@@ -1219,6 +1219,8 @@ populate_render_node_properties (GListStore    *store,
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
           {
+            if (i > 0 && stops[i].transition_hint != 0.5)
+              g_string_append_printf (s, "⟝ %.2f ⟞\n", stops[i].transition_hint);
             g_string_append_printf (s, "%.2f, ", stops[i].offset);
             gdk_color_print (&stops[i].color, s);
             g_string_append_c (s, '\n');
@@ -1257,6 +1259,8 @@ populate_render_node_properties (GListStore    *store,
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
           {
+            if (i > 0 && stops[i].transition_hint != 0.5)
+              g_string_append_printf (s, "⟝ %.2f ⟞\n", stops[i].transition_hint);
             g_string_append_printf (s, "%.2f, ", stops[i].offset);
             gdk_color_print (&stops[i].color, s);
             g_string_append_c (s, '\n');
@@ -1290,6 +1294,8 @@ populate_render_node_properties (GListStore    *store,
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
           {
+            if (i > 0 && stops[i].transition_hint != 0.5)
+              g_string_append_printf (s, "⟝ %.2f ⟞\n", stops[i].transition_hint);
             g_string_append_printf (s, "%.2f, ", stops[i].offset);
             gdk_color_print (&stops[i].color, s);
             g_string_append_c (s, '\n');

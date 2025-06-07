@@ -2592,18 +2592,21 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor   *self,
       if (i == 0)
         {
           real_stops[0].offset = stops[i].offset;
+          real_stops[0].transition_hint = stops[i].transition_hint;
           gdk_color_init_copy (&real_stops[i].color, &stops[i].color);
           i++;
         }
       else
         {
-          real_stops[0].offset = stops[i-1].offset;
+          real_stops[0].offset = stops[i - 1].offset;
+          real_stops[0].transition_hint = stops[i - 1].transition_hint;
           gdk_color_init_copy (&real_stops[0].color, &stops[i - 1].color);
           real_stops[0].color.alpha *= 0;
         }
       for (j = 1; j < 6 && i < n_stops; j++)
         {
           real_stops[j].offset = stops[i].offset;
+          real_stops[j].transition_hint = stops[i].transition_hint;
           gdk_color_init_copy (&real_stops[j].color, &stops[i].color);
           i++;
         }
@@ -2611,6 +2614,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor   *self,
         {
           g_assert (j == 6);
           real_stops[j].offset = stops[i].offset;
+          real_stops[j].transition_hint = stops[i].transition_hint;
           gdk_color_init_copy (&real_stops[j].color, &stops[i].color);
           j++;
           i++;
@@ -2618,6 +2622,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor   *self,
       else if (i < n_stops)
         {
           real_stops[j].offset = stops[i].offset;
+          real_stops[j].transition_hint = stops[i].transition_hint;
           gdk_color_init_copy (&real_stops[j].color, &stops[i].color);
           real_stops[j].color.alpha *= 0;
           j++;

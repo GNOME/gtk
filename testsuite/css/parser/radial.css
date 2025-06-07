@@ -62,3 +62,8 @@ o {
   background-image: radial-gradient(red 0, yellow 10% 20%, green 90% 100%);
   border-image-source: repeating-radial-gradient(red 0, yellow 10% 20%, green 90% 100%);
 }
+
+p {
+  background-image: radial-gradient(red 0% 10%, green, yellow 90% 100%);
+  border-image-source: repeating-radial-gradient(red 0% 10%, green, yellow 90% 100%);
+}

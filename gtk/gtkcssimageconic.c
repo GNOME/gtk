@@ -40,12 +40,13 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
   GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
   GskGradientStop *stops;
   int i, last;
-  double offset;
+  double offset, hint;
 
   stops = g_newa (GskGradientStop, self->n_stops);
 
   last = -1;
   offset = 0;
+  hint = 0;
   for (i = 0; i < self->n_stops; i++)
     {
       const GtkCssImageConicColorStop *stop = &self->color_stops[i];
@@ -53,6 +54,12 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
 
       if (stop->offset == NULL)
         {
+          if (stop->transition_hint)
+            {
+              hint = MAX (hint, gtk_css_number_value_get (stop->transition_hint, 360) / 360);
+              hint = CLAMP (hint, 0.0, 1.0);
+            }
+
           if (i == 0)
             pos = 0.0;
           else if (i + 1 == self->n_stops)
@@ -66,6 +73,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
           pos = CLAMP (pos, 0.0, 1.0);
         }
 
+      pos = MAX (pos, hint);
       pos = MAX (pos, offset);
       step = (pos - offset) / (i - last);
       for (last = last + 1; last <= i; last++)
@@ -76,15 +84,21 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
 
           stops[last].offset = offset;
           gtk_css_color_to_color (gtk_css_color_value_get_color (stop->color), &stops[last].color);
+          if (last > 0 && stop->transition_hint)
+            {
+              hint = gtk_css_number_value_get (stop->transition_hint, 360) / 360;
+              hint = CLAMP (hint, 0.0, 1.0);
+              stops[last].transition_hint = (hint - stops[last - 1].offset) / (stops[last].offset - stops[last - 1].offset);
+            }
+          else
+            {
+              stops[last].transition_hint = 0.5;
+            }
         }
 
       offset = pos;
       last = i;
     }
-
-  for (i = 0; i + 1 < self->n_stops; i++)
-    stops[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
-  stops[self->n_stops - 1].transition_hint = 1;
 
   if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
@@ -103,84 +117,71 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
     gdk_color_finish (&stops[i].color);
 }
 
-static gboolean
-parse_angles (GtkCssParser *parser,
-              gpointer      option_data,
-              gpointer      unused)
-{
-  GtkCssValue **angles = option_data;
-
-  angles[0] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
-  if (angles[0] == NULL)
-    return FALSE;
-
-  if (gtk_css_number_value_can_parse (parser))
-    {
-      angles[1] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
-      if (angles[1] == NULL)
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static gboolean
-parse_color (GtkCssParser *parser,
-             gpointer      option_data,
-             gpointer      unused)
-{
-  GtkCssValue **color = option_data;
-
-  *color = gtk_css_color_value_parse (parser);
-  if (*color == NULL)
-    return FALSE;
-
-  return TRUE;
-}
-
 static guint
 gtk_css_image_conic_parse_color_stop (GtkCssImageConic *self,
                                       GtkCssParser      *parser,
                                       GArray            *stop_array)
 {
-  GtkCssValue *angles[2] = { NULL, NULL };
+  GtkCssValue *hint = NULL;
   GtkCssValue *color = NULL;
-  GtkCssParseOption options[] =
+  GtkCssValue *angles[2] = { NULL, NULL };
+
+  if (gtk_css_number_value_can_parse (parser))
     {
-      { (void *) gtk_css_number_value_can_parse, parse_angles, &angles },
-      { (void *) gtk_css_color_value_can_parse, parse_color, &color },
-    };
+      hint = gtk_css_number_value_parse (parser,
+                                         GTK_CSS_PARSE_PERCENT
+                                         | GTK_CSS_PARSE_ANGLE);
+      if (hint == NULL)
+        {
+          gtk_css_parser_error_syntax (parser, "Failed to parse transition hint");
+          goto fail;
+        }
 
-  if (!gtk_css_parser_consume_any (parser, options, G_N_ELEMENTS (options), NULL))
-    goto fail;
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        goto fail;
 
+      gtk_css_parser_consume_token (parser);
+    }
+
+  color = gtk_css_color_value_parse (parser);
   if (color == NULL)
     {
-      if (angles[0])
-        gtk_css_value_unref (angles[0]);
-      if (angles[1])
-        gtk_css_value_unref (angles[1]);
-
       gtk_css_parser_error_syntax (parser, "Expected color stop to contain a color");
       goto fail;
     }
 
+  if (gtk_css_number_value_can_parse (parser))
+    {
+      angles[0] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
+      if (angles[0] == NULL)
+        goto fail;
+
+      if (gtk_css_number_value_can_parse (parser))
+        {
+          angles[1] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
+          if (angles[1] == NULL)
+            goto fail;
+        }
+    }
+
   g_array_append_vals (stop_array, (GtkCssImageConicColorStop[1]) {
-                         { angles[0], color }
+                         { angles[0], hint, color }
                        },
                        1);
   if (angles[1])
     g_array_append_vals (stop_array, (GtkCssImageConicColorStop[1]) {
-                           { angles[1], gtk_css_value_ref (color) }
+                           { angles[1], NULL, gtk_css_value_ref (color) }
                          },
                          1);
 
   return 1;
 
 fail:
+  g_clear_pointer (&hint, gtk_css_value_unref);
   g_clear_pointer (&angles[0], gtk_css_value_unref);
   g_clear_pointer (&angles[1], gtk_css_value_unref);
   g_clear_pointer (&color, gtk_css_value_unref);
+
   return 0;
 }
 
@@ -348,6 +349,12 @@ gtk_css_image_conic_print (GtkCssImage *image,
       if (i > 0)
         g_string_append (string, ", ");
 
+      if (stop->transition_hint)
+        {
+          gtk_css_value_print (stop->transition_hint, string);
+          g_string_append (string, ", ");
+        }
+
       gtk_css_value_print (stop->color, string);
 
       if (stop->offset)
@@ -386,13 +393,14 @@ gtk_css_image_conic_compute (GtkCssImage          *image,
       scopy->color = gtk_css_value_compute (stop->color, property_id, context);
 
       if (stop->offset)
-        {
-          scopy->offset = gtk_css_value_compute (stop->offset, property_id, context);
-        }
+        scopy->offset = gtk_css_value_compute (stop->offset, property_id, context);
       else
-        {
-          scopy->offset = NULL;
-        }
+        scopy->offset = NULL;
+
+      if (stop->transition_hint)
+        scopy->transition_hint = gtk_css_value_compute (stop->transition_hint, property_id, context);
+      else
+        scopy->transition_hint = NULL;
     }
 
   return GTK_CSS_IMAGE (copy);
@@ -440,6 +448,23 @@ gtk_css_image_conic_transition (GtkCssImage *start_image,
       const GtkCssImageConicColorStop *start_stop = &start->color_stops[i];
       const GtkCssImageConicColorStop *end_stop = &end->color_stops[i];
       GtkCssImageConicColorStop *stop = &result->color_stops[i];
+
+      if ((start_stop->transition_hint != NULL) != (end_stop->transition_hint != NULL))
+        goto fail;
+
+      if (start_stop->transition_hint == NULL)
+        {
+          stop->transition_hint = NULL;
+        }
+      else
+        {
+          stop->transition_hint = gtk_css_value_transition (start_stop->transition_hint,
+                                                            end_stop->transition_hint,
+                                                            property_id,
+                                                            progress);
+          if (stop->transition_hint == NULL)
+            goto fail;
+        }
 
       if ((start_stop->offset != NULL) != (end_stop->offset != NULL))
         goto fail;
@@ -499,6 +524,7 @@ gtk_css_image_conic_equal (GtkCssImage *image1,
       const GtkCssImageConicColorStop *stop2 = &conic2->color_stops[i];
 
       if (!gtk_css_value_equal0 (stop1->offset, stop2->offset) ||
+          !gtk_css_value_equal0 (stop1->transition_hint, stop2->transition_hint) ||
           !gtk_css_value_equal (stop1->color, stop2->color))
         return FALSE;
     }
@@ -519,6 +545,8 @@ gtk_css_image_conic_dispose (GObject *object)
       gtk_css_value_unref (stop->color);
       if (stop->offset)
         gtk_css_value_unref (stop->offset);
+      if (stop->transition_hint)
+        gtk_css_value_unref (stop->transition_hint);
     }
   g_free (self->color_stops);
 
@@ -538,22 +566,29 @@ gtk_css_image_conic_is_computed (GtkCssImage *image)
   computed = !self->center || gtk_css_value_is_computed (self->center);
   computed &= !self->rotation || gtk_css_value_is_computed (self->rotation);
 
-  for (i = 0; i < self->n_stops; i ++)
-    {
-      const GtkCssImageConicColorStop *stop = &self->color_stops[i];
+  if (computed)
+    for (i = 0; i < self->n_stops; i ++)
+      {
+        const GtkCssImageConicColorStop *stop = &self->color_stops[i];
 
-      if (stop->offset && !gtk_css_value_is_computed (stop->offset))
-        {
-          computed = FALSE;
-          break;
-        }
+        if (stop->transition_hint && !gtk_css_value_is_computed (stop->transition_hint))
+          {
+            computed = FALSE;
+            break;
+          }
 
-      if (!gtk_css_value_is_computed (stop->color))
-        {
-          computed = FALSE;
-          break;
-        }
-    }
+        if (stop->offset && !gtk_css_value_is_computed (stop->offset))
+          {
+            computed = FALSE;
+            break;
+          }
+
+        if (!gtk_css_value_is_computed (stop->color))
+          {
+            computed = FALSE;
+            break;
+          }
+      }
 
   return computed;
 }
@@ -595,6 +630,11 @@ gtk_css_image_conic_resolve (GtkCssImage          *image,
 
   for (guint i = 0; i < self->n_stops; i++)
     {
+      if (self->color_stops[i].transition_hint)
+        resolved->color_stops[i].transition_hint = gtk_css_value_ref (self->color_stops[i].transition_hint);
+      else
+        resolved->color_stops[i].transition_hint = NULL;
+
       if (self->color_stops[i].offset)
         resolved->color_stops[i].offset = gtk_css_value_ref (self->color_stops[i].offset);
       else

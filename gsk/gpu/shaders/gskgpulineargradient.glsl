@@ -16,7 +16,9 @@ PASS_FLAT(7) vec4 _color5;
 PASS_FLAT(8) vec4 _color6;
 PASS_FLAT(9) vec4 _offsets0;
 PASS_FLAT(10) vec3 _offsets1;
-PASS(11) float _offset;
+PASS_FLAT(11) vec4 _hints0;
+PASS_FLAT(12) vec3 _hints1;
+PASS(13) float _offset;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -32,6 +34,8 @@ IN(7) vec4 in_color5;
 IN(8) vec4 in_color6;
 IN(9) vec4 in_offsets0;
 IN(10) vec3 in_offsets1;
+IN(11) vec4 in_hints0;
+IN(12) vec3 in_hints1;
 
 void
 run (out vec2 pos)
@@ -57,6 +61,8 @@ run (out vec2 pos)
   _color6 = color_premultiply (in_color6);
   _offsets0 = in_offsets0;
   _offsets1 = in_offsets1;
+  _hints0 = in_hints0;
+  _hints1 = in_hints1;
 }
 
 #endif
@@ -65,10 +71,26 @@ run (out vec2 pos)
 
 #ifdef GSK_FRAGMENT_SHADER
 
+#define M_LN2 0.69314718055994530942 /* log_e 2 */
+
+float
+compute_c (float f, float hint)
+{
+  if (hint == 0.5)
+    return f;
+  else if (hint <= 0.0)
+    return 1.0;
+  else if (hint >= 1.0)
+    return 0.0;
+  else
+    return pow(f, -M_LN2 / log(hint));
+}
+
 vec4
 get_gradient_color (float offset)
 {
   vec4 color;
+  float f;
 
   if (offset <= _offsets0[3])
     {
@@ -77,14 +99,26 @@ get_gradient_color (float offset)
           if (offset <= _offsets0[0])
             color = _color0;
           else
-            color = mix (_color0, _color1, (offset - _offsets0[0]) / (_offsets0[1] - _offsets0[0]));
+            {
+              f = (offset - _offsets0[0]) / (_offsets0[1] - _offsets0[0]);
+              f = compute_c (f, _hints0[1]);
+              color = mix (_color0, _color1, f);
+            }
         }
       else
         {
           if (offset <= _offsets0[2])
-            color = mix (_color1, _color2, (offset - _offsets0[1]) / (_offsets0[2] - _offsets0[1]));
+            {
+              f = (offset - _offsets0[1]) / (_offsets0[2] - _offsets0[1]);
+              f = compute_c (f, _hints0[2]);
+              color = mix (_color1, _color2, f);
+            }
           else
-            color = mix (_color2, _color3, (offset - _offsets0[2]) / (_offsets0[3] - _offsets0[2]));
+            {
+              f = (offset - _offsets0[2]) / (_offsets0[3] - _offsets0[2]);
+              f = compute_c (f, _hints0[3]);
+              color = mix (_color2, _color3, f);
+            }
         }
     }
   else
@@ -92,14 +126,26 @@ get_gradient_color (float offset)
       if (offset <= _offsets1[1])
         {
           if (offset <= _offsets1[0])
-            color = mix (_color3, _color4, (offset - _offsets0[3]) / (_offsets1[0] - _offsets0[3]));
+            {
+              f = (offset - _offsets0[3]) / (_offsets1[0] - _offsets0[3]);
+              f = compute_c (f, _hints1[0]);
+              color = mix (_color3, _color4, f);
+            }
           else
-            color = mix (_color4, _color5, (offset - _offsets1[0]) / (_offsets1[1] - _offsets1[0]));
+            {
+              f = (offset - _offsets1[0]) / (_offsets1[1] - _offsets1[0]);
+              f = compute_c (f, _hints1[1]);
+              color = mix (_color4, _color5, f);
+            }
         }
       else
         {
           if (offset <= _offsets1[2])
-            color = mix (_color5, _color6, (offset - _offsets1[1]) / (_offsets1[2] - _offsets1[1]));
+            {
+              f = (offset - _offsets1[1]) / (_offsets1[2] - _offsets1[1]);
+              f = compute_c (f, _hints1[2]);
+              color = mix (_color5, _color6, f);
+            }
           else
             color = _color6;
         }

@@ -132,3 +132,9 @@ aa {
   background-image: linear-gradient(to bottom, red 0 10%, yellow 20% 30%, green 100%);
   border-image-source: repeating-linear-gradient(to bottom, red 0 10%, yellow 20% 30%, green 100%);
 }
+
+bb {
+  background-image: linear-gradient(red 0% 10%, green, blue 90% 100%);
+  border-image-source: repeating-linear-gradient(red 0% 10%, green, blue 90% 100%);
+}
+

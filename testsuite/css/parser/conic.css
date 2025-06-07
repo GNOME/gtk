@@ -41,3 +41,11 @@ j {
 k {
   background-image: conic-gradient(in srgb from -10deg at 20px 20px, red, yellow);
 }
+
+l {
+  background-image: conic-gradient(at 20px 20px, red 0deg, 90%, yellow 180deg);
+}
+
+m {
+  background-image: conic-gradient(at 20px 20px, red 0deg, 45deg, yellow 180deg);
+}
