@@ -87,18 +87,25 @@ gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
   instance->angle = angle;
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 6)].color, ics, opacity, instance->color6);
   instance->offsets1[2] = stops[MIN (n_stops - 1, 6)].offset;
+  instance->hints1[2] = stops[MIN (n_stops - 1, 6)].transition_hint;
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 5)].color, ics, opacity, instance->color5);
   instance->offsets1[1] = stops[MIN (n_stops - 1, 5)].offset;
+  instance->hints1[1] = stops[MIN (n_stops - 1, 5)].transition_hint;
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 4)].color, ics, opacity, instance->color4);
   instance->offsets1[0] = stops[MIN (n_stops - 1, 4)].offset;
+  instance->hints1[0] = stops[MIN (n_stops - 1, 4)].transition_hint;
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 3)].color, ics, opacity, instance->color3);
   instance->offsets0[3] = stops[MIN (n_stops - 1, 3)].offset;
+  instance->hints0[3] = stops[MIN (n_stops - 1, 3)].transition_hint;
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 2)].color, ics, opacity, instance->color2);
   instance->offsets0[2] = stops[MIN (n_stops - 1, 2)].offset;
+  instance->hints0[2] = stops[MIN (n_stops - 1, 2)].transition_hint;
   gsk_gpu_color_to_float (&stops[1].color, ics, opacity, instance->color1);
   instance->offsets0[1] = stops[1].offset;
+  instance->hints0[1] = stops[1].transition_hint;
   gsk_gpu_color_to_float (&stops[0].color, ics, opacity, instance->color0);
   instance->offsets0[0] = stops[0].offset;
+  instance->hints0[0] = stops[0].transition_hint;
 
   gsk_adjust_hue (ics, hue_interp, instance->color0, instance->color1);
   gsk_adjust_hue (ics, hue_interp, instance->color1, instance->color2);
