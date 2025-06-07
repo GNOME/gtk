@@ -131,7 +131,10 @@ gtk_css_keyframes_add_keyframe (GtkCssKeyframes *keyframes,
     }
 
   if (keyframes->variables)
-    keyframes->variables = g_realloc (keyframes->variables, sizeof (GtkCssVariableSet *) * keyframes->n_keyframes);
+    {
+      keyframes->variables = g_realloc (keyframes->variables, sizeof (GtkCssVariableSet *) * keyframes->n_keyframes);
+      keyframes->variables[keyframes->n_keyframes - 1] = NULL;
+    }
 
   return k;
 }
