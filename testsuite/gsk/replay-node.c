@@ -56,6 +56,9 @@ replay_linear_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   interp = gsk_linear_gradient_node_get_interpolation_color_state (node);
   hue = gsk_linear_gradient_node_get_hue_interpolation (node);
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_linear_gradient_node_get_snap (node));
+
   if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
     gtk_snapshot_add_repeating_linear_gradient (snapshot, &bounds,
                                                 start_point, end_point,
@@ -66,22 +69,34 @@ replay_linear_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
                                       start_point, end_point,
                                       interp, hue,
                                       stops, n_stops);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
 replay_radial_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   graphene_rect_t bounds;
+  const graphene_point_t *center;
+  float hradius, vradius, start, end;
+  const GskGradientStop *stops;
+  gsize n_stops;
+  GskHueInterpolation hue;
+  GdkColorState *interp;
+
   gsk_render_node_get_bounds (node, &bounds);
-  const graphene_point_t *center = gsk_radial_gradient_node_get_center (node);
-  float hradius = gsk_radial_gradient_node_get_hradius (node);
-  float vradius = gsk_radial_gradient_node_get_vradius (node);
-  float start = gsk_radial_gradient_node_get_start (node);
-  float end = gsk_radial_gradient_node_get_end (node);
-  gsize n_stops = gsk_radial_gradient_node_get_n_color_stops (node);
-  const GskGradientStop *stops = gsk_radial_gradient_node_get_gradient_stops (node);
-  GskHueInterpolation hue = gsk_radial_gradient_node_get_hue_interpolation (node);
-  GdkColorState *interp = gsk_radial_gradient_node_get_interpolation_color_state (node);
+  center = gsk_radial_gradient_node_get_center (node);
+  hradius = gsk_radial_gradient_node_get_hradius (node);
+  vradius = gsk_radial_gradient_node_get_vradius (node);
+  start = gsk_radial_gradient_node_get_start (node);
+  end = gsk_radial_gradient_node_get_end (node);
+  n_stops = gsk_radial_gradient_node_get_n_color_stops (node);
+  stops = gsk_radial_gradient_node_get_gradient_stops (node);
+  hue = gsk_radial_gradient_node_get_hue_interpolation (node);
+  interp = gsk_radial_gradient_node_get_interpolation_color_state (node);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_radial_gradient_node_get_snap (node));
 
   if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
     gtk_snapshot_add_repeating_radial_gradient (snapshot, &bounds, center,
@@ -93,24 +108,38 @@ replay_radial_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
                                       hradius, vradius, start, end,
                                       interp, hue,
                                       stops, n_stops);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
 replay_conic_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   graphene_rect_t bounds;
+  const graphene_point_t *center;
+  float rotation;
+  const GskGradientStop *stops;
+  gsize n_stops;
+  GskHueInterpolation hue;
+  GdkColorState *interp;
+
   gsk_render_node_get_bounds (node, &bounds);
-  const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
-  float rotation = gsk_conic_gradient_node_get_rotation (node);
-  gsize n_stops = gsk_conic_gradient_node_get_n_color_stops (node);
-  const GskGradientStop *stops = gsk_conic_gradient_node_get_gradient_stops (node);
-  GskHueInterpolation hue = gsk_conic_gradient_node_get_hue_interpolation (node);
-  GdkColorState *interp = gsk_conic_gradient_node_get_interpolation_color_state (node);
+  center = gsk_conic_gradient_node_get_center (node);
+  rotation = gsk_conic_gradient_node_get_rotation (node);
+  n_stops = gsk_conic_gradient_node_get_n_color_stops (node);
+  stops = gsk_conic_gradient_node_get_gradient_stops (node);
+  hue = gsk_conic_gradient_node_get_hue_interpolation (node);
+  interp = gsk_conic_gradient_node_get_interpolation_color_state (node);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_conic_gradient_node_get_snap (node));
 
   gtk_snapshot_add_conic_gradient (snapshot, &bounds, center,
                                    rotation,
                                    interp, hue,
                                    stops, n_stops);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
