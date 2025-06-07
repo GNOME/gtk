@@ -36,8 +36,9 @@ typedef struct _GtkCssImageLinearClass      GtkCssImageLinearClass;
 typedef struct _GtkCssImageLinearColorStop  GtkCssImageLinearColorStop;
 
 struct _GtkCssImageLinearColorStop {
-  GtkCssValue        *offset;
+  GtkCssValue        *transition_hint;
   GtkCssValue        *color;
+  GtkCssValue        *offset;
 };
 
 struct _GtkCssImageLinear

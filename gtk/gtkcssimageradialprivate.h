@@ -36,8 +36,9 @@ typedef struct _GtkCssImageRadialClass      GtkCssImageRadialClass;
 typedef struct _GtkCssImageRadialColorStop  GtkCssImageRadialColorStop;
 
 struct _GtkCssImageRadialColorStop {
-  GtkCssValue        *offset;
+  GtkCssValue        *transition_hint;
   GtkCssValue        *color;
+  GtkCssValue        *offset;
 };
 
 typedef enum {
