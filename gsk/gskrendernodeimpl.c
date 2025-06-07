@@ -577,6 +577,7 @@ gsk_linear_gradient_node_diff (GskRenderNode *node1,
           GskGradientStop *stop2 = &self2->stops[i];
 
           if (stop1->offset == stop2->offset &&
+              stop1->transition_hint == stop2->transition_hint &&
               gdk_color_equal (&stop1->color, &stop2->color))
             continue;
 
@@ -1152,6 +1153,7 @@ gsk_radial_gradient_node_diff (GskRenderNode *node1,
           GskGradientStop *stop2 = &self2->stops[i];
 
           if (stop1->offset == stop2->offset &&
+              stop1->transition_hint == stop2->transition_hint &&
               gdk_color_equal (&stop1->color, &stop2->color))
             continue;
 
@@ -1956,6 +1958,7 @@ gsk_conic_gradient_node_diff (GskRenderNode *node1,
       GskGradientStop *stop2 = &self2->stops[i];
 
       if (stop1->offset != stop2->offset ||
+          stop1->transition_hint != stop2->transition_hint ||
           !gdk_color_equal (&stop1->color, &stop2->color))
         {
           gsk_render_node_diff_impossible (node1, node2, data);
