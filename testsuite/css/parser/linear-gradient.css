@@ -127,3 +127,8 @@ z {
   background-image: linear-gradient(to bottom, red 0, 20%, green 100%);
   border-image-source: repeating-linear-gradient(to bottom, red 0, 20%, green 100%);
 }
+
+aa {
+  background-image: linear-gradient(to bottom, red 0 10%, yellow 20% 30%, green 100%);
+  border-image-source: repeating-linear-gradient(to bottom, red 0 10%, yellow 20% 30%, green 100%);
+}
