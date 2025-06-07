@@ -122,3 +122,8 @@ y {
   background-image: linear-gradient(in hwb to bottom, red 0, green 100%);
   border-image-source: repeating-linear-gradient(in hwb to bottom, red 0, green 100%);
 }
+
+z {
+  background-image: linear-gradient(to bottom, red 0, 20%, green 100%);
+  border-image-source: repeating-linear-gradient(to bottom, red 0, 20%, green 100%);
+}
