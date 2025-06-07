@@ -654,6 +654,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   for (gsize i = 0; i < n_color_stops; i++)
     {
       stops[i].offset = color_stops[i].offset;
+      stops[i].transition_hint = 0.5;
       gdk_color_init_from_rgba (&stops[i].color, &color_stops[i].color);
     }
 
@@ -728,6 +729,7 @@ gsk_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
   for (i = 0; i < n_stops; i++)
     {
       self->stops[i].offset = stops[i].offset;
+      self->stops[i].transition_hint = stops[i].transition_hint;
       gdk_color_init_copy (&self->stops[i].color, &stops[i].color);
       opaque = opaque && gdk_color_is_opaque (&stops[i].color);
     }
@@ -780,6 +782,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   for (gsize i = 0; i < n_color_stops; i++)
     {
       stops[i].offset = color_stops[i].offset;
+      stops[i].transition_hint = 0.5;
       gdk_color_init_from_rgba (&stops[i].color, &color_stops[i].color);
     }
 
@@ -855,6 +858,7 @@ gsk_repeating_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
   for (i = 0; i < n_stops; i++)
     {
       self->stops[i].offset = stops[i].offset;
+      self->stops[i].transition_hint = stops[i].transition_hint;
       gdk_color_init_copy (&self->stops[i].color, &stops[i].color);
 
       opaque = opaque && gdk_color_is_opaque (&stops[i].color);
@@ -1243,6 +1247,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   for (gsize i = 0; i < n_color_stops; i++)
     {
       stops[i].offset = color_stops[i].offset;
+      stops[i].transition_hint = 0.5;
       gdk_color_init_from_rgba (&stops[i].color, &color_stops[i].color);
     }
 
@@ -1336,6 +1341,7 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
     {
       gdk_color_init_copy (&self->stops[i].color, &stops[i].color);
       self->stops[i].offset = stops[i].offset;
+      self->stops[i].transition_hint = stops[i].transition_hint;
       opaque = opaque && gdk_color_is_opaque (&stops[i].color);
     }
 
@@ -1399,6 +1405,7 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   for (gsize i = 0; i < n_color_stops; i++)
     {
       stops[i].offset = color_stops[i].offset;
+      stops[i].transition_hint = 0.5;
       gdk_color_init_from_rgba (&stops[i].color, &color_stops[i].color);
     }
 
@@ -1492,6 +1499,7 @@ gsk_repeating_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
     {
       gdk_color_init_copy (&self->stops[i].color, &stops[i].color);
       self->stops[i].offset = stops[i].offset;
+      self->stops[i].transition_hint = stops[i].transition_hint;
       opaque = opaque && gdk_color_is_opaque (&stops[i].color);
     }
 
@@ -2019,6 +2027,7 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
   for (gsize i = 0; i < n_color_stops; i++)
     {
       stops[i].offset = color_stops[i].offset;
+      stops[i].transition_hint = 0.5;
       gdk_color_init_from_rgba (&stops[i].color, &color_stops[i].color);
     }
 
@@ -2097,6 +2106,7 @@ gsk_conic_gradient_node_new2 (const graphene_rect_t   *bounds,
     {
       gdk_color_init_copy (&self->stops[i].color, &stops[i].color);
       self->stops[i].offset = stops[i].offset;
+      self->stops[i].transition_hint = stops[i].transition_hint;
       opaque = opaque && gdk_color_is_opaque (&stops[i].color);
     }
 

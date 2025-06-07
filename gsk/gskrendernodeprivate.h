@@ -184,6 +184,16 @@ _gsk_render_node_get_node_type (const GskRenderNode *node)
   return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
 }
 
+/*< private >
+ * GskGradientStop:
+ * @offset: the offset of the color stop, as a value between 0 and 1
+ * @transition_hint: where to place the midpoint between the previous stop
+ *   and this one, as a value between 0 and 1. If this is != 0.5, the
+ *   interpolation is non-linear
+ * @color: the color at the given offset
+ *
+ * A color stop in a gradient node.
+ */
 typedef struct _GskGradientStop GskGradientStop;
 struct _GskGradientStop
 {
