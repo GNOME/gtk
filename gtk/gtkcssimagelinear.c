@@ -146,7 +146,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */
   double start, end; /* position of first/last point on gradient line - with gradient line being [0, 1] */
-  double offset;
+  double offset, hint;
   int i, last;
 
   if (linear->side)
@@ -214,6 +214,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
   offset = start;
   last = -1;
   stops = g_newa (GskGradientStop, linear->n_stops);
+  hint = start;
 
   for (i = 0; i < linear->n_stops; i++)
     {
@@ -222,6 +223,12 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
 
       if (stop->offset == NULL)
         {
+          if (stop->transition_hint)
+            {
+              hint = MAX (hint, gtk_css_number_value_get (stop->transition_hint, length) / length);
+              hint = CLAMP (hint, 0.0, 1.0);
+            }
+
           if (i == 0)
             pos = 0.0;
           else if (i + 1 == linear->n_stops)
@@ -235,6 +242,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
           pos = CLAMP (pos, 0.0, 1.0);
         }
 
+      pos = MAX (pos, hint);
       pos = MAX (pos, offset);
       step = (pos - offset) / (i - last);
       for (last = last + 1; last <= i; last++)
@@ -246,20 +254,22 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
           gtk_css_color_to_color (gtk_css_color_value_get_color (stop->color), &stops[last].color);
 
           stops[last].offset = (offset - start) / (end - start);
+
+          if (last > 0 && stop->transition_hint)
+            {
+              hint = gtk_css_number_value_get (stop->transition_hint, length) / length;
+              hint = CLAMP (hint, 0, 1);
+
+              stops[last].transition_hint = (hint - stops[last - 1].offset) / (stops[last].offset - stops[last - 1].offset);
+            }
+          else
+            {
+              stops[last].transition_hint = 0.5;
+            }
         }
 
       offset = pos;
       last = i;
-    }
-
-  stops[0].transition_hint = 0;
-  for (i = 1; i < linear->n_stops; i++)
-    {
-      const GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
-      if (stop->transition_hint)
-        stops[i].transition_hint = CLAMP (gtk_css_number_value_get (stop->transition_hint, length), stops[i - 1].offset, stops[i].offset);
-      else
-        stops[i].transition_hint = (stops[i - 1].offset + stops[i].offset) / 2;
     }
 
   if (linear->color_space != GTK_CSS_COLOR_SPACE_SRGB)
@@ -339,8 +349,7 @@ gtk_css_image_linear_parse_color_stop (GtkCssImageLinear *self,
 
       if (gtk_css_number_value_can_parse (parser))
         {
-          if (stop.transition_hint)
-            stop.transition_hint = gtk_css_value_ref (stop.transition_hint);
+          stop.transition_hint = NULL;
           stop.color = gtk_css_value_ref (stop.color);
 
           stop.offset = gtk_css_number_value_parse (parser,
@@ -348,8 +357,6 @@ gtk_css_image_linear_parse_color_stop (GtkCssImageLinear *self,
                                                     | GTK_CSS_PARSE_LENGTH);
           if (stop.offset == NULL)
             {
-              if (stop.transition_hint)
-                gtk_css_value_unref (stop.transition_hint);
               gtk_css_value_unref (stop.color);
               return 0;
             }
@@ -692,7 +699,7 @@ gtk_css_image_linear_transition (GtkCssImage *start_image,
       const GtkCssImageLinearColorStop *end_stop = &end->color_stops[i];
       GtkCssImageLinearColorStop *stop = &result->color_stops[i];
 
-      if ((start_stop->offset != NULL) != (end_stop->offset != NULL))
+      if ((start_stop->transition_hint != NULL) != (end_stop->transition_hint != NULL))
         goto fail;
 
       if (start_stop->transition_hint == NULL)
@@ -708,6 +715,9 @@ gtk_css_image_linear_transition (GtkCssImage *start_image,
           if (stop->transition_hint == NULL)
             goto fail;
         }
+
+      if ((start_stop->offset != NULL) != (end_stop->offset != NULL))
+        goto fail;
 
       if (start_stop->offset == NULL)
         {
@@ -811,28 +821,29 @@ gtk_css_image_linear_is_computed (GtkCssImage *image)
 
   computed = !linear->angle || gtk_css_value_is_computed (linear->angle);
 
-  for (i = 0; i < linear->n_stops; i++)
-    {
-      const GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
+  if (computed)
+    for (i = 0; i < linear->n_stops; i++)
+      {
+        const GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
 
-      if (stop->transition_hint && !gtk_css_value_is_computed (stop->transition_hint))
-        {
-          computed = FALSE;
-          break;
-        }
+        if (stop->transition_hint && !gtk_css_value_is_computed (stop->transition_hint))
+          {
+            computed = FALSE;
+            break;
+          }
 
-      if (stop->offset && !gtk_css_value_is_computed (stop->offset))
-        {
-          computed = FALSE;
-          break;
-        }
+        if (stop->offset && !gtk_css_value_is_computed (stop->offset))
+          {
+            computed = FALSE;
+            break;
+          }
 
-      if (!gtk_css_value_is_computed (stop->color))
-        {
-          computed = FALSE;
-          break;
-        }
-    }
+        if (!gtk_css_value_is_computed (stop->color))
+          {
+            computed = FALSE;
+            break;
+          }
+      }
 
   return computed;
 }

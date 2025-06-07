@@ -37,6 +37,7 @@ typedef struct _GtkCssImageConicColorStop  GtkCssImageConicColorStop;
 
 struct _GtkCssImageConicColorStop {
   GtkCssValue        *offset;
+  GtkCssValue        *transition_hint;
   GtkCssValue        *color;
 };
 
