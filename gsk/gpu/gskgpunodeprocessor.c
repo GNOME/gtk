@@ -572,8 +572,9 @@ gsk_gpu_node_processor_clip_node_bounds (GskGpuNodeProcessor *self,
 
 static gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (GskGpuNodeProcessor *self,
-                                                          GskRenderNode *node,
-                                                          graphene_rect_t *out_bounds)
+                                                          GskRenderNode       *node,
+                                                          GskRectSnap          snap,
+                                                          graphene_rect_t     *out_bounds)
 {
   graphene_rect_t tmp;
 
@@ -582,7 +583,7 @@ gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (GskGpuNodeProcessor *s
   if (!gsk_rect_intersection (&tmp, &node->bounds, out_bounds))
     return FALSE;
 
-  gsk_rect_snap_to_grid_grow (out_bounds, &self->scale, &self->offset, out_bounds);
+  gsk_rect_snap_to_grid (out_bounds, snap, &self->scale, &self->offset, out_bounds);
 
   return TRUE;
 }
@@ -972,7 +973,7 @@ gsk_gpu_node_processor_add_cairo_node (GskGpuNodeProcessor *self,
   GskGpuImage *image;
   graphene_rect_t clipped_bounds;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clipped_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, GSK_RECT_SNAP_GROW, &clipped_bounds))
     return;
 
   gsk_gpu_node_processor_sync_globals (self, 0);
@@ -1306,7 +1307,7 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   GskGpuImage *child_image, *mask_image;
   GdkColor white;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, GSK_RECT_SNAP_GROW, &clip_bounds))
     return;
 
   child_image = gsk_gpu_node_processor_get_node_as_image (self,
@@ -2588,7 +2589,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor   *self,
       return;
     }
 
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, GSK_RECT_SNAP_GROW, &bounds))
     return;
 
   image = gsk_gpu_node_processor_init_draw (&other,
@@ -3059,7 +3060,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
   mask_child = gsk_mask_node_get_mask (node);
   mask_mode = gsk_mask_node_get_mask_mode (node);
 
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, GSK_RECT_SNAP_GROW, &bounds))
     return;
 
   mask_image = gsk_gpu_node_processor_get_node_as_image (self,
@@ -3490,7 +3491,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   graphene_rect_t tex_rect;
   GskGpuCache *cache;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, GSK_RECT_SNAP_GROW, &clip_bounds))
     return;
 
   child = gsk_fill_node_get_child (node);
@@ -3571,7 +3572,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
   graphene_rect_t tex_rect;
   GskGpuCache *cache;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, GSK_RECT_SNAP_GROW, &clip_bounds))
     return;
 
   child = gsk_stroke_node_get_child (node);
@@ -4471,7 +4472,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
           gsk_gpu_node_processor_set_scissor (&self, &rect);
 
           /* Can't use gsk_gpu_node_processor_get_node_as_image () because of colorspaces */
-          if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (&self, node, &clip_bounds))
+          if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (&self, node, GSK_RECT_SNAP_GROW, &clip_bounds))
             continue;
 
           image = gsk_gpu_get_node_as_image (self.frame,
