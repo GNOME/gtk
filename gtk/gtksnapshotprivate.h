@@ -47,9 +47,6 @@ GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot    
 void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
                                                                  GdkSubsurface          *subsurface);
 
-void                    gtk_snapshot_add_color                  (GtkSnapshot            *snapshot,
-                                                                 const GdkColor         *color,
-                                                                 const graphene_rect_t  *bounds);
 void                    gtk_snapshot_add_border                 (GtkSnapshot            *snapshot,
                                                                  const GskRoundedRect   *outline,
                                                                  const float             border_width[4],

@@ -177,6 +177,10 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_color               (GtkSnapshot            *snapshot,
                                                          const GdkRGBA          *color,
                                                          const graphene_rect_t  *bounds);
+GDK_AVAILABLE_IN_4_20
+void            gtk_snapshot_add_color                  (GtkSnapshot            *snapshot,
+                                                         const GdkColor         *color,
+                                                         const graphene_rect_t  *bounds);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_linear_gradient     (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,

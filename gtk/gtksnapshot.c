@@ -2534,7 +2534,7 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
   gtk_snapshot_add_color (snapshot, &color2, bounds);
 }
 
-/*< private >
+/**
  * gtk_snapshot_add_color:
  * @snapshot: a `GtkSnapshot`
  * @color: the color to draw
@@ -2543,6 +2543,8 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
  * Creates a new render node drawing the @color into the
  * given @bounds and appends it to the current render node
  * of @snapshot.
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_add_color (GtkSnapshot           *snapshot,
