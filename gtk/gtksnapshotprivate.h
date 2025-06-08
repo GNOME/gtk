@@ -24,12 +24,6 @@
 
 G_BEGIN_DECLS
 
-void                    gtk_snapshot_append_text                (GtkSnapshot            *snapshot,
-                                                                 PangoFont              *font,
-                                                                 PangoGlyphString       *glyphs,
-                                                                 const GdkRGBA          *color,
-                                                                 float                   x,
-                                                                 float                   y);
 void                    gtk_snapshot_add_text                   (GtkSnapshot            *snapshot,
                                                                  PangoFont              *font,
                                                                  PangoGlyphString       *glyphs,

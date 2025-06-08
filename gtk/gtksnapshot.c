@@ -2569,21 +2569,6 @@ gtk_snapshot_add_color (GtkSnapshot           *snapshot,
 }
 
 void
-gtk_snapshot_append_text (GtkSnapshot           *snapshot,
-                          PangoFont             *font,
-                          PangoGlyphString      *glyphs,
-                          const GdkRGBA         *color,
-                          float                  x,
-                          float                  y)
-{
-  GdkColor color2;
-
-  gdk_color_init_from_rgba (&color2, color);
-  gtk_snapshot_add_text (snapshot, font, glyphs, &color2, x, y);
-  gdk_color_finish (&color2);
-}
-
-void
 gtk_snapshot_add_text (GtkSnapshot      *snapshot,
                        PangoFont        *font,
                        PangoGlyphString *glyphs,
