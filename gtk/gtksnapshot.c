@@ -2465,7 +2465,8 @@ gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
-  node = gsk_texture_node_new (texture, &real_bounds);
+  state = gtk_snapshot_get_current_state (snapshot);
+  node = gsk_texture_node_new_snapped (texture, &real_bounds, state->snap);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
