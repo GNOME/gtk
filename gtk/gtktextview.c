@@ -9175,10 +9175,16 @@ gtk_text_view_set_virtual_cursor_pos (GtkTextView *text_view,
     return;
 
   if (x == -1 || y == -1)
-    gtk_text_view_get_cursor_locations (text_view, NULL, &pos, NULL);
+    {
+      gtk_text_view_get_cursor_locations (text_view, NULL, &pos, NULL);
+      if (x == -1)
+        x = pos.x;
+      if (y == -1)
+        y = pos.y + pos.height / 2;
+    }
 
-  text_view->priv->virtual_cursor_x = (x == -1) ? pos.x : x;
-  text_view->priv->virtual_cursor_y = (y == -1) ? pos.y + pos.height / 2 : y;
+  text_view->priv->virtual_cursor_x = x;
+  text_view->priv->virtual_cursor_y = y;
 }
 
 static void
