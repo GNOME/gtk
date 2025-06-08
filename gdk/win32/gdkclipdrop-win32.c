@@ -1023,6 +1023,10 @@ process_clipboard_queue (gpointer data)
         case GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_STORE:
           try_again = process_store (clipdrop, (GdkWin32ClipboardThreadStore *) placeholder);
           break;
+        default:
+          try_again = FALSE;
+          g_assert_not_reached ();
+          break;
         }
 
       if (try_again)
