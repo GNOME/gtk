@@ -620,7 +620,7 @@ show_surface_internal (GdkSurface *surface,
   if (!already_mapped &&
       GDK_IS_TOPLEVEL (surface))
     {
-      gboolean center = FALSE;
+      gboolean center;
       RECT hwnd_rect, center_on_rect;
       int x, y;
 
@@ -658,6 +658,11 @@ show_surface_internal (GdkSurface *surface,
 	  _gdk_win32_adjust_client_rect (GDK_SURFACE (owner), &center_on_rect);
 	  center = TRUE;
 	}
+      else
+        {
+          center_on_rect = (RECT){ 0, };
+          center = FALSE;
+        }
 
       if (center)
 	{
