@@ -9147,22 +9147,29 @@ gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
                                           gtk_text_buffer_get_insert (get_buffer (text_view)));
 
       gtk_text_layout_get_cursor_locations (priv->layout, &insert, &pos, NULL);
-    }
 
-  if (x)
+      if (x)
+        {
+          if (priv->virtual_cursor_x != -1)
+            *x = priv->virtual_cursor_x;
+          else
+            *x = pos.x;
+        }
+
+      if (y)
+        {
+          if (priv->virtual_cursor_y != -1)
+            *y = priv->virtual_cursor_y;
+          else
+            *y = pos.y + pos.height / 2;
+        }
+    }
+  else
     {
-      if (priv->virtual_cursor_x != -1)
+      if (x)
         *x = priv->virtual_cursor_x;
-      else
-        *x = pos.x;
-    }
-
-  if (y)
-    {
-      if (priv->virtual_cursor_y != -1)
+      if (y)
         *y = priv->virtual_cursor_y;
-      else
-        *y = pos.y + pos.height / 2;
     }
 }
 
