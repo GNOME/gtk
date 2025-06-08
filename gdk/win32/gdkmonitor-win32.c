@@ -510,7 +510,7 @@ typedef struct {
 static BOOL CALLBACK
 enum_monitor (HMONITOR hmonitor,
               HDC      hdc,
-              LPRECT   rect,
+              LPRECT   unused,
               LPARAM   param)
 {
   EnumMonitorData *data = (EnumMonitorData *) param;
