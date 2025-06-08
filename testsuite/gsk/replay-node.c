@@ -30,9 +30,12 @@ replay_color_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_color_node_get_snap (node));
   gtk_snapshot_add_color (snapshot,
                           gsk_color_node_get_gdk_color (node),
                           &bounds);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
