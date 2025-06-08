@@ -2700,19 +2700,21 @@ parse_inset_shadow_node (GtkCssParser *parser,
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
   GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
   double dx = 1, dy = 1, blur = 0, spread = 0;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
     { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
-    { "blur", parse_positive_double, NULL, &blur }
+    { "blur", parse_positive_double, NULL, &blur },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *node;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  node = gsk_inset_shadow_node_new2 (&outline, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
+  node = gsk_inset_shadow_node_new_snapped (&outline, snap, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
 
   gdk_color_finish (&color);
 
@@ -3126,19 +3128,21 @@ parse_outset_shadow_node (GtkCssParser *parser,
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
   GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
   double dx = 1, dy = 1, blur = 0, spread = 0;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
     { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
-    { "blur", parse_positive_double, NULL, &blur }
+    { "blur", parse_positive_double, NULL, &blur },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *node;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  node = gsk_outset_shadow_node_new2 (&outline, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
+  node = gsk_outset_shadow_node_new_snapped (&outline, snap, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
 
   gdk_color_finish (&color);
 
@@ -5552,6 +5556,7 @@ render_node_print (Printer       *p,
       {
         start_node (p, "outset-shadow", node_name);
 
+        append_snap_param (p, "snap", gsk_outset_shadow_node_get_snap (node));
         append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node), 0.0f);
         if (!gdk_color_equal (gsk_outset_shadow_node_get_gdk_color (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
           append_color_param (p, "color", gsk_outset_shadow_node_get_gdk_color (node));
@@ -5753,6 +5758,7 @@ render_node_print (Printer       *p,
       {
         start_node (p, "inset-shadow", node_name);
 
+        append_snap_param (p, "snap", gsk_inset_shadow_node_get_snap (node));
         append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node), 0.0f);
         if (!gdk_color_equal (gsk_inset_shadow_node_get_gdk_color (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
           append_color_param (p, "color", gsk_inset_shadow_node_get_gdk_color (node));

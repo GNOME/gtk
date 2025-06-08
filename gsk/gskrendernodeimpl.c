@@ -3534,6 +3534,8 @@ struct _GskInsetShadowNode
   graphene_point_t offset;
   float spread;
   float blur_radius;
+
+  GskRectSnap snap;
 };
 
 static void
@@ -3940,7 +3942,8 @@ gsk_inset_shadow_node_diff (GskRenderNode *node1,
       gdk_color_equal (&self1->color, &self2->color) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->spread == self2->spread &&
-      self1->blur_radius == self2->blur_radius)
+      self1->blur_radius == self2->blur_radius &&
+      self1->snap == self2->snap)
     return;
 
   gsk_render_node_diff_impossible (node1, node2, data);
@@ -3985,34 +3988,40 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
   GskRenderNode *node;
 
   gdk_color_init_from_rgba (&color2, color);
-  node = gsk_inset_shadow_node_new2 (outline,
-                                     &color2,
-                                     &GRAPHENE_POINT_INIT (dx, dy),
-                                     spread, blur_radius);
+  node = gsk_inset_shadow_node_new_snapped (outline,
+                                            GSK_RECT_SNAP_NONE,
+                                            &color2,
+                                            &GRAPHENE_POINT_INIT (dx, dy),
+                                            spread, blur_radius);
   gdk_color_finish (&color2);
 
   return node;
 }
 
-/*< private >
- * gsk_inset_shadow_node_new2:
+/**
+ * gsk_inset_shadow_node_new_snapped:
  * @outline: outline of the region containing the shadow
+ * @snap: the snap value
  * @color: color of the shadow
  * @offset: offset of shadow
  * @spread: how far the shadow spreads towards the inside
  * @blur_radius: how much blur to apply to the shadow
  *
  * Creates a `GskRenderNode` that will render an inset shadow
- * into the box given by @outline.
+ * into the box given by @outline and aligned to the pixel grid
+ * according to @snap.
  *
  * Returns: (transfer full) (type GskInsetShadowNode): A new `GskRenderNode`
+ *
+ * Since: 4.20
  */
 GskRenderNode *
-gsk_inset_shadow_node_new2 (const GskRoundedRect   *outline,
-                            const GdkColor         *color,
-                            const graphene_point_t *offset,
-                            float                   spread,
-                            float                   blur_radius)
+gsk_inset_shadow_node_new_snapped (const GskRoundedRect   *outline,
+                                   GskRectSnap             snap,
+                                   const GdkColor         *color,
+                                   const graphene_point_t *offset,
+                                   float                   spread,
+                                   float                   blur_radius)
 {
   GskInsetShadowNode *self;
   GskRenderNode *node;
@@ -4032,6 +4041,7 @@ gsk_inset_shadow_node_new2 (const GskRoundedRect   *outline,
   self->offset = *offset;
   self->spread = spread;
   self->blur_radius = blur_radius;
+  self->snap = snap;
 
   gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
 
@@ -4074,13 +4084,33 @@ gsk_inset_shadow_node_get_color (const GskRenderNode *node)
   return (const GdkRGBA *) &self->color.values;
 }
 
-/*< private >
+/**
+ * gsk_inset_shadow_node_get_snap:
+ * @node: (type GskInsetShadowNode): a `GskRenderNode`
+ *
+ * Retrieves the snap value used when creating this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskRectSnap
+gsk_inset_shadow_node_get_snap (const GskRenderNode *node)
+{
+  const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
+
+  return self->snap;
+}
+
+/**
  * gsk_inset_shadow_node_get_gdk_color:
  * @node: (type GskInsetShadowNode): a `GskRenderNode`
  *
  * Retrieves the color of the given @node.
  *
  * Returns: (transfer none): the color of the node
+ *
+ * Since: 4.20
  */
 const GdkColor *
 gsk_inset_shadow_node_get_gdk_color (const GskRenderNode *node)
@@ -4187,6 +4217,8 @@ struct _GskOutsetShadowNode
   graphene_point_t offset;
   float spread;
   float blur_radius;
+
+  GskRectSnap snap;
 };
 
 static void
@@ -4336,7 +4368,8 @@ gsk_outset_shadow_node_diff (GskRenderNode *node1,
       gdk_color_equal (&self1->color, &self2->color) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->spread == self2->spread &&
-      self1->blur_radius == self2->blur_radius)
+      self1->blur_radius == self2->blur_radius &&
+      self1->snap == self2->snap)
     return;
 
   gsk_render_node_diff_impossible (node1, node2, data);
@@ -4381,34 +4414,40 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
   GskRenderNode *node;
 
   gdk_color_init_from_rgba (&color2, color);
-  node = gsk_outset_shadow_node_new2 (outline,
-                                      &color2,
-                                      &GRAPHENE_POINT_INIT (dx, dy),
-                                      spread, blur_radius);
+  node = gsk_outset_shadow_node_new_snapped (outline,
+                                             GSK_RECT_SNAP_NONE,
+                                             &color2,
+                                             &GRAPHENE_POINT_INIT (dx, dy),
+                                             spread, blur_radius);
   gdk_color_finish (&color2);
 
   return node;
 }
 
-/*< private >
- * gsk_outset_shadow_node_new2:
+/**
+ * gsk_outset_shadow_node_new_snapped:
  * @outline: outline of the region surrounded by shadow
+ * @snap: the snap value
  * @color: color of the shadow
  * @offset: offset of shadow
  * @spread: how far the shadow spreads towards the inside
  * @blur_radius: how much blur to apply to the shadow
  *
  * Creates a `GskRenderNode` that will render an outset shadow
- * around the box given by @outline.
+ * around the box given by @outline and aligned to the pixel grid
+ * according to @snap.
  *
  * Returns: (transfer full) (type GskOutsetShadowNode): A new `GskRenderNode`
+ *
+ * Since: 4.20
  */
 GskRenderNode *
-gsk_outset_shadow_node_new2 (const GskRoundedRect   *outline,
-                             const GdkColor         *color,
-                             const graphene_point_t *offset,
-                             float                   spread,
-                             float                   blur_radius)
+gsk_outset_shadow_node_new_snapped (const GskRoundedRect   *outline,
+                                    GskRectSnap             snap,
+                                    const GdkColor         *color,
+                                    const graphene_point_t *offset,
+                                    float                   spread,
+                                    float                   blur_radius)
 {
   GskOutsetShadowNode *self;
   GskRenderNode *node;
@@ -4428,6 +4467,8 @@ gsk_outset_shadow_node_new2 (const GskRoundedRect   *outline,
   self->offset = *offset;
   self->spread = spread;
   self->blur_radius = blur_radius;
+
+  self->snap = snap;
 
   gsk_outset_shadow_get_extents (self, &top, &right, &bottom, &left);
 
@@ -4476,13 +4517,33 @@ gsk_outset_shadow_node_get_color (const GskRenderNode *node)
   return (const GdkRGBA *) &self->color.values;
 }
 
-/*< private >
+/**
+ * gsk_outset_shadow_node_get_snap:
+ * @node: (type GskOutsetShadowNode): a `GskRenderNode`
+ *
+ * Retrieves the snap value used when creating this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskRectSnap
+gsk_outset_shadow_node_get_snap (const GskRenderNode *node)
+{
+  const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
+
+  return self->snap;
+}
+
+/**
  * gsk_outset_shadow_node_get_gdk_color:
  * @node: (type GskOutsetShadowNode): a `GskRenderNode`
  *
  * Retrieves the color of the given @node.
  *
  * Returns: (transfer none): the color of the node
+ *
+ * Since: 4.20
  */
 const GdkColor *
 gsk_outset_shadow_node_get_gdk_color (const GskRenderNode *node)

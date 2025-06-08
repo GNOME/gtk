@@ -345,6 +345,7 @@ uniforms in the shader.
 | dy       | `<number>`       | 1                      | non-default |
 | outline  | `<rounded-rect>` | 50                     | always      |
 | spread   | `<number>`       | 0                      | non-default |
+| snap     | `<snap>`         | none                   | non-default |
 
 Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 
@@ -395,6 +396,7 @@ Creates a node like `gsk_transform_node_new()` with the given properties.
 | dy       | `<number>`       | 1                      | non-default |
 | outline  | `<rounded-rect>` | 50                     | always      |
 | spread   | `<number>`       | 0                      | non-default |
+| snap     | `<snap>`         | none                   | non-default |
 
 Creates a node like `gsk_outset_shadow_node_new()` with the given properties.
 

@@ -3392,21 +3392,25 @@ gtk_snapshot_add_inset_shadow (GtkSnapshot            *snapshot,
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, x, y;
+  GtkSnapshotState *state;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (outline != NULL);
   g_return_if_fail (color != NULL);
   g_return_if_fail (offset != NULL);
 
+  state = gtk_snapshot_get_current_state (snapshot);
+
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
-  node = gsk_inset_shadow_node_new2 (&real_outline,
-                                     color,
-                                     &GRAPHENE_POINT_INIT (scale_x * offset->x,
-                                                           scale_y * offset->y),
-                                     spread,
-                                     blur_radius);
+  node = gsk_inset_shadow_node_new_snapped (&real_outline,
+                                            state->snap,
+                                            color,
+                                            &GRAPHENE_POINT_INIT (scale_x * offset->x,
+                                                                  scale_y * offset->y),
+                                            spread,
+                                            blur_radius);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
@@ -3465,21 +3469,25 @@ gtk_snapshot_add_outset_shadow (GtkSnapshot            *snapshot,
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, x, y;
+  GtkSnapshotState *state;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (outline != NULL);
   g_return_if_fail (color != NULL);
   g_return_if_fail (offset != NULL);
 
+  state = gtk_snapshot_get_current_state (snapshot);
+
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
-  node = gsk_outset_shadow_node_new2 (&real_outline,
-                                      color,
-                                      &GRAPHENE_POINT_INIT (scale_x * offset->x,
-                                                            scale_y * offset->y),
-                                      spread,
-                                      blur_radius);
+  node = gsk_outset_shadow_node_new_snapped (&real_outline,
+                                             state->snap,
+                                             color,
+                                             &GRAPHENE_POINT_INIT (scale_x * offset->x,
+                                                                   scale_y * offset->y),
+                                             spread,
+                                             blur_radius);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
