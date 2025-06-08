@@ -9137,15 +9137,17 @@ gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
 
   priv = text_view->priv;
 
-  if (cursor)
-    insert = *cursor;
-  else
-    gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
-                                      gtk_text_buffer_get_insert (get_buffer (text_view)));
-
   if ((x && priv->virtual_cursor_x == -1) ||
       (y && priv->virtual_cursor_y == -1))
-    gtk_text_layout_get_cursor_locations (priv->layout, &insert, &pos, NULL);
+    {
+      if (cursor)
+        insert = *cursor;
+      else
+        gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
+                                          gtk_text_buffer_get_insert (get_buffer (text_view)));
+
+      gtk_text_layout_get_cursor_locations (priv->layout, &insert, &pos, NULL);
+    }
 
   if (x)
     {
