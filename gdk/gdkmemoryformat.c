@@ -206,6 +206,8 @@ name ## _mipmap_linear (guchar                *dest, \
     { \
       guint32 y_ = 0, u_ = 0, v_ = 0; \
 \
+      x = 0; /* silence MSVC */\
+\
       for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
         { \
           const T *y_data = (const T *) (src + gdk_memory_layout_offset (src_layout, 0, 0, y + y_start));\
@@ -320,6 +322,8 @@ name ## _mipmap_linear (guchar                *dest, \
     { \
       guint32 y_ = 0, u_ = 0, v_ = 0; \
 \
+      x = 0; /* silence MSVC */\
+\
       for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
         { \
           const guchar *y_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, 0, 0, y + y_start));\
@@ -413,6 +417,8 @@ name ## _mipmap_linear (guchar                *dest, \
   for (x_start = 0; x_start < src_layout->width; x_start += n) \
     { \
       guint32 y_ = 0, u_ = 0, v_ = 0; \
+\
+      x = 0; /* silence MSVC */\
 \
       for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
         { \
@@ -766,6 +772,8 @@ gdk_mipmap_ ## DataType ## _ ## n_units ## _linear (guchar                *dest,
   for (x_dest = 0; x_dest < src_layout->width; x_dest += n) \
     { \
       SumType tmp[n_units] = { 0, }; \
+\
+      x = 0; /* silence MSVC */\
 \
       for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
         { \
