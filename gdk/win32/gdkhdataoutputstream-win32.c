@@ -369,6 +369,8 @@ gdk_win32_hdata_output_stream_new (GdkWin32Clipdrop           *clipdrop,
           return NULL;
         }
     }
+  else
+    handle = NULL; /* silence compiler */
 
   stream = g_object_new (GDK_TYPE_WIN32_HDATA_OUTPUT_STREAM, NULL);
   priv = gdk_win32_hdata_output_stream_get_instance_private (stream);
