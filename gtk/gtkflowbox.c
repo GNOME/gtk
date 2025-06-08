@@ -2563,7 +2563,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
     {
       GtkCssStyle *style;
       GSequenceIter *iter, *iter1, *iter2;
-      GdkRectangle line_rect, rect;
+      GdkRectangle line_rect = { 0, }, rect;
       GArray *lines;
       gboolean vertical;
       cairo_t *cr;
@@ -2585,7 +2585,6 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           iter2 = iter;
         }
 
-      line_rect.width = 0;
       lines = g_array_new (FALSE, FALSE, sizeof (GdkRectangle));
 
       for (iter = iter1;
