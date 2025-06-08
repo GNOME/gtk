@@ -112,7 +112,7 @@ resolve_references_do (GtkCssVariableValue *value,
       GtkCssVariableValueReference *ref = &value->references[i];
       int id = gtk_css_custom_property_pool_lookup (pool, ref->name);
       GtkCssVariableValue *var_value = NULL;
-      gsize var_length, var_refs;
+      gsize var_length = 0, var_refs = 0;
       GtkCssVariableSet *source = style_variables;
       ResolveResult result = RESOLVE_INVALID;
 
