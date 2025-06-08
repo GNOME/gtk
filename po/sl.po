@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-05-28 16:12+0000\n"
-"PO-Revision-Date: 2025-05-28 20:16+0200\n"
+"POT-Creation-Date: 2025-06-07 19:08+0000\n"
+"PO-Revision-Date: 2025-06-08 09:01+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -53,22 +53,22 @@ msgstr "Ni mogoče brati iz praznega odložišča."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Ni skladnih zapisov za prenos vsebine odložišča."
 
-#: gdk/gdkcolorstate.c:1078
+#: gdk/gdkcolorstate.c:1081
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: nedoločeni parametri niso podprti"
 
-#: gdk/gdkcolorstate.c:1124
+#: gdk/gdkcolorstate.c:1127
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: funkcija prenosa %u ni podprta"
 
-#: gdk/gdkcolorstate.c:1155
+#: gdk/gdkcolorstate.c:1158
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: Primarne barve %u niso podprte"
 
-#: gdk/gdkcolorstate.c:1182
+#: gdk/gdkcolorstate.c:1185
 #, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp: Koeficienti matrike %u, %s niso podprti"
@@ -84,11 +84,11 @@ msgstr "Ni mogoče določiti vsebine kot »%s«."
 msgid "Cannot provide contents as %s"
 msgstr "Ni mogoče določiti vsebine kot %s."
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:468
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:471
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1767
+#: gdk/gdkdisplay.c:1368 gdk/gdkvulkancontext.c:1754
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Podpora Vulkan je onemogočena z GDK_DISABLE"
 
@@ -150,25 +150,24 @@ msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 msgid "No compatible formats to transfer contents."
 msgstr "Ni skladnih zapisov za prenos vsebine."
 
-#: gdk/gdkglcontext.c:428 gdk/x11/gdkglcontext-glx.c:654
+#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:654
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:451 gdk/win32/gdkglcontext-win32-wgl.c:706
-#: gdk/win32/gdkglcontext-win32-wgl.c:849
-#: gdk/win32/gdkglcontext-win32-wgl.c:893 gdk/x11/gdkglcontext-glx.c:700
+#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:674
+#: gdk/win32/gdkglcontext-win32-wgl.c:800 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
-#: gdk/gdkglcontext.c:1316
+#: gdk/gdkglcontext.c:1447
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL ES API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1328
+#: gdk/gdkglcontext.c:1459
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1339
+#: gdk/gdkglcontext.c:1470
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Program ne podpira vmesnika API %s"
@@ -176,17 +175,17 @@ msgstr "Program ne podpira vmesnika API %s"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2130
+#: gdk/gdkglcontext.c:2261
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 
-#: gdk/gdkglcontext.c:2141
+#: gdk/gdkglcontext.c:2272
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Poskus uporabe %s, vendar je onemogočeno prek GDK_DISABLE"
 
-#: gdk/gdktexture.c:678
+#: gdk/gdktexture.c:679
 msgid "Unknown image format."
 msgstr "Neznan zapis slike."
 
@@ -773,21 +772,21 @@ msgstr ""
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:636
+#: gdk/win32/gdkglcontext-win32-wgl.c:604
 msgid "No GL implementation is available"
 msgstr "Okolje GL ni na voljo"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:715
+#: gdk/win32/gdkglcontext-win32-wgl.c:688
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Različica WGL %d.%d je prestara, zahtevana je različica vsaj %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:733
+#: gdk/win32/gdkglcontext-win32-wgl.c:707
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Izvedba GL ne more uporabiti vsebine GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1013
+#: gdk/win32/gdkglcontext-win32-wgl.c:931
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
@@ -900,7 +899,7 @@ msgstr "Izrisovalnik ne podpira OpenGL ES 3.0"
 msgid "OpenGL 3.3 required"
 msgstr "Potrebujete OpenGL 3.3"
 
-#: gsk/gpu/gskvulkanrenderer.c:158
+#: gsk/gpu/gskvulkanrenderer.c:159
 msgid "Vulkan support disabled during GTK build"
 msgstr "Podpora za Vulkan je med gradnjo GTK onemogočena"
 
@@ -2334,7 +2333,7 @@ msgstr "Datoteka s tem imenom že obstaja."
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6470 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6471 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2865,7 +2864,7 @@ msgid "Play"
 msgstr "Predvajaj"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6471
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6472
 msgid "_OK"
 msgstr "_V redu"
 
@@ -4494,12 +4493,12 @@ msgstr "_Razveljavi"
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
-#: gtk/gtkwindow.c:6459
+#: gtk/gtkwindow.c:6460
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
-#: gtk/gtkwindow.c:6461
+#: gtk/gtkwindow.c:6462
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4510,7 +4509,7 @@ msgstr ""
 "nastavitev kateregakoli programa GTK. Neustrezna raba lahko povzroči napačno "
 "delovanje oziroma sesutje okolja."
 
-#: gtk/gtkwindow.c:6466
+#: gtk/gtkwindow.c:6467
 msgid "Don’t show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -4691,21 +4690,21 @@ msgstr "Razredi slogov"
 msgid "CSS Property"
 msgstr "Lastnosti CSS"
 
-#: gtk/inspector/general.c:469
+#: gtk/inspector/general.c:470
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:644
+#: gtk/inspector/general.c:645
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:741
+#: gtk/inspector/general.c:742
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
+#: gtk/inspector/general.c:996 gtk/inspector/general.c:1035
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
@@ -5056,7 +5055,7 @@ msgstr "Vir:"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:2182
+#: gtk/inspector/recorder.c:2188
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
@@ -8281,12 +8280,12 @@ msgstr "konec črte"
 msgid "line join"
 msgstr "spoj črte"
 
-#: tools/gtk-path-tool-render.c:219
+#: tools/gtk-path-tool-render.c:226
 #, c-format
 msgid "Saving png to '%s' failed"
 msgstr "Shranjevanje datoteke png v »%s« je spodletelo"
 
-#: tools/gtk-path-tool-render.c:226
+#: tools/gtk-path-tool-render.c:233
 #, c-format
 msgid "Output written to '%s'."
 msgstr "Odvod je zapisan v »%s«."
@@ -8370,6 +8369,7 @@ msgid ""
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
 "  compare      Compare nodes or images\n"
+"  convert      Convert into nodes\n"
 "  extract      Extract data urls\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
@@ -8384,6 +8384,7 @@ msgstr ""
 "Ukazi:\n"
 "  benchmark    Preizkusno izrisovanje vozlišča\n"
 "  compare      Primerja vozlišča ali slike\n"
+"  convert      Pretvori v vozlišča\n"
 "  extract      Izvleče url-je podatkov\n"
 "  info         Izpiše podatke o vozlišču\n"
 "  show         Pokaže vozlišče\n"
