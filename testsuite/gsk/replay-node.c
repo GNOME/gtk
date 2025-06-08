@@ -195,8 +195,11 @@ replay_inset_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
   float spread = gsk_inset_shadow_node_get_spread (node);
   float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_inset_shadow_node_get_snap (node));
   gtk_snapshot_add_inset_shadow (snapshot, outline, color,
                                  offset, spread, blur_radius);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
@@ -208,8 +211,11 @@ replay_outset_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
   float spread = gsk_outset_shadow_node_get_spread (node);
   float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_outset_shadow_node_get_snap (node));
   gtk_snapshot_add_outset_shadow (snapshot, outline, color,
                                   offset, spread, blur_radius);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
