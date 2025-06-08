@@ -1155,24 +1155,21 @@ inner_clipboard_hwnd_procedure (HWND   hwnd,
 
         GDK_NOTE (DND, g_print (" \n"));
 
-        if (CLIPDROP_CB_THREAD_MEMBER (clipdrop, stored_hwnd_owner) != hwnd_owner)
+        CLIPDROP_CB_THREAD_MEMBER (clipdrop, stored_hwnd_owner) = hwnd_owner;
+        CLIPDROP_CB_THREAD_MEMBER (clipdrop, owner_change_time) = g_get_monotonic_time ();
+
+        if (hwnd_owner != CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd))
           {
-            CLIPDROP_CB_THREAD_MEMBER (clipdrop, stored_hwnd_owner) = hwnd_owner;
-            CLIPDROP_CB_THREAD_MEMBER (clipdrop, owner_change_time) = g_get_monotonic_time ();
+            if (CLIPDROP_CB_THREAD_MEMBER (clipdrop, cached_advertisement))
+              g_array_free (CLIPDROP_CB_THREAD_MEMBER (clipdrop, cached_advertisement), TRUE);
 
-            if (hwnd_owner != CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd))
-              {
-                if (CLIPDROP_CB_THREAD_MEMBER (clipdrop, cached_advertisement))
-                  g_array_free (CLIPDROP_CB_THREAD_MEMBER (clipdrop, cached_advertisement), TRUE);
-
-                CLIPDROP_CB_THREAD_MEMBER (clipdrop, cached_advertisement) = NULL;
-              }
-
-            process_clipboard_queue (clipdrop);
-
-            if (hwnd_owner != CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd))
-              g_idle_add_full (G_PRIORITY_DEFAULT, clipboard_owner_changed, NULL, NULL);
+            CLIPDROP_CB_THREAD_MEMBER (clipdrop, cached_advertisement) = NULL;
           }
+
+        process_clipboard_queue (clipdrop);
+
+        if (hwnd_owner != CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd))
+          g_idle_add_full (G_PRIORITY_DEFAULT, clipboard_owner_changed, NULL, NULL);
 
         /* clear error to avoid confusing SetClipboardViewer() return */
         SetLastError (0);
