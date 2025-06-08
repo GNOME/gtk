@@ -332,7 +332,7 @@ apply_current_scale (cairo_t *cr,
     *y *= fabs (y_scale);
 }
 
-static const cairo_user_data_key_t original_cr_key;
+static const cairo_user_data_key_t original_cr_key = { 0, };
 
 cairo_t *
 gsk_cairo_blur_start_drawing (cairo_t         *cr,

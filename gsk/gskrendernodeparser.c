@@ -5935,7 +5935,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
             if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_RECORDING)
               {
-                static const cairo_user_data_key_t cairo_is_stupid_key;
+                static const cairo_user_data_key_t cairo_is_stupid_key = { 0, };
                 cairo_device_t *script;
 
                 array = g_byte_array_new ();
