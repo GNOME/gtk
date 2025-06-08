@@ -484,6 +484,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
 
   escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
   len = strlen (escaped_file_data);
+  data = g_new0 (guchar, 4 * width * height);
 
   for (int plane = 0; plane < 3; plane++)
     {
@@ -510,7 +511,10 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
                                   plane == 2 ? r_string : g_string,
                                   error);
       if (loaded == NULL)
-        goto out;
+        {
+          g_free (data);
+          goto out;
+        }
 
 #ifdef DEBUG_SYMBOLIC
         {
@@ -528,10 +532,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
 #endif
 
       if (plane == 0)
-        {
-          data = g_new0 (guchar, 4 * width * height);
-          extract_plane (loaded, data, width, height, 3, 3);
-        }
+        extract_plane (loaded, data, width, height, 3, 3);
 
       only_fg &= extract_plane (loaded, data, width, height, 0, plane);
 
