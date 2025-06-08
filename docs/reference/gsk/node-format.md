@@ -469,6 +469,7 @@ Creates a node like `gsk_rounded_clip_node_new()` with the given properties.
 | -------- | ---------------- | ---------------------- | ----------- |
 | child    | `<node>`         | color { }              | always      |
 | shadows  | `<shadow>`       | black 1 1              | always      |
+| snap     | `<snap>`         | none                   | non-default |
 
 Creates a node like `gsk_shadow_node_new()` with the given properties.
 

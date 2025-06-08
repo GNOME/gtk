@@ -1378,11 +1378,12 @@ gtk_snapshot_collect_shadow (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  shadow_node = gsk_shadow_node_new2 (node,
-                                      state->data.shadow.shadows != NULL
-                                        ? state->data.shadow.shadows
-                                        : &state->data.shadow.a_shadow,
-                                      state->data.shadow.n_shadows);
+  shadow_node = gsk_shadow_node_new_snapped (node,
+                                             state->snap,
+                                             state->data.shadow.shadows != NULL
+                                               ? state->data.shadow.shadows
+                                               : &state->data.shadow.a_shadow,
+                                             state->data.shadow.n_shadows);
 
   gsk_render_node_unref (node);
 

@@ -130,22 +130,6 @@ const graphene_point_t *gsk_inset_shadow_node_get_offset        (const GskRender
 
 const graphene_point_t *gsk_outset_shadow_node_get_offset       (const GskRenderNode    *node);
 
-typedef struct _GskShadowEntry GskShadowEntry;
-struct _GskShadowEntry
-{
-  GdkColor color;
-  graphene_point_t offset;
-  float radius;
-};
-
-GskRenderNode * gsk_shadow_node_new2                    (GskRenderNode        *child,
-                                                         const GskShadowEntry *shadows,
-                                                         gsize                 n_shadows);
-
-const GskShadowEntry *gsk_shadow_node_get_shadow_entry  (const GskRenderNode  *node,
-                                                         gsize                 i);
-
-
 #define GSK_RENDER_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
 
 #define gsk_render_node_get_node_type(node) _gsk_render_node_get_node_type (node)

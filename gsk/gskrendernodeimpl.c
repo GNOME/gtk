@@ -6869,6 +6869,8 @@ struct _GskShadowNode
 {
   GskRenderNode render_node;
 
+  GskRectSnap snap;
+
   GskRenderNode *child;
 
   gsize n_shadows;
@@ -6950,7 +6952,8 @@ gsk_shadow_node_diff (GskRenderNode *node1,
   cairo_rectangle_int_t rect;
   gsize i, n;
 
-  if (self1->n_shadows != self2->n_shadows)
+  if (self1->n_shadows != self2->n_shadows ||
+      self1->snap != self2->snap)
     {
       gsk_render_node_diff_impossible (node1, node2, data);
       return;
@@ -7061,7 +7064,7 @@ gsk_shadow_node_new (GskRenderNode   *child,
       shadows2[i].radius = shadows[i].radius;
     }
 
-  node = gsk_shadow_node_new2 (child, shadows2, n_shadows);
+  node = gsk_shadow_node_new_snapped (child, GSK_RECT_SNAP_NONE, shadows2, n_shadows);
 
   for (gsize i = 0; i < n_shadows; i++)
     gdk_color_finish (&shadows2[i].color);
@@ -7071,7 +7074,8 @@ gsk_shadow_node_new (GskRenderNode   *child,
 }
 
 /*< private >
- * gsk_shadow_node_new2:
+ * gsk_shadow_node_new_snapped:
+ * @snap: the snap value
  * @child: The node to draw
  * @shadows: (array length=n_shadows): The shadows to apply
  * @n_shadows: number of entries in the @shadows array
@@ -7082,9 +7086,10 @@ gsk_shadow_node_new (GskRenderNode   *child,
  * Returns: (transfer full) (type GskShadowNode): A new `GskRenderNode`
  */
 GskRenderNode *
-gsk_shadow_node_new2 (GskRenderNode        *child,
-                      const GskShadowEntry *shadows,
-                      gsize                 n_shadows)
+gsk_shadow_node_new_snapped (GskRenderNode        *child,
+                             GskRectSnap           snap,
+                             const GskShadowEntry *shadows,
+                             gsize                 n_shadows)
 {
   GskShadowNode *self;
   GskRenderNode *node;
@@ -7098,6 +7103,8 @@ gsk_shadow_node_new2 (GskRenderNode        *child,
   self = gsk_render_node_alloc (GSK_SHADOW_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = TRUE;
+
+  self->snap = snap;
 
   self->child = gsk_render_node_ref (child);
   self->n_shadows = n_shadows;
@@ -7135,6 +7142,24 @@ gsk_shadow_node_get_child (const GskRenderNode *node)
   const GskShadowNode *self = (const GskShadowNode *) node;
 
   return self->child;
+}
+
+/**
+ * gsk_shadoww_node_get_snap:
+ * @node: (type GskShadowNode): a `GskRenderNode`
+ *
+ * Retrieves the snap value used when creating this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskRectSnap
+gsk_shadow_node_get_snap (const GskRenderNode *node)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+
+  return self->snap;
 }
 
 /**

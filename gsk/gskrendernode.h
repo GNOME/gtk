@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 
 typedef struct _GskColorStop            GskColorStop;
 typedef struct _GskShadow               GskShadow;
+typedef struct _GskShadowEntry          GskShadowEntry;
 
 /**
  * GskColorStop:
@@ -66,6 +67,27 @@ struct _GskShadow
   GdkRGBA color;
   float dx;
   float dy;
+  float radius;
+};
+
+/**
+ * GskShadowEntry:
+ * @color: the color of the shadow
+ * @offset: the offset of the shadow
+ * @radius: the radius of the shadow
+ *
+ * The shadow parameters in a shadow node.
+ *
+ * In contrast to [struct@Gsk.Shadow], this struct
+ * uses a [struct@Gdk.Color] to allow specifying
+ * color state information.
+ *
+ * Since: 4.20
+ */
+struct _GskShadowEntry
+{
+  GdkColor color;
+  graphene_point_t offset;
   float radius;
 };
 
@@ -687,11 +709,21 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_shadow_node_new                     (GskRenderNode            *child,
                                                                  const GskShadow          *shadows,
                                                                  gsize                     n_shadows);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_shadow_node_new_snapped             (GskRenderNode        *child,
+                                                                 GskRectSnap           snap,
+                                                                 const GskShadowEntry *shadows,
+                                                                 gsize                 n_shadows);
+GDK_AVAILABLE_IN_4_20
+GskRectSnap             gsk_shadow_node_get_snap                (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_shadow_node_get_child               (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GskShadow *       gsk_shadow_node_get_shadow              (const GskRenderNode      *node,
                                                                  gsize                     i) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+const GskShadowEntry *  gsk_shadow_node_get_shadow_entry        (const GskRenderNode  *node,
+                                                                 gsize                 i) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gsize                   gsk_shadow_node_get_n_shadows           (const GskRenderNode      *node) G_GNUC_PURE;
 

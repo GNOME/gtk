@@ -3818,9 +3818,11 @@ parse_shadow_node (GtkCssParser *parser,
 {
   GskRenderNode *child = NULL;
   GArray *shadows = g_array_new (FALSE, TRUE, sizeof (GskShadowEntry));
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
     { "shadows", parse_shadows, clear_shadows, shadows },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *result;
 
@@ -3834,7 +3836,7 @@ parse_shadow_node (GtkCssParser *parser,
       g_array_append_val (shadows, default_shadow);
     }
 
-  result = gsk_shadow_node_new2 (child, (GskShadowEntry *)shadows->data, shadows->len);
+  result = gsk_shadow_node_new_snapped (child, snap, (GskShadowEntry *)shadows->data, shadows->len);
 
   clear_shadows (shadows);
   g_array_free (shadows, TRUE);
@@ -5787,6 +5789,8 @@ render_node_print (Printer       *p,
         int i;
 
         start_node (p, "shadow", node_name);
+
+        append_snap_param (p, "snap", gsk_shadow_node_get_snap (node));
 
         _indent (p);
         g_string_append (p->str, "shadows: ");
