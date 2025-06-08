@@ -1042,15 +1042,12 @@ gdk_wintab_make_event (GdkDisplay *display,
 	    g_print ("gdk_wintab_make_event: surface=%p %+g%+g\n",
                surface ? GDK_SURFACE_HWND (surface) : NULL, x, y));
 
-  if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)
-    {
-      if (!WINTAB_API_CALL (device_manager, WTPacket) ((HCTX) msg->lParam, msg->wParam, &packet))
-        return NULL;
-    }
-
   switch (msg->message)
     {
     case WT_PACKET:
+      if (!WINTAB_API_CALL (device_manager, WTPacket) ((HCTX) msg->lParam, msg->wParam, &packet))
+        return NULL;
+
       source_device = gdk_device_manager_find_wintab_device (device_manager,
 							     (HCTX) msg->lParam,
 							     packet.pkCursor);
@@ -1241,6 +1238,9 @@ gdk_wintab_make_event (GdkDisplay *display,
       return event;
 
     case WT_CSRCHANGE:
+      if (!WINTAB_API_CALL (device_manager, WTPacket) ((HCTX) msg->lParam, msg->wParam, &packet))
+        return NULL;
+
       if (device_manager->dev_entered_proximity > 0)
 	device_manager->dev_entered_proximity -= 1;
 
