@@ -2655,7 +2655,7 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
   g_free (stops2);
 }
 
-/*< private >
+/**
  * gtk_snapshot_add_linear_gradient:
  * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the linear gradient into
@@ -2667,6 +2667,8 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
  * @n_stops: the number of elements in @stops
  *
  * Appends a linear gradient node with the given stops to @snapshot.
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_add_linear_gradient (GtkSnapshot            *snapshot,
@@ -2782,7 +2784,7 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
   g_free (stops2);
 }
 
-/*< private >
+/**
  * gtk_snapshot_add_repeating_linear_gradient:
  * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the linear gradient into
@@ -2794,6 +2796,8 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
  * @n_stops: the number of elements in @stops
  *
  * Appends a repeating linear gradient node with the given stops to @snapshot.
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_add_repeating_linear_gradient (GtkSnapshot            *snapshot,
@@ -2907,7 +2911,7 @@ gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
   g_free (stops2);
 }
 
-/*< private >
+/**
  * gtk_snapshot_add_conic_gradient:
  * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the gradient into
@@ -2920,6 +2924,8 @@ gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
  * @n_stops: the number of elements in @stops
  *
  * Appends a conic gradient node with the given stops to @snapshot.
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_add_conic_gradient (GtkSnapshot            *snapshot,
@@ -3036,7 +3042,7 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
   g_free (stops2);
 }
 
-/*< private >
+/**
  * gtk_snapshot_add_radial_gradient:
  * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the readial gradient into
@@ -3051,6 +3057,8 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
  * @n_stops: the number of elements in @stops
  *
  * Appends a radial gradient node with the given stops to @snapshot.
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_add_radial_gradient (GtkSnapshot            *snapshot,
@@ -3169,7 +3177,7 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
   g_free (stops2);
 }
 
-/*< private >
+/**
  * gtk_snapshot_add_repeating_radial_gradient:
  * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the readial gradient into
@@ -3184,6 +3192,8 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
  * @n_stops: the number of elements in @stops
  *
  * Appends a repeating radial gradient node with the given stops to @snapshot.
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_add_repeating_radial_gradient (GtkSnapshot            *snapshot,
