@@ -278,6 +278,11 @@ void            gtk_snapshot_append_border              (GtkSnapshot            
                                                          const GskRoundedRect   *outline,
                                                          const float             border_width[4],
                                                          const GdkRGBA           border_color[4]);
+GDK_AVAILABLE_IN_4_20
+void            gtk_snapshot_add_border                 (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const float             border_width[4],
+                                                         const GdkColor          border_color[4]);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_inset_shadow        (GtkSnapshot            *snapshot,
                                                          const GskRoundedRect   *outline,

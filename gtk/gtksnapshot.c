@@ -3289,7 +3289,7 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
     gdk_color_finish (&color[i]);
 }
 
-/*< private >
+/**
  * gtk_snapshot_add_border:
  * @snapshot: a `GtkSnapshot`
  * @outline: the outline of the border
@@ -3301,6 +3301,8 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
  * Appends a stroked border rectangle inside the given @outline.
  *
  * The four sides of the border can have different widths and colors.
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_add_border (GtkSnapshot          *snapshot,
