@@ -55,6 +55,11 @@
  *     </template>
  *   </interface>
  * ```
+ *
+ * A common approach is to embed such templates as CDATA marked sections into
+ * a surrounding UI file. Note that if you use this approach, extracting
+ * translatable strings with xgettext will not work for strings inside the
+ * marked section.
  */
 
 struct _GtkBuilderListItemFactory
