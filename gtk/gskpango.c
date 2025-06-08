@@ -514,7 +514,7 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   gdk_color_finish (&color2);
 }
 
-/* < private >
+/**
  * gtk_snapshot_add_layout:
  * @snapshot: a `GtkSnapshot`
  * @layout: the `PangoLayout` to render
@@ -527,6 +527,8 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
  *
  * Note that if the layout does not produce any visible output, then nodes
  * may not be added to the @snapshot.
+ *
+ * Since: 4.20
  **/
 void
 gtk_snapshot_add_layout (GtkSnapshot    *snapshot,

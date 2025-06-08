@@ -317,7 +317,10 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_layout              (GtkSnapshot            *snapshot,
                                                          PangoLayout            *layout,
                                                          const GdkRGBA          *color);
-
+GDK_AVAILABLE_IN_4_20
+void            gtk_snapshot_add_layout                 (GtkSnapshot            *snapshot,
+                                                         PangoLayout            *layout,
+                                                         const GdkColor         *color);
 GDK_AVAILABLE_IN_4_14
 void            gtk_snapshot_append_fill                (GtkSnapshot            *snapshot,
                                                          GskPath                *path,
