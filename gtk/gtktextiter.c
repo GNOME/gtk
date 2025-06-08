@@ -5950,6 +5950,10 @@ _gtk_text_iter_check (const GtkTextIter *iter)
             }
         }
     }
+#ifdef _MSC_VER
+  else
+    seg_byte_offset = 0;
+#endif
 
   if (real->line_char_offset >= 0)
     {
@@ -5983,6 +5987,10 @@ _gtk_text_iter_check (const GtkTextIter *iter)
             }
         }
     }
+#ifdef _MSC_VER
+  else
+    seg_char_offset = 0;
+#endif
 
   if (real->line_char_offset >= 0 && real->line_byte_offset >= 0)
     {

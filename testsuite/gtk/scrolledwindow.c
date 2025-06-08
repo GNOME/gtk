@@ -17,7 +17,7 @@ test_size (gboolean       overlay,
            TestProperty   prop)
 {
   GtkWidget *scrolledwindow, *box;
-  int min_size, max_size, child_size;
+  int min_size = 0, max_size = 0, child_size = 0;
   int scrollbar_size = 0;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

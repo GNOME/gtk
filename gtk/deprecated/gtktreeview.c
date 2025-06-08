@@ -5693,7 +5693,7 @@ validate_visible_area (GtkTreeView *tree_view)
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkTreePath *path = NULL;
   GtkTreePath *above_path = NULL;
-  GtkTreeIter iter;
+  GtkTreeIter iter = { 0, };
   GtkTreeRBTree *tree = NULL;
   GtkTreeRBNode *node = NULL;
   gboolean need_redraw = FALSE;
@@ -6516,7 +6516,10 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
     path = NULL;
 
   if (!path)
-    tree = NULL;
+    {
+      tree = NULL;
+      node = NULL;
+    }
   else
     _gtk_tree_view_find_node (tree_view, path, &tree, &node);
 

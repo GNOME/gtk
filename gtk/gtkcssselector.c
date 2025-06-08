@@ -2181,6 +2181,7 @@ subdivide_infos (GByteArray                 *array,
      as that makes it possible to skip the largest amount of checks later */
 
   max_count = 0;
+  max_selector = (GtkCssSelector) { 0, };
 
   g_hash_table_iter_init (&iter, ht);
   while (g_hash_table_iter_next (&iter, &key, &value))

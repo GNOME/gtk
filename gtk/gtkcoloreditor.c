@@ -221,7 +221,7 @@ popup_edit (GtkWidget  *widget,
             GVariant   *parameters)
 {
   GtkColorEditor *editor = GTK_COLOR_EDITOR (widget);
-  GtkWidget *popup = NULL;
+  GtkWidget *popup;
   GtkRoot *root;
   GtkWidget *focus;
   int position;
@@ -253,6 +253,9 @@ popup_edit (GtkWidget  *widget,
   else
     {
       g_warning ("unsupported popup_edit parameter %s", param);
+      popup = NULL;
+      focus = NULL;
+      position = 0;
     }
 
   if (popup == editor->current_popup)

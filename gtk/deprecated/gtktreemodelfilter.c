@@ -2047,7 +2047,10 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
       current_state = FILTER_ELT (iter.user_data2)->visible_siter != NULL;
     }
   else
-    current_state = FALSE;
+    {
+      iter = (GtkTreeIter) { 0, }; /* MSVC... */
+      current_state = FALSE;
+    }
 
   if (current_state == FALSE && requested_state == FALSE)
     /* no changes required */

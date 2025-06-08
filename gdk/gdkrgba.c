@@ -211,7 +211,6 @@ gdk_rgba_parse (GdkRGBA    *rgba,
     {
       has_alpha = FALSE;
       is_hsl = FALSE;
-      a = 1;
       str += 3;
     }
   else if (strncmp (str, "hsla", 4) == 0)
@@ -224,7 +223,6 @@ gdk_rgba_parse (GdkRGBA    *rgba,
     {
       has_alpha = FALSE;
       is_hsl = TRUE;
-      a = 1;
       str += 3;
     }
   else
@@ -300,6 +298,10 @@ gdk_rgba_parse (GdkRGBA    *rgba,
         return FALSE;
       str = p;
       SKIP_WHITESPACES (str);
+    }
+  else
+    {
+      a = 1;
     }
 
   if (*str != ')')

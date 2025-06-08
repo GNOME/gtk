@@ -2958,14 +2958,16 @@ do_allocate:
       if (ROW_PRIV (row)->header != NULL)
         {
           if (allocate_min || allocate_nat)
-            gtk_widget_measure (ROW_PRIV (row)->header,
-                                GTK_ORIENTATION_VERTICAL, width,
-                                &child_min, &child_nat,
-                                NULL, NULL);
-          if (allocate_min)
-            header_allocation.height = child_min;
-          else if (allocate_nat)
-            header_allocation.height = child_nat;
+            {
+              gtk_widget_measure (ROW_PRIV (row)->header,
+                                  GTK_ORIENTATION_VERTICAL, width,
+                                  &child_min, &child_nat,
+                                  NULL, NULL);
+              if (allocate_min)
+                header_allocation.height = child_min;
+              else
+                header_allocation.height = child_nat;
+            }
           else
             header_allocation.height = sizes[i].minimum_size;
 
@@ -2980,14 +2982,16 @@ do_allocate:
         }
 
       if (allocate_min || allocate_nat)
-        gtk_widget_measure (GTK_WIDGET (row),
-                            GTK_ORIENTATION_VERTICAL, width,
-                            &child_min, &child_nat,
-                            NULL, NULL);
-      if (allocate_min)
-        child_allocation.height = child_min;
-      else if (allocate_nat)
-        child_allocation.height = child_nat;
+        {
+          gtk_widget_measure (GTK_WIDGET (row),
+                              GTK_ORIENTATION_VERTICAL, width,
+                              &child_min, &child_nat,
+                              NULL, NULL);
+          if (allocate_min)
+            child_allocation.height = child_min;
+          else
+            child_allocation.height = child_nat;
+        }
       else
         child_allocation.height = sizes[i].minimum_size;
 

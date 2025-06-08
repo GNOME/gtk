@@ -2608,7 +2608,7 @@ gtk_snapshot_add_linear_gradient (GtkSnapshot            *snapshot,
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
   const GdkColor *first_color;
-  gboolean need_gradient = TRUE;
+  gboolean need_gradient;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (start_point != NULL);
@@ -2634,6 +2634,11 @@ gtk_snapshot_add_linear_gradient (GtkSnapshot            *snapshot,
               break;
             }
         }
+    }
+  else
+    {
+      need_gradient = TRUE;
+      first_color = NULL; /* poor MSVC */
     }
 
   if (need_gradient)
@@ -2730,7 +2735,7 @@ gtk_snapshot_add_repeating_linear_gradient (GtkSnapshot            *snapshot,
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
-  gboolean need_gradient = TRUE;
+  gboolean need_gradient;
   const GdkColor *first_color;
 
   g_return_if_fail (snapshot != NULL);
@@ -2754,6 +2759,11 @@ gtk_snapshot_add_repeating_linear_gradient (GtkSnapshot            *snapshot,
               break;
             }
         }
+    }
+  else
+    {
+      need_gradient = TRUE;
+      first_color = NULL; /* poor MSVC */
     }
 
   if (need_gradient)
@@ -2853,7 +2863,7 @@ gtk_snapshot_add_conic_gradient (GtkSnapshot            *snapshot,
   graphene_rect_t real_bounds;
   float dx, dy;
   const GdkColor *first_color;
-  gboolean need_gradient = TRUE;
+  gboolean need_gradient;
   int i;
 
   g_return_if_fail (snapshot != NULL);
@@ -2876,6 +2886,11 @@ gtk_snapshot_add_conic_gradient (GtkSnapshot            *snapshot,
               break;
             }
         }
+    }
+  else
+    {
+      need_gradient = TRUE;
+      first_color = NULL; /* poor MSVC */
     }
 
   if (need_gradient)

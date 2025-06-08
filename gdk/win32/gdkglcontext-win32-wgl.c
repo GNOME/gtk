@@ -749,11 +749,8 @@ create_wgl_context_with_attribs (HDC           hdc,
         0
       };
 
-      if (share != NULL)
-        context_wgl = GDK_WIN32_GL_CONTEXT_WGL (share);
-
       hglrc = wglCreateContextAttribsARB (hdc,
-                                          share != NULL ? context_wgl->wgl_context : NULL,
+                                          share != NULL ? GDK_WIN32_GL_CONTEXT_WGL (share)->wgl_context : NULL,
                                           attribs);
 
       if (hglrc)

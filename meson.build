@@ -287,11 +287,23 @@ if cc.get_id() == 'msvc'
   # break features.
   test_cflags += [
     '/wd4018', # signed/unsigned mismatch, gcc/clang don't warn about it so the codes littered with it
-    '/wd4334', # '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
     '/wd4068', # unknown pragma, triggers for all gcc/clang pragmas
-    '/wd4116', # breaks G_ALIGNOF()
-    '/wd4267', # conversion from $64BIT to $32BIT, possible loss of data (no gcc warning, so GTK's littered with it)
     '/wd4090', # VC2017 is way too aggressive with this
+    '/wd4100', # same as -Wunused-parameter
+    '/wd4116', # breaks G_ALIGNOF()
+    '/wd4127', # conditional expression is constant - also triggers in macros...
+    '/wd4152', # nonstandard function to data covnversion - g_task_set_source_tag() uses it
+    '/wd4189', # MSVC can't handle G_GNUC_UNUSED
+    '/wd4200', # zero-sized array in struct/union
+    '/wd4201', # nameless struct/union is required with GTK
+    '/wd4206', # empty file - gdkkeys-win32-impl-wow64.c qualifies
+    '/wd4232', # non-static DLL imports - we do that in lots of places with functions, particularly get_type()
+    '/wd4245', # conversion from signed to unsigned (no gcc warning, so GTK's littered with it)
+    '/wd4267', # conversion from $64BIT to $32BIT, possible loss of data (no gcc warning, so GTK's littered with it)
+    '/wd4324', # structure was padded due to alignment specifier - why are you warning about doing what I told you?!
+    '/wd4334', # '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+    '/wd4389', # comparison between signed and unsigned (no gcc warning, so GTK's littered with it)
+    '/wd4702', # unreachable code, triggers after assert_not_reached() which can be compiled out
   ]
 
   msvc_supported_cflags = cc.get_supported_arguments(test_cflags)

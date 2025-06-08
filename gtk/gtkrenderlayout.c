@@ -265,6 +265,7 @@ gtk_css_style_snapshot_caret (GtkCssBoxes    *boxes,
   pango_layout_get_caret_pos (layout, index, &strong_pos, &weak_pos);
 
   direction2 = PANGO_DIRECTION_NEUTRAL;
+  cursor2 = NULL; /* poor MSVC */
 
   if (split_cursor)
     {

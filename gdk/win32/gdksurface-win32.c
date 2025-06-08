@@ -620,7 +620,7 @@ show_surface_internal (GdkSurface *surface,
   if (!already_mapped &&
       GDK_IS_TOPLEVEL (surface))
     {
-      gboolean center = FALSE;
+      gboolean center;
       RECT hwnd_rect, center_on_rect;
       int x, y;
 
@@ -658,6 +658,11 @@ show_surface_internal (GdkSurface *surface,
 	  _gdk_win32_adjust_client_rect (GDK_SURFACE (owner), &center_on_rect);
 	  center = TRUE;
 	}
+      else
+        {
+          center_on_rect = (RECT){ 0, };
+          center = FALSE;
+        }
 
       if (center)
 	{
@@ -1177,8 +1182,6 @@ get_effective_surface_decorations (GdkSurface       *surface,
       *decoration = GDK_DECOR_ALL;
       return TRUE;
     }
-
-  return FALSE;
 }
 
 static void
@@ -1735,15 +1738,13 @@ get_cursor_name_from_op (GdkW32WindowDragOp op,
        * fallthrough to GDK_WIN32_DRAGOP_NONE case
        */
     case GDK_WIN32_DRAGOP_COUNT:
+    default:
       g_assert_not_reached ();
+      G_GNUC_FALLTHROUGH;
     case GDK_WIN32_DRAGOP_NONE:
       return "default";
     /* default: warn about unhandled enum values */
     }
-
-  g_assert_not_reached ();
-
-  return NULL;
 }
 
 static void

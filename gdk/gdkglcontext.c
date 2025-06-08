@@ -714,7 +714,9 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
                                  GdkMemoryDepth  *out_depth)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  G_GNUC_UNUSED GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+#ifdef HAVE_EGL
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+#endif
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   GdkColorState *color_state;
   cairo_region_t *damage;

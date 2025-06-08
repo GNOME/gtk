@@ -272,12 +272,12 @@ query_object_formats (GdkDisplay   *display,
   GdkContentFormatsBuilder *builder;
   GdkContentFormats *result_formats;
 
-  builder = gdk_content_formats_builder_new ();
-
   hr = IDataObject_EnumFormatEtc (pDataObj, DATADIR_GET, &pfmt);
+  if (FAILED (hr))
+    return gdk_content_formats_new (NULL, 0);
 
-  if (SUCCEEDED (hr))
-    hr = IEnumFORMATETC_Next (pfmt, 1, &fmt, NULL);
+  builder = gdk_content_formats_builder_new ();
+  hr = IEnumFORMATETC_Next (pfmt, 1, &fmt, NULL);
 
   while (SUCCEEDED (hr) && hr != S_FALSE)
     {
