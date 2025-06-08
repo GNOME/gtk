@@ -296,9 +296,12 @@ replay_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
   const GskShadowEntry *shadow = gsk_shadow_node_get_shadow_entry (node, 0);
   GskRenderNode *child = gsk_shadow_node_get_child (node);
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_shadow_node_get_snap (node));
   gtk_snapshot_push_shadows (snapshot, shadow, n_shadows);
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
