@@ -37,10 +37,6 @@ GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot    
 void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
                                                                  GdkSubsurface          *subsurface);
 
-void                    gtk_snapshot_push_shadows               (GtkSnapshot          *snapshot,
-                                                                 const GskShadowEntry *shadow,
-                                                                 gsize                 n_shadows);
-
 void                    gtk_snapshot_append_node_scaled         (GtkSnapshot             *snapshot,
                                                                  GskRenderNode           *node,
                                                                  graphene_rect_t         *from,

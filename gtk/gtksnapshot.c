@@ -1466,7 +1466,7 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
   g_free (shadow2);
 }
 
-/*< private >
+/**
  * gtk_snapshot_push_shadows:
  * @snapshot: a `GtkSnapshot`
  * @shadow: (array length=n_shadows): the first shadow specification
@@ -1475,6 +1475,8 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
  * Applies a shadow to an image.
  *
  * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
+ *
+ * Since: 4.20
  */
 void
 gtk_snapshot_push_shadows (GtkSnapshot          *snapshot,

@@ -99,6 +99,10 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_shadow                (GtkSnapshot            *snapshot,
                                                          const GskShadow        *shadow,
                                                          gsize                   n_shadows);
+GDK_AVAILABLE_IN_4_20
+void            gtk_snapshot_push_shadows               (GtkSnapshot          *snapshot,
+                                                         const GskShadowEntry *shadow,
+                                                         gsize                 n_shadows);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_blend                 (GtkSnapshot            *snapshot,
                                                          GskBlendMode            blend_mode);
