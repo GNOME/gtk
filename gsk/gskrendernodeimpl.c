@@ -3057,6 +3057,8 @@ struct _GskTextureScaleNode
 
   GdkTexture *texture;
   GskScalingFilter filter;
+
+  GskRectSnap snap;
 };
 
 static void
@@ -3143,6 +3145,7 @@ gsk_texture_scale_node_diff (GskRenderNode *node1,
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
       self1->filter != self2->filter ||
+      self1->snap != self2->snap ||
       gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
       gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
     {
@@ -3214,6 +3217,24 @@ gsk_texture_scale_node_get_filter (const GskRenderNode *node)
 }
 
 /**
+ * gsk_texture_scale_node_get_snap:
+ * @node: (type GskInsetShadowNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
+ *
+ * Retrieves the snap value used when creating this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskRectSnap
+gsk_texture_scale_node_get_snap (const GskRenderNode *node)
+{
+  const GskTextureScaleNode *self = (const GskTextureScaleNode *) node;
+
+  return self->snap;
+}
+
+/**
  * gsk_texture_scale_node_new:
  * @texture: the texture to scale
  * @bounds: the size of the texture to scale to
@@ -3241,6 +3262,43 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
                             const graphene_rect_t *bounds,
                             GskScalingFilter       filter)
 {
+  return gsk_texture_scale_node_new_snapped (texture,
+                                             bounds,
+                                             GSK_RECT_SNAP_NONE,
+                                             filter);
+}
+
+/**
+ * gsk_texture_scale_node_new_snapped:
+ * @texture: the texture to scale
+ * @bounds: the size of the texture to scale to
+ * @snap: the snap value
+ * @filter: how to scale the texture
+ *
+ * Creates a node that scales the texture to the size given by the
+ * bounds using the filter and then places it at the bounds' position,
+ * aligned to the pixel grid according to @snap.
+ *
+ * Note that further scaling and other transformations which are
+ * applied to the node will apply linear filtering to the resulting
+ * texture, as usual.
+ *
+ * This node is intended for tight control over scaling applied
+ * to a texture, such as in image editors and requires the
+ * application to be aware of the whole render tree as further
+ * transforms may be applied that conflict with the desired effect
+ * of this node.
+ *
+ * Returns: (transfer full) (type GskTextureScaleNode): A new `GskRenderNode`
+ *
+ * Since: 4.20
+ */
+GskRenderNode *
+gsk_texture_scale_node_new_snapped (GdkTexture            *texture,
+                                    const graphene_rect_t *bounds,
+                                    GskRectSnap            snap,
+                                    GskScalingFilter       filter)
+{
   GskTextureScaleNode *self;
   GskRenderNode *node;
 
@@ -3259,6 +3317,7 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
   self->filter = filter;
+  self->snap = snap;
 
   node->preferred_depth = gdk_texture_get_depth (texture);
 
