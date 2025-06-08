@@ -4924,7 +4924,6 @@ gtk_text_draw_cursor (GtkText     *self,
   GtkCssStyle *style;
   PangoRectangle cursor_rect;
   int cursor_index;
-  gboolean block;
   gboolean block_at_line_end;
   PangoLayout *layout;
   const char *text;
@@ -4943,13 +4942,9 @@ gtk_text_draw_cursor (GtkText     *self,
   else
     cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
 
-  if (!priv->overwrite_mode)
-    block = FALSE;
-  else
-    block = _gtk_text_util_get_block_cursor_location (layout,
-                                                      cursor_index, &cursor_rect, &block_at_line_end);
-
-  if (!block)
+  if (!priv->overwrite_mode ||
+      !_gtk_text_util_get_block_cursor_location (layout,
+                                                 cursor_index, &cursor_rect, &block_at_line_end))
     {
       gtk_css_boxes_init (&boxes, widget);
       gtk_css_style_snapshot_caret (&boxes, display, snapshot,
