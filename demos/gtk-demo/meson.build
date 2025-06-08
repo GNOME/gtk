@@ -92,6 +92,7 @@ demos = files([
   'sidebar.c',
   'sizegroup.c',
   'sliding_puzzle.c',
+  'snap.c',
   'spinbutton.c',
   'spinner.c',
   'stack.c',
@@ -140,6 +141,7 @@ extra_demo_sources = files([
   'suggestionentry.c',
   'unicode-names.c',
   'svgsymbolicpaintable.c',
+  'snappaintable.c',
   '../../gtk/gtkrendernodepaintable.c'
 ])
 

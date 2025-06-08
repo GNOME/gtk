@@ -1,0 +1,117 @@
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">Snap</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+       <child type="start">
+         <object class="GtkButton">
+           <signal name="clicked" handler="open_file_cb" swapped="false" object="snap_paintable"/>
+           <property name="tooltip-text" translatable="true">Open an image file</property>
+           <property name="child">
+             <object class="GtkImage">
+               <property name="paintable">resource:///org/gtk/libgtk/icons/scalable/actions/document-open-symbolic.svg</property>
+             </object>
+           </property>
+         </object>
+       </child>
+       <child type="start">
+         <object class="GtkButton">
+           <signal name="clicked" handler="open_logo_cb" swapped="false" object="snap_paintable"/>
+           <property name="tooltip-text" translatable="true">Open logo</property>
+           <property name="child">
+             <object class="GtkImage">
+               <property name="paintable">resource:///snap/start-here.png</property>
+             </object>
+           </property>
+         </object>
+       </child>
+       <child type="start">
+         <object class="GtkButton">
+           <signal name="clicked" handler="open_rose_cb" swapped="false" object="snap_paintable"/>
+           <property name="tooltip-text" translatable="true">Open rose</property>
+           <property name="child">
+             <object class="GtkImage">
+               <property name="paintable">resource:///snap/portland-rose-thumbnail.png</property>
+             </object>
+           </property>
+         </object>
+       </child>
+       <child type="end">
+         <object class="GtkDropDown">
+           <property name="tooltip-text" translatable="true">Snap mode</property>
+           <property name="model">
+             <object class="GtkStringList">
+               <items>
+                 <item translatable="yes">None</item>
+                 <item translatable="yes">Grow</item>
+                 <item translatable="yes">Shrink</item>
+                 <item translatable="yes">Round</item>
+               </items>
+             </object>
+           </property>
+           <signal name="notify::selected" handler="selected_snap_changed_cb" swapped="false" object="snap_paintable"/>
+         </object>
+       </child>
+       <child type="end">
+         <object class="GtkDropDown">
+           <property name="tooltip-text" translatable="true">Pixels or Tiles</property>
+           <property name="model">
+             <object class="GtkStringList">
+               <items>
+                 <item translatable="yes">Pixels</item>
+                 <item translatable="yes">Tiles</item>
+               </items>
+             </object>
+           </property>
+           <signal name="notify::selected" handler="selected_tiles_changed_cb" swapped="false" object="snap_paintable"/>
+         </object>
+       </child>
+       <child type="end">
+         <object class="GtkBox">
+           <child>
+             <object class="GtkButton">
+               <signal name="clicked" handler="zoom_out_cb" swapped="false" object="snap_paintable"/>
+               <property name="css-classes">circular
+flat</property>
+               <property name="tooltip-text" translatable="true">Zoom out</property>
+               <property name="child">
+                 <object class="GtkImage">
+                   <property name="icon-name">zoom-out-symbolic</property>
+                 </object>
+               </property>
+             </object>
+           </child>
+           <child>
+             <object class="GtkButton">
+               <signal name="clicked" handler="zoom_in_cb" swapped="false" object="snap_paintable"/>
+               <property name="css-classes">circular
+flat</property>
+               <property name="tooltip-text" translatable="true">Zoom in</property>
+               <property name="child">
+                 <object class="GtkImage">
+                   <property name="icon-name">zoom-in-symbolic</property>
+                 </object>
+               </property>
+             </object>
+           </child>
+         </object>
+       </child>
+      </object>
+    </property>
+    <property name="child">
+      <object class="GtkScrolledWindow">
+        <child>
+          <object class="GtkPicture">
+            <property name="can-shrink">false</property>
+            <property name="paintable">
+              <object class="SnapPaintable" id="snap_paintable">
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
