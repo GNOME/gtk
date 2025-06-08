@@ -291,6 +291,13 @@ void            gtk_snapshot_append_inset_shadow        (GtkSnapshot            
                                                          float                   dy,
                                                          float                   spread,
                                                          float                   blur_radius);
+GDK_AVAILABLE_IN_4_20
+void            gtk_snapshot_add_inset_shadow           (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const GdkColor         *color,
+                                                         const graphene_point_t *offset,
+                                                         float                   spread,
+                                                         float                   blur_radius);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_outset_shadow       (GtkSnapshot            *snapshot,
                                                          const GskRoundedRect   *outline,
@@ -299,7 +306,13 @@ void            gtk_snapshot_append_outset_shadow       (GtkSnapshot            
                                                          float                   dy,
                                                          float                   spread,
                                                          float                   blur_radius);
-/* next function implemented in gskpango.c */
+GDK_AVAILABLE_IN_4_20
+void            gtk_snapshot_add_outset_shadow          (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const GdkColor         *color,
+                                                         const graphene_point_t *offset,
+                                                         float                   spread,
+                                                         float                   blur_radius);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_layout              (GtkSnapshot            *snapshot,
                                                          PangoLayout            *layout,

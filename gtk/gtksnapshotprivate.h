@@ -47,20 +47,6 @@ GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot    
 void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
                                                                  GdkSubsurface          *subsurface);
 
-void                    gtk_snapshot_add_inset_shadow           (GtkSnapshot            *snapshot,
-                                                                 const GskRoundedRect   *outline,
-                                                                 const GdkColor         *color,
-                                                                 const graphene_point_t *offset,
-                                                                 float                   spread,
-                                                                 float                   blur_radius);
-
-void                    gtk_snapshot_add_outset_shadow          (GtkSnapshot            *snapshot,
-                                                                 const GskRoundedRect   *outline,
-                                                                 const GdkColor         *color,
-                                                                 const graphene_point_t *offset,
-                                                                 float                   spread,
-                                                                 float                   blur_radius);
-
 void                    gtk_snapshot_push_shadows               (GtkSnapshot          *snapshot,
                                                                  const GskShadowEntry *shadow,
                                                                  gsize                 n_shadows);
