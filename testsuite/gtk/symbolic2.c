@@ -205,7 +205,7 @@ static gboolean
 pixbuf_supports_svg (void)
 {
   GSList *formats, *l;
-  gboolean has_svg;
+  gboolean has_svg = FALSE;
 
   formats = gdk_pixbuf_get_formats ();
   for (l = formats; l; l = l->next)
