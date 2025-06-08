@@ -1,7 +1,9 @@
 color {
   color: color(srgb 1 2 3);
+  snap: grow;
 }
 
 color {
   color: color(srgb 1 1 1 1 1 1);
+  snap: round floor ceil none;
 }

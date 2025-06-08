@@ -1,8 +1,10 @@
 color {
   bounds: 0 0 50 50;
   color: rgb(255,255,255);
+  snap: grow;
 }
 color {
   bounds: 0 0 50 50;
   color: rgb(255,255,255);
+  snap: round floor ceil none;
 }

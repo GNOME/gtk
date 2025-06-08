@@ -26,6 +26,7 @@
 #include <gsk/gsktypes.h>
 #include <gsk/gskglshader.h>
 #include <gtk/css/gtkcss.h>
+#include <gdk/gdkcolor.h>
 
 G_BEGIN_DECLS
 
@@ -218,8 +219,16 @@ GType                   gsk_color_node_get_type                 (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
                                                                  const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_color_node_new_snapped              (const GdkColor           *color,
+                                                                 const graphene_rect_t    *bounds,
+                                                                 GskRectSnap               snap);
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_color_node_get_color                (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+const GdkColor *        gsk_color_node_get_gdk_color            (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GskRectSnap             gsk_color_node_get_snap                 (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;

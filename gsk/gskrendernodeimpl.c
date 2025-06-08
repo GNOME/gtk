@@ -160,6 +160,7 @@ struct _GskColorNode
 {
   GskRenderNode render_node;
   GdkColor color;
+  GskRectSnap snap;
 };
 
 static void
@@ -194,7 +195,8 @@ gsk_color_node_diff (GskRenderNode *node1,
   GskColorNode *self2 = (GskColorNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
-      gdk_color_equal (&self1->color, &self2->color))
+      gdk_color_equal (&self1->color, &self2->color) &&
+      self1->snap == self2->snap)
     return;
 
   gsk_render_node_diff_impossible (node1, node2, data);
@@ -235,13 +237,15 @@ gsk_color_node_get_color (const GskRenderNode *node)
   return (const GdkRGBA *) &self->color.values;
 }
 
-/*< private >
+/**
  * gsk_color_node_get_gdk_color:
  * @node: (type GskColorNode): a `GskRenderNode`
  *
  * Retrieves the color of the given @node.
  *
  * Returns: (transfer none): the color of the node
+ *
+ * Since: 4.20
  */
 const GdkColor *
 gsk_color_node_get_gdk_color (const GskRenderNode *node)
@@ -258,8 +262,8 @@ gsk_color_node_get_gdk_color (const GskRenderNode *node)
  * @rgba: a `GdkRGBA` specifying a color
  * @bounds: the rectangle to render the color into
  *
- * Creates a `GskRenderNode` that will render the color specified by @rgba into
- * the area given by @bounds.
+ * Creates a `GskRenderNode` that will render the color specified
+ * by @rgba into the area given by @bounds.
  *
  * Returns: (transfer full) (type GskColorNode): A new `GskRenderNode`
  */
@@ -271,25 +275,30 @@ gsk_color_node_new (const GdkRGBA         *rgba,
   GskRenderNode *node;
 
   gdk_color_init_from_rgba (&color, rgba);
-  node = gsk_color_node_new2 (&color, bounds);
+  node = gsk_color_node_new_snapped (&color, bounds, GSK_RECT_SNAP_NONE);
   gdk_color_finish (&color);
 
   return node;
 }
 
-/*< private >
- * gsk_color_node_new2:
+/**
+ * gsk_color_node_new_snapped:
  * @color: a `GdkColor` specifying a color
  * @bounds: the rectangle to render the color into
+ * @snap: the snap value
  *
  * Creates a `GskRenderNode` that will render the color specified by @color
- * into the area given by @bounds.
+ * into the area given by @bounds, and aligned to the pixel grid according
+ * to @snap.
  *
  * Returns: (transfer full) (type GskColorNode): A new `GskRenderNode`
+ *
+ * Since: 4.20
  */
 GskRenderNode *
-gsk_color_node_new2 (const GdkColor        *color,
-                     const graphene_rect_t *bounds)
+gsk_color_node_new_snapped (const GdkColor        *color,
+                            const graphene_rect_t *bounds,
+                            GskRectSnap            snap)
 {
   GskColorNode *self;
   GskRenderNode *node;
@@ -306,10 +315,30 @@ gsk_color_node_new2 (const GdkColor        *color,
 
   gdk_color_init_copy (&self->color, color);
 
+  self->snap = snap;
+
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
   return node;
+}
+
+/**
+ * gsk_color_node_get_snap:
+ * @node: (type GskColorNode): a `GskRenderNode` for a color
+ *
+ * Retrieves the snap value used when creating this `GskColorNode`.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskRectSnap
+gsk_color_node_get_snap (const GskRenderNode *node)
+{
+  const GskColorNode *self = (const GskColorNode *) node;
+
+  return self->snap;
 }
 
 /* }}} */

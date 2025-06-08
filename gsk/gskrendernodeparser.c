@@ -2435,15 +2435,17 @@ parse_color_node (GtkCssParser *parser,
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GdkColor color = GDK_COLOR_SRGB (1, 0, 0.8, 1);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "color", parse_color, NULL, &color },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *node;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  node = gsk_color_node_new2 (&color, &bounds);
+  node = gsk_color_node_new_snapped (&color, &bounds, snap);
 
   gdk_color_finish (&color);
 
@@ -5421,6 +5423,7 @@ render_node_print (Printer       *p,
         start_node (p, "color", node_name);
         append_rect_param (p, "bounds", &node->bounds);
         append_color_param (p, "color", gsk_color_node_get_gdk_color (node));
+        append_snap_param (p, "snap", gsk_color_node_get_snap (node));
         end_node (p);
       }
       break;

@@ -228,11 +228,16 @@ clip property. If that rectangle is indeed rounded, a node like
 | -------- | ---------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`         | 50                     | always      |
 | color    | `<color>`        | #FF00CC                | always      |
+| snap     | `<snap>`         | none                   | non-default |
 
-Creates a node like `gsk_color_node_new()` with the given properties.
+Creates a node like `gsk_color_node_new_snapped()` with the given properties.
 
 The color is chosen as an error pink so it is visible while also reminding
 people to change it.
+
+Possible values for the snap property are:
+
+    snap: grow | shrink | ( round | floor | ceil | none ){1-4}
 
 ### color-matrix
 
