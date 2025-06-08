@@ -1072,8 +1072,10 @@ static GdkGLContext *
 gdk_win32_display_init_gl (GdkDisplay  *display,
                            GError     **error)
 {
+#ifdef HAVE_EGL
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   HDC init_gl_hdc = NULL;
+#endif
   GdkGLContext *context;
 
   /*
