@@ -2520,6 +2520,7 @@ struct _GskBorderNode
   float border_width[4];
   GdkColor border_color[4];
   GdkRGBA *border_rgba;
+  GskRectSnap snap;
 };
 
 static void
@@ -2706,6 +2707,12 @@ gsk_border_node_diff (GskRenderNode *node1,
       return;
     }
 
+  if (self1->snap != self2->snap)
+    {
+      gsk_render_node_diff_impossible (node1, node2, data);
+      return;
+    }
+
   if (self1->border_width[0] == self2->border_width[0] &&
       self1->border_width[1] == self2->border_width[1] &&
       self1->border_width[2] == self2->border_width[2] &&
@@ -2824,7 +2831,10 @@ gsk_border_node_new (const GskRoundedRect *outline,
   for (int i = 0; i < 4; i++)
     gdk_color_init_from_rgba (&color[i], &border_color[i]);
 
-  node = gsk_border_node_new2 (outline, border_width, color);
+  node = gsk_border_node_new_snapped (outline,
+                                      GSK_RECT_SNAP_NONE,
+                                      border_width,
+                                      color);
 
   for (int i = 0; i < 4; i++)
     gdk_color_finish (&color[i]);
@@ -2832,25 +2842,29 @@ gsk_border_node_new (const GskRoundedRect *outline,
   return node;
 }
 
-/*< private >
- * gsk_border_node_new2:
+/**
+ * gsk_border_node_new_snapped:
  * @outline: a `GskRoundedRect` describing the outline of the border
+ * @snap: the snap value
  * @border_width: (array fixed-size=4): the stroke width of the border on
  *     the top, right, bottom and left side respectively.
  * @border_color: (array fixed-size=4): the color used on the top, right,
  *     bottom and left side.
  *
- * Creates a `GskRenderNode` that will stroke a border rectangle inside the
- * given @outline.
+ * Creates a `GskRenderNode` that will stroke a border rectangle inside
+ * the given @outline and aligned to the pixel grid according to @snap.
  *
  * The 4 sides of the border can have different widths and colors.
  *
  * Returns: (transfer full) (type GskBorderNode): A new `GskRenderNode`
+ *
+ * Since: 4.20
  */
 GskRenderNode *
-gsk_border_node_new2 (const GskRoundedRect *outline,
-                      const float           border_width[4],
-                      const GdkColor        border_color[4])
+gsk_border_node_new_snapped (const GskRoundedRect *outline,
+                             GskRectSnap           snap,
+                             const float           border_width[4],
+                             const GdkColor        border_color[4])
 {
   GskBorderNode *self;
   GskRenderNode *node;
@@ -2863,6 +2877,8 @@ gsk_border_node_new2 (const GskRoundedRect *outline,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->preferred_depth = GDK_MEMORY_NONE;
+
+  self->snap = snap;
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   memcpy (self->border_width, border_width, sizeof (self->border_width));
@@ -2889,7 +2905,7 @@ gsk_border_node_new2 (const GskRoundedRect *outline,
   return node;
 }
 
-/*< private >
+/**
  * gsk_border_node_get_gdk_colors:
  * @node: (type GskBorderNode): a `GskRenderNode` for a border
  *
@@ -2897,6 +2913,8 @@ gsk_border_node_new2 (const GskRoundedRect *outline,
  *
  * Returns: (transfer none) (array fixed-size=4): an array of 4 `GdkColor`
  *   structs for the top, right, bottom and left color of the border
+ *
+ * Since: 4.20
  */
 const GdkColor *
 gsk_border_node_get_gdk_colors (const GskRenderNode *node)
@@ -2904,6 +2922,24 @@ gsk_border_node_get_gdk_colors (const GskRenderNode *node)
   const GskBorderNode *self = (const GskBorderNode *) node;
 
   return self->border_color;
+}
+
+/**
+ * gsk_border_node_get_snap:
+ * @node: (type GskBorderNode): a `GskRenderNode` for a border
+ *
+ * Retrieves the snap value used when creating this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskRectSnap
+gsk_border_node_get_snap (const GskRenderNode *node)
+{
+  const GskBorderNode *self = (const GskBorderNode *) node;
+
+  return self->snap;
 }
 
 bool

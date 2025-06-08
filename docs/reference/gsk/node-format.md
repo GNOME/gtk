@@ -189,6 +189,7 @@ Creates a node like `gsk_blur_node_new()` with the given properties.
 | colors   | `<color>{1,4}`   | black                  | non-default |
 | outline  | `<rounded-rect>` | 50                     | always      |
 | widths   | `<number>{1,4}`  | 1                      | non-default |
+| snap     | `<snap>`         | none                   | non-default |
 
 Creates a node like `gsk_border_node_new()` with the given properties.
 
@@ -197,6 +198,10 @@ of top, right, bottom, left. If the last/left value isn't given, the 2nd/right
 value is used. If the 3rd/bottom value isn't given, the 1st/top value is used.
 And if the 2nd/right value also isn't given, the 1st/top value is used for
 every 4 values.
+
+Possible values for the snap property are:
+
+    snap: grow | shrink | ( round | floor | ceil | none ){1-4}
 
 ### cairo
 
@@ -234,10 +239,6 @@ Creates a node like `gsk_color_node_new_snapped()` with the given properties.
 
 The color is chosen as an error pink so it is visible while also reminding
 people to change it.
-
-Possible values for the snap property are:
-
-    snap: grow | shrink | ( round | floor | ceil | none ){1-4}
 
 ### color-matrix
 

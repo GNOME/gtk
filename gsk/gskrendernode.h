@@ -483,17 +483,26 @@ GskRenderNode *         gsk_repeating_radial_gradient_node_new_snapped
                                                                      gsize                       n_stops);
 
 GDK_AVAILABLE_IN_ALL
-GType                   gsk_border_node_get_type                (void) G_GNUC_CONST;
+GType                   gsk_border_node_get_type                    (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_border_node_new                     (const GskRoundedRect     *outline,
-                                                                 const float               border_width[4],
-                                                                 const GdkRGBA             border_color[4]);
+GskRenderNode *         gsk_border_node_new                         (const GskRoundedRect       *outline,
+                                                                     const float                 border_width[4],
+                                                                     const GdkRGBA               border_color[4]);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_border_node_new_snapped                 (const GskRoundedRect       *outline,
+                                                                     GskRectSnap                 snap,
+                                                                     const float                 border_width[4],
+                                                                     const GdkColor              border_color[4]);
+GDK_AVAILABLE_IN_4_20
+GskRectSnap             gsk_border_node_get_snap                    (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-const GskRoundedRect *  gsk_border_node_get_outline             (const GskRenderNode      *node) G_GNUC_PURE;
+const GskRoundedRect *  gsk_border_node_get_outline                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-const float *           gsk_border_node_get_widths              (const GskRenderNode      *node) G_GNUC_PURE;
+const float *           gsk_border_node_get_widths                  (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_border_node_get_colors              (const GskRenderNode      *node) G_GNUC_PURE;
+const GdkRGBA *         gsk_border_node_get_colors                  (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+const GdkColor *        gsk_border_node_get_gdk_colors              (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_inset_shadow_node_get_type          (void) G_GNUC_CONST;

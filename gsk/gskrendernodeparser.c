@@ -3004,15 +3004,17 @@ parse_border_node (GtkCssParser *parser,
     GDK_COLOR_SRGB (0, 0, 0, 1),
     GDK_COLOR_SRGB (0, 0, 0, 1),
   };
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
     { "widths", parse_float4, NULL, &widths },
     { "colors", parse_colors4, NULL, &colors },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  return gsk_border_node_new2 (&outline, widths, colors);
+  return gsk_border_node_new_snapped (&outline, snap, widths, colors);
 }
 
 static GskRenderNode *
@@ -5654,6 +5656,8 @@ render_node_print (Printer       *p,
         const float *widths = gsk_border_node_get_widths (node);
         guint i, n;
         start_node (p, "border", node_name);
+
+        append_snap_param (p, "snap", gsk_border_node_get_snap (node));
 
         if (!gdk_color_equal (&colors[3], &colors[1]))
           n = 4;

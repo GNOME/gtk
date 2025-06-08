@@ -3311,23 +3311,27 @@ gtk_snapshot_add_border (GtkSnapshot          *snapshot,
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, dx, dy;
+  GtkSnapshotState *state;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (outline != NULL);
   g_return_if_fail (border_width != NULL);
   g_return_if_fail (border_color != NULL);
 
+  state = gtk_snapshot_get_current_state (snapshot);
+
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
 
-  node = gsk_border_node_new2 (&real_outline,
-                               (float[4]) {
-                                 border_width[0] * scale_y,
-                                 border_width[1] * scale_x,
-                                 border_width[2] * scale_y,
-                                 border_width[3] * scale_x,
-                               },
-                               border_color);
+  node = gsk_border_node_new_snapped (&real_outline,
+                                      state->snap,
+                                      (float[4]) {
+                                        border_width[0] * scale_y,
+                                        border_width[1] * scale_x,
+                                        border_width[2] * scale_y,
+                                        border_width[3] * scale_x,
+                                      },
+                                      border_color);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
