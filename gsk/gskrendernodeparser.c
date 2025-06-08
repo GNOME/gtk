@@ -3032,10 +3032,12 @@ parse_texture_scale_node (GtkCssParser *parser,
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GdkTexture *texture = NULL;
   GskScalingFilter filter = GSK_SCALING_FILTER_LINEAR;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "texture", parse_texture, clear_texture, &texture },
-    { "filter", parse_scaling_filter, NULL, &filter }
+    { "filter", parse_scaling_filter, NULL, &filter },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *node;
 
@@ -3044,7 +3046,7 @@ parse_texture_scale_node (GtkCssParser *parser,
   if (texture == NULL)
     texture = create_default_texture ();
 
-  node = gsk_texture_scale_node_new (texture, &bounds, filter);
+  node = gsk_texture_scale_node_new_snapped (texture, &bounds, snap, filter);
   g_object_unref (texture);
 
   return node;
@@ -5773,6 +5775,8 @@ render_node_print (Printer       *p,
           }
 
         append_texture_param (p, "texture", gsk_texture_scale_node_get_texture (node));
+        append_snap_param (p, "snap", gsk_texture_scale_node_get_snap (node));
+
         end_node (p);
       }
       break;

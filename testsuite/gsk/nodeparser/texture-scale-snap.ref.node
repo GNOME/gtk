@@ -1,0 +1,29 @@
+texture-scale {
+  bounds: 3 0 1 1;
+  filter: trilinear;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: grow;
+}
+texture-scale {
+  bounds: 4 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: round round ceil floor;
+}

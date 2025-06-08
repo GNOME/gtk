@@ -1,0 +1,18 @@
+texture-scale {
+  bounds: 3 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  filter: trilinear;
+  snap: grow;
+}
+texture-scale {
+  bounds: 4 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  filter: linear;
+  snap: round round ceil floor;
+}
