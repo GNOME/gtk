@@ -4864,7 +4864,7 @@ gtk_label_update_active_link (GtkWidget *widget,
 
   if (info->links && !info->in_drag)
     {
-      GtkLabelLink *link;
+      GtkLabelLink *link = NULL;
       gboolean found = FALSE;
 
       if (info->selection_anchor == info->selection_end)
