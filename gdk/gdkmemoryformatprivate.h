@@ -142,6 +142,9 @@ gboolean                gdk_memory_format_find_by_dxgi_format       (DXGI_FORMAT
 DXGI_FORMAT             gdk_memory_format_get_dxgi_format           (GdkMemoryFormat             format,
                                                                      guint                      *out_shader_4_component_mapping);
 DXGI_FORMAT             gdk_memory_format_get_dxgi_srgb_format      (GdkMemoryFormat             format);
+DXGI_FORMAT             gdk_memory_format_get_dxgi_srv_format       (GdkMemoryFormat             format,
+                                                                     gsize                       nth,
+                                                                     guint                      *out_shader_4_component_mapping);
 
 gboolean                gdk_memory_format_find_by_cairo_format      (cairo_format_t              cairo_format,
                                                                      GdkMemoryFormat            *out_memory_format);
