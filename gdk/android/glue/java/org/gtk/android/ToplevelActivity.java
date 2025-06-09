@@ -139,11 +139,13 @@ public class ToplevelActivity extends Activity {
 					boolean imeKeyboardState = queuedImeKeyboardState > 0;
 					queuedImeKeyboardState = 0;
 					runOnUiThread(() -> {
+						WindowInsetsController controller = getWindowInsetsController();
 						if (imeKeyboardState) {
 							requestFocus();
-							getWindowInsetsController().show(WindowInsets.Type.ime());
-						 } else {
-							getWindowInsetsController().hide(WindowInsets.Type.ime());
+							if (controller != null)
+								controller.show(WindowInsets.Type.ime());
+						 } else if (controller != null) {
+							controller.hide(WindowInsets.Type.ime());
 						 }
 					});
 				});
