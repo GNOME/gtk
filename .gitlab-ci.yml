@@ -305,7 +305,7 @@ fedora-mingw64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=1.0
+    - pip3 install --user meson==1.8.2
     - meson -Dintrospection=disabled -Dgraphene:introspection=disabled _build
     - meson compile -C _build
 
@@ -367,7 +367,7 @@ macos-arm64:
     - |
       /opt/macports/bin/python3.11 -m venv .venv
       source .venv/bin/activate
-      pip3 install meson==1.8.1 ninja==1.11.1.1 certifi==2025.4.26
+      pip3 install meson==1.8.2 ninja==1.11.1.1 certifi==2025.4.26
       ln -s /opt/ccache/ccache .venv/bin
     # The introspection feature requires pkg-config and bison.
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
@@ -446,7 +446,7 @@ android:
     - cp -f pixiewood/prepare/wraps/glib/hack.patch subprojects/packagefiles/glib_hack.patch
     - sed -i 's/\[provide\]/diff_files = glib_hack.patch\n\n\0/' subprojects/glib.wrap
     # Drop this as soon as Debian/the container has meson >= 1.7.0
-    - git clone --depth 1 https://github.com/mesonbuild/meson.git --branch 1.8.0
+    - git clone --depth 1 https://github.com/mesonbuild/meson.git --branch 1.8.2
   script:
     - ./meson/meson.py setup
             --cross-file "${ANDROID_HOME}/toolchain.cross"
@@ -482,7 +482,7 @@ android:
   before_script:
     - .gitlab-ci/show-info-linux.sh
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
-    - git clone --depth 1 https://github.com/sp1ritCS/meson.git --branch android
+    - git clone --depth 1 https://github.com/mesonbuild/meson.git # TODO: affix to a tag as soon as one exists that contains 98b1980
     - git clone --depth 1 https://github.com/sp1ritCS/mini-studio.git
   script:
     # This should be included in the repo itself once it's been merged into meson and released
