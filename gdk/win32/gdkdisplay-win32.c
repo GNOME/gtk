@@ -422,6 +422,224 @@ gdk_win32_display_get_next_serial (GdkDisplay *display)
 	return 0;
 }
 
+static gboolean
+gdk_win32_display_create_d3d_devices (GdkWin32Display    *self,
+                                      DXGI_ADAPTER_FLAG   required,
+                                      DXGI_ADAPTER_FLAG   disallowed,
+                                      ID3D11Device      **d3d11_device,
+                                      ID3D12Device      **d3d12_device,
+                                      GError            **error)
+{
+  IDXGIAdapter1 *adapter;
+  HRESULT hr;
+  guint i;
+
+  if (d3d11_device && !gdk_has_feature (GDK_FEATURE_D3D11))
+    {
+      g_set_error (error, GDK_WIN32_HRESULT_ERROR, DXGI_ERROR_NOT_FOUND, "D3D11 disabled via GDK_DISABLE");
+      return FALSE;
+    }
+  if (d3d12_device && !gdk_has_feature (GDK_FEATURE_D3D12))
+    {
+      g_set_error (error, GDK_WIN32_HRESULT_ERROR, DXGI_ERROR_NOT_FOUND, "D3D12 disabled via GDK_DISABLE");
+      return FALSE;
+    }
+
+  /* This function records the first error in the error variable and then
+     sets error = NULL to ignore future errors. */
+
+  for (i = 0; IDXGIFactory4_EnumAdapters1 (self->dxgi_factory, i, &adapter) != DXGI_ERROR_NOT_FOUND; i++)
+    {
+      DXGI_ADAPTER_DESC1 desc;
+
+      hr = IDXGIAdapter1_GetDesc1 (adapter, &desc);
+      if (!gdk_win32_check_hresult (hr, error, "Failed to get adapter description"))
+        {
+          error = NULL;
+          gdk_win32_com_clear (&adapter);
+          continue;
+        }
+
+      if ((desc.Flags & required) != required ||
+          (desc.Flags & disallowed) != 0)
+        {
+          gdk_win32_com_clear (&adapter);
+          continue;
+        }
+
+      if (d3d11_device != NULL)
+        {
+          hr = D3D11CreateDevice ((IDXGIAdapter *) adapter,
+                                  D3D_DRIVER_TYPE_UNKNOWN,
+                                  NULL,
+                                  D3D11_CREATE_DEVICE_BGRA_SUPPORT, /* Cairo needs this */
+                                  NULL,
+                                  0,
+                                  D3D11_SDK_VERSION,
+                                  d3d11_device,
+                                  NULL,
+                                  NULL);
+          if (!gdk_win32_check_hresult (hr, error, "Failed to create D3D11 device"))
+            {
+              error = NULL;
+              gdk_win32_com_clear (&adapter);
+              continue;
+            }
+        }
+
+      if (d3d12_device != NULL)
+        {
+          hr = D3D12CreateDevice ((IUnknown *) adapter,
+                                  D3D_FEATURE_LEVEL_12_0,
+                                  &IID_ID3D12Device,
+                                  (void **) d3d12_device);
+          if (!gdk_win32_check_hresult (hr, error, "Failed to create D3D12 device"))
+            {
+              error = NULL;
+              if (d3d11_device)
+                gdk_win32_com_clear (d3d11_device);
+              gdk_win32_com_clear (&adapter);
+              continue;
+            }
+        }
+
+      gdk_win32_com_clear (&adapter);
+      return TRUE;
+    }
+
+  g_set_error (error, GDK_WIN32_HRESULT_ERROR, DXGI_ERROR_NOT_FOUND, "No adapters available");
+  return FALSE;
+}
+
+static void
+gdk_win32_display_init_dcomp (GdkWin32Display *self)
+{
+  const GUID my_IID_IDCompositionDevice = { 0xC37EA93A,0xE7AA,0x450D,0xB1,0x6F,0x97,0x46,0xCB,0x04,0x07,0xF3 };
+  IDXGIDevice *dxgi_device;
+
+  if (!gdk_has_feature (GDK_FEATURE_DCOMP))
+    return;
+  
+  hr_warn (ID3D11Device_QueryInterface (self->d3d11_device, &IID_IDXGIDevice, (void **) &dxgi_device));
+
+  hr_warn (DCompositionCreateDevice (dxgi_device, &my_IID_IDCompositionDevice, (void **) &self->dcomp_device));
+
+  gdk_win32_com_clear (&dxgi_device);
+}
+
+static gboolean
+gdk_win32_display_init_d3d (GdkWin32Display  *self,
+                            GError          **error)
+{
+  GError *errors[6] = { NULL, };
+  HRESULT hr;
+  gboolean res;
+  gsize i;
+
+  hr = CreateDXGIFactory1 (&IID_IDXGIFactory4, (void **) &self->dxgi_factory);
+  if (!gdk_win32_check_hresult (hr, error, "Failed to create DXGI factory"))
+    return FALSE;
+
+  res = gdk_win32_display_create_d3d_devices (self, 0, DXGI_ADAPTER_FLAG_SOFTWARE, &self->d3d11_device, &self->d3d12_device, &errors[0]) ||
+        gdk_win32_display_create_d3d_devices (self, 0, DXGI_ADAPTER_FLAG_SOFTWARE, &self->d3d11_device, NULL, &errors[1]) ||
+        gdk_win32_display_create_d3d_devices (self, 0, DXGI_ADAPTER_FLAG_SOFTWARE, NULL, &self->d3d12_device, &errors[2]) ||
+        gdk_win32_display_create_d3d_devices (self, DXGI_ADAPTER_FLAG_SOFTWARE, 0, &self->d3d11_device, &self->d3d12_device, &errors[3]) ||
+        gdk_win32_display_create_d3d_devices (self, DXGI_ADAPTER_FLAG_SOFTWARE, 0, &self->d3d11_device, NULL, &errors[4]) ||
+        gdk_win32_display_create_d3d_devices (self, DXGI_ADAPTER_FLAG_SOFTWARE, 0, NULL, &self->d3d12_device, &errors[5]);
+
+  if (error && !res)
+    {
+      for (i = 0; i < G_N_ELEMENTS (errors); i++)
+        {
+          if (!g_error_matches (errors[i], GDK_WIN32_HRESULT_ERROR, DXGI_ERROR_NOT_FOUND))
+            {
+              *error = g_error_copy (errors[i]);
+              break;
+            }
+        }
+      
+      if (i == G_N_ELEMENTS (errors))
+        *error = g_error_copy (errors[0]);
+    }
+
+    for (i = 0; i < G_N_ELEMENTS (errors); i++)
+      g_clear_error (&errors[i]);
+
+  return res;
+}
+
+/*<private>
+ * gdk_win32_display_get_dcomp_device:
+ * @self: the display
+ *
+ * Gets the Direct Composition device used to composite
+ * the UI.
+ * 
+ * If Direct Composition is not supported, NULL is returned.
+ * 
+ * Note that Wine does not support Direct Composition at this point.
+ *
+ * Returns: (nullable): the device
+ */
+IDCompositionDevice *
+gdk_win32_display_get_dcomp_device (GdkWin32Display *self)
+{
+  return self->dcomp_device;
+}
+
+/*<private>
+ * gdk_win32_display_get_dxgi_factory:
+ * @self: the display
+ *
+ * Gets the factory used to create rendering resources.
+ *
+ * Returns: the factory
+ */
+IDXGIFactory4 *
+gdk_win32_display_get_dxgi_factory (GdkWin32Display *self)
+{
+  return self->dxgi_factory;
+}
+
+/*<private>
+ * gdk_win32_display_get_d3d11_device:
+ * @self: the display
+ *
+ * Gets the D3D11 device used for rendering. It will be
+ * created with the factory from
+ * gdk_win32_display_get_dxgi_factory() and refer to the same adapter
+ * as the D3D12 device.
+ *
+ * Returns: the D3D11 device used for rendering
+ */
+ID3D11Device *
+gdk_win32_display_get_d3d11_device (GdkWin32Display *self)
+{
+  return self->d3d11_device;
+}
+
+/*<private>
+ * gdk_win32_display_get_d3d12_device:
+ * @self: the display
+ *
+ * Gets the D3D12 device used for rendering. It will be
+ * created with the factory from
+ * gdk_win32_display_get_dxgi_factory() and refer to the same adapter
+ * as the D3D11 device.
+ *
+ * If D3D12 is not supported on this computer, NULL is returned.
+ *
+ * According to the Steam hardware survey, 5-10% of people were
+ * still using Windows without D3D12 in early 2025.
+ *
+ * Returns: (nullable) the D3D12 device used for rendering
+ */
+ID3D12Device *
+gdk_win32_display_get_d3d12_device (GdkWin32Display *self)
+{
+  return self->d3d12_device;
+}
+
 static LRESULT CALLBACK
 inner_display_change_hwnd_procedure (HWND   hwnd,
                                      UINT   message,
@@ -524,6 +742,7 @@ _gdk_win32_display_open (const char *display_name)
   static gsize display_inited = 0;
   static GdkDisplay *display = NULL;
   GdkWin32Display *win32_display;
+  GError *error = NULL;
 
   GDK_NOTE (MISC, g_print ("gdk_display_open: %s\n", (display_name ? display_name : "NULL")));
 
@@ -559,6 +778,13 @@ _gdk_win32_display_open (const char *display_name)
 
       display->clipboard = gdk_win32_clipboard_new (display);
       display->primary_clipboard = gdk_clipboard_new (display);
+
+      if (!gdk_win32_display_init_d3d (win32_display, &error))
+        {
+          GDK_DEBUG (D3D12, "Failed to initialize D3D: %s", error->message);
+          g_clear_error (&error);
+        }
+      gdk_win32_display_init_dcomp (win32_display);
 
       /* Precalculate display name */
       gdk_display_get_name (display);
@@ -669,13 +895,16 @@ gdk_win32_display_sync (GdkDisplay * display)
 static void
 gdk_win32_display_dispose (GObject *object)
 {
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
+  GdkWin32Display *self = GDK_WIN32_DISPLAY (object);
 
-  if (display_win32->hwnd != NULL)
+  if (self->hwnd != NULL)
     {
-      DestroyWindow (display_win32->hwnd);
-      display_win32->hwnd = NULL;
+      DestroyWindow (self->hwnd);
+      self->hwnd = NULL;
     }
+
+  gdk_win32_com_clear (&self->d3d12_device);
+  gdk_win32_com_clear (&self->dxgi_factory);
 
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->dispose (object);
 }
@@ -1033,11 +1262,7 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
       HDC hdc;
 
       if (surface != NULL)
-        {
-          if (GDK_WIN32_SURFACE (surface)->hdc == NULL)
-            GDK_WIN32_SURFACE (surface)->hdc = GetDC (GDK_SURFACE_HWND (surface));
-          hdc = GDK_WIN32_SURFACE (surface)->hdc;
-        }
+        hdc = GetDC (GDK_SURFACE_HWND (surface));
       else
         hdc = GetDC (NULL);
 
@@ -1048,11 +1273,9 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
       dpix = GetDeviceCaps (hdc, LOGPIXELSX);
       dpiy = GetDeviceCaps (hdc, LOGPIXELSY);
 
-      /*
-       * If surface is not NULL, the HDC should not be released, since surfaces have
-       * Win32 HWNDs created with CS_OWNDC
-       */
-      if (surface == NULL)
+      if (surface != NULL)
+        ReleaseDC (GDK_SURFACE_HWND (surface), hdc);
+      else
         ReleaseDC (NULL, hdc);
 
       is_scale_acquired = TRUE;

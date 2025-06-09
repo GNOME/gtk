@@ -63,6 +63,12 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextWGLClass;
 
 G_DEFINE_TYPE (GdkWin32GLContextWGL, gdk_win32_gl_context_wgl, GDK_TYPE_WIN32_GL_CONTEXT)
 
+static HDC
+gdk_wgl_get_default_hdc (GdkWin32Display *display_win32)
+{
+  return GetDC (display_win32->hwnd);
+}
+
 static void
 gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 {
@@ -89,9 +95,6 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
-  GdkSurface *surface = gdk_gl_context_get_surface (context);
-  GdkWin32Display *display_win32 = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
-  GdkWin32Surface *surface_win32 = GDK_WIN32_SURFACE (surface);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, context_data, painted);
 
@@ -127,7 +130,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
         }
     }
 
-  SwapBuffers (surface_win32->hdc);
+  SwapBuffers (GetDC (GDK_WIN32_GL_CONTEXT (context)->handle));
 }
 
 static void
@@ -154,12 +157,6 @@ gdk_win32_gl_context_wgl_get_damage (GdkGLContext *gl_context)
     }
 
   return GDK_GL_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->get_damage (gl_context);
-}
-
-static HDC
-gdk_wgl_get_default_hdc (GdkWin32Display *display_win32)
-{
-  return GetDC (display_win32->hwnd);
 }
 typedef struct {
   GArray *array;
@@ -514,26 +511,16 @@ gdk_create_dummy_wgl_context (GdkWin32Display *display_win32,
 static HWND
 create_dummy_gl_window (void)
 {
-  WNDCLASS wclass = { 0, };
   ATOM klass;
   HWND hwnd = NULL;
 
-  wclass.lpszClassName = L"GdkGLDummyWindow";
-  wclass.lpfnWndProc = DefWindowProc;
-  wclass.hInstance = this_module ();
-  wclass.style = CS_OWNDC;
-
-  klass = RegisterClass (&wclass);
+  klass = gdk_win32_gl_context_get_class ();
   if (klass)
     {
       hwnd = CreateWindow (MAKEINTRESOURCE (klass),
                            NULL, WS_POPUP,
                            0, 0, 0, 0, NULL, NULL,
                            this_module (), NULL);
-      if (!hwnd)
-        {
-          UnregisterClass (MAKEINTRESOURCE (klass), this_module ());
-        }
     }
 
   return hwnd;
@@ -848,29 +835,33 @@ create_wgl_context (GdkGLContext    *context,
 }
 
 static gboolean
-set_wgl_pixformat_for_hdc (GdkWin32Display *display_win32,
-                           HDC              hdc)
+gdk_win32_wgl_ensure_pixel_format_for_hdc (GdkWin32Display  *display_win32,
+                                           HDC               hdc,
+                                           GError          **error)
 {
-  gboolean skip_acquire = FALSE;
-  gboolean set_pixel_format_result = FALSE;
+  PIXELFORMATDESCRIPTOR pfd = {0};
+  int current_pixel_format;
+  
+  current_pixel_format = GetPixelFormat (hdc);
+  if (current_pixel_format == display_win32->wgl_pixel_format)
+    return TRUE;
 
-  if (GetPixelFormat (hdc) != 0)
+  if (current_pixel_format != 0)
     {
-      skip_acquire = TRUE;
-      set_pixel_format_result = TRUE;
+      g_set_error (error, GDK_GL_ERROR,
+                   GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                   _("Unsupported pixel format %d set on Window"), current_pixel_format);
+      return FALSE;
     }
-  else
+
+  DescribePixelFormat (hdc, display_win32->wgl_pixel_format, sizeof (PIXELFORMATDESCRIPTOR), &pfd);
+  if (!SetPixelFormat (hdc, display_win32->wgl_pixel_format, &pfd))
     {
-      PIXELFORMATDESCRIPTOR pfd = {0};
-      DescribePixelFormat (hdc, display_win32->wgl_pixel_format, sizeof (PIXELFORMATDESCRIPTOR), &pfd);
-      set_pixel_format_result = SetPixelFormat (hdc, display_win32->wgl_pixel_format, &pfd);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                           _("No available configurations for the given pixel format"));
+      return 0;
     }
-
-  /* SetPixelFormat() failed, bail out */
-  if (!set_pixel_format_result)
-    return FALSE;
-
-  GDK_DEBUG (OPENGL, "%s""requested and set pixel format: %d\n", skip_acquire ? "already " : "", display_win32->wgl_pixel_format);
 
   return TRUE;
 }
@@ -887,7 +878,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   HGLRC hglrc;
   HDC hdc;
 
-  GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkGLContext *share = gdk_display_get_gl_context (display);
@@ -912,22 +902,13 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
         return 0;
 
       hdc = gdk_wgl_get_default_hdc (display_win32);
+
+      if (!gdk_win32_wgl_ensure_pixel_format_for_hdc (display_win32, hdc, error))
+        return 0;
     }
   else
     {
-      if (surface != NULL)
-        hdc = GDK_WIN32_SURFACE (surface)->hdc;
-      else
-        hdc = gdk_wgl_get_default_hdc (display_win32);
-    }
-
-  if (!set_wgl_pixformat_for_hdc (display_win32, hdc))
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
-
-      return 0;
+      hdc = gdk_wgl_get_default_hdc (display_win32);
     }
 
   /* if there isn't wglCreateContextAttribsARB() on WGL, use a legacy context */
@@ -1032,19 +1013,67 @@ static gboolean
 gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
                                        gboolean      surfaceless)
 {
-  GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
-  GdkDisplay *display = gdk_gl_context_get_display (context);
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
   HDC hdc;
 
-  if (surfaceless || surface == NULL)
-    hdc = gdk_wgl_get_default_hdc (display_win32);
+  if (GDK_WIN32_GL_CONTEXT (self)->handle)
+    {
+      hdc = GetDC (GDK_WIN32_GL_CONTEXT (self)->handle);
+    }
   else
-    hdc = GDK_WIN32_SURFACE (surface)->hdc;
+    {
+      GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
+    
+      hdc = gdk_wgl_get_default_hdc (GDK_WIN32_DISPLAY (display));
+    }
 
-  if (!gdk_win32_private_wglMakeCurrent (hdc, context_wgl->wgl_context))
+  if (!gdk_win32_private_wglMakeCurrent (hdc, self->wgl_context))
     return FALSE;
+
+  return TRUE;
+}
+
+static void
+gdk_win32_gl_context_wgl_maybe_remake_current (GdkWin32GLContextWGL *self)
+{
+  if (gdk_win32_private_wglGetCurrentContext () != self->wgl_context)
+    return;
+
+  gdk_win32_gl_context_wgl_make_current (GDK_GL_CONTEXT (self), FALSE);
+}
+
+static void
+gdk_win32_gl_context_wgl_surface_detach (GdkDrawContext  *context)
+{
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->surface_detach (context);
+    
+  gdk_win32_gl_context_wgl_maybe_remake_current (self);
+}
+
+static gboolean
+gdk_win32_gl_context_wgl_surface_attach (GdkDrawContext  *context,
+                                         GError         **error)
+{
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
+  GdkWin32GLContext *win32_context = GDK_WIN32_GL_CONTEXT (context);
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_draw_context_get_display (context));
+
+  if (!GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->surface_attach (context, error))
+    return FALSE;
+
+  if (!gdk_win32_wgl_ensure_pixel_format_for_hdc (win32_display,
+                                                  GetDC (win32_context->handle),
+                                                  error))
+    {
+      /* XXX: This is yucky */
+      gdk_win32_gl_context_wgl_surface_detach (context);
+      
+      return FALSE;
+    }
+
+  gdk_win32_gl_context_wgl_maybe_remake_current (self);
 
   return TRUE;
 }
@@ -1066,6 +1095,8 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
 
   draw_context_class->end_frame = gdk_win32_gl_context_wgl_end_frame;
   draw_context_class->empty_frame = gdk_win32_gl_context_wgl_empty_frame;
+  draw_context_class->surface_attach = gdk_win32_gl_context_wgl_surface_attach;
+  draw_context_class->surface_detach = gdk_win32_gl_context_wgl_surface_detach;
 
   gobject_class->dispose = gdk_win32_gl_context_wgl_dispose;
 }

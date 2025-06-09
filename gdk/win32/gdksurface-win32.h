@@ -25,6 +25,7 @@
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>
+#include "gdk/win32/dcomp.h"
 #include <directmanipulation.h>
 
 #ifdef HAVE_EGL
@@ -130,6 +131,9 @@ struct _GdkWin32Surface
 
   HANDLE handle;
 
+  IDCompositionTarget *dcomp_target;
+  IDCompositionVisual *dcomp_visual;
+
   HICON   hicon_big;
   HICON   hicon_small;
 
@@ -167,8 +171,6 @@ struct _GdkWin32Surface
    * and is unset when WM_WINDOWPOSCHANGING is handled.
    */
   guint maximizing : 1;
-
-  HDC hdc;
 
   GdkW32DragMoveResizeContext drag_move_resize_context;
 
@@ -217,6 +219,8 @@ void gdk_win32_surface_move_resize (GdkSurface *surface,
 
 GdkSurface *    gdk_win32_drag_surface_new                      (GdkDisplay             *display);
 
+void            gdk_win32_surface_set_dcomp_content             (GdkWin32Surface        *self,
+                                                                 IUnknown               *dcomp_content);
 
 #ifdef HAVE_EGL
 EGLSurface gdk_win32_surface_get_egl_surface (GdkSurface *surface,
