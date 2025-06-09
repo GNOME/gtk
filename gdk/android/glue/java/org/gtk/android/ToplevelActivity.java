@@ -88,6 +88,10 @@ public class ToplevelActivity extends Activity {
 			@GlibContext.GtkThread
 			private native void notifyAttached();
 			@GlibContext.GtkThread
+			private native void notifyLayoutSurface(int width, int height, float scale);
+			@GlibContext.GtkThread
+			private native void notifyLayoutPosition(int x, int y);
+			@GlibContext.GtkThread
 			private native void notifyDetached();
 
 			@GlibContext.GtkThread
@@ -100,8 +104,6 @@ public class ToplevelActivity extends Activity {
 			@GlibContext.GtkThread
 			private native boolean notifyDragEvent(DragEvent event);
 
-			@UiThread
-			private native void notifyLayout(int x, int y, int width, int height, float scale);
 			@UiThread
 			private native void notifyVisibility(boolean visible);
 
@@ -287,11 +289,10 @@ public class ToplevelActivity extends Activity {
 			@Override
 			protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 				if (changed)
-					notifyLayout(
+					GlibContext.runOnMain(() -> notifyLayoutPosition(
 						left - ToplevelView.this.insets.left,
-						top - ToplevelView.this.insets.top,
-						-1, -1, -1.f
-					);
+						top - ToplevelView.this.insets.top
+					));
 				super.onLayout(changed, left, top, right, bottom);
 			}
 
@@ -306,7 +307,7 @@ public class ToplevelActivity extends Activity {
 						ToplevelActivity.this.getWindowManager().getCurrentWindowMetrics().getDensity() :
 						getResources().getDisplayMetrics().density;
 
-				notifyLayout(-1, -1, width, height, scale);
+				GlibContext.blockForMain(() -> notifyLayoutSurface(width, height, scale));
 			}
 
 			@Override
