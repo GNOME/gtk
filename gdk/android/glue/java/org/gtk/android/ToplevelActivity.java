@@ -440,13 +440,9 @@ public class ToplevelActivity extends Activity {
 					GdkContext.activate();
 				}
 
-				if (nativeIdentifier == 0) {
+				if (nativeIdentifier == 0)
 					Logger.getLogger("Toplevel").log(Level.SEVERE, "Call to activate did not spawn a new window");
-					return null;
-				}
 			}
-
-			return null;
 		});
 	}
 
