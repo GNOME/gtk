@@ -264,7 +264,7 @@ gsk_gpu_shader_op_d3d12_command_n (GskGpuOp             *op,
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGpuOp *next;
-  gsize i, j, n_ops, max_ops_per_draw;
+  gsize i, n_ops, max_ops_per_draw;
   ID3D12PipelineState *pipeline;
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
