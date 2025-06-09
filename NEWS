@@ -1,5 +1,21 @@
-Overview of Changes in 4.18.6, xx-xx-xxxx
+Overview of Changes in 4.18.6, 09-06-2025
 =========================================
+
+* Bugs fixed:
+  - #7450 Wrong behavior of GdkKeymap on macOS (Elisa Pau)
+  - !8528 4.18.5 (Matthias Clasen)
+  - !8595 cups: NULL-terminate array of choices (Marek Kasik)
+  - !8610 Fix the android build (Florian "sp1rit"​)
+  - !8657 icontheme: Load the missing image icon from the theme (Sebastian
+    Wiesner, Benjamin Otte, Robert Mader, Zander Brown, James Westman, Tait
+    Hoyem, Matthias Clasen)
+
+* Translation updates:
+  - Catalan (Jordi Mas i Hernandez)
+  - Finnish (Jiri Grönroos)
+  - German (Christian Kirbach)
+  - Hebrew (Yaron Shahrabani)
+  - Slovak (Peter Mráz)
 
 Overview of Changes in 4.18.5, 03-05-2025
 =========================================
