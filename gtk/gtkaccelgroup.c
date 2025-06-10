@@ -355,6 +355,14 @@ gtk_accelerator_parse_with_keycode (const char      *accelerator,
                   len -= 1;
                   last_ch = *accelerator;
                 }
+
+              if (!last_ch)
+                {
+                  /* The opened '<' has never been closed with '>'
+                  See bug #7592 */
+                  error = TRUE;
+                  goto out;
+                }
             }
         }
       else
