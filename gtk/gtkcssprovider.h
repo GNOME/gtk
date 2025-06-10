@@ -73,7 +73,42 @@ void             gtk_css_provider_load_named     (GtkCssProvider  *provider,
                                                   const char      *name,
                                                   const char      *variant);
 
+GDK_AVAILABLE_IN_4_20
+void             gtk_css_provider_add_discrete_media_feature (GtkCssProvider  *provider,
+                                                              const char      *feature_name,
+                                                              const char      *feature_value);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
+
+/**
+ * GTK_CSS_PREFERS_COLOR_SCHEME:
+ *
+ * Value for the `prefers-color-scheme` media feature.
+ *
+ * Possible values are:
+ *
+ * - [const@Gtk.CSS_PREFERS_COLOR_SCHEME_LIGHT]
+ * - [const@Gtk.CSS_PREFERS_COLOR_SCHEME_DARK]
+ *
+ * Since: 4.20
+ */
+#define GTK_CSS_PREFERS_COLOR_SCHEME               "prefers-color-scheme"
+/**
+ * GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT:
+ *
+ * Prefer a light color theme for media feature [const@Gtk.CSS_PREFERS_COLOR_SCHEME].
+ *
+ * Since: 4.20
+ */
+#define GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT         "light"
+/**
+ * GTK_CSS_PREFERS_COLOR_SCHEME_DARK:
+ *
+ * Prefer a dark color theme for media feature [const@Gtk.CSS_PREFERS_COLOR_SCHEME].
+ *
+ * Since: 4.20
+ */
+#define GTK_CSS_PREFERS_COLOR_SCHEME_DARK         "dark"
 
 G_END_DECLS
 
