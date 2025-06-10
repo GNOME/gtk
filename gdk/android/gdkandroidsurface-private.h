@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 
 void _gdk_android_surface_bind_native (JNIEnv *env, jobject this, jlong identifier);
 void _gdk_android_surface_on_attach (JNIEnv *env, jobject this);
+void _gdk_android_surface_on_layout_surface (JNIEnv *env, jobject this, jint width, jint height, jfloat scale);
+void _gdk_android_surface_on_layout_position (JNIEnv *env, jobject this, jint x, jint y);
 void _gdk_android_surface_on_detach (JNIEnv *env, jobject this);
 
 void _gdk_android_surface_on_dnd_start_failed (JNIEnv *env, jobject this, jobject native_identifier);
@@ -39,7 +41,6 @@ void _gdk_android_surface_on_motion_event (JNIEnv *env, jobject this, jint event
 void _gdk_android_surface_on_key_event (JNIEnv *env, jobject this, jobject event);
 jboolean _gdk_android_surface_on_drag_event (JNIEnv *env, jobject this, jobject event);
 
-void _gdk_android_surface_on_layout_ui_thread (JNIEnv *env, jobject this, jint x, jint y, jint width, jint height, jfloat scale);
 void _gdk_android_surface_on_visibility_ui_thread (JNIEnv *env, jobject this, jboolean visible);
 
 typedef struct
@@ -66,8 +67,6 @@ struct _GdkAndroidSurface
   gboolean delayed_map;
 
   GdkAndroidSurfaceConfiguration cfg;
-  gboolean is_dirty;
-  GdkAndroidSurfaceConfiguration next;
 
   GdkDrop *active_drop;
 };
@@ -76,7 +75,7 @@ struct _GdkAndroidSurfaceClass
 {
   GdkSurfaceClass parent_class;
 
-  void (*on_layout) (GdkAndroidSurface *self, gint x, gint y, gint width, gint height, gfloat scale);
+  void (*on_layout) (GdkAndroidSurface *self);
   void (*reposition) (GdkAndroidSurface *self);
 };
 

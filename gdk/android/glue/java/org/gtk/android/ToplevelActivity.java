@@ -88,6 +88,10 @@ public class ToplevelActivity extends Activity {
 			@GlibContext.GtkThread
 			private native void notifyAttached();
 			@GlibContext.GtkThread
+			private native void notifyLayoutSurface(int width, int height, float scale);
+			@GlibContext.GtkThread
+			private native void notifyLayoutPosition(int x, int y);
+			@GlibContext.GtkThread
 			private native void notifyDetached();
 
 			@GlibContext.GtkThread
@@ -100,8 +104,6 @@ public class ToplevelActivity extends Activity {
 			@GlibContext.GtkThread
 			private native boolean notifyDragEvent(DragEvent event);
 
-			@UiThread
-			private native void notifyLayout(int x, int y, int width, int height, float scale);
 			@UiThread
 			private native void notifyVisibility(boolean visible);
 
@@ -137,11 +139,13 @@ public class ToplevelActivity extends Activity {
 					boolean imeKeyboardState = queuedImeKeyboardState > 0;
 					queuedImeKeyboardState = 0;
 					runOnUiThread(() -> {
+						WindowInsetsController controller = getWindowInsetsController();
 						if (imeKeyboardState) {
 							requestFocus();
-							getWindowInsetsController().show(WindowInsets.Type.ime());
-						 } else {
-							getWindowInsetsController().hide(WindowInsets.Type.ime());
+							if (controller != null)
+								controller.show(WindowInsets.Type.ime());
+						 } else if (controller != null) {
+							controller.hide(WindowInsets.Type.ime());
 						 }
 					});
 				});
@@ -287,11 +291,10 @@ public class ToplevelActivity extends Activity {
 			@Override
 			protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 				if (changed)
-					notifyLayout(
+					GlibContext.runOnMain(() -> notifyLayoutPosition(
 						left - ToplevelView.this.insets.left,
-						top - ToplevelView.this.insets.top,
-						-1, -1, -1.f
-					);
+						top - ToplevelView.this.insets.top
+					));
 				super.onLayout(changed, left, top, right, bottom);
 			}
 
@@ -306,7 +309,7 @@ public class ToplevelActivity extends Activity {
 						ToplevelActivity.this.getWindowManager().getCurrentWindowMetrics().getDensity() :
 						getResources().getDisplayMetrics().density;
 
-				notifyLayout(-1, -1, width, height, scale);
+				GlibContext.blockForMain(() -> notifyLayoutSurface(width, height, scale));
 			}
 
 			@Override
@@ -440,13 +443,9 @@ public class ToplevelActivity extends Activity {
 					GdkContext.activate();
 				}
 
-				if (nativeIdentifier == 0) {
+				if (nativeIdentifier == 0)
 					Logger.getLogger("Toplevel").log(Level.SEVERE, "Call to activate did not spawn a new window");
-					return null;
-				}
 			}
-
-			return null;
 		});
 	}
 

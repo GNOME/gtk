@@ -67,7 +67,6 @@ public final class ImContext {
 					b = a;
 
 				ImContext.this.updatePreedit(content.toString(), b);
-				return null;
 			});
 			return true;
 		}

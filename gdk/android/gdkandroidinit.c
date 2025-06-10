@@ -48,6 +48,8 @@ static const JNINativeMethod clipboard_provider_change_listener_natives[] = {
 static const JNINativeMethod surface_natives[] = {
   { .name = "bindNative", .signature = "(J)V", .fnPtr = _gdk_android_surface_bind_native },
   { .name = "notifyAttached", .signature = "()V", .fnPtr = _gdk_android_surface_on_attach },
+  { .name = "notifyLayoutSurface", .signature = "(IIF)V", .fnPtr = _gdk_android_surface_on_layout_surface },
+  { .name = "notifyLayoutPosition", .signature = "(II)V", .fnPtr = _gdk_android_surface_on_layout_position },
   { .name = "notifyDetached", .signature = "()V", .fnPtr = _gdk_android_surface_on_detach },
 
   { .name = "notifyDNDStartFailed", .signature = "(Lorg/gtk/android/ClipboardProvider$NativeDragIdentifier;)V", .fnPtr = _gdk_android_surface_on_dnd_start_failed },
@@ -56,7 +58,6 @@ static const JNINativeMethod surface_natives[] = {
   { .name = "notifyKeyEvent", .signature = "(Landroid/view/KeyEvent;)V", .fnPtr = _gdk_android_surface_on_key_event },
   { .name = "notifyDragEvent", .signature = "(Landroid/view/DragEvent;)Z", .fnPtr = _gdk_android_surface_on_drag_event },
 
-  { .name = "notifyLayout", .signature = "(IIIIF)V", .fnPtr = _gdk_android_surface_on_layout_ui_thread },
   { .name = "notifyVisibility", .signature = "(Z)V", .fnPtr = _gdk_android_surface_on_visibility_ui_thread },
 };
 static const JNINativeMethod toplevel_natives[] = {

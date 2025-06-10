@@ -125,6 +125,73 @@ _gdk_android_surface_on_attach (JNIEnv *env, jobject this)
   g_debug ("TRACE: Surface.OnAttach (%p [%s])", self, G_OBJECT_TYPE_NAME (self));
 }
 
+static void
+gdk_android_surface_handle_map (GdkAndroidSurface *self);
+void
+_gdk_android_surface_on_layout_surface (JNIEnv *env, jobject this,
+                                        jint width, jint height,
+                                        jfloat scale)
+{
+  glong identifier = (*env)->GetLongField (env, this, gdk_android_get_java_cache ()->surface.surface_identifier);
+  GdkAndroidDisplay *display = gdk_android_display_get_display_instance ();
+  GdkAndroidSurface *self = g_hash_table_lookup (display->surfaces, (gpointer) identifier);
+  gdk_android_check_surface (self);
+
+  g_debug ("TRACE: Surface.OnLayoutSurface (%p [%s]): %dx%d @ %f", self, G_OBJECT_TYPE_NAME (self), width, height, scale);
+
+  self->cfg.width = width;
+  self->cfg.height = height;
+  self->cfg.scale = scale;
+
+  GdkAndroidSurfaceClass *klass = GDK_ANDROID_SURFACE_GET_CLASS (self);
+  if (klass->on_layout)
+    klass->on_layout (self);
+
+  GdkSurface *surface = (GdkSurface *)self;
+  surface->width = ceilf (self->cfg.width / self->cfg.scale);
+  surface->height = ceilf (self->cfg.height / self->cfg.scale);
+  surface->x = self->cfg.x / self->cfg.scale;
+  surface->y = self->cfg.y / self->cfg.scale;
+
+  g_debug ("New surface bounds: %dx%d at (%d|%d)", surface->width, surface->height, surface->x, surface->y);
+  _gdk_surface_update_size (surface);
+  gdk_android_surface_reposition_children (self);
+  gdk_surface_invalidate_rect (surface, NULL);
+
+  gdk_surface_request_layout ((GdkSurface *) self);
+
+  if (self->delayed_map)
+    {
+      gdk_android_surface_handle_map (self);
+      self->delayed_map = FALSE;
+    }
+}
+
+void
+_gdk_android_surface_on_layout_position (JNIEnv *env, jobject this,
+                                         jint x, jint y)
+{
+  glong identifier = (*env)->GetLongField (env, this, gdk_android_get_java_cache ()->surface.surface_identifier);
+  GdkAndroidDisplay *display = gdk_android_display_get_display_instance ();
+  GdkAndroidSurface *self = g_hash_table_lookup (display->surfaces, (gpointer) identifier);
+  gdk_android_check_surface (self);
+
+  g_debug ("TRACE: Surface.OnLayoutPosition (%p [%s]): (%d|%d)", self, G_OBJECT_TYPE_NAME (self), x, y);
+
+  self->cfg.x = x;
+  self->cfg.y = y;
+
+  GdkAndroidSurfaceClass *klass = GDK_ANDROID_SURFACE_GET_CLASS (self);
+  if (klass->on_layout)
+    klass->on_layout (self);
+
+  GdkSurface *surface = (GdkSurface *)self;
+  surface->x = self->cfg.x / self->cfg.scale;
+  surface->y = self->cfg.y / self->cfg.scale;
+
+  gdk_android_surface_reposition_children (self);
+}
+
 void
 _gdk_android_surface_on_detach (JNIEnv *env, jobject this)
 {
@@ -180,100 +247,6 @@ _gdk_android_surface_on_drag_event (JNIEnv *env, jobject this, jobject event)
   gdk_android_check_surface_val (self, FALSE);
 
   return gdk_android_dnd_surface_handle_drop_event (self, event);
-}
-
-static void
-gdk_android_surface_recreate_egl_surface (GdkAndroidSurface *self)
-{
-  GdkDrawContext *attached;
-
-  attached = gdk_surface_get_attached_context (GDK_SURFACE (self));
-  if (GDK_IS_GL_CONTEXT (attached))
-    {
-      gdk_gl_context_set_egl_native_window (GDK_GL_CONTEXT (attached), self->native);
-    }
-}
-
-typedef struct
-{
-  GdkAndroidSurface *self;
-  GdkAndroidSurfaceConfiguration next;
-} GdkAndroidSurfaceOnLayoutData;
-static void
-gdk_android_surface_on_layout_data_destroy (GdkAndroidSurfaceOnLayoutData *data)
-{
-  if (!data)
-    return;
-  g_object_unref (data->self);
-  g_free (data);
-}
-
-static void
-gdk_android_surface_handle_map (GdkAndroidSurface *self);
-
-static gboolean
-gdk_android_surface_on_layout (GdkAndroidSurfaceOnLayoutData *data)
-{
-  g_debug ("TRACE: Surface.OnLayout (%p [%s])", data->self, G_OBJECT_TYPE_NAME (data->self));
-
-#define QUEUE_CFG_UPDATE(field) \
-  data->self->next.field = data->next.field >= 0 ? data->next.field : (data->self->is_dirty ? data->self->next.field : data->self->cfg.field);
-  QUEUE_CFG_UPDATE (x)
-  QUEUE_CFG_UPDATE (y)
-  QUEUE_CFG_UPDATE (width)
-  QUEUE_CFG_UPDATE (height)
-  QUEUE_CFG_UPDATE (scale)
-#undef QUEUE_CFG_UPDATE
-  data->self->is_dirty = TRUE;
-
-  GdkAndroidSurfaceClass *klass = GDK_ANDROID_SURFACE_GET_CLASS (data->self);
-  if (klass->on_layout)
-    klass->on_layout (data->self,
-                      data->self->next.x, data->self->next.y,
-                      data->self->next.width, data->self->next.height,
-                      data->self->next.scale);
-
-  // As on_layout may be called from Java surfaceChanged, recreate the EGL surface
-  gdk_android_surface_recreate_egl_surface (data->self);
-  gdk_surface_request_layout ((GdkSurface *) data->self);
-
-  if (data->self->delayed_map)
-    {
-      gdk_android_surface_handle_map (data->self);
-      data->self->delayed_map = FALSE;
-    }
-
-  return G_SOURCE_REMOVE;
-}
-
-void
-_gdk_android_surface_on_layout_ui_thread (JNIEnv *env, jobject this,
-                                          jint x, jint y,
-                                          jint width, jint height,
-                                          jfloat scale)
-{
-  glong identifier = (*env)->GetLongField (env, this, gdk_android_get_java_cache ()->surface.surface_identifier);
-  GdkAndroidDisplay *display = gdk_android_display_get_display_instance ();
-  GdkAndroidSurface *self = gdk_android_display_get_surface_from_identifier (display, identifier);
-  if (!self)
-    return;
-  if (!GDK_IS_ANDROID_SURFACE (self))
-    {
-      g_object_unref (self);
-      return;
-    }
-
-  g_debug ("TRACE: [UiThread] Surface.OnLayout (%p [%s])", self, G_OBJECT_TYPE_NAME (self));
-
-  GdkAndroidSurfaceOnLayoutData *data = g_new (GdkAndroidSurfaceOnLayoutData, 1);
-  data->self = self;
-  data->next = (GdkAndroidSurfaceConfiguration){
-    .x = x, .y = y, .width = width, .height = height, .scale = scale
-  };
-  g_idle_add_full (G_PRIORITY_DEFAULT,
-                   G_SOURCE_FUNC (gdk_android_surface_on_layout),
-                   data,
-                   (GDestroyNotify) gdk_android_surface_on_layout_data_destroy);
 }
 
 typedef struct
@@ -422,11 +395,12 @@ _gdk_android_surface_on_visibility_ui_thread (JNIEnv *env, jobject this,
       jobject holder = (*env)->CallObjectMethod (env, this, gdk_android_get_java_cache ()->surface.get_holder);
       jobject android_surface = (*env)->CallObjectMethod (env, holder, gdk_android_get_java_cache ()->a_surfaceholder.get_surface);
       self->native = ANativeWindow_fromSurface (env, android_surface);
-      gdk_android_surface_recreate_egl_surface (self);
       (*env)->PopLocalFrame (env, NULL);
     }
-  else
-    gdk_android_surface_recreate_egl_surface (self);
+
+  GdkDrawContext *attached = gdk_surface_get_attached_context ((GdkSurface *)self);
+  if (GDK_IS_GL_CONTEXT (attached))
+    gdk_gl_context_set_egl_native_window ((GdkGLContext *)attached, self->native);
 
   g_mutex_unlock (&self->native_lock);
 
@@ -643,23 +617,6 @@ gdk_android_surface_get_scale (GdkSurface *surface)
 static gboolean
 gdk_android_surface_compute_size (GdkSurface *surface)
 {
-  GdkAndroidSurface *self = (GdkAndroidSurface *) surface;
-  if (self->is_dirty)
-    {
-      self->cfg = self->next;
-      surface->width = ceilf (self->cfg.width / self->cfg.scale);
-      surface->height = ceilf (self->cfg.height / self->cfg.scale);
-      surface->x = self->cfg.x / self->cfg.scale;
-      surface->y = self->cfg.y / self->cfg.scale;
-
-      self->is_dirty = FALSE;
-
-      g_debug ("New bounds: %dx%d at (%d|%d)", surface->width, surface->height, surface->x, surface->y);
-      _gdk_surface_update_size (surface);
-      gdk_android_surface_reposition_children (self);
-      gdk_surface_invalidate_rect (surface, NULL);
-    }
-
   return FALSE;
 }
 
@@ -699,7 +656,6 @@ gdk_android_surface_init (GdkAndroidSurface *self)
   self->cfg = (GdkAndroidSurfaceConfiguration){
     .x = 0, .y = 0, .width = 0, .height = 0, .scale = 1.f
   };
-  self->is_dirty = FALSE;
 }
 
 GdkAndroidToplevel *
