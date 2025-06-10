@@ -485,18 +485,12 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
 
   if (priv->egl_context && display->have_egl_buffer_age)
     {
-      EGLDisplay egl_display;
-      EGLint swap_behavior = EGL_BUFFER_DESTROYED, buffer_age = 0;
-
-      egl_display = gdk_display_get_egl_display (display);
-
+      int buffer_age = 0;
       gdk_gl_context_make_current (context);
+      eglQuerySurface (gdk_display_get_egl_display (display), priv->egl_surface,
+                       EGL_BUFFER_AGE_EXT, &buffer_age);
 
-      eglQuerySurface (egl_display, priv->egl_surface, EGL_SWAP_BEHAVIOR, &swap_behavior);
-      eglQuerySurface (egl_display, priv->egl_surface, EGL_BUFFER_AGE_EXT, &buffer_age);
-
-      if (swap_behavior == EGL_BUFFER_PRESERVED &&
-          buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
+      if (buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
         {
           cairo_region_t *damage = cairo_region_create ();
           int i;
@@ -655,7 +649,7 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
        gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth)))
     {
       GdkGLContext *cleared;
-      EGLint attribs[4], tmp;
+      EGLint attribs[4];
       EGLDisplay egl_display;
       EGLConfig egl_config;
       int i;
@@ -691,10 +685,6 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
                                                       NULL);
         }
       priv->egl_surface_depth = depth;
-
-      if (eglGetConfigAttrib (egl_display, egl_config, EGL_SURFACE_TYPE, &tmp)
-          && (tmp & EGL_SWAP_BEHAVIOR_PRESERVED_BIT) != 0)
-        eglSurfaceAttrib (egl_display, priv->egl_surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
 
       if (cleared)
         {

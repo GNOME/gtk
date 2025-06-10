@@ -170,6 +170,8 @@ activate_about (GSimpleAction *action,
   char *os_name;
   char *os_version;
   GString *s;
+  GFile *logo_file;
+  GtkIconPaintable *logo;
 
   s = g_string_new ("");
 
@@ -198,6 +200,8 @@ activate_about (GSimpleAction *action,
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
+  logo_file = g_file_new_for_uri ("resource:///org/gtk/Demo4/icons/scalable/apps/org.gtk.Demo4.svg");
+  logo = gtk_icon_paintable_new_for_file (logo_file, 64, 1);
   gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
                          "program-name", g_strcmp0 (PROFILE, "devel") == 0
                                          ? "GTK Demo (Development)"
@@ -208,10 +212,12 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK widgets",
                          "authors", (const char *[]) { "The GTK Team", NULL },
-                         "logo-icon-name", "org.gtk.Demo4",
+                         "logo", logo,
                          "title", "About GTK Demo",
                          "system-information", s->str,
                          NULL);
+  g_object_unref (logo);
+  g_object_unref (logo_file);
 
   g_string_free (s, TRUE);
   g_free (version);

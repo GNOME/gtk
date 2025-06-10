@@ -85,6 +85,26 @@ gdk_android_gl_context_surface_attach (GdkDrawContext  *context,
   return TRUE;
 }
 
+static void
+gdk_android_gl_context_surface_resized (GdkDrawContext  *context)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+  /*
+   * For some reason, not all surface changes (e.g. fullscreening) cause
+   * the OS to do the surfaceDestroyed / surfaceCreated cycle, but we
+   * still have to recreate the EGL surface for those cases.
+   */
+  gdk_gl_context_set_egl_native_window ((GdkGLContext *)context,
+                                        GDK_ANDROID_SURFACE (surface)->native);
+}
+
+static void
+gdk_android_gl_context_surface_detach (GdkDrawContext  *context)
+{
+  gdk_gl_context_set_egl_native_window ((GdkGLContext *)context,
+                                        NULL);
+}
+
 static GLuint
 gdk_android_gl_context_get_default_framebuffer (GdkGLContext *gl_context)
 {
@@ -121,6 +141,8 @@ gdk_android_gl_context_class_init (GdkAndroidGLContextClass *class)
   draw_context_class->end_frame = gdk_android_gl_context_end_frame;
   draw_context_class->empty_frame = gdk_android_gl_context_empty_frame;
   draw_context_class->surface_attach = gdk_android_gl_context_surface_attach;
+  draw_context_class->surface_resized = gdk_android_gl_context_surface_resized;
+  draw_context_class->surface_detach = gdk_android_gl_context_surface_detach;
   gl_context_class->backend_type = GDK_GL_EGL;
   gl_context_class->get_default_framebuffer = gdk_android_gl_context_get_default_framebuffer;
   gl_context_class->realize = gdk_android_gl_context_realize;

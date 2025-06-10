@@ -1046,7 +1046,7 @@ gtk_snapshot_collect_gl_shader_texture (GtkSnapshot      *snapshot,
  * [method@Gtk.Snapshot.pop].
  *
  * If you want to use pre-existing textures as input to the shader rather
- - * than rendering new ones, use [method@Gtk.Snapshot.append_texture] to
+ * than rendering new ones, use [method@Gtk.Snapshot.append_texture] to
  * push a texture node. These will be used directly rather than being
  * re-rendered.
  *
@@ -2842,7 +2842,7 @@ gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
  * @center: the center point of the conic gradient
  * @rotation: the clockwise rotation in degrees of the starting angle.
  *   0 means the starting angle is the top.
- * @interpolate: the color state to interpolate in
+ * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
  * @stops: (array length=n_stops): the color stops defining the gradient
  * @n_stops: the number of elements in @stops

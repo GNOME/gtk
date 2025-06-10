@@ -59,8 +59,11 @@ if have_egl
 endif
 
 d3d12_dep = [
+  cc.find_library('d3d11'),
   cc.find_library('d3d12'),
+  cc.find_library('dcomp'),
   cc.find_library('dxgi'),
+  cc.find_library('dxguid'),
   dependency('DirectX-Headers', version: '>= 1.611'),
 ]
 

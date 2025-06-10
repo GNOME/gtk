@@ -54,12 +54,16 @@ G_BEGIN_DECLS
 struct _GdkWin32GLContext
 {
   GdkGLContext parent_instance;
+
+  HWND handle;
 };
 
 struct _GdkWin32GLContextClass
 {
   GdkGLContextClass parent_class;
 };
+
+ATOM            gdk_win32_gl_context_get_class          (void);
 
 /* WGL */
 #define GDK_TYPE_WIN32_GL_CONTEXT_WGL     (gdk_win32_gl_context_wgl_get_type())

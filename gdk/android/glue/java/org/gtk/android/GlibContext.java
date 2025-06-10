@@ -53,4 +53,12 @@ public final class GlibContext {
 		}
 		return retval.get();
 	}
+
+	@UiThread
+	public static void blockForMain(Runnable runnable) {
+		blockForMain(() -> {
+			runnable.run();
+			return null;
+		});
+	}
 }
