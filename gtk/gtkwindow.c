@@ -267,6 +267,7 @@ struct _GtkWindowPrivate
   guint    use_subsurface            : 1;
 
   guint    in_present                : 1;
+  guint    in_dispose                : 1;
 
   GdkWindowTypeHint type_hint;
 
@@ -1727,6 +1728,7 @@ gtk_window_init (GtkWindow *window)
   priv->mnemonics_visible = TRUE;
   priv->focus_visible = TRUE;
   priv->initial_fullscreen_monitor = -1;
+  priv->in_dispose = FALSE;
 
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
@@ -3183,6 +3185,7 @@ gtk_window_dispose (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = window->priv;
+  priv->in_dispose = TRUE;
 
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
@@ -8772,10 +8775,18 @@ gtk_window_real_set_focus (GtkWindow *window,
 
       priv->focus_widget = NULL;
 
-      if (priv->has_focus)
-	do_focus_change (old_focus, FALSE);
+      /* Avoid generating focus events to widget inside GtkWindow being disposed,
+       * because by the time callbacks will run the widget itself and GtkWindow
+       * too may already be destroyed -- Issue #6758 */
+      if (!priv->in_dispose)
+        {
+          if (priv->has_focus)
+            {
+	      do_focus_change (old_focus, FALSE);
+            }
 
-      g_object_notify (G_OBJECT (old_focus), "is-focus");
+          g_object_notify (G_OBJECT (old_focus), "is-focus");
+        }
     }
 
   /* The above notifications may have set a new focus widget,
