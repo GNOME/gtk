@@ -1,0 +1,11 @@
+default-mode {
+  color: rgb(0,128,0);
+}
+
+dark-mode {
+  color: rgb(0,0,255);
+}
+
+normal {
+  color: rgb(255,0,0);
+}
