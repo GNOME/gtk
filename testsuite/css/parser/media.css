@@ -1,0 +1,24 @@
+
+@media {
+  default-mode {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  dark-mode {
+    color: blue;
+  }
+}
+
+/* Syntax error: media features should be enclosed in parenthesis. */
+@media prefers-color-scheme: dark {
+  dark-mode {
+    color: blue;
+  }
+}
+
+/* Normal style */
+normal {
+  color: red;
+}

@@ -28,6 +28,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscustompropertypoolprivate.h"
 #include "gtkcsskeyframesprivate.h"
+#include "gtkcssmediaqueryprivate.h"
 #include "gtkcssreferencevalueprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
@@ -131,6 +132,8 @@ struct _GtkCssProviderPrivate
 {
   GScanner *scanner;
 
+  GArray *media_features;
+
   GHashTable *symbolic_colors;
   GHashTable *keyframes;
 
@@ -156,11 +159,11 @@ static void gtk_css_style_provider_emit_error (GtkStyleProvider *provider,
                                                GtkCssSection    *section,
                                                const GError     *error);
 
-static void
-gtk_css_provider_load_internal (GtkCssProvider *css_provider,
-                                GtkCssScanner  *scanner,
-                                GFile          *file,
-                                GBytes         *bytes);
+static void gtk_css_provider_load_internal (GtkCssProvider *css_provider,
+                                            GtkCssScanner  *scanner,
+                                            GFile          *file,
+                                            GBytes         *bytes);
+static void parse_ruleset                  (GtkCssScanner *scanner);
 
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_ADD_PRIVATE (GtkCssProvider)
@@ -764,6 +767,33 @@ parse_import (GtkCssScanner *scanner)
 }
 
 static gboolean
+parse_media_block (GtkCssScanner *scanner)
+{
+  if (!gtk_css_parser_try_at_keyword (scanner->parser, "media"))
+    return FALSE;
+
+  if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
+    {
+      GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
+      _gtk_css_media_query_parse (scanner->parser, priv->media_features);
+    }
+
+  if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
+    {
+      gtk_css_parser_error_syntax (scanner->parser, "Expected '{' after @media query");
+      return FALSE;
+    }
+
+  gtk_css_parser_start_block (scanner->parser);
+
+  parse_ruleset (scanner);
+
+  gtk_css_parser_end_block (scanner->parser);
+
+  return TRUE;
+}
+
+static gboolean
 parse_color_definition (GtkCssScanner *scanner)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
@@ -833,6 +863,9 @@ parse_keyframes (GtkCssScanner *scanner)
 static void
 parse_at_keyword (GtkCssScanner *scanner)
 {
+  if (parse_media_block (scanner))
+    return;
+
   gtk_css_parser_start_semicolon_block (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
 
   if (!parse_import (scanner) &&
