@@ -188,6 +188,12 @@ handle_application_method (GDBusConnection       *connection,
       locale = setlocale (types[lctype], NULL);
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", locale));
     }
+  else if (g_strcmp0 (method_name, "GetApplicationBusAddress") == 0)
+    {
+      GtkAtSpiRoot *root = user_data;
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", root->bus_address));
+    }
 }
 
 static GVariant *
