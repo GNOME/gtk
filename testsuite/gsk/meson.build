@@ -11,7 +11,7 @@ node_parser = executable('node-parser',
 )
 
 compare_render_tests = [
-  'big-box-glyph-nocairo',
+  'big-box-glyph',
   'big-checkerboard',
   'big-checkerboard-scaled-down',
   'big-checkerboard-scaled-down-nearest',
