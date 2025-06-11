@@ -358,8 +358,7 @@ gtk_accelerator_parse_with_keycode (const char      *accelerator,
 
               if (!last_ch)
                 {
-                  /* The opened '<' has never been closed with '>'
-                  See bug #7592 */
+                  /* The opened '<' has never been closed with '>' */
                   error = TRUE;
                   goto out;
                 }
