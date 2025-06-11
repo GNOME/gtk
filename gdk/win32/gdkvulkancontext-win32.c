@@ -137,6 +137,7 @@ gdk_win32_vulkan_context_surface_attach (GdkDrawContext  *context,
     {
       if (!DestroyWindow (self->handle))
         WIN32_API_FAILED ("DestroyWindow");
+      self->handle = NULL;
       return FALSE;
     }
 
@@ -164,6 +165,7 @@ gdk_win32_vulkan_context_surface_detach (GdkDrawContext *context)
 
       if (!DestroyWindow (self->handle))
         WIN32_API_FAILED ("DestroyWindow");
+      self->handle = NULL;
     }
 }
 
@@ -189,34 +191,10 @@ gdk_win32_vulkan_context_surface_resized (GdkDrawContext *draw_context)
 }
 
 static void
-gdk_win32_vulkan_context_dispose (GObject *object)
-{
-  GdkWin32VulkanContext *self = GDK_WIN32_VULKAN_CONTEXT (object);
-
-  if (self->handle)
-    {
-      GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
-
-      if (!GDK_SURFACE_DESTROYED (surface))
-        {
-          gdk_win32_surface_set_dcomp_content (GDK_WIN32_SURFACE (surface), NULL);
-
-          if (!DestroyWindow (self->handle))
-            WIN32_API_FAILED ("DestroyWindow");
-        }
-    }
-
-  G_OBJECT_CLASS (gdk_win32_vulkan_context_parent_class)->dispose (object);
-}
-
-static void
 gdk_win32_vulkan_context_class_init (GdkWin32VulkanContextClass *klass)
 {
   GdkVulkanContextClass *context_class = GDK_VULKAN_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->dispose = gdk_win32_vulkan_context_dispose;
 
   context_class->create_surface = gdk_win32_vulkan_context_create_surface;
 

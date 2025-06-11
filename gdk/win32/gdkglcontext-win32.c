@@ -127,6 +127,7 @@ gdk_win32_gl_context_surface_detach (GdkDrawContext *context)
 
       if (!DestroyWindow (self->handle))
         WIN32_API_FAILED ("DestroyWindow");
+      self->handle = NULL;
     }
 }
 
