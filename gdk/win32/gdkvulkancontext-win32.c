@@ -137,6 +137,7 @@ gdk_win32_vulkan_context_surface_attach (GdkDrawContext  *context,
     {
       if (!DestroyWindow (self->handle))
         WIN32_API_FAILED ("DestroyWindow");
+      self->handle = NULL;
       return FALSE;
     }
 
@@ -164,6 +165,7 @@ gdk_win32_vulkan_context_surface_detach (GdkDrawContext *context)
 
       if (!DestroyWindow (self->handle))
         WIN32_API_FAILED ("DestroyWindow");
+      self->handle = NULL;
     }
 }
 
