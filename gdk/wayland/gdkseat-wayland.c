@@ -2851,6 +2851,7 @@ tablet_tool_handle_proximity_in (void                      *data,
   tablet->pointer_info.enter_serial = serial;
 
   tablet->pointer_info.focus = g_object_ref (surface);
+  tablet->pointer_info.cursor_shape = 0;
 
   gdk_device_update_tool (tablet->stylus_device, tool->tool);
   gdk_wayland_device_tablet_clone_tool_axes (tablet, tool->tool);
