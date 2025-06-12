@@ -1393,6 +1393,10 @@ move_resize_window_internal (GdkWindow *window,
 
       frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       [impl->toplevel setFrame:frame_rect display:YES];
+
+      if (window->window_type == GDK_WINDOW_TEMP)
+        [impl->view setFrame:content_rect];
+
       impl->cairo_surface = gdk_quartz_ref_cairo_surface (window);
       cairo_surface_destroy (impl->cairo_surface); // Remove the extra reference
     }
