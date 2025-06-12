@@ -18,6 +18,6 @@ AAEAAwAAAA4AAAAA//8A/wD//wAA/wAA\
 }
 
 text {
-  font: "Cantarell 15px";
-  glyphs: "Hello";
+  font: "text-mixed-color 15px";
+  glyphs: 7 10;
 }
