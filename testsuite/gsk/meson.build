@@ -11,7 +11,7 @@ node_parser = executable('node-parser',
 )
 
 compare_render_tests = [
-  'big-box-glyph-nocairo',
+  'big-box-glyph',
   'big-checkerboard',
   'big-checkerboard-scaled-down',
   'big-checkerboard-scaled-down-nearest',
@@ -228,6 +228,17 @@ compare_render_tests = [
   'z-transform-clipping-bounds-nocairo',
 ]
 
+# These tests are either slow or need lots of memory.
+# So we don't run them in parallel with other such tests to not
+# cause CI failures
+demanding_tests = [
+  'huge-height',
+  'huge-height-hdr',
+  'huge-width',
+  'huge-width-hdr',
+  'lots-of-offscreens',
+]
+
 # these are too sensitive to differences in the renderers
 # to run in ci, but still useful to keep around
 informative_render_tests = [
@@ -328,7 +339,8 @@ foreach renderer : renderers
             join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
           ],
           env: test_env,
-          suite: suites + extra_suites
+          suite: suites + extra_suites,
+          is_parallel: not demanding_tests.contains (testname),
         )
       endforeach
     endif
