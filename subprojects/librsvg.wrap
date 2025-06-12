@@ -1,8 +1,8 @@
 [wrap-git]
 directory=librsvg
-url=https://gitlab.gnome.org/sp1rit/librsvg.git
+url=https://gitlab.gnome.org/GNOME/librsvg.git
 #push-url=git@ssh.gitlab.gnome.org:GNOME/librsvg.git
-revision=stylesheet
+revision=librsvg-gtk-2.40.23
 depth=1
 
 [provide]
