@@ -1,0 +1,58 @@
+#! /usr/bin/env python3
+
+from pathlib import Path
+import os, sys, subprocess, difflib
+
+def run_command(command, name, inputdir, resultsdir):
+    success = True
+
+    ret = subprocess.run (command, shell=True, capture_output=True, text=True)
+    output = ret.stdout.splitlines()
+
+    path = Path(inputdir) / (name + '.expected')
+    expected = path.open().read().splitlines()
+
+    for s in expected:
+        print(s)
+    sys.exit(0)
+
+    diff = list(difflib.unified_diff(output, expected))
+    if len(diff) > 0:
+        path = Path(resultsdir) / (name + '.diff')
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.open(mode='w').writelines(s + '\n' for s in diff)
+        success = False
+
+    errors = ret.stderr.splitlines(keepends=True)
+    path = Path(resultsdir) / (name + '.errors')
+    try:
+        expected_errors = path.open().read().splitlines()
+    except OSError:
+        expected_errors = ''
+
+    diff = list(difflib.unified_diff(errors, expected_errors))
+    if len(diff) > 0:
+        path = Path(resultsdir) / (name + '.errors.diff')
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.open(mode='w').writelines(s + '\n' for s in diff)
+        success = False
+
+    if not success:
+        path = Path(resultsdir) / (name + '.out')
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.open(mode='w').writelines(s + '\n' for s in output)
+
+        path = Path(resultsdir) / (name + '.ref')
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.open(mode='w').writelines(s + '\n' for s in expected)
+
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+
+   if len(sys.argv) != 5:
+       print('usage: run-command COMMAND NAME INPUTDIR OUTPUTDIR')
+       sys.exit(1)
+
+   run_command(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
