@@ -53,18 +53,6 @@ gdk_win32_gl_context_egl_empty_frame (GdkDrawContext *draw_context)
 {
 }
 
-static gboolean
-gdk_x11_gl_context_egl_surface_attach (GdkDrawContext  *context,
-                                       GError         **error)
-{
-  GdkSurface *surface = gdk_draw_context_get_surface (context);
-
-  gdk_gl_context_set_egl_native_window (GDK_GL_CONTEXT (context),
-                                        gdk_win32_surface_get_handle (surface));
-
-  return TRUE;
-}
-
 static void
 gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
 {
