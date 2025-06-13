@@ -1619,6 +1619,12 @@ settings_update_theme (GtkSettings *settings)
 
   get_theme_name (settings, &theme_name, &theme_variant);
 
+  gtk_css_provider_add_discrete_media_feature (settings->theme_provider,
+                                               GTK_CSS_PREFERS_COLOR_SCHEME,
+                                               (theme_variant != NULL && (strcmp (theme_variant, "dark") == 0) ?
+                                                GTK_CSS_PREFERS_COLOR_SCHEME_DARK :
+                                                GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT));
+
   gtk_css_provider_load_named (settings->theme_provider,
                                theme_name,
                                theme_variant);

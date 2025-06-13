@@ -18,22 +18,10 @@
 #include "gtkcssmediaqueryprivate.h"
 
 
-GtkCssDiscreteMediaFeature *
-_gtk_css_media_feature_new (const char *feature_name,
-                            const char *feature_value)
-{
-  GtkCssDiscreteMediaFeature *media_feature;
-
-  media_feature = g_new0 (GtkCssDiscreteMediaFeature, 1);
-  _gtk_css_media_feature_init (media_feature, feature_name, feature_value);
-
-  return media_feature;
-}
-
 void
 _gtk_css_media_feature_init (GtkCssDiscreteMediaFeature *media_feature,
-                             const char *feature_name,
-                             const char *feature_value)
+                             const char                 *feature_name,
+                             const char                 *feature_value)
 {
   g_assert (feature_name != NULL);
   g_assert (feature_value != NULL);
@@ -43,33 +31,33 @@ _gtk_css_media_feature_init (GtkCssDiscreteMediaFeature *media_feature,
 }
 
 void
-_gtk_css_media_feature_free (GtkCssDiscreteMediaFeature *media_feature)
+_gtk_css_media_feature_update (GtkCssDiscreteMediaFeature *media_feature,
+                               const char                 *feature_value)
+{
+  g_assert (media_feature != NULL);
+  g_assert (feature_value != NULL);
+
+  g_free (media_feature->value);
+
+  media_feature->value = g_strdup (feature_value);
+}
+
+void
+_gtk_css_media_feature_clear (GtkCssDiscreteMediaFeature *media_feature)
 {
   g_assert (media_feature != NULL);
 
-  if (media_feature->name)
-    g_free (media_feature->name);
-
-  if (media_feature->value)
-    g_free (media_feature->value);
-
-  g_free (media_feature);
+  g_clear_pointer (&media_feature->name, g_free);
+  g_clear_pointer (&media_feature->value, g_free);
 }
-
-gboolean
-_gtk_css_media_feature_match (GtkCssDiscreteMediaFeature *media_feature,
-                              const char *feature_name,
-                              const char *feature_value)
-{
-  // TODO
-  return TRUE;
-}
-
 
 static gboolean
-parse_media_feature (GtkCssParser *parser)
+parse_media_feature (GtkCssParser *parser, GArray *media_features)
 {
   const GtkCssToken *token;
+  int i;
+  GtkCssDiscreteMediaFeature *media_feature = NULL;
+  gboolean match;
 
   if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_PARENS))
     {
@@ -81,9 +69,15 @@ parse_media_feature (GtkCssParser *parser)
 
   token = gtk_css_parser_get_token (parser);
 
-  if (gtk_css_token_is_ident (token, "prefers-color-scheme"))
+  for (i = 0; i < media_features->len; i++)
     {
-      gtk_css_parser_consume_token (parser);
+      GtkCssDiscreteMediaFeature *mf = &g_array_index (media_features, GtkCssDiscreteMediaFeature, i);
+      if (gtk_css_token_is_ident (token, mf->name))
+        {
+          media_feature = mf;
+          gtk_css_parser_consume_token (parser);
+          break;
+        }
     }
 
   if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COLON))
@@ -97,38 +91,29 @@ parse_media_feature (GtkCssParser *parser)
 
   token = gtk_css_parser_get_token (parser);
 
-  if (gtk_css_token_is_ident (token, "dark"))
-    {
-      gtk_css_parser_consume_token (parser);
-    }
-  else if (gtk_css_token_is_ident (token, "light"))
-    {
-      gtk_css_parser_consume_token (parser);
-    }
-  else
-    {
-      gtk_css_parser_error_syntax (parser, "Expected 'dark'/'light'");
-    }
+  match = (media_feature != NULL) && gtk_css_token_is_ident (token, media_feature->value);
+
+  gtk_css_parser_consume_token (parser);
 
   gtk_css_parser_end_block (parser);
 
-  return TRUE;
+  return match;
 }
 
-static void
-parse_media_query (GtkCssParser *parser)
+static gboolean
+parse_media_query (GtkCssParser *parser, GArray *media_features)
 {
   /* TODO: handle `and`, `or, `not` statements. */
-  parse_media_feature (parser);
+  return parse_media_feature (parser, media_features);
 }
 
 gboolean
 _gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
 {
-  do {
-      parse_media_query (parser);
-    }
-  while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
+  gboolean result = parse_media_query (parser, media_features);
 
-  return TRUE;
+  while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
+    result |= parse_media_query (parser, media_features);
+
+  return result;
 }
