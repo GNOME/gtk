@@ -435,7 +435,7 @@ if os_unix
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 cairo_dep      = dependency('cairo', version: cairo_req,
-                            default_options: ['zlib=enabled', 'tests=disabled'])
+                            default_options: ['zlib=enabled', 'tests=disabled', 'lzo=disabled'])
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req)
 pango_dep      = dependency('pango', version: pango_req)
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
