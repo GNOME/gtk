@@ -2,7 +2,7 @@ default-mode {
   color: rgb(0,128,0);
 }
 
-dark-mode {
+light-mode-is-enabled {
   color: rgb(0,0,255);
 }
 
