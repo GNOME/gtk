@@ -163,7 +163,8 @@ static void gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                             GtkCssScanner  *scanner,
                                             GFile          *file,
                                             GBytes         *bytes);
-static void parse_ruleset                  (GtkCssScanner *scanner);
+static void parse_ruleset                  (GtkCssScanner  *scanner,
+                                            gboolean        commit);
 
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_ADD_PRIVATE (GtkCssProvider)
@@ -448,6 +449,7 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
 
+  priv->media_features = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssDiscreteMediaFeature), 4);
   priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -605,6 +607,11 @@ gtk_css_provider_finalize (GObject *object)
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (object);
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   guint i;
+
+  for (i = 0; i < priv->media_features->len; i++)
+    _gtk_css_media_feature_clear (&g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, i));
+
+  g_array_free (priv->media_features, TRUE);
 
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
@@ -769,13 +776,15 @@ parse_import (GtkCssScanner *scanner)
 static gboolean
 parse_media_block (GtkCssScanner *scanner)
 {
+  gboolean should_commit = TRUE;
+
   if (!gtk_css_parser_try_at_keyword (scanner->parser, "media"))
     return FALSE;
 
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
     {
       GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
-      _gtk_css_media_query_parse (scanner->parser, priv->media_features);
+      should_commit = _gtk_css_media_query_parse (scanner->parser, priv->media_features);
     }
 
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
@@ -786,7 +795,7 @@ parse_media_block (GtkCssScanner *scanner)
 
   gtk_css_parser_start_block (scanner->parser);
 
-  parse_ruleset (scanner);
+  parse_ruleset (scanner, should_commit);
 
   gtk_css_parser_end_block (scanner->parser);
 
@@ -1112,7 +1121,7 @@ parse_declarations (GtkCssScanner *scanner,
 }
 
 static void
-parse_ruleset (GtkCssScanner *scanner)
+parse_ruleset (GtkCssScanner *scanner, gboolean commit)
 {
   GtkCssSelectors selectors;
   GtkCssRuleset ruleset = { 0, };
@@ -1144,7 +1153,9 @@ parse_ruleset (GtkCssScanner *scanner)
 
   gtk_css_parser_end_block (scanner->parser);
 
-  css_provider_commit (scanner->provider, &selectors, &ruleset);
+  if (commit)
+    css_provider_commit (scanner->provider, &selectors, &ruleset);
+
   gtk_css_ruleset_clear (&ruleset);
 
 out:
@@ -1157,7 +1168,7 @@ parse_statement (GtkCssScanner *scanner)
   if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_AT_KEYWORD))
     parse_at_keyword (scanner);
   else
-    parse_ruleset (scanner);
+    parse_ruleset (scanner, TRUE);
 }
 
 static void
@@ -1685,6 +1696,36 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
           gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, NULL);
         }
     }
+}
+
+void
+gtk_css_provider_add_discrete_media_feature (GtkCssProvider  *provider,
+                                             const char      *feature_name,
+                                             const char      *feature_value)
+{
+  GtkCssProviderPrivate *priv;
+  guint i;
+  GtkCssDiscreteMediaFeature *media_feature;
+
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
+  g_return_if_fail (feature_name != NULL);
+  g_return_if_fail (feature_value != NULL);
+
+  priv = gtk_css_provider_get_instance_private (provider);
+
+  for (i = 0; i < priv->media_features->len; i++)
+    {
+      media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, i);
+      if (strcmp (media_feature->name, feature_name) == 0)
+        {
+          _gtk_css_media_feature_update (media_feature, feature_value);
+          return;
+        }
+    }
+
+  g_array_set_size (priv->media_features, priv->media_features->len + 1);
+  media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, priv->media_features->len - 1);
+  _gtk_css_media_feature_init (media_feature, feature_name, feature_value);
 }
 
 static int

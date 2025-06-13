@@ -29,21 +29,18 @@ typedef struct
 } GtkCssDiscreteMediaFeature;
 
 
-gboolean                     _gtk_css_media_query_parse  (GtkCssParser *parser,
-                                                          GArray *media_features);
+gboolean _gtk_css_media_query_parse    (GtkCssParser *parser,
+                                        GArray *media_features);
 
-GtkCssDiscreteMediaFeature * _gtk_css_media_feature_new   (const char *feature_name,
-                                                           const char *feature_value);
 
-void                         _gtk_css_media_feature_init  (GtkCssDiscreteMediaFeature *media_feature,
-                                                           const char *feature_name,
-                                                           const char *feature_value);
+void     _gtk_css_media_feature_init   (GtkCssDiscreteMediaFeature *media_feature,
+                                        const char *feature_name,
+                                        const char *feature_value);
 
-void                         _gtk_css_media_feature_free  (GtkCssDiscreteMediaFeature *media_feature);
+void     _gtk_css_media_feature_update (GtkCssDiscreteMediaFeature *media_feature,
+                                        const char *feature_value);
 
-gboolean                     _gtk_css_media_feature_match (GtkCssDiscreteMediaFeature *media_feature,
-                                                           const char *feature_name,
-                                                           const char *feature_value);
+void     _gtk_css_media_feature_clear  (GtkCssDiscreteMediaFeature *media_feature);
 
 
 G_END_DECLS

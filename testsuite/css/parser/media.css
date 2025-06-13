@@ -5,13 +5,19 @@
   }
 }
 
+@media (prefers-color-scheme: light) {
+  light-mode-is-enabled {
+    color: blue;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   dark-mode {
     color: blue;
   }
 }
 
-/* Syntax error: media features should be enclosed in parenthesis. */
+/* Syntax error: media features should be enclosed in parentheses. */
 @media prefers-color-scheme: dark {
   dark-mode {
     color: blue;
