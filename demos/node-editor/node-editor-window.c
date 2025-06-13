@@ -1901,7 +1901,7 @@ set_initial_text (NodeEditorWindow *self)
          "transform {\n"
          "  child: text {\n"
          "    color: rgb(46,52,54);\n"
-         "    font: \"Cantarell Bold 11\";\n"
+         "    font: \"Sans Bold 14.6px\";\n"
          "    glyphs: \"GTK Node Editor\";\n"
          "    offset: 8 14.418;\n"
          "  }\n"

@@ -3384,7 +3384,7 @@ parse_text_node (GtkCssParser *parser,
 
   if (font == NULL)
     {
-      font = font_from_string (pango_cairo_font_map_get_default (), "Cantarell 15px", TRUE);
+      font = font_from_string (pango_cairo_font_map_get_default (), "Sans 15px", TRUE);
       g_assert (font);
     }
 
