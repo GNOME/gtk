@@ -194,7 +194,9 @@ gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
     XIDefineCursor (GDK_SURFACE_XDISPLAY (surface),
                     device_xi2->device_id,
                     GDK_SURFACE_XID (surface),
-                    gdk_x11_display_get_xcursor (GDK_SURFACE_DISPLAY (surface), cursor));
+                    _gdk_x11_display_get_xcursor_with_scale (GDK_SURFACE_DISPLAY (surface),
+                                                             cursor,
+                                                             gdk_surface_get_scale (surface)));
   else
     XIUndefineCursor (GDK_SURFACE_XDISPLAY (surface),
                       device_xi2->device_id,
@@ -326,9 +328,9 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
   if (!cursor)
     xcursor = None;
   else
-    {
-      xcursor = gdk_x11_display_get_xcursor (display, cursor);
-    }
+    xcursor = _gdk_x11_display_get_xcursor_with_scale (display,
+                                                       cursor,
+                                                       gdk_surface_get_scale (surface));
 
   mask.deviceid = device_xi2->device_id;
   mask.mask = _gdk_x11_device_xi2_translate_event_mask (device_manager_xi2,
