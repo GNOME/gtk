@@ -172,6 +172,9 @@ void       _gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
 void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
                                                      guint      *width,
                                                      guint      *height);
+Cursor     _gdk_x11_display_get_xcursor_with_scale  (GdkDisplay *display,
+                                                     GdkCursor  *cursor,
+                                                     int scale);
 
 GList *    gdk_x11_display_get_toplevel_windows     (GdkDisplay *display);
 

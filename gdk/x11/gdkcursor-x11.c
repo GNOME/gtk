@@ -147,8 +147,7 @@ static const struct {
 static XcursorImage*
 create_cursor_image (GdkTexture *texture,
                      int         x,
-                     int         y,
-		     int         scale)
+                     int         y)
 {
   XcursorImage *xcimage;
 
@@ -172,11 +171,8 @@ gdk_x11_cursor_create_for_texture (GdkDisplay *display,
 {
   XcursorImage *xcimage;
   Cursor xcursor;
-  int target_scale;
 
-  target_scale =
-    gdk_monitor_get_scale_factor (gdk_x11_display_get_primary_monitor (display));
-  xcimage = create_cursor_image (texture, x, y, target_scale);
+  xcimage = create_cursor_image (texture, x, y);
   xcursor = XcursorImageLoadCursor (GDK_DISPLAY_XDISPLAY (display), xcimage);
   XcursorImageDestroy (xcimage);
 
@@ -344,26 +340,10 @@ _gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 #endif
 }
 
-/**
- * gdk_x11_display_get_xcursor:
- * @display: (type GdkX11Display): a `GdkDisplay`
- * @cursor: a `GdkCursor`
- *
- * Returns the X cursor belonging to a `GdkCursor`, potentially
- * creating the cursor.
- *
- * Be aware that the returned cursor may not be unique to @cursor.
- * It may for example be shared with its fallback cursor. On old
- * X servers that don't support the XCursor extension, all cursors
- * may even fall back to a few default cursors.
- *
- * Returns: an Xlib Cursor.
- *
- * Deprecated: 4.18
- */
 Cursor
-gdk_x11_display_get_xcursor (GdkDisplay *display,
-                             GdkCursor  *cursor)
+_gdk_x11_display_get_xcursor_with_scale (GdkDisplay *display,
+                                         GdkCursor  *cursor,
+                                         int scale)
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   Cursor xcursor;
@@ -396,7 +376,7 @@ gdk_x11_display_get_xcursor (GdkDisplay *display,
 
       size = XcursorGetDefaultSize (GDK_DISPLAY_XDISPLAY (display));
 
-      texture = gdk_cursor_get_texture_for_size  (cursor, size, 1,
+      texture = gdk_cursor_get_texture_for_size  (cursor, size, scale,
                                                   &width, &height,
                                                   &hotspot_x, &hotspot_y);
 
@@ -418,8 +398,31 @@ gdk_x11_display_get_xcursor (GdkDisplay *display,
     }
       
   if (gdk_cursor_get_fallback (cursor))
-    return gdk_x11_display_get_xcursor (display, gdk_cursor_get_fallback (cursor));
+    return _gdk_x11_display_get_xcursor_with_scale (display, gdk_cursor_get_fallback (cursor), scale);
 
   return None;
 }
 
+/**
+ * gdk_x11_display_get_xcursor:
+ * @display: (type GdkX11Display): a `GdkDisplay`
+ * @cursor: a `GdkCursor`
+ *
+ * Returns the X cursor belonging to a `GdkCursor`, potentially
+ * creating the cursor.
+ *
+ * Be aware that the returned cursor may not be unique to @cursor.
+ * It may for example be shared with its fallback cursor. On old
+ * X servers that don't support the XCursor extension, all cursors
+ * may even fall back to a few default cursors.
+ *
+ * Returns: an Xlib Cursor.
+ *
+ * Deprecated: 4.18
+ */
+Cursor
+gdk_x11_display_get_xcursor (GdkDisplay *display,
+                             GdkCursor  *cursor)
+{
+  return _gdk_x11_display_get_xcursor_with_scale (display, cursor, 1);
+}
