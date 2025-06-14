@@ -6,6 +6,24 @@
   }
 }
 
+@media (prefers-color-scheme) {
+  skip-missing-colon {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme:) {
+  skip-missing-feature-value {
+    color: green;
+  }
+}
+
+@media (unknown-feature: something) {
+  skip-unknown {
+    color: green;
+  }
+}
+
 /* Normal style */
 normal {
   color: red;
