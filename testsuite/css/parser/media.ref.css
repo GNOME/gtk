@@ -37,6 +37,14 @@ not-dark-style-with-parens {
   color: rgb(0,128,0);
 }
 
+light-and-not-dark {
+  color: rgb(0,128,0);
+}
+
+light-comma-dark {
+  color: rgb(0,128,0);
+}
+
 normal {
   color: rgb(255,0,0);
 }

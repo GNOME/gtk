@@ -60,6 +60,18 @@
   }
 }
 
+@media (prefers-color-scheme: light) and (not (prefers-color-scheme: dark)) {
+  light-and-not-dark {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme: light), (prefers-color-scheme: dark) {
+  light-comma-dark {
+    color: green;
+  }
+}
+
 /* Normal style */
 normal {
   color: red;

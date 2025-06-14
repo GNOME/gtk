@@ -1,7 +1,7 @@
 
 /* Syntax error: media features should be enclosed in parentheses. */
 @media prefers-color-scheme: dark {
-  skip-dark-mode {
+  skip-missing-parens {
     color: green;
   }
 }
@@ -21,6 +21,18 @@
 @media (unknown-feature: something) {
   skip-unknown {
     color: green;
+  }
+}
+
+@media (prefers-color-scheme: light) and (unknown-feature: something) {
+  skip-unknown {
+    color: red;
+  }
+}
+
+@media (prefers-color-scheme: light) or (unknown-feature: something) {
+  match-on-first-expression {
+    color: blue;
   }
 }
 
