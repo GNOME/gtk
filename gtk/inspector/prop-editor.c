@@ -1196,7 +1196,9 @@ property_editor (GObject                *object,
       prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
       label = gtk_label_new ("");
-      button = gtk_button_new_with_label (_("Properties"));
+      button = gtk_button_new_from_icon_name ("info-outline-symbolic");
+      gtk_widget_set_css_classes (button, (const char *[]) { "flat", "circular", NULL });
+      gtk_widget_set_tooltip_text (button, "Show properties");
       g_signal_connect_swapped (button, "clicked",
                                 G_CALLBACK (object_properties),
                                 self);
