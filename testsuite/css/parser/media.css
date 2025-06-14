@@ -54,6 +54,12 @@
   }
 }
 
+@media (not (prefers-color-scheme: dark)) {
+  not-dark-style-with-parens {
+    color: green;
+  }
+}
+
 /* Normal style */
 normal {
   color: red;

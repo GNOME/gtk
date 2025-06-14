@@ -33,6 +33,10 @@ not-dark-style {
   color: rgb(0,128,0);
 }
 
+not-dark-style-with-parens {
+  color: rgb(0,128,0);
+}
+
 normal {
   color: rgb(255,0,0);
 }

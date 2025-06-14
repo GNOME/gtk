@@ -1,3 +1,5 @@
 media-errors.css:3:8-28: error: GTK_CSS_PARSER_ERROR_SYNTAX
 media-errors.css:3:8-28: error: GTK_CSS_PARSER_ERROR_SYNTAX
 media-errors.css:3:8-28: error: GTK_CSS_PARSER_ERROR_SYNTAX
+media-errors.css:9:29-30: error: GTK_CSS_PARSER_ERROR_SYNTAX
+media-errors.css:21:9-24: error: GTK_CSS_PARSER_WARNING_SYNTAX
