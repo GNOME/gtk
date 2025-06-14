@@ -112,7 +112,7 @@ parse_media_feature (GtkCssParser *parser, GArray *media_features)
 }
 
 /*
- * ( <media-condition> ) | <media-feature>
+ * ( <media-condition> | <media-feature> )
  */
 static gboolean
 parse_media_in_parens (GtkCssParser *parser, GArray *media_features)
@@ -145,11 +145,23 @@ static gboolean
 parse_media_condition (GtkCssParser *parser, GArray *media_features)
 {
   gboolean result;
+  gboolean is_and;
 
   if (gtk_css_parser_try_ident (parser, "not"))
     result = !parse_media_in_parens (parser, media_features);
   else
     result = parse_media_in_parens (parser, media_features);
+
+  while ((is_and = gtk_css_parser_has_ident (parser, "and")) ||
+         gtk_css_parser_has_ident (parser, "or"))
+    {
+      gtk_css_parser_consume_token (parser);
+
+      if (is_and)
+        result &= parse_media_in_parens (parser, media_features);
+      else
+        result |= parse_media_in_parens (parser, media_features);
+    }
 
   return result;
 }
