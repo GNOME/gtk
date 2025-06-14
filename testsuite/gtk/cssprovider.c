@@ -123,7 +123,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/cssprovider/load-with-media-query", test_load_with_media_query);
   g_test_add_func ("/cssprovider/load-with-undefined-media-query", test_load_with_undefined_media_query);
   g_test_add_func ("/cssprovider/load-with-negating-media-query", test_load_with_negating_media_query);
-  // g_test_add_func ("/cssprovider/load-with-and-media-query", test_load_with_and_media_query);
+  g_test_add_func ("/cssprovider/load-with-and-media-query", test_load_with_and_media_query);
 
   return g_test_run ();
 }
