@@ -126,6 +126,7 @@ struct _GtkCssScanner
   GtkCssProvider *provider;
   GtkCssParser *parser;
   GtkCssScanner *parent;
+  guint skip_count;
 };
 
 struct _GtkCssProviderPrivate
@@ -163,8 +164,7 @@ static void gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                             GtkCssScanner  *scanner,
                                             GFile          *file,
                                             GBytes         *bytes);
-static void parse_ruleset                  (GtkCssScanner  *scanner,
-                                            gboolean        commit);
+static void parse_statement                (GtkCssScanner  *scanner);
 
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_ADD_PRIVATE (GtkCssProvider)
@@ -442,6 +442,17 @@ gtk_css_scanner_would_recurse (GtkCssScanner *scanner,
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_css_scanner_should_commit (GtkCssScanner *scanner)
+{
+  gboolean commit = (scanner->skip_count == 0);
+
+  if (scanner->parent)
+    commit &= gtk_css_scanner_should_commit (scanner->parent);
+
+  return commit;
 }
 
 static void
@@ -749,6 +760,10 @@ parse_import (GtkCssScanner *scanner)
     {
       gtk_css_parser_error_syntax (scanner->parser, "Expected ';'");
     }
+  else if (!gtk_css_scanner_should_commit (scanner))
+    {
+      /* nothing to do */
+    }
   else if (gtk_css_scanner_would_recurse (scanner, file))
     {
        char *path = g_file_get_path (file);
@@ -776,7 +791,7 @@ parse_import (GtkCssScanner *scanner)
 static gboolean
 parse_media_block (GtkCssScanner *scanner)
 {
-  gboolean should_commit = TRUE;
+  gboolean is_match = TRUE;
 
   if (!gtk_css_parser_try_at_keyword (scanner->parser, "media"))
     return FALSE;
@@ -784,7 +799,7 @@ parse_media_block (GtkCssScanner *scanner)
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
     {
       GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
-      should_commit = _gtk_css_media_query_parse (scanner->parser, priv->media_features);
+      is_match = _gtk_css_media_query_parse (scanner->parser, priv->media_features);
     }
 
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
@@ -795,7 +810,15 @@ parse_media_block (GtkCssScanner *scanner)
 
   gtk_css_parser_start_block (scanner->parser);
 
-  parse_ruleset (scanner, should_commit);
+  if (!is_match)
+    scanner->skip_count += 1;
+
+  while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY) &&
+         !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+    parse_statement (scanner);
+
+  if (!is_match)
+    scanner->skip_count -= 1;
 
   gtk_css_parser_end_block (scanner->parser);
 
@@ -832,7 +855,10 @@ parse_color_definition (GtkCssScanner *scanner)
       return TRUE;
     }
 
-  g_hash_table_insert (priv->symbolic_colors, name, color);
+  if (gtk_css_scanner_should_commit (scanner))
+    g_hash_table_insert (priv->symbolic_colors, name, color);
+  else
+    gtk_css_value_unref (color);
 
   return TRUE;
 }
@@ -861,7 +887,12 @@ parse_keyframes (GtkCssScanner *scanner)
 
   keyframes = _gtk_css_keyframes_parse (scanner->parser);
   if (keyframes != NULL)
-    g_hash_table_insert (priv->keyframes, name, keyframes);
+    {
+      if (gtk_css_scanner_should_commit (scanner))
+        g_hash_table_insert (priv->keyframes, name, keyframes);
+      else
+        _gtk_css_keyframes_unref (keyframes);
+    }
 
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     gtk_css_parser_error_syntax (scanner->parser, "Expected '}' after declarations");
@@ -1121,7 +1152,7 @@ parse_declarations (GtkCssScanner *scanner,
 }
 
 static void
-parse_ruleset (GtkCssScanner *scanner, gboolean commit)
+parse_ruleset (GtkCssScanner *scanner)
 {
   GtkCssSelectors selectors;
   GtkCssRuleset ruleset = { 0, };
@@ -1153,7 +1184,7 @@ parse_ruleset (GtkCssScanner *scanner, gboolean commit)
 
   gtk_css_parser_end_block (scanner->parser);
 
-  if (commit)
+  if (gtk_css_scanner_should_commit (scanner))
     css_provider_commit (scanner->provider, &selectors, &ruleset);
 
   gtk_css_ruleset_clear (&ruleset);
@@ -1168,7 +1199,7 @@ parse_statement (GtkCssScanner *scanner)
   if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_AT_KEYWORD))
     parse_at_keyword (scanner);
   else
-    parse_ruleset (scanner, TRUE);
+    parse_ruleset (scanner);
 }
 
 static void
