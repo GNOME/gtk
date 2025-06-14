@@ -111,6 +111,11 @@ parse_media_query (GtkCssParser *parser, GArray *media_features)
   return parse_media_feature (parser, media_features);
 }
 
+/*
+ * _gtk_css_media_query_parse:
+ *
+ * Returns: TRUE if the query matches to the provided media features.
+ */
 gboolean
 _gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
 {
