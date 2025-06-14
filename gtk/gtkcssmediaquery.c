@@ -107,7 +107,16 @@ parse_media_feature (GtkCssParser *parser, GArray *media_features)
 static gboolean
 parse_media_query (GtkCssParser *parser, GArray *media_features)
 {
+  const GtkCssToken *token;
   /* TODO: handle `and`, `or, `not` statements. */
+  token = gtk_css_parser_get_token (parser);
+
+  if (gtk_css_token_is_ident (token, "not"))
+    {
+      gtk_css_parser_consume_token (parser);
+      return !parse_media_feature (parser, media_features);
+    }
+
   return parse_media_feature (parser, media_features);
 }
 
