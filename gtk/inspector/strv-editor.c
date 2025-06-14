@@ -103,14 +103,13 @@ static void
 gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
 {
   gtk_box_set_spacing (GTK_BOX (editor), 6);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (editor), GTK_ORIENTATION_VERTICAL);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (editor), GTK_ORIENTATION_HORIZONTAL);
   editor->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_widget_set_visible (editor->box, TRUE);
 
   editor->button = gtk_button_new_from_icon_name ("list-add-symbolic");
   gtk_widget_add_css_class (editor->button, "image-button");
   gtk_widget_set_focus_on_click (editor->button, FALSE);
-  gtk_widget_set_halign (editor->button, GTK_ALIGN_END);
+  gtk_widget_set_valign (editor->button, GTK_ALIGN_START);
   gtk_accessible_update_property (GTK_ACCESSIBLE (editor->button),
                                   GTK_ACCESSIBLE_PROPERTY_LABEL, _("Add"),
                                   -1);
