@@ -41,6 +41,6 @@ void     _gtk_css_media_feature_update (GtkCssDiscreteMediaFeature *media_featur
                                         const char *feature_value);
 
 void     _gtk_css_media_feature_clear  (GtkCssDiscreteMediaFeature *media_feature);
-
+ 
 
 G_END_DECLS
