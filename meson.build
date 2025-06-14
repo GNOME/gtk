@@ -423,6 +423,24 @@ gskinc = include_directories('gsk')
 gtkinc = include_directories('gtk')
 testinc = include_directories('tests')
 
+harfbuzz_fallback_options = [
+  'coretext=enabled',
+  'directwrite=enabled',
+  'gdi=enabled',
+  'freetype=disabled',
+  'cairo=disabled',
+  'docs=disabled',
+  'utilities=disabled',
+  'tests=disabled',
+]
+
+# Enable FreeType support in HarfBuzz if building it as a
+# subproject and FontConfig support is required or requested
+if os_linux
+  harfbuzz_fallback_options += 'freetype=enabled'
+else
+endif
+
 # Dependencies
 glib_dep       = dependency('glib-2.0', version: glib_req)
 gi_dep         = dependency('gobject-introspection-1.0', version: gi_req, required: get_option('introspection').enabled())
@@ -441,7 +459,7 @@ pango_dep      = dependency('pango', version: pango_req)
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             default_options: ['docs=false'])
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
-                            default_options: ['coretext=enabled'])
+                            default_options: harfbuzz_fallback_options)
 hb_subset_dep  = dependency('harfbuzz-subset', version: harfbuzz_req)
 
 # Require PangoFT2 if on X11 or wayland
