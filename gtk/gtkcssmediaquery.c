@@ -17,6 +17,29 @@
 
 #include "gtkcssmediaqueryprivate.h"
 
+/*
+ * The Media Query parser is based on
+ * https://www.w3.org/TR/mediaqueries-5/
+ */
+
+static gboolean parse_media_condition (GtkCssParser *parser, GArray *media_features);
+
+
+/*
+ * _gtk_css_media_query_parse:
+ *
+ * Returns: TRUE if the query matches with the provided media features.
+ */
+gboolean
+_gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
+{
+  gboolean result = parse_media_condition (parser, media_features);
+
+  while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
+    result |= parse_media_condition (parser, media_features);
+
+  return result;
+}
 
 void
 _gtk_css_media_feature_init (GtkCssDiscreteMediaFeature *media_feature,
@@ -51,21 +74,15 @@ _gtk_css_media_feature_clear (GtkCssDiscreteMediaFeature *media_feature)
   g_clear_pointer (&media_feature->value, g_free);
 }
 
+/*
+ * A feature, without parens: `<feature-name>: <feature-value>`.
+ */
 static gboolean
 parse_media_feature (GtkCssParser *parser, GArray *media_features)
 {
   const GtkCssToken *token;
   int i;
   GtkCssDiscreteMediaFeature *media_feature = NULL;
-  gboolean match;
-
-  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_PARENS))
-    {
-      gtk_css_parser_error_syntax (parser, "Expected '(' after @media query");
-      return FALSE;
-    }
-
-  gtk_css_parser_start_block (parser);
 
   token = gtk_css_parser_get_token (parser);
 
@@ -82,56 +99,57 @@ parse_media_feature (GtkCssParser *parser, GArray *media_features)
   if (media_feature == NULL)
     gtk_css_parser_warn_syntax (parser, "Undefined @media feature '%s'", gtk_css_token_to_string (token));
 
-  gtk_css_parser_consume_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    gtk_css_parser_consume_token (parser);
 
-  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COLON))
+  if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
     {
       gtk_css_parser_error_syntax (parser, "Expected ':' after @media feature name");
-      gtk_css_parser_end_block (parser);
       return FALSE;
     }
 
-  gtk_css_parser_consume_token (parser);
-
-  token = gtk_css_parser_get_token (parser);
-
-  match = (media_feature != NULL) && gtk_css_token_is_ident (token, media_feature->value);
-
-  gtk_css_parser_consume_token (parser);
-
-  gtk_css_parser_end_block (parser);
-
-  return match;
-}
-
-static gboolean
-parse_media_query (GtkCssParser *parser, GArray *media_features)
-{
-  const GtkCssToken *token;
-  /* TODO: handle `and`, `or, `not` statements. */
-  token = gtk_css_parser_get_token (parser);
-
-  if (gtk_css_token_is_ident (token, "not"))
-    {
-      gtk_css_parser_consume_token (parser);
-      return !parse_media_feature (parser, media_features);
-    }
-
-  return parse_media_feature (parser, media_features);
+  return (media_feature != NULL) && gtk_css_parser_try_ident (parser, media_feature->value);
 }
 
 /*
- * _gtk_css_media_query_parse:
- *
- * Returns: TRUE if the query matches to the provided media features.
+ * ( <media-condition> ) | <media-feature>
  */
-gboolean
-_gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
+static gboolean
+parse_media_in_parens (GtkCssParser *parser, GArray *media_features)
 {
-  gboolean result = parse_media_query (parser, media_features);
+  gboolean result;
 
-  while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
-    result |= parse_media_query (parser, media_features);
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_PARENS))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected '(' after @media query");
+      return FALSE;
+    }
+
+  gtk_css_parser_start_block (parser);
+
+  if (gtk_css_parser_has_ident (parser, "not") ||
+      gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_PARENS))
+    result = parse_media_condition (parser, media_features);
+  else
+    result = parse_media_feature (parser, media_features);
+
+  gtk_css_parser_end_block (parser);
+
+  return result;
+}
+
+/*
+ * not <media-in-parens> | <media-in-parens> [ <and <media-in-parens>>* | <or <media-in-parens>>* ]
+ */
+static gboolean
+parse_media_condition (GtkCssParser *parser, GArray *media_features)
+{
+  gboolean result;
+
+  if (gtk_css_parser_try_ident (parser, "not"))
+    result = !parse_media_in_parens (parser, media_features);
+  else
+    result = parse_media_in_parens (parser, media_features);
 
   return result;
 }
