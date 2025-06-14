@@ -33,6 +33,53 @@ test_section_load_nonexisting_file (void)
   g_object_unref (provider);
 }
 
+static void
+test_load_with_media_query (void)
+{
+  GtkCssProvider *provider;
+  char *rendered_css;
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_add_discrete_media_feature (provider, "my-feature", "my-value");
+  gtk_css_provider_load_from_string (provider,
+    "@media (my-feature: my-value) { include-me { color: blue; } }"
+    "@media (my-feature: other-value) { skip-me { color: blue; } }");
+  rendered_css = gtk_css_provider_to_string (provider);
+  g_object_unref (provider);
+
+  g_assert_nonnull (strstr (rendered_css, "include-me"));
+  g_assert_null (strstr (rendered_css, "skip-me"));
+  g_free (rendered_css);
+}
+
+static void
+assert_media_query_parse_warning (GtkCssProvider *provider,
+                                  GtkCssSection  *section,
+                                  const GError   *error,
+                                  gpointer        unused)
+{
+  g_assert_error (error, GTK_CSS_PARSER_WARNING, GTK_CSS_PARSER_WARNING_SYNTAX);
+  g_assert_cmpstr (error->message, ==, "Undefined @media feature 'not-a-feature'");
+}
+
+static void
+test_load_with_undefined_media_query (void)
+{
+  GtkCssProvider *provider;
+  char *rendered_css;
+  provider = gtk_css_provider_new ();
+  g_signal_connect (provider, "parsing-error",
+                    G_CALLBACK (assert_media_query_parse_warning), NULL);
+
+  gtk_css_provider_load_from_string (provider,
+    "@media (not-a-feature: other-value) { skip-me { color: blue; } }");
+  rendered_css = gtk_css_provider_to_string (provider);
+  g_object_unref (provider);
+
+  g_assert_cmpstr (rendered_css, ==, "");
+  g_free (rendered_css);
+}
+
+
 int
 main (int argc, char *argv[])
 {
@@ -41,6 +88,8 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/cssprovider/section-in-load-from-data", test_section_in_load_from_data);
   g_test_add_func ("/cssprovider/load-nonexisting-file", test_section_load_nonexisting_file);
+  g_test_add_func ("/cssprovider/load-with-media-query", test_load_with_media_query);
+  g_test_add_func ("/cssprovider/load-with-undefined-media-query", test_load_with_undefined_media_query);
 
   return g_test_run ();
 }
