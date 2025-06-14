@@ -75,10 +75,14 @@ parse_media_feature (GtkCssParser *parser, GArray *media_features)
       if (gtk_css_token_is_ident (token, mf->name))
         {
           media_feature = mf;
-          gtk_css_parser_consume_token (parser);
           break;
         }
     }
+
+  if (media_feature == NULL)
+    gtk_css_parser_warn_syntax (parser, "Undefined @media feature '%s'", gtk_css_token_to_string (token));
+
+  gtk_css_parser_consume_token (parser);
 
   if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COLON))
     {
