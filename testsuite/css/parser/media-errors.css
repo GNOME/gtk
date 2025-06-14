@@ -1,0 +1,12 @@
+
+/* Syntax error: media features should be enclosed in parentheses. */
+@media prefers-color-scheme: dark {
+  skip-dark-mode {
+    color: green;
+  }
+}
+
+/* Normal style */
+normal {
+  color: red;
+}

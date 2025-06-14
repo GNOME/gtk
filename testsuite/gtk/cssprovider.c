@@ -79,6 +79,21 @@ test_load_with_undefined_media_query (void)
   g_free (rendered_css);
 }
 
+static void
+test_load_with_negating_media_query (void)
+{
+  GtkCssProvider *provider;
+  char *rendered_css;
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_add_discrete_media_feature (provider, "feature", "one");
+  gtk_css_provider_load_from_string (provider,
+    "@media not (feature: two) { style { color: blue; } }");
+  rendered_css = gtk_css_provider_to_string (provider);
+  g_object_unref (provider);
+
+  g_assert_nonnull (strstr (rendered_css, "style"));
+  g_free (rendered_css);
+}
 
 int
 main (int argc, char *argv[])
@@ -90,6 +105,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/cssprovider/load-nonexisting-file", test_section_load_nonexisting_file);
   g_test_add_func ("/cssprovider/load-with-media-query", test_load_with_media_query);
   g_test_add_func ("/cssprovider/load-with-undefined-media-query", test_load_with_undefined_media_query);
+  g_test_add_func ("/cssprovider/load-with-negating-media-query", test_load_with_negating_media_query);
 
   return g_test_run ();
 }
