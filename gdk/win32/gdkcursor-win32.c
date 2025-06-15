@@ -1466,22 +1466,10 @@ pixbuf_to_hicon (GdkPixbuf *pixbuf,
   return icon;
 }
 
-/**
- * gdk_win32_display_get_win32hcursor:
- * @display: (type GdkWin32Display): a `GdkDisplay`
- * @cursor: a `GdkCursor`
- *
- * Returns the Win32 HCURSOR wrapper object belonging to a `GdkCursor`,
- * potentially creating the cursor object.
- *
- * Be aware that the returned cursor may not be unique to @cursor.
- * It may for example be shared with its fallback cursor.
- *
- * Returns: a GdkWin32HCursor
- */
 GdkWin32HCursor *
-gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
-                                    GdkCursor       *cursor)
+_gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
+                                                GdkCursor       *cursor,
+                                                int              scale)
 {
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
   GdkWin32HCursor *win32hcursor;
@@ -1514,7 +1502,7 @@ gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
       int size = display->cursor_theme_size;
       int width, height, hotspot_x, hotspot_y;
 
-      texture = gdk_cursor_get_texture_for_size (cursor, size, 1,
+      texture = gdk_cursor_get_texture_for_size (cursor, size, scale,
                                                  &width, &height,
                                                  &hotspot_x, &hotspot_y);
       if (texture)
@@ -1538,7 +1526,27 @@ gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
   fallback = gdk_cursor_get_fallback (cursor);
 
   if (fallback)
-    return gdk_win32_display_get_win32hcursor (display, fallback);
+    return _gdk_win32_display_get_win32hcursor_with_scale (display, fallback, scale);
 
   return NULL;
+}
+
+/**
+ * gdk_win32_display_get_win32hcursor:
+ * @display: (type GdkWin32Display): a `GdkDisplay`
+ * @cursor: a `GdkCursor`
+ *
+ * Returns the Win32 HCURSOR wrapper object belonging to a `GdkCursor`,
+ * potentially creating the cursor object.
+ *
+ * Be aware that the returned cursor may not be unique to @cursor.
+ * It may for example be shared with its fallback cursor.
+ *
+ * Returns: a GdkWin32HCursor
+ */
+GdkWin32HCursor *
+gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
+                                    GdkCursor       *cursor)
+{
+  return _gdk_win32_display_get_win32hcursor_with_scale (display, cursor, 1);
 }
