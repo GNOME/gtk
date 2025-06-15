@@ -2,6 +2,10 @@
   Please, read the CONTRIBUTING.md guide on how to file a new issue.
 
   https://gitlab.gnome.org/GNOME/gtk/-/blob/main/CONTRIBUTING.md
+
+  You should also read how to report issues on the Handbook:
+
+  https://handbook.gnome.org/issues/reporting.html
 -->
 
 ## Steps to reproduce
@@ -38,7 +42,10 @@
 ## Backtrace
 <!--
  - Attaching a stack trace obtained using GDB is appreciated; follow the
-   instructions on the wiki:
+   instructions on the handbook:
 
-   https://wiki.gnome.org/Community/GettingInTouch/Bugzilla/GettingTraces
+   https://handbook.gnome.org/issues/stack-traces.html
+
+   Remember to escape the content between three backticks (```) to ensure
+   that the stack trace is properly rendered.
 -->
