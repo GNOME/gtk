@@ -923,7 +923,8 @@ insert_text_cb (GtkEditable *editable,
 
   length = g_utf8_strlen (new_text, new_text_length);
 
-  char *inserted_text = g_utf8_substring (new_text, 0, length);
+  GtkText *text_widget = gtk_editable_get_text_widget (GTK_WIDGET (editable));
+  char *inserted_text = gtk_text_get_display_text (text_widget, *position - length, *position);
   changed->text_changed (changed->data, "insert", *position - length, length, inserted_text);
   g_free (inserted_text);
 }
@@ -939,10 +940,10 @@ delete_text_cb (GtkEditable *editable,
   if (start == end)
     return;
 
-  text = gtk_editable_get_chars (editable, start, end);
-
+  GtkText *text_widget = gtk_editable_get_text_widget (GTK_WIDGET (editable));
   if (end < 0)
-    end = g_utf8_strlen(text, -1);
+    end = gtk_text_get_text_length (text_widget);
+  text = gtk_text_get_display_text (text_widget, start, end);
 
   changed->text_changed (changed->data, "delete", start, end - start, text);
   g_free (text);
