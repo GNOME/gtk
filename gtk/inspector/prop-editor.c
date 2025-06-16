@@ -1130,80 +1130,76 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_ENUM)
     {
-      {
-        GEnumClass *eclass;
-        GtkStringList *names;
-        int j;
+      GEnumClass *eclass;
+      GtkStringList *names;
+      int j;
 
-        eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
+      eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 
-        names = gtk_string_list_new (NULL);
-        for (j = 0; j < eclass->n_values; j++)
-          gtk_string_list_append (names, eclass->values[j].value_nick);
+      names = gtk_string_list_new (NULL);
+      for (j = 0; j < eclass->n_values; j++)
+        gtk_string_list_append (names, eclass->values[j].value_nick);
 
-        prop_edit = gtk_drop_down_new (G_LIST_MODEL (names), NULL);
+      prop_edit = gtk_drop_down_new (G_LIST_MODEL (names), NULL);
 
-        connect_controller (G_OBJECT (prop_edit), "notify::selected",
-                            object, spec, G_CALLBACK (enum_modified));
+      connect_controller (G_OBJECT (prop_edit), "notify::selected",
+                          object, spec, G_CALLBACK (enum_modified));
 
-        g_type_class_unref (eclass);
+      g_type_class_unref (eclass);
 
-        g_object_connect_property (object, spec,
-                                   G_CALLBACK (enum_changed),
-                                   prop_edit, G_OBJECT (prop_edit));
-      }
+      g_object_connect_property (object, spec,
+                                 G_CALLBACK (enum_changed),
+                                 prop_edit, G_OBJECT (prop_edit));
     }
   else if (type == G_TYPE_PARAM_FLAGS)
     {
-      {
-        GtkWidget *box;
-        GtkWidget *sw;
-        GtkWidget *popover;
-        GFlagsClass *fclass;
-        int j;
+      GtkWidget *box;
+      GtkWidget *sw;
+      GtkWidget *popover;
+      GFlagsClass *fclass;
+      int j;
 
-        popover = gtk_popover_new ();
-        prop_edit = gtk_menu_button_new ();
-        gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
+      popover = gtk_popover_new ();
+      prop_edit = gtk_menu_button_new ();
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
 
-        sw = gtk_scrolled_window_new ();
-        gtk_popover_set_child (GTK_POPOVER (popover), sw);
-        g_object_set (sw,
-                      "hexpand", TRUE,
-                      "vexpand", TRUE,
-                      "hscrollbar-policy", GTK_POLICY_NEVER,
-                      "vscrollbar-policy", GTK_POLICY_NEVER,
-                      NULL);
-        box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
+      sw = gtk_scrolled_window_new ();
+      gtk_popover_set_child (GTK_POPOVER (popover), sw);
+      g_object_set (sw,
+                    "hexpand", TRUE,
+                    "vexpand", TRUE,
+                    "hscrollbar-policy", GTK_POLICY_NEVER,
+                    "vscrollbar-policy", GTK_POLICY_NEVER,
+                    NULL);
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
 
-        fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
+      fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
 
-        for (j = 0; j < fclass->n_values; j++)
-          {
-            GtkWidget *b;
+      for (j = 0; j < fclass->n_values; j++)
+        {
+          GtkWidget *b;
 
-            b = gtk_check_button_new_with_label (fclass->values[j].value_nick);
-            g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
-            gtk_box_append (GTK_BOX (box), b);
-            connect_controller (G_OBJECT (b), "toggled",
-                                object, spec, G_CALLBACK (flags_modified));
-          }
+          b = gtk_check_button_new_with_label (fclass->values[j].value_nick);
+          g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
+          gtk_box_append (GTK_BOX (box), b);
+          connect_controller (G_OBJECT (b), "toggled",
+                              object, spec, G_CALLBACK (flags_modified));
+        }
 
-        if (j >= 10)
-          {
-            g_object_set (sw,
-                          "vscrollbar-policy", GTK_POLICY_AUTOMATIC,
-                          "min-content-height", 250,
-                          NULL);
-          }
+      if (j >= 10)
+        {
+          g_object_set (sw,
+                        "vscrollbar-policy", GTK_POLICY_AUTOMATIC,
+                        "min-content-height", 250,
+                        NULL);
+        }
 
-        g_type_class_unref (fclass);
+      g_type_class_unref (fclass);
 
-        g_object_connect_property (object, spec,
-                                   G_CALLBACK (flags_changed),
-                                   prop_edit, G_OBJECT (prop_edit));
-      }
+      g_object_connect_property (object, spec,
+                                 G_CALLBACK (flags_changed),
+                                 prop_edit, G_OBJECT (prop_edit));
     }
   else if (type == G_TYPE_PARAM_UNICHAR)
     {
