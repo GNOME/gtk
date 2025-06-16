@@ -532,27 +532,11 @@ editable_handle_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetText") == 0)
     {
       int start, end;
-      const char *text;
-      int len;
       char *string;
 
       g_variant_get (parameters, "(ii)", &start, &end);
 
-      text = gtk_editable_get_text (GTK_EDITABLE (widget));
-      len = g_utf8_strlen (text, -1);
-
-      start = CLAMP (start, 0, len);
-      end = CLAMP (end, 0, len);
-
-      if (end <= start)
-        string = g_strdup ("");
-      else
-        {
-          const char *p, *q;
-          p = g_utf8_offset_to_pointer (text, start);
-          q = g_utf8_offset_to_pointer (text, end);
-          string = g_strndup (p, q - p);
-        }
+      string = gtk_text_get_display_text (text_widget, start, end);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", string));
       g_free (string);
