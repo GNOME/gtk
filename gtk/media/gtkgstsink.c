@@ -708,7 +708,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gsize i;
 
       bytes = g_bytes_new_with_free_func (frame->data[0],
-                                          frame->info.size,
+                                          frame->map[0].size,
                                           (GDestroyNotify) video_frame_free,
                                           frame);
 
