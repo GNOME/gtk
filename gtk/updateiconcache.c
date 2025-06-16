@@ -612,7 +612,10 @@ scan_directory (const gchar *base_path,
   dir = g_dir_open (dir_path, 0, NULL);
 
   if (!dir)
-    return directories;
+    {
+      g_free (dir_path);
+      return directories;
+    }
 
   dir_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -644,14 +647,17 @@ scan_directory (const gchar *base_path,
 	  directories = scan_directory (base_path, subsubdir, files,
 					directories, depth + 1);
 	  g_free (subsubdir);
+	  g_free (path);
 
 	  continue;
 	}
 
       /* ignore images in the toplevel directory */
       if (subdir == NULL)
-        continue;
-
+        {
+          g_free (path);
+          continue;
+        }
       retval = g_file_test (path, G_FILE_TEST_IS_REGULAR);
       if (retval)
 	{
@@ -665,7 +671,10 @@ scan_directory (const gchar *base_path,
 	    flags |= HAS_ICON_FILE;
 
 	  if (flags == 0)
-	    continue;
+	    {
+	      g_free (path);
+	      continue;
+	    }
 
 	  basename = g_strdup (name);
 	  dot = strrchr (basename, '.');
@@ -704,6 +713,7 @@ scan_directory (const gchar *base_path,
 
   g_list_free_full (list, g_free);
   g_dir_close (dir);
+  g_free (dir_path);
 
   /* Move dir into the big file hash */
   g_hash_table_foreach_remove (dir_hash, foreach_remove_func, files);
@@ -1719,6 +1729,7 @@ main (int argc, char **argv)
   g_option_context_add_main_entries (context, args, GETTEXT_PACKAGE);
 
   g_option_context_parse (context, &argc, &argv, NULL);
+  g_option_context_free (context);
 
   path = argv[1];
 #ifdef G_OS_WIN32

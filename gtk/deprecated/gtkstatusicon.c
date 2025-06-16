@@ -1623,13 +1623,15 @@ gtk_status_icon_color_changed (GtkTrayIcon   *tray,
 
   if (name)
     {
-      GdkRGBA rgba;
+      GdkRGBA *rgba;
 
       g_object_get (priv->tray_icon, pspec->name, &rgba, NULL);
 
-      rgba.alpha = 1;
+      rgba->alpha = 1;
 
-      gtk_widget_override_symbolic_color (priv->image, name, &rgba);
+      gtk_widget_override_symbolic_color (priv->image, name, rgba);
+
+      gdk_rgba_free (rgba);
     }
 }
 

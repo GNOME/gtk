@@ -683,6 +683,8 @@ static gboolean         gtk_widget_real_button_event            (GtkWidget      
                                                                  GdkEventButton   *event);
 static gboolean         gtk_widget_real_motion_event            (GtkWidget        *widget,
                                                                  GdkEventMotion   *event);
+static gboolean         gtk_widget_real_crossing_event          (GtkWidget        *widget,
+                                                                 GdkEventCrossing *event);
 static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
@@ -1076,8 +1078,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->destroy_event = NULL;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
-  klass->enter_notify_event = NULL;
-  klass->leave_notify_event = NULL;
+  klass->enter_notify_event = gtk_widget_real_crossing_event;
+  klass->leave_notify_event = gtk_widget_real_crossing_event;
   klass->configure_event = NULL;
   klass->focus_in_event = gtk_widget_real_focus_in_event;
   klass->focus_out_event = gtk_widget_real_focus_out_event;
@@ -1146,7 +1148,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
+  /**
+   * GtkWidget:visible: (getter get_visible)
+   */
   widget_props[PROP_VISIBLE] =
       g_param_spec_boolean ("visible",
                             P_("Visible"),
@@ -1154,6 +1158,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkWidget:sensitive: (getter get_sensitive)
+   */
   widget_props[PROP_SENSITIVE] =
       g_param_spec_boolean ("sensitive",
                             P_("Sensitive"),
@@ -7212,6 +7219,14 @@ gtk_widget_real_button_event (GtkWidget      *widget,
 static gboolean
 gtk_widget_real_motion_event (GtkWidget      *widget,
                               GdkEventMotion *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                      GTK_PHASE_BUBBLE);
+}
+
+static gboolean
+gtk_widget_real_crossing_event (GtkWidget        *widget,
+                                GdkEventCrossing *event)
 {
   return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
                                       GTK_PHASE_BUBBLE);

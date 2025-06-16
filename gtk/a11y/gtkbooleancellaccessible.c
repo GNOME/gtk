@@ -52,7 +52,7 @@ gtk_boolean_cell_accessible_action_get_name (AtkAction *action,
   if (i == 0)
     return "toggle";
 
-  return parent_action_iface->get_description (action, i - 1);
+  return parent_action_iface->get_name (action, i - 1);
 }
 
 static const gchar *
@@ -62,7 +62,7 @@ gtk_boolean_cell_accessible_action_get_localized_name (AtkAction *action,
   if (i == 0)
     return C_("Action name", "Toggle");
 
-  return parent_action_iface->get_description (action, i - 1);
+  return parent_action_iface->get_localized_name (action, i - 1);
 }
 
 static gboolean

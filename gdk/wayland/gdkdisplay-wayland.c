@@ -553,6 +553,12 @@ gdk_registry_handle_global (void               *data,
                           display_wayland->xdg_activation_version);
     }
 #endif
+  else if (strcmp (interface, wp_cursor_shape_manager_v1_interface.name) == 0)
+    {
+      display_wayland->cursor_shape =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &wp_cursor_shape_manager_v1_interface, 1);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -1221,7 +1227,7 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
   if (gdk_screen_get_setting (display_wayland->screen, "gtk-cursor-theme-size", &v))
     size = g_value_get_int (&v);
   else
-    size = 32;
+    size = 24;
   g_value_unset (&v);
 
   g_value_init (&v, G_TYPE_STRING);

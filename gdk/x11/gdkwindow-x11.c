@@ -72,6 +72,8 @@
 #include <X11/extensions/Xdamage.h>
 #endif
 
+#define XLIB_COORD_MAX 32767
+
 const int _gdk_x11_event_mask_table[21] =
 {
   ExposureMask,
@@ -193,6 +195,14 @@ _gdk_x11_window_update_size (GdkWindowImplX11 *impl)
 {
   if (impl->cairo_surface)
     {
+      if (impl->unscaled_width < 0)
+        impl->unscaled_width = 0;
+      else if (impl->unscaled_width > XLIB_COORD_MAX)
+        impl->unscaled_width = XLIB_COORD_MAX;
+      if (impl->unscaled_height < 0)
+        impl->unscaled_height = 0;
+      else if (impl->unscaled_height > XLIB_COORD_MAX)
+        impl->unscaled_height = XLIB_COORD_MAX;
       cairo_xlib_surface_set_size (impl->cairo_surface,
                                    impl->unscaled_width, impl->unscaled_height);
     }
@@ -3187,9 +3197,9 @@ gdk_window_x11_get_geometry (GdkWindow *window,
 		    &root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
       
       if (x)
-	*x = tx / impl->window_scale;
+	*x = (tx + tborder_width) / impl->window_scale;
       if (y)
-	*y = ty / impl->window_scale;
+	*y = (ty + tborder_width) / impl->window_scale;
       if (width)
 	*width = twidth / impl->window_scale;
       if (height)
@@ -3305,8 +3315,8 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
             {
 	      rect->x = wx;
 	      rect->y = wy;
-	      rect->width = ww;
-	      rect->height = wh;
+	      rect->width = ww + wb * 2;
+	      rect->height = wh + wb * 2;
 	    }
 
 	  /* _NET_FRAME_EXTENTS format is left, right, top, bottom */
@@ -3378,8 +3388,8 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
     {
       rect->x = wx;
       rect->y = wy;
-      rect->width = ww;
-      rect->height = wh;
+      rect->width = ww + wb * 2;
+      rect->height = wh + wb * 2;
     }
 
  out:

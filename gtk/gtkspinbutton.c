@@ -800,6 +800,19 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   priv->gadget = gtk_box_gadget_new_for_node (widget_node, GTK_WIDGET (spin_button));
 
   entry_node = gtk_css_node_new ();
+
+  char *down_button_icon_names[] = {
+    "value-decrease-symbolic",
+    "list-remove-symbolic"
+  };
+  GIcon *down_icon = g_themed_icon_new_from_names (down_button_icon_names, 2);
+
+  char *up_button_icon_names[] = {
+    "value-increase-symbolic",
+    "list-add-symbolic"
+  };
+  GIcon *up_icon = g_themed_icon_new_from_names (up_button_icon_names, 2);
+
   gtk_css_node_set_name (entry_node, I_("entry"));
   gtk_css_node_set_parent (entry_node, widget_node);
   gtk_css_node_set_state (entry_node, gtk_css_node_get_state (widget_node));
@@ -812,7 +825,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   priv->down_button = gtk_icon_helper_new_named ("button",
                                                  GTK_WIDGET (spin_button));
   _gtk_icon_helper_set_use_fallback (GTK_ICON_HELPER (priv->down_button), TRUE);
-  _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (priv->down_button), "list-remove-symbolic", GTK_ICON_SIZE_MENU);
+  _gtk_icon_helper_set_gicon (GTK_ICON_HELPER (priv->down_button), down_icon, GTK_ICON_SIZE_MENU);
+  g_object_unref (down_icon);
   gtk_css_gadget_add_class (priv->down_button, "down");
   gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->down_button), widget_node);
   gtk_css_node_set_state (gtk_css_gadget_get_node (priv->down_button), gtk_css_node_get_state (widget_node));
@@ -823,7 +837,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   priv->up_button = gtk_icon_helper_new_named ("button",
                                                GTK_WIDGET (spin_button));
   _gtk_icon_helper_set_use_fallback (GTK_ICON_HELPER (priv->up_button), TRUE);
-  _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (priv->up_button), "list-add-symbolic", GTK_ICON_SIZE_MENU);
+  _gtk_icon_helper_set_gicon (GTK_ICON_HELPER (priv->up_button), up_icon, GTK_ICON_SIZE_MENU);
+  g_object_unref (up_icon);
   gtk_css_gadget_add_class (priv->up_button, "up");
   gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->up_button), widget_node);
   gtk_css_node_set_state (gtk_css_gadget_get_node (priv->up_button), gtk_css_node_get_state (widget_node));
@@ -2416,6 +2431,10 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
   if (priv->numeric != numeric)
     {
        priv->numeric = numeric;
+
+       if (numeric)
+         gtk_widget_set_direction (GTK_WIDGET (spin_button), GTK_TEXT_DIR_LTR);
+
        g_object_notify (G_OBJECT (spin_button), "numeric");
     }
 }

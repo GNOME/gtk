@@ -285,6 +285,11 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  * - ![](zoom_in_cursor.png) "zoom-in"
  * - ![](zoom_out_cursor.png) "zoom-out"
  *
+ * Additionally, the following cursor names are supported, which are
+ * not in the CSS specification:
+ * - ![](dnd_ask_cursor.png) "dnd-ask"
+ * - ![](all_resize_cursor.png) "all-resize"
+ *
  *
  * Returns: (nullable): a new #GdkCursor, or %NULL if there is no
  *   cursor with the given name

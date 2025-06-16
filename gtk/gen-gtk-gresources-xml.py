@@ -24,7 +24,7 @@ xml += '''
 '''
 
 for f in get_files('theme/Adwaita/assets', '.png'):
-  xml += '    <file preprocess=\'to-pixdata\'>theme/Adwaita/assets/{0}</file>\n'.format(f)
+  xml += '    <file>theme/Adwaita/assets/{0}</file>\n'.format(f)
 
 xml += '\n'
 
@@ -39,7 +39,7 @@ xml += '''
 '''
 
 for f in get_files('theme/HighContrast/assets', '.png'):
-  xml += '    <file preprocess=\'to-pixdata\'>theme/HighContrast/assets/{0}</file>\n'.format(f)
+  xml += '    <file>theme/HighContrast/assets/{0}</file>\n'.format(f)
 
 xml += '\n'
 

@@ -192,12 +192,23 @@
         }
     }
 }
+static void
+synthesize_configure_event(GdkWindow *window)
+{
+  GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
+
+  event->configure.window = g_object_ref (window);
+  event->configure.x = window->x;
+  event->configure.y = window->y;
+  event->configure.width = window->width;
+  event->configure.height = window->height;
+
+  _gdk_event_queue_append (gdk_display_get_default (), event);
+}
 
 -(void)windowDidMove:(NSNotification *)aNotification
 {
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkEvent *event;
-
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   /* In case the window is changed when maximized remove the maximized state */
@@ -209,16 +220,7 @@
     }
 
   _gdk_quartz_window_update_position (window);
-
-  /* Synthesize a configure event */
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = g_object_ref (window);
-  event->configure.x = window->x;
-  event->configure.y = window->y;
-  event->configure.width = window->width;
-  event->configure.height = window->height;
-
-  _gdk_event_queue_append (gdk_display_get_default (), event);
+  synthesize_configure_event(window);
 
   [self checkSendEnterNotify];
 }
@@ -227,7 +229,6 @@
 {
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkEvent *event;
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
   /* Alignment to 4 pixels is on scaled pixels and these are unscaled pixels so divide by scale to compensate. */
   const gint scale = gdk_window_get_scale_factor (window);
@@ -245,31 +246,18 @@
   window->height = content_rect.size.height;
 
   if(window->width % align)
-    {
-      window->width += align - window->width % align;
-      content_rect.size.width = window->width;
-    }
+      content_rect.size.width = window->width + align - window->width % align;
 
   content_rect.origin.x = 0;
   content_rect.origin.y = 0;
 
   [[self contentView] setFrame:content_rect];
-
   /* Certain resize operations (e.g. going fullscreen), also move the
    * origin of the window.
    */
   _gdk_quartz_window_update_position (window);
   _gdk_window_update_size (window);
-
-  /* Synthesize a configure event */
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = g_object_ref (window);
-  event->configure.x = window->x;
-  event->configure.y = window->y;
-  event->configure.width = window->width;
-  event->configure.height = window->height;
-
-  _gdk_event_queue_append (gdk_display_get_default (), event);
+  synthesize_configure_event (window);
 
   [self checkSendEnterNotify];
 }
@@ -801,9 +789,10 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
           wh = gdk_window_get_height (win);
 
           if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
-            event->dnd.context->dest_window = g_object_ref (win);
-            break;
-        }
+            {
+              event->dnd.context->dest_window = g_object_ref (win);
+              break;
+            }}
     }
 
   device = gdk_drag_context_get_device (_gdk_quartz_drag_source_context);

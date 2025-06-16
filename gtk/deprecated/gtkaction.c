@@ -453,7 +453,7 @@ gtk_action_class_init (GtkActionClass *klass)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
   /**
-   * GtkAction:sensitive:
+   * GtkAction:sensitive: (getter get_sensitive)
    *
    * Whether the action is enabled.
    *
@@ -468,7 +468,7 @@ gtk_action_class_init (GtkActionClass *klass)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
   /**
-   * GtkAction:visible:
+   * GtkAction:visible: (getter get_visible)
    *
    * Whether the action is visible.
    *

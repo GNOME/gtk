@@ -3765,6 +3765,7 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
   GtkNotebookPrivate *priv = notebook->priv;
 
   priv->rootwindow_drop = FALSE;
+  priv->operation = DRAG_OPERATION_NONE;
 
   if (result == GTK_DRAG_RESULT_NO_TARGET)
     {

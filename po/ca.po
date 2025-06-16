@@ -348,12 +348,12 @@ msgstr "Silencia"
 #: gdk/keyname-table.h:6887
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
-msgstr "Apuja el volum"
+msgstr "Abaixa el volum"
 
 #: gdk/keyname-table.h:6888
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
-msgstr "Abaixa el volum"
+msgstr "Apuja el volum"
 
 #: gdk/keyname-table.h:6889
 msgctxt "keyboard label"
@@ -853,7 +853,7 @@ msgstr "_Centrat"
 #: gtk/a11y/gtkimageaccessible.c:90 gtk/deprecated/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "_Justificat"
+msgstr "_Omple"
 
 #. This is about text justification, "left-justified text"
 #: gtk/a11y/gtkimageaccessible.c:91 gtk/deprecated/gtkstock.c:398

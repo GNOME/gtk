@@ -490,6 +490,7 @@ setup_search (GtkFileChooserDialog *dialog)
       button = gtk_toggle_button_new ();
       gtk_widget_set_focus_on_click (button, FALSE);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_tooltip_text (button, _("Search"));
       image = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");

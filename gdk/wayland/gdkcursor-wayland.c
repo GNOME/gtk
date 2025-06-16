@@ -122,6 +122,7 @@ static const struct {
   { "nwse-resize",  "bd_double_arrow" },
   { "zoom-in",      "left_ptr" },
   { "zoom-out",     "left_ptr" },
+  { "all-resize",   "move" }, /* not CSS, but we want to guarantee it anyway */
   { NULL, NULL }
 };
 
@@ -208,6 +209,13 @@ gdk_wayland_cursor_get_surface (GdkCursor *cursor,
 				gdouble *y_hot)
 {
   return NULL;
+}
+
+const char *
+_gdk_wayland_cursor_get_name (GdkCursor *cursor)
+{
+  GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
+  return wayland_cursor->name;
 }
 
 struct wl_buffer *

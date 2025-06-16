@@ -1,5 +1,79 @@
-Overview of Changes in GTK+ 3.24.44, xx-xx-xxxx
+Overview of Changes in GTK+ 3.24.50, xx-xx-xxxx
 ===============================================
+
+
+Overview of Changes in GTK+ 3.24.49, 05-03-2025
+===============================================
+
+* Fix a crash in GtkIMContext
+
+* Fix crashes in DND with GtkPlug/GtkSocket
+
+* Wayland:
+ - Fix erroneous crossing events, causing menus to malfunction
+ - Support the cursor-shape protocol
+
+* X11:
+ - Enforce size limits on windows, preventing lockups
+
+* macOS:
+ - Fix pen tilt handling
+
+* Translation updates
+ Bulgarian
+ Thai
+
+
+Overview of Changes in GTK+ 3.24.48, 25-02-2025
+===============================================
+
+* Switch to the new ci-based release process
+
+Overview of Changes in GTK+ 3.24.44, 24-01-2025
+===============================================
+
+* GtkFileChooser:
+ - Stop replacing : (colon) with U+2236 (ratio)
+
+* GtkEmojiChooser:
+ - Update to Unicode 16 / CLDR 46
+
+* GtkSpinButton:
+ - Use semantically appropriate icon names
+ - Make numeric spin buttons always LTR
+
+* GtkEntry:
+ - Stop guessing text direction from keyboard layout
+ - Add a shortcut and context menu item to change text direction
+
+* GtkEventControllerMotion:
+ - Make enter and leave signals work
+
+* Accessibility:
+ - Use message dialog titles as names
+
+* GDK:
+ - Fix portal handling of gvfs files
+
+* Wayland:
+ - Support the xdg_foreign_v2 protocol
+ - Try to fix monitor geometry on sway
+ - Improve font setting fallback
+ - Use a better default cursor size
+ - Fix a crash during DND
+
+* macOS:
+ - Fix a UI hang
+
+* Translation updates:
+ Bulgarian
+ Farsi
+ Hindi
+ Hungarian
+ Icelandic
+ Latvian
+ Serbian
+
 
 Overview of Changes in GTK+ 3.24.43, 10-07-2024
 ===============================================

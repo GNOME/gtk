@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-07 15:21+0000\n"
-"PO-Revision-Date: 2019-08-16 13:31+0200\n"
+"PO-Revision-Date: 2025-02-23 13:31+0200\n"
 "Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -5441,7 +5441,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:802
 msgid "Enable Popup"
-msgstr "Disponible el menú emergent"
+msgstr "Habilita el menú emergent"
 
 #: gtk/gtknotebook.c:803
 msgid ""
@@ -8874,7 +8874,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:1127
 msgid "Hover Selection"
-msgstr "Segueix el punter"
+msgstr "Selecció al passar per sobre"
 
 #: gtk/gtktreeview.c:1128
 msgid "Whether the selection should follow the pointer"
@@ -8882,7 +8882,7 @@ msgstr "Si la selecció ha de seguir el punter"
 
 #: gtk/gtktreeview.c:1146
 msgid "Hover Expand"
-msgstr "Expandeix amb el punter"
+msgstr "Expandeix al passar per sobre"
 
 #: gtk/gtktreeview.c:1147
 msgid ""

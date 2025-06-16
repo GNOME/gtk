@@ -1260,7 +1260,7 @@ gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
     }
 
   focus_widget = gtk_window_get_focus (window);
-  if (window)
+  if (focus_widget)
     {
       /* Wrapped off the end, clear the focus setting for the toplevel */
       parent = gtk_widget_get_parent (focus_widget);
