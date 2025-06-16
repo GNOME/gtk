@@ -281,6 +281,8 @@ gtk_gst_sink_set_caps (GstBaseSink *bsink,
 {
   GtkGstSink *self = GTK_GST_SINK (bsink);
 
+  g_clear_object (&self->pool);
+
   GST_INFO_OBJECT (self, "set caps with %" GST_PTR_FORMAT, caps);
 
 #ifdef GDK_WINDOWING_WIN32
@@ -552,6 +554,91 @@ video_frame_free (GstVideoFrame *frame)
 #define ROUND_UP_WIDTH(vinfo, width) GST_ROUND_UP_N ((width), 1 << GST_VIDEO_FORMAT_INFO_W_SUB ((vinfo)->finfo, GST_VIDEO_INFO_N_PLANES (vinfo) - 1))
 #define ROUND_UP_HEIGHT(vinfo, height) GST_ROUND_UP_N ((height), 1 << GST_VIDEO_FORMAT_INFO_H_SUB ((vinfo)->finfo, GST_VIDEO_INFO_N_PLANES (vinfo) - 1))
 
+static GstVideoFrame*
+gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
+                                  GstVideoFrame  *frame)
+{
+  g_autoptr (GstBuffer) tmp_buffer = NULL;
+  GstVideoFrame *tmp_frame;
+
+  /* Buffer is contiguous, GTK can use it */
+  if (gst_buffer_n_memory (frame->buffer) == 1)
+    return frame;
+
+  GST_DEBUG_OBJECT (self, "Buffer is not contiguous, copy needed");
+
+  if (!self->pool)
+    {
+      GstStructure *config;
+      g_autoptr (GstCaps) caps;
+      guint size;
+
+      GST_DEBUG_OBJECT (self, "Creating buffer pool for copies");
+
+      self->pool = gst_video_buffer_pool_new ();
+      config = gst_buffer_pool_get_config (self->pool);
+
+      caps = gst_video_info_to_caps (&self->v_info);
+      size = GST_VIDEO_INFO_SIZE (&self->v_info);
+
+      gst_buffer_pool_config_set_params (config, caps, size, 2, 0);
+
+      if (!gst_buffer_pool_set_config (self->pool, config))
+        {
+          GST_ERROR_OBJECT (self, "Could not create buffer pool");
+          g_clear_object (&self->pool);
+          video_frame_free (frame);
+          return NULL;
+        }
+    }
+
+  if (!gst_buffer_pool_set_active (self->pool, TRUE))
+    {
+      video_frame_free (frame);
+      GST_WARNING_OBJECT (self, "Can't set pool active");
+      return NULL;
+    }
+
+  if (gst_buffer_pool_acquire_buffer (self->pool, &tmp_buffer, NULL) !=
+       GST_FLOW_OK)
+    {
+      video_frame_free (frame);
+      GST_ERROR_OBJECT (self, "Can't acquire buffer");
+      return NULL;
+    }
+  g_assert (gst_buffer_n_memory (tmp_buffer) == 1);
+
+  if (!gst_buffer_copy_into (tmp_buffer, frame->buffer,
+                             GST_BUFFER_COPY_METADATA, 0, -1))
+    {
+      video_frame_free (frame);
+      GST_ERROR_OBJECT (self, "Can't copy metadata");
+      return NULL;
+    }
+
+  tmp_frame = g_new (GstVideoFrame, 1);
+  if (!gst_video_frame_map (tmp_frame, &self->v_info, tmp_buffer,
+                            GST_MAP_READWRITE))
+    {
+      video_frame_free (frame);
+      g_free (tmp_frame);
+      GST_ERROR_OBJECT (self, "Can't map new buffer");
+      return NULL;
+    }
+
+  if (!gst_video_frame_copy (tmp_frame, frame))
+    {
+      video_frame_free (frame);
+      video_frame_free (tmp_frame);
+      GST_ERROR_OBJECT (self, "Can't copy frame");
+      return NULL;
+    }
+
+  GST_DEBUG_OBJECT (self, "Copied and replaced frame");
+  video_frame_free (frame);
+  return tmp_frame;
+}
+
 static GdkTexture *
 gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
                                   GstBuffer       *buffer,
@@ -706,6 +793,10 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       GdkMemoryTextureBuilder *builder;
       GBytes *bytes;
       gsize i;
+
+      frame = gtk_gst_sink_maybe_replace_frame (self, frame);
+      if (!frame)
+        return NULL;
 
       bytes = g_bytes_new_with_free_func (frame->data[0],
                                           frame->map[0].size,
@@ -1040,6 +1131,7 @@ gtk_gst_sink_dispose (GObject *object)
   g_clear_object (&self->gst_display);
   g_clear_object (&self->gdk_context);
   g_clear_object (&self->gdk_display);
+  g_clear_object (&self->pool);
 
   G_OBJECT_CLASS (gtk_gst_sink_parent_class)->dispose (object);
 }
