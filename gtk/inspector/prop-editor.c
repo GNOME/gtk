@@ -1776,7 +1776,6 @@ constructed (GObject *object)
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_widget_set_hexpand (label, TRUE);
       gtk_widget_set_halign (label, GTK_ALIGN_FILL);
-      gtk_widget_add_css_class (label, "dim-label");
       gtk_box_append (GTK_BOX (box), label);
 
       readonly_changed (self->object, spec, label);

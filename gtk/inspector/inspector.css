@@ -24,6 +24,11 @@
   padding: 0 4px;
 }
 
+.list cell .dim-label {
+  opacity: 0.55;
+  text-shadow: none;
+}
+
 picture.dark {
   background: gray;
 }
