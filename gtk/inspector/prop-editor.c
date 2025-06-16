@@ -1139,7 +1139,7 @@ property_editor (GObject                *object,
 
         names = gtk_string_list_new (NULL);
         for (j = 0; j < eclass->n_values; j++)
-          gtk_string_list_append (names, eclass->values[j].value_name);
+          gtk_string_list_append (names, eclass->values[j].value_nick);
 
         prop_edit = gtk_drop_down_new (G_LIST_MODEL (names), NULL);
 
