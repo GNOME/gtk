@@ -660,7 +660,8 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_unset (&val);
 
   str = flags_to_string (fclass, flags);
-  gtk_menu_button_set_label (GTK_MENU_BUTTON (data), str);
+  child = gtk_menu_button_get_child (GTK_MENU_BUTTON (data));
+  gtk_label_set_text (GTK_LABEL (child), str);
   g_free (str);
 
   popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (data));
@@ -1153,6 +1154,7 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_FLAGS)
     {
+      GtkWidget *label;
       GtkWidget *box;
       GtkWidget *sw;
       GtkWidget *popover;
@@ -1161,7 +1163,11 @@ property_editor (GObject                *object,
 
       popover = gtk_popover_new ();
       prop_edit = gtk_menu_button_new ();
+      gtk_menu_button_set_always_show_arrow (GTK_MENU_BUTTON (prop_edit), TRUE);
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
+      label = gtk_label_new ("");
+      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+      gtk_menu_button_set_child (GTK_MENU_BUTTON (prop_edit), label);
 
       sw = gtk_scrolled_window_new ();
       gtk_popover_set_child (GTK_POPOVER (popover), sw);
