@@ -4645,61 +4645,50 @@ gtk_window_unrealize (GtkWidget *widget)
   priv->use_client_shadow = FALSE;
 }
 
+static inline void
+add_or_remove_class (GtkWidget  *widget,
+                     gboolean    add,
+                     const char *class)
+{
+  if (add)
+    gtk_widget_add_css_class (widget, class);
+  else
+    gtk_widget_remove_css_class (widget, class);
+}
+
 static void
 update_window_style_classes (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget = GTK_WIDGET (window);
-  guint edge_constraints;
+  guint constraints;
 
-  edge_constraints = priv->edge_constraints;
+  constraints = priv->edge_constraints;
 
-  if (!priv->edge_constraints)
+  if (!constraints)
     {
       gtk_widget_remove_css_class (widget, "tiled-top");
       gtk_widget_remove_css_class (widget, "tiled-right");
       gtk_widget_remove_css_class (widget, "tiled-bottom");
       gtk_widget_remove_css_class (widget, "tiled-left");
 
-      if (priv->tiled)
-        gtk_widget_add_css_class (widget, "tiled");
-      else
-        gtk_widget_remove_css_class (widget, "tiled");
+      add_or_remove_class (widget, priv->tiled, "tiled");
     }
   else
     {
       gtk_widget_remove_css_class (widget, "tiled");
-
-      if (edge_constraints & GDK_TOPLEVEL_STATE_TOP_TILED)
-        gtk_widget_add_css_class (widget, "tiled-top");
-      else
-        gtk_widget_remove_css_class (widget, "tiled-top");
-
-      if (edge_constraints & GDK_TOPLEVEL_STATE_RIGHT_TILED)
-        gtk_widget_add_css_class (widget, "tiled-right");
-      else
-        gtk_widget_remove_css_class (widget, "tiled-right");
-
-      if (edge_constraints & GDK_TOPLEVEL_STATE_BOTTOM_TILED)
-        gtk_widget_add_css_class (widget, "tiled-bottom");
-      else
-        gtk_widget_remove_css_class (widget, "tiled-bottom");
-
-      if (edge_constraints & GDK_TOPLEVEL_STATE_LEFT_TILED)
-        gtk_widget_add_css_class (widget, "tiled-left");
-      else
-        gtk_widget_remove_css_class (widget, "tiled-left");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_TOP_TILED, "tiled-top");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_RIGHT_TILED, "tiled-right");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_BOTTOM_TILED, "tiled-bottom");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_LEFT_TILED, "tiled-left");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_TOP_RESIZABLE, "resizable-top");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE, "resizable-right");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE, "resizable-bottom");
+      add_or_remove_class (widget, constraints & GDK_TOPLEVEL_STATE_LEFT_RESIZABLE, "resizable-left");
     }
 
-  if (priv->maximized)
-    gtk_widget_add_css_class (widget, "maximized");
-  else
-    gtk_widget_remove_css_class (widget, "maximized");
-
-  if (priv->fullscreen)
-    gtk_widget_add_css_class (widget, "fullscreen");
-  else
-    gtk_widget_remove_css_class (widget, "fullscreen");
+  add_or_remove_class (widget, priv->maximized, "maximized");
+  add_or_remove_class (widget, priv->fullscreen, "fullscreen");
 }
 
 /* _gtk_window_set_allocation:
