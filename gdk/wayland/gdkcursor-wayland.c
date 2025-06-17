@@ -150,15 +150,21 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
     }
   else
     {
-      *scale = desired_scale;
+      int w, h;
 
       texture = gdk_cursor_get_texture_for_size (cursor,
                                                  display->cursor_theme_size,
                                                  desired_scale,
-                                                 width,
-                                                 height,
+                                                 &w,
+                                                 &h,
                                                  hotspot_x,
                                                  hotspot_y);
+
+      if (texture)
+        {
+          *scale = MAX (gdk_texture_get_width (texture) / (float) w,
+                        gdk_texture_get_height (texture) / (float) h);
+        }
     }
 
   if (texture)
