@@ -157,6 +157,7 @@ os_unix = not os_win32
 
 if os_darwin
   wayland_enabled = false
+  x11_enabled = false
 else
   macos_enabled = false
 endif
