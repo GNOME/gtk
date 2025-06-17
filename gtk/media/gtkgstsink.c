@@ -694,7 +694,8 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
     }
   else
 #endif
-  if (gst_is_dmabuf_memory (mem))
+  if (gst_is_dmabuf_memory (mem) &&
+      self->drm_info.drm_fourcc != DRM_FORMAT_INVALID)
     {
       GdkDmabufTextureBuilder *builder = NULL;
       const GstVideoMeta *vmeta = gst_buffer_get_video_meta (buffer);
@@ -705,7 +706,6 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       g_clear_pointer (&frame, g_free);
 
       g_return_val_if_fail (vmeta, NULL);
-      g_return_val_if_fail (self->drm_info.drm_fourcc != DRM_FORMAT_INVALID, NULL);
 
       builder = gdk_dmabuf_texture_builder_new ();
       gdk_dmabuf_texture_builder_set_display (builder, self->gdk_display);
