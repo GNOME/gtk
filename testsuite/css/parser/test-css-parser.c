@@ -40,7 +40,7 @@ test_get_reference_file (const char *css_file)
     g_string_append_len (file, css_file, strlen (css_file) - 4);
   else
     g_string_append (file, css_file);
-  
+
   g_string_append (file, ".ref.css");
 
   if (!g_file_test (file->str, G_FILE_TEST_EXISTS))
@@ -61,7 +61,7 @@ test_get_errors_file (const char *css_file)
     g_string_append_len (file, css_file, strlen (css_file) - 4);
   else
     g_string_append (file, css_file);
-  
+
   g_string_append (file, ".errors");
 
   if (!g_file_test (file->str, G_FILE_TEST_EXISTS))
@@ -109,7 +109,7 @@ parsing_error_cb (GtkCssProvider *provider,
   else if (error->domain == GTK_CSS_PARSER_WARNING)
     append_error_value (errors, GTK_TYPE_CSS_PARSER_WARNING, error->code);
   else
-    g_string_append_printf (errors, 
+    g_string_append_printf (errors,
                             "%s %u\n",
                             g_quark_to_string (error->domain),
                             error->code);
@@ -130,9 +130,12 @@ parse_css_file (GFile *file, gboolean generate)
   errors = g_string_new ("");
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_add_discrete_media_feature (provider, GTK_CSS_PREFERS_COLOR_SCHEME, GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT);
+  gtk_css_provider_update_discrete_media_features (provider,
+                                                   1,
+                                                   (const char*[]) { GTK_CSS_PREFERS_COLOR_SCHEME, },
+                                                   (const char*[]) { GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT, });
 
-  g_signal_connect (provider, 
+  g_signal_connect (provider,
                     "parsing-error",
                     G_CALLBACK (parsing_error_cb),
                     errors);
@@ -259,7 +262,7 @@ add_tests_for_files_in_directory (GFile *dir)
 
       g_object_unref (info);
     }
-  
+
   g_assert_no_error (error);
   g_object_unref (enumerator);
 
@@ -271,6 +274,7 @@ add_tests_for_files_in_directory (GFile *dir)
 int
 main (int argc, char **argv)
 {
+
   if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
     {
       GFile *file;
@@ -306,6 +310,8 @@ main (int argc, char **argv)
           g_object_unref (file);
         }
     }
+
+  gtk_css_provider_define_discrete_media_feature ("prefers-color-scheme", 2, (const char*[]) { "light", "dark" });
 
   return g_test_run ();
 }
