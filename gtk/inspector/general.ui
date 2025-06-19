@@ -9,7 +9,15 @@
             <property name="valign">start</property>
             <property name="margin-top">10</property>
             <property name="margin-start">10</property>
-            <property name="icon-name">edit-copy-symbolic</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-copy-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
             <property name="tooltip-text" translatable="yes">Copy to clipboard as gitlab markdown</property>
             <signal name="clicked" handler="gtk_inspector_general_clip"/>
           </object>
@@ -491,7 +499,11 @@
                               <object class="GtkImage" id="display_rgba">
                                 <property name="halign">end</property>
                                 <property name="valign">baseline</property>
-                                <property name="icon-name">object-select-symbolic</property>
+                                <property name="paintable">
+                                  <object class="GtkIconPaintable" id="object-select-symbolic">
+                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/object-select-symbolic.svg</property>
+                                  </object>
+                                </property>
                                 <property name="hexpand">1</property>
                               </object>
                             </child>
@@ -517,7 +529,7 @@
                               <object class="GtkImage" id="display_composited">
                                 <property name="halign">end</property>
                                 <property name="valign">baseline</property>
-                                <property name="icon-name">object-select-symbolic</property>
+                                <property name="paintable">object-select-symbolic</property>
                                 <property name="hexpand">1</property>
                               </object>
                             </child>
