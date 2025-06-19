@@ -140,6 +140,9 @@ struct _GtkCssProviderPrivate
 
   GArray *rulesets;
   GtkCssSelectorTree *tree;
+
+  GBytes *source;
+
   GResource *resource;
   char *path;
   GBytes *bytes; /* *no* reference */
@@ -633,6 +636,8 @@ gtk_css_provider_finalize (GObject *object)
   g_hash_table_destroy (priv->symbolic_colors);
   g_hash_table_destroy (priv->keyframes);
 
+  g_clear_pointer (&priv->source, g_bytes_unref);
+
   if (priv->resource)
     {
       g_resources_unregister (priv->resource);
@@ -689,6 +694,8 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   guint i;
+
+  g_clear_pointer (&priv->source, g_bytes_unref);
 
   if (priv->resource)
     {
@@ -777,10 +784,26 @@ parse_import (GtkCssScanner *scanner)
     }
   else
     {
+      GError *load_error = NULL;
+
+      GBytes *bytes = g_file_load_bytes (file, NULL, NULL, &load_error);
+
+      if (bytes == NULL)
+        {
+          gtk_css_parser_error (scanner->parser,
+                                GTK_CSS_PARSER_ERROR_IMPORT,
+                                gtk_css_parser_get_block_location (scanner->parser),
+                                gtk_css_parser_get_end_location (scanner->parser),
+                                "Failed to import: %s",
+                                load_error->message);
+          g_error_free (load_error);
+        }
+
+
       gtk_css_provider_load_internal (scanner->provider,
                                       scanner,
                                       file,
-                                      NULL);
+                                      bytes);
     }
 
   g_clear_object (&file);
@@ -1284,59 +1307,23 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (self);
   gint64 before G_GNUC_UNUSED;
+  GtkCssScanner *scanner;
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  if (bytes == NULL)
-    {
-      GError *load_error = NULL;
-
-      bytes = g_file_load_bytes (file, NULL, NULL, &load_error);
-
-      if (bytes == NULL)
-        {
-          if (parent == NULL)
-            {
-              GtkCssLocation empty = { 0, };
-              GtkCssSection *section = gtk_css_section_new (file, &empty, &empty);
-
-              gtk_css_style_provider_emit_error (GTK_STYLE_PROVIDER (self), section, load_error);
-              gtk_css_section_unref (section);
-            }
-          else
-            {
-              gtk_css_parser_error (parent->parser,
-                                    GTK_CSS_PARSER_ERROR_IMPORT,
-                                    gtk_css_parser_get_block_location (parent->parser),
-                                    gtk_css_parser_get_end_location (parent->parser),
-                                    "Failed to import: %s",
-                                    load_error->message);
-            }
-
-          g_error_free (load_error);
-        }
-    }
-
   priv->bytes = bytes;
 
-  if (bytes)
-    {
-      GtkCssScanner *scanner;
+  scanner = gtk_css_scanner_new (self,
+                                  parent,
+                                  file,
+                                  bytes);
 
-      scanner = gtk_css_scanner_new (self,
-                                     parent,
-                                     file,
-                                     bytes);
+  parse_stylesheet (scanner);
 
-      parse_stylesheet (scanner);
+  gtk_css_scanner_destroy (scanner);
 
-      gtk_css_scanner_destroy (scanner);
-
-      if (parent == NULL)
-        gtk_css_provider_postprocess (self);
-
-      g_bytes_unref (bytes);
-    }
+  if (parent == NULL)
+    gtk_css_provider_postprocess (self);
 
   if (GDK_PROFILER_IS_RUNNING)
     {
@@ -1364,6 +1351,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  const char      *data,
                                  gssize           length)
 {
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GBytes *bytes;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
@@ -1376,7 +1364,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_load_from_bytes (css_provider, bytes);
 
-  g_bytes_unref (bytes);
+  priv->source = bytes;
 }
 
 /**
@@ -1421,12 +1409,15 @@ void
 gtk_css_provider_load_from_bytes (GtkCssProvider *css_provider,
                                   GBytes         *data)
 {
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
   g_return_if_fail (data != NULL);
 
   gtk_css_provider_reset (css_provider);
 
-  gtk_css_provider_load_internal (css_provider, NULL, NULL, g_bytes_ref (data));
+  gtk_css_provider_load_internal (css_provider, NULL, NULL, data);
+
+  priv->source = g_bytes_ref (data);
 
   gtk_style_provider_changed (GTK_STYLE_PROVIDER (css_provider));
 }
@@ -1444,12 +1435,35 @@ void
 gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                  GFile           *file)
 {
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GBytes *bytes;
+
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
   g_return_if_fail (G_IS_FILE (file));
 
   gtk_css_provider_reset (css_provider);
 
-  gtk_css_provider_load_internal (css_provider, NULL, file, NULL);
+  GError *load_error = NULL;
+
+  bytes = g_file_load_bytes (file, NULL, NULL, &load_error);
+
+  if (load_error != NULL)
+    {
+      GtkCssLocation empty = { 0, };
+      GtkCssSection *section = gtk_css_section_new (file, &empty, &empty);
+
+      gtk_css_style_provider_emit_error (GTK_STYLE_PROVIDER (css_provider), section, load_error);
+      gtk_css_section_unref (section);
+
+      g_clear_pointer (&priv->bytes, g_bytes_unref);
+      g_error_free (load_error);
+    }
+  else
+    {
+      gtk_css_provider_load_internal (css_provider, NULL, file, bytes);
+
+      priv->source = g_bytes_ref (bytes);
+    }
 
   gtk_style_provider_changed (GTK_STYLE_PROVIDER (css_provider));
 }
