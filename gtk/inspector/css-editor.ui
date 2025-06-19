@@ -35,21 +35,45 @@
         <child>
           <object class="GtkToggleButton" id="disable_button">
             <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
-            <property name="icon-name">media-playback-pause-symbolic</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/media-playback-pause-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
             <signal name="toggled" handler="disable_toggled"/>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="save_button">
             <property name="tooltip-text" translatable="yes">Save the current CSS</property>
-            <property name="icon-name">document-save-symbolic</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-save-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
             <signal name="clicked" handler="save_clicked"/>
           </object>
         </child>
         <child>
           <object class="GtkToggleButton" id="deprections_button">
             <property name="tooltip-text" translatable="yes">Show deprecations</property>
-            <property name="icon-name">dialog-information-symbolic</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/dialog-information-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
             <signal name="toggled" handler="toggle_deprecations"/>
           </object>
         </child>
