@@ -8,7 +8,15 @@
         <child>
           <object class="GtkToggleButton" id="show_button">
             <property name="tooltip-text" translatable="yes">Show data</property>
-            <property name="icon-name">view-refresh-symbolic</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-refresh-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
             <signal name="toggled" handler="toggle_show"/>
           </object>
         </child>
