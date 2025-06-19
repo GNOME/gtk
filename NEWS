@@ -4,14 +4,17 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
 * GtkImage:
  - Change the sizing behavior for paintables. Stop scaling them up
 
-* Add g_uri_launcher_can_laucher to determine if a given
-  uri has a handler
+* Add g_uri_launcher_can_launch to check if a given uri has a handler
 
 * GtkIconTheme:
  - Allow strokes in symbolic icons
  - Document the symbolic icon format
  - Add a small parser for symbolic svg files
  - Convert symbolic svgs to render nodes and rasterize them later
+ - Make it possible to create GtkIconPaintable objects in ui files
+
+* GtkVideo:
+ - Port the gstreamer backend to use GskPlay
 
 * Resources:
  - Clean up and simplify all symbolic icons and theme assets,
@@ -20,6 +23,9 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
 
 * CSS:
  - Plug a memory leak in the css variables code
+ - Support transition hints for gradients
+ - Support two-position stops for gradients
+ - Pass toplevel edge constraints to css
 
 * GL:
  - Support multiplane texture formats
@@ -35,35 +41,66 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
 * Tools:
  - Add some interactive controls to gtk4-path-tool
  - Add a command to convert symbolic svgs to nodes
+ - The inspector UI has been improved in some places
 
 * Demos:
  - Fix lighting in the gears GL demo
+ - Use paintables for some icons, so we no longer rely on an
+   icon theme to provide them
+ - Stop hardcoding Cantarell as font in various places
 
 * Build:
  - Include modules in libgtk
+ - Build with libcups 3
+ - Use meson 1.8.2
 
 * Wayland:
  - Stop handling compose sequences client-side, since
    the compositor does it
  - Plug a memory leak in the offloading code
+ - Fix scaling of callback cursors
+ - Update tablet cursors properly
 
 * MacOS:
  - Support window snapping
  - Better window menu support
+ - Don't build the x11 backend on macos, by default
 
 * Windows:
  - Fix resizing problems with the cairo renderer
- - Add aPI for D3D12 textures
+ - Add API for D3D12 textures
+ - Refactor and modernize the WGL support
+ - Fix many msvc warnings
+ - Use D3D11 or D3D12 and DirectComposition. This
+   can be disabled using new GDK_DISABLE values:
+
+   GDK_DISABLE=d3d11,d3d12, dcomp
+
+* Android:
+ - Simplify surface layout
 
 * Bugs fixed:
   - #6519 AtSpiSocket not in gir
+  - #7233 `contain_mimetype` can return true for a type that _was_ present in
+    the clipboard but removed leading to `g-io-quark-error` when reading the
+    data
   - #7277 Support mac os snapping feature
   - #7450 Wrong behavior of GdkKeymap on macOS (Elisa Pau)
   - #7524 `Gtk.MapListModel` becomes desynchronized when the original list model
     is modified (Matthias Clasen)
   - #7541 Win32: window resize issues (not repainted or wrong direction) with
-  - #7572 path caching fallout (Matthias Clasen, Benjamin Otte)
     cairo renderer (Benjamin Otte)
+  - #7562 Android: Allocation warning spam when scrolling ScrolledWindow
+  - #7572 path caching fallout (Matthias Clasen, Benjamin Otte)
+  - #7583 macos: Vulkan renderer broken
+  - #7587 Dynamic cursors are incorrectly scaled (Matthias Clasen, PBS)
+  - #7589 Windows vulkan renderer: DestroyWindow failed with code 1400: Invalid
+    window handle. (Benjamin Otte)
+  - #7592 `gtk_accelerator_parse_with_keycode` returns a false positive for
+    parsing (Rubén Muñoz--Bertrand)
+  - #7593 Wayland: The tablet cursor shape does not always changes shape when
+    hovering into a GTK4 application (Matthias Clasen)
+  - #7606 Giant mouse cursor (Matthias Clasen)
   - !7883 Add GdkD3d12Texture (Benjamin Otte)
   - !8061 Deprecate the last few undeprecated GdkPixbuf apis (Matthias Clasen)
   - !8080 macos: Add (experimental) Vulkan support (Arjan Molenaar)
@@ -84,6 +121,7 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - !8543 Allow overriding (de)serializers (Matthias Clasen)
   - !8544 node-editor: Help isn't editable (Matthias Clasen)
   - !8545 Improve the a11y overlay (Matthias Clasen)
+  - !8547 Convert symbolic icons to render nodes (Matthias Clasen)
   - !8548 path: Fix handling of 'm' (Matthias Clasen)
   - !8549 path: Fix handling of custom contours (Matthias Clasen)
   - !8550 icons: Update folder-new-symbolic from Adwaita (Matthias Clasen)
@@ -94,6 +132,7 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - !8556 wayland: Stop deriving from GtkIMContextSimple (Matthias Clasen)
   - !8557 path tool: Add some interactive control (Matthias Clasen)
   - !8558 some win32 fixes (Benjamin Otte)
+  - !8559 win32: Use DirectComposition (Benjamin Otte)
   - !8560 Document the atspi socket (Matthias Clasen)
   - !8561 win32 fixes (Benjamin Otte)
   - !8564 ci: fix the android build ci (Florian "sp1rit"​)
@@ -112,7 +151,7 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - !8578 icontheme: Drop non_blocking flags (Matthias Clasen)
   - !8579 android: introduce properties missing from toplevel (Florian
     "sp1rit"​)
-  - !8580 Implement caching for path fills (Benjamin Otte, Matthias Clasen)
+  - !8580 Implement caching for path fills (Matthias Clasen, Benjamin Otte)
   - !8581 testsuite: Add a bunch of compare tests (Benjamin Otte)
   - !8582 memorytexturebuilder: Fix set_color_state annotation (Robert Mader)
   - !8583 rework GskGpuCache a bit (Benjamin Otte)
@@ -127,9 +166,10 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - !8594 Build with libcups 3
   - !8597 dmabuf: egl: Skip unknown drm formats (Robert Mader)
   - !8598 Cache strokes (Matthias Clasen)
+  - !8599 wayland: Plug a memory leak (Matthias Clasen)
   - !8600 GL: Add multiplane texture support (Benjamin Otte)
-  - !8602 rendernode tool: Add a --dont-move option (Benjamin Otte, Matthias
-    Clasen)
+  - !8602 rendernode tool: Add a --dont-move option (Matthias Clasen, Benjamin
+    Otte)
   - !8603 texturedownloader: Fix annotations (Benjamin Otte)
   - !8605 CI/MSVC: fix accesskit-c build with non-native Rust toolchain (L. E.
     Segovia)
@@ -138,8 +178,6 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - !8608 Make gsk_path_get_bounds() WARN_IF_UNUSED_RESULT (Benjamin Otte)
   - !8609 Revert 6d15f59fef2330dca2e27 (Matthias Clasen)
   - !8611 Small icon fixes (Matthias Clasen)
-  - !8547 Convert symbolic icons to render nodes (Matthias Clasen)
-  - !8599 wayland: Plug a memory leak (Matthias Clasen)
   - !8613 Add some more path parser tests (Matthias Clasen)
   - !8617 gpu: Do not use fma() in GLSL shaders (Robert Mader)
   - !8620 docs: Make warnings more bold (Matthias Clasen)
@@ -163,17 +201,65 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - !8641 snapshot: Move a helper (Matthias Clasen)
   - !8642 More svg rendering and path work (Matthias Clasen)
   - !8643 Improve symbolic icon handling (Matthias Clasen)
+  - !8644 surface: Add the concept of an "attached context" (Benjamin Otte)
+  - !8645 wayland: More debug spew for color (Matthias Clasen)
+  - !8646 rendernode tool: Tweak the convert command (Matthias Clasen)
+  - !8647 icontheme: Split off gtkiconpaintable.c (Matthias Clasen)
+  - !8648 Try meson 1.8.1 (Matthias Clasen)
+  - !8649 wayland: Add a way to get the text protocol proxy (Matthias Clasen)
+  - !8650 Rename many of the private color apis
+  - !8651 macos: update draw contexts and fix vulkan renderer (Arjan Molenaar)
+  - !8652 Fix name of Activate/Deactivate DBus signal name (Tait Hoyem)
+  - !8653 css: Parse transition hints for linear gradients (Matthias Clasen)
+  - !8655 Implement transition hints for gradients (Matthias Clasen)
+  - !8656 css: Fix a crash (Matthias Clasen)
+  - !8658 gdk: Drop an unused include (Matthias Clasen)
+  - !8659 Fix a ton of warnings due to stricter MSVC compiler flags (Benjamin
+    Otte)
+  - !8660 Update the clipboard on all `WM_CLIPBOARDUPDATE` events even if for
+    the same owner (Doublonmousse)
+  - !8662 android: Simplify surface layouting (Florian "sp1rit"​)
+  - !8663 Cosmetics (Matthias Clasen)
+  - !8664 Fix memory layout initialization (Matthias Clasen)
+  - !8667 ci: Allow the macos job to fail (Matthias Clasen)
+  - !8668 ci: unify towards a shared used meson version (Florian "sp1rit"​)
+  - !8669 Add zoom icons to our fallback set (Matthias Clasen)
+  - !8671 Fix a parsing bug with '<' and '>' (Rubén Muñoz--Bertrand)
+  - !8675 win32: Remove leftover code (Benjamin Otte)
+  - !8676 testsuite: Don't run slow tests in parallel (Benjamin Otte)
+  - !8677 ci: Redo tools tests (Matthias Clasen)
+  - !8679 Replace hardcoded values of Cantarell (Matthias Clasen)
+  - !8680 docs: Add missing docs_url field to the backends documentation
+    (Corentin Noël)
+  - !8683 inspector: Minor ui improvements (Matthias Clasen)
+  - !8684 ci: Slim down our harfbuzz fallback build (Matthias Clasen)
+  - !8686 Update the issue template for crashes (Emmanuele Bassi)
+  - !8688 inspector: Small UI improvements (Matthias Clasen)
+  - !8690 a11y atspi: Report masked password instead of plain one
+  - !8691 gstreamer: Use the actual data size for the texture builder (Robert
+    Mader)
+  - !8692 Pass resizable edge window states on to css (Matthias Clasen)
+  - !8694 Revert "wayland: Fix callback cursor scaling" (Matthias Clasen)
+  - !8696 gtkmaplistmodel: Make 'model' property writable (Georges Basile
+    Stavracas Neto)
+  - !8697 meson: Disable x11 feature on macos
+  - !8698 gstreamer: Handle non-contiguous sysmem buffers (Robert Mader)
+ - !8699 ci: Don't build broadway on macos (Matthias Clasen)
+  - !8700 Revert "Add gdk_wayland_toplevel_get_xdg_toplevel"
 
 * Translation updates:
+  - Catalan (Jordi Mas i Hernandez)
   - Finnish (Jiri Grönroos)
   - Georgian (Ekaterine Papava)
   - German (Christian Kirbach)
-  - Hebrew (Yaron Shahrabani, Yosef Or Boczko)
+  - Hebrew (Yosef Or Boczko, Yaron Shahrabani)
   - Interlingua (International Auxiliary Language Association) (Emilio
     Sepúlveda)
   - Slovak (Peter Mráz)
   - Slovenian (Martin)
+  - Turkish (Emin Tufan Çetin)
   - Uzbek (Baxrom Raxmatov)
+
 
 Overview of Changes in 4.19.1, 02-05-2025
 =========================================
