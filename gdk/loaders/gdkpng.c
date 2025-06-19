@@ -715,6 +715,7 @@ gdk_save_png (GdkTexture *texture,
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, format);
+  gdk_texture_downloader_set_color_state (&downloader, color_state);
   bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
   gdk_texture_downloader_finish (&downloader);
   data = g_bytes_get_data (bytes, NULL);
