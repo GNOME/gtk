@@ -459,7 +459,11 @@
                           <object class="GtkImage" id="tick_callback">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-name">object-select-symbolic</property>
+                            <property name="paintable">
+                              <object class="GtkIconPaintable" id="object-select-symbolic">
+                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/object-select-symbolic.svg</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -585,7 +589,7 @@
                           <object class="GtkImage" id="mapped">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-name">object-select-symbolic</property>
+                            <property name="paintable">object-select-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -611,7 +615,7 @@
                           <object class="GtkImage" id="realized">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-name">object-select-symbolic</property>
+                            <property name="paintable">object-select-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -637,7 +641,7 @@
                           <object class="GtkImage" id="is_toplevel">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-name">object-select-symbolic</property>
+                            <property name="paintable">object-select-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -663,7 +667,7 @@
                           <object class="GtkImage" id="child_visible">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-name">object-select-symbolic</property>
+                            <property name="paintable">object-select-symbolic</property>
                           </object>
                         </child>
                       </object>
