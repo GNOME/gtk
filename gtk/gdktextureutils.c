@@ -1329,11 +1329,12 @@ end_element_cb (GMarkupParseContext *context,
 }
 
 static GskRenderNode *
-gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
-                                         gboolean *only_fg,
-                                         gboolean *single_path,
-                                         double   *width,
-                                         double   *height)
+gsk_render_node_new_from_bytes_symbolic (GBytes    *bytes,
+                                         gboolean  *only_fg,
+                                         gboolean  *single_path,
+                                         double    *width,
+                                         double    *height,
+                                         GError   **error)
 {
   GMarkupParseContext *context;
   GMarkupParser parser = {
@@ -1344,7 +1345,6 @@ gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
     NULL,
   };
   ParserData data;
-  GError *error = NULL;
   const char *text;
   gsize len;
 
@@ -1357,18 +1357,15 @@ gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
   text = g_bytes_get_data (bytes, &len);
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
-  if (!g_markup_parse_context_parse (context, text, len, &error))
+  if (!g_markup_parse_context_parse (context, text, len, error))
     {
       GskRenderNode *node;
 
-      if (GTK_DEBUG_CHECK (ICONTHEME))
-        gdk_debug_message ("Failed to convert svg to node: %s", error->message);
-
-      g_error_free (error);
-
       g_markup_parse_context_free (context);
+
       if (data.has_clip)
         gtk_snapshot_pop (data.snapshot);
+
       node = gtk_snapshot_free_to_node (data.snapshot);
       g_clear_pointer (&node, gsk_render_node_unref);
 
@@ -1398,6 +1395,7 @@ gsk_render_node_new_from_resource_symbolic (const char *path,
 {
   GBytes *bytes;
   GskRenderNode *node;
+  GError *error = NULL;
 
   if (!gdk_has_feature (GDK_FEATURE_ICON_NODES))
     return NULL;
@@ -1406,8 +1404,14 @@ gsk_render_node_new_from_resource_symbolic (const char *path,
   if (!bytes)
     return NULL;
 
-  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, single_path, width, height);
+  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, single_path, width, height, &error);
   g_bytes_unref (bytes);
+  if (error)
+    {
+      if (GTK_DEBUG_CHECK (ICONTHEME))
+        gdk_debug_message ("Failed to convert resource %s to node: %s", path, error->message);
+      g_error_free (error);
+    }
 
   return node;
 }
@@ -1423,6 +1427,7 @@ gsk_render_node_new_from_filename_symbolic (const char *filename,
   gsize len;
   GBytes *bytes;
   GskRenderNode *node;
+  GError *error = NULL;
 
   if (!gdk_has_feature (GDK_FEATURE_ICON_NODES))
     return NULL;
@@ -1431,8 +1436,14 @@ gsk_render_node_new_from_filename_symbolic (const char *filename,
     return NULL;
 
   bytes = g_bytes_new_take (text, len);
-  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, single_path, width, height);
+  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, single_path, width, height, &error);
   g_bytes_unref (bytes);
+  if (error)
+    {
+      if (GTK_DEBUG_CHECK (ICONTHEME))
+        gdk_debug_message ("Failed to convert file %s to node: %s", filename, error->message);
+      g_error_free (error);
+    }
 
   return node;
 }
