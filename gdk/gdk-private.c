@@ -25,6 +25,7 @@ gdk__private__ (void)
     gdk_profiler_stop,
     gdk_window_titlebar_gesture,
     gdk_window_is_impl_offscreen,
+    gdk_running_in_sandbox,
   };
 
   return &table;

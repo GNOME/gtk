@@ -73,6 +73,8 @@ typedef struct {
                                             GdkTitlebarGesture  gesture);
 
   gboolean (* gdk_window_is_impl_offscreen) (GdkWindow *window);
+
+  gboolean (* gdk_running_in_sandbox) (void);
 } GdkPrivateVTable;
 
 GDK_AVAILABLE_IN_ALL

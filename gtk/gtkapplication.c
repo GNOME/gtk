@@ -291,6 +291,40 @@ gtk_application_load_resources (GtkApplication *application)
   }
 }
 
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+static void
+gtk_application_identify_to_portal (GtkApplication *application)
+{
+  GVariantBuilder builder;
+  GApplication *g_application = G_APPLICATION (application);
+  GDBusConnection *session_bus;
+  const char *application_id;
+
+  session_bus = g_application_get_dbus_connection (g_application);
+  if (!session_bus)
+    return;
+
+  application_id = g_application_get_application_id (g_application);
+  if (!application_id)
+    return;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+
+  /* Intentionally ignore errors */
+  g_dbus_connection_call (session_bus,
+                          "org.freedesktop.portal.Desktop",
+                          "/org/freedesktop/portal/desktop",
+                          "org.freedesktop.host.portal.Registry",
+                          "Register",
+                          g_variant_new ("(sa{sv})",
+                                         application_id,
+                                         &builder),
+                          NULL,
+                          G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                          -1,
+                          NULL, NULL, NULL);
+}
+#endif
 
 static void
 gtk_application_startup (GApplication *g_application)
@@ -300,6 +334,11 @@ gtk_application_startup (GApplication *g_application)
   G_APPLICATION_CLASS (gtk_application_parent_class)->startup (g_application);
 
   gtk_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
+
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+  if (!GDK_PRIVATE_CALL (gdk_running_in_sandbox ()))
+    gtk_application_identify_to_portal (application);
+#endif
 
   gtk_init (NULL, NULL);
 
