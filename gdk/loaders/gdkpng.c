@@ -245,7 +245,7 @@ gdk_png_get_color_state (png_struct  *png,
   return GDK_COLOR_STATE_SRGB;
 }
 
-static void
+static GdkColorState *
 gdk_png_set_color_state (png_struct    *png,
                          png_info      *info,
                          GdkColorState *color_state,
@@ -289,6 +289,8 @@ gdk_png_set_color_state (png_struct    *png,
   /* For good measure, we add an sRGB chunk too */
   if (gdk_color_state_equal (color_state, GDK_COLOR_STATE_SRGB))
     png_set_sRGB (png, info, PNG_sRGB_INTENT_PERCEPTUAL);
+
+  return color_state;
 }
 
 /* }}} */
@@ -670,7 +672,7 @@ gdk_save_png (GdkTexture *texture,
                 PNG_COMPRESSION_TYPE_DEFAULT,
                 PNG_FILTER_TYPE_DEFAULT);
 
-  gdk_png_set_color_state (png, info, color_state, chunk_data);
+  color_state = gdk_png_set_color_state (png, info, color_state, chunk_data);
 
   png_write_info (png, info);
 
