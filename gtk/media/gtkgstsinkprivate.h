@@ -48,6 +48,7 @@ struct _GtkGstSink
 
   GstVideoInfo         v_info;
   GstVideoInfoDmaDrm   drm_info;
+  GstBufferPool       *pool;
 
   GtkGstPaintable     *paintable;
   GdkDisplay          *gdk_display;
