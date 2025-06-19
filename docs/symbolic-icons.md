@@ -19,8 +19,8 @@ These attributes are allowed on `path` elements:
 - `class`: the symbolic part of symbolic icons. This can contain one of the following classes to determine the symbolic fill color: "success", "warning", "error", "success-fill", "warning-fill", "error-fill", "foreground-fill", "transparent-fill". The first 3 classes are the originally supported values, they have been duplicated with a -fill suffix for consistency. Any element that does not have one of these classes set is filled using the foreground color.
 The `class` attribute can also contain one of the following classes to determine the symbolic stroke color: "foreground-stroke", "success-stroke", "warning-stroke", "error-stroke". Any element that does not have one of these classes is not stroked.
 - `opacity`: overall opacity
-- `fill-opacity`: opacity for filled paths
-- `stroke-opacity`: opacity for stroked paths
+- `fill-opacity`: opacity for filled paths, in addition to the symbolic color alpha
+- `stroke-opacity`: opacity for stroked paths, in addition to the symbolic color alpha
 - `fill-rule`: the fill rule used when filling
 - `stroke-width`: line width used when stroking
 - `stroke-linecap`: the line cap value used when stroking
@@ -28,8 +28,8 @@ The `class` attribute can also contain one of the following classes to determine
 - `stroke-miterlimit`: the miter limit value used when stroking
 - `stroke-dasharray`: the dash array used when stroking
 - `stroke-dashoffset`: the dash offset used when stroking
-- `id`: ignored
 - `style`: ignored
+- `id`: ignored
 - `color`: ignored
 - `overflow`: ignored
 
