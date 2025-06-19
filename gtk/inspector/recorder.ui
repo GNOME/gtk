@@ -16,7 +16,15 @@
             </style>
             <child>
               <object class="GtkMenuButton">
-                <property name="icon-name">open-menu-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/open-menu-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <property name="tooltip-text" translatable="yes">Recording Options</property>
                 <property name="menu-model">
                   <menu>
@@ -38,14 +46,30 @@
             </child>
             <child>
               <object class="GtkToggleButton">
-                <property name="icon-name">media-record-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/media-record-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <property name="tooltip-text" translatable="yes">Record frames</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="recording" bind-flags="bidirectional|sync-create"/>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="icon-name">edit-clear-all-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-clear-all-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <property name="tooltip-text" translatable="yes">Clear recorded frames</property>
                 <signal name="clicked" handler="recordings_clear_all"/>
                 <property name="hexpand">true</property>
@@ -54,7 +78,15 @@
             </child>
             <child>
               <object class="GtkToggleButton" id="dark_mode_button">
-                <property name="icon-name">display-brightness-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/display-brightness-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <property name="tooltip-text" translatable="yes">Use a dark background</property>
                 <property name="action-name">record.toggle-dark</property>
               </object>
@@ -62,7 +94,15 @@
             <child>
               <object class="GtkButton" id="render_node_save_button">
                 <property name="sensitive">0</property>
-                <property name="icon-name">document-save-as-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-save-as-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <property name="tooltip-text" translatable="yes">Save selected node</property>
                 <signal name="clicked" handler="render_node_save"/>
               </object>
@@ -70,7 +110,15 @@
             <child>
               <object class="GtkButton" id="render_node_clip_button">
                 <property name="sensitive">0</property>
-                <property name="icon-name">edit-copy-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-copy-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                 <signal name="clicked" handler="render_node_clip"/>
               </object>
