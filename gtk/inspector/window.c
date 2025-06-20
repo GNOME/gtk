@@ -530,6 +530,7 @@ gtk_inspector_window_realize (GtkWidget *widget)
   gsk_renderer_set_debug_flags (renderer, 0);
 
   provider = gtk_css_provider_new ();
+
   gtk_css_provider_load_from_resource (provider, "/org/gtk/libgtk/inspector/inspector.css");
   gtk_style_context_add_provider_for_display (gtk_widget_get_display (widget),
                                               GTK_STYLE_PROVIDER (provider),
