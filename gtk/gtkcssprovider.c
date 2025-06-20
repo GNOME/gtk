@@ -799,10 +799,13 @@ parse_import (GtkCssScanner *scanner)
           g_error_free (load_error);
         }
       else
-        gtk_css_provider_load_internal (scanner->provider,
-                                        scanner,
-                                        file,
-                                        bytes);
+        {
+          gtk_css_provider_load_internal (scanner->provider,
+                                          scanner,
+                                          file,
+                                          bytes);
+          g_bytes_unref (bytes);
+        }
     }
 
   g_clear_object (&file);
@@ -1363,7 +1366,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_load_from_bytes (css_provider, bytes);
 
-  priv->source = bytes;
+  g_bytes_unref (bytes);
 }
 
 /**
@@ -1461,7 +1464,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
     {
       gtk_css_provider_load_internal (css_provider, NULL, file, bytes);
 
-      priv->source = g_bytes_ref (bytes);
+      priv->source = bytes;
     }
 
   gtk_style_provider_changed (GTK_STYLE_PROVIDER (css_provider));
