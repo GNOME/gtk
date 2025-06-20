@@ -1883,7 +1883,7 @@ _is_valid_media_feature (const char *feature_name, const char *feature_value)
  * @feature_values: (array length=n_features): value of the feature
  *
  * Update CSS media features. Media features need to be defined with
- * [func@gtk_css_provider_define_discrete_media_feature].
+ * [func@Gtk.css_provider_define_discrete_media_feature].
  *
  * Updating media features will trigger a re-evaluation of the CSS.
  *

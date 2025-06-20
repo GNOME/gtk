@@ -123,8 +123,8 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
  *
  * Possible values are:
  *
- * - [const@Gtk.GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE]
- * - [const@Gtk.GTK_CSS_PREFERS_CONTRAST_MORE]
+ * - [const@Gtk.CSS_PREFERS_CONTRAST_NO_PREFERENCE]
+ * - [const@Gtk.CSS_PREFERS_CONTRAST_MORE]
  *
  * Since: 4.20
  */
@@ -132,7 +132,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
 /**
  * GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE:
  *
- * Prefer normal contrast theme for media feature [const@Gtk.GTK_CSS_PREFERS_CONTRAST].
+ * Prefer normal contrast theme for media feature [const@Gtk.CSS_PREFERS_CONTRAST].
  *
  * Since: 4.20
  */
@@ -140,7 +140,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
 /**
  * GTK_CSS_PREFERS_CONTRAST_MORE:
  *
- * Prefer high contrast theme for media feature [const@Gtk.GTK_CSS_PREFERS_CONTRAST].
+ * Prefer high contrast theme for media feature [const@Gtk.CSS_PREFERS_CONTRAST].
  *
  * Since: 4.20
  */
