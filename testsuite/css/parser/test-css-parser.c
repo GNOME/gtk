@@ -310,8 +310,6 @@ main (int argc, char **argv)
         }
     }
 
-  gtk_css_provider_define_discrete_media_feature ("prefers-color-scheme", 2, (const char*[]) { "light", "dark" });
-
   return g_test_run ();
 }
 

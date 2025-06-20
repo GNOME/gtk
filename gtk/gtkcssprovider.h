@@ -116,5 +116,35 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
  */
 #define GTK_CSS_PREFERS_COLOR_SCHEME_DARK         "dark"
 
+/**
+ * GTK_CSS_PREFERS_CONTRAST:
+ *
+ * Value for the `prefers-contrast` media feature.
+ *
+ * Possible values are:
+ *
+ * - [const@Gtk.GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE]
+ * - [const@Gtk.GTK_CSS_PREFERS_CONTRAST_MORE]
+ *
+ * Since: 4.20
+ */
+#define GTK_CSS_PREFERS_CONTRAST                   "prefers-contrast"
+/**
+ * GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE:
+ *
+ * Prefer normal contrast theme for media feature [const@Gtk.GTK_CSS_PREFERS_CONTRAST].
+ *
+ * Since: 4.20
+ */
+#define GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE     "no-preference"
+/**
+ * GTK_CSS_PREFERS_CONTRAST_MORE:
+ *
+ * Prefer high contrast theme for media feature [const@Gtk.GTK_CSS_PREFERS_CONTRAST].
+ *
+ * Since: 4.20
+ */
+#define GTK_CSS_PREFERS_CONTRAST_MORE              "more"
+
 G_END_DECLS
 
