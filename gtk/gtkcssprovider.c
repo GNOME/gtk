@@ -635,7 +635,7 @@ gtk_css_provider_finalize (GObject *object)
   guint i;
 
   for (i = 0; i < priv->media_features->len; i++)
-    _gtk_css_media_feature_clear (&g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, i));
+    gtk_css_media_feature_clear (&g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, i));
 
   g_array_free (priv->media_features, TRUE);
 
@@ -833,7 +833,7 @@ parse_media_block (GtkCssScanner *scanner)
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
     {
       GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
-      is_match = _gtk_css_media_query_parse (scanner->parser, priv->media_features);
+      is_match = gtk_css_media_query_parse (scanner->parser, priv->media_features);
     }
 
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
@@ -1785,14 +1785,14 @@ gtk_css_provider_add_discrete_media_feature (GtkCssProvider  *provider,
           if (strcmp (media_feature->value, feature_value) == 0)
             return FALSE;
 
-          _gtk_css_media_feature_update (media_feature, feature_value);
+          gtk_css_media_feature_update (media_feature, feature_value);
           return TRUE;
         }
     }
 
   g_array_set_size (priv->media_features, priv->media_features->len + 1);
   media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, priv->media_features->len - 1);
-  _gtk_css_media_feature_init (media_feature, feature_name, feature_value);
+  gtk_css_media_feature_init (media_feature, feature_name, feature_value);
 
   return TRUE;
 }
