@@ -26,12 +26,12 @@ static gboolean parse_media_condition (GtkCssParser *parser, GArray *media_featu
 
 
 /*
- * _gtk_css_media_query_parse:
+ * gtk_css_media_query_parse:
  *
  * Returns: TRUE if the query matches with the provided media features.
  */
 gboolean
-_gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
+gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
 {
   gboolean result = parse_media_condition (parser, media_features);
 
@@ -42,7 +42,7 @@ _gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
 }
 
 void
-_gtk_css_media_feature_init (GtkCssDiscreteMediaFeature *media_feature,
+gtk_css_media_feature_init (GtkCssDiscreteMediaFeature *media_feature,
                              const char                 *feature_name,
                              const char                 *feature_value)
 {
@@ -54,7 +54,7 @@ _gtk_css_media_feature_init (GtkCssDiscreteMediaFeature *media_feature,
 }
 
 void
-_gtk_css_media_feature_update (GtkCssDiscreteMediaFeature *media_feature,
+gtk_css_media_feature_update (GtkCssDiscreteMediaFeature *media_feature,
                                const char                 *feature_value)
 {
   g_assert (media_feature != NULL);
@@ -66,7 +66,7 @@ _gtk_css_media_feature_update (GtkCssDiscreteMediaFeature *media_feature,
 }
 
 void
-_gtk_css_media_feature_clear (GtkCssDiscreteMediaFeature *media_feature)
+gtk_css_media_feature_clear (GtkCssDiscreteMediaFeature *media_feature)
 {
   g_assert (media_feature != NULL);
 
