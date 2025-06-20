@@ -1743,34 +1743,33 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
     }
 }
 
-void
+gboolean
 gtk_css_provider_add_discrete_media_feature (GtkCssProvider  *provider,
                                              const char      *feature_name,
                                              const char      *feature_value)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
   guint i;
   GtkCssDiscreteMediaFeature *media_feature;
-
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
-  g_return_if_fail (feature_name != NULL);
-  g_return_if_fail (feature_value != NULL);
-
-  priv = gtk_css_provider_get_instance_private (provider);
 
   for (i = 0; i < priv->media_features->len; i++)
     {
       media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, i);
       if (strcmp (media_feature->name, feature_name) == 0)
         {
+          if (strcmp (media_feature->value, feature_value) == 0)
+            return FALSE;
+
           _gtk_css_media_feature_update (media_feature, feature_value);
-          return;
+          return TRUE;
         }
     }
 
   g_array_set_size (priv->media_features, priv->media_features->len + 1);
   media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, priv->media_features->len - 1);
   _gtk_css_media_feature_init (media_feature, feature_name, feature_value);
+
+  return TRUE;
 }
 
 static int

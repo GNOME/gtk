@@ -314,7 +314,7 @@ text_changed (GtkTextBuffer         *buffer,
   if (ce->priv->timeout != 0)
     g_source_remove (ce->priv->timeout);
 
-  ce->priv->timeout = g_timeout_add (100, update_timeout, ce); 
+  ce->priv->timeout = g_timeout_add (100, update_timeout, ce);
 
   g_list_free_full (ce->priv->errors, css_error_free);
   ce->priv->errors = NULL;
@@ -367,6 +367,7 @@ static void
 create_provider (GtkInspectorCssEditor *ce)
 {
   ce->priv->provider = gtk_css_provider_new ();
+
   g_signal_connect (ce->priv->provider, "parsing-error",
                     G_CALLBACK (show_parsing_error), ce);
 
