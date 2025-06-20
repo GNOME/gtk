@@ -558,7 +558,7 @@ static GstVideoFrame*
 gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
                                   GstVideoFrame  *frame)
 {
-  g_autoptr (GstBuffer) tmp_buffer = NULL;
+  GstBuffer *tmp_buffer = NULL;
   GstVideoFrame *tmp_frame;
 
   /* Buffer is contiguous, GTK can use it */
@@ -570,7 +570,7 @@ gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
   if (!self->pool)
     {
       GstStructure *config;
-      g_autoptr (GstCaps) caps;
+      GstCaps *caps;
       guint size;
 
       GST_DEBUG_OBJECT (self, "Creating buffer pool for copies");
@@ -586,10 +586,13 @@ gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
       if (!gst_buffer_pool_set_config (self->pool, config))
         {
           GST_ERROR_OBJECT (self, "Could not create buffer pool");
+          gst_caps_unref (caps);
           g_clear_object (&self->pool);
           video_frame_free (frame);
           return NULL;
         }
+
+      gst_caps_unref (caps);
     }
 
   if (!gst_buffer_pool_set_active (self->pool, TRUE))
@@ -611,6 +614,7 @@ gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
   if (!gst_buffer_copy_into (tmp_buffer, frame->buffer,
                              GST_BUFFER_COPY_METADATA, 0, -1))
     {
+      gst_buffer_unref (tmp_buffer);
       video_frame_free (frame);
       GST_ERROR_OBJECT (self, "Can't copy metadata");
       return NULL;
@@ -620,6 +624,7 @@ gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
   if (!gst_video_frame_map (tmp_frame, &self->v_info, tmp_buffer,
                             GST_MAP_READWRITE))
     {
+      gst_buffer_unref (tmp_buffer);
       video_frame_free (frame);
       g_free (tmp_frame);
       GST_ERROR_OBJECT (self, "Can't map new buffer");
@@ -628,6 +633,7 @@ gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
 
   if (!gst_video_frame_copy (tmp_frame, frame))
     {
+      gst_buffer_unref (tmp_buffer);
       video_frame_free (frame);
       video_frame_free (tmp_frame);
       GST_ERROR_OBJECT (self, "Can't copy frame");
@@ -635,6 +641,7 @@ gtk_gst_sink_maybe_replace_frame (GtkGstSink     *self,
     }
 
   GST_DEBUG_OBJECT (self, "Copied and replaced frame");
+  gst_buffer_unref (tmp_buffer);
   video_frame_free (frame);
   return tmp_frame;
 }
