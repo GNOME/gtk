@@ -798,12 +798,11 @@ parse_import (GtkCssScanner *scanner)
                                 load_error->message);
           g_error_free (load_error);
         }
-
-
-      gtk_css_provider_load_internal (scanner->provider,
-                                      scanner,
-                                      file,
-                                      bytes);
+      else
+        gtk_css_provider_load_internal (scanner->provider,
+                                        scanner,
+                                        file,
+                                        bytes);
     }
 
   g_clear_object (&file);
