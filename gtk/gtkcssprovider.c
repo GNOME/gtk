@@ -226,6 +226,9 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  gtk_css_provider_define_discrete_media_feature ("prefers-color-scheme", 2, (const char *[]) { "light", "dark" });
+  gtk_css_provider_define_discrete_media_feature ("prefers-contrast", 4, (const char *[]) { "no-preference", "less", "more", "custom" });
+
   if (g_getenv ("GTK_CSS_DEBUG"))
     gtk_css_provider_set_keep_css_sections ();
 
@@ -1677,19 +1680,33 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 {
   char *path;
   char *resource_path;
+  const char *prefers_color_scheme;
+  const char *prefers_contrast;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
   g_return_if_fail (name != NULL);
 
   gtk_css_provider_reset (provider);
 
+  if (variant != NULL && (g_strrstr(variant, "dark") != NULL))
+    prefers_color_scheme = GTK_CSS_PREFERS_COLOR_SCHEME_DARK;
+  else
+    prefers_color_scheme = GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT;
+
+  if (variant != NULL && (g_strrstr(variant, "hc") != NULL))
+    prefers_contrast = GTK_CSS_PREFERS_CONTRAST_MORE;
+  else
+    prefers_contrast = GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE;
+
+  gtk_css_provider_update_discrete_media_features (provider,
+                                                   2,
+                                                   (const char *[]) { GTK_CSS_PREFERS_COLOR_SCHEME, GTK_CSS_PREFERS_CONTRAST },
+                                                   (const char *[]) { prefers_color_scheme, prefers_contrast });
+
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
    */
-  if (variant)
-    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk-%s.css", name, variant);
-  else
-    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);
+  resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);
 
   if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
     {
@@ -1801,8 +1818,11 @@ gtk_css_provider_define_discrete_media_feature (const char      *feature_name,
   gsize i;
   const char **copy_feature_values;
 
+  g_return_if_fail (feature_name != NULL);
+  g_return_if_fail (feature_values != NULL);
+
   if (defined_media_features == NULL)
-    defined_media_features = g_array_sized_new (FALSE, FALSE, sizeof (_GtkCssDefinedMediaFeature), 8);
+    defined_media_features = g_array_sized_new (FALSE, FALSE, sizeof (_GtkCssDefinedMediaFeature), 4);
 
   // TODO: should check for an upper limit 16, or 32?
 
@@ -1865,6 +1885,8 @@ _is_valid_media_feature (const char *feature_name, const char *feature_value)
  *
  * Update CSS media features. Media features need to be defined with
  * [func@gtk_css_provider_define_discrete_media_feature].
+ *
+ * Updating media features will trigger a re-evaluation of the CSS.
  *
  * Returns: `TRUE` if features were updated.
  */
