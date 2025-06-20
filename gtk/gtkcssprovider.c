@@ -1752,34 +1752,33 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
     }
 }
 
-static void
+static gboolean
 gtk_css_provider_add_discrete_media_feature (GtkCssProvider  *provider,
                                              const char      *feature_name,
                                              const char      *feature_value)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
   guint i;
   GtkCssDiscreteMediaFeature *media_feature;
-
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
-  g_return_if_fail (feature_name != NULL);
-  g_return_if_fail (feature_value != NULL);
-
-  priv = gtk_css_provider_get_instance_private (provider);
 
   for (i = 0; i < priv->media_features->len; i++)
     {
       media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, i);
       if (strcmp (media_feature->name, feature_name) == 0)
         {
+          if (strcmp (media_feature->value, feature_value) == 0)
+            return FALSE;
+
           _gtk_css_media_feature_update (media_feature, feature_value);
-          return;
+          return TRUE;
         }
     }
 
   g_array_set_size (priv->media_features, priv->media_features->len + 1);
   media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, priv->media_features->len - 1);
   _gtk_css_media_feature_init (media_feature, feature_name, feature_value);
+
+  return TRUE;
 }
 
 /**
@@ -1864,9 +1863,10 @@ _is_valid_media_feature (const char *feature_name, const char *feature_value)
  * @feature_names: (array length=n_features): name of the feature
  * @feature_values: (array length=n_features): value of the feature
  *
- * TODO: documentation.
+ * Update CSS media features. Media features need to be defined with
+ * [func@gtk_css_provider_define_discrete_media_feature].
  *
- * Returns: `TRUE` if all features were correctly set.
+ * Returns: `TRUE` if features were updated.
  */
 gboolean
 gtk_css_provider_update_discrete_media_features (GtkCssProvider  *provider,
@@ -1876,6 +1876,7 @@ gtk_css_provider_update_discrete_media_features (GtkCssProvider  *provider,
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
   gsize i;
+  gboolean updated = FALSE;
 
   g_return_val_if_fail (defined_media_features != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (provider), FALSE);
@@ -1887,18 +1888,16 @@ gtk_css_provider_update_discrete_media_features (GtkCssProvider  *provider,
         return FALSE;
 
   for (i = 0; i < n_features; i++)
-    {
-      gtk_css_provider_add_discrete_media_feature (provider, feature_names[i], feature_values[i]);
-    }
+    updated |= gtk_css_provider_add_discrete_media_feature (provider, feature_names[i], feature_values[i]);
 
-  if (priv->source != NULL)
+  if (updated && priv->source != NULL)
     {
       GBytes *source = g_bytes_ref (priv->source);
       gtk_css_provider_load_from_bytes (provider, source);
       g_bytes_unref (source);
     }
 
-  return TRUE;
+  return updated;
 }
 
 static int
