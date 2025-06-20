@@ -1668,19 +1668,31 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 {
   char *path;
   char *resource_path;
+  const char *prefers_color_scheme;
+  const char *prefers_contrast;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
   g_return_if_fail (name != NULL);
 
   gtk_css_provider_reset (provider);
 
+  if (variant != NULL && (strstr(variant, "dark") != NULL))
+    prefers_color_scheme = "dark";
+  else
+    prefers_color_scheme = "light";
+
+  if (variant != NULL && (strstr(variant, "hc") != NULL))
+    prefers_contrast = "more";
+  else
+    prefers_contrast = "no-preference";
+
+  gtk_css_provider_add_discrete_media_feature (provider, "prefers-color-scheme", prefers_color_scheme);
+  gtk_css_provider_add_discrete_media_feature (provider, "prefers-contrast", prefers_contrast);
+
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
    */
-  if (variant)
-    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk-%s.css", name, variant);
-  else
-    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);
+  resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);
 
   if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
     {
