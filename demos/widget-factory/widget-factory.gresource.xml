@@ -81,6 +81,7 @@
     <file>icons/scalable/actions/format-justify-left-symbolic.svg</file>
     <file>icons/scalable/actions/format-justify-right-symbolic.svg</file>
     <file>icons/scalable/actions/insert-link-symbolic.svg</file>
+    <file>icons/scalable/actions/send-to-symbolic.svg</file>
     <file>icons/scalable/actions/star-new-symbolic.svg</file>
     <file>icons/scalable/actions/view-continuous-symbolic.svg</file>
     <file>icons/scalable/actions/view-dual-symbolic.svg</file>
@@ -100,6 +101,7 @@
     <file>icons/scalable/devices/network-wireless-symbolic.svg</file>
     <file>icons/scalable/devices/phone-symbolic.svg</file>
 
+    <file>icons/scalable/status/appointment-soon-symbolic.svg</file>
     <file>icons/scalable/status/weather-clear-night-symbolic.svg</file>
     <file>icons/scalable/status/weather-few-clouds-night-symbolic.svg</file>
     <file>icons/scalable/status/weather-fog-symbolic.svg</file>
