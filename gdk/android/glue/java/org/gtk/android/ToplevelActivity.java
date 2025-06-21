@@ -241,8 +241,15 @@ public class ToplevelActivity extends Activity {
 			private boolean keyEventProxy(KeyEvent event) {
 				if (event == null)
 					return false;
-				// interestingly, calling MotionEvent.obtain translates it into the current View
-				// space. No idea where it gets that information from
+				/* For some *mystical* reason, once we have an IME (InputConnection)
+				 * attached, we receive back presses via onKeyDown/-Up, which we did
+				 * not receive before. As we always return true, this results in
+				 * onBackPressed() not being called, preventing us from closing the
+				 * activity. Early exit in such cases, to ensure to have this handled
+				 * via the onBackPressed callback instead.
+				 */
+				if (event.getKeyCode() == KeyEvent.KEYCODE_BACK)
+					return false;
 				GlibContext.runOnMain(() -> notifyKeyEvent(event));
 				return true;
 			}
