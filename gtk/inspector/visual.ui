@@ -74,6 +74,72 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="colorscheme_label">
+                                <property name="label" translatable="yes">Color Scheme</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropDown" id="color_scheme_combo">
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <property name="hexpand">1</property>
+                                <property name="model">
+                                  <object class="GtkStringList">
+                                    <items>
+                                      <item translatable="yes">Light</item>
+                                      <item translatable="yes">Dark</item>
+                                    </items>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="contrast_label">
+                                <property name="label" translatable="yes">Contrast</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropDown" id="contrast_combo">
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <property name="hexpand">1</property>
+                                <property name="model">
+                                  <object class="GtkStringList">
+                                    <items>
+                                      <item translatable="yes">No-preference</item>
+                                      <item translatable="yes">Less</item>
+                                      <item translatable="yes">More</item>
+                                      <item translatable="yes">Custom</item>
+                                    </items>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
                         <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
