@@ -300,6 +300,8 @@ activate_about (GSimpleAction *action,
   char *os_version;
   GString *s;
   GtkWidget *dialog;
+  GFile *logo_file;
+  GtkIconPaintable *logo;
 
   s = g_string_new ("");
 
@@ -332,6 +334,8 @@ activate_about (GSimpleAction *action,
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
+  logo_file = g_file_new_for_uri ("resource:///org/gtk/WidgetFactory4/icons/scalable/apps/org.gtk.WidgetFactory4.svg");
+  logo = gtk_icon_paintable_new_for_file (logo_file, 64, 1);
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "transient-for", gtk_application_get_active_window (app),
                          "modal", TRUE,
@@ -344,10 +348,12 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK themes and widgets",
                          "authors", (const char *[]) { "Andrea Cimitan", "Cosimo Cecchi", NULL },
-                         "logo-icon-name", "org.gtk.WidgetFactory4",
+                         "logo", logo,
                          "title", "About GTK Widget Factory",
                          "system-information", s->str,
                          NULL);
+  g_object_unref (logo);
+  g_object_unref (logo_file);
 
   gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
                                        _("Maintained by"), (const char *[]) { "The GTK Team", NULL });
