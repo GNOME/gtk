@@ -7,6 +7,7 @@
         </style>
         <child>
           <object class="GtkToggleButton" id="show_button">
+            <style><class name="image-button"/></style>
             <property name="tooltip-text" translatable="yes">Show data</property>
             <property name="child">
               <object class="GtkImage">
