@@ -19,6 +19,7 @@
 
 #include <gtk/gtksettings.h>
 #include "gtkstylecascadeprivate.h"
+#include "gtkcssprovider.h"
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,7 @@ int      gtk_settings_get_dnd_drag_threshold (GtkSettings *settings);
 const char *gtk_settings_get_font_family    (GtkSettings *settings);
 int          gtk_settings_get_font_size      (GtkSettings *settings);
 gboolean     gtk_settings_get_font_size_is_absolute (GtkSettings *settings);
+GtkCssProvider *gtk_settings_get_theme_provider (GtkSettings *settings);
 
 G_END_DECLS
 
