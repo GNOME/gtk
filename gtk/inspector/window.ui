@@ -23,6 +23,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="select_object">
+                        <style><class name="image-button"/></style>
                         <property name="focus-on-click">0</property>
                         <property name="tooltip-text" translatable="yes">Select an Object</property>
                         <property name="halign">center</property>
@@ -46,6 +47,7 @@
                             <property name="name">list</property>
                             <property name="child">
                               <object class="GtkButton" id="object_details_button">
+                                <style><class name="image-button"/></style>
                                 <property name="focus-on-click">0</property>
                                 <property name="tooltip-text" translatable="yes">Show Details</property>
                                 <property name="halign">center</property>
@@ -69,6 +71,7 @@
                             <property name="name">details</property>
                             <property name="child">
                               <object class="GtkButton">
+                                <style><class name="image-button"/></style>
                                 <property name="focus-on-click">0</property>
                                 <property name="tooltip-text" translatable="yes">Show all Objects</property>
                                 <property name="halign">center</property>
@@ -127,6 +130,7 @@
                                 <property name="name">list</property>
                                 <property name="child">
                                   <object class="GtkButton">
+                                    <style><class name="image-button"/></style>
                                     <property name="focus-on-click">0</property>
                                     <property name="tooltip-text" translatable="yes">Show Details</property>
                                     <property name="halign">center</property>
@@ -145,6 +149,7 @@
                                 <property name="name">details</property>
                                 <property name="child">
                                   <object class="GtkButton">
+                                    <style><class name="image-button"/></style>
                                     <property name="focus-on-click">0</property>
                                     <property name="tooltip-text" translatable="yes">Show all Resources</property>
                                     <property name="halign">center</property>
@@ -175,6 +180,7 @@
                         <property name="name">statistics</property>
                         <property name="child">
                           <object class="GtkToggleButton" id="record_statistics_button">
+                            <style><class name="image-button"/></style>
                             <property name="focus-on-click">0</property>
                             <property name="tooltip-text" translatable="yes">Collect Statistics</property>
                             <property name="halign">start</property>
@@ -267,6 +273,7 @@
                                     </style>
                                     <child>
                                       <object class="GtkToggleButton" id="sidebar_toggle">
+                                        <style><class name="image-button"/></style>
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
@@ -297,6 +304,7 @@
                                             <property name="name">actions</property>
                                             <property name="child">
                                               <object class="GtkButton" id="refresh_actions_button">
+                                                <style><class name="image-button"/></style>
                                                 <property name="child">
                                                   <object class="GtkImage">
                                                     <property name="paintable">
@@ -379,6 +387,7 @@
                                     </style>
                                     <child>
                                       <object class="GtkButton" id="go_up_button">
+                                        <style><class name="image-button"/></style>
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
@@ -394,6 +403,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="go_down_button">
+                                        <style><class name="image-button"/></style>
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
@@ -409,6 +419,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="go_previous_button">
+                                        <style><class name="image-button"/></style>
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
@@ -430,6 +441,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="go_next_button">
+                                        <style><class name="image-button"/></style>
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
