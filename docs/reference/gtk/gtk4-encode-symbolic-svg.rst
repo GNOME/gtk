@@ -30,6 +30,9 @@ desired dimensions for the generated PNG file.
 To distinguish them from ordinary PNGs, the generated files have the extension
 ``.symbolic.png``.
 
+Note that starting with 4.20, GTK can handle symbolic svgs without this
+preparation, and this tool is not recommended anymore.
+
 OPTIONS
 -------
 
