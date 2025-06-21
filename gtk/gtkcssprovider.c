@@ -1836,6 +1836,24 @@ gtk_css_provider_update_discrete_media_features (GtkCssProvider  *provider,
   return updated;
 }
 
+const char *
+gtk_css_provider_get_discrete_media_feature (GtkCssProvider *provider,
+                                             const char     *feature_name)
+{
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+
+  for (gsize i = 0; i < priv->media_features->len; i++)
+    {
+      GtkCssDiscreteMediaFeature *media_feature;
+
+      media_feature = &g_array_index (priv->media_features, GtkCssDiscreteMediaFeature, i);
+      if (strcmp (media_feature->name, feature_name) == 0)
+        return media_feature->value;
+    }
+
+  return NULL;
+}
+
 static int
 compare_properties (gconstpointer a, gconstpointer b, gpointer style)
 {
