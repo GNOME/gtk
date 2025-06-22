@@ -1353,7 +1353,6 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  const char      *data,
                                  gssize           length)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GBytes *bytes;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
