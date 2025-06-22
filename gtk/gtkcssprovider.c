@@ -1806,11 +1806,7 @@ gtk_css_provider_add_discrete_media_feature (GtkCssProvider  *provider,
  * @n_feature_values: number of features in @feature_values
  * @feature_values: (array length=n_feature_values): values of the feature (e.g. `dark`, `light`)
  *
- * Define a new discrete media feature.asm
- *
- * `feature_name` and `feature_values` will be owned by this function a
- *
- * The first feature value is considered the default.
+ * Define a new discrete media feature.
  */
 void
 gtk_css_provider_define_discrete_media_feature (const char      *feature_name,
