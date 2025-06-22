@@ -1365,7 +1365,6 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  const char      *data,
                                  gssize           length)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GBytes *bytes;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
@@ -1691,18 +1690,18 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   gtk_css_provider_reset (provider);
 
   if (variant != NULL && (strstr (variant, "dark") != NULL))
-    prefers_color_scheme = GTK_CSS_PREFERS_COLOR_SCHEME_DARK;
+    prefers_color_scheme = "dark";
   else
-    prefers_color_scheme = GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT;
+    prefers_color_scheme = "light";
 
   if (variant != NULL && (strstr (variant, "hc") != NULL))
-    prefers_contrast = GTK_CSS_PREFERS_CONTRAST_MORE;
+    prefers_contrast = "more";
   else
-    prefers_contrast = GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE;
+    prefers_contrast = "no-preference";
 
   gtk_css_provider_update_discrete_media_features (provider,
                                                    2,
-                                                   (const char *[]) { GTK_CSS_PREFERS_COLOR_SCHEME, GTK_CSS_PREFERS_CONTRAST },
+                                                   (const char *[]) { "prefers-color-scheme", "prefers-contrast" },
                                                    (const char *[]) { prefers_color_scheme, prefers_contrast });
 
   /* try loading the resource for the theme. This is mostly meant for built-in

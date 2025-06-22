@@ -132,8 +132,8 @@ parse_css_file (GFile *file, gboolean generate)
   provider = gtk_css_provider_new ();
   gtk_css_provider_update_discrete_media_features (provider,
                                                    1,
-                                                   (const char*[]) { GTK_CSS_PREFERS_COLOR_SCHEME, },
-                                                   (const char*[]) { GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT, });
+                                                   (const char*[]) { "prefers-color-scheme", },
+                                                   (const char*[]) { "light", });
 
   g_signal_connect (provider,
                     "parsing-error",
