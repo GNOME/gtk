@@ -117,9 +117,13 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   GdkColor text_color;
   GtkCssValue *text_shadow;
+  gboolean has_color_glyphs;
+  gboolean has_alpha;
 
   if (!glyph_item->item->analysis.font)
     return;
+
+  has_color_glyphs = gtk_pango_glyph_item_has_color_glyphs (glyph_item);
 
   if (crenderer->shadow_style)
     text_shadow = crenderer->shadow_style->used->text_shadow;
@@ -142,7 +146,7 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
       if (radius != 0)
         gtk_snapshot_push_blur (crenderer->snapshot, radius);
 
-      if (gtk_pango_glyph_item_has_color_glyphs (glyph_item))
+      if (has_color_glyphs)
         {
           GdkColor black = GDK_COLOR_SRGB (0, 0, 0, 1);
           graphene_rect_t bounds;
@@ -181,12 +185,23 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
 
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &text_color);
 
+  has_alpha = !gdk_color_is_opaque (&text_color);
+
+  if (has_color_glyphs && has_alpha)
+    {
+      gtk_snapshot_push_opacity (crenderer->snapshot, text_color.alpha);
+      text_color.alpha = 1;
+    }
+
   gtk_snapshot_add_text (crenderer->snapshot,
                          glyph_item->item->analysis.font,
                          glyph_item->glyphs,
                          &text_color,
                          (float) x / PANGO_SCALE,
                          (float) y / PANGO_SCALE);
+
+  if (has_color_glyphs && has_alpha)
+    gtk_snapshot_pop (crenderer->snapshot);
 
   gdk_color_finish (&text_color);
 }
