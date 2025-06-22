@@ -1,0 +1,14 @@
+@keyframes aaaa {
+  from {
+    outline-width: 1px;
+  }
+  to {
+    outline-width: 2px;
+  }
+  10%, 50% {
+    outline-width: 3px;
+  }
+  20% {
+    outline-width: 4px;
+  }
+}
