@@ -26,7 +26,17 @@
 #include "gtktypebuiltins.h"
 #include "gtksettings.h"
 #include "gdkcairoprivate.h"
+#include "gdkcolorprivate.h"
 
+
+static void
+get_text_bounds (PangoLayout     *layout,
+                 graphene_rect_t *bounds)
+{
+  PangoRectangle ink_rect;
+  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  graphene_rect_init (bounds, ink_rect.x, ink_rect.y, ink_rect.width, ink_rect.height);
+}
 
 void
 gtk_css_style_snapshot_layout (GtkCssBoxes *boxes,
@@ -36,8 +46,7 @@ gtk_css_style_snapshot_layout (GtkCssBoxes *boxes,
                                PangoLayout *layout)
 {
   GtkCssStyle *style;
-  GdkColor color;
-  gboolean has_shadow;
+  GdkColor text_color;
 
   gtk_snapshot_push_debug (snapshot, "Layout");
 
@@ -48,19 +57,54 @@ gtk_css_style_snapshot_layout (GtkCssBoxes *boxes,
     }
 
   style = boxes->style;
-  gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->color), &color);
+  gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->color), &text_color);
 
-  has_shadow = gtk_css_shadow_value_push_snapshot (style->used->text_shadow, snapshot);
+  if (!gtk_css_shadow_value_is_clear (style->used->text_shadow))
+    {
+      graphene_point_t offset;
+      GdkColor color;
+      double radius;
 
-  gtk_snapshot_add_layout (snapshot, layout, &color);
+      gtk_css_shadow_value_get_offset (style->used->text_shadow, 0, &offset);
+      gtk_css_shadow_value_get_color (style->used->text_shadow, 0, &color);
+      radius = gtk_css_shadow_value_get_radius (style->used->text_shadow, 0);
 
-  if (has_shadow)
-    gtk_snapshot_pop (snapshot);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &offset);
+
+      if (radius != 0)
+        gtk_snapshot_push_blur (snapshot, radius);
+
+      if (gtk_pango_layout_has_color_glyphs (layout))
+        {
+          GdkColor black = GDK_COLOR_SRGB (0, 0, 0, 1);
+          graphene_rect_t bounds;
+
+          get_text_bounds (layout, &bounds);
+          gtk_snapshot_push_mask (snapshot, GSK_MASK_MODE_ALPHA);
+          gtk_snapshot_add_layout (snapshot, layout, &black);
+          gtk_snapshot_pop (snapshot);
+          gtk_snapshot_add_color (snapshot, &color, &bounds);
+          gtk_snapshot_pop (snapshot);
+          gdk_color_finish (&black);
+        }
+      else
+        {
+          gtk_snapshot_add_layout (snapshot, layout, &color);
+        }
+
+      if (radius != 0)
+        gtk_snapshot_pop (snapshot);
+
+      gtk_snapshot_restore (snapshot);
+    }
+
+  gtk_snapshot_add_layout (snapshot, layout, &text_color);
+
+  gdk_color_finish (&text_color);
 
   if (x != 0 || y != 0)
     gtk_snapshot_restore (snapshot);
-
-  gdk_color_finish (&color);
 
   gtk_snapshot_pop (snapshot);
 }
