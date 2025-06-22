@@ -29,7 +29,6 @@
                         </child>
                         <child>
                           <object class="GtkButton">
-                            <style><class name="image-button"/></style>
                             <property name="child">
                               <object class="GtkImage">
                                 <property name="paintable">
@@ -44,7 +43,6 @@
                         </child>
                         <child>
                           <object class="GtkButton">
-                            <style><class name="image-button"/></style>
                             <property name="child">
                               <object class="GtkImage">
                                 <property name="paintable">
