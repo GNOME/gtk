@@ -793,3 +793,34 @@ gtk_css_shadow_value_pop_snapshot (const GtkCssValue *value,
   if (!gtk_css_shadow_value_is_clear (value))
     gtk_snapshot_pop (snapshot);
 }
+
+void
+gtk_css_shadow_value_get_offset (const GtkCssValue *value,
+                                 guint              n,
+                                 graphene_point_t  *offset)
+{
+  const ShadowValue *shadow = &value->shadows[n];
+
+  graphene_point_init (offset,
+                       gtk_css_number_value_get (shadow->hoffset, 0),
+                       gtk_css_number_value_get (shadow->voffset, 0));
+}
+
+void
+gtk_css_shadow_value_get_color (const GtkCssValue *value,
+                                guint              n,
+                                GdkColor          *color)
+{
+  const ShadowValue *shadow = &value->shadows[n];
+
+  gtk_css_color_to_color (gtk_css_color_value_get_color (shadow->color), color);
+}
+
+double
+gtk_css_shadow_value_get_radius (const GtkCssValue *value,
+                                 guint              n)
+{
+  const ShadowValue *shadow = &value->shadows[n];
+
+  return gtk_css_number_value_get (shadow->radius, 0);
+}

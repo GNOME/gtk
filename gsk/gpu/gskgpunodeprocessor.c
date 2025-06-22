@@ -3135,20 +3135,47 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   GdkColor color2;
   GskGpuShaderClip node_clip;
 
-  if (self->opacity < 1.0 &&
-      gsk_text_node_has_color_glyphs (node))
-    {
-      gsk_gpu_node_processor_add_without_opacity (self, node);
-      return;
-    }
-
-  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
-
+  color = gsk_text_node_get_gdk_color (node);
   glyphs = gsk_text_node_get_glyphs (node, &num_glyphs);
   font = gsk_text_node_get_font (node);
   offset = *gsk_text_node_get_offset (node);
   hint_style = gsk_text_node_get_font_hint_style (node);
-  color = gsk_text_node_get_gdk_color (node);
+
+  if ((self->opacity < 1.0 || !gdk_color_is_opaque (color)) &&
+      gsk_text_node_has_color_glyphs (node))
+    {
+      double old_opacity = self->opacity;
+      GskRenderNode *node2;
+
+      /* Make alpha apply to color glyphs too */
+      self->opacity *= color->alpha;
+
+      if (!gdk_color_is_opaque (color))
+        {
+          PangoGlyphString gs;
+
+          /* Construct a temporary node with alpha == 1
+           * to prevent recursion
+           */
+          gdk_color_init_copy (&color2, color);
+          color2.alpha = 1;
+          gs.num_glyphs = num_glyphs;
+          gs.glyphs = (PangoGlyphInfo *) glyphs;
+          node2 = gsk_text_node_new2 (font, &gs, &color2, &offset);
+          gdk_color_finish (&color2);
+        }
+      else
+        node2 = gsk_render_node_ref (node);
+
+      gsk_gpu_node_processor_add_without_opacity (self, node2);
+
+      gsk_render_node_unref (node2);
+
+      self->opacity = old_opacity;
+      return;
+    }
+
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
 
   alt = gsk_gpu_color_states_find (self->ccs, color);
   color_states = gsk_gpu_color_states_create (self->ccs, TRUE, alt, FALSE);
