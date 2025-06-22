@@ -56,7 +56,7 @@ typedef enum
 /**
  * GskPathForeachFunc:
  * @op: The operation
- * @pts: The points of the operation
+ * @pts: (array length=n_pts): The points of the operation
  * @n_pts: The number of points
  * @weight: The weight for conic curves, or unused if not a conic curve
  * @user_data: The user data provided with the function
