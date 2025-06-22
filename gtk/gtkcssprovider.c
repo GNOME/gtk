@@ -1690,12 +1690,12 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 
   gtk_css_provider_reset (provider);
 
-  if (variant != NULL && (g_strrstr(variant, "dark") != NULL))
+  if (variant != NULL && (strstr (variant, "dark") != NULL))
     prefers_color_scheme = GTK_CSS_PREFERS_COLOR_SCHEME_DARK;
   else
     prefers_color_scheme = GTK_CSS_PREFERS_COLOR_SCHEME_LIGHT;
 
-  if (variant != NULL && (g_strrstr(variant, "hc") != NULL))
+  if (variant != NULL && (strstr (variant, "hc") != NULL))
     prefers_contrast = GTK_CSS_PREFERS_CONTRAST_MORE;
   else
     prefers_contrast = GTK_CSS_PREFERS_CONTRAST_NO_PREFERENCE;
