@@ -5454,7 +5454,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * [method@Gtk.Window.present] or any equivalent function generating
  * a window map event.
  *
- * This function is only useful on X11, not with other GTK targets.
+ * This function is only useful on Wayland or X11, not with other GDK
+ * backends.
  */
 void
 gtk_window_set_startup_id (GtkWindow   *window,
