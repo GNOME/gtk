@@ -82,4 +82,7 @@ char *gtk_pango_get_string_at   (PangoLayout                  *layout,
                                  unsigned int                 *start_offset,
                                  unsigned int                 *end_offset);
 
+gboolean gtk_pango_glyph_item_has_color_glyphs (PangoGlyphItem *item);
+gboolean gtk_pango_layout_has_color_glyphs     (PangoLayout    *layout);
+
 G_END_DECLS

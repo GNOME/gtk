@@ -1251,3 +1251,43 @@ gtk_pango_get_string_at (PangoLayout                  *layout,
 
   return g_utf8_substring (text, start, end);
 }
+
+gboolean
+gtk_pango_glyph_item_has_color_glyphs (PangoGlyphItem *run)
+{
+  for (int i = 0; i < run->glyphs->num_glyphs; i++)
+    {
+      if (run->glyphs->glyphs[i].attr.is_color)
+        return TRUE;
+   }
+
+  return FALSE;
+}
+
+gboolean
+gtk_pango_layout_has_color_glyphs (PangoLayout *layout)
+{
+  gboolean ret = FALSE;
+  PangoLayoutIter *iter;
+
+  iter = pango_layout_get_iter (layout);
+
+  while (pango_layout_iter_next_run (iter) && !ret)
+    {
+      PangoLayoutRun *run = pango_layout_iter_get_run_readonly (iter);
+
+      if (!run)
+        continue;
+
+      if (gtk_pango_glyph_item_has_color_glyphs (run))
+        {
+          ret = TRUE;
+          break;
+        }
+    }
+
+  pango_layout_iter_free (iter);
+
+  return ret;
+}
+
