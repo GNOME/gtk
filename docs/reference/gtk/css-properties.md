@@ -299,7 +299,7 @@ done with
 
 ## Media Queries
 
-Since GTL 4.20 [CSS Media Queries](https://www.w3.org/TR/mediaqueries-5/) are supported.
+Since GTK 4.20 [CSS Media Queries](https://www.w3.org/TR/mediaqueries-5/) are supported.
 Media queries can include `not`, `and`, and `or` expressions.
 
 GTK supports the following media features:
