@@ -9,7 +9,6 @@
             <property name="valign">start</property>
             <property name="margin-top">10</property>
             <property name="margin-start">10</property>
-            <style><class name="image-button"/></style>
             <property name="child">
               <object class="GtkImage">
                 <property name="paintable">

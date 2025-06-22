@@ -35,7 +35,6 @@
         <child>
           <object class="GtkToggleButton" id="disable_button">
             <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
-            <style><class name="image-button"/></style>
             <property name="child">
               <object class="GtkImage">
                 <property name="paintable">
@@ -51,7 +50,6 @@
         <child>
           <object class="GtkButton" id="save_button">
             <property name="tooltip-text" translatable="yes">Save the current CSS</property>
-            <style><class name="image-button"/></style>
             <property name="child">
               <object class="GtkImage">
                 <property name="paintable">
@@ -67,7 +65,6 @@
         <child>
           <object class="GtkToggleButton" id="deprections_button">
             <property name="tooltip-text" translatable="yes">Show deprecations</property>
-            <style><class name="image-button"/></style>
             <property name="child">
               <object class="GtkImage">
                 <property name="paintable">

@@ -512,7 +512,6 @@ Manual</property>
                                 </child>
                                 <child>
                                   <object class="GtkMenuButton">
-                                    <style><class name="image-button"/></style>
                                     <property name="child">
                                       <object class="GtkImage">
                                         <property name="paintable">

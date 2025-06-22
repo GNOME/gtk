@@ -418,23 +418,35 @@ key_controller_key_released_cb (GtkEventControllerKey *controller,
     gtk_button_finish_activate (button, TRUE);
 }
 
+static inline void
+add_or_remove_class (GtkWidget  *widget,
+                     gboolean    add,
+                     const char *class)
+{
+  if (add)
+    gtk_widget_add_css_class (widget, class);
+  else
+    gtk_widget_remove_css_class (widget, class);
+}
+
 static void
-gtk_button_set_child_type (GtkButton *button, guint child_type)
+update_style_classes_from_child_type (GtkButton *button,
+                                      guint      child_type)
+{
+  add_or_remove_class (GTK_WIDGET (button), child_type == LABEL_CHILD, "text-button");
+  add_or_remove_class (GTK_WIDGET (button), child_type == ICON_CHILD, "image-button");
+}
+
+static void
+gtk_button_set_child_type (GtkButton *button,
+                           guint      child_type)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   if (priv->child_type == child_type)
     return;
 
-  if (child_type == LABEL_CHILD)
-    gtk_widget_add_css_class (GTK_WIDGET (button), "text-button");
-  else
-    gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
-
-  if (child_type == ICON_CHILD)
-    gtk_widget_add_css_class (GTK_WIDGET (button), "image-button");
-  else
-    gtk_widget_remove_css_class (GTK_WIDGET (button), "image-button");
+  update_style_classes_from_child_type (button, child_type);
 
   if (child_type != LABEL_CHILD)
     g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
@@ -1092,6 +1104,12 @@ gtk_button_set_child (GtkButton *button,
     gtk_widget_set_parent (priv->child, GTK_WIDGET (button));
 
   gtk_button_set_child_type (button, WIDGET_CHILD);
+
+  if (GTK_IS_IMAGE (child))
+    update_style_classes_from_child_type (button, ICON_CHILD);
+  else if (GTK_IS_LABEL (child))
+    update_style_classes_from_child_type (button, LABEL_CHILD);
+
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_CHILD]);
 }
 
