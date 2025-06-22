@@ -415,6 +415,29 @@ gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
   return TRUE;
 }
 
+static guint
+gtk_css_keyframes_copy_keyframe (GtkCssKeyframes *keyframes,
+                                 guint            k,
+                                 double           progress)
+{
+  guint l = gtk_css_keyframes_add_keyframe (keyframes, progress);
+
+  if (l <= k)
+    k++;
+
+  if (keyframes->variables && keyframes->variables[k])
+    keyframes->variables[l] = gtk_css_variable_set_copy (keyframes->variables[k]);
+
+  for (guint p = 0; p < keyframes->n_properties; p++)
+    {
+      GtkCssValue *value = KEYFRAMES_VALUE (keyframes, k, p);
+      if (value)
+        KEYFRAMES_VALUE (keyframes, l, p) = gtk_css_value_ref (value);
+    }
+
+  return l;
+}
+
 static gboolean
 gtk_css_keyframes_parse_block (GtkCssKeyframes *keyframes,
                                guint            k,
@@ -449,42 +472,64 @@ _gtk_css_keyframes_parse (GtkCssParser *parser)
   GtkCssKeyframes *keyframes;
   double progress;
   guint k;
+  GArray *selectors;
 
   g_return_val_if_fail (parser != NULL, NULL);
 
   keyframes = gtk_css_keyframes_new ();
 
+  selectors = g_array_new (FALSE, FALSE, sizeof (double));
+
   while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      if (gtk_css_parser_try_ident (parser, "from"))
-        progress = 0;
-      else if (gtk_css_parser_try_ident (parser, "to"))
-        progress = 1;
-      else if (gtk_css_parser_consume_percentage (parser, &progress))
+      g_array_set_size (selectors, 0);
+
+      while (TRUE)
         {
-          if (progress < 0 || progress > 100)
+          if (gtk_css_parser_try_ident (parser, "from"))
+            progress = 0;
+          else if (gtk_css_parser_try_ident (parser, "to"))
+            progress = 1;
+          else if (gtk_css_parser_consume_percentage (parser, &progress))
             {
-              /* XXX: should we skip over the block here? */
-              gtk_css_parser_error_value (parser, "percentages must be between 0%% and 100%%");
-              _gtk_css_keyframes_unref (keyframes);
-              return NULL;
+              if (progress < 0 || progress > 100)
+                {
+                  /* XXX: should we skip over the block here? */
+                  gtk_css_parser_error_value (parser, "percentages must be between 0%% and 100%%");
+                  g_clear_pointer (&keyframes, _gtk_css_keyframes_unref);
+                  goto done;
+                }
+              progress /= 100;
             }
-          progress /= 100;
-        }
-      else
-        {
-          _gtk_css_keyframes_unref (keyframes);
-          return NULL;
+          else
+            {
+              gtk_css_parser_error_value (parser, "failed to parse keyframe selector");
+              g_clear_pointer (&keyframes, _gtk_css_keyframes_unref);
+              goto done;
+            }
+
+          g_array_append_val (selectors, progress);
+
+          if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+            break;
+
+          gtk_css_parser_consume_token (parser);
         }
 
-      k = gtk_css_keyframes_add_keyframe (keyframes, progress);
+      k = gtk_css_keyframes_add_keyframe (keyframes, g_array_index (selectors, double, 0));
 
       if (!gtk_css_keyframes_parse_block (keyframes, k, parser))
         {
-          _gtk_css_keyframes_unref (keyframes);
-          return NULL;
+          g_clear_pointer (&keyframes, _gtk_css_keyframes_unref);
+          goto done;
         }
+
+      for (guint i = 1; i < selectors->len; i++)
+        k = gtk_css_keyframes_copy_keyframe (keyframes, k, g_array_index (selectors, double, i));
     }
+
+done:
+  g_array_unref (selectors);
 
   return keyframes;
 }
