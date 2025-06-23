@@ -463,20 +463,20 @@ gtk_text_layout_set_cursor_direction (GtkTextLayout   *layout,
 }
 
 /**
- * gtk_text_layout_set_keyboard_direction:
- * @keyboard_dir: the current direction of the keyboard.
+ * gtk_text_layout_set_default_direction:
+ * @default_dir: the defaule direction.
  *
- * Sets the keyboard direction; this is used as for the bidirectional
+ * Sets the default direction; this is used as for the bidirectional
  * base direction for the line with the cursor if the line contains
  * only neutral characters.
  */
 void
-gtk_text_layout_set_keyboard_direction (GtkTextLayout   *layout,
-					GtkTextDirection keyboard_dir)
+gtk_text_layout_set_default_direction (GtkTextLayout   *layout,
+				       GtkTextDirection default_dir)
 {
-  if (keyboard_dir != layout->keyboard_direction)
+  if (default_dir != layout->default_direction)
     {
-      layout->keyboard_direction = keyboard_dir;
+      layout->default_direction = default_dir;
       gtk_text_layout_invalidate_cursor_line (layout, TRUE);
     }
 }
@@ -2260,7 +2260,7 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
   if (line == priv->cursor_line &&
       line->dir_strong == PANGO_DIRECTION_NEUTRAL)
     {
-      base_dir = (layout->keyboard_direction == GTK_TEXT_DIR_LTR) ?
+      base_dir = (layout->default_direction == GTK_TEXT_DIR_LTR) ?
          PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
     }
 

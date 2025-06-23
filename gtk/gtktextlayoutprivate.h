@@ -132,10 +132,10 @@ struct _GtkTextLayout
    */
   guint cursor_direction : 2;
 
-  /* The keyboard direction is used to default the alignment when
+  /* The default direction is used for alignment when
      there are no strong characters.
   */
-  guint keyboard_direction : 2;
+  guint default_direction : 2;
 
   guint overwrite_mode : 1;
 
@@ -227,8 +227,8 @@ void               gtk_text_layout_set_cursor_direction  (GtkTextLayout     *lay
                                                           GtkTextDirection   direction);
 void		   gtk_text_layout_set_overwrite_mode	 (GtkTextLayout     *layout,
 							  gboolean           overwrite);
-void               gtk_text_layout_set_keyboard_direction (GtkTextLayout     *layout,
-							   GtkTextDirection keyboard_dir);
+void               gtk_text_layout_set_default_direction (GtkTextLayout     *layout,
+							   GtkTextDirection default_dir);
 void               gtk_text_layout_default_style_changed (GtkTextLayout     *layout);
 
 void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,

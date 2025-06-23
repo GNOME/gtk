@@ -8208,7 +8208,8 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
     new_cursor_dir = new_keyboard_dir;
 
   gtk_text_layout_set_cursor_direction (priv->layout, new_cursor_dir);
-  gtk_text_layout_set_keyboard_direction (priv->layout, new_keyboard_dir);
+  gtk_text_layout_set_default_direction(priv->layout,
+    gtk_widget_get_direction (GTK_WIDGET (text_view)));
 }
 
 static void
