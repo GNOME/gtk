@@ -10,7 +10,6 @@ profile = sys.argv[2]
 sys.stdout.write("/* This file is auto-generated. Do not edit. */\n")
 sys.stdout.write("#pragma once\n")
 sys.stdout.write("\n")
-sys.stdout.write(f"#define PROFILE \"{profile}\"\n")
 
 short_sha = os.environ.get('CI_COMMIT_SHORT_SHA')
 if short_sha is None:

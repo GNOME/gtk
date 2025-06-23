@@ -186,6 +186,15 @@ gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
 gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
 gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
 
+profile = get_option('profile')
+if profile == 'auto'
+  if gtk_minor_version.is_even()
+    profile = 'default'
+  else
+    profile = 'devel'
+  endif
+endif
+
 cdata = configuration_data()
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 cdata.set_quoted('GTK_LOCALEDIR', gtk_localedir)
@@ -193,6 +202,9 @@ cdata.set_quoted('GTK_DATADIR', gtk_datadir)
 cdata.set_quoted('GTK_LIBDIR', gtk_libdir)
 cdata.set_quoted('GTK_SYSCONFDIR', gtk_sysconfdir)
 cdata.set_quoted('GETTEXT_PACKAGE', 'gtk40')
+cdata.set_quoted('PROFILE', profile)
+
+
 
 check_headers = [
   'dev/evdev/input.h',
@@ -894,15 +906,6 @@ project_build_root = meson.current_build_dir()
 gen_visibility_macros = find_program('build-aux/meson/gen-visibility-macros.py')
 
 gen_profile_conf = find_program('build-aux/meson/gen-profile-conf.py')
-
-profile = get_option('profile')
-if profile == 'auto'
-  if gtk_minor_version.is_even()
-    profile = 'default'
-  else
-    profile = 'devel'
-  endif
-endif
 
 profile_conf_h = declare_dependency(
   sources: custom_target('profile-conf',
