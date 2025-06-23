@@ -24,8 +24,7 @@
 #include "node-editor-application.h"
 
 #include "node-editor-window.h"
-
-#include "profile_conf.h"
+#include "vcstag.h"
 
 static const char *css =
 "textview.editor {"
@@ -100,10 +99,8 @@ activate_about (GSimpleAction *action,
 
   g_string_append_printf (s, "\nRenderer\n\t%s", renderer);
 
-  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
-                             PACKAGE_VERSION,
-                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             VCS_TAG,
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
@@ -295,17 +292,11 @@ NodeEditorApplication *
 node_editor_application_new (void)
 {
   NodeEditorApplication *app;
-  char version[80];
-
-  g_snprintf (version, sizeof (version), "%s%s%s\n",
-              PACKAGE_VERSION,
-              g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-              g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
 
   app = g_object_new (NODE_EDITOR_APPLICATION_TYPE,
                       "application-id", "org.gtk.gtk4.NodeEditor",
                       "flags", G_APPLICATION_HANDLES_OPEN | G_APPLICATION_NON_UNIQUE,
-                      "version", version,
+                      "version", VCS_TAG,
                       NULL);
 
   g_application_add_main_option (G_APPLICATION (app), "reset", 0, 0,G_OPTION_ARG_NONE, "Remove autosave content", NULL);

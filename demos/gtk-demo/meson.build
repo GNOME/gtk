@@ -236,7 +236,7 @@ endforeach
 
 demo_cflags += [ '-DGTK_COMPILATION=1' ]
 
-gtkdemo_deps += [ profile_conf_h ]
+gtkdemo_deps += [ vcstag_h ]
 
 executable('gtk4-demo',
   sources: [demos, demos_h, extra_demo_sources, gtkdemo_resources],

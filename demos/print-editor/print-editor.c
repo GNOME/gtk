@@ -1,11 +1,12 @@
-#include <config.h>
+#include "config.h"
+
+#include "vcstag.h"
+
 #include <math.h>
 #include <pango/pangocairo.h>
 #include <glib/gi18n.h>
 #include <gmodule.h>
 #include <gtk/gtk.h>
-
-#include "profile_conf.h"
 
 static GtkWidget *main_window;
 static GFile *filename = NULL;
@@ -606,10 +607,8 @@ activate_about (GSimpleAction *action,
   g_strfreev (backends);
   g_free (setting);
 
-  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
-                             PACKAGE_VERSION,
-                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             VCS_TAG,
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
@@ -870,7 +869,6 @@ main (int argc, char **argv)
 {
   GtkApplication *app;
   GError *error = NULL;
-  char version[80];
 
   gtk_init ();
 
@@ -891,12 +889,7 @@ main (int argc, char **argv)
 
   app = gtk_application_new ("org.gtk.PrintEditor4", G_APPLICATION_HANDLES_OPEN);
 
-  g_snprintf (version, sizeof (version), "%s%s%s\n",
-              PACKAGE_VERSION,
-              g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-              g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
-
-  g_application_set_version (G_APPLICATION (app), version);
+  g_application_set_version (G_APPLICATION (app), VCS_TAG);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),

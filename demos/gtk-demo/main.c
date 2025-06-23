@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include "config.h"
+#include "vcstag.h"
 #include <gtk/gtk.h>
 #include <gmodule.h>
 #include <glib/gstdio.h>
@@ -25,8 +26,6 @@
 
 #include "demos.h"
 #include "fontify.h"
-
-#include "profile_conf.h"
 
 static GtkWidget *info_view;
 static GtkWidget *source_view;
@@ -192,10 +191,8 @@ activate_about (GSimpleAction *action,
                           gtk_get_micro_version ());
   g_string_append_printf (s, "\nA link can appear here: <http://www.gtk.org>");
 
-  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
-                             PACKAGE_VERSION,
-                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             VCS_TAG,
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
@@ -1132,18 +1129,12 @@ main (int argc, char **argv)
     { "app.quit", { "<Control>q", NULL } },
   };
   int i;
-  char version[80];
 
   gtk_init ();
 
   app = gtk_application_new ("org.gtk.Demo4", G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE);
 
-  g_snprintf (version, sizeof (version), "%s%s%s\n",
-              PACKAGE_VERSION,
-              g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-              g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
-
-  g_application_set_version (G_APPLICATION (app), version);
+  g_application_set_version (G_APPLICATION (app), VCS_TAG);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),

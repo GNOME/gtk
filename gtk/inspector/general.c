@@ -19,6 +19,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "general.h"
+#include "vcstag.h"
 #include "window.h"
 
 #include "gtkdebug.h"
@@ -41,8 +42,6 @@
 #include "gdk/gdkmonitorprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdkvulkancontextprivate.h"
-
-#include "profile_conf.h"
 
 #include <epoxy/gl.h>
 
@@ -340,23 +339,22 @@ get_renderer_kind (GdkDisplay *display)
   return renderer;
 }
 
-static char *
+static const char *
 get_version_string (void)
 {
   if (g_strcmp0 (PROFILE, "devel") == 0)
-    return g_strdup_printf ("%s-%s", GTK_VERSION, VCS_TAG);
+    return VCS_TAG;
   else
-    return g_strdup (GTK_VERSION);
+    return GTK_VERSION;
 }
 
 static void
 init_version (GtkInspectorGeneral *gen)
 {
-  char *version;
+  const char *version;
 
   version = get_version_string ();
   gtk_label_set_text (GTK_LABEL (gen->gtk_version), version);
-  g_free (version);
 
   gtk_label_set_text (GTK_LABEL (gen->gdk_backend), get_display_kind (gen->display));
   gtk_label_set_text (GTK_LABEL (gen->gsk_renderer), get_renderer_kind (gen->display));
@@ -366,11 +364,10 @@ static void
 dump_version (GdkDisplay *display,
               GString    *string)
 {
-  char *version;
+  const char *version;
 
   version = get_version_string ();
   g_string_append_printf (string, "| GTK Version | %s |\n", version);
-  g_free (version);
   g_string_append_printf (string, "| GDK Backend | %s |\n", get_display_kind (display));
   g_string_append_printf (string, "| GSK Renderer | %s |\n", get_renderer_kind (display));
 }

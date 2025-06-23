@@ -20,13 +20,13 @@
 
 #include "config.h"
 
+#include "vcstag.h"
+
 #include <stdlib.h>
 
 #include <glib/gi18n.h>
 #include <gmodule.h>
 #include <gtk/gtk.h>
-
-#include "profile_conf.h"
 
 static void
 change_dark_state (GSimpleAction *action,
@@ -324,10 +324,8 @@ activate_about (GSimpleAction *action,
                           gtk_get_micro_version ());
   g_string_append_printf (s, "\nA link can appear here: <http://www.gtk.org>");
 
-  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
-                             PACKAGE_VERSION,
-                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+                             VCS_TAG,
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
@@ -2595,15 +2593,10 @@ main (int argc, char *argv[])
     { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
   int status;
-  char version[80];
 
   app = gtk_application_new ("org.gtk.WidgetFactory4", G_APPLICATION_NON_UNIQUE);
 
-  g_snprintf (version, sizeof (version), "%s%s%s\n",
-              PACKAGE_VERSION,
-              g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-              g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
-  g_application_set_version (G_APPLICATION (app), version);
+  g_application_set_version (G_APPLICATION (app), VCS_TAG);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),

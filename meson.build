@@ -905,17 +905,11 @@ project_build_root = meson.current_build_dir()
 
 gen_visibility_macros = find_program('build-aux/meson/gen-visibility-macros.py')
 
-gen_profile_conf = find_program('build-aux/meson/gen-profile-conf.py')
-
-profile_conf_h = declare_dependency(
-  sources: custom_target('profile-conf',
-    command: [gen_profile_conf, meson.project_source_root(), profile],
-    capture: true,
-    output: 'profile_conf.h',
-    build_by_default: true,
-    build_always_stale: true,
-  )
-)
+# vcstag.h
+vcstag = vcs_tag(input: 'build-aux/meson/vcstag.h.in',
+                 output: 'vcstag.h',
+                 fallback: profile)
+vcstag_h = declare_dependency (sources: vcstag)
 
 subdir('gdk/version')
 subdir('gtk/css')

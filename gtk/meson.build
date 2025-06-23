@@ -1019,7 +1019,7 @@ gtk_deps = [
   libm,
   graphene_dep,
   accesskit_dep,
-  profile_conf_h,
+  vcstag_h,
 ]
 
 if x11_enabled
