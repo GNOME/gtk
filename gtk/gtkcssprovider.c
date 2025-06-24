@@ -228,6 +228,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
 
   gtk_css_provider_define_discrete_media_feature ("prefers-color-scheme", 2, (const char *[]) { "light", "dark" });
   gtk_css_provider_define_discrete_media_feature ("prefers-contrast", 4, (const char *[]) { "no-preference", "less", "more", "custom" });
+  gtk_css_provider_define_discrete_media_feature ("--gdk-display", 6, (const char *[]) { "wayland", "x11", "windows", "macos", "android", "broadway" });
 
   if (g_getenv ("GTK_CSS_DEBUG"))
     gtk_css_provider_set_keep_css_sections ();
