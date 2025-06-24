@@ -732,6 +732,8 @@ gdk_android_get_env (void)
 {
   if (gdk_android_thread_env)
     return gdk_android_thread_env;
+  if (G_UNLIKELY (!gdk_android_vm))
+    return NULL;
   gint rc = (*gdk_android_vm)->GetEnv (gdk_android_vm, (void **) &gdk_android_thread_env, JNI_VERSION_1_6);
   if (G_UNLIKELY (rc != JNI_OK))
     g_critical ("Unable to get env for the current thread. Is is attached?");
