@@ -22,8 +22,89 @@
  * https://www.w3.org/TR/mediaqueries-5/
  */
 
+
+typedef struct {
+  const char  *feature_name;
+  gsize        n_feature_values;
+  const char **feature_values;
+} _GtkCssDefinedMediaFeature;
+
+/* An append-only list of supported media features. */
+static GArray *defined_media_features = NULL;
+
 static gboolean parse_media_condition (GtkCssParser *parser, GArray *media_features);
 
+/*
+ * gtk_css_define_discrete_media_feature:
+ * @feature_name: name of the feature (e.g. `prefers-color-scheme`)
+ * @n_feature_values: number of features in @feature_values
+ * @feature_values: (array length=n_feature_values): values of the feature (e.g. `dark`, `light`)
+ *
+ * Define a new discrete media feature.
+ */
+void
+gtk_css_media_feature_define_discrete (const char      *feature_name,
+                                       gsize            n_feature_values,
+                                       const char     **feature_values)
+{
+  gsize i;
+  const char **copy_feature_values;
+
+  g_return_if_fail (feature_name != NULL);
+  g_return_if_fail (feature_values != NULL);
+
+  if (defined_media_features == NULL)
+    defined_media_features = g_array_sized_new (FALSE, FALSE, sizeof (_GtkCssDefinedMediaFeature), 4);
+
+  for (i = 0; i < defined_media_features->len; i++)
+    {
+      _GtkCssDefinedMediaFeature *dmf = &g_array_index (defined_media_features, _GtkCssDefinedMediaFeature, i);
+
+      if (strcmp (dmf->feature_name, feature_name) == 0)
+        {
+          g_warning ("Failed to define media feature: feature is already defined (%s)", feature_name);
+          return;
+        }
+    }
+
+  copy_feature_values = g_new0 (const char*, n_feature_values);
+  for (i = 0; i < n_feature_values; i++)
+    copy_feature_values[i] = g_strdup(feature_values[i]);
+
+  g_array_append_val (defined_media_features,
+                       ((_GtkCssDefinedMediaFeature) { g_strdup (feature_name), n_feature_values, copy_feature_values }));
+}
+
+gboolean
+gtk_css_media_feature_is_valid (const char *feature_name, const char *feature_value)
+{
+  gsize i;
+
+  if (defined_media_features != NULL)
+    for (i = 0; i < defined_media_features->len; i++)
+      {
+        _GtkCssDefinedMediaFeature *dmf = &g_array_index (defined_media_features, _GtkCssDefinedMediaFeature, i);
+
+        if (strcmp (dmf->feature_name, feature_name) == 0)
+          {
+            gsize k;
+
+            for (k = 0; k < dmf->n_feature_values; k++)
+              {
+                if (strcmp (dmf->feature_values[k], feature_value) == 0)
+                  return TRUE;
+              }
+
+            g_warning ("Failed to update media feature %s: invalid value (%s)", feature_name, feature_value);
+
+            return FALSE;
+          }
+      }
+
+  g_warning ("Failed to update media feature %s: undefined name", feature_name);
+
+  return FALSE;
+}
 
 /*
  * gtk_css_media_query_parse:
