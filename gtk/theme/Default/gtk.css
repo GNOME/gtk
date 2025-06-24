@@ -1,8 +1,8 @@
-@media (prefers-color-scheme: light) and (prefers-contrast: no-preference) {
+@media (prefers-color-scheme: light) and (not (prefers-contrast: more)) {
   @import url("resource:///org/gtk/libgtk/theme/Default/Default-light.css");
 }
 
-@media (prefers-color-scheme: dark) and (prefers-contrast: no-preference) {
+@media (prefers-color-scheme: dark) and (not (prefers-contrast: more)) {
   @import url("resource:///org/gtk/libgtk/theme/Default/Default-dark.css");
 }
 
