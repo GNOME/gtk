@@ -142,6 +142,68 @@ test_update_media_features_after_style_sheet_is_loaded (void)
   g_free (rendered_css);
 }
 
+static void
+real_test_gdk_display_media_feature (const char* display_name)
+{
+  GtkCssProvider *provider = gtk_css_provider_new ();
+  char *rendered_css;
+  char style_name[32];
+
+  gtk_css_provider_update_discrete_media_features (provider, 1, (const char *[]) { "--gdk-display" }, (const char *[]) { display_name });
+
+  gtk_css_provider_load_from_string (provider,
+    "@media (--gdk-display: wayland) { wayland-style { color: blue; } }"
+    "@media (--gdk-display: x11) { x11-style { color: blue; } }"
+    "@media (--gdk-display: windows) { windows-style { color: blue; } }"
+    "@media (--gdk-display: macos) { macos-style { color: blue; } }"
+    "@media (--gdk-display: android) { android-style { color: blue; } }"
+    "@media (--gdk-display: broadway) { broadway-style { color: blue; } }"
+  );
+  rendered_css = gtk_css_provider_to_string (provider);
+  g_object_unref (provider);
+
+  g_snprintf (style_name, sizeof (style_name), "%s-style", display_name);
+
+  g_assert_nonnull (strstr (rendered_css, style_name));
+  g_free (rendered_css);
+}
+
+static void
+test_gdk_display_media_feature_wayland (void)
+{
+  real_test_gdk_display_media_feature ("wayland");
+}
+
+static void
+test_gdk_display_media_feature_x11 (void)
+{
+  real_test_gdk_display_media_feature ("x11");
+}
+
+static void
+test_gdk_display_media_feature_windows (void)
+{
+  real_test_gdk_display_media_feature ("windows");
+}
+
+static void
+test_gdk_display_media_feature_macos (void)
+{
+  real_test_gdk_display_media_feature ("macos");
+}
+
+static void
+test_gdk_display_media_feature_android (void)
+{
+  real_test_gdk_display_media_feature ("android");
+}
+
+static void
+test_gdk_display_media_feature_broadway (void)
+{
+  real_test_gdk_display_media_feature ("broadway");
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -155,6 +217,12 @@ main (int argc, char *argv[])
   g_test_add_func ("/cssprovider/load-with-negating-media-query", test_load_with_negating_media_query);
   g_test_add_func ("/cssprovider/load-with-and-media-query", test_load_with_and_media_query);
   g_test_add_func ("/cssprovider/update-media-features-after-style-sheet-is-loaded", test_update_media_features_after_style_sheet_is_loaded);
+  g_test_add_func ("/cssprovider/--gdk-display-media-feature/wayland", test_gdk_display_media_feature_wayland);
+  g_test_add_func ("/cssprovider/--gdk-display-media-feature/x11", test_gdk_display_media_feature_x11);
+  g_test_add_func ("/cssprovider/--gdk-display-media-feature/windows", test_gdk_display_media_feature_windows);
+  g_test_add_func ("/cssprovider/--gdk-display-media-feature/macos", test_gdk_display_media_feature_macos);
+  g_test_add_func ("/cssprovider/--gdk-display-media-feature/android", test_gdk_display_media_feature_android);
+  g_test_add_func ("/cssprovider/--gdk-display-media-feature/broadway", test_gdk_display_media_feature_broadway);
 
   return g_test_run ();
 }
