@@ -1693,7 +1693,10 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
    */
-  resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);
+  if (variant)
+    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk-%s.css", name, variant);
+  else
+    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);
 
   if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
     {
