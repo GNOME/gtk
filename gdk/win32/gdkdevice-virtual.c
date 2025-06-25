@@ -71,7 +71,9 @@ gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
     cursor = gdk_cursor_new_from_name ("default", NULL);
 
   if (display != NULL)
-    win32_hcursor = gdk_win32_display_get_win32hcursor (GDK_WIN32_DISPLAY (display), cursor);
+    win32_hcursor = _gdk_win32_display_get_win32hcursor_with_scale (GDK_WIN32_DISPLAY (display),
+                                                                    cursor,
+                                                                    gdk_surface_get_scale (surface));
 
   /* This is correct because the code up the stack already
    * checked that cursor is currently inside this surface,
@@ -115,7 +117,9 @@ gdk_device_virtual_grab (GdkDevice    *device,
       win32_hcursor = NULL;
 
       if (cursor != NULL)
-        win32_hcursor = gdk_win32_display_get_win32hcursor (display, cursor);
+        win32_hcursor = _gdk_win32_display_get_win32hcursor_with_scale (display,
+                                                                        cursor,
+                                                                        gdk_surface_get_scale (surface));
 
       g_set_object (&display->grab_cursor, win32_hcursor);
 

@@ -244,6 +244,10 @@ Win32Cursor *     win32_cursor_theme_get_cursor       (Win32CursorTheme *theme,
 void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
 Win32CursorTheme *_gdk_win32_display_get_cursor_theme (GdkWin32Display  *win32_display);
 
+GdkWin32HCursor *_gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
+                                                                 GdkCursor       *cursor,
+                                                                 int              scale);
+
 HICON _gdk_win32_create_hicon_for_texture (GdkTexture *texture,
                                            gboolean    is_icon,
                                            int         x,
