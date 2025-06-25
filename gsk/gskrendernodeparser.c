@@ -2065,7 +2065,7 @@ clear_font (gpointer inout_font)
   g_clear_object ((PangoFont **) inout_font);
 }
 
-#define GLYPH_NEEDS_WIDTH (1 << 15)
+#define GLYPH_NEEDS_WIDTH ((PangoGlyphUnit) -1)
 
 static gboolean
 parse_glyphs (GtkCssParser *parser,
@@ -2093,7 +2093,7 @@ parse_glyphs (GtkCssParser *parser,
                   gtk_css_parser_error_value (parser, "Unsupported character %d in string", i);
                 }
               gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + s[i];
-              *(unsigned int *) &gi.attr |= GLYPH_NEEDS_WIDTH;
+              gi.geometry.width = GLYPH_NEEDS_WIDTH;
               pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
               glyph_string->glyphs[glyph_string->num_glyphs - 1] = gi;
             }
@@ -2116,7 +2116,7 @@ parse_glyphs (GtkCssParser *parser,
             }
           else
             {
-              *(unsigned int *) &gi.attr |= GLYPH_NEEDS_WIDTH;
+              gi.geometry.width = GLYPH_NEEDS_WIDTH;
             }
 
           if (gtk_css_parser_has_number (parser))
@@ -3259,13 +3259,8 @@ unpack_glyphs (PangoFont        *font,
     {
       PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-      if (((*(unsigned int *) &gi->attr) & GLYPH_NEEDS_WIDTH) == 0)
-        continue;
-
-      *(unsigned int *) &gi->attr &= ~GLYPH_NEEDS_WIDTH;
-
-     if (gi->glyph >= PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH &&
-         gi->glyph < PANGO_GLYPH_INVALID_INPUT)
+      if (gi->glyph >= PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH &&
+          gi->glyph < PANGO_GLYPH_INVALID_INPUT)
         {
           PangoGlyph idx = gi->glyph - (PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH) - MIN_ASCII_GLYPH;
 
@@ -3285,7 +3280,8 @@ unpack_glyphs (PangoFont        *font,
           gi->glyph = ascii->glyphs[idx].glyph;
           gi->geometry.width = ascii->glyphs[idx].geometry.width;
         }
-      else
+      
+      if (gi->geometry.width == GLYPH_NEEDS_WIDTH)
         {
           PangoRectangle rect;
 
@@ -3404,7 +3400,7 @@ parse_text_node (GtkCssParser *parser,
       for (i = 0; i < strlen (text); i++)
         {
           gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + text[i];
-          *(unsigned int *) &gi.attr |= GLYPH_NEEDS_WIDTH;
+          gi.geometry.width = GLYPH_NEEDS_WIDTH;
           glyphs->glyphs[i] = gi;
         }
     }
