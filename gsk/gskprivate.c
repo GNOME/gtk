@@ -111,6 +111,7 @@ gsk_reload_font (PangoFont            *font,
   if (G_UNLIKELY (context == NULL))
     context = pango_context_new ();
 
+  pango_context_set_round_glyph_positions (context, hint_metrics == CAIRO_HINT_METRICS_ON);
   pango_cairo_context_set_font_options (context, options);
 
   last_result = pango_font_map_reload_font (pango_font_get_font_map (font), font, scale, context, NULL);
