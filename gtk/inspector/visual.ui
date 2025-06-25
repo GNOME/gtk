@@ -128,7 +128,6 @@
                                       <item translatable="yes">No-preference</item>
                                       <item translatable="yes">Less</item>
                                       <item translatable="yes">More</item>
-                                      <item translatable="yes">Custom</item>
                                     </items>
                                   </object>
                                 </property>
