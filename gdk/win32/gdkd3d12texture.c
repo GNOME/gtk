@@ -163,7 +163,7 @@ gdk_d3d12_texture_download (GdkTexture            *texture,
                                                      },
                                                      .Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
                                                  }),
-                                                 D3D12_RESOURCE_STATE_COMMON,
+                                                 D3D12_RESOURCE_STATE_COPY_DEST,
                                                  NULL,
                                                  &IID_ID3D12Resource,
                                                  (void **) &buffer));

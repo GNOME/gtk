@@ -2023,10 +2023,11 @@ parse_font (GtkCssParser *parser,
             }
           else
             {
-              gtk_css_parser_emit_error (parser,
-                                         &start_location,
-                                         gtk_css_parser_get_end_location (parser),
-                                         error);
+              gtk_css_parser_error (parser,
+                                    GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                    &start_location,
+                                    gtk_css_parser_get_end_location (parser),
+                                    "%s", error->message);
               g_clear_error (&error);
             }
 
