@@ -27,246 +27,186 @@
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkenums.h"
 
+#include <librsvg/rsvg.h>
 
-/* {{{ Pixbuf helpers */
+/* {{{ svg helpers */
 
-static inline gboolean
-pixbuf_is_only_fg (GdkPixbuf *pixbuf)
+static gboolean
+gdk_texture_get_rsvg_handle_size (RsvgHandle *handle, gdouble *out_width, gdouble *out_height)
 {
-  return gdk_pixbuf_get_option (pixbuf, "tEXt::only-foreground") != NULL;
+#if LIBRSVG_CHECK_VERSION (2,52,0)
+  return rsvg_handle_get_intrinsic_size_in_pixels (handle, out_width, out_height);
+#else
+  RsvgDimensionData dim;
+  rsvg_handle_get_dimensions (handle, &dim);
+  if (out_width)
+    *out_width = dim.width;
+  if (out_height)
+    *out_height = dim.height;
+  return TRUE;
+#endif
 }
 
-static GdkPixbuf *
-load_from_stream (GdkPixbufLoader  *loader,
-                  GInputStream     *stream,
-                  GCancellable     *cancellable,
-                  GError          **error)
+static GdkTexture *
+gdk_texture_new_from_rsvg (RsvgHandle  *handle,
+                           int          width,
+                           int          height,
+                           GError     **error)
 {
-  GdkPixbuf *pixbuf;
-  gssize n_read;
-  guchar buffer[65536];
-  gboolean res;
+  int stride;
+  guchar *data;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GdkTexture *texture = NULL;
 
-  res = TRUE;
-  while (1)
-    {
-      n_read = g_input_stream_read (stream, buffer, sizeof (buffer), cancellable, error);
-      if (n_read < 0)
-        {
-          res = FALSE;
-          error = NULL; /* Ignore further errors */
-          break;
-        }
+  stride = width * 4;
+  data = g_new0 (guchar, stride * height);
 
-      if (n_read == 0)
-        break;
+  surface = cairo_image_surface_create_for_data (data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 width, height,
+                                                 stride);
 
-      if (!gdk_pixbuf_loader_write (loader, buffer, n_read, error))
-        {
-          res = FALSE;
-          error = NULL;
-          break;
-        }
-    }
+  cr = cairo_create (surface);
 
-  if (!gdk_pixbuf_loader_close (loader, error))
-    {
-      res = FALSE;
-      error = NULL;
-    }
+#if !LIBRSVG_CHECK_VERSION (2,52,0)
+  {
+    RsvgDimensionData dim;
+    gdouble sx,sy,s;
 
-  pixbuf = NULL;
+    rsvg_handle_get_dimensions (handle, &dim);
+    sx = (gdouble)width / dim.width;
+    sy = (gdouble)height / dim.height;
+    s = MIN (sx, sy);
 
-  if (res)
-    {
-      pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-      if (pixbuf)
-        g_object_ref (pixbuf);
-    }
+    cairo_scale (cr, s, s);
+  }
 
-  return pixbuf;
-}
-
-static void
-size_prepared_cb (GdkPixbufLoader *loader,
-                  int              width,
-                  int              height,
-                  gpointer         data)
-{
-  double *scale = data;
-
-  width = MAX (*scale * width, 1);
-  height = MAX (*scale * height, 1);
-
-  gdk_pixbuf_loader_set_size (loader, width, height);
-}
-
-/* Like gdk_pixbuf_new_from_stream_at_scale, but
- * load the image at its original size times the
- * given scale.
- */
-static GdkPixbuf *
-_gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
-                                    double         scale,
-                                    GCancellable  *cancellable,
-                                    GError       **error)
-{
-  GdkPixbufLoader *loader;
-  GdkPixbuf *pixbuf;
-
-  loader = gdk_pixbuf_loader_new ();
-
-  if (scale != 0)
-    g_signal_connect (loader, "size-prepared",
-                      G_CALLBACK (size_prepared_cb), &scale);
-
-  pixbuf = load_from_stream (loader, stream, cancellable, error);
-
-  g_object_unref (loader);
-
-  return pixbuf;
-}
-
-static void
-size_prepared_cb2 (GdkPixbufLoader *loader,
-                   int              width,
-                   int              height,
-                   gpointer         data)
-{
-  int *scales = data;
-
-  if (scales[2]) /* keep same aspect ratio as original, while fitting in given size */
-    {
-      double aspect = (double) height / width;
-
-      /* First use given width and calculate size */
-      width = scales[0];
-      height = scales[0] * aspect;
-
-      /* Check if it fits given height, otherwise scale down */
-      if (height > scales[1])
-        {
-          width *= (double) scales[1] / height;
-          height = scales[1];
-        }
-    }
+  if (!rsvg_handle_render_cairo (handle, cr))
+    g_set_error (error, GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
+                 "Error rendering SVG document (%s)", cairo_status_to_string (cairo_status (cr)));
   else
+#else
+  if (rsvg_handle_render_document (handle, cr,
+                                   &(RsvgRectangle) { 0, 0, width, height },
+                                   error))
+#endif
     {
-      width = scales[0];
-      height = scales[1];
+      GBytes *bytes;
+
+      bytes = g_bytes_new (data, stride * height);
+      texture = gdk_memory_texture_new (width, height,
+                                        GDK_MEMORY_DEFAULT,
+                                        bytes,
+                                        stride);
+      g_bytes_unref (bytes);
     }
 
-  gdk_pixbuf_loader_set_size (loader, width, height);
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+  g_free (data);
+
+  return texture;
 }
 
-static GdkPixbuf *
-_gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
-                                      int            width,
-                                      int            height,
-                                      GCancellable  *cancellable,
-                                      GError       **error)
+static GdkTexture *
+gdk_texture_new_from_svg_bytes (GBytes  *bytes,
+                                double   scale,
+                                GError **error)
 {
-  GdkPixbufLoader *loader;
-  GdkPixbuf *pixbuf;
-  int scales[3];
+  const guchar *data;
+  gsize len;
+  RsvgHandle *handle;
+  GdkTexture *texture;
+  int width, height;
+  double w, h;
 
-  loader = gdk_pixbuf_loader_new ();
-
-  scales[0] = width;
-  scales[1] = height;
-  scales[2] = TRUE;
-  g_signal_connect (loader, "size-prepared",
-                    G_CALLBACK (size_prepared_cb2), scales);
-
-  pixbuf = load_from_stream (loader, stream, cancellable, error);
-
-  g_object_unref (loader);
-
-  return pixbuf;
-}
-
-static GdkPixbuf *
-_gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
-                                        int           width,
-                                        int           height,
-                                        GError      **error)
-{
-  GInputStream *stream;
-  GdkPixbuf *pixbuf;
-
-  stream = g_resources_open_stream (resource_path, 0, error);
-  if (stream == NULL)
+  data = g_bytes_get_data (bytes, &len);
+  handle = rsvg_handle_new_from_data (data, len, error);
+  if (!handle)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, NULL, error);
-  g_object_unref (stream);
+  if (!gdk_texture_get_rsvg_handle_size (handle, &w, &h))
+    {
+      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                           "Svg image has no intrinsic size; please set one");
+      g_object_unref (handle);
+      return NULL;
+    }
 
-  return pixbuf;
+  width = ceil (w * scale);
+  height = ceil (h * scale);
+
+  texture = gdk_texture_new_from_rsvg (handle, width, height, error);
+  g_object_unref (handle);
+
+  return texture;
 }
 
 /* }}} */
-/* {{{ Symbolic processing */
+ /* {{{ Symbolic processing */
+
+static char *
+make_stylesheet (const char *fg_color,
+                 const char *success_color,
+                 const char *warning_color,
+                 const char *error_color)
+{
+  return g_strconcat ("rect,circle,path,.foreground-fill {\n"
+                      " fill:", fg_color, "!important;\n"
+                      "}\n"
+                      ".warning,.warning-fill {\n"
+                      " fill:", warning_color, "!important;\n"
+                      "}\n"
+                      ".error,.error-fill {\n"
+                      "  fill:", error_color, "!important;\n"
+                      "}\n"
+                      ".success,.success-fill {\n"
+                      "  fill:", success_color, "!important;\n"
+                      "}\n"
+                      ".transparent-fill {\n"
+                      "  fill: none !important;\n"
+                      "}\n"
+                      ".foreground-stroke {\n"
+                      "  stroke:", fg_color, "!important;\n"
+                      "}\n"
+                      ".warning-stroke {\n"
+                      "  stroke:", warning_color, "!important;\n"
+                      "}\n"
+                      ".error-stroke {\n"
+                      "  stroke:", error_color, "!important;\n"
+                      "}\n"
+                      ".success-stroke {\n"
+                      "  stroke:", success_color, "!important;\n"
+                      "}",
+                      NULL);
+}
 
 static GdkTexture *
-load_symbolic_svg (const char     *escaped_file_data,
-                   gsize           len,
-                   int             width,
-                   int             height,
-                   const char     *icon_width_str,
-                   const char     *icon_height_str,
-                   const char     *fg_string,
-                   const char     *success_color_string,
-                   const char     *warning_color_string,
-                   const char     *error_color_string,
-                   GError        **error)
+load_symbolic_svg (RsvgHandle  *handle,
+                   int          width,
+                   int          height,
+                   const char  *fg_color,
+                   const char  *success_color,
+                   const char  *warning_color,
+                   const char  *error_color,
+                   GError     **error)
 {
-  GInputStream *stream;
-  GdkTexture *texture;
-  char *data;
+  GdkTexture *texture = NULL;
+  char *stylesheet;
 
-  data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-                      "<svg version=\"1.1\" "
-                           "xmlns=\"http://www.w3.org/2000/svg\" "
-                           "xmlns:xi=\"http://www.w3.org/2001/XInclude\" "
-                           "width=\"", icon_width_str, "\" "
-                           "height=\"", icon_height_str, "\">"
-                        "<style type=\"text/css\">"
-                          "rect,circle,path,.foreground-fill {"
-                            "fill: ", fg_string," !important;"
-                          "}\n"
-                          ".warning,.warning-fill {"
-                            "fill: ", warning_color_string, " !important;"
-                          "}\n"
-                          ".error,.error-fill {"
-                            "fill: ", error_color_string ," !important;"
-                          "}\n"
-                          ".success,.success-fill {"
-                            "fill: ", success_color_string, " !important;"
-                          "}\n"
-                          ".transparent-fill {"
-                            "fill: none !important;"
-                          "}\n"
-                          ".foreground-stroke {"
-                            "stroke: ", fg_string," !important;"
-                          "}\n"
-                          ".warning-stroke {"
-                            "stroke: ", warning_color_string, " !important;"
-                          "}\n"
-                          ".error-stroke {"
-                            "stroke: ", error_color_string ," !important;"
-                          "}\n"
-                          ".success-stroke {"
-                            "stroke: ", success_color_string, " !important;"
-                          "}"
-                        "</style>"
-                        "<xi:include href=\"data:text/xml;base64,",
-                      NULL);
+  stylesheet = make_stylesheet (fg_color, success_color, warning_color, error_color);
 
-  stream = g_memory_input_stream_new_from_data (data, -1, g_free);
-  g_memory_input_stream_add_data (G_MEMORY_INPUT_STREAM (stream), escaped_file_data, len, NULL);
-  g_memory_input_stream_add_data (G_MEMORY_INPUT_STREAM (stream), "\"/></svg>", strlen ("\"/></svg>"), NULL);
-  texture = gdk_texture_new_from_stream_at_scale (stream, width, height, NULL, NULL, error);
-  g_object_unref (stream);
+  if (!rsvg_handle_set_stylesheet (handle, (const guint8 *) stylesheet, strlen (stylesheet), error))
+    {
+      g_prefix_error (error, "Could not set stylesheet");
+      goto out;
+    }
+
+  texture = gdk_texture_new_from_rsvg (handle, width, height, error);
+
+out:
+  g_free (stylesheet);
 
   return texture;
 }
@@ -361,68 +301,15 @@ keep_alpha (GdkTexture *src)
   return res;
 }
 
-static void
-svg_find_size_strings (const char  *data,
-                       gsize        len,
-                       char       **width,
-                       char       **height)
-{
-  gsize i, j, k, l;
-
-  *width = NULL;
-  *height = NULL;
-
-  for (i = 0; i < len - 4; i++)
-    {
-      if (strncmp (data + i, "<svg", 4) == 0)
-        {
-          for (j = i + strlen ("<svg"); j < len - 9; j++)
-            {
-              if (strncmp (data + j, "height=\"", strlen ("height=\"")) == 0)
-                {
-                  k = l = j + strlen ("height=\"");
-                  while (l < len && data[l] != '\"')
-                    l++;
-
-                  *height = g_strndup (data + k, l - k);
-
-                  if (*width && *height)
-                    return;
-
-                  j = l;
-                }
-              else if (strncmp (data + j, "width=\"", strlen ("width=\"")) == 0)
-                {
-                  k = l = j + strlen ("width=\"");
-                  while (l < len && data[l] != '\"')
-                    l++;
-
-                  *width = g_strndup (data + k, l - k);
-
-                  if (*width && *height)
-                    return;
-
-                  j = l;
-                }
-              else if (data[j] == '>')
-                {
-                  break;
-                }
-            }
-
-          break;
-        }
-    }
-
-  *width = g_strdup ("16px");
-  *height = g_strdup ("16px");
-}
-
 static gboolean
-svg_has_symbolic_classes (const char *data,
-                          gsize       len)
+svg_has_symbolic_classes (GBytes *bytes)
 {
 #ifdef HAVE_MEMMEM
+  const char *data;
+  gsize len;
+
+  data = g_bytes_get_data (bytes, &len);
+
   /* Not super precise, but good enough */
   return memmem (data, len, "class=\"", strlen ("class=\"")) != NULL;
 #else
@@ -438,53 +325,52 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
                                      GError   **error)
 
 {
-  const char *file_data;
-  gsize file_len;
+  RsvgHandle *handle;
+  double w, h;
   const char *r_string = "rgb(255,0,0)";
   const char *g_string = "rgb(0,255,0)";
-  char *icon_width_str = NULL;
-  char *icon_height_str = NULL;
-  char *escaped_file_data = NULL;
-  gsize len;
-  gboolean has_symbolic_classes;
-  gboolean only_fg = TRUE;
+  gboolean only_fg;
   guchar *data;
   GBytes *data_bytes;
   GdkTexture *texture;
 
-  file_data = g_bytes_get_data (bytes, &file_len);
-
-  has_symbolic_classes = svg_has_symbolic_classes (file_data, file_len);
-
-  /* Fetch size from the original icon */
-  if (has_symbolic_classes || width == 0 || height == 0)
-    svg_find_size_strings (file_data, file_len, &icon_width_str, &icon_height_str);
+  handle = rsvg_handle_new_from_data (g_bytes_get_data (bytes, NULL),
+                                      g_bytes_get_size (bytes),
+                                      error);
 
   if (width == 0 || height == 0)
     {
-      width = (int) g_ascii_strtoull (icon_width_str, NULL, 0);
-      height = (int) g_ascii_strtoull (icon_height_str, NULL, 0);
+      /* Fetch size from the original icon */
+      if (!gdk_texture_get_rsvg_handle_size (handle, &w, &h))
+        {
+          g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "Symbolic icon has no intrinsic size; please set one in its SVG");
+          g_object_unref (handle);
+          return NULL;
+        }
+
+      width = (int) ceil (w);
+      height = (int) ceil (h);
     }
 
-  if (!has_symbolic_classes)
+  if (!svg_has_symbolic_classes (bytes))
     {
-      GInputStream *stream;
-
-      stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
-      texture = gdk_texture_new_from_stream_at_scale (stream, width, height, NULL, NULL, error);
-      g_object_unref (stream);
+      texture = gdk_texture_new_from_rsvg (handle, width, height, error);
 
       if (texture)
         texture = keep_alpha (texture);
 
-      goto out;
+      if (out_only_fg)
+        *out_only_fg = TRUE;
+
+      return texture;
     }
 
+  only_fg = TRUE;
   texture = NULL;
 
-  escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
-  len = strlen (escaped_file_data);
-  data = g_new0 (guchar, 4 * width * height);
+  data = NULL;
+  data_bytes = NULL;
 
   for (int plane = 0; plane < 3; plane++)
     {
@@ -502,54 +388,36 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
        * channels, with the color of the fg being implicitly
        * the "rest", as all color fractions should add up to 1.
        */
-      loaded = load_symbolic_svg (escaped_file_data, len, width, height,
-                                  icon_width_str,
-                                  icon_height_str,
+      loaded = load_symbolic_svg (handle, width, height,
                                   g_string,
                                   plane == 0 ? r_string : g_string,
                                   plane == 1 ? r_string : g_string,
                                   plane == 2 ? r_string : g_string,
                                   error);
       if (loaded == NULL)
-        {
-          g_free (data);
-          goto out;
-        }
-
-#ifdef DEBUG_SYMBOLIC
-        {
-          static int debug_counter;
-          char *filename;
-
-          if (plane == 0)
-            debug_counter++;
-
-          filename = g_strdup_printf ("image%d.debug%d.png", debug_counter, plane);
-          g_print ("Writing %s\n", filename);
-          gdk_texture_save_to_png (loaded, filename);
-          g_free (filename);
-        }
-#endif
+        goto out;
 
       if (plane == 0)
-        extract_plane (loaded, data, width, height, 3, 3);
+        {
+          data = g_new0 (guchar, 4 * width * height);
+          data_bytes = g_bytes_new_take (data, 4 * width * height);
+
+          extract_plane (loaded, data, width, height, 3, 3);
+        }
 
       only_fg &= extract_plane (loaded, data, width, height, 0, plane);
 
       g_object_unref (loaded);
     }
 
-  data_bytes = g_bytes_new_take (data, 4 * width * height);
   texture = gdk_memory_texture_new (width, height,
                                     GDK_MEMORY_R8G8B8A8,
                                     data_bytes,
                                     4 * width);
-  g_bytes_unref (data_bytes);
 
 out:
-  g_free (escaped_file_data);
-  g_free (icon_width_str);
-  g_free (icon_height_str);
+  g_bytes_unref (data_bytes);
+  g_object_unref (handle);
 
   if (out_only_fg)
     *out_only_fg = only_fg;
@@ -618,29 +486,50 @@ gdk_texture_new_from_resource_with_fg (const char *path,
   return texture;
 }
 
+static GBytes *
+input_stream_get_bytes (GInputStream  *stream,
+                        GError       **error)
+{
+  GOutputStream *out;
+  gssize res;
+  GBytes *bytes;
+
+  out = g_memory_output_stream_new_resizable ();
+  res = g_output_stream_splice (out, stream, G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET, NULL, error);
+
+  if (res == -1)
+    {
+      g_object_unref (out);
+      return NULL;
+    }
+
+  bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (out));
+  g_object_unref (out);
+
+  return bytes;
+}
+
 GdkTexture *
 gdk_texture_new_from_stream_with_fg (GInputStream  *stream,
                                      gboolean      *only_fg,
                                      GCancellable  *cancellable,
                                      GError       **error)
 {
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture = NULL;
+  GBytes *bytes;
+  GdkTexture *texture;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
-  if (pixbuf)
-    {
-      if (only_fg)
-        *only_fg = pixbuf_is_only_fg (pixbuf);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_object_unref (pixbuf);
-    }
+  bytes = input_stream_get_bytes (stream, error);
+  if (!bytes)
+    return NULL;
+
+  texture = gdk_texture_new_from_bytes_with_fg (bytes, only_fg, error);
+
+  g_bytes_unref (bytes);
 
   return texture;
 }
 
+/* Only called for svg */
 GdkTexture *
 gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       int            width,
@@ -649,19 +538,18 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       GCancellable  *cancellable,
                                       GError       **error)
 {
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture = NULL;
+  RsvgHandle *handle;
+  GdkTexture *texture;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, cancellable, error);
-  if (pixbuf)
-    {
-      if (only_fg)
-        *only_fg = pixbuf_is_only_fg (pixbuf);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_object_unref (pixbuf);
-    }
+  if (only_fg)
+    *only_fg = FALSE;
+
+  handle = rsvg_handle_new_from_stream_sync (stream, NULL, RSVG_HANDLE_FLAGS_NONE, NULL, error);
+  if (!handle)
+    return NULL;
+
+  texture = gdk_texture_new_from_rsvg (handle, width, height, error);
+  g_object_unref (handle);
 
   return texture;
 }
@@ -673,19 +561,15 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
                                         gboolean      *only_fg,
                                         GError       **error)
 {
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture = NULL;
+  GInputStream *stream;
+  GdkTexture *texture;
 
-  pixbuf = _gdk_pixbuf_new_from_resource_at_scale (path, width, height, error);
-  if (pixbuf)
-    {
-      if (only_fg)
-        *only_fg = pixbuf_is_only_fg (pixbuf);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_object_unref (pixbuf);
-    }
+  stream = g_resources_open_stream (path, 0, error);
+  if (stream == NULL)
+    return NULL;
+
+  texture = gdk_texture_new_from_stream_at_scale (stream, width, height, only_fg, NULL, error);
+  g_object_unref (stream);
 
   return texture;
 }
@@ -789,32 +673,6 @@ gdk_texture_new_from_file_symbolic (GFile     *file,
 /* }}} */
 /* {{{ Scaled paintable API */
 
-typedef struct {
-  double scale;
-} LoaderData;
-
-static void
-on_loader_size_prepared (GdkPixbufLoader *loader,
-                         int              width,
-                         int              height,
-                         gpointer         user_data)
-{
-  LoaderData *loader_data = user_data;
-  GdkPixbufFormat *format;
-
-  /* Let the regular icon helper code path handle non-scalable images */
-  format = gdk_pixbuf_loader_get_format (loader);
-  if (!gdk_pixbuf_format_is_scalable (format))
-    {
-      loader_data->scale = 1.0;
-      return;
-    }
-
-  gdk_pixbuf_loader_set_size (loader,
-                              width * loader_data->scale,
-                              height * loader_data->scale);
-}
-
 static GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
                                      double  scale)
@@ -826,42 +684,7 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
     }
   else
     {
-      GdkPixbufLoader *loader;
-      gboolean success;
-      GdkTexture *texture;
-      GdkPaintable *paintable;
-      LoaderData loader_data;
-
-      loader_data.scale = scale;
-
-      loader = gdk_pixbuf_loader_new ();
-      g_signal_connect (loader, "size-prepared",
-                        G_CALLBACK (on_loader_size_prepared), &loader_data);
-
-      success = gdk_pixbuf_loader_write_bytes (loader, bytes, NULL);
-      /* close even when writing failed */
-      success &= gdk_pixbuf_loader_close (loader, NULL);
-
-      if (!success)
-        {
-          g_object_unref (loader);
-          return NULL;
-        }
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-      g_object_unref (loader);
-
-      if (loader_data.scale != 1.0)
-        paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale);
-      else
-        paintable = g_object_ref (GDK_PAINTABLE (texture));
-
-      g_object_unref (texture);
-
-      return paintable;
+      return GDK_PAINTABLE (gdk_texture_new_from_svg_bytes (bytes, scale, NULL));
     }
 }
 

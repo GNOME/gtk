@@ -291,3 +291,12 @@ make_pot = find_program ('make-pot', dirs: meson.project_source_root())
 test('potfiles', make_pot,
      workdir: meson.project_source_root(),
      suite: ['gtk', 'translations' ])
+
+if host_machine.system() in ['linux']
+  test_link = find_program ('test-link')
+
+  test('rsvg', test_link,
+       args: [ libgtk.full_path() ],
+       workdir: meson.project_source_root(),
+       suite: ['gtk', 'gtk'])
+endif
