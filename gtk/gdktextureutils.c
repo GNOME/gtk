@@ -31,10 +31,12 @@
 
 /* {{{ svg helpers */
 
-#if !LIBRSVG_CHECK_VERSION (2,52,0)
 static gboolean
-rsvg_handle_get_intrinsic_size_in_pixels (RsvgHandle *handle, gdouble *out_width, gdouble *out_height)
+gdk_texture_get_rsvg_handle_size (RsvgHandle *handle, gdouble *out_width, gdouble *out_height)
 {
+#if LIBRSVG_CHECK_VERSION (2,52,0)
+  return rsvg_handle_get_intrinsic_size_in_pixels (handle, out_width, out_height);
+#else
   RsvgDimensionData dim;
   rsvg_handle_get_dimensions (handle, &dim);
   if (out_width)
@@ -42,8 +44,8 @@ rsvg_handle_get_intrinsic_size_in_pixels (RsvgHandle *handle, gdouble *out_width
   if (out_height)
     *out_height = dim.height;
   return TRUE;
-}
 #endif
+}
 
 static GdkTexture *
 gdk_texture_new_from_rsvg (RsvgHandle  *handle,
@@ -124,7 +126,7 @@ gdk_texture_new_from_svg_bytes (GBytes  *bytes,
   if (!handle)
     return NULL;
 
-  if (!rsvg_handle_get_intrinsic_size_in_pixels (handle, &w, &h))
+  if (!gdk_texture_get_rsvg_handle_size (handle, &w, &h))
     {
       g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
                            "Svg image has no intrinsic size; please set one");
@@ -339,7 +341,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
   if (width == 0 || height == 0)
     {
       /* Fetch size from the original icon */
-      if (!rsvg_handle_get_intrinsic_size_in_pixels (handle, &w, &h))
+      if (!gdk_texture_get_rsvg_handle_size (handle, &w, &h))
         {
           g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
                        "Symbolic icon has no intrinsic size; please set one in its SVG");
