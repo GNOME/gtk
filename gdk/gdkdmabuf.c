@@ -567,7 +567,9 @@ gdk_dmabuf_new_for_bytes (GBytes  *bytes,
   alignment = sysconf (_SC_PAGE_SIZE);
   size = align (g_bytes_get_size (bytes), alignment);
 
+#ifdef HAVE_MEMFD_CREATE
   mem_fd = memfd_create ("gtk", MFD_ALLOW_SEALING);
+#endif
   if (mem_fd == -1)
     {
       g_set_error (error,
