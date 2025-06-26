@@ -1731,7 +1731,7 @@ insert_theme (GtkIconTheme *self,
           dir_mtime.exists = FALSE;
         }
 
-      g_array_insert_val (self->dir_mtimes, 0, dir_mtime);
+      g_array_append_val (self->dir_mtimes, dir_mtime);
     }
 
   if (theme_file == NULL)
