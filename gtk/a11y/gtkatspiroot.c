@@ -45,7 +45,6 @@
 
 #define ATSPI_PATH_PREFIX       "/org/a11y/atspi"
 #define ATSPI_ROOT_PATH         ATSPI_PATH_PREFIX "/accessible/root"
-#define ATSPI_NULL_PATH         ATSPI_PATH_PREFIX "/null"
 #define ATSPI_CACHE_PATH        ATSPI_PATH_PREFIX "/cache"
 #define ATSPI_REGISTRY_PATH     ATSPI_PATH_PREFIX "/registry"
 
@@ -404,7 +403,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
       res = g_variant_new_string (id ? id : "");
     }
   else if (g_strcmp0 (property_name, "Parent") == 0)
-    res = g_variant_new ("(so)", ATSPI_NULL_PATH, "");
+    res = gtk_at_spi_null_ref ();
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
     {
       guint n_toplevels = g_list_model_get_n_items (self->toplevels);
