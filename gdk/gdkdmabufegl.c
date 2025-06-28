@@ -243,6 +243,8 @@ gdk_dmabuf_egl_downloader_create_multiplane_formats (GdkDisplay              *di
           break;
         case GDK_SHADER_2_PLANES:
         case GDK_SHADER_3_PLANES:
+        case GDK_SHADER_3_PLANES_10BIT_LSB:
+        case GDK_SHADER_3_PLANES_12BIT_LSB:
           gdk_dmabuf_egl_downloader_add_multiplane_format (display,
                                                            formats,
                                                            mf,

@@ -31,6 +31,12 @@ gsk_gpu_print_shader_op (GString     *string,
       case GDK_SHADER_3_PLANES:
         g_string_append (string, "3");
         break;
+      case GDK_SHADER_3_PLANES_10BIT_LSB:
+        g_string_append (string, "A");
+        break;
+      case GDK_SHADER_3_PLANES_12BIT_LSB:
+        g_string_append (string, "C");
+        break;
       default:
         g_assert_not_reached ();
         break;
