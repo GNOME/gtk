@@ -283,7 +283,7 @@ GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE (GtkPrintBackendCups, gtk_print_backend
                          g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "cups",
-                                                         10))
+                                                         20))
 
 
 /*

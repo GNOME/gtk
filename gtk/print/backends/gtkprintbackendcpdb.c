@@ -188,7 +188,7 @@ GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE (GtkPrintBackendCpdb, gtk_print_backend
                          g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "cpdb",
-                                                         10))
+                                                         20))
 
 /*
  * GtkPrintBackend object for currently opened print dialog
