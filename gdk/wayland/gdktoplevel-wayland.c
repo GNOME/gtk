@@ -682,12 +682,13 @@ gdk_wayland_toplevel_handle_configure (GdkWaylandSurface *wayland_surface)
   gdk_surface_request_layout (surface);
 
   GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
-                     "configure, surface %p %dx%d,%s%s%s%s",
+                     "configure, surface %p %dx%d,%s%s%s%s%s",
                      surface, width, height,
                      (new_state & GDK_TOPLEVEL_STATE_FULLSCREEN) ? " fullscreen" : "",
                      (new_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ? " maximized" : "",
                      (new_state & GDK_TOPLEVEL_STATE_FOCUSED) ? " focused" : "",
-                     (new_state & GDK_TOPLEVEL_STATE_TILED) ? " tiled" : "");
+                     (new_state & GDK_TOPLEVEL_STATE_TILED) ? " tiled" : "",
+                     (new_state & GDK_TOPLEVEL_STATE_SUSPENDED) ? " suspended" : "");
 
   gdk_surface_queue_state_change (surface, ~0 & ~new_state, new_state);
 
