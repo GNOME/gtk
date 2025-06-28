@@ -394,6 +394,12 @@ _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock)
     _gdk_frame_clock_freeze (clock);
 }
 
+gboolean
+gdk_frame_clock_is_frozen (GdkFrameClock *clock)
+{
+  return clock->priv->n_freeze_inhibitors == 0;
+}
+
 static inline gint64
 _gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
 {
