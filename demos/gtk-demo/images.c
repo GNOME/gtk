@@ -355,7 +355,7 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      gicon = g_themed_icon_new_with_default_fallbacks ("battery-caution-charging-symbolic");
+      gicon = g_themed_icon_new_with_default_fallbacks ("battery-level-10-charging-symbolic");
       image = gtk_image_new_from_gicon (gicon);
       gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
       g_object_unref (gicon);

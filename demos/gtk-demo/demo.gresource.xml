@@ -432,14 +432,14 @@
     <file>icons/16x16/actions/process-stop.png</file>
     <file>icons/16x16/actions/go-home.png</file>
     <file>icons/16x16/actions/go-up.png</file>
-    <file>icons/16x16/actions/mail-send-receive-symbolic.symbolic.png</file>
-    <file>icons/16x16/actions/view-fullscreen-symbolic.symbolic.png</file>
-    <file>icons/16x16/actions/document-edit-symbolic.symbolic.png</file>
     <file>icons/16x16/emotes/face-cool.png</file>
-    <file>icons/16x16/emotes/face-laugh-symbolic.symbolic.png</file>
-    <file>icons/16x16/status/battery-caution-charging-symbolic.symbolic.png</file>
     <file>icons/16x16/categories/applications-other.png</file>
     <file>icons/48x48/status/starred.png</file>
+    <file>icons/scalable/actions/document-edit-symbolic.svg</file>
+    <file>icons/scalable/actions/mail-send-receive-symbolic.svg</file>
+    <file>icons/scalable/actions/view-fullscreen-symbolic.svg</file>
+    <file>icons/scalable/emotes/face-laugh-symbolic.svg</file>
+    <file>icons/scalable/status/battery-level-10-charging-symbolic.svg</file>
     <file alias="icons/scalable/apps/org.gtk.Demo4.svg">data/scalable/apps/org.gtk.Demo4.svg</file>
     <file>portland-rose-thumbnail.png</file>
     <file>large-image-thumbnail.png</file>
