@@ -30,5 +30,61 @@ G_BEGIN_DECLS
 
 char ** _gtk_get_module_path          (const char   *type);
 
-G_END_DECLS
+/* A version of G_DEFINE_TYPE_WITH_CODE that appends "Builtin"
+ * to the type name. This helps with transition from modules
+ * to builtin modules for people who build gtk themselves.
+ */
+#define GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE(TypeName, type_name, TYPE_PARENT, _C_) \
+static void     type_name##_init              (TypeName        *self); \
+static void     type_name##_class_init        (TypeName##Class *klass); \
+static GType    type_name##_get_type_once     (void); \
+static void *   type_name##_parent_class = NULL; \
+static int      TypeName##_private_offset; \
+\
+static void     type_name##_class_intern_init (gpointer klass) \
+{ \
+  type_name##_parent_class = g_type_class_peek_parent (klass); \
+  if (TypeName##_private_offset != 0) \
+    g_type_class_adjust_private_offset (klass, &TypeName##_private_offset); \
+  type_name##_class_init ((TypeName##Class*) klass); \
+} \
+\
+G_GNUC_UNUSED \
+static inline gpointer \
+type_name##_get_instance_private (TypeName *self) \
+{ \
+  return (G_STRUCT_MEMBER_P (self, TypeName##_private_offset)); \
+} \
+\
+GType \
+type_name##_get_type (void) \
+{ \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+\
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
+    { \
+      GType g_define_type_id = type_name##_get_type_once (); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+    }                                   \
+  return static_g_define_type_id; \
+} \
+\
+G_NO_INLINE \
+static GType \
+type_name##_get_type_once (void) \
+{ \
+  GType g_define_type_id = \
+        g_type_register_static_simple (TYPE_PARENT, \
+                                       g_intern_static_string (#TypeName "Builtin"), \
+                                       sizeof (TypeName##Class), \
+                                       (GClassInitFunc)(void (*)(void)) type_name##_class_intern_init, \
+                                       sizeof (TypeName), \
+                                       (GInstanceInitFunc)(void (*)(void)) type_name##_init, \
+                                       (GTypeFlags) 0); \
+    { \
+  { _C_; } \
+    } \
+  return g_define_type_id; \
+}
 
+G_END_DECLS

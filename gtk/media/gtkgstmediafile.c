@@ -21,6 +21,7 @@
 
 #include "gtkgstmediafileprivate.h"
 #include "gtkgstpaintableprivate.h"
+#include "gtkmodulesprivate.h"
 
 #include <gst/play/play.h>
 
@@ -93,13 +94,13 @@ gtk_gst_media_file_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_aspect_ratio = gtk_gst_media_file_paintable_get_intrinsic_aspect_ratio;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE,
+GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
                                                 gtk_gst_media_file_paintable_init);
                          g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "gstreamer",
-                                                         10))
+                                                         20))
 
 static void
 gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)

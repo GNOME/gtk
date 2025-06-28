@@ -44,6 +44,7 @@
 #include "gtk/gtk.h"
 #include "gtk/print/gtkprinterprivate.h"
 #include "gtk/gtkprivate.h"
+#include "gtk/gtkmodulesprivate.h"
 
 #include "gtkprintbackendfile.h"
 
@@ -120,11 +121,11 @@ static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter  
 static GList *              file_printer_list_papers               (GtkPrinter              *printer);
 static GtkPageSetup *       file_printer_get_default_page_size     (GtkPrinter              *printer);
 
-G_DEFINE_TYPE_WITH_CODE (GtkPrintBackendFile, gtk_print_backend_file, GTK_TYPE_PRINT_BACKEND,
+GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE (GtkPrintBackendFile, gtk_print_backend_file, GTK_TYPE_PRINT_BACKEND,
                          g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "file",
-                                                         10))
+                                                         20))
 
 /**
  * gtk_print_backend_file_new:
