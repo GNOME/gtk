@@ -2036,5 +2036,25 @@ typedef enum {
   GTK_INTERFACE_CONTRAST_LESS,
 } GtkInterfaceContrast;
 
+/**
+ * GtkRestoreReason:
+ * @GTK_RESTORE_REASON_PRISTINE: Don't restore anything
+ * @GTK_RESTORE_REASON_LAUNCH: This is normal launch. Restore as little as is reasonable
+ * @GTK_RESTORE_REASON_RECOVER: The application has crashed before. Try to restore the previous state
+ * @GTK_RESTORE_REASON_RESTORE: This is a session restore. Restore the previous state as far as possible
+ *
+ * Enumerates possible reasons for an application to restore saved state.
+ *
+ * See [signal@Gtk.Application::restore-state].
+ *
+ * Since: 4.22
+ */
+typedef enum
+{
+  GTK_RESTORE_REASON_PRISTINE,
+  GTK_RESTORE_REASON_LAUNCH,
+  GTK_RESTORE_REASON_RECOVER,
+  GTK_RESTORE_REASON_RESTORE,
+} GtkRestoreReason;
 
 G_END_DECLS
