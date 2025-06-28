@@ -273,10 +273,20 @@ G_MODULE_EXPORT void
 fishbowl_changes_toggled_cb (GtkToggleButton *button,
                              gpointer         user_data)
 {
+  GFile *file;
+  GdkPaintable *paintable;
+  GtkWidget *image;
+
   if (gtk_toggle_button_get_active (button))
-    gtk_button_set_icon_name (GTK_BUTTON (button), "changes-prevent");
+    file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/scalable/status/changes-prevent-symbolic.svg");
   else
-    gtk_button_set_icon_name (GTK_BUTTON (button), "changes-allow");
+    file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/scalable/status/changes-allow-symbolic.svg");
+
+  paintable = GDK_PAINTABLE (gtk_icon_paintable_new_for_file (file, 16, 1));
+  image = gtk_button_get_child (GTK_BUTTON (button));
+  gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
+  g_object_unref (paintable);
+  g_object_unref (file);
 }
 
 G_MODULE_EXPORT char *
