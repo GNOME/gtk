@@ -1086,10 +1086,10 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         case GTK_ACCESSIBLE_INVALID_TRUE:
         case GTK_ACCESSIBLE_INVALID_GRAMMAR:
         case GTK_ACCESSIBLE_INVALID_SPELLING:
-          emit_state_changed (self, "invalid_entry", TRUE);
+          emit_state_changed (self, "invalid-entry", TRUE);
           break;
         case GTK_ACCESSIBLE_INVALID_FALSE:
-          emit_state_changed (self, "invalid_entry", FALSE);
+          emit_state_changed (self, "invalid-entry", FALSE);
           break;
         default:
           break;
