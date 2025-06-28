@@ -385,7 +385,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                                        .pWaitSemaphoreValues = gsk_semaphore_values_get_data (&semaphores.wait_semaphore_values),
                                   } : NULL,
                                },
-                               NULL);
+                               VK_NULL_HANDLE);
 
   gsk_semaphores_clear (&semaphores.wait_semaphores);
   gsk_semaphore_values_clear (&semaphores.wait_semaphore_values);
