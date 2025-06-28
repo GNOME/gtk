@@ -49,6 +49,7 @@
 #include <gtk/print/gtkprintbackendprivate.h>
 #include <gtk/print/gtkprinterprivate.h>
 #include <gtk/gtkprivate.h>
+#include <gtk/gtkmodulesprivate.h>
 
 #include "gtkprintbackendcups.h"
 #include "gtkprintercups.h"
@@ -278,7 +279,7 @@ static void                 secrets_service_vanished_cb             (GDBusConnec
                                                                      const char *name,
                                                                      gpointer user_data);
 
-G_DEFINE_TYPE_WITH_CODE (GtkPrintBackendCups, gtk_print_backend_cups, GTK_TYPE_PRINT_BACKEND,
+GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE (GtkPrintBackendCups, gtk_print_backend_cups, GTK_TYPE_PRINT_BACKEND,
                          g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "cups",

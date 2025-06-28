@@ -22,6 +22,7 @@
 #include <cpdb/frontend.h>
 
 #include <gtk/gtkprivate.h>
+#include <gtk/gtkmodulesprivate.h>
 #include "gtkprintbackendcpdb.h"
 #include "gtkprintbackendutils.h"
 
@@ -183,7 +184,7 @@ typedef struct {
   GDestroyNotify dnotify;
 } _PrintStreamData;
 
-G_DEFINE_TYPE_WITH_CODE (GtkPrintBackendCpdb, gtk_print_backend_cpdb, GTK_TYPE_PRINT_BACKEND,
+GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE (GtkPrintBackendCpdb, gtk_print_backend_cpdb, GTK_TYPE_PRINT_BACKEND,
                          g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "cpdb",
