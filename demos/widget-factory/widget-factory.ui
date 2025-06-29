@@ -532,7 +532,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="enable-emoji-completion">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="placeholder-text" translatable="1">Click icon to change mode</property>
-                                <property name="secondary-icon-name">view-refresh-symbolic</property>
+                                <property name="secondary-icon-paintable">
+                                  <object class="GtkIconPaintable">
+                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-refresh-symbolic.svg</property>
+                                  </object>
+                                </property>
                                 <property name="secondary-icon-tooltip-text">Change mode</property>
                                 <signal name="icon-release" handler="on_entry_icon_release" swapped="no"/>
                               </object>

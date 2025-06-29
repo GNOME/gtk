@@ -13,13 +13,29 @@
             </style>
             <child>
               <object class="GtkButton">
-                <property name="icon-name">go-previous-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-previous-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <signal name="clicked" handler="fishbowl_prev_button_clicked_cb" object="bowl" swapped="no"/>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="icon-name">go-next-symbolic</property>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-next-symbolic.svg</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
                 <signal name="clicked" handler="fishbowl_next_button_clicked_cb" object="bowl" swapped="no"/>
               </object>
             </child>
@@ -38,7 +54,15 @@
         </child>
         <child type="end">
           <object class="GtkToggleButton" id="changes_allow">
-            <property name="icon-name">changes-allow</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/changes-allow-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
             <property name="has-frame">0</property>
             <signal name="notify::active" handler="fishbowl_changes_toggled_cb"/>
           </object>
