@@ -1265,7 +1265,8 @@ gdk_surface_schedule_update (GdkSurface *surface)
 
   /* If there's no frame clock (a foreign surface), then the invalid
    * region will just stick around unless gdk_surface_process_updates()
-   * is called. */
+   * is called.
+   */
   frame_clock = gdk_surface_get_frame_clock (surface);
   if (frame_clock)
     gdk_frame_clock_request_phase (gdk_surface_get_frame_clock (surface),
@@ -2738,11 +2739,17 @@ gdk_surface_queue_state_change (GdkSurface       *surface,
                                 GdkToplevelState  unset_flags,
                                 GdkToplevelState  set_flags)
 {
+  GdkFrameClock *frame_clock;
+
   surface->pending_unset_flags |= unset_flags;
   surface->pending_set_flags &= ~unset_flags;
 
   surface->pending_set_flags |= set_flags;
   surface->pending_unset_flags &= ~set_flags;
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  if (!frame_clock || gdk_frame_clock_is_frozen (frame_clock))
+    gdk_surface_apply_state_change (surface);
 }
 
 void
