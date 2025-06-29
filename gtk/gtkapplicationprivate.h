@@ -151,6 +151,9 @@ typedef struct
   char            *menubar_path;
   guint            menubar_id;
 
+  char            *instance_id;
+  GtkRestoreReason reason;
+
   /* Portal support */
   GDBusProxy      *inhibit_proxy;
   GSList          *inhibit_handles;
