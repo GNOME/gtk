@@ -219,6 +219,10 @@ void            gdk_x11_surface_move                 (GdkSurface *surface,
 void            gdk_x11_surface_check_monitor        (GdkSurface *surface,
                                                       GdkMonitor *monitor);
 
+void            gdk_x11_toplevel_save_state          (GdkToplevel     *toplevel,
+                                                      GVariantBuilder *builder);
+void            gdk_x11_toplevel_restore_state       (GdkToplevel     *toplevel,
+                                                      GVariant        *state);
 
 G_END_DECLS
 
