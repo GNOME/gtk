@@ -613,11 +613,17 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          self);
     }
   else if (texture && texture != self->texture &&
-           (!get_texture_info (self, texture, &fourcc, &premultiplied, &dmabuf) ||
+           !get_texture_info (self, texture, &fourcc, &premultiplied, &dmabuf))
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "[%p] 🗙 Texture type not supported or export failed",
+                         self);
+    }
+  else if (texture && texture != self->texture &&
            !gdk_wayland_color_surface_can_set_color_state (self->color,
                                                            gdk_texture_get_color_state (texture),
                                                            fourcc, premultiplied,
-                                                           &error)))
+                                                           &error))
     {
       gdk_dmabuf_close_fds (&dmabuf);
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
