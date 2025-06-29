@@ -2029,7 +2029,7 @@ gtk_builder_set_current_object (GtkBuilder *builder,
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
   g_return_if_fail (GTK_IS_BUILDER (builder));
-  g_return_if_fail (current_object || G_IS_OBJECT (current_object));
+  g_return_if_fail (current_object == NULL || G_IS_OBJECT (current_object));
 
   if (!g_set_object (&priv->current_object, current_object))
     return;
