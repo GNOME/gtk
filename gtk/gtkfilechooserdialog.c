@@ -164,7 +164,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * - To save a file under a different name, use %GTK_FILE_CHOOSER_ACTION_SAVE,
  *   and set the existing file with [method@Gtk.FileChooser.set_file].
  *
- * - To choose a folder instead of a filem use %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
+ * - To choose a folder instead of a file, use %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
  *
  * In general, you should only cause the file chooser to show a specific
  * folder when it is appropriate to use [method@Gtk.FileChooser.set_file],
