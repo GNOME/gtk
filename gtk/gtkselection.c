@@ -526,7 +526,7 @@ gtk_target_list_add_uri_targets (GtkTargetList *list,
 
   gtk_target_list_add (list, text_uri_list_atom, 0, info);
 
-#ifndef G_OS_WIN32
+#if defined(G_OS_UNIX) && !defined(__APPLE__)
   if (file_transfer_portal_supported ())
     {
       gtk_target_list_add (list, portal_filetransfer_atom, 0, info);
