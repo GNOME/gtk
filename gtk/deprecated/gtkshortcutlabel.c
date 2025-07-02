@@ -129,7 +129,7 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
 {
   const char *labels[16];
   GList *freeme = NULL;
-  char key_label[6];
+  char key_label[16];
   const char *tmp;
   gunichar ch;
   int i = 0;
@@ -178,8 +178,18 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
           labels[i++] = C_("keyboard label", "Backslash");
           break;
         default:
-          memset (key_label, 0, 6);
-          g_unichar_to_utf8 (g_unichar_toupper (ch), key_label);
+          memset (key_label, 0, sizeof (key_label));
+          if (key >= GDK_KEY_KP_Space && key <= GDK_KEY_KP_9)
+            {
+              key_label[0] = 'K';
+              key_label[1] = 'P';
+              key_label[2] = ' ';
+              g_unichar_to_utf8 (g_unichar_toupper (ch), key_label + 3);
+            }
+          else
+            {
+              g_unichar_to_utf8 (g_unichar_toupper (ch), key_label);
+            }
           labels[i++] = key_label;
           break;
         }
