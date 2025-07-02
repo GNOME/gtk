@@ -942,7 +942,7 @@ gtk_accelerator_print_label (GString        *gstring,
         append_separator (gstring);
 
       if (accelerator_key >= GDK_KEY_KP_Space &&
-          accelerator_key <= GDK_KEY_KP_Equal)
+          accelerator_key <= GDK_KEY_KP_9)
         {
           /* Translators: "KP" means "numeric key pad". This string will
            * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
