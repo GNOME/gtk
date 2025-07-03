@@ -1462,8 +1462,13 @@ set_visible_child (GtkStack               *stack,
     }
 
   if (priv->last_visible_child)
-    gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
-  priv->last_visible_child = NULL;
+    {
+      gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
+      gtk_accessible_update_state (GTK_ACCESSIBLE (priv->last_visible_child),
+                                   GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                                   -1);
+    }
+      priv->last_visible_child = NULL;
 
   if (priv->visible_child && priv->visible_child->widget)
     {
@@ -1477,6 +1482,9 @@ set_visible_child (GtkStack               *stack,
         {
           gtk_widget_set_child_visible (priv->visible_child->widget, FALSE);
         }
+      gtk_accessible_update_state (GTK_ACCESSIBLE (priv->visible_child),
+                                   GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                                   -1);
     }
 
   priv->visible_child = child_info;
@@ -1484,6 +1492,9 @@ set_visible_child (GtkStack               *stack,
   if (child_info)
     {
       gtk_widget_set_child_visible (child_info->widget, TRUE);
+      gtk_accessible_update_state (GTK_ACCESSIBLE (child_info),
+                                   GTK_ACCESSIBLE_STATE_HIDDEN, FALSE,
+                                   -1);
 
       if (contains_focus)
         {
