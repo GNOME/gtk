@@ -651,27 +651,13 @@ void
 gtk_bitset_shift_left (GtkBitset *self,
                        guint      amount)
 {
-  GtkBitset *original;
-  GtkBitsetIter iter;
-  guint value;
-  gboolean loop;
+  roaring_bitmap_t *other;
 
   g_return_if_fail (self != NULL);
 
-  if (amount == 0)
-    return;
-
-  original = gtk_bitset_copy (self);
-  gtk_bitset_remove_all (self);
-
-  for (loop = gtk_bitset_iter_init_at (&iter, original, amount, &value);
-       loop;
-       loop = gtk_bitset_iter_next (&iter, &value))
-    {
-      gtk_bitset_add (self, value - amount);
-    }
-
-  gtk_bitset_unref (original);
+  other = roaring_bitmap_add_offset (&self->roaring, - (int64_t) amount);
+  roaring_bitmap_overwrite (&self->roaring, other);
+  roaring_bitmap_free (other);
 }
 
 /**
@@ -687,27 +673,11 @@ void
 gtk_bitset_shift_right (GtkBitset *self,
                         guint      amount)
 {
-  GtkBitset *original;
-  GtkBitsetIter iter;
-  guint value;
-  gboolean loop;
+  roaring_bitmap_t *other;
 
-  g_return_if_fail (self != NULL);
-
-  if (amount == 0)
-    return;
-
-  original = gtk_bitset_copy (self);
-  gtk_bitset_remove_all (self);
-
-  for (loop = gtk_bitset_iter_init_first (&iter, original, &value);
-       loop && value <= G_MAXUINT - amount;
-       loop = gtk_bitset_iter_next (&iter, &value))
-    {
-      gtk_bitset_add (self, value + amount);
-    }
-
-  gtk_bitset_unref (original);
+  other = roaring_bitmap_add_offset (&self->roaring, (int64_t) amount);
+  roaring_bitmap_overwrite (&self->roaring, other);
+  roaring_bitmap_free (other);
 }
 
 /**
@@ -763,7 +733,7 @@ gtk_bitset_iter_copy (GtkBitsetIter *iter)
 {
   roaring_uint32_iterator_t *riter = (roaring_uint32_iterator_t *) iter;
 
-  return (GtkBitsetIter *) roaring_copy_uint32_iterator (riter);
+  return (GtkBitsetIter *) roaring_uint32_iterator_copy (riter);
 }
 
 static void
@@ -771,7 +741,7 @@ gtk_bitset_iter_free (GtkBitsetIter *iter)
 {
   roaring_uint32_iterator_t *riter = (roaring_uint32_iterator_t *) iter;
 
-  roaring_free_uint32_iterator (riter);
+  roaring_uint32_iterator_free (riter);
 }
 
 G_DEFINE_BOXED_TYPE (GtkBitsetIter, gtk_bitset_iter, gtk_bitset_iter_copy, gtk_bitset_iter_free)
@@ -799,7 +769,7 @@ gtk_bitset_iter_init_first (GtkBitsetIter   *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (set != NULL, FALSE);
 
-  roaring_init_iterator (&set->roaring, riter);
+  roaring_iterator_init (&set->roaring, riter);
 
   if (value)
     *value = riter->has_value ? riter->current_value : 0;
@@ -830,7 +800,7 @@ gtk_bitset_iter_init_last (GtkBitsetIter    *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (set != NULL, FALSE);
 
-  roaring_init_iterator_last (&set->roaring, riter);
+  roaring_iterator_init_last (&set->roaring, riter);
 
   if (value)
     *value = riter->has_value ? riter->current_value : 0;
@@ -863,8 +833,8 @@ gtk_bitset_iter_init_at (GtkBitsetIter   *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (set != NULL, FALSE);
 
-  roaring_init_iterator (&set->roaring, riter);
-  if (!roaring_move_uint32_iterator_equalorlarger (riter, target))
+  roaring_iterator_init (&set->roaring, riter);
+  if (!roaring_uint32_iterator_move_equalorlarger (riter, target))
     {
       if (value)
         *value = 0;
@@ -897,7 +867,7 @@ gtk_bitset_iter_next (GtkBitsetIter *iter,
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  if (!roaring_advance_uint32_iterator (riter))
+  if (!roaring_uint32_iterator_advance (riter))
     {
       if (value)
         *value = 0;
@@ -930,7 +900,7 @@ gtk_bitset_iter_previous (GtkBitsetIter *iter,
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  if (!roaring_previous_uint32_iterator (riter))
+  if (!roaring_uint32_iterator_previous (riter))
     {
       if (value)
         *value = 0;
