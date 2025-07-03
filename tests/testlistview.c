@@ -253,7 +253,8 @@ file_info_selection_new (GListModel *model)
 
 /*** ---------------------- ***/
 
-GSList *pending = NULL;
+GSList *pending_dirs = NULL;
+guint pending = 0;
 guint active = 0;
 
 static void
@@ -274,8 +275,9 @@ loading_cb (GtkDirectoryList *dir,
 
       while (active < 20 && pending)
         {
-          GtkDirectoryList *dir2 = pending->data;
-          pending = g_slist_remove (pending, dir2);
+          GtkDirectoryList *dir2 = pending_dirs->data;
+          pending_dirs = g_slist_remove (pending_dirs, dir2);
+          pending--;
           gtk_directory_list_set_file (dir2, g_object_get_data (G_OBJECT (dir2), "file"));
           g_object_unref (dir2);
         }
@@ -298,7 +300,8 @@ create_directory_list (GFile *file)
   if (active > 20)
     {
       g_object_set_data_full (G_OBJECT (dir), "file", g_object_ref (file), g_object_unref);
-      pending = g_slist_prepend (pending, g_object_ref (dir));
+      pending_dirs = g_slist_prepend (pending_dirs, g_object_ref (dir));
+      pending++;
     }
   else
     {
@@ -554,7 +557,7 @@ update_statusbar (GtkStatusbar *statusbar)
 
   if (pending || active)
     {
-      g_string_append_printf (string, " (%u directories remaining)", active + g_slist_length (pending));
+      g_string_append_printf (string, " (%u directories remaining)", active + pending);
       result = G_SOURCE_CONTINUE;
     }
 
