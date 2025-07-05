@@ -357,6 +357,8 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
       return FALSE;
     }
 
+  gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
+
 #ifdef GDK_WINDOWING_WIN32
   if (gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY))
     {
@@ -394,18 +396,9 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
       gst_query_add_allocation_pool (query, pool, size, 2, 0);
       g_clear_object (&pool);
 
-      /* we also support various metadata */
-      gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
-
       return TRUE;
     }
 #endif
-
-  if (gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_DMABUF))
-    {
-      gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
-      return TRUE;
-    }
 
   if (gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_GL_MEMORY))
     {
@@ -439,16 +432,13 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
       gst_query_add_allocation_pool (query, pool, size, 2, 0);
       g_clear_object (&pool);
 
-      /* we also support various metadata */
-      gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
-
       if (self->gst_context->gl_vtable->FenceSync)
         gst_query_add_allocation_meta (query, GST_GL_SYNC_META_API_TYPE, 0);
 
       return TRUE;
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean
@@ -805,7 +795,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       if (!frame)
         return NULL;
 
-      bytes = g_bytes_new_with_free_func (frame->data[0],
+      bytes = g_bytes_new_with_free_func (frame->map[0].data,
                                           frame->map[0].size,
                                           (GDestroyNotify) video_frame_free,
                                           frame);
