@@ -199,14 +199,6 @@ int                    gsk_curve_get_curvature_points           (const GskCurve 
 int                    gsk_curve_get_cusps                      (const GskCurve         *curve,
                                                                  float                   t[2]);
 
-typedef enum
-{
-  GSK_PATH_INTERSECTION_NONE,
-  GSK_PATH_INTERSECTION_NORMAL,
-  GSK_PATH_INTERSECTION_START,
-  GSK_PATH_INTERSECTION_END,
-} GskPathIntersection;
-
 int                    gsk_curve_intersect                      (const GskCurve         *curve1,
                                                                  const GskCurve         *curve2,
                                                                  float                  *t1,
