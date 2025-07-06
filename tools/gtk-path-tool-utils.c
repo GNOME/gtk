@@ -228,12 +228,11 @@ collect_cb (GskPathOperation        op,
         gsk_path_builder_conic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
       if (cd->points)
         {
-          if (cd->controls)
-            gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
           gsk_path_builder_add_circle (cd->point_builder, &pts[2], 4);
         }
       if (cd->controls)
         {
+          gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
           gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
           gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
         }
@@ -243,15 +242,12 @@ collect_cb (GskPathOperation        op,
       gsk_path_builder_cubic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       if (cd->points)
         {
-          if (cd->controls)
-            {
-              gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
-              gsk_path_builder_add_circle (cd->point_builder, &pts[2], 3);
-            }
           gsk_path_builder_add_circle (cd->point_builder, &pts[3], 4);
         }
       if (cd->controls)
         {
+          gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
+          gsk_path_builder_add_circle (cd->point_builder, &pts[2], 3);
           gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
           gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
           gsk_path_builder_line_to (cd->line_builder, pts[3].x, pts[3].y);

@@ -184,22 +184,25 @@ update_bounds (PathView *self)
         graphene_rect_init (&self->bounds, 0, 0, 0, 0);
     }
   else
-    gsk_path_get_stroke_bounds (self->path, self->stroke, &self->bounds);
+    {
+      if (!gsk_path_get_stroke_bounds (self->scaled_path, self->stroke, &self->bounds))
+        graphene_rect_init (&self->bounds, 0, 0, 0, 0);
+    }
 
   if (self->line_path)
     {
       graphene_rect_t bounds;
 
-      gsk_path_get_stroke_bounds (self->line_path, self->stroke, &bounds);
-      graphene_rect_union (&bounds, &self->bounds, &self->bounds);
+      if (gsk_path_get_stroke_bounds (self->line_path, self->stroke, &bounds))
+        graphene_rect_union (&bounds, &self->bounds, &self->bounds);
     }
 
   if (self->point_path)
     {
       graphene_rect_t bounds;
 
-      gsk_path_get_stroke_bounds (self->point_path, self->stroke, &bounds);
-      graphene_rect_union (&bounds, &self->bounds, &self->bounds);
+      if (gsk_path_get_stroke_bounds (self->point_path, self->stroke, &bounds))
+        graphene_rect_union (&bounds, &self->bounds, &self->bounds);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
