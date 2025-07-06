@@ -547,6 +547,7 @@ path_view_class_init (PathViewClass *class)
 
   gtk_widget_class_install_property_action (widget_class, "points", "show-points");
   gtk_widget_class_install_property_action (widget_class, "controls", "show-controls");
+  gtk_widget_class_install_property_action (widget_class, "intersections", "show-intersections");
 
   gtk_widget_class_install_action (widget_class, "fill-rule", NULL,
                                    path_view_toggle_fill_rule);
@@ -555,6 +556,7 @@ path_view_class_init (PathViewClass *class)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, 0, "zoom", "d", 1/1.2);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_p, 0, "points", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, 0, "controls", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_i, 0, "intersections", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, 0, "fill-rule", NULL);
 }
 
