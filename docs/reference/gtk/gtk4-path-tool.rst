@@ -150,7 +150,6 @@ Rendering
 ^^^^^^^^^
 
 The ``render`` command renders the given path as a PNG image.
-The interior of the path is filled.
 
 ``--fill``
 
