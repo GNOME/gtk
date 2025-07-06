@@ -692,6 +692,9 @@ do_pre_parse_initialization (int    *argc,
       slowdown = g_ascii_strtod (env_string, NULL);
       _gtk_set_slowdown (slowdown);
     }
+
+  /* Trigger fontconfig initialization early */
+  pango_cairo_font_map_get_default ();
 }
 
 static void
