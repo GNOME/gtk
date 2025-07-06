@@ -280,6 +280,7 @@ do_render (int          *argc,
       g_free (msg);
     }
 
+  gsk_stroke_free (stroke);
   g_object_unref (texture);
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);

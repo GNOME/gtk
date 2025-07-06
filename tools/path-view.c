@@ -184,22 +184,25 @@ update_bounds (PathView *self)
         graphene_rect_init (&self->bounds, 0, 0, 0, 0);
     }
   else
-    gsk_path_get_stroke_bounds (self->path, self->stroke, &self->bounds);
+    {
+      if (!gsk_path_get_stroke_bounds (self->scaled_path, self->stroke, &self->bounds))
+        graphene_rect_init (&self->bounds, 0, 0, 0, 0);
+    }
 
   if (self->line_path)
     {
       graphene_rect_t bounds;
 
-      gsk_path_get_stroke_bounds (self->line_path, self->stroke, &bounds);
-      graphene_rect_union (&bounds, &self->bounds, &self->bounds);
+      if (gsk_path_get_stroke_bounds (self->line_path, self->stroke, &bounds))
+        graphene_rect_union (&bounds, &self->bounds, &self->bounds);
     }
 
   if (self->point_path)
     {
       graphene_rect_t bounds;
 
-      gsk_path_get_stroke_bounds (self->point_path, self->stroke, &bounds);
-      graphene_rect_union (&bounds, &self->bounds, &self->bounds);
+      if (gsk_path_get_stroke_bounds (self->point_path, self->stroke, &bounds))
+        graphene_rect_union (&bounds, &self->bounds, &self->bounds);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
@@ -547,6 +550,7 @@ path_view_class_init (PathViewClass *class)
 
   gtk_widget_class_install_property_action (widget_class, "points", "show-points");
   gtk_widget_class_install_property_action (widget_class, "controls", "show-controls");
+  gtk_widget_class_install_property_action (widget_class, "intersections", "show-intersections");
 
   gtk_widget_class_install_action (widget_class, "fill-rule", NULL,
                                    path_view_toggle_fill_rule);
@@ -555,6 +559,7 @@ path_view_class_init (PathViewClass *class)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, 0, "zoom", "d", 1/1.2);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_p, 0, "points", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, 0, "controls", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_i, 0, "intersections", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, 0, "fill-rule", NULL);
 }
 

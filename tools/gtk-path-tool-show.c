@@ -226,6 +226,7 @@ do_show (int          *argc,
 
   g_clear_pointer (&path1, gsk_path_unref);
   g_clear_pointer (&path2, gsk_path_unref);
+  gsk_stroke_free (stroke);
 
   g_strfreev (args);
 }

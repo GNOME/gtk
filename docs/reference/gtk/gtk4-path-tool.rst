@@ -59,7 +59,8 @@ Showing
 The ``show`` command displays the given path in a window. The interior
 of the path is filled. The window allows some interactive control with
 key bindings: '+'/'-' change the zoom level, 'p' toggles display of points,
-'c' toggles display of controls, 'f' changes the fill rule.
+'c' toggles display of controls, 'i' toggles display of intersections and
+'f' changes the fill rule.
 
 ``--fill``
 
@@ -150,7 +151,6 @@ Rendering
 ^^^^^^^^^
 
 The ``render`` command renders the given path as a PNG image.
-The interior of the path is filled.
 
 ``--fill``
 
