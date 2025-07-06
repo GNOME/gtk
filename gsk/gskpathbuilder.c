@@ -907,57 +907,6 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
     }
 
   self->flags &= ~GSK_PATH_FLAT;
-
-  /* At this point, we are dealing with a cubic that can't be reduced to
-   * lines or quadratics. Check for cusps.
-   */
-    {
-      GskCurve c, c1, c2, c3, c4;
-      float t[2];
-      int n;
-
-      gsk_curve_init_foreach (&c,
-                              GSK_PATH_CUBIC,
-                              (const graphene_point_t[]) { p0, p1, p2, p3 },
-                              4,
-                              0.f);
-
-      n = gsk_curve_get_cusps (&c, t);
-      if (n == 1)
-        {
-          gsk_curve_split (&c, t[0], &c1, &c2);
-          gsk_path_builder_append_current (self,
-                                           GSK_PATH_CUBIC,
-                                           3, &c1.cubic.points[1]);
-          gsk_path_builder_append_current (self,
-                                           GSK_PATH_CUBIC,
-                                           3, &c2.cubic.points[1]);
-          return;
-        }
-      else if (n == 2)
-        {
-          if (t[1] < t[0])
-            {
-              float s = t[0];
-              t[0] = t[1];
-              t[1] = s;
-            }
-
-          gsk_curve_split (&c, t[0], &c1, &c2);
-          gsk_curve_split (&c2, (t[1] - t[0]) / (1 - t[0]), &c3, &c4);
-          gsk_path_builder_append_current (self,
-                                           GSK_PATH_CUBIC,
-                                           3, &c1.cubic.points[1]);
-          gsk_path_builder_append_current (self,
-                                           GSK_PATH_CUBIC,
-                                           3, &c3.cubic.points[1]);
-          gsk_path_builder_append_current (self,
-                                           GSK_PATH_CUBIC,
-                                           3, &c4.cubic.points[1]);
-          return;
-        }
-    }
-
   gsk_path_builder_append_current (self,
                                    GSK_PATH_CUBIC,
                                    3, (graphene_point_t[3]) { p1, p2, p3 });
