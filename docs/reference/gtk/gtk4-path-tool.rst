@@ -17,8 +17,8 @@ SYNOPSIS
 |   **gtk4-path-tool** <COMMAND> [OPTIONS...] <PATH>
 |
 |   **gtk4-path-tool** decompose [OPTIONS...] <PATH>
-|   **gtk4-path-tool** show [OPTIONS...] <PATH>
-|   **gtk4-path-tool** render [OPTIONS...] <PATH>
+|   **gtk4-path-tool** show [OPTIONS...] <PATH>...
+|   **gtk4-path-tool** render [OPTIONS...] <PATH>...
 |   **gtk4-path-tool** reverse [OPTIONS...] <PATH>
 |   **gtk4-path-tool** info [OPTIONS...] <PATH>
 
@@ -77,6 +77,11 @@ key bindings: '+'/'-' change the zoom level, 'p' toggles display of points,
 
   Show control points.
 
+``--intersections``
+
+  If two paths are given, show their intersections. If one path is given,
+  show its self-intersections.
+
 ``--fill-rule=VALUE``
 
   The fill rule that is used to determine what areas are inside the path.
@@ -96,6 +101,11 @@ key bindings: '+'/'-' change the zoom level, 'p' toggles display of points,
 
   The color that is used to render the points.
   If not specified, red is used.
+
+``--intersection-color=COLOR``
+
+  The color that is used to render intersections.
+  If not specified, green is used.
 
 ``--line-width=VALUE``
 
@@ -158,6 +168,11 @@ The interior of the path is filled.
 
   Show control points.
 
+``--intersections``
+
+  If two paths are given, show their intersections. If one path is given,
+  show its self-intersections.
+
 ``--fill-rule=VALUE``
 
   The fill rule that is used to determine what areas are inside the path.
@@ -177,6 +192,11 @@ The interior of the path is filled.
 
   The color that is used to render the points.
   If not specified, red is used.
+
+``--intersection-color=COLOR``
+
+  The color that is used to render intersections.
+  If not specified, green is used.
 
 ``--output-file=FILE``
 

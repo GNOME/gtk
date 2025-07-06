@@ -6,4 +6,5 @@
 
 G_DECLARE_FINAL_TYPE (PathView, path_view, PATH, VIEW, GtkWidget)
 
-GtkWidget * path_view_new (GskPath *path);
+GtkWidget * path_view_new (GskPath *path1,
+                           GskPath *path2);

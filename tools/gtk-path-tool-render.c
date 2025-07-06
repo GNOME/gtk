@@ -38,10 +38,12 @@ do_render (int          *argc,
   const char *fg_color = "black";
   const char *bg_color = "white";
   const char *point_color = "red";
+  const char *intersection_color = "lightgreen";
   double zoom = 1;
-  gboolean do_stroke = FALSE;
+  gboolean do_fill = TRUE;
   gboolean show_points = FALSE;
   gboolean show_controls = FALSE;
+  gboolean show_intersections = FALSE;
   double line_width = 1;
   const char *cap = "butt";
   const char *join = "miter";
@@ -53,16 +55,18 @@ do_render (int          *argc,
   GOptionContext *context;
   GOptionGroup *options;
   const GOptionEntry entries[] = {
-    { "fill", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &do_stroke, N_("Fill the path (the default)"), NULL },
-    { "stroke", 0, 0, G_OPTION_ARG_NONE, &do_stroke, N_("Stroke the path"), NULL },
+    { "fill", 0, 0, G_OPTION_ARG_NONE, &do_fill, N_("Fill the path (the default)"), NULL },
+    { "stroke", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &do_fill, N_("Stroke the path"), NULL },
     { "points", 0, 0, G_OPTION_ARG_NONE, &show_points, N_("Show path points"), NULL },
     { "controls", 0, 0, G_OPTION_ARG_NONE, &show_controls, N_("Show control points"), NULL },
+    { "intersections", 0, 0, G_OPTION_ARG_NONE, &show_intersections, N_("Show intersections"), NULL },
     { "output", 0, 0, G_OPTION_ARG_FILENAME, &output_file, N_("The output file"), N_("FILE") },
     { "fg-color", 0, 0, G_OPTION_ARG_STRING, &fg_color, N_("Foreground color"), N_("COLOR") },
     { "bg-color", 0, 0, G_OPTION_ARG_STRING, &bg_color, N_("Background color"), N_("COLOR") },
     { "point-color", 0, 0, G_OPTION_ARG_STRING, &point_color, N_("Point color"), N_("COLOR") },
+    { "intersection-color", 0, 0, G_OPTION_ARG_STRING, &intersection_color, N_("Intersection color"), N_("COLOR") },
     { "zoom", 0, 0, G_OPTION_ARG_DOUBLE, &zoom, N_("Zoom level (number)"), N_("VALUE") },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH") },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH…") },
     { NULL, }
   };
   const GOptionEntry fill_entries[] = {
@@ -79,14 +83,19 @@ do_render (int          *argc,
     { NULL, }
   };
 
+  GskPath *path1;
+  GskPath *path2;
+  GskPathBuilder *builder;
   GskPath *path;
   GskPath *scaled_path = NULL;
   GskPath *line_path = NULL;
   GskPath *point_path = NULL;
+  GskPath *intersection_line_path = NULL;
+  GskPath *intersection_point_path = NULL;
   GskFillRule fill_rule;
-  GdkRGBA fg, bg, pc;
+  GdkRGBA fg, bg, pc, ic;
   graphene_rect_t bounds;
-  GskRenderNode *fg_node, *pc_node, *nodes[5], *node;
+  GskRenderNode *fg_node, *pc_node, *ic_node, *nodes[7], *node;
   GdkSurface *surface;
   GskRenderer *renderer;
   GdkTexture *texture;
@@ -146,20 +155,41 @@ do_render (int          *argc,
       exit (1);
     }
 
-  path = get_path (args[0]);
+  path1 = get_path (args[0]);
+  if (g_strv_length (args) > 1)
+    path2 = get_path (args[1]);
+  else
+    path2 = NULL;
+
+  builder = gsk_path_builder_new ();
+  if (path1)
+    gsk_path_builder_add_path (builder, path1);
+  if (path2)
+    gsk_path_builder_add_path (builder, path2);
+  path = gsk_path_builder_free_to_path (builder);
+
+  zoom = CLAMP (zoom, 1, 20);
 
   collect_render_data (path,
                        show_points,
                        show_controls,
-                       CLAMP (zoom, 1, 20),
+                       zoom,
                        &scaled_path,
                        &line_path,
                        &point_path);
+
+  if (show_intersections)
+    collect_intersections (path1,
+                           path2,
+                           zoom,
+                           &intersection_line_path,
+                           &intersection_point_path);
 
   fill_rule = get_enum_value (GSK_TYPE_FILL_RULE, _("fill rule"), fill);
   get_color (&fg, fg_color);
   get_color (&bg, bg_color);
   get_color (&pc, point_color);
+  get_color (&ic, intersection_color);
 
   line_cap = get_enum_value (GSK_TYPE_LINE_CAP, _("line cap"), cap);
   line_join = get_enum_value (GSK_TYPE_LINE_JOIN, _("line join"), join);
@@ -171,29 +201,30 @@ do_render (int          *argc,
   gsk_stroke_set_dash_offset (stroke, dash_offset);
   _gsk_stroke_set_dashes (stroke, dashes);
 
-  if (do_stroke)
-    {
-      gsk_path_get_stroke_bounds (scaled_path, stroke, &bounds);
-      graphene_rect_inset (&bounds, -10, -10);
-    }
-  else
+  if (do_fill)
     {
       if (gsk_path_get_bounds (scaled_path, &bounds))
         graphene_rect_inset (&bounds, -10, -10);
       else
         graphene_rect_init (&bounds, -10, -10, 20, 20);
     }
+  else
+    {
+      gsk_path_get_stroke_bounds (scaled_path, stroke, &bounds);
+      graphene_rect_inset (&bounds, -10, -10);
+    }
 
   fg_node = gsk_color_node_new (&fg, &bounds);
   pc_node = gsk_color_node_new (&pc, &bounds);
+  ic_node = gsk_color_node_new (&ic, &bounds);
 
   i = 0;
   nodes[i++] = gsk_color_node_new (&bg, &bounds);
 
-  if (do_stroke)
-    nodes[i++] = gsk_stroke_node_new (fg_node, scaled_path, stroke);
-  else
+  if (do_fill)
     nodes[i++] = gsk_fill_node_new (fg_node, scaled_path, fill_rule);
+  else
+    nodes[i++] = gsk_stroke_node_new (fg_node, scaled_path, stroke);
 
   if (line_path)
     {
@@ -208,10 +239,24 @@ do_render (int          *argc,
       nodes[i++] = gsk_stroke_node_new (fg_node, point_path, stroke);
     }
 
+  if (intersection_line_path)
+    {
+      GskStroke *line_stroke = gsk_stroke_new (line_width);
+      nodes[i++] = gsk_stroke_node_new (ic_node, intersection_line_path, line_stroke);
+      gsk_stroke_free (line_stroke);
+    }
+
+  if (intersection_point_path)
+    {
+      nodes[i++] = gsk_fill_node_new (ic_node, intersection_point_path, GSK_FILL_RULE_WINDING);
+    }
+
   node = gsk_container_node_new (nodes, i);
 
   gsk_render_node_unref (fg_node);
   gsk_render_node_unref (pc_node);
+  gsk_render_node_unref (ic_node);
+
   for (i--; i >= 0; i--)
     gsk_render_node_unref (nodes[i]);
 
@@ -238,13 +283,15 @@ do_render (int          *argc,
   g_object_unref (texture);
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
-  g_object_unref (surface);
+  gdk_surface_destroy (surface);
   gsk_render_node_unref (node);
 
   gsk_path_unref (path);
   g_clear_pointer (&scaled_path, gsk_path_unref);
   g_clear_pointer (&line_path, gsk_path_unref);
   g_clear_pointer (&point_path, gsk_path_unref);
+  g_clear_pointer (&intersection_line_path, gsk_path_unref);
+  g_clear_pointer (&intersection_point_path, gsk_path_unref);
 
   g_strfreev (args);
 }

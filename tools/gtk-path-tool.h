@@ -26,3 +26,10 @@ void collect_render_data (GskPath   *path,
                           GskPath  **scaled_path,
                           GskPath  **line_path,
                           GskPath  **point_path);
+
+void collect_intersections (GskPath  *path1,
+                            GskPath  *path2,
+                            double    zoom,
+                            GskPath **lines,
+                            GskPath **points);
+

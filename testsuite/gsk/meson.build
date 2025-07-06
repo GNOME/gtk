@@ -614,6 +614,7 @@ tests = [
   [ 'opaque' ],
   [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
   [ 'path-special-cases' ],
+  ['path-intersect'],
 ]
 
 test_cargs = []
@@ -645,6 +646,7 @@ internal_tests = [
   [ 'boundingbox'],
   [ 'curve', [ ], [ 'flaky' ]],
   [ 'curve-special-cases' ],
+  [ 'curve-intersect' ],
   [ 'half-float' ],
   [ 'not-diff' ],
   [ 'misc'],

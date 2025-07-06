@@ -36,6 +36,10 @@ GskContour *            gsk_standard_contour_new                (GskPathFlags   
 
 GskContour *            gsk_circle_contour_new                  (const graphene_point_t *center,
                                                                  float                   radius);
+void                    gsk_circle_contour_get_params           (const GskContour       *contour,
+                                                                 graphene_point_t       *center,
+                                                                 float                  *radius,
+                                                                 gboolean               *ccw);
 GskContour *            gsk_rect_contour_new                    (const graphene_rect_t  *rect);
 GskContour *            gsk_rounded_rect_contour_new            (const GskRoundedRect   *rounded_rect);
 
