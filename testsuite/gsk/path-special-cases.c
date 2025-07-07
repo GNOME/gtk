@@ -348,6 +348,7 @@ test_rect_path (void)
   graphene_rect_t bounds;
   GskPathPoint point;
   float distance;
+  graphene_point_t p;
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 200, 100));
@@ -369,6 +370,12 @@ test_rect_path (void)
   g_assert_true (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point, &distance));
 
   g_assert_true (distance == 100);
+
+  g_assert_true (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (50, -10), INFINITY, &point, &distance));
+  gsk_path_point_get_position (&point, path, &p);
+
+  g_assert_true (distance == 10);
+  g_assert_true (graphene_point_near (&p, &GRAPHENE_POINT_INIT (50, 0), 0.1));
 
   gsk_path_unref (path);
 }

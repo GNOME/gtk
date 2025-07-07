@@ -238,7 +238,7 @@ typedef struct
   float threshold;
   gsize idx;
   gsize best_idx;
-  gsize best_t;
+  float best_t;
 } ClosestPointData;
 
 static gboolean
