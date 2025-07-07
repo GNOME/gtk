@@ -1518,10 +1518,14 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
                                       float                  *out_dist)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
-  float dist, angle, t;
+  float d, dist, angle, t;
   gsize idx;
 
-  dist = fabsf (graphene_point_distance (&self->center, point, NULL, NULL) - self->radius);
+  d = graphene_point_distance (&self->center, point, NULL, NULL);
+  if (d > self->radius)
+    dist = d - self->radius;
+  else
+    dist = self->radius - d;
 
   if (dist > threshold)
     return FALSE;
@@ -1547,6 +1551,8 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
 
   result->idx = idx;
   result->t = t;
+
+  *out_dist = dist;
 
   return TRUE;
 }
