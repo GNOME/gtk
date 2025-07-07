@@ -207,6 +207,65 @@ test_curve_length (void)
   g_assert_cmpfloat_with_epsilon (l, l1 + l2, 0.62);
 }
 
+static void
+test_curve_cusp (void)
+{
+  GskCurve c;
+  float t[2];
+  int n;
+
+  /* These coefficients were read out of the
+   * diagram in https://pomax.github.io/bezierinfo/#canonical
+   */
+  gsk_curve_init_foreach (&c, GSK_PATH_CUBIC,
+                          (graphene_point_t []) {
+                            { 0, 0 },
+                            { 0, 100 },
+                            { 100, 100 },
+                            { -100, 0 }
+                          },
+                          4, 0);
+
+  n = gsk_curve_get_cusps (&c, t);
+  g_assert_cmpint (n, ==, 1);
+
+  gsk_curve_init_foreach (&c, GSK_PATH_CUBIC,
+                          (graphene_point_t []) {
+                            { 0, 0 },
+                            { 0, 100 },
+                            { 100, 100 },
+                            { -200, -125 }
+                          },
+                          4, 0);
+
+  n = gsk_curve_get_cusps (&c, t);
+  g_assert_cmpint (n, ==, 1);
+
+  gsk_curve_init_foreach (&c, GSK_PATH_CUBIC,
+                          (graphene_point_t []) {
+                            { 0, 0 },
+                            { 0, 100 },
+                            { 100, 100 },
+                            { -90, 0 }
+                          },
+                          4, 0);
+
+  n = gsk_curve_get_cusps (&c, t);
+  g_assert_cmpint (n, ==, 0);
+
+  gsk_curve_init_foreach (&c, GSK_PATH_CUBIC,
+                          (graphene_point_t []) {
+                            { 0, 0 },
+                            { 0, 100 },
+                            { 100, 100 },
+                            { -110, 0 }
+                          },
+                          4, 0);
+
+  n = gsk_curve_get_cusps (&c, t);
+  g_assert_cmpint (n, ==, 0);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -218,6 +277,7 @@ main (int   argc,
   g_test_add_func ("/curve/special/crossing", test_curve_crossing);
   g_test_add_func ("/curve/special/circle", test_circle);
   g_test_add_func ("/curve/special/length", test_curve_length);
+  g_test_add_func ("/curve/special/cusp", test_curve_cusp);
 
   return g_test_run ();
 }
