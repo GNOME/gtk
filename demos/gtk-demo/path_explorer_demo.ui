@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk40">
+  <object class="GtkWindow" id="window">
+    <property name="title">Path Explorer</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="start">
+          <object class="GtkToggleButton" id="sidebar-toggle">
+            <property name="icon-name">open-menu-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GtkGrid">
+            <style><class name="sidebar"/></style>
+            <property name="visible" bind-source="sidebar-toggle" bind-property="active" bind-flags="sync-create"/>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Fill</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="hexpand">0</property>
+                <child>
+                  <object class="GtkCheckButton">
+                    <property name="active" bind-source="demo" bind-property="fill" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColorDialogButton">
+                    <property name="hexpand">1</property>
+                    <property name="dialog">
+                      <object class="GtkColorDialog">
+                        <property name="modal">1</property>
+                        <property name="with-alpha">1</property>
+                      </object>
+                    </property>
+                    <property name="rgba" bind-source="demo" bind-property="fill-color" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Stroke</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="hexpand">0</property>
+                <child>
+                  <object class="GtkCheckButton" id="stroke_toggle">
+                    <property name="active" bind-source="demo" bind-property="stroke" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColorDialogButton">
+                    <property name="hexpand">1</property>
+                    <property name="dialog">
+                      <object class="GtkColorDialog">
+                        <property name="modal">1</property>
+                        <property name="with-alpha">1</property>
+                      </object>
+                    </property>
+                    <property name="rgba" bind-source="demo" bind-property="stroke-color" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Fill rule</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDropDown">
+                <property name="selected" bind-source="demo" bind-property="fill-rule" bind-flags="bidirectional|sync-create"/>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>Winding</item>
+                      <item>Even-Odd</item>
+                    </items>
+                  </object>
+                </property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Line cap</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDropDown">
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>Butt</item>
+                      <item>Round</item>
+                      <item>Square</item>
+                    </items>
+                  </object>
+                </property>
+                <property name="selected" bind-source="demo" bind-property="line-cap" bind-flags="bidirectional|sync-create"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Line join</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDropDown">
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>Miter</item>
+                      <item>Round</item>
+                      <item>Bevel</item>
+                    </items>
+                  </object>
+                </property>
+                <property name="selected" bind-source="demo" bind-property="line-join" bind-flags="bidirectional|sync-create"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Miter limit</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="upper">10</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">1</property>
+                    <property name="value" bind-source="demo" bind-property="miter-limit" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Stroke width</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">1</property>
+                    <property name="upper">20</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">1</property>
+                    <property name="value" bind-source="demo" bind-property="line-width" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Dash pattern</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">7</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="text" bind-source="demo" bind-property="dashes" bind-flags="bidirectional|sync-create"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">7</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Dash offset</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">8</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">-1000</property>
+                    <property name="upper">1000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">1</property>
+                    <property name="value" bind-source="demo" bind-property="dash-offset" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">8</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Show points</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">9</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton">
+                <property name="active" bind-source="demo" bind-property="show-points" bind-flags="bidirectional|sync-create"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">9</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Show bounds</property>
+                <property name="xalign">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">10</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton">
+                <property name="active" bind-source="demo" bind-property="show-bounds" bind-flags="bidirectional|sync-create"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">10</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <style><class name="content"/></style>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <child>
+                  <object class="PathExplorer" id="demo">
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry">
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale">
+                <property name="inverted">1</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="upper">1</property>
+                    <property name="step-increment">0.1</property>
+                    <property name="value" bind-source="demo" bind-property="start" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="upper">1</property>
+                    <property name="step-increment">0.1</property>
+                    <property name="value" bind-source="demo" bind-property="end" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
