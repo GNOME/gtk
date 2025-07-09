@@ -2,7 +2,7 @@
 directory = gdk-pixbuf
 url = https://gitlab.gnome.org/GNOME/gdk-pixbuf.git
 push-url = ssh://git@ssh.gitlab.gnome.org:GNOME/gdk-pixbuf.git
-revision = 2.42.12
+revision = 2.43.3
 depth = 1
 
 [provide]

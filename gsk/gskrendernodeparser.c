@@ -5335,8 +5335,6 @@ render_node_print (Printer       *p,
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
       {
-        GdkColorState *interpolation;
-
         if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
           start_node (p, "repeating-linear-gradient", node_name);
         else
@@ -5345,13 +5343,14 @@ render_node_print (Printer       *p,
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "start", gsk_linear_gradient_node_get_start (node));
         append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
-        append_stops_param (p, "stops", gsk_linear_gradient_node_get_gradient_stops (node),
-                                        gsk_linear_gradient_node_get_n_color_stops (node));
+        append_stops_param (p, "stops", gsk_gradient_node_get_stops (node),
+                                        gsk_gradient_node_get_n_stops (node));
 
-        interpolation = gsk_linear_gradient_node_get_interpolation_color_state (node);
-        append_color_state_param (p, "interpolation", interpolation, GDK_COLOR_STATE_SRGB);
+        append_color_state_param (p, "interpolation",
+                                  gsk_gradient_node_get_interpolation (node),
+                                  GDK_COLOR_STATE_SRGB);
         append_hue_interpolation_param (p, "hue-interpolation",
-                                        gsk_linear_gradient_node_get_hue_interpolation (node),
+                                        gsk_gradient_node_get_hue_interpolation (node),
                                         GSK_HUE_INTERPOLATION_SHORTER);
 
         end_node (p);
@@ -5361,8 +5360,6 @@ render_node_print (Printer       *p,
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_RADIAL_GRADIENT_NODE:
       {
-        GdkColorState *interpolation;
-
         if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
           start_node (p, "repeating-radial-gradient", node_name);
         else
@@ -5375,13 +5372,14 @@ render_node_print (Printer       *p,
         append_float_param (p, "start", gsk_radial_gradient_node_get_start (node), 0.0f);
         append_float_param (p, "end", gsk_radial_gradient_node_get_end (node), 1.0f);
 
-        append_stops_param (p, "stops", gsk_radial_gradient_node_get_gradient_stops (node),
-                                        gsk_radial_gradient_node_get_n_color_stops (node));
+        append_stops_param (p, "stops", gsk_gradient_node_get_stops (node),
+                                        gsk_gradient_node_get_n_stops (node));
 
-        interpolation = gsk_radial_gradient_node_get_interpolation_color_state (node);
-        append_color_state_param (p, "interpolation", interpolation, GDK_COLOR_STATE_SRGB);
+        append_color_state_param (p, "interpolation",
+                                  gsk_gradient_node_get_interpolation (node),
+                                  GDK_COLOR_STATE_SRGB);
         append_hue_interpolation_param (p, "hue-interpolation",
-                                        gsk_radial_gradient_node_get_hue_interpolation (node),
+                                        gsk_gradient_node_get_hue_interpolation (node),
                                         GSK_HUE_INTERPOLATION_SHORTER);
 
         end_node (p);
@@ -5390,21 +5388,20 @@ render_node_print (Printer       *p,
 
     case GSK_CONIC_GRADIENT_NODE:
       {
-        GdkColorState *interpolation;
-
         start_node (p, "conic-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "center", gsk_conic_gradient_node_get_center (node));
         append_float_param (p, "rotation", gsk_conic_gradient_node_get_rotation (node), 0.0f);
 
-        append_stops_param (p, "stops", gsk_conic_gradient_node_get_gradient_stops (node),
-                                        gsk_conic_gradient_node_get_n_color_stops (node));
+        append_stops_param (p, "stops", gsk_gradient_node_get_stops (node),
+                                        gsk_gradient_node_get_n_stops (node));
 
-        interpolation = gsk_conic_gradient_node_get_interpolation_color_state (node);
-        append_color_state_param (p, "interpolation", interpolation, GDK_COLOR_STATE_SRGB);
+        append_color_state_param (p, "interpolation",
+                                  gsk_gradient_node_get_interpolation (node),
+                                  GDK_COLOR_STATE_SRGB);
         append_hue_interpolation_param (p, "hue-interpolation",
-                                        gsk_conic_gradient_node_get_hue_interpolation (node),
+                                        gsk_gradient_node_get_hue_interpolation (node),
                                         GSK_HUE_INTERPOLATION_SHORTER);
 
         end_node (p);
