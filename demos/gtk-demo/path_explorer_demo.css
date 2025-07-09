@@ -1,0 +1,11 @@
+.sidebar {
+  padding: 10px;
+  background: white;
+  border-spacing: 10px 10px;
+}
+.sidebar box {
+  border-spacing: 10px 10px;
+}
+.content {
+  padding: 10px;
+}

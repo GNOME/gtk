@@ -1610,7 +1610,10 @@ gsk_circle_contour_get_tangent (const GskContour   *contour,
 
   gsk_circle_contour_get_position (contour, point, &p);
 
-  graphene_vec2_init (tangent, - p.y + self->center.y, p.x - self->center.x);
+  if (direction == GSK_PATH_TO_END || direction == GSK_PATH_FROM_START)
+    graphene_vec2_init (tangent, - p.y + self->center.y, p.x - self->center.x);
+  else
+    graphene_vec2_init (tangent, p.y - self->center.y, - p.x + self->center.x);
   graphene_vec2_normalize (tangent, tangent);
 }
 

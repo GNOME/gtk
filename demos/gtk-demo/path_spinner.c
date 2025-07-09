@@ -302,6 +302,8 @@ do_path_spinner (GtkWidget *do_widget)
 
       paintable = gtk_spinner_paintable_new ();
       picture = gtk_picture_new_for_paintable (paintable);
+      gtk_widget_set_halign (picture, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (picture, GTK_ALIGN_CENTER);
       gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_CONTAIN);
       gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
       g_object_unref (paintable);

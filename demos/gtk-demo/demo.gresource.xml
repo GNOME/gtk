@@ -325,6 +325,7 @@
     <file>paintable_symbolic.c</file>
     <file>panes.c</file>
     <file>password_entry.c</file>
+    <file>path_explorer_demo.c</file>
     <file>path_fill.c</file>
     <file>path_maze.c</file>
     <file>path_spinner.c</file>
@@ -414,6 +415,10 @@
   </gresource>
   <gresource prefix="/fontrendering">
     <file>fontrendering.ui</file>
+  </gresource>
+  <gresource prefix="/path_explorer">
+    <file>path_explorer_demo.ui</file>
+    <file>path_explorer_demo.css</file>
   </gresource>
   <gresource prefix="/path_sweep">
     <file>path_sweep.ui</file>
