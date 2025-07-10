@@ -138,7 +138,7 @@ typedef struct
   GDBusProxy      *inhibit_proxy;
   GSList *inhibit_handles;
   guint            state_changed_handler;
-  char *           session_id;
+  char *           session_path;
   guint            session_state;
 } GtkApplicationImplDBus;
 

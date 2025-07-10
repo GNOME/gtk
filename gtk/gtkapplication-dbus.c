@@ -252,7 +252,7 @@ screensaver_signal_portal (GDBusConnection *connection,
 
           g_dbus_proxy_call (dbus->inhibit_proxy,
                              "QueryEndResponse",
-                             g_variant_new ("(o)", dbus->session_id),
+                             g_variant_new ("(o)", dbus->session_path),
                              G_DBUS_CALL_FLAGS_NONE,
                              G_MAXINT,
                              NULL,
@@ -538,7 +538,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
           /* Monitor screensaver state */
 
-          dbus->session_id = gtk_get_portal_session_path (dbus->session, &token);
+          dbus->session_path = gtk_get_portal_session_path (dbus->session, &token);
           dbus->state_changed_handler =
               g_dbus_connection_signal_subscribe (dbus->session,
                                                   PORTAL_BUS_NAME,
@@ -896,16 +896,16 @@ gtk_application_impl_dbus_finalize (GObject *object)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) object;
 
-  if (dbus->session_id)
+  if (dbus->session_path)
     {
       g_dbus_connection_call (dbus->session,
                               PORTAL_BUS_NAME,
-                              dbus->session_id,
+                              dbus->session_path,
                               PORTAL_SESSION_INTERFACE,
                               "Close",
                               NULL, NULL, 0, -1, NULL, NULL, NULL);
 
-      g_free (dbus->session_id);
+      g_free (dbus->session_path);
     }
 
   if (dbus->state_changed_handler)
