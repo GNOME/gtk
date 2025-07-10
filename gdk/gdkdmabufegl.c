@@ -41,7 +41,6 @@
 static gboolean
 gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
                                            GdkDmabufFormatsBuilder   *formats,
-                                           GdkDmabufFormatsBuilder   *all_formats,
                                            GdkDmabufFormatsBuilder   *internal,
                                            GdkDmabufFormatsBuilder   *external)
 {
@@ -100,8 +99,6 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
           GdkMemoryFormat format;
           gboolean is_yuv;
 
-          if (modifiers[j] != DRM_FORMAT_MOD_LINEAR && !external_only[j])
-            gdk_dmabuf_formats_builder_add_format (all_formats, fourccs[i], modifiers[j]);
           if (external_only[j])
             {
               gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
@@ -256,8 +253,6 @@ gdk_dmabuf_egl_downloader_create_multiplane_formats (GdkDisplay              *di
           break;
         }
     }
-
-  gdk_dmabuf_formats_unref (formats);
 }
 
 static EGLImage
@@ -516,7 +511,7 @@ void
 gdk_dmabuf_egl_init (GdkDisplay *display)
 {
 #if defined (HAVE_DMABUF) && defined (HAVE_EGL)
-  GdkDmabufFormatsBuilder *formats, *all_formats, *internal, *external;
+  GdkDmabufFormatsBuilder *formats, *internal, *external;
   gboolean retval = FALSE;
   GError *error = NULL;
   GskRenderer *renderer;
@@ -532,7 +527,6 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
     }
 
   formats = gdk_dmabuf_formats_builder_new ();
-  all_formats = gdk_dmabuf_formats_builder_new ();
   internal = gdk_dmabuf_formats_builder_new ();
   external = gdk_dmabuf_formats_builder_new ();
 
@@ -540,15 +534,16 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
   if (previous)
     g_object_ref (previous);
 
-  retval = gdk_dmabuf_egl_downloader_collect_formats (display, formats, all_formats, internal, external);
+  retval = gdk_dmabuf_egl_downloader_collect_formats (display, formats, internal, external);
+
+  display->egl_internal_formats = gdk_dmabuf_formats_builder_free_to_formats (internal);
+  display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
 
   gdk_dmabuf_egl_downloader_create_multiplane_formats (display,
-                                                       gdk_dmabuf_formats_builder_free_to_formats (all_formats),
+                                                       display->egl_internal_formats,
                                                        formats);
 
   display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
-  display->egl_internal_formats = gdk_dmabuf_formats_builder_free_to_formats (internal);
-  display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
 
   if (!retval)
     {
