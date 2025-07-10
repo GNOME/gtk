@@ -5206,7 +5206,7 @@ changed_handler (GtkTextLayout     *layout,
 
       if (new_first_para_top != old_first_para_top)
         {
-          priv->yoffset += new_first_para_top - old_first_para_top;
+          priv->yoffset += new_first_para_top - old_first_para_top + priv->top_margin;
 
           gtk_adjustment_set_value (text_view->priv->vadjustment, priv->yoffset);
         }
