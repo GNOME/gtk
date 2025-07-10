@@ -107,6 +107,15 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
 
           if (modifiers[j] != DRM_FORMAT_MOD_LINEAR && !external_only[j])
             gdk_dmabuf_formats_builder_add_format (all_formats, fourccs[i], modifiers[j]);
+          if (external_only[j])
+            {
+              gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
+            }
+          else
+            {
+              gdk_dmabuf_formats_builder_add_format (internal, fourccs[i], modifiers[j]);
+              all_external = FALSE;
+            }
 
           if (!gdk_memory_format_find_by_dmabuf_fourcc (fourccs[i],
                                                         TRUE,
@@ -132,16 +141,6 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
 
           if (advertise)
             gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
-
-          if (external_only[j])
-            {
-              gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
-            }
-          else
-            {
-              gdk_dmabuf_formats_builder_add_format (internal, fourccs[i], modifiers[j]);
-              all_external = FALSE;
-            }
         }
 
       /* Accept implicit modifiers as long as we accept the format at all.
