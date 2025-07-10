@@ -97,11 +97,6 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
 
       for (int j = 0; j < num_modifiers; j++)
         {
-          /* All linear formats we support are already advertised by the mmap downloader.
-           * We don't add external formats, unless we can use them (via GLES)
-           */
-          gboolean advertise = modifiers[j] != DRM_FORMAT_MOD_LINEAR &&
-                               (!external_only[j] || gdk_gl_context_get_use_es (context));
           GdkMemoryFormat format;
           gboolean is_yuv;
 
@@ -117,30 +112,44 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
               all_external = FALSE;
             }
 
-          if (!gdk_memory_format_find_by_dmabuf_fourcc (fourccs[i],
-                                                        TRUE,
-                                                        &format,
-                                                        &is_yuv))
+          if (modifiers[j] == DRM_FORMAT_MOD_LINEAR)
+            {
+              /* All linear formats we support are already advertised by the mmap downloader. */
+              GDK_DISPLAY_DEBUG (display, DMABUF,
+                                 "Skipping EGL %sdmabuf format %.4s::0000000000000000 because we don't advertise linear formats",
+                                 external_only[j] ? "external " : "",
+                                 (char *) &fourccs[i]);
+            }
+          else if (external_only[j] && !gdk_gl_context_get_use_es (context))
             {
               GDK_DISPLAY_DEBUG (display, DMABUF,
-                                 "Skipping EGL %sdmabuf format %.4s::%016" G_GINT64_MODIFIER "x",
+                                 "Skipping EGL external dmabuf format %.4s::%016" G_GINT64_MODIFIER "x because only GLES can use them",
+                                 (char *) &fourccs[i],
+                                 modifiers[j]);
+            }
+           else if (!gdk_memory_format_find_by_dmabuf_fourcc (fourccs[i],
+                                                              TRUE,
+                                                              &format,
+                                                              &is_yuv))
+            {
+              GDK_DISPLAY_DEBUG (display, DMABUF,
+                                 "Skipping EGL %sdmabuf format %.4s::%016" G_GINT64_MODIFIER "x because the format is unsupported",
                                  external_only[j] ? "external " : "",
                                  (char *) &fourccs[i],
                                  modifiers[j]);
-              continue;
             }
+          else
+            {
+              GDK_DISPLAY_DEBUG (display, DMABUF,
+                                 "EGL advertises %sdmabuf format %.4s::%016" G_GINT64_MODIFIER "x as %s%s",
+                                 external_only[j] ? "external " : "",
+                                 (char *) &fourccs[i],
+                                 modifiers[j],
+                                 gdk_memory_format_get_name (format),
+                                 is_yuv ? " (YUV)" : "");
 
-          GDK_DISPLAY_DEBUG (display, DMABUF,
-                             "EGL %s %sdmabuf format %.4s::%016" G_GINT64_MODIFIER "x as %s%s",
-                             advertise ? "advertises" : "supports",
-                             external_only[j] ? "external " : "",
-                             (char *) &fourccs[i],
-                             modifiers[j],
-                             gdk_memory_format_get_name (format),
-                             is_yuv ? " (YUV)" : "");
-
-          if (advertise)
-            gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
+              gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
+            }
         }
 
       /* Accept implicit modifiers as long as we accept the format at all.
