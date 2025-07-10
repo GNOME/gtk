@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkfilter.h"
+#include "gtkfilterprivate.h"
 
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -51,9 +51,26 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE (GtkFilter, gtk_filter, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_CODE (GtkFilter, gtk_filter, G_TYPE_OBJECT,
+                         g_type_add_class_private (g_define_type_id, sizeof (GtkFilterClassPrivate)))
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+static gpointer
+gtk_filter_default_watch (GtkFilter              *self,
+                          gpointer                item,
+                          GtkFilterWatchCallback  callback,
+                          gpointer                user_data,
+                          GDestroyNotify          destroy)
+{
+  return NULL;
+}
+
+static void
+gtk_filter_default_unwatch (GtkFilter *filter,
+                            gpointer   watch)
+{
+}
 
 static gboolean
 gtk_filter_default_match (GtkFilter *self,
@@ -74,9 +91,13 @@ static void
 gtk_filter_class_init (GtkFilterClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkFilterClassPrivate *filter_private_class = G_TYPE_CLASS_GET_PRIVATE (class, GTK_TYPE_FILTER, GtkFilterClassPrivate);
 
   class->match = gtk_filter_default_match;
   class->get_strictness = gtk_filter_default_get_strictness;
+
+  filter_private_class->watch = gtk_filter_default_watch;
+  filter_private_class->unwatch = gtk_filter_default_unwatch;
 
   /**
    * GtkFilter::changed:
@@ -181,4 +202,63 @@ gtk_filter_changed (GtkFilter       *self,
   g_return_if_fail (GTK_IS_FILTER (self));
 
   g_signal_emit (self, signals[CHANGED], 0, change);
+}
+
+/*<private>
+ * gtk_filter_watch:
+ * @self: a filter
+ * @item: (type GObject) (transfer none): The item to watch
+ *
+ * Watches the the given @item for property changes.
+ *
+ * Callers are responsible to keep this watch as long as both
+ * @self and @item are alive. To destroy the watch, use
+ * gtk_filter_unwatch.
+ *
+ * Returns: (transfer full) (nullable): the expression watch
+ *
+ * Since: 4.20
+ */
+gpointer
+gtk_filter_watch (GtkFilter              *self,
+                  gpointer                item,
+                  GtkFilterWatchCallback  callback,
+                  gpointer                user_data,
+                  GDestroyNotify          destroy)
+{
+  GtkFilterClassPrivate *priv;
+  GtkFilterClass *class;
+
+  g_return_val_if_fail (GTK_IS_FILTER (self), NULL);
+
+  class = GTK_FILTER_GET_CLASS (self);
+  priv = G_TYPE_CLASS_GET_PRIVATE (class, GTK_TYPE_FILTER, GtkFilterClassPrivate);
+
+  return priv->watch (self, item, callback, user_data, destroy);
+}
+
+/*<private>
+ * gtk_filter_unwatch:
+ * @self: a filter
+ * @watch: (transfer full): The item to watch
+ *
+ * Stops @watch. This is only called with what was previously returned
+ * by [vfunc@Gtk.Filter.watch].
+ *
+ * Since: 4.20
+ */
+void
+gtk_filter_unwatch (GtkFilter *self,
+                    gpointer   watch)
+{
+  GtkFilterClassPrivate *priv;
+  GtkFilterClass *class;
+
+  g_return_if_fail (GTK_IS_FILTER (self));
+  g_return_if_fail (watch != NULL);
+
+  class = GTK_FILTER_GET_CLASS (self);
+  priv = G_TYPE_CLASS_GET_PRIVATE (class, GTK_TYPE_FILTER, GtkFilterClassPrivate);
+
+  priv->unwatch (self, watch);
 }
