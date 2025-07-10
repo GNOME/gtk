@@ -1193,6 +1193,30 @@ gtk_im_context_simple_reset (GtkIMContext *context)
     }
 }
 
+static gboolean
+check_compose_sequence (guint     *keys,
+                        int        n_keys,
+                        GString   *output)
+{
+  gboolean compose_finish = FALSE;
+  gboolean compose_match = FALSE;
+  GSList *tmp_list = global_tables;
+
+  while (tmp_list)
+    {
+      if (gtk_compose_table_check ((GtkComposeTable *)tmp_list->data,
+                                  keys, n_keys,
+                                  &compose_finish, &compose_match,
+                                  output))
+        {
+          if (compose_finish && compose_match)
+            return TRUE;
+        }
+      tmp_list = tmp_list->next;
+    }
+  return FALSE;
+}
+
 static void
 gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
                                           char          **str,
@@ -1221,9 +1245,29 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
         }
       else
         {
+          GString *compose_output;
+          compose_output = g_string_new ("");
           for (i = 0; priv->compose_buffer[i]; i++)
             {
-              if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
+              guint test_sequences[][3] = {
+                {priv->compose_buffer[i], 0x010025cc, 0}, // ◌ U+25CC DOTTED CIRCLE
+                {priv->compose_buffer[i], GDK_KEY_space, 0}
+              };
+              gboolean success = FALSE;
+              g_string_truncate (compose_output, 0);
+              for (int seq = 0; seq < G_N_ELEMENTS(test_sequences); seq++)
+                {
+                  if (check_compose_sequence(test_sequences[seq], 2, compose_output))
+                    {
+                      success = TRUE;
+                      break;
+                    }
+                }
+              if (success)
+                {
+                  g_string_append (s, compose_output->str);
+                }
+              else if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
                 {
                   /* We only show the Compose key visibly when it is the
                    * only glyph in the preedit, or when the sequence contains
@@ -1257,6 +1301,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
                     }
                 }
             }
+          g_string_free (compose_output, TRUE);
         }
     }
 
