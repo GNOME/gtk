@@ -168,7 +168,9 @@ create_monitor_cb (GObject      *source,
 }
 
 static void
-gtk_application_impl_dbus_startup (GtkApplicationImpl *impl)
+gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
+                                   gboolean            support_save,
+                                   GVariant           *global_state)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GError *error = NULL;
@@ -248,7 +250,8 @@ G_DEFINE_QUARK (GtkApplicationImplDBus export id, gtk_application_impl_dbus_expo
 
 static void
 gtk_application_impl_dbus_window_added (GtkApplicationImpl *impl,
-                                        GtkWindow          *window)
+                                        GtkWindow          *window,
+                                        GVariant           *state)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GActionGroup *actions;

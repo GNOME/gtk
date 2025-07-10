@@ -337,7 +337,7 @@ gtk_application_startup (GApplication *g_application)
   gdk_profiler_end_mark (before2, "gtk_init", NULL);
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
-  gtk_application_impl_startup (priv->impl);
+  gtk_application_impl_startup (priv->impl, priv->support_save, NULL);
 
   gtk_application_load_resources (application);
   gtk_application_set_window_icon (application);
@@ -465,7 +465,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                     G_CALLBACK (gtk_application_window_active_cb),
                     application);
 
-  gtk_application_impl_window_added (priv->impl, window);
+  gtk_application_impl_window_added (priv->impl, window, NULL);
 
   gtk_application_impl_active_window_changed (priv->impl, window);
 
