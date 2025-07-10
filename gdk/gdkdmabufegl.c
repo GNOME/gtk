@@ -444,6 +444,8 @@ gdk_dmabuf_egl_import_dmabuf_multiplane (GdkGLContext    *context,
       fourcc = gdk_memory_format_get_dmabuf_shader_fourcc (format, i);
       if (fourcc == 0)
         break;
+      if (!gdk_dmabuf_formats_contains (display->egl_internal_formats, fourcc, dmabuf->modifier))
+        break;
 
       images[i] = gdk_dmabuf_egl_create_image (display,
                                                width / width_subsample,
