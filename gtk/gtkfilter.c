@@ -56,6 +56,24 @@ G_DEFINE_TYPE_WITH_CODE (GtkFilter, gtk_filter, G_TYPE_OBJECT,
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+typedef struct _ExpressionWatchData {
+  GtkExpression *expression;
+  gpointer item;
+
+  GtkExpressionWatch *watch;
+  GtkFilterWatchCallback callback;
+
+  gpointer user_data;
+  GDestroyNotify destroy;
+} ExpressionWatchData;
+
+static void
+expression_watch_cb (gpointer user_data)
+{
+  ExpressionWatchData *data = (ExpressionWatchData *) user_data;
+  data->callback (data->item, data->user_data);
+}
+
 static gpointer
 gtk_filter_default_watch (GtkFilter              *self,
                           gpointer                item,
@@ -63,6 +81,32 @@ gtk_filter_default_watch (GtkFilter              *self,
                           gpointer                user_data,
                           GDestroyNotify          destroy)
 {
+  GParamSpec *pspec;
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (self), "expression");
+  if (pspec && g_type_is_a (pspec->value_type, GTK_TYPE_EXPRESSION))
+    {
+      ExpressionWatchData *data;
+      GtkExpression *expression;
+
+      g_object_get (self, "expression", &expression, NULL);
+
+      data = g_new0 (ExpressionWatchData, 1);
+      data->item = item;
+      data->callback = callback;
+      data->user_data = user_data;
+      data->destroy = destroy;
+      data->watch = gtk_expression_watch (expression,
+                                          item,
+                                          expression_watch_cb,
+                                          data,
+                                          NULL);
+
+      gtk_expression_unref (expression);
+
+      return g_steal_pointer (&data);
+    }
+
   return NULL;
 }
 
@@ -70,6 +114,9 @@ static void
 gtk_filter_default_unwatch (GtkFilter *filter,
                             gpointer   watch)
 {
+  ExpressionWatchData *data = (ExpressionWatchData *) watch;
+  g_clear_pointer (&data->watch, gtk_expression_watch_unwatch);
+  g_free (data);
 }
 
 static gboolean
