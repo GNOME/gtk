@@ -355,8 +355,8 @@ gtk_any_filter_class_init (GtkAnyFilterClass *class)
   GtkMultiFilterClass *multi_filter_class = GTK_MULTI_FILTER_CLASS (class);
   GtkFilterClass *filter_class = GTK_FILTER_CLASS (class);
 
-  multi_filter_class->addition_change = GTK_FILTER_CHANGE_LESS_STRICT;
-  multi_filter_class->removal_change = GTK_FILTER_CHANGE_MORE_STRICT;
+  multi_filter_class->addition_change = GTK_FILTER_CHANGE_LESS_STRICT_REWATCH;
+  multi_filter_class->removal_change = GTK_FILTER_CHANGE_MORE_STRICT_REWATCH;
 
   filter_class->match = gtk_any_filter_match;
   filter_class->get_strictness = gtk_any_filter_get_strictness;
@@ -453,8 +453,8 @@ gtk_every_filter_class_init (GtkEveryFilterClass *class)
   GtkMultiFilterClass *multi_filter_class = GTK_MULTI_FILTER_CLASS (class);
   GtkFilterClass *filter_class = GTK_FILTER_CLASS (class);
 
-  multi_filter_class->addition_change = GTK_FILTER_CHANGE_MORE_STRICT;
-  multi_filter_class->removal_change = GTK_FILTER_CHANGE_LESS_STRICT;
+  multi_filter_class->addition_change = GTK_FILTER_CHANGE_MORE_STRICT_REWATCH;
+  multi_filter_class->removal_change = GTK_FILTER_CHANGE_LESS_STRICT_REWATCH;
 
   filter_class->match = gtk_every_filter_match;
   filter_class->get_strictness = gtk_every_filter_get_strictness;

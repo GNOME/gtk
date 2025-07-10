@@ -614,15 +614,21 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self,
           default:
             g_assert_not_reached ();
             /* fall thru */
+
+          case GTK_FILTER_CHANGE_DIFFERENT_REWATCH:
           case GTK_FILTER_CHANGE_DIFFERENT:
             self->matches = gtk_bitset_new_empty ();
             pending = gtk_bitset_new_range (0, g_list_model_get_n_items (self->model));
             break;
+
+          case GTK_FILTER_CHANGE_LESS_STRICT_REWATCH:
           case GTK_FILTER_CHANGE_LESS_STRICT:
             self->matches = gtk_bitset_copy (old);
             pending = gtk_bitset_new_range (0, g_list_model_get_n_items (self->model));
             gtk_bitset_subtract (pending, self->matches);
             break;
+
+          case GTK_FILTER_CHANGE_MORE_STRICT_REWATCH:
           case GTK_FILTER_CHANGE_MORE_STRICT:
             self->matches = gtk_bitset_new_empty ();
             pending = gtk_bitset_copy (old);
