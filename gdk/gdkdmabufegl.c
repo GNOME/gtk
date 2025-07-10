@@ -176,8 +176,7 @@ static void
 gdk_dmabuf_egl_downloader_add_multiplane_format (GdkDisplay              *display,
                                                  GdkDmabufFormats        *formats,
                                                  GdkMemoryFormat          mf,
-                                                 GdkDmabufFormatsBuilder *advertise,
-                                                 GdkDmabufFormatsBuilder *internal)
+                                                 GdkDmabufFormatsBuilder *advertise)
 {
   const GdkDmabufFormat *all;
   gsize i, n;
@@ -217,7 +216,6 @@ gdk_dmabuf_egl_downloader_add_multiplane_format (GdkDisplay              *displa
                              all[i].modifier,
                              gdk_memory_format_get_name (mf));
           gdk_dmabuf_formats_builder_add_format (advertise, fourcc, all[i].modifier);
-          gdk_dmabuf_formats_builder_add_format (internal, fourcc, all[i].modifier);
         }
       fourcc = gdk_memory_format_get_dmabuf_yuv_fourcc (mf);
       if (fourcc != 0)
@@ -228,7 +226,6 @@ gdk_dmabuf_egl_downloader_add_multiplane_format (GdkDisplay              *displa
                              all[i].modifier,
                              gdk_memory_format_get_name (mf));
           gdk_dmabuf_formats_builder_add_format (advertise, fourcc, all[i].modifier);
-          gdk_dmabuf_formats_builder_add_format (internal, fourcc, all[i].modifier);
         }
     }
 }
@@ -236,8 +233,7 @@ gdk_dmabuf_egl_downloader_add_multiplane_format (GdkDisplay              *displa
 static void
 gdk_dmabuf_egl_downloader_create_multiplane_formats (GdkDisplay              *display,
                                                      GdkDmabufFormats        *formats,
-                                                     GdkDmabufFormatsBuilder *advertise,
-                                                     GdkDmabufFormatsBuilder *internal)
+                                                     GdkDmabufFormatsBuilder *advertise)
 {
   GdkMemoryFormat mf;
 
@@ -253,8 +249,7 @@ gdk_dmabuf_egl_downloader_create_multiplane_formats (GdkDisplay              *di
           gdk_dmabuf_egl_downloader_add_multiplane_format (display,
                                                            formats,
                                                            mf,
-                                                           advertise,
-                                                           internal);
+                                                           advertise);
           break;
         default:
           g_assert_not_reached ();
@@ -549,8 +544,7 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
 
   gdk_dmabuf_egl_downloader_create_multiplane_formats (display,
                                                        gdk_dmabuf_formats_builder_free_to_formats (all_formats),
-                                                       formats,
-                                                       internal);
+                                                       formats);
 
   display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
   display->egl_internal_formats = gdk_dmabuf_formats_builder_free_to_formats (internal);
