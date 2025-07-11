@@ -561,6 +561,173 @@ test_sections (void)
   g_object_unref (sorted);
 }
 
+struct _GtkMutableStringObject
+{
+  GObject parent;
+  char *string;
+};
+
+enum
+{
+  PROP_STRING = 1,
+};
+
+#define GTK_TYPE_MUTABLE_STRING_OBJECT (gtk_mutable_string_object_get_type ())
+G_DECLARE_FINAL_TYPE (GtkMutableStringObject, gtk_mutable_string_object, GTK, MUTABLE_STRING_OBJECT, GObject)
+
+G_DEFINE_FINAL_TYPE (GtkMutableStringObject, gtk_mutable_string_object, G_TYPE_OBJECT)
+
+static void
+gtk_mutable_string_object_set_string (GtkMutableStringObject *self,
+                                      const char             *string)
+{
+  g_assert (GTK_IS_MUTABLE_STRING_OBJECT (self));
+
+  if (g_strcmp0 (self->string, string) == 0)
+    return;
+
+  g_clear_pointer (&self->string, g_free);
+  self->string = g_strdup (string);
+
+  g_object_notify (G_OBJECT (self), "string");
+}
+
+static void
+gtk_mutable_string_object_get_property (GObject    *object,
+                                        guint       prop_id,
+                                        GValue     *value,
+                                        GParamSpec *pspec)
+{
+  GtkMutableStringObject *self = GTK_MUTABLE_STRING_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      g_value_set_string (value, self->string);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_mutable_string_object_set_property (GObject      *object,
+                                        guint         prop_id,
+                                        const GValue *value,
+                                        GParamSpec   *pspec)
+{
+  GtkMutableStringObject *self = GTK_MUTABLE_STRING_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      gtk_mutable_string_object_set_string (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_mutable_string_object_class_init (GtkMutableStringObjectClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gtk_mutable_string_object_get_property;
+  object_class->set_property = gtk_mutable_string_object_set_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_STRING,
+                                   g_param_spec_string ("string", NULL, NULL, NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+}
+
+static void
+gtk_mutable_string_object_init (GtkMutableStringObject *self)
+{
+}
+
+static void
+test_watch_items (void)
+{
+  GtkMutableStringObject *string_object;
+  GtkFilterListModel *filter_model;
+  GtkStringFilter *string_filter;
+  GListStore *store;
+  const char * const strings[] = {
+    "aa",
+    "ab",
+    "ac",
+    "ad",
+    "ae",
+  };
+
+  string_filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT,
+                                                                      NULL,
+                                                                      "string"));
+  gtk_string_filter_set_search (string_filter, "a");
+
+  g_type_ensure (GTK_TYPE_MUTABLE_STRING_OBJECT);
+
+  store = g_list_store_new (GTK_TYPE_MUTABLE_STRING_OBJECT);
+  for (size_t i = 0; i < G_N_ELEMENTS (strings); i++)
+    {
+      gpointer item = g_object_new (GTK_TYPE_MUTABLE_STRING_OBJECT, "string", strings[i], NULL);
+      g_list_store_append (store, item);
+      g_clear_object (&item);
+    }
+
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store),
+                                            GTK_FILTER (string_filter));
+  gtk_filter_list_model_set_watch_items (filter_model, TRUE);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  string_object = g_list_model_get_item (G_LIST_MODEL (store), 1);
+  gtk_mutable_string_object_set_string (string_object, "bb");
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 4);
+
+  gtk_mutable_string_object_set_string (string_object, "ab");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  string_object = g_object_new (GTK_TYPE_MUTABLE_STRING_OBJECT, "string", "ff", NULL);
+  g_list_store_append (store, string_object);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  gtk_mutable_string_object_set_string (string_object, "af");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  g_list_store_remove (store, 5);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  g_list_store_append (store, string_object);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  /* Stop watching, no changes should propagate */
+  gtk_filter_list_model_set_watch_items (filter_model, FALSE);
+
+  gtk_mutable_string_object_set_string (string_object, "ff");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  /* Start watching again */
+  gtk_filter_list_model_set_watch_items (filter_model, TRUE);
+
+  gtk_mutable_string_object_set_string (string_object, "af");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  gtk_mutable_string_object_set_string (string_object, "ff");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  g_clear_object (&string_object);
+  g_clear_object (&filter_model);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -577,6 +744,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filterlistmodel/empty", test_empty);
   g_test_add_func ("/filterlistmodel/add_remove_item", test_add_remove_item);
   g_test_add_func ("/filterlistmodel/sections", test_sections);
+  g_test_add_func ("/filterlistmodel/watch-items", test_watch_items);
 
   return g_test_run ();
 }
