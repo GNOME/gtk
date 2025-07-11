@@ -18,72 +18,127 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
-static void
-deserialize_finish (GObject      *source,
-                    GAsyncResult *result,
-                    gpointer      data)
+typedef struct
 {
-  GOutputStream *stream = G_OUTPUT_STREAM (source);
-  GdkContentDeserializer *deserializer = data;
-  GValue *value;
+  GtkWidget *picture;
+  GdkDrop *drop;
+  GFile *file;
+} DropData;
+
+static void
+drop_data_free (DropData *data)
+{
+  g_object_unref (data->drop);
+  g_object_unref (data->file);
+  g_free (data);
+}
+
+static void
+save_finish (GObject      *source,
+             GAsyncResult *result,
+             gpointer      user_data)
+{
+  GOutputStream *output = G_OUTPUT_STREAM (source);
+  DropData *data = user_data;
   GError *error = NULL;
 
-  g_output_stream_splice_finish (stream, result, &error);
+  g_output_stream_splice_finish (output, result, &error);
   if (error)
     {
-      gdk_content_deserializer_return_error (deserializer, error);
+      g_print ("Saving failed: %s\n", error->message);
+      g_error_free (error);
+      gdk_drop_finish (data->drop, 0);
+      drop_data_free (data);
       return;
     }
 
-  value = gdk_content_deserializer_get_value (deserializer);
-  g_assert (G_VALUE_HOLDS (value, G_TYPE_BYTES));
+  gtk_picture_set_file (GTK_PICTURE (data->picture), data->file);
 
-  g_value_take_boxed (value, g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (stream)));
-
-  gdk_content_deserializer_return_success (deserializer);
+  gdk_drop_finish (data->drop, GDK_ACTION_COPY);
+  drop_data_free (data);
 }
 
 static void
-deserialize_svg_to_bytes (GdkContentDeserializer *deserializer)
+drop_done (GObject      *source,
+           GAsyncResult *result,
+           gpointer      user_data)
 {
-  GOutputStream *output = g_memory_output_stream_new_resizable ();
-
-  g_output_stream_splice_async (output,
-                                gdk_content_deserializer_get_input_stream (deserializer),
-                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
-                                G_PRIORITY_DEFAULT,
-                                gdk_content_deserializer_get_cancellable (deserializer),
-                                deserialize_finish,
-                                deserializer);
-
-  g_object_unref (output);
-}
-
-static gboolean
-drop_cb (GtkDropTarget *target,
-         GValue        *value,
-         double         x,
-         double         y,
-         gpointer       user_data)
-{
-  GtkWidget *widget;
-  GBytes *bytes;
-  const char *data;
-  gsize length;
+  GdkDrop *drop = GDK_DROP (source);
+  GtkWidget *picture = user_data;
+  const char *mime_type;
+  GInputStream *input;
   GFile *file;
+  GOutputStream *output;
+  DropData *data;
   GError *error = NULL;
 
-  bytes = g_value_get_boxed (value);
-  data = g_bytes_get_data (bytes, &length);
+  input = gdk_drop_read_finish (drop, result, &mime_type, &error);
+  if (!input)
+    {
+      g_print ("Drop failed: %s\n", error->message);
+      g_error_free (error);
+      gdk_drop_finish (drop, 0);
+      return;
+    }
 
-  if (!g_file_set_contents ("dropped.svg", data, length, NULL))
-    g_error ("%s", error->message);
+  if (strcmp (mime_type, "image/svg+xml") == 0)
+    file = g_file_new_for_path ("dropped.svg");
+  else if (strcmp (mime_type, "image/png") == 0)
+    file = g_file_new_for_path ("dropped.png");
+  else if (strcmp (mime_type, "image/jpeg") == 0)
+    file = g_file_new_for_path ("dropped.jpeg");
+  else if (strcmp (mime_type, "image/tiff") == 0)
+    file = g_file_new_for_path ("dropped.tiff");
+  else
+    g_assert_not_reached ();
 
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (target));
+  output = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &error));
+  if (!output)
+    {
+      g_print ("Saving failed: %s\n", error->message);
+      g_clear_error (&error);
+      g_clear_object (&input);
+      gdk_drop_finish (drop, 0);
+      return;
+    }
 
-  file = g_file_new_for_path ("dropped.svg");
-  gtk_picture_set_file (GTK_PICTURE (widget), file);
+  data = g_new (DropData, 1);
+  data->drop = g_object_ref (drop);
+  data->picture = picture;
+  data->file = g_object_ref (file);
+
+  g_output_stream_splice_async (output, input,
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                save_finish,
+                                data);
+
+  g_object_unref (output);
   g_object_unref (file);
+}
+
+static const char *mime_types[] = {
+  "image/svg+xml",
+  "image/png",
+  "image/jpeg",
+  "image/tiff",
+  NULL
+};
+
+static gboolean
+drop_cb (GtkEventController *controller,
+         GdkDrop            *drop,
+         double              x,
+         double              y,
+         gpointer            user_data)
+{
+  gdk_drop_read_async (drop,
+                       mime_types,
+                       G_PRIORITY_DEFAULT,
+                       NULL,
+                       drop_done,
+                       gtk_event_controller_get_widget (controller));
 
   return TRUE;
 }
@@ -93,20 +148,20 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *picture;
   gboolean done = FALSE;
-  GtkDropTarget *target;
+  GdkContentFormats *formats;
+  GtkDropTargetAsync *target;
 
   gtk_init ();
-
-  gdk_content_register_deserializer ("image/svg+xml", G_TYPE_BYTES,
-                                     deserialize_svg_to_bytes,
-                                     NULL, NULL);
 
   window = gtk_window_new ();
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
   picture = gtk_picture_new_for_resource ("/org/gtk/libgtk/icons/16x16/status/image-missing.png");
 
-  target = gtk_drop_target_new (G_TYPE_BYTES, GDK_ACTION_COPY);
+  formats = gdk_content_formats_new (mime_types, G_N_ELEMENTS (mime_types) - 1);
+  target = gtk_drop_target_async_new (formats, GDK_ACTION_COPY);
+  gdk_content_formats_unref (formats);
+
   g_signal_connect (target, "drop", G_CALLBACK (drop_cb), NULL);
   gtk_widget_add_controller (picture, GTK_EVENT_CONTROLLER (target));
 
