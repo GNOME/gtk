@@ -93,7 +93,7 @@ to emit a signal such as [`signal@Gtk.ListView::activate`]. This provides an
 easy way to set up lists, but can also be turned off on listitems if undesired.
 
 Both selections and activation are supported among other things via widget
-[actions](#actions-overview). This allows developers to add widgets to their
+[actions](https://docs.gtk.org/gtk4/actions.html). This allows developers to add widgets to their
 lists that cause selections to change or to trigger activation via the
 [`iface@Gtk.Actionable`] interface. For a list of all supported actions
 see the relevant documentation.
