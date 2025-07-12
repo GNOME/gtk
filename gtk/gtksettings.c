@@ -792,6 +792,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Set to %TRUE if the desktop environment is displaying
    * the app menu, %FALSE if the app should display it itself.
+   *
+   * Deprecated: 4.20: This setting is not relevant anymore
    */
   pspecs[PROP_SHELL_SHOWS_APP_MENU] = g_param_spec_boolean ("gtk-shell-shows-app-menu", NULL, NULL,
                                                             FALSE,
@@ -802,6 +804,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Set to %TRUE if the desktop environment is displaying
    * the menubar, %FALSE if the app should display it itself.
+   *
+   * Deprecated: 4.20: This setting is not relevant anymore
    */
   pspecs[PROP_SHELL_SHOWS_MENUBAR] = g_param_spec_boolean ("gtk-shell-shows-menubar", NULL, NULL,
                                                            FALSE,
@@ -812,6 +816,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Set to %TRUE if the desktop environment is displaying
    * the desktop folder, %FALSE if not.
+   * 
+   * Deprecated: 4.20: This setting is not relevant anymore
    */
   pspecs[PROP_SHELL_SHOWS_DESKTOP] = g_param_spec_boolean ("gtk-shell-shows-desktop", NULL, NULL,
                                                            TRUE,
