@@ -127,17 +127,11 @@ typedef struct
   char            *menubar_path;
   guint            menubar_id;
 
-  /* Session management... */
-  GDBusProxy      *sm_proxy;
-  GDBusProxy      *client_proxy;
-  char            *client_path;
-  GDBusProxy      *ss_proxy;
-
   /* Portal support */
   GDBusProxy      *inhibit_proxy;
-  GSList *inhibit_handles;
+  GSList          *inhibit_handles;
   guint            state_changed_handler;
-  char *           session_path;
+  char            *session_path;
   guint            session_state;
 } GtkApplicationImplDBus;
 
@@ -145,9 +139,6 @@ typedef struct
 {
   GtkApplicationImplClass parent_class;
 
-  /* returns floating */
-  GVariant *  (* get_window_system_id)      (GtkApplicationImplDBus      *dbus,
-                                             GtkWindow                   *window);
 } GtkApplicationImplDBusClass;
 
 GType                   gtk_application_impl_get_type                   (void);
