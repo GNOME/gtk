@@ -488,24 +488,18 @@ test_iter (void)
 
   g_assert_false (gtk_bitset_iter_is_valid (&iter));
   g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 0);
-  g_assert_false (gtk_bitset_iter_previous (&iter, &value));
-  g_assert_false (gtk_bitset_iter_next (&iter, &value));
 
   ret = gtk_bitset_iter_init_last (&iter, set, &value);
   g_assert_false (ret);
 
   g_assert_false (gtk_bitset_iter_is_valid (&iter));
   g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 0);
-  g_assert_false (gtk_bitset_iter_previous (&iter, &value));
-  g_assert_false (gtk_bitset_iter_next (&iter, &value));
 
   ret = gtk_bitset_iter_init_at (&iter, set, 0, &value);
   g_assert_false (ret);
 
   g_assert_false (gtk_bitset_iter_is_valid (&iter));
   g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 0);
-  g_assert_false (gtk_bitset_iter_previous (&iter, &value));
-  g_assert_false (gtk_bitset_iter_next (&iter, &value));
 
   gtk_bitset_add_range_closed (set, 10, 20);
 
@@ -559,6 +553,42 @@ test_splice_overflow (void)
   gtk_bitset_unref (set);
 }
 
+static void
+test_bitset_iter_forward_reverse (void)
+{
+  GtkBitset *set = gtk_bitset_new_range (10, 3);
+  GtkBitsetIter iter;
+  guint value;
+
+  /* Forward iteration test */
+  gboolean ok = gtk_bitset_iter_init_first (&iter, set, &value);
+  g_assert_true (ok);
+  g_assert_cmpuint (value, ==, 10);
+
+  g_assert_true (gtk_bitset_iter_next (&iter, &value));
+  g_assert_cmpuint (value, ==, 11);
+
+  g_assert_true (gtk_bitset_iter_previous (&iter, &value));
+  g_assert_cmpuint (value, ==, 10);
+
+  /* Reverse iteration test */
+  ok = gtk_bitset_iter_init_last (&iter, set, &value);
+  g_assert_true (ok);
+  g_assert_cmpuint (value, ==, 12);
+
+  g_assert_true (gtk_bitset_iter_previous (&iter, &value));
+  g_assert_cmpuint (value, ==, 11);
+
+  g_assert_true (gtk_bitset_iter_previous (&iter, &value));
+  g_assert_cmpuint (value, ==, 10);
+
+  g_assert_false (gtk_bitset_iter_previous (&iter, &value));
+  g_assert_false (gtk_bitset_iter_is_valid (&iter));
+  g_assert_cmpuint (value, ==, 0);
+
+  gtk_bitset_unref (set);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -577,8 +607,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/bitset/shift-right", test_shift_right);
   g_test_add_func ("/bitset/slice", test_slice);
   g_test_add_func ("/bitset/rectangle", test_rectangle);
-  g_test_add_func ("/bitset/iter", test_iter);
+  g_test_add_func ("/bitset/iter/basic", test_iter);
   g_test_add_func ("/bitset/splice-overflow", test_splice_overflow);
+  g_test_add_func ("/bitset/iter/forward-reverse", test_bitset_iter_forward_reverse);
 
   return g_test_run ();
 }
