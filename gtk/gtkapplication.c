@@ -141,6 +141,7 @@ enum {
   PROP_SCREENSAVER_ACTIVE,
   PROP_MENUBAR,
   PROP_ACTIVE_WINDOW,
+  PROP_SUPPORT_SAVE,
   NUM_PROPERTIES
 };
 
@@ -161,6 +162,7 @@ typedef struct
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   char            *help_overlay_path;
+  gboolean         support_save;
 } GtkApplicationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -524,6 +526,10 @@ gtk_application_get_property (GObject    *object,
       g_value_set_object (value, gtk_application_get_active_window (application));
       break;
 
+    case PROP_SUPPORT_SAVE:
+      g_value_set_boolean (value, priv->support_save);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -547,6 +553,10 @@ gtk_application_set_property (GObject      *object,
 
     case PROP_MENUBAR:
       gtk_application_set_menubar (application, g_value_get_object (value));
+      break;
+
+    case PROP_SUPPORT_SAVE:
+      priv->support_save = g_value_get_boolean (value);
       break;
 
     default:
@@ -708,6 +718,19 @@ gtk_application_class_init (GtkApplicationClass *class)
     g_param_spec_object ("active-window", NULL, NULL,
                          GTK_TYPE_WINDOW,
                          G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkApplication:support-save:
+   *
+   * Set this property to true if the application supports
+   * state saving and restoring.
+   *
+   * Since: 4.22
+   */
+  gtk_application_props[PROP_SUPPORT_SAVE] =
+    g_param_spec_boolean ("support-save", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_DEPRECATED);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, gtk_application_props);
 }
