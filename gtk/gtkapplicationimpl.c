@@ -67,10 +67,9 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
 }
 
 void
-gtk_application_impl_startup (GtkApplicationImpl *impl,
-                              gboolean            register_session)
+gtk_application_impl_startup (GtkApplicationImpl *impl)
 {
-  GTK_APPLICATION_IMPL_GET_CLASS (impl)->startup (impl, register_session);
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->startup (impl);
 }
 
 void

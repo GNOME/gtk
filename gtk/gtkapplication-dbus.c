@@ -310,8 +310,7 @@ create_monitor_cb (GObject      *source,
 }
 
 static void
-gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
-                                   gboolean            register_session)
+gtk_application_impl_dbus_startup (GtkApplicationImpl *impl)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GError *error = NULL;
@@ -378,9 +377,6 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
           goto out;
         }
     }
-
-  if (!register_session)
-    goto out;
 
   dbus->ss_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
                                                                  G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START |
@@ -531,7 +527,6 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
           return;
         }
 
-      if (register_session)
         {
           char *token;
           GVariantBuilder opt_builder;
