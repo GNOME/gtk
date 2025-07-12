@@ -866,6 +866,7 @@ gtk_bitset_iter_next (GtkBitsetIter *iter,
   roaring_uint32_iterator_t *riter = (roaring_uint32_iterator_t *) iter;
 
   g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (riter->has_value, FALSE);
 
   if (!roaring_uint32_iterator_advance (riter))
     {
@@ -899,6 +900,7 @@ gtk_bitset_iter_previous (GtkBitsetIter *iter,
   roaring_uint32_iterator_t *riter = (roaring_uint32_iterator_t *) iter;
 
   g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (riter->has_value, FALSE);
 
   if (!roaring_uint32_iterator_previous (riter))
     {
