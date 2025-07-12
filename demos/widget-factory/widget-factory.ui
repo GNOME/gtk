@@ -462,11 +462,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             </property>
             <property name="child">
               <object class="GtkImage">
-                <property name="paintable">
-                  <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/open-menu-symbolic.svg</property>
-                  </object>
-                </property>
+                <property name="paintable">open-menu-symbolic</property>
               </object>
             </property>
           </object>
@@ -532,11 +528,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="enable-emoji-completion">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="placeholder-text" translatable="1">Click icon to change mode</property>
-                                <property name="secondary-icon-paintable">
-                                  <object class="GtkIconPaintable">
-                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-refresh-symbolic.svg</property>
-                                  </object>
-                                </property>
+                                <property name="secondary-icon-paintable">view-refresh-symbolic</property>
                                 <property name="secondary-icon-tooltip-text">Change mode</property>
                                 <signal name="icon-release" handler="on_entry_icon_release" swapped="no"/>
                               </object>
@@ -563,11 +555,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   <object class="GtkButton" id="button224">
                                     <property name="child">
                                       <object class="GtkImage">
-                                        <property name="paintable">
-                                          <object class="GtkIconPaintable" id="window-close-symbolic">
-                                            <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/window-close-symbolic.svg</property>
-                                          </object>
-                                        </property>
+                                        <property name="paintable">window-close-symbolic</property>
                                       </object>
                                     </property>
                                   </object>
@@ -1697,11 +1685,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">3</property>
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable" id="emblem-system-symbolic">
-                                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/emblems/emblem-system-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">emblem-system-symbolic</property>
                                               </object>
                                             </property>
                                           </object>
@@ -1794,11 +1778,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             </child>
                                             <child>
                                               <object class="GtkImage" id="listboxrow3image">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/object-select-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">object-select-symbolic</property>
                                                 <property name="halign">2</property>
                                                 <property name="valign">3</property>
                                                 <property name="opacity">0</property>
@@ -1852,11 +1832,7 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="valign">3</property>
                                                 <property name="child">
                                                   <object class="GtkImage">
-                                                    <property name="paintable">
-                                                      <object class="GtkIconPaintable">
-                                                        <property name="file">resource:///org/gtk/WidgetFactory4/icons/scalable/status/appointment-soon-symbolic.svg</property>
-                                                      </object>
-                                                    </property>
+                                                    <property name="paintable">appointment-soon-symbolic</property>
                                                   </object>
                                                 </property>
                                               </object>
@@ -1951,11 +1927,7 @@ microphone-sensitivity-medium-symbolic</property>
 
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:////org/gtk/WidgetFactory4/icons/scalable/actions/document-new-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">document-new-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="tooltip-text" translatable="1">Create a new document</property>
@@ -1966,11 +1938,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="1">Save</property>
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:////org/gtk/libgtk/icons/scalable/actions/document-save-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">document-save-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="tooltip-text" translatable="1">Save the current document</property>
@@ -1984,11 +1952,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="1">Search</property>
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:////org/gtk/libgtk/icons/scalable/actions/edit-find-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">edit-find-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="action-name">win.search</property>
@@ -2001,11 +1965,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="1">Insert</property>
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:////org/gtk/libgtk/icons/scalable/actions/insert-image-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">insert-image-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="tooltip-text" translatable="1">Insert something</property>
@@ -2168,11 +2128,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkButton" id="decrease_button">
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:///org/gtk/WidgetFactory4/icons/scalable/actions/zoom-out-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">zoom-out-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="tooltip-text">Normal icons</property>
@@ -2183,11 +2139,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkButton" id="increase_button">
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:///org/gtk/WidgetFactory4/icons/scalable/actions/zoom-in-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">zoom-in-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="tooltip-text">Large icons</property>
@@ -2198,11 +2150,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkButton" id="reset_button">
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable">
-                                                    <property name="file">resource:///org/gtk/WidgetFactory4/icons/scalable/actions/zoom-original-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">zoom-original-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="tooltip-text">Inherited icon size</property>
@@ -2385,11 +2333,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <child>
                                           <object class="GtkImage">
                                             <property name="valign">4</property>
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/media-record-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">media-record-symbolic</property>
                                             <property name="valign">center</property>
                                           </object>
                                         </child>
@@ -2415,11 +2359,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="active">1</property>
                                         <property name="child">
                                           <object class="GtkImage">
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-grid-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">view-grid-symbolic</property>
                                           </object>
                                         </property>
                                         <property name="valign">center</property>
@@ -2430,11 +2370,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="group">grid_button</property>
                                         <property name="child">
                                           <object class="GtkImage">
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-list-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">view-list-symbolic</property>
                                           </object>
                                         </property>
                                         <property name="valign">center</property>
@@ -2466,11 +2402,7 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkMenuButton">
                                 <property name="child">
                                   <object class="GtkImage">
-                                    <property name="paintable">
-                                      <object class="GtkIconPaintable">
-                                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-more-symbolic.svg</property>
-                                      </object>
-                                    </property>
+                                    <property name="paintable">view-more-symbolic</property>
                                   </object>
                                 </property>
                                 <property name="menu-model">new_style_menu_model</property>
@@ -2707,11 +2639,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkButton" id="toolbutton1">
                                     <property name="child">
                                       <object class="GtkImage">
-                                        <property name="paintable">
-                                          <object class="GtkIconPaintable">
-                                            <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-open-symbolic.svg</property>
-                                          </object>
-                                        </property>
+                                        <property name="paintable">document-open-symbolic</property>
                                       </object>
                                     </property>
                                     <property name="focus-on-click">0</property>
@@ -2722,11 +2650,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkButton" id="toolbutton2">
                                     <property name="child">
                                       <object class="GtkImage">
-                                        <property name="paintable">
-                                          <object class="GtkIconPaintable">
-                                            <property name="file">resource:///org/gtk/WidgetFactory4/icons/scalable/actions/send-to-symbolic.svg</property>
-                                          </object>
-                                        </property>
+                                        <property name="paintable">send-to-symbolic</property>
                                       </object>
                                     </property>
                                     <property name="focus-on-click">0</property>
@@ -2737,11 +2661,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkButton" id="toolbutton3">
                                     <property name="child">
                                       <object class="GtkImage">
-                                        <property name="paintable">
-                                          <object class="GtkIconPaintable">
-                                            <property name="file">resource:///org/gtk/WidgetFactory4/icons/scalable/actions/view-fullscreen-symbolic.svg</property>
-                                          </object>
-                                        </property>
+                                        <property name="paintable">view-fullscreen-symbolic</property>
                                       </object>
                                     </property>
                                     <property name="focus-on-click">0</property>
@@ -2752,11 +2672,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkButton" id="toolbutton4">
                                     <property name="child">
                                       <object class="GtkImage">
-                                        <property name="paintable">
-                                          <object class="GtkIconPaintable">
-                                            <property name="file">resource:///org/gtk/WidgetFactory4/icons/scalable/actions/star-new-symbolic.svg</property>
-                                          </object>
-                                        </property>
+                                        <property name="paintable">start-new-symbolic</property>
                                       </object>
                                     </property>
                                     <property name="focus-on-click">0</property>
@@ -2788,11 +2704,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="sensitive">0</property>
                                         <property name="child">
                                           <object class="GtkImage">
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-cut-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">edit-cut-symbolic</property>
                                           </object>
                                         </property>
                                         <property name="focus-on-click">0</property>
@@ -2804,11 +2716,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="sensitive">0</property>
                                         <property name="child">
                                           <object class="GtkImage">
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-copy-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">edit-copy-symbolic</property>
                                           </object>
                                         </property>
                                         <property name="focus-on-click">0</property>
@@ -2820,11 +2728,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="sensitive">0</property>
                                         <property name="child">
                                           <object class="GtkImage">
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-paste-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">edit-paste-symbolic</property>
                                           </object>
                                         </property>
                                         <property name="focus-on-click">0</property>
@@ -2839,11 +2743,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="valign">2</property>
                                     <property name="child">
                                       <object class="GtkImage">
-                                        <property name="paintable">
-                                          <object class="GtkIconPaintable">
-                                            <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-delete-symbolic.svg</property>
-                                          </object>
-                                        </property>
+                                        <property name="paintable">edit-delete-symbolic</property>
                                       </object>
                                     </property>
                                     <property name="focus-on-click">0</property>
@@ -2877,11 +2777,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkButton">
                                         <property name="child">
                                           <object class="GtkImage">
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-previous-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">go-previous-symbolic</property>
                                           </object>
                                         </property>
                                       </object>
@@ -2890,11 +2786,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkButton">
                                         <property name="child">
                                           <object class="GtkImage">
-                                            <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-next-symbolic.svg</property>
-                                              </object>
-                                            </property>
+                                            <property name="paintable">go-next-symbolic</property>
                                           </object>
                                         </property>
                                       </object>
@@ -2932,11 +2824,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="popover">notebook_info_popover2</property>
                                             <property name="child">
                                               <object class="GtkImage">
-                                                <property name="paintable">
-                                                  <object class="GtkIconPaintable" id="emblem-important-symbolic">
-                                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/emblems/emblem-important-symbolic.svg</property>
-                                                  </object>
-                                                </property>
+                                                <property name="paintable">emblem-important-symbolic</property>
                                               </object>
                                             </property>
                                             <property name="has-frame">0</property>
