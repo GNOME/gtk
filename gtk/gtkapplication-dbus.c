@@ -466,38 +466,6 @@ gtk_application_impl_dbus_uninhibit (GtkApplicationImpl *impl,
     }
 }
 
-static gboolean
-gtk_application_impl_dbus_prefers_app_menu (GtkApplicationImpl *impl)
-{
-  static gboolean decided;
-  static gboolean result;
-
-  /* We do not support notifying if/when the result changes, so make
-   * sure that once we give an answer, we will always give the same one.
-   */
-  if (!decided)
-    {
-      GtkSettings *gtk_settings;
-      gboolean show_app_menu;
-      gboolean show_menubar;
-
-      gtk_settings = gtk_settings_get_default ();
-      g_object_get (G_OBJECT (gtk_settings),
-                    "gtk-shell-shows-app-menu", &show_app_menu,
-                    "gtk-shell-shows-menubar", &show_menubar,
-                    NULL);
-
-      /* We prefer traditional menus when we have a shell that doesn't
-       * show the appmenu or we have a shell that shows menubars
-       * (ie: Unity)
-       */
-      result = show_app_menu && !show_menubar;
-      decided = TRUE;
-    }
-
-  return result;
-}
-
 static void
 gtk_application_impl_dbus_init (GtkApplicationImplDBus *dbus)
 {
@@ -548,7 +516,6 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->set_menubar = gtk_application_impl_dbus_set_menubar;
   impl_class->inhibit = gtk_application_impl_dbus_inhibit;
   impl_class->uninhibit = gtk_application_impl_dbus_uninhibit;
-  impl_class->prefers_app_menu = gtk_application_impl_dbus_prefers_app_menu;
 
   gobject_class->finalize = gtk_application_impl_dbus_finalize;
 }
