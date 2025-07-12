@@ -696,7 +696,7 @@ gtk_drag_source_set_content (GtkDragSource      *source,
 GdkDragAction
 gtk_drag_source_get_actions (GtkDragSource *source)
 {
-  g_return_val_if_fail (GTK_IS_DRAG_SOURCE (source), 0);
+  g_return_val_if_fail (GTK_IS_DRAG_SOURCE (source), GDK_ACTION_NONE);
 
   return source->actions;
 }

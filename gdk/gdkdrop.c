@@ -504,7 +504,7 @@ gdk_drop_get_actions (GdkDrop *self)
 {
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
 
-  g_return_val_if_fail (GDK_IS_DROP (self), 0);
+  g_return_val_if_fail (GDK_IS_DROP (self), GDK_ACTION_NONE);
 
   return priv->actions;
 }

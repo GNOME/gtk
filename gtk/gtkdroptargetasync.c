@@ -132,7 +132,7 @@ static gboolean
 gtk_drop_target_async_accept (GtkDropTargetAsync *self,
                               GdkDrop            *drop)
 {
-  if ((gdk_drop_get_actions (drop) & self->actions) == 0)
+  if ((gdk_drop_get_actions (drop) & self->actions) == GDK_ACTION_NONE)
     return FALSE;
 
   if (self->formats == NULL)
@@ -153,7 +153,7 @@ make_action_unique (GdkDragAction actions)
   if (actions & GDK_ACTION_LINK)
     return GDK_ACTION_LINK;
 
-  return 0;
+  return GDK_ACTION_NONE;
 }
 
 static GdkDragAction
@@ -386,7 +386,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
    */
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions", NULL, NULL,
-                           GDK_TYPE_DRAG_ACTION, 0,
+                           GDK_TYPE_DRAG_ACTION, GDK_ACTION_NONE,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -652,7 +652,7 @@ gtk_drop_target_async_set_actions (GtkDropTargetAsync *self,
 GdkDragAction
 gtk_drop_target_async_get_actions (GtkDropTargetAsync *self)
 {
-  g_return_val_if_fail (GTK_IS_DROP_TARGET_ASYNC (self), 0);
+  g_return_val_if_fail (GTK_IS_DROP_TARGET_ASYNC (self), GDK_ACTION_NONE);
 
   return self->actions;
 }

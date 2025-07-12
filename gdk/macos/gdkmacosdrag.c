@@ -429,7 +429,7 @@ _gdk_macos_drag_ns_operation_to_action (NSDragOperation operation)
     return GDK_ACTION_MOVE;
   if (operation & NSDragOperationLink)
     return GDK_ACTION_LINK;
-  return 0;
+  return GDK_ACTION_NONE;
 }
 
 void
