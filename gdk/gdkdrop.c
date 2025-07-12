@@ -551,8 +551,8 @@ gdk_drop_get_drag (GdkDrop *self)
 /**
  * gdk_drop_status:
  * @self: a `GdkDrop`
- * @actions: Supported actions of the destination, or 0 to indicate
- *    that a drop will not be accepted
+ * @actions: Supported actions of the destination, or `GDK_ACTION_NONE` to
+ *    indicate that a drop will not be accepted
  * @preferred: A unique action that's a member of @actions indicating the
  *    preferred action
  *
@@ -590,7 +590,8 @@ gdk_drop_status (GdkDrop       *self,
 /**
  * gdk_drop_finish:
  * @self: a `GdkDrop`
- * @action: the action performed by the destination or 0 if the drop failed
+ * @action: the action performed by the destination or `GDK_ACTION_NONE` if the
+ *   drop failed
  *
  * Ends the drag operation after a drop.
  *

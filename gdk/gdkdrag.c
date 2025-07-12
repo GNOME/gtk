@@ -808,7 +808,7 @@ gdk_drag_get_cursor (GdkDrag       *drag,
  * Checks if @action represents a single action or includes
  * multiple actions.
  *
- * When @action is 0 - ie no action was given, %TRUE
+ * When @action is `GDK_ACTION_NONE` - ie no action was given, `TRUE`
  * is returned.
  *
  * Returns: %TRUE if exactly one action was given

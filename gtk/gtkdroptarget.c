@@ -779,7 +779,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    *
    * It can be used to set up custom highlighting.
    *
-   * Returns: Preferred action for this drag operation or 0 if
+   * Returns: Preferred action for this drag operation or `GDK_ACTION_NONE` if
    *   dropping is not supported at the current @x,@y location.
    */
   signals[ENTER] =
@@ -803,7 +803,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    *
    * Emitted while the pointer is moving over the drop target.
    *
-   * Returns: Preferred action for this drag operation or 0 if
+   * Returns: Preferred action for this drag operation or `GDK_ACTION_NONE` if
    *   dropping is not supported at the current @x,@y location.
    */
   signals[MOTION] =
