@@ -182,7 +182,7 @@ gtk_drop_target_end_drop (GtkDropTarget *self)
 
   if (self->dropping)
     {
-      gdk_drop_finish (self->drop, 0);
+      gdk_drop_finish (self->drop, GDK_ACTION_NONE);
       self->dropping = FALSE;
     }
 
@@ -220,7 +220,7 @@ make_action_unique (GdkDragAction actions)
   if (actions & GDK_ACTION_LINK)
     return GDK_ACTION_LINK;
 
-  return 0;
+  return GDK_ACTION_NONE;
 }
 
 static void
@@ -236,7 +236,7 @@ gtk_drop_target_do_drop (GtkDropTarget *self)
   if (success)
     gdk_drop_finish (self->drop, make_action_unique (self->actions & gdk_drop_get_actions (self->drop)));
   else
-    gdk_drop_finish (self->drop, 0);
+    gdk_drop_finish (self->drop, GDK_ACTION_NONE);
 
   self->dropping = FALSE;
 
@@ -358,7 +358,7 @@ static gboolean
 gtk_drop_target_accept (GtkDropTarget *self,
                         GdkDrop       *drop)
 {
-  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (self)) == 0)
+  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (self)) == GDK_ACTION_NONE)
     return FALSE;
 
   if (self->formats == NULL)
@@ -648,7 +648,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    */
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions", NULL, NULL,
-                           GDK_TYPE_DRAG_ACTION, 0,
+                           GDK_TYPE_DRAG_ACTION, GDK_ACTION_NONE,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -779,7 +779,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    *
    * It can be used to set up custom highlighting.
    *
-   * Returns: Preferred action for this drag operation or 0 if
+   * Returns: Preferred action for this drag operation or `GDK_ACTION_NONE` if
    *   dropping is not supported at the current @x,@y location.
    */
   signals[ENTER] =
@@ -803,7 +803,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    *
    * Emitted while the pointer is moving over the drop target.
    *
-   * Returns: Preferred action for this drag operation or 0 if
+   * Returns: Preferred action for this drag operation or `GDK_ACTION_NONE` if
    *   dropping is not supported at the current @x,@y location.
    */
   signals[MOTION] =
@@ -1014,7 +1014,7 @@ gtk_drop_target_set_actions (GtkDropTarget *self,
 GdkDragAction
 gtk_drop_target_get_actions (GtkDropTarget *self)
 {
-  g_return_val_if_fail (GTK_IS_DROP_TARGET (self), 0);
+  g_return_val_if_fail (GTK_IS_DROP_TARGET (self), GDK_ACTION_NONE);
 
   return self->actions;
 }

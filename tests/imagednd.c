@@ -47,7 +47,7 @@ save_finish (GObject      *source,
     {
       g_print ("Saving failed: %s\n", error->message);
       g_error_free (error);
-      gdk_drop_finish (data->drop, 0);
+      gdk_drop_finish (data->drop, GDK_ACTION_NONE);
       drop_data_free (data);
       return;
     }
@@ -77,7 +77,7 @@ drop_done (GObject      *source,
     {
       g_print ("Drop failed: %s\n", error->message);
       g_error_free (error);
-      gdk_drop_finish (drop, 0);
+      gdk_drop_finish (drop, GDK_ACTION_NONE);
       return;
     }
 
@@ -98,7 +98,7 @@ drop_done (GObject      *source,
       g_print ("Saving failed: %s\n", error->message);
       g_clear_error (&error);
       g_clear_object (&input);
-      gdk_drop_finish (drop, 0);
+      gdk_drop_finish (drop, GDK_ACTION_NONE);
       return;
     }
 

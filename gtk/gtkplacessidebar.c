@@ -4208,8 +4208,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * The drag action to use must be the return value of the signal handler.
    *
    * Returns: The drag action to use, for example, GDK_ACTION_COPY
-   * or GDK_ACTION_MOVE, or 0 if no action is allowed here (i.e. drops
-   * are not allowed in the specified @dest_file).
+   *   or GDK_ACTION_MOVE, or `GDK_ACTION_NONE` if no action is allowed here (i.e. drops
+   *   are not allowed in the specified @dest_file).
    */
   places_sidebar_signals [DRAG_ACTION_REQUESTED] =
           g_signal_new (I_("drag-action-requested"),
@@ -4234,7 +4234,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * to pop up a menu to ask the user for which drag action to perform.
    *
    * Returns: the final drag action that the sidebar should pass to the drag side
-   * of the drag-and-drop operation.
+   *   of the drag-and-drop operation.
    */
   places_sidebar_signals [DRAG_ACTION_ASK] =
           g_signal_new (I_("drag-action-ask"),

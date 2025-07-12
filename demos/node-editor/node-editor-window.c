@@ -545,7 +545,7 @@ on_picture_drop_read_cb (GObject      *source,
   if (input == NULL)
     {
       g_object_unref (self);
-      gdk_drop_finish (drop, 0);
+      gdk_drop_finish (drop, GDK_ACTION_NONE);
       return;
     }
 

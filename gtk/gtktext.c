@@ -6668,7 +6668,7 @@ gtk_text_drag_accept (GtkDropTarget *dest,
   if (!priv->editable)
     return FALSE;
 
-  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == 0)
+  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == GDK_ACTION_NONE)
     return FALSE;
 
   return gdk_content_formats_match (gtk_drop_target_get_formats (dest), gdk_drop_get_formats (drop));

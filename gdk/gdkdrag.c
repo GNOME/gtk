@@ -140,7 +140,7 @@ gdk_drag_get_actions (GdkDrag *drag)
 {
   GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
-  g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
+  g_return_val_if_fail (GDK_IS_DRAG (drag), GDK_ACTION_NONE);
 
   return priv->actions;
 }
@@ -158,7 +158,7 @@ gdk_drag_get_selected_action (GdkDrag *drag)
 {
   GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
 
-  g_return_val_if_fail (GDK_IS_DRAG (drag), 0);
+  g_return_val_if_fail (GDK_IS_DRAG (drag), GDK_ACTION_NONE);
 
   return priv->selected_action;
 }
@@ -433,7 +433,7 @@ gdk_drag_class_init (GdkDragClass *klass)
   properties[PROP_ACTIONS] =
     g_param_spec_flags ("actions", NULL, NULL,
                         GDK_TYPE_DRAG_ACTION,
-                        0,
+                        GDK_ACTION_NONE,
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -808,7 +808,7 @@ gdk_drag_get_cursor (GdkDrag       *drag,
  * Checks if @action represents a single action or includes
  * multiple actions.
  *
- * When @action is 0 - ie no action was given, %TRUE
+ * When @action is `GDK_ACTION_NONE` - ie no action was given, `TRUE`
  * is returned.
  *
  * Returns: %TRUE if exactly one action was given

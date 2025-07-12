@@ -120,7 +120,7 @@ got_texture (GObject *source,
   else
     {
       g_error_free (error);
-      gdk_drop_finish (drop, 0);
+      gdk_drop_finish (drop, GDK_ACTION_NONE);
     }
 
   g_object_set_data (G_OBJECT (image), "drop", NULL);
@@ -134,7 +134,7 @@ perform_drop (GdkDrop   *drop,
     gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, image);
   else
     {
-      gdk_drop_finish (drop, 0);
+      gdk_drop_finish (drop, GDK_ACTION_NONE);
       g_object_set_data (G_OBJECT (image), "drop", NULL);
     }
 }
@@ -158,7 +158,7 @@ do_cancel (GtkWidget *button)
   GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (image), "drop"));
 
   gtk_popover_popdown (GTK_POPOVER (popover));
-  gdk_drop_finish (drop, 0);
+  gdk_drop_finish (drop, GDK_ACTION_NONE);
 
   g_object_set_data (G_OBJECT (image), "drop", NULL);
 }

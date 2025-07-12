@@ -285,6 +285,14 @@ typedef enum
  */
 typedef enum
 {
+  /**
+   * GDK_ACTION_NONE:
+   *
+   * No action.
+   *
+   * Since: 4.20
+   */
+  GDK_ACTION_NONE GDK_AVAILABLE_ENUMERATOR_IN_4_20 = 0,
   GDK_ACTION_COPY    = 1 << 0,
   GDK_ACTION_MOVE    = 1 << 1,
   GDK_ACTION_LINK    = 1 << 2,
