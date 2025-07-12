@@ -22,7 +22,7 @@ project('gtk', 'c',
         license: 'LGPL-2.1-or-later')
 
 glib_major_req = 2
-glib_minor_req = 82
+glib_minor_req = 84
 
 pango_major_req = 1
 pango_minor_req = 56
