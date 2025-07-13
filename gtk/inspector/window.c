@@ -900,7 +900,7 @@ gtk_inspector_handle_event (GdkEvent *event)
           gtk_inspector_recorder_record_single_frame (recorder, FALSE);
           return TRUE;
         }
-      else if (gdk_key_event_matches (event, GDK_KEY_s, GDK_SUPER_MASK) == GDK_KEY_MATCH_EXACT)
+      else if (gdk_key_event_matches (event, GDK_KEY_f, GDK_SUPER_MASK) == GDK_KEY_MATCH_EXACT)
         {
           gtk_inspector_recorder_record_single_frame (recorder, TRUE);
           return TRUE;
