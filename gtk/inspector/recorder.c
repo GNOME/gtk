@@ -224,6 +224,7 @@ struct _GtkInspectorRecorder
   gboolean highlight_sequences;
   gboolean record_events;
   gboolean stop_after_next_frame;
+  gboolean save_to_file;
   gboolean dark;
 
   GdkEventSequence *selected_sequence;
@@ -2696,7 +2697,8 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
 }
 
 void
-gtk_inspector_recorder_record_single_frame (GtkInspectorRecorder *recorder)
+gtk_inspector_recorder_record_single_frame (GtkInspectorRecorder *recorder,
+                                            gboolean              save_to_file)
 {
   if (gtk_inspector_recorder_is_recording (recorder))
     return;
@@ -2705,6 +2707,7 @@ gtk_inspector_recorder_record_single_frame (GtkInspectorRecorder *recorder)
   recorder->start_time = 0;
   recorder->record_events = FALSE;
   recorder->stop_after_next_frame = TRUE;
+  recorder->save_to_file = save_to_file;
   gtk_inspector_recorder_add_recording (recorder, recorder->recording);
 }
 
@@ -2767,6 +2770,16 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (recorder));
       gdk_clipboard_set (clipboard, GSK_TYPE_RENDER_NODE, node);
+
+      if (recorder->save_to_file)
+        {
+          char *filename;
+          static int counter = 0;
+
+          filename = g_strdup_printf ("gtk-frame%d.node", counter++);
+          gsk_render_node_write_to_file (node, filename, NULL);
+          g_free (filename);
+        }
     }
 }
 
