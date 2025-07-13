@@ -2760,14 +2760,13 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
 
   if (recorder->stop_after_next_frame)
     {
-      GtkSingleSelection *selection;
+      GdkClipboard *clipboard;
 
       recorder->stop_after_next_frame = FALSE;
       gtk_inspector_recorder_set_recording (recorder, FALSE);
 
-      selection = GTK_SINGLE_SELECTION (gtk_list_view_get_model (GTK_LIST_VIEW (recorder->recordings_list)));
-      gtk_single_selection_set_selected (selection, g_list_model_get_n_items (G_LIST_MODEL (selection)) - 1);
-      render_node_clip (NULL, recorder);
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (recorder));
+      gdk_clipboard_set (clipboard, GSK_TYPE_RENDER_NODE, node);
     }
 }
 
