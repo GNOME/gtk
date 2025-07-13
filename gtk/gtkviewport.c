@@ -629,6 +629,9 @@ focus_change_handler (GtkWidget *widget)
   if (GTK_IS_TEXT (focus_widget))
     focus_widget = gtk_widget_get_parent (focus_widget);
 
+  if (gtk_widget_get_native (focus_widget) != gtk_widget_get_native (widget))
+    return;
+
   gtk_viewport_scroll_to (viewport, focus_widget, NULL);
 }
 
