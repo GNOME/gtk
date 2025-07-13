@@ -205,7 +205,7 @@ extern "C" {  // portability definitions are in global scope, not a namespace
 /* wrappers for Visual Studio built-ins that look like gcc built-ins
  * __builtin_ctzll */
 /** result might be undefined when input_num is zero */
-inline int roaring_trailing_zeroes(unsigned long long input_num) {
+static inline int roaring_trailing_zeroes(unsigned long long input_num) {
     unsigned long index;
 #ifdef _WIN64  // highly recommended!!!
     _BitScanForward64(&index, input_num);
@@ -223,7 +223,7 @@ inline int roaring_trailing_zeroes(unsigned long long input_num) {
 /* wrappers for Visual Studio built-ins that look like gcc built-ins
  * __builtin_clzll */
 /** result might be undefined when input_num is zero */
-inline int roaring_leading_zeroes(unsigned long long input_num) {
+static inline int roaring_leading_zeroes(unsigned long long input_num) {
     unsigned long index;
 #ifdef _WIN64  // highly recommended!!!
     _BitScanReverse64(&index, input_num);
@@ -248,11 +248,11 @@ inline int roaring_leading_zeroes(unsigned long long input_num) {
 #define CROARING_INTRINSICS 1
 #define roaring_unreachable __builtin_unreachable()
 /** result might be undefined when input_num is zero */
-inline int roaring_trailing_zeroes(unsigned long long input_num) {
+static inline int roaring_trailing_zeroes(unsigned long long input_num) {
     return __builtin_ctzll(input_num);
 }
 /** result might be undefined when input_num is zero */
-inline int roaring_leading_zeroes(unsigned long long input_num) {
+static inline int roaring_leading_zeroes(unsigned long long input_num) {
     return __builtin_clzll(input_num);
 }
 #endif
@@ -830,63 +830,63 @@ struct bitset_s {
 typedef struct bitset_s bitset_t;
 
 /* Create a new bitset. Return NULL in case of failure. */
-bitset_t *bitset_create(void);
+static bitset_t *bitset_create(void);
 
 /* Create a new bitset able to contain size bits. Return NULL in case of
  * failure. */
-bitset_t *bitset_create_with_capacity(size_t size);
+static bitset_t *bitset_create_with_capacity(size_t size);
 
 /* Free memory. */
-void bitset_free(bitset_t *bitset);
+static void bitset_free(bitset_t *bitset);
 
 /* Set all bits to zero. */
-void bitset_clear(bitset_t *bitset);
+static void bitset_clear(bitset_t *bitset);
 
 /* Set all bits to one. */
-void bitset_fill(bitset_t *bitset);
+static void bitset_fill(bitset_t *bitset);
 
 /* Create a copy */
-bitset_t *bitset_copy(const bitset_t *bitset);
+static bitset_t *bitset_copy(const bitset_t *bitset);
 
 /* For advanced users: Resize the bitset so that it can support newarraysize *
  * 64 bits. Return true in case of success, false for failure. Pad with zeroes
  * new buffer areas if requested. */
-bool bitset_resize(bitset_t *bitset, size_t newarraysize, bool padwithzeroes);
+static bool bitset_resize(bitset_t *bitset, size_t newarraysize, bool padwithzeroes);
 
 /* returns how many bytes of memory the backend buffer uses */
-inline size_t bitset_size_in_bytes(const bitset_t *bitset) {
+static inline size_t bitset_size_in_bytes(const bitset_t *bitset) {
     return bitset->arraysize * sizeof(uint64_t);
 }
 
 /* returns how many bits can be accessed */
-inline size_t bitset_size_in_bits(const bitset_t *bitset) {
+static inline size_t bitset_size_in_bits(const bitset_t *bitset) {
     return bitset->arraysize * 64;
 }
 
 /* returns how many words (64-bit) of memory the backend buffer uses */
-inline size_t bitset_size_in_words(const bitset_t *bitset) {
+static inline size_t bitset_size_in_words(const bitset_t *bitset) {
     return bitset->arraysize;
 }
 
 /* For advanced users: Grow the bitset so that it can support newarraysize * 64
  * bits with padding. Return true in case of success, false for failure. */
-bool bitset_grow(bitset_t *bitset, size_t newarraysize);
+static bool bitset_grow(bitset_t *bitset, size_t newarraysize);
 
 /* attempts to recover unused memory, return false in case of
  * roaring_reallocation failure */
-bool bitset_trim(bitset_t *bitset);
+static bool bitset_trim(bitset_t *bitset);
 
 /* shifts all bits by 's' positions so that the bitset representing values
  * 1,2,10 would represent values 1+s, 2+s, 10+s */
-void bitset_shift_left(bitset_t *bitset, size_t s);
+static void bitset_shift_left(bitset_t *bitset, size_t s);
 
 /* shifts all bits by 's' positions so that the bitset representing values
  * 1,2,10 would represent values 1-s, 2-s, 10-s, negative values are deleted */
-void bitset_shift_right(bitset_t *bitset, size_t s);
+static void bitset_shift_right(bitset_t *bitset, size_t s);
 
 /* Set the ith bit. Attempts to resize the bitset if needed (may silently fail)
  */
-inline void bitset_set(bitset_t *bitset, size_t i) {
+static inline void bitset_set(bitset_t *bitset, size_t i) {
     size_t shiftedi = i / 64;
     if (shiftedi >= bitset->arraysize) {
         if (!bitset_grow(bitset, shiftedi + 1)) {
@@ -898,7 +898,7 @@ inline void bitset_set(bitset_t *bitset, size_t i) {
 
 /* Set the ith bit to the specified value. Attempts to resize the bitset if
  * needed (may silently fail) */
-inline void bitset_set_to_value(bitset_t *bitset, size_t i, bool flag) {
+static inline void bitset_set_to_value(bitset_t *bitset, size_t i, bool flag) {
     size_t shiftedi = i / 64;
     uint64_t mask = ((uint64_t)1) << (i % 64);
     uint64_t dynmask = ((uint64_t)flag) << (i % 64);
@@ -914,7 +914,7 @@ inline void bitset_set_to_value(bitset_t *bitset, size_t i, bool flag) {
 }
 
 /* Get the value of the ith bit.  */
-inline bool bitset_get(const bitset_t *bitset, size_t i) {
+static inline bool bitset_get(const bitset_t *bitset, size_t i) {
     size_t shiftedi = i / 64;
     if (shiftedi >= bitset->arraysize) {
         return false;
@@ -923,64 +923,64 @@ inline bool bitset_get(const bitset_t *bitset, size_t i) {
 }
 
 /* Count number of bits set.  */
-size_t bitset_count(const bitset_t *bitset);
+static size_t bitset_count(const bitset_t *bitset);
 
 /* Returns true if no bit is set.  */
-bool bitset_empty(const bitset_t *bitset);
+static bool bitset_empty(const bitset_t *bitset);
 
 /* Find the index of the first bit set. Or SIZE_MAX if the bitset is empty.  */
-size_t bitset_minimum(const bitset_t *bitset);
+static size_t bitset_minimum(const bitset_t *bitset);
 
 /* Find the index of the last bit set. Or zero if the bitset is empty.  */
-size_t bitset_maximum(const bitset_t *bitset);
+static size_t bitset_maximum(const bitset_t *bitset);
 
 /* compute the union in-place (to b1), returns true if successful, to generate a
  * new bitset first call bitset_copy */
-bool bitset_inplace_union(bitset_t *CROARING_CBITSET_RESTRICT b1,
+static bool bitset_inplace_union(bitset_t *CROARING_CBITSET_RESTRICT b1,
                           const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* report the size of the union (without materializing it) */
-size_t bitset_union_count(const bitset_t *CROARING_CBITSET_RESTRICT b1,
+static size_t bitset_union_count(const bitset_t *CROARING_CBITSET_RESTRICT b1,
                           const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* compute the intersection in-place (to b1), to generate a new bitset first
  * call bitset_copy */
-void bitset_inplace_intersection(bitset_t *CROARING_CBITSET_RESTRICT b1,
+static void bitset_inplace_intersection(bitset_t *CROARING_CBITSET_RESTRICT b1,
                                  const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* report the size of the intersection (without materializing it) */
-size_t bitset_intersection_count(const bitset_t *CROARING_CBITSET_RESTRICT b1,
+static size_t bitset_intersection_count(const bitset_t *CROARING_CBITSET_RESTRICT b1,
                                  const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* returns true if the bitsets contain no common elements */
-bool bitsets_disjoint(const bitset_t *CROARING_CBITSET_RESTRICT b1,
+static bool bitsets_disjoint(const bitset_t *CROARING_CBITSET_RESTRICT b1,
                       const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* returns true if the bitsets contain any common elements */
-bool bitsets_intersect(const bitset_t *CROARING_CBITSET_RESTRICT b1,
+static bool bitsets_intersect(const bitset_t *CROARING_CBITSET_RESTRICT b1,
                        const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* returns true if b1 contains all of the set bits of b2 */
-bool bitset_contains_all(const bitset_t *CROARING_CBITSET_RESTRICT b1,
+static bool bitset_contains_all(const bitset_t *CROARING_CBITSET_RESTRICT b1,
                          const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* compute the difference in-place (to b1), to generate a new bitset first call
  * bitset_copy */
-void bitset_inplace_difference(bitset_t *CROARING_CBITSET_RESTRICT b1,
+static void bitset_inplace_difference(bitset_t *CROARING_CBITSET_RESTRICT b1,
                                const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* compute the size of the difference */
-size_t bitset_difference_count(const bitset_t *CROARING_CBITSET_RESTRICT b1,
+static size_t bitset_difference_count(const bitset_t *CROARING_CBITSET_RESTRICT b1,
                                const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* compute the symmetric difference in-place (to b1), return true if successful,
  * to generate a new bitset first call bitset_copy */
-bool bitset_inplace_symmetric_difference(
+static bool bitset_inplace_symmetric_difference(
     bitset_t *CROARING_CBITSET_RESTRICT b1,
     const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
 /* compute the size of the symmetric difference  */
-size_t bitset_symmetric_difference_count(
+static size_t bitset_symmetric_difference_count(
     const bitset_t *CROARING_CBITSET_RESTRICT b1,
     const bitset_t *CROARING_CBITSET_RESTRICT b2);
 
@@ -990,7 +990,7 @@ size_t bitset_symmetric_difference_count(
     //.....
   }
   */
-inline bool bitset_next_set_bit(const bitset_t *bitset, size_t *i) {
+static inline bool bitset_next_set_bit(const bitset_t *bitset, size_t *i) {
     size_t x = *i / 64;
     if (x >= bitset->arraysize) {
         return false;
@@ -1022,7 +1022,7 @@ inline bool bitset_next_set_bit(const bitset_t *bitset, size_t *i) {
     //.....
   }
   */
-inline size_t bitset_next_set_bits(const bitset_t *bitset, size_t *buffer,
+static inline size_t bitset_next_set_bits(const bitset_t *bitset, size_t *buffer,
                                    size_t capacity, size_t *startfrom) {
     if (capacity == 0) return 0;  // sanity check
     size_t x = *startfrom / 64;
@@ -1059,7 +1059,7 @@ end:
 typedef bool (*bitset_iterator)(size_t value, void *param);
 
 // return true if uninterrupted
-inline bool bitset_for_each(const bitset_t *b, bitset_iterator iterator,
+static inline bool bitset_for_each(const bitset_t *b, bitset_iterator iterator,
                             void *ptr) {
     size_t base = 0;
     for (size_t i = 0; i < b->arraysize; ++i) {
@@ -1075,7 +1075,7 @@ inline bool bitset_for_each(const bitset_t *b, bitset_iterator iterator,
     return true;
 }
 
-inline void bitset_print(const bitset_t *b) {
+static inline void bitset_print(const bitset_t *b) {
     printf("{");
     for (size_t i = 0; bitset_next_set_bit(b, &i); i++) {
         printf("%zu, ", i);
@@ -1122,14 +1122,14 @@ typedef struct roaring_bitmap_s {
  * Capacity is a performance hint for how many "containers" the data will need.
  * Client is responsible for calling `roaring_bitmap_free()`.
  */
-roaring_bitmap_t *roaring_bitmap_create_with_capacity(uint32_t cap);
+static roaring_bitmap_t *roaring_bitmap_create_with_capacity(uint32_t cap);
 
 /**
  * Dynamically allocates a new bitmap (initially empty).
  * Returns NULL if the allocation fails.
  * Client is responsible for calling `roaring_bitmap_free()`.
  */
-inline roaring_bitmap_t *roaring_bitmap_create(void) {
+static inline roaring_bitmap_t *roaring_bitmap_create(void) {
     return roaring_bitmap_create_with_capacity(0);
 }
 
@@ -1138,14 +1138,14 @@ inline roaring_bitmap_t *roaring_bitmap_create(void) {
  * Capacity is a performance hint for how many "containers" the data will need.
  * Can return false if auxiliary allocations fail when capacity greater than 0.
  */
-bool roaring_bitmap_init_with_capacity(roaring_bitmap_t *r, uint32_t cap);
+static bool roaring_bitmap_init_with_capacity(roaring_bitmap_t *r, uint32_t cap);
 
 /**
  * Initialize a roaring bitmap structure in memory controlled by client.
  * The bitmap will be in a "clear" state, with no auxiliary allocations.
  * Since this performs no allocations, the function will not fail.
  */
-inline void roaring_bitmap_init_cleared(roaring_bitmap_t *r) {
+static inline void roaring_bitmap_init_cleared(roaring_bitmap_t *r) {
     roaring_bitmap_init_with_capacity(r, 0);
 }
 
@@ -1154,14 +1154,14 @@ inline void roaring_bitmap_init_cleared(roaring_bitmap_t *r) {
  * distance k*step from min.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_from_range(uint64_t min, uint64_t max,
+static roaring_bitmap_t *roaring_bitmap_from_range(uint64_t min, uint64_t max,
                                             uint32_t step);
 
 /**
  * Creates a new bitmap from a pointer of uint32_t integers
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_of_ptr(size_t n_args, const uint32_t *vals);
+static roaring_bitmap_t *roaring_bitmap_of_ptr(size_t n_args, const uint32_t *vals);
 
 /*
  * Whether you want to use copy-on-write.
@@ -1172,10 +1172,10 @@ roaring_bitmap_t *roaring_bitmap_of_ptr(size_t n_args, const uint32_t *vals);
  * do so for all of your bitmaps, since interactions between bitmaps with and
  * without COW is unsafe.
  */
-inline bool roaring_bitmap_get_copy_on_write(const roaring_bitmap_t *r) {
+static inline bool roaring_bitmap_get_copy_on_write(const roaring_bitmap_t *r) {
     return r->high_low_container.flags & ROARING_FLAG_COW;
 }
-inline void roaring_bitmap_set_copy_on_write(roaring_bitmap_t *r, bool cow) {
+static inline void roaring_bitmap_set_copy_on_write(roaring_bitmap_t *r, bool cow) {
     if (cow) {
         r->high_low_container.flags |= ROARING_FLAG_COW;
     } else {
@@ -1188,12 +1188,12 @@ inline void roaring_bitmap_set_copy_on_write(roaring_bitmap_t *r, bool cow) {
  * The returned pointer may be NULL in case of errors. The caller is responsible
  * for freeing the return bitmap.
  */
-roaring_bitmap_t *roaring_bitmap_add_offset(const roaring_bitmap_t *bm,
+static roaring_bitmap_t *roaring_bitmap_add_offset(const roaring_bitmap_t *bm,
                                             int64_t offset);
 /**
  * Describe the inner structure of the bitmap.
  */
-void roaring_bitmap_printf_describe(const roaring_bitmap_t *r);
+static void roaring_bitmap_printf_describe(const roaring_bitmap_t *r);
 
 /**
  * Creates a new bitmap from a list of uint32_t integers
@@ -1203,7 +1203,7 @@ void roaring_bitmap_printf_describe(const roaring_bitmap_t *r);
  *
  * @see roaring_bitmap_from
  */
-CROARING_DEPRECATED roaring_bitmap_t *roaring_bitmap_of(size_t n, ...);
+CROARING_DEPRECATED static roaring_bitmap_t *roaring_bitmap_of(size_t n, ...);
 
 #ifdef __cplusplus
 /**
@@ -1248,7 +1248,7 @@ CROARING_DEPRECATED roaring_bitmap_t *roaring_bitmap_of(size_t n, ...);
  * The caller is responsible for memory management.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_copy(const roaring_bitmap_t *r);
+static roaring_bitmap_t *roaring_bitmap_copy(const roaring_bitmap_t *r);
 
 /**
  * Copies a bitmap from src to dest. It is assumed that the pointer dest
@@ -1262,13 +1262,13 @@ roaring_bitmap_t *roaring_bitmap_copy(const roaring_bitmap_t *r);
  * the dest bitmap is left in a valid, empty state (even if it was not empty
  * before).
  */
-bool roaring_bitmap_overwrite(roaring_bitmap_t *dest,
+static bool roaring_bitmap_overwrite(roaring_bitmap_t *dest,
                               const roaring_bitmap_t *src);
 
 /**
  * Print the content of the bitmap.
  */
-void roaring_bitmap_printf(const roaring_bitmap_t *r);
+static void roaring_bitmap_printf(const roaring_bitmap_t *r);
 
 /**
  * Computes the intersection between two bitmaps and returns new bitmap. The
@@ -1280,25 +1280,25 @@ void roaring_bitmap_printf(const roaring_bitmap_t *r);
  * many temporary bitmaps.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_and(const roaring_bitmap_t *r1,
+static roaring_bitmap_t *roaring_bitmap_and(const roaring_bitmap_t *r1,
                                      const roaring_bitmap_t *r2);
 
 /**
  * Computes the size of the intersection between two bitmaps.
  */
-uint64_t roaring_bitmap_and_cardinality(const roaring_bitmap_t *r1,
+static uint64_t roaring_bitmap_and_cardinality(const roaring_bitmap_t *r1,
                                         const roaring_bitmap_t *r2);
 
 /**
  * Check whether two bitmaps intersect.
  */
-bool roaring_bitmap_intersect(const roaring_bitmap_t *r1,
+static bool roaring_bitmap_intersect(const roaring_bitmap_t *r1,
                               const roaring_bitmap_t *r2);
 
 /**
  * Check whether a bitmap and an open range intersect.
  */
-bool roaring_bitmap_intersect_with_range(const roaring_bitmap_t *bm, uint64_t x,
+static bool roaring_bitmap_intersect_with_range(const roaring_bitmap_t *bm, uint64_t x,
                                          uint64_t y);
 
 /**
@@ -1307,25 +1307,25 @@ bool roaring_bitmap_intersect_with_range(const roaring_bitmap_t *bm, uint64_t x,
  *
  * The Jaccard index is undefined if both bitmaps are empty.
  */
-double roaring_bitmap_jaccard_index(const roaring_bitmap_t *r1,
+static double roaring_bitmap_jaccard_index(const roaring_bitmap_t *r1,
                                     const roaring_bitmap_t *r2);
 
 /**
  * Computes the size of the union between two bitmaps.
  */
-uint64_t roaring_bitmap_or_cardinality(const roaring_bitmap_t *r1,
+static uint64_t roaring_bitmap_or_cardinality(const roaring_bitmap_t *r1,
                                        const roaring_bitmap_t *r2);
 
 /**
  * Computes the size of the difference (andnot) between two bitmaps.
  */
-uint64_t roaring_bitmap_andnot_cardinality(const roaring_bitmap_t *r1,
+static uint64_t roaring_bitmap_andnot_cardinality(const roaring_bitmap_t *r1,
                                            const roaring_bitmap_t *r2);
 
 /**
  * Computes the size of the symmetric difference (xor) between two bitmaps.
  */
-uint64_t roaring_bitmap_xor_cardinality(const roaring_bitmap_t *r1,
+static uint64_t roaring_bitmap_xor_cardinality(const roaring_bitmap_t *r1,
                                         const roaring_bitmap_t *r2);
 
 /**
@@ -1335,7 +1335,7 @@ uint64_t roaring_bitmap_xor_cardinality(const roaring_bitmap_t *r1,
  * Performance hint: if you are computing the intersection between several
  * bitmaps, two-by-two, it is best to start with the smallest bitmap.
  */
-void roaring_bitmap_and_inplace(roaring_bitmap_t *r1,
+static void roaring_bitmap_and_inplace(roaring_bitmap_t *r1,
                                 const roaring_bitmap_t *r2);
 
 /**
@@ -1343,14 +1343,14 @@ void roaring_bitmap_and_inplace(roaring_bitmap_t *r1,
  * responsible for memory management.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_or(const roaring_bitmap_t *r1,
+static roaring_bitmap_t *roaring_bitmap_or(const roaring_bitmap_t *r1,
                                     const roaring_bitmap_t *r2);
 
 /**
  * Inplace version of `roaring_bitmap_or(), modifies r1.
  * TODO: decide whether r1 == r2 ok
  */
-void roaring_bitmap_or_inplace(roaring_bitmap_t *r1,
+static void roaring_bitmap_or_inplace(roaring_bitmap_t *r1,
                                const roaring_bitmap_t *r2);
 
 /**
@@ -1359,7 +1359,7 @@ void roaring_bitmap_or_inplace(roaring_bitmap_t *r1,
  * See also `roaring_bitmap_or_many_heap()`
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_or_many(size_t number,
+static roaring_bitmap_t *roaring_bitmap_or_many(size_t number,
                                          const roaring_bitmap_t **rs);
 
 /**
@@ -1367,7 +1367,7 @@ roaring_bitmap_t *roaring_bitmap_or_many(size_t number,
  * faster than `roaring_bitmap_or_many() which uses a naive algorithm.
  * Caller is responsible for freeing the result.
  */
-roaring_bitmap_t *roaring_bitmap_or_many_heap(uint32_t number,
+static roaring_bitmap_t *roaring_bitmap_or_many_heap(uint32_t number,
                                               const roaring_bitmap_t **rs);
 
 /**
@@ -1375,13 +1375,13 @@ roaring_bitmap_t *roaring_bitmap_or_many_heap(uint32_t number,
  * and returns new bitmap. The caller is responsible for memory management.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_xor(const roaring_bitmap_t *r1,
+static roaring_bitmap_t *roaring_bitmap_xor(const roaring_bitmap_t *r1,
                                      const roaring_bitmap_t *r2);
 
 /**
  * Inplace version of roaring_bitmap_xor, modifies r1, r1 != r2.
  */
-void roaring_bitmap_xor_inplace(roaring_bitmap_t *r1,
+static void roaring_bitmap_xor_inplace(roaring_bitmap_t *r1,
                                 const roaring_bitmap_t *r2);
 
 /**
@@ -1389,7 +1389,7 @@ void roaring_bitmap_xor_inplace(roaring_bitmap_t *r1,
  * Caller is responsible for freeing the result.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_xor_many(size_t number,
+static roaring_bitmap_t *roaring_bitmap_xor_many(size_t number,
                                           const roaring_bitmap_t **rs);
 
 /**
@@ -1397,13 +1397,13 @@ roaring_bitmap_t *roaring_bitmap_xor_many(size_t number,
  * Caller is responsible for freeing the result.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_andnot(const roaring_bitmap_t *r1,
+static roaring_bitmap_t *roaring_bitmap_andnot(const roaring_bitmap_t *r1,
                                         const roaring_bitmap_t *r2);
 
 /**
  * Inplace version of roaring_bitmap_andnot, modifies r1, r1 != r2.
  */
-void roaring_bitmap_andnot_inplace(roaring_bitmap_t *r1,
+static void roaring_bitmap_andnot_inplace(roaring_bitmap_t *r1,
                                    const roaring_bitmap_t *r2);
 
 /**
@@ -1420,7 +1420,7 @@ void roaring_bitmap_andnot_inplace(roaring_bitmap_t *r1,
 /**
  * Frees the memory.
  */
-void roaring_bitmap_free(const roaring_bitmap_t *r);
+static void roaring_bitmap_free(const roaring_bitmap_t *r);
 
 /**
  * A bit of context usable with `roaring_bitmap_*_bulk()` functions
@@ -1454,7 +1454,7 @@ typedef struct roaring_bulk_context_s {
  * In order to exploit this optimization, the caller should call this function
  * with values with the same "key" (high 16 bits of the value) consecutively.
  */
-void roaring_bitmap_add_bulk(roaring_bitmap_t *r,
+static void roaring_bitmap_add_bulk(roaring_bitmap_t *r,
                              roaring_bulk_context_t *context, uint32_t val);
 
 /**
@@ -1465,30 +1465,30 @@ void roaring_bitmap_add_bulk(roaring_bitmap_t *r,
  * values with the same "key" (high 16 bits of the value) as consecutive
  * elements in `vals`
  */
-void roaring_bitmap_add_many(roaring_bitmap_t *r, size_t n_args,
+static void roaring_bitmap_add_many(roaring_bitmap_t *r, size_t n_args,
                              const uint32_t *vals);
 
 /**
  * Add value x
  */
-void roaring_bitmap_add(roaring_bitmap_t *r, uint32_t x);
+static void roaring_bitmap_add(roaring_bitmap_t *r, uint32_t x);
 
 /**
  * Add value x
  * Returns true if a new value was added, false if the value already existed.
  */
-bool roaring_bitmap_add_checked(roaring_bitmap_t *r, uint32_t x);
+static bool roaring_bitmap_add_checked(roaring_bitmap_t *r, uint32_t x);
 
 /**
  * Add all values in range [min, max]
  */
-void roaring_bitmap_add_range_closed(roaring_bitmap_t *r, uint32_t min,
+static void roaring_bitmap_add_range_closed(roaring_bitmap_t *r, uint32_t min,
                                      uint32_t max);
 
 /**
  * Add all values in range [min, max)
  */
-inline void roaring_bitmap_add_range(roaring_bitmap_t *r, uint64_t min,
+static inline void roaring_bitmap_add_range(roaring_bitmap_t *r, uint64_t min,
                                      uint64_t max) {
     if (max <= min || min > (uint64_t)UINT32_MAX + 1) {
         return;
@@ -1499,18 +1499,18 @@ inline void roaring_bitmap_add_range(roaring_bitmap_t *r, uint64_t min,
 /**
  * Remove value x
  */
-void roaring_bitmap_remove(roaring_bitmap_t *r, uint32_t x);
+static void roaring_bitmap_remove(roaring_bitmap_t *r, uint32_t x);
 
 /**
  * Remove all values in range [min, max]
  */
-void roaring_bitmap_remove_range_closed(roaring_bitmap_t *r, uint32_t min,
+static void roaring_bitmap_remove_range_closed(roaring_bitmap_t *r, uint32_t min,
                                         uint32_t max);
 
 /**
  * Remove all values in range [min, max)
  */
-inline void roaring_bitmap_remove_range(roaring_bitmap_t *r, uint64_t min,
+static inline void roaring_bitmap_remove_range(roaring_bitmap_t *r, uint64_t min,
                                         uint64_t max) {
     if (max <= min || min > (uint64_t)UINT32_MAX + 1) {
         return;
@@ -1521,32 +1521,32 @@ inline void roaring_bitmap_remove_range(roaring_bitmap_t *r, uint64_t min,
 /**
  * Remove multiple values
  */
-void roaring_bitmap_remove_many(roaring_bitmap_t *r, size_t n_args,
+static void roaring_bitmap_remove_many(roaring_bitmap_t *r, size_t n_args,
                                 const uint32_t *vals);
 
 /**
  * Remove value x
  * Returns true if a new value was removed, false if the value was not existing.
  */
-bool roaring_bitmap_remove_checked(roaring_bitmap_t *r, uint32_t x);
+static bool roaring_bitmap_remove_checked(roaring_bitmap_t *r, uint32_t x);
 
 /**
  * Check if value is present
  */
-bool roaring_bitmap_contains(const roaring_bitmap_t *r, uint32_t val);
+static bool roaring_bitmap_contains(const roaring_bitmap_t *r, uint32_t val);
 
 /**
  * Check whether a range of values from range_start (included)
  * to range_end (excluded) is present
  */
-bool roaring_bitmap_contains_range(const roaring_bitmap_t *r,
+static bool roaring_bitmap_contains_range(const roaring_bitmap_t *r,
                                    uint64_t range_start, uint64_t range_end);
 
 /**
  * Check whether a range of values from range_start (included)
  * to range_end (included) is present
  */
-bool roaring_bitmap_contains_range_closed(const roaring_bitmap_t *r,
+static bool roaring_bitmap_contains_range_closed(const roaring_bitmap_t *r,
                                           uint32_t range_start,
                                           uint32_t range_end);
 
@@ -1565,39 +1565,39 @@ bool roaring_bitmap_contains_range_closed(const roaring_bitmap_t *r,
  * In order to exploit this optimization, the caller should call this function
  * with values with the same "key" (high 16 bits of the value) consecutively.
  */
-bool roaring_bitmap_contains_bulk(const roaring_bitmap_t *r,
+static bool roaring_bitmap_contains_bulk(const roaring_bitmap_t *r,
                                   roaring_bulk_context_t *context,
                                   uint32_t val);
 
 /**
  * Get the cardinality of the bitmap (number of elements).
  */
-uint64_t roaring_bitmap_get_cardinality(const roaring_bitmap_t *r);
+static uint64_t roaring_bitmap_get_cardinality(const roaring_bitmap_t *r);
 
 /**
  * Returns the number of elements in the range [range_start, range_end).
  */
-uint64_t roaring_bitmap_range_cardinality(const roaring_bitmap_t *r,
+static uint64_t roaring_bitmap_range_cardinality(const roaring_bitmap_t *r,
                                           uint64_t range_start,
                                           uint64_t range_end);
 
 /**
  * Returns the number of elements in the range [range_start, range_end].
  */
-uint64_t roaring_bitmap_range_cardinality_closed(const roaring_bitmap_t *r,
+static uint64_t roaring_bitmap_range_cardinality_closed(const roaring_bitmap_t *r,
                                                  uint32_t range_start,
                                                  uint32_t range_end);
 /**
  * Returns true if the bitmap is empty (cardinality is zero).
  */
-bool roaring_bitmap_is_empty(const roaring_bitmap_t *r);
+static bool roaring_bitmap_is_empty(const roaring_bitmap_t *r);
 
 /**
  * Empties the bitmap.  It will have no auxiliary allocations (so if the bitmap
  * was initialized in client memory via roaring_bitmap_init(), then a call to
  * roaring_bitmap_clear() would be enough to "free" it)
  */
-void roaring_bitmap_clear(roaring_bitmap_t *r);
+static void roaring_bitmap_clear(roaring_bitmap_t *r);
 
 /**
  * Convert the bitmap to a sorted array, output in `ans`.
@@ -1606,7 +1606,7 @@ void roaring_bitmap_clear(roaring_bitmap_t *r);
  *
  *     ans = malloc(roaring_bitmap_get_cardinality(bitmap) * sizeof(uint32_t));
  */
-void roaring_bitmap_to_uint32_array(const roaring_bitmap_t *r, uint32_t *ans);
+static void roaring_bitmap_to_uint32_array(const roaring_bitmap_t *r, uint32_t *ans);
 
 /**
  * Store the bitmap to a bitset. This can be useful for people
@@ -1624,7 +1624,7 @@ void roaring_bitmap_to_uint32_array(const roaring_bitmap_t *r, uint32_t *ans);
  *   bitset_free(out);
  *
  */
-bool roaring_bitmap_to_bitset(const roaring_bitmap_t *r, bitset_t *bitset);
+static bool roaring_bitmap_to_bitset(const roaring_bitmap_t *r, bitset_t *bitset);
 
 /**
  * Convert the bitmap to a sorted array from `offset` by `limit`, output in
@@ -1636,14 +1636,14 @@ bool roaring_bitmap_to_bitset(const roaring_bitmap_t *r, bitset_t *bitset);
  *
  * Return false in case of failure (e.g., insufficient memory)
  */
-bool roaring_bitmap_range_uint32_array(const roaring_bitmap_t *r, size_t offset,
+static bool roaring_bitmap_range_uint32_array(const roaring_bitmap_t *r, size_t offset,
                                        size_t limit, uint32_t *ans);
 
 /**
  * Remove run-length encoding even when it is more space efficient.
  * Return whether a change was applied.
  */
-bool roaring_bitmap_remove_run_compression(roaring_bitmap_t *r);
+static bool roaring_bitmap_remove_run_compression(roaring_bitmap_t *r);
 
 /**
  * Convert array and bitmap containers to run containers when it is more
@@ -1652,13 +1652,13 @@ bool roaring_bitmap_remove_run_compression(roaring_bitmap_t *r);
  * Returns true if the result has at least one run container.
  * Additional savings might be possible by calling `shrinkToFit()`.
  */
-bool roaring_bitmap_run_optimize(roaring_bitmap_t *r);
+static bool roaring_bitmap_run_optimize(roaring_bitmap_t *r);
 
 /**
  * If needed, reallocate memory to shrink the memory usage.
  * Returns the number of bytes saved.
  */
-size_t roaring_bitmap_shrink_to_fit(roaring_bitmap_t *r);
+static size_t roaring_bitmap_shrink_to_fit(roaring_bitmap_t *r);
 
 /**
  * Write the bitmap to an output pointer, this output buffer should refer to
@@ -1678,7 +1678,7 @@ size_t roaring_bitmap_shrink_to_fit(roaring_bitmap_t *r);
  * checksums so that, at deserialization, you can be confident
  * that you are recovering the correct data.
  */
-size_t roaring_bitmap_serialize(const roaring_bitmap_t *r, char *buf);
+static size_t roaring_bitmap_serialize(const roaring_bitmap_t *r, char *buf);
 
 /**
  * Use with `roaring_bitmap_serialize()`.
@@ -1692,7 +1692,7 @@ size_t roaring_bitmap_serialize(const roaring_bitmap_t *r, char *buf);
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_deserialize(const void *buf);
+static roaring_bitmap_t *roaring_bitmap_deserialize(const void *buf);
 
 /**
  * Use with `roaring_bitmap_serialize()`.
@@ -1710,14 +1710,14 @@ roaring_bitmap_t *roaring_bitmap_deserialize(const void *buf);
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_deserialize_safe(const void *buf,
+static roaring_bitmap_t *roaring_bitmap_deserialize_safe(const void *buf,
                                                   size_t maxbytes);
 
 /**
  * How many bytes are required to serialize this bitmap (NOT compatible
  * with Java and Go versions)
  */
-size_t roaring_bitmap_size_in_bytes(const roaring_bitmap_t *r);
+static size_t roaring_bitmap_size_in_bytes(const roaring_bitmap_t *r);
 
 /**
  * Read bitmap from a serialized buffer.
@@ -1736,7 +1736,7 @@ size_t roaring_bitmap_size_in_bytes(const roaring_bitmap_t *r);
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_portable_deserialize(const char *buf);
+static roaring_bitmap_t *roaring_bitmap_portable_deserialize(const char *buf);
 
 /**
  * Read bitmap from a serialized buffer safely (reading up to maxbytes).
@@ -1773,7 +1773,7 @@ roaring_bitmap_t *roaring_bitmap_portable_deserialize(const char *buf);
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_portable_deserialize_safe(const char *buf,
+static roaring_bitmap_t *roaring_bitmap_portable_deserialize_safe(const char *buf,
                                                            size_t maxbytes);
 
 /**
@@ -1798,7 +1798,7 @@ roaring_bitmap_t *roaring_bitmap_portable_deserialize_safe(const char *buf,
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_portable_deserialize_frozen(const char *buf);
+static roaring_bitmap_t *roaring_bitmap_portable_deserialize_frozen(const char *buf);
 
 /**
  * Check how many bytes would be read (up to maxbytes) at this pointer if there
@@ -1807,7 +1807,7 @@ roaring_bitmap_t *roaring_bitmap_portable_deserialize_frozen(const char *buf);
  * This is meant to be compatible with the Java and Go versions:
  * https://github.com/RoaringBitmap/RoaringFormatSpec
  */
-size_t roaring_bitmap_portable_deserialize_size(const char *buf,
+static size_t roaring_bitmap_portable_deserialize_size(const char *buf,
                                                 size_t maxbytes);
 
 /**
@@ -1816,7 +1816,7 @@ size_t roaring_bitmap_portable_deserialize_size(const char *buf,
  * This is meant to be compatible with the Java and Go versions:
  * https://github.com/RoaringBitmap/RoaringFormatSpec
  */
-size_t roaring_bitmap_portable_size_in_bytes(const roaring_bitmap_t *r);
+static size_t roaring_bitmap_portable_size_in_bytes(const roaring_bitmap_t *r);
 
 /**
  * Write a bitmap to a char buffer.  The output buffer should refer to at least
@@ -1836,7 +1836,7 @@ size_t roaring_bitmap_portable_size_in_bytes(const roaring_bitmap_t *r);
  * checksums so that, at deserialization, you can be confident
  * that you are recovering the correct data.
  */
-size_t roaring_bitmap_portable_serialize(const roaring_bitmap_t *r, char *buf);
+static size_t roaring_bitmap_portable_serialize(const roaring_bitmap_t *r, char *buf);
 
 /*
  * "Frozen" serialization format imitates memory layout of roaring_bitmap_t.
@@ -1860,7 +1860,7 @@ size_t roaring_bitmap_portable_serialize(const roaring_bitmap_t *r, char *buf);
 /**
  * Returns number of bytes required to serialize bitmap using frozen format.
  */
-size_t roaring_bitmap_frozen_size_in_bytes(const roaring_bitmap_t *r);
+static size_t roaring_bitmap_frozen_size_in_bytes(const roaring_bitmap_t *r);
 
 /**
  * Serializes bitmap using frozen format.
@@ -1874,7 +1874,7 @@ size_t roaring_bitmap_frozen_size_in_bytes(const roaring_bitmap_t *r);
  * checksums so that, at deserialization, you can be confident
  * that you are recovering the correct data.
  */
-void roaring_bitmap_frozen_serialize(const roaring_bitmap_t *r, char *buf);
+static void roaring_bitmap_frozen_serialize(const roaring_bitmap_t *r, char *buf);
 
 /**
  * Creates constant bitmap that is a view of a given buffer.
@@ -1907,29 +1907,29 @@ const roaring_bitmap_t *roaring_bitmap_frozen_view(const char *buf,
  *
  * Iteration is ordered: from the smallest to the largest elements.
  */
-bool roaring_iterate(const roaring_bitmap_t *r, roaring_iterator iterator,
+static bool roaring_iterate(const roaring_bitmap_t *r, roaring_iterator iterator,
                      void *ptr);
 
-bool roaring_iterate64(const roaring_bitmap_t *r, roaring_iterator64 iterator,
+static bool roaring_iterate64(const roaring_bitmap_t *r, roaring_iterator64 iterator,
                        uint64_t high_bits, void *ptr);
 
 /**
  * Return true if the two bitmaps contain the same elements.
  */
-bool roaring_bitmap_equals(const roaring_bitmap_t *r1,
+static bool roaring_bitmap_equals(const roaring_bitmap_t *r1,
                            const roaring_bitmap_t *r2);
 
 /**
  * Return true if all the elements of r1 are also in r2.
  */
-bool roaring_bitmap_is_subset(const roaring_bitmap_t *r1,
+static bool roaring_bitmap_is_subset(const roaring_bitmap_t *r1,
                               const roaring_bitmap_t *r2);
 
 /**
  * Return true if all the elements of r1 are also in r2, and r2 is strictly
  * greater than r1.
  */
-bool roaring_bitmap_is_strict_subset(const roaring_bitmap_t *r1,
+static bool roaring_bitmap_is_strict_subset(const roaring_bitmap_t *r1,
                                      const roaring_bitmap_t *r2);
 
 /**
@@ -1949,7 +1949,7 @@ bool roaring_bitmap_is_strict_subset(const roaring_bitmap_t *r1,
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_lazy_or(const roaring_bitmap_t *r1,
+static roaring_bitmap_t *roaring_bitmap_lazy_or(const roaring_bitmap_t *r1,
                                          const roaring_bitmap_t *r2,
                                          const bool bitsetconversion);
 
@@ -1961,7 +1961,7 @@ roaring_bitmap_t *roaring_bitmap_lazy_or(const roaring_bitmap_t *r1,
  * `bitsetconversion` is a flag which determines whether container-container
  * operations force a bitset conversion.
  */
-void roaring_bitmap_lazy_or_inplace(roaring_bitmap_t *r1,
+static void roaring_bitmap_lazy_or_inplace(roaring_bitmap_t *r1,
                                     const roaring_bitmap_t *r2,
                                     const bool bitsetconversion);
 
@@ -1971,7 +1971,7 @@ void roaring_bitmap_lazy_or_inplace(roaring_bitmap_t *r1,
  * Execute maintenance on a bitmap created from `roaring_bitmap_lazy_or()`
  * or modified with `roaring_bitmap_lazy_or_inplace()`.
  */
-void roaring_bitmap_repair_after_lazy(roaring_bitmap_t *r1);
+static void roaring_bitmap_repair_after_lazy(roaring_bitmap_t *r1);
 
 /**
  * Computes the symmetric difference between two bitmaps and returns new bitmap.
@@ -1986,7 +1986,7 @@ void roaring_bitmap_repair_after_lazy(roaring_bitmap_t *r1);
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_lazy_xor(const roaring_bitmap_t *r1,
+static roaring_bitmap_t *roaring_bitmap_lazy_xor(const roaring_bitmap_t *r1,
                                           const roaring_bitmap_t *r2);
 
 /**
@@ -1994,7 +1994,7 @@ roaring_bitmap_t *roaring_bitmap_lazy_xor(const roaring_bitmap_t *r1,
  *
  * Inplace version of roaring_bitmap_lazy_xor, modifies r1. r1 != r2
  */
-void roaring_bitmap_lazy_xor_inplace(roaring_bitmap_t *r1,
+static void roaring_bitmap_lazy_xor_inplace(roaring_bitmap_t *r1,
                                      const roaring_bitmap_t *r2);
 
 /**
@@ -2003,7 +2003,7 @@ void roaring_bitmap_lazy_xor_inplace(roaring_bitmap_t *r1,
  * Areas outside the range are passed through unchanged.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_flip(const roaring_bitmap_t *r1,
+static roaring_bitmap_t *roaring_bitmap_flip(const roaring_bitmap_t *r1,
                                       uint64_t range_start, uint64_t range_end);
 
 /**
@@ -2012,7 +2012,7 @@ roaring_bitmap_t *roaring_bitmap_flip(const roaring_bitmap_t *r1,
  * Areas outside the range are passed through unchanged.
  * The returned pointer may be NULL in case of errors.
  */
-roaring_bitmap_t *roaring_bitmap_flip_closed(const roaring_bitmap_t *x1,
+static roaring_bitmap_t *roaring_bitmap_flip_closed(const roaring_bitmap_t *x1,
                                              uint32_t range_start,
                                              uint32_t range_end);
 /**
@@ -2021,7 +2021,7 @@ roaring_bitmap_t *roaring_bitmap_flip_closed(const roaring_bitmap_t *x1,
  * range_end - range_start.
  * Areas outside the range are passed through unchanged.
  */
-void roaring_bitmap_flip_inplace(roaring_bitmap_t *r1, uint64_t range_start,
+static void roaring_bitmap_flip_inplace(roaring_bitmap_t *r1, uint64_t range_start,
                                  uint64_t range_end);
 
 /**
@@ -2030,7 +2030,7 @@ void roaring_bitmap_flip_inplace(roaring_bitmap_t *r1, uint64_t range_start,
  * range_end - range_start + 1.
  * Areas outside the range are passed through unchanged.
  */
-void roaring_bitmap_flip_inplace_closed(roaring_bitmap_t *r1,
+static void roaring_bitmap_flip_inplace_closed(roaring_bitmap_t *r1,
                                         uint32_t range_start,
                                         uint32_t range_end);
 
@@ -2040,7 +2040,7 @@ void roaring_bitmap_flip_inplace_closed(roaring_bitmap_t *r1,
  * function returns true and sets element to the element of given rank.
  * Otherwise, it returns false.
  */
-bool roaring_bitmap_select(const roaring_bitmap_t *r, uint32_t rank,
+static bool roaring_bitmap_select(const roaring_bitmap_t *r, uint32_t rank,
                            uint32_t *element);
 
 /**
@@ -2053,7 +2053,7 @@ bool roaring_bitmap_select(const roaring_bitmap_t *r, uint32_t rank,
  * as having index 0, whereas roaring_bitmap_rank returns 1 when ranking
  * the smallest value.
  */
-uint64_t roaring_bitmap_rank(const roaring_bitmap_t *r, uint32_t x);
+static uint64_t roaring_bitmap_rank(const roaring_bitmap_t *r, uint32_t x);
 
 /**
  * roaring_bitmap_rank_many is an `Bulk` version of `roaring_bitmap_rank`
@@ -2064,7 +2064,7 @@ uint64_t roaring_bitmap_rank(const roaring_bitmap_t *r, uint32_t x);
  *
  *     ans = malloc((end-begin) * sizeof(uint64_t));
  */
-void roaring_bitmap_rank_many(const roaring_bitmap_t *r, const uint32_t *begin,
+static void roaring_bitmap_rank_many(const roaring_bitmap_t *r, const uint32_t *begin,
                               const uint32_t *end, uint64_t *ans);
 
 /**
@@ -2074,17 +2074,17 @@ void roaring_bitmap_rank_many(const roaring_bitmap_t *r, const uint32_t *begin,
  * is not the element of roaring bitmap, but the rank function will return a
  * non-negative number.
  */
-int64_t roaring_bitmap_get_index(const roaring_bitmap_t *r, uint32_t x);
+static int64_t roaring_bitmap_get_index(const roaring_bitmap_t *r, uint32_t x);
 
 /**
  * Returns the smallest value in the set, or UINT32_MAX if the set is empty.
  */
-uint32_t roaring_bitmap_minimum(const roaring_bitmap_t *r);
+static uint32_t roaring_bitmap_minimum(const roaring_bitmap_t *r);
 
 /**
  * Returns the greatest value in the set, or 0 if the set is empty.
  */
-uint32_t roaring_bitmap_maximum(const roaring_bitmap_t *r);
+static uint32_t roaring_bitmap_maximum(const roaring_bitmap_t *r);
 
 /**
  * (For advanced users.)
@@ -2092,7 +2092,7 @@ uint32_t roaring_bitmap_maximum(const roaring_bitmap_t *r);
  * Collect statistics about the bitmap, see roaring_types.h for
  * a description of roaring_statistics_t
  */
-void roaring_bitmap_statistics(const roaring_bitmap_t *r,
+static void roaring_bitmap_statistics(const roaring_bitmap_t *r,
                                roaring_statistics_t *stat);
 
 /**
@@ -2109,15 +2109,15 @@ void roaring_bitmap_statistics(const roaring_bitmap_t *r,
  * If reason is non-null, it will be set to a string describing the first
  * inconsistency found if any.
  */
-bool roaring_bitmap_internal_validate(const roaring_bitmap_t *r,
+static bool roaring_bitmap_internal_validate(const roaring_bitmap_t *r,
                                       const char **reason);
 
 /*********************
 * What follows is code use to iterate through values in a roaring bitmap
 
-roaring_bitmap_t *r =...
-roaring_uint32_iterator_t i;
-roaring_iterator_create(r, &i);
+static roaring_bitmap_t *r =...
+static roaring_uint32_iterator_t i;
+static roaring_iterator_create(r, &i);
 while(i.has_value) {
   printf("value = %d\n", i.current_value);
   roaring_uint32_iterator_advance(&i);
@@ -2149,7 +2149,7 @@ typedef struct roaring_uint32_iterator_s {
  * If there is a  value, then this iterator points to the first value and
  * `it->has_value` is true. The value is in `it->current_value`.
  */
-void roaring_iterator_init(const roaring_bitmap_t *r,
+static void roaring_iterator_init(const roaring_bitmap_t *r,
                            roaring_uint32_iterator_t *newit);
 
 /** DEPRECATED, use `roaring_iterator_init`. */
@@ -2163,7 +2163,7 @@ CROARING_DEPRECATED static inline void roaring_init_iterator(
  * If there is a value, then this iterator points to the last value and
  * `it->has_value` is true. The value is in `it->current_value`.
  */
-void roaring_iterator_init_last(const roaring_bitmap_t *r,
+static void roaring_iterator_init_last(const roaring_bitmap_t *r,
                                 roaring_uint32_iterator_t *newit);
 
 /** DEPRECATED, use `roaring_iterator_init_last`. */
@@ -2180,7 +2180,7 @@ CROARING_DEPRECATED static inline void roaring_init_iterator_last(
  * If there is a value, then this iterator points to the first value and
  * `it->has_value` is true.  The value is in `it->current_value`.
  */
-roaring_uint32_iterator_t *roaring_iterator_create(const roaring_bitmap_t *r);
+static roaring_uint32_iterator_t *roaring_iterator_create(const roaring_bitmap_t *r);
 
 /** DEPRECATED, use `roaring_iterator_create`. */
 CROARING_DEPRECATED static inline roaring_uint32_iterator_t *
@@ -2197,7 +2197,7 @@ roaring_create_iterator(const roaring_bitmap_t *r) {
  * be called on the iterator again. Calling `roaring_uint32_iterator_previous`
  * is allowed.
  */
-bool roaring_uint32_iterator_advance(roaring_uint32_iterator_t *it);
+static bool roaring_uint32_iterator_advance(roaring_uint32_iterator_t *it);
 
 /** DEPRECATED, use `roaring_uint32_iterator_advance`. */
 CROARING_DEPRECATED static inline bool roaring_advance_uint32_iterator(
@@ -2214,7 +2214,7 @@ CROARING_DEPRECATED static inline bool roaring_advance_uint32_iterator(
  * be called on the iterator again. Calling `roaring_uint32_iterator_advance` is
  * allowed.
  */
-bool roaring_uint32_iterator_previous(roaring_uint32_iterator_t *it);
+static bool roaring_uint32_iterator_previous(roaring_uint32_iterator_t *it);
 
 /** DEPRECATED, use `roaring_uint32_iterator_previous`. */
 CROARING_DEPRECATED static inline bool roaring_previous_uint32_iterator(
@@ -2227,7 +2227,7 @@ CROARING_DEPRECATED static inline bool roaring_previous_uint32_iterator(
  * then `it->has_value` is true. The new value is in `it->current_value`.
  * For convenience, returns `it->has_value`.
  */
-bool roaring_uint32_iterator_move_equalorlarger(roaring_uint32_iterator_t *it,
+static bool roaring_uint32_iterator_move_equalorlarger(roaring_uint32_iterator_t *it,
                                                 uint32_t val);
 
 /** DEPRECATED, use `roaring_uint32_iterator_move_equalorlarger`. */
@@ -2241,7 +2241,7 @@ roaring_move_uint32_iterator_equalorlarger(roaring_uint32_iterator_t *it,
  * Creates a copy of an iterator.
  * Caller must free it.
  */
-roaring_uint32_iterator_t *roaring_uint32_iterator_copy(
+static roaring_uint32_iterator_t *roaring_uint32_iterator_copy(
     const roaring_uint32_iterator_t *it);
 
 /** DEPRECATED, use `roaring_uint32_iterator_copy`. */
@@ -2253,7 +2253,7 @@ roaring_copy_uint32_iterator(const roaring_uint32_iterator_t *it) {
 /**
  * Free memory following `roaring_iterator_create()`
  */
-void roaring_uint32_iterator_free(roaring_uint32_iterator_t *it);
+static void roaring_uint32_iterator_free(roaring_uint32_iterator_t *it);
 
 /** DEPRECATED, use `roaring_uint32_iterator_free`. */
 CROARING_DEPRECATED static inline void roaring_free_uint32_iterator(
@@ -2272,7 +2272,7 @@ CROARING_DEPRECATED static inline void roaring_free_uint32_iterator(
  *  - first value is copied from ${it}->current_value
  *  - after function returns, iterator is positioned at the next element
  */
-uint32_t roaring_uint32_iterator_read(roaring_uint32_iterator_t *it,
+static uint32_t roaring_uint32_iterator_read(roaring_uint32_iterator_t *it,
                                       uint32_t *buf, uint32_t count);
 
 /** DEPRECATED, use `roaring_uint32_iterator_read`. */
@@ -2336,14 +2336,14 @@ typedef struct roaring_memory_s {
     roaring_aligned_free_p aligned_free;
 } roaring_memory_t;
 
-void roaring_init_memory_hook(roaring_memory_t memory_hook);
+static void roaring_init_memory_hook(roaring_memory_t memory_hook);
 
-void* roaring_malloc(size_t);
-void* roaring_realloc(void*, size_t);
-void* roaring_calloc(size_t, size_t);
-void roaring_free(void*);
-void* roaring_aligned_malloc(size_t, size_t);
-void roaring_aligned_free(void*);
+static void* roaring_malloc(size_t);
+static void* roaring_realloc(void*, size_t);
+static void* roaring_calloc(size_t, size_t);
+static void roaring_free(void*);
+static void* roaring_aligned_malloc(size_t, size_t);
+static void roaring_aligned_free(void*);
 
 #ifdef __cplusplus
 }
@@ -2391,19 +2391,19 @@ typedef struct roaring64_bulk_context_s {
  * Client is responsible for calling `roaring64_bitmap_free()`.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_create(void);
-void roaring64_bitmap_free(roaring64_bitmap_t *r);
+static roaring64_bitmap_t *roaring64_bitmap_create(void);
+static void roaring64_bitmap_free(roaring64_bitmap_t *r);
 
 /**
  * Returns a copy of a bitmap.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_copy(const roaring64_bitmap_t *r);
+static roaring64_bitmap_t *roaring64_bitmap_copy(const roaring64_bitmap_t *r);
 
 /**
  * Creates a new bitmap of a pointer to N 64-bit integers.
  */
-roaring64_bitmap_t *roaring64_bitmap_of_ptr(size_t n_args,
+static roaring64_bitmap_t *roaring64_bitmap_of_ptr(size_t n_args,
                                             const uint64_t *vals);
 
 #ifdef __cplusplus
@@ -2451,26 +2451,26 @@ roaring64_bitmap_t *roaring64_bitmap_of_ptr(size_t n_args,
  * After calling this function, the original bitmap will be empty, and the
  * returned bitmap will contain all the values from the original bitmap.
  */
-roaring64_bitmap_t *roaring64_bitmap_move_from_roaring32(roaring_bitmap_t *r);
+static roaring64_bitmap_t *roaring64_bitmap_move_from_roaring32(roaring_bitmap_t *r);
 
 /**
  * Create a new bitmap containing all the values in [min, max) that are at a
  * distance k*step from min.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_from_range(uint64_t min, uint64_t max,
+static roaring64_bitmap_t *roaring64_bitmap_from_range(uint64_t min, uint64_t max,
                                                 uint64_t step);
 
 /**
  * Adds the provided value to the bitmap.
  */
-void roaring64_bitmap_add(roaring64_bitmap_t *r, uint64_t val);
+static void roaring64_bitmap_add(roaring64_bitmap_t *r, uint64_t val);
 
 /**
  * Adds the provided value to the bitmap.
  * Returns true if a new value was added, false if the value already existed.
  */
-bool roaring64_bitmap_add_checked(roaring64_bitmap_t *r, uint64_t val);
+static bool roaring64_bitmap_add_checked(roaring64_bitmap_t *r, uint64_t val);
 
 /**
  * Add an item, using context from a previous insert for faster insertion.
@@ -2486,7 +2486,7 @@ bool roaring64_bitmap_add_checked(roaring64_bitmap_t *r, uint64_t val);
  * In order to exploit this optimization, the caller should call this function
  * with values with the same high 48 bits of the value consecutively.
  */
-void roaring64_bitmap_add_bulk(roaring64_bitmap_t *r,
+static void roaring64_bitmap_add_bulk(roaring64_bitmap_t *r,
                                roaring64_bulk_context_t *context, uint64_t val);
 
 /**
@@ -2497,31 +2497,31 @@ void roaring64_bitmap_add_bulk(roaring64_bitmap_t *r,
  * values with the same high 48 bits of the value as consecutive elements in
  * `vals`.
  */
-void roaring64_bitmap_add_many(roaring64_bitmap_t *r, size_t n_args,
+static void roaring64_bitmap_add_many(roaring64_bitmap_t *r, size_t n_args,
                                const uint64_t *vals);
 
 /**
  * Add all values in range [min, max).
  */
-void roaring64_bitmap_add_range(roaring64_bitmap_t *r, uint64_t min,
+static void roaring64_bitmap_add_range(roaring64_bitmap_t *r, uint64_t min,
                                 uint64_t max);
 
 /**
  * Add all values in range [min, max].
  */
-void roaring64_bitmap_add_range_closed(roaring64_bitmap_t *r, uint64_t min,
+static void roaring64_bitmap_add_range_closed(roaring64_bitmap_t *r, uint64_t min,
                                        uint64_t max);
 
 /**
  * Removes a value from the bitmap if present.
  */
-void roaring64_bitmap_remove(roaring64_bitmap_t *r, uint64_t val);
+static void roaring64_bitmap_remove(roaring64_bitmap_t *r, uint64_t val);
 
 /**
  * Removes a value from the bitmap if present, returns true if the value was
  * removed and false if the value was not present.
  */
-bool roaring64_bitmap_remove_checked(roaring64_bitmap_t *r, uint64_t val);
+static bool roaring64_bitmap_remove_checked(roaring64_bitmap_t *r, uint64_t val);
 
 /**
  * Remove an item, using context from a previous insert for faster removal.
@@ -2537,7 +2537,7 @@ bool roaring64_bitmap_remove_checked(roaring64_bitmap_t *r, uint64_t val);
  * In order to exploit this optimization, the caller should call this function
  * with values with the same high 48 bits of the value consecutively.
  */
-void roaring64_bitmap_remove_bulk(roaring64_bitmap_t *r,
+static void roaring64_bitmap_remove_bulk(roaring64_bitmap_t *r,
                                   roaring64_bulk_context_t *context,
                                   uint64_t val);
 
@@ -2549,35 +2549,35 @@ void roaring64_bitmap_remove_bulk(roaring64_bitmap_t *r,
  * values with the same high 48 bits of the value as consecutive elements in
  * `vals`.
  */
-void roaring64_bitmap_remove_many(roaring64_bitmap_t *r, size_t n_args,
+static void roaring64_bitmap_remove_many(roaring64_bitmap_t *r, size_t n_args,
                                   const uint64_t *vals);
 
 /**
  * Remove all values in range [min, max).
  */
-void roaring64_bitmap_remove_range(roaring64_bitmap_t *r, uint64_t min,
+static void roaring64_bitmap_remove_range(roaring64_bitmap_t *r, uint64_t min,
                                    uint64_t max);
 
 /**
  * Remove all values in range [min, max].
  */
-void roaring64_bitmap_remove_range_closed(roaring64_bitmap_t *r, uint64_t min,
+static void roaring64_bitmap_remove_range_closed(roaring64_bitmap_t *r, uint64_t min,
                                           uint64_t max);
 
 /**
  * Empties the bitmap.
  */
-void roaring64_bitmap_clear(roaring64_bitmap_t *r);
+static void roaring64_bitmap_clear(roaring64_bitmap_t *r);
 
 /**
  * Returns true if the provided value is present.
  */
-bool roaring64_bitmap_contains(const roaring64_bitmap_t *r, uint64_t val);
+static bool roaring64_bitmap_contains(const roaring64_bitmap_t *r, uint64_t val);
 
 /**
  * Returns true if all values in the range [min, max) are present.
  */
-bool roaring64_bitmap_contains_range(const roaring64_bitmap_t *r, uint64_t min,
+static bool roaring64_bitmap_contains_range(const roaring64_bitmap_t *r, uint64_t min,
                                      uint64_t max);
 
 /**
@@ -2595,7 +2595,7 @@ bool roaring64_bitmap_contains_range(const roaring64_bitmap_t *r, uint64_t min,
  * In order to exploit this optimization, the caller should call this function
  * with values with the same high 48 bits of the value consecutively.
  */
-bool roaring64_bitmap_contains_bulk(const roaring64_bitmap_t *r,
+static bool roaring64_bitmap_contains_bulk(const roaring64_bitmap_t *r,
                                     roaring64_bulk_context_t *context,
                                     uint64_t val);
 
@@ -2605,7 +2605,7 @@ bool roaring64_bitmap_contains_bulk(const roaring64_bitmap_t *r,
  * returns true and sets element to the element of given rank. Otherwise, it
  * returns false.
  */
-bool roaring64_bitmap_select(const roaring64_bitmap_t *r, uint64_t rank,
+static bool roaring64_bitmap_select(const roaring64_bitmap_t *r, uint64_t rank,
                              uint64_t *element);
 
 /**
@@ -2618,64 +2618,64 @@ bool roaring64_bitmap_select(const roaring64_bitmap_t *r, uint64_t rank,
  * as having index 0, whereas roaring64_bitmap_rank returns 1 when ranking
  * the smallest value.
  */
-uint64_t roaring64_bitmap_rank(const roaring64_bitmap_t *r, uint64_t val);
+static uint64_t roaring64_bitmap_rank(const roaring64_bitmap_t *r, uint64_t val);
 
 /**
  * Returns true if the given value is in the bitmap, and sets `out_index` to the
  * (0-based) index of the value in the bitmap. Returns false if the value is not
  * in the bitmap.
  */
-bool roaring64_bitmap_get_index(const roaring64_bitmap_t *r, uint64_t val,
+static bool roaring64_bitmap_get_index(const roaring64_bitmap_t *r, uint64_t val,
                                 uint64_t *out_index);
 
 /**
  * Returns the number of values in the bitmap.
  */
-uint64_t roaring64_bitmap_get_cardinality(const roaring64_bitmap_t *r);
+static uint64_t roaring64_bitmap_get_cardinality(const roaring64_bitmap_t *r);
 
 /**
  * Returns the number of elements in the range [min, max).
  */
-uint64_t roaring64_bitmap_range_cardinality(const roaring64_bitmap_t *r,
+static uint64_t roaring64_bitmap_range_cardinality(const roaring64_bitmap_t *r,
                                             uint64_t min, uint64_t max);
 
 /**
  * Returns the number of elements in the range [min, max]
  */
-uint64_t roaring64_bitmap_range_closed_cardinality(const roaring64_bitmap_t *r,
+static uint64_t roaring64_bitmap_range_closed_cardinality(const roaring64_bitmap_t *r,
                                                    uint64_t min, uint64_t max);
 
 /**
  * Returns true if the bitmap is empty (cardinality is zero).
  */
-bool roaring64_bitmap_is_empty(const roaring64_bitmap_t *r);
+static bool roaring64_bitmap_is_empty(const roaring64_bitmap_t *r);
 
 /**
  * Returns the smallest value in the set, or UINT64_MAX if the set is empty.
  */
-uint64_t roaring64_bitmap_minimum(const roaring64_bitmap_t *r);
+static uint64_t roaring64_bitmap_minimum(const roaring64_bitmap_t *r);
 
 /**
  * Returns the largest value in the set, or 0 if empty.
  */
-uint64_t roaring64_bitmap_maximum(const roaring64_bitmap_t *r);
+static uint64_t roaring64_bitmap_maximum(const roaring64_bitmap_t *r);
 
 /**
  * Returns true if the result has at least one run container.
  */
-bool roaring64_bitmap_run_optimize(roaring64_bitmap_t *r);
+static bool roaring64_bitmap_run_optimize(roaring64_bitmap_t *r);
 
 /**
  * Shrinks internal arrays to eliminate any unused capacity. Returns the number
  * of bytes freed.
  */
-size_t roaring64_bitmap_shrink_to_fit(roaring64_bitmap_t *r);
+static size_t roaring64_bitmap_shrink_to_fit(roaring64_bitmap_t *r);
 
 /**
  *  (For advanced users.)
  * Collect statistics about the bitmap
  */
-void roaring64_bitmap_statistics(const roaring64_bitmap_t *r,
+static void roaring64_bitmap_statistics(const roaring64_bitmap_t *r,
                                  roaring64_statistics_t *stat);
 
 /**
@@ -2689,26 +2689,26 @@ void roaring64_bitmap_statistics(const roaring64_bitmap_t *r,
  * If reason is non-null, it will be set to a string describing the first
  * inconsistency found if any.
  */
-bool roaring64_bitmap_internal_validate(const roaring64_bitmap_t *r,
+static bool roaring64_bitmap_internal_validate(const roaring64_bitmap_t *r,
                                         const char **reason);
 
 /**
  * Return true if the two bitmaps contain the same elements.
  */
-bool roaring64_bitmap_equals(const roaring64_bitmap_t *r1,
+static bool roaring64_bitmap_equals(const roaring64_bitmap_t *r1,
                              const roaring64_bitmap_t *r2);
 
 /**
  * Return true if all the elements of r1 are also in r2.
  */
-bool roaring64_bitmap_is_subset(const roaring64_bitmap_t *r1,
+static bool roaring64_bitmap_is_subset(const roaring64_bitmap_t *r1,
                                 const roaring64_bitmap_t *r2);
 
 /**
  * Return true if all the elements of r1 are also in r2, and r2 is strictly
  * greater than r1.
  */
-bool roaring64_bitmap_is_strict_subset(const roaring64_bitmap_t *r1,
+static bool roaring64_bitmap_is_strict_subset(const roaring64_bitmap_t *r1,
                                        const roaring64_bitmap_t *r2);
 
 /**
@@ -2722,13 +2722,13 @@ bool roaring64_bitmap_is_strict_subset(const roaring64_bitmap_t *r1,
  *
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_and(const roaring64_bitmap_t *r1,
+static roaring64_bitmap_t *roaring64_bitmap_and(const roaring64_bitmap_t *r1,
                                          const roaring64_bitmap_t *r2);
 
 /**
  * Computes the size of the intersection between two bitmaps.
  */
-uint64_t roaring64_bitmap_and_cardinality(const roaring64_bitmap_t *r1,
+static uint64_t roaring64_bitmap_and_cardinality(const roaring64_bitmap_t *r1,
                                           const roaring64_bitmap_t *r2);
 
 /**
@@ -2738,19 +2738,19 @@ uint64_t roaring64_bitmap_and_cardinality(const roaring64_bitmap_t *r1,
  * Performance hint: if you are computing the intersection between several
  * bitmaps, two-by-two, it is best to start with the smallest bitmaps.
  */
-void roaring64_bitmap_and_inplace(roaring64_bitmap_t *r1,
+static void roaring64_bitmap_and_inplace(roaring64_bitmap_t *r1,
                                   const roaring64_bitmap_t *r2);
 
 /**
  * Check whether two bitmaps intersect.
  */
-bool roaring64_bitmap_intersect(const roaring64_bitmap_t *r1,
+static bool roaring64_bitmap_intersect(const roaring64_bitmap_t *r1,
                                 const roaring64_bitmap_t *r2);
 
 /**
  * Check whether a bitmap intersects the range [min, max).
  */
-bool roaring64_bitmap_intersect_with_range(const roaring64_bitmap_t *r,
+static bool roaring64_bitmap_intersect_with_range(const roaring64_bitmap_t *r,
                                            uint64_t min, uint64_t max);
 
 /**
@@ -2759,7 +2759,7 @@ bool roaring64_bitmap_intersect_with_range(const roaring64_bitmap_t *r,
  *
  * The Jaccard index is undefined if both bitmaps are empty.
  */
-double roaring64_bitmap_jaccard_index(const roaring64_bitmap_t *r1,
+static double roaring64_bitmap_jaccard_index(const roaring64_bitmap_t *r1,
                                       const roaring64_bitmap_t *r2);
 
 /**
@@ -2767,19 +2767,19 @@ double roaring64_bitmap_jaccard_index(const roaring64_bitmap_t *r1,
  * responsible for free-ing the result.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_or(const roaring64_bitmap_t *r1,
+static roaring64_bitmap_t *roaring64_bitmap_or(const roaring64_bitmap_t *r1,
                                         const roaring64_bitmap_t *r2);
 
 /**
  * Computes the size of the union between two bitmaps.
  */
-uint64_t roaring64_bitmap_or_cardinality(const roaring64_bitmap_t *r1,
+static uint64_t roaring64_bitmap_or_cardinality(const roaring64_bitmap_t *r1,
                                          const roaring64_bitmap_t *r2);
 
 /**
  * In-place version of `roaring64_bitmap_or(), modifies `r1`.
  */
-void roaring64_bitmap_or_inplace(roaring64_bitmap_t *r1,
+static void roaring64_bitmap_or_inplace(roaring64_bitmap_t *r1,
                                  const roaring64_bitmap_t *r2);
 
 /**
@@ -2787,20 +2787,20 @@ void roaring64_bitmap_or_inplace(roaring64_bitmap_t *r1,
  * bitmap. The caller is responsible for free-ing the result.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_xor(const roaring64_bitmap_t *r1,
+static roaring64_bitmap_t *roaring64_bitmap_xor(const roaring64_bitmap_t *r1,
                                          const roaring64_bitmap_t *r2);
 
 /**
  * Computes the size of the symmetric difference (xor) between two bitmaps.
  */
-uint64_t roaring64_bitmap_xor_cardinality(const roaring64_bitmap_t *r1,
+static uint64_t roaring64_bitmap_xor_cardinality(const roaring64_bitmap_t *r1,
                                           const roaring64_bitmap_t *r2);
 
 /**
  * In-place version of `roaring64_bitmap_xor()`, modifies `r1`. `r1` and `r2`
  * are not allowed to be equal (that would result in an empty bitmap).
  */
-void roaring64_bitmap_xor_inplace(roaring64_bitmap_t *r1,
+static void roaring64_bitmap_xor_inplace(roaring64_bitmap_t *r1,
                                   const roaring64_bitmap_t *r2);
 
 /**
@@ -2808,20 +2808,20 @@ void roaring64_bitmap_xor_inplace(roaring64_bitmap_t *r1,
  * bitmap. The caller is responsible for free-ing the result.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_andnot(const roaring64_bitmap_t *r1,
+static roaring64_bitmap_t *roaring64_bitmap_andnot(const roaring64_bitmap_t *r1,
                                             const roaring64_bitmap_t *r2);
 
 /**
  * Computes the size of the difference (andnot) between two bitmaps.
  */
-uint64_t roaring64_bitmap_andnot_cardinality(const roaring64_bitmap_t *r1,
+static uint64_t roaring64_bitmap_andnot_cardinality(const roaring64_bitmap_t *r1,
                                              const roaring64_bitmap_t *r2);
 
 /**
  * In-place version of `roaring64_bitmap_andnot()`, modifies `r1`. `r1` and `r2`
  * are not allowed to be equal (that would result in an empty bitmap).
  */
-void roaring64_bitmap_andnot_inplace(roaring64_bitmap_t *r1,
+static void roaring64_bitmap_andnot_inplace(roaring64_bitmap_t *r1,
                                      const roaring64_bitmap_t *r2);
 
 /**
@@ -2830,7 +2830,7 @@ void roaring64_bitmap_andnot_inplace(roaring64_bitmap_t *r1,
  * passed through unchanged.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_flip(const roaring64_bitmap_t *r,
+static roaring64_bitmap_t *roaring64_bitmap_flip(const roaring64_bitmap_t *r,
                                           uint64_t min, uint64_t max);
 
 /**
@@ -2839,7 +2839,7 @@ roaring64_bitmap_t *roaring64_bitmap_flip(const roaring64_bitmap_t *r,
  * passed through unchanged.
  * The returned pointer may be NULL in case of errors.
  */
-roaring64_bitmap_t *roaring64_bitmap_flip_closed(const roaring64_bitmap_t *r,
+static roaring64_bitmap_t *roaring64_bitmap_flip_closed(const roaring64_bitmap_t *r,
                                                  uint64_t min, uint64_t max);
 
 /**
@@ -2847,14 +2847,14 @@ roaring64_bitmap_t *roaring64_bitmap_flip_closed(const roaring64_bitmap_t *r,
  * bitmap in the interval [min, max). The number of negated values is `max -
  * min`. Areas outside the range are passed through unchanged.
  */
-void roaring64_bitmap_flip_inplace(roaring64_bitmap_t *r, uint64_t min,
+static void roaring64_bitmap_flip_inplace(roaring64_bitmap_t *r, uint64_t min,
                                    uint64_t max);
 /**
  * In-place version of `roaring64_bitmap_flip_closed`. Compute the negation of
  * the bitmap in the interval [min, max]. The number of negated values is `max -
  * min + 1`. Areas outside the range are passed through unchanged.
  */
-void roaring64_bitmap_flip_closed_inplace(roaring64_bitmap_t *r, uint64_t min,
+static void roaring64_bitmap_flip_closed_inplace(roaring64_bitmap_t *r, uint64_t min,
                                           uint64_t max);
 /**
  * How many bytes are required to serialize this bitmap.
@@ -2862,7 +2862,7 @@ void roaring64_bitmap_flip_closed_inplace(roaring64_bitmap_t *r, uint64_t min,
  * This is meant to be compatible with other languages:
  * https://github.com/RoaringBitmap/RoaringFormatSpec#extension-for-64-bit-implementations
  */
-size_t roaring64_bitmap_portable_size_in_bytes(const roaring64_bitmap_t *r);
+static size_t roaring64_bitmap_portable_size_in_bytes(const roaring64_bitmap_t *r);
 
 /**
  * Write a bitmap to a buffer. The output buffer should refer to at least
@@ -2882,7 +2882,7 @@ size_t roaring64_bitmap_portable_size_in_bytes(const roaring64_bitmap_t *r);
  * checksums so that, at deserialization, you can be confident
  * that you are recovering the correct data.
  */
-size_t roaring64_bitmap_portable_serialize(const roaring64_bitmap_t *r,
+static size_t roaring64_bitmap_portable_serialize(const roaring64_bitmap_t *r,
                                            char *buf);
 /**
  * Check how many bytes would be read (up to maxbytes) at this pointer if there
@@ -2891,7 +2891,7 @@ size_t roaring64_bitmap_portable_serialize(const roaring64_bitmap_t *r,
  * This is meant to be compatible with other languages
  * https://github.com/RoaringBitmap/RoaringFormatSpec#extension-for-64-bit-implementations
  */
-size_t roaring64_bitmap_portable_deserialize_size(const char *buf,
+static size_t roaring64_bitmap_portable_deserialize_size(const char *buf,
                                                   size_t maxbytes);
 
 /**
@@ -2927,7 +2927,7 @@ size_t roaring64_bitmap_portable_deserialize_size(const char *buf,
  * mainframe IBM s390x), the data format is going to be big-endian and not
  * compatible with little-endian systems.
  */
-roaring64_bitmap_t *roaring64_bitmap_portable_deserialize_safe(const char *buf,
+static roaring64_bitmap_t *roaring64_bitmap_portable_deserialize_safe(const char *buf,
                                                                size_t maxbytes);
 
 /**
@@ -2936,7 +2936,7 @@ roaring64_bitmap_t *roaring64_bitmap_portable_deserialize_safe(const char *buf,
  *
  * `roaring64_bitmap_shrink_to_fit()` must be called before this method.
  */
-size_t roaring64_bitmap_frozen_size_in_bytes(const roaring64_bitmap_t *r);
+static size_t roaring64_bitmap_frozen_size_in_bytes(const roaring64_bitmap_t *r);
 
 /**
  * Serializes the bitmap in a "frozen" format. The given buffer must be at least
@@ -2956,7 +2956,7 @@ size_t roaring64_bitmap_frozen_size_in_bytes(const roaring64_bitmap_t *r);
  * mainframe IBM s390x), the data format is going to be big-endian and not
  * compatible with little-endian systems.
  */
-size_t roaring64_bitmap_frozen_serialize(const roaring64_bitmap_t *r,
+static size_t roaring64_bitmap_frozen_serialize(const roaring64_bitmap_t *r,
                                          char *buf);
 
 /**
@@ -2974,7 +2974,7 @@ size_t roaring64_bitmap_frozen_serialize(const roaring64_bitmap_t *r,
  * mainframe IBM s390x), the data format is going to be big-endian and not
  * compatible with little-endian systems.
  */
-roaring64_bitmap_t *roaring64_bitmap_frozen_view(const char *buf,
+static roaring64_bitmap_t *roaring64_bitmap_frozen_view(const char *buf,
                                                  size_t maxbytes);
 
 /**
@@ -2990,7 +2990,7 @@ roaring64_bitmap_t *roaring64_bitmap_frozen_view(const char *buf,
  *
  * Iteration is ordered from the smallest to the largest elements.
  */
-bool roaring64_bitmap_iterate(const roaring64_bitmap_t *r,
+static bool roaring64_bitmap_iterate(const roaring64_bitmap_t *r,
                               roaring_iterator64 iterator, void *ptr);
 
 /**
@@ -3001,7 +3001,7 @@ bool roaring64_bitmap_iterate(const roaring64_bitmap_t *r,
  * out = malloc(roaring64_bitmap_get_cardinality(bitmap) * sizeof(uint64_t));
  * ```
  */
-void roaring64_bitmap_to_uint64_array(const roaring64_bitmap_t *r,
+static void roaring64_bitmap_to_uint64_array(const roaring64_bitmap_t *r,
                                       uint64_t *out);
 
 /**
@@ -3012,7 +3012,7 @@ void roaring64_bitmap_to_uint64_array(const roaring64_bitmap_t *r,
  * to the first value and `roaring64_iterator_has_value()` returns true. The
  * value can be retrieved with `roaring64_iterator_value()`.
  */
-roaring64_iterator_t *roaring64_iterator_create(const roaring64_bitmap_t *r);
+static roaring64_iterator_t *roaring64_iterator_create(const roaring64_bitmap_t *r);
 
 /**
  * Create an iterator object that can be used to iterate through the values.
@@ -3022,45 +3022,45 @@ roaring64_iterator_t *roaring64_iterator_create(const roaring64_bitmap_t *r);
  * to the last value and `roaring64_iterator_has_value()` returns true. The
  * value can be retrieved with `roaring64_iterator_value()`.
  */
-roaring64_iterator_t *roaring64_iterator_create_last(
+static roaring64_iterator_t *roaring64_iterator_create_last(
     const roaring64_bitmap_t *r);
 
 /**
  * Re-initializes an existing iterator. Functionally the same as
  * `roaring64_iterator_create` without a allocation.
  */
-void roaring64_iterator_reinit(const roaring64_bitmap_t *r,
+static void roaring64_iterator_reinit(const roaring64_bitmap_t *r,
                                roaring64_iterator_t *it);
 
 /**
  * Re-initializes an existing iterator. Functionally the same as
  * `roaring64_iterator_create_last` without a allocation.
  */
-void roaring64_iterator_reinit_last(const roaring64_bitmap_t *r,
+static void roaring64_iterator_reinit_last(const roaring64_bitmap_t *r,
                                     roaring64_iterator_t *it);
 
 /**
  * Creates a copy of the iterator. Caller is responsible for calling
  * `roaring64_iterator_free()` on the resulting iterator.
  */
-roaring64_iterator_t *roaring64_iterator_copy(const roaring64_iterator_t *it);
+static roaring64_iterator_t *roaring64_iterator_copy(const roaring64_iterator_t *it);
 
 /**
  * Free the iterator.
  */
-void roaring64_iterator_free(roaring64_iterator_t *it);
+static void roaring64_iterator_free(roaring64_iterator_t *it);
 
 /**
  * Returns true if the iterator currently points to a value. If so, calling
  * `roaring64_iterator_value()` returns the value.
  */
-bool roaring64_iterator_has_value(const roaring64_iterator_t *it);
+static bool roaring64_iterator_has_value(const roaring64_iterator_t *it);
 
 /**
  * Returns the value the iterator currently points to. Should only be called if
  * `roaring64_iterator_has_value()` returns true.
  */
-uint64_t roaring64_iterator_value(const roaring64_iterator_t *it);
+static uint64_t roaring64_iterator_value(const roaring64_iterator_t *it);
 
 /**
  * Advance the iterator. If there is a new value, then
@@ -3071,7 +3071,7 @@ uint64_t roaring64_iterator_value(const roaring64_iterator_t *it);
  * Once this returns false, `roaring64_iterator_advance` should not be called on
  * the iterator again. Calling `roaring64_iterator_previous` is allowed.
  */
-bool roaring64_iterator_advance(roaring64_iterator_t *it);
+static bool roaring64_iterator_advance(roaring64_iterator_t *it);
 
 /**
  * Decrement the iterator. If there is a new value, then
@@ -3082,7 +3082,7 @@ bool roaring64_iterator_advance(roaring64_iterator_t *it);
  * Once this returns false, `roaring64_iterator_previous` should not be called
  * on the iterator again. Calling `roaring64_iterator_advance` is allowed.
  */
-bool roaring64_iterator_previous(roaring64_iterator_t *it);
+static bool roaring64_iterator_previous(roaring64_iterator_t *it);
 
 /**
  * Move the iterator to the first value greater than or equal to `val`, if it
@@ -3091,7 +3091,7 @@ bool roaring64_iterator_previous(roaring64_iterator_t *it);
  * traversed in increasing order. For convenience, returns the result of
  * `roaring64_iterator_has_value()`.
  */
-bool roaring64_iterator_move_equalorlarger(roaring64_iterator_t *it,
+static bool roaring64_iterator_move_equalorlarger(roaring64_iterator_t *it,
                                            uint64_t val);
 
 /**
@@ -3101,7 +3101,7 @@ bool roaring64_iterator_move_equalorlarger(roaring64_iterator_t *it,
  *
  * This function can be used together with other iterator functions.
  */
-uint64_t roaring64_iterator_read(roaring64_iterator_t *it, uint64_t *buf,
+static uint64_t roaring64_iterator_read(roaring64_iterator_t *it, uint64_t *buf,
                                  uint64_t count);
 
 #ifdef __cplusplus

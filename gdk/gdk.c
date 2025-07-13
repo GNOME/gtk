@@ -30,6 +30,7 @@
 
 #include "gdkconstructorprivate.h"
 #include "gdkdebugprivate.h"
+#include "gdkcontentformatsprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkglcontextprivate.h"
 #include <glib/gi18n-lib.h>
@@ -351,6 +352,9 @@ gdk_pre_parse (void)
 #ifndef G_HAS_CONSTRUCTORS
   stash_and_unset_environment ();
 #endif
+
+  gdk_content_init_serializers ();
+  gdk_content_init_deserializers ();
 }
 
 /*< private >
@@ -492,8 +496,6 @@ gdk_display_should_use_portal (GdkDisplay *display,
                                const char *portal_interface,
                                guint       min_version)
 {
-  g_assert (display != NULL);
-
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_NO_PORTALS)
     return FALSE;
 
