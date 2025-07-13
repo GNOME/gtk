@@ -592,7 +592,7 @@ After opening the inspector, it listens for a few keyboard shortcuts that
 let you use its frame and event recording functionality without moving the
 focus away from the application window: <kbd>Super</kbd>+<kbd>R</kbd> turns
 the recording on and off, <kbd>Super</kbd>+<kbd>C</kbd> records a single
-frame and <kbd>Super</kbd>+<kbd>S</kbd> records a single frame and saves
+frame and <kbd>Super</kbd>+<kbd>F</kbd> records a single frame and saves
 it to a `.node` file.
 
 There are a few more environment variables that can be set to influence
