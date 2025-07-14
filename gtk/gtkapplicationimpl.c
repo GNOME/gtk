@@ -45,7 +45,6 @@ gtk_application_impl_init (GtkApplicationImpl *impl)
 }
 
 static guint do_nothing (void) { return 0; }
-static gboolean return_false (void) { return FALSE; }
 
 static void
 gtk_application_impl_class_init (GtkApplicationImplClass *class)
@@ -63,14 +62,12 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->set_menubar = (gpointer) do_nothing;
   class->inhibit = (gpointer) do_nothing;
   class->uninhibit = (gpointer) do_nothing;
-  class->prefers_app_menu = (gpointer) return_false;
 }
 
 void
-gtk_application_impl_startup (GtkApplicationImpl *impl,
-                              gboolean            register_session)
+gtk_application_impl_startup (GtkApplicationImpl *impl)
 {
-  GTK_APPLICATION_IMPL_GET_CLASS (impl)->startup (impl, register_session);
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->startup (impl);
 }
 
 void
@@ -149,12 +146,6 @@ gtk_application_impl_uninhibit (GtkApplicationImpl *impl,
                                 guint               cookie)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->uninhibit (impl, cookie);
-}
-
-gboolean
-gtk_application_impl_prefers_app_menu (GtkApplicationImpl *impl)
-{
-  return GTK_APPLICATION_IMPL_GET_CLASS (impl)->prefers_app_menu (impl);
 }
 
 GtkApplicationImpl *

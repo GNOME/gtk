@@ -109,10 +109,8 @@
  * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/main/examples/bp/bloatpad.c)
  * is available in the GTK source code repository
  *
- * `GtkApplication` optionally registers with a session manager of the
- * users session (if you set the [property@Gtk.Application:register-session]
- * property) and offers various functionality related to the session
- * life-cycle.
+ * `GtkApplication` registers with a session manager if possible and
+ * offers various functionality related to the session life-cycle.
  *
  * An application can block various ways to end the session with
  * the [method@Gtk.Application.inhibit] function. Typical use cases for
@@ -337,7 +335,7 @@ gtk_application_startup (GApplication *g_application)
   gdk_profiler_end_mark (before2, "gtk_init", NULL);
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
-  gtk_application_impl_startup (priv->impl, priv->register_session);
+  gtk_application_impl_startup (priv->impl);
 
   gtk_application_load_resources (application);
   gtk_application_set_window_icon (application);
@@ -650,8 +648,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * Emitted when the session manager is about to end the session.
    *
-   * This signal is only emitted if [property@Gtk.Application:register-session]
-   * is true. Applications can connect to this signal and call
+   * Applications can connect to this signal and call
    * [method@Gtk.Application.inhibit] with [flags@Gtk.ApplicationInhibitFlags.logout]
    * to delay the end of the session until state has been saved.
    */
@@ -669,20 +666,20 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * This will make GTK track the session state (such as the
    * [property@Gtk.Application:screensaver-active] property).
+   *
+   * Deprecated: 4.20: This property is ignored. GTK always registers
+   * with the session manager
    */
   gtk_application_props[PROP_REGISTER_SESSION] =
     g_param_spec_boolean ("register-session", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_DEPRECATED);
 
   /**
    * GtkApplication:screensaver-active:
    *
    * This property is true if GTK believes that the screensaver
    * is currently active.
-   *
-   * GTK only tracks session state (including this) when
-   * [property@Gtk.Application:register-session] is set to true.
    *
    * Tracking the screensaver state is currently only supported on
    * Linux.

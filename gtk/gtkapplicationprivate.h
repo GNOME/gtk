@@ -66,8 +66,7 @@ typedef struct
 {
   GObjectClass parent_class;
 
-  void        (* startup)                   (GtkApplicationImpl          *impl,
-                                             gboolean                     register_session);
+  void        (* startup)                   (GtkApplicationImpl          *impl);
   void        (* shutdown)                  (GtkApplicationImpl          *impl);
 
   void        (* before_emit)               (GtkApplicationImpl          *impl,
@@ -98,9 +97,6 @@ typedef struct
   gboolean    (* is_inhibited)              (GtkApplicationImpl          *impl,
                                              GtkApplicationInhibitFlags   flags);
 
-  gboolean    (* prefers_app_menu)          (GtkApplicationImpl          *impl);
-
-
 } GtkApplicationImplClass;
 
 #define GTK_TYPE_APPLICATION_IMPL_DBUS                      (gtk_application_impl_dbus_get_type ())
@@ -128,17 +124,11 @@ typedef struct
   char            *menubar_path;
   guint            menubar_id;
 
-  /* Session management... */
-  GDBusProxy      *sm_proxy;
-  GDBusProxy      *client_proxy;
-  char            *client_path;
-  GDBusProxy      *ss_proxy;
-
   /* Portal support */
   GDBusProxy      *inhibit_proxy;
-  GSList *inhibit_handles;
+  GSList          *inhibit_handles;
   guint            state_changed_handler;
-  char *           session_id;
+  char            *session_path;
   guint            session_state;
 } GtkApplicationImplDBus;
 
@@ -146,9 +136,6 @@ typedef struct
 {
   GtkApplicationImplClass parent_class;
 
-  /* returns floating */
-  GVariant *  (* get_window_system_id)      (GtkApplicationImplDBus      *dbus,
-                                             GtkWindow                   *window);
 } GtkApplicationImplDBusClass;
 
 GType                   gtk_application_impl_get_type                   (void);
@@ -160,8 +147,7 @@ GType                   gtk_application_impl_android_get_type           (void);
 
 GtkApplicationImpl *    gtk_application_impl_new                        (GtkApplication              *application,
                                                                          GdkDisplay                  *display);
-void                    gtk_application_impl_startup                    (GtkApplicationImpl          *impl,
-                                                                         gboolean                     register_session);
+void                    gtk_application_impl_startup                    (GtkApplicationImpl          *impl);
 void                    gtk_application_impl_shutdown                   (GtkApplicationImpl          *impl);
 void                    gtk_application_impl_before_emit                (GtkApplicationImpl          *impl,
                                                                          GVariant                    *platform_data);
@@ -190,8 +176,6 @@ gboolean                gtk_application_impl_is_inhibited               (GtkAppl
 
 char *                 gtk_application_impl_dbus_get_window_path       (GtkApplicationImplDBus      *dbus,
                                                                          GtkWindow                   *window);
-gboolean                gtk_application_impl_prefers_app_menu           (GtkApplicationImpl          *impl);
-
 
 void                    gtk_application_impl_quartz_setup_menu          (GMenuModel                  *model,
                                                                          GtkActionMuxer              *muxer);
