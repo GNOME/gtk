@@ -1,4 +1,4 @@
-/* Path/Explorer
+/* Path/Path Explorer
  *
  * This demo lets you explore some of the features of GskPath.
  */
