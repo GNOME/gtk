@@ -6,11 +6,13 @@ Note that support for strokes, and style classes other than "success", "warning"
 
 ### Allowed primitives
 
-We use `path` elements as graphics primitives. They may be grouped with `g` elements, but those are otherwise ignored.
+We use `path`, `circle` and `rect` elements as graphics primitives. They may be grouped with `g` elements, but those are otherwise ignored.
 
 ### Supported attributes
 
 The `d` attribute is required on `path` elements, to specify the path.
+The `cx`, `cy` and `r` attributes are required on `circle` elements.
+The `x`, `y`, `width` and `height` attributes are required on `rect` elements.
 
 These attributes are allowed on `path` elements:
 

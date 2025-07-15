@@ -767,6 +767,80 @@ set_attribute_error (GError     **error,
 }
 
 static void
+set_missing_attribute_error (GError     **error,
+                             const char  *name)
+{
+  g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+               "Missing attribute: %s", name);
+}
+
+static void
+markup_filter_attributes (const char *element_name,
+                          const char **attribute_names,
+                          const char **attribute_values,
+                          const char  *name,
+                          ...)
+{
+  va_list ap;
+
+  va_start (ap, name);
+  while (name)
+    {
+      const char **ptr;
+
+      ptr = va_arg (ap, const char **);
+
+      *ptr = NULL;
+      for (int i = 0; attribute_names[i]; i++)
+        {
+          if (strcmp (attribute_names[i], name) == 0)
+            {
+              *ptr = attribute_values[i];
+              break;
+            }
+        }
+
+      name = va_arg (ap, const char *);
+    }
+
+  va_end (ap);
+}
+
+static GskPath *
+circle_path_new (float cx,
+                 float cy,
+                 float radius)
+{
+  GskPathBuilder *builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), radius);
+  return gsk_path_builder_free_to_path (builder);
+}
+
+static GskPath *
+rect_path_new (float x,
+               float y,
+               float width,
+               float height,
+               float rx,
+               float ry)
+{
+  GskPathBuilder *builder = gsk_path_builder_new ();
+  if (rx == 0 && ry == 0)
+    gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
+  else
+    gsk_path_builder_add_rounded_rect (builder,
+                                       &(GskRoundedRect) { .bounds = GRAPHENE_RECT_INIT (x, y, width, height),
+                                                           .corner = {
+                                                             GRAPHENE_SIZE_INIT (rx, ry),
+                                                             GRAPHENE_SIZE_INIT (rx, ry),
+                                                             GRAPHENE_SIZE_INIT (rx, ry),
+                                                             GRAPHENE_SIZE_INIT (rx, ry)
+                                                           }
+                                                         });
+  return gsk_path_builder_free_to_path (builder);
+}
+
+static void
 start_element_cb (GMarkupParseContext  *context,
                   const gchar          *element_name,
                   const gchar         **attribute_names,
@@ -775,27 +849,48 @@ start_element_cb (GMarkupParseContext  *context,
                   GError              **error)
 {
   ParserData *data = user_data;
+  const char *path_attr = NULL;
+  const char *fill_rule_attr = NULL;
+  const char *fill_opacity_attr = NULL;
+  const char *stroke_width_attr = NULL;
+  const char *stroke_opacity_attr = NULL;
+  const char *stroke_linecap_attr = NULL;
+  const char *stroke_linejoin_attr = NULL;
+  const char *stroke_miterlimit_attr = NULL;
+  const char *stroke_dasharray_attr = NULL;
+  const char *stroke_dashoffset_attr = NULL;
+  const char *opacity_attr = NULL;
+  const char *class_attr = NULL;
+  GskPath *path = NULL;
+  GskStroke *stroke = NULL;
+  GskFillRule fill_rule;
+  double opacity;
+  double fill_opacity;
+  double stroke_opacity;
+  GdkRGBA fill_color;
+  GdkRGBA stroke_color;
+  char *end;
+  gboolean do_fill = FALSE;
+  gboolean do_stroke = FALSE;
 
   if (strcmp (element_name, "svg") == 0)
     {
       const char *width_attr = NULL;
       const char *height_attr = NULL;
-      char *end;
 
-      for (int i = 0; attribute_names[i]; i++)
-        {
-          if (strcmp (attribute_names[i], "width") == 0)
-            width_attr = attribute_values[i];
-          else if (strcmp (attribute_names[i], "height") == 0)
-            height_attr = attribute_values[i];
-        }
+      markup_filter_attributes (element_name,
+                                attribute_names,
+                                attribute_values,
+                                "width", &width_attr,
+                                "height", &height_attr,
+                                NULL);
 
-      if (!width_attr)
+      if (width_attr == NULL)
         {
-          g_set_error_literal (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE,
-                               "Missing attribute: width");
+          set_missing_attribute_error (error, "width");
           return;
         }
+
       data->width = g_ascii_strtod (width_attr, &end);
       if (end && *end != '\0' && strcmp (end, "px") != 0)
         {
@@ -803,10 +898,9 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      if (!height_attr)
+      if (height_attr == NULL)
         {
-          g_set_error_literal (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE,
-                               "Missing attribute: height");
+          set_missing_attribute_error (error, "height");
           return;
         }
 
@@ -819,63 +913,168 @@ start_element_cb (GMarkupParseContext  *context,
 
       gtk_snapshot_push_clip (data->snapshot, &GRAPHENE_RECT_INIT (0, 0, data->width, data->height));
       data->has_clip = TRUE;
+
+      /* Done */
+      return;
     }
   else if (strcmp (element_name, "g") == 0)
     {
       /* Do nothing */
+      return;
+    }
+  else if (strcmp (element_name, "circle") == 0)
+    {
+      const char *cx_attr = NULL;
+      const char *cy_attr = NULL;
+      const char *r_attr = NULL;
+      float cx = 0;
+      float cy = 0;
+      float r = 0;
+
+      markup_filter_attributes (element_name,
+                                attribute_names,
+                                attribute_values,
+                                "cx", &cx_attr,
+                                "cy", &cy_attr,
+                                "r", &r_attr,
+                                NULL);
+
+      if (cx_attr)
+        {
+          cx = g_ascii_strtod (cx_attr, &end);
+          if (end && *end != '\0')
+            {
+              set_attribute_error (error, "cx", cx_attr);
+              return;
+            }
+        }
+
+      if (cy_attr)
+        {
+          cy = g_ascii_strtod (cy_attr, &end);
+          if (end && *end != '\0')
+            {
+              set_attribute_error (error, "cy", cy_attr);
+              return;
+            }
+        }
+
+      if (r_attr)
+        {
+          r = g_ascii_strtod (r_attr, &end);
+          if ((end && *end != '\0') || r < 0)
+            {
+              set_attribute_error (error, "r", r_attr);
+              return;
+            }
+        }
+
+      if (r == 0)
+        return;  /* nothing to do */
+
+      path = circle_path_new (cx, cy, r);
+    }
+  else if (strcmp (element_name, "rect") == 0)
+    {
+      const char *x_attr = NULL;
+      const char *y_attr = NULL;
+      const char *width_attr = NULL;
+      const char *height_attr = NULL;
+      const char *rx_attr = NULL;
+      const char *ry_attr = NULL;
+      float x = 0;
+      float y = 0;
+      float width = 0;
+      float height = 0;
+      float rx = 0;
+      float ry = 0;
+
+      markup_filter_attributes (element_name,
+                                attribute_names,
+                                attribute_values,
+                                "x", &x_attr,
+                                "y", &y_attr,
+                                "width", &width_attr,
+                                "height", &height_attr,
+                                "rx", &rx_attr,
+                                "ry", &ry_attr,
+                                NULL);
+
+      if (x_attr)
+        {
+          x = g_ascii_strtod (x_attr, &end);
+          if (end && *end != '\0')
+            {
+              set_attribute_error (error, "x", x_attr);
+              return;
+            }
+        }
+
+      if (y_attr)
+        {
+          y = g_ascii_strtod (y_attr, &end);
+          if (end && *end != '\0')
+            {
+              set_attribute_error (error, "y", y_attr);
+              return;
+            }
+        }
+
+      width = g_ascii_strtod (width_attr, &end);
+      if ((end && *end != '\0') || width < 0)
+        {
+          set_attribute_error (error, "width", width_attr);
+          return;
+        }
+
+      height = g_ascii_strtod (height_attr, &end);
+      if ((end && *end != '\0') || height < 0)
+        {
+          set_attribute_error (error, "height", height_attr);
+          return;
+        }
+
+      if (width == 0 || height == 0)
+        return;  /* nothing to do */
+
+      if (rx_attr)
+        {
+          rx = g_ascii_strtod (rx_attr, &end);
+          if ((end && *end != '\0') || rx < 0)
+            {
+              set_attribute_error (error, "rx", rx_attr);
+              return;
+            }
+        }
+
+      if (ry_attr)
+        {
+          ry = g_ascii_strtod (ry_attr, &end);
+          if ((end && *end != '\0') || ry < 0)
+            {
+              set_attribute_error (error, "ry", ry_attr);
+              return;
+            }
+        }
+
+      if (!rx_attr && ry_attr)
+        rx = ry;
+      else if (rx_attr && !ry_attr)
+        ry = rx;
+
+      path = rect_path_new (x, y, width, height, rx, ry);
     }
   else if (strcmp (element_name, "path") == 0)
     {
-      const char *path_attr = NULL;
-      const char *fill_rule_attr = NULL;
-      const char *fill_opacity_attr = NULL;
-      const char *stroke_width_attr = NULL;
-      const char *stroke_opacity_attr = NULL;
-      const char *stroke_linecap_attr = NULL;
-      const char *stroke_linejoin_attr = NULL;
-      const char *stroke_miterlimit_attr = NULL;
-      const char *stroke_dasharray_attr = NULL;
-      const char *stroke_dashoffset_attr = NULL;
-      const char *opacity_attr = NULL;
-      const char *class_attr = NULL;
-      GskPath *path = NULL;
-      GskStroke *stroke = NULL;
-      GskFillRule fill_rule;
-      double opacity;
-      double fill_opacity;
-      double stroke_opacity;
-      GdkRGBA fill_color;
-      GdkRGBA stroke_color;
-      char *end;
-      gboolean do_fill = FALSE;
-      gboolean do_stroke = FALSE;
+      markup_filter_attributes (element_name,
+                                attribute_names,
+                                attribute_values,
+                                "d", &path_attr,
+                                NULL);
 
-      if (!g_markup_collect_attributes (element_name,
-                                        attribute_names,
-                                        attribute_values,
-                                        error,
-                                        G_MARKUP_COLLECT_STRING, "d", &path_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "class", &class_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "opacity", &opacity_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-rule", &fill_rule_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-opacity", &fill_opacity_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-width", &stroke_width_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-opacity", &stroke_opacity_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linecap", &stroke_linecap_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linejoin", &stroke_linejoin_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-miterlimit", &stroke_miterlimit_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dasharray", &stroke_dasharray_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dashoffset", &stroke_dashoffset_attr,
-                                        /* The following attributes are explicitly ignored */
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "style", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "color", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "overflow", NULL,
-                                         /* Other attributes cause an error, and we'll fall back to loading a texture */
-                                        G_MARKUP_COLLECT_INVALID))
+      if (!path_attr)
         {
+          set_missing_attribute_error (error, "d");
           return;
         }
 
@@ -885,252 +1084,285 @@ start_element_cb (GMarkupParseContext  *context,
           set_attribute_error (error, "d", path_attr);
           return;
         }
-
-      fill_opacity = 1;
-      if (fill_opacity_attr)
-        {
-          fill_opacity = g_ascii_strtod (fill_opacity_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "fill-opacity", fill_opacity_attr);
-              goto cleanup;
-            }
-          fill_opacity = CLAMP (fill_opacity, 0, 1);
-        }
-
-      stroke_opacity = 1;
-      if (stroke_opacity_attr)
-        {
-          stroke_opacity = g_ascii_strtod (stroke_opacity_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "stroke-opacity", stroke_opacity_attr);
-              goto cleanup;
-            }
-          stroke_opacity = CLAMP (stroke_opacity, 0, 1);
-        }
-
-      if (!class_attr)
-        {
-          fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
-          do_fill = TRUE;
-          do_stroke = FALSE;
-        }
-      else
-        {
-          const char * const *classes;
-
-          classes = (const char * const *) g_strsplit (class_attr, " ", 0);
-
-          if (g_strv_contains (classes, "transparent-fill"))
-            {
-              do_fill = FALSE;
-              data->only_fg = FALSE;
-            }
-          else if (g_strv_contains (classes, "foreground-fill"))
-            {
-              do_fill = TRUE;
-              fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
-            }
-          else if (g_strv_contains (classes, "success") ||
-                   g_strv_contains (classes, "success-fill"))
-            {
-              do_fill = TRUE;
-              fill_color = (GdkRGBA) { 1, 0, 0, fill_opacity };
-              data->only_fg = FALSE;
-            }
-          else if (g_strv_contains (classes, "warning") ||
-                   g_strv_contains (classes, "warning-fill"))
-            {
-              do_fill = TRUE;
-              fill_color = (GdkRGBA) { 0, 1, 0, 1 };
-              data->only_fg = FALSE;
-            }
-          else if (g_strv_contains (classes, "error") ||
-                   g_strv_contains (classes, "error-fill"))
-            {
-              do_fill = TRUE;
-              fill_color = (GdkRGBA) { 0, 0, 1, fill_opacity };
-              data->only_fg = FALSE;
-            }
-          else
-            {
-              do_fill = TRUE;
-              fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
-            }
-
-          if (g_strv_contains (classes, "success-stroke"))
-            {
-              do_stroke = TRUE;
-              stroke_color = (GdkRGBA) { 1, 0, 0, stroke_opacity };
-              data->only_fg = FALSE;
-            }
-          else if (g_strv_contains (classes, "warning-stroke"))
-            {
-              do_stroke = TRUE;
-              stroke_color = (GdkRGBA) { 0, 1, 0, stroke_opacity };
-              data->only_fg = FALSE;
-            }
-          else if (g_strv_contains (classes, "error-stroke"))
-            {
-              do_stroke = TRUE;
-              stroke_color = (GdkRGBA) { 0, 0, 1, stroke_opacity };
-              data->only_fg = FALSE;
-            }
-          else if (g_strv_contains (classes, "foreground-stroke"))
-            {
-              do_stroke = TRUE;
-              stroke_color = (GdkRGBA) { 0, 0, 0, stroke_opacity };
-            }
-          else
-            {
-              do_stroke = FALSE;
-            }
-
-          g_strfreev ((char **) classes);
-        }
-
-      opacity = 1;
-      if (opacity_attr)
-        {
-          opacity = g_ascii_strtod (opacity_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "opacity", opacity_attr);
-              goto cleanup;
-            }
-        }
-
-      if (fill_rule_attr && strcmp (fill_rule_attr, "evenodd") == 0)
-        fill_rule = GSK_FILL_RULE_EVEN_ODD;
-      else
-        fill_rule = GSK_FILL_RULE_WINDING;
-
-      stroke = gsk_stroke_new (1);
-
-      if (stroke_width_attr)
-        {
-          double w = g_ascii_strtod (stroke_width_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "stroke-width", stroke_width_attr);
-              goto cleanup;
-            }
-
-          gsk_stroke_set_line_width (stroke, w);
-        }
-
-      if (stroke_linecap_attr)
-        {
-          if (strcmp (stroke_linecap_attr, "butt") == 0)
-            gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_BUTT);
-          else if (strcmp (stroke_linecap_attr, "round") == 0)
-            gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
-          else if (strcmp (stroke_linecap_attr, "square") == 0)
-            gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_SQUARE);
-          else
-            {
-              set_attribute_error (error, "stroke-linecap", stroke_linecap_attr);
-              goto cleanup;
-            }
-        }
-
-      if (stroke_linejoin_attr)
-        {
-          if (strcmp (stroke_linejoin_attr, "miter") == 0)
-            gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_MITER);
-          else if (strcmp (stroke_linejoin_attr, "round") == 0)
-            gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
-          else if (strcmp (stroke_linejoin_attr, "bevel") == 0)
-            gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_BEVEL);
-          else
-            {
-              set_attribute_error (error, "stroke-linejoin", stroke_linejoin_attr);
-              goto cleanup;
-            }
-        }
-
-      if (stroke_miterlimit_attr)
-        {
-          double ml = g_ascii_strtod (stroke_miterlimit_attr, &end);
-          if ((end && *end != '\0') || ml < 1)
-            {
-              set_attribute_error (error, "stroke-miterlimit", stroke_miterlimit_attr);
-              goto cleanup;
-            }
-
-          gsk_stroke_set_miter_limit (stroke, ml);
-        }
-
-      if (stroke_dasharray_attr &&
-          strcmp (stroke_dasharray_attr, "none") != 0)
-        {
-          char **str;
-          gsize n_dash;
-
-          str = g_strsplit_set (stroke_dasharray_attr, ", ", 0);
-
-          n_dash = g_strv_length (str);
-          if (n_dash > 0)
-            {
-              float *dash = g_newa (float, n_dash);
-
-              for (int i = 0; i < n_dash; i++)
-                {
-                  dash[i] = g_ascii_strtod (str[i], &end);
-                  if (end && *end != '\0')
-                    {
-                      set_attribute_error (error, "stroke-dasharray", stroke_dasharray_attr);
-                      g_strfreev (str);
-                      goto cleanup;
-                    }
-                }
-
-              gsk_stroke_set_dash (stroke, dash, n_dash);
-            }
-
-          g_strfreev (str);
-        }
-
-      if (stroke_dashoffset_attr)
-        {
-          double offset = g_ascii_strtod (stroke_dashoffset_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "stroke-dashoffset", stroke_dashoffset_attr);
-              goto cleanup;
-            }
-
-          gsk_stroke_set_dash_offset (stroke, offset);
-        }
-
-      if (opacity != 1)
-        gtk_snapshot_push_opacity (data->snapshot, opacity);
-
-      if (do_fill)
-        {
-          data->n_paths++;
-          gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &fill_color);
-        }
-
-      if (do_stroke)
-        {
-          data->n_paths++;
-          gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
-        }
-
-      if (opacity != 1)
-        gtk_snapshot_pop (data->snapshot);
-
-cleanup:
-      g_clear_pointer (&path, gsk_path_unref);
-      g_clear_pointer (&stroke, gsk_stroke_free);
     }
   else
     {
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
                    "Unhandled element: %s", element_name);
+      return;
     }
+
+  g_assert (path != NULL);
+
+  if (!g_markup_collect_attributes (element_name,
+                                    attribute_names,
+                                    attribute_values,
+                                    error,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "class", &class_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "opacity", &opacity_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-rule", &fill_rule_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-opacity", &fill_opacity_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-width", &stroke_width_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-opacity", &stroke_opacity_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linecap", &stroke_linecap_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linejoin", &stroke_linejoin_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-miterlimit", &stroke_miterlimit_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dasharray", &stroke_dasharray_attr,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dashoffset", &stroke_dashoffset_attr,
+                                    /* The following attributes are explicitly ignored */
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "style", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "color", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "overflow", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "d", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "cx", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "cy", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "r", NULL,
+                                     /* Other attributes cause an error, and we'll fall back to loading a texture */
+                                    G_MARKUP_COLLECT_INVALID))
+    return;
+
+  fill_opacity = 1;
+  if (fill_opacity_attr)
+    {
+      fill_opacity = g_ascii_strtod (fill_opacity_attr, &end);
+      if (end && *end != '\0')
+        {
+          set_attribute_error (error, "fill-opacity", fill_opacity_attr);
+          goto cleanup;
+        }
+      fill_opacity = CLAMP (fill_opacity, 0, 1);
+    }
+
+  stroke_opacity = 1;
+  if (stroke_opacity_attr)
+    {
+      stroke_opacity = g_ascii_strtod (stroke_opacity_attr, &end);
+      if (end && *end != '\0')
+        {
+          set_attribute_error (error, "stroke-opacity", stroke_opacity_attr);
+          goto cleanup;
+        }
+      stroke_opacity = CLAMP (stroke_opacity, 0, 1);
+    }
+
+  if (!class_attr)
+    {
+      fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
+      do_fill = TRUE;
+      do_stroke = FALSE;
+    }
+  else
+    {
+      const char * const *classes;
+
+      classes = (const char * const *) g_strsplit (class_attr, " ", 0);
+
+      if (g_strv_contains (classes, "transparent-fill"))
+        {
+          do_fill = FALSE;
+          data->only_fg = FALSE;
+        }
+      else if (g_strv_contains (classes, "foreground-fill"))
+        {
+          do_fill = TRUE;
+          fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
+        }
+      else if (g_strv_contains (classes, "success") ||
+               g_strv_contains (classes, "success-fill"))
+        {
+          do_fill = TRUE;
+          fill_color = (GdkRGBA) { 1, 0, 0, fill_opacity };
+          data->only_fg = FALSE;
+        }
+      else if (g_strv_contains (classes, "warning") ||
+               g_strv_contains (classes, "warning-fill"))
+        {
+          do_fill = TRUE;
+          fill_color = (GdkRGBA) { 0, 1, 0, 1 };
+          data->only_fg = FALSE;
+        }
+      else if (g_strv_contains (classes, "error") ||
+               g_strv_contains (classes, "error-fill"))
+        {
+          do_fill = TRUE;
+          fill_color = (GdkRGBA) { 0, 0, 1, fill_opacity };
+          data->only_fg = FALSE;
+        }
+      else
+        {
+          do_fill = TRUE;
+          fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
+        }
+
+      if (g_strv_contains (classes, "success-stroke"))
+        {
+          do_stroke = TRUE;
+          stroke_color = (GdkRGBA) { 1, 0, 0, stroke_opacity };
+          data->only_fg = FALSE;
+        }
+      else if (g_strv_contains (classes, "warning-stroke"))
+        {
+          do_stroke = TRUE;
+          stroke_color = (GdkRGBA) { 0, 1, 0, stroke_opacity };
+          data->only_fg = FALSE;
+        }
+      else if (g_strv_contains (classes, "error-stroke"))
+        {
+          do_stroke = TRUE;
+          stroke_color = (GdkRGBA) { 0, 0, 1, stroke_opacity };
+          data->only_fg = FALSE;
+        }
+      else if (g_strv_contains (classes, "foreground-stroke"))
+        {
+          do_stroke = TRUE;
+          stroke_color = (GdkRGBA) { 0, 0, 0, stroke_opacity };
+        }
+      else
+        {
+          do_stroke = FALSE;
+        }
+
+      g_strfreev ((char **) classes);
+    }
+
+  opacity = 1;
+  if (opacity_attr)
+    {
+      opacity = g_ascii_strtod (opacity_attr, &end);
+      if (end && *end != '\0')
+        {
+          set_attribute_error (error, "opacity", opacity_attr);
+          goto cleanup;
+        }
+    }
+
+  if (fill_rule_attr && strcmp (fill_rule_attr, "evenodd") == 0)
+    fill_rule = GSK_FILL_RULE_EVEN_ODD;
+  else
+    fill_rule = GSK_FILL_RULE_WINDING;
+
+  stroke = gsk_stroke_new (1);
+
+  if (stroke_width_attr)
+    {
+      double w = g_ascii_strtod (stroke_width_attr, &end);
+      if (end && *end != '\0')
+        {
+          set_attribute_error (error, "stroke-width", stroke_width_attr);
+          goto cleanup;
+        }
+
+      gsk_stroke_set_line_width (stroke, w);
+    }
+
+  if (stroke_linecap_attr)
+    {
+      if (strcmp (stroke_linecap_attr, "butt") == 0)
+        gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_BUTT);
+      else if (strcmp (stroke_linecap_attr, "round") == 0)
+        gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
+      else if (strcmp (stroke_linecap_attr, "square") == 0)
+        gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_SQUARE);
+      else
+        {
+          set_attribute_error (error, "stroke-linecap", stroke_linecap_attr);
+          goto cleanup;
+        }
+    }
+
+  if (stroke_linejoin_attr)
+    {
+      if (strcmp (stroke_linejoin_attr, "miter") == 0)
+        gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_MITER);
+      else if (strcmp (stroke_linejoin_attr, "round") == 0)
+        gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
+      else if (strcmp (stroke_linejoin_attr, "bevel") == 0)
+        gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_BEVEL);
+      else
+        {
+          set_attribute_error (error, "stroke-linejoin", stroke_linejoin_attr);
+          goto cleanup;
+        }
+    }
+
+  if (stroke_miterlimit_attr)
+    {
+      double ml = g_ascii_strtod (stroke_miterlimit_attr, &end);
+      if ((end && *end != '\0') || ml < 1)
+        {
+          set_attribute_error (error, "stroke-miterlimit", stroke_miterlimit_attr);
+          goto cleanup;
+        }
+
+      gsk_stroke_set_miter_limit (stroke, ml);
+    }
+
+  if (stroke_dasharray_attr &&
+      strcmp (stroke_dasharray_attr, "none") != 0)
+    {
+      char **str;
+      gsize n_dash;
+
+      str = g_strsplit_set (stroke_dasharray_attr, ", ", 0);
+
+      n_dash = g_strv_length (str);
+      if (n_dash > 0)
+        {
+          float *dash = g_newa (float, n_dash);
+
+          for (int i = 0; i < n_dash; i++)
+            {
+              dash[i] = g_ascii_strtod (str[i], &end);
+              if (end && *end != '\0')
+                {
+                  set_attribute_error (error, "stroke-dasharray", stroke_dasharray_attr);
+                  g_strfreev (str);
+                  goto cleanup;
+                }
+            }
+
+          gsk_stroke_set_dash (stroke, dash, n_dash);
+        }
+
+      g_strfreev (str);
+    }
+
+  if (stroke_dashoffset_attr)
+    {
+      double offset = g_ascii_strtod (stroke_dashoffset_attr, &end);
+      if (end && *end != '\0')
+        {
+          set_attribute_error (error, "stroke-dashoffset", stroke_dashoffset_attr);
+          goto cleanup;
+        }
+
+      gsk_stroke_set_dash_offset (stroke, offset);
+    }
+
+  if (opacity != 1)
+    gtk_snapshot_push_opacity (data->snapshot, opacity);
+
+  if (do_fill)
+    {
+      data->n_paths++;
+      gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &fill_color);
+    }
+
+  if (do_stroke)
+    {
+      data->n_paths++;
+      gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
+    }
+
+  if (opacity != 1)
+    gtk_snapshot_pop (data->snapshot);
+
+cleanup:
+  g_clear_pointer (&path, gsk_path_unref);
+  g_clear_pointer (&stroke, gsk_stroke_free);
 }
 
 static void

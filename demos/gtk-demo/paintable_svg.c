@@ -13,7 +13,7 @@
 #include <librsvg/rsvg.h>
 
 #include "svgpaintable.h"
-#include "svgsymbolicpaintable.h"
+#include "symbolicpaintable.h"
 
 
 static void
@@ -35,7 +35,7 @@ open_response_cb (GObject      *source,
 
       if (strstr (g_file_peek_path (file), "symbolic"))
         {
-          paintable = GDK_PAINTABLE (svg_symbolic_paintable_new (file));
+          paintable = GDK_PAINTABLE (symbolic_paintable_new (file));
           if (!GTK_IS_IMAGE (image))
             {
               image = gtk_image_new ();
