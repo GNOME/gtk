@@ -1455,8 +1455,6 @@ gsk_render_node_new_from_resource_symbolic (const char *path,
   if (!gdk_has_feature (GDK_FEATURE_ICON_NODES))
     return NULL;
 
-  g_print ("symbolic resource: %s\n", path);
-
   bytes = g_resources_lookup_data (path, 0, NULL);
   if (!bytes)
     return NULL;

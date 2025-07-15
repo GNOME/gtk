@@ -5,7 +5,7 @@
  */
 
 #include <gtk/gtk.h>
-#include "svgsymbolicpaintable.h"
+#include "symbolicpaintable.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
 
 static guint tick_cb;
@@ -412,7 +412,7 @@ create_path (void)
 
       uri = g_strconcat ("resource://", "/org/gtk/libgtk/icons/scalable/", symbolics[idx].path, NULL);
       file = g_file_new_for_uri (uri);
-      symbolics[idx].paintable = GDK_PAINTABLE (svg_symbolic_paintable_new (file));
+      symbolics[idx].paintable = GDK_PAINTABLE (symbolic_paintable_new (file));
       g_object_unref (file);
       g_free (uri);
     }
