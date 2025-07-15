@@ -278,18 +278,14 @@ gtk_application_impl_quartz_set_app_menu (GtkApplicationImpl *impl,
 }
 
 static void
-gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
-                                     gboolean            register_session)
+gtk_application_impl_quartz_startup (GtkApplicationImpl *impl)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;
   GMenuModel *menubar;
 
-  if (register_session)
-    {
-      quartz->delegate = [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz];
-      [NSApp setDelegate: (id<NSApplicationDelegate>)quartz->delegate];
-    }
+  quartz->delegate = [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz];
+  [NSApp setDelegate: (id<NSApplicationDelegate>)quartz->delegate];
 
   quartz->muxer = gtk_action_muxer_new (NULL);
   gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
