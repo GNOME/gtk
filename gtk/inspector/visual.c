@@ -722,71 +722,19 @@ init_dark (GtkInspectorVisual *vis)
 }
 
 static void
-colorscheme_changed (GtkDropDown        *dropdown,
-                     GParamSpec         *pspec,
-                     GtkInspectorVisual *vis)
-{
-  GtkCssProvider *provider;
-  GValue value = G_VALUE_INIT;
-  guint pos;
-
-  pos = gtk_drop_down_get_selected (dropdown);
-  g_value_init (&value, GTK_TYPE_INTERFACE_COLOR_SCHEME);
-  g_value_set_enum (&value, pos);
-
-  provider = gtk_settings_get_theme_provider (vis->settings);
-  g_object_set_property (G_OBJECT (provider), "prefers-color-scheme", &value);
-  g_value_unset (&value);
-}
-
-static void
 init_colorscheme (GtkInspectorVisual *vis)
 {
-  GtkCssProvider *provider;
-  GValue value = G_VALUE_INIT;
-
-  provider = gtk_settings_get_theme_provider (vis->settings);
-  g_object_get_property (G_OBJECT (provider), "prefers-color-scheme", &value);
-
-  gtk_drop_down_set_selected (GTK_DROP_DOWN (vis->color_scheme_combo), g_value_get_enum (&value));
-  g_value_unset (&value);
-
-  g_signal_connect (vis->color_scheme_combo, "notify::selected",
-                    G_CALLBACK (colorscheme_changed), vis);
-}
-
-static void
-contrast_changed (GtkDropDown        *dropdown,
-                  GParamSpec         *pspec,
-                  GtkInspectorVisual *vis)
-{
-  GtkCssProvider *provider;
-  GValue value = G_VALUE_INIT;
-  guint pos;
-
-  pos = gtk_drop_down_get_selected (dropdown);
-  g_value_init (&value, GTK_TYPE_INTERFACE_CONTRAST);
-  g_value_set_enum (&value, pos);
-
-  provider = gtk_settings_get_theme_provider (vis->settings);
-  g_object_set_property (G_OBJECT (provider), "prefers-contrast", &value);
-  g_value_unset (&value);
+  g_object_bind_property (vis->settings, "gtk-interface-color-scheme",
+                          vis->color_scheme_combo, "selected",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 }
 
 static void
 init_contrast (GtkInspectorVisual *vis)
 {
-  GtkCssProvider *provider;
-  GValue value = G_VALUE_INIT;
-
-  provider = gtk_settings_get_theme_provider (vis->settings);
-  g_object_get_property (G_OBJECT (provider), "prefers-contrast", &value);
-
-  gtk_drop_down_set_selected (GTK_DROP_DOWN (vis->contrast_combo), g_value_get_enum (&value));
-  g_value_unset (&value);
-
-  g_signal_connect (vis->contrast_combo, "notify::selected",
-                    G_CALLBACK (contrast_changed), vis);
+  g_object_bind_property (vis->settings, "gtk-interface-contrast",
+                          vis->contrast_combo, "selected",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 }
 
 static void
