@@ -986,15 +986,38 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                    GTK_FONT_RENDERING_AUTOMATIC,
                                                    GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSettings:gtk-interface-color-scheme:
+   *
+   * Define the color scheme used for rendering the user interface.
+   *
+   * The UI can be set to either [enum@Gtk.InterfaceColorScheme.LIGHT],
+   * or [enum@Gtk.InterfaceColorScheme.DARK] mode.
+   *
+   * Since: 4.20
+   */
   pspecs[PROP_INTERFACE_COLOR_SCHEME] = g_param_spec_enum ("gtk-interface-color-scheme", NULL, NULL,
                                                            GTK_TYPE_INTERFACE_COLOR_SCHEME,
                                                            GTK_INTERFACE_COLOR_SCHEME_LIGHT,
                                                            GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSettings:gtk-interface-contrast:
+   *
+   * Define the contrast mode to use for the user interface.
+   *
+   * When set to [enum@Gtk.InterfaceContrast.MORE], the UI is rendered in
+   * high contrast.
+   *
+   * When set to [enum@Gtk.InterfaceContrast.NO_PREFERENCE] (the default),
+   * the user interface will be rendered in default mode.
+   *
+   * Since: 4.20
+   */
   pspecs[PROP_INTERFACE_CONTRAST] = g_param_spec_enum ("gtk-interface-contrast", NULL, NULL,
-                                                   GTK_TYPE_INTERFACE_CONTRAST,
-                                                   GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
-                                                   GTK_PARAM_READWRITE);
+                                                       GTK_TYPE_INTERFACE_CONTRAST,
+                                                       GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
+                                                       GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, pspecs);
 }
