@@ -73,12 +73,6 @@ void             gtk_css_provider_load_named     (GtkCssProvider  *provider,
                                                   const char      *name,
                                                   const char      *variant);
 
-GDK_AVAILABLE_IN_4_20
-gboolean         gtk_css_provider_update_discrete_media_features (GtkCssProvider  *provider,
-                                                                  gsize            n_features,
-                                                                  const char     **feature_names,
-                                                                  const char     **feature_values);
-
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
 
 G_END_DECLS
