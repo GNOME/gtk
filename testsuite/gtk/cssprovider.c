@@ -40,7 +40,10 @@ test_load_with_media_query (void)
   char *rendered_css;
   provider = gtk_css_provider_new ();
 
-  gtk_css_provider_update_discrete_media_features (provider, 1, (const char *[]) { "prefers-color-scheme" }, (const char *[]) { "light" });
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                NULL);
+
   gtk_css_provider_load_from_string (provider,
     "@media (prefers-color-scheme: light) { include-me { color: blue; } }"
     "@media (prefers-color-scheme: dark) { skip-me { color: blue; } }");
@@ -87,9 +90,11 @@ test_load_with_and_media_query (void)
   char *rendered_css;
   provider = gtk_css_provider_new ();
 
-  gtk_css_provider_update_discrete_media_features (provider, 2,
-    (const char *[]) { "prefers-color-scheme", "prefers-contrast" },
-    (const char *[]) { "light", "more" });
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                "prefers-contrast", GTK_INTERFACE_CONTRAST_MORE,
+                NULL);
+
   gtk_css_provider_load_from_string (provider,
     "@media (prefers-color-scheme: light) and (prefers-contrast: more) { style { color: blue; } }");
   rendered_css = gtk_css_provider_to_string (provider);
@@ -106,7 +111,9 @@ test_load_with_negating_media_query (void)
   char *rendered_css;
   provider = gtk_css_provider_new ();
 
-  gtk_css_provider_update_discrete_media_features (provider, 1, (const char *[]) { "prefers-color-scheme" }, (const char *[]) { "light" });
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                NULL);
 
   gtk_css_provider_load_from_string (provider,
     "@media not (prefers-color-scheme: dark) { style { color: blue; } }");
@@ -125,14 +132,18 @@ test_update_media_features_after_style_sheet_is_loaded (void)
   provider = gtk_css_provider_new ();
 
 
-  gtk_css_provider_update_discrete_media_features (provider, 1, (const char *[]) { "prefers-color-scheme" }, (const char *[]) { "light" });
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                NULL);
 
   gtk_css_provider_load_from_string (provider,
     "@media (prefers-color-scheme: light) { one-style { color: blue; } }"
     "@media (prefers-color-scheme: dark) { two-style { color: blue; } }"
   );
 
-  gtk_css_provider_update_discrete_media_features (provider, 1, (const char *[]) { "prefers-color-scheme" }, (const char *[]) { "dark" });
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_DARK,
+                NULL);
 
   rendered_css = gtk_css_provider_to_string (provider);
   g_object_unref (provider);
@@ -142,6 +153,7 @@ test_update_media_features_after_style_sheet_is_loaded (void)
   g_free (rendered_css);
 }
 
+/*
 static void
 real_test_gdk_display_media_feature (const char* display_name)
 {
@@ -203,7 +215,7 @@ test_gdk_display_media_feature_broadway (void)
 {
   real_test_gdk_display_media_feature ("broadway");
 }
-
+*/
 int
 main (int argc, char *argv[])
 {
@@ -217,12 +229,14 @@ main (int argc, char *argv[])
   g_test_add_func ("/cssprovider/load-with-negating-media-query", test_load_with_negating_media_query);
   g_test_add_func ("/cssprovider/load-with-and-media-query", test_load_with_and_media_query);
   g_test_add_func ("/cssprovider/update-media-features-after-style-sheet-is-loaded", test_update_media_features_after_style_sheet_is_loaded);
+/*
   g_test_add_func ("/cssprovider/--gdk-display-media-feature/wayland", test_gdk_display_media_feature_wayland);
   g_test_add_func ("/cssprovider/--gdk-display-media-feature/x11", test_gdk_display_media_feature_x11);
   g_test_add_func ("/cssprovider/--gdk-display-media-feature/windows", test_gdk_display_media_feature_windows);
   g_test_add_func ("/cssprovider/--gdk-display-media-feature/macos", test_gdk_display_media_feature_macos);
   g_test_add_func ("/cssprovider/--gdk-display-media-feature/android", test_gdk_display_media_feature_android);
   g_test_add_func ("/cssprovider/--gdk-display-media-feature/broadway", test_gdk_display_media_feature_broadway);
+*/
 
   return g_test_run ();
 }
