@@ -304,9 +304,7 @@ Media queries can include `not`, `and`, and `or` expressions.
 
 GTK supports the following media features:
 
-| Media feature       | Reference | Notes |
-|:--------------------|:----------|:------|
-|prefers-color-scheme | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-color-scheme) | both `light` and `dark` mode |
-|prefers-contrast     | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-contrast) | only `no-preference` and `more` |
-
-Platform libraries such as libadwaita and granite may support different media features.
+| Media feature        | Reference | Notes |
+|:---------------------|:----------|:------|
+| prefers-color-scheme | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-color-scheme) | `light` and `dark` mode |
+| prefers-contrast     | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-contrast) | `no-preference`, `more`, and `less` |
