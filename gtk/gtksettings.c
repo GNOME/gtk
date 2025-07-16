@@ -202,6 +202,8 @@ enum {
   PROP_KEYNAV_USE_CARET,
   PROP_OVERLAY_SCROLLING,
   PROP_FONT_RENDERING,
+  PROP_INTERFACE_COLOR_SCHEME,
+  PROP_INTERFACE_CONTRAST,
 
   NUM_PROPERTIES
 };
@@ -229,6 +231,7 @@ static void    settings_update_font_options      (GtkSettings           *setting
 static void    settings_update_font_values       (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 static void    settings_update_theme             (GtkSettings           *settings);
+static void    settings_update_interface         (GtkSettings           *settings);
 static gboolean settings_update_xsetting         (GtkSettings           *settings,
                                                   GParamSpec            *pspec,
                                                   gboolean               force);
@@ -261,9 +264,6 @@ gtk_settings_init (GtkSettings *settings)
 
   g_datalist_init (&settings->queued_settings);
 
-  settings->style_cascades = g_slist_prepend (NULL, _gtk_style_cascade_new ());
-  settings->theme_provider = gtk_css_provider_new ();
-
   settings->property_values = g_new0 (GtkSettingsPropertyValue, NUM_PROPERTIES - 1);
   g_object_freeze_notify (G_OBJECT (settings));
 
@@ -278,6 +278,10 @@ gtk_settings_init (GtkSettings *settings)
       g_object_notify_by_pspec (G_OBJECT (settings), pspec);
       settings->property_values[i - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
     }
+
+  settings->style_cascades = g_slist_prepend (NULL, _gtk_style_cascade_new ());
+  settings->theme_provider = gtk_css_provider_new ();
+  settings_update_interface (settings);
 
   path = g_build_filename (_gtk_get_data_prefix (), "share", "gtk-4.0", "settings.ini", NULL);
   gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
@@ -816,7 +820,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Set to %TRUE if the desktop environment is displaying
    * the desktop folder, %FALSE if not.
-   * 
+   *
    * Deprecated: 4.20: This setting is not relevant anymore
    */
   pspecs[PROP_SHELL_SHOWS_DESKTOP] = g_param_spec_boolean ("gtk-shell-shows-desktop", NULL, NULL,
@@ -980,6 +984,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
   pspecs[PROP_FONT_RENDERING] = g_param_spec_enum ("gtk-font-rendering", NULL, NULL,
                                                    GTK_TYPE_FONT_RENDERING,
                                                    GTK_FONT_RENDERING_AUTOMATIC,
+                                                   GTK_PARAM_READWRITE);
+
+  pspecs[PROP_INTERFACE_COLOR_SCHEME] = g_param_spec_enum ("gtk-interface-color-scheme", NULL, NULL,
+                                                           GTK_TYPE_INTERFACE_COLOR_SCHEME,
+                                                           GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                                                           GTK_PARAM_READWRITE);
+
+  pspecs[PROP_INTERFACE_CONTRAST] = g_param_spec_enum ("gtk-interface-contrast", NULL, NULL,
+                                                   GTK_TYPE_INTERFACE_CONTRAST,
+                                                   GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
                                                    GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, pspecs);
@@ -1296,6 +1310,10 @@ gtk_settings_notify (GObject    *object,
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
       settings_update_cursor_theme (settings);
+      break;
+    case PROP_INTERFACE_COLOR_SCHEME:
+    case PROP_INTERFACE_CONTRAST:
+      settings_update_interface (settings);
       break;
     default:
       break;
@@ -1651,6 +1669,23 @@ settings_update_theme (GtkSettings *settings)
 
   g_free (theme_name);
   g_free (theme_variant);
+}
+
+static void
+settings_update_interface (GtkSettings *settings)
+{
+  GtkInterfaceColorScheme color_scheme;
+  GtkInterfaceContrast contrast;
+
+  g_object_get (settings,
+                "gtk-interface-color-scheme", &color_scheme,
+                "gtk-interface-contrast", &contrast,
+                NULL);
+
+  g_object_set (settings->theme_provider,
+                "prefers-color-scheme", color_scheme,
+                "prefers-contrast", contrast,
+                NULL);
 }
 
 const cairo_font_options_t *
