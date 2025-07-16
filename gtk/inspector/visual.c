@@ -720,18 +720,16 @@ init_dark (GtkInspectorVisual *vis)
     }
 }
 
-static const char *colorscheme_values[] = { "light", "dark" };
-
 static void
 colorscheme_changed (GtkDropDown        *dropdown,
                      GParamSpec         *pspec,
                      GtkInspectorVisual *vis)
 {
-  GtkCssProvider *provider;
   guint pos = gtk_drop_down_get_selected (dropdown);
 
-  provider = gtk_settings_get_theme_provider (vis->settings);
-  gtk_css_provider_add_discrete_media_feature (provider, "prefers-color-scheme", colorscheme_values[pos]);
+  g_object_set (vis->settings,
+                "prefers-color-scheme", pos,
+                NULL);
 }
 
 static guint
@@ -750,6 +748,7 @@ g_strv_find (const char **values,
 static void
 init_colorscheme (GtkInspectorVisual *vis)
 {
+  static const char *colorscheme_values[] = { "light", "dark" };
   GtkCssProvider *provider;
   const char *value;
   guint pos;
@@ -765,23 +764,22 @@ init_colorscheme (GtkInspectorVisual *vis)
                     G_CALLBACK (colorscheme_changed), vis);
 }
 
-static const char *contrast_values[] = { "no-preference", "less", "more" };
-
 static void
 contrast_changed (GtkDropDown        *dropdown,
                   GParamSpec         *pspec,
                   GtkInspectorVisual *vis)
 {
-  GtkCssProvider *provider;
   guint pos = gtk_drop_down_get_selected (dropdown);
 
-  provider = gtk_settings_get_theme_provider (vis->settings);
-  gtk_css_provider_add_discrete_media_feature (provider, "prefers-contrast", contrast_values[pos]);
+  g_object_set (vis->settings,
+                "prefers-contrast", pos,
+                NULL);
 }
 
 static void
 init_contrast (GtkInspectorVisual *vis)
 {
+  static const char *contrast_values[] = { "no-preference", "less", "more" };
   GtkCssProvider *provider;
   const char *value;
   guint pos;

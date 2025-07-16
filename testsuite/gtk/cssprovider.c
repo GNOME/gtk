@@ -39,10 +39,14 @@ test_load_with_media_query (void)
   GtkCssProvider *provider;
   char *rendered_css;
   provider = gtk_css_provider_new ();
-  gtk_css_provider_add_discrete_media_feature (provider, "my-feature", "my-value");
+
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                NULL);
+
   gtk_css_provider_load_from_string (provider,
-    "@media (my-feature: my-value) { include-me { color: blue; } }"
-    "@media (my-feature: other-value) { skip-me { color: blue; } }");
+    "@media (prefers-color-scheme: light) { include-me { color: blue; } }"
+    "@media (prefers-color-scheme: dark) { skip-me { color: blue; } }");
   rendered_css = gtk_css_provider_to_string (provider);
   g_object_unref (provider);
 
@@ -85,10 +89,14 @@ test_load_with_and_media_query (void)
   GtkCssProvider *provider;
   char *rendered_css;
   provider = gtk_css_provider_new ();
-  gtk_css_provider_add_discrete_media_feature (provider, "feature-one", "one");
-  gtk_css_provider_add_discrete_media_feature (provider, "feature-two", "two");
+
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                "prefers-contrast", GTK_INTERFACE_CONTRAST_MORE,
+                NULL);
+
   gtk_css_provider_load_from_string (provider,
-    "@media (feature-one: one) and (feature-two: two) { style { color: blue; } }");
+    "@media (prefers-color-scheme: light) and (prefers-contrast: more) { style { color: blue; } }");
   rendered_css = gtk_css_provider_to_string (provider);
   g_object_unref (provider);
 
@@ -102,13 +110,46 @@ test_load_with_negating_media_query (void)
   GtkCssProvider *provider;
   char *rendered_css;
   provider = gtk_css_provider_new ();
-  gtk_css_provider_add_discrete_media_feature (provider, "feature", "one");
+
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                NULL);
+
   gtk_css_provider_load_from_string (provider,
-    "@media not (feature: two) { style { color: blue; } }");
+    "@media not (prefers-color-scheme: dark) { style { color: blue; } }");
   rendered_css = gtk_css_provider_to_string (provider);
   g_object_unref (provider);
 
   g_assert_nonnull (strstr (rendered_css, "style"));
+  g_free (rendered_css);
+}
+
+static void
+test_update_media_features_after_style_sheet_is_loaded (void)
+{
+  GtkCssProvider *provider;
+  char *rendered_css;
+  provider = gtk_css_provider_new ();
+
+
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                NULL);
+
+  gtk_css_provider_load_from_string (provider,
+    "@media (prefers-color-scheme: dark) { one-style { color: blue; } }"
+    "@media (prefers-color-scheme: light) { two-style { color: blue; } }"
+  );
+
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_DARK,
+                NULL);
+
+  rendered_css = gtk_css_provider_to_string (provider);
+  g_object_unref (provider);
+
+  g_assert_null (strstr (rendered_css, "one-style"));
+  g_assert_nonnull (strstr (rendered_css, "two-style"));
   g_free (rendered_css);
 }
 
@@ -124,6 +165,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/cssprovider/load-with-undefined-media-query", test_load_with_undefined_media_query);
   g_test_add_func ("/cssprovider/load-with-negating-media-query", test_load_with_negating_media_query);
   g_test_add_func ("/cssprovider/load-with-and-media-query", test_load_with_and_media_query);
+  g_test_add_func ("/cssprovider/update-media-features-after-style-sheet-is-loaded", test_update_media_features_after_style_sheet_is_loaded);
 
   return g_test_run ();
 }

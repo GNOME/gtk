@@ -130,7 +130,9 @@ parse_css_file (GFile *file, gboolean generate)
   errors = g_string_new ("");
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_add_discrete_media_feature (provider, "prefers-color-scheme", "light");
+  g_object_set (provider,
+                "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                NULL);
 
   g_signal_connect (provider,
                     "parsing-error",

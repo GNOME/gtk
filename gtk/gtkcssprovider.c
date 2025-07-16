@@ -39,6 +39,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkversion.h"
+#include "gtktypebuiltins.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -134,6 +135,8 @@ struct _GtkCssProviderPrivate
   GScanner *scanner;
 
   GArray *media_features;
+  GtkInterfaceColorScheme prefers_color_scheme;
+  GtkInterfaceContrast prefers_contrast;
 
   GHashTable *symbolic_colors;
   GHashTable *keyframes;
@@ -153,11 +156,30 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+   PROP_0,
+   PROP_PREFERS_COLOR_SCHEME,
+   PROP_PREFERS_CONTRAST,
+   NUM_PROPERTIES
+};
+
 static gboolean gtk_keep_css_sections = FALSE;
 
 static guint css_provider_signals[LAST_SIGNAL] = { 0 };
 
-static void gtk_css_provider_finalize (GObject *object);
+static GParamSpec *pspecs[NUM_PROPERTIES] = { NULL, };
+
+static void gtk_css_provider_finalize         (GObject *object);
+static void gtk_css_provider_get_property     (GObject               *object,
+                                               guint                  property_id,
+                                               GValue                *value,
+                                               GParamSpec            *pspec);
+static void gtk_css_provider_set_property     (GObject               *object,
+                                               guint                  property_id,
+                                               const GValue          *value,
+                                               GParamSpec            *pspec);
+static void gtk_css_provider_notify           (GObject               *object,
+                                               GParamSpec            *pspec);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface);
 static void gtk_css_style_provider_emit_error (GtkStyleProvider *provider,
                                                GtkCssSection    *section,
@@ -220,6 +242,13 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   if (g_getenv ("GTK_CSS_DEBUG"))
     gtk_css_provider_set_keep_css_sections ();
 
+  object_class->finalize = gtk_css_provider_finalize;
+  object_class->get_property = gtk_css_provider_get_property;
+  object_class->set_property = gtk_css_provider_set_property;
+  object_class->notify = gtk_css_provider_notify;
+
+  klass->parsing_error = gtk_css_provider_parsing_error;
+
   /**
    * GtkCssProvider::parsing-error:
    * @provider: the provider that had a parsing error
@@ -258,9 +287,19 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
                               G_TYPE_FROM_CLASS (object_class),
                               _gtk_marshal_VOID__BOXED_BOXEDv);
 
-  object_class->finalize = gtk_css_provider_finalize;
+  pspecs[PROP_PREFERS_COLOR_SCHEME] = g_param_spec_enum ("prefers-color-scheme", NULL, NULL,
+                                                         GTK_TYPE_INTERFACE_COLOR_SCHEME,
+                                                         GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                                                         GTK_PARAM_READWRITE);
 
-  klass->parsing_error = gtk_css_provider_parsing_error;
+  pspecs[PROP_PREFERS_CONTRAST] = g_param_spec_enum ("prefers-contrast", NULL, NULL,
+                                                     GTK_TYPE_INTERFACE_CONTRAST,
+                                                     GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
+                                                     GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, pspecs);
+
+
 }
 
 static void
@@ -464,6 +503,9 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
 
   priv->media_features = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssDiscreteMediaFeature), 4);
+  priv->prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
+  priv->prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
+
   priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -648,6 +690,84 @@ gtk_css_provider_finalize (GObject *object)
   g_free (priv->path);
 
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
+}
+
+static void
+gtk_css_provider_get_property (GObject         *object,
+                               guint            prop_id,
+                               GValue          *value,
+                               GParamSpec      *pspec)
+{
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (GTK_CSS_PROVIDER (object));
+
+  switch (prop_id)
+    {
+    case PROP_PREFERS_COLOR_SCHEME:
+      g_value_set_enum (value, priv->prefers_color_scheme);
+      break;
+    case PROP_PREFERS_CONTRAST:
+      g_value_set_enum (value, priv->prefers_contrast);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_css_provider_set_property (GObject         *object,
+                               guint            prop_id,
+                               const GValue    *value,
+                               GParamSpec      *pspec)
+{
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (GTK_CSS_PROVIDER (object));
+
+  switch (prop_id)
+    {
+    case PROP_PREFERS_COLOR_SCHEME:
+      priv->prefers_color_scheme = g_value_get_enum (value);
+      break;
+    case PROP_PREFERS_CONTRAST:
+      priv->prefers_contrast = g_value_get_enum (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+update_media_features (GtkCssProvider *css_provider)
+{
+  GtkInterfaceColorScheme color_scheme;
+  GtkInterfaceContrast contrast;
+  const char *color_scheme_names[] = { "light", "dark" };
+  const char *contrast_names[] = { "no-preference", "less", "more" };
+
+  g_object_get (css_provider,
+                "prefers-color-scheme", &color_scheme,
+                "prefers-contrast", &contrast,
+                NULL);
+
+  gtk_css_provider_add_discrete_media_feature (css_provider, "prefers-color-scheme", color_scheme_names[color_scheme]);
+  gtk_css_provider_add_discrete_media_feature (css_provider, "prefers-contrast", contrast_names[contrast]);
+}
+
+static void
+gtk_css_provider_notify (GObject    *object,
+                         GParamSpec *pspec)
+{
+  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (object);
+
+  switch (pspec->param_id)
+    {
+    case PROP_PREFERS_COLOR_SCHEME:
+    case PROP_PREFERS_CONTRAST:
+      update_media_features (css_provider);
+      break;
+    default:
+      break;
+    }
 }
 
 /**
@@ -1669,8 +1789,8 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 {
   char *path;
   char *resource_path;
-  const char *prefers_color_scheme;
-  const char *prefers_contrast;
+  GtkInterfaceColorScheme prefers_color_scheme;
+  GtkInterfaceContrast prefers_contrast;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
   g_return_if_fail (name != NULL);
@@ -1678,17 +1798,19 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   gtk_css_provider_reset (provider);
 
   if (variant != NULL && (strstr (variant, "dark") != NULL))
-    prefers_color_scheme = "dark";
+    prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_DARK;
   else
-    prefers_color_scheme = "light";
+    prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
 
   if (variant != NULL && (strstr (variant, "hc") != NULL))
-    prefers_contrast = "more";
+    prefers_contrast = GTK_INTERFACE_CONTRAST_MORE;
   else
-    prefers_contrast = "no-preference";
+    prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
 
-  gtk_css_provider_add_discrete_media_feature (provider, "prefers-color-scheme", prefers_color_scheme);
-  gtk_css_provider_add_discrete_media_feature (provider, "prefers-contrast", prefers_contrast);
+  g_object_set (provider,
+                "prefers-color-scheme", prefers_color_scheme,
+                "prefers-contrast", prefers_contrast,
+                NULL);
 
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.

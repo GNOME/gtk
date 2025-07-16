@@ -30,6 +30,5 @@ void   gtk_css_provider_set_keep_css_sections (void);
 const char * gtk_css_provider_get_discrete_media_feature (GtkCssProvider *provider,
                                                           const char     *feature_name);
 
-
 G_END_DECLS
 
