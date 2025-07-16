@@ -41,39 +41,6 @@ gtk_css_media_query_parse (GtkCssParser *parser, GArray *media_features)
   return result;
 }
 
-void
-gtk_css_media_feature_init (GtkCssDiscreteMediaFeature *media_feature,
-                             const char                 *feature_name,
-                             const char                 *feature_value)
-{
-  g_assert (feature_name != NULL);
-  g_assert (feature_value != NULL);
-
-  media_feature->name = g_strdup (feature_name);
-  media_feature->value = g_strdup (feature_value);
-}
-
-void
-gtk_css_media_feature_update (GtkCssDiscreteMediaFeature *media_feature,
-                               const char                 *feature_value)
-{
-  g_assert (media_feature != NULL);
-  g_assert (feature_value != NULL);
-
-  g_free (media_feature->value);
-
-  media_feature->value = g_strdup (feature_value);
-}
-
-void
-gtk_css_media_feature_clear (GtkCssDiscreteMediaFeature *media_feature)
-{
-  g_assert (media_feature != NULL);
-
-  g_clear_pointer (&media_feature->name, g_free);
-  g_clear_pointer (&media_feature->value, g_free);
-}
-
 /*
  * A feature, without parens: `<feature-name>: <feature-value>`.
  */

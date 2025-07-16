@@ -27,13 +27,5 @@ const char *_gtk_css_provider_get_theme_dir (GtkCssProvider *provider);
 
 void   gtk_css_provider_set_keep_css_sections (void);
 
-const char * gtk_css_provider_get_discrete_media_feature (GtkCssProvider *provider,
-                                                          const char     *feature_name);
-
-gboolean gtk_css_provider_update_discrete_media_features (GtkCssProvider  *provider,
-                                                          gsize            n_features,
-                                                          const char     **feature_names,
-                                                          const char     **feature_values);
-
 G_END_DECLS
 
