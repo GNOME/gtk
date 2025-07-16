@@ -267,19 +267,12 @@ G_DEFINE_TYPE_WITH_CODE (GtkFilterListModel, gtk_filter_list_model, G_TYPE_OBJEC
 
 static gboolean
 gtk_filter_list_model_run_filter_on_item (GtkFilterListModel *self,
-                                          guint               position)
+                                          gpointer            item)
 {
-  gpointer item;
-  gboolean visible;
-
   /* all other cases should have been optimized away */
   g_assert (self->strictness == GTK_FILTER_MATCH_SOME);
 
-  item = g_list_model_get_item (self->model, position);
-  visible = gtk_filter_match (self->filter, item);
-  g_object_unref (item);
-
-  return visible;
+  return gtk_filter_match (self->filter, item);
 }
 
 static void
@@ -361,14 +354,15 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
        i < n_steps && more;
        i++, more = gtk_bitset_iter_next (&iter, &pos))
     {
-      if (gtk_filter_list_model_run_filter_on_item (self, pos))
+      gpointer item = g_list_model_get_item (self->model, pos);
+
+      if (gtk_filter_list_model_run_filter_on_item (self, item))
         gtk_bitset_add (self->matches, pos);
       else
         gtk_bitset_remove (self->matches, pos);
 
       if (self->watch_items && !gtk_bitset_contains (self->watched_items, pos))
         {
-          gpointer item = g_list_model_get_item (self->model, pos);
           gpointer watch;
 
           watch = gtk_filter_watch (self->filter, item, item_changed_cb, self, NULL);
@@ -376,9 +370,9 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
                                     watch_data_new (self->filter, watch));
 
           gtk_bitset_add (self->watched_items, pos);
-
-          g_clear_object (&item);
         }
+
+      g_clear_object (&item);
     }
 
   if (more)
