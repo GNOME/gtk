@@ -29,14 +29,6 @@ typedef struct
 } GtkCssDiscreteMediaFeature;
 
 
-void     gtk_css_media_feature_define_discrete (const char      *feature_name,
-                                                gsize            n_feature_values,
-                                                const char     **feature_values);
-
-gboolean gtk_css_media_feature_is_valid        (const char *feature_name,
-                                                const char *feature_value);
-
-
 gboolean gtk_css_media_query_parse             (GtkCssParser *parser,
                                                 GArray *media_features);
 

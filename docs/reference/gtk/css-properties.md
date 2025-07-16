@@ -308,4 +308,3 @@ GTK supports the following media features:
 |:---------------------|:----------|:------|
 | prefers-color-scheme | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-color-scheme) | `light` and `dark` mode |
 | prefers-contrast     | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-contrast) | `no-preference`, `more`, and `less` |
-| --gdk-display        | `wayland`, `x11`, `windows`, `macos`, `android`, or `broadway` | [GDK Display](https://docs.gtk.org/gdk4/class.Display.html) backend in use |
