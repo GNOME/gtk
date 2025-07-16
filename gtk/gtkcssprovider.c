@@ -288,19 +288,60 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
                               G_TYPE_FROM_CLASS (object_class),
                               _gtk_marshal_VOID__BOXED_BOXEDv);
 
+  /**
+   * GtkCssProvider:prefers-color-scheme:
+   *
+   * Define the color scheme used for rendering the user interface.
+   *
+   * The UI can be set to either [enum@Gtk.InterfaceColorScheme.LIGHT],
+   * or [enum@Gtk.InterfaceColorScheme.DARK] mode.
+   *
+   * This setting is be available for media queries in CSS:
+   *
+   * ```css
+   * @media (prefers-color-scheme: dark) {
+   *   // some dark mode styling
+   * }
+   * ```
+   *
+   * Changing this setting will cause a re-render of the style sheet.
+   *
+   * Since: 4.20
+   */
   pspecs[PROP_PREFERS_COLOR_SCHEME] = g_param_spec_enum ("prefers-color-scheme", NULL, NULL,
                                                          GTK_TYPE_INTERFACE_COLOR_SCHEME,
                                                          GTK_INTERFACE_COLOR_SCHEME_LIGHT,
                                                          GTK_PARAM_READWRITE);
 
+  /**
+   * GtkCssProvider:prefers-contrast:
+   *
+   * Define the contrast mode to use for the user interface.
+   *
+   * When set to [enum@Gtk.InterfaceContrast.MORE], the UI is rendered in
+   * high contrast.
+   *
+   * When set to [enum@Gtk.InterfaceContrast.NO_PREFERENCE] (the default),
+   * the user interface will be rendered in default mode.
+   *
+   * This setting is be available for media queries in CSS:
+   *
+   * ```css
+   * @media (prefers-contrast: more) {
+   *   // some style with high contrast
+   * }
+   * ```
+   *
+   * Changing this setting will cause a re-render of the style sheet.
+   *
+   * Since: 4.20
+   */
   pspecs[PROP_PREFERS_CONTRAST] = g_param_spec_enum ("prefers-contrast", NULL, NULL,
                                                      GTK_TYPE_INTERFACE_CONTRAST,
                                                      GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
                                                      GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, pspecs);
-
-
 }
 
 static void
