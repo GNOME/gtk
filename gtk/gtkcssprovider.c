@@ -1858,6 +1858,8 @@ _gtk_css_find_theme (const char *name,
  * The actual process of finding the theme might change between
  * releases, but it is guaranteed that this function uses the same
  * mechanism to load the theme that GTK uses for loading its own theme.
+ *
+ * Deprecated: 4.20: Using any of the other theme loaders, combine with media queries.
  */
 void
 gtk_css_provider_load_named (GtkCssProvider *provider,
