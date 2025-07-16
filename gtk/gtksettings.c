@@ -231,7 +231,6 @@ static void    settings_update_font_options      (GtkSettings           *setting
 static void    settings_update_font_values       (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 static void    settings_update_theme             (GtkSettings           *settings);
-static void    settings_update_interface         (GtkSettings           *settings);
 static gboolean settings_update_xsetting         (GtkSettings           *settings,
                                                   GParamSpec            *pspec,
                                                   gboolean               force);
@@ -281,7 +280,13 @@ gtk_settings_init (GtkSettings *settings)
 
   settings->style_cascades = g_slist_prepend (NULL, _gtk_style_cascade_new ());
   settings->theme_provider = gtk_css_provider_new ();
-  settings_update_interface (settings);
+
+  g_object_bind_property (settings, "gtk-interface-color-scheme",
+                          settings->theme_provider, "prefers-color-scheme",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (settings, "gtk-interface-contrast",
+                          settings->theme_provider, "prefers-contrast",
+                          G_BINDING_SYNC_CREATE);
 
   path = g_build_filename (_gtk_get_data_prefix (), "share", "gtk-4.0", "settings.ini", NULL);
   gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
@@ -1100,6 +1105,14 @@ settings_init_style (GtkSettings *settings)
       char *css_path;
 
       css_provider = gtk_css_provider_new ();
+
+      g_object_bind_property (settings, "gtk-interface-color-scheme",
+                              css_provider, "prefers-color-scheme",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (settings, "gtk-interface-contrast",
+                              css_provider, "prefers-contrast",
+                              G_BINDING_SYNC_CREATE);
+
       css_path = g_build_filename (g_get_user_config_dir (),
                                    "gtk-4.0",
                                    "gtk.css",
@@ -1113,6 +1126,7 @@ settings_init_style (GtkSettings *settings)
     }
 
   cascade = _gtk_settings_get_style_cascade (settings, 1);
+
   _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -1333,10 +1347,6 @@ gtk_settings_notify (GObject    *object,
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
       settings_update_cursor_theme (settings);
-      break;
-    case PROP_INTERFACE_COLOR_SCHEME:
-    case PROP_INTERFACE_CONTRAST:
-      settings_update_interface (settings);
       break;
     default:
       break;
@@ -1618,7 +1628,6 @@ get_theme_name (GtkSettings  *settings,
                 char        **theme_name,
                 char        **theme_variant)
 {
-  GtkCssProvider *css_provider;
   GtkInterfaceContrast prefers_contrast;
   gboolean prefer_dark;
 
@@ -1648,8 +1657,7 @@ get_theme_name (GtkSettings  *settings,
                 "gtk-application-prefer-dark-theme", &prefer_dark,
                 NULL);
 
-  css_provider = gtk_settings_get_theme_provider (settings);
-  g_object_get (css_provider, "prefers-contrast", &prefers_contrast, NULL);
+  g_object_get (settings->theme_provider, "prefers-contrast", &prefers_contrast, NULL);
   if (prefers_contrast == GTK_INTERFACE_CONTRAST_MORE)
     {
       if (prefer_dark)
@@ -1692,23 +1700,6 @@ settings_update_theme (GtkSettings *settings)
 
   g_free (theme_name);
   g_free (theme_variant);
-}
-
-static void
-settings_update_interface (GtkSettings *settings)
-{
-  GtkInterfaceColorScheme color_scheme;
-  GtkInterfaceContrast contrast;
-
-  g_object_get (settings,
-                "gtk-interface-color-scheme", &color_scheme,
-                "gtk-interface-contrast", &contrast,
-                NULL);
-
-  g_object_set (settings->theme_provider,
-                "prefers-color-scheme", color_scheme,
-                "prefers-contrast", contrast,
-                NULL);
 }
 
 const cairo_font_options_t *
@@ -2080,10 +2071,4 @@ gtk_settings_get_font_size_is_absolute (GtkSettings *settings)
   settings_update_font_name (settings);
 
   return settings->font_size_absolute;
-}
-
-GtkCssProvider *
-gtk_settings_get_theme_provider (GtkSettings *settings)
-{
-  return settings->theme_provider;
 }
