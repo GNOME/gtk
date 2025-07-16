@@ -137,8 +137,8 @@ test_update_media_features_after_style_sheet_is_loaded (void)
                 NULL);
 
   gtk_css_provider_load_from_string (provider,
-    "@media (prefers-color-scheme: dark) { one-style { color: blue; } }"
-    "@media (prefers-color-scheme: light) { two-style { color: blue; } }"
+    "@media (prefers-color-scheme: light) { one-style { color: blue; } }"
+    "@media (prefers-color-scheme: dark) { two-style { color: blue; } }"
   );
 
   g_object_set (provider,

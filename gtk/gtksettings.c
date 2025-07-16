@@ -1596,7 +1596,7 @@ get_theme_name (GtkSettings  *settings,
                 char        **theme_variant)
 {
   GtkCssProvider *css_provider;
-  const char *prefers_contrast;
+  GtkInterfaceContrast prefers_contrast;
   gboolean prefer_dark;
 
   *theme_name = NULL;
@@ -1626,8 +1626,8 @@ get_theme_name (GtkSettings  *settings,
                 NULL);
 
   css_provider = gtk_settings_get_theme_provider (settings);
-  prefers_contrast = gtk_css_provider_get_discrete_media_feature (css_provider, "prefers-contrast");
-  if (prefers_contrast != NULL && strcmp (prefers_contrast, "more") == 0)
+  g_object_get (css_provider, "prefers-contrast", &prefers_contrast, NULL);
+  if (prefers_contrast == GTK_INTERFACE_CONTRAST_MORE)
     {
       if (prefer_dark)
         *theme_variant = g_strdup ("hc-dark");
