@@ -239,10 +239,6 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  gtk_css_media_feature_define_discrete ("prefers-color-scheme", 2, (const char *[]) { "light", "dark" });
-  gtk_css_media_feature_define_discrete ("prefers-contrast", 4, (const char *[]) { "no-preference", "less", "more" });
-  gtk_css_media_feature_define_discrete ("--gdk-display", 6, (const char *[]) { "wayland", "x11", "windows", "macos", "android", "broadway" });
-
   if (g_getenv ("GTK_CSS_DEBUG"))
     gtk_css_provider_set_keep_css_sections ();
 
@@ -1950,10 +1946,6 @@ gtk_css_provider_update_discrete_media_features (GtkCssProvider  *provider,
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (feature_names != NULL, FALSE);
   g_return_val_if_fail (feature_values != NULL, FALSE);
-
-  for (i = 0; i < n_features; i++)
-    if (!gtk_css_media_feature_is_valid (feature_names[i], feature_values[i]))
-        return FALSE;
 
   for (i = 0; i < n_features; i++)
     updated |= gtk_css_provider_add_discrete_media_feature (provider, feature_names[i], feature_values[i]);
