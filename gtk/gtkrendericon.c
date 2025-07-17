@@ -27,6 +27,7 @@
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstransformvalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gtksnapshot.h"
 #include "gtksymbolicpaintable.h"
@@ -101,6 +102,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   gboolean has_shadow;
   gboolean is_symbolic_paintable;
   GdkRGBA colors[4];
+  double weight = 400;
 
   g_return_if_fail (style != NULL);
   g_return_if_fail (snapshot != NULL);
@@ -117,6 +119,11 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   is_symbolic_paintable = GTK_IS_SYMBOLIC_PAINTABLE (paintable);
   if (is_symbolic_paintable)
     {
+      GtkCssValue *value;
+
+      value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_WEIGHT);
+      weight = gtk_css_number_value_get (value, 100);
+
       gtk_css_style_lookup_symbolic_colors (style, colors);
 
       if (gdk_rgba_is_clear (&colors[0]))
@@ -126,7 +133,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   if (transform == NULL)
     {
       if (is_symbolic_paintable)
-        gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, colors, G_N_ELEMENTS (colors));
+        gtk_symbolic_paintable_snapshot_with_weight (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, colors, G_N_ELEMENTS (colors), weight);
       else
         gdk_paintable_snapshot (paintable, snapshot, width, height);
     }
@@ -140,7 +147,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- width / 2.0, - height / 2.0));
 
       if (is_symbolic_paintable)
-        gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, colors, G_N_ELEMENTS (colors));
+        gtk_symbolic_paintable_snapshot_with_weight (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, colors, G_N_ELEMENTS (colors), weight);
       else
         gdk_paintable_snapshot (paintable, snapshot, width, height);
 
