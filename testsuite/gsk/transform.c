@@ -729,6 +729,50 @@ test_to_2d_components (void)
 }
 
 static void
+test_from_2d (void)
+{
+  GskTransform *transform;
+  gfloat cases[][6] = {
+    { 1.f, 2.f, 3.f, 4.f, 5.f, 6.f },
+    { 0.f, 2.f, 3.f, 4.f, 5.f, 6.f },
+    { 1.f, 0.f, 3.f, 4.f, 5.f, 6.f },
+    { 1.f, 2.f, 0.f, 4.f, 5.f, 6.f },
+    { 1.f, 2.f, 3.f, 0.f, 5.f, 6.f },
+
+    { 0.f, 0.f, 3.f, 4.f, 5.f, 6.f },
+    { 1.f, 0.f, 0.f, 4.f, 5.f, 6.f },
+    { 1.f, 2.f, 0.f, 0.f, 5.f, 6.f },
+    { 0.f, 2.f, 3.f, 0.f, 5.f, 6.f },
+
+    { 0.f, 0.f, 0.f, 4.f, 5.f, 6.f },
+    { 1.f, 0.f, 0.f, 0.f, 5.f, 6.f },
+
+    { 0.f, 0.f, 0.f, 0.f, 5.f, 6.f },
+  };
+
+  for (gsize i = 0; i < G_N_ELEMENTS(cases); i++) {
+    transform = gsk_transform_matrix_2d (NULL,
+                                         cases[i][0], cases[i][1],
+                                         cases[i][2], cases[i][3],
+                                         cases[i][4], cases[i][5]);
+    gfloat xx,yx,xy,yy,dx,dy;
+    gsk_transform_to_2d (transform,
+                         &xx, &yx,
+                         &xy, &yy,
+                         &dx, &dy);
+
+    g_assert_cmpfloat (cases[i][0], ==, xx);
+    g_assert_cmpfloat (cases[i][1], ==, yx);
+    g_assert_cmpfloat (cases[i][2], ==, xy);
+    g_assert_cmpfloat (cases[i][3], ==, yy);
+    g_assert_cmpfloat (cases[i][4], ==, dx);
+    g_assert_cmpfloat (cases[i][5], ==, dy);
+
+    gsk_transform_unref (transform);
+  }
+}
+
+static void
 test_transform_point (void)
 {
   GskTransform *t, *t2, *t3;
@@ -1164,6 +1208,7 @@ main (int   argc,
   g_test_add_func ("/transform/point", test_transform_point);
   g_test_add_func ("/transform/to-2d", test_to_2d);
   g_test_add_func ("/transform/to-2d-components", test_to_2d_components);
+  g_test_add_func ("/transform/from-2d", test_from_2d);
   g_test_add_func ("/transform/scale", test_scale_transform);
   g_test_add_func ("/transform/skew", test_skew_transform);
   g_test_add_func ("/transform/perspective", test_perspective_transform);

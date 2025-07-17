@@ -566,6 +566,50 @@ gsk_transform_matrix (GskTransform            *next,
   return gsk_transform_matrix_with_category (next, matrix, GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN);
 }
 
+/**
+ * gsk_transform_matrix_2d:
+ * @next: (nullable) (transfer full): the next transform
+ * @xx: the xx member
+ * @yx: the yx member
+ * @xy: the xy member
+ * @yy: the yy member
+ * @dx: the x0 member
+ * @dy: the y0 member
+ *
+ * Multiplies @next with the matrix [ xx yx x0; xy yy y0; 0 0 1 ].
+ *
+ * The result of calling [method@Gsk.Transform.to_2d] on the returned
+ * [struct@Gsk.Transform] should match the input passed to this
+ * function.
+ *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
+ * Returns: (nullable): The new transform
+ *
+ * Since: 4.20
+ */
+GskTransform *
+gsk_transform_matrix_2d (GskTransform *next,
+                         float         xx,
+                         float         yx,
+                         float         xy,
+                         float         yy,
+                         float         dx,
+                         float         dy)
+{
+  // fast-path
+  if (yx == 0.f && xy == 0.f) {
+    graphene_point_t offset;
+    graphene_point_init (&offset, dx, dy);
+    return gsk_transform_scale (gsk_transform_translate (next, &offset), xx, yy);
+  } else {
+    graphene_matrix_t matrix;
+    graphene_matrix_init_from_2d (&matrix, xx, yx, xy, yy, dx, dy);
+    return gsk_transform_matrix_with_category (next, &matrix, GSK_FINE_TRANSFORM_CATEGORY_2D);
+  }
+}
+
 /* }}} */
 /* {{{ TRANSLATE */
 
