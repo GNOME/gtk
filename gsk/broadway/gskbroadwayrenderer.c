@@ -1006,6 +1006,8 @@ gsk_broadway_renderer_init (GskBroadwayRenderer *self)
  * support.
  *
  * Returns: a new Broadway renderer.
+ *
+ * Deprecated: 4.20: Broadway will be retired in GTK 5
  **/
 GskRenderer *
 gsk_broadway_renderer_new (void)

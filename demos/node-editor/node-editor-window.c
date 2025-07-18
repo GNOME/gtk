@@ -1233,9 +1233,11 @@ node_editor_window_realize (GtkWidget *widget)
                                    gsk_vulkan_renderer_new (),
                                    "Vulkan");
 #ifdef GDK_WINDOWING_BROADWAY
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   node_editor_window_add_renderer (self,
                                    gsk_broadway_renderer_new (),
                                    "Broadway");
+G_GNUC_END_IGNORE_DEPRECATIONS
 #endif
   node_editor_window_add_renderer (self,
                                    gsk_cairo_renderer_new (),
