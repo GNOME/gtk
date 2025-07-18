@@ -99,4 +99,8 @@ float                   gsk_contour_get_distance                (const GskContou
                                                                  const GskPathPoint     *point,
                                                                  gpointer                measure_data);
 
+gsize                   gsk_contour_get_shader_size             (const GskContour       *self);
+void                    gsk_contour_to_shader                   (const GskContour       *self,
+                                                                 guchar                 *data);
+
 G_END_DECLS

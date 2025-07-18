@@ -55,6 +55,7 @@ gsk_private_sources = files([
   'gpu/gskgpucrossfadeop.c',
   'gpu/gskgpudownloadop.c',
   'gpu/gskgpudevice.c',
+  'gpu/gskgpufillop.c',
   'gpu/gskgpuframe.c',
   'gpu/gskgpuglobalsop.c',
   'gpu/gskgpuimage.c',

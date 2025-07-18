@@ -97,6 +97,9 @@ struct _GskContourClass
   float                 (* get_distance)        (const GskContour       *contour,
                                                  const GskPathPoint     *point,
                                                  gpointer                measure_data);
+  gsize                 (* get_shader_size)     (const GskContour       *self);
+  void                  (* to_shader)           (const GskContour       *self,
+                                                 guchar                 *data);
 };
 
 /* {{{ Utilities */
@@ -516,6 +519,38 @@ gsk_contour_print_default (const GskContour *contour,
                            GString          *string)
 {
   gsk_contour_foreach (contour, foreach_print, string);
+}
+
+static gsize
+gsk_contour_default_get_shader_size (const GskContour *contour)
+{
+  GskPath *path;
+  const GskContour *std;
+  gsize size;
+
+  path = convert_to_standard_contour (contour);
+  std = gsk_path_get_contour (path, 0);
+
+  size = gsk_contour_get_shader_size (std);
+
+  gsk_path_unref (path);
+
+  return size;
+}
+
+static void
+gsk_contour_default_to_shader (const GskContour *contour,
+                               guchar           *data)
+{
+  GskPath *path;
+  const GskContour *std;
+
+  path = convert_to_standard_contour (contour);
+  std = gsk_path_get_contour (path, 0);
+
+  gsk_contour_to_shader (std, data);
+
+  gsk_path_unref (path);
 }
 
 /* }}} */
@@ -1265,6 +1300,33 @@ gsk_standard_contour_get_distance (const GskContour   *contour,
   return p0->length * (1 - fraction) + p1->length * fraction;
 }
 
+static gsize
+gsk_standard_contour_get_shader_size (const GskContour *contour)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+
+  return (1 + self->n_ops) * sizeof (guint32) +
+         self->n_points * 2 * sizeof (float);
+}
+
+static void
+gsk_standard_contour_to_shader (const GskContour *contour,
+                                guchar           *data)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+  guint32 *ops = (guint32 *) data;
+  gsize i;
+
+  *ops = self->n_ops;
+  ops++;
+  for (i = 0; i < self->n_ops; i++)
+    ops[i] = gsk_pathop_op (self->ops[i]);
+
+  memcpy (data + (1 + self->n_ops) * sizeof (guint32),
+          self->points,
+          self->n_points * 2 * sizeof (float));
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -1288,6 +1350,8 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_free_measure,
   gsk_standard_contour_get_point,
   gsk_standard_contour_get_distance,
+  gsk_standard_contour_get_shader_size,
+  gsk_standard_contour_to_shader,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -1754,6 +1818,8 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_free_measure,
   gsk_circle_contour_get_point,
   gsk_circle_contour_get_distance,
+  gsk_contour_default_get_shader_size,
+  gsk_contour_default_to_shader,
 };
 
 GskContour *
@@ -2100,6 +2166,8 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_free_measure,
   gsk_rect_contour_get_point,
   gsk_rect_contour_get_distance,
+  gsk_contour_default_get_shader_size,
+  gsk_contour_default_to_shader,
 };
 
 GskContour *
@@ -2434,6 +2502,8 @@ static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
   gsk_rounded_rect_contour_free_measure,
   gsk_rounded_rect_contour_get_point,
   gsk_rounded_rect_contour_get_distance,
+  gsk_contour_default_get_shader_size,
+  gsk_contour_default_to_shader,
 };
 
 static gsize
@@ -2669,6 +2739,19 @@ gsk_contour_get_distance (const GskContour   *self,
                           gpointer            measure_data)
 {
   return self->klass->get_distance (self, point, measure_data);
+}
+
+gsize
+gsk_contour_get_shader_size (const GskContour *self)
+{
+  return self->klass->get_shader_size (self);
+}
+
+void
+gsk_contour_to_shader (const GskContour *self,
+                       guchar           *data)
+{
+  return self->klass->to_shader (self, data);
 }
 
 /* }}} */

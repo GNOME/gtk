@@ -23,6 +23,7 @@
 #include "gskgpuconvertopprivate.h"
 #include "gskgpucrossfadeopprivate.h"
 #include "gskgpudeviceprivate.h"
+#include "gskgpufillopprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
@@ -3478,6 +3479,20 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
     return;
 
   child = gsk_fill_node_get_child (node);
+
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    {
+      gsk_gpu_fill_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
+                           self->ccs,
+                           self->opacity,
+                           &self->offset,
+                           &clip_bounds,
+                           gsk_fill_node_get_path (node),
+                           gsk_fill_node_get_fill_rule (node),
+                           gsk_color_node_get_gdk_color (child));
+      return;
+    }
 
   cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
 
