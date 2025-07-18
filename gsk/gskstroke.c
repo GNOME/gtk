@@ -209,7 +209,7 @@ gsk_stroke_equal (gconstpointer stroke1,
  *
  * Sets the line width to be used when stroking.
  *
- * The line width must be > 0.
+ * The line width must be >= 0.
  *
  * Since: 4.14
  */
@@ -218,7 +218,7 @@ gsk_stroke_set_line_width (GskStroke *self,
                            float      line_width)
 {
   g_return_if_fail (self != NULL);
-  g_return_if_fail (line_width > 0);
+  g_return_if_fail (line_width >= 0);
 
   self->line_width = line_width;
 }
