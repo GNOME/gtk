@@ -17,6 +17,16 @@ uniform PushConstants
 #define GSK_GLOBAL_CLIP_RECT push.clip[0]
 #define GSK_GLOBAL_SCALE push.scale
 
+#if __VERSION__ < 420 || (defined(GSK_GLES) && __VERSION__ < 310)
+layout(std140)
+#else
+layout(std140, binding = 1)
+#endif
+uniform Floats
+{
+  vec4 really_just_floats[1024];
+} floats[11];
+
 #define GSK_VERTEX_INDEX gl_VertexID
 
 
@@ -30,6 +40,50 @@ uniform PushConstants
 #ifdef GSK_FRAGMENT_SHADER
 #define PASS(_loc) in
 #define PASS_FLAT(_loc) flat in
+
+float
+gsk_get_float (int id)
+{
+  int float_id = id & 0x3FFFFF;
+  int array_id = (id >> 22) & 0xFF;
+  switch (array_id)
+    {
+      case 0:
+        return floats[0].really_just_floats[float_id >> 2][float_id & 3];
+      case 1:
+        return floats[1].really_just_floats[float_id >> 2][float_id & 3];
+      case 2:
+        return floats[2].really_just_floats[float_id >> 2][float_id & 3];
+      case 3:
+        return floats[3].really_just_floats[float_id >> 2][float_id & 3];
+      case 4:
+        return floats[4].really_just_floats[float_id >> 2][float_id & 3];
+      case 5:
+        return floats[5].really_just_floats[float_id >> 2][float_id & 3];
+      case 6:
+        return floats[6].really_just_floats[float_id >> 2][float_id & 3];
+      case 7:
+        return floats[7].really_just_floats[float_id >> 2][float_id & 3];
+      case 8:
+        return floats[8].really_just_floats[float_id >> 2][float_id & 3];
+      case 9:
+        return floats[9].really_just_floats[float_id >> 2][float_id & 3];
+      case 10:
+        return floats[10].really_just_floats[float_id >> 2][float_id & 3];
+      default:
+        return 0.0;
+    }
+}
+
+float
+gsk_get_float (uint id)
+{
+  return gsk_get_float (int (id));
+}
+
+#define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
+#define gsk_get_uint(id) (floatBitsToUint(gsk_get_float(id)))
+
 
 #if GSK_N_TEXTURES > 0
 

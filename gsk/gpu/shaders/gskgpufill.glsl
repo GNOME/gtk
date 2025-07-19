@@ -2,20 +2,21 @@
 
 #include "common.glsl"
 
-#define GSK_FILL_RULE_WINDING 0
-#define GSK_FILL_RULE_EVEN_ODD 1
+#define GSK_FILL_RULE_WINDING 0u
+#define GSK_FILL_RULE_EVEN_ODD 1u
 
 #define GSK_PATH_MOVE 0
 #define GSK_PATH_CLOSE 1
 #define GSK_PATH_LINE 2
-#define GSK_PATH_CURVE 3
-#define GSK_PATH_CONIC 4
+#define GSK_PATH_QUAD 3
+#define GSK_PATH_CUBIC 4
+#define GSK_PATH_CONIC 5
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS_FLAT(2) vec4 _color;
 PASS_FLAT(3) vec2 _offset;
-PASS_FLAT(4) uint _points_id;
+PASS_FLAT(4) int _points_id;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -23,7 +24,7 @@ PASS_FLAT(4) uint _points_id;
 IN(0) vec4 in_rect;
 IN(1) vec4 in_color;
 IN(2) vec2 in_offset;
-IN(3) uint in_points_id;
+IN(3) int in_points_id;
 
 void
 run (out vec2 pos)
@@ -45,9 +46,9 @@ run (out vec2 pos)
 #ifdef GSK_FRAGMENT_SHADER
 
 vec2
-get_point (inout uint idx)
+get_point (inout int idx)
 {
-  vec2 p = vec2 (get_float (idx), get_float (idx + 1));
+  vec2 p = vec2 (gsk_get_float (idx), gsk_get_float (idx + 1));
   idx += 2;
   p *= push.scale;
 
@@ -229,15 +230,15 @@ cubic_winding (vec2 p0,
   int n_roots;
   int w = 0;
 
-  if ((p0.y > 0 && p1.y > 0 && p2.y > 0 && p3.y > 0) ||
-      (p0.y <= 0 && p1.y <= 0 && p2.y <= 0 && p3.y <= 0))
+  if ((p0.y > 0.0 && p1.y > 0.0 && p2.y > 0.0 && p3.y > 0.0) ||
+      (p0.y <= 0.0 && p1.y <= 0.0 && p2.y <= 0.0 && p3.y <= 0.0))
     return 0;
 
-  if (0 <= min (min (p0.x, p1.x), min (p2.x, p3.x)))
+  if (0.0 <= min (min (p0.x, p1.x), min (p2.x, p3.x)))
     {
-      if (p0.y <= 0 && p3.y > 0)
+      if (p0.y <= 0.0 && p3.y > 0.0)
         return 1;
-      else if (p0.y > 0 && p3.y <= 0)
+      else if (p0.y > 0.0 && p3.y <= 0.0)
         return -1;
       else
         return 0;
@@ -254,7 +255,7 @@ cubic_winding (vec2 p0,
     n_roots = solve_cubic (vec3 (a0.y / a3.y, a1.y / a3.y, a2.y / a3.y), roots);
 
   bool greater = p0.y > 0.0;
-  float last = 0;
+  float last = 0.0;
   float last_x = p0.x;
   for (int i = 0; i < n_roots; i++)
     {
@@ -275,7 +276,7 @@ cubic_winding (vec2 p0,
       last = roots[i];
     }
 
-  bool new_greater = p3.y > 0;
+  bool new_greater = p3.y > 0.0;
   if (new_greater != greater)
     {
       if (last_x > 0.0)
@@ -288,19 +289,19 @@ cubic_winding (vec2 p0,
 void
 standard_contour_distance (vec2        p,
                            inout float d,
-                           inout uint  path_idx,
+                           inout int  path_idx,
                            inout int   w)
 {
-  int n_points = get_int (path_idx);
-  uint ops_idx = path_idx + 1;
-  uint pts_idx = ops_idx + n_points;
+  int n_points = gsk_get_int (path_idx);
+  int ops_idx = path_idx + 1;
+  int pts_idx = ops_idx + n_points;
 
   vec2 start = get_point (pts_idx) - p;
   int op = GSK_PATH_MOVE;
   
   for (int i = 1; i < n_points; i++)
     {
-      op = get_int (ops_idx + i);
+      op = gsk_get_int (ops_idx + i);
       switch (op)
         {
           case GSK_PATH_MOVE:
@@ -316,7 +317,20 @@ standard_contour_distance (vec2        p,
             }
             break;
 
-          case GSK_PATH_CURVE:
+          case GSK_PATH_QUAD:
+            {
+              vec2 q1 = get_point(pts_idx);
+              vec2 q2 = get_point(pts_idx);
+              vec2 p1 = p * (1./3.) + q1 * (2./3.) - p;
+              vec2 p2 = q2 * (1./3.) + q1 * (2./3.) - p;
+              vec2 p3 = q2 - p;
+              d = cubic_distance_squared (start, p1, p2, p3, d);
+              w += cubic_winding (start, p1, p2, p3);
+              start = p3;
+            }
+            break;
+
+          case GSK_PATH_CUBIC:
             {
               vec2 p1 = get_point (pts_idx) - p;
               vec2 p2 = get_point (pts_idx) - p;
@@ -341,7 +355,7 @@ standard_contour_distance (vec2        p,
 
   if (op != GSK_PATH_CLOSE)
     {
-      uint tmp_idx = ops_idx + n_points;
+      int tmp_idx = ops_idx + n_points;
       vec2 end = get_point (tmp_idx) - p;
       d = line_distance_squared (start, end, d);
       w += line_winding (start, end);
@@ -353,9 +367,9 @@ standard_contour_distance (vec2        p,
 float
 path_distance (vec2 p, uint fill_rule)
 {
-  uint path_idx = _points_id;
+  int path_idx = _points_id;
 
-  int n = get_int (path_idx);
+  int n = gsk_get_int (path_idx);
   path_idx++;
   int w = 0;
   float d = 1e38;

@@ -135,14 +135,6 @@ main (void)
 
 #ifdef GSK_FRAGMENT_SHADER
 
-layout(set = 1, binding = 0) readonly buffer FloatBuffers {
-  float floats[];
-} buffers[50000];
-
-#define get_buffer(id) buffers[id]
-#define get_float(id) get_buffer(0).floats[id]
-#define get_int(id) floatBitsToInt (get_float (id))
-
 vec4
 gsk_texture_straight_alpha (sampler2D tex,
                             vec2      pos)

@@ -96,6 +96,14 @@ for i, match in enumerate(matches):
                          GL_FALSE,
                          sizeof ({struct_name}),
                          GSIZE_TO_POINTER (offset + G_STRUCT_OFFSET({struct_name}, {match['name']})));''');
+    elif match['type'] == 'int':
+        print(f'''  glEnableVertexAttribArray ({match['location']});
+  glVertexAttribDivisor ({match['location']}, 1);
+  glVertexAttribIPointer ({match['location']},
+                          1,
+                          GL_INT,
+                          sizeof ({struct_name}),
+                          GSIZE_TO_POINTER (offset + G_STRUCT_OFFSET({struct_name}, {match['name']})));''');
     elif match['type'] == 'uint':
         print(f'''  glEnableVertexAttribArray ({match['location']});
   glVertexAttribDivisor ({match['location']}, 1);
