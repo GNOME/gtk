@@ -363,6 +363,8 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
       if (out_only_fg)
         *out_only_fg = TRUE;
 
+      g_object_unref (handle);
+
       return texture;
     }
 
