@@ -73,29 +73,6 @@ gtk_application_get_proxy_if_service_present (GDBusConnection *connection,
   return proxy;
 }
 
-#ifdef G_HAS_CONSTRUCTORS
-#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
-#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_desktop_autostart_id)
-#endif
-G_DEFINE_CONSTRUCTOR(stash_desktop_autostart_id)
-#endif
-
-static char *client_id = NULL;
-
-static void
-stash_desktop_autostart_id (void)
-{
-  const char *desktop_autostart_id;
-
-  desktop_autostart_id = g_getenv ("DESKTOP_AUTOSTART_ID");
-  client_id = g_strdup (desktop_autostart_id ? desktop_autostart_id : "");
-
-  /* Unset DESKTOP_AUTOSTART_ID in order to avoid child processes to
-   * use the same client id.
-   */
-  g_unsetenv ("DESKTOP_AUTOSTART_ID");
-}
-
 enum {
   UNKNOWN   = 0,
   RUNNING   = 1,
@@ -183,7 +160,10 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl)
   GVariantBuilder opt_builder;
 
 #ifndef G_HAS_CONSTRUCTORS
-  stash_desktop_autostart_id ();
+  /* Unset DESKTOP_AUTOSTART_ID in order to avoid child processes to
+   * use the same client id.
+   */
+  g_unsetenv ("DESKTOP_AUTOSTART_ID");
 #endif
 
   dbus->session = g_application_get_dbus_connection (G_APPLICATION (impl->application));
