@@ -758,6 +758,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Dark themes should not be used for documents, where large spaces
    * are white/light and the dark chrome creates too much contrast
    * (web browser, text editor...).
+   *
+   * Deprecated: 4.20: Use `gtk-interface-color-scheme` instead.
    */
   pspecs[PROP_APPLICATION_PREFER_DARK_THEME] = g_param_spec_boolean ("gtk-application-prefer-dark-theme", NULL, NULL,
                                                                      FALSE,
