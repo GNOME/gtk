@@ -77,6 +77,14 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_color_matrix          (GtkSnapshot            *snapshot,
                                                          const graphene_matrix_t*color_matrix,
                                                          const graphene_vec4_t  *color_offset);
+
+GDK_AVAILABLE_IN_4_20
+void            gtk_snapshot_push_component_transfer   (GtkSnapshot                *snapshot,
+                                                        const GskComponentTransfer *red,
+                                                        const GskComponentTransfer *green,
+                                                        const GskComponentTransfer *blue,
+                                                        const GskComponentTransfer *alpha);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_repeat                (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,
@@ -109,6 +117,7 @@ void            gtk_snapshot_push_mask                  (GtkSnapshot            
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress);
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
 void            gtk_snapshot_push_gl_shader             (GtkSnapshot            *snapshot,

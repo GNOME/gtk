@@ -1,0 +1,10 @@
+component-transfer {
+  child: linear-gradient {
+    bounds: 0 0 50 50;
+    start: 0 0;
+    end: 50 0;
+    stops: 0 rgb(0,0,0), 1 rgb(255,255,255);
+  }
+  red: levels(5);
+  green: levels(5);
+  blue: levels(5);

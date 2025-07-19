@@ -29,7 +29,7 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 
-#define N_NODE_TYPES (GSK_SUBSURFACE_NODE + 1)
+#define N_NODE_TYPES (GSK_COMPONENT_TRANSFER_NODE + 1)
 static void
 count_nodes (GskRenderNode *node,
              unsigned int  *counts,
@@ -144,6 +144,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_SUBSURFACE_NODE:
       count_nodes (gsk_subsurface_node_get_child (node), counts, &d);
+      break;
+
+    case GSK_COMPONENT_TRANSFER_NODE:
+      count_nodes (gsk_component_transfer_node_get_child (node), counts, &d);
       break;
 
     case GSK_NOT_A_RENDER_NODE:

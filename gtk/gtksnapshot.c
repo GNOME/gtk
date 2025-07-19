@@ -86,6 +86,12 @@ struct _GtkSnapshotState {
       graphene_vec4_t offset;
     } color_matrix;
     struct {
+      GskComponentTransfer *red;
+      GskComponentTransfer *green;
+      GskComponentTransfer *blue;
+      GskComponentTransfer *alpha;
+    } component_transfer;
+    struct {
       graphene_rect_t bounds;
       graphene_rect_t child_bounds;
     } repeat;
@@ -686,6 +692,75 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
 
   graphene_matrix_init_from_matrix (&state->data.color_matrix.matrix, color_matrix);
   graphene_vec4_init_from_vec4 (&state->data.color_matrix.offset, color_offset);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_component_transfer (GtkSnapshot      *snapshot,
+                                         GtkSnapshotState *state,
+                                         GskRenderNode   **nodes,
+                                         guint             n_nodes)
+{
+  GskRenderNode *node, *result;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (node == NULL)
+    return NULL;
+
+  result = gsk_component_transfer_node_new (node,
+                                            state->data.component_transfer.red,
+                                            state->data.component_transfer.green,
+                                            state->data.component_transfer.blue,
+                                            state->data.component_transfer.alpha);
+  gsk_render_node_unref (node);
+
+  return result;
+}
+
+static void
+gtk_snapshot_clear_component_transfer (GtkSnapshotState *state)
+{
+  gsk_component_transfer_free (state->data.component_transfer.red);
+  gsk_component_transfer_free (state->data.component_transfer.green);
+  gsk_component_transfer_free (state->data.component_transfer.blue);
+  gsk_component_transfer_free (state->data.component_transfer.alpha);
+}
+
+/**
+ * gtk_snapshot_push_component_transfer:
+ * @snapshot: a `GtkSnapshot`
+ * @red: the transfer for the red component
+ * @green: the transfer for the green component
+ * @blue: the transfer for the blue component
+ * @alpha: the transfer for the alpha component
+ *
+ * Modifies the colors of an image by applying a transfer
+ * function for each component.
+ *
+ * The transfer functions operate on unpremultiplied colors.
+ *
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
+ *
+ * Since: 4.20
+ */
+void
+gtk_snapshot_push_component_transfer (GtkSnapshot                *snapshot,
+                                      const GskComponentTransfer *red,
+                                      const GskComponentTransfer *green,
+                                      const GskComponentTransfer *blue,
+                                      const GskComponentTransfer *alpha)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_component_transfer,
+                                   gtk_snapshot_clear_component_transfer);
+
+  state->data.component_transfer.red = gsk_component_transfer_copy (red);
+  state->data.component_transfer.green = gsk_component_transfer_copy (green);
+  state->data.component_transfer.blue = gsk_component_transfer_copy (blue);
+  state->data.component_transfer.alpha = gsk_component_transfer_copy (alpha);
 }
 
 static GskRenderNode *

@@ -30,6 +30,7 @@
 #include "gskstroke.h"
 #include "gsktransformprivate.h"
 #include "gskenumtypes.h"
+#include "gskcomponenttransferprivate.h"
 #include "gskprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
@@ -3772,6 +3773,62 @@ parse_subsurface_node (GtkCssParser *parser,
 }
 
 static gboolean
+parse_component_transfer (GtkCssParser *parser,
+                          Context      *context,
+                          gpointer      out_transfer)
+{
+  return gsk_component_transfer_parser_parse (parser, out_transfer);
+}
+
+static void
+clear_component_transfer (gpointer inout_transfer)
+{
+  g_clear_pointer ((GskComponentTransfer **) inout_transfer, gsk_component_transfer_free);
+}
+
+static GskRenderNode *
+parse_component_transfer_node (GtkCssParser *parser,
+                               Context      *context)
+{
+  GskRenderNode *child = NULL;
+  GskComponentTransfer *red = NULL;
+  GskComponentTransfer *green = NULL;
+  GskComponentTransfer *blue = NULL;
+  GskComponentTransfer *alpha = NULL;
+  const Declaration declarations[] = {
+    { "child", parse_node, clear_node, &child },
+    { "red", parse_component_transfer, clear_component_transfer, &red },
+    { "green", parse_component_transfer, clear_component_transfer, &green },
+    { "blue", parse_component_transfer, clear_component_transfer, &blue },
+    { "alpha", parse_component_transfer, clear_component_transfer, &alpha },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+  if (red == NULL)
+    red = gsk_component_transfer_new_identity ();
+  if (green == NULL)
+    green = gsk_component_transfer_new_identity ();
+  if (blue == NULL)
+    blue = gsk_component_transfer_new_identity ();
+  if (alpha == NULL)
+    alpha = gsk_component_transfer_new_identity ();
+
+  result = gsk_component_transfer_node_new (child, red, green, blue, alpha);
+
+  gsk_component_transfer_free (red);
+  gsk_component_transfer_free (green);
+  gsk_component_transfer_free (blue);
+  gsk_component_transfer_free (alpha);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
             gpointer      out_node)
@@ -3810,6 +3867,7 @@ parse_node (GtkCssParser *parser,
     { "glshader", parse_glshader_node },
     { "mask", parse_mask_node },
     { "subsurface", parse_subsurface_node },
+    { "component-transfer", parse_component_transfer_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4179,6 +4237,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_SUBSURFACE_NODE:
       printer_init_duplicates_for_node (printer, gsk_subsurface_node_get_child (node));
+      break;
+
+    case GSK_COMPONENT_TRANSFER_NODE:
+      printer_init_duplicates_for_node (printer, gsk_component_transfer_node_get_child (node));
       break;
 
     default:
@@ -5270,6 +5332,20 @@ append_hue_interpolation_param (Printer             *p,
 }
 
 static void
+append_component_transfer_param (Printer                    *p,
+                                 const char                 *param_name,
+                                 const GskComponentTransfer *transfer)
+{
+  if (transfer->kind == GSK_COMPONENT_TRANSFER_IDENTITY)
+    return;
+
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  gsk_component_transfer_print (transfer, p->str);
+  g_string_append (p->str, ";\n");
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -5967,6 +6043,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         start_node (p, "subsurface", node_name);
 
         append_node_param (p, "child", gsk_subsurface_node_get_child (node));
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_COMPONENT_TRANSFER_NODE:
+      {
+        start_node (p, "component-transfer", node_name);
+
+        append_node_param (p, "child", gsk_component_transfer_node_get_child (node));
+        append_component_transfer_param (p, "red", gsk_component_transfer_node_get_transfer (node, 0));
+        append_component_transfer_param (p, "green", gsk_component_transfer_node_get_transfer (node, 1));
+        append_component_transfer_param (p, "blue", gsk_component_transfer_node_get_transfer (node, 2));
+        append_component_transfer_param (p, "alpha", gsk_component_transfer_node_get_transfer (node, 3));
 
         end_node (p);
       }

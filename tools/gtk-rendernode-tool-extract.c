@@ -259,6 +259,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       extract_from_node (gsk_subsurface_node_get_child (node), basename);
       break;
 
+    case GSK_COMPONENT_TRANSFER_NODE:
+      extract_from_node (gsk_component_transfer_node_get_child (node), basename);
+      break;
+
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();
