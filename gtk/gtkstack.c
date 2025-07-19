@@ -2920,6 +2920,8 @@ gtk_stack_init (GtkStack *stack)
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
   priv->children = g_ptr_array_new();
+
+  gtk_widget_set_overflow (GTK_WIDGET (stack), GTK_OVERFLOW_HIDDEN);
 }
 
 /**
