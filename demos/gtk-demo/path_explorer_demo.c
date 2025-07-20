@@ -49,7 +49,7 @@ do_path_explorer_demo (GtkWidget *do_widget)
   if (!css_provider)
     {
       css_provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_resource (css_provider, "/path_explorer/path_explorer_demo.css");
+      gtk_css_provider_load_from_resource (css_provider, "/path_explorer_demo/path_explorer_demo.css");
 
       gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                                   GTK_STYLE_PROVIDER (css_provider),
@@ -67,7 +67,7 @@ do_path_explorer_demo (GtkWidget *do_widget)
 
       builder = gtk_builder_new ();
 
-      gtk_builder_add_from_resource (builder, "/path_explorer/path_explorer_demo.ui", &error);
+      gtk_builder_add_from_resource (builder, "/path_explorer_demo/path_explorer_demo.ui", &error);
       if (error)
         g_error ("%s", error->message);
 

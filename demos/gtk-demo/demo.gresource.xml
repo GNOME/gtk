@@ -416,7 +416,7 @@
   <gresource prefix="/fontrendering">
     <file>fontrendering.ui</file>
   </gresource>
-  <gresource prefix="/path_explorer">
+  <gresource prefix="/path_explorer_demo">
     <file>path_explorer_demo.ui</file>
     <file>path_explorer_demo.css</file>
   </gresource>
