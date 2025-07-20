@@ -60,7 +60,7 @@ rect_get_position (Rect rect)
 {
   Rect r = rect_round_larger (rect_clip (rect));
 
-  vec2 pos = mix (r.bounds.xy, r.bounds.zw, offsets[GSK_VERTEX_INDEX]);
+  vec2 pos = mix (rect_bounds (r).xy, rect_bounds (r).zw, offsets[GSK_VERTEX_INDEX]);
 
   return pos;
 }
@@ -78,7 +78,7 @@ border_get_position (RoundedRect outside,
     {
     case SLICE_TOP_LEFT:
       rect = rect_round_larger (rect);
-      rect.bounds = rect.bounds.xwzy;
+      rect = Rect (rect_bounds (rect).xwzy);
       break;
     case SLICE_TOP:
       rect = rect_round_smaller_larger (rect);
@@ -91,21 +91,21 @@ border_get_position (RoundedRect outside,
       break;
     case SLICE_BOTTOM_RIGHT:
       rect = rect_round_larger (rect);
-      rect.bounds = rect.bounds.zyxw;
+      rect = Rect (rect_bounds (rect).zyxw);
       break;
     case SLICE_BOTTOM:
       rect = rect_round_smaller_larger (rect);
       break;
     case SLICE_BOTTOM_LEFT:
       rect = rect_round_larger (rect);
-      rect.bounds = rect.bounds.zwxy;
+      rect = Rect (rect_bounds (rect).zwxy);
       break;
     case SLICE_LEFT:
       rect = rect_round_larger_smaller (rect);
       break;
     }
 
-  vec2 pos = mix (rect.bounds.xy, rect.bounds.zw, offsets[vert_index]);
+  vec2 pos = mix (rect_bounds (rect).xy, rect_bounds (rect).zw, offsets[vert_index]);
 
   return pos;
 }
@@ -115,7 +115,7 @@ scale_tex_coord (vec2 in_pos,
                  Rect in_rect,
                  vec4 tex_rect)
 {
-  return tex_rect.xy + (in_pos - in_rect.bounds.xy) / rect_size (in_rect) * tex_rect.zw;
+  return tex_rect.xy + (in_pos - rect_pos (in_rect)) / rect_size (in_rect) * tex_rect.zw;
 }
 
 void            run                             (out vec2 pos);

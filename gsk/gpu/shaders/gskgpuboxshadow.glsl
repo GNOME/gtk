@@ -101,7 +101,7 @@ float
 blur_rect (Rect r,
            vec2 pos)
 {
-  return erf_range (r.bounds.xz - pos.x, _sigma.x) * erf_range (r.bounds.yw - pos.y, _sigma.y);
+  return erf_range (rect_bounds (r).xz - pos.x, _sigma.x) * erf_range (rect_bounds (r).yw - pos.y, _sigma.y);
 }
 
 float
@@ -136,12 +136,12 @@ float
 blur_rounded_rect (RoundedRect r,
                    vec2        p)
 {
-  float result = blur_rect (Rect (r.bounds), _pos);
+  float result = blur_rect (Rect (rounded_rect_bounds (r)), _pos);
 
-  result -= blur_corner (p - r.bounds.xy, vec2 (r.corner_widths[TOP_LEFT], r.corner_heights[TOP_LEFT]));
-  result -= blur_corner (vec2 (r.bounds.z - p.x, p.y - r.bounds.y), vec2 (r.corner_widths[TOP_RIGHT], r.corner_heights[TOP_RIGHT]));
-  result -= blur_corner (r.bounds.zw - p, vec2 (r.corner_widths[BOTTOM_RIGHT], r.corner_heights[BOTTOM_RIGHT]));
-  result -= blur_corner (vec2 (p.x - r.bounds.x, r.bounds.w - p.y), vec2 (r.corner_widths[BOTTOM_LEFT], r.corner_heights[BOTTOM_LEFT]));
+  result -= blur_corner (p - rounded_rect_bounds (r).xy, rounded_rect_corner (r, TOP_LEFT));
+  result -= blur_corner (vec2 (rounded_rect_bounds (r).z - p.x, p.y - rounded_rect_bounds (r).y), rounded_rect_corner (r, TOP_RIGHT));
+  result -= blur_corner (rounded_rect_bounds (r).zw - p, rounded_rect_corner (r, BOTTOM_RIGHT));
+  result -= blur_corner (vec2 (p.x - rounded_rect_bounds (r).x, rounded_rect_bounds (r).w - p.y), rounded_rect_corner (r, BOTTOM_LEFT));
 
   return result;
 }

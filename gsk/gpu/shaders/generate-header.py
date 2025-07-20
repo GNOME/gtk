@@ -10,6 +10,13 @@ struct_name = "GskGpu" + name.title().replace('-', '') + "Instance"
 n_textures = -1
 filename = sys.argv[1]
 
+# The Adreno Android driver has an issue when a varying struct is passed
+# into a subroutine. In order to avoid any issues, we heavily limit the
+# data types that are allowed to be used as varying.
+# If you need to add a data type here, ensure that it works as expected
+# on Adreno before adding it.
+allowed_varying = {"uint", "float", "vec2", "vec3", "vec4", "mat2", "mat3", "mat4", "Rect", "RoundedRect"}
+
 with open(filename) as f:
     lines = f.readlines()
     matches = []
@@ -18,6 +25,11 @@ with open(filename) as f:
         match = re.search(r"^#define GSK_N_TEXTURES ([0-9]+)$", line)
         if match:
             n_textures = int(match.group(1))
+
+        match = re.search(r"^PASS(?:_FLAT)?\(([0-9]+)\) ([A-z0-9]+) ([a-zA-Z0-9_]+);$", line)
+        if match:
+            if match.group(2) not in allowed_varying:
+                raise Exception(f'''{filename}:{pos}: varying {match.group(3)} has unallowed data type: {match.group(2)}''')
 
         match = re.search(r"^IN\(([0-9]+)\) ([a-z0-9]+) ([a-zA-Z0-9_]+);$", line)
         if not match:
