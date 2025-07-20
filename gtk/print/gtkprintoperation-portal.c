@@ -395,7 +395,7 @@ find_file_printer (void)
       GtkPrintBackend *backend = l->data;
 
       /* FIXME: this needs changes for cpdb */
-      if (strcmp (G_OBJECT_TYPE_NAME (backend), "GtkPrintBackendFile") == 0)
+      if (strcmp (G_OBJECT_TYPE_NAME (backend), "GtkPrintBackendFileBuiltin") == 0)
         {
           printers = gtk_print_backend_get_printer_list (backend);
           printer = printers->data;
