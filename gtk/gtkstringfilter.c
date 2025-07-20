@@ -419,7 +419,7 @@ gtk_string_filter_set_expression (GtkStringFilter *self,
   self->expression = gtk_expression_ref (expression);
 
   if (gtk_string_filter_has_search (self))
-    gtk_filter_changed (GTK_FILTER (self), GTK_FILTER_CHANGE_DIFFERENT);
+    gtk_filter_changed (GTK_FILTER (self), GTK_FILTER_CHANGE_DIFFERENT_REWATCH);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXPRESSION]);
 }

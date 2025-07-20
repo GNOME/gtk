@@ -57,6 +57,11 @@ gboolean                gtk_filter_list_model_get_incremental   (GtkFilterListMo
 GDK_AVAILABLE_IN_ALL
 guint                   gtk_filter_list_model_get_pending       (GtkFilterListModel     *self);
 
+GDK_AVAILABLE_IN_4_20
+gboolean                gtk_filter_list_model_get_watch_items   (GtkFilterListModel     *self);
+GDK_AVAILABLE_IN_4_20
+void                    gtk_filter_list_model_set_watch_items   (GtkFilterListModel     *self,
+                                                                 gboolean                watch_items);
 
 G_END_DECLS
 

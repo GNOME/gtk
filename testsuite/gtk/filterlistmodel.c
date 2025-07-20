@@ -561,6 +561,352 @@ test_sections (void)
   g_object_unref (sorted);
 }
 
+struct _GtkMutableStringObject
+{
+  GObject parent;
+  char *string;
+};
+
+enum
+{
+  PROP_STRING = 1,
+};
+
+#define GTK_TYPE_MUTABLE_STRING_OBJECT (gtk_mutable_string_object_get_type ())
+G_DECLARE_FINAL_TYPE (GtkMutableStringObject, gtk_mutable_string_object, GTK, MUTABLE_STRING_OBJECT, GObject)
+
+G_DEFINE_FINAL_TYPE (GtkMutableStringObject, gtk_mutable_string_object, G_TYPE_OBJECT)
+
+static void
+gtk_mutable_string_object_set_string (GtkMutableStringObject *self,
+                                      const char             *string)
+{
+  g_assert (GTK_IS_MUTABLE_STRING_OBJECT (self));
+
+  if (g_strcmp0 (self->string, string) == 0)
+    return;
+
+  g_clear_pointer (&self->string, g_free);
+  self->string = g_strdup (string);
+
+  g_object_notify (G_OBJECT (self), "string");
+}
+
+static void
+gtk_mutable_string_object_get_property (GObject    *object,
+                                        guint       prop_id,
+                                        GValue     *value,
+                                        GParamSpec *pspec)
+{
+  GtkMutableStringObject *self = GTK_MUTABLE_STRING_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      g_value_set_string (value, self->string);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_mutable_string_object_set_property (GObject      *object,
+                                        guint         prop_id,
+                                        const GValue *value,
+                                        GParamSpec   *pspec)
+{
+  GtkMutableStringObject *self = GTK_MUTABLE_STRING_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      gtk_mutable_string_object_set_string (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_mutable_string_object_class_init (GtkMutableStringObjectClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gtk_mutable_string_object_get_property;
+  object_class->set_property = gtk_mutable_string_object_set_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_STRING,
+                                   g_param_spec_string ("string", NULL, NULL, NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+}
+
+static void
+gtk_mutable_string_object_init (GtkMutableStringObject *self)
+{
+}
+
+static void
+test_watch_items (void)
+{
+  GtkMutableStringObject *string_object;
+  GtkFilterListModel *filter_model;
+  GtkStringFilter *string_filter;
+  GListStore *store;
+  const char * const strings[] = {
+    "aa",
+    "ab",
+    "ac",
+    "ad",
+    "ae",
+  };
+
+  string_filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT,
+                                                                      NULL,
+                                                                      "string"));
+  gtk_string_filter_set_search (string_filter, "a");
+
+  g_type_ensure (GTK_TYPE_MUTABLE_STRING_OBJECT);
+
+  store = g_list_store_new (GTK_TYPE_MUTABLE_STRING_OBJECT);
+  for (size_t i = 0; i < G_N_ELEMENTS (strings); i++)
+    {
+      gpointer item = g_object_new (GTK_TYPE_MUTABLE_STRING_OBJECT, "string", strings[i], NULL);
+      g_list_store_append (store, item);
+      g_clear_object (&item);
+    }
+
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store),
+                                            GTK_FILTER (string_filter));
+  gtk_filter_list_model_set_watch_items (filter_model, TRUE);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  string_object = g_list_model_get_item (G_LIST_MODEL (store), 1);
+  gtk_mutable_string_object_set_string (string_object, "bb");
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 4);
+
+  gtk_mutable_string_object_set_string (string_object, "ab");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  string_object = g_object_new (GTK_TYPE_MUTABLE_STRING_OBJECT, "string", "ff", NULL);
+  g_list_store_append (store, string_object);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  gtk_mutable_string_object_set_string (string_object, "af");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  g_list_store_remove (store, 5);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  g_list_store_append (store, string_object);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  /* Stop watching, no changes should propagate */
+  gtk_filter_list_model_set_watch_items (filter_model, FALSE);
+
+  gtk_mutable_string_object_set_string (string_object, "ff");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  /* Start watching again */
+  gtk_filter_list_model_set_watch_items (filter_model, TRUE);
+
+  gtk_mutable_string_object_set_string (string_object, "af");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 6);
+
+  gtk_mutable_string_object_set_string (string_object, "ff");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 5);
+
+  g_clear_object (&string_object);
+  g_clear_object (&filter_model);
+}
+
+struct _GtkBoolObject
+{
+  GObject parent;
+  gboolean value;
+  gboolean value2;
+};
+
+enum
+{
+  PROP_VALUE = 1,
+  PROP_VALUE2,
+};
+
+#define GTK_TYPE_BOOL_OBJECT (gtk_bool_object_get_type ())
+G_DECLARE_FINAL_TYPE (GtkBoolObject, gtk_bool_object, GTK, BOOL_OBJECT, GObject)
+
+G_DEFINE_FINAL_TYPE (GtkBoolObject, gtk_bool_object, G_TYPE_OBJECT)
+
+static void
+gtk_bool_object_set_values (GtkBoolObject *self,
+                            gboolean       value,
+                            gboolean       value2)
+{
+  g_assert (GTK_IS_BOOL_OBJECT (self));
+
+  if (self->value == value && self->value2 == value2)
+    return;
+
+  if (self->value != value)
+    {
+      self->value = value;
+      g_object_notify (G_OBJECT (self), "value");
+    }
+
+  if (self->value2 != value2)
+    {
+      self->value2 = value2;
+      g_object_notify (G_OBJECT (self), "value2");
+    }
+}
+
+static void
+gtk_bool_object_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GtkBoolObject *self = GTK_BOOL_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_VALUE:
+      g_value_set_boolean (value, self->value);
+      break;
+
+    case PROP_VALUE2:
+      g_value_set_boolean (value, self->value2);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_bool_object_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GtkBoolObject *self = GTK_BOOL_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_VALUE:
+      gtk_bool_object_set_values (self, g_value_get_boolean (value), self->value2);
+      break;
+
+    case PROP_VALUE2:
+      gtk_bool_object_set_values (self, self->value, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_bool_object_class_init (GtkBoolObjectClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gtk_bool_object_get_property;
+  object_class->set_property = gtk_bool_object_set_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_VALUE,
+                                   g_param_spec_boolean ("value", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   PROP_VALUE2,
+                                   g_param_spec_boolean ("value2", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+}
+
+static void
+gtk_bool_object_init (GtkBoolObject *self)
+{
+}
+
+static void
+test_watch_items_multifilter (void)
+{
+  GtkFilterListModel *filter_model;
+  GtkEveryFilter *every_filter;
+  GtkBoolObject *bool_object;
+  GtkAnyFilter *any_filter;
+  GListStore *store;
+
+  store = g_list_store_new (GTK_TYPE_BOOL_OBJECT);
+
+  bool_object = g_object_new (GTK_TYPE_BOOL_OBJECT, NULL);
+  g_list_store_append (store, bool_object);
+
+  any_filter = gtk_any_filter_new ();
+  gtk_multi_filter_append (GTK_MULTI_FILTER (any_filter),
+                           GTK_FILTER (gtk_bool_filter_new (gtk_property_expression_new (GTK_TYPE_BOOL_OBJECT, NULL, "value"))));
+  gtk_multi_filter_append (GTK_MULTI_FILTER (any_filter),
+                           GTK_FILTER (gtk_bool_filter_new (gtk_property_expression_new (GTK_TYPE_BOOL_OBJECT, NULL, "value2"))));
+
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store), GTK_FILTER (any_filter));
+  gtk_filter_list_model_set_watch_items (filter_model, TRUE);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 0);
+
+  gtk_bool_object_set_values (bool_object, FALSE, TRUE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
+
+  gtk_bool_object_set_values (bool_object, TRUE, FALSE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
+
+  gtk_bool_object_set_values (bool_object, TRUE, TRUE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
+
+  gtk_bool_object_set_values (bool_object, FALSE, FALSE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 0);
+
+  every_filter = gtk_every_filter_new ();
+  gtk_multi_filter_append (GTK_MULTI_FILTER (every_filter),
+                           GTK_FILTER (gtk_bool_filter_new (gtk_property_expression_new (GTK_TYPE_BOOL_OBJECT, NULL, "value"))));
+  gtk_multi_filter_append (GTK_MULTI_FILTER (every_filter),
+                           GTK_FILTER (gtk_bool_filter_new (gtk_property_expression_new (GTK_TYPE_BOOL_OBJECT, NULL, "value2"))));
+
+  gtk_filter_list_model_set_filter (filter_model, GTK_FILTER (every_filter));
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 0);
+
+  gtk_bool_object_set_values (bool_object, FALSE, TRUE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 0);
+
+  gtk_bool_object_set_values (bool_object, TRUE, FALSE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 0);
+
+  gtk_bool_object_set_values (bool_object, TRUE, TRUE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
+
+  gtk_bool_object_set_values (bool_object, FALSE, FALSE);
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 0);
+
+  g_clear_object (&every_filter);
+  g_clear_object (&bool_object);
+  g_clear_object (&filter_model);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -577,6 +923,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/filterlistmodel/empty", test_empty);
   g_test_add_func ("/filterlistmodel/add_remove_item", test_add_remove_item);
   g_test_add_func ("/filterlistmodel/sections", test_sections);
+  g_test_add_func ("/filterlistmodel/watch-items", test_watch_items);
+  g_test_add_func ("/filterlistmodel/watch-items-multifilter", test_watch_items_multifilter);
 
   return g_test_run ();
 }
