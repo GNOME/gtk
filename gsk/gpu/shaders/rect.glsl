@@ -5,9 +5,11 @@
    note that this is not containing width or height */
 #define Rect vec4[1]
 
-/* This is done as macro to allow lvalue assigments.
-   Also valid for RoundedRect */
-#define rect_bounds(r) ((r)[0])
+vec4
+rect_bounds (Rect r)
+{
+  return r[0];
+}
 
 Rect
 rect_new_size (vec4 coords)
@@ -19,8 +21,7 @@ Rect
 rect_from_gsk (vec4 coords)
 {
   Rect result = rect_new_size (coords);
-  rect_bounds (result) *= GSK_GLOBAL_SCALE.xyxy;
-  return result;
+  return Rect (rect_bounds(result) * GSK_GLOBAL_SCALE.xyxy);
 }
 
 float

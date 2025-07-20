@@ -136,12 +136,12 @@ float
 blur_rounded_rect (RoundedRect r,
                    vec2        p)
 {
-  float result = blur_rect (Rect (rect_bounds (r)), _pos);
+  float result = blur_rect (Rect (rounded_rect_bounds (r)), _pos);
 
-  result -= blur_corner (p - rect_bounds (r).xy, rounded_rect_corner (r, TOP_LEFT));
-  result -= blur_corner (vec2 (rect_bounds (r).z - p.x, p.y - rect_bounds (r).y), rounded_rect_corner (r, TOP_RIGHT));
-  result -= blur_corner (rect_bounds (r).zw - p, rounded_rect_corner (r, BOTTOM_RIGHT));
-  result -= blur_corner (vec2 (p.x - rect_bounds (r).x, rect_bounds (r).w - p.y), rounded_rect_corner (r, BOTTOM_LEFT));
+  result -= blur_corner (p - rounded_rect_bounds (r).xy, rounded_rect_corner (r, TOP_LEFT));
+  result -= blur_corner (vec2 (rounded_rect_bounds (r).z - p.x, p.y - rounded_rect_bounds (r).y), rounded_rect_corner (r, TOP_RIGHT));
+  result -= blur_corner (rounded_rect_bounds (r).zw - p, rounded_rect_corner (r, BOTTOM_RIGHT));
+  result -= blur_corner (vec2 (p.x - rounded_rect_bounds (r).x, rounded_rect_bounds (r).w - p.y), rounded_rect_corner (r, BOTTOM_LEFT));
 
   return result;
 }

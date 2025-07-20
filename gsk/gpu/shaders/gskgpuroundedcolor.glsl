@@ -16,7 +16,7 @@ run (out vec2 pos)
 {
   RoundedRect outline = rounded_rect_from_gsk (in_outline);
   
-  pos = rect_get_position (Rect (rect_bounds (outline)));
+  pos = rect_get_position (Rect (rounded_rect_bounds (outline)));
 
   _pos = pos;
   _outline= outline;
