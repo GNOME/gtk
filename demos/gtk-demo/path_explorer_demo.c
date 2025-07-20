@@ -72,6 +72,7 @@ do_path_explorer_demo (GtkWidget *do_widget)
         g_error ("%s", error->message);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       demo = PATH_EXPLORER (gtk_builder_get_object (builder, "demo"));
       entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
