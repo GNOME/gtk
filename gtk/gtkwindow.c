@@ -6550,7 +6550,7 @@ gtk_window_guess_default_size (GtkWindow *window,
   GdkDisplay *display;
   GdkWindow *gdkwindow;
   GdkMonitor *monitor;
-  GdkRectangle workarea;
+  GdkRectangle workarea = { 0 };
   int minimum, natural;
 
   widget = GTK_WIDGET (window);
@@ -6569,7 +6569,8 @@ gtk_window_guess_default_size (GtkWindow *window,
   else
     monitor = gdk_display_get_monitor (display, 0);
 
-  gdk_monitor_get_workarea (monitor, &workarea);
+  if (monitor != NULL)
+    gdk_monitor_get_workarea (monitor, &workarea);
 
   if (window->priv->unlimited_guessed_size_x)
     *width = INT_MAX;
