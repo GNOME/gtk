@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-07-15 19:19+0000\n"
-"PO-Revision-Date: 2025-07-19 11:31+0200\n"
+"POT-Creation-Date: 2025-07-22 23:01+0000\n"
+"PO-Revision-Date: 2025-07-23 13:38+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1839,7 +1839,7 @@ msgstr "_Zapri"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:391
+#: gtk/gtkapplication-dbus.c:371
 msgid "Reason not specified"
 msgstr "Vzrok ni naveden"
 
@@ -7370,6 +7370,18 @@ msgstr "_Zloži"
 msgid "_Reverse"
 msgstr "_Obrnjeno"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:364
+msgid "Page ordering preview"
+msgstr "Predogled zaporedja strani"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:365
+msgid ""
+"A visualization of the effect of the collate and reverse options on the page "
+"ordering"
+msgstr ""
+"Ponazoritev učinka možnosti zbiranja strani in obratnega zaporedja pri "
+"razvrščanju strani"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
 msgstr "Splošno"
@@ -7406,6 +7418,10 @@ msgstr "Lihe liste"
 msgid "Sc_ale:"
 msgstr "_Merilo:"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:587
+msgid "Scale in percent"
+msgstr "Merilo v odstotkih"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
 msgstr "Papir"
@@ -7425,6 +7441,10 @@ msgstr "Izhodni p_ult:"
 #: gtk/print/ui/gtkprintunixdialog.ui:727
 msgid "Or_ientation:"
 msgstr "_Usmerjenost:"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:770
+msgid "Page layout preview"
+msgstr "Predogled postavitve strani"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
