@@ -4356,6 +4356,8 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
       break;
     case GDK_SHADER_2_PLANES:
     case GDK_SHADER_3_PLANES:
+    case GDK_SHADER_3_PLANES_10BIT_LSB:
+    case GDK_SHADER_3_PLANES_12BIT_LSB:
     default:
       g_return_if_reached ();
     }

@@ -229,21 +229,21 @@ name ## _mipmap_linear (guchar                *dest, \
     } \
 } \
 
-#define YUV3_FUNCS(name, uv_swapped, x_subsample, y_subsample) \
+#define YUV3_FUNCS(name, T, scale, lshift, uv_swapped, x_subsample, y_subsample) \
 static void \
 name ## _to_float (float                (*dest)[4], \
                    const guchar          *src_data, \
                    const GdkMemoryLayout *src_layout, \
                    gsize                  y) \
 { \
-  const guchar *y_data = (const guchar *) (src_data + gdk_memory_layout_offset (src_layout, 0, 0, y)); \
-  const guchar *u_data = (const guchar *) (src_data + gdk_memory_layout_offset (src_layout, uv_swapped ? 2 : 1, 0, y - y % y_subsample)); \
-  const guchar *v_data = (const guchar *) (src_data + gdk_memory_layout_offset (src_layout, uv_swapped ? 1 : 2, 0, y - y % y_subsample)); \
+  const T *y_data = (const T *) (src_data + gdk_memory_layout_offset (src_layout, 0, 0, y)); \
+  const T *u_data = (const T *) (src_data + gdk_memory_layout_offset (src_layout, uv_swapped ? 2 : 1, 0, y - y % y_subsample)); \
+  const T *v_data = (const T *) (src_data + gdk_memory_layout_offset (src_layout, uv_swapped ? 1 : 2, 0, y - y % y_subsample)); \
   for (gsize x = 0; x < src_layout->width; x++) \
     { \
-      dest[x][1] = (float) y_data[x] / 255.f; \
-      dest[x][2] = (float) u_data[x / x_subsample] / 255.f; \
-      dest[x][0] = (float) v_data[x / x_subsample] / 255.f; \
+      dest[x][1] = CLAMP ((float) y_data[x] / (float) scale, 0.0f, 1.0f); \
+      dest[x][2] = CLAMP ((float) u_data[x / x_subsample] / (float) scale, 0.0f, 1.0f); \
+      dest[x][0] = CLAMP ((float) v_data[x / x_subsample] / (float) scale, 0.0f, 1.0f); \
       dest[x][3] = 1.0f; \
     } \
 } \
@@ -254,15 +254,15 @@ name ## _from_float (guchar                *dest_data, \
                      const float          (*src)[4], \
                      gsize                  y) \
 { \
-  guchar *u_data = (guchar *) (dest_data + gdk_memory_layout_offset (dest_layout, uv_swapped ? 2 : 1, 0, y)); \
-  guchar *v_data = (guchar *) (dest_data + gdk_memory_layout_offset (dest_layout, uv_swapped ? 1 : 2, 0, y)); \
+  T *u_data = (T *) (dest_data + gdk_memory_layout_offset (dest_layout, uv_swapped ? 2 : 1, 0, y)); \
+  T *v_data = (T *) (dest_data + gdk_memory_layout_offset (dest_layout, uv_swapped ? 1 : 2, 0, y)); \
 \
   for (gsize ys = 0; ys < y_subsample; ys++) \
     {\
-      guchar *y_data = (guchar *) (dest_data + gdk_memory_layout_offset (dest_layout, 0, 0, y + ys)); \
+      T *y_data = (T *) (dest_data + gdk_memory_layout_offset (dest_layout, 0, 0, y + ys)); \
       for (gsize x = 0; x < dest_layout->width; x++) \
         { \
-          y_data[x] = CLAMP (src[ys * dest_layout->width + x][1] * 255 + 0.5, 0, 255); \
+          y_data[x] = CLAMP (src[ys * dest_layout->width + x][1] * scale + 0.5, 0, scale); \
         } \
     }\
 \
@@ -278,8 +278,8 @@ name ## _from_float (guchar                *dest_data, \
           } \
       u /= x_subsample * y_subsample; \
       v /= x_subsample * y_subsample; \
-      u_data[x / x_subsample] = CLAMP (u * 255 + 0.5, 0, 255); \
-      v_data[x / x_subsample] = CLAMP (v * 255 + 0.5, 0, 255); \
+      u_data[x / x_subsample] = CLAMP (u * scale + 0.5, 0, scale); \
+      v_data[x / x_subsample] = CLAMP (v * scale + 0.5, 0, scale); \
     } \
 }\
 \
@@ -292,18 +292,22 @@ name ## _mipmap_nearest (guchar                *dest, \
 { \
   gsize x, pos; \
   gsize n = 1 << lod_level; \
-  guchar *dest_data = (guchar *) dest; \
+  T *dest_data = (T *) dest; \
+  guint tmp; \
   gsize real_y = MIN (y + n / 2, src_layout->height - 1); \
-  const guchar *y_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, 0, 0, real_y)); \
-  const guchar *u_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 2 : 1, 0, real_y - real_y % y_subsample)); \
-  const guchar *v_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 1 : 2, 0, real_y - real_y % y_subsample)); \
+  const T *y_data = (const T *) (src + gdk_memory_layout_offset (src_layout, 0, 0, real_y)); \
+  const T *u_data = (const T *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 2 : 1, 0, real_y - real_y % y_subsample)); \
+  const T *v_data = (const T *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 1 : 2, 0, real_y - real_y % y_subsample)); \
 \
   for (x = 0; x < src_layout->width; x += n) \
     { \
       pos = MIN (x + n / 2, src_layout->width - 1); \
-      *dest_data++ = v_data[pos / x_subsample]; \
-      *dest_data++ = y_data[pos]; \
-      *dest_data++ = u_data[pos / x_subsample]; \
+      tmp = v_data[pos / x_subsample]; \
+      *dest_data++ = lshift ? (tmp << lshift) | (tmp >> (sizeof (T) * 8 - lshift)) : tmp; \
+      tmp = y_data[pos]; \
+      *dest_data++ = lshift ? (tmp << lshift) | (tmp >> (sizeof (T) * 8 - lshift)) : tmp; \
+      tmp = u_data[pos / x_subsample]; \
+      *dest_data++ = lshift ? (tmp << lshift) | (tmp >> (sizeof (T) * 8 - lshift)) : tmp; \
     } \
 } \
 \
@@ -316,7 +320,8 @@ name ## _mipmap_linear (guchar                *dest, \
 { \
   gsize x_start, x, y; \
   gsize n = 1 << lod_level; \
-  guchar *dest_data = (guchar *) dest; \
+  T *dest_data = (T *) dest; \
+  guint tmp; \
 \
   for (x_start = 0; x_start < src_layout->width; x_start += n) \
     { \
@@ -326,14 +331,17 @@ name ## _mipmap_linear (guchar                *dest, \
 \
       for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
         { \
-          const guchar *y_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, 0, 0, y + y_start));\
-          const guchar *u_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 2 : 1, 0, (y + y_start) / y_subsample * y_subsample));\
-          const guchar *v_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 1 : 2, 0, (y + y_start) / y_subsample * y_subsample));\
+          const T *y_data = (const T *) (src + gdk_memory_layout_offset (src_layout, 0, 0, y + y_start));\
+          const T *u_data = (const T *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 2 : 1, 0, (y + y_start) / y_subsample * y_subsample));\
+          const T *v_data = (const T *) (src + gdk_memory_layout_offset (src_layout, uv_swapped ? 1 : 2, 0, (y + y_start) / y_subsample * y_subsample));\
           for (x = 0; x < MIN (n, src_layout->width - x_start); x++) \
             { \
-              y_ += y_data[x_start + x]; \
-              u_ += u_data[(x_start + x) / x_subsample]; \
-              v_ += v_data[(x_start + x) / x_subsample]; \
+              tmp = y_data[x_start + x]; \
+              y_ += lshift ? (tmp << lshift) | (tmp >> (sizeof (T) * 8 - lshift)) : tmp; \
+              tmp = u_data[(x_start + x) / x_subsample]; \
+              u_ += lshift ? (tmp << lshift) | (tmp >> (sizeof (T) * 8 - lshift)) : tmp; \
+              tmp = v_data[(x_start + x) / x_subsample]; \
+              v_ += lshift ? (tmp << lshift) | (tmp >> (sizeof (T) * 8 - lshift)) : tmp; \
             } \
         } \
 \
@@ -482,16 +490,25 @@ NV12_FUNCS (p016, guint16, 0, 65535, FALSE, 2, 2)
 #pragma warning( pop )
 #endif
 
-YUV3_FUNCS (yuv410, FALSE, 4, 4)
-YUV3_FUNCS (yvu410, TRUE, 4, 4)
-YUV3_FUNCS (yuv411, FALSE, 4, 1)
-YUV3_FUNCS (yvu411, TRUE, 4, 1)
-YUV3_FUNCS (yuv420, FALSE, 2, 2)
-YUV3_FUNCS (yvu420, TRUE, 2, 2)
-YUV3_FUNCS (yuv422, FALSE, 2, 1)
-YUV3_FUNCS (yvu422, TRUE, 2, 1)
-YUV3_FUNCS (yuv444, FALSE, 1, 1)
-YUV3_FUNCS (yvu444, TRUE, 1, 1)
+YUV3_FUNCS (yuv410, guchar, 255, 0, FALSE, 4, 4)
+YUV3_FUNCS (yvu410, guchar, 255, 0, TRUE, 4, 4)
+YUV3_FUNCS (yuv411, guchar, 255, 0, FALSE, 4, 1)
+YUV3_FUNCS (yvu411, guchar, 255, 0, TRUE, 4, 1)
+YUV3_FUNCS (yuv420, guchar, 255, 0, FALSE, 2, 2)
+YUV3_FUNCS (yvu420, guchar, 255, 0, TRUE, 2, 2)
+YUV3_FUNCS (yuv422, guchar, 255, 0, FALSE, 2, 1)
+YUV3_FUNCS (yvu422, guchar, 255, 0, TRUE, 2, 1)
+YUV3_FUNCS (yuv444, guchar, 255, 0, FALSE, 1, 1)
+YUV3_FUNCS (yvu444, guchar, 255, 0, TRUE, 1, 1)
+YUV3_FUNCS (s010, guint16, 1023, 6, FALSE, 2, 2)
+YUV3_FUNCS (s210, guint16, 1023, 6, FALSE, 2, 1)
+YUV3_FUNCS (s410, guint16, 1023, 6, FALSE, 1, 1)
+YUV3_FUNCS (s012, guint16, 4095, 4, FALSE, 2, 2)
+YUV3_FUNCS (s212, guint16, 4095, 4, FALSE, 2, 1)
+YUV3_FUNCS (s412, guint16, 4095, 4, FALSE, 1, 1)
+YUV3_FUNCS (s016, guint16, 65535, 0, FALSE, 2, 2)
+YUV3_FUNCS (s216, guint16, 65535, 0, FALSE, 2, 1)
+YUV3_FUNCS (s416, guint16, 65535, 0, FALSE, 1, 1)
 
 YUYV_FUNCS (yuyv, 0, 1, 3)
 YUYV_FUNCS (yvyu, 0, 3, 1)
@@ -4613,6 +4630,789 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_format = GDK_MEMORY_R8G8B8,
     .mipmap_nearest = vyuy_mipmap_nearest,
     .mipmap_linear = vyuy_mipmap_linear,
+  },
+  [GDK_MEMORY_X6G10_X6B10_X6R10_420] = {
+    .name = "S010",
+    .n_planes = 3,
+    .block_size = { 2, 2 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X6G10_X6B10_X6R10_420,
+    .straight = GDK_MEMORY_X6G10_X6B10_X6R10_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES_10BIT_LSB,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_UNDEFINED,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S010,
+    },
+    .to_float = s010_to_float,
+    .from_float = s010_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s010_mipmap_nearest,
+    .mipmap_linear = s010_mipmap_linear,
+  },
+  [GDK_MEMORY_X6G10_X6B10_X6R10_422] = {
+    .name = "S210",
+    .n_planes = 3,
+    .block_size = { 2, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X6G10_X6B10_X6R10_422,
+    .straight = GDK_MEMORY_X6G10_X6B10_X6R10_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES_10BIT_LSB,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_UNDEFINED,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S210,
+    },
+    .to_float = s210_to_float,
+    .from_float = s210_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s210_mipmap_nearest,
+    .mipmap_linear = s210_mipmap_linear,
+  },
+  [GDK_MEMORY_X6G10_X6B10_X6R10_444] = {
+    .name = "S410",
+    .n_planes = 3,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X6G10_X6B10_X6R10_444,
+    .straight = GDK_MEMORY_X6G10_X6B10_X6R10_444,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES_10BIT_LSB,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_UNDEFINED,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S410,
+    },
+    .to_float = s410_to_float,
+    .from_float = s410_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s410_mipmap_nearest,
+    .mipmap_linear = s410_mipmap_linear,
+  },
+  [GDK_MEMORY_X4G12_X4B12_X4R12_420] = {
+    .name = "S012",
+    .n_planes = 3,
+    .block_size = { 2, 2 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X4G12_X4B12_X4R12_420,
+    .straight = GDK_MEMORY_X4G12_X4B12_X4R12_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES_12BIT_LSB,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_UNDEFINED,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S012,
+    },
+    .to_float = s012_to_float,
+    .from_float = s012_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s012_mipmap_nearest,
+    .mipmap_linear = s012_mipmap_linear,
+  },
+  [GDK_MEMORY_X4G12_X4B12_X4R12_422] = {
+    .name = "S212",
+    .n_planes = 3,
+    .block_size = { 2, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X4G12_X4B12_X4R12_422,
+    .straight = GDK_MEMORY_X4G12_X4B12_X4R12_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES_12BIT_LSB,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_UNDEFINED,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S212,
+    },
+    .to_float = s212_to_float,
+    .from_float = s212_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s212_mipmap_nearest,
+    .mipmap_linear = s212_mipmap_linear,
+  },
+  [GDK_MEMORY_X4G12_X4B12_X4R12_444] = {
+    .name = "S412",
+    .n_planes = 3,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X4G12_X4B12_X4R12_444,
+    .straight = GDK_MEMORY_X4G12_X4B12_X4R12_444,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES_12BIT_LSB,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_UNDEFINED,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S412,
+    },
+    .to_float = s412_to_float,
+    .from_float = s412_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s412_mipmap_nearest,
+    .mipmap_linear = s412_mipmap_linear,
+  },
+  [GDK_MEMORY_G16_B16_R16_420] = {
+    .name = "S016",
+    .n_planes = 3,
+    .block_size = { 2, 2 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G16_B16_R16_420,
+    .straight = GDK_MEMORY_G16_B16_R16_420,
+    .alignment = G_ALIGNOF (guint16),
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G16_B16_R16_3PLANE_420_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = GDK_SWIZZLE_IDENTITY,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S016,
+    },
+    .to_float = s016_to_float,
+    .from_float = s016_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s016_mipmap_nearest,
+    .mipmap_linear = s016_mipmap_linear,
+  },
+  [GDK_MEMORY_G16_B16_R16_422] = {
+    .name = "S216",
+    .n_planes = 3,
+    .block_size = { 2, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G16_B16_R16_422,
+    .straight = GDK_MEMORY_G16_B16_R16_422,
+    .alignment = G_ALIGNOF (guint16),
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = GDK_SWIZZLE_IDENTITY,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S216,
+    },
+    .to_float = s216_to_float,
+    .from_float = s216_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s216_mipmap_nearest,
+    .mipmap_linear = s216_mipmap_linear,
+  },
+  [GDK_MEMORY_G16_B16_R16_444] = {
+    .name = "S416",
+    .n_planes = 3,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G16_B16_R16_444,
+    .straight = GDK_MEMORY_G16_B16_R16_444,
+    .alignment = G_ALIGNOF (guint16),
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16,
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_3_PLANES,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 1,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+        {
+            .plane = 2,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_R16,
+                .format = GL_RED,
+                .type = GL_UNSIGNED_SHORT
+            },
+            .dmabuf_fourcc = DRM_FORMAT_R16,
+        },
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = GDK_SWIZZLE_IDENTITY,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_S416,
+    },
+    .to_float = s416_to_float,
+    .from_float = s416_from_float,
+    .mipmap_format = GDK_MEMORY_R16G16B16,
+    .mipmap_nearest = s416_mipmap_nearest,
+    .mipmap_linear = s416_mipmap_linear,
   },
 };
 

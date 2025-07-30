@@ -63,6 +63,15 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_G10X6_B10X6R10X6_420:
     case GDK_MEMORY_G12X4_B12X4R12X4_420:
     case GDK_MEMORY_G16_B16R16_420:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_420:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_422:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_444:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_420:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_422:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_444:
+    case GDK_MEMORY_G16_B16_R16_420:
+    case GDK_MEMORY_G16_B16_R16_422:
+    case GDK_MEMORY_G16_B16_R16_444:
       return CHANNEL_UINT_16;
 
     case GDK_MEMORY_R16G16B16_FLOAT:
@@ -136,6 +145,15 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
     case GDK_MEMORY_G8R8G8B8_422:
     case GDK_MEMORY_R8G8B8G8_422:
     case GDK_MEMORY_B8G8R8G8_422:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_420:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_422:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_444:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_420:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_422:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_444:
+    case GDK_MEMORY_G16_B16_R16_420:
+    case GDK_MEMORY_G16_B16_R16_422:
+    case GDK_MEMORY_G16_B16_R16_444:
       return 3;
 
     case GDK_MEMORY_G8:
@@ -335,6 +353,31 @@ gdk_memory_pixel_print (const guchar          *data,
       }
       break;
 
+    case GDK_MEMORY_X6G10_X6B10_X6R10_420:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_422:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_444:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_420:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_422:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_444:
+    case GDK_MEMORY_G16_B16_R16_420:
+    case GDK_MEMORY_G16_B16_R16_422:
+    case GDK_MEMORY_G16_B16_R16_444:
+      {
+        const guint16 *y_data = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
+        const guint16 *u_data = (const guint16 *) (data + gdk_memory_layout_offset (layout,
+                                                                                    1,
+                                                                                    x - x % gdk_memory_format_get_plane_block_width (layout->format, 1),
+                                                                                    y - y % gdk_memory_format_get_plane_block_height (layout->format, 1)));
+        const guint16 *v_data = (const guint16 *) (data + gdk_memory_layout_offset (layout,
+                                                                                    2,
+                                                                                    x - x % gdk_memory_format_get_plane_block_width (layout->format, 2),
+                                                                                    y - y % gdk_memory_format_get_plane_block_height (layout->format, 2)));
+        guint16 mask = gdk_memory_format_get_default_shader_op (layout->format) == GDK_SHADER_3_PLANES_10BIT_LSB ? 0x3FF :
+                       gdk_memory_format_get_default_shader_op (layout->format) == GDK_SHADER_3_PLANES_12BIT_LSB ? 0xFFF : 0xFFFF;
+        g_string_append_printf (string, "%04X %04X %04X", y_data[0] & mask, u_data[0] & mask, v_data[0] & mask);
+      }
+      break;
+
     case GDK_MEMORY_G8B8G8R8_422:
     case GDK_MEMORY_G8R8G8B8_422:
     case GDK_MEMORY_R8G8B8G8_422:
@@ -519,6 +562,45 @@ gdk_memory_pixel_equal (const guchar          *data1,
                                                  2,
                                                  x - x % gdk_memory_format_get_plane_block_width (layout2->format, 2),
                                                  y - y % gdk_memory_format_get_plane_block_height (layout2->format, 2)));
+
+    case GDK_MEMORY_X6G10_X6B10_X6R10_420:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_422:
+    case GDK_MEMORY_X6G10_X6B10_X6R10_444:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_420:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_422:
+    case GDK_MEMORY_X4G12_X4B12_X4R12_444:
+    case GDK_MEMORY_G16_B16_R16_420:
+    case GDK_MEMORY_G16_B16_R16_422:
+    case GDK_MEMORY_G16_B16_R16_444:
+      {
+        const guint16 *y1 = (const guint16 *) (data1 + gdk_memory_layout_offset (layout1, 0, x, y));
+        const guint16 *y2 = (const guint16 *) (data2 + gdk_memory_layout_offset (layout2, 0, x, y));
+        const guint16 *u1 = (const guint16 *) (data1 + gdk_memory_layout_offset (layout1,
+                                                                                 1,
+                                                                                 x - x % gdk_memory_format_get_plane_block_width (layout1->format, 1),
+                                                                                 y - y % gdk_memory_format_get_plane_block_height (layout1->format, 1)));
+        const guint16 *u2 = (const guint16 *) (data2 + gdk_memory_layout_offset (layout2,
+                                                                                 1,
+                                                                                 x - x % gdk_memory_format_get_plane_block_width (layout2->format, 1),
+                                                                                 y - y % gdk_memory_format_get_plane_block_height (layout2->format, 1)));
+        const guint16 *v1 = (const guint16 *) (data1 + gdk_memory_layout_offset (layout1,
+                                                                                 2,
+                                                                                 x - x % gdk_memory_format_get_plane_block_width (layout1->format, 2),
+                                                                                 y - y % gdk_memory_format_get_plane_block_height (layout1->format, 2)));
+        const guint16 *v2 = (const guint16 *) (data2 + gdk_memory_layout_offset (layout2,
+                                                                                 2,
+                                                                                 x - x % gdk_memory_format_get_plane_block_width (layout2->format, 2),
+                                                                                 y - y % gdk_memory_format_get_plane_block_height (layout2->format, 2)));
+
+        guint16 mask = gdk_memory_format_get_default_shader_op (layout1->format) == GDK_SHADER_3_PLANES_10BIT_LSB ? 0x3FF :
+                       gdk_memory_format_get_default_shader_op (layout1->format) == GDK_SHADER_3_PLANES_12BIT_LSB ? 0xFFF : 0xFFFF;
+
+        if (!G_APPROX_VALUE ((y1[0] & mask), (y2[0] & mask), accurate ? 1 : 256) ||
+            !G_APPROX_VALUE ((u1[0] & mask), (u2[0] & mask), accurate ? 1 : 256) ||
+            !G_APPROX_VALUE ((v1[0] & mask), (v2[0] & mask), accurate ? 1 : 256))
+          return FALSE;
+      }
+      return TRUE;
 
     case GDK_MEMORY_G8B8G8R8_422:
     case GDK_MEMORY_G8R8G8B8_422:

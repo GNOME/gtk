@@ -61,13 +61,15 @@ typedef enum {
   GDK_SHADER_DEFAULT,
   GDK_SHADER_STRAIGHT,
   GDK_SHADER_2_PLANES,
-  GDK_SHADER_3_PLANES
+  GDK_SHADER_3_PLANES,
+  GDK_SHADER_3_PLANES_10BIT_LSB,
+  GDK_SHADER_3_PLANES_12BIT_LSB
 } GdkShaderOp;
 
 static inline gsize
 gdk_shader_op_get_n_shaders (GdkShaderOp op)
 {
-  static gsize n_shaders[] = { 1, 1, 2, 3 };
+  static gsize n_shaders[] = { 1, 1, 2, 3, 3, 3 };
   return n_shaders[op];
 }
 

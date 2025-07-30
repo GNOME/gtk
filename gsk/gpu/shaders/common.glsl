@@ -169,6 +169,18 @@ gsk_texture0 (vec2 pos)
     return vec4 (texture (GSK_TEXTURE0, pos).x, texture (GSK_TEXTURE0_1, pos).xy, 1.0).brga;
   else if (GSK_TEXTURE0_SAMPLE_OP == GDK_SHADER_3_PLANES)
     return vec4 (texture (GSK_TEXTURE0_2, pos).x, texture (GSK_TEXTURE0, pos).x, texture (GSK_TEXTURE0_1, pos).x, 1.0);
+  else if (GSK_TEXTURE0_SAMPLE_OP == GDK_SHADER_3_PLANES_10BIT_LSB)
+    /* 65535.0 / 1023.0 ~= 64.061583578 */
+    return vec4 (clamp (texture (GSK_TEXTURE0_2, pos).x * 64.061583578, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE0, pos).x * 64.061583578, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE0_1, pos).x * 64.061583578, 0.0, 1.0),
+                 1.0);
+  else if (GSK_TEXTURE0_SAMPLE_OP == GDK_SHADER_3_PLANES_12BIT_LSB)
+    /* 65535.0 / 4095.0 ~= 16.003663004 */
+    return vec4 (clamp (texture (GSK_TEXTURE0_2, pos).x * 16.003663004, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE0, pos).x * 16.003663004, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE0_1, pos).x * 16.003663004, 0.0, 1.0),
+                 1.0);
 }
 #endif
 
@@ -184,6 +196,18 @@ gsk_texture1 (vec2 pos)
     return vec4 (texture (GSK_TEXTURE1, pos).x, texture (GSK_TEXTURE1_1, pos).xy, 1.0).brga;
   else if (GSK_TEXTURE1_SAMPLE_OP == GDK_SHADER_3_PLANES)
     return vec4 (texture (GSK_TEXTURE1_2, pos).x, texture (GSK_TEXTURE1, pos).x, texture (GSK_TEXTURE1_1, pos).x, 1.0);
+  else if (GSK_TEXTURE1_SAMPLE_OP == GDK_SHADER_3_PLANES_10BIT_LSB)
+    /* 65535.0 / 1023.0 ~= 64.061583578 */
+    return vec4 (clamp (texture (GSK_TEXTURE1_2, pos).x * 64.061583578, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE1, pos).x * 64.061583578, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE1_1, pos).x * 64.061583578, 0.0, 1.0),
+                 1.0);
+  else if (GSK_TEXTURE1_SAMPLE_OP == GDK_SHADER_3_PLANES_12BIT_LSB)
+    /* 65535.0 / 4095.0 ~= 16.003663004 */
+    return vec4 (clamp (texture (GSK_TEXTURE1_2, pos).x * 16.003663004, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE1, pos).x * 16.003663004, 0.0, 1.0),
+                 clamp (texture (GSK_TEXTURE1_1, pos).x * 16.003663004, 0.0, 1.0),
+                 1.0);
 }
 #endif
 

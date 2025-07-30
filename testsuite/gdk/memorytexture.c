@@ -557,7 +557,8 @@ test_conversion (gconstpointer data,
                      gdk_memory_format_get_block_height (format2));
 
   if (gdk_memory_format_get_channel_type (format1) == CHANNEL_FLOAT_16 ||
-      format1 == GDK_MEMORY_G10X6_B10X6R10X6_420)
+      format1 == GDK_MEMORY_G10X6_B10X6R10X6_420 ||
+      gdk_memory_format_get_default_shader_op (format1) == GDK_SHADER_3_PLANES_10BIT_LSB)
     accurate = FALSE;
   else
     accurate = TRUE;
