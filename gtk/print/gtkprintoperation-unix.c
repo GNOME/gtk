@@ -211,6 +211,25 @@ shell_command_substitute_file (const char *cmd,
   return g_string_free (final, FALSE);
 }
 
+static gboolean
+has_flatpak (const char *app_id,
+             const char *branch)
+{
+  int status;
+
+  if (!g_spawn_sync (NULL,
+                     (char **)(const char *[]) { "/usr/bin/flatpak", "info", app_id, branch, NULL },
+                     NULL,
+                     G_SPAWN_DEFAULT,
+                     NULL, NULL,
+                     NULL, NULL,
+                     &status,
+                     NULL))
+    return FALSE;
+
+  return g_spawn_check_wait_status (status, NULL);
+}
+
 static char *
 get_preview_command (GdkDisplay *display)
 {
@@ -218,6 +237,14 @@ get_preview_command (GdkDisplay *display)
   char *preview_cmd;
 
   g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+
+  if (g_str_has_prefix (preview_cmd, "evince "))
+    {
+      if (has_flatpak ("org.gnome.Papers", "stable"))
+        g_set_str (&preview_cmd, g_strdup ("flatpak run --command=papers-previewer --file-forwarding org.gnome.Papers --print-settings @@ %s %f @@"));
+      else if (g_file_test ("/usr/bin/papers-previewer", G_FILE_TEST_IS_EXECUTABLE))
+        g_set_str (&preview_cmd, g_strdup ("papers-previewer --unlink-tempfile --print-settings %s %f"));
+    }
 
   return preview_cmd;
 }
