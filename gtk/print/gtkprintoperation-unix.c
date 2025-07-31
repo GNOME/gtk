@@ -211,6 +211,17 @@ shell_command_substitute_file (const char *cmd,
   return g_string_free (final, FALSE);
 }
 
+static char *
+get_preview_command (GdkDisplay *display)
+{
+  GtkSettings *settings = gtk_settings_get_for_display (display);
+  char *preview_cmd;
+
+  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+
+  return preview_cmd;
+}
+
 static void
 gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
                                          cairo_surface_t   *surface,
@@ -221,7 +232,6 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   GdkAppLaunchContext *context;
   char *cmd;
   char *preview_cmd;
-  GtkSettings *settings;
   GtkPrintSettings *print_settings = NULL;
   GtkPageSetup *page_setup;
   GKeyFile *key_file = NULL;
@@ -286,8 +296,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   if (!retval)
     goto out;
 
-  settings = gtk_settings_get_for_display (display);
-  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+  preview_cmd = get_preview_command (display);
 
   quoted_filename = g_shell_quote (filename);
   quoted_settings_filename = g_shell_quote (settings_filename);
