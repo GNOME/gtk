@@ -201,6 +201,17 @@ shell_command_substitute_file (const gchar *cmd,
   return g_string_free (final, FALSE);
 }
 
+static char *
+get_preview_command (GdkScreen *screen)
+{
+  GtkSettings *settings = gtk_settings_get_for_screen (screen);
+  char *preview_cmd;
+
+  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+
+  return preview_cmd;
+}
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
@@ -277,8 +288,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   if (!retval)
     goto out;
 
-  settings = gtk_settings_get_for_screen (screen);
-  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+  preview_cmd = get_preview_command (screen);
 
   quoted_filename = g_shell_quote (filename);
   quoted_settings_filename = g_shell_quote (settings_filename);
