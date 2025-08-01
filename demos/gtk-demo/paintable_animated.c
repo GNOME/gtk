@@ -209,6 +209,7 @@ do_paintable_animated (GtkWidget *do_widget)
 
       nuclear = gtk_nuclear_animation_new (TRUE);
       image = gtk_image_new_from_paintable (nuclear);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 256);
       gtk_window_set_child (GTK_WINDOW (window), image);
       g_object_unref (nuclear);
     }

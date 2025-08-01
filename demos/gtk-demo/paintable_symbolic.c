@@ -193,6 +193,7 @@ do_paintable_symbolic (GtkWidget *do_widget)
 
       nuclear = gtk_nuclear_symbolic_new ();
       image = gtk_image_new_from_paintable (nuclear);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 256);
 
       gtk_button_set_child (GTK_BUTTON (button), image);
       g_signal_connect (button, "clicked", G_CALLBACK (nuclear_button_clicked), nuclear);
