@@ -850,6 +850,9 @@ construct_widgets (GtkPrinterOptionWidget *widget)
             {
               GtkWidget *entry = gtk_widget_get_first_child (priv->combo);
               gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
+              gtk_entry_set_input_purpose (GTK_ENTRY (entry), 
+                                          source->type == GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD ?
+                                          GTK_INPUT_PURPOSE_PASSWORD : GTK_INPUT_PURPOSE_PIN);
             }
         }
 

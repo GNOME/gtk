@@ -23,8 +23,9 @@
 #include "gtkatspiutilsprivate.h"
 
 #include "gtkenums.h"
-#include "gtkpasswordentry.h"
 #include "gtkscrolledwindow.h"
+#include "gtktext.h"
+#include "gtkeditable.h"
 
 /*< private >
  * gtk_accessible_role_to_atspi_role:
@@ -317,9 +318,31 @@ gtk_atspi_role_for_context (GtkATContext *context)
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
   GtkAccessibleRole role = gtk_at_context_get_accessible_role (context);
 
-  /* ARIA does not have a "password entry" role, so we need to fudge it here */
-  if (GTK_IS_PASSWORD_ENTRY (accessible))
-    return ATSPI_ROLE_PASSWORD_TEXT;
+  /* ARIA does not have a password entry role, so use the input purpose to distinguish them */
+  if (role == GTK_ACCESSIBLE_ROLE_TEXT_BOX)
+    {
+      GtkInputPurpose purpose = GTK_INPUT_PURPOSE_FREE_FORM;
+      gboolean found_purpose = FALSE;
+
+      if (GTK_IS_TEXT (accessible))
+        {
+          purpose = gtk_text_get_input_purpose (GTK_TEXT (accessible));
+          found_purpose = TRUE;
+        }
+      else if (GTK_IS_EDITABLE (accessible))
+        {
+          GtkEditable *delegate = gtk_editable_get_delegate (GTK_EDITABLE (accessible));
+          if (delegate && GTK_IS_TEXT (delegate))
+            {
+              purpose = gtk_text_get_input_purpose (GTK_TEXT (delegate));
+              found_purpose = TRUE;
+            }
+        }
+
+      if (found_purpose && 
+          (purpose == GTK_INPUT_PURPOSE_PASSWORD || purpose == GTK_INPUT_PURPOSE_PIN))
+        return ATSPI_ROLE_PASSWORD_TEXT;
+    }
 
   /* ARIA does not have a "scroll area" role */
   if (GTK_IS_SCROLLED_WINDOW (accessible))
