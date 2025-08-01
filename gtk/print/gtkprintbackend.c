@@ -716,6 +716,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
           gtk_entry_set_visibility (GTK_ENTRY (entry), ai_visible[i]);
           gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+          
+          /* Set password input purpose for hidden entries */
+          if (!ai_visible[i])
+            gtk_entry_set_input_purpose (GTK_ENTRY (entry), GTK_INPUT_PURPOSE_PASSWORD);
 
           gtk_box_append (GTK_BOX (vbox), box);
 
