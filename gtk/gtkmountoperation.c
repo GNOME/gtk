@@ -738,6 +738,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       priv->password_entry = table_add_entry (operation, rows++, _("_Password"),
                                               NULL, operation);
       gtk_entry_set_visibility (GTK_ENTRY (priv->password_entry), FALSE);
+      gtk_entry_set_input_purpose (GTK_ENTRY (priv->password_entry), GTK_INPUT_PURPOSE_PASSWORD);
     }
 
    if (priv->ask_flags & G_ASK_PASSWORD_SAVING_SUPPORTED)
