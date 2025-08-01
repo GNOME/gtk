@@ -23,6 +23,7 @@
 #endif
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>       
@@ -201,6 +202,51 @@ shell_command_substitute_file (const gchar *cmd,
   return g_string_free (final, FALSE);
 }
 
+
+static gboolean
+has_flatpak (const char *app_id,
+             const char *branch)
+{
+  int status;
+
+  if (!g_spawn_sync (NULL,
+                     (char **)(const char *[]) { "/usr/bin/flatpak", "info", app_id, branch, NULL },
+                     NULL,
+                     G_SPAWN_DEFAULT,
+                     NULL, NULL,
+                     NULL, NULL,
+                     &status,
+                     NULL))
+    return FALSE;
+
+  return WIFEXITED (status) && WEXITSTATUS (status) == 0;
+}
+
+static char *
+get_preview_command (GdkScreen *screen)
+{
+  GtkSettings *settings = gtk_settings_get_for_screen (screen);
+  char *preview_cmd;
+
+  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+
+  if (g_str_has_prefix (preview_cmd, "evince "))
+    {
+      if (has_flatpak ("org.gnome.Papers", "stable"))
+        {
+          g_free (preview_cmd);
+          preview_cmd = g_strdup ("flatpak run --command=papers-previewer --file-forwarding org.gnome.Papers --print-settings @@ %s %f @@");
+        }
+      else if (g_file_test ("/usr/bin/papers-previewer", G_FILE_TEST_IS_EXECUTABLE))
+        {
+          g_free (preview_cmd);
+          preview_cmd = g_strdup ("papers-previewer --unlink-tempfile --print-settings %s %f");
+        }
+    }
+
+  return preview_cmd;
+}
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
@@ -277,8 +323,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   if (!retval)
     goto out;
 
-  settings = gtk_settings_get_for_screen (screen);
-  g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
+  preview_cmd = get_preview_command (screen);
 
   quoted_filename = g_shell_quote (filename);
   quoted_settings_filename = g_shell_quote (settings_filename);
