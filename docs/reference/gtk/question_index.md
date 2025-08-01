@@ -10,9 +10,9 @@ the question you have, this list is a good place to start.
 *  How do I get started with GTK?
 
     The GTK [website](https://www.gtk.org) offers some
-    [tutorials](https://www.gtk.org/documentation.php) and other documentation
+    [tutorials](https://developer.gnome.org/documentation/tutorials.html) and other documentation
     This reference manual also contains a introductory
-    [Getting Started](#gtk-getting-started) part.
+    [Getting Started](https://docs.gtk.org/gtk4/getting_started.html) part.
 
     More documentation ranging from whitepapers to online books can be found at
     the [GNOME developer's site](https://developer.gnome.org). After studying these
@@ -20,11 +20,11 @@ the question you have, this list is a good place to start.
 
 *  Where can I get help with GTK, submit a bug report, or make a feature request?
 
-    See the [documentation](#gtk-resources) on this topic.
+    See the [documentation](https://docs.gtk.org/gtk4/resources.html) on this topic.
 
 *  How do I port from one GTK version to another?
 
-    Every major version of GTK comes with a [migration guide](#migrating). You may also
+    Every major version of GTK comes with a [migration guide](https://docs.gtk.org/gtk4/migrating-3to4.html). You may also
     find useful information in the documentation for specific widgets and functions. If
     you have a question not covered in the manual, feel free to ask, and please
     [file a bug report](https://gitlab.gnome.org/GNOME/gtk/issues/) against the

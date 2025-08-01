@@ -195,7 +195,7 @@ between them and the GTK build; if you are using a separate prefix
 for GTK, for instance, you will need to use the same prefix for
 all its dependencies you build. If you're lucky, this will all go
 smoothly, and you'll be ready to [start compiling your own GTK
-applications](#gtk-compiling). You can test your GTK installation
+applications](https://docs.gtk.org/gtk4/compiling.html). You can test your GTK installation
 by running the `gtk4-demo` program that GTK installs.
 
 If one of the projects you're configuring or building fails, look
@@ -203,7 +203,7 @@ closely at the error messages printed; these will often provide useful
 information as to what went wrong. Every build system has its own
 log that can help you understand the issue you're encountering. If
 all else fails, you can ask for help on the
-[GTK forums](#gtk-resources).
+[GTK forums](https://docs.gtk.org/gtk4/resources.html).
 
 ## Extra Configuration Options
 
