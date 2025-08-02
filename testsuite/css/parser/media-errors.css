@@ -1,0 +1,42 @@
+
+/* Syntax error: media features should be enclosed in parentheses. */
+@media prefers-color-scheme: dark {
+  skip-missing-parens {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme) {
+  skip-missing-colon {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme:) {
+  skip-missing-feature-value {
+    color: green;
+  }
+}
+
+@media (unknown-feature: something) {
+  skip-unknown {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme: light) and (unknown-feature: something) {
+  skip-unknown {
+    color: red;
+  }
+}
+
+@media (prefers-color-scheme: light) or (unknown-feature: something) {
+  match-on-first-expression {
+    color: blue;
+  }
+}
+
+/* Normal style */
+normal {
+  color: red;
+}

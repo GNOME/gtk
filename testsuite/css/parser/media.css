@@ -1,0 +1,78 @@
+@media {
+  default-mode {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  @import url("./simple.css");
+
+  @define-color media_color #f00;
+
+  @keyframes needs_attention {
+    from { background-color: red; }
+    to { background-color: blue; }
+  }
+
+  light-mode-is-enabled {
+    color: blue;
+  }
+
+  another-light-mode-rule {
+    color: blue;
+  }
+}
+
+/* Nested media blocks */
+@media {
+  @media (prefers-color-scheme: light) {
+    nested-tag {
+      color: blue;
+    }
+  }
+}
+
+/* This block is skipped */
+@media (prefers-color-scheme: dark) {
+  @import url("./margin.css");
+
+  @define-color media_color #f00;
+
+  @keyframes needs_attention {
+    from { background-color: green; }
+    to { background-color: red; }
+  }
+
+  skip-dark-mode {
+    color: blue;
+  }
+}
+
+@media not (prefers-color-scheme: dark) {
+  not-dark-style {
+    color: green;
+  }
+}
+
+@media (not (prefers-color-scheme: dark)) {
+  not-dark-style-with-parens {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme: light) and (not (prefers-color-scheme: dark)) {
+  light-and-not-dark {
+    color: green;
+  }
+}
+
+@media (prefers-color-scheme: light), (prefers-color-scheme: dark) {
+  light-comma-dark {
+    color: green;
+  }
+}
+
+/* Normal style */
+normal {
+  color: red;
+}
