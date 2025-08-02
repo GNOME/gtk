@@ -96,6 +96,7 @@ gtk_file_dialog_finalize (GObject *object)
   g_clear_object (&self->filters);
   g_clear_object (&self->default_filter);
   g_clear_object (&self->initial_folder);
+  g_clear_object (&self->initial_file);
   g_free (self->initial_name);
 
   G_OBJECT_CLASS (gtk_file_dialog_parent_class)->finalize (object);
