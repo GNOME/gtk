@@ -185,7 +185,7 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
     case GTK_CSS_FILTER_HUE_ROTATE:
       {
         double c, s;
-        value = gtk_css_number_value_get (filter->grayscale.value, 1.0) * G_PI / 180.0;
+        value = gtk_css_number_value_get (filter->hue_rotate.value, 1.0) * G_PI / 180.0;
         c = cos (value);
         s = sin (value);
         graphene_matrix_init_from_float (matrix, (float[16]) {
