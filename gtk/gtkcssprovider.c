@@ -532,6 +532,10 @@ gtk_css_scanner_new (GtkCssProvider *provider,
 
       feature.name = "prefers-color-scheme";
       feature.value = enum_to_nick (GTK_TYPE_INTERFACE_COLOR_SCHEME, priv->prefers_color_scheme);
+
+      if (strcmp (feature.value, "default") == 0)
+        feature.value = "light";
+
       g_array_append_vals (scanner->media_features, &feature, 1);
 
       feature.name = "prefers-contrast";

@@ -1980,8 +1980,9 @@ typedef enum {
 
 /**
  * GtkInterfaceColorScheme:
- * @GTK_INTERFACE_COLOR_SCHEME_LIGHT: A light color scheme is used
+ * @GTK_INTERFACE_COLOR_SCHEME_DEFAULT: The default color scheme is used
  * @GTK_INTERFACE_COLOR_SCHEME_DARK: A dark color scheme is used
+ * @GTK_INTERFACE_COLOR_SCHEME_LIGHT: A light color scheme is used
  *
  * Values for the [property@Gtk.Settings:gtk-interface-color-scheme]
  * and [property@Gtk.CssProvider:prefers-color-scheme] properties
@@ -1992,15 +1993,16 @@ typedef enum {
  * Since: 4.20
  */
 typedef enum {
+  GTK_INTERFACE_COLOR_SCHEME_DEFAULT,
+  GTK_INTERFACE_COLOR_SCHEME_DARK,
   GTK_INTERFACE_COLOR_SCHEME_LIGHT,
-  GTK_INTERFACE_COLOR_SCHEME_DARK
 } GtkInterfaceColorScheme;
 
 /**
  * GtkInterfaceContrast
  * @GTK_INTERFACE_CONTRAST_NO_PREFERENCE: No particular preference for contrast
- * @GTK_INTERFACE_CONTRAST_LESS: Less contrast is preferred
  * @GTK_INTERFACE_CONTRAST_MORE: More contrast is preferred
+ * @GTK_INTERFACE_CONTRAST_LESS: Less contrast is preferred
  *
  * Values for the [property@Gtk.Settings:gtk-interface-contrast]
  * and [property@Gtk.CssProvider:prefers-contrast] properties
@@ -2012,8 +2014,8 @@ typedef enum {
  */
 typedef enum {
   GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
-  GTK_INTERFACE_CONTRAST_LESS,
   GTK_INTERFACE_CONTRAST_MORE,
+  GTK_INTERFACE_CONTRAST_LESS,
 } GtkInterfaceContrast;
 
 
