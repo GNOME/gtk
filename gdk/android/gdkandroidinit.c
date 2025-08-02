@@ -167,6 +167,17 @@ gdk_android_set_latest_activity (JNIEnv *env, jobject activity)
   gdk_android_activity = activity ? (*env)->NewGlobalRef(env, activity) : NULL;
 }
 
+/**
+ * gdk_android_initialize: (skip)
+ * @env: the JNI environment for the current thread
+ * @application_classloader: the classloader used to resolve GTK classes
+ * @activity: (nullable): the android.content.Context object
+ *
+ * Initializes the android backend.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ * Since: 4.18
+ */
 gboolean
 gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject activity)
 {
@@ -620,6 +631,14 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   return TRUE;
 }
 
+/**
+ * gdk_android_finalize: (skip)
+ *
+ * Frees all allocated resources and references associated with the
+ * android backend.
+ *
+ * Since: 4.18
+ */
 void
 gdk_android_finalize (void)
 {
