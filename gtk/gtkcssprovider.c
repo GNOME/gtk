@@ -1863,12 +1863,15 @@ _gtk_css_find_theme (const char *name,
  * The actual process of finding the theme might change between
  * releases, but it is guaranteed that this function uses the same
  * mechanism to load the theme that GTK uses for loading its own theme.
+ *
+ * Deprecated: 4.20: Using any of the other theme loaders, combine with media queries.
  */
 void
 gtk_css_provider_load_named (GtkCssProvider *provider,
                              const char     *name,
                              const char     *variant)
 {
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
   char *path;
   char *resource_path;
 
@@ -1876,6 +1879,19 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   g_return_if_fail (name != NULL);
 
   gtk_css_provider_reset (provider);
+
+  if (variant != NULL)
+    {
+      if (strstr (variant, "dark") != NULL)
+        priv->prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_DARK;
+      else
+        priv->prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
+
+      if (strstr (variant, "hc") != NULL)
+        priv->prefers_contrast = GTK_INTERFACE_CONTRAST_MORE;
+      else
+        priv->prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
+    }
 
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
@@ -1897,7 +1913,6 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   path = _gtk_css_find_theme (name, variant);
   if (path)
     {
-      GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
       char *dir, *resource_file;
       GResource *resource;
 
