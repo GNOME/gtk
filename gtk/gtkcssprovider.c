@@ -1896,7 +1896,7 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
    */
-  if (variant)
+  if (variant && *variant)
     resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk-%s.css", name, variant);
   else
     resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);

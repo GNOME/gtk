@@ -1644,11 +1644,16 @@ get_theme_name (GtkSettings  *settings,
     {
       char *p;
       p = strrchr (*theme_name, ':');
-      if (p) {
-        *p = '\0';
-        p++;
-        *theme_variant = g_strdup (p);
-      }
+      if (p)
+        {
+          *p = '\0';
+          p++;
+          *theme_variant = g_strdup (p);
+        }
+      else
+        {
+          *theme_variant = g_strdup ("");
+        }
 
       return;
     }
