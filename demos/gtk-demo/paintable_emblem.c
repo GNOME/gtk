@@ -161,6 +161,7 @@ do_paintable_emblem (GtkWidget *do_widget)
 
       icon = demo_icon_new ("folder", "starred");
       image = gtk_image_new_from_paintable (icon);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 256);
       gtk_widget_set_hexpand (image, TRUE);
       gtk_widget_set_vexpand (image, TRUE);
       gtk_grid_attach (GTK_GRID (grid), image, 0, 0, 1, 1);
@@ -168,6 +169,7 @@ do_paintable_emblem (GtkWidget *do_widget)
       icon = demo_icon_new_with_paintable ("drive-multidisk",
                                            gtk_nuclear_animation_new (FALSE));
       image = gtk_image_new_from_paintable (icon);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 256);
       gtk_widget_set_hexpand (image, TRUE);
       gtk_widget_set_vexpand (image, TRUE);
       gtk_grid_attach (GTK_GRID (grid), image, 1, 0, 1, 1);
