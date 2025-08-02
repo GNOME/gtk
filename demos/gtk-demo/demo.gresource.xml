@@ -290,6 +290,7 @@
     <file>iconscroll.c</file>
     <file>iconview.c</file>
     <file>iconview_edit.c</file>
+    <file>image_filtering.c</file>
     <file>image_scaling.c</file>
     <file>images.c</file>
     <file>infobar.c</file>
@@ -430,6 +431,13 @@
   </gresource>
   <gresource prefix="/path_text">
     <file>path_text.ui</file>
+  </gresource>
+  <gresource prefix="/image_filtering">
+    <file>portland-rose.jpg</file>
+    <file>image_filtering.css</file>
+    <file>image_filtering.ui</file>
+    <file>filter_paintable.h</file>
+    <file>filter_paintable.c</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4">
     <file>icons/16x16/actions/application-exit.png</file>
