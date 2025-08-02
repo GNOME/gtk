@@ -96,6 +96,9 @@ You can use rgb(), rgba(), hsl() with both the legacy or the modern CSS
 syntax, and calc() can be used as well in color expressions. hwb(), oklab(),
 oklch(), color(), color-mix() and relative colors are supported as well.
 
+Finally, light-dark() can be used to select different colors depending
+on the effective color scheme.
+
 ### Non-CSS Colors
 
 GTK  extends the CSS syntax with several additional ways to specify colors.
