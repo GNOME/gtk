@@ -563,6 +563,7 @@ preview_print_idle_done (gpointer data)
   g_object_unref (pop->pages_data->op);
   g_free (pop->pages_data->pages);
   g_free (pop->pages_data);
+  cairo_surface_destroy (pop->surface);
 
   g_object_unref (op);
   g_free (pop);
