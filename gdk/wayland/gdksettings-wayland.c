@@ -345,6 +345,8 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } },
   { FALSE, "org.gnome.desktop.a11y.interface", "high-contrast", "high-contrast", G_TYPE_NONE, { .b = FALSE } },
   { FALSE, "org.gnome.desktop.a11y.interface", "show-status-shapes", "gtk-show-status-shapes", G_TYPE_BOOLEAN, { .b = FALSE } },
+  { FALSE, "org.freedesktop.appearance", "color-scheme", "gtk-interface-color-scheme", G_TYPE_ENUM, { .i = 0 } },
+  { FALSE, "org.freedesktop.appearance", "contrast", "gtk-interface-contrast", G_TYPE_ENUM, { .i = 0 } },
   /* Note, this setting doesn't exist, the portal and gsd fake it */
   { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_NONE, { .i = 0 } },
 };
@@ -430,6 +432,10 @@ apply_portal_setting (TranslationEntry *entry,
     case G_TYPE_ENUM:
       if (strcmp (entry->key, "font-rendering") == 0)
         entry->fallback.i = get_font_rendering (g_variant_get_string (value, NULL));
+      else if (strcmp (entry->key, "color-scheme") == 0)
+        entry->fallback.i = (int) g_variant_get_uint32 (value);
+      else if (strcmp (entry->key, "contrast") == 0)
+        entry->fallback.i = (int) g_variant_get_uint32 (value);
       break;
     case G_TYPE_BOOLEAN:
       entry->fallback.b = g_variant_get_boolean (value);
@@ -512,7 +518,7 @@ gdk_wayland_display_init_settings (GdkDisplay *display)
       const char *schema_str;
       GVariant *val;
       GVariantIter *iter;
-      const char *patterns[] = { "org.gnome.*", NULL }; 
+      const char *patterns[] = { "org.gnome.*", "org.freedesktop.appearance", NULL }; 
 
       display_wayland->settings_portal = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                                         G_DBUS_PROXY_FLAGS_NONE,
