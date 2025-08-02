@@ -278,16 +278,6 @@ gtk_settings_init (GtkSettings *settings)
       settings->property_values[i - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
     }
 
-  settings->style_cascades = g_slist_prepend (NULL, _gtk_style_cascade_new ());
-  settings->theme_provider = gtk_css_provider_new ();
-
-  g_object_bind_property (settings, "gtk-interface-color-scheme",
-                          settings->theme_provider, "prefers-color-scheme",
-                          G_BINDING_SYNC_CREATE);
-  g_object_bind_property (settings, "gtk-interface-contrast",
-                          settings->theme_provider, "prefers-contrast",
-                          G_BINDING_SYNC_CREATE);
-
   path = g_build_filename (_gtk_get_data_prefix (), "share", "gtk-4.0", "settings.ini", NULL);
   gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
@@ -1062,7 +1052,7 @@ gtk_settings_finalize (GObject *object)
 
   g_free (settings->font_family);
 
-  g_object_unref (settings->theme_provider);
+  g_clear_object (&settings->theme_provider);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
@@ -1102,6 +1092,18 @@ settings_init_style (GtkSettings *settings)
   static GtkCssProvider *css_provider = NULL;
   GtkStyleCascade *cascade;
 
+  cascade = _gtk_style_cascade_new ();
+
+  settings->style_cascades = g_slist_prepend (NULL, cascade);
+  settings->theme_provider = gtk_css_provider_new ();
+
+  g_object_bind_property (settings, "gtk-interface-color-scheme",
+                          settings->theme_provider, "prefers-color-scheme",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (settings, "gtk-interface-contrast",
+                          settings->theme_provider, "prefers-contrast",
+                          G_BINDING_SYNC_CREATE);
+
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
     {
@@ -1127,8 +1129,6 @@ settings_init_style (GtkSettings *settings)
 
       g_free (css_path);
     }
-
-  cascade = _gtk_settings_get_style_cascade (settings, 1);
 
   _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (css_provider),
