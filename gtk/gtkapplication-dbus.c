@@ -103,6 +103,7 @@ screensaver_signal_portal (GDBusConnection *connection,
   gtk_application_set_screensaver_active (dbus->impl.application, active);
 
   g_variant_lookup (state, "session-state", "u", &session_state);
+  g_variant_unref (state);
   if (session_state != dbus->session_state)
     {
       dbus->session_state = session_state;
