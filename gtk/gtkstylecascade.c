@@ -231,6 +231,29 @@ gtk_style_cascade_emit_error (GtkStyleProvider *provider,
   gtk_style_cascade_iter_clear (&iter);
 }
 
+static gboolean
+gtk_style_cascade_get_color_scheme (GtkStyleProvider        *provider,
+                                    GtkInterfaceColorScheme *color_scheme)
+{
+  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
+  GtkStyleCascadeIter iter;
+  GtkStyleProvider *item;
+
+  for (item = gtk_style_cascade_iter_init (cascade, &iter);
+       item;
+       item = gtk_style_cascade_iter_next (cascade, &iter))
+    {
+      if (gtk_style_provider_get_color_scheme (item, color_scheme))
+        {
+          gtk_style_cascade_iter_clear (&iter);
+          return TRUE;
+        }
+    }
+
+  gtk_style_cascade_iter_clear (&iter);
+  return FALSE;
+}
+
 static void
 gtk_style_cascade_provider_iface_init (GtkStyleProviderInterface *iface)
 {
@@ -240,6 +263,7 @@ gtk_style_cascade_provider_iface_init (GtkStyleProviderInterface *iface)
   iface->get_keyframes = gtk_style_cascade_get_keyframes;
   iface->lookup = gtk_style_cascade_lookup;
   iface->emit_error = gtk_style_cascade_emit_error;
+  iface->get_color_scheme = gtk_style_cascade_get_color_scheme;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkStyleCascade, _gtk_style_cascade, G_TYPE_OBJECT, 0,

@@ -156,6 +156,22 @@ gtk_style_provider_get_scale (GtkStyleProvider *provider)
   return iface->get_scale (provider);
 }
 
+gboolean
+gtk_style_provider_get_color_scheme (GtkStyleProvider        *provider,
+                                     GtkInterfaceColorScheme *color_scheme)
+{
+  GtkStyleProviderInterface *iface;
+
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), GTK_INTERFACE_COLOR_SCHEME_DEFAULT);
+
+  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+
+  if (iface->get_color_scheme)
+    return iface->get_color_scheme (provider, color_scheme);
+
+  return FALSE;
+}
+
 void
 gtk_style_provider_emit_error (GtkStyleProvider *provider,
                                GtkCssSection    *section,
@@ -242,3 +258,4 @@ gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
   cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
   _gtk_style_cascade_remove_provider (cascade, provider);
 }
+

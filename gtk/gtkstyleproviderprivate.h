@@ -56,6 +56,7 @@ struct _GtkStyleProviderInterface
   void                  (* changed)             (GtkStyleProvider        *provider);
   gboolean              (* has_section)         (GtkStyleProvider        *provider,
                                                  GtkCssSection           *section);
+  gboolean              (* get_color_scheme)    (GtkStyleProvider        *provider,                                                  GtkInterfaceColorScheme *color_scheme);
 };
 
 GtkSettings *           gtk_style_provider_get_settings          (GtkStyleProvider        *provider);
@@ -64,6 +65,8 @@ GtkCssValue *           gtk_style_provider_get_color             (GtkStyleProvid
 GtkCssKeyframes *       gtk_style_provider_get_keyframes         (GtkStyleProvider        *provider,
                                                                   const char              *name);
 int                     gtk_style_provider_get_scale             (GtkStyleProvider        *provider);
+gboolean                gtk_style_provider_get_color_scheme      (GtkStyleProvider        *provider,                                                  GtkInterfaceColorScheme *color_scheme);
+
 void                    gtk_style_provider_lookup                (GtkStyleProvider        *provider,
                                                                   const GtkCountingBloomFilter *filter,
                                                                   GtkCssNode              *node,
