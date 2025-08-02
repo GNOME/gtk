@@ -38,6 +38,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkversion.h"
+#include "gtktypebuiltins.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -131,6 +132,9 @@ struct _GtkCssProviderPrivate
 {
   GScanner *scanner;
 
+  GtkInterfaceColorScheme prefers_color_scheme;
+  GtkInterfaceContrast prefers_contrast;
+
   GHashTable *symbolic_colors;
   GHashTable *keyframes;
 
@@ -146,11 +150,27 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+   PROP_PREFERS_COLOR_SCHEME = 1,
+   PROP_PREFERS_CONTRAST,
+   NUM_PROPERTIES
+};
+
+static GParamSpec *pspecs[NUM_PROPERTIES] = { NULL, };
+
 static gboolean gtk_keep_css_sections = FALSE;
 
 static guint css_provider_signals[LAST_SIGNAL] = { 0 };
 
-static void gtk_css_provider_finalize (GObject *object);
+static void gtk_css_provider_finalize         (GObject *object);
+static void gtk_css_provider_get_property     (GObject               *object,
+                                               guint                  property_id,
+                                               GValue                *value,
+                                               GParamSpec            *pspec);
+static void gtk_css_provider_set_property     (GObject               *object,
+                                               guint                  property_id,
+                                               const GValue          *value,
+                                               GParamSpec            *pspec);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface);
 static void gtk_css_style_provider_emit_error (GtkStyleProvider *provider,
                                                GtkCssSection    *section,
@@ -213,6 +233,12 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   if (g_getenv ("GTK_CSS_DEBUG"))
     gtk_css_provider_set_keep_css_sections ();
 
+  object_class->finalize = gtk_css_provider_finalize;
+  object_class->get_property = gtk_css_provider_get_property;
+  object_class->set_property = gtk_css_provider_set_property;
+
+  klass->parsing_error = gtk_css_provider_parsing_error;
+
   /**
    * GtkCssProvider::parsing-error:
    * @provider: the provider that had a parsing error
@@ -251,9 +277,60 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
                               G_TYPE_FROM_CLASS (object_class),
                               _gtk_marshal_VOID__BOXED_BOXEDv);
 
-  object_class->finalize = gtk_css_provider_finalize;
+  /**
+   * GtkCssProvider:prefers-color-scheme:
+   *
+   * Define the color scheme used for rendering the user interface.
+   *
+   * The UI can be set to either [enum@Gtk.InterfaceColorScheme.LIGHT],
+   * or [enum@Gtk.InterfaceColorScheme.DARK] mode.
+   *
+   * This setting is be available for media queries in CSS:
+   *
+   * ```css
+   * @media (prefers-color-scheme: dark) {
+   *   // some dark mode styling
+   * }
+   * ```
+   *
+   * Changing this setting will cause a re-render of the style sheet.
+   *
+   * Since: 4.20
+   */
+  pspecs[PROP_PREFERS_COLOR_SCHEME] = g_param_spec_enum ("prefers-color-scheme", NULL, NULL,
+                                                         GTK_TYPE_INTERFACE_COLOR_SCHEME,
+                                                         GTK_INTERFACE_COLOR_SCHEME_DEFAULT,
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
-  klass->parsing_error = gtk_css_provider_parsing_error;
+  /**
+   * GtkCssProvider:prefers-contrast:
+   *
+   * Define the contrast mode to use for the user interface.
+   *
+   * When set to [enum@Gtk.InterfaceContrast.MORE], the UI is rendered in
+   * high contrast.
+   *
+   * When set to [enum@Gtk.InterfaceContrast.NO_PREFERENCE] (the default),
+   * the user interface will be rendered in default mode.
+   *
+   * This setting is be available for media queries in CSS:
+   *
+   * ```css
+   * @media (prefers-contrast: more) {
+   *   // some style with high contrast
+   * }
+   * ```
+   *
+   * Changing this setting will cause a re-render of the style sheet.
+   *
+   * Since: 4.20
+   */
+  pspecs[PROP_PREFERS_CONTRAST] = g_param_spec_enum ("prefers-contrast", NULL, NULL,
+                                                     GTK_TYPE_INTERFACE_CONTRAST,
+                                                     GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
+                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, pspecs);
 }
 
 static void
@@ -445,6 +522,9 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
 
+  priv->prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_DEFAULT;
+  priv->prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
+
   priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -623,6 +703,51 @@ gtk_css_provider_finalize (GObject *object)
 
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
 }
+
+static void
+gtk_css_provider_get_property (GObject         *object,
+                               guint            prop_id,
+                               GValue          *value,
+                               GParamSpec      *pspec)
+{
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (GTK_CSS_PROVIDER (object));
+
+  switch (prop_id)
+    {
+    case PROP_PREFERS_COLOR_SCHEME:
+      g_value_set_enum (value, priv->prefers_color_scheme);
+      break;
+    case PROP_PREFERS_CONTRAST:
+      g_value_set_enum (value, priv->prefers_contrast);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_css_provider_set_property (GObject         *object,
+                               guint            prop_id,
+                               const GValue    *value,
+                               GParamSpec      *pspec)
+{
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (GTK_CSS_PROVIDER (object));
+
+  switch (prop_id)
+    {
+    case PROP_PREFERS_COLOR_SCHEME:
+      priv->prefers_color_scheme = g_value_get_enum (value);
+      break;
+    case PROP_PREFERS_CONTRAST:
+      priv->prefers_contrast = g_value_get_enum (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 
 /**
  * gtk_css_provider_new:
