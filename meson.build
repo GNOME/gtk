@@ -455,7 +455,9 @@ endif
 
 # Dependencies
 glib_dep       = dependency('glib-2.0', version: glib_req)
-gi_dep         = dependency('gobject-introspection-1.0', version: gi_req, required: get_option('introspection').enabled())
+if not meson.version().version_compare('>= 1.9.0')
+  dependency('gobject-introspection-1.0', version: gi_req, required: get_option('introspection').enabled())
+endif
 gobject_dep    = dependency('gobject-2.0', version: glib_req)
 if os_win32
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled)
@@ -872,7 +874,7 @@ if bash.found()
 endif
 
 # Introspection
-gir = find_program('g-ir-scanner', required : get_option('introspection'))
+gir = find_program('g-ir-scanner', required : get_option('introspection'), native: true)
 
 if not gir.found() and get_option('introspection').enabled()
   error('Introspection enabled, but g-ir-scanner not found.')
