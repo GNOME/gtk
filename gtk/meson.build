@@ -1245,6 +1245,24 @@ if build_gir
     gtk_dep_sources += gdk_macos_gir
   endif
 
+  if android_enabled
+    gdk_android_gir = gnome.generate_gir(libgtk,
+      sources: gdk_android_public_headers + gdk_android_sources,
+      namespace: 'GdkAndroid',
+      nsversion: gtk_api_version,
+      identifier_prefix: 'Gdk',
+      symbol_prefix: 'gdk',
+      export_packages: 'gtk4-android',
+      includes: [ gdk_gir[0], ],
+      install: true,
+      dependencies: libgdk_dep,
+      header: 'gdk/android/gdkandroid.h',
+      extra_args: gir_args,
+      fatal_warnings: get_option('werror'),
+    )
+    gtk_dep_sources += gdk_android_gir
+  endif
+
   gsk_gir_inc = [ gdk_gir[0], 'Graphene-1.0' ]
 
   gsk_gir = gnome.generate_gir(libgtk,

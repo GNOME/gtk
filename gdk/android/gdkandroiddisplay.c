@@ -231,7 +231,7 @@ gdk_android_display_class_init (GdkAndroidDisplayClass *klass)
   display_class->get_setting = gdk_android_display_get_setting;
 
   /**
-   * GdkAndroidDisplay:night-mode: (gerrer get_night_mode)
+   * GdkAndroidDisplay:night-mode: (getter get_night_mode)
    *
    * The current night mode state of the Android UI configuration.
    *
