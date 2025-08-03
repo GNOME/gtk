@@ -1,5 +1,6 @@
 gsk_public_sources = files([
   'gskcairorenderer.c',
+  'gskcomponenttransfer.c',
   'gskdiff.c',
   'gskglshader.c',
   'gskoffload.c',
@@ -47,6 +48,7 @@ gsk_private_sources = files([
   'gpu/gskgpuclip.c',
   'gpu/gskgpucolorizeop.c',
   'gpu/gskgpucolormatrixop.c',
+  'gpu/gskgpucomponenttransferop.c',
   'gpu/gskgpucolorop.c',
   'gpu/gskgpuconicgradientop.c',
   'gpu/gskgpuconvertop.c',
@@ -81,6 +83,7 @@ gsk_f16c_sources = files([
 
 gsk_public_headers = files([
   'gskcairorenderer.h',
+  'gskcomponenttransfer.h',
   'gskenums.h',
   'gskglshader.h',
   'gskpath.h',

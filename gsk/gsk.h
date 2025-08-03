@@ -30,6 +30,7 @@
 #include <gsk/gskstroke.h>
 #include <gsk/gsktransform.h>
 #include <gsk/gskglshader.h>
+#include <gsk/gskcomponenttransfer.h>
 
 #include <gsk/gskcairorenderer.h>
 #include <gsk/gpu/gskvulkanrenderer.h>

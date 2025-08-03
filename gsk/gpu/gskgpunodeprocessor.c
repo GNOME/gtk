@@ -16,6 +16,7 @@
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
 #include "gskgpucolormatrixopprivate.h"
+#include "gskgpucomponenttransferopprivate.h"
 #include "gskgpucoloropprivate.h"
 #include "gskgpuconicgradientopprivate.h"
 #include "gskgpuconvertbuiltinopprivate.h"
@@ -3296,6 +3297,42 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_component_transfer_node (GskGpuNodeProcessor *self,
+                                                    GskRenderNode       *node)
+{
+  GskGpuImage *image;
+  GskRenderNode *child;
+  graphene_rect_t tex_rect;
+
+  child = gsk_component_transfer_node_get_child (node);
+
+  image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                    0,
+                                                    NULL,
+                                                    child,
+                                                    &tex_rect);
+  if (image == NULL)
+    return;
+
+  gsk_gpu_component_transfer_op (self->frame,
+                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                                 gsk_gpu_node_processor_color_states_explicit (self, self->ccs, FALSE),
+                                 &self->offset,
+                                 &(GskGpuShaderImage) {
+                                   image,
+                                   GSK_GPU_SAMPLER_DEFAULT,
+                                   &node->bounds,
+                                   &tex_rect,
+                                 },
+                                 gsk_component_transfer_node_get_transfer (node, 0),
+                                 gsk_component_transfer_node_get_transfer (node, 1),
+                                 gsk_component_transfer_node_get_transfer (node, 2),
+                                 gsk_component_transfer_node_get_transfer (node, 3));
+
+  g_object_unref (image);
+}
+
+static void
 gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
                                     const graphene_rect_t  *rect,
                                     float                   x,
@@ -4077,6 +4114,13 @@ static const struct
     gsk_gpu_node_processor_add_subsurface_node,
     gsk_gpu_node_processor_add_first_subsurface_node,
     gsk_gpu_get_subsurface_node_as_image,
+  },
+  [GSK_COMPONENT_TRANSFER_NODE] = {
+    0,
+    0,
+    gsk_gpu_node_processor_add_component_transfer_node,
+    NULL,
+    NULL,
   },
 };
 
