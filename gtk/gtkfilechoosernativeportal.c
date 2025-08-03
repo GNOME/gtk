@@ -162,7 +162,8 @@ response_cb (GDBusConnection  *connection,
           GtkFileFilter *f = g_list_model_get_item (filters, j);
           if (g_strcmp0 (gtk_file_filter_get_name (f), current_filter_name) == 0)
             {
-              filter_to_select = f;
+              g_set_object (&filter_to_select, f);
+              g_object_unref (f);
               break;
             }
           g_object_unref (f);
