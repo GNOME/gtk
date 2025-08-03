@@ -1,5 +1,186 @@
-Overview of Changes in 4.19.3, xx-xx-xxxx
+Overview of Changes in 4.19.4, xx-xx-xxxx
 =========================================
+
+
+Overview of Changes in 4.19.3, 03-08-2025
+=========================================
+
+* GtkVideo:
+  - Support fo 10/12/16bit software decoder formats has been added
+  - Avoid extra copies in more cases
+
+* GtkApplication:
+ - Rely on the portal instead of talking to session managers
+
+* GtkEntry:
+ - Entry icons now have an easy way to add an equivalent
+   context menu item
+
+* Icon support:
+ - Symbolic svgs can use <rect> and <circle>
+ - The symbolic png format is being phased out
+
+* List models:
+ - GtkFilterListModel can now watch its items and refilter
+
+* CSS:
+ - Media queries for color scheme and contrast are supported
+ - The light-dark() function is supported
+
+* Accessibility:
+ - Improve handling of password entries
+
+* Input:
+ - The simple IM context gained a way to make compose sequence
+   visuals configurable
+
+* Printing:
+ - Make portal printing work again
+ - Support gnome-papers for preview
+`
+* GSK:
+ - gsk_path_foreach_intersection is an API for path intersections
+ - Bugs in determining closest points of paths have been fixed
+ - A node type for component transfers has been added
+
+* Debugging:
+ - The recorder gained a Super+F shortcut to save a single frame
+ - The CSS editor has controls for color scheme and contrast
+
+* Tools and demos:
+ - gtk4-path-tool can show path intersections
+ - gtk4-demo gained a "Path Explorer" demo
+ - gtk4-demo gained a "Sweep" (path intersection) demo
+ - gtk4-demo gained a "Image Filtering" demo
+
+* macOS:
+ - Register sessions by default
+ - Fix negative numbers in spin buttons in the Swedish locale
+
+* Windows:
+ - Fix size negotiation for fullscreen and maximized windows
+
+* Android:
+ - Fix problems with the Adreno driver
+ - Build girs on if introspection is enabled
+
+* Deprecations:
+ - the Broadway renderer
+ - the GtkApplication:register-session property
+ - the gtk-application-prefer-dark setting
+
+* Bugs fixed:
+  - #2613 GtkTextView jumps on enter if a big enough top-margin is set (Manuel
+    Genovés)
+  - #4134 GtkTextView:top-margin breaks resize Y placement when wrap-text is set
+    (Manuel Genovés)
+  - #5273 Broken links in GTK4 documentation question index
+  - #7531 Blank screen with Adreno GPU driver on Android (Florian "sp1rit"​)
+  - #7554 Win32: opening a popover un-maximizes the toplevel (Doublonmousse)
+  - #7581 Proposal: Make compose sequence visuals configurable in compose files:
+    would make something like BÉPO visuals and similar layouts like Neo  future
+    proof, i.e. avoid code changes to Gtk in future. (Mike FABIAN)
+  - #7622 Typo (Brian Yurko)
+  - #7628 wayland: window notify::suspended is only triggered after window
+    becomes visible again (Matthias Clasen)
+  - #7636 extensions-app and gnome-control-center: inconsistent and buggy
+    behaviour with popups extending outside window boundary (Matthias Clasen)
+  - #7644 Multi-plane YCbCr fallback breaks external-only dmabuf import
+    (Benjamin Otte)
+  - #7650 Regression in GtkBitsetIter (Matthias Clasen)
+  - #7654 Gtk.Entry icons aren't accessible when they are sensitive/activatable
+  - #7663 Button losing focus/hover because of transition (Matthias Clasen)
+  - #7670 gtk_enumerate_printers() fails to return a printed named
+    "GtkPrintBackendFile" (Matthias Clasen)
+  - #7683 SpinButton (spin scales) can't show negative values on some macOS LANG
+    locales (Oona Räisänen)
+  - #7686 Leak when starting a libadwaita's demo
+  - https://gitlab.gnome.org/Teams/Websites/www.gtk.org/-/issues/
+
+* Changes:
+  - !8330 memoryformat: Add 10/12/16bit SW decoder formats (Robert Mader)
+  - !8723 android: Fix IME preventing from closing Activity
+  - !8728 gtkatspicontext: Fix returning null parent ref for the root (Lukáš
+    Tyrychtr)
+  - !8729 The 4.19.2 release (Matthias Clasen)
+  - !8730 vulkan: NULL is not compatible with VkFence (Zander Brown)
+  - !8731 Avoid conflict with preexisting modules (Matthias Clasen)
+  - !8732 meson: subproject compatability hack for meson < 1.8 (Florian
+    "sp1rit"​)
+  - !8733 Move away from symbolic pngs (Matthias Clasen)
+  - !8734 widget-factory: Drop one more icon-theme use (Matthias Clasen)
+  - !8735 builder: :current-object is nullable (Zander Brown)
+  - !8736 a11y: Fix state-change emissions (Matthias Clasen)
+  - !8737 wayland: More debug spew (Matthias Clasen)
+  - !8738 wayland: Split up some debug spew (Robert Mader)
+  - !8742 shortcutwindow: Differentiate keypad better (Matthias Clasen)
+  - !8744 gstreamer: Add video meta support for sysmem buffers (Robert Mader)
+  - !8746 Add new "watch-items" property & plumbing to GtkFilterListModel
+    (Georges Basile Stavracas Neto)
+  - !8747 gtkstack: Fix hiding the invisible GtkStackPages on the a11y layer
+    (Lukáš Tyrychtr)
+  - !8749 Sync with current CRoaring (Matthias Clasen)
+  - !8750 testlistview: Waste less time (Matthias Clasen)
+  - !8751 meson: Update libpng/libtiff/libjpeg wrap files (Jordan Petridis)
+  - !8752 Add path intersections (Matthias Clasen)
+  - !8753 tools: Make i toggle path intersections (Matthias Clasen)
+  - !8754 tools: Fix help output details (Matthias Clasen)
+  - !8756 pathbuilder: Don't split cubics
+  - !8757 path: Fix closest point for circles (Matthias Clasen)
+  - !8759 gtk4-demo: Cosmetics (Matthias Clasen)
+  - !8761 bumped gdk-pixbuf to 2.43.3 (Florian "sp1rit"​, Matthias Clasen)
+  - !8762 Fix EGL dmabuf format handling (Benjamin Otte)
+  - !8763 Make compose sequence visuals configurable in compose files (Mike
+    FABIAN, Matthias Clasen)
+  - !8764 docs: Fix non-working links within gtk4 API static generated docs
+    (Brian Yurko)
+  - !8765 Add a demo of raw image dnd
+  - !8766 image dnd: Use GdkDropTargetAsync (Matthias Clasen)
+  - !8768 widget-factory: Improve icon handling (Matthias Clasen)
+  - !8770 gdkenums: Add GDK_ACTION_NONE (Maximiliano Sandoval)
+  - !8771 Make roaring all static (Matthias Clasen)
+  - !8773 inspector: Change the shortcut for 'save a frame' (Matthias Clasen)
+  - !8774 entry: Add accessibility to primary and secondary icons (Sergio Costas
+    Rodriguez)
+  - !8775 gtk4-demo: Rename the path explorer demo (Matthias Clasen)
+  - !8777 symbolics: Support <circle> and <rect> (Matthias Clasen)
+  - !8778 macos: By default register the session (Arjan Molenaar)
+  - !8779 gsk: Added gsk_transform_matrix_2d (Florian "sp1rit"​)
+  - !8780 gsk: Allow a line width of zero (Matthias Clasen)
+  - !8782 Deprecate the Broadway renderer (Matthias Clasen)
+  - !8785 gsk: Add a component transfer node (Matthias Clasen)
+  - !8786 Fix rsvg leak (Khalid Abu Shawarib)
+  - !8787 Fix the pathexplorer demo (Florian "sp1rit"​)
+  - !8789 gpu: Don't pass structs as varying between shader stages (Florian
+    "sp1rit"​)
+  - !8791 fix: special case for maximized and fullscreened window in
+    `compute_toplevel_size` (Doublonmousse)
+  - !8794 gi/gtkfilter: Fix since annotations of new enum fields (Bilal
+    Elmoussaoui)
+  - !8796 print: Small refactoring (Matthias Clasen)
+  - !8799 password input purpose a11y (Lukáš Tyrychtr)
+  - !8800 gtk-demo: Update paintable demos (Matthias Clasen)
+  - !8801 gtk/application-dbus: Plug GVariant leak (Maximiliano Sandoval)
+  - !8803 Support media queries (Matthias Clasen)
+  - !8805 printoperation: Plug cairo surface leak (Maximiliano Sandoval)
+  - !8806 Plug some leaks in node editor (Maximiliano Sandoval)
+  - !8807 android: Build GdkAndroid-4.0.gir if introspection is enabled (Florian
+    "sp1rit"​)
+  - !8808 textureutils: Plug leak on start_element_cb (Maximiliano Sandoval)
+  - !8809 gtk/applicaiion-dbus: Call env variable unset in constructor when
+    available (Khalid Abu Shawarib)
+  - !8810 Plug a memory leak in svg parsing (Matthias Clasen)
+  - !8811 filechoosernative: Plug leak when setting mimetype (Maximiliano
+    Sandoval)
+
+* Translation updates:
+  - Galician (Fran Diéguez)
+  - Georgian (Ekaterine Papava)
+  - Italian (Davide Ferracin)
+  - Russian (Artur S0)
+  - Slovak (Peter Mráz)
+  - Slovenian (Martin)
+  - Turkish (Emin Tufan Çetin)
 
 
 Overview of Changes in 4.19.2, 27-06-2025

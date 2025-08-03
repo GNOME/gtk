@@ -293,7 +293,8 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * Define the color scheme used for rendering the user interface.
    *
    * The UI can be set to either [enum@Gtk.InterfaceColorScheme.LIGHT],
-   * or [enum@Gtk.InterfaceColorScheme.DARK] mode.
+   * or [enum@Gtk.InterfaceColorScheme.DARK] mode. Other values will
+   * be interpreted the same as [enum@Gtk.InterfaceColorScheme.LIGHT].
    *
    * This setting is be available for media queries in CSS:
    *
@@ -317,8 +318,9 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    *
    * Define the contrast mode to use for the user interface.
    *
-   * When set to [enum@Gtk.InterfaceContrast.MORE], the UI is rendered in
-   * high contrast.
+   * When set to [enum@Gtk.InterfaceContrast.MORE] or
+   * [enum@Gtk.InterfaceContrast.LESS], the UI is rendered in
+   * high or low contrast.
    *
    * When set to [enum@Gtk.InterfaceContrast.NO_PREFERENCE] (the default),
    * the user interface will be rendered in default mode.
@@ -491,17 +493,6 @@ gtk_css_scanner_parser_error (GtkCssParser         *parser,
   gtk_css_section_unref (section);
 }
 
-static const char *
-enum_to_nick (GType type,
-               int   value)
-{
-  GEnumClass *class = g_type_class_ref (type);
-  GEnumValue *v = g_enum_get_value (class, value);
-  g_type_class_unref (class);
-
-  return v->value_nick;
-}
-
 static GtkCssScanner *
 gtk_css_scanner_new (GtkCssProvider *provider,
                      GtkCssScanner  *parent,
@@ -530,15 +521,46 @@ gtk_css_scanner_new (GtkCssProvider *provider,
       scanner->media_features = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssDiscreteMediaFeature), 2);
 
       feature.name = "prefers-color-scheme";
-      feature.value = enum_to_nick (GTK_TYPE_INTERFACE_COLOR_SCHEME, priv->prefers_color_scheme);
 
-      if (strcmp (feature.value, "default") == 0)
-        feature.value = "light";
+      switch (priv->prefers_color_scheme)
+        {
+        case GTK_INTERFACE_COLOR_SCHEME_DEFAULT:
+        case GTK_INTERFACE_COLOR_SCHEME_LIGHT:
+        case GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED:
+          feature.value = "light";
+          break;
+
+        case GTK_INTERFACE_COLOR_SCHEME_DARK:
+          feature.value = "dark";
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
 
       g_array_append_vals (scanner->media_features, &feature, 1);
 
       feature.name = "prefers-contrast";
-      feature.value = enum_to_nick (GTK_TYPE_INTERFACE_CONTRAST, priv->prefers_contrast);
+
+      switch (priv->prefers_contrast)
+        {
+        case GTK_INTERFACE_CONTRAST_NO_PREFERENCE:
+        case GTK_INTERFACE_CONTRAST_UNSUPPORTED:
+          feature.value = "no-preference";
+          break;
+
+        case GTK_INTERFACE_CONTRAST_MORE:
+          feature.value = "more";
+          break;
+
+        case GTK_INTERFACE_CONTRAST_LESS:
+          feature.value = "less";
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
       g_array_append_vals (scanner->media_features, &feature, 1);
     }
   else

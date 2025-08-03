@@ -862,21 +862,10 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
 
         gtk_style_provider_get_color_scheme (provider, &color_scheme);
 
-        switch (color_scheme)
-          {
-          case GTK_INTERFACE_COLOR_SCHEME_DEFAULT:
-          case GTK_INTERFACE_COLOR_SCHEME_LIGHT:
-            value = gtk_css_color_value_do_resolve (color->light_dark.color1, context, current, cycle_list);
-            break;
-
-          case GTK_INTERFACE_COLOR_SCHEME_DARK:
-            value = gtk_css_color_value_do_resolve (color->light_dark.color2, context, current, cycle_list);
-            break;
-
-          default:
-            g_assert_not_reached ();
-
-          }
+        if (color_scheme == GTK_INTERFACE_COLOR_SCHEME_DARK)
+          value = gtk_css_color_value_do_resolve (color->light_dark.color2, context, current, cycle_list);
+        else
+          value = gtk_css_color_value_do_resolve (color->light_dark.color1, context, current, cycle_list);
       }
       break;
 

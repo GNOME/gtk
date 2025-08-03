@@ -1980,6 +1980,7 @@ typedef enum {
 
 /**
  * GtkInterfaceColorScheme:
+ * @GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED: The system doesn't support color schemes
  * @GTK_INTERFACE_COLOR_SCHEME_DEFAULT: The default color scheme is used
  * @GTK_INTERFACE_COLOR_SCHEME_DARK: A dark color scheme is used
  * @GTK_INTERFACE_COLOR_SCHEME_LIGHT: A light color scheme is used
@@ -1990,9 +1991,13 @@ typedef enum {
  *
  * This information can be used inside CSS via media queries.
  *
+ * More values may be added to this enumeration. Unknown values
+ * should be treated the same as `GTK_INTERFACE_COLOR_SCHEME_DEFAULT`.
+ *
  * Since: 4.20
  */
 typedef enum {
+  GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED,
   GTK_INTERFACE_COLOR_SCHEME_DEFAULT,
   GTK_INTERFACE_COLOR_SCHEME_DARK,
   GTK_INTERFACE_COLOR_SCHEME_LIGHT,
@@ -2000,6 +2005,7 @@ typedef enum {
 
 /**
  * GtkInterfaceContrast
+ * @GTK_INTERFACE_CONTRAST_UNSUPPORTED: The system doesn't support contrast levels
  * @GTK_INTERFACE_CONTRAST_NO_PREFERENCE: No particular preference for contrast
  * @GTK_INTERFACE_CONTRAST_MORE: More contrast is preferred
  * @GTK_INTERFACE_CONTRAST_LESS: Less contrast is preferred
@@ -2010,9 +2016,13 @@ typedef enum {
  *
  * This information can be used inside CSS via media queries.
  *
+ * More values may be added to this enumeration. Unknown values
+ * should be treated the same as `GTK_INTERFACE_CONTRAST_NO_PREFERENCE`.
+ *
  * Since: 4.20
  */
 typedef enum {
+  GTK_INTERFACE_CONTRAST_UNSUPPORTED,
   GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
   GTK_INTERFACE_CONTRAST_MORE,
   GTK_INTERFACE_CONTRAST_LESS,

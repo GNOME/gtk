@@ -69,6 +69,7 @@
                                 <property name="model">
                                   <object class="GtkStringList">
                                     <items>
+                                      <item translatable="yes">Unsupported</item>
                                       <item translatable="yes">Default</item>
                                       <item translatable="yes">Dark</item>
                                       <item translatable="yes">Light</item>
@@ -102,6 +103,7 @@
                                 <property name="model">
                                   <object class="GtkStringList">
                                     <items>
+                                      <item translatable="yes">Unsupported</item>
                                       <item translatable="yes">No Preference</item>
                                       <item translatable="yes">More</item>
                                       <item translatable="yes">Less</item>
