@@ -35,6 +35,8 @@
 #include "gtktextview.h"
 #include "gtktogglebutton.h"
 #include "gtktooltip.h"
+#include "gtksettings.h"
+#include "gtkdropdown.h"
 
 #include "gtk/css/gtkcss.h"
 
@@ -45,6 +47,8 @@ struct _GtkInspectorCssEditorPrivate
   GdkDisplay *display;
   GtkCssProvider *provider;
   GtkToggleButton *disable_button;
+  GtkDropDown *color_scheme;
+  GtkDropDown *contrast;
   guint timeout;
   GList *errors;
   gboolean show_deprecations;
@@ -282,6 +286,41 @@ save_clicked (GtkButton             *button,
 }
 
 static void
+color_scheme_changed (GtkDropDown           *dropdown,
+                      GParamSpec            *pspec,
+                      GtkInspectorCssEditor *ce)
+{
+  GtkInterfaceColorScheme color_scheme = gtk_drop_down_get_selected (ce->priv->color_scheme);
+  GtkInterfaceColorScheme system_color_scheme;
+  GtkInterfaceContrast contrast = gtk_drop_down_get_selected (ce->priv->contrast);
+  GtkInterfaceContrast system_contrast;
+
+  g_object_get (gtk_settings_get_for_display (ce->priv->display),
+                "gtk-interface-color-scheme", &system_color_scheme,
+                "gtk-interface-contrast", &system_contrast,
+                NULL);
+
+  if (color_scheme == GTK_INTERFACE_COLOR_SCHEME_DEFAULT)
+    color_scheme = system_color_scheme;
+
+  if (contrast == GTK_INTERFACE_CONTRAST_NO_PREFERENCE)
+    contrast = system_contrast;
+
+  g_object_set (ce->priv->provider,
+                "prefers-color-scheme", color_scheme,
+                "prefers-contrast", contrast,
+                NULL);
+}
+
+static void
+system_color_scheme_changed (GtkSettings           *settings,
+                             GParamSpec            *pspec,
+                             GtkInspectorCssEditor *ce)
+{
+  color_scheme_changed (NULL, NULL, ce);
+}
+
+static void
 update_style (GtkInspectorCssEditor *ce)
 {
   char *text;
@@ -314,7 +353,7 @@ text_changed (GtkTextBuffer         *buffer,
   if (ce->priv->timeout != 0)
     g_source_remove (ce->priv->timeout);
 
-  ce->priv->timeout = g_timeout_add (100, update_timeout, ce); 
+  ce->priv->timeout = g_timeout_add (100, update_timeout, ce);
 
   g_list_free_full (ce->priv->errors, css_error_free);
   ce->priv->errors = NULL;
@@ -367,9 +406,9 @@ static void
 create_provider (GtkInspectorCssEditor *ce)
 {
   ce->priv->provider = gtk_css_provider_new ();
+
   g_signal_connect (ce->priv->provider, "parsing-error",
                     G_CALLBACK (show_parsing_error), ce);
-
 }
 
 static void
@@ -383,6 +422,13 @@ static void
 add_provider (GtkInspectorCssEditor *ce,
               GdkDisplay *display)
 {
+  GtkSettings *settings = gtk_settings_get_for_display (display);
+
+  g_signal_connect_object (settings, "notify::gtk-interface-color-scheme",
+                           G_CALLBACK (system_color_scheme_changed), ce, 0);
+
+  system_color_scheme_changed (settings, NULL, ce);
+
   gtk_style_context_add_provider_for_display (display,
                                               GTK_STYLE_PROVIDER (ce->priv->provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -441,11 +487,14 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, text);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, disable_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, color_scheme);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, contrast);
   gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
   gtk_widget_class_bind_template_callback (widget_class, toggle_deprecations);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
+  gtk_widget_class_bind_template_callback (widget_class, color_scheme_changed);
 }
 
 void

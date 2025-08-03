@@ -36,7 +36,7 @@
 #include "gtkcssproviderprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtkswitch.h"
 #include "gtkscale.h"
 #include "gtkwindow.h"
@@ -49,6 +49,7 @@
 #include "gtkentry.h"
 #include "gtkstringlist.h"
 #include "gtklabel.h"
+#include "gtktypebuiltins.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -77,7 +78,8 @@ struct _GtkInspectorVisual
 
   GtkWidget *visual_box;
   GtkWidget *theme_combo;
-  GtkWidget *dark_switch;
+  GtkWidget *color_scheme_combo;
+  GtkWidget *contrast_combo;
   GtkWidget *icon_combo;
   GtkWidget *cursor_combo;
   GtkWidget *cursor_size_spin;
@@ -699,23 +701,19 @@ init_theme (GtkInspectorVisual *vis)
 }
 
 static void
-init_dark (GtkInspectorVisual *vis)
+init_colorscheme (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (vis->settings, "gtk-application-prefer-dark-theme",
-                          vis->dark_switch, "active",
+  g_object_bind_property (vis->settings, "gtk-interface-color-scheme",
+                          vis->color_scheme_combo, "selected",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+}
 
-  if (g_getenv ("GTK_THEME") != NULL)
-    {
-      GtkWidget *row;
-
-      /* theme is hardcoded, nothing we can do */
-      row = gtk_widget_get_parent (vis->dark_switch);
-      gtk_widget_unparent (vis->dark_switch);
-      vis->dark_switch = gtk_label_new ("Set via GTK_THEME");
-      gtk_widget_add_css_class (vis->dark_switch, "dim-label");
-      gtk_box_append (GTK_BOX (row), vis->dark_switch);
-    }
+static void
+init_contrast (GtkInspectorVisual *vis)
+{
+  g_object_bind_property (vis->settings, "gtk-interface-contrast",
+                          vis->contrast_combo, "selected",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -1111,12 +1109,7 @@ row_activated (GtkListBox         *box,
                GtkListBoxRow      *row,
                GtkInspectorVisual *vis)
 {
-  if (gtk_widget_is_ancestor (vis->dark_switch, GTK_WIDGET (row)))
-    {
-      GtkSwitch *sw = GTK_SWITCH (vis->dark_switch);
-      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
-    }
-  else if (gtk_widget_is_ancestor (vis->animation_switch, GTK_WIDGET (row)))
+  if (gtk_widget_is_ancestor (vis->animation_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->animation_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
@@ -1265,7 +1258,8 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, theme_combo);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, dark_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, color_scheme_combo);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, contrast_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_size_spin);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_size_adjustment);
@@ -1314,7 +1308,8 @@ gtk_inspector_visual_set_display (GtkInspectorVisual *vis,
 
   init_direction (vis);
   init_theme (vis);
-  init_dark (vis);
+  init_colorscheme (vis);
+  init_contrast (vis);
   init_icons (vis);
   init_cursors (vis);
   init_cursor_size (vis);

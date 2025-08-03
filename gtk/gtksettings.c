@@ -202,6 +202,8 @@ enum {
   PROP_KEYNAV_USE_CARET,
   PROP_OVERLAY_SCROLLING,
   PROP_FONT_RENDERING,
+  PROP_INTERFACE_COLOR_SCHEME,
+  PROP_INTERFACE_CONTRAST,
 
   NUM_PROPERTIES
 };
@@ -260,9 +262,6 @@ gtk_settings_init (GtkSettings *settings)
   const char * const *config_dirs;
 
   g_datalist_init (&settings->queued_settings);
-
-  settings->style_cascades = g_slist_prepend (NULL, _gtk_style_cascade_new ());
-  settings->theme_provider = gtk_css_provider_new ();
 
   settings->property_values = g_new0 (GtkSettingsPropertyValue, NUM_PROPERTIES - 1);
   g_object_freeze_notify (G_OBJECT (settings));
@@ -749,6 +748,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Dark themes should not be used for documents, where large spaces
    * are white/light and the dark chrome creates too much contrast
    * (web browser, text editor...).
+   *
+   * Deprecated: 4.20: Use `GtkCssProvider` properties instead
    */
   pspecs[PROP_APPLICATION_PREFER_DARK_THEME] = g_param_spec_boolean ("gtk-application-prefer-dark-theme", NULL, NULL,
                                                                      FALSE,
@@ -816,7 +817,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Set to %TRUE if the desktop environment is displaying
    * the desktop folder, %FALSE if not.
-   * 
+   *
    * Deprecated: 4.20: This setting is not relevant anymore
    */
   pspecs[PROP_SHELL_SHOWS_DESKTOP] = g_param_spec_boolean ("gtk-shell-shows-desktop", NULL, NULL,
@@ -982,6 +983,40 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                    GTK_FONT_RENDERING_AUTOMATIC,
                                                    GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSettings:gtk-interface-color-scheme:
+   *
+   * The color scheme used for rendering the user interface.
+   *
+   * This setting communicates the system-wide preference.
+   * The color scheme that is actually used when applying CSS
+   * styles can be set with the [property@Gtk.CssProvider:prefers-color-scheme]
+   * property.
+   *
+   * Since: 4.20
+   */
+  pspecs[PROP_INTERFACE_COLOR_SCHEME] = g_param_spec_enum ("gtk-interface-color-scheme", NULL, NULL,
+                                                           GTK_TYPE_INTERFACE_COLOR_SCHEME,
+                                                           GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                                                           GTK_PARAM_READWRITE);
+
+  /**
+   * GtkSettings:gtk-interface-contrast:
+   *
+   * The level of contrast to use for the user interface.
+   *
+   * This setting communicates the system-wide preference.
+   * The contrast level that is actually used when applying CSS
+   * styles can be set with the [property@Gtk.CssProvider:prefers-contrast]
+   * property.
+   *
+   * Since: 4.20
+   */
+  pspecs[PROP_INTERFACE_CONTRAST] = g_param_spec_enum ("gtk-interface-contrast", NULL, NULL,
+                                                       GTK_TYPE_INTERFACE_CONTRAST,
+                                                       GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
+                                                       GTK_PARAM_READWRITE);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, pspecs);
 }
 
@@ -1017,7 +1052,7 @@ gtk_settings_finalize (GObject *object)
 
   g_free (settings->font_family);
 
-  g_object_unref (settings->theme_provider);
+  g_clear_object (&settings->theme_provider);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
@@ -1057,12 +1092,32 @@ settings_init_style (GtkSettings *settings)
   static GtkCssProvider *css_provider = NULL;
   GtkStyleCascade *cascade;
 
+  cascade = _gtk_style_cascade_new ();
+
+  settings->style_cascades = g_slist_prepend (NULL, cascade);
+  settings->theme_provider = gtk_css_provider_new ();
+
+  g_object_bind_property (settings, "gtk-interface-color-scheme",
+                          settings->theme_provider, "prefers-color-scheme",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (settings, "gtk-interface-contrast",
+                          settings->theme_provider, "prefers-contrast",
+                          G_BINDING_SYNC_CREATE);
+
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
     {
       char *css_path;
 
       css_provider = gtk_css_provider_new ();
+
+      g_object_bind_property (settings, "gtk-interface-color-scheme",
+                              css_provider, "prefers-color-scheme",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (settings, "gtk-interface-contrast",
+                              css_provider, "prefers-contrast",
+                              G_BINDING_SYNC_CREATE);
+
       css_path = g_build_filename (g_get_user_config_dir (),
                                    "gtk-4.0",
                                    "gtk.css",
@@ -1075,7 +1130,6 @@ settings_init_style (GtkSettings *settings)
       g_free (css_path);
     }
 
-  cascade = _gtk_settings_get_style_cascade (settings, 1);
   _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -1577,6 +1631,7 @@ get_theme_name (GtkSettings  *settings,
                 char        **theme_name,
                 char        **theme_variant)
 {
+  GtkInterfaceContrast prefers_contrast;
   gboolean prefer_dark;
 
   *theme_name = NULL;
@@ -1589,11 +1644,16 @@ get_theme_name (GtkSettings  *settings,
     {
       char *p;
       p = strrchr (*theme_name, ':');
-      if (p) {
-        *p = '\0';
-        p++;
-        *theme_variant = g_strdup (p);
-      }
+      if (p)
+        {
+          *p = '\0';
+          p++;
+          *theme_variant = g_strdup (p);
+        }
+      else
+        {
+          *theme_variant = g_strdup ("");
+        }
 
       return;
     }
@@ -1605,7 +1665,15 @@ get_theme_name (GtkSettings  *settings,
                 "gtk-application-prefer-dark-theme", &prefer_dark,
                 NULL);
 
-  if (prefer_dark)
+  g_object_get (settings->theme_provider, "prefers-contrast", &prefers_contrast, NULL);
+  if (prefers_contrast == GTK_INTERFACE_CONTRAST_MORE)
+    {
+      if (prefer_dark)
+        *theme_variant = g_strdup ("hc-dark");
+      else
+        *theme_variant = g_strdup ("hc");
+    }
+  else if (prefer_dark)
     *theme_variant = g_strdup ("dark");
 
   if (*theme_name && **theme_name)

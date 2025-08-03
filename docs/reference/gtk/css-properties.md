@@ -96,6 +96,9 @@ You can use rgb(), rgba(), hsl() with both the legacy or the modern CSS
 syntax, and calc() can be used as well in color expressions. hwb(), oklab(),
 oklch(), color(), color-mix() and relative colors are supported as well.
 
+Finally, light-dark() can be used to select different colors depending
+on the effective color scheme.
+
 ### Non-CSS Colors
 
 GTK  extends the CSS syntax with several additional ways to specify colors.
@@ -146,7 +149,7 @@ To load a themed icon, use
 
 The specified icon name is used to look up a themed icon, while taking into
 account the values of the -gtk-icon-palette property. This kind of image is
-mainly used as value of the -gtk-icon-source property. 
+mainly used as value of the -gtk-icon-source property.
 
 Symbolic icons from the icon theme are recolored according to the
 -gtk-icon-palette property, which defines a list of named colors.
@@ -296,3 +299,15 @@ done with
 |animation-fill-mode| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation-fill-mode) | |
 |animation| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation) | |
 |border-spacing| [CSS Table Level 3](https://www.w3.org/TR/css-tables-3/#border-spacing-property) | respected by GtkBoxLayout, GtkGridLayout, GtkCenterLayout |
+
+## Media Queries
+
+Since GTK 4.20 [CSS Media Queries](https://www.w3.org/TR/mediaqueries-5/) are supported.
+Media queries can include `not`, `and`, and `or` expressions.
+
+GTK supports the following media features:
+
+| Media feature        | Reference | Notes |
+|:---------------------|:----------|:------|
+| prefers-color-scheme | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-color-scheme) | `light` and `dark` mode |
+| prefers-contrast     | [Media Queries Level 5](https://www.w3.org/TR/mediaqueries-5/#prefers-contrast) | `no-preference`, `more`, and `less` |

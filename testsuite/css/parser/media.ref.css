@@ -1,0 +1,50 @@
+@define-color media_color rgb(255,0,0);
+
+@keyframes needs_attention {
+  from {
+    background-color: rgb(255,0,0);
+  }
+  to {
+    background-color: rgb(0,0,255);
+  }
+}
+
+default-mode {
+  color: rgb(0,128,0);
+}
+
+foo {
+  color: rgb(0,0,0);
+}
+
+light-mode-is-enabled {
+  color: rgb(0,0,255);
+}
+
+another-light-mode-rule {
+  color: rgb(0,0,255);
+}
+
+nested-tag {
+  color: rgb(0,0,255);
+}
+
+not-dark-style {
+  color: rgb(0,128,0);
+}
+
+not-dark-style-with-parens {
+  color: rgb(0,128,0);
+}
+
+light-and-not-dark {
+  color: rgb(0,128,0);
+}
+
+light-comma-dark {
+  color: rgb(0,128,0);
+}
+
+normal {
+  color: rgb(255,0,0);
+}

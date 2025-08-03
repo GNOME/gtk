@@ -77,6 +77,36 @@
             <signal name="toggled" handler="toggle_deprecations"/>
           </object>
         </child>
+        <child>
+          <object class="GtkDropDown" id="color_scheme">
+            <signal name="notify::selected" handler="color_scheme_changed"/>
+            <property name="tooltip-text">Color scheme to use for this CSS</property>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>System colors</item>
+                  <item>Dark colors</item>
+                  <item>Light colors</item>
+                </items>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="contrast">
+            <signal name="notify::selected" handler="color_scheme_changed"/>
+            <property name="tooltip-text">Contrast level to use for this CSS</property>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>System contrast</item>
+                  <item>More contrast</item>
+                  <item>Less contrast</item>
+                </items>
+              </object>
+            </property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
