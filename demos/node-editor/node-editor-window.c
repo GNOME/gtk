@@ -259,6 +259,9 @@ mark_autosave_as_unsafe (void)
   path2 = get_autosave_path (NULL);
 
   g_rename (path2, path1);
+
+  g_free (path1);
+  g_free (path2);
 }
 
 static void
@@ -271,6 +274,9 @@ mark_autosave_as_safe (void)
   path2 = get_autosave_path (NULL);
 
   g_rename (path1, path2);
+
+  g_free (path1);
+  g_free (path2);
 }
 
 static void

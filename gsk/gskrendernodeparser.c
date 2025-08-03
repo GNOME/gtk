@@ -4768,6 +4768,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 #endif
 
   append_bytes_param (p, param_name, compressed_bytes, "application/gzip");
+
+  g_object_unref (compressor);
+  g_bytes_unref (compressed_bytes);
 }
 
 static void
