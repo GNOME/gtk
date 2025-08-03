@@ -1124,7 +1124,7 @@ start_element_cb (GMarkupParseContext  *context,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "r", NULL,
                                      /* Other attributes cause an error, and we'll fall back to loading a texture */
                                     G_MARKUP_COLLECT_INVALID))
-    return;
+    goto cleanup;
 
   fill_opacity = 1;
   if (fill_opacity_attr)
