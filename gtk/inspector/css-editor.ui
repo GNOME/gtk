@@ -90,6 +90,7 @@
                 </items>
               </object>
             </property>
+            <property name="selected">1</property>
           </object>
         </child>
         <child>
@@ -105,6 +106,7 @@
                 </items>
               </object>
             </property>
+            <property name="selected">1</property>
           </object>
         </child>
       </object>

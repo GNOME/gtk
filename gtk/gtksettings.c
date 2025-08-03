@@ -997,7 +997,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    */
   pspecs[PROP_INTERFACE_COLOR_SCHEME] = g_param_spec_enum ("gtk-interface-color-scheme", NULL, NULL,
                                                            GTK_TYPE_INTERFACE_COLOR_SCHEME,
-                                                           GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+                                                           GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED,
                                                            GTK_PARAM_READWRITE);
 
   /**
@@ -1014,7 +1014,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    */
   pspecs[PROP_INTERFACE_CONTRAST] = g_param_spec_enum ("gtk-interface-contrast", NULL, NULL,
                                                        GTK_TYPE_INTERFACE_CONTRAST,
-                                                       GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
+                                                       GTK_INTERFACE_CONTRAST_UNSUPPORTED,
                                                        GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, pspecs);
