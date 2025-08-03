@@ -40,6 +40,7 @@
 #include "gtkentrybuffer.h"
 #include "gtkgesturedrag.h"
 #include <glib/gi18n-lib.h>
+#include "gtkjoinedmenuprivate.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -174,6 +175,9 @@ struct _GtkEntryPrivate
 
   GtkWidget     *text;
   GtkWidget     *progress_widget;
+  GMenuModel    *extra_menu;
+  gchar         *menu_entry_icon_primary_text;
+  gchar         *menu_entry_icon_secondary_text;
 
   guint         show_emoji_icon         : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
@@ -238,6 +242,8 @@ enum {
   PROP_EXTRA_MENU,
   PROP_SHOW_EMOJI_ICON,
   PROP_ENABLE_EMOJI_COMPLETION,
+  PROP_MENU_ENTRY_ICON_PRIMARY_TEXT,
+  PROP_MENU_ENTRY_ICON_SECONDARY_TEXT,
   PROP_EDITING_CANCELED,
   NUM_PROPERTIES = PROP_EDITING_CANCELED,
 };
@@ -294,6 +300,8 @@ static void   gtk_entry_direction_changed    (GtkWidget        *widget,
  */
 static void gtk_entry_start_editing (GtkCellEditable *cell_editable,
 				     GdkEvent        *event);
+
+static void update_extra_menu (GtkEntry *entry);
 
 /* Default signal handlers
  */
@@ -433,6 +441,18 @@ gtk_entry_mnemonic_activate (GtkWidget *widget,
   gtk_widget_grab_focus (priv->text);
 
   return TRUE;
+}
+
+static void
+gtk_entry_activate_misc_icon (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *parameter)
+{
+  GtkEntry *self = GTK_ENTRY (widget);
+  gtk_entry_activate_icon (self,
+                           g_str_equal (action_name, "misc.menu_entry_icon_primary")
+                           ? GTK_ENTRY_ICON_PRIMARY
+                           : GTK_ENTRY_ICON_SECONDARY);
 }
 
 static void
@@ -923,6 +943,52 @@ gtk_entry_class_init (GtkEntryClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkEntry:menu-entry-icon-primary-text:
+   *
+   * Text for an item in the context menu to activate the primary icon action.
+   *
+   * When the primary icon is activatable and this property has been set, a new entry
+   * in the context menu of this GtkEntry will appear with this text. Selecting that
+   * menu entry will result in the primary icon being activated, exactly in the same way
+   * as it would be activated from a mouse click.
+   *
+   * This simplifies adding accessibility support to applications using activatable
+   * icons. The activatable icons aren't focusable when navigating the interface with
+   * the keyboard This is why Gtk recommends to also add those actions in the context
+   * menu. This set of methods greatly simplifies this, by adding a menu item that, when
+   * enabled, calls the same callback than clicking on the icon.
+   *
+   * Since: 4.20
+   */
+  entry_props[PROP_MENU_ENTRY_ICON_PRIMARY_TEXT] =
+      g_param_spec_string ("menu-entry-icon-primary-text", NULL, NULL,
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkEntry:menu-entry-icon-secondary-text:
+   *
+   * Text for an item in the context menu to activate the secondary icon action.
+   *
+   * When the primary icon is activatable and this property has been set, a new entry
+   * in the context menu of this GtkEntry will appear with this text. Selecting that
+   * menu entry will result in the primary icon being activated, exactly in the same way
+   * as it would be activated from a mouse click.
+   *
+   * This simplifies adding accessibility support to applications using activatable
+   * icons. The activatable icons aren't focusable when navigating the interface with
+   * the keyboard This is why Gtk recommends to also add those actions in the context
+   * menu. This set of methods greatly simplifies this, by adding a menu item that, when
+   * enabled, calls the same callback than clicking on the icon.
+   *
+   * Since: 4.20
+   */
+  entry_props[PROP_MENU_ENTRY_ICON_SECONDARY_TEXT] =
+      g_param_spec_string ("menu-entry-icon-secondary-text", NULL, NULL,
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
   g_object_class_override_property (gobject_class, PROP_EDITING_CANCELED, "editing-canceled");
   gtk_editable_install_properties (gobject_class, PROP_EDITING_CANCELED + 1);
@@ -981,6 +1047,11 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
+
+  gtk_widget_class_install_action (widget_class, "misc.menu_entry_icon_primary", NULL,
+                                   gtk_entry_activate_misc_icon);
+  gtk_widget_class_install_action (widget_class, "misc.menu_entry_icon_secondary", NULL,
+                                   gtk_entry_activate_misc_icon);
 }
 
 static GtkEditable *
@@ -1166,6 +1237,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_entry_set_extra_menu (entry, g_value_get_object (value));
       break;
 
+    case PROP_MENU_ENTRY_ICON_PRIMARY_TEXT:
+      gtk_entry_set_menu_entry_icon_text (entry,
+                                          GTK_ENTRY_ICON_PRIMARY,
+                                          g_value_get_string (value));
+      break;
+
+    case PROP_MENU_ENTRY_ICON_SECONDARY_TEXT:
+      gtk_entry_set_menu_entry_icon_text (entry,
+                                          GTK_ENTRY_ICON_SECONDARY,
+                                          g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1328,6 +1411,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_value_set_object (value, gtk_entry_get_extra_menu (entry));
       break;
 
+    case PROP_MENU_ENTRY_ICON_PRIMARY_TEXT:
+      g_value_set_string (value,
+                          gtk_entry_get_menu_entry_icon_text (entry,
+                                                              GTK_ENTRY_ICON_PRIMARY));
+      break;
+
+    case PROP_MENU_ENTRY_ICON_SECONDARY_TEXT:
+      g_value_set_string (value,
+                          gtk_entry_get_menu_entry_icon_text (entry,
+                                                              GTK_ENTRY_ICON_SECONDARY));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1425,6 +1520,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_editable_finish_delegate (GTK_EDITABLE (entry));
     }
   g_clear_pointer (&priv->text, gtk_widget_unparent);
+  g_clear_object (&priv->extra_menu);
+  g_clear_pointer (&priv->menu_entry_icon_primary_text, g_free);
+  g_clear_pointer (&priv->menu_entry_icon_secondary_text, g_free);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
@@ -2614,6 +2712,7 @@ gtk_entry_set_icon_activatable (GtkEntry             *entry,
                                             ? PROP_ACTIVATABLE_PRIMARY
                                             : PROP_ACTIVATABLE_SECONDARY]);
     }
+  update_extra_menu (entry);
 }
 
 /**
@@ -2763,6 +2862,7 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
                                             ? PROP_SENSITIVE_PRIMARY
                                             : PROP_SENSITIVE_SECONDARY]);
     }
+  update_extra_menu (entry);
 }
 
 /**
@@ -3722,6 +3822,151 @@ gtk_entry_get_text_widget (GtkEntry *entry)
 }
 
 /**
+ * gtk_entry_get_menu_entry_icon_text:
+ * @entry: a `GtkEntry`
+ * @icon_pos: either @GTK_ENTRY_ICON_PRIMARY or @GTK_ENTRY_ICON_SECONDARY
+ *
+ * Gets the text that will be used in the context menu of the `GtkEntry`
+ * when the specified icon is activatable. Selecting this item in the menu
+ * results, from all aspects, the same than clicking on the specified icon.
+ * This greatly simplifies making accessible applications, because the icons
+ * aren't focusable when using keyboard navigation. This is why Gtk recommends
+ * to add the same action to the context menu.
+ *
+ * Returns: (nullable) (transfer none): the text that will be used in the menu item,
+ *   or NULL if no menu item is desired.
+ *
+ * Since: 4.19
+ */
+const gchar *
+gtk_entry_get_menu_entry_icon_text (GtkEntry             *entry,
+                                    GtkEntryIconPosition  icon_pos)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+    return priv->menu_entry_icon_primary_text;
+  else
+    return priv->menu_entry_icon_secondary_text;
+}
+
+/**
+ * gtk_entry_set_menu_entry_icon_text:
+ * @entry: a `GtkEntry`
+ * @icon_pos: either @GTK_ENTRY_ICON_PRIMARY or @GTK_ENTRY_ICON_SECONDARY
+ * @text: the text used for the menu item in the context menu, or NULL to not add a menu item.
+ *
+ * Sets the text that will be used in the context menu of the `GtkEntry`
+ * when the specified icon is activatable. Selecting this item in the menu
+ * results, from all aspects, the same than clicking on the specified icon.
+ * This greatly simplifies making accessible applications, because the icons
+ * aren't focusable when using keyboard navigation. This is why Gtk recommends
+ * to add the same action to the context menu.
+ *
+ * Since: 4.19
+ */
+void
+gtk_entry_set_menu_entry_icon_text (GtkEntry             *entry,
+                                    GtkEntryIconPosition  icon_pos,
+                                    const gchar          *text)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+    {
+      g_clear_pointer (&priv->menu_entry_icon_primary_text, g_free);
+      priv->menu_entry_icon_primary_text = g_strdup (text);
+    }
+  else
+    {
+      g_clear_pointer (&priv->menu_entry_icon_secondary_text, g_free);
+      priv->menu_entry_icon_secondary_text = g_strdup (text);
+    }
+  update_extra_menu (entry);
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
+                                                          ? PROP_MENU_ENTRY_ICON_PRIMARY_TEXT
+                                                          : PROP_MENU_ENTRY_ICON_SECONDARY_TEXT]);
+}
+
+static GMenuItem *
+create_icon_menu_entry (GtkEntry             *entry,
+                        GtkEntryIconPosition  icon_pos,
+                        const gchar          *menu_entry_text)
+{
+  GMenuItem *item;
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  const gchar *action_name = (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+                             ? "misc.menu_entry_icon_primary"
+                             : "misc.menu_entry_icon_secondary";
+  EntryIconInfo *icon_info = priv->icons[icon_pos];
+
+  if (icon_info == NULL)
+    return NULL;
+
+  if (icon_info->nonactivatable)
+    return NULL;
+
+  if (menu_entry_text == NULL)
+    return NULL;
+
+  item = g_menu_item_new (menu_entry_text, action_name);
+  gtk_widget_action_set_enabled (GTK_WIDGET (entry), action_name,
+                                 gtk_widget_get_sensitive (icon_info->widget));
+  return item;
+}
+
+static void
+update_extra_menu (GtkEntry *entry)
+{
+  GtkJoinedMenu *joined;
+  GMenu *menu;
+  GMenu *section;
+  GMenuItem *item;
+  gboolean has_icon_entries = FALSE;
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  joined = gtk_joined_menu_new ();
+  menu = g_menu_new ();
+  section = g_menu_new ();
+
+  item = create_icon_menu_entry (entry,
+                                 GTK_ENTRY_ICON_PRIMARY,
+                                 priv->menu_entry_icon_primary_text);
+  if (item != NULL)
+    {
+      has_icon_entries = TRUE;
+      g_menu_append_item (section, item);
+      g_clear_object (&item);
+    }
+
+  item = create_icon_menu_entry (entry,
+                                 GTK_ENTRY_ICON_SECONDARY,
+                                 priv->menu_entry_icon_secondary_text);
+  if (item != NULL)
+    {
+      has_icon_entries = TRUE;
+      g_menu_append_item (section, item);
+      g_clear_object (&item);
+    }
+
+  if (has_icon_entries)
+    {
+      g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+      gtk_joined_menu_append_menu (joined, G_MENU_MODEL (menu));
+      if (priv->extra_menu != NULL)
+        gtk_joined_menu_append_menu (joined, G_MENU_MODEL (priv->extra_menu));
+      gtk_text_set_extra_menu (GTK_TEXT (priv->text), G_MENU_MODEL (joined));
+    }
+  else
+    {
+      gtk_text_set_extra_menu (GTK_TEXT (priv->text), priv->extra_menu);
+    }
+
+  g_object_unref (menu);
+  g_object_unref (section);
+}
+
+/**
  * gtk_entry_set_extra_menu:
  * @entry: a `GtkEntry`
  * @model: (nullable): a `GMenuModel`
@@ -3737,7 +3982,10 @@ gtk_entry_set_extra_menu (GtkEntry   *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_extra_menu (GTK_TEXT (priv->text), model);
+  g_clear_object (&priv->extra_menu);
+  priv->extra_menu = g_object_ref (model);
+
+  update_extra_menu (entry);
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_EXTRA_MENU]);
 }
@@ -3757,7 +4005,7 @@ gtk_entry_get_extra_menu (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  return gtk_text_get_extra_menu (GTK_TEXT (priv->text));
+  return priv->extra_menu;
 }
 
 /*< private >
