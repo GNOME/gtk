@@ -1255,9 +1255,9 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
               };
               gboolean success = FALSE;
               g_string_truncate (compose_output, 0);
-              for (int seq = 0; seq < G_N_ELEMENTS(test_sequences); seq++)
+              for (int seq = 0; seq < G_N_ELEMENTS (test_sequences); seq++)
                 {
-                  if (check_compose_sequence(test_sequences[seq], 2, compose_output))
+                  if (check_compose_sequence (test_sequences[seq], 2, compose_output))
                     {
                       success = TRUE;
                       break;
