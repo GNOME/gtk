@@ -290,9 +290,9 @@ color_scheme_changed (GtkDropDown           *dropdown,
                       GParamSpec            *pspec,
                       GtkInspectorCssEditor *ce)
 {
-  GtkInterfaceColorScheme color_scheme = gtk_drop_down_get_selected (ce->priv->color_scheme);
+  GtkInterfaceColorScheme color_scheme = gtk_drop_down_get_selected (ce->priv->color_scheme) + 1;
   GtkInterfaceColorScheme system_color_scheme;
-  GtkInterfaceContrast contrast = gtk_drop_down_get_selected (ce->priv->contrast);
+  GtkInterfaceContrast contrast = gtk_drop_down_get_selected (ce->priv->contrast) + 1;
   GtkInterfaceContrast system_contrast;
 
   g_object_get (gtk_settings_get_for_display (ce->priv->display),

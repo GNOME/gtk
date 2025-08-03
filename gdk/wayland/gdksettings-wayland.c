@@ -433,9 +433,9 @@ apply_portal_setting (TranslationEntry *entry,
       if (strcmp (entry->key, "font-rendering") == 0)
         entry->fallback.i = get_font_rendering (g_variant_get_string (value, NULL));
       else if (strcmp (entry->key, "color-scheme") == 0)
-        entry->fallback.i = (int) g_variant_get_uint32 (value);
+        entry->fallback.i = (int) (g_variant_get_uint32 (value) + 1);
       else if (strcmp (entry->key, "contrast") == 0)
-        entry->fallback.i = (int) g_variant_get_uint32 (value);
+        entry->fallback.i = (int) (g_variant_get_uint32 (value) + 1);
       break;
     case G_TYPE_BOOLEAN:
       entry->fallback.b = g_variant_get_boolean (value);
