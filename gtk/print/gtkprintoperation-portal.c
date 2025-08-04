@@ -462,10 +462,10 @@ prepare_print_response (GDBusConnection *connection,
           g_free (uri);
           close (fd);
 
+          portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+
           finish_print (portal, printer, page_setup, settings);
           g_free (filename);
-
-          portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
         }
       else
         {
