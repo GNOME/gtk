@@ -4616,10 +4616,10 @@ gtk_text_enter_text (GtkText    *self,
     }
 
   tmp_pos = priv->current_pos;
+  /* We do not need to notify the accessible text contents change
+   * here, the insert_text() call will take care of it
+   */
   gtk_editable_insert_text (GTK_EDITABLE (self), str, strlen (str), &tmp_pos);
-  gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
-                                       GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
-                                       tmp_pos, tmp_pos + g_utf8_strlen (str, -1));
   gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
 
   end_change (self);
