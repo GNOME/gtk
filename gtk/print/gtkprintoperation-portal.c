@@ -376,9 +376,6 @@ finish_print (PortalData        *portal,
 out:
   if (portal->print_cb)
     portal->print_cb (op, portal->parent, portal->do_print, portal->result);
-
-  if (portal->destroy)
-    portal->destroy (portal);
 }
 
 static GtkPrinter *
@@ -462,10 +459,10 @@ prepare_print_response (GDBusConnection *connection,
           g_free (uri);
           close (fd);
 
+          portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+
           finish_print (portal, printer, page_setup, settings);
           g_free (filename);
-
-          portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
         }
       else
         {
@@ -479,9 +476,6 @@ prepare_print_response (GDBusConnection *connection,
 
       if (portal->print_cb)
         portal->print_cb (portal->op, portal->parent, portal->do_print, portal->result);
-
-      if (portal->destroy)
-        portal->destroy (portal);
     }
 
   if (options)
@@ -489,6 +483,9 @@ prepare_print_response (GDBusConnection *connection,
 
   if (portal->loop)
     g_main_loop_quit (portal->loop);
+
+  if (portal->destroy)
+    portal->destroy (portal);
 }
 
 static void
@@ -507,8 +504,13 @@ prepare_print_called (GObject      *source,
       if (portal->op->priv->error == NULL)
         portal->op->priv->error = g_error_copy (error);
       g_error_free (error);
+
       if (portal->loop)
         g_main_loop_quit (portal->loop);
+
+      if (portal->destroy)
+        portal->destroy (portal);
+
       return;
     }
   else
