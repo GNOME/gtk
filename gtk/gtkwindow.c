@@ -2375,6 +2375,10 @@ gtk_window_set_title_internal (GtkWindow   *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   priv = window->priv;
+
+  if (g_strcmp0 (priv->title, title) == 0)
+    return;
+
   widget = GTK_WIDGET (window);
 
   new_title = g_strdup (title);
