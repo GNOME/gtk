@@ -130,7 +130,7 @@ container:fedora:
 
 .container.android:
   variables:
-    BASE_TAG: '2025-04-27.1'
+    BASE_TAG: '2025-08-05.0'
     FDO_DISTRIBUTION_VERSION: sid
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
