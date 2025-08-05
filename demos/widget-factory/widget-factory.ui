@@ -14,11 +14,6 @@
         <attribute name="label" translatable="yes">Style</attribute>
         <section>
           <item>
-            <attribute name="label" translatable="yes">Current</attribute>
-            <attribute name="action">win.theme</attribute>
-            <attribute name="target">current</attribute>
-          </item>
-          <item>
             <attribute name="label" translatable="yes">Default</attribute>
             <attribute name="action">win.theme</attribute>
             <attribute name="target">default</attribute>

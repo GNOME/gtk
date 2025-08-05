@@ -34,10 +34,15 @@ change_dark_state (GSimpleAction *action,
                     gpointer       user_data)
 {
   GtkSettings *settings = gtk_settings_get_default ();
+  GtkInterfaceColorScheme color_scheme;
+
+  if (g_variant_get_boolean (state))
+    color_scheme = GTK_INTERFACE_COLOR_SCHEME_DARK;
+  else
+    color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
 
   g_object_set (G_OBJECT (settings),
-                "gtk-application-prefer-dark-theme",
-                g_variant_get_boolean (state),
+                "gtk-interface-color-scheme", color_scheme,
                 NULL);
 
   g_simple_action_set_state (action, state);
@@ -49,33 +54,40 @@ change_theme_state (GSimpleAction *action,
                     gpointer       user_data)
 {
   GtkSettings *settings = gtk_settings_get_default ();
+  GtkInterfaceColorScheme color_scheme;
+  GtkInterfaceContrast contrast;
   const char *s;
-  const char *theme;
-
-  g_simple_action_set_state (action, state);
 
   s = g_variant_get_string (state, NULL);
 
+  g_simple_action_set_state (action, state);
+
   if (strcmp (s, "default") == 0)
-    theme = "Default";
-  else if (strcmp (s, "dark") == 0)
-    theme = "Default-dark";
-  else if (strcmp (s, "hc") == 0)
-    theme = "Default-hc";
-  else if (strcmp (s, "hc-dark") == 0)
-    theme = "Default-hc-dark";
-  else if (strcmp (s, "current") == 0)
     {
-      gtk_settings_reset_property (settings, "gtk-theme-name");
-      gtk_settings_reset_property (settings, "gtk-application-prefer-dark-theme");
-      return;
+      color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
+      contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
+    }
+  else if (strcmp (s, "dark") == 0)
+    {
+      color_scheme = GTK_INTERFACE_COLOR_SCHEME_DARK;
+      contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
+    }
+  else if (strcmp (s, "hc") == 0)
+    {
+      color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
+      contrast = GTK_INTERFACE_CONTRAST_MORE;
+    }
+  else if (strcmp (s, "hc-dark") == 0)
+    {
+      color_scheme = GTK_INTERFACE_COLOR_SCHEME_DARK;
+      contrast = GTK_INTERFACE_CONTRAST_MORE;
     }
   else
     return;
 
-  g_object_set (G_OBJECT (settings),
-                "gtk-theme-name", theme,
-                "gtk-application-prefer-dark-theme", FALSE,
+  g_object_set (settings,
+                "gtk-interface-color-scheme", color_scheme,
+                "gtk-interface-contrast", contrast,
                 NULL);
 }
 
