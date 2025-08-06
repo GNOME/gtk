@@ -392,6 +392,8 @@ gtk_adjustment_new (double value,
 		    double page_increment,
 		    double page_size)
 {
+  g_return_val_if_fail (lower + page_size <= upper, NULL);
+
   return g_object_new (GTK_TYPE_ADJUSTMENT,
 		       "lower", lower,
 		       "upper", upper,
@@ -840,6 +842,7 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
   gboolean value_changed = FALSE;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (lower + page_size <= upper);
 
   g_object_freeze_notify (G_OBJECT (adjustment));
 

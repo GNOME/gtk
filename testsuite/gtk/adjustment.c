@@ -109,7 +109,7 @@ test_clamp (void)
   gtk_adjustment_set_value (a, 99.0);
   g_assert_cmpfloat (gtk_adjustment_get_value (a), ==, 90.0);
 
-  gtk_adjustment_configure (a, 0.0, 0.0, 10.0, 1.0, 5.0, 20.0);
+  gtk_adjustment_configure (a, 0.0, 0.0, 10.0, 1.0, 5.0, 10.0);
   
   gtk_adjustment_set_value (a, 5.0);
   g_assert_cmpfloat (gtk_adjustment_get_value (a), ==, 0.0);
