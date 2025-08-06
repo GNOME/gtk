@@ -1051,7 +1051,7 @@ gtk_file_dialog_open (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
  *
- * Returns: (nullable) (transfer full): the file that was selected
+ * Returns: (transfer full): the file that was selected
  *
  * Since: 4.10
  */
@@ -1123,7 +1123,7 @@ gtk_file_dialog_select_folder (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.select_folder] call.
  *
- * Returns: (nullable) (transfer full): the folder that was selected
+ * Returns: (transfer full): the folder that was selected
  *
  * Since: 4.10
  */
@@ -1191,7 +1191,7 @@ gtk_file_dialog_save (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.save] call.
  *
- * Returns: (nullable) (transfer full): the file that was selected
+ * Returns: (transfer full): the file that was selected
  *
  * Since: 4.10
  */
@@ -1262,7 +1262,7 @@ gtk_file_dialog_open_multiple (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
  *
- * Returns: (nullable) (transfer full): the files that were selected,
+ * Returns: (transfer full): the files that were selected,
  *   as a list model of [iface@Gio.File]
  *
  * Since: 4.10
@@ -1335,7 +1335,7 @@ gtk_file_dialog_select_multiple_folders (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.select_multiple_folders] call.
  *
- * Returns: (nullable) (transfer full): the folders that were selected,
+ * Returns: (transfer full): the folders that were selected,
  *   as a list model of [iface@Gio.File]
  *
  * Since: 4.10
@@ -1436,7 +1436,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * is suitable for passing to iconv_open(). Otherwise, it will
  * be `NULL`.
  *
- * Returns: (nullable) (transfer full): the file that was selected
+ * Returns: (transfer full): the file that was selected
  *
  * Since: 4.18
  */
@@ -1547,7 +1547,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
  *
- * Returns: (nullable) (transfer full): the files that were selected,
+ * Returns: (transfer full): the files that were selected,
  *   as a list model of [iface@Gio.File]
  *
  * Since: 4.18
@@ -1680,8 +1680,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * The @line_ending will be set to one of "\n", "\r\n", "\r" or "",
  * where the latter means to preserve existing line endings.
  *
- * Returns: (nullable) (transfer full): the file that was selected.
- *   Otherwise, `NULL` is returned and @error is set
+ * Returns: (transfer full): the file that was selected.
  *
  * Since: 4.18
  */
