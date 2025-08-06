@@ -426,6 +426,8 @@ add_provider (GtkInspectorCssEditor *ce,
 
   g_signal_connect_object (settings, "notify::gtk-interface-color-scheme",
                            G_CALLBACK (system_color_scheme_changed), ce, 0);
+  g_signal_connect_object (settings, "notify::gtk-interface-contrast",
+                           G_CALLBACK (system_color_scheme_changed), ce, 0);
 
   system_color_scheme_changed (settings, NULL, ce);
 
