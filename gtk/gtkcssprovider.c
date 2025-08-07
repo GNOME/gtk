@@ -1119,7 +1119,10 @@ parse_color_definition (GtkCssScanner *scanner)
   if (gtk_css_scanner_should_commit (scanner))
     g_hash_table_insert (priv->symbolic_colors, name, color);
   else
-    gtk_css_value_unref (color);
+    {
+      gtk_css_value_unref (color);
+      g_free (name);
+    }
 
   return TRUE;
 }
@@ -1447,6 +1450,13 @@ parse_ruleset (GtkCssScanner *scanner)
 
   if (gtk_css_scanner_should_commit (scanner))
     css_provider_commit (scanner->provider, &selectors, &ruleset);
+  else
+    {
+      guint i;
+
+      for (i = 0; i < gtk_css_selectors_get_size (&selectors); i++)
+        _gtk_css_selector_free (gtk_css_selectors_get (&selectors, i));
+    }
 
   gtk_css_ruleset_clear (&ruleset);
 
