@@ -1119,7 +1119,10 @@ parse_color_definition (GtkCssScanner *scanner)
   if (gtk_css_scanner_should_commit (scanner))
     g_hash_table_insert (priv->symbolic_colors, name, color);
   else
-    gtk_css_value_unref (color);
+    {
+      gtk_css_value_unref (color);
+      g_free (name);
+    }
 
   return TRUE;
 }
