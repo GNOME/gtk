@@ -1,5 +1,47 @@
-Overview of Changes in GTK+ 3.24.50, xx-xx-xxxx
+Overview of Changes in GTK+ 3.24.51, xx-xx-xxxx
 ===============================================
+
+
+Overview of Changes in GTK+ 3.24.50, 07-08-2025
+===============================================
+
+* Themes:
+ - Add a progress-working-symbolic icon
+ - Support strokes in symbolic icons
+ - Update theme CSS
+ - Remove hardcoded Cantarell font
+
+* GtkShortcutsWindow:
+ - Differentiate all keypad symbols visually
+
+* GtkApplication:
+ - Register unsandboxed apps with the portals
+
+* macOS:
+ - Remove redundant NSView calls
+ - Fix some memory leaks
+ - Don't try to use the file transfer portal
+
+* Windows:
+ - Always mark windows as minimizable
+
+* X11
+ - Fix problems with gtk_window_get_geometry
+
+* Wayland:
+ - Fix a crash
+
+* Input:
+ - Make compose sequence visuals configurable
+
+* Printing:
+ - Fix the build with libcups 3
+ - Support gnome-papers as previewer
+
+* Translation updates
+ Nepali
+ Persian
+ Uzbek (Latin)
 
 
 Overview of Changes in GTK+ 3.24.49, 05-03-2025
