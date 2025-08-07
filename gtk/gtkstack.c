@@ -1307,6 +1307,7 @@ gtk_stack_unschedule_ticks (GtkStack *stack)
       gtk_widget_remove_tick_callback (GTK_WIDGET (stack), priv->tick_id);
       priv->tick_id = 0;
       g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_TRANSITION_RUNNING]);
+      gtk_widget_set_overflow (GTK_WIDGET (stack), GTK_OVERFLOW_VISIBLE);
     }
 }
 
@@ -1380,6 +1381,10 @@ gtk_stack_start_transition (GtkStack               *stack,
                                   priv->transition_duration * 1000,
                                   0,
                                   1.0);
+      /* We set overflow to hidden during transitions to avoid
+       * input problems.
+       */
+      gtk_widget_set_overflow (GTK_WIDGET (stack), GTK_OVERFLOW_HIDDEN);
     }
   else
     {
@@ -2920,8 +2925,6 @@ gtk_stack_init (GtkStack *stack)
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
   priv->children = g_ptr_array_new();
-
-  gtk_widget_set_overflow (GTK_WIDGET (stack), GTK_OVERFLOW_HIDDEN);
 }
 
 /**
