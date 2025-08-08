@@ -988,6 +988,12 @@ gdk_content_init_deserializers (void)
 
   /* Strings */
 
+  gdk_content_register_deserializer ("text/plain;charset=utf-8",
+                                     G_TYPE_STRING,
+                                     string_deserializer,
+                                     (gpointer) "utf-8",
+                                     NULL);
+
   if (!g_get_charset (&charset))
     {
       char *mime = g_strdup_printf ("text/plain;charset=%s", charset);
@@ -1003,12 +1009,6 @@ gdk_content_init_deserializers (void)
                                      G_TYPE_STRING,
                                      string_deserializer,
                                      (gpointer) "ASCII",
-                                     NULL);
-
-  gdk_content_register_deserializer ("text/plain;charset=utf-8",
-                                     G_TYPE_STRING,
-                                     string_deserializer,
-                                     (gpointer) "utf-8",
                                      NULL);
 
   /* Colors */
