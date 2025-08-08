@@ -276,6 +276,8 @@ if cc.compiles(uint128_t_src, name : '__uint128_t available')
   cdata.set('HAVE_UINT128_T', 1)
 endif
 
+cdata.set('HAVE_BACKTRACE', cc.has_function('backtrace', prefix: '#include <execinfo.h>'))
+
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
 # a stable GTK version.

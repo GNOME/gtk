@@ -24,7 +24,7 @@
 #include "reftest-module.h"
 #include "reftest-snapshot.h"
 
-#ifndef G_OS_WIN32
+#ifdef HAVE_BACKTRACE
 #include <execinfo.h>
 #endif
 #include <string.h>
@@ -469,7 +469,7 @@ log_writer (GLogLevelFlags   log_level,
             gsize            n_fields,
             gpointer         user_data)
 {
-#if !defined (G_OS_WIN32) && !defined (__ANDROID__)
+#ifdef HAVE_BACKTRACE
   if (log_level & G_LOG_LEVEL_CRITICAL)
     {
       void *buffer[1024];
