@@ -749,17 +749,6 @@ gtk_css_style_provider_has_section (GtkStyleProvider *provider,
   return priv->bytes == gtk_css_section_get_bytes (section);
 }
 
-static gboolean
-gtk_css_style_provider_get_color_scheme (GtkStyleProvider        *provider,
-                                         GtkInterfaceColorScheme *color_scheme)
-{
-  GtkCssProvider *self = GTK_CSS_PROVIDER (provider);
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (self);
-
-  *color_scheme = priv->prefers_color_scheme;
-  return TRUE;
-}
-
 static void
 gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
 {
@@ -768,7 +757,6 @@ gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
   iface->lookup = gtk_css_style_provider_lookup;
   iface->emit_error = gtk_css_style_provider_emit_error;
   iface->has_section = gtk_css_style_provider_has_section;
-  iface->get_color_scheme = gtk_css_style_provider_get_color_scheme;
 }
 
 static void

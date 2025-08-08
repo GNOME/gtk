@@ -217,8 +217,6 @@ test_data = [
   'color-mix.css',
   'color-mix.errors',
   'color-mix.ref.css',
-  'color-light-dark.css',
-  'color-light-dark.ref.css',
   'colors-red.css',
   'colors-red.ref.css',
   'comment-detection.css',
