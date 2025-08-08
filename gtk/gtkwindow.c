@@ -532,6 +532,8 @@ gtk_window_update_csd_size (GtkWindow *window,
                             int       *height,
                             int        apply);
 
+static void unset_fullscreen_monitor (GtkWindow *window);
+
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkWindow)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
@@ -2722,6 +2724,8 @@ gtk_window_dispose (GObject *object)
 
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
+
+  unset_fullscreen_monitor (window);
 
   g_list_free_full (priv->foci, (GDestroyNotify) gtk_pointer_focus_unref);
   priv->foci = NULL;
