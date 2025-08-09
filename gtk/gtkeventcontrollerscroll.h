@@ -49,12 +49,22 @@ typedef struct _GtkEventControllerScrollClass GtkEventControllerScrollClass;
  *
  * Describes the behavior of a `GtkEventControllerScroll`.
  **/
+
+/**
+ * GTK_EVENT_CONTROLLER_SCROLL_PHYSICAL_DIRECTION:
+ *
+ * A #GtkEventControllerScrollFlags value to prefer physical direction over
+ * logical direction (i.e. oblivious to natural scroll).
+ *
+ * Since: 4.20
+ */
 typedef enum {
   GTK_EVENT_CONTROLLER_SCROLL_NONE       = 0,
   GTK_EVENT_CONTROLLER_SCROLL_VERTICAL   = 1 << 0,
   GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL = 1 << 1,
   GTK_EVENT_CONTROLLER_SCROLL_DISCRETE   = 1 << 2,
   GTK_EVENT_CONTROLLER_SCROLL_KINETIC    = 1 << 3,
+  GTK_EVENT_CONTROLLER_SCROLL_PHYSICAL_DIRECTION = 1 << 4,
   GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES  = (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL | GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL),
 } GtkEventControllerScrollFlags;
 
