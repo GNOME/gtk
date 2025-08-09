@@ -1,0 +1,359 @@
+<interface>
+  <template class="IconEditorWindow" parent="GtkApplicationWindow">
+    <property name="title" translatable="yes">Icon Editor</property>
+    <property name="default-width">1024</property>
+    <property name="default-height">768</property>
+    <property name="show-controls" bind-source="open_menu" bind-property="active" bind-flags="bidirectional"/>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="title-widget">
+          <object class="GtkCenterBox">
+            <style><class name="titlebar"/></style>
+            <property name="start-widget">
+              <object class="GtkLabel">
+                <property name="label">•</property>
+                <property name="visible" bind-source="IconEditorWindow" bind-property="changed" bind-flags="sync-create"/>
+              </object>
+            </property>
+            <property name="center-widget">
+              <object class="GtkLabel">
+                <property name="label" bind-source="IconEditorWindow" bind-property="title" bind-flags="sync-create"/>
+                <property name="attributes">weight bold</property>
+              </object>
+            </property>
+          </object>
+        </property>
+        <child type="start">
+          <object class="GtkToggleButton" id="open_menu">
+            <property name="focus-on-click">0</property>
+            <property name="tooltip-text" translatable="yes">Show controls</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/icon-editor/general-properties-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="focus-on-click">0</property>
+            <property name="tooltip-text" translatable="yes">Open a file</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-open-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+            <property name="action-name">win.open</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton">
+            <property name="focus-on-click">0</property>
+            <property name="valign">center</property>
+            <property name="menu-model">
+              <menu>
+                <section>
+                  <item>
+                    <attribute name="label" translatable="yes">_Open…</attribute>
+                    <attribute name="action">win.open</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Import new state…</attribute>
+                    <attribute name="action">win.import</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Save</attribute>
+                    <attribute name="action">win.save</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">S_ave As…</attribute>
+                    <attribute name="action">win.save-as</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Export states</attribute>
+                    <attribute name="action">win.export</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Revert changes</attribute>
+                    <attribute name="action">win.revert</attribute>
+                  </item>
+                </section>
+                <section>
+                  <item>
+                    <attribute name="label" translatable="yes">Invert _colors</attribute>
+                    <attribute name="action">win.invert-colors</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">Show _thumbnails</attribute>
+                    <attribute name="action">win.show-thumbnails</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">Show _bounds</attribute>
+                    <attribute name="action">win.show-bounds</attribute>
+                  </item>
+                </section>
+                <section>
+                  <item>
+                    <attribute name="label" translatable="yes">_Help</attribute>
+                    <attribute name="action">app.help</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Inspector</attribute>
+                    <attribute name="action">app.inspector</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">A_bout Icon Editor</attribute>
+                    <attribute name="action">app.about</attribute>
+                  </item>
+                </section>
+              </menu>
+            </property>
+            <child>
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/open-menu-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkToggleButton">
+            <property name="tooltip-text" translatable="yes">Show bounds</property>
+            <property name="action-name">win.show-bounds</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/icon-editor/box-small-outline-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkToggleButton" id="show_thumbs">
+            <property name="tooltip-text" translatable="yes">Show thumbnails</property>
+            <property name="action-name">win.show-thumbnails</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-grid-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkToggleButton" id="color_scheme">
+            <property name="tooltip-text" translatable="yes">Invert colors</property>
+            <property name="action-name">win.invert-colors</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/display-brightness-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="StateEditor">
+            <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="child">
+      <object class="GtkOverlay">
+        <child>
+          <object class="GtkGestureClick">
+            <property name="button">3</property>
+            <signal name="pressed" handler="toggle_controls" swapped="yes"/>
+          </object>
+        </child>
+        <style><class name="view"/></style>
+        <property name="child">
+          <object class="GtkImage" id="image">
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
+            <property name="pixel-size">256</property>
+            <property name="paintable">
+              <object class="BorderPaintable">
+                <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                <property name="show-bounds" bind-source="IconEditorWindow" bind-property="show-bounds"/>
+              </object>
+            </property>
+          </object>
+        </property>
+        <child type="overlay">
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="halign">end</property>
+            <property name="valign">end</property>
+            <child>
+              <object class="GtkRevealer">
+                <property name="valign">end</property>
+                <property name="transition-type">slide-left</property>
+                <property name="reveal-child" bind-source="IconEditorWindow" bind-property="show-thumbnails"/>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="valign">end</property>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-200"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">16</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-300"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">16</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-400"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">16</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-500"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">16</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-600"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">16</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-200"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">32</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-300"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">32</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-400"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">32</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-500"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">32</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-600"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">32</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-200"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">64</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-300"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">64</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-400"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">64</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-500"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">64</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style><class name="thumbnail-600"/></style>
+                        <property name="valign">end</property>
+                        <property name="pixel-size">64</property>
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkRevealer" id="revealer">
+            <property name="halign">start</property>
+            <property name="valign">fill</property>
+            <property name="transition-type">slide-right</property>
+            <property name="reveal-child" bind-source="IconEditorWindow" bind-property="show-controls"/>
+            <property name="child">
+              <object class="PaintableEditor">
+                <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

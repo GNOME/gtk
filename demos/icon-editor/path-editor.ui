@@ -1,0 +1,582 @@
+<interface>
+  <template class="PathEditor" parent="GtkWidget">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <child>
+          <object class="GtkExpander" id="expander">
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="label-widget">
+              <object class="GtkBox">
+                <style><class name="tight"/></style>
+                <property name="hexpand">0</property>
+                <child>
+                  <object class="GtkLabel" id="path_label">
+                    <property name="hexpand">1</property>
+                    <property name="xalign">0</property>
+                    <property name="max-width-chars">20</property>
+                    <property name="width-chars">16</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <style>
+                      <class name="circular"/>
+                      <class name="small"/>
+                    </style>
+                    <property name="focus-on-click">0</property>
+                    <property name="has-frame">0</property>
+                    <property name="tooltip-text" translatable="yes">Edit path geometry</property>
+                    <property name="child">
+                      <object class="GtkImage">
+                        <property name="paintable">
+                          <object class="GtkIconPaintable">
+                            <property name="file">resource:///org/gtk/icon-editor/document-edit-symbolic.svg</property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                    <signal name="clicked" handler="edit_path" swapped="yes"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="move_down">
+                    <style>
+                      <class name="circular"/>
+                      <class name="small"/>
+                    </style>
+                    <property name="focus-on-click">0</property>
+                    <property name="has-frame">0</property>
+                    <property name="tooltip-text" translatable="yes">Move down</property>
+                    <property name="child">
+                      <object class="GtkImage">
+                        <property name="paintable">
+                          <object class="GtkIconPaintable">
+                            <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-down-symbolic.svg</property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                    <signal name="clicked" handler="move_path_down" swapped="yes"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <style>
+                      <class name="circular"/>
+                      <class name="small"/>
+                    </style>
+                    <property name="focus-on-click">0</property>
+                    <property name="has-frame">0</property>
+                    <property name="tooltip-text" translatable="yes">Delete path</property>
+                    <property name="child">
+                      <object class="GtkImage">
+                        <property name="paintable">
+                          <object class="GtkIconPaintable">
+                            <property name="file">resource:///org/gtk/libgtk/icons/scalable/places/user-trash-symbolic.svg</property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                    <signal name="clicked" handler="delete_path" swapped="yes"/>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkExpander" id="states_expander">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="states_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">State</property>
+              </object>
+            </property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="discrete_state">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="halign">fill</property>
+            <signal name="activate" handler="states_changed" swapped="yes"/>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="transition_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">states_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Transition</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="transition">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">states_expander</lookup>
+              </closure>
+            </binding>
+            <signal name="notify::selected" handler="transition_changed" swapped="yes"/>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>None</item>
+                  <item>Animate</item>
+                  <item>Blur</item>
+                </items>
+              </object>
+            </property>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="origin_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">states_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Origin</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="origin">
+            <signal name="value-changed" handler="origin_changed" swapped="yes"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">states_expander</lookup>
+              </closure>
+            </binding>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">1</property>
+                <property name="step-increment">0.1</property>
+              </object>
+            </property>
+            <marks>
+              <mark value="0" position="bottom"/>
+              <mark value="0.5" position="bottom"/>
+              <mark value="1" position="bottom"/>
+            </marks>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkExpander" id="stroke_expander">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="stroke_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Stroke</property>
+              </object>
+            </property>
+            <layout>
+              <property name="row">4</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkDropDown" id="stroke_paint">
+                <property name="hexpand">1</property>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>None</item>
+                      <item>Foreground</item>
+                      <item>Error</item>
+                      <item>Warning</item>
+                      <item>Success</item>
+                      <item>Custom</item>
+                    </items>
+                  </object>
+                </property>
+                <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColorDialogButton" id="stroke_color">
+                <property name="dialog">
+                  <object class="GtkColorDialog">
+                  </object>
+                </property>
+                <signal name="notify::rgba" handler="stroke_changed" swapped="yes"/>
+              </object>
+            </child>
+            <layout>
+              <property name="row">4</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="line_width_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Width</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">5</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="line_width">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="numeric">1</property>
+            <property name="digits">2</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">20</property>
+                <property name="value">1</property>
+                <property name="step-increment">0.1</property>
+                <property name="page-size">0</property>
+              </object>
+            </property>
+            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <layout>
+              <property name="row">5</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="line_join_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Join</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">6</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="line_join">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Miter</item>
+                  <item>Round</item>
+                  <item>Bevel</item>
+                </items>
+              </object>
+            </property>
+            <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
+            <layout>
+              <property name="row">6</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="line_cap_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Cap</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="line_cap">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Butt</item>
+                  <item>Round</item>
+                  <item>Square</item>
+                </items>
+              </object>
+            </property>
+            <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkExpander" id="fill_expander">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="fill_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Fill</property>
+              </object>
+            </property>
+            <layout>
+              <property name="row">8</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkDropDown" id="fill_paint">
+                <property name="hexpand">1</property>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>None</item>
+                      <item>Foreground</item>
+                      <item>Error</item>
+                      <item>Warning</item>
+                      <item>Success</item>
+                      <item>Custom</item>
+                    </items>
+                  </object>
+                </property>
+                <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColorDialogButton" id="fill_color">
+                <property name="dialog">
+                  <object class="GtkColorDialog">
+                  </object>
+                </property>
+                <signal name="notify::rgba" handler="fill_changed" swapped="yes"/>
+              </object>
+            </child>
+            <layout>
+              <property name="row">8</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="fill_rule_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">fill_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Rule</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">9</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="fill_rule">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">fill_expander</lookup>
+              </closure>
+            </binding>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Winding</item>
+                  <item>Even-Odd</item>
+                </items>
+              </object>
+            </property>
+            <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
+            <layout>
+              <property name="row">9</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkExpander" id="attach_expander">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="attach_to_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Attach</property>
+              </object>
+            </property>
+            <layout>
+              <property name="row">10</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="attach_to">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
+            <layout>
+              <property name="row">10</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="attach_at_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">attach_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Position</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">11</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="attach_at">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">attach_expander</lookup>
+              </closure>
+            </binding>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">1</property>
+                <property name="step-increment">0.1</property>
+              </object>
+            </property>
+            <signal name="value-changed" handler="attach_changed" swapped="yes"/>
+            <marks>
+              <mark value="0" position="bottom"/>
+              <mark value="0.5" position="bottom"/>
+              <mark value="1" position="bottom"/>
+            </marks>
+            <layout>
+              <property name="row">11</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup" id="sg">
+    <widgets>
+      <widget name="states_expander"/>
+      <widget name="transition_label"/>
+      <widget name="origin_label"/>
+      <widget name="stroke_expander"/>
+      <widget name="line_width_label"/>
+      <widget name="line_join_label"/>
+      <widget name="line_cap_label"/>
+      <widget name="fill_expander"/>
+      <widget name="fill_rule_label"/>
+      <widget name="attach_expander"/>
+      <widget name="attach_at_label"/>
+    </widgets>
+  </object>
+</interface>

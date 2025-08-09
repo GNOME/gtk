@@ -1,0 +1,89 @@
+@media (prefers-color-scheme: light) {
+  @media (prefers-contrast: more) {
+    :root {
+      --sidebar-bg: color(srgb 0.9 0.9 0.9);
+      --border: color(srgb 0 0 0 / 100%);
+    }
+  }
+  @media (not (prefers-contrast: more)) {
+    :root {
+      --sidebar-bg: color(srgb 0.9 0.9 0.9);
+      --border: color(srgb 0 0 0 / 50%);
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  @media (prefers-contrast: more) {
+    :root {
+      --sidebar-bg: color(srgb 0.1 0.1 0.1);
+      --border: color(srgb 1 1 1 / 100%);
+    }
+  }
+  @media (not (prefers-contrast: more)) {
+    :root {
+      --sidebar-bg: color(srgb 0.1 0.1 0.1);
+      --border: color(srgb 1 1 1 / 50%);
+    }
+  }
+}
+
+PaintableEditor {
+  border-right: 0.5px solid var(--border);
+  background: var(--sidebar-bg);
+}
+
+PaintableEditor > scrolledwindow > viewport {
+  padding: 10px;
+}
+
+PaintableEditor box:not(.linked):not(.tight) {
+  border-spacing: 10px;
+}
+
+PaintableEditor grid {
+  border-spacing: 10px;
+}
+
+PaintableEditor separator {
+  background-color: var(--border);
+}
+
+.thumbnail-200 {
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 4px;
+  font-weight: 200;
+}
+
+.thumbnail-300 {
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 4px;
+  font-weight: 300;
+}
+
+.thumbnail-400 {
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 4px;
+  font-weight: 400;
+}
+
+.thumbnail-500 {
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 4px;
+  font-weight: 500;
+}
+
+.thumbnail-600 {
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 4px;
+  font-weight: 600;
+}
+
+.titlebar {
+  border-spacing: 5px;
+}

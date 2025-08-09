@@ -562,6 +562,12 @@ flatpak:widget-factory:
   variables:
     APPID: org.gtk.WidgetFactory4
 
+flatpak:icon-editor:
+  extends: '.flatpak-defaults'
+  needs: []
+  variables:
+    APPID: org.gtk.IconEditor
+
 flatpak:widget-factory:aarch64:
   extends: '.flatpak-defaults'
   needs: []
