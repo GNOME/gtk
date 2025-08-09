@@ -2254,7 +2254,10 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
   GtkOrientation move_orientation;
   GdkScrollUnit scroll_unit;
 
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL && dx != 0)
+  scroll_unit = gtk_event_controller_scroll_get_unit (scroll);
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+      scroll_unit == GDK_SCROLL_UNIT_SURFACE)
     {
       move_orientation = GTK_ORIENTATION_HORIZONTAL;
       delta = dx;
@@ -2264,8 +2267,6 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
       move_orientation = GTK_ORIENTATION_VERTICAL;
       delta = dy;
     }
-
-  scroll_unit = gtk_event_controller_scroll_get_unit (scroll);
 
   if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
     {
