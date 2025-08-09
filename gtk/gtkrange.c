@@ -156,6 +156,7 @@ static void gtk_range_get_property   (GObject          *object,
                                       guint             prop_id,
                                       GValue           *value,
                                       GParamSpec       *pspec);
+static void gtk_range_constructed    (GObject          *object);
 static void gtk_range_finalize       (GObject          *object);
 static void gtk_range_dispose        (GObject          *object);
 static void gtk_range_measure        (GtkWidget      *widget,
@@ -275,6 +276,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   gobject_class->set_property = gtk_range_set_property;
   gobject_class->get_property = gtk_range_get_property;
+  gobject_class->constructed = gtk_range_constructed;
   gobject_class->finalize = gtk_range_finalize;
   gobject_class->dispose = gtk_range_dispose;
 
@@ -600,11 +602,6 @@ gtk_range_init (GtkRange *range)
                     G_CALLBACK (gtk_range_long_press_gesture_pressed), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
   gtk_gesture_group (gesture, priv->drag_gesture);
-
-  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
-  g_signal_connect (controller, "scroll",
-                    G_CALLBACK (gtk_range_scroll_controller_scroll), range);
-  gtk_widget_add_controller (GTK_WIDGET (range), controller);
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
@@ -1339,6 +1336,23 @@ gtk_range_dispose (GObject *object)
     }
 
   G_OBJECT_CLASS (gtk_range_parent_class)->dispose (object);
+}
+
+static void
+gtk_range_constructed (GObject *object)
+{
+  GtkRange *range = GTK_RANGE (object);
+  GtkEventController *controller;
+  GtkEventControllerScrollFlags flags;
+
+  flags = GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES;
+
+  controller = gtk_event_controller_scroll_new (flags);
+  g_signal_connect (controller, "scroll",
+                    G_CALLBACK (gtk_range_scroll_controller_scroll), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), controller);
+
+  G_OBJECT_CLASS (gtk_range_parent_class)->constructed (object);
 }
 
 static void
