@@ -212,7 +212,8 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
                                                AMotionEvent_getAxisValue (event, AMOTION_EVENT_AXIS_HSCROLL, 0),
                                                AMotionEvent_getAxisValue (event, AMOTION_EVENT_AXIS_VSCROLL, 0),
                                                FALSE, // how am I supposed to know if the current scroll event is the last?
-                                               GDK_SCROLL_UNIT_WHEEL);
+                                               GDK_SCROLL_UNIT_WHEEL,
+                                               GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
           gdk_android_seat_consume_event ((GdkDisplay *) display, ev);
         }
       else if (masked_action == AMOTION_EVENT_ACTION_DOWN ||

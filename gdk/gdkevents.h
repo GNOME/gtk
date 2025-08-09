@@ -435,6 +435,9 @@ GdkScrollUnit           gdk_scroll_event_get_unit       (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_scroll_event_is_stop        (GdkEvent *event);
+GDK_AVAILABLE_IN_4_20
+GdkScrollRelativeDirection
+                        gdk_scroll_event_get_relative_direction (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_key_event_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL

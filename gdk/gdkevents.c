@@ -718,7 +718,8 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
                                     dx,
                                     dy,
                                     gdk_scroll_event_is_stop (old_event),
-                                    scroll_unit);
+                                    scroll_unit,
+                                    gdk_scroll_event_get_relative_direction (old_event));
 
       ((GdkScrollEvent *)event)->history = history;
 
@@ -2401,15 +2402,16 @@ GDK_DEFINE_EVENT_TYPE (GdkScrollEvent, gdk_scroll_event,
                        GDK_EVENT_TYPE_SLOT (GDK_SCROLL))
 
 GdkEvent *
-gdk_scroll_event_new (GdkSurface      *surface,
-                      GdkDevice       *device,
-                      GdkDeviceTool   *tool,
-                      guint32          time,
-                      GdkModifierType  state,
-                      double           delta_x,
-                      double           delta_y,
-                      gboolean         is_stop,
-                      GdkScrollUnit    unit)
+gdk_scroll_event_new (GdkSurface                 *surface,
+                      GdkDevice                  *device,
+                      GdkDeviceTool              *tool,
+                      guint32                     time,
+                      GdkModifierType             state,
+                      double                      delta_x,
+                      double                      delta_y,
+                      gboolean                    is_stop,
+                      GdkScrollUnit               unit,
+                      GdkScrollRelativeDirection  rel_dir)
 {
   GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, time);
 
@@ -2420,17 +2422,19 @@ gdk_scroll_event_new (GdkSurface      *surface,
   self->delta_y = delta_y;
   self->is_stop = is_stop;
   self->unit = unit;
+  self->relative_direction = rel_dir;
 
   return (GdkEvent *) self;
 }
 
 GdkEvent *
-gdk_scroll_event_new_discrete (GdkSurface         *surface,
-                               GdkDevice          *device,
-                               GdkDeviceTool      *tool,
-                               guint32             time,
-                               GdkModifierType     state,
-                               GdkScrollDirection  direction)
+gdk_scroll_event_new_discrete (GdkSurface                 *surface,
+                               GdkDevice                  *device,
+                               GdkDeviceTool              *tool,
+                               guint32                     time,
+                               GdkModifierType             state,
+                               GdkScrollDirection          direction,
+                               GdkScrollRelativeDirection  rel_dir)
 {
   GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, time);
   double delta_x = 0, delta_y = 0;
@@ -2461,6 +2465,7 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
   self->delta_x = delta_x;
   self->delta_y = delta_y;
   self->unit = GDK_SCROLL_UNIT_WHEEL;
+  self->relative_direction = rel_dir;
 
   return (GdkEvent *) self;
 }
@@ -2476,6 +2481,7 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
  * @direction: scroll direction.
  * @delta_x: delta on the X axis in the 120.0 scale
  * @delta_x: delta on the Y axis in the 120.0 scale
+ * @rel_dir: relative direction hints about the deltas
  *
  * Creates a new discrete GdkScrollEvent for high resolution mouse wheels.
  *
@@ -2486,14 +2492,15 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
  * Returns: the newly created scroll event
  */
 GdkEvent *
-gdk_scroll_event_new_value120 (GdkSurface         *surface,
-                               GdkDevice          *device,
-                               GdkDeviceTool      *tool,
-                               guint32             time,
-                               GdkModifierType     state,
-                               GdkScrollDirection  direction,
-                               double              delta_x,
-                               double              delta_y)
+gdk_scroll_event_new_value120 (GdkSurface                 *surface,
+                               GdkDevice                  *device,
+                               GdkDeviceTool              *tool,
+                               guint32                     time,
+                               GdkModifierType             state,
+                               GdkScrollDirection          direction,
+                               double                      delta_x,
+                               double                      delta_y,
+                               GdkScrollRelativeDirection  rel_dir)
 {
   GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, time);
 
@@ -2503,6 +2510,7 @@ gdk_scroll_event_new_value120 (GdkSurface         *surface,
   self->delta_x = delta_x / 120.0;
   self->delta_y = delta_y / 120.0;
   self->unit = GDK_SCROLL_UNIT_WHEEL;
+  self->relative_direction = rel_dir;
 
   return (GdkEvent *) self;
 }
@@ -2604,6 +2612,19 @@ gdk_scroll_event_get_unit (GdkEvent *event)
                         GDK_SCROLL_UNIT_WHEEL);
 
   return self->unit;
+}
+
+GdkScrollRelativeDirection
+gdk_scroll_event_get_relative_direction (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event),
+                        GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL),
+                        GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
+
+  return self->relative_direction;
 }
 
 /* }}} */

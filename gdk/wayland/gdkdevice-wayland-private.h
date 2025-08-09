@@ -45,6 +45,7 @@ struct _GdkWaylandPointerFrameData
   double delta_x, delta_y;
   int32_t value120_x, value120_y;
   gint8 is_scroll_stop;
+  GdkScrollRelativeDirection relative_direction;
   enum wl_pointer_axis_source source;
 };
 

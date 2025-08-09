@@ -629,7 +629,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                  get_time_from_ns_event (nsevent),
                                  state,
                                  0.0, 0.0, TRUE,
-                                 GDK_SCROLL_UNIT_SURFACE);
+                                 GDK_SCROLL_UNIT_SURFACE,
+                                 GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
 
   dx = [nsevent deltaX];
   dy = [nsevent deltaY];
@@ -651,7 +652,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                     -sx,
                                     -sy,
                                     FALSE,
-                                    GDK_SCROLL_UNIT_SURFACE);
+                                    GDK_SCROLL_UNIT_SURFACE,
+                                    GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
 
       /* Fall through for scroll emulation */
     }
@@ -684,7 +686,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                            NULL,
                                            get_time_from_ns_event (nsevent),
                                            state,
-                                           direction);
+                                           direction,
+                                           GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
     }
 
   if (phase == NSEventPhaseEnded || phase == NSEventPhaseCancelled)
@@ -700,7 +703,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                   get_time_from_ns_event (nsevent),
                                   state,
                                   0.0, 0.0, TRUE,
-                                  GDK_SCROLL_UNIT_SURFACE);
+                                  GDK_SCROLL_UNIT_SURFACE,
+                                  GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
     }
 
   return g_steal_pointer (&ret);
