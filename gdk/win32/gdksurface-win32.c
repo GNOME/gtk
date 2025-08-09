@@ -2804,14 +2804,15 @@ compute_toplevel_size (GdkSurface *surface,
           geometry.min_width = size.min_width;
           geometry.min_height = size.min_height;
           mask = GDK_HINT_MIN_SIZE;
+          gdk_win32_surface_set_geometry_hints (surface, &geometry, mask);
         }
       else
         {
           geometry.max_width = geometry.min_width = *width;
           geometry.max_height = geometry.min_height = *height;
           mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+          gdk_win32_surface_set_geometry_hints (surface, &geometry, mask);
         }
-      gdk_win32_surface_set_geometry_hints (surface, &geometry, mask);
       gdk_surface_constrain_size (&geometry, mask, *width, *height, width, height);
     }
 }
