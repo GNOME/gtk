@@ -1355,6 +1355,9 @@ gtk_range_constructed (GObject *object)
 
   flags = GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES;
 
+  if (GTK_IS_SCALE (object))
+    flags |= GTK_EVENT_CONTROLLER_SCROLL_PHYSICAL_DIRECTION;
+
   controller = gtk_event_controller_scroll_new (flags);
   g_signal_connect (controller, "scroll-begin",
                     G_CALLBACK (gtk_range_scroll_controller_scroll_begin), range);
