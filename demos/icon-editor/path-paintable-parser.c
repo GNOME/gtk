@@ -125,6 +125,31 @@ markup_filter_attributes (const char *element_name,
   va_end (ap);
 }
 
+enum
+{
+  POSITIVE = 1 << 0,
+  LENGTH   = 1 << 1,
+};
+
+static gboolean
+parse_float (const char  *name,
+             const char  *value,
+             guint        flags,
+             float       *f,
+             GError     **error)
+{
+  char *end;
+
+  *f = g_ascii_strtod (value, &end);
+  if ((end && *end != '\0' && ((flags & LENGTH) == 0 || strcmp (end, "px") != 0)) ||
+      ((flags & POSITIVE) != 0 && *f < 0))
+    {
+      set_attribute_error (error, name, value);
+      return FALSE;
+    }
+  return TRUE;
+}
+
 static GskPath *
 circle_path_new (float cx,
                  float cy,
@@ -281,12 +306,11 @@ start_element_cb (GMarkupParseContext  *context,
   g_autoptr (GskStroke) stroke = NULL;
   guint stroke_symbolic;
   GdkRGBA stroke_color;
-  double stroke_opacity;
+  float stroke_opacity;
   guint fill_symbolic;
   GskFillRule fill_rule;
   GdkRGBA fill_color;
-  double fill_opacity;
-  char *end;
+  float fill_opacity;
   guint64 states;
   StateTransition transition;
   float origin;
@@ -301,7 +325,8 @@ start_element_cb (GMarkupParseContext  *context,
       const char *duration_attr = NULL;
       const char *delay_attr = NULL;
       const char *easing_attr = NULL;
-      double width, height;
+      float width, height;
+      float d;
 
       markup_filter_attributes (element_name,
                                 attribute_names,
@@ -319,12 +344,8 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      width = g_ascii_strtod (width_attr, &end);
-      if (end && *end != '\0' && strcmp (end, "px") != 0)
-        {
-          set_attribute_error (error, "width", width_attr);
-          return;
-        }
+      if (!parse_float ("width", width_attr, LENGTH, &width, error))
+        return;
 
       if (height_attr == NULL)
         {
@@ -332,41 +353,25 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      height = g_ascii_strtod (height_attr, &end);
-      if (end && *end != '\0' && strcmp (end, "px") != 0)
-        {
-          set_attribute_error (error, "height", height_attr);
-          return;
-        }
+      if (!parse_float ("height", height_attr, LENGTH, &height, error))
+        return;
 
       path_paintable_set_size (data->paintable, width, height);
 
       if (duration_attr)
         {
-          float duration;
+          if (!parse_float ("gtk:duration", duration_attr, POSITIVE, &d, error))
+            return;
 
-          duration = g_ascii_strtod (duration_attr, &end);
-          if ((end && *end != '\0') || duration < 0)
-            {
-              set_attribute_error (error, "gtk:duration", duration_attr);
-              return;
-            }
-
-          path_paintable_set_duration (data->paintable, duration);
+          path_paintable_set_duration (data->paintable, d);
         }
 
       if (delay_attr)
         {
-          float delay;
+          if (!parse_float ("gtk:delay", delay_attr, POSITIVE, &d, error))
+            return;
 
-          delay = g_ascii_strtod (delay_attr, &end);
-          if ((end && *end != '\0') || delay < 0)
-            {
-              set_attribute_error (error, "gtk:delay", delay_attr);
-              return;
-            }
-
-          path_paintable_set_delay (data->paintable, delay);
+          path_paintable_set_delay (data->paintable, d);
         }
 
       if (easing_attr)
@@ -417,32 +422,20 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (cx_attr)
         {
-          cx = g_ascii_strtod (cx_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "cx", cx_attr);
-              return;
-            }
+          if (!parse_float ("cx", cx_attr, 0, &cx, error))
+            return;
         }
 
       if (cy_attr)
         {
-          cy = g_ascii_strtod (cy_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "cy", cy_attr);
-              return;
-            }
+          if (!parse_float ("cy", cy_attr, 0, &cy, error))
+            return;
         }
 
       if (r_attr)
         {
-          r = g_ascii_strtod (r_attr, &end);
-          if ((end && *end != '\0') || r < 0)
-            {
-              set_attribute_error (error, "r", r_attr);
-              return;
-            }
+          if (!parse_float ("r", r_attr, POSITIVE, &r, error))
+            return;
         }
 
       if (r == 0)
@@ -478,42 +471,26 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (x_attr)
         {
-          x = g_ascii_strtod (x_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "x", x_attr);
-              return;
-            }
+          if (!parse_float ("x", x_attr, 0, &x, error))
+            return;
         }
 
       if (y_attr)
         {
-          y = g_ascii_strtod (y_attr, &end);
-          if (end && *end != '\0')
-            {
-              set_attribute_error (error, "y", y_attr);
-              return;
-            }
+          if (!parse_float ("y", y_attr, 0, &y, error))
+            return;
         }
 
       if (width_attr)
         {
-          width = g_ascii_strtod (width_attr, &end);
-          if ((end && *end != '\0') || width < 0)
-            {
-              set_attribute_error (error, "width", width_attr);
-              return;
-            }
+          if (!parse_float ("width", width_attr, POSITIVE, &width, error))
+            return;
         }
 
       if (height_attr)
         {
-          height = g_ascii_strtod (height_attr, &end);
-          if ((end && *end != '\0') || height < 0)
-            {
-              set_attribute_error (error, "height", height_attr);
-              return;
-            }
+          if (!parse_float ("height", height_attr, POSITIVE, &height, error))
+            return;
         }
 
       if (width == 0 || height == 0)
@@ -521,22 +498,14 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (rx_attr)
         {
-          rx = g_ascii_strtod (rx_attr, &end);
-          if ((end && *end != '\0') || rx < 0)
-            {
-              set_attribute_error (error, "rx", rx_attr);
-              return;
-            }
+          if (!parse_float ("rx", rx_attr, POSITIVE, &rx, error))
+            return;
         }
 
      if (ry_attr)
         {
-          ry = g_ascii_strtod (ry_attr, &end);
-          if ((end && *end != '\0') || ry < 0)
-            {
-              set_attribute_error (error, "ry", ry_attr);
-              return;
-            }
+          if (!parse_float ("ry", ry_attr, POSITIVE, &ry, error))
+            return;
         }
 
       if (!rx_attr && ry_attr)
@@ -659,12 +628,8 @@ start_element_cb (GMarkupParseContext  *context,
   stroke_opacity = 1;
   if (stroke_opacity_attr)
     {
-      stroke_opacity = g_ascii_strtod (stroke_opacity_attr, &end);
-      if (end && *end != '\0')
-        {
-          set_attribute_error (error, "stroke-opacity", stroke_opacity_attr);
-          return;
-        }
+      if (!parse_float ("stroke-opacity", stroke_opacity_attr, 0, &stroke_opacity, error))
+        return;
       stroke_opacity = CLAMP (stroke_opacity, 0, 1);
     }
 
@@ -698,12 +663,10 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (stroke_width_attr)
     {
-      double w = g_ascii_strtod (stroke_width_attr, &end);
-      if ((end && *end != '\0') || w < 0)
-        {
-          set_attribute_error (error, "stroke-width", stroke_width_attr);
-          return;
-        }
+      float w;
+
+      if (!parse_float ("stroke-width", stroke_width_attr, POSITIVE, &w, error))
+        return;
 
       gsk_stroke_set_line_width (stroke, w);
     }
@@ -755,12 +718,8 @@ start_element_cb (GMarkupParseContext  *context,
   fill_opacity = 1;
   if (fill_opacity_attr)
     {
-      fill_opacity = g_ascii_strtod (fill_opacity_attr, &end);
-      if (end && *end != '\0')
-        {
-          set_attribute_error (error, "fill-opacity", fill_opacity_attr);
-          return;
-        }
+      if (!parse_float ("fill-opacity", fill_opacity_attr, 0, &fill_opacity, error))
+        return;
       fill_opacity = CLAMP (fill_opacity, 0, 1);
     }
 
@@ -876,7 +835,7 @@ parse_symbolic_svg (GBytes  *bytes,
                     GError **error)
 {
   ParserData data;
-  GMarkupParseContext *context;
+  g_autoptr (GMarkupParseContext) context = NULL;
   GMarkupParser parser = {
     start_element_cb,
     end_element_cb,
@@ -896,7 +855,6 @@ parse_symbolic_svg (GBytes  *bytes,
   if (!g_markup_parse_context_parse (context, text, length, error))
     g_clear_object (&data.paintable);
 
-  g_markup_parse_context_free (context);
   g_hash_table_unref (data.paths);
 
   return data.paintable;

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<svg width="60" height="60" xmlns:gtk="https://www.gtk.org/madeup">
+  <path d="M5 30 l20 20 30 -40"
+        fill="none"
+        stroke="rgb(0,0,0)"
+        stroke-width="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        gtk:stroke="foreground"
+        gtk:states="0"
+        gtk:origin="start"
+  />
+</svg>

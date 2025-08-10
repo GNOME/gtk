@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<svg width="70" height="70" xmlns:gtk="https://www.gtk.org/icons"
+     gtk:duration="0.4"
+     gtk:delay="0.4"
+     gtk:easing="ease-in">
+  <path d="M10 35 l20 20 30 -40"
+        fill="none"
+        stroke="rgb(0,255,0)"
+        stroke-width="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        gtk:stroke="foreground"
+        gtk:states="0"
+        gtk:origin="start"
+        gtk:transition="blur"
+  />
+  <path d="M5 35 l60 0 M35 5 l0 60"
+        fill="none"
+        stroke="rgb(0,0,0)"
+        stroke-width="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        gtk:stroke="foreground"
+        gtk:states="1"
+        gtk:origin="middle"
+        gtk:transition="blur"
+  />
+</svg>
