@@ -1148,9 +1148,23 @@ dark_mode_cb (GtkToggleButton *button,
               GParamSpec      *pspec,
               NodeEditorWindow *self)
 {
-  g_object_set (gtk_widget_get_settings (GTK_WIDGET (self)),
-                "gtk-application-prefer-dark-theme", gtk_toggle_button_get_active (button),
-                NULL);
+  GtkSettings *settings;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (self));
+
+  if (gtk_toggle_button_get_active (button))
+    {
+      GtkInterfaceColorScheme color_scheme;
+
+      g_object_get (settings, "gtk-interface-color-scheme", &color_scheme, NULL);
+      if (color_scheme == GTK_INTERFACE_COLOR_SCHEME_DARK)
+        color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
+      else
+        color_scheme = GTK_INTERFACE_COLOR_SCHEME_DARK;
+      g_object_set (settings, "gtk-interface-color-scheme", color_scheme, NULL);
+    }
+  else
+    gtk_settings_reset_property (settings, "gtk-interface-color-scheme");
 }
 
 static void
