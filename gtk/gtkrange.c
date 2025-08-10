@@ -1852,6 +1852,54 @@ coord_to_value (GtkRange *range,
   return value;
 }
 
+static double
+scroll_delta_to_value (GtkRange      *range,
+                       GdkScrollUnit  scroll_unit,
+                       double         delta)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
+    return delta * gtk_adjustment_get_page_increment (priv->adjustment);
+  else if (scroll_unit == GDK_SCROLL_UNIT_SURFACE && GTK_IS_SCALE (range))
+    {
+      double frac;
+      int trough_length, slider_length;
+      graphene_rect_t slider_bounds;
+
+      if (!gtk_widget_compute_bounds (priv->slider_widget, priv->slider_widget, &slider_bounds))
+        {
+          graphene_rect_init (&slider_bounds, 0, 0,
+                              gtk_widget_get_width (priv->trough_widget),
+                              gtk_widget_get_height (priv->trough_widget));
+        }
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          trough_length = gtk_widget_get_width (priv->trough_widget);
+          slider_length = slider_bounds.size.width;
+        }
+      else
+        {
+          trough_length = gtk_widget_get_height (priv->trough_widget);
+          slider_length = slider_bounds.size.height;
+        }
+
+      if (trough_length == slider_length)
+        frac = 1.0;
+      else if (priv->slider_size_fixed)
+        frac = delta / (double) trough_length;
+      else
+        frac = delta / (double) (trough_length - slider_length);
+
+      return frac * (gtk_adjustment_get_upper (priv->adjustment) -
+                     gtk_adjustment_get_lower (priv->adjustment) -
+                     gtk_adjustment_get_page_size (priv->adjustment));
+    }
+
+  return delta;
+}
+
 static gboolean
 gtk_range_key_controller_key_pressed (GtkEventControllerKey *controller,
                                       guint                  keyval,
@@ -2300,10 +2348,7 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
       delta = dy;
     }
 
-  if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
-    {
-      delta *= gtk_adjustment_get_page_increment (priv->adjustment);
-    }
+  delta = scroll_delta_to_value (range, scroll_unit, delta);
 
   if (delta != 0 && should_invert_move (range, move_orientation))
     delta = - delta;
