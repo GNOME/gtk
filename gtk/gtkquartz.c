@@ -189,29 +189,49 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
       NSString *s = [pasteboard stringForType:GDK_QUARTZ_STRING_PBOARD_TYPE];
 
       if (s)
-	{
+	      {
           const char *utf8_string = [s UTF8String];
 
           gtk_selection_data_set (selection_data,
                                   target, 8,
                                   (guchar *)utf8_string, strlen (utf8_string));
-	}
+        }
     }
   else if (target == gdk_atom_intern_static_string ("application/x-color"))
     {
-      NSColor *nscolor = [[NSColor colorFromPasteboard:pasteboard]
-                          colorUsingColorSpaceName:NSDeviceRGBColorSpace];
-      
-      guint16 color[4];
-      
-      selection_data->target = target;
+      NSString *colorType = GDK_QUARTZ_COLOR_PBOARD_TYPE;
+      NSData *colorData = [pasteboard dataForType:colorType];
 
-      color[0] = 0xffff * [nscolor redComponent];
-      color[1] = 0xffff * [nscolor greenComponent];
-      color[2] = 0xffff * [nscolor blueComponent];
-      color[3] = 0xffff * [nscolor alphaComponent];
+      /* Check if we have complex color data vs simple RGB data.
+       * Since application/x-color is not a standard MIME type, preserve
+       * complex formats as raw binary to match Linux/Windows behavior. */
+      if (colorData && [colorData length] > 8)
+        {
+          /* Complex format: Pass raw data through unchanged to preserve
+           * application-specific color information and maintain cross-platform consistency */
+          gtk_selection_data_set (selection_data, target, 8,
+                                  [colorData bytes], [colorData length]);
+        }
+      else
+        {
+          /* Simple RGB format: Use standard GTK3 color handling */
+          NSColor *nscolor = [[NSColor colorFromPasteboard:pasteboard]
+                              colorUsingColorSpaceName:NSDeviceRGBColorSpace];
 
-      gtk_selection_data_set (selection_data, target, 16, (guchar *)color, 8);
+          if (nscolor)
+            {
+              guint16 color[4];
+
+              selection_data->target = target;
+
+              color[0] = 0xffff * [nscolor redComponent];
+              color[1] = 0xffff * [nscolor greenComponent];
+              color[2] = 0xffff * [nscolor blueComponent];
+              color[3] = 0xffff * [nscolor alphaComponent];
+
+              gtk_selection_data_set (selection_data, target, 16, (guchar *)color, 8);
+            }
+        }
     }
   else if (target == gdk_atom_intern_static_string ("text/uri-list"))
     {
@@ -298,17 +318,33 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
                   forType:type];
   else if ([type isEqualTo:GDK_QUARTZ_COLOR_PBOARD_TYPE])
     {
-      guint16 *color = (guint16 *)data;
-      float red, green, blue, alpha;
-      NSColor *nscolor;
+      /* Check if this is complex color data vs simple RGB format.
+       * Since application/x-color is not a standard MIME type, different
+       * applications use different formats. To match Linux/Windows behavior,
+       * preserve non-standard formats as raw binary data rather than forcing
+       * NSColor conversion which would corrupt the data. */
+      if (length > 8 && format == 8)
+        {
+          /* Complex format: Store as raw binary data to preserve application-specific
+           * color information (color profiles, metadata, extended precision, etc.) */
+          NSData *nsdata = [NSData dataWithBytes:data length:length];
+          [pasteboard setData:nsdata forType:type];
+        }
+      else
+        {
+          /* Simple RGB format: Convert to NSColor for macOS interoperability */
+          guint16 *color = (guint16 *)data;
+          float red, green, blue, alpha;
+          NSColor *nscolor;
 
-      red   = (float)color[0] / 0xffff;
-      green = (float)color[1] / 0xffff;
-      blue  = (float)color[2] / 0xffff;
-      alpha = (float)color[3] / 0xffff;
+          red   = (float)color[0] / 0xffff;
+          green = (float)color[1] / 0xffff;
+          blue  = (float)color[2] / 0xffff;
+          alpha = (float)color[3] / 0xffff;
 
-      nscolor = [NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha];
-      [nscolor writeToPasteboard:pasteboard];
+          nscolor = [NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha];
+          [nscolor writeToPasteboard:pasteboard];
+        }
     }
   else if ([type isEqualTo:GDK_QUARTZ_URL_PBOARD_TYPE])
     {
