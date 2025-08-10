@@ -6303,6 +6303,8 @@ static gboolean
 cursor_blinks (GtkTextView *text_view)
 {
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (text_view));
+  if (!GTK_IS_WINDOW (root))
+    return FALSE;
 
 #ifdef DEBUG_VALIDATION_AND_SCROLLING
   return FALSE;
