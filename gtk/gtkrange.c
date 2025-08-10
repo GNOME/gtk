@@ -99,6 +99,8 @@ struct _GtkRangePrivate
 
   double   fill_level;
   double *marks;
+  double initial_scroll_value;
+  double scroll_delta_accum;
 
   int *mark_pos;
   int   n_marks;
@@ -120,6 +122,8 @@ struct _GtkRangePrivate
 
   /* Whether dragging is ongoing */
   guint in_drag                : 1;
+  /* Whether scroll is ongoing */
+  guint in_scroll              : 1;
 
   GtkOrientation     orientation;
 
@@ -245,6 +249,10 @@ static void          gtk_range_allocate_trough          (GtkGizmo            *gi
 static void          gtk_range_render_trough            (GtkGizmo     *gizmo,
                                                          GtkSnapshot  *snapshot);
 
+static void          gtk_range_scroll_controller_scroll_begin (GtkEventControllerScroll *scroll,
+                                                               GtkRange                 *range);
+static void          gtk_range_scroll_controller_scroll_end (GtkEventControllerScroll *scroll,
+                                                             GtkRange                 *range);
 static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                          double                    dx,
                                                          double                    dy,
@@ -1348,8 +1356,12 @@ gtk_range_constructed (GObject *object)
   flags = GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES;
 
   controller = gtk_event_controller_scroll_new (flags);
+  g_signal_connect (controller, "scroll-begin",
+                    G_CALLBACK (gtk_range_scroll_controller_scroll_begin), range);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_range_scroll_controller_scroll), range);
+  g_signal_connect (controller, "scroll-end",
+                    G_CALLBACK (gtk_range_scroll_controller_scroll_end), range);
   gtk_widget_add_controller (GTK_WIDGET (range), controller);
 
   G_OBJECT_CLASS (gtk_range_parent_class)->constructed (object);
@@ -2242,6 +2254,26 @@ stop_scrolling (GtkRange *range)
   remove_autoscroll (range);
 }
 
+static void
+gtk_range_scroll_controller_scroll_begin (GtkEventControllerScroll *scroll,
+                                          GtkRange                 *range)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  priv->in_scroll = TRUE;
+  priv->initial_scroll_value = gtk_adjustment_get_value (priv->adjustment);
+  priv->scroll_delta_accum = 0;
+}
+
+static void
+gtk_range_scroll_controller_scroll_end (GtkEventControllerScroll *scroll,
+                                        GtkRange                 *range)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  priv->in_scroll = FALSE;
+}
+
 static gboolean
 gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                     double                    dx,
@@ -2249,7 +2281,7 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                     GtkRange                 *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  double delta;
+  double delta, value;
   gboolean handled;
   GtkOrientation move_orientation;
   GdkScrollUnit scroll_unit;
@@ -2276,8 +2308,16 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
   if (delta != 0 && should_invert_move (range, move_orientation))
     delta = - delta;
 
+  if (priv->in_scroll)
+    {
+      priv->scroll_delta_accum += delta;
+      value = priv->initial_scroll_value + priv->scroll_delta_accum;
+    }
+  else
+    value = gtk_adjustment_get_value (priv->adjustment) + delta;
+
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
-                 GTK_SCROLL_JUMP, gtk_adjustment_get_value (priv->adjustment) + delta,
+                 GTK_SCROLL_JUMP, value,
                  &handled);
 
   return GDK_EVENT_STOP;
