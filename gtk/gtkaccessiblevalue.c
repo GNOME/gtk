@@ -1405,7 +1405,7 @@ gtk_accessible_value_collect_value (const GtkAccessibleCollect  *cstate,
           }
         else 
           {
-            value = g_value_get_pointer (value_);
+            value = g_list_copy (g_value_get_pointer (value_));
           }
 
         if (ctor == NULL)
