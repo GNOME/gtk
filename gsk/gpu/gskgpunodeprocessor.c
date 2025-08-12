@@ -911,6 +911,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                                    source_depth,
                                                    &self->scale,
                                                    &intermediate_rect);
+  g_return_if_fail (intermediate != NULL);
 
   gsk_gpu_node_processor_sync_globals (&other, 0);
 
@@ -1327,6 +1328,8 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
                                                                          gsk_render_node_get_preferred_depth (node)),
                                                  &self->scale,
                                                  &clip_bounds);
+
+  g_return_if_fail (mask_image != NULL);
 
   gdk_color_init (&white, self->ccs, ((float[]){ 1, 1, 1, 1 }));
   gsk_gpu_node_processor_sync_globals (&other, 0);
@@ -2583,6 +2586,8 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor   *self,
                                                                     gsk_render_node_get_preferred_depth (node)),
                                             &self->scale,
                                             &bounds);
+
+  g_return_if_fail (image != NULL);
 
   other.blend = GSK_GPU_BLEND_ADD;
   other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
