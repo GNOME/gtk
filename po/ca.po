@@ -27,7 +27,7 @@
 #               much like a scrollbar.
 #               It is used to select a value in a given range. The user may drag
 #               the thumb across the scale track to adjust the value» .
-#               Vegeu http://wiki.mozilla.org/XUL:Slider_Tag
+#               Vegeu https://wiki.mozilla.org/XUL:Slider_Tag
 # Bin         - safata
 #
 msgid ""
@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-05-30 06:24+0000\n"
-"PO-Revision-Date: 2025-06-01 19:56+0200\n"
+"PO-Revision-Date: 2025-08-12 19:56+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -558,7 +558,7 @@ msgstr "Enrere"
 #: gdk/keynamesprivate.h:6927
 msgctxt "keyboard label"
 msgid "Sleep"
-msgstr "Atura temporalment"
+msgstr "Suspèn"
 
 #: gdk/keynamesprivate.h:6928
 msgctxt "keyboard label"
@@ -1089,7 +1089,7 @@ msgstr "S'estan obrint fitxers «%s»."
 #: gtk/deprecated/gtkappchooserdialog.c:233
 #, c-format
 msgid "No applications found for “%s” files"
-msgstr "No hi ha cap aplicació disponible per fitxers «%s»"
+msgstr "No hi ha cap aplicació disponible per a fitxers «%s»"
 
 #: gtk/deprecated/gtkappchooserdialog.c:435
 msgid "Failed to start GNOME Software"
