@@ -9996,13 +9996,13 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
     {
       GtkAccessibleRelation relation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
       GValue value = G_VALUE_INIT;
+      GList *labels;
 
-      /* The ATContext takes ownership of the GList returned by list_mnemonic_labels(),
-       * so we don't need to free it
-       */
       gtk_accessible_relation_init_value (relation, &value);
-      g_value_set_pointer (&value, gtk_widget_list_mnemonic_labels (widget));
+      labels = gtk_widget_list_mnemonic_labels (widget);
+      g_value_set_pointer (&value, labels);
       gtk_accessible_update_relation_value (GTK_ACCESSIBLE (widget), 1, &relation, &value);
+      g_list_free (labels);
       g_value_unset (&value);
     }
   else
