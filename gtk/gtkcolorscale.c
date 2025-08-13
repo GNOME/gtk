@@ -196,6 +196,8 @@ scale_constructed (GObject *object)
                                                 ? "a" : "h");
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (GTK_WIDGET (scale), controller);
+
+  G_OBJECT_CLASS (gtk_color_scale_parent_class)->constructed (object);
 }
 
 static void

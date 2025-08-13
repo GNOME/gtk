@@ -901,6 +901,20 @@ get_axis_name (uint32_t axis)
     }
 }
 
+static const char *
+get_direction_name (uint32_t direction)
+{
+  switch (direction)
+    {
+    case WL_POINTER_AXIS_RELATIVE_DIRECTION_IDENTICAL:
+      return "identical";
+    case WL_POINTER_AXIS_RELATIVE_DIRECTION_INVERTED:
+      return "inverted";
+    default:
+      return "unknown";
+    }
+}
+
 static void
 pointer_handle_axis (void              *data,
                      struct wl_pointer *pointer,
@@ -1056,6 +1070,22 @@ pointer_handle_axis_value120 (void              *data,
                   get_axis_name (axis), value, seat);
 }
 
+static void
+pointer_handle_axis_relative_direction (void              *data,
+                                        struct wl_pointer *pointer,
+                                        uint32_t           axis,
+                                        uint32_t           direction)
+{
+  GdkWaylandSeat *seat = data;
+
+  if (!seat->pointer_info.focus)
+    return;
+
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "scroll relative direction, axis %s, direction %s, seat %p",
+                  get_axis_name (axis), get_direction_name (direction), seat);
+}
+
 static const struct wl_pointer_listener pointer_listener = {
   pointer_handle_enter,
   pointer_handle_leave,
@@ -1067,6 +1097,7 @@ static const struct wl_pointer_listener pointer_listener = {
   pointer_handle_axis_stop,
   pointer_handle_axis_discrete,
   pointer_handle_axis_value120,
+  pointer_handle_axis_relative_direction,
 };
 
 /* }}} */
@@ -1439,15 +1470,27 @@ keyboard_handle_key (void               *data,
                      uint32_t            state_w)
 {
   GdkWaylandSeat *seat = data;
+  uint32_t press, repeat;
 
   if (!seat->keyboard_focus)
     return;
 
+  if (state_w == WL_KEYBOARD_KEY_STATE_REPEATED &&
+      wl_keyboard_get_version (keyboard) < WL_KEYBOARD_KEY_STATE_REPEATED_SINCE_VERSION)
+    {
+      g_warning ("Unexpected 'repeated' key state, wl_keyboard version is %d\n",
+                 wl_keyboard_get_version (keyboard));
+      return;
+    }
+
+  press = state_w == WL_KEYBOARD_KEY_STATE_PRESSED ||
+    state_w == WL_KEYBOARD_KEY_STATE_REPEATED;
+  repeat = state_w == WL_KEYBOARD_KEY_STATE_PRESSED;
+
   seat->keyboard_time = time;
   seat->keyboard_key_serial = serial;
   seat->repeat_count = 0;
-  deliver_key_event (data, time, key + 8, state_w, FALSE);
-
+  deliver_key_event (data, time, key + 8, press, repeat);
 }
 
 static void

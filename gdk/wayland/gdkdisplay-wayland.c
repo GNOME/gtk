@@ -101,7 +101,7 @@
 #define LINUX_DMABUF_VERSION            5
 #define DATA_DEVICE_MANAGER_VERSION     3
 #define SUBCOMPOSITOR_VERSION           1
-#define SEAT_VERSION                    8
+#define SEAT_VERSION                    10
 #define POINTER_GESTURES_VERSION        3
 #define PRIMARY_SELECTION_VERSION       1
 #define OUTPUT_MIN_VERSION              2
