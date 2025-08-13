@@ -218,6 +218,7 @@ gtk_gst_media_file_destroy_play (GtkGstMediaFile *self)
   g_signal_handlers_disconnect_by_func (self->play_adapter, gtk_gst_media_file_seek_done_cb, self);
   g_signal_handlers_disconnect_by_func (self->play_adapter, gtk_gst_media_file_error_cb, self);
   g_object_unref (self->play_adapter);
+  gst_play_stop (self->play);
   g_object_unref (self->play);
   self->play = NULL;
 }
