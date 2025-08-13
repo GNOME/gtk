@@ -893,9 +893,9 @@ get_axis_name (uint32_t axis)
   switch (axis)
     {
     case WL_POINTER_AXIS_VERTICAL_SCROLL:
-      return "horizontal";
-    case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
       return "vertical";
+    case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
+      return "horizontal";
     default:
       return "unknown";
     }
