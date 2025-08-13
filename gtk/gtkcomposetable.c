@@ -764,6 +764,14 @@ gtk_compose_table_new_with_list (GList   *compose_list,
       gtk_compose_seqs[n++] = codepoint & 0xffff;
     }
 
+  if (char_data->len > 0x8000)
+    {
+      g_warning ("GTK can't handle compose tables this large");
+      g_free (gtk_compose_seqs);
+      g_string_free (char_data, TRUE);
+      return NULL;
+    }
+
   retval = g_new0 (GtkComposeTable, 1);
   retval->data = gtk_compose_seqs;
   retval->max_seq_len = max_compose_len;
