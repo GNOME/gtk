@@ -36,13 +36,19 @@ static const GskGpuShaderOpClass GSK_GPU_COMPONENT_TRANSFER_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
 #endif
-    gsk_gpu_shader_op_gl_command
+    gsk_gpu_shader_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+    gsk_gpu_shader_op_d3d12_command,
+#endif
   },
   "gskgpucomponenttransfer",
   gsk_gpu_componenttransfer_n_textures,
   sizeof (GskGpuComponenttransferInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_componenttransfer_info,
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_componenttransfer_input_layout,
 #endif
   gsk_gpu_component_transfer_op_print_instance,
   gsk_gpu_componenttransfer_setup_attrib_locations,
