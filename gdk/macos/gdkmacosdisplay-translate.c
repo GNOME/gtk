@@ -593,6 +593,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                    int              y)
 {
   GdkScrollDirection direction = 0;
+  GdkScrollRelativeDirection relative_direction;
   GdkModifierType state;
   GdkDevice *pointer;
   GdkEvent *ret = NULL;
@@ -607,6 +608,9 @@ fill_scroll_event (GdkMacosDisplay *self,
 
   phase = [nsevent phase];
   momentumPhase = [nsevent momentumPhase];
+  relative_direction = [nsevent isDirectionInvertedFromDevice] ?
+    GDK_SCROLL_RELATIVE_DIRECTION_INVERTED :
+    GDK_SCROLL_RELATIVE_DIRECTION_IDENTICAL;
 
   /* Ignore kinetic scroll events from the display server as we already
    * handle those internally.
@@ -630,7 +634,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                                  state,
                                  0.0, 0.0, TRUE,
                                  GDK_SCROLL_UNIT_SURFACE,
-                                 GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
+                                 relative_direction);
 
   dx = [nsevent deltaX];
   dy = [nsevent deltaY];
@@ -653,7 +657,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                                     -sy,
                                     FALSE,
                                     GDK_SCROLL_UNIT_SURFACE,
-                                    GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
+                                    relative_direction);
 
       /* Fall through for scroll emulation */
     }
@@ -687,7 +691,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                                            get_time_from_ns_event (nsevent),
                                            state,
                                            direction,
-                                           GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
+                                           relative_direction);
     }
 
   if (phase == NSEventPhaseEnded || phase == NSEventPhaseCancelled)
@@ -704,7 +708,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                                   state,
                                   0.0, 0.0, TRUE,
                                   GDK_SCROLL_UNIT_SURFACE,
-                                  GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
+                                  relative_direction);
     }
 
   return g_steal_pointer (&ret);
