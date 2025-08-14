@@ -5791,7 +5791,6 @@ gtk_text_set_text (GtkText     *self,
   gtk_text_history_begin_irreversible_action (priv->history);
 
   begin_change (self);
-  g_object_freeze_notify (G_OBJECT (self));
   gtk_editable_delete_text (GTK_EDITABLE (self), 0, -1);
   gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_REMOVE,
@@ -5801,7 +5800,6 @@ gtk_text_set_text (GtkText     *self,
   gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
                                        tmp_pos, tmp_pos + g_utf8_strlen (text, -1));
-  g_object_thaw_notify (G_OBJECT (self));
   end_change (self);
 
   gtk_text_history_end_irreversible_action (priv->history);
