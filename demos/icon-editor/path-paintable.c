@@ -69,6 +69,8 @@ typedef struct
 
   gboolean stroke;
   float stroke_width;
+  float min_stroke_width;
+  float max_stroke_width;
   guint stroke_symbolic;
   GdkRGBA stroke_color;
   GskLineCap stroke_linecap;
@@ -292,8 +294,24 @@ get_stroke_for_path (PathElt *elt,
                      double   weight)
 {
   GskStroke *stroke;
+  float width;
 
-  stroke = gsk_stroke_new (elt->stroke_width * weight / 400.0);
+  if (weight < 400)
+    {
+      float f = (400 - weight) / 300;
+      width = elt->min_stroke_width * f + elt->stroke_width * (1 - f);
+    }
+  else if (weight > 400)
+    {
+      float f = (weight - 400) / 600;
+      width = elt->max_stroke_width * f + elt->stroke_width * (1 - f);
+    }
+  else
+    {
+      width = elt->stroke_width;
+    }
+
+  stroke = gsk_stroke_new (width);
   gsk_stroke_set_line_cap (stroke, elt->stroke_linecap);
   gsk_stroke_set_line_join (stroke, elt->stroke_linejoin);
 
@@ -1128,6 +1146,8 @@ path_paintable_add_path (PathPaintable *self,
 
   elt.stroke = TRUE;
   elt.stroke_width = 2;
+  elt.min_stroke_width = 0.5;
+  elt.max_stroke_width = 5;
   elt.stroke_linecap = GSK_LINE_CAP_ROUND;
   elt.stroke_linejoin = GSK_LINE_JOIN_ROUND;
   elt.stroke_symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
@@ -1356,6 +1376,8 @@ path_paintable_set_path_stroke (PathPaintable *self,
 
   elt->stroke = do_stroke;
   elt->stroke_width = gsk_stroke_get_line_width (stroke);
+  elt->min_stroke_width = elt->stroke_width * 100. / 400.;
+  elt->max_stroke_width = elt->stroke_width * 1000. / 400.;
   elt->stroke_linecap = gsk_stroke_get_line_cap (stroke);
   elt->stroke_linejoin = gsk_stroke_get_line_join (stroke);
   elt->stroke_symbolic = symbolic;
@@ -1365,6 +1387,43 @@ path_paintable_set_path_stroke (PathPaintable *self,
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
   g_signal_emit (self, signals[CHANGED], 0);
+}
+
+void
+path_paintable_set_path_stroke_variation (PathPaintable *self,
+                                          gsize          idx,
+                                          float          min_stroke_width,
+                                          float          max_stroke_width)
+{
+  g_return_if_fail (idx < self->paths->len);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  if (elt->min_stroke_width == min_stroke_width &&
+      elt->max_stroke_width == max_stroke_width)
+    return;
+
+  elt->min_stroke_width = min_stroke_width;
+  elt->max_stroke_width = max_stroke_width;
+
+  recompute_bounds (self);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+  g_signal_emit (self, signals[CHANGED], 0);
+}
+
+void
+path_paintable_get_path_stroke_variation (PathPaintable *self,
+                                          gsize          idx,
+                                          float         *min_stroke_width,
+                                          float         *max_stroke_width)
+{
+  g_return_if_fail (idx < self->paths->len);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  *min_stroke_width = elt->min_stroke_width;
+  *max_stroke_width = elt->max_stroke_width;
 }
 
 void

@@ -308,6 +308,92 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="min_width_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Min</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">6</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="min_width">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="numeric">1</property>
+            <property name="digits">2</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">20</property>
+                <property name="value">1</property>
+                <property name="step-increment">0.1</property>
+                <property name="page-size">0</property>
+              </object>
+            </property>
+            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <layout>
+              <property name="row">6</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="max_width_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Max</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="max_width">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="numeric">1</property>
+            <property name="digits">2</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">20</property>
+                <property name="value">1</property>
+                <property name="step-increment">0.1</property>
+                <property name="page-size">0</property>
+              </object>
+            </property>
+            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkLabel" id="line_join_label">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool">
@@ -318,7 +404,7 @@
             <property name="label" translatable="yes">Join</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">6</property>
+              <property name="row">8</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -342,7 +428,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">6</property>
+              <property name="row">8</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -359,7 +445,7 @@
             <property name="label" translatable="yes">Cap</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">7</property>
+              <property name="row">9</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -383,7 +469,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">7</property>
+              <property name="row">9</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -403,7 +489,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">8</property>
+              <property name="row">10</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -441,7 +527,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">8</property>
+              <property name="row">10</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -458,7 +544,7 @@
             <property name="label" translatable="yes">Rule</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">9</property>
+              <property name="row">11</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -481,7 +567,7 @@
             </property>
             <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
             <layout>
-              <property name="row">9</property>
+              <property name="row">11</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -501,7 +587,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">10</property>
+              <property name="row">12</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -511,7 +597,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
             <layout>
-              <property name="row">10</property>
+              <property name="row">12</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -528,7 +614,7 @@
             <property name="label" translatable="yes">Position</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">11</property>
+              <property name="row">13</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -555,7 +641,7 @@
               <mark value="1" position="bottom"/>
             </marks>
             <layout>
-              <property name="row">11</property>
+              <property name="row">13</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -571,6 +657,8 @@
       <widget name="origin_label"/>
       <widget name="stroke_expander"/>
       <widget name="line_width_label"/>
+      <widget name="min_width_label"/>
+      <widget name="max_width_label"/>
       <widget name="line_join_label"/>
       <widget name="line_cap_label"/>
       <widget name="fill_expander"/>

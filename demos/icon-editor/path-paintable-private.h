@@ -121,6 +121,15 @@ gboolean        path_paintable_get_path_stroke     (PathPaintable   *self,
                                                     guint           *symbolic,
                                                     GdkRGBA         *color);
 
+void            path_paintable_set_path_stroke_variation (PathPaintable   *self,
+                                                          gsize            idx,
+                                                          float            min_stroke_width,
+                                                          float            max_stroke_width);
+void            path_paintable_get_path_stroke_variation (PathPaintable   *self,
+                                                          gsize            idx,
+                                                          float           *min_stroke_width,
+                                                          float           *max_stroke_width);
+
 void            path_paintable_attach_path         (PathPaintable   *self,
                                                     gsize            idx,
                                                     gsize            to,

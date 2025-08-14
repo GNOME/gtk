@@ -1,2 +1,5 @@
 - add a separate -gtk-icon-weight css property ?
 - allow animating fills ?
+- ui for min/max-stroke-width
+- investigate bounds not bounding
+- update size if it is zero

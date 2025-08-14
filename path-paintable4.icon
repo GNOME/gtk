@@ -53,7 +53,7 @@
         stroke-opacity='0.7'
         gtk:stroke='foreground'
         fill='none'
-        gtk:states='0,1'
+        gtk:states='0 1'
         gtk:transition='animate'
         gtk:origin='middle'/>
 </svg>

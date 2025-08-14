@@ -46,7 +46,8 @@
  * <circle>, <rect>, <path>
  *   id: ID for the path
  *   stroke-width, stroke-opacity,
- *   stroke-linecap, stroke-linejoin: Stroke parameters
+ *   stroke-linecap, stroke-linejoin: Stroke parameters. stroke-width
+ *     is ignored is gtk:stroke-width is set
  *   fill-opacity, fill-rule: Fill parameters
  *   stroke: Ignored in favor of gtk:stroke
  *   gtk:stroke: Stroke paint. Either a symbolic color name
@@ -54,7 +55,8 @@
  *     or a fixed color in the format parsed by gdk_rgba_parse
  *   fill: Ignored in favor of gtk:fill
  *   gtk:fill: Fill paint
- *   gtk:states: A comma-separated list of numbers
+ *   gtk:stroke-width: the minimum, normal and maximun stroke-width
+ *   gtk:states: A space-separated list of numbers, or 'all'
  *   gtk:transition: The transition to use. One of 'none',
  *     'animate' or 'blur'
  *   gtk:origin: Where to start the animation. One of 'start',
@@ -196,7 +198,7 @@ states_to_string (guint64 states)
           if ((states & (1ull << u)) != 0)
             {
               if (str->len > 0)
-                g_string_append_c (str, ',');
+                g_string_append_c (str, ' ');
               g_string_append_printf (str, "%u", u);
             }
         }
@@ -220,7 +222,7 @@ states_parse (const char *text,
 
   *states = 0;
 
-  str = g_strsplit (text, ",", 0);
+  str = g_strsplit (text, " ", 0);
   for (int i = 0; str[i]; i++)
     {
       guint u;
@@ -290,6 +292,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *stroke_attr = NULL;
   const char *class_attr = NULL;
   const char *stroke_width_attr = NULL;
+  const char *gtk_stroke_width_attr = NULL;
   const char *stroke_opacity_attr = NULL;
   const char *stroke_linecap_attr = NULL;
   const char *stroke_linejoin_attr = NULL;
@@ -317,6 +320,8 @@ start_element_cb (GMarkupParseContext  *context,
   gsize idx;
   gsize attach_to;
   float attach_pos;
+  float min_stroke_width;
+  float max_stroke_width;
 
   if (strcmp (element_name, "svg") == 0)
     {
@@ -555,6 +560,7 @@ start_element_cb (GMarkupParseContext  *context,
                             "fill-opacity", &fill_opacity_attr,
                             "fill-rule", &fill_rule_attr,
                             "id", &id_attr,
+                            "gtk:stroke-width", &gtk_stroke_width_attr,
                             "gtk:fill", &fill_attr,
                             "gtk:stroke", &stroke_attr,
                             "gtk:states", &states_attr,
@@ -667,6 +673,24 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (!parse_float ("stroke-width", stroke_width_attr, POSITIVE, &w, error))
         return;
+
+      gsk_stroke_set_line_width (stroke, w);
+
+      min_stroke_width = w * 100.0 / 400.0;
+      max_stroke_width = w * 1000.0 / 400.0;
+    }
+
+  if (gtk_stroke_width_attr)
+    {
+      int res;
+      float w;
+
+      res = sscanf (gtk_stroke_width_attr, "%f %f %f", &min_stroke_width, &w, &max_stroke_width);
+      if (res < 3 || max_stroke_width < w || w < min_stroke_width)
+        {
+          set_attribute_error (error, "gtk:stroke-width", gtk_stroke_width_attr);
+          return;
+        }
 
       gsk_stroke_set_line_width (stroke, w);
     }
@@ -816,6 +840,7 @@ start_element_cb (GMarkupParseContext  *context,
   path_paintable_set_path_origin (data->paintable, idx, origin);
   path_paintable_set_path_fill (data->paintable, idx, fill_attr != NULL, fill_rule, fill_symbolic, &fill_color);
   path_paintable_set_path_stroke (data->paintable, idx, stroke_attr != NULL, stroke, stroke_symbolic, &stroke_color);
+  path_paintable_set_path_stroke_variation (data->paintable, idx, min_stroke_width, max_stroke_width);
   path_paintable_attach_path (data->paintable, idx, attach_to, attach_pos);
 
   if (id_attr)

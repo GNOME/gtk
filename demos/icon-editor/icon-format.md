@@ -46,7 +46,8 @@ The following attributes are allowed on elements that specify a path:
 - `stroke-opacity`: opacity for stroked paths, in addition to the symbolic
   color alpha
 - `fill-rule`: the fill rule used when filling
-- `stroke-width`: line width used when stroking
+- `stroke-width`: line width used when stroking, ignored when
+  `gtk:stroke-width` is set
 - `stroke-linecap`: the line cap value used when stroking
 - `stroke-linejoin`: the line join value used when stroking
 - `id`: used when attaching paths
@@ -76,10 +77,13 @@ The following attributes can be set on elements that specify a path:
   (`foreground`, `success`, `warning`, `error`)
   or a fixed color in the format parsed by `gdk_rgba_parse`
 - `gtk:fill`: Fill paint (similar to `gtk:stroke`)
-- `gtk:states`: a comma-separated list of unsigned integers
+- `gtk:states`: a space-separated list of unsigned integers, or 'all'
 - `gtk:transition`: The transition to use. One of `none`,
   `animate` or `blur`
 - `gtk:origin`: Where to start the animation. One of `start`,
   `middle` or `end`, or a number between 0 and 1
 - `gtk:attach-to`: the ID of another path to attach to
 - `gtk:attach-pos`: Where to attach the path (similar to `gtk:origin`)
+- `gtk:stroke-width`: 3 space-separated numbers, for the minimum,
+   default and maximum stroke-width. The minimum and maximum are used
+   when applying font weight
