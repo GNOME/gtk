@@ -3962,6 +3962,7 @@ update_extra_menu (GtkEntry *entry)
       gtk_text_set_extra_menu (GTK_TEXT (priv->text), priv->extra_menu);
     }
 
+  g_object_unref (joined);
   g_object_unref (menu);
   g_object_unref (section);
 }
