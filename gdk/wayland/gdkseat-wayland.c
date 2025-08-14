@@ -1485,7 +1485,7 @@ keyboard_handle_key (void               *data,
 
   press = state_w == WL_KEYBOARD_KEY_STATE_PRESSED ||
     state_w == WL_KEYBOARD_KEY_STATE_REPEATED;
-  repeat = state_w == WL_KEYBOARD_KEY_STATE_PRESSED;
+  repeat = state_w == WL_KEYBOARD_KEY_STATE_REPEATED;
 
   seat->keyboard_time = time;
   seat->keyboard_key_serial = serial;
