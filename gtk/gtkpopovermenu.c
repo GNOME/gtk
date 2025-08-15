@@ -946,7 +946,7 @@ gtk_popover_menu_add_child (GtkPopoverMenu *popover,
  * @child: the `GtkWidget` to remove
  *
  * Removes a widget that has previously been added with
- * [method@Gtk.PopoverMenu.add_child()]
+ * [method@Gtk.PopoverMenu.add_child]
  *
  * Returns: %TRUE if the widget was removed
  */

@@ -3374,7 +3374,7 @@ gtk_text_view_get_visible_rect (GtkTextView  *text_view,
  * the textview's text contents.
  *
  * This allows for more-precise positioning than what is provided by
- * [method@Gtk.TextView.get_visible_rect()] as you can discover what
+ * [method@Gtk.TextView.get_visible_rect] as you can discover what
  * device pixel is being quantized for text positioning.
  *
  * You might want this when making ulterior widgets align with quantized
