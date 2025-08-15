@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-07-13 18:21+0000\n"
-"PO-Revision-Date: 2025-07-15 22:35+0200\n"
-"Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
+"POT-Creation-Date: 2025-08-15 05:12+0000\n"
+"PO-Revision-Date: 2025-08-15 13:16+0200\n"
+"Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -578,7 +578,7 @@ msgstr "Chyba pri interpretácii obrázku JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nepodporovaný priestor farieb formátu JPEG (%d)"
 
-#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467 gdk/loaders/gdktiff.c:491
+#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467 gdk/loaders/gdktiff.c:500
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Nedostatok pamäte pre veľkosť obrázka %ux%u"
@@ -603,15 +603,15 @@ msgstr "Nepodporovaný typ farby %u v obrázku png"
 msgid "Image stride too large for image size %ux%u"
 msgstr "Dĺžka riadku je príliš veľká pre obrázok s rozmermi %ux%u"
 
-#: gdk/loaders/gdktiff.c:382
+#: gdk/loaders/gdktiff.c:391
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Zlyhalo načítanie údajov RGB zo súboru TIFF"
 
-#: gdk/loaders/gdktiff.c:424
+#: gdk/loaders/gdktiff.c:433
 msgid "Could not load TIFF data"
 msgstr "Nepodarilo sa načítať údaje formátu TIFF"
 
-#: gdk/loaders/gdktiff.c:505
+#: gdk/loaders/gdktiff.c:514
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Čítanie údajov zlyhalo na riadku č. %d"
@@ -1156,7 +1156,7 @@ msgid "Pick a Font"
 msgstr "Výber písma"
 
 #: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3818
-#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:284
+#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:328
 msgid "Font"
 msgstr "Písmo"
 
@@ -1860,7 +1860,7 @@ msgstr "Za_vrieť"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:728 gtk/gtkapplication-dbus.c:770
+#: gtk/gtkapplication-dbus.c:385
 msgid "Reason not specified"
 msgstr "Dôvod nebol určený"
 
@@ -2275,18 +2275,18 @@ msgstr "Okraje papiera"
 msgid "_Edit"
 msgstr "_Upraviť"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6354
-#: gtk/gtktextview.c:9386
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6352
+#: gtk/gtktextview.c:9388
 msgid "_Copy"
 msgstr "_Kopírovať"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
-#: gtk/gtktextview.c:9464
+#: gtk/gtktextview.c:9466
 msgid "Context menu"
 msgstr "Kontextová ponuka"
 
 # tooltip
-#: gtk/gtkentry.c:3687
+#: gtk/gtkentry.c:3787
 msgid "Insert Emoji"
 msgstr "Vloží smejka"
 
@@ -2357,27 +2357,27 @@ msgstr "Súbor s takým názvom už existuje"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:5001
-#: gtk/gtkfiledialog.c:913 gtk/gtkmessagedialog.c:173
+#: gtk/gtkfiledialog.c:914 gtk/gtkmessagedialog.c:173
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6461 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_Zrušiť"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:885 gtk/gtkplacessidebar.c:3149
+#: gtk/gtkfiledialog.c:886 gtk/gtkplacessidebar.c:3149
 #: gtk/gtkplacessidebar.c:3234 gtk/gtkplacesview.c:1646
 msgid "_Open"
 msgstr "_Otvoriť"
 
-#: gtk/gtkfilechoosernative.c:588 gtk/gtkfiledialog.c:890
+#: gtk/gtkfilechoosernative.c:588 gtk/gtkfiledialog.c:891
 msgid "_Save"
 msgstr "_Uložiť"
 
-#: gtk/gtkfilechoosernativeportal.c:499
+#: gtk/gtkfilechoosernativeportal.c:500
 #, c-format
 msgid "The session bus is not available"
 msgstr "Zbernica relácie nie je dostupná"
@@ -2455,7 +2455,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ak položku odstránite, bude natrvalo stratená."
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6362 gtk/gtktextview.c:9394
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6360 gtk/gtktextview.c:9396
 msgid "_Delete"
 msgstr "O_dstrániť"
 
@@ -2686,39 +2686,39 @@ msgstr "Veľkosť"
 msgid "Type"
 msgstr "Typ"
 
-#: gtk/gtkfiledialog.c:886
+#: gtk/gtkfiledialog.c:887
 msgid "Pick Files"
 msgstr "Výber súborov"
 
 # DK: nahlásil by som bug na rozdelenie pre obidva výskyty - jedno bude dialog title a druhé asi button label
 # PK: je to titulok podla zdrojaku
 # window title
-#: gtk/gtkfiledialog.c:886
+#: gtk/gtkfiledialog.c:887
 msgid "Pick a File"
 msgstr "Výber súboru"
 
-#: gtk/gtkfiledialog.c:891
+#: gtk/gtkfiledialog.c:892
 msgid "Save a File"
 msgstr "Uloženie súboru"
 
-#: gtk/gtkfiledialog.c:895 gtk/ui/gtkappchooserdialog.ui:53
+#: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:53
 #: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "_Vybrať"
 
-#: gtk/gtkfiledialog.c:896
+#: gtk/gtkfiledialog.c:897
 msgid "Select Folders"
 msgstr "Výber priečinkov"
 
-#: gtk/gtkfiledialog.c:896
+#: gtk/gtkfiledialog.c:897
 msgid "Select a Folder"
 msgstr "Výber priečinku"
 
-#: gtk/gtkfiledialog.c:1397 gtk/gtkfiledialog.c:1514 gtk/gtkfiledialog.c:1623
+#: gtk/gtkfiledialog.c:1398 gtk/gtkfiledialog.c:1515 gtk/gtkfiledialog.c:1624
 msgid "Encoding"
 msgstr "Kódovanie"
 
-#: gtk/gtkfiledialog.c:1634
+#: gtk/gtkfiledialog.c:1635
 msgid "Line Ending"
 msgstr "Ukončenie riadku"
 
@@ -2765,7 +2765,7 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Povoliť"
 
-#: gtk/gtkfontchooserwidget.c:2406
+#: gtk/gtkfontchooserwidget.c:2406 gtk/inspector/visual.ui:73
 msgid "Default"
 msgstr "Predvolená hodnota"
 
@@ -2815,15 +2815,15 @@ msgstr "Zavrieť"
 msgid "Close the infobar"
 msgstr "Zavrie infopanel"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6350 gtk/gtktextview.c:9382
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6348 gtk/gtktextview.c:9384
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6358 gtk/gtktextview.c:9390
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6356 gtk/gtktextview.c:9392
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6371 gtk/gtktextview.c:9415
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6369 gtk/gtktextview.c:9417
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
@@ -2902,7 +2902,7 @@ msgid "Play"
 msgstr "Prehrávanie"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6462
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
 msgid "_OK"
 msgstr "_OK"
 
@@ -2959,19 +2959,19 @@ msgstr "_PIM"
 msgid "_Password"
 msgstr "_Heslo"
 
-#: gtk/gtkmountoperation.c:760
+#: gtk/gtkmountoperation.c:761
 msgid "Forget password _immediately"
 msgstr "Heslo _ihneď zabudnúť"
 
-#: gtk/gtkmountoperation.c:770
+#: gtk/gtkmountoperation.c:771
 msgid "Remember password until you _logout"
 msgstr "Zapamätať heslo do odh_lásenia"
 
-#: gtk/gtkmountoperation.c:781
+#: gtk/gtkmountoperation.c:782
 msgid "Remember _forever"
 msgstr "Zapamätať _navždy"
 
-#: gtk/gtkmountoperation.c:1251
+#: gtk/gtkmountoperation.c:1252
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Neznáma aplikácia (PID %d)"
@@ -2981,12 +2981,12 @@ msgstr "Neznáma aplikácia (PID %d)"
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
 #.
-#: gtk/gtkmountoperation.c:1396
+#: gtk/gtkmountoperation.c:1397
 #, c-format
 msgid "Unable to end process"
 msgstr "Nie je možné ukončiť proces"
 
-#: gtk/gtkmountoperation.c:1546
+#: gtk/gtkmountoperation.c:1547
 msgid "_End Process"
 msgstr "_Ukončiť proces"
 
@@ -4065,7 +4065,7 @@ msgstr "Nešpecifikovaný profil"
 msgid "Authentication"
 msgstr "Overenie totožnosti"
 
-#: gtk/print/gtkprintbackend.c:732
+#: gtk/print/gtkprintbackend.c:736
 msgid "_Remember password"
 msgstr "_Zapamätať heslo"
 
@@ -4087,74 +4087,74 @@ msgstr "Nie je k dispozícii"
 msgid "%s job #%d"
 msgstr "%s: úloha č. %d"
 
-#: gtk/print/gtkprintoperation.c:1702
+#: gtk/print/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Počiatočný stav"
 
-#: gtk/print/gtkprintoperation.c:1703
+#: gtk/print/gtkprintoperation.c:1704
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Pripravuje sa na tlač"
 
-#: gtk/print/gtkprintoperation.c:1704
+#: gtk/print/gtkprintoperation.c:1705
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Generujú sa údaje"
 
-#: gtk/print/gtkprintoperation.c:1705
+#: gtk/print/gtkprintoperation.c:1706
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Odosielajú sa údaje"
 
-#: gtk/print/gtkprintoperation.c:1706
+#: gtk/print/gtkprintoperation.c:1707
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Čaká sa"
 
-#: gtk/print/gtkprintoperation.c:1707
+#: gtk/print/gtkprintoperation.c:1708
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Zablokované na probléme"
 
-#: gtk/print/gtkprintoperation.c:1708
+#: gtk/print/gtkprintoperation.c:1709
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Tlačí sa"
 
-#: gtk/print/gtkprintoperation.c:1709
+#: gtk/print/gtkprintoperation.c:1710
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Tlač ukončená"
 
-#: gtk/print/gtkprintoperation.c:1710
+#: gtk/print/gtkprintoperation.c:1711
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Tlač ukončená s chybou"
 
 # %d - pocet stran
-#: gtk/print/gtkprintoperation.c:2254
+#: gtk/print/gtkprintoperation.c:2255
 #, c-format
 msgid "Preparing %d"
 msgstr "Pripravuje sa %d"
 
-#: gtk/print/gtkprintoperation.c:2256 gtk/print/gtkprintoperation.c:2875
+#: gtk/print/gtkprintoperation.c:2257 gtk/print/gtkprintoperation.c:2876
 #, c-format
 msgid "Preparing"
 msgstr "Pripravuje sa"
 
 #  %d - pocet stran
-#: gtk/print/gtkprintoperation.c:2259
+#: gtk/print/gtkprintoperation.c:2260
 #, c-format
 msgid "Printing %d"
 msgstr "Tlačí sa %d"
 
-#: gtk/print/gtkprintoperation.c:2908
+#: gtk/print/gtkprintoperation.c:2909
 #, c-format
 msgid "Error creating print preview"
 msgstr "Chyba pri vytváraní náhľadu"
 
-#: gtk/print/gtkprintoperation.c:2911
+#: gtk/print/gtkprintoperation.c:2912
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -4162,12 +4162,12 @@ msgstr ""
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:603
-#: gtk/print/gtkprintoperation-portal.c:672 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:605
+#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Tlačiť"
 
-#: gtk/print/gtkprintoperation-unix.c:490
+#: gtk/print/gtkprintoperation-unix.c:526
 #: gtk/print/gtkprintoperation-win32.c:1498
 msgid "Application"
 msgstr "Aplikácia"
@@ -4382,11 +4382,11 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Bočný panel"
 
-#: gtk/gtktext.c:6376
+#: gtk/gtktext.c:6374
 msgid "Change di_rection"
 msgstr "Zmeniť _smer"
 
-#: gtk/gtktext.c:6381 gtk/gtktextview.c:9420
+#: gtk/gtktext.c:6379 gtk/gtktextview.c:9422
 msgid "Insert _Emoji"
 msgstr "Vložiť _emodži"
 
@@ -4546,20 +4546,20 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS"
 
-#: gtk/gtktextview.c:9402
+#: gtk/gtktextview.c:9404
 msgid "_Undo"
 msgstr "Vrátiť _späť"
 
-#: gtk/gtktextview.c:9406
+#: gtk/gtktextview.c:9408
 msgid "_Redo"
 msgstr "_Opakovať vrátené"
 
-#: gtk/gtkwindow.c:6450
+#: gtk/gtkwindow.c:6454
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK?"
 
-#: gtk/gtkwindow.c:6452
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4570,7 +4570,7 @@ msgstr ""
 "preskúmať a meniť interné vlastnosti ľubovolnej aplikácie GTK. Jeho "
 "používaním môžete spôsobiť neočakávané chovanie alebo pád."
 
-#: gtk/gtkwindow.c:6457
+#: gtk/gtkwindow.c:6461
 msgid "Don’t show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -4707,11 +4707,11 @@ msgctxt "propagation limit"
 msgid "Native"
 msgstr "Rovnaký prvok"
 
-#: gtk/inspector/css-editor.c:135
+#: gtk/inspector/css-editor.c:139
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Sem môžete napísať ľubovoľné pravidlo CSS platné v systéme GTK"
 
-#: gtk/inspector/css-editor.c:136
+#: gtk/inspector/css-editor.c:140
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -4719,11 +4719,11 @@ msgstr ""
 "Aplikáciu tohoto vlastného pravidla CSS môžete dočasne zakázať kliknutím na "
 "tlačidlo „Pozastaviť“ vyššie."
 
-#: gtk/inspector/css-editor.c:137
+#: gtk/inspector/css-editor.c:141
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr "Zmeny sa prejavia okamžite a globálne pre celú aplikáciu."
 
-#: gtk/inspector/css-editor.c:236
+#: gtk/inspector/css-editor.c:240
 #, c-format
 msgid "Saving CSS failed"
 msgstr "Ukladanie pravidla CSS zlyhalo"
@@ -5000,7 +5000,7 @@ msgstr "Počet snímkov"
 msgid "Frame Rate"
 msgstr "Frekvencia snímok"
 
-#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:314
+#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:358
 msgid "Scale"
 msgstr "Mierka"
 
@@ -5134,7 +5134,7 @@ msgstr "Zdroj:"
 msgid "Defined At"
 msgstr "Definované na"
 
-#: gtk/inspector/recorder.c:2189
+#: gtk/inspector/recorder.c:2212
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Ukladanie RenderNode zlyhalo"
@@ -5288,27 +5288,57 @@ msgid "GTK Theme"
 msgstr "Motív GTK"
 
 #: gtk/inspector/visual.ui:58
-msgid "Dark Variant"
-msgstr "Tmavý variant"
+msgid "System Color Scheme"
+msgstr "Farebná schéma systému"
 
-#: gtk/inspector/visual.ui:83
+#: gtk/inspector/visual.ui:72 gtk/inspector/visual.ui:106
+msgid "Unsupported"
+msgstr "Nepodporované"
+
+#: gtk/inspector/visual.ui:74
+msgid "Dark"
+msgstr "Tmavá"
+
+#: gtk/inspector/visual.ui:75
+msgid "Light"
+msgstr "Svetlá"
+
+#: gtk/inspector/visual.ui:92
+#, fuzzy
+#| msgid "System Information"
+msgid "System Contrast"
+msgstr "Informácie o systéme"
+
+#: gtk/inspector/visual.ui:107
+msgid "No Preference"
+msgstr "Žiadna predvoľba"
+
+#: gtk/inspector/visual.ui:108
+msgid "More"
+msgstr "Viac"
+
+#: gtk/inspector/visual.ui:109
+msgid "Less"
+msgstr "Menej"
+
+#: gtk/inspector/visual.ui:127
 msgid "Cursor Theme"
 msgstr "Motív kurzora"
 
-#: gtk/inspector/visual.ui:108
+#: gtk/inspector/visual.ui:152
 msgid "Cursor Size"
 msgstr "Veľkosť kurzora"
 
-#: gtk/inspector/visual.ui:144
+#: gtk/inspector/visual.ui:188
 msgid "Icon Theme"
 msgstr "Motív ikon"
 
-#: gtk/inspector/visual.ui:169
+#: gtk/inspector/visual.ui:213
 msgid "Text Direction"
 msgstr "Smer textu"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:184
+#: gtk/inspector/visual.ui:228
 msgid ""
 "Left-to-Right\n"
 "Right-to-Left"
@@ -5316,20 +5346,20 @@ msgstr ""
 "Zľava doprava\n"
 "Sprava doľava"
 
-#: gtk/inspector/visual.ui:201
+#: gtk/inspector/visual.ui:245
 msgid "Animations"
 msgstr "Animácie"
 
-#: gtk/inspector/visual.ui:226
+#: gtk/inspector/visual.ui:270
 msgid "Slowdown"
 msgstr "Spomaliť"
 
-#: gtk/inspector/visual.ui:361
+#: gtk/inspector/visual.ui:405
 msgid "Rendering"
 msgstr "Vykresľovanie"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:376
+#: gtk/inspector/visual.ui:420
 msgctxt "Font rendering"
 msgid ""
 "Automatic\n"
@@ -5338,66 +5368,66 @@ msgstr ""
 "Automatické\n"
 "Ručné"
 
-#: gtk/inspector/visual.ui:403
+#: gtk/inspector/visual.ui:447
 msgid "Show Framerate"
 msgstr "Zobraziť frekvenciu snímok"
 
-#: gtk/inspector/visual.ui:428
+#: gtk/inspector/visual.ui:472
 msgid "Show Graphic Updates"
 msgstr "Zobraziť grafické aktualizácie"
 
-#: gtk/inspector/visual.ui:448
+#: gtk/inspector/visual.ui:492
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 "Zatieni všetky miesta, kde aktuálny vykresľovač využíva Cairo namiesto GPU."
 
-#: gtk/inspector/visual.ui:454
+#: gtk/inspector/visual.ui:498
 msgid "Show Cairo Rendering"
 msgstr "Zobraziť vykresľovanie Cairom"
 
-#: gtk/inspector/visual.ui:479
+#: gtk/inspector/visual.ui:523
 msgid "Show Baselines"
 msgstr "Zobraziť základné línie"
 
-#: gtk/inspector/visual.ui:507
+#: gtk/inspector/visual.ui:551
 msgid "Show Layout Borders"
 msgstr "Zobraziť okraje rozloženia"
 
-#: gtk/inspector/visual.ui:572
+#: gtk/inspector/visual.ui:616
 msgid "CSS Padding"
 msgstr "Odsadenie CSS"
 
-#: gtk/inspector/visual.ui:582
+#: gtk/inspector/visual.ui:626
 msgid "CSS Border"
 msgstr "Hranica CSS"
 
-#: gtk/inspector/visual.ui:592
+#: gtk/inspector/visual.ui:636
 msgid "CSS Margin"
 msgstr "Okraj CSS"
 
-#: gtk/inspector/visual.ui:602
+#: gtk/inspector/visual.ui:646
 msgid "Widget Margin"
 msgstr "Okraje prvku"
 
-#: gtk/inspector/visual.ui:637
+#: gtk/inspector/visual.ui:681
 msgid "Show Focus"
 msgstr "Zobraziť zameriavač"
 
-#: gtk/inspector/visual.ui:662
+#: gtk/inspector/visual.ui:706
 msgid "Show Accessibility warnings"
 msgstr "Zobraziť upozornenia prístupnosti"
 
-#: gtk/inspector/visual.ui:687
+#: gtk/inspector/visual.ui:731
 msgid "Show Graphics Offload"
 msgstr "Zobraziť odľahčenie grafiky"
 
-#: gtk/inspector/visual.ui:722
+#: gtk/inspector/visual.ui:766
 msgid "Show Touch UI"
 msgstr "Zobraziť dotykové rozhranie"
 
-#: gtk/inspector/visual.ui:753
+#: gtk/inspector/visual.ui:797
 msgid "Inspect Inspector"
 msgstr "Skúmať Inšpektora"
 
@@ -7456,6 +7486,17 @@ msgstr "Zh_romažďovať"
 msgid "_Reverse"
 msgstr "_Opačne"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:364
+msgid "Page ordering preview"
+msgstr "Náhľad zoradenia stránok"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:365
+msgid ""
+"A visualization of the effect of the collate and reverse options on the page "
+"ordering"
+msgstr ""
+"Vizualizácia efektu volieb zhromaždenia a obrátenia pri zoradení stránok"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
 msgstr "Všeobecné"
@@ -7493,6 +7534,10 @@ msgstr "Nepárne listy"
 msgid "Sc_ale:"
 msgstr "_Mierka:"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:587
+msgid "Scale in percent"
+msgstr "Mierka v percentách"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
 msgstr "Papier"
@@ -7512,6 +7557,10 @@ msgstr "Výstup_ný zberač:"
 #: gtk/print/ui/gtkprintunixdialog.ui:727
 msgid "Or_ientation:"
 msgstr "_Orientácia:"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:770
+msgid "Page layout preview"
+msgstr "Náhľad rozloženia stránky"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
@@ -7666,7 +7715,7 @@ msgstr ""
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
 #: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
+#: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
 msgstr "SÚBOR"
@@ -8474,7 +8523,21 @@ msgid "Failed to parse '%s' as number"
 msgstr "Nepodarilo sa spracovať „%s“ ako číslo"
 
 #: tools/gtk-rendernode-tool.c:35
-#, c-format
+#, fuzzy, c-format
+#| msgid ""
+#| "Usage:\n"
+#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
+#| "\n"
+#| "Perform various tasks on GTK render nodes.\n"
+#| "\n"
+#| "Commands:\n"
+#| "  benchmark    Benchmark rendering of a node\n"
+#| "  compare      Compare nodes or images\n"
+#| "  extract      Extract data urls\n"
+#| "  info         Provide information about the node\n"
+#| "  show         Show the node\n"
+#| "  render       Take a screenshot of the node\n"
+#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8533,7 +8596,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Zmeria výkon vykresľovania súboru .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
+#: tools/gtk-rendernode-tool-extract.c:320 tools/gtk-rendernode-tool-info.c:252
 #: tools/gtk-rendernode-tool-render.c:300 tools/gtk-rendernode-tool-show.c:150
 #, c-format
 msgid "No .node file specified\n"
@@ -8579,48 +8642,48 @@ msgstr "Zlyhalo načítanie %s: %s\n"
 msgid "Failed to write %s\n"
 msgstr "Zlyhalo zapísanie %s\n"
 
-#: tools/gtk-rendernode-tool-extract.c:292
+#: tools/gtk-rendernode-tool-extract.c:296
 msgid "Directory to use"
 msgstr "Adresár, ktorý sa má použiť"
 
-#: tools/gtk-rendernode-tool-extract.c:292
+#: tools/gtk-rendernode-tool-extract.c:296
 msgid "DIRECTORY"
 msgstr "ADRESÁR"
 
-#: tools/gtk-rendernode-tool-extract.c:293
+#: tools/gtk-rendernode-tool-extract.c:297
 msgid "Be verbose"
 msgstr "Zobrazí podrobné informácie"
 
-#: tools/gtk-rendernode-tool-extract.c:303
+#: tools/gtk-rendernode-tool-extract.c:307
 msgid "Extract data urls from the render node."
 msgstr "Extrahuje dátové URL z vykresľovacieho uzla."
 
-#: tools/gtk-rendernode-tool-extract.c:322 tools/gtk-rendernode-tool-info.c:254
+#: tools/gtk-rendernode-tool-extract.c:326 tools/gtk-rendernode-tool-info.c:258
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Je možné zadať len jeden súbor .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:193
+#: tools/gtk-rendernode-tool-info.c:197
 msgid "Number of nodes:"
 msgstr "Počet uzlov:"
 
-#: tools/gtk-rendernode-tool-info.c:200
+#: tools/gtk-rendernode-tool-info.c:204
 msgid "Depth:"
 msgstr "Hĺbka:"
 
-#: tools/gtk-rendernode-tool-info.c:203
+#: tools/gtk-rendernode-tool-info.c:207
 msgid "Bounds:"
 msgstr "Hranice:"
 
-#: tools/gtk-rendernode-tool-info.c:204
+#: tools/gtk-rendernode-tool-info.c:208
 msgid "Origin:"
 msgstr "Pôvod:"
 
-#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
+#: tools/gtk-rendernode-tool-info.c:212 tools/gtk-rendernode-tool-info.c:218
 msgid "Opaque part:"
 msgstr "Nepriehľadná časť:"
 
-#: tools/gtk-rendernode-tool-info.c:235
+#: tools/gtk-rendernode-tool-info.c:239
 msgid "Provide information about the render node."
 msgstr "Poskytne informácie o vykresľovanom uzle."
 
@@ -8659,7 +8722,7 @@ msgstr "Umiestní uzol do nezaťažujúceho kontajnera"
 
 #: tools/gtk-rendernode-tool-show.c:137
 msgid "Show the render node."
-msgstr "Zobrazí vykresľovací uzol"
+msgstr "Zobrazí vykresľovací uzol."
 
 #: tools/gtk-rendernode-tool-show.c:156
 #, c-format
@@ -8781,6 +8844,23 @@ msgstr ""
 "Ak tu naozaj chcete vytvoriť vyrovnávaciu pamäť ikon, použite voľbu --ignore-"
 "theme-index.\n"
 
+#, c-format
+#~ msgid "cicp: Narrow range or YUV not supported"
+#~ msgstr "cicp: Užší rozsah alebo YUV nie sú podporované"
+
+#~ msgid "Theme is hardcoded by GTK_THEME"
+#~ msgstr "Motív je vynútený podľa premennej prostredia GTK_THEME"
+
+#~ msgid "Dark Variant"
+#~ msgstr "Tmavý variant"
+
+#, c-format
+#~ msgid "Can’t close stream"
+#~ msgstr "Nedá sa zavrieť prúd"
+
+#~ msgid "Can only show a single path"
+#~ msgstr "Je možné zobraziť len jednu cestu"
+
 #~ msgid "Other application…"
 #~ msgstr "Iná aplikácia…"
 
@@ -8838,9 +8918,6 @@ msgstr ""
 
 #~ msgid "Allocation"
 #~ msgstr "Pridelenie"
-
-#~ msgid "Theme is hardcoded by GTK_THEME"
-#~ msgstr "Motív je vynútený podľa premennej prostredia GTK_THEME"
 
 #~ msgid "Backend does not support window scaling"
 #~ msgstr "Obslužný program nepodporuje škálovanie okna"
@@ -8950,9 +9027,6 @@ msgstr ""
 #~ msgid "Not a video file"
 #~ msgstr "Nie je video súborom"
 
-#~ msgid "Unsupported video codec"
-#~ msgstr "Nepodporovaný video kodek"
-
 #~ msgid "Print to LPR"
 #~ msgstr "Tlač na LPR"
 
@@ -8961,10 +9035,6 @@ msgstr ""
 
 #~ msgid "Command Line"
 #~ msgstr "Príkazový riadok"
-
-#, c-format
-#~ msgid "Can’t close stream"
-#~ msgstr "Nedá sa zavrieť prúd"
 
 #, c-format
 #~ msgid "%s:%d: %sproperty %s::%s not found\n"
@@ -10564,9 +10634,6 @@ msgstr ""
 
 #~ msgid "_Palette:"
 #~ msgstr "_Paleta:"
-
-#~ msgid "Color Wheel"
-#~ msgstr "Farebný kruh"
 
 #~ msgid ""
 #~ "The previously-selected color, for comparison to the color you’re "
