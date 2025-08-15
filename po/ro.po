@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-08-15 05:58+0000\n"
-"PO-Revision-Date: 2025-08-15 16:52+0200\n"
+"PO-Revision-Date: 2025-08-15 20:02+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -58,22 +58,22 @@ msgstr "Niciun format compatibil pentru transferul datelor copiate."
 #: gdk/gdkcolorstate.c:921
 #, c-format
 msgid "cicp: Narrow range or YUV not supported"
-msgstr "cicp: Interval îngust sau YUV nesuportat"
+msgstr "cicp: Intervalul îngust sau YUV nu este acceptat"
 
 #: gdk/gdkcolorstate.c:931
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
-msgstr "cicp: Parametri nespecificați nesuportați"
+msgstr "cicp: Parametrii nespecificați nu sunt neacceptați"
 
 #: gdk/gdkcolorstate.c:977
 #, c-format
 msgid "cicp: Transfer function %u not supported"
-msgstr "cicp: Funcția de transfer %u nu este suportată"
+msgstr "cicp: Funcția de transfer %u nu este acceptată"
 
 #: gdk/gdkcolorstate.c:1007
 #, c-format
 msgid "cicp: Color primaries %u not supported"
-msgstr "cicp: Culorile primare %u nu sunt suportate"
+msgstr "cicp: Culorile principale %u nu sunt acceptate"
 
 #: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
@@ -773,7 +773,7 @@ msgstr "Implementarea GL nu poate partaja contexturile GL"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:1053
 msgid "No available configurations for the given pixel format"
-msgstr "Nu sunt configurații disponibile pentru formatul de pixel dat"
+msgstr "Nu sunt configurări disponibile pentru formatul de pixel dat"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
 msgid "writing a closed stream"
@@ -892,7 +892,7 @@ msgstr "Clic"
 #: gtk/a11y/gtkatspiaction.c:289
 msgctxt "accessibility"
 msgid "Clicks the button"
-msgstr "Apasă clic pe buton"
+msgstr "Clic pe buton"
 
 #: gtk/a11y/gtkatspiaction.c:339
 msgctxt "accessibility"
@@ -907,12 +907,12 @@ msgstr "Comută întrerupătorul"
 #: gtk/a11y/gtkatspiaction.c:421
 msgctxt "accessibility"
 msgid "Select"
-msgstr "Selectează"
+msgstr "Alege"
 
 #: gtk/a11y/gtkatspiaction.c:422
 msgctxt "accessibility"
 msgid "Selects the color"
-msgstr "Selectează culoarea"
+msgstr "Alege culoarea"
 
 #: gtk/a11y/gtkatspiaction.c:429 gtk/a11y/gtkatspiaction.c:490
 #: gtk/a11y/gtkatspiaction.c:546 gtk/a11y/gtkatspiaction.c:654
@@ -4611,11 +4611,11 @@ msgstr "Implementează"
 
 #: gtk/inspector/visual.c:690 gtk/inspector/visual.c:708
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr "Tema este hardcodată de GTK_THEME"
+msgstr "Aspectul este fixat de GTK_THEME"
 
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
-msgstr "Temă GTK"
+msgstr "Aspect GTK"
 
 #: gtk/inspector/visual.ui:58
 msgid "Dark Variant"
@@ -4623,19 +4623,19 @@ msgstr "Variantă întunecată"
 
 #: gtk/inspector/visual.ui:83
 msgid "Cursor Theme"
-msgstr "Temă cursor"
+msgstr "Aspect cursor"
 
 #: gtk/inspector/visual.ui:108
 msgid "Cursor Size"
-msgstr "Dimensiune cursor"
+msgstr "Mărime cursor"
 
 #: gtk/inspector/visual.ui:144
 msgid "Icon Theme"
-msgstr "Temă de iconițe"
+msgstr "Aspect simboluri"
 
 #: gtk/inspector/visual.ui:169
 msgid "Text Direction"
-msgstr "Direcție text"
+msgstr "Direcția textului"
 
 #. translators: these strings must be separated by newlines
 #: gtk/inspector/visual.ui:184
@@ -4656,7 +4656,7 @@ msgstr "Încetinește"
 
 #: gtk/inspector/visual.ui:361
 msgid "Rendering"
-msgstr "Randare"
+msgstr "Afișare"
 
 #. translators: these strings must be separated by newlines
 #: gtk/inspector/visual.ui:376
@@ -4681,8 +4681,8 @@ msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
-"Colorează toate locurile în care randorul curent utilizează Cairo în loc de "
-"GPU."
+"Colorează toate locurile în care motorul de redare actual utilizează Cairo "
+"în loc de GPU."
 
 #: gtk/inspector/visual.ui:454
 msgid "Show Cairo Rendering"
@@ -4754,7 +4754,7 @@ msgstr "Obiecte"
 
 #: gtk/inspector/window.ui:231
 msgid "Toggle Sidebar"
-msgstr "Comută bara laterală"
+msgstr "Arată/Ascunde Panoul lateral"
 
 #: gtk/inspector/window.ui:253
 msgid "Refresh action state"
@@ -4762,23 +4762,23 @@ msgstr "Actualizează starea acțiunii"
 
 #: gtk/inspector/window.ui:327
 msgid "Previous object"
-msgstr "Anteriorul obiect"
+msgstr "Obiectul precedent"
 
 #: gtk/inspector/window.ui:334
 msgid "Child object"
-msgstr "Obiect copil"
+msgstr "Obiectul copil"
 
 #: gtk/inspector/window.ui:341
 msgid "Previous sibling"
-msgstr "Anteriorul frate"
+msgstr "Fratele precedent"
 
 #: gtk/inspector/window.ui:347
 msgid "List Position"
-msgstr "Poziție listă"
+msgstr "Poziția în listă"
 
 #: gtk/inspector/window.ui:354
 msgid "Next sibling"
-msgstr "Următorul frate"
+msgstr "Fratele următor"
 
 #: gtk/inspector/window.ui:384
 msgid "Miscellaneous"
@@ -4794,7 +4794,7 @@ msgstr "Noduri CSS"
 
 #: gtk/inspector/window.ui:427
 msgid "Size Groups"
-msgstr "Dimensionează grupurile"
+msgstr "Grupuri de mărimi"
 
 #: gtk/inspector/window.ui:436 gtk/inspector/window.ui:445
 msgid "Data"
@@ -4806,7 +4806,7 @@ msgstr "Acțiuni"
 
 #: gtk/inspector/window.ui:466
 msgid "Menu"
-msgstr "Meniu"
+msgstr "Opțiuni"
 
 #: gtk/inspector/window.ui:475
 msgid "Controllers"
@@ -4830,7 +4830,7 @@ msgstr "Informații"
 
 #: gtk/inspector/window.ui:552
 msgid "Settings"
-msgstr "Configurări"
+msgstr "Preferințe"
 
 #: gtk/inspector/window.ui:561
 msgid "Resources"
@@ -6452,11 +6452,11 @@ msgstr "Șterge"
 
 #: gtk/ui/gtkapplication-quartz.ui:79
 msgid "Select All"
-msgstr "Selectează tot"
+msgstr "Selecționează tot"
 
 #: gtk/ui/gtkassistant.ui:64
 msgid "_Finish"
-msgstr "_Finalizează"
+msgstr "_Termină"
 
 #: gtk/ui/gtkassistant.ui:75
 msgid "_Back"
@@ -8542,13 +8542,14 @@ msgstr "Nu s-a putut genera SVG-ul: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:270
 msgid "Render a .node file to an image."
-msgstr "Randează un fișier .node la o imagine."
+msgstr "Transformă un fișier .node într-o imagine."
 
 #: tools/gtk-rendernode-tool-render.c:289
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
-"Se poate randa doar un singur fișier .node la un singur fișier de ieșire\n"
+"Se poate transforma doar un singur fișier .node într-un singur fișier de "
+"ieșire\n"
 
 #: tools/gtk-rendernode-tool-show.c:131
 msgid "Show the render node."
