@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
-  <path class="foreground-stroke" stroke="#241f30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/>
+  <path class="foreground-stroke transparent-fill" stroke="#241f30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/>
   <circle class="foreground-fill foreground-stroke" cx="6" cy="6" r=".5" fill="#241F30" stroke="#241F30"/>
-  <path class="foreground-stroke" stroke="#241f30" stroke-linecap="round" stroke-width="2" d="m2.8 13.6 3.32-3.3 1.5 1L9.5 9.4l3.94 3.99"/>
+  <path class="foreground-stroke transparent-fill" stroke="#241f30" stroke-linecap="round" stroke-width="2" d="m2.8 13.6 3.32-3.3 1.5 1L9.5 9.4l3.94 3.99"/>
 </svg>
