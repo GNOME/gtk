@@ -61,7 +61,7 @@
  *
  * Note that during the signal emissions, changing properties on the listitems
  * passed will not trigger notify signals as the listitem's notifications are
- * frozen. See [method@GObject.Object.freeze_notify()] for details.
+ * frozen. See [method@GObject.Object.freeze_notify] for details.
  *
  * For tracking changes in other properties in the listitem, the
  * ::notify signal is recommended. The signal can be connected in the
