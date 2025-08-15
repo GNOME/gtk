@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <g fill="#2e3436">
-        <path d="m 6 5 c -0.550781 0 -1 0.449219 -1 1 s 0.449219 1 1 1 s 1 -0.449219 1 -1 s -0.449219 -1 -1 -1 z m 3.5 3 l -2 2 l -1.5 -1 l -2 2 v 0.5 c 0 0.5 0.5 0.5 0.5 0.5 h 7 s 0.472656 -0.035156 0.5 -0.5 v -1 z m 0 0"/>
-        <path d="m 4 1 c -1.644531 0 -3 1.355469 -3 3 v 8 c 0 1.644531 1.355469 3 3 3 h 8 c 1.644531 0 3 -1.355469 3 -3 v -8 c 0 -1.644531 -1.355469 -3 -3 -3 z m 0 2 h 8 c 0.570312 0 1 0.429688 1 1 v 8 c 0 0.570312 -0.429688 1 -1 1 h -8 c -0.570312 0 -1 -0.429688 -1 -1 v -8 c 0 -0.570312 0.429688 -1 1 -1 z m 0 0"/>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
+  <path class="foreground-stroke" stroke="#241f30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/>
+  <circle class="foreground-fill foreground-stroke" cx="6" cy="6" r=".5" fill="#241F30" stroke="#241F30"/>
+  <path class="foreground-stroke" stroke="#241f30" stroke-linecap="round" stroke-width="2" d="m2.8 13.6 3.32-3.3 1.5 1L9.5 9.4l3.94 3.99"/>
 </svg>
