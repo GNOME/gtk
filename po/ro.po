@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-08-15 05:58+0000\n"
-"PO-Revision-Date: 2025-08-15 15:39+0200\n"
+"PO-Revision-Date: 2025-08-15 16:52+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -53,7 +53,7 @@ msgstr "Nu se poate citi dintr-un loc gol."
 
 #: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
-msgstr "Niciun format compatibil pentru transferul informațiilor copiate."
+msgstr "Niciun format compatibil pentru transferul datelor copiate."
 
 #: gdk/gdkcolorstate.c:921
 #, c-format
@@ -625,28 +625,28 @@ msgstr "Nu s-a putut decoda conținutul cu tipul mime de „%s”"
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
-"Nu se poate prelua controlul zonei cu informații copiate. Limita de timp a "
+"Nu se poate prelua controlul zonei cu datele copiate. Limita de timp a "
 "expirat pentru OpenClipboard()."
 
 #: gdk/win32/gdkclipdrop-win32.c:694
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
-"Nu se poate prelua controlul zonei cu informații copiate. Un alt proces a "
+"Nu se poate prelua controlul zonei cu datele copiate. Un alt proces a "
 "revendicat-o mai înaintea."
 
 #: gdk/win32/gdkclipdrop-win32.c:708
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Nu se poate prelua controlul zonei cu informații copiate. OpenClipboard() a "
+"Nu se poate prelua controlul zonei cu datele copiate. OpenClipboard() a "
 "eșuat: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:718
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
-"Nu se poate prelua controlul zonei cu informații copiate. EmptyClipboard() a "
+"Nu se poate prelua controlul zonei cu datele copiate. EmptyClipboard() a "
 "eșuat: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:760
