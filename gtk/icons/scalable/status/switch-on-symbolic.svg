@@ -1,3 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
-  <path class="foreground-stroke" stroke="#241F30" stroke-linecap="round" stroke-width="2" d="M8 3v10"/>
+  <path class="foreground-stroke transparent-fill" stroke="#241F30" stroke-linecap="round" stroke-width="2" d="M8 3v10"/>
 </svg>
