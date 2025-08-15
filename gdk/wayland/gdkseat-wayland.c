@@ -549,7 +549,8 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
                                              gdk_wayland_device_get_modifiers (seat->logical_pointer),
                                              direction,
                                              value120_x,
-                                             value120_y);
+                                             value120_y,
+                                             seat->pointer_info.frame.relative_direction);
     }
   else
     {
@@ -563,7 +564,8 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
                                                  NULL,
                                                  seat->pointer_info.time,
                                                  gdk_wayland_device_get_modifiers (seat->logical_pointer),
-                                                 direction);
+                                                 direction,
+                                                 seat->pointer_info.frame.relative_direction);
         }
     }
 
@@ -588,7 +590,8 @@ flush_smooth_scroll_event (GdkWaylandSeat *seat,
                                 gdk_wayland_device_get_modifiers (seat->logical_pointer),
                                 delta_x, delta_y,
                                 is_stop,
-                                GDK_SCROLL_UNIT_SURFACE);
+                                GDK_SCROLL_UNIT_SURFACE,
+                                seat->pointer_info.frame.relative_direction);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -630,6 +633,8 @@ flush_scroll_event (GdkWaylandSeat             *seat,
   pointer_frame->delta_x = 0;
   pointer_frame->delta_y = 0;
   pointer_frame->is_scroll_stop = FALSE;
+  pointer_frame->relative_direction =
+    GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN;
 }
 
 /* }}} */
@@ -1077,9 +1082,20 @@ pointer_handle_axis_relative_direction (void              *data,
                                         uint32_t           direction)
 {
   GdkWaylandSeat *seat = data;
+  GdkWaylandPointerFrameData *pointer_frame = &seat->pointer_info.frame;
 
   if (!seat->pointer_info.focus)
     return;
+
+  switch (axis)
+    {
+    case WL_POINTER_AXIS_VERTICAL_SCROLL:
+    case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
+      pointer_frame->relative_direction = direction;
+      break;
+    default:
+      g_return_if_reached ();
+    }
 
   GDK_SEAT_DEBUG (seat, EVENTS,
                   "scroll relative direction, axis %s, direction %s, seat %p",
@@ -3225,7 +3241,8 @@ tablet_tool_handle_wheel (void                      *data,
                                 gdk_wayland_device_get_modifiers (tablet->logical_device),
                                 0, clicks,
                                 FALSE,
-                                GDK_SCROLL_UNIT_WHEEL);
+                                GDK_SCROLL_UNIT_WHEEL,
+                                GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }

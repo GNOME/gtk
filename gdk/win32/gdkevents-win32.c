@@ -2583,7 +2583,8 @@ gdk_event_translate (MSG *msg,
                                              build_pointer_event_state (msg),
                                              direction,
                                              (double) scroll_x,
-                                             (double) -scroll_y);
+                                             (double) -scroll_y,
+                                             GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN);
 
       _gdk_win32_append_event (event);
 

@@ -232,6 +232,7 @@ struct _GdkScrollEvent
   GdkDeviceTool *tool;
   GArray *history; /* <GdkTimeCoord> */
   GdkScrollUnit unit;
+  GdkScrollRelativeDirection relative_direction;
 };
 
 /*
@@ -482,31 +483,34 @@ GdkEvent * gdk_focus_event_new          (GdkSurface      *surface,
 
 GdkEvent * gdk_delete_event_new         (GdkSurface      *surface);
 
-GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
-                                         GdkDevice       *device,
-                                         GdkDeviceTool   *tool,
-                                         guint32          time,
-                                         GdkModifierType  state,
-                                         double           delta_x,
-                                         double           delta_y,
-                                         gboolean         is_stop,
-                                         GdkScrollUnit    unit);
+GdkEvent * gdk_scroll_event_new         (GdkSurface                 *surface,
+                                         GdkDevice                  *device,
+                                         GdkDeviceTool              *tool,
+                                         guint32                     time,
+                                         GdkModifierType             state,
+                                         double                      delta_x,
+                                         double                      delta_y,
+                                         gboolean                    is_stop,
+                                         GdkScrollUnit               unit,
+                                         GdkScrollRelativeDirection  rel_dir);
 
-GdkEvent * gdk_scroll_event_new_discrete (GdkSurface         *surface,
-                                          GdkDevice          *device,
-                                          GdkDeviceTool      *tool,
-                                          guint32             time,
-                                          GdkModifierType     state,
-                                          GdkScrollDirection  direction);
+GdkEvent * gdk_scroll_event_new_discrete (GdkSurface                 *surface,
+                                          GdkDevice                  *device,
+                                          GdkDeviceTool              *tool,
+                                          guint32                     time,
+                                          GdkModifierType             state,
+                                          GdkScrollDirection          direction,
+                                          GdkScrollRelativeDirection  rel_dir);
 
-GdkEvent * gdk_scroll_event_new_value120 (GdkSurface         *surface,
-                                          GdkDevice          *device,
-                                          GdkDeviceTool      *tool,
-                                          guint32             time,
-                                          GdkModifierType     state,
-                                          GdkScrollDirection  direction,
-                                          double              delta_x,
-                                          double              delta_y);
+GdkEvent * gdk_scroll_event_new_value120 (GdkSurface                 *surface,
+                                          GdkDevice                  *device,
+                                          GdkDeviceTool              *tool,
+                                          guint32                     time,
+                                          GdkModifierType             state,
+                                          GdkScrollDirection          direction,
+                                          double                      delta_x,
+                                          double                      delta_y,
+                                          GdkScrollRelativeDirection  rel_dir);
 
 GdkEvent * gdk_touch_event_new          (GdkEventType      type,
                                          GdkEventSequence *sequence,

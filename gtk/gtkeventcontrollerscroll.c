@@ -377,17 +377,25 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
   scroll_unit = gdk_scroll_event_get_unit (event);
 
+  gdk_scroll_event_get_deltas (event, &dx, &dy);
+
+  if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_VERTICAL) == 0)
+    dy = 0;
+  if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL) == 0)
+    dx = 0;
+
+  if (!!(scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_PHYSICAL_DIRECTION) &&
+      gdk_scroll_event_get_relative_direction (event) == GDK_SCROLL_RELATIVE_DIRECTION_INVERTED)
+    {
+      dx *= -1;
+      dy *= -1;
+    }
+
   /* FIXME: Handle device changes */
   direction = gdk_scroll_event_get_direction (event);
   if (direction == GDK_SCROLL_SMOOTH)
     {
-      gdk_scroll_event_get_deltas (event, &dx, &dy);
       gtk_event_controller_scroll_begin (controller);
-
-      if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_VERTICAL) == 0)
-        dy = 0;
-      if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL) == 0)
-        dx = 0;
 
       if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_DISCRETE)
         {
@@ -433,13 +441,6 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
     }
   else
     {
-      gdk_scroll_event_get_deltas (event, &dx, &dy);
-
-      if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_VERTICAL) == 0)
-        dy = 0;
-      if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL) == 0)
-        dx = 0;
-
       if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_DISCRETE)
         {
           int steps;

@@ -300,6 +300,24 @@ typedef enum
 } GdkDragAction;
 
 /**
+ * GdkScrollRelativeDirection:
+ * @GDK_SCROLL_RELATIVE_DIRECTION_IDENTICAL: Physical motion and event motion are the same
+ * @GDK_SCROLL_RELATIVE_DIRECTION_INVERTED: Physical motion is inverted relative to event motion
+ * @GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN: Relative motion is unknown on this device or backend
+ *
+ * Used in scroll events, to announce the direction relative
+ * to physical motion.
+ *
+ * Since: 4.20
+ */
+typedef enum
+{
+  GDK_SCROLL_RELATIVE_DIRECTION_IDENTICAL,
+  GDK_SCROLL_RELATIVE_DIRECTION_INVERTED,
+  GDK_SCROLL_RELATIVE_DIRECTION_UNKNOWN,
+} GdkScrollRelativeDirection;
+
+/**
  * GDK_ACTION_ALL:
  *
  * Defines all possible DND actions.
