@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-06-09 23:18+0000\n"
-"PO-Revision-Date: 2025-07-15 22:46+0200\n"
-"Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
+"POT-Creation-Date: 2025-08-15 10:07+0000\n"
+"PO-Revision-Date: 2025-08-15 13:13+0200\n"
+"Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -6858,6 +6858,17 @@ msgstr "Zh_romažďovať"
 msgid "_Reverse"
 msgstr "_Opačne"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:364
+msgid "Page ordering preview"
+msgstr "Náhľad zoradenia stránok"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:365
+msgid ""
+"A visualization of the effect of the collate and reverse options on the page "
+"ordering"
+msgstr ""
+"Vizualizácia efektu volieb zhromaždenia a obrátenia pri zoradení stránok"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
 msgstr "Všeobecné"
@@ -6895,6 +6906,10 @@ msgstr "Nepárne listy"
 msgid "Sc_ale:"
 msgstr "_Mierka:"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:587
+msgid "Scale in percent"
+msgstr "Mierka v percentách"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
 msgstr "Papier"
@@ -6914,6 +6929,10 @@ msgstr "Výstup_ný zberač:"
 #: gtk/print/ui/gtkprintunixdialog.ui:727
 msgid "Or_ientation:"
 msgstr "_Orientácia:"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:770
+msgid "Page layout preview"
+msgstr "Náhľad rozloženia stránky"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
