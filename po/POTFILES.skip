@@ -26,6 +26,7 @@ demos/gtk-demo/font_features.c
 demos/gtk-demo/font_features.ui
 demos/gtk-demo/fontrendering.ui
 demos/gtk-demo/iconview.c
+demos/gtk-demo/image_filtering.ui
 demos/gtk-demo/infobar.c
 demos/gtk-demo/listbox_controls.ui
 demos/gtk-demo/listbox.ui
@@ -38,6 +39,7 @@ demos/gtk-demo/main.ui
 demos/gtk-demo/menus.ui
 demos/gtk-demo/offscreen_window2.c
 demos/gtk-demo/paint.c
+demos/gtk-demo/path_sweep.ui
 demos/gtk-demo/path_text.ui
 demos/gtk-demo/path_walk.ui
 demos/gtk-demo/popover.ui
@@ -355,6 +357,16 @@ testsuite/reftests/wrapping-in-boxes-in-boxes.ui
 testsuite/tools/enumerate-data/widget-factory2.ui
 testsuite/tools/enumerate-data/widget-factory3.ui
 testsuite/tools/enumerate-data/widget-factory.ui
+testsuite/tools/enumerate/widget-factory2.ui
+testsuite/tools/enumerate/widget-factory3.ui
+testsuite/tools/enumerate/widget-factory.ui
+testsuite/tools/simplify-3to4/assistant.ui
+testsuite/tools/simplify-3to4/box.ui
+testsuite/tools/simplify-3to4/grid.ui
+testsuite/tools/simplify-3to4/notebook.ui
+testsuite/tools/simplify-3to4/office-runner.ui
+testsuite/tools/simplify-3to4/stack.ui
+testsuite/tools/simplify-3to4/toolbar.ui
 testsuite/tools/simplify-data-3to4/assistant.ui
 testsuite/tools/simplify-data-3to4/box.ui
 testsuite/tools/simplify-data-3to4/grid.ui
@@ -363,7 +375,9 @@ testsuite/tools/simplify-data-3to4/office-runner.ui
 testsuite/tools/simplify-data-3to4/stack.ui
 testsuite/tools/simplify-data-3to4/toolbar.ui
 testsuite/tools/simplify-data/test3.ui
+testsuite/tools/simplify/test3.ui
 testsuite/tools/validate-data/valid5.ui
+testsuite/tools/validate/valid5.ui
 tests/visuals/linked-buttons-horizontal.ui
 tests/visuals/linked-buttons-vertical.ui
 tests/visuals/suggested-action-buttons.ui

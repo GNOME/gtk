@@ -452,6 +452,7 @@ tools/gtk-path-tool-utils.c
 tools/gtk-rendernode-tool.c
 tools/gtk-rendernode-tool-benchmark.c
 tools/gtk-rendernode-tool-compare.c
+tools/gtk-rendernode-tool-convert.c
 tools/gtk-rendernode-tool-extract.c
 tools/gtk-rendernode-tool-info.c
 tools/gtk-rendernode-tool-render.c
