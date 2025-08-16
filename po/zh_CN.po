@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-04-07 00:36+0000\n"
-"PO-Revision-Date: 2025-04-07 08:43+0800\n"
+"POT-Creation-Date: 2025-08-16 11:43+0000\n"
+"PO-Revision-Date: 2025-08-17 07:36+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -876,105 +876,105 @@ msgstr "此渲染器不支持 OpenGL ES 3.0。"
 msgid "OpenGL 3.3 required"
 msgstr "需要 OpenGL 3.3"
 
-#: gtk/a11y/gtkatspiaction.c:285
+#: gtk/a11y/gtkatspiaction.c:288
 msgctxt "accessibility"
 msgid "Click"
 msgstr "点击"
 
-#: gtk/a11y/gtkatspiaction.c:286
+#: gtk/a11y/gtkatspiaction.c:289
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "点击按钮"
 
-#: gtk/a11y/gtkatspiaction.c:336
+#: gtk/a11y/gtkatspiaction.c:339
 msgctxt "accessibility"
 msgid "Toggle"
 msgstr "开关"
 
-#: gtk/a11y/gtkatspiaction.c:337
+#: gtk/a11y/gtkatspiaction.c:340
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "切换开关"
 
-#: gtk/a11y/gtkatspiaction.c:418
+#: gtk/a11y/gtkatspiaction.c:421
 msgctxt "accessibility"
 msgid "Select"
 msgstr "选择"
 
-#: gtk/a11y/gtkatspiaction.c:419
+#: gtk/a11y/gtkatspiaction.c:422
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "选择颜色"
 
-#: gtk/a11y/gtkatspiaction.c:426 gtk/a11y/gtkatspiaction.c:487
-#: gtk/a11y/gtkatspiaction.c:543 gtk/a11y/gtkatspiaction.c:651
-#: gtk/a11y/gtkatspiaction.c:738
+#: gtk/a11y/gtkatspiaction.c:429 gtk/a11y/gtkatspiaction.c:490
+#: gtk/a11y/gtkatspiaction.c:546 gtk/a11y/gtkatspiaction.c:654
+#: gtk/a11y/gtkatspiaction.c:741
 msgctxt "accessibility"
 msgid "Activate"
 msgstr "激活"
 
-#: gtk/a11y/gtkatspiaction.c:427
+#: gtk/a11y/gtkatspiaction.c:430
 msgctxt "accessibility"
 msgid "Activates the color"
 msgstr "使用颜色"
 
-#: gtk/a11y/gtkatspiaction.c:434
+#: gtk/a11y/gtkatspiaction.c:437
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "自定义"
 
-#: gtk/a11y/gtkatspiaction.c:435
+#: gtk/a11y/gtkatspiaction.c:438
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "自定义颜色"
 
-#: gtk/a11y/gtkatspiaction.c:488
+#: gtk/a11y/gtkatspiaction.c:491
 msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "激活扩展器"
 
-#: gtk/a11y/gtkatspiaction.c:544 gtk/a11y/gtkatspiaction.c:652
-#: gtk/a11y/gtkatspiaction.c:739
+#: gtk/a11y/gtkatspiaction.c:547 gtk/a11y/gtkatspiaction.c:655
+#: gtk/a11y/gtkatspiaction.c:742
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "激活输入框"
 
-#: gtk/a11y/gtkatspiaction.c:551
+#: gtk/a11y/gtkatspiaction.c:554
 msgctxt "accessibility"
 msgid "Activate primary icon"
 msgstr "激活主图标"
 
-#: gtk/a11y/gtkatspiaction.c:552
+#: gtk/a11y/gtkatspiaction.c:555
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
 msgstr "激活输入框的主图标"
 
-#: gtk/a11y/gtkatspiaction.c:559
+#: gtk/a11y/gtkatspiaction.c:562
 msgctxt "accessibility"
 msgid "Activate secondary icon"
 msgstr "激活副图标"
 
-#: gtk/a11y/gtkatspiaction.c:560
+#: gtk/a11y/gtkatspiaction.c:563
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
 msgstr "激活输入框的副图标"
 
-#: gtk/a11y/gtkatspiaction.c:659
+#: gtk/a11y/gtkatspiaction.c:662
 msgctxt "accessibility"
 msgid "Peek"
 msgstr "窥视"
 
-#: gtk/a11y/gtkatspiaction.c:660
+#: gtk/a11y/gtkatspiaction.c:663
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
 msgstr "显示密码输入框的内容"
 
-#: gtk/a11y/gtkatspiaction.c:746
+#: gtk/a11y/gtkatspiaction.c:749
 msgctxt "accessibility"
 msgid "Clear"
 msgstr "清除"
 
-#: gtk/a11y/gtkatspiaction.c:747
+#: gtk/a11y/gtkatspiaction.c:750
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "清除输入框的内容"
@@ -2221,12 +2221,12 @@ msgstr "纸张边距"
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5902 gtk/gtktext.c:6322
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6322
 #: gtk/gtktextview.c:9320
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5962 gtk/gtktext.c:2877
+#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2877
 #: gtk/gtktextview.c:9398
 msgid "Context menu"
 msgstr "右键菜单"
@@ -2236,7 +2236,7 @@ msgid "Insert Emoji"
 msgstr "插入表情符号"
 
 #. Translators: Label for a search button and entry, should be translated as a verb
-#: gtk/gtkfilechooserdialog.c:481 gtk/ui/gtkfilechooserwidget.ui:123
+#: gtk/gtkfilechooserdialog.c:477 gtk/ui/gtkfilechooserwidget.ui:123
 msgid "Search"
 msgstr "搜索"
 
@@ -2301,12 +2301,12 @@ msgid "A file with that name already exists"
 msgstr "同名文件已存在"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:4988
+#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:5000
 #: gtk/gtkfiledialog.c:913 gtk/gtkmessagedialog.c:173
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6359 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6360 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2399,7 +2399,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "如果您删除一个项目，它将永久丢失。"
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -2462,7 +2462,7 @@ msgid "Home"
 msgstr "主目录"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2196 gtk/gtkfilechooserwidget.c:7420
+#: gtk/gtkfilechooserwidget.c:2196 gtk/gtkfilechooserwidget.c:7432
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "位置"
@@ -2485,8 +2485,8 @@ msgstr "正在搜索"
 msgid "Enter location or URL"
 msgstr "输入位置或 URL"
 
-#: gtk/gtkfilechooserwidget.c:3445 gtk/gtkfilechooserwidget.c:5775
-#: gtk/gtkfilechooserwidget.c:7442
+#: gtk/gtkfilechooserwidget.c:3445 gtk/gtkfilechooserwidget.c:5787
+#: gtk/gtkfilechooserwidget.c:7454
 msgid "Modified"
 msgstr "修改日期"
 
@@ -2569,58 +2569,58 @@ msgstr "演示文稿"
 msgid "Spreadsheet"
 msgstr "电子表格"
 
-#: gtk/gtkfilechooserwidget.c:4980 gtk/print/gtkprintunixdialog.c:674
+#: gtk/gtkfilechooserwidget.c:4179 gtk/gtkfilechooserwidget.c:5155
+msgid "You do not have access to the specified folder."
+msgstr "您没有访问指定文件夹的权限。"
+
+#: gtk/gtkfilechooserwidget.c:4992 gtk/print/gtkprintunixdialog.c:674
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "已经存在名为“%s”的文件。您想要替换它吗？"
 
-#: gtk/gtkfilechooserwidget.c:4982 gtk/print/gtkprintunixdialog.c:678
+#: gtk/gtkfilechooserwidget.c:4994 gtk/print/gtkprintunixdialog.c:678
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "文件已经在“%s”中了。替换该文件将覆盖它的内容。"
 
-#: gtk/gtkfilechooserwidget.c:4988 gtk/print/gtkprintunixdialog.c:686
+#: gtk/gtkfilechooserwidget.c:5000 gtk/print/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: gtk/gtkfilechooserwidget.c:5143
-msgid "You do not have access to the specified folder."
-msgstr "您没有访问指定文件夹的权限。"
-
-#: gtk/gtkfilechooserwidget.c:5722
+#: gtk/gtkfilechooserwidget.c:5734
 msgid "Could not send the search request"
 msgstr "无法发送搜索请求"
 
-#: gtk/gtkfilechooserwidget.c:6003
+#: gtk/gtkfilechooserwidget.c:6015
 msgid "Accessed"
 msgstr "访问时间"
 
-#: gtk/gtkfilechooserwidget.c:7398
+#: gtk/gtkfilechooserwidget.c:7410
 msgid "_Size"
 msgstr "大小(_S)"
 
-#: gtk/gtkfilechooserwidget.c:7402
+#: gtk/gtkfilechooserwidget.c:7414
 msgid "T_ype"
 msgstr "类型(_Y)"
 
-#: gtk/gtkfilechooserwidget.c:7406
+#: gtk/gtkfilechooserwidget.c:7418
 msgid "_Time"
 msgstr "时间(_T)"
 
-#: gtk/gtkfilechooserwidget.c:7412 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7424 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "名称"
 
-#: gtk/gtkfilechooserwidget.c:7429 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7441 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserwidget.c:7435 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7447 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "数据类型"
@@ -2737,7 +2737,7 @@ msgstr "样式变体"
 msgid "Character Variations"
 msgstr "字符变体"
 
-#: gtk/gtkglarea.c:319
+#: gtk/gtkglarea.c:326
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 上下文创建失败"
 
@@ -2750,23 +2750,23 @@ msgstr "关闭"
 msgid "Close the infobar"
 msgstr "关闭信息栏"
 
-#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: gtk/gtklabel.c:5914
+#: gtk/gtklabel.c:5918
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
-#: gtk/gtklabel.c:5918
+#: gtk/gtklabel.c:5922
 msgid "Copy _Link Address"
 msgstr "复制链接地址(_L)"
 
@@ -2837,7 +2837,7 @@ msgid "Play"
 msgstr "播放"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6360
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6361
 msgid "_OK"
 msgstr "确定(_O)"
 
@@ -3881,12 +3881,12 @@ msgid "_Redo"
 msgstr "重做(_R)"
 
 # Chrome 那个叫检查元素，这个叫检查器也没什么问题吧。
-#: gtk/gtkwindow.c:6348
+#: gtk/gtkwindow.c:6349
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "您是否要使用 GTK 检查器？"
 
-#: gtk/gtkwindow.c:6350
+#: gtk/gtkwindow.c:6351
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3896,7 +3896,7 @@ msgstr ""
 "GTK 检查器是一个交互式的调试器，让您可以探索并修改任何 GTK 应用程序的内部构"
 "造。使用它可能造成应用程序损坏或崩溃。"
 
-#: gtk/gtkwindow.c:6355
+#: gtk/gtkwindow.c:6356
 msgid "Don’t show this message again"
 msgstr "不要再显示此消息"
 
@@ -4077,21 +4077,21 @@ msgstr "样式类别"
 msgid "CSS Property"
 msgstr "CSS 属性"
 
-#: gtk/inspector/general.c:469
+#: gtk/inspector/general.c:470
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "输入法上下文由 GTK_IM_MODULE 硬编码"
 
-#: gtk/inspector/general.c:644
+#: gtk/inspector/general.c:645
 msgctxt "GL renderer"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/general.c:741
+#: gtk/inspector/general.c:742
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
+#: gtk/inspector/general.c:996 gtk/inspector/general.c:1035
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "无"
@@ -6747,6 +6747,16 @@ msgstr "逐份(_O)"
 msgid "_Reverse"
 msgstr "逆序(_R)"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:364
+msgid "Page ordering preview"
+msgstr "页面排序预览"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:365
+msgid ""
+"A visualization of the effect of the collate and reverse options on the page "
+"ordering"
+msgstr "页面排序的逐份和逆序打印选项的可视化效果"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
 msgstr "常规"
@@ -6783,6 +6793,10 @@ msgstr "奇数页"
 msgid "Sc_ale:"
 msgstr "缩放(_A)："
 
+#: gtk/print/ui/gtkprintunixdialog.ui:587
+msgid "Scale in percent"
+msgstr "百分比缩放"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
 msgstr "纸张"
@@ -6802,6 +6816,10 @@ msgstr "出纸器(_R)："
 #: gtk/print/ui/gtkprintunixdialog.ui:727
 msgid "Or_ientation:"
 msgstr "方向(_I)："
+
+#: gtk/print/ui/gtkprintunixdialog.ui:770
+msgid "Page layout preview"
+msgstr "页面布局预览"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
