@@ -98,6 +98,12 @@ static void init_pointer_data (GdkWaylandPointerData *pointer_data,
                                GdkDisplay            *display,
                                GdkDevice             *logical_device);
 
+typedef struct
+{
+  uint32_t event_type;
+  uint32_t button;
+} TabletEvent;
+
 /* {{{ Utilities */
 
 GdkWaylandTabletData *
@@ -2762,48 +2768,133 @@ tablet_tool_handle_removed (void                      *data,
   _gdk_wayland_seat_remove_tool (GDK_WAYLAND_SEAT (tool->seat), tool);
 }
 
-static void
-gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
-                                      guint32               time)
+static double *
+tablet_copy_axes (GdkWaylandTabletData *tablet)
 {
-  GdkEvent *event;
-  GdkEventType type;
-
-  event = tablet->pointer_info.frame.event;
-  tablet->pointer_info.frame.event = NULL;
-
-  if (!event)
-    return;
-
-  gdk_event_ref (event);
-
-  type = gdk_event_get_event_type (event);
-
-  if (type == GDK_PROXIMITY_OUT)
-    emulate_crossing (gdk_event_get_surface (event), NULL,
-                      tablet->logical_device, GDK_LEAVE_NOTIFY,
-                      GDK_CROSSING_NORMAL, time);
-
-  _gdk_wayland_display_deliver_event (gdk_seat_get_display (tablet->seat),
-                                      event);
-
-  if (type == GDK_PROXIMITY_IN)
-    emulate_crossing (gdk_event_get_surface (event), NULL,
-                      tablet->logical_device, GDK_ENTER_NOTIFY,
-                      GDK_CROSSING_NORMAL, time);
-
-  gdk_event_unref (event);
+  return g_memdup2 (tablet->axes, sizeof (double) * GDK_AXIS_LAST);
 }
 
 static void
-gdk_wayland_tablet_set_frame_event (GdkWaylandTabletData *tablet,
-                                    GdkEvent             *event)
+gdk_wayland_tablet_flush_frame_events (GdkWaylandTabletData *tablet,
+                                       guint32               time)
 {
-  if (tablet->pointer_info.frame.event &&
-      gdk_event_get_event_type (tablet->pointer_info.frame.event) != gdk_event_get_event_type (event))
-    gdk_wayland_tablet_flush_frame_event (tablet, GDK_CURRENT_TIME);
+  GList *events, *l;
 
-  tablet->pointer_info.frame.event = event;
+  events = g_list_reverse (tablet->events);
+  tablet->events = NULL;
+
+  for (l = events; l; l = l->next)
+    {
+      TabletEvent *tablet_event = events->data;
+      GdkEvent *event = NULL;
+
+      if (!tablet->current_tool)
+        continue;
+
+      if (tablet_event->event_type == GDK_PROXIMITY_OUT)
+        emulate_crossing (tablet->pointer_info.focus, NULL,
+                          tablet->logical_device, GDK_LEAVE_NOTIFY,
+                          GDK_CROSSING_NORMAL, time);
+
+      switch (tablet_event->event_type)
+        {
+        case GDK_PROXIMITY_IN:
+          event = gdk_proximity_event_new (GDK_PROXIMITY_IN,
+                                           tablet->pointer_info.focus,
+                                           tablet->logical_device,
+                                           tablet->current_tool->tool,
+                                           time);
+          break;
+        case GDK_PROXIMITY_OUT:
+          event = gdk_proximity_event_new (GDK_PROXIMITY_OUT,
+                                           tablet->pointer_info.focus,
+                                           tablet->logical_device,
+                                           tablet->current_tool->tool,
+                                           time);
+          break;
+        case GDK_BUTTON_PRESS:
+        case GDK_BUTTON_RELEASE:
+          {
+            uint32_t button_mod;
+
+            event = gdk_button_event_new (tablet_event->event_type,
+                                          tablet->pointer_info.focus,
+                                          tablet->logical_device,
+                                          tablet->current_tool->tool,
+                                          time,
+                                          gdk_wayland_device_get_modifiers (tablet->logical_device),
+                                          tablet_event->button,
+                                          tablet->pointer_info.surface_x,
+                                          tablet->pointer_info.surface_y,
+                                          tablet_copy_axes (tablet));
+
+            button_mod =
+              (GDK_BUTTON1_MASK << (tablet_event->button - 1)) &
+              (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK);
+
+            if (tablet_event->event_type == GDK_BUTTON_PRESS)
+              tablet->pointer_info.button_modifiers |= button_mod;
+            else
+              tablet->pointer_info.button_modifiers &= ~(button_mod);
+
+            break;
+          }
+        case GDK_MOTION_NOTIFY:
+          event = gdk_motion_event_new (tablet->pointer_info.focus,
+                                        tablet->logical_device,
+                                        tablet->current_tool->tool,
+                                        time,
+                                        gdk_wayland_device_get_modifiers (tablet->logical_device),
+                                        tablet->pointer_info.surface_x,
+                                        tablet->pointer_info.surface_y,
+                                        tablet_copy_axes (tablet));
+          break;
+        default:
+          break;
+        }
+
+      if (event)
+        {
+          _gdk_wayland_display_deliver_event (gdk_seat_get_display (tablet->seat),
+                                              event);
+        }
+
+      if (tablet_event->event_type == GDK_PROXIMITY_IN)
+        emulate_crossing (tablet->pointer_info.focus, NULL,
+                          tablet->logical_device, GDK_ENTER_NOTIFY,
+                          GDK_CROSSING_NORMAL, time);
+      else if (tablet_event->event_type == GDK_PROXIMITY_OUT)
+        {
+          g_object_unref (tablet->pointer_info.focus);
+          tablet->pointer_info.focus = NULL;
+          tablet->pointer_info.has_cursor_surface = FALSE;
+
+          tablet->pointer_info.button_modifiers &=
+            ~(GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+              GDK_BUTTON4_MASK | GDK_BUTTON5_MASK);
+
+          gdk_device_update_tool (tablet->stylus_device, NULL);
+          g_clear_object (&tablet->pointer_info.cursor);
+          tablet->pointer_info.cursor_is_default = FALSE;
+
+          tablet->current_tool->current_tablet = NULL;
+          tablet->current_tool = NULL;
+        }
+    }
+
+  g_list_free_full (tablet->events, g_free);
+}
+
+static void
+gdk_wayland_tablet_add_frame_event (GdkWaylandTabletData *tablet,
+                                    GdkEventType          event_type,
+                                    uint32_t              button)
+{
+  TabletEvent *tablet_event;
+
+  tablet_event = g_new0 (TabletEvent, 1);
+  *tablet_event = (TabletEvent) { event_type, button };
+  tablet->events = g_list_prepend (tablet->events, tablet_event);
 }
 
 static void
@@ -2892,7 +2983,6 @@ tablet_tool_handle_proximity_in (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = zwp_tablet_v2_get_user_data (wp_tablet);
   GdkSurface *surface;
-  GdkEvent *event;
 
   if (!wsurface)
     return;
@@ -2916,12 +3006,7 @@ tablet_tool_handle_proximity_in (void                      *data,
   gdk_wayland_device_tablet_clone_tool_axes (tablet, tool->tool);
   gdk_wayland_mimic_device_axes (tablet->logical_device, tablet->stylus_device);
 
-  event = gdk_proximity_event_new (GDK_PROXIMITY_IN,
-                                   tablet->pointer_info.focus,
-                                   tablet->logical_device,
-                                   tool->tool,
-                                   tablet->pointer_info.time);
-  gdk_wayland_tablet_set_frame_event (tablet, event);
+  gdk_wayland_tablet_add_frame_event (tablet, GDK_PROXIMITY_IN, 0);
 
   GDK_SEAT_DEBUG (tablet->seat, EVENTS,
                   "proximity in, seat %p surface %p tool %d",
@@ -2935,7 +3020,6 @@ tablet_tool_handle_proximity_out (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  GdkEvent *event;
 
   if (!tablet)
     return;
@@ -2944,50 +3028,7 @@ tablet_tool_handle_proximity_out (void                      *data,
                   "proximity out, seat %p, tool %d", tool->seat,
                   gdk_device_tool_get_tool_type (tool->tool));
 
-  event = gdk_proximity_event_new (GDK_PROXIMITY_OUT,
-                                   tablet->pointer_info.focus,
-                                   tablet->logical_device,
-                                   tool->tool,
-                                   tablet->pointer_info.time);
-  gdk_wayland_tablet_set_frame_event (tablet, event);
-
-  g_object_unref (tablet->pointer_info.focus);
-  tablet->pointer_info.focus = NULL;
-  tablet->pointer_info.has_cursor_surface = FALSE;
-
-  tablet->pointer_info.button_modifiers &=
-    ~(GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
-      GDK_BUTTON4_MASK | GDK_BUTTON5_MASK);
-
-  gdk_device_update_tool (tablet->stylus_device, NULL);
-  g_clear_object (&tablet->pointer_info.cursor);
-  tablet->pointer_info.cursor_is_default = FALSE;
-}
-
-static double *
-tablet_copy_axes (GdkWaylandTabletData *tablet)
-{
-  return g_memdup2 (tablet->axes, sizeof (double) * GDK_AXIS_LAST);
-}
-
-static void
-tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
-                                  GdkEventType          evtype,
-                                  guint                 button)
-{
-  GdkEvent *event;
-
-  event = gdk_button_event_new (evtype,
-                                tablet->pointer_info.focus,
-                                tablet->logical_device,
-                                tablet->current_tool->tool,
-                                tablet->pointer_info.time,
-                                gdk_wayland_device_get_modifiers (tablet->logical_device),
-                                button,
-                                tablet->pointer_info.surface_x,
-                                tablet->pointer_info.surface_y,
-                                tablet_copy_axes (tablet));
-  gdk_wayland_tablet_set_frame_event (tablet, event);
+  gdk_wayland_tablet_add_frame_event (tablet, GDK_PROXIMITY_OUT, 0);
 }
 
 static void
@@ -3003,8 +3044,7 @@ tablet_tool_handle_down (void                      *data,
 
   tablet->pointer_info.press_serial = serial;
 
-  tablet_create_button_event_frame (tablet, GDK_BUTTON_PRESS, GDK_BUTTON_PRIMARY);
-  tablet->pointer_info.button_modifiers |= GDK_BUTTON1_MASK;
+  gdk_wayland_tablet_add_frame_event (tablet, GDK_BUTTON_PRESS, GDK_BUTTON_PRIMARY);
 }
 
 static void
@@ -3017,8 +3057,7 @@ tablet_tool_handle_up (void                      *data,
   if (!tablet || !tablet->pointer_info.focus)
     return;
 
-  tablet_create_button_event_frame (tablet, GDK_BUTTON_RELEASE, GDK_BUTTON_PRIMARY);
-  tablet->pointer_info.button_modifiers &= ~GDK_BUTTON1_MASK;
+  gdk_wayland_tablet_add_frame_event (tablet, GDK_BUTTON_RELEASE, GDK_BUTTON_PRIMARY);
 }
 
 static void
@@ -3029,7 +3068,6 @@ tablet_tool_handle_motion (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  GdkEvent *event;
 
   if (!tablet)
     return;
@@ -3042,16 +3080,7 @@ tablet_tool_handle_motion (void                      *data,
                   tablet->pointer_info.surface_x,
                   tablet->pointer_info.surface_y);
 
-  event = gdk_motion_event_new (tablet->pointer_info.focus,
-                                tablet->logical_device,
-                                tool->tool,
-                                tablet->pointer_info.time,
-                                gdk_wayland_device_get_modifiers (tablet->logical_device),
-                                tablet->pointer_info.surface_x,
-                                tablet->pointer_info.surface_y,
-                                tablet_copy_axes (tablet));
-
-  gdk_wayland_tablet_set_frame_event (tablet, event);
+  gdk_wayland_tablet_add_frame_event (tablet, GDK_MOTION_NOTIFY, 0);
 }
 
 static void
@@ -3161,7 +3190,7 @@ tablet_tool_handle_button (void                      *data,
   else
     return;
 
-  tablet_create_button_event_frame (tablet, evtype, n_button);
+  gdk_wayland_tablet_add_frame_event (tablet, evtype, n_button);
 }
 
 static void
@@ -3254,7 +3283,6 @@ tablet_tool_handle_frame (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  GdkEvent *frame_event;
 
   if (!tablet)
     return;
@@ -3262,16 +3290,8 @@ tablet_tool_handle_frame (void                      *data,
   GDK_SEAT_DEBUG (tablet->seat, EVENTS,
                   "tablet frame, time %d", time);
 
-  frame_event = tablet->pointer_info.frame.event;
-
-  if (frame_event && gdk_event_get_event_type (frame_event) == GDK_PROXIMITY_OUT)
-    {
-      tool->current_tablet = NULL;
-      tablet->current_tool = NULL;
-    }
-
   tablet->pointer_info.time = time;
-  gdk_wayland_tablet_flush_frame_event (tablet, time);
+  gdk_wayland_tablet_flush_frame_events (tablet, time);
 }
 
 static const struct zwp_tablet_tool_v2_listener tablet_tool_listener = {

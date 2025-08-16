@@ -147,6 +147,7 @@ struct _GdkWaylandTabletData
   GdkDevice *stylus_device;
   GdkSeat *seat;
   GdkWaylandPointerData pointer_info;
+  GList *events;
 
   GList *pads;
 
