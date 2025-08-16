@@ -319,6 +319,126 @@ test_clipboard_files (void)
   g_strfreev (filenames);
 }
 
+static void
+buffer_received (GObject *source,
+                 GAsyncResult *res,
+                 gpointer data)
+{
+  GdkClipboard *clipboard = GDK_CLIPBOARD (source);
+  gboolean *done = data;
+  GError *error = NULL;
+  const GValue *value;
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+  char *text;
+
+  value = gdk_clipboard_read_value_finish (clipboard, res, &error);
+
+  g_assert_no_error (error);
+  buffer = g_value_get_object (value);
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+  g_assert_cmpstr (text, ==, "üäö");
+
+  g_free (text);
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
+static void
+test_clipboard_string_to_buffer (void)
+{
+  GdkDisplay *display;
+  GdkClipboard *clipboard;
+  gboolean done;
+  GtkTextBuffer *b;
+
+  b = gtk_text_buffer_new (NULL); // Just to register serializers
+
+  display = gdk_display_get_default ();
+  clipboard = gdk_display_get_clipboard (display);
+
+  g_assert_true (gdk_clipboard_get_display (clipboard) == display);
+
+  gdk_clipboard_set_text (clipboard, "üäö");
+
+  g_assert_true (gdk_clipboard_is_local (clipboard));
+
+  done = FALSE;
+
+  gdk_clipboard_read_value_async (clipboard, GTK_TYPE_TEXT_BUFFER,
+                                  0, NULL, buffer_received, &done);
+
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
+
+  g_object_unref (b);
+}
+
+static void
+string_received (GObject *source,
+                 GAsyncResult *res,
+                 gpointer data)
+{
+  GdkClipboard *clipboard = GDK_CLIPBOARD (source);
+  gboolean *done = data;
+  GError *error = NULL;
+  char *string;
+
+  string = gdk_clipboard_read_text_finish (clipboard, res, &error);
+
+  g_assert_no_error (error);
+  g_assert_cmpstr (string, ==, "üäö");
+
+  g_free (string);
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
+static void
+test_clipboard_buffer_to_string (void)
+{
+  GdkDisplay *display;
+  GdkClipboard *clipboard;
+  gboolean done;
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+  GdkContentFormats *formats;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_set_text (buffer, "üäö", -1);
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  gtk_text_buffer_select_range (buffer, &start, &end);
+
+  display = gdk_display_get_default ();
+  clipboard = gdk_display_get_clipboard (display);
+
+  g_assert_true (gdk_clipboard_get_display (clipboard) == display);
+
+  gdk_clipboard_set (clipboard, GTK_TYPE_TEXT_BUFFER, buffer);
+
+  g_assert_true (gdk_clipboard_is_local (clipboard));
+
+  formats = gdk_clipboard_get_formats (clipboard);
+  g_assert_true (gdk_content_formats_contain_gtype (formats, G_TYPE_STRING));
+
+  done = FALSE;
+
+  gdk_clipboard_read_text_async (clipboard, NULL, string_received, &done);
+
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -333,6 +453,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/clipboard/color", test_clipboard_color);
   g_test_add_func ("/clipboard/file", test_clipboard_file);
   g_test_add_func ("/clipboard/files", test_clipboard_files);
+  g_test_add_func ("/clipboard/string-to-buffer", test_clipboard_string_to_buffer);
+  g_test_add_func ("/clipboard/buffer-to-string", test_clipboard_buffer_to_string);
 
   return g_test_run ();
 }
