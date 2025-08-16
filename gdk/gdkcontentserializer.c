@@ -1056,6 +1056,12 @@ gdk_content_init_serializers (void)
 
   /* Strings */
 
+  gdk_content_register_serializer (G_TYPE_STRING,
+                                   "text/plain;charset=utf-8",
+                                   string_serializer,
+                                   (gpointer) "utf-8",
+                                   NULL);
+
   if (!g_get_charset (&charset))
     {
       char *mime = g_strdup_printf ("text/plain;charset=%s", charset);
@@ -1066,16 +1072,11 @@ gdk_content_init_serializers (void)
                                        NULL);
       g_free (mime);
     }
+
   gdk_content_register_serializer (G_TYPE_STRING,
                                    "text/plain",
                                    string_serializer,
                                    (gpointer) "ASCII",
-                                   NULL);
-
-  gdk_content_register_serializer (G_TYPE_STRING,
-                                   "text/plain;charset=utf-8",
-                                   string_serializer,
-                                   (gpointer) "utf-8",
                                    NULL);
 
   /* Colors */

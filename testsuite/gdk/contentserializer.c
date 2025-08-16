@@ -463,6 +463,182 @@ test_custom_format (void)
   g_free (data);
 }
 
+static void
+test_serialize_union_string (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_serialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+}
+
+static void
+test_deserialize_union_string (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_deserialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+}
+
+static void
+test_serialize_union_textbuffer (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+  GtkTextBuffer *b = gtk_text_buffer_new (NULL); // Just to register serializers
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, GTK_TYPE_TEXT_BUFFER);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_serialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+
+  g_object_unref (b);
+}
+
+static void
+test_deserialize_union_textbuffer (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+  GtkTextBuffer *b = gtk_text_buffer_new (NULL);
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, GTK_TYPE_TEXT_BUFFER);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_deserialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+
+  g_object_unref (b);
+}
+
+static void
+my_string_serializer (GdkContentSerializer *serializer)
+{
+  int *count;
+  GOutputStream *stream;
+  const GValue *value;
+  const char *text;
+  gboolean res;
+  gsize written;
+  GError *error = NULL;
+
+  g_assert_true (gdk_content_serializer_get_gtype (serializer) == G_TYPE_STRING);
+  g_assert_cmpstr (gdk_content_serializer_get_mime_type (serializer), ==, "text/plain;charset=utf-8");
+
+  count = gdk_content_serializer_get_user_data (serializer);
+  (*count)++;
+
+  stream = gdk_content_serializer_get_output_stream (serializer);
+  value = gdk_content_serializer_get_value (serializer);
+
+  text = g_value_get_string (value);
+  res = g_output_stream_write_all (stream, text, strlen (text), &written, NULL, &error);
+  g_assert_true (res);
+  g_assert_no_error (error);
+
+  gdk_content_serializer_return_success (serializer);
+}
+
+static void
+my_serialize_done (GObject *source,
+                   GAsyncResult *result,
+                   gpointer data)
+{
+  gboolean *done = data;
+  gboolean res;
+  GError *error = NULL;
+
+  res = gdk_content_serialize_finish (result, &error);
+  g_assert_true (res);
+  g_assert_no_error (error);
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
+static int my_serializer_count = 0;
+
+static void
+test_override_serializer (void)
+{
+  GOutputStream *stream;
+  GValue value = G_VALUE_INIT;
+  gboolean done = FALSE;
+
+  gdk_content_register_serializer (G_TYPE_STRING, "text/plain;charset=utf-8",
+                                   my_string_serializer,
+                                   &my_serializer_count,
+                                   NULL);
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, "bu ba bla");
+
+  stream = g_memory_output_stream_new_resizable ();
+
+  gdk_content_serialize_async (stream,
+                               "text/plain;charset=utf-8",
+                               &value,
+                               G_PRIORITY_DEFAULT,
+                               NULL,
+                               my_serialize_done,
+                               &done);
+
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
+
+  g_assert_true (my_serializer_count > 0);
+
+  g_object_unref (stream);
+  g_value_unset (&value);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -478,6 +654,11 @@ main (int argc, char *argv[])
   g_test_add_func ("/content/file", test_content_file);
   g_test_add_func ("/content/files", test_content_files);
   g_test_add_func ("/content/custom", test_custom_format);
+  g_test_add_func ("/content/serialize/union/string", test_serialize_union_string);
+  g_test_add_func ("/content/serialize/union/textbuffer", test_serialize_union_textbuffer);
+  g_test_add_func ("/content/deserialize/union/string", test_deserialize_union_string);
+  g_test_add_func ("/content/deserialize/union/textbuffer", test_deserialize_union_textbuffer);
+  g_test_add_func ("/content/serializer/override", test_override_serializer);
 
   return g_test_run ();
 }

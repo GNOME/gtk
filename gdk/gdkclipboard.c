@@ -1239,7 +1239,7 @@ gdk_clipboard_set_content (GdkClipboard       *clipboard,
  * [func@GObject.signal_emit].
  *
  * ```c
- * gdk_clipboard_set (clipboard, GTK_TYPE_STRING, "Hello World");
+ * gdk_clipboard_set (clipboard, G_TYPE_STRING, "Hello World");
  *
  * gdk_clipboard_set (clipboard, GDK_TYPE_TEXTURE, some_texture);
  * ```
