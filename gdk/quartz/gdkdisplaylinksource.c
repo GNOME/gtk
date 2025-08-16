@@ -26,6 +26,12 @@
 #include "gdkinternal-quartz.h"
 #include "gdkdisplaylinksource.h"
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+#define GDK_QUARTZ_APPLICATION_DEFINED NSApplicationDefined
+#else
+#define GDK_QUARTZ_APPLICATION_DEFINED NSEventTypeApplicationDefined
+#endif
+
 static gint64 host_to_frame_clock_time (gint64 host_time);
 
 static gboolean
@@ -126,7 +132,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
        * the select thread which would then send this message as
        * well. Lots of extra work.
        */
-      event = [NSEvent otherEventWithType: NSEventTypeApplicationDefined
+      event = [NSEvent otherEventWithType: GDK_QUARTZ_APPLICATION_DEFINED
                                  location: NSZeroPoint
                             modifierFlags: 0
                                 timestamp: 0
