@@ -463,6 +463,100 @@ test_custom_format (void)
   g_free (data);
 }
 
+static void
+test_serialize_union_string (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_serialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+}
+
+static void
+test_deserialize_union_string (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_deserialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+}
+
+static void
+test_serialize_union_textbuffer (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+  GtkTextBuffer *b = gtk_text_buffer_new (NULL); // Just to register serializers
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, GTK_TYPE_TEXT_BUFFER);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_serialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+
+  g_object_unref (b);
+}
+
+static void
+test_deserialize_union_textbuffer (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *result;
+  const char * expected[] = {
+    "text/plain;charset=utf-8",
+    "text/plain",
+    NULL,
+  };
+  const char * const * mime_types;
+  GtkTextBuffer *b = gtk_text_buffer_new (NULL);
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, GTK_TYPE_TEXT_BUFFER);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  result = gdk_content_formats_union_deserialize_mime_types (formats);
+  mime_types = gdk_content_formats_get_mime_types (result, NULL);
+
+  g_assert_cmpstrv (mime_types, expected);
+
+  g_object_unref (b);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -478,6 +572,10 @@ main (int argc, char *argv[])
   g_test_add_func ("/content/file", test_content_file);
   g_test_add_func ("/content/files", test_content_files);
   g_test_add_func ("/content/custom", test_custom_format);
+  g_test_add_func ("/content/serialize/union/string", test_serialize_union_string);
+  g_test_add_func ("/content/serialize/union/textbuffer", test_serialize_union_textbuffer);
+  g_test_add_func ("/content/deserialize/union/string", test_deserialize_union_string);
+  g_test_add_func ("/content/deserialize/union/textbuffer", test_deserialize_union_textbuffer);
 
   return g_test_run ();
 }
