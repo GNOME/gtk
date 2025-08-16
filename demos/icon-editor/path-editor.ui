@@ -213,7 +213,7 @@
             <property name="valign">center</property>
             <property name="margin-start">10</property>
             <property name="label-widget">
-              <object class="GtkLabel" id="stroke_label">
+              <object class="GtkLabel">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
                 <property name="label" translatable="yes">Stroke</property>
@@ -265,15 +265,23 @@
         </child>
 
         <child>
-          <object class="GtkLabel" id="line_width_label">
+          <object class="GtkExpander" id="width_expander">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Width</property>
-            <property name="xalign">1</property>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">20</property>
+            <property name="label-widget">
+              <object class="GtkLabel">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Width</property>
+              </object>
+            </property>
             <layout>
               <property name="row">5</property>
               <property name="column">0</property>
@@ -281,25 +289,16 @@
           </object>
         </child>
         <child>
-          <object class="GtkSpinButton" id="line_width">
+          <object class="RangeEditor" id="width_range">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
               </closure>
             </binding>
-            <property name="numeric">1</property>
-            <property name="digits">2</property>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">20</property>
-                <property name="value">1</property>
-                <property name="step-increment">0.1</property>
-                <property name="page-size">0</property>
-              </object>
-            </property>
-            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::value1" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::middle" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::value2" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">5</property>
               <property name="column">1</property>
@@ -308,11 +307,12 @@
         </child>
 
         <child>
-          <object class="GtkLabel" id="min_width_label">
+          <object class="GtkLabel" id="line_min_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_and">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="expanded">width_expander</lookup>
               </closure>
             </binding>
             <property name="label" translatable="yes">Min</property>
@@ -323,12 +323,14 @@
             </layout>
           </object>
         </child>
+
         <child>
           <object class="GtkSpinButton" id="min_width">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_and">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="expanded">width_expander</lookup>
               </closure>
             </binding>
             <property name="numeric">1</property>
@@ -336,13 +338,13 @@
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">0</property>
-                <property name="upper">20</property>
-                <property name="value">1</property>
+                <property name="upper">25</property>
+                <property name="value">2</property>
                 <property name="step-increment">0.1</property>
                 <property name="page-size">0</property>
               </object>
             </property>
-            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
               <property name="row">6</property>
               <property name="column">1</property>
@@ -351,14 +353,15 @@
         </child>
 
         <child>
-          <object class="GtkLabel" id="max_width_label">
+          <object class="GtkLabel" id="line_width_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_and">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="expanded">width_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Max</property>
+            <property name="label" translatable="yes">Normal</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">7</property>
@@ -366,12 +369,14 @@
             </layout>
           </object>
         </child>
+
         <child>
-          <object class="GtkSpinButton" id="max_width">
+          <object class="GtkSpinButton" id="line_width">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_and">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="expanded">width_expander</lookup>
               </closure>
             </binding>
             <property name="numeric">1</property>
@@ -379,15 +384,61 @@
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">0</property>
-                <property name="upper">20</property>
-                <property name="value">1</property>
+                <property name="upper">25</property>
+                <property name="value">2</property>
                 <property name="step-increment">0.1</property>
                 <property name="page-size">0</property>
               </object>
             </property>
-            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
               <property name="row">7</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="line_max_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_and">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="expanded">width_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Max</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">8</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkSpinButton" id="max_width">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_and">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="expanded">width_expander</lookup>
+              </closure>
+            </binding>
+            <property name="numeric">1</property>
+            <property name="digits">2</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">25</property>
+                <property name="value">2</property>
+                <property name="step-increment">0.1</property>
+                <property name="page-size">0</property>
+              </object>
+            </property>
+            <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
+            <layout>
+              <property name="row">8</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -404,7 +455,7 @@
             <property name="label" translatable="yes">Join</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">8</property>
+              <property name="row">9</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -428,7 +479,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">8</property>
+              <property name="row">9</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -445,7 +496,7 @@
             <property name="label" translatable="yes">Cap</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">9</property>
+              <property name="row">10</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -469,7 +520,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">9</property>
+              <property name="row">10</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -489,7 +540,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">10</property>
+              <property name="row">11</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -527,7 +578,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">10</property>
+              <property name="row">11</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -544,7 +595,7 @@
             <property name="label" translatable="yes">Rule</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">11</property>
+              <property name="row">12</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -567,7 +618,7 @@
             </property>
             <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
             <layout>
-              <property name="row">11</property>
+              <property name="row">12</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -587,7 +638,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">12</property>
+              <property name="row">13</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -597,7 +648,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
             <layout>
-              <property name="row">12</property>
+              <property name="row">13</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -614,7 +665,7 @@
             <property name="label" translatable="yes">Position</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">13</property>
+              <property name="row">14</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -641,7 +692,7 @@
               <mark value="1" position="bottom"/>
             </marks>
             <layout>
-              <property name="row">13</property>
+              <property name="row">14</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -656,9 +707,10 @@
       <widget name="transition_label"/>
       <widget name="origin_label"/>
       <widget name="stroke_expander"/>
+      <widget name="width_expander"/>
+      <widget name="line_min_label"/>
       <widget name="line_width_label"/>
-      <widget name="min_width_label"/>
-      <widget name="max_width_label"/>
+      <widget name="line_max_label"/>
       <widget name="line_join_label"/>
       <widget name="line_cap_label"/>
       <widget name="fill_expander"/>

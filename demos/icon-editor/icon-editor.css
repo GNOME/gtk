@@ -3,12 +3,26 @@
     :root {
       --sidebar-bg: color(srgb 0.9 0.9 0.9);
       --border: color(srgb 0 0 0 / 100%);
+
+      --highlight: rgb(53,132,228);
+      --trough-background: rgb(225,222,219);
+      --trough-border-color: rgb(225,222,219);
+      --slider-outline-color: rgba(53,132,228,0.5);
+      --slider-border-color: rgb(205,199,194);
+      --slider-background: linear-gradient(to top, rgb(246,245,244) 2px, rgb(251,250,250));
     }
   }
   @media (not (prefers-contrast: more)) {
     :root {
       --sidebar-bg: color(srgb 0.9 0.9 0.9);
       --border: color(srgb 0 0 0 / 50%);
+
+      --highlight: rgb(53,132,228);
+      --trough-background: rgb(225,222,219);
+      --trough-border-color: rgb(225,222,219);
+      --slider-outline-color: rgba(53,132,228,0.5);
+      --slider-border-color: rgb(205,199,194);
+      --slider-background: linear-gradient(to top, rgb(246,245,244) 2px, rgb(251,250,250));
     }
   }
 }
@@ -18,12 +32,26 @@
     :root {
       --sidebar-bg: color(srgb 0.1 0.1 0.1);
       --border: color(srgb 1 1 1 / 100%);
+
+      --highlight: rgb(21,83,158);
+      --trough-background: rgb(40,40,40);
+      --trough-border-color: rgb(40,40,40);
+      --slider-outline-color: rgba(21,83,158,0.7);
+      --slider-border-color: rgb(27,27,27);
+      --slider-background: linear-gradient(to top, rgb(55,55,55) 2px, rgb(58,58,58));
     }
   }
   @media (not (prefers-contrast: more)) {
     :root {
       --sidebar-bg: color(srgb 0.1 0.1 0.1);
       --border: color(srgb 1 1 1 / 50%);
+
+      --highlight: rgb(21,83,158);
+      --trough-background: rgb(40,40,40);
+      --trough-border-color: rgb(40,40,40);
+      --slider-outline-color: rgba(21,83,158,0.7);
+      --slider-border-color: rgb(27,27,27);
+      --slider-background: linear-gradient(to top, rgb(55,55,55) 2px, rgb(58,58,58));
     }
   }
 }
@@ -86,4 +114,58 @@ PaintableEditor separator {
 
 .titlebar {
   border-spacing: 5px;
+}
+
+rangeeditor > trough {
+  border: 1px solid var(--trough-border-color);
+  border-radius: 3px;
+  background: var(--trough-background);
+  min-height: 6px;
+}
+
+rangeeditor > trough > highlight {
+  background: var(--highlight);
+}
+
+rangeeditor > mark > indicator {
+  min-width: 1px;
+  min-height: 6px;
+  background-color: currentColor;
+}
+
+rangeeditor > mark {
+  min-width: 13px;
+  min-height: 12px;
+  margin-top: -3px;
+  margin-bottom: -3px;
+  margin-left: -6px;
+  margin-right: -6px;
+}
+
+rangeeditor > trough > slider.left {
+  min-width: 10px;
+  min-height: 18px;
+  margin: -9px 0px;
+  border-top-left-radius: 100%;
+  border-bottom-left-radius: 100%;
+  outline-color: var(--slider-outline-color);
+  border-color: var(--slider-border-color);
+  background-image: var(--slider-background);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  border-width: 1px;
+  border-style: solid;
+}
+
+rangeeditor > trough > slider.right {
+  min-width: 10px;
+  min-height: 18px;
+  margin: -9px 0px;
+  border-top-right-radius: 100%;
+  border-bottom-right-radius: 100%;
+  outline-color: var(--slider-outline-color);
+  border-color: var(--slider-border-color);
+  background-image: var(--slider-background);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  border-width: 1px;
+  border-style: solid;
 }

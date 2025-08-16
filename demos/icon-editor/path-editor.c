@@ -21,6 +21,7 @@
 
 #include "path-editor.h"
 #include "path-paintable-private.h"
+#include "range-editor.h"
 
 
 struct _PathEditor
@@ -36,8 +37,9 @@ struct _PathEditor
   GtkDropDown *origin;
   GtkDropDown *stroke_paint;
   GtkColorDialogButton *stroke_color;
-  GtkSpinButton *line_width;
+  RangeEditor *width_range;
   GtkSpinButton *min_width;
+  GtkSpinButton *line_width;
   GtkSpinButton *max_width;
   GtkDropDown *line_join;
   GtkDropDown *line_cap;
@@ -152,28 +154,51 @@ origin_changed (PathEditor *self)
 }
 
 static void
+line_width_changed (PathEditor *self)
+{
+  float lower, upper;
+  float min, width, max;
+
+  if (self->updating)
+    return;
+
+  range_editor_get_limits (self->width_range, &lower, NULL, &upper);
+
+  width = gtk_spin_button_get_value (self->line_width);
+  width = CLAMP (width, lower, upper);
+
+  min = gtk_spin_button_get_value (self->min_width);
+  max = gtk_spin_button_get_value (self->max_width);
+
+  min = MIN (min, width);
+  max = MAX (max, width);
+
+  range_editor_configure (self->width_range,
+                          lower, width, upper, min, max);
+}
+
+static void
 stroke_changed (PathEditor *self)
 {
   gboolean do_stroke;
-  float line_width, min_width, max_width;
+  float width;
+  float min, max;
   GskLineJoin line_join;
   GskLineCap line_cap;
   guint selected;
   guint symbolic;
   const GdkRGBA *color;
   g_autoptr (GskStroke) stroke = NULL;
-  GtkAdjustment *adj;
 
   if (self->updating)
     return;
 
-  line_width = gtk_spin_button_get_value (self->line_width);
   line_join = gtk_drop_down_get_selected (self->line_join);
   line_cap = gtk_drop_down_get_selected (self->line_cap);
-  min_width = gtk_spin_button_get_value (self->min_width);
-  max_width = gtk_spin_button_get_value (self->max_width);
+  range_editor_get_limits (self->width_range, NULL, &width, NULL);
+  range_editor_get_values (self->width_range, &min, &max);
 
-  stroke = gsk_stroke_new (line_width);
+  stroke = gsk_stroke_new (width);
   gsk_stroke_set_line_join (stroke, line_join);
   gsk_stroke_set_line_cap (stroke, line_cap);
 
@@ -199,13 +224,11 @@ stroke_changed (PathEditor *self)
   path_paintable_set_path_stroke (self->paintable, self->path,
                                   do_stroke, stroke, symbolic, color);
   path_paintable_set_path_stroke_variation (self->paintable, self->path,
-                                            min_width, max_width);
+                                            min, max);
 
-  adj = gtk_spin_button_get_adjustment (self->min_width);
-  gtk_adjustment_configure (adj, min_width, 0.5, line_width, 0.1, 0.1, 0);
-
-  adj = gtk_spin_button_get_adjustment (self->max_width);
-  gtk_adjustment_configure (adj, max_width, line_width, 20, 0.1, 0.1, 0);
+  gtk_spin_button_set_value (self->min_width, min);
+  gtk_spin_button_set_value (self->line_width, width);
+  gtk_spin_button_set_value (self->max_width, max);
 }
 
 static void
@@ -290,6 +313,15 @@ bool_and_bool (GObject  *object,
                gboolean  b2)
 {
   return b1 && b2;
+}
+
+static gboolean
+bool_and_and (GObject  *object,
+              gboolean  b1,
+              gboolean  b2,
+              gboolean  b3)
+{
+  return b1 && b2 && b3;
 }
 
 static void
@@ -463,8 +495,9 @@ path_editor_update (PathEditor *self)
       gsize to;
       float pos;
       g_autoptr (GtkStringList) model = NULL;
-      float width, min_width, max_width;
-      GtkAdjustment *adj;
+      float width;
+      float min_width, max_width;
+      float lower, upper;
 
       self->updating = TRUE;
 
@@ -489,6 +522,9 @@ path_editor_update (PathEditor *self)
       path_paintable_get_path_stroke_variation (self->paintable, self->path,
                                                 &min_width, &max_width);
 
+      lower = MIN (min_width, 0);
+      upper = MAX (max_width, 25);
+
       if (!do_stroke)
         gtk_drop_down_set_selected (self->stroke_paint, 0);
       else if (symbolic == 0xffff)
@@ -498,13 +534,12 @@ path_editor_update (PathEditor *self)
 
       gtk_color_dialog_button_set_rgba (self->stroke_color, &color);
 
+      gtk_spin_button_set_value (self->min_width, min_width);
       gtk_spin_button_set_value (self->line_width, width);
+      gtk_spin_button_set_value (self->max_width, max_width);
 
-      adj = gtk_spin_button_get_adjustment (self->min_width);
-      gtk_adjustment_configure (adj, min_width, 0.5, width, 0.1, 0.1, 0);
-
-      adj = gtk_spin_button_get_adjustment (self->max_width);
-      gtk_adjustment_configure (adj, max_width, width, 20, 0.1, 0.1, 0);
+      range_editor_configure (self->width_range,
+                              lower, width, upper, min_width, max_width);
 
       gtk_drop_down_set_selected (self->line_join, (guint) gsk_stroke_get_line_join (stroke));
       gtk_drop_down_set_selected (self->line_cap, (guint) gsk_stroke_get_line_cap (stroke));
@@ -639,6 +674,8 @@ path_editor_class_init (PathEditorClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  g_type_ensure (RANGE_EDITOR_TYPE);
+
   object_class->set_property = path_editor_set_property;
   object_class->get_property = path_editor_get_property;
   object_class->dispose = path_editor_dispose;
@@ -665,8 +702,9 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, origin);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_color);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_width);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, width_range);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, min_width);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_width);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, max_width);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, line_join);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, line_cap);
@@ -682,10 +720,12 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, origin_changed);
   gtk_widget_class_bind_template_callback (widget_class, stroke_changed);
+  gtk_widget_class_bind_template_callback (widget_class, line_width_changed);
   gtk_widget_class_bind_template_callback (widget_class, fill_changed);
   gtk_widget_class_bind_template_callback (widget_class, states_changed);
   gtk_widget_class_bind_template_callback (widget_class, attach_changed);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool);
+  gtk_widget_class_bind_template_callback (widget_class, bool_and_and);
   gtk_widget_class_bind_template_callback (widget_class, edit_path);
   gtk_widget_class_bind_template_callback (widget_class, move_path_down);
   gtk_widget_class_bind_template_callback (widget_class, delete_path);
