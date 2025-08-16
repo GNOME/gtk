@@ -47,7 +47,7 @@ gsk_stroke_new (float line_width)
 {
   GskStroke *self;
 
-  g_return_val_if_fail (line_width > 0, NULL);
+  g_return_val_if_fail (line_width >= 0, NULL);
 
   self = g_new0 (GskStroke, 1);
 
