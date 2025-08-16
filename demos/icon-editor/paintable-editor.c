@@ -83,10 +83,45 @@ create_path_editors (PaintableEditor *self)
 }
 
 static void
+maybe_update_size (PaintableEditor *self)
+{
+  guint symbolic;
+  GdkRGBA color;
+  g_autoptr (GskStroke) stroke = gsk_stroke_new (0);
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  g_autofree char *text = NULL;
+
+  if (path_paintable_get_width (self->paintable) != 0 &&
+      path_paintable_get_height (self->paintable) != 0)
+    return;
+
+  for (gsize i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
+    {
+      GskPath *path = path_paintable_get_path (self->paintable, i);
+      graphene_rect_t b;
+
+      path_paintable_get_path_stroke (self->paintable, i, stroke, &symbolic, &color);
+
+      gsk_path_get_stroke_bounds (path, stroke, &b);
+      graphene_rect_union (&b, &bounds, &bounds);
+    }
+
+  path_paintable_set_size (self->paintable,
+                           bounds.origin.x + bounds.size.width,
+                           bounds.origin.y + bounds.size.height);
+
+  text = g_strdup_printf ("%g", path_paintable_get_width (self->paintable));
+  gtk_editable_set_text (GTK_EDITABLE (self->width), text);
+  text = g_strdup_printf ("%g", path_paintable_get_height (self->paintable));
+  gtk_editable_set_text (GTK_EDITABLE (self->height), text);
+}
+
+static void
 paths_changed (PaintableEditor *self)
 {
   clear_path_editors (self);
   create_path_editors (self);
+  maybe_update_size (self);
 }
 
 static void
