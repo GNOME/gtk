@@ -675,7 +675,7 @@ gtk_font_dialog_choose_family (GtkFontDialog        *self,
  * not finished successfully, the value passed as @initial_value
  * to [method@Gtk.FontDialog.choose_family] is returned.
 
- * Returns: (nullable) (transfer full): the selected family
+ * Returns: (transfer full): the selected family
  *
  * Since: 4.10
  */
@@ -756,7 +756,7 @@ gtk_font_dialog_choose_face (GtkFontDialog       *self,
  *
  * Finishes the [method@Gtk.FontDialog.choose_face] call.
  *
- * Returns: (nullable) (transfer full): the selected font face
+ * Returns: (transfer full): the selected [class@Pango.FontFace]
  *
  * Since: 4.10
  */
@@ -834,7 +834,8 @@ gtk_font_dialog_choose_font (GtkFontDialog        *self,
  *
  * Finishes the [method@Gtk.FontDialog.choose_font] call.
  *
- * Returns: (nullable) (transfer full): the selected font
+ * Returns: (transfer full): a [struct@Pango.FontDescription] describing
+ *   the selected font
  *
  * Since: 4.10
  */
