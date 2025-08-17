@@ -112,20 +112,19 @@ test_label_markup (void)
 
   g_assert_cmpstr (str->str, ==,
     "range 0 3\n"
-    "[0,4]underline=1\n"
+    "[0,4]underline=5\n"
     "[0,8]foreground=#1b1b6a6acbcb\n"
     "[0,3]style=2\n"
     "range 3 4\n"
-    "[0,4]underline=1\n"
+    "[0,4]underline=5\n"
     "[0,8]foreground=#1b1b6a6acbcb\n"
     "range 4 5\n"
     "[0,8]foreground=#1b1b6a6acbcb\n"
     "[4,5]underline=3\n"
     "range 5 8\n"
     "[0,8]foreground=#1b1b6a6acbcb\n"
-    "[5,8]underline=1\n"
+    "[5,8]underline=5\n"
     "range 8 2147483647\n");
-
 
   gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
 
@@ -138,11 +137,11 @@ test_label_markup (void)
 
   g_assert_cmpstr (str->str, ==,
     "range 0 3\n"
-    "[0,7]underline=1\n"
+    "[0,7]underline=5\n"
     "[0,7]foreground=#1b1b6a6acbcb\n"
     "[0,3]style=2\n"
     "range 3 7\n"
-    "[0,7]underline=1\n"
+    "[0,7]underline=5\n"
     "[0,7]foreground=#1b1b6a6acbcb\n"
     "range 7 2147483647\n");
 
@@ -158,11 +157,11 @@ test_label_markup (void)
 
   g_assert_cmpstr (str->str, ==,
     "range 0 3\n"
-    "[0,8]underline=1\n"
+    "[0,8]underline=5\n"
     "[0,8]foreground=#1b1b6a6acbcb\n"
     "[0,3]style=2\n"
     "range 3 8\n"
-    "[0,8]underline=1\n"
+    "[0,8]underline=5\n"
     "[0,8]foreground=#1b1b6a6acbcb\n"
     "range 8 2147483647\n");
 
