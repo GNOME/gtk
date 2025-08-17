@@ -671,11 +671,10 @@ gtk_font_dialog_choose_family (GtkFontDialog        *self,
  *
  * Finishes the [method@Gtk.FontDialog.choose_family] call.
  *
- * This function never returns an error. If the operation is
- * not finished successfully, the value passed as @initial_value
- * to [method@Gtk.FontDialog.choose_family] is returned.
-
- * Returns: (nullable) (transfer full): the selected family
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
+ * Returns: (transfer full): the selected [class@Pango.FontFamily]
  *
  * Since: 4.10
  */
@@ -756,7 +755,10 @@ gtk_font_dialog_choose_face (GtkFontDialog       *self,
  *
  * Finishes the [method@Gtk.FontDialog.choose_face] call.
  *
- * Returns: (nullable) (transfer full): the selected font face
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
+ * Returns: (transfer full): the selected [class@Pango.FontFace]
  *
  * Since: 4.10
  */
@@ -834,7 +836,11 @@ gtk_font_dialog_choose_font (GtkFontDialog        *self,
  *
  * Finishes the [method@Gtk.FontDialog.choose_font] call.
  *
- * Returns: (nullable) (transfer full): the selected font
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
+ * Returns: (transfer full): a [struct@Pango.FontDescription] describing
+ *   the selected font
  *
  * Since: 4.10
  */
@@ -919,6 +925,9 @@ gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
  *
  * The selected font and features are returned in @font_desc and
  * @font_features.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: true if a font was selected
  *

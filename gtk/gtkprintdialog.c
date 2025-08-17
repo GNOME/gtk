@@ -941,6 +941,8 @@ prepare_print_response (GDBusConnection *connection,
         setup->token = token;
 
         g_task_return_pointer (task, gtk_print_setup_ref (setup), (GDestroyNotify) gtk_print_setup_unref);
+
+        gtk_print_setup_unref (setup);
       }
       break;
 
@@ -1543,8 +1545,10 @@ gtk_print_dialog_setup (GtkPrintDialog       *self,
  * which contains the print settings and page setup information that
  * will be used to print.
  *
- * Returns: The `GtkPrintSetup` object that resulted from the call,
- *   or `NULL` if the call was not successful
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
+ * Returns: (transfer full): the resulting `[struct@Gtk.PrintSetup]`
  *
  * Since: 4.14
  */
@@ -1683,6 +1687,9 @@ gtk_print_dialog_print (GtkPrintDialog       *self,
  * call may not be instant as it operation will for the printer to finish
  * printing.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): a [class@Gio.OutputStream]
  *
  * Since: 4.14
@@ -1820,6 +1827,9 @@ gtk_print_dialog_print_file (GtkPrintDialog       *self,
  *
  * Finishes the [method@Gtk.PrintDialog.print_file] call and
  * returns the results.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: Whether the call was successful
  *
