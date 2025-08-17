@@ -1051,6 +1051,9 @@ gtk_file_dialog_open (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the file that was selected
  *
  * Since: 4.10
@@ -1123,6 +1126,9 @@ gtk_file_dialog_select_folder (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.select_folder] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the folder that was selected
  *
  * Since: 4.10
@@ -1190,6 +1196,9 @@ gtk_file_dialog_save (GtkFileDialog       *self,
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.save] call.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: (transfer full): the file that was selected
  *
@@ -1261,6 +1270,9 @@ gtk_file_dialog_open_multiple (GtkFileDialog       *self,
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: (transfer full): the files that were selected,
  *   as a list model of [iface@Gio.File]
@@ -1334,6 +1346,9 @@ gtk_file_dialog_select_multiple_folders (GtkFileDialog       *self,
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.select_multiple_folders] call.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: (transfer full): the folders that were selected,
  *   as a list model of [iface@Gio.File]
@@ -1435,6 +1450,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * for the file, then @encoding will be set to a codeset name that
  * is suitable for passing to iconv_open(). Otherwise, it will
  * be `NULL`.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: (transfer full): the file that was selected
  *
@@ -1546,6 +1564,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: (transfer full): the files that were selected,
  *   as a list model of [iface@Gio.File]
@@ -1679,6 +1700,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * The @line_ending will be set to one of "\n", "\r\n", "\r" or "",
  * where the latter means to preserve existing line endings.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: (transfer full): the file that was selected.
  *
