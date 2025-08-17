@@ -471,7 +471,7 @@ gtk_color_dialog_choose_rgba (GtkColorDialog       *self,
  *
  * Finishes the [method@Gtk.ColorDialog.choose_rgba] call
  *
- * Returns: (nullable) (transfer full): the selected color
+ * Returns: (transfer full): the selected color
  *
  * Since: 4.10
  */
