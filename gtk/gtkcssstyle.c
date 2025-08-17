@@ -506,12 +506,12 @@ get_pango_underline_from_style (GtkTextDecorationStyle style)
   switch (style)
     {
     case GTK_CSS_TEXT_DECORATION_STYLE_DOUBLE:
-      return PANGO_UNDERLINE_DOUBLE;
+      return PANGO_UNDERLINE_DOUBLE_LINE;
     case GTK_CSS_TEXT_DECORATION_STYLE_WAVY:
-      return PANGO_UNDERLINE_ERROR;
+      return PANGO_UNDERLINE_ERROR_LINE;
     case GTK_CSS_TEXT_DECORATION_STYLE_SOLID:
     default:
-      return PANGO_UNDERLINE_SINGLE;
+      return PANGO_UNDERLINE_SINGLE_LINE;
     }
 
   g_return_val_if_reached (PANGO_UNDERLINE_SINGLE);
