@@ -1012,7 +1012,7 @@ finish_multiple_files_op (GtkFileDialog   *self,
  *
  * The file chooser dialog will be set up to select a single file.
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.10
  */
@@ -1051,6 +1051,9 @@ gtk_file_dialog_open (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the file that was selected
  *
  * Since: 4.10
@@ -1084,7 +1087,7 @@ gtk_file_dialog_open_finish (GtkFileDialog   *self,
  * be opened in the parent directory of that folder, otherwise, it
  * will be in the directory [property@Gtk.FileDialog:initial-folder].
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.10
  */
@@ -1123,6 +1126,9 @@ gtk_file_dialog_select_folder (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.select_folder] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the folder that was selected
  *
  * Since: 4.10
@@ -1152,7 +1158,7 @@ gtk_file_dialog_select_folder_finish (GtkFileDialog  *self,
  *
  * The file chooser dialog will be save mode.
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.10
  */
@@ -1191,6 +1197,9 @@ gtk_file_dialog_save (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.save] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the file that was selected
  *
  * Since: 4.10
@@ -1223,7 +1232,7 @@ gtk_file_dialog_save_finish (GtkFileDialog   *self,
  * The file chooser dialog will initially be opened in the directory
  * [property@Gtk.FileDialog:initial-folder].
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.10
  */
@@ -1262,6 +1271,9 @@ gtk_file_dialog_open_multiple (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the files that were selected,
  *   as a list model of [iface@Gio.File]
  *
@@ -1296,7 +1308,7 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
  * The file chooser dialog will initially be opened in the
  * directory [property@Gtk.FileDialog:initial-folder].
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.10
  */
@@ -1335,6 +1347,9 @@ gtk_file_dialog_select_multiple_folders (GtkFileDialog       *self,
  *
  * Finishes the [method@Gtk.FileDialog.select_multiple_folders] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the folders that were selected,
  *   as a list model of [iface@Gio.File]
  *
@@ -1370,7 +1385,7 @@ gtk_file_dialog_select_multiple_folders_finish (GtkFileDialog   *self,
  * In contrast to [method@Gtk.FileDialog.open], this function
  * lets the user select the text encoding for the file, if possible.
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.18
  */
@@ -1436,6 +1451,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * is suitable for passing to iconv_open(). Otherwise, it will
  * be `NULL`.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the file that was selected
  *
  * Since: 4.18
@@ -1487,7 +1505,7 @@ gtk_file_dialog_open_text_file_finish (GtkFileDialog  *self,
  * In contrast to [method@Gtk.FileDialog.open], this function
  * lets the user select the text encoding for the files, if possible.
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.18
  */
@@ -1547,6 +1565,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the files that were selected,
  *   as a list model of [iface@Gio.File]
  *
@@ -1596,7 +1617,7 @@ gtk_file_dialog_open_multiple_text_files_finish (GtkFileDialog   *self,
  * lets the user select the text encoding and line endings for
  * the text file, if possible.
  *
- * The @callback will be called when the dialog is dismissed.
+ * The @callback will be called when the dialog is closed.
  *
  * Since: 4.18
  */
@@ -1679,6 +1700,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * The @line_ending will be set to one of "\n", "\r\n", "\r" or "",
  * where the latter means to preserve existing line endings.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: (transfer full): the file that was selected.
  *
