@@ -671,11 +671,7 @@ gtk_font_dialog_choose_family (GtkFontDialog        *self,
  *
  * Finishes the [method@Gtk.FontDialog.choose_family] call.
  *
- * This function never returns an error. If the operation is
- * not finished successfully, the value passed as @initial_value
- * to [method@Gtk.FontDialog.choose_family] is returned.
-
- * Returns: (transfer full): the selected family
+ * Returns: (transfer full): the selected [class@Pango.FontFamily]
  *
  * Since: 4.10
  */
