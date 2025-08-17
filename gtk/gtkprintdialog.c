@@ -1545,6 +1545,9 @@ gtk_print_dialog_setup (GtkPrintDialog       *self,
  * which contains the print settings and page setup information that
  * will be used to print.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): the resulting `[struct@Gtk.PrintSetup]`
  *
  * Since: 4.14
@@ -1684,6 +1687,9 @@ gtk_print_dialog_print (GtkPrintDialog       *self,
  * call may not be instant as it operation will for the printer to finish
  * printing.
  *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
+ *
  * Returns: (transfer full): a [class@Gio.OutputStream]
  *
  * Since: 4.14
@@ -1821,6 +1827,9 @@ gtk_print_dialog_print_file (GtkPrintDialog       *self,
  *
  * Finishes the [method@Gtk.PrintDialog.print_file] call and
  * returns the results.
+ *
+ * Note that this function returns a [error@Gtk.DialogError.DISMISSED]
+ * error if the user cancels the dialog.
  *
  * Returns: Whether the call was successful
  *
