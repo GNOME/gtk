@@ -941,6 +941,8 @@ prepare_print_response (GDBusConnection *connection,
         setup->token = token;
 
         g_task_return_pointer (task, gtk_print_setup_ref (setup), (GDestroyNotify) gtk_print_setup_unref);
+
+        gtk_print_setup_unref (setup);
       }
       break;
 
@@ -1543,8 +1545,7 @@ gtk_print_dialog_setup (GtkPrintDialog       *self,
  * which contains the print settings and page setup information that
  * will be used to print.
  *
- * Returns: The `GtkPrintSetup` object that resulted from the call,
- *   or `NULL` if the call was not successful
+ * Returns: (transfer full): the resulting `[struct@Gtk.PrintSetup]`
  *
  * Since: 4.14
  */
