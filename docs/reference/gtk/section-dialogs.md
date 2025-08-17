@@ -115,6 +115,7 @@ Here is a list of existing dialogs
 |-------------|-------------------------|----------------------------------------|
 | Files       | [class@Gtk.FileDialog]  | [method@Gtk.FileDialog.open]           |
 | Text Files  | [class@Gtk.FileDialog]  | [method@Gtk.FileDialog.open_text_file] |
+| Folders     | [class@Gtk.FileDialog]  | [method@Gtk.FileDialog.select_folder]  |
 | Fonts       | [class@Gtk.FontDialog]  | [method@Gtk.FontDialog.choose_font]    |
 | Colors      | [class@Gtk.ColorDialog] | [method@Gtk.ColorDialog.choose_rgba]   |
 | Printing    | [class@Gtk.PrintDialog] | [method@Gtk.PrintDialog.print]         |
@@ -126,9 +127,9 @@ can open font face or font family objects.
 
 ## History
 
-In past, dialogs in GTK were widgets that were derived from GtkDialog
-(and ultimatively, from GtkWindow), such as GtkFileChooserDialog or
-GtkColorChooserDialog. This turned out to be limiting and inconvenient
+In past, dialogs in GTK were widgets that were derived from `GtkDialog`
+(and ultimatively, from `GtkWindow`), such as `GtkFileChooserDialog` or
+`GtkColorChooserDialog`. This turned out to be limiting and inconvenient
 when wrapping platform APIs that are often out-of-process.
 
 Most of these APIs have been deprecated by now, and will be removed
