@@ -72,6 +72,7 @@ content_files = [
   "css-overview.md",
   "css-properties.md",
   "section-accessibility.md",
+  "section-dialogs.md",
   "section-list-widget.md",
   "section-text-widget.md",
   "section-tree-widget.md",
