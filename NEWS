@@ -1,5 +1,93 @@
-Overview of Changes in 4.19.4, xx-xx-xxxx
+Overview of Changes in 4.19.5, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.19.4, 18-08-2025
+=========================================
+
+* Wayland:
+ - Support wl_seat v10, and support server-side key repeat
+ - Handle natural scrolling better
+
+* Clipboard:
+ - Fix text encoding mixups
+
+* Text:
+ - Make underlines continuous across runs
+
+* Bugs fixed:
+  - #514 scale use wrong direction  when use natural scrolling feature (Carlos
+    Garnacho)
+  - #6660 Numpad "home" and "end" keys behave differently than "home" and "end"
+    keys when combined with shift (Brian Kress)
+  - #7672 Gtk.FileDialog.open_finish() is wrongfully marked as nullable
+    (Matthias Clasen)
+  - #7691 4.19.3: Missing borders in g-c-c wifi page (Matthias Clasen)
+  - #7693 Crash due to use after free in unset_fullscreen_monitor (deltragon)
+  - #7694 4.19.3 regression: vte apps cant decode utf8 on copy-paste (Matthias
+    Clasen)
+  - #7708 Holding down keys no longer works (Carlos Garnacho)
+  - #7712 GtkTextView gives encoded UTF-8 characters on paste sometimes
+    (Matthias Clasen)
+  - #7715 inconsistent y of text underline (Matthias Clasen)
+
+* Changes:
+  - !8239 Numpad keys behave differently than non numpad keys when combined with
+    shift (Matthias Clasen, Brian Kress)
+  - !8277 atcontext: Fix a11y value leaks (Khalid Abu Shawarib)
+  - !8812 4.19.3 (Matthias Clasen)
+  - !8813 gtktext: Remove a duplicate text added notification for a11y (Lukáš
+    Tyrychtr)
+  - !8815 print portal memory cleanups (lbaudin)
+  - !8818 widget-factory: Fix style selectors (Matthias Clasen)
+  - !8819 entry: Use 4.20 instead of 4.19 as version for newly added API
+    (Sebastian Dröge)
+  - !8820 ci: Regenerate the image (Matthias Clasen)
+  - !8821 inspector: Fix up an oversight (Matthias Clasen)
+  - !8823 CSS editor fixes (Alice Mikhaylenko)
+  - !8824 adjustment: Verify that we have a valid range (Sergey Bugaev)
+  - !8829 cssprovider: Fix relative URLs when updating media queries (Alice
+    Mikhaylenko)
+  - !8830 Fix 2 leaks when skipping media queries (Alice Mikhaylenko)
+  - !8831 css: Drop light-dark again (Matthias Clasen)
+  - !8833 Check for non-standard backtrace() instead of assuming it (Haelwenn
+    (lanodan) Monnier)
+  - !8834 textview: Don't cast root to window without checking type (Ben Mather)
+  - !8836 GtkRange/GtkScale scroll improvements (Carlos Garnacho)
+  - !8837 node editor: Fix the dark bg button (Matthias Clasen)
+  - !8841 widget: Fix leak when disposing GtkLabel (Maximiliano Sandoval)
+  - !8843 gsk: Don't crash on failed image creation (Matthias Clasen)
+  - !8844 Fix license of GtkFileThumbnail files (Michael Catanzaro)
+  - !8846 gdk/wayland: Support wl_seat version 10 (Carlos Garnacho)
+  - !8847 gdk: Fix mixed-up axis names (Titouan Real)
+  - !8848 Delete Kikongo and Turkmen translations (Michael Catanzaro)
+  - !8853 print: Fix finding cpdb headers (Alessandro Astone)
+  - !8855 text: Drop a redundant call (Matthias Clasen)
+  - !8856 entry: Plug leak in update_extra_menu (Maximiliano Sandoval)
+  - !8858 build: pass output file as argument to docutils rst2man/html (Eli
+    Schwartz)
+  - !8860 gtk: docs: Remove () at the end of method links (Maximiliano Sandoval)
+  - !8861 gdk/wayland: Flush all tablet events after wp_tablet_tool.frame
+    (Carlos Garnacho)
+  - !8862 stroke: Really allow a line width of 0 (Matthias Clasen)
+  - !8863 contentserializer: Change the order back here too (Matthias Clasen)
+  - !8864 docs: Improve wording consistency (Matthias Clasen)
+  - !8865 Assorted dialog fixes (Matthias Clasen)
+  - !8868 docs: Add a section about dialogs (Matthias Clasen)
+  - !8869 docs: Some more work on the dialog section (Matthias Clasen)
+  - !8870 docs: Some more work on the dialog section (Matthias Clasen)
+
+* Translation updates:
+  - Catalan (Jordi Mas)
+  - Esperanto (Kristjan SCHMIDT)
+  - Galician (Fran Diéguez)
+  - Kongo (Michael Catanzaro)
+  - Persian (Danial Behzadi)
+  - Polish (Piotr Drąg)
+  - Romanian (Antonio Marin)
+  - Russian (Artur S0)
+  - Slovak (Dušan Kazik)
+  - Slovenian (Martin)
+  - Turkmen (Michael Catanzaro)
 
 
 Overview of Changes in 4.19.3, 03-08-2025
