@@ -3,13 +3,14 @@ Slug: gtk-dialogs
 
 Dialogs in GTK are asynchronous APIs to obtain certain objects, such
 as files or fonts, or to initiate certain actions such as printing
-or to provide information to the user. The common factor behind these
-is that they usually require user interaction.
+or to provide information to the user. The commonality behind these
+is that they are all high-level tasks that usually require user
+interaction.
 
 ## API
 
-All dialogs follow the async / finish pattern with a [iface@Gio.AsyncResult]
-that is extensively used in GIO.
+All dialogs follow the async/finish pattern with a [iface@Gio.AsyncResult]
+object. This pattern is extensively used in GIO and in other places.
 
 The dialog object itself functions as the _source_ object of the async operation,
 and keeps state that is needed during the operation. Each async operation is
@@ -21,8 +22,8 @@ Other pieces that are by convention passed to the begin function include
 an optional parent window (to attach dialog windows to) and a _cancellable_
 object that can be used to programmatically cancel an ongoing async operation.
 
-The callback that is passed to the begin function must have the API of
-a [callback@Gio.AsyncReadyCallback]:
+The callback that is passed to the begin function must have the signature
+of a [callback@Gio.AsyncReadyCallback]:
 
     void callback (GObject      *source,
                    GAsyncResult *result,
@@ -39,6 +40,8 @@ dialog = gtk_file_dialog_new ();
 
 gtk_file_dialog_open (dialog, window, NULL, file_selected, data);
 g_object_unref (dialog);
+
+/* Return to the mainloop to give the async op a chance to run */
 ```
 
 The callback will look like this:
@@ -79,9 +82,9 @@ file_selected (GObject      *source,
 
 ## Errors
 
-There are many possible causes for async operations to fail.
-The ones that are specifically related to this being a dialog API
-are captured by the [error@Gtk.DialogError] enumeration.
+There are many possible causes for async operations to fail. The ones
+that are specifically related to this being a dialog API are captured
+by the [error@Gtk.DialogError] enumeration.
 
 - A dialog can be cancelled programmatically (using the cancellable).
   In this case, the [error@Gtk.DialogError.CANCELLED] error is raised
@@ -121,9 +124,33 @@ Here is a list of existing dialogs
 | Printing    | [class@Gtk.PrintDialog] | [method@Gtk.PrintDialog.print]         |
 | Alerts      | [class@Gtk.AlertDialog] | [method@Gtk.AlertDialog.choose]        |
 
-Note that many of the dialogs have multiple entry points, for example the
+Note that many of the dialogs have other entry points, for example the
 file dialog can open multiple files, or save to a file, and the font dialog
 can open font face or font family objects.
+
+# Language Bindings
+
+A big motivation for strictly following the async/finish pattern for dialogs
+is that bindings for languages with support for promises can make it work
+seamlessly with their languages native async support.
+
+Here is how the example above might look in JavaScript:
+
+```
+async someFunction() {
+    const dialog = new Gtk.FileDialog();
+
+    // Set up dialog here...
+
+    try {
+        const file = await dialog.open(window, null);
+
+        // Do something with the file here ...
+    } catch (e) {
+        logError(e, "Error opening file dialog:");
+    }
+}
+```
 
 ## History
 
