@@ -311,7 +311,10 @@ item_changed_cb (gpointer item,
 {
   GtkFilterListModel *self = (GtkFilterListModel *) user_data;
   GtkBitset *item_to_refilter = NULL;
+  unsigned int position = GTK_INVALID_LIST_POSITION;
   unsigned int n_items;
+  gboolean was_filtered;
+  gboolean is_filtered;
 
   g_assert (GTK_IS_FILTER_LIST_MODEL (self));
   g_assert (G_IS_LIST_MODEL (self->model));
@@ -320,13 +323,13 @@ item_changed_cb (gpointer item,
   item_to_refilter = gtk_bitset_new_empty ();
   n_items = g_list_model_get_n_items (self->model);
 
-  for (size_t i = 0; i < n_items; i++)
+  for (position = 0; position < n_items; position++)
     {
-      gpointer aux = g_list_model_get_item (self->model, i);
+      gpointer aux = g_list_model_get_item (self->model, position);
 
       if (aux == item)
         {
-          gtk_bitset_add (item_to_refilter, i);
+          gtk_bitset_add (item_to_refilter, position);
           g_clear_object (&aux);
           break;
         }
@@ -334,7 +337,19 @@ item_changed_cb (gpointer item,
       g_clear_object (&aux);
     }
 
+  g_assert (!gtk_bitset_is_empty (item_to_refilter));
+  g_assert (position != GTK_INVALID_LIST_POSITION);
+
+  was_filtered = gtk_bitset_contains (self->matches, position);
+
   gtk_filter_list_model_start_filtering (self, g_steal_pointer (&item_to_refilter));
+
+  is_filtered = gtk_bitset_contains (self->matches, position);
+  if (was_filtered != is_filtered)
+    g_list_model_items_changed (G_LIST_MODEL (self),
+                                position,
+                                is_filtered ? 0 : 1,
+                                is_filtered ? 1 : 0);
 }
 
 static void

@@ -907,6 +907,61 @@ test_watch_items_multifilter (void)
   g_clear_object (&filter_model);
 }
 
+static void
+items_changed_cb (gboolean *items_changed_emitted)
+{
+  *items_changed_emitted = TRUE;
+}
+
+static void
+test_watch_items_signaling (void)
+{
+
+  GtkMutableStringObject *string_object;
+  GtkFilterListModel *filter_model;
+  GtkStringFilter *string_filter;
+  GListStore *store;
+  const char * const strings[] = {
+    "a",
+  };
+  gboolean items_changed_emitted = FALSE;
+
+  string_filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT,
+                                                                      NULL,
+                                                                      "string"));
+  gtk_string_filter_set_search (string_filter, "a");
+
+  store = g_list_store_new (GTK_TYPE_MUTABLE_STRING_OBJECT);
+  for (size_t i = 0; i < G_N_ELEMENTS (strings); i++)
+    {
+      gpointer item = g_object_new (GTK_TYPE_MUTABLE_STRING_OBJECT, "string", strings[i], NULL);
+      g_list_store_append (store, item);
+      g_clear_object (&item);
+    }
+
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (store),
+                                            GTK_FILTER (string_filter));
+  gtk_filter_list_model_set_watch_items (filter_model, TRUE);
+  g_signal_connect_swapped (filter_model, "items-changed", G_CALLBACK (items_changed_cb), &items_changed_emitted);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
+
+  string_object = g_list_model_get_item (G_LIST_MODEL (store), 0);
+  gtk_mutable_string_object_set_string (string_object, "b");
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 0);
+  g_assert_true (items_changed_emitted);
+
+  items_changed_emitted = FALSE;
+
+  gtk_mutable_string_object_set_string (string_object, "a");
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
+  g_assert_true (items_changed_emitted);
+
+  g_clear_object (&string_object);
+  g_clear_object (&filter_model);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -925,6 +980,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filterlistmodel/sections", test_sections);
   g_test_add_func ("/filterlistmodel/watch-items", test_watch_items);
   g_test_add_func ("/filterlistmodel/watch-items-multifilter", test_watch_items_multifilter);
+  g_test_add_func ("/filterlistmodel/watch-items-signaling", test_watch_items_signaling);
 
   return g_test_run ();
 }
