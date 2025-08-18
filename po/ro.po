@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-08-15 11:18+0000\n"
-"PO-Revision-Date: 2025-08-16 09:52+0200\n"
+"POT-Creation-Date: 2025-08-17 15:16+0000\n"
+"PO-Revision-Date: 2025-08-18 10:47+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -958,22 +958,22 @@ msgstr "Activează intrarea"
 #: gtk/a11y/gtkatspiaction.c:554
 msgctxt "accessibility"
 msgid "Activate primary icon"
-msgstr "Activează iconița principală"
+msgstr "Activează simbolul principal"
 
 #: gtk/a11y/gtkatspiaction.c:555
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
-msgstr "Activează iconița principală a intrării"
+msgstr "Activează simbolul principal al rubricii de introducere"
 
 #: gtk/a11y/gtkatspiaction.c:562
 msgctxt "accessibility"
 msgid "Activate secondary icon"
-msgstr "Activează iconița secundară"
+msgstr "Activează simbolul secundar"
 
 #: gtk/a11y/gtkatspiaction.c:563
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
-msgstr "Activează iconița secundară a intrării"
+msgstr "Activează simbolul secundar al rubricii de introducere"
 
 #: gtk/a11y/gtkatspiaction.c:662
 msgctxt "accessibility"
@@ -983,7 +983,7 @@ msgstr "Aruncă o privire"
 #: gtk/a11y/gtkatspiaction.c:663
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
-msgstr "Arată conținutul intrării parolei"
+msgstr "Arată conținutul rubricii de introducere a parolei"
 
 #: gtk/a11y/gtkatspiaction.c:749
 msgctxt "accessibility"
@@ -2637,6 +2637,7 @@ msgstr "Nume"
 
 #: gtk/gtkfilechooserwidget.c:7442 gtk/inspector/resource-list.ui:98
 #: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
+#: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "Dimensiune"
 
@@ -2670,11 +2671,11 @@ msgstr "Alege dosarele"
 msgid "Select a Folder"
 msgstr "Alege un dosar"
 
-#: gtk/gtkfiledialog.c:1398 gtk/gtkfiledialog.c:1515 gtk/gtkfiledialog.c:1624
+#: gtk/gtkfiledialog.c:1413 gtk/gtkfiledialog.c:1533 gtk/gtkfiledialog.c:1645
 msgid "Encoding"
 msgstr "Codificare"
 
-#: gtk/gtkfiledialog.c:1635
+#: gtk/gtkfiledialog.c:1656
 msgid "Line Ending"
 msgstr "Sfârșitul liniei"
 
@@ -4862,7 +4863,7 @@ msgstr "Țintă"
 
 #: gtk/inspector/menu.ui:41
 msgid "Icon"
-msgstr "Iconiță"
+msgstr "Simbol"
 
 #: gtk/inspector/misc-info.ui:31
 msgid "Address"
@@ -7568,7 +7569,7 @@ msgstr "Redare"
 
 #: tools/encodesymbolic.c:42
 msgid "Output to this directory instead of cwd"
-msgstr "Produce în acest director în loc de cwd"
+msgstr "Produce în acest dosar în loc de cwd"
 
 #: tools/encodesymbolic.c:43
 msgid "Generate debug output"
@@ -7627,6 +7628,7 @@ msgstr ""
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
 #: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-convert.c:98
 #: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
@@ -8242,6 +8244,7 @@ msgid "The output file"
 msgstr "Fișierul rezultat"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:117
+#: tools/gtk-rendernode-tool-convert.c:93
 msgid "Foreground color"
 msgstr "Culoare de prim-plan"
 
@@ -8249,6 +8252,10 @@ msgstr "Culoare de prim-plan"
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
 #: tools/gtk-path-tool-show.c:117 tools/gtk-path-tool-show.c:118
 #: tools/gtk-path-tool-show.c:119 tools/gtk-path-tool-show.c:120
+#: tools/gtk-rendernode-tool-convert.c:93
+#: tools/gtk-rendernode-tool-convert.c:94
+#: tools/gtk-rendernode-tool-convert.c:95
+#: tools/gtk-rendernode-tool-convert.c:96
 msgid "COLOR"
 msgstr "CULOARE"
 
@@ -8545,6 +8552,42 @@ msgstr ""
 "Nu s-a putut încărca %s: %s\n"
 "\n"
 
+#: tools/gtk-rendernode-tool-convert.c:92
+msgid "Recolor the node"
+msgstr "Recolorează nodul"
+
+#: tools/gtk-rendernode-tool-convert.c:94
+msgid "Success color"
+msgstr "Culoare de succes"
+
+#: tools/gtk-rendernode-tool-convert.c:95
+msgid "Warning color"
+msgstr "Culoare de avertizare"
+
+#: tools/gtk-rendernode-tool-convert.c:96
+msgid "Error color"
+msgstr "Culoare de eroare"
+
+#: tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "MĂRIME"
+
+#: tools/gtk-rendernode-tool-convert.c:107
+msgid "Convert from symbolic svg to node."
+msgstr "Convertește din SVG simbolic în nod."
+
+#: tools/gtk-rendernode-tool-convert.c:177
+#, c-format
+msgid "No .svg file specified\n"
+msgstr "Niciun fișier .svg specificat\n"
+
+#: tools/gtk-rendernode-tool-convert.c:183
+#, c-format
+msgid "Can only accept a single .svg file\n"
+msgstr ""
+"Se poate accepta doar un singur fișier .svg\n"
+"\n"
+
 #: tools/gtk-rendernode-tool-extract.c:73
 #: tools/gtk-rendernode-tool-extract.c:149
 #, c-format
@@ -8553,7 +8596,7 @@ msgstr "Nu s-a putut scrie %s\n"
 
 #: tools/gtk-rendernode-tool-extract.c:296
 msgid "Directory to use"
-msgstr "Director de utilizat"
+msgstr "Dosarul de utilizat"
 
 #: tools/gtk-rendernode-tool-extract.c:296
 msgid "DIRECTORY"
@@ -8722,7 +8765,7 @@ msgstr "Dezactivează ieșirea detaliată"
 
 #: tools/updateiconcache.c:1670
 msgid "Validate existing icon cache"
-msgstr "Validează cache-ul de iconițe existent"
+msgstr "Validează fișierul cache de simboluri existent"
 
 #: tools/updateiconcache.c:1736
 #, c-format
@@ -8732,12 +8775,12 @@ msgstr "Nu s-a găsit fișierul: %s\n"
 #: tools/updateiconcache.c:1742
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "Nu este un cache de iconițe valid: %s\n"
+msgstr "Fișierul cache pentru simboluri nu e corect: %s\n"
 
 #: tools/updateiconcache.c:1755
 #, c-format
 msgid "No theme index file.\n"
-msgstr "Nu există un fișier index al temei.\n"
+msgstr "Niciun fișier index pentru aspect.\n"
 
 #: tools/updateiconcache.c:1759
 #, c-format
@@ -8745,6 +8788,6 @@ msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Niciun fișier index de temă în „%s”.\n"
-"Dacă chiar doriți să creați aici un cache pentru iconițe, utilizați --ignore-"
-"theme-index.\n"
+"Niciun fișier index pentru aspect în „%s”.\n"
+"Dacă se dorește crearea unui fișier cache pentru simboluri aici, trebuie "
+"folosit --ignore-theme-index.\n"
