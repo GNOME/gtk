@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-08-15 05:58+0000\n"
-"PO-Revision-Date: 2025-08-15 20:02+0200\n"
+"POT-Creation-Date: 2025-08-16 23:38+0000\n"
+"PO-Revision-Date: 2025-08-18 10:47+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -950,22 +950,22 @@ msgstr "Activează intrarea"
 #: gtk/a11y/gtkatspiaction.c:554
 msgctxt "accessibility"
 msgid "Activate primary icon"
-msgstr "Activează iconița principală"
+msgstr "Activează simbolul principal"
 
 #: gtk/a11y/gtkatspiaction.c:555
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
-msgstr "Activează iconița principală a intrării"
+msgstr "Activează simbolul principal al rubricii de introducere"
 
 #: gtk/a11y/gtkatspiaction.c:562
 msgctxt "accessibility"
 msgid "Activate secondary icon"
-msgstr "Activează iconița secundară"
+msgstr "Activează simbolul secundar"
 
 #: gtk/a11y/gtkatspiaction.c:563
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
-msgstr "Activează iconița secundară a intrării"
+msgstr "Activează simbolul secundar al rubricii de introducere"
 
 #: gtk/a11y/gtkatspiaction.c:662
 msgctxt "accessibility"
@@ -975,7 +975,7 @@ msgstr "Aruncă o privire"
 #: gtk/a11y/gtkatspiaction.c:663
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
-msgstr "Arată conținutul intrării parolei"
+msgstr "Arată conținutul rubricii de introducere a parolei"
 
 #: gtk/a11y/gtkatspiaction.c:749
 msgctxt "accessibility"
@@ -4267,7 +4267,7 @@ msgstr "Țintă"
 
 #: gtk/inspector/menu.ui:41
 msgid "Icon"
-msgstr "Iconiță"
+msgstr "Simbol"
 
 #: gtk/inspector/misc-info.ui:31
 msgid "Address"
@@ -7528,7 +7528,7 @@ msgstr "Profil nespecificat"
 
 #: tools/encodesymbolic.c:41
 msgid "Output to this directory instead of cwd"
-msgstr "Produce în acest director în loc de cwd"
+msgstr "Produce în acest dosar în loc de cwd"
 
 #: tools/encodesymbolic.c:42
 msgid "Generate debug output"
@@ -8480,7 +8480,7 @@ msgstr "Nu s-a putut scrie %s\n"
 
 #: tools/gtk-rendernode-tool-extract.c:292
 msgid "Directory to use"
-msgstr "Director de utilizat"
+msgstr "Dosarul de utilizat"
 
 #: tools/gtk-rendernode-tool-extract.c:292
 msgid "DIRECTORY"
@@ -8651,7 +8651,7 @@ msgstr "Dezactivează ieșirea detaliată"
 
 #: tools/updateiconcache.c:1670
 msgid "Validate existing icon cache"
-msgstr "Validează cache-ul de iconițe existent"
+msgstr "Validează fișierul cache de simboluri existent"
 
 #: tools/updateiconcache.c:1736
 #, c-format
@@ -8661,12 +8661,12 @@ msgstr "Nu s-a găsit fișierul: %s\n"
 #: tools/updateiconcache.c:1742
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "Nu este un cache de iconițe valid: %s\n"
+msgstr "Fișierul cache pentru simboluri nu e corect: %s\n"
 
 #: tools/updateiconcache.c:1755
 #, c-format
 msgid "No theme index file.\n"
-msgstr "Nu există un fișier index al temei.\n"
+msgstr "Niciun fișier index pentru aspect.\n"
 
 #: tools/updateiconcache.c:1759
 #, c-format
@@ -8674,6 +8674,6 @@ msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Niciun fișier index de temă în „%s”.\n"
-"Dacă chiar doriți să creați aici un cache pentru iconițe, utilizați --ignore-"
-"theme-index.\n"
+"Niciun fișier index pentru aspect în „%s”.\n"
+"Dacă se dorește crearea unui fișier cache pentru simboluri aici, trebuie "
+"folosit --ignore-theme-index.\n"
