@@ -1,11 +1,10 @@
 Title: Dialogs
 Slug: gtk-dialogs
 
-Dialogs in GTK are asynchronous APIs to obtain certain objects, such
-as files or fonts, or to initiate certain actions such as printing
-or to provide information to the user. The commonality behind these
-is that they are all high-level tasks that usually require user
-interaction.
+Dialogs in GTK are asynchronous APIs to obtain certain objects, such as
+files or fonts, or to initiate certain actions such as printing or to
+provide information to the user. The commonality behind these is that
+they are all high-level tasks that usually require user interaction.
 
 ## API
 
@@ -39,6 +38,7 @@ dialog = gtk_file_dialog_new ();
 /* Set up dialog here ... */
 
 gtk_file_dialog_open (dialog, window, NULL, file_selected, data);
+
 g_object_unref (dialog);
 
 /* Return to the mainloop to give the async op a chance to run */
@@ -70,6 +70,7 @@ file_selected (GObject      *source,
 
           g_object_unref (alert);
         }
+
       g_error_free (error);
       return;
     }
@@ -99,40 +100,42 @@ the user explicitly chose to dismiss the dialog).
 
 ## Details
 
-There are some fine points in the asynchronous API pattern that
-are worth drawing attention to:
+There are some fine points in the async/finish pattern that are worth
+drawing attention to:
 
 - The dialog object is kept alive for the duration of the asynchronous
   operation, so it is safe to drop your reference after initiating the
   operation (unless you want to keep using the dialog object for multiple
   operations).
-- The finish functions are not _nullable_ - they only return `NULL`
-  if an error occurred (which is why the 'dismissed by the user'
-  case is handled as an error). This is relevant for language bindings.
+- The finish functions are not _nullable_—they only return `NULL` if an
+  error occurred (which is why the 'dismissed by the user' case is handled
+  as an error). This is relevant for language bindings.
 
 ## Existing dialogs
 
 Here is a list of existing dialogs
 
-| Object/Task | GTK Dialog              | Main API                               |
-|-------------|-------------------------|----------------------------------------|
-| Files       | [class@Gtk.FileDialog]  | [method@Gtk.FileDialog.open]           |
-| Text Files  | [class@Gtk.FileDialog]  | [method@Gtk.FileDialog.open_text_file] |
-| Folders     | [class@Gtk.FileDialog]  | [method@Gtk.FileDialog.select_folder]  |
-| Fonts       | [class@Gtk.FontDialog]  | [method@Gtk.FontDialog.choose_font]    |
-| Colors      | [class@Gtk.ColorDialog] | [method@Gtk.ColorDialog.choose_rgba]   |
-| Printing    | [class@Gtk.PrintDialog] | [method@Gtk.PrintDialog.print]         |
-| Alerts      | [class@Gtk.AlertDialog] | [method@Gtk.AlertDialog.choose]        |
+| Object/Task  | GTK Dialog               | Main API                               |
+|--------------|--------------------------|----------------------------------------|
+| Files        | [class@Gtk.FileDialog]   | [method@Gtk.FileDialog.open]           |
+| Text Files   | [class@Gtk.FileDialog]   | [method@Gtk.FileDialog.open_text_file] |
+| Folders      | [class@Gtk.FileDialog]   | [method@Gtk.FileDialog.select_folder]  |
+| Fonts        | [class@Gtk.FontDialog]   | [method@Gtk.FontDialog.choose_font]    |
+| Colors       | [class@Gtk.ColorDialog]  | [method@Gtk.ColorDialog.choose_rgba]   |
+| Printing     | [class@Gtk.PrintDialog]  | [method@Gtk.PrintDialog.print]         |
+| Alerts       | [class@Gtk.AlertDialog]  | [method@Gtk.AlertDialog.choose]        |
+| URIs         | [class@Gtk.UriLauncher]  | [method@Gtk.UriLauncher.launch]        |
+| Applications | [class@Gtk.FileLauncher] | [method@Gtk.FileLauncher.launch]       |
 
 Note that many of the dialogs have other entry points, for example the
 file dialog can open multiple files, or save to a file, and the font dialog
-can open font face or font family objects.
+can choose font face or font family objects.
 
 # Language Bindings
 
 A big motivation for strictly following the async/finish pattern for dialogs
-is that bindings for languages with support for promises can make it work
-seamlessly with their languages native async support.
+is that bindings for languages with support for promises can make this pattern
+work seamlessly with their languages native async support.
 
 Here is how the example above might look in JavaScript:
 
@@ -146,6 +149,7 @@ async someFunction() {
         const file = await dialog.open(window, null);
 
         // Do something with the file here ...
+
     } catch (e) {
         logError(e, "Error opening file dialog:");
     }
