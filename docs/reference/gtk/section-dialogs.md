@@ -11,11 +11,15 @@ they are all high-level tasks that usually require user interaction.
 All dialogs follow the async/finish pattern with a [iface@Gio.AsyncResult]
 object. This pattern is extensively used in GIO and in other places.
 
-The dialog object itself functions as the _source_ object of the async operation,
-and keeps state that is needed during the operation. Each async operation is
-provided as a pair of functions, one to begin the async operation, and one to
-obtain the results. The second function is by convention named finish(), and it
-must be called from a callback that the caller provides to the first function.
+The dialog object itself functions as the _source_ object of the async
+operation, and holds state that is needed to set up the operation. But
+once the operation is started, the dialog object can be safely reused
+or dropped.
+
+Each async operation is provided as a pair of functions, one to _begin_
+the async operation, and one to obtain the results. The second function
+is by convention named _finish_, and it must be called from a callback
+that the caller provides to the first function.
 
 Other pieces that are by convention passed to the begin function include
 an optional parent window (to attach dialog windows to) and a _cancellable_
