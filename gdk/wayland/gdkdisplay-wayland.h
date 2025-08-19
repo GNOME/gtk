@@ -89,7 +89,7 @@ struct _GdkWaylandDisplay
   gboolean list_protocols;
   char **skip_protocols;
 
-  guint32    shell_capabilities;
+  uint32_t shell_capabilities;
 
   /* Startup notification */
   char *startup_notification_id;

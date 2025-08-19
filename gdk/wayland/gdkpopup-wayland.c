@@ -1001,7 +1001,7 @@ gdk_wayland_surface_create_xdg_popup (GdkWaylandPopup *wayland_popup,
   if (grab_input_seat)
     {
       struct wl_seat *seat;
-      guint32 serial;
+      uint32_t serial;
 
       seat = gdk_wayland_seat_get_wl_seat (GDK_SEAT (grab_input_seat));
       serial = _gdk_wayland_seat_get_last_implicit_grab_serial (grab_input_seat, NULL);

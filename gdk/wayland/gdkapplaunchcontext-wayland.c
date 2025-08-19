@@ -134,7 +134,7 @@ struct _GdkWaylandAppLaunchContext
 {
   GdkAppLaunchContext base;
   char *name;
-  guint serial;
+  uint32_t serial;
 };
 
 struct _GdkWaylandAppLaunchContextClass

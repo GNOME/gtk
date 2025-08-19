@@ -164,8 +164,8 @@ gdk_wayland_cairo_surface_destroy (void *p)
 
 cairo_surface_t *
 gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
-                                        guint              width,
-                                        guint              height)
+                                        uint32_t           width,
+                                        uint32_t           height)
 {
   GdkWaylandCairoSurfaceData *data;
   cairo_surface_t *surface = NULL;

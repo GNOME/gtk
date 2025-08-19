@@ -37,8 +37,9 @@ struct _GdkWaylandPollSource
   GSource source;
   GPollFD pfd;
   GdkWaylandDisplay *display;
-  guint reading : 1;
-  guint can_dispatch : 1;
+
+  uint32_t reading      : 1;
+  uint32_t can_dispatch : 1;
 };
 
 /* If we should try wl_display_dispatch_pending() before

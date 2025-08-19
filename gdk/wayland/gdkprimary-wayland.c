@@ -286,7 +286,7 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
       const char * const *mime_types;
       gsize i, n_mime_types;
       GdkSeat *seat;
-      guint32 serial;
+      uint32_t serial;
 
       gdk_wayland_primary_discard_offer (cb);
       gdk_wayland_primary_discard_source (cb);

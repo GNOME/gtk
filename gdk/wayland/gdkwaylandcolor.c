@@ -28,7 +28,7 @@ wl_to_cicp_primaries (enum wp_color_manager_v1_primaries cp)
 static enum wp_color_manager_v1_primaries
 cicp_to_wl_primaries (uint cp)
 {
-  for (guint i = WP_COLOR_MANAGER_V1_PRIMARIES_SRGB; i < G_N_ELEMENTS (primaries_map); i++)
+  for (uint32_t i = WP_COLOR_MANAGER_V1_PRIMARIES_SRGB; i < G_N_ELEMENTS (primaries_map); i++)
     if (primaries_map[i] == cp)
        return (enum wp_color_manager_v1_primaries)i;
 
@@ -58,10 +58,10 @@ static gboolean
 primaries_to_wl_primaries (const uint primaries[8],
                            enum wp_color_manager_v1_primaries *out_primaries)
 {
-  guint i, j;
-
-  for (i = WP_COLOR_MANAGER_V1_PRIMARIES_SRGB; i < G_N_ELEMENTS (primaries_primaries); i++)
+  for (uint32_t i = WP_COLOR_MANAGER_V1_PRIMARIES_SRGB; i < G_N_ELEMENTS (primaries_primaries); i++)
     {
+      uint32_t j;
+
       for (j = 0; j < 8; j++)
         {
           if (primaries[j] != primaries_primaries[i][j])
@@ -101,7 +101,7 @@ wl_to_cicp_transfer (enum wp_color_manager_v1_transfer_function tf)
 static enum wp_color_manager_v1_transfer_function
 cicp_to_wl_transfer (uint tf)
 {
-  for (guint i = WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_BT1886; i < G_N_ELEMENTS (transfer_map); i++)
+  for (uint32_t i = WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_BT1886; i < G_N_ELEMENTS (transfer_map); i++)
     if (transfer_map[i] == tf)
        return (enum wp_color_manager_v1_transfer_function)i;
 
@@ -129,7 +129,7 @@ cicp_to_wl_coefficients (uint m)
   if (m == 6)
     m = 5;
 
-  for (guint i = 0; i < G_N_ELEMENTS (coefficients_map); i++)
+  for (uint32_t i = 0; i < G_N_ELEMENTS (coefficients_map); i++)
     if (coefficients_map[i].cicp == m)
        return coefficients_map[i].wp;
 
@@ -139,7 +139,7 @@ cicp_to_wl_coefficients (uint m)
 static const char *
 wl_coefficients_name (enum wp_color_representation_surface_v1_coefficients value)
 {
-  for (guint i = 0; i < G_N_ELEMENTS (coefficients_map); i++)
+  for (uint32_t i = 0; i < G_N_ELEMENTS (coefficients_map); i++)
     if (coefficients_map[i].wp == value)
        return coefficients_map[i].name;
 
@@ -158,7 +158,7 @@ struct {
 static const char *
 wl_alpha_name (enum wp_color_representation_surface_v1_alpha_mode alpha)
 {
-  for (guint i = 0; i < G_N_ELEMENTS (alpha_modes); i++)
+  for (uint32_t i = 0; i < G_N_ELEMENTS (alpha_modes); i++)
     if (alpha_modes[i].wp == alpha)
        return alpha_modes[i].name;
 
@@ -217,7 +217,7 @@ struct _GdkWaylandColor
   } color_representation_supported;
 };
 
-static guint
+static uint32_t
 color_state_hash (gconstpointer data)
 {
   GdkColorState *cs = (GdkColorState *) data;
@@ -1210,7 +1210,7 @@ gdk_wayland_color_get_color_representation (GdkWaylandColor *color,
 void
 gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
                                            GdkColorState          *cs,
-                                           guint32                 fourcc,
+                                           uint32_t                fourcc,
                                            gboolean                premultiplied)
 {
   if (self->mgmt_surface)
@@ -1275,7 +1275,7 @@ gdk_wayland_color_surface_unset_color_state (GdkWaylandColorSurface *self)
 gboolean
 gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface  *self,
                                                GdkColorState           *cs,
-                                               guint32                  fourcc,
+                                               uint32_t                 fourcc,
                                                gboolean                 premultiplied,
                                                GError                 **error)
 {

@@ -54,7 +54,7 @@ time_from_wayland (uint32_t tv_sec_hi,
                    uint32_t tv_sec_lo,
                    uint32_t tv_nsec)
 {
-  guint64 t = tv_sec_hi;
+  uint64_t t = tv_sec_hi;
   t <<= 32;
   t |= tv_sec_lo;
   t *= G_USEC_PER_SEC;
@@ -83,7 +83,7 @@ gdk_wayland_presentation_feedback_presented (void                            *da
   GdkWaylandPresentationFrame *frame = data;
   GdkWaylandPresentationTime *self;
   GdkFrameTimings *timings;
-  guint pos;
+  uint32_t pos;
 
   g_assert (frame != NULL);
   g_assert (frame->self != NULL);
@@ -105,7 +105,7 @@ gdk_wayland_presentation_feedback_discarded (void                            *da
                                              struct wp_presentation_feedback *feedback)
 {
   GdkWaylandPresentationFrame *frame = data;
-  guint pos;
+  uint32_t pos;
 
   g_assert (frame != NULL);
   g_assert (frame->self != NULL);

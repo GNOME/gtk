@@ -1031,7 +1031,7 @@ gdk_wayland_display_get_monitor_at_surface (GdkDisplay *display,
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   struct wl_output *output;
-  guint i, n;
+  uint32_t i, n;
 
   g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), NULL);
 

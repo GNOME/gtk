@@ -90,7 +90,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
                          GdkEventMask  event_mask,
                          GdkSurface   *confine_to,
                          GdkCursor    *cursor,
-                         guint32       time_)
+                         uint32_t      time_)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
@@ -144,7 +144,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
 
 static void
 gdk_wayland_device_ungrab (GdkDevice *device,
-                           guint32    time_)
+                           uint32_t   time_)
 {
   GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
   GdkWaylandPointerData *pointer =
@@ -526,7 +526,7 @@ emulate_touch_crossing (GdkSurface           *surface,
                         GdkWaylandTouchData *touch,
                         GdkEventType         type,
                         GdkCrossingMode      mode,
-                        guint32              time_)
+                        uint32_t             time_)
 {
   GdkEvent *event;
 
@@ -694,7 +694,7 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                   struct wl_data_source *source)
 {
   GdkWaylandSeat *seat;
-  guint32 serial;
+  uint32_t serial;
 
   g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
 
@@ -745,7 +745,7 @@ static void
 emulate_focus (GdkSurface *surface,
                GdkDevice *device,
                gboolean   focus_in,
-               guint32    time_)
+               uint32_t   time_)
 {
   GdkEvent *event = gdk_focus_event_new (surface, device, focus_in);
 
@@ -758,7 +758,7 @@ emulate_crossing (GdkSurface       *surface,
                   GdkDevice       *device,
                   GdkEventType     type,
                   GdkCrossingMode  mode,
-                  guint32          time_)
+                  uint32_t         time_)
 {
   GdkEvent *event;
   GdkModifierType state;
@@ -782,7 +782,7 @@ device_emit_grab_crossing (GdkDevice       *device,
                            GdkSurface       *from,
                            GdkSurface       *to,
                            GdkCrossingMode  mode,
-                           guint32          time_)
+                           uint32_t         time_)
 {
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
@@ -803,7 +803,7 @@ device_emit_grab_crossing (GdkDevice       *device,
 void
 gdk_wayland_device_maybe_emit_grab_crossing (GdkDevice  *device,
                                              GdkSurface *window,
-                                             guint32     time)
+                                             uint32_t    time)
 {
   GdkSurface *surface = gdk_wayland_device_get_focus (device);
   GdkSurface *focus = window;
@@ -814,7 +814,7 @@ gdk_wayland_device_maybe_emit_grab_crossing (GdkDevice  *device,
 
 GdkSurface *
 gdk_wayland_device_maybe_emit_ungrab_crossing (GdkDevice *device,
-                                               guint32    time_)
+                                               uint32_t   time_)
 {
   GdkDeviceGrabInfo *grab;
   GdkSurface *focus = NULL;

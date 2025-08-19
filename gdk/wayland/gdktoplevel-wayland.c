@@ -454,11 +454,10 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
       GdkMonitor *monitor;
       GListModel *monitors;
       GdkRectangle monitor_geometry, display_geometry = { 0 };
-      guint i;
 
       monitors = gdk_display_get_monitors (display);
 
-      for (i = 0; i < g_list_model_get_n_items (monitors); i++)
+      for (uint32_t i = 0; i < g_list_model_get_n_items (monitors); i++)
         {
           monitor = g_list_model_get_item (monitors, i);
           gdk_monitor_get_geometry (monitor, &monitor_geometry);
@@ -2071,7 +2070,7 @@ gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
   uint32_t serial;
 
   GdkEventType event_type = gdk_event_get_event_type (event);
-  switch ((guint) event_type)
+  switch ((uint32_t) event_type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
@@ -2181,7 +2180,7 @@ gdk_wayland_toplevel_begin_resize (GdkToplevel    *toplevel,
                                    int             button,
                                    double          x,
                                    double          y,
-                                   guint32         timestamp)
+                                   uint32_t        timestamp)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl;
@@ -2252,7 +2251,7 @@ gdk_wayland_toplevel_begin_move (GdkToplevel *toplevel,
                                  int          button,
                                  double       x,
                                  double       y,
-                                 guint32      timestamp)
+                                 uint32_t      timestamp)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl;
@@ -2294,7 +2293,7 @@ static const struct xdg_activation_token_v1_listener token_listener = {
 
 static void
 gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
-                            guint32      timestamp)
+                            uint32_t     timestamp)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);

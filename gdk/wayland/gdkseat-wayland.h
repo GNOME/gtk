@@ -48,8 +48,8 @@ void gdk_wayland_seat_set_drag (GdkSeat        *seat,
                                 GdkDrag *drag);
 
 void       gdk_wayland_display_create_seat    (GdkWaylandDisplay     *display,
-                                               guint32                id,
+                                               uint32_t               id,
                                                struct wl_seat        *seat);
 void       gdk_wayland_display_remove_seat    (GdkWaylandDisplay     *display,
-                                               guint32                id);
+                                               uint32_t               id);
 

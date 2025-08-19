@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include <stdint.h>
 #include <glib.h>
 
 #define GDK_FRACTIONAL_SCALE_FACTOR 120
@@ -27,7 +28,7 @@ typedef struct _GdkFractionalScale GdkFractionalScale;
 
 struct _GdkFractionalScale
 {
-  guint32 scale;
+  uint32_t scale;
 };
 
 #define GDK_FRACTIONAL_SCALE_INIT(fractional_scale) (GdkFractionalScale) { fractional_scale }

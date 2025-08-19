@@ -26,7 +26,7 @@ struct _GdkWaylandSubsurface
   GdkWaylandColorSurface *color;
 
   GdkTexture *texture;
-  guint32 fourcc;
+  uint32_t fourcc;
   gboolean premultiplied;
   cairo_rectangle_int_t dest;
   graphene_rect_t source;

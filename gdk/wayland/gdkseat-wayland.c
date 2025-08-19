@@ -147,7 +147,7 @@ emulate_crossing (GdkSurface       *surface,
                   GdkDevice       *device,
                   GdkEventType     type,
                   GdkCrossingMode  mode,
-                  guint32          time_)
+                  uint32_t         time_)
 {
   GdkEvent *event;
   GdkModifierType state;
@@ -174,7 +174,7 @@ emulate_touch_crossing (GdkSurface           *surface,
                         GdkWaylandTouchData *touch,
                         GdkEventType         type,
                         GdkCrossingMode      mode,
-                        guint32              time_)
+                        uint32_t             time_)
 {
   GdkEvent *event;
 
@@ -1129,8 +1129,8 @@ static gboolean keyboard_repeat (gpointer data);
 
 static gboolean
 get_key_repeat (GdkWaylandSeat *seat,
-                guint          *delay,
-                guint          *interval)
+                uint32_t       *delay,
+                uint32_t       *interval)
 {
   gboolean repeat;
 
@@ -1180,8 +1180,8 @@ deliver_key_event (GdkWaylandSeat *seat,
   struct xkb_state *xkb_state;
   struct xkb_keymap *xkb_keymap;
   GdkKeymap *keymap;
-  guint delay, interval, timeout;
-  gint64 begin_time, now;
+  uint32_t delay, interval, timeout;
+  int64_t begin_time, now;
   xkb_mod_mask_t consumed;
   GdkTranslatedKey translated;
   GdkTranslatedKey no_lock;
@@ -1923,8 +1923,8 @@ static const struct wl_touch_listener touch_listener = {
 static void
 emit_gesture_swipe_event (GdkWaylandSeat          *seat,
                           GdkTouchpadGesturePhase  phase,
-                          guint32                  _time,
-                          guint32                  n_fingers,
+                          uint32_t                 _time,
+                          uint32_t                 n_fingers,
                           double                   dx,
                           double                   dy)
 {
@@ -2024,8 +2024,8 @@ static const struct zwp_pointer_gesture_swipe_v1_listener gesture_swipe_listener
 static void
 emit_gesture_pinch_event (GdkWaylandSeat          *seat,
                           GdkTouchpadGesturePhase  phase,
-                          guint32                  _time,
-                          guint                    n_fingers,
+                          uint32_t                 _time,
+                          uint32_t                 n_fingers,
                           double                   dx,
                           double                   dy,
                           double                   scale,
@@ -2133,8 +2133,8 @@ static const struct zwp_pointer_gesture_pinch_v1_listener gesture_pinch_listener
 static void
 emit_gesture_hold_event (GdkWaylandSeat          *seat,
                          GdkTouchpadGesturePhase  phase,
-                         guint32                  _time,
-                         guint32                  n_fingers)
+                         uint32_t                 _time,
+                         uint32_t                 n_fingers)
 {
   GdkEvent *event;
 
@@ -2704,7 +2704,7 @@ tablet_tool_handle_hardware_serial (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
 
-  tool->hardware_serial = ((guint64) serial_hi) << 32 | serial_lo;
+  tool->hardware_serial = ((uint64_t) serial_hi) << 32 | serial_lo;
 }
 
 static void
@@ -2715,7 +2715,7 @@ tablet_tool_handle_hardware_id_wacom (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
 
-  tool->hardware_id_wacom = ((guint64) id_hi) << 32 | id_lo;
+  tool->hardware_id_wacom = ((uint64_t) id_hi) << 32 | id_lo;
 }
 
 static void
@@ -2776,7 +2776,7 @@ tablet_copy_axes (GdkWaylandTabletData *tablet)
 
 static void
 gdk_wayland_tablet_flush_frame_events (GdkWaylandTabletData *tablet,
-                                       guint32               time)
+                                       uint32_t              time)
 {
   GList *events, *l;
 
@@ -3167,7 +3167,7 @@ tablet_tool_handle_button (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
   GdkEventType evtype;
-  guint n_button;
+  uint32_t n_button;
 
   if (!tablet || !tablet->pointer_info.focus)
     return;
@@ -3565,7 +3565,7 @@ tablet_pad_group_handle_mode (void                           *data,
   GdkWaylandTabletPadData *pad = group->pad;
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
   GdkEvent *event;
-  guint n_group;
+  uint32_t n_group;
 
   GDK_SEAT_DEBUG (seat, EVENTS,
                   "tablet pad group handle mode, pad group = %p, mode = %d",
@@ -4183,7 +4183,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                        gpointer                prepare_func_data)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
-  guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
+  uint32_t evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
   GdkDisplay *display = gdk_seat_get_display (seat);
   gulong next_serial;
   GList *l;
@@ -4463,7 +4463,7 @@ gdk_wayland_seat_init (GdkWaylandSeat *seat)
 
 void
 gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
-                                 guint32            id,
+                                 uint32_t           id,
                                  struct wl_seat    *wl_seat)
 {
   GdkDisplay *display = GDK_DISPLAY (display_wayland);
@@ -4521,7 +4521,7 @@ gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
 
 void
 gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
-                                 guint32            id)
+                                 uint32_t           id)
 {
   GdkDisplay *display = GDK_DISPLAY (display_wayland);
   GList *l, *seats;

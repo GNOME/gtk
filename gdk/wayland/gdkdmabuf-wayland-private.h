@@ -41,7 +41,7 @@ typedef struct
 typedef struct
 {
   dev_t target_device;
-  guint32 flags;
+  uint32_t flags;
   gsize n_formats;
   DmabufFormat *formats;
 } DmabufTranche;
