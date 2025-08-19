@@ -62,6 +62,7 @@ gsk_component_transfer_new_identity (void)
 
 /**
  * gsk_component_transfer_new_levels:
+ * @n: Number of levels
  *
  * Creates a new component transfer that limits
  * the values of the component to `n` levels.
@@ -89,6 +90,8 @@ gsk_component_transfer_new_levels (float n)
 
 /**
  * gsk_component_transfer_new_linear:
+ * @m: Slope
+ * @b: Offset
  *
  * Creates a new component transfer that applies
  * a linear transform.
@@ -118,6 +121,9 @@ gsk_component_transfer_new_linear (float m,
 
 /**
  * gsk_component_transfer_new_gamma:
+ * @amp: Amplitude
+ * @exp: Exponent
+ * @ofs: Offset
  *
  * Creates a new component transfer that applies
  * a gamma transform.
@@ -149,6 +155,8 @@ gsk_component_transfer_new_gamma (float amp,
 
 /**
  * gsk_component_transfer_new_discrete:
+ * @n: Number of values
+ * @values: (array length=n): Values
  *
  * Creates a new component transfer that applies
  * a step function.
@@ -183,6 +191,8 @@ gsk_component_transfer_new_discrete (guint  n,
 
 /**
  * gsk_component_transfer_new_table:
+ * @n: Number of values
+ * @values: (array length=n): Values
  *
  * Creates a new component transfer that applies
  * a piecewise linear function.
@@ -260,8 +270,8 @@ gsk_component_transfer_free (GskComponentTransfer *self)
 
 /**
  * gsk_component_transfer_equal:
- * @self: a component transfer
- * @other: another component transfer
+ * @self: (not nullable): a component transfer
+ * @other: (not nullable): another component transfer
  *
  * Compares two component transfers for equality.
  *
