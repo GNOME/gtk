@@ -4315,6 +4315,22 @@ _gtk_window_titlebar_shows_app_menu (GtkWindow *window)
   return FALSE;
 }
 
+static void
+update_shadow_width (GtkWindow *window,
+                     GtkBorder *border)
+{
+  GdkWindow *gdk_window;
+
+  gdk_window = _gtk_widget_get_window (GTK_WIDGET (window));
+
+  if (gdk_window)
+    gdk_window_set_shadow_width (gdk_window,
+                                 border->left,
+                                 border->right,
+                                 border->top,
+                                 border->bottom);
+}
+
 /**
  * gtk_window_set_decorated:
  * @window: a #GtkWindow
@@ -4337,6 +4353,7 @@ void
 gtk_window_set_decorated (GtkWindow *window,
                           gboolean   setting)
 {
+  GtkBorder window_border = { 0 };
   GtkWindowPrivate *priv;
   GdkWindow *gdk_window;
 
@@ -4366,6 +4383,8 @@ gtk_window_set_decorated (GtkWindow *window,
     }
 
   update_window_buttons (window);
+  get_shadow_width (window, &window_border);
+  update_shadow_width (window, &window_border);
   gtk_widget_queue_resize (GTK_WIDGET (window));
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DECORATED]);
@@ -7263,22 +7282,6 @@ shape:
   region = cairo_region_create_rectangle (&rect);
   gtk_widget_set_csd_input_shape (widget, region);
   cairo_region_destroy (region);
-}
-
-static void
-update_shadow_width (GtkWindow *window,
-                     GtkBorder *border)
-{
-  GdkWindow *gdk_window;
-
-  gdk_window = _gtk_widget_get_window (GTK_WIDGET (window));
-
-  if (gdk_window)
-    gdk_window_set_shadow_width (gdk_window,
-                                 border->left,
-                                 border->right,
-                                 border->top,
-                                 border->bottom);
 }
 
 static void
