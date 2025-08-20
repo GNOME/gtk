@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-13 19:33+0000\n"
-"PO-Revision-Date: 2025-08-17 11:58+0330\n"
+"POT-Creation-Date: 2025-08-17 11:17+0000\n"
+"PO-Revision-Date: 2025-08-20 16:56+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
 "Language: fa\n"
@@ -628,7 +628,7 @@ msgstr "چسبیدن به گوشه"
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
-msgstr ""
+msgstr "سمتی از جعبه فرمان که با نقطه اتصال برای اتصال جعبه فرمان هم‌راستا است"
 
 #: gtk/deprecated/gtkhandlebox.c:250
 msgid "Snap edge set"
@@ -1275,7 +1275,7 @@ msgstr "مقدار هدف کنش"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
-msgstr ""
+msgstr "پارامتر فراخوانی کنش‌ها"
 
 #: gtk/gtkactionbar.c:338 gtk/gtkbox.c:358 gtk/gtkheaderbar.c:2013
 msgid "Pack type"
@@ -1286,6 +1286,8 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
+"یک GtkPackType که نشان می‌دهد آیا فرزند با اشاره به شروع یا پایان والد، فشرده "
+"شده است یا خیر"
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:365 gtk/gtkheaderbar.c:2020
 #: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1768
@@ -1642,6 +1644,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, "
 "e.g., help buttons"
 msgstr ""
+"اگر درست باشد، فرزند در یک گروه ثانویه از فرزندان ظاهر می‌شود، که برای مثال "
+"برای دکمه‌های راهنما مناسب است"
 
 #: gtk/gtkbbox.c:292
 msgid "Non-Homogeneous"
@@ -1649,7 +1653,7 @@ msgstr "ناهمگن"
 
 #: gtk/gtkbbox.c:293
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
-msgstr ""
+msgstr "اگر درست باشد، فرزند مشمول اندازه‌های همگن نخواهد شد"
 
 #: gtk/gtkbox.c:278 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:342
 #: gtk/gtkheaderbar.c:2048 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
@@ -1692,10 +1696,12 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
+"اینکه آیا فضای اضافی داده شده به فرزند باید به خودش اختصاص داده شود یا به "
+"عنوان فضای اضافی استفاده شود"
 
 #: gtk/gtkbox.c:351
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
+msgstr "فضای اضافی برای قرار دادن بین فرزند و همسایگانش، بر حسب تصدانه"
 
 #: gtk/gtkbuilder.c:292
 msgid "Translation Domain"
@@ -1703,13 +1709,13 @@ msgstr "دامنهٔ ترجمه"
 
 #: gtk/gtkbuilder.c:293
 msgid "The translation domain used by gettext"
-msgstr ""
+msgstr "دامنهٔ ترجمهٔ استفاده شده به دست gettext"
 
 #: gtk/gtkbutton.c:282
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
+msgstr "متن ابزارک برچسب درون دکمه، اگر دکمه ابزارک برچسب داشته باشد"
 
 #: gtk/gtkbutton.c:288 gtk/gtkexpander.c:317 gtk/gtklabel.c:827
 #: gtk/gtkmenuitem.c:805 gtk/gtktoolbutton.c:250
@@ -1722,19 +1728,21 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"در صورت تنظیم، یک زیرخط در متن نشان می‌دهد که نویسهٔ بعدی باید برای کلید "
+"شتاب‌دهندهٔ یادآور استفاده شود"
 
 #: gtk/gtkbutton.c:301
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
-msgstr ""
+msgstr "در صورت تنظیم، برچسب به جای نمایش، برای گزینش موردی اصلی استفاده می‌شود"
 
 #: gtk/gtkbutton.c:307
 msgid "Border relief"
-msgstr ""
+msgstr "راحتی مرز"
 
 #: gtk/gtkbutton.c:308
 msgid "The border relief style"
-msgstr ""
+msgstr "سبک راحتی مرز"
 
 #: gtk/gtkbutton.c:327
 msgid "Horizontal alignment for child"
@@ -1783,7 +1791,7 @@ msgstr "جابجایی افقی فرزند"
 #: gtk/gtkbutton.c:557
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
-msgstr ""
+msgstr "فرزند هنگام فشردن دکمه چه‌قدر در جهت x حرکت می‌کند"
 
 #: gtk/gtkbutton.c:573
 msgid "Child Y Displacement"
@@ -1792,7 +1800,7 @@ msgstr "جابجایی عمودی فرزند"
 #: gtk/gtkbutton.c:574
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
-msgstr ""
+msgstr "فرزند هنگام فشردن دکمه چه‌قدر در جهت y حرکت می‌کند"
 
 #: gtk/gtkbutton.c:593
 msgid "Displace focus"
@@ -1803,6 +1811,8 @@ msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
+"این که آیا ویژگی‌های child_displacement_x/_y باید روی مستطیل focus نیز تأثیر "
+"بگذارند یا نه"
 
 #: gtk/gtkbutton.c:610 gtk/gtkentry.c:900 gtk/gtkentry.c:2129
 msgid "Inner Border"
@@ -1962,6 +1972,8 @@ msgid ""
 "A GtkPackType indicating whether the cell is packed with reference to the "
 "start or end of the cell area"
 msgstr ""
+"یک GtkPackType که نشان می‌دهد آیا خانه با اشاره به شروع یا پایان ناخیهٔ خانه "
+"پر شده است یا نه"
 
 #: gtk/gtkcellarea.c:790
 msgid "Focus Cell"
@@ -1993,7 +2005,7 @@ msgstr "ناحیه"
 
 #: gtk/gtkcellareacontext.c:116
 msgid "The Cell Area this context was created for"
-msgstr ""
+msgstr "ناحیهٔ خانه‌ای که این زمینه برایش ایجاد شده"
 
 #: gtk/gtkcellareacontext.c:132 gtk/gtkcellareacontext.c:151
 #: gtk/gtktreeviewcolumn.c:300
@@ -2018,7 +2030,7 @@ msgstr "ویرایش لغو شد"
 
 #: gtk/gtkcelleditable.c:52
 msgid "Indicates that editing has been canceled"
-msgstr ""
+msgstr "نشان می‌دهد که ویرایش لغو شده"
 
 #: gtk/gtkcellrendereraccel.c:141
 msgid "Accelerator key"
@@ -2034,7 +2046,7 @@ msgstr "تغییردهنده‌های شتاب‌ده"
 
 #: gtk/gtkcellrendereraccel.c:159
 msgid "The modifier mask of the accelerator"
-msgstr ""
+msgstr "نقاب تغییردهندهٔ شتاب‌دهنده"
 
 #: gtk/gtkcellrendereraccel.c:176
 msgid "Accelerator keycode"
@@ -2042,7 +2054,7 @@ msgstr "رمزکلید شتاب‌ده"
 
 #: gtk/gtkcellrendereraccel.c:177
 msgid "The hardware keycode of the accelerator"
-msgstr ""
+msgstr "کد کلید سخت‌افزاری شتاب‌دهنده"
 
 #: gtk/gtkcellrendereraccel.c:196
 msgid "Accelerator Mode"
@@ -2058,7 +2070,7 @@ msgstr "حالت"
 
 #: gtk/gtkcellrenderer.c:293
 msgid "Editable mode of the CellRenderer"
-msgstr ""
+msgstr "حالت ویرایش‌پذیر پرداختگر خانه"
 
 #: gtk/gtkcellrenderer.c:301
 msgid "visible"
@@ -2074,7 +2086,7 @@ msgstr "حسّاس نشان دادن خانه"
 
 #: gtk/gtkcellrenderer.c:316
 msgid "xalign"
-msgstr ""
+msgstr "xalign"
 
 #: gtk/gtkcellrenderer.c:317
 msgid "The x-align"
@@ -2082,7 +2094,7 @@ msgstr "قرار گیری X"
 
 #: gtk/gtkcellrenderer.c:326
 msgid "yalign"
-msgstr ""
+msgstr "yalign"
 
 #: gtk/gtkcellrenderer.c:327
 msgid "The y-align"
@@ -2090,19 +2102,19 @@ msgstr "قرار گیری Y"
 
 #: gtk/gtkcellrenderer.c:336
 msgid "xpad"
-msgstr ""
+msgstr "xpad"
 
 #: gtk/gtkcellrenderer.c:337
 msgid "The xpad"
-msgstr ""
+msgstr "Xpad"
 
 #: gtk/gtkcellrenderer.c:346
 msgid "ypad"
-msgstr ""
+msgstr "ypad"
 
 #: gtk/gtkcellrenderer.c:347
 msgid "The ypad"
-msgstr ""
+msgstr "Ypad"
 
 #: gtk/gtkcellrenderer.c:356
 msgid "width"
@@ -2134,7 +2146,7 @@ msgstr "بسط‌یافته است"
 
 #: gtk/gtkcellrenderer.c:386
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "ردیف گسترنده بوده و گسترده شده"
 
 #: gtk/gtkcellrenderer.c:393
 msgid "Cell background color name"
@@ -2142,7 +2154,7 @@ msgstr "نام رنگ پس‌زمینهٔ خانه"
 
 #: gtk/gtkcellrenderer.c:394
 msgid "Cell background color as a string"
-msgstr ""
+msgstr "رنگ پس‌زمینهٔ خانه به صورت رشته"
 
 #: gtk/gtkcellrenderer.c:409
 msgid "Cell background color"
@@ -2170,7 +2182,7 @@ msgstr "این که پرداختگر خانه در حال حاضر در حالت
 
 #: gtk/gtkcellrenderer.c:441
 msgid "Cell background set"
-msgstr ""
+msgstr "پس‌زمینهٔ خانه تنظیم شد"
 
 #: gtk/gtkcellrenderer.c:442
 msgid "Whether the cell background color is set"
@@ -2182,7 +2194,7 @@ msgstr "مدل"
 
 #: gtk/gtkcellrenderercombo.c:129
 msgid "The model containing the possible values for the combo box"
-msgstr ""
+msgstr "مدل مقدارهای لازم برای جعبهٔ چندتایی را دارد"
 
 #: gtk/gtkcellrenderercombo.c:151
 msgid "Text Column"
@@ -2190,7 +2202,7 @@ msgstr "ستون متن"
 
 #: gtk/gtkcellrenderercombo.c:152
 msgid "A column in the data source model to get the strings from"
-msgstr ""
+msgstr "ستونی در مدل منبع داده برای دریافت رشته‌ها"
 
 #: gtk/gtkcellrenderercombo.c:169 gtk/gtkcombobox.c:1095
 msgid "Has Entry"
@@ -2198,31 +2210,31 @@ msgstr "ورودی دارد"
 
 #: gtk/gtkcellrenderercombo.c:170
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "اگر نادرست باشد نمی‌گذارد رشته‌ای جز رشته‌های گزیده وارد شود"
 
 #: gtk/gtkcellrendererpixbuf.c:152
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "شی pixvuf"
 
 #: gtk/gtkcellrendererpixbuf.c:153
 msgid "The pixbuf to render"
-msgstr ""
+msgstr "‏pixbuf برای پرداخت"
 
 #: gtk/gtkcellrendererpixbuf.c:160
 msgid "Pixbuf Expander Open"
-msgstr ""
+msgstr "گسترندهٔ pixbuf باز شد"
 
 #: gtk/gtkcellrendererpixbuf.c:161
 msgid "Pixbuf for open expander"
-msgstr ""
+msgstr "‏pixbuf برای گشودن گسترنده"
 
 #: gtk/gtkcellrendererpixbuf.c:168
 msgid "Pixbuf Expander Closed"
-msgstr ""
+msgstr "گسترندهٔ pixbuf بسته شد"
 
 #: gtk/gtkcellrendererpixbuf.c:169
 msgid "Pixbuf for closed expander"
-msgstr ""
+msgstr "‏pixbuf برای بستن گسترنده"
 
 #: gtk/gtkcellrendererpixbuf.c:180
 msgid "surface"
@@ -2234,7 +2246,7 @@ msgstr "سطح مورد پرداخت"
 
 #: gtk/gtkcellrendererpixbuf.c:196
 msgid "The stock ID of the stock icon to render"
-msgstr ""
+msgstr "شناسهٔ نقشک اصلی برای پرداخت"
 
 #: gtk/gtkcellrendererpixbuf.c:211
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
@@ -2246,15 +2258,15 @@ msgstr "جزییات"
 
 #: gtk/gtkcellrendererpixbuf.c:228
 msgid "Render detail to pass to the theme engine"
-msgstr ""
+msgstr "جزییات پرداخت برای دادن به موتور زمینه"
 
 #: gtk/gtkcellrendererpixbuf.c:263
 msgid "Follow State"
-msgstr ""
+msgstr "پیروی از وضعیت"
 
 #: gtk/gtkcellrendererpixbuf.c:264
 msgid "Whether the rendered pixbuf should be colorized according to the state"
-msgstr ""
+msgstr "این که pixbuf پرداخت شده باید با توجّه به وضهیت رنگ شود یا نه"
 
 #: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:359 gtk/gtkmodelbutton.c:1168
 #: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:844
@@ -2283,21 +2295,22 @@ msgstr "تپش"
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
-msgstr ""
+msgstr "تنظیم به مقدارهای مثبت برای نشان دادن وجود پیشرفت به مقدار نامشخّص."
 
 #: gtk/gtkcellrendererprogress.c:197
 msgid "Text x alignment"
-msgstr ""
+msgstr "قرار گیری افقی"
 
 #: gtk/gtkcellrendererprogress.c:198
 msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
+"قرارگیری افقی متن. از 0 (چپ) تا 1 (راست). معکوس برای چینش‌های راست به چپ."
 
 #: gtk/gtkcellrendererprogress.c:214
 msgid "Text y alignment"
-msgstr ""
+msgstr "قرار گیری عمودی"
 
 #: gtk/gtkcellrendererprogress.c:215
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
@@ -2319,15 +2332,15 @@ msgstr "تنظیم"
 
 #: gtk/gtkcellrendererspin.c:114 gtk/gtkspinbutton.c:380
 msgid "The adjustment that holds the value of the spin button"
-msgstr ""
+msgstr "تنظیمی که مقدار دکمهٔ مقداری را نگه می‌دارد"
 
 #: gtk/gtkcellrendererspin.c:129
 msgid "Climb rate"
-msgstr ""
+msgstr "نرخ صعود"
 
 #: gtk/gtkcellrendererspin.c:130
 msgid "The acceleration rate when you hold down a button"
-msgstr ""
+msgstr "نرخ شتاب هنگام نگه داشتن دکمه"
 
 #: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:767 gtk/gtkspinbutton.c:395
 msgid "Digits"
@@ -2335,11 +2348,11 @@ msgstr "ارقام"
 
 #: gtk/gtkcellrendererspin.c:144 gtk/gtkspinbutton.c:396
 msgid "The number of decimal places to display"
-msgstr ""
+msgstr "تعداد ارقام اعشاری برای نمایش"
 
 #: gtk/gtkcellrendererspinner.c:126
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr ""
+msgstr "این که چرخنده در خانه فعّال (نمایان) است یا نه"
 
 #: gtk/gtkcellrendererspinner.c:145
 msgid "Pulse of the spinner"
@@ -2367,7 +2380,7 @@ msgstr "مشخصه‌ها"
 
 #: gtk/gtkcellrenderertext.c:270
 msgid "A list of style attributes to apply to the text of the renderer"
-msgstr ""
+msgstr "سیاهه‌ای از ویژگی‌های سبک برای اعمال به متن پرداختگر"
 
 #: gtk/gtkcellrenderertext.c:276
 msgid "Single Paragraph Mode"
@@ -2375,7 +2388,7 @@ msgstr "حالت تک‌بند"
 
 #: gtk/gtkcellrenderertext.c:277
 msgid "Whether to keep all text in a single paragraph"
-msgstr ""
+msgstr "این که همهٔ متن در یک بند نگه داشته شوند یا نه"
 
 #: gtk/gtkcellrenderertext.c:283 gtk/gtkcellview.c:217 gtk/gtktexttag.c:216
 msgid "Background color name"
@@ -2429,7 +2442,7 @@ msgstr "ویرایش‌پذیر"
 
 #: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:310 gtk/gtktextview.c:827
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "این که کاربر می‌تواند متن را دستکاری کند یا نه"
 
 #: gtk/gtkcellrenderertext.c:364 gtk/gtkcellrenderertext.c:371
 #: gtk/gtkfontchooser.c:64 gtk/gtktexttag.c:325 gtk/gtktexttag.c:333
@@ -2438,7 +2451,7 @@ msgstr "قلم"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtkfontchooser.c:65 gtk/gtktexttag.c:326
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
+msgstr "شرح قلم به صورت رشته. برای نمونه Sans Italic 12"
 
 #: gtk/gtkcellrenderertext.c:372 gtk/gtkfontchooser.c:78 gtk/gtktexttag.c:334
 msgid "Font description as a PangoFontDescription struct"
@@ -2500,7 +2513,7 @@ msgstr "بالا بردن"
 #: gtk/gtkcellrenderertext.c:442
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr ""
+msgstr "عرض از مبدأ متن بالای خط زیمنه (در صورت منفی بود زیر خط زمینه)"
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:516
 msgid "Strikethrough"
@@ -2541,6 +2554,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
+"مکان ترجیحی برای سه نقطه گذاشتن در رشته در صورت نداشتن فضای کافی برای نمایش "
+"کل رشته"
 
 #: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:457
 #: gtk/gtklabel.c:984
@@ -2549,7 +2564,7 @@ msgstr "پهنا به نویسه"
 
 #: gtk/gtkcellrenderertext.c:504 gtk/gtklabel.c:985
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "پهنای مطلوب برچسب بر حسب نویسه"
 
 #: gtk/gtkcellrenderertext.c:525 gtk/gtklabel.c:1040
 msgid "Maximum Width In Characters"
@@ -2568,6 +2583,7 @@ msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
+"چگونگی شکستن رشته به چند خط در صورت نداشتن فضای کافی برای نمایش کل رشته"
 
 #: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:923
 msgid "Wrap width"
@@ -2575,7 +2591,7 @@ msgstr "پهنای پیچش"
 
 #: gtk/gtkcellrenderertext.c:562
 msgid "The width at which the text is wrapped"
-msgstr ""
+msgstr "پهنایی که در آن متن می‌شکند"
 
 #: gtk/gtkcellrenderertext.c:580 gtk/gtktreeviewcolumn.c:344
 msgid "Alignment"
@@ -2583,7 +2599,7 @@ msgstr "ردیف کردن"
 
 #: gtk/gtkcellrenderertext.c:581
 msgid "How to align the lines"
-msgstr ""
+msgstr "چکوگی تراز کردن خط‌ها"
 
 #: gtk/gtkcellrenderertext.c:596 gtk/gtkentry.c:1110
 msgid "Placeholder text"
@@ -2591,7 +2607,7 @@ msgstr "متن جانگه‌دار"
 
 #: gtk/gtkcellrenderertext.c:597
 msgid "Text rendered when an editable cell is empty"
-msgstr ""
+msgstr "متن هنگام خالی بودن خانهٔ ویرایش‌پذیر پرداخت شد"
 
 #: gtk/gtkcellrenderertext.c:606 gtk/gtkcellview.c:353 gtk/gtktexttag.c:722
 msgid "Background set"
@@ -2612,103 +2628,103 @@ msgstr "این که آیا این برچسب بر رنگ پس‌زمینه تأ�
 # hich-yek, hich-kodaam, be-hich-vajh, aslan
 #: gtk/gtkcellrenderertext.c:614 gtk/gtktexttag.c:734
 msgid "Editability set"
-msgstr ""
+msgstr "ویرایش‌پذیری تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:615 gtk/gtktexttag.c:735
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "این که این برچسب روی ویرایش‌پذیری متن اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:618 gtk/gtktexttag.c:738
 msgid "Font family set"
-msgstr ""
+msgstr "خانوادهٔ قلم تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:619 gtk/gtktexttag.c:739
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "این که این برچسب روی خانوادهٔ قلم اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:622 gtk/gtktexttag.c:742
 msgid "Font style set"
-msgstr ""
+msgstr "سبک قلم تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:623 gtk/gtktexttag.c:743
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "این که این برچسب روی سبک قلم اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:626 gtk/gtktexttag.c:746
 msgid "Font variant set"
-msgstr ""
+msgstr "دگرگونهٔ قلم تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:627 gtk/gtktexttag.c:747
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "این که این برچسب روی دگرگونهٔ قلم اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:630 gtk/gtktexttag.c:750
 msgid "Font weight set"
-msgstr ""
+msgstr "وزن قلم تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:631 gtk/gtktexttag.c:751
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "این که این برچسب روی وزن قلم اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:634 gtk/gtktexttag.c:754
 msgid "Font stretch set"
-msgstr ""
+msgstr "کشیدگی قلم تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:635 gtk/gtktexttag.c:755
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "این که این برچسب روی کشیدگی قلم اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:638 gtk/gtktexttag.c:758
 msgid "Font size set"
-msgstr ""
+msgstr "اندازهٔ قلم تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:639 gtk/gtktexttag.c:759
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "این که این برچسب روی اندازهٔ قلم اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:642 gtk/gtktexttag.c:762
 msgid "Font scale set"
-msgstr ""
+msgstr "مقیاس قلم تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:643 gtk/gtktexttag.c:763
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "این که این برچسب روی مقیاس قلم اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:646 gtk/gtktexttag.c:782
 msgid "Rise set"
-msgstr ""
+msgstr "بالا بردن تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:647 gtk/gtktexttag.c:783
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "این که این برچسب روی بالا بردن اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:650 gtk/gtktexttag.c:798
 msgid "Strikethrough set"
-msgstr ""
+msgstr "خط‌خوردگی تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:651 gtk/gtktexttag.c:799
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "این که این برچسب روی خط‌خوردگی اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:654 gtk/gtktexttag.c:806
 msgid "Underline set"
-msgstr ""
+msgstr "زیرخط تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:655 gtk/gtktexttag.c:807
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "این که این برچسب روی زیرخط اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:658 gtk/gtktexttag.c:770
 msgid "Language set"
-msgstr ""
+msgstr "زبان تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:659 gtk/gtktexttag.c:771
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr ""
+msgstr "این که این برچسب روی زبان پرداخت متن اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:662
 msgid "Ellipsize set"
-msgstr ""
+msgstr "کوتاه کردن تنظیم شد"
 
 #: gtk/gtkcellrenderertext.c:663
 msgid "Whether this tag affects the ellipsize mode"
@@ -2728,7 +2744,7 @@ msgstr "تغییر وضعیت حالت"
 
 #: gtk/gtkcellrenderertoggle.c:139
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "وضعیت تغییر خالت دکمه"
 
 #: gtk/gtkcellrenderertoggle.c:146
 msgid "Inconsistent state"
@@ -2736,7 +2752,7 @@ msgstr "وضعیت متناقض"
 
 #: gtk/gtkcellrenderertoggle.c:147
 msgid "The inconsistent state of the button"
-msgstr ""
+msgstr "وضعیت تناقض دکمه"
 
 # hich-yek, hich-kodaam, be-hich-vajh, aslan
 #: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3920
@@ -2745,15 +2761,15 @@ msgstr "به‌کار‌انداختنی"
 
 #: gtk/gtkcellrenderertoggle.c:155
 msgid "The toggle button can be activated"
-msgstr ""
+msgstr "دکمهٔ تغییر وضعیت می‌تواند فعّال شود"
 
 #: gtk/gtkcellrenderertoggle.c:162
 msgid "Radio state"
-msgstr ""
+msgstr "وضعیت رادیویی"
 
 #: gtk/gtkcellrenderertoggle.c:163
 msgid "Draw the toggle button as a radio button"
-msgstr ""
+msgstr "رسم دکمهٔ تغییر وضعیت به شکل رادیویی"
 
 #: gtk/gtkcellrenderertoggle.c:170
 msgid "Indicator size"
@@ -2762,7 +2778,7 @@ msgstr "اندازهٔ نشانگر"
 #: gtk/gtkcellrenderertoggle.c:171 gtk/gtkcheckbutton.c:233
 #: gtk/gtkcheckmenuitem.c:241
 msgid "Size of check or radio indicator"
-msgstr ""
+msgstr "اندازهٔ نشانگر رادیویی یا تیک"
 
 #: gtk/gtkcellview.c:248
 msgid "Background RGBA color"
@@ -2784,15 +2800,15 @@ msgstr "ناحیهٔ خانه"
 #: gtk/gtkcellview.c:283 gtk/gtkcombobox.c:1183 gtk/gtkentrycompletion.c:468
 #: gtk/gtkiconview.c:650 gtk/gtktreemenu.c:308 gtk/gtktreeviewcolumn.c:400
 msgid "The GtkCellArea used to layout cells"
-msgstr ""
+msgstr "‏GtkCellArea استفاده شده برای چینش خانه‌ها"
 
 #: gtk/gtkcellview.c:306
 msgid "Cell Area Context"
-msgstr ""
+msgstr "بافتار ناحیهٔ خانه"
 
 #: gtk/gtkcellview.c:307
 msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
-msgstr ""
+msgstr "‏GtkCellAreaContext استفاده شده برای محاسبهٔ هندسهٔ نمای خانه"
 
 #: gtk/gtkcellview.c:324
 msgid "Draw Sensitive"
@@ -2808,7 +2824,7 @@ msgstr "مدل برازش"
 
 #: gtk/gtkcellview.c:344
 msgid "Whether to request enough space for every row in the model"
-msgstr ""
+msgstr "این که فضای کافی برای هر ردیفی در کدل درخواست شود یا نه"
 
 #: gtk/gtkcheckbutton.c:232 gtk/gtkcheckmenuitem.c:240
 msgid "Indicator Size"
@@ -2820,11 +2836,11 @@ msgstr "فاصله‌گذاری نشانه"
 
 #: gtk/gtkcheckbutton.c:250
 msgid "Spacing around check or radio indicator"
-msgstr ""
+msgstr "فاصله گذاری بین نشانگر رادیویی یا تیک"
 
 #: gtk/gtkcheckmenuitem.c:210
 msgid "Whether the menu item is checked"
-msgstr ""
+msgstr "این که مورد فهرست تیک خورده یا نه"
 
 #: gtk/gtkcheckmenuitem.c:217 gtk/gtktogglebutton.c:195
 msgid "Inconsistent"
@@ -2832,15 +2848,15 @@ msgstr "ناهماهنگ"
 
 #: gtk/gtkcheckmenuitem.c:218
 msgid "Whether to display an \"inconsistent\" state"
-msgstr ""
+msgstr "این که وضعیت «متناقض» نشان داده شود یا نه"
 
 #: gtk/gtkcheckmenuitem.c:225
 msgid "Draw as radio menu item"
-msgstr ""
+msgstr "رسم به شکل مورد فهرست رادیویی"
 
 #: gtk/gtkcheckmenuitem.c:226
 msgid "Whether the menu item looks like a radio menu item"
-msgstr ""
+msgstr "این که مورد فهرست شبیه مورد فهرست رادیویی باشد یا نه"
 
 #: gtk/gtkcolorbutton.c:168 gtk/gtkcolorchooser.c:87
 msgid "Use alpha"
@@ -2848,7 +2864,7 @@ msgstr "استفاده از آلفا"
 
 #: gtk/gtkcolorbutton.c:169
 msgid "Whether to give the color an alpha value"
-msgstr ""
+msgstr "این که به رنگ مقدار آلفایی داده شود یا نه"
 
 #: gtk/gtkcolorbutton.c:184
 msgid "The title of the color selection dialog"
@@ -2860,7 +2876,7 @@ msgstr "رنگ انتخاب‌شده"
 
 #: gtk/gtkcolorbutton.c:218
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
+msgstr "مقدار کدری گزیده (0 شفّاف کامل، 65535 کدر کامل)"
 
 #: gtk/gtkcolorbutton.c:232
 msgid "Current RGBA Color"
@@ -2876,7 +2892,7 @@ msgstr "نمایش ویرایشگر"
 
 #: gtk/gtkcolorbutton.c:275
 msgid "Whether to show the color editor right away"
-msgstr ""
+msgstr "این که ویرایشگر رنگ درجا نشان داده شود یا نه"
 
 #: gtk/gtkcolorchooser.c:67
 msgid "Color"
@@ -2924,31 +2940,31 @@ msgstr "این که نمونه باید شخصی‌سازی ارائه دهد ی
 
 #: gtk/gtkcombobox.c:907
 msgid "ComboBox model"
-msgstr ""
+msgstr "مدل ComboBox"
 
 #: gtk/gtkcombobox.c:908
 msgid "The model for the combo box"
-msgstr ""
+msgstr "مدل برای جعبهٔ ترکیبی"
 
 #: gtk/gtkcombobox.c:924
 msgid "Wrap width for laying out the items in a grid"
-msgstr ""
+msgstr "پهنای شکستن برای چینش موراد در شبکه"
 
 #: gtk/gtkcombobox.c:944 gtk/gtktreemenu.c:358
 msgid "Row span column"
-msgstr ""
+msgstr "طول ردیف ستون"
 
 #: gtk/gtkcombobox.c:945 gtk/gtktreemenu.c:359
 msgid "TreeModel column containing the row span values"
-msgstr ""
+msgstr "ستون TreeModel دارای مقدارهای طول ردیف"
 
 #: gtk/gtkcombobox.c:966 gtk/gtktreemenu.c:379
 msgid "Column span column"
-msgstr ""
+msgstr "دهانهٔ ستون"
 
 #: gtk/gtkcombobox.c:967 gtk/gtktreemenu.c:380
 msgid "TreeModel column containing the column span values"
-msgstr ""
+msgstr "ستون TreeModel دارای مقدارهای دهانهٔ ستون"
 
 #: gtk/gtkcombobox.c:988
 msgid "Active item"
@@ -2960,7 +2976,7 @@ msgstr "موردی که هم‌اکنون فعال است"
 
 #: gtk/gtkcombobox.c:1011
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr ""
+msgstr "این که پایین‌افتادنی‌ها باید مورد فهرستی جداکننده داشته باشند یا نه"
 
 #: gtk/gtkcombobox.c:1026 gtk/gtkentry.c:884
 msgid "Has Frame"
@@ -2968,25 +2984,26 @@ msgstr "قاب دارد"
 
 #: gtk/gtkcombobox.c:1027
 msgid "Whether the combo box draws a frame around the child"
-msgstr ""
+msgstr "این که جعبهٔ ترکیبی قابی دور فرزند رسم کند یا نه"
 
 #: gtk/gtkcombobox.c:1044 gtk/gtkmenu.c:703
 msgid "Tearoff Title"
-msgstr ""
+msgstr "عنوان جداکننده"
 
 #: gtk/gtkcombobox.c:1045
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
+"عنوانی که ممکن است هنگام اجرای بالاپریدنی به دست مدیر پنجره نمایش داده شود"
 
 #: gtk/gtkcombobox.c:1062
 msgid "Popup shown"
-msgstr ""
+msgstr "بالاپریدنی نمایان"
 
 #: gtk/gtkcombobox.c:1063
 msgid "Whether the combo's dropdown is shown"
-msgstr ""
+msgstr "این که پایین افتادنی چندتایی نمایان است یا نه"
 
 #: gtk/gtkcombobox.c:1079
 msgid "Button Sensitivity"
