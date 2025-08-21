@@ -37,9 +37,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-05-25 17:45+0000\n"
-"PO-Revision-Date: 2025-05-25 19:53+0200\n"
-"Last-Translator: Philipp Kiemle <l10n@prly.mozmail.com>\n"
+"POT-Creation-Date: 2025-08-16 11:43+0000\n"
+"PO-Revision-Date: 2025-08-16 21:22+0200\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -4159,21 +4159,21 @@ msgid "CSS Property"
 msgstr "CSS-Eigenschaft"
 
 # https://docs.gtk.org/gtk4/class.IMContext.html
-#: gtk/inspector/general.c:469
+#: gtk/inspector/general.c:470
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Der IM-Context ist fest einprogrammiert durch GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:644
+#: gtk/inspector/general.c:645
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Keiner"
 
-#: gtk/inspector/general.c:741
+#: gtk/inspector/general.c:742
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
+#: gtk/inspector/general.c:996 gtk/inspector/general.c:1035
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Keine"
@@ -6706,10 +6706,8 @@ msgid "Font Name"
 msgstr "Schriftname"
 
 #: gtk/ui/gtkfontchooserwidget.ui:379
-#, fuzzy
-#| msgid "Style Variations"
 msgid "Font Variation Axes"
-msgstr "Stilvariationen"
+msgstr "Achsen der Schriftvariationen"
 
 #: gtk/ui/gtkfontchooserwidget.ui:427
 msgid "Font Features"
@@ -6850,6 +6848,18 @@ msgstr "_Zusammentragen"
 msgid "_Reverse"
 msgstr "_Rückwärts"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:364
+msgid "Page ordering preview"
+msgstr "Vorschau der Seitenreihenfolge"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:365
+msgid ""
+"A visualization of the effect of the collate and reverse options on the page "
+"ordering"
+msgstr ""
+"Eine optische Darstellung der Unterschiede zwischen den Optionen "
+"Zusammentragen und Rückwärts bei der Seitenreihenfolge"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
 msgstr "Allgemein"
@@ -6886,6 +6896,10 @@ msgstr "Ungerade Seiten"
 msgid "Sc_ale:"
 msgstr "S_kalierung:"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:587
+msgid "Scale in percent"
+msgstr "Skalierung in Prozent"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
 msgstr "Papier"
@@ -6905,6 +6919,10 @@ msgstr "Ausgabes_chacht:"
 #: gtk/print/ui/gtkprintunixdialog.ui:727
 msgid "Or_ientation:"
 msgstr "_Ausrichtung:"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:770
+msgid "Page layout preview"
+msgstr "Vorschau der Seitenanordnung"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
