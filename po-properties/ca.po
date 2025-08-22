@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-07 15:21+0000\n"
-"PO-Revision-Date: 2025-02-23 13:31+0200\n"
+"PO-Revision-Date: 2025-08-22 13:31+0200\n"
 "Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -5295,7 +5295,7 @@ msgstr "Àrea del missatge"
 
 #: gtk/gtkmessagedialog.c:295
 msgid "GtkBox that holds the dialog's primary and secondary labels"
-msgstr "La GtkVBox que conté les etiquetes primària i secundària del diàleg"
+msgstr "La GtkBox que conté les etiquetes primària i secundària del diàleg"
 
 #: gtk/gtkmodelbutton.c:1150
 msgid "Role"
@@ -6991,7 +6991,7 @@ msgstr "Llindar de l'arrossegament"
 
 #: gtk/gtksettings.c:531
 msgid "Number of pixels the cursor can move before dragging"
-msgstr "Nombre de píxels que el cursor pot moure's abans d'avançar"
+msgstr "Nombre de píxels que el cursor pot moure's abans d'arrossegar"
 
 #: gtk/gtksettings.c:544
 msgid "Font Name"
@@ -7125,7 +7125,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:688
 msgid "Show the 'Input Methods' menu"
-msgstr "Mosta el menú de «Mètodes d'entrada»"
+msgstr "Mostra el menú de «Mètodes d'entrada»"
 
 #: gtk/gtksettings.c:689
 msgid ""
@@ -8355,7 +8355,7 @@ msgstr "Marge dret fixat"
 
 #: gtk/gtktexttag.c:803
 msgid "Whether this tag affects the right margin"
-msgstr "Quan aquesta etiqueta afecta el marge dret"
+msgstr "Si aquesta etiqueta afecta el marge dret"
 
 #: gtk/gtktexttag.c:817
 msgid "Underline RGBA set"
@@ -8379,7 +8379,7 @@ msgstr "Conjunt mode ajust"
 
 #: gtk/gtktexttag.c:833
 msgid "Whether this tag affects line wrap mode"
-msgstr "Quan aquesta etiqueta afecta el mode d'ajustat de línia"
+msgstr "Si aquesta etiqueta afecta el mode d'ajustat de línia"
 
 #: gtk/gtktexttag.c:836
 msgid "Tabs set"
@@ -8927,7 +8927,7 @@ msgstr "Si s'han de mostrar les línies de graella en la visualització d'arbre"
 
 #: gtk/gtktreeview.c:1197
 msgid "Enable Tree Lines"
-msgstr "Habilita les línies dels arbres"
+msgstr "Habilita les línies de l'arbre"
 
 #: gtk/gtktreeview.c:1198
 msgid "Whether tree lines should be drawn in the tree view"
@@ -9101,7 +9101,7 @@ msgstr "Alineació X del text de la capçalera de columna o giny"
 
 #: gtk/gtktreeviewcolumn.c:352
 msgid "Whether the column can be reordered around the headers"
-msgstr "Si la columna pot ser reordenada al voltant la capçalera"
+msgstr "Si la columna pot ser reordenada al voltant de la capçalera"
 
 #: gtk/gtktreeviewcolumn.c:358
 msgid "Sort indicator"
@@ -9255,7 +9255,7 @@ msgstr "Fill compost"
 
 #: gtk/gtkwidget.c:1231
 msgid "Whether the widget is part of a composite widget"
-msgstr "Si el giny és part d'un giny compost o no"
+msgstr "Si el giny és part d'un giny compost"
 
 #: gtk/gtkwidget.c:1246
 msgid "Style"
@@ -9274,7 +9274,7 @@ msgstr "Esdeveniments"
 #: gtk/gtkwidget.c:1256
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
-"La màscara d'incidències que decideix quin tipus de GdkEvents obté aquest "
+"La màscara d'esdeveniments que decideix quin tipus de GdkEvents obté aquest "
 "giny"
 
 # NOTA: segons la següent cadena, indica si la funció show_all afecta aquest
@@ -9737,7 +9737,7 @@ msgstr "Urgent"
 
 #: gtk/gtkwindow.c:941
 msgid "TRUE if the window should be brought to the user's attention."
-msgstr "«TRUE» (cert) si la finestra no  ha de captar l'atenció de l'usuari."
+msgstr "«TRUE» (cert) si la finestra ha de captar l'atenció de l'usuari."
 
 #: gtk/gtkwindow.c:954
 msgid "Accept focus"

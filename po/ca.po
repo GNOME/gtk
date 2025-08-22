@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-26 06:40+0000\n"
-"PO-Revision-Date: 2023-06-22 20:44+0200\n"
+"PO-Revision-Date: 2025-08-22 20:44+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -6330,7 +6330,7 @@ msgstr "Foto petita"
 #: gtk/paper_names_offsets.c:171
 msgctxt "paper size"
 msgid "Wide Photo"
-msgstr "Format ample"
+msgstr "Foto ampla"
 
 #: gtk/paper_names_offsets.c:172
 msgctxt "paper size"
