@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-05-30 06:24+0000\n"
-"PO-Revision-Date: 2025-08-12 19:56+0200\n"
+"PO-Revision-Date: 2025-08-22 19:56+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -1058,7 +1058,7 @@ msgstr "Dades mal formades: URL"
 #: gtk/css/gtkcssdataurl.c:140
 #, c-format
 msgid "Could not unescape string"
-msgstr "No s'ha pogut escapar la cadena"
+msgstr "No s'ha pogut eliminar l'escapament de la cadena"
 
 #: gtk/deprecated/gtkappchooserbutton.c:326
 msgid "Other app…"
@@ -4265,7 +4265,7 @@ msgstr "Versió de la GL"
 
 #: gtk/inspector/general.ui:676
 msgid "GL Backend Vendor"
-msgstr "Vendor dorsal GL"
+msgstr "Proveïdor del dorsal GL"
 
 #: gtk/inspector/general.ui:703
 msgid "GL Backend Version"
@@ -7625,7 +7625,7 @@ msgid ""
 "\n"
 msgstr ""
 "Ús:\n"
-"  gtk-builder-tool [ORDRE] [OPCIONS…] FITXER\n"
+"  gtk4-builder-tool [ORDRE] [OPCIONS…] FITXER\n"
 "\n"
 "Fes diverses tasques en fitxers GtkBuilder .ui.\n"
 "\n"
@@ -8598,7 +8598,7 @@ msgstr "Error a %s: %s\n"
 #: tools/gtk-rendernode-tool-utils.c:72
 #, c-format
 msgid "Failed to load node file: %s\n"
-msgstr "No s'ha pogut obrir el fitxer node: %s\n"
+msgstr "No s'ha pogut carregar el fitxer node: %s\n"
 
 #: tools/updateiconcache.c:1402
 #, c-format
