@@ -3908,7 +3908,7 @@ msgstr "Mida de l'expansor"
 
 #: gtk/gtkexpander.c:390 gtk/gtktoolitemgroup.c:1675 gtk/gtktreeview.c:1235
 msgid "Size of the expander arrow"
-msgstr "Mida de la fila expansora"
+msgstr "Mida de la fletxa expansora"
 
 #: gtk/gtkexpander.c:407
 msgid "Spacing around expander arrow"
@@ -4458,7 +4458,7 @@ msgstr "Model de vista d'icones"
 
 #: gtk/gtkiconview.c:474
 msgid "The model for the icon view"
-msgstr "El model per la vista d'icones"
+msgstr "El model per a la vista d'icones"
 
 #: gtk/gtkiconview.c:490
 msgid "Number of columns"
@@ -4934,7 +4934,7 @@ msgstr "Direcció de l'empaquetament fill"
 
 #: gtk/gtkmenubar.c:237
 msgid "The child pack direction of the menubar"
-msgstr "L'orientació de la barra d'eines"
+msgstr "L'orientació de la barra de menús"
 
 #: gtk/gtkmenubar.c:254
 msgid "Style of bevel around the menubar"
@@ -5103,7 +5103,7 @@ msgstr "Espai addicional a dreta i esquerra de les vores del menú"
 
 #: gtk/gtkmenu.c:905
 msgid "Vertical Padding"
-msgstr "Separació vertical"
+msgstr "Farciment vertical"
 
 #: gtk/gtkmenu.c:906
 msgid "Extra space at the top and bottom of the menu"
@@ -5180,7 +5180,7 @@ msgstr ""
 
 #: gtk/gtkmenuitem.c:745
 msgid "Right Justified"
-msgstr "Alinea a la dreta"
+msgstr "Alineat a la dreta"
 
 #: gtk/gtkmenuitem.c:746
 msgid ""
@@ -5382,7 +5382,7 @@ msgid ""
 "If TRUE, the dialog is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
-"Si és «TRUE» (cert), la finestra és modal (les altres finestres no es podran "
+"Si és «TRUE» (cert), el diàleg és modal (les altres finestres no es podran "
 "utilitzar mentre aquesta estigui oberta)"
 
 #: gtk/gtknativedialog.c:243
