@@ -34,7 +34,7 @@ struct _GdkWaylandTouchData
   double y;
   GdkSurface *surface;
   uint32_t touch_down_serial;
-  guint initial_touch : 1;
+  uint32_t initial_touch : 1;
 };
 
 struct _GdkWaylandPointerFrameData
@@ -66,11 +66,14 @@ struct _GdkWaylandPointerData {
   struct wl_surface *pointer_surface;
   struct wp_viewport *pointer_surface_viewport;
   struct wp_cursor_shape_device_v1 *shape_device;
-  guint cursor_is_default: 1;
-  guint has_cursor_surface : 1;
-  guint cursor_shape;
+
+  uint32_t cursor_is_default: 1;
+  uint32_t has_cursor_surface : 1;
+
+  uint32_t cursor_shape;
+
   GdkCursor *cursor;
-  guint touchpad_event_sequence;
+  uint32_t touchpad_event_sequence;
 
   int32_t cursor_hotspot_x;
   int32_t cursor_hotspot_y;
@@ -91,12 +94,12 @@ struct _GdkWaylandTabletPadGroupData
   GList *dials;
   GList *buttons;
 
-  guint mode_switch_serial;
-  guint n_modes;
-  guint current_mode;
+  uint32_t mode_switch_serial;
+  uint32_t n_modes;
+  uint32_t current_mode;
 
   struct {
-    guint source;
+    uint32_t source;
     gboolean is_stop;
     double value;
   } axis_tmp_info;
@@ -110,7 +113,7 @@ struct _GdkWaylandTabletPadData
 
   GdkWaylandTabletData *current_tablet;
 
-  guint enter_serial;
+  uint32_t enter_serial;
   uint32_t n_buttons;
   char *path;
 
@@ -127,8 +130,8 @@ struct _GdkWaylandTabletToolData
   struct wp_cursor_shape_device_v1 *shape_device;
   GdkAxisFlags axes;
   GdkDeviceToolType type;
-  guint64 hardware_serial;
-  guint64 hardware_id_wacom;
+  uint64_t hardware_serial;
+  uint64_t hardware_id_wacom;
 
   GdkDeviceTool *tool;
   GdkWaylandTabletData *current_tablet;
@@ -161,7 +164,7 @@ struct _GdkWaylandSeat
 {
   GdkSeat parent_instance;
 
-  guint32 id;
+  uint32_t id;
   struct wl_seat *wl_seat;
   struct wl_pointer *wl_pointer;
   struct wl_keyboard *wl_keyboard;
@@ -209,10 +212,10 @@ struct _GdkWaylandSeat
   GdkDragAction pending_action;
 
   struct wl_callback *repeat_callback;
-  guint32 repeat_timer;
-  guint32 repeat_key;
-  guint32 repeat_count;
-  gint64 repeat_deadline;
+  uint32_t repeat_timer;
+  uint32_t repeat_key;
+  uint32_t repeat_count;
+  int64_t repeat_deadline;
   uint32_t keyboard_time;
   uint32_t keyboard_key_serial;
 
@@ -223,7 +226,7 @@ struct _GdkWaylandSeat
   GdkDrop *drop;
 
   /* Some tracking on gesture events */
-  guint gesture_n_fingers;
+  uint32_t gesture_n_fingers;
   double gesture_scale;
 
   GdkCursor *grab_cursor;
@@ -250,7 +253,7 @@ void gdk_wayland_device_query_state (GdkDevice        *device,
 
 void gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
                                           GdkDevicePadFeature  feature,
-                                          guint                feature_idx,
+                                          uint32_t             feature_idx,
                                           const char          *label);
 
 GdkWaylandTabletPadData * gdk_wayland_seat_find_pad (GdkWaylandSeat *seat,
@@ -264,10 +267,10 @@ GdkWaylandTouchData * gdk_wayland_seat_get_touch (GdkWaylandSeat *seat,
 
 void gdk_wayland_device_maybe_emit_grab_crossing (GdkDevice  *device,
                                                   GdkSurface *window,
-                                                  guint32     time);
+                                                  uint32_t    time);
 
 GdkSurface * gdk_wayland_device_maybe_emit_ungrab_crossing (GdkDevice *device,
-                                                            guint32    time_);
+                                                            uint32_t   time_);
 
 void gdk_wayland_device_update_surface_cursor (GdkDevice *device);
 

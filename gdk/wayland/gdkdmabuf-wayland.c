@@ -173,12 +173,12 @@ linux_dmabuf_tranche_formats (void *data,
   DmabufFormatsInfo *info = data;
   DmabufTranche *tranche;
   int i;
-  guint16 *pos;
+  uint16_t *pos;
 
   g_assert (info->pending_tranche != NULL);
   tranche = info->pending_tranche;
 
-  tranche->n_formats = indices->size / sizeof (guint16);
+  tranche->n_formats = indices->size / sizeof (uint16_t);
   tranche->formats = g_new (DmabufFormat, tranche->n_formats);
 
   i = 0;

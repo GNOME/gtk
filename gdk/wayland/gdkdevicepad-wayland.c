@@ -217,7 +217,7 @@ tablet_pad_lookup_button_group (GdkWaylandTabletPadData *pad,
 void
 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
                                      GdkDevicePadFeature  feature,
-                                     guint                feature_idx,
+                                     uint32_t             feature_idx,
                                      const char          *label)
 {
   GdkWaylandTabletPadData *pad;

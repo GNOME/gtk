@@ -257,7 +257,7 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
         else if (ratio > image_ratio)
           {
             w = MIN (width, gtk_icon_helper_get_size (self));
-            h = width / ratio;
+            h = w / ratio;
           }
         else
           {

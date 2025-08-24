@@ -260,7 +260,7 @@ export_gl_texture_as_dmabuf (GdkDisplay *display,
 static gboolean
 get_texture_info (GdkWaylandSubsurface *self,
                   GdkTexture           *texture,
-                  guint32              *out_fourcc,
+                  uint32_t             *out_fourcc,
                   gboolean             *out_premultiplied,
                   GdkDmabuf            *out_dmabuf)
 {
@@ -515,7 +515,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   gboolean needs_bg_commit = FALSE;
   gboolean color_changed = FALSE;
   gboolean transparent_changed = FALSE;
-  guint32 fourcc = 0;
+  uint32_t fourcc = 0;
   gboolean premultiplied = TRUE;
   gboolean was_transparent;
   gboolean is_transparent;

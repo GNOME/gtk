@@ -22,8 +22,8 @@
 #include "gdkdisplay-wayland.h"
 
 cairo_surface_t * gdk_wayland_display_create_shm_surface  (GdkWaylandDisplay *display,
-                                                           guint              width,
-                                                           guint              height);
+                                                           uint32_t           width,
+                                                           uint32_t           height);
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer  (cairo_surface_t   *surface);
 gboolean          _gdk_wayland_is_shm_surface             (cairo_surface_t   *surface);
 struct wl_buffer *_gdk_wayland_shm_texture_get_wl_buffer  (GdkWaylandDisplay *display,

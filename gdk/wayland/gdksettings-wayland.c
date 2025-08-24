@@ -356,9 +356,7 @@ static TranslationEntry *
 find_translation_entry_by_schema (const char *schema,
                                   const char *key)
 {
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+  for (gsize i = 0; i < G_N_ELEMENTS (translations); i++)
     {
       if (g_str_equal (schema, translations[i].schema) &&
           g_str_equal (key, translations[i].key))
@@ -385,9 +383,7 @@ find_translation_entry_by_key (GSettings  *settings,
 static TranslationEntry *
 find_translation_entry_by_setting (const char *setting)
 {
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+  for (gsize i = 0; i < G_N_ELEMENTS (translations); i++)
     {
       if (g_str_equal (setting, translations[i].setting))
         return &translations[i];

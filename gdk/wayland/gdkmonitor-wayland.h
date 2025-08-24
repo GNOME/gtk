@@ -24,7 +24,7 @@
 struct _GdkWaylandMonitor {
   GdkMonitor parent;
 
-  guint32 id;
+  uint32_t id;
   struct wl_output *output;
   gboolean added;
 
@@ -46,7 +46,7 @@ GdkMonitor *gdk_wayland_display_get_monitor (GdkWaylandDisplay *display,
                                              struct wl_output  *output);
 
 void gdk_wayland_display_add_output      (GdkWaylandDisplay *display_wayland,
-                                          guint32            id,
+                                          uint32_t           id,
                                           struct wl_output  *output);
 void gdk_wayland_display_remove_output   (GdkWaylandDisplay *self,
-                                          guint32            id);
+                                          uint32_t           id);

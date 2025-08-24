@@ -76,7 +76,7 @@ static void gdk_wayland_surface_configure (GdkSurface *surface);
 
 static void
 fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
-                                        guint32          frame_time)
+                                        uint32_t         frame_time)
 {
   /* The timestamp in a wayland frame is a msec time value that in some
    * way reflects the time at which the server started drawing the frame.
@@ -198,8 +198,8 @@ gdk_wayland_surface_thaw_state (GdkSurface *surface)
 static void
 gdk_wayland_surface_get_buffer_size (GdkSurface      *surface,
                                      GdkDrawContext  *context,
-                                     guint           *out_width,
-                                     guint           *out_height)
+                                     uint32_t        *out_width,
+                                     uint32_t        *out_height)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
 
