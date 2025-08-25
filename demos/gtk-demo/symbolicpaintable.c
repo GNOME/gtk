@@ -566,7 +566,9 @@ start_element_cb (GMarkupParseContext  *context,
   else
     fill_rule = GSK_FILL_RULE_WINDING;
 
-  stroke = gsk_stroke_new (1);
+  stroke = gsk_stroke_new (2);
+  gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
+  gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
 
   if (stroke_width_attr)
     {
