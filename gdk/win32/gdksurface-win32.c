@@ -2784,34 +2784,37 @@ compute_toplevel_size (GdkSurface *surface,
       gboolean is_fullscreened;
       GdkRectangle monitor_geometry;
 
-      if (monitor && 
+      if (monitor &&
           gdk_toplevel_layout_get_maximized (layout, &is_maximized) &&
-          is_maximized) 
+          is_maximized)
         {
           geometry.min_width = bounds_width;
           geometry.min_height = bounds_height;
           mask = GDK_HINT_MIN_SIZE;
-      } else if (monitor && 
-        gdk_toplevel_layout_get_fullscreen (layout, &is_fullscreened) && 
-        is_fullscreened) 
+        }
+      else if (monitor &&
+               gdk_toplevel_layout_get_fullscreen (layout, &is_fullscreened) &&
+               is_fullscreened)
         {
           gdk_monitor_get_geometry (monitor, &monitor_geometry);
           geometry.min_width = monitor_geometry.width;
           geometry.min_height = monitor_geometry.height;
           mask = GDK_HINT_MIN_SIZE;
-      } else if (gdk_toplevel_layout_get_resizable (layout))
+        }
+      else if (gdk_toplevel_layout_get_resizable (layout))
         {
           geometry.min_width = size.min_width;
           geometry.min_height = size.min_height;
           mask = GDK_HINT_MIN_SIZE;
+          gdk_win32_surface_set_geometry_hints (surface, &geometry, mask);
         }
       else
         {
           geometry.max_width = geometry.min_width = *width;
           geometry.max_height = geometry.min_height = *height;
           mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+          gdk_win32_surface_set_geometry_hints (surface, &geometry, mask);
         }
-      gdk_win32_surface_set_geometry_hints (surface, &geometry, mask);
       gdk_surface_constrain_size (&geometry, mask, *width, *height, width, height);
     }
 }
