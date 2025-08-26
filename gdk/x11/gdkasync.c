@@ -166,14 +166,14 @@ send_event_handler (Display *dpy,
 			    True);
 	}
 
+      DeqAsyncHandler(state->dpy, &state->async);
+
       if (state->callback)
         {
           guint id;
           id = gdk_threads_add_idle (callback_idle, state);
           g_source_set_name_by_id (id, "[gtk+] callback_idle");
         }
-
-      DeqAsyncHandler(state->dpy, &state->async);
 
       return (rep->generic.type != X_Error);
     }
