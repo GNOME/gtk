@@ -57,6 +57,7 @@
 #endif
 #ifdef GDK_WINDOWING_WIN32
 #include <gdk/win32/gdkwin32.h>
+#include "gdk/win32/gdkprivate-win32.h"
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gskbroadwayrenderer.h"
@@ -585,7 +586,13 @@ get_renderer_for_backend (GdkSurface *surface)
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (GDK_IS_WIN32_SURFACE (surface))
-    return GSK_TYPE_D3D12_RENDERER;
+    {
+      /* Intel drivers seem to have issues with the D3D12 renderer in particular with video playback */
+      if (!gdk_win32_display_is_intel (gdk_surface_get_display (surface)))
+        return GSK_TYPE_D3D12_RENDERER;
+      else
+        return GSK_TYPE_CAIRO_RENDERER;
+    }
 #endif
 
   return G_TYPE_INVALID;
