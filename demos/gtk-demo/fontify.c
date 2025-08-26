@@ -542,8 +542,7 @@ fontify (const char    *format,
   GSubprocess *subprocess;
   char *format_arg;
   GtkSettings *settings;
-  char *theme;
-  gboolean prefer_dark;
+  GtkInterfaceColorScheme color_scheme;
   const char *style_arg;
   char *text;
   GtkTextIter start, end;
@@ -552,16 +551,13 @@ fontify (const char    *format,
 
   settings = gtk_settings_get_default ();
   g_object_get (settings,
-                "gtk-theme-name", &theme,
-                "gtk-application-prefer-dark-theme", &prefer_dark,
+                "gtk-interface-color-scheme", &color_scheme,
                 NULL);
 
-  if (prefer_dark || strcmp (theme, "HighContrastInverse") == 0)
+  if (color_scheme == GTK_INTERFACE_COLOR_SCHEME_DARK)
     style_arg = "--style=edit-vim-dark";
   else
     style_arg = "--style=edit-kwrite";
-
-  g_free (theme);
 
   format_arg = g_strconcat ("--syntax=", format, NULL);
   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
