@@ -1,0 +1,8 @@
+<svg width='60' height='60'>
+  <path d='M 5 30 L 25 50 L 55 10'
+        id='path0'
+        stroke='none'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-fill'/>
+</svg>

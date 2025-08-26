@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Icon Editor
+Comment=An application that edits icons
+Exec=gtk4-icon-editor
+Icon=org.gtk.IconEditor
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;GTK;

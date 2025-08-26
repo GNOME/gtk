@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gtk/Shaper">
+    <file preprocess="xml-stripblanks">org.gtk.Shaper.svg</file>
+    <file preprocess="xml-stripblanks">org.gtk.Shaper.Devel.svg</file>
+    <file preprocess="xml-stripblanks">org.gtk.Shaper-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icon-editor-window.ui</file>
+    <file preprocess="xml-stripblanks">state-editor.ui</file>
+    <file preprocess="xml-stripblanks">paintable-editor.ui</file>
+    <file preprocess="xml-stripblanks">path-editor.ui</file>
+    <file preprocess="xml-stripblanks">help-window.ui</file>
+    <file preprocess="xml-stripblanks">general-properties-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">box-small-outline-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">document-revert-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">document-edit-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">settings-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">example1.gpa</file>
+    <file preprocess="xml-stripblanks">example2.gpa</file>
+    <file preprocess="xml-stripblanks">example3.gpa</file>
+    <file preprocess="xml-stripblanks">example4.gpa</file>
+    <file preprocess="xml-stripblanks">example5.gpa</file>
+    <file preprocess="xml-stripblanks">example6.gpa</file>
+    <file alias="icon-format.md">../../docs/reference/gtk/icon-format.md</file>
+    <file>icon-editor.css</file>
+  </gresource>
+</gresources>
