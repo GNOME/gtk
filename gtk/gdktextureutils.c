@@ -26,6 +26,7 @@
 #include "gdk/gdkdebugprivate.h"
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkenums.h"
+#include "gtk/gtkbitmaskprivate.h"
 
 #include <librsvg/rsvg.h>
 
@@ -776,14 +777,16 @@ set_missing_attribute_error (GError     **error,
                "Missing attribute: %s", name);
 }
 
-static void
+static gboolean
 markup_filter_attributes (const char *element_name,
                           const char **attribute_names,
                           const char **attribute_values,
+                          GError     **error,
                           const char  *name,
                           ...)
 {
   va_list ap;
+  guint64 filtered = 0;
 
   va_start (ap, name);
   while (name)
@@ -792,12 +795,37 @@ markup_filter_attributes (const char *element_name,
 
       ptr = va_arg (ap, const char **);
 
-      *ptr = NULL;
+      if (ptr)
+        *ptr = NULL;
+
+      /* Ignoring a whole namespace */
+      if (g_str_has_suffix (name, ":*"))
+        {
+          GPatternSpec *spec = g_pattern_spec_new (name);
+
+          for (int i = 0; attribute_names[i]; i++)
+            {
+              if (filtered & (1ull << i))
+                continue;
+
+              if (g_pattern_spec_match_string (spec, attribute_names[i]))
+                {
+                  filtered |= 1ull << i;
+                  continue;
+                }
+            }
+        }
+
       for (int i = 0; attribute_names[i]; i++)
         {
+          if (filtered & (1ull << i))
+            continue;
+
           if (strcmp (attribute_names[i], name) == 0)
             {
-              *ptr = attribute_values[i];
+              if (ptr)
+                *ptr = attribute_values[i];
+              filtered |= 1ull << i;
               break;
             }
         }
@@ -806,6 +834,20 @@ markup_filter_attributes (const char *element_name,
     }
 
   va_end (ap);
+
+  for (guint i = 0; attribute_names[i]; i++)
+    {
+      if ((filtered & (1ull << i)) == 0)
+        {
+          g_set_error (error, G_MARKUP_ERROR,
+                       G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
+                       "attribute '%s' is invalid for element '%s'",
+                       attribute_names[i], element_name);
+          return FALSE;
+        }
+    }
+
+  return TRUE;
 }
 
 static GskPath *
@@ -883,6 +925,7 @@ start_element_cb (GMarkupParseContext  *context,
       markup_filter_attributes (element_name,
                                 attribute_names,
                                 attribute_values,
+                                NULL,
                                 "width", &width_attr,
                                 "height", &height_attr,
                                 NULL);
@@ -936,6 +979,7 @@ start_element_cb (GMarkupParseContext  *context,
       markup_filter_attributes (element_name,
                                 attribute_names,
                                 attribute_values,
+                                NULL,
                                 "cx", &cx_attr,
                                 "cy", &cy_attr,
                                 "r", &r_attr,
@@ -994,6 +1038,7 @@ start_element_cb (GMarkupParseContext  *context,
       markup_filter_attributes (element_name,
                                 attribute_names,
                                 attribute_values,
+                                NULL,
                                 "x", &x_attr,
                                 "y", &y_attr,
                                 "width", &width_attr,
@@ -1071,6 +1116,7 @@ start_element_cb (GMarkupParseContext  *context,
       markup_filter_attributes (element_name,
                                 attribute_names,
                                 attribute_values,
+                                NULL,
                                 "d", &path_attr,
                                 NULL);
 
@@ -1096,34 +1142,33 @@ start_element_cb (GMarkupParseContext  *context,
 
   g_assert (path != NULL);
 
-  if (!g_markup_collect_attributes (element_name,
-                                    attribute_names,
-                                    attribute_values,
-                                    error,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "class", &class_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "opacity", &opacity_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-rule", &fill_rule_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-opacity", &fill_opacity_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-width", &stroke_width_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-opacity", &stroke_opacity_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linecap", &stroke_linecap_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linejoin", &stroke_linejoin_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-miterlimit", &stroke_miterlimit_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dasharray", &stroke_dasharray_attr,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dashoffset", &stroke_dashoffset_attr,
-                                    /* The following attributes are explicitly ignored */
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "style", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "color", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "overflow", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "d", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "cx", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "cy", NULL,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "r", NULL,
-                                     /* Other attributes cause an error, and we'll fall back to loading a texture */
-                                    G_MARKUP_COLLECT_INVALID))
+  if (!markup_filter_attributes (element_name,
+                                 attribute_names,
+                                 attribute_values,
+                                 error,
+                                 "class", &class_attr,
+                                 "opacity", &opacity_attr,
+                                 "fill-rule", &fill_rule_attr,
+                                 "fill-opacity", &fill_opacity_attr,
+                                 "stroke-width", &stroke_width_attr,
+                                 "stroke-opacity", &stroke_opacity_attr,
+                                 "stroke-linecap", &stroke_linecap_attr,
+                                 "stroke-linejoin", &stroke_linejoin_attr,
+                                 "stroke-miterlimit", &stroke_miterlimit_attr,
+                                 "stroke-dasharray", &stroke_dasharray_attr,
+                                 "stroke-dashoffset", &stroke_dashoffset_attr,
+                                 "fill", NULL,
+                                 "stroke", NULL,
+                                 "style", NULL,
+                                 "id", NULL,
+                                 "color", NULL,
+                                 "overflow", NULL,
+                                 "d", NULL,
+                                 "cx", NULL,
+                                 "cy", NULL,
+                                 "r", NULL,
+                                 "gtk:*", NULL, /* Ignore gtk namespace attrs */
+                                 NULL))
     goto cleanup;
 
   fill_opacity = 1;
