@@ -451,6 +451,7 @@ gdk_win32_display_create_d3d_devices (GdkWin32Display    *self,
   for (i = 0; IDXGIFactory4_EnumAdapters1 (self->dxgi_factory, i, &adapter) != DXGI_ERROR_NOT_FOUND; i++)
     {
       DXGI_ADAPTER_DESC1 desc;
+      const wchar_t *wstr_intel = L"Intel";
 
       hr = IDXGIAdapter1_GetDesc1 (adapter, &desc);
       if (!gdk_win32_check_hresult (hr, error, "Failed to get adapter description"))
@@ -458,6 +459,17 @@ gdk_win32_display_create_d3d_devices (GdkWin32Display    *self,
           error = NULL;
           gdk_win32_com_clear (&adapter);
           continue;
+        }
+
+      if (g_getenv ("GSK_RENDERER") == NULL &&
+          wcsncmp (desc.Description, wstr_intel, wcslen (wstr_intel)) == 0)
+        {
+          /*
+           * Sadly, Intel drivers tend to have issues with the D3D12 renderer especially when
+           * video playback is being involved. Issue can also be in gstd3d12, which is out of our grasp
+           */
+          g_message ("Falling back to Cairo renderer as Intel drivers tend to have issues with the D3D12 renderer");
+          self->is_intel_gpu = TRUE;
         }
 
       if ((desc.Flags & required) != required ||
