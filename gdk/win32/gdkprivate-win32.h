@@ -342,3 +342,5 @@ this_module (void)
   return (HMODULE) &__ImageBase;
 }
 
+gboolean      gdk_win32_display_is_intel (GdkDisplay *display);
+

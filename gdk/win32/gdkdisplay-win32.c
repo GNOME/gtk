@@ -1390,6 +1390,14 @@ _gdk_win32_display_get_keymap (GdkDisplay *display)
   return gdk_win32_display_get_default_keymap (GDK_WIN32_DISPLAY (display));
 }
 
+gboolean
+gdk_win32_display_is_intel (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), FALSE);
+
+  return GDK_WIN32_DISPLAY (display)->is_intel_gpu;
+}
+
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 {

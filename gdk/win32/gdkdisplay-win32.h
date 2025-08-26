@@ -167,6 +167,8 @@ struct _GdkWin32Display
   IDXGIFactory4 *dxgi_factory;
   ID3D11Device *d3d11_device;
   ID3D12Device *d3d12_device;
+  /* Intel Drivers aren't very good with dealing with D3D12 with gstd3d12 video support */
+  gboolean is_intel_gpu;
 
   /* WGL/OpenGL Items */
   int wgl_pixel_format;
