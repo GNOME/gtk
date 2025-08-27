@@ -106,7 +106,7 @@ update_closest_point (PathExplorer *self)
 static void
 update_path (PathExplorer *self)
 {
-  float start = 1 - self->start;
+  float start = self->start;
   float end = self->end;
 
   g_clear_pointer (&self->segment, gsk_path_unref);
@@ -404,7 +404,7 @@ path_explorer_init (PathExplorer *self)
   self->zoom = 1;
   self->stroke = gsk_stroke_new (1);
   self->fill_rule = GSK_FILL_RULE_WINDING;
-  self->start = 1;
+  self->start = 0;
   self->end = 1;
   self->fill_color = (GdkRGBA) { 1, 1, 0, 1 };
   self->stroke_color = (GdkRGBA) { 0, 0, 0, 1 };

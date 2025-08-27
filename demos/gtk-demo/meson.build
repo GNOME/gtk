@@ -139,6 +139,7 @@ extra_demo_sources = files([
   'path_explorer.c',
   'pixbufpaintable.c',
   'puzzlepiece.c',
+  'range-editor.c',
   'script-names.c',
   'settings-key.c',
   'singular_value_decomposition.c',

@@ -346,28 +346,13 @@
               </object>
             </child>
             <child>
-              <object class="GtkScale">
-                <property name="inverted">1</property>
-                <property name="adjustment">
-                  <object class="GtkAdjustment">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="step-increment">0.1</property>
-                    <property name="value" bind-source="demo" bind-property="start" bind-flags="bidirectional|sync-create"/>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale">
-                <property name="adjustment">
-                  <object class="GtkAdjustment">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="step-increment">0.1</property>
-                    <property name="value" bind-source="demo" bind-property="end" bind-flags="bidirectional|sync-create"/>
-                  </object>
-                </property>
+              <object class="RangeEditor">
+                <property name="hexpand">1</property>
+                <property name="lower">0</property>
+                <property name="upper">1</property>
+                <property name="value1" bind-source="demo" bind-property="start" bind-flags="bidirectional|sync-create"/>
+                <property name="value2" bind-source="demo" bind-property="end" bind-flags="bidirectional|sync-create"/>
+
               </object>
             </child>
           </object>
