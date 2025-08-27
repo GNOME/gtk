@@ -21,6 +21,7 @@ expand_content_md_files = [
   'coordinates.md',
   'css-overview.md',
   'css-properties.md',
+  'icon-format.md',
   'section-accessibility.md',
   'section-dialogs.md',
   'section-text-widget.md',

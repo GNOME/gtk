@@ -317,6 +317,7 @@ gtk_public_sources = files([
   'gtkpaned.c',
   'gtkpasswordentry.c',
   'gtkpasswordentrybuffer.c',
+  'gtkpathpaintable.c',
   'gtkpicture.c',
   'gtkpopover.c',
   'gtkpopovermenu.c',
@@ -558,6 +559,7 @@ gtk_public_headers = files([
   'gtkpaned.h',
   'gtkpasswordentry.h',
   'gtkpasswordentrybuffer.h',
+  'gtkpathpaintable.h',
   'gtkpicture.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
@@ -1093,6 +1095,8 @@ endif
 # Unconditional. If libintl isn't found,
 # the object just does nothing being in the deplist
 gtk_deps += libintl_dep
+
+install_data('gtk-mime.xml', install_dir: join_paths (gtk_datadir, 'mime/packages'), install_tag: 'runtime')
 
 gtk_settings_schemas = [
   'org.gtk.gtk4.Settings.FileChooser.gschema.xml',
