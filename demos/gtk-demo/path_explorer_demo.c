@@ -6,6 +6,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include "range-editor.h"
 #include "path_explorer.h"
 
 static gboolean
@@ -64,6 +65,7 @@ do_path_explorer_demo (GtkWidget *do_widget)
       GError *error = NULL;
 
       g_type_ensure (path_explorer_get_type ());
+      g_type_ensure (range_editor_get_type ());
 
       builder = gtk_builder_new ();
 
