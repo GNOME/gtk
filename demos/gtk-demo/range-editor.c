@@ -410,12 +410,12 @@ drag_gesture_update (GtkGestureDrag *gesture,
       if (self->mouse_location == self->slider1)
         {
           v = CLAMP (v, self->lower, self->upper);
-          range_editor_set_values (self, v, self->value2);
+          range_editor_set_values (self, MIN (v, self->value2), self->value2);
         }
       else if (self->mouse_location == self->slider2)
         {
           v = CLAMP (v, self->lower, self->upper);
-          range_editor_set_values (self, self->value1, v);
+          range_editor_set_values (self, self->value1, MAX (self->value1, v));
         }
     }
 }
