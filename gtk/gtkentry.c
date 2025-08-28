@@ -3838,16 +3838,23 @@ gtk_entry_get_text_widget (GtkEntry *entry)
  *
  * Since: 4.20
  */
-const gchar *
+const char *
 gtk_entry_get_menu_entry_icon_text (GtkEntry             *entry,
                                     GtkEntryIconPosition  icon_pos)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-    return priv->menu_entry_icon_primary_text;
-  else
-    return priv->menu_entry_icon_secondary_text;
+  switch (icon_pos)
+    {
+    case GTK_ENTRY_ICON_PRIMARY:
+      return priv->menu_entry_icon_primary_text;
+    case GTK_ENTRY_ICON_SECONDARY:
+      return priv->menu_entry_icon_secondary_text;
+    default:
+      g_assert_not_reached ();
+      return NULL;
+    }
 }
 
 /**
@@ -3871,21 +3878,34 @@ gtk_entry_set_menu_entry_icon_text (GtkEntry             *entry,
                                     const gchar          *text)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  char **text_p = NULL;
+  guint prop_id = 0;
 
-  if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  switch (icon_pos)
     {
-      g_clear_pointer (&priv->menu_entry_icon_primary_text, g_free);
-      priv->menu_entry_icon_primary_text = g_strdup (text);
+    case GTK_ENTRY_ICON_PRIMARY:
+      text_p = &priv->menu_entry_icon_primary_text;
+      prop_id = PROP_MENU_ENTRY_ICON_PRIMARY_TEXT;
+      break;
+
+    case GTK_ENTRY_ICON_SECONDARY:
+      text_p = &priv->menu_entry_icon_secondary_text;
+      prop_id = PROP_MENU_ENTRY_ICON_SECONDARY_TEXT;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
     }
-  else
-    {
-      g_clear_pointer (&priv->menu_entry_icon_secondary_text, g_free);
-      priv->menu_entry_icon_secondary_text = g_strdup (text);
-    }
+
+  if (!g_set_str (text_p, text))
+    return;
+
   update_extra_menu (entry);
-  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
-                                                          ? PROP_MENU_ENTRY_ICON_PRIMARY_TEXT
-                                                          : PROP_MENU_ENTRY_ICON_SECONDARY_TEXT]);
+
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[prop_id]);
 }
 
 static GMenuItem *
