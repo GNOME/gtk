@@ -1,5 +1,37 @@
-Overview of Changes in 4.19.5, xx-xx-xxxx
+Overview of Changes in 4.20.0, 29-08-2025
 =========================================
+
+* Bugs fixed:
+  - #7695 gdk-win32: unmaximize doesn't restore the original size
+  - #7702 Should GTK_ACCESSIBLE_ROLE_STATUS really be NAME_PROHIBITED?
+
+* Changes:
+  - !8851 gstreamer: Stop GstPlay before dropping the ref (Robert Mader)
+  - !8871 gtk/filterlistmodel: Emit items-changed for item watches (Georges
+    Basile Stavracas Neto)
+  - !8872 Gtk 4.19.4
+  - !8873 docs: Some more details about dialogs (Matthias Clasen)
+  - !8874 gsk: Add docs / gi annotations to new component transfer API
+    (Sebastian Dröge)
+  - !8876 Revert "meson: Rework introspection handling" (Florian "sp1rit"​)
+  - !8879 iconhelper: Fix handling of non-square icons (Matthias Clasen)
+  - !8880 gsk: Add missing Since marker to GskComponentTransferNode (Sebastian
+    Dröge)
+  - !8881 symbolic: Fix stroke defaults (Matthias Clasen)
+  - !8883 Ignore gtk namespace attributes (Matthias Clasen)
+  - !8884 gtk-demo: Fix markup in dark (Matthias Clasen)
+  - !8885 entry: Clean up coding style (Sergio Costas Rodriguez)
+  - !8886 gtk-demo: Avoid some criticals (Matthias Clasen)
+  - !8887 gtkatcontext: Fix name generation flags for the banner role (Lukáš
+    Tyrychtr, Matthias Clasen)
+
+* Translation updates:
+  - Catalan (Jordi Mas)
+  - Czech (Daniel Rusek)
+  - Lithuanian (Aurimas Aurimas Černius)
+  - Thai (Aefgh Threenine)
+  - Turkish (Emin Tufan Çetin)
+
 
 Overview of Changes in 4.19.4, 18-08-2025
 =========================================
