@@ -251,7 +251,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
           g_warning ("Failed to load icon %s: %s", icon->filename, load_error ? load_error->message : "");
           g_clear_error (&load_error);
           texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
-          icon->icon_name = g_strdup ("image-missing");
+          g_set_str (&icon->icon_name, "image-missing");
           icon->is_symbolic = FALSE;
           icon->only_fg = FALSE;
         }
@@ -694,7 +694,7 @@ void
 gtk_icon_paintable_set_icon_name (GtkIconPaintable *icon,
                                   const char       *name)
 {
-  icon->icon_name = g_strdup (name);
+  g_set_str (&icon->icon_name, name);
 }
 
 GtkIconPaintable *
