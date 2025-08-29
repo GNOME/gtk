@@ -166,7 +166,7 @@ test_name_prohibited (void)
   name = gtk_at_context_get_name (context);
   desc = gtk_at_context_get_description (context);
 
-  g_assert_cmpstr (name, ==, "");
+  g_assert_cmpstr (name, ==, "too late");
   g_assert_cmpstr (desc, ==, "");
 
   g_free (name);
