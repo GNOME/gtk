@@ -801,6 +801,8 @@ path_explorer_snapshot (GtkWidget   *widget,
                                      &GRAPHENE_RECT_INIT (0, 0, width, height ));
 
           gtk_snapshot_pop (snapshot);
+
+          gsk_path_unref (path);
         }
     }
 

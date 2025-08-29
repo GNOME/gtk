@@ -814,6 +814,8 @@ markup_filter_attributes (const char *element_name,
                   continue;
                 }
             }
+
+          g_pattern_spec_free (spec);
         }
 
       for (int i = 0; attribute_names[i]; i++)

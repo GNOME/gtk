@@ -961,7 +961,11 @@ gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
 
   if (state->data.clip.bounds.size.width == 0 ||
       state->data.clip.bounds.size.height == 0)
-    return NULL;
+    {
+      gsk_render_node_unref (node);
+
+      return NULL;
+    }
 
   clip_node = gsk_clip_node_new (node, &state->data.clip.bounds);
 

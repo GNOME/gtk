@@ -3089,7 +3089,8 @@ find_display_line_above (GtkTextLayout *layout,
           if (tmp_top < y)
             {
               found_line = line;
-	      pango_layout_iter_free (layout_iter);
+              pango_layout_iter_free (layout_iter);
+              gtk_text_line_display_unref (display);
               goto done;
             }
         }
@@ -3648,9 +3649,8 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
 	 gtk_text_iter_backward_char (iter);
     }
 
-  g_clear_pointer (&display, gtk_text_line_display_unref);
-
  done:
+  g_clear_pointer (&display, gtk_text_line_display_unref);
 
   return
     !gtk_text_iter_equal (iter, &orig) &&

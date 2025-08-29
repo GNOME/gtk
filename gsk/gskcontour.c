@@ -2359,7 +2359,7 @@ gsk_rounded_rect_contour_add_segment (const GskContour   *contour,
 
 typedef struct
 {
-  const GskContour *contour;
+  GskContour *contour;
   gpointer measure_data;
 } RoundedRectMeasureData;
 
@@ -2387,6 +2387,7 @@ gsk_rounded_rect_contour_free_measure (const GskContour *contour,
   RoundedRectMeasureData *data = measure_data;
 
   gsk_standard_contour_free_measure (data->contour, data->measure_data);
+  g_free (data->contour);
   g_free (data);
 }
 
