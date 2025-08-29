@@ -64,7 +64,7 @@ get_intersection_path (GskPath *path1,
 
   gsk_path_foreach_intersection (path1, path2, intersection_cb, builder);
 
-  return gsk_path_builder_to_path (builder);
+  return gsk_path_builder_free_to_path (builder);
 }
 
 static void
