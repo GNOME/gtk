@@ -646,7 +646,6 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
                                        gsk_transform_node_get_transform (node));
       gsk_render_node_unref (color_matrix);
       gsk_render_node_unref (node);
-      node = NULL;
     }
   else
     {
