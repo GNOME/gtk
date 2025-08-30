@@ -137,7 +137,7 @@ enable_window_controls (GtkWindowButtonsQuartz *self,
   nswindow = native_window (GTK_WIDGET (self));
   if (!GDK_IS_MACOS_WINDOW (nswindow))
     return;
-  
+
   window = GTK_WINDOW (root);
   is_sovereign_window = !gtk_window_get_modal (window) &&
                          gtk_window_get_transient_for (window) == NULL;
@@ -276,7 +276,7 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
     }
 
   [window setShowStandardWindowButtons:YES];
-  
+
   enable_window_controls (self, TRUE);
 
   window_controls_bounds (window, &bounds);
@@ -336,20 +336,6 @@ gtk_window_buttons_quartz_size_allocate (GtkWidget *widget,
 }
 
 static void
-gtk_window_buttons_quartz_state_flags_changed (GtkWidget* widget,
-                                               GtkStateFlags previous_state_flags)
-{
-  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
-
-  if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
-    enable_window_controls (self, FALSE);
-  else
-    enable_window_controls (self, TRUE);
-
-  GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->state_flags_changed (widget, previous_state_flags);
-}
-
-static void
 gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -365,7 +351,6 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
   widget_class->unroot = gtk_window_buttons_quartz_unroot;
   widget_class->realize = gtk_window_buttons_quartz_realize;
   widget_class->unrealize = gtk_window_buttons_quartz_unrealize;
-  widget_class->state_flags_changed = gtk_window_buttons_quartz_state_flags_changed;
 
   /**
    * GtkWindowButtonsQuartz:decoration-layout:
