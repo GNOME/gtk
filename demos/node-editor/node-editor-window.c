@@ -309,10 +309,15 @@ reload (NodeEditorWindow *self)
 
   if (self->node && self->zoom_level != 0)
     {
+      GskTransform *transform;
       float scale;
 
       scale = pow (1.2, self->zoom_level);
-      big_node = gsk_transform_node_new (self->node, gsk_transform_scale (NULL, scale, scale));
+
+      transform = gsk_transform_scale (NULL, scale, scale);
+      big_node = gsk_transform_node_new (self->node, transform);
+
+      gsk_transform_unref (transform);
     }
   else if (self->node)
     {
