@@ -209,13 +209,13 @@ gtk_drop_target_async_handle_event (GtkEventController *controller,
                                     double              y)
 {
   GtkDropTargetAsync *self = GTK_DROP_TARGET_ASYNC (controller);
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
   GdkDrop *drop;
 
   switch ((int) gdk_event_get_event_type (event))
     {
     case GDK_DRAG_MOTION:
       {
-        GtkWidget *widget = gtk_event_controller_get_widget (controller);
         GdkDragAction preferred_action;
 
         drop = gdk_dnd_event_get_drop (event);
@@ -248,6 +248,10 @@ gtk_drop_target_async_handle_event (GtkEventController *controller,
           return FALSE;
 
         g_signal_emit (self, signals[DROP], 0, self->drop, x, y, &handled);
+
+        g_clear_object (&self->drop);
+        gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
+
         return handled;
       }
 
@@ -313,6 +317,7 @@ gtk_drop_target_async_finalize (GObject *object)
 {
   GtkDropTargetAsync *self = GTK_DROP_TARGET_ASYNC (object);
 
+  g_clear_object (&self->drop);
   g_clear_pointer (&self->formats, gdk_content_formats_unref);
 
   G_OBJECT_CLASS (gtk_drop_target_async_parent_class)->finalize (object);
