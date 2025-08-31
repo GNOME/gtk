@@ -27,6 +27,7 @@
 #include "gtkdroptargetasync.h"
 
 #include "gtkdropprivate.h"
+#include "gdk/gdkdropprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkmarshalers.h"
 #include "gdk/gdkmarshalers.h"
@@ -266,6 +267,9 @@ gtk_drop_target_async_handle_crossing (GtkEventController    *controller,
 
   if (crossing->type != GTK_CROSSING_DROP)
     return;
+
+  if (self->drop && gdk_drop_is_finished (self->drop))
+    g_clear_object (&self->drop);
 
   /* sanity check */
   g_warn_if_fail (self->drop == NULL || self->drop == crossing->drop);
