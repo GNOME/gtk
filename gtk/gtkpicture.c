@@ -35,7 +35,7 @@
  *
  * Displays a `GdkPaintable`.
  *
- * picture>
+ * <picture>
  *   <source srcset="picture-dark.png" media="(prefers-color-scheme: dark)">
  *   <img alt="An example GtkPicture" src="picture.png">
  * </picture>
