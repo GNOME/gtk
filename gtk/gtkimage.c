@@ -42,7 +42,7 @@
  *
  * Displays an image.
  *
- * picture>
+ * <picture>
  *   <source srcset="image-dark.png" media="(prefers-color-scheme: dark)">
  *   <img alt="An example GtkImage" src="image.png">
  * </picture>

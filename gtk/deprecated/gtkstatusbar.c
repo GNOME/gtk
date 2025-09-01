@@ -44,7 +44,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * A `GtkStatusbar` widget is usually placed along the bottom of an application's
  * main [class@Gtk.Window].
  *
- * picture>
+ * <picture>
  *   <source srcset="statusbar-dark.png" media="(prefers-color-scheme: dark)">
  *   <img alt="An example GtkStatusbar" src="statusbar.png">
  * </picture>
