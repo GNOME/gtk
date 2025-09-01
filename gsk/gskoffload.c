@@ -198,6 +198,15 @@ find_texture_to_attach (GskOffload          *self,
             GdkTexture *texture = gsk_texture_node_get_texture (node);
             int width, height;
 
+            if (GDK_IS_MEMORY_TEXTURE (texture) &&
+                !GDK_DISPLAY_DEBUG_CHECK (gdk_surface_get_display (self->surface),
+                                          FORCE_OFFLOAD))
+              {
+                GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                   "[%p] 🗙 Memory texture", subsurface);
+                goto out;
+              }
+
             if (gsk_transform_get_fine_category (transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
               {
                 char *s = gsk_transform_to_string (transform);
