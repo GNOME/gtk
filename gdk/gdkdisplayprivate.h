@@ -144,7 +144,7 @@ struct _GdkDisplay
   guint have_egl_dma_buf_export : 1;
   guint have_egl_gl_colorspace : 1;
 
-  GdkDmabufFormats *dmabuf_formats;
+  /* atomic */ GdkDmabufFormats *dmabuf_formats;
   GdkDmabufDownloader *egl_downloader;
   GdkDmabufDownloader *vk_downloader;
 

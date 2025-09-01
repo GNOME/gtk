@@ -2011,13 +2011,14 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #endif
 }
 
-void
-gdk_display_init_dmabuf (GdkDisplay *self)
+static gboolean
+gdk_display_init_dmabuf_invoke_callback (gpointer data)
 {
+  GdkDisplay *self = data;
   GdkDmabufFormatsBuilder *builder;
 
   if (self->dmabuf_formats != NULL)
-    return;
+    return G_SOURCE_REMOVE;
 
   GDK_DISPLAY_DEBUG (self, DMABUF,
                      "Beginning initialization of dmabuf support");
@@ -2043,11 +2044,28 @@ gdk_display_init_dmabuf (GdkDisplay *self)
     }
 #endif
 
-  self->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
+  g_atomic_pointer_set (&self->dmabuf_formats, gdk_dmabuf_formats_builder_free_to_formats (builder));
 
   GDK_DISPLAY_DEBUG (self, DMABUF,
                      "Initialization finished. Advertising %zu dmabuf formats",
                      gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats));
+  
+  return G_SOURCE_REMOVE;
+}
+
+void
+gdk_display_init_dmabuf (GdkDisplay *self)
+{
+  if (g_atomic_pointer_get (&self->dmabuf_formats))
+    return;
+
+  GDK_DISPLAY_DEBUG (self, DMABUF,
+                     "Invoking initialization of dmabuf support");
+
+  g_main_context_invoke (NULL, gdk_display_init_dmabuf_invoke_callback, self);
+
+  GDK_DISPLAY_DEBUG (self, DMABUF,
+                     "Initialization invoking finished");
 }
 
 /**
@@ -2063,6 +2081,8 @@ gdk_display_init_dmabuf (GdkDisplay *self)
  * buffer formats with producers such as v4l, pipewire or GStreamer.
  *
  * To learn more about dma-bufs, see [class@Gdk.DmabufTextureBuilder].
+ *
+ * This function is threadsafe. It can be called from any thread.
  *
  * Returns: (transfer none): a `GdkDmabufFormats` object
  *
