@@ -1236,7 +1236,7 @@ gtk_image_system_setting_changed (GtkWidget        *widget,
  * Sets the pixel size to use for named icons.
  *
  * If the pixel size is set to a value != -1, it is used instead
- * of the icon size set by [method@Gtk.Image.set_from_icon_name].
+ * of the icon size set by [method@Gtk.Image.set_icon_size].
  */
 void
 gtk_image_set_pixel_size (GtkImage *image,
