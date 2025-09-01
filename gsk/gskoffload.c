@@ -696,7 +696,10 @@ complex_clip:
                 transform_bounds (self, &info->texture_rect, &info->texture_rect);
                 info->has_background = has_background;
                 transform_bounds (self, &node->bounds, &info->background_rect);
-                info->place_above = self->last_info ? self->last_info->subsurface : NULL;
+                if (self->last_info && self->last_info->subsurface != info->subsurface)
+                  info->place_above = self->last_info->subsurface;
+                else
+                  info->place_above = NULL;
                 self->last_info = info;
               }
           }
