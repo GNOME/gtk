@@ -1865,7 +1865,7 @@ _gtk_css_find_theme (const char *name,
   int i;
   char *dir;
 
-  if (variant)
+  if (variant && *variant)
     g_snprintf (file, sizeof (file), "gtk-%s.css", variant);
   else
     strcpy (file, "gtk.css");

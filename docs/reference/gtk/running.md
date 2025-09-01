@@ -162,6 +162,8 @@ mainly for easy debugging of theme issues.
 It is also possible to specify a theme variant to load, by appending
 the variant name with a colon, like this: `GTK_THEME=Adwaita:dark`.
 
+## Other environment variables
+
 The following environment variables are used by GdkPixbuf, GDK or
 Pango, not by GTK itself, but we list them here for completeness
 nevertheless.
