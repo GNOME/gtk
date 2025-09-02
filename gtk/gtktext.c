@@ -2049,6 +2049,7 @@ gtk_text_init (GtkText *self)
   GtkDropTarget *target;
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
   priv->editable = TRUE;
   priv->visible = TRUE;
@@ -2759,22 +2760,14 @@ gtk_text_snapshot (GtkWidget   *widget,
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
+  /* Draw text and cursor */
   if (priv->dnd_position != -1)
     gtk_text_draw_cursor (self, snapshot, CURSOR_DND);
-
-  gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT (
-                            0,
-                            0,
-                            gtk_widget_get_width (widget),
-                            gtk_widget_get_height (widget)));
 
   if (priv->placeholder)
     gtk_widget_snapshot_child (widget, priv->placeholder, snapshot);
 
   gtk_text_draw_text (self, snapshot);
-
-  gtk_snapshot_pop (snapshot);
 
   /* When no text is being displayed at all, don't show the cursor */
   if (gtk_text_get_display_mode (self) != DISPLAY_BLANK &&
