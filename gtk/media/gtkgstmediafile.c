@@ -179,6 +179,7 @@ gtk_gst_media_file_seek_done_cb (GstPlaySignalAdapter *adapter,
 static void
 gtk_gst_media_file_error_cb (GstPlaySignalAdapter *adapter,
                              GError               *error,
+                             GstStructure         *details,
                              GtkGstMediaFile      *self)
 {
   if (gtk_media_stream_get_error (GTK_MEDIA_STREAM (self)))
