@@ -5245,15 +5245,7 @@ gtk_text_adjust_scroll (GtkText *self)
     }
   else
     {
-      /* And make sure cursors are on screen. Note that the cursor is
-       * actually drawn one pixel into the INNER_BORDER space on
-       * the right, when the scroll is at the utmost right. This
-       * looks better to me than confining the cursor inside the
-       * border entirely, though it means that the cursor gets one
-       * pixel closer to the edge of the widget on the right than
-       * on the left. This might need changing if one changed
-       * INNER_BORDER from 2 to 1, as one would do on a
-       * small-screen-real-estate display.
+      /* And make sure cursors are on screen.
        *
        * We always make sure that the strong cursor is on screen, and
        * put the weak cursor on screen if possible.
