@@ -5130,6 +5130,46 @@ gtk_text_find_position (GtkText *self,
 }
 
 static void
+gtk_text_get_caret_locations (GtkText        *self,
+                              PangoRectangle *strong,
+                              PangoRectangle *weak)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  DisplayMode mode = gtk_text_get_display_mode (self);
+
+  if (mode == DISPLAY_BLANK)
+    {
+      if (strong)
+        {
+          strong->x = 0;
+          strong->width = 0;
+        }
+
+      if (weak)
+        {
+          weak->x = 0;
+          weak->width = 0;
+        }
+    }
+  else
+    {
+      PangoLayout *layout = gtk_text_ensure_layout (self, TRUE);
+      const char *text = pango_layout_get_text (layout);
+      int index;
+
+      index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
+
+      pango_layout_get_caret_pos (layout, index, strong, weak);
+
+      if (strong)
+        pango_extents_to_pixels (strong, NULL);
+
+      if (weak)
+        pango_extents_to_pixels (weak, NULL);
+    }
+}
+
+static void
 gtk_text_get_cursor_locations (GtkText   *self,
                                int       *strong_x,
                                int       *weak_x)
@@ -5224,8 +5264,7 @@ gtk_text_adjust_scroll (GtkText *self)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   const int text_width = gtk_widget_get_width (GTK_WIDGET (self));
   int min_offset, max_offset;
-  int strong_x, weak_x;
-  int strong_xoffset, weak_xoffset;
+  PangoRectangle strong, weak;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (self)))
     return;
@@ -5241,7 +5280,8 @@ gtk_text_adjust_scroll (GtkText *self)
        * cursors away, this is so both handles can cause content
        * to scroll.
        */
-      strong_x = weak_x = gtk_text_get_selection_bound_location (self);
+      strong.x = weak.x = gtk_text_get_selection_bound_location (self);
+      strong.width = weak.width = 1;
     }
   else
     {
@@ -5250,32 +5290,27 @@ gtk_text_adjust_scroll (GtkText *self)
        * We always make sure that the strong cursor is on screen, and
        * put the weak cursor on screen if possible.
        */
-      gtk_text_get_cursor_locations (self, &strong_x, &weak_x);
+      gtk_text_get_caret_locations (self, &strong, &weak);
     }
 
-  strong_xoffset = strong_x - priv->scroll_offset;
-
-  if (strong_xoffset < 0)
+  if (strong.x - priv->scroll_offset < 0)
     {
-      priv->scroll_offset += strong_xoffset;
-      strong_xoffset = 0;
+      priv->scroll_offset = strong.x;
     }
-  else if (strong_xoffset > text_width)
+  else if (strong.x + strong.width - priv->scroll_offset > text_width)
     {
-      priv->scroll_offset += strong_xoffset - text_width;
-      strong_xoffset = text_width;
+      priv->scroll_offset = strong.x + strong.width - text_width;
     }
 
-  weak_xoffset = weak_x - priv->scroll_offset;
-
-  if (weak_xoffset < 0 && strong_xoffset - weak_xoffset <= text_width)
+  if (weak.x - priv->scroll_offset < 0 &&
+      strong.x + strong.width - weak.x <= text_width)
     {
-      priv->scroll_offset += weak_xoffset;
+      priv->scroll_offset = weak.x;
     }
-  else if (weak_xoffset > text_width &&
-           strong_xoffset - (weak_xoffset - text_width) >= 0)
+  else if (weak.x + weak.width - priv->scroll_offset > text_width &&
+           weak.x + weak.width - strong.x <= text_width)
     {
-      priv->scroll_offset += weak_xoffset - text_width;
+      priv->scroll_offset = weak.x + weak.width - text_width;
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_SCROLL_OFFSET]);
