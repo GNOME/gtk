@@ -4722,8 +4722,8 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
 
       gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
 
-      allocation.x = - child_req.width;
-      allocation.y = - child_req.height;
+      allocation.x = - 1000 - child_req.width;
+      allocation.y = - 1000 - child_req.height;
       allocation.width = child_req.width;
       allocation.height = child_req.height;
 
