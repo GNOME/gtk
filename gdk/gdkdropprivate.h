@@ -77,6 +77,7 @@ void                    gdk_drop_emit_drop_event                (GdkDrop        
                                                                  double                  x,
                                                                  double                  y,
                                                                  guint32                 time);
+gboolean                gdk_drop_is_finished                    (GdkDrop                *self);
 
 G_END_DECLS
 

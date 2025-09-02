@@ -613,6 +613,16 @@ gdk_drop_finish (GdkDrop       *self,
   priv->state = GDK_DROP_STATE_FINISHED;
 }
 
+gboolean
+gdk_drop_is_finished (GdkDrop *self)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DROP (self), FALSE);
+
+  return priv->state == GDK_DROP_STATE_FINISHED;
+}
+
 static void
 gdk_drop_read_internal (GdkDrop             *self,
                         GdkContentFormats   *formats,
