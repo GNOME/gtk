@@ -307,6 +307,8 @@ gtk_css_style_snapshot_caret (GtkCssBoxes    *boxes,
     }
 
   pango_layout_get_caret_pos (layout, index, &strong_pos, &weak_pos);
+  pango_extents_to_pixels (&strong_pos, NULL);
+  pango_extents_to_pixels (&weak_pos, NULL);
 
   direction2 = PANGO_DIRECTION_NEUTRAL;
   cursor2 = NULL; /* poor MSVC */
@@ -330,11 +332,11 @@ gtk_css_style_snapshot_caret (GtkCssBoxes    *boxes,
     }
 
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (MIN (cursor1->x, cursor1->x + cursor1->width)), y + PANGO_PIXELS (cursor1->y)));
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + MIN (cursor1->x, cursor1->x + cursor1->width), y + cursor1->y));
   snapshot_insertion_cursor (snapshot,
                              boxes->style,
-                             PANGO_PIXELS (cursor1->width),
-                             PANGO_PIXELS (cursor1->height),
+                             cursor1->width,
+                             cursor1->height,
                              aspect_ratio,
                              TRUE,
                              direction,
@@ -344,11 +346,11 @@ gtk_css_style_snapshot_caret (GtkCssBoxes    *boxes,
   if (direction2 != PANGO_DIRECTION_NEUTRAL)
     {
       gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (MIN (cursor2->x, cursor2->x + cursor2->width)), y + PANGO_PIXELS (cursor2->y)));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + MIN (cursor2->x, cursor2->x + cursor2->width), y + cursor2->y));
       snapshot_insertion_cursor (snapshot,
                                  boxes->style,
-                                 PANGO_PIXELS (cursor2->width),
-                                 PANGO_PIXELS (cursor2->height),
+                                 cursor2->width,
+                                 cursor2->height,
                                  aspect_ratio,
                                  FALSE,
                                  direction2,
