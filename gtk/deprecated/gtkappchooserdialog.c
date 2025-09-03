@@ -469,6 +469,7 @@ setup_search (GtkAppChooserDialog *self)
       GtkWidget *header;
 
       button = gtk_toggle_button_new ();
+      gtk_widget_set_tooltip_text (button, _("Search"));
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       image = gtk_image_new_from_icon_name ("edit-find-symbolic");
       gtk_button_set_child (GTK_BUTTON (button), image);
