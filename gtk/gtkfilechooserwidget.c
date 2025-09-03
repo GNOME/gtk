@@ -872,7 +872,35 @@ struct FileExistsData
   GFile *file;
   GtkWidget *error_stack;
   GtkWidget *button;
+  GtkWidget *entry;
 };
+
+static void
+update_error_state (GtkWidget *entry,
+                    GtkWidget *error_stack)
+{
+  GtkWidget *error;
+
+  error = gtk_file_chooser_error_stack_get_error (GTK_FILE_CHOOSER_ERROR_STACK (error_stack));
+
+  if (!error)
+    {
+      gtk_widget_remove_css_class (entry, "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_STATE_INVALID);
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE);
+    }
+  else
+    {
+      gtk_widget_add_css_class (entry, "error");
+      gtk_accessible_update_state (GTK_ACCESSIBLE (entry),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
+
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (entry),
+                                      GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE, error, NULL,
+                                      -1);
+    }
+}
 
 static void
 name_exists_get_info_cb (GObject      *source,
@@ -900,6 +928,8 @@ name_exists_get_info_cb (GObject      *source,
       /* Don't clear the label here, it may contain a warning */
     }
 
+  update_error_state (data->entry, data->error_stack);
+
   g_object_unref (impl);
   g_object_unref (data->file);
   g_free (data);
@@ -913,7 +943,8 @@ check_valid_child_name (GtkFileChooserWidget *impl,
                         gboolean              is_folder,
                         GFile                *original,
                         GtkWidget            *error_stack,
-                        GtkWidget            *button)
+                        GtkWidget            *button,
+                        GtkWidget            *entry)
 {
   GtkFileChooserErrorStack *stack = GTK_FILE_CHOOSER_ERROR_STACK (error_stack);
 
@@ -962,6 +993,7 @@ check_valid_child_name (GtkFileChooserWidget *impl,
           data->file = g_object_ref (file);
           data->error_stack = error_stack;
           data->button = button;
+          data->entry = entry;
 
           if (impl->file_exists_get_info_cancellable)
             g_cancellable_cancel (impl->file_exists_get_info_cancellable);
@@ -979,6 +1011,8 @@ check_valid_child_name (GtkFileChooserWidget *impl,
           g_object_unref (file);
         }
     }
+
+  update_error_state (entry, error_stack);
 }
 
 static void
@@ -991,7 +1025,8 @@ new_folder_name_changed (GtkEditable          *editable,
                           TRUE,
                           NULL,
                           impl->new_folder_error_stack,
-                          impl->new_folder_create_button);
+                          impl->new_folder_create_button,
+                          GTK_WIDGET (editable));
 }
 
 static void
@@ -1294,7 +1329,8 @@ rename_file_name_changed (GtkEntry             *entry,
                           file_type == G_FILE_TYPE_DIRECTORY,
                           impl->rename_file_source_file,
                           impl->rename_file_error_stack,
-                          impl->rename_file_rename_button);
+                          impl->rename_file_rename_button,
+                          GTK_WIDGET (entry));
 }
 
 static void
