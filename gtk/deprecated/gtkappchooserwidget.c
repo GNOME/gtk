@@ -41,10 +41,13 @@
 #include "gtksignallistitemfactory.h"
 #include "gtklistitem.h"
 #include "gtksingleselection.h"
+#include "gtkfilterlistmodel.h"
+#include "gtkstringfilter.h"
 #include "gtksortlistmodel.h"
 #include "gtkstringsorter.h"
 #include "gtkcustomsorter.h"
 #include "gtklistheader.h"
+#include "gtksearchentry.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -192,6 +195,8 @@ struct _GtkAppChooserWidget {
 
   GListStore *app_info_store;
   GtkListItemFactory *header_factory;
+  GtkStringFilter *filter;
+  GtkStringSorter *sorter;
   GtkWidget *program_list;
   GtkWidget *no_apps_label;
   GtkWidget *no_apps;
@@ -507,6 +512,8 @@ gtk_app_chooser_widget_finalize (GObject *object)
   g_object_unref (self->monitor);
   g_object_unref (self->app_info_store);
   g_object_unref (self->header_factory);
+  g_object_unref (self->filter);
+  g_object_unref (self->sorter);
 
   G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->finalize (object);
 }
@@ -861,15 +868,20 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
 {
   GtkListItemFactory *factory;
   GtkSingleSelection *selection;
+  GtkExpression *expression;
+  GtkFilterListModel *filter;
   GtkSortListModel *sort;
   GtkCustomSorter *section_sorter;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->app_info_store = g_list_store_new (gtk_app_item_get_type ());
+  expression = gtk_property_expression_new (gtk_app_item_get_type (), NULL, "name");
+  self->filter = gtk_string_filter_new (gtk_expression_ref (expression));
+  self->sorter = gtk_string_sorter_new (expression);
 
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (g_object_ref (self->app_info_store)),
-                                  GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (gtk_app_item_get_type (), NULL, "name"))));
+  self->app_info_store = g_list_store_new (gtk_app_item_get_type ());
+  filter = gtk_filter_list_model_new (G_LIST_MODEL (g_object_ref (self->app_info_store)), GTK_FILTER (g_object_ref (self->filter)));
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (filter), GTK_SORTER (g_object_ref (self->sorter)));
 
   section_sorter = gtk_custom_sorter_new (compare_section, NULL, NULL);
   gtk_sort_list_model_set_section_sorter (sort, GTK_SORTER (section_sorter));
@@ -1222,6 +1234,13 @@ gtk_app_chooser_widget_get_default_text (GtkAppChooserWidget *self)
   return self->default_text;
 }
 
+static void
+changed_cb (GtkEditable         *editable,
+            GtkAppChooserWidget *self)
+{
+  gtk_string_filter_set_search (self->filter, gtk_editable_get_text (editable));
+}
+
 void
 _gtk_app_chooser_widget_set_search_entry (GtkAppChooserWidget *self,
                                           GtkEditable         *entry)
@@ -1229,4 +1248,6 @@ _gtk_app_chooser_widget_set_search_entry (GtkAppChooserWidget *self,
   g_object_bind_property (self->no_apps, "visible",
                           entry, "sensitive",
                           G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+
+  g_signal_connect (entry, "changed", G_CALLBACK (changed_cb), self);
 }
