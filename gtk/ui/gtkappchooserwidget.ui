@@ -11,6 +11,7 @@
             <property name="has-frame">1</property>
             <property name="child">
               <object class="GtkListView" id="program_list">
+                <property name="tab-behavior">item</property>
               </object>
             </property>
           </object>
