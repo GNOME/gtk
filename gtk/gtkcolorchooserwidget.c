@@ -265,6 +265,8 @@ gtk_color_chooser_widget_set_show_editor (GtkColorChooserWidget *cc,
 
   gtk_widget_set_visible (cc->editor, show_editor);
   gtk_widget_set_visible (cc->palette, !show_editor);
+  if (show_editor)
+    gtk_widget_grab_focus (cc->editor);
 }
 
 static void
@@ -517,6 +519,7 @@ gtk_color_chooser_widget_activate_color_customize (GtkWidget  *widget,
 
   gtk_widget_set_visible (cc->palette, FALSE);
   gtk_widget_set_visible (cc->editor, TRUE);
+  gtk_widget_grab_focus (cc->editor);
   g_object_notify (G_OBJECT (cc), "show-editor");
 }
 
