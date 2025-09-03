@@ -55,6 +55,8 @@ GdkGLContext *  gdk_wayland_window_create_gl_context                (GdkWindow  
                                                                      GError           **error);
 void            gdk_wayland_window_invalidate_for_new_frame         (GdkWindow         *window,
                                                                      cairo_region_t    *update_area);
+gboolean        gdk_wayland_display_is_gl_context_current           (GdkDisplay        *display,
+                                                                     GdkGLContext      *context);
 gboolean        gdk_wayland_display_make_gl_context_current         (GdkDisplay        *display,
                                                                      GdkGLContext      *context);
 

@@ -56,6 +56,8 @@ GdkGLContext *  gdk_quartz_window_create_gl_context                (GdkWindow   
                                                                     GError           **error);
 void            gdk_quartz_window_invalidate_for_new_frame         (GdkWindow         *window,
                                                                     cairo_region_t    *update_area);
+gboolean        gdk_quartz_display_is_gl_context_current           (GdkDisplay        *display,
+                                                                    GdkGLContext      *context);
 gboolean        gdk_quartz_display_make_gl_context_current         (GdkDisplay        *display,
                                                                     GdkGLContext      *context);
 

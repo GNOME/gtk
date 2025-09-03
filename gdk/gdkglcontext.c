@@ -907,7 +907,8 @@ gdk_gl_context_make_current (GdkGLContext *context)
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   current = g_private_get (&thread_current_context);
-  if (current == context)
+  if (current == context &&
+      gdk_display_is_gl_context_current (priv->display, context))
     return;
 
   /* we need to realize the GdkGLContext if it wasn't explicitly realized */
@@ -1059,6 +1060,16 @@ gdk_gl_context_get_current (void)
   GdkGLContext *current;
 
   current = g_private_get (&thread_current_context);
+
+  if (current)
+    {
+      GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (current);
+      if (!gdk_display_is_gl_context_current (priv->display, current))
+        {
+          g_private_replace (&thread_current_context, NULL);
+          current = NULL;
+        }
+    }
 
   return current;
 }
