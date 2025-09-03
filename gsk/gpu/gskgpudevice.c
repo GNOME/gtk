@@ -33,7 +33,6 @@ gsk_gpu_device_gc (GskGpuDevice *self,
                    gint64        timestamp)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
-  gint64 before G_GNUC_UNUSED = GDK_PROFILER_CURRENT_TIME;
   gboolean result;
 
   if (priv->cache == NULL)
@@ -46,8 +45,6 @@ gsk_gpu_device_gc (GskGpuDevice *self,
                              timestamp);
   if (result)
     g_clear_object (&priv->cache);
-
-  gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
 
   return result;
 }

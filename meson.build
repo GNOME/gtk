@@ -317,6 +317,7 @@ if cc.get_id() == 'msvc'
     '/wd4324', # structure was padded due to alignment specifier - why are you warning about doing what I told you?!
     '/wd4334', # '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
     '/wd4389', # comparison between signed and unsigned (no gcc warning, so GTK's littered with it)
+    '/wd4701', # potentially uninitialized variable - triggers all the time in debug builds
     '/wd4702', # unreachable code, triggers after assert_not_reached() which can be compiled out
   ]
 
