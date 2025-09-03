@@ -506,6 +506,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
                                                         G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_css_name (widget_class, "plane");
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SLIDER);
 }
 
 GtkWidget *
