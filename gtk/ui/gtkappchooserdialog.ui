@@ -2,6 +2,7 @@
 <interface domain="gtk40">
   <template class="GtkAppChooserDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Select App</property>
+    <property name="default-height">500</property>
     <style>
       <class name="appchooser"/>
     </style>
