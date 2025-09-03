@@ -154,3 +154,12 @@ gtk_file_chooser_error_stack_set_custom_error  (GtkFileChooserErrorStack *self,
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "custom");
 }
+
+GtkWidget *
+gtk_file_chooser_error_stack_get_error (GtkFileChooserErrorStack *self)
+{
+  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (self->stack)), "no-error") != 0)
+    return gtk_stack_get_visible_child (GTK_STACK (self->stack));
+
+  return NULL;
+}

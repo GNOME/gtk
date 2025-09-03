@@ -53,6 +53,7 @@ void   gtk_file_chooser_error_stack_set_error         (GtkFileChooserErrorStack 
 
 void   gtk_file_chooser_error_stack_set_custom_error  (GtkFileChooserErrorStack *self,
                                                        const char               *label_text);
+GtkWidget *gtk_file_chooser_error_stack_get_error     (GtkFileChooserErrorStack *self);
 
 G_END_DECLS
 
