@@ -213,7 +213,6 @@ main (int argc, char **argv)
   radio_file = gtk_check_button_new_with_label ("Use GFile");
   radio_content = gtk_check_button_new_with_label ("Use content type");
   gtk_check_button_set_group (GTK_CHECK_BUTTON (radio_content), GTK_CHECK_BUTTON (radio_file));
-  gtk_check_button_set_group (GTK_CHECK_BUTTON (radio_file), GTK_CHECK_BUTTON (radio_content));
   gtk_check_button_set_active (GTK_CHECK_BUTTON (radio_file), TRUE);
 
   gtk_grid_attach (GTK_GRID (grid), radio_file,
