@@ -525,6 +525,14 @@ gtk_color_editor_set_property (GObject      *object,
     }
 }
 
+static gboolean
+gtk_color_editor_grab_focus (GtkWidget *widget)
+{
+  GtkColorEditor *ce = GTK_COLOR_EDITOR (widget);
+
+  return gtk_widget_grab_focus (ce->entry);
+}
+
 static void
 gtk_color_editor_class_init (GtkColorEditorClass *class)
 {
@@ -534,6 +542,8 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   object_class->dispose = gtk_color_editor_dispose;
   object_class->get_property = gtk_color_editor_get_property;
   object_class->set_property = gtk_color_editor_set_property;
+
+  widget_class->grab_focus = gtk_color_editor_grab_focus;
 
   g_object_class_override_property (object_class, PROP_RGBA, "rgba");
   g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
