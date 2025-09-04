@@ -1611,7 +1611,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
 
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_HAS_POPUP);
       if (gtk_boolean_accessible_value_get (value))
-        accesskit_node_set_has_popup(node, ACCESSKIT_HAS_POPUP_TRUE);
+        accesskit_node_set_has_popup(node, ACCESSKIT_HAS_POPUP_MENU);
     }
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION))

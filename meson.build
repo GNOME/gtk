@@ -749,7 +749,7 @@ cloudproviders_dep = dependency('cloudproviders',
   ])
 cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
 
-accesskit_dep = dependency('accesskit-c-0.15', required: get_option('accesskit').enabled())
+accesskit_dep = dependency('accesskit-c-0.17', required: get_option('accesskit').enabled())
 
 cdata.set('HAVE_ACCESSKIT', accesskit_dep.found())
 
