@@ -2414,10 +2414,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_connect (priv->buffer, "changed",
 			G_CALLBACK (gtk_text_view_buffer_changed_handler),
                         text_view);
-      g_signal_connect (priv->buffer, "notify",
+      g_signal_connect (priv->buffer, "notify::can-undo",
                         G_CALLBACK (gtk_text_view_buffer_notify_undo),
                         text_view);
-      g_signal_connect (priv->buffer, "notify",
+      g_signal_connect (priv->buffer, "notify::can-redo",
                         G_CALLBACK (gtk_text_view_buffer_notify_redo),
                         text_view);
       g_signal_connect_after (priv->buffer, "insert-text",
