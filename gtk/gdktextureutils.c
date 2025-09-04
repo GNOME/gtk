@@ -36,7 +36,25 @@ static gboolean
 gdk_texture_get_rsvg_handle_size (RsvgHandle *handle, gdouble *out_width, gdouble *out_height)
 {
 #if LIBRSVG_CHECK_VERSION (2,52,0)
-  return rsvg_handle_get_intrinsic_size_in_pixels (handle, out_width, out_height);
+  gboolean has_viewbox;
+  RsvgRectangle viewbox;
+
+  if (rsvg_handle_get_intrinsic_size_in_pixels (handle, out_width, out_height))
+    return TRUE;
+
+  rsvg_handle_get_intrinsic_dimensions (handle,
+                                        NULL, NULL, NULL, NULL,
+                                        &has_viewbox,
+                                        &viewbox);
+
+  if (has_viewbox)
+    {
+      *out_width = viewbox.width;
+      *out_height = viewbox.height;
+      return TRUE;
+    }
+
+  return FALSE;
 #else
   RsvgDimensionData dim;
   rsvg_handle_get_dimensions (handle, &dim);
@@ -145,7 +163,7 @@ gdk_texture_new_from_svg_bytes (GBytes  *bytes,
 }
 
 /* }}} */
- /* {{{ Symbolic processing */
+/* {{{ Symbolic processing */
 
 static char *
 make_stylesheet (const char *fg_color,
