@@ -116,7 +116,9 @@
                                         <property name="min-content-height">200</property>
                                         <property name="hscrollbar-policy">2</property>
                                         <property name="child">
-                                          <object class="GtkListView" id="language_list"/>
+                                          <object class="GtkListView" id="language_list">
+                                            <property name="tab-behavior">item</property>
+                                          </object>
                                         </property>
                                       </object>
                                     </property>
@@ -151,6 +153,7 @@
                                 <property name="has-frame">1</property>
                                 <property name="child">
                                   <object class="GtkListView" id="family_face_list">
+                                    <property name="tab-behavior">item</property>
                                     <property name="model">selection</property>
                                     <signal name="activate" handler="row_activated_cb" swapped="no"/>
                                     <property name="factory">
