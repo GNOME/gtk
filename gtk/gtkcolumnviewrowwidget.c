@@ -266,6 +266,14 @@ gtk_column_view_row_widget_focus (GtkWidget        *widget,
         return FALSE;
     }
 
+  if (current &&
+      (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN ||
+      direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT))
+    {
+      if (gtk_widget_child_focus (current, direction))
+        return TRUE;
+    }
+
   if (current == NULL)
     {
       GtkColumnViewColumn *focus_column = gtk_column_view_get_focus_column (view);

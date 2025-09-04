@@ -58,6 +58,12 @@ gtk_column_view_cell_widget_focus (GtkWidget        *widget,
   if (gtk_widget_get_focus_child (widget))
     {
       /* focus is in the child */
+
+      /* Try moving inside the child */
+      if (gtk_widget_child_focus (child, direction))
+        return TRUE;
+
+      /* That failed, exit it */
       if (direction == GTK_DIR_TAB_BACKWARD)
         return gtk_widget_grab_focus_self (widget);
       else
