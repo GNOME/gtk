@@ -60,6 +60,10 @@
  * `GtkSpinner` has a single CSS node with the name spinner.
  * When the animation is active, the :checked pseudoclass is
  * added to this node.
+ *
+ * # Accessibility
+ *
+ * `GtkSpinner` uses the [enum@Gtk.AccessibleRole.progress_bar] role.
  */
 
 typedef struct _GtkSpinnerClass GtkSpinnerClass;
@@ -264,6 +268,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_css_name (widget_class, I_("spinner"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_PROGRESS_BAR);
 }
 
 static void
@@ -296,6 +301,10 @@ gtk_spinner_start (GtkSpinner *spinner)
   g_return_if_fail (GTK_IS_SPINNER (spinner));
 
   gtk_spinner_set_spinning (spinner, TRUE);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (spinner),
+                               GTK_ACCESSIBLE_STATE_BUSY, TRUE,
+                               -1);
 }
 
 /**
@@ -310,4 +319,8 @@ gtk_spinner_stop (GtkSpinner *spinner)
   g_return_if_fail (GTK_IS_SPINNER (spinner));
 
   gtk_spinner_set_spinning (spinner, FALSE);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (spinner),
+                               GTK_ACCESSIBLE_STATE_BUSY, FALSE,
+                               -1);
 }
