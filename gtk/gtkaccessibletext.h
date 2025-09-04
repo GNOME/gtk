@@ -290,6 +290,37 @@ struct _GtkAccessibleTextInterface
   gboolean (* get_offset) (GtkAccessibleText      *self,
                            const graphene_point_t *point,
                            unsigned int           *offset);
+
+  /**
+   * GtkAccessibleTextInterface::set_caret_position:
+   * @self: the accessible object
+   * @offset: the text offset in characters
+   *
+   * Sets the caret position.
+   *
+   * Returns: true if the caret position was updated
+   *
+   * Since: 4.22
+   */
+  gboolean (* set_caret_position) (GtkAccessibleText *self,
+                                   unsigned int       offset);
+
+  /**
+   * GtkAccessibleTextInterface::set_selection:
+   * @self: the accessible object
+   * @i: the selection to set
+   * @range: the range to set the selection to
+   *
+   * Sets the caret position.
+   *
+   * Returns: true if the selection was updated
+   *
+   * Since: 4.22
+   */
+  gboolean (* set_selection) (GtkAccessibleText      *self,
+                              gsize                   i,
+                              GtkAccessibleTextRange *range);
+
 };
 
 GDK_AVAILABLE_IN_4_14
