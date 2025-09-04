@@ -6421,6 +6421,43 @@ gtk_label_accessible_text_get_offset (GtkAccessibleText      *self,
   return TRUE;
 }
 
+static gboolean
+gtk_label_accessible_text_set_caret_position (GtkAccessibleText *self,
+                                              unsigned int       offset)
+{
+  GtkLabel *label = GTK_LABEL (self);
+  int index;
+
+  if (!gtk_label_get_selectable (label))
+    return FALSE;
+
+  index = g_utf8_offset_to_pointer (label->text, offset) - label->text;
+
+  gtk_label_select_region_index (label, index, index);
+  return TRUE;
+}
+
+static gboolean
+gtk_label_accessible_text_set_selection (GtkAccessibleText      *self,
+                                         gsize                   i,
+                                         GtkAccessibleTextRange *range)
+{
+  GtkLabel *label = GTK_LABEL (self);
+  int index1, index2;
+
+  if (!gtk_label_get_selectable (label))
+    return FALSE;
+
+  if (i != 0)
+    return FALSE;
+
+  index1 = g_utf8_offset_to_pointer (label->text, range->start) - label->text;
+  index2 = g_utf8_offset_to_pointer (label->text, range->start + range->length) - label->text;
+
+  gtk_label_select_region_index (label, index1, index2);
+  return TRUE;
+}
+
 static void
 gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -6432,6 +6469,8 @@ gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_default_attributes = gtk_label_accessible_text_get_default_attributes;
   iface->get_extents = gtk_label_accessible_text_get_extents;
   iface->get_offset = gtk_label_accessible_text_get_offset;
+  iface->set_caret_position = gtk_label_accessible_text_set_caret_position;
+  iface->set_selection = gtk_label_accessible_text_set_selection;
 }
 
 /* }}} */
