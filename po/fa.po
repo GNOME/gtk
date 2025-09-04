@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-08-16 07:56+0000\n"
-"PO-Revision-Date: 2025-08-16 14:21+0330\n"
+"POT-Creation-Date: 2025-09-04 11:54+0000\n"
+"PO-Revision-Date: 2025-09-04 16:57+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Bookmarks: 133,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -1023,24 +1023,30 @@ msgstr "هیچ برنامه‌ای برای پرونده‌های «%s» پید�
 msgid "Failed to start GNOME Software"
 msgstr "شکست در اجرای نرم‌افزارهای گنوم"
 
-#: gtk/deprecated/gtkappchooserwidget.c:525
-msgid "Default App"
-msgstr "کارهٔ پیش‌گزیده"
+#. Translators: Label for a search button and entry, should be translated as a verb
+#: gtk/deprecated/gtkappchooserdialog.c:472 gtk/gtkfilechooserdialog.c:477
+#: gtk/ui/gtkfilechooserwidget.ui:123
+msgid "Search"
+msgstr "جست‌وجو"
 
-#: gtk/deprecated/gtkappchooserwidget.c:575
+#: gtk/deprecated/gtkappchooserwidget.c:300
 #, c-format
 msgid "No apps found for “%s”."
 msgstr "هیچ کاره‌ای برای «%s» پیدا نشد."
 
-#: gtk/deprecated/gtkappchooserwidget.c:658
+#: gtk/deprecated/gtkappchooserwidget.c:794
+msgid "Default App"
+msgstr "کارهٔ پیش‌گزیده"
+
+#: gtk/deprecated/gtkappchooserwidget.c:796
 msgid "Recommended Apps"
 msgstr "کاره‌های توصیه شده"
 
-#: gtk/deprecated/gtkappchooserwidget.c:673
+#: gtk/deprecated/gtkappchooserwidget.c:798
 msgid "Related Apps"
 msgstr "کاره‌های مربوط"
 
-#: gtk/deprecated/gtkappchooserwidget.c:687
+#: gtk/deprecated/gtkappchooserwidget.c:800
 msgid "Other Apps"
 msgstr "دیگر کاره‌ها"
 
@@ -1082,13 +1088,13 @@ msgstr "%Id ٪"
 msgid "Pick a Color"
 msgstr "یک رنگ بردارید"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:321
+#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:323
 #: gtk/gtkcolordialogbutton.c:337
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "قرمز ٪%Id، سبز ٪%Id، آبی ٪%Id، آلفا ٪%Id"
 
-#: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:327
+#: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:329
 #: gtk/gtkcolordialogbutton.c:343
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1103,7 +1109,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "یک قلم بردارید"
 
-#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3818
+#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3854
 #: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:328
 msgid "Font"
 msgstr "قلم"
@@ -1893,246 +1899,246 @@ msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%Id"
 
-#: gtk/gtkcolorchooserwidget.c:384 gtk/gtkcoloreditor.c:171
+#: gtk/gtkcolorchooserwidget.c:386 gtk/gtkcoloreditor.c:171
 #, c-format
 msgid "Color: %s"
 msgstr "رنگ: %s"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "آبی خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "آبی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Blue"
 msgstr "آبی"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "آبی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "آبی خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:454
+#: gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "سبز خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "سبز روشن"
 
-#: gtk/gtkcolorchooserwidget.c:456
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Green"
 msgstr "سبز"
 
-#: gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "سبز تیره"
 
-#: gtk/gtkcolorchooserwidget.c:458
+#: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "سبز خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "زرد خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:460
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "زرد روشن"
 
-#: gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "زرد"
 
-#: gtk/gtkcolorchooserwidget.c:462
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "زرد تیره"
 
-#: gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "زرد خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:464
+#: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "نارنجی خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "نارنجی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:466
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Orange"
 msgstr "نارنجی"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "نارنجی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "نارنجی خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "قرمز خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "قرمز روشن"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Red"
 msgstr "قرمز"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "قرمز تیره"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "قرمز خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "بنفش خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:475
+#: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "بنفش روشن"
 
-#: gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Purple"
 msgstr "بنفش"
 
-#: gtk/gtkcolorchooserwidget.c:477
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "بنفش تیره"
 
-#: gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "بنفش خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "قهوه‌ای خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:480
+#: gtk/gtkcolorchooserwidget.c:482
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "قهوه‌ای روشن"
 
-#: gtk/gtkcolorchooserwidget.c:481
+#: gtk/gtkcolorchooserwidget.c:483
 msgctxt "Color name"
 msgid "Brown"
 msgstr "قهوه‌ای"
 
-#: gtk/gtkcolorchooserwidget.c:482
+#: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "قهوه‌ای تیره"
 
-#: gtk/gtkcolorchooserwidget.c:483
+#: gtk/gtkcolorchooserwidget.c:485
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "قهوه‌ای خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:486
 msgctxt "Color name"
 msgid "White"
 msgstr "سفید"
 
-#: gtk/gtkcolorchooserwidget.c:485
+#: gtk/gtkcolorchooserwidget.c:487
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "خاکستری روشن ۱"
 
-#: gtk/gtkcolorchooserwidget.c:486
+#: gtk/gtkcolorchooserwidget.c:488
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "خاکستری روشن ۲"
 
-#: gtk/gtkcolorchooserwidget.c:487
+#: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "خاکستری روشن ۳"
 
-#: gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "خاکستری روشن ۴"
 
-#: gtk/gtkcolorchooserwidget.c:489
+#: gtk/gtkcolorchooserwidget.c:491
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "خاکستری تیره ۱"
 
-#: gtk/gtkcolorchooserwidget.c:490
+#: gtk/gtkcolorchooserwidget.c:492
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "خاکستری تیره ۲"
 
-#: gtk/gtkcolorchooserwidget.c:491
+#: gtk/gtkcolorchooserwidget.c:493
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "خاکستری تیره ۳"
 
-#: gtk/gtkcolorchooserwidget.c:492
+#: gtk/gtkcolorchooserwidget.c:494
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "خاکستری تیره ۴"
 
-#: gtk/gtkcolorchooserwidget.c:493
+#: gtk/gtkcolorchooserwidget.c:495
 msgctxt "Color name"
 msgid "Black"
 msgstr "مشکی"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:568
 msgid "Custom"
 msgstr "سفارشی"
 
-#: gtk/gtkcolorchooserwidget.c:579
+#: gtk/gtkcolorchooserwidget.c:582
 msgid "Add Color"
 msgstr "افزودن رنگ"
 
-#: gtk/gtkcolorchooserwidget.c:601
+#: gtk/gtkcolorchooserwidget.c:604
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "رنگ سفارشی %Id: %s"
@@ -2209,7 +2215,7 @@ msgstr "حاشیه‌های کاغذ"
 msgid "_Edit"
 msgstr "_ویرایش"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6352
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
 #: gtk/gtktextview.c:9388
 msgid "_Copy"
 msgstr "_رونوشت"
@@ -2222,11 +2228,6 @@ msgstr "فهرست بافتاری"
 #: gtk/gtkentry.c:3787
 msgid "Insert Emoji"
 msgstr "درج ایموجی"
-
-#. Translators: Label for a search button and entry, should be translated as a verb
-#: gtk/gtkfilechooserdialog.c:477 gtk/ui/gtkfilechooserwidget.ui:123
-msgid "Search"
-msgstr "جست‌وجو"
 
 #: gtk/gtkfilechooserdialog.c:562
 msgid "_Name"
@@ -2289,12 +2290,12 @@ msgid "A file with that name already exists"
 msgstr "یک پرونده با همان نام در حال حاضر وجود دارد"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:5001
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:5037
 #: gtk/gtkfiledialog.c:914 gtk/gtkmessagedialog.c:173 gtk/gtkmessagedialog.c:182
 #: gtk/gtkmountoperation.c:608 gtk/print/gtkpagesetupunixdialog.c:285
 #: gtk/print/gtkprintbackend.c:654 gtk/print/gtkprintunixdialog.c:683
 #: gtk/print/gtkprintunixdialog.c:840 gtk/gtkwindow.c:6465
-#: gtk/ui/gtkappchooserdialog.ui:48 gtk/ui/gtkassistant.ui:52
+#: gtk/ui/gtkappchooserdialog.ui:51 gtk/ui/gtkassistant.ui:52
 #: gtk/ui/gtkcolorchooserdialog.ui:36 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_انصراف"
@@ -2376,238 +2377,239 @@ msgstr "نمی‌توان پوشه را حذف کرد"
 msgid "The file could not be moved to the Trash"
 msgstr "پرونده را نمی‌توان به زباله‌دان منتقل کرد"
 
-#: gtk/gtkfilechooserwidget.c:1212
+#: gtk/gtkfilechooserwidget.c:1247
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "آیا مطمئنید که می‌خواهید برای همیشه «%s» را پاک کنید؟"
 
-#: gtk/gtkfilechooserwidget.c:1213
+#: gtk/gtkfilechooserwidget.c:1248
 msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
-#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6360 gtk/gtktextview.c:9396
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9396
 msgid "_Delete"
 msgstr "_حذف"
 
-#: gtk/gtkfilechooserwidget.c:1331
+#: gtk/gtkfilechooserwidget.c:1367
 msgid "The file could not be renamed"
 msgstr "نمی‌توان نام پرونده را تغییر داد"
 
-#: gtk/gtkfilechooserwidget.c:1507
+#: gtk/gtkfilechooserwidget.c:1543
 msgid "Could not select file"
 msgstr "انتخاب پرونده ممکن نیست"
 
-#: gtk/gtkfilechooserwidget.c:1727 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1763 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "نمای شبکه‌ای"
 
-#: gtk/gtkfilechooserwidget.c:1733
+#: gtk/gtkfilechooserwidget.c:1769
 msgid "List View"
 msgstr "نمای سیاهه‌ای"
 
-#: gtk/gtkfilechooserwidget.c:1796
+#: gtk/gtkfilechooserwidget.c:1832
 msgid "_Visit File"
 msgstr "_مشاهده پرونده"
 
-#: gtk/gtkfilechooserwidget.c:1800
+#: gtk/gtkfilechooserwidget.c:1836
 msgid "_Open With File Manager"
 msgstr "_گشودن با مدیر پرونده‌ها"
 
-#: gtk/gtkfilechooserwidget.c:1804
+#: gtk/gtkfilechooserwidget.c:1840
 msgid "_Copy Location"
 msgstr "_رونوشت از مکان"
 
-#: gtk/gtkfilechooserwidget.c:1808
+#: gtk/gtkfilechooserwidget.c:1844
 msgid "_Add to Bookmarks"
 msgstr "_افزودن به نشانک‌ها"
 
-#: gtk/gtkfilechooserwidget.c:1812 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1848 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "_تغییر نام"
 
-#: gtk/gtkfilechooserwidget.c:1820
+#: gtk/gtkfilechooserwidget.c:1856
 msgid "_Move to Trash"
 msgstr "_انتقال به زباله‌دان"
 
-#: gtk/gtkfilechooserwidget.c:1829
+#: gtk/gtkfilechooserwidget.c:1865
 msgid "Show _Hidden Files"
 msgstr "نمایش پرونده‌های _مخفی"
 
-#: gtk/gtkfilechooserwidget.c:1833
+#: gtk/gtkfilechooserwidget.c:1869
 msgid "Sort _Folders Before Files"
 msgstr "مرتب کردن _شاخه‌ها پیش از پرونده‌ها"
 
-#: gtk/gtkfilechooserwidget.c:1956 gtk/gtkfilechooserwidget.c:1986
-#: gtk/gtkfilechooserwidget.c:3861
+#: gtk/gtkfilechooserwidget.c:1992 gtk/gtkfilechooserwidget.c:2022
+#: gtk/gtkfilechooserwidget.c:3897
 msgid "Unknown"
 msgstr "نامعلوم"
 
-#: gtk/gtkfilechooserwidget.c:2041 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2077 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "خانه"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2196 gtk/gtkfilechooserwidget.c:7433
+#: gtk/gtkfilechooserwidget.c:2232 gtk/gtkfilechooserwidget.c:7469
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "مکان"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2303
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Name:"
 msgstr "_نام:"
 
-#: gtk/gtkfilechooserwidget.c:2860 gtk/gtkfilechooserwidget.c:2874
+#: gtk/gtkfilechooserwidget.c:2896 gtk/gtkfilechooserwidget.c:2910
 #, c-format
 msgid "Searching in %s"
 msgstr "در حال جست‌وجو در %s"
 
-#: gtk/gtkfilechooserwidget.c:2880
+#: gtk/gtkfilechooserwidget.c:2916
 msgid "Searching"
 msgstr "درحال جست‌وجو"
 
-#: gtk/gtkfilechooserwidget.c:2886
+#: gtk/gtkfilechooserwidget.c:2922
 msgid "Enter location or URL"
 msgstr "وارد کردن مکان یا URL"
 
-#: gtk/gtkfilechooserwidget.c:3445 gtk/gtkfilechooserwidget.c:5788
-#: gtk/gtkfilechooserwidget.c:7455
+#: gtk/gtkfilechooserwidget.c:3481 gtk/gtkfilechooserwidget.c:5824
+#: gtk/gtkfilechooserwidget.c:7491
 msgid "Modified"
 msgstr "تغییریافته"
 
-#: gtk/gtkfilechooserwidget.c:3630
+#: gtk/gtkfilechooserwidget.c:3666
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "محتوای %s قابل خواندن نبود"
 
-#: gtk/gtkfilechooserwidget.c:3634
+#: gtk/gtkfilechooserwidget.c:3670
 msgid "Could not read the contents of the folder"
 msgstr "محتوای پوشه قابل خواندن نبود"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3757 gtk/gtkfilechooserwidget.c:3800
+#: gtk/gtkfilechooserwidget.c:3793 gtk/gtkfilechooserwidget.c:3836
 msgid "%H:%M"
 msgstr "%OH:%OM"
 
-#: gtk/gtkfilechooserwidget.c:3759 gtk/gtkfilechooserwidget.c:3802
+#: gtk/gtkfilechooserwidget.c:3795 gtk/gtkfilechooserwidget.c:3838
 msgid "%l:%M %p"
 msgstr "%OI:%OM %p"
 
-#: gtk/gtkfilechooserwidget.c:3763
+#: gtk/gtkfilechooserwidget.c:3799
 msgid "Yesterday"
 msgstr "دیروز"
 
-#: gtk/gtkfilechooserwidget.c:3772
+#: gtk/gtkfilechooserwidget.c:3808
 #, no-c-format
 msgid "%-e %b"
 msgstr "%O-e %b"
 
-#: gtk/gtkfilechooserwidget.c:3776
+#: gtk/gtkfilechooserwidget.c:3812
 msgid "%-e %b %Y"
 msgstr "%O-e %b %OY"
 
-#: gtk/gtkfilechooserwidget.c:3816 gtk/gtkfilechooserwidget.c:3824
+#: gtk/gtkfilechooserwidget.c:3852 gtk/gtkfilechooserwidget.c:3860
 msgid "Program"
 msgstr "برنامه"
 
-#: gtk/gtkfilechooserwidget.c:3817
+#: gtk/gtkfilechooserwidget.c:3853
 msgid "Audio"
 msgstr "صدا"
 
-#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilefilter.c:1072
+#: gtk/gtkfilechooserwidget.c:3855 gtk/gtkfilefilter.c:1072
 msgid "Image"
 msgstr "تصویر"
 
-#: gtk/gtkfilechooserwidget.c:3820
+#: gtk/gtkfilechooserwidget.c:3856
 msgid "Archive"
 msgstr "بایگانی"
 
-#: gtk/gtkfilechooserwidget.c:3821
+#: gtk/gtkfilechooserwidget.c:3857
 msgid "Markup"
 msgstr "نشانه‌گذاری"
 
-#: gtk/gtkfilechooserwidget.c:3822 gtk/gtkfilechooserwidget.c:3823
+#: gtk/gtkfilechooserwidget.c:3858 gtk/gtkfilechooserwidget.c:3859
 msgid "Text"
 msgstr "متن"
 
-#: gtk/gtkfilechooserwidget.c:3825
+#: gtk/gtkfilechooserwidget.c:3861
 msgid "Video"
 msgstr "ویدیو"
 
-#: gtk/gtkfilechooserwidget.c:3826
+#: gtk/gtkfilechooserwidget.c:3862
 msgid "Contacts"
 msgstr "آشنایان"
 
-#: gtk/gtkfilechooserwidget.c:3827
+#: gtk/gtkfilechooserwidget.c:3863
 msgid "Calendar"
 msgstr "تقویم"
 
-#: gtk/gtkfilechooserwidget.c:3828
+#: gtk/gtkfilechooserwidget.c:3864
 msgid "Document"
 msgstr "سند"
 
-#: gtk/gtkfilechooserwidget.c:3829
+#: gtk/gtkfilechooserwidget.c:3865
 msgid "Presentation"
 msgstr "ارائه‌"
 
-#: gtk/gtkfilechooserwidget.c:3830
+#: gtk/gtkfilechooserwidget.c:3866
 msgid "Spreadsheet"
 msgstr "صفحهٔ گسترده"
 
-#: gtk/gtkfilechooserwidget.c:4180 gtk/gtkfilechooserwidget.c:5156
+#: gtk/gtkfilechooserwidget.c:4216 gtk/gtkfilechooserwidget.c:5192
 msgid "You do not have access to the specified folder."
 msgstr "شما دسترسی به پوشه مشخص شده را ندارید."
 
-#: gtk/gtkfilechooserwidget.c:4993 gtk/print/gtkprintunixdialog.c:674
+#: gtk/gtkfilechooserwidget.c:5029 gtk/print/gtkprintunixdialog.c:674
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "پرونده‌ای با نام «%s» از قبل وجود دارد.  می‌خواهید آن را جایگزین کنید؟"
 
-#: gtk/gtkfilechooserwidget.c:4995 gtk/print/gtkprintunixdialog.c:678
+#: gtk/gtkfilechooserwidget.c:5031 gtk/print/gtkprintunixdialog.c:678
 #, c-format
 msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "پرونده از قبل در «%s» وجود دارد.  با جایگزینی آن تمام محتوایش بازنویسی می‌شود."
 
-#: gtk/gtkfilechooserwidget.c:5001 gtk/print/gtkprintunixdialog.c:686
+#: gtk/gtkfilechooserwidget.c:5037 gtk/print/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "_جایگزینی"
 
-#: gtk/gtkfilechooserwidget.c:5735
+#: gtk/gtkfilechooserwidget.c:5771
 msgid "Could not send the search request"
 msgstr "نمی‌توان درخواست جست‌وجو را ارسال کرد"
 
-#: gtk/gtkfilechooserwidget.c:6016
+#: gtk/gtkfilechooserwidget.c:6052
 msgid "Accessed"
 msgstr "در دسترس"
 
-#: gtk/gtkfilechooserwidget.c:7411
+#: gtk/gtkfilechooserwidget.c:7447
 msgid "_Size"
 msgstr "ا_ندازه"
 
-#: gtk/gtkfilechooserwidget.c:7415
+#: gtk/gtkfilechooserwidget.c:7451
 msgid "T_ype"
 msgstr "_گونه"
 
-#: gtk/gtkfilechooserwidget.c:7419
+#: gtk/gtkfilechooserwidget.c:7455
 msgid "_Time"
 msgstr "_زمان"
 
-#: gtk/gtkfilechooserwidget.c:7425 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7461 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "نام"
 
-#: gtk/gtkfilechooserwidget.c:7442 gtk/inspector/resource-list.ui:98
-#: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
+#: gtk/gtkfilechooserwidget.c:7478 gtk/inspector/resource-list.ui:98
+#: gtk/ui/gtkfontchooserwidget.ui:220 gtk/ui/gtkfontchooserwidget.ui:386
+#: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "اندازه"
 
-#: gtk/gtkfilechooserwidget.c:7448 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7484 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "نوع"
@@ -2624,7 +2626,7 @@ msgstr "پرونده‌ای را بردارید"
 msgid "Save a File"
 msgstr "پرونده‌ای را ذخیره کنید"
 
-#: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:53
+#: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:56
 #: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "_گزینش"
@@ -2637,11 +2639,11 @@ msgstr "گزینش شاخه‌ها"
 msgid "Select a Folder"
 msgstr "شاخه‌ای را برگزنید"
 
-#: gtk/gtkfiledialog.c:1398 gtk/gtkfiledialog.c:1515 gtk/gtkfiledialog.c:1624
+#: gtk/gtkfiledialog.c:1413 gtk/gtkfiledialog.c:1533 gtk/gtkfiledialog.c:1645
 msgid "Encoding"
 msgstr "کدگذاری"
 
-#: gtk/gtkfiledialog.c:1635
+#: gtk/gtkfiledialog.c:1656
 msgid "Line Ending"
 msgstr "پایان‌دهی خط"
 
@@ -2737,15 +2739,15 @@ msgstr "بستن"
 msgid "Close the infobar"
 msgstr "بستن نوار اطّلاعات"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6348 gtk/gtktextview.c:9384
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9384
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6356 gtk/gtktextview.c:9392
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9392
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6369 gtk/gtktextview.c:9417
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9417
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
@@ -3975,7 +3977,7 @@ msgstr "در دسترس نیست"
 #: gtk/print/gtkprintoperation.c:255
 #, c-format
 msgid "%s job #%d"
-msgstr "%s کار شماره %Id"
+msgstr "‏%s کار شماره %Id"
 
 #: gtk/print/gtkprintoperation.c:1703
 msgctxt "print operation status"
@@ -4142,11 +4144,11 @@ msgstr "از بالا به پایین"
 msgid "Bottom to top"
 msgstr "از پایین به بالا"
 
-#: gtk/gtkprintdialog.c:1759
+#: gtk/gtkprintdialog.c:1766
 msgid "Failed to create the read file descriptor"
 msgstr "شکست در ایجاد شرح دهندهٔ پروندهٔ خواندن"
 
-#: gtk/gtkprogressbar.c:629
+#: gtk/gtkprogressbar.c:631
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -4260,11 +4262,11 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "نوار کناری"
 
-#: gtk/gtktext.c:6374
+#: gtk/gtktext.c:6401
 msgid "Change di_rection"
 msgstr "دگرگونی _جهت"
 
-#: gtk/gtktext.c:6379 gtk/gtktextview.c:9422
+#: gtk/gtktext.c:6406 gtk/gtktextview.c:9422
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
@@ -6950,15 +6952,15 @@ msgstr "اطّلاعات سامانه"
 msgid "Select App"
 msgstr "گزینش کاره"
 
-#: gtk/ui/gtkappchooserdialog.ui:63
+#: gtk/ui/gtkappchooserdialog.ui:66
 msgid "_View All Apps"
 msgstr "_دیدن تمامی کاره‌ها"
 
-#: gtk/ui/gtkappchooserdialog.ui:69
+#: gtk/ui/gtkappchooserdialog.ui:72
 msgid "_Find New Apps"
 msgstr "_یافتن کاره‌های جدید"
 
-#: gtk/ui/gtkappchooserwidget.ui:100
+#: gtk/ui/gtkappchooserwidget.ui:40
 msgid "No applications found."
 msgstr "هیچ برنامه‌ای پیدا نشد."
 
@@ -7181,24 +7183,24 @@ msgstr "تک‌عرض"
 msgid "Language"
 msgstr "زبان"
 
-#: gtk/ui/gtkfontchooserwidget.ui:198 gtk/ui/gtkfontchooserwidget.ui:200
-#: gtk/ui/gtkfontchooserwidget.ui:350 gtk/ui/gtkfontchooserwidget.ui:354
+#: gtk/ui/gtkfontchooserwidget.ui:201 gtk/ui/gtkfontchooserwidget.ui:203
+#: gtk/ui/gtkfontchooserwidget.ui:353 gtk/ui/gtkfontchooserwidget.ui:357
 msgid "Preview Font"
 msgstr "پیش‌نمایش قلم"
 
-#: gtk/ui/gtkfontchooserwidget.ui:296
+#: gtk/ui/gtkfontchooserwidget.ui:299
 msgid "No Fonts Found"
 msgstr "هیچ قلمی پیدا نشد"
 
-#: gtk/ui/gtkfontchooserwidget.ui:334
+#: gtk/ui/gtkfontchooserwidget.ui:337
 msgid "Font Name"
 msgstr "نام قلم"
 
-#: gtk/ui/gtkfontchooserwidget.ui:379
+#: gtk/ui/gtkfontchooserwidget.ui:382
 msgid "Font Variation Axes"
 msgstr "محورهای دگرگونی قلم"
 
-#: gtk/ui/gtkfontchooserwidget.ui:427
+#: gtk/ui/gtkfontchooserwidget.ui:430
 msgid "Font Features"
 msgstr "ویژگی‌های قلم"
 
@@ -7549,8 +7551,8 @@ msgstr ""
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
 #: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
-#: tools/gtk-rendernode-tool-show.c:122
+#: tools/gtk-rendernode-tool-convert.c:98 tools/gtk-rendernode-tool-extract.c:298
+#: tools/gtk-rendernode-tool-info.c:230 tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
 msgstr "پرونده"
 
@@ -7669,7 +7671,7 @@ msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.ui‬ را د�
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr ""
-"%s:%Id: نمی‌توان مقدار ویژگی «%s» را تجزیه کرد: %s\n"
+"‏%s:%Id: نمی‌توان مقدار ویژگی «%s» را تجزیه کرد: %s\n"
 "\n"
 
 #: tools/gtk-builder-tool-simplify.c:666
@@ -8101,32 +8103,32 @@ msgstr "طول مسیر"
 #: tools/gtk-path-tool-info.c:138
 #, c-format
 msgid "%d contours"
-msgstr "%Id خط فاصل"
+msgstr "‏%Id خط فاصل"
 
 #: tools/gtk-path-tool-info.c:140
 #, c-format
 msgid "%d operations"
-msgstr "%Id عملیات"
+msgstr "‏%Id عملیات"
 
 #: tools/gtk-path-tool-info.c:144
 #, c-format
 msgid "%d lines"
-msgstr "%Id خط"
+msgstr "‏%Id خط"
 
 #: tools/gtk-path-tool-info.c:149
 #, c-format
 msgid "%d quadratics"
-msgstr "%Id درجه دوم"
+msgstr "‏%Id درجه دوم"
 
 #: tools/gtk-path-tool-info.c:154
 #, c-format
 msgid "%d cubics"
-msgstr "%Id درجه سوم"
+msgstr "‏%Id درجه سوم"
 
 #: tools/gtk-path-tool-info.c:159
 #, c-format
 msgid "%d conics"
-msgstr "%Id مخروطی"
+msgstr "‏%Id مخروطی"
 
 #: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:112
 msgid "Fill the path (the default)"
@@ -8153,6 +8155,7 @@ msgid "The output file"
 msgstr "پروندهٔ خروجی"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:117
+#: tools/gtk-rendernode-tool-convert.c:93
 msgid "Foreground color"
 msgstr "رنگ پیش‌زمینه"
 
@@ -8160,6 +8163,8 @@ msgstr "رنگ پیش‌زمینه"
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
 #: tools/gtk-path-tool-show.c:117 tools/gtk-path-tool-show.c:118
 #: tools/gtk-path-tool-show.c:119 tools/gtk-path-tool-show.c:120
+#: tools/gtk-rendernode-tool-convert.c:93 tools/gtk-rendernode-tool-convert.c:94
+#: tools/gtk-rendernode-tool-convert.c:95 tools/gtk-rendernode-tool-convert.c:96
 msgid "COLOR"
 msgstr "COLOR"
 
@@ -8443,6 +8448,40 @@ msgstr "شکست در ایجاد پرداختگر: %s\n"
 #, c-format
 msgid "Failed to load %s: %s\n"
 msgstr "شکست در بار کردن %s: ‏%s‏\n"
+
+#: tools/gtk-rendernode-tool-convert.c:92
+msgid "Recolor the node"
+msgstr "تغییر رنگ گره"
+
+#: tools/gtk-rendernode-tool-convert.c:94
+msgid "Success color"
+msgstr "رنگ موفّق"
+
+#: tools/gtk-rendernode-tool-convert.c:95
+msgid "Warning color"
+msgstr "رنگ هشدار"
+
+#: tools/gtk-rendernode-tool-convert.c:96
+msgid "Error color"
+msgstr "رنگ خطا"
+
+#: tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "SIZE"
+
+#: tools/gtk-rendernode-tool-convert.c:107
+msgid "Convert from symbolic svg to node."
+msgstr "تبدیل از svg نمادین به گره."
+
+#: tools/gtk-rendernode-tool-convert.c:177
+#, c-format
+msgid "No .svg file specified\n"
+msgstr "هیچ پروندهٔ ‪.svg‬ ای مشخّص نشده\n"
+
+#: tools/gtk-rendernode-tool-convert.c:183
+#, c-format
+msgid "Can only accept a single .svg file\n"
+msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.svg‬ را بپذیرد\n"
 
 #: tools/gtk-rendernode-tool-extract.c:73 tools/gtk-rendernode-tool-extract.c:149
 #, c-format
@@ -10008,9 +10047,6 @@ msgstr ""
 
 #~ msgid "Question"
 #~ msgstr "پرسش"
-
-#~ msgid "Warning"
-#~ msgstr "اخطار"
 
 #~ msgid "Error"
 #~ msgstr "خطا"
