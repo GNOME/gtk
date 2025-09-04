@@ -78,9 +78,25 @@ render_node_from_svg (GFile  *file,
 
   if (!rsvg_handle_get_intrinsic_size_in_pixels (handle, &width, &height))
     {
-      g_warning ("SVG without intrinsic size");
-      g_object_unref (handle);
-      return NULL;
+      gboolean has_viewbox;
+      RsvgRectangle viewbox;
+
+      rsvg_handle_get_intrinsic_dimensions (handle,
+                                            NULL, NULL, NULL, NULL,
+                                            &has_viewbox,
+                                            &viewbox);
+
+      if (has_viewbox)
+        {
+          width = viewbox.width;
+          height = viewbox.height;
+        }
+      else
+        {
+          g_warning ("SVG without intrinsic size or viewbox");
+          g_object_unref (handle);
+          return NULL;
+        }
     }
 
   node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0, width, height));
