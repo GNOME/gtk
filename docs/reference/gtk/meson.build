@@ -26,6 +26,7 @@ expand_content_md_files = [
   'section-text-widget.md',
   'section-tree-widget.md',
   'section-list-widget.md',
+  'section-threading.md',
   'question_index.md',
   'visual_index.md',
   'tools.md',
