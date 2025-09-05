@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-04-06 21:31+0000\n"
-"PO-Revision-Date: 2025-04-07 08:47+0800\n"
+"POT-Creation-Date: 2025-09-04 15:22+0000\n"
+"PO-Revision-Date: 2025-09-05 09:55+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -48,8 +48,8 @@ msgstr "无兼容格式可用于传输内容提供者的内容。"
 
 #: gdk/android/gdkandroidclipboard.c:623 gdk/macos/gdkmacospasteboard.c:161
 #: gdk/wayland/gdkclipboard-wayland.c:245 gdk/wayland/gdkdrop-wayland.c:205
-#: gdk/wayland/gdkprimary-wayland.c:343 gdk/win32/gdkdrop-win32.c:1014
-#: gdk/win32/gdkdrop-win32.c:1063 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/wayland/gdkprimary-wayland.c:343 gdk/win32/gdkdrop-win32.c:1010
+#: gdk/win32/gdkdrop-win32.c:1059 gdk/x11/gdkclipboard-x11.c:801
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "未找到兼容传输格式"
@@ -71,22 +71,22 @@ msgstr "无法读取空剪贴板。"
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "无兼容格式可用于传输剪贴板内容。"
 
-#: gdk/gdkcolorstate.c:1057
+#: gdk/gdkcolorstate.c:1081
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp：不支持未指定的参数"
 
-#: gdk/gdkcolorstate.c:1103
+#: gdk/gdkcolorstate.c:1127
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp：不支持传输函数 %u"
 
-#: gdk/gdkcolorstate.c:1134
+#: gdk/gdkcolorstate.c:1158
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp：不支持原色 %u"
 
-#: gdk/gdkcolorstate.c:1161
+#: gdk/gdkcolorstate.c:1185
 #, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp：不支持矩阵系数 %u、%s"
@@ -102,57 +102,57 @@ msgstr "无法以“%s”提供内容"
 msgid "Cannot provide contents as %s"
 msgstr "无法以 %s 提供内容"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:466
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:471
 msgid "The current backend does not support OpenGL"
 msgstr "当前后端不支持 OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1715
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1754
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 Vulkan 支持"
 
-#: gdk/gdkdisplay.c:1418
+#: gdk/gdkdisplay.c:1415
 msgid "OpenGL support disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 OpenGL 支持"
 
-#: gdk/gdkdisplay.c:1732
+#: gdk/gdkdisplay.c:1729
 msgid "No EGL configuration available"
 msgstr "没有可用的 EGL 配置"
 
-#: gdk/gdkdisplay.c:1740
+#: gdk/gdkdisplay.c:1737
 msgid "Failed to get EGL configurations"
 msgstr "获取 EGL 配置失败"
 
-#: gdk/gdkdisplay.c:1770
+#: gdk/gdkdisplay.c:1767
 msgid "No EGL configuration with required features found"
 msgstr "未找到带有所需功能的 EGL 配置"
 
-#: gdk/gdkdisplay.c:1777
+#: gdk/gdkdisplay.c:1774
 msgid "No perfect EGL configuration found"
 msgstr "未找到完全符合的 EGL 配置"
 
-#: gdk/gdkdisplay.c:1819
+#: gdk/gdkdisplay.c:1816
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL 实现缺失 %2$d 项扩展：%1$s"
 
-#: gdk/gdkdisplay.c:1868
+#: gdk/gdkdisplay.c:1865
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL 在此沙盒内不可用"
 
-#: gdk/gdkdisplay.c:1869
+#: gdk/gdkdisplay.c:1866
 msgid "libEGL not available"
 msgstr "libEGL 不可用"
 
-#: gdk/gdkdisplay.c:1879
+#: gdk/gdkdisplay.c:1876
 msgid "Failed to create EGL display"
 msgstr "创建 EGL 显示失败"
 
-#: gdk/gdkdisplay.c:1888
+#: gdk/gdkdisplay.c:1885
 msgid "Could not initialize EGL display"
 msgstr "无法初始化 EGL 显示"
 
-#: gdk/gdkdisplay.c:1898
+#: gdk/gdkdisplay.c:1895
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL %d.%d 版太旧。GTK 需要 %d.%d"
@@ -165,25 +165,24 @@ msgstr "不支持从其他应用拖放。"
 msgid "No compatible formats to transfer contents."
 msgstr "无兼容格式可用于传输内容。"
 
-#: gdk/gdkglcontext.c:426 gdk/x11/gdkglcontext-glx.c:653
+#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:654
 msgid "No GL API allowed."
 msgstr "无允许的 GL API。"
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:661
+#: gdk/win32/gdkglcontext-win32-wgl.c:784 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "无法创建 GL 上下文"
 
-#: gdk/gdkglcontext.c:1312
+#: gdk/gdkglcontext.c:1439
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 OpenGL ES 接口"
 
-#: gdk/gdkglcontext.c:1324
+#: gdk/gdkglcontext.c:1451
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 OpenGL 接口"
 
-#: gdk/gdkglcontext.c:1335
+#: gdk/gdkglcontext.c:1462
 #, c-format
 msgid "Application does not support %s API"
 msgstr "应用程序不支持 %s API"
@@ -191,17 +190,17 @@ msgstr "应用程序不支持 %s API"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2253
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "尝试使用 %s，但 %s 已在使用"
 
-#: gdk/gdkglcontext.c:2123
+#: gdk/gdkglcontext.c:2264
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "尝试使用 %s，但已通过 GDK_DISABLE 将其禁用"
 
-#: gdk/gdktexture.c:671
+#: gdk/gdktexture.c:679
 msgid "Unknown image format."
 msgstr "未知图像格式。"
 
@@ -281,12 +280,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "下"
 
-#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:219
+#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:229
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page Up"
 
-#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:222
+#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:232
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page Down"
@@ -592,7 +591,7 @@ msgstr "解释 JPEG 图像文件时出错（%s）"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "不支持的 JPEG 颜色空间（%d）"
 
-#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:465 gdk/loaders/gdktiff.c:491
+#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467 gdk/loaders/gdktiff.c:500
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "内存不足以处理尺寸为 %ux%u 的图像"
@@ -602,30 +601,30 @@ msgstr "内存不足以处理尺寸为 %ux%u 的图像"
 msgid "Error reading png (%s)"
 msgstr "读取 png 出错（%s）"
 
-#: gdk/loaders/gdkpng.c:388
+#: gdk/loaders/gdkpng.c:390
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "PNG 图像中不支持的深度 %u"
 
-#: gdk/loaders/gdkpng.c:438
+#: gdk/loaders/gdkpng.c:440
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "PNG 图像中不支持的颜色类型 %u"
 
-#: gdk/loaders/gdkpng.c:450
+#: gdk/loaders/gdkpng.c:452
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "图像步幅对于图像尺寸 %ux%u 来说太大"
 
-#: gdk/loaders/gdktiff.c:382
+#: gdk/loaders/gdktiff.c:391
 msgid "Failed to load RGB data from TIFF file"
 msgstr "无法从 TIFF 文件载入 RGB 数据"
 
-#: gdk/loaders/gdktiff.c:424
+#: gdk/loaders/gdktiff.c:433
 msgid "Could not load TIFF data"
 msgstr "无法载入 TIFF 数据"
 
-#: gdk/loaders/gdktiff.c:505
+#: gdk/loaders/gdktiff.c:514
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "读取第 %d 行数据失败"
@@ -686,87 +685,92 @@ msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr "无法获取剪贴板数据。无法分配 %s 字节用于存储数据。"
 
-#: gdk/win32/gdkclipdrop-win32.c:893
+#: gdk/win32/gdkclipdrop-win32.c:892
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "无法获取剪贴板数据。OpenClipboard() 超时。"
 
-#: gdk/win32/gdkclipdrop-win32.c:903
+#: gdk/win32/gdkclipdrop-win32.c:902
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "无法获取剪贴板数据。剪贴板所有权已更改。"
 
-#: gdk/win32/gdkclipdrop-win32.c:913
+#: gdk/win32/gdkclipdrop-win32.c:912
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr "无法获取剪贴板数据。剪贴板数据已在获取前被更改。"
 
-#: gdk/win32/gdkclipdrop-win32.c:928
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "无法获取剪贴板数据。OpenClipboard() 失败：0x%lx。"
 
-#: gdk/win32/gdkclipdrop-win32.c:953
+#: gdk/win32/gdkclipdrop-win32.c:956
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "无法获取剪贴板数据。未找到兼容的传输格式。"
 
-#: gdk/win32/gdkclipdrop-win32.c:963
+#: gdk/win32/gdkclipdrop-win32.c:966
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "无法获取剪贴板数据。GetClipboardData() 失败：0x%lx。"
 
-#: gdk/win32/gdkdrop-win32.c:945
+#: gdk/win32/gdkdrop-win32.c:941
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "无法获取拖放数据。GlobalLock(0x%p) 失败：0x%lx。"
 
-#: gdk/win32/gdkdrop-win32.c:954
+#: gdk/win32/gdkdrop-win32.c:950
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "无法获取拖放数据。GlobalSize(0x%p) 失败：0x%lx。"
 
-#: gdk/win32/gdkdrop-win32.c:965
+#: gdk/win32/gdkdrop-win32.c:961
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr "无法获取拖放数据。无法分配 %s 字节用于存储数据。"
 
-#: gdk/win32/gdkdrop-win32.c:1035
+#: gdk/win32/gdkdrop-win32.c:1031
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "GDK 平面 0x%p 没有注册为拖放目标"
 
-#: gdk/win32/gdkdrop-win32.c:1043
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "目标上下文记录 0x%p 无数据对象"
 
-#: gdk/win32/gdkdrop-win32.c:1083
+#: gdk/win32/gdkdrop-win32.c:1079
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) 失败，返回码 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1122
+#: gdk/win32/gdkdrop-win32.c:1118
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "无法将拖放数据的 W32 格式 0x%x 转换为 %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:591
 msgid "No GL implementation is available"
 msgstr "没有可用的 GL 实现"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:675
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "EGL %d.%d 版太旧。需要至少 %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:694
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL 实现无法分享 GL 上下文"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:853
+#, c-format
+msgid "Unsupported pixel format %d set on Window"
+msgstr "窗口上设置了不支持的像素格式 %d"
+
+#: gdk/win32/gdkglcontext-win32-wgl.c:862
 msgid "No available configurations for the given pixel format"
 msgstr "指定的像素格式没有可用的设置"
 
@@ -828,15 +832,15 @@ msgstr "剪贴板管理器无法存储选择。"
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "无法存储剪贴板。无活动中的剪贴板管理器。"
 
-#: gdk/x11/gdkglcontext-glx.c:819
+#: gdk/x11/gdkglcontext-glx.c:820
 msgid "No GLX configurations available"
 msgstr "没有可用的 GLX 配置"
 
-#: gdk/x11/gdkglcontext-glx.c:906
+#: gdk/x11/gdkglcontext-glx.c:907
 msgid "No GLX configuration with required features found"
 msgstr "未找到带有所需功能的 GLX 配置"
 
-#: gdk/x11/gdkglcontext-glx.c:982
+#: gdk/x11/gdkglcontext-glx.c:983
 msgid "GLX is not supported"
 msgstr "不支持 GLX"
 
@@ -872,114 +876,118 @@ msgstr "不支持的编码“%s”"
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "此渲染器不支持 OpenGL ES 3.0。"
 
-#: gsk/gpu/gskglrenderer.c:66
+#: gsk/gpu/gskglrenderer.c:64
 msgid "OpenGL 3.3 required"
 msgstr "需要 OpenGL 3.3"
 
-#: gtk/a11y/gtkatspiaction.c:285
+#: gsk/gpu/gskvulkanrenderer.c:159
+msgid "Vulkan support disabled during GTK build"
+msgstr "GTK 构建过程中禁用了 Vulkan 支持"
+
+#: gtk/a11y/gtkatspiaction.c:288
 msgctxt "accessibility"
 msgid "Click"
 msgstr "点击"
 
-#: gtk/a11y/gtkatspiaction.c:286
+#: gtk/a11y/gtkatspiaction.c:289
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "点击按钮"
 
-#: gtk/a11y/gtkatspiaction.c:336
+#: gtk/a11y/gtkatspiaction.c:339
 msgctxt "accessibility"
 msgid "Toggle"
 msgstr "开关"
 
-#: gtk/a11y/gtkatspiaction.c:337
+#: gtk/a11y/gtkatspiaction.c:340
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "切换开关"
 
-#: gtk/a11y/gtkatspiaction.c:418
+#: gtk/a11y/gtkatspiaction.c:421
 msgctxt "accessibility"
 msgid "Select"
 msgstr "选择"
 
-#: gtk/a11y/gtkatspiaction.c:419
+#: gtk/a11y/gtkatspiaction.c:422
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "选择颜色"
 
-#: gtk/a11y/gtkatspiaction.c:426 gtk/a11y/gtkatspiaction.c:487
-#: gtk/a11y/gtkatspiaction.c:543 gtk/a11y/gtkatspiaction.c:651
-#: gtk/a11y/gtkatspiaction.c:738
+#: gtk/a11y/gtkatspiaction.c:429 gtk/a11y/gtkatspiaction.c:490
+#: gtk/a11y/gtkatspiaction.c:546 gtk/a11y/gtkatspiaction.c:654
+#: gtk/a11y/gtkatspiaction.c:741
 msgctxt "accessibility"
 msgid "Activate"
 msgstr "激活"
 
-#: gtk/a11y/gtkatspiaction.c:427
+#: gtk/a11y/gtkatspiaction.c:430
 msgctxt "accessibility"
 msgid "Activates the color"
 msgstr "使用颜色"
 
-#: gtk/a11y/gtkatspiaction.c:434
+#: gtk/a11y/gtkatspiaction.c:437
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "自定义"
 
-#: gtk/a11y/gtkatspiaction.c:435
+#: gtk/a11y/gtkatspiaction.c:438
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "自定义颜色"
 
-#: gtk/a11y/gtkatspiaction.c:488
+#: gtk/a11y/gtkatspiaction.c:491
 msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "激活扩展器"
 
-#: gtk/a11y/gtkatspiaction.c:544 gtk/a11y/gtkatspiaction.c:652
-#: gtk/a11y/gtkatspiaction.c:739
+#: gtk/a11y/gtkatspiaction.c:547 gtk/a11y/gtkatspiaction.c:655
+#: gtk/a11y/gtkatspiaction.c:742
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "激活输入框"
 
-#: gtk/a11y/gtkatspiaction.c:551
+#: gtk/a11y/gtkatspiaction.c:554
 msgctxt "accessibility"
 msgid "Activate primary icon"
 msgstr "激活主图标"
 
-#: gtk/a11y/gtkatspiaction.c:552
+#: gtk/a11y/gtkatspiaction.c:555
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
 msgstr "激活输入框的主图标"
 
-#: gtk/a11y/gtkatspiaction.c:559
+#: gtk/a11y/gtkatspiaction.c:562
 msgctxt "accessibility"
 msgid "Activate secondary icon"
 msgstr "激活副图标"
 
-#: gtk/a11y/gtkatspiaction.c:560
+#: gtk/a11y/gtkatspiaction.c:563
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
 msgstr "激活输入框的副图标"
 
-#: gtk/a11y/gtkatspiaction.c:659
+#: gtk/a11y/gtkatspiaction.c:662
 msgctxt "accessibility"
 msgid "Peek"
 msgstr "窥视"
 
-#: gtk/a11y/gtkatspiaction.c:660
+#: gtk/a11y/gtkatspiaction.c:663
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
 msgstr "显示密码输入框的内容"
 
-#: gtk/a11y/gtkatspiaction.c:746
+#: gtk/a11y/gtkatspiaction.c:749
 msgctxt "accessibility"
 msgid "Clear"
 msgstr "清除"
 
-#: gtk/a11y/gtkatspiaction.c:747
+#: gtk/a11y/gtkatspiaction.c:750
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "清除输入框的内容"
 
-#: gtk/a11y/gtkatspiroot.c:263 gtk/gtkaccessible.c:906
+#: gtk/a11y/gtkatspiroot.c:269 gtk/gtkaccessible.c:906
 msgctxt "accessibility"
 msgid "application"
 msgstr "应用程序"
@@ -1034,24 +1042,30 @@ msgstr "选择找到用于处理“%s”文件的应用程序"
 msgid "Failed to start GNOME Software"
 msgstr "打开 GNOME 软件失败"
 
-#: gtk/deprecated/gtkappchooserwidget.c:525
-msgid "Default App"
-msgstr "默认应用"
+#. Translators: Label for a search button and entry, should be translated as a verb
+#: gtk/deprecated/gtkappchooserdialog.c:472 gtk/gtkfilechooserdialog.c:477
+#: gtk/ui/gtkfilechooserwidget.ui:123
+msgid "Search"
+msgstr "搜索"
 
-#: gtk/deprecated/gtkappchooserwidget.c:575
+#: gtk/deprecated/gtkappchooserwidget.c:300
 #, c-format
 msgid "No apps found for “%s”."
 msgstr "没有用于处理“%s”的应用。"
 
-#: gtk/deprecated/gtkappchooserwidget.c:658
+#: gtk/deprecated/gtkappchooserwidget.c:794
+msgid "Default App"
+msgstr "默认应用"
+
+#: gtk/deprecated/gtkappchooserwidget.c:796
 msgid "Recommended Apps"
 msgstr "推荐应用"
 
-#: gtk/deprecated/gtkappchooserwidget.c:673
+#: gtk/deprecated/gtkappchooserwidget.c:798
 msgid "Related Apps"
 msgstr "相关应用"
 
-#: gtk/deprecated/gtkappchooserwidget.c:687
+#: gtk/deprecated/gtkappchooserwidget.c:800
 msgid "Other Apps"
 msgstr "其他应用"
 
@@ -1093,13 +1107,13 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "拾取颜色"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:321
+#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:323
 #: gtk/gtkcolordialogbutton.c:337
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "红 %d%%，绿 %d%%，蓝 %d%%，透明度 %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:327
+#: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:329
 #: gtk/gtkcolordialogbutton.c:343
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1114,8 +1128,8 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "选择字体"
 
-#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3818
-#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:284
+#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3854
+#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:328
 msgid "Font"
 msgstr "字体"
 
@@ -1298,7 +1312,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:839 gtk/deprecated/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:846 gtk/deprecated/gtkshortcutlabel.c:103
 #: gtk/deprecated/gtkshortcutlabel.c:139
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1309,7 +1323,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:858 gtk/deprecated/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:865 gtk/deprecated/gtkshortcutlabel.c:106
 #: gtk/deprecated/gtkshortcutlabel.c:141
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1320,7 +1334,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:877 gtk/deprecated/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:884 gtk/deprecated/gtkshortcutlabel.c:109
 #: gtk/deprecated/gtkshortcutlabel.c:143
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1331,7 +1345,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:895 gtk/deprecated/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:902 gtk/deprecated/gtkshortcutlabel.c:115
 #: gtk/deprecated/gtkshortcutlabel.c:145
 msgctxt "keyboard label"
 msgid "Super"
@@ -1342,7 +1356,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:118
+#: gtk/gtkaccelgroup.c:916 gtk/deprecated/gtkshortcutlabel.c:118
 #: gtk/deprecated/gtkshortcutlabel.c:147
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1353,7 +1367,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:924 gtk/deprecated/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:931 gtk/deprecated/gtkshortcutlabel.c:112
 #: gtk/deprecated/gtkshortcutlabel.c:150
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1363,17 +1377,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:944
+#: gtk/gtkaccelgroup.c:951
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "小键盘"
 
-#: gtk/gtkaccelgroup.c:951
+#: gtk/gtkaccelgroup.c:958
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "空格"
 
-#: gtk/gtkaccelgroup.c:954 gtk/deprecated/gtkshortcutlabel.c:178
+#: gtk/gtkaccelgroup.c:961 gtk/deprecated/gtkshortcutlabel.c:178
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "反斜杠 (\\)"
@@ -1807,7 +1821,7 @@ msgstr "关闭(_C)"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:728 gtk/gtkapplication-dbus.c:770
+#: gtk/gtkapplication-dbus.c:385
 msgid "Reason not specified"
 msgstr "未指定原因"
 
@@ -1903,246 +1917,246 @@ msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%d"
 
-#: gtk/gtkcolorchooserwidget.c:384 gtk/gtkcoloreditor.c:171
+#: gtk/gtkcolorchooserwidget.c:386 gtk/gtkcoloreditor.c:171
 #, c-format
 msgid "Color: %s"
 msgstr "颜色：%s"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "极浅蓝"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "浅蓝色"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Blue"
 msgstr "蓝色"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "深蓝色"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "极深蓝"
 
-#: gtk/gtkcolorchooserwidget.c:454
+#: gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "极浅绿"
 
-#: gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "浅绿色"
 
-#: gtk/gtkcolorchooserwidget.c:456
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Green"
 msgstr "绿色"
 
-#: gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "深绿色"
 
-#: gtk/gtkcolorchooserwidget.c:458
+#: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "极深绿"
 
-#: gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "极浅黄"
 
-#: gtk/gtkcolorchooserwidget.c:460
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "浅黄色"
 
-#: gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "黄色"
 
-#: gtk/gtkcolorchooserwidget.c:462
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "深黄色"
 
-#: gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "极深黄"
 
-#: gtk/gtkcolorchooserwidget.c:464
+#: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "极浅橙"
 
-#: gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "浅橙色"
 
-#: gtk/gtkcolorchooserwidget.c:466
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Orange"
 msgstr "橙色"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "深橙色"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "极深橙"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "极浅红"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "浅红色"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Red"
 msgstr "红色"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "深红色"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "极深红"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "极浅紫"
 
-#: gtk/gtkcolorchooserwidget.c:475
+#: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "浅紫色"
 
-#: gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Purple"
 msgstr "紫色"
 
-#: gtk/gtkcolorchooserwidget.c:477
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "深紫色"
 
-#: gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "极深紫"
 
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "极浅棕"
 
-#: gtk/gtkcolorchooserwidget.c:480
+#: gtk/gtkcolorchooserwidget.c:482
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "浅棕色"
 
-#: gtk/gtkcolorchooserwidget.c:481
+#: gtk/gtkcolorchooserwidget.c:483
 msgctxt "Color name"
 msgid "Brown"
 msgstr "棕色"
 
-#: gtk/gtkcolorchooserwidget.c:482
+#: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "深棕色"
 
-#: gtk/gtkcolorchooserwidget.c:483
+#: gtk/gtkcolorchooserwidget.c:485
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "极深棕"
 
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:486
 msgctxt "Color name"
 msgid "White"
 msgstr "白色"
 
-#: gtk/gtkcolorchooserwidget.c:485
+#: gtk/gtkcolorchooserwidget.c:487
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "浅灰 1"
 
-#: gtk/gtkcolorchooserwidget.c:486
+#: gtk/gtkcolorchooserwidget.c:488
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "浅灰 2"
 
-#: gtk/gtkcolorchooserwidget.c:487
+#: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "浅灰 3"
 
-#: gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "浅灰 4"
 
-#: gtk/gtkcolorchooserwidget.c:489
+#: gtk/gtkcolorchooserwidget.c:491
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "深灰 1"
 
-#: gtk/gtkcolorchooserwidget.c:490
+#: gtk/gtkcolorchooserwidget.c:492
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "深灰 2"
 
-#: gtk/gtkcolorchooserwidget.c:491
+#: gtk/gtkcolorchooserwidget.c:493
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "深灰 3"
 
-#: gtk/gtkcolorchooserwidget.c:492
+#: gtk/gtkcolorchooserwidget.c:494
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "深灰 4"
 
-#: gtk/gtkcolorchooserwidget.c:493
+#: gtk/gtkcolorchooserwidget.c:495
 msgctxt "Color name"
 msgid "Black"
 msgstr "黑色"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:568
 msgid "Custom"
 msgstr "自定义"
 
-#: gtk/gtkcolorchooserwidget.c:579
+#: gtk/gtkcolorchooserwidget.c:582
 msgid "Add Color"
 msgstr "添加颜色"
 
-#: gtk/gtkcolorchooserwidget.c:601
+#: gtk/gtkcolorchooserwidget.c:604
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "自定义颜色 %d：%s"
@@ -2221,24 +2235,19 @@ msgstr "纸张边距"
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5902 gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9320
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
+#: gtk/gtktextview.c:9388
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5962 gtk/gtktext.c:2877
-#: gtk/gtktextview.c:9398
+#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
+#: gtk/gtktextview.c:9466
 msgid "Context menu"
 msgstr "右键菜单"
 
-#: gtk/gtkentry.c:3687
+#: gtk/gtkentry.c:3787
 msgid "Insert Emoji"
 msgstr "插入表情符号"
-
-#. Translators: Label for a search button and entry, should be translated as a verb
-#: gtk/gtkfilechooserdialog.c:481 gtk/ui/gtkfilechooserwidget.ui:123
-msgid "Search"
-msgstr "搜索"
 
 #: gtk/gtkfilechooserdialog.c:562
 msgid "_Name"
@@ -2301,28 +2310,28 @@ msgid "A file with that name already exists"
 msgstr "同名文件已存在"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:4988
-#: gtk/gtkfiledialog.c:913 gtk/gtkmessagedialog.c:173
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:5037
+#: gtk/gtkfiledialog.c:914 gtk/gtkmessagedialog.c:173
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
-#: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
+#: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6368 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "取消(_C)"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:885 gtk/gtkplacessidebar.c:3149
+#: gtk/gtkfiledialog.c:886 gtk/gtkplacessidebar.c:3149
 #: gtk/gtkplacessidebar.c:3234 gtk/gtkplacesview.c:1646
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: gtk/gtkfilechoosernative.c:588 gtk/gtkfiledialog.c:890
+#: gtk/gtkfilechoosernative.c:588 gtk/gtkfiledialog.c:891
 msgid "_Save"
 msgstr "保存(_S)"
 
-#: gtk/gtkfilechoosernativeportal.c:499
+#: gtk/gtkfilechoosernativeportal.c:500
 #, c-format
 msgid "The session bus is not available"
 msgstr "该会话总线不可用"
@@ -2335,7 +2344,7 @@ msgstr "选择要显示的文件类型"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserutils.c:364
+#: gtk/gtkfilechooserutils.c:365
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s 上的 %1$s"
@@ -2389,276 +2398,277 @@ msgstr "无法删除文件"
 msgid "The file could not be moved to the Trash"
 msgstr "无法将文件移动到回收站"
 
-#: gtk/gtkfilechooserwidget.c:1212
+#: gtk/gtkfilechooserwidget.c:1247
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "确定要永久删除“%s”吗？"
 
-#: gtk/gtkfilechooserwidget.c:1213
+#: gtk/gtkfilechooserwidget.c:1248
 msgid "If you delete an item, it will be permanently lost."
 msgstr "如果您删除一个项目，它将永久丢失。"
 
-#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9396
 msgid "_Delete"
 msgstr "删除(_D)"
 
-#: gtk/gtkfilechooserwidget.c:1331
+#: gtk/gtkfilechooserwidget.c:1367
 msgid "The file could not be renamed"
 msgstr "无法重命名文件"
 
-#: gtk/gtkfilechooserwidget.c:1507
+#: gtk/gtkfilechooserwidget.c:1543
 msgid "Could not select file"
 msgstr "无法选择文件"
 
-#: gtk/gtkfilechooserwidget.c:1727 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1763 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "网格视图"
 
-#: gtk/gtkfilechooserwidget.c:1733
+#: gtk/gtkfilechooserwidget.c:1769
 msgid "List View"
 msgstr "列表视图"
 
-#: gtk/gtkfilechooserwidget.c:1796
+#: gtk/gtkfilechooserwidget.c:1832
 msgid "_Visit File"
 msgstr "访问文件(_V)"
 
-#: gtk/gtkfilechooserwidget.c:1800
+#: gtk/gtkfilechooserwidget.c:1836
 msgid "_Open With File Manager"
 msgstr "以文件管理器打开(_O)"
 
-#: gtk/gtkfilechooserwidget.c:1804
+#: gtk/gtkfilechooserwidget.c:1840
 msgid "_Copy Location"
 msgstr "复制位置(_C)"
 
-#: gtk/gtkfilechooserwidget.c:1808
+#: gtk/gtkfilechooserwidget.c:1844
 msgid "_Add to Bookmarks"
 msgstr "添加到书签(_A)"
 
-#: gtk/gtkfilechooserwidget.c:1812 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1848 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "重命名(_R)"
 
-#: gtk/gtkfilechooserwidget.c:1820
+#: gtk/gtkfilechooserwidget.c:1856
 msgid "_Move to Trash"
 msgstr "移动到回收站(_M)"
 
-#: gtk/gtkfilechooserwidget.c:1829
+#: gtk/gtkfilechooserwidget.c:1865
 msgid "Show _Hidden Files"
 msgstr "显示隐藏文件(_H)"
 
-#: gtk/gtkfilechooserwidget.c:1833
+#: gtk/gtkfilechooserwidget.c:1869
 msgid "Sort _Folders Before Files"
 msgstr "文件夹列在文件前(_F)"
 
-#: gtk/gtkfilechooserwidget.c:1956 gtk/gtkfilechooserwidget.c:1986
-#: gtk/gtkfilechooserwidget.c:3861
+#: gtk/gtkfilechooserwidget.c:1992 gtk/gtkfilechooserwidget.c:2022
+#: gtk/gtkfilechooserwidget.c:3897
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserwidget.c:2041 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2077 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "主目录"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2196 gtk/gtkfilechooserwidget.c:7420
+#: gtk/gtkfilechooserwidget.c:2232 gtk/gtkfilechooserwidget.c:7469
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "位置"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2303
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Name:"
 msgstr "名称(_N)："
 
-#: gtk/gtkfilechooserwidget.c:2860 gtk/gtkfilechooserwidget.c:2874
+#: gtk/gtkfilechooserwidget.c:2896 gtk/gtkfilechooserwidget.c:2910
 #, c-format
 msgid "Searching in %s"
 msgstr "正在 %s 内搜索"
 
-#: gtk/gtkfilechooserwidget.c:2880
+#: gtk/gtkfilechooserwidget.c:2916
 msgid "Searching"
 msgstr "正在搜索"
 
-#: gtk/gtkfilechooserwidget.c:2886
+#: gtk/gtkfilechooserwidget.c:2922
 msgid "Enter location or URL"
 msgstr "输入位置或 URL"
 
-#: gtk/gtkfilechooserwidget.c:3445 gtk/gtkfilechooserwidget.c:5775
-#: gtk/gtkfilechooserwidget.c:7442
+#: gtk/gtkfilechooserwidget.c:3481 gtk/gtkfilechooserwidget.c:5824
+#: gtk/gtkfilechooserwidget.c:7491
 msgid "Modified"
 msgstr "修改日期"
 
-#: gtk/gtkfilechooserwidget.c:3630
+#: gtk/gtkfilechooserwidget.c:3666
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "无法读取 %s 的内容"
 
-#: gtk/gtkfilechooserwidget.c:3634
+#: gtk/gtkfilechooserwidget.c:3670
 msgid "Could not read the contents of the folder"
 msgstr "无法获得该文件夹的内容"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3757 gtk/gtkfilechooserwidget.c:3800
+#: gtk/gtkfilechooserwidget.c:3793 gtk/gtkfilechooserwidget.c:3836
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3759 gtk/gtkfilechooserwidget.c:3802
+#: gtk/gtkfilechooserwidget.c:3795 gtk/gtkfilechooserwidget.c:3838
 msgid "%l:%M %p"
 msgstr "%P %-I:%M"
 
-#: gtk/gtkfilechooserwidget.c:3763
+#: gtk/gtkfilechooserwidget.c:3799
 msgid "Yesterday"
 msgstr "昨天"
 
-#: gtk/gtkfilechooserwidget.c:3772
+#: gtk/gtkfilechooserwidget.c:3808
 #, no-c-format
 msgid "%-e %b"
 msgstr "%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:3776
+#: gtk/gtkfilechooserwidget.c:3812
 msgid "%-e %b %Y"
 msgstr "%Y年%-m月%-d日"
 
-#: gtk/gtkfilechooserwidget.c:3816 gtk/gtkfilechooserwidget.c:3824
+#: gtk/gtkfilechooserwidget.c:3852 gtk/gtkfilechooserwidget.c:3860
 msgid "Program"
 msgstr "程序"
 
-#: gtk/gtkfilechooserwidget.c:3817
+#: gtk/gtkfilechooserwidget.c:3853
 msgid "Audio"
 msgstr "音频"
 
-#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilefilter.c:1069
+#: gtk/gtkfilechooserwidget.c:3855 gtk/gtkfilefilter.c:1072
 msgid "Image"
 msgstr "图像"
 
-#: gtk/gtkfilechooserwidget.c:3820
+#: gtk/gtkfilechooserwidget.c:3856
 msgid "Archive"
 msgstr "归档"
 
-#: gtk/gtkfilechooserwidget.c:3821
+#: gtk/gtkfilechooserwidget.c:3857
 msgid "Markup"
 msgstr "标记"
 
-#: gtk/gtkfilechooserwidget.c:3822 gtk/gtkfilechooserwidget.c:3823
+#: gtk/gtkfilechooserwidget.c:3858 gtk/gtkfilechooserwidget.c:3859
 msgid "Text"
 msgstr "文本"
 
-#: gtk/gtkfilechooserwidget.c:3825
+#: gtk/gtkfilechooserwidget.c:3861
 msgid "Video"
 msgstr "视频"
 
-#: gtk/gtkfilechooserwidget.c:3826
+#: gtk/gtkfilechooserwidget.c:3862
 msgid "Contacts"
 msgstr "联系人"
 
-#: gtk/gtkfilechooserwidget.c:3827
+#: gtk/gtkfilechooserwidget.c:3863
 msgid "Calendar"
 msgstr "日历"
 
-#: gtk/gtkfilechooserwidget.c:3828
+#: gtk/gtkfilechooserwidget.c:3864
 msgid "Document"
 msgstr "文档"
 
-#: gtk/gtkfilechooserwidget.c:3829
+#: gtk/gtkfilechooserwidget.c:3865
 msgid "Presentation"
 msgstr "演示文稿"
 
-#: gtk/gtkfilechooserwidget.c:3830
+#: gtk/gtkfilechooserwidget.c:3866
 msgid "Spreadsheet"
 msgstr "电子表格"
 
-#: gtk/gtkfilechooserwidget.c:4980 gtk/print/gtkprintunixdialog.c:674
+#: gtk/gtkfilechooserwidget.c:4216 gtk/gtkfilechooserwidget.c:5192
+msgid "You do not have access to the specified folder."
+msgstr "您没有访问指定文件夹的权限。"
+
+#: gtk/gtkfilechooserwidget.c:5029 gtk/print/gtkprintunixdialog.c:674
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "已经存在名为“%s”的文件。您想要替换它吗？"
 
-#: gtk/gtkfilechooserwidget.c:4982 gtk/print/gtkprintunixdialog.c:678
+#: gtk/gtkfilechooserwidget.c:5031 gtk/print/gtkprintunixdialog.c:678
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "文件已经在“%s”中了。替换该文件将覆盖它的内容。"
 
-#: gtk/gtkfilechooserwidget.c:4988 gtk/print/gtkprintunixdialog.c:686
+#: gtk/gtkfilechooserwidget.c:5037 gtk/print/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: gtk/gtkfilechooserwidget.c:5143
-msgid "You do not have access to the specified folder."
-msgstr "您没有访问指定文件夹的权限。"
-
-#: gtk/gtkfilechooserwidget.c:5722
+#: gtk/gtkfilechooserwidget.c:5771
 msgid "Could not send the search request"
 msgstr "无法发送搜索请求"
 
-#: gtk/gtkfilechooserwidget.c:6003
+#: gtk/gtkfilechooserwidget.c:6052
 msgid "Accessed"
 msgstr "访问时间"
 
-#: gtk/gtkfilechooserwidget.c:7398
+#: gtk/gtkfilechooserwidget.c:7447
 msgid "_Size"
 msgstr "大小(_S)"
 
-#: gtk/gtkfilechooserwidget.c:7402
+#: gtk/gtkfilechooserwidget.c:7451
 msgid "T_ype"
 msgstr "类型(_Y)"
 
-#: gtk/gtkfilechooserwidget.c:7406
+#: gtk/gtkfilechooserwidget.c:7455
 msgid "_Time"
 msgstr "时间(_T)"
 
-#: gtk/gtkfilechooserwidget.c:7412 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7461 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "名称"
 
-#: gtk/gtkfilechooserwidget.c:7429 gtk/inspector/resource-list.ui:82
-#: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
+#: gtk/gtkfilechooserwidget.c:7478 gtk/inspector/resource-list.ui:98
+#: gtk/ui/gtkfontchooserwidget.ui:220 gtk/ui/gtkfontchooserwidget.ui:386
+#: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserwidget.c:7435 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7484 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "数据类型"
 
-#: gtk/gtkfiledialog.c:886
+#: gtk/gtkfiledialog.c:887
 msgid "Pick Files"
 msgstr "选择文件"
 
-#: gtk/gtkfiledialog.c:886
+#: gtk/gtkfiledialog.c:887
 msgid "Pick a File"
 msgstr "选择文件"
 
-#: gtk/gtkfiledialog.c:891
+#: gtk/gtkfiledialog.c:892
 msgid "Save a File"
 msgstr "保存文件"
 
-#: gtk/gtkfiledialog.c:895 gtk/ui/gtkappchooserdialog.ui:53
+#: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:56
 #: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "选择(_S)"
 
-#: gtk/gtkfiledialog.c:896
+#: gtk/gtkfiledialog.c:897
 msgid "Select Folders"
 msgstr "选择文件夹"
 
-#: gtk/gtkfiledialog.c:896
+#: gtk/gtkfiledialog.c:897
 msgid "Select a Folder"
 msgstr "选择文件夹"
 
-#: gtk/gtkfiledialog.c:1397 gtk/gtkfiledialog.c:1514 gtk/gtkfiledialog.c:1623
+#: gtk/gtkfiledialog.c:1413 gtk/gtkfiledialog.c:1533 gtk/gtkfiledialog.c:1645
 msgid "Encoding"
 msgstr "编码"
 
-#: gtk/gtkfiledialog.c:1634
+#: gtk/gtkfiledialog.c:1656
 msgid "Line Ending"
 msgstr "行尾"
 
-#: gtk/gtkfilefilter.c:1082
+#: gtk/gtkfilefilter.c:1085
 msgid "Unspecified"
 msgstr "未指定"
 
@@ -2701,7 +2711,7 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "启用"
 
-#: gtk/gtkfontchooserwidget.c:2406
+#: gtk/gtkfontchooserwidget.c:2406 gtk/inspector/visual.ui:73
 msgid "Default"
 msgstr "默认"
 
@@ -2737,7 +2747,7 @@ msgstr "样式变体"
 msgid "Character Variations"
 msgstr "字符变体"
 
-#: gtk/gtkglarea.c:319
+#: gtk/gtkglarea.c:326
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 上下文创建失败"
 
@@ -2750,23 +2760,23 @@ msgstr "关闭"
 msgid "Close the infobar"
 msgstr "关闭信息栏"
 
-#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9384
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9392
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9417
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: gtk/gtklabel.c:5914
+#: gtk/gtklabel.c:5918
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
-#: gtk/gtklabel.c:5918
+#: gtk/gtklabel.c:5922
 msgid "Copy _Link Address"
 msgstr "复制链接地址(_L)"
 
@@ -2837,7 +2847,7 @@ msgid "Play"
 msgstr "播放"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6369
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
 msgid "_OK"
 msgstr "确定(_O)"
 
@@ -2883,7 +2893,7 @@ msgstr "隐藏(_H)"
 
 #: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
-msgstr "窗口系统(_W)"
+msgstr "_Windows 系统"
 
 #: gtk/gtkmountoperation.c:732
 msgid "_PIM"
@@ -2893,19 +2903,19 @@ msgstr "个人信息管理系统 (_PIM)"
 msgid "_Password"
 msgstr "密码(_P)"
 
-#: gtk/gtkmountoperation.c:760
+#: gtk/gtkmountoperation.c:761
 msgid "Forget password _immediately"
 msgstr "立即忘记密码(_I)"
 
-#: gtk/gtkmountoperation.c:770
+#: gtk/gtkmountoperation.c:771
 msgid "Remember password until you _logout"
 msgstr "注销前记住密码(_L)"
 
-#: gtk/gtkmountoperation.c:781
+#: gtk/gtkmountoperation.c:782
 msgid "Remember _forever"
 msgstr "永远记住(_F)"
 
-#: gtk/gtkmountoperation.c:1251
+#: gtk/gtkmountoperation.c:1252
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "未知应用程序(PID %d)"
@@ -2915,12 +2925,12 @@ msgstr "未知应用程序(PID %d)"
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
 #.
-#: gtk/gtkmountoperation.c:1396
+#: gtk/gtkmountoperation.c:1397
 #, c-format
 msgid "Unable to end process"
 msgstr "无法结束进程"
 
-#: gtk/gtkmountoperation.c:1546
+#: gtk/gtkmountoperation.c:1547
 msgid "_End Process"
 msgstr "结束进程(_E)"
 
@@ -2930,27 +2940,27 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "不能杀死 PID %d 进程。操作未实现。"
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:988
+#: gtk/gtkmountoperation-x11.c:990
 msgid "Terminal Pager"
 msgstr "终端阅读器"
 
-#: gtk/gtkmountoperation-x11.c:989
+#: gtk/gtkmountoperation-x11.c:991
 msgid "Top Command"
 msgstr "Top 命令"
 
-#: gtk/gtkmountoperation-x11.c:990
+#: gtk/gtkmountoperation-x11.c:992
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Shell (bash)"
 
-#: gtk/gtkmountoperation-x11.c:991
+#: gtk/gtkmountoperation-x11.c:993
 msgid "Bourne Shell"
 msgstr "Bourne Shell"
 
-#: gtk/gtkmountoperation-x11.c:992
+#: gtk/gtkmountoperation-x11.c:994
 msgid "Z Shell"
 msgstr "Z Shell (zsh)"
 
-#: gtk/gtkmountoperation-x11.c:1092
+#: gtk/gtkmountoperation-x11.c:1094
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "无法结束 PID %d 的进程：%s"
@@ -3342,11 +3352,644 @@ msgstr "断开连接"
 msgid "Unmount"
 msgstr "卸载"
 
-#: gtk/print/gtkprintbackend.c:637
+#: gtk/print/backends/gtkprintbackendcpdb.c:496
+#: gtk/print/backends/gtkprintbackendcups.c:5715
+msgctxt "Print job priority"
+msgid "Urgent"
+msgstr "紧急"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:497
+#: gtk/print/backends/gtkprintbackendcups.c:5716
+msgctxt "Print job priority"
+msgid "High"
+msgstr "高"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:498
+#: gtk/print/backends/gtkprintbackendcups.c:5717
+msgctxt "Print job priority"
+msgid "Medium"
+msgstr "中"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:499
+#: gtk/print/backends/gtkprintbackendcups.c:5718
+msgctxt "Print job priority"
+msgid "Low"
+msgstr "低"
+
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: gtk/print/backends/gtkprintbackendcpdb.c:521
+#: gtk/print/backends/gtkprintbackendcups.c:5861
+msgctxt "printer option"
+msgid "Before"
+msgstr "封面"
+
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: gtk/print/backends/gtkprintbackendcpdb.c:528
+#: gtk/print/backends/gtkprintbackendcups.c:5876
+msgctxt "printer option"
+msgid "After"
+msgstr "封底"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:551
+msgid "Print at"
+msgstr "打印于"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:561
+msgid "Print at time"
+msgstr "在指定时间打印"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:624
+msgctxt "print option"
+msgid "Borderless"
+msgstr "无边框"
+
+#. Translators: this is a printer status.
+#: gtk/print/backends/gtkprintbackendcpdb.c:1483
+#: gtk/print/backends/gtkprintbackendcups.c:2650
+msgid "Paused; Rejecting Jobs"
+msgstr "暂停，拒绝任务"
+
+#. Translators: this is a printer status.
+#: gtk/print/backends/gtkprintbackendcpdb.c:1486
+#: gtk/print/backends/gtkprintbackendcups.c:2653
+#: gtk/print/gtkprintoperation-win32.c:630
+msgid "Paused"
+msgstr "已暂停"
+
+#. Translators: this is a printer status.
+#: gtk/print/backends/gtkprintbackendcpdb.c:1489
+#: gtk/print/backends/gtkprintbackendcups.c:2656
+msgid "Rejecting Jobs"
+msgstr "拒绝任务"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1154
+#: gtk/print/backends/gtkprintbackendcups.c:1461
+msgid "Username:"
+msgstr "用户名："
+
+#: gtk/print/backends/gtkprintbackendcups.c:1155
+#: gtk/print/backends/gtkprintbackendcups.c:1470
+msgid "Password:"
+msgstr "密码："
+
+#: gtk/print/backends/gtkprintbackendcups.c:1193
+#: gtk/print/backends/gtkprintbackendcups.c:1483
+#, c-format
+msgid "Authentication is required to print document “%s” on printer %s"
+msgstr "在打印机 %2$s 上打印文档“%1$s”需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1195
+#, c-format
+msgid "Authentication is required to print a document on %s"
+msgstr "在 %s 打印一个文档需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1199
+#, c-format
+msgid "Authentication is required to get attributes of job “%s”"
+msgstr "获取任务“%s”的属性需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1201
+msgid "Authentication is required to get attributes of a job"
+msgstr "获取一个任务的属性需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1205
+#, c-format
+msgid "Authentication is required to get attributes of printer %s"
+msgstr "获取打印机 “%s” 的属性需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1207
+msgid "Authentication is required to get attributes of a printer"
+msgstr "获取一个打印机的属性需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1210
+#, c-format
+msgid "Authentication is required to get default printer of %s"
+msgstr "获取 “%s” 的缺省打印机需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1213
+#, c-format
+msgid "Authentication is required to get printers from %s"
+msgstr "从 “%s” 获取打印机需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1218
+#, c-format
+msgid "Authentication is required to get a file from %s"
+msgstr "从 %s 获取一个文件需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1220
+#, c-format
+msgid "Authentication is required on %s"
+msgstr "在 %s 需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1455
+msgid "Domain:"
+msgstr "域："
+
+#: gtk/print/backends/gtkprintbackendcups.c:1485
+#, c-format
+msgid "Authentication is required to print document “%s”"
+msgstr "打印文档“%s”需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1490
+#, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr "在打印机“%s”打印此文档需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1492
+msgid "Authentication is required to print this document"
+msgstr "打印文档需要认证"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2582
+#, c-format
+msgid "Printer “%s” is low on toner."
+msgstr "打印机“%s”墨量低。"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2586
+#, c-format
+msgid "Printer “%s” has no toner left."
+msgstr "打印机“%s”墨用完了。"
+
+#. Translators: "Developer" like on photo development context
+#: gtk/print/backends/gtkprintbackendcups.c:2591
+#, c-format
+msgid "Printer “%s” is low on developer."
+msgstr "打印机“%s”显影剂量低。"
+
+#. Translators: "Developer" like on photo development context
+#: gtk/print/backends/gtkprintbackendcups.c:2596
+#, c-format
+msgid "Printer “%s” is out of developer."
+msgstr "打印机“%s”显影剂用完了。"
+
+#. Translators: "marker" is one color bin of the printer
+#: gtk/print/backends/gtkprintbackendcups.c:2601
+#, c-format
+msgid "Printer “%s” is low on at least one marker supply."
+msgstr "打印机“%s”至少有一个彩色墨量低。"
+
+#. Translators: "marker" is one color bin of the printer
+#: gtk/print/backends/gtkprintbackendcups.c:2606
+#, c-format
+msgid "Printer “%s” is out of at least one marker supply."
+msgstr "打印机“%s”至少有一种彩色墨用完了。"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2610
+#, c-format
+msgid "The cover is open on printer “%s”."
+msgstr "打印机“%s”的盖子未关。"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2614
+#, c-format
+msgid "The door is open on printer “%s”."
+msgstr "打印机“%s”的盖子被打开了。"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2618
+#, c-format
+msgid "Printer “%s” is low on paper."
+msgstr "打印机“%s”纸快用完了。"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2622
+#, c-format
+msgid "Printer “%s” is out of paper."
+msgstr "打印机“%s”缺纸。"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2626
+#, c-format
+msgid "Printer “%s” is currently offline."
+msgstr "打印机“%s”目前离线。"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2630
+#, c-format
+msgid "There is a problem on printer “%s”."
+msgstr "打印机“%s”可能有问题。"
+
+#. Translators: this string connects multiple printer states together.
+#: gtk/print/backends/gtkprintbackendcups.c:2697
+msgid "; "
+msgstr "；"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4645
+#: gtk/print/backends/gtkprintbackendcups.c:4713
+msgctxt "printing option"
+msgid "Two Sided"
+msgstr "双面"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4646
+msgctxt "printing option"
+msgid "Paper Type"
+msgstr "纸张类型"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4647
+msgctxt "printing option"
+msgid "Paper Source"
+msgstr "纸张来源"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4648
+#: gtk/print/backends/gtkprintbackendcups.c:4714
+msgctxt "printing option"
+msgid "Output Tray"
+msgstr "出纸器"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4649
+msgctxt "printing option"
+msgid "Resolution"
+msgstr "分辨率"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4650
+msgctxt "printing option"
+msgid "GhostScript pre-filtering"
+msgstr "GhostScript 预过滤"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4659
+msgctxt "printing option value"
+msgid "One Sided"
+msgstr "单面"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4661
+msgctxt "printing option value"
+msgid "Long Edge (Standard)"
+msgstr "长边（标准）"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4663
+msgctxt "printing option value"
+msgid "Short Edge (Flip)"
+msgstr "短边（翻转）"
+
+#. Translators: this is an option of "Paper Source"
+#: gtk/print/backends/gtkprintbackendcups.c:4665
+#: gtk/print/backends/gtkprintbackendcups.c:4667
+#: gtk/print/backends/gtkprintbackendcups.c:4675
+msgctxt "printing option value"
+msgid "Auto Select"
+msgstr "自动选择"
+
+#. Translators: this is an option of "Paper Source"
+#. Translators: this is an option of "Resolution"
+#: gtk/print/backends/gtkprintbackendcups.c:4669
+#: gtk/print/backends/gtkprintbackendcups.c:4671
+#: gtk/print/backends/gtkprintbackendcups.c:4673
+#: gtk/print/backends/gtkprintbackendcups.c:4677
+msgctxt "printing option value"
+msgid "Printer Default"
+msgstr "打印机默认"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4679
+msgctxt "printing option value"
+msgid "Embed GhostScript fonts only"
+msgstr "只嵌入 GhostScript 字体"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4681
+msgctxt "printing option value"
+msgid "Convert to PS level 1"
+msgstr "转换到 PS 1 级"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4683
+msgctxt "printing option value"
+msgid "Convert to PS level 2"
+msgstr "转换到 PS 2 级"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4685
+msgctxt "printing option value"
+msgid "No pre-filtering"
+msgstr "无预过滤"
+
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: gtk/print/backends/gtkprintbackendcups.c:4694
+msgctxt "printing option group"
+msgid "Miscellaneous"
+msgstr "杂项"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4722
+msgctxt "sides"
+msgid "One Sided"
+msgstr "单面"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4724
+msgctxt "sides"
+msgid "Long Edge (Standard)"
+msgstr "长边（标准）"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4726
+msgctxt "sides"
+msgid "Short Edge (Flip)"
+msgstr "短边（翻转）"
+
+#. Translators: Top output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4729
+msgctxt "output-bin"
+msgid "Top Bin"
+msgstr "顶纸盒"
+
+#. Translators: Middle output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4731
+msgctxt "output-bin"
+msgid "Middle Bin"
+msgstr "中纸盒"
+
+#. Translators: Bottom output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4733
+msgctxt "output-bin"
+msgid "Bottom Bin"
+msgstr "底纸盒"
+
+#. Translators: Side output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4735
+msgctxt "output-bin"
+msgid "Side Bin"
+msgstr "侧纸盒"
+
+#. Translators: Left output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4737
+msgctxt "output-bin"
+msgid "Left Bin"
+msgstr "左纸盒"
+
+#. Translators: Right output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4739
+msgctxt "output-bin"
+msgid "Right Bin"
+msgstr "右纸盒"
+
+#. Translators: Center output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4741
+msgctxt "output-bin"
+msgid "Center Bin"
+msgstr "中纸盒"
+
+#. Translators: Rear output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4743
+msgctxt "output-bin"
+msgid "Rear Bin"
+msgstr "后纸盒"
+
+#. Translators: Output bin where one sided output is oriented in the face-up position
+#: gtk/print/backends/gtkprintbackendcups.c:4745
+msgctxt "output-bin"
+msgid "Face Up Bin"
+msgstr "面朝上纸盒"
+
+#. Translators: Output bin where one sided output is oriented in the face-down position
+#: gtk/print/backends/gtkprintbackendcups.c:4747
+msgctxt "output-bin"
+msgid "Face Down Bin"
+msgstr "面朝下纸盒"
+
+#. Translators: Large capacity output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4749
+msgctxt "output-bin"
+msgid "Large Capacity Bin"
+msgstr "大容量纸盒"
+
+#. Translators: Output stacker number %d
+#: gtk/print/backends/gtkprintbackendcups.c:4771
+#, c-format
+msgctxt "output-bin"
+msgid "Stacker %d"
+msgstr "贴纸 %d"
+
+#. Translators: Output mailbox number %d
+#: gtk/print/backends/gtkprintbackendcups.c:4775
+#, c-format
+msgctxt "output-bin"
+msgid "Mailbox %d"
+msgstr "邮箱 %d"
+
+#. Translators: Private mailbox
+#: gtk/print/backends/gtkprintbackendcups.c:4779
+msgctxt "output-bin"
+msgid "My Mailbox"
+msgstr "我的邮箱"
+
+#. Translators: Output tray number %d
+#: gtk/print/backends/gtkprintbackendcups.c:4783
+#, c-format
+msgctxt "output-bin"
+msgid "Tray %d"
+msgstr "托盘 %d"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5265
+msgid "Printer Default"
+msgstr "打印机默认"
+
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5724
+#: gtk/print/gtkprintunixdialog.c:2737
+msgid "Left to right, top to bottom"
+msgstr "从左到右，从上到下"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5724
+#: gtk/print/gtkprintunixdialog.c:2737
+msgid "Left to right, bottom to top"
+msgstr "从左到右，从下到上"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5725
+#: gtk/print/gtkprintunixdialog.c:2738
+msgid "Right to left, top to bottom"
+msgstr "从右到左，从上到下"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5725
+#: gtk/print/gtkprintunixdialog.c:2738
+msgid "Right to left, bottom to top"
+msgstr "从右到左，从下到上"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5726
+#: gtk/print/gtkprintunixdialog.c:2739
+msgid "Top to bottom, left to right"
+msgstr "从上到下，从左到右"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5726
+#: gtk/print/gtkprintunixdialog.c:2739
+msgid "Top to bottom, right to left"
+msgstr "从上到下，从右到左"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5727
+#: gtk/print/gtkprintunixdialog.c:2740
+msgid "Bottom to top, left to right"
+msgstr "从下到上，从左到右"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5727
+#: gtk/print/gtkprintunixdialog.c:2740
+msgid "Bottom to top, right to left"
+msgstr "从下到上，从右到左"
+
+#. Translators, this string is used to label the job priority option
+#. * in the print dialog
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5749
+msgid "Job Priority"
+msgstr "任务优先级"
+
+#. Translators, this string is used to label the billing info entry
+#. * in the print dialog
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5760
+msgid "Billing Info"
+msgstr "计费信息"
+
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5784
+msgctxt "cover page"
+msgid "None"
+msgstr "无"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5785
+msgctxt "cover page"
+msgid "Classified"
+msgstr "保密"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5786
+msgctxt "cover page"
+msgid "Confidential"
+msgstr "机密"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5787
+msgctxt "cover page"
+msgid "Secret"
+msgstr "秘密"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5788
+msgctxt "cover page"
+msgid "Standard"
+msgstr "标准"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5789
+msgctxt "cover page"
+msgid "Top Secret"
+msgstr "绝密"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5790
+msgctxt "cover page"
+msgid "Unclassified"
+msgstr "非保密"
+
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5802
+msgctxt "printer option"
+msgid "Pages per Sheet"
+msgstr "每张页数"
+
+#. Translators, this string is used to label the option in the print
+#. * dialog that controls in what order multiple pages are arranged
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5819
+msgctxt "printer option"
+msgid "Page Ordering"
+msgstr "页面顺序"
+
+#. Translators: this is the name of the option that controls when
+#. * a print job is printed. Possible values are 'now', a specified time,
+#. * or 'on hold'
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5896
+msgctxt "printer option"
+msgid "Print at"
+msgstr "打印于"
+
+#. Translators: this is the name of the option that allows the user
+#. * to specify a time when a print job will be printed.
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5907
+msgctxt "printer option"
+msgid "Print at time"
+msgstr "在指定时间打印"
+
+#. Translators: this format is used to display a custom
+#. * paper size. The two placeholders are replaced with
+#. * the width and height in points. E.g: "Custom
+#. * 230.4x142.9"
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5955
+#, c-format
+msgid "Custom %s×%s"
+msgstr "自定义 %s×%s"
+
+#. TRANSLATORS: this is the ICC color profile to use for this job
+#: gtk/print/backends/gtkprintbackendcups.c:6067
+msgctxt "printer option"
+msgid "Printer Profile"
+msgstr "打印机配置"
+
+#. TRANSLATORS: this is when color profile information is unavailable
+#: gtk/print/backends/gtkprintbackendcups.c:6074
+msgctxt "printer option value"
+msgid "Unavailable"
+msgstr "不可用"
+
+#: gtk/print/backends/gtkprintbackendfile.c:231
+msgid "output"
+msgstr "输出"
+
+#: gtk/print/backends/gtkprintbackendfile.c:511
+msgid "Print to File"
+msgstr "打印到文件"
+
+#: gtk/print/backends/gtkprintbackendfile.c:643
+msgid "PDF"
+msgstr "PDF"
+
+#: gtk/print/backends/gtkprintbackendfile.c:643
+msgid "PostScript"
+msgstr "PostScript"
+
+#: gtk/print/backends/gtkprintbackendfile.c:643
+msgid "SVG"
+msgstr "SVG"
+
+#: gtk/print/backends/gtkprintbackendfile.c:656
+msgid "Pages per _sheet:"
+msgstr "每张页数(_S)："
+
+#: gtk/print/backends/gtkprintbackendfile.c:726
+msgid "File"
+msgstr "文件"
+
+#: gtk/print/backends/gtkprintbackendfile.c:736
+msgid "_Output format"
+msgstr "输出格式(_O)"
+
+#. TRANSLATORS: when we're running an old CUPS, and
+#. * it hasn't registered the device with colord
+#: gtk/print/backends/gtkprintercups.c:245
+msgid "Color management unavailable"
+msgstr "颜色管理不可用"
+
+#. TRANSLATORS: when there is no color profile available
+#: gtk/print/backends/gtkprintercups.c:257
+msgid "No profile available"
+msgstr "没有可用配置"
+
+#. TRANSLATORS: when the color profile has no title
+#: gtk/print/backends/gtkprintercups.c:268
+msgid "Unspecified profile"
+msgstr "未指定的配置"
+
+#: gtk/print/gtkprintbackend.c:653
 msgid "Authentication"
 msgstr "认证"
 
-#: gtk/print/gtkprintbackend.c:716
+#: gtk/print/gtkprintbackend.c:736
 msgid "_Remember password"
 msgstr "记住密码(_R)"
 
@@ -3367,84 +4010,84 @@ msgstr "不可用"
 msgid "%s job #%d"
 msgstr "%s 的打印作业 #%d"
 
-#: gtk/print/gtkprintoperation.c:1702
+#: gtk/print/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "初始状态"
 
-#: gtk/print/gtkprintoperation.c:1703
+#: gtk/print/gtkprintoperation.c:1704
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "准备打印"
 
-#: gtk/print/gtkprintoperation.c:1704
+#: gtk/print/gtkprintoperation.c:1705
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "生成数据"
 
-#: gtk/print/gtkprintoperation.c:1705
+#: gtk/print/gtkprintoperation.c:1706
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "发送数据"
 
-#: gtk/print/gtkprintoperation.c:1706
+#: gtk/print/gtkprintoperation.c:1707
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "等候"
 
-#: gtk/print/gtkprintoperation.c:1707
+#: gtk/print/gtkprintoperation.c:1708
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "塞纸"
 
-#: gtk/print/gtkprintoperation.c:1708
+#: gtk/print/gtkprintoperation.c:1709
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "打印"
 
-#: gtk/print/gtkprintoperation.c:1709
+#: gtk/print/gtkprintoperation.c:1710
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "完成"
 
-#: gtk/print/gtkprintoperation.c:1710
+#: gtk/print/gtkprintoperation.c:1711
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "有错误完成"
 
-#: gtk/print/gtkprintoperation.c:2254
+#: gtk/print/gtkprintoperation.c:2255
 #, c-format
 msgid "Preparing %d"
 msgstr "正在准备 %d"
 
-#: gtk/print/gtkprintoperation.c:2256 gtk/print/gtkprintoperation.c:2875
+#: gtk/print/gtkprintoperation.c:2257 gtk/print/gtkprintoperation.c:2876
 #, c-format
 msgid "Preparing"
 msgstr "正在准备"
 
-#: gtk/print/gtkprintoperation.c:2259
+#: gtk/print/gtkprintoperation.c:2260
 #, c-format
 msgid "Printing %d"
 msgstr "正在打印 %d"
 
-#: gtk/print/gtkprintoperation.c:2908
+#: gtk/print/gtkprintoperation.c:2909
 #, c-format
 msgid "Error creating print preview"
 msgstr "创建打印预览时出错"
 
-#: gtk/print/gtkprintoperation.c:2911
+#: gtk/print/gtkprintoperation.c:2912
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "最可能的原因是无法创建临时文件。"
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:603
-#: gtk/print/gtkprintoperation-portal.c:672 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:605
+#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "打印"
 
-#: gtk/print/gtkprintoperation-unix.c:490
+#: gtk/print/gtkprintoperation-unix.c:526
 #: gtk/print/gtkprintoperation-win32.c:1498
 msgid "Application"
 msgstr "应用程序"
@@ -3456,13 +4099,6 @@ msgstr "打印机离线"
 #: gtk/print/gtkprintoperation-win32.c:628
 msgid "Out of paper"
 msgstr "缺纸"
-
-#. Translators: this is a printer status.
-#: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1521
-#: modules/printbackends/gtkprintbackendcups.c:2639
-msgid "Paused"
-msgstr "已暂停"
 
 #: gtk/print/gtkprintoperation-win32.c:632
 msgid "Need user intervention"
@@ -3523,52 +4159,6 @@ msgstr "获取打印机信息失败"
 msgid "Getting printer information…"
 msgstr "正在获取打印机信息…"
 
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
-#.
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing
-#.
-#: gtk/print/gtkprintunixdialog.c:2737
-#: modules/printbackends/gtkprintbackendcups.c:5679
-msgid "Left to right, top to bottom"
-msgstr "从左到右，从上到下"
-
-#: gtk/print/gtkprintunixdialog.c:2737
-#: modules/printbackends/gtkprintbackendcups.c:5679
-msgid "Left to right, bottom to top"
-msgstr "从左到右，从下到上"
-
-#: gtk/print/gtkprintunixdialog.c:2738
-#: modules/printbackends/gtkprintbackendcups.c:5680
-msgid "Right to left, top to bottom"
-msgstr "从右到左，从上到下"
-
-#: gtk/print/gtkprintunixdialog.c:2738
-#: modules/printbackends/gtkprintbackendcups.c:5680
-msgid "Right to left, bottom to top"
-msgstr "从右到左，从下到上"
-
-#: gtk/print/gtkprintunixdialog.c:2739
-#: modules/printbackends/gtkprintbackendcups.c:5681
-msgid "Top to bottom, left to right"
-msgstr "从上到下，从左到右"
-
-#: gtk/print/gtkprintunixdialog.c:2739
-#: modules/printbackends/gtkprintbackendcups.c:5681
-msgid "Top to bottom, right to left"
-msgstr "从上到下，从右到左"
-
-#: gtk/print/gtkprintunixdialog.c:2740
-#: modules/printbackends/gtkprintbackendcups.c:5682
-msgid "Bottom to top, left to right"
-msgstr "从下到上，从左到右"
-
-#: gtk/print/gtkprintunixdialog.c:2740
-#: modules/printbackends/gtkprintbackendcups.c:5682
-msgid "Bottom to top, right to left"
-msgstr "从下到上，从右到左"
-
 #: gtk/print/gtkprintunixdialog.c:2744 gtk/print/gtkprintunixdialog.c:2757
 msgid "Page Ordering"
 msgstr "页面顺序"
@@ -3589,11 +4179,11 @@ msgstr "自顶到底"
 msgid "Bottom to top"
 msgstr "自底至顶"
 
-#: gtk/gtkprintdialog.c:1755
+#: gtk/gtkprintdialog.c:1766
 msgid "Failed to create the read file descriptor"
 msgstr "创建读取文件描述符失败"
 
-#: gtk/gtkprogressbar.c:629
+#: gtk/gtkprogressbar.c:631
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3684,7 +4274,7 @@ msgid "Search Shortcuts"
 msgstr "搜索快捷操作"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:496
+#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:584
 msgid "Shortcuts"
 msgstr "快捷操作"
 
@@ -3708,11 +4298,11 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "侧边栏"
 
-#: gtk/gtktext.c:6344
+#: gtk/gtktext.c:6401
 msgid "Change di_rection"
 msgstr "更改方向(_R)"
 
-#: gtk/gtktext.c:6349 gtk/gtktextview.c:9354
+#: gtk/gtktext.c:6406 gtk/gtktextview.c:9422
 msgid "Insert _Emoji"
 msgstr "插入表情符号(_E)"
 
@@ -3872,21 +4462,21 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS 经典"
 
-#: gtk/gtktextview.c:9336
+#: gtk/gtktextview.c:9404
 msgid "_Undo"
 msgstr "撤消(_U)"
 
-#: gtk/gtktextview.c:9340
+#: gtk/gtktextview.c:9408
 msgid "_Redo"
 msgstr "重做(_R)"
 
 # Chrome 那个叫检查元素，这个叫检查器也没什么问题吧。
-#: gtk/gtkwindow.c:6357
+#: gtk/gtkwindow.c:6454
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "您是否要使用 GTK 检查器？"
 
-#: gtk/gtkwindow.c:6359
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3896,7 +4486,7 @@ msgstr ""
 "GTK 检查器是一个交互式的调试器，让您可以探索并修改任何 GTK 应用程序的内部构"
 "造。使用它可能造成应用程序损坏或崩溃。"
 
-#: gtk/gtkwindow.c:6364
+#: gtk/gtkwindow.c:6461
 msgid "Don’t show this message again"
 msgstr "不要再显示此消息"
 
@@ -3946,8 +4536,8 @@ msgid "Attribute"
 msgstr "属性"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:159
-#: gtk/inspector/recorder.ui:203 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:207
+#: gtk/inspector/recorder.ui:251 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "值"
 
@@ -3999,7 +4589,7 @@ msgstr "远端"
 msgid "Drag and hold here"
 msgstr "拖动并在这里保持"
 
-#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:572
+#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:660
 msgid "Clipboard"
 msgstr "剪贴板"
 
@@ -4033,21 +4623,21 @@ msgctxt "propagation limit"
 msgid "Native"
 msgstr "原生"
 
-#: gtk/inspector/css-editor.c:135
+#: gtk/inspector/css-editor.c:139
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "您可以在这里输入任何 GTK 可识别的 CSS 规则。"
 
-#: gtk/inspector/css-editor.c:136
+#: gtk/inspector/css-editor.c:140
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr "您可以点击上面的“暂停”按钮来暂时停用这个自定义 CSS。"
 
-#: gtk/inspector/css-editor.c:137
+#: gtk/inspector/css-editor.c:141
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr "变更会立即应用到全局，影响整个应用程序。"
 
-#: gtk/inspector/css-editor.c:236
+#: gtk/inspector/css-editor.c:240
 #, c-format
 msgid "Saving CSS failed"
 msgstr "保存 CSS 失败"
@@ -4056,11 +4646,11 @@ msgstr "保存 CSS 失败"
 msgid "Disable this custom CSS"
 msgstr "停用这个自定义 CSS"
 
-#: gtk/inspector/css-editor.ui:44
+#: gtk/inspector/css-editor.ui:52
 msgid "Save the current CSS"
 msgstr "保存目前的 CSS"
 
-#: gtk/inspector/css-editor.ui:51
+#: gtk/inspector/css-editor.ui:67
 msgid "Show deprecations"
 msgstr "显示废弃内容"
 
@@ -4077,154 +4667,154 @@ msgstr "样式类别"
 msgid "CSS Property"
 msgstr "CSS 属性"
 
-#: gtk/inspector/general.c:469
+#: gtk/inspector/general.c:470
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "输入法上下文由 GTK_IM_MODULE 硬编码"
 
-#: gtk/inspector/general.c:644
+#: gtk/inspector/general.c:645
 msgctxt "GL renderer"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/general.c:741
+#: gtk/inspector/general.c:742
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
+#: gtk/inspector/general.c:996 gtk/inspector/general.c:1035
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/general.ui:13
+#: gtk/inspector/general.ui:21
 msgid "Copy to clipboard as gitlab markdown"
 msgstr "作为 gitlab markdown 复制到剪贴板"
 
-#: gtk/inspector/general.ui:45
+#: gtk/inspector/general.ui:53
 msgid "Operating System"
 msgstr "操作系统"
 
-#: gtk/inspector/general.ui:71
+#: gtk/inspector/general.ui:79
 msgid "GTK Version"
 msgstr "GTK 版本"
 
-#: gtk/inspector/general.ui:97
+#: gtk/inspector/general.ui:105
 msgid "GDK Backend"
 msgstr "GDK 后端"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:131
 msgid "GSK Renderer"
 msgstr "GSK 渲染器"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:157
 msgid "Pango Fontmap"
 msgstr "Pango 字体映射"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:183
 msgid "Media Backend"
 msgstr "媒体后端"
 
-#: gtk/inspector/general.ui:201
+#: gtk/inspector/general.ui:209
 msgid "Input Method"
 msgstr "输入法"
 
-#: gtk/inspector/general.ui:227
+#: gtk/inspector/general.ui:235
 msgid "Accessibility Backend"
 msgstr "无障碍后端"
 
-#: gtk/inspector/general.ui:264
+#: gtk/inspector/general.ui:272
 msgid "Application ID"
 msgstr "应用程序 ID"
 
-#: gtk/inspector/general.ui:290
+#: gtk/inspector/general.ui:298
 msgid "Resource Path"
 msgstr "资源路径"
 
-#: gtk/inspector/general.ui:327 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:335 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "前缀"
 
-#: gtk/inspector/general.ui:354
+#: gtk/inspector/general.ui:362
 msgid "Environment"
 msgstr "环境"
 
-#: gtk/inspector/general.ui:457
+#: gtk/inspector/general.ui:465
 msgid "Display"
 msgstr "显示"
 
-#: gtk/inspector/general.ui:484
+#: gtk/inspector/general.ui:492
 msgid "RGBA Visual"
 msgstr "RGBA 视觉"
 
-#: gtk/inspector/general.ui:510
+#: gtk/inspector/general.ui:522
 msgid "Composited"
 msgstr "混成"
 
-#: gtk/inspector/general.ui:535
+#: gtk/inspector/general.ui:547
 msgid "Protocols"
 msgstr "协议"
 
-#: gtk/inspector/general.ui:591
+#: gtk/inspector/general.ui:603
 msgid "GL Renderer"
 msgstr "GL 渲染器"
 
-#: gtk/inspector/general.ui:620
+#: gtk/inspector/general.ui:632
 msgid "GL Vendor"
 msgstr "GL 供应商"
 
-#: gtk/inspector/general.ui:649
+#: gtk/inspector/general.ui:661
 msgid "GL Version"
 msgstr "GL 版本"
 
-#: gtk/inspector/general.ui:676
+#: gtk/inspector/general.ui:688
 msgid "GL Backend Vendor"
 msgstr "GL 后端厂商"
 
-#: gtk/inspector/general.ui:703
+#: gtk/inspector/general.ui:715
 msgid "GL Backend Version"
 msgstr "GL 后端版本"
 
-#: gtk/inspector/general.ui:753
+#: gtk/inspector/general.ui:765
 msgid "GL Full Version"
 msgstr "GL 完整版本"
 
-#: gtk/inspector/general.ui:782
+#: gtk/inspector/general.ui:794
 msgid "GLSL Version"
 msgstr "GLSL 版本"
 
-#: gtk/inspector/general.ui:811
+#: gtk/inspector/general.ui:823
 msgid "GL Extensions"
 msgstr "GL 扩展"
 
-#: gtk/inspector/general.ui:899
+#: gtk/inspector/general.ui:911
 msgid "EGL Extensions"
 msgstr "EGL 扩展"
 
-#: gtk/inspector/general.ui:986
+#: gtk/inspector/general.ui:998
 msgid "GL Features"
 msgstr "GL 特性"
 
-#: gtk/inspector/general.ui:1022
+#: gtk/inspector/general.ui:1034
 msgid "Vulkan Device"
 msgstr "Vulkan 设备"
 
-#: gtk/inspector/general.ui:1049
+#: gtk/inspector/general.ui:1061
 msgid "Vulkan API Version"
 msgstr "Vulkan API 版本"
 
-#: gtk/inspector/general.ui:1076
+#: gtk/inspector/general.ui:1088
 msgid "Vulkan Driver Version"
 msgstr "Vulkan 驱动版本"
 
-#: gtk/inspector/general.ui:1125
+#: gtk/inspector/general.ui:1137
 msgid "Vulkan Layers"
 msgstr "Vulkan 层"
 
-#: gtk/inspector/general.ui:1194
+#: gtk/inspector/general.ui:1206
 msgid "Vulkan Extensions"
 msgstr "Vulkan 扩展"
 
-#: gtk/inspector/general.ui:1281
+#: gtk/inspector/general.ui:1293
 msgid "Vulkan Features"
 msgstr "Vulkan 特性"
 
@@ -4289,8 +4879,8 @@ msgid "Surface"
 msgstr "表面"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1199
-#: gtk/inspector/prop-editor.c:1594 gtk/inspector/window.ui:394
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1634
+#: gtk/inspector/window.ui:482
 msgid "Properties"
 msgstr "属性"
 
@@ -4306,39 +4896,39 @@ msgstr "帧时钟"
 msgid "Tick Callback"
 msgstr "定时回调"
 
-#: gtk/inspector/misc-info.ui:477
+#: gtk/inspector/misc-info.ui:481
 msgid "Frame Count"
 msgstr "帧数"
 
-#: gtk/inspector/misc-info.ui:502
+#: gtk/inspector/misc-info.ui:506
 msgid "Frame Rate"
 msgstr "帧率"
 
-#: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:314
+#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:358
 msgid "Scale"
 msgstr "缩放"
 
-#: gtk/inspector/misc-info.ui:552
+#: gtk/inspector/misc-info.ui:556
 msgid "Color state"
 msgstr "颜色状态"
 
-#: gtk/inspector/misc-info.ui:577
+#: gtk/inspector/misc-info.ui:581
 msgid "Mapped"
 msgstr "已映射"
 
-#: gtk/inspector/misc-info.ui:603
+#: gtk/inspector/misc-info.ui:607
 msgid "Realized"
 msgstr "已实例化"
 
-#: gtk/inspector/misc-info.ui:629
+#: gtk/inspector/misc-info.ui:633
 msgid "Is Toplevel"
 msgstr "是顶端层级"
 
-#: gtk/inspector/misc-info.ui:655
+#: gtk/inspector/misc-info.ui:659
 msgid "Child Visible"
 msgstr "子项可见性"
 
-#: gtk/inspector/prop-editor.c:748
+#: gtk/inspector/prop-editor.c:749
 #, c-format
 msgid "Pointer: %p"
 msgstr "指针：%p"
@@ -4346,7 +4936,7 @@ msgstr "指针：%p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:873
+#: gtk/inspector/prop-editor.c:874
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s 具有值“%s”"
@@ -4354,7 +4944,7 @@ msgstr "%s 具有值“%s”"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:884
+#: gtk/inspector/prop-editor.c:885
 #, c-format
 msgid "%s with type %s"
 msgstr "%s 具有类型 %s"
@@ -4362,7 +4952,7 @@ msgstr "%s 具有类型 %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:897
+#: gtk/inspector/prop-editor.c:898
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s 对于 %s %p"
@@ -4370,71 +4960,71 @@ msgstr "%s 对于 %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:927
+#: gtk/inspector/prop-editor.c:928
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s 具有值类型 %s"
 
-#: gtk/inspector/prop-editor.c:1288
+#: gtk/inspector/prop-editor.c:1328
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "不可编辑的属性类型：%s"
 
-#: gtk/inspector/prop-editor.c:1446
+#: gtk/inspector/prop-editor.c:1486
 msgctxt "column number"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/prop-editor.c:1483
+#: gtk/inspector/prop-editor.c:1523
 msgid "Attribute:"
 msgstr "属性："
 
-#: gtk/inspector/prop-editor.c:1486
+#: gtk/inspector/prop-editor.c:1526
 msgid "Model"
 msgstr "型号"
 
-#: gtk/inspector/prop-editor.c:1491
+#: gtk/inspector/prop-editor.c:1531
 msgid "Column:"
 msgstr "列："
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1590
+#: gtk/inspector/prop-editor.c:1630
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "动作来源：%p (%s)"
 
-#: gtk/inspector/prop-editor.c:1645
+#: gtk/inspector/prop-editor.c:1685
 msgid "Reset"
 msgstr "重置"
 
-#: gtk/inspector/prop-editor.c:1653
+#: gtk/inspector/prop-editor.c:1693
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "默认"
 
-#: gtk/inspector/prop-editor.c:1656
+#: gtk/inspector/prop-editor.c:1696
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "主题"
 
-#: gtk/inspector/prop-editor.c:1659
+#: gtk/inspector/prop-editor.c:1699
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1663
+#: gtk/inspector/prop-editor.c:1703
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "应用程序"
 
-#: gtk/inspector/prop-editor.c:1666
+#: gtk/inspector/prop-editor.c:1706
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/inspector/prop-editor.c:1669
+#: gtk/inspector/prop-editor.c:1709
 msgid "Source:"
 msgstr "来源："
 
@@ -4442,68 +5032,68 @@ msgstr "来源："
 msgid "Defined At"
 msgstr "定义于"
 
-#: gtk/inspector/recorder.c:2181
+#: gtk/inspector/recorder.c:2212
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "无法保存 RenderNode"
 
-#: gtk/inspector/recorder.ui:20
+#: gtk/inspector/recorder.ui:28
 msgid "Recording Options"
 msgstr "记录选项"
 
-#: gtk/inspector/recorder.ui:24
+#: gtk/inspector/recorder.ui:32
 msgid "Record events"
 msgstr "记录事件"
 
-#: gtk/inspector/recorder.ui:28
+#: gtk/inspector/recorder.ui:36
 msgid "Add debug nodes"
 msgstr "添加调试节点"
 
-#: gtk/inspector/recorder.ui:32
+#: gtk/inspector/recorder.ui:40
 msgid "Highlight event sequences"
 msgstr "高亮事件序列"
 
-#: gtk/inspector/recorder.ui:42
+#: gtk/inspector/recorder.ui:58
 msgid "Record frames"
 msgstr "记录帧"
 
-#: gtk/inspector/recorder.ui:49
+#: gtk/inspector/recorder.ui:73
 msgid "Clear recorded frames"
 msgstr "清除已记录帧"
 
-#: gtk/inspector/recorder.ui:58
+#: gtk/inspector/recorder.ui:90
 msgid "Use a dark background"
 msgstr "使用暗色背景"
 
-#: gtk/inspector/recorder.ui:66
+#: gtk/inspector/recorder.ui:106
 msgid "Save selected node"
 msgstr "保存选中节点"
 
-#: gtk/inspector/recorder.ui:74
+#: gtk/inspector/recorder.ui:122
 msgid "Copy to clipboard"
 msgstr "复制到剪贴板"
 
-#: gtk/inspector/recorder.ui:154 gtk/inspector/recorder.ui:198
+#: gtk/inspector/recorder.ui:202 gtk/inspector/recorder.ui:246
 msgid "Property"
 msgstr "属性"
 
-#: gtk/inspector/resource-list.ui:59
+#: gtk/inspector/resource-list.ui:75
 msgid "Path"
 msgstr "路径"
 
-#: gtk/inspector/resource-list.ui:71
+#: gtk/inspector/resource-list.ui:87
 msgid "Count"
 msgstr "数量"
 
-#: gtk/inspector/resource-list.ui:121
+#: gtk/inspector/resource-list.ui:137
 msgid "Name:"
 msgstr "名称："
 
-#: gtk/inspector/resource-list.ui:143
+#: gtk/inspector/resource-list.ui:159
 msgid "Type:"
 msgstr "类型："
 
-#: gtk/inspector/resource-list.ui:164 tools/gtk-image-tool-info.c:56
+#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:56
 msgid "Size:"
 msgstr "尺寸："
 
@@ -4572,7 +5162,7 @@ msgstr "启用 GOBJECT_DEBUG=instance-count 统计"
 msgid "Remove %s"
 msgstr "删除 %s"
 
-#: gtk/inspector/strv-editor.c:115
+#: gtk/inspector/strv-editor.c:114
 msgid "Add"
 msgstr "添加"
 
@@ -4588,36 +5178,60 @@ msgstr "层级"
 msgid "Implements"
 msgstr "实现"
 
-#: gtk/inspector/visual.c:690 gtk/inspector/visual.c:708
-msgid "Theme is hardcoded by GTK_THEME"
-msgstr "主题由 GTK_THEME 控制"
-
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
 msgstr "GTK 主题"
 
 #: gtk/inspector/visual.ui:58
-msgid "Dark Variant"
-msgstr "深色变种"
+msgid "System Color Scheme"
+msgstr "系统配色方案"
 
-#: gtk/inspector/visual.ui:83
+#: gtk/inspector/visual.ui:72 gtk/inspector/visual.ui:106
+msgid "Unsupported"
+msgstr "不支持的"
+
+#: gtk/inspector/visual.ui:74
+msgid "Dark"
+msgstr "暗色"
+
+#: gtk/inspector/visual.ui:75
+msgid "Light"
+msgstr "亮色"
+
+#: gtk/inspector/visual.ui:92
+msgid "System Contrast"
+msgstr "系统对比度"
+
+#: gtk/inspector/visual.ui:107
+msgid "No Preference"
+msgstr "无首选项"
+
+#: gtk/inspector/visual.ui:108
+msgid "More"
+msgstr "更多"
+
+#: gtk/inspector/visual.ui:109
+msgid "Less"
+msgstr "较少"
+
+#: gtk/inspector/visual.ui:127
 msgid "Cursor Theme"
 msgstr "光标主题"
 
-#: gtk/inspector/visual.ui:108
+#: gtk/inspector/visual.ui:152
 msgid "Cursor Size"
 msgstr "光标大小"
 
-#: gtk/inspector/visual.ui:144
+#: gtk/inspector/visual.ui:188
 msgid "Icon Theme"
 msgstr "图标主题"
 
-#: gtk/inspector/visual.ui:169
+#: gtk/inspector/visual.ui:213
 msgid "Text Direction"
 msgstr "文本方向"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:184
+#: gtk/inspector/visual.ui:228
 msgid ""
 "Left-to-Right\n"
 "Right-to-Left"
@@ -4625,20 +5239,20 @@ msgstr ""
 "左至右\n"
 "右至左"
 
-#: gtk/inspector/visual.ui:201
+#: gtk/inspector/visual.ui:245
 msgid "Animations"
 msgstr "动画"
 
-#: gtk/inspector/visual.ui:226
+#: gtk/inspector/visual.ui:270
 msgid "Slowdown"
 msgstr "减速"
 
-#: gtk/inspector/visual.ui:361
+#: gtk/inspector/visual.ui:405
 msgid "Rendering"
 msgstr "渲染"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:376
+#: gtk/inspector/visual.ui:420
 msgctxt "Font rendering"
 msgid ""
 "Automatic\n"
@@ -4647,61 +5261,65 @@ msgstr ""
 "自动\n"
 "手动"
 
-#: gtk/inspector/visual.ui:403
+#: gtk/inspector/visual.ui:447
 msgid "Show Framerate"
 msgstr "显示帧率"
 
-#: gtk/inspector/visual.ui:428
+#: gtk/inspector/visual.ui:472
 msgid "Show Graphic Updates"
 msgstr "显示图形更新"
 
-#: gtk/inspector/visual.ui:448
+#: gtk/inspector/visual.ui:492
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr "为当前渲染器使用 Cairo 而不是 GPU 的所有位置进行着色。"
 
-#: gtk/inspector/visual.ui:454
+#: gtk/inspector/visual.ui:498
 msgid "Show Cairo Rendering"
 msgstr "显示 Cairo 渲染"
 
-#: gtk/inspector/visual.ui:479
+#: gtk/inspector/visual.ui:523
 msgid "Show Baselines"
 msgstr "显示基线"
 
-#: gtk/inspector/visual.ui:507
+#: gtk/inspector/visual.ui:551
 msgid "Show Layout Borders"
 msgstr "显示布局边框"
 
-#: gtk/inspector/visual.ui:564
+#: gtk/inspector/visual.ui:616
 msgid "CSS Padding"
 msgstr "CSS 填充"
 
-#: gtk/inspector/visual.ui:574
+#: gtk/inspector/visual.ui:626
 msgid "CSS Border"
 msgstr "CSS 边框"
 
-#: gtk/inspector/visual.ui:584
+#: gtk/inspector/visual.ui:636
 msgid "CSS Margin"
 msgstr "CSS 边距"
 
-#: gtk/inspector/visual.ui:594
+#: gtk/inspector/visual.ui:646
 msgid "Widget Margin"
 msgstr "部件边距"
 
-#: gtk/inspector/visual.ui:629
+#: gtk/inspector/visual.ui:681
 msgid "Show Focus"
 msgstr "显示焦点"
 
-#: gtk/inspector/visual.ui:654
+#: gtk/inspector/visual.ui:706
 msgid "Show Accessibility warnings"
 msgstr "显示辅助功能警告"
 
-#: gtk/inspector/visual.ui:679
+#: gtk/inspector/visual.ui:731
 msgid "Show Graphics Offload"
 msgstr "显示图形离屏渲染"
 
-#: gtk/inspector/visual.ui:711
+#: gtk/inspector/visual.ui:766
+msgid "Show Touch UI"
+msgstr "显示触摸界面"
+
+#: gtk/inspector/visual.ui:797
 msgid "Inspect Inspector"
 msgstr "检阅本检查器"
 
@@ -4709,123 +5327,123 @@ msgstr "检阅本检查器"
 msgid "Select an Object"
 msgstr "选择对象"
 
-#: gtk/inspector/window.ui:42 gtk/inspector/window.ui:107
+#: gtk/inspector/window.ui:50 gtk/inspector/window.ui:131
 msgid "Show Details"
 msgstr "显示细节"
 
-#: gtk/inspector/window.ui:57
+#: gtk/inspector/window.ui:73
 msgid "Show all Objects"
 msgstr "显示所有对象"
 
-#: gtk/inspector/window.ui:121
+#: gtk/inspector/window.ui:149
 msgid "Show all Resources"
 msgstr "显示所有资源"
 
-#: gtk/inspector/window.ui:147
+#: gtk/inspector/window.ui:179
 msgid "Collect Statistics"
 msgstr "收集统计"
 
-#: gtk/inspector/window.ui:199
+#: gtk/inspector/window.ui:239
 msgid "Objects"
 msgstr "对象"
 
-#: gtk/inspector/window.ui:231
+#: gtk/inspector/window.ui:279
 msgid "Toggle Sidebar"
 msgstr "切换侧边栏"
 
-#: gtk/inspector/window.ui:253
+#: gtk/inspector/window.ui:309
 msgid "Refresh action state"
 msgstr "刷新动作状态"
 
-#: gtk/inspector/window.ui:327
+#: gtk/inspector/window.ui:391
 msgid "Previous object"
 msgstr "上一个对象"
 
-#: gtk/inspector/window.ui:334
+#: gtk/inspector/window.ui:406
 msgid "Child object"
 msgstr "子对象"
 
-#: gtk/inspector/window.ui:341
+#: gtk/inspector/window.ui:421
 msgid "Previous sibling"
 msgstr "上一个同级对象"
 
-#: gtk/inspector/window.ui:347
+#: gtk/inspector/window.ui:427
 msgid "List Position"
 msgstr "列表位置"
 
-#: gtk/inspector/window.ui:354
+#: gtk/inspector/window.ui:442
 msgid "Next sibling"
 msgstr "下一个同级对象"
 
-#: gtk/inspector/window.ui:384
+#: gtk/inspector/window.ui:472
 msgid "Miscellaneous"
 msgstr "杂项"
 
-#: gtk/inspector/window.ui:405 gtk/print/ui/gtkprintunixdialog.ui:451
+#: gtk/inspector/window.ui:493 gtk/print/ui/gtkprintunixdialog.ui:451
 msgid "Layout"
 msgstr "布局"
 
-#: gtk/inspector/window.ui:416
+#: gtk/inspector/window.ui:504
 msgid "CSS Nodes"
 msgstr "CSS 节点"
 
-#: gtk/inspector/window.ui:427
+#: gtk/inspector/window.ui:515
 msgid "Size Groups"
 msgstr "尺寸组"
 
-#: gtk/inspector/window.ui:436 gtk/inspector/window.ui:445
+#: gtk/inspector/window.ui:524 gtk/inspector/window.ui:533
 msgid "Data"
 msgstr "数据"
 
-#: gtk/inspector/window.ui:455
+#: gtk/inspector/window.ui:543
 msgid "Actions"
 msgstr "操作"
 
-#: gtk/inspector/window.ui:466
+#: gtk/inspector/window.ui:554
 msgid "Menu"
 msgstr "菜单"
 
-#: gtk/inspector/window.ui:475
+#: gtk/inspector/window.ui:563
 msgid "Controllers"
 msgstr "控制器"
 
-#: gtk/inspector/window.ui:485
+#: gtk/inspector/window.ui:573
 msgid "Magnifier"
 msgstr "放大镜"
 
-#: gtk/inspector/window.ui:506
+#: gtk/inspector/window.ui:594
 msgid "Accessibility"
 msgstr "辅助功能"
 
-#: gtk/inspector/window.ui:530
+#: gtk/inspector/window.ui:618
 msgid "Global"
 msgstr "全局"
 
-#: gtk/inspector/window.ui:543
+#: gtk/inspector/window.ui:631
 msgid "Information"
 msgstr "信息"
 
-#: gtk/inspector/window.ui:552
+#: gtk/inspector/window.ui:640
 msgid "Settings"
 msgstr "设置"
 
-#: gtk/inspector/window.ui:561
+#: gtk/inspector/window.ui:649
 msgid "Resources"
 msgstr "资源"
 
-#: gtk/inspector/window.ui:582
+#: gtk/inspector/window.ui:670
 msgid "Statistics"
 msgstr "统计信息"
 
-#: gtk/inspector/window.ui:593
+#: gtk/inspector/window.ui:681
 msgid "Logging"
 msgstr "日志记录"
 
-#: gtk/inspector/window.ui:608
+#: gtk/inspector/window.ui:696
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:617
+#: gtk/inspector/window.ui:705
 msgid "Recorder"
 msgstr "记录器"
 
@@ -6367,15 +6985,15 @@ msgstr "系统信息"
 msgid "Select App"
 msgstr "选择应用"
 
-#: gtk/ui/gtkappchooserdialog.ui:63
+#: gtk/ui/gtkappchooserdialog.ui:66
 msgid "_View All Apps"
 msgstr "查看所有应用(_V)"
 
-#: gtk/ui/gtkappchooserdialog.ui:69
+#: gtk/ui/gtkappchooserdialog.ui:72
 msgid "_Find New Apps"
 msgstr "查找新应用(_F)"
 
-#: gtk/ui/gtkappchooserwidget.ui:100
+#: gtk/ui/gtkappchooserwidget.ui:40
 msgid "No applications found."
 msgstr "找不到应用程序。"
 
@@ -6430,6 +7048,10 @@ msgstr "删除"
 #: gtk/ui/gtkapplication-quartz.ui:79
 msgid "Select All"
 msgstr "全选"
+
+#: gtk/ui/gtkapplication-quartz.ui:85
+msgid "_Window"
+msgstr "窗口(_W)"
 
 #: gtk/ui/gtkassistant.ui:64
 msgid "_Finish"
@@ -6593,24 +7215,24 @@ msgstr "等宽"
 msgid "Language"
 msgstr "语言"
 
-#: gtk/ui/gtkfontchooserwidget.ui:198 gtk/ui/gtkfontchooserwidget.ui:200
-#: gtk/ui/gtkfontchooserwidget.ui:350 gtk/ui/gtkfontchooserwidget.ui:354
+#: gtk/ui/gtkfontchooserwidget.ui:201 gtk/ui/gtkfontchooserwidget.ui:203
+#: gtk/ui/gtkfontchooserwidget.ui:353 gtk/ui/gtkfontchooserwidget.ui:357
 msgid "Preview Font"
 msgstr "预览字体"
 
-#: gtk/ui/gtkfontchooserwidget.ui:296
+#: gtk/ui/gtkfontchooserwidget.ui:299
 msgid "No Fonts Found"
 msgstr "未找到字体"
 
-#: gtk/ui/gtkfontchooserwidget.ui:334
+#: gtk/ui/gtkfontchooserwidget.ui:337
 msgid "Font Name"
 msgstr "字体名称"
 
-#: gtk/ui/gtkfontchooserwidget.ui:379
+#: gtk/ui/gtkfontchooserwidget.ui:382
 msgid "Font Variation Axes"
 msgstr "字体变体轴"
 
-#: gtk/ui/gtkfontchooserwidget.ui:427
+#: gtk/ui/gtkfontchooserwidget.ui:430
 msgid "Font Features"
 msgstr "字体特性"
 
@@ -6747,6 +7369,16 @@ msgstr "逐份(_O)"
 msgid "_Reverse"
 msgstr "逆序(_R)"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:364
+msgid "Page ordering preview"
+msgstr "页面排序预览"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:365
+msgid ""
+"A visualization of the effect of the collate and reverse options on the page "
+"ordering"
+msgstr "页面排序的逐份和逆序选项的可视化效果"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
 msgstr "常规"
@@ -6783,6 +7415,10 @@ msgstr "奇数页"
 msgid "Sc_ale:"
 msgstr "缩放(_A)："
 
+#: gtk/print/ui/gtkprintunixdialog.ui:587
+msgid "Scale in percent"
+msgstr "百分比缩放"
+
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
 msgstr "纸张"
@@ -6802,6 +7438,10 @@ msgstr "出纸器(_R)："
 #: gtk/print/ui/gtkprintunixdialog.ui:727
 msgid "Or_ientation:"
 msgstr "方向(_I)："
+
+#: gtk/print/ui/gtkprintunixdialog.ui:770
+msgid "Page layout preview"
+msgstr "页面布局预览"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
@@ -6896,613 +7536,28 @@ msgstr "对话框中的某些设置冲突"
 msgid "Play"
 msgstr "播放"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:531
-#: modules/printbackends/gtkprintbackendcups.c:5670
-msgctxt "Print job priority"
-msgid "Urgent"
-msgstr "紧急"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:532
-#: modules/printbackends/gtkprintbackendcups.c:5671
-msgctxt "Print job priority"
-msgid "High"
-msgstr "高"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:533
-#: modules/printbackends/gtkprintbackendcups.c:5672
-msgctxt "Print job priority"
-msgid "Medium"
-msgstr "中"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:534
-#: modules/printbackends/gtkprintbackendcups.c:5673
-msgctxt "Print job priority"
-msgid "Low"
-msgstr "低"
-
-#. Translators, this is the label used for the option in the print
-#. * dialog that controls the front cover page.
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:556
-#: modules/printbackends/gtkprintbackendcups.c:5816
-msgctxt "printer option"
-msgid "Before"
-msgstr "封面"
-
-#. Translators, this is the label used for the option in the print
-#. * dialog that controls the back cover page.
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:563
-#: modules/printbackends/gtkprintbackendcups.c:5831
-msgctxt "printer option"
-msgid "After"
-msgstr "封底"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:586
-msgid "Print at"
-msgstr "打印于"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:596
-msgid "Print at time"
-msgstr "在指定时间打印"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:659
-msgctxt "print option"
-msgid "Borderless"
-msgstr "无边框"
-
-#. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1518
-#: modules/printbackends/gtkprintbackendcups.c:2636
-msgid "Paused; Rejecting Jobs"
-msgstr "暂停，拒绝任务"
-
-#. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1524
-#: modules/printbackends/gtkprintbackendcups.c:2642
-msgid "Rejecting Jobs"
-msgstr "拒绝任务"
-
-#: modules/printbackends/gtkprintbackendcups.c:1142
-#: modules/printbackends/gtkprintbackendcups.c:1449
-msgid "Username:"
-msgstr "用户名："
-
-#: modules/printbackends/gtkprintbackendcups.c:1143
-#: modules/printbackends/gtkprintbackendcups.c:1458
-msgid "Password:"
-msgstr "密码："
-
-#: modules/printbackends/gtkprintbackendcups.c:1181
-#: modules/printbackends/gtkprintbackendcups.c:1471
-#, c-format
-msgid "Authentication is required to print document “%s” on printer %s"
-msgstr "在打印机 %2$s 上打印文档“%1$s”需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1183
-#, c-format
-msgid "Authentication is required to print a document on %s"
-msgstr "在 %s 打印一个文档需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1187
-#, c-format
-msgid "Authentication is required to get attributes of job “%s”"
-msgstr "获取任务“%s”的属性需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1189
-msgid "Authentication is required to get attributes of a job"
-msgstr "获取一个任务的属性需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1193
-#, c-format
-msgid "Authentication is required to get attributes of printer %s"
-msgstr "获取打印机 “%s” 的属性需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1195
-msgid "Authentication is required to get attributes of a printer"
-msgstr "获取一个打印机的属性需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1198
-#, c-format
-msgid "Authentication is required to get default printer of %s"
-msgstr "获取 “%s” 的缺省打印机需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1201
-#, c-format
-msgid "Authentication is required to get printers from %s"
-msgstr "从 “%s” 获取打印机需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1206
-#, c-format
-msgid "Authentication is required to get a file from %s"
-msgstr "从 %s 获取一个文件需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1208
-#, c-format
-msgid "Authentication is required on %s"
-msgstr "在 %s 需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1443
-msgid "Domain:"
-msgstr "域："
-
-#: modules/printbackends/gtkprintbackendcups.c:1473
-#, c-format
-msgid "Authentication is required to print document “%s”"
-msgstr "打印文档“%s”需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1478
-#, c-format
-msgid "Authentication is required to print this document on printer %s"
-msgstr "在打印机“%s”打印此文档需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:1480
-msgid "Authentication is required to print this document"
-msgstr "打印文档需要认证"
-
-#: modules/printbackends/gtkprintbackendcups.c:2568
-#, c-format
-msgid "Printer “%s” is low on toner."
-msgstr "打印机“%s”墨量低。"
-
-#: modules/printbackends/gtkprintbackendcups.c:2572
-#, c-format
-msgid "Printer “%s” has no toner left."
-msgstr "打印机“%s”墨用完了。"
-
-#. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2577
-#, c-format
-msgid "Printer “%s” is low on developer."
-msgstr "打印机“%s”显影剂量低。"
-
-#. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2582
-#, c-format
-msgid "Printer “%s” is out of developer."
-msgstr "打印机“%s”显影剂用完了。"
-
-#. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2587
-#, c-format
-msgid "Printer “%s” is low on at least one marker supply."
-msgstr "打印机“%s”至少有一个彩色墨量低。"
-
-#. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2592
-#, c-format
-msgid "Printer “%s” is out of at least one marker supply."
-msgstr "打印机“%s”至少有一种彩色墨用完了。"
-
-#: modules/printbackends/gtkprintbackendcups.c:2596
-#, c-format
-msgid "The cover is open on printer “%s”."
-msgstr "打印机“%s”的盖子未关。"
-
-#: modules/printbackends/gtkprintbackendcups.c:2600
-#, c-format
-msgid "The door is open on printer “%s”."
-msgstr "打印机“%s”的盖子被打开了。"
-
-#: modules/printbackends/gtkprintbackendcups.c:2604
-#, c-format
-msgid "Printer “%s” is low on paper."
-msgstr "打印机“%s”纸快用完了。"
-
-#: modules/printbackends/gtkprintbackendcups.c:2608
-#, c-format
-msgid "Printer “%s” is out of paper."
-msgstr "打印机“%s”缺纸。"
-
-#: modules/printbackends/gtkprintbackendcups.c:2612
-#, c-format
-msgid "Printer “%s” is currently offline."
-msgstr "打印机“%s”目前离线。"
-
-#: modules/printbackends/gtkprintbackendcups.c:2616
-#, c-format
-msgid "There is a problem on printer “%s”."
-msgstr "打印机“%s”可能有问题。"
-
-#. Translators: this string connects multiple printer states together.
-#: modules/printbackends/gtkprintbackendcups.c:2683
-msgid "; "
-msgstr "；"
-
-#: modules/printbackends/gtkprintbackendcups.c:4611
-#: modules/printbackends/gtkprintbackendcups.c:4678
-msgctxt "printing option"
-msgid "Two Sided"
-msgstr "双面"
-
-#: modules/printbackends/gtkprintbackendcups.c:4612
-msgctxt "printing option"
-msgid "Paper Type"
-msgstr "纸张类型"
-
-#: modules/printbackends/gtkprintbackendcups.c:4613
-msgctxt "printing option"
-msgid "Paper Source"
-msgstr "纸张来源"
-
-#: modules/printbackends/gtkprintbackendcups.c:4614
-#: modules/printbackends/gtkprintbackendcups.c:4679
-msgctxt "printing option"
-msgid "Output Tray"
-msgstr "出纸器"
-
-#: modules/printbackends/gtkprintbackendcups.c:4615
-msgctxt "printing option"
-msgid "Resolution"
-msgstr "分辨率"
-
-#: modules/printbackends/gtkprintbackendcups.c:4616
-msgctxt "printing option"
-msgid "GhostScript pre-filtering"
-msgstr "GhostScript 预过滤"
-
-#: modules/printbackends/gtkprintbackendcups.c:4625
-msgctxt "printing option value"
-msgid "One Sided"
-msgstr "单面"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4627
-msgctxt "printing option value"
-msgid "Long Edge (Standard)"
-msgstr "长边（标准）"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4629
-msgctxt "printing option value"
-msgid "Short Edge (Flip)"
-msgstr "短边（翻转）"
-
-#. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4631
-#: modules/printbackends/gtkprintbackendcups.c:4633
-#: modules/printbackends/gtkprintbackendcups.c:4641
-msgctxt "printing option value"
-msgid "Auto Select"
-msgstr "自动选择"
-
-#. Translators: this is an option of "Paper Source"
-#. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4635
-#: modules/printbackends/gtkprintbackendcups.c:4637
-#: modules/printbackends/gtkprintbackendcups.c:4639
-#: modules/printbackends/gtkprintbackendcups.c:4643
-msgctxt "printing option value"
-msgid "Printer Default"
-msgstr "打印机默认"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4645
-msgctxt "printing option value"
-msgid "Embed GhostScript fonts only"
-msgstr "只嵌入 GhostScript 字体"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4647
-msgctxt "printing option value"
-msgid "Convert to PS level 1"
-msgstr "转换到 PS 1 级"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4649
-msgctxt "printing option value"
-msgid "Convert to PS level 2"
-msgstr "转换到 PS 2 级"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4651
-msgctxt "printing option value"
-msgid "No pre-filtering"
-msgstr "无预过滤"
-
-#. Translators: "Miscellaneous" is the label for a button, that opens
-#. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4660
-msgctxt "printing option group"
-msgid "Miscellaneous"
-msgstr "杂项"
-
-#: modules/printbackends/gtkprintbackendcups.c:4687
-msgctxt "sides"
-msgid "One Sided"
-msgstr "单面"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4689
-msgctxt "sides"
-msgid "Long Edge (Standard)"
-msgstr "长边（标准）"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4691
-msgctxt "sides"
-msgid "Short Edge (Flip)"
-msgstr "短边（翻转）"
-
-#. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4694
-msgctxt "output-bin"
-msgid "Top Bin"
-msgstr "顶纸盒"
-
-#. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4696
-msgctxt "output-bin"
-msgid "Middle Bin"
-msgstr "中纸盒"
-
-#. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4698
-msgctxt "output-bin"
-msgid "Bottom Bin"
-msgstr "底纸盒"
-
-#. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4700
-msgctxt "output-bin"
-msgid "Side Bin"
-msgstr "侧纸盒"
-
-#. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4702
-msgctxt "output-bin"
-msgid "Left Bin"
-msgstr "左纸盒"
-
-#. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4704
-msgctxt "output-bin"
-msgid "Right Bin"
-msgstr "右纸盒"
-
-#. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4706
-msgctxt "output-bin"
-msgid "Center Bin"
-msgstr "中纸盒"
-
-#. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4708
-msgctxt "output-bin"
-msgid "Rear Bin"
-msgstr "后纸盒"
-
-#. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4710
-msgctxt "output-bin"
-msgid "Face Up Bin"
-msgstr "面朝上纸盒"
-
-#. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4712
-msgctxt "output-bin"
-msgid "Face Down Bin"
-msgstr "面朝下纸盒"
-
-#. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4714
-msgctxt "output-bin"
-msgid "Large Capacity Bin"
-msgstr "大容量纸盒"
-
-#. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4736
-#, c-format
-msgctxt "output-bin"
-msgid "Stacker %d"
-msgstr "贴纸 %d"
-
-#. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4740
-#, c-format
-msgctxt "output-bin"
-msgid "Mailbox %d"
-msgstr "邮箱 %d"
-
-#. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4744
-msgctxt "output-bin"
-msgid "My Mailbox"
-msgstr "我的邮箱"
-
-#. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4748
-#, c-format
-msgctxt "output-bin"
-msgid "Tray %d"
-msgstr "托盘 %d"
-
-#: modules/printbackends/gtkprintbackendcups.c:5225
-msgid "Printer Default"
-msgstr "打印机默认"
-
-#. Translators, this string is used to label the job priority option
-#. * in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5704
-msgid "Job Priority"
-msgstr "任务优先级"
-
-#. Translators, this string is used to label the billing info entry
-#. * in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5715
-msgid "Billing Info"
-msgstr "计费信息"
-
-#. Translators, these strings are names for various 'standard' cover
-#. * pages that the printing system may support.
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5739
-msgctxt "cover page"
-msgid "None"
-msgstr "无"
-
-#: modules/printbackends/gtkprintbackendcups.c:5740
-msgctxt "cover page"
-msgid "Classified"
-msgstr "保密"
-
-#: modules/printbackends/gtkprintbackendcups.c:5741
-msgctxt "cover page"
-msgid "Confidential"
-msgstr "机密"
-
-#: modules/printbackends/gtkprintbackendcups.c:5742
-msgctxt "cover page"
-msgid "Secret"
-msgstr "秘密"
-
-#: modules/printbackends/gtkprintbackendcups.c:5743
-msgctxt "cover page"
-msgid "Standard"
-msgstr "标准"
-
-#: modules/printbackends/gtkprintbackendcups.c:5744
-msgctxt "cover page"
-msgid "Top Secret"
-msgstr "绝密"
-
-#: modules/printbackends/gtkprintbackendcups.c:5745
-msgctxt "cover page"
-msgid "Unclassified"
-msgstr "非保密"
-
-#. Translators, this string is used to label the pages-per-sheet option
-#. * in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5757
-msgctxt "printer option"
-msgid "Pages per Sheet"
-msgstr "每张页数"
-
-#. Translators, this string is used to label the option in the print
-#. * dialog that controls in what order multiple pages are arranged
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5774
-msgctxt "printer option"
-msgid "Page Ordering"
-msgstr "页面顺序"
-
-#. Translators: this is the name of the option that controls when
-#. * a print job is printed. Possible values are 'now', a specified time,
-#. * or 'on hold'
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5851
-msgctxt "printer option"
-msgid "Print at"
-msgstr "打印于"
-
-#. Translators: this is the name of the option that allows the user
-#. * to specify a time when a print job will be printed.
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5862
-msgctxt "printer option"
-msgid "Print at time"
-msgstr "在指定时间打印"
-
-#. Translators: this format is used to display a custom
-#. * paper size. The two placeholders are replaced with
-#. * the width and height in points. E.g: "Custom
-#. * 230.4x142.9"
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5909
-#, c-format
-msgid "Custom %s×%s"
-msgstr "自定义 %s×%s"
-
-#. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:6020
-msgctxt "printer option"
-msgid "Printer Profile"
-msgstr "打印机配置"
-
-#. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:6027
-msgctxt "printer option value"
-msgid "Unavailable"
-msgstr "不可用"
-
-#: modules/printbackends/gtkprintbackendfile.c:263
-msgid "output"
-msgstr "输出"
-
-#: modules/printbackends/gtkprintbackendfile.c:543
-msgid "Print to File"
-msgstr "打印到文件"
-
-#: modules/printbackends/gtkprintbackendfile.c:675
-msgid "PDF"
-msgstr "PDF"
-
-#: modules/printbackends/gtkprintbackendfile.c:675
-msgid "PostScript"
-msgstr "PostScript"
-
-#: modules/printbackends/gtkprintbackendfile.c:675
-msgid "SVG"
-msgstr "SVG"
-
-#: modules/printbackends/gtkprintbackendfile.c:688
-msgid "Pages per _sheet:"
-msgstr "每张页数(_S)："
-
-#: modules/printbackends/gtkprintbackendfile.c:758
-msgid "File"
-msgstr "文件"
-
-#: modules/printbackends/gtkprintbackendfile.c:768
-msgid "_Output format"
-msgstr "输出格式(_O)"
-
-#. TRANSLATORS: when we're running an old CUPS, and
-#. * it hasn't registered the device with colord
-#: modules/printbackends/gtkprintercups.c:272
-msgid "Color management unavailable"
-msgstr "颜色管理不可用"
-
-#. TRANSLATORS: when there is no color profile available
-#: modules/printbackends/gtkprintercups.c:284
-msgid "No profile available"
-msgstr "没有可用配置"
-
-#. TRANSLATORS: when the color profile has no title
-#: modules/printbackends/gtkprintercups.c:295
-msgid "Unspecified profile"
-msgstr "未指定的配置"
-
-#: tools/encodesymbolic.c:41
+#: tools/encodesymbolic.c:42
 msgid "Output to this directory instead of cwd"
 msgstr "输出到这个目录而不是当前工作路径"
 
-#: tools/encodesymbolic.c:42
+#: tools/encodesymbolic.c:43
 msgid "Generate debug output"
 msgstr "生成调试输出"
 
-#: tools/encodesymbolic.c:95
+#: tools/encodesymbolic.c:93
 #, c-format
 msgid "Invalid size %s\n"
 msgstr "无效的大小 %s\n"
 
-#: tools/encodesymbolic.c:107 tools/encodesymbolic.c:116
+#: tools/encodesymbolic.c:107
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "无法加载文件：%s\n"
 
-#: tools/encodesymbolic.c:144 tools/encodesymbolic.c:162
+#: tools/encodesymbolic.c:144
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr "无法保存文件 %s：%s\n"
-
-#: tools/encodesymbolic.c:168
-#, c-format
-msgid "Can’t close stream"
-msgstr "无法关闭流"
 
 #: tools/gtk-builder-tool.c:36
 #, c-format
@@ -7539,9 +7594,10 @@ msgstr ""
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
-#: tools/gtk-rendernode-tool-show.c:116
+#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-convert.c:98
+#: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
+#: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
 msgstr "文件"
 
@@ -7575,7 +7631,7 @@ msgstr "使用来自 CSS 文件的样式"
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:274
 #: tools/gtk-rendernode-tool-benchmark.c:108
-#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
+#: tools/gtk-rendernode-tool-render.c:279 tools/gtk-rendernode-tool-show.c:129
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "无法初始化窗口系统\n"
@@ -7620,13 +7676,13 @@ msgstr ""
 "使用 --force 以覆盖。\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:230
+#: tools/gtk-rendernode-tool-render.c:245
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "输出已写入 %s。\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:234
+#: tools/gtk-rendernode-tool-render.c:249
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "保存 %s 失败：%s\n"
@@ -7646,7 +7702,7 @@ msgstr "覆盖已有文件"
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
 #: tools/gtk-image-tool-convert.c:112 tools/gtk-image-tool-relabel.c:86
 #: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
-#: tools/gtk-rendernode-tool-render.c:255
+#: tools/gtk-rendernode-tool-render.c:272
 msgid "FILE…"
 msgstr "文件…"
 
@@ -7805,27 +7861,22 @@ msgstr "未指定图像文件\n"
 msgid "Can only accept two image files\n"
 msgstr "仅能接受两个图像文件\n"
 
-#: tools/gtk-image-tool-compare.c:85 tools/gtk-rendernode-tool-compare.c:111
-#, c-format
-msgid "Failed to load %s: %s\n"
-msgstr "加载 %s 失败：%s\n"
-
-#: tools/gtk-image-tool-compare.c:96 tools/gtk-rendernode-tool-compare.c:122
+#: tools/gtk-image-tool-compare.c:89 tools/gtk-rendernode-tool-compare.c:122
 #, c-format
 msgid "Could not save diff image to %s\n"
 msgstr "无法将差异图像保存至 %s\n"
 
-#: tools/gtk-image-tool-compare.c:106 tools/gtk-rendernode-tool-compare.c:132
+#: tools/gtk-image-tool-compare.c:99 tools/gtk-rendernode-tool-compare.c:132
 #, c-format
 msgid "Differences witten to %s.\n"
 msgstr "差异已写入 %s。\n"
 
-#: tools/gtk-image-tool-compare.c:108 tools/gtk-rendernode-tool-compare.c:134
+#: tools/gtk-image-tool-compare.c:101 tools/gtk-rendernode-tool-compare.c:134
 #, c-format
 msgid "The images are different.\n"
 msgstr "图像不同。\n"
 
-#: tools/gtk-image-tool-compare.c:111 tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-image-tool-compare.c:104 tools/gtk-rendernode-tool-compare.c:137
 #, c-format
 msgid "No differences.\n"
 msgstr "无差异。\n"
@@ -7930,7 +7981,7 @@ msgstr ""
 "不是色彩状态：%s\n"
 "可能的值：%s\n"
 
-#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:115
+#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:121
 msgid "Don't add a titlebar"
 msgstr "不要添加标题栏"
 
@@ -7938,7 +7989,22 @@ msgstr "不要添加标题栏"
 msgid "Show one or more images."
 msgstr "显示一幅或更多图像。"
 
-#: tools/gtk-image-tool-utils.c:255
+#: tools/gtk-image-tool-utils.c:50 tools/gtk-rendernode-tool-utils.c:54
+#, c-format
+msgid "Error at %s: %s\n"
+msgstr "在 %s 出错：%s\n"
+
+#: tools/gtk-image-tool-utils.c:68 tools/gtk-rendernode-tool-utils.c:72
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "加载节点文件失败：%s\n"
+
+#: tools/gtk-image-tool-utils.c:89
+#, c-format
+msgid "%s is not a texture node\n"
+msgstr "%s 不是纹理节点\n"
+
+#: tools/gtk-image-tool-utils.c:315
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
 msgstr "cicp 必须为由 / 分隔的 4 个数字\n"
@@ -8043,8 +8109,7 @@ msgid "Allow conic Bézier curves"
 msgstr "允许圆锥贝塞尔曲线"
 
 #: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
-#: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
-#: tools/gtk-path-tool-reverse.c:34 tools/gtk-path-tool-show.c:147
+#: tools/gtk-path-tool-restrict.c:38 tools/gtk-path-tool-reverse.c:34
 msgid "PATH"
 msgstr "路径"
 
@@ -8108,132 +8173,155 @@ msgstr "%d 立方曲线"
 msgid "%d conics"
 msgstr "%d 圆锥曲线"
 
-#: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:112
 msgid "Fill the path (the default)"
 msgstr "填充路径（默认）"
 
-#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
+#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:113
 msgid "Stroke the path"
 msgstr "描边路径"
 
-#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
+#: tools/gtk-path-tool-render.c:60 tools/gtk-path-tool-show.c:114
 msgid "Show path points"
 msgstr "显示路径点"
 
-#: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
+#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:115
 msgid "Show control points"
 msgstr "显示控制点"
 
-#: tools/gtk-path-tool-render.c:121
+#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:116
+msgid "Show intersections"
+msgstr "显示交叉点"
+
+#: tools/gtk-path-tool-render.c:63
 msgid "The output file"
 msgstr "输出文件"
 
-#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
+#: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:117
+#: tools/gtk-rendernode-tool-convert.c:93
 msgid "Foreground color"
 msgstr "前景色"
 
-#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
-#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
-#: tools/gtk-path-tool-show.c:145 tools/gtk-path-tool-show.c:146
+#: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-render.c:65
+#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
+#: tools/gtk-path-tool-show.c:117 tools/gtk-path-tool-show.c:118
+#: tools/gtk-path-tool-show.c:119 tools/gtk-path-tool-show.c:120
+#: tools/gtk-rendernode-tool-convert.c:93
+#: tools/gtk-rendernode-tool-convert.c:94
+#: tools/gtk-rendernode-tool-convert.c:95
+#: tools/gtk-rendernode-tool-convert.c:96
 msgid "COLOR"
 msgstr "颜色"
 
-#: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
+#: tools/gtk-path-tool-render.c:65 tools/gtk-path-tool-show.c:118
 msgid "Background color"
 msgstr "背景色"
 
-#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
+#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:119
 msgid "Point color"
 msgstr "点颜色"
 
-#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
-msgid "Fill rule (winding, even-odd)"
-msgstr "填充规则（缠绕，偶数-奇数）"
+#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:120
+msgid "Intersection color"
+msgstr "交叉点颜色"
 
-#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-render.c:133
-#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-render.c:135
-#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-render.c:137
-#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:151
-#: tools/gtk-path-tool-show.c:155 tools/gtk-path-tool-show.c:156
-#: tools/gtk-path-tool-show.c:157 tools/gtk-path-tool-show.c:158
-#: tools/gtk-path-tool-show.c:159 tools/gtk-path-tool-show.c:160
+#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:121
+msgid "Zoom level (number)"
+msgstr "缩放级别（数字）"
+
+#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-render.c:73
+#: tools/gtk-path-tool-render.c:77 tools/gtk-path-tool-render.c:78
+#: tools/gtk-path-tool-render.c:79 tools/gtk-path-tool-render.c:80
+#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-render.c:82
+#: tools/gtk-path-tool-show.c:121 tools/gtk-path-tool-show.c:126
+#: tools/gtk-path-tool-show.c:130 tools/gtk-path-tool-show.c:131
+#: tools/gtk-path-tool-show.c:132 tools/gtk-path-tool-show.c:133
+#: tools/gtk-path-tool-show.c:134 tools/gtk-path-tool-show.c:135
 msgid "VALUE"
 msgstr "值"
 
-#: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
+#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:122
+msgid "PATH…"
+msgstr "路径…"
+
+#: tools/gtk-path-tool-render.c:73 tools/gtk-path-tool-show.c:126
+msgid "Fill rule (winding, even-odd)"
+msgstr "填充规则（缠绕，偶数-奇数）"
+
+#: tools/gtk-path-tool-render.c:77 tools/gtk-path-tool-show.c:130
 msgid "Line width (number)"
 msgstr "线宽（数字）"
 
-#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
+#: tools/gtk-path-tool-render.c:78 tools/gtk-path-tool-show.c:131
 msgid "Line cap (butt, round, square)"
 msgstr "线帽（对接、圆形、方形）"
 
-#: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
+#: tools/gtk-path-tool-render.c:79
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgstr "线连接（斜接、斜接夹、圆形、斜面、圆弧）"
 
-#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
+#: tools/gtk-path-tool-render.c:80 tools/gtk-path-tool-show.c:133
 msgid "Miter limit (number)"
 msgstr "斜接限制（数字）"
 
-#: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
+#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:134
 msgid "Dash pattern (comma-separated numbers)"
 msgstr "破折号图案（逗号分隔数字）"
 
-#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
+#: tools/gtk-path-tool-render.c:82 tools/gtk-path-tool-show.c:135
 msgid "Dash offset (number)"
 msgstr "破折号偏移量（数字）"
 
-#: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
+#: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:148
 msgid "Could not initialize windowing system"
 msgstr "无法初始化窗口系统"
 
-#: tools/gtk-path-tool-render.c:168
+#: tools/gtk-path-tool-render.c:117
 msgid "Render the path to a png image."
 msgstr "将路径渲染为 png 图像。"
 
-#: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:159
 msgid "Options related to filling"
 msgstr "与填充相关的选项"
 
-#: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
+#: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:160
 msgid "Show help for fill options"
 msgstr "显示填充选项的帮助"
 
-#: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
+#: tools/gtk-path-tool-render.c:130 tools/gtk-path-tool-show.c:167
 msgid "Options related to stroking"
 msgstr "与描边相关的选项"
 
-#: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
+#: tools/gtk-path-tool-render.c:131 tools/gtk-path-tool-show.c:168
 msgid "Show help for stroke options"
 msgstr "显示描边选项的帮助"
 
-#: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
+#: tools/gtk-path-tool-render.c:148 tools/gtk-path-tool-show.c:185
 msgid "No path specified"
 msgstr "未指定路径"
 
-#: tools/gtk-path-tool-render.c:205
+#: tools/gtk-path-tool-render.c:154
 msgid "Can only render a single path"
 msgstr "只能渲染单个路径"
 
-#: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
+#: tools/gtk-path-tool-render.c:188 tools/gtk-path-tool-show.c:201
 msgid "fill rule"
 msgstr "填充规则"
 
-#: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
+#: tools/gtk-path-tool-render.c:194 tools/gtk-path-tool-show.c:207
 msgid "line cap"
 msgstr "线帽"
 
-#: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
+#: tools/gtk-path-tool-render.c:195 tools/gtk-path-tool-show.c:208
 msgid "line join"
 msgstr "线连接"
 
-#: tools/gtk-path-tool-render.c:310
+#: tools/gtk-path-tool-render.c:271
 #, c-format
 msgid "Saving png to '%s' failed"
 msgstr "将 png 保存到“%s”失败"
 
-#: tools/gtk-path-tool-render.c:317
+#: tools/gtk-path-tool-render.c:278
 #, c-format
 msgid "Output written to '%s'."
 msgstr "输出已写入到“%s”。"
@@ -8258,17 +8346,21 @@ msgstr "限制路径为线段。"
 msgid "Reverse a path."
 msgstr "反转路径。"
 
-#: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
+#: tools/gtk-path-tool-show.c:53
 msgid "Path Preview"
 msgstr "路径预览"
 
-#: tools/gtk-path-tool-show.c:180
+#: tools/gtk-path-tool-show.c:132
+msgid "Line join (miter, miter-clip, round, bevel)"
+msgstr "线连接（斜接、斜接夹、圆形、斜面）"
+
+#: tools/gtk-path-tool-show.c:156
 msgid "Display the path."
 msgstr "显示路径。"
 
-#: tools/gtk-path-tool-show.c:215
-msgid "Can only show a single path"
-msgstr "只能显示单个路径"
+#: tools/gtk-path-tool-show.c:191
+msgid "Can only show one or two paths"
+msgstr "仅能显示一个或两个路径"
 
 #: tools/gtk-path-tool-utils.c:58
 #, c-format
@@ -8315,6 +8407,7 @@ msgid ""
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
 "  compare      Compare nodes or images\n"
+"  convert      Convert into nodes\n"
 "  extract      Extract data urls\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
@@ -8329,6 +8422,7 @@ msgstr ""
 "命令：\n"
 "  benchmark    节点的渲染基准测试\n"
 "  compare      比较节点或图像\n"
+"  convert      转换为节点\n"
 "  extract      提取数据 URL\n"
 "  info         提供有关节点的信息\n"
 "  show         显示节点\n"
@@ -8341,7 +8435,7 @@ msgstr "将渲染器添加到基准测试"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:254
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "RENDERER"
 msgstr "渲染器"
 
@@ -8362,8 +8456,8 @@ msgid "Benchmark rendering of a .node file."
 msgstr ".node 文件的渲染基准测试。"
 
 #: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
-#: tools/gtk-rendernode-tool-render.c:283 tools/gtk-rendernode-tool-show.c:144
+#: tools/gtk-rendernode-tool-extract.c:320 tools/gtk-rendernode-tool-info.c:252
+#: tools/gtk-rendernode-tool-render.c:300 tools/gtk-rendernode-tool-show.c:150
 #, c-format
 msgid "No .node file specified\n"
 msgstr "未指定 .node 文件\n"
@@ -8374,7 +8468,7 @@ msgid "Can only benchmark a single .node file\n"
 msgstr "只能对单个 .node 文件进行基准测试\n"
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:254
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "Renderer to use"
 msgstr "要使用的渲染器"
 
@@ -8392,10 +8486,49 @@ msgid "Must specify two files\n"
 msgstr "必须指定两个文件\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:209
+#: tools/gtk-rendernode-tool-render.c:211
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "创建渲染器失败：%s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "加载 %s 失败：%s\n"
+
+#: tools/gtk-rendernode-tool-convert.c:92
+msgid "Recolor the node"
+msgstr "对节点重新着色"
+
+#: tools/gtk-rendernode-tool-convert.c:94
+msgid "Success color"
+msgstr "成功颜色"
+
+#: tools/gtk-rendernode-tool-convert.c:95
+msgid "Warning color"
+msgstr "警告颜色"
+
+#: tools/gtk-rendernode-tool-convert.c:96
+msgid "Error color"
+msgstr "错误颜色"
+
+#: tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "大小"
+
+#: tools/gtk-rendernode-tool-convert.c:107
+msgid "Convert from symbolic svg to node."
+msgstr "将符号 SVG 转换为节点。"
+
+#: tools/gtk-rendernode-tool-convert.c:177
+#, c-format
+msgid "No .svg file specified\n"
+msgstr "未指定 .svg 文件\n"
+
+#: tools/gtk-rendernode-tool-convert.c:183
+#, c-format
+msgid "Can only accept a single .svg file\n"
+msgstr "仅能接受单个 .svg 文件\n"
 
 #: tools/gtk-rendernode-tool-extract.c:73
 #: tools/gtk-rendernode-tool-extract.c:149
@@ -8403,52 +8536,52 @@ msgstr "创建渲染器失败：%s\n"
 msgid "Failed to write %s\n"
 msgstr "写入 %s 失败\n"
 
-#: tools/gtk-rendernode-tool-extract.c:292
+#: tools/gtk-rendernode-tool-extract.c:296
 msgid "Directory to use"
 msgstr "要使用的目录"
 
-#: tools/gtk-rendernode-tool-extract.c:292
+#: tools/gtk-rendernode-tool-extract.c:296
 msgid "DIRECTORY"
 msgstr "目录"
 
-#: tools/gtk-rendernode-tool-extract.c:293
+#: tools/gtk-rendernode-tool-extract.c:297
 msgid "Be verbose"
 msgstr "显示详细信息"
 
-#: tools/gtk-rendernode-tool-extract.c:303
+#: tools/gtk-rendernode-tool-extract.c:307
 msgid "Extract data urls from the render node."
 msgstr "从渲染节点提取数据 URL。"
 
-#: tools/gtk-rendernode-tool-extract.c:322 tools/gtk-rendernode-tool-info.c:254
+#: tools/gtk-rendernode-tool-extract.c:326 tools/gtk-rendernode-tool-info.c:258
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "只能预览单个 .node 文件\n"
 
-#: tools/gtk-rendernode-tool-info.c:193
+#: tools/gtk-rendernode-tool-info.c:197
 msgid "Number of nodes:"
 msgstr "节点数："
 
-#: tools/gtk-rendernode-tool-info.c:200
+#: tools/gtk-rendernode-tool-info.c:204
 msgid "Depth:"
 msgstr "深度："
 
-#: tools/gtk-rendernode-tool-info.c:203
+#: tools/gtk-rendernode-tool-info.c:207
 msgid "Bounds:"
 msgstr "边界："
 
-#: tools/gtk-rendernode-tool-info.c:204
+#: tools/gtk-rendernode-tool-info.c:208
 msgid "Origin:"
 msgstr "原点："
 
-#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
+#: tools/gtk-rendernode-tool-info.c:212 tools/gtk-rendernode-tool-info.c:218
 msgid "Opaque part:"
 msgstr "不透明部分："
 
-#: tools/gtk-rendernode-tool-info.c:235
+#: tools/gtk-rendernode-tool-info.c:239
 msgid "Provide information about the render node."
 msgstr "提供有关渲染节点的信息。"
 
-#: tools/gtk-rendernode-tool-render.c:170
+#: tools/gtk-rendernode-tool-render.c:171
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -8457,39 +8590,37 @@ msgstr ""
 "文件 %s 已存在。\n"
 "如果要覆盖，请指定文件名。\n"
 
-#: tools/gtk-rendernode-tool-render.c:184
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:185
+#: tools/gtk-rendernode-tool-render.c:197
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "生成 SVG 失败：%s\n"
 
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-render.c:271
+msgid "Keep node position unchanged"
+msgstr "保持节点位置不被更改"
+
+#: tools/gtk-rendernode-tool-render.c:287
 msgid "Render a .node file to an image."
 msgstr "将 .node 文件渲染为图像。"
 
-#: tools/gtk-rendernode-tool-render.c:289
+#: tools/gtk-rendernode-tool-render.c:306
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "只能将单个 .node 文件渲染为单个输出文件\n"
 
-#: tools/gtk-rendernode-tool-show.c:131
+#: tools/gtk-rendernode-tool-show.c:120
+msgid "Put node into offload container"
+msgstr "将节点放置在卸载容器内"
+
+#: tools/gtk-rendernode-tool-show.c:137
 msgid "Show the render node."
 msgstr "显示渲染节点。"
 
-#: tools/gtk-rendernode-tool-show.c:150
+#: tools/gtk-rendernode-tool-show.c:156
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "只能预览单个 .node 文件\n"
-
-#: tools/gtk-rendernode-tool-utils.c:54
-#, c-format
-msgid "Error at %s: %s\n"
-msgstr "在 %s 出错：%s\n"
-
-#: tools/gtk-rendernode-tool-utils.c:72
-#, c-format
-msgid "Failed to load node file: %s\n"
-msgstr "加载节点文件失败：%s\n"
 
 #: tools/updateiconcache.c:1402
 #, c-format
@@ -8597,6 +8728,16 @@ msgid ""
 msgstr ""
 "“%s”中没有主题索引文件。\n"
 "如果您确实想要在此创建图标缓存，请使用 --ignore-theme-index 参数。\n"
+
+#~ msgid "Theme is hardcoded by GTK_THEME"
+#~ msgstr "主题由 GTK_THEME 控制"
+
+#~ msgid "Dark Variant"
+#~ msgstr "深色变种"
+
+#, c-format
+#~ msgid "Can’t close stream"
+#~ msgstr "无法关闭流"
 
 #, c-format
 #~ msgid "cicp: Narrow range or YUV not supported"
@@ -8875,9 +9016,6 @@ msgstr ""
 
 #~ msgid "Not a video file"
 #~ msgstr "不是视频文件"
-
-#~ msgid "Unsupported video codec"
-#~ msgstr "不支持的视频编解码器"
 
 #~ msgid "Can't parse “%s”: %s\n"
 #~ msgstr "无法解析“%s”：%s\n"
@@ -9941,9 +10079,6 @@ msgstr ""
 #~ msgid "Question"
 #~ msgstr "问题"
 
-#~ msgid "Warning"
-#~ msgstr "警告"
-
 #~ msgid "Error"
 #~ msgstr "错误"
 
@@ -10241,9 +10376,6 @@ msgstr ""
 #~ msgid "S_aturation:"
 #~ msgstr "饱和度(_A)："
 
-#~ msgid "Intensity of the color."
-#~ msgstr "色彩浓度。"
-
 #~ msgid "_Value:"
 #~ msgstr "值(_V)："
 
@@ -10303,9 +10435,6 @@ msgstr ""
 
 #~ msgid "The color you’ve chosen."
 #~ msgstr "您所选择的颜色。"
-
-#~ msgid "_Save color here"
-#~ msgstr "在此保存颜色(_S)"
 
 #~ msgid ""
 #~ "Click this palette entry to make it the current color. To change this "
@@ -10535,9 +10664,6 @@ msgstr ""
 
 #~ msgid "\"%s\" is not a valid attribute type"
 #~ msgstr "“%s”不是合法的属性类型"
-
-#~ msgid "\"%s\" is not a valid attribute name"
-#~ msgstr "“%s”不是合法的属性名称"
 
 #~ msgid ""
 #~ "\"%s\" could not be converted to a value of type \"%s\" for attribute "
