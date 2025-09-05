@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-08-03 19:26+0000\n"
-"PO-Revision-Date: 2025-08-04 15:28+0300\n"
+"POT-Creation-Date: 2025-08-18 00:48+0000\n"
+"PO-Revision-Date: 2025-08-18 11:20+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: RU\n"
 "Language: ru\n"
@@ -2250,13 +2250,13 @@ msgstr "Поля страницы"
 msgid "_Edit"
 msgstr "_Редактировать"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6354
-#: gtk/gtktextview.c:9386
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6352
+#: gtk/gtktextview.c:9388
 msgid "_Copy"
 msgstr "_Копировать"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
-#: gtk/gtktextview.c:9464
+#: gtk/gtktextview.c:9466
 msgid "Context menu"
 msgstr "Контекстное меню"
 
@@ -2335,7 +2335,7 @@ msgstr "Файл с таким именем уже существует"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6461 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2428,7 +2428,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "При удалении элемента он будет навсегда утерян."
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6362 gtk/gtktextview.c:9394
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6360 gtk/gtktextview.c:9396
 msgid "_Delete"
 msgstr "_Удалить"
 
@@ -2647,6 +2647,7 @@ msgstr "Имя"
 
 #: gtk/gtkfilechooserwidget.c:7442 gtk/inspector/resource-list.ui:98
 #: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
+#: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "Размер"
 
@@ -2680,11 +2681,11 @@ msgstr "Выбрать папки"
 msgid "Select a Folder"
 msgstr "Выбрать папку"
 
-#: gtk/gtkfiledialog.c:1398 gtk/gtkfiledialog.c:1515 gtk/gtkfiledialog.c:1624
+#: gtk/gtkfiledialog.c:1413 gtk/gtkfiledialog.c:1533 gtk/gtkfiledialog.c:1645
 msgid "Encoding"
 msgstr "Кодировка"
 
-#: gtk/gtkfiledialog.c:1635
+#: gtk/gtkfiledialog.c:1656
 msgid "Line Ending"
 msgstr "Окончание строки"
 
@@ -2780,15 +2781,15 @@ msgstr "Закрыть"
 msgid "Close the infobar"
 msgstr "Закрыть информационную панель"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6350 gtk/gtktextview.c:9382
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6348 gtk/gtktextview.c:9384
 msgid "Cu_t"
 msgstr "В_ырезать"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6358 gtk/gtktextview.c:9390
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6356 gtk/gtktextview.c:9392
 msgid "_Paste"
 msgstr "_Вставить"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6371 gtk/gtktextview.c:9415
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6369 gtk/gtktextview.c:9417
 msgid "Select _All"
 msgstr "Выделить _всё"
 
@@ -2867,7 +2868,7 @@ msgid "Play"
 msgstr "Воспроизвести"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6462
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
 msgid "_OK"
 msgstr "_OK"
 
@@ -4104,8 +4105,8 @@ msgstr "Наиболее вероятная причина: не удалось 
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:603
-#: gtk/print/gtkprintoperation-portal.c:672 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:605
+#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Печать"
 
@@ -4201,7 +4202,7 @@ msgstr "Сверху вниз"
 msgid "Bottom to top"
 msgstr "Снизу вверх"
 
-#: gtk/gtkprintdialog.c:1759
+#: gtk/gtkprintdialog.c:1766
 msgid "Failed to create the read file descriptor"
 msgstr "Не удалось создать дескриптор файла чтения"
 
@@ -4322,11 +4323,11 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Боковая панель"
 
-#: gtk/gtktext.c:6376
+#: gtk/gtktext.c:6374
 msgid "Change di_rection"
 msgstr "Изменить _направление"
 
-#: gtk/gtktext.c:6381 gtk/gtktextview.c:9420
+#: gtk/gtktext.c:6379 gtk/gtktextview.c:9422
 msgid "Insert _Emoji"
 msgstr "Вставить _эмодзи"
 
@@ -4486,20 +4487,20 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9402
+#: gtk/gtktextview.c:9404
 msgid "_Undo"
 msgstr "_Отменить"
 
-#: gtk/gtktextview.c:9406
+#: gtk/gtktextview.c:9408
 msgid "_Redo"
 msgstr "_Повторить"
 
-#: gtk/gtkwindow.c:6450
+#: gtk/gtkwindow.c:6454
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Использовать GTK Inspector?"
 
-#: gtk/gtkwindow.c:6452
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4510,7 +4511,7 @@ msgstr ""
 "изменять внутренние компоненты любого приложения на GTK. Его использование "
 "может привести к неверной работе или фатальному сбою приложения."
 
-#: gtk/gtkwindow.c:6457
+#: gtk/gtkwindow.c:6461
 msgid "Don’t show this message again"
 msgstr "Больше не показывать это сообщение"
 
@@ -7620,6 +7621,7 @@ msgstr ""
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
 #: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-convert.c:98
 #: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
@@ -8223,6 +8225,7 @@ msgid "The output file"
 msgstr "Файл вывода"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:117
+#: tools/gtk-rendernode-tool-convert.c:93
 msgid "Foreground color"
 msgstr "Цвет переднего плана"
 
@@ -8230,6 +8233,10 @@ msgstr "Цвет переднего плана"
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
 #: tools/gtk-path-tool-show.c:117 tools/gtk-path-tool-show.c:118
 #: tools/gtk-path-tool-show.c:119 tools/gtk-path-tool-show.c:120
+#: tools/gtk-rendernode-tool-convert.c:93
+#: tools/gtk-rendernode-tool-convert.c:94
+#: tools/gtk-rendernode-tool-convert.c:95
+#: tools/gtk-rendernode-tool-convert.c:96
 msgid "COLOR"
 msgstr "ЦВЕТ"
 
@@ -8516,6 +8523,40 @@ msgstr "Не удалось создать инструмент визуализ
 #, c-format
 msgid "Failed to load %s: %s\n"
 msgstr "Не удалось загрузить %s: %s\n"
+
+#: tools/gtk-rendernode-tool-convert.c:92
+msgid "Recolor the node"
+msgstr "Перекрасить узел"
+
+#: tools/gtk-rendernode-tool-convert.c:94
+msgid "Success color"
+msgstr "Цвет успешного действия"
+
+#: tools/gtk-rendernode-tool-convert.c:95
+msgid "Warning color"
+msgstr "Цвет предупреждения"
+
+#: tools/gtk-rendernode-tool-convert.c:96
+msgid "Error color"
+msgstr "Цвет ошибки"
+
+#: tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "РАЗМЕР"
+
+#: tools/gtk-rendernode-tool-convert.c:107
+msgid "Convert from symbolic svg to node."
+msgstr "Преобразование из символьного svg в узел."
+
+#: tools/gtk-rendernode-tool-convert.c:177
+#, c-format
+msgid "No .svg file specified\n"
+msgstr "Не указан файл .svg\n"
+
+#: tools/gtk-rendernode-tool-convert.c:183
+#, c-format
+msgid "Can only accept a single .svg file\n"
+msgstr "Возможно принять только один файл .svg\n"
 
 #: tools/gtk-rendernode-tool-extract.c:73
 #: tools/gtk-rendernode-tool-extract.c:149
