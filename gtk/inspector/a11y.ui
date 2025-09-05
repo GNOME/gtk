@@ -148,6 +148,34 @@
                 </accessibility>
               </object>
             </child>
+            <child>
+              <object class="GtkLabel" id="interface_label">
+                <property name="label" translatable="yes">Interface</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+                <property name="xalign">0.0</property>
+                <layout>
+                  <property name="row">5</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="interface">
+                <property name="selectable">1</property>
+                <property name="halign">end</property>
+                <property name="valign">baseline</property>
+                <property name="ellipsize">end</property>
+                <property name="max-width-chars">50</property>
+                <layout>
+                  <property name="row">5</property>
+                  <property name="column">1</property>
+                </layout>
+                <accessibility>
+                  <relation name="labelled-by">interface_label</relation>
+                </accessibility>
+              </object>
+            </child>
           </object>
         </child>
         <child>
