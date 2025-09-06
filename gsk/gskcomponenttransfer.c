@@ -44,6 +44,13 @@ G_DEFINE_BOXED_TYPE (GskComponentTransfer, gsk_component_transfer, gsk_component
  * Creates a new component transfer that doesn't
  * change the component value.
  *
+ * <figure>
+ *   <picture>
+ *     <source srcset="identity-dark.png" media="(prefers-color-scheme: dark)">
+ *       <img alt="Component transfer: identity" src="identity-light.png">
+ *   </picture>
+ * </figure>
+ *
  * Returns: a new `GskComponentTransfer`
  *
  * Since: 4.20
@@ -70,6 +77,13 @@ gsk_component_transfer_new_identity (void)
  * The new value is computed as
  *
  *     C' = floor (C * n) / n
+ *
+ * <figure>
+ *   <picture>
+ *     <source srcset="levels-dark.png" media="(prefers-color-scheme: dark)">
+ *       <img alt="Component transfer: levels" src="levels-light.png">
+ *   </picture>
+ * </figure>
  *
  * Returns: a new `GskComponentTransfer`
  *
@@ -99,6 +113,13 @@ gsk_component_transfer_new_levels (float n)
  * The new value is computed as
  *
  *     C' = C * m + b
+ *
+ * <figure>
+ *   <picture>
+ *     <source srcset="linear-dark.png" media="(prefers-color-scheme: dark)">
+ *       <img alt="Component transfer: linear" src="linear-light.png">
+ *   </picture>
+ * </figure>
  *
  * Returns: a new `GskComponentTransfer`
  *
@@ -131,6 +152,13 @@ gsk_component_transfer_new_linear (float m,
  * The new value is computed as
  *
  *     C' = amp * pow (C, exp) + ofs
+ *
+ * <figure>
+ *   <picture>
+ *     <source srcset="gamma-dark.png" media="(prefers-color-scheme: dark)">
+ *       <img alt="Component transfer: gamma" src="gamma-light.png">
+ *   </picture>
+ * </figure>
  *
  * Returns: a new `GskComponentTransfer`
  *
@@ -169,6 +197,13 @@ gsk_component_transfer_new_gamma (float amp,
  *
  *     k / n <= C < (k + 1) / n
  *
+ * <figure>
+ *   <picture>
+ *     <source srcset="discrete-dark.png" media="(prefers-color-scheme: dark)">
+ *       <img alt="Component transfer: discrete" src="discrete-light.png">
+ *   </picture>
+ * </figure>
+ *
  * Returns: a new `GskComponentTransfer`
  *
  * Since: 4.20
@@ -204,6 +239,13 @@ gsk_component_transfer_new_discrete (guint  n,
  * where k is the smallest value such that
  *
  *     k / n <= C < (k + 1) / n
+ *
+ * <figure>
+ *   <picture>
+ *     <source srcset="table-dark.png" media="(prefers-color-scheme: dark)">
+ *       <img alt="Component transfer: table" src="table-light.png">
+ *   </picture>
+ * </figure>
  *
  * Returns: a new `GskComponentTransfer`
  *
