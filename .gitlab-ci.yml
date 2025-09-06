@@ -385,6 +385,7 @@ macos-arm64:
       meson setup -Dprefix=${CI_PROJECT_DIR}/.venv -Dintrospection=disabled -Dtests=false _glib_build glib
       meson compile -C _glib_build
       meson install -C _glib_build
+      cp -rvf "${CI_PROJECT_DIR}/_glib_build/meson-logs" "${CI_PROJECT_DIR}/_glib_build/meson-logs.no-introspection"
     - |
       git clone --depth 1 --branch $(crudini --get subprojects/gobject-introspection.wrap wrap-git revision) --recurse-submodules https://gitlab.gnome.org/gnome/gobject-introspection.git
       meson setup -Dprefix=${CI_PROJECT_DIR}/.venv _gi_build gobject-introspection
@@ -405,6 +406,8 @@ macos-arm64:
   artifacts:
     when: always
     paths:
+      - "${CI_PROJECT_DIR}/_glib_build/meson-logs.no-introspection"
+      - "${CI_PROJECT_DIR}/_glib_build/meson-logs"
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkMacos-4.0.gir"
 
