@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-07 15:21+0000\n"
-"PO-Revision-Date: 2025-08-22 13:31+0200\n"
+"PO-Revision-Date: 2025-09-06 13:31+0200\n"
 "Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -4926,7 +4926,7 @@ msgstr "Direcció de l'empaquetament"
 
 #: gtk/gtkmenubar.c:220
 msgid "The pack direction of the menubar"
-msgstr "La direcció de l'empaquetament de la barra d'eines"
+msgstr "La direcció de l'empaquetament de la barra de menús"
 
 #: gtk/gtkmenubar.c:236
 msgid "Child Pack direction"
