@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-09-04 15:22+0000\n"
-"PO-Revision-Date: 2025-09-05 11:36+0200\n"
+"PO-Revision-Date: 2025-09-06 11:36+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -802,7 +802,7 @@ msgstr "IDataObject_GetData (0x%x) ha fallat, retornant 0x%lx"
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
-"S'ha produït un error en convertir les dades W32 del format DnD 0x%x to %p "
+"S'ha produït un error en convertir les dades W32 del format DnD 0x%x a %p "
 "(%s)"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:591
@@ -2778,7 +2778,7 @@ msgstr "Per defecte"
 #: gtk/gtkfontchooserwidget.c:2070
 msgctxt "Font feature value"
 msgid "Enable"
-msgstr "Habilitat"
+msgstr "Habilita"
 
 # Premi a qui va ficar "Per defecte:LTR. M'ha costat
 # trobar en quin mòdul estava l'error. jm
@@ -7764,7 +7764,7 @@ msgstr "No s'ha trobat cap objecte\n"
 #: tools/gtk-builder-tool-screenshot.c:244
 #, c-format
 msgid "Objects of type %s can't be screenshot\n"
-msgstr "Els objectes del tipus %s no poden ser captura de pantalla\n"
+msgstr "No es pot fer una captura de pantalla dels objectes del tipus %s\n"
 
 # FIXME
 #: tools/gtk-builder-tool-screenshot.c:298
@@ -8352,7 +8352,7 @@ msgstr "VALOR"
 
 #: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:122
 msgid "PATH…"
-msgstr "CAMÍ"
+msgstr "CAMÍ…"
 
 #: tools/gtk-path-tool-render.c:73 tools/gtk-path-tool-show.c:126
 msgid "Fill rule (winding, even-odd)"
@@ -8462,7 +8462,7 @@ msgstr "Previsualització del camí"
 
 #: tools/gtk-path-tool-show.c:132
 msgid "Line join (miter, miter-clip, round, bevel)"
-msgstr "Unió de línia (biaix, biaix-clip, rodó, bisell"
+msgstr "Unió de línia (biaix, biaix-clip, rodó, bisell)"
 
 #: tools/gtk-path-tool-show.c:156
 msgid "Display the path."
@@ -8559,7 +8559,7 @@ msgstr "EXECUCIONS"
 
 #: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Don’t download result/wait for GPU to finish"
-msgstr "No baixa el resultat/espera que la GPU acabi"
+msgstr "No baixis el resultat/espera que la GPU acabi"
 
 #: tools/gtk-rendernode-tool-benchmark.c:116
 msgid "Benchmark rendering of a .node file."
