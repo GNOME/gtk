@@ -245,6 +245,9 @@
     <file>gtk-logo.webm</file>
     <file alias="org.gtk.Demo4.svg">data/scalable/apps/org.gtk.Demo4.svg</file>
   </gresource>
+  <gresource prefix="/image_filter">
+    <file>component_filter.ui</file>
+  </gresource>
   <gresource prefix="/video-player">
     <file>bbb.png</file>
   </gresource>
@@ -438,6 +441,11 @@
     <file>image_filtering.ui</file>
     <file>filter_paintable.h</file>
     <file>filter_paintable.c</file>
+    <file>component_filter.h</file>
+    <file>component_filter.c</file>
+    <file>component_filter.ui</file>
+    <file>minigraph.h</file>
+    <file>minigraph.c</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4">
     <file>icons/16x16/actions/application-exit.png</file>

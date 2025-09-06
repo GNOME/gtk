@@ -1,11 +1,15 @@
 /* Image Filtering
  *
  * Show some image filter effects.
+ *
+ * Also demonstrate how to use GskPath for drawing
+ * simple graphs.
  */
 
 #include <gtk/gtk.h>
 
 #include "filter_paintable.h"
+#include "component_filter.h"
 
 static GtkWidget *window = NULL;
 
@@ -29,6 +33,7 @@ do_image_filtering (GtkWidget *do_widget)
       GtkBuilder *builder;
 
       g_type_ensure (GTK_TYPE_FILTER_PAINTABLE);
+      g_type_ensure (component_filter_get_type ());
 
       builder = gtk_builder_new ();
 

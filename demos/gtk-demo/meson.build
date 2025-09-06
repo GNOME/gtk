@@ -146,7 +146,9 @@ extra_demo_sources = files([
   'suggestionentry.c',
   'unicode-names.c',
   'symbolicpaintable.c',
-  '../../gtk/gtkrendernodepaintable.c'
+  '../../gtk/gtkrendernodepaintable.c',
+  'component_filter.c',
+  'minigraph.c',
 ])
 
 if os_unix

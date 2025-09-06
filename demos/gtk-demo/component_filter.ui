@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="ComponentFilter" parent="GtkWidget">
+    <property name="valign">baseline-center</property>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">10</property>
+        <property name="hexpand">0</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="baseline-child">0</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkDropDown" id="kind">
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>Identity</item>
+                      <item>Levels</item>
+                      <item>Linear</item>
+                      <item>Gamma</item>
+                      <item>Discrete</item>
+                      <item>Table</item>
+                    </items>
+                  </object>
+                </property>
+                <signal name="notify::selected" handler="update_component_transfer" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStack" id="stack">
+                <property name="vhomogeneous">0</property>
+
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">identity</property>
+                    <property name="child">
+                      <object class="GtkBox">
+                      </object>
+                    </property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">levels</property>
+                    <property name="child">
+                      <object class="GtkGrid">
+                        <property name="row-spacing">10</property>
+                        <property name="column-spacing">10</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <style><class name="dim-label"/></style>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Levels</property>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="levels">
+                            <property name="halign">start</property>
+                            <property name="numeric">1</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">1</property>
+                                <property name="upper">256</property>
+                                <property name="value">256</property>
+                                <property name="step-increment">1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                       </object>
+                    </property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">linear</property>
+                    <property name="child">
+                      <object class="GtkGrid">
+                        <property name="row-spacing">10</property>
+                        <property name="column-spacing">10</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <style><class name="dim-label"/></style>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Slope</property>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="linear_m">
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">-4</property>
+                                <property name="upper">4</property>
+                                <property name="value">1</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <style><class name="dim-label"/></style>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Intercept</property>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="linear_b">
+                            <property name="tooltip-text" translatable="yes">Intercept</property>
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">-1</property>
+                                <property name="upper">2</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">gamma</property>
+                    <property name="child">
+                      <object class="GtkGrid">
+                        <property name="row-spacing">10</property>
+                        <property name="column-spacing">10</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <style><class name="dim-label"/></style>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Amplitude</property>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="gamma_amp">
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">-2</property>
+                                <property name="upper">2</property>
+                                <property name="value">1</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <style><class name="dim-label"/></style>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Exponent</property>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="gamma_exp">
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">3</property>
+                                <property name="value">1</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <style><class name="dim-label"/></style>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Offset</property>
+                            <layout>
+                              <property name="row">2</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="gamma_ofs">
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">-1</property>
+                                <property name="upper">2</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">2</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">discrete</property>
+                    <property name="child">
+                      <object class="GtkGrid" id="discrete_grid">
+                        <property name="row-spacing">10</property>
+                        <property name="column-spacing">10</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <style><class name="dim-label"/></style>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Size</property>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="discrete_size">
+                            <property name="numeric">1</property>
+                            <property name="digits">0</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">2</property>
+                                <property name="upper">6</property>
+                                <property name="value">2</property>
+                                <property name="step-increment">1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkSpinButton" id="discrete_value0">
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">1</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkSpinButton" id="discrete_value1">
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">1</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">2</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkSpinButton" id="discrete_value2">
+                            <property name="visible">0</property>
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">1</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">3</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkSpinButton" id="discrete_value3">
+                            <property name="visible">0</property>
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">1</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">5</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkSpinButton" id="discrete_value4">
+                            <property name="visible">0</property>
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">1</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">6</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="GtkSpinButton" id="discrete_value5">
+                            <property name="visible">0</property>
+                            <property name="numeric">1</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">1</property>
+                                <property name="value">0</property>
+                                <property name="step-increment">0.1</property>
+                              </object>
+                            </property>
+                            <signal name="notify::value" handler="update_component_transfer" swapped="yes"/>
+                            <layout>
+                              <property name="row">7</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+
+                      </object>
+                    </property>
+                  </object>
+                </child>
+
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="MiniGraph" id="graph">
+            <property name="halign">end</property>
+            <property name="valign">start</property>
+            <property name="hexpand">1</property>
+            <property name="width-request">76</property>
+            <property name="height-request">76</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
