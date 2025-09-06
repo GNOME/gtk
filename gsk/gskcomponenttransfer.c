@@ -76,7 +76,7 @@ gsk_component_transfer_new_identity (void)
  *
  * The new value is computed as
  *
- *     C' = floor (C * n) / n
+ *     C' = (floor (C * n) + 0.5) / n
  *
  * <figure>
  *   <picture>
