@@ -11,8 +11,8 @@ static struct {
   const char *name;
 } scripts[] =
 {
-  { G_UNICODE_SCRIPT_COMMON, HB_SCRIPT_COMMON,  NULL },
-  { G_UNICODE_SCRIPT_INHERITED, HB_SCRIPT_INHERITED,  NULL },
+  { G_UNICODE_SCRIPT_COMMON, HB_SCRIPT_COMMON, NC_("Script", "No script") },
+  { G_UNICODE_SCRIPT_INHERITED, HB_SCRIPT_INHERITED,  NC_("Script", "No script") },
   { G_UNICODE_SCRIPT_ARABIC, HB_SCRIPT_ARABIC,  NC_("Script", "Arabic") },
   { G_UNICODE_SCRIPT_ARMENIAN, HB_SCRIPT_ARMENIAN,  NC_("Script", "Armenian") },
   { G_UNICODE_SCRIPT_BENGALI, HB_SCRIPT_BENGALI,  NC_("Script", "Bengali") },
