@@ -3,7 +3,7 @@
   <template class="ComponentFilter" parent="GtkWidget">
     <property name="valign">baseline-center</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <property name="spacing">10</property>
         <property name="hexpand">0</property>
         <child>

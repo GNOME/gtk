@@ -1,9 +1,13 @@
 /* Image Filtering
+ * #Keywords: brightness, contrast, saturation, sepia, blur, color, posterize, graph
  *
- * Show some image filter effects.
+ * Show some image filters.
  *
- * Also demonstrate how to use GskPath for drawing
- * simple graphs.
+ * This includes both TV-style brightness and contrast controls, as well
+ * as more complex effects such as sepia. All of the filters are applied
+ * on the GPU.
+ *
+ * Also demonstrate how to use GskPath for drawing simple graphs.
  */
 
 #include <gtk/gtk.h>
@@ -164,6 +168,7 @@ do_image_filtering (GtkWidget *do_widget)
         g_print ("%s", error->message);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       g_object_unref (builder);
     }

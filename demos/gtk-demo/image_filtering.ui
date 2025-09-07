@@ -66,11 +66,14 @@
                         <property name="adjustment">
                           <object class="GtkAdjustment" id="brightness">
                             <property name="lower">0</property>
-                            <property name="upper">1</property>
+                            <property name="upper">2</property>
                             <property name="value">1</property>
                             <property name="step-increment">0.1</property>
                           </object>
                         </property>
+                        <marks>
+                          <mark value="1"/>
+                        </marks>
                         <layout>
                           <property name="column">1</property>
                           <property name="row">0</property>
@@ -94,11 +97,14 @@
                         <property name="adjustment">
                           <object class="GtkAdjustment" id="contrast">
                             <property name="lower">0</property>
-                            <property name="upper">1</property>
+                            <property name="upper">2</property>
                             <property name="value">1</property>
                             <property name="step-increment">0.1</property>
                           </object>
                         </property>
+                        <marks>
+                          <mark value="1"/>
+                        </marks>
                         <layout>
                           <property name="column">1</property>
                           <property name="row">1</property>
@@ -122,11 +128,14 @@
                         <property name="adjustment">
                           <object class="GtkAdjustment" id="saturation">
                             <property name="lower">0</property>
-                            <property name="upper">1</property>
+                            <property name="upper">2</property>
                             <property name="value">1</property>
                             <property name="step-increment">0.1</property>
                           </object>
                         </property>
+                        <marks>
+                          <mark value="1"/>
+                        </marks>
                         <layout>
                           <property name="column">1</property>
                           <property name="row">2</property>
@@ -221,12 +230,40 @@
                     <child>
                       <object class="GtkLabel">
                         <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Blur</property>
+                        <property name="xalign">1</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">6</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="blur">
+                            <property name="lower">0</property>
+                            <property name="upper">50</property>
+                            <property name="value">0</property>
+                            <property name="step-increment">0.1</property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">6</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
                         <property name="label" translatable="yes">Red</property>
                         <property name="xalign">1</property>
                         <property name="valign">baseline</property>
                         <layout>
                           <property name="column">0</property>
-                          <property name="row">6</property>
+                          <property name="row">7</property>
                         </layout>
                       </object>
                     </child>
@@ -235,7 +272,7 @@
                         <property name="valign">baseline</property>
                         <layout>
                           <property name="column">1</property>
-                          <property name="row">6</property>
+                          <property name="row">7</property>
                         </layout>
                       </object>
                     </child>
@@ -247,7 +284,7 @@
                         <property name="label" translatable="yes">Green</property>
                         <layout>
                           <property name="column">0</property>
-                          <property name="row">7</property>
+                          <property name="row">8</property>
                         </layout>
                       </object>
                     </child>
@@ -256,7 +293,7 @@
                         <property name="valign">baseline</property>
                         <layout>
                           <property name="column">1</property>
-                          <property name="row">7</property>
+                          <property name="row">8</property>
                         </layout>
                       </object>
                     </child>
@@ -268,7 +305,7 @@
                         <property name="valign">baseline</property>
                         <layout>
                           <property name="column">0</property>
-                          <property name="row">8</property>
+                          <property name="row">9</property>
                         </layout>
                       </object>
                     </child>
@@ -277,7 +314,7 @@
                         <property name="valign">baseline</property>
                         <layout>
                           <property name="column">1</property>
-                          <property name="row">8</property>
+                          <property name="row">9</property>
                         </layout>
                       </object>
                     </child>
@@ -289,7 +326,7 @@
                         <property name="label" translatable="yes">Alpha</property>
                         <layout>
                           <property name="column">0</property>
-                          <property name="row">9</property>
+                          <property name="row">10</property>
                         </layout>
                       </object>
                     </child>
@@ -298,7 +335,7 @@
                         <property name="valign">baseline</property>
                         <layout>
                           <property name="column">1</property>
-                          <property name="row">9</property>
+                          <property name="row">10</property>
                         </layout>
                       </object>
                     </child>
@@ -322,6 +359,7 @@
                     <property name="sepia" bind-source="sepia" bind-property="value"/>
                     <property name="invert" bind-source="invert" bind-property="value"/>
                     <property name="rotate" bind-source="rotate" bind-property="value"/>
+                    <property name="blur" bind-source="blur" bind-property="value"/>
                     <property name="red-transfer" bind-source="red" bind-property="transfer"/>
                     <property name="green-transfer" bind-source="green" bind-property="transfer"/>
                     <property name="blue-transfer" bind-source="blue" bind-property="transfer"/>
