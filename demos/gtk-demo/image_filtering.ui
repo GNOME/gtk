@@ -7,8 +7,23 @@
     <property name="titlebar">
       <object class="GtkHeaderBar">
         <child type="start">
+          <object class="GtkButton">
+            <property name="tooltip-text" translatable="yes">Open File</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-open-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+            <signal name="clicked" handler="open_file" object="picture"/>
+          </object>
+        </child>
+        <child type="start">
           <object class="GtkToggleButton" id="toggle">
-            <property name="active">1</property>
+            <property name="tooltip-text" translatable="yes">Filters</property>
             <property name="child">
               <object class="GtkImage">
                 <property name="paintable">
@@ -26,245 +41,277 @@
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
         <child>
-          <object class="GtkGrid">
-            <property name="visible" bind-source="toggle" bind-property="active"/>
-            <style><class name="sidebar"/></style>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Brightness</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale">
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="brightness">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="value">1</property>
-                    <property name="step-increment">0.1</property>
+          <object class="GtkRevealer">
+            <property name="reveal-child" bind-source="toggle" bind-property="active" bind-flags="sync-create"/>
+            <property name="transition-type">slide-right</property>
+            <property name="child">
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <child>
+                  <object class="GtkGrid">
+                    <style><class name="sidebar"/></style>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Brightness</property>
+                        <property name="xalign">1</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="brightness">
+                            <property name="lower">0</property>
+                            <property name="upper">1</property>
+                            <property name="value">1</property>
+                            <property name="step-increment">0.1</property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Contrast</property>
+                        <property name="xalign">1</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="contrast">
+                            <property name="lower">0</property>
+                            <property name="upper">1</property>
+                            <property name="value">1</property>
+                            <property name="step-increment">0.1</property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Saturation</property>
+                        <property name="xalign">1</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="saturation">
+                            <property name="lower">0</property>
+                            <property name="upper">1</property>
+                            <property name="value">1</property>
+                            <property name="step-increment">0.1</property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">2</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Sepia</property>
+                        <property name="xalign">1</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="sepia">
+                            <property name="lower">0</property>
+                            <property name="upper">1</property>
+                            <property name="value">0</property>
+                            <property name="step-increment">0.1</property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">3</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Invert</property>
+                        <property name="xalign">1</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="invert">
+                            <property name="lower">0</property>
+                            <property name="upper">1</property>
+                            <property name="value">0</property>
+                            <property name="step-increment">0.1</property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">4</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Rotate</property>
+                        <property name="xalign">1</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">5</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="rotate">
+                            <property name="lower">0</property>
+                            <property name="upper">360</property>
+                            <property name="value">0</property>
+                            <property name="step-increment">1</property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">5</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Red</property>
+                        <property name="xalign">1</property>
+                        <property name="valign">baseline</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">6</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ComponentFilter" id="red">
+                        <property name="valign">baseline</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">6</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="valign">baseline</property>
+                        <property name="xalign">1</property>
+                        <property name="label" translatable="yes">Green</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">7</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ComponentFilter" id="green">
+                        <property name="valign">baseline</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">7</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="label" translatable="yes">Blue</property>
+                        <property name="xalign">1</property>
+                        <property name="valign">baseline</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">8</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ComponentFilter" id="blue">
+                        <property name="valign">baseline</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">8</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <style><class name="dim-label"/></style>
+                        <property name="valign">baseline</property>
+                        <property name="xalign">1</property>
+                        <property name="label" translatable="yes">Alpha</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">9</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ComponentFilter" id="alpha">
+                        <property name="valign">baseline</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">9</property>
+                        </layout>
+                      </object>
+                    </child>
                   </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">0</property>
-                  <property name="column-span">2</property>
-                </layout>
+                </child>
               </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Contrast</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">1</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale">
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="contrast">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="value">1</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">1</property>
-                  <property name="column-span">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Saturation</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale">
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="saturation">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="value">1</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">2</property>
-                  <property name="column-span">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Sepia</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">3</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale">
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="sepia">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="value">0</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">3</property>
-                  <property name="column-span">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Invert</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">4</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale">
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="invert">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="value">0</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">4</property>
-                  <property name="column-span">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Rotate</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">5</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale">
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="rotate">
-                    <property name="lower">0</property>
-                    <property name="upper">360</property>
-                    <property name="value">0</property>
-                    <property name="step-increment">1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">5</property>
-                  <property name="column-span">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Levels</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">6</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSpinButton">
-                <property name="numeric">1</property>
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="levels">
-                    <property name="lower">1</property>
-                    <property name="upper">256</property>
-                    <property name="value">256</property>
-                    <property name="step-increment">1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">6</property>
-                  <property name="column-span">1</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Linear</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">7</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSpinButton">
-                <property name="numeric">1</property>
-                <property name="digits">2</property>
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="linear_m">
-                    <property name="lower">0</property>
-                    <property name="upper">4</property>
-                    <property name="value">1</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">7</property>
-                  <property name="column-span">1</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSpinButton">
-                <property name="numeric">1</property>
-                <property name="digits">2</property>
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="linear_b">
-                    <property name="lower">-1</property>
-                    <property name="upper">1</property>
-                    <property name="value">0</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-                <layout>
-                  <property name="column">2</property>
-                  <property name="row">7</property>
-                  <property name="column-span">1</property>
-                </layout>
-              </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <child>
-              <object class="GtkPicture">
+              <object class="GtkPicture" id="picture">
                 <property name="can-shrink">0</property>
                 <property name="hexpand">1</property>
                 <property name="paintable">
@@ -275,9 +322,10 @@
                     <property name="sepia" bind-source="sepia" bind-property="value"/>
                     <property name="invert" bind-source="invert" bind-property="value"/>
                     <property name="rotate" bind-source="rotate" bind-property="value"/>
-                    <property name="levels" bind-source="levels" bind-property="value"/>
-                    <property name="linear-m" bind-source="linear_m" bind-property="value"/>
-                    <property name="linear-b" bind-source="linear_b" bind-property="value"/>
+                    <property name="red-transfer" bind-source="red" bind-property="transfer"/>
+                    <property name="green-transfer" bind-source="green" bind-property="transfer"/>
+                    <property name="blue-transfer" bind-source="blue" bind-property="transfer"/>
+                    <property name="alpha-transfer" bind-source="alpha" bind-property="transfer"/>
                   </object>
                 </property>
               </object>
