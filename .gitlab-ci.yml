@@ -360,15 +360,14 @@ macos-arm64:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
     PKG_CONFIG_PATH: $CI_PROJECT_DIR/.venv/lib/pkgconfig
     SDKROOT: /opt/sdks/MacOSX11.3.sdk
-    SSL_CERT_FILE: $CI_PROJECT_DIR/.venv/lib/python3.11/site-packages/certifi/cacert.pem
   before_script:
     - .gitlab-ci/show-info-macos.sh
     # Setup the virtual environment with meson and ninja. Add ccache to speed
     # up the build.
     - |
-      /opt/macports/bin/python3.11 -m venv .venv
+      python3 -m venv .venv
       source .venv/bin/activate
-      pip3 install meson==1.8.2 ninja==1.11.1.1 certifi==2025.4.26
+      pip3 install meson==1.9.0 ninja==1.11.1.1 certifi==2025.4.26
       ln -s /opt/ccache/ccache .venv/bin
     # The introspection feature requires pkg-config and bison.
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
@@ -386,6 +385,7 @@ macos-arm64:
       meson setup -Dprefix=${CI_PROJECT_DIR}/.venv -Dintrospection=disabled -Dtests=false _glib_build glib
       meson compile -C _glib_build
       meson install -C _glib_build
+      cp -rvf "${CI_PROJECT_DIR}/_glib_build/meson-logs" "${CI_PROJECT_DIR}/_glib_build/meson-logs.no-introspection"
     - |
       git clone --depth 1 --branch $(crudini --get subprojects/gobject-introspection.wrap wrap-git revision) --recurse-submodules https://gitlab.gnome.org/gnome/gobject-introspection.git
       meson setup -Dprefix=${CI_PROJECT_DIR}/.venv _gi_build gobject-introspection
@@ -406,6 +406,8 @@ macos-arm64:
   artifacts:
     when: always
     paths:
+      - "${CI_PROJECT_DIR}/_glib_build/meson-logs.no-introspection"
+      - "${CI_PROJECT_DIR}/_glib_build/meson-logs"
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkMacos-4.0.gir"
 
