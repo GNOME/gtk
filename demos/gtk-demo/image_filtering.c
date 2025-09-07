@@ -1,9 +1,13 @@
 /* Image Filtering
+ * #Keywords: brightness, contrast, saturation, sepia, color, posterize, graph
  *
- * Show some image filter effects.
+ * Show some image filters.
  *
- * Also demonstrate how to use GskPath for drawing
- * simple graphs.
+ * This includes both TV-style brightness and contrast controls, as well
+ * as more complex effects such as sepia. All of the filters are applied
+ * on the GPU.
+ *
+ * Also demonstrate how to use GskPath for drawing simple graphs.
  */
 
 #include <gtk/gtk.h>
