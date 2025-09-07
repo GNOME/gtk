@@ -14,6 +14,7 @@ struct _ComponentFilter
 {
   GtkWidget parent_instance;
 
+  GtkDropDown *box;
   GtkDropDown *kind;
   GtkStack *stack;
   GtkSpinButton *levels;
@@ -193,6 +194,8 @@ component_filter_class_init (ComponentFilterClass *class)
                                                        G_PARAM_READABLE));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/image_filter/component_filter.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, ComponentFilter, box);
   gtk_widget_class_bind_template_child (widget_class, ComponentFilter, kind);
   gtk_widget_class_bind_template_child (widget_class, ComponentFilter, stack);
   gtk_widget_class_bind_template_child (widget_class, ComponentFilter, levels);

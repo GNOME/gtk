@@ -164,6 +164,7 @@ do_image_filtering (GtkWidget *do_widget)
         g_print ("%s", error->message);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       g_object_unref (builder);
     }
