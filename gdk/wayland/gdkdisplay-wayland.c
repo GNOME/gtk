@@ -895,9 +895,6 @@ gdk_wayland_display_finalize (GObject *object)
   g_free (display_wayland->startup_notification_id);
   xkb_context_unref (display_wayland->xkb_context);
 
-  if (display_wayland->settings)
-    g_hash_table_destroy (display_wayland->settings);
-
   g_clear_object (&display_wayland->settings_portal);
 
   g_strfreev (display_wayland->skip_protocols);

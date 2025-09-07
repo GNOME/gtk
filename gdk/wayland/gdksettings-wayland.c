@@ -99,22 +99,6 @@ get_font_rendering (const char *s)
   return 0;
 }
 
-static double
-get_dpi_from_gsettings (GdkWaylandDisplay *display_wayland)
-{
-  GSettings *settings;
-  double factor;
-
-  settings = g_hash_table_lookup (display_wayland->settings,
-                                  "org.gnome.desktop.interface");
-  if (settings != NULL)
-    factor = g_settings_get_double (settings, "text-scaling-factor");
-  else
-    factor = 1.0;
-
-  return 96.0 * factor;
-}
-
 /* When using the Settings portal, we cache the value in
  * the fallback member, and we ignore the valid field
  */
@@ -127,8 +111,8 @@ struct _TranslationEntry {
   GType type;
   union {
     const char *s;
-    int          i;
-    gboolean     b;
+    int i;
+    gboolean b;
   } fallback;
 };
 
@@ -139,7 +123,6 @@ static void
 update_xft_settings (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GSettings *settings;
   GsdFontAntialiasingMode antialiasing;
   GsdFontHinting hinting;
   GsdFontRgbaOrder order;
@@ -187,35 +170,10 @@ update_xft_settings (GdkDisplay *display)
     }
   else
     {
-      TranslationEntry *entry;
-
-      entry = find_translation_entry_by_schema ("org.gnome.desktop.interface", "font-antialiasing");
-
-      if (entry && entry->valid)
-        {
-          settings = g_hash_table_lookup (display_wayland->settings,
-                                          "org.gnome.desktop.interface");
-          antialiasing = g_settings_get_enum (settings, "font-antialiasing");
-          hinting = g_settings_get_enum (settings, "font-hinting");
-          order = g_settings_get_enum (settings, "font-rgba-order");
-        }
-      else if (g_hash_table_contains (display_wayland->settings,
-                                      "org.gnome.settings-daemon.plugins.xsettings"))
-        {
-          settings = g_hash_table_lookup (display_wayland->settings,
-                                          "org.gnome.settings-daemon.plugins.xsettings");
-          antialiasing = g_settings_get_enum (settings, "antialiasing");
-          hinting = g_settings_get_enum (settings, "hinting");
-          order = g_settings_get_enum (settings, "rgba-order");
-        }
-      else
-        {
-          antialiasing = GSD_FONT_ANTIALIASING_MODE_GRAYSCALE;
-          hinting = GSD_FONT_HINTING_MEDIUM;
-          order = GSD_FONT_RGBA_ORDER_RGB;
-        }
-
-      dpi = get_dpi_from_gsettings (display_wayland) * 1024;
+      antialiasing = GSD_FONT_ANTIALIASING_MODE_GRAYSCALE;
+      hinting = GSD_FONT_HINTING_MEDIUM;
+      order = GSD_FONT_RGBA_ORDER_RGB;
+      dpi = 96.0 * 1024;
     }
 
   xft_settings.hinting = (hinting != GSD_FONT_HINTING_NONE);
@@ -367,20 +325,6 @@ find_translation_entry_by_schema (const char *schema,
 }
 
 static TranslationEntry *
-find_translation_entry_by_key (GSettings  *settings,
-                               const char *key)
-{
-  char *schema;
-  TranslationEntry *entry;
-
-  g_object_get (settings, "schema", &schema, NULL);
-  entry = find_translation_entry_by_schema (schema, key);
-  g_free (schema);
-
-  return entry;
-}
-
-static TranslationEntry *
 find_translation_entry_by_setting (const char *setting)
 {
   for (gsize i = 0; i < G_N_ELEMENTS (translations); i++)
@@ -390,26 +334,6 @@ find_translation_entry_by_setting (const char *setting)
     }
 
   return NULL;
-}
-
-static void
-settings_changed (GSettings  *settings,
-                  const char *key,
-                  GdkDisplay *display)
-{
-  TranslationEntry *entry;
-
-  entry = find_translation_entry_by_key (settings, key);
-
-  if (entry != NULL)
-    {
-      if (entry->type != G_TYPE_NONE)
-        gdk_display_setting_changed (display, entry->setting);
-      else if (strcmp (key, "high-contrast") == 0)
-        gdk_display_setting_changed (display, "gtk-theme-name");
-      else
-        update_xft_settings (display);
-    }
 }
 
 static void
@@ -501,10 +425,6 @@ void
 gdk_wayland_display_init_settings (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GSettingsSchemaSource *source;
-  GSettingsSchema *schema;
-  GSettings *settings;
-  int i;
 
   if (gdk_display_should_use_portal (display, PORTAL_SETTINGS_INTERFACE, 0) &&
       !(gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS))
@@ -595,43 +515,8 @@ gdk_wayland_display_init_settings (GdkDisplay *display)
       return;
 
 fallback:
-      g_debug ("Failed to use Settings portal; falling back to gsettings");
+      g_debug ("Failed to use Settings portal, falling back to defaults");
     }
-
-  g_intern_static_string ("antialiasing");
-  g_intern_static_string ("hinting");
-  g_intern_static_string ("rgba-order");
-  g_intern_static_string ("text-scaling-factor");
-
-  display_wayland->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
-
-  source = g_settings_schema_source_get_default ();
-  if (source == NULL)
-    return;
-
-  for (i = 0; i < G_N_ELEMENTS (translations); i++)
-    {
-      schema = g_settings_schema_source_lookup (source, translations[i].schema, TRUE);
-      if (!schema)
-        continue;
-
-      g_intern_static_string (translations[i].key);
-
-      if (g_hash_table_lookup (display_wayland->settings, (gpointer)translations[i].schema) == NULL)
-        {
-          settings = g_settings_new_full (schema, NULL, NULL);
-          g_signal_connect (settings, "changed",
-                            G_CALLBACK (settings_changed), display);
-          g_hash_table_insert (display_wayland->settings, (gpointer)translations[i].schema, settings);
-        }
-
-      if (g_settings_schema_has_key (schema, translations[i].key))
-        translations[i].valid = TRUE;
-
-      g_settings_schema_unref (schema);
-    }
-
-  update_xft_settings (display);
 }
 
 static void
@@ -640,7 +525,6 @@ set_value_from_entry (GdkDisplay       *display,
                       GValue           *value)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GSettings *settings;
 
   if (display_wayland->settings_portal)
     {
@@ -678,121 +562,7 @@ set_value_from_entry (GdkDisplay       *display,
           g_assert_not_reached ();
           break;
         }
-
-      return;
     }
-
-  settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, entry->schema);
-  switch (entry->type)
-    {
-    case G_TYPE_STRING:
-      if (settings && entry->valid)
-        {
-          char *s;
-          s = g_settings_get_string (settings, entry->key);
-          g_value_set_string (value, s);
-          g_free (s);
-        }
-      else
-        {
-          g_value_set_static_string (value, entry->fallback.s);
-        }
-      break;
-    case G_TYPE_INT:
-      g_value_set_int (value, settings && entry->valid
-                              ? g_settings_get_int (settings, entry->key)
-                              : entry->fallback.i);
-      break;
-    case G_TYPE_BOOLEAN:
-      g_value_set_boolean (value, settings && entry->valid
-                                  ? g_settings_get_boolean (settings, entry->key)
-                                  : entry->fallback.b);
-      break;
-    case G_TYPE_ENUM:
-      g_value_set_enum (value, settings && entry->valid
-                               ? g_settings_get_enum (settings, entry->key)
-                               : entry->fallback.i);
-      break;
-    case G_TYPE_NONE:
-      if (g_str_equal (entry->setting, "gtk-fontconfig-timestamp"))
-        g_value_set_uint (value, (guint)entry->fallback.i);
-      else if (g_str_equal (entry->setting, "gtk-xft-antialias"))
-        g_value_set_int (value, display_wayland->xft_settings.antialias);
-      else if (g_str_equal (entry->setting, "gtk-xft-hinting"))
-        g_value_set_int (value, display_wayland->xft_settings.hinting);
-      else if (g_str_equal (entry->setting, "gtk-xft-hintstyle"))
-        g_value_set_static_string (value, display_wayland->xft_settings.hintstyle);
-      else if (g_str_equal (entry->setting, "gtk-xft-rgba"))
-        g_value_set_static_string (value, display_wayland->xft_settings.rgba);
-      else if (g_str_equal (entry->setting, "gtk-xft-dpi"))
-        g_value_set_int (value, display_wayland->xft_settings.dpi);
-      else
-        g_assert_not_reached ();
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static void
-set_decoration_layout_from_entry (GdkDisplay       *display,
-                                  TranslationEntry *entry,
-                                  GValue           *value)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GSettings *settings = NULL;
-
-  if (display_wayland->settings_portal)
-    {
-      g_value_set_string (value, entry->fallback.s);
-      return;
-    }
-
-  settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, entry->schema);
-
-  if (settings)
-    {
-      char *s = g_settings_get_string (settings, entry->key);
-
-      translate_wm_button_layout_to_gtk (s);
-      g_value_set_string (value, s);
-
-      g_free (s);
-    }
-  else
-    {
-      g_value_set_static_string (value, entry->fallback.s);
-    }
-}
-
-static void
-set_theme_from_entry (GdkDisplay       *display,
-                      TranslationEntry *entry,
-                      GValue           *value)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GSettings *settings = NULL;
-  GSettingsSchema *schema = NULL;
-  gboolean hc = FALSE;
-
-  if (display_wayland->settings_portal == NULL)
-    {
-      settings = (GSettings *)g_hash_table_lookup (display_wayland->settings,
-                                                   "org.gnome.desktop.a11y.interface");
-    }
-
-  if (settings)
-    g_object_get (settings, "settings-schema", &schema, NULL);
-
-  if (schema && g_settings_schema_has_key (schema, "high-contrast"))
-    hc = g_settings_get_boolean (settings, "high-contrast");
-
-  g_clear_pointer (&schema, g_settings_schema_unref);
-
-  if (hc)
-    g_value_set_static_string (value, "HighContrast");
-  else
-    set_value_from_entry (display, entry, value);
 }
 
 static gboolean
@@ -813,26 +583,21 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
                                  const char *name,
                                  GValue     *value)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   TranslationEntry *entry;
 
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS)
       return FALSE;
 
-  if (GDK_WAYLAND_DISPLAY (display)->settings != NULL &&
-      g_hash_table_size (GDK_WAYLAND_DISPLAY (display)->settings) == 0)
-    return FALSE;
-
-  entry = find_translation_entry_by_setting (name);
-  if (entry != NULL)
+  if (display_wayland->settings_portal)
     {
-      if (strcmp (name, "gtk-decoration-layout") == 0)
-        set_decoration_layout_from_entry (display, entry, value);
-      else if (strcmp (name, "gtk-theme-name") == 0)
-        set_theme_from_entry (display, entry, value);
-      else
-        set_value_from_entry (display, entry, value);
-      return TRUE;
-   }
+      entry = find_translation_entry_by_setting (name);
+      if (entry != NULL)
+        {
+          set_value_from_entry (display, entry, value);
+          return TRUE;
+        }
+    }
 
   if (strcmp (name, "gtk-shell-shows-app-menu") == 0)
     return set_capability_setting (display, value, GTK_SHELL1_CAPABILITY_GLOBAL_APP_MENU);
