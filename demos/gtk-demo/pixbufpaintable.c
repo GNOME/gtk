@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include "pixbufpaintable.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 struct _PixbufPaintable {
   GObject parent_instance;
 
