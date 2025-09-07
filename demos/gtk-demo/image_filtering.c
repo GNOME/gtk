@@ -1,5 +1,5 @@
 /* Image Filtering
- * #Keywords: brightness, contrast, saturation, sepia, color, posterize, graph
+ * #Keywords: brightness, contrast, saturation, sepia, blur, color, posterize, graph
  *
  * Show some image filters.
  *

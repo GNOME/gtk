@@ -14,6 +14,7 @@ struct _GtkFilterPaintable
   float sepia;
   float invert;
   float rotate;
+  float blur;
   GskComponentTransfer *red_transfer;
   GskComponentTransfer *green_transfer;
   GskComponentTransfer *blue_transfer;
@@ -33,6 +34,7 @@ enum {
   PROP_SEPIA,
   PROP_INVERT,
   PROP_ROTATE,
+  PROP_BLUR,
   PROP_RED_TRANSFER,
   PROP_GREEN_TRANSFER,
   PROP_BLUE_TRANSFER,
@@ -53,6 +55,9 @@ gtk_filter_paintable_snapshot (GdkPaintable *paintable,
                                double        height)
 {
   GtkFilterPaintable *self = GTK_FILTER_PAINTABLE (paintable);
+  GskComponentTransfer *identity;
+
+  identity = gsk_component_transfer_new_identity ();
 
   if (self->brightness != 1)
     {
@@ -139,18 +144,32 @@ gtk_filter_paintable_snapshot (GdkPaintable *paintable,
       gtk_snapshot_push_color_matrix (snapshot, &matrix, graphene_vec4_zero ());
     }
 
-  gtk_snapshot_push_component_transfer (snapshot,
-                                        self->red_transfer,
-                                        self->green_transfer,
-                                        self->blue_transfer,
-                                        self->alpha_transfer);
+  if (!gsk_component_transfer_equal (self->red_transfer, identity) ||
+      !gsk_component_transfer_equal (self->green_transfer, identity) ||
+      !gsk_component_transfer_equal (self->blue_transfer, identity) ||
+      !gsk_component_transfer_equal (self->alpha_transfer, identity))
+    gtk_snapshot_push_component_transfer (snapshot,
+                                          self->red_transfer,
+                                          self->green_transfer,
+                                          self->blue_transfer,
+                                          self->alpha_transfer);
+
+  if (self->blur != 0)
+    gtk_snapshot_push_blur (snapshot, self->blur);
 
   gtk_snapshot_append_texture (snapshot, self->texture,
                                &GRAPHENE_RECT_INIT (0, 0,
                                                     gdk_texture_get_width (self->texture),
                                                     gdk_texture_get_height (self->texture)));
 
-  gtk_snapshot_pop (snapshot);
+  if (self->blur != 0)
+    gtk_snapshot_pop (snapshot);
+
+  if (!gsk_component_transfer_equal (self->red_transfer, identity) ||
+      !gsk_component_transfer_equal (self->green_transfer, identity) ||
+      !gsk_component_transfer_equal (self->blue_transfer, identity) ||
+      !gsk_component_transfer_equal (self->alpha_transfer, identity))
+    gtk_snapshot_pop (snapshot);
 
   if (self->saturation != 1)
     gtk_snapshot_pop (snapshot);
@@ -169,6 +188,8 @@ gtk_filter_paintable_snapshot (GdkPaintable *paintable,
 
   if (self->rotate != 0)
     gtk_snapshot_pop (snapshot);
+
+  gsk_component_transfer_free (identity);
 }
 
 static int
@@ -230,6 +251,9 @@ gtk_filter_paintable_get_property (GObject    *object,
     case PROP_ROTATE:
       g_value_set_float (value, self->rotate);
       break;
+    case PROP_BLUR:
+      g_value_set_float (value, self->blur);
+      break;
     case PROP_RED_TRANSFER:
       g_value_set_boxed (value, self->red_transfer);
       break;
@@ -278,6 +302,9 @@ gtk_filter_paintable_set_property (GObject      *object,
       break;
     case PROP_ROTATE:
       self->rotate = g_value_get_float (value);
+      break;
+    case PROP_BLUR:
+      self->blur = g_value_get_float (value);
       break;
     case PROP_RED_TRANSFER:
       gsk_component_transfer_free (self->red_transfer);
@@ -346,6 +373,9 @@ gtk_filter_paintable_class_init (GtkFilterPaintableClass *klass)
                                                G_PARAM_READWRITE);
   props[PROP_ROTATE]     = g_param_spec_float ("rotate", NULL, NULL,
                                                0, 360, 0,
+                                               G_PARAM_READWRITE);
+  props[PROP_BLUR]       = g_param_spec_float ("blur", NULL, NULL,
+                                               0, 50, 0,
                                                G_PARAM_READWRITE);
   props[PROP_RED_TRANSFER] = g_param_spec_boxed ("red-transfer", NULL, NULL,
                                                  GSK_TYPE_COMPONENT_TRANSFER,
