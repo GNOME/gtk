@@ -330,13 +330,13 @@ gtk_filter_paintable_class_init (GtkFilterPaintableClass *klass)
                                                 GDK_TYPE_TEXTURE,
                                                 G_PARAM_READWRITE);
   props[PROP_BRIGHTNESS] = g_param_spec_float ("brightness", NULL, NULL,
-                                               0, 1, 1,
+                                               0, 2, 1,
                                                G_PARAM_READWRITE);
   props[PROP_CONTRAST]   = g_param_spec_float ("contrast", NULL, NULL,
-                                               0, 1, 1,
+                                               0, 2, 1,
                                                G_PARAM_READWRITE);
   props[PROP_SATURATION] = g_param_spec_float ("saturation", NULL, NULL,
-                                               0, 1, 1,
+                                               0, 2, 1,
                                                G_PARAM_READWRITE);
   props[PROP_SEPIA]      = g_param_spec_float ("sepia", NULL, NULL,
                                                0, 1, 1,
