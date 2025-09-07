@@ -136,7 +136,7 @@ Other libraries are maintained separately.
   from [here](https://download.gnome.org/sources/glib/).
 - The [GdkPixbuf](https://git.gnome.org/browse/gdk-pixbuf/)
   library provides facilities for loading images in a variety of
-  file formats. It is available [here](ttps://download.gnome.org/sources/gdk-pixbuf/).
+  file formats. It is available [here](https://download.gnome.org/sources/gdk-pixbuf/).
 - [Pango](http://www.pango.org) is a library for internationalized
   text handling. It is available [here](https://download.gnome.org/sources/pango/).
 - [GObject Introspection](https://gitlab.gnome.org/GNOME/gobject-introspection)
