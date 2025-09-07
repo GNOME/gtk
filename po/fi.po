@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-05-16 21:11+0000\n"
-"PO-Revision-Date: 2025-05-17 20:20+0300\n"
+"POT-Creation-Date: 2025-09-07 12:05+0000\n"
+"PO-Revision-Date: 2025-09-07 17:37+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.7\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 #, fuzzy
@@ -33,9 +33,9 @@ msgid "No compatible formats to transfer contents of content provider."
 msgstr "Ei yhteensopivia muotoja sisällön siirtämiseksi."
 
 #: gdk/android/gdkandroidclipboard.c:623 gdk/macos/gdkmacospasteboard.c:161
-#: gdk/wayland/gdkclipboard-wayland.c:244 gdk/wayland/gdkdrop-wayland.c:205
-#: gdk/wayland/gdkprimary-wayland.c:343 gdk/win32/gdkdrop-win32.c:1014
-#: gdk/win32/gdkdrop-win32.c:1063 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/wayland/gdkclipboard-wayland.c:245 gdk/wayland/gdkdrop-wayland.c:205
+#: gdk/wayland/gdkprimary-wayland.c:343 gdk/win32/gdkdrop-win32.c:1010
+#: gdk/win32/gdkdrop-win32.c:1059 gdk/x11/gdkclipboard-x11.c:801
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "Yhteensopivaa siirtomuotoa ei löytynyt"
@@ -58,26 +58,27 @@ msgstr "Tyhjältä leikepöydältä ei voi lukea."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Ei yhteensopivia muotoja leikepöydän sisällön siirtämiseksi."
 
-#: gdk/gdkcolorstate.c:921
-#, c-format
-msgid "cicp: Narrow range or YUV not supported"
-msgstr ""
-
-#: gdk/gdkcolorstate.c:931
+#: gdk/gdkcolorstate.c:1081
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr ""
 
-#: gdk/gdkcolorstate.c:977
+#: gdk/gdkcolorstate.c:1127
 #, fuzzy, c-format
 #| msgid "Format %s not supported"
 msgid "cicp: Transfer function %u not supported"
 msgstr "Muoto %s ei ole tuettu"
 
-#: gdk/gdkcolorstate.c:1007
+#: gdk/gdkcolorstate.c:1158
 #, fuzzy, c-format
 #| msgid "Format %s not supported"
 msgid "cicp: Color primaries %u not supported"
+msgstr "Muoto %s ei ole tuettu"
+
+#: gdk/gdkcolorstate.c:1185
+#, fuzzy, c-format
+#| msgid "Format %s not supported"
+msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "Muoto %s ei ole tuettu"
 
 #: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
@@ -93,39 +94,39 @@ msgstr "Tiedoston %s sisältöä ei voitu lukea"
 msgid "Cannot provide contents as %s"
 msgstr "Tiedoston %s sisältöä ei voitu lukea"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:466
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:471
 msgid "The current backend does not support OpenGL"
 msgstr "Nykyinen taustaosa ei tue OpenGL:ää"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1715
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1754
 #, fuzzy
 #| msgid "Vulkan support disabled via GDK_DEBUG"
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "GDK_DEBUG on poistanut Vulkan-tuen käytöstä"
 
-#: gdk/gdkdisplay.c:1418
+#: gdk/gdkdisplay.c:1415
 #, fuzzy
 #| msgid "GL support disabled via GDK_DEBUG"
 msgid "OpenGL support disabled via GDK_DISABLE"
 msgstr "GDK_DEBUG on poistanut GL-tuen käytöstä"
 
-#: gdk/gdkdisplay.c:1732
+#: gdk/gdkdisplay.c:1729
 msgid "No EGL configuration available"
 msgstr "Ei EGL-kokoonpanoa käytettävissä"
 
-#: gdk/gdkdisplay.c:1740
+#: gdk/gdkdisplay.c:1737
 msgid "Failed to get EGL configurations"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1770
+#: gdk/gdkdisplay.c:1767
 msgid "No EGL configuration with required features found"
 msgstr "EGL-kokoonpanoa vaadituin ominaisuuksin ei löydy"
 
-#: gdk/gdkdisplay.c:1777
+#: gdk/gdkdisplay.c:1774
 msgid "No perfect EGL configuration found"
 msgstr "Täydellistä EGL-kokoonpanoa ei löytynyt"
 
-#: gdk/gdkdisplay.c:1819
+#: gdk/gdkdisplay.c:1816
 #, fuzzy, c-format
 #| msgid "No GL implementation is available"
 msgid "EGL implementation is missing extension %s"
@@ -133,23 +134,23 @@ msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "GL-toteutusta ei ole käytettävissä"
 msgstr[1] "GL-toteutusta ei ole käytettävissä"
 
-#: gdk/gdkdisplay.c:1868
+#: gdk/gdkdisplay.c:1865
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL ei ole käytettävissä tässä hiekkalaatikossa"
 
-#: gdk/gdkdisplay.c:1869
+#: gdk/gdkdisplay.c:1866
 msgid "libEGL not available"
 msgstr "libEGL ei käytettävissä"
 
-#: gdk/gdkdisplay.c:1879
+#: gdk/gdkdisplay.c:1876
 msgid "Failed to create EGL display"
 msgstr "EGL-näytön luominen epäonnistui"
 
-#: gdk/gdkdisplay.c:1888
+#: gdk/gdkdisplay.c:1885
 msgid "Could not initialize EGL display"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1898
+#: gdk/gdkdisplay.c:1895
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL-versio %d.%d on liian vanha. GTK vaatii version %d.%d"
@@ -162,29 +163,28 @@ msgstr "Raahaa ja pudota -toiminto toisista sovelluksista ei ole tuettu."
 msgid "No compatible formats to transfer contents."
 msgstr "Ei yhteensopivia muotoja sisällön siirtämiseksi."
 
-#: gdk/gdkglcontext.c:426 gdk/x11/gdkglcontext-glx.c:653
+#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:654
 msgid "No GL API allowed."
 msgstr ""
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:661
+#: gdk/win32/gdkglcontext-win32-wgl.c:784 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "GL-kontekstia ei voi luoda"
 
-#: gdk/gdkglcontext.c:1312
+#: gdk/gdkglcontext.c:1439
 #, fuzzy
 #| msgid "GL support disabled via GDK_DEBUG"
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "GDK_DEBUG on poistanut GL-tuen käytöstä"
 
-#: gdk/gdkglcontext.c:1324
+#: gdk/gdkglcontext.c:1451
 #, fuzzy
 #| msgid "GL support disabled via GDK_DEBUG"
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "GDK_DEBUG on poistanut GL-tuen käytöstä"
 
-#: gdk/gdkglcontext.c:1335
+#: gdk/gdkglcontext.c:1462
 #, c-format
 msgid "Application does not support %s API"
 msgstr ""
@@ -192,18 +192,18 @@ msgstr ""
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2253
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Yritetään käyttää %s, mutta %s on jo käytössä"
 
-#: gdk/gdkglcontext.c:2123
+#: gdk/gdkglcontext.c:2264
 #, fuzzy, c-format
 #| msgid "Trying to use %s, but %s is already in use"
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Yritetään käyttää %s, mutta %s on jo käytössä"
 
-#: gdk/gdktexture.c:672
+#: gdk/gdktexture.c:679
 msgid "Unknown image format."
 msgstr "Tuntematon kuvamuoto."
 
@@ -284,12 +284,12 @@ msgid "Down"
 msgstr "Alas"
 
 # , c-format
-#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:219
+#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:229
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
-#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:222
+#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:232
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
@@ -596,7 +596,7 @@ msgstr ""
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Ei-tuettu JPEG-väriavaruus (%d)"
 
-#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:468 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467 gdk/loaders/gdktiff.c:500
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Ei tarpeeksi muistia kuvakoolle %ux%u"
@@ -606,31 +606,31 @@ msgstr "Ei tarpeeksi muistia kuvakoolle %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Virhe luettaessa png:tä (%s)"
 
-#: gdk/loaders/gdkpng.c:389
+#: gdk/loaders/gdkpng.c:390
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Ei-tuettu syvyys %u png-kuvassa"
 
-#: gdk/loaders/gdkpng.c:439
+#: gdk/loaders/gdkpng.c:440
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Ei-tuettu värityyppi %u png-kuvassa"
 
-#: gdk/loaders/gdkpng.c:453
+#: gdk/loaders/gdkpng.c:452
 #, fuzzy, c-format
 #| msgid "Not enough memory for image size %ux%u"
 msgid "Image stride too large for image size %ux%u"
 msgstr "Ei tarpeeksi muistia kuvakoolle %ux%u"
 
-#: gdk/loaders/gdktiff.c:358
+#: gdk/loaders/gdktiff.c:391
 msgid "Failed to load RGB data from TIFF file"
 msgstr "RGB-datan lataaminen TIFF-tiedostosta epäonnistui"
 
-#: gdk/loaders/gdktiff.c:401
+#: gdk/loaders/gdktiff.c:433
 msgid "Could not load TIFF data"
 msgstr "Ei voitu ladata TIFF-dataa"
 
-#: gdk/loaders/gdktiff.c:484
+#: gdk/loaders/gdktiff.c:514
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Data lukeminen epäonnistui rivillä %d"
@@ -699,17 +699,17 @@ msgstr ""
 "Leikepöydän dataa ei voi saada. %s tavun varaaminen datan tallennusta varten "
 "epäonnistui."
 
-#: gdk/win32/gdkclipdrop-win32.c:893
+#: gdk/win32/gdkclipdrop-win32.c:892
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "Leikepöydän dataa ei voi saada. OpenClipboard() aikakatkaistiin."
 
-#: gdk/win32/gdkclipdrop-win32.c:903
+#: gdk/win32/gdkclipdrop-win32.c:902
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "Leikepöydän dataa ei voi saada. Leikepöydän omistajuus muuttui."
 
-#: gdk/win32/gdkclipdrop-win32.c:913
+#: gdk/win32/gdkclipdrop-win32.c:912
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -717,72 +717,77 @@ msgstr ""
 "Leikepöydän dataa ei voi saada. Leikepöydän data muuttui, ennen kuin sitä "
 "oli mahdollista saada."
 
-#: gdk/win32/gdkclipdrop-win32.c:928
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Leikepöydän dataa ei voi saada. OpenClipboard() epäonnistui: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:953
+#: gdk/win32/gdkclipdrop-win32.c:956
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "Leikepöydän dataa ei voi saada. Yhteensopivaa siirtomuotoa ei löydy."
 
-#: gdk/win32/gdkclipdrop-win32.c:963
+#: gdk/win32/gdkclipdrop-win32.c:966
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Leikepöydän dataa ei voi saada. GetClipboardData() epäonnistui: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:945
+#: gdk/win32/gdkdrop-win32.c:941
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:954
+#: gdk/win32/gdkdrop-win32.c:950
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:965
+#: gdk/win32/gdkdrop-win32.c:961
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1035
+#: gdk/win32/gdkdrop-win32.c:1031
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1043
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1083
+#: gdk/win32/gdkdrop-win32.c:1079
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1122
+#: gdk/win32/gdkdrop-win32.c:1118
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:591
 msgid "No GL implementation is available"
 msgstr "GL-toteutusta ei ole käytettävissä"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:675
 #, fuzzy, c-format
 #| msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "EGL-versio %d.%d on liian vanha. GTK vaatii version %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:694
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr ""
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:853
+#, c-format
+msgid "Unsupported pixel format %d set on Window"
+msgstr ""
+
+#: gdk/win32/gdkglcontext-win32-wgl.c:862
 msgid "No available configurations for the given pixel format"
 msgstr ""
 
@@ -845,15 +850,15 @@ msgstr "Leikepöydän hallinta ei voinut tallettaa valintaa."
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Leikepöytää ei voi tallettaa. Leikepöydän hallinta ei ole aktiivinen."
 
-#: gdk/x11/gdkglcontext-glx.c:819
+#: gdk/x11/gdkglcontext-glx.c:820
 msgid "No GLX configurations available"
 msgstr "Ei GLX-kokoonpanoja käytettävissä"
 
-#: gdk/x11/gdkglcontext-glx.c:906
+#: gdk/x11/gdkglcontext-glx.c:907
 msgid "No GLX configuration with required features found"
 msgstr "GLX-kokoonpanoa vaadituin ominaisuuksin ei löydy"
 
-#: gdk/x11/gdkglcontext-glx.c:982
+#: gdk/x11/gdkglcontext-glx.c:983
 msgid "GLX is not supported"
 msgstr "GLX ei ole tuettu"
 
@@ -889,9 +894,15 @@ msgstr "Ei-tuettu merkistökoodaus “%s”"
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr ""
 
-#: gsk/gpu/gskglrenderer.c:66
+#: gsk/gpu/gskglrenderer.c:64
 msgid "OpenGL 3.3 required"
 msgstr "OpenGL 3.3 vaaditaan"
+
+#: gsk/gpu/gskvulkanrenderer.c:159
+#, fuzzy
+#| msgid "Vulkan support disabled via GDK_DEBUG"
+msgid "Vulkan support disabled during GTK build"
+msgstr "GDK_DEBUG on poistanut Vulkan-tuen käytöstä"
 
 #: gtk/a11y/gtkatspiaction.c:288
 msgctxt "accessibility"
@@ -988,11 +999,9 @@ msgid "Peek"
 msgstr ""
 
 #: gtk/a11y/gtkatspiaction.c:663
-#, fuzzy
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
-msgstr "Selaa verkon sisältöä"
+msgstr "Näyttää salasanakentän sisällön"
 
 #: gtk/a11y/gtkatspiaction.c:749
 msgctxt "accessibility"
@@ -1000,13 +1009,11 @@ msgid "Clear"
 msgstr "Tyhjennä"
 
 #: gtk/a11y/gtkatspiaction.c:750
-#, fuzzy
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
-msgstr "Selaa verkon sisältöä"
+msgstr "Tyhjentää kentän sisällön"
 
-#: gtk/a11y/gtkatspiroot.c:263 gtk/gtkaccessible.c:906
+#: gtk/a11y/gtkatspiroot.c:269 gtk/gtkaccessible.c:906
 msgctxt "accessibility"
 msgid "application"
 msgstr "sovellus"
@@ -1062,24 +1069,30 @@ msgstr "Sovelluksia ei löytynyt \"%s\"-tiedostoille"
 msgid "Failed to start GNOME Software"
 msgstr "Gnomen ohjelmistosovelluksen käynnistäminen epäonnistui"
 
-#: gtk/deprecated/gtkappchooserwidget.c:525
-msgid "Default App"
-msgstr "Oletussovellus"
+#. Translators: Label for a search button and entry, should be translated as a verb
+#: gtk/deprecated/gtkappchooserdialog.c:472 gtk/gtkfilechooserdialog.c:477
+#: gtk/ui/gtkfilechooserwidget.ui:123
+msgid "Search"
+msgstr "Etsi"
 
-#: gtk/deprecated/gtkappchooserwidget.c:575
+#: gtk/deprecated/gtkappchooserwidget.c:300
 #, c-format
 msgid "No apps found for “%s”."
 msgstr "Ei sovellusta, jolla avata \"%s\"."
 
-#: gtk/deprecated/gtkappchooserwidget.c:658
+#: gtk/deprecated/gtkappchooserwidget.c:794
+msgid "Default App"
+msgstr "Oletussovellus"
+
+#: gtk/deprecated/gtkappchooserwidget.c:796
 msgid "Recommended Apps"
 msgstr "Suositellut sovellukset"
 
-#: gtk/deprecated/gtkappchooserwidget.c:673
+#: gtk/deprecated/gtkappchooserwidget.c:798
 msgid "Related Apps"
 msgstr "Vastaavanlaiset sovellukset"
 
-#: gtk/deprecated/gtkappchooserwidget.c:687
+#: gtk/deprecated/gtkappchooserwidget.c:800
 msgid "Other Apps"
 msgstr "Muut sovellukset"
 
@@ -1121,13 +1134,13 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Valitse väri"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:321
+#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:323
 #: gtk/gtkcolordialogbutton.c:337
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Punainen %d% %, Vihreä %d% %, Sininen %d% %, Alpha %d% %"
 
-#: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:327
+#: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:329
 #: gtk/gtkcolordialogbutton.c:343
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1142,8 +1155,8 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Valitse fontti"
 
-#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3818
-#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:284
+#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3854
+#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:328
 msgid "Font"
 msgstr "Fontti"
 
@@ -1328,7 +1341,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:839 gtk/deprecated/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:846 gtk/deprecated/gtkshortcutlabel.c:103
 #: gtk/deprecated/gtkshortcutlabel.c:139
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1339,7 +1352,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:858 gtk/deprecated/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:865 gtk/deprecated/gtkshortcutlabel.c:106
 #: gtk/deprecated/gtkshortcutlabel.c:141
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1350,7 +1363,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:877 gtk/deprecated/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:884 gtk/deprecated/gtkshortcutlabel.c:109
 #: gtk/deprecated/gtkshortcutlabel.c:143
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1361,7 +1374,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:895 gtk/deprecated/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:902 gtk/deprecated/gtkshortcutlabel.c:115
 #: gtk/deprecated/gtkshortcutlabel.c:145
 msgctxt "keyboard label"
 msgid "Super"
@@ -1372,7 +1385,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:118
+#: gtk/gtkaccelgroup.c:916 gtk/deprecated/gtkshortcutlabel.c:118
 #: gtk/deprecated/gtkshortcutlabel.c:147
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1383,7 +1396,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:924 gtk/deprecated/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:931 gtk/deprecated/gtkshortcutlabel.c:112
 #: gtk/deprecated/gtkshortcutlabel.c:150
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1393,17 +1406,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:944
+#: gtk/gtkaccelgroup.c:951
 msgctxt "keyboard label"
 msgid "KP"
 msgstr ""
 
-#: gtk/gtkaccelgroup.c:951
+#: gtk/gtkaccelgroup.c:958
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Välilyönti"
 
-#: gtk/gtkaccelgroup.c:954 gtk/deprecated/gtkshortcutlabel.c:178
+#: gtk/gtkaccelgroup.c:961 gtk/deprecated/gtkshortcutlabel.c:178
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Takakeno"
@@ -1876,7 +1889,7 @@ msgstr "_Sulje"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:728 gtk/gtkapplication-dbus.c:770
+#: gtk/gtkapplication-dbus.c:385
 msgid "Reason not specified"
 msgstr "Syytä ei annettu"
 
@@ -1915,7 +1928,7 @@ msgstr "kohteen <%s> sisällä ei voi ilmetä tekstiä"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:672
+#: gtk/gtkcalendar.c:693
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1929,7 +1942,7 @@ msgstr "calendar:week_start:1"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:823
+#: gtk/gtkcalendar.c:844
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1943,7 +1956,7 @@ msgstr "calendar:MY"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1004
+#: gtk/gtkcalendar.c:1025
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1955,7 +1968,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1108
+#: gtk/gtkcalendar.c:1129
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1968,252 +1981,252 @@ msgstr "%Y"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1154
+#: gtk/gtkcalendar.c:1175
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%d"
 
-#: gtk/gtkcolorchooserwidget.c:384 gtk/gtkcoloreditor.c:171
+#: gtk/gtkcolorchooserwidget.c:386 gtk/gtkcoloreditor.c:171
 #, c-format
 msgid "Color: %s"
 msgstr "Väri: %s"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "Erittäin vaalea sininen"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "Vaaleansininen"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Sininen"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "Tummansininen"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "Erittäin tumma sininen"
 
-#: gtk/gtkcolorchooserwidget.c:454
+#: gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "Erittäin vaalea vihreä"
 
-#: gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "Vaaleanvihreä"
 
-#: gtk/gtkcolorchooserwidget.c:456
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Green"
 msgstr "Vihreä"
 
-#: gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "Tummanvihreä"
 
-#: gtk/gtkcolorchooserwidget.c:458
+#: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "Erittäin tumma vihreä"
 
-#: gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "Erittäin vaalea keltainen"
 
-#: gtk/gtkcolorchooserwidget.c:460
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "Vaaleankeltainen"
 
-#: gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "Keltainen"
 
-#: gtk/gtkcolorchooserwidget.c:462
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "Tummankeltainen"
 
-#: gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "Erittäin tumma keltainen"
 
-#: gtk/gtkcolorchooserwidget.c:464
+#: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "Erittäin vaalea oranssi"
 
-#: gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Vaaleanoranssi"
 
-#: gtk/gtkcolorchooserwidget.c:466
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Oranssi"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Tummanoranssi"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "Erittäin tumma oranssi"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "Erittän vaalea punainen"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "Vaalea punainen"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Red"
 msgstr "Punainen"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "Tummanpunainen"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "Erittäin tumma punainen"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "Erittäin vaalea violetti"
 
-#: gtk/gtkcolorchooserwidget.c:475
+#: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "Vaalea violetti"
 
-#: gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Purple"
 msgstr "Violetti"
 
-#: gtk/gtkcolorchooserwidget.c:477
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "Tumma violetti"
 
-#: gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "Erittäin tumma violetti"
 
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "Erittäin vaalea ruskea"
 
-#: gtk/gtkcolorchooserwidget.c:480
+#: gtk/gtkcolorchooserwidget.c:482
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "Vaaleanruskea"
 
-#: gtk/gtkcolorchooserwidget.c:481
+#: gtk/gtkcolorchooserwidget.c:483
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Ruske"
 
-#: gtk/gtkcolorchooserwidget.c:482
+#: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "Tummanruskea"
 
-#: gtk/gtkcolorchooserwidget.c:483
+#: gtk/gtkcolorchooserwidget.c:485
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "Erittäin tumma ruskea"
 
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:486
 msgctxt "Color name"
 msgid "White"
 msgstr "Valkoinen"
 
-#: gtk/gtkcolorchooserwidget.c:485
+#: gtk/gtkcolorchooserwidget.c:487
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "Vaaleanharmaa 1"
 
-#: gtk/gtkcolorchooserwidget.c:486
+#: gtk/gtkcolorchooserwidget.c:488
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "Vaaleanharmaa 2"
 
-#: gtk/gtkcolorchooserwidget.c:487
+#: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "Vaaleanharmaa 3"
 
-#: gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "Vaaleanharmaa 4"
 
-#: gtk/gtkcolorchooserwidget.c:489
+#: gtk/gtkcolorchooserwidget.c:491
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "Tummanharmaa 1"
 
-#: gtk/gtkcolorchooserwidget.c:490
+#: gtk/gtkcolorchooserwidget.c:492
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "Tummanharmaa 2"
 
-#: gtk/gtkcolorchooserwidget.c:491
+#: gtk/gtkcolorchooserwidget.c:493
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "Tummanharmaa 3"
 
-#: gtk/gtkcolorchooserwidget.c:492
+#: gtk/gtkcolorchooserwidget.c:494
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "Tummanharmaa 4"
 
-#: gtk/gtkcolorchooserwidget.c:493
+#: gtk/gtkcolorchooserwidget.c:495
 msgctxt "Color name"
 msgid "Black"
 msgstr "Musta"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:568
 msgid "Custom"
 msgstr "Mukautettu"
 
-#: gtk/gtkcolorchooserwidget.c:579
+#: gtk/gtkcolorchooserwidget.c:582
 msgid "Add Color"
 msgstr "Lisää väri"
 
-#: gtk/gtkcolorchooserwidget.c:601
+#: gtk/gtkcolorchooserwidget.c:604
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Mukautettu väri %d: %s"
@@ -2292,24 +2305,19 @@ msgstr "Paperin marginaalit"
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9320
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
+#: gtk/gtktextview.c:9382
 msgid "_Copy"
 msgstr "_Kopioi"
 
-#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2877
-#: gtk/gtktextview.c:9398
+#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
+#: gtk/gtktextview.c:9460
 msgid "Context menu"
 msgstr "Kontekstivalikko"
 
-#: gtk/gtkentry.c:3687
+#: gtk/gtkentry.c:3787
 msgid "Insert Emoji"
 msgstr "Syötä emoji"
-
-#. Translators: Label for a search button and entry, should be translated as a verb
-#: gtk/gtkfilechooserdialog.c:477 gtk/ui/gtkfilechooserwidget.ui:123
-msgid "Search"
-msgstr "Etsi"
 
 #: gtk/gtkfilechooserdialog.c:562
 msgid "_Name"
@@ -2372,28 +2380,28 @@ msgid "A file with that name already exists"
 msgstr "Tiedosto samalla nimellä on jo olemassa"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:5000
-#: gtk/gtkfiledialog.c:913 gtk/gtkmessagedialog.c:173
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:5037
+#: gtk/gtkfiledialog.c:914 gtk/gtkmessagedialog.c:173
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
-#: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
+#: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6360 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_Peru"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:885 gtk/gtkplacessidebar.c:3149
+#: gtk/gtkfiledialog.c:886 gtk/gtkplacessidebar.c:3149
 #: gtk/gtkplacessidebar.c:3234 gtk/gtkplacesview.c:1646
 msgid "_Open"
 msgstr "_Avaa"
 
-#: gtk/gtkfilechoosernative.c:588 gtk/gtkfiledialog.c:890
+#: gtk/gtkfilechoosernative.c:588 gtk/gtkfiledialog.c:891
 msgid "_Save"
 msgstr "_Tallenna"
 
-#: gtk/gtkfilechoosernativeportal.c:499
+#: gtk/gtkfilechoosernativeportal.c:500
 #, fuzzy, c-format
 #| msgid "libEGL not available"
 msgid "The session bus is not available"
@@ -2407,7 +2415,7 @@ msgstr "Valitse, minkä tyyppiset tiedostot näkyvät"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserutils.c:364
+#: gtk/gtkfilechooserutils.c:365
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s - %2$s"
@@ -2462,196 +2470,196 @@ msgstr "Tiedoston poistaminen epäonnistui"
 msgid "The file could not be moved to the Trash"
 msgstr "Tiedoston siirtäminen roskakoriin epäonnistui"
 
-#: gtk/gtkfilechooserwidget.c:1212
+#: gtk/gtkfilechooserwidget.c:1247
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Haluatko varmasti poistaa kohteen “%s”?"
 
-#: gtk/gtkfilechooserwidget.c:1213
+#: gtk/gtkfilechooserwidget.c:1248
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Jos poistat kohteen, se häviää pysyvästi."
 
-#: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9390
 msgid "_Delete"
 msgstr "_Poista"
 
-#: gtk/gtkfilechooserwidget.c:1331
+#: gtk/gtkfilechooserwidget.c:1367
 msgid "The file could not be renamed"
 msgstr "Tiedoston nimeäminen uudelleen ei onnistunut"
 
-#: gtk/gtkfilechooserwidget.c:1507
+#: gtk/gtkfilechooserwidget.c:1543
 msgid "Could not select file"
 msgstr "Tiedostoa ei voitu valita"
 
-#: gtk/gtkfilechooserwidget.c:1727 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1763 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "Ruudukkonäkymä"
 
-#: gtk/gtkfilechooserwidget.c:1733
+#: gtk/gtkfilechooserwidget.c:1769
 msgid "List View"
 msgstr "Luettelonäkymä"
 
-#: gtk/gtkfilechooserwidget.c:1796
+#: gtk/gtkfilechooserwidget.c:1832
 msgid "_Visit File"
 msgstr "Näytä tie_dosto tiedostonhallinnassa"
 
-#: gtk/gtkfilechooserwidget.c:1800
+#: gtk/gtkfilechooserwidget.c:1836
 msgid "_Open With File Manager"
 msgstr "_Avaa tiedostonhallinnalla"
 
-#: gtk/gtkfilechooserwidget.c:1804
+#: gtk/gtkfilechooserwidget.c:1840
 msgid "_Copy Location"
 msgstr "Kopioi si_jainti"
 
-#: gtk/gtkfilechooserwidget.c:1808
+#: gtk/gtkfilechooserwidget.c:1844
 msgid "_Add to Bookmarks"
 msgstr "_Lisää kirjanmerkkeihin"
 
-#: gtk/gtkfilechooserwidget.c:1812 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1848 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "_Nimeä uudelleen"
 
-#: gtk/gtkfilechooserwidget.c:1820
+#: gtk/gtkfilechooserwidget.c:1856
 msgid "_Move to Trash"
 msgstr "_Siirrä roskakoriin"
 
-#: gtk/gtkfilechooserwidget.c:1829
+#: gtk/gtkfilechooserwidget.c:1865
 msgid "Show _Hidden Files"
 msgstr "Näytä _piilotiedostot"
 
-#: gtk/gtkfilechooserwidget.c:1833
+#: gtk/gtkfilechooserwidget.c:1869
 msgid "Sort _Folders Before Files"
 msgstr "Järjestä _kansiot ennen tiedostoja"
 
-#: gtk/gtkfilechooserwidget.c:1956 gtk/gtkfilechooserwidget.c:1986
-#: gtk/gtkfilechooserwidget.c:3861
+#: gtk/gtkfilechooserwidget.c:1992 gtk/gtkfilechooserwidget.c:2022
+#: gtk/gtkfilechooserwidget.c:3897
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: gtk/gtkfilechooserwidget.c:2041 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2077 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Koti"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2196 gtk/gtkfilechooserwidget.c:7432
+#: gtk/gtkfilechooserwidget.c:2232 gtk/gtkfilechooserwidget.c:7469
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Sijainti"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2303
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: gtk/gtkfilechooserwidget.c:2860 gtk/gtkfilechooserwidget.c:2874
+#: gtk/gtkfilechooserwidget.c:2896 gtk/gtkfilechooserwidget.c:2910
 #, c-format
 msgid "Searching in %s"
 msgstr "Etsitään kohteesta %s"
 
-#: gtk/gtkfilechooserwidget.c:2880
+#: gtk/gtkfilechooserwidget.c:2916
 msgid "Searching"
 msgstr "Etsitään"
 
-#: gtk/gtkfilechooserwidget.c:2886
+#: gtk/gtkfilechooserwidget.c:2922
 msgid "Enter location or URL"
 msgstr "Anna sijainti tai osoite"
 
-#: gtk/gtkfilechooserwidget.c:3445 gtk/gtkfilechooserwidget.c:5787
-#: gtk/gtkfilechooserwidget.c:7454
+#: gtk/gtkfilechooserwidget.c:3481 gtk/gtkfilechooserwidget.c:5824
+#: gtk/gtkfilechooserwidget.c:7491
 msgid "Modified"
 msgstr "Muokattu"
 
-#: gtk/gtkfilechooserwidget.c:3630
+#: gtk/gtkfilechooserwidget.c:3666
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Tiedoston %s sisältöä ei voitu lukea"
 
-#: gtk/gtkfilechooserwidget.c:3634
+#: gtk/gtkfilechooserwidget.c:3670
 msgid "Could not read the contents of the folder"
 msgstr "Kansion sisältöä ei voitu lukea"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3757 gtk/gtkfilechooserwidget.c:3800
+#: gtk/gtkfilechooserwidget.c:3793 gtk/gtkfilechooserwidget.c:3836
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3759 gtk/gtkfilechooserwidget.c:3802
+#: gtk/gtkfilechooserwidget.c:3795 gtk/gtkfilechooserwidget.c:3838
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:3763
+#: gtk/gtkfilechooserwidget.c:3799
 msgid "Yesterday"
 msgstr "Eilen"
 
-#: gtk/gtkfilechooserwidget.c:3772
+#: gtk/gtkfilechooserwidget.c:3808
 #, no-c-format
 msgid "%-e %b"
 msgstr "%-e. %b"
 
-#: gtk/gtkfilechooserwidget.c:3776
+#: gtk/gtkfilechooserwidget.c:3812
 msgid "%-e %b %Y"
 msgstr "%-e. %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:3816 gtk/gtkfilechooserwidget.c:3824
+#: gtk/gtkfilechooserwidget.c:3852 gtk/gtkfilechooserwidget.c:3860
 msgid "Program"
 msgstr "Ohjelma"
 
-#: gtk/gtkfilechooserwidget.c:3817
+#: gtk/gtkfilechooserwidget.c:3853
 msgid "Audio"
 msgstr "Ääni"
 
-#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilefilter.c:1069
+#: gtk/gtkfilechooserwidget.c:3855 gtk/gtkfilefilter.c:1072
 msgid "Image"
 msgstr "Kuva"
 
-#: gtk/gtkfilechooserwidget.c:3820
+#: gtk/gtkfilechooserwidget.c:3856
 msgid "Archive"
 msgstr "Arkisto"
 
-#: gtk/gtkfilechooserwidget.c:3821
+#: gtk/gtkfilechooserwidget.c:3857
 msgid "Markup"
 msgstr "Merkkaus"
 
-#: gtk/gtkfilechooserwidget.c:3822 gtk/gtkfilechooserwidget.c:3823
+#: gtk/gtkfilechooserwidget.c:3858 gtk/gtkfilechooserwidget.c:3859
 msgid "Text"
 msgstr "Teksti"
 
-#: gtk/gtkfilechooserwidget.c:3825
+#: gtk/gtkfilechooserwidget.c:3861
 msgid "Video"
 msgstr "Video"
 
-#: gtk/gtkfilechooserwidget.c:3826
+#: gtk/gtkfilechooserwidget.c:3862
 msgid "Contacts"
 msgstr "Yhteystiedot"
 
-#: gtk/gtkfilechooserwidget.c:3827
+#: gtk/gtkfilechooserwidget.c:3863
 msgid "Calendar"
 msgstr "Kalenteri"
 
-#: gtk/gtkfilechooserwidget.c:3828
+#: gtk/gtkfilechooserwidget.c:3864
 msgid "Document"
 msgstr "Asiakirja"
 
-#: gtk/gtkfilechooserwidget.c:3829
+#: gtk/gtkfilechooserwidget.c:3865
 msgid "Presentation"
 msgstr "Esitys"
 
-#: gtk/gtkfilechooserwidget.c:3830
+#: gtk/gtkfilechooserwidget.c:3866
 msgid "Spreadsheet"
 msgstr "Laskentataulukko"
 
-#: gtk/gtkfilechooserwidget.c:4179 gtk/gtkfilechooserwidget.c:5155
+#: gtk/gtkfilechooserwidget.c:4216 gtk/gtkfilechooserwidget.c:5192
 msgid "You do not have access to the specified folder."
 msgstr "Sinulla ei ole käyttöoikeutta kyseiseen kansioon."
 
-#: gtk/gtkfilechooserwidget.c:4992 gtk/print/gtkprintunixdialog.c:674
+#: gtk/gtkfilechooserwidget.c:5029 gtk/print/gtkprintunixdialog.c:674
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Tiedosto ”%s” on jo olemassa. Haluatko korvata sen?"
 
-#: gtk/gtkfilechooserwidget.c:4994 gtk/print/gtkprintunixdialog.c:678
+#: gtk/gtkfilechooserwidget.c:5031 gtk/print/gtkprintunixdialog.c:678
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2659,81 +2667,82 @@ msgstr ""
 "Tiedosto on jo olemassa kansiossa ”%s”. Tiedoston korvaus ylikirjoittaa sen "
 "sisällön."
 
-#: gtk/gtkfilechooserwidget.c:5000 gtk/print/gtkprintunixdialog.c:686
+#: gtk/gtkfilechooserwidget.c:5037 gtk/print/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "_Korvaa"
 
-#: gtk/gtkfilechooserwidget.c:5734
+#: gtk/gtkfilechooserwidget.c:5771
 msgid "Could not send the search request"
 msgstr "Hakupyyntöä ei voitu lähettää"
 
-#: gtk/gtkfilechooserwidget.c:6015
+#: gtk/gtkfilechooserwidget.c:6052
 msgid "Accessed"
 msgstr "Käytetty"
 
-#: gtk/gtkfilechooserwidget.c:7410
+#: gtk/gtkfilechooserwidget.c:7447
 msgid "_Size"
 msgstr "_Koko"
 
-#: gtk/gtkfilechooserwidget.c:7414
+#: gtk/gtkfilechooserwidget.c:7451
 msgid "T_ype"
 msgstr "_Tyyppi"
 
-#: gtk/gtkfilechooserwidget.c:7418
+#: gtk/gtkfilechooserwidget.c:7455
 msgid "_Time"
 msgstr "_Aika"
 
-#: gtk/gtkfilechooserwidget.c:7424 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7461 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Nimi"
 
-#: gtk/gtkfilechooserwidget.c:7441 gtk/inspector/resource-list.ui:82
-#: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
+#: gtk/gtkfilechooserwidget.c:7478 gtk/inspector/resource-list.ui:98
+#: gtk/ui/gtkfontchooserwidget.ui:220 gtk/ui/gtkfontchooserwidget.ui:386
+#: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "Koko"
 
-#: gtk/gtkfilechooserwidget.c:7447 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7484 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Tyyppi"
 
-#: gtk/gtkfiledialog.c:886
+#: gtk/gtkfiledialog.c:887
 msgid "Pick Files"
 msgstr "Valitse tiedostot"
 
-#: gtk/gtkfiledialog.c:886
+#: gtk/gtkfiledialog.c:887
 msgid "Pick a File"
 msgstr "Valitse tiedosto"
 
-#: gtk/gtkfiledialog.c:891
+#: gtk/gtkfiledialog.c:892
 msgid "Save a File"
 msgstr "Tallenna tiedosto"
 
-#: gtk/gtkfiledialog.c:895 gtk/ui/gtkappchooserdialog.ui:53
+#: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:56
 #: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "_Valitse"
 
-#: gtk/gtkfiledialog.c:896
+#: gtk/gtkfiledialog.c:897
 msgid "Select Folders"
 msgstr "Valitse kansiot"
 
-#: gtk/gtkfiledialog.c:896
+#: gtk/gtkfiledialog.c:897
 msgid "Select a Folder"
 msgstr "Valitse kansio"
 
-#: gtk/gtkfiledialog.c:1397 gtk/gtkfiledialog.c:1514 gtk/gtkfiledialog.c:1623
+#: gtk/gtkfiledialog.c:1413 gtk/gtkfiledialog.c:1533 gtk/gtkfiledialog.c:1645
 msgid "Encoding"
 msgstr "Merkistökoodaus"
 
-#: gtk/gtkfiledialog.c:1634
+#: gtk/gtkfiledialog.c:1656
 msgid "Line Ending"
 msgstr "Rivinloppu"
 
-#: gtk/gtkfilefilter.c:1082
+#: gtk/gtkfilefilter.c:1085
 msgid "Unspecified"
 msgstr "Määrittämätön"
 
@@ -2776,7 +2785,7 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Käytä"
 
-#: gtk/gtkfontchooserwidget.c:2406
+#: gtk/gtkfontchooserwidget.c:2406 gtk/inspector/visual.ui:73
 msgid "Default"
 msgstr "Oletus"
 
@@ -2833,15 +2842,15 @@ msgstr "Sulje"
 msgid "Close the infobar"
 msgstr "Sulje infopalkki"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9378
 msgid "Cu_t"
 msgstr "_Leikkaa"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9386
 msgid "_Paste"
 msgstr "L_iitä"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9411
 msgid "Select _All"
 msgstr "Valitse k_aikki"
 
@@ -2920,7 +2929,7 @@ msgid "Play"
 msgstr "Toista"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6361
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
 msgid "_OK"
 msgstr "_OK"
 
@@ -2976,19 +2985,19 @@ msgstr ""
 msgid "_Password"
 msgstr "_Salasana"
 
-#: gtk/gtkmountoperation.c:760
+#: gtk/gtkmountoperation.c:761
 msgid "Forget password _immediately"
 msgstr "_Unohda salasana heti"
 
-#: gtk/gtkmountoperation.c:770
+#: gtk/gtkmountoperation.c:771
 msgid "Remember password until you _logout"
 msgstr "Muista _uloskirjautumiseen saakka"
 
-#: gtk/gtkmountoperation.c:781
+#: gtk/gtkmountoperation.c:782
 msgid "Remember _forever"
 msgstr "_Muista aina"
 
-#: gtk/gtkmountoperation.c:1251
+#: gtk/gtkmountoperation.c:1252
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Tuntematon sovellus (prosessitunniste %d)"
@@ -2998,12 +3007,12 @@ msgstr "Tuntematon sovellus (prosessitunniste %d)"
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
 #.
-#: gtk/gtkmountoperation.c:1396
+#: gtk/gtkmountoperation.c:1397
 #, c-format
 msgid "Unable to end process"
 msgstr "Ei voitu päättää prosessia"
 
-#: gtk/gtkmountoperation.c:1546
+#: gtk/gtkmountoperation.c:1547
 msgid "_End Process"
 msgstr "_Päätä prosessi"
 
@@ -3015,27 +3024,27 @@ msgstr ""
 "toteutusta."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:988
+#: gtk/gtkmountoperation-x11.c:990
 msgid "Terminal Pager"
 msgstr "Päätteen sivutin"
 
-#: gtk/gtkmountoperation-x11.c:989
+#: gtk/gtkmountoperation-x11.c:991
 msgid "Top Command"
 msgstr "Top-komento"
 
-#: gtk/gtkmountoperation-x11.c:990
+#: gtk/gtkmountoperation-x11.c:992
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Shell"
 
-#: gtk/gtkmountoperation-x11.c:991
+#: gtk/gtkmountoperation-x11.c:993
 msgid "Bourne Shell"
 msgstr "Bourne Shell"
 
-#: gtk/gtkmountoperation-x11.c:992
+#: gtk/gtkmountoperation-x11.c:994
 msgid "Z Shell"
 msgstr "Z Shell"
 
-#: gtk/gtkmountoperation-x11.c:1092
+#: gtk/gtkmountoperation-x11.c:1094
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Ei voi päättää prosessia, jonka prosessitunniste on %d: %s"
@@ -3432,11 +3441,645 @@ msgstr "Katkaise yhteys"
 msgid "Unmount"
 msgstr "Irrota liitos"
 
-#: gtk/print/gtkprintbackend.c:637
+#: gtk/print/backends/gtkprintbackendcpdb.c:496
+#: gtk/print/backends/gtkprintbackendcups.c:5715
+msgctxt "Print job priority"
+msgid "Urgent"
+msgstr "Kiireellinen"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:497
+#: gtk/print/backends/gtkprintbackendcups.c:5716
+msgctxt "Print job priority"
+msgid "High"
+msgstr "Korkea"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:498
+#: gtk/print/backends/gtkprintbackendcups.c:5717
+msgctxt "Print job priority"
+msgid "Medium"
+msgstr "Tavallinen"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:499
+#: gtk/print/backends/gtkprintbackendcups.c:5718
+msgctxt "Print job priority"
+msgid "Low"
+msgstr "Matala"
+
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: gtk/print/backends/gtkprintbackendcpdb.c:521
+#: gtk/print/backends/gtkprintbackendcups.c:5861
+msgctxt "printer option"
+msgid "Before"
+msgstr "Ennen"
+
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: gtk/print/backends/gtkprintbackendcpdb.c:528
+#: gtk/print/backends/gtkprintbackendcups.c:5876
+msgctxt "printer option"
+msgid "After"
+msgstr "Jälkeen"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:551
+msgid "Print at"
+msgstr "Tulostusaika"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:561
+msgid "Print at time"
+msgstr "Tulosta ajankohtana"
+
+#: gtk/print/backends/gtkprintbackendcpdb.c:624
+msgctxt "print option"
+msgid "Borderless"
+msgstr "Reunukseton"
+
+#. Translators: this is a printer status.
+#: gtk/print/backends/gtkprintbackendcpdb.c:1483
+#: gtk/print/backends/gtkprintbackendcups.c:2650
+msgid "Paused; Rejecting Jobs"
+msgstr "Keskeytetty; työt hylätään"
+
+#. Translators: this is a printer status.
+#: gtk/print/backends/gtkprintbackendcpdb.c:1486
+#: gtk/print/backends/gtkprintbackendcups.c:2653
+#: gtk/print/gtkprintoperation-win32.c:630
+msgid "Paused"
+msgstr "Pysäytetty"
+
+#. Translators: this is a printer status.
+#: gtk/print/backends/gtkprintbackendcpdb.c:1489
+#: gtk/print/backends/gtkprintbackendcups.c:2656
+msgid "Rejecting Jobs"
+msgstr "Työt hylätään"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1154
+#: gtk/print/backends/gtkprintbackendcups.c:1461
+msgid "Username:"
+msgstr "Käyttäjätunnus:"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1155
+#: gtk/print/backends/gtkprintbackendcups.c:1470
+msgid "Password:"
+msgstr "Salasana:"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1193
+#: gtk/print/backends/gtkprintbackendcups.c:1483
+#, c-format
+msgid "Authentication is required to print document “%s” on printer %s"
+msgstr ""
+"Tunnistautuminen vaaditaan asiakirjan “%s” tulostamiseksi tulostimella %s"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1195
+#, c-format
+msgid "Authentication is required to print a document on %s"
+msgstr "Todennus vaaditaan asiakirjan tulostamiseksi isännällä %s"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1199
+#, c-format
+msgid "Authentication is required to get attributes of job “%s”"
+msgstr "Tunnistautuminen vaaditaan työn “%s” määreiden saamiseksi"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1201
+msgid "Authentication is required to get attributes of a job"
+msgstr "Todennus vaaditaan työn määreiden saamiseksi"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1205
+#, c-format
+msgid "Authentication is required to get attributes of printer %s"
+msgstr "Todennus vaaditaan tulostimen %s määreiden saamiseksi"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1207
+msgid "Authentication is required to get attributes of a printer"
+msgstr "Todennus vaaditaan tulostimen määreiden saamiseksi"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1210
+#, c-format
+msgid "Authentication is required to get default printer of %s"
+msgstr "Todennus vaaditaan isännän %s oletustulostimen saamiseksi"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1213
+#, c-format
+msgid "Authentication is required to get printers from %s"
+msgstr "Todennus vaaditaan tulostimien saamiseksi isännältä %s"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1218
+#, c-format
+msgid "Authentication is required to get a file from %s"
+msgstr "Todennus vaaditaan tiedoston saamiksesi isännältä %s"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1220
+#, c-format
+msgid "Authentication is required on %s"
+msgstr "Todennus vaaditaan isännällä %s"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1455
+msgid "Domain:"
+msgstr "Toimialue:"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1485
+#, c-format
+msgid "Authentication is required to print document “%s”"
+msgstr "Asiakirjan “%s” tulostus vaatii tunnistautumisen"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1490
+#, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr "Tämän asiakirjan tulostaminen tulostimella %s vaatii tunnistautumisen"
+
+#: gtk/print/backends/gtkprintbackendcups.c:1492
+msgid "Authentication is required to print this document"
+msgstr "Tämän asiakirjan tulostaminen vaatii tunnistautumisen"
+
+#: gtk/print/backends/gtkprintbackendcups.c:2582
+#, c-format
+msgid "Printer “%s” is low on toner."
+msgstr "Tulostimesta “%s” on väri vähissä."
+
+#: gtk/print/backends/gtkprintbackendcups.c:2586
+#, c-format
+msgid "Printer “%s” has no toner left."
+msgstr "Tulostimesta “%s” on väri loppu."
+
+#. Translators: "Developer" like on photo development context
+#: gtk/print/backends/gtkprintbackendcups.c:2591
+#, c-format
+msgid "Printer “%s” is low on developer."
+msgstr "Tulostimesta “%s” on kehite vähissä."
+
+#. Translators: "Developer" like on photo development context
+#: gtk/print/backends/gtkprintbackendcups.c:2596
+#, c-format
+msgid "Printer “%s” is out of developer."
+msgstr "Tulostimesta “%s” on kehite loppu."
+
+#. Translators: "marker" is one color bin of the printer
+#: gtk/print/backends/gtkprintbackendcups.c:2601
+#, c-format
+msgid "Printer “%s” is low on at least one marker supply."
+msgstr "Tulostimesta “%s” on ainakin yksi väri vähissä."
+
+#. Translators: "marker" is one color bin of the printer
+#: gtk/print/backends/gtkprintbackendcups.c:2606
+#, c-format
+msgid "Printer “%s” is out of at least one marker supply."
+msgstr "Tulostimesta “%s” on ainakin yksi väri loppu."
+
+#: gtk/print/backends/gtkprintbackendcups.c:2610
+#, c-format
+msgid "The cover is open on printer “%s”."
+msgstr "Tulostimen “%s” kansi on auki."
+
+#: gtk/print/backends/gtkprintbackendcups.c:2614
+#, c-format
+msgid "The door is open on printer “%s”."
+msgstr "Tulostimen “%s” luukku on auki."
+
+#: gtk/print/backends/gtkprintbackendcups.c:2618
+#, c-format
+msgid "Printer “%s” is low on paper."
+msgstr "Tulostimesta “%s” on paperi vähissä."
+
+#: gtk/print/backends/gtkprintbackendcups.c:2622
+#, c-format
+msgid "Printer “%s” is out of paper."
+msgstr "Tulostimesta “%s” on paperi loppu."
+
+#: gtk/print/backends/gtkprintbackendcups.c:2626
+#, c-format
+msgid "Printer “%s” is currently offline."
+msgstr "Tulostin “%s” ei ole yhdistettynä."
+
+#: gtk/print/backends/gtkprintbackendcups.c:2630
+#, c-format
+msgid "There is a problem on printer “%s”."
+msgstr "Tulostimessa “%s” on ongelma."
+
+#. Translators: this string connects multiple printer states together.
+#: gtk/print/backends/gtkprintbackendcups.c:2697
+msgid "; "
+msgstr "; "
+
+#: gtk/print/backends/gtkprintbackendcups.c:4645
+#: gtk/print/backends/gtkprintbackendcups.c:4713
+msgctxt "printing option"
+msgid "Two Sided"
+msgstr "Kaksipuolinen"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4646
+msgctxt "printing option"
+msgid "Paper Type"
+msgstr "Paperin tyyppi"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4647
+msgctxt "printing option"
+msgid "Paper Source"
+msgstr "Paperin lähde"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4648
+#: gtk/print/backends/gtkprintbackendcups.c:4714
+msgctxt "printing option"
+msgid "Output Tray"
+msgstr "Tulostuskaukalo"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4649
+msgctxt "printing option"
+msgid "Resolution"
+msgstr "Tarkkuus"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4650
+msgctxt "printing option"
+msgid "GhostScript pre-filtering"
+msgstr "GhostScript-esisuodatus"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4659
+msgctxt "printing option value"
+msgid "One Sided"
+msgstr "Yksipuolinen"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4661
+msgctxt "printing option value"
+msgid "Long Edge (Standard)"
+msgstr "Pitkä reuna (tavallinen)"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4663
+msgctxt "printing option value"
+msgid "Short Edge (Flip)"
+msgstr "Lyhyt reuna (käännetty)"
+
+#. Translators: this is an option of "Paper Source"
+#: gtk/print/backends/gtkprintbackendcups.c:4665
+#: gtk/print/backends/gtkprintbackendcups.c:4667
+#: gtk/print/backends/gtkprintbackendcups.c:4675
+msgctxt "printing option value"
+msgid "Auto Select"
+msgstr "Valitse automaattisesti"
+
+#. Translators: this is an option of "Paper Source"
+#. Translators: this is an option of "Resolution"
+#: gtk/print/backends/gtkprintbackendcups.c:4669
+#: gtk/print/backends/gtkprintbackendcups.c:4671
+#: gtk/print/backends/gtkprintbackendcups.c:4673
+#: gtk/print/backends/gtkprintbackendcups.c:4677
+msgctxt "printing option value"
+msgid "Printer Default"
+msgstr "Tulostimen oletus"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4679
+msgctxt "printing option value"
+msgid "Embed GhostScript fonts only"
+msgstr "Upota vain GhostScript-fontit"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4681
+msgctxt "printing option value"
+msgid "Convert to PS level 1"
+msgstr "Muunna PS-tasoksi 1"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4683
+msgctxt "printing option value"
+msgid "Convert to PS level 2"
+msgstr "Muunna PS-tasoksi 2"
+
+#. Translators: this is an option of "GhostScript"
+#: gtk/print/backends/gtkprintbackendcups.c:4685
+msgctxt "printing option value"
+msgid "No pre-filtering"
+msgstr "Ei esisuodatusta"
+
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: gtk/print/backends/gtkprintbackendcups.c:4694
+msgctxt "printing option group"
+msgid "Miscellaneous"
+msgstr "Sekalaiset"
+
+#: gtk/print/backends/gtkprintbackendcups.c:4722
+msgctxt "sides"
+msgid "One Sided"
+msgstr "Yksipuolinen"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4724
+msgctxt "sides"
+msgid "Long Edge (Standard)"
+msgstr "Pitkä reuna (tavallinen)"
+
+#. Translators: this is an option of "Two Sided"
+#: gtk/print/backends/gtkprintbackendcups.c:4726
+msgctxt "sides"
+msgid "Short Edge (Flip)"
+msgstr "Lyhyt reuna (käännetty)"
+
+#. Translators: Top output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4729
+msgctxt "output-bin"
+msgid "Top Bin"
+msgstr "Yläsäiliö"
+
+#. Translators: Middle output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4731
+msgctxt "output-bin"
+msgid "Middle Bin"
+msgstr "Keskiosan säiliö"
+
+#. Translators: Bottom output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4733
+msgctxt "output-bin"
+msgid "Bottom Bin"
+msgstr "Alasäiliö"
+
+#. Translators: Side output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4735
+msgctxt "output-bin"
+msgid "Side Bin"
+msgstr "Sivusäiliö"
+
+#. Translators: Left output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4737
+msgctxt "output-bin"
+msgid "Left Bin"
+msgstr "Vasen säiliö"
+
+#. Translators: Right output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4739
+msgctxt "output-bin"
+msgid "Right Bin"
+msgstr "Oikea säiliö"
+
+#. Translators: Center output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4741
+msgctxt "output-bin"
+msgid "Center Bin"
+msgstr "Keskisäiliö"
+
+#. Translators: Rear output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4743
+msgctxt "output-bin"
+msgid "Rear Bin"
+msgstr "Takaosan säiliö"
+
+#. Translators: Output bin where one sided output is oriented in the face-up position
+#: gtk/print/backends/gtkprintbackendcups.c:4745
+msgctxt "output-bin"
+msgid "Face Up Bin"
+msgstr "Ylöspäin oleva säiliö"
+
+#. Translators: Output bin where one sided output is oriented in the face-down position
+#: gtk/print/backends/gtkprintbackendcups.c:4747
+msgctxt "output-bin"
+msgid "Face Down Bin"
+msgstr "Alaspäin oleva säiliö"
+
+#. Translators: Large capacity output bin
+#: gtk/print/backends/gtkprintbackendcups.c:4749
+msgctxt "output-bin"
+msgid "Large Capacity Bin"
+msgstr "Suuren kapasiteetin säiliö"
+
+#. Translators: Output stacker number %d
+#: gtk/print/backends/gtkprintbackendcups.c:4771
+#, c-format
+msgctxt "output-bin"
+msgid "Stacker %d"
+msgstr "Pinoaja %d"
+
+#. Translators: Output mailbox number %d
+#: gtk/print/backends/gtkprintbackendcups.c:4775
+#, c-format
+msgctxt "output-bin"
+msgid "Mailbox %d"
+msgstr "Postilokero %d"
+
+#. Translators: Private mailbox
+#: gtk/print/backends/gtkprintbackendcups.c:4779
+msgctxt "output-bin"
+msgid "My Mailbox"
+msgstr "Oma postilokero"
+
+#. Translators: Output tray number %d
+#: gtk/print/backends/gtkprintbackendcups.c:4783
+#, c-format
+msgctxt "output-bin"
+msgid "Tray %d"
+msgstr "Tulostuskaukalo %d"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5265
+msgid "Printer Default"
+msgstr "Tulostimen oletus"
+
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5724
+#: gtk/print/gtkprintunixdialog.c:2737
+msgid "Left to right, top to bottom"
+msgstr "Vasemmalta oikealle, ylhäältä alas"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5724
+#: gtk/print/gtkprintunixdialog.c:2737
+msgid "Left to right, bottom to top"
+msgstr "Vasemmalta oikealle, alhaalta ylös"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5725
+#: gtk/print/gtkprintunixdialog.c:2738
+msgid "Right to left, top to bottom"
+msgstr "Oikealta vasemmalle, ylhäältä alas"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5725
+#: gtk/print/gtkprintunixdialog.c:2738
+msgid "Right to left, bottom to top"
+msgstr "Oikealta vasemmalle, alhaalta ylös"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5726
+#: gtk/print/gtkprintunixdialog.c:2739
+msgid "Top to bottom, left to right"
+msgstr "Ylhäältä alas, vasemmalta oikealle"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5726
+#: gtk/print/gtkprintunixdialog.c:2739
+msgid "Top to bottom, right to left"
+msgstr "Ylhäältä alas, oikealta vasemmalle"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5727
+#: gtk/print/gtkprintunixdialog.c:2740
+msgid "Bottom to top, left to right"
+msgstr "Alhaalta ylös, vasemmalta oikealle"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5727
+#: gtk/print/gtkprintunixdialog.c:2740
+msgid "Bottom to top, right to left"
+msgstr "Alhaalta ylös, oikealta vasemmalle"
+
+#. Translators, this string is used to label the job priority option
+#. * in the print dialog
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5749
+msgid "Job Priority"
+msgstr "Työn tärkeys"
+
+#. Translators, this string is used to label the billing info entry
+#. * in the print dialog
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5760
+msgid "Billing Info"
+msgstr "Laskutustiedot"
+
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5784
+msgctxt "cover page"
+msgid "None"
+msgstr "Ei mitään"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5785
+msgctxt "cover page"
+msgid "Classified"
+msgstr "Luokiteltu"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5786
+msgctxt "cover page"
+msgid "Confidential"
+msgstr "Luottamuksellinen"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5787
+msgctxt "cover page"
+msgid "Secret"
+msgstr "Salainen"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5788
+msgctxt "cover page"
+msgid "Standard"
+msgstr "Normaali"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5789
+msgctxt "cover page"
+msgid "Top Secret"
+msgstr "Erittäin salainen"
+
+#: gtk/print/backends/gtkprintbackendcups.c:5790
+msgctxt "cover page"
+msgid "Unclassified"
+msgstr "Luokittelematon"
+
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5802
+msgctxt "printer option"
+msgid "Pages per Sheet"
+msgstr "Sivuja arkkia kohti"
+
+#. Translators, this string is used to label the option in the print
+#. * dialog that controls in what order multiple pages are arranged
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5819
+msgctxt "printer option"
+msgid "Page Ordering"
+msgstr "Sivun järjestys"
+
+#. Translators: this is the name of the option that controls when
+#. * a print job is printed. Possible values are 'now', a specified time,
+#. * or 'on hold'
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5896
+msgctxt "printer option"
+msgid "Print at"
+msgstr "Tulostusaika"
+
+#. Translators: this is the name of the option that allows the user
+#. * to specify a time when a print job will be printed.
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5907
+msgctxt "printer option"
+msgid "Print at time"
+msgstr "Tulosta ajankohtana"
+
+#. Translators: this format is used to display a custom
+#. * paper size. The two placeholders are replaced with
+#. * the width and height in points. E.g: "Custom
+#. * 230.4x142.9"
+#.
+#: gtk/print/backends/gtkprintbackendcups.c:5955
+#, c-format
+msgid "Custom %s×%s"
+msgstr "Omavalintainen %s×%s"
+
+#. TRANSLATORS: this is the ICC color profile to use for this job
+#: gtk/print/backends/gtkprintbackendcups.c:6067
+msgctxt "printer option"
+msgid "Printer Profile"
+msgstr "Tulostinprofiili"
+
+#. TRANSLATORS: this is when color profile information is unavailable
+#: gtk/print/backends/gtkprintbackendcups.c:6074
+msgctxt "printer option value"
+msgid "Unavailable"
+msgstr "Ei saatavilla"
+
+#: gtk/print/backends/gtkprintbackendfile.c:231
+msgid "output"
+msgstr "tuloste"
+
+#: gtk/print/backends/gtkprintbackendfile.c:511
+msgid "Print to File"
+msgstr "Tulosta tiedostoon"
+
+#: gtk/print/backends/gtkprintbackendfile.c:643
+msgid "PDF"
+msgstr "PDF"
+
+#: gtk/print/backends/gtkprintbackendfile.c:643
+msgid "PostScript"
+msgstr "PostScript"
+
+#: gtk/print/backends/gtkprintbackendfile.c:643
+msgid "SVG"
+msgstr "SVG"
+
+#: gtk/print/backends/gtkprintbackendfile.c:656
+msgid "Pages per _sheet:"
+msgstr "Sivuja a_rkille:"
+
+#: gtk/print/backends/gtkprintbackendfile.c:726
+msgid "File"
+msgstr "Tiedosto"
+
+#: gtk/print/backends/gtkprintbackendfile.c:736
+msgid "_Output format"
+msgstr "_Tulostusformaatti"
+
+#. TRANSLATORS: when we're running an old CUPS, and
+#. * it hasn't registered the device with colord
+#: gtk/print/backends/gtkprintercups.c:245
+msgid "Color management unavailable"
+msgstr "Värinhallinta ei ole käytettävissä"
+
+#. TRANSLATORS: when there is no color profile available
+#: gtk/print/backends/gtkprintercups.c:257
+msgid "No profile available"
+msgstr "Ei profiilia saatavilla"
+
+#. TRANSLATORS: when the color profile has no title
+#: gtk/print/backends/gtkprintercups.c:268
+msgid "Unspecified profile"
+msgstr "Määrittelemätön profiili"
+
+#: gtk/print/gtkprintbackend.c:653
 msgid "Authentication"
 msgstr "Todennus"
 
-#: gtk/print/gtkprintbackend.c:716
+#: gtk/print/gtkprintbackend.c:736
 msgid "_Remember password"
 msgstr "_Muista salasana"
 
@@ -3457,84 +4100,84 @@ msgstr "Ei saatavilla"
 msgid "%s job #%d"
 msgstr "%s työ #%d"
 
-#: gtk/print/gtkprintoperation.c:1702
+#: gtk/print/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Aloitustila"
 
-#: gtk/print/gtkprintoperation.c:1703
+#: gtk/print/gtkprintoperation.c:1704
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Valmistellaan tulostusta"
 
-#: gtk/print/gtkprintoperation.c:1704
+#: gtk/print/gtkprintoperation.c:1705
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Luodaan tietoja"
 
-#: gtk/print/gtkprintoperation.c:1705
+#: gtk/print/gtkprintoperation.c:1706
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Lähetetään tietoja"
 
-#: gtk/print/gtkprintoperation.c:1706
+#: gtk/print/gtkprintoperation.c:1707
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Odotetaan"
 
-#: gtk/print/gtkprintoperation.c:1707
+#: gtk/print/gtkprintoperation.c:1708
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Pysähtynyt ongelmaan"
 
-#: gtk/print/gtkprintoperation.c:1708
+#: gtk/print/gtkprintoperation.c:1709
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Tulostetaan"
 
-#: gtk/print/gtkprintoperation.c:1709
+#: gtk/print/gtkprintoperation.c:1710
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Valmis"
 
-#: gtk/print/gtkprintoperation.c:1710
+#: gtk/print/gtkprintoperation.c:1711
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Valmistui virheellisesti"
 
-#: gtk/print/gtkprintoperation.c:2254
+#: gtk/print/gtkprintoperation.c:2255
 #, c-format
 msgid "Preparing %d"
 msgstr "Valmistellaan %d"
 
-#: gtk/print/gtkprintoperation.c:2256 gtk/print/gtkprintoperation.c:2875
+#: gtk/print/gtkprintoperation.c:2257 gtk/print/gtkprintoperation.c:2876
 #, c-format
 msgid "Preparing"
 msgstr "Valmistelaan"
 
-#: gtk/print/gtkprintoperation.c:2259
+#: gtk/print/gtkprintoperation.c:2260
 #, c-format
 msgid "Printing %d"
 msgstr "Tulostetaan %d"
 
-#: gtk/print/gtkprintoperation.c:2908
+#: gtk/print/gtkprintoperation.c:2909
 #, c-format
 msgid "Error creating print preview"
 msgstr "Virhe luotaessa tulostuksen esikatselua"
 
-#: gtk/print/gtkprintoperation.c:2911
+#: gtk/print/gtkprintoperation.c:2912
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Yleisin vian syy on, ettei väliaikaistiedostoa voitu luoda."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:603
-#: gtk/print/gtkprintoperation-portal.c:672 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:605
+#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Tulosta"
 
-#: gtk/print/gtkprintoperation-unix.c:490
+#: gtk/print/gtkprintoperation-unix.c:526
 #: gtk/print/gtkprintoperation-win32.c:1498
 msgid "Application"
 msgstr "Sovellus"
@@ -3546,13 +4189,6 @@ msgstr "Tulostin ei ole päällä"
 #: gtk/print/gtkprintoperation-win32.c:628
 msgid "Out of paper"
 msgstr "Paperi on loppu"
-
-#. Translators: this is a printer status.
-#: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1521
-#: modules/printbackends/gtkprintbackendcups.c:2639
-msgid "Paused"
-msgstr "Pysäytetty"
 
 #: gtk/print/gtkprintoperation-win32.c:632
 msgid "Need user intervention"
@@ -3613,52 +4249,6 @@ msgstr "Tulostimen tietojen nouto epäonnistui"
 msgid "Getting printer information…"
 msgstr "Haetaan tulostimen tietoja…"
 
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
-#.
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing
-#.
-#: gtk/print/gtkprintunixdialog.c:2737
-#: modules/printbackends/gtkprintbackendcups.c:5679
-msgid "Left to right, top to bottom"
-msgstr "Vasemmalta oikealle, ylhäältä alas"
-
-#: gtk/print/gtkprintunixdialog.c:2737
-#: modules/printbackends/gtkprintbackendcups.c:5679
-msgid "Left to right, bottom to top"
-msgstr "Vasemmalta oikealle, alhaalta ylös"
-
-#: gtk/print/gtkprintunixdialog.c:2738
-#: modules/printbackends/gtkprintbackendcups.c:5680
-msgid "Right to left, top to bottom"
-msgstr "Oikealta vasemmalle, ylhäältä alas"
-
-#: gtk/print/gtkprintunixdialog.c:2738
-#: modules/printbackends/gtkprintbackendcups.c:5680
-msgid "Right to left, bottom to top"
-msgstr "Oikealta vasemmalle, alhaalta ylös"
-
-#: gtk/print/gtkprintunixdialog.c:2739
-#: modules/printbackends/gtkprintbackendcups.c:5681
-msgid "Top to bottom, left to right"
-msgstr "Ylhäältä alas, vasemmalta oikealle"
-
-#: gtk/print/gtkprintunixdialog.c:2739
-#: modules/printbackends/gtkprintbackendcups.c:5681
-msgid "Top to bottom, right to left"
-msgstr "Ylhäältä alas, oikealta vasemmalle"
-
-#: gtk/print/gtkprintunixdialog.c:2740
-#: modules/printbackends/gtkprintbackendcups.c:5682
-msgid "Bottom to top, left to right"
-msgstr "Alhaalta ylös, vasemmalta oikealle"
-
-#: gtk/print/gtkprintunixdialog.c:2740
-#: modules/printbackends/gtkprintbackendcups.c:5682
-msgid "Bottom to top, right to left"
-msgstr "Alhaalta ylös, oikealta vasemmalle"
-
 #: gtk/print/gtkprintunixdialog.c:2744 gtk/print/gtkprintunixdialog.c:2757
 msgid "Page Ordering"
 msgstr "Sivun järjestys"
@@ -3679,13 +4269,13 @@ msgstr "Ylhäältä alas"
 msgid "Bottom to top"
 msgstr "Alhaalta ylös"
 
-#: gtk/gtkprintdialog.c:1755
+#: gtk/gtkprintdialog.c:1766
 #, fuzzy
 #| msgid "Failed to rewrite header\n"
 msgid "Failed to create the read file descriptor"
 msgstr "Otsakkeen uudelleenkirjoitus epäonnistui\n"
 
-#: gtk/gtkprogressbar.c:629
+#: gtk/gtkprogressbar.c:631
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3778,7 +4368,7 @@ msgid "Search Shortcuts"
 msgstr "Etsi pikanäppäimiä"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:496
+#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:584
 msgid "Shortcuts"
 msgstr "Pikanäppäimet"
 
@@ -3802,11 +4392,11 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "sivupalkki"
 
-#: gtk/gtktext.c:6344
+#: gtk/gtktext.c:6401
 msgid "Change di_rection"
 msgstr "Vaihda _suunta"
 
-#: gtk/gtktext.c:6349 gtk/gtktextview.c:9354
+#: gtk/gtktext.c:6406 gtk/gtktextview.c:9416
 msgid "Insert _Emoji"
 msgstr "Sy_ötä emoji"
 
@@ -3966,20 +4556,20 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9336
+#: gtk/gtktextview.c:9398
 msgid "_Undo"
 msgstr "K_umoa"
 
-#: gtk/gtktextview.c:9340
+#: gtk/gtktextview.c:9402
 msgid "_Redo"
 msgstr "_Tee uudelleen"
 
-#: gtk/gtkwindow.c:6349
+#: gtk/gtkwindow.c:6454
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Haluatko käyttää GTK Inspectoria?"
 
-#: gtk/gtkwindow.c:6351
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3991,7 +4581,7 @@ msgstr ""
 "toiminnallisuutta. Sen käyttäminen saattaa johtaa sovelluksen rikkoutumiseen "
 "tai kaatumiseen."
 
-#: gtk/gtkwindow.c:6356
+#: gtk/gtkwindow.c:6461
 msgid "Don’t show this message again"
 msgstr "Älä näytä tätä viestiä uudestaan"
 
@@ -4046,8 +4636,8 @@ msgid "Attribute"
 msgstr "Attribuutti"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
-#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:207
+#: gtk/inspector/recorder.ui:251 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "Arvo"
 
@@ -4103,7 +4693,7 @@ msgstr "etä"
 msgid "Drag and hold here"
 msgstr "Vedä ja raahaa tähän"
 
-#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:572
+#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:660
 msgid "Clipboard"
 msgstr "Leikepöytä"
 
@@ -4138,21 +4728,21 @@ msgctxt "propagation limit"
 msgid "Native"
 msgstr ""
 
-#: gtk/inspector/css-editor.c:135
+#: gtk/inspector/css-editor.c:139
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr ""
 
-#: gtk/inspector/css-editor.c:136
+#: gtk/inspector/css-editor.c:140
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
 
-#: gtk/inspector/css-editor.c:137
+#: gtk/inspector/css-editor.c:141
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
 
-#: gtk/inspector/css-editor.c:236
+#: gtk/inspector/css-editor.c:240
 #, c-format
 msgid "Saving CSS failed"
 msgstr "CSS:n tallentaminen epäonnistui"
@@ -4161,11 +4751,11 @@ msgstr "CSS:n tallentaminen epäonnistui"
 msgid "Disable this custom CSS"
 msgstr "Poista käytöstä tämä mukautettu CSS"
 
-#: gtk/inspector/css-editor.ui:44
+#: gtk/inspector/css-editor.ui:52
 msgid "Save the current CSS"
 msgstr "Tallenna nykyinen CSS"
 
-#: gtk/inspector/css-editor.ui:51
+#: gtk/inspector/css-editor.ui:67
 #, fuzzy
 #| msgid "Show other locations"
 msgid "Show deprecations"
@@ -4184,206 +4774,157 @@ msgstr "Tyyliluokat"
 msgid "CSS Property"
 msgstr "CSS-ominaisuus"
 
-#: gtk/inspector/general.c:469
+#: gtk/inspector/general.c:470
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr ""
 
-#: gtk/inspector/general.c:644
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
+#: gtk/inspector/general.c:645
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Ei mitään"
 
-#: gtk/inspector/general.c:741
+#: gtk/inspector/general.c:742
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
+#: gtk/inspector/general.c:996 gtk/inspector/general.c:1035
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Ei mitään"
 
-#: gtk/inspector/general.ui:13
+#: gtk/inspector/general.ui:21
 msgid "Copy to clipboard as gitlab markdown"
 msgstr "Kopioi leikepöydälle gitlab-markdown-muotoiluna"
 
-#: gtk/inspector/general.ui:45
-#, fuzzy
-#| msgid "Opening %d Item"
-#| msgid_plural "Opening %d Items"
+#: gtk/inspector/general.ui:53
 msgid "Operating System"
-msgstr "Avataan %d kohde"
+msgstr "Käyttöjärjestelmä"
 
-#: gtk/inspector/general.ui:71
+#: gtk/inspector/general.ui:79
 msgid "GTK Version"
 msgstr "GTK-versio"
 
-#: gtk/inspector/general.ui:97
+#: gtk/inspector/general.ui:105
 msgid "GDK Backend"
 msgstr "GDK-taustaosa"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:131
 msgid "GSK Renderer"
 msgstr ""
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:157
 msgid "Pango Fontmap"
 msgstr ""
 
-#: gtk/inspector/general.ui:175
-#, fuzzy
-#| msgid "GDK Backend"
+#: gtk/inspector/general.ui:183
 msgid "Media Backend"
-msgstr "GDK-taustaosa"
+msgstr "Median taustaosa"
 
-#: gtk/inspector/general.ui:201
+#: gtk/inspector/general.ui:209
 msgid "Input Method"
 msgstr "Syöttötapa"
 
-#: gtk/inspector/general.ui:227
-#, fuzzy
-#| msgid "Accessibility"
+#: gtk/inspector/general.ui:235
 msgid "Accessibility Backend"
-msgstr "Esteettömyys"
+msgstr "Esteettömyyden taustaosa"
 
-#: gtk/inspector/general.ui:264
-#, fuzzy
-#| msgid "Application"
+#: gtk/inspector/general.ui:272
 msgid "Application ID"
-msgstr "Sovellus"
+msgstr "Sovelluksen ID"
 
-#: gtk/inspector/general.ui:290
-#, fuzzy
-#| msgid "Resources"
+#: gtk/inspector/general.ui:298
 msgid "Resource Path"
-msgstr "Resurssit"
+msgstr "Resurssin polku"
 
-#: gtk/inspector/general.ui:327 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:335 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Etuliite"
 
-#: gtk/inspector/general.ui:354
+#: gtk/inspector/general.ui:362
 msgid "Environment"
 msgstr ""
 
-#: gtk/inspector/general.ui:457
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Display"
+#: gtk/inspector/general.ui:465
 msgid "Display"
-msgstr "Display"
+msgstr "Näyttö"
 
-#: gtk/inspector/general.ui:484
+#: gtk/inspector/general.ui:492
 msgid "RGBA Visual"
 msgstr ""
 
-#: gtk/inspector/general.ui:510
-#, fuzzy
-#| msgid "Computer"
+#: gtk/inspector/general.ui:522
 msgid "Composited"
-msgstr "Tietokone"
+msgstr "Kompositoitu"
 
-#: gtk/inspector/general.ui:535
-#, fuzzy
-#| msgid "Available Protocols"
+#: gtk/inspector/general.ui:547
 msgid "Protocols"
-msgstr "Käytettävissä olevat protokollat"
+msgstr "Protokollat"
 
-#: gtk/inspector/general.ui:591
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Generating data"
+#: gtk/inspector/general.ui:603
 msgid "GL Renderer"
-msgstr "Luodaan tietoja"
+msgstr "GL-renderöijä"
 
-#: gtk/inspector/general.ui:620
-#, fuzzy
-#| msgid "GDK Backend"
+#: gtk/inspector/general.ui:632
 msgid "GL Vendor"
-msgstr "GDK-taustaosa"
+msgstr "GL-valmistaja"
 
-#: gtk/inspector/general.ui:649
+#: gtk/inspector/general.ui:661
 msgid "GL Version"
 msgstr "GL-versio"
 
-#: gtk/inspector/general.ui:676
-#, fuzzy
-#| msgid "GDK Backend"
+#: gtk/inspector/general.ui:688
 msgid "GL Backend Vendor"
-msgstr "GDK-taustaosa"
+msgstr "GL-taustaosan valmistaja"
 
-#: gtk/inspector/general.ui:703
-#, fuzzy
-#| msgid "GL Version"
+#: gtk/inspector/general.ui:715
 msgid "GL Backend Version"
-msgstr "GL-versio"
+msgstr "GL-taustaosan versio"
 
-#: gtk/inspector/general.ui:753
-#, fuzzy
-#| msgid "GL Version"
+#: gtk/inspector/general.ui:765
 msgid "GL Full Version"
-msgstr "GL-versio"
+msgstr "GL:n koko versio"
 
-#: gtk/inspector/general.ui:782
-#, fuzzy
+#: gtk/inspector/general.ui:794
 #| msgid "GL Version"
 msgid "GLSL Version"
-msgstr "GL-versio"
+msgstr "GLSL-versio"
 
-#: gtk/inspector/general.ui:811
-#, fuzzy
-#| msgid "GL Version"
+#: gtk/inspector/general.ui:823
 msgid "GL Extensions"
-msgstr "GL-versio"
+msgstr "GL-laajennukset"
 
-#: gtk/inspector/general.ui:899
-#, fuzzy
-#| msgid "GL Version"
+#: gtk/inspector/general.ui:911
 msgid "EGL Extensions"
-msgstr "GL-versio"
+msgstr "EGL-laajennukset"
 
-#: gtk/inspector/general.ui:986
-#, fuzzy
-#| msgid "Gestures"
+#: gtk/inspector/general.ui:998
 msgid "GL Features"
-msgstr "Eleet"
+msgstr "GL-ominaisuudet"
 
-#: gtk/inspector/general.ui:1022
+#: gtk/inspector/general.ui:1034
 msgid "Vulkan Device"
 msgstr "Vulkan-laite"
 
-#: gtk/inspector/general.ui:1049
-#, fuzzy
-#| msgid "Vulkan API version"
+#: gtk/inspector/general.ui:1061
 msgid "Vulkan API Version"
 msgstr "Vulkan-rajapinnan versio"
 
-#: gtk/inspector/general.ui:1076
-#, fuzzy
-#| msgid "Vulkan driver version"
+#: gtk/inspector/general.ui:1088
 msgid "Vulkan Driver Version"
 msgstr "Vulkan-ajurin versio"
 
-#: gtk/inspector/general.ui:1125
-#, fuzzy
-#| msgid "Vulkan API version"
+#: gtk/inspector/general.ui:1137
 msgid "Vulkan Layers"
-msgstr "Vulkan-rajapinnan versio"
+msgstr "Vulkan-tasot"
 
-#: gtk/inspector/general.ui:1194
-#, fuzzy
-#| msgid "Vulkan API version"
+#: gtk/inspector/general.ui:1206
 msgid "Vulkan Extensions"
-msgstr "Vulkan-rajapinnan versio"
+msgstr "Vulkan-laajennukset"
 
-#: gtk/inspector/general.ui:1281
-#, fuzzy
-#| msgid "Vulkan Device"
+#: gtk/inspector/general.ui:1293
 msgid "Vulkan Features"
-msgstr "Vulkan-laite"
+msgstr "Vulkan-ominaisuudet"
 
 #: gtk/inspector/menu.c:264
 msgid "Unnamed section"
@@ -4453,8 +4994,8 @@ msgid "Surface"
 msgstr ""
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1199
-#: gtk/inspector/prop-editor.c:1594 gtk/inspector/window.ui:394
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1634
+#: gtk/inspector/window.ui:482
 msgid "Properties"
 msgstr "Ominaisuudet"
 
@@ -4473,45 +5014,45 @@ msgstr ""
 msgid "Tick Callback"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:477
+#: gtk/inspector/misc-info.ui:481
 #, fuzzy
 #| msgid "_Mount"
 msgid "Frame Count"
 msgstr "_Liitä"
 
-#: gtk/inspector/misc-info.ui:502
+#: gtk/inspector/misc-info.ui:506
 msgid "Frame Rate"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:314
+#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:358
 #, fuzzy
 #| msgid "Font Scale"
 msgid "Scale"
 msgstr "Fontin skaalaus"
 
-#: gtk/inspector/misc-info.ui:552
+#: gtk/inspector/misc-info.ui:556
 #, fuzzy
 #| msgid "Color Name"
 msgid "Color state"
 msgstr "Värin nimi"
 
-#: gtk/inspector/misc-info.ui:577
+#: gtk/inspector/misc-info.ui:581
 msgid "Mapped"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:603
+#: gtk/inspector/misc-info.ui:607
 msgid "Realized"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:629
+#: gtk/inspector/misc-info.ui:633
 msgid "Is Toplevel"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:655
+#: gtk/inspector/misc-info.ui:659
 msgid "Child Visible"
 msgstr ""
 
-#: gtk/inspector/prop-editor.c:748
+#: gtk/inspector/prop-editor.c:749
 #, fuzzy, c-format
 #| msgid "Printer"
 msgid "Pointer: %p"
@@ -4520,7 +5061,7 @@ msgstr "Tulostin"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:873
+#: gtk/inspector/prop-editor.c:874
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s arvolla \"%s\""
@@ -4528,7 +5069,7 @@ msgstr "%s arvolla \"%s\""
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:884
+#: gtk/inspector/prop-editor.c:885
 #, c-format
 msgid "%s with type %s"
 msgstr "%s tyypillä %s"
@@ -4536,7 +5077,7 @@ msgstr "%s tyypillä %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:897
+#: gtk/inspector/prop-editor.c:898
 #, c-format
 msgid "%s for %s %p"
 msgstr ""
@@ -4544,74 +5085,74 @@ msgstr ""
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:927
+#: gtk/inspector/prop-editor.c:928
 #, c-format
 msgid "%s with value type %s"
 msgstr ""
 
-#: gtk/inspector/prop-editor.c:1288
+#: gtk/inspector/prop-editor.c:1328
 #, fuzzy, c-format
 #| msgid "Unable to stop %s"
 msgid "Uneditable property type: %s"
 msgstr "Kohteen %s pysäyttäminen ei onnistunut"
 
-#: gtk/inspector/prop-editor.c:1446
+#: gtk/inspector/prop-editor.c:1486
 #, fuzzy
 #| msgid "None"
 msgctxt "column number"
 msgid "None"
 msgstr "Ei mikään"
 
-#: gtk/inspector/prop-editor.c:1483
+#: gtk/inspector/prop-editor.c:1523
 msgid "Attribute:"
 msgstr "Attribuutti:"
 
-#: gtk/inspector/prop-editor.c:1486
+#: gtk/inspector/prop-editor.c:1526
 msgid "Model"
 msgstr "Malli"
 
-#: gtk/inspector/prop-editor.c:1491
+#: gtk/inspector/prop-editor.c:1531
 msgid "Column:"
 msgstr "Sarake:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1590
+#: gtk/inspector/prop-editor.c:1630
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr ""
 
-#: gtk/inspector/prop-editor.c:1645
+#: gtk/inspector/prop-editor.c:1685
 msgid "Reset"
 msgstr ""
 
-#: gtk/inspector/prop-editor.c:1653
+#: gtk/inspector/prop-editor.c:1693
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Oletus"
 
-#: gtk/inspector/prop-editor.c:1656
+#: gtk/inspector/prop-editor.c:1696
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Teema"
 
-#: gtk/inspector/prop-editor.c:1659
+#: gtk/inspector/prop-editor.c:1699
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1663
+#: gtk/inspector/prop-editor.c:1703
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Sovellus"
 
-#: gtk/inspector/prop-editor.c:1666
+#: gtk/inspector/prop-editor.c:1706
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: gtk/inspector/prop-editor.c:1669
+#: gtk/inspector/prop-editor.c:1709
 msgid "Source:"
 msgstr "Lähde:"
 
@@ -4619,78 +5160,78 @@ msgstr "Lähde:"
 msgid "Defined At"
 msgstr ""
 
-#: gtk/inspector/recorder.c:2059
+#: gtk/inspector/recorder.c:2212
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNoden tallentaminen epäonnistui"
 
-#: gtk/inspector/recorder.ui:20
+#: gtk/inspector/recorder.ui:28
 #, fuzzy
 #| msgid "Description"
 msgid "Recording Options"
 msgstr "Kuvaus"
 
-#: gtk/inspector/recorder.ui:24
+#: gtk/inspector/recorder.ui:32
 #, fuzzy
 #| msgctxt "Stock label, media"
 #| msgid "_Record"
 msgid "Record events"
 msgstr "_Tallenna"
 
-#: gtk/inspector/recorder.ui:28
+#: gtk/inspector/recorder.ui:36
 msgid "Add debug nodes"
 msgstr ""
 
-#: gtk/inspector/recorder.ui:32
+#: gtk/inspector/recorder.ui:40
 msgid "Highlight event sequences"
 msgstr ""
 
-#: gtk/inspector/recorder.ui:42
+#: gtk/inspector/recorder.ui:58
 #, fuzzy
 #| msgctxt "Stock label, media"
 #| msgid "_Record"
 msgid "Record frames"
 msgstr "_Tallenna"
 
-#: gtk/inspector/recorder.ui:49
+#: gtk/inspector/recorder.ui:73
 msgid "Clear recorded frames"
 msgstr ""
 
-#: gtk/inspector/recorder.ui:58
+#: gtk/inspector/recorder.ui:90
 msgid "Use a dark background"
 msgstr "Käytä tummaa taustaa"
 
-#: gtk/inspector/recorder.ui:66
+#: gtk/inspector/recorder.ui:106
 msgid "Save selected node"
 msgstr "Tallenna valittu solmu"
 
-#: gtk/inspector/recorder.ui:74
+#: gtk/inspector/recorder.ui:122
 msgid "Copy to clipboard"
 msgstr "Kopioi leikepöydälle"
 
-#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
+#: gtk/inspector/recorder.ui:202 gtk/inspector/recorder.ui:246
 msgid "Property"
 msgstr "Ominaisuus"
 
-#: gtk/inspector/resource-list.ui:59
+#: gtk/inspector/resource-list.ui:75
 msgid "Path"
 msgstr "Polku"
 
-#: gtk/inspector/resource-list.ui:71
+#: gtk/inspector/resource-list.ui:87
 #, fuzzy
 #| msgid "_Mount"
 msgid "Count"
 msgstr "_Liitä"
 
-#: gtk/inspector/resource-list.ui:121
+#: gtk/inspector/resource-list.ui:137
 msgid "Name:"
 msgstr "Nimi:"
 
-#: gtk/inspector/resource-list.ui:143
+#: gtk/inspector/resource-list.ui:159
 msgid "Type:"
 msgstr "Tyyppi:"
 
-#: gtk/inspector/resource-list.ui:164 tools/gtk-image-tool-info.c:56
+#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:56
 msgid "Size:"
 msgstr "Koko:"
 
@@ -4761,7 +5302,7 @@ msgstr ""
 msgid "Remove %s"
 msgstr "Poista %s"
 
-#: gtk/inspector/strv-editor.c:115
+#: gtk/inspector/strv-editor.c:114
 msgid "Add"
 msgstr "Lisää"
 
@@ -4777,36 +5318,62 @@ msgstr "Hierarkia"
 msgid "Implements"
 msgstr ""
 
-#: gtk/inspector/visual.c:690 gtk/inspector/visual.c:708
-msgid "Theme is hardcoded by GTK_THEME"
-msgstr "Teema on kovakoodattu GTK_THEME:llä"
-
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
 msgstr "GTK-teema"
 
 #: gtk/inspector/visual.ui:58
-msgid "Dark Variant"
-msgstr "Tumma muunnelma"
+msgid "System Color Scheme"
+msgstr "Järjestelmän väriteema"
 
-#: gtk/inspector/visual.ui:83
+#: gtk/inspector/visual.ui:72 gtk/inspector/visual.ui:106
+msgid "Unsupported"
+msgstr "Ei tuettu"
+
+#: gtk/inspector/visual.ui:74
+msgid "Dark"
+msgstr "Tumma"
+
+#: gtk/inspector/visual.ui:75
+msgid "Light"
+msgstr "Vaalea"
+
+#: gtk/inspector/visual.ui:92
+msgid "System Contrast"
+msgstr "Järjestelmän kontrasti"
+
+#: gtk/inspector/visual.ui:107
+#, fuzzy
+#| msgid "Preferences"
+msgid "No Preference"
+msgstr "Asetukset"
+
+#: gtk/inspector/visual.ui:108
+msgid "More"
+msgstr ""
+
+#: gtk/inspector/visual.ui:109
+msgid "Less"
+msgstr ""
+
+#: gtk/inspector/visual.ui:127
 msgid "Cursor Theme"
 msgstr "Kursoriteema"
 
-#: gtk/inspector/visual.ui:108
+#: gtk/inspector/visual.ui:152
 msgid "Cursor Size"
 msgstr "Kursorin koko"
 
-#: gtk/inspector/visual.ui:144
+#: gtk/inspector/visual.ui:188
 msgid "Icon Theme"
 msgstr "Kuvaketeema"
 
-#: gtk/inspector/visual.ui:169
+#: gtk/inspector/visual.ui:213
 msgid "Text Direction"
 msgstr "Tekstin suunta"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:184
+#: gtk/inspector/visual.ui:228
 #, fuzzy
 #| msgid "Left-to-Right"
 msgid ""
@@ -4814,15 +5381,15 @@ msgid ""
 "Right-to-Left"
 msgstr "Vasemmalta oikealle"
 
-#: gtk/inspector/visual.ui:201
+#: gtk/inspector/visual.ui:245
 msgid "Animations"
 msgstr "Animaatiot"
 
-#: gtk/inspector/visual.ui:226
+#: gtk/inspector/visual.ui:270
 msgid "Slowdown"
 msgstr ""
 
-#: gtk/inspector/visual.ui:361
+#: gtk/inspector/visual.ui:405
 #, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Generating data"
@@ -4830,80 +5397,84 @@ msgid "Rendering"
 msgstr "Luodaan tietoja"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:376
+#: gtk/inspector/visual.ui:420
 msgctxt "Font rendering"
 msgid ""
 "Automatic\n"
 "Manual"
 msgstr ""
 
-#: gtk/inspector/visual.ui:403
+#: gtk/inspector/visual.ui:447
 #, fuzzy
 #| msgid "Show Text"
 msgid "Show Framerate"
 msgstr "Näytä teksti"
 
-#: gtk/inspector/visual.ui:428
+#: gtk/inspector/visual.ui:472
 msgid "Show Graphic Updates"
 msgstr ""
 
-#: gtk/inspector/visual.ui:448
+#: gtk/inspector/visual.ui:492
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 
-#: gtk/inspector/visual.ui:454
+#: gtk/inspector/visual.ui:498
 #, fuzzy
 #| msgid "Show program version"
 msgid "Show Cairo Rendering"
 msgstr "Näytä ohjelman versio"
 
-#: gtk/inspector/visual.ui:479
+#: gtk/inspector/visual.ui:523
 msgid "Show Baselines"
 msgstr ""
 
-#: gtk/inspector/visual.ui:507
+#: gtk/inspector/visual.ui:551
 msgid "Show Layout Borders"
 msgstr ""
 
-#: gtk/inspector/visual.ui:564
+#: gtk/inspector/visual.ui:616
 msgid "CSS Padding"
 msgstr ""
 
-#: gtk/inspector/visual.ui:574
+#: gtk/inspector/visual.ui:626
 #, fuzzy
 #| msgid "CSS nodes"
 msgid "CSS Border"
 msgstr "CSS-solmut"
 
-#: gtk/inspector/visual.ui:584
+#: gtk/inspector/visual.ui:636
 #, fuzzy
 #| msgid "Paper Margins"
 msgid "CSS Margin"
 msgstr "Paperin marginaalit"
 
-#: gtk/inspector/visual.ui:594
+#: gtk/inspector/visual.ui:646
 #, fuzzy
 #| msgid "Paper Margins"
 msgid "Widget Margin"
 msgstr "Paperin marginaalit"
 
-#: gtk/inspector/visual.ui:629
+#: gtk/inspector/visual.ui:681
 msgid "Show Focus"
 msgstr ""
 
-#: gtk/inspector/visual.ui:654
+#: gtk/inspector/visual.ui:706
 #, fuzzy
 #| msgid "Accessibility"
 msgid "Show Accessibility warnings"
 msgstr "Esteettömyys"
 
-#: gtk/inspector/visual.ui:679
+#: gtk/inspector/visual.ui:731
 msgid "Show Graphics Offload"
 msgstr ""
 
-#: gtk/inspector/visual.ui:711
+#: gtk/inspector/visual.ui:766
+msgid "Show Touch UI"
+msgstr ""
+
+#: gtk/inspector/visual.ui:797
 msgid "Inspect Inspector"
 msgstr ""
 
@@ -4911,131 +5482,131 @@ msgstr ""
 msgid "Select an Object"
 msgstr "Valitse objekti"
 
-#: gtk/inspector/window.ui:42 gtk/inspector/window.ui:107
+#: gtk/inspector/window.ui:50 gtk/inspector/window.ui:131
 msgid "Show Details"
 msgstr "Näytä tiedot"
 
-#: gtk/inspector/window.ui:57
+#: gtk/inspector/window.ui:73
 msgid "Show all Objects"
 msgstr "Näytä kaikki objektit"
 
-#: gtk/inspector/window.ui:121
+#: gtk/inspector/window.ui:149
 msgid "Show all Resources"
 msgstr "Näytä kaikki resurssit"
 
-#: gtk/inspector/window.ui:147
+#: gtk/inspector/window.ui:179
 msgid "Collect Statistics"
 msgstr "Kerää tilastot"
 
-#: gtk/inspector/window.ui:199
+#: gtk/inspector/window.ui:239
 msgid "Objects"
 msgstr "Objektit"
 
-#: gtk/inspector/window.ui:231
+#: gtk/inspector/window.ui:279
 msgid "Toggle Sidebar"
 msgstr "Sivupalkki päälle/pois"
 
-#: gtk/inspector/window.ui:253
+#: gtk/inspector/window.ui:309
 msgid "Refresh action state"
 msgstr ""
 
-#: gtk/inspector/window.ui:327
+#: gtk/inspector/window.ui:391
 #, fuzzy
 #| msgctxt "Stock label, media"
 #| msgid "Pre_vious"
 msgid "Previous object"
 msgstr "E_dellinen"
 
-#: gtk/inspector/window.ui:334
+#: gtk/inspector/window.ui:406
 #, fuzzy
 #| msgid "Child Properties"
 msgid "Child object"
 msgstr "Lapsen ominaisuudet"
 
-#: gtk/inspector/window.ui:341
+#: gtk/inspector/window.ui:421
 #, fuzzy
 #| msgctxt "Stock label, media"
 #| msgid "Pre_vious"
 msgid "Previous sibling"
 msgstr "E_dellinen"
 
-#: gtk/inspector/window.ui:347
+#: gtk/inspector/window.ui:427
 msgid "List Position"
 msgstr ""
 
-#: gtk/inspector/window.ui:354
+#: gtk/inspector/window.ui:442
 msgid "Next sibling"
 msgstr ""
 
-#: gtk/inspector/window.ui:384
+#: gtk/inspector/window.ui:472
 msgid "Miscellaneous"
 msgstr "Lisäasetukset"
 
-#: gtk/inspector/window.ui:405 gtk/print/ui/gtkprintunixdialog.ui:451
+#: gtk/inspector/window.ui:493 gtk/print/ui/gtkprintunixdialog.ui:451
 msgid "Layout"
 msgstr "Asettelu"
 
-#: gtk/inspector/window.ui:416
+#: gtk/inspector/window.ui:504
 msgid "CSS Nodes"
 msgstr "CSS-solmut"
 
-#: gtk/inspector/window.ui:427
+#: gtk/inspector/window.ui:515
 msgid "Size Groups"
 msgstr ""
 
-#: gtk/inspector/window.ui:436 gtk/inspector/window.ui:445
+#: gtk/inspector/window.ui:524 gtk/inspector/window.ui:533
 msgid "Data"
 msgstr ""
 
-#: gtk/inspector/window.ui:455
+#: gtk/inspector/window.ui:543
 msgid "Actions"
 msgstr "Toiminnot"
 
-#: gtk/inspector/window.ui:466
+#: gtk/inspector/window.ui:554
 msgid "Menu"
 msgstr "Valikko"
 
-#: gtk/inspector/window.ui:475
+#: gtk/inspector/window.ui:563
 msgid "Controllers"
 msgstr ""
 
-#: gtk/inspector/window.ui:485
+#: gtk/inspector/window.ui:573
 msgid "Magnifier"
 msgstr "Suurennuslasi"
 
-#: gtk/inspector/window.ui:506
+#: gtk/inspector/window.ui:594
 msgid "Accessibility"
 msgstr "Esteettömyys"
 
-#: gtk/inspector/window.ui:530
+#: gtk/inspector/window.ui:618
 msgid "Global"
 msgstr ""
 
-#: gtk/inspector/window.ui:543
+#: gtk/inspector/window.ui:631
 msgid "Information"
 msgstr "Tietoja"
 
-#: gtk/inspector/window.ui:552
+#: gtk/inspector/window.ui:640
 msgid "Settings"
 msgstr "Asetukset"
 
-#: gtk/inspector/window.ui:561
+#: gtk/inspector/window.ui:649
 msgid "Resources"
 msgstr "Resurssit"
 
-#: gtk/inspector/window.ui:582
+#: gtk/inspector/window.ui:670
 msgid "Statistics"
 msgstr "Tilastot"
 
-#: gtk/inspector/window.ui:593
+#: gtk/inspector/window.ui:681
 msgid "Logging"
 msgstr ""
 
-#: gtk/inspector/window.ui:608
+#: gtk/inspector/window.ui:696
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:617
+#: gtk/inspector/window.ui:705
 #, fuzzy
 #| msgctxt "Stock label, media"
 #| msgid "_Record"
@@ -6648,15 +7219,15 @@ msgstr "Järjestelmän tiedot"
 msgid "Select App"
 msgstr "Valitse sovellus"
 
-#: gtk/ui/gtkappchooserdialog.ui:63
+#: gtk/ui/gtkappchooserdialog.ui:66
 msgid "_View All Apps"
 msgstr "_Näytä kaikki sovellukset"
 
-#: gtk/ui/gtkappchooserdialog.ui:69
+#: gtk/ui/gtkappchooserdialog.ui:72
 msgid "_Find New Apps"
 msgstr "_Etsi uusia sovelluksia"
 
-#: gtk/ui/gtkappchooserwidget.ui:100
+#: gtk/ui/gtkappchooserwidget.ui:40
 msgid "No applications found."
 msgstr "Sovelluksia ei löytynyt."
 
@@ -6711,6 +7282,10 @@ msgstr "Poista"
 #: gtk/ui/gtkapplication-quartz.ui:79
 msgid "Select All"
 msgstr "Valitse kaikki"
+
+#: gtk/ui/gtkapplication-quartz.ui:85
+msgid "_Window"
+msgstr "_Ikkuna"
 
 #: gtk/ui/gtkassistant.ui:64
 msgid "_Finish"
@@ -6880,30 +7455,28 @@ msgstr "Tasalevyinen"
 msgid "Language"
 msgstr "Kieli"
 
-#: gtk/ui/gtkfontchooserwidget.ui:198 gtk/ui/gtkfontchooserwidget.ui:200
-#: gtk/ui/gtkfontchooserwidget.ui:350 gtk/ui/gtkfontchooserwidget.ui:354
+#: gtk/ui/gtkfontchooserwidget.ui:201 gtk/ui/gtkfontchooserwidget.ui:203
+#: gtk/ui/gtkfontchooserwidget.ui:353 gtk/ui/gtkfontchooserwidget.ui:357
 msgid "Preview Font"
 msgstr "Esikatsele fontti"
 
-#: gtk/ui/gtkfontchooserwidget.ui:296
+#: gtk/ui/gtkfontchooserwidget.ui:299
 msgid "No Fonts Found"
 msgstr "Fontteja ei löytynyt"
 
-#: gtk/ui/gtkfontchooserwidget.ui:334
+#: gtk/ui/gtkfontchooserwidget.ui:337
 msgid "Font Name"
 msgstr "Fontin nimi"
 
-#: gtk/ui/gtkfontchooserwidget.ui:379
+#: gtk/ui/gtkfontchooserwidget.ui:382
 #, fuzzy
 #| msgid "Style Variations"
 msgid "Font Variation Axes"
 msgstr "Tyylivariaatiot"
 
-#: gtk/ui/gtkfontchooserwidget.ui:427
-#, fuzzy
-#| msgid "Change Font Features"
+#: gtk/ui/gtkfontchooserwidget.ui:430
 msgid "Font Features"
-msgstr "Muuta fontin ominaisuuksia"
+msgstr "Fontin ominaisuudet"
 
 #: gtk/ui/gtkmediacontrols.ui:45
 msgctxt "media controls"
@@ -7037,6 +7610,16 @@ msgstr "_Kerää"
 msgid "_Reverse"
 msgstr "Kää_nteinen"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:364
+msgid "Page ordering preview"
+msgstr "Sivujärjestyksen esikatselu"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:365
+msgid ""
+"A visualization of the effect of the collate and reverse options on the page "
+"ordering"
+msgstr ""
+
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
 msgstr "Yleiset"
@@ -7073,6 +7656,10 @@ msgstr "Parittomat arkit"
 msgid "Sc_ale:"
 msgstr "Mitt_akaava:"
 
+#: gtk/print/ui/gtkprintunixdialog.ui:587
+msgid "Scale in percent"
+msgstr ""
+
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
 msgstr "Paperi"
@@ -7092,6 +7679,10 @@ msgstr "Tulostus_kaukalo:"
 #: gtk/print/ui/gtkprintunixdialog.ui:727
 msgid "Or_ientation:"
 msgstr "_Suunta:"
+
+#: gtk/print/ui/gtkprintunixdialog.ui:770
+msgid "Page layout preview"
+msgstr "Sivun asettelun esikatselu"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
@@ -7186,614 +7777,28 @@ msgstr "Jotkut asetukset ikkunassa ovat ristiriidassa"
 msgid "Play"
 msgstr "Toista"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:531
-#: modules/printbackends/gtkprintbackendcups.c:5670
-msgctxt "Print job priority"
-msgid "Urgent"
-msgstr "Kiireellinen"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:532
-#: modules/printbackends/gtkprintbackendcups.c:5671
-msgctxt "Print job priority"
-msgid "High"
-msgstr "Korkea"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:533
-#: modules/printbackends/gtkprintbackendcups.c:5672
-msgctxt "Print job priority"
-msgid "Medium"
-msgstr "Tavallinen"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:534
-#: modules/printbackends/gtkprintbackendcups.c:5673
-msgctxt "Print job priority"
-msgid "Low"
-msgstr "Matala"
-
-#. Translators, this is the label used for the option in the print
-#. * dialog that controls the front cover page.
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:556
-#: modules/printbackends/gtkprintbackendcups.c:5816
-msgctxt "printer option"
-msgid "Before"
-msgstr "Ennen"
-
-#. Translators, this is the label used for the option in the print
-#. * dialog that controls the back cover page.
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:563
-#: modules/printbackends/gtkprintbackendcups.c:5831
-msgctxt "printer option"
-msgid "After"
-msgstr "Jälkeen"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:586
-msgid "Print at"
-msgstr "Tulostusaika"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:596
-msgid "Print at time"
-msgstr "Tulosta ajankohtana"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:659
-msgctxt "print option"
-msgid "Borderless"
-msgstr "Reunukseton"
-
-#. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1518
-#: modules/printbackends/gtkprintbackendcups.c:2636
-msgid "Paused; Rejecting Jobs"
-msgstr "Keskeytetty; työt hylätään"
-
-#. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1524
-#: modules/printbackends/gtkprintbackendcups.c:2642
-msgid "Rejecting Jobs"
-msgstr "Työt hylätään"
-
-#: modules/printbackends/gtkprintbackendcups.c:1142
-#: modules/printbackends/gtkprintbackendcups.c:1449
-msgid "Username:"
-msgstr "Käyttäjätunnus:"
-
-#: modules/printbackends/gtkprintbackendcups.c:1143
-#: modules/printbackends/gtkprintbackendcups.c:1458
-msgid "Password:"
-msgstr "Salasana:"
-
-#: modules/printbackends/gtkprintbackendcups.c:1181
-#: modules/printbackends/gtkprintbackendcups.c:1471
-#, c-format
-msgid "Authentication is required to print document “%s” on printer %s"
-msgstr ""
-"Tunnistautuminen vaaditaan asiakirjan “%s” tulostamiseksi tulostimella %s"
-
-#: modules/printbackends/gtkprintbackendcups.c:1183
-#, c-format
-msgid "Authentication is required to print a document on %s"
-msgstr "Todennus vaaditaan asiakirjan tulostamiseksi isännällä %s"
-
-#: modules/printbackends/gtkprintbackendcups.c:1187
-#, c-format
-msgid "Authentication is required to get attributes of job “%s”"
-msgstr "Tunnistautuminen vaaditaan työn “%s” määreiden saamiseksi"
-
-#: modules/printbackends/gtkprintbackendcups.c:1189
-msgid "Authentication is required to get attributes of a job"
-msgstr "Todennus vaaditaan työn määreiden saamiseksi"
-
-#: modules/printbackends/gtkprintbackendcups.c:1193
-#, c-format
-msgid "Authentication is required to get attributes of printer %s"
-msgstr "Todennus vaaditaan tulostimen %s määreiden saamiseksi"
-
-#: modules/printbackends/gtkprintbackendcups.c:1195
-msgid "Authentication is required to get attributes of a printer"
-msgstr "Todennus vaaditaan tulostimen määreiden saamiseksi"
-
-#: modules/printbackends/gtkprintbackendcups.c:1198
-#, c-format
-msgid "Authentication is required to get default printer of %s"
-msgstr "Todennus vaaditaan isännän %s oletustulostimen saamiseksi"
-
-#: modules/printbackends/gtkprintbackendcups.c:1201
-#, c-format
-msgid "Authentication is required to get printers from %s"
-msgstr "Todennus vaaditaan tulostimien saamiseksi isännältä %s"
-
-#: modules/printbackends/gtkprintbackendcups.c:1206
-#, c-format
-msgid "Authentication is required to get a file from %s"
-msgstr "Todennus vaaditaan tiedoston saamiksesi isännältä %s"
-
-#: modules/printbackends/gtkprintbackendcups.c:1208
-#, c-format
-msgid "Authentication is required on %s"
-msgstr "Todennus vaaditaan isännällä %s"
-
-#: modules/printbackends/gtkprintbackendcups.c:1443
-msgid "Domain:"
-msgstr "Toimialue:"
-
-#: modules/printbackends/gtkprintbackendcups.c:1473
-#, c-format
-msgid "Authentication is required to print document “%s”"
-msgstr "Asiakirjan “%s” tulostus vaatii tunnistautumisen"
-
-#: modules/printbackends/gtkprintbackendcups.c:1478
-#, c-format
-msgid "Authentication is required to print this document on printer %s"
-msgstr "Tämän asiakirjan tulostaminen tulostimella %s vaatii tunnistautumisen"
-
-#: modules/printbackends/gtkprintbackendcups.c:1480
-msgid "Authentication is required to print this document"
-msgstr "Tämän asiakirjan tulostaminen vaatii tunnistautumisen"
-
-#: modules/printbackends/gtkprintbackendcups.c:2568
-#, c-format
-msgid "Printer “%s” is low on toner."
-msgstr "Tulostimesta “%s” on väri vähissä."
-
-#: modules/printbackends/gtkprintbackendcups.c:2572
-#, c-format
-msgid "Printer “%s” has no toner left."
-msgstr "Tulostimesta “%s” on väri loppu."
-
-#. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2577
-#, c-format
-msgid "Printer “%s” is low on developer."
-msgstr "Tulostimesta “%s” on kehite vähissä."
-
-#. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2582
-#, c-format
-msgid "Printer “%s” is out of developer."
-msgstr "Tulostimesta “%s” on kehite loppu."
-
-#. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2587
-#, c-format
-msgid "Printer “%s” is low on at least one marker supply."
-msgstr "Tulostimesta “%s” on ainakin yksi väri vähissä."
-
-#. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2592
-#, c-format
-msgid "Printer “%s” is out of at least one marker supply."
-msgstr "Tulostimesta “%s” on ainakin yksi väri loppu."
-
-#: modules/printbackends/gtkprintbackendcups.c:2596
-#, c-format
-msgid "The cover is open on printer “%s”."
-msgstr "Tulostimen “%s” kansi on auki."
-
-#: modules/printbackends/gtkprintbackendcups.c:2600
-#, c-format
-msgid "The door is open on printer “%s”."
-msgstr "Tulostimen “%s” luukku on auki."
-
-#: modules/printbackends/gtkprintbackendcups.c:2604
-#, c-format
-msgid "Printer “%s” is low on paper."
-msgstr "Tulostimesta “%s” on paperi vähissä."
-
-#: modules/printbackends/gtkprintbackendcups.c:2608
-#, c-format
-msgid "Printer “%s” is out of paper."
-msgstr "Tulostimesta “%s” on paperi loppu."
-
-#: modules/printbackends/gtkprintbackendcups.c:2612
-#, c-format
-msgid "Printer “%s” is currently offline."
-msgstr "Tulostin “%s” ei ole yhdistettynä."
-
-#: modules/printbackends/gtkprintbackendcups.c:2616
-#, c-format
-msgid "There is a problem on printer “%s”."
-msgstr "Tulostimessa “%s” on ongelma."
-
-#. Translators: this string connects multiple printer states together.
-#: modules/printbackends/gtkprintbackendcups.c:2683
-msgid "; "
-msgstr "; "
-
-#: modules/printbackends/gtkprintbackendcups.c:4611
-#: modules/printbackends/gtkprintbackendcups.c:4678
-msgctxt "printing option"
-msgid "Two Sided"
-msgstr "Kaksipuolinen"
-
-#: modules/printbackends/gtkprintbackendcups.c:4612
-msgctxt "printing option"
-msgid "Paper Type"
-msgstr "Paperin tyyppi"
-
-#: modules/printbackends/gtkprintbackendcups.c:4613
-msgctxt "printing option"
-msgid "Paper Source"
-msgstr "Paperin lähde"
-
-#: modules/printbackends/gtkprintbackendcups.c:4614
-#: modules/printbackends/gtkprintbackendcups.c:4679
-msgctxt "printing option"
-msgid "Output Tray"
-msgstr "Tulostuskaukalo"
-
-#: modules/printbackends/gtkprintbackendcups.c:4615
-msgctxt "printing option"
-msgid "Resolution"
-msgstr "Tarkkuus"
-
-#: modules/printbackends/gtkprintbackendcups.c:4616
-msgctxt "printing option"
-msgid "GhostScript pre-filtering"
-msgstr "GhostScript-esisuodatus"
-
-#: modules/printbackends/gtkprintbackendcups.c:4625
-msgctxt "printing option value"
-msgid "One Sided"
-msgstr "Yksipuolinen"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4627
-msgctxt "printing option value"
-msgid "Long Edge (Standard)"
-msgstr "Pitkä reuna (tavallinen)"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4629
-msgctxt "printing option value"
-msgid "Short Edge (Flip)"
-msgstr "Lyhyt reuna (käännetty)"
-
-#. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4631
-#: modules/printbackends/gtkprintbackendcups.c:4633
-#: modules/printbackends/gtkprintbackendcups.c:4641
-msgctxt "printing option value"
-msgid "Auto Select"
-msgstr "Valitse automaattisesti"
-
-#. Translators: this is an option of "Paper Source"
-#. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4635
-#: modules/printbackends/gtkprintbackendcups.c:4637
-#: modules/printbackends/gtkprintbackendcups.c:4639
-#: modules/printbackends/gtkprintbackendcups.c:4643
-msgctxt "printing option value"
-msgid "Printer Default"
-msgstr "Tulostimen oletus"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4645
-msgctxt "printing option value"
-msgid "Embed GhostScript fonts only"
-msgstr "Upota vain GhostScript-fontit"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4647
-msgctxt "printing option value"
-msgid "Convert to PS level 1"
-msgstr "Muunna PS-tasoksi 1"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4649
-msgctxt "printing option value"
-msgid "Convert to PS level 2"
-msgstr "Muunna PS-tasoksi 2"
-
-#. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4651
-msgctxt "printing option value"
-msgid "No pre-filtering"
-msgstr "Ei esisuodatusta"
-
-#. Translators: "Miscellaneous" is the label for a button, that opens
-#. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4660
-msgctxt "printing option group"
-msgid "Miscellaneous"
-msgstr "Sekalaiset"
-
-#: modules/printbackends/gtkprintbackendcups.c:4687
-msgctxt "sides"
-msgid "One Sided"
-msgstr "Yksipuolinen"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4689
-msgctxt "sides"
-msgid "Long Edge (Standard)"
-msgstr "Pitkä reuna (tavallinen)"
-
-#. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4691
-msgctxt "sides"
-msgid "Short Edge (Flip)"
-msgstr "Lyhyt reuna (käännetty)"
-
-#. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4694
-msgctxt "output-bin"
-msgid "Top Bin"
-msgstr "Yläsäiliö"
-
-#. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4696
-msgctxt "output-bin"
-msgid "Middle Bin"
-msgstr "Keskiosan säiliö"
-
-#. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4698
-msgctxt "output-bin"
-msgid "Bottom Bin"
-msgstr "Alasäiliö"
-
-#. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4700
-msgctxt "output-bin"
-msgid "Side Bin"
-msgstr "Sivusäiliö"
-
-#. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4702
-msgctxt "output-bin"
-msgid "Left Bin"
-msgstr "Vasen säiliö"
-
-#. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4704
-msgctxt "output-bin"
-msgid "Right Bin"
-msgstr "Oikea säiliö"
-
-#. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4706
-msgctxt "output-bin"
-msgid "Center Bin"
-msgstr "Keskisäiliö"
-
-#. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4708
-msgctxt "output-bin"
-msgid "Rear Bin"
-msgstr "Takaosan säiliö"
-
-#. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4710
-msgctxt "output-bin"
-msgid "Face Up Bin"
-msgstr "Ylöspäin oleva säiliö"
-
-#. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4712
-msgctxt "output-bin"
-msgid "Face Down Bin"
-msgstr "Alaspäin oleva säiliö"
-
-#. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4714
-msgctxt "output-bin"
-msgid "Large Capacity Bin"
-msgstr "Suuren kapasiteetin säiliö"
-
-#. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4736
-#, c-format
-msgctxt "output-bin"
-msgid "Stacker %d"
-msgstr "Pinoaja %d"
-
-#. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4740
-#, c-format
-msgctxt "output-bin"
-msgid "Mailbox %d"
-msgstr "Postilokero %d"
-
-#. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4744
-msgctxt "output-bin"
-msgid "My Mailbox"
-msgstr "Oma postilokero"
-
-#. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4748
-#, c-format
-msgctxt "output-bin"
-msgid "Tray %d"
-msgstr "Tulostuskaukalo %d"
-
-#: modules/printbackends/gtkprintbackendcups.c:5225
-msgid "Printer Default"
-msgstr "Tulostimen oletus"
-
-#. Translators, this string is used to label the job priority option
-#. * in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5704
-msgid "Job Priority"
-msgstr "Työn tärkeys"
-
-#. Translators, this string is used to label the billing info entry
-#. * in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5715
-msgid "Billing Info"
-msgstr "Laskutustiedot"
-
-#. Translators, these strings are names for various 'standard' cover
-#. * pages that the printing system may support.
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5739
-msgctxt "cover page"
-msgid "None"
-msgstr "Ei mitään"
-
-#: modules/printbackends/gtkprintbackendcups.c:5740
-msgctxt "cover page"
-msgid "Classified"
-msgstr "Luokiteltu"
-
-#: modules/printbackends/gtkprintbackendcups.c:5741
-msgctxt "cover page"
-msgid "Confidential"
-msgstr "Luottamuksellinen"
-
-#: modules/printbackends/gtkprintbackendcups.c:5742
-msgctxt "cover page"
-msgid "Secret"
-msgstr "Salainen"
-
-#: modules/printbackends/gtkprintbackendcups.c:5743
-msgctxt "cover page"
-msgid "Standard"
-msgstr "Normaali"
-
-#: modules/printbackends/gtkprintbackendcups.c:5744
-msgctxt "cover page"
-msgid "Top Secret"
-msgstr "Erittäin salainen"
-
-#: modules/printbackends/gtkprintbackendcups.c:5745
-msgctxt "cover page"
-msgid "Unclassified"
-msgstr "Luokittelematon"
-
-#. Translators, this string is used to label the pages-per-sheet option
-#. * in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5757
-msgctxt "printer option"
-msgid "Pages per Sheet"
-msgstr "Sivuja arkkia kohti"
-
-#. Translators, this string is used to label the option in the print
-#. * dialog that controls in what order multiple pages are arranged
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5774
-msgctxt "printer option"
-msgid "Page Ordering"
-msgstr "Sivun järjestys"
-
-#. Translators: this is the name of the option that controls when
-#. * a print job is printed. Possible values are 'now', a specified time,
-#. * or 'on hold'
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5851
-msgctxt "printer option"
-msgid "Print at"
-msgstr "Tulostusaika"
-
-#. Translators: this is the name of the option that allows the user
-#. * to specify a time when a print job will be printed.
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5862
-msgctxt "printer option"
-msgid "Print at time"
-msgstr "Tulosta ajankohtana"
-
-#. Translators: this format is used to display a custom
-#. * paper size. The two placeholders are replaced with
-#. * the width and height in points. E.g: "Custom
-#. * 230.4x142.9"
-#.
-#: modules/printbackends/gtkprintbackendcups.c:5909
-#, c-format
-msgid "Custom %s×%s"
-msgstr "Omavalintainen %s×%s"
-
-#. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:6020
-msgctxt "printer option"
-msgid "Printer Profile"
-msgstr "Tulostinprofiili"
-
-#. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:6027
-msgctxt "printer option value"
-msgid "Unavailable"
-msgstr "Ei saatavilla"
-
-#: modules/printbackends/gtkprintbackendfile.c:263
-msgid "output"
-msgstr "tuloste"
-
-#: modules/printbackends/gtkprintbackendfile.c:543
-msgid "Print to File"
-msgstr "Tulosta tiedostoon"
-
-#: modules/printbackends/gtkprintbackendfile.c:675
-msgid "PDF"
-msgstr "PDF"
-
-#: modules/printbackends/gtkprintbackendfile.c:675
-msgid "PostScript"
-msgstr "PostScript"
-
-#: modules/printbackends/gtkprintbackendfile.c:675
-msgid "SVG"
-msgstr "SVG"
-
-#: modules/printbackends/gtkprintbackendfile.c:688
-msgid "Pages per _sheet:"
-msgstr "Sivuja a_rkille:"
-
-#: modules/printbackends/gtkprintbackendfile.c:758
-msgid "File"
-msgstr "Tiedosto"
-
-#: modules/printbackends/gtkprintbackendfile.c:768
-msgid "_Output format"
-msgstr "_Tulostusformaatti"
-
-#. TRANSLATORS: when we're running an old CUPS, and
-#. * it hasn't registered the device with colord
-#: modules/printbackends/gtkprintercups.c:272
-msgid "Color management unavailable"
-msgstr "Värinhallinta ei ole käytettävissä"
-
-#. TRANSLATORS: when there is no color profile available
-#: modules/printbackends/gtkprintercups.c:284
-msgid "No profile available"
-msgstr "Ei profiilia saatavilla"
-
-#. TRANSLATORS: when the color profile has no title
-#: modules/printbackends/gtkprintercups.c:295
-msgid "Unspecified profile"
-msgstr "Määrittelemätön profiili"
-
-#: tools/encodesymbolic.c:41
+#: tools/encodesymbolic.c:42
 msgid "Output to this directory instead of cwd"
 msgstr ""
 
-#: tools/encodesymbolic.c:42
+#: tools/encodesymbolic.c:43
 msgid "Generate debug output"
 msgstr "Generoi vianselvitystulostetta"
 
-#: tools/encodesymbolic.c:95
+#: tools/encodesymbolic.c:93
 #, c-format
 msgid "Invalid size %s\n"
 msgstr "Virheellinen koko %s\n"
 
-#: tools/encodesymbolic.c:107 tools/encodesymbolic.c:116
+#: tools/encodesymbolic.c:107
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "Tiedostoa ei voi ladata: %s\n"
 
-#: tools/encodesymbolic.c:144 tools/encodesymbolic.c:162
+#: tools/encodesymbolic.c:144
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr "Tiedostoa %s ei voitu tallentaa: %s\n"
-
-#: tools/encodesymbolic.c:168
-#, c-format
-msgid "Can’t close stream"
-msgstr ""
 
 #: tools/gtk-builder-tool.c:36
 #, c-format
@@ -7817,9 +7822,10 @@ msgstr ""
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
-#: tools/gtk-rendernode-tool-show.c:116
+#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-convert.c:98
+#: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
+#: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
 msgstr "TIEDOSTO"
 
@@ -7853,7 +7859,7 @@ msgstr "Käytä tyyliä CSS-tiedostosta"
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:274
 #: tools/gtk-rendernode-tool-benchmark.c:108
-#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
+#: tools/gtk-rendernode-tool-render.c:279 tools/gtk-rendernode-tool-show.c:129
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr ""
@@ -7899,13 +7905,13 @@ msgstr ""
 "Käytä --force korvataksesi tiedoston.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:230
+#: tools/gtk-rendernode-tool-render.c:245
 #, c-format
 msgid "Output written to %s.\n"
 msgstr ""
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:234
+#: tools/gtk-rendernode-tool-render.c:249
 #, fuzzy, c-format
 #| msgid "Failed to open file %s : %s\n"
 msgid "Failed to save %s: %s\n"
@@ -7924,9 +7930,9 @@ msgid "Overwrite existing file"
 msgstr "Kirjoita olemassa olevan tiedoston yli"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:89 tools/gtk-image-tool-relabel.c:86
+#: tools/gtk-image-tool-convert.c:112 tools/gtk-image-tool-relabel.c:86
 #: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
-#: tools/gtk-rendernode-tool-render.c:255
+#: tools/gtk-rendernode-tool-render.c:272
 msgid "FILE…"
 msgstr "TIEDOSTO…"
 
@@ -8068,7 +8074,7 @@ msgstr "Käsitelty tiedosto"
 msgid "Compare two images"
 msgstr ""
 
-#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:113
+#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:136
 #: tools/gtk-image-tool-info.c:101 tools/gtk-image-tool-relabel.c:109
 #: tools/gtk-image-tool-show.c:141
 #, c-format
@@ -8080,68 +8086,63 @@ msgstr "Ei määritetty kuvatiedostoa\n"
 msgid "Can only accept two image files\n"
 msgstr ""
 
-#: tools/gtk-image-tool-compare.c:85 tools/gtk-rendernode-tool-compare.c:111
-#, c-format
-msgid "Failed to load %s: %s\n"
-msgstr "Ei voitu ladata %s: %s\n"
-
-#: tools/gtk-image-tool-compare.c:96 tools/gtk-rendernode-tool-compare.c:122
+#: tools/gtk-image-tool-compare.c:89 tools/gtk-rendernode-tool-compare.c:122
 #, fuzzy, c-format
 #| msgid "Could not rename %s back to %s: %s.\n"
 msgid "Could not save diff image to %s\n"
 msgstr "Tiedoston %s nimeäminen takaisin nimelle %s epäonnistui: %s\n"
 
-#: tools/gtk-image-tool-compare.c:106 tools/gtk-rendernode-tool-compare.c:132
+#: tools/gtk-image-tool-compare.c:99 tools/gtk-rendernode-tool-compare.c:132
 #, c-format
 msgid "Differences witten to %s.\n"
 msgstr ""
 
-#: tools/gtk-image-tool-compare.c:108 tools/gtk-rendernode-tool-compare.c:134
+#: tools/gtk-image-tool-compare.c:101 tools/gtk-rendernode-tool-compare.c:134
 #, c-format
 msgid "The images are different.\n"
 msgstr ""
 
-#: tools/gtk-image-tool-compare.c:111 tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-image-tool-compare.c:104 tools/gtk-rendernode-tool-compare.c:137
 #, c-format
 msgid "No differences.\n"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:86
+#: tools/gtk-image-tool-convert.c:109
 msgid "Format to use"
 msgstr "Käytettävä muoto"
 
-#: tools/gtk-image-tool-convert.c:86
+#: tools/gtk-image-tool-convert.c:109
 msgid "FORMAT"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
 msgid "Color state to use"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
 #, fuzzy
 #| msgid "COLOR"
 msgid "COLORSTATE"
 msgstr "VÄRI"
 
-#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use, as cicp tuple"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
 msgid "CICP"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:100
+#: tools/gtk-image-tool-convert.c:123
 msgid "Convert the image to a different format or color state."
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:119 tools/gtk-image-tool-relabel.c:115
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:115
 #, c-format
 msgid "Can only accept a single image file and output file\n"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:133
+#: tools/gtk-image-tool-convert.c:156
 #, c-format
 msgid ""
 "Not a memory format: %s\n"
@@ -8149,7 +8150,7 @@ msgid ""
 "  %s\n"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:150
+#: tools/gtk-image-tool-convert.c:173
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -8157,12 +8158,12 @@ msgid ""
 "  %s\n"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:160 tools/gtk-image-tool-relabel.c:140
+#: tools/gtk-image-tool-convert.c:183 tools/gtk-image-tool-relabel.c:140
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr ""
 
-#: tools/gtk-image-tool-convert.c:168 tools/gtk-image-tool-relabel.c:148
+#: tools/gtk-image-tool-convert.c:191 tools/gtk-image-tool-relabel.c:148
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr ""
@@ -8204,15 +8205,32 @@ msgid ""
 "Possible values: %s\n"
 msgstr ""
 
-#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:115
+#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:121
 msgid "Don't add a titlebar"
 msgstr ""
 
 #: tools/gtk-image-tool-show.c:128
 msgid "Show one or more images."
+msgstr "Näytä yksi tai useampi kuva."
+
+#: tools/gtk-image-tool-utils.c:50 tools/gtk-rendernode-tool-utils.c:54
+#, c-format
+msgid "Error at %s: %s\n"
 msgstr ""
 
-#: tools/gtk-image-tool-utils.c:255
+#: tools/gtk-image-tool-utils.c:68 tools/gtk-rendernode-tool-utils.c:72
+#, fuzzy, c-format
+#| msgid "Failed to open file %s : %s\n"
+msgid "Failed to load node file: %s\n"
+msgstr "Tiedostoa ”%s” ei voitu avata: %s\n"
+
+#: tools/gtk-image-tool-utils.c:89
+#, fuzzy, c-format
+#| msgid "\"%s\" is not a valid attribute name"
+msgid "%s is not a texture node\n"
+msgstr "”%s” ei ole kelvollinen ominaisuuden nimi"
+
+#: tools/gtk-image-tool-utils.c:315
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
 msgstr ""
@@ -8302,8 +8320,7 @@ msgid "Allow conic Bézier curves"
 msgstr ""
 
 #: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
-#: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
-#: tools/gtk-path-tool-reverse.c:34 tools/gtk-path-tool-show.c:147
+#: tools/gtk-path-tool-restrict.c:38 tools/gtk-path-tool-reverse.c:34
 msgid "PATH"
 msgstr "POLKU"
 
@@ -8314,12 +8331,12 @@ msgstr ""
 #: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
 #: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
 msgid "No paths given."
-msgstr ""
+msgstr "Polkuja ei annettu."
 
 #: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 #: tools/gtk-path-tool-reverse.c:78
 msgid "That didn't work out."
-msgstr ""
+msgstr "Se ei toiminut."
 
 #: tools/gtk-path-tool-info.c:100
 msgid "Print information about a path."
@@ -8368,147 +8385,174 @@ msgstr ""
 msgid "%d conics"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:112
 msgid "Fill the path (the default)"
-msgstr ""
+msgstr "Täytä polku (oletus)"
 
-#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
+#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:113
 msgid "Stroke the path"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
+#: tools/gtk-path-tool-render.c:60 tools/gtk-path-tool-show.c:114
 #, fuzzy
 #| msgid "Show other locations"
 msgid "Show path points"
 msgstr "Näytä muut sijainnit"
 
-#: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
+#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:115
 #, fuzzy
 #| msgid "Show other locations"
 msgid "Show control points"
 msgstr "Näytä muut sijainnit"
 
-#: tools/gtk-path-tool-render.c:121
+#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:116
+#, fuzzy
+#| msgid "Show other locations"
+msgid "Show intersections"
+msgstr "Näytä muut sijainnit"
+
+#: tools/gtk-path-tool-render.c:63
 msgid "The output file"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
+#: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:117
+#: tools/gtk-rendernode-tool-convert.c:93
 msgid "Foreground color"
 msgstr "Edustaväri"
 
-#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
-#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
-#: tools/gtk-path-tool-show.c:145 tools/gtk-path-tool-show.c:146
+#: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-render.c:65
+#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
+#: tools/gtk-path-tool-show.c:117 tools/gtk-path-tool-show.c:118
+#: tools/gtk-path-tool-show.c:119 tools/gtk-path-tool-show.c:120
+#: tools/gtk-rendernode-tool-convert.c:93
+#: tools/gtk-rendernode-tool-convert.c:94
+#: tools/gtk-rendernode-tool-convert.c:95
+#: tools/gtk-rendernode-tool-convert.c:96
 msgid "COLOR"
 msgstr "VÄRI"
 
-#: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
+#: tools/gtk-path-tool-render.c:65 tools/gtk-path-tool-show.c:118
 msgid "Background color"
 msgstr "Taustaväri"
 
-#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
+#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:119
 #, fuzzy
 #| msgid "Custom color"
 msgid "Point color"
 msgstr "Mukautettu väri"
 
-#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
-msgid "Fill rule (winding, even-odd)"
+#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:120
+#, fuzzy
+#| msgid "Intensity of the color."
+msgid "Intersection color"
+msgstr "Värin kylläisyys."
+
+#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:121
+msgid "Zoom level (number)"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-render.c:133
-#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-render.c:135
-#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-render.c:137
-#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:151
-#: tools/gtk-path-tool-show.c:155 tools/gtk-path-tool-show.c:156
-#: tools/gtk-path-tool-show.c:157 tools/gtk-path-tool-show.c:158
-#: tools/gtk-path-tool-show.c:159 tools/gtk-path-tool-show.c:160
+#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-render.c:73
+#: tools/gtk-path-tool-render.c:77 tools/gtk-path-tool-render.c:78
+#: tools/gtk-path-tool-render.c:79 tools/gtk-path-tool-render.c:80
+#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-render.c:82
+#: tools/gtk-path-tool-show.c:121 tools/gtk-path-tool-show.c:126
+#: tools/gtk-path-tool-show.c:130 tools/gtk-path-tool-show.c:131
+#: tools/gtk-path-tool-show.c:132 tools/gtk-path-tool-show.c:133
+#: tools/gtk-path-tool-show.c:134 tools/gtk-path-tool-show.c:135
 msgid "VALUE"
 msgstr "ARVO"
 
-#: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
+#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:122
+msgid "PATH…"
+msgstr "POLKU…"
+
+#: tools/gtk-path-tool-render.c:73 tools/gtk-path-tool-show.c:126
+msgid "Fill rule (winding, even-odd)"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:77 tools/gtk-path-tool-show.c:130
 msgid "Line width (number)"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
+#: tools/gtk-path-tool-render.c:78 tools/gtk-path-tool-show.c:131
 msgid "Line cap (butt, round, square)"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
+#: tools/gtk-path-tool-render.c:79
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
+#: tools/gtk-path-tool-render.c:80 tools/gtk-path-tool-show.c:133
 msgid "Miter limit (number)"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
+#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:134
 msgid "Dash pattern (comma-separated numbers)"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
+#: tools/gtk-path-tool-render.c:82 tools/gtk-path-tool-show.c:135
 msgid "Dash offset (number)"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
+#: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:148
 msgid "Could not initialize windowing system"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:168
+#: tools/gtk-path-tool-render.c:117
 #, fuzzy
 #| msgid "Unsupported depth %u in png image"
 msgid "Render the path to a png image."
 msgstr "Ei-tuettu syvyys %u png-kuvassa"
 
-#: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:159
 msgid "Options related to filling"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
+#: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:160
 #, fuzzy
 #| msgid "Show other locations"
 msgid "Show help for fill options"
 msgstr "Näytä muut sijainnit"
 
-#: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
+#: tools/gtk-path-tool-render.c:130 tools/gtk-path-tool-show.c:167
 msgid "Options related to stroking"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
+#: tools/gtk-path-tool-render.c:131 tools/gtk-path-tool-show.c:168
 #, fuzzy
 #| msgid "Show other locations"
 msgid "Show help for stroke options"
 msgstr "Näytä muut sijainnit"
 
-#: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
+#: tools/gtk-path-tool-render.c:148 tools/gtk-path-tool-show.c:185
 #, fuzzy
 #| msgid "Reason not specified"
 msgid "No path specified"
 msgstr "Syytä ei annettu"
 
-#: tools/gtk-path-tool-render.c:205
+#: tools/gtk-path-tool-render.c:154
 msgid "Can only render a single path"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
+#: tools/gtk-path-tool-render.c:188 tools/gtk-path-tool-show.c:201
 msgid "fill rule"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
+#: tools/gtk-path-tool-render.c:194 tools/gtk-path-tool-show.c:207
 msgid "line cap"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
+#: tools/gtk-path-tool-render.c:195 tools/gtk-path-tool-show.c:208
 msgid "line join"
 msgstr ""
 
-#: tools/gtk-path-tool-render.c:310
+#: tools/gtk-path-tool-render.c:271
 #, fuzzy, c-format
 #| msgid "Saving CSS failed"
 msgid "Saving png to '%s' failed"
 msgstr "CSS:n tallentaminen epäonnistui"
 
-#: tools/gtk-path-tool-render.c:317
+#: tools/gtk-path-tool-render.c:278
 #, c-format
 msgid "Output written to '%s'."
 msgstr ""
@@ -8537,19 +8581,23 @@ msgstr "Ei-tuettu syvyys %u png-kuvassa"
 msgid "Reverse a path."
 msgstr "Käänteinen pysty"
 
-#: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
+#: tools/gtk-path-tool-show.c:53
 #, fuzzy
 #| msgctxt "Stock label"
 #| msgid "Print Pre_view"
 msgid "Path Preview"
 msgstr "Tulostuksen _esikatselu"
 
-#: tools/gtk-path-tool-show.c:180
+#: tools/gtk-path-tool-show.c:132
+msgid "Line join (miter, miter-clip, round, bevel)"
+msgstr ""
+
+#: tools/gtk-path-tool-show.c:156
 msgid "Display the path."
 msgstr ""
 
-#: tools/gtk-path-tool-show.c:215
-msgid "Can only show a single path"
+#: tools/gtk-path-tool-show.c:191
+msgid "Can only show one or two paths"
 msgstr ""
 
 #: tools/gtk-path-tool-utils.c:58
@@ -8603,6 +8651,7 @@ msgid ""
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
 "  compare      Compare nodes or images\n"
+"  convert      Convert into nodes\n"
 "  extract      Extract data urls\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
@@ -8619,7 +8668,7 @@ msgstr "Luodaan tietoja"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:254
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "RENDERER"
 msgstr ""
 
@@ -8640,8 +8689,8 @@ msgid "Benchmark rendering of a .node file."
 msgstr ""
 
 #: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
-#: tools/gtk-rendernode-tool-render.c:283 tools/gtk-rendernode-tool-show.c:144
+#: tools/gtk-rendernode-tool-extract.c:320 tools/gtk-rendernode-tool-info.c:252
+#: tools/gtk-rendernode-tool-render.c:300 tools/gtk-rendernode-tool-show.c:150
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Ei määritetty .node-tiedostoa\n"
@@ -8652,7 +8701,7 @@ msgid "Can only benchmark a single .node file\n"
 msgstr ""
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:254
+#: tools/gtk-rendernode-tool-render.c:270
 #, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Generating data"
@@ -8661,23 +8710,64 @@ msgstr "Luodaan tietoja"
 
 #: tools/gtk-rendernode-tool-compare.c:70
 msgid "FILE1 FILE2"
-msgstr ""
+msgstr "TIEDOSTO1 TIEDOSTO2"
 
 #: tools/gtk-rendernode-tool-compare.c:82
 msgid "Compare .node or .png files."
-msgstr ""
+msgstr "Vertaa .node- tai .png-tiedostoja."
 
 #: tools/gtk-rendernode-tool-compare.c:95
 #, c-format
 msgid "Must specify two files\n"
-msgstr ""
+msgstr "Täytyy valita kaksi tiedostoa\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:209
+#: tools/gtk-rendernode-tool-render.c:211
 #, fuzzy, c-format
 #| msgid "Failed to rewrite header\n"
 msgid "Failed to create renderer: %s\n"
 msgstr "Otsakkeen uudelleenkirjoitus epäonnistui\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "Ei voitu ladata %s: %s\n"
+
+#: tools/gtk-rendernode-tool-convert.c:92
+#, fuzzy
+#| msgid "_Save color here"
+msgid "Recolor the node"
+msgstr "_Tallenna väri tähän"
+
+#: tools/gtk-rendernode-tool-convert.c:94
+msgid "Success color"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-convert.c:95
+msgid "Warning color"
+msgstr "Varoitusväri"
+
+#: tools/gtk-rendernode-tool-convert.c:96
+msgid "Error color"
+msgstr "Virheväri"
+
+#: tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "KOKO"
+
+#: tools/gtk-rendernode-tool-convert.c:107
+msgid "Convert from symbolic svg to node."
+msgstr ""
+
+#: tools/gtk-rendernode-tool-convert.c:177
+#, c-format
+msgid "No .svg file specified\n"
+msgstr "Ei määritetty .svg-tiedostoa\n"
+
+#: tools/gtk-rendernode-tool-convert.c:183
+#, c-format
+msgid "Can only accept a single .svg file\n"
+msgstr ""
 
 #: tools/gtk-rendernode-tool-extract.c:73
 #: tools/gtk-rendernode-tool-extract.c:149
@@ -8686,58 +8776,58 @@ msgstr "Otsakkeen uudelleenkirjoitus epäonnistui\n"
 msgid "Failed to write %s\n"
 msgstr "Otsakkeen kirjoitus epäonnistui\n"
 
-#: tools/gtk-rendernode-tool-extract.c:292
+#: tools/gtk-rendernode-tool-extract.c:296
 #, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Generating data"
 msgid "Directory to use"
 msgstr "Luodaan tietoja"
 
-#: tools/gtk-rendernode-tool-extract.c:292
+#: tools/gtk-rendernode-tool-extract.c:296
 msgid "DIRECTORY"
 msgstr "HAKEMISTO"
 
-#: tools/gtk-rendernode-tool-extract.c:293
+#: tools/gtk-rendernode-tool-extract.c:297
 msgid "Be verbose"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-extract.c:303
+#: tools/gtk-rendernode-tool-extract.c:307
 msgid "Extract data urls from the render node."
 msgstr ""
 
-#: tools/gtk-rendernode-tool-extract.c:322 tools/gtk-rendernode-tool-info.c:254
+#: tools/gtk-rendernode-tool-extract.c:326 tools/gtk-rendernode-tool-info.c:258
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-info.c:193
+#: tools/gtk-rendernode-tool-info.c:197
 msgid "Number of nodes:"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-info.c:200
+#: tools/gtk-rendernode-tool-info.c:204
 msgid "Depth:"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-info.c:203
+#: tools/gtk-rendernode-tool-info.c:207
 #, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Left"
 msgid "Bounds:"
 msgstr "Vasen"
 
-#: tools/gtk-rendernode-tool-info.c:204
+#: tools/gtk-rendernode-tool-info.c:208
 msgid "Origin:"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
+#: tools/gtk-rendernode-tool-info.c:212 tools/gtk-rendernode-tool-info.c:218
 msgid "Opaque part:"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-info.c:235
+#: tools/gtk-rendernode-tool-info.c:239
 msgid "Provide information about the render node."
 msgstr ""
 
-#: tools/gtk-rendernode-tool-render.c:170
+#: tools/gtk-rendernode-tool-render.c:171
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -8746,40 +8836,37 @@ msgstr ""
 "Tiedosto %s on olemassa.\n"
 "Jos haluat ylikirjoittaa sen, määritä tiedostonimi.\n"
 
-#: tools/gtk-rendernode-tool-render.c:184
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:185
+#: tools/gtk-rendernode-tool-render.c:197
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "SVG:n generointi epäonnistui: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-render.c:271
+msgid "Keep node position unchanged"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-render.c:287
 msgid "Render a .node file to an image."
 msgstr ""
 
-#: tools/gtk-rendernode-tool-render.c:289
+#: tools/gtk-rendernode-tool-render.c:306
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-show.c:131
+#: tools/gtk-rendernode-tool-show.c:120
+msgid "Put node into offload container"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-show.c:137
 msgid "Show the render node."
 msgstr ""
 
-#: tools/gtk-rendernode-tool-show.c:150
+#: tools/gtk-rendernode-tool-show.c:156
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr ""
-
-#: tools/gtk-rendernode-tool-utils.c:54
-#, c-format
-msgid "Error at %s: %s\n"
-msgstr ""
-
-#: tools/gtk-rendernode-tool-utils.c:72
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
-msgid "Failed to load node file: %s\n"
-msgstr "Tiedostoa ”%s” ei voitu avata: %s\n"
 
 #: tools/updateiconcache.c:1402
 #, c-format
@@ -8888,6 +8975,12 @@ msgstr ""
 "Teeman indeksitiedostoa ei löydy kansiosta “%s”\n"
 "Jos haluat todella luoda kuvakevälimuistin tähän, käytä valitsinta\n"
 "--ignore-theme-index.\n"
+
+#~ msgid "Theme is hardcoded by GTK_THEME"
+#~ msgstr "Teema on kovakoodattu GTK_THEME:llä"
+
+#~ msgid "Dark Variant"
+#~ msgstr "Tumma muunnelma"
 
 #~ msgctxt "GL version"
 #~ msgid "None"
@@ -9010,9 +9103,6 @@ msgstr ""
 
 #~ msgid "Not a video file"
 #~ msgstr "Ei videotiedosto"
-
-#~ msgid "Unsupported video codec"
-#~ msgstr "Videokoodekki ei ole tuettu"
 
 #~ msgid "Print to LPR"
 #~ msgstr "Tulosta LPR:ää käyttäen"
@@ -9178,10 +9268,6 @@ msgstr ""
 #~ msgctxt "Stock label"
 #~ msgid "Question"
 #~ msgstr "Kysymys"
-
-#~ msgctxt "Stock label"
-#~ msgid "Warning"
-#~ msgstr "Varoitus"
 
 #~ msgctxt "Stock label"
 #~ msgid "_Execute"
@@ -9661,11 +9747,6 @@ msgstr ""
 #~ msgstr "”%s” ei ole kelvollinen ominaisuuden tyyppi"
 
 #, fuzzy
-#~| msgid "\"%s\" is not a valid attribute name"
-#~ msgid "“%s” is not a valid attribute name"
-#~ msgstr "”%s” ei ole kelvollinen ominaisuuden nimi"
-
-#, fuzzy
 #~| msgid ""
 #~| "\"%s\" could not be converted to a value of type \"%s\" for attribute "
 #~| "\"%s\""
@@ -9954,9 +10035,6 @@ msgstr ""
 #~ msgid "S_aturation:"
 #~ msgstr "K_ylläisyys:"
 
-#~ msgid "Intensity of the color."
-#~ msgstr "Värin kylläisyys."
-
 #~ msgid "_Value:"
 #~ msgstr "_Arvo:"
 
@@ -10014,9 +10092,6 @@ msgstr ""
 
 #~ msgid "The color you’ve chosen."
 #~ msgstr "Valitsemasi väri."
-
-#~ msgid "_Save color here"
-#~ msgstr "_Tallenna väri tähän"
 
 #~ msgid ""
 #~ "Click this palette entry to make it the current color. To change this "
