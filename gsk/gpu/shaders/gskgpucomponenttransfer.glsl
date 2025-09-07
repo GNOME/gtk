@@ -120,7 +120,7 @@ apply_component_transfer (uint coord, float c)
   else if (kind == GSK_COMPONENT_TRANSFER_LEVELS)
     {
       float n = get_param(coord, 1u);
-      return floor (c * n) / n;
+      return (floor (c * n) + 0.5) / n;
     }
   else if (kind == GSK_COMPONENT_TRANSFER_LINEAR)
     {

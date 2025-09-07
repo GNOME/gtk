@@ -1,10 +1,27 @@
 component-transfer {
-  child: linear-gradient {
-    bounds: 0 0 50 50;
-    start: 0 0;
-    end: 50 0;
-    stops: 0 rgb(0,0,0), 1 rgb(255,255,255);
+  child: container {
+    color {
+      color: color(srgb 0 0 0);
+      bounds: 0 0 10 50;
+    }
+    color {
+      color: color(srgb 0.2 0.2 0.2);
+      bounds: 10 0 10 50;
+    }
+    color {
+      color: color(srgb 0.4 0.4 0.4);
+      bounds: 20 0 10 50;
+    }
+    color {
+      color: color(srgb 0.8 0.8 0.8);
+      bounds: 30 0 10 50;
+    }
+    color {
+      color: color(srgb 1 1 1);
+      bounds: 40 0 10 50;
+    }
   }
-  red: levels(5);
-  green: levels(5);
-  blue: levels(5);
+  red: levels(4);
+  green: levels(4);
+  blue: levels(4);
+}

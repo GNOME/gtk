@@ -121,7 +121,7 @@ gsk_component_transfer_apply (const GskComponentTransfer *self,
     case GSK_COMPONENT_TRANSFER_IDENTITY:
       return c;
     case GSK_COMPONENT_TRANSFER_LEVELS:
-      return floor (c * self->levels.n) / self->levels.n;
+      return (floorf (c * self->levels.n) + 0.5f) / self->levels.n;
     case GSK_COMPONENT_TRANSFER_LINEAR:
       return c * self->linear.m + self->linear.b;
     case GSK_COMPONENT_TRANSFER_GAMMA:

@@ -76,7 +76,7 @@ gsk_component_transfer_new_identity (void)
  *
  * The new value is computed as
  *
- *     C' = floor (C * n) / n
+ *     C' = (floor (C * n) + 0.5) / n
  *
  * <figure>
  *   <picture>
@@ -234,11 +234,11 @@ gsk_component_transfer_new_discrete (guint  n,
  *
  * The new value is computed as
  *
- *     C' = values[k] + (C - k / n) * n * (values[k + 1] - values[k])
+ *     C' = values[k] + (C - k / (n - 1)) * n * (values[k + 1] - values[k])
  *
  * where k is the smallest value such that
  *
- *     k / n <= C < (k + 1) / n
+ *     k / (n - 1) <= C < (k + 1) / (n - 1)
  *
  * <figure>
  *   <picture>
