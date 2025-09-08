@@ -1,5 +1,71 @@
-Overview of Changes in 4.20.1, xx-xx-xxxx
+Overview of Changes in 4.20.1, 08-09-2025
 =========================================
+
+* Bugs fixed:
+  - #6666 Second Drag-and-Drop operation causes Gtk-CRITICAL messages at every
+    event (Matthias Clasen)
+  - #7345 columnview focus problem with menus
+  - #7717 GtkTextView with css padding shows offscreen widgets in upper left
+    corner (Matthias Clasen)
+  - #7724 Occasional crashes in gsk_gl_device_setup_samplers() (Benjamin Otte)
+  - #7729 Gtk.Entry: Cursor disappears when reaching right border (Matthias
+    Clasen)
+  - #7731 GTK_THEME environment variable not working properly with GTK4-4.20
+    (Matthias Clasen)
+  - #7734 MacOS: dyld: file does not start with MH_MAGIC[_64]: 0x00000000
+    0x00000000 (sid)
+
+* Changes:
+  - !8888 4.20.0 (Matthias Clasen)
+  - !8889 Plug some memory leaks (Matthias Clasen)
+  - !8890 node-editor: Plug GskTransform leak (Maximiliano Sandoval)
+  - !8891 macos: do not explicitly disable window controls (Arjan Molenaar)
+  - !8893 text: Only clip the text drawing (Matthias Clasen)
+  - !8894 Improve DND interoperability with kwin (Matthias Clasen)
+  - !8896 Make GTK_THEME work as before (Matthias Clasen)
+  - !8897 columnview: Fix arrow navigation in a nested widget inside a cell
+    (Lukáš Tyrychtr)
+  - !8898 docs: Fix invalid picture elements (Chris Mayo)
+  - !8899 docs: Fix Image.set_pixel_size reference to set_icon_size (Chris Mayo)
+  - !8900 offload: Do not try to raise subsurface above itself (Robert Mader)
+  - !8902 Try harder to fix caret visibility in entries (Matthias Clasen)
+  - !8904 various small fixes (Benjamin Otte)
+  - !8905 Modernize the app chooser (Matthias Clasen)
+  - !8907 colorchooser: Fix up editor focus (Matthias Clasen)
+  - !8908 filechooser: Improve error handling (Matthias Clasen)
+  - !8909 build: update to accesskit-c v0.17.0 (Christoph Reiter)
+  - !8910 a11y: Give spinner a progressbar role (Matthias Clasen)
+  - !8911 fontchooser: Make lists more keynav-friendly (Matthias Clasen)
+  - !8912 textview: Connect to detailed can-undo/can-redo notify signals (Julian
+    Sparber)
+  - !8913 gtk-demo: Support svg without width/height (Matthias Clasen)
+  - !8916 docs: Add illustrations for component transfer (Matthias Clasen)
+  - !8917 gtk-demo: Add a demo for sections (Matthias Clasen)
+  - !8918 gsk: Tweak the formula for component transfer (Matthias Clasen)
+  - !8919 Fix MacOS build failure (sid)
+  - !8920 demos: Improve the image filtering demo (Matthias Clasen)
+  - !8921 demos: Memory leak fixes (Matthias Clasen)
+  - !8922 Adapt to deprecations (Matthias Clasen)
+  - !8924 docs: Fix broken links (Chris Mayo)
+  - !8926 scrolledwindow: Improve behavior if nested in other scrollables
+    (Carlos Garnacho)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Catalan (Jordi Mas i Hernandez, Jordi Mas)
+  - Chinese (China) (luming zh)
+  - Finnish (Jiri Grönroos)
+  - Georgian (Ekaterine Papava)
+  - Hebrew (Yosef Or Boczko)
+  - Hungarian (Balázs Úr)
+  - Japanese (Makoto Sakaguchi)
+  - Korean (Changwoo Ryu)
+  - Lithuanian (Aurimas Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Portuguese (Brazil) (Rafael Fontenelle)
+  - Russian (Artur S0)
+  - Swedish (Anders Jonsson)
+  - Ukrainian (Yuri Chornoivan)
 
 Overview of Changes in 4.20.0, 29-08-2025
 =========================================
