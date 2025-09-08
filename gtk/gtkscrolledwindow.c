@@ -265,6 +265,7 @@ typedef struct
   guint    propagate_natural_width  : 1;
   guint    propagate_natural_height : 1;
   guint    smooth_scroll            : 1;
+  guint    scrolling                : 1;
 
   int      min_content_width;
   int      min_content_height;
@@ -286,6 +287,8 @@ typedef struct
 
   double drag_start_x;
   double drag_start_y;
+  double prev_x;
+  double prev_y;
 
   guint                  kinetic_scrolling         : 1;
 
@@ -400,10 +403,10 @@ static void     indicator_start_fade (Indicator *indicator,
 static void     indicator_set_over   (Indicator *indicator,
                                       gboolean   over);
 
-static void scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
-                                    double                    delta_x,
-                                    double                    delta_y,
-                                    GtkEventControllerScroll *scroll);
+static gboolean scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
+                                        double                    delta_x,
+                                        double                    delta_y,
+                                        GtkEventControllerScroll *scroll);
 
 static guint signals[LAST_SIGNAL] = {0};
 static GParamSpec *properties[NUM_PROPERTIES];
@@ -1239,6 +1242,7 @@ captured_scroll_cb (GtkEventControllerScroll *scroll,
 {
   GtkScrolledWindowPrivate *priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
+  int overshoot_x, overshoot_y;
 
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
@@ -1246,13 +1250,21 @@ captured_scroll_cb (GtkEventControllerScroll *scroll,
       !may_vscroll (scrolled_window))
     return GDK_EVENT_PROPAGATE;
 
-  if (priv->smooth_scroll)
+  if (!priv->scrolling)
+    return GDK_EVENT_PROPAGATE;
+
+  scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll);
+
+  _gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y);
+
+  if (ABS (overshoot_x) == MAX_OVERSHOOT_DISTANCE ||
+      ABS (overshoot_y) == MAX_OVERSHOOT_DISTANCE)
     {
-      scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll);
-      return GDK_EVENT_STOP;
+      priv->scrolling = FALSE;
+      return GDK_EVENT_PROPAGATE;
     }
 
-  return GDK_EVENT_PROPAGATE;
+  return GDK_EVENT_STOP;
 }
 
 static void
@@ -1267,6 +1279,13 @@ captured_motion (GtkEventController *controller,
   GdkModifierType state;
   GdkEvent *event;
   GtkWidget *target;
+
+  if (priv->prev_x != x || priv->prev_y != y)
+    {
+      gtk_scrolled_window_decelerate (sw, 0, 0);
+      priv->prev_x = x;
+      priv->prev_y = y;
+    }
 
   if (!priv->use_indicators)
     return;
@@ -1344,7 +1363,7 @@ stop_kinetic_scrolling_cb (GtkEventControllerScroll *scroll,
     gtk_kinetic_scrolling_stop (priv->vscrolling);
 }
 
-static void
+static gboolean
 scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
                         double                    delta_x,
                         double                    delta_y,
@@ -1354,6 +1373,7 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
     gtk_scrolled_window_get_instance_private (scrolled_window);
   gboolean shifted;
   GdkModifierType state;
+  gboolean changed = FALSE;
 
   state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
   shifted = (state & GDK_SHIFT_MASK) != 0;
@@ -1390,6 +1410,7 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
       new_value = priv->unclamped_hadj_value + delta_x;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
                                                  new_value);
+      changed |= TRUE;
     }
 
   if (delta_y != 0.0 &&
@@ -1413,6 +1434,7 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
       new_value = priv->unclamped_vadj_value + delta_y;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
                                                  new_value);
+      changed |= TRUE;
     }
 
   g_clear_handle_id (&priv->scroll_events_overshoot_id, g_source_remove);
@@ -1425,6 +1447,8 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
       gdk_source_set_static_name_by_id (priv->scroll_events_overshoot_id,
                                       "[gtk] start_scroll_deceleration_cb");
     }
+
+  return changed;
 }
 
 static gboolean
@@ -1435,15 +1459,29 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
 {
   GtkScrolledWindowPrivate *priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
+  gboolean scrolled_in_non_scrollable_dir = FALSE;
 
   if (!may_hscroll (scrolled_window) &&
       !may_vscroll (scrolled_window))
     return GDK_EVENT_PROPAGATE;
 
-  if (!priv->smooth_scroll)
-    scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll);
+  if (!priv->scrolling)
+    {
+      if (scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll))
+        priv->scrolling = TRUE;
+      else
+        {
+          scrolled_in_non_scrollable_dir =
+            ((delta_x != 0 && !may_hscroll (scrolled_window)) ||
+             (delta_y != 0 && !may_vscroll (scrolled_window)));
+          if (scrolled_in_non_scrollable_dir)
+            gtk_scrolled_window_decelerate (scrolled_window, 0, 0);
+        }
+    }
 
-  return GDK_EVENT_STOP;
+  return (scrolled_in_non_scrollable_dir ||
+          _gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL)) ?
+    GDK_EVENT_PROPAGATE : GDK_EVENT_STOP;
 }
 
 static void
@@ -1453,6 +1491,7 @@ scroll_controller_scroll_end (GtkEventControllerScroll *scroll,
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
   priv->smooth_scroll = FALSE;
+  priv->scrolling = FALSE;
 }
 
 static void
@@ -1461,9 +1500,14 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
                               double                    initial_vel_y,
                               GtkScrolledWindow        *scrolled_window)
 {
+  GtkScrolledWindowPrivate *priv =
+    gtk_scrolled_window_get_instance_private (scrolled_window);
   GdkScrollUnit scroll_unit;
   gboolean shifted;
   GdkModifierType state;
+
+  if (!priv->scrolling)
+    return;
 
   scroll_unit = gtk_event_controller_scroll_get_unit (scroll);
   state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
