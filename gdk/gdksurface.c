@@ -2032,7 +2032,8 @@ gdk_surface_get_root_coords (GdkSurface *surface,
 /**
  * gdk_surface_set_input_region:
  * @surface: a `GdkSurface`
- * @region: region of surface to be reactive
+ * @region: (nullable): region of surface to be reactive,
+ *   or %NULL to make the entire surface reactive
  *
  * Apply the region to the surface for the purpose of event
  * handling.
