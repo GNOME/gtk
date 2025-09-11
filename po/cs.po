@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-09-04 15:52+0000\n"
-"PO-Revision-Date: 2025-09-09 16:12+0200\n"
+"POT-Creation-Date: 2025-09-09 19:28+0000\n"
+"PO-Revision-Date: 2025-09-09 21:46+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -6829,7 +6829,7 @@ msgstr "_Měřítko:"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:587
 msgid "Scale in percent"
-msgstr ""
+msgstr "Měřítko v procentech"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
