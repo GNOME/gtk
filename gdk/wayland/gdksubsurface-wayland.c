@@ -47,13 +47,29 @@
 static inline enum wl_output_transform
 gdk_texture_transform_to_wl (GdkDihedral transform)
 {
-  return (enum wl_output_transform) transform;
+  enum wl_output_transform tf;
+
+  if (transform == GDK_DIHEDRAL_FLIPPED_90)
+    tf = WL_OUTPUT_TRANSFORM_FLIPPED_270;
+  else if (transform == GDK_DIHEDRAL_FLIPPED_270)
+    tf = WL_OUTPUT_TRANSFORM_FLIPPED_90;
+  else
+    tf = (enum wl_output_transform) transform;
+  return tf;
 }
 
 static inline GdkDihedral
 wl_output_transform_to_gdk (enum wl_output_transform transform)
 {
-  return (GdkDihedral) transform;
+  GdkDihedral tf;
+
+  if (transform == WL_OUTPUT_TRANSFORM_FLIPPED_90)
+    tf = GDK_DIHEDRAL_FLIPPED_270;
+  else if (transform == WL_OUTPUT_TRANSFORM_FLIPPED_270)
+    tf = GDK_DIHEDRAL_FLIPPED_90;
+  else
+    tf = (GdkDihedral) transform;
+  return tf;
 }
 
 G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_NORMAL == (int) GDK_DIHEDRAL_NORMAL);
