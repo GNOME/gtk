@@ -290,6 +290,7 @@ gtk_css_style_snapshot_caret (GtkCssBoxes    *boxes,
   GdkSeat *seat;
   PangoDirection keyboard_direction;
   PangoDirection direction2;
+  gboolean width_was_zero;
 
   g_object_get (gtk_settings_get_for_display (display),
                 "gtk-split-cursor", &split_cursor,
@@ -307,8 +308,19 @@ gtk_css_style_snapshot_caret (GtkCssBoxes    *boxes,
     }
 
   pango_layout_get_caret_pos (layout, index, &strong_pos, &weak_pos);
+
+  /* We special-case a width of zero here, because we don't want
+   * an upright cursor go sloped due to rounding.
+   */
+  width_was_zero = strong_pos.width == 0;
   pango_extents_to_pixels (&strong_pos, NULL);
+  if (width_was_zero)
+    strong_pos.width = 0;
+
+  width_was_zero = weak_pos.width == 0;
   pango_extents_to_pixels (&weak_pos, NULL);
+  if (width_was_zero)
+    weak_pos.width = 0;
 
   direction2 = PANGO_DIRECTION_NEUTRAL;
   cursor2 = NULL; /* poor MSVC */
