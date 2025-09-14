@@ -25,6 +25,7 @@ PASS_FLAT(11) vec4 _table7;
 PASS(12) vec2 _pos;
 PASS_FLAT(13) Rect _rect;
 PASS(14) vec2 _tex_coord;
+PASS_FLAT(15) float _opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -43,6 +44,7 @@ IN(10) vec4 in_table6;
 IN(11) vec4 in_table7;
 IN(12) vec4 in_rect;
 IN(13) vec4 in_tex_rect;
+IN(14) float in_opacity;
 
 void
 run (out vec2 pos)
@@ -52,6 +54,7 @@ run (out vec2 pos)
   pos = rect_get_position (r);
 
   _pos = pos;
+  _opacity = in_opacity;
   _rect = r;
   _tex_coord = rect_get_coord (rect_from_gsk (in_tex_rect), pos);
   _params_r = in_params_r;
@@ -186,7 +189,7 @@ run (out vec4 color,
 
   pixel = output_color_from_alt (pixel);
 
-  color = output_color_alpha (pixel, rect_coverage (_rect, _pos));
+  color = output_color_alpha (pixel, rect_coverage (_rect, _pos) * _opacity);
   position = _pos;
 }
 

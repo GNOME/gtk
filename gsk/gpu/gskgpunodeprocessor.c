@@ -3323,6 +3323,7 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuNodeProcessor *self,
                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                                  gsk_gpu_node_processor_color_states_explicit (self, self->ccs, FALSE),
                                  &self->offset,
+                                 self->opacity,
                                  &(GskGpuShaderImage) {
                                    image,
                                    GSK_GPU_SAMPLER_DEFAULT,
@@ -4122,7 +4123,7 @@ static const struct
   },
   [GSK_COMPONENT_TRANSFER_NODE] = {
     0,
-    0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_component_transfer_node,
     NULL,
     NULL,

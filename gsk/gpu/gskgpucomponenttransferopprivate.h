@@ -11,6 +11,7 @@ void                    gsk_gpu_component_transfer_op                   (GskGpuF
                                                                          GskGpuShaderClip                clip,
                                                                          GskGpuColorStates               color_states,
                                                                          const graphene_point_t         *offset,
+                                                                         float                           opacity,
                                                                          const GskGpuShaderImage        *image,
                                                                          const GskComponentTransfer     *red,
                                                                          const GskComponentTransfer     *green,
