@@ -794,6 +794,12 @@ gtk_css_shadow_value_pop_snapshot (const GtkCssValue *value,
     gtk_snapshot_pop (snapshot);
 }
 
+guint
+gtk_css_shadow_value_get_n_shadows (const GtkCssValue *value)
+{
+  return value->n_shadows;
+}
+
 void
 gtk_css_shadow_value_get_offset (const GtkCssValue *value,
                                  guint              n,
