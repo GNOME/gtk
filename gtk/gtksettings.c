@@ -2003,6 +2003,7 @@ gtk_settings_reset_property (GtkSettings *settings,
     g_value_copy (&tmp_value, &settings->property_values[pspec->param_id - 1].value);
   else
     g_param_value_set_default (pspec, &settings->property_values[pspec->param_id - 1].value);
+  g_value_unset (&tmp_value);
 
   settings->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
   g_object_notify_by_pspec (G_OBJECT (settings), pspec);
