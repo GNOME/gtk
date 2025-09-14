@@ -144,6 +144,7 @@ pspec_select_value (GParamSpec *pspec,
       if (!G_TYPE_IS_ABSTRACT (pspec->value_type) &&
           !G_TYPE_IS_INTERFACE (pspec->value_type))
         {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           if (g_type_is_a (pspec->value_type, GDK_TYPE_PIXBUF))
             object = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 32, 32);
           else if (g_type_is_a (pspec->value_type, GDK_TYPE_PIXBUF_ANIMATION))
@@ -152,6 +153,7 @@ pspec_select_value (GParamSpec *pspec,
             object = g_object_new (pspec->value_type, NULL);
           g_object_ref_sink (object);
           g_value_take_object (value, object);
+G_GNUC_END_IGNORE_DEPRECATIONS
         }
     }
   /* unimplemented:

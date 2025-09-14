@@ -823,16 +823,3 @@ gsk_render_node_is_hdr (const GskRenderNode *node)
 {
   return node->is_hdr;
 }
-
-/* Whether we need an offscreen to handle opacity correctly for this node.
- * We don't if there is only one drawing node inside (could be child
- * node, or grandchild, or...).
- *
- * For containers with multiple children, we can avoid the offscreen if
- * the children are known not to overlap.
- */
-gboolean
-gsk_render_node_use_offscreen_for_opacity (const GskRenderNode *node)
-{
-  return node->offscreen_for_opacity;
-}

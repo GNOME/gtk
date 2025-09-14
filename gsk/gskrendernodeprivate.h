@@ -34,7 +34,6 @@ struct _GskRenderNode
   graphene_rect_t bounds;
 
   guint preferred_depth : GDK_MEMORY_DEPTH_BITS;
-  guint offscreen_for_opacity : 1;
   guint fully_opaque : 1;
   guint is_hdr : 1;
 };
@@ -113,8 +112,6 @@ GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode    
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 
 gboolean        gsk_container_node_is_disjoint          (const GskRenderNode         *node) G_GNUC_PURE;
-
-gboolean        gsk_render_node_use_offscreen_for_opacity (const GskRenderNode       *node) G_GNUC_PURE;
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
 #define gsk_render_node_unref(node) _gsk_render_node_unref(node)
