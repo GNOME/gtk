@@ -140,6 +140,7 @@ gsk_gpu_component_transfer_op (GskGpuFrame                *frame,
                                GskGpuShaderClip            clip,
                                GskGpuColorStates           color_states,
                                const graphene_point_t     *offset,
+                               float                       opacity,
                                const GskGpuShaderImage    *image,
                                const GskComponentTransfer *red,
                                const GskComponentTransfer *green,
@@ -166,5 +167,7 @@ gsk_gpu_component_transfer_op (GskGpuFrame                *frame,
   copy_component_transfer (green, 1, instance, &n);
   copy_component_transfer (blue, 2, instance, &n);
   copy_component_transfer (alpha, 3, instance, &n);
+
+  instance->opacity = opacity;
 }
 
