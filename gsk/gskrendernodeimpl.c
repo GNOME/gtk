@@ -303,7 +303,6 @@ gsk_color_node_new2 (const GdkColor        *color,
 
   self = gsk_render_node_alloc (GSK_COLOR_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gdk_color_is_opaque (color);
   node->preferred_depth = GDK_MEMORY_NONE;
   node->is_hdr = color_state_is_hdr (color->color_state);
@@ -820,7 +819,6 @@ gsk_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
 
   self = gsk_render_node_alloc (GSK_LINEAR_GRADIENT_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -939,7 +937,6 @@ gsk_repeating_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
 
   self = gsk_render_node_alloc (GSK_REPEATING_LINEAR_GRADIENT_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -1375,7 +1372,6 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
 
   self = gsk_render_node_alloc (GSK_RADIAL_GRADIENT_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -1523,7 +1519,6 @@ gsk_repeating_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
 
   self = gsk_render_node_alloc (GSK_REPEATING_RADIAL_GRADIENT_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -2064,7 +2059,6 @@ gsk_conic_gradient_node_new2 (const graphene_rect_t   *bounds,
 
   self = gsk_render_node_alloc (GSK_CONIC_GRADIENT_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -2539,7 +2533,6 @@ gsk_border_node_new2 (const GskRoundedRect *outline,
 
   self = gsk_render_node_alloc (GSK_BORDER_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
@@ -2816,7 +2809,6 @@ gsk_texture_node_new (GdkTexture            *texture,
 
   self = gsk_render_node_alloc (GSK_TEXTURE_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
   node->is_hdr = color_state_is_hdr (gdk_texture_get_color_state (texture));
 
@@ -3037,7 +3029,6 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
 
   self = gsk_render_node_alloc (GSK_TEXTURE_SCALE_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE &&
     bounds->size.width == floor (bounds->size.width) &&
     bounds->size.height == floor (bounds->size.height);
@@ -3560,7 +3551,6 @@ gsk_inset_shadow_node_new2 (const GskRoundedRect   *outline,
 
   self = gsk_render_node_alloc (GSK_INSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
@@ -3956,7 +3946,6 @@ gsk_outset_shadow_node_new2 (const GskRoundedRect   *outline,
 
   self = gsk_render_node_alloc (GSK_OUTSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
@@ -4231,7 +4220,6 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
 
   self = gsk_render_node_alloc (GSK_CAIRO_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->preferred_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -4501,7 +4489,6 @@ gsk_container_node_new (GskRenderNode **children,
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
       self->children[0] = gsk_render_node_ref (children[0]);
-      node->offscreen_for_opacity = children[0]->offscreen_for_opacity;
       node->preferred_depth = children[0]->preferred_depth;
       gsk_rect_init_from_rect (&node->bounds, &(children[0]->bounds));
       have_opaque = gsk_render_node_get_opaque_rect (self->children[0], &self->opaque);
@@ -4513,7 +4500,6 @@ gsk_container_node_new (GskRenderNode **children,
           self->disjoint = self->disjoint && !gsk_rect_intersects (&node->bounds, &(children[i]->bounds));
           graphene_rect_union (&node->bounds, &(children[i]->bounds), &node->bounds);
           node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
-          node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
           if (gsk_render_node_get_opaque_rect (self->children[i], &child_opaque))
             {
               if (have_opaque)
@@ -4528,7 +4514,6 @@ gsk_container_node_new (GskRenderNode **children,
           is_hdr |= gsk_render_node_is_hdr (self->children[i]);
         }
 
-      node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
       node->fully_opaque = have_opaque && graphene_rect_equal (&node->bounds, &self->opaque);
       node->is_hdr = is_hdr;
    }
@@ -4810,7 +4795,6 @@ gsk_transform_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_TRANSFORM_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->fully_opaque = child->fully_opaque && category >= GSK_TRANSFORM_CATEGORY_2D_AFFINE;
 
   self->child = gsk_render_node_ref (child);
@@ -4971,7 +4955,6 @@ gsk_opacity_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_OPACITY_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
 
   self->child = gsk_render_node_ref (child);
   self->opacity = CLAMP (opacity, 0.0, 1.0);
@@ -5204,7 +5187,6 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
 
   self = gsk_render_node_alloc (GSK_COLOR_MATRIX_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
 
   self->child = gsk_render_node_ref (child);
   graphene_matrix_init_from_matrix (&self->color_matrix, color_matrix);
@@ -5503,7 +5485,6 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
 
   self = gsk_render_node_alloc (GSK_REPEAT_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = TRUE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -5680,7 +5661,6 @@ gsk_clip_node_new (GskRenderNode         *child,
 
   self = gsk_render_node_alloc (GSK_CLIP_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
   /* because of the intersection when computing bounds */
   node->fully_opaque = child->fully_opaque;
 
@@ -5867,7 +5847,6 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
 
   self = gsk_render_node_alloc (GSK_ROUNDED_CLIP_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
 
   self->child = gsk_render_node_ref (child);
   gsk_rounded_rect_init_copy (&self->clip, clip);
@@ -6044,7 +6023,6 @@ gsk_fill_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_FILL_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
 
@@ -6255,7 +6233,6 @@ gsk_stroke_node_new (GskRenderNode   *child,
 
   self = gsk_render_node_alloc (GSK_STROKE_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
 
@@ -6572,7 +6549,6 @@ gsk_shadow_node_new2 (GskRenderNode        *child,
 
   self = gsk_render_node_alloc (GSK_SHADOW_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = TRUE;
 
   self->child = gsk_render_node_ref (child);
   self->n_shadows = n_shadows;
@@ -6839,7 +6815,6 @@ gsk_blend_node_new (GskRenderNode *bottom,
 
   self = gsk_render_node_alloc (GSK_BLEND_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = TRUE;
 
   self->bottom = gsk_render_node_ref (bottom);
   self->top = gsk_render_node_ref (top);
@@ -7026,7 +7001,6 @@ gsk_cross_fade_node_new (GskRenderNode *start,
 
   self = gsk_render_node_alloc (GSK_CROSS_FADE_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = TRUE;
   node->fully_opaque = start->fully_opaque && end->fully_opaque &&
     gsk_rect_equal (&start->bounds, &end->bounds);
 
@@ -7280,7 +7254,6 @@ gsk_text_node_new2 (PangoFont              *font,
 
   self = gsk_render_node_alloc (GSK_TEXT_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
   node->preferred_depth = GDK_MEMORY_NONE;
   node->is_hdr = color_state_is_hdr (color->color_state);
 
@@ -7744,7 +7717,6 @@ gsk_blur_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_BLUR_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
 
   self->child = gsk_render_node_ref (child);
   self->radius = radius;
@@ -8160,7 +8132,6 @@ gsk_debug_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_DEBUG_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->fully_opaque = child->fully_opaque;
 
   self->child = gsk_render_node_ref (child);
@@ -8346,7 +8317,6 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
 
   self = gsk_render_node_alloc (GSK_GL_SHADER_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = TRUE;
   node->preferred_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -8580,7 +8550,6 @@ gsk_subsurface_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_SUBSURFACE_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->fully_opaque = child->fully_opaque;
 
   self->child = gsk_render_node_ref (child);
@@ -8796,7 +8765,6 @@ gsk_component_transfer_node_new (GskRenderNode              *child,
 
   self = gsk_render_node_alloc (GSK_COMPONENT_TRANSFER_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->fully_opaque = FALSE;
 
   self->child = gsk_render_node_ref (child);
