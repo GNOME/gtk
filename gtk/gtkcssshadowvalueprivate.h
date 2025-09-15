@@ -57,6 +57,8 @@ gboolean        gtk_css_shadow_value_push_snapshot    (const GtkCssValue        
 void            gtk_css_shadow_value_pop_snapshot     (const GtkCssValue        *value,
                                                        GtkSnapshot              *snapshot);
 
+guint           gtk_css_shadow_value_get_n_shadows    (const GtkCssValue        *value);
+
 void            gtk_css_shadow_value_get_offset       (const GtkCssValue        *value,
                                                        guint                     n,
                                                        graphene_point_t         *offset);
