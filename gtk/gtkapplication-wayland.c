@@ -229,21 +229,27 @@ gtk_application_impl_wayland_uninhibit (GtkApplicationImpl *impl,
 
 static void
 gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
-                                      gboolean            support_save,
-                                      GVariant           *global)
+                                      gboolean            support_save)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GdkDisplay *display = gdk_display_get_default ();
   enum xx_session_manager_v1_reason wl_reason;
-  const char *id = NULL;
+  char *id = NULL;
+  GVariant *state;
 
-  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->startup (impl, support_save, global);
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->startup (impl, support_save);
 
   if (!support_save)
     return;
 
-  if (global)
-    g_variant_lookup (global, "wayland-session", "&s", &id);
+  state = gtk_application_impl_retrieve_state (impl);
+  if (state)
+    {
+      GVariant *global = g_variant_get_child_value (state, 0);
+      g_variant_lookup (global, "wayland-session", "s", &id);
+      g_clear_pointer (&global, g_variant_unref);
+      g_clear_pointer (&state, g_variant_unref);
+    }
 
   switch (dbus->reason)
     {
@@ -261,7 +267,7 @@ gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
 
     case GTK_RESTORE_REASON_PRISTINE:
       wl_reason = XX_SESSION_MANAGER_V1_REASON_LAUNCH;
-      id = NULL;
+      g_clear_pointer (&id, g_free);
       break;
     default:
       g_assert_not_reached ();
@@ -269,6 +275,7 @@ gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
 
   GTK_DEBUG (SESSION, "Wayland register session ID %s", id);
   gdk_wayland_display_register_session (display, wl_reason, id);
+  g_free (id);
 }
 
 static void

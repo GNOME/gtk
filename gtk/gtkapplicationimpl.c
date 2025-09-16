@@ -74,10 +74,9 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
 
 void
 gtk_application_impl_startup (GtkApplicationImpl *impl,
-                              gboolean            support_save,
-                              GVariant           *global_state)
+                              gboolean            support_save)
 {
-  GTK_APPLICATION_IMPL_GET_CLASS (impl)->startup (impl, support_save, global_state);
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->startup (impl, support_save);
 }
 
 void

@@ -77,8 +77,7 @@ typedef struct
   GObjectClass parent_class;
 
   void        (* startup)                   (GtkApplicationImpl          *impl,
-                                             gboolean                     support_save,
-                                             GVariant                    *global_state);
+                                             gboolean                     support_save);
   void        (* shutdown)                  (GtkApplicationImpl          *impl);
 
   void        (* before_emit)               (GtkApplicationImpl          *impl,
@@ -178,8 +177,7 @@ GType                   gtk_application_impl_android_get_type           (void);
 GtkApplicationImpl *    gtk_application_impl_new                        (GtkApplication              *application,
                                                                          GdkDisplay                  *display);
 void                    gtk_application_impl_startup                    (GtkApplicationImpl          *impl,
-                                                                         gboolean                     support_save,
-                                                                         GVariant                    *global_state);
+                                                                         gboolean                     support_save);
 void                    gtk_application_impl_shutdown                   (GtkApplicationImpl          *impl);
 void                    gtk_application_impl_before_emit                (GtkApplicationImpl          *impl,
                                                                          GVariant                    *platform_data);

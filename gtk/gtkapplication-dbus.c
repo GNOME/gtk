@@ -194,8 +194,7 @@ get_restore_reason (void)
 
 static void
 gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
-                                   gboolean            support_save,
-                                   GVariant           *global_state)
+                                   gboolean            support_save)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GError *error = NULL;
@@ -212,8 +211,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
     return;
 
   /* TODO get these from the session manager */
-  if (global_state)
-    g_variant_lookup (global_state, "instance-id", "s", &dbus->instance_id);
+  dbus->instance_id = g_strdup (""); /* FIXME */
   dbus->reason = get_restore_reason ();
 
   dbus->application_id = g_application_get_application_id (G_APPLICATION (impl->application));

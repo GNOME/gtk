@@ -375,8 +375,6 @@ gtk_application_startup (GApplication *g_application)
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   gint64 before G_GNUC_UNUSED;
   gint64 before2 G_GNUC_UNUSED;
-  GVariant *state = NULL;
-  GVariant *global = NULL;
 
   before = GDK_PROFILER_CURRENT_TIME;
 
@@ -395,17 +393,7 @@ gtk_application_startup (GApplication *g_application)
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
 
-  if (priv->support_save)
-    {
-      state = gtk_application_impl_retrieve_state (priv->impl);
-      if (state)
-        global = g_variant_get_child_value (state, 0);
-    }
-
-  gtk_application_impl_startup (priv->impl, priv->support_save, global);
-
-  g_clear_pointer (&global, g_variant_unref);
-  g_clear_pointer (&state, g_variant_unref);
+  gtk_application_impl_startup (priv->impl, priv->support_save);
 
   gtk_application_load_resources (application);
   gtk_application_set_window_icon (application);
