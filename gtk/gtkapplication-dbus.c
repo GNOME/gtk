@@ -528,15 +528,20 @@ gtk_application_impl_dbus_collect_global_state (GtkApplicationImpl *impl,
 static char *
 get_state_file (GtkApplicationImpl *impl)
 {
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   const char *app_id;
+  const char *instance_id;
   const char *dir;
 
   app_id = g_application_get_application_id (G_APPLICATION (impl->application));
   if (!app_id)
     return NULL;
 
+  instance_id = dbus->instance_id;
+
   dir = g_get_user_state_dir ();
-  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, ".state", NULL);
+
+  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "#", instance_id, ".state", NULL);
 }
 
 static void
