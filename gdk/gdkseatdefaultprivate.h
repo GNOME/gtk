@@ -48,6 +48,9 @@ GType     gdk_seat_default_get_type     (void) G_GNUC_CONST;
 
 GdkSeat * gdk_seat_default_new_for_logical_pair         (GdkDevice      *pointer,
                                                          GdkDevice      *keyboard);
+void      gdk_seat_default_init_for_logical_pair        (GdkSeatDefault *seat,
+                                                         GdkDevice      *pointer,
+                                                         GdkDevice      *keyboard);
 
 void      gdk_seat_default_add_physical_device          (GdkSeatDefault *seat,
                                                          GdkDevice      *device);
@@ -57,6 +60,8 @@ void      gdk_seat_default_add_tool                     (GdkSeatDefault *seat,
                                                          GdkDeviceTool  *tool);
 void      gdk_seat_default_remove_tool                  (GdkSeatDefault *seat,
                                                          GdkDeviceTool  *tool);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkSeatDefault, g_object_unref)
 
 G_END_DECLS
 
