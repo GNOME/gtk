@@ -78,6 +78,21 @@ gtk_accessible_text_default_get_default_attributes (GtkAccessibleText   *self,
   *attribute_values = g_new0 (char *, 1);
 }
 
+static gboolean
+gtk_accessible_text_default_set_caret_position (GtkAccessibleText *self,
+                                                unsigned int       offset)
+{
+  return FALSE;
+}
+
+static gboolean
+gtk_accessible_text_default_set_selection (GtkAccessibleText      *self,
+                                           gsize                   i,
+                                           GtkAccessibleTextRange *range)
+{
+  return FALSE;
+}
+
 static void
 gtk_accessible_text_default_init (GtkAccessibleTextInterface *iface)
 {
@@ -87,6 +102,8 @@ gtk_accessible_text_default_init (GtkAccessibleTextInterface *iface)
   iface->get_selection = gtk_accessible_text_default_get_selection;
   iface->get_attributes = gtk_accessible_text_default_get_attributes;
   iface->get_default_attributes = gtk_accessible_text_default_get_default_attributes;
+  iface->set_caret_position = gtk_accessible_text_default_set_caret_position;
+  iface->set_selection = gtk_accessible_text_default_set_selection;
 }
 
 static GBytes *
@@ -522,6 +539,44 @@ gtk_accessible_text_get_offset (GtkAccessibleText      *self,
     return GTK_ACCESSIBLE_TEXT_GET_IFACE (self)->get_offset (self, point, offset);
 
   return FALSE;
+}
+
+/*< private >
+ * gtk_accessible_text_set_caret_position:
+ * @self: the accessible object
+ * @offset: the text offset in characters
+ *
+ * Sets the caret position.
+ *
+ * Returns: true if the caret position was updated
+ */
+gboolean
+gtk_accessible_text_set_caret_position (GtkAccessibleText *self,
+                                        unsigned int       offset)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE_TEXT (self), FALSE);
+
+  return GTK_ACCESSIBLE_TEXT_GET_IFACE (self)->set_caret_position (self, offset);
+}
+
+/*< private >
+ * gtk_accessible_text_set_selection:
+ * @self: the accessible object
+ * @i: the selection to set
+ * @range: the range to set the selection to
+ *
+ * Sets the caret position.
+ *
+ * Returns: true if the selection was updated
+ */
+gboolean
+gtk_accessible_text_set_selection (GtkAccessibleText      *self,
+                                   gsize                   i,
+                                   GtkAccessibleTextRange *range)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE_TEXT (self), FALSE);
+
+  return GTK_ACCESSIBLE_TEXT_GET_IFACE (self)->set_selection (self, i, range);
 }
 
 /**

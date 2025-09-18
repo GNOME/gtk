@@ -26,6 +26,8 @@
 #include "gtkstack.h"
 #include "gtkbinlayout.h"
 #include "gtkaccessibleprivate.h"
+#include "gtkaccessibletext.h"
+#include "gtkaccessiblerange.h"
 #include "gtkaccessiblevalueprivate.h"
 #include "gtkatcontextprivate.h"
 #include "gtkcolumnview.h"
@@ -206,6 +208,8 @@ struct _GtkInspectorA11y
   GtkWidget *bounds;
   GtkWidget *path_label;
   GtkWidget *path;
+  GtkWidget *interface_label;
+  GtkWidget *interface;
   GtkWidget *attributes;
 };
 
@@ -300,6 +304,22 @@ update_bounds (GtkInspectorA11y *sl)
       gtk_label_set_label (GTK_LABEL (sl->bounds), size_label);
       g_free (size_label);
     }
+}
+
+static void
+update_interface (GtkInspectorA11y *sl)
+{
+  const char *interface = NULL;
+
+  if (GTK_IS_ACCESSIBLE_TEXT (sl->object))
+    interface = "GtkAccessibleText";
+  else if (GTK_IS_ACCESSIBLE_RANGE (sl->object))
+    interface = "GtkAccessibleRange";
+
+  gtk_label_set_label (GTK_LABEL (sl->interface), interface ? interface : "");
+
+  gtk_widget_set_visible (sl->interface, interface != NULL);
+  gtk_widget_set_visible (sl->interface_label, interface != NULL);
 }
 
 extern GType gtk_string_pair_get_type (void);
@@ -465,6 +485,7 @@ refresh_all (GtkInspectorA11y *sl)
   update_name (sl);
   update_description (sl);
   update_path (sl);
+  update_interface (sl);
   update_attributes (sl);
 }
 
@@ -504,6 +525,7 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
       gtk_stack_page_set_visible (page, TRUE);
       refresh_all (sl);
       update_bounds (sl);
+      update_interface (sl);
     }
   else
     {
@@ -520,6 +542,9 @@ gtk_inspector_a11y_init (GtkInspectorA11y *sl)
   gtk_widget_set_visible (sl->path, FALSE);
   gtk_widget_set_visible (sl->path_label, FALSE);
 #endif
+
+  gtk_widget_set_visible (sl->interface, FALSE);
+  gtk_widget_set_visible (sl->interface_label, FALSE);
 }
 
 static void
@@ -562,6 +587,8 @@ gtk_inspector_a11y_class_init (GtkInspectorA11yClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, bounds);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path_label);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, interface_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, interface);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, attributes);
 
   gtk_widget_class_bind_template_callback (widget_class, setup_cell_cb);

@@ -91,7 +91,14 @@ accessible_text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "SetCaretOffset") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      int offset;
+      gboolean ret;
+
+      g_variant_get (parameters, "(i)", &offset);
+
+      ret = gtk_accessible_text_set_caret_position (accessible_text, offset);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "GetText") == 0)
     {
@@ -342,14 +349,79 @@ accessible_text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "AddSelection") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      int start, end;
+      gsize n_ranges;
+      gboolean ret;
+
+      g_variant_get (parameters, "(ii)", &start, &end);
+
+      if (gtk_accessible_text_get_selection (accessible_text, &n_ranges, NULL))
+        {
+          ret = FALSE;
+        }
+      else
+        {
+          GtkAccessibleTextRange range;
+
+          range.start = start;
+          range.length = end - start;
+          ret = gtk_accessible_text_set_selection (accessible_text, 0, &range);
+        }
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "RemoveSelection") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      int num;
+      gboolean ret;
+
+      g_variant_get (parameters, "(i)", &num);
+
+      if (num != 0)
+        ret = FALSE;
+      else
+        {
+          GtkAccessibleTextRange *ranges;
+          gsize n_ranges;
+
+          if (!gtk_accessible_text_get_selection (accessible_text, &n_ranges, &ranges))
+            {
+              ret = FALSE;
+            }
+          else if (num >= n_ranges)
+            {
+              g_free (ranges);
+              ret = FALSE;
+            }
+          else
+            {
+              GtkAccessibleTextRange range;
+
+              range.start = ranges[num].start + ranges[num].length;
+              range.length = 0;
+              g_free (ranges);
+
+              ret = gtk_accessible_text_set_selection (accessible_text, num, &range);
+            }
+        }
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "SetSelection") == 0)
     {
+      int num;
+      int start, end;
+      gboolean ret;
+      GtkAccessibleTextRange range;
+
+      g_variant_get (parameters, "(iii)", &num, &start, &end);
+
+      range.start = start;
+      range.length = end - start;
+
+      ret = gtk_accessible_text_set_selection (accessible_text, num, &range);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
       g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)

@@ -67,4 +67,13 @@ gtk_accessible_text_get_offset (GtkAccessibleText      *self,
                                 const graphene_point_t *point,
                                 unsigned int           *offset);
 
+gboolean
+gtk_accessible_text_set_caret_position (GtkAccessibleText *self,
+                                        unsigned int       offset);
+
+gboolean
+gtk_accessible_text_set_selection (GtkAccessibleText      *self,
+                                   gsize                   i,
+                                   GtkAccessibleTextRange *range);
+
 G_END_DECLS
