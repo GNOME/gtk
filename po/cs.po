@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-09-09 05:40+0000\n"
-"PO-Revision-Date: 2025-09-09 16:04+0200\n"
+"POT-Creation-Date: 2025-09-18 19:21+0000\n"
+"PO-Revision-Date: 2025-09-18 21:34+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -4567,11 +4567,15 @@ msgstr "Rozměry"
 msgid "Object Path"
 msgstr "Cesta k objektu"
 
-#: gtk/inspector/a11y.ui:164
+#: gtk/inspector/a11y.ui:153
+msgid "Interface"
+msgstr "Rozhraní"
+
+#: gtk/inspector/a11y.ui:192
 msgid "Attribute"
 msgstr "Atribut"
 
-#: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
+#: gtk/inspector/a11y.ui:204 gtk/inspector/css-node-tree.ui:70
 #: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:207
 #: gtk/inspector/recorder.ui:251 gtk/inspector/strv-editor.c:73
 msgid "Value"
