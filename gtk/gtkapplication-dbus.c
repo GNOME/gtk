@@ -28,6 +28,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "gdk/gdkconstructorprivate.h"
+#include "gtktypebuiltins.h"
 
 #ifdef G_OS_UNIX
 #include <gio/gunixfdlist.h>
@@ -173,23 +174,101 @@ create_monitor_cb (GObject      *source,
   g_variant_unref (ret);
 }
 
-static GtkRestoreReason
-get_restore_reason (void)
+static char *
+get_state_file (GtkApplicationImpl *impl,
+                const char         *instance_id_override)
 {
-  const char *str = g_getenv ("GTK_RESTORE_REASON");
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+  const char *app_id;
+  const char *instance_id;
+  const char *dir;
 
-  if (!str || strcmp (str, "launch") == 0)
-    return GTK_RESTORE_REASON_LAUNCH;
-  else if (strcmp (str, "restore") == 0)
-    return GTK_RESTORE_REASON_RESTORE;
-  else if (strcmp (str, "recover") == 0)
-    return GTK_RESTORE_REASON_RECOVER;
-  else if (strcmp (str, "pristine") == 0)
-    return GTK_RESTORE_REASON_PRISTINE;
+  app_id = g_application_get_application_id (G_APPLICATION (impl->application));
+  if (!app_id)
+    return NULL;
 
-  g_warning ("Unknown GTK_RESTORE_REASON value: %s", str);
+  if (instance_id_override)
+    instance_id = instance_id_override;
+  else if (dbus->instance_id)
+    instance_id = dbus->instance_id;
+  else
+    return NULL;
 
-  return GTK_RESTORE_REASON_LAUNCH;
+  dir = g_get_user_state_dir ();
+
+  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "#", instance_id, ".state", NULL);
+}
+
+static gboolean
+request_restore (GtkApplicationImplDBus *dbus)
+{
+  GtkApplicationImpl *impl = (GtkApplicationImpl*) dbus;
+  const char *app_id;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GVariant) reply = NULL;
+  g_autoptr (GVariantIter) discard_iter = NULL;
+  gboolean discarded_any = FALSE;
+  GVariantBuilder discarded;
+  const char *discard = NULL;
+
+  app_id = g_application_get_application_id (G_APPLICATION (dbus->impl.application));
+
+  reply = g_dbus_connection_call_sync (dbus->session,
+                                       "org.gnome.SessionManager",
+                                       "/org/gnome/SessionManager",
+                                       "org.gnome.SessionManager",
+                                       "RegisterRestore",
+                                       g_variant_new ("(ss)", app_id, ""),
+                                       G_VARIANT_TYPE ("(usas)"),
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       -1,
+                                       NULL,
+                                       &error);
+  if (!reply)
+    {
+      g_warning ("Failed to register restore: %s", error->message);
+      return FALSE;
+    }
+
+  g_variant_get (reply, "(usas)", &dbus->reason, &dbus->instance_id, &discard_iter);
+
+  GTK_DEBUG (SESSION, "Registered restore, reason %s instance-id %s",
+             g_enum_get_value (g_type_class_get (GTK_TYPE_RESTORE_REASON), dbus->reason)->value_nick,
+             dbus->instance_id);
+
+  g_variant_builder_init (&discarded, G_VARIANT_TYPE ("(sas)"));
+  g_variant_builder_add (&discarded, "s", app_id);
+  g_variant_builder_open (&discarded, G_VARIANT_TYPE ("as"));
+  while (g_variant_iter_loop (discard_iter, "s", &discard))
+    {
+      char *path = get_state_file (impl, discard);
+
+      if (g_remove (path) < 0)
+        {
+          g_warning ("Failed to remove discarded state file '%s': %m", path);
+          g_free (path);
+          continue;
+        }
+
+      g_free (path);
+      discarded_any = TRUE;
+      g_variant_builder_add (&discarded, "s", discard);
+    }
+  g_variant_builder_close (&discarded);
+
+  if (discarded_any)
+    g_dbus_connection_call_sync (dbus->session,
+                                 "org.gnome.SessionManager",
+                                 "/org/gnome/SessionManager",
+                                 "org.gnome.SessionManager",
+                                 "DeletedInstanceIds",
+                                 g_variant_builder_end (&discarded),
+                                 NULL,
+                                 G_DBUS_CALL_FLAGS_NONE,
+                                 -1,
+                                 NULL,
+                                 NULL);
+  return TRUE;
 }
 
 static void
@@ -210,9 +289,11 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   if (!dbus->session)
     return;
 
-  /* TODO get these from the session manager */
-  dbus->instance_id = g_strdup (""); /* FIXME */
-  dbus->reason = get_restore_reason ();
+  if (!support_save || !request_restore (dbus))
+    {
+      dbus->reason = GTK_RESTORE_REASON_PRISTINE;
+      dbus->instance_id = NULL;
+    }
 
   dbus->application_id = g_application_get_application_id (G_APPLICATION (impl->application));
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
@@ -270,6 +351,21 @@ gtk_application_impl_dbus_shutdown (GtkApplicationImpl *impl)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   g_cancellable_cancel (dbus->cancellable);
+
+  if (dbus->instance_id)
+    g_dbus_connection_call_sync (dbus->session,
+                                 "org.gnome.SessionManager",
+                                 "/org/gnome/SessionManager",
+                                 "org.gnome.SessionManager",
+                                 "UnregisterRestore",
+                                 g_variant_new ("(ss)",
+                                                g_application_get_application_id (G_APPLICATION (impl->application)),
+                                                dbus->instance_id),
+                                 NULL,
+                                 G_DBUS_CALL_FLAGS_NONE,
+                                 -1,
+                                 NULL,
+                                 NULL);
 }
 
 GQuark gtk_application_impl_dbus_export_id_quark (void);
@@ -516,41 +612,12 @@ gtk_application_impl_dbus_get_restore_reason (GtkApplicationImpl *impl)
 }
 
 static void
-gtk_application_impl_dbus_collect_global_state (GtkApplicationImpl *impl,
-                                                GVariantBuilder    *state)
-{
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
-
-  if (dbus->instance_id)
-    g_variant_builder_add (state, "{sv}", "instance-id", g_variant_new_string (dbus->instance_id));
-}
-
-static char *
-get_state_file (GtkApplicationImpl *impl)
-{
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
-  const char *app_id;
-  const char *instance_id;
-  const char *dir;
-
-  app_id = g_application_get_application_id (G_APPLICATION (impl->application));
-  if (!app_id)
-    return NULL;
-
-  instance_id = dbus->instance_id;
-
-  dir = g_get_user_state_dir ();
-
-  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "#", instance_id, ".state", NULL);
-}
-
-static void
 gtk_application_impl_dbus_store_state (GtkApplicationImpl *impl,
                                        GVariant           *state)
 {
   char *file;
 
-  file = get_state_file (impl);
+  file = get_state_file (impl, NULL);
   if (file)
     {
       GTK_DEBUG (SESSION, "Store state, file %s", file);
@@ -568,7 +635,7 @@ gtk_application_impl_dbus_forget_state (GtkApplicationImpl *impl)
 {
   char *file;
 
-  file = get_state_file (impl);
+  file = get_state_file (impl, NULL);
   g_remove (file);
   g_free (file);
 }
@@ -581,7 +648,7 @@ gtk_application_impl_dbus_retrieve_state (GtkApplicationImpl *impl)
   gsize length;
   GVariant *state = NULL;
 
-  file = get_state_file (impl);
+  file = get_state_file (impl, NULL);
   if (!file)
     return NULL;
 
@@ -650,7 +717,6 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->inhibit = gtk_application_impl_dbus_inhibit;
   impl_class->uninhibit = gtk_application_impl_dbus_uninhibit;
   impl_class->get_restore_reason = gtk_application_impl_dbus_get_restore_reason;
-  impl_class->collect_global_state = gtk_application_impl_dbus_collect_global_state;
   impl_class->store_state = gtk_application_impl_dbus_store_state;
   impl_class->forget_state = gtk_application_impl_dbus_forget_state;
   impl_class->retrieve_state = gtk_application_impl_dbus_retrieve_state;
