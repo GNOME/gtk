@@ -82,7 +82,6 @@ struct _GdkWaylandDisplay
   GdkDisplay parent_instance;
   GList *toplevels;
 
-  GHashTable *settings;
   GsdXftSettings xft_settings;
   GDBusProxy *settings_portal;
 
