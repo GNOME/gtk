@@ -101,7 +101,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   GskTransform *transform;
   gboolean has_shadow;
   gboolean is_symbolic_paintable;
-  GdkRGBA colors[4];
+  GdkRGBA colors[5];
   double weight = 400;
 
   g_return_if_fail (style != NULL);
