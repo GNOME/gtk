@@ -241,7 +241,11 @@ request_restore (GtkApplicationImplDBus *dbus)
   g_variant_builder_open (&discarded, G_VARIANT_TYPE ("as"));
   while (g_variant_iter_loop (discard_iter, "s", &discard))
     {
-      char *path = get_state_file (impl, discard);
+      char *path;
+
+      GTK_DEBUG (SESSION, "Cleaning up instance id: %s", discard);
+
+      path = get_state_file (impl, discard);
 
       if (g_remove (path) < 0)
         {
