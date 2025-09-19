@@ -76,6 +76,7 @@ content_files = [
   "section-list-widget.md",
   "section-text-widget.md",
   "section-tree-widget.md",
+  "section-threading.md",
   "migrating-2to4.md",
   "migrating-3to4.md",
   "migrating-4to5.md",
