@@ -341,7 +341,6 @@ msys2-ucrt64:
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWin32-4.0.gir"
 
 macos-arm64:
-  allow_failure: true
   stage: build
   tags:
     - macos
