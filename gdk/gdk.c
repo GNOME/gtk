@@ -409,6 +409,9 @@ gdk_running_in_sandbox (void)
   return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
 }
 
+#define DBUS_BUS_NAME "org.freedesktop.DBus"
+#define DBUS_OBJECT_PATH "/org/freedesktop/DBus"
+#define DBUS_BUS_INTERFACE "org.freedesktop.DBus"
 #define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
 #define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
 
@@ -418,6 +421,51 @@ void
 gdk_disable_portals (void)
 {
   portals_disabled = TRUE;
+}
+
+static gboolean
+environment_has_portals (void)
+{
+  static gboolean cached = FALSE;
+  static gboolean has_portals = FALSE;
+  GDBusConnection *bus = NULL;
+  GVariant *result = NULL;
+  GVariantIter *activatable_names = NULL;
+  const char *name = NULL;
+
+  if (cached)
+    return has_portals;
+
+  bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  if (!bus)
+    return FALSE;
+
+  result = g_dbus_connection_call_sync (bus,
+                                        DBUS_BUS_NAME,
+                                        DBUS_OBJECT_PATH,
+                                        DBUS_BUS_INTERFACE,
+                                        "ListActivatableNames",
+                                        NULL,
+                                        G_VARIANT_TYPE ("(as)"),
+                                        G_DBUS_CALL_FLAGS_NONE,
+                                        3000,
+                                        NULL,
+                                        NULL);
+  if (!result)
+    return FALSE;
+
+  g_variant_get (result, "(as)", &activatable_names);
+  while (g_variant_iter_next (activatable_names, "s", &name))
+    if (g_str_equal (name, PORTAL_BUS_NAME))
+      {
+        has_portals = TRUE;
+        break;
+      }
+  g_variant_iter_free (activatable_names);
+  g_variant_unref (result);
+
+  cached = TRUE;
+  return has_portals;
 }
 
 static gboolean
@@ -452,7 +500,7 @@ check_portal_interface (const char *portal_interface,
                                             "Get",
                                             g_variant_new ("(ss)", portal_interface, "version"),
                                             NULL,
-                                            G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                                            G_DBUS_CALL_FLAGS_NONE,
                                             3000,
                                             NULL,
                                             NULL);
@@ -507,6 +555,9 @@ gdk_display_should_use_portal (GdkDisplay *display,
 
   if (gdk_running_in_sandbox ())
     return TRUE;
+
+  if (!environment_has_portals ())
+    return FALSE;
 
   if (portal_interface == NULL)
     return TRUE;
