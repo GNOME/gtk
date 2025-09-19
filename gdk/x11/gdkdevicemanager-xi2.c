@@ -1624,11 +1624,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                            xev->detail,
                            xev->event_x, xev->event_y);
 
-#ifdef XINPUT_2_2
-        if (xev->flags & XIPointerEmulated)
-          return FALSE;
-#endif
-
         if (ev->evtype == XI_ButtonRelease &&
             (xev->detail >= 4 && xev->detail <= 7))
           return FALSE;
@@ -1639,6 +1634,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             /* Button presses of button 4-7 are scroll events */
 
+#ifdef XINPUT_2_2
+            if (xev->flags & XIPointerEmulated)
+              return FALSE;
+#endif
             if (xev->detail == 4)
               direction = GDK_SCROLL_UP;
             else if (xev->detail == 5)
@@ -1710,11 +1709,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         double x, y;
         double *axes;
 
-#ifdef XINPUT_2_2
-        if (xev->flags & XIPointerEmulated)
-          return FALSE;
-#endif
-
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
         device = g_hash_table_lookup (device_manager->id_table,
@@ -1735,6 +1729,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           {
             GdkModifierType state;
             GdkScrollDirection direction;
+
+#ifdef XINPUT_2_2
+            if (xev->flags & XIPointerEmulated)
+              return FALSE;
+#endif
 
             GDK_DISPLAY_DEBUG (display, EVENTS,
                                "smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
