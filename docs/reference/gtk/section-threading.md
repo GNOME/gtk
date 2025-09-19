@@ -64,7 +64,7 @@ The second recommendation is to push long-running tasks to
 worker threads, and return the results back to the main thread
 via an idle or with [method@GLib.MainContext.invoke]. This can be
 achieved without manually juggling threads by using [class@Gio.Task]
-or libdex.
+or [libdex](https://gnome.pages.gitlab.gnome.org/libdex/libdex-1/index.html).
 
 A common scenario for the second recommendation is when the construction
 of an object has high overhead (e.g. creating GdkTexture may require
