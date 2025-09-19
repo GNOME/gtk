@@ -30,10 +30,9 @@
  *
  * `GdkPaintable`s implementing the interface will have the
  * [vfunc@Gtk.SymbolicPaintable.snapshot_symbolic] function called and
- * have the colors for drawing symbolic icons passed. At least 4 colors are guaranteed
- * to be passed every time.
- *
- * These 4 colors are the foreground color, and the colors to use for errors, warnings
+ * have the colors for drawing symbolic icons passed. At least 4 colors
+ * are guaranteed to be passed every time. These 4 colors are the
+ * foreground color, and the colors to use for errors, warnings
  * and success information in that order.
  *
  * More colors may be added in the future.
@@ -114,4 +113,48 @@ gtk_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable   *paintable,
 
       iface->snapshot_symbolic (paintable, snapshot, width, height, real_colors, 4);
     }
+}
+
+/**
+ * gtk_symbolic_paintable_snapshot_with_weight:
+ * @paintable: a `GtkSymbolicPaintable`
+ * @snapshot: a `GdkSnapshot` to snapshot to
+ * @width: width to snapshot in
+ * @height: height to snapshot in
+ * @colors: (array length=n_colors): a pointer to an array of colors
+ * @n_colors: The number of colors
+ * @weight: The font weight to use (from 1 to 1000, with default 400)
+ *
+ * Snapshots the paintable with the given colors and weight.
+ *
+ * If less than 4 colors are provided, GTK will pad the array with default
+ * colors.
+ *
+ * Since: 4.22
+ */
+void
+gtk_symbolic_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
+                                             GdkSnapshot          *snapshot,
+                                             double                width,
+                                             double                height,
+                                             const GdkRGBA        *colors,
+                                             gsize                 n_colors,
+                                             double                weight)
+{
+  GtkSymbolicPaintableInterface *iface;
+
+  g_return_if_fail (GTK_IS_SYMBOLIC_PAINTABLE (paintable));
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (colors != NULL || n_colors == 0);
+  g_return_if_fail (1 <= weight && weight <= 1000);
+
+  if (width <= 0.0 || height <= 0.0)
+    return;
+
+  iface = GTK_SYMBOLIC_PAINTABLE_GET_IFACE (paintable);
+
+  if (iface->snapshot_with_weight)
+    iface->snapshot_with_weight (paintable, snapshot, width, height, colors, n_colors, weight);
+  else
+    gtk_symbolic_paintable_snapshot_symbolic (paintable, snapshot, width, height, colors, n_colors);
 }
