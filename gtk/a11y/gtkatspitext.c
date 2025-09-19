@@ -422,7 +422,6 @@ accessible_text_handle_method (GDBusConnection       *connection,
       ret = gtk_accessible_text_set_selection (accessible_text, num, &range);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)
     {
