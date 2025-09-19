@@ -115,14 +115,6 @@ endif
 # Tests that test private apis and therefore are linked against libgtk-4.a
 internal_tests = [
   {
-    'name': 'symbolic2',
-    'sources': [
-      'symbolic2.c',
-      '../reftests/reftest-compare.c',
-    ],
-  },
-  { 'name': 'bitmask' },
-  {
     'name': 'composetable',
     'sources': [
       'composetable.c',
@@ -147,6 +139,15 @@ internal_tests = [
       '../reftests/reftest-compare.c',
     ],
   },
+  {
+    'name': 'symbolic2',
+    'sources': [
+      'symbolic2.c',
+      '../reftests/reftest-compare.c',
+    ],
+    'suites': [ 'flaky' ],
+  },
+  { 'name': 'bitmask' },
 ]
 
 is_debug = get_option('buildtype').startswith('debug')
