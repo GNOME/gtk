@@ -9,3 +9,6 @@ subdir('gtk-demo')
 subdir('node-editor')
 subdir('widget-factory')
 subdir('print-editor')
+if cc.get_id() != 'msvc'
+  subdir('icon-editor')
+endif

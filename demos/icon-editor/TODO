@@ -1,0 +1,4 @@
+- add a separate -gtk-icon-weight css property ?
+- allow animating fills ?
+- make animation more generic ?
+- allow setting segment length?

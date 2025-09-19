@@ -869,17 +869,18 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
 
 void
 gtk_css_style_lookup_symbolic_colors (GtkCssStyle *style,
-                                      GdkRGBA      color_out[4])
+                                      GdkRGBA      color_out[5])
 {
-  const char *names[4] = {
+  const char *names[5] = {
     [GTK_SYMBOLIC_COLOR_ERROR] = "error",
     [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
-    [GTK_SYMBOLIC_COLOR_SUCCESS] = "success"
+    [GTK_SYMBOLIC_COLOR_SUCCESS] = "success",
+    [GTK_SYMBOLIC_COLOR_ACCENT] = "accent",
   };
 
   color_out[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (style->used->color);
 
-  for (gsize i = 1; i < 4; i++)
+  for (gsize i = 1; i < G_N_ELEMENTS (names); i++)
     {
       GtkCssValue *lookup;
 

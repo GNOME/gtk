@@ -322,7 +322,7 @@ PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle    
 PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
 
 void                    gtk_css_style_lookup_symbolic_colors    (GtkCssStyle            *style,
-                                                                 GdkRGBA                 color_out[4]);
+                                                                 GdkRGBA                 color_out[5]);
 
 GtkCssVariableValue *   gtk_css_style_get_custom_property       (GtkCssStyle            *style,
                                                                  int                     id);

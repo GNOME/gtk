@@ -1,0 +1,858 @@
+<interface>
+  <template class="IconEditorWindow" parent="GtkApplicationWindow">
+    <property name="title" translatable="yes">Icon Editor</property>
+    <property name="default-width">1024</property>
+    <property name="default-height">768</property>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="title-widget">
+          <object class="GtkCenterBox">
+            <style><class name="window-title"/></style>
+            <property name="start-widget">
+              <object class="GtkLabel">
+                <property name="label">•</property>
+                <property name="visible" bind-source="IconEditorWindow" bind-property="changed" bind-flags="sync-create"/>
+              </object>
+            </property>
+            <property name="center-widget">
+              <object class="GtkLabel">
+                <property name="label" bind-source="IconEditorWindow" bind-property="title" bind-flags="sync-create"/>
+                <property name="attributes">weight bold</property>
+              </object>
+            </property>
+          </object>
+        </property>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="focus-on-click">0</property>
+            <property name="tooltip-text" translatable="yes">Open a file</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-open-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+            <property name="action-name">win.open</property>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="focus-on-click">0</property>
+            <property name="tooltip-text" translatable="yes">Save changes</property>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-save-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+            <property name="action-name">win.save</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton">
+            <property name="focus-on-click">0</property>
+            <property name="valign">center</property>
+            <property name="menu-model">
+              <menu>
+                <section>
+                  <item>
+                    <attribute name="label" translatable="yes">_Open…</attribute>
+                    <attribute name="action">win.open</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Save</attribute>
+                    <attribute name="action">win.save</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">S_ave As…</attribute>
+                    <attribute name="action">win.save-as</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Revert changes</attribute>
+                    <attribute name="action">win.revert</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Close</attribute>
+                    <attribute name="action">win.close</attribute>
+                  </item>
+                </section>
+                <section>
+                  <item>
+                    <attribute name="label" translatable="yes">_Import state…</attribute>
+                    <attribute name="action">win.import</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Export states</attribute>
+                    <attribute name="action">win.export</attribute>
+                  </item>
+                </section>
+                <section>
+                  <submenu>
+                    <attribute name="label" translatable="yes">Examples</attribute>
+                    <section>
+                      <item>
+                        <attribute name="label" translatable="yes">Example 1: Transition</attribute>
+                        <attribute name="action">win.open-example</attribute>
+                        <attribute name="target">example1.gpa</attribute>
+                      </item>
+                      <item>
+                        <attribute name="label" translatable="yes">Example 2: Colors</attribute>
+                        <attribute name="action">win.open-example</attribute>
+                        <attribute name="target">example2.gpa</attribute>
+                      </item>
+                      <item>
+                        <attribute name="label" translatable="yes">Example 3: Overlaps</attribute>
+                        <attribute name="action">win.open-example</attribute>
+                        <attribute name="target">example3.gpa</attribute>
+                      </item>
+                      <item>
+                        <attribute name="label" translatable="yes">Example 4: Attachment</attribute>
+                        <attribute name="action">win.open-example</attribute>
+                        <attribute name="target">example4.gpa</attribute>
+                      </item>
+                      <item>
+                        <attribute name="label" translatable="yes">Example 5: Simple</attribute>
+                        <attribute name="action">win.open-example</attribute>
+                        <attribute name="target">example5.gpa</attribute>
+                      </item>
+                      <item>
+                        <attribute name="label" translatable="yes">Example 6: Animation</attribute>
+                        <attribute name="action">win.open-example</attribute>
+                        <attribute name="target">example6.gpa</attribute>
+                      </item>
+                    </section>
+                  </submenu>
+                  <item>
+                    <attribute name="label" translatable="yes">_Help</attribute>
+                    <attribute name="action">app.help</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">_Inspector</attribute>
+                    <attribute name="action">app.inspector</attribute>
+                  </item>
+                  <item>
+                    <attribute name="label" translatable="yes">A_bout Icon Editor</attribute>
+                    <attribute name="action">app.about</attribute>
+                  </item>
+                </section>
+              </menu>
+            </property>
+            <child>
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/open-menu-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkToggleButton" id="open_menu">
+            <property name="focus-on-click">0</property>
+            <property name="tooltip-text" translatable="yes">Show controls</property>
+            <property name="active" bind-source="IconEditorWindow" bind-property="show-controls" bind-flags="bidirectional|sync-create"/>
+            <property name="child">
+              <object class="GtkImage">
+                <property name="paintable">
+                  <object class="GtkIconPaintable">
+                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/info-outline-symbolic.svg</property>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="child">
+      <object class="GtkStack" id="main_stack">
+        <style><class name="view"/></style>
+        <property name="transition-type">crossfade</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">empty</property>
+            <property name="child">
+              <object class="GtkBox">
+                <style><class name="empty-page"/></style>
+                <property name="orientation">vertical</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkImage" id="empty_logo">
+                    <property name="pixel-size">256</property>
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/Shaper/org.gtk.Shaper.svg</property>
+                        <property name="size">192</property>
+                        <property name="scale">1</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <style><class name="title-1"/></style>
+                    <property name="label" translatable="yes">Create or Open an Icon</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <style>
+                      <class name="suggested-action"/>
+                      <class name="title-3"/>
+                    </style>
+                    <property name="focus-on-click">0</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">New Icon</property>
+                    <property name="action-name">win.show-controls</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="hexpand">0</property>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">0</property>
+                        <property name="focus-on-click">0</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="pixel-size">32</property>
+                            <property name="paintable">
+                              <object class="PathPaintable">
+                                <property name="resource">/org/gtk/Shaper/example1.gpa</property>
+                                <property name="state">0</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="action-name">win.open-example</property>
+                        <property name="action-target">'example1.gpa'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">0</property>
+                        <property name="focus-on-click">0</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="pixel-size">32</property>
+                            <property name="paintable">
+                              <object class="PathPaintable">
+                                <property name="resource">/org/gtk/Shaper/example2.gpa</property>
+                                <property name="state">0</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="action-name">win.open-example</property>
+                        <property name="action-target">'example2.gpa'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">0</property>
+                        <property name="focus-on-click">0</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="pixel-size">32</property>
+                            <property name="paintable">
+                              <object class="PathPaintable">
+                                <property name="resource">/org/gtk/Shaper/example3.gpa</property>
+                                <property name="state">0</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="action-name">win.open-example</property>
+                        <property name="action-target">'example3.gpa'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">0</property>
+                        <property name="focus-on-click">0</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="pixel-size">32</property>
+                            <property name="paintable">
+                              <object class="PathPaintable">
+                                <property name="resource">/org/gtk/Shaper/example4.gpa</property>
+                                <property name="state">0</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="action-name">win.open-example</property>
+                        <property name="action-target">'example4.gpa'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">0</property>
+                        <property name="focus-on-click">0</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="pixel-size">32</property>
+                            <property name="paintable">
+                              <object class="PathPaintable">
+                                <property name="resource">/org/gtk/Shaper/example5.gpa</property>
+                                <property name="state">0</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="action-name">win.open-example</property>
+                        <property name="action-target">'example5.gpa'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="has-frame">0</property>
+                        <property name="focus-on-click">0</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="pixel-size">32</property>
+                            <property name="paintable">
+                              <object class="PathPaintable">
+                                <property name="resource">/org/gtk/Shaper/example6.gpa</property>
+                                <property name="state">0</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="action-name">win.open-example</property>
+                        <property name="action-target">'example6.gpa'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">content</property>
+            <property name="child">
+              <object class="GtkBox">
+                <style><class name="view"/></style>
+                <child>
+                  <object class="GtkGestureClick">
+                    <property name="button">3</property>
+                    <signal name="pressed" handler="toggle_controls" swapped="yes"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid">
+                    <child>
+                      <object class="GtkImage" id="image">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">256</property>
+                        <property name="paintable">
+                          <object class="BorderPaintable">
+                            <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                            <property name="show-bounds" bind-source="IconEditorWindow" bind-property="show-bounds"/>
+                            <property name="show-spines" bind-source="IconEditorWindow" bind-property="show-spines"/>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="row">0</property>
+                          <property name="column">0</property>
+                          <property name="column-span">8</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_0">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">1</property>
+                          <property name="column">0</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_1">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">1</property>
+                          <property name="column">2</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_2">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">1</property>
+                          <property name="column">4</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_3">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">1</property>
+                          <property name="column">6</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_4">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">2</property>
+                          <property name="column">0</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_5">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">2</property>
+                          <property name="column">2</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_6">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">2</property>
+                          <property name="column">4</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image48_7">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">48</property>
+                        <layout>
+                          <property name="row">2</property>
+                          <property name="column">6</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_0">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_1">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_2">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_3">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_4">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_5">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">5</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_6">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">6</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_7">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">7</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_8">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_9">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_10">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_11">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_12">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_13">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">5</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_14">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">6</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image24_15">
+                        <style><class name="grid-image"/></style>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="pixel-size">24</property>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">7</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton">
+                        <style><class name="grid-button"/></style>
+                        <property name="halign">start</property>
+                        <property name="valign">end</property>
+                        <property name="tooltip-text" translatable="yes">State Control</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="paintable">
+                              <object class="GtkIconPaintable">
+                                <property name="file">resource:///org/gtk/Shaper/general-properties-symbolic.svg</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="popover">
+                          <object class="GtkPopover">
+                            <property name="child">
+                              <object class="StateEditor">
+                                <style><class name="grid-button"/></style>
+                                <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="row">5</property>
+                          <property name="column">0</property>
+                          <property name="column-span">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton">
+                        <style><class name="grid-button"/></style>
+                        <property name="halign">end</property>
+                        <property name="valign">end</property>
+                        <property name="tooltip-text" translatable="yes">Display Settings</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="paintable">
+                              <object class="GtkIconPaintable">
+                                <property name="file">resource:///org/gtk/Shaper/settings-symbolic.svg</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <property name="popover">
+                          <object class="GtkPopover">
+                            <property name="child">
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="xalign">1</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Weight</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkScale">
+                                        <property name="valign">baseline</property>
+                                        <property name="width-request">150</property>
+                                        <property name="adjustment">
+                                          <object class="GtkAdjustment">
+                                            <property name="lower">1</property>
+                                            <property name="upper">1000</property>
+                                            <property name="value" bind-source="IconEditorWindow" bind-property="weight" bind-flags="bidirectional|sync-create"/>
+                                          </object>
+                                        </property>
+                                        <marks>
+                                          <mark position="top" value="400"/>
+                                        </marks>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSeparator"/>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="hexpand">0</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="xalign">1</property>
+                                        <property name="label" translatable="yes">X-Ray Path Shapes</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSwitch">
+                                        <property name="halign">end</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="action-name">win.show-spines</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSeparator"/>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="hexpand">0</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="xalign">1</property>
+                                        <property name="label" translatable="yes">Show Bounds</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSwitch">
+                                        <property name="halign">end</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="action-name">win.show-bounds</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSeparator"/>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="hexpand">0</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="xalign">1</property>
+                                        <property name="label" translatable="yes">Invert Colors</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSwitch">
+                                        <property name="halign">end</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="action-name">win.invert-colors</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <layout>
+                          <property name="row">5</property>
+                          <property name="column">4</property>
+                          <property name="column-span">4</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkRevealer" id="revealer">
+                    <property name="halign">end</property>
+                    <property name="valign">fill</property>
+                    <property name="transition-type">slide-left</property>
+                    <property name="reveal-child" bind-source="IconEditorWindow" bind-property="show-controls" bind-flags="sync-create"/>
+                    <property name="child">
+                      <object class="PaintableEditor">
+                        <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable" bind-flags="sync-create"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

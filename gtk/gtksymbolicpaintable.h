@@ -34,10 +34,12 @@ G_DECLARE_INTERFACE (GtkSymbolicPaintable, gtk_symbolic_paintable, GTK, SYMBOLIC
 
 /**
  * GtkSymbolicPaintableInterface:
- * @snapshot_symbolic: Snapshot the paintable using the given colors. 
+ * @snapshot_symbolic: Snapshot the paintable using the given colors.
  *   See `GtkSymbolicPaintable::snapshot_symbolic()` for details.
  *   If this function is not implemented, [vfunc@Gdk.Paintable.snapshot]
  *   will be called.
+ * @snapshot_with_weight: Like @snapshot_symbolic, but additionally takes
+ *   a font weight argument. Since: 4.22
  *
  * The list of virtual functions for the `GtkSymbolicPaintable` interface.
  * No function must be implemented, default implementations exist for each one.
@@ -54,8 +56,15 @@ struct _GtkSymbolicPaintableInterface
                                                                          double                  height,
                                                                          const GdkRGBA          *colors,
                                                                          gsize                   n_colors);
-};
 
+  void                  (* snapshot_with_weight)                        (GtkSymbolicPaintable   *paintable,
+                                                                         GdkSnapshot            *snapshot,
+                                                                         double                  width,
+                                                                         double                  height,
+                                                                         const GdkRGBA          *colors,
+                                                                         gsize                   n_colors,
+                                                                         double                  weight);
+};
 GDK_AVAILABLE_IN_4_6
 void                    gtk_symbolic_paintable_snapshot_symbolic        (GtkSymbolicPaintable   *paintable,
                                                                          GdkSnapshot            *snapshot,
@@ -64,5 +73,15 @@ void                    gtk_symbolic_paintable_snapshot_symbolic        (GtkSymb
                                                                          const GdkRGBA          *colors,
                                                                          gsize                   n_colors);
 
+GDK_AVAILABLE_IN_4_22
+void                    gtk_symbolic_paintable_snapshot_with_weight     (GtkSymbolicPaintable   *paintable,
+                                                                         GdkSnapshot            *snapshot,
+                                                                         double                  width,
+                                                                         double                  height,
+                                                                         const GdkRGBA          *colors,
+                                                                         gsize                   n_colors,
+                                                                         double                  weight);
+
 G_END_DECLS
+
 

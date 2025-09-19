@@ -1,0 +1,36 @@
+<interface>
+  <template class="StateEditor" parent="GtkWidget">
+    <property name="sensitive">0</property>
+    <child>
+      <object class="GtkBox">
+        <property name="hexpand">0</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">State</property>
+            <property name="valign">baseline</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="discrete_state">
+            <property name="tooltip-text" translatable="yes">State</property>
+            <property name="halign">end</property>
+            <property name="valign">baseline</property>
+            <property name="hexpand">1</property>
+            <property name="numeric">1</property>
+            <property name="digits">0</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">-1</property>
+                <property name="upper">63</property>
+                <property name="value">0</property>
+                <property name="step-increment">1</property>
+                <property name="page-increment">1</property>
+              </object>
+            </property>
+            <signal name="value-changed" handler="update_state" swapped="yes"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
