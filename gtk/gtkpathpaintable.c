@@ -137,6 +137,7 @@ typedef struct
     GtkPathAnimationDirection direction;
     float duration;
     GtkEasingFunction easing;
+    float segment;
   } animation;
 
   struct {
@@ -837,6 +838,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_direction_attr = NULL;
   const char *animation_duration_attr = NULL;
   const char *animation_easing_attr = NULL;
+  const char *animation_segment_attr = NULL;
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
@@ -865,6 +867,7 @@ start_element_cb (GMarkupParseContext  *context,
   guint animation_direction;
   float animation_duration;
   guint animation_easing;
+  float animation_segment;
   float origin;
   gsize idx;
   gsize attach_to;
@@ -1115,6 +1118,7 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-direction", &animation_direction_attr,
                             "gpa:animation-duration", &animation_duration_attr,
                             "gpa:animation-easing", &animation_easing_attr,
+                            "gpa:animation-segment", &animation_segment_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
                             "gpa:transition-easing", &transition_easing_attr,
@@ -1142,6 +1146,7 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_direction_attr &&
       !animation_duration_attr &&
       !animation_easing_attr &&
+      !animation_segment_attr &&
       !transition_type_attr &&
       !transition_duration_attr &&
       !transition_easing_attr &&
@@ -1369,6 +1374,13 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
+  animation_segment = 0.2f;
+  if (animation_segment_attr)
+    {
+      if (!parse_float ("gpa:animation-segment", animation_segment_attr, POSITIVE, &animation_segment, error))
+        goto cleanup;
+    }
+
   attach_to = (gsize) -1;
   if (attach_to_attr)
     {
@@ -1409,6 +1421,7 @@ start_element_cb (GMarkupParseContext  *context,
   elt.animation.direction = (GtkPathAnimationDirection) animation_direction;
   elt.animation.duration = animation_duration;
   elt.animation.easing = (GtkEasingFunction) animation_easing;
+  elt.animation.segment = animation_segment;
 
   elt.fill.enabled = fill_attr != NULL;
   elt.fill.rule = (GskFillRule) fill_rule;
@@ -1541,7 +1554,19 @@ paint_elt (GtkPathPaintable *self,
 
   pos = lerp (elt->attach.position, base->current_start, base->current_end);
 
-  gsk_path_get_start_point (elt->path, &point);
+  if (elt->origin != 0)
+    {
+      if (!elt->measure)
+        elt->measure = gsk_path_measure_new (elt->path);
+
+      length = gsk_path_measure_get_length (elt->measure);
+      gsk_path_measure_get_point (elt->measure, length * elt->origin, &point);
+    }
+  else
+    {
+      gsk_path_get_start_point (elt->path, &point);
+    }
+
   gsk_path_point_get_position (&point, elt->path, &orig_pos);
   orig_angle = 0; /* FIXME */
 
@@ -1608,10 +1633,12 @@ paint_elt_animated (GtkPathPaintable *self,
                     float             end,
                     PaintData        *data)
 {
-  float segment = 0.2;
   float t;
   guint rep;
   float origin;
+  float segment;
+
+  segment = elt->animation.segment;
 
   switch (elt->animation.type)
     {
@@ -1690,10 +1717,15 @@ paint_elt_animated (GtkPathPaintable *self,
         }
       break;
     case GTK_PATH_ANIMATION_DIRECTION_SEGMENT:
-      paint_elt_partial (self, elt, lerp (t, start, end), lerp (fmodf (t + segment, 1), start, end), data);
+      if (segment >= 1.f)
+        paint_elt_partial (self, elt, start, end, data);
+      else
+        paint_elt_partial (self, elt, lerp (t, start, end), lerp (fmodf (t + segment, 1), start, end), data);
       break;
     case GTK_PATH_ANIMATION_DIRECTION_SEGMENT_ALTERNATE:
-      if (rep % 2 == 0)
+      if (segment >= 1.f)
+        paint_elt_partial (self, elt, start, end, data);
+      else if (rep % 2 == 0)
         paint_elt_partial (self, elt, lerp (t * (1 - segment), start, end), lerp (t * (1 - segment) + segment, start, end), data);
       else
         paint_elt_partial (self, elt, lerp (1 - segment - t * (1 - segment), start, end), lerp (1 - t * (1 - segment), start, end), data);
@@ -1745,6 +1777,13 @@ paint_elt_with_fade (GtkPathPaintable *self,
   gtk_snapshot_push_opacity (data->snapshot, 1 - t);
   paint_elt_animated (self, elt, 0, 1, data);
   gtk_snapshot_pop (data->snapshot);
+}
+
+static void
+invalidate_in_idle (gpointer data)
+{
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (data));
+  g_object_unref (data);
 }
 
 static void
@@ -1868,7 +1907,7 @@ paint (GtkPathPaintable *self,
     }
 
   if (self->transition.running || self->animation.running)
-    g_idle_add_once ((GSourceOnceFunc) gdk_paintable_invalidate_contents, self);
+    g_idle_add_once (invalidate_in_idle, g_object_ref (self));
 
   if (data->time >= self->transition.start_time + (self->transition.out_duration + self->transition.in_duration) * G_TIME_SPAN_SECOND)
     self->transition.running = FALSE;
@@ -1895,7 +1934,7 @@ gtk_path_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
   data.height = height;
   data.colors = colors;
   data.n_colors = n_colors;
-  data.weight = self->weight > 0 ? self->weight : weight;
+  data.weight = self->weight >= 1 ? self->weight : weight;
   data.time = g_get_monotonic_time ();
 
   scale = MIN (width / MAX (self->width, 1), height / MAX (self->height, 1));
@@ -2125,6 +2164,9 @@ gtk_path_paintable_class_init (GtkPathPaintableClass *class)
  *
  * Sets the state of the paintable.
  *
+ * USe [method@Gtk.PathPaintable.get_max_state] to
+ * find out what states @self has.
+ *
  * Since: 4.22
  */
 void
@@ -2161,7 +2203,7 @@ gtk_path_paintable_set_state (GtkPathPaintable *self,
  * gtk_path_paintable_get_state:
  * @self: a paintable
  *
- * Gets the state of the paintable.
+ * Gets the current state of the paintable.
  *
  * Returns: the state
  *
@@ -2176,7 +2218,7 @@ gtk_path_paintable_get_state (GtkPathPaintable *self)
 /**
  * gtk_path_paintable_set_weight:
  * @self: a paintable
- * @weight: the font weight, as a value between -11 and 1000,
+ * @weight: the font weight, as a value between -1 and 1000,
  *
  * Sets the font weight that is used when rendering
  * the paintable.
@@ -2250,8 +2292,8 @@ gtk_path_paintable_get_max_state (GtkPathPaintable *self)
  * Parses the data in @bytes and creates a
  * paintable.
  *
- * The supported format is a subset of SVG.
- * See icon-format.md for details.
+ * The supported format is a [subset](icon-format.html)
+ * of SVG.
  *
  * Returns: the paintable
  *
@@ -2277,8 +2319,8 @@ gtk_path_paintable_new_from_bytes (GBytes  *bytes,
  *
  * Parses the resource and creates a paintable.
  *
- * The supported format is a subset of SVG.
- * See icon-format.md for details.
+ * The supported format is a [subset](icon-format.html)
+ * of SVG.
  *
  * Returns: the paintable
  *

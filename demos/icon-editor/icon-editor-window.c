@@ -21,7 +21,6 @@
 
 #include "icon-editor-window.h"
 
-#include "state-editor.h"
 #include "paintable-editor.h"
 #include "path-paintable.h"
 #include "border-paintable.h"
@@ -45,6 +44,7 @@ struct _IconEditorWindow
   gboolean show_spines;
   gboolean invert_colors;
   float weight;
+  guint state;
   GtkStack *main_stack;
   GtkImage *empty_logo;
   union {
@@ -74,6 +74,7 @@ enum
   PROP_SHOW_SPINES,
   PROP_INVERT_COLORS,
   PROP_WEIGHT,
+  PROP_STATE,
   NUM_PROPERTIES,
 };
 
@@ -168,6 +169,20 @@ icon_editor_window_set_weight (IconEditorWindow *self,
   path_paintable_set_weight (self->paintable, weight);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
+}
+
+static void
+icon_editor_window_set_state (IconEditorWindow *self,
+                              guint             state)
+{
+  if (self->state == state)
+    return;
+
+  self->state = state;
+
+  path_paintable_set_state (self->paintable, state);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
 }
 
 static void
@@ -348,6 +363,7 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
   if (self->paintable)
     {
       path_paintable_set_state (self->paintable, 0);
+      icon_editor_window_set_state (self, 0);
 
       g_signal_connect_swapped (self->paintable, "changed",
                                 G_CALLBACK (paintable_changed), self);
@@ -570,7 +586,7 @@ show_save_filechooser (IconEditorWindow *self)
     {
       g_autoptr (GFile) cwd = g_file_new_for_path (".");
       gtk_file_dialog_set_initial_folder (dialog, cwd);
-      gtk_file_dialog_set_initial_name (dialog, "demo.icon");
+      gtk_file_dialog_set_initial_name (dialog, "demo.gpa");
     }
 
   gtk_file_dialog_save (dialog,
@@ -818,6 +834,16 @@ open_example (GSimpleAction *action,
   icon_editor_window_set_paintable (self, paintable);
 }
 
+static void
+reshuffle (GSimpleAction *action,
+           GVariant      *parameter,
+           gpointer       user_data)
+{
+  IconEditorWindow *self = user_data;
+
+  set_random_icons (self);
+}
+
 static GActionEntry win_entries[] = {
   { "open", file_open, NULL, NULL, NULL },
   { "save", file_save, NULL, NULL, NULL },
@@ -829,6 +855,7 @@ static GActionEntry win_entries[] = {
   { "add-path", add_path, NULL, NULL, NULL },
   { "show-controls", show_controls, NULL, NULL, NULL },
   { "open-example", open_example, "s", NULL, NULL },
+  { "reshuffle", reshuffle, NULL, NULL, NULL },
 };
 
 /* }}} */
@@ -841,6 +868,7 @@ icon_editor_window_init (IconEditorWindow *self)
   g_autoptr (PathPaintable) paintable = path_paintable_new ();
 
   self->weight = 400;
+  self->state = 0;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -900,6 +928,10 @@ icon_editor_window_set_property (GObject      *object,
       icon_editor_window_set_weight (self, g_value_get_float (value));
       break;
 
+    case PROP_STATE:
+      icon_editor_window_set_state (self, g_value_get_uint (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -942,6 +974,10 @@ icon_editor_window_get_property (GObject    *object,
 
     case PROP_WEIGHT:
       g_value_set_float (value, self->weight);
+      break;
+
+    case PROP_STATE:
+      g_value_set_uint (value, self->state);
       break;
 
     default:
@@ -1000,7 +1036,6 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkWindowClass *window_class = GTK_WINDOW_CLASS (class);
 
-  g_type_ensure (STATE_EDITOR_TYPE);
   g_type_ensure (PAINTABLE_EDITOR_TYPE);
   g_type_ensure (BORDER_PAINTABLE_TYPE);
 
@@ -1046,6 +1081,11 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
     g_param_spec_float ("weight", NULL, NULL,
                         1.f, 1000.f, 400.f,
                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_STATE] =
+    g_param_spec_uint ("state", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

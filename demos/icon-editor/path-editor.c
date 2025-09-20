@@ -46,6 +46,7 @@ struct _PathEditor
   GtkDropDown *animation_direction;
   GtkSpinButton *animation_duration;
   GtkDropDown *animation_easing;
+  GtkSpinButton *animation_segment;
   GtkDropDown *stroke_paint;
   GtkColorDialogButton *stroke_color;
   RangeEditor *width_range;
@@ -145,15 +146,23 @@ path_editor_get_path_image (PathEditor *self)
     {
       gboolean do_stroke;
       g_autoptr (GskStroke) stroke = gsk_stroke_new (1);
-      guint symbolic = 0;
-      GdkRGBA color;
+      guint stroke_symbolic = 0;
+      GdkRGBA stroke_color;
+      gboolean do_fill;
+      guint fill_symbolic = 0;
+      GdkRGBA fill_color;
+      GskFillRule rule;
 
       self->path_image = path_paintable_new ();
       path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path));
 
       do_stroke = path_paintable_get_path_stroke (self->paintable, self->path,
-                                                  stroke, &symbolic, &color);
-      path_paintable_set_path_stroke (self->path_image, 0, do_stroke, stroke, symbolic, &color);
+                                                  stroke, &stroke_symbolic, &stroke_color);
+      do_fill = path_paintable_get_path_fill (self->paintable, self->path,
+                                              &rule, &fill_symbolic, &fill_color);
+
+      path_paintable_set_path_stroke (self->path_image, 0, do_stroke, stroke, stroke_symbolic, &stroke_color);
+      path_paintable_set_path_fill (self->path_image, 0, do_fill, rule, fill_symbolic, &fill_color);
       path_paintable_set_size (self->path_image,
                                path_paintable_get_width (self->paintable),
                                path_paintable_get_height (self->paintable));
@@ -170,6 +179,7 @@ animation_changed (PathEditor *self)
   AnimationDirection direction;
   float duration;
   EasingFunction easing;
+  float segment;
 
   if (self->updating)
     return;
@@ -178,8 +188,9 @@ animation_changed (PathEditor *self)
   direction = (AnimationDirection) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
+  segment = gtk_spin_button_get_value (self->animation_segment);
 
-  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, easing);
+  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, easing, segment);
 }
 
 static void
@@ -327,6 +338,9 @@ fill_changed (PathEditor *self)
 
   path_paintable_set_path_fill (self->paintable, self->path,
                                 do_fill, fill_rule, symbolic, color);
+
+  g_clear_object (&self->path_image);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH_IMAGE]);
 }
 
 static void
@@ -614,6 +628,9 @@ path_editor_update (PathEditor *self)
       gtk_drop_down_set_selected (self->animation_easing,
                                   path_paintable_get_path_animation_easing (self->paintable, self->path));
 
+      gtk_spin_button_set_value (self->animation_segment,
+                                 path_paintable_get_path_animation_segment (self->paintable, self->path));
+
       width = gsk_stroke_get_line_width (stroke);
       path_paintable_get_path_stroke_variation (self->paintable, self->path,
                                                 &min_width, &max_width);
@@ -818,6 +835,7 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_duration);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_easing);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_color);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, width_range);

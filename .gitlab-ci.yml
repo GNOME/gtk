@@ -563,12 +563,6 @@ flatpak:widget-factory:
   variables:
     APPID: org.gtk.WidgetFactory4
 
-flatpak:icon-editor:
-  extends: '.flatpak-defaults'
-  needs: []
-  variables:
-    APPID: org.gtk.IconEditor
-
 flatpak:widget-factory:aarch64:
   extends: '.flatpak-defaults'
   needs: []
@@ -590,6 +584,20 @@ flatpak:node-editor:aarch64:
     - flatpak-aarch64
   variables:
     APPID: org.gtk.gtk4.NodeEditor
+
+flatpak:icon-editor:
+  extends: '.flatpak-defaults'
+  needs: []
+  variables:
+    APPID: org.gtk.Shaper
+
+flatpak:icon-editor:aarch64:
+  extends: '.flatpak-defaults'
+  needs: []
+  tags:
+    - flatpak-aarch64
+  variables:
+    APPID: org.gtk.Shaper
 
 # Publish the demo apps to the GNOME Nightly repo
 # https://wiki.gnome.org/Apps/Nightly
@@ -617,6 +625,14 @@ nightly node-editor:
 nightly node-editor aarch64:
     extends: '.publish_nightly'
     needs: ['flatpak:node-editor:aarch64']
+
+nightly icon-editor:
+    extends: '.publish_nightly'
+    needs: ['flatpak:icon-editor']
+
+nightly icon-editor aarch64:
+    extends: '.publish_nightly'
+    needs: ['flatpak:icon-editor:aarch64']
 
 static-scan:
   extends:

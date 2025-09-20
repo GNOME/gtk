@@ -131,7 +131,8 @@ void            path_paintable_set_path_animation  (PathPaintable     *self,
                                                     AnimationType      type,
                                                     AnimationDirection direction,
                                                     float              duration,
-                                                    EasingFunction     easing);
+                                                    EasingFunction     easing,
+                                                    float              segment);
 AnimationType
                 path_paintable_get_path_animation_type
                                                    (PathPaintable     *self,
@@ -144,6 +145,9 @@ float           path_paintable_get_path_animation_duration
                                                    (PathPaintable     *self,
                                                     gsize              idx);
 EasingFunction  path_paintable_get_path_animation_easing
+                                                   (PathPaintable     *self,
+                                                    gsize              idx);
+float           path_paintable_get_path_animation_segment
                                                    (PathPaintable     *self,
                                                     gsize              idx);
 

@@ -453,6 +453,47 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="animation_segment_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">animation_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">Segment</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">12</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="animation_segment">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">animation_expander</lookup>
+              </closure>
+            </binding>
+            <signal name="value-changed" handler="animation_changed" swapped="yes"/>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">1</property>
+                <property name="step-increment">0.1</property>
+              </object>
+            </property>
+            <property name="numeric">1</property>
+            <property name="digits">2</property>
+            <layout>
+              <property name="row">12</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkExpander" id="stroke_expander">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
@@ -466,7 +507,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">12</property>
+              <property name="row">13</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -505,7 +546,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">12</property>
+              <property name="row">13</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -530,7 +571,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">13</property>
+              <property name="row">14</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -547,7 +588,7 @@
             <signal name="notify::middle" handler="stroke_changed" swapped="yes"/>
             <signal name="notify::value2" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">13</property>
+              <property name="row">14</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -565,7 +606,7 @@
             <property name="label" translatable="yes">Min</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">14</property>
+              <property name="row">15</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -593,7 +634,7 @@
             </property>
             <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
-              <property name="row">14</property>
+              <property name="row">15</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -611,7 +652,7 @@
             <property name="label" translatable="yes">Normal</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">15</property>
+              <property name="row">16</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -639,7 +680,7 @@
             </property>
             <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
-              <property name="row">15</property>
+              <property name="row">16</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -657,7 +698,7 @@
             <property name="label" translatable="yes">Max</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">16</property>
+              <property name="row">17</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -685,7 +726,7 @@
             </property>
             <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
-              <property name="row">16</property>
+              <property name="row">17</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -702,7 +743,7 @@
             <property name="label" translatable="yes">Join</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">17</property>
+              <property name="row">18</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -726,7 +767,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">17</property>
+              <property name="row">18</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -743,7 +784,7 @@
             <property name="label" translatable="yes">Cap</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">18</property>
+              <property name="row">19</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -767,7 +808,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">18</property>
+              <property name="row">19</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -787,7 +828,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">19</property>
+              <property name="row">20</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -825,7 +866,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">19</property>
+              <property name="row">20</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -842,7 +883,7 @@
             <property name="label" translatable="yes">Rule</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">20</property>
+              <property name="row">21</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -865,7 +906,7 @@
             </property>
             <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
             <layout>
-              <property name="row">20</property>
+              <property name="row">21</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -885,7 +926,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">21</property>
+              <property name="row">22</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -895,7 +936,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
             <layout>
-              <property name="row">21</property>
+              <property name="row">22</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -912,7 +953,7 @@
             <property name="label" translatable="yes">Position</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">22</property>
+              <property name="row">23</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -939,7 +980,7 @@
               <mark value="1" position="bottom"/>
             </marks>
             <layout>
-              <property name="row">22</property>
+              <property name="row">23</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -958,6 +999,7 @@
       <widget name="animation_expander"/>
       <widget name="animation_duration_label"/>
       <widget name="animation_easing_label"/>
+      <widget name="animation_segment_label"/>
       <widget name="stroke_expander"/>
       <widget name="width_expander"/>
       <widget name="line_min_label"/>

@@ -523,7 +523,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="enable-emoji-completion">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="placeholder-text" translatable="1">Click icon to change mode</property>
-                                <property name="secondary-icon-paintable">view-refresh-symbolic</property>
+                                <property name="secondary-icon-paintable">
+                                  <object class="GtkPathPaintable">
+                                    <property name="resource">/org/gtk/WidgetFactory4/icons/view-refresh.gpa</property>
+                                  </object>
+                                </property>
                                 <property name="secondary-icon-tooltip-text">Change mode</property>
                                 <signal name="icon-release" handler="on_entry_icon_release" swapped="no"/>
                               </object>

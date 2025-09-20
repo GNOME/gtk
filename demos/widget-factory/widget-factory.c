@@ -608,6 +608,8 @@ on_entry_icon_release (GtkEntry            *entry,
                        GtkEntryIconPosition icon_pos,
                        gpointer             user_data)
 {
+  GtkPathPaintable *paintable;
+
   if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
     return;
 
@@ -619,7 +621,9 @@ on_entry_icon_release (GtkEntry            *entry,
       gtk_entry_set_progress_fraction (entry, 0);
     }
   else if (pulse_entry_mode % 3 == 1)
-    gtk_entry_set_progress_fraction (entry, 0.25);
+    {
+      gtk_entry_set_progress_fraction (entry, 0.25);
+    }
   else if (pulse_entry_mode % 3 == 2)
     {
       if (pulse_time - 50 < 400)
@@ -628,6 +632,10 @@ on_entry_icon_release (GtkEntry            *entry,
           pulse_it (GTK_WIDGET (entry));
         }
     }
+
+  g_object_get (entry, "secondary-icon-paintable", &paintable, NULL);
+  gtk_path_paintable_set_state (paintable, pulse_entry_mode % 3);
+  g_object_unref (paintable);
 }
 
 #define EPSILON (1e-10)
