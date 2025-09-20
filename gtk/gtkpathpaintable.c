@@ -1541,7 +1541,19 @@ paint_elt (GtkPathPaintable *self,
 
   pos = lerp (elt->attach.position, base->current_start, base->current_end);
 
-  gsk_path_get_start_point (elt->path, &point);
+  if (elt->origin != 0)
+    {
+      if (!elt->measure)
+        elt->measure = gsk_path_measure_new (elt->path);
+
+      length = gsk_path_measure_get_length (elt->measure);
+      gsk_path_measure_get_point (elt->measure, length * elt->origin, &point);
+    }
+  else
+    {
+      gsk_path_get_start_point (elt->path, &point);
+    }
+
   gsk_path_point_get_position (&point, elt->path, &orig_pos);
   orig_angle = 0; /* FIXME */
 
