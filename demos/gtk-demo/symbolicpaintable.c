@@ -171,7 +171,6 @@ markup_filter_attributes (const char *element_name,
                        G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
                        "attribute '%s' is invalid for element '%s'",
                        attribute_names[i], element_name);
-          g_print ("unhandled attribute %s\n", attribute_names[i]);
           return FALSE;
         }
     }
