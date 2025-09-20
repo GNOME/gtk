@@ -146,15 +146,23 @@ path_editor_get_path_image (PathEditor *self)
     {
       gboolean do_stroke;
       g_autoptr (GskStroke) stroke = gsk_stroke_new (1);
-      guint symbolic = 0;
-      GdkRGBA color;
+      guint stroke_symbolic = 0;
+      GdkRGBA stroke_color;
+      gboolean do_fill;
+      guint fill_symbolic = 0;
+      GdkRGBA fill_color;
+      GskFillRule rule;
 
       self->path_image = path_paintable_new ();
       path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path));
 
       do_stroke = path_paintable_get_path_stroke (self->paintable, self->path,
-                                                  stroke, &symbolic, &color);
-      path_paintable_set_path_stroke (self->path_image, 0, do_stroke, stroke, symbolic, &color);
+                                                  stroke, &stroke_symbolic, &stroke_color);
+      do_fill = path_paintable_get_path_fill (self->paintable, self->path,
+                                              &rule, &fill_symbolic, &fill_color);
+
+      path_paintable_set_path_stroke (self->path_image, 0, do_stroke, stroke, stroke_symbolic, &stroke_color);
+      path_paintable_set_path_fill (self->path_image, 0, do_fill, rule, fill_symbolic, &fill_color);
       path_paintable_set_size (self->path_image,
                                path_paintable_get_width (self->paintable),
                                path_paintable_get_height (self->paintable));
@@ -330,6 +338,9 @@ fill_changed (PathEditor *self)
 
   path_paintable_set_path_fill (self->paintable, self->path,
                                 do_fill, fill_rule, symbolic, color);
+
+  g_clear_object (&self->path_image);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH_IMAGE]);
 }
 
 static void
