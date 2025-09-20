@@ -822,6 +822,16 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child>
+                                  <object class="GtkSeparator"/>
+                                </child>
+                                <child>
+                                  <object class="GtkButton">
+                                    <property name="label">Reshuffle</property>
+                                    <property name="halign">end</property>
+                                    <property name="action-name">win.reshuffle</property>
+                                  </object>
+                                </child>
                               </object>
                             </property>
                           </object>

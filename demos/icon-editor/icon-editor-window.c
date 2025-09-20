@@ -834,6 +834,16 @@ open_example (GSimpleAction *action,
   icon_editor_window_set_paintable (self, paintable);
 }
 
+static void
+reshuffle (GSimpleAction *action,
+           GVariant      *parameter,
+           gpointer       user_data)
+{
+  IconEditorWindow *self = user_data;
+
+  set_random_icons (self);
+}
+
 static GActionEntry win_entries[] = {
   { "open", file_open, NULL, NULL, NULL },
   { "save", file_save, NULL, NULL, NULL },
@@ -845,6 +855,7 @@ static GActionEntry win_entries[] = {
   { "add-path", add_path, NULL, NULL, NULL },
   { "show-controls", show_controls, NULL, NULL, NULL },
   { "open-example", open_example, "s", NULL, NULL },
+  { "reshuffle", reshuffle, NULL, NULL, NULL },
 };
 
 /* }}} */
