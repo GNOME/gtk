@@ -1357,18 +1357,21 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 static void
 row_activated (GtkListBox *box, GtkListBoxRow *row)
 {
-  GtkWidget *image;
+  GtkImage *image;
   GtkWidget *dialog;
 
-  image = (GtkWidget *)g_object_get_data (G_OBJECT (row), "image");
-  dialog = (GtkWidget *)g_object_get_data (G_OBJECT (row), "dialog");
+  image = (GtkImage *) g_object_get_data (G_OBJECT (row), "image");
+  dialog = (GtkWidget *) g_object_get_data (G_OBJECT (row), "dialog");
 
   if (image)
     {
-      if (gtk_widget_get_opacity (image) > 0)
-        gtk_widget_set_opacity (image, 0);
+      GtkPathPaintable *paintable;
+
+      paintable = GTK_PATH_PAINTABLE (gtk_image_get_paintable (image));
+      if (gtk_path_paintable_get_state (paintable) == 0)
+        gtk_path_paintable_set_state (paintable, GTK_PATH_PAINTABLE_STATE_EMPTY);
       else
-        gtk_widget_set_opacity (image, 1);
+        gtk_path_paintable_set_state (paintable, 0);
     }
   else if (dialog)
     {
