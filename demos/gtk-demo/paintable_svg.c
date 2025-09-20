@@ -15,6 +15,24 @@
 #include "svgpaintable.h"
 #include "symbolicpaintable.h"
 
+static void
+image_clicked (GtkGestureClick *click,
+               int n_press,
+               double x,
+               double y,
+               GtkImage *image)
+{
+  GtkPathPaintable *paintable = GTK_PATH_PAINTABLE (gtk_image_get_paintable (image));
+  guint state = gtk_path_paintable_get_state (paintable);
+  guint max_state = gtk_path_paintable_get_max_state (paintable);
+
+  if (state == GTK_PATH_PAINTABLE_STATE_EMPTY)
+    gtk_path_paintable_set_state (paintable, 0);
+  else if (state < max_state)
+    gtk_path_paintable_set_state (paintable, state + 1);
+  else
+    gtk_path_paintable_set_state (paintable, GTK_PATH_PAINTABLE_STATE_EMPTY);
+}
 
 static void
 open_response_cb (GObject      *source,
@@ -33,7 +51,7 @@ open_response_cb (GObject      *source,
 
       image = gtk_window_get_child (GTK_WINDOW (window));
 
-      if (strstr (g_file_peek_path (file), "symbolic"))
+      if (g_str_has_suffix (g_file_peek_path (file), "-symbolic.svg"))
         {
           paintable = GDK_PAINTABLE (symbolic_paintable_new (file));
           if (!GTK_IS_IMAGE (image))
@@ -41,6 +59,26 @@ open_response_cb (GObject      *source,
               image = gtk_image_new ();
               gtk_image_set_pixel_size (GTK_IMAGE (image), 64);
               gtk_window_set_child (GTK_WINDOW (window), image);
+            }
+
+          gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
+        }
+      else if (g_str_has_suffix (g_file_peek_path (file), ".gpa"))
+        {
+          GBytes *bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+          paintable = GDK_PAINTABLE (gtk_path_paintable_new_from_bytes (bytes, NULL));
+          g_bytes_unref (bytes);
+          if (!GTK_IS_IMAGE (image))
+            {
+              GtkEventController *controller;
+
+              image = gtk_image_new ();
+              gtk_image_set_pixel_size (GTK_IMAGE (image), 64);
+              gtk_window_set_child (GTK_WINDOW (window), image);
+              controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+              g_signal_connect (controller, "pressed",
+                                G_CALLBACK (image_clicked), image);
+              gtk_widget_add_controller (image, controller);
             }
 
           gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
@@ -76,6 +114,7 @@ show_file_open (GtkWidget *button,
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "image/svg+xml");
+  gtk_file_filter_add_mime_type (filter, "image/x-gtk-path-animation");
   filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
   g_list_store_append (filters, filter);
   g_object_unref (filter);
