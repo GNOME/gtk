@@ -768,7 +768,7 @@
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">X-Ray Path Shapes</property>
+                                        <property name="label" translatable="yes">X-Ray Shapes</property>
                                       </object>
                                     </child>
                                     <child>
