@@ -683,38 +683,6 @@
                     <child>
                       <object class="GtkMenuButton">
                         <style><class name="grid-button"/></style>
-                        <property name="halign">start</property>
-                        <property name="valign">end</property>
-                        <property name="tooltip-text" translatable="yes">State Control</property>
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="paintable">
-                              <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/Shaper/general-properties-symbolic.svg</property>
-                              </object>
-                            </property>
-                          </object>
-                        </property>
-                        <property name="popover">
-                          <object class="GtkPopover">
-                            <property name="child">
-                              <object class="StateEditor">
-                                <style><class name="grid-button"/></style>
-                                <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable"/>
-                              </object>
-                            </property>
-                          </object>
-                        </property>
-                        <layout>
-                          <property name="row">5</property>
-                          <property name="column">0</property>
-                          <property name="column-span">4</property>
-                        </layout>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuButton">
-                        <style><class name="grid-button"/></style>
                         <property name="halign">end</property>
                         <property name="valign">end</property>
                         <property name="tooltip-text" translatable="yes">Display Settings</property>
@@ -755,6 +723,38 @@
                                         <marks>
                                           <mark position="top" value="400"/>
                                         </marks>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkSeparator"/>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="xalign">1</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">State</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton">
+                                        <property name="halign">end</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="numeric">1</property>
+                                        <property name="digits">0</property>
+                                        <property name="adjustment">
+                                          <object class="GtkAdjustment">
+                                            <property name="lower">-1</property>
+                                            <property name="upper">63</property>
+                                            <property name="step-increment">1</property>
+                                            <property name="page-increment">1</property>
+                                            <property name="value" bind-source="IconEditorWindow" bind-property="state" bind-flags="bidirectional|sync-create"/>
+                                          </object>
+                                        </property>
                                       </object>
                                     </child>
                                   </object>
