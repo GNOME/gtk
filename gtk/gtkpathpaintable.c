@@ -1737,9 +1737,6 @@ paint_elt_animated (GtkPathPaintable *self,
 
 /* This is doing an animated blur together with alpha
  * thresholding to achieve a 'blobbing' effect.
- *
- * If we transition to or from the 'unset' state,
- * we also add a fade out.
  */
 static void
 paint_elt_with_blur (GtkPathPaintable *self,
