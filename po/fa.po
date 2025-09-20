@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-09-04 11:54+0000\n"
-"PO-Revision-Date: 2025-09-04 16:57+0330\n"
+"POT-Creation-Date: 2025-09-20 06:00+0000\n"
+"PO-Revision-Date: 2025-09-20 09:51+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -1803,7 +1803,7 @@ msgstr "_بستن"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:385
+#: gtk/gtkapplication-dbus.c:384
 msgid "Reason not specified"
 msgstr "دلیل مشخّص نشده"
 
@@ -2216,12 +2216,12 @@ msgid "_Edit"
 msgstr "_ویرایش"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
-#: gtk/gtktextview.c:9388
+#: gtk/gtktextview.c:9382
 msgid "_Copy"
 msgstr "_رونوشت"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
-#: gtk/gtktextview.c:9466
+#: gtk/gtktextview.c:9460
 msgid "Context menu"
 msgstr "فهرست بافتاری"
 
@@ -2387,7 +2387,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
 #: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9396
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9390
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2739,15 +2739,15 @@ msgstr "بستن"
 msgid "Close the infobar"
 msgstr "بستن نوار اطّلاعات"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9384
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9378
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9392
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9386
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9417
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9411
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
@@ -4266,7 +4266,7 @@ msgstr "نوار کناری"
 msgid "Change di_rection"
 msgstr "دگرگونی _جهت"
 
-#: gtk/gtktext.c:6406 gtk/gtktextview.c:9422
+#: gtk/gtktext.c:6406 gtk/gtktextview.c:9416
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
@@ -4426,11 +4426,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "سامانه عامل کلاسیک مک"
 
-#: gtk/gtktextview.c:9404
+#: gtk/gtktextview.c:9398
 msgid "_Undo"
 msgstr "بر_گردان"
 
-#: gtk/gtktextview.c:9408
+#: gtk/gtktextview.c:9402
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
@@ -4494,11 +4494,15 @@ msgstr "مزرها"
 msgid "Object Path"
 msgstr "مسیر شی"
 
-#: gtk/inspector/a11y.ui:164
+#: gtk/inspector/a11y.ui:153
+msgid "Interface"
+msgstr "میانا"
+
+#: gtk/inspector/a11y.ui:192
 msgid "Attribute"
 msgstr "ویژگی"
 
-#: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
+#: gtk/inspector/a11y.ui:204 gtk/inspector/css-node-tree.ui:70
 #: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:207
 #: gtk/inspector/recorder.ui:251 gtk/inspector/strv-editor.c:73
 msgid "Value"
