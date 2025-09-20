@@ -1717,10 +1717,15 @@ paint_elt_animated (GtkPathPaintable *self,
         }
       break;
     case GTK_PATH_ANIMATION_DIRECTION_SEGMENT:
-      paint_elt_partial (self, elt, lerp (t, start, end), lerp (fmodf (t + segment, 1), start, end), data);
+      if (segment >= 1.f)
+        paint_elt_partial (self, elt, start, end, data);
+      else
+        paint_elt_partial (self, elt, lerp (t, start, end), lerp (fmodf (t + segment, 1), start, end), data);
       break;
     case GTK_PATH_ANIMATION_DIRECTION_SEGMENT_ALTERNATE:
-      if (rep % 2 == 0)
+      if (segment >= 1.f)
+        paint_elt_partial (self, elt, start, end, data);
+      else if (rep % 2 == 0)
         paint_elt_partial (self, elt, lerp (t * (1 - segment), start, end), lerp (t * (1 - segment) + segment, start, end), data);
       else
         paint_elt_partial (self, elt, lerp (1 - segment - t * (1 - segment), start, end), lerp (1 - t * (1 - segment), start, end), data);
