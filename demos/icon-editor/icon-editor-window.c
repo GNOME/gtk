@@ -570,7 +570,7 @@ show_save_filechooser (IconEditorWindow *self)
     {
       g_autoptr (GFile) cwd = g_file_new_for_path (".");
       gtk_file_dialog_set_initial_folder (dialog, cwd);
-      gtk_file_dialog_set_initial_name (dialog, "demo.icon");
+      gtk_file_dialog_set_initial_name (dialog, "demo.gpa");
     }
 
   gtk_file_dialog_save (dialog,
