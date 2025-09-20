@@ -76,6 +76,7 @@ typedef struct
     AnimationDirection direction;
     float duration;
     EasingFunction easing;
+    float segment;
   } animation;
 
   struct {
@@ -588,6 +589,7 @@ path_paintable_add_path (PathPaintable *self,
   elt.animation.direction = ANIMATION_DIRECTION_NORMAL;
   elt.animation.duration = 0;
   elt.animation.easing = EASING_FUNCTION_LINEAR;
+  elt.animation.segment = 0.2;
 
   elt.fill.enabled = FALSE;
   elt.fill.rule = GSK_FILL_RULE_WINDING;
@@ -744,7 +746,8 @@ path_paintable_set_path_animation (PathPaintable      *self,
                                    AnimationType       type,
                                    AnimationDirection  direction,
                                    float               duration,
-                                   EasingFunction      easing)
+                                   EasingFunction      easing,
+                                   float               segment)
 {
   g_return_if_fail (idx < self->paths->len);
   g_return_if_fail (duration >= 0);
@@ -754,13 +757,15 @@ path_paintable_set_path_animation (PathPaintable      *self,
   if (elt->animation.type == type &&
       elt->animation.direction == direction &&
       elt->animation.duration == duration &&
-      elt->animation.easing == easing)
+      elt->animation.easing == easing &&
+      elt->animation.segment == segment)
     return;
 
   elt->animation.type = type;
   elt->animation.direction = direction;
   elt->animation.duration = duration;
   elt->animation.easing = easing;
+  elt->animation.segment = segment;
 
   g_signal_emit (self, signals[CHANGED], 0);
 }
@@ -809,6 +814,16 @@ path_paintable_get_path_animation_easing (PathPaintable *self,
   return elt->animation.easing;
 }
 
+float
+path_paintable_get_path_animation_segment (PathPaintable *self,
+                                           gsize          idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, 0.2);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->animation.segment;
+}
 void
 path_paintable_set_path_origin (PathPaintable *self,
                                 gsize          idx,
@@ -1116,7 +1131,8 @@ path_paintable_copy (PathPaintable *self)
                                          path_paintable_get_path_animation_type (self, i),
                                          path_paintable_get_path_animation_direction (self, i),
                                          path_paintable_get_path_animation_duration (self, i),
-                                         path_paintable_get_path_animation_easing (self, i));
+                                         path_paintable_get_path_animation_easing (self, i),
+                                         path_paintable_get_path_animation_segment (self, i));
 
       enabled = path_paintable_get_path_fill (self, i, &rule, &symbolic, &color);
       path_paintable_set_path_fill (other, i, enabled, rule, symbolic, &color);
@@ -1189,7 +1205,8 @@ path_paintable_combine (PathPaintable *one,
                                          path_paintable_get_path_animation_type (two, i),
                                          path_paintable_get_path_animation_direction (two, i),
                                          path_paintable_get_path_animation_duration (two, i),
-                                         path_paintable_get_path_animation_easing (two, i));
+                                         path_paintable_get_path_animation_easing (two, i),
+                                         path_paintable_get_path_animation_segment (two, i));
 
       states = path_paintable_get_path_states (two, i);
       if (states == ALL_STATES)

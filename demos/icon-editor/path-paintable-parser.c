@@ -268,6 +268,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_direction_attr = NULL;
   const char *animation_duration_attr = NULL;
   const char *animation_easing_attr = NULL;
+  const char *animation_segment_attr = NULL;
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
@@ -292,6 +293,7 @@ start_element_cb (GMarkupParseContext  *context,
   AnimationDirection animation_direction;
   float animation_duration;
   EasingFunction animation_easing;
+  float animation_segment;
   float origin;
   gsize idx;
   gsize attach_to;
@@ -528,6 +530,7 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-direction", &animation_direction_attr,
                             "gpa:animation-duration", &animation_duration_attr,
                             "gpa:animation-easing", &animation_easing_attr,
+                            "gpa:animation-segment", &animation_segment_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
                             "gpa:transition-easing", &transition_easing_attr,
@@ -548,6 +551,7 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_direction_attr &&
       !animation_duration_attr &&
       !animation_easing_attr &&
+      !animation_segment_attr &&
       !attach_to_attr &&
       !attach_pos_attr)
     {
@@ -899,6 +903,13 @@ start_element_cb (GMarkupParseContext  *context,
         }
     }
 
+  animation_segment = 0.2f;
+  if (animation_segment_attr)
+    {
+      if (!parse_float ("gpa:animation-segment", animation_segment_attr, POSITIVE, &animation_segment, error))
+        goto cleanup;
+    }
+
   attach_to = (gsize) -1;
   if (attach_to_attr)
     {
@@ -928,7 +939,7 @@ start_element_cb (GMarkupParseContext  *context,
   idx = path_paintable_add_path (data->paintable, path);
 
   path_paintable_set_path_states (data->paintable, idx, states);
-  path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_easing);
+  path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_easing, animation_segment);
   path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_easing);
   path_paintable_set_path_origin (data->paintable, idx, origin);
   path_paintable_set_path_fill (data->paintable, idx, fill_attr != NULL, fill_rule, fill_symbolic, &fill_color);
@@ -1059,6 +1070,13 @@ path_paintable_save_path (PathPaintable *self,
     {
       g_string_append_printf (str, "\n        gpa:animation-easing='%s'",
                               easing[path_paintable_get_path_animation_easing (self, idx)]);
+      has_gtk_attr = TRUE;
+    }
+
+  if (path_paintable_get_path_animation_segment (self, idx) != 0.2)
+    {
+      g_string_append_printf (str, "\n        gpa:animation-segment='%g'",
+                              path_paintable_get_path_animation_segment (self, idx));
       has_gtk_attr = TRUE;
     }
 

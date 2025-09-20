@@ -46,6 +46,7 @@ struct _PathEditor
   GtkDropDown *animation_direction;
   GtkSpinButton *animation_duration;
   GtkDropDown *animation_easing;
+  GtkSpinButton *animation_segment;
   GtkDropDown *stroke_paint;
   GtkColorDialogButton *stroke_color;
   RangeEditor *width_range;
@@ -170,6 +171,7 @@ animation_changed (PathEditor *self)
   AnimationDirection direction;
   float duration;
   EasingFunction easing;
+  float segment;
 
   if (self->updating)
     return;
@@ -178,8 +180,9 @@ animation_changed (PathEditor *self)
   direction = (AnimationDirection) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
+  segment = gtk_spin_button_get_value (self->animation_segment);
 
-  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, easing);
+  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, easing, segment);
 }
 
 static void
@@ -614,6 +617,9 @@ path_editor_update (PathEditor *self)
       gtk_drop_down_set_selected (self->animation_easing,
                                   path_paintable_get_path_animation_easing (self->paintable, self->path));
 
+      gtk_spin_button_set_value (self->animation_segment,
+                                 path_paintable_get_path_animation_segment (self->paintable, self->path));
+
       width = gsk_stroke_get_line_width (stroke);
       path_paintable_get_path_stroke_variation (self->paintable, self->path,
                                                 &min_width, &max_width);
@@ -818,6 +824,7 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_duration);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_easing);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_color);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, width_range);
