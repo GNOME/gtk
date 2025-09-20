@@ -137,6 +137,7 @@ typedef struct
     GtkPathAnimationDirection direction;
     float duration;
     GtkEasingFunction easing;
+    float segment;
   } animation;
 
   struct {
@@ -837,6 +838,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_direction_attr = NULL;
   const char *animation_duration_attr = NULL;
   const char *animation_easing_attr = NULL;
+  const char *animation_segment_attr = NULL;
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
@@ -865,6 +867,7 @@ start_element_cb (GMarkupParseContext  *context,
   guint animation_direction;
   float animation_duration;
   guint animation_easing;
+  float animation_segment;
   float origin;
   gsize idx;
   gsize attach_to;
@@ -1115,6 +1118,7 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-direction", &animation_direction_attr,
                             "gpa:animation-duration", &animation_duration_attr,
                             "gpa:animation-easing", &animation_easing_attr,
+                            "gpa:animation-segment", &animation_segment_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
                             "gpa:transition-easing", &transition_easing_attr,
@@ -1142,6 +1146,7 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_direction_attr &&
       !animation_duration_attr &&
       !animation_easing_attr &&
+      !animation_segment_attr &&
       !transition_type_attr &&
       !transition_duration_attr &&
       !transition_easing_attr &&
@@ -1369,6 +1374,13 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
+  animation_segment = 0.2f;
+  if (animation_segment_attr)
+    {
+      if (!parse_float ("gpa:animation-segment", animation_segment_attr, POSITIVE, &animation_segment, error))
+        goto cleanup;
+    }
+
   attach_to = (gsize) -1;
   if (attach_to_attr)
     {
@@ -1409,6 +1421,7 @@ start_element_cb (GMarkupParseContext  *context,
   elt.animation.direction = (GtkPathAnimationDirection) animation_direction;
   elt.animation.duration = animation_duration;
   elt.animation.easing = (GtkEasingFunction) animation_easing;
+  elt.animation.segment = animation_segment;
 
   elt.fill.enabled = fill_attr != NULL;
   elt.fill.rule = (GskFillRule) fill_rule;
@@ -1620,10 +1633,12 @@ paint_elt_animated (GtkPathPaintable *self,
                     float             end,
                     PaintData        *data)
 {
-  float segment = 0.2;
   float t;
   guint rep;
   float origin;
+  float segment;
+
+  segment = elt->animation.segment;
 
   switch (elt->animation.type)
     {
