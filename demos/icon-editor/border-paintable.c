@@ -132,6 +132,9 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                 {
                   GskPath *path = path_paintable_get_path (self->paintable, i);
                   float origin = path_paintable_get_path_origin (self->paintable, i);
+                  gsize attach_to;
+                  float attach_pos;
+
                   graphene_point_t pos;
                   g_autoptr (GskPath) dot = NULL;
 
@@ -145,6 +148,27 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                   gtk_snapshot_push_fill (snapshot, dot, GSK_FILL_RULE_WINDING);
                   gtk_snapshot_append_color (snapshot, &c, &bounds);
                   gtk_snapshot_pop (snapshot);
+
+                  path_paintable_get_attach_path (self->paintable, i, &attach_to, &attach_pos);
+
+                  if (attach_to != (gsize) -1)
+                    {
+                      GskPathBuilder *builder;
+                      GskPath *arrow;
+
+                      builder = gsk_path_builder_new ();
+                      gsk_path_builder_move_to (builder, pos.x, pos.y);
+                      gsk_path_builder_rel_line_to (builder, 20.f/scale, 0);
+                      gsk_path_builder_rel_move_to (builder, -4.f/scale, -3.f/scale);
+                      gsk_path_builder_rel_line_to (builder, 4.f/scale, 3.f/scale);
+                      gsk_path_builder_rel_line_to (builder, -4.f/scale, 3.f/scale);
+                      arrow = gsk_path_builder_free_to_path (builder);
+                      gtk_snapshot_push_stroke (snapshot, arrow, stroke);
+                      gtk_snapshot_append_color (snapshot, &c, &bounds);
+                      gtk_snapshot_pop (snapshot);
+
+                      gsk_path_unref (arrow);
+                    }
                 }
             }
         }
