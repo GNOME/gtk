@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-09-05 15:12+0000\n"
-"PO-Revision-Date: 2025-09-05 19:58+0300\n"
+"POT-Creation-Date: 2025-09-20 16:07+0000\n"
+"PO-Revision-Date: 2025-09-20 19:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -68,7 +68,6 @@ msgstr "cicp: підтримки основних кольорів %u не пе�
 
 #: gdk/gdkcolorstate.c:1185
 #, c-format
-#| msgid "cicp: Transfer function %u not supported"
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp: коефіцієнтів матриці %u, підтримки %s не передбачено"
 
@@ -908,7 +907,6 @@ msgid "OpenGL 3.3 required"
 msgstr "Потрібна OpenGL 3.3"
 
 #: gsk/gpu/gskvulkanrenderer.c:159
-#| msgid "Vulkan support disabled via GDK_DISABLE"
 msgid "Vulkan support disabled during GTK build"
 msgstr "Підтримку Vulkan вимкнено під час збирання GTK"
 
@@ -1851,7 +1849,7 @@ msgstr "_Закрити"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:385
+#: gtk/gtkapplication-dbus.c:384
 msgid "Reason not specified"
 msgstr "Причину не вказано"
 
@@ -2266,12 +2264,12 @@ msgid "_Edit"
 msgstr "З_міни"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
-#: gtk/gtktextview.c:9388
+#: gtk/gtktextview.c:9382
 msgid "_Copy"
 msgstr "_Копіювати"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
-#: gtk/gtktextview.c:9466
+#: gtk/gtktextview.c:9460
 msgid "Context menu"
 msgstr "Контекстне меню"
 
@@ -2438,7 +2436,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9396
+#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9390
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2790,15 +2788,15 @@ msgstr "Закрити"
 msgid "Close the infobar"
 msgstr "Закрити панель відомостей"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9384
+#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9378
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9392
+#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9386
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9417
+#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9411
 msgid "Select _All"
 msgstr "Виді_лити все"
 
@@ -4342,7 +4340,7 @@ msgstr "Бічна панель"
 msgid "Change di_rection"
 msgstr "Змінити _напрям"
 
-#: gtk/gtktext.c:6406 gtk/gtktextview.c:9422
+#: gtk/gtktext.c:6406 gtk/gtktextview.c:9416
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
@@ -4502,11 +4500,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9404
+#: gtk/gtktextview.c:9398
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: gtk/gtktextview.c:9408
+#: gtk/gtktextview.c:9402
 msgid "_Redo"
 msgstr "Пов_торити"
 
@@ -4571,11 +4569,16 @@ msgstr "Межі"
 msgid "Object Path"
 msgstr "Шлях до об'єкта"
 
-#: gtk/inspector/a11y.ui:164
+#: gtk/inspector/a11y.ui:153
+#| msgid "Surface"
+msgid "Interface"
+msgstr "Інтерфейс"
+
+#: gtk/inspector/a11y.ui:192
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
+#: gtk/inspector/a11y.ui:204 gtk/inspector/css-node-tree.ui:70
 #: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:207
 #: gtk/inspector/recorder.ui:251 gtk/inspector/strv-editor.c:73
 msgid "Value"
@@ -4731,8 +4734,6 @@ msgid "Copy to clipboard as gitlab markdown"
 msgstr "Скопіювати до буфера як код розмітки gitlab"
 
 #: gtk/inspector/general.ui:53
-#| msgid "Opening %d Item"
-#| msgid_plural "Opening %d Items"
 msgid "Operating System"
 msgstr "Операційна система"
 
@@ -5229,29 +5230,22 @@ msgid "System Color Scheme"
 msgstr "Схема кольорів системи"
 
 #: gtk/inspector/visual.ui:72 gtk/inspector/visual.ui:106
-#| msgid "Unsupported video codec"
 msgid "Unsupported"
 msgstr "Немає підтримки"
 
 #: gtk/inspector/visual.ui:74
-#| msgctxt "Color name"
-#| msgid "Dark Red"
 msgid "Dark"
 msgstr "Темна"
 
 #: gtk/inspector/visual.ui:75
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgid "Light"
 msgstr "Світла"
 
 #: gtk/inspector/visual.ui:92
-#| msgid "System Information"
 msgid "System Contrast"
 msgstr "Загальносистемна контрастність"
 
 #: gtk/inspector/visual.ui:107
-#| msgid "Preferences"
 msgid "No Preference"
 msgstr "Без переваг"
 
@@ -5367,7 +5361,6 @@ msgid "Show Graphics Offload"
 msgstr "Показувати графічне вивантаження"
 
 #: gtk/inspector/visual.ui:766
-#| msgid "Show Focus"
 msgid "Show Touch UI"
 msgstr "Показувати сенсорний інтерфейс"
 
@@ -7102,8 +7095,6 @@ msgid "Select All"
 msgstr "Вибрати все"
 
 #: gtk/ui/gtkapplication-quartz.ui:85
-#| msgctxt "Line ending name"
-#| msgid "Windows"
 msgid "_Window"
 msgstr "_Вікно"
 
@@ -7423,7 +7414,6 @@ msgid "_Reverse"
 msgstr "_Обернено"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:364
-#| msgid "Page or_dering:"
 msgid "Page ordering preview"
 msgstr "Перегляд порядку сторінок"
 
@@ -7432,8 +7422,8 @@ msgid ""
 "A visualization of the effect of the collate and reverse options on the page "
 "ordering"
 msgstr ""
-"Візуалізація ефекту упорядкування та параметрів зворотного порядку на"
-" упорядковування сторінок"
+"Візуалізація ефекту упорядкування та параметрів зворотного порядку на "
+"упорядковування сторінок"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
@@ -7496,7 +7486,6 @@ msgid "Or_ientation:"
 msgstr "_Орієнтація:"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:770
-#| msgid "Path Preview"
 msgid "Page layout preview"
 msgstr "Перегляд компонування сторінок"
 
@@ -8253,7 +8242,6 @@ msgid "Show control points"
 msgstr "Показати контрольні точки"
 
 #: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:116
-#| msgid "Show deprecations"
 msgid "Show intersections"
 msgstr "Показувати перетини"
 
@@ -8286,7 +8274,6 @@ msgid "Point color"
 msgstr "Колір точки"
 
 #: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:120
-#| msgid "Enter location or URL"
 msgid "Intersection color"
 msgstr "Колір перетинів"
 
@@ -8306,7 +8293,6 @@ msgid "VALUE"
 msgstr "ЗНАЧЕННЯ"
 
 #: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:122
-#| msgid "PATH"
 msgid "PATH…"
 msgstr "ШЛЯХ…"
 
@@ -8419,7 +8405,6 @@ msgid "Path Preview"
 msgstr "Перегляд контура"
 
 #: tools/gtk-path-tool-show.c:132
-#| msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgid "Line join (miter, miter-clip, round, bevel)"
 msgstr ""
 "З'єднання лінії (під кутом, під кутом з обрізанням, заокруглення, "
@@ -8430,7 +8415,6 @@ msgid "Display the path."
 msgstr "Показати контур."
 
 #: tools/gtk-path-tool-show.c:191
-#| msgid "Can only show a single path"
 msgid "Can only show one or two paths"
 msgstr "Можливий показ лише одного або двох контурів"
 
@@ -8470,20 +8454,6 @@ msgstr "Не вдалося обробити «%s» як число"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  extract      Extract data urls\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8592,12 +8562,10 @@ msgid "Success color"
 msgstr "Колір успіху"
 
 #: tools/gtk-rendernode-tool-convert.c:95
-#| msgid "Point color"
 msgid "Warning color"
 msgstr "Колір попередження"
 
 #: tools/gtk-rendernode-tool-convert.c:96
-#| msgid "Foreground color"
 msgid "Error color"
 msgstr "Колір помилки"
 
@@ -8611,13 +8579,11 @@ msgstr "Перетворити з символічного svg на вузол."
 
 #: tools/gtk-rendernode-tool-convert.c:177
 #, c-format
-#| msgid "No .ui file specified\n"
 msgid "No .svg file specified\n"
 msgstr "Не вказано файла .svg\n"
 
 #: tools/gtk-rendernode-tool-convert.c:183
 #, c-format
-#| msgid "Can only accept a single .node file\n"
 msgid "Can only accept a single .svg file\n"
 msgstr "Можлива одночасна обробка лише одного файла .svg\n"
 
