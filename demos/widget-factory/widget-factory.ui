@@ -1773,10 +1773,13 @@ microphone-sensitivity-medium-symbolic</property>
                                             </child>
                                             <child>
                                               <object class="GtkImage" id="listboxrow3image">
-                                                <property name="paintable">object-select-symbolic</property>
+                                                <property name="paintable">
+                                                  <object class="GtkPathPaintable">
+                                                    <property name="resource">/org/gtk/WidgetFactory4/icons/checked.gpa</property>
+                                                  </object>
+                                                </property>
                                                 <property name="halign">2</property>
                                                 <property name="valign">3</property>
-                                                <property name="opacity">0</property>
                                               </object>
                                             </child>
                                           </object>

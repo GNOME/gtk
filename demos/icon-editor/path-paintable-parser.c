@@ -1078,7 +1078,7 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_transition_easing (self, idx) != EASING_FUNCTION_LINEAR)
     {
-      g_string_append_printf (str, "\n     gpa:transition-easing='%s'",
+      g_string_append_printf (str, "\n        gpa:transition-easing='%s'",
                               easing[path_paintable_get_path_transition_easing (self, idx)]);
       has_gtk_attr = TRUE;
     }

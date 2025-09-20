@@ -1096,7 +1096,9 @@ endif
 # the object just does nothing being in the deplist
 gtk_deps += libintl_dep
 
-install_data('gtk-mime.xml', install_dir: join_paths (gtk_datadir, 'mime/packages'), install_tag: 'runtime')
+if os_linux
+  install_data('gtk-mime.xml', install_dir: join_paths (gtk_datadir, 'mime/packages'), install_tag: 'runtime')
+endif
 
 gtk_settings_schemas = [
   'org.gtk.gtk4.Settings.FileChooser.gschema.xml',
