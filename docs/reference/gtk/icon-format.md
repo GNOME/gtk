@@ -130,13 +130,13 @@ The following attributes can be set on the `<svg>` element:
 The following attributes can be set on elements that specify a path:
 
 - `gpa:stroke`: Stroke paint. Either a symbolic color name ('foreground', 'success', 'warning', 'error', 'accent') or a fixed color in the format parsed by `gdk_rgba_parse`
-- `gpa:fill`: Fill paint (similar to `grappa:stroke`)
-- `grappa:states`: A space-separated list of unsigned integers between 0 and 63, or
+- `gpa:fill`: Fill paint (similar to `gpa:stroke`)
+- `gpa:states`: A space-separated list of unsigned integers between 0 and 63, or
    'all' or 'none'
 - `gpa:animation-type`: The animation to use. One of 'none' or 'automatic'
 - `gpa:animation-direction`: One of 'normal', 'alternate', 'reverse', 'reverse-alternate', 'in-out', 'in-out-alternate', 'in-out-reverse', 'segment, 'segment-alternate'
 - `gpa:animation-duration`: The duration of one animation cycle (in seconds)
-- `gpa:animation-easing`: the easing function for animations (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
+- `gpa:animation-easing`: The easing function for animations (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
 - `gpa:transition-type`: The transition to use. One of 'none', 'animate', 'blur' or 'fade'
 - `gpa:transition-duration`: The transition duration (in seconds)
 - `gpa:transition-easing`: The easing function for transitions (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
