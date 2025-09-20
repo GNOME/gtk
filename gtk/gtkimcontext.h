@@ -99,8 +99,11 @@ struct _GtkIMContextClass
   gboolean (* activate_osk_with_event) (GtkIMContext *context,
                                         GdkEvent     *event);
 
+  /* another signal */
+  gboolean (*invalid_composition)  (GtkIMContext *context,
+				    const char *str);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
 };

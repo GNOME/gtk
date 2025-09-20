@@ -515,20 +515,6 @@ check_hex (GtkIMContextSimple *context_simple,
   return TRUE;
 }
 
-static void
-beep_surface (GdkSurface *surface)
-{
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  gboolean   beep;
-
-  g_object_get (gtk_settings_get_for_display (display),
-                "gtk-error-bell", &beep,
-                NULL);
-
-  if (beep)
-    gdk_surface_beep (surface);
-}
-
 static inline gboolean
 is_dead_key (guint keysym)
 {
@@ -604,6 +590,41 @@ append_dead_key (GString *string,
     default:
       g_string_append_unichar (string, gdk_keyval_to_unicode (keysym));
     }
+}
+
+static void
+handle_invalid_composition (GtkIMContext *context,
+                            guint        *compose_buffer,
+                            guint         n_compose,
+                            GdkSurface   *surface)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GString *s = g_string_new ("");
+  gboolean avoid_beep;
+  gboolean display_beepable;
+  guint i;
+
+  for (i = 0; i < n_compose; i++)
+    if (is_dead_key (compose_buffer[i]))
+      append_dead_key (s, compose_buffer[i]);
+    else
+      {
+        gunichar ch = gdk_keyval_to_unicode (compose_buffer[i]);
+
+        if (ch != 0 && ch != ' ' && !g_unichar_iscntrl (ch))
+          g_string_append_unichar (s, ch);
+      }
+
+  g_signal_emit_by_name (context, "invalid-composition", s->str, &avoid_beep);
+
+  g_string_free (s, TRUE);
+
+  g_object_get (gtk_settings_get_for_display (display),
+                "gtk-error-bell", &display_beepable,
+                NULL);
+
+  if (!avoid_beep && display_beepable)
+    gdk_surface_beep (surface);
 }
 
 static gboolean
@@ -710,7 +731,11 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)                /* Invalid sequence */
         {
-          beep_surface (gdk_event_get_surface (event));
+          handle_invalid_composition (context,
+                                      priv->compose_buffer,
+                                      n_compose,
+                                      gdk_event_get_surface (event));
+
           g_signal_emit_by_name (context, "preedit-changed");
           g_signal_emit_by_name (context, "preedit-end");
           return TRUE;
@@ -832,7 +857,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           else if (priv->in_hex_sequence)
             {
               /* invalid hex sequence */
-              beep_surface (surface);
+              handle_invalid_composition (context,
+                                          priv->compose_buffer,
+                                          n_compose,
+                                          surface);
 
               g_string_set_size (priv->tentative_match, 0);
               priv->in_hex_sequence = FALSE;
@@ -974,7 +1002,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
         {
           /* invalid hex sequence */
           if (n_compose > 0)
-            beep_surface (surface);
+            handle_invalid_composition (context,
+                                        priv->compose_buffer,
+                                        n_compose,
+                                        surface);
 
           g_string_set_size (priv->tentative_match, 0);
           priv->in_hex_sequence = FALSE;
@@ -1014,7 +1045,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       else if (!is_hex_end)
         {
           /* non-hex character in hex sequence, or sequence too long */
-          beep_surface (surface);
+          handle_invalid_composition (context,
+                                      priv->compose_buffer,
+                                      n_compose,
+                                      surface);
           return TRUE;
         }
     }
@@ -1050,7 +1084,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               else
                 {
                   /* invalid hex sequence */
-                  beep_surface (surface);
+                  handle_invalid_composition (context,
+                                              priv->compose_buffer,
+                                              n_compose,
+                                              surface);
 
                   g_string_set_size (priv->tentative_match, 0);
                   priv->in_hex_sequence = FALSE;
@@ -1058,7 +1095,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                 }
             }
           else if (!check_hex (context_simple, n_compose))
-            beep_surface (surface);
+            handle_invalid_composition (context,
+                                        priv->compose_buffer,
+                                        n_compose,
+                                        surface);
 
           g_signal_emit_by_name (context_simple, "preedit-changed");
 
@@ -1157,10 +1197,13 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
        */
       if (prefix > 0)
         {
+          handle_invalid_composition (context,
+                                      priv->compose_buffer,
+                                      n_compose,
+                                      surface);
+
           for (i = prefix; i < n_compose; i++)
             priv->compose_buffer[i] = 0;
-
-          beep_surface (gdk_event_get_surface (event));
 
           g_signal_emit_by_name (context_simple, "preedit-changed");
 
