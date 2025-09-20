@@ -275,7 +275,7 @@ icon_editor_application_new (void)
               devel ? VCS_TAG : "");
 
   app = g_object_new (ICON_EDITOR_APPLICATION_TYPE,
-                      "application-id", devel ? "org.gtk.Shaper.Devel" : "org.gtk.Shaper",
+                      "application-id", "org.gtk.Shaper",
                       "resource-base-path", "/org/gtk/Shaper",
                       "flags", G_APPLICATION_HANDLES_OPEN | G_APPLICATION_NON_UNIQUE,
                       "version", version,
