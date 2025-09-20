@@ -1780,6 +1780,13 @@ paint_elt_with_fade (GtkPathPaintable *self,
 }
 
 static void
+invalidate_in_idle (gpointer data)
+{
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (data));
+  g_object_unref (data);
+}
+
+static void
 paint (GtkPathPaintable *self,
        PaintData        *data)
 {
@@ -1900,7 +1907,7 @@ paint (GtkPathPaintable *self,
     }
 
   if (self->transition.running || self->animation.running)
-    g_idle_add_once ((GSourceOnceFunc) gdk_paintable_invalidate_contents, self);
+    g_idle_add_once (invalidate_in_idle, g_object_ref (self));
 
   if (data->time >= self->transition.start_time + (self->transition.out_duration + self->transition.in_duration) * G_TIME_SPAN_SECOND)
     self->transition.running = FALSE;
