@@ -1922,7 +1922,7 @@ gtk_path_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
   data.height = height;
   data.colors = colors;
   data.n_colors = n_colors;
-  data.weight = self->weight > 0 ? self->weight : weight;
+  data.weight = self->weight >= 1 ? self->weight : weight;
   data.time = g_get_monotonic_time ();
 
   scale = MIN (width / MAX (self->width, 1), height / MAX (self->height, 1));
@@ -2152,6 +2152,9 @@ gtk_path_paintable_class_init (GtkPathPaintableClass *class)
  *
  * Sets the state of the paintable.
  *
+ * USe [method@Gtk.PathPaintable.get_max_state] to
+ * find out what states @self has.
+ *
  * Since: 4.22
  */
 void
@@ -2188,7 +2191,7 @@ gtk_path_paintable_set_state (GtkPathPaintable *self,
  * gtk_path_paintable_get_state:
  * @self: a paintable
  *
- * Gets the state of the paintable.
+ * Gets the current state of the paintable.
  *
  * Returns: the state
  *
@@ -2203,7 +2206,7 @@ gtk_path_paintable_get_state (GtkPathPaintable *self)
 /**
  * gtk_path_paintable_set_weight:
  * @self: a paintable
- * @weight: the font weight, as a value between -11 and 1000,
+ * @weight: the font weight, as a value between -1 and 1000,
  *
  * Sets the font weight that is used when rendering
  * the paintable.
@@ -2277,8 +2280,8 @@ gtk_path_paintable_get_max_state (GtkPathPaintable *self)
  * Parses the data in @bytes and creates a
  * paintable.
  *
- * The supported format is a subset of SVG.
- * See icon-format.md for details.
+ * The supported format is a [subset](icon-format.html)
+ * of SVG.
  *
  * Returns: the paintable
  *
@@ -2304,8 +2307,8 @@ gtk_path_paintable_new_from_bytes (GBytes  *bytes,
  *
  * Parses the resource and creates a paintable.
  *
- * The supported format is a subset of SVG.
- * See icon-format.md for details.
+ * The supported format is a [subset](icon-format.html)
+ * of SVG.
  *
  * Returns: the paintable
  *
