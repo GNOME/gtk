@@ -818,7 +818,7 @@ float
 path_paintable_get_path_animation_segment (PathPaintable *self,
                                            gsize          idx)
 {
-  g_return_val_if_fail (idx < self->paths->len, 0.2);
+  g_return_val_if_fail (idx < self->paths->len, 0.2f);
 
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 

@@ -1073,7 +1073,7 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  if (path_paintable_get_path_animation_segment (self, idx) != 0.2)
+  if (path_paintable_get_path_animation_segment (self, idx) != 0.2f)
     {
       g_string_append_printf (str, "\n        gpa:animation-segment='%g'",
                               path_paintable_get_path_animation_segment (self, idx));
