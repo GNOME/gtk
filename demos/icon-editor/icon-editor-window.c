@@ -462,9 +462,32 @@ static void
 show_open_filechooser (IconEditorWindow *self)
 {
   g_autoptr (GtkFileDialog) dialog = NULL;
+  g_autoptr (GListStore) filters = NULL;
+  GtkFileFilter *filter;
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "All files");
+  gtk_file_filter_add_pattern (filter, "*");
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "SVG files");
+  gtk_file_filter_add_mime_type (filter, "image/svg+xml");
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "GTK icons");
+  gtk_file_filter_add_mime_type (filter, "image/x-gtk-path-animation");
+  gtk_file_filter_add_pattern (filter, "*.gpa");
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
 
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, self->importing ? "Open SVG file" : "Open icon file");
+
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+
   if (self->file)
     {
       gtk_file_dialog_set_initial_file (dialog, self->file);
@@ -474,6 +497,7 @@ show_open_filechooser (IconEditorWindow *self)
       g_autoptr (GFile) cwd = g_file_new_for_path (".");
       gtk_file_dialog_set_initial_folder (dialog, cwd);
     }
+
 
   gtk_file_dialog_open (dialog, GTK_WINDOW (self),
                         NULL, open_response_cb, self);
