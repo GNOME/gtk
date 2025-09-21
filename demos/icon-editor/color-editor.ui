@@ -20,11 +20,36 @@
       </object>
     </child>
     <child>
-      <object class="GtkColorDialogButton" id="custom">
-        <property name="dialog">
-          <object class="GtkColorDialog"/>
-        </property>
-        <property name="rgba" bind-source="ColorEditor" bind-property="color" bind-flags="bidirectional | sync-create"/>
+      <object class="GtkStack" id="stack">
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">indicator</property>
+            <property name="child">
+              <object class="GtkBox">
+                <style><class name="indicator-box"/></style>
+                <property name="hexpand">0</property>
+                <child>
+                  <object class="GtkBox" id="indicator">
+                    <property name="hexpand">1</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">custom</property>
+            <property name="child">
+              <object class="GtkColorDialogButton" id="custom">
+                <property name="dialog">
+                  <object class="GtkColorDialog"/>
+                </property>
+                <property name="rgba" bind-source="ColorEditor" bind-property="color" bind-flags="bidirectional | sync-create"/>
+              </object>
+            </property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

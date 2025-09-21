@@ -81,6 +81,39 @@ ColorEditor {
   border-spacing: 10px;
 }
 
+ColorEditor box.indicator-box {
+  margin: 4px;
+}
+
+ColorEditor box.indicator {
+  border: solid 4px transparent;
+  border-radius: 4px;
+}
+
+ColorEditor box.indicator.none {
+  background: none;
+}
+
+ColorEditor box.indicator.foreground {
+  background: currentColor;
+}
+
+ColorEditor box.indicator.error {
+  background: @error_color;
+}
+
+ColorEditor box.indicator.warning {
+  background: @warning_color;
+}
+
+ColorEditor box.indicator.success {
+  background: @success_color;
+}
+
+ColorEditor box.indicator.accent {
+  background: @accent_color;
+}
+
 PaintableEditor separator {
   background-color: var(--border);
 }

@@ -29,6 +29,8 @@ struct _ColorEditor
   GdkRGBA color;
 
   GtkDropDown *paint;
+  GtkStack *stack;
+  GtkWidget *indicator;
   GtkColorDialogButton *custom;
 };
 
@@ -150,6 +152,8 @@ color_editor_class_init (ColorEditorClass *class)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/Shaper/color-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, ColorEditor, paint);
+  gtk_widget_class_bind_template_child (widget_class, ColorEditor, stack);
+  gtk_widget_class_bind_template_child (widget_class, ColorEditor, indicator);
   gtk_widget_class_bind_template_child (widget_class, ColorEditor, custom);
 
   gtk_widget_class_set_css_name (widget_class, "ColorEditor");
@@ -177,6 +181,21 @@ color_editor_set_symbolic (ColorEditor  *self,
   self->symbolic = symbolic;
 
   gtk_drop_down_set_selected (self->paint, symbolic);
+
+  if (symbolic == 0 || symbolic - 1 <= GTK_SYMBOLIC_COLOR_ACCENT)
+    {
+      const char *cls[] = { "none", "foreground", "error", "warning", "success", "accent" };
+      const char *classes[3] = { "indicator", NULL, NULL };
+
+      gtk_stack_set_visible_child_name (self->stack, "indicator");
+
+      classes[1] = cls[symbolic];
+      gtk_widget_set_css_classes (self->indicator, classes);
+    }
+  else
+    {
+      gtk_stack_set_visible_child_name (self->stack, "custom");
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SYMBOLIC]);
 }
