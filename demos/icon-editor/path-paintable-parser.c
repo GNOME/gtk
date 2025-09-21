@@ -754,7 +754,7 @@ start_element_cb (GMarkupParseContext  *context,
   transition_type = TRANSITION_TYPE_NONE;
   if (transition_type_attr)
     {
-      const char *types[] = { "none", "animate", "blur", "fade" };
+      const char *types[] = { "none", "animate", "morph", "fade" };
       guint i;
 
       for (i = 0; i < G_N_ELEMENTS (types); i++)
@@ -1082,7 +1082,7 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_transition_type (self, idx) != TRANSITION_TYPE_NONE)
     {
-      const char *transition[] = { "none", "animate", "blur", "fade" };
+      const char *transition[] = { "none", "animate", "morph", "fade" };
 
       g_string_append_printf (str, "\n        gpa:transition-type='%s'", transition[path_paintable_get_path_transition_type (self, idx)]);
       has_gtk_attr = TRUE;

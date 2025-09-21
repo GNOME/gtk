@@ -42,7 +42,8 @@
  * for the effect used to transition each path:
  * - no effect
  * - animated stroke
- * - animated blur
+ * - morphing
+ * - fade
  *
  * For animated strokes, the origin of the stroke can be either
  * at the start or end of the path, or at an arbirary position
