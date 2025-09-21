@@ -42,6 +42,9 @@
             <property name="name">custom</property>
             <property name="child">
               <object class="GtkColorDialogButton" id="custom">
+                <accessibility>
+                  <property name="label" translatable="yes">Custom color</property>
+                </accessibility>
                 <property name="dialog">
                   <object class="GtkColorDialog"/>
                 </property>
