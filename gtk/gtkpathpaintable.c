@@ -27,6 +27,8 @@
 #include "gtksymbolicpaintable.h"
 #include "gtktypebuiltins.h"
 
+#include <stdint.h>
+
 /**
  * GtkPathPaintable:
  *
@@ -123,7 +125,7 @@ typedef struct
   GskPath *path;
   GskPathMeasure *measure;
 
-  guint64 states;
+  uint64_t states;
   float origin;
 
   struct {
@@ -145,7 +147,7 @@ typedef struct
     float width;
     float min_width;
     float max_width;
-    guint symbolic;
+    unsigned int symbolic;
     GdkRGBA color;
     GskLineCap linecap;
     GskLineJoin linejoin;
@@ -154,12 +156,12 @@ typedef struct
   struct {
     gboolean enabled;
     GskFillRule rule;
-    guint symbolic;
+    unsigned int symbolic;
     GdkRGBA color;
   } fill;
 
   struct {
-    gsize to;
+    size_t to;
     float position;
   } attach;
 
@@ -181,22 +183,25 @@ struct _GtkPathPaintable
 
   struct {
     gboolean running;
-    gint64 start_time;
+    int64_t start_time;
     float out_duration;
     float in_duration;
-    guint old_state;
-    guint new_state;
+    unsigned int old_state;
+    unsigned int new_state;
   } transition;
 
   struct {
     gboolean running;
-    gint64 start_time;
+    int64_t start_time;
   } animation;
 
   float weight;
 
-  guint state;
-  guint max_state;
+  unsigned int state;
+  unsigned int max_state;
+
+  unsigned int pending_notify;
+  unsigned int pending_invalidate;
 };
 
 struct _GtkPathPaintableClass
@@ -222,10 +227,10 @@ typedef struct
   double width;
   double height;
   const GdkRGBA *colors;
-  gsize n_colors;
+  size_t n_colors;
   float weight;
   float t_anim;
-  gint64 time;
+  int64_t time;
 } PaintData;
 
 static inline float
@@ -317,8 +322,8 @@ apply_easing (GtkEasingFunction easing,
  *   and is part of all states (except for the 'empty' one)
  */
 static gboolean
-state_match (guint64 states,
-             guint   state)
+state_match (uint64_t     states,
+             unsigned int state)
 {
   if (state == GTK_PATH_PAINTABLE_STATE_EMPTY)
     return FALSE;
@@ -330,8 +335,8 @@ state_match (guint64 states,
 }
 
 static gboolean
-path_is_in_state (PathElt *elt,
-                  guint    state)
+path_is_in_state (PathElt      *elt,
+                  unsigned int  state)
 {
   return state_match (elt->states, state);
 }
@@ -342,10 +347,64 @@ path_is_animating (PathElt *elt)
   return elt->animation.type != GTK_PATH_ANIMATION_TYPE_NONE;
 }
 
+static GskStroke *
+get_stroke_for_path (PathElt *elt,
+                     float    weight)
+{
+  GskStroke *stroke;
+  float width;
+
+  if (weight < 1.f)
+    {
+      g_assert_not_reached ();
+    }
+  else if (weight < 400.f)
+    {
+      float f = (400.f - weight) / (400.f - 1.f);
+      width = elt->stroke.min_width * f + elt->stroke.width * (1.f - f);
+    }
+  else if (weight == 400.f)
+    {
+      width = elt->stroke.width;
+    }
+  else if (weight <= 1000.f)
+    {
+      float f = (weight - 400.f) / (1000.f - 400.f);
+      width = elt->stroke.max_width * f + elt->stroke.width * (1.f - f);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  stroke = gsk_stroke_new (width);
+  gsk_stroke_set_line_cap (stroke, elt->stroke.linecap);
+  gsk_stroke_set_line_join (stroke, elt->stroke.linejoin);
+
+  return stroke;
+}
+
+static void
+get_fill_color_for_path (GtkPathPaintable *self,
+                         PathElt          *elt,
+                         GdkRGBA          *c,
+                         PaintData        *data)
+{
+  if (elt->fill.symbolic < data->n_colors)
+    {
+      *c = data->colors[elt->fill.symbolic];
+      c->alpha *= elt->fill.color.alpha;
+    }
+  else
+    {
+      *c = elt->fill.color;
+    }
+}
+
 static gboolean
 compute_transition_duration (GtkPathPaintable *self,
-                             guint             from,
-                             guint             to,
+                             unsigned int      from,
+                             unsigned int      to,
                              float            *out_duration,
                              float            *in_duration)
 {
@@ -353,7 +412,7 @@ compute_transition_duration (GtkPathPaintable *self,
   float in = 0;
   gboolean res = FALSE;
 
-  for (guint i = 0; i < self->paths->len; i++)
+  for (unsigned int i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
@@ -379,11 +438,64 @@ compute_transition_duration (GtkPathPaintable *self,
   return res;
 }
 
+static void
+compute_bounds (GtkPathPaintable *self)
+{
+  graphene_rect_t bounds;
+
+  for (unsigned int i = 0; i < self->paths->len; i++)
+    {
+      PathElt *elt = &g_array_index (self->paths, PathElt, i);
+
+      if (!gsk_path_is_empty (elt->path))
+        {
+          graphene_rect_t bd;
+          GskStroke *stroke;
+
+          stroke  = get_stroke_for_path (elt, 1000.f);
+
+          if (gsk_path_get_stroke_bounds (elt->path, stroke, &bd))
+            {
+              if (i > 0)
+                graphene_rect_union (&bd, &bounds, &bounds);
+              else
+                graphene_rect_init_from_rect (&bounds, &bd);
+            }
+
+           gsk_stroke_free (stroke);
+        }
+    }
+
+  if (!graphene_rect_equal (&self->bounds, &bounds))
+    {
+      graphene_rect_init_from_rect (&self->bounds, &bounds);
+      gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+    }
+}
+
+static unsigned int
+compute_max_state (GtkPathPaintable *self)
+{
+  unsigned int max = 0;
+
+  for (size_t idx = 0; idx < self->paths->len; idx++)
+    {
+      PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+      if (elt->states == GTK_PATH_PAINTABLE_ALL_STATES)
+        continue;
+
+      max = MAX (max, g_bit_nth_msf (elt->states, -1));
+    }
+
+  return max;
+}
+
 static gboolean
 has_animation_in_state (GtkPathPaintable *self,
-                        guint             state)
+                        unsigned int      state)
 {
-  for (guint i = 0; i < self->paths->len; i++)
+  for (unsigned int i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
@@ -426,93 +538,6 @@ get_path_segment (PathElt *elt,
   return gsk_path_builder_free_to_path (builder);
 }
 
-static GskStroke *
-get_stroke_for_path (PathElt *elt,
-                     float    weight)
-{
-  GskStroke *stroke;
-  float width;
-
-  if (weight < 1.f)
-    {
-      g_assert_not_reached ();
-    }
-  else if (weight < 400.f)
-    {
-      float f = (400.f - weight) / (400.f - 1.f);
-      width = elt->stroke.min_width * f + elt->stroke.width * (1.f - f);
-    }
-  else if (weight == 400.f)
-    {
-      width = elt->stroke.width;
-    }
-  else if (weight <= 1000.f)
-    {
-      float f = (weight - 400.f) / (1000.f - 400.f);
-      width = elt->stroke.max_width * f + elt->stroke.width * (1.f - f);
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-
-  stroke = gsk_stroke_new (width);
-  gsk_stroke_set_line_cap (stroke, elt->stroke.linecap);
-  gsk_stroke_set_line_join (stroke, elt->stroke.linejoin);
-
-  return stroke;
-}
-
-static void
-recompute_bounds (GtkPathPaintable *self)
-{
-  graphene_rect_t bounds;
-
-  for (guint i = 0; i < self->paths->len; i++)
-    {
-      PathElt *elt = &g_array_index (self->paths, PathElt, i);
-
-      if (elt->path != NULL && !gsk_path_is_empty (elt->path))
-        {
-          graphene_rect_t bd;
-          GskStroke *stroke = get_stroke_for_path (elt, 1000.f);
-
-          if (gsk_path_get_stroke_bounds (elt->path, stroke, &bd))
-            {
-              if (i > 0)
-                graphene_rect_union (&bd, &bounds, &bounds);
-              else
-                graphene_rect_init_from_rect (&bounds, &bd);
-            }
-
-           gsk_stroke_free (stroke);
-        }
-    }
-
-  if (!graphene_rect_equal (&self->bounds, &bounds))
-    {
-      graphene_rect_init_from_rect (&self->bounds, &bounds);
-      gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
-    }
-}
-
-static void
-get_fill_color_for_path (GtkPathPaintable *self,
-                         PathElt          *elt,
-                         GdkRGBA          *c,
-                         PaintData        *data)
-{
-  if (elt->fill.symbolic < data->n_colors)
-    {
-      *c = data->colors[elt->fill.symbolic];
-      c->alpha *= elt->fill.color.alpha;
-    }
-  else
-    {
-      *c = elt->fill.color;
-    }
-}
-
 static void
 get_stroke_color_for_path (GtkPathPaintable *self,
                            PathElt          *elt,
@@ -530,34 +555,18 @@ get_stroke_color_for_path (GtkPathPaintable *self,
     }
 }
 
-static guint
-compute_max_state (GtkPathPaintable *self)
-{
-  guint max = 0;
-
-  for (gsize idx = 0; idx < self->paths->len; idx++)
-    {
-      PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-      if (elt->states == GTK_PATH_PAINTABLE_ALL_STATES)
-        continue;
-
-      max = MAX (max, g_bit_nth_msf (elt->states, -1));
-    }
-
-  return max;
-}
-
 static void
 notify_state (GtkPathPaintable *self)
 {
+  self->pending_notify = 0;
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
 }
 
 static void
 set_state (GtkPathPaintable *self,
-           guint             state)
+           unsigned int      state,
+           gboolean          defer_notify)
 {
   if (self->state == state)
     return;
@@ -567,8 +576,11 @@ set_state (GtkPathPaintable *self,
   self->animation.start_time = g_get_monotonic_time ();
   self->animation.running = has_animation_in_state (self, state);
 
-  if (self->transition.running)
-    g_idle_add_once ((GSourceOnceFunc) notify_state, self);
+  if (defer_notify)
+    {
+      if (!self->pending_notify)
+        self->pending_notify = g_idle_add_once ((GSourceOnceFunc) notify_state, self);
+    }
   else
     notify_state (self);
 }
@@ -621,7 +633,7 @@ static void
 markup_filter_attributes (const char *element_name,
                           const char **attribute_names,
                           const char **attribute_values,
-                          guint64     *handled,
+                          uint64_t    *handled,
                           const char  *name,
                           ...)
 {
@@ -635,7 +647,7 @@ markup_filter_attributes (const char *element_name,
       ptr = va_arg (ap, const char **);
 
       *ptr = NULL;
-      for (guint i = 0; attribute_names[i]; i++)
+      for (unsigned int i = 0; attribute_names[i]; i++)
         {
           if (strcmp (attribute_names[i], name) == 0)
             {
@@ -676,11 +688,11 @@ enum
 };
 
 static gboolean
-parse_float (const char  *name,
-             const char  *value,
-             guint        flags,
-             float       *f,
-             GError     **error)
+parse_float (const char    *name,
+             const char    *value,
+             unsigned int   flags,
+             float         *f,
+             GError       **error)
 {
   char *end;
 
@@ -696,16 +708,14 @@ parse_float (const char  *name,
 }
 
 static gboolean
-parse_enum (const char  *name,
-            const char  *value,
-            const char **values,
-            gsize        n_values,
-            guint       *result,
-            GError     **error)
+parse_enum (const char    *name,
+            const char    *value,
+            const char   **values,
+            size_t          n_values,
+            unsigned int  *result,
+            GError       **error)
 {
-  guint i;
-
-  for (i = 0; i < n_values; i++)
+  for (unsigned int i = 0; i < n_values; i++)
     {
       if (strcmp (value, values[i]) == 0)
         {
@@ -720,7 +730,7 @@ parse_enum (const char  *name,
 
 static gboolean
 parse_states (const char *text,
-              guint64    *states)
+              uint64_t   *states)
 {
   GStrv str = NULL;
 
@@ -739,12 +749,12 @@ parse_states (const char *text,
   *states = 0;
 
   str = g_strsplit (text, " ", 0);
-  for (int i = 0; str[i]; i++)
+  for (unsigned int i = 0; str[i]; i++)
     {
-      guint u;
+      unsigned int u;
       char *end;
 
-      u = (guint) g_ascii_strtoull (str[i], &end, 10);
+      u = (unsigned int) g_ascii_strtoull (str[i], &end, 10);
       if ((end && *end != '\0') || (u > 63))
         {
           *states = GTK_PATH_PAINTABLE_ALL_STATES;
@@ -760,27 +770,14 @@ parse_states (const char *text,
 }
 
 static gboolean
-parse_origin (const char *text,
-              float      *origin)
-{
-  char *end;
-
-  *origin = (float) g_ascii_strtod (text, &end);
-  if ((end && *end != '\0') || *origin < 0 || *origin > 1)
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
-parse_paint (const char  *name,
-             const char  *value,
-             guint       *symbolic,
-             GdkRGBA     *color,
-             GError     **error)
+parse_paint (const char    *name,
+             const char    *value,
+             unsigned int  *symbolic,
+             GdkRGBA       *color,
+             GError       **error)
 {
   const char *sym[] = { "foreground", "error", "warning", "success", "accent" };
-  guint i;
+  unsigned int i;
 
   for (i = 0; i < G_N_ELEMENTS (sym); i++)
     {
@@ -806,8 +803,8 @@ typedef struct
 {
   GtkPathPaintable *paintable;
   GHashTable *paths;
-  guint state;
-  guint version;
+  unsigned int state;
+  unsigned int version;
 } ParserData;
 
 static void
@@ -819,7 +816,7 @@ start_element_cb (GMarkupParseContext  *context,
                   GError              **error)
 {
   ParserData *data = user_data;
-  guint64 handled = 0;
+  uint64_t handled = 0;
   int first_unset;
   const char *ignored = NULL;
   const char *path_attr = NULL;
@@ -847,30 +844,30 @@ start_element_cb (GMarkupParseContext  *context,
   const char *attach_to_attr = NULL;
   const char *attach_pos_attr = NULL;
   GskPath *path = NULL;
-  guint stroke_symbolic;
+  unsigned int stroke_symbolic;
   GdkRGBA stroke_color;
   float stroke_opacity;
   float stroke_width;
   float stroke_min_width;
   float stroke_max_width;
-  guint stroke_linejoin;
-  guint stroke_linecap;
-  guint fill_symbolic;
-  guint fill_rule;
+  unsigned int stroke_linejoin;
+  unsigned int stroke_linecap;
+  unsigned int fill_symbolic;
+  unsigned int fill_rule;
   GdkRGBA fill_color;
   float fill_opacity;
-  guint64 states;
-  guint transition_type;
+  uint64_t states;
+  unsigned int transition_type;
   float transition_duration;
-  guint transition_easing;
-  guint animation_type;
-  guint animation_direction;
+  unsigned int transition_easing;
+  unsigned int animation_type;
+  unsigned int animation_direction;
   float animation_duration;
-  guint animation_easing;
+  unsigned int animation_easing;
   float animation_segment;
   float origin;
-  gsize idx;
-  gsize attach_to;
+  size_t idx;
+  size_t attach_to;
   float attach_pos;
   PathElt elt;
 
@@ -915,10 +912,10 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (version_attr)
         {
-          guint version;
+          unsigned int version;
           char *end;
 
-          version = (guint) g_ascii_strtoull (version_attr, &end, 10);
+          version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
           if ((end && *end != '\0') || version != 1)
             {
               set_attribute_error (error, "gpa:version", version_attr);
@@ -930,10 +927,10 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (state_attr)
         {
-          guint state;
+          unsigned int state;
           char *end;
 
-          state = (guint) g_ascii_strtoull (state_attr, &end, 10);
+          state = (unsigned int) g_ascii_strtoull (state_attr, &end, 10);
           if ((end && *end != '\0') || (state > 63))
             {
               set_attribute_error (error, "gpa:state", state_attr);
@@ -1134,7 +1131,7 @@ start_element_cb (GMarkupParseContext  *context,
     {
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
                    "Unhandled attribute: %s", attribute_names[first_unset]);
-      return;
+      goto cleanup;
     }
 
   if (!fill_attr &&
@@ -1235,14 +1232,24 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (gtk_stroke_width_attr)
     {
-      int res;
+      GStrv str;
 
-      res = sscanf (gtk_stroke_width_attr, "%f %f %f", &stroke_min_width, &stroke_width, &stroke_max_width);
-      if (res < 3 || stroke_min_width < stroke_width || stroke_width > stroke_max_width)
+      str = g_strsplit (gtk_stroke_width_attr, " ", 0);
+      if (g_strv_length (str) != 3)
         {
           set_attribute_error (error, "gpa:stroke-width", gtk_stroke_width_attr);
+          g_strfreev (str);
           goto cleanup;
         }
+
+      if (!parse_float ("gpa:stroke-width", str[0], POSITIVE, &stroke_min_width, error) ||
+          !parse_float ("gpa:stroke-width", str[1], POSITIVE, &stroke_width, error) ||
+          !parse_float ("gpa:stroke-width", str[2], POSITIVE, &stroke_max_width, error))
+        {
+          g_strfreev (str);
+          goto cleanup;
+        }
+      g_strfreev (str);
     }
 
   stroke_linecap = GSK_LINE_CAP_ROUND;
@@ -1315,15 +1322,12 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  attach_to = (gsize) -1;
+  attach_to = (size_t) -1;
   origin = 0;
   if (origin_attr)
     {
-      if (!parse_origin (origin_attr, &origin))
-        {
-          set_attribute_error (error, "gpa:origin", origin_attr);
-          goto cleanup;
-        }
+      if (!parse_float ("gpa:origin", origin_attr, UNIT, &origin, error))
+        goto cleanup;
     }
 
   states = GTK_PATH_PAINTABLE_ALL_STATES;
@@ -1381,7 +1385,7 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  attach_to = (gsize) -1;
+  attach_to = (size_t) -1;
   if (attach_to_attr)
     {
       gpointer value;
@@ -1400,11 +1404,8 @@ start_element_cb (GMarkupParseContext  *context,
   attach_pos = 0;
   if (attach_pos_attr)
     {
-      if (!parse_origin (attach_pos_attr, &attach_pos))
-        {
-          set_attribute_error (error, "gpa:attach-pos", attach_pos_attr);
-          goto cleanup;
-        }
+      if (!parse_float ("gpa:attach-pos", attach_pos_attr, UNIT, &attach_pos, error))
+        goto cleanup;
     }
 
   elt.path = gsk_path_ref (path);
@@ -1481,8 +1482,8 @@ gtk_path_paintable_init_from_bytes (GtkPathPaintable  *self,
   g_markup_parse_context_free (context);
   g_hash_table_unref (data.paths);
 
-  recompute_bounds (self);
-  set_state (self, data.state);
+  compute_bounds (self);
+  set_state (self, data.state, FALSE);
 
   return ret;
 }
@@ -1543,7 +1544,7 @@ paint_elt (GtkPathPaintable *self,
   float orig_angle, adjusted_angle;
   GskTransform *transform = NULL;
 
-  if (elt->attach.to == (gsize) -1)
+  if (elt->attach.to == (size_t) -1)
     {
       fill_path (self, elt, elt->path, data);
       stroke_path (self, elt, elt->path, data);
@@ -1579,7 +1580,7 @@ paint_elt (GtkPathPaintable *self,
   gsk_path_point_get_position (&point, base->path, &adjusted_pos);
   adjusted_angle = gsk_path_point_get_rotation (&point, base->path, GSK_PATH_TO_END);
 
-  /* Now determine that transform that moves orig_pos to adjusted_pos
+  /* Now determine the transform that moves orig_pos to adjusted_pos
    * and rotates orig_dir to adjusted_dir
    */
 
@@ -1634,7 +1635,7 @@ paint_elt_animated (GtkPathPaintable *self,
                     PaintData        *data)
 {
   float t;
-  guint rep;
+  unsigned int rep;
   float origin;
   float segment;
 
@@ -1652,7 +1653,7 @@ paint_elt_animated (GtkPathPaintable *self,
       g_assert_not_reached ();
     }
 
-  rep = (guint) floorf (t);
+  rep = (unsigned int) floorf (t);
   t = apply_easing (elt->animation.easing, t - floorf (t));
 
   origin = lerp (elt->origin, start, end);
@@ -1777,10 +1778,10 @@ paint_elt_with_fade (GtkPathPaintable *self,
 }
 
 static void
-invalidate_in_idle (gpointer data)
+invalidate_in_idle (GtkPathPaintable *self)
 {
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (data));
-  g_object_unref (data);
+  self->pending_invalidate = 0;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 static void
@@ -1795,10 +1796,10 @@ paint (GtkPathPaintable *self,
       self->state != self->transition.new_state &&
       data->time >= out_end)
     {
-      set_state (self, self->transition.new_state);
+      set_state (self, self->transition.new_state, TRUE);
     }
 
-  for (guint i = 0; i < self->paths->len; i++)
+  for (unsigned int i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
       gboolean in_old_state, in_new_state;
@@ -1904,7 +1905,10 @@ paint (GtkPathPaintable *self,
     }
 
   if (self->transition.running || self->animation.running)
-    g_idle_add_once (invalidate_in_idle, g_object_ref (self));
+    {
+      if (!self->pending_invalidate)
+        self->pending_invalidate = g_idle_add_once ((GSourceOnceFunc) invalidate_in_idle, self);
+    }
 
   if (data->time >= self->transition.start_time + (self->transition.out_duration + self->transition.in_duration) * G_TIME_SPAN_SECOND)
     self->transition.running = FALSE;
@@ -1919,7 +1923,7 @@ gtk_path_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
                                          double                width,
                                          double                height,
                                          const GdkRGBA        *colors,
-                                         gsize                 n_colors,
+                                         size_t                 n_colors,
                                          double                weight)
 {
   GtkPathPaintable *self = GTK_PATH_PAINTABLE (paintable);
@@ -1948,7 +1952,7 @@ gtk_path_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                                       double                width,
                                       double                height,
                                       const GdkRGBA        *colors,
-                                      gsize                 n_colors)
+                                      size_t                 n_colors)
 {
   gtk_path_paintable_snapshot_with_weight (paintable,
                                            snapshot,
@@ -2031,16 +2035,19 @@ gtk_path_paintable_dispose (GObject *object)
 {
   GtkPathPaintable *self = GTK_PATH_PAINTABLE (object);
 
+  g_clear_handle_id (&self->pending_notify, g_source_remove);
+  g_clear_handle_id (&self->pending_invalidate, g_source_remove);
+
   g_array_unref (self->paths);
 
   G_OBJECT_CLASS (gtk_path_paintable_parent_class)->dispose (object);
 }
 
 static void
-gtk_path_paintable_get_property (GObject    *object,
-                                 guint       property_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
+gtk_path_paintable_get_property (GObject      *object,
+                                 unsigned int  property_id,
+                                 GValue       *value,
+                                 GParamSpec   *pspec)
 {
   GtkPathPaintable *self = GTK_PATH_PAINTABLE (object);
 
@@ -2062,7 +2069,7 @@ gtk_path_paintable_get_property (GObject    *object,
 
 static void
 gtk_path_paintable_set_property (GObject      *object,
-                                 guint         property_id,
+                                 unsigned int  property_id,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
@@ -2186,14 +2193,14 @@ gtk_path_paintable_set_state (GtkPathPaintable *self,
       self->transition.in_duration = in;
       self->transition.running = TRUE;
       self->transition.start_time = g_get_monotonic_time ();
+
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
     }
   else
     {
       self->transition.running = FALSE;
-      set_state (self, state);
+      set_state (self, state, FALSE);
     }
-
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 /**
@@ -2209,6 +2216,8 @@ gtk_path_paintable_set_state (GtkPathPaintable *self,
 unsigned int
 gtk_path_paintable_get_state (GtkPathPaintable *self)
 {
+  g_return_val_if_fail (GTK_IS_PATH_PAINTABLE (self), 0);
+
   return self->state;
 }
 
@@ -2270,7 +2279,7 @@ gtk_path_paintable_get_weight (GtkPathPaintable *self)
  *
  * Since: 4.22
  */
-guint
+unsigned int
 gtk_path_paintable_get_max_state (GtkPathPaintable *self)
 {
   g_return_val_if_fail (GTK_IS_PATH_PAINTABLE (self), 0);

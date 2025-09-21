@@ -22,6 +22,7 @@
 #include "path-editor.h"
 #include "path-paintable.h"
 #include "range-editor.h"
+#include "color-editor.h"
 
 
 struct _PathEditor
@@ -47,16 +48,14 @@ struct _PathEditor
   GtkSpinButton *animation_duration;
   GtkDropDown *animation_easing;
   GtkSpinButton *animation_segment;
-  GtkDropDown *stroke_paint;
-  GtkColorDialogButton *stroke_color;
+  ColorEditor *stroke_paint;
   RangeEditor *width_range;
   GtkSpinButton *min_width;
   GtkSpinButton *line_width;
   GtkSpinButton *max_width;
   GtkDropDown *line_join;
   GtkDropDown *line_cap;
-  GtkDropDown *fill_paint;
-  GtkColorDialogButton *fill_color;
+  ColorEditor *fill_paint;
   GtkDropDown *fill_rule;
   GtkDropDown *attach_to;
   GtkScale *attach_at;
@@ -271,7 +270,7 @@ stroke_changed (PathEditor *self)
   gsk_stroke_set_line_join (stroke, line_join);
   gsk_stroke_set_line_cap (stroke, line_cap);
 
-  selected = gtk_drop_down_get_selected (self->stroke_paint);
+  selected = color_editor_get_symbolic (self->stroke_paint);
   if (selected == 0)
     {
       do_stroke = FALSE;
@@ -288,7 +287,7 @@ stroke_changed (PathEditor *self)
       symbolic = selected - 1;
     }
 
-  color = gtk_color_dialog_button_get_rgba (self->stroke_color);
+  color = color_editor_get_color (self->stroke_paint);
 
   path_paintable_set_path_stroke (self->paintable, self->path,
                                   do_stroke, stroke, symbolic, color);
@@ -317,7 +316,7 @@ fill_changed (PathEditor *self)
 
   fill_rule = gtk_drop_down_get_selected (self->fill_rule);
 
-  selected = gtk_drop_down_get_selected (self->fill_paint);
+  selected = color_editor_get_symbolic (self->fill_paint);
   if (selected == 0)
     {
       do_fill = FALSE;
@@ -334,7 +333,7 @@ fill_changed (PathEditor *self)
       symbolic = selected - 1;
     }
 
-  color = gtk_color_dialog_button_get_rgba (self->fill_color);
+  color = color_editor_get_color (self->fill_paint);
 
   path_paintable_set_path_fill (self->paintable, self->path,
                                 do_fill, fill_rule, symbolic, color);
@@ -639,13 +638,13 @@ path_editor_update (PathEditor *self)
       upper = MAX (max_width, 25);
 
       if (!do_stroke)
-        gtk_drop_down_set_selected (self->stroke_paint, 0);
+        color_editor_set_symbolic (self->stroke_paint, 0);
       else if (symbolic == 0xffff)
-        gtk_drop_down_set_selected (self->stroke_paint, 5);
+        color_editor_set_symbolic (self->stroke_paint, 6);
       else
-        gtk_drop_down_set_selected (self->stroke_paint, symbolic + 1);
+        color_editor_set_symbolic (self->stroke_paint, symbolic + 1);
 
-      gtk_color_dialog_button_set_rgba (self->stroke_color, &color);
+      color_editor_set_color (self->stroke_paint, &color);
 
       gtk_spin_button_set_value (self->min_width, min_width);
       gtk_spin_button_set_value (self->line_width, width);
@@ -661,13 +660,13 @@ path_editor_update (PathEditor *self)
                                               &fill_rule, &symbolic, &color);
 
       if (!do_fill)
-        gtk_drop_down_set_selected (self->fill_paint, 0);
+        color_editor_set_symbolic (self->fill_paint, 0);
       else if (symbolic == 0xffff)
-        gtk_drop_down_set_selected (self->fill_paint, 5);
+        color_editor_set_symbolic (self->fill_paint, 6);
       else
-        gtk_drop_down_set_selected (self->fill_paint, symbolic + 1);
+        color_editor_set_symbolic (self->fill_paint, symbolic + 1);
 
-      gtk_color_dialog_button_set_rgba (self->fill_color, &color);
+      color_editor_set_color (self->fill_paint, &color);
 
       gtk_drop_down_set_selected (self->fill_rule, (guint) fill_rule);
 
@@ -798,6 +797,7 @@ path_editor_class_init (PathEditorClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   g_type_ensure (RANGE_EDITOR_TYPE);
+  g_type_ensure (COLOR_EDITOR_TYPE);
 
   object_class->set_property = path_editor_set_property;
   object_class->get_property = path_editor_get_property;
@@ -837,7 +837,6 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_easing);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_color);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, width_range);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, min_width);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, line_width);
@@ -845,7 +844,6 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, line_join);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, line_cap);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, fill_paint);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, fill_color);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, fill_rule);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, attach_to);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, attach_at);

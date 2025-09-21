@@ -56,6 +56,7 @@
         </child>
         <child type="end">
           <object class="GtkMenuButton">
+            <property name="tooltip-text" translatable="yes">Main menu</property>
             <property name="focus-on-click">0</property>
             <property name="valign">center</property>
             <property name="menu-model">
@@ -237,6 +238,7 @@
                         </property>
                         <property name="action-name">win.open-example</property>
                         <property name="action-target">'example1.gpa'</property>
+                        <property name="tooltip-text" translatable="yes">Open example 1: Transitions</property>
                       </object>
                     </child>
                     <child>
@@ -258,6 +260,7 @@
                         </property>
                         <property name="action-name">win.open-example</property>
                         <property name="action-target">'example2.gpa'</property>
+                        <property name="tooltip-text" translatable="yes">Open example 2: Colors</property>
                       </object>
                     </child>
                     <child>
@@ -279,6 +282,7 @@
                         </property>
                         <property name="action-name">win.open-example</property>
                         <property name="action-target">'example3.gpa'</property>
+                        <property name="tooltip-text" translatable="yes">Open example 3: Overlaps</property>
                       </object>
                     </child>
                     <child>
@@ -300,6 +304,7 @@
                         </property>
                         <property name="action-name">win.open-example</property>
                         <property name="action-target">'example4.gpa'</property>
+                        <property name="tooltip-text" translatable="yes">Open example 4: Attachment</property>
                       </object>
                     </child>
                     <child>
@@ -321,6 +326,7 @@
                         </property>
                         <property name="action-name">win.open-example</property>
                         <property name="action-target">'example5.gpa'</property>
+                        <property name="tooltip-text" translatable="yes">Open example 5: Simple</property>
                       </object>
                     </child>
                     <child>
@@ -342,6 +348,7 @@
                         </property>
                         <property name="action-name">win.open-example</property>
                         <property name="action-target">'example6.gpa'</property>
+                        <property name="tooltip-text" translatable="yes">Open example 6: Animation</property>
                       </object>
                     </child>
                   </object>
@@ -706,11 +713,13 @@
                                       <object class="GtkLabel">
                                         <property name="xalign">1</property>
                                         <property name="valign">baseline</property>
-                                        <property name="label" translatable="yes">Weight</property>
+                                        <property name="label" translatable="yes">_Weight</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">weight</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkScale">
+                                      <object class="GtkScale" id="weight">
                                         <property name="valign">baseline</property>
                                         <property name="width-request">150</property>
                                         <property name="adjustment">
@@ -736,11 +745,13 @@
                                       <object class="GtkLabel">
                                         <property name="xalign">1</property>
                                         <property name="valign">baseline</property>
-                                        <property name="label" translatable="yes">State</property>
+                                        <property name="label" translatable="yes">_State</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">state</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton">
+                                      <object class="GtkSpinButton" id="state">
                                         <property name="halign">end</property>
                                         <property name="valign">baseline</property>
                                         <property name="hexpand">1</property>
@@ -768,11 +779,13 @@
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">X-Ray Shapes</property>
+                                        <property name="label" translatable="yes">_X-Ray Shapes</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">spine</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSwitch">
+                                      <object class="GtkSwitch" id="spine">
                                         <property name="halign">end</property>
                                         <property name="hexpand">1</property>
                                         <property name="action-name">win.show-spines</property>
@@ -789,11 +802,13 @@
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Show Bounds</property>
+                                        <property name="label" translatable="yes">Show _Bounds</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">bounds</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSwitch">
+                                      <object class="GtkSwitch" id="bounds">
                                         <property name="halign">end</property>
                                         <property name="hexpand">1</property>
                                         <property name="action-name">win.show-bounds</property>
@@ -810,11 +825,13 @@
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Invert Colors</property>
+                                        <property name="label" translatable="yes">_Invert Colors</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">invert</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSwitch">
+                                      <object class="GtkSwitch" id="invert">
                                         <property name="halign">end</property>
                                         <property name="hexpand">1</property>
                                         <property name="action-name">win.invert-colors</property>
@@ -827,7 +844,8 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton">
-                                    <property name="label">Reshuffle</property>
+                                    <property name="label" translatable="yes">_Reshuffle</property>
+                                    <property name="use-underline">1</property>
                                     <property name="halign">end</property>
                                     <property name="action-name">win.reshuffle</property>
                                   </object>

@@ -1,0 +1,59 @@
+<interface>
+  <template class="ColorEditor" parent="GtkWidget">
+    <child>
+      <object class="GtkDropDown" id="paint">
+        <property name="hexpand">1</property>
+        <property name="model">
+          <object class="GtkStringList">
+            <items>
+              <item>None</item>
+              <item>Foreground</item>
+              <item>Error</item>
+              <item>Warning</item>
+              <item>Success</item>
+              <item>Accent</item>
+              <item>Custom</item>
+            </items>
+          </object>
+        </property>
+        <property name="selected" bind-source="ColorEditor" bind-property="symbolic" bind-flags="bidirectional | sync-create"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStack" id="stack">
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">indicator</property>
+            <property name="child">
+              <object class="GtkBox">
+                <style><class name="indicator-box"/></style>
+                <property name="hexpand">0</property>
+                <child>
+                  <object class="GtkBox" id="indicator">
+                    <property name="hexpand">1</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">custom</property>
+            <property name="child">
+              <object class="GtkColorDialogButton" id="custom">
+                <accessibility>
+                  <property name="label" translatable="yes">Custom color</property>
+                </accessibility>
+                <property name="dialog">
+                  <object class="GtkColorDialog"/>
+                </property>
+                <property name="rgba" bind-source="ColorEditor" bind-property="color" bind-flags="bidirectional | sync-create"/>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

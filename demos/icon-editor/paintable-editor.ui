@@ -10,7 +10,9 @@
               <object class="GtkGrid">
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Keywords</property>
+                    <property name="label" translatable="yes">_Keywords</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">keywords</property>
                     <property name="xalign">1</property>
                     <layout>
                       <property name="row">0</property>
@@ -29,8 +31,13 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Size</property>
+                    <property name="label" translatable="yes">_Size</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">width</property>
                     <property name="xalign">1</property>
+                        <accessibility>
+                          <property name="label" translatable="yes">Width</property>
+                        </accessibility>
                     <layout>
                       <property name="row">4</property>
                       <property name="column">0</property>
@@ -52,6 +59,9 @@
                     <child>
                       <object class="GtkEntry" id="height">
                         <signal name="activate" handler="size_changed" swapped="yes"/>
+                        <accessibility>
+                          <property name="label" translatable="yes">Height</property>
+                        </accessibility>
                       </object>
                     </child>
                     <layout>
@@ -62,7 +72,9 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Compatibility</property>
+                    <property name="label" translatable="yes">_Compatibility</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">compat</property>
                     <property name="xalign">1</property>
                     <layout>
                       <property name="row">6</property>
@@ -73,6 +85,7 @@
                 <child>
                   <object class="GtkLabel" id="compat">
                     <property name="xalign">0</property>
+                    <property name="selectable">1</property>
                     <layout>
                       <property name="row">6</property>
                       <property name="column">1</property>

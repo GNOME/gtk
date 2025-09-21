@@ -307,10 +307,7 @@ gtk_css_palette_value_new_default (void)
       gtk_css_palette_value_set_color (default_palette, 2, g_strdup ("warning"),
                                        gtk_css_color_value_new_name ("warning_color"));
       gtk_css_palette_value_set_color (default_palette, 3, g_strdup ("accent"),
-                                       gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_SRGB,
-                                                                      FALSE,
-                                                                      (float[4]) { 0.208, 0.518, 0.894, 1.0 },
-                                                                      (gboolean[4]) { 0, 0, 0, 0 }));
+                                       gtk_css_color_value_new_name ("accent_color"));
       /* Above is already sorted */
     }
 

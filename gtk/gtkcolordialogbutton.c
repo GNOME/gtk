@@ -157,6 +157,10 @@ gtk_color_dialog_button_init (GtkColorDialogButton *self)
   gtk_widget_add_css_class (self->button, "color");
 
   gtk_color_dialog_button_set_rgba (self, &(GdkRGBA) { 0.75, 0.25, 0.25, 1.0 });
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->button),
+                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                  -1);
 }
 
 static void

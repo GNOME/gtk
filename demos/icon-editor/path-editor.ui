@@ -13,6 +13,9 @@
                   <object class="GtkImage">
                     <property name="pixel-size">20</property>
                     <property name="paintable" bind-source="PathEditor" bind-property="path-image"/>
+                    <accessibility>
+                      <property name="label" translatable="yes">Path</property>
+                    </accessibility>
                   </object>
                 </child>
                 <child>
@@ -56,7 +59,7 @@
                         </style>
                         <property name="focus-on-click">0</property>
                         <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Move down</property>
+                        <property name="tooltip-text" translatable="yes">Move path down</property>
                         <property name="child">
                           <object class="GtkImage">
                             <property name="paintable">
@@ -105,7 +108,9 @@
         <child>
           <object class="GtkLabel" id="visible_label">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="label" translatable="yes">In State</property>
+            <property name="label" translatable="yes">_In State</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">visible</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">1</property>
@@ -128,7 +133,9 @@
         <child>
           <object class="GtkLabel" id="origin_label">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="label" translatable="yes">Origin</property>
+            <property name="label" translatable="yes">_Origin</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">origin</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">2</property>
@@ -169,7 +176,9 @@
               <object class="GtkLabel" id="transition_label">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Transition</property>
+                <property name="label" translatable="yes">_Transition</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">transition_type</property>
               </object>
             </property>
             <layout>
@@ -207,7 +216,9 @@
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Duration</property>
+            <property name="label" translatable="yes">_Duration</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">transition_duration</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">6</property>
@@ -248,7 +259,9 @@
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Easing</property>
+            <property name="label" translatable="yes">_Easing</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">transition_easing</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">7</property>
@@ -293,7 +306,9 @@
               <object class="GtkLabel" id="animation_label">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Animation</property>
+                <property name="label" translatable="yes">_Animation</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">animation_type</property>
               </object>
             </property>
             <layout>
@@ -329,7 +344,9 @@
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Direction</property>
+            <property name="label" translatable="yes">_Direction</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">animation_direction</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">9</property>
@@ -376,7 +393,9 @@
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Duration</property>
+            <property name="label" translatable="yes">_Duration</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">animation_duration</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">10</property>
@@ -417,7 +436,9 @@
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Easing</property>
+            <property name="label" translatable="yes">_Easing</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">animation_easing</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">11</property>
@@ -461,6 +482,8 @@
               </closure>
             </binding>
             <property name="label" translatable="yes">Segment</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">animation_segment</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">12</property>
@@ -503,7 +526,9 @@
               <object class="GtkLabel">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Stroke</property>
+                <property name="label" translatable="yes">_Stroke</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">stroke_paint</property>
               </object>
             </property>
             <layout>
@@ -513,42 +538,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="ColorEditor" id="stroke_paint">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkDropDown" id="stroke_paint">
-                <property name="hexpand">1</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item>None</item>
-                      <item>Foreground</item>
-                      <item>Error</item>
-                      <item>Warning</item>
-                      <item>Success</item>
-                      <item>Accent</item>
-                      <item>Custom</item>
-                    </items>
-                  </object>
-                </property>
-                <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkColorDialogButton" id="stroke_color">
-                <property name="dialog">
-                  <object class="GtkColorDialog">
-                  </object>
-                </property>
-                <signal name="notify::rgba" handler="stroke_changed" swapped="yes"/>
-              </object>
-            </child>
             <layout>
               <property name="row">13</property>
               <property name="column">1</property>
             </layout>
+            <signal name="notify::symbolic" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::color" handler="stroke_changed" swapped="yes"/>
           </object>
         </child>
 
@@ -567,7 +565,9 @@
               <object class="GtkLabel">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Width</property>
+                <property name="label" translatable="yes">_Width</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">width_range</property>
               </object>
             </property>
             <layout>
@@ -603,7 +603,9 @@
                 <lookup name="expanded">width_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Min</property>
+            <property name="label" translatable="yes">_Min</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">min_width</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">15</property>
@@ -649,7 +651,9 @@
                 <lookup name="expanded">width_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Normal</property>
+            <property name="label" translatable="yes">_Normal</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">line_width</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">16</property>
@@ -695,7 +699,9 @@
                 <lookup name="expanded">width_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Max</property>
+            <property name="label" translatable="yes">Ma_x</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">max_width</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">17</property>
@@ -740,7 +746,9 @@
                 <lookup name="expanded">stroke_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Join</property>
+            <property name="label" translatable="yes">_Join</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">line_join</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">18</property>
@@ -781,7 +789,9 @@
                 <lookup name="expanded">stroke_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Cap</property>
+            <property name="label" translatable="yes">_Cap</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">line_cap</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">19</property>
@@ -824,7 +834,9 @@
               <object class="GtkLabel" id="fill_label">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Fill</property>
+                <property name="label" translatable="yes">_Fill</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">fill_paint</property>
               </object>
             </property>
             <layout>
@@ -834,41 +846,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="ColorEditor" id="fill_paint">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkDropDown" id="fill_paint">
-                <property name="hexpand">1</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item>None</item>
-                      <item>Foreground</item>
-                      <item>Error</item>
-                      <item>Warning</item>
-                      <item>Success</item>
-                      <item>Custom</item>
-                    </items>
-                  </object>
-                </property>
-                <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkColorDialogButton" id="fill_color">
-                <property name="dialog">
-                  <object class="GtkColorDialog">
-                  </object>
-                </property>
-                <signal name="notify::rgba" handler="fill_changed" swapped="yes"/>
-              </object>
-            </child>
             <layout>
               <property name="row">20</property>
               <property name="column">1</property>
             </layout>
+            <signal name="notify::symbolic" handler="fill_changed" swapped="yes"/>
+            <signal name="notify::color" handler="fill_changed" swapped="yes"/>
           </object>
         </child>
 
@@ -880,7 +866,9 @@
                 <lookup name="expanded">fill_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Rule</property>
+            <property name="label" translatable="yes">_Rule</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">fill_rule</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">21</property>
@@ -922,7 +910,9 @@
               <object class="GtkLabel" id="attach_to_label">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Attach</property>
+                <property name="label" translatable="yes">_Attach</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">attach_to</property>
               </object>
             </property>
             <layout>
@@ -950,7 +940,9 @@
                 <lookup name="expanded">attach_expander</lookup>
               </closure>
             </binding>
-            <property name="label" translatable="yes">Position</property>
+            <property name="label" translatable="yes">_Position</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">attach_at</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">23</property>

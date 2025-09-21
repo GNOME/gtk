@@ -243,7 +243,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_grid_set_column_spacing (GTK_GRID (table), 6);
     gtk_window_set_child (GTK_WINDOW (window), table);
 
-    label = gtk_label_new ("Color:");
+    label = gtk_label_new_with_mnemonic ("_Color:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
@@ -253,7 +253,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_label_set_mnemonic_widget (GTK_LABEL (label), picker);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
 
-    label = gtk_label_new ("Font:");
+    label = gtk_label_new_with_mnemonic ("_Font:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
@@ -263,7 +263,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_label_set_mnemonic_widget (GTK_LABEL (label), picker);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 1, 1, 1);
 
-    label = gtk_label_new ("File:");
+    label = gtk_label_new_with_mnemonic ("_File:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
@@ -271,8 +271,10 @@ do_pickers (GtkWidget *do_widget)
 
     picker = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
     button = gtk_button_new_from_icon_name ("document-open-symbolic");
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
     gtk_accessible_update_property (GTK_ACCESSIBLE (button),
                                     GTK_ACCESSIBLE_PROPERTY_LABEL, "Select File",
+                                    GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
                                     -1);
 
     label = gtk_label_new ("None");
@@ -291,6 +293,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_halign (app_picker, GTK_ALIGN_END);
     gtk_accessible_update_property (GTK_ACCESSIBLE (app_picker),
                                     GTK_ACCESSIBLE_PROPERTY_LABEL, "Open File",
+                                    GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
                                     -1);
     gtk_widget_set_sensitive (app_picker, FALSE);
     g_signal_connect (app_picker, "clicked", G_CALLBACK (open_app), NULL);
@@ -304,13 +307,18 @@ do_pickers (GtkWidget *do_widget)
 
     gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
 
-    label = gtk_label_new ("URI:");
+    label = gtk_label_new_with_mnemonic ("_URI:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
     gtk_grid_attach (GTK_GRID (table), label, 0, 3, 1, 1);
 
     picker = gtk_button_new_with_label ("www.gtk.org");
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), picker);
+    gtk_accessible_update_property (GTK_ACCESSIBLE (picker),
+                                    GTK_ACCESSIBLE_PROPERTY_LABEL, "Open www.gtk.org",
+                                    GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                    -1);
     g_signal_connect (picker, "clicked", G_CALLBACK (launch_uri), NULL);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 3, 1, 1);
   }
