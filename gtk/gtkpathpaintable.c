@@ -770,19 +770,6 @@ parse_states (const char *text,
 }
 
 static gboolean
-parse_origin (const char *text,
-              float      *origin)
-{
-  char *end;
-
-  *origin = (float) g_ascii_strtod (text, &end);
-  if ((end && *end != '\0') || *origin < 0 || *origin > 1)
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
 parse_paint (const char    *name,
              const char    *value,
              unsigned int  *symbolic,
@@ -1144,7 +1131,7 @@ start_element_cb (GMarkupParseContext  *context,
     {
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
                    "Unhandled attribute: %s", attribute_names[first_unset]);
-      return;
+      goto cleanup;
     }
 
   if (!fill_attr &&
@@ -1245,14 +1232,24 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (gtk_stroke_width_attr)
     {
-      int res;
+      GStrv str;
 
-      res = sscanf (gtk_stroke_width_attr, "%f %f %f", &stroke_min_width, &stroke_width, &stroke_max_width);
-      if (res < 3 || stroke_min_width < stroke_width || stroke_width > stroke_max_width)
+      str = g_strsplit (gtk_stroke_width_attr, " ", 0);
+      if (g_strv_length (str) != 3)
         {
           set_attribute_error (error, "gpa:stroke-width", gtk_stroke_width_attr);
+          g_strfreev (str);
           goto cleanup;
         }
+
+      if (!parse_float ("gpa:stroke-width", str[0], POSITIVE, &stroke_min_width, error) ||
+          !parse_float ("gpa:stroke-width", str[1], POSITIVE, &stroke_width, error) ||
+          !parse_float ("gpa:stroke-width", str[2], POSITIVE, &stroke_max_width, error))
+        {
+          g_strfreev (str);
+          goto cleanup;
+        }
+      g_strfreev (str);
     }
 
   stroke_linecap = GSK_LINE_CAP_ROUND;
@@ -1329,11 +1326,8 @@ start_element_cb (GMarkupParseContext  *context,
   origin = 0;
   if (origin_attr)
     {
-      if (!parse_origin (origin_attr, &origin))
-        {
-          set_attribute_error (error, "gpa:origin", origin_attr);
-          goto cleanup;
-        }
+      if (!parse_float ("gpa:origin", origin_attr, UNIT, &origin, error))
+        goto cleanup;
     }
 
   states = GTK_PATH_PAINTABLE_ALL_STATES;
@@ -1410,11 +1404,8 @@ start_element_cb (GMarkupParseContext  *context,
   attach_pos = 0;
   if (attach_pos_attr)
     {
-      if (!parse_origin (attach_pos_attr, &attach_pos))
-        {
-          set_attribute_error (error, "gpa:attach-pos", attach_pos_attr);
-          goto cleanup;
-        }
+      if (!parse_float ("gpa:attach-pos", attach_pos_attr, UNIT, &attach_pos, error))
+        goto cleanup;
     }
 
   elt.path = gsk_path_ref (path);
@@ -1589,7 +1580,7 @@ paint_elt (GtkPathPaintable *self,
   gsk_path_point_get_position (&point, base->path, &adjusted_pos);
   adjusted_angle = gsk_path_point_get_rotation (&point, base->path, GSK_PATH_TO_END);
 
-  /* Now determine that transform that moves orig_pos to adjusted_pos
+  /* Now determine the transform that moves orig_pos to adjusted_pos
    * and rotates orig_dir to adjusted_dir
    */
 
@@ -2225,6 +2216,8 @@ gtk_path_paintable_set_state (GtkPathPaintable *self,
 unsigned int
 gtk_path_paintable_get_state (GtkPathPaintable *self)
 {
+  g_return_val_if_fail (GTK_IS_PATH_PAINTABLE (self), 0);
+
   return self->state;
 }
 
