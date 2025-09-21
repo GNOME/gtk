@@ -197,6 +197,9 @@ struct _GtkPathPaintable
 
   guint state;
   guint max_state;
+
+  guint pending_notify;
+  guint pending_invalidate;
 };
 
 struct _GtkPathPaintableClass
@@ -551,13 +554,15 @@ compute_max_state (GtkPathPaintable *self)
 static void
 notify_state (GtkPathPaintable *self)
 {
+  self->pending_notify = 0;
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
 }
 
 static void
 set_state (GtkPathPaintable *self,
-           guint             state)
+           guint             state,
+           gboolean          defer_notify)
 {
   if (self->state == state)
     return;
@@ -567,8 +572,11 @@ set_state (GtkPathPaintable *self,
   self->animation.start_time = g_get_monotonic_time ();
   self->animation.running = has_animation_in_state (self, state);
 
-  if (self->transition.running)
-    g_idle_add_once ((GSourceOnceFunc) notify_state, self);
+  if (defer_notify)
+    {
+      if (!self->pending_notify)
+        self->pending_notify = g_idle_add_once ((GSourceOnceFunc) notify_state, self);
+    }
   else
     notify_state (self);
 }
@@ -1482,7 +1490,7 @@ gtk_path_paintable_init_from_bytes (GtkPathPaintable  *self,
   g_hash_table_unref (data.paths);
 
   recompute_bounds (self);
-  set_state (self, data.state);
+  set_state (self, data.state, FALSE);
 
   return ret;
 }
@@ -1777,10 +1785,10 @@ paint_elt_with_fade (GtkPathPaintable *self,
 }
 
 static void
-invalidate_in_idle (gpointer data)
+invalidate_in_idle (GtkPathPaintable *self)
 {
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (data));
-  g_object_unref (data);
+  self->pending_invalidate = 0;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 static void
@@ -1795,7 +1803,7 @@ paint (GtkPathPaintable *self,
       self->state != self->transition.new_state &&
       data->time >= out_end)
     {
-      set_state (self, self->transition.new_state);
+      set_state (self, self->transition.new_state, TRUE);
     }
 
   for (guint i = 0; i < self->paths->len; i++)
@@ -1904,7 +1912,10 @@ paint (GtkPathPaintable *self,
     }
 
   if (self->transition.running || self->animation.running)
-    g_idle_add_once (invalidate_in_idle, g_object_ref (self));
+    {
+      if (!self->pending_invalidate)
+        self->pending_invalidate = g_idle_add_once ((GSourceOnceFunc) invalidate_in_idle, self);
+    }
 
   if (data->time >= self->transition.start_time + (self->transition.out_duration + self->transition.in_duration) * G_TIME_SPAN_SECOND)
     self->transition.running = FALSE;
@@ -2030,6 +2041,9 @@ static void
 gtk_path_paintable_dispose (GObject *object)
 {
   GtkPathPaintable *self = GTK_PATH_PAINTABLE (object);
+
+  g_clear_handle_id (&self->pending_notify, g_source_remove);
+  g_clear_handle_id (&self->pending_invalidate, g_source_remove);
 
   g_array_unref (self->paths);
 
@@ -2186,14 +2200,14 @@ gtk_path_paintable_set_state (GtkPathPaintable *self,
       self->transition.in_duration = in;
       self->transition.running = TRUE;
       self->transition.start_time = g_get_monotonic_time ();
+
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
     }
   else
     {
       self->transition.running = FALSE;
-      set_state (self, state);
+      set_state (self, state, FALSE);
     }
-
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 /**
