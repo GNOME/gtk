@@ -82,7 +82,7 @@ typedef enum
 {
   GTK_PATH_TRANSITION_TYPE_NONE,
   GTK_PATH_TRANSITION_TYPE_ANIMATE,
-  GTK_PATH_TRANSITION_TYPE_BLUR,
+  GTK_PATH_TRANSITION_TYPE_MORPH,
   GTK_PATH_TRANSITION_TYPE_FADE,
 } GtkPathTransitionType;
 
@@ -1293,7 +1293,7 @@ start_element_cb (GMarkupParseContext  *context,
   if (transition_type_attr)
     {
       if (!parse_enum ("gpa:transition-type", transition_type_attr,
-                       (const char *[]) { "none", "animate", "blur", "fade" }, 4,
+                       (const char *[]) { "none", "animate", "morph", "fade" }, 4,
                         &transition_type, error))
         goto cleanup;
     }
@@ -1739,10 +1739,10 @@ paint_elt_animated (GtkPathPaintable *self,
  * thresholding to achieve a 'blobbing' effect.
  */
 static void
-paint_elt_with_blur (GtkPathPaintable *self,
-                     PathElt          *elt,
-                     float             t,
-                     PaintData        *data)
+paint_elt_with_blobbing (GtkPathPaintable *self,
+                         PathElt          *elt,
+                         float             t,
+                         PaintData        *data)
 {
   GskComponentTransfer *identity;
   GskComponentTransfer *alpha;
@@ -1840,9 +1840,9 @@ paint (GtkPathPaintable *self,
                   if (t < 1)
                     paint_elt_animated (self, elt, 0, 1, data);
                   break;
-                case GTK_PATH_TRANSITION_TYPE_BLUR:
+                case GTK_PATH_TRANSITION_TYPE_MORPH:
                   if (t < 1)
-                    paint_elt_with_blur (self, elt, t, data);
+                    paint_elt_with_blobbing (self, elt, t, data);
                   break;
                 case GTK_PATH_TRANSITION_TYPE_FADE:
                   if (t < 1)
@@ -1881,9 +1881,9 @@ paint (GtkPathPaintable *self,
                   if (t > 0)
                     paint_elt_animated (self, elt, 0, 1, data);
                   break;
-                case GTK_PATH_TRANSITION_TYPE_BLUR:
+                case GTK_PATH_TRANSITION_TYPE_MORPH:
                   if (t > 0)
-                    paint_elt_with_blur (self, elt, 1 - t, data);
+                    paint_elt_with_blobbing (self, elt, 1 - t, data);
                   break;
                 case GTK_PATH_TRANSITION_TYPE_FADE:
                   if (t > 0)

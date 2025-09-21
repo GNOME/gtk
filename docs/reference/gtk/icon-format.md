@@ -11,7 +11,7 @@ This document is an attempt to describe this format.
 
 An icon can define a number of states (up to 64). Icons always have an `unset` state, which is used to do draw-in and draw-out animations.
 
-Each path can be present in a subset of states (or in all states). When the state changes, the appearance and disappearance of paths can be animated, with a dynamic stroke, a blur effect, or a fade. There are a number of parameters to influence the transition effects.
+Each path can be present in a subset of states (or in all states). When the state changes, the appearance and disappearance of paths can be animated, with a dynamic stroke, a blobby morphing effect, or a fade. There are a number of parameters to influence the transition effects.
 
 <table>
   <tr>
@@ -25,10 +25,10 @@ Each path can be present in a subset of states (or in all states). When the stat
     </td>
     <td>
       <figure>
-        <video alt="Blur" autoplay controls loop muted>
-          <source src="trans-blur.webm"/>
+        <video alt="Morph" autoplay controls loop muted>
+          <source src="trans-morph.webm"/>
         </video>
-        <figcaption>Blur</figcaption>
+        <figcaption>Morph</figcaption>
       </figure>
     </td>
     <td>
@@ -138,7 +138,7 @@ The following attributes can be set on elements that specify a path:
 - `gpa:animation-duration`: The duration of one animation cycle (in seconds)
 - `gpa:animation-easing`: The easing function for animations (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
 - `gpa:animation-segment`: The length of the segment to animate (as a value between 0 and 1). This is used for the 'segment' and 'segment-alternate' animation directions
-- `gpa:transition-type`: The transition to use. One of 'none', 'animate', 'blur' or 'fade'
+- `gpa:transition-type`: The transition to use. One of 'none', 'animate', 'morph' or 'fade'
 - `gpa:transition-duration`: The transition duration (in seconds)
 - `gpa:transition-easing`: The easing function for transitions (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
 - `gpa:origin`: Where to start the draw transition. A number between 0 and 1

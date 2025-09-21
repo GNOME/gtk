@@ -333,7 +333,7 @@ content_images = [
   "images/path-paintable-animation-light.webm",
   "images/path-paintable-animation-dark.webm",
   "images/trans-animate.webm",
-  "images/trans-blur.webm",
+  "images/trans-morph.webm",
   "images/trans-fade.webm",
   "images/anim-normal.webm",
   "images/anim-alternate.webm",
