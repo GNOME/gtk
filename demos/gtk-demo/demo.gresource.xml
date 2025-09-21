@@ -240,10 +240,11 @@
   <gresource prefix="/images">
     <file>pixbufpaintable.h</file>
     <file>pixbufpaintable.c</file>
-    <file>alphatest.png</file>
     <file>floppybuddy.gif</file>
     <file>gtk-logo.webm</file>
     <file alias="org.gtk.Demo4.svg">data/scalable/apps/org.gtk.Demo4.svg</file>
+    <file>stateful.gpa</file>
+    <file>animated.gpa</file>
   </gresource>
   <gresource prefix="/image_filter">
     <file>component_filter.ui</file>
