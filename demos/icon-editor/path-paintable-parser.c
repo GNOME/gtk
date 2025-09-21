@@ -1021,6 +1021,7 @@ path_paintable_save_path (PathPaintable *self,
   GStrv class_strv;
   char *class_str;
   gboolean has_gtk_attr = FALSE;
+  char buffer[G_ASCII_DTOSTR_BUF_SIZE];
 
   stroke = gsk_stroke_new (1);
 
@@ -1061,8 +1062,9 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_animation_duration (self, idx) != 0)
     {
-      g_string_append_printf (str, "\n        gpa:animation-duration='%g'",
-                              path_paintable_get_path_animation_duration (self, idx));
+      g_string_append_printf (str, "\n        gpa:animation-duration='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g",
+                                               path_paintable_get_path_animation_duration (self, idx)));
       has_gtk_attr = TRUE;
     }
 
@@ -1075,8 +1077,9 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_animation_segment (self, idx) != 0.2f)
     {
-      g_string_append_printf (str, "\n        gpa:animation-segment='%g'",
-                              path_paintable_get_path_animation_segment (self, idx));
+      g_string_append_printf (str, "\n        gpa:animation-segment='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g",
+                                               path_paintable_get_path_animation_segment (self, idx)));
       has_gtk_attr = TRUE;
     }
 
@@ -1090,7 +1093,9 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_transition_duration (self, idx) != 0)
     {
-      g_string_append_printf (str, "\n        gpa:transition-duration='%g'", path_paintable_get_path_transition_duration (self, idx));
+      g_string_append_printf (str, "\n        gpa:transition-duration='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g",
+                                               path_paintable_get_path_transition_duration (self, idx)));
       has_gtk_attr = TRUE;
     }
 
@@ -1103,8 +1108,9 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_origin (self, idx) != 0)
     {
-      g_string_append_printf (str, "\n        gpa:origin='%g'",
-                              path_paintable_get_path_origin (self, idx));
+      g_string_append_printf (str, "\n        gpa:origin='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g",
+                                               path_paintable_get_path_origin (self, idx)));
       has_gtk_attr = TRUE;
     }
 
@@ -1112,7 +1118,8 @@ path_paintable_save_path (PathPaintable *self,
   if (to != (gsize) -1)
     {
       g_string_append_printf (str, "\n        gpa:attach-to='path%lu'", to);
-      g_string_append_printf (str, "\n        gpa:attach-pos='%g'", pos);
+      g_string_append_printf (str, "\n        gpa:attach-pos='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", pos));
       has_gtk_attr = TRUE;
     }
 
@@ -1121,7 +1128,8 @@ path_paintable_save_path (PathPaintable *self,
       const char *linecap[] = { "butt", "round", "square" };
       const char *linejoin[] = { "miter", "round", "bevel" };
 
-      g_string_append_printf (str, "\n        stroke-width='%g'", gsk_stroke_get_line_width (stroke));
+      g_string_append_printf (str, "\n        stroke-width='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", gsk_stroke_get_line_width (stroke)));
       g_string_append_printf (str, "\n        stroke-linecap='%s'", linecap[gsk_stroke_get_line_cap (stroke)]);
       g_string_append_printf (str, "\n        stroke-linejoin='%s'", linejoin[gsk_stroke_get_line_join (stroke)]);
 
@@ -1136,7 +1144,8 @@ path_paintable_save_path (PathPaintable *self,
       else if (stroke_symbolic <= GTK_SYMBOLIC_COLOR_ACCENT)
         {
           if (color.alpha < 1)
-            g_string_append_printf (str, "\n        stroke-opacity='%g'", color.alpha);
+            g_string_append_printf (str, "\n        stroke-opacity='%s'",
+                                    g_ascii_formatd (buffer, sizeof (buffer), "%g", color.alpha));
           g_string_append_printf (str, "\n        stroke='%s'", fallback_color[stroke_symbolic]);
           if (stroke_symbolic < GTK_SYMBOLIC_COLOR_ACCENT)
             g_strv_builder_take (class_builder, g_strdup_printf ("%s-stroke", sym[stroke_symbolic]));
@@ -1166,7 +1175,8 @@ path_paintable_save_path (PathPaintable *self,
       else if (fill_symbolic <= GTK_SYMBOLIC_COLOR_ACCENT)
         {
           if (color.alpha < 1)
-            g_string_append_printf (str, "\n        fill-opacity='%g'", color.alpha);
+            g_string_append_printf (str, "\n        fill-opacity='%s'",
+                                    g_ascii_formatd (buffer, sizeof (buffer), "%g", color.alpha));
           g_string_append_printf (str, "\n        fill='%s'", fallback_color[fill_symbolic]);
 
           if (fill_symbolic < GTK_SYMBOLIC_COLOR_ACCENT)
@@ -1204,10 +1214,11 @@ path_paintable_save (PathPaintable *self,
                      guint          state)
 {
   GStrv keywords;
+  char buffer[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_string_append_printf (str, "<svg width='%g' height='%g'",
-                          path_paintable_get_width (self),
-                          path_paintable_get_height (self));
+  g_string_append_printf (str, "<svg width='%s' height='%s'",
+                          g_ascii_formatd (buffer, sizeof (buffer), "%g", path_paintable_get_width (self)),
+                          g_ascii_formatd (buffer, sizeof (buffer), "%g", path_paintable_get_height (self)));
   g_string_append (str, "\n     xmlns:gpa='https://www.gtk.org/grappa'");
 
   g_string_append (str, "\n     gpa:version='1'");
