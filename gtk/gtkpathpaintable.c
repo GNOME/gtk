@@ -347,6 +347,60 @@ path_is_animating (PathElt *elt)
   return elt->animation.type != GTK_PATH_ANIMATION_TYPE_NONE;
 }
 
+static GskStroke *
+get_stroke_for_path (PathElt *elt,
+                     float    weight)
+{
+  GskStroke *stroke;
+  float width;
+
+  if (weight < 1.f)
+    {
+      g_assert_not_reached ();
+    }
+  else if (weight < 400.f)
+    {
+      float f = (400.f - weight) / (400.f - 1.f);
+      width = elt->stroke.min_width * f + elt->stroke.width * (1.f - f);
+    }
+  else if (weight == 400.f)
+    {
+      width = elt->stroke.width;
+    }
+  else if (weight <= 1000.f)
+    {
+      float f = (weight - 400.f) / (1000.f - 400.f);
+      width = elt->stroke.max_width * f + elt->stroke.width * (1.f - f);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  stroke = gsk_stroke_new (width);
+  gsk_stroke_set_line_cap (stroke, elt->stroke.linecap);
+  gsk_stroke_set_line_join (stroke, elt->stroke.linejoin);
+
+  return stroke;
+}
+
+static void
+get_fill_color_for_path (GtkPathPaintable *self,
+                         PathElt          *elt,
+                         GdkRGBA          *c,
+                         PaintData        *data)
+{
+  if (elt->fill.symbolic < data->n_colors)
+    {
+      *c = data->colors[elt->fill.symbolic];
+      c->alpha *= elt->fill.color.alpha;
+    }
+  else
+    {
+      *c = elt->fill.color;
+    }
+}
+
 static gboolean
 compute_transition_duration (GtkPathPaintable *self,
                              unsigned int      from,
@@ -382,6 +436,59 @@ compute_transition_duration (GtkPathPaintable *self,
   *in_duration = in;
 
   return res;
+}
+
+static void
+compute_bounds (GtkPathPaintable *self)
+{
+  graphene_rect_t bounds;
+
+  for (unsigned int i = 0; i < self->paths->len; i++)
+    {
+      PathElt *elt = &g_array_index (self->paths, PathElt, i);
+
+      if (!gsk_path_is_empty (elt->path))
+        {
+          graphene_rect_t bd;
+          GskStroke *stroke;
+
+          stroke  = get_stroke_for_path (elt, 1000.f);
+
+          if (gsk_path_get_stroke_bounds (elt->path, stroke, &bd))
+            {
+              if (i > 0)
+                graphene_rect_union (&bd, &bounds, &bounds);
+              else
+                graphene_rect_init_from_rect (&bounds, &bd);
+            }
+
+           gsk_stroke_free (stroke);
+        }
+    }
+
+  if (!graphene_rect_equal (&self->bounds, &bounds))
+    {
+      graphene_rect_init_from_rect (&self->bounds, &bounds);
+      gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+    }
+}
+
+static unsigned int
+compute_max_state (GtkPathPaintable *self)
+{
+  unsigned int max = 0;
+
+  for (size_t idx = 0; idx < self->paths->len; idx++)
+    {
+      PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+      if (elt->states == GTK_PATH_PAINTABLE_ALL_STATES)
+        continue;
+
+      max = MAX (max, g_bit_nth_msf (elt->states, -1));
+    }
+
+  return max;
 }
 
 static gboolean
@@ -431,93 +538,6 @@ get_path_segment (PathElt *elt,
   return gsk_path_builder_free_to_path (builder);
 }
 
-static GskStroke *
-get_stroke_for_path (PathElt *elt,
-                     float    weight)
-{
-  GskStroke *stroke;
-  float width;
-
-  if (weight < 1.f)
-    {
-      g_assert_not_reached ();
-    }
-  else if (weight < 400.f)
-    {
-      float f = (400.f - weight) / (400.f - 1.f);
-      width = elt->stroke.min_width * f + elt->stroke.width * (1.f - f);
-    }
-  else if (weight == 400.f)
-    {
-      width = elt->stroke.width;
-    }
-  else if (weight <= 1000.f)
-    {
-      float f = (weight - 400.f) / (1000.f - 400.f);
-      width = elt->stroke.max_width * f + elt->stroke.width * (1.f - f);
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-
-  stroke = gsk_stroke_new (width);
-  gsk_stroke_set_line_cap (stroke, elt->stroke.linecap);
-  gsk_stroke_set_line_join (stroke, elt->stroke.linejoin);
-
-  return stroke;
-}
-
-static void
-recompute_bounds (GtkPathPaintable *self)
-{
-  graphene_rect_t bounds;
-
-  for (unsigned int i = 0; i < self->paths->len; i++)
-    {
-      PathElt *elt = &g_array_index (self->paths, PathElt, i);
-
-      if (elt->path != NULL && !gsk_path_is_empty (elt->path))
-        {
-          graphene_rect_t bd;
-          GskStroke *stroke = get_stroke_for_path (elt, 1000.f);
-
-          if (gsk_path_get_stroke_bounds (elt->path, stroke, &bd))
-            {
-              if (i > 0)
-                graphene_rect_union (&bd, &bounds, &bounds);
-              else
-                graphene_rect_init_from_rect (&bounds, &bd);
-            }
-
-           gsk_stroke_free (stroke);
-        }
-    }
-
-  if (!graphene_rect_equal (&self->bounds, &bounds))
-    {
-      graphene_rect_init_from_rect (&self->bounds, &bounds);
-      gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
-    }
-}
-
-static void
-get_fill_color_for_path (GtkPathPaintable *self,
-                         PathElt          *elt,
-                         GdkRGBA          *c,
-                         PaintData        *data)
-{
-  if (elt->fill.symbolic < data->n_colors)
-    {
-      *c = data->colors[elt->fill.symbolic];
-      c->alpha *= elt->fill.color.alpha;
-    }
-  else
-    {
-      *c = elt->fill.color;
-    }
-}
-
 static void
 get_stroke_color_for_path (GtkPathPaintable *self,
                            PathElt          *elt,
@@ -533,24 +553,6 @@ get_stroke_color_for_path (GtkPathPaintable *self,
     {
       *c = elt->stroke.color;
     }
-}
-
-static unsigned int
-compute_max_state (GtkPathPaintable *self)
-{
-  unsigned int max = 0;
-
-  for (size_t idx = 0; idx < self->paths->len; idx++)
-    {
-      PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-      if (elt->states == GTK_PATH_PAINTABLE_ALL_STATES)
-        continue;
-
-      max = MAX (max, g_bit_nth_msf (elt->states, -1));
-    }
-
-  return max;
 }
 
 static void
@@ -1489,7 +1491,7 @@ gtk_path_paintable_init_from_bytes (GtkPathPaintable  *self,
   g_markup_parse_context_free (context);
   g_hash_table_unref (data.paths);
 
-  recompute_bounds (self);
+  compute_bounds (self);
   set_state (self, data.state, FALSE);
 
   return ret;
