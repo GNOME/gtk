@@ -62,7 +62,7 @@ typedef enum
  * Indicates which monitor a surface should span over when in fullscreen mode.
  */
 typedef enum
-{
+{ /*< prefix=GDK_FULLSCREEN >*/
   GDK_FULLSCREEN_ON_CURRENT_MONITOR,
   GDK_FULLSCREEN_ON_ALL_MONITORS
 } GdkFullscreenMode;
@@ -325,4 +325,3 @@ void            gdk_toplevel_set_gravity (GdkToplevel *toplevel,
                                           GdkGravity   gravity);
 
 G_END_DECLS
-
