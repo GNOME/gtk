@@ -549,12 +549,12 @@ export_to_file (IconEditorWindow *self,
 
   if (g_str_has_suffix (path, ".svg"))
     path[strlen (path) - strlen (".svg")] = '\0';
-  else if (g_str_has_suffix (path, ".icon"))
-    path[strlen (path) - strlen (".icon")] = '\0';
+  else if (g_str_has_suffix (path, ".gpa"))
+    path[strlen (path) - strlen (".gpa")] = '\0';
 
   for (guint idx = 0; idx <= path_paintable_get_max_state (self->paintable); idx++)
     {
-      g_autofree char *filename = g_strdup_printf ("%s-%u.icon", path, idx);
+      g_autofree char *filename = g_strdup_printf ("%s-%u.gpa", path, idx);
       g_autoptr (GBytes) bytes = NULL;
       g_autoptr (GError) error = NULL;
 
