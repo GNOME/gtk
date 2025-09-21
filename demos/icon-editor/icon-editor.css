@@ -77,6 +77,10 @@ PaintableEditor grid {
   border-spacing: 10px;
 }
 
+ColorEditor {
+  border-spacing: 10px;
+}
+
 PaintableEditor separator {
   background-color: var(--border);
 }

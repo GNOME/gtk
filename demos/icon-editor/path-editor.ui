@@ -513,42 +513,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="ColorEditor" id="stroke_paint">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkDropDown" id="stroke_paint">
-                <property name="hexpand">1</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item>None</item>
-                      <item>Foreground</item>
-                      <item>Error</item>
-                      <item>Warning</item>
-                      <item>Success</item>
-                      <item>Accent</item>
-                      <item>Custom</item>
-                    </items>
-                  </object>
-                </property>
-                <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkColorDialogButton" id="stroke_color">
-                <property name="dialog">
-                  <object class="GtkColorDialog">
-                  </object>
-                </property>
-                <signal name="notify::rgba" handler="stroke_changed" swapped="yes"/>
-              </object>
-            </child>
             <layout>
               <property name="row">13</property>
               <property name="column">1</property>
             </layout>
+            <signal name="notify::symbolic" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::color" handler="stroke_changed" swapped="yes"/>
           </object>
         </child>
 
@@ -834,41 +807,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="ColorEditor" id="fill_paint">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkDropDown" id="fill_paint">
-                <property name="hexpand">1</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item>None</item>
-                      <item>Foreground</item>
-                      <item>Error</item>
-                      <item>Warning</item>
-                      <item>Success</item>
-                      <item>Custom</item>
-                    </items>
-                  </object>
-                </property>
-                <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkColorDialogButton" id="fill_color">
-                <property name="dialog">
-                  <object class="GtkColorDialog">
-                  </object>
-                </property>
-                <signal name="notify::rgba" handler="fill_changed" swapped="yes"/>
-              </object>
-            </child>
             <layout>
               <property name="row">20</property>
               <property name="column">1</property>
             </layout>
+            <signal name="notify::symbolic" handler="fill_changed" swapped="yes"/>
+            <signal name="notify::color" handler="fill_changed" swapped="yes"/>
           </object>
         </child>
 
