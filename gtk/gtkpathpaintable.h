@@ -57,7 +57,7 @@ void                gtk_path_paintable_set_state        (GtkPathPaintable  *self
 GDK_AVAILABLE_IN_4_22
 unsigned int        gtk_path_paintable_get_state        (GtkPathPaintable  *self);
 GDK_AVAILABLE_IN_4_22
-guint               gtk_path_paintable_get_max_state    (GtkPathPaintable  *self);
+unsigned int        gtk_path_paintable_get_max_state    (GtkPathPaintable  *self);
 GDK_AVAILABLE_IN_4_22
 void                gtk_path_paintable_set_weight       (GtkPathPaintable  *self,
                                                          float              weight);
