@@ -2862,7 +2862,11 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
       update_single_bit (&new_style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_TITLE, WS_CAPTION);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_MENU, WS_SYSMENU);
-      update_single_bit (&new_style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
+      if (impl->type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+        {
+          update_single_bit (&new_style, all, decorations & GDK_DECOR_MINIMIZE, WS_MINIMIZEBOX);
+          update_single_bit (&new_style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
+        }
     }
 
   if (needs_basic_layering)
