@@ -3143,7 +3143,7 @@ gtk_builder_get_template_type (GtkBuilder *builder,
  * If no closure could be created, %NULL will be returned and @error
  * will be set.
  *
- * Returns: (transfer none) (nullable): A new closure for invoking @function_name
+ * Returns: (transfer floating) (nullable): A new closure for invoking @function_name
  */
 GClosure *
 gtk_builder_create_closure (GtkBuilder             *builder,
