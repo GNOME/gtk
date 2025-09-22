@@ -2057,7 +2057,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         if (xev->mode == XINotifyNormal &&
             (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
                       GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)))
-          break;
+          {
+            surface->has_pointer = ev->evtype == XI_Enter;
+            break;
+          }
 
         if (ev->evtype == XI_Enter &&
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
