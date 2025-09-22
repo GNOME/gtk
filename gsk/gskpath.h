@@ -46,7 +46,7 @@ G_BEGIN_DECLS
  * Since: 4.14
  */
 typedef enum
-{
+{ /*< prefix=GSK_PATH_FOREACH >*/
   GSK_PATH_FOREACH_ALLOW_ONLY_LINES = 0,
   GSK_PATH_FOREACH_ALLOW_QUAD       = (1 << 0),
   GSK_PATH_FOREACH_ALLOW_CUBIC      = (1 << 1),

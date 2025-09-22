@@ -45,7 +45,7 @@ G_DECLARE_INTERFACE (GdkPaintable, gdk_paintable, GDK, PAINTABLE, GObject)
  *
  * Implementations use these for optimizations such as caching.
  */
-typedef enum {
+typedef enum { /*< prefix=GDK_PAINTABLE >*/
   GDK_PAINTABLE_STATIC_SIZE = 1 << 0,
   GDK_PAINTABLE_STATIC_CONTENTS = 1 << 1
 } GdkPaintableFlags;
@@ -143,4 +143,3 @@ GdkPaintable *  gdk_paintable_new_empty                 (int                    
 
 
 G_END_DECLS
-
