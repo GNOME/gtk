@@ -1410,7 +1410,10 @@ expression_info_construct (GtkBuilder      *builder,
           {
             params[--i] = expression_info_construct (builder, domain, l->data, error);
             if (params[i] == NULL)
-              return NULL;
+              {
+                g_closure_unref (closure);
+                return NULL;
+              }
           }
         expression = gtk_closure_expression_new (info->closure.type, closure, n_params, params);
 
