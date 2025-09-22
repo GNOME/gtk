@@ -230,12 +230,40 @@ selection_changed (GtkSingleSelection *selection,
 
   selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection));
 
+  gtk_accessible_reset_property (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT);
+
   if (selected == GTK_INVALID_LIST_POSITION)
     {
       gtk_stack_set_visible_child_name (GTK_STACK (self->button_stack), "empty");
     }
   else
     {
+      GObject *item;
+
+      item = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
+
+      if (self->expression)
+        {
+          GValue value = G_VALUE_INIT;
+
+          if (gtk_expression_evaluate (self->expression, item, &value))
+            gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                            GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, g_value_get_string (&value),
+                                            -1);
+
+          g_value_unset (&value);
+        }
+      else if (GTK_IS_STRING_OBJECT (item))
+        {
+          const char *string;
+
+          string = gtk_string_object_get_string (GTK_STRING_OBJECT (item));
+
+          gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                          GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, string,
+                                            -1);
+        }
+
       gtk_stack_set_visible_child_name (GTK_STACK (self->button_stack), "item");
     }
 
