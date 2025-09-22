@@ -535,6 +535,14 @@ handle_accessible_method (GDBusConnection       *connection,
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{ss}"));
       g_variant_builder_add (&builder, "{ss}", "toolkit", "GTK");
 
+      if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT))
+        {
+          GtkAccessibleValue *value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
+                                                                              GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT);
+          g_variant_builder_add (&builder, "{ss}",
+                                 "valuetext", gtk_string_accessible_value_get (value));
+        }
+
       if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_LEVEL))
         {
           GtkAccessibleValue *value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
