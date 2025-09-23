@@ -1,1 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM6 5c.559 0 1.031.473 1.031 1.031V7c0 .558-.472 1-1.03 1-.56 0-1-.442-1-1v-.969C5 5.473 5.44 5 6 5zm4 0c.559 0 1 .473 1 1.031V7c0 .558-.441 1-1 1-.558 0-1-.442-1-1v-.969C9 5.473 9.442 5 10 5zM3 9.07c.997.637 4.017.917 5 .917.984 0 3.805.051 5-.917v.5c0 .68-1.744 1.404-5 1.404-3.256 0-5-.872-5-1.404z" fill="#474747"/></svg>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='face emoji smile people category'
+     gpa:state='0'>
+  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 11 6 C 11 6.55228472, 10.5522852 7, 10 7 C 9.44771481 7, 9 6.55228472, 9 6 C 9 5.44771528, 9.44771481 5, 10 5 C 10.5522852 5, 11 5.44771528, 11 6 Z M 7 6 C 7 6.55228472, 6.55228472 7, 6 7 C 5.44771528 7, 5 6.55228472, 5 6 C 5 5.44771528, 5.44771528 5, 6 5 C 6.55228472 5, 7 5.44771528, 7 6 Z'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 11.0310888 9.48407745 C 10.4058743 10.5669813, 9.25042915 11.2340775, 8 11.2340775 C 6.74957037 11.2340775, 5.59412575 10.5669813, 4.96891117 9.48407745'
+        id='path2'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+</svg>

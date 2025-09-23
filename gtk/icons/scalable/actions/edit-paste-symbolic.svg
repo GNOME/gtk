@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect width="12" height="13" x="2" y="2" class="foreground-stroke transparent-fill" rx="1.979" ry="1.979" style="fill:none;stroke:#241f31;stroke-width:2;stroke-linecap:round;paint-order:stroke markers fill"/><path d="M6.49 4h3.02a.49.49 135 0 0 .49-.49V2.49a1.18 1.18 67.5 0 0-.346-.836l-.308-.308A1.18 1.18 22.5 0 0 8.51 1H7.49a1.18 1.18 157.5 0 0-.836.346l-.308.308A1.18 1.18 112.5 0 0 6 2.49v1.02a.49.49 45 0 0 .49.49Z" class="foreground-stroke transparent-fill" style="fill:none;stroke:#241f31;stroke-width:2;stroke-linecap:round;paint-order:stroke markers fill"/></svg>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:state='0'>
+  <path d='M 9.89400005 2 L 12.0209999 2 C 13.1169996 2, 14 2.8829999, 14 3.97900009 L 14 13.0209999 C 14.0010653 13.5461893, 13.7929058 14.0501747, 13.4215403 14.4215403 C 13.0501747 14.7929058, 12.5461893 15.0010653, 12.0209999 15 L 3.97900009 15 C 3.45381093 15.0010653, 2.94982553 14.7929058, 2.57845998 14.4215403 C 2.20709443 14.0501747, 1.9989351 13.5461893, 2 13.0209999 L 2 3.97900009 C 2 2.8829999, 2.8829999 2, 3.97900009 2 L 6.10599995 2'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 6.48999977 4 L 9.51000023 4 C 9.78061962 3.99999976, 10 3.78061938, 10 3.50999999 L 10 2.49000001 C 10.0003262 2.17642999, 9.87583065 1.87562501, 9.65400028 1.65400004 L 9.34599972 1.34599996 C 9.12437534 1.12416971, 8.82357025 0.999673903, 8.51000023 1 L 7.48999977 1 C 7.17642975 0.999673784, 6.87562466 1.12416959, 6.65399981 1.34599996 L 6.34600019 1.65400004 C 6.12416983 1.8756249, 5.99967384 2.17642975, 6 2.49000001 L 6 3.50999999 C 6 3.78061938, 6.21938038 3.99999976, 6.48999977 4 Z'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+</svg>

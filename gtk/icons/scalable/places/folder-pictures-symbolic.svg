@@ -1,5 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
-  <path class="foreground-stroke transparent-fill" stroke="#241f30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/>
-  <circle class="foreground-fill foreground-stroke" cx="6" cy="6" r=".5" fill="#241F30" stroke="#241F30"/>
-  <path class="foreground-stroke transparent-fill" stroke="#241f30" stroke-linecap="round" stroke-width="2" d="m2.8 13.6 3.32-3.3 1.5 1L9.5 9.4l3.94 3.99"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='folder image photo picture'
+     gpa:state='0'>
+  <path d='M 2 12 L 2 4 C 2 2.9000001, 2.9000001 2, 4 2 L 12 2 C 13.1045694 2, 14 2.89543056, 14 4 L 14 12 C 14 13.1045694, 13.1045694 14, 12 14 L 4 14 C 2.89543056 14, 2 13.1045694, 2 12 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 6.5 6 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 2.79999995 13.6000004 L 6.11999989 10.3000002 L 7.61999989 11.3000002 L 9.5 9.39999962 L 13.4399996 13.3900003'
+        id='path2'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

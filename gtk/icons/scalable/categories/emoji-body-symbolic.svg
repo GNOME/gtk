@@ -1,4 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 1 7 v 8 h 11 c 0.4375 0 0.875 -0.375 1 -1 l 1 -5.96875 v -2.03125 c 0 -0.535156 -0.40625 -1 -1 -1 h -3.898438 l 0.898438 -3.5 c 0.226562 -0.839844 -0.433594 -1.5 -1 -1.5 h -1 l -4.042969 7 z m 0 0" fill="#2e3436"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='category hand thumbs thhumbsup body'
+     gpa:state='0'>
+  <path d='M 2 8 L 5 8 L 6.73000002 1.94299996 C 6.88940573 1.38484669, 7.39952993 1.00000906, 7.98000002 0.99999994 L 8.02000046 1 C 8.56123924 1.00000024, 9 1.43876112, 9 1.98000002 L 9 5 L 12 5 C 13.1045694 5, 14 5.89543056, 14 7 L 13.283 12.0200005 C 13.1207504 13.1561613, 12.147687 14.0000792, 11 14 L 2 14 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

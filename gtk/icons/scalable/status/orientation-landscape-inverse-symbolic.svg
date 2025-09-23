@@ -1,4 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 2.15625 13.042969 c -0.613281 0 -1.113281 -0.5 -1.113281 -1.113281 v -7.847657 c 0 -0.617187 0.5 -1.113281 1.113281 -1.113281 h 11.738281 c 0.617188 0 1.117188 0.496094 1.117188 1.113281 v 7.847657 c 0 0.613281 -0.5 1.113281 -1.117188 1.113281 z m 5.84375 -3 l 4 -4.042969 h -8 z m 0 0" fill="#2e3436"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   gpa:version="1"
+   gpa:keywords="page orientation print landscape inverse"
+   gpa:state="0"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="orientation-landscape-inverse-symbolic.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:gpa="https://www.gtk.org/grappa">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="25.632621"
+     inkscape:cx="3.7842404"
+     inkscape:cy="7.0223018"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <path
+     d="M 3.1586206 3 L 12.8413792 3 O 15 3, 15 5.15862083, 0.707106769 L 15 10.8413792 O 15 13, 12.8413792 13, 0.707106769 L 3.1586206 13 O 1 13, 1 10.8413792, 0.707106769 L 1 5.15862083 O 1 3, 3.1586206 3, 0.707106769 Z"
+     id="path0"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke="rgb(0,0,0)"
+     fill="none"
+     class="foreground-stroke transparent-fill" />
+  <path
+     d="m 5,7 3,3 3,-3 z"
+     id="path1"
+     stroke-width="0.5"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke="#000000"
+     fill-rule="winding"
+     fill="#000000"
+     class="foreground-stroke foreground-fill"
+     style="stroke:none" />
 </svg>

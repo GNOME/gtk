@@ -1,7 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-  <g fill="#2e3436">
-    <path d="M7.995 0a6.01 6.01 0 00-5.87 4.777c-.529 2.534.689 5.036 2.872 6.327l.002.898A1 1 0 006 13h4a1 1 0 001-.998l.002-.9c2.183-1.293 3.4-3.797 2.87-6.33A6.009 6.009 0 007.996 0zm0 2c1.9 0 3.53 1.322 3.918 3.182a3.99 3.99 0 01-2.312 4.484 1 1 0 00-.6.914V11H6.997v-.418a1 1 0 00-.6-.914 3.993 3.993 0 01-2.316-4.484A3.99 3.99 0 017.995 2z"/>
-    <path d="M6 15c0 .554.446 1 1 1h2c.554 0 1-.446 1-1v-1H6z"/>
-    <path d="M6.992 5.994a.5.5 0 00-.348.86l1 1a.5.5 0 00.707 0l1-1a.5.5 0 10-.707-.708l-.647.647-.646-.647a.5.5 0 00-.36-.152z" opacity=".35" fill-rule="evenodd"/>
-  </g>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='object category bulb light'
+     gpa:state='0'>
+  <path d='M 6 7 L 7 8 L 8.15241337 6.98137951 L 9.00010204 8 L 10 7'
+        id='path0'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 9 13 L 9 14 C 9 14.3572655, 8.80940056 14.6873922, 8.5 14.866025 C 8.19059849 15.0446577, 7.80940104 15.0446577, 7.5 14.866025 C 7.19059896 14.6873922, 7 14.3572655, 7 14 L 7 13'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 9.9535799 11.0000038 L 10.6861715 10.5244646 C 12.7919588 9.30874443, 13.8186178 6.83028412, 13.1892862 4.48169184 C 12.5599527 2.13309956, 10.4315529 0.499995559, 7.99999952 0.4999955 C 5.56844568 0.499995321, 3.44004512 2.13309908, 2.81071281 4.48169136 C 2.18138051 6.83028364, 3.20804 9.30874443, 5.31382751 10.5244646 L 6.0464201 11.0000038'
+        id='path2'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 9.95358562 11 L 6 12 M 9.95358562 12 L 6 13 M 6 13 L 10 13 M 6 11 L 10 11'
+        id='path3'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

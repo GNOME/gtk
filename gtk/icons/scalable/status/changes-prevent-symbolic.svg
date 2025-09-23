@@ -1,4 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
-  <path class="foreground-stroke transparent-fill" stroke="#241f30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 8V5a3 3 0 1 0-6 0v3"/>
-  <path class="foreground-stroke transparent-fill" stroke="#241F30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 14V9c0-.6.4-1 1-1h8c.6 0 1 .4 1 1v5H3Z"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='lock locked changes prevent'
+     gpa:state='0'>
+  <path d='M 11 8 L 11 5 C 11 3.34314585, 9.65685463 2, 8 2 C 6.34314585 2, 5 3.34314585, 5 5 L 5 8'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 3 14 L 3 9 C 3 8.39999962, 3.4000001 8, 4 8 L 12 8 C 12.6000004 8, 13 8.39999962, 13 9 L 13 14 L 3 14 Z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

@@ -1,4 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 2.15625 3 c -0.613281 0 -1.113281 0.496094 -1.113281 1.113281 v 7.84375 c 0 0.617188 0.5 1.117188 1.113281 1.117188 h 11.738281 c 0.617188 0 1.117188 -0.5 1.117188 -1.117188 v -7.84375 c 0 -0.617187 -0.5 -1.113281 -1.117188 -1.113281 z m 5.84375 3 l 4 4 h -8 z m 0 0" fill="#2e3436"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='page orientation print landscape'
+     gpa:state='0'>
+  <path d='M 3.1586206 3 L 12.8413792 3 O 15 3, 15 5.15862083, 0.707106769 L 15 10.8413792 O 15 13, 12.8413792 13, 0.707106769 L 3.1586206 13 O 1 13, 1 10.8413792, 0.707106769 L 1 5.15862083 O 1 3, 3.1586206 3, 0.707106769 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 5 9.99998951 L 8 6.99998951 L 11 9.99998951 Z'
+        id='path1'
+        stroke-width='0.5'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-stroke foreground-fill'/>
 </svg>

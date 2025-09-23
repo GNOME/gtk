@@ -1,3 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-<path d="M6.003 1s-3 0-3 3v5s.044 1.419.028 2c0 1-.537 1.413-1.404 2.121-.627.49-.774 1.31-.307 1.697.43.356 1.162.304 1.66-.343L4 13c.698-1.014.983-1.876 1-3l.003-6C5.003 3 6 3 6 3v6.574L9.003 6.5V4c0-1 .997-1 .997-1l.003 2.5L12 3.465c.338-.312.503-.465 1-.465l.003 1L9 8h4s.003 1-1 1H8l-2 2c0 .426 0 2.006 2 2.006L12.003 13s3 0 2.997-2.99V1z" fill="#2e3436"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='leaf category nature'
+     gpa:state='0'>
+  <path d='M 1 15 L 3.1116972 12.8883028 C 3.68046808 12.3195324, 4.00000048 11.5481129, 4 10.7437496 L 4 6 C 4 3.23857617, 6.23857641 1, 9 1 L 15 1 L 15 8 C 15 10.7614241, 12.7614241 13, 10 13 L 7 13'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 8.5 8.14285755 L 8.5 4.5 M 7.3125 9.5 L 11 9.5 M 6 11 L 13 3'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

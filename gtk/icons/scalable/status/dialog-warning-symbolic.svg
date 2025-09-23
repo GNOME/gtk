@@ -1,4 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 7.90625 0.09375 c -0.527344 -0.0273438 -1.039062 0.28125 -1.4375 0.96875 l -6.25 11.59375 c -0.535156 0.964844 0.046875 2.34375 1.09375 2.34375 h 13.15625 c 0.980469 0 1.902344 -1.160156 1.21875 -2.34375 l -6.3125 -11.53125 c -0.398438 -0.644531 -0.941406 -1.003906 -1.46875 -1.03125 z m 1.09375 3.90625 v 5 c 0.007812 0.527344 -0.472656 1 -1 1 s -1.007812 -0.472656 -1 -1 v -5 z m -1 7 c 0.550781 0 1 0.449219 1 1 s -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 z m 0 0" fill="#2e3436"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='dialog wanrning explamation mark'
+     gpa:state='0'>
+  <path d='M 5.65290785 2.4333961 L 1.34709215 10.5666037 C 0.851478338 11.5027628, 0.882516742 12.6301394, 1.42888844 13.537611 C 1.97526014 14.4450827, 2.95709968 15, 4.01635742 15 L 11.9836426 15 C 13.0429001 15, 14.0247402 14.4450827, 14.5711117 13.537611 C 15.1174841 12.6301394, 15.1485224 11.5027628, 14.6529083 10.5666037 L 10.3470917 2.4333961 C 9.88682842 1.56401038, 8.98370361 1.0202558, 8 1.0202558 C 7.01629591 1.0202558, 6.1131711 1.56401038, 5.65290785 2.4333961 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 8 5 L 8 9'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 7.9765625 12 L 8.05859375 12'
+        id='path2'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

@@ -1,1 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M8 7h6c.554 0 1 .446 1 1v6c0 .554-.446 1-1 1H8c-.554 0-1-.446-1-1V8c0-.554.446-1 1-1m4-3H7.362A3.36 3.36 135 0 0 4 7.362V12M1 9V6.8A5.8 5.8 135 0 1 6.8 1H9" class="foreground-stroke transparent-fill" style="fill:none;stroke:#241f31;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"/><path d="M12.514 12.492 9.508 9.508m0 3.006 3.006-3.006" class="foreground-stroke transparent-fill" style="fill:none;stroke:#241f31;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;paint-order:markers stroke fill"/></svg>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='edit clear all clean'
+     gpa:state='0'>
+  <path d='M 8 7 L 14 7 C 14.5539999 7, 15 7.4460001, 15 8 L 15 14 C 15 14.5539999, 14.5539999 15, 14 15 L 8 15 C 7.4460001 15, 7 14.5539999, 7 14 L 7 8 C 7 7.4460001, 7.4460001 7, 8 7 M 12 4 L 7.36199999 4 C 6.47017956 3.99946904, 5.61473322 4.353508, 4.98412085 4.98412085 C 4.353508 5.61473322, 3.99946904 6.47017956, 4 7.36199999 L 4 12 M 1 9 L 1 6.80000019 C 1.00000012 3.59674859, 3.59674859 1.00000012, 6.80000019 1.00000012 L 9 1'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 12.5139999 12.4919996 L 9.50800037 9.50800037 M 9.50800037 12.5139999 L 12.5139999 9.50800037'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+</svg>

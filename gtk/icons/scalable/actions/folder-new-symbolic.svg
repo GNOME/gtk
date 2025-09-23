@@ -1,3 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-  <path d="M9 12h6m-3-3v6M6 14H3a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h4l2 2h4a2 2 45 0 1 2 2v1" class="foreground-stroke transparent-fill"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='folder add create mkdir'
+     gpa:state='0'>
+  <path d='M 9 12 L 15 12 M 12 9 L 12 15 M 6 14 L 3 14 C 1.89543045 14, 1 13.1045694, 1 12 L 1 4 C 1 2.89543056, 1.89543045 2, 3 2 L 7 2 L 9 4 L 13 4 C 14.1045694 4, 15 4.89543056, 15 6 L 15 7'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

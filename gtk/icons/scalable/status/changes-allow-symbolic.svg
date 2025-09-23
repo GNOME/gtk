@@ -1,3 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
-  <path class="foreground-stroke transparent-fill" stroke="#241F30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 9V4a3 3 0 1 0-6 0v1M3 15v-5c0-.6.4-1 1-1h8c.6 0 1 .4 1 1v5H3Z"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='unlocked changes allow'
+     gpa:state='0'>
+  <path d='M 11 9 L 11 4 C 11 2.34314585, 9.65685463 1, 8 1 C 6.34314585 1, 5 2.34314585, 5 4 L 5 5 M 3 15 L 3 10 C 3 9.39999962, 3.4000001 9, 4 9 L 12 9 C 12.6000004 9, 13 9.39999962, 13 10 L 13 15 L 3 15 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

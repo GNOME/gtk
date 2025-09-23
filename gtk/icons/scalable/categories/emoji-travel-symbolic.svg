@@ -1,3 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-  <path d="M3.003 1a1 1 0 00-.97.758l-1 4a1 1 0 00-.03.242v.04c-.564.094-1 .561-1 1.153v4.614c0 .592.436 1.059 1 1.154V14.5c0 .277.223.5.5.5h2c.277 0 .5-.223.5-.5V13h8v1.5c0 .277.223.5.5.5h2c.277 0 .5-.223.5-.5v-1.54c.564-.094 1-.561 1-1.153V7.193c0-.592-.436-1.059-1-1.154V6a1 1 0 00-.03-.242l-1-4a1 1 0 00-.97-.758zm.781 2h8.438l.75 3H3.034zm-.281 5a1.5 1.5 0 011.5 1.5 1.5 1.5 0 01-1.5 1.5 1.5 1.5 0 01-1.5-1.5 1.5 1.5 0 011.5-1.5zm9 0a1.5 1.5 0 011.5 1.5 1.5 1.5 0 01-1.5 1.5 1.5 1.5 0 01-1.5-1.5 1.5 1.5 0 011.5-1.5z" fill="#2e3436" fill-rule="evenodd"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='car travel transport route category'
+     gpa:state='0'>
+  <path d='M 1.8482759 7 L 3 2 L 13 2 L 14 7'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 13 9.5 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 4 9.5 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z'
+        id='path2'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 4 12 L 4 13 C 4 13.5522852, 3.55228519 14, 3 14 C 2.44771481 14, 2 13.5522852, 2 13 L 2 12 M 14 12 L 14 13 C 14 13.5522852, 13.5522842 14, 13 14 C 12.4477158 14, 12 13.5522852, 12 13 L 12 12'
+        id='path3'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 2.5 7 L 13.5 7 O 15 7, 15 8.5, 0.707106769 L 15 10.5 O 15 12, 13.5 12, 0.707106769 L 2.5 12 O 1 12, 1 10.5, 0.707106769 L 1 8.5 O 1 7, 2.5 7, 0.707106769 Z'
+        id='path4'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

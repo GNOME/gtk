@@ -1,3 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
-  <path class="foreground-stroke transparent-fill" stroke="#241F30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.4 10.38A5.48 5.48 0 0 0 6.5 1a5.5 5.5 0 1 0 3.9 9.38Zm0 0L14 14"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='folder saved search loupe'
+     gpa:state='0'>
+  <path d='M 10.3999996 10.3800001 C 11.9886942 8.81197453, 12.4675369 6.43703461, 11.6105652 4.37590599 C 10.7535925 2.31477737, 8.73209095 0.979426026, 6.5 0.999999881 C 4.00930738 1.00083613, 1.83005977 2.67534828, 1.1878314 5.08181763 C 0.545602977 7.48828697, 1.60071695 10.0259714, 3.75979424 11.2677193 C 5.91887188 12.5094662, 8.64292908 12.1452913, 10.3999996 10.3800001 Z M 10.3999996 10.3800001 L 14 14'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>
