@@ -580,6 +580,26 @@ handle_accessible_method (GDBusConnection       *connection,
                                  "rowindextext", gtk_string_accessible_value_get (value));
         }
 
+      if (gtk_at_context_has_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_POS_IN_SET))
+        {
+          GtkAccessibleValue *value = gtk_at_context_get_accessible_relation (GTK_AT_CONTEXT (self),
+                                                                              GTK_ACCESSIBLE_RELATION_POS_IN_SET);
+
+          char *pos = g_strdup_printf ("%d", gtk_int_accessible_value_get (value));
+          g_variant_builder_add (&builder, "{ss}", "posinset", pos);
+          g_free (pos);
+        }
+
+      if (gtk_at_context_has_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_SET_SIZE))
+        {
+          GtkAccessibleValue *value = gtk_at_context_get_accessible_relation (GTK_AT_CONTEXT (self),
+                                                                              GTK_ACCESSIBLE_RELATION_SET_SIZE);
+
+          char *size = g_strdup_printf ("%d", gtk_int_accessible_value_get (value));
+          g_variant_builder_add (&builder, "{ss}", "setsize", size);
+          g_free (size);
+        }
+
       if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS) ||
           gtk_at_context_has_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_LABELLED_BY))
         {
