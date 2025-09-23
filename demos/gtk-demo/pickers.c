@@ -300,8 +300,12 @@ do_pickers (GtkWidget *do_widget)
     gtk_box_append (GTK_BOX (picker), app_picker);
 
     print_button = gtk_button_new_from_icon_name ("printer-symbolic");
-    gtk_widget_set_tooltip_text (print_button, "Print file");
+    gtk_widget_set_tooltip_text (print_button, "Print File");
     gtk_widget_set_sensitive (print_button, FALSE);
+    gtk_accessible_update_property (GTK_ACCESSIBLE (print_button),
+                                    GTK_ACCESSIBLE_PROPERTY_LABEL, "Print File",
+                                    GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                    -1);
     g_signal_connect (print_button, "clicked", G_CALLBACK (print_file), NULL);
     gtk_box_append (GTK_BOX (picker), print_button);
 
