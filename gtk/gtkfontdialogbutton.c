@@ -150,6 +150,10 @@ gtk_font_dialog_button_init (GtkFontDialogButton *self)
   pango_font_description_free (font_desc);
 
   gtk_widget_add_css_class (self->button, "font");
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->button),
+                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                  -1);
 }
 
 static void

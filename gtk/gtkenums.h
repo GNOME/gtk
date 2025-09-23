@@ -1634,7 +1634,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_PROPERTY_VALUE_NOW: Defines the current value for a range widget.
  *    Value type: double
  * @GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT: Defines the human readable text alternative
- *    of aria-valuenow for a range widget. Value type: string
+ *    of [enum@Gtk.AccessibleProperty.VALUE_NOW] for a range widget. Value type: string
  *
  * The possible accessible properties of a [iface@Accessible].
  */
@@ -1710,7 +1710,7 @@ typedef enum {
  *    with respect to the total number of rows within a table, grid, or treegrid.
  *    Value type: integer
  * @GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT: Defines a human readable text
- *    alternative of aria-rowindex. Value type: string
+ *    alternative of [enum@Gtk.AccessibleRelation.ROW_INDEX]. Value type: string
  * @GTK_ACCESSIBLE_RELATION_ROW_SPAN: Defines the number of rows spanned by a
  *    cell or gridcell within a table, grid, or treegrid. Value type: integer
  * @GTK_ACCESSIBLE_RELATION_SET_SIZE: Defines the number of items in the current
