@@ -50,6 +50,8 @@ GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActi
 
 const char *           gtk_menu_tracker_item_get_action_name           (GtkMenuTrackerItem *self);
 
+GVariant *             gtk_menu_tracker_item_get_action_target         (GtkMenuTrackerItem *self);
+
 const char *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
 
 const char *           gtk_menu_tracker_item_get_custom                (GtkMenuTrackerItem *self);

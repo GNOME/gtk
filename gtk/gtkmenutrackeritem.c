@@ -747,6 +747,12 @@ gtk_menu_tracker_item_get_action_name (GtkMenuTrackerItem *self)
   return strrchr (self->action_and_target, '|') + 1;
 }
 
+GVariant *
+gtk_menu_tracker_item_get_action_target (GtkMenuTrackerItem *self)
+{
+  return g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
+}
+
 const char *
 gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
 {
