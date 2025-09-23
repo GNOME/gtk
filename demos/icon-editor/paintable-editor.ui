@@ -99,11 +99,13 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="summary1">
+                    <property name="selectable">1</property>
                     <property name="xalign">0</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkLabel" id="summary2">
+                    <property name="selectable">1</property>
                     <property name="xalign">0</property>
                   </object>
                 </child>
