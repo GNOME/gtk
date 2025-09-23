@@ -1399,6 +1399,10 @@ expression_info_construct (GtkBuilder      *builder,
                                               error);
         if (closure == NULL)
           return NULL;
+
+        g_closure_ref (closure);
+        g_closure_sink (closure);
+
         n_params = g_slist_length (info->closure.params);
         params = g_newa (GtkExpression *, n_params);
         i = n_params;
@@ -1406,9 +1410,15 @@ expression_info_construct (GtkBuilder      *builder,
           {
             params[--i] = expression_info_construct (builder, domain, l->data, error);
             if (params[i] == NULL)
-              return NULL;
+              {
+                g_closure_unref (closure);
+                return NULL;
+              }
           }
         expression = gtk_closure_expression_new (info->closure.type, closure, n_params, params);
+
+        g_closure_unref (closure);
+
         g_free (info->closure.function_name);
         g_free (info->closure.object_name);
         g_slist_free_full (info->closure.params, (GDestroyNotify) free_expression_info);
