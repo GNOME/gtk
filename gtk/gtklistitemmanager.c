@@ -1376,6 +1376,11 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
                                              position + i,
                                              item,
                                              gtk_selection_model_is_selected (self->model, position + i));
+                  gtk_accessible_update_relation (GTK_ACCESSIBLE (tile->widget),
+                                                  GTK_ACCESSIBLE_RELATION_POS_IN_SET, position + i + 1,
+                                                  GTK_ACCESSIBLE_RELATION_SET_SIZE, g_list_model_get_n_items (G_LIST_MODEL (self->model)),
+                                                  -1);
+
                   g_object_unref (item);
                   gtk_widget_insert_after (tile->widget, self->widget, insert_after);
                 }
@@ -1523,6 +1528,12 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
                                      position + i,
                                      item,
                                      gtk_selection_model_is_selected (self->model, position + i));
+
+          gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
+                                          GTK_ACCESSIBLE_RELATION_POS_IN_SET, position + i + 1,
+                                          GTK_ACCESSIBLE_RELATION_SET_SIZE, g_list_model_get_n_items (G_LIST_MODEL (self->model)),
+                                          -1);
+
           gtk_widget_insert_after (new_tile->widget, self->widget, insert_after);
           insert_after = new_tile->widget;
         }
@@ -1603,6 +1614,25 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
   gtk_list_item_change_finish (&change);
 
   gtk_widget_queue_resize (self->widget);
+}
+
+static void
+gtk_list_item_manager_model_n_items_changed_cb (GListModel         *model,
+                                                GParamSpec         *pspec,
+                                                GtkListItemManager *self)
+{
+  guint n_items = g_list_model_get_n_items (model);
+  GtkListTile *tile;
+
+  for (tile = gtk_list_item_manager_get_first (self);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget && tile->type == GTK_LIST_TILE_ITEM)
+        gtk_accessible_update_relation (GTK_ACCESSIBLE (tile->widget),
+                                        GTK_ACCESSIBLE_RELATION_SET_SIZE, n_items,
+                                       -1);
+    }
 }
 
 static void
@@ -1726,6 +1756,9 @@ gtk_list_item_manager_clear_model (GtkListItemManager *self)
                                         gtk_list_item_manager_model_items_changed_cb,
                                         self);
   g_signal_handlers_disconnect_by_func (self->model,
+                                        gtk_list_item_manager_model_n_items_changed_cb,
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->model,
                                         gtk_list_item_manager_model_sections_changed_cb,
                                         self);
   g_clear_object (&self->model);
@@ -1781,6 +1814,10 @@ gtk_list_item_manager_set_model (GtkListItemManager *self,
       g_signal_connect (model,
                         "items-changed",
                         G_CALLBACK (gtk_list_item_manager_model_items_changed_cb),
+                        self);
+      g_signal_connect (model,
+                        "notify::n-items",
+                        G_CALLBACK (gtk_list_item_manager_model_n_items_changed_cb),
                         self);
       g_signal_connect (model,
                         "selection-changed",
