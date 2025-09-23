@@ -36,6 +36,9 @@
               </object>
             </property>
             <property name="action-name">win.open</property>
+            <accessibility>
+              <property name="has-popup">1</property>
+            </accessibility>
           </object>
         </child>
         <child type="start">
@@ -52,6 +55,9 @@
               </object>
             </property>
             <property name="action-name">win.save</property>
+            <accessibility>
+              <property name="has-popup">1</property>
+            </accessibility>
           </object>
         </child>
         <child type="end">
