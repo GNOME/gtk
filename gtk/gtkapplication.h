@@ -51,9 +51,6 @@ struct _GtkApplication
  * @window_removed: Signal emitted when a `GtkWindow` is removed from
  *    application, either as a side-effect of being destroyed or
  *    explicitly through gtk_application_remove_window().
- * @save_state: Vfunc for the save-state signal. Since 4.20
- * @restore_state: Vfunc for the restore-state signal. Since 4.20
- * @restore_window: VFunc for the restore-window signal. Since 4.20
  */
 struct _GtkApplicationClass
 {
@@ -66,13 +63,44 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
+  /**
+   * GtkApplicationClass::save_state:
+   * @state: a dictionary where to store the application's state
+   *
+   * Class closure for the [signal@Application::save-state] signal.
+   *
+   * Returns: true to stop stop further handlers from running
+   *
+   * Since: 4.22
+   */
   gboolean (* save_state)    (GtkApplication   *application,
                               GVariantDict     *state);
 
+  /**
+   * GtkApplicationClass::restore_state:
+   * @reason: the reason for restoring state
+   * @state: a dictionary containing the application state to restore
+   *
+   * Class closure for the [signal@Application::restore-state] signal.
+   *
+   * Returns: true to stop stop further handlers from running
+   *
+   * Since: 4.22
+   */
   gboolean (* restore_state) (GtkApplication   *application,
                               GtkRestoreReason  reason,
                               GVariant         *state);
 
+  /**
+   * GtkApplicationClass::restore_window:
+   * @reason: the reason this window is restored
+   * @state: (nullable): the state to restore, as saved by a
+   *   [signal@Gtk.ApplicationWindow::save-state] handler
+   *
+   * Class closure for the [signal@Application::restore-window] signal.
+   *
+   * Since: 4.22
+   */
   void     (*restore_window) (GtkApplication   *application,
                               GtkRestoreReason  reason,
                               GVariant         *state);
