@@ -844,7 +844,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * This will make GTK track the session state (such as the
    * [property@Gtk.Application:screensaver-active] property).
    *
-   * Deprecated: 4.20: This property is ignored. GTK always registers
+   * Deprecated: 4.22: This property is ignored. GTK always registers
    * with the session manager
    */
   gtk_application_props[PROP_REGISTER_SESSION] =
@@ -1568,7 +1568,7 @@ collect_state (GtkApplication *application)
  * calls this function automatically when the application is closed or
  * the session ends.
  *
- * Since: 4.20
+ * Since: 4.22
  */
 void
 gtk_application_save (GtkApplication *application)
@@ -1598,7 +1598,7 @@ gtk_application_save (GtkApplication *application)
  * In order to reenable state saving, call
  * [method@Gtk.Application.save].
  *
- * Since: 4.20
+ * Since: 4.22
  */
 void
 gtk_application_forget (GtkApplication *application)
@@ -1667,7 +1667,7 @@ restore_state (GtkApplication   *application,
  *
  * Returns: true if state is being restored, false otherwise
  *
- * Since: 4.20
+ * Since: 4.22
  */
 gboolean
 gtk_application_restore (GtkApplication   *application,
