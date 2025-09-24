@@ -336,7 +336,7 @@ set_random_icons (IconEditorWindow *self)
       path_paintable_set_state (paintable, 0);
       g_object_bind_property (self, "weight",
                               paintable, "weight",
-                              G_BINDING_DEFAULT);
+                              G_BINDING_SYNC_CREATE);
       gtk_image_set_from_paintable (self->images[i], GDK_PAINTABLE (paintable));
       gtk_widget_set_tooltip_text (GTK_WIDGET (self->images[i]), names[r]);
       gtk_bitset_add (used, r);
