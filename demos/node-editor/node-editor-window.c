@@ -74,6 +74,8 @@ struct _NodeEditorWindow
   gulong after_paint_handler;
 
   int zoom_level;
+  gboolean dark_mode;
+  int paned_position;
 };
 
 struct _NodeEditorWindowClass
@@ -83,6 +85,9 @@ struct _NodeEditorWindowClass
 
 enum {
   PROP_AUTO_RELOAD = 1,
+  PROP_ZOOM_LEVEL,
+  PROP_DARK_MODE,
+  PROP_PANED_POSITION,
   NUM_PROPERTIES
 };
 
@@ -1149,15 +1154,19 @@ out:
 }
 
 static void
-dark_mode_cb (GtkToggleButton *button,
-              GParamSpec      *pspec,
-              NodeEditorWindow *self)
+set_dark_mode (NodeEditorWindow *self,
+               gboolean          dark_mode)
 {
   GtkSettings *settings;
 
+  if (self->dark_mode == dark_mode)
+    return;
+
+  self->dark_mode = dark_mode;
+
   settings = gtk_widget_get_settings (GTK_WIDGET (self));
 
-  if (gtk_toggle_button_get_active (button))
+  if (dark_mode)
     {
       GtkInterfaceColorScheme color_scheme;
 
@@ -1170,6 +1179,8 @@ dark_mode_cb (GtkToggleButton *button,
     }
   else
     gtk_settings_reset_property (settings, "gtk-interface-color-scheme");
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DARK_MODE]);
 }
 
 static void
@@ -1683,6 +1694,9 @@ paste_node_cb (GtkWidget  *widget,
   gdk_clipboard_read_text_async (clipboard, NULL, text_received, widget);
 }
 
+static void set_zoom_level (NodeEditorWindow *self,
+                            int               zoom_level);
+
 static void
 node_editor_window_set_property (GObject      *object,
                                  guint         prop_id,
@@ -1706,6 +1720,18 @@ node_editor_window_set_property (GObject      *object,
       }
       break;
 
+    case PROP_ZOOM_LEVEL:
+      set_zoom_level (self, g_value_get_int (value));
+      break;
+
+    case PROP_DARK_MODE:
+      set_dark_mode (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_PANED_POSITION:
+      self->paned_position = g_value_get_int (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1724,6 +1750,18 @@ node_editor_window_get_property (GObject    *object,
     {
     case PROP_AUTO_RELOAD:
       g_value_set_boolean (value, self->auto_reload);
+      break;
+
+    case PROP_ZOOM_LEVEL:
+      g_value_set_int (value, self->zoom_level);
+      break;
+
+    case PROP_DARK_MODE:
+      g_value_set_boolean (value, self->dark_mode);
+      break;
+
+    case PROP_PANED_POSITION:
+      g_value_set_int (value, self->paned_position);
       break;
 
     default:
@@ -1750,6 +1788,21 @@ update_zoom_buttons (NodeEditorWindow *self)
 }
 
 static void
+set_zoom_level (NodeEditorWindow *self,
+                int               zoom_level)
+{
+  zoom_level = CLAMP (zoom_level + 1, MIN_ZOOM, MAX_ZOOM);
+
+  if (self->zoom_level == zoom_level)
+    return;
+
+  self->zoom_level = zoom_level;
+  update_zoom_buttons (self);
+  text_changed (self->text_buffer, self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ZOOM_LEVEL]);
+}
+
+static void
 zoom_in_cb (GtkButton        *button,
             NodeEditorWindow *self)
 {
@@ -1767,11 +1820,38 @@ zoom_out_cb (GtkButton        *button,
   text_changed (self->text_buffer, self);
 }
 
+static gboolean
+node_editor_window_save_state (GtkApplicationWindow *win,
+                               GVariantDict         *state)
+{
+  NodeEditorWindow *self = NODE_EDITOR_WINDOW (win);
+
+  g_variant_dict_insert (state, "zoom-level", "i", self->zoom_level);
+  g_variant_dict_insert (state, "auto-reload", "b", self->auto_reload);
+  g_variant_dict_insert (state, "dark-mode", "b", self->dark_mode);
+  g_variant_dict_insert (state, "paned-position", "i", self->paned_position);
+
+  return TRUE;
+}
+
+static gboolean
+node_editor_window_close_request (GtkWindow *window)
+{
+  GtkApplication *application;
+
+  application = gtk_window_get_application (window);
+  g_application_quit (G_APPLICATION (application));
+
+  return TRUE;
+}
+
 static void
 node_editor_window_class_init (NodeEditorWindowClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkWindowClass *win_class = GTK_WINDOW_CLASS (class);
+  GtkApplicationWindowClass *appwin_class = GTK_APPLICATION_WINDOW_CLASS (class);
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
   GtkShortcut *shortcut;
@@ -1781,6 +1861,9 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   object_class->set_property = node_editor_window_set_property;
   object_class->get_property = node_editor_window_get_property;
 
+  win_class->close_request = node_editor_window_close_request;
+  appwin_class->save_state = node_editor_window_save_state;
+
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/gtk4/node-editor/node-editor-window.ui");
 
@@ -1789,7 +1872,19 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   properties[PROP_AUTO_RELOAD] = g_param_spec_boolean ("auto-reload", NULL, NULL,
                                                        TRUE,
-                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_ZOOM_LEVEL] = g_param_spec_int ("zoom-level", NULL, NULL,
+                                                  MIN_ZOOM, MAX_ZOOM, 0,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_DARK_MODE] = g_param_spec_boolean ("dark-mode", NULL, NULL,
+                                                     FALSE,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_PANED_POSITION] = g_param_spec_int ("paned-position", NULL, NULL,
+                                                      0, G_MAXINT, 0,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -1812,7 +1907,6 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, clip_image_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_save_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_name_entry_changed_cb);
-  gtk_widget_class_bind_template_callback (widget_class, dark_mode_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drag_prepare_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drop_cb);
   gtk_widget_class_bind_template_callback (widget_class, click_gesture_pressed);

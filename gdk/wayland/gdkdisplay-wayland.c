@@ -63,6 +63,9 @@
 #include "presentation-time-client-protocol.h"
 #include "color-management-v1-client-protocol.h"
 #include "color-representation-v1-client-protocol.h"
+#include "xx-session-management-v1-client-protocol.h"
+
+#include "wm-button-layout-translation.h"
 
 #include "gdk/gdkprivate.h"
 
@@ -176,6 +179,9 @@ init_skip_protocols (GdkWaylandDisplay *display_wayland)
 
   if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), COLOR_MANAGEMENT))
     g_strv_builder_add (strv, wp_color_manager_v1_interface.name);
+
+  if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), SESSION_MANAGEMENT))
+    g_strv_builder_add (strv, xx_session_manager_v1_interface.name);
 
   if (help)
     {
@@ -456,6 +462,49 @@ static const struct org_kde_kwin_server_decoration_manager_listener server_decor
 };
 
 /* }}} */
+/* {{{ session listener */
+
+static void
+session_listener_created (void                 *data,
+                          struct xx_session_v1 *xx_session_v1,
+                          const char           *id)
+{
+  GdkWaylandDisplay *display_wayland = data;
+
+  GDK_DEBUG (MISC, "session created: %s", id);
+
+  if (g_strcmp0 (display_wayland->session_id, id) != 0)
+    {
+      g_clear_pointer (&display_wayland->session_id, g_free);
+      display_wayland->session_id = g_strdup (id);
+    }
+}
+
+static void
+session_listener_restored (void                 *data,
+                           struct xx_session_v1 *xx_session_v1)
+{
+  GdkWaylandDisplay *display_wayland = data;
+
+  GDK_DEBUG (MISC, "session restored: %s", display_wayland->session_id);
+}
+
+static void
+session_listener_replaced (void                 *data,
+                           struct xx_session_v1 *xx_session_v1)
+{
+  GdkWaylandDisplay *display_wayland = data;
+
+  GDK_DEBUG (MISC, "session replaced: %s", display_wayland->session_id);
+}
+
+static const struct xx_session_v1_listener xx_session_listener = {
+  .created = session_listener_created,
+  .restored = session_listener_restored,
+  .replaced = session_listener_replaced,
+};
+
+/* }}} */
 /* {{{ wl_registry listener */
 
 static void
@@ -514,6 +563,13 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_wm_dialog_v1_interface,
                           MIN (version, XDG_WM_DIALOG_VERSION));
+    }
+  else if (match_global (display_wayland, interface, version, xx_session_manager_v1_interface.name, 0))
+    {
+      display_wayland->xx_session_manager =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xx_session_manager_v1_interface,
+                          version);
     }
   else if (match_global (display_wayland, interface, version, gtk_shell1_interface.name, 0))
     {
@@ -874,6 +930,8 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->color, gdk_wayland_color_free);
   g_clear_pointer (&display_wayland->system_bell, xdg_system_bell_v1_destroy);
   g_clear_pointer (&display_wayland->toplevel_icon, xdg_toplevel_icon_manager_v1_destroy);
+  g_clear_pointer (&display_wayland->xx_session, xx_session_v1_destroy);
+  g_clear_pointer (&display_wayland->xx_session_manager, xx_session_manager_v1_destroy);
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);
@@ -1318,6 +1376,54 @@ gdk_wayland_display_query_registry (GdkDisplay *display,
   return FALSE;
 }
 
-/* }}} */
+void
+gdk_wayland_display_register_session (GdkDisplay                        *display,
+                                      enum xx_session_manager_v1_reason  reason,
+                                      const char                        *name)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
+  GDK_DEBUG (MISC, "register session %s, reason %u", name, reason);
+
+  if (!display_wayland->xx_session_manager)
+    return;
+
+  g_clear_pointer (&display_wayland->session_id, g_free);
+  display_wayland->session_id = g_strdup (name);
+
+  display_wayland->xx_session =
+    xx_session_manager_v1_get_session (display_wayland->xx_session_manager,
+                                       reason,
+                                       name);
+  xx_session_v1_add_listener (display_wayland->xx_session,
+                              &xx_session_listener,
+                              display_wayland);
+
+  wl_display_roundtrip (display_wayland->wl_display);
+}
+
+void
+gdk_wayland_display_unregister_session (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (!display_wayland->xx_session_manager)
+    return;
+
+  if (display_wayland->xx_session)
+    xx_session_v1_remove (display_wayland->xx_session);
+
+  g_clear_pointer (&display_wayland->session_id, g_free);
+  g_clear_pointer (&display_wayland->xx_session, xx_session_v1_destroy);
+}
+
+const char *
+gdk_wayland_display_get_session_id (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  return display_wayland->session_id;
+}
+
+/* }}} */
 /* vim:set foldmethod=marker: */

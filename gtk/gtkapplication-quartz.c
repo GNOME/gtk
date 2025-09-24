@@ -278,7 +278,8 @@ gtk_application_impl_quartz_set_app_menu (GtkApplicationImpl *impl,
 }
 
 static void
-gtk_application_impl_quartz_startup (GtkApplicationImpl *impl)
+gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
+                                     gboolean            support_save)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;

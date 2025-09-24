@@ -219,22 +219,65 @@ node_editor_application_startup (GApplication *app)
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
+static NodeEditorWindow *
+create_window (GtkApplication *app)
+{
+  NodeEditorWindow *win;
+
+  win = node_editor_window_new (NODE_EDITOR_APPLICATION (app));
+
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    gtk_widget_add_css_class (GTK_WIDGET (win), "devel");
+
+  return win;
+}
+
+static void
+node_editor_application_restore_window (GtkApplication   *app,
+                                        GtkRestoreReason  reason,
+                                        GVariant         *state)
+{
+  NodeEditorWindow *win;
+  int zoom_level;
+  gboolean auto_reload;
+  gboolean dark_mode;
+  int paned_position;
+
+  win = create_window (app);
+
+  if (!state)
+    return;
+
+  if (reason <= GTK_RESTORE_REASON_LAUNCH)
+    return;
+
+  g_variant_lookup (state, "zoom-level", "i", &zoom_level);
+  g_variant_lookup (state, "dark-mode", "b", &dark_mode);
+  g_variant_lookup (state, "auto-reload", "b", &auto_reload);
+  g_variant_lookup (state, "paned-position", "i", &paned_position);
+
+  if (reason == GTK_RESTORE_REASON_RECOVER)
+    auto_reload = FALSE;
+
+  g_object_set (win,
+                "auto-reload", auto_reload,
+                "zoom-level", zoom_level,
+                "dark-mode", dark_mode,
+                "paned-position", paned_position,
+                NULL);
+}
+
 static void
 node_editor_application_activate (GApplication *app)
 {
   GList *list;
   NodeEditorWindow *win;
 
-  if ((list = gtk_application_get_windows (GTK_APPLICATION (app))) != NULL)
-    {
-      gtk_window_present (GTK_WINDOW (list->data));
-      return;
-    }
-
-  win = node_editor_window_new (NODE_EDITOR_APPLICATION (app));
-
-  if (g_strcmp0 (PROFILE, "devel") == 0)
-    gtk_widget_add_css_class (GTK_WIDGET (win), "devel");
+  list = gtk_application_get_windows (GTK_APPLICATION (app));
+  if (list)
+    win = list->data;
+  else
+    win = create_window (GTK_APPLICATION (app));
 
   gtk_window_present (GTK_WINDOW (win));
 }
@@ -250,7 +293,7 @@ node_editor_application_open (GApplication  *app,
 
   for (i = 0; i < n_files; i++)
     {
-      win = node_editor_window_new (NODE_EDITOR_APPLICATION (app));
+      win = create_window (GTK_APPLICATION (app));
       node_editor_window_load (win, files[i]);
       gtk_window_present (GTK_WINDOW (win));
     }
@@ -260,10 +303,12 @@ static void
 node_editor_application_class_init (NodeEditorApplicationClass *class)
 {
   GApplicationClass *application_class = G_APPLICATION_CLASS (class);
+  GtkApplicationClass *gtk_application_class = GTK_APPLICATION_CLASS (class);
 
   application_class->startup = node_editor_application_startup;
-  application_class->activate = node_editor_application_activate;
   application_class->open = node_editor_application_open;
+  application_class->activate = node_editor_application_activate;
+  gtk_application_class->restore_window = node_editor_application_restore_window;
 }
 
 static int
@@ -306,6 +351,7 @@ node_editor_application_new (void)
                       "application-id", "org.gtk.gtk4.NodeEditor",
                       "flags", G_APPLICATION_HANDLES_OPEN | G_APPLICATION_NON_UNIQUE,
                       "version", version,
+                      "support-save", TRUE,
                       NULL);
 
   g_application_add_main_option (G_APPLICATION (app), "reset", 0, 0,G_OPTION_ARG_NONE, "Remove autosave content", NULL);

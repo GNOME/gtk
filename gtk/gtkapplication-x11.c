@@ -21,8 +21,11 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkapplicationwindowprivate.h"
 #include "gtknative.h"
+#include "gtkprivate.h"
 
+#include "gdk/x11/gdksurface-x11.h"
 #include <gdk/x11/gdkx.h>
 
 typedef GtkApplicationImplDBusClass GtkApplicationImplX11Class;
@@ -30,7 +33,6 @@ typedef GtkApplicationImplDBusClass GtkApplicationImplX11Class;
 typedef struct
 {
   GtkApplicationImplDBus dbus;
-
 } GtkApplicationImplX11;
 
 G_DEFINE_TYPE (GtkApplicationImplX11, gtk_application_impl_x11, GTK_TYPE_APPLICATION_IMPL_DBUS)
@@ -63,6 +65,30 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
+gtk_application_impl_x11_handle_window_map (GtkApplicationImpl *impl,
+                                            GtkWindow          *window)
+{
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+  GdkSurface *gdk_surface;
+  GVariant *state;
+
+  if (!GTK_IS_APPLICATION_WINDOW (window))
+    return;
+
+  gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
+
+  if (!GDK_IS_X11_SURFACE (gdk_surface))
+    return;
+
+  state = gtk_application_impl_dbus_get_window_state (dbus, window);
+  if (state)
+    {
+      gdk_x11_toplevel_restore_state (GDK_TOPLEVEL (gdk_surface), state);
+      g_variant_unref (state);
+    }
+}
+
+static void
 gtk_application_impl_x11_init (GtkApplicationImplX11 *x11)
 {
 }
@@ -81,10 +107,24 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
+gtk_application_impl_x11_collect_window_state (GtkApplicationImpl   *impl,
+                                               GtkApplicationWindow *window,
+                                               GVariantBuilder      *state)
+{
+  GdkSurface *surface;
+
+  surface = gtk_native_get_surface (GTK_NATIVE (window));
+  gdk_x11_toplevel_save_state (GDK_TOPLEVEL (surface), state);
+}
+
+static void
 gtk_application_impl_x11_class_init (GtkApplicationImplX11Class *class)
 {
   GtkApplicationImplClass *impl_class = GTK_APPLICATION_IMPL_CLASS (class);
 
   impl_class->handle_window_realize = gtk_application_impl_x11_handle_window_realize;
+
+  impl_class->handle_window_map = gtk_application_impl_x11_handle_window_map;
   impl_class->before_emit = gtk_application_impl_x11_before_emit;
+  impl_class->collect_window_state = gtk_application_impl_x11_collect_window_state;
 }

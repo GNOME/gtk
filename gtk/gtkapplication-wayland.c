@@ -22,10 +22,13 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkapplicationwindowprivate.h"
 #include "gtknative.h"
+#include "gtkprivate.h"
 
 #include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdktoplevel-wayland-private.h>
+#include <gdk/wayland/gdkdisplay-wayland.h>
 
 
 typedef struct
@@ -75,6 +78,10 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GdkSurface *gdk_surface;
   char *window_path;
+  GVariant *state;
+  char *id = NULL;
+
+  GTK_DEBUG (SESSION, "Handle window realize");
 
   gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
@@ -92,6 +99,23 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
                                             dbus->unique_name);
 
   g_free (window_path);
+
+  state = gtk_application_impl_dbus_get_window_state (dbus, window);
+  if (state)
+    {
+      g_variant_lookup (state, "session-id", "s", &id);
+      GTK_DEBUG (SESSION, "Found saved session ID %s", id);
+    }
+  else
+    {
+      id = g_uuid_string_random ();
+      GTK_DEBUG (SESSION, "No saved session ID, using %s", id);
+    }
+
+  GTK_DEBUG (SESSION, "Set Wayland toplevel session ID: %s", id);
+  gdk_wayland_toplevel_set_session_id (GDK_TOPLEVEL (gdk_surface), id);
+  gdk_wayland_toplevel_restore_from_session (GDK_TOPLEVEL (gdk_surface));
+  g_free (id);
 
   impl_class->handle_window_realize (impl, window);
 }
@@ -116,9 +140,9 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
                                              GtkWindow          *window)
 {
   GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
-  GSList *iter;
+  GdkSurface *surface;
 
-  for (iter = wayland->inhibitors; iter; iter = iter->next)
+  for (GSList *iter = wayland->inhibitors; iter; iter = iter->next)
     {
       GtkApplicationWaylandInhibitor *inhibitor = iter->data;
 
@@ -133,6 +157,9 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
             }
         }
     }
+
+  surface = gtk_native_get_surface (GTK_NATIVE (window));
+  gdk_wayland_toplevel_remove_from_session (GDK_TOPLEVEL (surface));
 }
 
 static guint
@@ -201,6 +228,87 @@ gtk_application_impl_wayland_uninhibit (GtkApplicationImpl *impl,
 }
 
 static void
+gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
+                                      gboolean            support_save)
+{
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+  GdkDisplay *display = gdk_display_get_default ();
+  enum xx_session_manager_v1_reason wl_reason;
+  char *id = NULL;
+  GVariant *state;
+
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->startup (impl, support_save);
+
+  if (!support_save)
+    return;
+
+  state = gtk_application_impl_retrieve_state (impl);
+  if (state)
+    {
+      GVariant *global = g_variant_get_child_value (state, 0);
+      g_variant_lookup (global, "wayland-session", "s", &id);
+      g_clear_pointer (&global, g_variant_unref);
+      g_clear_pointer (&state, g_variant_unref);
+    }
+
+  switch (dbus->reason)
+    {
+    case GTK_RESTORE_REASON_LAUNCH:
+      wl_reason = XX_SESSION_MANAGER_V1_REASON_LAUNCH;
+      break;
+
+    case GTK_RESTORE_REASON_RESTORE:
+      wl_reason = XX_SESSION_MANAGER_V1_REASON_SESSION_RESTORE;
+      break;
+
+    case GTK_RESTORE_REASON_RECOVER:
+      wl_reason = XX_SESSION_MANAGER_V1_REASON_RECOVER;
+      break;
+
+    case GTK_RESTORE_REASON_PRISTINE:
+      wl_reason = XX_SESSION_MANAGER_V1_REASON_LAUNCH;
+      g_clear_pointer (&id, g_free);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  GTK_DEBUG (SESSION, "Wayland register session ID %s", id);
+  gdk_wayland_display_register_session (display, wl_reason, id);
+  g_free (id);
+}
+
+static void
+gtk_application_impl_wayland_collect_window_state (GtkApplicationImpl   *impl,
+                                                   GtkApplicationWindow *window,
+                                                   GVariantBuilder      *state)
+{
+  GdkSurface *surface;
+  const char *session_id;
+
+  surface = gtk_native_get_surface (GTK_NATIVE (window));
+
+  session_id = gdk_wayland_toplevel_get_session_id (GDK_TOPLEVEL (surface));
+  if (session_id)
+    g_variant_builder_add (state, "{sv}", "session-id", g_variant_new_string (session_id));
+}
+
+static void
+gtk_application_impl_wayland_collect_global_state (GtkApplicationImpl *impl,
+                                                   GVariantBuilder    *state)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  const char *id;
+
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->collect_global_state (impl, state);
+
+  id = gdk_wayland_display_get_session_id (display);
+
+  if (id)
+    g_variant_builder_add (state, "{sv}", "wayland-session", g_variant_new_string (id));
+}
+
+static void
 gtk_application_impl_wayland_init (GtkApplicationImplWayland *wayland)
 {
 }
@@ -210,17 +318,15 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
 {
   GtkApplicationImplClass *impl_class = GTK_APPLICATION_IMPL_CLASS (class);
 
+  impl_class->handle_window_realize = gtk_application_impl_wayland_handle_window_realize;
+  impl_class->before_emit = gtk_application_impl_wayland_before_emit;
+  impl_class->window_removed = gtk_application_impl_wayland_window_removed;
+  impl_class->inhibit = gtk_application_impl_wayland_inhibit;
+  impl_class->uninhibit = gtk_application_impl_wayland_uninhibit;
+  impl_class->startup = gtk_application_impl_wayland_startup;
+  impl_class->collect_window_state = gtk_application_impl_wayland_collect_window_state;
+  impl_class->collect_global_state = gtk_application_impl_wayland_collect_global_state;
+
   class->dbus_inhibit = impl_class->inhibit;
   class->dbus_uninhibit = impl_class->uninhibit;
-
-  impl_class->handle_window_realize =
-    gtk_application_impl_wayland_handle_window_realize;
-  impl_class->before_emit =
-    gtk_application_impl_wayland_before_emit;
-  impl_class->window_removed =
-    gtk_application_impl_wayland_window_removed;
-  impl_class->inhibit =
-    gtk_application_impl_wayland_inhibit;
-  impl_class->uninhibit =
-    gtk_application_impl_wayland_uninhibit;
 }

@@ -5544,6 +5544,57 @@ gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->unexport_handle = gdk_x11_toplevel_unexport_handle;
 }
 
+void
+gdk_x11_toplevel_save_state (GdkToplevel     *toplevel,
+                             GVariantBuilder *builder)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  int x, y, width, height;
+
+  g_variant_builder_add (builder, "{sv}", "maximized",
+                         g_variant_new_boolean ((surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0));
+  g_variant_builder_add (builder, "{sv}", "fullscreen",
+                         g_variant_new_boolean ((surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN) != 0));
+
+  gdk_surface_get_geometry (surface, &x, &y, &width, &height);
+  g_variant_builder_add (builder, "{sv}", "geometry",
+                         g_variant_new ("(iiii)", x, y, width, height));
+}
+
+void
+gdk_x11_toplevel_restore_state (GdkToplevel *toplevel,
+                                GVariant    *state)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  gboolean maximized, fullscreen;
+
+  if (!g_variant_lookup (state, "maximized", "b", &maximized))
+    maximized = FALSE;
+
+  if (!g_variant_lookup (state, "fullscreen", "b", &fullscreen))
+    fullscreen = FALSE;
+
+  if (maximized)
+    gdk_x11_surface_maximize (surface);
+  else
+    gdk_x11_surface_unmaximize (surface);
+
+  if (fullscreen)
+    gdk_x11_surface_fullscreen (surface);
+  else
+    gdk_x11_surface_unfullscreen (surface);
+
+  if (!maximized && !fullscreen)
+    {
+      int x, y, width, height;
+
+      if (g_variant_lookup (state, "geometry", "(iiii)", &x, &y, &width, &height))
+        {
+          x11_surface_move_resize (surface, x, y, width, height);
+        }
+    }
+}
+
 typedef struct {
   GdkX11Surface parent_instance;
 } GdkX11DragSurface;
@@ -5623,4 +5674,3 @@ gdk_x11_drag_surface_new (GdkDisplay *display)
                        "display", display,
                        NULL);
 }
-

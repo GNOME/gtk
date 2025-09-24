@@ -45,6 +45,7 @@
 #include <gdk/wayland/xdg-system-bell-v1-client-protocol.h>
 #include <gdk/wayland/cursor-shape-v1-client-protocol.h>
 #include <gdk/wayland/xdg-toplevel-icon-v1-client-protocol.h>
+#include <gdk/wayland/xx-session-management-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -130,6 +131,9 @@ struct _GdkWaylandDisplay
   struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
   struct wp_cursor_shape_manager_v1 *cursor_shape;
   struct xdg_toplevel_icon_manager_v1 *toplevel_icon;
+  struct xx_session_manager_v1 *xx_session_manager;
+  struct xx_session_v1 *xx_session;
+
   GdkWaylandColor *color;
 
   GList *async_roundtrips;
@@ -157,6 +161,8 @@ struct _GdkWaylandDisplay
 
   GListStore *monitors;
 
+  char *session_id;
+
   gint64 last_bell_time_ms;
 };
 
@@ -174,6 +180,15 @@ void       gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
                                                struct wl_event_queue *event_queue);
 
 GdkDisplay *_gdk_wayland_display_open (const char *display_name);
+
+void                    gdk_wayland_display_register_session    (GdkDisplay *display,
+                                                                 enum xx_session_manager_v1_reason reason,
+                                                                 const char *name);
+
+void                    gdk_wayland_display_unregister_session  (GdkDisplay *display);
+
+const char *            gdk_wayland_display_get_session_id      (GdkDisplay *display);
+
 
 G_END_DECLS
 
