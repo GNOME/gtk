@@ -306,7 +306,12 @@ tracker_item_changed (GObject    *object,
   const char *action_name = gtk_menu_tracker_item_get_action_name (trackerItem);
 
   if (focus_widget != NULL && action_name != NULL)
-    gtk_widget_activate_action (focus_widget, action_name, NULL);
+    {
+      GVariant *action_target = gtk_menu_tracker_item_get_action_target (trackerItem);
+      gtk_widget_activate_action_variant (focus_widget, action_name, action_target);
+      if (action_target)
+        g_variant_unref (action_target);
+    }
   else
     gtk_menu_tracker_item_activated (trackerItem);
 }
