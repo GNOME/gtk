@@ -377,6 +377,10 @@
                 </child>
                 <child>
                   <object class="GtkGrid">
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="width-request">680</property>
+                    <property name="height-request">680</property>
                     <child>
                       <object class="GtkImage" id="image">
                         <style><class name="grid-image"/></style>
