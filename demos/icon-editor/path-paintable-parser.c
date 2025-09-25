@@ -643,7 +643,7 @@ start_element_cb (GMarkupParseContext  *context,
   gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
   gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
   min_stroke_width = 0.5;
-  max_stroke_width = 5;
+  max_stroke_width = 4;
 
   if (stroke_width_attr)
     {
@@ -654,8 +654,8 @@ start_element_cb (GMarkupParseContext  *context,
 
       gsk_stroke_set_line_width (stroke, w);
 
-      min_stroke_width = w * 100.0 / 400.0;
-      max_stroke_width = w * 1000.0 / 400.0;
+      min_stroke_width = w / 2;
+      max_stroke_width = w * 2;
     }
 
   if (gtk_stroke_width_attr)
