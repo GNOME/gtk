@@ -245,7 +245,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_FILLER;
 
     case GTK_ACCESSIBLE_ROLE_SWITCH:
-      return ATSPI_ROLE_CHECK_BOX;
+      return ATSPI_ROLE_SWITCH;
 
     case GTK_ACCESSIBLE_ROLE_TAB:
       return ATSPI_ROLE_PAGE_TAB;
