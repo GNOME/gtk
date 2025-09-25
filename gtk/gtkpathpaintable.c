@@ -1217,17 +1217,17 @@ start_element_cb (GMarkupParseContext  *context,
 
   stroke_color.alpha *= stroke_opacity;
 
+  stroke_min_width = 1;
   stroke_width = 2;
-  stroke_min_width = 0.5;
-  stroke_max_width = 5;
+  stroke_max_width = 4;
 
   if (stroke_width_attr)
     {
       if (!parse_float ("stroke-width", stroke_width_attr, POSITIVE, &stroke_width, error))
         goto cleanup;
 
-      stroke_min_width = stroke_width * 100.0 / 400.0;
-      stroke_max_width = stroke_width * 1000.0 / 400.0;
+      stroke_min_width = stroke_width / 2;
+      stroke_max_width = stroke_width * 2;
     }
 
   if (gtk_stroke_width_attr)
