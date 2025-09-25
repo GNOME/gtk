@@ -451,6 +451,20 @@ temp_file_changed (GFileMonitor      *monitor,
 }
 
 static void
+file_launched (GObject      *source,
+               GAsyncResult *result,
+               gpointer      data)
+{
+  GtkFileLauncher *launcher = GTK_FILE_LAUNCHER (source);
+  g_autoptr (GError) error = NULL;
+
+  if (!gtk_file_launcher_launch_finish (launcher, result, &error))
+    {
+      g_print ("Failed to launch path editor: %s", error->message);
+    }
+}
+
+static void
 edit_path (PathEditor *self)
 {
   GString *str;
@@ -461,13 +475,14 @@ edit_path (PathEditor *self)
   gssize written;
   g_autoptr (GError) error = NULL;
   GFileMonitor *monitor;
-  g_autoptr (GSubprocess) subprocess = NULL;
   g_autoptr (GskStroke) stroke = NULL;
   guint symbolic;
   GdkRGBA color;
   const char *linecap[] = { "butt", "round", "square" };
   const char *linejoin[] = { "miter", "round", "bevel" };
   g_autoptr (GskPath) path = NULL;
+  g_autoptr(GtkFileLauncher) launcher = NULL;
+  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
 
   path = path_to_svg_path (path_paintable_get_path (self->paintable, self->path));
 
@@ -523,24 +538,11 @@ edit_path (PathEditor *self)
   g_signal_connect_object (monitor, "changed",
                            G_CALLBACK (temp_file_changed), self, G_CONNECT_DEFAULT);
 
-  g_print ("Running: flatpak run --command=inkscape --file-forwarding org.inkscape.Inkscape @@ %s @@\n", g_file_peek_path (file));
+  launcher = gtk_file_launcher_new (file);
 
-  subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, &error,
-                                 "flatpak",
-                                 "run",
-                                 "--command=inkscape",
-                                 "--file-forwarding",
-                                 "org.inkscape.Inkscape",
-                                 "@@",
-                                 g_file_peek_path (file),
-                                 "@@",
-                                 NULL);
+  gtk_file_launcher_set_writable (launcher, TRUE);
 
-  if (!subprocess)
-    {
-      show_error (self, "Editing Failed", error->message);
-      return;
-    }
+  gtk_file_launcher_launch (launcher, GTK_WINDOW (root), NULL, file_launched, self);
 }
 
 static void
