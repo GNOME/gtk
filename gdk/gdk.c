@@ -456,7 +456,7 @@ environment_has_portals (void)
     return FALSE;
 
   g_variant_get (result, "(as)", &activatable_names);
-  while (g_variant_iter_next (activatable_names, "s", &name))
+  while (g_variant_iter_next (activatable_names, "&s", &name))
     if (g_str_equal (name, PORTAL_BUS_NAME))
       {
         has_portals = TRUE;
