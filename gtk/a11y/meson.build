@@ -25,6 +25,8 @@ if gtk_a11y_backends.contains('atspi')
     'gtkatspitext.c',
     'gtkatspiutils.c',
     'gtkatspivalue.c',
+    'gtkatspihypertext.c',
+    'gtkatspihyperlink.c',
   ])
 
   gtk_atspi_public_headers = files([

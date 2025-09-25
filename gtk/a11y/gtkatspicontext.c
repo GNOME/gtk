@@ -35,6 +35,8 @@
 #include "gtkatspiutilsprivate.h"
 #include "gtkatspivalueprivate.h"
 #include "gtkatspicomponentprivate.h"
+#include "gtkatspihypertextprivate.h"
+#include "gtkatspihyperlinkprivate.h"
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-action.h"
 #include "a11y/atspi/atspi-editabletext.h"
@@ -42,6 +44,8 @@
 #include "a11y/atspi/atspi-value.h"
 #include "a11y/atspi/atspi-selection.h"
 #include "a11y/atspi/atspi-component.h"
+#include "a11y/atspi/atspi-hyperlink.h"
+#include "a11y/atspi/atspi-hypertext.h"
 
 #include "gtkdebug.h"
 #include "gtkprivate.h"
@@ -1454,6 +1458,36 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
         g_dbus_connection_register_object (self->connection,
                                            self->context_path,
                                            (GDBusInterfaceInfo *) &atspi_action_interface,
+                                           vtable,
+                                           self,
+                                           NULL,
+                                           NULL);
+      self->n_registered_objects++;
+    }
+
+  vtable = gtk_atspi_get_hypertext_vtable (accessible);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_hypertext_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+        g_dbus_connection_register_object (self->connection,
+                                           self->context_path,
+                                           (GDBusInterfaceInfo *) &atspi_hypertext_interface,
+                                           vtable,
+                                           self,
+                                           NULL,
+                                           NULL);
+      self->n_registered_objects++;
+    }
+
+  vtable = gtk_atspi_get_hyperlink_vtable (accessible);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_hyperlink_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+        g_dbus_connection_register_object (self->connection,
+                                           self->context_path,
+                                           (GDBusInterfaceInfo *) &atspi_hyperlink_interface,
                                            vtable,
                                            self,
                                            NULL,

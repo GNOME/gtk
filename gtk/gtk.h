@@ -33,6 +33,7 @@
 #include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkaccessible.h>
+#include <gtk/gtkaccessiblehypertext.h>
 #include <gtk/gtkaccessiblerange.h>
 #include <gtk/gtkaccessibletext.h>
 #include <gtk/gtkactionable.h>
