@@ -34,14 +34,6 @@
 typedef struct
 {
   GtkApplicationImplDBusClass parent_class;
-
-  /* stores the dbus version of the overridden methods */
-  guint (*dbus_inhibit) (GtkApplicationImpl         *impl,
-                         GtkWindow                  *window,
-                         GtkApplicationInhibitFlags  flags,
-                         const char                 *reason);
-  void (*dbus_uninhibit) (GtkApplicationImpl *impl,
-                          guint               cookie);
 } GtkApplicationImplWaylandClass;
 
 typedef struct
@@ -196,7 +188,7 @@ gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
     }
 
   if (flags)
-    inhibitor->dbus_cookie = ((GtkApplicationImplWaylandClass *) G_OBJECT_GET_CLASS (wayland))->dbus_inhibit (impl, window, flags, reason);
+    inhibitor->dbus_cookie = GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->inhibit (impl, window, flags, reason);
 
   return inhibitor->cookie;
 }
@@ -215,7 +207,7 @@ gtk_application_impl_wayland_uninhibit (GtkApplicationImpl *impl,
       if (inhibitor->cookie == cookie)
         {
           if (inhibitor->dbus_cookie)
-            ((GtkApplicationImplWaylandClass *) G_OBJECT_GET_CLASS (wayland))->dbus_uninhibit (impl, inhibitor->dbus_cookie);
+            GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->uninhibit (impl, inhibitor->dbus_cookie);
           if (inhibitor->surface)
             gdk_wayland_toplevel_uninhibit_idle (GDK_TOPLEVEL (inhibitor->surface));
           gtk_application_wayland_inhibitor_free (inhibitor);
@@ -326,7 +318,4 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
   impl_class->startup = gtk_application_impl_wayland_startup;
   impl_class->collect_window_state = gtk_application_impl_wayland_collect_window_state;
   impl_class->collect_global_state = gtk_application_impl_wayland_collect_global_state;
-
-  class->dbus_inhibit = impl_class->inhibit;
-  class->dbus_uninhibit = impl_class->uninhibit;
 }
