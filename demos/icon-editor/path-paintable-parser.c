@@ -298,6 +298,7 @@ start_element_cb (GMarkupParseContext  *context,
   gsize idx;
   gsize attach_to;
   float attach_pos;
+  float stroke_width;
   float min_stroke_width;
   float max_stroke_width;
 
@@ -639,24 +640,22 @@ start_element_cb (GMarkupParseContext  *context,
 
   stroke_color.alpha *= stroke_opacity;
 
-  stroke = gsk_stroke_new (2);
+  stroke_width = 2;
+
+  stroke = gsk_stroke_new (stroke_width);
   gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
   gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
-  min_stroke_width = 0.5;
-  max_stroke_width = 4;
 
   if (stroke_width_attr)
     {
-      float w;
-
-      if (!parse_float ("stroke-width", stroke_width_attr, POSITIVE, &w, error))
+      if (!parse_float ("stroke-width", stroke_width_attr, POSITIVE, &stroke_width, error))
         goto cleanup;
 
-      gsk_stroke_set_line_width (stroke, w);
-
-      min_stroke_width = w / 2;
-      max_stroke_width = w * 2;
+      gsk_stroke_set_line_width (stroke, stroke_width);
     }
+
+  min_stroke_width = stroke_width * 0.25;
+  max_stroke_width = stroke_width * 1.5;
 
   if (gtk_stroke_width_attr)
     {
