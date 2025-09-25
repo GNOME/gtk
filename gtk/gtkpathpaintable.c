@@ -1217,18 +1217,15 @@ start_element_cb (GMarkupParseContext  *context,
 
   stroke_color.alpha *= stroke_opacity;
 
-  stroke_min_width = 1;
   stroke_width = 2;
-  stroke_max_width = 4;
-
   if (stroke_width_attr)
     {
       if (!parse_float ("stroke-width", stroke_width_attr, POSITIVE, &stroke_width, error))
         goto cleanup;
-
-      stroke_min_width = stroke_width / 2;
-      stroke_max_width = stroke_width * 2;
     }
+
+  stroke_min_width = stroke_width * 0.25;
+  stroke_max_width = stroke_width * 1.5;
 
   if (gtk_stroke_width_attr)
     {
@@ -1244,7 +1241,8 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (!parse_float ("gpa:stroke-width", str[0], POSITIVE, &stroke_min_width, error) ||
           !parse_float ("gpa:stroke-width", str[1], POSITIVE, &stroke_width, error) ||
-          !parse_float ("gpa:stroke-width", str[2], POSITIVE, &stroke_max_width, error))
+          !parse_float ("gpa:stroke-width", str[2], POSITIVE, &stroke_max_width, error) ||
+          stroke_width < stroke_min_width || stroke_width > stroke_max_width)
         {
           g_strfreev (str);
           goto cleanup;
