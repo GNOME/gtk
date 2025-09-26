@@ -27,6 +27,7 @@
 #include "gtklabelprivate.h"
 
 #include "gtkaccessibletextprivate.h"
+#include "gtkaccessiblehypertextprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkcsscolorvalueprivate.h"
@@ -374,6 +375,7 @@ typedef struct
   char *title;     /* the title attribute, used as tooltip */
 
   GtkCssNode *cssnode;
+  GtkAccessibleHyperlink *accessible;
 
   gboolean visited; /* get set when the link is activated; this flag
                      * gets preserved over later set_markup() calls
@@ -476,13 +478,19 @@ static void gtk_label_move_cursor        (GtkLabel        *self,
 static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface);
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
+static void     gtk_label_accessible_init (GtkAccessibleInterface *iface);
 static void     gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface);
+static void     gtk_label_accessible_hypertext_init (GtkAccessibleHypertextInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_label_buildable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                gtk_label_accessible_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_TEXT,
-                                                gtk_label_accessible_text_init))
+                                                gtk_label_accessible_text_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_HYPERTEXT,
+                                                gtk_label_accessible_hypertext_init))
 
 static void
 add_move_binding (GtkWidgetClass *widget_class,
@@ -1583,8 +1591,9 @@ gtk_label_clear_links (GtkLabel *self)
 
   for (i = 0; i < self->select_info->n_links; i++)
     {
-      const GtkLabelLink *link = &self->select_info->links[i];
+      GtkLabelLink *link = &self->select_info->links[i];
       gtk_css_node_set_parent (link->cssnode, NULL);
+      g_clear_object (&link->accessible);
       g_free (link->uri);
       g_free (link->title);
     }
@@ -1838,6 +1847,16 @@ gtk_label_query_tooltip (GtkWidget  *widget,
                                                                    tooltip);
 }
 
+static void
+set_link_focus (GtkLabelLink *link,
+                gboolean      focused)
+{
+  if (link->accessible)
+    gtk_accessible_hyperlink_set_platform_state (link->accessible,
+                                                 GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
+                                                 focused);
+}
+
 static gboolean
 gtk_label_focus (GtkWidget        *widget,
                  GtkDirectionType  direction)
@@ -1864,6 +1883,7 @@ gtk_label_focus (GtkWidget        *widget,
           if (focus_link && direction == GTK_DIR_TAB_BACKWARD)
             {
               int i;
+              set_link_focus (focus_link, TRUE);
               for (i = info->n_links - 1; i >= 0; i--)
                 {
                   focus_link = &info->links[i];
@@ -1892,6 +1912,10 @@ gtk_label_focus (GtkWidget        *widget,
       if (info->selection_anchor != info->selection_end)
         goto out;
 
+      focus_link = gtk_label_get_focus_link (self, NULL);
+      if (focus_link)
+        set_link_focus (focus_link, FALSE);
+
       index = info->selection_anchor;
 
       if (direction == GTK_DIR_TAB_FORWARD)
@@ -1899,10 +1923,11 @@ gtk_label_focus (GtkWidget        *widget,
           guint i;
           for (i = 0; i < info->n_links; i++)
             {
-              const GtkLabelLink *link = &info->links[i];
+              GtkLabelLink *link = &info->links[i];
 
               if (link->start > index)
                 {
+                  set_link_focus (link, TRUE);
                   if (!range_is_in_ellipsis (self, link->start, link->end))
                     {
                       gtk_label_select_region_index (self, link->start, link->start);
@@ -1920,6 +1945,7 @@ gtk_label_focus (GtkWidget        *widget,
 
               if (link->end < index)
                 {
+                  set_link_focus (link, TRUE);
                   if (!range_is_in_ellipsis (self, link->start, link->end))
                     {
                       gtk_label_select_region_index (self, link->start, link->start);
@@ -1943,6 +1969,8 @@ gtk_label_focus (GtkWidget        *widget,
 
       if (!focus_link)
         goto out;
+
+      set_link_focus (focus_link, FALSE);
 
       switch (direction)
         {
@@ -1995,6 +2023,7 @@ gtk_label_focus (GtkWidget        *widget,
       if (new_index != -1 && new_index < info->n_links)
         {
           focus_link = &info->links[new_index];
+          set_link_focus (focus_link, TRUE);
           info->selection_anchor = focus_link->start;
           info->selection_end = focus_link->start;
           gtk_widget_queue_draw (widget);
@@ -3585,6 +3614,14 @@ selection_style_changed_cb (GtkCssNode        *node,
 }
 
 static void
+clear_label_link (gpointer data)
+{
+  GtkLabelLink *link = data;
+
+  g_clear_object (&link->accessible);
+}
+
+static void
 start_element_handler (GMarkupParseContext  *context,
                        const char           *element_name,
                        const char          **attribute_names,
@@ -3661,13 +3698,18 @@ start_element_handler (GMarkupParseContext  *context,
         }
 
       if (!pdata->links)
-        pdata->links = g_array_new (FALSE, TRUE, sizeof (GtkLabelLink));
+        {
+          pdata->links = g_array_new (FALSE, TRUE, sizeof (GtkLabelLink));
+          g_array_set_clear_func (pdata->links, clear_label_link);
+        }
 
       link.uri = g_strdup (uri);
       link.title = g_strdup (title);
+      link.accessible = NULL;
 
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (pdata->label));
       link.cssnode = gtk_css_node_new ();
+
       gtk_css_node_set_name (link.cssnode, g_quark_from_static_string ("link"));
       gtk_css_node_set_parent (link.cssnode, widget_node);
       if (class)
@@ -3726,6 +3768,7 @@ end_element_handler (GMarkupParseContext  *context,
   if (!strcmp (element_name, "a"))
     {
       GtkLabelLink *link = &g_array_index (pdata->links, GtkLabelLink, pdata->links->len - 1);
+
       link->end = pdata->text_len;
     }
   else
@@ -6255,6 +6298,79 @@ gtk_label_get_tabs (GtkLabel *self)
   return self->tabs ? pango_tab_array_copy (self->tabs) : NULL;
 }
 
+/* {{{ GtkAccessible implementation */
+
+static void
+gtk_label_link_ensure_accessible (GtkLabel     *self,
+                                  GtkLabelLink *link,
+                                  gsize         index)
+{
+  if (!link->accessible)
+    {
+      GtkAccessibleTextRange range;
+      GtkLabelLink *next = NULL;
+
+      range.start = link->start;
+      range.length = link->end - link->start;
+      link->accessible = gtk_accessible_hyperlink_new (GTK_ACCESSIBLE_HYPERTEXT (self), index, link->uri, &range);
+
+      if (index + 1 < self->select_info->n_links)
+        {
+          next = &self->select_info->links[index + 1];
+          gtk_label_link_ensure_accessible (self, next, index + 1);
+        }
+
+      gtk_accessible_set_accessible_parent (GTK_ACCESSIBLE (link->accessible),
+                                            GTK_ACCESSIBLE (self),
+                                            next ? GTK_ACCESSIBLE (next->accessible) : NULL);
+
+      if (link->title)
+        gtk_accessible_update_property (GTK_ACCESSIBLE (link->accessible),
+                                        GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                        link->title,
+                                        -1);
+
+      gtk_accessible_hyperlink_set_platform_state (link->accessible,
+                                                   GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
+                                                   TRUE);
+
+      if (link == gtk_label_get_focus_link (self, NULL))
+        gtk_accessible_hyperlink_set_platform_state (link->accessible,
+                                                     GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
+                                                     TRUE);
+    }
+}
+
+static GtkAccessible *
+gtk_label_accessible_get_first_accessible_child (GtkAccessible *self)
+{
+  GtkLabel *label = GTK_LABEL (self);
+
+  if (label->select_info && label->select_info->links &&
+      0 < label->select_info->n_links)
+    {
+      GtkLabelLink *link;
+
+      link = &label->select_info->links[0];
+
+      gtk_label_link_ensure_accessible (label, link, 0);
+
+      return GTK_ACCESSIBLE (g_object_ref (link->accessible));
+    }
+
+  return NULL;
+}
+
+static void
+gtk_label_accessible_init (GtkAccessibleInterface *iface)
+{
+  GtkAccessibleInterface *parent = g_type_interface_peek_parent (iface);
+
+  *iface = *parent;
+  iface->get_first_accessible_child = gtk_label_accessible_get_first_accessible_child;
+}
+
+/* }}} */
 /* {{{ GtkAccessibleText implementation */
 
 static GBytes *
@@ -6432,6 +6548,66 @@ gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_default_attributes = gtk_label_accessible_text_get_default_attributes;
   iface->get_extents = gtk_label_accessible_text_get_extents;
   iface->get_offset = gtk_label_accessible_text_get_offset;
+}
+
+ /* }}} */
+/*  {{{ GtkAccessibleHypertext implementation */
+
+static unsigned int
+gtk_label_accessible_hypertext_get_n_links (GtkAccessibleHypertext *self)
+{
+  GtkLabel *label = GTK_LABEL (self);
+
+  if (label->select_info && label->select_info->links)
+    return label->select_info->n_links;
+
+  return 0;
+}
+
+static GtkAccessibleHyperlink *
+gtk_label_accessible_hypertext_get_link (GtkAccessibleHypertext *self,
+                                         unsigned int            index)
+{
+  GtkLabel *label = GTK_LABEL (self);
+
+  if (label->select_info && label->select_info->links &&
+      index < label->select_info->n_links)
+    {
+      GtkLabelLink *link;
+
+      link = &label->select_info->links[index];
+
+      gtk_label_link_ensure_accessible (label, link, index);
+
+      return GTK_ACCESSIBLE_HYPERLINK (link->accessible);
+    }
+
+  return NULL;
+}
+
+static unsigned int
+gtk_label_accessible_hypertext_get_link_at (GtkAccessibleHypertext *self,
+                                            unsigned int            offset)
+{
+  GtkLabel *label = GTK_LABEL (self);
+  int pos;
+  int link_index;
+
+  pos = g_utf8_offset_to_pointer (label->text, offset) - label->text;
+  link_index = _gtk_label_get_link_at (label, pos);
+
+  if (link_index != -1)
+    return (unsigned int) link_index;
+
+  return G_MAXUINT;
+}
+
+static void
+gtk_label_accessible_hypertext_init (GtkAccessibleHypertextInterface *iface)
+{
+  iface->get_n_links = gtk_label_accessible_hypertext_get_n_links;
+  iface->get_link = gtk_label_accessible_hypertext_get_link;
+  iface->get_link_at = gtk_label_accessible_hypertext_get_link_at;
 }
 
 /* }}} */

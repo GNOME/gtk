@@ -162,6 +162,7 @@ gtk_public_sources = files([
   'gtkaccelgroup.c',
   'gtkaccessible.c',
   'gtkaccessiblerange.c',
+  'gtkaccessiblehypertext.c',
   'gtkaccessibletext.c',
   'gtkaccessiblevalue.c',
   'gtkactionable.c',
