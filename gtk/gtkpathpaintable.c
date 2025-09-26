@@ -930,17 +930,17 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (state_attr)
         {
-          unsigned int state;
+          int state;
           char *end;
 
-          state = (unsigned int) g_ascii_strtoull (state_attr, &end, 10);
-          if ((end && *end != '\0') || (state > 63))
+          state = (int) g_ascii_strtoll (state_attr, &end, 10);
+          if ((end && *end != '\0') || (state < -1 || state > 63))
             {
               set_attribute_error (error, "gpa:state", state_attr);
               return;
             }
 
-          data->state = state;
+          data->state = (unsigned int) state;
         }
 
       return;
@@ -1481,7 +1481,7 @@ gtk_path_paintable_init_from_bytes (GtkPathPaintable  *self,
 
   data.paintable = self;
   data.paths = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  data.state = GTK_PATH_PAINTABLE_STATE_EMPTY;
+  data.state = 0;
   data.version = 0;
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
