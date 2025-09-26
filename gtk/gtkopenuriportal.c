@@ -335,7 +335,10 @@ open_uri (OpenUriData         *data,
       int fd, fd_id, errsv;
 
       path = g_file_peek_path (file);
-      fd = g_open (path, O_RDONLY | O_CLOEXEC);
+      if (data->flags & GTK_OPENURI_FLAGS_WRITABLE)
+        fd = g_open (path, O_RDWR | O_CLOEXEC);
+      else
+        fd = g_open (path, O_RDONLY | O_CLOEXEC);
       errsv = errno;
       if (fd == -1)
         {
