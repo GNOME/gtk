@@ -150,15 +150,18 @@ typedef struct
   char            *menubar_path;
   guint            menubar_id;
 
-  char            *instance_id;
-  GtkRestoreReason reason;
-
   /* Portal support */
   GDBusProxy      *inhibit_proxy;
   GSList          *inhibit_handles;
   guint            state_changed_handler;
-  char            *session_path;
+  char            *inhibit_session_path;
   guint            session_state;
+
+  GDBusProxy      *save_restore_proxy;
+  char            *save_restore_session_path;
+  guint            save_restore_handler;
+  char            *instance_id;
+  GtkRestoreReason reason;
 } GtkApplicationImplDBus;
 
 typedef struct

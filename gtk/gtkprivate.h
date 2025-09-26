@@ -121,6 +121,7 @@ guint gtk_get_portal_interface_version (GDBusConnection *connection,
 #define PORTAL_SCREENSHOT_INTERFACE "org.freedesktop.portal.Screenshot"
 #define PORTAL_INHIBIT_INTERFACE "org.freedesktop.portal.Inhibit"
 #define PORTAL_OPENURI_INTERFACE "org.freedesktop.portal.OpenURI"
+#define PORTAL_SAVE_RESTORE_INTERFACE "org.freedesktop.portal.SaveRestore"
 
 void            gtk_set_display_debug_flags        (GdkDisplay    *display,
                                                     GtkDebugFlags  flags);
