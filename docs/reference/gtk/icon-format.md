@@ -140,6 +140,7 @@ The following attributes can be set on elements that specify a path:
 - `gpa:animation-segment`: The length of the segment to animate (as a value between 0 and 1). This is used for the 'segment' and 'segment-alternate' animation directions
 - `gpa:transition-type`: The transition to use. One of 'none', 'animate', 'morph' or 'fade'
 - `gpa:transition-duration`: The transition duration (in seconds)
+- `gpa:transition-delay`: The transition delay (in seconds). Can be negative, for overlaps
 - `gpa:transition-easing`: The easing function for transitions (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
 - `gpa:origin`: Where to start the draw transition. A number between 0 and 1
 - `gpa:attach-to`: The ID of another path to attach to

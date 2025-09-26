@@ -252,6 +252,49 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="transition_delay_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">transition_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">D_elay</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">transition_delay</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="transition_delay">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">transition_expander</lookup>
+              </closure>
+            </binding>
+            <signal name="value-changed" handler="transition_changed" swapped="yes"/>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">-3</property>
+                <property name="upper">3</property>
+                <property name="step-increment">0.1</property>
+              </object>
+            </property>
+            <property name="numeric">1</property>
+            <property name="digits">2</property>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkLabel" id="transition_easing_label">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool">
@@ -264,7 +307,7 @@
             <property name="mnemonic-widget">transition_easing</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">7</property>
+              <property name="row">8</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -290,7 +333,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">7</property>
+              <property name="row">8</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -312,7 +355,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">8</property>
+              <property name="row">9</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -330,7 +373,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">8</property>
+              <property name="row">9</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -349,7 +392,7 @@
             <property name="mnemonic-widget">animation_direction</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">9</property>
+              <property name="row">10</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -379,7 +422,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">9</property>
+              <property name="row">10</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -398,7 +441,7 @@
             <property name="mnemonic-widget">animation_duration</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">10</property>
+              <property name="row">11</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -422,7 +465,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">10</property>
+              <property name="row">11</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -441,7 +484,7 @@
             <property name="mnemonic-widget">animation_easing</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">11</property>
+              <property name="row">12</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -467,7 +510,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">11</property>
+              <property name="row">12</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -486,7 +529,7 @@
             <property name="mnemonic-widget">animation_segment</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">12</property>
+              <property name="row">13</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -510,7 +553,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">12</property>
+              <property name="row">13</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -532,7 +575,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">13</property>
+              <property name="row">14</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -542,7 +585,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
             <layout>
-              <property name="row">13</property>
+              <property name="row">14</property>
               <property name="column">1</property>
             </layout>
             <signal name="notify::symbolic" handler="stroke_changed" swapped="yes"/>
@@ -571,7 +614,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">14</property>
+              <property name="row">15</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -588,7 +631,7 @@
             <signal name="notify::middle" handler="stroke_changed" swapped="yes"/>
             <signal name="notify::value2" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">14</property>
+              <property name="row">15</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -608,7 +651,7 @@
             <property name="mnemonic-widget">min_width</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">15</property>
+              <property name="row">16</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -636,7 +679,7 @@
             </property>
             <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
-              <property name="row">15</property>
+              <property name="row">16</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -656,7 +699,7 @@
             <property name="mnemonic-widget">line_width</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">16</property>
+              <property name="row">17</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -684,7 +727,7 @@
             </property>
             <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
-              <property name="row">16</property>
+              <property name="row">17</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -704,7 +747,7 @@
             <property name="mnemonic-widget">max_width</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">17</property>
+              <property name="row">18</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -732,7 +775,7 @@
             </property>
             <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
             <layout>
-              <property name="row">17</property>
+              <property name="row">18</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -751,7 +794,7 @@
             <property name="mnemonic-widget">line_join</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">18</property>
+              <property name="row">19</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -775,7 +818,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">18</property>
+              <property name="row">19</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -794,7 +837,7 @@
             <property name="mnemonic-widget">line_cap</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">19</property>
+              <property name="row">20</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -818,7 +861,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">19</property>
+              <property name="row">20</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -840,7 +883,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">20</property>
+              <property name="row">21</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -850,7 +893,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
             <layout>
-              <property name="row">20</property>
+              <property name="row">21</property>
               <property name="column">1</property>
             </layout>
             <signal name="notify::symbolic" handler="fill_changed" swapped="yes"/>
@@ -871,7 +914,7 @@
             <property name="mnemonic-widget">fill_rule</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">21</property>
+              <property name="row">22</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -894,7 +937,7 @@
             </property>
             <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
             <layout>
-              <property name="row">21</property>
+              <property name="row">22</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -916,7 +959,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">22</property>
+              <property name="row">23</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -926,7 +969,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
             <layout>
-              <property name="row">22</property>
+              <property name="row">23</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -945,7 +988,7 @@
             <property name="mnemonic-widget">attach_at</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">23</property>
+              <property name="row">24</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -972,7 +1015,7 @@
               <mark value="1" position="bottom"/>
             </marks>
             <layout>
-              <property name="row">23</property>
+              <property name="row">24</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -987,6 +1030,7 @@
       <widget name="origin_label"/>
       <widget name="transition_expander"/>
       <widget name="transition_duration_label"/>
+      <widget name="transition_delay_label"/>
       <widget name="transition_easing_label"/>
       <widget name="animation_expander"/>
       <widget name="animation_duration_label"/>
