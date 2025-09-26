@@ -160,13 +160,16 @@ ensure_render_paintable (PathPaintable *self)
 {
   if (!self->render_paintable)
     {
-      GBytes *bytes = path_paintable_serialize (self);
+      GBytes *bytes = path_paintable_serialize (self, self->state);
       GError *error = NULL;
 
       self->render_paintable = gtk_path_paintable_new_from_bytes (bytes, &error);
 
       if (!self->render_paintable)
-        g_error ("%s", error->message);
+        {
+          g_print ("Failed to parse\n%s\n", (const char *) g_bytes_get_data (bytes, NULL));
+          g_error ("%s", error->message);
+        }
 
       gtk_path_paintable_set_weight (self->render_paintable, self->weight);
 

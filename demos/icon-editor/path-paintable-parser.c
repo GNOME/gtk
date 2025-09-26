@@ -310,7 +310,9 @@ start_element_cb (GMarkupParseContext  *context,
       const char *height_attr = NULL;
       const char *keywords_attr = NULL;
       const char *version_attr = NULL;
+      const char *state_attr = NULL;
       float width, height;
+      unsigned int initial_state;
 
       markup_filter_attributes (element_name,
                                 attribute_names,
@@ -319,6 +321,7 @@ start_element_cb (GMarkupParseContext  *context,
                                 "height", &height_attr,
                                 "gpa:keywords", &keywords_attr,
                                 "gpa:version", &version_attr,
+                                "gpa:state", &state_attr,
                                 NULL);
 
       if (width_attr == NULL)
@@ -349,6 +352,24 @@ start_element_cb (GMarkupParseContext  *context,
 
           g_strfreev (keywords);
         }
+
+      initial_state = 0;
+      if (state_attr)
+        {
+          int state;
+          char *end;
+
+          state = (int) g_ascii_strtoll (state_attr, &end, 10);
+          if ((end && *end != '\0') || (state < -1 || state > 63))
+            {
+              set_attribute_error (error, "gpa:state", state_attr);
+              return;
+            }
+
+          initial_state = (unsigned int) state;
+        }
+
+      path_paintable_set_state (data->paintable, initial_state);
 
       if (version_attr)
         {
@@ -1229,7 +1250,8 @@ path_paintable_save_path (PathPaintable *self,
 static void
 path_paintable_save (PathPaintable *self,
                      GString       *str,
-                     guint          state)
+                     guint          initial_state,
+                     guint          state_to_save)
 {
   GStrv keywords;
   char buffer[G_ASCII_DTOSTR_BUF_SIZE];
@@ -1254,10 +1276,12 @@ path_paintable_save (PathPaintable *self,
       g_string_append_c (str, '\'');
     }
 
-  if (path_paintable_get_state (self) != STATE_UNSET)
+  if (initial_state != 0)
     {
-      g_string_append_printf (str,      "\n     gpa:state='%u'",
-                              path_paintable_get_state (self));
+      if (initial_state == STATE_UNSET)
+        g_string_append_printf (str,      "\n     gpa:state='-1'");
+      else
+        g_string_append_printf (str,      "\n     gpa:state='%u'", initial_state);
     }
 
   g_string_append (str, ">\n");
@@ -1265,7 +1289,7 @@ path_paintable_save (PathPaintable *self,
   for (gsize idx = 0; idx < path_paintable_get_n_paths (self); idx++)
     {
       guint64 states = path_paintable_get_path_states (self, idx);
-      if (state == STATE_UNSET || (states & (G_GUINT64_CONSTANT (1) << state)) != 0)
+      if (state_to_save == STATE_UNSET || (states & (G_GUINT64_CONSTANT (1) << state_to_save)) != 0)
         path_paintable_save_path (self, idx, str);
     }
 
@@ -1284,11 +1308,11 @@ path_paintable_save (PathPaintable *self,
  */
 GBytes *
 path_paintable_serialize_state (PathPaintable *self,
-                                guint          state)
+                                guint          state_to_save)
 {
   GString *str = g_string_new ("");
 
-  path_paintable_save (self, str, state);
+  path_paintable_save (self, str, path_paintable_get_state (self), state_to_save);
 
   return g_string_free_to_bytes (str);
 }
@@ -1325,11 +1349,12 @@ path_paintable_new_from_resource (const char *path)
 }
 
 GBytes *
-path_paintable_serialize (PathPaintable *self)
+path_paintable_serialize (PathPaintable *self,
+                          unsigned int   initial_state)
 {
   GString *str = g_string_new ("");
 
-  path_paintable_save (self, str, STATE_UNSET);
+  path_paintable_save (self, str, initial_state, STATE_UNSET);
 
   return g_string_free_to_bytes (str);
 }

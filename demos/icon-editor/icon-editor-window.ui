@@ -882,6 +882,7 @@
                     <property name="child">
                       <object class="PaintableEditor">
                         <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable" bind-flags="sync-create"/>
+                        <property name="initial-state" bind-source="IconEditorWindow" bind-property="initial-state" bind-flags="sync-create | bidirectional"/>
                       </object>
                     </property>
                   </object>

@@ -80,7 +80,8 @@ PathPaintable * path_paintable_new_from_bytes (GBytes         *bytes,
                                                GError        **error);
 PathPaintable * path_paintable_new_from_resource (const char  *path);
 
-GBytes *        path_paintable_serialize      (PathPaintable  *self);
+GBytes *        path_paintable_serialize      (PathPaintable  *self,
+                                               unsigned int    initial_state);
 
 gboolean        path_paintable_equal          (PathPaintable  *self,
                                                PathPaintable  *other);

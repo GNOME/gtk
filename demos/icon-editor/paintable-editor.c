@@ -24,12 +24,15 @@
 #include "path-paintable.h"
 
 static void size_changed (PaintableEditor *self);
+static void paintable_editor_set_initial_state (PaintableEditor *self,
+                                                unsigned int     state);
 
 struct _PaintableEditor
 {
   GtkWidget parent_instance;
 
   PathPaintable *paintable;
+  unsigned int state;
 
   GtkScrolledWindow *swin;
   GtkEntry *keywords;
@@ -38,6 +41,7 @@ struct _PaintableEditor
   GtkLabel *compat;
   GtkLabel *summary1;
   GtkLabel *summary2;
+  GtkSpinButton *initial_state;
 
   GtkBox *path_elts;
 };
@@ -50,6 +54,7 @@ struct _PaintableEditorClass
 enum
 {
   PROP_PAINTABLE = 1,
+  PROP_INITIAL_STATE,
   NUM_PROPERTIES,
 };
 
@@ -112,7 +117,7 @@ update_summary (PaintableEditor *self)
 
       if (state == STATE_UNSET)
         {
-          summary1 = g_strdup ("Current state: —");
+          summary1 = g_strdup ("Current state: -1");
           summary2 = g_strdup_printf ("%lu path elements", path_paintable_get_n_paths (self->paintable));
         }
       else
@@ -214,6 +219,10 @@ paintable_editor_set_property (GObject      *object,
       paintable_editor_set_paintable (self, g_value_get_object (value));
       break;
 
+    case PROP_INITIAL_STATE:
+      paintable_editor_set_initial_state (self, g_value_get_uint (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -232,6 +241,10 @@ paintable_editor_get_property (GObject    *object,
     {
     case PROP_PAINTABLE:
       g_value_set_object (value, self->paintable);
+      break;
+
+    case PROP_INITIAL_STATE:
+      g_value_set_uint (value, self->state);
       break;
 
     default:
@@ -281,6 +294,11 @@ paintable_editor_class_init (PaintableEditorClass *class)
                         PATH_PAINTABLE_TYPE,
                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
+  properties[PROP_INITIAL_STATE] =
+    g_param_spec_uint ("initial-state", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
@@ -293,6 +311,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary1);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary2);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, initial_state);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, path_elts);
 
   gtk_widget_class_bind_template_callback (widget_class, size_changed);
@@ -374,6 +393,20 @@ paintable_editor_set_paintable (PaintableEditor *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
+}
+
+static void
+paintable_editor_set_initial_state (PaintableEditor *self,
+                                    unsigned int     state)
+{
+  g_return_if_fail (PAINTABLE_IS_EDITOR (self));
+
+  if (self->state == state)
+    return;
+
+  self->state = state;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_STATE]);
 }
 
 /* }}} */
