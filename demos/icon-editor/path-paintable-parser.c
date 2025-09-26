@@ -112,6 +112,40 @@ parse_float (const char  *name,
   return TRUE;
 }
 
+static gboolean
+parse_duration (const char    *name,
+                const char    *value,
+                unsigned int   flags,
+                float         *f,
+                GError       **error)
+{
+  double v;
+  char *end;
+
+  v = g_ascii_strtod (value, &end);
+  if ((flags & POSITIVE) != 0 && value < 0)
+    {
+      set_attribute_error (error, name, value);
+      return FALSE;
+    }
+  else if (end && *end != '\0')
+    {
+      if (strcmp (end, "ms") == 0)
+        *f = v;
+      else if (strcmp (end, "s") == 0)
+        *f = v * 1000;
+      else
+        {
+          set_attribute_error (error, name, value);
+          return FALSE;
+        }
+    }
+  else
+    *f = v * 1000;
+
+  return TRUE;
+}
+
 static GskPath *
 circle_path_new (float cx,
                  float cy,
@@ -800,14 +834,14 @@ start_element_cb (GMarkupParseContext  *context,
   transition_duration = 0.f;
   if (transition_duration_attr)
     {
-      if (!parse_float ("gpa:transition-duration", transition_duration_attr, POSITIVE, &transition_duration, error))
+      if (!parse_duration ("gpa:transition-duration", transition_duration_attr, POSITIVE, &transition_duration, error))
         goto cleanup;
     }
 
   transition_delay = 0.f;
   if (transition_delay_attr)
     {
-      if (!parse_float ("gpa:transition-delay", transition_delay_attr, 0, &transition_delay, error))
+      if (!parse_duration ("gpa:transition-delay", transition_delay_attr, 0, &transition_delay, error))
         goto cleanup;
     }
 
@@ -906,7 +940,7 @@ start_element_cb (GMarkupParseContext  *context,
   animation_duration = 0.f;
   if (animation_duration_attr)
     {
-      if (!parse_float ("gpa:animation-duration", animation_duration_attr, POSITIVE, &animation_duration, error))
+      if (!parse_duration ("gpa:animation-duration", animation_duration_attr, POSITIVE, &animation_duration, error))
         goto cleanup;
     }
 
@@ -1093,7 +1127,7 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_animation_duration (self, idx) != 0)
     {
-      g_string_append_printf (str, "\n        gpa:animation-duration='%s'",
+      g_string_append_printf (str, "\n        gpa:animation-duration='%sms'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g",
                                                path_paintable_get_path_animation_duration (self, idx)));
       has_gtk_attr = TRUE;
@@ -1124,7 +1158,7 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_transition_duration (self, idx) != 0)
     {
-      g_string_append_printf (str, "\n        gpa:transition-duration='%s'",
+      g_string_append_printf (str, "\n        gpa:transition-duration='%sms'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g",
                                                path_paintable_get_path_transition_duration (self, idx)));
       has_gtk_attr = TRUE;
@@ -1132,7 +1166,7 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_transition_delay (self, idx) != 0)
     {
-      g_string_append_printf (str, "\n        gpa:transition-delay='%s'",
+      g_string_append_printf (str, "\n        gpa:transition-delay='%sms'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g",
                                                path_paintable_get_path_transition_delay (self, idx)));
       has_gtk_attr = TRUE;

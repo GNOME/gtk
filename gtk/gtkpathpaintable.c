@@ -130,15 +130,15 @@ typedef struct
 
   struct {
     GtkPathTransitionType type;
-    float duration;
-    float delay;
+    float duration; /* in ms */
+    float delay;    /* in ms */
     GtkEasingFunction easing;
   } transition;
 
   struct {
     GtkPathAnimationType type;
     GtkPathAnimationDirection direction;
-    float duration;
+    float duration; /* in ms */
     GtkEasingFunction easing;
     float segment;
   } animation;
@@ -705,6 +705,40 @@ parse_float (const char    *name,
       set_attribute_error (error, name, value);
       return FALSE;
     }
+  return TRUE;
+}
+
+static gboolean
+parse_duration (const char    *name,
+                const char    *value,
+                unsigned int   flags,
+                float         *f,
+                GError       **error)
+{
+  double v;
+  char *end;
+
+  v = g_ascii_strtod (value, &end);
+  if ((flags & POSITIVE) != 0 && value < 0)
+    {
+      set_attribute_error (error, name, value);
+      return FALSE;
+    }
+  else if (end && *end != '\0')
+    {
+      if (strcmp (end, "ms") == 0)
+        *f = v;
+      else if (strcmp (end, "s") == 0)
+        *f = v * 1000;
+      else
+        {
+          set_attribute_error (error, name, value);
+          return FALSE;
+        }
+    }
+  else
+    *f = v * 1000;
+
   return TRUE;
 }
 
@@ -1311,14 +1345,14 @@ start_element_cb (GMarkupParseContext  *context,
   transition_duration = 0.f;
   if (transition_duration_attr)
     {
-      if (!parse_float ("gpa:transition-duration", transition_duration_attr, POSITIVE, &transition_duration, error))
+      if (!parse_duration ("gpa:transition-duration", transition_duration_attr, POSITIVE, &transition_duration, error))
         goto cleanup;
     }
 
   transition_delay = 0.f;
   if (transition_delay_attr)
     {
-      if (!parse_float ("gpa:transition-delay", transition_delay_attr, 0, &transition_delay, error))
+      if (!parse_duration ("gpa:transition-delay", transition_delay_attr, 0, &transition_delay, error))
         goto cleanup;
     }
 
@@ -1374,7 +1408,7 @@ start_element_cb (GMarkupParseContext  *context,
   animation_duration = 0.f;
   if (animation_duration_attr)
     {
-      if (!parse_float ("gpa:animation-duration", animation_duration_attr, POSITIVE, &animation_duration, error))
+      if (!parse_duration ("gpa:animation-duration", animation_duration_attr, POSITIVE, &animation_duration, error))
         goto cleanup;
     }
 
@@ -1658,7 +1692,7 @@ paint_elt_animated (GtkPathPaintable *self,
       paint_elt_partial (self, elt, start, end, data);
       return;
     case GTK_PATH_ANIMATION_TYPE_AUTOMATIC:
-      t = (data->time - self->animation.start_time) / (elt->animation.duration * G_TIME_SPAN_SECOND);
+      t = (data->time - self->animation.start_time) / (elt->animation.duration * G_TIME_SPAN_MILLISECOND);
       break;
     default:
       g_assert_not_reached ();
@@ -1801,7 +1835,7 @@ paint (GtkPathPaintable *self,
 {
   float out_end;
 
-  out_end = self->transition.start_time + self->transition.out_duration * G_TIME_SPAN_SECOND;
+  out_end = self->transition.start_time + self->transition.out_duration * G_TIME_SPAN_MILLISECOND;
 
   if (self->transition.running &&
       self->state != self->transition.new_state &&
@@ -1835,8 +1869,8 @@ paint (GtkPathPaintable *self,
         {
           float start_time, end_time;
 
-          start_time = out_end - (elt->transition.duration + elt->transition.delay) * G_TIME_SPAN_SECOND;
-          end_time = start_time + elt->transition.duration * G_TIME_SPAN_SECOND;
+          start_time = out_end - (elt->transition.duration + elt->transition.delay) * G_TIME_SPAN_MILLISECOND;
+          end_time = start_time + elt->transition.duration * G_TIME_SPAN_MILLISECOND;
 
           if (data->time < start_time)
             {
@@ -1880,8 +1914,8 @@ paint (GtkPathPaintable *self,
         {
           float start_time, end_time;
 
-          start_time = out_end + elt->transition.delay * G_TIME_SPAN_SECOND;
-          end_time = start_time + elt->transition.duration * G_TIME_SPAN_SECOND;
+          start_time = out_end + elt->transition.delay * G_TIME_SPAN_MILLISECOND;
+          end_time = start_time + elt->transition.duration * G_TIME_SPAN_MILLISECOND;
 
           if (data->time < start_time)
             {
@@ -1929,7 +1963,7 @@ paint (GtkPathPaintable *self,
         self->pending_invalidate = g_idle_add_once ((GSourceOnceFunc) invalidate_in_idle, self);
     }
 
-  if (data->time >= self->transition.start_time + (self->transition.out_duration + self->transition.in_duration) * G_TIME_SPAN_SECOND)
+  if (data->time >= self->transition.start_time + (self->transition.out_duration + self->transition.in_duration) * G_TIME_SPAN_MILLISECOND)
     self->transition.running = FALSE;
 }
 

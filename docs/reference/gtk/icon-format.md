@@ -125,7 +125,7 @@ The following attributes can be set on the `<svg>` element:
 
 - `gpa:version`: The format version. Must be 1 if specified, currently.
 - `gpa:keywords`: A space-separated list of keywords
-- `gpa:state`: The initial state
+- `gpa:state`: The initial state, as a number between -1 and 63
 
 The following attributes can be set on elements that specify a path:
 
@@ -135,12 +135,12 @@ The following attributes can be set on elements that specify a path:
    'all' or 'none'
 - `gpa:animation-type`: The animation to use. One of 'none' or 'automatic'
 - `gpa:animation-direction`: One of 'normal', 'alternate', 'reverse', 'reverse-alternate', 'in-out', 'in-out-alternate', 'in-out-reverse', 'segment, 'segment-alternate'
-- `gpa:animation-duration`: The duration of one animation cycle (in seconds)
+- `gpa:animation-duration`: The duration of one animation cycle. A floating point number, followed by 's' or 'ms'
 - `gpa:animation-easing`: The easing function for animations (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
 - `gpa:animation-segment`: The length of the segment to animate (as a value between 0 and 1). This is used for the 'segment' and 'segment-alternate' animation directions
 - `gpa:transition-type`: The transition to use. One of 'none', 'animate', 'morph' or 'fade'
-- `gpa:transition-duration`: The transition duration (in seconds)
-- `gpa:transition-delay`: The transition delay (in seconds). Can be negative, for overlaps
+- `gpa:transition-duration`: The transition duration. A floating point number, followed by 's' or 'ms'
+- `gpa:transition-delay`: The transition delay. Can be negative, for overlaps. A floating point number, followed by 's' or 'ms'
 - `gpa:transition-easing`: The easing function for transitions (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease')
 - `gpa:origin`: Where to start the draw transition. A number between 0 and 1
 - `gpa:attach-to`: The ID of another path to attach to
