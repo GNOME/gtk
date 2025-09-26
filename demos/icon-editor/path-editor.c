@@ -270,7 +270,7 @@ stroke_changed (PathEditor *self)
   gsk_stroke_set_line_join (stroke, line_join);
   gsk_stroke_set_line_cap (stroke, line_cap);
 
-  selected = color_editor_get_symbolic (self->stroke_paint);
+  selected = color_editor_get_color_type (self->stroke_paint);
   if (selected == 0)
     {
       do_stroke = FALSE;
@@ -316,7 +316,7 @@ fill_changed (PathEditor *self)
 
   fill_rule = gtk_drop_down_get_selected (self->fill_rule);
 
-  selected = color_editor_get_symbolic (self->fill_paint);
+  selected = color_editor_get_color_type (self->fill_paint);
   if (selected == 0)
     {
       do_fill = FALSE;
@@ -640,11 +640,11 @@ path_editor_update (PathEditor *self)
       upper = MAX (max_width, 25);
 
       if (!do_stroke)
-        color_editor_set_symbolic (self->stroke_paint, 0);
+        color_editor_set_color_type (self->stroke_paint, 0);
       else if (symbolic == 0xffff)
-        color_editor_set_symbolic (self->stroke_paint, 6);
+        color_editor_set_color_type (self->stroke_paint, 6);
       else
-        color_editor_set_symbolic (self->stroke_paint, symbolic + 1);
+        color_editor_set_color_type (self->stroke_paint, symbolic + 1);
 
       color_editor_set_color (self->stroke_paint, &color);
 
@@ -662,11 +662,11 @@ path_editor_update (PathEditor *self)
                                               &fill_rule, &symbolic, &color);
 
       if (!do_fill)
-        color_editor_set_symbolic (self->fill_paint, 0);
+        color_editor_set_color_type (self->fill_paint, 0);
       else if (symbolic == 0xffff)
-        color_editor_set_symbolic (self->fill_paint, 6);
+        color_editor_set_color_type (self->fill_paint, 6);
       else
-        color_editor_set_symbolic (self->fill_paint, symbolic + 1);
+        color_editor_set_color_type (self->fill_paint, symbolic + 1);
 
       color_editor_set_color (self->fill_paint, &color);
 

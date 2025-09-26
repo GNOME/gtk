@@ -29,6 +29,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gdktextureutilsprivate.h"
+#include "gtksymbolicpaintable.h"
+#include "gtkrendericonprivate.h"
 
 /**
  * GtkPicture:
@@ -122,6 +124,7 @@ gtk_picture_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
   GtkPicture *self = GTK_PICTURE (widget);
+  GtkCssStyle *style;
   double ratio;
   int x, y, width, height;
   double w, h;
@@ -129,13 +132,21 @@ gtk_picture_snapshot (GtkWidget   *widget,
   if (self->paintable == NULL)
     return;
 
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
   ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
 
   if (self->content_fit == GTK_CONTENT_FIT_FILL || ratio == 0)
     {
-      gdk_paintable_snapshot (self->paintable, snapshot, width, height);
+      if (GTK_IS_SYMBOLIC_PAINTABLE (self->paintable))
+        gtk_css_style_snapshot_icon_paintable (style,
+                                               snapshot,
+                                               self->paintable,
+                                               width, height);
+      else
+        gdk_paintable_snapshot (self->paintable, snapshot, width, height);
     }
   else
     {
@@ -184,7 +195,13 @@ gtk_picture_snapshot (GtkWidget   *widget,
 
       gtk_snapshot_save (snapshot);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-      gdk_paintable_snapshot (self->paintable, snapshot, w, h);
+      if (GTK_IS_SYMBOLIC_PAINTABLE (self->paintable))
+        gtk_css_style_snapshot_icon_paintable (style,
+                                               snapshot,
+                                               self->paintable,
+                                               w, h);
+      else
+        gdk_paintable_snapshot (self->paintable, snapshot, w, h);
       gtk_snapshot_restore (snapshot);
     }
 }

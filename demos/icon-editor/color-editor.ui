@@ -1,7 +1,11 @@
 <interface>
   <template class="ColorEditor" parent="GtkWidget">
+    <property name="alpha" bind-source="indicator" bind-property="alpha" bind-flags="bidirectional | sync-create"/>
     <child>
       <object class="GtkDropDown" id="paint">
+        <accessibility>
+          <property name="label" translatable="yes">Color</property>
+        </accessibility>
         <property name="hexpand">1</property>
         <property name="model">
           <object class="GtkStringList">
@@ -16,23 +20,59 @@
             </items>
           </object>
         </property>
-        <property name="selected" bind-source="ColorEditor" bind-property="symbolic" bind-flags="bidirectional | sync-create"/>
+        <property name="selected" bind-source="ColorEditor" bind-property="color-type" bind-flags="bidirectional | sync-create"/>
       </object>
     </child>
     <child>
       <object class="GtkStack" id="stack">
         <child>
           <object class="GtkStackPage">
+            <property name="name">none</property>
+            <property name="child">
+              <object class="GtkBox"/>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
             <property name="name">indicator</property>
             <property name="child">
-              <object class="GtkBox">
-                <style><class name="indicator-box"/></style>
-                <property name="hexpand">0</property>
-                <child>
-                  <object class="GtkBox" id="indicator">
-                    <property name="hexpand">1</property>
+              <object class="GtkMenuButton">
+                <style><class name="alpha"/></style>
+                <accessibility>
+                  <property name="label" translatable="yes">Alpha</property>
+                </accessibility>
+                <property name="popover">
+                  <object class="GtkPopover">
+                    <property name="child">
+                      <object class="GtkScale">
+                        <accessibility>
+                          <property name="label" translatable="yes">Alpha</property>
+                        </accessibility>
+                        <property name="orientation">vertical</property>
+                        <property name="height-request">100</property>
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="alpha_adj">
+                            <property name="lower">0</property>
+                            <property name="upper">1</property>
+                            <property name="step-increment">0.1</property>
+                            <property name="value">0.5</property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
                   </object>
-                </child>
+                </property>
+                <property name="child">
+                  <object class="GtkPicture">
+                    <property name="paintable">
+                      <object class="ColorPaintable" id="indicator">
+                        <property name="symbolic" bind-source="ColorEditor" bind-property="symbolic" bind-flags="sync-create"/>
+                        <property name="alpha" bind-source="alpha_adj" bind-property="value" bind-flags="bidirectional | sync-create"/>
+                      </object>
+                    </property>
+                  </object>
+                </property>
               </object>
             </property>
           </object>

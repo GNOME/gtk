@@ -1,6 +1,7 @@
 icon_editor_sources = [
   'border-paintable.c',
   'color-editor.c',
+  'color-paintable.c',
   'icon-editor-application.c',
   'icon-editor-window.c',
   'fontify.c',
