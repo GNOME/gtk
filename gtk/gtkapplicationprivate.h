@@ -155,10 +155,12 @@ typedef struct
   GDBusProxy      *inhibit_proxy;
   GSList          *inhibit_handles;
   guint            state_changed_handler;
-  char            *session_path;
+  char            *inhibit_session_path;
   guint            session_state;
 
-  gboolean         save_restore_registered;
+  GDBusProxy      *save_restore_proxy;
+  char            *save_restore_session_path;
+  guint            save_restore_handler;
   char            *instance_id;
   GtkRestoreReason reason;
 } GtkApplicationImplDBus;
