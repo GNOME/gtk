@@ -24,20 +24,15 @@
 #include <gtk/gtk.h>
 
 
-#define COLOR_EDITOR_TYPE (color_editor_get_type ())
-G_DECLARE_FINAL_TYPE (ColorEditor, color_editor, COLOR, EDITOR, GtkWidget)
+#define COLOR_PAINTABLE_TYPE (color_paintable_get_type ())
+G_DECLARE_FINAL_TYPE (ColorPaintable, color_paintable, COLOR, PAINTABLE, GtkWidget)
 
 
-ColorEditor *    color_editor_new          (void);
+ColorPaintable *  color_paintable_new          (void);
 
-void             color_editor_set_color_type (ColorEditor    *self,
-                                              unsigned int    color_type);
-unsigned int     color_editor_get_color_type (ColorEditor    *self);
-
-void             color_editor_set_color    (ColorEditor    *self,
-                                            const GdkRGBA  *color);
-const GdkRGBA   *color_editor_get_color    (ColorEditor    *self);
-
-void             color_editor_set_alpha    (ColorEditor    *self,
-                                            float           alpha);
-float            color_editor_get_alpha    (ColorEditor    *self);
+void              color_paintable_set_symbolic (ColorPaintable   *self,
+                                                GtkSymbolicColor  symbolic);
+GtkSymbolicColor  color_paintable_get_symbolic (ColorPaintable   *self);
+void              color_paintable_set_alpha    (ColorPaintable   *self,
+                                                float             alpha);
+float             color_paintable_get_alpha    (ColorPaintable   *self);

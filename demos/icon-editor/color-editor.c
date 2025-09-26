@@ -20,24 +20,27 @@
  */
 
 #include "color-editor.h"
+#include "color-paintable.h"
 
 struct _ColorEditor
 {
   GtkWidget parent_instance;
 
-  unsigned int symbolic;
+  unsigned int color_type;
   GdkRGBA color;
 
   GtkDropDown *paint;
   GtkStack *stack;
-  GtkWidget *indicator;
+  ColorPaintable *indicator;
   GtkColorDialogButton *custom;
 };
 
 enum
 {
-  PROP_SYMBOLIC = 1,
+  PROP_COLOR_TYPE = 1,
+  PROP_SYMBOLIC,
   PROP_COLOR,
+  PROP_ALPHA,
   NUM_PROPERTIES,
 };
 
@@ -72,12 +75,16 @@ color_editor_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SYMBOLIC:
-      color_editor_set_symbolic (self, g_value_get_uint (value));
+    case PROP_COLOR_TYPE:
+      color_editor_set_color_type (self, g_value_get_uint (value));
       break;
 
     case PROP_COLOR:
       color_editor_set_color (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_ALPHA:
+      color_editor_set_alpha (self, g_value_get_float (value));
       break;
 
     default:
@@ -96,12 +103,20 @@ color_editor_get_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_COLOR_TYPE:
+      g_value_set_uint (value, self->color_type);
+      break;
+
     case PROP_SYMBOLIC:
-      g_value_set_uint (value, self->symbolic);
+      g_value_set_enum (value, CLAMP (self->color_type - 1, GTK_SYMBOLIC_COLOR_FOREGROUND, GTK_SYMBOLIC_COLOR_ACCENT));
       break;
 
     case PROP_COLOR:
       g_value_set_boxed (value, &self->color);
+      break;
+
+    case PROP_ALPHA:
+      g_value_set_float (value, self->color.alpha);
       break;
 
     default:
@@ -132,19 +147,31 @@ color_editor_class_init (ColorEditorClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  g_type_ensure (color_paintable_get_type ());
+
   object_class->set_property = color_editor_set_property;
   object_class->get_property = color_editor_get_property;
   object_class->dispose = color_editor_dispose;
   object_class->finalize = color_editor_finalize;
 
-  properties[PROP_SYMBOLIC] =
-    g_param_spec_uint ("symbolic", NULL, NULL,
+  properties[PROP_COLOR_TYPE] =
+    g_param_spec_uint ("color-type", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_SYMBOLIC] =
+    g_param_spec_enum ("symbolic", NULL, NULL,
+                       GTK_TYPE_SYMBOLIC_COLOR, GTK_SYMBOLIC_COLOR_FOREGROUND,
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   properties[PROP_COLOR] =
     g_param_spec_boxed ("color", NULL, NULL,
                         GDK_TYPE_RGBA,
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_ALPHA] =
+    g_param_spec_float ("alpha", NULL, NULL,
+                        0, 1, 1,
                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
@@ -170,42 +197,35 @@ color_editor_new (void)
 }
 
 void
-color_editor_set_symbolic (ColorEditor  *self,
-                           unsigned int  symbolic)
+color_editor_set_color_type (ColorEditor  *self,
+                             unsigned int  color_type)
 {
   g_return_if_fail (COLOR_IS_EDITOR (self));
 
-  if (self->symbolic == symbolic)
+  if (self->color_type == color_type)
     return;
 
-  self->symbolic = symbolic;
+  self->color_type = color_type;
 
-  gtk_drop_down_set_selected (self->paint, symbolic);
+  gtk_drop_down_set_selected (self->paint, color_type);
 
-  if (symbolic == 0 || symbolic - 1 <= GTK_SYMBOLIC_COLOR_ACCENT)
-    {
-      const char *cls[] = { "none", "foreground", "error", "warning", "success", "accent" };
-      const char *classes[3] = { "indicator", NULL, NULL };
-
-      gtk_stack_set_visible_child_name (self->stack, "indicator");
-
-      classes[1] = cls[symbolic];
-      gtk_widget_set_css_classes (self->indicator, classes);
-    }
+  if (color_type == 0)
+    gtk_stack_set_visible_child_name (self->stack, "none");
+  else if (color_type - 1 <= GTK_SYMBOLIC_COLOR_ACCENT)
+    gtk_stack_set_visible_child_name (self->stack, "indicator");
   else
-    {
-      gtk_stack_set_visible_child_name (self->stack, "custom");
-    }
+    gtk_stack_set_visible_child_name (self->stack, "custom");
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_TYPE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SYMBOLIC]);
 }
 
 unsigned int
-color_editor_get_symbolic (ColorEditor *self)
+color_editor_get_color_type (ColorEditor *self)
 {
   g_return_val_if_fail (COLOR_IS_EDITOR (self), 0);
 
-  return self->symbolic;
+  return self->color_type;
 }
 
 void
@@ -219,6 +239,7 @@ color_editor_set_color (ColorEditor   *self,
   gtk_color_dialog_button_set_rgba (self->custom, &self->color);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ALPHA]);
 }
 
 const GdkRGBA *
@@ -227,6 +248,29 @@ color_editor_get_color (ColorEditor *self)
   g_return_val_if_fail (COLOR_IS_EDITOR (self), NULL);
 
   return &self->color;
+}
+
+void
+color_editor_set_alpha (ColorEditor *self,
+                        float        alpha)
+{
+  g_return_if_fail (COLOR_IS_EDITOR (self));
+
+  if (self->color.alpha == alpha)
+    return;
+
+  self->color.alpha = alpha;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ALPHA]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
+}
+
+float
+color_editor_get_alpha (ColorEditor *self)
+{
+  g_return_val_if_fail (COLOR_IS_EDITOR (self), 1);
+
+  return self->color.alpha;
 }
 
 /* }}} */
