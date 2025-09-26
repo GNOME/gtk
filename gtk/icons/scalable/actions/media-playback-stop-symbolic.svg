@@ -1,4 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 3.5 2 h 9 c 0.828125 0 1.5 0.671875 1.5 1.5 v 9 c 0 0.828125 -0.671875 1.5 -1.5 1.5 h -9 c -0.828125 0 -1.5 -0.671875 -1.5 -1.5 v -9 c 0 -0.828125 0.671875 -1.5 1.5 -1.5 z m 0 0" fill="#2e3436"/>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='media playback stop square'
+     gpa:state='0'>
+  <path d='M 4.5 3 L 11.5 3 O 13 3, 13 4.5, 0.707106769 L 13 11.5 O 13 13, 11.5 13, 0.707106769 L 4.5 13 O 3 13, 3 11.5, 0.707106769 L 3 4.5 O 3 3, 4.5 3, 0.707106769 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

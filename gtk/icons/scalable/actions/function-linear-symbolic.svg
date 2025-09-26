@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M5 13a2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2ZM15 3a2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2ZM4.414 11.586l7.172-7.172" class="foreground-stroke transparent-fill" style="fill:none;stroke:#241f31;stroke-width:2;stroke-linecap:round;paint-order:stroke markers fill"/></svg>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='function linear line'
+     gpa:state='0'>
+  <path d='M 5 13 C 5 14.1045694, 4.10456944 15, 3 15 C 1.89543045 15, 1 14.1045694, 1 13 C 1 11.8954306, 1.89543045 11, 3 11 C 4.10456944 11, 5 11.8954306, 5 13 Z M 15 3 C 15 4.10456944, 14.1045694 5, 13 5 C 11.8954306 5, 11 4.10456944, 11 3 C 11 1.89543045, 11.8954306 1, 13 1 C 14.1045694 1, 15 1.89543045, 15 3 Z M 4.41400003 11.5860004 L 11.5860004 4.41400003'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+</svg>

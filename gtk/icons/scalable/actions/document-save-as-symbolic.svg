@@ -1,1 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M2 15h12M5 9l3 3 3-3M8 4v8m3-11v0M8.007 1v0M5 1v0" class="foreground-stroke transparent-fill" style="fill:none;stroke:#241f31;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"/></svg>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='save file name save-as'
+     gpa:state='0'>
+  <path d='M 2 15 L 14 15 M 5 9 L 8 12 L 11 9 M 8 5 L 8 12'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 5 1.5 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 8.5 1.5 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z'
+        id='path2'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 12 1.5 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z'
+        id='path3'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+</svg>

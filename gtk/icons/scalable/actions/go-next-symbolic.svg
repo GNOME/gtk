@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="none" d="m5 2 6 6-6 6" class="foreground-stroke transparent-fill" style="fill:#000;fill-opacity:0;stroke:#241f31;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"/></svg>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='arrow point next'
+     gpa:state='0'>
+  <path d='M 5 2 L 11 8 L 5 14'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+</svg>

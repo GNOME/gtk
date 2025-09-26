@@ -1,8 +1,54 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <g fill="#2e3436">
-        <path d="m 7.996094 12 c -0.703125 0 -1.355469 0.371094 -1.714844 0.972656 h -3.285156 c -0.554688 0 -1 0.449219 -1 1 c 0 0.550782 0.445312 1 1 1 h 3.246094 c 0.351562 0.640625 1.023437 1.035156 1.753906 1.039063 c 0.726562 -0.003907 1.398437 -0.398438 1.75 -1.039063 h 3.261718 c 0.550782 0 1 -0.449218 1 -1 c 0 -0.550781 -0.449218 -1 -1 -1 h -3.292968 c -0.363282 -0.601562 -1.015625 -0.972656 -1.71875 -0.972656 z m 0 1 c 0.554687 0 1.003906 0.449219 1.003906 1.007812 c 0 0.554688 -0.449219 1.003907 -1.003906 1.003907 c -0.558594 0 -1.007813 -0.449219 -1.007813 -1.003907 c 0 -0.558593 0.449219 -1.007812 1.007813 -1.007812 z m 0 0"/>
-        <path d="m 6.992188 10 h 2.007812 v 3 h -2.007812 z m 0 0"/>
-        <path d="m 4 0 c -1.644531 0 -3 1.355469 -3 3 v 5.015625 c 0 1.644531 1.355469 3 3 3 h 8 c 1.644531 0 3 -1.355469 3 -3 v -3.015625 c 0 -1.644531 -1.355469 -3 -3 -3 h -2.585938 l -1.707031 -1.707031 c -0.1875 -0.1875 -0.441406 -0.292969 -0.707031 -0.292969 z m 0 2 h 2.585938 l 1 1 h -4.585938 c 0 -0.5625 0.4375 -1 1 -1 z m -1 2 h 9 c 0.5625 0 1 0.4375 1 1 v 3.015625 c 0 0.5625 -0.4375 1 -1 1 h -8 c -0.5625 0 -1 -0.4375 -1 -1 z m 0 0"/>
-    </g>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='remote folder network share resource LAN'
+     gpa:state='0'>
+  <path d='M 10 14 L 13 14'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='square'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 6 14 L 3 14'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='square'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 9.50000191 14 o 0 1.50000143, -1.50000143 1.50000143, 0.707106769 o -1.50000143 0, -1.50000143 -1.50000143, 0.707106769 o 0 -1.50000143, 1.50000143 -1.50000143, 0.707106769 o 1.50000143 0, 1.50000143 1.50000143, 0.707106769 z'
+        id='path2'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 7.99609423 12 L 7.99609423 10'
+        id='path3'
+        stroke-width='2'
+        stroke-linecap='square'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 4 10 L 12 10 C 13.1045694 10, 14 9.10456944, 14 8 L 14 5 C 14 3.89543056, 13.1045694 3, 12 3 L 9.51234055 3 C 9.1842947 3, 8.86968422 2.86968446, 8.63772106 2.63772082 L 7.36227942 1.36227918 C 7.13031578 1.13031566, 6.81570578 0.999999881, 6.48765993 0.99999994 L 4 1 C 2.89543056 1, 2 1.89543045, 2 3 L 2 8 C 2 9.10456944, 2.89543056 10, 4 10 Z'
+        id='path4'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 2 3.51115084 L 9 3.51115084 L 10 3'
+        id='path5'
+        stroke-width='1'
+        stroke-linecap='square'
+        stroke-linejoin='miter'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>
