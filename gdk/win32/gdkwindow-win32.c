@@ -2767,8 +2767,7 @@ _gdk_win32_window_lacks_wm_decorations (GdkWindow *window)
    */
   has_any_decorations = FALSE;
 
-  if (style & (WS_BORDER | WS_THICKFRAME | WS_CAPTION |
-               WS_SYSMENU | WS_MAXIMIZEBOX))
+  if (style & (WS_BORDER | WS_THICKFRAME | WS_CAPTION))
     has_any_decorations = TRUE;
   else
     GDK_NOTE (MISC, g_print ("Window %p (handle %p): has no decorations (style %lx)\n",
