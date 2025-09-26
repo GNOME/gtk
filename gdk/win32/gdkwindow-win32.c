@@ -805,10 +805,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       else
 	{
 	  /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
-	  if (window->window_type == GDK_WINDOW_TOPLEVEL)
-	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-	  else
-	    dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+          dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
 	  offset_x = _gdk_offset_x;
 	  offset_y = _gdk_offset_y;
