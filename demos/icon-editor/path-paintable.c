@@ -68,6 +68,7 @@ typedef struct
   struct {
     TransitionType type;
     float duration;
+    float delay;
     EasingFunction easing;
     float origin;
   } transition;
@@ -211,6 +212,7 @@ path_elt_equal (PathElt *elt1,
 
   if (elt1->transition.type != elt2->transition.type ||
       elt1->transition.duration != elt2->transition.duration ||
+      elt1->transition.delay != elt2->transition.delay ||
       elt1->transition.easing != elt2->transition.easing ||
       elt1->transition.origin != elt2->transition.origin)
     return FALSE;
@@ -583,6 +585,7 @@ path_paintable_add_path (PathPaintable *self,
 
   elt.transition.type = TRANSITION_TYPE_NONE;
   elt.transition.duration = 0;
+  elt.transition.delay = 0;
   elt.transition.easing = EASING_FUNCTION_LINEAR;
   elt.transition.origin = 0;
 
@@ -719,6 +722,7 @@ path_paintable_set_path_transition (PathPaintable   *self,
                                     gsize            idx,
                                     TransitionType  type,
                                     float            duration,
+                                    float            delay,
                                     EasingFunction   easing)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -728,11 +732,13 @@ path_paintable_set_path_transition (PathPaintable   *self,
 
   if (elt->transition.type == type &&
       elt->transition.duration == duration &&
+      elt->transition.delay == delay &&
       elt->transition.easing == easing)
     return;
 
   elt->transition.type = type;
   elt->transition.duration = duration;
+  elt->transition.delay = delay;
   elt->transition.easing = easing;
 
   if (elt->fill.enabled && elt->transition.type == TRANSITION_TYPE_ANIMATE)
@@ -1038,6 +1044,17 @@ path_paintable_get_path_transition_duration (PathPaintable *self,
   return elt->transition.duration;
 }
 
+float
+path_paintable_get_path_transition_delay (PathPaintable *self,
+                                          gsize          idx)
+{
+  g_return_val_if_fail (idx< self->paths->len, 0);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->transition.delay;
+}
+
 EasingFunction
 path_paintable_get_path_transition_easing (PathPaintable *self,
                                            gsize          idx)
@@ -1126,6 +1143,7 @@ path_paintable_copy (PathPaintable *self)
       path_paintable_set_path_transition (other, i,
                                           path_paintable_get_path_transition_type (self, i),
                                           path_paintable_get_path_transition_duration (self, i),
+                                          path_paintable_get_path_transition_delay (self, i),
                                           path_paintable_get_path_transition_easing (self, i));
       path_paintable_set_path_origin (other, i, path_paintable_get_path_origin (self, i));
       path_paintable_set_path_animation (other, i,
@@ -1198,6 +1216,7 @@ path_paintable_combine (PathPaintable *one,
       path_paintable_set_path_transition (res, idx,
                                           path_paintable_get_path_transition_type (two, i),
                                           path_paintable_get_path_transition_duration (two, i),
+                                          path_paintable_get_path_transition_delay (two, i),
                                           path_paintable_get_path_transition_easing (two, i));
       path_paintable_set_path_origin (res, idx,
                                       path_paintable_get_path_origin (two, i));

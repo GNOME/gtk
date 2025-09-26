@@ -155,12 +155,16 @@ void            path_paintable_set_path_transition (PathPaintable   *self,
                                                     gsize            idx,
                                                     TransitionType  transition,
                                                     float            duration,
+                                                    float            delay,
                                                     EasingFunction   easing);
 TransitionType
                 path_paintable_get_path_transition_type
                                                    (PathPaintable   *self,
                                                     gsize            idx);
 float           path_paintable_get_path_transition_duration
+                                                   (PathPaintable   *self,
+                                                    gsize            idx);
+float           path_paintable_get_path_transition_delay
                                                    (PathPaintable   *self,
                                                     gsize            idx);
 EasingFunction  path_paintable_get_path_transition_easing

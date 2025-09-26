@@ -272,6 +272,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
+  const char *transition_delay_attr = NULL;
   const char *transition_easing_attr = NULL;
   const char *id_attr = NULL;
   const char *attach_to_attr = NULL;
@@ -288,6 +289,7 @@ start_element_cb (GMarkupParseContext  *context,
   guint64 states;
   TransitionType transition_type;;
   float transition_duration;
+  float transition_delay;
   EasingFunction transition_easing;
   AnimationType animation_type;
   AnimationDirection animation_direction;
@@ -534,6 +536,7 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-segment", &animation_segment_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
+                            "gpa:transition-delay", &transition_delay_attr,
                             "gpa:transition-easing", &transition_easing_attr,
                             "gpa:origin", &origin_attr,
                             "gpa:attach-to", &attach_to_attr,
@@ -546,6 +549,7 @@ start_element_cb (GMarkupParseContext  *context,
       !states_attr &&
       !transition_type_attr &&
       !transition_duration_attr &&
+      !transition_delay_attr &&
       !transition_easing_attr &&
       !origin_attr &&
       !animation_type_attr &&
@@ -779,6 +783,13 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
+  transition_delay = 0.f;
+  if (transition_delay_attr)
+    {
+      if (!parse_float ("gpa:transition-delay", transition_delay_attr, 0, &transition_delay, error))
+        goto cleanup;
+    }
+
   transition_easing = EASING_FUNCTION_LINEAR;
   if (transition_easing_attr)
     {
@@ -939,7 +950,7 @@ start_element_cb (GMarkupParseContext  *context,
 
   path_paintable_set_path_states (data->paintable, idx, states);
   path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_easing, animation_segment);
-  path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_easing);
+  path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_delay, transition_easing);
   path_paintable_set_path_origin (data->paintable, idx, origin);
   path_paintable_set_path_fill (data->paintable, idx, fill_attr != NULL, fill_rule, fill_symbolic, &fill_color);
   path_paintable_set_path_stroke (data->paintable, idx, stroke_attr != NULL, stroke, stroke_symbolic, &stroke_color);
@@ -1095,6 +1106,14 @@ path_paintable_save_path (PathPaintable *self,
       g_string_append_printf (str, "\n        gpa:transition-duration='%s'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g",
                                                path_paintable_get_path_transition_duration (self, idx)));
+      has_gtk_attr = TRUE;
+    }
+
+  if (path_paintable_get_path_transition_delay (self, idx) != 0)
+    {
+      g_string_append_printf (str, "\n        gpa:transition-delay='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g",
+                                               path_paintable_get_path_transition_delay (self, idx)));
       has_gtk_attr = TRUE;
     }
 

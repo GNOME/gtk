@@ -42,6 +42,7 @@ struct _PathEditor
   GtkDropDown *origin;
   GtkDropDown *transition_type;
   GtkSpinButton *transition_duration;
+  GtkSpinButton *transition_delay;
   GtkDropDown *transition_easing;
   GtkDropDown *animation_type;
   GtkDropDown *animation_direction;
@@ -197,6 +198,7 @@ transition_changed (PathEditor *self)
 {
   TransitionType type;
   float duration;
+  float delay;
   EasingFunction easing;
 
   if (self->updating)
@@ -204,9 +206,10 @@ transition_changed (PathEditor *self)
 
   type = (TransitionType) gtk_drop_down_get_selected (self->transition_type);
   duration = gtk_spin_button_get_value (self->transition_duration);
+  delay = gtk_spin_button_get_value (self->transition_delay);
   easing = (EasingFunction) gtk_drop_down_get_selected (self->transition_easing);
 
-  path_paintable_set_path_transition (self->paintable, self->path, type, duration, easing);
+  path_paintable_set_path_transition (self->paintable, self->path, type, duration, delay, easing);
 }
 
 static void
@@ -614,6 +617,9 @@ path_editor_update (PathEditor *self)
       gtk_spin_button_set_value (self->transition_duration,
                                  path_paintable_get_path_transition_duration (self->paintable, self->path));
 
+      gtk_spin_button_set_value (self->transition_delay,
+                                 path_paintable_get_path_transition_delay (self->paintable, self->path));
+
       gtk_drop_down_set_selected (self->transition_easing,
                                   path_paintable_get_path_transition_easing (self->paintable, self->path));
 
@@ -835,6 +841,7 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, origin);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_duration);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_delay);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_easing);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
