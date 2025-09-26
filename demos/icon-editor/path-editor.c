@@ -469,9 +469,10 @@ edit_path (PathEditor *self)
 {
   GString *str;
   g_autoptr (GBytes) bytes = NULL;
+  g_autofree char *name = NULL;
+  g_autofree char *filename = NULL;
   g_autoptr (GFile) file = NULL;
-  g_autoptr (GFileIOStream) iostream = NULL;
-  GOutputStream *ostream;
+  g_autoptr (GOutputStream) ostream = NULL;
   gssize written;
   g_autoptr (GError) error = NULL;
   GFileMonitor *monitor;
@@ -511,14 +512,15 @@ edit_path (PathEditor *self)
   g_string_append (str, "</svg>");
   bytes = g_string_free_to_bytes (str);
 
-  file = g_file_new_tmp ("gtkXXXXXX.svg", &iostream, &error);
-  if (!file)
+  name = g_strdup_printf ("org.gtk.Shaper-path%lu.svg", self->path);
+  filename = g_build_filename (g_get_user_cache_dir (), name, NULL);
+  file = g_file_new_for_path (filename);
+  ostream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &error));
+  if (!ostream)
     {
       show_error (self, "Editing Failed", error->message);
       return;
     }
-
-  ostream = g_io_stream_get_output_stream (G_IO_STREAM (iostream));
 
   written = g_output_stream_write_bytes (ostream, bytes, NULL, &error);
   if (written == -1)
@@ -526,6 +528,7 @@ edit_path (PathEditor *self)
       show_error (self, "Editing Failed", error->message);
       return;
     }
+
   g_output_stream_close (ostream, NULL, NULL);
 
   monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
