@@ -433,6 +433,7 @@ environment_has_portals (void)
   GVariant *result = NULL;
   GVariantIter *activatable_names = NULL;
   const char *name = NULL;
+  GError *error = NULL;
 
   if (cached)
     return has_portals;
@@ -449,11 +450,15 @@ environment_has_portals (void)
                                         NULL,
                                         G_VARIANT_TYPE ("(as)"),
                                         G_DBUS_CALL_FLAGS_NONE,
-                                        3000,
+                                        25000,
                                         NULL,
-                                        NULL);
-  if (!result)
-    return FALSE;
+                                        &error);
+  if (error != NULL)
+    {
+      g_warning ("Cannot list activatable names: %s", error->message);
+      g_clear_error (&error);
+      return FALSE;
+    }
 
   g_variant_get (result, "(as)", &activatable_names);
   while (g_variant_iter_next (activatable_names, "&s", &name))
@@ -477,6 +482,7 @@ check_portal_interface (const char *portal_interface,
   GDBusConnection *bus = NULL;
   guint version = 0;
   gpointer val;
+  GError *error = NULL;
 
   /* Portal versions start at 1, and we use 0 as marker
    * for unsupported interfaces.
@@ -502,11 +508,17 @@ check_portal_interface (const char *portal_interface,
                                             g_variant_new ("(ss)", portal_interface, "version"),
                                             NULL,
                                             G_DBUS_CALL_FLAGS_NONE,
-                                            3000,
+                                            25000,
                                             NULL,
-                                            NULL);
+                                            &error);
 
-      if (result)
+      if (error != NULL)
+        {
+          g_warning ("Cannot get portal %s version: %s", portal_interface, error->message);
+          g_clear_error (&error);
+          version = 0;
+        }
+      else
         {
           GVariant *v;
 
@@ -515,8 +527,6 @@ check_portal_interface (const char *portal_interface,
           g_variant_unref (v);
           g_variant_unref (result);
         }
-      else
-        version = 0;
 
       val = GUINT_TO_POINTER (version);
       g_hash_table_insert (versions, g_strdup (portal_interface), val);
