@@ -13,7 +13,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-copy-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/edit-copy-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -501,7 +501,7 @@
                                 <property name="valign">baseline</property>
                                 <property name="paintable">
                                   <object class="GtkIconPaintable" id="object-select-symbolic">
-                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/object-select-symbolic.svg</property>
+                                    <property name="file">resource:///org/gtk/libgtk/icons/object-select-symbolic.svg</property>
                                   </object>
                                 </property>
                                 <property name="hexpand">1</property>

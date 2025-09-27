@@ -265,8 +265,8 @@ test_symbolic_file (gconstpointer data)
 }
 
 static const char *skipped[] = {
-  "/org/gtk/libgtk/icons/scalable/categories/emoji-objects-symbolic.svg",
-  "/org/gtk/libgtk/icons/scalable/places/folder-publicshare-symbolic.svg",
+  "/org/gtk/libgtk/icons/emoji-objects-symbolic.svg",
+  "/org/gtk/libgtk/icons/folder-publicshare-symbolic.svg",
   NULL
 };
 
@@ -295,7 +295,7 @@ test_symbolic_resource (gconstpointer data)
 int
 main (int argc, char *argv[])
 {
-  const char *path = "/org/gtk/libgtk/icons/scalable";
+  const char *path = "/org/gtk/libgtk/icons";
   char **dirs;
 
   gtk_test_init (&argc, &argv);

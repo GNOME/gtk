@@ -560,7 +560,7 @@ Manual</property>
                                       <object class="GtkImage">
                                         <property name="paintable">
                                           <object class="GtkIconPaintable">
-                                            <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/dialog-information-symbolic.svg</property>
+                                            <property name="file">resource:///org/gtk/libgtk/icons/dialog-information-symbolic.svg</property>
                                           </object>
                                         </property>
                                       </object>

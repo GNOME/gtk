@@ -64,7 +64,7 @@
                           <object class="GtkImage">
                             <property name="paintable">
                               <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-down-symbolic.svg</property>
+                                <property name="file">resource:///org/gtk/libgtk/icons/go-down-symbolic.svg</property>
                               </object>
                             </property>
                           </object>
@@ -85,7 +85,7 @@
                           <object class="GtkImage">
                             <property name="paintable">
                               <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/places/user-trash-symbolic.svg</property>
+                                <property name="file">resource:///org/gtk/libgtk/icons/user-trash-symbolic.svg</property>
                               </object>
                             </property>
                           </object>

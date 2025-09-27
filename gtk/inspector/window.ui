@@ -31,7 +31,7 @@
                           <object class="GtkImage">
                             <property name="paintable">
                               <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/find-location-symbolic.svg</property>
+                                <property name="file">resource:///org/gtk/libgtk/icons/find-location-symbolic.svg</property>
                               </object>
                             </property>
                           </object>
@@ -54,7 +54,7 @@
                                   <object class="GtkImage">
                                     <property name="paintable">
                                       <object class="GtkIconPaintable" id="dialog-information-symbolic">
-                                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/dialog-information-symbolic.svg</property>
+                                        <property name="file">resource:///org/gtk/libgtk/icons/dialog-information-symbolic.svg</property>
                                       </object>
                                     </property>
                                   </object>
@@ -77,7 +77,7 @@
                                   <object class="GtkImage">
                                     <property name="paintable">
                                       <object class="GtkIconPaintable" id="view-list-symbolic">
-                                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-list-symbolic.svg</property>
+                                        <property name="file">resource:///org/gtk/libgtk/icons/view-list-symbolic.svg</property>
                                       </object>
                                     </property>
                                   </object>
@@ -183,7 +183,7 @@
                               <object class="GtkImage">
                                 <property name="paintable">
                                   <object class="GtkIconPaintable">
-                                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/media-record-symbolic.svg</property>
+                                    <property name="file">resource:///org/gtk/libgtk/icons/media-record-symbolic.svg</property>
                                   </object>
                                 </property>
                               </object>
@@ -271,7 +271,7 @@
                                           <object class="GtkImage">
                                             <property name="paintable">
                                               <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/open-menu-symbolic.svg</property>
+                                                <property name="file">resource:///org/gtk/libgtk/icons/open-menu-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -301,7 +301,7 @@
                                                   <object class="GtkImage">
                                                     <property name="paintable">
                                                       <object class="GtkIconPaintable">
-                                                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/view-refresh-symbolic.svg</property>
+                                                        <property name="file">resource:///org/gtk/libgtk/icons/view-refresh-symbolic.svg</property>
                                                       </object>
                                                     </property>
                                                   </object>
@@ -383,7 +383,7 @@
                                           <object class="GtkImage">
                                             <property name="paintable">
                                               <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-up-symbolic.svg</property>
+                                                <property name="file">resource:///org/gtk/libgtk/icons/go-up-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -398,7 +398,7 @@
                                           <object class="GtkImage">
                                             <property name="paintable">
                                               <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-down-symbolic.svg</property>
+                                                <property name="file">resource:///org/gtk/libgtk/icons/go-down-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -413,7 +413,7 @@
                                           <object class="GtkImage">
                                             <property name="paintable">
                                               <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-previous-symbolic.svg</property>
+                                                <property name="file">resource:///org/gtk/libgtk/icons/go-previous-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -434,7 +434,7 @@
                                           <object class="GtkImage">
                                             <property name="paintable">
                                               <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-next-symbolic.svg</property>
+                                                <property name="file">resource:///org/gtk/libgtk/icons/go-next-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>

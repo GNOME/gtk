@@ -36,7 +36,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-find-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/edit-find-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -58,7 +58,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/open-menu-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/open-menu-symbolic.svg</property>
                   </object>
                 </property>
               </object>

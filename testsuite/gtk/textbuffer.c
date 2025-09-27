@@ -649,7 +649,7 @@ fill_buffer (GtkTextBuffer *buffer)
                               "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
                               NULL);
 
-  texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/audio-volume-high.png");
+  texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/status/image-missing.png");
 
   g_assert_nonnull (texture);
 

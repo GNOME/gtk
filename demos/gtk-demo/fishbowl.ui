@@ -17,7 +17,7 @@
                   <object class="GtkImage">
                     <property name="paintable">
                       <object class="GtkIconPaintable">
-                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-previous-symbolic.svg</property>
+                        <property name="file">resource:///org/gtk/libgtk/icons/go-previous-symbolic.svg</property>
                       </object>
                     </property>
                   </object>
@@ -31,7 +31,7 @@
                   <object class="GtkImage">
                     <property name="paintable">
                       <object class="GtkIconPaintable">
-                        <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/go-next-symbolic.svg</property>
+                        <property name="file">resource:///org/gtk/libgtk/icons/go-next-symbolic.svg</property>
                       </object>
                     </property>
                   </object>
@@ -58,7 +58,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/changes-allow-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/changes-allow-symbolic.svg</property>
                   </object>
                 </property>
               </object>
