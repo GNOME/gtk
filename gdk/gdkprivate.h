@@ -14,7 +14,8 @@ G_STMT_START { \
 } G_STMT_END
 
 gboolean gdk_running_in_sandbox (void);
-void     gdk_disable_portals (void);
+void     gdk_disable_portals    (void);
+void     gdk_set_portals_app_id (const char *app_id);
 
 gboolean gdk_display_should_use_portal (GdkDisplay *display,
                                         const char *portal_interface,
