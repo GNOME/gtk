@@ -193,7 +193,7 @@ gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
     {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
       if (gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
-        {  
+        {
           UTType* uti = [UTType typeWithIdentifier:type];
           if (uti != nil)
             return gdk_atom_intern (uti.preferredMIMEType.UTF8String, FALSE);
