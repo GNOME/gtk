@@ -788,16 +788,20 @@
                                     <property name="hexpand">0</property>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="xalign">1</property>
+                                        <property name="xalign">0</property>
+                                        <property name="hexpand">1</property>
                                         <property name="label" translatable="yes">_X-Ray Shapes</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">spine</property>
+                                        <child>
+                                          <object class="GtkGestureClick">
+                                            <signal name="pressed" handler="gtk_widget_activate" object="spine"/>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkSwitch" id="spine">
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">1</property>
                                         <property name="action-name">win.show-spines</property>
                                       </object>
                                     </child>
@@ -811,16 +815,20 @@
                                     <property name="hexpand">0</property>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="xalign">1</property>
+                                        <property name="xalign">0</property>
+                                        <property name="hexpand">1</property>
                                         <property name="label" translatable="yes">Show _Bounds</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">bounds</property>
+                                        <child>
+                                          <object class="GtkGestureClick">
+                                            <signal name="pressed" handler="gtk_widget_activate" object="bounds"/>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkSwitch" id="bounds">
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">1</property>
                                         <property name="action-name">win.show-bounds</property>
                                       </object>
                                     </child>
@@ -834,16 +842,20 @@
                                     <property name="hexpand">0</property>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="xalign">1</property>
+                                        <property name="xalign">0</property>
+                                        <property name="hexpand">1</property>
                                         <property name="label" translatable="yes">_Invert Colors</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">invert</property>
+                                        <child>
+                                          <object class="GtkGestureClick">
+                                            <signal name="pressed" handler="gtk_widget_activate" object="invert"/>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkSwitch" id="invert">
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">1</property>
                                         <property name="action-name">win.invert-colors</property>
                                       </object>
                                     </child>
@@ -882,6 +894,7 @@
                     <property name="child">
                       <object class="PaintableEditor">
                         <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable" bind-flags="sync-create"/>
+                        <property name="initial-state" bind-source="IconEditorWindow" bind-property="initial-state" bind-flags="sync-create | bidirectional"/>
                       </object>
                     </property>
                   </object>

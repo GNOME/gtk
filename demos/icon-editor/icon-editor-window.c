@@ -45,6 +45,7 @@ struct _IconEditorWindow
   gboolean invert_colors;
   float weight;
   guint state;
+  guint initial_state;
   GtkStack *main_stack;
   GtkImage *empty_logo;
   union {
@@ -75,6 +76,7 @@ enum
   PROP_INVERT_COLORS,
   PROP_WEIGHT,
   PROP_STATE,
+  PROP_INITIAL_STATE,
   NUM_PROPERTIES,
 };
 
@@ -201,6 +203,20 @@ icon_editor_window_set_changed (IconEditorWindow *self,
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), changed);
   action = g_action_map_lookup_action (G_ACTION_MAP (self), "revert");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), changed);
+}
+
+static void
+icon_editor_window_set_initial_state (IconEditorWindow *self,
+                                      guint             initial_state)
+{
+  if (self->initial_state == initial_state)
+    return;
+
+  self->initial_state = initial_state;
+
+  icon_editor_window_set_changed (self, TRUE);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_STATE]);
 }
 
 /* }}} */
@@ -385,8 +401,8 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
 
   if (self->paintable)
     {
-      path_paintable_set_state (self->paintable, 0);
-      icon_editor_window_set_state (self, 0);
+      icon_editor_window_set_state (self, path_paintable_get_state (paintable));
+      icon_editor_window_set_initial_state (self, path_paintable_get_state (paintable));
 
       g_signal_connect_swapped (self->paintable, "changed",
                                 G_CALLBACK (paintable_changed), self);
@@ -545,7 +561,7 @@ save_to_file (IconEditorWindow *self,
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
 
-  bytes = path_paintable_serialize (self->paintable);
+  bytes = path_paintable_serialize (self->paintable, self->initial_state);
   if (!g_file_replace_contents (file,
                                 g_bytes_get_data (bytes, NULL),
                                 g_bytes_get_size (bytes),
@@ -979,6 +995,10 @@ icon_editor_window_set_property (GObject      *object,
       icon_editor_window_set_state (self, g_value_get_uint (value));
       break;
 
+    case PROP_INITIAL_STATE:
+      icon_editor_window_set_initial_state (self, g_value_get_uint (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1025,6 +1045,10 @@ icon_editor_window_get_property (GObject    *object,
 
     case PROP_STATE:
       g_value_set_uint (value, self->state);
+      break;
+
+    case PROP_INITIAL_STATE:
+      g_value_set_uint (value, self->initial_state);
       break;
 
     default:
@@ -1131,6 +1155,11 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
 
   properties[PROP_STATE] =
     g_param_spec_uint ("state", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_INITIAL_STATE] =
+    g_param_spec_uint ("initial-state", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
