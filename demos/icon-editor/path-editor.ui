@@ -238,8 +238,8 @@
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">0</property>
-                <property name="upper">3</property>
-                <property name="step-increment">0.1</property>
+                <property name="upper">3000</property>
+                <property name="step-increment">1</property>
               </object>
             </property>
             <property name="numeric">1</property>
@@ -280,9 +280,9 @@
             <signal name="value-changed" handler="transition_changed" swapped="yes"/>
             <property name="adjustment">
               <object class="GtkAdjustment">
-                <property name="lower">-3</property>
-                <property name="upper">3</property>
-                <property name="step-increment">0.1</property>
+                <property name="lower">-3000</property>
+                <property name="upper">3000</property>
+                <property name="step-increment">1</property>
               </object>
             </property>
             <property name="numeric">1</property>
@@ -458,8 +458,8 @@
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">0</property>
-                <property name="upper">3</property>
-                <property name="step-increment">0.1</property>
+                <property name="upper">3000</property>
+                <property name="step-increment">1</property>
               </object>
             </property>
             <property name="numeric">1</property>
