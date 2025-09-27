@@ -49,6 +49,11 @@
 #include "gtkscalebutton.h"
 #include "print/gtkprinteroptionwidgetprivate.h"
 
+
+#ifdef GDK_WINDOWING_MACOS
+#include <gdk/macos/gdkmacos.h>
+#endif
+
 #include <locale.h>
 
 typedef struct _GtkAccessKitTextLayout
@@ -703,6 +708,29 @@ set_bounds (GtkAccessible *accessible, accesskit_node *node)
           p.x = x;
           p.y = y;
         }
+
+#ifdef GDK_WINDOWING_MACOS
+      /* On macOS, we do the scaling ourselves.
+       * Make sure we provide bounds in physical coordinates.
+       */
+      if (GTK_IS_WIDGET (accessible) &&
+          GDK_IS_MACOS_DISPLAY (gtk_widget_get_display (GTK_WIDGET (accessible))))
+        {
+          GtkNative *native;
+          GdkSurface *surface;
+
+          if ((native = gtk_widget_get_native (GTK_WIDGET (accessible))) != NULL &&
+              (surface = gtk_native_get_surface (native)) != NULL)
+            {
+              double scale = gdk_surface_get_scale (surface);
+
+              p.x *= scale;
+              p.y *= scale;
+              bounds.x1 *= scale;
+              bounds.y1 *= scale;
+            }
+        }
+#endif
 
       transform = accesskit_affine_translate (p);
       accesskit_node_set_transform (node, transform);
