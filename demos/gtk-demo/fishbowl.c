@@ -278,9 +278,9 @@ fishbowl_changes_toggled_cb (GtkToggleButton *button,
   GtkWidget *image;
 
   if (gtk_toggle_button_get_active (button))
-    file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/scalable/status/changes-prevent-symbolic.svg");
+    file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/changes-prevent-symbolic.svg");
   else
-    file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/scalable/status/changes-allow-symbolic.svg");
+    file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/changes-allow-symbolic.svg");
 
   paintable = GDK_PAINTABLE (gtk_icon_paintable_new_for_file (file, 16, 1));
   image = gtk_button_get_child (GTK_BUTTON (button));

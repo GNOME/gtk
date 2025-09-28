@@ -1,5 +1,5 @@
 <interface>
   <object class="GtkImage">
-    <property name="paintable">resource:///org/gtk/libgtk/icons/scalable/status/dialog-warning-symbolic.svg</property>
+    <property name="paintable">resource:///org/gtk/libgtk/icons/dialog-warning-symbolic.svg</property>
   </object>
 </interface>

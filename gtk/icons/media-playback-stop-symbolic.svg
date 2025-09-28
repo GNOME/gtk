@@ -1,14 +1,11 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='media playback stop square'
-     gpa:state='0'>
+     gpa:keywords='media playback stop square'>
   <path d='M 4.5 3 L 11.5 3 O 13 3, 13 4.5, 0.707106769 L 13 11.5 O 13 13, 11.5 13, 0.707106769 L 4.5 13 O 3 13, 3 11.5, 0.707106769 L 3 4.5 O 3 3, 4.5 3, 0.707106769 Z'
         id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+        stroke='none'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-fill'/>
 </svg>

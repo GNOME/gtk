@@ -104,7 +104,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-open-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/document-open-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -120,7 +120,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/document-save-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/document-save-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -136,7 +136,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/insert-image-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/insert-image-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -152,7 +152,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/edit-copy-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/edit-copy-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -177,7 +177,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/open-menu-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/open-menu-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -193,7 +193,7 @@
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/display-brightness-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/display-brightness-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -214,7 +214,7 @@ flat</property>
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/zoom-in-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/zoom-in-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -233,7 +233,7 @@ flat</property>
               <object class="GtkImage">
                 <property name="paintable">
                   <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/scalable/actions/zoom-out-symbolic.svg</property>
+                    <property name="file">resource:///org/gtk/libgtk/icons/zoom-out-symbolic.svg</property>
                   </object>
                 </property>
               </object>

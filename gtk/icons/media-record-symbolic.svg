@@ -1,0 +1,10 @@
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'>
+  <path d='M 14 8 o 0 6, -6 6, 0.707106769 o -6 0, -6 -6, 0.707106769 o 0 -6, 6 -6, 0.707106769 o 6 0, 6 6, 0.707106769 z'
+        id='path0'
+        stroke='none'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-fill'/>
+</svg>
