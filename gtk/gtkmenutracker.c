@@ -281,6 +281,8 @@ gtk_menu_tracker_remove_items (GtkMenuTracker  *tracker,
 {
   int i;
 
+  g_return_if_fail (change_point != NULL);
+
   for (i = 0; i < n_items; i++)
     {
       GtkMenuTrackerSection *subsection;
@@ -306,6 +308,8 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
                             int                     position,
                             int                     n_items)
 {
+  g_return_if_fail (change_point != NULL);
+
   while (n_items--)
     {
       GMenuModel *submenu;
