@@ -132,6 +132,7 @@ window.background:dir(ltr)
       -gtk-icon-style: requested; /* variables.css:85:3-14 */
       -gtk-icon-transform: none; /* variables.css:85:3-14 */
       -gtk-icon-filter: none; /* variables.css:85:3-14 */
+      -gtk-icon-weight: 400; /* variables.css:85:3-14 */
       border-spacing: 0 0; /* variables.css:85:3-14 */
       transform: none; /* variables.css:85:3-14 */
       transform-origin: center; /* variables.css:85:3-14 */

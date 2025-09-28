@@ -69,6 +69,7 @@ static const int icon_props[] = {
   GTK_CSS_PROPERTY_ICON_SIZE,
   GTK_CSS_PROPERTY_ICON_SHADOW,
   GTK_CSS_PROPERTY_ICON_STYLE,
+  GTK_CSS_PROPERTY_ICON_WEIGHT,
 };
 
 static const int outline_props[] = {
@@ -201,10 +202,10 @@ static const int used_props_map[] = {
   10, /* icon-shadow */
   -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1,
   12, /* caret-color */
   13, /* secondary-caret-color */
-  -1, -1, -1,
+  -1, -1, -1, 
 };
 
 G_STATIC_ASSERT (G_N_ELEMENTS (used_props_map) == GTK_CSS_PROPERTY_N_PROPERTIES);
