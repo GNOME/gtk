@@ -4298,7 +4298,7 @@ proxy_symbolic_pixbuf_destroy (guchar   *pixels,
        symbolic_cache = symbolic_cache->next)
     {
       if (symbolic_cache->proxy_pixbuf != NULL &&
-          gdk_pixbuf_get_pixels (symbolic_cache->proxy_pixbuf) == pixels)
+          gdk_pixbuf_read_pixels (symbolic_cache->proxy_pixbuf) == pixels)
         break;
     }
 
@@ -4364,8 +4364,8 @@ gtk_icon_theme_color_symbolic_pixbuf (GdkPixbuf     *symbolic,
                                       const GdkRGBA *error_color)
 {
   int width, height, x, y, src_stride, dst_stride;
-  guchar *src_data, *dst_data;
-  guchar *src_row, *dst_row;
+  const guchar *src_data, *src_row;
+  guchar *dst_data, *dst_row;
   int alpha;
   GdkPixbuf *colored;
   guint8 fg_pixel[4], success_pixel[4], warning_pixel[4], error_pixel[4];
@@ -4383,7 +4383,7 @@ gtk_icon_theme_color_symbolic_pixbuf (GdkPixbuf     *symbolic,
   colored = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
 
   src_stride = gdk_pixbuf_get_rowstride (symbolic);
-  src_data = gdk_pixbuf_get_pixels (symbolic);
+  src_data = gdk_pixbuf_read_pixels (symbolic);
 
   dst_data = gdk_pixbuf_get_pixels (colored);
   dst_stride = gdk_pixbuf_get_rowstride (colored);
