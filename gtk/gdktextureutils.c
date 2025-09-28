@@ -1575,16 +1575,57 @@ gsk_render_node_new_from_filename_symbolic (const char *filename,
 /* }}} */
 /* {{{ Render node recoloring */
 
+static GskStroke *
+apply_weight (const GskStroke *orig,
+              float            weight)
+{
+  GskStroke *stroke = gsk_stroke_copy (orig);
+  float min_width, width, max_width;
+
+  width = gsk_stroke_get_line_width (orig);
+  min_width = width * 0.25;
+  max_width = width * 1.5;
+
+  if (weight < 1.f)
+    {
+      g_assert_not_reached ();
+    }
+  else if (weight < 400.f)
+    {
+      float f = (400.f - weight) / (400.f - 1.f);
+      width = min_width * f + width * (1.f - f);
+    }
+  else if (weight == 400.f)
+    {
+      /* nothing to do */
+    }
+  else if (weight <= 1000.f)
+    {
+      float f = (weight - 400.f) / (1000.f - 400.f);
+      width = max_width * f + width * (1.f - f);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  gsk_stroke_set_line_width (stroke, width);
+
+  return stroke;
+}
+
 static gboolean
 recolor_node (GskRenderNode *node,
-              const GdkRGBA  colors[4],
+              const GdkRGBA *colors,
+              gsize          n_colors,
+              float          weight,
               GtkSnapshot   *snapshot)
 {
   switch ((int) gsk_render_node_get_node_type (node))
     {
     case GSK_CONTAINER_NODE:
       for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
-        if (!recolor_node (gsk_container_node_get_child (node, i), colors, snapshot))
+        if (!recolor_node (gsk_container_node_get_child (node, i), colors, n_colors, weight, snapshot))
           return FALSE;
       return TRUE;
 
@@ -1594,7 +1635,7 @@ recolor_node (GskRenderNode *node,
 
         gtk_snapshot_save (snapshot);
         gtk_snapshot_transform (snapshot, gsk_transform_node_get_transform (node));
-        ret = recolor_node (gsk_transform_node_get_child (node), colors, snapshot);
+        ret = recolor_node (gsk_transform_node_get_child (node), colors, n_colors, weight, snapshot);
         gtk_snapshot_restore (snapshot);
 
         return ret;
@@ -1605,7 +1646,7 @@ recolor_node (GskRenderNode *node,
         gboolean ret;
 
         gtk_snapshot_push_clip (snapshot, gsk_clip_node_get_clip (node));
-        ret = recolor_node (gsk_clip_node_get_child (node), colors, snapshot);
+        ret = recolor_node (gsk_clip_node_get_child (node), colors, n_colors, weight, snapshot);
         gtk_snapshot_pop (snapshot);
 
         return ret;
@@ -1616,7 +1657,7 @@ recolor_node (GskRenderNode *node,
         gboolean ret;
 
         gtk_snapshot_push_opacity (snapshot, gsk_opacity_node_get_opacity (node));
-        ret = recolor_node (gsk_opacity_node_get_child (node), colors, snapshot);
+        ret = recolor_node (gsk_opacity_node_get_child (node), colors, n_colors, weight, snapshot);
         gtk_snapshot_pop (snapshot);
 
         return ret;
@@ -1629,7 +1670,7 @@ recolor_node (GskRenderNode *node,
         gtk_snapshot_push_fill (snapshot,
                                 gsk_fill_node_get_path (node),
                                 gsk_fill_node_get_fill_rule (node));
-        ret = recolor_node (gsk_fill_node_get_child (node), colors, snapshot);
+        ret = recolor_node (gsk_fill_node_get_child (node), colors, n_colors, weight, snapshot);
         gtk_snapshot_pop (snapshot);
 
         return ret;
@@ -1639,11 +1680,15 @@ recolor_node (GskRenderNode *node,
     case GSK_STROKE_NODE:
       {
         gboolean ret;
+        GskStroke *stroke;
 
+        stroke = apply_weight (gsk_stroke_node_get_stroke (node), weight);
         gtk_snapshot_push_stroke (snapshot,
                                   gsk_stroke_node_get_path (node),
-                                  gsk_stroke_node_get_stroke (node));
-        ret = recolor_node (gsk_stroke_node_get_child (node), colors, snapshot);
+                                  stroke);
+        gsk_stroke_free (stroke);
+
+        ret = recolor_node (gsk_stroke_node_get_child (node), colors, n_colors, weight, snapshot);
         gtk_snapshot_pop (snapshot);
 
         return ret;
@@ -1686,6 +1731,7 @@ gboolean
 gsk_render_node_recolor (GskRenderNode  *node,
                          const GdkRGBA  *colors,
                          gsize           n_colors,
+                         float           weight,
                          GskRenderNode **recolored)
 {
   GtkSnapshot *snapshot;
@@ -1698,7 +1744,7 @@ gsk_render_node_recolor (GskRenderNode  *node,
     }
 
   snapshot = gtk_snapshot_new ();
-  ret = recolor_node (node, colors, snapshot);
+  ret = recolor_node (node, colors, n_colors, weight, snapshot);
   *recolored = gtk_snapshot_free_to_node (snapshot);
 
   if (!ret)

@@ -495,6 +495,10 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_other (animated);
       gtk_css_take_value (&style->other->icon_filter, value);
       break;
+    case GTK_CSS_PROPERTY_ICON_WEIGHT:
+      unshare_icon (animated);
+      gtk_css_take_value (&style->icon->icon_weight, value);
+      break;
     case GTK_CSS_PROPERTY_BORDER_SPACING:
       unshare_size (animated);
       gtk_css_take_value (&style->size->border_spacing, value);

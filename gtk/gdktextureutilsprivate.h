@@ -85,6 +85,7 @@ GskRenderNode *gsk_render_node_new_from_filename_symbolic (const char *filename,
 gboolean gsk_render_node_recolor (GskRenderNode  *node,
                                   const GdkRGBA  *colors,
                                   gsize           n_colors,
+                                  float           weight,
                                   GskRenderNode **recolored);
 
 

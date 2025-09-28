@@ -1,0 +1,71 @@
+a {
+  -gtk-icon-weight: initial;
+}
+
+b {
+  -gtk-icon-weight: inherit;
+}
+
+c {
+  -gtk-icon-weight: unset;
+}
+
+d {
+  -gtk-icon-weight: 400;
+}
+
+e {
+  -gtk-icon-weight: 700;
+}
+
+f {
+  -gtk-icon-weight: bolder;
+}
+
+g {
+  -gtk-icon-weight: lighter;
+}
+
+h {
+  -gtk-icon-weight: 100;
+}
+
+i {
+  -gtk-icon-weight: 200;
+}
+
+j {
+  -gtk-icon-weight: 300;
+}
+
+k {
+  -gtk-icon-weight: 400;
+}
+
+l {
+  -gtk-icon-weight: 500;
+}
+
+m {
+  -gtk-icon-weight: 600;
+}
+
+n {
+  -gtk-icon-weight: 700;
+}
+
+o {
+  -gtk-icon-weight: 800;
+}
+
+p {
+  -gtk-icon-weight: 900;
+}
+
+q {
+  -gtk-icon-weight: 1;
+}
+
+r {
+  -gtk-icon-weight: 1000;
+}

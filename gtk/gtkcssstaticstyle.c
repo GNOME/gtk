@@ -511,6 +511,9 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
     case GTK_CSS_PROPERTY_ICON_STYLE:
       gtk_css_take_value (&style->icon->icon_style, value);
       break;
+    case GTK_CSS_PROPERTY_ICON_WEIGHT:
+      gtk_css_take_value (&style->icon->icon_weight, value);
+      break;
     case GTK_CSS_PROPERTY_ICON_TRANSFORM:
       gtk_css_take_value (&style->other->icon_transform, value);
       break;

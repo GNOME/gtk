@@ -258,7 +258,7 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
                     gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_ERROR]);
 
   if ((recolor->single_path || colors_opaque) &&
-      gsk_render_node_recolor (recolor->node, colors, 4, &recolored))
+      gsk_render_node_recolor (recolor->node, colors, 4, 400, &recolored))
     {
       gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
       gsk_render_node_unref (recolored);

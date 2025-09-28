@@ -328,12 +328,13 @@ init_color_matrix (graphene_matrix_t *color_matrix,
 /* {{{ GtkSymbolicPaintable implementation */
 
 static void
-gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
-                                      GtkSnapshot          *snapshot,
-                                      double                width,
-                                      double                height,
-                                      const GdkRGBA        *colors,
-                                      gsize                 n_colors)
+gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
+                                         GtkSnapshot          *snapshot,
+                                         double                width,
+                                         double                height,
+                                         const GdkRGBA        *colors,
+                                         gsize                 n_colors,
+                                         double                weight)
 {
   GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
   GskRenderNode *node, *recolored;
@@ -374,7 +375,7 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
 
   if (icon->is_symbolic && icon->allow_recolor &&
       (icon->single_path || colors_opaque) &&
-      gsk_render_node_recolor (node, colors, n_colors, &recolored))
+      gsk_render_node_recolor (node, colors, n_colors, weight, &recolored))
     {
       g_debug ("snapshot symbolic icon as recolored node");
       recolored = enforce_logical_size (recolored, icon->width, icon->height);
@@ -426,8 +427,23 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
 }
 
 static void
+gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
+                                      GtkSnapshot          *snapshot,
+                                      double                width,
+                                      double                height,
+                                      const GdkRGBA        *colors,
+                                      gsize                 n_colors)
+{
+  gtk_icon_paintable_snapshot_with_weight (paintable, snapshot,
+                                           width, height,
+                                           colors, n_colors,
+                                           400);
+}
+
+static void
 icon_symbolic_paintable_init (GtkSymbolicPaintableInterface *iface)
 {
+  iface->snapshot_with_weight = gtk_icon_paintable_snapshot_with_weight;
   iface->snapshot_symbolic = gtk_icon_paintable_snapshot_symbolic;
 }
 
