@@ -180,7 +180,8 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
                                 const GdkPixbuf *pixbuf)
 {
   gint width, height;
-  guchar *gdk_pixels, *cairo_pixels;
+  const guchar *gdk_pixels;
+  guchar *cairo_pixels;
   int gdk_rowstride, cairo_stride;
   int n_channels;
   int j;
@@ -201,7 +202,7 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
-  gdk_pixels = gdk_pixbuf_get_pixels (pixbuf);
+  gdk_pixels = gdk_pixbuf_read_pixels (pixbuf);
   gdk_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   n_channels = gdk_pixbuf_get_n_channels (pixbuf);
   cairo_stride = cairo_image_surface_get_stride (surface);
