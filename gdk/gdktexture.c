@@ -542,7 +542,7 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  bytes = g_bytes_new_with_free_func (gdk_pixbuf_get_pixels (pixbuf),
+  bytes = g_bytes_new_with_free_func (gdk_pixbuf_read_pixels (pixbuf),
                                       gdk_pixbuf_get_height (pixbuf)
                                       * (gsize) gdk_pixbuf_get_rowstride (pixbuf),
                                       g_object_unref,
