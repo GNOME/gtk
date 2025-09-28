@@ -121,7 +121,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
     {
       GtkCssValue *value;
 
-      value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_WEIGHT);
+      value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_WEIGHT);
       weight = gtk_css_number_value_get (value, 100);
 
       gtk_css_style_lookup_symbolic_colors (style, colors);
