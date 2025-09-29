@@ -4,14 +4,18 @@
      gpa:keywords='media playback pause'>
   <path d='M 11.5 2 O 13 2, 13 3.5, 0.707106769 L 13 12.5 O 13 14, 11.5 14, 0.707106769 O 10 14, 10 12.5, 0.707106769 L 10 3.5 O 10 2, 11.5 2, 0.707106769 Z'
         id='path0'
-        stroke='none'
-        fill-rule='winding'
-        fill='rgb(0,0,0)'
-        class='foreground-fill'/>
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
   <path d='M 4.5 2 O 6 2, 6 3.5, 0.707106769 L 6 12.5 O 6 14, 4.5 14, 0.707106769 O 3 14, 3 12.5, 0.707106769 L 3 3.5 O 3 2, 4.5 2, 0.707106769 Z'
         id='path1'
-        stroke='none'
-        fill-rule='winding'
-        fill='rgb(0,0,0)'
-        class='foreground-fill'/>
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>
