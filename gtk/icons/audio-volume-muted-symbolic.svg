@@ -1,17 +1,15 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='sound audio mute disabled'
-     gpa:state='0'>
+     gpa:keywords='sound audio mute disabled'>
   <path d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
         id='path0'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
-        fill-rule='winding'
-        fill='rgb(0,0,0)'
-        class='foreground-stroke foreground-fill'/>
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
   <path d='M 10 10 L 14 6 M 10 6 L 14 10'
         id='path1'
         stroke-width='2'

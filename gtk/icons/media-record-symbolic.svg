@@ -3,8 +3,10 @@
      gpa:version='1'>
   <path d='M 14 8 o 0 6, -6 6, 0.707106769 o -6 0, -6 -6, 0.707106769 o 0 -6, 6 -6, 0.707106769 o 6 0, 6 6, 0.707106769 z'
         id='path0'
-        stroke='none'
-        fill-rule='winding'
-        fill='rgb(0,0,0)'
-        class='foreground-fill'/>
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>
