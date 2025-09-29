@@ -805,10 +805,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       else
 	{
 	  /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
-	  if (window->window_type == GDK_WINDOW_TOPLEVEL)
-	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-	  else
-	    dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+          dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
 	  offset_x = _gdk_offset_x;
 	  offset_y = _gdk_offset_y;
@@ -831,6 +828,12 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
     default:
       g_assert_not_reached ();
     }
+
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    gdk_window_set_type_hint (window, attributes->type_hint);
+
+  if (impl->type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    dwStyle &= ~(WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
 
   if (window->window_type != GDK_WINDOW_CHILD)
     {
@@ -878,9 +881,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
     title = "";
 
   impl->native_event_mask = GDK_STRUCTURE_MASK | event_mask;
-
-  if (attributes_mask & GDK_WA_TYPE_HINT)
-    gdk_window_set_type_hint (window, attributes->type_hint);
 
   if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY)
     dwExStyle |= WS_EX_TOOLWINDOW;
@@ -2770,8 +2770,7 @@ _gdk_win32_window_lacks_wm_decorations (GdkWindow *window)
    */
   has_any_decorations = FALSE;
 
-  if (style & (WS_BORDER | WS_THICKFRAME | WS_CAPTION |
-               WS_SYSMENU | WS_MAXIMIZEBOX))
+  if (style & (WS_BORDER | WS_THICKFRAME | WS_CAPTION))
     has_any_decorations = TRUE;
   else
     GDK_NOTE (MISC, g_print ("Window %p (handle %p): has no decorations (style %lx)\n",
@@ -2866,7 +2865,11 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
       update_single_bit (&new_style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_TITLE, WS_CAPTION);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_MENU, WS_SYSMENU);
-      update_single_bit (&new_style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
+      if (impl->type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+        {
+          update_single_bit (&new_style, all, decorations & GDK_DECOR_MINIMIZE, WS_MINIMIZEBOX);
+          update_single_bit (&new_style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
+        }
     }
 
   if (needs_basic_layering)
