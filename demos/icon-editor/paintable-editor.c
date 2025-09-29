@@ -73,12 +73,17 @@ clear_path_editors (PaintableEditor *self)
     gtk_box_remove (self->path_elts, child);
 }
 
-static void
+static PathEditor *
 append_path_editor (PaintableEditor *self,
                     gsize           idx)
 {
-  gtk_box_append (self->path_elts, GTK_WIDGET (path_editor_new (self->paintable, idx)));
+  PathEditor *pe;
+
+  pe = path_editor_new (self->paintable, idx);
+  gtk_box_append (self->path_elts, GTK_WIDGET (pe));
   gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+
+  return pe;
 }
 
 static void
@@ -418,6 +423,7 @@ paintable_editor_add_path (PaintableEditor *self)
 {
   g_autoptr (GskPath) path = NULL;
   char buffer[128];
+  PathEditor *pe;
 
   if (path_paintable_get_n_paths (self->paintable) == 0)
     path_paintable_set_size (self->paintable, 100.f, 100.f);
@@ -432,8 +438,10 @@ paintable_editor_add_path (PaintableEditor *self)
   path = gsk_path_parse (buffer);
   g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
   path_paintable_add_path (self->paintable, path);
-  append_path_editor (self, path_paintable_get_n_paths (self->paintable) - 1);
+  pe = append_path_editor (self, path_paintable_get_n_paths (self->paintable) - 1);
   g_signal_handlers_unblock_by_func (self->paintable, paths_changed, self);
+
+  path_editor_edit_path (pe);
 }
 
 /* }}} */

@@ -39,3 +39,4 @@ PathPaintable * path_editor_get_paintable (PathEditor    *self);
 void            path_editor_set_path      (PathEditor    *self,
                                            gsize          idx);
 gsize           path_editor_get_path      (PathEditor    *self);
+void            path_editor_edit_path     (PathEditor    *self);

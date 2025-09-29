@@ -960,6 +960,14 @@ path_editor_get_path (PathEditor *self)
   return self->path;
 }
 
+void
+path_editor_edit_path (PathEditor *self)
+{
+  g_return_if_fail (PATH_IS_EDITOR (self));
+
+  edit_path (self);
+}
+
 /* }}} */
 
 /* vim:set foldmethod=marker: */
