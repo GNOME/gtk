@@ -1372,9 +1372,12 @@ path_paintable_save_path (PathPaintable *self,
     {
       const char *linecap[] = { "butt", "round", "square" };
       const char *linejoin[] = { "miter", "round", "bevel" };
+      float width, min_width, max_width;
+
+      width = gsk_stroke_get_line_width (stroke);
 
       g_string_append_printf (str, "\n        stroke-width='%s'",
-                              g_ascii_formatd (buffer, sizeof (buffer), "%g", gsk_stroke_get_line_width (stroke)));
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", width));
       g_string_append_printf (str, "\n        stroke-linecap='%s'", linecap[gsk_stroke_get_line_cap (stroke)]);
       g_string_append_printf (str, "\n        stroke-linejoin='%s'", linejoin[gsk_stroke_get_line_join (stroke)]);
 
@@ -1395,6 +1398,22 @@ path_paintable_save_path (PathPaintable *self,
             g_strv_builder_take (class_builder, g_strdup_printf ("%s-stroke", sym[stroke_symbolic]));
           else
             has_gtk_attr = TRUE;
+        }
+
+      min_width = width * 0.25;
+      max_width = width * 1.5;
+
+      path_paintable_get_path_stroke_variation (self, idx, &min_width, &max_width);
+      if (min_width != width * 0.25 || max_width != width * 1.5)
+        {
+          char buffer2[G_ASCII_DTOSTR_BUF_SIZE];
+          char buffer3[G_ASCII_DTOSTR_BUF_SIZE];
+
+          g_string_append_printf (str, "\n        gpa:stroke-width='%s %s %s'",
+                                  g_ascii_formatd (buffer, sizeof (buffer), "%g", min_width),
+                                  g_ascii_formatd (buffer2, sizeof (buffer2), "%g", width),
+                                  g_ascii_formatd (buffer3, sizeof (buffer3), "%g", max_width));
+          has_gtk_attr = TRUE;
         }
     }
   else
