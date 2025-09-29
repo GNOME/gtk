@@ -75,22 +75,30 @@ typedef enum
 G_DECLARE_FINAL_TYPE (PathPaintable, path_paintable, PATH, PAINTABLE, GObject)
 
 
-PathPaintable * path_paintable_new            (void);
-PathPaintable * path_paintable_new_from_bytes (GBytes         *bytes,
-                                               GError        **error);
-PathPaintable * path_paintable_new_from_resource (const char  *path);
+PathPaintable * path_paintable_new                 (void);
+PathPaintable * path_paintable_new_from_bytes      (GBytes         *bytes,
+                                                    GError        **error);
+PathPaintable * path_paintable_new_from_resource   (const char     *resource);
 
-GBytes *        path_paintable_serialize      (PathPaintable  *self,
-                                               unsigned int    initial_state);
+GBytes *        path_paintable_serialize           (PathPaintable  *self,
+                                                    unsigned int    initial_state);
 
-gboolean        path_paintable_equal          (PathPaintable  *self,
-                                               PathPaintable  *other);
+GBytes *        path_paintable_serialize_state     (PathPaintable   *self,
+                                                    guint            state);
 
-void            path_paintable_set_state      (PathPaintable  *self,
-                                               guint           state);
-guint           path_paintable_get_state      (PathPaintable  *self);
+PathPaintable * path_paintable_copy                (PathPaintable   *self);
 
-guint           path_paintable_get_max_state  (PathPaintable  *self);
+PathPaintable * path_paintable_combine             (PathPaintable   *one,
+                                                    PathPaintable   *two);
+
+gboolean        path_paintable_equal               (PathPaintable   *self,
+                                                    PathPaintable   *other);
+
+void            path_paintable_set_state           (PathPaintable   *self,
+                                                    guint            state);
+guint           path_paintable_get_state           (PathPaintable   *self);
+
+guint           path_paintable_get_max_state       (PathPaintable   *self);
 
 void            path_paintable_set_weight          (PathPaintable   *self,
                                                     float            weight);
@@ -160,8 +168,7 @@ void            path_paintable_set_path_transition (PathPaintable   *self,
                                                     float            duration,
                                                     float            delay,
                                                     EasingFunction   easing);
-TransitionType
-                path_paintable_get_path_transition_type
+TransitionType  path_paintable_get_path_transition_type
                                                    (PathPaintable   *self,
                                                     gsize            idx);
 float           path_paintable_get_path_transition_duration
@@ -204,14 +211,16 @@ gboolean        path_paintable_get_path_stroke     (PathPaintable   *self,
                                                     guint           *symbolic,
                                                     GdkRGBA         *color);
 
-void            path_paintable_set_path_stroke_variation (PathPaintable   *self,
-                                                          gsize            idx,
-                                                          float            min_stroke_width,
-                                                          float            max_stroke_width);
-void            path_paintable_get_path_stroke_variation (PathPaintable   *self,
-                                                          gsize            idx,
-                                                          float           *min_stroke_width,
-                                                          float           *max_stroke_width);
+void            path_paintable_set_path_stroke_variation
+                                                   (PathPaintable   *self,
+                                                    gsize            idx,
+                                                    float            min_width,
+                                                    float            max_width);
+void            path_paintable_get_path_stroke_variation
+                                                   (PathPaintable   *self,
+                                                    gsize            idx,
+                                                    float           *min_width,
+                                                    float           *max_width);
 
 void            path_paintable_attach_path         (PathPaintable   *self,
                                                     gsize            idx,
@@ -222,24 +231,5 @@ void            path_paintable_get_attach_path     (PathPaintable   *self,
                                                     gsize           *to,
                                                     float           *pos);
 
-PathPaintable * path_paintable_copy                (PathPaintable   *self);
-
-PathPaintable * path_paintable_combine             (PathPaintable   *one,
-                                                    PathPaintable   *two);
-
-GBytes *        path_paintable_serialize_state     (PathPaintable   *self,
-                                                    guint            state);
-
-GtkCompatibility path_paintable_get_compatibility (PathPaintable *self);
-
-char *   states_to_string (guint64     states);
-gboolean states_parse     (const char *text,
-                           guint64     default_value,
-                           guint64    *states);
-
-gboolean origin_parse     (const char *text,
-                           float      *origin);
-
-gboolean parse_symbolic_svg (PathPaintable  *self,
-                             GBytes         *bytes,
-                             GError        **error);
+GtkCompatibility
+                path_paintable_get_compatibility   (PathPaintable   *self);
