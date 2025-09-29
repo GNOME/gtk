@@ -244,6 +244,7 @@
     <file>floppybuddy.gif</file>
     <file>gtk-logo.webm</file>
     <file alias="org.gtk.Demo4.svg">data/scalable/apps/org.gtk.Demo4.svg</file>
+    <file alias="org.gtk.Demo4-symbolic.svg">data/symbolic/apps/org.gtk.Demo4-symbolic.svg</file>
   </gresource>
   <gresource prefix="/image_filter">
     <file>component_filter.ui</file>
