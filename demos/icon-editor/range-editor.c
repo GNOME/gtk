@@ -648,9 +648,9 @@ range_editor_init (RangeEditor *self)
 
 static void
 range_editor_set_property (GObject      *object,
-                          guint         prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
+                           unsigned int  prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
 {
   RangeEditor *self = RANGE_EDITOR (object);
   float v;
@@ -689,10 +689,10 @@ range_editor_set_property (GObject      *object,
 }
 
 static void
-range_editor_get_property (GObject    *object,
-                           guint       prop_id,
-                           GValue     *value,
-                           GParamSpec *pspec)
+range_editor_get_property (GObject      *object,
+                           unsigned int  prop_id,
+                           GValue       *value,
+                           GParamSpec   *pspec)
 {
   RangeEditor *self = RANGE_EDITOR (object);
 

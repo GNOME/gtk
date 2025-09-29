@@ -44,8 +44,8 @@ struct _IconEditorWindow
   gboolean show_spines;
   gboolean invert_colors;
   float weight;
-  guint state;
-  guint initial_state;
+  unsigned int state;
+  unsigned int initial_state;
   GtkStack *main_stack;
   GtkImage *empty_logo;
   union {
@@ -176,7 +176,7 @@ icon_editor_window_set_weight (IconEditorWindow *self,
 
 static void
 icon_editor_window_set_state (IconEditorWindow *self,
-                              guint             state)
+                              unsigned int      state)
 {
   if (self->state == state)
     return;
@@ -208,7 +208,7 @@ icon_editor_window_set_changed (IconEditorWindow *self,
 
 static void
 icon_editor_window_set_initial_state (IconEditorWindow *self,
-                                      guint             initial_state)
+                                      unsigned int      initial_state)
 {
   if (self->initial_state == initial_state)
     return;
@@ -361,14 +361,14 @@ set_random_icons (IconEditorWindow *self)
   };
   g_autoptr (GtkBitset) used = gtk_bitset_new_empty ();
 
-  for (guint i = 0; i < 24; i++)
+  for (unsigned int i = 0; i < 24; i++)
     {
-      guint32 r;
+      uint32_t r;
       g_autofree char *path;
       g_autoptr (PathPaintable) paintable = NULL;
 
       do {
-        r = g_random_int_range (0, (guint32) G_N_ELEMENTS (names));
+        r = g_random_int_range (0, (uint32_t) G_N_ELEMENTS (names));
       } while (gtk_bitset_contains (used, r));
 
       path = g_strconcat ("/org/gtk/libgtk/icons/", names[r], ".svg", NULL);
@@ -592,7 +592,7 @@ export_to_file (IconEditorWindow *self,
   else if (g_str_has_suffix (path, ".gpa"))
     path[strlen (path) - strlen (".gpa")] = '\0';
 
-  for (guint idx = 0; idx <= path_paintable_get_max_state (self->paintable); idx++)
+  for (unsigned int idx = 0; idx <= path_paintable_get_max_state (self->paintable); idx++)
     {
       g_autofree char *filename = g_strdup_printf ("%s-%u.gpa", path, idx);
       g_autoptr (GBytes) bytes = NULL;
@@ -955,7 +955,7 @@ icon_editor_window_init (IconEditorWindow *self)
 
 static void
 icon_editor_window_set_property (GObject      *object,
-                                 guint         prop_id,
+                                 unsigned int  prop_id,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
@@ -1002,10 +1002,10 @@ icon_editor_window_set_property (GObject      *object,
 }
 
 static void
-icon_editor_window_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
+icon_editor_window_get_property (GObject      *object,
+                                 unsigned int  prop_id,
+                                 GValue       *value,
+                                 GParamSpec   *pspec)
 {
   IconEditorWindow *self = ICON_EDITOR_WINDOW (object);
 

@@ -9,7 +9,6 @@ icon_editor_sources = [
   'paintable-editor.c',
   'path-editor.c',
   'path-paintable.c',
-  'path-paintable-parser.c',
   'range-editor.c',
 ]
 

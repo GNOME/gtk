@@ -30,7 +30,7 @@ struct _PathEditor
   GtkWidget parent_instance;
 
   PathPaintable *paintable;
-  gsize path;
+  size_t path;
   PathPaintable *path_image;
 
   gboolean updating;
@@ -74,12 +74,12 @@ enum
 
 static GParamSpec *properties[NUM_PROPERTIES];
 
-/* {{{ Path-to-SVG */ 
+/* {{{ Path-to-SVG */
 
 static gboolean
 collect_path (GskPathOperation        op,
               const graphene_point_t *pts,
-              gsize                   n_pts,
+              size_t                  n_pts,
               float                   weight,
               gpointer                user_data)
 {
@@ -146,10 +146,10 @@ path_editor_get_path_image (PathEditor *self)
     {
       gboolean do_stroke;
       g_autoptr (GskStroke) stroke = gsk_stroke_new (1);
-      guint stroke_symbolic = 0;
+      unsigned int stroke_symbolic = 0;
       GdkRGBA stroke_color;
       gboolean do_fill;
-      guint fill_symbolic = 0;
+      unsigned int fill_symbolic = 0;
       GdkRGBA fill_color;
       GskFillRule rule;
 
@@ -256,8 +256,8 @@ stroke_changed (PathEditor *self)
   float min, max;
   GskLineJoin line_join;
   GskLineCap line_cap;
-  guint selected;
-  guint symbolic;
+  unsigned int selected;
+  unsigned int symbolic;
   const GdkRGBA *color;
   g_autoptr (GskStroke) stroke = NULL;
 
@@ -309,8 +309,8 @@ static void
 fill_changed (PathEditor *self)
 {
   gboolean do_fill;
-  guint selected;
-  guint symbolic;
+  unsigned int selected;
+  unsigned int symbolic;
   const GdkRGBA *color;
   GskFillRule fill_rule;
 
@@ -348,9 +348,9 @@ fill_changed (PathEditor *self)
 static void
 visible_changed (PathEditor *self)
 {
-  guint64 visible;
-  guint64 states;
-  guint state;
+  uint64_t visible;
+  uint64_t states;
+  unsigned int state;
 
   if (self->updating)
     return;
@@ -370,7 +370,7 @@ visible_changed (PathEditor *self)
 static void
 attach_changed (PathEditor *self)
 {
-  gsize selected;
+  size_t selected;
   float pos;
 
   if (self->updating)
@@ -380,7 +380,7 @@ attach_changed (PathEditor *self)
   pos = gtk_range_get_value (GTK_RANGE (self->attach_at));
 
   if (selected == 0)
-    path_paintable_attach_path (self->paintable, self->path, (gsize) -1, pos);
+    path_paintable_attach_path (self->paintable, self->path, (size_t) -1, pos);
   else if (selected <= self->path)
     path_paintable_attach_path (self->paintable, self->path, selected - 1, pos);
   else
@@ -480,7 +480,7 @@ edit_path (PathEditor *self)
   g_autoptr (GError) error = NULL;
   GFileMonitor *monitor;
   g_autoptr (GskStroke) stroke = NULL;
-  guint symbolic;
+  unsigned int symbolic;
   GdkRGBA color;
   const char *linecap[] = { "butt", "round", "square" };
   const char *linejoin[] = { "miter", "round", "bevel" };
@@ -572,10 +572,10 @@ delete_path (PathEditor *self)
 static void
 path_editor_update_state (PathEditor *self)
 {
-  if (self->paintable && self->path != (gsize) -1)
+  if (self->paintable && self->path != (size_t) -1)
     {
-      guint state;
-      guint64 states;
+      unsigned int state;
+      uint64_t states;
 
       state = path_paintable_get_state (self->paintable);
       states = path_paintable_get_path_states (self->paintable, self->path);
@@ -589,7 +589,7 @@ path_editor_update_state (PathEditor *self)
 static void
 path_editor_update (PathEditor *self)
 {
-  if (self->paintable && self->path != (gsize) -1)
+  if (self->paintable && self->path != (size_t) -1)
     {
       GskPath *path;
       g_autofree char *text = NULL;
@@ -597,11 +597,11 @@ path_editor_update (PathEditor *self)
       g_autofree char *states = NULL;
       gboolean do_stroke;
       g_autoptr (GskStroke) stroke = gsk_stroke_new (1);
-      guint symbolic;
+      unsigned int symbolic;
       GdkRGBA color;
       gboolean do_fill;
       GskFillRule fill_rule;
-      gsize to;
+      size_t to;
       float pos;
       g_autoptr (GtkStringList) model = NULL;
       float width;
@@ -670,8 +670,8 @@ path_editor_update (PathEditor *self)
       range_editor_configure (self->width_range,
                               lower, width, upper, min_width, max_width);
 
-      gtk_drop_down_set_selected (self->line_join, (guint) gsk_stroke_get_line_join (stroke));
-      gtk_drop_down_set_selected (self->line_cap, (guint) gsk_stroke_get_line_cap (stroke));
+      gtk_drop_down_set_selected (self->line_join, (unsigned int) gsk_stroke_get_line_join (stroke));
+      gtk_drop_down_set_selected (self->line_cap, (unsigned int) gsk_stroke_get_line_cap (stroke));
 
       do_fill = path_paintable_get_path_fill (self->paintable, self->path,
                                               &fill_rule, &symbolic, &color);
@@ -685,11 +685,11 @@ path_editor_update (PathEditor *self)
 
       color_editor_set_color (self->fill_paint, &color);
 
-      gtk_drop_down_set_selected (self->fill_rule, (guint) fill_rule);
+      gtk_drop_down_set_selected (self->fill_rule, (unsigned int) fill_rule);
 
       model = gtk_string_list_new (NULL);
       gtk_string_list_append (model, "None");
-      for (gsize i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
+      for (size_t i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
         {
           if (i == self->path)
             continue;
@@ -698,7 +698,7 @@ path_editor_update (PathEditor *self)
       gtk_drop_down_set_model (self->attach_to, G_LIST_MODEL (model));
 
       path_paintable_get_attach_path (self->paintable, self->path, &to, &pos);
-      if (to == (gsize) -1)
+      if (to == (size_t) -1)
         gtk_drop_down_set_selected (self->attach_to, 0);
       else if (to < self->path)
         gtk_drop_down_set_selected (self->attach_to, to + 1);
@@ -735,7 +735,7 @@ path_editor_init (PathEditor *self)
 
 static void
 path_editor_set_property (GObject      *object,
-                          guint         prop_id,
+                          unsigned int  prop_id,
                           const GValue *value,
                           GParamSpec   *pspec)
 {
@@ -758,10 +758,10 @@ path_editor_set_property (GObject      *object,
 }
 
 static void
-path_editor_get_property (GObject    *object,
-                           guint       prop_id,
-                           GValue     *value,
-                           GParamSpec *pspec)
+path_editor_get_property (GObject      *object,
+                          unsigned int  prop_id,
+                          GValue       *value,
+                          GParamSpec   *pspec)
 {
   PathEditor *self = PATH_EDITOR (object);
 
@@ -891,7 +891,7 @@ path_editor_class_init (PathEditorClass *class)
 
 PathEditor *
 path_editor_new (PathPaintable *paintable,
-                 gsize          path)
+                 size_t         path)
 {
   return g_object_new (PATH_EDITOR_TYPE,
                        "paintable", paintable,
@@ -922,7 +922,7 @@ path_editor_set_paintable (PathEditor    *self,
                                 G_CALLBACK (path_editor_update_state), self);
     }
 
-  self->path = (gsize) -1;
+  self->path = (size_t) -1;
 
   path_editor_update (self);
   path_editor_update_state (self);
@@ -942,7 +942,7 @@ path_editor_get_paintable (PathEditor *self)
 
 void
 path_editor_set_path (PathEditor *self,
-                      gsize       path)
+                      size_t      path)
 {
   g_return_if_fail (PATH_IS_EDITOR (self));
   g_return_if_fail ((self->paintable == NULL && path == 0) ||
@@ -959,7 +959,7 @@ path_editor_set_path (PathEditor *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
 }
 
-gsize
+size_t
 path_editor_get_path (PathEditor *self)
 {
   g_return_val_if_fail (PATH_IS_EDITOR (self), 0);

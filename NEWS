@@ -1,6 +1,142 @@
 Overview of Changes in 4.21.0, xx-xx-xxxx
 =========================================
 
+* Symbolic icons can now be stateful and animated. A new CSS
+  property, -gtk-icon-weight, can be used to modify the weight
+  of strokes. The extensions to the icon format are described here:
+
+  https://docs.gtk.org/gtk4/icon-format.html
+
+* GTK includes a new org.gtk.Shaper demo that serves as an
+  editor for the new symbolic icon format.
+
+* All included icons have been converted to use strokes
+
+* The Wayland backend relies on the portal for settings
+
+* The Wayland backend implements the experimental
+  xx-session-management protocol. To enable it, use
+
+  GDK_DEBUG=session-mgmt
+
+* GtkApplication has gained support for state saving.
+  To try this out you need to use gnome-session main
+  and enable the session management protocol
+
+* A GtkAccessibleHypertext interface lets accessibles provide
+  information about embedded links
+
+* GtkAccessibleText can set caret and selection positions
+
+* Accessibility for dropdowns, list widgets, switches and entries
+  has been improved
+
+* GtkFileLauncher can provide writable access to files when used
+  in a flatpak
+
+* Some enumerations have had their introspected value names corrected:
+  GdkPaintableFlags, GdkFullscreenMode, GskPathForeachFlags,
+  GtkConstraintVflParserError
+  This is an API change for language bindings
+
+* GLib 2.84 is required now
+
+* Bugs fixed:
+  - #5712 Context menus in KGX and g-t-e fail to activate actions on X11
+  - #7309 Use the new accessible "switch" role instead of toggle button /
+    checkbox for Gtk switches (Matthias Clasen)
+  - #7602 Problems with GtkBuilder releasing references (Matthias Clasen)
+  - #7727 Stop using gsettings as fallback in the wayland settings code
+    (Matthias Clasen)
+  - #7739 a11y: Add caret and selection setters to GtkAccessibleText (Matthias
+    Clasen)
+  - #7755 Only the first text-shadow value gets applied when there are multiple
+    (regression) (Matthias Clasen)
+  - #7757 Make sense of AtkHyperlink (Matthias Clasen)
+  - #7766 gtk4-icon-editor does not seem to run with lang that set another
+    decimal symbol
+  - #7767 macOS: Main menu items with "action" and "target" set do not work
+    (Thomas Holder)
+  - #7777 shaper: Add  separate alpha slider (Matthias Clasen)
+
+* Changes:
+  - !6462 gdk/x11: Track enter/leave events on grab surface while button is held
+    (gldrk)
+  - !8502 State saving support (Matthias Clasen, Carlos Garnacho, Adrian Vovk)
+  - !8687 builder: Come clean about floating references (Matthias Clasen)
+  - !8892 Add GtkPathPaintable (Matthias Clasen)
+  - !8914 accessibletext: Add setters (Matthias Clasen)
+  - !8925 Add threading documentation (Matthias Clasen)
+  - !8928 surface: Mark region as nullable in set_input_region (João Pereira)
+  - !8930 settings: Call g_value_unset() after _gtk_settings_parse_convert()
+    (Takao Fujiwara)
+  - !8931 wayland: Invert flipped transforms (Robert Mader)
+  - !8933 Fix upright text carets (Matthias Clasen)
+  - !8935 gsk: Drop an unused private flag (Matthias Clasen)
+  - !8936 Some small gsk fixes (Matthias Clasen)
+  - !8937 text: Apply all text shadows (Matthias Clasen)
+  - !8945 symbolics: use strokes (Jakub Steiner, Matthias Clasen)
+  - !8946 wayland: Avoid a cursor size of zero (Matthias Clasen)
+  - !8947 Fix a broken cast (Matthias Clasen)
+  - !8948 build: Require GLib 2.84 (Matthias Clasen)
+  - !8949 ci: Remove "allow_failure" in MacOS build (sid)
+  - !8950 a11y atspi: No more report error for AT-SPI Text SetSelection (Michael
+    Weghorn)
+  - !8952 Fix memory leak with GtkPathBar (evan-razzaque)
+  - !8953 Some follow-up things for animated icons (Matthias Clasen)
+  - !8954 path paintable: Respect origin for attachments (Matthias Clasen)
+  - !8955 docs: Typo fix (tytan652)
+  - !8956 im context: add invalid-composition signal (Cristian Iacovlev)
+  - !8957 path paintable: Rename the blur transition (Matthias Clasen)
+  - !8958 Add prefix g-i annotation for some enums (VBB)
+  - !8959 icon-editor: Ensure dot decimal point for float format (tytan652)
+  - !8960 path paintable: Be more careful (Matthias Clasen)
+  - !8961 gtk-demo: Refresh the images demo (Matthias Clasen)
+  - !8962 Set the GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT in GtkDropDown (Matthias
+    Clasen)
+  - !8963 entry: Improve accessiblity (Matthias Clasen)
+  - !8964 Listview accessibility
+  - !8967 Portal check: activate the service if needed (Adrian Vovk)
+  - !8968 application: Document state vfuncs (Maximiliano Sandoval)
+  - !8969 application: Fix Since tags (Matthias Clasen)
+  - !8971 path paintable: Reduce weight variation (Matthias Clasen)
+  - !8972 gtkapplication-wayland: simplify chainup (Georges Basile Stavracas
+    Neto)
+  - !8973 Tweak stroke width range again (Matthias Clasen)
+  - !8974 gdk: Fix a string leak (Alice Mikhaylenko)
+  - !8975 icons: Stroke only stock (Jakub Steiner)
+  - !8976 picture: Allow symbolic paintables (Matthias Clasen)
+  - !8977 wip: Reduce the internal icontheme (Matthias Clasen)
+  - !8979 icon editor: Don't use a tempfile (Matthias Clasen)
+  - !8981 file launcher: Make writable work (Matthias Clasen)
+  - !8982 filterlistmodel: Fix position when emitting items-changed for item
+    watches (Kévin Commaille)
+  - !8984 icon editor: Allow setting initial state (Matthias Clasen)
+  - !8985 icon editor: Durations are now in ms (Matthias Clasen)
+  - !8987 gdk: Use longer timeout to reach to portals (Valentin David)
+  - !8988 css: Add an icon weight property (Matthias Clasen)
+  - !8989 Update expected errors for css tests (Matthias Clasen)
+  - !8991 menutracker: Add some assertions (Matthias Clasen)
+
+* Translation updates:
+  - Catalan (Jordi Mas i Hernandez)
+  - Chinese (China) (luming zh)
+  - Czech (Daniel Rusek)
+  - Danish (Ask Hjorth Larsen)
+  - Esperanto (Kristjan SCHMIDT)
+  - Galician (Francisco Diéguez Souto)
+  - Georgian (Ekaterine Papava)
+  - Lithuanian (Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Portuguese (Hugo Carvalho)
+  - Portuguese (Brazil) (Juliano de Souza Camargo)
+  - Romanian (Antonio Marin)
+  - Slovenian (Martin)
+  - Spanish (Daniel Mustieles)
+  - Turkish (Sabri Ünal)
+  - Ukrainian (Yuri Chornoivan)
+
+
 Overview of Changes in 4.20.1, 08-09-2025
 =========================================
 
