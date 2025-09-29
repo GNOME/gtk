@@ -2221,7 +2221,7 @@ gtk_path_paintable_class_init (GtkPathPaintableClass *class)
  *
  * Sets the state of the paintable.
  *
- * USe [method@Gtk.PathPaintable.get_max_state] to
+ * Use [method@Gtk.PathPaintable.get_max_state] to
  * find out what states @self has.
  *
  * Since: 4.22
