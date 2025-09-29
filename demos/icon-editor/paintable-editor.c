@@ -74,15 +74,19 @@ clear_path_editors (PaintableEditor *self)
 }
 
 static void
+append_path_editor (PaintableEditor *self,
+                    gsize           idx)
+{
+  gtk_box_append (self->path_elts, GTK_WIDGET (path_editor_new (self->paintable, idx)));
+  gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+}
+
+static void
 create_path_editors (PaintableEditor *self)
 {
-  for (gsize i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-    {
-      PathEditor *pe = path_editor_new (self->paintable, i);
-      gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-      gtk_box_append (self->path_elts, GTK_WIDGET (pe));
-    }
   gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  for (gsize i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
+    append_path_editor (self, i);
 }
 
 static void
@@ -407,6 +411,29 @@ paintable_editor_set_initial_state (PaintableEditor *self,
   self->state = state;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_STATE]);
+}
+
+void
+paintable_editor_add_path (PaintableEditor *self)
+{
+  g_autoptr (GskPath) path = NULL;
+  char buffer[128];
+
+  if (path_paintable_get_n_paths (self->paintable) == 0)
+    path_paintable_set_size (self->paintable, 100.f, 100.f);
+
+  g_snprintf (buffer, sizeof (buffer), "M 0 0 L ");
+  g_ascii_formatd (buffer + strlen (buffer), sizeof (buffer) - strlen (buffer),
+                   "%g ",
+                   path_paintable_get_width (self->paintable));
+  g_ascii_formatd (buffer + strlen (buffer), sizeof (buffer) - strlen (buffer),
+                   "%g ",
+                   path_paintable_get_width (self->paintable));
+  path = gsk_path_parse (buffer);
+  g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
+  path_paintable_add_path (self->paintable, path);
+  append_path_editor (self, path_paintable_get_n_paths (self->paintable) - 1);
+  g_signal_handlers_unblock_by_func (self->paintable, paths_changed, self);
 }
 
 /* }}} */

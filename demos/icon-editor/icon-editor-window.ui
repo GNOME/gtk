@@ -892,7 +892,7 @@
                     <property name="transition-type">slide-left</property>
                     <property name="reveal-child" bind-source="IconEditorWindow" bind-property="show-controls" bind-flags="sync-create"/>
                     <property name="child">
-                      <object class="PaintableEditor">
+                      <object class="PaintableEditor" id="paintable_editor">
                         <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable" bind-flags="sync-create"/>
                         <property name="initial-state" bind-source="IconEditorWindow" bind-property="initial-state" bind-flags="sync-create | bidirectional"/>
                       </object>
