@@ -56,7 +56,7 @@ color_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                                       double                 width,
                                       double                 height,
                                       const GdkRGBA         *colors,
-                                      gsize                  n_colors,
+                                      size_t                 n_colors,
                                       double                 weight)
 {
   ColorPaintable *self = COLOR_PAINTABLE (paintable);
@@ -77,7 +77,7 @@ color_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
                                    double                 width,
                                    double                 height,
                                    const GdkRGBA         *colors,
-                                   gsize                  n_colors)
+                                   size_t                 n_colors)
 {
   color_paintable_snapshot_with_weight (paintable,
                                         snapshot,

@@ -90,7 +90,7 @@ static void
 create_path_editors (PaintableEditor *self)
 {
   gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  for (gsize i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
+  for (size_t i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
     append_path_editor (self, i);
 }
 
@@ -110,16 +110,16 @@ update_summary (PaintableEditor *self)
 {
   if (self->paintable)
     {
-      guint state = path_paintable_get_state (self->paintable);
+      unsigned int state = path_paintable_get_state (self->paintable);
       g_autofree char *summary1 = NULL;
       g_autofree char *summary2 = NULL;
-      guint n;
+      unsigned int n;
 
 
       n = 0;
-      for (gsize i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
+      for (size_t i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
         {
-          guint64 states = path_paintable_get_path_states (self->paintable, i);
+          uint64_t states = path_paintable_get_path_states (self->paintable, i);
           if (states & (1ul << state))
             n++;
         }
@@ -216,7 +216,7 @@ paintable_editor_init (PaintableEditor *self)
 
 static void
 paintable_editor_set_property (GObject      *object,
-                               guint         prop_id,
+                               unsigned int  prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
@@ -239,10 +239,10 @@ paintable_editor_set_property (GObject      *object,
 }
 
 static void
-paintable_editor_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
+paintable_editor_get_property (GObject      *object,
+                               unsigned int  prop_id,
+                               GValue       *value,
+                               GParamSpec   *pspec)
 {
   PaintableEditor *self = PAINTABLE_EDITOR (object);
 

@@ -30,13 +30,13 @@ G_DECLARE_FINAL_TYPE (PathEditor, path_editor, PATH, EDITOR, GtkWidget)
 
 
 PathEditor *    path_editor_new           (PathPaintable *paintable,
-                                           gsize          idx);
+                                           size_t         idx);
 
 void            path_editor_set_paintable (PathEditor    *self,
                                            PathPaintable *paintable);
 PathPaintable * path_editor_get_paintable (PathEditor    *self);
 
 void            path_editor_set_path      (PathEditor    *self,
-                                           gsize          idx);
-gsize           path_editor_get_path      (PathEditor    *self);
+                                           size_t         idx);
+size_t          path_editor_get_path      (PathEditor    *self);
 void            path_editor_edit_path     (PathEditor    *self);

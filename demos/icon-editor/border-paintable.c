@@ -68,7 +68,7 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                                        double                 width,
                                        double                 height,
                                        const GdkRGBA         *colors,
-                                       gsize                  n_colors,
+                                       size_t                 n_colors,
                                        double                 weight)
 {
   BorderPaintable *self = BORDER_PAINTABLE (paintable);
@@ -113,7 +113,7 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, width, height);
       GdkRGBA c = (GdkRGBA) { 1, 0, 0, 1 };
       g_autoptr (GskStroke) stroke = NULL;
-      guint state;
+      unsigned int state;
 
       stroke = gsk_stroke_new (1.f/scale);
 
@@ -124,15 +124,15 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
       if (state != STATE_UNSET)
         {
-          for (guint i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
+          for (unsigned int i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
             {
-              guint64 states = path_paintable_get_path_states (self->paintable, i);
+              uint64_t states = path_paintable_get_path_states (self->paintable, i);
 
               if (states & (G_GUINT64_CONSTANT (1) << state))
                 {
                   GskPath *path = path_paintable_get_path (self->paintable, i);
                   float origin = path_paintable_get_path_origin (self->paintable, i);
-                  gsize attach_to;
+                  size_t attach_to;
                   float attach_pos;
 
                   graphene_point_t pos;
@@ -151,7 +151,7 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
                   path_paintable_get_attach_path (self->paintable, i, &attach_to, &attach_pos);
 
-                  if (attach_to != (gsize) -1)
+                  if (attach_to != (size_t) -1)
                     {
                       GskPathBuilder *builder;
                       GskPath *arrow;
@@ -183,7 +183,7 @@ border_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
                                     double                 width,
                                     double                 height,
                                     const GdkRGBA         *colors,
-                                    gsize                  n_colors)
+                                    size_t                 n_colors)
 {
   border_paintable_snapshot_with_weight (paintable,
                                          snapshot,
@@ -290,10 +290,10 @@ border_paintable_dispose (GObject *object)
 }
 
 static void
-border_paintable_get_property (GObject    *object,
-                               guint       property_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
+border_paintable_get_property (GObject      *object,
+                               unsigned int  property_id,
+                               GValue       *value,
+                               GParamSpec   *pspec)
 {
   BorderPaintable *self = BORDER_PAINTABLE (object);
 
@@ -319,7 +319,7 @@ border_paintable_get_property (GObject    *object,
 
 static void
 border_paintable_set_property (GObject      *object,
-                               guint         property_id,
+                               unsigned int  property_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {

@@ -117,7 +117,7 @@ activate_help (GSimpleAction *action,
   GtkTextBuffer *buffer;
   g_autoptr (GBytes) bytes = NULL;
   const char *text;
-  gsize length;
+  size_t length;
 
   if (!self->help_window)
     {

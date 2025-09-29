@@ -326,8 +326,8 @@ typedef struct
 {
   GMarkupParseContext *parser;
   char *markup;
-  gsize pos;
-  gsize len;
+  size_t pos;
+  size_t len;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextMark *mark;
@@ -365,7 +365,7 @@ insert_markup_idle (gpointer data)
 
       if (g_get_monotonic_time () - begin > G_TIME_SPAN_MILLISECOND)
         {
-          guint id;
+          unsigned int id;
           id = g_idle_add (insert_markup_idle, data);
           g_source_set_name_by_id (id, "[gtk-demo] insert_markup_idle");
           return G_SOURCE_REMOVE;
@@ -402,7 +402,7 @@ parse_markup_idle (gpointer data)
   do {
     if (g_get_monotonic_time () - begin > G_TIME_SPAN_MILLISECOND)
       {
-        guint id;
+        unsigned int id;
         id = g_idle_add (parse_markup_idle, data);
         g_source_set_name_by_id (id, "[gtk-demo] parse_markup_idle");
         return G_SOURCE_REMOVE;
@@ -518,7 +518,7 @@ fontify_finish (GObject      *source,
   if (stdout_buf)
     {
       char *markup;
-      gsize len;
+      size_t len;
       char *p;
       GtkTextIter start;
 

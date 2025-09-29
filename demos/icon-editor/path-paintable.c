@@ -21,12 +21,11 @@
 
 #include "path-paintable.h"
 
-
 typedef struct
 {
   GskPath *path;
 
-  guint64 states;
+  uint64_t states;
 
   struct {
     TransitionType type;
@@ -49,7 +48,7 @@ typedef struct
     float width;
     float min_width;
     float max_width;
-    guint symbolic;
+    unsigned int symbolic;
     GdkRGBA color;
     GskLineCap linecap;
     GskLineJoin linejoin;
@@ -58,12 +57,12 @@ typedef struct
   struct {
     gboolean enabled;
     GskFillRule rule;
-    guint symbolic;
+    unsigned int symbolic;
     GdkRGBA color;
   } fill;
 
   struct {
-    gsize to;
+    size_t to;
     float position;
   } attach;
 
@@ -76,7 +75,7 @@ struct _PathPaintable
 
   double width, height;
 
-  guint state;
+  unsigned int state;
   float weight;
 
   GStrv keywords;
@@ -100,7 +99,7 @@ enum
 };
 
 static GParamSpec *properties[NUM_PROPERTIES];
-static guint signals[LAST_SIGNAL];
+static unsigned int signals[LAST_SIGNAL];
 
 /* {{{ Helpers */
 
@@ -118,21 +117,19 @@ notify_state (GObject *object)
   g_object_notify_by_pspec (object, properties[PROP_STATE]);
 }
 
-static void
+static GtkPathPaintable *
 ensure_render_paintable (PathPaintable *self)
 {
   if (!self->render_paintable)
     {
-      GBytes *bytes = path_paintable_serialize (self, self->state);
-      GError *error = NULL;
+      g_autoptr (GBytes) bytes = NULL;
+      g_autoptr (GError) error = NULL;
 
+      bytes = path_paintable_serialize (self, self->state);
       self->render_paintable = gtk_path_paintable_new_from_bytes (bytes, &error);
 
       if (!self->render_paintable)
-        {
-          g_print ("Failed to parse\n%s\n", (const char *) g_bytes_get_data (bytes, NULL));
-          g_error ("%s", error->message);
-        }
+        g_error ("%s", error->message);
 
       gtk_path_paintable_set_weight (self->render_paintable, self->weight);
 
@@ -145,22 +142,18 @@ ensure_render_paintable (PathPaintable *self)
                                 G_CALLBACK (gdk_paintable_invalidate_size), self);
 
     }
+
+  return self->render_paintable;
 }
 
 static gboolean
 path_equal (GskPath *p1,
             GskPath *p2)
 {
-  char *s1 = gsk_path_to_string (p1);
-  char *s2 = gsk_path_to_string (p2);
-  gboolean res;
+  g_autofree char *s1 = gsk_path_to_string (p1);
+  g_autofree char *s2 = gsk_path_to_string (p2);
 
-  res = strcmp (s1, s2) == 0;
-
-  g_free (s1);
-  g_free (s2);
-
-  return res;
+  return strcmp (s1, s2) == 0;
 }
 
 static gboolean
@@ -259,12 +252,10 @@ markup_filter_attributes (const char *element_name,
   va_start (ap, name);
   while (name)
     {
-      const char **ptr;
-
-      ptr = va_arg (ap, const char **);
+      const char **ptr = va_arg (ap, const char **);
 
       *ptr = NULL;
-      for (int i = 0; attribute_names[i]; i++)
+      for (unsigned int i = 0; attribute_names[i]; i++)
         {
           if (strcmp (attribute_names[i], name) == 0)
             {
@@ -286,11 +277,11 @@ enum
 };
 
 static gboolean
-parse_float (const char  *name,
-             const char  *value,
-             guint        flags,
-             float       *f,
-             GError     **error)
+parse_float (const char    *name,
+             const char    *value,
+             unsigned int   flags,
+             float         *f,
+             GError       **error)
 {
   char *end;
 
@@ -373,7 +364,7 @@ rect_path_new (float x,
 }
 
 static char *
-states_to_string (guint64 states)
+states_to_string (uint64_t states)
 {
   if (states == ALL_STATES)
     {
@@ -387,7 +378,7 @@ states_to_string (guint64 states)
     {
       GString *str = g_string_new ("");
 
-      for (guint u = 0; u < 64; u++)
+      for (unsigned int u = 0; u < 64; u++)
         {
           if ((states & (G_GUINT64_CONSTANT (1) << u)) != 0)
             {
@@ -402,8 +393,8 @@ states_to_string (guint64 states)
 
 static gboolean
 states_parse (const char *text,
-              guint64     default_value,
-              guint64    *states)
+              uint64_t    default_value,
+              uint64_t   *states)
 {
   g_auto (GStrv) str = NULL;
 
@@ -428,12 +419,12 @@ states_parse (const char *text,
   *states = 0;
 
   str = g_strsplit (text, " ", 0);
-  for (int i = 0; str[i]; i++)
+  for (unsigned int i = 0; str[i]; i++)
     {
-      guint u;
+      unsigned int u;
       char *end;
 
-      u = (guint) g_ascii_strtoull (str[i], &end, 10);
+      u = (unsigned int) g_ascii_strtoull (str[i], &end, 10);
       if ((end && *end != '\0') || (u > 63))
         {
           *states = ALL_STATES;
@@ -468,9 +459,9 @@ g_strv_has (GStrv       strv,
 
 static void
 start_element_cb (GMarkupParseContext  *context,
-                  const gchar          *element_name,
-                  const gchar         **attribute_names,
-                  const gchar         **attribute_values,
+                  const char           *element_name,
+                  const char          **attribute_names,
+                  const char          **attribute_values,
                   gpointer              user_data,
                   GError              **error)
 {
@@ -502,14 +493,14 @@ start_element_cb (GMarkupParseContext  *context,
   const char *attach_pos_attr = NULL;
   GskPath *path = NULL;
   GskStroke *stroke = NULL;
-  guint stroke_symbolic;
+  unsigned int stroke_symbolic;
   GdkRGBA stroke_color;
   float stroke_opacity;
-  guint fill_symbolic;
+  unsigned int fill_symbolic;
   GskFillRule fill_rule;
   GdkRGBA fill_color;
   float fill_opacity;
-  guint64 states;
+  uint64_t states;
   TransitionType transition_type;;
   float transition_duration;
   float transition_delay;
@@ -520,8 +511,8 @@ start_element_cb (GMarkupParseContext  *context,
   EasingFunction animation_easing;
   float animation_segment;
   float origin;
-  gsize idx;
-  gsize attach_to;
+  size_t idx;
+  size_t attach_to;
   float attach_pos;
   float stroke_width;
   float min_stroke_width;
@@ -596,10 +587,10 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (version_attr)
         {
-          guint version;
+          unsigned int version;
           char *end;
 
-          version = (guint) g_ascii_strtoull (version_attr, &end, 10);
+          version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
           if ((end && *end != '\0') || version != 1)
             {
               set_attribute_error (error, "gpa:version", version_attr);
@@ -1002,7 +993,7 @@ start_element_cb (GMarkupParseContext  *context,
   if (transition_type_attr)
     {
       const char *types[] = { "none", "animate", "morph", "fade" };
-      guint i;
+      unsigned int i;
 
       for (i = 0; i < G_N_ELEMENTS (types); i++)
         {
@@ -1040,7 +1031,7 @@ start_element_cb (GMarkupParseContext  *context,
       const char *easing[] =  { "linear", "ease-in-out", "ease-in",
         "ease-out", "ease"
       };
-      guint i;
+      unsigned int i;
 
       for (i = 0; i < G_N_ELEMENTS (easing); i++)
         {
@@ -1058,7 +1049,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
     }
 
-  attach_to = (gsize) -1;
+  attach_to = (size_t) -1;
   origin = 0;
   if (origin_attr)
     {
@@ -1083,7 +1074,7 @@ start_element_cb (GMarkupParseContext  *context,
   if (animation_type_attr)
     {
       const char *types[] = { "none", "automatic" };
-      guint i;
+      unsigned int i;
 
       for (i = 0; i < G_N_ELEMENTS (types); i++)
         {
@@ -1108,7 +1099,7 @@ start_element_cb (GMarkupParseContext  *context,
         "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse",
         "segment", "segment-alternate"
       };
-      guint i;
+      unsigned int i;
 
       for (i = 0; i < G_N_ELEMENTS (directions); i++)
         {
@@ -1139,7 +1130,7 @@ start_element_cb (GMarkupParseContext  *context,
       const char *easing[] =  { "linear", "ease-in-out", "ease-in",
         "ease-out", "ease"
       };
-      guint i;
+      unsigned int i;
 
       for (i = 0; i < G_N_ELEMENTS (easing); i++)
         {
@@ -1164,7 +1155,7 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  attach_to = (gsize) -1;
+  attach_to = (size_t) -1;
   if (attach_to_attr)
     {
       gpointer value;
@@ -1209,14 +1200,6 @@ cleanup:
   g_clear_pointer (&stroke, gsk_stroke_free);
 }
 
-static void
-end_element_cb (GMarkupParseContext  *context,
-                const gchar          *element_name,
-                gpointer              user_data,
-                GError              **error)
-{
-}
-
 static gboolean
 parse_symbolic_svg (PathPaintable  *paintable,
                     GBytes         *bytes,
@@ -1226,13 +1209,13 @@ parse_symbolic_svg (PathPaintable  *paintable,
   GMarkupParseContext *context;
   GMarkupParser parser = {
     start_element_cb,
-    end_element_cb,
+    NULL,
     NULL,
     NULL,
     NULL,
   };
   const char *text;
-  gsize length;
+  size_t length;
   gboolean ret;
 
   data.paintable = paintable;
@@ -1255,21 +1238,21 @@ parse_symbolic_svg (PathPaintable  *paintable,
 
 static void
 path_paintable_save_path (PathPaintable *self,
-                          gsize          idx,
+                          size_t         idx,
                           GString       *str)
 {
   const char *sym[] = { "foreground", "error", "warning", "success", "accent" };
   const char *easing[] = { "linear", "ease-in-out", "ease-in", "ease-out", "ease" };
   const char *fallback_color[] = { "rgb(0,0,0)", "rgb(255,0,0)", "rgb(255,255,0)", "rgb(0,255,0)", "rgb(0,0,255)", };
   GskStroke *stroke;
-  guint stroke_symbolic;
-  guint fill_symbolic;
+  unsigned int stroke_symbolic;
+  unsigned int fill_symbolic;
   gboolean stroke_enabled;
   gboolean fill_enabled;
   GdkRGBA color;
   GskFillRule fill_rule;
-  guint64 states;
-  gsize to;
+  uint64_t states;
+  size_t to;
   float pos;
   GStrvBuilder *class_builder;
   GStrv class_strv;
@@ -1290,11 +1273,8 @@ path_paintable_save_path (PathPaintable *self,
   states = path_paintable_get_path_states (self, idx);
   if (states != ALL_STATES)
     {
-      char *s;
-
-      s = states_to_string (states);
+      g_autofree char *s = states_to_string (states);
       g_string_append_printf (str, "\n        gpa:states='%s'", s);
-      g_free (s);
       has_gtk_attr = TRUE;
     }
 
@@ -1376,11 +1356,11 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  to = (gsize) -1;
+  to = (size_t) -1;
   pos = 0;
 
   path_paintable_get_attach_path (self, idx, &to, &pos);
-  if (to != (gsize) -1)
+  if (to != (size_t) -1)
     {
       g_string_append_printf (str, "\n        gpa:attach-to='path%lu'", to);
       g_string_append_printf (str, "\n        gpa:attach-pos='%s'",
@@ -1400,10 +1380,9 @@ path_paintable_save_path (PathPaintable *self,
 
       if (stroke_symbolic == 0xffff)
         {
-          char *s = gdk_rgba_to_string (&color);
+          g_autofree char *s = gdk_rgba_to_string (&color);
           g_string_append_printf (str, "\n        stroke='%s'", s);
           g_string_append_printf (str, "\n        gpa:stroke='%s'", s);
-          g_free (s);
           has_gtk_attr = TRUE;
         }
       else if (stroke_symbolic <= GTK_SYMBOLIC_COLOR_ACCENT)
@@ -1431,10 +1410,9 @@ path_paintable_save_path (PathPaintable *self,
 
       if (fill_symbolic == 0xffff)
         {
-          char *s = gdk_rgba_to_string (&color);
+          g_autofree char *s = gdk_rgba_to_string (&color);
           g_string_append_printf (str, "\n        fill='%s'", s);
           g_string_append_printf (str, "\n        gpa:fill='%s'", s);
-          g_free (s);
           has_gtk_attr = TRUE;
         }
       else if (fill_symbolic <= GTK_SYMBOLIC_COLOR_ACCENT)
@@ -1476,8 +1454,8 @@ path_paintable_save_path (PathPaintable *self,
 static void
 path_paintable_save (PathPaintable *self,
                      GString       *str,
-                     guint          initial_state,
-                     guint          state_to_save)
+                     unsigned int   initial_state,
+                     unsigned int   state_to_save)
 {
   GStrv keywords;
   char buffer[G_ASCII_DTOSTR_BUF_SIZE];
@@ -1493,7 +1471,7 @@ path_paintable_save (PathPaintable *self,
   if (keywords)
     {
       g_string_append (str,      "\n     gpa:keywords='");
-      for (int i = 0; keywords[i]; i++)
+      for (unsigned int i = 0; keywords[i]; i++)
         {
           if (i > 0)
             g_string_append_c (str, ' ');
@@ -1512,9 +1490,9 @@ path_paintable_save (PathPaintable *self,
 
   g_string_append (str, ">\n");
 
-  for (gsize idx = 0; idx < path_paintable_get_n_paths (self); idx++)
+  for (size_t idx = 0; idx < path_paintable_get_n_paths (self); idx++)
     {
-      guint64 states = path_paintable_get_path_states (self, idx);
+      uint64_t states = path_paintable_get_path_states (self, idx);
       if (state_to_save == STATE_UNSET || (states & (G_GUINT64_CONSTANT (1) << state_to_save)) != 0)
         path_paintable_save_path (self, idx, str);
     }
@@ -1534,7 +1512,7 @@ path_paintable_save (PathPaintable *self,
  */
 GBytes *
 path_paintable_serialize_state (PathPaintable *self,
-                                guint          state_to_save)
+                                unsigned int   state_to_save)
 {
   GString *str = g_string_new ("");
 
@@ -1552,14 +1530,10 @@ path_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
                                      double                width,
                                      double                height,
                                      const GdkRGBA        *colors,
-                                     gsize                 n_colors,
+                                     size_t                n_colors,
                                      double                weight)
 {
-  PathPaintable *self = PATH_PAINTABLE (paintable);
-
-  ensure_render_paintable (self);
-
-  gtk_symbolic_paintable_snapshot_with_weight (GTK_SYMBOLIC_PAINTABLE (self->render_paintable),
+  gtk_symbolic_paintable_snapshot_with_weight (GTK_SYMBOLIC_PAINTABLE (ensure_render_paintable (PATH_PAINTABLE (paintable))),
                                                snapshot,
                                                width, height,
                                                colors, n_colors,
@@ -1572,16 +1546,12 @@ path_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
                                   double                 width,
                                   double                 height,
                                   const GdkRGBA         *colors,
-                                  gsize                  n_colors)
+                                  size_t                 n_colors)
 {
-  PathPaintable *self = PATH_PAINTABLE (paintable);
-
-  ensure_render_paintable (self);
-
-  gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (self->render_paintable),
-                                            snapshot,
-                                            width, height,
-                                            colors, n_colors);
+  path_paintable_snapshot_with_weight (paintable, snapshot,
+                                       width, height,
+                                       colors, n_colors,
+                                       400);
 }
 
 static void
@@ -1600,11 +1570,7 @@ path_paintable_snapshot (GdkPaintable  *paintable,
                          double         width,
                          double         height)
 {
-  PathPaintable *self = PATH_PAINTABLE (paintable);
-
-  ensure_render_paintable (self);
-
-  gdk_paintable_snapshot (GDK_PAINTABLE (self->render_paintable),
+  gdk_paintable_snapshot (GDK_PAINTABLE (ensure_render_paintable (PATH_PAINTABLE (paintable))),
                           snapshot,
                           width, height);
 }
@@ -1612,19 +1578,13 @@ path_paintable_snapshot (GdkPaintable  *paintable,
 static int
 path_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
-  PathPaintable *self = PATH_PAINTABLE (paintable);
-
-  ensure_render_paintable (self);
-
-  return gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (self->render_paintable));
+  return gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (ensure_render_paintable (PATH_PAINTABLE (paintable))));
 }
 
 static int
 path_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
-  PathPaintable *self = PATH_PAINTABLE (paintable);
-
-  return gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (self->render_paintable));
+  return gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (ensure_render_paintable (PATH_PAINTABLE (paintable))));
 }
 
 static void
@@ -1659,7 +1619,6 @@ path_paintable_dispose (GObject *object)
   PathPaintable *self = PATH_PAINTABLE (object);
 
   g_array_unref (self->paths);
-
   g_clear_pointer (&self->keywords, g_strfreev);
 
   if (self->render_paintable)
@@ -1676,10 +1635,10 @@ path_paintable_dispose (GObject *object)
 }
 
 static void
-path_paintable_get_property (GObject    *object,
-                             guint       property_id,
-                             GValue     *value,
-                             GParamSpec *pspec)
+path_paintable_get_property (GObject      *object,
+                             unsigned int  property_id,
+                             GValue       *value,
+                             GParamSpec   *pspec)
 {
   PathPaintable *self = PATH_PAINTABLE (object);
 
@@ -1705,7 +1664,7 @@ path_paintable_get_property (GObject    *object,
 
 static void
 path_paintable_set_property (GObject      *object,
-                             guint         property_id,
+                             unsigned int  property_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
@@ -1726,14 +1685,12 @@ path_paintable_set_property (GObject      *object,
         const char *path = g_value_get_string (value);
         if (path)
           {
-            GBytes *bytes;
+            g_autoptr (GBytes) bytes = NULL;
             GError *error = NULL;
 
             bytes = g_resources_lookup_data (path, 0, NULL);
             if (!parse_symbolic_svg (self, bytes, &error))
               g_error ("%s", error->message);
-
-            g_bytes_unref (bytes);
           }
       }
       break;
@@ -1766,7 +1723,7 @@ path_paintable_class_init (PathPaintableClass *class)
    * The current state of the paintable.
    *
    * This can be a number between 0 and the maximum state
-   * of the paintable, or the special value `(guint) -1`
+   * of the paintable, or the special value `(unsigned int) -1`
    * to indicate the 'none' state in which nothing is drawn.
    */
   properties[PROP_STATE] =
@@ -1861,7 +1818,7 @@ path_paintable_get_height (PathPaintable *self)
   return self->height;
 }
 
-gsize
+size_t
 path_paintable_add_path (PathPaintable *self,
                          GskPath       *path)
 {
@@ -1891,13 +1848,13 @@ path_paintable_add_path (PathPaintable *self,
   elt.stroke.enabled = TRUE;
   elt.stroke.width = 2;
   elt.stroke.min_width = 0.5;
-  elt.stroke.max_width = 5;
+  elt.stroke.max_width = 3;
   elt.stroke.linecap = GSK_LINE_CAP_ROUND;
   elt.stroke.linejoin = GSK_LINE_JOIN_ROUND;
   elt.stroke.symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
   elt.stroke.color = (GdkRGBA) { 0, 0, 0, 1 };
 
-  elt.attach.to = (gsize) -1;
+  elt.attach.to = (size_t) -1;
   elt.attach.position = 0;
 
   g_array_append_val (self->paths, elt);
@@ -1910,17 +1867,17 @@ path_paintable_add_path (PathPaintable *self,
 
 void
 path_paintable_delete_path (PathPaintable *self,
-                            gsize          idx)
+                            size_t         idx)
 {
-  for (gsize i = 0; i < self->paths->len; i++)
+  for (size_t i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
-      if (elt->attach.to == (gsize) -1)
+      if (elt->attach.to == (size_t) -1)
         continue;
 
       if (elt->attach.to == idx)
-        elt->attach.to = (gsize) -1;
+        elt->attach.to = (size_t) -1;
       else if (elt->attach.to > idx)
         elt->attach.to -= 1;
     }
@@ -1935,8 +1892,8 @@ path_paintable_delete_path (PathPaintable *self,
 
 void
 path_paintable_move_path (PathPaintable *self,
-                          gsize          idx,
-                          gsize          new_pos)
+                          size_t         idx,
+                          size_t         new_pos)
 {
   PathElt tmp;
 
@@ -1946,11 +1903,11 @@ path_paintable_move_path (PathPaintable *self,
   if (new_pos == idx)
     return;
 
-  for (gsize i = 0; i < self->paths->len; i++)
+  for (size_t i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
-      if (elt->attach.to == (gsize) -1)
+      if (elt->attach.to == (size_t) -1)
         continue;
 
       if (elt->attach.to == idx)
@@ -1989,7 +1946,7 @@ path_paintable_duplicate_path (PathPaintable *self,
 
 void
 path_paintable_set_path (PathPaintable *self,
-                         gsize          idx,
+                         size_t         idx,
                          GskPath       *path)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -2004,8 +1961,8 @@ path_paintable_set_path (PathPaintable *self,
 
 void
 path_paintable_set_path_states (PathPaintable *self,
-                                gsize          idx,
-                                guint64        states)
+                                size_t         idx,
+                                uint64_t       states)
 {
   g_return_if_fail (idx < self->paths->len);
 
@@ -2023,8 +1980,8 @@ path_paintable_set_path_states (PathPaintable *self,
 
 void
 path_paintable_set_path_transition (PathPaintable   *self,
-                                    gsize            idx,
-                                    TransitionType  type,
+                                    size_t           idx,
+                                    TransitionType   type,
                                     float            duration,
                                     float            delay,
                                     EasingFunction   easing)
@@ -2053,7 +2010,7 @@ path_paintable_set_path_transition (PathPaintable   *self,
 
 void
 path_paintable_set_path_animation (PathPaintable      *self,
-                                   gsize               idx,
+                                   size_t              idx,
                                    AnimationType       type,
                                    AnimationDirection  direction,
                                    float               duration,
@@ -2083,7 +2040,7 @@ path_paintable_set_path_animation (PathPaintable      *self,
 
 AnimationType
 path_paintable_get_path_animation_type (PathPaintable *self,
-                                        gsize          idx)
+                                        size_t         idx)
 {
   g_return_val_if_fail (idx < self->paths->len, ANIMATION_TYPE_NONE);
 
@@ -2094,7 +2051,7 @@ path_paintable_get_path_animation_type (PathPaintable *self,
 
 AnimationDirection
 path_paintable_get_path_animation_direction (PathPaintable *self,
-                                             gsize          idx)
+                                             size_t         idx)
 {
   g_return_val_if_fail (idx < self->paths->len, ANIMATION_DIRECTION_NORMAL);
 
@@ -2105,7 +2062,7 @@ path_paintable_get_path_animation_direction (PathPaintable *self,
 
 float
 path_paintable_get_path_animation_duration (PathPaintable *self,
-                                            gsize          idx)
+                                            size_t         idx)
 {
   g_return_val_if_fail (idx < self->paths->len, 0);
 
@@ -2116,7 +2073,7 @@ path_paintable_get_path_animation_duration (PathPaintable *self,
 
 EasingFunction
 path_paintable_get_path_animation_easing (PathPaintable *self,
-                                          gsize          idx)
+                                          size_t         idx)
 {
   g_return_val_if_fail (idx< self->paths->len, 0);
 
@@ -2127,7 +2084,7 @@ path_paintable_get_path_animation_easing (PathPaintable *self,
 
 float
 path_paintable_get_path_animation_segment (PathPaintable *self,
-                                           gsize          idx)
+                                           size_t         idx)
 {
   g_return_val_if_fail (idx < self->paths->len, 0.2f);
 
@@ -2137,7 +2094,7 @@ path_paintable_get_path_animation_segment (PathPaintable *self,
 }
 void
 path_paintable_set_path_origin (PathPaintable *self,
-                                gsize          idx,
+                                size_t         idx,
                                 float          origin)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -2154,10 +2111,10 @@ path_paintable_set_path_origin (PathPaintable *self,
 
 void
 path_paintable_set_path_fill (PathPaintable   *self,
-                              gsize            idx,
+                              size_t           idx,
                               gboolean         enabled,
                               GskFillRule      rule,
-                              guint            symbolic,
+                              unsigned int     symbolic,
                               const GdkRGBA   *color)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -2184,10 +2141,10 @@ path_paintable_set_path_fill (PathPaintable   *self,
 
 void
 path_paintable_set_path_stroke (PathPaintable *self,
-                                gsize          idx,
+                                size_t         idx,
                                 gboolean       enabled,
                                 GskStroke     *stroke,
-                                guint          symbolic,
+                                unsigned int   symbolic,
                                 const GdkRGBA *color)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -2217,7 +2174,7 @@ path_paintable_set_path_stroke (PathPaintable *self,
 
 void
 path_paintable_set_path_stroke_variation (PathPaintable *self,
-                                          gsize          idx,
+                                          size_t         idx,
                                           float          min_width,
                                           float          max_width)
 {
@@ -2237,7 +2194,7 @@ path_paintable_set_path_stroke_variation (PathPaintable *self,
 
 void
 path_paintable_get_path_stroke_variation (PathPaintable *self,
-                                          gsize          idx,
+                                          size_t         idx,
                                           float         *min_width,
                                           float         *max_width)
 {
@@ -2251,8 +2208,8 @@ path_paintable_get_path_stroke_variation (PathPaintable *self,
 
 void
 path_paintable_attach_path (PathPaintable *self,
-                            gsize          idx,
-                            gsize          to,
+                            size_t         idx,
+                            size_t         to,
                             float          pos)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -2270,8 +2227,8 @@ path_paintable_attach_path (PathPaintable *self,
 
 void
 path_paintable_get_attach_path (PathPaintable *self,
-                                gsize          idx,
-                                gsize         *to,
+                                size_t         idx,
+                                size_t        *to,
                                 float         *pos)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -2298,7 +2255,7 @@ path_paintable_get_keywords (PathPaintable *self)
   return self->keywords;
 }
 
-gsize
+size_t
 path_paintable_get_n_paths (PathPaintable *self)
 {
   return self->paths->len;
@@ -2306,7 +2263,7 @@ path_paintable_get_n_paths (PathPaintable *self)
 
 GskPath *
 path_paintable_get_path (PathPaintable *self,
-                         gsize          idx)
+                         size_t         idx)
 {
   g_return_val_if_fail (idx < self->paths->len, NULL);
 
@@ -2315,9 +2272,9 @@ path_paintable_get_path (PathPaintable *self,
   return elt->path;
 }
 
-guint64
+uint64_t
 path_paintable_get_path_states (PathPaintable *self,
-                                gsize          idx)
+                                size_t         idx)
 {
   g_return_val_if_fail (idx < self->paths->len, 0);
 
@@ -2328,7 +2285,7 @@ path_paintable_get_path_states (PathPaintable *self,
 
 TransitionType
 path_paintable_get_path_transition_type (PathPaintable *self,
-                                         gsize          idx)
+                                         size_t         idx)
 {
   g_return_val_if_fail (idx< self->paths->len, TRANSITION_TYPE_NONE);
 
@@ -2339,7 +2296,7 @@ path_paintable_get_path_transition_type (PathPaintable *self,
 
 float
 path_paintable_get_path_transition_duration (PathPaintable *self,
-                                             gsize          idx)
+                                             size_t         idx)
 {
   g_return_val_if_fail (idx< self->paths->len, 0);
 
@@ -2350,7 +2307,7 @@ path_paintable_get_path_transition_duration (PathPaintable *self,
 
 float
 path_paintable_get_path_transition_delay (PathPaintable *self,
-                                          gsize          idx)
+                                          size_t         idx)
 {
   g_return_val_if_fail (idx< self->paths->len, 0);
 
@@ -2361,7 +2318,7 @@ path_paintable_get_path_transition_delay (PathPaintable *self,
 
 EasingFunction
 path_paintable_get_path_transition_easing (PathPaintable *self,
-                                           gsize          idx)
+                                           size_t         idx)
 {
   g_return_val_if_fail (idx< self->paths->len, 0);
 
@@ -2372,7 +2329,7 @@ path_paintable_get_path_transition_easing (PathPaintable *self,
 
 float
 path_paintable_get_path_origin (PathPaintable *self,
-                                gsize          idx)
+                                size_t         idx)
 {
   g_return_val_if_fail (idx < self->paths->len, 0.0);
 
@@ -2383,9 +2340,9 @@ path_paintable_get_path_origin (PathPaintable *self,
 
 gboolean
 path_paintable_get_path_fill (PathPaintable *self,
-                              gsize          idx,
+                              size_t         idx,
                               GskFillRule   *rule,
-                              guint         *symbolic,
+                              unsigned int  *symbolic,
                               GdkRGBA       *color)
 {
   g_return_val_if_fail (idx < self->paths->len, FALSE);
@@ -2401,9 +2358,9 @@ path_paintable_get_path_fill (PathPaintable *self,
 
 gboolean
 path_paintable_get_path_stroke (PathPaintable *self,
-                                gsize          idx,
+                                size_t         idx,
                                 GskStroke     *stroke,
-                                guint         *symbolic,
+                                unsigned int  *symbolic,
                                 GdkRGBA       *color)
 {
   g_return_val_if_fail (idx < self->paths->len, FALSE);
@@ -2426,9 +2383,9 @@ path_paintable_copy (PathPaintable *self)
   GskStroke *stroke;
   gboolean enabled;
   GskFillRule rule = GSK_FILL_RULE_WINDING;
-  guint symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+  unsigned int symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
   GdkRGBA color = (GdkRGBA) { 0, 0, 0, 1 };
-  gsize to = (gsize) -1;
+  size_t to = (size_t) -1;
   float pos = 0;
 
   other = path_paintable_new ();
@@ -2438,7 +2395,7 @@ path_paintable_copy (PathPaintable *self)
 
   stroke = gsk_stroke_new (1);
 
-  for (gsize i = 0; i < self->paths->len; i++)
+  for (size_t i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
@@ -2477,8 +2434,8 @@ path_paintable_combine (PathPaintable *one,
                         PathPaintable *two)
 {
   PathPaintable *res;
-  guint max_state;
-  gsize n_paths;
+  unsigned int max_state;
+  size_t n_paths;
   GskStroke *stroke;
 
   res = path_paintable_copy (one);
@@ -2486,16 +2443,16 @@ path_paintable_combine (PathPaintable *one,
   max_state = path_paintable_get_max_state (res);
   n_paths = path_paintable_get_n_paths (res);
 
-  for (gsize i = 0; i < path_paintable_get_n_paths (res); i++)
+  for (size_t i = 0; i < path_paintable_get_n_paths (res); i++)
     {
-      guint64 states;
+      uint64_t states;
 
       states = path_paintable_get_path_states (res, i);
       if (states == ALL_STATES)
         {
           states = 0;
 
-          for (gsize j = 0; j <= max_state; j++)
+          for (size_t j = 0; j <= max_state; j++)
             states = states | (G_GUINT64_CONSTANT (1) << j);
 
           path_paintable_set_path_states (res, i, states);
@@ -2504,15 +2461,15 @@ path_paintable_combine (PathPaintable *one,
 
   stroke = gsk_stroke_new (1);
 
-  for (gsize i = 0; i < path_paintable_get_n_paths (two); i++)
+  for (size_t i = 0; i < path_paintable_get_n_paths (two); i++)
     {
-      gsize idx;
-      guint64 states;
+      size_t idx;
+      uint64_t states;
       gboolean enabled;
       GskFillRule rule = GSK_FILL_RULE_WINDING;
-      guint symbolic = 0;
+      unsigned int symbolic = 0;
       GdkRGBA color;
-      gsize attach_to = (gsize) -1;
+      size_t attach_to = (size_t) -1;
       float attach_pos = 0;;
 
       idx = path_paintable_add_path (res, path_paintable_get_path (two, i));
@@ -2535,10 +2492,10 @@ path_paintable_combine (PathPaintable *one,
       states = path_paintable_get_path_states (two, i);
       if (states == ALL_STATES)
         {
-          guint max2 = path_paintable_get_max_state (two);
+          unsigned int max2 = path_paintable_get_max_state (two);
 
           states = 0;
-          for (gsize j = 0; j <= max2; j++)
+          for (size_t j = 0; j <= max2; j++)
             states |= G_GUINT64_CONSTANT (1) << j;
         }
       path_paintable_set_path_states (res, idx, states << (max_state + 1));
@@ -2578,10 +2535,9 @@ path_paintable_get_compatibility (PathPaintable *self)
    * This is informational.
    * Icons may still render (in a degraded fashion) with older GTK.
    */
-
   GtkCompatibility compat = GTK_4_0;
 
-  for (gsize i = 0; i < self->paths->len; i++)
+  for (size_t i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
@@ -2590,7 +2546,7 @@ path_paintable_get_compatibility (PathPaintable *self)
 
       if (elt->transition.type != TRANSITION_TYPE_NONE ||
           elt->animation.type != ANIMATION_TYPE_NONE ||
-          elt->attach.to != (gsize) - 1)
+          elt->attach.to != (size_t) - 1)
         compat = MAX (compat, GTK_4_22);
     }
 
@@ -2602,7 +2558,7 @@ path_paintable_get_compatibility (PathPaintable *self)
 
 void
 path_paintable_set_state (PathPaintable *self,
-                          guint          state)
+                          unsigned int   state)
 {
   if (self->state == state)
     return;
@@ -2613,7 +2569,7 @@ path_paintable_set_state (PathPaintable *self,
     gtk_path_paintable_set_state (self->render_paintable, state);
 }
 
-guint
+unsigned int
 path_paintable_get_state (PathPaintable *self)
 {
   return self->state;
@@ -2640,12 +2596,10 @@ path_paintable_get_weight (PathPaintable *self)
   return self->weight;
 }
 
-guint
+unsigned int
 path_paintable_get_max_state (PathPaintable *self)
 {
-  ensure_render_paintable (self);
-
-  return gtk_path_paintable_get_max_state (self->render_paintable);
+  return gtk_path_paintable_get_max_state (ensure_render_paintable (self));
 }
 
 static inline gboolean
@@ -2678,7 +2632,7 @@ path_paintable_equal (PathPaintable *self,
   if (!g_strv_same (self->keywords, other->keywords))
     return FALSE;
 
-  for (gsize i = 0; i < self->paths->len; i++)
+  for (size_t i = 0; i < self->paths->len; i++)
     {
       PathElt *elt1 = &g_array_index (self->paths, PathElt, i);
       PathElt *elt2 = &g_array_index (other->paths, PathElt, i);
