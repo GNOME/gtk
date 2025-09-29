@@ -452,8 +452,8 @@ check_portal_interface (const char *portal_interface,
                                             "Get",
                                             g_variant_new ("(ss)", portal_interface, "version"),
                                             NULL,
-                                            G_DBUS_CALL_FLAGS_NO_AUTO_START,
-                                            3000,
+                                            G_DBUS_CALL_FLAGS_NONE,
+                                            25000,
                                             NULL,
                                             NULL);
 
