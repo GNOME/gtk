@@ -38,6 +38,7 @@
             <property name="name">indicator</property>
             <property name="child">
               <object class="GtkMenuButton">
+                <property name="direction">left</property>
                 <style><class name="alpha"/></style>
                 <accessibility>
                   <property name="label" translatable="yes">Alpha</property>
@@ -45,20 +46,39 @@
                 <property name="popover">
                   <object class="GtkPopover">
                     <property name="child">
-                      <object class="GtkScale">
-                        <accessibility>
-                          <property name="label" translatable="yes">Alpha</property>
-                        </accessibility>
-                        <property name="orientation">vertical</property>
-                        <property name="height-request">100</property>
-                        <property name="adjustment">
-                          <object class="GtkAdjustment" id="alpha_adj">
-                            <property name="lower">0</property>
-                            <property name="upper">1</property>
-                            <property name="step-increment">0.1</property>
-                            <property name="value">0.5</property>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <child>
+                          <object class="GtkLabel" id="alpha_label">
+                            <property name="label" translatable="yes">_Alpha</property>
+                            <property name="use-underline">1</property>
+                            <property name="mnemonic-widget">alpha_spin</property>
                           </object>
-                        </property>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="alpha_spin">
+                            <property name="adjustment">alpha_adj</property>
+                            <property name="numeric">1</property>
+                            <property name="digits">3</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScale">
+                            <accessibility>
+                              <relation name="labelled-by">alpha_label</relation>
+                            </accessibility>
+                            <property name="orientation">horizontal</property>
+                            <property name="width-request">100</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment" id="alpha_adj">
+                                <property name="lower">0</property>
+                                <property name="upper">1</property>
+                                <property name="step-increment">0.01</property>
+                                <property name="page-increment">0.1</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </property>
                   </object>

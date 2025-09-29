@@ -59,6 +59,7 @@ struct _IconEditorWindow
       GtkImage *image24_12, *image24_13, *image24_14, *image24_15;
     };
   };
+  PaintableEditor *paintable_editor;
 };
 
 struct _IconEditorWindowClass
@@ -860,13 +861,8 @@ add_path (GSimpleAction *action,
           gpointer       user_data)
 {
   IconEditorWindow *self = user_data;
-  g_autoptr (GskPath) path = NULL;
 
-  if (path_paintable_get_n_paths (self->paintable) == 0)
-    path_paintable_set_size (self->paintable, 100.f, 100.f);
-
-  path = gsk_path_parse ("M 0 0 L 100 100");
-  path_paintable_add_path (self->paintable, path);
+  paintable_editor_add_path (self->paintable_editor);
 }
 
 static void
@@ -1193,6 +1189,7 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, image24_13);
   gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, image24_14);
   gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, image24_15);
+  gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, paintable_editor);
 
   gtk_widget_class_bind_template_callback (widget_class, show_open_filechooser);
   gtk_widget_class_bind_template_callback (widget_class, toggle_controls);

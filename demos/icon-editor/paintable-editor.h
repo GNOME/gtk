@@ -35,3 +35,4 @@ PaintableEditor * paintable_editor_new           (void);
 void              paintable_editor_set_paintable (PaintableEditor *self,
                                                   PathPaintable   *paintable);
 PathPaintable *   paintable_editor_get_paintable (PaintableEditor *self);
+void              paintable_editor_add_path      (PaintableEditor *self);

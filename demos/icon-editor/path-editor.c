@@ -558,6 +558,12 @@ move_path_down (PathEditor *self)
 }
 
 static void
+duplicate_path (PathEditor *self)
+{
+  path_paintable_duplicate_path (self->paintable, self->path);
+}
+
+static void
 delete_path (PathEditor *self)
 {
   path_paintable_delete_path (self->paintable, self->path);
@@ -873,6 +879,7 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_and);
   gtk_widget_class_bind_template_callback (widget_class, edit_path);
+  gtk_widget_class_bind_template_callback (widget_class, duplicate_path);
   gtk_widget_class_bind_template_callback (widget_class, move_path_down);
   gtk_widget_class_bind_template_callback (widget_class, delete_path);
 
@@ -958,6 +965,14 @@ path_editor_get_path (PathEditor *self)
   g_return_val_if_fail (PATH_IS_EDITOR (self), 0);
 
   return self->path;
+}
+
+void
+path_editor_edit_path (PathEditor *self)
+{
+  g_return_if_fail (PATH_IS_EDITOR (self));
+
+  edit_path (self);
 }
 
 /* }}} */

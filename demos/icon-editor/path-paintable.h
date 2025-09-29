@@ -115,6 +115,8 @@ void            path_paintable_delete_path         (PathPaintable   *self,
 void            path_paintable_move_path           (PathPaintable   *self,
                                                     gsize            idx,
                                                     gsize            new_idx);
+void            path_paintable_duplicate_path      (PathPaintable   *self,
+                                                    gsize            idx);
 void            path_paintable_set_path            (PathPaintable   *self,
                                                     gsize            idx,
                                                     GskPath         *path);
