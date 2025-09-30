@@ -14,18 +14,28 @@ For up-to-date information on building, installation, and bundling, see the
 
 By default a GTK app shows an app menu and an edit menu.
 To make menu actions work well with native windows, such as a file dialog,
-the most common edit commands are treated special:
+the most common edit commands are treated special. In addition, some default
+keyboard shortcuts are registered.
 
-* `text.undo`
-* `text.redo`
-* `clipboard.cut`
-* `clipboard.copy`
-* `clipboard.paste`
-* `selection.select-all`
+| Name    | Action    | Shortcut |
+|:--------|:----------|:------|
+| Undo    | `text.undo` | <kbd>⌘</kbd>-<kbd>z</kbd> |
+| Redo    | `text.redo` | <kbd>⌘</kbd>-<kbd>Shift</kbd>-<kbd>z |
+| Cut     | `clipboard.cut` | <kbd>⌘</kbd>-<kbd>x</kbd> |
+| Copy    | `clipboard.copy` | <kbd>⌘</kbd>-<kbd>c</kbd> |
+| Paste   | `clipboard.paste` | <kbd>⌘</kbd>-<kbd>v</kbd> |
+| Select All | `selection.select-all` | <kbd>⌘</kbd>-<kbd>a</kbd> |
 
 Those actions map to their respective macOS counterparts.
 The actions are enabled in GTK if the action is available on the focused widget
 and is enabled.
+
+The application menu shortcuts registered with GTK are:
+
+| Name    | Action    | Shortcut |
+|:--------|:----------|:------|
+| Settings  | `app.preferences` | <kbd>⌘</kbd>-<kbd>,</kbd> |
+| Quit | `app.quit` | <kbd>⌘</kbd>-<kbd>q</kbd> |
 
 To extend the macOS system menu, add application and window actions to the
 application with [`Application.set_accels_for_action()`](method.Application.set_accels_for_action.html).
@@ -54,7 +64,7 @@ Since GTK 4.18, [`GtkHeaderBar`](class.HeaderBar.html) has the option to use nat
 The controls are positioned in their normal place: the top-left corner.
 This feature can be enabled by setting the property [`use-native-controls`](property.HeaderBar.use-native-controls.html) to `TRUE` on a `GtkHeaderBar`.
 The property [`decoration-layout`](property.HeaderBar.decoration-layout.html) can be used to
-enable/disable buttons. 
+enable/disable buttons.
 
 ![The GTK demo application with macOS native window controls](macos-window-controls.png)
 
