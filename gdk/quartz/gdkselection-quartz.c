@@ -25,7 +25,7 @@
 #include "gdkquartz.h"
 #include "gdkinternal-quartz.h"
 #include "gdkquartz-gtk-only.h"
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
 #include <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #endif
 
@@ -191,7 +191,7 @@ gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
     return gdk_atom_intern_static_string ("text/uri-list");
   else
     {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
       if (gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
         {
           UTType* uti = [UTType typeWithIdentifier:type];
@@ -216,7 +216,7 @@ gdk_quartz_target_to_pasteboard_type_libgtk_only (const char *target)
     return GDK_QUARTZ_URL_PBOARD_TYPE;
   else
     {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
       if (gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
         {
           UTType* type = [UTType typeWithMIMEType: [NSString stringWithUTF8String:target]];
