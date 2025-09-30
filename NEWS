@@ -1,5 +1,30 @@
-Overview of Changes in GTK+ 3.24.51, xx-xx-xxxx
+Overview of Changes in GTK+ 3.24.51, 29-09-2025
 ===============================================
+
+* Wayland:
+ - Force window titles to be valid utf8
+ - Flush tablet events when neccessary
+
+* X11:
+ - Avoid a use-after-free with threads
+
+* Windows:
+ - Avoid min/max buttons for dialogs
+
+* Images:
+ - Replace a few calls to gdk_pixbuf_get_pixels
+   with read_pixels to avoid thread-safety issues
+
+* GL:
+ - Try harder to keep the GL context current
+
+* Input:
+ - Make compose file parsing more robust
+
+* Translation updates:
+ Catalan
+ Esperanto
+ Persian
 
 
 Overview of Changes in GTK+ 3.24.50, 07-08-2025
