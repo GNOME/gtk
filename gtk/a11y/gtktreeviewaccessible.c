@@ -2028,6 +2028,9 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
 
   if (state == GTK_CELL_RENDERER_FOCUSED)
     {
+      if (!gtk_widget_has_focus (GTK_WIDGET (treeview)))
+        return;
+
       single_column = get_effective_focus_column (treeview, _gtk_tree_view_get_focus_column (treeview));
     }
   else if (state == GTK_CELL_RENDERER_EXPANDED ||
