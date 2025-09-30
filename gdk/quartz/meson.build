@@ -54,6 +54,21 @@ iosurface_dep = dependency('appleframeworks', modules: 'IOSurface', required: tr
 
 gdk_quartz_deps = [ core_graphics_dep, appkit_dep, cocoa_dep, carbon_dep, quartzcore_dep, iosurface_dep ]
 
+# UniformTypeIdentifiers was introduced in MacOS 11.0 - Only use if available
+# Check MAC_OS_X_VERSION_MAX_ALLOWED macro
+cc = meson.get_compiler('c')
+if cc.compiles('''
+#include <AvailabilityMacros.h>
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
+int main() { return 0; }
+#else
+#error "Deployment target too old"
+#endif
+''', name: 'macOS 11.0+ deployment target')
+  utident_dep = dependency('appleframeworks', modules: 'UniformTypeIdentifiers', required: true)
+  gdk_quartz_deps += [ utident_dep ]
+endif
+
 libgdk_quartz = static_library('gdk-quartz',
   gdk_quartz_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],

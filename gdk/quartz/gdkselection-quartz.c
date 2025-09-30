@@ -25,6 +25,9 @@
 #include "gdkquartz.h"
 #include "gdkinternal-quartz.h"
 #include "gdkquartz-gtk-only.h"
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
+#include <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#endif
 
 gboolean
 _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
@@ -187,7 +190,17 @@ gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
            [type isEqualToString:GDK_QUARTZ_FILE_PBOARD_TYPE])
     return gdk_atom_intern_static_string ("text/uri-list");
   else
-    return gdk_atom_intern ([type UTF8String], FALSE);
+    {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
+      if (gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
+        {
+          UTType* uti = [UTType typeWithIdentifier:type];
+          if (uti != nil)
+            return gdk_atom_intern (uti.preferredMIMEType.UTF8String, FALSE);
+        }
+#endif
+      return gdk_atom_intern ([type UTF8String], FALSE);
+    }
 }
 
 NSString *
@@ -202,7 +215,17 @@ gdk_quartz_target_to_pasteboard_type_libgtk_only (const char *target)
   else if (strcmp (target, "text/uri-list") == 0)
     return GDK_QUARTZ_URL_PBOARD_TYPE;
   else
-    return [NSString stringWithUTF8String:target];
+    {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 110000
+      if (gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
+        {
+          UTType* type = [UTType typeWithMIMEType: [NSString stringWithUTF8String:target]];
+          if (type != nil)
+            return type.identifier;
+        }
+#endif
+      return [NSString stringWithUTF8String:target];
+    }
 }
 
 NSString *
