@@ -1,5 +1,33 @@
-Overview of Changes in 4.20.2, xx-xx-xxxx
+Overview of Changes in 4.20.2, 29-09-2025
 =========================================
+
+* Bugs fixed:
+  - #7755 Only the first text-shadow value gets applied when there are multiple
+    (regression) (Matthias Clasen)
+  - #7757 Make sense of AtkHyperlink (Matthias Clasen)
+  - #7783 Opening Clipboard Demo triggers abort (Matthias Clasen)
+
+* Changes:
+  - !8928 surface: Mark region as nullable in set_input_region (João Pereira)
+  - !8930 settings: Call g_value_unset() after _gtk_settings_parse_convert()
+    (Takao Fujiwara)
+  - !8931 wayland: Invert flipped transforms (Robert Mader)
+  - !8933 Fix upright text carets (Matthias Clasen)
+  - !8935 gsk: Drop an unused private flag (Matthias Clasen)
+  - !8936 Some small gsk fixes (Matthias Clasen)
+  - !8937 text: Apply all text shadows (Matthias Clasen)
+  - !8965 Backports for 4.20 (evan-razzaque, Matthias Clasen)
+  - !8978 Add GtkAccessibleHypertext (Matthias Clasen)
+
+* Translation updates:
+  - Bulgarian (twlvnn kraftwerk)
+  - Czech (Daniel Rusek)
+  - Danish (Ask Hjorth Larsen)
+  - Galician (Francisco Diéguez Souto)
+  - Portuguese (Hugo Carvalho)
+  - Spanish (Daniel Mustieles)
+  - Turkish (Sabri Ünal)
+
 
 Overview of Changes in 4.20.1, 08-09-2025
 =========================================
