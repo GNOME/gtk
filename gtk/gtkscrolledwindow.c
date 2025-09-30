@@ -293,6 +293,7 @@ typedef struct
   guint                  kinetic_scrolling         : 1;
 
   guint                  deceleration_id;
+  GdkModifierType        scrolling_modifiers;
 
   double                 x_velocity;
   double                 y_velocity;
@@ -1248,7 +1249,12 @@ captured_scroll_cb (GtkEventControllerScroll *scroll,
 
   if (!may_hscroll (scrolled_window) &&
       !may_vscroll (scrolled_window))
-    return GDK_EVENT_PROPAGATE;
+    priv->scrolling = FALSE;
+
+  if (priv->scrolling &&
+      priv->scrolling_modifiers !=
+      gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll)))
+    priv->scrolling = FALSE;
 
   if (!priv->scrolling)
     return GDK_EVENT_PROPAGATE;
@@ -1468,7 +1474,11 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
   if (!priv->scrolling)
     {
       if (scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll))
-        priv->scrolling = TRUE;
+        {
+          priv->scrolling = TRUE;
+          priv->scrolling_modifiers =
+            gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
+        }
       else
         {
           scrolled_in_non_scrollable_dir =
