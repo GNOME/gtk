@@ -157,7 +157,11 @@ Folder</property>
                                 <style>
                                   <class name="large-icons"/>
                                 </style>
-                                <property name="paintable">resource:///images/org.gtk.Demo4.svg</property>
+                                <property name="paintable">
+                                  <object class="GtkIconPaintable">
+                                    <property name="file">resource:///images/org.gtk.Demo4-symbolic.svg</property>
+                                  </object>
+                                </property>
                               </object>
                             </property>
                           </object>
