@@ -1651,7 +1651,9 @@ path_paintable_init (PathPaintable *self)
   self->paths = g_array_new (FALSE, TRUE, sizeof (PathElt));
   g_array_set_clear_func (self->paths, clear_path_elt);
 
-  self->state = STATE_UNSET;
+  self->state = 0;
+  self->width = 100;
+  self->height = 100;
 }
 
 static void
