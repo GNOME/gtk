@@ -112,3 +112,25 @@ Set it up according to their
 Pay special attention to the environment variables that need to be set: `VULKAN_SDK`,
 `DYLD_LIBRARY_PATH`, `VK_ICD_FILENAMES`, and `VK_LAYER_PATH`. You can also use the provided
 `setup-env.sh` script in the SDK root folder.
+
+## Publishing
+
+GTK provides no means to package GTK applications (create a `.app`s out of them).
+
+However, we can provide a few pointers.
+
+GTK uses an OpenGL surface for drawing. On laptops with 2 GPU's it will take the heavy
+(Radeon) GPU by default. If your app is not heavy on graphics, it may be better to use
+the more energy efficient built-in GPU instead.
+This can be configured by adding the following to the app's `Info.plist`:
+
+```xml
+<plist version="1.0">
+  <dict>
+    ...
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+    ...
+  </dict>
+</plist>
+```
