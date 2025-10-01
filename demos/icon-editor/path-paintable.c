@@ -39,6 +39,7 @@ typedef struct
     AnimationType type;
     AnimationDirection direction;
     float duration;
+    float repeat;
     EasingFunction easing;
     float segment;
   } animation;
@@ -494,6 +495,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_type_attr = NULL;
   const char *animation_direction_attr = NULL;
   const char *animation_duration_attr = NULL;
+  const char *animation_repeat_attr = NULL;
   const char *animation_easing_attr = NULL;
   const char *animation_segment_attr = NULL;
   const char *origin_attr = NULL;
@@ -521,6 +523,7 @@ start_element_cb (GMarkupParseContext  *context,
   AnimationType animation_type;
   AnimationDirection animation_direction;
   float animation_duration;
+  float animation_repeat;
   EasingFunction animation_easing;
   float animation_segment;
   float origin;
@@ -779,6 +782,7 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-type", &animation_type_attr,
                             "gpa:animation-direction", &animation_direction_attr,
                             "gpa:animation-duration", &animation_duration_attr,
+                            "gpa:animation-repeat", &animation_repeat_attr,
                             "gpa:animation-easing", &animation_easing_attr,
                             "gpa:animation-segment", &animation_segment_attr,
                             "gpa:transition-type", &transition_type_attr,
@@ -1135,6 +1139,15 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
+  animation_repeat = G_MAXFLOAT;
+  if (animation_repeat_attr)
+    {
+      if (strcmp (animation_repeat_attr, "indefinite") == 0)
+        animation_repeat = G_MAXFLOAT;
+      else if (!parse_float ("gpa:animation-repeat", animation_repeat_attr, POSITIVE, &animation_repeat, error))
+        goto cleanup;
+    }
+
   animation_easing = EASING_FUNCTION_LINEAR;
   if (animation_easing_attr)
     {
@@ -1180,7 +1193,7 @@ start_element_cb (GMarkupParseContext  *context,
   idx = path_paintable_add_path (data->paintable, path);
 
   path_paintable_set_path_states (data->paintable, idx, states);
-  path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_easing, animation_segment);
+  path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_repeat, animation_easing, animation_segment);
   path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_delay, transition_easing);
   path_paintable_set_path_origin (data->paintable, idx, origin);
   path_paintable_set_path_fill (data->paintable, idx, fill_attr != NULL, fill_rule, fill_symbolic, &fill_color);
@@ -1321,6 +1334,14 @@ path_paintable_save_path (PathPaintable *self,
       g_string_append_printf (str, "\n        gpa:animation-duration='%sms'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g",
                                                path_paintable_get_path_animation_duration (self, idx)));
+      has_gtk_attr = TRUE;
+    }
+
+  if (path_paintable_get_path_animation_repeat (self, idx) != G_MAXFLOAT)
+    {
+      g_string_append_printf (str, "\n        gpa:animation-repeat='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g",
+                                               path_paintable_get_path_animation_repeat (self, idx)));
       has_gtk_attr = TRUE;
     }
 
@@ -2057,6 +2078,7 @@ path_paintable_set_path_animation (PathPaintable      *self,
                                    AnimationType       type,
                                    AnimationDirection  direction,
                                    float               duration,
+                                   float               repeat,
                                    EasingFunction      easing,
                                    float               segment)
 {
@@ -2068,6 +2090,7 @@ path_paintable_set_path_animation (PathPaintable      *self,
   if (elt->animation.type == type &&
       elt->animation.direction == direction &&
       elt->animation.duration == duration &&
+      elt->animation.repeat == repeat &&
       elt->animation.easing == easing &&
       elt->animation.segment == segment)
     return;
@@ -2075,6 +2098,7 @@ path_paintable_set_path_animation (PathPaintable      *self,
   elt->animation.type = type;
   elt->animation.direction = direction;
   elt->animation.duration = duration;
+  elt->animation.repeat = repeat;
   elt->animation.easing = easing;
   elt->animation.segment = segment;
 
@@ -2112,6 +2136,17 @@ path_paintable_get_path_animation_duration (PathPaintable *self,
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
   return elt->animation.duration;
+}
+
+float
+path_paintable_get_path_animation_repeat (PathPaintable *self,
+                                          size_t         idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, 0);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->animation.repeat;
 }
 
 EasingFunction
@@ -2454,6 +2489,7 @@ path_paintable_copy (PathPaintable *self)
                                          path_paintable_get_path_animation_type (self, i),
                                          path_paintable_get_path_animation_direction (self, i),
                                          path_paintable_get_path_animation_duration (self, i),
+                                         path_paintable_get_path_animation_repeat (self, i),
                                          path_paintable_get_path_animation_easing (self, i),
                                          path_paintable_get_path_animation_segment (self, i));
 
@@ -2529,6 +2565,7 @@ path_paintable_combine (PathPaintable *one,
                                          path_paintable_get_path_animation_type (two, i),
                                          path_paintable_get_path_animation_direction (two, i),
                                          path_paintable_get_path_animation_duration (two, i),
+                                         path_paintable_get_path_animation_repeat (two, i),
                                          path_paintable_get_path_animation_easing (two, i),
                                          path_paintable_get_path_animation_segment (two, i));
 

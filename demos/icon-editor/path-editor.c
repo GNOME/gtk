@@ -47,6 +47,8 @@ struct _PathEditor
   GtkDropDown *animation_type;
   GtkDropDown *animation_direction;
   GtkSpinButton *animation_duration;
+  GtkSpinButton *animation_repeat;
+  GtkCheckButton *infty_check;
   GtkDropDown *animation_easing;
   GtkSpinButton *animation_segment;
   ColorEditor *stroke_paint;
@@ -178,6 +180,7 @@ animation_changed (PathEditor *self)
   AnimationType type;
   AnimationDirection direction;
   float duration;
+  float repeat;
   EasingFunction easing;
   float segment;
 
@@ -187,10 +190,14 @@ animation_changed (PathEditor *self)
   type = (AnimationType) gtk_drop_down_get_selected (self->animation_type);
   direction = (AnimationDirection) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
+  if (gtk_check_button_get_active (self->infty_check))
+    repeat = G_MAXFLOAT;
+  else
+    repeat = gtk_spin_button_get_value (self->animation_repeat);
   easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
   segment = gtk_spin_button_get_value (self->animation_segment);
 
-  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, easing, segment);
+  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, repeat, easing, segment);
 }
 
 static void
@@ -641,6 +648,18 @@ path_editor_update (PathEditor *self)
       gtk_spin_button_set_value (self->animation_duration,
                                  path_paintable_get_path_animation_duration (self->paintable, self->path));
 
+      if (path_paintable_get_path_animation_repeat (self->paintable, self->path) == G_MAXFLOAT)
+        {
+          gtk_check_button_set_active (self->infty_check, TRUE);
+          gtk_spin_button_set_value (self->animation_repeat, 1);
+        }
+      else
+        {
+          gtk_check_button_set_active (self->infty_check, FALSE);
+          gtk_spin_button_set_value (self->animation_repeat,
+                                     path_paintable_get_path_animation_repeat (self->paintable, self->path));
+        }
+
       gtk_drop_down_set_selected (self->animation_easing,
                                   path_paintable_get_path_animation_easing (self->paintable, self->path));
 
@@ -852,6 +871,8 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_duration);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_repeat);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, infty_check);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_easing);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
