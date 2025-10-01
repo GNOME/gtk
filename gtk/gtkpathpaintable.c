@@ -139,6 +139,7 @@ typedef struct
     GtkPathAnimationType type;
     GtkPathAnimationDirection direction;
     float duration; /* in ms */
+    float repeat;
     GtkEasingFunction easing;
     float segment;
   } animation;
@@ -192,8 +193,8 @@ struct _GtkPathPaintable
   } transition;
 
   struct {
-    gboolean running;
     int64_t start_time;
+    int64_t end_time;
   } animation;
 
   float weight;
@@ -342,10 +343,15 @@ path_is_in_state (PathElt      *elt,
   return state_match (elt->states, state);
 }
 
-static gboolean
-path_is_animating (PathElt *elt)
+static int64_t
+path_animation_duration (PathElt *elt)
 {
-  return elt->animation.type != GTK_PATH_ANIMATION_TYPE_NONE;
+  if (elt->animation.type == GTK_PATH_ANIMATION_TYPE_NONE)
+    return 0;
+  else if (elt->animation.repeat == G_MAXFLOAT)
+    return G_MAXINT64;
+  else
+    return elt->animation.duration * elt->animation.repeat * G_TIME_SPAN_MILLISECOND;
 }
 
 static GskStroke *
@@ -492,19 +498,38 @@ compute_max_state (GtkPathPaintable *self)
   return max;
 }
 
-static gboolean
-has_animation_in_state (GtkPathPaintable *self,
-                        unsigned int      state)
+static int64_t
+add_without_wrap (int64_t i1, int64_t i2)
 {
-  for (unsigned int i = 0; i < self->paths->len; i++)
+  g_assert (i2 >= 0);
+
+  if (i1 > G_MAXINT64 - i2)
+    return G_MAXINT64;
+
+  return i1 + i2;
+}
+
+static void
+compute_animation_end_time (GtkPathPaintable *self,
+                            unsigned int      state,
+                            int64_t          *end)
+{
+  *end = self->animation.start_time;
+
+  for (size_t i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
-      if (path_is_in_state (elt, state) && path_is_animating (elt))
-        return TRUE;
-    }
+      if (!path_is_in_state (elt, state))
+        continue;
 
-  return FALSE;
+      int64_t end2 = add_without_wrap (self->animation.start_time,
+                                       path_animation_duration (elt));
+      *end = MAX (*end, end2);
+
+      if (*end == G_MAXINT64)
+        return;
+    }
 }
 
 static GskPath *
@@ -575,7 +600,7 @@ set_state (GtkPathPaintable *self,
   self->state = state;
 
   self->animation.start_time = g_get_monotonic_time ();
-  self->animation.running = has_animation_in_state (self, state);
+  compute_animation_end_time (self, state, &self->animation.end_time);
 
   if (defer_notify)
     {
@@ -882,6 +907,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_type_attr = NULL;
   const char *animation_direction_attr = NULL;
   const char *animation_duration_attr = NULL;
+  const char *animation_repeat_attr = NULL;
   const char *animation_easing_attr = NULL;
   const char *animation_segment_attr = NULL;
   const char *origin_attr = NULL;
@@ -913,6 +939,7 @@ start_element_cb (GMarkupParseContext  *context,
   unsigned int animation_type;
   unsigned int animation_direction;
   float animation_duration;
+  float animation_repeat;
   unsigned int animation_easing;
   float animation_segment;
   float origin;
@@ -1163,6 +1190,7 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-type", &animation_type_attr,
                             "gpa:animation-direction", &animation_direction_attr,
                             "gpa:animation-duration", &animation_duration_attr,
+                            "gpa:animation-repeat", &animation_repeat_attr,
                             "gpa:animation-easing", &animation_easing_attr,
                             "gpa:animation-segment", &animation_segment_attr,
                             "gpa:transition-type", &transition_type_attr,
@@ -1192,6 +1220,7 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_type_attr &&
       !animation_direction_attr &&
       !animation_duration_attr &&
+      !animation_repeat_attr &&
       !animation_easing_attr &&
       !animation_segment_attr &&
       !transition_type_attr &&
@@ -1423,6 +1452,15 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
+  animation_repeat = G_MAXFLOAT;
+  if (animation_repeat_attr)
+    {
+      if (strcmp (animation_repeat_attr, "indefinite") == 0)
+        animation_repeat = G_MAXFLOAT;
+      else if (!parse_float ("gpa:animation-repeat", animation_repeat_attr, POSITIVE, &animation_repeat, error))
+        goto cleanup;
+    }
+
   animation_easing = GTK_EASING_FUNCTION_LINEAR;
   if (animation_easing_attr)
     {
@@ -1462,6 +1500,7 @@ start_element_cb (GMarkupParseContext  *context,
   elt.animation.type = (GtkPathAnimationType) animation_type;
   elt.animation.direction = (GtkPathAnimationDirection) animation_direction;
   elt.animation.duration = animation_duration;
+  elt.animation.repeat = animation_repeat;
   elt.animation.easing = (GtkEasingFunction) animation_easing;
   elt.animation.segment = animation_segment;
 
@@ -1718,7 +1757,11 @@ paint_elt_animated (GtkPathPaintable *self,
       paint_elt_partial (self, elt, start, end, data);
       return;
     case GTK_PATH_ANIMATION_TYPE_AUTOMATIC:
-      t = (data->time - self->animation.start_time) / (elt->animation.duration * G_TIME_SPAN_MILLISECOND);
+      if (elt->animation.repeat == G_MAXFLOAT ||
+          data->time < self->animation.start_time + elt->animation.duration * elt->animation.repeat * G_TIME_SPAN_MILLISECOND)
+        t = (data->time - self->animation.start_time) / (elt->animation.duration * G_TIME_SPAN_MILLISECOND);
+      else
+        t = elt->animation.repeat;
       break;
     default:
       g_assert_not_reached ();
@@ -1983,7 +2026,7 @@ paint (GtkPathPaintable *self,
         }
     }
 
-  if (self->transition.running || self->animation.running)
+  if (self->transition.running || data->time < self->animation.end_time)
     {
       if (!self->pending_invalidate)
         self->pending_invalidate = g_idle_add_once ((GSourceOnceFunc) invalidate_in_idle, self);
@@ -2106,7 +2149,6 @@ gtk_path_paintable_init (GtkPathPaintable *self)
   self->weight = -1.f;
 
   self->transition.running = FALSE;
-  self->animation.running = FALSE;
 }
 
 static void
