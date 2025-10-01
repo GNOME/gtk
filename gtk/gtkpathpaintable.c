@@ -834,10 +834,23 @@ parse_paint (const char    *name,
   return TRUE;
 }
 
+typedef struct {
+  char *to;
+  float position;
+} AttachData;
+
+static void
+attach_data_clear (gpointer data)
+{
+  AttachData *attach = data;
+  g_free (attach->to);
+}
+
 typedef struct
 {
   GtkPathPaintable *paintable;
   GHashTable *paths;
+  GArray *attach;
   unsigned int state;
   unsigned int version;
 } ParserData;
@@ -904,8 +917,7 @@ start_element_cb (GMarkupParseContext  *context,
   float animation_segment;
   float origin;
   size_t idx;
-  size_t attach_to;
-  float attach_pos;
+  AttachData attach;
   PathElt elt;
 
   if (strcmp (element_name, "svg") == 0)
@@ -1366,7 +1378,6 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  attach_to = (size_t) -1;
   origin = 0;
   if (origin_attr)
     {
@@ -1429,26 +1440,11 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  attach_to = (size_t) -1;
-  if (attach_to_attr)
-    {
-      gpointer value;
-
-      /* Note that we avoid cycles by only allowing to attach
-       * to an earlier path.
-       */
-      if (!g_hash_table_lookup_extended (data->paths, attach_to_attr, NULL, &value))
-        {
-          set_attribute_error (error, "gpa:attach-to", attach_to_attr);
-          goto cleanup;
-        }
-      attach_to = GPOINTER_TO_UINT (value);
-    }
-
-  attach_pos = 0;
+  attach.to = g_strdup (attach_to_attr);
+  attach.position = 0;
   if (attach_pos_attr)
     {
-      if (!parse_float ("gpa:attach-pos", attach_pos_attr, UNIT, &attach_pos, error))
+      if (!parse_float ("gpa:attach-pos", attach_pos_attr, UNIT, &attach.position, error))
         goto cleanup;
     }
 
@@ -1483,12 +1479,14 @@ start_element_cb (GMarkupParseContext  *context,
   elt.stroke.symbolic = stroke_symbolic;
   elt.stroke.color = stroke_color;
 
-  elt.attach.to = attach_to;
-  elt.attach.position = attach_pos;
+  elt.attach.to = (size_t) -1;
+  elt.attach.position = 0;
 
   g_array_append_val (data->paintable->paths, elt);
 
   idx = data->paintable->paths->len - 1;
+
+  g_array_append_val (data->attach, attach);
 
   if (id_attr)
     g_hash_table_insert (data->paths, g_strdup (id_attr), GUINT_TO_POINTER (idx));
@@ -1515,6 +1513,8 @@ gtk_path_paintable_init_from_bytes (GtkPathPaintable  *self,
 
   data.paintable = self;
   data.paths = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  data.attach = g_array_new (FALSE, TRUE, sizeof (AttachData));
+  g_array_set_clear_func (data.attach, attach_data_clear);
   data.state = 0;
   data.version = 0;
 
@@ -1525,7 +1525,33 @@ gtk_path_paintable_init_from_bytes (GtkPathPaintable  *self,
                                       error);
 
   g_markup_parse_context_free (context);
+
+  if (ret)
+    {
+      for (unsigned int i = 0; i < data.attach->len; i++)
+        {
+          PathElt *elt = &g_array_index (self->paths, PathElt, i);
+          AttachData *attach = &g_array_index (data.attach, AttachData, i);
+          gpointer value = NULL;
+
+          if (!attach->to)
+            continue;
+
+          if (!g_hash_table_lookup_extended (data.paths, attach->to, NULL, &value))
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Invalid %s attribute value: %s", "gpa:attach-to", attach->to);
+              ret = FALSE;
+              break;
+            }
+
+          elt->attach.to = (size_t) GPOINTER_TO_UINT (value);
+          elt->attach.position = attach->position;
+        }
+    }
+
   g_hash_table_unref (data.paths);
+  g_array_unref (data.attach);
 
   compute_bounds (self);
   set_state (self, data.state, FALSE);
