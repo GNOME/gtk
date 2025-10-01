@@ -115,6 +115,7 @@ show_file_open (GtkWidget *button,
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "image/svg+xml");
   gtk_file_filter_add_mime_type (filter, "image/x-gtk-path-animation");
+  gtk_file_filter_add_pattern (filter, "*.gpa");
   filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
   g_list_store_append (filters, filter);
   g_object_unref (filter);
