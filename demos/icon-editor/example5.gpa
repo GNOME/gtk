@@ -1,8 +1,1 @@
-<svg width='60' height='60'>
-  <path d='M 5 30 L 25 50 L 55 10'
-        id='path0'
-        stroke='none'
-        fill-rule='winding'
-        fill='rgb(0,0,0)'
-        class='foreground-fill'/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round" d="M10 0C5.593 0 2 3.593 2 8v.61l-.316-.317a1 1 0 0 0-1.414 0 1 1 0 0 0 0 1.414l2.023 2.023a1 1 0 0 0 1.414 0l2-2a1 1 0 0 0 0-1.414A1 1 0 0 0 5 8.023a1 1 0 0 0-.707.293L4 8.61V8c0-3.327 2.673-6 6-6h2v2.44c-.71.28-1.28.85-1.56 1.56H9C7.355 6 6 7.355 6 9s1.355 3 3 3h2c.566 0 1 .434 1 1s-.434 1-1 1H7a1 1 0 0 0-1 1 1 1 0 0 0 1 1h4c1.645 0 3-1.355 3-3s-1.355-3-3-3H9c-.566 0-1-.434-1-1s.434-1 1-1h1.44A2.765 2.765 0 0 0 13 9.75c1.51 0 2.75-1.24 2.75-2.75 0-1.158-.73-2.158-1.75-2.56V1a1 1 0 0 0-1-1zm3 5.75c.7 0 1.25.55 1.25 1.25S13.7 8.25 13 8.25 11.75 7.7 11.75 7 12.3 5.75 13 5.75" style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#5e5c64;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;enable-background:accumulate;stop-color:#000;stop-opacity:1;opacity:1"/></svg>
