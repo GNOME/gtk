@@ -334,25 +334,45 @@
           </object>
         </child>
         <child>
-          <object class="GtkDropDown" id="transition_easing">
+          <object class="GtkBox">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
             </binding>
-            <signal name="notify::selected" handler="transition_changed" swapped="yes"/>
-            <property name="model">
-              <object class="GtkStringList">
-                <items>
-                  <item>Linear</item>
-                  <item>Ease-in-out</item>
-                  <item>Ease-in</item>
-                  <item>Ease-out</item>
-                  <item>Ease</item>
-                </items>
+            <property name="hexpand">0</property>
+            <child>
+              <object class="GtkDropDown" id="transition_easing">
+                <property name="valign">center</property>
+                <property name="hexpand">1</property>
+                <signal name="notify::selected" handler="transition_changed" swapped="yes"/>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>Linear</item>
+                      <item>Ease-in-out</item>
+                      <item>Ease-in</item>
+                      <item>Ease-out</item>
+                      <item>Ease</item>
+                    </items>
+                  </object>
+                </property>
               </object>
-            </property>
+            </child>
+            <child>
+              <object class="GtkMenuButton">
+                <property name="sensitive">0</property>
+                <property name="valign">center</property>
+                <property name="child">
+                  <object class="MiniGraph">
+                    <property name="width-request">50</property>
+                    <property name="height-request">50</property>
+                    <property name="easing-function" bind-source="transition_easing" bind-property="selected" bind-flags="sync-create"/>
+                  </object>
+                </property>
+              </object>
+            </child>
             <layout>
               <property name="row">8</property>
               <property name="column">1</property>
@@ -574,6 +594,7 @@
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <child>
               <object class="GtkDropDown" id="animation_easing">
                 <property name="valign">center</property>
@@ -601,9 +622,9 @@
                     <constant type="guint">5</constant>
                   </closure>
                 </binding>
+                <property name="valign">center</property>
                 <property name="child">
                   <object class="MiniGraph" id="mini_graph">
-                    <property name="valign">center</property>
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
                     <property name="easing-function" bind-source="animation_easing" bind-property="selected" bind-flags="sync-create"/>
