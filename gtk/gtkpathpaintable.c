@@ -80,6 +80,60 @@
  * Since: 4.22
  */
 
+/* {{{ Easing */
+
+static inline float
+lerp (float t, float a, float b)
+{
+  return a + (b - a) * t;
+}
+
+static float
+apply_easing_params (float *params,
+                     float  progress)
+{
+  static const float epsilon = 0.00001;
+  float tmin, t, tmax;
+  float x1, y1, x2, y2;
+
+  x1 = params[0];
+  y1 = params[1];
+  x2 = params[2];
+  y2 = params[3];
+
+  if (progress <= 0)
+    return 0;
+  if (progress >= 1)
+    return 1;
+
+  tmin = 0.0;
+  tmax = 1.0;
+  t = progress;
+
+  while (tmin < tmax)
+    {
+      float sample;
+
+      sample = (((1.0 + 3 * x1 - 3 * x2) * t
+                +      -6 * x1 + 3 * x2) * t
+                +       3 * x1         ) * t;
+      if (fabsf (sample - progress) < epsilon)
+        break;
+
+      if (progress > sample)
+        tmin = t;
+      else
+        tmax = t;
+      t = (tmax + tmin) * .5;
+    }
+
+  return (((1.0 + 3 * y1 - 3 * y2) * t
+          +      -6 * y1 + 3 * y2) * t
+          +       3 * y1         ) * t;
+}
+
+/* }}} */
+
 typedef enum
 {
   GTK_PATH_TRANSITION_TYPE_NONE,
@@ -95,6 +149,7 @@ typedef enum
   GTK_EASING_FUNCTION_EASE_IN,
   GTK_EASING_FUNCTION_EASE_OUT,
   GTK_EASING_FUNCTION_EASE,
+  GTK_EASING_FUNCTION_CUSTOM,
 } GtkEasingFunction;
 
 typedef enum
@@ -116,6 +171,58 @@ typedef enum
   GTK_PATH_ANIMATION_DIRECTION_SEGMENT_ALTERNATE,
 } GtkPathAnimationDirection;
 
+typedef enum
+{
+  GTK_CALC_MODE_LINEAR,
+  GTK_CALC_MODE_DISCRETE,
+  GTK_CALC_MODE_SPLINE,
+} GtkCalcMode;
+
+typedef struct
+{
+  float time;
+  float value;
+  float params[4];
+} GtkKeyFrame;
+
+static float
+compute_value (GtkCalcMode  mode,
+               GArray      *keyframes,
+               float        t)
+{
+  size_t i;
+  GtkKeyFrame *kf0 = NULL;
+  GtkKeyFrame *kf1 = NULL;
+  float t_rel;
+
+  if (keyframes->len < 2)
+    return 0;
+
+  for (i = 1; i < keyframes->len; i++)
+    {
+      kf0 = &g_array_index (keyframes, GtkKeyFrame, i - 1);
+      kf1 = &g_array_index (keyframes, GtkKeyFrame, i);
+
+      if (t < kf1->time)
+        break;
+    }
+
+  g_assert (kf0 && kf1);
+
+  t_rel = (t - kf0->time) / (kf1->time - kf0->time);
+
+  switch (mode)
+    {
+    case GTK_CALC_MODE_DISCRETE:
+      return kf0->value;
+    case GTK_CALC_MODE_LINEAR:
+      return lerp (t_rel, kf0->value, kf1->value);
+    case GTK_CALC_MODE_SPLINE:
+      return lerp (apply_easing_params (kf0->params, t_rel), kf0->value, kf1->value);
+    default:
+      g_assert_not_reached ();
+    }
+}
 
 #define GTK_PATH_PAINTABLE_NO_STATES 0
 #define GTK_PATH_PAINTABLE_ALL_STATES 0xffffffff
@@ -140,8 +247,9 @@ typedef struct
     GtkPathAnimationDirection direction;
     float duration; /* in ms */
     float repeat;
-    GtkEasingFunction easing;
     float segment;
+    GtkCalcMode mode;
+    GArray *keyframes;
   } animation;
 
   struct {
@@ -235,12 +343,6 @@ typedef struct
   int64_t time;
 } PaintData;
 
-static inline float
-lerp (float t, float a, float b)
-{
-  return a + (b - a) * t;
-}
-
 static void
 clear_path_elt (gpointer data)
 {
@@ -260,50 +362,6 @@ static struct {
   { GTK_EASING_FUNCTION_EASE_OUT, { 0, 0, 0.58, 1 } },
   { GTK_EASING_FUNCTION_EASE, { 0.25, 0.1, 0.25, 1 } },
 };
-
-static float
-apply_easing_params (float *params,
-                     float  progress)
-{
-  static const float epsilon = 0.00001;
-  float tmin, t, tmax;
-  float x1, y1, x2, y2;
-
-  x1 = params[0];
-  y1 = params[1];
-  x2 = params[2];
-  y2 = params[3];
-
-  if (progress <= 0)
-    return 0;
-  if (progress >= 1)
-    return 1;
-
-  tmin = 0.0;
-  tmax = 1.0;
-  t = progress;
-
-  while (tmin < tmax)
-    {
-      float sample;
-
-      sample = (((1.0 + 3 * x1 - 3 * x2) * t
-                +      -6 * x1 + 3 * x2) * t
-                +       3 * x1         ) * t;
-      if (fabsf (sample - progress) < epsilon)
-        break;
-
-      if (progress > sample)
-        tmin = t;
-      else
-        tmax = t;
-      t = (tmax + tmin) * .5;
-    }
-
-  return (((1.0 + 3 * y1 - 3 * y2) * t
-          +      -6 * y1 + 3 * y2) * t
-          +       3 * y1         ) * t;
-}
 
 static float
 apply_easing (GtkEasingFunction easing,
@@ -768,6 +826,42 @@ parse_duration (const char    *name,
 }
 
 static gboolean
+parse_float_values (const char    *name,
+                    const char    *value,
+                    float         *values,
+                    unsigned int   length,
+                    unsigned int   flags,
+                    unsigned int  *n_values,
+                    GError       **error)
+{
+  GStrv strv;
+  unsigned int len;
+
+  strv = g_strsplit (value, " ", 0);
+  len = g_strv_length (strv);
+
+  if (len > length)
+    {
+      g_strfreev (strv);
+      set_attribute_error (error, name, value);
+      return FALSE;
+    }
+
+  for (unsigned int i = 0; i < len; i++)
+    {
+      if (!parse_float (name, strv[i], flags, &values[i], error))
+        {
+          g_strfreev (strv);
+          return FALSE;
+        }
+    }
+
+  g_strfreev (strv);
+  *n_values = len;
+  return TRUE;
+}
+
+static gboolean
 parse_enum (const char    *name,
             const char    *value,
             const char   **values,
@@ -871,6 +965,108 @@ attach_data_clear (gpointer data)
   g_free (attach->to);
 }
 
+static GArray *
+construct_animation_frames (unsigned int   easing,
+                            GtkCalcMode   *mode,
+                            float         *values,
+                            unsigned int   n_values,
+                            float         *times,
+                            unsigned int   n_times,
+                            float         *controls,
+                            unsigned int   n_controls,
+                            GError       **error)
+{
+  GArray *res = g_array_new (FALSE, TRUE, sizeof (GtkKeyFrame));
+
+  if (easing < GTK_EASING_FUNCTION_CUSTOM)
+    {
+      GtkKeyFrame frame;
+
+      frame.value = 0;
+      frame.time = 0;
+      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+      g_array_append_val (res, frame);
+
+      frame.value = 1;
+      frame.time = 1;
+      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+      g_array_append_val (res, frame);
+
+      if (easing == GTK_EASING_FUNCTION_LINEAR)
+        *mode = GTK_CALC_MODE_LINEAR;
+      else
+        *mode = GTK_CALC_MODE_SPLINE;
+    }
+  else
+    {
+      if (n_values < 2)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: too view values");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      if (n_values != n_times)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: length of times and values differs");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      if (times[0] != 0)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: first time is not 0");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      if (*mode != GTK_CALC_MODE_DISCRETE && times[n_times - 1] != 1)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: last time is not 1");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      for (int i = 1; i < n_times; i++)
+        {
+          if (times[i] < times[i - 1])
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Could not handle animation attributes: times are not increasing");
+              g_array_unref (res);
+              return NULL;
+            }
+        }
+
+      if (*mode == GTK_CALC_MODE_SPLINE && n_controls != 4 * (n_values - 1))
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: wrong number of control points");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      for (int i = 0; i < n_values; i++)
+        {
+          GtkKeyFrame frame;
+
+          frame.value = values[i];
+          frame.time = times[i];
+          if (i + 1 < n_values)
+            memcpy (frame.params, &controls[4 * i], 4 * sizeof (float));
+          else
+            memset (frame.params, 0, 4 * sizeof (float));
+          g_array_append_val (res, frame);
+        }
+    }
+
+  return res;
+}
+
 typedef struct
 {
   GtkPathPaintable *paintable;
@@ -908,8 +1104,12 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_direction_attr = NULL;
   const char *animation_duration_attr = NULL;
   const char *animation_repeat_attr = NULL;
-  const char *animation_easing_attr = NULL;
   const char *animation_segment_attr = NULL;
+  const char *animation_easing_attr = NULL;
+  const char *animation_mode_attr = NULL;
+  const char *animation_values_attr = NULL;
+  const char *animation_times_attr = NULL;
+  const char *animation_controls_attr = NULL;
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
@@ -940,12 +1140,20 @@ start_element_cb (GMarkupParseContext  *context,
   unsigned int animation_direction;
   float animation_duration;
   float animation_repeat;
-  unsigned int animation_easing;
   float animation_segment;
+  unsigned int animation_easing;
+  unsigned int animation_mode;
+  GArray *animation_keyframes = NULL;
   float origin;
   size_t idx;
   AttachData attach;
   PathElt elt;
+  float animation_values[10];
+  float animation_times[10];
+  float animation_controls[40];
+  unsigned int n_animation_values;
+  unsigned int n_animation_times;
+  unsigned int n_animation_controls;
 
   if (strcmp (element_name, "svg") == 0)
     {
@@ -1191,8 +1399,12 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-direction", &animation_direction_attr,
                             "gpa:animation-duration", &animation_duration_attr,
                             "gpa:animation-repeat", &animation_repeat_attr,
-                            "gpa:animation-easing", &animation_easing_attr,
                             "gpa:animation-segment", &animation_segment_attr,
+                            "gpa:animation-easing", &animation_easing_attr,
+                            "gpa:animation-mode", &animation_mode_attr,
+                            "gpa:animation-values", &animation_values_attr,
+                            "gpa:animation-times", &animation_times_attr,
+                            "gpa:animation-controls", &animation_controls_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
                             "gpa:transition-delay", &transition_delay_attr,
@@ -1221,8 +1433,12 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_direction_attr &&
       !animation_duration_attr &&
       !animation_repeat_attr &&
-      !animation_easing_attr &&
       !animation_segment_attr &&
+      !animation_easing_attr &&
+      !animation_mode_attr &&
+      !animation_values_attr &&
+      !animation_times_attr &&
+      !animation_controls_attr &&
       !transition_type_attr &&
       !transition_duration_attr &&
       !transition_delay_attr &&
@@ -1461,22 +1677,67 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  animation_easing = GTK_EASING_FUNCTION_LINEAR;
-  if (animation_easing_attr)
-    {
-      if (!parse_enum ("gpa:animation-easing", animation_easing_attr,
-                       (const char *[]) { "linear", "ease-in-out", "ease-in",
-                                          "ease-out", "ease" }, 5,
-                        &animation_easing, error))
-        goto cleanup;
-    }
-
   animation_segment = 0.2f;
   if (animation_segment_attr)
     {
       if (!parse_float ("gpa:animation-segment", animation_segment_attr, POSITIVE, &animation_segment, error))
         goto cleanup;
     }
+
+  animation_easing = GTK_EASING_FUNCTION_LINEAR;
+  if (animation_easing_attr)
+    {
+      if (!parse_enum ("gpa:animation-easing", animation_easing_attr,
+                       (const char *[]) { "linear", "ease-in-out", "ease-in",
+                                          "ease-out", "ease", "custom" }, 6,
+                        &animation_easing, error))
+        goto cleanup;
+    }
+
+  animation_mode = GTK_CALC_MODE_LINEAR;
+  if (animation_mode_attr)
+    {
+      if (!parse_enum ("gpa:animation-mode", animation_mode_attr,
+                       (const char *[]) { "linear", "discrete", "spline" },  3,
+                        &animation_mode, error))
+        goto cleanup;
+    }
+
+  n_animation_values = 0;
+  if (animation_values_attr)
+    {
+      if (!parse_float_values ("gpa:animation-values", animation_values_attr,
+                               animation_values, 10, 0, &n_animation_values,
+                               error))
+        goto cleanup;
+    }
+
+  n_animation_times = 0;
+  if (animation_times_attr)
+    {
+      if (!parse_float_values ("gpa:animation-times", animation_times_attr,
+                               animation_times, 10, UNIT, &n_animation_times,
+                               error))
+        goto cleanup;
+    }
+
+  n_animation_controls = 0;
+  if (animation_controls_attr)
+    {
+      if (!parse_float_values ("gpa:animation-controls", animation_controls_attr,
+                               animation_controls, 40, UNIT, &n_animation_controls,
+                               error))
+        goto cleanup;
+    }
+
+  animation_keyframes = construct_animation_frames (animation_easing,
+                                                    &animation_mode,
+                                                    animation_values, n_animation_values,
+                                                    animation_times, n_animation_times,
+                                                    animation_controls, n_animation_controls,
+                                                    error);
+  if (!animation_keyframes)
+    goto cleanup;
 
   attach.to = g_strdup (attach_to_attr);
   attach.position = 0;
@@ -1501,8 +1762,9 @@ start_element_cb (GMarkupParseContext  *context,
   elt.animation.direction = (GtkPathAnimationDirection) animation_direction;
   elt.animation.duration = animation_duration;
   elt.animation.repeat = animation_repeat;
-  elt.animation.easing = (GtkEasingFunction) animation_easing;
   elt.animation.segment = animation_segment;
+  elt.animation.mode = (GtkCalcMode) animation_mode;
+  elt.animation.keyframes = g_array_ref (animation_keyframes);
 
   elt.fill.enabled = fill_attr != NULL;
   elt.fill.rule = (GskFillRule) fill_rule;
@@ -1532,6 +1794,7 @@ start_element_cb (GMarkupParseContext  *context,
 
 cleanup:
   g_clear_pointer (&path, gsk_path_unref);
+  g_clear_pointer (&animation_keyframes, g_array_unref);
 }
 
 static gboolean
@@ -1768,7 +2031,7 @@ paint_elt_animated (GtkPathPaintable *self,
     }
 
   rep = (unsigned int) floorf (t);
-  t = apply_easing (elt->animation.easing, t - floorf (t));
+  t = compute_value (elt->animation.mode, elt->animation.keyframes, t - floorf (t));
 
   origin = lerp (elt->origin, start, end);
 
