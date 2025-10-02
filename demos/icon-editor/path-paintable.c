@@ -39,8 +39,12 @@ typedef struct
     AnimationType type;
     AnimationDirection direction;
     float duration;
-    EasingFunction easing;
+    float repeat;
     float segment;
+    EasingFunction easing;
+    CalcMode mode;
+    KeyFrame *frames;
+    unsigned int n_frames;
   } animation;
 
   struct {
@@ -109,6 +113,7 @@ clear_path_elt (gpointer data)
   PathElt *elt = data;
 
   gsk_path_unref (elt->path);
+  g_free (elt->animation.frames);
 }
 
 static void
@@ -166,6 +171,7 @@ path_elt_equal (PathElt *elt1,
   if (elt1->animation.type != elt2->animation.type ||
       elt1->animation.direction != elt2->animation.direction ||
       elt1->animation.duration != elt2->animation.duration ||
+      elt1->animation.repeat != elt2->animation.repeat ||
       elt1->animation.easing != elt2->animation.easing)
     return FALSE;
 
@@ -275,6 +281,7 @@ enum
 {
   POSITIVE = 1 << 0,
   LENGTH   = 1 << 1,
+  UNIT     = 1 << 2,
 };
 
 static gboolean
@@ -288,7 +295,8 @@ parse_float (const char    *name,
 
   *f = g_ascii_strtod (value, &end);
   if ((end && *end != '\0' && ((flags & LENGTH) == 0 || strcmp (end, "px") != 0)) ||
-      ((flags & POSITIVE) != 0 && *f < 0))
+      ((flags & POSITIVE) != 0 && *f < 0) ||
+      ((flags & UNIT) != 0 && (*f < 0 || *f > 1)))
     {
       set_attribute_error (error, name, value);
       return FALSE;
@@ -326,6 +334,93 @@ parse_duration (const char    *name,
     }
   else
     *f = v * 1000;
+
+  return TRUE;
+}
+
+static gboolean
+parse_float_values (const char    *name,
+                    const char    *value,
+                    float         *values,
+                    unsigned int   length,
+                    unsigned int   flags,
+                    unsigned int  *n_values,
+                    GError       **error)
+{
+  GStrv strv;
+  unsigned int len;
+
+  strv = g_strsplit (value, " ", 0);
+  len = g_strv_length (strv);
+
+  if (len > length)
+    {
+      g_strfreev (strv);
+      set_attribute_error (error, name, value);
+      return FALSE;
+    }
+
+  for (unsigned int i = 0; i < len; i++)
+    {
+      if (!parse_float (name, strv[i], flags, &values[i], error))
+        {
+          g_strfreev (strv);
+          return FALSE;
+        }
+    }
+
+  g_strfreev (strv);
+  *n_values = len;
+  return TRUE;
+}
+
+static gboolean
+parse_enum (const char    *name,
+            const char    *value,
+            const char   **values,
+            size_t          n_values,
+            unsigned int  *result,
+            GError       **error)
+{
+  for (unsigned int i = 0; i < n_values; i++)
+    {
+      if (strcmp (value, values[i]) == 0)
+        {
+          *result = i;
+          return TRUE;
+        }
+    }
+
+  set_attribute_error (error, name, value);
+  return FALSE;
+}
+
+static gboolean
+parse_paint (const char    *name,
+             const char    *value,
+             unsigned int  *symbolic,
+             GdkRGBA       *color,
+             GError       **error)
+{
+  const char *sym[] = { "foreground", "error", "warning", "success", "accent" };
+  unsigned int i;
+
+  for (i = 0; i < G_N_ELEMENTS (sym); i++)
+    {
+      if (strcmp (value, sym[i]) == 0)
+        {
+          *symbolic = (GtkSymbolicColor) i;
+          break;
+        }
+    }
+  if (i == G_N_ELEMENTS (sym))
+    {
+      if (!gdk_rgba_parse (color, value))
+        {
+          set_attribute_error (error, name, value);
+          return FALSE;
+        }
+    }
 
   return TRUE;
 }
@@ -451,6 +546,118 @@ origin_parse (const char *text,
   return TRUE;
 }
 
+static struct {
+  float params[4];
+} easing_funcs[] = {
+  { { 0, 0, 1, 1 } },
+  { { 0.42, 0, 0.58, 1 } },
+  { { 0.42, 0, 1, 1 } },
+  { { 0, 0, 0.58, 1 } },
+  { { 0.25, 0.1, 0.25, 1 } },
+};
+
+
+static GArray *
+construct_animation_frames (unsigned int   easing,
+                            CalcMode      *mode,
+                            float         *values,
+                            unsigned int   n_values,
+                            float         *times,
+                            unsigned int   n_times,
+                            float         *controls,
+                            unsigned int   n_controls,
+                            GError       **error)
+{
+  GArray *res = g_array_new (FALSE, TRUE, sizeof (KeyFrame));
+
+  if (easing < EASING_FUNCTION_CUSTOM)
+    {
+      KeyFrame frame;
+
+      frame.value = 0;
+      frame.time = 0;
+      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+      g_array_append_val (res, frame);
+
+      frame.value = 1;
+      frame.time = 1;
+      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+      g_array_append_val (res, frame);
+
+      if (easing == EASING_FUNCTION_LINEAR)
+        *mode = CALC_MODE_LINEAR;
+      else
+        *mode = CALC_MODE_SPLINE;
+    }
+  else
+    {
+      if (n_values < 2)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: too view values");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      if (n_values != n_times)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: length of times and values differs");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      if (times[0] != 0)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: first time is not 0");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      if (*mode != CALC_MODE_DISCRETE && times[n_times - 1] != 1)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: last time is not 1");
+          g_array_unref (res);
+          return NULL;
+        }
+      for (int i = 1; i < n_times; i++)
+        {
+          if (times[i] < times[i - 1])
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Could not handle animation attributes: times are not increasing");
+              g_array_unref (res);
+              return NULL;
+            }
+        }
+
+      if (*mode == CALC_MODE_SPLINE && n_controls != 4 * (n_values - 1))
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Could not handle animation attributes: wrong number of control points");
+          g_array_unref (res);
+          return NULL;
+        }
+
+      for (int i = 0; i < n_values; i++)
+        {
+          KeyFrame frame;
+
+          frame.value = values[i];
+          frame.time = times[i];
+          if (i + 1 < n_values)
+            memcpy (frame.params, &controls[4 * i], 4 * sizeof (float));
+          else
+            memset (frame.params, 0, 4 * sizeof (float));
+          g_array_append_val (res, frame);
+        }
+    }
+
+  return res;
+}
+
 static inline gboolean
 g_strv_has (GStrv       strv,
             const char *s)
@@ -494,8 +701,13 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_type_attr = NULL;
   const char *animation_direction_attr = NULL;
   const char *animation_duration_attr = NULL;
-  const char *animation_easing_attr = NULL;
+  const char *animation_repeat_attr = NULL;
   const char *animation_segment_attr = NULL;
+  const char *animation_easing_attr = NULL;
+  const char *animation_mode_attr = NULL;
+  const char *animation_values_attr = NULL;
+  const char *animation_times_attr = NULL;
+  const char *animation_controls_attr = NULL;
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
@@ -521,14 +733,23 @@ start_element_cb (GMarkupParseContext  *context,
   AnimationType animation_type;
   AnimationDirection animation_direction;
   float animation_duration;
-  EasingFunction animation_easing;
+  float animation_repeat;
   float animation_segment;
+  unsigned int animation_easing;
+  unsigned int animation_mode;
+  GArray *animation_keyframes = NULL;
   float origin;
   size_t idx;
   AttachData attach;
   float stroke_width;
   float min_stroke_width;
   float max_stroke_width;
+  float animation_values[10];
+  float animation_times[10];
+  float animation_controls[40];
+  unsigned int n_animation_values;
+  unsigned int n_animation_times;
+  unsigned int n_animation_controls;
 
   if (strcmp (element_name, "svg") == 0)
     {
@@ -779,8 +1000,13 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-type", &animation_type_attr,
                             "gpa:animation-direction", &animation_direction_attr,
                             "gpa:animation-duration", &animation_duration_attr,
-                            "gpa:animation-easing", &animation_easing_attr,
+                            "gpa:animation-repeat", &animation_repeat_attr,
                             "gpa:animation-segment", &animation_segment_attr,
+                            "gpa:animation-easing", &animation_easing_attr,
+                            "gpa:animation-mode", &animation_mode_attr,
+                            "gpa:animation-values", &animation_values_attr,
+                            "gpa:animation-times", &animation_times_attr,
+                            "gpa:animation-controls", &animation_controls_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
                             "gpa:transition-delay", &transition_delay_attr,
@@ -802,8 +1028,12 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_type_attr &&
       !animation_direction_attr &&
       !animation_duration_attr &&
-      !animation_easing_attr &&
       !animation_segment_attr &&
+      !animation_easing_attr &&
+      !animation_mode_attr &&
+      !animation_values_attr &&
+      !animation_times_attr &&
+      !animation_controls_attr &&
       !attach_to_attr &&
       !attach_pos_attr)
     {
@@ -860,33 +1090,16 @@ start_element_cb (GMarkupParseContext  *context,
   stroke_opacity = 1;
   if (stroke_opacity_attr)
     {
-      if (!parse_float ("stroke-opacity", stroke_opacity_attr, 0, &stroke_opacity, error))
+      if (!parse_float ("stroke-opacity", stroke_opacity_attr, UNIT, &stroke_opacity, error))
         goto cleanup;
-      stroke_opacity = CLAMP (stroke_opacity, 0, 1);
     }
 
   stroke_symbolic = 0xffff;
   stroke_color = (GdkRGBA) { 0, 0, 0, 1 };
   if (stroke_attr)
     {
-      if (strcmp (stroke_attr, "foreground") == 0)
-        stroke_symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
-      else if (strcmp (stroke_attr, "success") == 0)
-        stroke_symbolic = GTK_SYMBOLIC_COLOR_SUCCESS;
-      else if (strcmp (stroke_attr, "warning") == 0)
-        stroke_symbolic = GTK_SYMBOLIC_COLOR_WARNING;
-      else if (strcmp (stroke_attr, "error") == 0)
-        stroke_symbolic = GTK_SYMBOLIC_COLOR_ERROR;
-      else if (strcmp (stroke_attr, "accent") == 0)
-        stroke_symbolic = GTK_SYMBOLIC_COLOR_ACCENT;
-      else
-        {
-          if (!gdk_rgba_parse (&stroke_color, stroke_attr))
-            {
-              set_attribute_error (error, "gpa:stroke", stroke_attr);
-              goto cleanup;
-            }
-       }
+      if (!parse_paint ("gpa:stroke", stroke_attr, &stroke_symbolic, &stroke_color, error))
+        goto cleanup;
     }
 
   stroke_color.alpha *= stroke_opacity;
@@ -910,67 +1123,67 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (gtk_stroke_width_attr)
     {
-      int res;
+      GStrv str;
       float w;
 
-      res = sscanf (gtk_stroke_width_attr, "%f %f %f", &min_stroke_width, &w, &max_stroke_width);
-      if (res < 3 || max_stroke_width < w || w < min_stroke_width)
+      str = g_strsplit (gtk_stroke_width_attr, " ", 0);
+      if (g_strv_length (str) != 3)
         {
           set_attribute_error (error, "gpa:stroke-width", gtk_stroke_width_attr);
+          g_strfreev (str);
           goto cleanup;
         }
+
+      if (!parse_float ("gpa:stroke-width", str[0], POSITIVE, &min_stroke_width, error) ||
+          !parse_float ("gpa:stroke-width", str[1], POSITIVE, &w, error) ||
+          !parse_float ("gpa:stroke-width", str[2], POSITIVE, &max_stroke_width, error) ||
+          w < min_stroke_width || w > max_stroke_width)
+        {
+          g_strfreev (str);
+          goto cleanup;
+        }
+      g_strfreev (str);
 
       gsk_stroke_set_line_width (stroke, w);
     }
 
   if (stroke_linecap_attr)
     {
-      if (strcmp (stroke_linecap_attr, "butt") == 0)
-        gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_BUTT);
-      else if (strcmp (stroke_linecap_attr, "round") == 0)
-        gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
-      else if (strcmp (stroke_linecap_attr, "square") == 0)
-        gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_SQUARE);
-      else
-        {
-          set_attribute_error (error, "stroke-linecap", stroke_linecap_attr);
-          goto cleanup;
-        }
+      GskLineCap linecap;
+
+      if (!parse_enum ("stroke-linecap", stroke_linecap_attr,
+                       (const char *[]) { "butt", "round", "square" }, 3,
+                        &linecap, error))
+        goto cleanup;
+
+      gsk_stroke_set_line_cap (stroke, linecap);
     }
 
   if (stroke_linejoin_attr)
     {
-      if (strcmp (stroke_linejoin_attr, "miter") == 0)
-        gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_MITER);
-      else if (strcmp (stroke_linejoin_attr, "round") == 0)
-        gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
-      else if (strcmp (stroke_linejoin_attr, "bevel") == 0)
-        gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_BEVEL);
-      else
-        {
-          set_attribute_error (error, "stroke-linejoin", stroke_linejoin_attr);
-          goto cleanup;
-        }
+      GskLineJoin linejoin;
+
+      if (!parse_enum ("stroke-linejoin", stroke_linejoin_attr,
+                       (const char *[]) { "miter", "round", "bevel" }, 3,
+                        &linejoin, error))
+        goto cleanup;
+
+      gsk_stroke_set_line_join (stroke, linejoin);
     }
 
   fill_rule = GSK_FILL_RULE_WINDING;
   if (fill_rule_attr)
     {
-      if (strcmp (fill_rule_attr, "winding") == 0)
-        fill_rule = GSK_FILL_RULE_WINDING;
-      else if (strcmp (fill_rule_attr, "evenodd") == 0)
-        fill_rule = GSK_FILL_RULE_EVEN_ODD;
-      else
-        {
-          set_attribute_error (error, "fill-rule", fill_rule_attr);
-          goto cleanup;
-        }
+      if (!parse_enum ("fill-rule", fill_rule_attr,
+                       (const char *[]) { "winding", "evenodd" }, 2,
+                        &fill_rule, error))
+        goto cleanup;
     }
 
   fill_opacity = 1;
   if (fill_opacity_attr)
     {
-      if (!parse_float ("fill-opacity", fill_opacity_attr, 0, &fill_opacity, error))
+      if (!parse_float ("fill-opacity", fill_opacity_attr, UNIT, &fill_opacity, error))
         goto cleanup;
       fill_opacity = CLAMP (fill_opacity, 0, 1);
     }
@@ -979,24 +1192,7 @@ start_element_cb (GMarkupParseContext  *context,
   fill_color = (GdkRGBA) { 0, 0, 0, 1 };
   if (fill_attr)
     {
-      if (strcmp (fill_attr, "foreground") == 0)
-        fill_symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
-      else if (strcmp (fill_attr, "success") == 0)
-        fill_symbolic = GTK_SYMBOLIC_COLOR_SUCCESS;
-      else if (strcmp (fill_attr, "warning") == 0)
-        fill_symbolic = GTK_SYMBOLIC_COLOR_WARNING;
-      else if (strcmp (fill_attr, "error") == 0)
-        fill_symbolic = GTK_SYMBOLIC_COLOR_ERROR;
-      else if (strcmp (stroke_attr, "accent") == 0)
-        stroke_symbolic = GTK_SYMBOLIC_COLOR_ACCENT;
-      else
-        {
-          if (!gdk_rgba_parse (&fill_color, fill_attr))
-            {
-              set_attribute_error (error, "gpa:fill", fill_attr);
-              goto cleanup;
-            }
-       }
+      if (!parse_paint ("gpa:fill", fill_attr, &fill_symbolic, &fill_color, error))         goto cleanup;
     }
 
   fill_color.alpha *= fill_opacity;
@@ -1004,23 +1200,10 @@ start_element_cb (GMarkupParseContext  *context,
   transition_type = TRANSITION_TYPE_NONE;
   if (transition_type_attr)
     {
-      const char *types[] = { "none", "animate", "morph", "fade" };
-      unsigned int i;
-
-      for (i = 0; i < G_N_ELEMENTS (types); i++)
-        {
-          if (strcmp (transition_type_attr, types[i]) == 0)
-            {
-              transition_type = (TransitionType) i;
-              break;
-            }
-        }
-
-      if (i == G_N_ELEMENTS (types))
-        {
-          set_attribute_error (error, "gpa:transition-type", transition_type_attr);
-          goto cleanup;
-        }
+      if (!parse_enum ("gpa:transition-type", transition_type_attr,
+                       (const char *[]) { "none", "animate", "morph", "fade" }, 4,
+                        &transition_type, error))
+        goto cleanup;
     }
 
   transition_duration = 0.f;
@@ -1040,35 +1223,18 @@ start_element_cb (GMarkupParseContext  *context,
   transition_easing = EASING_FUNCTION_LINEAR;
   if (transition_easing_attr)
     {
-      const char *easing[] =  { "linear", "ease-in-out", "ease-in",
-        "ease-out", "ease"
-      };
-      unsigned int i;
-
-      for (i = 0; i < G_N_ELEMENTS (easing); i++)
-        {
-          if (strcmp (transition_easing_attr, easing[i]) == 0)
-            {
-              transition_easing = (EasingFunction) i;
-              break;
-            }
-        }
-
-      if (i == G_N_ELEMENTS (easing))
-        {
-          set_attribute_error (error, "gpa:transition-easing", transition_easing_attr);
-          goto cleanup;
-        }
+      if (!parse_enum ("gpa:transition-easing", transition_easing_attr,
+                       (const char *[]) { "linear", "ease-in-out", "ease-in",
+                                          "ease-out", "ease" }, 5,
+                        &transition_easing, error))
+        goto cleanup;
     }
 
   origin = 0;
   if (origin_attr)
     {
-      if (!origin_parse (origin_attr, &origin))
-        {
-          set_attribute_error (error, "gpa:origin", origin_attr);
-          goto cleanup;
-        }
+      if (!parse_float ("gpa:origin", origin_attr, UNIT, &origin, error))
+        goto cleanup;
     }
 
   states = ALL_STATES;
@@ -1084,48 +1250,22 @@ start_element_cb (GMarkupParseContext  *context,
   animation_type = ANIMATION_TYPE_NONE;
   if (animation_type_attr)
     {
-      const char *types[] = { "none", "automatic" };
-      unsigned int i;
-
-      for (i = 0; i < G_N_ELEMENTS (types); i++)
-        {
-          if (strcmp (animation_type_attr, types[i]) == 0)
-            {
-              animation_type = (AnimationType) i;
-              break;
-            }
-        }
-
-      if (i == G_N_ELEMENTS (types))
-        {
-          set_attribute_error (error, "gpa:animation-type", animation_type_attr);
-          goto cleanup;
-        }
+      if (!parse_enum ("gpa:animation-type", animation_type_attr,
+                       (const char *[]) { "none", "automatic", }, 2,
+                        &animation_type, error))
+        goto cleanup;
     }
 
   animation_direction = ANIMATION_DIRECTION_NORMAL;
   if (animation_direction_attr)
     {
-      const char *directions[] = { "normal", "alternate", "reverse",
-        "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse",
-        "segment", "segment-alternate"
-      };
-      unsigned int i;
-
-      for (i = 0; i < G_N_ELEMENTS (directions); i++)
-        {
-          if (strcmp (animation_direction_attr, directions[i]) == 0)
-            {
-              animation_direction = (AnimationDirection) i;
-              break;
-            }
-        }
-
-      if (i == G_N_ELEMENTS (directions))
-        {
-          set_attribute_error (error, "gpa:animation-direction", animation_direction_attr);
-          goto cleanup;
-        }
+      if (!parse_enum ("gpa:animation-direction", animation_direction_attr,
+                       (const char *[]) { "normal", "alternate", "reverse",
+                                          "reverse-alternate", "in-out",
+                                          "in-out-alternate", "in-out-reverse",
+                                          "segment", "segment-alternate" }, 9,
+                        &animation_direction, error))
+        goto cleanup;
     }
 
   animation_duration = 0.f;
@@ -1135,28 +1275,13 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  animation_easing = EASING_FUNCTION_LINEAR;
-  if (animation_easing_attr)
+  animation_repeat = G_MAXFLOAT;
+  if (animation_repeat_attr)
     {
-      const char *easing[] =  { "linear", "ease-in-out", "ease-in",
-        "ease-out", "ease"
-      };
-      unsigned int i;
-
-      for (i = 0; i < G_N_ELEMENTS (easing); i++)
-        {
-          if (strcmp (animation_easing_attr, easing[i]) == 0)
-            {
-              animation_easing = (EasingFunction) i;
-              break;
-            }
-        }
-
-      if (i == G_N_ELEMENTS (easing))
-        {
-          set_attribute_error (error, "gpa:animation-easing", animation_easing_attr);
-          goto cleanup;
-        }
+      if (strcmp (animation_repeat_attr, "indefinite") == 0)
+        animation_repeat = G_MAXFLOAT;
+      else if (!parse_float ("gpa:animation-repeat", animation_repeat_attr, POSITIVE, &animation_repeat, error))
+        goto cleanup;
     }
 
   animation_segment = 0.2f;
@@ -1165,6 +1290,61 @@ start_element_cb (GMarkupParseContext  *context,
       if (!parse_float ("gpa:animation-segment", animation_segment_attr, POSITIVE, &animation_segment, error))
         goto cleanup;
     }
+
+  animation_easing = EASING_FUNCTION_LINEAR;
+  if (animation_easing_attr)
+    {
+      if (!parse_enum ("gpa:animation-easing", animation_easing_attr,
+                       (const char *[]) { "linear", "ease-in-out", "ease-in",
+                                          "ease-out", "ease", "custom" }, 6,
+                        &animation_easing, error))
+        goto cleanup;
+    }
+
+  animation_mode = CALC_MODE_LINEAR;
+  if (animation_mode_attr)
+    {
+      if (!parse_enum ("gpa:animation-mode", animation_mode_attr,
+                       (const char *[]) { "linear", "discrete", "spline" },  3,
+                        &animation_mode, error))
+        goto cleanup;
+    }
+
+  n_animation_values = 0;
+  if (animation_values_attr)
+    {
+      if (!parse_float_values ("gpa:animation-values", animation_values_attr,
+                               animation_values, 10, 0, &n_animation_values,
+                               error))
+        goto cleanup;
+    }
+
+  n_animation_times = 0;
+  if (animation_times_attr)
+    {
+      if (!parse_float_values ("gpa:animation-times", animation_times_attr,
+                               animation_times, 10, UNIT, &n_animation_times,
+                               error))
+        goto cleanup;
+    }
+
+  n_animation_controls = 0;
+  if (animation_controls_attr)
+    {
+      if (!parse_float_values ("gpa:animation-controls", animation_controls_attr,
+                               animation_controls, 40, UNIT, &n_animation_controls,
+                               error))
+        goto cleanup;
+    }
+
+  animation_keyframes = construct_animation_frames (animation_easing,
+                                                    &animation_mode,
+                                                    animation_values, n_animation_values,
+                                                    animation_times, n_animation_times,
+                                                    animation_controls, n_animation_controls,
+                                                    error);
+  if (!animation_keyframes)
+    goto cleanup;
 
   attach.to = g_strdup (attach_to_attr);
   attach.pos = 0;
@@ -1180,7 +1360,8 @@ start_element_cb (GMarkupParseContext  *context,
   idx = path_paintable_add_path (data->paintable, path);
 
   path_paintable_set_path_states (data->paintable, idx, states);
-  path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_easing, animation_segment);
+  path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_repeat, animation_easing, animation_segment);
+  path_paintable_set_path_animation_timing (data->paintable, idx, animation_easing, animation_mode, (KeyFrame *) animation_keyframes->data, animation_keyframes->len);
   path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_delay, transition_easing);
   path_paintable_set_path_origin (data->paintable, idx, origin);
   path_paintable_set_path_fill (data->paintable, idx, fill_attr != NULL, fill_rule, fill_symbolic, &fill_color);
@@ -1195,6 +1376,7 @@ start_element_cb (GMarkupParseContext  *context,
 cleanup:
   g_clear_pointer (&path, gsk_path_unref);
   g_clear_pointer (&stroke, gsk_stroke_free);
+  g_clear_pointer (&animation_keyframes, g_array_unref);
 }
 
 static gboolean
@@ -1264,8 +1446,9 @@ path_paintable_save_path (PathPaintable *self,
                           GString       *str)
 {
   const char *sym[] = { "foreground", "error", "warning", "success", "accent" };
-  const char *easing[] = { "linear", "ease-in-out", "ease-in", "ease-out", "ease" };
+  const char *easing[] = { "linear", "ease-in-out", "ease-in", "ease-out", "ease", "custom" };
   const char *fallback_color[] = { "rgb(0,0,0)", "rgb(255,0,0)", "rgb(255,255,0)", "rgb(0,255,0)", "rgb(0,0,255)", };
+  const char *mode[] = { "linear", "discrete", "spline" };
   GskStroke *stroke;
   unsigned int stroke_symbolic;
   unsigned int fill_symbolic;
@@ -1324,10 +1507,58 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
+  if (path_paintable_get_path_animation_repeat (self, idx) != G_MAXFLOAT)
+    {
+      g_string_append_printf (str, "\n        gpa:animation-repeat='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g",
+                                               path_paintable_get_path_animation_repeat (self, idx)));
+      has_gtk_attr = TRUE;
+    }
+
   if (path_paintable_get_path_animation_easing (self, idx) != EASING_FUNCTION_LINEAR)
     {
       g_string_append_printf (str, "\n        gpa:animation-easing='%s'",
                               easing[path_paintable_get_path_animation_easing (self, idx)]);
+      has_gtk_attr = TRUE;
+    }
+
+  if (path_paintable_get_path_animation_easing (self, idx) == EASING_FUNCTION_CUSTOM)
+    {
+      GString *values = g_string_new ("");
+      GString *times = g_string_new ("");
+      GString *controls = g_string_new ("");
+      const KeyFrame *frames = path_paintable_get_path_animation_frames (self, idx);
+      unsigned int n = path_paintable_get_path_animation_n_frames (self, idx);
+
+      for (unsigned int p = 0; p < n; p++)
+        {
+          g_string_append_printf (values, "%s%s",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", frames[p].value),
+                                  p + 1 < n ? " " : "");
+          g_string_append_printf (times, "%s%s",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", frames[p].time),
+                                  p + 1 < n ? " " : "");
+          if (p + 1 < n)
+            {
+              for (unsigned int i = 0; i < 4; i++)
+                g_string_append_printf (controls, "%s%s",
+                                        g_ascii_formatd (buffer, sizeof (buffer),
+                                                         "%g", frames[p].params[i]),
+                                        (p + 2 == n && i + 1 == 4) ? "" : " ");
+            }
+        }
+
+      g_string_append_printf (str, "\n        gpa:animation-mode='%s'",
+                              mode[path_paintable_get_path_animation_mode (self, idx)]);
+      g_string_append_printf (str, "\n        gpa:animation-values='%s'", values->str);
+      g_string_append_printf (str, "\n        gpa:animation-times='%s'", times->str);
+      g_string_append_printf (str, "\n        gpa:animation-controls='%s'", controls->str);
+      g_string_free (values, TRUE);
+      g_string_free (times, TRUE);
+      g_string_free (controls, TRUE);
+
       has_gtk_attr = TRUE;
     }
 
@@ -1880,8 +2111,12 @@ path_paintable_add_path (PathPaintable *self,
   elt.animation.type = ANIMATION_TYPE_NONE;
   elt.animation.direction = ANIMATION_DIRECTION_NORMAL;
   elt.animation.duration = 0;
-  elt.animation.easing = EASING_FUNCTION_LINEAR;
+  elt.animation.repeat = G_MAXFLOAT;
   elt.animation.segment = 0.2;
+  elt.animation.easing = EASING_FUNCTION_LINEAR;
+  elt.animation.mode = CALC_MODE_LINEAR;
+  elt.animation.frames = NULL;
+  elt.animation.n_frames = 0;
 
   elt.fill.enabled = FALSE;
   elt.fill.rule = GSK_FILL_RULE_WINDING;
@@ -2057,6 +2292,7 @@ path_paintable_set_path_animation (PathPaintable      *self,
                                    AnimationType       type,
                                    AnimationDirection  direction,
                                    float               duration,
+                                   float               repeat,
                                    EasingFunction      easing,
                                    float               segment)
 {
@@ -2068,6 +2304,7 @@ path_paintable_set_path_animation (PathPaintable      *self,
   if (elt->animation.type == type &&
       elt->animation.direction == direction &&
       elt->animation.duration == duration &&
+      elt->animation.repeat == repeat &&
       elt->animation.easing == easing &&
       elt->animation.segment == segment)
     return;
@@ -2075,6 +2312,7 @@ path_paintable_set_path_animation (PathPaintable      *self,
   elt->animation.type = type;
   elt->animation.direction = direction;
   elt->animation.duration = duration;
+  elt->animation.repeat = repeat;
   elt->animation.easing = easing;
   elt->animation.segment = segment;
 
@@ -2114,6 +2352,17 @@ path_paintable_get_path_animation_duration (PathPaintable *self,
   return elt->animation.duration;
 }
 
+float
+path_paintable_get_path_animation_repeat (PathPaintable *self,
+                                          size_t         idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, 0);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->animation.repeat;
+}
+
 EasingFunction
 path_paintable_get_path_animation_easing (PathPaintable *self,
                                           size_t         idx)
@@ -2135,6 +2384,70 @@ path_paintable_get_path_animation_segment (PathPaintable *self,
 
   return elt->animation.segment;
 }
+
+void
+path_paintable_set_path_animation_timing (PathPaintable  *self,
+                                          size_t          idx,
+                                          EasingFunction  easing,
+                                          CalcMode        mode,
+                                          const KeyFrame *frames,
+                                          unsigned int    n_frames)
+{
+  g_return_if_fail (idx < self->paths->len);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  if (elt->animation.easing == easing &&
+      elt->animation.mode == mode &&
+      elt->animation.n_frames == n_frames &&
+      memcmp (elt->animation.frames, frames, sizeof (KeyFrame) * n_frames) == 0)
+    return;
+
+  elt->animation.easing = easing;
+  elt->animation.mode = mode;
+  if (frames != elt->animation.frames)
+    {
+      g_free (elt->animation.frames);
+      elt->animation.frames = g_memdup2 (frames, sizeof (KeyFrame) * n_frames);
+      elt->animation.n_frames = n_frames;
+    }
+
+  g_signal_emit (self, signals[CHANGED], 0);
+}
+
+CalcMode
+path_paintable_get_path_animation_mode (PathPaintable *self,
+                                        size_t         idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, CALC_MODE_LINEAR);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->animation.mode;
+}
+
+unsigned int
+path_paintable_get_path_animation_n_frames (PathPaintable *self,
+                                            size_t         idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, 0);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->animation.n_frames;
+}
+
+const KeyFrame *
+path_paintable_get_path_animation_frames (PathPaintable *self,
+                                          size_t         idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, NULL);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->animation.frames;
+}
+
 void
 path_paintable_set_path_origin (PathPaintable *self,
                                 size_t         idx,
@@ -2454,6 +2767,7 @@ path_paintable_copy (PathPaintable *self)
                                          path_paintable_get_path_animation_type (self, i),
                                          path_paintable_get_path_animation_direction (self, i),
                                          path_paintable_get_path_animation_duration (self, i),
+                                         path_paintable_get_path_animation_repeat (self, i),
                                          path_paintable_get_path_animation_easing (self, i),
                                          path_paintable_get_path_animation_segment (self, i));
 
@@ -2529,6 +2843,7 @@ path_paintable_combine (PathPaintable *one,
                                          path_paintable_get_path_animation_type (two, i),
                                          path_paintable_get_path_animation_direction (two, i),
                                          path_paintable_get_path_animation_duration (two, i),
+                                         path_paintable_get_path_animation_repeat (two, i),
                                          path_paintable_get_path_animation_easing (two, i),
                                          path_paintable_get_path_animation_segment (two, i));
 

@@ -6,6 +6,7 @@ icon_editor_sources = [
   'icon-editor-window.c',
   'fontify.c',
   'main.c',
+  'mini-graph.c',
   'paintable-editor.c',
   'path-editor.c',
   'path-paintable.c',
