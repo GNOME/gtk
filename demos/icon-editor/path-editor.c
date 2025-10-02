@@ -23,6 +23,7 @@
 #include "path-paintable.h"
 #include "range-editor.h"
 #include "color-editor.h"
+#include "mini-graph.h"
 
 
 struct _PathEditor
@@ -48,9 +49,10 @@ struct _PathEditor
   GtkDropDown *animation_direction;
   GtkSpinButton *animation_duration;
   GtkSpinButton *animation_repeat;
+  GtkSpinButton *animation_segment;
   GtkCheckButton *infty_check;
   GtkDropDown *animation_easing;
-  GtkSpinButton *animation_segment;
+  MiniGraph *mini_graph;
   ColorEditor *stroke_paint;
   RangeEditor *width_range;
   GtkSpinButton *min_width;
@@ -663,6 +665,12 @@ path_editor_update (PathEditor *self)
       gtk_drop_down_set_selected (self->animation_easing,
                                   path_paintable_get_path_animation_easing (self->paintable, self->path));
 
+      mini_graph_set_params (self->mini_graph,
+                             path_paintable_get_path_animation_easing (self->paintable, self->path),
+                             path_paintable_get_path_animation_mode (self->paintable, self->path),
+                             path_paintable_get_path_animation_frames (self->paintable, self->path),
+                             path_paintable_get_path_animation_n_frames (self->paintable, self->path));
+
       gtk_spin_button_set_value (self->animation_segment,
                                  path_paintable_get_path_animation_segment (self->paintable, self->path));
 
@@ -834,6 +842,7 @@ path_editor_class_init (PathEditorClass *class)
 
   g_type_ensure (RANGE_EDITOR_TYPE);
   g_type_ensure (COLOR_EDITOR_TYPE);
+  g_type_ensure (MINI_GRAPH_TYPE);
 
   object_class->set_property = path_editor_set_property;
   object_class->get_property = path_editor_get_property;
@@ -871,10 +880,11 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_duration);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_repeat);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, infty_check);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_easing);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, mini_graph);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, width_range);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, min_width);

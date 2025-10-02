@@ -39,7 +39,15 @@ typedef enum
   EASING_FUNCTION_EASE_IN,
   EASING_FUNCTION_EASE_OUT,
   EASING_FUNCTION_EASE,
+  EASING_FUNCTION_CUSTOM,
 } EasingFunction;
+
+typedef enum
+{
+  CALC_MODE_LINEAR,
+  CALC_MODE_DISCRETE,
+  CALC_MODE_SPLINE,
+} CalcMode;
 
 typedef enum
 {
@@ -166,6 +174,34 @@ EasingFunction  path_paintable_get_path_animation_easing
 float           path_paintable_get_path_animation_segment
                                                    (PathPaintable     *self,
                                                     size_t             idx);
+typedef struct
+{
+  float time;
+  float value;
+  float params[4];
+} KeyFrame;
+
+void            path_paintable_set_path_animation_timing
+                                                   (PathPaintable     *self,
+                                                    size_t             idx,
+                                                    EasingFunction     easing,
+                                                    CalcMode           mode,
+                                                    KeyFrame          *frames,
+                                                    unsigned int       n_frames);
+CalcMode        path_paintable_get_path_animation_mode
+                                                   (PathPaintable     *self,
+                                                    size_t             idx);
+unsigned int    path_paintable_get_path_animation_n_frames
+                                                   (PathPaintable     *self,
+                                                    size_t             idx);
+const KeyFrame *path_paintable_get_path_animation_frames
+                                                   (PathPaintable     *self,
+                                                    size_t             idx);
+void            path_paintable_get_path_animation_frame
+                                                   (PathPaintable     *self,
+                                                    size_t             idx,
+                                                    size_t             pos,
+                                                    KeyFrame          *frame);
 
 void            path_paintable_set_path_transition (PathPaintable   *self,
                                                     size_t           idx,
