@@ -12,8 +12,6 @@
         class='foreground-stroke transparent-fill'/>
   <path d='M 10.1852732 4.95939684 C 11.2715759 6.84092855, 11.2715759 9.15907097, 10.1852732 11.0406027'
         id='path1'
-        gpa:animation-type='automatic'
-        gpa:transition-type='fade'
         gpa:transition-duration='500ms'
         gpa:transition-easing='ease-in-out'
         gpa:origin='0.5'
@@ -26,8 +24,6 @@
         gpa:stroke='foreground'/>
   <path d='M 13.5790482 2.99999976 C 15.3653765 6.09401035, 15.3653765 9.90598965, 13.5790482 13'
         id='path2'
-        gpa:animation-type='automatic'
-        gpa:transition-type='fade'
         gpa:transition-duration='1000ms'
         gpa:transition-easing='ease-in-out'
         gpa:origin='0.5'

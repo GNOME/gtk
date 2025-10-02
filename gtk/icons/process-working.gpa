@@ -1,18 +1,19 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='sound audio volume low'>
-  <path d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
+     gpa:keywords='animation overlap'>
+  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
         id='path0'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'
+        stroke-opacity='0.2'
         stroke='rgb(0,0,0)'
         fill='none'
         class='foreground-stroke transparent-fill'/>
-  <path d='M 10.1852732 4.95939684 C 11.2715759 6.84092855, 11.2715759 9.15907097, 10.1852732 11.0406027'
+  <path d='M 1 8 C 1 4.23732758, 4.23732758 1, 8 1'
         id='path1'
-        gpa:origin='0.5'
+        gpa:animation-type='automatic'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'
