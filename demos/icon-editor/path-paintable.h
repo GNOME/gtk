@@ -186,7 +186,7 @@ void            path_paintable_set_path_animation_timing
                                                     size_t             idx,
                                                     EasingFunction     easing,
                                                     CalcMode           mode,
-                                                    KeyFrame          *frames,
+                                                    const KeyFrame    *frames,
                                                     unsigned int       n_frames);
 CalcMode        path_paintable_get_path_animation_mode
                                                    (PathPaintable     *self,
@@ -197,11 +197,6 @@ unsigned int    path_paintable_get_path_animation_n_frames
 const KeyFrame *path_paintable_get_path_animation_frames
                                                    (PathPaintable     *self,
                                                     size_t             idx);
-void            path_paintable_get_path_animation_frame
-                                                   (PathPaintable     *self,
-                                                    size_t             idx,
-                                                    size_t             pos,
-                                                    KeyFrame          *frame);
 
 void            path_paintable_set_path_transition (PathPaintable   *self,
                                                     size_t           idx,

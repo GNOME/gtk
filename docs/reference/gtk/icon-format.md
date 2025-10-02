@@ -135,7 +135,6 @@ The following attributes can be set on elements that specify a path:
    'all' or 'none'
 - `gpa:animation-type`: The animation to use. One of 'none' or 'automatic'
 - `gpa:animation-direction`: One of 'normal', 'alternate', 'reverse', 'reverse-alternate', 'in-out', 'in-out-alternate', 'in-out-reverse', 'segment, 'segment-alternate'
-- `gpa:animation-segment`: The length of the segment to animate (as a value between 0 and 1). This is used for the 'segment' and 'segment-alternate' animation directions
 - `gpa:animation-duration`: The duration of one animation cycle. A floating point number, followed by 's' or 'ms'
 - `gpa:animation-repeat`: The number of animation cycles to run. A floating point number, or 'indefinite'
 - `gpa:animation-easing`: The easing function for animations (one of 'linear', 'ease-in-out', 'ease-in', 'ease-out' or 'ease' or 'custom')
@@ -144,6 +143,7 @@ The following attributes can be set on elements that specify a path:
 - `gpa:animation-values`: a list of floating point numbers between 0 and 1
 - `gpa:animation-times`: a list of non-decreasing floating point numbers between 0 and 1
 - `gpa:animation-controls`: a list of control points for the spline
+- `gpa:animation-segment`: The length of the segment to animate (as a value between 0 and 1). This is used for the 'segment' and 'segment-alternate' animation directions
 - `gpa:transition-type`: The transition to use. One of 'none', 'animate', 'morph' or 'fade'
 - `gpa:transition-duration`: The transition duration. A floating point number, followed by 's' or 'ms'
 - `gpa:transition-delay`: The transition delay. Can be negative, for overlaps. A floating point number, followed by 's' or 'ms'

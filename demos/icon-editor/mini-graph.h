@@ -16,3 +16,6 @@ void mini_graph_set_params (MiniGraph      *self,
 
 void mini_graph_set_easing_function (MiniGraph      *self,
                                      EasingFunction  easing);
+
+void mini_graph_set_calc_mode (MiniGraph *self,
+                               CalcMode   mode);

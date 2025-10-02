@@ -53,6 +53,9 @@ struct _PathEditor
   GtkCheckButton *infty_check;
   GtkDropDown *animation_easing;
   MiniGraph *mini_graph;
+  GtkDropDown *calc_mode;
+  MiniGraph *big_graph;
+  GtkBox *frames;
   ColorEditor *stroke_paint;
   RangeEditor *width_range;
   GtkSpinButton *min_width;
@@ -184,7 +187,10 @@ animation_changed (PathEditor *self)
   float duration;
   float repeat;
   EasingFunction easing;
+  CalcMode mode;
   float segment;
+  const KeyFrame *frames;
+  unsigned int n_frames;
 
   if (self->updating)
     return;
@@ -196,10 +202,18 @@ animation_changed (PathEditor *self)
     repeat = G_MAXFLOAT;
   else
     repeat = gtk_spin_button_get_value (self->animation_repeat);
-  easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
   segment = gtk_spin_button_get_value (self->animation_segment);
+  easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
+  mode = (CalcMode) gtk_drop_down_get_selected (self->calc_mode);
 
   path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, repeat, easing, segment);
+
+  frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
+  n_frames = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
+  path_paintable_set_path_animation_timing (self->paintable, self->path, easing, mode, frames, n_frames);
+
+  mini_graph_set_params (self->mini_graph, easing, mode, frames, n_frames);
+  mini_graph_set_params (self->big_graph, easing, mode, frames, n_frames);
 }
 
 static void
@@ -413,6 +427,14 @@ bool_and_and (GObject  *object,
   return b1 && b2 && b3;
 }
 
+static gboolean
+uint_equal (GObject      *object,
+            unsigned int  u1,
+            unsigned int  u2)
+{
+  return u1 == u2;
+}
+
 static void
 show_error (PathEditor *self,
             const char *title,
@@ -595,6 +617,187 @@ path_editor_update_state (PathEditor *self)
     }
 }
 
+static void populate_frames (PathEditor *self);
+
+static void
+add_frame (PathEditor *self)
+{
+  EasingFunction easing;
+  CalcMode mode;
+  const KeyFrame *frames;
+  unsigned int n;
+  KeyFrame *f;
+
+  easing = path_paintable_get_path_animation_easing (self->paintable, self->path);
+  mode = path_paintable_get_path_animation_mode (self->paintable, self->path);
+  frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
+  n = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
+
+  f = g_new (KeyFrame, n + 1);
+  memcpy (f, frames, sizeof (KeyFrame) * n);
+  memcpy (&f[n], &frames[n - 1], sizeof (KeyFrame));
+  f[n - 1].time = (f[n - 2].time + f[n].time) / 2;
+
+  path_paintable_set_path_animation_timing (self->paintable, self->path,
+                                            easing, mode, f, n + 1);
+  mini_graph_set_params (self->mini_graph, easing, mode, f, n + 1);
+  mini_graph_set_params (self->big_graph, easing, mode, f, n + 1);
+
+  g_free (f);
+
+  populate_frames (self);
+}
+
+static void
+remove_frame (PathEditor *self)
+{
+  EasingFunction easing;
+  CalcMode mode;
+  const KeyFrame *frames;
+  unsigned int n;
+  KeyFrame *f;
+
+  easing = path_paintable_get_path_animation_easing (self->paintable, self->path);
+  mode = path_paintable_get_path_animation_mode (self->paintable, self->path);
+  frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
+  n = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
+
+  if (n == 2)
+    return;
+
+  f = g_new (KeyFrame, n - 1);
+  memcpy (f, frames, sizeof (KeyFrame) * (n - 1));
+
+  f[n - 2].time = 1;
+  f[n - 2].value = 1;
+
+  path_paintable_set_path_animation_timing (self->paintable, self->path,
+                                            easing, mode, f, n - 1);
+  mini_graph_set_params (self->mini_graph, easing, mode, f, n - 1);
+  mini_graph_set_params (self->big_graph, easing, mode, f, n - 1);
+
+  g_free (f);
+
+  populate_frames (self);
+}
+
+static void
+entry_activated (GtkEntry   *entry,
+                 PathEditor *self)
+{
+  GtkWidget *child;
+  size_t pos;
+  EasingFunction easing;
+  CalcMode mode;
+  const KeyFrame *frames;
+  unsigned int n;
+  KeyFrame *f;
+
+  easing = path_paintable_get_path_animation_easing (self->paintable, self->path);
+  mode = path_paintable_get_path_animation_mode (self->paintable, self->path);
+  frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
+  n = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
+
+  f = g_memdup2 (frames, sizeof (KeyFrame) * n);
+
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (self->frames)), pos = 0;
+       child;
+       child = gtk_widget_get_next_sibling (child), pos++)
+    {
+      GtkWidget *w;
+      unsigned int i;
+      float *ff = (float *) &f[pos];
+      char *end;
+
+      for (w = gtk_widget_get_first_child (child), i = 0;
+           i < 6;
+           w = gtk_widget_get_next_sibling (w), i++)
+        {
+          ff[i] = g_ascii_strtod (gtk_editable_get_text (GTK_EDITABLE (w)), &end);
+          if ((end && *end != '\0') || ff[i] < 0 || ff[i] > 1)
+            goto done;
+        }
+    }
+
+  path_paintable_set_path_animation_timing (self->paintable, self->path,
+                                            easing, mode, f, n);
+  mini_graph_set_params (self->mini_graph, easing, mode, f, n);
+  mini_graph_set_params (self->big_graph, easing, mode, f, n);
+
+done:
+  g_free (f);
+}
+
+static void
+populate_frames (PathEditor *self)
+{
+  GtkWidget *child;
+  GtkWidget *entry;
+  const KeyFrame *frames;
+  unsigned int n_frames;
+  char buffer[G_ASCII_DTOSTR_BUF_SIZE];
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->frames))) != NULL)
+    gtk_widget_unparent (child);
+
+  frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
+  n_frames = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
+
+  for (unsigned int i = 0; i < n_frames; i++)
+    {
+      child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+      entry = gtk_entry_new ();
+      gtk_editable_set_max_width_chars (GTK_EDITABLE (entry), 3);
+      gtk_editable_set_text (GTK_EDITABLE (entry),
+                             g_ascii_formatd (buffer, sizeof (buffer), "%g", frames[i].time));
+      g_signal_connect (entry, "activate", G_CALLBACK (entry_activated), self);
+      gtk_widget_set_sensitive (entry, 0 < i && i < n_frames - 1);
+      gtk_box_append (GTK_BOX (child), entry);
+
+      entry = gtk_entry_new ();
+      gtk_editable_set_max_width_chars (GTK_EDITABLE (entry), 3);
+      gtk_editable_set_text (GTK_EDITABLE (entry),
+                             g_ascii_formatd (buffer, sizeof (buffer), "%g", frames[i].value));
+      g_signal_connect (entry, "activate", G_CALLBACK (entry_activated), self);
+      gtk_widget_set_sensitive (entry, 0 < i && i < n_frames - 1);
+      gtk_box_append (GTK_BOX (child), entry);
+
+      entry = gtk_entry_new ();
+      gtk_editable_set_max_width_chars (GTK_EDITABLE (entry), 3);
+      gtk_editable_set_text (GTK_EDITABLE (entry),
+                             g_ascii_formatd (buffer, sizeof (buffer), "%g", frames[i].params[0]));
+      g_signal_connect (entry, "activate", G_CALLBACK (entry_activated), self);
+      gtk_widget_set_sensitive (entry, i < n_frames - 1);
+      gtk_box_append (GTK_BOX (child), entry);
+
+      entry = gtk_entry_new ();
+      gtk_editable_set_max_width_chars (GTK_EDITABLE (entry), 3);
+      gtk_editable_set_text (GTK_EDITABLE (entry),
+                             g_ascii_formatd (buffer, sizeof (buffer), "%g", frames[i].params[1]));
+      g_signal_connect (entry, "activate", G_CALLBACK (entry_activated), self);
+      gtk_widget_set_sensitive (entry, i < n_frames - 1);
+      gtk_box_append (GTK_BOX (child), entry);
+
+      entry = gtk_entry_new ();
+      gtk_editable_set_max_width_chars (GTK_EDITABLE (entry), 3);
+      gtk_editable_set_text (GTK_EDITABLE (entry),
+                             g_ascii_formatd (buffer, sizeof (buffer), "%g", frames[i].params[2]));
+      g_signal_connect (entry, "activate", G_CALLBACK (entry_activated), self);
+      gtk_widget_set_sensitive (entry, i < n_frames - 1);
+      gtk_box_append (GTK_BOX (child), entry);
+
+      entry = gtk_entry_new ();
+      gtk_editable_set_max_width_chars (GTK_EDITABLE (entry), 3);
+      gtk_editable_set_text (GTK_EDITABLE (entry),
+                             g_ascii_formatd (buffer, sizeof (buffer), "%g", frames[i].params[3]));
+      g_signal_connect (entry, "activate", G_CALLBACK (entry_activated), self);
+      gtk_widget_set_sensitive (entry, i < n_frames - 1);
+      gtk_box_append (GTK_BOX (child), entry);
+
+      gtk_box_append (GTK_BOX (self->frames), child);
+    }
+}
+
 static void
 path_editor_update (PathEditor *self)
 {
@@ -665,11 +868,20 @@ path_editor_update (PathEditor *self)
       gtk_drop_down_set_selected (self->animation_easing,
                                   path_paintable_get_path_animation_easing (self->paintable, self->path));
 
+      gtk_drop_down_set_selected (self->calc_mode,
+                                  path_paintable_get_path_animation_mode (self->paintable, self->path));
       mini_graph_set_params (self->mini_graph,
                              path_paintable_get_path_animation_easing (self->paintable, self->path),
                              path_paintable_get_path_animation_mode (self->paintable, self->path),
                              path_paintable_get_path_animation_frames (self->paintable, self->path),
                              path_paintable_get_path_animation_n_frames (self->paintable, self->path));
+      mini_graph_set_params (self->big_graph,
+                             path_paintable_get_path_animation_easing (self->paintable, self->path),
+                             path_paintable_get_path_animation_mode (self->paintable, self->path),
+                             path_paintable_get_path_animation_frames (self->paintable, self->path),
+                             path_paintable_get_path_animation_n_frames (self->paintable, self->path));
+
+      populate_frames (self);
 
       gtk_spin_button_set_value (self->animation_segment,
                                  path_paintable_get_path_animation_segment (self->paintable, self->path));
@@ -885,6 +1097,9 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, infty_check);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_easing);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, mini_graph);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, calc_mode);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, big_graph);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, frames);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, width_range);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, min_width);
@@ -909,10 +1124,13 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, attach_changed);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_and);
+  gtk_widget_class_bind_template_callback (widget_class, uint_equal);
   gtk_widget_class_bind_template_callback (widget_class, edit_path);
   gtk_widget_class_bind_template_callback (widget_class, duplicate_path);
   gtk_widget_class_bind_template_callback (widget_class, move_path_down);
   gtk_widget_class_bind_template_callback (widget_class, delete_path);
+  gtk_widget_class_bind_template_callback (widget_class, add_frame);
+  gtk_widget_class_bind_template_callback (widget_class, remove_frame);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }

@@ -222,6 +222,7 @@ struct _MiniGraphClass
 
 enum {
   PROP_EASING_FUNCTION = 1,
+  PROP_CALC_MODE,
   NUM_PROPERTIES,
 };
 
@@ -263,6 +264,10 @@ mini_graph_set_property (GObject      *object,
       mini_graph_set_easing_function (self, g_value_get_uint (value));
       break;
 
+    case PROP_CALC_MODE:
+      mini_graph_set_calc_mode (self, g_value_get_uint (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -283,6 +288,10 @@ mini_graph_get_property (GObject      *object,
       g_value_set_uint (value, self->easing);
       break;
 
+    case PROP_CALC_MODE:
+      g_value_set_uint (value, self->mode);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -301,6 +310,11 @@ mini_graph_class_init (MiniGraphClass *class)
 
   properties[PROP_EASING_FUNCTION] =
     g_param_spec_uint ("easing-function", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_CALC_MODE] =
+    g_param_spec_uint ("calc-mode", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
@@ -337,15 +351,17 @@ mini_graph_set_params (MiniGraph      *self,
         {
           g_free (self->frames);
           self->frames = g_memdup2 (frames, sizeof (KeyFrame) * n_frames);
+          self->n_frames = n_frames;
         }
-      self->n_frames = n_frames;
     }
   else
     update_keyframes (self);
 
+  g_clear_pointer (&self->path, gsk_path_unref);
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EASING_FUNCTION]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALC_MODE]);
 }
 
 void
@@ -353,4 +369,11 @@ mini_graph_set_easing_function (MiniGraph      *self,
                                 EasingFunction  easing)
 {
   mini_graph_set_params (self, easing, self->mode, self->frames, self->n_frames);
+}
+
+void
+mini_graph_set_calc_mode (MiniGraph *self,
+                          CalcMode   mode)
+{
+  mini_graph_set_params (self, self->easing, mode, self->frames, self->n_frames);
 }

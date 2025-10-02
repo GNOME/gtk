@@ -43,8 +43,8 @@ typedef struct
     float segment;
     EasingFunction easing;
     CalcMode mode;
-    KeyFrame *keyframes;
-    unsigned int n_keyframes;
+    KeyFrame *frames;
+    unsigned int n_frames;
   } animation;
 
   struct {
@@ -113,6 +113,7 @@ clear_path_elt (gpointer data)
   PathElt *elt = data;
 
   gsk_path_unref (elt->path);
+  g_free (elt->animation.frames);
 }
 
 static void
@@ -1526,26 +1527,27 @@ path_paintable_save_path (PathPaintable *self,
       GString *values = g_string_new ("");
       GString *times = g_string_new ("");
       GString *controls = g_string_new ("");
+      const KeyFrame *frames = path_paintable_get_path_animation_frames (self, idx);
       unsigned int n = path_paintable_get_path_animation_n_frames (self, idx);
 
       for (unsigned int p = 0; p < n; p++)
         {
-          KeyFrame kf;
-
-          path_paintable_get_path_animation_frame (self, idx, p, &kf);
           g_string_append_printf (values, "%s%s",
                                   g_ascii_formatd (buffer, sizeof (buffer),
-                                                   "%g", kf.value),
+                                                   "%g", frames[p].value),
                                   p + 1 < n ? " " : "");
           g_string_append_printf (times, "%s%s",
                                   g_ascii_formatd (buffer, sizeof (buffer),
-                                                   "%g", kf.time),
+                                                   "%g", frames[p].time),
                                   p + 1 < n ? " " : "");
-          for (unsigned int i = 0; i < 4; i++)
-            g_string_append_printf (controls, "%s%s",
-                                    g_ascii_formatd (buffer, sizeof (buffer),
-                                                     "%g", kf.params[i]),
-                                    (i < 3 || p + 1 < n) ? " " : "");
+          if (p + 1 < n)
+            {
+              for (unsigned int i = 0; i < 4; i++)
+                g_string_append_printf (controls, "%s%s",
+                                        g_ascii_formatd (buffer, sizeof (buffer),
+                                                         "%g", frames[p].params[i]),
+                                        (p + 2 == n && i + 1 == 4) ? "" : " ");
+            }
         }
 
       g_string_append_printf (str, "\n        gpa:animation-mode='%s'",
@@ -2110,8 +2112,11 @@ path_paintable_add_path (PathPaintable *self,
   elt.animation.direction = ANIMATION_DIRECTION_NORMAL;
   elt.animation.duration = 0;
   elt.animation.repeat = G_MAXFLOAT;
-  elt.animation.easing = EASING_FUNCTION_LINEAR;
   elt.animation.segment = 0.2;
+  elt.animation.easing = EASING_FUNCTION_LINEAR;
+  elt.animation.mode = CALC_MODE_LINEAR;
+  elt.animation.frames = NULL;
+  elt.animation.n_frames = 0;
 
   elt.fill.enabled = FALSE;
   elt.fill.rule = GSK_FILL_RULE_WINDING;
@@ -2385,17 +2390,29 @@ path_paintable_set_path_animation_timing (PathPaintable  *self,
                                           size_t          idx,
                                           EasingFunction  easing,
                                           CalcMode        mode,
-                                          KeyFrame       *frames,
+                                          const KeyFrame *frames,
                                           unsigned int    n_frames)
 {
   g_return_if_fail (idx < self->paths->len);
 
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
+  if (elt->animation.easing == easing &&
+      elt->animation.mode == mode &&
+      elt->animation.n_frames == n_frames &&
+      memcmp (elt->animation.frames, frames, sizeof (KeyFrame) * n_frames) == 0)
+    return;
+
   elt->animation.easing = easing;
   elt->animation.mode = mode;
-  elt->animation.keyframes = g_memdup2 (frames, sizeof (KeyFrame) * n_frames);
-  elt->animation.n_keyframes = n_frames;
+  if (frames != elt->animation.frames)
+    {
+      g_free (elt->animation.frames);
+      elt->animation.frames = g_memdup2 (frames, sizeof (KeyFrame) * n_frames);
+      elt->animation.n_frames = n_frames;
+    }
+
+  g_signal_emit (self, signals[CHANGED], 0);
 }
 
 CalcMode
@@ -2417,22 +2434,7 @@ path_paintable_get_path_animation_n_frames (PathPaintable *self,
 
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
-  return elt->animation.n_keyframes;
-}
-
-void
-path_paintable_get_path_animation_frame (PathPaintable *self,
-                                         size_t         idx,
-                                         size_t         pos,
-                                         KeyFrame      *frame)
-{
-  g_return_if_fail (idx < self->paths->len);
-
-  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-  g_return_if_fail (pos < elt->animation.n_keyframes);
-
-  memcpy (frame, &elt->animation.keyframes[pos], sizeof (KeyFrame));
+  return elt->animation.n_frames;
 }
 
 const KeyFrame *
@@ -2443,7 +2445,7 @@ path_paintable_get_path_animation_frames (PathPaintable *self,
 
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
-  return elt->animation.keyframes;
+  return elt->animation.frames;
 }
 
 void
