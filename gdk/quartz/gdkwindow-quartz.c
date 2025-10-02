@@ -1183,8 +1183,15 @@ gdk_window_quartz_show (GdkWindow *window, gboolean already_mapped)
       make_key = (window->accept_focus && focus_on_map &&
                   window->window_type != GDK_WINDOW_TEMP);
 
-      [(GdkQuartzNSWindow*)impl->toplevel showAndMakeKey:make_key];
-      clear_toplevel_order ();
+      /* If window is already mapped and visible, skip showAndMakeKey to avoid
+       * spurious resignMain/becomeMain notifications that cause focus fighting.
+       * See https://gitlab.gnome.org/GNOME/gimp/-/issues/14901
+       */
+      if (!GDK_WINDOW_IS_MAPPED (window) || ![impl->toplevel isVisible])
+        {
+          [(GdkQuartzNSWindow*)impl->toplevel showAndMakeKey:make_key];
+          clear_toplevel_order ();
+        }
 
       _gdk_quartz_events_send_map_event (window);
     }
