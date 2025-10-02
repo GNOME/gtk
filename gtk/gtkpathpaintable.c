@@ -1135,14 +1135,14 @@ start_element_cb (GMarkupParseContext  *context,
   unsigned int transition_type;
   float transition_duration;
   float transition_delay;
-  unsigned int transition_easing;
-  unsigned int animation_type;
-  unsigned int animation_direction;
+  GtkEasingFunction transition_easing;
+  GtkPathAnimationType animation_type;
+  GtkPathAnimationDirection animation_direction;
   float animation_duration;
   float animation_repeat;
   float animation_segment;
-  unsigned int animation_easing;
-  unsigned int animation_mode;
+  GtkEasingFunction animation_easing;
+  GtkCalcMode animation_mode;
   GArray *animation_keyframes = NULL;
   float origin;
   size_t idx;
@@ -1616,11 +1616,15 @@ start_element_cb (GMarkupParseContext  *context,
   transition_easing = GTK_EASING_FUNCTION_LINEAR;
   if (transition_easing_attr)
     {
+      unsigned int easing;
+
       if (!parse_enum ("gpa:transition-easing", transition_easing_attr,
                        (const char *[]) { "linear", "ease-in-out", "ease-in",
                                           "ease-out", "ease" }, 5,
-                        &transition_easing, error))
+                        &easing, error))
         goto cleanup;
+
+      transition_easing = (GtkEasingFunction) easing;
     }
 
   origin = 0;
@@ -1643,22 +1647,30 @@ start_element_cb (GMarkupParseContext  *context,
   animation_type = GTK_PATH_ANIMATION_TYPE_NONE;
   if (animation_type_attr)
     {
+      unsigned int type;
+
       if (!parse_enum ("gpa:animation-type", animation_type_attr,
                        (const char *[]) { "none", "automatic", }, 2,
-                        &animation_type, error))
+                        &type, error))
         goto cleanup;
+
+      animation_type = (GtkPathAnimationType) type;
     }
 
   animation_direction = GTK_PATH_ANIMATION_DIRECTION_NORMAL;
   if (animation_direction_attr)
     {
+      unsigned int direction;
+
       if (!parse_enum ("gpa:animation-direction", animation_direction_attr,
                        (const char *[]) { "normal", "alternate", "reverse",
                                           "reverse-alternate", "in-out",
                                           "in-out-alternate", "in-out-reverse",
                                           "segment", "segment-alternate" }, 9,
-                        &animation_direction, error))
+                        &direction, error))
         goto cleanup;
+
+      animation_direction = (GtkPathAnimationDirection) direction;
     }
 
   animation_duration = 0.f;
@@ -1687,20 +1699,28 @@ start_element_cb (GMarkupParseContext  *context,
   animation_easing = GTK_EASING_FUNCTION_LINEAR;
   if (animation_easing_attr)
     {
+      unsigned int easing;
+
       if (!parse_enum ("gpa:animation-easing", animation_easing_attr,
                        (const char *[]) { "linear", "ease-in-out", "ease-in",
                                           "ease-out", "ease", "custom" }, 6,
-                        &animation_easing, error))
+                        &easing, error))
         goto cleanup;
+
+       animation_easing = (GtkEasingFunction) easing;
     }
 
   animation_mode = GTK_CALC_MODE_LINEAR;
   if (animation_mode_attr)
     {
+      unsigned int mode;
+
       if (!parse_enum ("gpa:animation-mode", animation_mode_attr,
                        (const char *[]) { "linear", "discrete", "spline" },  3,
-                        &animation_mode, error))
+                        &mode, error))
         goto cleanup;
+
+      animation_mode = (GtkCalcMode) mode;
     }
 
   n_animation_values = 0;
@@ -1755,15 +1775,15 @@ start_element_cb (GMarkupParseContext  *context,
   elt.transition.type = (GtkPathTransitionType) transition_type;
   elt.transition.duration = transition_duration;
   elt.transition.delay = transition_delay;
-  elt.transition.easing = (GtkEasingFunction) transition_easing;
+  elt.transition.easing = transition_easing;
   elt.origin = origin;
 
-  elt.animation.type = (GtkPathAnimationType) animation_type;
-  elt.animation.direction = (GtkPathAnimationDirection) animation_direction;
+  elt.animation.type = animation_type;
+  elt.animation.direction = animation_direction;
   elt.animation.duration = animation_duration;
   elt.animation.repeat = animation_repeat;
   elt.animation.segment = animation_segment;
-  elt.animation.mode = (GtkCalcMode) animation_mode;
+  elt.animation.mode = animation_mode;
   elt.animation.keyframes = g_array_ref (animation_keyframes);
 
   elt.fill.enabled = fill_attr != NULL;
