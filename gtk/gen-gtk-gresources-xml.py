@@ -74,6 +74,9 @@ xml += '    <file>icons/16x16/status/image-missing.png</file>\n'
 for f in get_files('icons', '.svg'):
   xml += '    <file preprocess=\'xml-stripblanks\'>icons/{0}</file>\n'.format(f)
 
+for f in get_files('icons', '.gpa'):
+  xml += '    <file preprocess=\'xml-stripblanks\'>icons/{0}</file>\n'.format(f)
+
 for f in get_files('inspector', '.ui'):
   xml += '    <file preprocess=\'xml-stripblanks\'>inspector/{0}</file>\n'.format(f)
 
