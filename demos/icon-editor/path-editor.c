@@ -159,9 +159,10 @@ path_editor_get_path_image (PathEditor *self)
       unsigned int fill_symbolic = 0;
       GdkRGBA fill_color;
       GskFillRule rule;
+      float shape_params[6] = { 0, };
 
       self->path_image = path_paintable_new ();
-      path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path));
+      path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path), SHAPE_PATH, shape_params);
 
       do_stroke = path_paintable_get_path_stroke (self->paintable, self->path,
                                                   stroke, &stroke_symbolic, &stroke_color);

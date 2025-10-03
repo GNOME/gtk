@@ -25,6 +25,17 @@ typedef struct
 {
   GskPath *path;
 
+  ShapeType shape_type;
+  union {
+    struct {
+      float cx, cy, r;
+    } circle;
+    struct {
+      float x, y, width, height, rx, ry;
+    } rect;
+    float shape_params[6];
+  };
+
   uint64_t states;
 
   struct {
@@ -750,6 +761,8 @@ start_element_cb (GMarkupParseContext  *context,
   unsigned int n_animation_values;
   unsigned int n_animation_times;
   unsigned int n_animation_controls;
+  ShapeType shape_type;
+  float shape_params[6];
 
   if (strcmp (element_name, "svg") == 0)
     {
@@ -880,6 +893,11 @@ start_element_cb (GMarkupParseContext  *context,
         return;  /* nothing to do */
 
       path = circle_path_new (cx, cy, r);
+      shape_type = SHAPE_CIRCLE;
+      memset (shape_params, 0, sizeof (float) * 6);
+      shape_params[0] = cx;
+      shape_params[1] = cy;
+      shape_params[2] = r;
     }
   else if (strcmp (element_name, "rect") == 0)
     {
@@ -952,6 +970,14 @@ start_element_cb (GMarkupParseContext  *context,
         ry = rx;
 
       path = rect_path_new (x, y, width, height, rx, ry);
+      shape_type = SHAPE_RECT;
+      memset (shape_params, 0, sizeof (float) * 6);
+      shape_params[0] = x;
+      shape_params[1] = y;
+      shape_params[2] = width;
+      shape_params[3] = height;
+      shape_params[4] = rx;
+      shape_params[5] = ry;
     }
   else if (strcmp (element_name, "path") == 0)
     {
@@ -973,6 +999,9 @@ start_element_cb (GMarkupParseContext  *context,
           set_attribute_error (error, "d", path_attr);
           return;
         }
+
+      shape_type = SHAPE_PATH;
+      memset (shape_params, 0, sizeof (float) * 6);
     }
   else
     {
@@ -1357,7 +1386,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
     }
 
-  idx = path_paintable_add_path (data->paintable, path);
+  idx = path_paintable_add_path (data->paintable, path, shape_type, shape_params);
 
   path_paintable_set_path_states (data->paintable, idx, states);
   path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_repeat, animation_easing, animation_segment);
@@ -1464,15 +1493,49 @@ path_paintable_save_path (PathPaintable *self,
   char *class_str;
   gboolean has_gtk_attr = FALSE;
   char buffer[G_ASCII_DTOSTR_BUF_SIZE];
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
   stroke = gsk_stroke_new (1);
 
-  g_string_append (str, "  <path d='");
-  gsk_path_print (path_paintable_get_path (self, idx), str);
-  g_string_append (str, "'");
+  if (elt->shape_type == SHAPE_CIRCLE)
+    {
+      g_string_append (str,  "  <circle");
+      g_string_append_printf (str, " cx='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->circle.cx));
+      g_string_append_printf (str, " cy='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->circle.cy));
+      g_string_append_printf (str, " r='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->circle.r));
+    }
+  else if (elt->shape_type == SHAPE_RECT)
+    {
+      g_string_append (str,  "  <rect");
+      g_string_append_printf (str, " x='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->rect.x));
+      g_string_append_printf (str, " y='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->rect.y));
+      g_string_append_printf (str, " width='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->rect.width));
+      g_string_append_printf (str, " height='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->rect.height));
+      if (elt->rect.rx != 0 || elt->rect.ry != 0)
+        {
+          g_string_append_printf (str, " rx='%s'",
+                                  g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->rect.rx));
+          g_string_append_printf (str, " ry='%s'",
+                                  g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->rect.ry));
+        }
+    }
+  else if (elt->shape_type == SHAPE_PATH)
+    {
+      g_string_append (str, "  <path d='");
+      gsk_path_print (path_paintable_get_path (self, idx), str);
+      g_string_append (str, "'");
+    }
+  else
+    g_assert_not_reached ();
 
   g_string_append_printf (str, "\n        id='path%lu'", idx);
-
   class_builder = g_strv_builder_new ();
 
   states = path_paintable_get_path_states (self, idx);
@@ -2094,11 +2157,30 @@ path_paintable_get_height (PathPaintable *self)
 
 size_t
 path_paintable_add_path (PathPaintable *self,
-                         GskPath       *path)
+                         GskPath       *path,
+                         ShapeType      shape_type,
+                         float          params[6])
 {
   PathElt elt;
 
   elt.path = gsk_path_ref (path);
+
+  elt.shape_type = shape_type;
+  if (shape_type == SHAPE_CIRCLE)
+    {
+      elt.circle.cx = params[0];
+      elt.circle.cy = params[1];
+      elt.circle.r = params[2];
+    }
+  else if (shape_type == SHAPE_RECT)
+    {
+      elt.rect.x = params[0];
+      elt.rect.y = params[1];
+      elt.rect.width = params[2];
+      elt.rect.height = params[3];
+      elt.rect.rx = params[4];
+      elt.rect.ry = params[5];
+    }
 
   elt.states = ALL_STATES;
 
@@ -2755,7 +2837,7 @@ path_paintable_copy (PathPaintable *self)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
 
-      path_paintable_add_path (other, elt->path);
+      path_paintable_add_path (other, elt->path, elt->shape_type, elt->shape_params);
       path_paintable_set_path_states (other, i, path_paintable_get_path_states (self, i));
       path_paintable_set_path_transition (other, i,
                                           path_paintable_get_path_transition_type (self, i),
@@ -2827,9 +2909,10 @@ path_paintable_combine (PathPaintable *one,
       unsigned int symbolic = 0;
       GdkRGBA color;
       size_t attach_to = (size_t) -1;
-      float attach_pos = 0;;
+      float attach_pos = 0;
+      PathElt *elt = &g_array_index (two->paths, PathElt, i);
 
-      idx = path_paintable_add_path (res, path_paintable_get_path (two, i));
+      idx = path_paintable_add_path (res, elt->path, elt->shape_type, elt->shape_params);
 
       path_paintable_set_path_transition (res, idx,
                                           path_paintable_get_path_transition_type (two, i),
