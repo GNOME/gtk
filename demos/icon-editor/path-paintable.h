@@ -125,8 +125,17 @@ GStrv           path_paintable_get_keywords        (PathPaintable   *self);
 
 size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 
+typedef enum
+{
+  SHAPE_CIRCLE,
+  SHAPE_RECT,
+  SHAPE_PATH,
+} ShapeType;
+
 size_t          path_paintable_add_path            (PathPaintable   *self,
-                                                    GskPath         *path);
+                                                    GskPath         *path,
+                                                    ShapeType        shape_type,
+                                                    float            shape_params[6]);
 void            path_paintable_delete_path         (PathPaintable   *self,
                                                     size_t           idx);
 void            path_paintable_move_path           (PathPaintable   *self,
