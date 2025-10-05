@@ -116,24 +116,18 @@ gsk_vulkan_get_ycbcr_flags (GskGpuConversion               conv,
     }
 }
 
-static gboolean
-gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
-                                   VkFormat           format,
-                                   uint64_t           modifier,
-                                   guint              n_planes,
-                                   VkImageTiling      tiling,
-                                   VkImageUsageFlags  usage,
-                                   gsize              width,
-                                   gsize              height,
-                                   GskGpuImageFlags  *out_flags)
+static VkFormatFeatureFlags
+gsk_vulkan_device_get_format_features (GskVulkanDevice   *device,
+                                       VkFormat           format,
+                                       uint64_t           modifier,
+                                       guint              n_planes,
+                                       VkImageTiling      tiling,
+                                       VkImageUsageFlags  usage)
 {
   VkDrmFormatModifierPropertiesEXT drm_mod_properties[100];
   VkDrmFormatModifierPropertiesListEXT drm_properties;
   VkPhysicalDevice vk_phys_device;
   VkFormatProperties2 properties;
-  VkImageFormatProperties2 image_properties;
-  VkFormatFeatureFlags features;
-  VkResult res;
   gsize i;
 
   vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
@@ -154,29 +148,63 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
   switch ((int) tiling)
     {
       case VK_IMAGE_TILING_OPTIMAL:
-        features = properties.formatProperties.optimalTilingFeatures;
-        break;
+        return properties.formatProperties.optimalTilingFeatures;
+
       case VK_IMAGE_TILING_LINEAR:
-        features = properties.formatProperties.linearTilingFeatures;
-        break;
+        return properties.formatProperties.linearTilingFeatures;
+
       case VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT:
-        features = 0;
         for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
           {
             if (drm_mod_properties[i].drmFormatModifier == modifier &&
                 drm_mod_properties[i].drmFormatModifierPlaneCount == n_planes)
-              {
-                features = drm_mod_properties[i].drmFormatModifierTilingFeatures;
-                break;
-              }
+              return drm_mod_properties[i].drmFormatModifierTilingFeatures;
           }
-        if (features == 0)
-          return FALSE;
-        break;
-      default:
-        return FALSE;
-    }
+        return 0;
 
+      default:
+        return 0;
+    }
+}
+ 
+static GskGpuImageFlags
+gsk_vulkan_image_flags_for_features (VkFormatFeatureFlags features)
+{
+  GskGpuImageFlags result;
+
+  result = 0;
+
+  if (features & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
+    result |= GSK_GPU_IMAGE_BLIT;
+  if (features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)
+    result |= GSK_GPU_IMAGE_FILTERABLE;
+  if (features & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)
+    result |= GSK_GPU_IMAGE_RENDERABLE;
+  if (features & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT)
+    result |= GSK_GPU_IMAGE_DOWNLOADABLE;
+
+  return result;
+}
+
+static gboolean
+gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
+                                   VkFormat           format,
+                                   uint64_t           modifier,
+                                   guint              n_planes,
+                                   VkImageTiling      tiling,
+                                   VkImageUsageFlags  usage,
+                                   gsize              width,
+                                   gsize              height,
+                                   GskGpuImageFlags  *out_flags)
+{
+  VkPhysicalDevice vk_phys_device;
+  VkImageFormatProperties2 image_properties;
+  VkFormatFeatureFlags features;
+  VkResult res;
+
+  vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
+
+  features = gsk_vulkan_device_get_format_features (device, format, modifier, n_planes, tiling, usage);
   if (!(features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
     return FALSE;
 
@@ -207,15 +235,7 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
       image_properties.imageFormatProperties.maxExtent.height < height)
     return FALSE;
 
-  *out_flags = 0;
-  if (features & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
-    *out_flags |= GSK_GPU_IMAGE_BLIT;
-  if (features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)
-    *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
-  if (features & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)
-    *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
-  if (features & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT)
-    *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
+  *out_flags = gsk_vulkan_image_flags_for_features (features);
   if (image_properties.imageFormatProperties.maxMipLevels >= gsk_gpu_mipmap_levels (width, height) &&
       (*out_flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)) == (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE))
     *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
