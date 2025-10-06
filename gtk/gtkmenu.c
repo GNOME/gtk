@@ -154,6 +154,10 @@
 #define MENU_POPUP_DELAY     225
 #define MENU_POPDOWN_DELAY  1000
 
+#define N_MOTION_EVENTS 3 /* Expected motion events before
+                           * allowing to popdown on release
+                           */
+
 #define ATTACH_INFO_KEY "gtk-menu-child-attach-info-key"
 #define ATTACHED_MENUS "gtk-attached-menus"
 
@@ -4051,6 +4055,7 @@ static gboolean
 gtk_menu_motion_notify (GtkWidget      *widget,
                         GdkEventMotion *event)
 {
+  GtkMenuPrivate *priv;
   GtkWidget *menu_item;
   GtkMenu *menu;
   GtkMenuShell *menu_shell;
@@ -4090,8 +4095,12 @@ gtk_menu_motion_notify (GtkWidget      *widget,
 
   menu_shell = GTK_MENU_SHELL (parent);
   menu = GTK_MENU (menu_shell);
+  priv = menu->priv;
 
-  if (definitely_within_item (menu_item, event->x, event->y))
+  priv->n_motion_events++;
+
+  if (priv->n_motion_events >= N_MOTION_EVENTS &&
+      definitely_within_item (menu_item, event->x, event->y))
     menu_shell->priv->activate_time = 0;
 
   need_enter = (gtk_menu_has_navigation_triangle (menu) || menu_shell->priv->ignore_enter);
@@ -4467,6 +4476,8 @@ gtk_menu_enter_notify (GtkWidget        *widget,
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
+
+  GTK_MENU (widget)->priv->n_motion_events = 0;
 
   if (GTK_IS_MENU (widget) &&
       gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
