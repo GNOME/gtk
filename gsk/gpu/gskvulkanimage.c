@@ -1109,7 +1109,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                  (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier, dmabuf->n_planes);
       return NULL;
     }
-  flags = gsk_vulkan_image_flags_for_features (vk_features);
+  flags = gsk_vulkan_image_flags_for_features (vk_features) & ~(GSK_GPU_IMAGE_RENDERABLE);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
