@@ -358,6 +358,7 @@ macos-arm64:
     # additional settings
     CCACHE_MAXSIZE: "250Mi"
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
+    ORKA_RUNNER: sonoma-2
     PKG_CONFIG_PATH: $CI_PROJECT_DIR/.venv/lib/pkgconfig
     SDKROOT: /opt/sdks/MacOSX11.3.sdk
   before_script:
@@ -373,7 +374,7 @@ macos-arm64:
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
     - curl -L $CI_API_V4_URL/projects/30438/packages/generic/bison/v3.8.2+3/bison-3.8.2+3_$(uname -m).tar.xz | tar -C .venv -xJ
     # The AccessKit feature requires Rust and toml2json.
-    - ln -s /opt/rustup/toolchains/1.86.0-aarch64-apple-darwin/bin/* .venv/bin
+    - ln -s /opt/rustup/toolchains/1.89.0-aarch64-apple-darwin/bin/* .venv/bin
     - pip3 install toml2json==0.1.0
     # Meson cannot handle circular dependencies in subprojects, so we have to build GLib and
     # GObject Introspection ourselves. With crudini we ensure using the same versions as
