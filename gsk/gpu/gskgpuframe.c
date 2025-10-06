@@ -845,7 +845,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame           *self,
 
   image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
   if (image && image_is_uploaded (image))
-    image = NULL;
+    g_clear_object (&image);
 
   if (image == NULL)
     image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
