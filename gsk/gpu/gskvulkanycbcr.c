@@ -176,9 +176,11 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                                                      {
                                                          .binding = 0,
                                                          .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = 1,
+                                                         .descriptorCount = 3,
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                         .pImmutableSamplers = (VkSampler[1]) {
+                                                         .pImmutableSamplers = (VkSampler[3]) {
+                                                             self->vk_sampler,
+                                                             self->vk_sampler,
                                                              self->vk_sampler,
                                                          },
                                                      }
