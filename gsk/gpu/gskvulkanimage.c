@@ -1062,6 +1062,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   VkSamplerYcbcrModelConversion model;
   VkSamplerYcbcrRange range;
   PFN_vkGetMemoryFdPropertiesKHR func_vkGetMemoryFdPropertiesKHR;
+  VkFormatFeatureFlags vk_features;
   gsize i;
   int fd;
   VkResult res;
@@ -1096,19 +1097,19 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
-  if (!gsk_vulkan_device_supports_format (device,
-                                          vk_format,
-                                          dmabuf->modifier,
-                                          dmabuf->n_planes,
-                                          VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
-                                          VK_IMAGE_USAGE_SAMPLED_BIT,
-                                          width, height,
-                                          &flags))
+  vk_features = gsk_vulkan_device_get_format_features (device,
+                                                       vk_format,
+                                                       dmabuf->modifier,
+                                                       dmabuf->n_planes,
+                                                       VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                                                       VK_IMAGE_USAGE_SAMPLED_BIT);
+  if (!(vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
     {
       GDK_DEBUG (DMABUF, "Vulkan driver does not support format %.4s::%016llx with %u planes",
                  (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier, dmabuf->n_planes);
       return NULL;
     }
+  flags = gsk_vulkan_image_flags_for_features (vk_features);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
