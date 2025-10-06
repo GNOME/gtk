@@ -27,6 +27,7 @@
 #include "gtksymbolicpaintable.h"
 #include "gtktypebuiltins.h"
 
+#include <math.h>
 #include <stdint.h>
 
 /**
@@ -82,19 +83,19 @@
 
 /* {{{ Easing */
 
-static inline float
-lerp (float t, float a, float b)
+static inline double
+lerp (double t, double a, double b)
 {
   return a + (b - a) * t;
 }
 
 static float
-apply_easing_params (float *params,
-                     float  progress)
+apply_easing_params (double *params,
+                     double  progress)
 {
-  static const float epsilon = 0.00001;
-  float tmin, t, tmax;
-  float x1, y1, x2, y2;
+  static const double epsilon = 0.00001;
+  double tmin, t, tmax;
+  double x1, y1, x2, y2;
 
   x1 = params[0];
   y1 = params[1];
@@ -112,12 +113,12 @@ apply_easing_params (float *params,
 
   while (tmin < tmax)
     {
-      float sample;
+      double sample;
 
-      sample = (((1.0 + 3 * x1 - 3 * x2) * t
-                +      -6 * x1 + 3 * x2) * t
-                +       3 * x1         ) * t;
-      if (fabsf (sample - progress) < epsilon)
+      sample = (((1 + 3 * x1 - 3 * x2) * t
+                +    -6 * x1 + 3 * x2) * t
+                +     3 * x1         ) * t;
+      if (fabs (sample - progress) < epsilon)
         break;
 
       if (progress > sample)
@@ -127,9 +128,9 @@ apply_easing_params (float *params,
       t = (tmax + tmin) * .5;
     }
 
-  return (((1.0 + 3 * y1 - 3 * y2) * t
-          +      -6 * y1 + 3 * y2) * t
-          +       3 * y1         ) * t;
+  return (((1 + 3 * y1 - 3 * y2) * t
+          +    -6 * y1 + 3 * y2) * t
+          +     3 * y1         ) * t;
 }
 
 /* }}} */
@@ -180,9 +181,9 @@ typedef enum
 
 typedef struct
 {
-  float time;
-  float value;
-  float params[4];
+  double time;
+  double value;
+  double params[4];
 } GtkKeyFrame;
 
 static float
@@ -233,21 +234,21 @@ typedef struct
   GskPathMeasure *measure;
 
   uint64_t states;
-  float origin;
+  double origin;
 
   struct {
     GtkPathTransitionType type;
-    float duration; /* in ms */
-    float delay;    /* in ms */
+    int64_t duration; /* in µs */
+    int64_t delay;    /* in µs */
     GtkEasingFunction easing;
   } transition;
 
   struct {
     GtkPathAnimationType type;
     GtkPathAnimationDirection direction;
-    float duration; /* in ms */
-    float repeat;
-    float segment;
+    double segment;
+    int64_t duration; /* in µs */
+    double repeat; /* INFINITY for 'indefinite' */
     GtkCalcMode mode;
     GArray *keyframes;
   } animation;
@@ -276,8 +277,8 @@ typedef struct
   } attach;
 
   /* These are used by attached paths */
-  float current_start;
-  float current_end;
+  double current_start;
+  double current_end;
 
 } PathElt;
 
@@ -288,14 +289,13 @@ struct _GtkPathPaintable
   GArray *paths;
 
   double width, height;
-
   graphene_rect_t bounds;
 
   struct {
     gboolean running;
     int64_t start_time;
-    float out_duration;
-    float in_duration;
+    int64_t out_duration;
+    int64_t in_duration;
     unsigned int old_state;
     unsigned int new_state;
   } transition;
@@ -306,7 +306,6 @@ struct _GtkPathPaintable
   } animation;
 
   float weight;
-
   unsigned int state;
   unsigned int max_state;
 
@@ -354,7 +353,7 @@ clear_path_elt (gpointer data)
 
 static struct {
   GtkEasingFunction easing;
-  float params[4];
+  double params[4];
 } easing_funcs[] = {
   { GTK_EASING_FUNCTION_LINEAR, { 0, 0, 1, 1 } },
   { GTK_EASING_FUNCTION_EASE_IN_OUT, { 0.42, 0, 0.58, 1 } },
@@ -406,10 +405,10 @@ path_animation_duration (PathElt *elt)
 {
   if (elt->animation.type == GTK_PATH_ANIMATION_TYPE_NONE)
     return 0;
-  else if (elt->animation.repeat == G_MAXFLOAT)
+  else if (elt->animation.repeat == INFINITY)
     return G_MAXINT64;
   else
-    return elt->animation.duration * elt->animation.repeat * G_TIME_SPAN_MILLISECOND;
+    return (int64_t) round (elt->animation.duration * elt->animation.repeat);
 }
 
 static GskStroke *
@@ -470,11 +469,11 @@ static gboolean
 compute_transition_duration (GtkPathPaintable *self,
                              unsigned int      from,
                              unsigned int      to,
-                             float            *out_duration,
-                             float            *in_duration)
+                             int64_t          *out_duration,
+                             int64_t          *in_duration)
 {
-  float out = 0;
-  float in = 0;
+  int64_t out = 0;
+  int64_t in = 0;
   gboolean res = FALSE;
 
   for (unsigned int i = 0; i < self->paths->len; i++)
@@ -677,9 +676,9 @@ g_strv_has (GStrv       strv,
 }
 
 static GskPath *
-circle_path_new (float cx,
-                 float cy,
-                 float radius)
+circle_path_new (double cx,
+                 double cy,
+                 double radius)
 {
   GskPathBuilder *builder = gsk_path_builder_new ();
   gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), radius);
@@ -687,12 +686,12 @@ circle_path_new (float cx,
 }
 
 static GskPath *
-rect_path_new (float x,
-               float y,
-               float width,
-               float height,
-               float rx,
-               float ry)
+rect_path_new (double x,
+               double y,
+               double width,
+               double height,
+               double rx,
+               double ry)
 {
   GskPathBuilder *builder = gsk_path_builder_new ();
   if (rx == 0 && ry == 0)
@@ -772,11 +771,11 @@ enum
 };
 
 static gboolean
-parse_float (const char    *name,
-             const char    *value,
-             unsigned int   flags,
-             float         *f,
-             GError       **error)
+parse_number (const char    *name,
+              const char    *value,
+              unsigned int   flags,
+              double        *f,
+              GError       **error)
 {
   char *end;
 
@@ -795,7 +794,7 @@ static gboolean
 parse_duration (const char    *name,
                 const char    *value,
                 unsigned int   flags,
-                float         *f,
+                int64_t       *f,
                 GError       **error)
 {
   double v;
@@ -810,9 +809,9 @@ parse_duration (const char    *name,
   else if (end && *end != '\0')
     {
       if (strcmp (end, "ms") == 0)
-        *f = v;
+        *f = v * G_TIME_SPAN_MILLISECOND;
       else if (strcmp (end, "s") == 0)
-        *f = v * 1000;
+        *f = v * G_TIME_SPAN_SECOND;
       else
         {
           set_attribute_error (error, name, value);
@@ -820,19 +819,19 @@ parse_duration (const char    *name,
         }
     }
   else
-    *f = v * 1000;
+    *f = v * G_TIME_SPAN_SECOND;
 
   return TRUE;
 }
 
 static gboolean
-parse_float_values (const char    *name,
-                    const char    *value,
-                    float         *values,
-                    unsigned int   length,
-                    unsigned int   flags,
-                    unsigned int  *n_values,
-                    GError       **error)
+parse_numbers (const char    *name,
+               const char    *value,
+               double        *values,
+               unsigned int   length,
+               unsigned int   flags,
+               unsigned int  *n_values,
+               GError       **error)
 {
   GStrv strv;
   unsigned int len;
@@ -849,7 +848,7 @@ parse_float_values (const char    *name,
 
   for (unsigned int i = 0; i < len; i++)
     {
-      if (!parse_float (name, strv[i], flags, &values[i], error))
+      if (!parse_number (name, strv[i], flags, &values[i], error))
         {
           g_strfreev (strv);
           return FALSE;
@@ -968,11 +967,11 @@ attach_data_clear (gpointer data)
 static GArray *
 construct_animation_frames (unsigned int   easing,
                             GtkCalcMode   *mode,
-                            float         *values,
+                            double        *values,
                             unsigned int   n_values,
-                            float         *times,
+                            double        *times,
                             unsigned int   n_times,
-                            float         *controls,
+                            double        *controls,
                             unsigned int   n_controls,
                             GError       **error)
 {
@@ -984,12 +983,12 @@ construct_animation_frames (unsigned int   easing,
 
       frame.value = 0;
       frame.time = 0;
-      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (double));
       g_array_append_val (res, frame);
 
       frame.value = 1;
       frame.time = 1;
-      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (double));
       g_array_append_val (res, frame);
 
       if (easing == GTK_EASING_FUNCTION_LINEAR)
@@ -1057,9 +1056,9 @@ construct_animation_frames (unsigned int   easing,
           frame.value = values[i];
           frame.time = times[i];
           if (i + 1 < n_values)
-            memcpy (frame.params, &controls[4 * i], 4 * sizeof (float));
+            memcpy (frame.params, &controls[4 * i], 4 * sizeof (double));
           else
-            memset (frame.params, 0, 4 * sizeof (float));
+            memset (frame.params, 0, 4 * sizeof (double));
           g_array_append_val (res, frame);
         }
     }
@@ -1121,36 +1120,36 @@ start_element_cb (GMarkupParseContext  *context,
   GskPath *path = NULL;
   unsigned int stroke_symbolic;
   GdkRGBA stroke_color;
-  float stroke_opacity;
-  float stroke_width;
-  float stroke_min_width;
-  float stroke_max_width;
+  double stroke_opacity;
+  double stroke_width;
+  double stroke_min_width;
+  double stroke_max_width;
   unsigned int stroke_linejoin;
   unsigned int stroke_linecap;
   unsigned int fill_symbolic;
   unsigned int fill_rule;
   GdkRGBA fill_color;
-  float fill_opacity;
+  double fill_opacity;
   uint64_t states;
   unsigned int transition_type;
-  float transition_duration;
-  float transition_delay;
+  int64_t transition_duration;
+  int64_t transition_delay;
   GtkEasingFunction transition_easing;
   GtkPathAnimationType animation_type;
   GtkPathAnimationDirection animation_direction;
-  float animation_duration;
-  float animation_repeat;
-  float animation_segment;
+  int64_t animation_duration;
+  double animation_repeat;
+  double animation_segment;
   GtkEasingFunction animation_easing;
   GtkCalcMode animation_mode;
   GArray *animation_keyframes = NULL;
-  float origin;
+  double origin;
   size_t idx;
   AttachData attach;
   PathElt elt;
-  float animation_values[10];
-  float animation_times[10];
-  float animation_controls[40];
+  double animation_values[10];
+  double animation_times[10];
+  double animation_controls[40];
   unsigned int n_animation_values;
   unsigned int n_animation_times;
   unsigned int n_animation_controls;
@@ -1161,7 +1160,7 @@ start_element_cb (GMarkupParseContext  *context,
       const char *height_attr = NULL;
       const char *state_attr = NULL;
       const char *version_attr = NULL;
-      float width, height;
+      double width, height;
 
       markup_filter_attributes (element_name,
                                 attribute_names,
@@ -1179,7 +1178,7 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      if (!parse_float ("width", width_attr, LENGTH | POSITIVE, &width, error))
+      if (!parse_number ("width", width_attr, LENGTH | POSITIVE, &width, error))
         return;
 
       if (height_attr == NULL)
@@ -1188,7 +1187,7 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      if (!parse_float ("height", height_attr, LENGTH | POSITIVE, &height, error))
+      if (!parse_number ("height", height_attr, LENGTH | POSITIVE, &height, error))
         return;
 
       data->paintable->width = width;
@@ -1239,9 +1238,9 @@ start_element_cb (GMarkupParseContext  *context,
       const char *cx_attr = NULL;
       const char *cy_attr = NULL;
       const char *r_attr = NULL;
-      float cx = 0;
-      float cy = 0;
-      float r = 0;
+      double cx = 0;
+      double cy = 0;
+      double r = 0;
 
       markup_filter_attributes (element_name,
                                 attribute_names,
@@ -1254,19 +1253,19 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (cx_attr)
         {
-          if (!parse_float ("cx", cx_attr, 0, &cx, error))
+          if (!parse_number ("cx", cx_attr, 0, &cx, error))
             return;
         }
 
       if (cy_attr)
         {
-          if (!parse_float ("cy", cy_attr, 0, &cy, error))
+          if (!parse_number ("cy", cy_attr, 0, &cy, error))
             return;
         }
 
       if (r_attr)
         {
-          if (!parse_float ("r", r_attr, POSITIVE, &r, error))
+          if (!parse_number ("r", r_attr, POSITIVE, &r, error))
             return;
         }
 
@@ -1283,12 +1282,12 @@ start_element_cb (GMarkupParseContext  *context,
       const char *height_attr = NULL;
       const char *rx_attr = NULL;
       const char *ry_attr = NULL;
-      float x = 0;
-      float y = 0;
-      float width = 0;
-      float height = 0;
-      float rx = 0;
-      float ry = 0;
+      double x = 0;
+      double y = 0;
+      double width = 0;
+      double height = 0;
+      double rx = 0;
+      double ry = 0;
 
       markup_filter_attributes (element_name,
                                 attribute_names,
@@ -1304,25 +1303,25 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (x_attr)
         {
-          if (!parse_float ("x", x_attr, 0, &x, error))
+          if (!parse_number ("x", x_attr, 0, &x, error))
             return;
         }
 
       if (y_attr)
         {
-          if (!parse_float ("y", y_attr, 0, &y, error))
+          if (!parse_number ("y", y_attr, 0, &y, error))
             return;
         }
 
       if (width_attr)
         {
-          if (!parse_float ("width", width_attr, POSITIVE, &width, error))
+          if (!parse_number ("width", width_attr, POSITIVE, &width, error))
             return;
         }
 
       if (height_attr)
         {
-          if (!parse_float ("height", height_attr, POSITIVE, &height, error))
+          if (!parse_number ("height", height_attr, POSITIVE, &height, error))
             return;
         }
 
@@ -1331,13 +1330,13 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (rx_attr)
         {
-          if (!parse_float ("rx", rx_attr, POSITIVE, &rx, error))
+          if (!parse_number ("rx", rx_attr, POSITIVE, &rx, error))
             return;
         }
 
      if (ry_attr)
         {
-          if (!parse_float ("ry", ry_attr, POSITIVE, &ry, error))
+          if (!parse_number ("ry", ry_attr, POSITIVE, &ry, error))
             return;
         }
 
@@ -1499,7 +1498,7 @@ start_element_cb (GMarkupParseContext  *context,
   stroke_opacity = 1;
   if (stroke_opacity_attr)
     {
-      if (!parse_float ("stroke-opacity", stroke_opacity_attr, UNIT, &stroke_opacity, error))
+      if (!parse_number ("stroke-opacity", stroke_opacity_attr, UNIT, &stroke_opacity, error))
         goto cleanup;
     }
 
@@ -1516,7 +1515,7 @@ start_element_cb (GMarkupParseContext  *context,
   stroke_width = 2;
   if (stroke_width_attr)
     {
-      if (!parse_float ("stroke-width", stroke_width_attr, POSITIVE, &stroke_width, error))
+      if (!parse_number ("stroke-width", stroke_width_attr, POSITIVE, &stroke_width, error))
         goto cleanup;
     }
 
@@ -1525,25 +1524,21 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (gtk_stroke_width_attr)
     {
-      GStrv str;
+      double v[3];
+      unsigned int len;
 
-      str = g_strsplit (gtk_stroke_width_attr, " ", 0);
-      if (g_strv_length (str) != 3)
+      if (!parse_numbers ("gpa:stroke-width", gtk_stroke_width_attr, v, 3, POSITIVE, &len, error))
+        goto cleanup;
+
+      if (len != 3 || v[1] < v[0] || v[2] < v[1])
         {
           set_attribute_error (error, "gpa:stroke-width", gtk_stroke_width_attr);
-          g_strfreev (str);
           goto cleanup;
         }
 
-      if (!parse_float ("gpa:stroke-width", str[0], POSITIVE, &stroke_min_width, error) ||
-          !parse_float ("gpa:stroke-width", str[1], POSITIVE, &stroke_width, error) ||
-          !parse_float ("gpa:stroke-width", str[2], POSITIVE, &stroke_max_width, error) ||
-          stroke_width < stroke_min_width || stroke_width > stroke_max_width)
-        {
-          g_strfreev (str);
-          goto cleanup;
-        }
-      g_strfreev (str);
+      stroke_min_width = v[0];
+      stroke_width = v[1];
+      stroke_max_width = v[2];
     }
 
   stroke_linecap = GSK_LINE_CAP_ROUND;
@@ -1576,7 +1571,7 @@ start_element_cb (GMarkupParseContext  *context,
   fill_opacity = 1;
   if (fill_opacity_attr)
     {
-      if (!parse_float ("fill-opacity", fill_opacity_attr, UNIT, &fill_opacity, error))
+      if (!parse_number ("fill-opacity", fill_opacity_attr, UNIT, &fill_opacity, error))
         goto cleanup;
     }
 
@@ -1630,7 +1625,7 @@ start_element_cb (GMarkupParseContext  *context,
   origin = 0;
   if (origin_attr)
     {
-      if (!parse_float ("gpa:origin", origin_attr, UNIT, &origin, error))
+      if (!parse_number ("gpa:origin", origin_attr, UNIT, &origin, error))
         goto cleanup;
     }
 
@@ -1680,19 +1675,19 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  animation_repeat = G_MAXFLOAT;
+  animation_repeat = INFINITY;
   if (animation_repeat_attr)
     {
       if (strcmp (animation_repeat_attr, "indefinite") == 0)
-        animation_repeat = G_MAXFLOAT;
-      else if (!parse_float ("gpa:animation-repeat", animation_repeat_attr, POSITIVE, &animation_repeat, error))
+        animation_repeat = INFINITY;
+      else if (!parse_number ("gpa:animation-repeat", animation_repeat_attr, POSITIVE, &animation_repeat, error))
         goto cleanup;
     }
 
-  animation_segment = 0.2f;
+  animation_segment = 0.2;
   if (animation_segment_attr)
     {
-      if (!parse_float ("gpa:animation-segment", animation_segment_attr, POSITIVE, &animation_segment, error))
+      if (!parse_number ("gpa:animation-segment", animation_segment_attr, POSITIVE, &animation_segment, error))
         goto cleanup;
     }
 
@@ -1726,27 +1721,27 @@ start_element_cb (GMarkupParseContext  *context,
   n_animation_values = 0;
   if (animation_values_attr)
     {
-      if (!parse_float_values ("gpa:animation-values", animation_values_attr,
-                               animation_values, 10, 0, &n_animation_values,
-                               error))
+      if (!parse_numbers ("gpa:animation-values", animation_values_attr,
+                          animation_values, 10, 0, &n_animation_values,
+                          error))
         goto cleanup;
     }
 
   n_animation_times = 0;
   if (animation_times_attr)
     {
-      if (!parse_float_values ("gpa:animation-times", animation_times_attr,
-                               animation_times, 10, UNIT, &n_animation_times,
-                               error))
+      if (!parse_numbers ("gpa:animation-times", animation_times_attr,
+                          animation_times, 10, UNIT, &n_animation_times,
+                          error))
         goto cleanup;
     }
 
   n_animation_controls = 0;
   if (animation_controls_attr)
     {
-      if (!parse_float_values ("gpa:animation-controls", animation_controls_attr,
-                               animation_controls, 40, UNIT, &n_animation_controls,
-                               error))
+      if (!parse_numbers ("gpa:animation-controls", animation_controls_attr,
+                          animation_controls, 40, UNIT, &n_animation_controls,
+                          error))
         goto cleanup;
     }
 
@@ -1763,8 +1758,12 @@ start_element_cb (GMarkupParseContext  *context,
   attach.position = 0;
   if (attach_pos_attr)
     {
-      if (!parse_float ("gpa:attach-pos", attach_pos_attr, UNIT, &attach.position, error))
+      double v;
+
+      if (!parse_number ("gpa:attach-pos", attach_pos_attr, UNIT, &v, error))
         goto cleanup;
+
+      attach.position = v;
     }
 
   elt.path = gsk_path_ref (path);
@@ -1930,11 +1929,11 @@ paint_elt (GtkPathPaintable *self,
            PaintData        *data)
 {
   PathElt *base;
-  float pos;
-  float length;
+  double pos;
+  double length;
   GskPathPoint point;
   graphene_point_t orig_pos, adjusted_pos;
-  float orig_angle, adjusted_angle;
+  double orig_angle, adjusted_angle;
   GskTransform *transform = NULL;
 
   if (elt->attach.to == (size_t) -1)
@@ -1999,8 +1998,8 @@ paint_elt (GtkPathPaintable *self,
 static void
 paint_elt_partial (GtkPathPaintable *self,
                    PathElt          *elt,
-                   float             start,
-                   float             end,
+                   double            start,
+                   double            end,
                    PaintData        *data)
 {
   elt->current_start = start;
@@ -2023,14 +2022,14 @@ paint_elt_partial (GtkPathPaintable *self,
 static void
 paint_elt_animated (GtkPathPaintable *self,
                     PathElt          *elt,
-                    float             start,
-                    float             end,
+                    double            start,
+                    double            end,
                     PaintData        *data)
 {
-  float t;
+  double t;
   unsigned int rep;
-  float origin;
-  float segment;
+  double origin;
+  double segment;
 
   segment = elt->animation.segment;
 
@@ -2040,9 +2039,9 @@ paint_elt_animated (GtkPathPaintable *self,
       paint_elt_partial (self, elt, start, end, data);
       return;
     case GTK_PATH_ANIMATION_TYPE_AUTOMATIC:
-      if (elt->animation.repeat == G_MAXFLOAT ||
-          data->time < self->animation.start_time + elt->animation.duration * elt->animation.repeat * G_TIME_SPAN_MILLISECOND)
-        t = (data->time - self->animation.start_time) / (elt->animation.duration * G_TIME_SPAN_MILLISECOND);
+      if (elt->animation.repeat == INFINITY ||
+          data->time < self->animation.start_time + elt->animation.duration * elt->animation.repeat)
+        t = (data->time - self->animation.start_time) / (double) elt->animation.duration;
       else
         t = elt->animation.repeat;
       break;
@@ -2050,8 +2049,8 @@ paint_elt_animated (GtkPathPaintable *self,
       g_assert_not_reached ();
     }
 
-  rep = (unsigned int) floorf (t);
-  t = compute_value (elt->animation.mode, elt->animation.keyframes, t - floorf (t));
+  rep = (unsigned int) floor (t);
+  t = compute_value (elt->animation.mode, elt->animation.keyframes, t - floor (t));
 
   origin = lerp (elt->origin, start, end);
 
@@ -2115,13 +2114,13 @@ paint_elt_animated (GtkPathPaintable *self,
         }
       break;
     case GTK_PATH_ANIMATION_DIRECTION_SEGMENT:
-      if (segment >= 1.f)
+      if (segment >= 1)
         paint_elt_partial (self, elt, start, end, data);
       else
         paint_elt_partial (self, elt, lerp (t, start, end), lerp (fmodf (t + segment, 1), start, end), data);
       break;
     case GTK_PATH_ANIMATION_DIRECTION_SEGMENT_ALTERNATE:
-      if (segment >= 1.f)
+      if (segment >= 1)
         paint_elt_partial (self, elt, start, end, data);
       else if (rep % 2 == 0)
         paint_elt_partial (self, elt, lerp (t * (1 - segment), start, end), lerp (t * (1 - segment) + segment, start, end), data);
@@ -2139,12 +2138,12 @@ paint_elt_animated (GtkPathPaintable *self,
 static void
 paint_elt_with_blobbing (GtkPathPaintable *self,
                          PathElt          *elt,
-                         float             t,
+                         double            t,
                          PaintData        *data)
 {
   GskComponentTransfer *identity;
   GskComponentTransfer *alpha;
-  float blur;
+  double blur;
 
   blur = t * CLAMP (MAX (data->width, data->height) / 2, 0, 64);
 
@@ -2166,7 +2165,7 @@ paint_elt_with_blobbing (GtkPathPaintable *self,
 static void
 paint_elt_with_fade (GtkPathPaintable *self,
                      PathElt          *elt,
-                     float             t,
+                     double            t,
                      PaintData        *data)
 {
   gtk_snapshot_push_opacity (data->snapshot, 1 - t);
@@ -2185,9 +2184,9 @@ static void
 paint (GtkPathPaintable *self,
        PaintData        *data)
 {
-  float out_end;
+  int64_t out_end;
 
-  out_end = self->transition.start_time + self->transition.out_duration * G_TIME_SPAN_MILLISECOND;
+  out_end = self->transition.start_time + self->transition.out_duration;
 
   if (self->transition.running &&
       self->state != self->transition.new_state &&
@@ -2219,10 +2218,10 @@ paint (GtkPathPaintable *self,
         }
       else if (in_old_state && !in_new_state)
         {
-          float start_time, end_time;
+          int64_t start_time, end_time;
 
-          start_time = out_end - (elt->transition.duration + elt->transition.delay) * G_TIME_SPAN_MILLISECOND;
-          end_time = start_time + elt->transition.duration * G_TIME_SPAN_MILLISECOND;
+          start_time = out_end - (elt->transition.duration + elt->transition.delay);
+          end_time = start_time + elt->transition.duration;
 
           if (data->time < start_time)
             {
@@ -2232,7 +2231,7 @@ paint (GtkPathPaintable *self,
                    data->time <= end_time)
             {
               /* disappearing */
-              float t = (data->time - start_time) / (end_time - start_time);
+              double t = (data->time - start_time) / (double) (end_time - start_time);
 
               t = apply_easing (elt->transition.easing, t);
 
@@ -2264,10 +2263,10 @@ paint (GtkPathPaintable *self,
         }
       else if (!in_old_state && in_new_state)
         {
-          float start_time, end_time;
+          int64_t start_time, end_time;
 
-          start_time = out_end + elt->transition.delay * G_TIME_SPAN_MILLISECOND;
-          end_time = start_time + elt->transition.duration * G_TIME_SPAN_MILLISECOND;
+          start_time = out_end + elt->transition.delay;
+          end_time = start_time + elt->transition.duration;
 
           if (data->time < start_time)
             {
@@ -2277,7 +2276,7 @@ paint (GtkPathPaintable *self,
                    data->time <= end_time)
             {
               /* appearing */
-              float t = (data->time - start_time) / (end_time - start_time);
+              double t = (data->time - start_time) / (double) (end_time - start_time);
 
               t = apply_easing (elt->transition.easing, t);
 
@@ -2315,7 +2314,7 @@ paint (GtkPathPaintable *self,
         self->pending_invalidate = g_idle_add_once ((GSourceOnceFunc) invalidate_in_idle, self);
     }
 
-  if (data->time >= self->transition.start_time + (self->transition.out_duration + self->transition.in_duration) * G_TIME_SPAN_MILLISECOND)
+  if (data->time >= self->transition.start_time + self->transition.out_duration + self->transition.in_duration)
     self->transition.running = FALSE;
 }
 
@@ -2333,7 +2332,7 @@ gtk_path_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
 {
   GtkPathPaintable *self = GTK_PATH_PAINTABLE (paintable);
   PaintData data;
-  float scale;
+  double scale;
 
   data.snapshot = snapshot;
   data.width = width;
@@ -2581,7 +2580,7 @@ void
 gtk_path_paintable_set_state (GtkPathPaintable *self,
                               unsigned int      state)
 {
-  float out, in;
+  int64_t out, in;
 
   g_return_if_fail (GTK_IS_PATH_PAINTABLE (self));
   g_return_if_fail (state == GTK_PATH_PAINTABLE_STATE_EMPTY || state <= 63);
@@ -2643,7 +2642,7 @@ gtk_path_paintable_set_weight (GtkPathPaintable *self,
                                float             weight)
 {
   g_return_if_fail (GTK_IS_PATH_PAINTABLE (self));
-  g_return_if_fail (-1.f <= weight && weight <= 1000.f);
+  g_return_if_fail (-1 <= weight && weight <= 1000);
 
   if (self->weight == weight)
     return;
@@ -2667,7 +2666,7 @@ gtk_path_paintable_set_weight (GtkPathPaintable *self,
 float
 gtk_path_paintable_get_weight (GtkPathPaintable *self)
 {
-  g_return_val_if_fail (GTK_IS_PATH_PAINTABLE (self), -1.f);
+  g_return_val_if_fail (GTK_IS_PATH_PAINTABLE (self), -1);
 
   return self->weight;
 }

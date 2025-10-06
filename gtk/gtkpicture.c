@@ -383,6 +383,21 @@ gtk_picture_paintable_invalidate_size (GdkPaintable *paintable,
 }
 
 static void
+gtk_picture_css_changed (GtkWidget         *widget,
+                         GtkCssStyleChange *change)
+{
+  GtkPicture *self = GTK_PICTURE (widget);
+
+  GTK_WIDGET_CLASS (gtk_picture_parent_class)->css_changed (widget, change);
+
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_REDRAW_SYMBOLIC) &&
+      self->paintable && GTK_IS_SYMBOLIC_PAINTABLE (self->paintable))
+    {
+      gtk_widget_queue_draw (widget);
+    }
+}
+
+static void
 gtk_picture_clear_paintable (GtkPicture *self)
 {
   guint flags;
@@ -431,6 +446,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   widget_class->snapshot = gtk_picture_snapshot;
   widget_class->get_request_mode = gtk_picture_get_request_mode;
   widget_class->measure = gtk_picture_measure;
+  widget_class->css_changed = gtk_picture_css_changed;
 
   /**
    * GtkPicture:paintable:
