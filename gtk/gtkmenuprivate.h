@@ -87,6 +87,7 @@ struct _GtkMenuPrivate
   gint scroll_offset;
   gint saved_scroll_offset;
   gint scroll_step;
+  gint n_motion_events;
 
   guint scroll_timeout;
 
