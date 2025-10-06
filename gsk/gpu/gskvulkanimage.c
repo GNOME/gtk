@@ -1892,13 +1892,27 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                                   .dstSet = self->descriptor_sets[sampler].vk_descriptor_set,
                                   .dstBinding = 0,
                                   .dstArrayElement = 0,
-                                  .descriptorCount = 1,
+                                  .descriptorCount = 3,
                                   .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                  .pImageInfo = &(VkDescriptorImageInfo) {
+                                  .pImageInfo = (VkDescriptorImageInfo[3]) {
+                                    {
                                       .sampler = self->ycbcr ? gsk_vulkan_ycbcr_get_vk_sampler (self->ycbcr)
                                                              : gsk_vulkan_device_get_vk_sampler (self->device, sampler),
                                       .imageView = self->vk_image_view,
                                       .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                                    },
+                                    {
+                                      .sampler = self->ycbcr ? gsk_vulkan_ycbcr_get_vk_sampler (self->ycbcr)
+                                                             : gsk_vulkan_device_get_vk_sampler (self->device, sampler),
+                                      .imageView = self->vk_image_view,
+                                      .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                                    },
+                                    {
+                                      .sampler = self->ycbcr ? gsk_vulkan_ycbcr_get_vk_sampler (self->ycbcr)
+                                                             : gsk_vulkan_device_get_vk_sampler (self->device, sampler),
+                                      .imageView = self->vk_image_view,
+                                      .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                                    }
                                   },
                               },
                               0,
