@@ -694,12 +694,9 @@ reference:
     - meson setup
             ${COMMON_MESON_FLAGS}
             --buildtype=release
-            --force-fallback-for=gdk-pixbuf,pango
             -Dintrospection=enabled
             -Ddocumentation=true
             -Dman-pages=true
-            -Dgdk-pixbuf:gtk_doc=true
-            -Dpango:documentation=true
             -Dbuild-demos=true
             -Dbuild-examples=false
             -Dbuild-tests=false
@@ -713,14 +710,6 @@ reference:
     - mv _build/docs/reference/gsk/gsk4/ _reference/gsk4/
     - mv _build/docs/reference/gtk/gtk4/ _reference/gtk4/
     - mv _build/docs/reference/gtk/*.html _reference/gtk4/
-    - mv _build/subprojects/pango/docs/Pango/ _reference/Pango/
-    - mv _build/subprojects/pango/docs/PangoCairo/ _reference/PangoCairo/
-    - mv _build/subprojects/pango/docs/PangoFc/ _reference/PangoFc/
-    - mv _build/subprojects/pango/docs/PangoFT2/ _reference/PangoFT2/
-    - mv _build/subprojects/pango/docs/PangoOT/ _reference/PangoOT/
-    - mv _build/subprojects/pango/docs/PangoXft/ _reference/PangoXft/
-    - mv _build/subprojects/gdk-pixbuf/docs/gdk-pixbuf/ _reference/gdk-pixbuf/
-    - mv _build/subprojects/gdk-pixbuf/docs/gdk-pixdata/ _reference/gdk-pixdata/
   artifacts:
     paths:
       - _reference
