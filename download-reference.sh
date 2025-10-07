@@ -6,6 +6,7 @@ REF="main"
 # GLib needs platform-specific docs to be downloaded, hence one job on Windows and one on Linux
 PROJECTS=( \
 	"gtk reference" \
+        "gdk-pixbuf reference" \
 	"glib msys2-mingw32" \
 	"glib fedora-x86_64" \
 )
