@@ -9,7 +9,7 @@
 msgid ""
 msgstr "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-09-04 13:28+0000\n"
+"POT-Creation-Date: 2025-10-07 11:46+0000\n"
 "PO-Revision-Date: 2025-09-04 10:00+0100\n"
 "Last-Translator: Asier Saratsua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
@@ -1087,13 +1087,13 @@ msgid "Pick a Color"
 msgstr "Hautatu kolorea"
 
 #: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:323
-#: gtk/gtkcolordialogbutton.c:337
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Gorria %%%d, Berdea %%%d, Urdina %%%d, Alpha %%%d"
 
 #: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:329
-#: gtk/gtkcolordialogbutton.c:343
+#: gtk/gtkcolordialogbutton.c:347
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Gorria %%%d, Berdea %%%d, Urdina %%%d"
@@ -1112,7 +1112,7 @@ msgstr "Hautatu letra-tipoa"
 msgid "Font"
 msgstr "Letra-tipoa"
 
-#: gtk/deprecated/gtkfontbutton.c:1158 gtk/gtkfontdialogbutton.c:657
+#: gtk/deprecated/gtkfontbutton.c:1158 gtk/gtkfontdialogbutton.c:661
 msgctxt "font"
 msgid "None"
 msgstr "Bat ere ez"
@@ -1796,7 +1796,7 @@ msgstr "It_xi"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:385
+#: gtk/gtkapplication-dbus.c:384
 msgid "Reason not specified"
 msgstr "Ez da arrazoirik zehaztu"
 
@@ -2210,13 +2210,13 @@ msgstr "Paper-marjinak"
 msgid "_Edit"
 msgstr "_Editatu"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
-#: gtk/gtktextview.c:9388
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5949 gtk/gtktext.c:6379
+#: gtk/gtktextview.c:9382
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
-#: gtk/gtktextview.c:9466
+#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:6009 gtk/gtktext.c:2891
+#: gtk/gtktextview.c:9460
 msgid "Context menu"
 msgstr "Testuinguru-menua"
 
@@ -2254,19 +2254,19 @@ msgstr "Fitxategi-izenak ezin du '/' karaktererik eduki"
 
 #: gtk/gtkfilechoosererrorstack.c:89
 msgid "Folder names should not begin with a space"
-msgstr "Karpetaren izena ez luke zuriune batekin hasi behar"
+msgstr "Karpetaren izenak ez luke zuriune batekin hasi behar"
 
 #: gtk/gtkfilechoosererrorstack.c:93
 msgid "File names should not begin with a space"
-msgstr "Fitxategiaren izena ez luke zuriune batekin hasi behar"
+msgstr "Fitxategiaren izenak ez luke zuriune batekin hasi behar"
 
 #: gtk/gtkfilechoosererrorstack.c:97
 msgid "Folder names should not end with a space"
-msgstr "Karpetaren izena ez luke zuriune batekin amaitu behar"
+msgstr "Karpetaren izenak ez luke zuriune batekin amaitu behar"
 
 #: gtk/gtkfilechoosererrorstack.c:101
 msgid "File names should not end with a space"
-msgstr "Fitxategiaren izena ez luke zuriune batekin amaitu behar"
+msgstr "Fitxategiaren izenak ez luke zuriune batekin amaitu behar"
 
 #: gtk/gtkfilechoosererrorstack.c:105
 msgid "Folder names starting with a “.” are hidden"
@@ -2383,7 +2383,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Elementu bat ezabatzen baduzu, betirako galduko duzu."
 
 #: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9396
+#: gtk/gtklabel.c:5951 gtk/gtktext.c:6387 gtk/gtktextview.c:9390
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -2735,23 +2735,23 @@ msgstr "Itxi"
 msgid "Close the infobar"
 msgstr "Itxi informazio-barra"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9384
+#: gtk/gtklabel.c:5948 gtk/gtktext.c:6375 gtk/gtktextview.c:9378
 msgid "Cu_t"
 msgstr "_Moztu"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9392
+#: gtk/gtklabel.c:5950 gtk/gtktext.c:6383 gtk/gtktextview.c:9386
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9417
+#: gtk/gtklabel.c:5956 gtk/gtktext.c:6396 gtk/gtktextview.c:9411
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: gtk/gtklabel.c:5918
+#: gtk/gtklabel.c:5961
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
-#: gtk/gtklabel.c:5922
+#: gtk/gtklabel.c:5965
 msgid "Copy _Link Address"
 msgstr "Kopiatu _estekaren helbidea"
 
@@ -4277,7 +4277,7 @@ msgstr "Alboko barra"
 msgid "Change di_rection"
 msgstr "Aldatu _norabidea"
 
-#: gtk/gtktext.c:6406 gtk/gtktextview.c:9422
+#: gtk/gtktext.c:6406 gtk/gtktextview.c:9416
 msgid "Insert _Emoji"
 msgstr "Txertatu _emojia"
 
@@ -4437,11 +4437,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Klasikoa"
 
-#: gtk/gtktextview.c:9404
+#: gtk/gtktextview.c:9398
 msgid "_Undo"
 msgstr "_Desegin"
 
-#: gtk/gtktextview.c:9408
+#: gtk/gtktextview.c:9402
 msgid "_Redo"
 msgstr "_Berregin"
 
