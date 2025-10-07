@@ -1,24 +1,23 @@
 #!/bin/bash
 
-REF="main"
-
 # project name followed by CI job name
 # GLib needs platform-specific docs to be downloaded, hence one job on Windows and one on Linux
 PROJECTS=( \
-	"gtk reference" \
-        "gdk-pixbuf reference" \
-	"glib msys2-mingw32" \
-	"glib fedora-x86_64" \
+	"gtk main reference" \
+        "gdk-pixbuf master reference" \
+	"glib main msys2-mingw32" \
+	"glib main fedora-x86_64" \
 )
 
 for PAIR in "${PROJECTS[@]}"; do
 	# shellcheck disable=SC2086
 	set -- $PAIR
 	PROJECT="$1"
-	JOB_NAME="$2"
+        REF="$2"
+	JOB_NAME="$3"
 
 	curl -L --output "$REF-docs.zip" "https://gitlab.gnome.org/GNOME/$PROJECT/-/jobs/artifacts/$REF/download?job=$JOB_NAME" || exit $?
-	unzip -o -d "$REF-docs" "$REF-docs.zip" || exit $?
+	unzip -o -d "main-docs" "$REF-docs.zip" || exit $?
 	rm -f "$REF-docs.zip"
 done
 
@@ -55,7 +54,7 @@ IFS='
 '
 
 for SECTION in $SECTIONS; do
-        mv "$REF-docs/_reference/$SECTION" "$DOCS_DIR/$SECTION"
+        mv "main-docs/_reference/$SECTION" "$DOCS_DIR/$SECTION"
 done
 
-rm -rf "$REF-docs"
+rm -rf "main-docs"
