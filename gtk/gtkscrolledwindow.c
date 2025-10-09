@@ -1475,9 +1475,12 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
     {
       if (scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll))
         {
-          priv->scrolling = TRUE;
-          priv->scrolling_modifiers =
-            gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
+          if (priv->smooth_scroll)
+            {
+              priv->scrolling = TRUE;
+              priv->scrolling_modifiers =
+                gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
+            }
         }
       else
         {
