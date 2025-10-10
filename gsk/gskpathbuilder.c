@@ -241,7 +241,7 @@ gsk_path_builder_unref (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_free_to_path: (skip)
- * @self: a path builder
+ * @self: (transfer full): a path builder
  *
  * Creates a new path from the current state of the
  * builder, and unrefs the builder.
