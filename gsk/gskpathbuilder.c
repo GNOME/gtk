@@ -271,9 +271,10 @@ gsk_path_builder_free_to_path (GskPathBuilder *self)
  *
  * Creates a new path from the given builder.
  *
- * The given `GskPathBuilder` is reset once this function returns;
- * you cannot call this function multiple times on the same builder
- * instance.
+ * The given `GskPathBuilder` is reset to the initial state once this
+ * function returns. Calling this function again on the same builder
+ * instance will therefore produce an empty path, not a copy of the same
+ * path.
  *
  * This function is intended primarily for language bindings.
  * C code should use [method@Gsk.PathBuilder.free_to_path].
