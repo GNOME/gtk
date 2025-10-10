@@ -219,7 +219,15 @@ gtk_revealer_set_position (GtkRevealer *revealer,
     }
 
   if (revealer->current_pos == revealer->target_pos)
-    g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
+    {
+      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
+        gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_VISIBLE);
+
+      g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
+    }
 }
 
 static gboolean
@@ -264,6 +272,12 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
       transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
       gtk_settings_get_enable_animations (gtk_widget_get_settings (widget)))
     {
+      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
+        gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
+
       revealer->source_pos = revealer->current_pos;
       if (revealer->tick_id == 0)
         revealer->tick_id =
@@ -705,8 +719,6 @@ gtk_revealer_init (GtkRevealer *revealer)
   revealer->transition_duration = 250;
   revealer->current_pos = 0.0;
   revealer->target_pos = 0.0;
-
-  gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
 }
 
 /**
