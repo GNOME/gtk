@@ -6710,6 +6710,21 @@ gtk_window_lookup_pointer_focus_implicit_grab (GtkWindow        *window,
   return focus ? gtk_pointer_focus_get_implicit_grab (focus) : NULL;
 }
 
+static void
+clear_widget_active_state (GtkWidget *widget,
+                           GtkWidget *topmost)
+{
+  GtkWidget *w = widget;
+
+  while (w)
+    {
+      gtk_widget_set_active_state (w, FALSE);
+      if (w == topmost)
+        break;
+      w = _gtk_widget_get_parent (w);
+    }
+}
+
 void
 gtk_window_update_pointer_focus (GtkWindow        *window,
                                  GdkDevice        *device,
@@ -6738,6 +6753,12 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
           pos = g_list_find (priv->foci, focus);
           if (pos)
             {
+              if (focus->grab_widget)
+                {
+                  clear_widget_active_state (focus->grab_widget, NULL);
+                  gtk_pointer_focus_set_implicit_grab (focus, NULL);
+                }
+
               priv->foci = g_list_remove (priv->foci, focus);
               gtk_pointer_focus_unref (focus);
             }
@@ -6749,21 +6770,6 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
     {
       focus = gtk_pointer_focus_new (window, target, device, sequence, x, y);
       priv->foci = g_list_prepend (priv->foci, focus);
-    }
-}
-
-static void
-clear_widget_active_state (GtkWidget *widget,
-                           GtkWidget *topmost)
-{
-  GtkWidget *w = widget;
-
-  while (w)
-    {
-      gtk_widget_set_active_state (w, FALSE);
-      if (w == topmost)
-        break;
-      w = _gtk_widget_get_parent (w);
     }
 }
 
