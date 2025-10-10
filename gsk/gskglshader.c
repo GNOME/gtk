@@ -1254,7 +1254,7 @@ gsk_shader_args_builder_to_args (GskShaderArgsBuilder *builder)
 
 /**
  * gsk_shader_args_builder_free_to_args: (skip)
- * @builder: a `GskShaderArgsBuilder`
+ * @builder: (transfer full): a `GskShaderArgsBuilder`
  *
  * Creates a new `GBytes` args from the current state of the
  * given @builder, and frees the @builder instance.
