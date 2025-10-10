@@ -32,6 +32,38 @@ G_BEGIN_DECLS
 
 typedef struct _GtkRevealer GtkRevealer;
 
+/**
+ * GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT:
+ *
+ * Combination of [enum@Gtk.RevealerTransitionType.CROSSFADE]
+ * and [enum@Gtk.RevealerTransitionType.SLIDE_RIGHT].
+ *
+ * Since: 4.22
+ */
+/**
+ * GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT:
+ *
+ * Combination of [enum@Gtk.RevealerTransitionType.CROSSFADE]
+ * and [enum@Gtk.RevealerTransitionType.SLIDE_LEFT].
+ *
+ * Since: 4.22
+ */
+/**
+ * GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP:
+ *
+ * Combination of [enum@Gtk.RevealerTransitionType.CROSSFADE]
+ * and [enum@Gtk.RevealerTransitionType.SLIDE_UP].
+ *
+ * Since: 4.22
+ */
+/**
+ * GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN:
+ *
+ * Combination of [enum@Gtk.RevealerTransitionType.CROSSFADE]
+ * and [enum@Gtk.RevealerTransitionType.SLIDE_DOWN].
+ *
+ * Since: 4.22
+ */
 typedef enum {
   GTK_REVEALER_TRANSITION_TYPE_NONE,
   GTK_REVEALER_TRANSITION_TYPE_CROSSFADE,
@@ -42,7 +74,11 @@ typedef enum {
   GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT,
   GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT,
   GTK_REVEALER_TRANSITION_TYPE_SWING_UP,
-  GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN
+  GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN,
+  GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT,
+  GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT,
+  GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP,
+  GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN
 } GtkRevealerTransitionType;
 
 GDK_AVAILABLE_IN_ALL
