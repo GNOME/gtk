@@ -810,6 +810,8 @@ gsk_path_parse (const char *string)
         }
 
       after_comma = (p > string) && p[-1] == ',';
+
+      skip_whitespace (&p);
     }
 
   if (after_comma)
