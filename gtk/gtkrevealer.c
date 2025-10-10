@@ -164,8 +164,6 @@ gtk_revealer_init (GtkRevealer *revealer)
   revealer->transition_duration = 250;
   revealer->current_pos = 0.0;
   revealer->target_pos = 0.0;
-
-  gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
 }
 
 static void
@@ -875,6 +873,14 @@ gtk_revealer_set_transition_type (GtkRevealer               *revealer,
 
   if (revealer->transition_type == transition)
     return;
+
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
+    gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
+  else
+    gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_VISIBLE);
 
   revealer->transition_type = transition;
   gtk_widget_queue_resize (GTK_WIDGET (revealer));
