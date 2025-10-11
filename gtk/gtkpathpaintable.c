@@ -2571,7 +2571,7 @@ gtk_path_paintable_class_init (GtkPathPaintableClass *class)
   /**
    * GtkPathPaintable:weight:
    *
-   * If not set to -1, this value overrides the font weight used
+   * If not set to -1, this value overrides the weight used
    * when rendering the paintable.
    *
    * Since: 4.22
@@ -2666,11 +2666,15 @@ gtk_path_paintable_get_state (GtkPathPaintable *self)
  * @self: a paintable
  * @weight: the font weight, as a value between -1 and 1000,
  *
- * Sets the font weight that is used when rendering
- * the paintable.
+ * Sets the weight that is used when stroking paths.
  *
- * The default value of -1 means to use the font weight
- * from CSS.
+ * This number is interpreted similar to a font weight,
+ * with 400 being the nominal default weight that leaves
+ * the stroke width unchanged. Smaller values produce
+ * lighter strokes, bigger values heavier strokes.
+ *
+ * The default value of -1 means to use the weight
+ * from CSS -gtk-icon-weight property.
  *
  * Since: 4.22
  */
