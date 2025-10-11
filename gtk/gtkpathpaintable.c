@@ -289,6 +289,7 @@ struct _GtkPathPaintable
   GArray *paths;
 
   double width, height;
+  graphene_rect_t view_box;
   graphene_rect_t bounds;
 
   struct {
@@ -1158,6 +1159,7 @@ start_element_cb (GMarkupParseContext  *context,
     {
       const char *width_attr = NULL;
       const char *height_attr = NULL;
+      const char *viewbox_attr = NULL;
       const char *state_attr = NULL;
       const char *version_attr = NULL;
       double width, height;
@@ -1168,6 +1170,7 @@ start_element_cb (GMarkupParseContext  *context,
                                 &handled,
                                 "width", &width_attr,
                                 "height", &height_attr,
+                                "viewBox", &viewbox_attr,
                                 "gpa:version", &version_attr,
                                 "gpa:state", &state_attr,
                                 NULL);
@@ -1192,6 +1195,32 @@ start_element_cb (GMarkupParseContext  *context,
 
       data->paintable->width = width;
       data->paintable->height = height;
+
+      if (viewbox_attr)
+        {
+          GStrv strv;
+          unsigned int n;
+          double x, y, w, h;
+
+          strv = g_strsplit (viewbox_attr, " ", 0);
+          n = g_strv_length (strv);
+          if (n != 4)
+            {
+              set_attribute_error (error, "viewBox", viewbox_attr);
+              g_strfreev (strv);
+              return;
+            }
+          if (!parse_number ("viewBox", strv[0], LENGTH, &x, error) ||
+              !parse_number ("viewBox", strv[1], LENGTH, &y, error) ||
+              !parse_number ("viewBox", strv[2], LENGTH | POSITIVE, &w, error) ||
+              !parse_number ("viewBox", strv[3], LENGTH | POSITIVE, &h, error))
+            {
+              g_strfreev (strv);
+              return;
+            }
+
+          graphene_rect_init (&data->paintable->view_box, x, y, w, h);
+        }
 
       if (version_attr)
         {
@@ -2332,7 +2361,7 @@ gtk_path_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
 {
   GtkPathPaintable *self = GTK_PATH_PAINTABLE (paintable);
   PaintData data;
-  double scale;
+  graphene_rect_t view_box;
 
   data.snapshot = snapshot;
   data.width = width;
@@ -2342,10 +2371,18 @@ gtk_path_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
   data.weight = self->weight >= 1 ? self->weight : weight;
   data.time = g_get_monotonic_time ();
 
-  scale = MIN (width / MAX (self->width, 1), height / MAX (self->height, 1));
+  if (self->view_box.size.width == 0 || self->view_box.size.height == 0)
+    graphene_rect_init (&view_box, 0, 0, self->width, self->height);
+  else
+    view_box = self->view_box;
 
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_scale (snapshot, scale, scale);
+  gtk_snapshot_scale (snapshot, width / view_box.size.width,
+                                height / view_box.size.height);
+  gtk_snapshot_translate (snapshot,
+                          &GRAPHENE_POINT_INIT (- view_box.origin.x,
+                                                - view_box.origin.y));
+
   paint (self, &data);
   gtk_snapshot_restore (snapshot);
 }
@@ -2534,7 +2571,7 @@ gtk_path_paintable_class_init (GtkPathPaintableClass *class)
   /**
    * GtkPathPaintable:weight:
    *
-   * If not set to -1, this value overrides the font weight used
+   * If not set to -1, this value overrides the weight used
    * when rendering the paintable.
    *
    * Since: 4.22
@@ -2629,11 +2666,15 @@ gtk_path_paintable_get_state (GtkPathPaintable *self)
  * @self: a paintable
  * @weight: the font weight, as a value between -1 and 1000,
  *
- * Sets the font weight that is used when rendering
- * the paintable.
+ * Sets the weight that is used when stroking paths.
  *
- * The default value of -1 means to use the font weight
- * from CSS.
+ * This number is interpreted similar to a font weight,
+ * with 400 being the nominal default weight that leaves
+ * the stroke width unchanged. Smaller values produce
+ * lighter strokes, bigger values heavier strokes.
+ *
+ * The default value of -1 means to use the weight
+ * from CSS -gtk-icon-weight property.
  *
  * Since: 4.22
  */
