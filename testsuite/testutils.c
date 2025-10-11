@@ -67,6 +67,8 @@ diff_bytes_with_file (const char  *file1,
                                   | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
                                   error,
                                   diff_cmd, "--strip-trailing-cr", "-u", file1, "-", NULL);
+      g_free (diff_cmd);
+
       if (process == NULL)
         return NULL;
 
