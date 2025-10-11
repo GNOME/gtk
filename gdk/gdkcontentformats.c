@@ -696,7 +696,7 @@ gdk_content_formats_builder_unref (GdkContentFormatsBuilder *builder)
 
 /**
  * gdk_content_formats_builder_free_to_formats: (skip)
- * @builder: a `GdkContentFormatsBuilder`
+ * @builder: (transfer full): a `GdkContentFormatsBuilder`
  *
  * Creates a new `GdkContentFormats` from the current state of the
  * given @builder, and frees the @builder instance.
