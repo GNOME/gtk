@@ -2,8 +2,14 @@
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
      gpa:keywords='add done animation checkmark plus new'>
-  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+  <circle cx='8' cy='8' r='7'
         id='path0'
+        gpa:states='0 1'
         gpa:transition-type='fade'
         gpa:transition-duration='200ms'
         gpa:transition-delay='200ms'
@@ -17,7 +23,7 @@
         gpa:stroke='foreground'/>
   <path d='M 11 8 L 5 8 M 8 5 L 8 11'
         id='path1'
-        gpa:states='0 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31'
+        gpa:states='0'
         gpa:transition-type='animate'
         gpa:transition-duration='200ms'
         gpa:transition-easing='ease-in-out'
@@ -31,7 +37,7 @@
         gpa:stroke='foreground'/>
   <path d='M 5.5 8 L 7.5 10 L 10.5 6'
         id='path2'
-        gpa:states='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31'
+        gpa:states='1'
         gpa:animation-duration='800ms'
         gpa:animation-easing='ease-out'
         gpa:transition-type='animate'
@@ -42,6 +48,6 @@
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
         fill='none'
-        class='foreground-stroke transparent-fill'
+        class='foreground-stroke transparent-fill not-initial-state'
         gpa:stroke='foreground'/>
 </svg>
