@@ -11,6 +11,7 @@ icon_editor_sources = [
   'path-editor.c',
   'path-paintable.c',
   'range-editor.c',
+  'state-editor.c',
 ]
 
 icon_editor_resources = gnome.compile_resources('icon_editor_resources',

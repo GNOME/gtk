@@ -1,0 +1,41 @@
+<interface>
+  <template class="StateEditor" parent="GtkWindow">
+    <property name="resizable">0</property>
+    <property name="title" translatable="yes">State Map</property>
+    <property name="modal">1</property>
+    <style><class name="state-editor"/></style>
+    <child>
+      <object class="GtkScrolledWindow" id="swin">
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">never</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkGrid" id="grid">
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">end</property>
+                <style><class name="buttons"/></style>
+                <child>
+                  <object class="GtkButton">
+                    <property name="label">Add State</property>
+                    <signal name="clicked" handler="add_state" swapped="yes"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="label">Drop State</property>
+                    <signal name="clicked" handler="drop_state" swapped="yes"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
