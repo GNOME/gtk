@@ -8605,6 +8605,14 @@ gsk_subsurface_node_get_subsurface (const GskRenderNode *node)
 /* }}} */
 /* {{{ GSK_COMPONENT_TRANSFER_NODE */
 
+/**
+ * GskComponentTransferNode:
+ *
+ * A render node for applying a `GskComponentTransfer` for each color
+ * component of the child node.
+ *
+ * Since: 4.20
+ */
 struct _GskComponentTransferNode
 {
   GskRenderNode render_node;
