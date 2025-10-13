@@ -1591,9 +1591,11 @@ start_element_cb (GMarkupParseContext  *context,
   fill_rule = GSK_FILL_RULE_WINDING;
   if (fill_rule_attr)
     {
-      if (!parse_enum ("fill-rule", fill_rule_attr,
-                       (const char *[]) { "winding", "evenodd" }, 2,
-                        &fill_rule, error))
+      if (strcmp (fill_rule_attr, "winding") == 0)
+        fill_rule = GSK_FILL_RULE_WINDING;
+      else if (!parse_enum ("fill-rule", fill_rule_attr,
+                            (const char *[]) { "nonzero", "evenodd" }, 2,
+                             &fill_rule, error))
         goto cleanup;
     }
 
