@@ -1475,6 +1475,7 @@ parse_symbolic_svg (PathPaintable  *paintable,
 static void
 path_paintable_save_path (PathPaintable *self,
                           size_t         idx,
+                          unsigned int   initial_state,
                           GString       *str)
 {
   const char *sym[] = { "foreground", "error", "warning", "success", "accent" };
@@ -1772,6 +1773,9 @@ path_paintable_save_path (PathPaintable *self,
       g_strv_builder_add (class_builder, "transparent-fill");
     }
 
+  if ((path_paintable_get_path_states (self, idx) & (G_GUINT64_CONSTANT(1) << initial_state)) == 0)
+    g_strv_builder_add (class_builder, "not-initial-state");
+
   class_strv = g_strv_builder_unref_to_strv (class_builder);
   class_str = g_strjoinv (" ", class_strv);
   g_string_append_printf (str, "\n        class='%s'", class_str);
@@ -1828,11 +1832,16 @@ path_paintable_save (PathPaintable *self,
 
   g_string_append (str, ">\n");
 
+  /* Compatibility with other renderers */
+  g_string_append (str, "  <style type='text/css'>\n");
+  g_string_append (str, "    .not-initial-state {\n      display: none;\n    }\n");
+  g_string_append (str, "  </style>\n");
+
   for (size_t idx = 0; idx < path_paintable_get_n_paths (self); idx++)
     {
       uint64_t states = path_paintable_get_path_states (self, idx);
       if (state_to_save == STATE_UNSET || (states & (G_GUINT64_CONSTANT (1) << state_to_save)) != 0)
-        path_paintable_save_path (self, idx, str);
+        path_paintable_save_path (self, idx, initial_state, str);
     }
 
   g_string_append (str, "</svg>");
