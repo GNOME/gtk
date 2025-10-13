@@ -1203,9 +1203,11 @@ start_element_cb (GMarkupParseContext  *context,
   fill_rule = GSK_FILL_RULE_WINDING;
   if (fill_rule_attr)
     {
-      if (!parse_enum ("fill-rule", fill_rule_attr,
-                       (const char *[]) { "winding", "evenodd" }, 2,
-                        &fill_rule, error))
+      if (strcmp (fill_rule_attr, "winding") == 0)
+        fill_rule = GSK_FILL_RULE_WINDING;
+      else if (!parse_enum ("fill-rule", fill_rule_attr,
+                            (const char *[]) { "nonzero", "evenodd" }, 2,
+                            &fill_rule, error))
         goto cleanup;
     }
 
@@ -1739,7 +1741,7 @@ path_paintable_save_path (PathPaintable *self,
 
   if ((fill_enabled = path_paintable_get_path_fill (self, idx, &fill_rule, &fill_symbolic, &color)))
     {
-      const char *rule[] = { "winding", "evenodd" };
+      const char *rule[] = { "nonzero", "evenodd" };
 
       g_string_append_printf (str, "\n        fill-rule='%s'", rule[fill_rule]);
 
