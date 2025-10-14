@@ -583,7 +583,6 @@
                       <item>Ease-in</item>
                       <item>Ease-out</item>
                       <item>Ease</item>
-                      <item>Custom</item>
                     </items>
                   </object>
                 </property>
@@ -591,88 +590,12 @@
             </child>
             <child>
               <object class="GtkMenuButton">
-                <binding name="sensitive">
-                  <closure type="gboolean" function="uint_equal">
-                    <lookup name="selected">animation_easing</lookup>
-                    <constant type="guint">5</constant>
-                  </closure>
-                </binding>
                 <property name="valign">center</property>
                 <property name="child">
                   <object class="MiniGraph" id="mini_graph">
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
                     <property name="easing-function" bind-source="animation_easing" bind-property="selected" bind-flags="sync-create"/>
-                  </object>
-                </property>
-                <property name="popover">
-                  <object class="GtkPopover">
-                    <property name="child">
-                      <object class="GtkGrid">
-                        <child>
-                          <object class="MiniGraph" id="big_graph">
-                            <property name="width-request">200</property>
-                            <property name="height-request">200</property>
-                            <layout>
-                              <property name="row">0</property>
-                              <property name="column">0</property>
-                              <property name="column-span">2</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkDropDown" id="calc_mode">
-                            <property name="valign">center</property>
-                            <property name="model">
-                              <object class="GtkStringList">
-                                <items>
-                                  <item>Linear</item>
-                                  <item>Discrete</item>
-                                  <item>Spline</item>
-                                </items>
-                              </object>
-                            </property>
-                            <signal name="notify::selected" handler="animation_changed" swapped="yes"/>
-                            <layout>
-                              <property name="row">1</property>
-                              <property name="column">0</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <child>
-                              <object class="GtkButton">
-                                <property name="hexpand">1</property>
-                                <property name="halign">end</property>
-                                <property name="icon-name">list-add-symbolic</property>
-                                <signal name="clicked" handler="add_frame" swapped="yes"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton">
-                                <property name="icon-name">list-remove-symbolic</property>
-                                <signal name="clicked" handler="remove_frame" swapped="yes"/>
-                              </object>
-                            </child>
-                            <layout>
-                              <property name="row">1</property>
-                              <property name="column">1</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="frames">
-                            <property name="orientation">vertical</property>
-                            <layout>
-                              <property name="row">2</property>
-                              <property name="column">0</property>
-                              <property name="column-span">2</property>
-                            </layout>
-                          </object>
-                        </child>
-                      </object>
-                    </property>
                   </object>
                 </property>
               </object>
