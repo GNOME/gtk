@@ -33,8 +33,6 @@ struct _IconEditorWindow
 {
   GtkApplicationWindow parent;
 
-  gboolean importing;
-  gboolean exporting;
   GFile *file;
   PathPaintable *paintable;
   PathPaintable *orig_paintable;
@@ -259,9 +257,7 @@ static void
 load_error (IconEditorWindow *self,
             const char       *message)
 {
-  show_error (self,
-              self->importing ? "Importing failed" : "Loading failed",
-              message);
+  show_error (self, "Loading failed", message);
 }
 
 static void
@@ -415,16 +411,11 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
         icon_editor_window_set_show_controls (self, TRUE);
     }
 
-  if (!self->importing)
-    {
-      g_clear_object (&self->orig_paintable);
-      if (paintable)
-        self->orig_paintable = path_paintable_copy (paintable);
+  g_clear_object (&self->orig_paintable);
+  if (paintable)
+    self->orig_paintable = path_paintable_copy (paintable);
 
-      icon_editor_window_set_changed (self, FALSE);
-    }
-  else
-    icon_editor_window_set_changed (self, TRUE);
+  icon_editor_window_set_changed (self, FALSE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHANGED]);
@@ -448,12 +439,6 @@ load_bytes (IconEditorWindow *self,
     {
       load_error (self, error->message);
       return FALSE;
-    }
-
-  if (self->importing)
-    {
-      PathPaintable *p = path_paintable_combine (self->paintable, paintable);
-      g_set_object (&paintable, p);
     }
 
   icon_editor_window_set_paintable (self, paintable);
@@ -525,7 +510,7 @@ show_open_filechooser (IconEditorWindow *self)
   g_object_unref (filter);
 
   dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_set_title (dialog, self->importing ? "Open SVG file" : "Open icon file");
+  gtk_file_dialog_set_title (dialog, "Open icon file");
 
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
@@ -551,9 +536,7 @@ static void
 save_error (IconEditorWindow *self,
             const char       *message)
 {
-  show_error (self,
-              self->exporting ? "Export failed" : "Saving failed",
-              message);
+  show_error (self, "Saving failed", message);
 }
 
 static void
@@ -583,36 +566,6 @@ save_to_file (IconEditorWindow *self,
 }
 
 static void
-export_to_file (IconEditorWindow *self,
-                GFile            *file)
-{
-  g_autofree char *path = g_file_get_path (file);
-
-  if (g_str_has_suffix (path, ".svg"))
-    path[strlen (path) - strlen (".svg")] = '\0';
-  else if (g_str_has_suffix (path, ".gpa"))
-    path[strlen (path) - strlen (".gpa")] = '\0';
-
-  for (unsigned int idx = 0; idx <= path_paintable_get_max_state (self->paintable); idx++)
-    {
-      g_autofree char *filename = g_strdup_printf ("%s-%u.gpa", path, idx);
-      g_autoptr (GBytes) bytes = NULL;
-      g_autoptr (GError) error = NULL;
-
-      bytes = path_paintable_serialize_state (self->paintable, idx);
-
-      if (!g_file_set_contents (filename,
-                                g_bytes_get_data (bytes, NULL),
-                                g_bytes_get_size (bytes),
-                                &error))
-       {
-         save_error (self, error->message);
-         return;
-       }
-    }
-}
-
-static void
 save_response_cb (GObject      *source,
                   GAsyncResult *result,
                   void         *user_data)
@@ -630,10 +583,7 @@ save_response_cb (GObject      *source,
       return;
     }
 
-  if (self->exporting)
-    export_to_file (self, file);
-  else
-    save_to_file (self, file);
+  save_to_file (self, file);
 }
 
 static void
@@ -642,7 +592,7 @@ show_save_filechooser (IconEditorWindow *self)
   g_autoptr (GtkFileDialog) dialog = NULL;
 
   dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_set_title (dialog, self->exporting ? "Export states" : "Save icon");
+  gtk_file_dialog_set_title (dialog, "Save icon");
   if (self->file)
     {
       gtk_file_dialog_set_initial_file (dialog, self->file);
@@ -725,7 +675,6 @@ file_open (GSimpleAction *action,
 {
   IconEditorWindow *self = user_data;
 
-  self->importing = FALSE;
   show_open_filechooser (self);
 }
 
@@ -736,7 +685,6 @@ file_save (GSimpleAction *action,
 {
   IconEditorWindow *self = user_data;
 
-  self->exporting = FALSE;
   if (self->file)
     save_to_file (self, self->file);
   else
@@ -750,7 +698,6 @@ file_save_as (GSimpleAction *action,
 {
   IconEditorWindow *self = user_data;
 
-  self->exporting = FALSE;
   show_save_filechooser (self);
 }
 
@@ -835,28 +782,6 @@ revert_changes (GSimpleAction *action,
 }
 
 static void
-file_import (GSimpleAction *action,
-             GVariant      *parameter,
-             gpointer       user_data)
-{
-  IconEditorWindow *self = user_data;
-
-  self->importing = self->paintable != NULL;
-  show_open_filechooser (self);
-}
-
-static void
-file_export (GSimpleAction *action,
-             GVariant      *parameter,
-             gpointer       user_data)
-{
-  IconEditorWindow *self = user_data;
-
-  self->exporting = TRUE;
-  show_save_filechooser (self);
-}
-
-static void
 add_path (GSimpleAction *action,
           GVariant      *parameter,
           gpointer       user_data)
@@ -926,8 +851,6 @@ static GActionEntry win_entries[] = {
   { "save-as", file_save_as, NULL, NULL, NULL },
   { "revert", revert_changes, NULL, NULL, NULL },
   { "close", file_close, NULL, NULL, NULL },
-  { "import", file_import, NULL, NULL, NULL },
-  { "export", file_export, NULL, NULL, NULL },
   { "add-path", add_path, NULL, NULL, NULL },
   { "edit-states", edit_states, NULL, NULL, NULL },
   { "show-controls", show_controls, NULL, NULL, NULL },
@@ -1233,13 +1156,10 @@ icon_editor_window_load (IconEditorWindow *self,
   if (!load_file_contents (self, file))
     return FALSE;
 
-  if (!self->importing)
-    {
-      g_set_object (&self->file, file);
+  g_set_object (&self->file, file);
 
-      basename = g_file_get_basename (file);
-      gtk_window_set_title (GTK_WINDOW (self), basename);
-    }
+  basename = g_file_get_basename (file);
+  gtk_window_set_title (GTK_WINDOW (self), basename);
 
   return TRUE;
 }
