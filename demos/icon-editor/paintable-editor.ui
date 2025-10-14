@@ -148,9 +148,21 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="add_path">
-                <property name="label" translatable="yes">Add path</property>
-                <property name="action-name">win.add-path</property>
+              <object class="GtkBox">
+                <property name="hexpand">0</property>
+                <child>
+                  <object class="GtkButton" id="add_path">
+                    <property name="label" translatable="yes">Add path</property>
+                    <property name="hexpand">1</property>
+                    <property name="action-name">win.add-path</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="edit_states">
+                    <property name="label" translatable="yes">States</property>
+                    <property name="action-name">win.edit-states</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

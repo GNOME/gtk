@@ -24,6 +24,7 @@
 #include "paintable-editor.h"
 #include "path-paintable.h"
 #include "border-paintable.h"
+#include "state-editor.h"
 
 #include <glib/gstdio.h>
 
@@ -866,6 +867,22 @@ add_path (GSimpleAction *action,
 }
 
 static void
+edit_states (GSimpleAction *action,
+             GVariant      *parameter,
+             gpointer       user_data)
+{
+  IconEditorWindow *self = user_data;
+  StateEditor *editor;
+
+  editor = state_editor_new ();
+  gtk_window_set_transient_for (GTK_WINDOW (editor), GTK_WINDOW (self));
+
+  state_editor_set_paintable (editor, self->paintable);
+
+  gtk_window_present (GTK_WINDOW (editor));
+}
+
+static void
 show_controls (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
@@ -912,6 +929,7 @@ static GActionEntry win_entries[] = {
   { "import", file_import, NULL, NULL, NULL },
   { "export", file_export, NULL, NULL, NULL },
   { "add-path", add_path, NULL, NULL, NULL },
+  { "edit-states", edit_states, NULL, NULL, NULL },
   { "show-controls", show_controls, NULL, NULL, NULL },
   { "open-example", open_example, "s", NULL, NULL },
   { "reshuffle", reshuffle, NULL, NULL, NULL },

@@ -7,6 +7,7 @@
     <file preprocess="xml-stripblanks">icon-editor-window.ui</file>
     <file preprocess="xml-stripblanks">paintable-editor.ui</file>
     <file preprocess="xml-stripblanks">path-editor.ui</file>
+    <file preprocess="xml-stripblanks">state-editor.ui</file>
     <file preprocess="xml-stripblanks">color-editor.ui</file>
     <file preprocess="xml-stripblanks">help-window.ui</file>
     <file preprocess="xml-stripblanks">document-edit-symbolic.svg</file>

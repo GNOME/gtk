@@ -204,3 +204,13 @@ rangeeditor > trough > slider.right {
   font-weight: 600;
   font-size: 120%;
 }
+
+.state-editor grid {
+  border-spacing: 10px;
+  margin: 10px;
+}
+
+.state-editor .buttons {
+  border-spacing: 10px;
+  margin: 10px;
+}

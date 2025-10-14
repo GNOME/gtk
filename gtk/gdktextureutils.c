@@ -982,7 +982,12 @@ start_element_cb (GMarkupParseContext  *context,
       /* Done */
       return;
     }
-  else if (strcmp (element_name, "g") == 0)
+  else if (strcmp (element_name, "g") == 0 ||
+           strcmp (element_name, "defs") == 0 ||
+           strcmp (element_name, "style") == 0 ||
+           g_str_has_prefix (element_name, "sodipodi:") ||
+           g_str_has_prefix (element_name, "inkscape:"))
+
     {
       /* Do nothing */
       return;
@@ -1187,7 +1192,7 @@ start_element_cb (GMarkupParseContext  *context,
                                  "cx", NULL,
                                  "cy", NULL,
                                  "r", NULL,
-                                 "gtk:*", NULL, /* Ignore gtk namespace attrs */
+                                 "gpa:*", NULL, /* Ignore gtk namespace attrs */
                                  NULL))
     goto cleanup;
 

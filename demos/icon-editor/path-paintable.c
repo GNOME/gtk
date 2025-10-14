@@ -848,6 +848,7 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else if (strcmp (element_name, "g") == 0 ||
            strcmp (element_name, "defs") == 0 ||
+           strcmp (element_name, "style") == 0 ||
            g_str_has_prefix (element_name, "sodipodi:") ||
            g_str_has_prefix (element_name, "inkscape:"))
     {
@@ -1203,9 +1204,11 @@ start_element_cb (GMarkupParseContext  *context,
   fill_rule = GSK_FILL_RULE_WINDING;
   if (fill_rule_attr)
     {
-      if (!parse_enum ("fill-rule", fill_rule_attr,
-                       (const char *[]) { "winding", "evenodd" }, 2,
-                        &fill_rule, error))
+      if (strcmp (fill_rule_attr, "winding") == 0)
+        fill_rule = GSK_FILL_RULE_WINDING;
+      else if (!parse_enum ("fill-rule", fill_rule_attr,
+                            (const char *[]) { "nonzero", "evenodd" }, 2,
+                            &fill_rule, error))
         goto cleanup;
     }
 
@@ -1472,6 +1475,7 @@ parse_symbolic_svg (PathPaintable  *paintable,
 static void
 path_paintable_save_path (PathPaintable *self,
                           size_t         idx,
+                          unsigned int   initial_state,
                           GString       *str)
 {
   const char *sym[] = { "foreground", "error", "warning", "success", "accent" };
@@ -1739,7 +1743,7 @@ path_paintable_save_path (PathPaintable *self,
 
   if ((fill_enabled = path_paintable_get_path_fill (self, idx, &fill_rule, &fill_symbolic, &color)))
     {
-      const char *rule[] = { "winding", "evenodd" };
+      const char *rule[] = { "nonzero", "evenodd" };
 
       g_string_append_printf (str, "\n        fill-rule='%s'", rule[fill_rule]);
 
@@ -1768,6 +1772,9 @@ path_paintable_save_path (PathPaintable *self,
       g_string_append (str, "\n        fill='none'");
       g_strv_builder_add (class_builder, "transparent-fill");
     }
+
+  if ((path_paintable_get_path_states (self, idx) & (G_GUINT64_CONSTANT(1) << initial_state)) == 0)
+    g_strv_builder_add (class_builder, "not-initial-state");
 
   class_strv = g_strv_builder_unref_to_strv (class_builder);
   class_str = g_strjoinv (" ", class_strv);
@@ -1825,11 +1832,16 @@ path_paintable_save (PathPaintable *self,
 
   g_string_append (str, ">\n");
 
+  /* Compatibility with other renderers */
+  g_string_append (str, "  <style type='text/css'>\n");
+  g_string_append (str, "    .not-initial-state {\n      display: none;\n    }\n");
+  g_string_append (str, "  </style>\n");
+
   for (size_t idx = 0; idx < path_paintable_get_n_paths (self); idx++)
     {
       uint64_t states = path_paintable_get_path_states (self, idx);
       if (state_to_save == STATE_UNSET || (states & (G_GUINT64_CONSTANT (1) << state_to_save)) != 0)
-        path_paintable_save_path (self, idx, str);
+        path_paintable_save_path (self, idx, initial_state, str);
     }
 
   g_string_append (str, "</svg>");

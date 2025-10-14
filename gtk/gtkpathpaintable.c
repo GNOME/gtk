@@ -1256,6 +1256,7 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else if (strcmp (element_name, "g") == 0 ||
            strcmp (element_name, "defs") == 0 ||
+           strcmp (element_name, "style") == 0 ||
            g_str_has_prefix (element_name, "sodipodi:") ||
            g_str_has_prefix (element_name, "inkscape:"))
     {
@@ -1591,9 +1592,11 @@ start_element_cb (GMarkupParseContext  *context,
   fill_rule = GSK_FILL_RULE_WINDING;
   if (fill_rule_attr)
     {
-      if (!parse_enum ("fill-rule", fill_rule_attr,
-                       (const char *[]) { "winding", "evenodd" }, 2,
-                        &fill_rule, error))
+      if (strcmp (fill_rule_attr, "winding") == 0)
+        fill_rule = GSK_FILL_RULE_WINDING;
+      else if (!parse_enum ("fill-rule", fill_rule_attr,
+                            (const char *[]) { "nonzero", "evenodd" }, 2,
+                             &fill_rule, error))
         goto cleanup;
     }
 
