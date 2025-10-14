@@ -386,6 +386,10 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
       GdkMemoryFormat rgba_format;
       GdkSwizzle rgba_swizzle;
 
+      /* Just turn off conversion for fallbacks. They likely don't support it. */
+      if (conv != GSK_GPU_CONVERSION_SRGB)
+        conv = GSK_GPU_CONVERSION_NONE;
+
       /* Second, try the potential RGBA format */
       if (gdk_memory_format_get_rgba_format (format, &rgba_format, &rgba_swizzle))
         {
