@@ -92,9 +92,6 @@ PathPaintable * path_paintable_new_from_resource   (const char     *resource);
 GBytes *        path_paintable_serialize           (PathPaintable  *self,
                                                     unsigned int    initial_state);
 
-GBytes *        path_paintable_serialize_state     (PathPaintable   *self,
-                                                    unsigned int     state);
-
 PathPaintable * path_paintable_copy                (PathPaintable   *self);
 
 PathPaintable * path_paintable_combine             (PathPaintable   *one,

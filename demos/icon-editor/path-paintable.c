@@ -1796,8 +1796,7 @@ path_paintable_save_path (PathPaintable *self,
 static void
 path_paintable_save (PathPaintable *self,
                      GString       *str,
-                     unsigned int   initial_state,
-                     unsigned int   state_to_save)
+                     unsigned int   initial_state)
 {
   GStrv keywords;
   char buffer[G_ASCII_DTOSTR_BUF_SIZE];
@@ -1823,12 +1822,7 @@ path_paintable_save (PathPaintable *self,
     }
 
   if (initial_state != 0)
-    {
-      if (initial_state == STATE_UNSET)
-        g_string_append_printf (str,      "\n     gpa:state='-1'");
-      else
-        g_string_append_printf (str,      "\n     gpa:state='%u'", initial_state);
-    }
+    g_string_append_printf (str,      "\n     gpa:state='%u'", initial_state);
 
   g_string_append (str, ">\n");
 
@@ -1838,34 +1832,9 @@ path_paintable_save (PathPaintable *self,
   g_string_append (str, "  </style>\n");
 
   for (size_t idx = 0; idx < path_paintable_get_n_paths (self); idx++)
-    {
-      uint64_t states = path_paintable_get_path_states (self, idx);
-      if (state_to_save == STATE_UNSET || (states & (G_GUINT64_CONSTANT (1) << state_to_save)) != 0)
-        path_paintable_save_path (self, idx, initial_state, str);
-    }
+    path_paintable_save_path (self, idx, initial_state, str);
 
   g_string_append (str, "</svg>");
-}
-
-/*< private >
- * path_paintable_serialize_state:
- * @self: the paintable
- * @state: the state to serialize
- *
- * Serializes the paintable to SVG, including only
- * the paths that are present in the given state.
- *
- * Returns: (transfer full): SVG data
- */
-GBytes *
-path_paintable_serialize_state (PathPaintable *self,
-                                unsigned int   state_to_save)
-{
-  GString *str = g_string_new ("");
-
-  path_paintable_save (self, str, path_paintable_get_state (self), state_to_save);
-
-  return g_string_free_to_bytes (str);
 }
 
 /* }}} */
@@ -3131,7 +3100,7 @@ path_paintable_serialize (PathPaintable *self,
 {
   GString *str = g_string_new ("");
 
-  path_paintable_save (self, str, initial_state, STATE_UNSET);
+  path_paintable_save (self, str, initial_state);
 
   return g_string_free_to_bytes (str);
 }
