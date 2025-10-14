@@ -226,7 +226,7 @@ compute_value (GtkCalcMode  mode,
 }
 
 #define GTK_PATH_PAINTABLE_NO_STATES 0
-#define GTK_PATH_PAINTABLE_ALL_STATES 0xffffffff
+#define GTK_PATH_PAINTABLE_ALL_STATES G_MAXUINT64
 
 typedef struct
 {
