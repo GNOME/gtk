@@ -53,6 +53,39 @@ G_DEFINE_TYPE (StateEditor, state_editor, GTK_TYPE_WINDOW)
 
 static void repopulate (StateEditor *self);
 
+static GdkPaintable *
+get_paintable_for_path (PathPaintable *paintable,
+                        gsize          path)
+{
+  gboolean do_stroke;
+  g_autoptr (GskStroke) stroke = gsk_stroke_new (1);
+  unsigned int stroke_symbolic = 0;
+  GdkRGBA stroke_color;
+  gboolean do_fill;
+  unsigned int fill_symbolic = 0;
+  GdkRGBA fill_color;
+  GskFillRule rule;
+  float shape_params[6] = { 0, };
+  PathPaintable *path_image;
+
+  path_image = path_paintable_new ();
+  path_paintable_add_path (path_image, path_paintable_get_path (paintable, path), SHAPE_PATH, shape_params);
+
+  do_stroke = path_paintable_get_path_stroke (paintable, path,
+                                              stroke, &stroke_symbolic, &stroke_color);
+  do_fill = path_paintable_get_path_fill (paintable, path,
+                                          &rule, &fill_symbolic, &fill_color);
+
+  path_paintable_set_path_stroke (path_image, 0, do_stroke, stroke, stroke_symbolic, &stroke_color);
+  path_paintable_set_path_fill (path_image, 0, do_fill, rule, fill_symbolic, &fill_color);
+  path_paintable_set_size (path_image,
+                           path_paintable_get_width (paintable),
+                           path_paintable_get_height (paintable));
+  path_paintable_set_state (path_image, 0);
+
+  return GDK_PAINTABLE (path_image);
+}
+
 static void
 update_states (StateEditor *self)
 {
@@ -136,10 +169,17 @@ create_paths (StateEditor *self)
   for (unsigned int i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
     {
       uint64_t states = path_paintable_get_path_states (self->paintable, i);
+#if 0
       char *s = g_strdup_printf ("Path %u", i);
       child = gtk_label_new (s);
-      gtk_grid_attach (self->grid, child, -1, i, 1, 1);
       g_free (s);
+#else
+      GdkPaintable *paintable = get_paintable_for_path (self->paintable, i);
+      child = gtk_image_new_from_paintable (paintable);
+      gtk_image_set_pixel_size (GTK_IMAGE (child), 20);
+      g_object_unref (paintable);
+#endif
+      gtk_grid_attach (self->grid, child, -1, i, 1, 1);
 
       for (unsigned int j = 0; j <= self->max_state; j++)
         {
