@@ -703,9 +703,20 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
       /* We know these formats can't be scaled */
       return GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
     }
-  else
+  else if (scale == 1)
     {
       return GDK_PAINTABLE (gdk_texture_new_from_svg_bytes (bytes, scale, NULL));
+    }
+  else
+    {
+      GdkTexture *texture;
+      GdkPaintable *paintable;
+
+      texture = gdk_texture_new_from_svg_bytes (bytes, scale, NULL);
+      paintable = gtk_scaler_new (GDK_PAINTABLE (texture), scale);
+      g_object_unref (texture);
+
+      return paintable;
     }
 }
 
