@@ -2,7 +2,8 @@
 <interface domain="gtk40">
   <template class="GtkColorChooserDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Select a Color</property>
-    <property name="resizable">0</property>
+    <property name="halign">GTK_ALIGN_CENTER</property>
+    <property name="valign">GTK_ALIGN_CENTER</property>
     <style>
       <class name="colorchooser"/>
     </style>
@@ -15,17 +16,24 @@
         <property name="margin-top">5</property>
         <property name="margin-bottom">5</property>
         <child>
-          <object class="GtkColorChooserWidget" id="chooser">
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-            <property name="margin-top">5</property>
-            <property name="margin-bottom">5</property>
-            <property name="rgba">rgb(255,255,255)</property>
-            <property name="hexpand">1</property>
-            <property name="vexpand">1</property>
-            <signal name="color-activated" handler="color_activated_cb" swapped="no"/>
-            <signal name="notify::rgba" handler="propagate_notify" swapped="no"/>
-            <signal name="notify::show-editor" handler="propagate_notify" swapped="no"/>
+          <object class="GtkScrolledWindow" id="scroller">
+            <property name="max-content-height">262</property>
+            <property name="propagate-natural-width">1</property>
+            <property name="propagate-natural-height">1</property>
+            <child>
+              <object class="GtkColorChooserWidget" id="chooser">
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
+                <property name="margin-top">5</property>
+                <property name="margin-bottom">5</property>
+                <property name="rgba">rgb(255,255,255)</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <signal name="color-activated" handler="color_activated_cb" swapped="no"/>
+                <signal name="notify::rgba" handler="propagate_notify" swapped="no"/>
+                <signal name="notify::show-editor" handler="propagate_notify" swapped="no"/>
+              </object>
+            </child>
           </object>
         </child>
       </object>
