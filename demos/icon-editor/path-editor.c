@@ -38,8 +38,6 @@ struct _PathEditor
 
   GtkGrid *grid;
   GtkLabel *path_label;
-  GtkWidget *visible_label;
-  GtkCheckButton *visible;
   GtkDropDown *origin;
   GtkDropDown *transition_type;
   GtkSpinButton *transition_duration;
@@ -370,28 +368,6 @@ fill_changed (PathEditor *self)
 }
 
 static void
-visible_changed (PathEditor *self)
-{
-  uint64_t visible;
-  uint64_t states;
-  unsigned int state;
-
-  if (self->updating)
-    return;
-
-  if (!self->paintable)
-    return;
-
-  visible = gtk_check_button_get_active (self->visible);
-
-  state = path_paintable_get_state (self->paintable);
-  states = path_paintable_get_path_states (self->paintable, self->path);
-
-  path_paintable_set_path_states (self->paintable, self->path,
-                                  (states & ~(G_GUINT64_CONSTANT (1) << state)) | (visible << state));
-}
-
-static void
 attach_changed (PathEditor *self)
 {
   size_t selected;
@@ -599,23 +575,6 @@ static void
 delete_path (PathEditor *self)
 {
   path_paintable_delete_path (self->paintable, self->path);
-}
-
-static void
-path_editor_update_state (PathEditor *self)
-{
-  if (self->paintable && self->path != (size_t) -1)
-    {
-      unsigned int state;
-      uint64_t states;
-
-      state = path_paintable_get_state (self->paintable);
-      states = path_paintable_get_path_states (self->paintable, self->path);
-
-      gtk_widget_set_sensitive (self->visible_label, state != STATE_UNSET);
-      gtk_widget_set_sensitive (GTK_WIDGET (self->visible), state != STATE_UNSET);
-      gtk_check_button_set_active (self->visible, (states & (G_GUINT64_CONSTANT (1) << state)) != 0);
-    }
 }
 
 static void populate_frames (PathEditor *self);
@@ -1038,9 +997,6 @@ path_editor_finalize (GObject *object)
 {
   PathEditor *self = PATH_EDITOR (object);
 
-  if (self->paintable)
-    g_signal_handlers_disconnect_by_func (self->paintable, path_editor_update_state, self);
-
   g_clear_object (&self->path_image);
   g_clear_object (&self->paintable);
 
@@ -1083,8 +1039,6 @@ path_editor_class_init (PathEditorClass *class)
 
   gtk_widget_class_bind_template_child (widget_class, PathEditor, grid);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, path_label);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, visible_label);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, visible);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, origin);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_duration);
@@ -1115,7 +1069,6 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, move_down);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, sg);
 
-  gtk_widget_class_bind_template_callback (widget_class, visible_changed);
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
   gtk_widget_class_bind_template_callback (widget_class, origin_changed);
@@ -1158,24 +1111,12 @@ path_editor_set_paintable (PathEditor    *self,
 
   g_clear_object (&self->path_image);
 
-  if (self->paintable)
-    {
-      g_signal_handlers_disconnect_by_func (self->paintable, path_editor_update_state, self);
-    }
-
   if (!g_set_object (&self->paintable, paintable))
     return;
-
-  if (self->paintable)
-    {
-      g_signal_connect_swapped (self->paintable, "notify::state",
-                                G_CALLBACK (path_editor_update_state), self);
-    }
 
   self->path = (size_t) -1;
 
   path_editor_update (self);
-  path_editor_update_state (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
@@ -1204,7 +1145,6 @@ path_editor_set_path (PathEditor *self,
   self->path = path;
 
   path_editor_update (self);
-  path_editor_update_state (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
 }
