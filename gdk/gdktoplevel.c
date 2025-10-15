@@ -872,6 +872,8 @@ gdk_toplevel_unexport_handle (GdkToplevel *toplevel,
  *
  * The capabilities that are available for this toplevel.
  *
+ * Returns: the capabilities of the `GdkToplevel`.
+ *
  * Since: 4.20
  */
 GdkToplevelCapabilities

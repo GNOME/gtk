@@ -2614,6 +2614,16 @@ gdk_scroll_event_get_unit (GdkEvent *event)
   return self->unit;
 }
 
+/**
+ * gdk_scroll_event_get_relative_direction:
+ * @event: (type GdkScrollRelativeDirection): a relative scroll direction.
+ *
+ * Extracts the scroll direction relative to the physical motion.
+ *
+ * Returns: the relative scroll direction.
+ *
+ * Since: 4.20
+ */
 GdkScrollRelativeDirection
 gdk_scroll_event_get_relative_direction (GdkEvent *event)
 {

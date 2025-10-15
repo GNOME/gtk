@@ -203,11 +203,6 @@ typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskMaskNode                     GskMaskNode;
 typedef struct _GskGLShaderNode                 GskGLShaderNode GDK_DEPRECATED_TYPE_IN_4_16_FOR(GtkGLArea);
 typedef struct _GskSubsurfaceNode               GskSubsurfaceNode;
-/**
- * GskComponentTransferNode:
- *
- * Since: 4.20
- */
 typedef struct _GskComponentTransferNode        GskComponentTransferNode;
 
 GDK_AVAILABLE_IN_ALL
