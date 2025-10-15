@@ -66,13 +66,15 @@
  *
  * Provides a mechanism to share global settings between applications.
  *
+ * GTK relies on the platform-specific API for getting desktop-wide
+ * settings.
+ *
+ * On Wayland, the settings are obtained via a settings portal that
+ * is part of the Linux desktop APIs for application.
+ *
  * On the X window system, this sharing is realized by an
  * [XSettings](http://www.freedesktop.org/wiki/Specifications/xsettings-spec)
- * manager that is usually part of the desktop environment, along with
- * utilities that let the user change these settings.
- *
- * On Wayland, the settings are obtained either via a settings portal,
- * or by reading desktop settings from [class@Gio.Settings].
+ * manager.
  *
  * On macOS, the settings are obtained from `NSUserDefaults`.
  *
