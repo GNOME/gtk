@@ -350,42 +350,6 @@ parse_duration (const char    *name,
 }
 
 static gboolean
-parse_float_values (const char    *name,
-                    const char    *value,
-                    float         *values,
-                    unsigned int   length,
-                    unsigned int   flags,
-                    unsigned int  *n_values,
-                    GError       **error)
-{
-  GStrv strv;
-  unsigned int len;
-
-  strv = g_strsplit (value, " ", 0);
-  len = g_strv_length (strv);
-
-  if (len > length)
-    {
-      g_strfreev (strv);
-      set_attribute_error (error, name, value);
-      return FALSE;
-    }
-
-  for (unsigned int i = 0; i < len; i++)
-    {
-      if (!parse_float (name, strv[i], flags, &values[i], error))
-        {
-          g_strfreev (strv);
-          return FALSE;
-        }
-    }
-
-  g_strfreev (strv);
-  *n_values = len;
-  return TRUE;
-}
-
-static gboolean
 parse_enum (const char    *name,
             const char    *value,
             const char   **values,
@@ -569,102 +533,21 @@ static struct {
 
 
 static GArray *
-construct_animation_frames (unsigned int   easing,
-                            CalcMode      *mode,
-                            float         *values,
-                            unsigned int   n_values,
-                            float         *times,
-                            unsigned int   n_times,
-                            float         *controls,
-                            unsigned int   n_controls,
-                            GError       **error)
+construct_animation_frames (unsigned int easing, GError **error)
 {
   GArray *res = g_array_new (FALSE, TRUE, sizeof (KeyFrame));
 
-  if (easing < EASING_FUNCTION_CUSTOM)
-    {
-      KeyFrame frame;
+  KeyFrame frame;
 
-      frame.value = 0;
-      frame.time = 0;
-      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
-      g_array_append_val (res, frame);
+  frame.value = 0;
+  frame.time = 0;
+  memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+  g_array_append_val (res, frame);
 
-      frame.value = 1;
-      frame.time = 1;
-      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
-      g_array_append_val (res, frame);
-
-      if (easing == EASING_FUNCTION_LINEAR)
-        *mode = CALC_MODE_LINEAR;
-      else
-        *mode = CALC_MODE_SPLINE;
-    }
-  else
-    {
-      if (n_values < 2)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: too view values");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      if (n_values != n_times)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: length of times and values differs");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      if (times[0] != 0)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: first time is not 0");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      if (*mode != CALC_MODE_DISCRETE && times[n_times - 1] != 1)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: last time is not 1");
-          g_array_unref (res);
-          return NULL;
-        }
-      for (int i = 1; i < n_times; i++)
-        {
-          if (times[i] < times[i - 1])
-            {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Could not handle animation attributes: times are not increasing");
-              g_array_unref (res);
-              return NULL;
-            }
-        }
-
-      if (*mode == CALC_MODE_SPLINE && n_controls != 4 * (n_values - 1))
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: wrong number of control points");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      for (int i = 0; i < n_values; i++)
-        {
-          KeyFrame frame;
-
-          frame.value = values[i];
-          frame.time = times[i];
-          if (i + 1 < n_values)
-            memcpy (frame.params, &controls[4 * i], 4 * sizeof (float));
-          else
-            memset (frame.params, 0, 4 * sizeof (float));
-          g_array_append_val (res, frame);
-        }
-    }
+  frame.value = 1;
+  frame.time = 1;
+  memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
+  g_array_append_val (res, frame);
 
   return res;
 }
@@ -715,10 +598,6 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_repeat_attr = NULL;
   const char *animation_segment_attr = NULL;
   const char *animation_easing_attr = NULL;
-  const char *animation_mode_attr = NULL;
-  const char *animation_values_attr = NULL;
-  const char *animation_times_attr = NULL;
-  const char *animation_controls_attr = NULL;
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
@@ -747,7 +626,6 @@ start_element_cb (GMarkupParseContext  *context,
   float animation_repeat;
   float animation_segment;
   unsigned int animation_easing;
-  unsigned int animation_mode;
   GArray *animation_keyframes = NULL;
   float origin;
   size_t idx;
@@ -755,12 +633,6 @@ start_element_cb (GMarkupParseContext  *context,
   float stroke_width;
   float min_stroke_width;
   float max_stroke_width;
-  float animation_values[10];
-  float animation_times[10];
-  float animation_controls[40];
-  unsigned int n_animation_values;
-  unsigned int n_animation_times;
-  unsigned int n_animation_controls;
   ShapeType shape_type;
   float shape_params[6];
 
@@ -1033,10 +905,6 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-repeat", &animation_repeat_attr,
                             "gpa:animation-segment", &animation_segment_attr,
                             "gpa:animation-easing", &animation_easing_attr,
-                            "gpa:animation-mode", &animation_mode_attr,
-                            "gpa:animation-values", &animation_values_attr,
-                            "gpa:animation-times", &animation_times_attr,
-                            "gpa:animation-controls", &animation_controls_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
                             "gpa:transition-delay", &transition_delay_attr,
@@ -1060,10 +928,6 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_duration_attr &&
       !animation_segment_attr &&
       !animation_easing_attr &&
-      !animation_mode_attr &&
-      !animation_values_attr &&
-      !animation_times_attr &&
-      !animation_controls_attr &&
       !attach_to_attr &&
       !attach_pos_attr)
     {
@@ -1328,55 +1192,15 @@ start_element_cb (GMarkupParseContext  *context,
     {
       if (!parse_enum ("gpa:animation-easing", animation_easing_attr,
                        (const char *[]) { "linear", "ease-in-out", "ease-in",
-                                          "ease-out", "ease", "custom" }, 6,
+                                          "ease-out", "ease" }, 5,
                         &animation_easing, error))
         goto cleanup;
     }
 
-  animation_mode = CALC_MODE_LINEAR;
-  if (animation_mode_attr)
-    {
-      if (!parse_enum ("gpa:animation-mode", animation_mode_attr,
-                       (const char *[]) { "linear", "discrete", "spline" },  3,
-                        &animation_mode, error))
-        goto cleanup;
-    }
-
-  n_animation_values = 0;
-  if (animation_values_attr)
-    {
-      if (!parse_float_values ("gpa:animation-values", animation_values_attr,
-                               animation_values, 10, 0, &n_animation_values,
-                               error))
-        goto cleanup;
-    }
-
-  n_animation_times = 0;
-  if (animation_times_attr)
-    {
-      if (!parse_float_values ("gpa:animation-times", animation_times_attr,
-                               animation_times, 10, UNIT, &n_animation_times,
-                               error))
-        goto cleanup;
-    }
-
-  n_animation_controls = 0;
-  if (animation_controls_attr)
-    {
-      if (!parse_float_values ("gpa:animation-controls", animation_controls_attr,
-                               animation_controls, 40, UNIT, &n_animation_controls,
-                               error))
-        goto cleanup;
-    }
-
-  animation_keyframes = construct_animation_frames (animation_easing,
-                                                    &animation_mode,
-                                                    animation_values, n_animation_values,
-                                                    animation_times, n_animation_times,
-                                                    animation_controls, n_animation_controls,
-                                                    error);
+  animation_keyframes = construct_animation_frames (animation_easing, error);
   if (!animation_keyframes)
     goto cleanup;
+
 
   attach.to = g_strdup (attach_to_attr);
   attach.pos = 0;
@@ -1393,7 +1217,7 @@ start_element_cb (GMarkupParseContext  *context,
 
   path_paintable_set_path_states (data->paintable, idx, states);
   path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_repeat, animation_easing, animation_segment);
-  path_paintable_set_path_animation_timing (data->paintable, idx, animation_easing, animation_mode, (KeyFrame *) animation_keyframes->data, animation_keyframes->len);
+  path_paintable_set_path_animation_timing (data->paintable, idx, animation_easing, CALC_MODE_SPLINE, (KeyFrame *) animation_keyframes->data, animation_keyframes->len);
   path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_delay, transition_easing);
   path_paintable_set_path_origin (data->paintable, idx, origin);
   path_paintable_set_path_fill (data->paintable, idx, fill_attr != NULL, fill_rule, fill_symbolic, &fill_color);
@@ -1481,7 +1305,6 @@ path_paintable_save_path (PathPaintable *self,
   const char *sym[] = { "foreground", "error", "warning", "success", "accent" };
   const char *easing[] = { "linear", "ease-in-out", "ease-in", "ease-out", "ease", "custom" };
   const char *fallback_color[] = { "rgb(0,0,0)", "rgb(255,0,0)", "rgb(255,255,0)", "rgb(0,255,0)", "rgb(0,0,255)", };
-  const char *mode[] = { "linear", "discrete", "spline" };
   GskStroke *stroke;
   unsigned int stroke_symbolic;
   unsigned int fill_symbolic;
@@ -1586,46 +1409,6 @@ path_paintable_save_path (PathPaintable *self,
     {
       g_string_append_printf (str, "\n        gpa:animation-easing='%s'",
                               easing[path_paintable_get_path_animation_easing (self, idx)]);
-      has_gtk_attr = TRUE;
-    }
-
-  if (path_paintable_get_path_animation_easing (self, idx) == EASING_FUNCTION_CUSTOM)
-    {
-      GString *values = g_string_new ("");
-      GString *times = g_string_new ("");
-      GString *controls = g_string_new ("");
-      const KeyFrame *frames = path_paintable_get_path_animation_frames (self, idx);
-      unsigned int n = path_paintable_get_path_animation_n_frames (self, idx);
-
-      for (unsigned int p = 0; p < n; p++)
-        {
-          g_string_append_printf (values, "%s%s",
-                                  g_ascii_formatd (buffer, sizeof (buffer),
-                                                   "%g", frames[p].value),
-                                  p + 1 < n ? " " : "");
-          g_string_append_printf (times, "%s%s",
-                                  g_ascii_formatd (buffer, sizeof (buffer),
-                                                   "%g", frames[p].time),
-                                  p + 1 < n ? " " : "");
-          if (p + 1 < n)
-            {
-              for (unsigned int i = 0; i < 4; i++)
-                g_string_append_printf (controls, "%s%s",
-                                        g_ascii_formatd (buffer, sizeof (buffer),
-                                                         "%g", frames[p].params[i]),
-                                        (p + 2 == n && i + 1 == 4) ? "" : " ");
-            }
-        }
-
-      g_string_append_printf (str, "\n        gpa:animation-mode='%s'",
-                              mode[path_paintable_get_path_animation_mode (self, idx)]);
-      g_string_append_printf (str, "\n        gpa:animation-values='%s'", values->str);
-      g_string_append_printf (str, "\n        gpa:animation-times='%s'", times->str);
-      g_string_append_printf (str, "\n        gpa:animation-controls='%s'", controls->str);
-      g_string_free (values, TRUE);
-      g_string_free (times, TRUE);
-      g_string_free (controls, TRUE);
-
       has_gtk_attr = TRUE;
     }
 

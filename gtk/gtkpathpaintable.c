@@ -150,7 +150,6 @@ typedef enum
   GTK_EASING_FUNCTION_EASE_IN,
   GTK_EASING_FUNCTION_EASE_OUT,
   GTK_EASING_FUNCTION_EASE,
-  GTK_EASING_FUNCTION_CUSTOM,
 } GtkEasingFunction;
 
 typedef enum
@@ -967,102 +966,20 @@ attach_data_clear (gpointer data)
 
 static GArray *
 construct_animation_frames (unsigned int   easing,
-                            GtkCalcMode   *mode,
-                            double        *values,
-                            unsigned int   n_values,
-                            double        *times,
-                            unsigned int   n_times,
-                            double        *controls,
-                            unsigned int   n_controls,
                             GError       **error)
 {
   GArray *res = g_array_new (FALSE, TRUE, sizeof (GtkKeyFrame));
+  GtkKeyFrame frame;
 
-  if (easing < GTK_EASING_FUNCTION_CUSTOM)
-    {
-      GtkKeyFrame frame;
+  frame.value = 0;
+  frame.time = 0;
+  memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (double));
+  g_array_append_val (res, frame);
 
-      frame.value = 0;
-      frame.time = 0;
-      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (double));
-      g_array_append_val (res, frame);
-
-      frame.value = 1;
-      frame.time = 1;
-      memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (double));
-      g_array_append_val (res, frame);
-
-      if (easing == GTK_EASING_FUNCTION_LINEAR)
-        *mode = GTK_CALC_MODE_LINEAR;
-      else
-        *mode = GTK_CALC_MODE_SPLINE;
-    }
-  else
-    {
-      if (n_values < 2)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: too view values");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      if (n_values != n_times)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: length of times and values differs");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      if (times[0] != 0)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: first time is not 0");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      if (*mode != GTK_CALC_MODE_DISCRETE && times[n_times - 1] != 1)
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: last time is not 1");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      for (int i = 1; i < n_times; i++)
-        {
-          if (times[i] < times[i - 1])
-            {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Could not handle animation attributes: times are not increasing");
-              g_array_unref (res);
-              return NULL;
-            }
-        }
-
-      if (*mode == GTK_CALC_MODE_SPLINE && n_controls != 4 * (n_values - 1))
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Could not handle animation attributes: wrong number of control points");
-          g_array_unref (res);
-          return NULL;
-        }
-
-      for (int i = 0; i < n_values; i++)
-        {
-          GtkKeyFrame frame;
-
-          frame.value = values[i];
-          frame.time = times[i];
-          if (i + 1 < n_values)
-            memcpy (frame.params, &controls[4 * i], 4 * sizeof (double));
-          else
-            memset (frame.params, 0, 4 * sizeof (double));
-          g_array_append_val (res, frame);
-        }
-    }
+  frame.value = 1;
+  frame.time = 1;
+  memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (double));
+  g_array_append_val (res, frame);
 
   return res;
 }
@@ -1106,10 +1023,6 @@ start_element_cb (GMarkupParseContext  *context,
   const char *animation_repeat_attr = NULL;
   const char *animation_segment_attr = NULL;
   const char *animation_easing_attr = NULL;
-  const char *animation_mode_attr = NULL;
-  const char *animation_values_attr = NULL;
-  const char *animation_times_attr = NULL;
-  const char *animation_controls_attr = NULL;
   const char *origin_attr = NULL;
   const char *transition_type_attr = NULL;
   const char *transition_duration_attr = NULL;
@@ -1148,12 +1061,6 @@ start_element_cb (GMarkupParseContext  *context,
   size_t idx;
   AttachData attach;
   PathElt elt;
-  double animation_values[10];
-  double animation_times[10];
-  double animation_controls[40];
-  unsigned int n_animation_values;
-  unsigned int n_animation_times;
-  unsigned int n_animation_controls;
 
   if (strcmp (element_name, "svg") == 0)
     {
@@ -1430,10 +1337,6 @@ start_element_cb (GMarkupParseContext  *context,
                             "gpa:animation-repeat", &animation_repeat_attr,
                             "gpa:animation-segment", &animation_segment_attr,
                             "gpa:animation-easing", &animation_easing_attr,
-                            "gpa:animation-mode", &animation_mode_attr,
-                            "gpa:animation-values", &animation_values_attr,
-                            "gpa:animation-times", &animation_times_attr,
-                            "gpa:animation-controls", &animation_controls_attr,
                             "gpa:transition-type", &transition_type_attr,
                             "gpa:transition-duration", &transition_duration_attr,
                             "gpa:transition-delay", &transition_delay_attr,
@@ -1464,10 +1367,6 @@ start_element_cb (GMarkupParseContext  *context,
       !animation_repeat_attr &&
       !animation_segment_attr &&
       !animation_easing_attr &&
-      !animation_mode_attr &&
-      !animation_values_attr &&
-      !animation_times_attr &&
-      !animation_controls_attr &&
       !transition_type_attr &&
       !transition_duration_attr &&
       !transition_delay_attr &&
@@ -1730,61 +1629,21 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (!parse_enum ("gpa:animation-easing", animation_easing_attr,
                        (const char *[]) { "linear", "ease-in-out", "ease-in",
-                                          "ease-out", "ease", "custom" }, 6,
+                                          "ease-out", "ease" }, 5,
                         &easing, error))
         goto cleanup;
 
        animation_easing = (GtkEasingFunction) easing;
     }
 
-  animation_mode = GTK_CALC_MODE_LINEAR;
-  if (animation_mode_attr)
-    {
-      unsigned int mode;
-
-      if (!parse_enum ("gpa:animation-mode", animation_mode_attr,
-                       (const char *[]) { "linear", "discrete", "spline" },  3,
-                        &mode, error))
-        goto cleanup;
-
-      animation_mode = (GtkCalcMode) mode;
-    }
-
-  n_animation_values = 0;
-  if (animation_values_attr)
-    {
-      if (!parse_numbers ("gpa:animation-values", animation_values_attr,
-                          animation_values, 10, 0, &n_animation_values,
-                          error))
-        goto cleanup;
-    }
-
-  n_animation_times = 0;
-  if (animation_times_attr)
-    {
-      if (!parse_numbers ("gpa:animation-times", animation_times_attr,
-                          animation_times, 10, UNIT, &n_animation_times,
-                          error))
-        goto cleanup;
-    }
-
-  n_animation_controls = 0;
-  if (animation_controls_attr)
-    {
-      if (!parse_numbers ("gpa:animation-controls", animation_controls_attr,
-                          animation_controls, 40, UNIT, &n_animation_controls,
-                          error))
-        goto cleanup;
-    }
-
-  animation_keyframes = construct_animation_frames (animation_easing,
-                                                    &animation_mode,
-                                                    animation_values, n_animation_values,
-                                                    animation_times, n_animation_times,
-                                                    animation_controls, n_animation_controls,
-                                                    error);
+  animation_keyframes = construct_animation_frames (animation_easing, error);
   if (!animation_keyframes)
     goto cleanup;
+
+  if (animation_easing == GTK_EASING_FUNCTION_LINEAR)
+    animation_mode = GTK_CALC_MODE_LINEAR;
+  else
+    animation_mode = GTK_CALC_MODE_SPLINE;
 
   attach.to = g_strdup (attach_to_attr);
   attach.position = 0;
