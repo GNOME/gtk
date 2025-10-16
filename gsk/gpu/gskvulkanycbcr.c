@@ -30,6 +30,7 @@ gsk_vulkan_ycbcr_info_hash (gconstpointer info_)
           (info->vk_components.a << 20) |
           (info->vk_ycbcr_model << 17) |
           (info->vk_ycbcr_range << 16)) ^
+         info->vk_features ^
          info->vk_format;
 }
 
@@ -41,6 +42,7 @@ gsk_vulkan_ycbcr_info_equal (gconstpointer info1_,
   const GskVulkanYcbcrInfo *info2 = info2_;
 
   return info1->vk_format == info2->vk_format &&
+         info1->vk_features == info2->vk_features &&
          info1->vk_components.r == info2->vk_components.r && 
          info1->vk_components.g == info2->vk_components.g && 
          info1->vk_components.b == info2->vk_components.b && 

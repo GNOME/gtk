@@ -11,6 +11,7 @@ typedef struct _GskVulkanYcbcrInfo GskVulkanYcbcrInfo;
 struct _GskVulkanYcbcrInfo
 {
   VkFormat vk_format;
+  VkFormatFeatureFlags vk_features;
   VkComponentMapping vk_components;
   VkSamplerYcbcrModelConversion vk_ycbcr_model;
   VkSamplerYcbcrRange vk_ycbcr_range;
