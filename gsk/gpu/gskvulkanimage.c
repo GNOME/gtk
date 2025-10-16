@@ -744,14 +744,13 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
 }
 
 #ifdef HAVE_DMABUF
-static gboolean
+static VkFormatFeatureFlags
 gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
                                        VkFormat                  vk_format,
                                        const VkComponentMapping *vk_components,
                                        gsize                     width,
                                        gsize                     height,
                                        uint64_t                  modifiers[100],
-                                       GskGpuImageFlags         *out_flags,
                                        gsize                    *out_n_modifiers)
 
 {
@@ -761,7 +760,7 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
   VkPhysicalDevice vk_phys_device;
   VkFormatProperties2 properties;
   VkImageFormatProperties2 image_properties;
-  GskGpuImageFlags flags;
+  VkFormatFeatureFlags vk_features;
   gsize i, n_modifiers;
   VkResult res;
 
@@ -787,8 +786,8 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
                                         vk_format,
                                         &properties);
 
-  flags = GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_DOWNLOADABLE;
   n_modifiers = 0;
+  vk_features = -1;
   for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
     {
       if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & required) != required)
@@ -821,25 +820,15 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
           image_properties.imageFormatProperties.maxExtent.height < height)
         continue;
 
-      /* we could check the real used format after creation, but for now: */
-      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
-        flags &= ~GSK_GPU_IMAGE_BLIT;
-      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT) == 0)
-        flags &= ~GSK_GPU_IMAGE_FILTERABLE;
-      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT) == 0)
-        flags &= ~GSK_GPU_IMAGE_RENDERABLE;
-      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT) == 0)
-        flags &= ~GSK_GPU_IMAGE_DOWNLOADABLE;
-
       modifiers[n_modifiers++] = drm_mod_properties[i].drmFormatModifier;
+      vk_features &= drm_mod_properties[i].drmFormatModifierTilingFeatures;
     }
 
   if (n_modifiers == 0)
-    return FALSE;
+    return 0;
 
-  *out_flags = flags;
   *out_n_modifiers = n_modifiers;
-  return TRUE;
+  return vk_features;
 }
 
 GskGpuImage *
@@ -852,6 +841,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   uint64_t modifiers[100];
   VkDevice vk_device;
   VkFormat vk_format, vk_srgb_format;
+  VkFormatFeatureFlags vk_features;
   VkComponentMapping vk_components;
   VkMemoryRequirements requirements;
   VkSamplerYcbcrConversion vk_conversion;
@@ -876,13 +866,19 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
   if (try_srgb)
     vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
-  if (gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components, width, height,
-                                             modifiers, &flags, &n_modifiers))
+  if ((vk_features = gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components,
+                                                            width, height,
+                                                            modifiers, &n_modifiers)))
     {
       vk_format = vk_srgb_format;
     }
-  else if (!gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
-                                                   modifiers, &flags, &n_modifiers))
+  else if ((vk_features = gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components,
+                                                                 width, height,
+                                                                 modifiers, &n_modifiers)))
+    {
+      /* nothing to do */
+    }
+  else
     {
       /* Second, try the potential RGBA format, but as a fallback */
       GdkMemoryFormat rgba_format;
@@ -896,14 +892,16 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
         }
       else
         vk_format = vk_srgb_format = VK_FORMAT_UNDEFINED;
-      if (gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components, width, height,
-                                                 modifiers, &flags, &n_modifiers))
+      if ((vk_features = gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components,
+                                                                width, height,
+                                                                modifiers, &n_modifiers)))
         {
           vk_format = vk_srgb_format;
           format = rgba_format;
         }
-      else if (gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
-                                                      modifiers, &flags, &n_modifiers))
+      else if ((vk_features = gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components,
+                                                                     width, height,
+                                                                     modifiers, &n_modifiers)))
         {
           format = rgba_format;
         }
@@ -919,15 +917,17 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
               vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components, &needs_conversion);
               if (try_srgb)
                 vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
-              if (gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components, width, height,
-                                                         modifiers, &flags, &n_modifiers))
+              if ((vk_features = gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components,
+                                                                        width, height,
+                                                                        modifiers, &n_modifiers)))
                 {
                   vk_format = vk_srgb_format;
                   format = fallbacks[i];
                   break;
                 }
-              else if (gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
-                                                              modifiers, &flags, &n_modifiers))
+              else if ((vk_features = gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components,
+                                                                             width, height,
+                                                                             modifiers, &n_modifiers)))
                 {
                   format = fallbacks[i];
                   break;
@@ -949,7 +949,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
 
-  flags |= GSK_GPU_IMAGE_EXTERNAL;
+  flags = gsk_vulkan_image_flags_for_features (vk_features) | GSK_GPU_IMAGE_EXTERNAL;
 
   if (vk_format == vk_srgb_format)
     conv = GSK_GPU_CONVERSION_SRGB;
