@@ -130,6 +130,10 @@ effective_transition (GtkRevealer *revealer)
         return GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT;
       else if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT)
         return GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT;
+      else if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT)
+        return GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT;
+      else if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT)
+        return GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT;
     }
 
   return revealer->transition_type;
@@ -143,6 +147,8 @@ get_child_size_scale (GtkRevealer    *revealer,
     {
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT:
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         return revealer->current_pos;
       else
@@ -150,6 +156,8 @@ get_child_size_scale (GtkRevealer    *revealer,
 
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP:
       if (orientation == GTK_ORIENTATION_VERTICAL)
         return revealer->current_pos;
       else
@@ -196,21 +204,30 @@ gtk_revealer_set_position (GtkRevealer *revealer,
 
   transition = effective_transition (revealer);
   if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
-    {
-      gtk_widget_queue_draw (GTK_WIDGET (revealer));
-    }
-  else if (transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
+    gtk_widget_queue_draw (GTK_WIDGET (revealer));
+  else if (transition != GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
+    gtk_widget_queue_resize (GTK_WIDGET (revealer));
+
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN)
     {
       gtk_widget_set_opacity (GTK_WIDGET (revealer), revealer->current_pos);
       gtk_widget_queue_draw (GTK_WIDGET (revealer));
     }
-  else
-    {
-      gtk_widget_queue_resize (GTK_WIDGET (revealer));
-    }
 
   if (revealer->current_pos == revealer->target_pos)
-    g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
+    {
+      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
+        gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_VISIBLE);
+
+      g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
+    }
 }
 
 static gboolean
@@ -255,6 +272,12 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
       transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
       gtk_settings_get_enable_animations (gtk_widget_get_settings (widget)))
     {
+      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
+        gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
+
       revealer->source_pos = revealer->current_pos;
       if (revealer->tick_id == 0)
         revealer->tick_id =
@@ -533,6 +556,10 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT:
     default:
       break;
     }
@@ -692,8 +719,6 @@ gtk_revealer_init (GtkRevealer *revealer)
   revealer->transition_duration = 250;
   revealer->current_pos = 0.0;
   revealer->target_pos = 0.0;
-
-  gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
 }
 
 /**
