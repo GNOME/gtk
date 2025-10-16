@@ -36,6 +36,7 @@ typedef struct
     float shape_params[6];
   };
 
+  char *id;
   uint64_t states;
 
   struct {
@@ -125,6 +126,7 @@ clear_path_elt (gpointer data)
 
   gsk_path_unref (elt->path);
   g_free (elt->animation.frames);
+  g_free (elt->id);
 }
 
 static void
@@ -1227,7 +1229,10 @@ start_element_cb (GMarkupParseContext  *context,
   g_array_append_val (data->attach, attach);
 
   if (id_attr)
-    g_hash_table_insert (data->paths, g_strdup (id_attr), GUINT_TO_POINTER (idx));
+    {
+      path_paintable_set_path_id (data->paintable, idx, id_attr);
+      g_hash_table_insert (data->paths, g_strdup (id_attr), GUINT_TO_POINTER (idx));
+    }
 
 cleanup:
   g_clear_pointer (&path, gsk_path_unref);
@@ -1362,7 +1367,8 @@ path_paintable_save_path (PathPaintable *self,
   else
     g_assert_not_reached ();
 
-  g_string_append_printf (str, "\n        id='path%lu'", idx);
+  if (elt->id)
+    g_string_append_printf (str, "\n        id='%s'", elt->id);
   class_builder = g_strv_builder_new ();
 
   states = path_paintable_get_path_states (self, idx);
@@ -1465,7 +1471,13 @@ path_paintable_save_path (PathPaintable *self,
   path_paintable_get_attach_path (self, idx, &to, &pos);
   if (to != (size_t) -1)
     {
-      g_string_append_printf (str, "\n        gpa:attach-to='path%lu'", to);
+      const char *id;
+
+      id = path_paintable_get_path_id (self, to);
+
+      if (id)
+        g_string_append_printf (str, "\n        gpa:attach-to='%s'", id);
+
       g_string_append_printf (str, "\n        gpa:attach-pos='%s'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g", pos));
       has_gtk_attr = TRUE;
@@ -1928,6 +1940,7 @@ path_paintable_add_path (PathPaintable *self,
   PathElt elt;
 
   elt.path = gsk_path_ref (path);
+  elt.id = NULL;
 
   elt.shape_type = shape_type;
   if (shape_type == SHAPE_CIRCLE)
@@ -2100,6 +2113,42 @@ path_paintable_set_path_states (PathPaintable *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_STATE]);
 
   g_signal_emit (self, signals[CHANGED], 0);
+}
+
+gboolean
+path_paintable_set_path_id (PathPaintable *self,
+                            size_t         idx,
+                            const char    *id)
+{
+  g_return_val_if_fail (idx < self->paths->len, FALSE);
+
+  for (size_t i = 0; i < self->paths->len; i++)
+    {
+      PathElt *elt = &g_array_index (self->paths, PathElt, i);
+
+      if (i != idx &&
+          elt->id != NULL && id != NULL &&
+          strcmp (elt->id, id) == 0)
+        return FALSE;
+    }
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  if (g_set_str (&elt->id, id))
+    g_signal_emit (self, signals[CHANGED], 0);
+
+  return TRUE;
+}
+
+const char *
+path_paintable_get_path_id (PathPaintable *self,
+                            size_t         idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, NULL);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->id;
 }
 
 void

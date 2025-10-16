@@ -37,7 +37,8 @@ struct _PathEditor
   gboolean updating;
 
   GtkGrid *grid;
-  GtkLabel *path_label;
+  GtkLabel *path_cmds;
+  GtkEditableLabel *id_label;
   GtkDropDown *origin;
   GtkDropDown *transition_type;
   GtkSpinButton *transition_duration;
@@ -239,6 +240,19 @@ origin_changed (PathEditor *self)
 
   origin = gtk_range_get_value (GTK_RANGE (self->origin));
   path_paintable_set_path_origin (self->paintable, self->path, origin);
+}
+
+static void
+id_changed (PathEditor *self)
+{
+  const char *id;
+
+  if (self->updating)
+    return;
+
+  id = gtk_editable_get_text (GTK_EDITABLE (self->id_label));
+  if (!path_paintable_set_path_id (self->paintable, self->path, id))
+    gtk_widget_error_bell (GTK_WIDGET (self->id_label));
 }
 
 static void
@@ -573,6 +587,25 @@ delete_path (PathEditor *self)
 }
 
 static void
+repopulate_attach_to (PathEditor *self)
+{
+  g_autoptr (GtkStringList) model = NULL;
+
+  model = gtk_string_list_new (NULL);
+  gtk_string_list_append (model, "None");
+  for (size_t i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
+    {
+      if (i == self->path)
+        continue;
+      if (path_paintable_get_path_id (self->paintable, i))
+        gtk_string_list_take (model, g_strdup (path_paintable_get_path_id (self->paintable, i)));
+      else
+        gtk_string_list_take (model, g_strdup_printf ("Path %lu", i));
+   }
+ gtk_drop_down_set_model (self->attach_to, G_LIST_MODEL (model));
+}
+
+static void
 path_editor_update (PathEditor *self)
 {
   if (self->paintable && self->path != (size_t) -1)
@@ -589,7 +622,6 @@ path_editor_update (PathEditor *self)
       GskFillRule fill_rule;
       size_t to;
       float pos;
-      g_autoptr (GtkStringList) model = NULL;
       float width;
       float min_width, max_width;
       float lower, upper;
@@ -598,7 +630,9 @@ path_editor_update (PathEditor *self)
 
       path = path_paintable_get_path (self->paintable, self->path);
       text = gsk_path_to_string (path);
-      gtk_label_set_label (self->path_label, text);
+      gtk_label_set_label (GTK_LABEL (self->path_cmds), text);
+
+      gtk_editable_set_text (GTK_EDITABLE (self->id_label), path_paintable_get_path_id (self->paintable, self->path));
 
       do_stroke = path_paintable_get_path_stroke (self->paintable, self->path,
                                                   stroke, &symbolic, &color);
@@ -691,17 +725,9 @@ path_editor_update (PathEditor *self)
 
       gtk_drop_down_set_selected (self->fill_rule, (unsigned int) fill_rule);
 
-      model = gtk_string_list_new (NULL);
-      gtk_string_list_append (model, "None");
-      for (size_t i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-        {
-          if (i == self->path)
-            continue;
-          gtk_string_list_take (model, g_strdup_printf ("Path %lu", i));
-        }
-      gtk_drop_down_set_model (self->attach_to, G_LIST_MODEL (model));
-
+      repopulate_attach_to (self);
       path_paintable_get_attach_path (self->paintable, self->path, &to, &pos);
+
       if (to == (size_t) -1)
         gtk_drop_down_set_selected (self->attach_to, 0);
       else if (to < self->path)
@@ -843,7 +869,8 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/Shaper/path-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, PathEditor, grid);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, path_label);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, id_label);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, origin);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_duration);
@@ -874,6 +901,7 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
   gtk_widget_class_bind_template_callback (widget_class, origin_changed);
+  gtk_widget_class_bind_template_callback (widget_class, id_changed);
   gtk_widget_class_bind_template_callback (widget_class, stroke_changed);
   gtk_widget_class_bind_template_callback (widget_class, line_width_changed);
   gtk_widget_class_bind_template_callback (widget_class, fill_changed);

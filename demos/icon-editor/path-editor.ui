@@ -19,12 +19,10 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="path_label">
+                  <object class="GtkEditableLabel" id="id_label">
                     <property name="hexpand">1</property>
                     <property name="xalign">0</property>
-                    <property name="max-width-chars">20</property>
-                    <property name="width-chars">16</property>
-                    <property name="ellipsize">end</property>
+                    <signal name="notify::text" handler="id_changed" swapped="yes"/>
                   </object>
                 </child>
                 <child>
@@ -122,6 +120,30 @@
               <property name="row">0</property>
               <property name="column">0</property>
               <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="path_label">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="label" translatable="yes">_Path</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">path_cmds</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="path_cmds">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="ellipsize">end</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">1</property>
             </layout>
           </object>
         </child>
@@ -1117,6 +1139,7 @@
   </template>
   <object class="GtkSizeGroup" id="sg">
     <widgets>
+      <widget name="path_label"/>
       <widget name="origin_label"/>
       <widget name="transition_expander"/>
       <widget name="transition_duration_label"/>
