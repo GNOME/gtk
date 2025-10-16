@@ -110,7 +110,8 @@ update_states (StateEditor *self)
           row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
           col = gtk_grid_layout_child_get_column (GTK_GRID_LAYOUT_CHILD (layout_child));
 
-          states[row] |= (G_GUINT64_CONSTANT (1) << (unsigned int) col);
+          if (col <= self->max_state)
+            states[row] |= (G_GUINT64_CONSTANT (1) << (unsigned int) col);
         }
     }
 
