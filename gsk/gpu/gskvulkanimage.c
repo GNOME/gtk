@@ -186,7 +186,7 @@ gsk_vulkan_image_flags_for_features (VkFormatFeatureFlags features)
   return result;
 }
 
-static gboolean
+static VkFormatFeatureFlags
 gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
                                    VkFormat           format,
                                    uint64_t           modifier,
@@ -206,7 +206,7 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
 
   features = gsk_vulkan_device_get_format_features (device, format, modifier, n_planes, tiling, usage);
   if (!(features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
-    return FALSE;
+    return 0;
 
   image_properties = (VkImageFormatProperties2) {
     .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2,
@@ -229,18 +229,18 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
                                                    },
                                                    &image_properties);
   if (res != VK_SUCCESS)
-    return FALSE;
+    return 0;
 
   if (image_properties.imageFormatProperties.maxExtent.width < width ||
       image_properties.imageFormatProperties.maxExtent.height < height)
-    return FALSE;
+    return 0;
 
   *out_flags = gsk_vulkan_image_flags_for_features (features);
   if (image_properties.imageFormatProperties.maxMipLevels >= gsk_gpu_mipmap_levels (width, height) &&
       (*out_flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)) == (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE))
     *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
 
-  return TRUE;
+  return features;
 }
 
 static void
@@ -273,7 +273,7 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
                                  &self->vk_image_view);
 }
 
-static gboolean
+static VkFormatFeatureFlags
 gsk_vulkan_device_check_format (GskVulkanDevice          *device,
                                 VkFormat                  vk_format,
                                 const VkComponentMapping *vk_components,
@@ -286,43 +286,46 @@ gsk_vulkan_device_check_format (GskVulkanDevice          *device,
                                 GskGpuImageFlags         *out_flags)
 {
 #define CHECK_FLAGS (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_CAN_MIPMAP)
+  VkFormatFeatureFlags vk_features;
   GskGpuImageFlags flags;
 
   if (vk_format == VK_FORMAT_UNDEFINED)
-    return FALSE;
+    return 0;
 
   if (vk_usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT &&
       !gsk_component_mapping_is_framebuffer_compatible (vk_components))
-    return FALSE;
+    return 0;
 
-  if (gsk_vulkan_device_supports_format (device,
-                                         vk_format,
-                                         0, 1,
-                                         vk_tiling, vk_usage,
-                                         width, height,
-                                         &flags) &&
-      ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
+  vk_features = gsk_vulkan_device_supports_format (device,
+                                                   vk_format,
+                                                   0, 1,
+                                                   vk_tiling, vk_usage,
+                                                   width, height,
+                                                   &flags);
+  if (vk_features != 0 && ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
     {
       *out_tiling = vk_tiling;
       *out_flags = flags;
-      return TRUE;
+      return vk_features;
     }
 
-  if (vk_tiling == VK_IMAGE_TILING_LINEAR &&
-      gsk_vulkan_device_supports_format (device,
-                                         vk_format,
-                                         0, 1,
-                                         VK_IMAGE_TILING_OPTIMAL, vk_usage,
-                                         width, height,
-                                         &flags) &&
-      ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
+  if (vk_tiling == VK_IMAGE_TILING_LINEAR)
     {
-      *out_tiling = VK_IMAGE_TILING_OPTIMAL;
-      *out_flags = flags;
-      return TRUE;
+      vk_features = gsk_vulkan_device_supports_format (device,
+                                                       vk_format,
+                                                       0, 1,
+                                                       VK_IMAGE_TILING_OPTIMAL, vk_usage,
+                                                       width, height,
+                                                       &flags);
+      if (vk_features != 0 && ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
+        {
+          *out_tiling = VK_IMAGE_TILING_OPTIMAL;
+          *out_flags = flags;
+          return vk_features;
+        }
     }
 
-  return FALSE;
+  return 0;
 #undef CHECK_FLAGS
 }
 
@@ -373,6 +376,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GskGpuImageFlags flags;
   gboolean try_srgb;
   VkFormat vk_format, vk_srgb_format;
+  VkFormatFeatureFlags vk_features;
   VkComponentMapping vk_components;
   VkSamplerYcbcrConversion vk_conversion;
   VkSamplerYcbcrModelConversion vk_model;
@@ -393,15 +397,19 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
   if (try_srgb)
     vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
-  if (gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
-                                      tiling, usage, width, height,
-                                      &tiling, &flags))
+  if ((vk_features = gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
+                                                     tiling, usage, width, height,
+                                                     &tiling, &flags)))
     {
       vk_format = vk_srgb_format;
     }
-  else if (!gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
-                                            tiling, usage, width, height,
-                                            &tiling, &flags))
+  else if ((vk_features = gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                                          tiling, usage, width, height,
+                                                          &tiling, &flags)))
+    {
+      /* nothing to do */
+    }
+  else
     {
       GdkMemoryFormat rgba_format;
       GdkSwizzle rgba_swizzle;
@@ -418,15 +426,19 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
         vk_srgb_format = gdk_memory_format_vk_srgb_format (rgba_format);
       else
         vk_srgb_format = VK_FORMAT_UNDEFINED;
-      if (gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
-                                          tiling, usage, width, height,
-                                          &tiling, &flags))
+      if ((vk_features = gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
+                                                         tiling, usage, width, height,
+                                                         &tiling, &flags)))
         {
           vk_format = vk_srgb_format;
         }
-      else if (!gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
-                                                tiling, usage, width, height,
-                                                &tiling, &flags))
+      else if ((vk_features = gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                                              tiling, usage, width, height,
+                                                              &tiling, &flags)))
+        {
+          /* nothing to do */
+        }
+      else
         {
           const GdkMemoryFormat *fallbacks;
           gsize i;
@@ -438,17 +450,17 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
               vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components, &needs_conversion);
               if (try_srgb)
                 vk_srgb_format = gdk_memory_format_vk_srgb_format (fallbacks[i]);
-              if (gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
-                                                  tiling, usage, width, height,
-                                                  &tiling, &flags))
+              if ((vk_features = gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
+                                                                 tiling, usage, width, height,
+                                                                 &tiling, &flags)))
                 {
                   vk_format = vk_srgb_format;
                   format = fallbacks[i];
                   break;
                 }
-              else if (gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
-                                                       tiling, usage, width, height,
-                                                       &tiling, &flags))
+              else if ((vk_features = gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                                                      tiling, usage, width, height,
+                                                                      &tiling, &flags)))
                 {
                   format = fallbacks[i];
                   break;
@@ -1514,6 +1526,7 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
   GskVulkanImage *self;
   VkDevice vk_device;
   VkFormat vk_format;
+  VkFormatFeatureFlags vk_features;
   VkComponentMapping vk_components;
   VkSamplerYcbcrConversion vk_conversion;
   PFN_vkGetMemoryWin32HandlePropertiesKHR func_vkGetMemoryWin32HandlePropertiesKHR;
@@ -1566,13 +1579,14 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
       return NULL;
     }
 
-  if (!gsk_vulkan_device_supports_format (device,
-                                          vk_format,
-                                          0, 1,
-                                          VK_IMAGE_TILING_OPTIMAL,
-                                          VK_IMAGE_USAGE_SAMPLED_BIT,
-                                          desc.Width, desc.Height,
-                                          &flags))
+  vk_features = gsk_vulkan_device_supports_format (device,
+                                                   vk_format,
+                                                   0, 1,
+                                                   VK_IMAGE_TILING_OPTIMAL,
+                                                   VK_IMAGE_USAGE_SAMPLED_BIT,
+                                                   desc.Width, desc.Height,
+                                                   &flags);
+  if (vk_features == 0)
     {
       GDK_DEBUG (D3D12, "Vulkan driver does not support DXGI format %u", desc.Format);
       return NULL;
