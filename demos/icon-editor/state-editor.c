@@ -110,7 +110,8 @@ update_states (StateEditor *self)
           row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
           col = gtk_grid_layout_child_get_column (GTK_GRID_LAYOUT_CHILD (layout_child));
 
-          states[row] |= (G_GUINT64_CONSTANT (1) << (unsigned int) col);
+          if (col <= self->max_state)
+            states[row] |= (G_GUINT64_CONSTANT (1) << (unsigned int) col);
         }
     }
 
@@ -169,16 +170,15 @@ create_paths (StateEditor *self)
   for (unsigned int i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
     {
       uint64_t states = path_paintable_get_path_states (self->paintable, i);
-#if 0
-      char *s = g_strdup_printf ("Path %u", i);
-      child = gtk_label_new (s);
-      g_free (s);
-#else
       GdkPaintable *paintable = get_paintable_for_path (self->paintable, i);
+      const char *id = path_paintable_get_path_id (self->paintable, i);
+
       child = gtk_image_new_from_paintable (paintable);
       gtk_image_set_pixel_size (GTK_IMAGE (child), 20);
       g_object_unref (paintable);
-#endif
+      gtk_grid_attach (self->grid, child, -2, i, 1, 1);
+
+      child = gtk_label_new (id);
       gtk_grid_attach (self->grid, child, -1, i, 1, 1);
 
       for (unsigned int j = 0; j <= self->max_state; j++)

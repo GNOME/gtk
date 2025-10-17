@@ -329,6 +329,7 @@ fedora-mingw64:
 
 msys2-ucrt64:
   extends: .mingw-defaults
+  allow_failure: true
   needs: []
   variables:
     MSYSTEM: "UCRT64"
@@ -499,14 +500,12 @@ android:
 
 android:demo:
   extends: '.android-defaults'
-  allow_failure: true
   variables:
     APPID: org.gtk.Demo4
 
 android-signer:
   extends:
     - .distribution.android
-  allow_failure: true
   stage: android
   artifacts:
     paths:

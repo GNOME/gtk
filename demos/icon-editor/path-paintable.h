@@ -146,6 +146,12 @@ void            path_paintable_set_path            (PathPaintable   *self,
 GskPath *       path_paintable_get_path            (PathPaintable   *self,
                                                     size_t           idx);
 
+gboolean        path_paintable_set_path_id         (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    const char      *id);
+const char *    path_paintable_get_path_id         (PathPaintable   *self,
+                                                    size_t           idx);
+
 void            path_paintable_set_path_states     (PathPaintable   *self,
                                                     size_t           idx,
                                                     uint64_t         states);
