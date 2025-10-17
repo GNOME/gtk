@@ -176,7 +176,8 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                                                     .components = self->info.vk_components,
                                                     .xChromaOffset = vk_chroma,
                                                     .yChromaOffset = vk_chroma,
-                                                    .chromaFilter = VK_FILTER_LINEAR,
+                                                    .chromaFilter = info->vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT 
+                                                                  ? VK_FILTER_LINEAR : VK_FILTER_NEAREST,
                                                     .forceExplicitReconstruction = VK_FALSE
                                                 },
                                                 NULL,
