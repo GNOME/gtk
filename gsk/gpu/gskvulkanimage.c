@@ -971,13 +971,6 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   else
     shader_op = gdk_memory_format_get_default_shader_op (format);
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       flags,
-                       conv,
-                       shader_op,
-                       format,
-                       width, height);
-
   res = vkCreateImage (vk_device,
                        &(VkImageCreateInfo) {
                            .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
@@ -1060,6 +1053,13 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
     }
   else
     vk_conversion = VK_NULL_HANDLE;
+
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       flags,
+                       conv,
+                       shader_op,
+                       format,
+                       width, height);
 
   gsk_vulkan_image_create_view (self, vk_format, &vk_components, vk_conversion);
 
@@ -1665,15 +1665,6 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
       return NULL;
     }
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       flags |
-                       (needs_conversion ? GSK_GPU_IMAGE_EXTERNAL : 0) |
-                       (desc.MipLevels > 1 ? GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP : 0),
-                       shader_op,
-                       GSK_GPU_CONVERSION_NONE,
-                       format,
-                       desc.Width, desc.Height);
-
   vkGetImageMemoryRequirements2 (vk_device,
                                  &(VkImageMemoryRequirementsInfo2) {
                                      .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2,
@@ -1766,6 +1757,15 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
     }
   else
     vk_conversion = VK_NULL_HANDLE;
+
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       flags |
+                       (needs_conversion ? GSK_GPU_IMAGE_EXTERNAL : 0) |
+                       (desc.MipLevels > 1 ? GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP : 0),
+                       shader_op,
+                       GSK_GPU_CONVERSION_NONE,
+                       format,
+                       desc.Width, desc.Height);
 
   gsk_vulkan_image_create_view (self,
                                 vk_format,
