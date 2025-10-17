@@ -114,6 +114,18 @@ gsk_vulkan_ycbcr_finish_cache (GskGpuCache *cache)
   g_hash_table_unref (priv->ycbcr_cache);
 }
 
+gboolean
+gsk_vulkan_ycbcr_is_supported (VkFormatFeatureFlags vk_features)
+{
+  /* If neither VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT nor VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT is set,
+   * the application must not define a sampler Y′CBCR conversion using this format as a source.
+   */
+  if (!(vk_features & (VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT | VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT)))
+    return FALSE;
+
+  return TRUE;
+}
+
 static VkChromaLocation
 gsk_vulkan_ycbcr_get_best_vk_chroma (VkFormatFeatureFlags vk_features)
 {
@@ -146,6 +158,9 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
   self = g_hash_table_lookup (priv->ycbcr_cache, info);
   if (self)
     return self;
+
+  /* We expect calling code to check this */
+  g_assert (gsk_vulkan_ycbcr_is_supported (info->vk_features));
 
   self = gsk_gpu_cached_new (cache, &GSK_VULKAN_YCBCR_CLASS);
 
