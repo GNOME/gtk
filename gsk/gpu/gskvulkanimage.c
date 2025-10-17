@@ -499,7 +499,8 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self->vk_image_layout = layout;
   self->vk_access = access;
 
-  if (gsk_vulkan_get_ycbcr_flags (conv, &vk_model, &vk_range) || needs_conversion)
+  if (gsk_vulkan_ycbcr_is_supported (vk_features) &&
+      (gsk_vulkan_get_ycbcr_flags (conv, &vk_model, &vk_range) || needs_conversion))
     {
       self->ycbcr = gsk_vulkan_ycbcr_get (device,
                                           &(GskVulkanYcbcrInfo) {
@@ -515,7 +516,12 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
       shader_op = GDK_SHADER_DEFAULT;
     }
   else
-    vk_conversion = VK_NULL_HANDLE;
+    {
+      /* driver is broken if this happens */
+      g_warn_if_fail (!needs_conversion);
+      vk_conversion = VK_NULL_HANDLE;
+      conv = GSK_GPU_CONVERSION_NONE;
+    }
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, conv, shader_op, format, width, height);
 
@@ -1123,6 +1129,16 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                  (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier, dmabuf->n_planes);
       return NULL;
     }
+  if (!gsk_vulkan_ycbcr_is_supported (vk_features))
+    {
+      if (needs_conversion)
+        {
+          GDK_DEBUG (DMABUF, "Vulkan driver broken: Can't do YCbcrConversion for YCbcr format %.4s::%016llx with %u planes",
+                     (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier, dmabuf->n_planes);
+          return NULL;
+        }
+      conv = GSK_GPU_CONVERSION_NONE;
+    }
   flags = gsk_vulkan_image_flags_for_features (vk_features) & ~(GSK_GPU_IMAGE_RENDERABLE);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
@@ -1595,6 +1611,14 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
       return NULL;
     }
 
+  if (!gsk_vulkan_ycbcr_is_supported (vk_features))
+    {
+      if (needs_conversion)
+        {
+          GDK_DEBUG (D3D12, "Vulkan driver broken: Can't do YCbcrConversion for YCbcr format %u", desc.Format);
+          return NULL;
+        }
+    }
   if (needs_conversion)
     shader_op = GDK_SHADER_DEFAULT;
   else

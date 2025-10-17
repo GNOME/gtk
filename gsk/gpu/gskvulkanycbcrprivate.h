@@ -21,6 +21,8 @@ struct _GskVulkanYcbcrInfo
 void                            gsk_vulkan_ycbcr_init_cache                     (GskGpuCache                    *cache);
 void                            gsk_vulkan_ycbcr_finish_cache                   (GskGpuCache                    *cache);
 
+gboolean                        gsk_vulkan_ycbcr_is_supported                   (VkFormatFeatureFlags            vk_features);
+
 GskVulkanYcbcr *                gsk_vulkan_ycbcr_get                            (GskVulkanDevice                *self,
                                                                                  const GskVulkanYcbcrInfo       *info);
                                                                          
