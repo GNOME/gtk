@@ -114,6 +114,24 @@ gsk_vulkan_ycbcr_finish_cache (GskGpuCache *cache)
   g_hash_table_unref (priv->ycbcr_cache);
 }
 
+static VkChromaLocation
+gsk_vulkan_ycbcr_get_best_vk_chroma (VkFormatFeatureFlags vk_features)
+{
+  if (vk_features & VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT)
+    {
+      return VK_CHROMA_LOCATION_COSITED_EVEN;
+    }
+  else if (vk_features & VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT)
+    {
+      return VK_CHROMA_LOCATION_MIDPOINT;
+    }
+  else
+    {
+      /* Checked via gsk_vulkan_ycbcr_is_supported () */
+      g_return_val_if_reached (VK_CHROMA_LOCATION_COSITED_EVEN);
+    }
+}
+
 GskVulkanYcbcr *
 gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                       const GskVulkanYcbcrInfo *info)
@@ -122,6 +140,7 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
   VkDevice vk_device = gsk_vulkan_device_get_vk_device (device);
   VkDescriptorSetLayout vk_image_set_layout;
+  VkChromaLocation vk_chroma;
   GskVulkanYcbcr *self;
 
   self = g_hash_table_lookup (priv->ycbcr_cache, info);
@@ -132,6 +151,7 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
 
   self->info = *info;
 
+  vk_chroma = gsk_vulkan_ycbcr_get_best_vk_chroma (info->vk_features);
   GSK_VK_CHECK (vkCreateSamplerYcbcrConversion, vk_device,
                                                 &(VkSamplerYcbcrConversionCreateInfo) {
                                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO,
@@ -139,8 +159,8 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                                                     .ycbcrModel = self->info.vk_ycbcr_model,
                                                     .ycbcrRange = self->info.vk_ycbcr_range,
                                                     .components = self->info.vk_components,
-                                                    .xChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
-                                                    .yChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
+                                                    .xChromaOffset = vk_chroma,
+                                                    .yChromaOffset = vk_chroma,
                                                     .chromaFilter = VK_FILTER_LINEAR,
                                                     .forceExplicitReconstruction = VK_FALSE
                                                 },
