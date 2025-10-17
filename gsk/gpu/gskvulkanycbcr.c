@@ -186,8 +186,8 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
   GSK_VK_CHECK (vkCreateSampler, vk_device,
                                  &(VkSamplerCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                                     .magFilter = VK_FILTER_LINEAR,
-                                     .minFilter = VK_FILTER_LINEAR,
+                                     .magFilter = gsk_vulkan_ycbcr_is_filterable (self) ? VK_FILTER_LINEAR : VK_FILTER_NEAREST,
+                                     .minFilter = gsk_vulkan_ycbcr_is_filterable (self) ? VK_FILTER_LINEAR : VK_FILTER_NEAREST,
                                      .mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
                                      .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
                                      .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
@@ -254,6 +254,24 @@ gsk_vulkan_ycbcr_unref (GskVulkanYcbcr *self)
   self->ref_count--;
 
   gsk_gpu_cached_use ((GskGpuCached *) self);
+}
+
+gboolean
+gsk_vulkan_ycbcr_is_filterable (GskVulkanYcbcr *self)
+{
+  /* VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT specifies that
+   * the format can have different chroma, min, and mag filters.
+   */
+  if (self->info.vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT)
+    return TRUE;
+
+  /* VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT specifies that an application
+   * can define a sampler Y′CBCR conversion using this format as a source with chromaFilter set to VK_FILTER_LINEAR.
+   */
+  if (self->info.vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT)
+    return TRUE;
+
+  return FALSE;
 }
 
 VkSamplerYcbcrConversion
