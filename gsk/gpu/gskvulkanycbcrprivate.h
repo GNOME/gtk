@@ -29,6 +29,7 @@ GskVulkanYcbcr *                gsk_vulkan_ycbcr_get                            
 GskVulkanYcbcr *                gsk_vulkan_ycbcr_ref                            (GskVulkanYcbcr                 *self);
 void                            gsk_vulkan_ycbcr_unref                          (GskVulkanYcbcr                 *self);
 
+gboolean                        gsk_vulkan_ycbcr_is_filterable                  (GskVulkanYcbcr                 *self);
 VkSamplerYcbcrConversion        gsk_vulkan_ycbcr_get_vk_conversion              (GskVulkanYcbcr                 *self);
 VkSampler                       gsk_vulkan_ycbcr_get_vk_sampler                 (GskVulkanYcbcr                 *self);
 VkDescriptorSetLayout           gsk_vulkan_ycbcr_get_vk_descriptor_set_layout   (GskVulkanYcbcr                 *self);

@@ -513,6 +513,8 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
       flags |= GSK_GPU_IMAGE_EXTERNAL;
+      if (!gsk_vulkan_ycbcr_is_filterable (self->ycbcr))
+        flags &= ~(GSK_GPU_IMAGE_FILTERABLE);
       shader_op = GDK_SHADER_DEFAULT;
     }
   else
@@ -1049,6 +1051,8 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                                .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
                                           });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
+      if (!gsk_vulkan_ycbcr_is_filterable (self->ycbcr))
+        flags &= ~(GSK_GPU_IMAGE_FILTERABLE);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
   else
@@ -1217,6 +1221,8 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                               .vk_ycbcr_range = range,
                                           });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
+      if (!gsk_vulkan_ycbcr_is_filterable (self->ycbcr))
+        flags &= ~(GSK_GPU_IMAGE_FILTERABLE);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
       shader_op = GDK_SHADER_DEFAULT;
     }
@@ -1753,6 +1759,8 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
                                               .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
                                           });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
+      if (!gsk_vulkan_ycbcr_is_filterable (self->ycbcr))
+        flags &= ~(GSK_GPU_IMAGE_FILTERABLE);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
   else
