@@ -781,7 +781,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                   G_TYPE_VARIANT);
 
   /**
-   * GtkApplication:save-state:
+   * GtkApplication::save-state:
    * @application: the `GtkApplication` which emitted the signal
    * @dict: a `GVariantDict`
    *
@@ -790,9 +790,9 @@ gtk_application_class_init (GtkApplicationClass *class)
    * The handler for this signal should persist any
    * global state of @application into @dict.
    *
-   * See [signal@Gtk.Application:restore-state] for how to
-   * restore global state, and [signal@Gtk.ApplicationWindow:save-state]
-   * and [signal@Gtk.Application:create-window] for handling
+   * See [signal@Gtk.Application::restore-state] for how to
+   * restore global state, and [signal@Gtk.ApplicationWindow::save-state]
+   * and [signal@Gtk.Application::restore-window] for handling
    * per-window state.
    *
    * Returns: true to stop stop further handlers from running
@@ -810,7 +810,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                   G_TYPE_VARIANT_DICT);
 
   /**
-   * GtkApplication:restore-state:
+   * GtkApplication::restore-state:
    * @application: the `GtkApplication` which emitted the signal
    * @reason: the reason for restoring state
    * @state: an "a{sv}" `GVariant` with state to restore
@@ -818,7 +818,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * Emitted when application state is restored.
    *
    * The handler for this signal should do the opposite of what the
-   * corresponding handler for [signal@Gtk.Application:save-state]
+   * corresponding handler for [signal@Gtk.Application::save-state]
    * does.
    *
    * Returns: true to stop stop further handlers from running
