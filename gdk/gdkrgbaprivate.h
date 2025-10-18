@@ -72,8 +72,5 @@ _gdk_rgba_equal (gconstpointer p1,
          rgba1->alpha == rgba2->alpha;
 }
 
-GString * gdk_rgba_print (const GdkRGBA *rgba,
-                          GString       *string);
-
 G_END_DECLS
 

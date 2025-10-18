@@ -603,6 +603,37 @@ gsk_path_get_closest_point (GskPath                *self,
   return found;
 }
 
+/**
+ * gsk_path_equal:
+ * @path1: a path
+ * @path2: another path
+ *
+ * Returns whether two paths have identical structure.
+ *
+ * Note that it is possible to construct paths that render
+ * identical even though they don't have the same structure.
+ *
+ * Returns: true if @path1 and @path2 have identical structure
+ *
+ * Since: 4.22
+ */
+gboolean
+gsk_path_equal (const GskPath *path1,
+                const GskPath *path2)
+{
+  if (path1 == path2)
+    return TRUE;
+
+  if (path1->n_contours != path2->n_contours)
+    return FALSE;
+
+  for (int i = 0; i < path1->n_contours; i++)
+    if (!gsk_contour_equal (path1->contours[i], path2->contours[i]))
+      return FALSE;
+
+  return TRUE;
+}
+
 /* }}} */
 /* {{{ Foreach and decomposition */
 
