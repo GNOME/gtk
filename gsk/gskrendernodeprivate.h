@@ -59,6 +59,8 @@ struct _GskRenderNodeClass
   void          (* diff)                                (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
                                                          GskDiffData                 *data);
+  GskRenderNode*(* replay)                              (GskRenderNode               *node,
+                                                         GskRenderNodeReplay         *replay);
   gboolean      (* get_opaque_rect)                     (GskRenderNode               *node,
                                                          graphene_rect_t             *out_opaque);
 };
