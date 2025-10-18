@@ -132,11 +132,13 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
                                              GtkWindow          *window)
 {
   GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
+  GSList *iter = wayland->inhibitors;
   GdkSurface *surface;
 
-  for (GSList *iter = wayland->inhibitors; iter; iter = iter->next)
+  while (iter)
     {
       GtkApplicationWaylandInhibitor *inhibitor = iter->data;
+      GSList *next = iter->next;
 
       if (inhibitor->surface && inhibitor->surface == gtk_native_get_surface (GTK_NATIVE (window)))
         {
@@ -148,6 +150,8 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
               wayland->inhibitors = g_slist_delete_link (wayland->inhibitors, iter);
             }
         }
+
+      iter = next;
     }
 
   surface = gtk_native_get_surface (GTK_NATIVE (window));
