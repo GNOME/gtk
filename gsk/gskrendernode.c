@@ -160,6 +160,15 @@ gsk_render_node_real_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode *
+gsk_render_node_real_replay (GskRenderNode   *node,
+                             GskRenderReplay *replay)
+{
+  g_warning_once ("FIXME: implement replay vfunc for %s", g_type_name_from_instance ((GTypeInstance *) node));
+
+  return gsk_render_node_ref (node);
+}
+
 static gboolean
 gsk_render_node_real_get_opaque_rect (GskRenderNode   *node,
                                       graphene_rect_t *out_opaque)
@@ -174,6 +183,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->finalize = gsk_render_node_finalize;
   klass->can_diff = gsk_render_node_real_can_diff;
   klass->diff = gsk_render_node_real_diff;
+  klass->replay = gsk_render_node_real_replay;
   klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
 }
 
