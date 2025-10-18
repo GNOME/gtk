@@ -95,7 +95,7 @@ struct _PathPaintable
   float weight;
 
   GStrv keywords;
-  GtkPathPaintable *render_paintable;
+  GdkPaintable *render_paintable;
 };
 
 enum
@@ -135,7 +135,7 @@ notify_state (GObject *object)
   g_object_notify_by_pspec (object, properties[PROP_STATE]);
 }
 
-static GtkPathPaintable *
+static GdkPaintable *
 ensure_render_paintable (PathPaintable *self)
 {
   if (!self->render_paintable)
@@ -144,12 +144,13 @@ ensure_render_paintable (PathPaintable *self)
       g_autoptr (GError) error = NULL;
 
       bytes = path_paintable_serialize (self, self->state);
-      self->render_paintable = gtk_path_paintable_new_from_bytes (bytes, &error);
+
+      self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
+      gtk_svg_set_weight (GTK_SVG (self->render_paintable), self->weight);
+      gtk_svg_play (GTK_SVG (self->render_paintable));
 
       if (!self->render_paintable)
         g_error ("%s", error->message);
-
-      gtk_path_paintable_set_weight (self->render_paintable, self->weight);
 
       g_signal_connect_swapped (self->render_paintable, "notify::state",
                                 G_CALLBACK (notify_state), self);
@@ -1618,7 +1619,7 @@ path_paintable_save (PathPaintable *self,
       g_string_append_c (str, '\'');
     }
 
-  if (initial_state != 0)
+  if (initial_state != (unsigned int) -1)
     g_string_append_printf (str,      "\n     gpa:state='%u'", initial_state);
 
   g_string_append (str, ">\n");
@@ -2822,7 +2823,7 @@ path_paintable_set_state (PathPaintable *self,
   self->state = state;
 
   if (self->render_paintable)
-    gtk_path_paintable_set_state (self->render_paintable, state);
+    gtk_svg_set_state (GTK_SVG (self->render_paintable), state);
 }
 
 unsigned int
@@ -2841,7 +2842,7 @@ path_paintable_set_weight (PathPaintable *self,
   self->weight = weight;
 
   if (self->render_paintable)
-    gtk_path_paintable_set_weight (self->render_paintable, weight);
+    gtk_svg_set_weight (GTK_SVG (self->render_paintable), weight);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
 }
@@ -2855,7 +2856,7 @@ path_paintable_get_weight (PathPaintable *self)
 unsigned int
 path_paintable_get_max_state (PathPaintable *self)
 {
-  return gtk_path_paintable_get_max_state (ensure_render_paintable (self));
+  return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self))) - 1;
 }
 
 static inline gboolean

@@ -140,8 +140,8 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      paintable = GDK_PAINTABLE (gtk_path_paintable_new_from_resource ("/images/stateful.gpa"));
-      gtk_path_paintable_set_state (GTK_PATH_PAINTABLE (paintable), 0);
+      paintable = GDK_PAINTABLE (gtk_svg_new_from_resource ("/images/stateful.gpa"));
+      gtk_svg_set_state (GTK_SVG (paintable), 0);
       image = gtk_image_new_from_paintable (paintable);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 128);
 
@@ -167,8 +167,8 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      paintable = GDK_PAINTABLE (gtk_path_paintable_new_from_resource ("/images/animated.gpa"));
-      gtk_path_paintable_set_state (GTK_PATH_PAINTABLE (paintable), 0);
+      paintable = GDK_PAINTABLE (gtk_svg_new_from_resource ("/images/animated.gpa"));
+      gtk_svg_set_state (GTK_SVG (paintable), 0);
       image = gtk_image_new_from_paintable (paintable);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 128);
 
