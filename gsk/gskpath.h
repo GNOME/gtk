@@ -143,6 +143,9 @@ gboolean                gsk_path_foreach                        (GskPath        
                                                                  GskPathForeachFunc      func,
                                                                  gpointer                user_data);
 
+GDK_AVAILABLE_IN_4_22
+gboolean                gsk_path_equal                          (const GskPath          *path1,
+                                                                 const GskPath          *path2);
 /**
  * GskPathIntersection:
  * @GSK_PATH_INTERSECTION_NONE: No intersection
