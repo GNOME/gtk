@@ -716,7 +716,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   /**
    * GtkApplicationWindow::save-state:
    * @window: the window on which the signal is emitted
-   * @builder: a `GVariantBuilder` of type `a{sv}`
+   * @dict: a dictionary of type `a{sv}`
    *
    * The handler for this signal should persist any
    * application-specific state of @window into @dict.
