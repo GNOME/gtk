@@ -8621,6 +8621,11 @@ gsk_component_transfer_node_finalize (GskRenderNode *node)
 
   gsk_render_node_unref (self->child);
 
+  gsk_component_transfer_clear (&self->transfer[0]);
+  gsk_component_transfer_clear (&self->transfer[1]);
+  gsk_component_transfer_clear (&self->transfer[2]);
+  gsk_component_transfer_clear (&self->transfer[3]);
+
   parent_class->finalize (node);
 }
 
