@@ -1983,7 +1983,7 @@ gsk_transform_to_2d (GskTransform *self,
  *     gsk_transform_skew (
  *         gsk_transform_scale (
  *             gsk_transform_rotate (
- *                 gsk_transform_translate (NULL, &GRAPHENE_POINT_T (dx, dy)),
+ *                 gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, dy)),
  *                 angle),
  *             scale_x, scale_y),
  *         skew_x, skew_y)
