@@ -1586,6 +1586,8 @@ path_paintable_save_path (PathPaintable *self,
     }
 
   g_string_append (str, "/>\n");
+
+  gsk_stroke_free (stroke);
 }
 
 static void
