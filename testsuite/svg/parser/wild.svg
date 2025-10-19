@@ -1,0 +1,50 @@
+<svg width="300" height="200" viewBox="0 0 300 200">
+  <defs>
+    <mask id='messy too' mask-type='alpha'>
+    <clipPath id="soo messy">
+      <circle cx="20" cy="20" r="12" fill="rgba(255,0,0,0.5)">
+        <animate attributeName='cx' begin='3s' dur='10s'
+           from='20' to='0' fill='freeze'/>
+        <animate attributeName='r' begin='3s' dur='10s'
+           from='12' to='16' fill='freeze'/>
+      </circle>
+    </clipPath>
+    </mask>
+  </defs>
+  <g stroke="blue" stroke-width="10" opacity="0.5" transform="scale(10)">
+    <circle cx="10" cy="10" r="8" fill="red" stroke="none" stroke-width="0.5"
+      clip-path='url("#soo messy")'
+      mask='url("#messy too")'
+      >
+      <animate begin="+5s" attributeName='fill' dur='5s'
+         values='red; yellow; green' fill='freeze'/>
+    </circle>
+    <g>
+      <path d="M 0 10 h20" stroke="black" stroke-width="1"/>
+      <path d="M 10 0 v20" stroke="black" stroke-width="1"/>
+      <animateTransform attributeName='transform' type='rotate'
+         id='dreh' from='0 10 10' to='90 10 10' begin='+5s' dur='4s'
+         calcMode='linear'
+         keySplines='0.42 0 0.58 1'/>
+      <animate id="blurit" attributeName="filter" begin="+5s"
+         from="blur(0)" to="blur(12)" dur="2s"/>
+      <animate attributeName="filter" begin="blurit.end"
+         from="blur(12)" to="blur(0)" dur="2s" fill='freeze'/>
+    </g>
+  </g>
+  <path id="p" d="M30,160 L270,40" stroke="black" stroke-width="1">
+    <animate attributeName="stroke-dasharray" begin="+5s"
+       from="1 1" to="10 10" dur="10s"/>
+  </path>
+  <circle r="5" fill="red">
+    <animateMotion fill="freeze"
+      begin="+5s"
+      dur="5s"
+      repeatCount="20"
+      keyTimes="0;0.2;1"
+      keyPoints="0;0.8;1"
+      calcMode="linear">
+        <mpath href="p"/>
+    </animateMotion>
+  </circle>
+</svg>

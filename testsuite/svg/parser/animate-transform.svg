@@ -1,0 +1,36 @@
+<svg width="120" height="120" viewBox="0 0 120 120">
+  <!-- animateTransform with rotate -->
+  <rect x="40" y="40" width="20" height="20" fill="red">
+    <animateTransform attributeName="transform" type="rotate" values="0 50 50;360 50 50" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- animateTransform with scale -->
+  <circle cx="30" cy="30" r="8" fill="blue">
+    <animateTransform attributeName="transform" type="scale" from="1,1" to="2,2" dur="2s" fill="freeze"/>
+  </circle>
+  
+  <!-- animateTransform with scale different syntax -->
+  <circle cx="30" cy="30" r="8" fill="blue">
+    <animateTransform attributeName="transform" type="scale" from="1" to="2 2" dur="2s" fill="freeze"/>
+  </circle>
+  
+  <!-- animateTransform with translate -->
+  <path d="M10,10 L20,10 L15,20 Z" fill="green">
+    <animateTransform attributeName="transform" type="translate" values="0,0;50,50;0,0" dur="4s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- animateTransform with translate different syntax -->
+  <path d="M10,10 L20,10 L15,20 Z" fill="green">
+    <animateTransform attributeName="transform" type="translate" values="0 0; 50; 0 0" dur="4s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- animateTransform with another rotate -->
+  <rect x="70" y="70" width="15" height="15" fill="orange">
+    <animateTransform attributeName="transform" type="rotate" from="0 77.5 77.5" to="45 77.5 77.5" dur="2s" fill="freeze"/>
+  </rect>
+
+  <!-- animateTransform with another rotate -->
+  <rect x="70" y="70" width="15" height="15" fill="orange">
+    <animateTransform attributeName="transform" type="rotate" from="45" to="145,10,11" dur="2s" fill="freeze"/>
+  </rect>
+</svg>

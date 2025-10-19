@@ -1,0 +1,32 @@
+
+<svg width="16" height="16">
+  <path d="m0 0 l100 100" id='path0' pathLength='1'/>
+  <animate id='a1'
+        href='path0'
+        begin='0s'
+        end='indefinite'
+        dur='1s'
+        repeatCount='indefinite'
+        repeatDur='indefinite'
+        fill='freeze'
+        restart='never'
+        attributeName='fill'
+        calcMode='spline'
+        values='red;green'
+        keyTimes='0;1'
+        keySplines='0 0 1 1'
+        additive='sum'
+        accumulate='sum'/>
+  <animateTransform id='a2'
+        attributeName='transform'
+        href='path0'
+        type='translate'
+        from='0 0'
+        to='10 10'/>
+  <animateMotion id='a3'
+        href='path0'
+        rotate='auto-reverse'
+        path='M 0 0 L 10 20 L 20 10'
+        keyTimes='0;1'
+        keyPoints='0.5;0.8'/>
+</svg>

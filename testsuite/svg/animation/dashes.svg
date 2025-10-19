@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="300" height="200" viewBox="0 0 300 200">
+  <path   id="p" d="M30,160 L270,40" stroke="black" stroke-width="1"/>
+  <animate id="dashes" href="p" attributeName="stroke-dasharray" begin="0"
+       from="1 1" to="10 10" dur="10s"/>
+  <circle r="5" fill="red">
+<!--
+    <animateMotion fill="freeze"
+      dur="10s"
+      keyTimes="0;0.1;1"
+      keyPoints="0;0.9;1"
+      calcMode='linear'
+      path="M30,160 L270,40"/>
+-->
+  </circle>
+</svg>

@@ -1,0 +1,33 @@
+<svg width="150" height="100" viewBox="0 0 150 100">
+  <!-- Different timing and repeat behaviors -->
+  
+  <!-- Animation with begin offset -->
+  <circle cx="25" cy="25" r="8" fill="red">
+    <animate attributeName="fill" values="red;yellow;red" dur="2s" begin="1s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Animation with end time -->
+  <rect x="50" y="20" width="10" height="10" fill="blue">
+    <animate attributeName="width" from="10" to="20" dur="1s" begin="0s" end="3s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Animation with finite repeat -->
+  <circle cx="100" cy="25" r="8" fill="green">
+    <animate attributeName="r" from="8" to="15" dur="2s" repeatCount="2"/>
+  </circle>
+  
+  <!-- Animation with finite repeat count -->
+  <path d="M20,60 L30,60 L25,75 Z" fill="orange">
+    <animate attributeName="fill" values="orange;purple;orange" dur="1s" repeatCount="3"/>
+  </path>
+  
+  <!-- Animation with fill="remove" -->
+  <rect x="60" y="60" width="15" height="15" fill="cyan">
+    <animate attributeName="fill" from="cyan" to="magenta" dur="2s" fill="remove"/>
+  </rect>
+  
+  <!-- Animation with additive behavior -->
+  <circle cx="120" cy="70" r="10" fill="pink">
+    <animate attributeName="cx" from="120" to="130" dur="2s" additive="sum" repeatCount="indefinite"/>
+  </circle>
+</svg>

@@ -1,0 +1,31 @@
+<svg width="200" height="150" viewBox="0 0 200 150">
+  <!-- Define paths for motion (regular elements, not in defs) -->
+  <path id="motionPath1" d="M20,20 Q50,100 180,20" stroke="gray" stroke-width="1" fill="none"/>
+  <path id="motionPath2" d="M20,130 L180,130 L180,50 L20,50 Z" stroke="gray" stroke-width="1" fill="none"/>
+  
+  <!-- animateMotion with mpath (note: parser requires href without # prefix) -->
+  <circle r="5" fill="red">
+    <animateMotion dur="5s" keyTimes="0;1" repeatCount="indefinite">
+      <mpath href="motionPath1"/>
+    </animateMotion>
+  </circle>
+  
+  <!-- animateMotion with inline path -->
+  <rect width="8" height="8" fill="blue">
+    <animateMotion path="M20,60 C20,60 50,90 100,60 S180,30 180,60" dur="4s" keyTimes="0;1" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- animateMotion with keyPoints and mpath -->
+  <circle r="6" fill="green">
+    <animateMotion dur="6s" keyPoints="0;0.5;1" keyTimes="0;0.8;1" repeatCount="indefinite">
+      <mpath href="motionPath2"/>
+    </animateMotion>
+  </circle>
+
+  <!-- animateMotion with hash in mpath href -->
+  <circle r="6" fill="green">
+    <animateMotion dur="6s" keyPoints="0;0.5;1" keyTimes="0;0.8;1" repeatCount="indefinite">
+      <mpath href="#motionPath2"/>
+    </animateMotion>
+  </circle>
+</svg>
