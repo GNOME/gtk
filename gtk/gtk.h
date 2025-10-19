@@ -269,6 +269,7 @@
 #include <gtk/gtkstringsorter.h>
 #include <gtk/deprecated/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
+#include <gtk/gtksvg.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymbolicpaintable.h>
 #include <gtk/gtktext.h>
