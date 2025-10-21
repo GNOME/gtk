@@ -332,6 +332,5 @@ Blended picture</property>
         </child>
       </object>
     </property>
-    <property name="titlebar"/>
   </object>
 </interface>
