@@ -242,6 +242,7 @@ typedef struct
   PathPaintable *paintable;
   GHashTable *paths;
   GArray *attach;
+  const GSList *skip;
 } ParserData;
 
 static void
@@ -639,6 +640,9 @@ start_element_cb (GMarkupParseContext  *context,
   ShapeType shape_type;
   float shape_params[6];
 
+  if (data->skip)
+    return;
+
   if (strcmp (element_name, "svg") == 0)
     {
       const char *width_attr = NULL;
@@ -724,9 +728,15 @@ start_element_cb (GMarkupParseContext  *context,
   else if (strcmp (element_name, "g") == 0 ||
            strcmp (element_name, "defs") == 0 ||
            strcmp (element_name, "style") == 0 ||
+           strcmp (element_name, "title") == 0 ||
+           strcmp (element_name, "desc") == 0 ||
+           strcmp (element_name, "metadata") == 0 ||
+           strcmp (element_name, "linearGradient") == 0 ||
+           strcmp (element_name, "radialGradient") == 0 ||
            g_str_has_prefix (element_name, "sodipodi:") ||
            g_str_has_prefix (element_name, "inkscape:"))
     {
+      data->skip = g_markup_parse_context_get_element_stack (context);
       /* Do nothing */
       return;
     }
@@ -1241,6 +1251,24 @@ cleanup:
   g_clear_pointer (&animation_keyframes, g_array_unref);
 }
 
+static void
+end_element_cb (GMarkupParseContext *context,
+                const gchar         *element_name,
+                gpointer             user_data,
+                GError             **gmarkup_error)
+{
+  ParserData *data = user_data;
+
+  if (data->skip != NULL)
+    {
+      if (data->skip == g_markup_parse_context_get_element_stack (context))
+        {
+          data->skip = NULL;
+        }
+      return;
+    }
+}
+
 static gboolean
 parse_symbolic_svg (PathPaintable  *paintable,
                     GBytes         *bytes,
@@ -1250,7 +1278,7 @@ parse_symbolic_svg (PathPaintable  *paintable,
   GMarkupParseContext *context;
   GMarkupParser parser = {
     start_element_cb,
-    NULL,
+    end_element_cb,
     NULL,
     NULL,
     NULL,
@@ -1262,6 +1290,7 @@ parse_symbolic_svg (PathPaintable  *paintable,
   data.paintable = paintable;
   data.paths = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   data.attach = g_array_new (FALSE, TRUE, sizeof (AttachData));
+  data.skip = NULL;
   g_array_set_clear_func (data.attach, attach_data_clear);
 
   text = g_bytes_get_data (bytes, &length);
@@ -2856,7 +2885,7 @@ path_paintable_get_weight (PathPaintable *self)
 unsigned int
 path_paintable_get_max_state (PathPaintable *self)
 {
-  return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self))) - 1;
+  return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self)));
 }
 
 static inline gboolean
