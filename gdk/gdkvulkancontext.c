@@ -945,14 +945,6 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
                   }
                 break;
 
-              case VK_FORMAT_R16G16B16A16_UNORM:
-                if (priv->formats[GDK_MEMORY_U16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT)
-                  {
-                    priv->formats[GDK_MEMORY_U16].vk_format = formats[i];
-                    priv->formats[GDK_MEMORY_U16].gdk_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-                  }
-                break;
-
               case VK_FORMAT_R16G16B16A16_SFLOAT:
                 if (priv->formats[GDK_MEMORY_FLOAT16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT)
                   {
@@ -982,21 +974,17 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
       /* Ensure all the formats exist:
        * - If a format was found, keep that one.
        * - FLOAT32 chooses the best format we have.
-       * - FLOAT16 and U16 pick the format FLOAT32 uses
+       * - FLOAT16 picks the format FLOAT32 uses
        */
       if (priv->formats[GDK_MEMORY_FLOAT32].vk_format.format == VK_FORMAT_UNDEFINED)
         {
           if (priv->formats[GDK_MEMORY_FLOAT16].vk_format.format != VK_FORMAT_UNDEFINED)
             priv->formats[GDK_MEMORY_FLOAT32] = priv->formats[GDK_MEMORY_FLOAT16];
-          else if (priv->formats[GDK_MEMORY_U16].vk_format.format != VK_FORMAT_UNDEFINED)
-            priv->formats[GDK_MEMORY_FLOAT32] = priv->formats[GDK_MEMORY_U16];
           else
             priv->formats[GDK_MEMORY_FLOAT32] = priv->formats[GDK_MEMORY_U8];
         }
       if (priv->formats[GDK_MEMORY_FLOAT16].vk_format.format == VK_FORMAT_UNDEFINED)
         priv->formats[GDK_MEMORY_FLOAT16] = priv->formats[GDK_MEMORY_FLOAT32];
-      if (priv->formats[GDK_MEMORY_U16].vk_format.format == VK_FORMAT_UNDEFINED)
-        priv->formats[GDK_MEMORY_U16] = priv->formats[GDK_MEMORY_FLOAT32];
       priv->formats[GDK_MEMORY_NONE] = priv->formats[GDK_MEMORY_U8];
 
       if (!gdk_vulkan_context_check_swapchain (self, error))

@@ -1733,7 +1733,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
         GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
@@ -1794,7 +1794,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
         GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
@@ -1854,7 +1854,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R32G32B32A32_FLOAT,
         GDK_MEMORY_R16G16B16A16_FLOAT,
@@ -2444,7 +2444,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
         GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
@@ -2505,7 +2505,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16A16,
         GDK_MEMORY_R32G32B32A32_FLOAT,
@@ -2566,7 +2566,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
         GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
@@ -2685,7 +2685,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
         GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
@@ -3302,7 +3302,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint32),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -3375,7 +3375,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint32),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -3448,7 +3448,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint32),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -4657,7 +4657,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -4744,7 +4744,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -4831,7 +4831,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -4918,7 +4918,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -5005,7 +5005,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -5092,7 +5092,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
     .alignment = G_ALIGNOF (guint16),
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -5179,7 +5179,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -5266,7 +5266,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -5353,7 +5353,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .depth = GDK_MEMORY_U16,
+    .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -5692,13 +5692,12 @@ gdk_memory_depth_merge (GdkMemoryDepth depth1,
                         GdkMemoryDepth depth2)
 {
   static const GdkMemoryDepth merged_depths[GDK_N_DEPTHS][GDK_N_DEPTHS] = {
-                         /*  NONE                U8                  U8_SRGB             U16                 FLOAT16             FLOAT32 */
-    [GDK_MEMORY_NONE]    = { GDK_MEMORY_NONE,    GDK_MEMORY_U8,      GDK_MEMORY_U8_SRGB, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_U8]      = { GDK_MEMORY_U8,      GDK_MEMORY_U8,      GDK_MEMORY_FLOAT16, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_U8_SRGB] = { GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_U16]     = { GDK_MEMORY_U16,     GDK_MEMORY_U16,     GDK_MEMORY_FLOAT32, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_FLOAT16] = { GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_FLOAT32] = { GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
+                         /*  NONE                U8                  U8_SRGB             FLOAT16             FLOAT32 */
+    [GDK_MEMORY_NONE]    = { GDK_MEMORY_NONE,    GDK_MEMORY_U8,      GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U8]      = { GDK_MEMORY_U8,      GDK_MEMORY_U8,      GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U8_SRGB] = { GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT16] = { GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT32] = { GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
   };
 
   g_assert (depth1 < GDK_N_DEPTHS);
@@ -5725,8 +5724,6 @@ gdk_memory_depth_get_format (GdkMemoryDepth depth)
       case GDK_MEMORY_U8:
       case GDK_MEMORY_U8_SRGB:
         return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      case GDK_MEMORY_U16:
-        return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
       case GDK_MEMORY_FLOAT16:
         return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
       case GDK_MEMORY_FLOAT32:
@@ -5755,8 +5752,6 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
       case GDK_MEMORY_U8:
       case GDK_MEMORY_U8_SRGB:
         return GDK_MEMORY_A8;
-      case GDK_MEMORY_U16:
-        return GDK_MEMORY_A16;
       case GDK_MEMORY_FLOAT16:
         return GDK_MEMORY_A16_FLOAT;
       case GDK_MEMORY_FLOAT32:
@@ -5781,7 +5776,6 @@ gdk_memory_depth_is_srgb (GdkMemoryDepth depth)
 
       case GDK_MEMORY_NONE:
       case GDK_MEMORY_U8:
-      case GDK_MEMORY_U16:
       case GDK_MEMORY_FLOAT16:
       case GDK_MEMORY_FLOAT32:
         return FALSE;
