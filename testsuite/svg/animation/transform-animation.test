@@ -1,0 +1,9 @@
+input: transform-animation.svg
+time: 0
+output: transform-animation-0.svg
+time: 1000
+output: transform-animation-1.svg
+time: 1500
+output: transform-animation-2.svg
+time: 1750
+output: transform-animation-3.svg

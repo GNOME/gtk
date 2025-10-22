@@ -1,0 +1,9 @@
+input: additive.svg
+time: 0
+output: additive-0.svg
+time: 1000
+output: additive-1.svg
+time: 2000
+output: additive-2.svg
+time: 3000
+output: additive-3.svg
