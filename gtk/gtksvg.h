@@ -31,7 +31,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_SVG_TYPE (gtk_svg_get_type ())
+#define GTK_TYPE_SVG (gtk_svg_get_type ())
 
 GDK_AVAILABLE_IN_4_22
 G_DECLARE_FINAL_TYPE (GtkSvg, gtk_svg, GTK, SVG, GObject)
