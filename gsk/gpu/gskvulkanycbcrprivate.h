@@ -11,6 +11,7 @@ typedef struct _GskVulkanYcbcrInfo GskVulkanYcbcrInfo;
 struct _GskVulkanYcbcrInfo
 {
   VkFormat vk_format;
+  VkFormatFeatureFlags vk_features;
   VkComponentMapping vk_components;
   VkSamplerYcbcrModelConversion vk_ycbcr_model;
   VkSamplerYcbcrRange vk_ycbcr_range;
@@ -20,12 +21,15 @@ struct _GskVulkanYcbcrInfo
 void                            gsk_vulkan_ycbcr_init_cache                     (GskGpuCache                    *cache);
 void                            gsk_vulkan_ycbcr_finish_cache                   (GskGpuCache                    *cache);
 
+gboolean                        gsk_vulkan_ycbcr_is_supported                   (VkFormatFeatureFlags            vk_features);
+
 GskVulkanYcbcr *                gsk_vulkan_ycbcr_get                            (GskVulkanDevice                *self,
                                                                                  const GskVulkanYcbcrInfo       *info);
                                                                          
 GskVulkanYcbcr *                gsk_vulkan_ycbcr_ref                            (GskVulkanYcbcr                 *self);
 void                            gsk_vulkan_ycbcr_unref                          (GskVulkanYcbcr                 *self);
 
+gboolean                        gsk_vulkan_ycbcr_is_filterable                  (GskVulkanYcbcr                 *self);
 VkSamplerYcbcrConversion        gsk_vulkan_ycbcr_get_vk_conversion              (GskVulkanYcbcr                 *self);
 VkSampler                       gsk_vulkan_ycbcr_get_vk_sampler                 (GskVulkanYcbcr                 *self);
 VkDescriptorSetLayout           gsk_vulkan_ycbcr_get_vk_descriptor_set_layout   (GskVulkanYcbcr                 *self);

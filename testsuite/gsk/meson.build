@@ -225,8 +225,12 @@ compare_render_tests = [
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'yuv-matrix-d3d12',
-  'yuv-matrix-dmabuf',
-  'yuv-matrix-memory',
+  'yuv-matrix-dmabuf-nv12',
+  'yuv-matrix-dmabuf-rgba',
+  'yuv-matrix-dmabuf-yuyv',
+  'yuv-matrix-memory-nv12',
+  'yuv-matrix-memory-rgba',
+  'yuv-matrix-memory-yuyv',
   'z-transform-clipping-bounds-nocairo',
 ]
 

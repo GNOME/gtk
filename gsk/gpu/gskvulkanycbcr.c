@@ -30,6 +30,7 @@ gsk_vulkan_ycbcr_info_hash (gconstpointer info_)
           (info->vk_components.a << 20) |
           (info->vk_ycbcr_model << 17) |
           (info->vk_ycbcr_range << 16)) ^
+         info->vk_features ^
          info->vk_format;
 }
 
@@ -41,6 +42,7 @@ gsk_vulkan_ycbcr_info_equal (gconstpointer info1_,
   const GskVulkanYcbcrInfo *info2 = info2_;
 
   return info1->vk_format == info2->vk_format &&
+         info1->vk_features == info2->vk_features &&
          info1->vk_components.r == info2->vk_components.r && 
          info1->vk_components.g == info2->vk_components.g && 
          info1->vk_components.b == info2->vk_components.b && 
@@ -112,6 +114,36 @@ gsk_vulkan_ycbcr_finish_cache (GskGpuCache *cache)
   g_hash_table_unref (priv->ycbcr_cache);
 }
 
+gboolean
+gsk_vulkan_ycbcr_is_supported (VkFormatFeatureFlags vk_features)
+{
+  /* If neither VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT nor VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT is set,
+   * the application must not define a sampler Y′CBCR conversion using this format as a source.
+   */
+  if (!(vk_features & (VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT | VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT)))
+    return FALSE;
+
+  return TRUE;
+}
+
+static VkChromaLocation
+gsk_vulkan_ycbcr_get_best_vk_chroma (VkFormatFeatureFlags vk_features)
+{
+  if (vk_features & VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT)
+    {
+      return VK_CHROMA_LOCATION_COSITED_EVEN;
+    }
+  else if (vk_features & VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT)
+    {
+      return VK_CHROMA_LOCATION_MIDPOINT;
+    }
+  else
+    {
+      /* Checked via gsk_vulkan_ycbcr_is_supported () */
+      g_return_val_if_reached (VK_CHROMA_LOCATION_COSITED_EVEN);
+    }
+}
+
 GskVulkanYcbcr *
 gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                       const GskVulkanYcbcrInfo *info)
@@ -120,16 +152,21 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
   VkDevice vk_device = gsk_vulkan_device_get_vk_device (device);
   VkDescriptorSetLayout vk_image_set_layout;
+  VkChromaLocation vk_chroma;
   GskVulkanYcbcr *self;
 
   self = g_hash_table_lookup (priv->ycbcr_cache, info);
   if (self)
     return self;
 
+  /* We expect calling code to check this */
+  g_assert (gsk_vulkan_ycbcr_is_supported (info->vk_features));
+
   self = gsk_gpu_cached_new (cache, &GSK_VULKAN_YCBCR_CLASS);
 
   self->info = *info;
 
+  vk_chroma = gsk_vulkan_ycbcr_get_best_vk_chroma (info->vk_features);
   GSK_VK_CHECK (vkCreateSamplerYcbcrConversion, vk_device,
                                                 &(VkSamplerYcbcrConversionCreateInfo) {
                                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO,
@@ -137,9 +174,10 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                                                     .ycbcrModel = self->info.vk_ycbcr_model,
                                                     .ycbcrRange = self->info.vk_ycbcr_range,
                                                     .components = self->info.vk_components,
-                                                    .xChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
-                                                    .yChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
-                                                    .chromaFilter = VK_FILTER_LINEAR,
+                                                    .xChromaOffset = vk_chroma,
+                                                    .yChromaOffset = vk_chroma,
+                                                    .chromaFilter = info->vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT 
+                                                                  ? VK_FILTER_LINEAR : VK_FILTER_NEAREST,
                                                     .forceExplicitReconstruction = VK_FALSE
                                                 },
                                                 NULL,
@@ -148,8 +186,8 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
   GSK_VK_CHECK (vkCreateSampler, vk_device,
                                  &(VkSamplerCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                                     .magFilter = VK_FILTER_LINEAR,
-                                     .minFilter = VK_FILTER_LINEAR,
+                                     .magFilter = gsk_vulkan_ycbcr_is_filterable (self) ? VK_FILTER_LINEAR : VK_FILTER_NEAREST,
+                                     .minFilter = gsk_vulkan_ycbcr_is_filterable (self) ? VK_FILTER_LINEAR : VK_FILTER_NEAREST,
                                      .mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
                                      .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
                                      .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
@@ -176,9 +214,11 @@ gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                                                      {
                                                          .binding = 0,
                                                          .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = 1,
+                                                         .descriptorCount = 3,
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                         .pImmutableSamplers = (VkSampler[1]) {
+                                                         .pImmutableSamplers = (VkSampler[3]) {
+                                                             self->vk_sampler,
+                                                             self->vk_sampler,
                                                              self->vk_sampler,
                                                          },
                                                      }
@@ -214,6 +254,24 @@ gsk_vulkan_ycbcr_unref (GskVulkanYcbcr *self)
   self->ref_count--;
 
   gsk_gpu_cached_use ((GskGpuCached *) self);
+}
+
+gboolean
+gsk_vulkan_ycbcr_is_filterable (GskVulkanYcbcr *self)
+{
+  /* VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT specifies that
+   * the format can have different chroma, min, and mag filters.
+   */
+  if (self->info.vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT)
+    return TRUE;
+
+  /* VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT specifies that an application
+   * can define a sampler Y′CBCR conversion using this format as a source with chromaFilter set to VK_FILTER_LINEAR.
+   */
+  if (self->info.vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT)
+    return TRUE;
+
+  return FALSE;
 }
 
 VkSamplerYcbcrConversion

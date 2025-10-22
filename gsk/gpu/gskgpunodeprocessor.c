@@ -4583,7 +4583,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
     {
       GdkColorState *ccs = gdk_color_state_get_rendering_color_state (image_color_state);
 
-      intermediate = gsk_gpu_copy_image (frame, ccs, image, image_color_state, FALSE);
+      intermediate = gsk_gpu_copy_image (frame, ccs, g_object_ref (image), image_color_state, FALSE);
       if (intermediate == NULL)
         return NULL;
       image = intermediate;
