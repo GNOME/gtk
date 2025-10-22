@@ -2969,6 +2969,12 @@ path_paintable_serialize (PathPaintable *self,
   return g_string_free_to_bytes (str);
 }
 
+GBytes *
+path_paintable_serialize_as_svg (PathPaintable *self)
+{
+  return gtk_svg_serialize (GTK_SVG (ensure_render_paintable (self)));
+}
+
 /* }}} */
 
 /* vim:set foldmethod=marker: */

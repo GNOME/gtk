@@ -610,6 +610,66 @@ show_save_filechooser (IconEditorWindow *self)
                         save_response_cb, self);
 }
 
+static void
+export_to_file (IconEditorWindow *self,
+                GFile            *file)
+{
+  g_autoptr (GBytes) bytes = NULL;
+  g_autoptr (GError) error = NULL;
+
+  bytes = path_paintable_serialize_as_svg (self->paintable);
+  if (!g_file_replace_contents (file,
+                                g_bytes_get_data (bytes, NULL),
+                                g_bytes_get_size (bytes),
+                                NULL, FALSE,
+                                G_FILE_CREATE_NONE,
+                                NULL,
+                                NULL,
+                                &error))
+    {
+      save_error (self, error->message);
+      return;
+    }
+}
+
+static void
+export_response_cb (GObject      *source,
+                    GAsyncResult *result,
+                    void         *user_data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  IconEditorWindow *self = user_data;
+  g_autoptr (GFile) file = NULL;
+  g_autoptr (GError) error = NULL;
+
+  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  if (!file)
+    {
+      if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+        save_error (self, error->message);
+      return;
+    }
+
+  export_to_file (self, file);
+}
+
+static void
+show_export_filechooser (IconEditorWindow *self)
+{
+  g_autoptr (GtkFileDialog) dialog = NULL;
+  g_autoptr (GFile) cwd = g_file_new_for_path (".");
+
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Export as SVG");
+  gtk_file_dialog_set_initial_folder (dialog, cwd);
+  gtk_file_dialog_set_initial_name (dialog, "demo.svg");
+
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (self),
+                        NULL,
+                        export_response_cb, self);
+}
+
 /* }}} */
 /* {{{ GtkWindow implementation */
 
@@ -699,6 +759,16 @@ file_save_as (GSimpleAction *action,
   IconEditorWindow *self = user_data;
 
   show_save_filechooser (self);
+}
+
+static void
+file_export (GSimpleAction *action,
+             GVariant      *parameter,
+             gpointer       user_data)
+{
+  IconEditorWindow *self = user_data;
+
+  show_export_filechooser (self);
 }
 
 static void
@@ -849,6 +919,7 @@ static GActionEntry win_entries[] = {
   { "open", file_open, NULL, NULL, NULL },
   { "save", file_save, NULL, NULL, NULL },
   { "save-as", file_save_as, NULL, NULL, NULL },
+  { "export", file_export, NULL, NULL, NULL },
   { "revert", revert_changes, NULL, NULL, NULL },
   { "close", file_close, NULL, NULL, NULL },
   { "add-path", add_path, NULL, NULL, NULL },
