@@ -1,0 +1,15 @@
+input: priority.svg
+time: 0
+output: priority-0.svg
+time: 1000
+output: priority-1.svg
+time: 2000
+output: priority-2.svg
+time: 3000
+output: priority-3.svg
+time: 4000
+output: priority-4.svg
+time: 5000
+output: priority-5.svg
+time: 6000
+output: priority-6.svg

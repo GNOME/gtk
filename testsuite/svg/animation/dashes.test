@@ -1,0 +1,5 @@
+input: dashes.svg
+time: 0
+output: dashes-0.svg
+time: 5000
+output: dashes-1.svg

@@ -1,0 +1,9 @@
+input: animate-motion.svg
+time: 0
+output: animate-motion-0.svg
+time: 5000
+output: animate-motion-1.svg
+time: 10000
+output: animate-motion-2.svg
+time: 20000
+output: animate-motion-3.svg

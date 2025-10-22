@@ -1,0 +1,7 @@
+input: inherit.svg
+time: 0
+output: inherit-0.svg
+time: 1000
+output: inherit-1.svg
+time: 2000
+output: inherit-2.svg
