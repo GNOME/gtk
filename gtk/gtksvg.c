@@ -6450,7 +6450,7 @@ create_transition (Shape             *shape,
                    SvgValue          *to)
 {
   Animation *a;
-  TimeSpec *begin, *end;
+  TimeSpec *begin;
 
   a = animation_animate_new ();
   a->simple_duration = duration;
@@ -6458,14 +6458,12 @@ create_transition (Shape             *shape,
   a->repeat_count = 1;
 
   a->has_begin = 1;
-  a->has_end = 1;
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
   a->id = g_strdup_printf ("gpa:transition:fade-in:%s:%s", shape_attrs[attr].name, shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, delay));
-  end = animation_add_end (a, timeline_get_sync (timeline, NULL, a, TIME_SPEC_SIDE_BEGIN, duration));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -6482,8 +6480,8 @@ create_transition (Shape             *shape,
 
   a->shape = shape;
   g_ptr_array_add (shape->animations, a);
+
   time_spec_add_animation (begin, a);
-  time_spec_add_animation (end, a);
 
   a = animation_animate_new ();
   a->simple_duration = duration;
@@ -6491,14 +6489,12 @@ create_transition (Shape             *shape,
   a->repeat_count = 1;
 
   a->has_begin = 1;
-  a->has_end = 1;
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
   a->id = g_strdup_printf ("gpa:transition:fade-out:%s:%s", shape_attrs[attr].name, shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (duration + delay)));
-  end = animation_add_end (a, timeline_get_sync (timeline, NULL, a, TIME_SPEC_SIDE_BEGIN, duration));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -6517,7 +6513,74 @@ create_transition (Shape             *shape,
   g_ptr_array_add (shape->animations, a);
 
   time_spec_add_animation (begin, a);
-  time_spec_add_animation (end, a);
+}
+
+static void
+create_transition_delay (Shape     *shape,
+                         Timeline  *timeline,
+                         uint64_t   states,
+                         int64_t    delay,
+                         ShapeAttr  attr,
+                         SvgValue  *value)
+{
+  Animation *a;
+  TimeSpec *begin;
+
+  a = animation_set_new ();
+  a->simple_duration = delay;
+  a->repeat_duration = delay;
+  a->repeat_count = 1;
+
+  a->has_begin = 1;
+  a->has_simple_duration = 1;
+  a->has_repeat_duration = 1;
+
+  a->id = g_strdup_printf ("gpa:transition:fade-in-delay:%s:%s", shape_attrs[attr].name, shape->id);
+
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+
+  a->attr = attr;
+  a->n_frames = 2;
+  a->frames = g_new0 (Frame, a->n_frames);
+  a->frames[0].time = 0;
+  a->frames[1].time = 1;
+  a->frames[0].value = svg_value_ref (value);
+  a->frames[1].value = svg_value_ref (value);
+
+  a->fill = ANIMATION_FILL_REMOVE;
+
+  a->shape = shape;
+  g_ptr_array_add (shape->animations, a);
+  time_spec_add_animation (begin, a);
+
+  a = animation_set_new ();
+  a->simple_duration = delay;
+  a->repeat_duration = delay;
+  a->repeat_count = 1;
+
+  a->has_begin = 1;
+  a->has_simple_duration = 1;
+  a->has_repeat_duration = 1;
+
+  a->id = g_strdup_printf ("gpa:transition:fade-out-delay:%s:%s", shape_attrs[attr].name, shape->id);
+
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, -delay));
+
+  a->attr = attr;
+  a->n_frames = 2;
+  a->frames = g_new0 (Frame, a->n_frames);
+  a->frames[0].time = 0;
+  a->frames[1].time = 1;
+  a->frames[0].value = svg_value_ref (value);
+  a->frames[1].value = svg_value_ref (value);
+
+  a->fill = ANIMATION_FILL_REMOVE;
+
+  a->shape = shape;
+  g_ptr_array_add (shape->animations, a);
+  time_spec_add_animation (begin, a);
+
+  svg_value_unref (value);
 }
 
 static void
@@ -6540,6 +6603,10 @@ create_transitions (Shape             *shape,
                          SHAPE_ATTR_STROKE_DASHARRAY,
                          svg_dash_array_new ((double[]) { 0, 2 }, 2),
                          svg_dash_array_new ((double[]) { 1, 0 }, 2));
+      if (delay != 0)
+        create_transition_delay (shape, timeline, states, delay,
+                                 SHAPE_ATTR_STROKE_DASHOFFSET,
+                                 svg_number_new (0.5));
       if (!G_APPROX_VALUE (origin, 0, 0.001))
         create_transition (shape, timeline, states,
                            duration, delay, easing,
