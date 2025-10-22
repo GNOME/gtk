@@ -139,7 +139,7 @@
 
 #define INDEFINITE G_MAXINT64
 
-#undef DEBUG
+#define DEBUG
 
 typedef enum
 {
@@ -5187,6 +5187,7 @@ struct _Animation
 
   GtkSvgRunMode run_mode;
   int64_t next_invalidate;
+  gboolean state_changed;
 
   AnimationFill fill;
   AnimationRestart restart;
@@ -5753,6 +5754,9 @@ animation_update_state (Animation *a,
         }
 
       animation_update_run_mode (a, current_time);
+
+      a->state_changed = TRUE;
+
 #ifdef DEBUG
       if (strstr (g_getenv ("SVG_DEBUG") ?:"", "state"))
         {
@@ -10121,6 +10125,12 @@ collect_next_update_for_animation (Animation     *a,
 
   *run_mode = MAX (*run_mode, a->run_mode);
   *next_update = MIN (*next_update, a->next_invalidate);
+
+  if (a->state_changed)
+    {
+      *next_update = current_time;
+      a->state_changed = FALSE;
+    }
 }
 
 static void
