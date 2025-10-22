@@ -10307,7 +10307,7 @@ gtk_svg_get_next_update (GtkSvg *self)
 }
 
 /*< private >
- * gtk_svg_serialize:
+ * gtk_svg_serialize_full:
  * @self: an SVG paintable
  * @flags: flags that influence what content is
  *   included in the serialization
@@ -10334,8 +10334,8 @@ gtk_svg_get_next_update (GtkSvg *self)
  * Since: 4.22
  */
 GBytes *
-gtk_svg_serialize (GtkSvg               *self,
-                   GtkSvgSerializeFlags  flags)
+gtk_svg_serialize_full (GtkSvg               *self,
+                        GtkSvgSerializeFlags  flags)
 {
   GString *s = g_string_new ("");
 
@@ -10416,40 +10416,6 @@ gtk_svg_serialize (GtkSvg               *self,
   g_string_append (s, "\n</svg>\n");
 
   return g_string_free_to_bytes (s);
-}
-
-/**
- * gtk_svg_write_to_file:
- * @self: an SVG paintable
- * @filename: the file to save to
- * @flags: flags that influence what content is
- *   included in the serialization
- * @error: return location for an error
- *
- * Serializes the paintable, and saves the result
- * to a file.
- *
- * Returns: true, unless an error occurred
- *
- * Since: 4.22
- */
-gboolean
-gtk_svg_write_to_file (GtkSvg                *self,
-                       const char            *filename,
-                       GtkSvgSerializeFlags   flags,
-                       GError               **error)
-{
-  GBytes *bytes;
-  gboolean ret;
-
-  bytes = gtk_svg_serialize (self, flags);
-  ret = g_file_set_contents (filename,
-                             g_bytes_get_data (bytes, NULL),
-                             g_bytes_get_size (bytes),
-                             error);
-  g_bytes_unref (bytes);
-
-  return ret;
 }
 
 /**
@@ -10589,6 +10555,64 @@ gtk_svg_load_from_bytes (GtkSvg *self,
   gtk_svg_clear_content (self);
 
   gtk_svg_init_from_bytes (self, bytes);
+}
+
+/* }}} */
+/* {{{ Serialization */
+
+/**
+ * gtk_svg_serialize:
+ * @self: an SVG paintable
+ * @flags: flags that influence what content is
+ *   included in the serialization
+ *
+ * Serializes the content of the renderer as SVG.
+ *
+ * The SVG will be similar to the orignally loaded one,
+ * but is not guaranteed to be 100% identical.
+ *
+ * This function serializes the DOM, i.e. the results
+ * of parsing the SVG. It does not reflect the effect
+ * of applying animations.
+ *
+ * Returns: the serialized contents
+ *
+ * Since: 4.22
+ */
+GBytes *
+gtk_svg_serialize (GtkSvg *self)
+{
+  return gtk_svg_serialize_full (self, GTK_SVG_SERIALIZE_DEFAULT);
+}
+
+/**
+ * gtk_svg_write_to_file:
+ * @self: an SVG paintable
+ * @filename: the file to save to
+ * @error: return location for an error
+ *
+ * Serializes the paintable, and saves the result to a file.
+ *
+ * Returns: true, unless an error occurred
+ *
+ * Since: 4.22
+ */
+gboolean
+gtk_svg_write_to_file (GtkSvg      *self,
+                       const char  *filename,
+                       GError     **error)
+{
+  GBytes *bytes;
+  gboolean ret;
+
+  bytes = gtk_svg_serialize (self);
+  ret = g_file_set_contents (filename,
+                             g_bytes_get_data (bytes, NULL),
+                             g_bytes_get_size (bytes),
+                             error);
+  g_bytes_unref (bytes);
+
+  return ret;
 }
 
 /* }}} */
