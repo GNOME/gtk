@@ -544,6 +544,8 @@ _gdk_wayland_keymap_new (void)
   keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
 
   context = xkb_context_new (0);
+  if (G_UNLIKELY (!context))
+    g_error ("Failed to create XKB context");
 
   names.rules = "evdev";
   names.model = "pc105";
@@ -551,7 +553,12 @@ _gdk_wayland_keymap_new (void)
   names.variant = "";
   names.options = "";
   keymap->xkb_keymap = xkb_keymap_new_from_names (context, &names, 0);
+  if (G_UNLIKELY (!keymap->xkb_keymap))
+    g_error ("Failed to create XKB keymap");
+
   keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
+  if (G_UNLIKELY (!keymap->xkb_state))
+    g_error ("Failed to create XKB state");
   xkb_context_unref (context);
 
   update_direction (keymap);
@@ -611,6 +618,8 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
   char *map_str;
 
   context = xkb_context_new (0);
+  if (G_UNLIKELY (!context))
+    g_error ("Failed to create XKB context");
 
   map_str = mmap (NULL, size, PROT_READ, MAP_SHARED, fd, 0);
   if (map_str == MAP_FAILED)

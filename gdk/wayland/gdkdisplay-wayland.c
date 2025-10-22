@@ -1139,6 +1139,8 @@ static void
 gdk_wayland_display_init (GdkWaylandDisplay *display)
 {
   display->xkb_context = xkb_context_new (0);
+  if (G_UNLIKELY (!display->xkb_context))
+    g_error ("Failed to create XKB context");
 
   display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 }
