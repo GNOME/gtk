@@ -10520,7 +10520,7 @@ gtk_svg_clear_content (GtkSvg *self)
 GtkSvg *
 gtk_svg_new (void)
 {
-  return g_object_new (GTK_SVG_TYPE, NULL);
+  return g_object_new (GTK_TYPE_SVG, NULL);
 }
 
 /**
@@ -10536,7 +10536,7 @@ gtk_svg_new (void)
 GtkSvg *
 gtk_svg_new_from_bytes (GBytes *bytes)
 {
-  GtkSvg *self = g_object_new (GTK_SVG_TYPE, NULL);
+  GtkSvg *self = g_object_new (GTK_TYPE_SVG, NULL);
 
   gtk_svg_init_from_bytes (self, bytes);
 
@@ -10556,7 +10556,7 @@ gtk_svg_new_from_bytes (GBytes *bytes)
 GtkSvg *
 gtk_svg_new_from_resource (const char *path)
 {
-  return g_object_new (GTK_SVG_TYPE, "resource", path, NULL);
+  return g_object_new (GTK_TYPE_SVG, "resource", path, NULL);
 }
 
 /* }}} */
