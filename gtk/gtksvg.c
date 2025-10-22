@@ -7111,6 +7111,8 @@ parse_base_animation_attrs (Animation            *a,
           begin = animation_add_begin (a, timeline_get_time_spec (data->svg->timeline, &spec));
           time_spec_add_animation (begin, a);
           time_spec_clear (&spec);
+          if (begin->type == TIME_SPEC_TYPE_STATES)
+            data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (begin->states.states, -1));
         }
       g_strfreev (strv);
     }
@@ -7142,6 +7144,8 @@ parse_base_animation_attrs (Animation            *a,
           end = animation_add_end (a, timeline_get_time_spec (data->svg->timeline, &spec));
           time_spec_add_animation (end, a);
           time_spec_clear (&spec);
+          if (end->type == TIME_SPEC_TYPE_STATES)
+            data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (end->states.states, -1));
         }
       g_strfreev (strv);
     }
