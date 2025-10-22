@@ -7388,7 +7388,8 @@ parse_base_animation_attrs (Animation            *a,
   if (a->type == ANIMATION_TYPE_MOTION)
     {
       if (attr_name_attr)
-        gtk_svg_invalid_attribute (data->svg, context, "attributeName", NULL);
+        gtk_svg_invalid_attribute (data->svg, context, "attributeName",
+                                   "can't have 'attributeName' on <animateMotion>");
     }
   else if (!attr_name_attr)
     {
@@ -7412,10 +7413,10 @@ parse_base_animation_attrs (Animation            *a,
                          "gpa:stroke-minwidth", "gpa:stroke-maxwidth",
                        }, 31,
                        &value))
-        gtk_svg_invalid_attribute (data->svg, context, "attributeName", NULL);
+        gtk_svg_invalid_attribute (data->svg, context, "attributeName", "attribute '%s' is not animatable", attr_name_attr);
       else if (a->type == ANIMATION_TYPE_TRANSFORM && value != SHAPE_ATTR_TRANSFORM)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "attributeName", "Value must be 'transform'");
+          gtk_svg_invalid_attribute (data->svg, context, "attributeName", "value must be 'transform'");
           a->attr = SHAPE_ATTR_TRANSFORM;
         }
       else
@@ -7533,7 +7534,7 @@ parse_value_animation_attrs (Animation            *a,
       values = shape_attr_parse_values (a->attr, transform_type, values_attr);
       if (!values || values->len < 2)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "values", NULL);
+          gtk_svg_invalid_attribute (data->svg, context, "values", "failed to parse %s", values_attr);
           g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
@@ -8330,7 +8331,7 @@ start_element_cb (GMarkupParseContext  *context,
                                         context))
         {
           animation_drop_and_free (a);
-          skip_element (data, context, "Bad animation value attributes");
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
           return;
         }
 
@@ -8381,7 +8382,7 @@ start_element_cb (GMarkupParseContext  *context,
                                         context))
         {
           animation_drop_and_free (a);
-          skip_element (data, context, "Bad animation value attributes");
+          skip_element (data, context, "Skipping <%s>: bad attributes", element_name);
           return;
         }
 
@@ -8401,9 +8402,9 @@ start_element_cb (GMarkupParseContext  *context,
 
           if (!a->motion.path)
             {
-              gtk_svg_invalid_attribute (data->svg, context, "path", "Failed to parse: %s", path_attr);
+              gtk_svg_invalid_attribute (data->svg, context, "path", "failed to parse: %s", path_attr);
               animation_drop_and_free (a);
-              skip_element (data, context, "Bad <animateMotion> 'path' attribute");
+              skip_element (data, context, "Skipping <%s>: bad 'path' attribute", element_name);
               return;
             }
         }
@@ -8422,7 +8423,7 @@ start_element_cb (GMarkupParseContext  *context,
                                &value))
             a->motion.rotate = (AnimationRotate) value;
           else
-            gtk_svg_invalid_attribute (data->svg, context, "rotate", "Failed to parse: %s", rotate_attr);
+            gtk_svg_invalid_attribute (data->svg, context, "rotate", "failed to parse: %s", rotate_attr);
         }
 
       if (key_points_attr)
@@ -8430,10 +8431,10 @@ start_element_cb (GMarkupParseContext  *context,
           GArray *points = parse_numbers2 (key_points_attr, ";", 0, 1);
           if (!points)
             {
-              gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "Failed to parse: %s", key_points_attr);
+              gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "failed to parse: %s", key_points_attr);
               g_array_unref (points);
               animation_drop_and_free (a);
-              skip_element (data, context, "Bad <animateMotion> 'keyPoints' attribute");
+              skip_element (data, context, "Skipping <%s>: bad 'keyPoints' attribute", element_name);
               return;
             }
 
@@ -8442,7 +8443,7 @@ start_element_cb (GMarkupParseContext  *context,
               gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "wrong number of values");
               g_array_unref (points);
               animation_drop_and_free (a);
-              skip_element (data, context, "Bad <animateMotion> 'keyPoints' attribute");
+              skip_element (data, context, "Skipping <%s>: bad 'keyPoints' attribute", element_name);
 
               return;
             }
@@ -8476,7 +8477,7 @@ start_element_cb (GMarkupParseContext  *context,
           data->current_animation->type != ANIMATION_TYPE_MOTION ||
           data->current_animation->motion.path_ref != NULL)
         {
-          skip_element (data, context, "mpath is only allowed in <animateMotion>");
+          skip_element (data, context, "<mpath> only allowed in <animateMotion>");
           return;
         }
 
