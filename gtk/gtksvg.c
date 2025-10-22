@@ -139,7 +139,7 @@
 
 #define INDEFINITE G_MAXINT64
 
-#undef DEBUG
+#define DEBUG
 
 typedef enum
 {
@@ -5187,6 +5187,7 @@ struct _Animation
 
   GtkSvgRunMode run_mode;
   int64_t next_invalidate;
+  gboolean state_changed;
 
   AnimationFill fill;
   AnimationRestart restart;
@@ -5753,6 +5754,9 @@ animation_update_state (Animation *a,
         }
 
       animation_update_run_mode (a, current_time);
+
+      a->state_changed = TRUE;
+
 #ifdef DEBUG
       if (strstr (g_getenv ("SVG_DEBUG") ?:"", "state"))
         {
@@ -7111,6 +7115,8 @@ parse_base_animation_attrs (Animation            *a,
           begin = animation_add_begin (a, timeline_get_time_spec (data->svg->timeline, &spec));
           time_spec_add_animation (begin, a);
           time_spec_clear (&spec);
+          if (begin->type == TIME_SPEC_TYPE_STATES)
+            data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (begin->states.states, -1));
         }
       g_strfreev (strv);
     }
@@ -7142,6 +7148,8 @@ parse_base_animation_attrs (Animation            *a,
           end = animation_add_end (a, timeline_get_time_spec (data->svg->timeline, &spec));
           time_spec_add_animation (end, a);
           time_spec_clear (&spec);
+          if (end->type == TIME_SPEC_TYPE_STATES)
+            data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (end->states.states, -1));
         }
       g_strfreev (strv);
     }
@@ -9062,8 +9070,9 @@ serialize_animation_set (GString              *s,
   indent_for_attr (s, indent);
   g_string_append (s, "to='");
   svg_value_print (a->frames[0].value, s);
+  g_string_append (s, "'");
   serialize_animation_status (s, svg, indent, a, flags);
-  g_string_append (s, "'/>");
+  g_string_append (s, "/>");
 }
 
 static void
@@ -10116,6 +10125,12 @@ collect_next_update_for_animation (Animation     *a,
 
   *run_mode = MAX (*run_mode, a->run_mode);
   *next_update = MIN (*next_update, a->next_invalidate);
+
+  if (a->state_changed)
+    {
+      *next_update = current_time;
+      a->state_changed = FALSE;
+    }
 }
 
 static void

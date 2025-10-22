@@ -1,0 +1,15 @@
+input: states.svg
+time: 0
+output: states-0.svg
+time: 500
+output: states-1.svg
+time: 1000
+output: states-2.svg
+time: 5000
+output: states-3.svg
+time: 10000
+output: states-4.svg
+time: 10500
+output: states-5.svg
+time: 11000
+output: states-6.svg

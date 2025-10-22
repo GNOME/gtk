@@ -6,9 +6,9 @@
         gpa:version='1'
         gpa:state='empty'
         gpa:state-change-delay='0ms'
-        gpa:time-since-load='3000ms'>
+        gpa:time-since-load='0ms'>
   <circle
-          opacity='1'
+          opacity='0'
           stroke='rgb(255,0,0)'
           cx='50'
           cy='50'
@@ -19,18 +19,18 @@
             begin='500ms'
             dur='5000ms'
             fill='freeze'
-            to='0.5
-            gpa:status='running'
+            to='0.5'
+            gpa:status='inactive'
             gpa:current-start-time='500ms'
-            gpa:current-end-time='5500ms''/>
+            gpa:current-end-time='5500ms'/>
     <set
             id='two'
             attributeName='opacity'
             begin='1500ms'
             dur='2000ms'
-            to='1
-            gpa:status='running'
+            to='1'
+            gpa:status='inactive'
             gpa:current-start-time='1500ms'
-            gpa:current-end-time='3500ms''/>
+            gpa:current-end-time='3500ms'/>
   </circle>
 </svg>

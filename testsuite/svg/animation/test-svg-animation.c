@@ -24,55 +24,131 @@
 #include "gtk/gtksvgprivate.h"
 #include "testsuite/testutils.h"
 
+
 static char *
-test_get_reference_file (const char *svg_file)
+get_sibling (const char *file,
+             char       *name)
 {
-  GString *file = g_string_new (NULL);
+  char *dir = g_path_get_dirname (file);
+  char *res = g_build_filename (dir, g_strstrip (name), NULL);
+  g_free (dir);
+  return res;
+}
 
-  if (g_str_has_suffix (svg_file, ".svg"))
-    g_string_append_len (file, svg_file, strlen (svg_file) - 4);
-  else
-    g_string_append (file, svg_file);
+typedef enum
+{
+  TIME,
+  STATE,
+  OUTPUT
+} StepType;
 
-  g_string_append (file, ".ref.svg");
+typedef struct
+{
+  StepType type;
+  int64_t time;
+  unsigned int state;
+  char *output;
+} Step;
 
-  if (!g_file_test (file->str, G_FILE_TEST_EXISTS))
-    {
-      g_string_free (file, TRUE);
-      return g_strdup (svg_file);
-    }
+static void
+clear_step (gpointer data)
+{
+  Step *step = data;
 
-  return g_string_free (file, FALSE);
+  if (step->type == OUTPUT)
+    g_free (step->output);
 }
 
 static void
-render_svg_file (GFile *file, gboolean generate, unsigned int time)
+render_svg_file (GFile *file, gboolean generate)
 {
+  const char *filename;
   GtkSvg *svg;
-  char *reference_file;
   char *svg_file;
   char *contents;
   size_t length;
   GBytes *bytes;
-  char *diff;
   GError *error = NULL;
   int64_t load_time;
-  int64_t render_time;
-  GBytes *output;
+  GArray *steps;
 
-  if (generate)
+  steps = g_array_new (FALSE, FALSE, sizeof (Step));
+  g_array_set_clear_func (steps, clear_step);
+
+  filename = g_file_peek_path (file);
+
+  if (g_str_has_suffix (filename, ".test"))
     {
-      svg_file = g_file_get_path (file);
-      reference_file = test_get_reference_file (svg_file);
+      GStrv strv;
+
+      if (!g_file_get_contents (filename, &contents, &length, &error))
+        g_error ("%s", error->message);
+
+      strv = g_strsplit (contents, "\n", 0);
+
+      if (!g_str_has_prefix (strv[0], "input: "))
+        g_error ("Can't parse %s\n", filename);
+
+      svg_file = get_sibling (filename, strv[0] + strlen ("input: "));
+
+      for (unsigned int i = 1; strv[i]; i++)
+        {
+          Step step;
+
+          memset (&step, 0, sizeof (Step));
+
+          if (g_str_has_prefix (strv[i], "state: "))
+            {
+              char *end;
+              step.type = STATE;
+              if (strcmp (strv[i] + strlen ("state: "), "empty") == 0)
+                step.state = GTK_SVG_STATE_EMPTY;
+              else
+                {
+                  step.state = g_ascii_strtoull (strv[i] + strlen ("state: "), &end, 10);
+                  if ((end && *end != '\0') || step.state > 63)
+                    g_error ("Can't parse %s\n", filename);
+                }
+              g_array_append_val (steps, step);
+            }
+          else if (g_str_has_prefix (strv[i], "time: "))
+            {
+              char *end;
+              step.type = TIME;
+              step.time = g_ascii_strtoull (strv[i] + strlen ("time: "), &end, 10);
+              if (end && *end != '\0')
+                g_error ("Can't parse %s\n", filename);
+              g_array_append_val (steps, step);
+            }
+          else if (g_str_has_prefix (strv[i], "output: "))
+            {
+              step.type = OUTPUT;
+              step.output = get_sibling (filename, strv[i] + strlen ("output: "));
+              g_array_append_val (steps, step);
+            }
+        }
+
+      g_strfreev (strv);
+      g_free (contents);
     }
   else
     {
+      Step step;
       char *p, *end = NULL;
-      reference_file = g_file_get_path (file);
-      svg_file = g_strdup (reference_file);
+      int64_t time;
+
+      svg_file = g_file_get_path (file);
       p = strrchr (svg_file, '.');
       time = g_ascii_strtoull (&p[1], &end, 10);
       *p = '\0';
+
+      step.type = TIME;
+      step.time = time;
+      g_array_append_val (steps, step);
+
+      step.type = OUTPUT;
+      step.output = g_file_get_path (file);
+      g_array_append_val (steps, step);
     }
 
   if (!g_file_get_contents (svg_file, &contents, &length, &error))
@@ -81,45 +157,68 @@ render_svg_file (GFile *file, gboolean generate, unsigned int time)
   bytes = g_bytes_new_take (contents, length);
   svg = gtk_svg_new_from_bytes (bytes);
   g_bytes_unref (bytes);
-  g_assert_no_error (error);
 
   load_time = g_get_monotonic_time ();
-  render_time = load_time + time * G_TIME_SPAN_MILLISECOND;
-
   gtk_svg_set_load_time (svg, load_time);
-  gtk_svg_advance (svg, render_time);
 
-  output = gtk_svg_serialize_full (svg,
-                                   GTK_SVG_SERIALIZE_AT_CURRENT_TIME |
-                                   GTK_SVG_SERIALIZE_INCLUDE_STATE);
-
-  if (generate)
+  for (unsigned int i = 0; i < steps->len; i++)
     {
-      g_print ("%s", (const char *) g_bytes_get_data (output, NULL));
-      goto out;
+      Step *step = &g_array_index (steps, Step, i);
+      switch (step->type)
+        {
+        case TIME:
+          gtk_svg_advance (svg, load_time + step->time * G_TIME_SPAN_MILLISECOND);
+          break;
+        case STATE:
+          gtk_svg_set_state (svg, step->state);
+          break;
+        case OUTPUT:
+          {
+            GBytes *output;
+
+            output = gtk_svg_serialize_full (svg,
+                                             GTK_SVG_SERIALIZE_AT_CURRENT_TIME |
+                                             GTK_SVG_SERIALIZE_INCLUDE_STATE);
+            if (generate)
+              {
+                if (!g_file_set_contents (step->output,
+                                          g_bytes_get_data (output, NULL),
+                                          g_bytes_get_size (output),
+                                          &error))
+                  g_error ("%s", error->message);
+                g_print ("%s written\n", step->output);
+              }
+            else
+              {
+                char *diff;
+
+                diff = diff_bytes_with_file (step->output, output, &error);
+                g_assert_no_error (error);
+                if (diff && diff[0])
+                  {
+                    g_test_message ("Resulting file doesn't match reference:\n%s", diff);
+                    g_test_fail ();
+                 }
+                g_free (diff);
+              }
+            g_clear_pointer (&output, g_bytes_unref);
+          }
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
     }
 
-  diff = diff_bytes_with_file (reference_file, output, &error);
-  g_assert_no_error (error);
-
-  if (diff && diff[0])
-    {
-      g_test_message ("Resulting file doesn't match reference:\n%s", diff);
-      g_test_fail ();
-    }
-  g_free (diff);
-
-out:
-  g_free (reference_file);
+  g_array_unref (steps);
   g_free (svg_file);
-  g_clear_pointer (&output, g_bytes_unref);
   g_object_unref (svg);
 }
 
 static void
 test_svg_file (GFile *file)
 {
-  render_svg_file (file, FALSE, 0);
+  render_svg_file (file, FALSE);
 }
 
 static void
@@ -172,18 +271,14 @@ add_tests_for_files_in_directory (GFile *dir)
 
   while ((info = g_file_enumerator_next_file (enumerator, NULL, &error)))
     {
-      const char *filename;
+      const char *filename = g_file_info_get_name (info);
 
-      filename = g_file_info_get_name (info);
-
-      if (!g_regex_match_simple (".*\\.svg\\.[0-9]+$", filename, 0, 0))
+      if (g_str_has_suffix (filename, ".test") ||
+          g_regex_match_simple (".*\\.svg\\.[0-9]+$", filename, 0, 0))
         {
-          g_object_unref (info);
-          continue;
+          g_print ("adding %s\n", filename);
+          files = g_list_prepend (files, g_file_get_child (dir, filename));
         }
-
-      g_print ("adding %s\n", filename);
-      files = g_list_prepend (files, g_file_get_child (dir, filename));
 
       g_object_unref (info);
     }
@@ -202,17 +297,11 @@ main (int argc, char **argv)
   if (argc >= 3 && strcmp (argv[1], "--generate") == 0)
     {
       GFile *file;
-      unsigned int time;
-      char *end = NULL;
-
-      time = g_ascii_strtoull (argv[2], &end, 10);
-      if (end && *end != '\0')
-        g_error ("usage: test-svg-animation --generate TIME");
 
       gtk_init ();
 
-      file = g_file_new_for_commandline_arg (argv[3]);
-      render_svg_file (file, TRUE, time);
+      file = g_file_new_for_commandline_arg (argv[2]);
+      render_svg_file (file, TRUE);
       g_object_unref (file);
 
       return 0;
