@@ -81,6 +81,10 @@
                     <attribute name="action">win.save-as</attribute>
                   </item>
                   <item>
+                    <attribute name="label" translatable="yes">_Export…</attribute>
+                    <attribute name="action">win.export</attribute>
+                  </item>
+                  <item>
                     <attribute name="label" translatable="yes">_Revert changes</attribute>
                     <attribute name="action">win.revert</attribute>
                   </item>

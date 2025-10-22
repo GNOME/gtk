@@ -31,7 +31,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_SVG_TYPE (gtk_svg_get_type ())
+#define GTK_TYPE_SVG (gtk_svg_get_type ())
 
 GDK_AVAILABLE_IN_4_22
 G_DECLARE_FINAL_TYPE (GtkSvg, gtk_svg, GTK, SVG, GObject)
@@ -48,6 +48,14 @@ GtkSvg *         gtk_svg_new_from_bytes    (GBytes        *bytes);
 
 GDK_AVAILABLE_IN_4_22
 GtkSvg *         gtk_svg_new_from_resource (const char    *path);
+
+GDK_AVAILABLE_IN_4_22
+GBytes *         gtk_svg_serialize         (GtkSvg        *self);
+
+GDK_AVAILABLE_IN_4_22
+gboolean         gtk_svg_write_to_file     (GtkSvg        *self,
+                                            const char    *filename,
+                                            GError       **error);
 
 GDK_AVAILABLE_IN_4_22
 void             gtk_svg_set_weight        (GtkSvg        *self,

@@ -128,7 +128,7 @@ parse_svg_file (GFile *file, gboolean generate)
   bytes = g_bytes_new_take (contents, length);
   gtk_svg_load_from_bytes (svg, bytes);
 
-  output = gtk_svg_serialize (svg, GTK_SVG_SERIALIZE_DEFAULT);
+  output = gtk_svg_serialize (svg);
 
   if (generate)
     {
