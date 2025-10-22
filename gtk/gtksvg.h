@@ -50,6 +50,14 @@ GDK_AVAILABLE_IN_4_22
 GtkSvg *         gtk_svg_new_from_resource (const char    *path);
 
 GDK_AVAILABLE_IN_4_22
+GBytes *         gtk_svg_serialize         (GtkSvg        *self);
+
+GDK_AVAILABLE_IN_4_22
+gboolean         gtk_svg_write_to_file     (GtkSvg        *self,
+                                            const char    *filename,
+                                            GError       **error);
+
+GDK_AVAILABLE_IN_4_22
 void             gtk_svg_set_weight        (GtkSvg        *self,
                                             double         weight);
 GDK_AVAILABLE_IN_4_22

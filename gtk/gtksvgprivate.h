@@ -53,12 +53,7 @@ typedef enum
   GTK_SVG_SERIALIZE_INCLUDE_STATE     = 1 << 2,
 } GtkSvgSerializeFlags;
 
-GBytes *       gtk_svg_serialize       (GtkSvg                *self,
+GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
                                         GtkSvgSerializeFlags   flags);
-
-gboolean       gtk_svg_write_to_file   (GtkSvg                *self,
-                                        const char            *filename,
-                                        GtkSvgSerializeFlags   flags,
-                                        GError               **error);
 
 G_END_DECLS
