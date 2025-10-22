@@ -57,7 +57,6 @@ render_svg_file (GFile *file, gboolean generate)
   GError *error = NULL;
   GtkSnapshot *snapshot;
   GskRenderNode *node;
-  int64_t load_time;
 
   svg_file = g_file_get_path (file);
 
@@ -69,9 +68,7 @@ render_svg_file (GFile *file, gboolean generate)
   g_bytes_unref (bytes);
   g_assert_no_error (error);
 
-  load_time = g_get_monotonic_time ();
-  gtk_svg_set_load_time (svg, load_time);
-  gtk_svg_advance (svg, load_time);
+  gtk_svg_play (svg);
 
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (GDK_PAINTABLE (svg), snapshot, 100, 100);
