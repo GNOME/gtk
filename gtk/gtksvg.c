@@ -1724,6 +1724,67 @@ css_parser_parse_number (GtkCssParser *parser,
   return 1;
 }
 
+static gboolean
+parse_transform_function (GtkCssParser *self,
+                          guint         min_args,
+                          guint         max_args,
+                          double       *values)
+{
+  const GtkCssToken *token;
+  gboolean result = FALSE;
+  char function_name[64];
+  guint arg;
+
+  token = gtk_css_parser_get_token (self);
+  g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
+
+  g_strlcpy (function_name, gtk_css_token_get_string (token), 64);
+  gtk_css_parser_start_block (self);
+
+  arg = 0;
+  while (TRUE)
+    {
+      guint parse_args = css_parser_parse_number (self, arg, values);
+      if (parse_args == 0)
+        break;
+      arg += parse_args;
+      token = gtk_css_parser_get_token (self);
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+        {
+          if (arg < min_args)
+            {
+              gtk_css_parser_error_syntax (self, "%s() requires at least %u arguments", function_name, min_args);
+              break;
+            }
+          else
+            {
+              result = TRUE;
+              break;
+            }
+        }
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_COMMA))
+        {
+          if (arg >= max_args)
+            {
+              gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", function_name);
+              break;
+            }
+
+          gtk_css_parser_consume_token (self);
+          continue;
+        }
+      else if (!gtk_css_parser_has_number (self))
+        {
+          gtk_css_parser_error_syntax (self, "Unexpected data at end of %s() argument", function_name);
+          break;
+        }
+    }
+
+  gtk_css_parser_end_block (self);
+
+  return result;
+}
+
 static SvgValue *
 transform_parser_parse (GtkCssParser *parser)
 {
@@ -1745,7 +1806,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
            double values[3] = { 0, 0, 0 };
 
-          if (!gtk_css_parser_consume_function (parser, 1, 3, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 3, values))
             goto fail;
 
           transform.type = TRANSFORM_ROTATE;
@@ -1760,7 +1821,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[2] = { 0, 0 };
 
-          if (!gtk_css_parser_consume_function (parser, 1, 2, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 2, values))
             goto fail;
 
           transform.type = TRANSFORM_SCALE;
@@ -1774,7 +1835,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[2] = { 0, 0 };
 
-          if (!gtk_css_parser_consume_function (parser, 1, 2, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 2, values))
             goto fail;
 
           transform.type = TRANSFORM_TRANSLATE;
@@ -1788,7 +1849,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[1];
 
-          if (!gtk_css_parser_consume_function (parser, 1, 1, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 1, values))
             goto fail;
 
           transform.type = TRANSFORM_SKEW_X;
@@ -1798,7 +1859,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[1];
 
-          if (!gtk_css_parser_consume_function (parser, 1, 1, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 1, values))
             goto fail;
 
           transform.type = TRANSFORM_SKEW_Y;
@@ -1808,7 +1869,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[6];
 
-          if (!gtk_css_parser_consume_function (parser, 6, 6, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 6, 6, values))
             goto fail;
 
           transform.type = TRANSFORM_MATRIX;
