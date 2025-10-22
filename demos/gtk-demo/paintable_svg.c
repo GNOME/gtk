@@ -22,16 +22,16 @@ image_clicked (GtkGestureClick *click,
                double y,
                GtkImage *image)
 {
-  GtkPathPaintable *paintable = GTK_PATH_PAINTABLE (gtk_image_get_paintable (image));
-  guint state = gtk_path_paintable_get_state (paintable);
-  guint max_state = gtk_path_paintable_get_max_state (paintable);
+  GtkSvg *paintable = GTK_SVG (gtk_image_get_paintable (image));
+  guint state = gtk_svg_get_state (paintable);
+  guint n_states = gtk_svg_get_n_states (paintable);
 
-  if (state == GTK_PATH_PAINTABLE_STATE_EMPTY)
-    gtk_path_paintable_set_state (paintable, 0);
-  else if (state < max_state)
-    gtk_path_paintable_set_state (paintable, state + 1);
+  if (state == GTK_SVG_STATE_EMPTY)
+    gtk_svg_set_state (paintable, 0);
+  else if (state + 1 < n_states)
+    gtk_svg_set_state (paintable, state + 1);
   else
-    gtk_path_paintable_set_state (paintable, GTK_PATH_PAINTABLE_STATE_EMPTY);
+    gtk_svg_set_state (paintable, GTK_SVG_STATE_EMPTY);
 }
 
 static void
@@ -66,7 +66,7 @@ open_response_cb (GObject      *source,
       else if (g_str_has_suffix (g_file_peek_path (file), ".gpa"))
         {
           GBytes *bytes = g_file_load_bytes (file, NULL, NULL, NULL);
-          paintable = GDK_PAINTABLE (gtk_path_paintable_new_from_bytes (bytes, NULL));
+          paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
           g_bytes_unref (bytes);
           if (!GTK_IS_IMAGE (image))
             {

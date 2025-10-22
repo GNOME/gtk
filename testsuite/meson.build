@@ -90,3 +90,4 @@ if build_gir
   endif
 endif
 
+subdir('svg')

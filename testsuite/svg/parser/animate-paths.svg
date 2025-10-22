@@ -1,0 +1,44 @@
+<svg width="150" height="120" viewBox="0 0 150 120">
+  <!-- Path elements with various animations (Note: parser doesn't support 'd' attribute animation) -->
+  
+  <!-- Path with stroke animation -->
+  <path d="M20,20 L40,20 L40,40 L20,40 Z" fill="red" stroke="black" stroke-width="2">
+    <animate attributeName="stroke" 
+             values="black;blue;green;black" 
+             dur="3s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Path with fill animation -->
+  <path d="M60,20 C60,20 80,20 80,20" fill="blue" stroke="none">
+    <animate attributeName="fill" 
+             values="blue;red;yellow;blue" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Path with stroke-width animation -->
+  <path d="M20,60 L40,60 L60,60" fill="none" stroke="green" stroke-width="2">
+    <animate attributeName="stroke-width" 
+             values="2;6;2" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Path with opacity animation -->
+  <path d="M100,20 L120,20 L120,40 L100,40 Z" fill="orange" stroke="none" opacity="1">
+    <animate attributeName="opacity" 
+             values="1;0.3;1" 
+             dur="4s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Path with transform animation -->
+  <path d="M20,100 Q40,80 60,100" fill="purple" stroke="none">
+    <animateTransform attributeName="transform" 
+                     type="rotate" 
+                     values="0 40 90;180 40 90;360 40 90" 
+                     dur="3s" 
+                     repeatCount="indefinite"/>
+  </path>
+</svg>

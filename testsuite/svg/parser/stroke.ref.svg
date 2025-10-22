@@ -1,0 +1,30 @@
+<svg
+        width='16'
+        height='16'>
+  <path
+          id='path0'
+          stroke='rgba(1,10,200,0.5)'
+          stroke-opacity='0.5'
+          stroke-width='200.4'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='10'
+          stroke-dasharray='0 10 1 2'
+          stroke-dashoffset='-20'
+          d='M 0 0 L 100 100'
+          gpa:stroke-width='50.1 200.4 300.6'/>
+  <circle
+          id='circle'
+          stroke='rgb(255,0,0)'
+          stroke-opacity='0'
+          stroke-width='0'
+          stroke-linecap='square'
+          stroke-linejoin='bevel'
+          stroke-miterlimit='0'
+          stroke-dasharray='0 10 1 2'
+          stroke-dashoffset='10'
+          cx='0'
+          cy='0'
+          r='1'
+          gpa:stroke-width='0 0 0'/>
+</svg>

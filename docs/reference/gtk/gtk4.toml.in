@@ -304,6 +304,8 @@ content_images = [
   "images/stackswitcher-dark.png",
   "images/statusbar.png",
   "images/statusbar-dark.png",
+  "images/svg-renderer1.svg",
+  "images/svg-renderer2.svg",
   "images/switch.png",
   "images/switch-dark.png",
   "images/toggle-button.png",

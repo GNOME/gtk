@@ -1,0 +1,7 @@
+<svg viewport='0 0 100 100' width='100' height='100'>
+  <g stroke='none' fill-opacity='0.75'>
+    <rect id='rect' x='20' y='40' width='60' height='30' fill='blue'/>
+    <circle id='circle' cx='40' cy='40' r='10' fill='red'/>
+    <path id='triangle' d='M 40 40 L 50 80 L 75 55 z' fill='green'/>
+  </g>
+</svg>

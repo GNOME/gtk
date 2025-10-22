@@ -95,7 +95,7 @@ struct _PathPaintable
   float weight;
 
   GStrv keywords;
-  GtkPathPaintable *render_paintable;
+  GdkPaintable *render_paintable;
 };
 
 enum
@@ -135,7 +135,7 @@ notify_state (GObject *object)
   g_object_notify_by_pspec (object, properties[PROP_STATE]);
 }
 
-static GtkPathPaintable *
+static GdkPaintable *
 ensure_render_paintable (PathPaintable *self)
 {
   if (!self->render_paintable)
@@ -144,12 +144,13 @@ ensure_render_paintable (PathPaintable *self)
       g_autoptr (GError) error = NULL;
 
       bytes = path_paintable_serialize (self, self->state);
-      self->render_paintable = gtk_path_paintable_new_from_bytes (bytes, &error);
+
+      self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
+      gtk_svg_set_weight (GTK_SVG (self->render_paintable), self->weight);
+      gtk_svg_play (GTK_SVG (self->render_paintable));
 
       if (!self->render_paintable)
         g_error ("%s", error->message);
-
-      gtk_path_paintable_set_weight (self->render_paintable, self->weight);
 
       g_signal_connect_swapped (self->render_paintable, "notify::state",
                                 G_CALLBACK (notify_state), self);
@@ -241,6 +242,7 @@ typedef struct
   PathPaintable *paintable;
   GHashTable *paths;
   GArray *attach;
+  const GSList *skip;
 } ParserData;
 
 static void
@@ -638,6 +640,9 @@ start_element_cb (GMarkupParseContext  *context,
   ShapeType shape_type;
   float shape_params[6];
 
+  if (data->skip)
+    return;
+
   if (strcmp (element_name, "svg") == 0)
     {
       const char *width_attr = NULL;
@@ -723,9 +728,15 @@ start_element_cb (GMarkupParseContext  *context,
   else if (strcmp (element_name, "g") == 0 ||
            strcmp (element_name, "defs") == 0 ||
            strcmp (element_name, "style") == 0 ||
+           strcmp (element_name, "title") == 0 ||
+           strcmp (element_name, "desc") == 0 ||
+           strcmp (element_name, "metadata") == 0 ||
+           strcmp (element_name, "linearGradient") == 0 ||
+           strcmp (element_name, "radialGradient") == 0 ||
            g_str_has_prefix (element_name, "sodipodi:") ||
            g_str_has_prefix (element_name, "inkscape:"))
     {
+      data->skip = g_markup_parse_context_get_element_stack (context);
       /* Do nothing */
       return;
     }
@@ -1240,6 +1251,24 @@ cleanup:
   g_clear_pointer (&animation_keyframes, g_array_unref);
 }
 
+static void
+end_element_cb (GMarkupParseContext *context,
+                const gchar         *element_name,
+                gpointer             user_data,
+                GError             **gmarkup_error)
+{
+  ParserData *data = user_data;
+
+  if (data->skip != NULL)
+    {
+      if (data->skip == g_markup_parse_context_get_element_stack (context))
+        {
+          data->skip = NULL;
+        }
+      return;
+    }
+}
+
 static gboolean
 parse_symbolic_svg (PathPaintable  *paintable,
                     GBytes         *bytes,
@@ -1249,7 +1278,7 @@ parse_symbolic_svg (PathPaintable  *paintable,
   GMarkupParseContext *context;
   GMarkupParser parser = {
     start_element_cb,
-    NULL,
+    end_element_cb,
     NULL,
     NULL,
     NULL,
@@ -1261,6 +1290,7 @@ parse_symbolic_svg (PathPaintable  *paintable,
   data.paintable = paintable;
   data.paths = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   data.attach = g_array_new (FALSE, TRUE, sizeof (AttachData));
+  data.skip = NULL;
   g_array_set_clear_func (data.attach, attach_data_clear);
 
   text = g_bytes_get_data (bytes, &length);
@@ -1618,7 +1648,7 @@ path_paintable_save (PathPaintable *self,
       g_string_append_c (str, '\'');
     }
 
-  if (initial_state != 0)
+  if (initial_state != (unsigned int) -1)
     g_string_append_printf (str,      "\n     gpa:state='%u'", initial_state);
 
   g_string_append (str, ">\n");
@@ -2822,7 +2852,7 @@ path_paintable_set_state (PathPaintable *self,
   self->state = state;
 
   if (self->render_paintable)
-    gtk_path_paintable_set_state (self->render_paintable, state);
+    gtk_svg_set_state (GTK_SVG (self->render_paintable), state);
 }
 
 unsigned int
@@ -2841,7 +2871,7 @@ path_paintable_set_weight (PathPaintable *self,
   self->weight = weight;
 
   if (self->render_paintable)
-    gtk_path_paintable_set_weight (self->render_paintable, weight);
+    gtk_svg_set_weight (GTK_SVG (self->render_paintable), weight);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
 }
@@ -2855,7 +2885,7 @@ path_paintable_get_weight (PathPaintable *self)
 unsigned int
 path_paintable_get_max_state (PathPaintable *self)
 {
-  return gtk_path_paintable_get_max_state (ensure_render_paintable (self));
+  return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self)));
 }
 
 static inline gboolean

@@ -306,6 +306,7 @@ if cc.get_id() == 'msvc'
     '/wd4100', # same as -Wunused-parameter
     '/wd4116', # breaks G_ALIGNOF()
     '/wd4127', # conditional expression is constant - also triggers in macros...
+    '/wd4146', # unary minus operator applied to unsigned type, result still unsigned
     '/wd4152', # nonstandard function to data covnversion - g_task_set_source_tag() uses it
     '/wd4189', # MSVC can't handle G_GNUC_UNUSED
     '/wd4200', # zero-sized array in struct/union

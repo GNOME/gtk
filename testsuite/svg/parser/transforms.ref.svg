@@ -1,0 +1,7 @@
+<svg
+        width='16'
+        height='16'>
+  <path
+          transform='rotate(45, 0, 0) translate(-3, 5) scale(6, 6)'
+          d='M 0 0 L 100 100'/>
+</svg>

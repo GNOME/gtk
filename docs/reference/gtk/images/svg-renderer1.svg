@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width='300'
+        height='300'
+        viewBox='0 0 300 300'>
+  <circle
+          id='circle'
+          fill='none'
+          stroke='rgb(0,0,0)'
+          cx='100'
+          cy='100'
+          r='50'
+          stroke-width='2'
+          pathLength='1'>
+    <animate
+            id='gpa:animation:circle-stroke-dasharray'
+            attributeName='stroke-dasharray'
+            begin='0ms'
+            dur='600ms'
+            repeatCount='indefinite'
+            from='0.2 0.8'
+            to='0.2 0.8'
+            keyTimes='0; 1'/>
+    <animate
+            id='gpa:animation:circle-stroke-dashoffset'
+            attributeName='stroke-dashoffset'
+            begin='0ms'
+            dur='600ms'
+            repeatCount='indefinite'
+            from='0'
+            to='-1'
+            keyTimes='0; 1'/>
+  </circle>
+</svg>

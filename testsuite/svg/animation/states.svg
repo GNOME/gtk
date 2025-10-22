@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="10" stroke="red" opacity="0">
+    <animate id="fade-in" attributeName="opacity" from="0" to="1"
+      begin="+0" dur="1s" fill="freeze"/>
+    <animate id="fade-out" attributeName="opacity" from="1" to="0"
+      begin="+10s" dur="1s" fill="freeze"/>
+  </circle>
+</svg>

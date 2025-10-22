@@ -608,7 +608,7 @@ on_entry_icon_release (GtkEntry            *entry,
                        GtkEntryIconPosition icon_pos,
                        gpointer             user_data)
 {
-  GtkPathPaintable *paintable;
+  GtkSvg *paintable;
 
   if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
     return;
@@ -634,7 +634,7 @@ on_entry_icon_release (GtkEntry            *entry,
     }
 
   g_object_get (entry, "secondary-icon-paintable", &paintable, NULL);
-  gtk_path_paintable_set_state (paintable, pulse_entry_mode % 3);
+  gtk_svg_set_state (paintable, pulse_entry_mode % 3);
   g_object_unref (paintable);
 }
 
@@ -1373,13 +1373,13 @@ row_activated (GtkListBox *box, GtkListBoxRow *row)
 
   if (image)
     {
-      GtkPathPaintable *paintable;
+      GtkSvg *paintable;
 
-      paintable = GTK_PATH_PAINTABLE (gtk_image_get_paintable (image));
-      if (gtk_path_paintable_get_state (paintable) == 0)
-        gtk_path_paintable_set_state (paintable, GTK_PATH_PAINTABLE_STATE_EMPTY);
+      paintable = GTK_SVG (gtk_image_get_paintable (image));
+      if (gtk_svg_get_state (paintable) == 0)
+        gtk_svg_set_state (paintable, GTK_SVG_STATE_EMPTY);
       else
-        gtk_path_paintable_set_state (paintable, 0);
+        gtk_svg_set_state (paintable, 0);
     }
   else if (dialog)
     {

@@ -1,0 +1,25 @@
+<svg>
+  <circle cx='0' cy='0' r='10'>
+    <animate id="begin1" attributeName='opacity' begin='0s' dur='1s' from='0' to='1'/>
+  </circle>
+
+  <circle cx='0' cy='0' r='10'>
+    <animate id="begin2" attributeName='opacity' begin='10s' dur='1s' from='0' to='1'/>
+  </circle>
+
+  <circle cx='0' cy='0' r='10'>
+    <animate id="begin3" attributeName='opacity' begin='-200ms' dur='1s' from='0' to='1'/>
+  </circle>
+
+  <circle cx='0' cy='0' r='10'>
+    <animate id="begin4" attributeName='opacity' begin='begin3.begin +200ms' dur='1s' from='0' to='1'/>
+  </circle>
+
+  <circle cx='0' cy='0' r='10'>
+    <animate id="begin5" attributeName='opacity' begin='begin3.end -20' dur='1s' from='0' to='1'/>
+  </circle>
+
+  <circle cx='0' cy='0' r='10'>
+    <animate id="begin6" attributeName='opacity' begin='indefinite' dur='1s' from='0' to='1'/>
+  </circle>
+</svg>

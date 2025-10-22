@@ -1,0 +1,30 @@
+<svg width='16' height='16'>
+  <path id='path0' d='M 0 0 L 100 100'/>
+  <path id='path1' d='M 0 0 L 100 100'>
+    <animate id='a1'
+        attributeName='opacity' from='0' to='1'
+        begin='0s'
+        end='2000ms'
+        />
+    <animate id='a2'
+        attributeName='opacity' from='0' to='1'
+        begin='a1.begin'
+        end='a1.end'
+        />
+    <animate id='a3'
+        attributeName='opacity' from='0' to='1'
+        begin='a2.begin +1000ms'
+        end='a1.end -100ms'
+        />
+    <animate id='a4'
+        attributeName='opacity' from='0' to='1'
+        begin='gpa:states(0).begin +1000ms'
+        end='gpa:states(0 1).end -100ms'
+        />
+    <animate id='a5'
+        attributeName='opacity' from='0' to='1'
+        begin='gpa:states(all).begin'
+        end='gpa:states(none).end'
+        />
+  </path>
+</svg>

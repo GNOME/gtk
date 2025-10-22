@@ -1,0 +1,31 @@
+<svg
+        width='200'
+        height='200'>
+  <defs>
+    <clipPath
+            id='clip0'>
+      <rect
+              x='0'
+              y='0'
+              width='100'
+              height='100'/>
+    </clipPath>
+  </defs>
+  <g
+          clip-path='url("#clip0")'
+          fill='rgb(255,0,0)'
+          stroke='rgb(0,0,255)'>
+    <circle
+            cx='100'
+            cy='100'
+            r='50'/>
+  </g>
+  <path
+          clip-path='none'
+          d='M 0 0 L 100 100'/>
+  <circle
+          clip-path='path("M 0 0 h 10 v 20 h -10 z")'
+          cx='10'
+          cy='10'
+          r='10'/>
+</svg>

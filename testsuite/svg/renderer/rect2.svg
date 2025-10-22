@@ -1,0 +1,3 @@
+<svg width="100" height="100">
+  <rect x="10" y="10" width="50" height="20" stroke="red" transform="rotate(30)"/>
+</svg>

@@ -1,0 +1,84 @@
+<svg
+        width='150'
+        height='100'
+        viewBox='0 0 150 100'>
+  <circle
+          fill='rgb(255,0,0)'
+          cx='25'
+          cy='25'
+          r='8'>
+    <animate
+            attributeName='fill'
+            begin='1000ms'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='rgb(255,0,0); rgb(255,255,0); rgb(255,0,0)'
+            keyTimes='0; 0.5; 1'/>
+  </circle>
+  <rect
+          fill='rgb(0,0,255)'
+          x='50'
+          y='20'
+          width='10'
+          height='10'>
+    <animate
+            attributeName='width'
+            begin='0ms'
+            end='3000ms'
+            dur='1000ms'
+            repeatCount='indefinite'
+            from='10'
+            to='20'
+            keyTimes='0; 1'/>
+  </rect>
+  <circle
+          fill='rgb(0,128,0)'
+          cx='100'
+          cy='25'
+          r='8'>
+    <animate
+            attributeName='r'
+            dur='2000ms'
+            repeatCount='2'
+            from='8'
+            to='15'
+            keyTimes='0; 1'/>
+  </circle>
+  <path
+          fill='rgb(255,165,0)'
+          d='M 20 60 L 30 60 L 25 75 Z'>
+    <animate
+            attributeName='fill'
+            dur='1000ms'
+            repeatCount='3'
+            values='rgb(255,165,0); rgb(128,0,128); rgb(255,165,0)'
+            keyTimes='0; 0.5; 1'/>
+  </path>
+  <rect
+          fill='rgb(0,255,255)'
+          x='60'
+          y='60'
+          width='15'
+          height='15'>
+    <animate
+            attributeName='fill'
+            dur='2000ms'
+            from='rgb(0,255,255)'
+            to='rgb(255,0,255)'
+            keyTimes='0; 1'/>
+  </rect>
+  <circle
+          fill='rgb(255,192,203)'
+          cx='120'
+          cy='70'
+          r='10'>
+    <animate
+            attributeName='cx'
+            dur='2000ms'
+            repeatCount='indefinite'
+            from='120'
+            to='130'
+            keyTimes='0; 1'
+            additive='sum'/>
+  </circle>
+</svg>

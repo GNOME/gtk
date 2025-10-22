@@ -210,7 +210,6 @@
 #include <gtk/print/gtkpapersize.h>
 #include <gtk/gtkpasswordentry.h>
 #include <gtk/gtkpasswordentrybuffer.h>
-#include <gtk/gtkpathpaintable.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtkpopovermenu.h>
@@ -269,6 +268,7 @@
 #include <gtk/gtkstringsorter.h>
 #include <gtk/deprecated/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
+#include <gtk/gtksvg.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymbolicpaintable.h>
 #include <gtk/gtktext.h>

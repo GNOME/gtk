@@ -1,0 +1,8 @@
+<svg viewBox='0 0 100 100'>
+  <defs>
+    <mask id='mask'>
+      <circle cx='40' cy='40' r='40' fill='rgba(255,0,128, 0.5)'/>
+    </mask>
+  </defs>
+  <circle cx='60' cy='60' r='40' mask='url(#mask)'/>
+</svg>

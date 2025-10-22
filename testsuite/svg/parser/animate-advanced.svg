@@ -1,0 +1,37 @@
+<svg width="150" height="150" viewBox="0 0 150 150">
+  <!-- Advanced animation features -->
+  
+  <!-- Animation with multiple values and different calc modes -->
+  <rect x="10" y="10" width="20" height="20" fill="red">
+    <animate attributeName="x" values="10;50;80;10" keyTimes="0;0.3;0.7;1" dur="4s" calcMode="discrete" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Linear animation with multiple values -->
+  <circle cx="20" cy="60" r="8" fill="blue">
+    <animate attributeName="cx" values="20;60;100;140" dur="3s" calcMode="linear" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Animation with accumulate -->
+  <circle cx="30" cy="100" r="8" fill="green">
+    <animate attributeName="cx" from="30" to="50" dur="2s" repeatCount="3" accumulate="sum"/>
+  </circle>
+  
+  <!-- Complex spline animation with animateTransform -->
+  <path d="M60,20 L80,20 L70,40 Z" fill="orange">
+    <animateTransform attributeName="transform" 
+                     type="translate"
+                     values="0,0;50,0;50,50;0,50;0,0" 
+                     keyTimes="0;0.25;0.5;0.75;1"
+                     keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1"
+                     dur="5s" 
+                     calcMode="spline" 
+                     repeatCount="indefinite"/>
+  </path>
+
+  <!-- Multiple concurrent animations on same attribute -->
+  <circle cx="130" cy="30" r="10" fill="cyan">
+    <animate attributeName="r" values="10;15;10" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="r" from="10" to="15" dur="4s" additive="sum" repeatCount="indefinite"/>
+  </circle>
+  
+</svg>

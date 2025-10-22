@@ -1,0 +1,30 @@
+fill {
+  child: color {
+    bounds: 20 40 60 30;
+    color: rgba(0,0,255,0.75);
+  }
+  path: "\
+M 20 40 h 60 v 30 h -60 z";
+  fill-rule: winding;
+}
+fill {
+  child: color {
+    bounds: 30 30 20 20;
+    color: rgba(255,0,0,0.75);
+  }
+  path: "\
+M 50 40 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
+  fill-rule: winding;
+}
+fill {
+  child: color {
+    bounds: 40 40 35 40;
+    color: rgba(0,128,0,0.75);
+  }
+  path: "\
+M 40 40\
+L 50 80\
+L 75 55\
+Z";
+  fill-rule: winding;
+}

@@ -1,0 +1,22 @@
+<svg width='16' height='16'>
+  <path id='path0' d='M 0 0 L 100 100'
+    stroke='rgba(1,10,200,0.5)'
+    stroke-opacity='0.5'
+    stroke-width='200.4'
+    stroke-linecap='round'
+    stroke-linejoin='round'
+    stroke-miterlimit='10'
+    stroke-dasharray='0 10 1 2'
+    stroke-dashoffset='-20'
+  />
+  <circle id='circle' cx='0' cy='0' r='1'
+    stroke='red'
+    stroke-opacity='0'
+    stroke-width='0'
+    stroke-linecap='square'
+    stroke-linejoin='bevel'
+    stroke-miterlimit='0'
+    stroke-dasharray='0 10 1 2'
+    stroke-dashoffset='10'
+  />
+</svg>

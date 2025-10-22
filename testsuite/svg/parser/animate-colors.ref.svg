@@ -1,0 +1,92 @@
+<svg
+        width='120'
+        height='120'
+        viewBox='0 0 120 120'>
+  <rect
+          fill='rgb(255,0,0)'
+          x='10'
+          y='10'
+          width='20'
+          height='20'>
+    <animate
+            attributeName='fill'
+            dur='4000ms'
+            repeatCount='indefinite'
+            values='rgb(255,0,0); rgb(0,255,0); rgb(0,0,255); rgb(255,0,0)'
+            keyTimes='0; 0.333333; 0.666667; 1'/>
+  </rect>
+  <circle
+          fill='rgb(255,0,0)'
+          cx='60'
+          cy='20'
+          r='12'>
+    <animate
+            attributeName='fill'
+            dur='3000ms'
+            repeatCount='indefinite'
+            from='rgb(255,0,0)'
+            to='rgb(64,0,255)'
+            keyTimes='0; 1'/>
+  </circle>
+  <circle
+          fill='rgb(255,0,0)'
+          cx='20'
+          cy='60'
+          r='15'>
+    <animate
+            attributeName='fill'
+            dur='7000ms'
+            repeatCount='indefinite'
+            values='rgb(255,0,0); rgb(255,165,0); rgb(255,255,0); rgb(0,128,0); rgb(0,0,255); rgb(75,0,130); rgb(238,130,238); rgb(255,0,0)'
+            keyTimes='0; 0.142857; 0.285714; 0.428571; 0.571429; 0.714286; 0.857143; 1'/>
+  </circle>
+  <rect
+          opacity='1'
+          fill='rgb(128,0,128)'
+          x='60'
+          y='50'
+          width='25'
+          height='25'>
+    <animate
+            attributeName='opacity'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='1; 0.2; 1'
+            keyTimes='0; 0.5; 1'/>
+  </rect>
+  <path
+          fill='none'
+          stroke='rgb(0,0,0)'
+          stroke-width='2'
+          d='M 90 10 L 110 10 L 100 30 Z'
+          gpa:stroke-width='0.5 2 3'>
+    <animate
+            attributeName='stroke'
+            dur='4000ms'
+            repeatCount='indefinite'
+            values='rgb(0,0,0); rgb(255,0,0); rgb(0,128,0); rgb(0,0,255); rgb(0,0,0)'
+            keyTimes='0; 0.25; 0.5; 0.75; 1'/>
+  </path>
+  <rect
+          fill='rgb(0,255,255)'
+          stroke='rgb(255,0,255)'
+          stroke-width='3'
+          x='90'
+          y='50'
+          width='20'
+          height='20'
+          gpa:stroke-width='0.75 3 4.5'>
+    <animate
+            attributeName='fill'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='rgb(0,255,255); rgb(255,255,0); rgb(0,255,255)'
+            keyTimes='0; 0.5; 1'/>
+    <animate
+            attributeName='stroke'
+            dur='3000ms'
+            repeatCount='indefinite'
+            values='rgb(255,0,255); rgb(255,165,0); rgb(255,0,255)'
+            keyTimes='0; 0.5; 1'/>
+  </rect>
+</svg>

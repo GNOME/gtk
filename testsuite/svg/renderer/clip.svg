@@ -1,0 +1,8 @@
+<svg viewBox='0 0 100 100'>
+  <defs>
+    <clipPath id='clip'>
+      <circle cx='40' cy='40' r='40'/>
+    </clipPath>
+  </defs>
+  <circle cx='60' cy='60' r='40' clip-path='url(#clip)'/>
+</svg>

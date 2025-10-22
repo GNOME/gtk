@@ -1,0 +1,6 @@
+<svg width='16' height='16'>
+  <path d='M 0 0 L 100 100'/>
+  <circle cx='10' cy='12' r='5.5'/>
+  <rect x='1' y='-3' width='100.1' height='22.2222'/>
+  <rect x='0' y='0' width='10' height='20' rx='4' ry='0'/>
+</svg>
