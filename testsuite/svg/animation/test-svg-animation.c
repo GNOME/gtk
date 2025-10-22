@@ -89,7 +89,8 @@ render_svg_file (GFile *file, gboolean generate, unsigned int time)
   gtk_svg_set_load_time (svg, load_time);
   gtk_svg_advance (svg, render_time);
 
-  output = gtk_svg_serialize (svg, GTK_SVG_SERIALIZE_AT_CURRENT_TIME |
+  output = gtk_svg_serialize_full (svg,
+                                   GTK_SVG_SERIALIZE_AT_CURRENT_TIME |
                                    GTK_SVG_SERIALIZE_INCLUDE_STATE);
 
   if (generate)
