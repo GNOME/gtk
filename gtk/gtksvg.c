@@ -10401,10 +10401,13 @@ gtk_svg_serialize (GtkSvg               *self,
       g_string_append (s, "gpa:state-change-delay='");
       string_append_double (s, (self->state_change_delay) / (double) G_TIME_SPAN_MILLISECOND);
       g_string_append (s, "ms'");
-      indent_for_attr (s, 0);
-      g_string_append (s, "gpa:time-since-load='");
-      string_append_double (s, (self->current_time - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
-      g_string_append (s, "ms'");
+      if (self->load_time != INDEFINITE)
+        {
+          indent_for_attr (s, 0);
+          g_string_append (s, "gpa:time-since-load='");
+          string_append_double (s, (self->current_time - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          g_string_append (s, "ms'");
+        }
     }
 
   g_string_append (s, ">");
