@@ -9066,8 +9066,9 @@ serialize_animation_set (GString              *s,
   indent_for_attr (s, indent);
   g_string_append (s, "to='");
   svg_value_print (a->frames[0].value, s);
+  g_string_append (s, "'");
   serialize_animation_status (s, svg, indent, a, flags);
-  g_string_append (s, "'/>");
+  g_string_append (s, "/>");
 }
 
 static void
