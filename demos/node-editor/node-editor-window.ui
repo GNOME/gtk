@@ -189,6 +189,7 @@
             <property name="focus-on-click">0</property>
             <property name="valign">center</property>
             <property name="has-frame">0</property>
+            <property name="active" bind-source="NodeEditorWindow" bind-property="dark-mode" bind-flags="sync-create | bidirectional"/>
             <child>
               <object class="GtkImage">
                 <property name="paintable">
@@ -199,7 +200,6 @@
               </object>
             </child>
             <property name="tooltip-text" translatable="yes">Toggle the color scheme</property>
-            <signal name="notify::active" handler="dark_mode_cb" swapped="0"/>
           </object>
         </child>
         <child type="end">
