@@ -833,7 +833,7 @@ gdk_win32_gl_context_realize_wgl (GdkGLContext  *context,
   return TRUE;
 }
 
-static gboolean
+gboolean
 gdk_win32_display_is_wgl_context_current (GdkDisplay   *display,
                                           GdkGLContext *context)
 {
@@ -1313,7 +1313,8 @@ gdk_win32_window_invalidate_egl_framebuffer (GdkWindow *window)
     }
 }
 
-static gboolean
+#ifdef GDK_WIN32_ENABLE_EGL
+gboolean
 gdk_win32_display_is_egl_context_current (GdkDisplay   *display,
                                           GdkGLContext *context)
 {
@@ -1321,6 +1322,9 @@ gdk_win32_display_is_egl_context_current (GdkDisplay   *display,
 
   return context_egl->egl_context == eglGetCurrentContext ();
 }
+#else
+#define gdk_win32_display_is_egl_context_current(disp,ctx) FALSE
+#endif
 
 static gboolean
 gdk_win32_display_make_egl_context_current (GdkDisplay   *display,

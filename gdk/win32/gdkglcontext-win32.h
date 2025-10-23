@@ -62,6 +62,18 @@ gdk_win32_display_is_gl_context_current     (GdkDisplay     *display,
                                              GdkGLContext   *context);
 
 gboolean
+gdk_win32_display_is_wgl_context_current    (GdkDisplay     *display,
+                                             GdkGLContext   *context);
+
+#ifdef GDK_WIN32_ENABLE_EGL
+gboolean
+gdk_win32_display_is_egl_context_current    (GdkDisplay     *display,
+                                             GdkGLContext   *context);
+#else
+#define gdk_win32_display_is_egl_context_current(disp,ctx) FALSE
+#endif
+
+gboolean
 gdk_win32_display_make_gl_context_current   (GdkDisplay     *display,
                                              GdkGLContext   *context);
 
