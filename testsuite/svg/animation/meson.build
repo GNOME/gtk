@@ -10,6 +10,7 @@ test_data = [
   'dashes.test',
   'inherit.test',
   'priority.test',
+  'state-changes.test',
   'states.test',
   'transform-animation.test',
 ]
