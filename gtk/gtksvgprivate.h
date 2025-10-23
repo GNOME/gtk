@@ -54,6 +54,8 @@ typedef enum
 } GtkSvgSerializeFlags;
 
 GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
+                                        const GdkRGBA         *colors,
+                                        size_t                 n_colors,
                                         GtkSvgSerializeFlags   flags);
 
 G_END_DECLS

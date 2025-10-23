@@ -1,0 +1,7 @@
+input: symbolics.svg
+colors: black; red; yellow; green; blue
+time: 1000
+output: symbolics-0.svg
+colors: white; pink; brown; lavender; magenta
+time: 2000
+output: symbolics-1.svg

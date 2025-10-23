@@ -1,0 +1,60 @@
+<svg
+        width='64'
+        height='64'
+        viewBox='0 0 32 32'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='1500ms'>
+  <circle
+          id='red'
+          pathLength='1'
+          fill='rgb(255,0,0)'
+          cx='0'
+          cy='5'
+          r='5'>
+    <set
+            id='gpa:out-of-state:red'
+            attributeName='visibility'
+            begin='gpa:states(0).end; 0ms'
+            end='gpa:states(0).begin'
+            to='hidden'
+            gpa:status='done'
+            gpa:computed-simple-duration='indefinite'/>
+  </circle>
+  <circle
+          id='yellow'
+          pathLength='1'
+          visibility='hidden'
+          fill='rgb(255,255,0)'
+          cx='10'
+          cy='5'
+          r='5'>
+    <set
+            id='gpa:out-of-state:yellow'
+            attributeName='visibility'
+            begin='gpa:states(1).end; 0ms'
+            end='gpa:states(1).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
+  </circle>
+  <circle
+          id='blue'
+          pathLength='1'
+          fill='rgb(0,0,255)'
+          cx='20'
+          cy='5'
+          r='5'>
+    <set
+            id='gpa:out-of-state:blue'
+            attributeName='visibility'
+            begin='gpa:states(0 1).end; 0ms'
+            end='gpa:states(0 1).begin'
+            to='hidden'
+            gpa:status='done'
+            gpa:computed-simple-duration='indefinite'/>
+  </circle>
+</svg>

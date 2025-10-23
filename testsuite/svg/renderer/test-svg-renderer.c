@@ -73,7 +73,16 @@ render_svg_file (GFile *file, gboolean generate)
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (GDK_PAINTABLE (svg), snapshot, 100, 100);
   node = gtk_snapshot_free_to_node (snapshot);
-  bytes = gsk_render_node_serialize (node);
+  if (node)
+    {
+      bytes = gsk_render_node_serialize (node);
+      gsk_render_node_unref (node);
+    }
+  else
+    {
+      bytes = g_bytes_new_static ("", 0);
+    }
+
   if (generate)
     {
       g_print ("%s", (const char *) g_bytes_get_data (bytes, NULL));
@@ -97,7 +106,6 @@ out:
   g_bytes_unref (bytes);
   g_free (svg_file);
   g_object_unref (svg);
-  gsk_render_node_unref (node);
 }
 
 static void

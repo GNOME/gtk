@@ -10506,9 +10506,33 @@ gtk_svg_get_next_update (GtkSvg *self)
   return self->next_update;
 }
 
+/* copied from gtksymbolicpaintable.c */
+static const GdkRGBA *
+pad_colors (GdkRGBA        col[5],
+            const GdkRGBA *colors,
+            guint          n_colors)
+{
+  GdkRGBA default_colors[5] = {
+    [GTK_SYMBOLIC_COLOR_FOREGROUND] = { 0.745, 0.745, 0.745, 1.0 },
+    [GTK_SYMBOLIC_COLOR_ERROR] = { 0.797, 0, 0, 1.0 },
+    [GTK_SYMBOLIC_COLOR_WARNING] = { 0.957, 0.473, 0.242, 1.0 },
+    [GTK_SYMBOLIC_COLOR_SUCCESS] = { 0.305, 0.602, 0.023, 1.0 },
+    [GTK_SYMBOLIC_COLOR_ACCENT] = { 0.208, 0.518, 0.894, 1.0 },
+  };
+
+  memcpy (col, default_colors, sizeof (GdkRGBA) * 5);
+
+  if (n_colors != 0)
+    memcpy (col, colors, sizeof (GdkRGBA) * MIN (5, n_colors));
+
+  return col;
+}
+
 /*< private >
  * gtk_svg_serialize_full:
  * @self: an SVG paintable
+ * @colors (array length=n_colors): a pointer to an array of colors
+ * @n_colors: the number of colors
  * @flags: flags that influence what content is
  *   included in the serialization
  *
@@ -10535,26 +10559,36 @@ gtk_svg_get_next_update (GtkSvg *self)
  */
 GBytes *
 gtk_svg_serialize_full (GtkSvg               *self,
+                        const GdkRGBA        *colors,
+                        size_t                n_colors,
                         GtkSvgSerializeFlags  flags)
 {
   GString *s = g_string_new ("");
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     {
-      static GdkRGBA default_colors[5] = {
-        [GTK_SYMBOLIC_COLOR_FOREGROUND] = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0 },
-        [GTK_SYMBOLIC_COLOR_ERROR] = { 0.796887159533074, 0, 0, 1.0 },
-        [GTK_SYMBOLIC_COLOR_WARNING] = { 0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 },
-        [GTK_SYMBOLIC_COLOR_SUCCESS] = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0 },
-        [GTK_SYMBOLIC_COLOR_ACCENT] = { 0.208, 0.518, 0.894, 1.0 },
-      };
+      GdkRGBA real_colors[5];
+      const GdkRGBA *col = colors;
+      size_t n_col = n_colors;
+
+      if (n_colors >= 5)
+        {
+          col = colors;
+          n_col = n_colors;
+        }
+      else
+        {
+          col = pad_colors (real_colors, colors, n_colors);
+          n_col = 5;
+        }
 
       ComputeContext context;
       context.svg = self;
       context.current_time = self->current_time;
       context.parent = NULL;
-      context.colors = default_colors;
-      context.n_colors = G_N_ELEMENTS (default_colors);
+      context.colors = col;
+      context.n_colors = n_col;
+
       compute_current_values_for_shape (self->content, &context);
     }
 
@@ -10784,7 +10818,7 @@ gtk_svg_load_from_bytes (GtkSvg *self,
 GBytes *
 gtk_svg_serialize (GtkSvg *self)
 {
-  return gtk_svg_serialize_full (self, GTK_SVG_SERIALIZE_DEFAULT);
+  return gtk_svg_serialize_full (self, NULL, 0, GTK_SVG_SERIALIZE_DEFAULT);
 }
 
 /**
