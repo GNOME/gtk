@@ -254,6 +254,8 @@ static void
 gtk_svg_error_private_copy (const GtkSvgErrorPrivate *src,
                             GtkSvgErrorPrivate       *dest)
 {
+  g_assert (dest != NULL);
+  g_assert (src != NULL);
   dest->element = g_strdup (src->element);
   dest->attribute = g_strdup (src->attribute);
   dest->start = src->start;
@@ -263,6 +265,7 @@ gtk_svg_error_private_copy (const GtkSvgErrorPrivate *src,
 static void
 gtk_svg_error_private_clear (GtkSvgErrorPrivate *priv)
 {
+  g_assert (priv != NULL);
   g_free (priv->element);
   g_free (priv->attribute);
 }
@@ -274,6 +277,7 @@ gtk_svg_error_set_element (GError     *error,
                            const char *element)
 {
   GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+  g_assert (error->domain == GTK_SVG_ERROR);
   priv->element = g_strdup (element);
 }
 
@@ -282,6 +286,7 @@ gtk_svg_error_set_attribute (GError     *error,
                              const char *attribute)
 {
   GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+  g_assert (error->domain == GTK_SVG_ERROR);
   priv->attribute = g_strdup (attribute);
 }
 
@@ -291,6 +296,7 @@ gtk_svg_error_set_location (GError               *error,
                             const GtkSvgLocation *end)
 {
   GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+  g_assert (error->domain == GTK_SVG_ERROR);
   if (start)
     priv->start = *start;
   if (end)
