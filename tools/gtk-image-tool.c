@@ -44,6 +44,7 @@ usage (void)
              "  info         Show general information about the image\n"
              "  relabel      Change the color state of the image without conversion\n"
              "  show         Show the image\n"
+             "  play         Play an animation\n"
              "\n"));
   exit (0);
 }
@@ -118,6 +119,8 @@ main (int argc, const char *argv[])
     do_relabel (&argc, &argv);
   else if (strcmp (argv[0], "show") == 0)
     do_show (&argc, &argv);
+  else if (strcmp (argv[0], "play") == 0)
+    do_play (&argc, &argv);
   else
     usage ();
 

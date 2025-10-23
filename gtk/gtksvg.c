@@ -1724,6 +1724,67 @@ css_parser_parse_number (GtkCssParser *parser,
   return 1;
 }
 
+static gboolean
+parse_transform_function (GtkCssParser *self,
+                          guint         min_args,
+                          guint         max_args,
+                          double       *values)
+{
+  const GtkCssToken *token;
+  gboolean result = FALSE;
+  char function_name[64];
+  guint arg;
+
+  token = gtk_css_parser_get_token (self);
+  g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
+
+  g_strlcpy (function_name, gtk_css_token_get_string (token), 64);
+  gtk_css_parser_start_block (self);
+
+  arg = 0;
+  while (TRUE)
+    {
+      guint parse_args = css_parser_parse_number (self, arg, values);
+      if (parse_args == 0)
+        break;
+      arg += parse_args;
+      token = gtk_css_parser_get_token (self);
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+        {
+          if (arg < min_args)
+            {
+              gtk_css_parser_error_syntax (self, "%s() requires at least %u arguments", function_name, min_args);
+              break;
+            }
+          else
+            {
+              result = TRUE;
+              break;
+            }
+        }
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_COMMA))
+        {
+          if (arg >= max_args)
+            {
+              gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", function_name);
+              break;
+            }
+
+          gtk_css_parser_consume_token (self);
+          continue;
+        }
+      else if (!gtk_css_parser_has_number (self))
+        {
+          gtk_css_parser_error_syntax (self, "Unexpected data at end of %s() argument", function_name);
+          break;
+        }
+    }
+
+  gtk_css_parser_end_block (self);
+
+  return result;
+}
+
 static SvgValue *
 transform_parser_parse (GtkCssParser *parser)
 {
@@ -1745,7 +1806,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
            double values[3] = { 0, 0, 0 };
 
-          if (!gtk_css_parser_consume_function (parser, 1, 3, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 3, values))
             goto fail;
 
           transform.type = TRANSFORM_ROTATE;
@@ -1760,7 +1821,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[2] = { 0, 0 };
 
-          if (!gtk_css_parser_consume_function (parser, 1, 2, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 2, values))
             goto fail;
 
           transform.type = TRANSFORM_SCALE;
@@ -1774,7 +1835,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[2] = { 0, 0 };
 
-          if (!gtk_css_parser_consume_function (parser, 1, 2, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 2, values))
             goto fail;
 
           transform.type = TRANSFORM_TRANSLATE;
@@ -1788,7 +1849,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[1];
 
-          if (!gtk_css_parser_consume_function (parser, 1, 1, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 1, values))
             goto fail;
 
           transform.type = TRANSFORM_SKEW_X;
@@ -1798,7 +1859,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[1];
 
-          if (!gtk_css_parser_consume_function (parser, 1, 1, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 1, 1, values))
             goto fail;
 
           transform.type = TRANSFORM_SKEW_Y;
@@ -1808,7 +1869,7 @@ transform_parser_parse (GtkCssParser *parser)
         {
           double values[6];
 
-          if (!gtk_css_parser_consume_function (parser, 6, 6, css_parser_parse_number, values))
+          if (!parse_transform_function (parser, 6, 6, values))
             goto fail;
 
           transform.type = TRANSFORM_MATRIX;
@@ -6450,7 +6511,7 @@ create_transition (Shape             *shape,
                    SvgValue          *to)
 {
   Animation *a;
-  TimeSpec *begin, *end;
+  TimeSpec *begin;
 
   a = animation_animate_new ();
   a->simple_duration = duration;
@@ -6458,14 +6519,12 @@ create_transition (Shape             *shape,
   a->repeat_count = 1;
 
   a->has_begin = 1;
-  a->has_end = 1;
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
   a->id = g_strdup_printf ("gpa:transition:fade-in:%s:%s", shape_attrs[attr].name, shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, delay));
-  end = animation_add_end (a, timeline_get_sync (timeline, NULL, a, TIME_SPEC_SIDE_BEGIN, duration));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -6482,8 +6541,8 @@ create_transition (Shape             *shape,
 
   a->shape = shape;
   g_ptr_array_add (shape->animations, a);
+
   time_spec_add_animation (begin, a);
-  time_spec_add_animation (end, a);
 
   a = animation_animate_new ();
   a->simple_duration = duration;
@@ -6491,14 +6550,12 @@ create_transition (Shape             *shape,
   a->repeat_count = 1;
 
   a->has_begin = 1;
-  a->has_end = 1;
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
   a->id = g_strdup_printf ("gpa:transition:fade-out:%s:%s", shape_attrs[attr].name, shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (duration + delay)));
-  end = animation_add_end (a, timeline_get_sync (timeline, NULL, a, TIME_SPEC_SIDE_BEGIN, duration));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -6517,7 +6574,74 @@ create_transition (Shape             *shape,
   g_ptr_array_add (shape->animations, a);
 
   time_spec_add_animation (begin, a);
-  time_spec_add_animation (end, a);
+}
+
+static void
+create_transition_delay (Shape     *shape,
+                         Timeline  *timeline,
+                         uint64_t   states,
+                         int64_t    delay,
+                         ShapeAttr  attr,
+                         SvgValue  *value)
+{
+  Animation *a;
+  TimeSpec *begin;
+
+  a = animation_set_new ();
+  a->simple_duration = delay;
+  a->repeat_duration = delay;
+  a->repeat_count = 1;
+
+  a->has_begin = 1;
+  a->has_simple_duration = 1;
+  a->has_repeat_duration = 1;
+
+  a->id = g_strdup_printf ("gpa:transition:fade-in-delay:%s:%s", shape_attrs[attr].name, shape->id);
+
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+
+  a->attr = attr;
+  a->n_frames = 2;
+  a->frames = g_new0 (Frame, a->n_frames);
+  a->frames[0].time = 0;
+  a->frames[1].time = 1;
+  a->frames[0].value = svg_value_ref (value);
+  a->frames[1].value = svg_value_ref (value);
+
+  a->fill = ANIMATION_FILL_REMOVE;
+
+  a->shape = shape;
+  g_ptr_array_add (shape->animations, a);
+  time_spec_add_animation (begin, a);
+
+  a = animation_set_new ();
+  a->simple_duration = delay;
+  a->repeat_duration = delay;
+  a->repeat_count = 1;
+
+  a->has_begin = 1;
+  a->has_simple_duration = 1;
+  a->has_repeat_duration = 1;
+
+  a->id = g_strdup_printf ("gpa:transition:fade-out-delay:%s:%s", shape_attrs[attr].name, shape->id);
+
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, -delay));
+
+  a->attr = attr;
+  a->n_frames = 2;
+  a->frames = g_new0 (Frame, a->n_frames);
+  a->frames[0].time = 0;
+  a->frames[1].time = 1;
+  a->frames[0].value = svg_value_ref (value);
+  a->frames[1].value = svg_value_ref (value);
+
+  a->fill = ANIMATION_FILL_REMOVE;
+
+  a->shape = shape;
+  g_ptr_array_add (shape->animations, a);
+  time_spec_add_animation (begin, a);
+
+  svg_value_unref (value);
 }
 
 static void
@@ -6540,6 +6664,10 @@ create_transitions (Shape             *shape,
                          SHAPE_ATTR_STROKE_DASHARRAY,
                          svg_dash_array_new ((double[]) { 0, 2 }, 2),
                          svg_dash_array_new ((double[]) { 1, 0 }, 2));
+      if (delay != 0)
+        create_transition_delay (shape, timeline, states, delay,
+                                 SHAPE_ATTR_STROKE_DASHOFFSET,
+                                 svg_number_new (0.5));
       if (!G_APPROX_VALUE (origin, 0, 0.001))
         create_transition (shape, timeline, states,
                            duration, delay, easing,
@@ -7260,7 +7388,8 @@ parse_base_animation_attrs (Animation            *a,
   if (a->type == ANIMATION_TYPE_MOTION)
     {
       if (attr_name_attr)
-        gtk_svg_invalid_attribute (data->svg, context, "attributeName", NULL);
+        gtk_svg_invalid_attribute (data->svg, context, "attributeName",
+                                   "can't have 'attributeName' on <animateMotion>");
     }
   else if (!attr_name_attr)
     {
@@ -7284,10 +7413,10 @@ parse_base_animation_attrs (Animation            *a,
                          "gpa:stroke-minwidth", "gpa:stroke-maxwidth",
                        }, 31,
                        &value))
-        gtk_svg_invalid_attribute (data->svg, context, "attributeName", NULL);
+        gtk_svg_invalid_attribute (data->svg, context, "attributeName", "attribute '%s' is not animatable", attr_name_attr);
       else if (a->type == ANIMATION_TYPE_TRANSFORM && value != SHAPE_ATTR_TRANSFORM)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "attributeName", "Value must be 'transform'");
+          gtk_svg_invalid_attribute (data->svg, context, "attributeName", "value must be 'transform'");
           a->attr = SHAPE_ATTR_TRANSFORM;
         }
       else
@@ -7405,7 +7534,7 @@ parse_value_animation_attrs (Animation            *a,
       values = shape_attr_parse_values (a->attr, transform_type, values_attr);
       if (!values || values->len < 2)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "values", NULL);
+          gtk_svg_invalid_attribute (data->svg, context, "values", "failed to parse %s", values_attr);
           g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
@@ -8202,7 +8331,7 @@ start_element_cb (GMarkupParseContext  *context,
                                         context))
         {
           animation_drop_and_free (a);
-          skip_element (data, context, "Bad animation value attributes");
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
           return;
         }
 
@@ -8253,7 +8382,7 @@ start_element_cb (GMarkupParseContext  *context,
                                         context))
         {
           animation_drop_and_free (a);
-          skip_element (data, context, "Bad animation value attributes");
+          skip_element (data, context, "Skipping <%s>: bad attributes", element_name);
           return;
         }
 
@@ -8273,9 +8402,9 @@ start_element_cb (GMarkupParseContext  *context,
 
           if (!a->motion.path)
             {
-              gtk_svg_invalid_attribute (data->svg, context, "path", "Failed to parse: %s", path_attr);
+              gtk_svg_invalid_attribute (data->svg, context, "path", "failed to parse: %s", path_attr);
               animation_drop_and_free (a);
-              skip_element (data, context, "Bad <animateMotion> 'path' attribute");
+              skip_element (data, context, "Skipping <%s>: bad 'path' attribute", element_name);
               return;
             }
         }
@@ -8294,7 +8423,7 @@ start_element_cb (GMarkupParseContext  *context,
                                &value))
             a->motion.rotate = (AnimationRotate) value;
           else
-            gtk_svg_invalid_attribute (data->svg, context, "rotate", "Failed to parse: %s", rotate_attr);
+            gtk_svg_invalid_attribute (data->svg, context, "rotate", "failed to parse: %s", rotate_attr);
         }
 
       if (key_points_attr)
@@ -8302,10 +8431,10 @@ start_element_cb (GMarkupParseContext  *context,
           GArray *points = parse_numbers2 (key_points_attr, ";", 0, 1);
           if (!points)
             {
-              gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "Failed to parse: %s", key_points_attr);
+              gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "failed to parse: %s", key_points_attr);
               g_array_unref (points);
               animation_drop_and_free (a);
-              skip_element (data, context, "Bad <animateMotion> 'keyPoints' attribute");
+              skip_element (data, context, "Skipping <%s>: bad 'keyPoints' attribute", element_name);
               return;
             }
 
@@ -8314,7 +8443,7 @@ start_element_cb (GMarkupParseContext  *context,
               gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "wrong number of values");
               g_array_unref (points);
               animation_drop_and_free (a);
-              skip_element (data, context, "Bad <animateMotion> 'keyPoints' attribute");
+              skip_element (data, context, "Skipping <%s>: bad 'keyPoints' attribute", element_name);
 
               return;
             }
@@ -8348,7 +8477,7 @@ start_element_cb (GMarkupParseContext  *context,
           data->current_animation->type != ANIMATION_TYPE_MOTION ||
           data->current_animation->motion.path_ref != NULL)
         {
-          skip_element (data, context, "mpath is only allowed in <animateMotion>");
+          skip_element (data, context, "<mpath> only allowed in <animateMotion>");
           return;
         }
 
