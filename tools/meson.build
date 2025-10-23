@@ -54,6 +54,7 @@ gtk_tools = [
                        'gtk-image-tool-info.c',
                        'gtk-image-tool-compare.c',
                        'gtk-image-tool-convert.c',
+                       'gtk-image-tool-play.c',
                        'gtk-image-tool-relabel.c',
                        'gtk-image-tool-show.c',
                        'gtk-image-tool-utils.c',
