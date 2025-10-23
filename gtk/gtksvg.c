@@ -758,6 +758,13 @@ make_ellipse_path (double cx, double cy,
   return gsk_path_builder_free_to_path (builder);
 }
 
+static inline gboolean
+g_strv_has (GStrv       strv,
+            const char *s)
+{
+  return g_strv_contains ((const char * const *) strv, s);
+}
+
 /* }}} */
 /* {{{ gpa things */
 
@@ -7734,6 +7741,7 @@ parse_shape_attrs (Shape                *shape,
 {
   GtkSvgLocation loc;
   GtkSvgLocation *location = &loc;
+  const char *class_attr = NULL;
 
   gtk_svg_location_init (location, context);
   for (unsigned int i = 0; attr_names[i]; i++)
@@ -7745,6 +7753,10 @@ parse_shape_attrs (Shape                *shape,
 
       if (strcmp (attr_names[i], "class") == 0)
         {
+          /* We handle class after the loop to enforce priority
+           * of class over fill/stroke
+           */
+          class_attr = attr_values[i];
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "id") == 0)
@@ -7786,6 +7798,47 @@ parse_shape_attrs (Shape                *shape,
             }
           *handled |= BIT (i);
         }
+    }
+
+  if (class_attr)
+    {
+      GStrv classes = g_strsplit (class_attr, " ", 0);
+      SvgValue *value;
+
+      if (g_strv_has (classes, "transparent-fill"))
+        value = svg_paint_new_none ();
+      else if (g_strv_has (classes, "foreground-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else if (g_strv_has (classes, "success") ||
+               g_strv_has (classes, "success-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
+      else if (g_strv_has (classes, "warning") ||
+               g_strv_has (classes, "warning-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
+      else if (g_strv_has (classes, "error") ||
+               g_strv_has (classes, "error-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
+      else
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+
+      shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
+      svg_value_unref (value);
+
+      if (g_strv_has (classes, "success-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
+      else if (g_strv_has (classes, "warning-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
+      else if (g_strv_has (classes, "error-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
+      else if (g_strv_has (classes, "foreground-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else
+        value = svg_paint_new_none ();
+
+      shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
+      svg_value_unref (value);
+
+      g_strfreev (classes);
     }
 
   if (shape->attrs & BIT (SHAPE_ATTR_STROKE_WIDTH))

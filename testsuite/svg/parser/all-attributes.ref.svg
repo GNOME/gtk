@@ -12,7 +12,7 @@
           clip-rule='nonzero'
           mask='none'
           mask-type='luminance'
-          fill='none'
+          fill='url("#gpa:foreground") rgb(0,0,0)'
           fill-opacity='1'
           fill-rule='nonzero'
           stroke='none'
