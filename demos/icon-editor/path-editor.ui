@@ -723,7 +723,7 @@
                 <property name="xalign">1</property>
                 <property name="label" translatable="yes">_Width</property>
                 <property name="use-underline">1</property>
-                <property name="mnemonic-widget">width_range</property>
+                <property name="mnemonic-widget">line_width</property>
               </object>
             </property>
             <layout>
@@ -732,23 +732,34 @@
             </layout>
           </object>
         </child>
+
         <child>
-          <object class="RangeEditor" id="width_range">
+          <object class="GtkSpinButton" id="line_width">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_and">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
               </closure>
             </binding>
-            <signal name="notify::value1" handler="stroke_changed" swapped="yes"/>
-            <signal name="notify::middle" handler="stroke_changed" swapped="yes"/>
-            <signal name="notify::value2" handler="stroke_changed" swapped="yes"/>
+            <property name="numeric">1</property>
+            <property name="digits">2</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">25</property>
+                <property name="value">2</property>
+                <property name="step-increment">0.1</property>
+                <property name="page-size">0</property>
+              </object>
+            </property>
+            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">17</property>
               <property name="column">1</property>
             </layout>
           </object>
         </child>
+
 
         <child>
           <object class="GtkLabel" id="line_min_label">
@@ -790,57 +801,9 @@
                 <property name="page-size">0</property>
               </object>
             </property>
-            <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
+            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">18</property>
-              <property name="column">1</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="line_width_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_and">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">stroke_expander</lookup>
-                <lookup name="expanded">width_expander</lookup>
-              </closure>
-            </binding>
-            <property name="label" translatable="yes">_Normal</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">line_width</property>
-            <property name="xalign">1</property>
-            <layout>
-              <property name="row">19</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkSpinButton" id="line_width">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_and">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">stroke_expander</lookup>
-                <lookup name="expanded">width_expander</lookup>
-              </closure>
-            </binding>
-            <property name="numeric">1</property>
-            <property name="digits">2</property>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">25</property>
-                <property name="value">2</property>
-                <property name="step-increment">0.1</property>
-                <property name="page-size">0</property>
-              </object>
-            </property>
-            <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
-            <layout>
-              <property name="row">19</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -886,7 +849,7 @@
                 <property name="page-size">0</property>
               </object>
             </property>
-            <signal name="notify::value" handler="line_width_changed" swapped="yes"/>
+            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">20</property>
               <property name="column">1</property>
@@ -1153,7 +1116,6 @@
       <widget name="stroke_expander"/>
       <widget name="width_expander"/>
       <widget name="line_min_label"/>
-      <widget name="line_width_label"/>
       <widget name="line_max_label"/>
       <widget name="line_join_label"/>
       <widget name="line_cap_label"/>

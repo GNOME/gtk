@@ -254,6 +254,8 @@ static void
 gtk_svg_error_private_copy (const GtkSvgErrorPrivate *src,
                             GtkSvgErrorPrivate       *dest)
 {
+  g_assert (dest != NULL);
+  g_assert (src != NULL);
   dest->element = g_strdup (src->element);
   dest->attribute = g_strdup (src->attribute);
   dest->start = src->start;
@@ -263,6 +265,7 @@ gtk_svg_error_private_copy (const GtkSvgErrorPrivate *src,
 static void
 gtk_svg_error_private_clear (GtkSvgErrorPrivate *priv)
 {
+  g_assert (priv != NULL);
   g_free (priv->element);
   g_free (priv->attribute);
 }
@@ -274,6 +277,7 @@ gtk_svg_error_set_element (GError     *error,
                            const char *element)
 {
   GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+  g_assert (error->domain == GTK_SVG_ERROR);
   priv->element = g_strdup (element);
 }
 
@@ -282,6 +286,7 @@ gtk_svg_error_set_attribute (GError     *error,
                              const char *attribute)
 {
   GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+  g_assert (error->domain == GTK_SVG_ERROR);
   priv->attribute = g_strdup (attribute);
 }
 
@@ -291,6 +296,7 @@ gtk_svg_error_set_location (GError               *error,
                             const GtkSvgLocation *end)
 {
   GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+  g_assert (error->domain == GTK_SVG_ERROR);
   if (start)
     priv->start = *start;
   if (end)
@@ -3900,9 +3906,6 @@ width_apply_weight (double width,
                     double maxwidth,
                     double weight)
 {
-  minwidth = MIN (minwidth, width);
-  maxwidth = MAX (maxwidth, width);
-
   if (weight < 1)
     {
       g_assert_not_reached ();
@@ -7969,7 +7972,7 @@ parse_shape_gpa_attrs (Shape                *shape,
       unsigned int len;
 
       if (parse_numbers (strokewidth_attr, " ", 0, DBL_MAX, v, 3, &len) &&
-          (len == 3 && v[0] <= v[1] && v[1] <= v[2]))
+          len == 3)
         {
           value = svg_number_new (v[0]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, value);
