@@ -39,7 +39,8 @@ typedef enum
 {
   TIME,
   STATE,
-  OUTPUT
+  COLORS,
+  OUTPUT,
 } StepType;
 
 typedef struct
@@ -48,6 +49,8 @@ typedef struct
   int64_t time;
   unsigned int state;
   char *output;
+  GdkRGBA colors[5];
+  size_t n_colors;
 } Step;
 
 static void
@@ -71,6 +74,8 @@ render_svg_file (GFile *file, gboolean generate)
   GError *error = NULL;
   int64_t load_time;
   GArray *steps;
+  const GdkRGBA *colors = NULL;
+  size_t n_colors = 0;
 
   steps = g_array_new (FALSE, FALSE, sizeof (Step));
   g_array_set_clear_func (steps, clear_step);
@@ -118,6 +123,21 @@ render_svg_file (GFile *file, gboolean generate)
               step.time = g_ascii_strtoull (strv[i] + strlen ("time: "), &end, 10);
               if (end && *end != '\0')
                 g_error ("Can't parse %s\n", filename);
+              g_array_append_val (steps, step);
+            }
+          else if (g_str_has_prefix (strv[i], "colors: "))
+            {
+              GStrv cols = g_strsplit (strv[i] + strlen ("colors: "), ";", 0);
+
+              step.type = COLORS;
+              step.n_colors = MIN (g_strv_length (cols), 5);
+              for (unsigned int j = 0; j < step.n_colors; j++)
+                {
+                  if (!gdk_rgba_parse (&step.colors[j], cols[j]))
+                    g_error ("Can't parse %s\n", filename);
+                }
+              g_strfreev (cols);
+
               g_array_append_val (steps, step);
             }
           else if (g_str_has_prefix (strv[i], "output: "))
@@ -172,11 +192,16 @@ render_svg_file (GFile *file, gboolean generate)
         case STATE:
           gtk_svg_set_state (svg, step->state);
           break;
+        case COLORS:
+          colors = step->colors;
+          n_colors = step->n_colors;
+          break;
         case OUTPUT:
           {
             GBytes *output;
 
             output = gtk_svg_serialize_full (svg,
+                                             colors, n_colors,
                                              GTK_SVG_SERIALIZE_AT_CURRENT_TIME |
                                              GTK_SVG_SERIALIZE_INCLUDE_STATE);
             if (generate)
