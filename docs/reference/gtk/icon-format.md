@@ -150,4 +150,4 @@ The following attributes can be set on elements that specify a path:
 
 ## File names and mime type
 
-Historically, GTK has expected symbolic icon files to have names ending with '-symbolc.svg'. The icons in format described here should use the mime type 'image/x-gtk-path-animation', and a file extension of '.gpa'.
+Historically, GTK has expected symbolic icon files to have names ending with '-symbolic.svg'. The icons in format described here should use the mime type 'image/x-gtk-path-animation', and a file extension of '.gpa'.
