@@ -758,6 +758,13 @@ make_ellipse_path (double cx, double cy,
   return gsk_path_builder_free_to_path (builder);
 }
 
+static inline gboolean
+g_strv_has (GStrv       strv,
+            const char *s)
+{
+  return g_strv_contains ((const char * const *) strv, s);
+}
+
 /* }}} */
 /* {{{ gpa things */
 
@@ -5557,25 +5564,10 @@ shape_set_current_value (Shape     *shape,
                          ShapeAttr  attr,
                          SvgValue  *value)
 {
-  svg_value_ref (value);
+  if (value)
+    svg_value_ref (value);
   g_clear_pointer (&shape->current[attr], svg_value_unref);
   shape->current[attr] = value;
-}
-
-static void
-shape_init_current_values (Shape *shape,
-                           Shape *parent)
-{
-  for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
-    {
-      SvgValue *value;
-
-      if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
-        {
-          value = shape_get_base_value (shape, parent, attr);
-          shape_set_current_value (shape, attr, value);
-        }
-    }
 }
 
 /* }}} */
@@ -6342,13 +6334,31 @@ compare_anim (gconstpointer a,
 }
 
 static void
+shape_init_current_values (Shape          *shape,
+                           ComputeContext *context)
+{
+  for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
+    {
+      SvgValue *value;
+
+      if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
+        {
+          value = resolve_value (shape, context, attr,
+                                 shape_get_base_value (shape, context->parent, attr));
+          shape_set_current_value (shape, attr, value);
+          svg_value_unref (value);
+        }
+    }
+}
+
+static void
 compute_current_values_for_shape (Shape          *shape,
                                   ComputeContext *context)
 {
   if (!shape->display)
     return;
 
-  shape_init_current_values (shape, context->parent);
+  shape_init_current_values (shape, context);
 
   g_ptr_array_sort_values (shape->animations, compare_anim);
 
@@ -7731,6 +7741,7 @@ parse_shape_attrs (Shape                *shape,
 {
   GtkSvgLocation loc;
   GtkSvgLocation *location = &loc;
+  const char *class_attr = NULL;
 
   gtk_svg_location_init (location, context);
   for (unsigned int i = 0; attr_names[i]; i++)
@@ -7742,6 +7753,10 @@ parse_shape_attrs (Shape                *shape,
 
       if (strcmp (attr_names[i], "class") == 0)
         {
+          /* We handle class after the loop to enforce priority
+           * of class over fill/stroke
+           */
+          class_attr = attr_values[i];
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "id") == 0)
@@ -7783,6 +7798,47 @@ parse_shape_attrs (Shape                *shape,
             }
           *handled |= BIT (i);
         }
+    }
+
+  if (class_attr)
+    {
+      GStrv classes = g_strsplit (class_attr, " ", 0);
+      SvgValue *value;
+
+      if (g_strv_has (classes, "transparent-fill"))
+        value = svg_paint_new_none ();
+      else if (g_strv_has (classes, "foreground-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else if (g_strv_has (classes, "success") ||
+               g_strv_has (classes, "success-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
+      else if (g_strv_has (classes, "warning") ||
+               g_strv_has (classes, "warning-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
+      else if (g_strv_has (classes, "error") ||
+               g_strv_has (classes, "error-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
+      else
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+
+      shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
+      svg_value_unref (value);
+
+      if (g_strv_has (classes, "success-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
+      else if (g_strv_has (classes, "warning-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
+      else if (g_strv_has (classes, "error-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
+      else if (g_strv_has (classes, "foreground-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else
+        value = svg_paint_new_none ();
+
+      shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
+      svg_value_unref (value);
+
+      g_strfreev (classes);
     }
 
   if (shape->attrs & BIT (SHAPE_ATTR_STROKE_WIDTH))
@@ -10615,6 +10671,8 @@ gtk_svg_clear_content (GtkSvg *self)
   self->state = 0;
   self->max_state = 0;
   self->state_change_delay = 0;
+
+  self->gpa_version = 0;
 }
 
 /* }}} */
