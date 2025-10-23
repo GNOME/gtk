@@ -10618,6 +10618,8 @@ gtk_svg_clear_content (GtkSvg *self)
   self->state = 0;
   self->max_state = 0;
   self->state_change_delay = 0;
+
+  self->gpa_version = 0;
 }
 
 /* }}} */
