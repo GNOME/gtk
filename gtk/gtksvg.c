@@ -5557,25 +5557,10 @@ shape_set_current_value (Shape     *shape,
                          ShapeAttr  attr,
                          SvgValue  *value)
 {
-  svg_value_ref (value);
+  if (value)
+    svg_value_ref (value);
   g_clear_pointer (&shape->current[attr], svg_value_unref);
   shape->current[attr] = value;
-}
-
-static void
-shape_init_current_values (Shape *shape,
-                           Shape *parent)
-{
-  for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
-    {
-      SvgValue *value;
-
-      if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
-        {
-          value = shape_get_base_value (shape, parent, attr);
-          shape_set_current_value (shape, attr, value);
-        }
-    }
 }
 
 /* }}} */
@@ -6342,13 +6327,31 @@ compare_anim (gconstpointer a,
 }
 
 static void
+shape_init_current_values (Shape          *shape,
+                           ComputeContext *context)
+{
+  for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
+    {
+      SvgValue *value;
+
+      if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
+        {
+          value = resolve_value (shape, context, attr,
+                                 shape_get_base_value (shape, context->parent, attr));
+          shape_set_current_value (shape, attr, value);
+          svg_value_unref (value);
+        }
+    }
+}
+
+static void
 compute_current_values_for_shape (Shape          *shape,
                                   ComputeContext *context)
 {
   if (!shape->display)
     return;
 
-  shape_init_current_values (shape, context->parent);
+  shape_init_current_values (shape, context);
 
   g_ptr_array_sort_values (shape->animations, compare_anim);
 
