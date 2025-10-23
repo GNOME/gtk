@@ -3906,9 +3906,6 @@ width_apply_weight (double width,
                     double maxwidth,
                     double weight)
 {
-  minwidth = MIN (minwidth, width);
-  maxwidth = MAX (maxwidth, width);
-
   if (weight < 1)
     {
       g_assert_not_reached ();
@@ -7975,7 +7972,7 @@ parse_shape_gpa_attrs (Shape                *shape,
       unsigned int len;
 
       if (parse_numbers (strokewidth_attr, " ", 0, DBL_MAX, v, 3, &len) &&
-          (len == 3 && v[0] <= v[1] && v[1] <= v[2]))
+          len == 3)
         {
           value = svg_number_new (v[0]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, value);
