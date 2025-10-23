@@ -12,6 +12,7 @@ test_data = [
   'priority.test',
   'state-changes.test',
   'states.test',
+  'symbolics.test',
   'transform-animation.test',
 ]
 
