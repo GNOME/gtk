@@ -179,9 +179,11 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
 
   for (i = 0; i < n_planes; i++)
     {
-      gsize block_width = gdk_memory_format_get_plane_block_width (layout.format, i);
-      gsize block_height = gdk_memory_format_get_plane_block_height (layout.format, i);
-      gsize block_bytes = gdk_memory_format_get_plane_block_bytes (layout.format, i);
+      gsize block_width, block_height, block_bytes;
+      /* We use this function for now because it produces the values we expect;
+       * In particular for GDK_MEMORY_G8B8G8R8_422 aka YUYV.
+       */
+      gdk_memory_format_get_shader_plane (layout.format, i, &block_width, &block_height, &block_bytes);
 
       buffer_image_copy[i] = (VkBufferImageCopy) {
                                  .bufferOffset = layout.planes[i].offset,
