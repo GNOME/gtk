@@ -7742,11 +7742,8 @@ parse_shape_attrs (Shape                *shape,
                    ParserData           *data,
                    GMarkupParseContext  *context)
 {
-  GtkSvgLocation loc;
-  GtkSvgLocation *location = &loc;
   const char *class_attr = NULL;
 
-  gtk_svg_location_init (location, context);
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
