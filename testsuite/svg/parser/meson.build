@@ -29,6 +29,7 @@ test_data = [
   'paint.svg',
   'simple.svg',
   'stroke.svg',
+  'style.svg',
   'times.svg',
   'transforms.svg',
   'use.svg'

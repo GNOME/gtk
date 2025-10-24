@@ -7190,6 +7190,8 @@ typedef struct
   } skip;
 } ParserData;
 
+/* {{{ Animation attribute */
+
 static void
 parse_base_animation_attrs (Animation            *a,
                             const char           *element_name,
@@ -7733,6 +7735,161 @@ parse_value_animation_attrs (Animation            *a,
   return TRUE;
 }
 
+/* }}} */
+/* {{{ Style */
+
+/* Priority order for attributes:
+ *
+ * gpa:... > class > style > presentation attrs
+ *
+ * class is in here for backwards compat with traditional
+ * symbolic icons.
+ */
+
+/* We parse the style attribute manually here, since
+ * svg_attr_parse_value doesn't use GtkCssParser
+ */
+static void
+skip_whitespace (const char **p)
+{
+  while (g_ascii_isspace (**p))
+    (*p)++;
+}
+
+static void
+skip_to_semicolon (const char **p)
+{
+  while (**p && **p != ';')
+    (*p)++;
+}
+
+static void
+skip_past_semicolon (const char **p)
+{
+  skip_to_semicolon (p);
+  if (**p) (*p)++;
+}
+
+static gboolean
+consume_colon (const char **p)
+{
+  skip_whitespace (p);
+  if (**p != ':')
+    return FALSE;
+
+  (*p)++;
+  skip_whitespace (p);
+  return TRUE;
+}
+
+static inline gboolean
+is_multibyte (char c)
+{
+  return c & 0x80;
+}
+
+static inline gboolean
+is_name_start (char c)
+{
+   return is_multibyte (c) || g_ascii_isalpha (c) || c == '_';
+}
+
+static inline gboolean
+is_name (char c)
+{
+  return is_name_start (c) || g_ascii_isdigit (c) || c == '-';
+}
+
+static char *
+consume_ident (const char **p)
+{
+  const char *q;
+  skip_whitespace (p);
+  if (!is_name_start (**p))
+    return NULL;
+  q = *p;
+  do {
+    (*p)++;
+  } while (is_name (**p));
+  return g_strndup (q, *p - q);
+}
+
+static char *
+consume_to_semicolon (const char **p)
+{
+  const char *q;
+  skip_whitespace (p);
+  q = *p;
+  skip_to_semicolon (p);
+  return g_strndup (q, *p - q);
+}
+
+static void
+parse_style_attr (Shape               *shape,
+                  const char          *style_attr,
+                  ParserData          *data,
+                  GMarkupParseContext *context)
+{
+  const char *p = style_attr;
+  ShapeAttr attr;
+  char *name;
+  char *prop_val;
+  SvgValue *value;
+
+  while (*p)
+    {
+      skip_whitespace (&p);
+      name = consume_ident (&p);
+      if (!name)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': expected identifier");
+          skip_past_semicolon (&p);
+          continue;
+        }
+
+      if (!find_shape_attr (name, &attr))
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': unsupported property '%s'", name);
+          g_free (name);
+          skip_past_semicolon (&p);
+          continue;
+        }
+
+      g_free (name);
+
+      if (!consume_colon (&p))
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': expected ':' after '%s'", shape_attrs[attr].name);
+          skip_past_semicolon (&p);
+          continue;
+        }
+
+      if (!*p)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': value expected after ':'");
+          break;
+        }
+
+      prop_val = consume_to_semicolon (&p);
+      value = shape_attr_parse_value (attr, prop_val);
+      if (!value)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "style", "failed to parse '%s' value '%s'", shape_attrs[attr].name, prop_val);
+        }
+      else
+        {
+          shape_set_base_value (shape, attr, value);
+          svg_value_unref (value);
+        }
+
+      g_free (prop_val);
+      skip_past_semicolon (&p);
+    }
+}
+
+/* }}} */
+/* {{{ Shape attributes */
+
 static void
 parse_shape_attrs (Shape                *shape,
                    const char           *element_name,
@@ -7743,6 +7900,7 @@ parse_shape_attrs (Shape                *shape,
                    GMarkupParseContext  *context)
 {
   const char *class_attr = NULL;
+  const char *style_attr = NULL;
 
   for (unsigned int i = 0; attr_names[i]; i++)
     {
@@ -7751,12 +7909,17 @@ parse_shape_attrs (Shape                *shape,
       if (*handled & BIT (i))
         continue;
 
+      /* We handle class and style after the loop to
+       * enforce priority over fill/stroke
+       */
       if (strcmp (attr_names[i], "class") == 0)
         {
-          /* We handle class after the loop to enforce priority
-           * of class over fill/stroke
-           */
           class_attr = attr_values[i];
+          *handled |= BIT (i);
+        }
+      else if (strcmp (attr_names[i], "style") == 0)
+        {
+          style_attr = attr_values[i];
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "id") == 0)
@@ -7799,6 +7962,9 @@ parse_shape_attrs (Shape                *shape,
           *handled |= BIT (i);
         }
     }
+
+  if (style_attr)
+    parse_style_attr (shape, style_attr, data, context);
 
   if (class_attr)
     {
@@ -8146,6 +8312,8 @@ parse_shape_gpa_attrs (Shape                *shape,
                            origin);
     }
 }
+
+/* }}} */
 
 G_GNUC_PRINTF (3, 4)
 static void
