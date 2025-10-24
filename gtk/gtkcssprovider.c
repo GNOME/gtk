@@ -309,7 +309,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * }
    * ```
    *
-   * Changing this setting will cause a re-render of the style sheet.
+   * Changing this setting will reload the style sheet.
    *
    * Since: 4.20
    */
@@ -338,7 +338,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * }
    * ```
    *
-   * Changing this setting will cause a re-render of the style sheet.
+   * Changing this setting will reload the style sheet.
    *
    * Since: 4.20
    */
@@ -366,7 +366,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * }
    * ```
    *
-   * Changing this setting will cause a re-render of the style sheet.
+   * Changing this setting will reload the style sheet.
    *
    * Since: 4.22
    */
