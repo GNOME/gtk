@@ -35,7 +35,7 @@ typedef struct
   int         xft_dpi;
   int         double_click_time;
   int         cursor_blink_time;
-  guint       enable_animations : 1;
+  guint       reduced_motion : 1;
   guint       shell_shows_desktop : 1;
   guint       shell_shows_menubar : 1;
   guint       primary_button_warps_slider : 1;
@@ -60,7 +60,7 @@ _gdk_macos_settings_load (GdkMacosSettings *settings)
 
   settings->shell_shows_desktop = TRUE;
   settings->shell_shows_menubar = TRUE;
-  settings->enable_animations = [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldReduceMotion] == NO;
+  settings->reduced_motion = [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldReduceMotion] == YES;
   settings->xft_dpi = 72 * 1024;
 
   ival = [defaults integerForKey:@"NSTextInsertionPointBlinkPeriod"];
@@ -114,9 +114,12 @@ _gdk_macos_display_get_setting (GdkMacosDisplay *self,
     }
 
   if (FALSE) {}
-  else if (strcmp (setting, "gtk-enable-animations") == 0)
+  else if (strcmp (setting, "gtk-interface-reduced-motion") == 0)
     {
-      g_value_set_boolean (value, current_settings.enable_animations);
+      /* 0: GTK_REDUCED_MOTION_NO_PREFERENCE
+       * 1: GTK_REDUCED_MOTION_REDUCE
+       */
+      g_value_set_enum (value, current_settings.reduced_motion ? 1 : 0);
       ret = TRUE;
     }
   else if (strcmp (setting, "gtk-xft-dpi") == 0)
@@ -177,8 +180,8 @@ _gdk_macos_display_reload_settings (GdkMacosDisplay *self)
   if (old_settings.double_click_time != current_settings.double_click_time)
     gdk_display_setting_changed (GDK_DISPLAY (self), "gtk-double-click-time");
 
-  if (old_settings.enable_animations != current_settings.enable_animations)
-    gdk_display_setting_changed (GDK_DISPLAY (self), "gtk-enable-animations");
+  if (old_settings.reduced_motion != current_settings.reduced_motion)
+    gdk_display_setting_changed (GDK_DISPLAY (self), "gtk-interface-reduced-motion");
 
   if (old_settings.font_name != current_settings.font_name)
     gdk_display_setting_changed (GDK_DISPLAY (self), "gtk-font-name");
