@@ -20,6 +20,7 @@ test_data = [
   'rect.svg',
   'rect2.svg',
   'rounded-rect.svg',
+  'style.svg',
   'use.svg',
 ]
 
