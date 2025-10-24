@@ -499,6 +499,20 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
       GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
       return TRUE;
     }
+  else if (strcmp ("gtk-interface-reduced-motion", name) == 0)
+    {
+      BOOL val = TRUE;
+      /* 0: no-preference
+       * 1: reduce
+       */
+      if (SystemParametersInfo (SPI_GETCLIENTAREAANIMATION, 0, &val, 0))
+        g_value_set_enum (value, val ? 0 : 1);
+      else
+        g_value_set_enum (value, 0);
+
+      GDK_NOTE (MISC, g_print ("gdk_win32_display_get_setting(\"%s\") : %s\n", name, val ? "no-preference" : "reduce"));
+      return TRUE;
+    }
 
   return FALSE;
 }
