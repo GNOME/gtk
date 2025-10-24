@@ -9567,7 +9567,6 @@ static void serialize_shape (GString              *s,
                              GtkSvg               *svg,
                              int                   indent,
                              Shape                *shape,
-                             Shape                *parent,
                              GtkSvgSerializeFlags  flags);
 
 static void
@@ -9575,7 +9574,6 @@ serialize_group (GString              *s,
                  GtkSvg               *svg,
                  int                   indent,
                  Shape                *shape,
-                 Shape                *parent,
                  GtkSvgSerializeFlags  flags)
 {
   if (indent > 0) /* Hack: this is for <svg> */
@@ -9592,7 +9590,7 @@ serialize_group (GString              *s,
   for (unsigned int i = 0; i < shape->shapes->len; i++)
     {
       Shape *sh = g_ptr_array_index (shape->shapes, i);
-      serialize_shape (s, svg, indent + 2 , sh, shape, flags);
+      serialize_shape (s, svg, indent + 2 , sh, flags);
     }
 
   if (indent > 0)
@@ -9655,7 +9653,6 @@ serialize_shape (GString              *s,
                  GtkSvg               *svg,
                  int                   indent,
                  Shape                *shape,
-                 Shape                *parent,
                  GtkSvgSerializeFlags  flags)
 {
   switch (shape->type)
@@ -9664,7 +9661,7 @@ serialize_shape (GString              *s,
     case SHAPE_CLIP_PATH:
     case SHAPE_MASK:
     case SHAPE_DEFS:
-      serialize_group (s, svg, indent, shape, parent, flags);
+      serialize_group (s, svg, indent, shape, flags);
       break;
 
     case SHAPE_CIRCLE:
@@ -10814,7 +10811,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
   g_string_append (s, ">");
 
-  serialize_shape (s, self, 0, self->content, NULL, flags);
+  serialize_shape (s, self, 0, self->content, flags);
   g_string_append (s, "\n</svg>\n");
 
   return g_string_free_to_bytes (s);
