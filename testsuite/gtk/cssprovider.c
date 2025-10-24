@@ -93,10 +93,11 @@ test_load_with_and_media_query (void)
   g_object_set (provider,
                 "prefers-color-scheme", GTK_INTERFACE_COLOR_SCHEME_LIGHT,
                 "prefers-contrast", GTK_INTERFACE_CONTRAST_MORE,
+                "prefers-reduced-motion", GTK_REDUCED_MOTION_REDUCE,
                 NULL);
 
   gtk_css_provider_load_from_string (provider,
-    "@media (prefers-color-scheme: light) and (prefers-contrast: more) { style { color: blue; } }");
+    "@media (prefers-color-scheme: light) and (prefers-contrast: more) and (prefers-reduced-motion: reduce) { style { color: blue; } }");
   rendered_css = gtk_css_provider_to_string (provider);
   g_object_unref (provider);
 
