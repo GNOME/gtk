@@ -122,8 +122,6 @@ load_animation_file (const char *filename)
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), NULL);
   gtk_svg_load_from_bytes (svg, bytes);
 
-  gtk_svg_play (svg);
-
   return svg;
 }
 
@@ -139,6 +137,7 @@ show_files (char     **filenames,
 
   window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
+  gtk_widget_realize (window);
 
   title = g_string_new ("");
   for (int i = 0; i < g_strv_length (filenames); i++)
@@ -175,6 +174,10 @@ show_files (char     **filenames,
       GtkEventController *click;
 
       svg = load_animation_file (filenames[i]);
+
+      gtk_svg_set_frame_clock (svg, gtk_widget_get_frame_clock (window));
+
+      gtk_svg_play (svg);
 
       picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (svg));
       gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
