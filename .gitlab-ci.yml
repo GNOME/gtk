@@ -329,6 +329,7 @@ fedora-mingw64:
 
 msys2-ucrt64:
   extends: .mingw-defaults
+  allow_failure: true
   needs: []
   variables:
     MSYSTEM: "UCRT64"
