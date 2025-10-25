@@ -3260,7 +3260,12 @@ svg_dash_array_interpolate (const SvgValue *value1,
   unsigned int n_dashes;
 
   if (a1->kind != a2->kind)
-    return NULL;
+    {
+      if (t < 0.5)
+        return svg_value_ref ((SvgValue *) value1);
+      else
+        return svg_value_ref ((SvgValue *) value2);
+    }
 
   if (a1->kind == DASH_ARRAY_NONE)
     return (SvgValue *) svg_dash_array_new_none ();

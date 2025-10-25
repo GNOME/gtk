@@ -25,6 +25,17 @@
             gpa:status='running'
             gpa:current-start-time='0ms'
             gpa:current-end-time='10000ms'/>
+    <animate
+            id='dashes'
+            attributeName='stroke-dasharray'
+            begin='10000ms'
+            dur='1000ms'
+            from='10 10'
+            to='none'
+            keyTimes='0; 1'
+            gpa:status='inactive'
+            gpa:current-start-time='10000ms'
+            gpa:current-end-time='11000ms'/>
   </path>
   <circle
           fill='rgb(255,0,0)'
