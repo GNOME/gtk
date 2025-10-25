@@ -870,13 +870,13 @@ struct _SvgValueClass
   const char *name;
 
   void       (* free)        (SvgValue       *value);
-  gboolean   (* equal)       (const SvgValue *value1,
-                              const SvgValue *value2);
-  SvgValue * (* interpolate) (const SvgValue *value1,
-                              const SvgValue *value2,
+  gboolean   (* equal)       (const SvgValue *value0,
+                              const SvgValue *value1);
+  SvgValue * (* interpolate) (const SvgValue *value0,
+                              const SvgValue *value1,
                               double          t);
-  SvgValue * (* accumulate)  (const SvgValue *value1,
-                              const SvgValue *value2,
+  SvgValue * (* accumulate)  (const SvgValue *value0,
+                              const SvgValue *value1,
                               int             n);
   void       (* print)       (const SvgValue *value,
                               GString        *string);
@@ -922,52 +922,52 @@ svg_value_unref (SvgValue *value)
 }
 
 static gboolean
-svg_value_equal (const SvgValue *value1,
-                 const SvgValue *value2)
+svg_value_equal (const SvgValue *value0,
+                 const SvgValue *value1)
 {
-  if (value1 == value2)
+  if (value0 == value1)
     return TRUE;
 
-  if (value1->class != value2->class)
+  if (value0->class != value1->class)
     return FALSE;
 
-  return value1->class->equal (value1, value2);
+  return value0->class->equal (value0, value1);
 }
 
 /* Compute v = t * a + (1 - t) * b */
 static SvgValue *
-svg_value_interpolate (const SvgValue *value1,
-                       const SvgValue *value2,
+svg_value_interpolate (const SvgValue *value0,
+                       const SvgValue *value1,
                        double          t)
 {
-  if (value1->class != value2->class)
+  if (value0->class != value1->class)
     return NULL;
 
   if (t == 0)
-    return svg_value_ref ((SvgValue *) value1);
+    return svg_value_ref ((SvgValue *) value0);
 
   if (t == 1)
-    return svg_value_ref ((SvgValue *) value2);
-
-  if (value1 == value2)
     return svg_value_ref ((SvgValue *) value1);
 
-  return value1->class->interpolate (value1, value2, t);
+  if (value0 == value1)
+    return svg_value_ref ((SvgValue *) value0);
+
+  return value1->class->interpolate (value0, value1, t);
 }
 
 /* Compute v = a + n * b */
 static SvgValue *
-svg_value_accumulate (const SvgValue *value1,
-                      const SvgValue *value2,
+svg_value_accumulate (const SvgValue *value0,
+                      const SvgValue *value1,
                       int             n)
 {
-  if (value1->class != value2->class)
+  if (value0->class != value1->class)
     return NULL;
 
   if (n == 0)
-    return svg_value_ref ((SvgValue *) value1);
+    return svg_value_ref ((SvgValue *) value0);
 
-  return value1->class->accumulate (value1, value2, n);
+  return value0->class->accumulate (value0, value1, n);
 }
 
 static void
@@ -1000,25 +1000,25 @@ svg_keyword_free (SvgValue *value)
 }
 
 static gboolean
-svg_keyword_equal (const SvgValue *value1,
-                   const SvgValue *value2)
+svg_keyword_equal (const SvgValue *value0,
+                   const SvgValue *value1)
 {
+  const SvgKeyword *k0 = (const SvgKeyword *) value0;
   const SvgKeyword *k1 = (const SvgKeyword *) value1;
-  const SvgKeyword *k2 = (const SvgKeyword *) value2;
-  return k1->keyword == k2->keyword;
+  return k0->keyword == k1->keyword;
 }
 
 static SvgValue *
-svg_keyword_interpolate (const SvgValue *value1,
-                         const SvgValue *value2,
+svg_keyword_interpolate (const SvgValue *value0,
+                         const SvgValue *value1,
                          double          t)
 {
   return NULL;
 }
 
 static SvgValue *
-svg_keyword_accumulate (const SvgValue *value1,
-                        const SvgValue *value2,
+svg_keyword_accumulate (const SvgValue *value0,
+                        const SvgValue *value1,
                         int             n)
 {
   return NULL;
@@ -1095,37 +1095,37 @@ svg_number_free (SvgValue *value)
 }
 
 static gboolean
-svg_number_equal (const SvgValue *value1,
-                  const SvgValue *value2)
+svg_number_equal (const SvgValue *value0,
+                  const SvgValue *value1)
 {
+  const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
-  const SvgNumber *n2 = (const SvgNumber *) value2;
 
-  return n1->value == n2->value;
+  return n0->value == n1->value;
 }
 
 static SvgValue * svg_number_new (double value);
 
 static SvgValue *
-svg_number_interpolate (const SvgValue *value1,
-                        const SvgValue *value2,
+svg_number_interpolate (const SvgValue *value0,
+                        const SvgValue *value1,
                         double          t)
 {
+  const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
-  const SvgNumber *n2 = (const SvgNumber *) value2;
 
-  return svg_number_new (lerp (t, n1->value, n2->value));
+  return svg_number_new (lerp (t, n0->value, n1->value));
 }
 
 static SvgValue *
-svg_number_accumulate (const SvgValue *value1,
-                       const SvgValue *value2,
+svg_number_accumulate (const SvgValue *value0,
+                       const SvgValue *value1,
                        int             n)
 {
+  const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
-  const SvgNumber *n2 = (const SvgNumber *) value2;
 
-  return svg_number_new (accumulate (n1->value, n2->value, n));
+  return svg_number_new (accumulate (n0->value, n1->value, n));
 }
 
 static void
@@ -1200,37 +1200,37 @@ svg_length_free (SvgValue *value)
 }
 
 static gboolean
-svg_length_equal (const SvgValue *value1,
-                  const SvgValue *value2)
+svg_length_equal (const SvgValue *value0,
+                  const SvgValue *value1)
 {
+  const SvgLength *l0 = (const SvgLength *) value0;
   const SvgLength *l1 = (const SvgLength *) value1;
-  const SvgLength *l2 = (const SvgLength *) value2;
 
-  return l1->value == l2->value;
+  return l0->value == l1->value;
 }
 
 static SvgValue * svg_length_new (double value);
 
 static SvgValue *
-svg_length_interpolate (const SvgValue *value1,
-                        const SvgValue *value2,
+svg_length_interpolate (const SvgValue *value0,
+                        const SvgValue *value1,
                         double          t)
 {
+  const SvgLength *l0 = (const SvgLength *) value0;
   const SvgLength *l1 = (const SvgLength *) value1;
-  const SvgLength *l2 = (const SvgLength *) value2;
 
-  return svg_length_new (lerp (t, l1->value, l2->value));
+  return svg_length_new (lerp (t, l0->value, l1->value));
 }
 
 static SvgValue *
-svg_length_accumulate (const SvgValue *value1,
-                       const SvgValue *value2,
+svg_length_accumulate (const SvgValue *value0,
+                       const SvgValue *value1,
                        int             n)
 {
+  const SvgLength *l0 = (const SvgLength *) value0;
   const SvgLength *l1 = (const SvgLength *) value1;
-  const SvgLength *l2 = (const SvgLength *) value2;
 
-  return svg_length_new (accumulate (l1->value, l2->value, n));
+  return svg_length_new (accumulate (l0->value, l1->value, n));
 }
 
 static void
@@ -1306,32 +1306,32 @@ svg_enum_free (SvgValue *value)
 }
 
 static gboolean
-svg_enum_equal (const SvgValue *value1,
-                const SvgValue *value2)
+svg_enum_equal (const SvgValue *value0,
+                const SvgValue *value1)
 {
+  const SvgEnum *n0 = (const SvgEnum *) value0;
   const SvgEnum *n1 = (const SvgEnum *) value1;
-  const SvgEnum *n2 = (const SvgEnum *) value2;
 
-  return n1->value == n2->value;
+  return n0->value == n1->value;
 }
 
 static SvgValue *
-svg_enum_interpolate (const SvgValue *value1,
-                      const SvgValue *value2,
+svg_enum_interpolate (const SvgValue *value0,
+                      const SvgValue *value1,
                       double          t)
 {
   if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value1);
+    return svg_value_ref ((SvgValue *) value0);
   else
-    return svg_value_ref ((SvgValue *) value2);
+    return svg_value_ref ((SvgValue *) value1);
 }
 
 static SvgValue *
-svg_enum_accumulate (const SvgValue *value1,
-                     const SvgValue *value2,
+svg_enum_accumulate (const SvgValue *value0,
+                     const SvgValue *value1,
                      int             n)
 {
-  return svg_value_ref ((SvgValue *) value1);
+  return svg_value_ref ((SvgValue *) value0);
 }
 
 static void
@@ -1571,61 +1571,66 @@ svg_transform_free (SvgValue *value)
 }
 
 static gboolean
-primitive_transform_equal (const PrimitiveTransform *t1,
-                           const PrimitiveTransform *t2)
+primitive_transform_equal (const PrimitiveTransform *t0,
+                           const PrimitiveTransform *t1)
 {
-  if (t1->type != t2->type)
+  if (t0->type != t1->type)
     return FALSE;
 
-  switch (t1->type)
+  switch (t0->type)
     {
     case TRANSFORM_NONE:
       return TRUE;
     case TRANSFORM_TRANSLATE:
-      return t1->translate.x == t2->translate.x &&
-             t1->translate.y == t2->translate.y;
+      return t0->translate.x == t1->translate.x &&
+             t0->translate.y == t1->translate.y;
     case TRANSFORM_SCALE:
-      return t1->scale.x == t2->scale.x &&
-             t1->scale.y == t2->scale.y;
+      return t0->scale.x == t1->scale.x &&
+             t0->scale.y == t1->scale.y;
     case TRANSFORM_ROTATE:
-      return t1->rotate.angle == t2->rotate.angle &&
-             t1->rotate.x == t2->rotate.x &&
-             t1->rotate.y == t2->rotate.y;
+      return t0->rotate.angle == t1->rotate.angle &&
+             t0->rotate.x == t1->rotate.x &&
+             t0->rotate.y == t1->rotate.y;
     case TRANSFORM_SKEW_X:
-      return t1->skew_x.angle == t2->skew_x.angle;
+      return t0->skew_x.angle == t1->skew_x.angle;
     case TRANSFORM_SKEW_Y:
-      return t1->skew_y.angle == t2->skew_y.angle;
+      return t0->skew_y.angle == t1->skew_y.angle;
     case TRANSFORM_MATRIX:
-      return t1->matrix.xx == t2->matrix.xx && t1->matrix.yx == t2->matrix.yx &&
-             t1->matrix.xy == t2->matrix.xy && t1->matrix.yy == t2->matrix.yy &&
-             t1->matrix.dx == t2->matrix.dx && t1->matrix.dy == t2->matrix.dy;
+      return t0->matrix.xx == t1->matrix.xx && t0->matrix.yx == t1->matrix.yx &&
+             t0->matrix.xy == t1->matrix.xy && t0->matrix.yy == t1->matrix.yy &&
+             t0->matrix.dx == t1->matrix.dx && t0->matrix.dy == t1->matrix.dy;
     default:
       g_assert_not_reached ();
     }
 }
 
 static gboolean
-svg_transform_equal (const SvgValue *value1,
-                     const SvgValue *value2)
+svg_transform_equal (const SvgValue *value0,
+                     const SvgValue *value1)
 {
+  const SvgTransform *t0 = (const SvgTransform *) value0;
   const SvgTransform *t1 = (const SvgTransform *) value1;
-  const SvgTransform *t2 = (const SvgTransform *) value2;
 
-  if (t1->n_transforms != t2->n_transforms)
+  if (t0->n_transforms != t1->n_transforms)
     return FALSE;
 
   for (unsigned int i = 0; i < t1->n_transforms; i++)
     {
-      if (!primitive_transform_equal (&t1->transforms[i], &t2->transforms[i]))
+      if (!primitive_transform_equal (&t0->transforms[i], &t1->transforms[i]))
         return FALSE;
     }
 
   return TRUE;
 }
 
-static SvgValue *svg_transform_interpolate (const SvgValue *v1, const SvgValue *v2, double t);
-static SvgValue *svg_transform_accumulate  (const SvgValue *v1, const SvgValue *v2, int n);
-static void      svg_transform_print       (const SvgValue *v1, GString *string);
+static SvgValue *svg_transform_interpolate (const SvgValue *v0,
+                                            const SvgValue *v1,
+                                            double          t);
+static SvgValue *svg_transform_accumulate  (const SvgValue *v0,
+                                            const SvgValue *v1,
+                                            int             n);
+static void      svg_transform_print       (const SvgValue *v,
+                                            GString        *string);
 
 static const SvgValueClass SVG_TRANSFORM_CLASS = {
   "SvgTransform",
@@ -1932,8 +1937,8 @@ svg_transform_parse (const char *value)
 }
 
 static SvgValue *
-primitive_transform_parse (TransformType   type,
-                           const char     *value)
+primitive_transform_parse (TransformType  type,
+                           const char    *value)
 {
   GStrv strv;
   unsigned int n;
@@ -2153,15 +2158,15 @@ svg_transform_print (const SvgValue *value,
 
 static void
 interpolate_matrices (double       t,
+                      const double m0[6],
                       const double m1[6],
-                      const double m2[6],
                       double       m[6])
 {
-  graphene_matrix_t mat1, mat2, res;
+  graphene_matrix_t mat0, mat1, res;
 
+  graphene_matrix_init_from_2d (&mat0, m0[0], m0[1], m0[2], m0[3], m0[4], m0[5]);
   graphene_matrix_init_from_2d (&mat1, m1[0], m1[1], m1[2], m1[3], m1[4], m1[5]);
-  graphene_matrix_init_from_2d (&mat2, m2[0], m2[1], m2[2], m2[3], m2[4], m2[5]);
-  graphene_matrix_interpolate (&mat1, &mat2, t, &res);
+  graphene_matrix_interpolate (&mat0, &mat1, t, &res);
   graphene_matrix_to_2d (&res, &m[0], &m[1], &m[2], &m[3], &m[4], &m[5]);
 }
 
@@ -2420,27 +2425,32 @@ svg_paint_free (SvgValue *value)
 }
 
 static gboolean
-svg_paint_equal (const SvgValue *value1,
-                 const SvgValue *value2)
+svg_paint_equal (const SvgValue *value0,
+                 const SvgValue *value1)
 {
+  const SvgPaint *paint0 = (const SvgPaint *) value0;
   const SvgPaint *paint1 = (const SvgPaint *) value1;
-  const SvgPaint *paint2 = (const SvgPaint *) value2;
 
-  if (paint1->kind != paint2->kind)
+  if (paint0->kind != paint1->kind)
     return FALSE;
 
-  if (paint1->kind == PAINT_NONE)
+  if (paint0->kind == PAINT_NONE)
     return TRUE;
 
-  if (paint1->kind == PAINT_SYMBOLIC)
-    return paint1->symbolic == paint2->symbolic;
+  if (paint0->kind == PAINT_SYMBOLIC)
+    return paint0->symbolic == paint1->symbolic;
 
-  return gdk_rgba_equal (&paint1->color, &paint2->color);
+  return gdk_rgba_equal (&paint0->color, &paint1->color);
 }
 
-static SvgValue *svg_paint_interpolate (const SvgValue *v1, const SvgValue *v2, double t);
-static SvgValue *svg_paint_accumulate  (const SvgValue *v1, const SvgValue *v2, int n);
-static void      svg_paint_print       (const SvgValue *v1, GString *string);
+static SvgValue *svg_paint_interpolate (const SvgValue *v0,
+                                        const SvgValue *v1,
+                                        double          t);
+static SvgValue *svg_paint_accumulate  (const SvgValue *v0,
+                                        const SvgValue *v1,
+                                        int             n);
+static void      svg_paint_print       (const SvgValue *v0,
+                                        GString        *string);
 
 static const SvgValueClass SVG_PAINT_CLASS = {
   "SvgPaint",
@@ -2790,31 +2800,36 @@ svg_filter_free (SvgValue *value)
 }
 
 static gboolean
-svg_filter_equal (const SvgValue *value1,
-                  const SvgValue *value2)
+svg_filter_equal (const SvgValue *value0,
+                  const SvgValue *value1)
 {
+  const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
-  const SvgFilter *f2 = (const SvgFilter *) value2;
 
-  if (f1->n_functions != f2->n_functions)
+  if (f0->n_functions != f1->n_functions)
     return FALSE;
 
-  for (unsigned int i = 0; i < f1->n_functions; i++)
+  for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      if (f1->functions[i].kind != f2->functions[i].kind)
+      if (f0->functions[i].kind != f1->functions[i].kind)
         return FALSE;
-      else if (f1->functions[i].kind == FILTER_NONE)
+      else if (f0->functions[i].kind == FILTER_NONE)
         return TRUE;
       else
-        return f1->functions[i].value == f2->functions[i].value;
+        return f0->functions[i].value == f1->functions[i].value;
     }
 
   return TRUE;
 }
 
-static SvgValue *svg_filter_interpolate (const SvgValue *v1, const SvgValue *v2, double t);
-static SvgValue *svg_filter_accumulate  (const SvgValue *v1, const SvgValue *v2, int n);
-static void      svg_filter_print       (const SvgValue *v1, GString *string);
+static SvgValue *svg_filter_interpolate (const SvgValue *v0,
+                                         const SvgValue *v1,
+                                         double          t);
+static SvgValue *svg_filter_accumulate  (const SvgValue *v0,
+                                         const SvgValue *v1,
+                                         int             n);
+static void      svg_filter_print       (const SvgValue *v0,
+                                         GString        *string);
 
 static const SvgValueClass SVG_FILTER_CLASS = {
   "SvgFilter",
@@ -2942,55 +2957,55 @@ svg_filter_print (const SvgValue *value,
 }
 
 static SvgValue *
-svg_filter_interpolate (const SvgValue *value1,
-                        const SvgValue *value2,
+svg_filter_interpolate (const SvgValue *value0,
+                        const SvgValue *value1,
                         double          t)
 {
+  const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
-  const SvgFilter *f2 = (const SvgFilter *) value2;
   SvgFilter *f;
 
-  if (f1->n_functions != f2->n_functions)
+  if (f0->n_functions != f1->n_functions)
     return NULL;
 
   /* TODO: filter interpolation wording in the spec */
-  for (unsigned int i = 0; i < f1->n_functions; i++)
+  for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      if (f1->functions[i].kind != f2->functions[i].kind)
+      if (f0->functions[i].kind != f1->functions[i].kind)
         return NULL;
     }
 
-  f = svg_filter_alloc (f1->n_functions);
+  f = svg_filter_alloc (f0->n_functions);
 
-  for (unsigned int i = 0; i < f1->n_functions; i++)
+  for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      f->functions[i].kind = f1->functions[i].kind;
+      f->functions[i].kind = f0->functions[i].kind;
       if (f->functions[i].kind != FILTER_NONE)
-        f->functions[i].value = lerp (t, f1->functions[i].value, f2->functions[i].value);
+        f->functions[i].value = lerp (t, f0->functions[i].value, f1->functions[i].value);
     }
 
   return (SvgValue *) f;
 }
 
 static SvgValue *
-svg_filter_accumulate (const SvgValue *value1,
-                       const SvgValue *value2,
+svg_filter_accumulate (const SvgValue *value0,
+                       const SvgValue *value1,
                        int             n)
 {
+  const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
-  const SvgFilter *f2 = (const SvgFilter *) value2;
   SvgFilter *f;
 
-  f = svg_filter_alloc (f1->n_functions + n * f2->n_functions);
+  f = svg_filter_alloc (f0->n_functions + n * f1->n_functions);
 
   for (unsigned int i = 0; i < n; i++)
-    memcpy (&f->functions[i * f2->n_functions],
-            f2->functions,
-            f2->n_functions * sizeof (FilterFunction));
+    memcpy (&f->functions[i * f1->n_functions],
+            f1->functions,
+            f1->n_functions * sizeof (FilterFunction));
 
-  memcpy (&f->functions[f1->n_functions + (n - 1) * f2->n_functions],
-          f1->functions,
-          f1->n_functions * sizeof (FilterFunction));
+  memcpy (&f->functions[f0->n_functions + (n - 1) * f1->n_functions],
+          f0->functions,
+          f0->n_functions * sizeof (FilterFunction));
 
   return (SvgValue *) f;
 }
@@ -3250,41 +3265,41 @@ svg_dash_array_print (const SvgValue *value,
 }
 
 static SvgValue *
-svg_dash_array_interpolate (const SvgValue *value1,
-                            const SvgValue *value2,
+svg_dash_array_interpolate (const SvgValue *value0,
+                            const SvgValue *value1,
                             double          t)
 {
+  const SvgDashArray *a0 = (const SvgDashArray *) value0;
   const SvgDashArray *a1 = (const SvgDashArray *) value1;
-  const SvgDashArray *a2 = (const SvgDashArray *) value2;
   SvgDashArray *a;
   unsigned int n_dashes;
 
-  if (a1->kind != a2->kind)
+  if (a0->kind != a1->kind)
     {
       if (t < 0.5)
-        return svg_value_ref ((SvgValue *) value1);
+        return svg_value_ref ((SvgValue *) value0);
       else
-        return svg_value_ref ((SvgValue *) value2);
+        return svg_value_ref ((SvgValue *) value1);
     }
 
-  if (a1->kind == DASH_ARRAY_NONE)
+  if (a0->kind == DASH_ARRAY_NONE)
     return (SvgValue *) svg_dash_array_new_none ();
 
-  n_dashes = lcm (a1->n_dashes, a2->n_dashes);
+  n_dashes = lcm (a0->n_dashes, a1->n_dashes);
 
   a = svg_dash_array_alloc (n_dashes);
-  a->kind = a1->kind;
+  a->kind = a0->kind;
 
   for (unsigned int i = 0; i < n_dashes; i++)
-    a->dashes[i] = lerp (t, a1->dashes[i % a1->n_dashes],
-                            a2->dashes[i % a2->n_dashes]);
+    a->dashes[i] = lerp (t, a0->dashes[i % a0->n_dashes],
+                            a1->dashes[i % a1->n_dashes]);
 
   return (SvgValue *) a;
 }
 
 static SvgValue *
-svg_dash_array_accumulate (const SvgValue *value1,
-                           const SvgValue *value2,
+svg_dash_array_accumulate (const SvgValue *value0,
+                           const SvgValue *value1,
                            int             n)
 {
   return NULL;
@@ -3308,24 +3323,24 @@ svg_path_free (SvgValue *value)
 }
 
 static gboolean
-svg_path_equal (const SvgValue *value1,
-                const SvgValue *value2)
+svg_path_equal (const SvgValue *value0,
+                const SvgValue *value1)
 {
-  const SvgPath *p1 = (const SvgPath *) value1;
-  const SvgPath *p2 = (const SvgPath *) value2;
+  const SvgPath *p0 = (const SvgPath *) value0;
+  const SvgPath *p2 = (const SvgPath *) value1;
 
-  if (p1->path == p2->path)
+  if (p0->path == p2->path)
     return TRUE;
 
-  if (!p1->path || !p2->path)
+  if (!p0->path || !p2->path)
     return FALSE;
 
-  return gsk_path_equal (p1->path, p2->path);
+  return gsk_path_equal (p0->path, p2->path);
 }
 
 static SvgValue *
-svg_path_accumulate (const SvgValue *value1,
-                     const SvgValue *value2,
+svg_path_accumulate (const SvgValue *value0,
+                     const SvgValue *value1,
                      int             n)
 {
   return NULL;
@@ -3444,98 +3459,98 @@ path_explode (GskPath *path)
 }
 
 static GskPath *
-path_interpolate (GskPath *p1,
-                  GskPath *p2,
+path_interpolate (GskPath *p0,
+                  GskPath *p1,
                   double   t)
 {
   GskPathBuilder *builder;
-  GArray *a1, *a2;
+  GArray *a0, *a1;
 
+  a0 = path_explode (p0);
   a1 = path_explode (p1);
-  a2 = path_explode (p2);
 
-  if (a1->len != a2->len)
+  if (a0->len != a1->len)
     {
+      g_array_unref (a0);
       g_array_unref (a1);
-      g_array_unref (a2);
       return NULL;
     }
 
   builder = gsk_path_builder_new ();
 
-  for (unsigned int i = 0; i < a1->len; i++)
+  for (unsigned int i = 0; i < a0->len; i++)
     {
+      PathOp *op0 = &g_array_index (a0, PathOp, i);
       PathOp *op1 = &g_array_index (a1, PathOp, i);
-      PathOp *op2 = &g_array_index (a2, PathOp, i);
 
-      if (op1->op != op2->op)
+      if (op0->op != op1->op)
         {
+          g_array_unref (a0);
           g_array_unref (a1);
-          g_array_unref (a2);
           gsk_path_builder_unref (builder);
           return NULL;
         }
 
-      switch (op1->op)
+      switch (op0->op)
         {
         case GSK_PATH_MOVE:
           gsk_path_builder_move_to (builder,
-                                    lerp (t, op1->pts[0].x, op2->pts[0].x),
-                                    lerp (t, op1->pts[0].y, op2->pts[0].y));
+                                    lerp (t, op0->pts[0].x, op1->pts[0].x),
+                                    lerp (t, op0->pts[0].y, op1->pts[0].y));
           break;
         case GSK_PATH_CLOSE:
           gsk_path_builder_close (builder);
           break;
         case GSK_PATH_LINE:
           gsk_path_builder_line_to (builder,
-                                    lerp (t, op1->pts[1].x, op2->pts[1].x),
-                                    lerp (t, op1->pts[1].y, op2->pts[1].y));
+                                    lerp (t, op0->pts[1].x, op1->pts[1].x),
+                                    lerp (t, op0->pts[1].y, op1->pts[1].y));
           break;
         case GSK_PATH_QUAD:
           gsk_path_builder_quad_to (builder,
-                                    lerp (t, op1->pts[1].x, op2->pts[1].x),
-                                    lerp (t, op1->pts[1].y, op2->pts[1].y),
-                                    lerp (t, op1->pts[2].x, op2->pts[2].x),
-                                    lerp (t, op1->pts[2].y, op2->pts[2].y));
+                                    lerp (t, op0->pts[1].x, op1->pts[1].x),
+                                    lerp (t, op0->pts[1].y, op1->pts[1].y),
+                                    lerp (t, op0->pts[2].x, op1->pts[2].x),
+                                    lerp (t, op0->pts[2].y, op1->pts[2].y));
           break;
         case GSK_PATH_CUBIC:
           gsk_path_builder_cubic_to (builder,
-                                     lerp (t, op1->pts[1].x, op2->pts[1].x),
-                                     lerp (t, op1->pts[1].y, op2->pts[1].y),
-                                     lerp (t, op1->pts[2].x, op2->pts[2].x),
-                                     lerp (t, op1->pts[2].y, op2->pts[2].y),
-                                     lerp (t, op1->pts[3].x, op2->pts[3].x),
-                                     lerp (t, op1->pts[3].y, op2->pts[3].y));
+                                     lerp (t, op0->pts[1].x, op1->pts[1].x),
+                                     lerp (t, op0->pts[1].y, op1->pts[1].y),
+                                     lerp (t, op0->pts[2].x, op1->pts[2].x),
+                                     lerp (t, op0->pts[2].y, op1->pts[2].y),
+                                     lerp (t, op0->pts[3].x, op1->pts[3].x),
+                                     lerp (t, op0->pts[3].y, op1->pts[3].y));
           break;
         case GSK_PATH_CONIC:
           gsk_path_builder_conic_to (builder,
-                                     lerp (t, op1->pts[1].x, op2->pts[1].x),
-                                     lerp (t, op1->pts[1].y, op2->pts[1].y),
-                                     lerp (t, op1->pts[2].x, op2->pts[2].x),
-                                     lerp (t, op1->pts[2].y, op2->pts[2].y),
-                                     lerp (t, op1->weight, op2->weight));
+                                     lerp (t, op0->pts[1].x, op1->pts[1].x),
+                                     lerp (t, op0->pts[1].y, op1->pts[1].y),
+                                     lerp (t, op0->pts[2].x, op1->pts[2].x),
+                                     lerp (t, op0->pts[2].y, op1->pts[2].y),
+                                     lerp (t, op0->weight, op1->weight));
           break;
         default:
           g_assert_not_reached ();
         }
     }
 
+  g_array_unref (a0);
   g_array_unref (a1);
-  g_array_unref (a2);
 
   return gsk_path_builder_free_to_path (builder);
 }
 
 static SvgValue *
-svg_path_interpolate (const SvgValue *value1,
-                      const SvgValue *value2,
+svg_path_interpolate (const SvgValue *value0,
+                      const SvgValue *value1,
                       double          t)
 {
+  const SvgPath *p0 = (const SvgPath *) value0;
   const SvgPath *p1 = (const SvgPath *) value1;
-  const SvgPath *p2 = (const SvgPath *) value2;
   GskPath *path;
 
-  path = path_interpolate (p1->path, p2->path, t);
+  path = path_interpolate (p0->path, p1->path, t);
 
   if (path)
     {
@@ -3545,9 +3560,9 @@ svg_path_interpolate (const SvgValue *value1,
     }
 
   if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value1);
+    return svg_value_ref ((SvgValue *) value0);
   else
-    return svg_value_ref ((SvgValue *) value2);
+    return svg_value_ref ((SvgValue *) value1);
 }
 
 /* }}} */
@@ -3588,39 +3603,39 @@ svg_clip_free (SvgValue *value)
 }
 
 static gboolean
-svg_clip_equal (const SvgValue *value1,
-                const SvgValue *value2)
+svg_clip_equal (const SvgValue *value0,
+                const SvgValue *value1)
 {
+  const SvgClip *c0 = (const SvgClip *) value0;
   const SvgClip *c1 = (const SvgClip *) value1;
-  const SvgClip *c2 = (const SvgClip *) value2;
 
-  if (c1->kind != c2->kind)
+  if (c0->kind != c1->kind)
     return FALSE;
 
-  switch (c1->kind)
+  switch (c0->kind)
     {
     case CLIP_NONE:
       return TRUE;
     case CLIP_PATH:
-      return gsk_path_equal (c1->path, c2->path);
+      return gsk_path_equal (c0->path, c1->path);
     case CLIP_REF:
-      return c1->ref.shape == c2->ref.shape;
+      return c0->ref.shape == c1->ref.shape;
     default:
       g_assert_not_reached ();
     }
 }
 
 static SvgValue *
-svg_clip_interpolate (const SvgValue *value1,
-                      const SvgValue *value2,
+svg_clip_interpolate (const SvgValue *value0,
+                      const SvgValue *value1,
                       double          t)
 {
   return NULL;
 }
 
 static SvgValue *
-svg_clip_accumulate (const SvgValue *value1,
-                     const SvgValue *value2,
+svg_clip_accumulate (const SvgValue *value0,
+                     const SvgValue *value1,
                      int             n)
 {
   return NULL;
@@ -3789,37 +3804,37 @@ svg_mask_free (SvgValue *value)
 }
 
 static gboolean
-svg_mask_equal (const SvgValue *value1,
-                const SvgValue *value2)
+svg_mask_equal (const SvgValue *value0,
+                const SvgValue *value1)
 {
+  const SvgMask *m0 = (const SvgMask *) value0;
   const SvgMask *m1 = (const SvgMask *) value1;
-  const SvgMask *m2 = (const SvgMask *) value2;
 
-  if (m1->kind != m2->kind)
+  if (m0->kind != m1->kind)
     return FALSE;
 
-  switch (m1->kind)
+  switch (m0->kind)
     {
     case MASK_NONE:
       return TRUE;
     case MASK_REF:
-      return m1->shape == m2->shape;
+      return m0->shape == m1->shape;
     default:
       g_assert_not_reached ();
     }
 }
 
 static SvgValue *
-svg_mask_interpolate (const SvgValue *value1,
-                      const SvgValue *value2,
+svg_mask_interpolate (const SvgValue *value0,
+                      const SvgValue *value1,
                       double          t)
 {
   return NULL;
 }
 
 static SvgValue *
-svg_mask_accumulate (const SvgValue *value1,
-                     const SvgValue *value2,
+svg_mask_accumulate (const SvgValue *value0,
+                     const SvgValue *value1,
                      int             n)
 {
   return NULL;
