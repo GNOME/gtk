@@ -1510,6 +1510,82 @@ svg_visibility_parse (const char *string)
   return NULL;
 }
 
+typedef enum
+{
+  SPREAD_METHOD_PAD,
+  SPREAD_METHOD_REFLECT,
+  SPREAD_METHOD_REPEAT,
+} SpreadMethod;
+
+static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
+  "SvgSpreadMethod",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum spread_method_values[] = {
+  { { &SVG_SPREAD_METHOD_CLASS, 1 }, SPREAD_METHOD_PAD, "pad" },
+  { { &SVG_SPREAD_METHOD_CLASS, 1 }, SPREAD_METHOD_REFLECT, "reflect" },
+  { { &SVG_SPREAD_METHOD_CLASS, 1 }, SPREAD_METHOD_REPEAT, "repeat" },
+};
+
+static SvgValue *
+svg_spread_method_new (SpreadMethod value)
+{
+  return svg_value_ref ((SvgValue *) &visibility_values[value]);
+}
+
+static SvgValue *
+svg_spread_method_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (spread_method_values); i++)
+    {
+      if (strcmp (string, spread_method_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &spread_method_values[i]);
+    }
+  return NULL;
+}
+
+typedef enum
+{
+  GRADIENT_UNITS_USER_SPACE_ON_USE,
+  GRADIENT_UNITS_OBJECT_BOUNDING_BOX,
+} GradientUnits;
+
+static const SvgValueClass SVG_GRADIENT_UNITS_CLASS = {
+  "SvgGradientUnits",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum gradient_units_values[] = {
+  { { &SVG_GRADIENT_UNITS_CLASS, 1 }, GRADIENT_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
+  { { &SVG_GRADIENT_UNITS_CLASS, 1 }, GRADIENT_UNITS_OBJECT_BOUNDING_BOX, "objectBoundingBox" },
+};
+
+static SvgValue *
+svg_gradient_units_new (GradientUnits value)
+{
+  return svg_value_ref ((SvgValue *) &gradient_units_values[value]);
+}
+
+static SvgValue *
+svg_gradient_units_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (gradient_units_values); i++)
+    {
+      if (strcmp (string, gradient_units_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &gradient_units_values[i]);
+    }
+  return NULL;
+}
+
 /* }}} */
 /* {{{ Transforms */
 
