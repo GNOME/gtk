@@ -29,6 +29,7 @@ main (int argc, char *argv[])
   GFile *file;
   GFileEnumerator *dir;
   int row;
+  GtkWidget *label;
 
   gtk_init ();
 
@@ -52,6 +53,14 @@ main (int argc, char *argv[])
   if (!dir)
     g_error ("%s", error->message);
 
+  label = gtk_label_new ("rsvg");
+  gtk_label_set_xalign (GTK_LABEL (label), 0.5);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, -1, 1, 1);
+
+  label = gtk_label_new ("gtk");
+  gtk_label_set_xalign (GTK_LABEL (label), 0.5);
+  gtk_grid_attach (GTK_GRID (grid), label, 2, -1, 1, 1);
+
   row = 0;
   while (1)
     {
@@ -60,7 +69,6 @@ main (int argc, char *argv[])
       char *basename;
       GdkPaintable *svg;
       GBytes *bytes;
-      GtkWidget *label;
       GtkWidget *img;
 
       if (!g_file_enumerator_iterate (dir, NULL, &child, NULL, &error))
