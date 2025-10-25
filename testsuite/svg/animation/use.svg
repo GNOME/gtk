@@ -1,0 +1,14 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+     width='30' height='20' viewBox='0 0 30 20'
+     gpa:state='0'>
+  <defs>
+    <circle id='circle1' cx='10' cy='10' r='5' fill-opacity='0.5' fill='red'/>
+    <circle id='circle2' cx='20' cy='10' r='5' fill-opacity='1' fill='green'/>
+  </defs>
+  <use>
+    <animate attributeName='href'
+        values='#circle1;#circle2'
+        begin='0' dur='1s'
+        fill='freeze'/>
+  </use>
+</svg>

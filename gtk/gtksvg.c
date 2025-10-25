@@ -4145,6 +4145,7 @@ typedef enum
   SHAPE_ATTR_STROKE_MITERLIMIT,
   SHAPE_ATTR_STROKE_DASHARRAY,
   SHAPE_ATTR_STROKE_DASHOFFSET,
+  SHAPE_ATTR_HREF,
   SHAPE_ATTR_PATH,
   SHAPE_ATTR_CX,
   SHAPE_ATTR_CY,
@@ -4327,6 +4328,12 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = FALSE,
     .parse_value = parse_dash_offset,
   },
+  { .id = SHAPE_ATTR_HREF,
+    .name = "href",
+    .inherited = FALSE,
+    .discrete = TRUE,
+    .parse_value = svg_href_parse,
+  },
   { .id = SHAPE_ATTR_PATH,
     .name = "d",
     .inherited = FALSE,
@@ -4428,6 +4435,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STROKE_MITERLIMIT].initial_value = svg_number_new (4);
   shape_attrs[SHAPE_ATTR_STROKE_DASHARRAY].initial_value = svg_dash_array_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_DASHOFFSET].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_HREF].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_PATH].initial_value = svg_path_new_none ();
   shape_attrs[SHAPE_ATTR_CX].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_CY].initial_value = svg_number_new (0);
@@ -4581,11 +4589,6 @@ struct _Shape
       double x, y, w, h, rx, ry;
     } rect;
   } path_for;
-
-  struct {
-    char *ref;
-    Shape *shape;
-  } use;
 };
 
 static void
@@ -4606,8 +4609,6 @@ shape_free (gpointer data)
 
   g_clear_pointer (&shape->path, gsk_path_unref);
   g_clear_pointer (&shape->measure, gsk_path_measure_unref);
-
-  g_clear_pointer (&shape->use.ref, g_free);
 
   g_free (data);
 }
@@ -4643,6 +4644,8 @@ shape_has_attr (ShapeType type,
 {
   switch ((unsigned int) attr)
     {
+    case SHAPE_ATTR_HREF:
+      return type == SHAPE_USE;
     case SHAPE_ATTR_CX:
     case SHAPE_ATTR_CY:
       return type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE;
@@ -8203,7 +8206,7 @@ parse_shape_attrs (Shape                *shape,
         }
     }
 
-  if (shape->attrs & (BIT (SHAPE_ATTR_CLIP_PATH) | BIT (SHAPE_ATTR_MASK)))
+  if (shape->attrs & (BIT (SHAPE_ATTR_CLIP_PATH) | BIT (SHAPE_ATTR_MASK) | BIT (SHAPE_ATTR_HREF)))
     g_ptr_array_add (data->pending_refs, shape);
 
   if (shape_has_attr (shape->type, SHAPE_ATTR_RX) &&
@@ -8953,31 +8956,6 @@ start_element_cb (GMarkupParseContext  *context,
   else if (strcmp (element_name, "use") == 0)
     {
       shape = shape_new (SHAPE_USE);
-
-      for (unsigned int i = 0; attr_names[i]; i++)
-        {
-          if (strcmp (attr_names[i], "href") == 0)
-            {
-              handled |= BIT (i);
-
-              if (attr_values[i][0] == '#')
-                shape->use.ref = g_strdup (attr_values[i] + 1);
-              else
-                shape->use.ref = g_strdup (attr_values[i]);
-            }
-        }
-
-      if (shape->use.ref)
-        {
-          g_ptr_array_add (data->pending_refs, shape);
-        }
-      else
-        {
-          gtk_svg_missing_attribute (data->svg, context, "href", NULL);
-          shape_free (shape);
-          skip_element (data, context, "Useless <use>");
-          return;
-        }
     }
   else
     {
@@ -9114,6 +9092,22 @@ resolve_mask_ref (SvgValue   *value,
 }
 
 static void
+resolve_href_ref (SvgValue   *value,
+                  ParserData *data)
+{
+  SvgHref *href = (SvgHref *) value;
+
+  if (href->kind == HREF_REF && href->shape == NULL)
+    {
+      Shape *target = g_hash_table_lookup (data->shapes, href->ref);
+      if (!target)
+        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", href->ref);
+      else
+        href->shape = target;
+    }
+}
+
+static void
 resolve_animation_refs (Shape      *shape,
                         ParserData *data)
 {
@@ -9149,12 +9143,19 @@ resolve_animation_refs (Shape      *shape,
           for (unsigned int j = 0; j < a->n_frames; j++)
             resolve_mask_ref (a->frames[j].value, data);
         }
+      else if (a->attr == SHAPE_ATTR_HREF)
+        {
+          for (unsigned int j = 0; j < a->n_frames; j++)
+            resolve_href_ref (a->frames[j].value, data);
+        }
 
       if (a->motion.path_ref)
         {
           a->motion.path_shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
           if (a->motion.path_shape == NULL)
-            gtk_svg_invalid_reference (data->svg, "No path with ID %s (resolving <mpath>", a->motion.path_ref);
+            gtk_svg_invalid_reference (data->svg,
+                                       "No path with ID %s (resolving <mpath>",
+                                       a->motion.path_ref);
           else if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
             /* a's path is attached to a->motion.path_shape
              * Make sure it moves along with transitions and animations
@@ -9179,15 +9180,7 @@ resolve_shape_refs (Shape      *shape,
 {
   resolve_clip_ref (shape->base[SHAPE_ATTR_CLIP_PATH], data);
   resolve_mask_ref (shape->base[SHAPE_ATTR_MASK], data);
-
-  if (shape->use.ref && shape->use.shape == NULL)
-    {
-      shape->use.shape = g_hash_table_lookup (data->shapes, shape->use.ref);
-      if (!shape->use.shape)
-        gtk_svg_invalid_reference (data->svg,
-                                   "No shape with ID %s (resolving <use>)",
-                                   shape->use.ref);
-    }
+  resolve_href_ref (shape->base[SHAPE_ATTR_HREF], data);
 }
 
 static void gtk_svg_clear_content (GtkSvg *self);
@@ -9868,8 +9861,6 @@ serialize_use (GString              *s,
 {
   indent_for_elt (s, indent);
   g_string_append (s, "<use");
-  indent_for_attr (s, indent);
-  g_string_append_printf (s, "href='#%s'", shape->use.ref);
   serialize_shape_attrs (s, svg, indent, shape, flags);
   serialize_gpa_attrs (s, svg, indent, shape, flags);
 
@@ -10130,8 +10121,10 @@ paint_shape (Shape        *shape,
   if (context->op == RENDERING && shape_type[shape->type].never_rendered)
     return;
 
-  if (shape->type == SHAPE_USE && shape->use.shape != NULL)
+  if (shape->type == SHAPE_USE &&
+      ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape != NULL)
     {
+      Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
       ComputeContext use_context;
       double x, y;
       x = svg_length_get (shape->current[SHAPE_ATTR_X]);
@@ -10145,11 +10138,11 @@ paint_shape (Shape        *shape,
       use_context.current_time = context->current_time;
       use_context.colors = context->colors;
       use_context.n_colors = context->n_colors;
-      compute_current_values_for_shape (shape->use.shape, &use_context);
+      compute_current_values_for_shape (use_shape, &use_context);
 
-      push_context (shape->use.shape, context);
-      paint_shape (shape->use.shape, context);
-      pop_context (shape->use.shape, context);
+      push_context (use_shape, context);
+      paint_shape (use_shape, context);
+      pop_context (use_shape, context);
 
       gtk_snapshot_restore (context->snapshot);
       return;

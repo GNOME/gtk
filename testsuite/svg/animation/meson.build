@@ -18,6 +18,7 @@ test_data = [
   'states.test',
   'symbolics.test',
   'transform-animation.test',
+  'use.test',
 ]
 
 foreach testname : test_data
