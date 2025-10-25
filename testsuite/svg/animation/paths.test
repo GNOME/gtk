@@ -1,0 +1,7 @@
+input: paths.svg
+time: 0
+output: paths-0.svg
+time: 5000
+output: paths-1.svg
+time: 10000
+output: paths-2.svg

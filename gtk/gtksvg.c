@@ -2702,9 +2702,9 @@ svg_paint_interpolate (const SvgValue *value0,
     }
 
   if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value1);
+    return svg_value_ref ((SvgValue *) value0);
   else
-    return svg_value_ref ((SvgValue *) value2);
+    return svg_value_ref ((SvgValue *) value1);
 }
 
 static SvgValue *
@@ -3537,19 +3537,17 @@ svg_path_interpolate (const SvgValue *value1,
 
   path = path_interpolate (p1->path, p2->path, t);
 
-  if (!path)
-    {
-      if (t < 0.5)
-        return svg_value_ref ((SvgValue *) value1);
-      else
-        return svg_value_ref ((SvgValue *) value2);
-    }
-  else
+  if (path)
     {
       SvgValue *res = svg_path_new (path);
       gsk_path_unref (path);
       return res;
     }
+
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value1);
+  else
+    return svg_value_ref ((SvgValue *) value2);
 }
 
 /* }}} */

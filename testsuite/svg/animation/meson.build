@@ -10,6 +10,7 @@ test_data = [
   'colors.test',
   'dashes.test',
   'inherit.test',
+  'paths.test',
   'priority.test',
   'state-changes.test',
   'states.test',
