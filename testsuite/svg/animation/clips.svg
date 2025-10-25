@@ -1,0 +1,16 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+     width='30' height='20' viewBox='0 0 30 20'
+     gpa:state='0'>
+  <clipPath id='clip1'>
+    <circle cx='10' cy='10' r='5'/>
+  </clipPath>
+  <clipPath id='clip2'>
+    <circle cx='20' cy='10' r='5'/>
+  </clipPath>
+  <rect id='rect' x='10' y='0' width='20' height='10' fill='red'>
+    <animate attributeName='clip-path'
+        values='url(#clip1);url(#clip2)'
+        begin='0' dur='1s'
+        fill='freeze'/>
+  </rect>
+</svg>

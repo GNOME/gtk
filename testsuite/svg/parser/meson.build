@@ -27,6 +27,7 @@ test_data = [
   'long-values.svg',
   'many-errors.svg',
   'paint.svg',
+  'percentage.svg',
   'simple.svg',
   'stroke.svg',
   'style.svg',

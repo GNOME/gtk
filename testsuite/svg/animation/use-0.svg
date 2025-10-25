@@ -1,0 +1,40 @@
+<svg
+        width='30'
+        height='20'
+        viewBox='0 0 30 20'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='0ms'>
+  <defs>
+    <circle
+            id='circle1'
+            fill='rgb(255,0,0)'
+            fill-opacity='0.5'
+            cx='10'
+            cy='10'
+            r='5'/>
+    <circle
+            id='circle2'
+            fill='rgb(0,128,0)'
+            fill-opacity='1'
+            cx='20'
+            cy='10'
+            r='5'/>
+  </defs>
+  <use
+          href='#circle1'>
+    <animate
+            attributeName='href'
+            begin='0ms'
+            dur='1000ms'
+            fill='freeze'
+            from='#circle1'
+            to='#circle2'
+            keyTimes='0; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:current-end-time='1000ms'/>
+  </use>
+</svg>

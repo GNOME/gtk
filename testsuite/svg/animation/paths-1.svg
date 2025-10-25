@@ -1,0 +1,25 @@
+<svg
+        width='300'
+        height='200'
+        viewBox='0 0 300 200'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='5000ms'>
+  <path
+          stroke='rgb(0,0,0)'
+          d='M 0 0 L 105 0 L 105 55 L 0 55 Z'>
+    <animate
+            attributeName='d'
+            begin='0ms'
+            dur='10000ms'
+            fill='freeze'
+            from='M 0 0 h 10 v 10 h -10 z'
+            to='M 0 0 h 200 v 100 h -200 z'
+            keyTimes='0; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:current-end-time='10000ms'/>
+  </path>
+</svg>

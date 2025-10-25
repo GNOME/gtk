@@ -17,6 +17,7 @@ test_data = [
   'more-filters.svg',
   'not-rendered.svg',
   'opacity.svg',
+  'percentage.svg',
   'rect.svg',
   'rect2.svg',
   'rounded-rect.svg',

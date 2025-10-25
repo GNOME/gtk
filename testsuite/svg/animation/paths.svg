@@ -1,0 +1,10 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+     width='300' height='200' viewBox='0 0 300 200'
+     gpa:state='0'>
+  <path d='M 0 0 h 10 v 10 h -10 z' stroke='black'>
+    <animate attributeName='d' begin='0' dur='10s'
+      from='M 0 0 h 10 v 10 h -10 z'
+      to='M 0 0 h 200 v 100 h -200 z'
+      fill='freeze'/>
+  </path>
+</svg>

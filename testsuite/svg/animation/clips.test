@@ -1,0 +1,5 @@
+input: clips.svg
+time: 0
+output: clips-0.svg
+time: 1000
+output: clips-1.svg

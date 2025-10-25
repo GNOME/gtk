@@ -12,7 +12,7 @@
     </clipPath>
   </defs>
   <g
-          clip-path='url("#clip0")'
+          clip-path='url(#clip0)'
           fill='rgb(255,0,0)'
           stroke='rgb(0,0,255)'>
     <circle

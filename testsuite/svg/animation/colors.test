@@ -1,0 +1,24 @@
+input: colors.svg
+time: 0
+colors: black; green; blue; red; magenta
+output: colors-0.svg
+time: 1000
+output: colors-1.svg
+time: 2000
+output: colors-2.svg
+time: 3000
+output: colors-3.svg
+time: 4000
+output: colors-4.svg
+time: 5000
+output: colors-5.svg
+time: 6000
+output: colors-6.svg
+time: 7000
+output: colors-7.svg
+time: 8000
+output: colors-8.svg
+time: 9000
+output: colors-9.svg
+time: 10000
+output: colors-10.svg

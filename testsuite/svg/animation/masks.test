@@ -1,0 +1,5 @@
+input: masks.svg
+time: 0
+output: masks-0.svg
+time: 1000
+output: masks-1.svg

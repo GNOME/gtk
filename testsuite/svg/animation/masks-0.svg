@@ -1,0 +1,48 @@
+<svg
+        width='30'
+        height='20'
+        viewBox='0 0 30 20'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='0ms'>
+  <mask
+          id='mask1'>
+    <circle
+            fill='rgb(255,255,255)'
+            fill-opacity='0.5'
+            cx='10'
+            cy='10'
+            r='5'/>
+  </mask>
+  <mask
+          id='mask2'>
+    <circle
+            fill='rgb(255,255,255)'
+            fill-opacity='1'
+            cx='20'
+            cy='10'
+            r='5'/>
+  </mask>
+  <rect
+          id='rect'
+          mask='url(#mask1)'
+          fill='rgb(255,0,0)'
+          x='10'
+          y='0'
+          width='20'
+          height='10'>
+    <animate
+            attributeName='mask'
+            begin='0ms'
+            dur='1000ms'
+            fill='freeze'
+            from='url(#mask1)'
+            to='url(#mask2)'
+            keyTimes='0; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:current-end-time='1000ms'/>
+  </rect>
+</svg>

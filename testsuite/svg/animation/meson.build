@@ -7,13 +7,18 @@ test_renderer = executable('test-svg-animation',
 test_data = [
   'additive.test',
   'animate-motion.test',
+  'clips.test',
+  'colors.test',
   'dashes.test',
   'inherit.test',
+  'masks.test',
+  'paths.test',
   'priority.test',
   'state-changes.test',
   'states.test',
   'symbolics.test',
   'transform-animation.test',
+  'use.test',
 ]
 
 foreach testname : test_data
