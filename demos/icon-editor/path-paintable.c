@@ -141,16 +141,12 @@ ensure_render_paintable (PathPaintable *self)
   if (!self->render_paintable)
     {
       g_autoptr (GBytes) bytes = NULL;
-      g_autoptr (GError) error = NULL;
 
       bytes = path_paintable_serialize (self, self->state);
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), self->weight);
       gtk_svg_play (GTK_SVG (self->render_paintable));
-
-      if (!self->render_paintable)
-        g_error ("%s", error->message);
 
       g_signal_connect_swapped (self->render_paintable, "notify::state",
                                 G_CALLBACK (notify_state), self);
@@ -2088,9 +2084,12 @@ path_paintable_move_path (PathPaintable *self,
     }
 
   tmp = g_array_index (self->paths, PathElt, idx);
-  gsk_path_ref (tmp.path);
 
+  /* Do not clear path struct while removing item */
+  g_array_set_clear_func (self->paths, NULL);
   g_array_remove_index (self->paths, idx);
+  g_array_set_clear_func (self->paths, clear_path_elt);
+
   g_array_insert_val (self->paths, new_pos, tmp);
 
   g_signal_emit (self, signals[CHANGED], 0);
