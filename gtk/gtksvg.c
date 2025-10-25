@@ -3961,6 +3961,134 @@ svg_mask_parse (const char *value)
 }
 
 /* }}} */
+/* {{{ Hrefs */
+
+typedef enum
+{
+  HREF_NONE,
+  HREF_REF,
+} HrefKind;
+
+typedef struct
+{
+  SvgValue base;
+  HrefKind kind;
+
+  char *ref;
+  Shape *shape;
+} SvgHref;
+
+static void
+svg_href_free (SvgValue *value)
+{
+  const SvgHref *r = (const SvgHref *) value;
+
+  if (r->kind == HREF_REF)
+    g_free (r->ref);
+
+  g_free (value);
+}
+
+static gboolean
+svg_href_equal (const SvgValue *value1,
+                const SvgValue *value2)
+{
+  const SvgHref *r1 = (const SvgHref *) value1;
+  const SvgHref *r2 = (const SvgHref *) value2;
+
+  if (r1->kind != r2->kind)
+    return FALSE;
+
+  switch (r1->kind)
+    {
+    case MASK_NONE:
+      return TRUE;
+    case MASK_REF:
+      return r1->shape == r2->shape &&
+             g_strcmp0 (r1->ref, r2->ref) == 0;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static SvgValue *
+svg_href_interpolate (const SvgValue *value1,
+                      const SvgValue *value2,
+                      double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value1);
+  else
+    return svg_value_ref ((SvgValue *) value2);
+}
+
+static SvgValue *
+svg_href_accumulate (const SvgValue *value1,
+                     const SvgValue *value2,
+                     int             n)
+{
+  return NULL;
+}
+static void
+svg_href_print (const SvgValue *value,
+                GString        *string)
+{
+  const SvgHref *r = (const SvgHref *) value;
+
+  switch (r->kind)
+    {
+    case HREF_NONE:
+      g_string_append (string, "none");
+      break;
+    case HREF_REF:
+      g_string_append_printf (string, "#%s", r->ref);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static const SvgValueClass SVG_HREF_CLASS = {
+  "SvgHref",
+  svg_href_free,
+  svg_href_equal,
+  svg_href_interpolate,
+  svg_href_accumulate,
+  svg_href_print
+};
+
+static SvgValue *
+svg_href_new_none (void)
+{
+  static SvgHref none = { { &SVG_HREF_CLASS, 1 }, HREF_NONE };
+  return svg_value_ref ((SvgValue *) &none);
+}
+
+static SvgValue *
+svg_href_new_ref (const char *ref)
+{
+  SvgHref *result;
+
+  result = (SvgHref *) svg_value_alloc (&SVG_HREF_CLASS, sizeof (SvgHref));
+  result->kind = HREF_REF;
+  result->ref = g_strdup (ref);
+  result->shape = NULL;
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_href_parse (const char *value)
+{
+  if (strcmp (value, "none") == 0)
+    return svg_href_new_none ();
+  else if (value[0] == '#')
+    return svg_href_new_ref (value + 1);
+  else
+    return svg_href_new_ref (value);
+}
+
+/* }}} */
 /* {{{ Weight variation */
 
 static double
