@@ -3625,13 +3625,9 @@ svg_clip_equal (const SvgValue *value0,
     }
 }
 
-static SvgValue *
-svg_clip_interpolate (const SvgValue *value0,
-                      const SvgValue *value1,
-                      double          t)
-{
-  return NULL;
-}
+static SvgValue * svg_clip_interpolate (const SvgValue *value0,
+                                        const SvgValue *value1,
+                                        double          t);
 
 static SvgValue *
 svg_clip_accumulate (const SvgValue *value0,
@@ -3704,6 +3700,46 @@ svg_clip_new_ref (const char *ref)
   result->ref.shape = NULL;
 
   return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_clip_interpolate (const SvgValue *value0,
+                      const SvgValue *value1,
+                      double          t)
+{
+  const SvgClip *c0 = (const SvgClip *) value0;
+  const SvgClip *c1 = (const SvgClip *) value1;
+  GskPath *path;
+
+  if (c0->kind == c1->kind)
+    {
+      switch (c0->kind)
+        {
+        case CLIP_NONE:
+          return svg_clip_new_none ();
+
+        case CLIP_PATH:
+          path = path_interpolate (c0->path, c1->path, t);
+          if (path)
+            {
+              SvgValue *v = svg_clip_new_path (path);
+              gsk_path_unref (path);
+              return v;
+            }
+          break;
+
+        case CLIP_REF:
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
 }
 
 static guint
