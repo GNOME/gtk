@@ -7255,7 +7255,7 @@ typedef struct
 
 /* {{{ Animation attribute */
 
-static void
+static gboolean
 parse_base_animation_attrs (Animation            *a,
                             const char           *element_name,
                             const char          **attr_names,
@@ -7500,6 +7500,8 @@ parse_base_animation_attrs (Animation            *a,
       else
         a->attr = (ShapeAttr) value;
     }
+
+  return TRUE;
 }
 
 static gboolean
@@ -8533,12 +8535,17 @@ start_element_cb (GMarkupParseContext  *context,
                                 "to", &to_attr,
                                 NULL);
 
-      parse_base_animation_attrs (a,
-                                  element_name,
-                                  attr_names, attr_values,
-                                  &handled,
-                                  data,
-                                  context);
+      if (!parse_base_animation_attrs (a,
+                                       element_name,
+                                       attr_names, attr_values,
+                                       &handled,
+                                       data,
+                                       context))
+        {
+          animation_drop_and_free (a);
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          return;
+        }
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -8603,12 +8610,17 @@ start_element_cb (GMarkupParseContext  *context,
       else
         a = animation_transform_new ();
 
-      parse_base_animation_attrs (a,
-                                  element_name,
-                                  attr_names, attr_values,
-                                  &handled,
-                                  data,
-                                  context);
+      if (!parse_base_animation_attrs (a,
+                                       element_name,
+                                       attr_names, attr_values,
+                                       &handled,
+                                       data,
+                                       context))
+        {
+          animation_drop_and_free (a);
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          return;
+        }
 
       if (!parse_value_animation_attrs (a,
                                         element_name,
@@ -8654,12 +8666,17 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      parse_base_animation_attrs (a,
-                                  element_name,
-                                  attr_names, attr_values,
-                                  &handled,
-                                  data,
-                                  context);
+      if (!parse_base_animation_attrs (a,
+                                       element_name,
+                                       attr_names, attr_values,
+                                       &handled,
+                                       data,
+                                       context))
+        {
+          animation_drop_and_free (a);
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          return;
+        }
 
       if (!parse_value_animation_attrs (a,
                                         element_name,
