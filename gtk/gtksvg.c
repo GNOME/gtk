@@ -4181,8 +4181,8 @@ typedef struct
 {
   const char *name;
   ShapeAttr id;
-  gboolean inherited;
-  gboolean discrete;
+  unsigned int inherited : 1;
+  unsigned int discrete  : 1;
   SvgValue * (* parse_value)      (const char *value);
   SvgValue * (* parse_for_values) (const char *value);
   SvgValue *initial_value;
@@ -4191,199 +4191,199 @@ typedef struct
 static ShapeAttribute shape_attrs[] = {
   { .id = SHAPE_ATTR_VISIBILITY,
     .name = "visibility",
-    .inherited = TRUE,
-    .discrete = TRUE,
+    .inherited = 1,
+    .discrete = 1,
     .parse_value = svg_visibility_parse,
   },
   { .id = SHAPE_ATTR_TRANSFORM,
     .name = "transform",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = svg_transform_parse,
   },
   { .id = SHAPE_ATTR_OPACITY,
     .name = "opacity",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_opacity,
   },
   { .id = SHAPE_ATTR_FILTER,
     .name = "filter",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = svg_filter_parse,
   },
   { .id = SHAPE_ATTR_CLIP_PATH,
     .name = "clip-path",
-    .inherited = FALSE,
-    .discrete = TRUE,
+    .inherited = 0,
+    .discrete = 1,
     .parse_value = svg_clip_parse,
   },
   { .id = SHAPE_ATTR_CLIP_RULE,
     .name = "clip-rule",
-    .inherited = TRUE,
-    .discrete = TRUE,
+    .inherited = 1,
+    .discrete = 1,
     .parse_value = svg_fill_rule_parse,
   },
   { .id = SHAPE_ATTR_MASK,
     .name = "mask",
-    .inherited = FALSE,
-    .discrete = TRUE,
+    .inherited = 0,
+    .discrete = 1,
     .parse_value = svg_mask_parse,
   },
   { .id = SHAPE_ATTR_MASK_TYPE,
     .name = "mask-type",
-    .inherited = FALSE,
-    .discrete = TRUE,
+    .inherited = 0,
+    .discrete = 1,
     .parse_value = svg_mask_type_parse,
   },
   { .id = SHAPE_ATTR_FILL,
     .name = "fill",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = svg_paint_parse,
   },
   { .id = SHAPE_ATTR_FILL_OPACITY,
     .name = "fill-opacity",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = parse_opacity,
   },
   { .id = SHAPE_ATTR_FILL_RULE,
     .name = "fill-rule",
-    .inherited = TRUE,
-    .discrete = TRUE,
+    .inherited = 1,
+    .discrete = 1,
     .parse_value = svg_fill_rule_parse,
   },
   { .id = SHAPE_ATTR_STROKE,
     .name = "stroke",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = svg_paint_parse,
   },
   { .id = SHAPE_ATTR_STROKE_OPACITY,
     .name = "stroke-opacity",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = parse_opacity,
   },
   { .id = SHAPE_ATTR_STROKE_WIDTH,
     .name = "stroke-width",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = parse_stroke_width,
   },
   { .id = SHAPE_ATTR_STROKE_LINECAP,
     .name = "stroke-linecap",
-    .inherited = TRUE,
-    .discrete = TRUE,
+    .inherited = 1,
+    .discrete = 1,
     .parse_value = svg_linecap_parse,
   },
   { .id = SHAPE_ATTR_STROKE_LINEJOIN,
     .name = "stroke-linejoin",
-    .inherited = TRUE,
-    .discrete = TRUE,
+    .inherited = 1,
+    .discrete = 1,
     .parse_value = svg_linejoin_parse,
   },
   { .id = SHAPE_ATTR_STROKE_MITERLIMIT,
     .name = "stroke-miterlimit",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = parse_miterlimit,
   },
   { .id = SHAPE_ATTR_STROKE_DASHARRAY,
     .name = "stroke-dasharray",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = svg_dash_array_parse,
   },
   { .id = SHAPE_ATTR_STROKE_DASHOFFSET,
     .name = "stroke-dashoffset",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = parse_dash_offset,
   },
   { .id = SHAPE_ATTR_HREF,
     .name = "href",
-    .inherited = FALSE,
-    .discrete = TRUE,
+    .inherited = 0,
+    .discrete = 1,
     .parse_value = svg_href_parse,
   },
   { .id = SHAPE_ATTR_PATH,
     .name = "d",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = svg_path_parse,
   },
   { .id = SHAPE_ATTR_CX,
     .name = "cx",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_CY,
     .name = "cy",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_R,
     .name = "r",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_X,
     .name = "x",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_Y,
     .name = "y",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_WIDTH,
     .name = "width",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_HEIGHT,
     .name = "height",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_RX,
     .name = "rx",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_RY,
     .name = "ry",
-    .inherited = FALSE,
-    .discrete = FALSE,
+    .inherited = 0,
+    .discrete = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = parse_stroke_width,
   },
   { .id = SHAPE_ATTR_STROKE_MAXWIDTH,
     .name = "gpa:stroke-maxwidth",
-    .inherited = TRUE,
-    .discrete = FALSE,
+    .inherited = 1,
+    .discrete = 0,
     .parse_value = parse_stroke_width,
   },
 };
@@ -4523,18 +4523,45 @@ typedef enum
 
 struct {
   const char *name;
-  gboolean is_leaf;
-  gboolean never_rendered;
-} shape_type[] = {
-  { "rect",     TRUE, FALSE },
-  { "circle",   TRUE, FALSE },
-  { "ellipse",  TRUE, FALSE },
-  { "path",     TRUE, FALSE },
-  { "g",        FALSE, FALSE },
-  { "clipPath", FALSE, TRUE },
-  { "mask",     FALSE, TRUE },
-  { "defs",     FALSE, TRUE },
-  { "use",      TRUE, FALSE },
+  unsigned int leaf           : 1;
+  unsigned int never_rendered : 1;
+} shape_types[] = {
+  { .name = "rect",
+    .leaf = 1,
+    .never_rendered = 0,
+  },
+  { .name = "circle",
+    .leaf = 1,
+    .never_rendered = 0,
+  },
+  { .name = "ellipse",
+    .leaf = 1,
+    .never_rendered = 0,
+  },
+  { .name = "path",
+    .leaf = 1,
+    .never_rendered = 0,
+  },
+  { .name = "g",
+    .leaf = 0,
+    .never_rendered = 0,
+  },
+  { .name = "clipPath",
+    .leaf = 0,
+    .never_rendered = 1,
+  },
+  { .name = "mask",
+    .leaf = 0,
+    .never_rendered = 1,
+  },
+  { .name = "defs",
+    .leaf = 0,
+    .never_rendered = 1,
+  },
+  { .name = "use",
+    .leaf = 1,
+    .never_rendered = 0,
+  },
 };
 
 struct _Shape
@@ -4607,7 +4634,7 @@ shape_new (ShapeType type)
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
 
-  if (!shape_type[type].is_leaf)
+  if (!shape_types[type].leaf)
     shape->shapes = g_ptr_array_new_with_free_func (shape_free);
 
   return shape;
@@ -6572,7 +6599,7 @@ compute_current_values_for_shape (Shape          *shape,
         }
     }
 
-  if (!shape_type[shape->type].is_leaf)
+  if (!shape_types[shape->type].leaf)
     {
       Shape *parent = context->parent;
       context->parent = shape;
@@ -8098,7 +8125,7 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (strcmp (attr_names[i], "pathLength") == 0)
         {
-          if (!shape_type[shape->type].is_leaf)
+          if (!shape_types[shape->type].leaf)
             gtk_svg_invalid_attribute (data->svg, context, "pathLength", NULL);
           else if (!parse_number (attr_values[i], 0, DBL_MAX, &shape->path_length))
             gtk_svg_invalid_attribute (data->svg, context, "pathLength", NULL);
@@ -8433,7 +8460,7 @@ parse_shape_gpa_attrs (Shape                *shape,
         gtk_svg_invalid_attribute (data->svg, context, "gpa:attach-pos", NULL);
     }
 
-  if (shape_type[shape->type].is_leaf)
+  if (shape_types[shape->type].leaf)
     {
       /* our dasharray-based animations require unit path length */
       if (shape->path_length != -1 && shape->path_length != 1)
@@ -8946,7 +8973,7 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (shape_type[data->current_shape->type].is_leaf)
+  if (shape_types[data->current_shape->type].leaf)
     {
       shape_free (shape);
       skip_element (data, context, "Parent element can't contain shapes");
@@ -9147,7 +9174,7 @@ resolve_animation_refs (Shape      *shape,
         }
     }
 
-  if (!shape_type[shape->type].is_leaf)
+  if (!shape_types[shape->type].leaf)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -9791,7 +9818,7 @@ serialize_group (GString              *s,
   if (indent > 0) /* Hack: this is for <svg> */
     {
       indent_for_elt (s, indent);
-      g_string_append_printf (s, "<%s", shape_type[shape->type].name);
+      g_string_append_printf (s, "<%s", shape_types[shape->type].name);
       serialize_shape_attrs (s, svg, indent, shape, flags);
       serialize_gpa_attrs (s, svg, indent, shape, flags);
       g_string_append (s, ">");
@@ -9808,7 +9835,7 @@ serialize_group (GString              *s,
   if (indent > 0)
     {
       indent_for_elt (s, indent);
-      g_string_append_printf (s, "</%s>", shape_type[shape->type].name);
+      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
     }
 }
 
@@ -9820,7 +9847,7 @@ serialize_leaf (GString              *s,
                 GtkSvgSerializeFlags  flags)
 {
   indent_for_elt (s, indent);
-  g_string_append_printf (s, "<%s", shape_type[shape->type].name);
+  g_string_append_printf (s, "<%s", shape_types[shape->type].name);
   serialize_shape_attrs (s, svg, indent, shape, flags);
   serialize_gpa_attrs (s, svg, indent, shape, flags);
 
@@ -9829,7 +9856,7 @@ serialize_leaf (GString              *s,
       g_string_append (s, ">");
       serialize_animations (s, svg, indent + 2, shape, flags);
       indent_for_elt (s, indent);
-      g_string_append_printf (s, "</%s>", shape_type[shape->type].name);
+      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
     }
   else
    g_string_append (s, "/>");
@@ -10102,7 +10129,7 @@ paint_shape (Shape        *shape,
   if (!shape->display)
     return;
 
-  if (context->op == RENDERING && shape_type[shape->type].never_rendered)
+  if (context->op == RENDERING && shape_types[shape->type].never_rendered)
     return;
 
   if (shape->type == SHAPE_USE &&
@@ -10133,7 +10160,7 @@ paint_shape (Shape        *shape,
       return;
     }
 
-  if (!shape_type[shape->type].is_leaf)
+  if (!shape_types[shape->type].leaf)
     {
       for (int i = 0; i < shape->shapes->len; i++)
         {
@@ -10631,7 +10658,7 @@ shape_dump_animation_state (Shape *shape, GString *string)
         g_string_append_printf (string, " %s", a->id);
     }
 
-  if (!shape_type[shape->type].is_leaf)
+  if (!shape_types[shape->type].leaf)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -10711,7 +10738,7 @@ collect_next_update_for_shape (Shape         *shape,
       collect_next_update_for_animation (a, current_time, run_mode, next_update);
     }
 
-  if (!shape_type[shape->type].is_leaf)
+  if (!shape_types[shape->type].leaf)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -10749,7 +10776,7 @@ shape_update_animation_state (Shape   *shape,
       animation_update_state (a, current_time);
     }
 
-  if (!shape_type[shape->type].is_leaf)
+  if (!shape_types[shape->type].leaf)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
