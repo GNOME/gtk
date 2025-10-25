@@ -4525,42 +4525,52 @@ struct {
   const char *name;
   unsigned int leaf           : 1;
   unsigned int never_rendered : 1;
+  unsigned int has_gpa_attrs  : 1;
 } shape_types[] = {
   { .name = "rect",
     .leaf = 1,
     .never_rendered = 0,
+    .has_gpa_attrs = 1,
   },
   { .name = "circle",
     .leaf = 1,
     .never_rendered = 0,
+    .has_gpa_attrs = 1,
   },
   { .name = "ellipse",
     .leaf = 1,
     .never_rendered = 0,
+    .has_gpa_attrs = 1,
   },
   { .name = "path",
     .leaf = 1,
     .never_rendered = 0,
+    .has_gpa_attrs = 1,
   },
   { .name = "g",
     .leaf = 0,
     .never_rendered = 0,
+    .has_gpa_attrs = 0,
   },
   { .name = "clipPath",
     .leaf = 0,
     .never_rendered = 1,
+    .has_gpa_attrs = 0,
   },
   { .name = "mask",
     .leaf = 0,
     .never_rendered = 1,
+    .has_gpa_attrs = 0,
   },
   { .name = "defs",
     .leaf = 0,
     .never_rendered = 1,
+    .has_gpa_attrs = 0,
   },
   { .name = "use",
     .leaf = 1,
     .never_rendered = 0,
+    .has_gpa_attrs = 0,
   },
 };
 
@@ -8269,6 +8279,9 @@ parse_shape_gpa_attrs (Shape                *shape,
   unsigned int animation_easing;
   double animation_segment;
   double attach_pos;
+
+  if (!shape_types[shape->type].has_gpa_attrs)
+    return;
 
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
