@@ -2483,19 +2483,31 @@ typedef enum
   PAINT_NONE,
   PAINT_COLOR,
   PAINT_SYMBOLIC,
+  PAINT_GRADIENT,
 } PaintKind;
 
 typedef struct
 {
   SvgValue base;
   PaintKind kind;
-  GtkSymbolicColor symbolic;
-  GdkRGBA color;
+  union {
+    GtkSymbolicColor symbolic;
+    GdkRGBA color;
+    struct {
+      char *ref;
+      Shape *shape;
+    } gradient;
+  };
 } SvgPaint;
 
 static void
 svg_paint_free (SvgValue *value)
 {
+  SvgPaint *paint = (SvgPaint *) value;
+
+  if (paint->kind == PAINT_GRADIENT)
+    g_free (paint->gradient.ref);
+
   g_free (value);
 }
 
@@ -2509,13 +2521,20 @@ svg_paint_equal (const SvgValue *value0,
   if (paint0->kind != paint1->kind)
     return FALSE;
 
-  if (paint0->kind == PAINT_NONE)
-    return TRUE;
-
-  if (paint0->kind == PAINT_SYMBOLIC)
-    return paint0->symbolic == paint1->symbolic;
-
-  return gdk_rgba_equal (&paint0->color, &paint1->color);
+  switch (paint0->kind)
+    {
+    case PAINT_NONE:
+      return TRUE;
+    case PAINT_SYMBOLIC:
+      return paint0->symbolic == paint1->symbolic;
+    case PAINT_COLOR:
+      return gdk_rgba_equal (&paint0->color, &paint1->color);
+    case PAINT_GRADIENT:
+      return paint0->gradient.shape == paint1->gradient.shape &&
+             g_strcmp0 (paint0->gradient.ref, paint1->gradient.ref) == 0;
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static SvgValue *svg_paint_interpolate (const SvgValue *v0,
@@ -2555,7 +2574,7 @@ parse_symbolic_color (const char       *value,
 static SvgValue *
 svg_paint_new_none (void)
 {
-  static SvgPaint none = { { &SVG_PAINT_CLASS, 1 }, PAINT_NONE };
+  static SvgPaint none = { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_NONE };
 
   return svg_value_ref ((SvgValue *) &none);
 }
@@ -2564,19 +2583,19 @@ static SvgValue *
 svg_paint_new_symbolic (GtkSymbolicColor symbolic)
 {
   static SvgPaint sym[] = {
-    { { &SVG_PAINT_CLASS, 1 }, PAINT_SYMBOLIC, GTK_SYMBOLIC_COLOR_FOREGROUND },
-    { { &SVG_PAINT_CLASS, 1 }, PAINT_SYMBOLIC, GTK_SYMBOLIC_COLOR_ERROR },
-    { { &SVG_PAINT_CLASS, 1 }, PAINT_SYMBOLIC, GTK_SYMBOLIC_COLOR_WARNING },
-    { { &SVG_PAINT_CLASS, 1 }, PAINT_SYMBOLIC, GTK_SYMBOLIC_COLOR_SUCCESS },
-    { { &SVG_PAINT_CLASS, 1 }, PAINT_SYMBOLIC, GTK_SYMBOLIC_COLOR_ACCENT },
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND },
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ERROR },
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_WARNING },
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_SUCCESS },
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ACCENT },
   };
 
   return svg_value_ref ((SvgValue *) &sym[symbolic]);
 }
 
 static SvgPaint default_rgba[] = {
-  { { &SVG_PAINT_CLASS, 1 }, PAINT_COLOR, 0, { 0, 0, 0, 1 } },
-  { { &SVG_PAINT_CLASS, 1 }, PAINT_COLOR, 0, { 1, 1, 1, 1 } },
+  { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 1 } },
+  { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_COLOR, .color = { 1, 1, 1, 1 } },
 };
 
 static SvgValue *
@@ -2604,6 +2623,19 @@ svg_paint_new_black (void)
 }
 
 static SvgValue *
+svg_paint_new_gradient (Shape      *shape,
+                        const char *ref)
+{
+  SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
+                                                  sizeof (SvgPaint));
+  paint->kind = PAINT_GRADIENT;
+  paint->gradient.shape = shape;
+  paint->gradient.ref = g_strdup (ref);
+
+  return (SvgValue *) paint;
+}
+
+static SvgValue *
 svg_paint_parse (const char *value)
 {
   GdkRGBA color;
@@ -2628,11 +2660,15 @@ svg_paint_parse (const char *value)
       parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
       url = gtk_css_parser_consume_url (parser);
-      if (url &&
-          g_str_has_prefix (url, "#gpa:") &&
-          parse_symbolic_color (url + strlen ("#gpa:"), &symbolic))
+      if (url)
         {
-          paint = svg_paint_new_symbolic (symbolic);
+          if (g_str_has_prefix (url, "#gpa:") &&
+              parse_symbolic_color (url + strlen ("#gpa:"), &symbolic))
+            paint = svg_paint_new_symbolic (symbolic);
+          else if (url[0] == '#')
+            paint = svg_paint_new_gradient (NULL, url + 1);
+          else
+            paint = svg_paint_new_gradient (NULL, url);
         }
 
       g_free (url);
@@ -2691,6 +2727,10 @@ svg_paint_print (const SvgValue *value,
                               colors[paint->symbolic].fallback);
       break;
 
+    case PAINT_GRADIENT:
+      g_string_append_printf (s, "url(#%s)", paint->gradient.ref);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -2719,6 +2759,10 @@ svg_paint_print_gpa (const SvgValue *value,
       g_string_append (s, symbolic[paint->symbolic]);
       break;
 
+    case PAINT_GRADIENT:
+      g_string_append_printf  (s, "url(#%s)", paint->gradient.ref);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -2737,9 +2781,13 @@ paint_get_rgba (const SvgPaint *paint,
       else
         *color = colors[GTK_SYMBOLIC_COLOR_FOREGROUND];
     }
-  else
+  else if (paint->kind == PAINT_COLOR)
     {
       *color = paint->color;
+    }
+  else
+    {
+      memset (color, 0, sizeof (GdkRGBA));
     }
 }
 
@@ -2801,18 +2849,23 @@ svg_paint_accumulate (const SvgValue *value0,
   const SvgPaint *p1 = (const SvgPaint *) value1;
   SvgPaint *paint;
 
-  if (p0->kind != PAINT_COLOR || p1->kind != PAINT_COLOR)
+  if (p0->kind != p1->kind)
     return NULL;
 
-  paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
+  if (p0->kind == PAINT_COLOR)
+    {
+      paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
 
-  paint->kind = PAINT_COLOR;
-  paint->color.red = accumulate (p0->color.red, p1->color.red, n);
-  paint->color.green = accumulate (p0->color.green, p1->color.green, n);
-  paint->color.blue = accumulate (p0->color.blue, p1->color.blue, n);
-  paint->color.alpha = accumulate (p0->color.alpha, p1->color.alpha, n);
+      paint->kind = PAINT_COLOR;
+      paint->color.red = accumulate (p0->color.red, p1->color.red, n);
+      paint->color.green = accumulate (p0->color.green, p1->color.green, n);
+      paint->color.blue = accumulate (p0->color.blue, p1->color.blue, n);
+      paint->color.alpha = accumulate (p0->color.alpha, p1->color.alpha, n);
 
-  return (SvgValue *) paint;
+      return (SvgValue *) paint;
+    }
+
+  return svg_value_ref ((SvgValue *) value0);
 }
 
 /* }}} */
@@ -8324,6 +8377,20 @@ parse_shape_attrs (Shape                *shape,
   if (shape->attrs & (BIT (SHAPE_ATTR_CLIP_PATH) | BIT (SHAPE_ATTR_MASK) | BIT (SHAPE_ATTR_HREF)))
     g_ptr_array_add (data->pending_refs, shape);
 
+  if (shape->attrs & BIT (SHAPE_ATTR_FILL))
+    {
+      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
+      if (paint->kind == PAINT_GRADIENT)
+        g_ptr_array_add (data->pending_refs, shape);
+    }
+
+  if (shape->attrs & BIT (SHAPE_ATTR_STROKE))
+    {
+      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
+      if (paint->kind == PAINT_GRADIENT)
+        g_ptr_array_add (data->pending_refs, shape);
+    }
+
   if (shape_has_attr (shape->type, SHAPE_ATTR_RX) &&
       shape_has_attr (shape->type, SHAPE_ATTR_RY))
     {
@@ -9226,6 +9293,22 @@ resolve_href_ref (SvgValue   *value,
 }
 
 static void
+resolve_paint_ref (SvgValue   *value,
+                   ParserData *data)
+{
+  SvgPaint *paint = (SvgPaint *) value;
+
+  if (paint->kind == PAINT_GRADIENT && paint->gradient.shape == NULL)
+    {
+      Shape *target = g_hash_table_lookup (data->shapes, paint->gradient.ref);
+      if (!target)
+        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->gradient.ref);
+      else
+        paint->gradient.shape = target;
+    }
+}
+
+static void
 resolve_animation_refs (Shape      *shape,
                         ParserData *data)
 {
@@ -9266,6 +9349,12 @@ resolve_animation_refs (Shape      *shape,
           for (unsigned int j = 0; j < a->n_frames; j++)
             resolve_href_ref (a->frames[j].value, data);
         }
+      else if (a->attr == SHAPE_ATTR_FILL ||
+               a->attr == SHAPE_ATTR_STROKE)
+        {
+          for (unsigned int j = 0; j < a->n_frames; j++)
+            resolve_paint_ref (a->frames[j].value, data);
+        }
 
       if (a->motion.path_ref)
         {
@@ -9299,6 +9388,8 @@ resolve_shape_refs (Shape      *shape,
   resolve_clip_ref (shape->base[SHAPE_ATTR_CLIP_PATH], data);
   resolve_mask_ref (shape->base[SHAPE_ATTR_MASK], data);
   resolve_href_ref (shape->base[SHAPE_ATTR_HREF], data);
+  resolve_paint_ref (shape->base[SHAPE_ATTR_FILL], data);
+  resolve_paint_ref (shape->base[SHAPE_ATTR_STROKE], data);
 }
 
 static void gtk_svg_clear_content (GtkSvg *self);
