@@ -1449,7 +1449,8 @@ gtk_accessible_update_children (GtkAccessible           *self,
  * Returns whether this accessible represents a password text field.
  *
  * Returns: true if the accessible is a password text field
- */gboolean
+ */
+gboolean
 gtk_accessible_is_password_text (GtkAccessible *accessible)
 {
   GtkInputPurpose purpose = GTK_INPUT_PURPOSE_FREE_FORM;
