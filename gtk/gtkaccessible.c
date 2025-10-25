@@ -58,7 +58,9 @@
 #include "gtkaccessibleprivate.h"
 
 #include "gtkatcontextprivate.h"
+#include "gtkeditable.h"
 #include "gtkenums.h"
+#include "gtktext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidget.h"
 
@@ -1438,4 +1440,39 @@ gtk_accessible_update_children (GtkAccessible           *self,
   gtk_at_context_child_changed (context, 1 << state, child);
   gtk_at_context_update (context);
   g_object_unref (context);
+}
+
+/*< private >
+ * gtk_accessible_is_password_text:
+ * @accessible: an accessible object
+ *
+ * Returns whether this accessible represents a password text field.
+ *
+ * Returns: true if the accessible is a password text field
+ */
+gboolean
+gtk_accessible_is_password_text (GtkAccessible *accessible)
+{
+  GtkInputPurpose purpose = GTK_INPUT_PURPOSE_FREE_FORM;
+  gboolean found_purpose = FALSE;
+
+  if (GTK_IS_TEXT (accessible))
+    {
+      purpose = gtk_text_get_input_purpose (GTK_TEXT (accessible));
+      found_purpose = TRUE;
+    }
+  else if (GTK_IS_EDITABLE (accessible))
+    {
+      GtkEditable *delegate = gtk_editable_get_delegate (GTK_EDITABLE (accessible));
+      if (delegate && GTK_IS_TEXT (delegate))
+        {
+          purpose = gtk_text_get_input_purpose (GTK_TEXT (delegate));
+          found_purpose = TRUE;
+        }
+    }
+
+  if (found_purpose && 
+      (purpose == GTK_INPUT_PURPOSE_PASSWORD || purpose == GTK_INPUT_PURPOSE_PIN))
+    return TRUE;
+  return FALSE;
 }

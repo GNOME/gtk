@@ -99,4 +99,6 @@ void            gtk_accessible_update_children  (GtkAccessible           *self,
 
 void            gtk_accessible_bounds_changed   (GtkAccessible *self);
 
+gboolean        gtk_accessible_is_password_text (GtkAccessible *accessible);
+
 G_END_DECLS

@@ -655,7 +655,8 @@ accesskit_role_for_context (GtkATContext *context)
     return ACCESSKIT_ROLE_GENERIC_CONTAINER;
 
   /* ARIA does not have a "password entry" role, so we need to fudge it here */
-  if (GTK_IS_PASSWORD_ENTRY (accessible))
+  if (role == GTK_ACCESSIBLE_ROLE_TEXT_BOX &&
+      gtk_accessible_is_password_text (accessible))
     return ACCESSKIT_ROLE_PASSWORD_INPUT;
 
   /* ARIA does not have a "scroll area" role */
