@@ -1,0 +1,31 @@
+<svg
+        width='300'
+        height='200'
+        viewBox='0 0 300 200'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='3000ms'>
+  <g
+          fill='rgb(0,0,255)'>
+    <circle
+            id='p'
+            fill='rgb(0,128,0)'
+            cx='10'
+            cy='10'
+            r='10'>
+      <animate
+              id='fill'
+              attributeName='fill'
+              begin='0ms'
+              dur='10000ms'
+              fill='freeze'
+              values='rgb(255,0,0); rgb(0,255,0); url("#gpa:foreground") rgb(0,0,0); inherit; none; rgb(255,0,0)'
+              keyTimes='0; 0.2; 0.4; 0.6; 0.8; 1'
+              gpa:status='running'
+              gpa:current-start-time='0ms'
+              gpa:current-end-time='10000ms'/>
+    </circle>
+  </g>
+</svg>

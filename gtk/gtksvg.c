@@ -2685,20 +2685,26 @@ svg_paint_interpolate (const SvgValue *value0,
 {
   const SvgPaint *p0 = (const SvgPaint *) value0;
   const SvgPaint *p1 = (const SvgPaint *) value1;
-  SvgPaint *paint;
 
-  if (p0->kind != PAINT_COLOR || p1->kind != PAINT_COLOR)
-    return NULL;
+  if (p0->kind == PAINT_COLOR || p1->kind == PAINT_COLOR)
+    {
+      SvgPaint *paint;
 
-  paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
+      paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
 
-  paint->kind = PAINT_COLOR;
-  paint->color.red = lerp (t, p0->color.red, p1->color.red);
-  paint->color.green = lerp (t, p0->color.green, p1->color.green);
-  paint->color.blue = lerp (t, p0->color.blue, p1->color.blue);
-  paint->color.alpha = lerp (t, p0->color.alpha, p1->color.alpha);
+      paint->kind = PAINT_COLOR;
+      paint->color.red = lerp (t, p0->color.red, p1->color.red);
+      paint->color.green = lerp (t, p0->color.green, p1->color.green);
+      paint->color.blue = lerp (t, p0->color.blue, p1->color.blue);
+      paint->color.alpha = lerp (t, p0->color.alpha, p1->color.alpha);
 
-  return (SvgValue *) paint;
+      return (SvgValue *) paint;
+    }
+
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value1);
+  else
+    return svg_value_ref ((SvgValue *) value2);
 }
 
 static SvgValue *

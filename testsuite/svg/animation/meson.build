@@ -7,6 +7,7 @@ test_renderer = executable('test-svg-animation',
 test_data = [
   'additive.test',
   'animate-motion.test',
+  'colors.test',
   'dashes.test',
   'inherit.test',
   'priority.test',
