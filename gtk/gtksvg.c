@@ -7469,36 +7469,21 @@ parse_base_animation_attrs (Animation            *a,
         gtk_svg_invalid_attribute (data->svg, context, "attributeName",
                                    "can't have 'attributeName' on <animateMotion>");
     }
+  else if (a->type == ANIMATION_TYPE_TRANSFORM &&
+           strcmp (attr_name_attr, "transform") != 0)
+    {
+      gtk_svg_invalid_attribute (data->svg, context, "attributeName", "value must be 'transform'");
+      a->attr = SHAPE_ATTR_TRANSFORM;
+    }
   else if (!attr_name_attr)
     {
       gtk_svg_missing_attribute (data->svg, context, "attributeName", NULL);
+      return FALSE;
     }
-  else
+  else if (!find_shape_attr (attr_name_attr, &a->attr))
     {
-      unsigned int value;
-
-      if (!parse_enum (attr_name_attr,
-                       (const char *[]) { "visibility", "transform",
-                         "opacity", "filter", "clip-path", "clip-rule",
-                         "mask", "mask-type", "fill",
-                         "fill-opacity", "fill-rule",
-                         "stroke", "stroke-opacity", "stroke-width",
-                         "stroke-linecap", "stroke-linejoin",
-                         "stroke-miterlimit", "stroke-dasharray",
-                         "stroke-dashoffset", "d",
-                         "cx", "cy", "r", "x", "y", "width",
-                         "height", "rx", "ry",
-                         "gpa:stroke-minwidth", "gpa:stroke-maxwidth",
-                       }, 31,
-                       &value))
-        gtk_svg_invalid_attribute (data->svg, context, "attributeName", "attribute '%s' is not animatable", attr_name_attr);
-      else if (a->type == ANIMATION_TYPE_TRANSFORM && value != SHAPE_ATTR_TRANSFORM)
-        {
-          gtk_svg_invalid_attribute (data->svg, context, "attributeName", "value must be 'transform'");
-          a->attr = SHAPE_ATTR_TRANSFORM;
-        }
-      else
-        a->attr = (ShapeAttr) value;
+      gtk_svg_missing_attribute (data->svg, context, "attributeName", "can't animate '%s'", attr_name_attr);
+      return FALSE;
     }
 
   return TRUE;
