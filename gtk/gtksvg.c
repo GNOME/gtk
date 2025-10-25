@@ -2725,7 +2725,7 @@ svg_paint_accumulate (const SvgValue *value0,
 }
 
 /* }}} */
-/*  {{{ Filters */
+/* {{{ Filters */
 
 typedef enum
 {
