@@ -1,0 +1,16 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+     width='30' height='20' viewBox='0 0 30 20'
+     gpa:state='0'>
+  <mask id='mask1'>
+    <circle cx='10' cy='10' r='5' fill-opacity='0.5' fill='white'/>
+  </mask>
+  <mask id='mask2'>
+    <circle cx='20' cy='10' r='5' fill-opacity='1' fill='white'/>
+  </mask>
+  <rect id='rect' x='10' y='0' width='20' height='10' fill='red'>
+    <animate attributeName='mask'
+        values='url(#mask1);url(#mask2)'
+        begin='0' dur='1s'
+        fill='freeze'/>
+  </rect>
+</svg>

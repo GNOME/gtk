@@ -3865,7 +3865,10 @@ svg_mask_interpolate (const SvgValue *value0,
                       const SvgValue *value1,
                       double          t)
 {
-  return NULL;
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
 }
 
 static SvgValue *
