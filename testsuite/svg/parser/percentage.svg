@@ -1,0 +1,6 @@
+<svg width="160" height="160" viewBox="0 0 160 160">
+  <g stroke-opacity='75%' fill='red' stroke='black'>
+    <circle cx='50%' cy='50%' r='30%'/>
+    <rect x='0%' y='10%' width='20%' height='20%'/>
+  </g>
+</svg>
