@@ -3643,7 +3643,7 @@ svg_clip_print (const SvgValue *value,
       g_string_append (string, "\")");
       break;
     case CLIP_REF:
-      g_string_append_printf (string, "url(\"#%s\")", c->ref.ref);
+      g_string_append_printf (string, "url(#%s)", c->ref.ref);
       break;
     default:
       g_assert_not_reached ();
@@ -3837,7 +3837,7 @@ svg_mask_print (const SvgValue *value,
       g_string_append (string, "none");
       break;
     case MASK_REF:
-      g_string_append_printf (string, "url(\"#%s\")", m->ref);
+      g_string_append_printf (string, "url(#%s)", m->ref);
       break;
     default:
       g_assert_not_reached ();
