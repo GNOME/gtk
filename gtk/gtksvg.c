@@ -4250,6 +4250,37 @@ width_apply_weight (double width,
 }
 
 /* }}} */
+/* {{{ Color stops */
+
+typedef enum
+{
+  COLOR_STOP_OFFSET,
+  COLOR_STOP_COLOR,
+  COLOR_STOP_OPACITY,
+} StopProperties;
+
+#define N_STOP_PROPS (COLOR_STOP_OPACITY + 1)
+
+typedef struct
+{
+  SvgValue *base[N_STOP_PROPS];
+  SvgValue *current[N_STOP_PROPS];
+} ColorStop;
+
+static void
+color_stop_free (gpointer v)
+{
+  ColorStop *stop = v;
+
+  for (unsigned int i = 0; i < N_STOP_PROPS; i++)
+    {
+      g_clear_pointer (&stop->base[i], svg_value_unref);
+      g_clear_pointer (&stop->current[i], svg_value_unref);
+    }
+  g_free (stop);
+}
+
+/* }}} */
 /* {{{ Attributes */
 
 typedef enum
