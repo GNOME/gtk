@@ -8940,6 +8940,50 @@ end_element_cb (GMarkupParseContext *context,
 }
 
 static void
+resolve_clip_ref (SvgValue   *value,
+                  ParserData *data)
+{
+  SvgClip *clip = (SvgClip *) value;
+
+  if (clip->kind == CLIP_REF && clip->ref.shape == NULL)
+    {
+      Shape *target = g_hash_table_lookup (data->shapes, clip->ref.ref);
+      if (!target)
+        gtk_svg_invalid_reference (data->svg,
+                                   "No path with ID %s (resolving clip-path)",
+                                   clip->ref.ref);
+      else if (target->type != SHAPE_CLIP_PATH)
+        gtk_svg_invalid_reference (data->svg,
+                                   "Shape with ID %s not a <clipPath> (resolving clip-path)",
+                                   clip->ref.ref);
+      else
+        clip->ref.shape = target;
+    }
+}
+
+static void
+resolve_mask_ref (SvgValue   *value,
+                  ParserData *data)
+{
+  SvgMask *mask = (SvgMask *) value;
+
+  if (mask->kind == MASK_REF && mask->shape == NULL)
+    {
+      Shape *target = g_hash_table_lookup (data->shapes, mask->ref);
+      if (!target)
+        gtk_svg_invalid_reference (data->svg,
+                                   "No shape with ID %s (resolving mask)",
+                                   mask->ref);
+      else if (target->type != SHAPE_MASK)
+        gtk_svg_invalid_reference (data->svg,
+                                   "Shape with ID %s not a <mask> (resolving mask)",
+                                   mask->ref);
+      else
+        mask->shape = target;
+    }
+}
+
+static void
 resolve_animation_refs (Shape      *shape,
                         ParserData *data)
 {
@@ -8963,6 +9007,17 @@ resolve_animation_refs (Shape      *shape,
                     animation_add_dep (spec->sync.base, a);
                 }
             }
+        }
+
+      if (a->attr == SHAPE_ATTR_CLIP_PATH)
+        {
+          for (unsigned int j = 0; j < a->n_frames; j++)
+            resolve_clip_ref (a->frames[j].value, data);
+        }
+      else if (a->attr == SHAPE_ATTR_MASK)
+        {
+          for (unsigned int j = 0; j < a->n_frames; j++)
+            resolve_mask_ref (a->frames[j].value, data);
         }
 
       if (a->motion.path_ref)
@@ -8989,31 +9044,19 @@ resolve_animation_refs (Shape      *shape,
 }
 
 static void
-resolve_shape_refs (Shape      *sh,
+resolve_shape_refs (Shape      *shape,
                     ParserData *data)
 {
-  SvgClip *clip = (SvgClip *) sh->base[SHAPE_ATTR_CLIP_PATH];
-  SvgMask *mask = (SvgMask *) sh->base[SHAPE_ATTR_MASK];
+  resolve_clip_ref (shape->base[SHAPE_ATTR_CLIP_PATH], data);
+  resolve_mask_ref (shape->base[SHAPE_ATTR_MASK], data);
 
-  if (clip->kind == CLIP_REF && clip->ref.shape == NULL)
+  if (shape->use.ref && shape->use.shape == NULL)
     {
-      clip->ref.shape = g_hash_table_lookup (data->shapes, clip->ref.ref);
-      if (!clip->ref.shape)
-        gtk_svg_invalid_reference (data->svg, "No path with ID %s (resolving clip-path)", clip->ref.ref);
-    }
-
-  if (mask->kind == MASK_REF && mask->shape == NULL)
-    {
-      mask->shape = g_hash_table_lookup (data->shapes, mask->ref);
-      if (!mask->shape)
-        gtk_svg_invalid_reference (data->svg, "No path with ID %s (resolving mask)", clip->ref.ref);
-    }
-
-  if (sh->use.ref && sh->use.shape == NULL)
-    {
-      sh->use.shape = g_hash_table_lookup (data->shapes, sh->use.ref);
-      if (!sh->use.shape)
-        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", sh->use.ref);
+      shape->use.shape = g_hash_table_lookup (data->shapes, shape->use.ref);
+      if (!shape->use.shape)
+        gtk_svg_invalid_reference (data->svg,
+                                   "No shape with ID %s (resolving <use>)",
+                                   shape->use.ref);
     }
 }
 
