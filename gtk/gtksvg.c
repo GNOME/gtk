@@ -5447,7 +5447,7 @@ struct _Animation
   char *id;
   char *href;
   Shape *shape;
-  ShapeAttr attr;
+  unsigned int attr;
 
   unsigned int has_simple_duration : 1;
   unsigned int has_repeat_count    : 1;
