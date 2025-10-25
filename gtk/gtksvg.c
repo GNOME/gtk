@@ -4670,8 +4670,9 @@ shape_has_attr (ShapeType type,
 }
 
 static GskPath *
-shape_get_path (Shape    *shape,
-                gboolean  current)
+shape_get_path (Shape                 *shape,
+                const graphene_size_t *viewport,
+                gboolean               current)
 {
   GskPathBuilder *builder;
   double cx, cy, r, x, y, width, height, rx, ry;
@@ -4745,7 +4746,8 @@ shape_get_path (Shape    *shape,
 }
 
 static GskPath *
-shape_get_current_path (Shape *shape)
+shape_get_current_path (Shape                 *shape,
+                        const graphene_size_t *viewport)
 {
   if (shape->path)
     {
@@ -4805,7 +4807,7 @@ shape_get_current_path (Shape *shape)
 
   if (!shape->path)
     {
-      shape->path = shape_get_path (shape, TRUE);
+      shape->path = shape_get_path (shape, viewport, TRUE);
 
       switch (shape->type)
         {
@@ -4848,11 +4850,12 @@ shape_get_current_path (Shape *shape)
 }
 
 static GskPathMeasure *
-shape_get_current_measure (Shape *shape)
+shape_get_current_measure (Shape                 *shape,
+                           const graphene_size_t *viewport)
 {
   if (!shape->measure)
     {
-      GskPath *path = shape_get_current_path (shape);
+      GskPath *path = shape_get_current_path (shape, viewport);
       shape->measure = gsk_path_measure_new (path);
       gsk_path_unref (path);
     }
@@ -5658,13 +5661,14 @@ fill_from_values (Animation     *a,
 }
 
 static GskPath *
-animation_motion_get_path (Animation *a,
-                           gboolean   current)
+animation_motion_get_path (Animation             *a,
+                           const graphene_size_t *viewport,
+                           gboolean               current)
 {
   g_assert (a->type == ANIMATION_TYPE_MOTION);
 
   if (a->motion.path_shape)
-    return shape_get_path (a->motion.path_shape, current);
+    return shape_get_path (a->motion.path_shape, viewport, current);
   else if (a->motion.path)
     return gsk_path_ref (a->motion.path);
   else
@@ -5672,25 +5676,28 @@ animation_motion_get_path (Animation *a,
 }
 
 static GskPath *
-animation_motion_get_base_path (Animation *a)
+animation_motion_get_base_path (Animation             *a,
+                                const graphene_size_t *viewport)
 {
-  return animation_motion_get_path (a, FALSE);
+  return animation_motion_get_path (a, viewport, FALSE);
 }
 
 static GskPath *
-animation_motion_get_current_path (Animation *a)
+animation_motion_get_current_path (Animation             *a,
+                                   const graphene_size_t *viewport)
 {
-  return animation_motion_get_path (a, TRUE);
+  return animation_motion_get_path (a, viewport, TRUE);
 }
 
 static GskPathMeasure *
-animation_motion_get_current_measure (Animation *a)
+animation_motion_get_current_measure (Animation             *a,
+                                      const graphene_size_t *viewport)
 {
   g_assert (a->type == ANIMATION_TYPE_MOTION);
 
   if (a->motion.path_shape)
     {
-      return shape_get_current_measure (a->motion.path_shape);
+      return shape_get_current_measure (a->motion.path_shape, viewport);
     }
   else if (a->motion.path)
     {
@@ -6307,6 +6314,7 @@ get_transform_data_for_motion (GskPathMeasure   *measure,
 
 typedef struct {
   GtkSvg *svg;
+  const graphene_size_t *viewport;
   Shape *parent; /* Can be different from the actual parent, for <use> */
   int64_t current_time;
   const GdkRGBA *colors;
@@ -6418,13 +6426,13 @@ compute_value_at_time (Animation      *a,
       SvgValue *value;
       GskPathMeasure *measure;
 
-      measure = shape_get_current_measure (a->shape);
+      measure = shape_get_current_measure (a->shape, context->viewport);
       get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
       gsk_path_measure_unref (measure);
 
       offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
 
-      measure = animation_motion_get_current_measure (a);
+      measure = animation_motion_get_current_measure (a, context->viewport);
       angle = a->motion.angle;
       get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
       value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
@@ -9744,9 +9752,9 @@ serialize_animation_motion (GString              *s,
       GskPath *path;
 
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-        path = animation_motion_get_current_path (a);
+        path = animation_motion_get_current_path (a, &svg->view_box.size);
       else
-        path = animation_motion_get_base_path (a);
+        path = animation_motion_get_base_path (a, &svg->view_box.size);
       if (path)
         {
           indent_for_attr (s, indent);
@@ -9920,6 +9928,7 @@ typedef enum
 typedef struct
 {
   GtkSvg *svg;
+  const graphene_size_t *viewport;
   GtkSnapshot *snapshot;
   graphene_rect_t bounds;
   int64_t current_time;
@@ -10134,6 +10143,7 @@ paint_shape (Shape        *shape,
 
       /* FIXME: this isn't the best way of doing this */
       use_context.svg = context->svg;
+      use_context.viewport = &context->svg->view_box.size;
       use_context.parent = shape;
       use_context.current_time = context->current_time;
       use_context.colors = context->colors;
@@ -10165,7 +10175,7 @@ paint_shape (Shape        *shape,
   if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
     return;
 
-  path = shape_get_current_path (shape);
+  path = shape_get_current_path (shape, context->viewport);
 
   if (context->op == RENDERING || context->op == MASKING)
     {
@@ -10218,7 +10228,7 @@ paint_shape (Shape        *shape,
                   GskPathMeasure *measure;
                   double length;
 
-                  measure = shape_get_current_measure (shape);
+                  measure = shape_get_current_measure (shape, context->viewport);
                   length = gsk_path_measure_get_length (measure);
                   gsk_path_measure_unref (measure);
 
@@ -10287,6 +10297,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   graphene_rect_t view_box;
 
   compute_context.svg = self;
+  compute_context.viewport = &self->view_box.size;
   compute_context.colors = colors;
   compute_context.n_colors = n_colors;
   compute_context.current_time = self->current_time;
@@ -10295,6 +10306,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   compute_current_values_for_shape (self->content, &compute_context);
 
   paint_context.svg = self;
+  paint_context.viewport = &self->view_box.size;
   paint_context.snapshot = snapshot;
   paint_context.bounds = self->bounds;
   paint_context.colors = colors;
@@ -10978,6 +10990,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
       ComputeContext context;
       context.svg = self;
+      context.viewport = &self->view_box.size;
       context.current_time = self->current_time;
       context.parent = NULL;
       context.colors = col;
