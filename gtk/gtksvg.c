@@ -11256,31 +11256,33 @@ paint_shape (Shape        *shape,
   if (context->op == RENDERING && shape_types[shape->type].never_rendered)
     return;
 
-  if (shape->type == SHAPE_USE &&
-      ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape != NULL)
+  if (shape->type == SHAPE_USE)
     {
-      Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
-      ComputeContext use_context;
-      double x, y;
-      x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
-      y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
-      gtk_snapshot_save (context->snapshot);
-      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
+      if (((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape != NULL)
+        {
+          Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+          ComputeContext use_context;
+          double x, y;
+          x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
+          y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
+          gtk_snapshot_save (context->snapshot);
+          gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
 
-      /* FIXME: this isn't the best way of doing this */
-      use_context.svg = context->svg;
-      use_context.viewport = &context->svg->view_box.size;
-      use_context.parent = shape;
-      use_context.current_time = context->current_time;
-      use_context.colors = context->colors;
-      use_context.n_colors = context->n_colors;
-      compute_current_values_for_shape (use_shape, &use_context);
+          /* FIXME: this isn't the best way of doing this */
+          use_context.svg = context->svg;
+          use_context.viewport = &context->svg->view_box.size;
+          use_context.parent = shape;
+          use_context.current_time = context->current_time;
+          use_context.colors = context->colors;
+          use_context.n_colors = context->n_colors;
+          compute_current_values_for_shape (use_shape, &use_context);
 
-      push_context (use_shape, context);
-      paint_shape (use_shape, context);
-      pop_context (use_shape, context);
+          push_context (use_shape, context);
+          paint_shape (use_shape, context);
+          pop_context (use_shape, context);
 
-      gtk_snapshot_restore (context->snapshot);
+          gtk_snapshot_restore (context->snapshot);
+        }
       return;
     }
 
