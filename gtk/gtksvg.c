@@ -4868,67 +4868,67 @@ typedef enum
 
 struct {
   const char *name;
-  unsigned int leaf            : 1;
+  unsigned int has_shapes      : 1;
   unsigned int never_rendered  : 1;
   unsigned int has_gpa_attrs   : 1;
   unsigned int has_color_stops : 1;
 } shape_types[] = {
   { .name = "rect",
-    .leaf = 1,
+    .has_shapes = 0,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
     .has_color_stops = 0,
   },
   { .name = "circle",
-    .leaf = 1,
+    .has_shapes = 0,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
     .has_color_stops = 0,
   },
   { .name = "ellipse",
-    .leaf = 1,
+    .has_shapes = 0,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
     .has_color_stops = 0,
   },
   { .name = "path",
-    .leaf = 1,
+    .has_shapes = 0,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
     .has_color_stops = 0,
   },
   { .name = "g",
-    .leaf = 0,
+    .has_shapes = 1,
     .never_rendered = 0,
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
   { .name = "clipPath",
-    .leaf = 0,
+    .has_shapes = 1,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
   { .name = "mask",
-    .leaf = 0,
+    .has_shapes = 1,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
   { .name = "defs",
-    .leaf = 0,
+    .has_shapes = 1,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
   { .name = "use",
-    .leaf = 1,
+    .has_shapes = 0,
     .never_rendered = 0,
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
   { .name = "linearGradient",
-    .leaf = 1,
+    .has_shapes = 0,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
     .has_color_stops = 1,
@@ -5007,7 +5007,7 @@ shape_new (ShapeType type)
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
 
-  if (!shape_types[type].leaf)
+  if (shape_types[type].has_shapes)
     shape->shapes = g_ptr_array_new_with_free_func (shape_free);
 
   if (shape_types[type].has_color_stops)
@@ -7084,7 +7084,7 @@ compute_current_values_for_shape (Shape          *shape,
         }
     }
 
-  if (!shape_types[shape->type].leaf)
+  if (shape_types[shape->type].has_shapes)
     {
       Shape *parent = context->parent;
       context->parent = shape;
@@ -8610,7 +8610,7 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (strcmp (attr_names[i], "pathLength") == 0)
         {
-          if (!shape_types[shape->type].leaf)
+          if (shape_types[shape->type].has_shapes)
             gtk_svg_invalid_attribute (data->svg, context, "pathLength", NULL);
           else if (!parse_number (attr_values[i], 0, DBL_MAX, &shape->path_length))
             gtk_svg_invalid_attribute (data->svg, context, "pathLength", NULL);
@@ -8962,7 +8962,7 @@ parse_shape_gpa_attrs (Shape                *shape,
         gtk_svg_invalid_attribute (data->svg, context, "gpa:attach-pos", NULL);
     }
 
-  if (shape_types[shape->type].leaf)
+  if (!shape_types[shape->type].has_shapes)
     {
       /* our dasharray-based animations require unit path length */
       if (shape->path_length != -1 && shape->path_length != 1)
@@ -9526,7 +9526,7 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (shape_types[data->current_shape->type].leaf)
+  if (!shape_types[data->current_shape->type].has_shapes)
     {
       shape_free (shape);
       skip_element (data, context, "Parent element can't contain shapes");
@@ -9752,7 +9752,7 @@ resolve_animation_refs (Shape      *shape,
         }
     }
 
-  if (!shape_types[shape->type].leaf)
+  if (shape_types[shape->type].has_shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -10953,7 +10953,7 @@ paint_shape (Shape        *shape,
       return;
     }
 
-  if (!shape_types[shape->type].leaf)
+  if (shape_types[shape->type].has_shapes)
     {
       for (int i = 0; i < shape->shapes->len; i++)
         {
@@ -11435,7 +11435,7 @@ shape_dump_animation_state (Shape *shape, GString *string)
         g_string_append_printf (string, " %s", a->id);
     }
 
-  if (!shape_types[shape->type].leaf)
+  if (shape_types[shape->type].has_shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -11515,7 +11515,7 @@ collect_next_update_for_shape (Shape         *shape,
       collect_next_update_for_animation (a, current_time, run_mode, next_update);
     }
 
-  if (!shape_types[shape->type].leaf)
+  if (shape_types[shape->type].has_shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -11553,7 +11553,7 @@ shape_update_animation_state (Shape   *shape,
       animation_update_state (a, current_time);
     }
 
-  if (!shape_types[shape->type].leaf)
+  if (shape_types[shape->type].has_shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
