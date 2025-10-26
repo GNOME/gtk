@@ -68,6 +68,10 @@
  *
  * <image src="svg-renderer1.svg">
  *
+ * Note that the generated animations assume a `pathLengh` value of 1.
+ * Setting `pathLength` in your SVG is therefore going to break such
+ * generated animations.
+ *
  * To connect general SVG animations to the states of the paintable,
  * use the custom `gpa:states(...)` condition in the `begin` and `end`
  * attributes of SVG animation elements. For example,
@@ -7405,7 +7409,6 @@ create_visibility_setter (Shape        *shape,
 
   a->shape = shape;
   g_ptr_array_add (shape->animations, a);
-
 }
 
 static void
@@ -7419,6 +7422,37 @@ create_states (Shape        *shape,
 
 /* }}} */
 /* {{{ Transitions */
+
+static void
+create_path_length (Shape    *shape,
+                    Timeline *timeline)
+{
+  Animation *a = animation_set_new ();
+  TimeSpec *begin, *end;
+
+  a->attr = SHAPE_ATTR_PATH_LENGTH;
+
+  a->id = g_strdup_printf ("gpa:path-length");
+  begin = animation_add_begin (a, timeline_get_start_of_time (timeline));
+  end = animation_add_end (a, timeline_get_end_of_time (timeline));
+  time_spec_add_animation (begin, a);
+  time_spec_add_animation (end, a);
+
+  a->has_begin = 1;
+  a->has_end = 1;
+
+  a->n_frames = 2;
+  a->frames = g_new0 (Frame, a->n_frames);
+  a->frames[0].time = 0;
+  a->frames[1].time = 1;
+  a->frames[0].value = svg_number_new (1);
+  a->frames[1].value = svg_number_new (1);
+
+  a->fill = ANIMATION_FILL_REMOVE;
+
+  a->shape = shape;
+  g_ptr_array_add (shape->animations, a);
+}
 
 static void
 create_transition (Shape             *shape,
@@ -7934,10 +7968,10 @@ create_animations (Shape                 *shape,
   a->gpa.segment = segment;
 
   if (offset->len > 0)
-    create_animation (shape, timeline, states, initial,
-                      repeat, repeat_duration, calc_mode,
-                      SHAPE_ATTR_STROKE_DASHOFFSET,
-                      offset);
+    a = create_animation (shape, timeline, states, initial,
+                          repeat, repeat_duration, calc_mode,
+                          SHAPE_ATTR_STROKE_DASHOFFSET,
+                          offset);
 
   g_array_unref (array);
   g_array_unref (offset);
@@ -9190,6 +9224,11 @@ parse_shape_gpa_attrs (Shape                *shape,
                  data->svg->timeline,
                  states,
                  data->svg->state);
+
+  if (attach_to_attr ||
+      transition_type == TRANSITION_TYPE_ANIMATE ||
+      animation_type != ANIMATION_TYPE_NONE)
+    create_path_length (shape, data->svg->timeline);
 
   if (attach_to_attr)
     create_attachment (shape,
