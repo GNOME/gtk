@@ -4916,7 +4916,7 @@ shape_attr_lookup (const char *name,
                    ShapeAttr  *attr,
                    ShapeType   type)
 {
-  if (type == SHAPE_LINEAR_GRADIENT &&
+  if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
       strcmp (name, "gradientTransform") == 0)
     name = "transform";
 
@@ -5487,28 +5487,18 @@ shape_get_current_measure (Shape                 *shape,
 }
 
 static unsigned int
-shape_add_color_stop (Shape    *shape,
-                      SvgValue *offset,
-                      SvgValue *color,
-                      SvgValue *opacity)
+shape_add_color_stop (Shape *shape)
 {
-  ColorStop *stop;
+  ColorStop *stop = g_new0 (ColorStop, 1);
 
   g_assert (shape_types[shape->type].has_color_stops);
 
-  stop = g_new0 (ColorStop, 1);
-
-  if (!offset)
-    offset = shape_attr_get_initial_value (SHAPE_ATTR_STOP_OFFSET, shape->type);
-  stop->base[COLOR_STOP_OFFSET] = svg_value_ref (offset);
-
-  if (!color)
-    color = shape_attr_get_initial_value (SHAPE_ATTR_STOP_COLOR, shape->type);
-  stop->base[COLOR_STOP_COLOR] = svg_value_ref (color);
-
-  if (!opacity)
-    opacity = shape_attr_get_initial_value (SHAPE_ATTR_STOP_OPACITY, shape->type);
-  stop->base[COLOR_STOP_OPACITY] = svg_value_ref (opacity);
+  stop->base[COLOR_STOP_OFFSET] =
+    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OFFSET, shape->type));
+  stop->base[COLOR_STOP_COLOR] =
+    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_COLOR, shape->type));
+  stop->base[COLOR_STOP_OPACITY] =
+    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OPACITY, shape->type));
 
   g_ptr_array_add (shape->color_stops, stop);
 
@@ -6440,10 +6430,23 @@ shape_set_base_value (Shape        *shape,
                       unsigned int  attr,
                       SvgValue     *value)
 {
-  g_assert (attr < SHAPE_ATTR_STOP_OFFSET);
-  g_clear_pointer (&shape->base[attr], svg_value_unref);
-  shape->base[attr] = svg_value_ref (value);
-  shape->attrs |= BIT (attr);
+  if (attr < SHAPE_ATTR_STOP_OFFSET)
+    {
+      g_clear_pointer (&shape->base[attr], svg_value_unref);
+      shape->base[attr] = svg_value_ref (value);
+      shape->attrs |= BIT (attr);
+    }
+  else
+    {
+      ColorStop *stop;
+
+      g_assert (shape_types[shape->type].has_color_stops);
+      /* set the values of the last color stop */
+      attr -= SHAPE_ATTR_STOP_OFFSET;
+      stop = g_ptr_array_index (shape->color_stops, shape->color_stops->len - 1);
+      g_clear_pointer (&stop->base[attr], svg_value_unref);
+      stop->base[attr] = svg_value_ref (value);
+    }
 }
 
 static void
@@ -9746,9 +9749,8 @@ start_element_cb (GMarkupParseContext  *context,
   else if (strcmp (element_name, "stop") == 0)
     {
       const char *parent = g_markup_parse_context_get_element_stack (context)->next->data;
-      SvgValue *offset = NULL;
-      SvgValue *color = NULL;
-      SvgValue *opacity = NULL;
+      SvgValue *value;
+      const char *style_attr = NULL;
 
       if (strcmp (parent, "linearGradient") != 0 &&
           strcmp (parent, "radialGradient") != 0)
@@ -9757,37 +9759,56 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
+      shape_add_color_stop (data->current_shape);
       for (unsigned int i = 0; attr_names[i]; i++)
         {
           if (strcmp (attr_names[i], "offset") == 0)
             {
               handled |= BIT (i);
-              offset = shape_attr_parse_value (SHAPE_ATTR_STOP_OFFSET, attr_values[i]);
-              if (!offset)
+              value = shape_attr_parse_value (SHAPE_ATTR_STOP_OFFSET, attr_values[i]);
+              if (value)
+                {
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OFFSET, value);
+                  svg_value_unref (value);
+                }
+              else
                 gtk_svg_invalid_attribute (data->svg, context, "offset", NULL);
             }
           else if (strcmp (attr_names[i], "stop-color") == 0)
             {
               handled |= BIT (i);
-              color = shape_attr_parse_value (SHAPE_ATTR_STOP_COLOR, attr_values[i]);
-              if (!color)
+              value = shape_attr_parse_value (SHAPE_ATTR_STOP_COLOR, attr_values[i]);
+              if (value)
+                {
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_COLOR, value);
+                  svg_value_unref (value);
+                }
+              else
                 gtk_svg_invalid_attribute (data->svg, context, "stop-color", NULL);
             }
           else if (strcmp (attr_names[i], "stop-opacity") == 0)
             {
               handled |= BIT (i);
-              opacity = shape_attr_parse_value (SHAPE_ATTR_STOP_OPACITY, attr_values[i]);
-              if (!opacity)
+              value = shape_attr_parse_value (SHAPE_ATTR_STOP_OPACITY, attr_values[i]);
+              if (value)
+                {
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OPACITY, value);
+                  svg_value_unref (value);
+                }
+              else
                 gtk_svg_invalid_attribute (data->svg, context, "stop-opacity", NULL);
+            }
+          else if (strcmp (attr_names[i], "style") == 0)
+            {
+              handled |= BIT (i);
+              style_attr = attr_values[i];
             }
         }
 
-      gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
+      if (style_attr)
+        parse_style_attr (data->current_shape, style_attr, data, context);
 
-      shape_add_color_stop (data->current_shape, offset, color, opacity);
-      g_clear_pointer (&offset, svg_value_unref);
-      g_clear_pointer (&color, svg_value_unref);
-      g_clear_pointer (&opacity, svg_value_unref);
+      gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
       return;
     }
