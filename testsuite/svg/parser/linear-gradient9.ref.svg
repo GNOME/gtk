@@ -1,0 +1,45 @@
+<svg
+        width='300'
+        height='200'
+        viewBox='0 0 300 200'>
+  <defs>
+    <linearGradient
+            id='MyGradient'
+            x1='0'
+            y1='0'
+            x2='0.5'
+            y2='0.5'
+            spreadMethod='repeat'
+            gradientUnits='objectBoundingBox'>
+      <stop
+              offset='0'
+              stop-color='rgb(255,0,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='0.5'
+              stop-color='rgb(255,0,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='0.5'
+              stop-color='rgb(255,255,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='1'
+              stop-color='rgb(255,255,0)'
+              stop-opacity='1'>
+      </stop>
+    </linearGradient>
+  </defs>
+  <rect
+          fill='none'
+          stroke='url(#MyGradient)'
+          stroke-width='10'
+          x='50'
+          y='50'
+          width='200'
+          height='100'
+          gpa:stroke-width='2.5 10 15'/>
+</svg>
