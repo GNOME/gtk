@@ -463,6 +463,25 @@ gtk_svg_update_error (GtkSvg     *self,
   g_error_free (error);
 }
 
+G_GNUC_PRINTF (2, 3)
+static void
+gtk_svg_rendering_error (GtkSvg     *self,
+                         const char *format,
+                         ...)
+{
+  va_list args;
+  GError *error;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_SVG_ERROR,
+                              GTK_SVG_ERROR_FAILED_RENDERING,
+                              format, args);
+  va_end (args);
+
+  gtk_svg_emit_error (self, error);
+  g_error_free (error);
+}
+
 /* }}} */
 /* {{{ Helpers */
 
