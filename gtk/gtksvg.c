@@ -10092,7 +10092,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   if (!g_markup_parse_context_parse (context,
                                      g_bytes_get_data (bytes, NULL),
                                      g_bytes_get_size (bytes),
-                                     &error))
+                                     &error) ||
+      !g_markup_parse_context_end_parse (context, &error))
     {
       gtk_svg_emit_error (self, error);
       g_clear_error (&error);
