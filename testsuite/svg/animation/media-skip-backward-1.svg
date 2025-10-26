@@ -1,0 +1,56 @@
+<svg
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='1000ms'>
+  <path
+          id='path4'
+          pathLength='1'
+          fill='red'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='butt'
+          stroke-linejoin='round'
+          d='M 4.48632765 3.125 L 12.4863281 7.125 C 13.1740217 7.50565195, 13.1740217 8.49434757, 12.4863281 8.875 L 4.48632765 12.875 C 3.81931257 13.2461014, 2.99919558 12.763298, 2.99999952 12 L 2.99999952 4 C 2.99919558 3.23670173, 3.81931257 2.75389957, 4.48632765 3.125 Z M 14 1 L 14 15'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='red'>
+    <set
+            id='gpa:out-of-state:path4'
+            attributeName='visibility'
+            begin='gpa:states(0).end'
+            end='gpa:states(0).begin'
+            to='hidden'
+            gpa:status='done'
+            gpa:computed-simple-duration='indefinite'/>
+  </path>
+  <path
+          id='path1'
+          pathLength='1'
+          visibility='hidden'
+          fill='url("#gpa:foreground") rgb(0,0,0)'
+          fill-rule='nonzero'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 3 L 12 8 L 3 13 Z M 14 2 L 14 14'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='foreground'>
+<!--
+    <set
+            id='gpa:out-of-state:path1'
+            attributeName='visibility'
+            begin='gpa:states(1).end'
+            end='gpa:states(1).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='500ms'/>
+-->
+  </path>
+</svg>

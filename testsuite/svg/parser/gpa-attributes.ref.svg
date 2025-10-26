@@ -6,7 +6,6 @@
         gpa:state='empty'>
   <path
           id='path0'
-          pathLength='1'
           fill='url("#gpa:accent") rgb(0,34,255)'
           stroke='url("#gpa:foreground") rgb(0,0,0)'
           stroke-width='2'

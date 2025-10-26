@@ -188,6 +188,7 @@ typedef enum
   SHAPE_ATTR_STROKE_DASHARRAY,
   SHAPE_ATTR_STROKE_DASHOFFSET,
   SHAPE_ATTR_HREF,
+  SHAPE_ATTR_PATH_LENGTH,
   SHAPE_ATTR_PATH,
   SHAPE_ATTR_CX,
   SHAPE_ATTR_CY,
@@ -4487,6 +4488,18 @@ parse_dash_offset (const char *value)
 }
 
 static SvgValue *
+parse_any_length (const char *value)
+{
+  return svg_number_parse (value, -DBL_MAX, DBL_MAX, LENGTH);
+}
+
+static SvgValue *
+parse_positive_length (const char *value)
+{
+  return svg_number_parse (value, 0, DBL_MAX, LENGTH);
+}
+
+static SvgValue *
 parse_length_percentage (const char *value)
 {
   return svg_number_parse (value, -DBL_MAX, DBL_MAX, PERCENTAGE | LENGTH);
@@ -4662,6 +4675,14 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = 1,
     .presentation = 0,
     .parse_value = svg_href_parse,
+  },
+  { .id = SHAPE_ATTR_PATH_LENGTH,
+    .name = "pathLength",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .parse_value = parse_positive_length,
+    .parse_for_values = parse_any_length,
   },
   { .id = SHAPE_ATTR_PATH,
     .name = "d",
@@ -4859,6 +4880,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STROKE_DASHARRAY].initial_value = svg_dash_array_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_DASHOFFSET].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_HREF].initial_value = svg_href_new_none ();
+  shape_attrs[SHAPE_ATTR_PATH_LENGTH].initial_value = svg_number_new (-1);
   shape_attrs[SHAPE_ATTR_PATH].initial_value = svg_path_new_none ();
   shape_attrs[SHAPE_ATTR_CX].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_CY].initial_value = svg_number_new (0);
@@ -5098,7 +5120,6 @@ struct _Shape
   uint64_t attrs;
   char *id;
   gboolean display;
-  double path_length;
 
   SvgValue *base[G_N_ELEMENTS (shape_attrs)];
   SvgValue *current[G_N_ELEMENTS (shape_attrs)];
@@ -5180,7 +5201,6 @@ shape_new (ShapeType type)
   shape->type = type;
   shape->attrs = 0;
   shape->display = TRUE;
-  shape->path_length = -1;
 
   for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
     shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
@@ -5217,6 +5237,9 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
+    case SHAPE_ATTR_PATH_LENGTH:
+      return type == SHAPE_RECT || type == SHAPE_CIRCLE ||
+             type == SHAPE_ELLIPSE || type == SHAPE_PATH;
     case SHAPE_ATTR_PATH:
       return type == SHAPE_PATH;
     case SHAPE_ATTR_STROKE_MINWIDTH:
@@ -8813,14 +8836,6 @@ parse_shape_attrs (Shape                *shape,
           shape->display = strcmp (attr_values[i], "none") != 0;
           *handled |= BIT (i);
         }
-      else if (strcmp (attr_names[i], "pathLength") == 0)
-        {
-          if (shape_types[shape->type].has_shapes)
-            gtk_svg_invalid_attribute (data->svg, context, "pathLength", NULL);
-          else if (!parse_number (attr_values[i], 0, DBL_MAX, &shape->path_length))
-            gtk_svg_invalid_attribute (data->svg, context, "pathLength", NULL);
-          *handled |= BIT (i);
-        }
       else if (find_shape_attr (attr_names[i], &attr, shape->type))
         {
           if (!shape_has_attr (shape->type, attr))
@@ -9167,48 +9182,43 @@ parse_shape_gpa_attrs (Shape                *shape,
         gtk_svg_invalid_attribute (data->svg, context, "gpa:attach-pos", NULL);
     }
 
-  if (!shape_types[shape->type].has_shapes)
-    {
-      /* our dasharray-based animations require unit path length */
-      if (shape->path_length != -1 && shape->path_length != 1)
-        gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set pathLength and use gpa features");
+  /* our dasharray-based animations require unit path length */
+  if (shape->attrs & BIT (SHAPE_ATTR_PATH_LENGTH))
+    gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set pathLength and use gpa features");
 
-      shape->path_length = 1;
+  create_states (shape,
+                 data->svg->timeline,
+                 states,
+                 data->svg->state);
 
-      create_states (shape,
-                     data->svg->timeline,
-                     states,
-                     data->svg->state);
+  if (attach_to_attr)
+    create_attachment (shape,
+                       data->svg->timeline,
+                       states,
+                       attach_to_attr,
+                       attach_pos,
+                       origin);
 
-      if (attach_to_attr)
-        create_attachment (shape,
-                           data->svg->timeline,
-                           states,
-                           attach_to_attr,
-                           attach_pos,
-                           origin);
+  create_transitions (shape,
+                      data->svg->timeline,
+                      states,
+                      transition_type,
+                      transition_duration,
+                      transition_delay,
+                      transition_easing,
+                      origin);
 
-      create_transitions (shape,
-                          data->svg->timeline,
-                          states,
-                          transition_type,
-                          transition_duration,
-                          transition_delay,
-                          transition_easing,
-                          origin);
-
-      if (animation_type != ANIMATION_TYPE_NONE)
-        create_animations (shape,
-                           data->svg->timeline,
-                           states,
-                           data->svg->state,
-                           animation_repeat,
-                           animation_duration,
-                           animation_direction,
-                           animation_easing,
-                           animation_segment,
-                           origin);
-    }
+  if (animation_type != ANIMATION_TYPE_NONE)
+    create_animations (shape,
+                       data->svg->timeline,
+                       states,
+                       data->svg->state,
+                       animation_repeat,
+                       animation_duration,
+                       animation_direction,
+                       animation_easing,
+                       animation_segment,
+                       origin);
 }
 
 /* }}} */
@@ -10145,14 +10155,6 @@ serialize_shape_attrs (GString              *s,
     {
       indent_for_attr (s, indent);
       g_string_append (s, "display='none'");
-    }
-
-  if (shape->path_length > 0)
-    {
-      indent_for_attr (s, indent);
-      g_string_append (s, "pathLength='");
-      string_append_double (s, shape->path_length);
-      g_string_append (s, "'");
     }
 
   for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
@@ -11226,11 +11228,19 @@ shape_create_stroke (Shape        *shape,
     {
       double *dashes = (double *) dasharray->dashes;
       unsigned int len = dasharray->n_dashes;
-      float offset = svg_number_get (shape->current[SHAPE_ATTR_STROKE_DASHOFFSET], shape->path_length);
+      double path_length;
+      double offset;
+
+      if (shape->attrs & BIT (SHAPE_ATTR_PATH_LENGTH))
+        path_length = svg_number_get (shape->current[SHAPE_ATTR_PATH_LENGTH], 1);
+      else /* FIXME makes mixing animations hard */
+        path_length = 1;
+
+      offset = svg_number_get (shape->current[SHAPE_ATTR_STROKE_DASHOFFSET], path_length);
 
       float *vals = g_newa (float, len);
 
-      if (shape->path_length > 0)
+      if (path_length > 0)
         {
           GskPathMeasure *measure;
           double length;
@@ -11240,9 +11250,9 @@ shape_create_stroke (Shape        *shape,
           gsk_path_measure_unref (measure);
 
           for (unsigned int i = 0; i < len; i++)
-            vals[i] = dashes[i] / shape->path_length * length;
+            vals[i] = dashes[i] / path_length * length;
 
-          offset = offset / shape->path_length * length;
+          offset = offset / path_length * length;
         }
       else
         {
