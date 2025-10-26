@@ -51,6 +51,10 @@
  * To find out what states a `GtkSvg` has, use [method@Gtk.Svg.get_n_states].
  * To set the current state, use [method@Gtk.Svg.set_state].
  *
+ * To play the animations in an SVG file, use
+ * [method@Gtk.Svg.set_frame_clock] to connect the paintable to a frame clock,
+ * and then use [method@Gtk.Svg.play] to start the animation.
+ *
  * ## SVG Extensions
  *
  * The paintable supports a number of [custom attributes](icon-format.html)
