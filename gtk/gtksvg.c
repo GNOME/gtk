@@ -9128,7 +9128,8 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
   else if (strcmp (element_name, "radialGradient") == 0 ||
-           strcmp (element_name, "filter") == 0)
+           strcmp (element_name, "filter") == 0 ||
+           strcmp (element_name, "pattern") == 0)
     {
       skip_element (data, context, "Ignoring unsupported element: <%s>", element_name);
       return;
