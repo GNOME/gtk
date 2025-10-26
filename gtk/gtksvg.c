@@ -5118,6 +5118,21 @@ struct {
   },
 };
 
+static gboolean
+shape_type_lookup (const char *name,
+                   ShapeType  *type)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_types); i++)
+    {
+      if (strcmp (name, shape_types[i].name) == 0)
+        {
+          *type = i;
+          return TRUE;
+        }
+    }
+  return FALSE;
+}
+
 struct _Shape
 {
   ShapeType type;
@@ -9288,6 +9303,7 @@ start_element_cb (GMarkupParseContext  *context,
                   GError              **gmarkup_error)
 {
   ParserData *data = user_data;
+  ShapeType shape_type;
   Shape *shape;
   uint64_t handled = 0;
 
@@ -9723,49 +9739,9 @@ start_element_cb (GMarkupParseContext  *context,
 
       return;
     }
-  else if (strcmp (element_name, "g") == 0)
+  else if (shape_type_lookup (element_name, &shape_type))
     {
-      shape = shape_new (SHAPE_GROUP);
-    }
-  else if (strcmp (element_name, "clipPath") == 0)
-    {
-      shape = shape_new (SHAPE_CLIP_PATH);
-    }
-  else if (strcmp (element_name, "mask") == 0)
-    {
-      shape = shape_new (SHAPE_MASK);
-    }
-  else if (strcmp (element_name, "defs") == 0)
-    {
-      shape = shape_new (SHAPE_DEFS);
-    }
-  else if (strcmp (element_name, "circle") == 0)
-    {
-      shape = shape_new (SHAPE_CIRCLE);
-    }
-  else if (strcmp (element_name, "ellipse") == 0)
-    {
-      shape = shape_new (SHAPE_ELLIPSE);
-    }
-  else if (strcmp (element_name, "rect") == 0)
-    {
-      shape = shape_new (SHAPE_RECT);
-    }
-  else if (strcmp (element_name, "path") == 0)
-    {
-      shape = shape_new (SHAPE_PATH);
-    }
-  else if (strcmp (element_name, "use") == 0)
-    {
-      shape = shape_new (SHAPE_USE);
-    }
-  else if (strcmp (element_name, "linearGradient") == 0)
-    {
-      shape = shape_new (SHAPE_LINEAR_GRADIENT);
-    }
-  else if (strcmp (element_name, "radialGradient") == 0)
-    {
-      shape = shape_new (SHAPE_RADIAL_GRADIENT);
+      shape = shape_new (shape_type);
     }
   else if (strcmp (element_name, "stop") == 0)
     {
@@ -9854,6 +9830,7 @@ end_element_cb (GMarkupParseContext *context,
                 GError             **gmarkup_error)
 {
   ParserData *data = user_data;
+  ShapeType shape_type;
 
   if (data->skip.to != NULL)
     {
@@ -9880,19 +9857,11 @@ end_element_cb (GMarkupParseContext *context,
       return;
     }
 
-  if (strcmp (element_name, "g") == 0 ||
-      strcmp (element_name, "clipPath") == 0 ||
-      strcmp (element_name, "mask") == 0 ||
-      strcmp (element_name, "defs") == 0 ||
-      strcmp (element_name, "use") == 0 ||
-      strcmp (element_name, "circle") == 0 ||
-      strcmp (element_name, "ellipse") == 0 ||
-      strcmp (element_name, "rect") == 0 ||
-      strcmp (element_name, "path") == 0 ||
-      strcmp (element_name, "linearGradient") == 0 ||
-      strcmp (element_name, "radialGradient") == 0)
+  if (shape_type_lookup (element_name, &shape_type))
     {
       GSList *tos = data->shape_stack;
+
+      g_assert (shape_type == data->current_shape->type);
 
       data->current_shape = tos->data;
       data->shape_stack = tos->next;
