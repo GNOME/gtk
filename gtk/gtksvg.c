@@ -4797,7 +4797,8 @@ shape_attr_init_default_values (void)
 
 static gboolean
 find_shape_attr (const char *name,
-                 ShapeAttr  *attr)
+                 ShapeAttr  *attr,
+                 ShapeType   type)
 {
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
@@ -8158,7 +8159,7 @@ parse_base_animation_attrs (Animation            *a,
       gtk_svg_missing_attribute (data->svg, context, "attributeName", NULL);
       return FALSE;
     }
-  else if (!find_shape_attr (attr_name_attr, &a->attr))
+  else if (!find_shape_attr (attr_name_attr, &a->attr, data->current_shape->type))
     {
       gtk_svg_missing_attribute (data->svg, context, "attributeName", "can't animate '%s'", attr_name_attr);
       return FALSE;
@@ -8575,7 +8576,7 @@ parse_style_attr (Shape               *shape,
           continue;
         }
 
-      if (!find_shape_attr (name, &attr))
+      if (!find_shape_attr (name, &attr, shape->type))
         {
           gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': unsupported property '%s'", name);
           g_free (name);
@@ -8668,7 +8669,7 @@ parse_shape_attrs (Shape                *shape,
             gtk_svg_invalid_attribute (data->svg, context, "pathLength", NULL);
           *handled |= BIT (i);
         }
-      else if (find_shape_attr (attr_names[i], &attr))
+      else if (find_shape_attr (attr_names[i], &attr, shape->type))
         {
           if (!shape_has_attr (shape->type, attr))
             {
