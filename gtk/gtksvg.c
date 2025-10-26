@@ -11201,6 +11201,19 @@ paint_gradient (Shape                 *gradient,
   if (!gradient)
     return;
 
+  if (gradient->color_stops->len == 0)
+    return;
+
+  if (gradient->color_stops->len == 1)
+    {
+      ColorStop *cs = g_ptr_array_index (gradient->color_stops, 0);
+      SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+      GdkRGBA color = stop_color->color;
+      color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      gtk_snapshot_append_color (context->snapshot, &color, bounds);
+      return;
+    }
+
   if (gradient->type == SHAPE_LINEAR_GRADIENT)
     paint_linear_gradient (gradient, bounds, context);
   else
