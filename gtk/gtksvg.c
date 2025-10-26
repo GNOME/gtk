@@ -10888,6 +10888,8 @@ static void paint_shape (Shape        *shape,
                          PaintContext *context);
 static void pop_context (Shape        *shape,
                          PaintContext *context);
+static void render_shape (Shape        *shape,
+                          PaintContext *context);
 
 
 static void
@@ -10970,9 +10972,7 @@ push_context (Shape        *shape,
         }
       else
         {
-          push_context (clip->ref.shape, context);
-          paint_shape (clip->ref.shape, context);
-          pop_context (clip->ref.shape, context);
+          render_shape (clip->ref.shape, context);
         }
 
       gtk_snapshot_pop (context->snapshot);
@@ -10986,9 +10986,7 @@ push_context (Shape        *shape,
 
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (shape->current[SHAPE_ATTR_MASK_TYPE]));
 
-      push_context (mask->shape, context);
-      paint_shape (mask->shape, context);
-      pop_context (mask->shape, context);
+      render_shape (mask->shape, context);
 
       gtk_snapshot_pop (context->snapshot);
 
@@ -11195,6 +11193,9 @@ paint_gradient (Shape                 *gradient,
                 const graphene_rect_t *bounds,
                 PaintContext          *context)
 {
+  if (!gradient)
+    return;
+
   if (gradient->type == SHAPE_LINEAR_GRADIENT)
     paint_linear_gradient (gradient, bounds, context);
   else
@@ -11271,12 +11272,6 @@ paint_shape (Shape        *shape,
   GskPath *path;
   graphene_rect_t bounds;
 
-  if (!shape->display)
-    return;
-
-  if (context->op == RENDERING && shape_types[shape->type].never_rendered)
-    return;
-
   if (shape->type == SHAPE_USE)
     {
       if (((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape != NULL)
@@ -11298,9 +11293,7 @@ paint_shape (Shape        *shape,
           use_context.n_colors = context->n_colors;
           compute_current_values_for_shape (use_shape, &use_context);
 
-          push_context (use_shape, context);
-          paint_shape (use_shape, context);
-          pop_context (use_shape, context);
+          render_shape (use_shape, context);
 
           gtk_snapshot_restore (context->snapshot);
         }
@@ -11312,10 +11305,7 @@ paint_shape (Shape        *shape,
       for (int i = 0; i < shape->shapes->len; i++)
         {
           Shape *s = g_ptr_array_index (shape->shapes, i);
-
-          push_context (s, context);
-          paint_shape (s, context);
-          pop_context (s, context);
+          render_shape (s, context);
         }
 
       return;
@@ -11412,6 +11402,21 @@ paint_shape (Shape        *shape,
   gsk_path_unref (path);
 }
 
+static void
+render_shape (Shape        *shape,
+              PaintContext *context)
+{
+  if (!shape->display)
+    return;
+
+  if (context->op == RENDERING && shape_types[shape->type].never_rendered)
+    return;
+
+  push_context (shape, context);
+  paint_shape (shape, context);
+  pop_context (shape, context);
+}
+
 /* }}} */
 /* {{{ GtkSymbolicPaintable implementation */
 
@@ -11502,9 +11507,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   gtk_snapshot_scale (snapshot, sx, sy);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
 
-  push_context (self->content, &paint_context);
-  paint_shape (self->content, &paint_context);
-  pop_context (self->content, &paint_context);
+  render_shape (self->content, &paint_context);
 
   gtk_snapshot_restore (snapshot);
 
