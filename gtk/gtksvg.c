@@ -208,6 +208,24 @@ typedef enum
   SHAPE_ATTR_STOP_OPACITY,
 } ShapeAttr;
 
+typedef enum
+{
+  ALIGN_MIN = 1 << 0,
+  ALIGN_MID = 1 << 1,
+  ALIGN_MAX = 1 << 2,
+} Align;
+
+#define ALIGN_XY(x,y) ((x) | ((y) << 3))
+
+#define ALIGN_GET_X(x) ((x) & 7)
+#define ALIGN_GET_Y(x) ((x) >> 3)
+
+typedef enum
+{
+  MEET,
+  SLICE,
+} MeetOrSlice;
+
 typedef struct _Animation Animation;
 typedef struct _Shape Shape;
 typedef struct _Timeline Timeline;
@@ -220,6 +238,9 @@ struct _GtkSvg
   double width, height;
   graphene_rect_t view_box;
   graphene_rect_t bounds;
+
+  Align align;
+  MeetOrSlice meet_or_slice;
 
   double weight;
   unsigned int state;
@@ -848,6 +869,55 @@ make_ellipse_path (double cx, double cy,
   gsk_path_builder_close    (builder);
 
   return gsk_path_builder_free_to_path (builder);
+}
+
+static gboolean
+parse_align (const char   *value,
+             unsigned int *res)
+{
+  struct {
+    const char *name;
+    unsigned int value;
+  } values[] = {
+    { "none", 0 },
+    { "xMinYMin", ALIGN_XY (ALIGN_MIN, ALIGN_MIN) },
+    { "xMidYMin", ALIGN_XY (ALIGN_MID, ALIGN_MIN) },
+    { "xMaxYMin", ALIGN_XY (ALIGN_MAX, ALIGN_MIN) },
+    { "xMinYMid", ALIGN_XY (ALIGN_MIN, ALIGN_MID) },
+    { "xMidYMid", ALIGN_XY (ALIGN_MID, ALIGN_MID) },
+    { "xMaxYMid", ALIGN_XY (ALIGN_MAX, ALIGN_MID) },
+    { "xMinYMax", ALIGN_XY (ALIGN_MIN, ALIGN_MAX) },
+    { "xMidYMax", ALIGN_XY (ALIGN_MID, ALIGN_MAX) },
+    { "xMaxYMax", ALIGN_XY (ALIGN_MAX, ALIGN_MAX) },
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (values); i++)
+    {
+      if (strcmp (values[i].name, value) == 0)
+        {
+          *res = values[i].value;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+parse_meet (const char   *value,
+            unsigned int *res)
+{
+  if (strcmp (value, "meet") == 0)
+    {
+      *res = MEET;
+      return TRUE;
+    }
+  else if (strcmp (value, "slice") == 0)
+    {
+      *res = SLICE;
+      return TRUE;
+    }
+  return FALSE;
 }
 
 static inline gboolean
@@ -9122,6 +9192,7 @@ start_element_cb (GMarkupParseContext  *context,
       const char *viewbox_attr = NULL;
       const char *state_attr = NULL;
       const char *version_attr = NULL;
+      const char *preserve_aspect_ratio_attr = NULL;
       double width, height;
 
       if (data->current_shape != data->svg->content)
@@ -9136,6 +9207,7 @@ start_element_cb (GMarkupParseContext  *context,
                                 "width", &width_attr,
                                 "height", &height_attr,
                                 "viewBox", &viewbox_attr,
+                                "preserveAspectRatio", &preserve_aspect_ratio_attr,
                                 "gpa:state", &state_attr,
                                 "gpa:version", &version_attr,
                                 NULL);
@@ -9175,6 +9247,41 @@ start_element_cb (GMarkupParseContext  *context,
 
       data->svg->width = width;
       data->svg->height = height;
+
+      if (preserve_aspect_ratio_attr)
+        {
+          GStrv strv;
+          unsigned int align;
+          unsigned int meet;
+
+          strv = g_strsplit (preserve_aspect_ratio_attr, " ", 0);
+          if (g_strv_length (strv) == 1)
+            {
+              if (!parse_align (strv[0], &align))
+                {
+                  gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+                }
+              else
+                {
+                  data->svg->align = align;
+                  data->svg->meet_or_slice = MEET;
+                }
+            }
+          else if (g_strv_length (strv) == 2)
+            {
+
+              if (parse_align (strv[0], &align) &&
+                  parse_meet (strv[1], &meet))
+                {
+                  data->svg->align = align;
+                  data->svg->meet_or_slice = meet;
+                }
+              else
+                gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+            }
+          else
+            gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+        }
 
       if (state_attr)
         {
@@ -11138,6 +11245,43 @@ paint_shape (Shape        *shape,
 /* {{{ GtkSymbolicPaintable implementation */
 
 static void
+compute_viewport_transform (GtkSvg *self,
+                            const graphene_rect_t *vb,
+                            double e_x, double e_y,
+                            double e_width, double e_height,
+                            double *scale_x, double *scale_y,
+                            double *translate_x, double *translate_y)
+{
+  double sx, sy, tx, ty;
+
+  sx = e_width / vb->size.width;
+  sy = e_height / vb->size.height;
+
+  if (self->align != 0 && self->meet_or_slice == MEET)
+    sx = sy = MIN (sx, sy);
+  else if (self->align != 0 && self->meet_or_slice == SLICE)
+    sx = sy = MAX (sx, sy);
+
+  tx = e_x - vb->origin.x * sx;
+  ty = e_y - vb->origin.y * sy;
+
+  if (ALIGN_GET_X (self->align) == ALIGN_MID)
+    tx += (e_width - vb->size.width * sx) / 2;
+  else if (ALIGN_GET_X (self->align) == ALIGN_MAX)
+    tx += (e_width - vb->size.width * sx);
+
+  if (ALIGN_GET_Y (self->align) == ALIGN_MID)
+    ty += (e_height - vb->size.height * sy) / 2;
+  else if (ALIGN_GET_Y (self->align) == ALIGN_MAX)
+    ty += (e_height - vb->size.height * sy);
+
+  *scale_x = sx;
+  *scale_y = sy;
+  *translate_x = tx;
+  *translate_y = ty;
+}
+
+static void
 gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               GtkSnapshot           *snapshot,
                               double                 width,
@@ -11150,9 +11294,19 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   ComputeContext compute_context;
   PaintContext paint_context;
   graphene_rect_t view_box;
+  double sx, sy, tx, ty;
+
+  if (self->view_box.size.width == 0 || self->view_box.size.height == 0)
+    graphene_rect_init (&view_box, 0, 0, self->width, self->height);
+  else
+    view_box = self->view_box;
+
+  compute_viewport_transform (self, &view_box,
+                              0, 0, width, height,
+                              &sx, &sy, &tx, &ty);
 
   compute_context.svg = self;
-  compute_context.viewport = &self->view_box.size;
+  compute_context.viewport = &view_box.size;
   compute_context.colors = colors;
   compute_context.n_colors = n_colors;
   compute_context.current_time = self->current_time;
@@ -11161,7 +11315,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   compute_current_values_for_shape (self->content, &compute_context);
 
   paint_context.svg = self;
-  paint_context.viewport = &self->view_box.size;
+  paint_context.viewport = &view_box.size;
   paint_context.snapshot = snapshot;
   paint_context.bounds = self->bounds;
   paint_context.colors = colors;
@@ -11172,17 +11326,10 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.clip_rule = GSK_FILL_RULE_WINDING;
   paint_context.current_time = self->current_time;
 
-  if (self->view_box.size.width == 0 || self->view_box.size.height == 0)
-    graphene_rect_init (&view_box, 0, 0, self->width, self->height);
-  else
-    view_box = self->view_box;
 
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_scale (snapshot, width / view_box.size.width,
-                                height / view_box.size.height);
-  gtk_snapshot_translate (snapshot,
-                          &GRAPHENE_POINT_INIT (- view_box.origin.x,
-                                                - view_box.origin.y));
+  gtk_snapshot_scale (snapshot, sx, sy);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
 
   push_context (self->content, &paint_context);
   paint_shape (self->content, &paint_context);
@@ -11978,6 +12125,12 @@ gtk_svg_clear_content (GtkSvg *self)
 
   self->timeline = timeline_new ();
   self->content = shape_new (SHAPE_GROUP);
+
+  self->width = 0;
+  self->height = 0;
+  graphene_rect_init (&self->view_box, 0, 0, 0, 0);
+  self->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
+  self->meet_or_slice = MEET;
 
   self->state = 0;
   self->max_state = 0;
