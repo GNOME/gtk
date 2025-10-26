@@ -4,12 +4,16 @@
   <g>
     <defs>
     </defs>
-    <circle/>
-    <path/>
+    <circle>
+    </circle>
+    <path>
+    </path>
     <rect
             stroke='rgb(255,0,0)'
             width='50'
-            height='40'/>
-    <use/>
+            height='40'>
+    </rect>
+    <use>
+    </use>
   </g>
 </svg>

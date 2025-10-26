@@ -41,5 +41,6 @@
           y='50'
           width='200'
           height='100'
-          gpa:stroke-width='0.5 2 3'/>
+          gpa:stroke-width='0.5 2 3'>
+  </rect>
 </svg>

@@ -14,14 +14,16 @@
             fill-opacity='0.5'
             cx='10'
             cy='10'
-            r='5'/>
+            r='5'>
+    </circle>
     <circle
             id='circle2'
             fill='rgb(0,128,0)'
             fill-opacity='1'
             cx='20'
             cy='10'
-            r='5'/>
+            r='5'>
+    </circle>
   </defs>
   <use
           href='#circle2'>

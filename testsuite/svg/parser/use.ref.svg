@@ -6,13 +6,16 @@
             id='circle1'
             cx='1'
             cy='2'
-            r='3'/>
+            r='3'>
+    </circle>
   </defs>
   <g>
     <use
-            href='#circle1'/>
+            href='#circle1'>
+    </use>
     <use
             href='#circle1'
-            x='10'/>
+            x='10'>
+    </use>
   </g>
 </svg>

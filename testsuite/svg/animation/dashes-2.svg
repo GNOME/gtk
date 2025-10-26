@@ -37,5 +37,6 @@
   </path>
   <circle
           fill='rgb(255,0,0)'
-          r='5'/>
+          r='5'>
+  </circle>
 </svg>

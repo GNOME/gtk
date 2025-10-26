@@ -9,11 +9,13 @@
     <circle
             cx='50%'
             cy='50%'
-            r='30%'/>
+            r='30%'>
+    </circle>
     <rect
             x='0%'
             y='10%'
             width='20%'
-            height='20%'/>
+            height='20%'>
+    </rect>
   </g>
 </svg>

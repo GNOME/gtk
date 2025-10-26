@@ -10646,6 +10646,9 @@ serialize_animation (GString              *s,
                      Animation            *a,
                      GtkSvgSerializeFlags  flags)
 {
+  if ((flags & GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION))
+    return;
+
   switch (a->type)
     {
     case ANIMATION_TYPE_SET:
@@ -10672,9 +10675,6 @@ serialize_animations (GString              *s,
                       Shape                *shape,
                       GtkSvgSerializeFlags  flags)
 {
-  if (flags & GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION)
-    return;
-
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
@@ -10730,39 +10730,10 @@ serialize_leaf (GString              *s,
   g_string_append_printf (s, "<%s", shape_types[shape->type].name);
   serialize_shape_attrs (s, svg, indent, shape, flags);
   serialize_gpa_attrs (s, svg, indent, shape, flags);
-
-  if (shape->animations->len > 0)
-    {
-      g_string_append (s, ">");
-      serialize_animations (s, svg, indent + 2, shape, flags);
-      indent_for_elt (s, indent);
-      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
-    }
-  else
-   g_string_append (s, "/>");
-}
-
-static void
-serialize_use (GString              *s,
-               GtkSvg               *svg,
-               int                   indent,
-               Shape                *shape,
-               GtkSvgSerializeFlags  flags)
-{
+  g_string_append (s, ">");
+  serialize_animations (s, svg, indent + 2, shape, flags);
   indent_for_elt (s, indent);
-  g_string_append (s, "<use");
-  serialize_shape_attrs (s, svg, indent, shape, flags);
-  serialize_gpa_attrs (s, svg, indent, shape, flags);
-
-  if (shape->animations->len > 0)
-    {
-      g_string_append (s, ">");
-      serialize_animations (s, svg, indent + 2, shape, flags);
-      indent_for_elt (s, indent);
-      g_string_append (s, "</use>");
-    }
-  else
-   g_string_append (s, "/>");
+  g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
 }
 
 static void
@@ -10823,8 +10794,8 @@ serialize_gradient (GString              *s,
   serialize_gpa_attrs (s, svg, indent, shape, flags);
   g_string_append (s, ">");
 
-   for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
-     serialize_color_stop (s, svg, indent + 2, shape, idx, flags);
+  for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
+    serialize_color_stop (s, svg, indent + 2, shape, idx, flags);
 
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
@@ -10857,11 +10828,8 @@ serialize_shape (GString              *s,
     case SHAPE_ELLIPSE:
     case SHAPE_RECT:
     case SHAPE_PATH:
-      serialize_leaf (s, svg, indent, shape, flags);
-      break;
-
     case SHAPE_USE:
-      serialize_use (s, svg, indent, shape, flags);
+      serialize_leaf (s, svg, indent, shape, flags);
       break;
 
     case SHAPE_LINEAR_GRADIENT:

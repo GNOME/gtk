@@ -7,13 +7,15 @@
         <circle
                 cx='0'
                 cy='0'
-                r='1'/>
+                r='1'>
+        </circle>
       </clipPath>
       <mask>
         <circle
                 cx='1'
                 cy='1'
-                r='1'/>
+                r='1'>
+        </circle>
       </mask>
     </defs>
     <g>
@@ -21,19 +23,22 @@
         <circle
                 cx='2'
                 cy='2'
-                r='2'/>
+                r='2'>
+        </circle>
       </clipPath>
       <mask>
         <circle
                 cx='3'
                 cy='3'
-                r='3'/>
+                r='3'>
+        </circle>
       </mask>
       <rect
               x='0'
               y='0'
               width='1'
-              height='1'/>
+              height='1'>
+      </rect>
     </g>
   </g>
 </svg>
