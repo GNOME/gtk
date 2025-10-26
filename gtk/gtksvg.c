@@ -105,8 +105,7 @@
  * `<polygon>`.
  *
  * In `<defs>`, only `<clipPath>`, `<mask>`, `<linearGradient>` and
- * shapes are supported, not `<filter>`, `<radialGradient>`,
- * `<pattern>` or other things.
+ * shapes are supported, not `<filter>`, `<pattern>` or other things.
  *
  * The support for filters is limited to filter functions minus
  * `drop-shadow()` plus a custom `alpha-level()` function, which
@@ -160,6 +159,7 @@ typedef enum
   SHAPE_DEFS,
   SHAPE_USE,
   SHAPE_LINEAR_GRADIENT,
+  SHAPE_RADIAL_GRADIENT,
 } ShapeType;
 
 typedef enum
@@ -200,6 +200,9 @@ typedef enum
   SHAPE_ATTR_Y2,
   SHAPE_ATTR_SPREAD_METHOD,
   SHAPE_ATTR_GRADIENT_UNITS,
+  SHAPE_ATTR_FX,
+  SHAPE_ATTR_FY,
+  SHAPE_ATTR_FR,
   /* Things below are custom */
   SHAPE_ATTR_STROKE_MINWIDTH,
   SHAPE_ATTR_STROKE_MAXWIDTH,
@@ -4773,6 +4776,25 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 0,
     .parse_value = svg_gradient_units_parse,
   },
+  { .id = SHAPE_ATTR_FX,
+    .name = "fx",
+    .inherited = 0,
+    .discrete = 0,
+    .parse_value = parse_length_percentage,
+  },
+  { .id = SHAPE_ATTR_FY,
+    .name = "fy",
+    .inherited = 0,
+    .discrete = 0,
+    .parse_value = parse_length_percentage,
+  },
+  { .id = SHAPE_ATTR_FR,
+    .name = "fr",
+    .inherited = 0,
+    .discrete = 0,
+    .parse_value = parse_positive_length_percentage,
+    .parse_for_values = parse_length_percentage,
+  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -4847,6 +4869,9 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_Y1].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_X2].initial_value = svg_percentage_new (100);
   shape_attrs[SHAPE_ATTR_Y2].initial_value = svg_percentage_new (0);
+  shape_attrs[SHAPE_ATTR_FX].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FY].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (SPREAD_METHOD_PAD);
   shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_gradient_units_new (GRADIENT_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
@@ -5055,6 +5080,12 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 1,
   },
+  { .name = "radialGradient",
+    .has_shapes = 0,
+    .never_rendered = 1,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 1,
+  },
 };
 
 struct _Shape
@@ -5116,6 +5147,22 @@ static SvgValue *
 shape_attr_get_initial_value (ShapeAttr attr,
                               ShapeType type)
 {
+  static SvgValue *default_radial_value;
+
+  if (type == SHAPE_RADIAL_GRADIENT)
+    {
+      /* Radial gradients have conflicting initial values. Yay */
+      if (attr == SHAPE_ATTR_CX ||
+          attr == SHAPE_ATTR_CY ||
+          attr == SHAPE_ATTR_R)
+        {
+          if (!default_radial_value)
+            default_radial_value = svg_percentage_new (50);
+
+          return default_radial_value;
+        }
+    }
+
   return shape_attrs[attr].initial_value;
 }
 
@@ -5131,7 +5178,7 @@ shape_new (ShapeType type)
   shape->display = TRUE;
   shape->path_length = -1;
 
-  for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
+  for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
     shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
@@ -5155,9 +5202,9 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_USE;
     case SHAPE_ATTR_CX:
     case SHAPE_ATTR_CY:
-      return type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE;
+      return type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_R:
-      return type == SHAPE_CIRCLE;
+      return type == SHAPE_CIRCLE || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_X:
     case SHAPE_ATTR_Y:
     case SHAPE_ATTR_WIDTH:
@@ -5177,15 +5224,19 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_Y2:
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_GRADIENT_UNITS:
-      return type == SHAPE_LINEAR_GRADIENT;
+      return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
       return FALSE;
     case SHAPE_ATTR_TRANSFORM:
       return TRUE;
+    case SHAPE_ATTR_FX:
+    case SHAPE_ATTR_FY:
+    case SHAPE_ATTR_FR:
+      return type == SHAPE_RADIAL_GRADIENT;
     default:
-      return type != SHAPE_LINEAR_GRADIENT;
+      return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
 }
 
@@ -5261,6 +5312,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_DEFS:
     case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
     default:
       g_assert_not_reached ();
     }
@@ -5322,6 +5374,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_DEFS:
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
+        case SHAPE_RADIAL_GRADIENT:
         default:
           g_assert_not_reached ();
         }
@@ -5364,6 +5417,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_DEFS:
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
+        case SHAPE_RADIAL_GRADIENT:
         default:
           g_assert_not_reached ();
         }
@@ -6285,6 +6339,7 @@ shape_get_current_value (Shape        *shape,
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
+
       s = stop_ref (attr);
       stop = g_ptr_array_index (shape->color_stops, s.idx);
 
@@ -6326,6 +6381,7 @@ shape_get_base_value (Shape        *shape,
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
+
       s = stop_ref (attr);
       stop = g_ptr_array_index (shape->color_stops, s.idx);
 
@@ -9320,8 +9376,7 @@ start_element_cb (GMarkupParseContext  *context,
       skip_element (data, context, "Ignoring metadata and style elements: <%s>", element_name);
       return;
     }
-  else if (strcmp (element_name, "radialGradient") == 0 ||
-           strcmp (element_name, "filter") == 0 ||
+  else if (strcmp (element_name, "filter") == 0 ||
            strcmp (element_name, "pattern") == 0)
     {
       skip_element (data, context, "Ignoring unsupported element: <%s>", element_name);
@@ -9655,6 +9710,10 @@ start_element_cb (GMarkupParseContext  *context,
     {
       shape = shape_new (SHAPE_LINEAR_GRADIENT);
     }
+  else if (strcmp (element_name, "radialGradient") == 0)
+    {
+      shape = shape_new (SHAPE_RADIAL_GRADIENT);
+    }
   else if (strcmp (element_name, "stop") == 0)
     {
       const char *parent = g_markup_parse_context_get_element_stack (context)->next->data;
@@ -9662,9 +9721,10 @@ start_element_cb (GMarkupParseContext  *context,
       SvgValue *color = NULL;
       SvgValue *opacity = NULL;
 
-      if (strcmp (parent, "linearGradient") != 0)
+      if (strcmp (parent, "linearGradient") != 0 &&
+          strcmp (parent, "radialGradient") != 0)
         {
-          skip_element (data, context, "<stop> only allowed in <linearGradient>");
+          skip_element (data, context, "<stop> only allowed in <linearGradient> or <radialGradient>");
           return;
         }
 
@@ -9776,7 +9836,8 @@ end_element_cb (GMarkupParseContext *context,
       strcmp (element_name, "ellipse") == 0 ||
       strcmp (element_name, "rect") == 0 ||
       strcmp (element_name, "path") == 0 ||
-      strcmp (element_name, "linearGradient") == 0)
+      strcmp (element_name, "linearGradient") == 0 ||
+      strcmp (element_name, "radialGradient") == 0)
     {
       GSList *tos = data->shape_stack;
 
@@ -9864,8 +9925,9 @@ resolve_paint_ref (SvgValue   *value,
       Shape *target = g_hash_table_lookup (data->shapes, paint->gradient.ref);
       if (!target)
         gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->gradient.ref);
-      else if (target->type != SHAPE_LINEAR_GRADIENT)
-        gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a <linearGradient> (resolving fill or stroke)", paint->gradient.ref);
+      else if (target->type != SHAPE_LINEAR_GRADIENT &&
+               target->type != SHAPE_RADIAL_GRADIENT)
+        gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a gradient (resolving fill or stroke)", paint->gradient.ref);
       else
         paint->gradient.shape = target;
     }
@@ -10758,6 +10820,7 @@ serialize_shape (GString              *s,
       break;
 
     case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
       serialize_gradient (s, svg, indent, shape, flags);
       break;
 
@@ -10969,9 +11032,9 @@ pop_context (Shape        *shape,
 }
 
 static void
-paint_gradient (Shape                 *gradient,
-                const graphene_rect_t *bounds,
-                PaintContext          *context)
+paint_linear_gradient (Shape                 *gradient,
+                       const graphene_rect_t *bounds,
+                       PaintContext          *context)
 {
   graphene_point_t start, end;
   GskColorStop *stops;
@@ -11038,6 +11101,101 @@ paint_gradient (Shape                 *gradient,
     default:
       g_assert_not_reached ();
     }
+}
+
+static void
+paint_radial_gradient (Shape                 *gradient,
+                       const graphene_rect_t *bounds,
+                       PaintContext          *context)
+{
+  graphene_point_t center;
+  double r, fr;
+  double radius, start, end;
+  GskColorStop *stops;
+  double offset;
+  GskTransform *gradient_transform;
+  graphene_rect_t gradient_bounds;
+
+  graphene_point_init (&center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->width),
+                                svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->height));
+
+  if ((((gradient->attrs & BIT (SHAPE_ATTR_FX)) != 0 &&
+        svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->width) != center.x)) ||
+      (((gradient->attrs & BIT (SHAPE_ATTR_FY)) != 0 &&
+        svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->height) != center.y)))
+    gtk_svg_rendering_error (context->svg, "non-concentric radial gradients are not implemented");
+
+  r = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
+  fr = svg_number_get (gradient->current[SHAPE_ATTR_FR], normalized_diagonal (context->viewport));
+
+  radius = MAX (r, fr);
+  start = fr / radius;
+  end = r / radius;
+
+  stops = g_newa (GskColorStop, gradient->color_stops->len);
+  offset = 0;
+  for (unsigned int i = 0; i < gradient->color_stops->len; i++)
+    {
+      ColorStop *cs = g_ptr_array_index (gradient->color_stops, i);
+      SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+
+      g_assert (stop_color->kind == PAINT_COLOR);
+      stops[i].offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
+      stops[i].color = stop_color->color;
+      stops[i].color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      offset = stops[i].offset;
+    }
+
+  gtk_snapshot_save (context->snapshot);
+
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == GRADIENT_UNITS_OBJECT_BOUNDING_BOX)
+    {
+      gtk_snapshot_translate (context->snapshot, &bounds->origin);
+      gtk_snapshot_scale (context->snapshot,  bounds->size.width, bounds->size.height);
+      graphene_rect_init (&gradient_bounds, 0, 0, 1, 1);
+    }
+  else
+    graphene_rect_init_from_rect (&gradient_bounds, bounds);
+
+  gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_TRANSFORM]);
+  gtk_snapshot_transform (context->snapshot, gradient_transform);
+  gsk_transform_unref (gradient_transform);
+
+  switch (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]))
+    {
+    case SPREAD_METHOD_PAD:
+      gtk_snapshot_append_radial_gradient (context->snapshot,
+                                           &gradient_bounds,
+                                           &center, radius, radius,
+                                           start, end,
+                                           stops, gradient->color_stops->len);
+      break;
+    case SPREAD_METHOD_REFLECT:
+      gtk_svg_rendering_error (context->svg, "the 'reflect' spreadMethod is not implemented");
+      G_GNUC_FALLTHROUGH;
+    case SPREAD_METHOD_REPEAT:
+      gtk_snapshot_append_repeating_radial_gradient (context->snapshot,
+                                                     &gradient_bounds,
+                                                     &center, radius, radius,
+                                                     start, end,
+                                                     stops, gradient->color_stops->len);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  gtk_snapshot_restore (context->snapshot);
+}
+
+static void
+paint_gradient (Shape                 *gradient,
+                const graphene_rect_t *bounds,
+                PaintContext          *context)
+{
+  if (gradient->type == SHAPE_LINEAR_GRADIENT)
+    paint_linear_gradient (gradient, bounds, context);
+  else
+    paint_radial_gradient (gradient, bounds, context);
 }
 
 static GskStroke *

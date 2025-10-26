@@ -1,0 +1,57 @@
+<svg
+        width='300'
+        height='200'
+        viewBox='0 0 300 200'>
+  <defs>
+    <radialGradient
+            id='MyGradient'
+            cx='0.5'
+            cy='0.5'
+            r='0.5'
+            spreadMethod='pad'
+            gradientUnits='objectBoundingBox'
+            fx='0.6'
+            fy='0.6'
+            fr='0.2'>
+      <stop
+              offset='0'
+              stop-color='rgb(0,128,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='0'
+              stop-color='rgb(255,0,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='0.5'
+              stop-color='rgb(255,0,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='0.5'
+              stop-color='rgb(255,255,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='0.99'
+              stop-color='rgb(255,255,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='1'
+              stop-color='rgb(0,0,255)'
+              stop-opacity='1'>
+      </stop>
+    </radialGradient>
+  </defs>
+  <rect
+          fill='url(#MyGradient)'
+          stroke='rgb(0,0,0)'
+          stroke-width='2'
+          x='50'
+          y='50'
+          width='200'
+          height='100'
+          gpa:stroke-width='0.5 2 3'/>
+</svg>
