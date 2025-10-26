@@ -200,7 +200,6 @@ typedef enum
   SHAPE_ATTR_Y2,
   SHAPE_ATTR_SPREAD_METHOD,
   SHAPE_ATTR_GRADIENT_UNITS,
-  SHAPE_ATTR_GRADIENT_TRANSFORM,
   /* Things below are custom */
   SHAPE_ATTR_STROKE_MINWIDTH,
   SHAPE_ATTR_STROKE_MAXWIDTH,
@@ -4704,13 +4703,6 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 0,
     .parse_value = svg_gradient_units_parse,
   },
-  { .id = SHAPE_ATTR_GRADIENT_TRANSFORM,
-    .name = "gradientTransform",
-    .inherited = 0,
-    .discrete = 0,
-    .presentation = 1,
-    .parse_value = svg_transform_parse,
-  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -4787,7 +4779,6 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_Y2].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (SPREAD_METHOD_PAD);
   shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_gradient_units_new (GRADIENT_UNITS_OBJECT_BOUNDING_BOX);
-  shape_attrs[SHAPE_ATTR_GRADIENT_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -4800,6 +4791,10 @@ find_shape_attr (const char *name,
                  ShapeAttr  *attr,
                  ShapeType   type)
 {
+  if (type == SHAPE_LINEAR_GRADIENT &&
+      strcmp (name, "gradientTransform") == 0)
+    name = "transform";
+
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
       if (strcmp (name, shape_attrs[i].name) == 0)
@@ -4809,6 +4804,17 @@ find_shape_attr (const char *name,
         }
     }
   return FALSE;
+}
+
+static const char *
+shape_attr_get_presentation (ShapeAttr attr,
+                             ShapeType type)
+{
+  if (type == SHAPE_LINEAR_GRADIENT &&
+      attr == SHAPE_ATTR_TRANSFORM)
+    return "gradientTransform";
+
+  return shape_attrs[attr].name;
 }
 
 static SvgValue *
@@ -5101,12 +5107,13 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_Y2:
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_GRADIENT_UNITS:
-    case SHAPE_ATTR_GRADIENT_TRANSFORM:
       return type == SHAPE_LINEAR_GRADIENT;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
       return FALSE;
+    case SHAPE_ATTR_TRANSFORM:
+      return TRUE;
     default:
       return type != SHAPE_LINEAR_GRADIENT;
     }
@@ -6912,7 +6919,10 @@ compute_value_at_time (Animation      *a,
         }
       if (ival == NULL)
         {
-          gtk_svg_update_error (context->svg, "Failed to interpolate %s value (animation %s)", shape_attrs[a->attr].name, a->id);
+          gtk_svg_update_error (context->svg,
+                                "Failed to interpolate %s value (animation %s)",
+                                shape_attr_get_presentation (a->attr, a->shape->type),
+                                a->id);
           ival = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
         }
 
@@ -6926,7 +6936,10 @@ compute_value_at_time (Animation      *a,
 
           if (aval == NULL)
             {
-              gtk_svg_update_error (context->svg, "Failed to accumulate %s value (animation %s)", shape_attrs[a->attr].name, a->id);
+              gtk_svg_update_error (context->svg,
+                                    "Failed to accumulate %s value (animation %s)",
+                                    shape_attr_get_presentation (a->attr, a->shape->type),
+                                    a->id);
               aval = svg_value_ref (ival);
             }
 
@@ -8571,14 +8584,17 @@ parse_style_attr (Shape               *shape,
       name = consume_ident (&p);
       if (!name)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': expected identifier");
+          gtk_svg_invalid_attribute (data->svg, context,
+                                     "style", "while parsing 'style': expected identifier");
           skip_past_semicolon (&p);
           continue;
         }
 
       if (!find_shape_attr (name, &attr, shape->type))
         {
-          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': unsupported property '%s'", name);
+          gtk_svg_invalid_attribute (data->svg, context,
+                                     "style", "while parsing 'style': unsupported property '%s'",
+                                     name);
           g_free (name);
           skip_past_semicolon (&p);
           continue;
@@ -8588,14 +8604,17 @@ parse_style_attr (Shape               *shape,
 
       if (!consume_colon (&p))
         {
-          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': expected ':' after '%s'", shape_attrs[attr].name);
+          gtk_svg_invalid_attribute (data->svg, context,
+                                     "style", "while parsing 'style': expected ':' after '%s'",
+                                     shape_attr_get_presentation (attr, shape->type));
           skip_past_semicolon (&p);
           continue;
         }
 
       if (!*p)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "style", "while parsing 'style': value expected after ':'");
+          gtk_svg_invalid_attribute (data->svg, context,
+                                     "style", "while parsing 'style': value expected after ':'");
           break;
         }
 
@@ -8603,7 +8622,10 @@ parse_style_attr (Shape               *shape,
       value = shape_attr_parse_value (attr, prop_val);
       if (!value)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "style", "failed to parse '%s' value '%s'", shape_attrs[attr].name, prop_val);
+          gtk_svg_invalid_attribute (data->svg, context,
+                                     "style", "failed to parse '%s' value '%s'",
+                                     shape_attr_get_presentation (attr, shape->type),
+                                     prop_val);
         }
       else
         {
@@ -9979,7 +10001,7 @@ serialize_shape_attrs (GString              *s,
                !svg_value_equal (value, shape_attr_get_initial_value (attr, shape->type))))
             {
               indent_for_attr (s, indent);
-              g_string_append_printf (s, "%s='", shape_attrs[attr].name);
+              g_string_append_printf (s, "%s='", shape_attr_get_presentation (attr, shape->type));
               svg_value_print (value, s);
               g_string_append (s, "'");
             }
@@ -10049,7 +10071,8 @@ serialize_base_animation_attrs (GString   *s,
   if (a->type != ANIMATION_TYPE_MOTION)
     {
       indent_for_attr (s, indent);
-      g_string_append_printf (s, "attributeName='%s'", shape_attrs[a->attr].name);
+      g_string_append_printf (s, "attributeName='%s'",
+                              shape_attr_get_presentation (a->attr, a->shape->type));
     }
 
   if (a->has_begin)
@@ -10884,7 +10907,7 @@ paint_gradient (Shape                 *gradient,
                            svg_number_get (gradient->current[SHAPE_ATTR_Y2], context->viewport->height));
     }
 
-  gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_GRADIENT_TRANSFORM]);
+  gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_TRANSFORM]);
   transform = gsk_transform_transform (transform, gradient_transform);
   gsk_transform_unref (gradient_transform);
   transform_gradient_line (transform, &start, &end, &start, &end);
