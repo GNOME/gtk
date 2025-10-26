@@ -104,8 +104,11 @@
  * `<path>` are supported, leaving out `<line>`, `<polyline>` and
  * `<polygon>`.
  *
- * In `<defs>`, only `<clipPath>`, `<mask>`, `<linearGradient>` and
- * shapes are supported, not `<filter>`, `<pattern>` or other things.
+ * In `<defs>`, only `<clipPath>`, `<mask>`, gradients and shapes are
+ * supported, not `<filter>`, `<pattern>` or other things.
+ *
+ * Gradient templating is not implemented, and radial gradients with
+ * `fx,fy != cx,cy` are not supported.
  *
  * The support for filters is limited to filter functions minus
  * `drop-shadow()` plus a custom `alpha-level()` function, which
@@ -127,9 +130,10 @@
  * paintable. GTK will drop things that it can't handle and try to make
  * sense of the rest.
  *
- * To track errors, connect to the [signal@Gtk.Svg::error] signal.
+ * To track errors during parsing or rednering, connect to the
+ * [signal@Gtk.Svg::error] signal.
  *
- * For errors in the `GTK_SVG_ERROR` domain, the functions
+ * For parsing errors in the `GTK_SVG_ERROR` domain, the functions
  * [func@Gtk.SvgError.get_start], [func@Gtk.SvgError.get_end],
  * [func@Gtk.SvgError.get_element] and [func@Gtk.SvgError.get_attribute]
  * can be used to obtain information about where the error occurred.
