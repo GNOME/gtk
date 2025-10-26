@@ -4,6 +4,6 @@
   <g fill='blue'>
     <circle id='p' cx='10' cy='10' r='10'/>
     <animate id='fill' href='p' attributeName='fill' begin='0'
-         values='red;rgb(0,255,0);url(#gpa:foreground);inherit;none;red' dur='10s' fill='freeze'/>
+         values='red;rgb(0,255,0);url(#gpa:foreground);blue;none;red' dur='10s' fill='freeze'/>
   </g>
 </svg>
