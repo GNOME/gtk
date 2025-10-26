@@ -11005,7 +11005,7 @@ push_context (Shape        *shape,
       pop_op (context);
     }
 
-  if (tf->n_transforms > 0)
+  if (tf->transforms[0].type != TRANSFORM_NONE)
     {
       GskTransform *transform;
 
@@ -11026,7 +11026,7 @@ pop_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
 
-  if (tf->n_transforms > 0)
+  if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
 
   if (svg_number_get (opacity, 1) != 1)
