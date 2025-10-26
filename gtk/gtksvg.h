@@ -40,14 +40,14 @@ GDK_AVAILABLE_IN_4_22
 GtkSvg *         gtk_svg_new               (void);
 
 GDK_AVAILABLE_IN_4_22
-void             gtk_svg_load_from_bytes   (GtkSvg        *self,
-                                            GBytes        *bytes);
-
-GDK_AVAILABLE_IN_4_22
 GtkSvg *         gtk_svg_new_from_bytes    (GBytes        *bytes);
 
 GDK_AVAILABLE_IN_4_22
 GtkSvg *         gtk_svg_new_from_resource (const char    *path);
+
+GDK_AVAILABLE_IN_4_22
+void             gtk_svg_load_from_bytes   (GtkSvg        *self,
+                                            GBytes        *bytes);
 
 GDK_AVAILABLE_IN_4_22
 GBytes *         gtk_svg_serialize         (GtkSvg        *self);
