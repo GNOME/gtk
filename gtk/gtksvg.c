@@ -10521,11 +10521,11 @@ serialize_color_stop (GString              *s,
 }
 
 static void
-serialize_linear_gradient (GString              *s,
-                           GtkSvg               *svg,
-                           int                   indent,
-                           Shape                *shape,
-                           GtkSvgSerializeFlags  flags)
+serialize_gradient (GString              *s,
+                    GtkSvg               *svg,
+                    int                   indent,
+                    Shape                *shape,
+                    GtkSvgSerializeFlags  flags)
 {
   indent_for_elt (s, indent);
   g_string_append_printf (s, "<%s", shape_types[shape->type].name);
@@ -10575,7 +10575,7 @@ serialize_shape (GString              *s,
       break;
 
     case SHAPE_LINEAR_GRADIENT:
-      serialize_linear_gradient (s, svg, indent, shape, flags);
+      serialize_gradient (s, svg, indent, shape, flags);
       break;
 
     default:
