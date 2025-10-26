@@ -147,6 +147,9 @@
 
 #define INDEFINITE G_MAXINT64
 
+/* Max. nesting level of paint calls we allow */
+#define MAX_DEPTH 256
+
 #define DEBUG
 
 typedef enum
@@ -10856,6 +10859,7 @@ typedef struct
   RenderOp op;
   GskFillRule clip_rule;
   GSList *op_stack;
+  int depth;
 } PaintContext;
 
 static void
@@ -11413,9 +11417,20 @@ render_shape (Shape        *shape,
   if (context->op == RENDERING && shape_types[shape->type].never_rendered)
     return;
 
+  context->depth++;
+  if (context->depth > MAX_DEPTH)
+    {
+      gtk_svg_rendering_error (context->svg,
+                               "excessive rendering depth (> %d), aborting",
+                               MAX_DEPTH);
+      return;
+    }
+
   push_context (shape, context);
   paint_shape (shape, context);
   pop_context (shape, context);
+
+  context->depth--;
 }
 
 /* }}} */
@@ -11502,7 +11517,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.op_stack = NULL;
   paint_context.clip_rule = GSK_FILL_RULE_WINDING;
   paint_context.current_time = self->current_time;
-
+  paint_context.depth = 0;
 
   gtk_snapshot_save (snapshot);
   gtk_snapshot_scale (snapshot, sx, sy);
