@@ -4912,9 +4912,9 @@ shape_attr_init_default_values (void)
 }
 
 static gboolean
-find_shape_attr (const char *name,
-                 ShapeAttr  *attr,
-                 ShapeType   type)
+shape_attr_lookup (const char *name,
+                   ShapeAttr  *attr,
+                   ShapeType   type)
 {
   if (type == SHAPE_LINEAR_GRADIENT &&
       strcmp (name, "gradientTransform") == 0)
@@ -8359,7 +8359,7 @@ parse_base_animation_attrs (Animation            *a,
       gtk_svg_missing_attribute (data->svg, context, "attributeName", NULL);
       return FALSE;
     }
-  else if (!find_shape_attr (attr_name_attr, &a->attr, data->current_shape->type))
+  else if (!shape_attr_lookup (attr_name_attr, &a->attr, data->current_shape->type))
     {
       gtk_svg_missing_attribute (data->svg, context, "attributeName", "can't animate '%s'", attr_name_attr);
       return FALSE;
@@ -8777,7 +8777,7 @@ parse_style_attr (Shape               *shape,
           continue;
         }
 
-      if (!find_shape_attr (name, &attr, shape->type))
+      if (!shape_attr_lookup (name, &attr, shape->type))
         {
           gtk_svg_invalid_attribute (data->svg, context,
                                      "style", "while parsing 'style': unsupported property '%s'",
@@ -8870,7 +8870,7 @@ parse_shape_attrs (Shape                *shape,
           shape->display = strcmp (attr_values[i], "none") != 0;
           *handled |= BIT (i);
         }
-      else if (find_shape_attr (attr_names[i], &attr, shape->type))
+      else if (shape_attr_lookup (attr_names[i], &attr, shape->type))
         {
           if (!shape_has_attr (shape->type, attr))
             {
