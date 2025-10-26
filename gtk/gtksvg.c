@@ -2830,29 +2830,6 @@ svg_paint_print_gpa (const SvgValue *value,
     }
 }
 
-static void
-paint_get_rgba (const SvgPaint *paint,
-                const GdkRGBA  *colors,
-                size_t          n_colors,
-                GdkRGBA        *color)
-{
-  if (paint->kind == PAINT_SYMBOLIC)
-    {
-      if (paint->symbolic < n_colors)
-        *color = colors[paint->symbolic];
-      else
-        *color = colors[GTK_SYMBOLIC_COLOR_FOREGROUND];
-    }
-  else if (paint->kind == PAINT_COLOR)
-    {
-      *color = paint->color;
-    }
-  else
-    {
-      memset (color, 0, sizeof (GdkRGBA));
-    }
-}
-
 static SvgValue *
 svg_paint_resolve (SvgValue      *value,
                    const GdkRGBA *colors,
