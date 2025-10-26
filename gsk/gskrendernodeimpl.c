@@ -80,6 +80,15 @@ color_state_is_hdr (GdkColorState *color_state)
          rendering_cs != GDK_COLOR_STATE_SRGB_LINEAR;
 }
 
+static gboolean
+has_empty_clip (cairo_t *cr)
+{
+  double x1, y1, x2, y2;
+
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+  return x1 >= x2 || y1 >= y2;
+}
+
 /* apply a rectangle that bounds @rect in
  * pixel-aligned device coordinates.
  *
@@ -2942,15 +2951,6 @@ gsk_inset_shadow_node_finalize (GskRenderNode *node)
   gdk_color_finish (&self->color);
 
   parent_class->finalize (node);
-}
-
-static gboolean
-has_empty_clip (cairo_t *cr)
-{
-  double x1, y1, x2, y2;
-
-  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-  return x1 >= x2 || y1 >= y2;
 }
 
 static void
