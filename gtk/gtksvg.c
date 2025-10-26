@@ -10783,11 +10783,6 @@ paint_gradient (Shape                 *gradient,
   double offset;
   GskTransform *transform, *gradient_transform;
 
-  graphene_point_init (&start, svg_number_get (gradient->current[SHAPE_ATTR_X1], 1),
-                               svg_number_get (gradient->current[SHAPE_ATTR_Y1], 1));
-  graphene_point_init (&end, svg_number_get (gradient->current[SHAPE_ATTR_X2], 1),
-                             svg_number_get (gradient->current[SHAPE_ATTR_Y2], 1));
-
   stops = g_newa (GskColorStop, gradient->color_stops->len);
   offset = 0;
   for (unsigned int i = 0; i < gradient->color_stops->len; i++)
@@ -10807,6 +10802,21 @@ paint_gradient (Shape                 *gradient,
     {
       transform = gsk_transform_translate (transform, &bounds->origin);
       transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
+      graphene_point_init (&start,
+                           svg_number_get (gradient->current[SHAPE_ATTR_X1], 1),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], 1));
+      graphene_point_init (&end,
+                           svg_number_get (gradient->current[SHAPE_ATTR_X2], 1),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], 1));
+    }
+  else
+    {
+      graphene_point_init (&start,
+                           svg_number_get (gradient->current[SHAPE_ATTR_X1], context->viewport->width),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], context->viewport->height));
+      graphene_point_init (&end,
+                           svg_number_get (gradient->current[SHAPE_ATTR_X2], context->viewport->width),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], context->viewport->height));
     }
 
   gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_GRADIENT_TRANSFORM]);
