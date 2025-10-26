@@ -8600,9 +8600,9 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
   else if (strcmp (element_name, "style") == 0 ||
-           g_str_has_prefix (element_name, "title") ||
-           g_str_has_prefix (element_name, "desc") ||
-           g_str_has_prefix (element_name, "metadata") ||
+           strcmp (element_name, "title") == 0 ||
+           strcmp (element_name, "desc") == 0 ||
+           strcmp (element_name, "metadata") == 0 ||
            g_str_has_prefix (element_name, "sodipodi:") ||
            g_str_has_prefix (element_name, "inkscape:"))
     {
