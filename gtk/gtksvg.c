@@ -11251,12 +11251,27 @@ gtk_svg_get_intrinsic_height (GdkPaintable *paintable)
   return ceil (self->height);
 }
 
+static double
+gtk_svg_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
+{
+  GtkSvg *self = GTK_SVG (paintable);
+
+  if (self->width > 0 && self->height > 0)
+    return self->width / self->height;
+
+  if (self->view_box.size.width > 0 && self->view_box.size.height > 0)
+    return self->view_box.size.width / self->view_box.size.height;
+
+  return 0;
+}
+
 static void
 gtk_svg_init_paintable_interface (GdkPaintableInterface *iface)
 {
   iface->snapshot = gtk_svg_snapshot;
   iface->get_intrinsic_width = gtk_svg_get_intrinsic_width;
   iface->get_intrinsic_height = gtk_svg_get_intrinsic_height;
+  iface->get_intrinsic_aspect_ratio = gtk_svg_get_intrinsic_aspect_ratio;
 }
 
 /* }}} */
