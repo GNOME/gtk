@@ -4993,6 +4993,13 @@ shape_free (gpointer data)
 
 static void animation_free (gpointer data);
 
+static SvgValue *
+shape_attr_get_initial_value (ShapeAttr attr,
+                              ShapeType type)
+{
+  return shape_attrs[attr].initial_value;
+}
+
 static Shape *
 shape_new (ShapeType type)
 {
@@ -5006,7 +5013,7 @@ shape_new (ShapeType type)
   shape->path_length = -1;
 
   for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
-    shape->base[attr] = svg_value_ref (shape_attrs[attr].initial_value);
+    shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
 
@@ -5272,16 +5279,15 @@ shape_add_color_stop (Shape    *shape,
   stop = g_new0 (ColorStop, 1);
 
   if (!offset)
-    offset = shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value;
+    offset = shape_attr_get_initial_value (SHAPE_ATTR_STOP_OFFSET, shape->type);
   stop->base[COLOR_STOP_OFFSET] = svg_value_ref (offset);
 
   if (!color)
-    color = shape_attrs[SHAPE_ATTR_STOP_COLOR].initial_value;
+    color = shape_attr_get_initial_value (SHAPE_ATTR_STOP_COLOR, shape->type);
   stop->base[COLOR_STOP_COLOR] = svg_value_ref (color);
 
   if (!opacity)
-    opacity = shape_attrs[SHAPE_ATTR_STOP_OPACITY].initial_value;
-
+    opacity = shape_attr_get_initial_value (SHAPE_ATTR_STOP_OPACITY, shape->type);
   stop->base[COLOR_STOP_OPACITY] = svg_value_ref (opacity);
 
   g_ptr_array_add (shape->color_stops, stop);
@@ -6178,18 +6184,18 @@ shape_get_base_value (Shape        *shape,
           if (parent && shape_attrs[attr].inherited)
             return parent->current[attr];
           else
-            return shape_attrs[attr].initial_value;
+            return shape_attr_get_initial_value (attr, shape->type);
         }
       else if (svg_value_is_inherit (shape->base[attr]))
         {
           if (parent)
             return parent->current[attr];
           else
-            return shape_attrs[attr].initial_value;
+            return shape_attr_get_initial_value (attr, shape->type);
         }
       else if (svg_value_is_initial (shape->base[attr]))
         {
-          return shape_attrs[attr].initial_value;
+          return shape_attr_get_initial_value (attr, shape->type);
         }
 
       return shape->base[attr];
@@ -6801,14 +6807,14 @@ resolve_value (Shape           *shape,
 {
   if (svg_value_is_initial (value))
     {
-      return svg_value_ref (shape_attrs[attr].initial_value);
+      return svg_value_ref (shape_attr_get_initial_value (attr, shape->type));
     }
   else if (svg_value_is_inherit (value))
     {
       if (context->parent)
         return svg_value_ref (context->parent->current[attr]);
       else
-        return svg_value_ref (shape_attrs[attr].initial_value);
+        return svg_value_ref (shape_attr_get_initial_value (attr, shape->type));
     }
   else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
     {
@@ -7016,10 +7022,10 @@ shape_init_current_values (Shape          *shape,
 {
   for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
     {
-      SvgValue *value;
-
       if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
         {
+          SvgValue *value;
+
           value = resolve_value (shape, context, attr,
                                  shape_get_base_value (shape, context->parent, attr));
           shape_set_current_value (shape, attr, value);
@@ -7035,6 +7041,7 @@ shape_init_current_values (Shape          *shape,
           for (StopProperties prop = 0; prop < N_STOP_PROPS; prop++)
             {
               SvgValue *value;
+
               value = resolve_value (shape, context, attr,
                                      shape_get_base_value (shape, NULL, attr));
               shape_set_current_value (shape, attr, value);
@@ -9925,8 +9932,8 @@ serialize_shape_attrs (GString              *s,
             value = shape_get_base_value (shape, NULL, attr);
 
           if (value &&
-              ((shape->attrs & BIT (attr)) ||
-               !svg_value_equal (value, shape_attrs[attr].initial_value)))
+              ((shape->attrs & BIT (attr)) != 0 ||
+               !svg_value_equal (value, shape_attr_get_initial_value (attr, shape->type))))
             {
               indent_for_attr (s, indent);
               g_string_append_printf (s, "%s='", shape_attrs[attr].name);
