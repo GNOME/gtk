@@ -9802,6 +9802,32 @@ serialize_animation_motion (GString              *s,
 }
 
 static void
+serialize_animation (GString              *s,
+                     GtkSvg               *svg,
+                     int                   indent,
+                     Animation            *a,
+                     GtkSvgSerializeFlags  flags)
+{
+  switch (a->type)
+    {
+    case ANIMATION_TYPE_SET:
+      serialize_animation_set (s, svg, indent, a, flags);
+      break;
+    case ANIMATION_TYPE_ANIMATE:
+      serialize_animation_animate (s, svg, indent, a, flags);
+      break;
+    case ANIMATION_TYPE_TRANSFORM:
+      serialize_animation_transform (s, svg, indent, a, flags);
+      break;
+    case ANIMATION_TYPE_MOTION:
+      serialize_animation_motion (s, svg, indent, a, flags);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
 serialize_animations (GString              *s,
                       GtkSvg               *svg,
                       int                   indent,
@@ -9814,23 +9840,7 @@ serialize_animations (GString              *s,
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
-      switch (a->type)
-        {
-        case ANIMATION_TYPE_SET:
-          serialize_animation_set (s, svg, indent, a, flags);
-          break;
-        case ANIMATION_TYPE_ANIMATE:
-          serialize_animation_animate (s, svg, indent, a, flags);
-          break;
-        case ANIMATION_TYPE_TRANSFORM:
-          serialize_animation_transform (s, svg, indent, a, flags);
-          break;
-        case ANIMATION_TYPE_MOTION:
-          serialize_animation_motion (s, svg, indent, a, flags);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
+      serialize_animation (s, svg, indent, a, flags);
     }
 }
 
