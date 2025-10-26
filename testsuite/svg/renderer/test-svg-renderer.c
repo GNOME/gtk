@@ -25,7 +25,7 @@
 #include "testsuite/testutils.h"
 
 static char *
-test_get_reference_file (const char *svg_file)
+test_get_sibling_file (const char *svg_file, const char *ext)
 {
   GString *file = g_string_new (NULL);
 
@@ -34,39 +34,101 @@ test_get_reference_file (const char *svg_file)
   else
     g_string_append (file, svg_file);
 
-  g_string_append (file, ".nodes");
+  g_string_append (file, ext);
 
   if (!g_file_test (file->str, G_FILE_TEST_EXISTS))
     {
       g_string_free (file, TRUE);
-      return g_strdup (svg_file);
+      return NULL;
     }
 
   return g_string_free (file, FALSE);
 }
 
 static void
+add_error_context (const GError *error,
+                   GString      *string)
+{
+  if (error->domain == GTK_SVG_ERROR)
+    {
+      const GtkSvgLocation *start = gtk_svg_error_get_start (error);
+      const GtkSvgLocation *end = gtk_svg_error_get_end (error);
+      const char *element = gtk_svg_error_get_element (error);
+      const char *attribute = gtk_svg_error_get_attribute (error);
+
+      if (start)
+        {
+          if (end->lines != start->lines || end->line_chars != start->line_chars)
+            g_string_append_printf (string,
+                                    "%lu.%lu - %lu.%lu: ",
+                                    start->lines, start->line_chars,
+                                    end->lines, end->line_chars);
+          else
+            g_string_append_printf (string,
+                                    "%lu.%lu: ",
+                                    start->lines, start->line_chars);
+        }
+
+      if (element && attribute)
+        g_string_append_printf (string, "(%s / %s): ", element, attribute);
+      else if (element)
+        g_string_append_printf (string, "(%s): ", element);
+    }
+}
+
+static void
+error_cb (GtkSvg       *svg,
+          const GError *error,
+          GString      *errors)
+{
+  add_error_context (error,errors);
+
+  if (error->domain == GTK_SVG_ERROR)
+    {
+      GEnumClass *class = g_type_class_get (GTK_TYPE_SVG_ERROR);
+      GEnumValue *value = g_enum_get_value (class, error->code);
+      g_string_append (errors, value->value_name);
+    }
+  else
+    {
+      g_string_append_printf (errors,
+                              "%s %u",
+                              g_quark_to_string (error->domain),
+                              error->code);
+    }
+
+  g_string_append_c (errors, '\n');
+}
+
+static void
 render_svg_file (GFile *file, gboolean generate)
 {
   GtkSvg *svg;
-  char *svg_file, *reference_file;
+  char *svg_file;
+  char *reference_file;
+  char *errors_file;
   char *contents;
   size_t length;
   GBytes *bytes;
   char *diff;
-  GError *error = NULL;
   GtkSnapshot *snapshot;
   GskRenderNode *node;
+  GString *errors;
+  GError *error = NULL;
+
+  errors = g_string_new ("");
 
   svg_file = g_file_get_path (file);
 
   if (!g_file_get_contents (svg_file, &contents, &length, &error))
     g_error ("%s", error->message);
 
+  svg = gtk_svg_new ();
+  g_signal_connect (svg, "error", G_CALLBACK (error_cb), errors);
+
   bytes = g_bytes_new_take (contents, length);
-  svg = gtk_svg_new_from_bytes (bytes);
-  g_bytes_unref (bytes);
-  g_assert_no_error (error);
+  gtk_svg_load_from_bytes (svg, bytes);
+  g_clear_pointer (&bytes, g_bytes_unref);
 
   gtk_svg_play (svg);
 
@@ -89,7 +151,7 @@ render_svg_file (GFile *file, gboolean generate)
       goto out;
     }
 
-  reference_file = test_get_reference_file (svg_file);
+  reference_file = test_get_sibling_file (svg_file, ".nodes");
 
   diff = diff_bytes_with_file (reference_file, bytes, &error);
   g_assert_no_error (error);
@@ -100,11 +162,30 @@ render_svg_file (GFile *file, gboolean generate)
       g_test_fail ();
     }
   g_free (reference_file);
-  g_free (diff);
+  g_clear_pointer (&diff,g_free);
+
+  errors_file = test_get_sibling_file (svg_file, ".errors");
+  if (errors_file)
+    {
+      diff = diff_string_with_file (errors_file, errors->str, errors->len, &error);
+      g_assert_no_error (error);
+
+      if (diff && diff[0])
+        {
+          g_test_message ("Errors don't match expected errors:\n%s", diff);
+          g_test_fail ();
+        }
+      g_free (diff);
+    }
+  else
+    g_assert_true (errors->len == 0);
+
+  g_free (errors_file);
 
 out:
-  g_bytes_unref (bytes);
+  g_string_free (errors, TRUE);
   g_free (svg_file);
+  g_clear_pointer (&bytes, g_bytes_unref);
   g_object_unref (svg);
 }
 
