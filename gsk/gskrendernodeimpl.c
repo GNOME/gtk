@@ -98,6 +98,92 @@ has_empty_clip (cairo_t *cr)
   return x1 >= x2 || y1 >= y2;
 }
 
+static gboolean
+gsk_porter_duff_is_bound_by_source (GskPorterDuff porter_duff)
+{
+  switch (porter_duff)
+    {
+      case GSK_PORTER_DUFF_DEST: /* this is a no-op */
+      case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+      case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+      case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+      case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+      case GSK_PORTER_DUFF_XOR:
+        return TRUE;
+
+      case GSK_PORTER_DUFF_SOURCE:
+      case GSK_PORTER_DUFF_SOURCE_IN_DEST:
+      case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+      case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+      case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+      case GSK_PORTER_DUFF_CLEAR:
+        return FALSE;
+
+      default:
+        g_return_val_if_reached (TRUE);
+    }
+}
+
+static cairo_operator_t
+gsk_porter_duff_to_cairo_operator (GskPorterDuff porter_duff)
+{
+  switch (porter_duff)
+    {
+      case GSK_PORTER_DUFF_SOURCE:
+        return CAIRO_OPERATOR_SOURCE;
+      case GSK_PORTER_DUFF_DEST:
+        return CAIRO_OPERATOR_DEST;
+      case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+        return CAIRO_OPERATOR_OVER;
+      case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+        return CAIRO_OPERATOR_DEST_OVER;
+      case GSK_PORTER_DUFF_SOURCE_IN_DEST:
+        return CAIRO_OPERATOR_IN;
+      case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+        return CAIRO_OPERATOR_DEST_IN;
+      case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+        return CAIRO_OPERATOR_OUT;
+      case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+        return CAIRO_OPERATOR_DEST_OUT;
+      case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+        return CAIRO_OPERATOR_ATOP;
+      case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+        return CAIRO_OPERATOR_DEST_ATOP;
+      case GSK_PORTER_DUFF_XOR:
+        return CAIRO_OPERATOR_XOR;
+      case GSK_PORTER_DUFF_CLEAR:
+        return CAIRO_OPERATOR_CLEAR;
+      default:
+        g_return_val_if_reached (CAIRO_OPERATOR_OVER);
+    }
+}
+
+static cairo_operator_t
+gsk_porter_duff_clears_background (GskPorterDuff porter_duff)
+{
+  switch (porter_duff)
+    {
+      case GSK_PORTER_DUFF_SOURCE:
+      case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+      case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+      case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+      case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+      case GSK_PORTER_DUFF_XOR:
+      case GSK_PORTER_DUFF_CLEAR:
+        return TRUE;
+
+      case GSK_PORTER_DUFF_DEST:
+      case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+      case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+      case GSK_PORTER_DUFF_SOURCE_IN_DEST:
+      case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+        return FALSE;
+
+      default:
+        g_return_val_if_reached (TRUE);
+    }
+}
+
 /* apply a rectangle that bounds @rect in
  * pixel-aligned device coordinates.
  *
@@ -7369,6 +7455,7 @@ struct _GskMaskNode
   GskRenderNode *mask;
   GskRenderNode *source;
   GskMaskMode mask_mode;
+  GskPorterDuff porter_duff;
 };
 
 static void
@@ -7474,6 +7561,7 @@ gsk_mask_node_draw (GskRenderNode *node,
       g_assert_not_reached ();
     }
 
+  cairo_set_operator (cr, gsk_porter_duff_to_cairo_operator (self->porter_duff));
   cairo_mask (cr, mask_pattern);
 
   cairo_pattern_destroy (mask_pattern);
@@ -7487,7 +7575,8 @@ gsk_mask_node_diff (GskRenderNode *node1,
   GskMaskNode *self1 = (GskMaskNode *) node1;
   GskMaskNode *self2 = (GskMaskNode *) node2;
 
-  if (self1->mask_mode != self2->mask_mode)
+  if (self1->mask_mode != self2->mask_mode ||
+      self1->porter_duff != self2->porter_duff)
     {
       gsk_render_node_diff_impossible (node1, node2, data);
       return;
@@ -7550,6 +7639,64 @@ gsk_mask_node_class_init (gpointer g_class,
 }
 
 /**
+ * gsk_mask_node_new_porter_duff:
+ * @source: The source node to be drawn
+ * @mask: The node to be used as mask
+ * @mask_mode: The mask mode to use
+ *
+ * Creates a `GskRenderNode` that will combine a source with the
+ * destination using the given Porter Duff operation wherever the
+ * mask is opaque according to the mask mode.
+ *
+ * The @mask_mode determines how the 'mask values' are derived from
+ * the colors of the @mask.
+ *
+ * Returns: (transfer full) (type GskMaskNode): A new `GskRenderNode`
+ *
+ * Since: 4.22
+ */
+GskRenderNode *
+gsk_mask_node_new_porter_duff (GskRenderNode *source,
+                               GskRenderNode *mask,
+                               GskMaskMode    mask_mode,
+                               GskPorterDuff  porter_duff)
+{
+  GskMaskNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (source), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (mask), NULL);
+
+  self = gsk_render_node_alloc (GSK_MASK_NODE);
+  self->source = gsk_render_node_ref (source);
+  self->mask = gsk_render_node_ref (mask);
+  self->mask_mode = mask_mode;
+  self->porter_duff = porter_duff;
+
+  if (gsk_porter_duff_is_bound_by_source (porter_duff))
+    {
+      if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+        self->render_node.bounds = source->bounds;
+      else if (!gsk_rect_intersection (&source->bounds, &mask->bounds, &self->render_node.bounds))
+        self->render_node.bounds = *graphene_rect_zero ();
+    }
+  else
+    {
+      if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+        {
+          g_warning_once ("FIXME: The boundedness of porter-duff operations with inverted alphas mask mode is undefined.");
+        }
+      self->render_node.bounds = mask->bounds;
+    }
+
+  self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
+  self->render_node.is_hdr = gsk_render_node_is_hdr (source) ||
+                             gsk_render_node_is_hdr (mask);
+  self->render_node.clears_background = gsk_porter_duff_clears_background (porter_duff);
+
+  return &self->render_node;
+}
+
+/**
  * gsk_mask_node_new:
  * @source: The source node to be drawn
  * @mask: The node to be used as mask
@@ -7570,26 +7717,7 @@ gsk_mask_node_new (GskRenderNode *source,
                    GskRenderNode *mask,
                    GskMaskMode    mask_mode)
 {
-  GskMaskNode *self;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (source), NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (mask), NULL);
-
-  self = gsk_render_node_alloc (GSK_MASK_NODE);
-  self->source = gsk_render_node_ref (source);
-  self->mask = gsk_render_node_ref (mask);
-  self->mask_mode = mask_mode;
-
-  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
-    self->render_node.bounds = source->bounds;
-  else if (!gsk_rect_intersection (&source->bounds, &mask->bounds, &self->render_node.bounds))
-    self->render_node.bounds = *graphene_rect_zero ();
-
-  self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
-  self->render_node.is_hdr = gsk_render_node_is_hdr (source) ||
-                             gsk_render_node_is_hdr (mask);
-
-  return &self->render_node;
+  return gsk_mask_node_new_porter_duff (source, mask, mask_mode, GSK_PORTER_DUFF_SOURCE_OVER_DEST);
 }
 
 /**
@@ -7634,7 +7762,7 @@ gsk_mask_node_get_mask (const GskRenderNode *node)
 
 /**
  * gsk_mask_node_get_mask_mode:
- * @node: (type GskMaskNode): a blending `GskRenderNode`
+ * @node: (type GskMaskNode): a mask `GskRenderNode`
  *
  * Retrieves the mask mode used by @node.
  *
@@ -7648,6 +7776,23 @@ gsk_mask_node_get_mask_mode (const GskRenderNode *node)
   const GskMaskNode *self = (const GskMaskNode *) node;
 
   return self->mask_mode;
+}
+
+/**
+ * gsk_mask_node_get_porter_duff:
+ * @node: (type GskMaskNode): a mask `GskRenderNode`
+ *
+ * Retrieves the porter-duff operation used to combine the source
+ * with the destination.
+ *
+ * Returns: the porter-duff operation
+ **/
+GskPorterDuff
+gsk_mask_node_get_porter_duff (const GskRenderNode *node)
+{
+  const GskMaskNode *self = (const GskMaskNode *) node;
+
+  return self->porter_duff;
 }
 
 /* }}} */

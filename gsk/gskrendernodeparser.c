@@ -1811,6 +1811,14 @@ parse_mask_mode (GtkCssParser *parser,
   return FALSE;
 }
 
+static gboolean
+parse_porter_duff (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      out_rule)
+{
+  return parse_enum (parser, GSK_TYPE_PORTER_DUFF, out_rule);
+}
+
 static PangoFont *
 font_from_string (PangoFontMap *fontmap,
                   const char   *string,
@@ -3059,8 +3067,10 @@ parse_mask_node (GtkCssParser *parser,
   GskRenderNode *source = NULL;
   GskRenderNode *mask = NULL;
   GskMaskMode mode = GSK_MASK_MODE_ALPHA;
+  GskPorterDuff porter_duff = GSK_PORTER_DUFF_SOURCE_OVER_DEST; 
   const Declaration declarations[] = {
     { "mode", parse_mask_mode, NULL, &mode },
+    { "porter-duff", parse_porter_duff, NULL, &porter_duff },
     { "source", parse_node, clear_node, &source },
     { "mask", parse_node, clear_node, &mask },
   };
@@ -3072,7 +3082,7 @@ parse_mask_node (GtkCssParser *parser,
   if (mask == NULL)
     mask = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
 
-  result = gsk_mask_node_new (source, mask, mode);
+  result = gsk_mask_node_new_porter_duff (source, mask, mode, porter_duff);
 
   gsk_render_node_unref (source);
   gsk_render_node_unref (mask);
@@ -6219,6 +6229,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           }
         append_node_param (p, "source", gsk_mask_node_get_source (node));
         append_node_param (p, "mask", gsk_mask_node_get_mask (node));
+        append_enum_param (p, "porter-duff", GSK_TYPE_PORTER_DUFF, gsk_mask_node_get_porter_duff (node));
 
         end_node (p);
       }

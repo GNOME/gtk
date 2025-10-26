@@ -527,12 +527,19 @@ GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_new                        (GskRenderNode            *source,
                                                                  GskRenderNode            *mask,
                                                                  GskMaskMode               mask_mode);
+GDK_AVAILABLE_IN_4_22
+GskRenderNode *        gsk_mask_node_new_porter_duff            (GskRenderNode            *source,
+                                                                 GskRenderNode            *mask,
+                                                                 GskMaskMode               mask_mode,
+                                                                 GskPorterDuff             porter_duff);
 GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_get_source                 (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_get_mask                   (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_4_10
 GskMaskMode            gsk_mask_node_get_mask_mode              (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_22
+GskPorterDuff          gsk_mask_node_get_porter_duff            (const GskRenderNode      *node);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
