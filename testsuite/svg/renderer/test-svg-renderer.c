@@ -133,7 +133,9 @@ render_svg_file (GFile *file, gboolean generate)
   gtk_svg_play (svg);
 
   snapshot = gtk_snapshot_new ();
-  gdk_paintable_snapshot (GDK_PAINTABLE (svg), snapshot, 100, 100);
+  gdk_paintable_snapshot (GDK_PAINTABLE (svg), snapshot,
+                          gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg)),
+                          gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg)));
   node = gtk_snapshot_free_to_node (snapshot);
   if (node)
     {
