@@ -10103,6 +10103,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
       gtk_svg_clear_content (self);
       g_slist_free (data.shape_stack);
       g_clear_pointer (&data.skip.reason, g_free);
+
+      g_ptr_array_set_size (data.pending_animations, 0);
+      g_ptr_array_set_size (data.pending_refs, 0);
     }
   else
     {
