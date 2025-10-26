@@ -4868,59 +4868,70 @@ typedef enum
 
 struct {
   const char *name;
-  unsigned int leaf           : 1;
-  unsigned int never_rendered : 1;
-  unsigned int has_gpa_attrs  : 1;
+  unsigned int leaf            : 1;
+  unsigned int never_rendered  : 1;
+  unsigned int has_gpa_attrs   : 1;
+  unsigned int has_color_stops : 1;
 } shape_types[] = {
   { .name = "rect",
     .leaf = 1,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
+    .has_color_stops = 0,
   },
   { .name = "circle",
     .leaf = 1,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
+    .has_color_stops = 0,
   },
   { .name = "ellipse",
     .leaf = 1,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
+    .has_color_stops = 0,
   },
   { .name = "path",
     .leaf = 1,
     .never_rendered = 0,
     .has_gpa_attrs = 1,
+    .has_color_stops = 0,
   },
   { .name = "g",
     .leaf = 0,
     .never_rendered = 0,
     .has_gpa_attrs = 0,
+    .has_color_stops = 0,
   },
   { .name = "clipPath",
     .leaf = 0,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
+    .has_color_stops = 0,
   },
   { .name = "mask",
     .leaf = 0,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
+    .has_color_stops = 0,
   },
   { .name = "defs",
     .leaf = 0,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
+    .has_color_stops = 0,
   },
   { .name = "use",
     .leaf = 1,
     .never_rendered = 0,
     .has_gpa_attrs = 0,
+    .has_color_stops = 0,
   },
   { .name = "linearGradient",
     .leaf = 1,
     .never_rendered = 1,
     .has_gpa_attrs = 0,
+    .has_color_stops = 1,
   },
 };
 
@@ -4999,7 +5010,7 @@ shape_new (ShapeType type)
   if (!shape_types[type].leaf)
     shape->shapes = g_ptr_array_new_with_free_func (shape_free);
 
-  if (type == SHAPE_LINEAR_GRADIENT)
+  if (shape_types[type].has_color_stops)
     shape->color_stops = g_ptr_array_new_with_free_func (color_stop_free);
 
   return shape;
@@ -5253,7 +5264,7 @@ shape_add_color_stop (Shape    *shape,
 {
   ColorStop *stop;
 
-  g_assert (shape->type == SHAPE_LINEAR_GRADIENT);
+  g_assert (shape_types[shape->type].has_color_stops);
 
   stop = g_new0 (ColorStop, 1);
 
@@ -6144,7 +6155,7 @@ shape_get_current_value (Shape        *shape,
       StopRef s;
       ColorStop *stop;
 
-      g_assert (shape->type == SHAPE_LINEAR_GRADIENT);
+      g_assert (shape_types[shape->type].has_color_stops);
       s = stop_ref (attr);
       stop = g_ptr_array_index (shape->color_stops, s.idx);
 
@@ -6185,7 +6196,7 @@ shape_get_base_value (Shape        *shape,
       StopRef s;
       ColorStop *stop;
 
-      g_assert (shape->type == SHAPE_LINEAR_GRADIENT);
+      g_assert (shape_types[shape->type].has_color_stops);
       s = stop_ref (attr);
       stop = g_ptr_array_index (shape->color_stops, s.idx);
 
@@ -6221,7 +6232,7 @@ shape_set_current_value (Shape        *shape,
       StopRef s;
       ColorStop *stop;
 
-      g_assert (shape->type == SHAPE_LINEAR_GRADIENT);
+      g_assert (shape_types[shape->type].has_color_stops);
       s = stop_ref (attr);
       stop = g_ptr_array_index (shape->color_stops, s.idx);
 
@@ -7013,7 +7024,7 @@ shape_init_current_values (Shape          *shape,
         }
     }
 
-  if (shape->type == SHAPE_LINEAR_GRADIENT)
+  if (shape_types[shape->type].has_color_stops)
     {
       unsigned int attr = SHAPE_ATTR_STOP_OFFSET;
       for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
