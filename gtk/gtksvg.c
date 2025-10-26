@@ -1273,14 +1273,17 @@ svg_percentage_new (double value)
 {
   static SvgNumber singletons[] = {
     { { &SVG_NUMBER_CLASS, 1 }, .unit = UNIT_PERCENT, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = UNIT_PERCENT, .value = 50 },
     { { &SVG_NUMBER_CLASS, 1 }, .unit = UNIT_PERCENT, .value = 100 },
   };
   SvgNumber *result;
 
   if (value == 0)
     return svg_value_ref ((SvgValue *) &singletons[0]);
-  else if (value == 100)
+  else if (value == 50)
     return svg_value_ref ((SvgValue *) &singletons[1]);
+  else if (value == 100)
+    return svg_value_ref ((SvgValue *) &singletons[2]);
 
   result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
   result->value = value;
