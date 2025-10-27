@@ -31,16 +31,16 @@
           y='0'
           width='20'
           height='10'>
-    <animate
-            attributeName='clip-path'
-            begin='0ms'
-            dur='1000ms'
-            fill='freeze'
-            from='url(#clip1)'
-            to='url(#clip2)'
-            keyTimes='0; 1'
-            gpa:status='running'
-            gpa:current-start-time='0ms'
-            gpa:current-end-time='1000ms'/>
+  <animate
+          attributeName='clip-path'
+          begin='0ms'
+          dur='1000ms'
+          fill='freeze'
+          from='url(#clip1)'
+          to='url(#clip2)'
+          keyTimes='0; 1'
+          gpa:status='running'
+          gpa:current-start-time='0ms'
+          gpa:current-end-time='1000ms'/>
   </rect>
 </svg>

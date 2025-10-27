@@ -27,14 +27,14 @@
   </defs>
   <use
           href='#circle2'>
-    <animate
-            attributeName='href'
-            begin='0ms'
-            dur='1000ms'
-            fill='freeze'
-            from='#circle1'
-            to='#circle2'
-            keyTimes='0; 1'
-            gpa:status='done'/>
+  <animate
+          attributeName='href'
+          begin='0ms'
+          dur='1000ms'
+          fill='freeze'
+          from='#circle1'
+          to='#circle2'
+          keyTimes='0; 1'
+          gpa:status='done'/>
   </use>
 </svg>

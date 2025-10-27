@@ -10222,7 +10222,7 @@ serialize_shape_attrs (GString              *s,
               indent_for_attr (s, indent);
               g_string_append_printf (s, "%s='", shape_attr_get_presentation (attr, shape->type));
               svg_value_print (value, s);
-              g_string_append (s, "'");
+              g_string_append_c (s, '\'');
             }
         }
     }
@@ -10399,7 +10399,7 @@ serialize_value_animation_attrs (GString   *s,
             svg_primitive_transform_print (a->frames[1].value, s);
           else
             svg_value_print (a->frames[1].value, s);
-          g_string_append (s, "'");
+          g_string_append_c (s, '\'');
         }
       else
         {
@@ -10424,7 +10424,7 @@ serialize_value_animation_attrs (GString   *s,
                   svg_value_print (a->frames[i].value, s);
                 }
             }
-          g_string_append (s, "'");
+          g_string_append_c (s, '\'');
         }
     }
 
@@ -10439,11 +10439,11 @@ serialize_value_animation_attrs (GString   *s,
           for (unsigned int j = 0; j < 4; j++)
             {
               if (j > 0)
-                g_string_append (s, " ");
+                g_string_append_c (s, ' ');
               string_append_double (s, a->frames[i].params[j]);
             }
         }
-      g_string_append (s, "'");
+      g_string_append_c (s, '\'');
     }
 
   indent_for_attr (s, indent);
@@ -10454,7 +10454,7 @@ serialize_value_animation_attrs (GString   *s,
         g_string_append (s, "; ");
       string_append_double (s, a->frames[i].time);
     }
-  g_string_append (s, "'");
+  g_string_append_c (s, '\'');
 
   if (a->calc_mode != CALC_MODE_LINEAR)
     {
@@ -10537,7 +10537,7 @@ serialize_animation_set (GString              *s,
   indent_for_attr (s, indent);
   g_string_append (s, "to='");
   svg_value_print (a->frames[0].value, s);
-  g_string_append (s, "'");
+  g_string_append_c (s, '\'');
   serialize_animation_status (s, svg, indent, a, flags);
   g_string_append (s, "/>");
 }
@@ -10625,7 +10625,6 @@ serialize_animation_motion (GString              *s,
     }
   else
     {
-      char *str;
       GskPath *path;
 
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
@@ -10635,10 +10634,10 @@ serialize_animation_motion (GString              *s,
       if (path)
         {
           indent_for_attr (s, indent);
-          str = gsk_path_to_string (path);
+          g_string_append (s, "path='");
+          gsk_path_print (path, s);
           gsk_path_unref (path);
-          g_string_append_printf (s, "path='%s'", str);
-          g_free (str);
+          g_string_append_c (s, '\'');
         }
       g_string_append (s, "/>");
     }
@@ -10671,74 +10670,6 @@ serialize_animation (GString              *s,
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-serialize_animations (GString              *s,
-                      GtkSvg               *svg,
-                      int                   indent,
-                      Shape                *shape,
-                      GtkSvgSerializeFlags  flags)
-{
-  for (unsigned int i = 0; i < shape->animations->len; i++)
-    {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      serialize_animation (s, svg, indent, a, flags);
-    }
-}
-
-static void serialize_shape (GString              *s,
-                             GtkSvg               *svg,
-                             int                   indent,
-                             Shape                *shape,
-                             GtkSvgSerializeFlags  flags);
-
-static void
-serialize_group (GString              *s,
-                 GtkSvg               *svg,
-                 int                   indent,
-                 Shape                *shape,
-                 GtkSvgSerializeFlags  flags)
-{
-  if (indent > 0) /* Hack: this is for <svg> */
-    {
-      indent_for_elt (s, indent);
-      g_string_append_printf (s, "<%s", shape_types[shape->type].name);
-      serialize_shape_attrs (s, svg, indent, shape, flags);
-      serialize_gpa_attrs (s, svg, indent, shape, flags);
-      g_string_append (s, ">");
-    }
-
-  serialize_animations (s, svg, indent + 2, shape, flags);
-
-  for (unsigned int i = 0; i < shape->shapes->len; i++)
-    {
-      Shape *sh = g_ptr_array_index (shape->shapes, i);
-      serialize_shape (s, svg, indent + 2 , sh, flags);
-    }
-
-  if (indent > 0)
-    {
-      indent_for_elt (s, indent);
-      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
-    }
-}
-
-static void
-serialize_leaf (GString              *s,
-                GtkSvg               *svg,
-                int                   indent,
-                Shape                *shape,
-                GtkSvgSerializeFlags  flags)
-{
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "<%s", shape_types[shape->type].name);
-  serialize_shape_attrs (s, svg, indent, shape, flags);
-  serialize_gpa_attrs (s, svg, indent, shape, flags);
-  g_string_append (s, ">");
-  serialize_animations (s, svg, indent + 2, shape, flags);
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
 }
 
 static void
@@ -10787,20 +10718,26 @@ serialize_color_stop (GString              *s,
 }
 
 static void
-serialize_gradient (GString              *s,
-                    GtkSvg               *svg,
-                    int                   indent,
-                    Shape                *shape,
-                    GtkSvgSerializeFlags  flags)
+serialize_shape (GString              *s,
+                 GtkSvg               *svg,
+                 int                   indent,
+                 Shape                *shape,
+                 GtkSvgSerializeFlags  flags)
 {
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "<%s", shape_types[shape->type].name);
-  serialize_shape_attrs (s, svg, indent, shape, flags);
-  serialize_gpa_attrs (s, svg, indent, shape, flags);
-  g_string_append (s, ">");
+  if (indent > 0) /* Hack: this is for <svg> */
+    {
+      indent_for_elt (s, indent);
+      g_string_append_printf (s, "<%s", shape_types[shape->type].name);
+      serialize_shape_attrs (s, svg, indent, shape, flags);
+      serialize_gpa_attrs (s, svg, indent, shape, flags);
+      g_string_append_c (s, '>');
+    }
 
-  for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
-    serialize_color_stop (s, svg, indent + 2, shape, idx, flags);
+  if (shape_types[shape->type].has_color_stops)
+    {
+      for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
+        serialize_color_stop (s, svg, indent + 2, shape, idx, flags);
+    }
 
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
@@ -10809,41 +10746,19 @@ serialize_gradient (GString              *s,
         serialize_animation (s, svg, indent, a, flags);
     }
 
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
-}
-
-static void
-serialize_shape (GString              *s,
-                 GtkSvg               *svg,
-                 int                   indent,
-                 Shape                *shape,
-                 GtkSvgSerializeFlags  flags)
-{
-  switch (shape->type)
+  if (shape_types[shape->type].has_shapes)
     {
-    case SHAPE_GROUP:
-    case SHAPE_CLIP_PATH:
-    case SHAPE_MASK:
-    case SHAPE_DEFS:
-      serialize_group (s, svg, indent, shape, flags);
-      break;
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          serialize_shape (s, svg, indent + 2 , sh, flags);
+        }
+    }
 
-    case SHAPE_CIRCLE:
-    case SHAPE_ELLIPSE:
-    case SHAPE_RECT:
-    case SHAPE_PATH:
-    case SHAPE_USE:
-      serialize_leaf (s, svg, indent, shape, flags);
-      break;
-
-    case SHAPE_LINEAR_GRADIENT:
-    case SHAPE_RADIAL_GRADIENT:
-      serialize_gradient (s, svg, indent, shape, flags);
-      break;
-
-    default:
-      g_assert_not_reached ();
+  if (indent > 0)
+    {
+      indent_for_elt (s, indent);
+      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
     }
 }
 

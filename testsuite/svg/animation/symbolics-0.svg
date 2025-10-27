@@ -13,14 +13,14 @@
           cx='0'
           cy='5'
           r='5'>
-    <set
-            id='gpa:out-of-state:foreground'
-            attributeName='visibility'
-            begin='gpa:states(all).end'
-            end='gpa:states(all).begin'
-            to='hidden'
-            gpa:status='inactive'
-            gpa:computed-simple-duration='indefinite'/>
+  <set
+          id='gpa:out-of-state:foreground'
+          attributeName='visibility'
+          begin='gpa:states(all).end'
+          end='gpa:states(all).begin'
+          to='hidden'
+          gpa:status='inactive'
+          gpa:computed-simple-duration='indefinite'/>
   </circle>
   <circle
           id='warning'
@@ -28,14 +28,14 @@
           cx='10'
           cy='5'
           r='5'>
-    <set
-            id='gpa:out-of-state:warning'
-            attributeName='visibility'
-            begin='gpa:states(all).end'
-            end='gpa:states(all).begin'
-            to='hidden'
-            gpa:status='inactive'
-            gpa:computed-simple-duration='indefinite'/>
+  <set
+          id='gpa:out-of-state:warning'
+          attributeName='visibility'
+          begin='gpa:states(all).end'
+          end='gpa:states(all).begin'
+          to='hidden'
+          gpa:status='inactive'
+          gpa:computed-simple-duration='indefinite'/>
   </circle>
   <circle
           id='blue'
@@ -43,13 +43,13 @@
           cx='20'
           cy='5'
           r='5'>
-    <set
-            id='gpa:out-of-state:blue'
-            attributeName='visibility'
-            begin='gpa:states(all).end'
-            end='gpa:states(all).begin'
-            to='hidden'
-            gpa:status='inactive'
-            gpa:computed-simple-duration='indefinite'/>
+  <set
+          id='gpa:out-of-state:blue'
+          attributeName='visibility'
+          begin='gpa:states(all).end'
+          end='gpa:states(all).begin'
+          to='hidden'
+          gpa:status='inactive'
+          gpa:computed-simple-duration='indefinite'/>
   </circle>
 </svg>

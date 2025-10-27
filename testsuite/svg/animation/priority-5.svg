@@ -13,22 +13,22 @@
           cx='50'
           cy='50'
           r='10'>
-    <set
-            id='one'
-            attributeName='opacity'
-            begin='500ms'
-            dur='5000ms'
-            fill='freeze'
-            to='0.5'
-            gpa:status='running'
-            gpa:current-start-time='500ms'
-            gpa:current-end-time='5500ms'/>
-    <set
-            id='two'
-            attributeName='opacity'
-            begin='1500ms'
-            dur='2000ms'
-            to='1'
-            gpa:status='done'/>
+  <set
+          id='one'
+          attributeName='opacity'
+          begin='500ms'
+          dur='5000ms'
+          fill='freeze'
+          to='0.5'
+          gpa:status='running'
+          gpa:current-start-time='500ms'
+          gpa:current-end-time='5500ms'/>
+  <set
+          id='two'
+          attributeName='opacity'
+          begin='1500ms'
+          dur='2000ms'
+          to='1'
+          gpa:status='done'/>
   </circle>
 </svg>

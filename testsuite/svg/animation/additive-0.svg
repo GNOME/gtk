@@ -12,29 +12,29 @@
           cx='50'
           cy='50'
           r='10'>
-    <animate
-            id='one'
-            attributeName='cx'
-            begin='0ms'
-            dur='5000ms'
-            from='0'
-            to='10'
-            keyTimes='0; 1'
-            additive='sum'
-            gpa:status='running'
-            gpa:current-start-time='0ms'
-            gpa:current-end-time='5000ms'/>
-    <animate
-            id='two'
-            attributeName='cx'
-            begin='1000ms'
-            dur='6000ms'
-            from='0'
-            to='10'
-            keyTimes='0; 1'
-            additive='sum'
-            gpa:status='inactive'
-            gpa:current-start-time='1000ms'
-            gpa:current-end-time='7000ms'/>
+  <animate
+          id='one'
+          attributeName='cx'
+          begin='0ms'
+          dur='5000ms'
+          from='0'
+          to='10'
+          keyTimes='0; 1'
+          additive='sum'
+          gpa:status='running'
+          gpa:current-start-time='0ms'
+          gpa:current-end-time='5000ms'/>
+  <animate
+          id='two'
+          attributeName='cx'
+          begin='1000ms'
+          dur='6000ms'
+          from='0'
+          to='10'
+          keyTimes='0; 1'
+          additive='sum'
+          gpa:status='inactive'
+          gpa:current-start-time='1000ms'
+          gpa:current-end-time='7000ms'/>
   </circle>
 </svg>
