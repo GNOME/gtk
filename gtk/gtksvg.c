@@ -4942,7 +4942,7 @@ static const char *
 shape_attr_get_presentation (ShapeAttr attr,
                              ShapeType type)
 {
-  if (type == SHAPE_LINEAR_GRADIENT &&
+  if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
       attr == SHAPE_ATTR_TRANSFORM)
     return "gradientTransform";
 
@@ -8373,10 +8373,14 @@ parse_base_animation_attrs (Animation            *a,
         gtk_svg_invalid_attribute (data->svg, context, "attributeName",
                                    "can't have 'attributeName' on <animateMotion>");
     }
-  else if (a->type == ANIMATION_TYPE_TRANSFORM &&
-           strcmp (attr_name_attr, "transform") != 0)
+  else if (a->type == ANIMATION_TYPE_TRANSFORM)
     {
-      gtk_svg_invalid_attribute (data->svg, context, "attributeName", "value must be 'transform'");
+      const char *expected;
+
+      expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, data->current_shape->type);
+      if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
+        gtk_svg_invalid_attribute (data->svg, context, "attributeName",
+                                   "value must be '%s'", expected);
       a->attr = SHAPE_ATTR_TRANSFORM;
     }
   else if (!attr_name_attr)
