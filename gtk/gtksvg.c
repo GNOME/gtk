@@ -4280,7 +4280,7 @@ svg_mask_parse (const char *value)
 }
 
 /* }}} */
-/* {{{ Hrefs */
+/* {{{ References */
 
 typedef enum
 {
