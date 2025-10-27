@@ -4036,7 +4036,7 @@ svg_paint_accumulate (const SvgValue *value0,
 }
 
 /* }}} */
-/* {{{ Filters */
+/* {{{ Filter functions */
 
 typedef enum
 {
@@ -4051,6 +4051,7 @@ typedef enum
   FILTER_SATURATE,
   FILTER_SEPIA,
   FILTER_ALPHA_LEVEL,
+  FILTER_REF,
 } FilterKind;
 
 static struct {
@@ -4073,7 +4074,13 @@ static struct {
 typedef struct
 {
   FilterKind kind;
-  double value;
+  union {
+    double value;
+    struct {
+      char *ref;
+      Shape *shape;
+    } ref;
+  };
 } FilterFunction;
 
 typedef struct {
@@ -4091,6 +4098,14 @@ svg_filter_size (unsigned int n)
 static void
 svg_filter_free (SvgValue *value)
 {
+  SvgFilter *f = (SvgFilter *) value;
+
+  for (unsigned int i = 0; i < f->n_functions; i++)
+    {
+      if (f->functions[i].kind == FILTER_REF)
+        g_free (f->functions[i].ref.ref);
+    }
+
   g_free (value);
 }
 
@@ -4110,6 +4125,9 @@ svg_filter_equal (const SvgValue *value0,
         return FALSE;
       else if (f0->functions[i].kind == FILTER_NONE)
         return TRUE;
+      else if (f0->functions[i].kind == FILTER_REF)
+        return f0->functions[i].ref.shape == f1->functions[i].ref.shape &&
+               strcmp (f0->functions[i].ref.ref, f1->functions[i].ref.ref) == 9;
       else
         return f0->functions[i].value == f1->functions[i].value;
     }
@@ -4171,18 +4189,31 @@ filter_parser_parse (GtkCssParser *parser)
 
       memset (&function, 0, sizeof (FilterFunction));
 
-      for (i = 1; i < G_N_ELEMENTS (filter_desc); i++)
+      if (gtk_css_parser_has_url (parser))
         {
-          if (gtk_css_parser_has_function (parser, filter_desc[i].name))
-            {
-              if (!gtk_css_parser_consume_function (parser, 1, 1, css_parser_parse_number, &function.value))
-                goto fail;
-              function.kind = filter_desc[i].kind;
-              break;
-            }
+          char *url = gtk_css_parser_consume_url (parser);
+          function.kind = FILTER_REF;
+          if (url[0] == '#')
+            function.ref.ref = g_strdup (url + 1);
+          else
+            function.ref.ref = g_strdup (url);
+          g_free (url);
         }
-      if (i == G_N_ELEMENTS (filter_desc))
-        break;
+      else
+        {
+          for (i = 1; i < G_N_ELEMENTS (filter_desc); i++)
+            {
+              if (gtk_css_parser_has_function (parser, filter_desc[i].name))
+                {
+                  if (!gtk_css_parser_consume_function (parser, 1, 1, css_parser_parse_number, &function.value))
+                    goto fail;
+                  function.kind = filter_desc[i].kind;
+                  break;
+                }
+            }
+          if (i == G_N_ELEMENTS (filter_desc))
+            break;
+        }
 
       g_array_append_val (array, function);
     }
@@ -4242,6 +4273,10 @@ svg_filter_print (const SvgValue *value,
         {
           g_string_append (s, "none");
         }
+      else if (function->kind == FILTER_REF)
+        {
+          g_string_append_printf (s, "url(#%s)", function->ref.ref);
+        }
       else
         {
           g_string_append_printf (s, "%s(", filter_desc[function->kind].name);
@@ -4275,7 +4310,7 @@ svg_filter_interpolate (const SvgValue *value0,
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
       f->functions[i].kind = f0->functions[i].kind;
-      if (f->functions[i].kind != FILTER_NONE)
+      if (f->functions[i].kind != FILTER_NONE && f->functions[i].kind != FILTER_REF)
         f->functions[i].value = lerp (t, f0->functions[i].value, f1->functions[i].value);
     }
 
@@ -4387,6 +4422,8 @@ svg_filter_get_matrix (FilterFunction    *f,
           0,             0,             0,             1 });
       graphene_vec4_init (offset, 0.0, 0.0, 0.0, 0.0);
       return TRUE;
+    case FILTER_REF:
+      /* TODO */
     default:
       g_assert_not_reached ();
     }
@@ -14545,6 +14582,7 @@ push_group (Shape        *shape,
                 gsk_component_transfer_free (alpha);
               }
               break;
+            case FILTER_REF:
             default:
               g_assert_not_reached ();
             }
