@@ -6,11 +6,13 @@
           cx='50'
           cy='50'
           rx='40'
-          ry='20'/>
+          ry='20'>
+  </ellipse>
   <ellipse
           fill='rgb(0,0,255)'
           cx='50'
           cy='50'
           rx='20'
-          ry='40'/>
+          ry='40'>
+  </ellipse>
 </svg>

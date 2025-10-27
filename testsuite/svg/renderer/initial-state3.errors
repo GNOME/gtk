@@ -1,0 +1,3 @@
+5.1: (svg / gpa:version): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+5.44: (circle / gpa:states): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+6.55: (circle / gpa:states): GTK_SVG_ERROR_INVALID_ATTRIBUTE

@@ -12,7 +12,8 @@
           stroke='rgb(0,0,0)'
           stroke-width='1'
           d='M 30 160 L 270 40'
-          gpa:stroke-width='0.25 1 1.5'/>
+          gpa:stroke-width='0.25 1 1.5'>
+  </path>
   <circle
           transform='translate(256.667, 46.6667) rotate(0, 0, 0) translate(-5, -0)'
           fill='rgb(255,0,0)'

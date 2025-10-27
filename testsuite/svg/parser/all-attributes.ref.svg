@@ -3,7 +3,6 @@
         height='16'>
   <path
           id='path0'
-          pathLength='400'
           visibility='visible'
           transform='none'
           opacity='1'
@@ -22,6 +21,8 @@
           stroke-linejoin='miter'
           stroke-dasharray=''
           stroke-dashoffset='0'
+          pathLength='400'
           d='M 0 0 L 100 100'
-          gpa:stroke-width='0.25 1 1.5'/>
+          gpa:stroke-width='0.25 1 1.5'>
+  </path>
 </svg>

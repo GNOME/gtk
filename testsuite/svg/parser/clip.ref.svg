@@ -8,7 +8,8 @@
               x='0'
               y='0'
               width='100'
-              height='100'/>
+              height='100'>
+      </rect>
     </clipPath>
   </defs>
   <g
@@ -18,14 +19,17 @@
     <circle
             cx='100'
             cy='100'
-            r='50'/>
+            r='50'>
+    </circle>
   </g>
   <path
           clip-path='none'
-          d='M 0 0 L 100 100'/>
+          d='M 0 0 L 100 100'>
+  </path>
   <circle
           clip-path='path("M 0 0 h 10 v 20 h -10 z")'
           cx='10'
           cy='10'
-          r='10'/>
+          r='10'>
+  </circle>
 </svg>

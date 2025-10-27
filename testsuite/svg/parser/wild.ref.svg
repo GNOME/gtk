@@ -7,7 +7,6 @@
             id='messy too'
             mask-type='alpha'>
       <clipPath
-              is-clip-path='1'
               id='soo messy'>
         <circle
                 fill='rgba(255,0,0,0.5)'
@@ -20,14 +19,16 @@
                   dur='10000ms'
                   fill='freeze'
                   from='20'
-                  to='0'>
+                  to='0'
+                  keyTimes='0; 1'/>
           <animate
                   attributeName='r'
                   begin='3000ms'
                   dur='10000ms'
                   fill='freeze'
                   from='12'
-                  to='16'>
+                  to='16'
+                  keyTimes='0; 1'/>
         </circle>
       </clipPath>
     </mask>
@@ -39,8 +40,8 @@
           stroke-width='10'
           gpa:stroke-width='2.5 10 15'>
     <circle
-            clip-path='url("#soo messy")'
-            mask='url("#messy too")'
+            clip-path='url(#soo messy)'
+            mask='url(#messy too)'
             fill='rgb(255,0,0)'
             stroke='none'
             stroke-width='0.5'
@@ -54,7 +55,7 @@
               dur='5000ms'
               fill='freeze'
               values='rgb(255,0,0); rgb(255,255,0); rgb(0,128,0)'
-              keyTimes='0; 0.5; 1'>
+              keyTimes='0; 0.5; 1'/>
     </circle>
     <g>
       <animateTransform
@@ -64,31 +65,36 @@
               dur='4000ms'
               from='0 10 10'
               to='90 10 10'
-              type='rotate'>
+              keyTimes='0; 1'
+              type='rotate'/>
       <animate
               id='blurit'
               attributeName='filter'
               begin='5000ms'
               dur='2000ms'
               from='blur(0)'
-              to='blur(12)'>
+              to='blur(12)'
+              keyTimes='0; 1'/>
       <animate
               attributeName='filter'
               begin='blurit.end'
               dur='2000ms'
               fill='freeze'
               from='blur(12)'
-              to='blur(0)'>
+              to='blur(0)'
+              keyTimes='0; 1'/>
       <path
               stroke='rgb(0,0,0)'
               stroke-width='1'
               d='M 0 10 L 20 10'
-              gpa:stroke-width='0.25 1 1.5'/>
+              gpa:stroke-width='0.25 1 1.5'>
+      </path>
       <path
               stroke='rgb(0,0,0)'
               stroke-width='1'
               d='M 10 0 L 10 20'
-              gpa:stroke-width='0.25 1 1.5'/>
+              gpa:stroke-width='0.25 1 1.5'>
+      </path>
     </g>
   </g>
   <path
@@ -102,12 +108,11 @@
             begin='5000ms'
             dur='10000ms'
             from='1 1'
-            to='10 10'>
+            to='10 10'
+            keyTimes='0; 1'/>
   </path>
   <circle
           fill='rgb(255,0,0)'
-          cx='0'
-          cy='0'
           r='5'>
     <animateMotion
             begin='5000ms'
@@ -115,7 +120,6 @@
             repeatCount='20'
             fill='freeze'
             keyTimes='0; 0.2; 1'
-            path='M 30 160 L 270 40'
             keyPoints='0; 0.8; 1'>
       <mpath href='p'/>
     </animateMotion>

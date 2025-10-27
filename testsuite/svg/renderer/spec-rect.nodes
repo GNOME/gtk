@@ -1,0 +1,49 @@
+transform {
+  transform: scale(0.1);
+  child: container {
+    stroke {
+      child: color {
+        bounds: 0 0 1200 400;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 1 1 h 1198 v 398 h -1198 z";
+      line-width: 2;
+      line-cap: butt;
+      line-join: miter;
+    }
+    fill {
+      child: color {
+        bounds: 100 100 400 200;
+        color: rgb(0,128,0);
+      }
+      path: "\
+M 150 100\
+L 450 100 O 500 100, 500 150, 0.707106769\
+L 500 250 O 500 300, 450 300, 0.707106769\
+L 150 300 O 100 300, 100 250, 0.707106769\
+L 100 150 O 100 100, 150 100, 0.707106769\
+Z";
+      fill-rule: winding;
+    }
+    transform {
+      transform: translate(700, 210) rotate(330);
+      child: stroke {
+        child: color {
+          bounds: -30 -30 460 260;
+          color: rgb(128,0,128);
+        }
+        path: "\
+M 50 0\
+L 350 0 O 400 0, 400 50, 0.707106769\
+L 400 150 O 400 200, 350 200, 0.707106769\
+L 50 200 O 0 200, 0 150, 0.707106769\
+L 0 50 O 0 0, 50 0, 0.707106769\
+Z";
+        line-width: 30;
+        line-cap: butt;
+        line-join: miter;
+      }
+    }
+  }
+}

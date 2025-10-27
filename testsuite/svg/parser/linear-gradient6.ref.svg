@@ -5,13 +5,13 @@
   <defs>
     <linearGradient
             id='MyGradient'
+            gradientTransform='rotate(45, 150, 100)'
             x1='50'
             y1='50'
             x2='250'
             y2='150'
             spreadMethod='repeat'
-            gradientUnits='userSpaceOnUse'
-            gradientTransform='rotate(45, 150, 100)'>
+            gradientUnits='userSpaceOnUse'>
       <stop
               offset='0'
               stop-color='rgb(255,0,0)'
@@ -42,5 +42,6 @@
           y='50'
           width='200'
           height='100'
-          gpa:stroke-width='0.5 2 3'/>
+          gpa:stroke-width='0.5 2 3'>
+  </rect>
 </svg>

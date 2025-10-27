@@ -10,7 +10,6 @@ test_data = [
   'clips.test',
   'colors.test',
   'dashes.test',
-  'inherit.test',
   'masks.test',
   'paths.test',
   'priority.test',

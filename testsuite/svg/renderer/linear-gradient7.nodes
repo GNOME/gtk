@@ -1,16 +1,13 @@
-transform {
-  transform: scale(0.333333, 0.5);
-  child: stroke {
-    child: linear-gradient {
-      bounds: 45 45 210 110;
-      start: 50 50;
-      end: 250 150;
-      stops: 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(255,255,0);
-    }
-    path: "\
-M 50 50 h 200 v 100 h -200 z";
-    line-width: 10;
-    line-cap: butt;
-    line-join: miter;
+stroke {
+  child: linear-gradient {
+    bounds: 45 45 210 110;
+    start: 50 50;
+    end: 250 150;
+    stops: 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(255,255,0);
   }
+  path: "\
+M 50 50 h 200 v 100 h -200 z";
+  line-width: 10;
+  line-cap: butt;
+  line-join: miter;
 }

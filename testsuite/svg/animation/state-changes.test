@@ -1,3 +1,5 @@
+# this test has scripted state changes test animations
+# that are generated from gpa attributes
 input: state-changes.svg
 time: 500
 output: state-changes-0.svg

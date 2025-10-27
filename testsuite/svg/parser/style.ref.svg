@@ -10,20 +10,24 @@
           cx='50'
           cy='50'
           r='20'
-          gpa:stroke-width='2.5 10 15'/>
+          gpa:stroke-width='2.5 10 15'>
+  </circle>
   <circle
           id='circle2'
           cx='50'
           cy='50'
-          r='20'/>
+          r='20'>
+  </circle>
   <circle
           id='circle3'
           cx='50'
           cy='50'
-          r='20'/>
+          r='20'>
+  </circle>
   <circle
           id='circle3'
           cx='50'
           cy='50'
-          r='20'/>
+          r='20'>
+  </circle>
 </svg>

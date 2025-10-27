@@ -9,7 +9,6 @@
         gpa:time-since-load='2000ms'>
   <circle
           id='foreground'
-          pathLength='1'
           fill='rgb(255,255,255)'
           cx='0'
           cy='5'
@@ -25,7 +24,6 @@
   </circle>
   <circle
           id='warning'
-          pathLength='1'
           fill='rgb(165,42,42)'
           cx='10'
           cy='5'
@@ -41,7 +39,6 @@
   </circle>
   <circle
           id='blue'
-          pathLength='1'
           fill='rgb(0,0,255)'
           cx='20'
           cy='5'

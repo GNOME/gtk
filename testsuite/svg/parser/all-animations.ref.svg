@@ -5,6 +5,12 @@
           id='path0'
           pathLength='1'
           d='M 0 0 L 100 100'>
+    <set
+            id='a0'
+            attributeName='stroke-width'
+            begin='0ms'
+            end='indefinite'
+            to='25'/>
     <animate
             id='a1'
             attributeName='fill'

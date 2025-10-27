@@ -3,5 +3,6 @@
         height='0'>
   <path
           stroke-dasharray='1 2 3'
-          d=''/>
+          d=''>
+  </path>
 </svg>

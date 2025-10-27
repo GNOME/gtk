@@ -1,6 +1,12 @@
 
 <svg width="16" height="16">
   <path d="m0 0 l100 100" id='path0' pathLength='1'/>
+  <set id='a0'
+        href='path0'
+        begin='0s'
+        end='indefinite'
+        attributeName='stroke-width'
+        to='25'/>
   <animate id='a1'
         href='path0'
         begin='0s'
