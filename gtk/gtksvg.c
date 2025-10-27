@@ -1765,12 +1765,12 @@ svg_spread_method_parse (const char *string)
 
 typedef enum
 {
-  GRADIENT_UNITS_USER_SPACE_ON_USE,
-  GRADIENT_UNITS_OBJECT_BOUNDING_BOX,
-} GradientUnits;
+  COORD_UNITS_USER_SPACE_ON_USE,
+  COORD_UNITS_OBJECT_BOUNDING_BOX,
+} CoordUnits;
 
-static const SvgValueClass SVG_GRADIENT_UNITS_CLASS = {
-  "SvgGradientUnits",
+static const SvgValueClass SVG_COORD_UNITS_CLASS = {
+  "SvgCoordUnits",
   svg_enum_free,
   svg_enum_equal,
   svg_enum_interpolate,
@@ -1778,24 +1778,24 @@ static const SvgValueClass SVG_GRADIENT_UNITS_CLASS = {
   svg_enum_print,
 };
 
-static SvgEnum gradient_units_values[] = {
-  { { &SVG_GRADIENT_UNITS_CLASS, 1 }, GRADIENT_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
-  { { &SVG_GRADIENT_UNITS_CLASS, 1 }, GRADIENT_UNITS_OBJECT_BOUNDING_BOX, "objectBoundingBox" },
+static SvgEnum coord_units_values[] = {
+  { { &SVG_COORD_UNITS_CLASS, 1 }, COORD_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
+  { { &SVG_COORD_UNITS_CLASS, 1 }, COORD_UNITS_OBJECT_BOUNDING_BOX, "objectBoundingBox" },
 };
 
 static SvgValue *
-svg_gradient_units_new (GradientUnits value)
+svg_coord_units_new (CoordUnits value)
 {
-  return svg_value_ref ((SvgValue *) &gradient_units_values[value]);
+  return svg_value_ref ((SvgValue *) &coord_units_values[value]);
 }
 
 static SvgValue *
-svg_gradient_units_parse (const char *string)
+svg_coord_units_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (gradient_units_values); i++)
+  for (unsigned int i = 0; i < G_N_ELEMENTS (coord_units_values); i++)
     {
-      if (strcmp (string, gradient_units_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &gradient_units_values[i]);
+      if (strcmp (string, coord_units_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &coord_units_values[i]);
     }
   return NULL;
 }
@@ -4810,7 +4810,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 1,
     .presentation = 0,
-    .parse_value = svg_gradient_units_parse,
+    .parse_value = svg_coord_units_parse,
   },
   { .id = SHAPE_ATTR_FX,
     .name = "fx",
@@ -4910,7 +4910,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (SPREAD_METHOD_PAD);
-  shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_gradient_units_new (GRADIENT_UNITS_OBJECT_BOUNDING_BOX);
+  shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -11073,7 +11073,7 @@ paint_linear_gradient (Shape                 *gradient,
     }
 
   transform = NULL;
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == GRADIENT_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       transform = gsk_transform_translate (transform, &bounds->origin);
       transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
@@ -11165,7 +11165,7 @@ paint_radial_gradient (Shape                 *gradient,
 
   gtk_snapshot_save (context->snapshot);
 
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == GRADIENT_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       gtk_snapshot_translate (context->snapshot, &bounds->origin);
       gtk_snapshot_scale (context->snapshot,  bounds->size.width, bounds->size.height);
