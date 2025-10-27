@@ -34,6 +34,9 @@ test_data = [
   'rect.svg',
   'rect2.svg',
   'rounded-rect.svg',
+  'spec-ellipse.svg',
+  'spec-opacity.svg',
+  'spec-rect.svg',
   'style.svg',
   'use.svg',
 ]
