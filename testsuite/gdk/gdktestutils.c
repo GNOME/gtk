@@ -658,8 +658,11 @@ texture_builder_init (TextureBuilder  *builder,
                       int              width,
                       int              height)
 {
-  gdk_memory_layout_init (&builder->layout, format, width, height, 1);
-  gdk_memory_layout_fudge (&builder->layout, 1);
+  gsize align;
+
+  align = gdk_memory_format_alignment (format);
+  gdk_memory_layout_init (&builder->layout, format, width, height, align);
+  gdk_memory_layout_fudge (&builder->layout, align);
   builder->pixels = g_malloc0 (builder->layout.size);
 }
 
