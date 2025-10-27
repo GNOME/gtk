@@ -4408,39 +4408,6 @@ svg_href_parse (const char *value)
 }
 
 /* }}} */
-/* {{{ Weight variation */
-
-static double
-width_apply_weight (double width,
-                    double minwidth,
-                    double maxwidth,
-                    double weight)
-{
-  if (weight < 1)
-    {
-      g_assert_not_reached ();
-    }
-  else if (weight < 400)
-    {
-      double f = (400 - weight) / (400 - 1);
-      return lerp (f, width, minwidth);
-    }
-  else if (weight == 400)
-    {
-      return width;
-    }
-  else if (weight <= 1000)
-    {
-      double f = (weight - 400) / (1000 - 400);
-      return lerp (f, width, maxwidth);
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-}
-
-/* }}} */
 /* {{{ Color stops */
 
 typedef enum
@@ -7394,6 +7361,39 @@ static struct {
   { { 0.25, 0.1, 0.25, 1 } },
 };
 
+/* {{{ Weight variation */
+
+static double
+width_apply_weight (double width,
+                    double minwidth,
+                    double maxwidth,
+                    double weight)
+{
+  if (weight < 1)
+    {
+      g_assert_not_reached ();
+    }
+  else if (weight < 400)
+    {
+      double f = (400 - weight) / (400 - 1);
+      return lerp (f, width, minwidth);
+    }
+  else if (weight == 400)
+    {
+      return width;
+    }
+  else if (weight <= 1000)
+    {
+      double f = (weight - 400) / (1000 - 400);
+      return lerp (f, width, maxwidth);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+}
+
+/* }}} */
 /* {{{ States */
 
 static void
