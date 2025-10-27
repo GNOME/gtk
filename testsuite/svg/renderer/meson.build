@@ -9,6 +9,7 @@ test_data = [
   'clip.svg',
   'ellipse.svg',
   'filter.svg',
+  'gradient-transform.svg',
   'initial-state1.svg',
   'initial-state2.svg',
   'initial-state3.svg',

@@ -11176,6 +11176,9 @@ paint_radial_gradient (Shape                 *gradient,
 
   gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_TRANSFORM]);
   gtk_snapshot_transform (context->snapshot, gradient_transform);
+
+  gradient_transform = gsk_transform_invert (gradient_transform);
+  gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
 
   switch (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]))
