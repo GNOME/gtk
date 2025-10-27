@@ -1,3 +1,4 @@
+# animation colors, including symbolics and none
 input: colors.svg
 time: 0
 colors: black; green; blue; red; magenta

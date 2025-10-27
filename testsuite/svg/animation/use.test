@@ -1,3 +1,4 @@
+# checks that animating the href of a use element works
 input: use.svg
 time: 0
 output: use-0.svg

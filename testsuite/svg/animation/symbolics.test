@@ -1,3 +1,5 @@
+# this test changes symbolic colors to verify that the
+# rendering is updated
 input: symbolics.svg
 colors: black; red; yellow; green; blue
 time: 1000

@@ -1,3 +1,4 @@
+# a basic animateMotion animation
 input: animate-motion.svg
 time: 0
 output: animate-motion-0.svg

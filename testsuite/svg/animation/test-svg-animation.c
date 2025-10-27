@@ -85,18 +85,22 @@ render_svg_file (GFile *file, gboolean generate)
   if (g_str_has_suffix (filename, ".test"))
     {
       GStrv strv;
+      unsigned int i = 0;
 
       if (!g_file_get_contents (filename, &contents, &length, &error))
         g_error ("%s", error->message);
 
       strv = g_strsplit (contents, "\n", 0);
 
-      if (!g_str_has_prefix (strv[0], "input: "))
+      /* Allow for a comment at the top */
+      while (strv[i] && strv[i][0] == '#') i++;
+
+      if (!g_str_has_prefix (strv[i], "input: "))
         g_error ("Can't parse %s\n", filename);
 
-      svg_file = get_sibling (filename, strv[0] + strlen ("input: "));
+      svg_file = get_sibling (filename, strv[i] + strlen ("input: "));
 
-      for (unsigned int i = 1; strv[i]; i++)
+      for (i++; strv[i]; i++)
         {
           Step step;
 
