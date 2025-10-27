@@ -150,6 +150,16 @@ gdk_dmabuf_texture_builder_dispose (GObject *object)
 }
 
 static void
+gdk_dmabuf_texture_builder_finalize (GObject *object)
+{
+  GdkDmabufTextureBuilder *self = GDK_DMABUF_TEXTURE_BUILDER (object);
+
+  g_object_unref (self->display);
+
+  G_OBJECT_CLASS (gdk_dmabuf_texture_builder_parent_class)->finalize (object);
+}
+
+static void
 gdk_dmabuf_texture_builder_get_property (GObject    *object,
                                          guint       property_id,
                                          GValue     *value,
@@ -267,6 +277,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = gdk_dmabuf_texture_builder_dispose;
+  gobject_class->finalize = gdk_dmabuf_texture_builder_finalize;
   gobject_class->get_property = gdk_dmabuf_texture_builder_get_property;
   gobject_class->set_property = gdk_dmabuf_texture_builder_set_property;
 
@@ -402,7 +413,7 @@ static void
 gdk_dmabuf_texture_builder_init (GdkDmabufTextureBuilder *self)
 {
   self->premultiplied = TRUE;
-  self->display = gdk_display_get_default ();
+  self->display = g_object_ref (gdk_display_get_default ());
   self->dmabuf.n_planes = 1;
 
   for (int i = 0; i < GDK_DMABUF_MAX_PLANES; i++)
