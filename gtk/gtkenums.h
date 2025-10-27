@@ -2057,4 +2057,25 @@ typedef enum
   GTK_RESTORE_REASON_RESTORE,
 } GtkRestoreReason;
 
+/**
+ * GtkReducedMotion:
+ * @GTK_REDUCED_MOTION_NO_PREFERENCE: The user has made no preference known to the system
+ * @GTK_REDUCED_MOTION_REDUCE: The user has notified the system that they
+ *   prefer an interface that removes or replaces the types of motion-based
+ *   animation that either trigger discomfort for those with vestibular
+ *   motion sensitivity, or distraction for those with attention deficits
+ *
+ * Values for the [property@Gtk.Settings:gtk-interface-reduced-motion]
+ * and [property@Gtk.CssProvider:prefers-reduced-motion] properties
+ * that indicates the preferred level of motion animations.
+ *
+ * This information can be used inside CSS via media queries.
+ *
+ * Since: 4.22
+ */
+typedef enum {
+  GTK_REDUCED_MOTION_NO_PREFERENCE,
+  GTK_REDUCED_MOTION_REDUCE,
+} GtkReducedMotion;
+
 G_END_DECLS

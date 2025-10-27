@@ -206,6 +206,7 @@ enum {
   PROP_FONT_RENDERING,
   PROP_INTERFACE_COLOR_SCHEME,
   PROP_INTERFACE_CONTRAST,
+  PROP_INTERFACE_REDUCED_MOTION,
 
   NUM_PROPERTIES
 };
@@ -1019,6 +1020,23 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                        GTK_INTERFACE_CONTRAST_UNSUPPORTED,
                                                        GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSettings:gtk-interface-reduced-motion:
+   *
+   * Whether animations should be reduced to essential motions.
+   *
+   * This setting communicates the system-wide preference.
+   * The motion level that is actually used when applying CSS
+   * styles can be set with the [property@Gtk.CssProvider:prefers-reduced-motion]
+   * property.
+   *
+   * Since: 4.22
+   */
+  pspecs[PROP_INTERFACE_REDUCED_MOTION] = g_param_spec_enum ("gtk-interface-reduced-motion", NULL, NULL,
+                                                             GTK_TYPE_REDUCED_MOTION,
+                                                             GTK_REDUCED_MOTION_NO_PREFERENCE,
+                                                             GTK_PARAM_READWRITE);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, pspecs);
 }
 
@@ -1105,6 +1123,9 @@ settings_init_style (GtkSettings *settings)
   g_object_bind_property (settings, "gtk-interface-contrast",
                           settings->theme_provider, "prefers-contrast",
                           G_BINDING_SYNC_CREATE);
+  g_object_bind_property (settings, "gtk-interface-reduced-motion",
+                          settings->theme_provider, "prefers-reduced-motion",
+                          G_BINDING_SYNC_CREATE);
 
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
@@ -1118,6 +1139,9 @@ settings_init_style (GtkSettings *settings)
                               G_BINDING_SYNC_CREATE);
       g_object_bind_property (settings, "gtk-interface-contrast",
                               css_provider, "prefers-contrast",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (settings, "gtk-interface-reduced-motion",
+                              css_provider, "prefers-reduced-motion",
                               G_BINDING_SYNC_CREATE);
 
       css_path = g_build_filename (g_get_user_config_dir (),

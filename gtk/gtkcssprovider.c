@@ -137,6 +137,7 @@ struct _GtkCssProviderPrivate
 
   GtkInterfaceColorScheme prefers_color_scheme;
   GtkInterfaceContrast prefers_contrast;
+  GtkReducedMotion prefers_reduced_motion;
 
   GHashTable *symbolic_colors;
   GHashTable *keyframes;
@@ -161,6 +162,7 @@ enum {
 enum {
    PROP_PREFERS_COLOR_SCHEME = 1,
    PROP_PREFERS_CONTRAST,
+   PROP_PREFERS_REDUCED_MOTION,
    NUM_PROPERTIES
 };
 
@@ -307,7 +309,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * }
    * ```
    *
-   * Changing this setting will cause a re-render of the style sheet.
+   * Changing this setting will reload the style sheet.
    *
    * Since: 4.20
    */
@@ -336,7 +338,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * }
    * ```
    *
-   * Changing this setting will cause a re-render of the style sheet.
+   * Changing this setting will reload the style sheet.
    *
    * Since: 4.20
    */
@@ -344,6 +346,34 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
                                                      GTK_TYPE_INTERFACE_CONTRAST,
                                                      GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkCssProvider:prefers-reduced-motion:
+   *
+   * Define the type of reduced motion to use for the user interface.
+   *
+   * When set to [enum@Gtk.ReducedMotion.REDUCE] the UI is rendered in
+   * with reduced motion animations.
+   *
+   * When set to [enum@Gtk.ReducedMotion.NO_PREFERENCE] (the default),
+   * the user interface will be rendered in default mode.
+   *
+   * This setting is be available for media queries in CSS:
+   *
+   * ```css
+   * @media (prefers-reduced-motion: reduce) {
+   *   // some style with reduced motion
+   * }
+   * ```
+   *
+   * Changing this setting will reload the style sheet.
+   *
+   * Since: 4.22
+   */
+  pspecs[PROP_PREFERS_REDUCED_MOTION] = g_param_spec_enum ("prefers-reduced-motion", NULL, NULL,
+                                                           GTK_TYPE_REDUCED_MOTION,
+                                                           GTK_REDUCED_MOTION_NO_PREFERENCE,
+                                                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, pspecs);
 }
@@ -558,6 +588,24 @@ gtk_css_scanner_new (GtkCssProvider *provider,
 
         case GTK_INTERFACE_CONTRAST_LESS:
           feature.value = "less";
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      g_array_append_vals (scanner->media_features, &feature, 1);
+
+      feature.name = "prefers-reduced-motion";
+
+      switch (priv->prefers_reduced_motion)
+        {
+        case GTK_REDUCED_MOTION_NO_PREFERENCE:
+          feature.value = "no-preference";
+          break;
+
+        case GTK_REDUCED_MOTION_REDUCE:
+          feature.value = "reduce";
           break;
 
         default:
@@ -806,6 +854,9 @@ gtk_css_provider_get_property (GObject         *object,
     case PROP_PREFERS_CONTRAST:
       g_value_set_enum (value, priv->prefers_contrast);
       break;
+    case PROP_PREFERS_REDUCED_MOTION:
+      g_value_set_enum (value, priv->prefers_reduced_motion);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -837,6 +888,15 @@ gtk_css_provider_set_property (GObject         *object,
       if (priv->prefers_contrast != enum_value)
         {
           priv->prefers_contrast = enum_value;
+          priv->needs_rerender = TRUE;
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+    case PROP_PREFERS_REDUCED_MOTION:
+      enum_value = g_value_get_enum (value);
+      if (priv->prefers_reduced_motion != enum_value)
+        {
+          priv->prefers_reduced_motion = enum_value;
           priv->needs_rerender = TRUE;
           g_object_notify_by_pspec (object, pspec);
         }
