@@ -14,7 +14,7 @@ if get_option('print-cpdb').enabled() and cpdb_dep.found()
   ])
   print_backend_deps += [cpdb_dep]
   cdata.set('HAVE_PRINTBACKEND_CPDB', 1)
-elif cups_dep.found()
+elif get_option('print-cups').enabled() and cups_dep.found()
   print_backends += 'cups'
   print_backend_sources += files([
     'gtkprintbackendcups.c',
