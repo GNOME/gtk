@@ -524,7 +524,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="invisible_char">•</property>
                                 <property name="placeholder-text" translatable="1">Click icon to change mode</property>
                                 <property name="secondary-icon-paintable">
-                                  <object class="GtkPathPaintable">
+                                  <object class="GtkSvg">
                                     <property name="resource">/org/gtk/WidgetFactory4/icons/view-refresh.gpa</property>
                                   </object>
                                 </property>
@@ -1778,7 +1778,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkImage" id="listboxrow3image">
                                                 <property name="paintable">
-                                                  <object class="GtkPathPaintable">
+                                                  <object class="GtkSvg">
                                                     <property name="resource">/org/gtk/WidgetFactory4/icons/checked.gpa</property>
                                                   </object>
                                                 </property>
