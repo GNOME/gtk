@@ -4354,15 +4354,14 @@ gsk_container_node_new (GskRenderNode **children,
     {
       graphene_rect_t child_opaque;
       gboolean have_opaque;
-      gboolean is_hdr;
 
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
       self->children[0] = gsk_render_node_ref (children[0]);
       node->preferred_depth = children[0]->preferred_depth;
       gsk_rect_init_from_rect (&node->bounds, &(children[0]->bounds));
-      have_opaque = gsk_render_node_get_opaque_rect (self->children[0], &self->opaque);
-      is_hdr = gsk_render_node_is_hdr (self->children[0]);
+      have_opaque = gsk_render_node_get_opaque_rect (children[0], &self->opaque);
+      node->is_hdr = gsk_render_node_is_hdr (children[0]);
 
       for (guint i = 1; i < n_children; i++)
         {
@@ -4370,7 +4369,7 @@ gsk_container_node_new (GskRenderNode **children,
           self->disjoint = self->disjoint && !gsk_rect_intersects (&node->bounds, &(children[i]->bounds));
           graphene_rect_union (&node->bounds, &(children[i]->bounds), &node->bounds);
           node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
-          if (gsk_render_node_get_opaque_rect (self->children[i], &child_opaque))
+          if (gsk_render_node_get_opaque_rect (children[i], &child_opaque))
             {
               if (have_opaque)
                 gsk_rect_coverage (&self->opaque, &child_opaque, &self->opaque);
@@ -4381,11 +4380,10 @@ gsk_container_node_new (GskRenderNode **children,
                 }
             }
 
-          is_hdr |= gsk_render_node_is_hdr (self->children[i]);
+          node->is_hdr |= gsk_render_node_is_hdr (self->children[i]);
         }
 
       node->fully_opaque = have_opaque && graphene_rect_equal (&node->bounds, &self->opaque);
-      node->is_hdr = is_hdr;
    }
 
   return node;
