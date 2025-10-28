@@ -5,41 +5,41 @@
           id='path0'
           pathLength='1'
           d='M 0 0 L 100 100'>
-    <set
-            id='a0'
-            attributeName='stroke-width'
-            begin='0ms'
-            end='indefinite'
-            to='25'/>
-    <animate
-            id='a1'
-            attributeName='fill'
-            begin='0ms'
-            end='indefinite'
-            dur='1000ms'
-            repeatCount='indefinite'
-            repeatDur='indefinite'
-            fill='freeze'
-            restart='never'
-            from='rgb(255,0,0)'
-            to='rgb(0,128,0)'
-            keySplines='0 0 1 1'
-            keyTimes='0; 1'
-            calcMode='spline'
-            additive='sum'
-            accumulate='sum'/>
-    <animateTransform
-            id='a2'
-            attributeName='transform'
-            from='0 0'
-            to='10 10'
-            keyTimes='0; 1'
-            type='translate'/>
-    <animateMotion
-            id='a3'
-            keyTimes='0; 1'
-            keyPoints='0.5; 0.8'
-            rotate='auto-reverse'
-            path='M 0 0 L 10 20 L 20 10'/>
+  <set
+          id='a0'
+          attributeName='stroke-width'
+          begin='0ms'
+          end='indefinite'
+          to='25'/>
+  <animate
+          id='a1'
+          attributeName='fill'
+          begin='0ms'
+          end='indefinite'
+          dur='1000ms'
+          repeatCount='indefinite'
+          repeatDur='indefinite'
+          fill='freeze'
+          restart='never'
+          from='rgb(255,0,0)'
+          to='rgb(0,128,0)'
+          keySplines='0 0 1 1'
+          keyTimes='0; 1'
+          calcMode='spline'
+          additive='sum'
+          accumulate='sum'/>
+  <animateTransform
+          id='a2'
+          attributeName='transform'
+          from='0 0'
+          to='10 10'
+          keyTimes='0; 1'
+          type='translate'/>
+  <animateMotion
+          id='a3'
+          keyTimes='0; 1'
+          keyPoints='0.5; 0.8'
+          rotate='auto-reverse'
+          path='M 0 0 L 10 20 L 20 10'/>
   </path>
 </svg>

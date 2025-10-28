@@ -2105,6 +2105,7 @@ path_paintable_duplicate_path (PathPaintable *self,
   PathElt elt = g_array_index (self->paths, PathElt, idx);
 
   gsk_path_ref (elt.path);
+  elt.id = g_strdup (elt.id);
 
   g_array_append_val (self->paths, elt);
 

@@ -1765,12 +1765,12 @@ svg_spread_method_parse (const char *string)
 
 typedef enum
 {
-  GRADIENT_UNITS_USER_SPACE_ON_USE,
-  GRADIENT_UNITS_OBJECT_BOUNDING_BOX,
-} GradientUnits;
+  COORD_UNITS_USER_SPACE_ON_USE,
+  COORD_UNITS_OBJECT_BOUNDING_BOX,
+} CoordUnits;
 
-static const SvgValueClass SVG_GRADIENT_UNITS_CLASS = {
-  "SvgGradientUnits",
+static const SvgValueClass SVG_COORD_UNITS_CLASS = {
+  "SvgCoordUnits",
   svg_enum_free,
   svg_enum_equal,
   svg_enum_interpolate,
@@ -1778,24 +1778,24 @@ static const SvgValueClass SVG_GRADIENT_UNITS_CLASS = {
   svg_enum_print,
 };
 
-static SvgEnum gradient_units_values[] = {
-  { { &SVG_GRADIENT_UNITS_CLASS, 1 }, GRADIENT_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
-  { { &SVG_GRADIENT_UNITS_CLASS, 1 }, GRADIENT_UNITS_OBJECT_BOUNDING_BOX, "objectBoundingBox" },
+static SvgEnum coord_units_values[] = {
+  { { &SVG_COORD_UNITS_CLASS, 1 }, COORD_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
+  { { &SVG_COORD_UNITS_CLASS, 1 }, COORD_UNITS_OBJECT_BOUNDING_BOX, "objectBoundingBox" },
 };
 
 static SvgValue *
-svg_gradient_units_new (GradientUnits value)
+svg_coord_units_new (CoordUnits value)
 {
-  return svg_value_ref ((SvgValue *) &gradient_units_values[value]);
+  return svg_value_ref ((SvgValue *) &coord_units_values[value]);
 }
 
 static SvgValue *
-svg_gradient_units_parse (const char *string)
+svg_coord_units_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (gradient_units_values); i++)
+  for (unsigned int i = 0; i < G_N_ELEMENTS (coord_units_values); i++)
     {
-      if (strcmp (string, gradient_units_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &gradient_units_values[i]);
+      if (strcmp (string, coord_units_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &coord_units_values[i]);
     }
   return NULL;
 }
@@ -4408,39 +4408,6 @@ svg_href_parse (const char *value)
 }
 
 /* }}} */
-/* {{{ Weight variation */
-
-static double
-width_apply_weight (double width,
-                    double minwidth,
-                    double maxwidth,
-                    double weight)
-{
-  if (weight < 1)
-    {
-      g_assert_not_reached ();
-    }
-  else if (weight < 400)
-    {
-      double f = (400 - weight) / (400 - 1);
-      return lerp (f, width, minwidth);
-    }
-  else if (weight == 400)
-    {
-      return width;
-    }
-  else if (weight <= 1000)
-    {
-      double f = (weight - 400) / (1000 - 400);
-      return lerp (f, width, maxwidth);
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-}
-
-/* }}} */
 /* {{{ Color stops */
 
 typedef enum
@@ -4810,7 +4777,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 1,
     .presentation = 0,
-    .parse_value = svg_gradient_units_parse,
+    .parse_value = svg_coord_units_parse,
   },
   { .id = SHAPE_ATTR_FX,
     .name = "fx",
@@ -4910,7 +4877,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (SPREAD_METHOD_PAD);
-  shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_gradient_units_new (GRADIENT_UNITS_OBJECT_BOUNDING_BOX);
+  shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -7394,6 +7361,39 @@ static struct {
   { { 0.25, 0.1, 0.25, 1 } },
 };
 
+/* {{{ Weight variation */
+
+static double
+width_apply_weight (double width,
+                    double minwidth,
+                    double maxwidth,
+                    double weight)
+{
+  if (weight < 1)
+    {
+      g_assert_not_reached ();
+    }
+  else if (weight < 400)
+    {
+      double f = (400 - weight) / (400 - 1);
+      return lerp (f, width, minwidth);
+    }
+  else if (weight == 400)
+    {
+      return width;
+    }
+  else if (weight <= 1000)
+    {
+      double f = (weight - 400) / (1000 - 400);
+      return lerp (f, width, maxwidth);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+}
+
+/* }}} */
 /* {{{ States */
 
 static void
@@ -10222,7 +10222,7 @@ serialize_shape_attrs (GString              *s,
               indent_for_attr (s, indent);
               g_string_append_printf (s, "%s='", shape_attr_get_presentation (attr, shape->type));
               svg_value_print (value, s);
-              g_string_append (s, "'");
+              g_string_append_c (s, '\'');
             }
         }
     }
@@ -10399,7 +10399,7 @@ serialize_value_animation_attrs (GString   *s,
             svg_primitive_transform_print (a->frames[1].value, s);
           else
             svg_value_print (a->frames[1].value, s);
-          g_string_append (s, "'");
+          g_string_append_c (s, '\'');
         }
       else
         {
@@ -10424,7 +10424,7 @@ serialize_value_animation_attrs (GString   *s,
                   svg_value_print (a->frames[i].value, s);
                 }
             }
-          g_string_append (s, "'");
+          g_string_append_c (s, '\'');
         }
     }
 
@@ -10439,11 +10439,11 @@ serialize_value_animation_attrs (GString   *s,
           for (unsigned int j = 0; j < 4; j++)
             {
               if (j > 0)
-                g_string_append (s, " ");
+                g_string_append_c (s, ' ');
               string_append_double (s, a->frames[i].params[j]);
             }
         }
-      g_string_append (s, "'");
+      g_string_append_c (s, '\'');
     }
 
   indent_for_attr (s, indent);
@@ -10454,7 +10454,7 @@ serialize_value_animation_attrs (GString   *s,
         g_string_append (s, "; ");
       string_append_double (s, a->frames[i].time);
     }
-  g_string_append (s, "'");
+  g_string_append_c (s, '\'');
 
   if (a->calc_mode != CALC_MODE_LINEAR)
     {
@@ -10537,7 +10537,7 @@ serialize_animation_set (GString              *s,
   indent_for_attr (s, indent);
   g_string_append (s, "to='");
   svg_value_print (a->frames[0].value, s);
-  g_string_append (s, "'");
+  g_string_append_c (s, '\'');
   serialize_animation_status (s, svg, indent, a, flags);
   g_string_append (s, "/>");
 }
@@ -10625,7 +10625,6 @@ serialize_animation_motion (GString              *s,
     }
   else
     {
-      char *str;
       GskPath *path;
 
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
@@ -10635,10 +10634,10 @@ serialize_animation_motion (GString              *s,
       if (path)
         {
           indent_for_attr (s, indent);
-          str = gsk_path_to_string (path);
+          g_string_append (s, "path='");
+          gsk_path_print (path, s);
           gsk_path_unref (path);
-          g_string_append_printf (s, "path='%s'", str);
-          g_free (str);
+          g_string_append_c (s, '\'');
         }
       g_string_append (s, "/>");
     }
@@ -10671,74 +10670,6 @@ serialize_animation (GString              *s,
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-serialize_animations (GString              *s,
-                      GtkSvg               *svg,
-                      int                   indent,
-                      Shape                *shape,
-                      GtkSvgSerializeFlags  flags)
-{
-  for (unsigned int i = 0; i < shape->animations->len; i++)
-    {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      serialize_animation (s, svg, indent, a, flags);
-    }
-}
-
-static void serialize_shape (GString              *s,
-                             GtkSvg               *svg,
-                             int                   indent,
-                             Shape                *shape,
-                             GtkSvgSerializeFlags  flags);
-
-static void
-serialize_group (GString              *s,
-                 GtkSvg               *svg,
-                 int                   indent,
-                 Shape                *shape,
-                 GtkSvgSerializeFlags  flags)
-{
-  if (indent > 0) /* Hack: this is for <svg> */
-    {
-      indent_for_elt (s, indent);
-      g_string_append_printf (s, "<%s", shape_types[shape->type].name);
-      serialize_shape_attrs (s, svg, indent, shape, flags);
-      serialize_gpa_attrs (s, svg, indent, shape, flags);
-      g_string_append (s, ">");
-    }
-
-  serialize_animations (s, svg, indent + 2, shape, flags);
-
-  for (unsigned int i = 0; i < shape->shapes->len; i++)
-    {
-      Shape *sh = g_ptr_array_index (shape->shapes, i);
-      serialize_shape (s, svg, indent + 2 , sh, flags);
-    }
-
-  if (indent > 0)
-    {
-      indent_for_elt (s, indent);
-      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
-    }
-}
-
-static void
-serialize_leaf (GString              *s,
-                GtkSvg               *svg,
-                int                   indent,
-                Shape                *shape,
-                GtkSvgSerializeFlags  flags)
-{
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "<%s", shape_types[shape->type].name);
-  serialize_shape_attrs (s, svg, indent, shape, flags);
-  serialize_gpa_attrs (s, svg, indent, shape, flags);
-  g_string_append (s, ">");
-  serialize_animations (s, svg, indent + 2, shape, flags);
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
 }
 
 static void
@@ -10787,20 +10718,26 @@ serialize_color_stop (GString              *s,
 }
 
 static void
-serialize_gradient (GString              *s,
-                    GtkSvg               *svg,
-                    int                   indent,
-                    Shape                *shape,
-                    GtkSvgSerializeFlags  flags)
+serialize_shape (GString              *s,
+                 GtkSvg               *svg,
+                 int                   indent,
+                 Shape                *shape,
+                 GtkSvgSerializeFlags  flags)
 {
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "<%s", shape_types[shape->type].name);
-  serialize_shape_attrs (s, svg, indent, shape, flags);
-  serialize_gpa_attrs (s, svg, indent, shape, flags);
-  g_string_append (s, ">");
+  if (indent > 0) /* Hack: this is for <svg> */
+    {
+      indent_for_elt (s, indent);
+      g_string_append_printf (s, "<%s", shape_types[shape->type].name);
+      serialize_shape_attrs (s, svg, indent, shape, flags);
+      serialize_gpa_attrs (s, svg, indent, shape, flags);
+      g_string_append_c (s, '>');
+    }
 
-  for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
-    serialize_color_stop (s, svg, indent + 2, shape, idx, flags);
+  if (shape_types[shape->type].has_color_stops)
+    {
+      for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
+        serialize_color_stop (s, svg, indent + 2, shape, idx, flags);
+    }
 
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
@@ -10809,41 +10746,19 @@ serialize_gradient (GString              *s,
         serialize_animation (s, svg, indent, a, flags);
     }
 
-  indent_for_elt (s, indent);
-  g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
-}
-
-static void
-serialize_shape (GString              *s,
-                 GtkSvg               *svg,
-                 int                   indent,
-                 Shape                *shape,
-                 GtkSvgSerializeFlags  flags)
-{
-  switch (shape->type)
+  if (shape_types[shape->type].has_shapes)
     {
-    case SHAPE_GROUP:
-    case SHAPE_CLIP_PATH:
-    case SHAPE_MASK:
-    case SHAPE_DEFS:
-      serialize_group (s, svg, indent, shape, flags);
-      break;
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          serialize_shape (s, svg, indent + 2 , sh, flags);
+        }
+    }
 
-    case SHAPE_CIRCLE:
-    case SHAPE_ELLIPSE:
-    case SHAPE_RECT:
-    case SHAPE_PATH:
-    case SHAPE_USE:
-      serialize_leaf (s, svg, indent, shape, flags);
-      break;
-
-    case SHAPE_LINEAR_GRADIENT:
-    case SHAPE_RADIAL_GRADIENT:
-      serialize_gradient (s, svg, indent, shape, flags);
-      break;
-
-    default:
-      g_assert_not_reached ();
+  if (indent > 0)
+    {
+      indent_for_elt (s, indent);
+      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
     }
 }
 
@@ -11073,7 +10988,7 @@ paint_linear_gradient (Shape                 *gradient,
     }
 
   transform = NULL;
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == GRADIENT_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       transform = gsk_transform_translate (transform, &bounds->origin);
       transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
@@ -11165,7 +11080,7 @@ paint_radial_gradient (Shape                 *gradient,
 
   gtk_snapshot_save (context->snapshot);
 
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == GRADIENT_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       gtk_snapshot_translate (context->snapshot, &bounds->origin);
       gtk_snapshot_scale (context->snapshot,  bounds->size.width, bounds->size.height);

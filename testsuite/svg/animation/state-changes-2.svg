@@ -14,15 +14,15 @@
           cx='0'
           cy='5'
           r='5'>
-    <set
-            id='gpa:out-of-state:red'
-            attributeName='visibility'
-            begin='gpa:states(0).end; 0ms'
-            end='gpa:states(0).begin'
-            to='hidden'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='2000ms'/>
+  <set
+          id='gpa:out-of-state:red'
+          attributeName='visibility'
+          begin='gpa:states(0).end; 0ms'
+          end='gpa:states(0).begin'
+          to='hidden'
+          gpa:status='running'
+          gpa:computed-simple-duration='indefinite'
+          gpa:current-start-time='2000ms'/>
   </circle>
   <circle
           id='yellow'
@@ -30,14 +30,14 @@
           cx='10'
           cy='5'
           r='5'>
-    <set
-            id='gpa:out-of-state:yellow'
-            attributeName='visibility'
-            begin='gpa:states(1).end; 0ms'
-            end='gpa:states(1).begin'
-            to='hidden'
-            gpa:status='done'
-            gpa:computed-simple-duration='indefinite'/>
+  <set
+          id='gpa:out-of-state:yellow'
+          attributeName='visibility'
+          begin='gpa:states(1).end; 0ms'
+          end='gpa:states(1).begin'
+          to='hidden'
+          gpa:status='done'
+          gpa:computed-simple-duration='indefinite'/>
   </circle>
   <circle
           id='blue'
@@ -45,13 +45,13 @@
           cx='20'
           cy='5'
           r='5'>
-    <set
-            id='gpa:out-of-state:blue'
-            attributeName='visibility'
-            begin='gpa:states(0 1).end; 0ms'
-            end='gpa:states(0 1).begin'
-            to='hidden'
-            gpa:status='done'
-            gpa:computed-simple-duration='indefinite'/>
+  <set
+          id='gpa:out-of-state:blue'
+          attributeName='visibility'
+          begin='gpa:states(0 1).end; 0ms'
+          end='gpa:states(0 1).begin'
+          to='hidden'
+          gpa:status='done'
+          gpa:computed-simple-duration='indefinite'/>
   </circle>
 </svg>

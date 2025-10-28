@@ -13,27 +13,27 @@
           cx='50'
           cy='50'
           r='10'>
-    <animate
-            id='fade-in'
-            attributeName='opacity'
-            begin='0ms'
-            dur='1000ms'
-            fill='freeze'
-            from='0'
-            to='1'
-            keyTimes='0; 1'
-            gpa:status='done'/>
-    <animate
-            id='fade-out'
-            attributeName='opacity'
-            begin='10000ms'
-            dur='1000ms'
-            fill='freeze'
-            from='1'
-            to='0'
-            keyTimes='0; 1'
-            gpa:status='inactive'
-            gpa:current-start-time='10000ms'
-            gpa:current-end-time='11000ms'/>
+  <animate
+          id='fade-in'
+          attributeName='opacity'
+          begin='0ms'
+          dur='1000ms'
+          fill='freeze'
+          from='0'
+          to='1'
+          keyTimes='0; 1'
+          gpa:status='done'/>
+  <animate
+          id='fade-out'
+          attributeName='opacity'
+          begin='10000ms'
+          dur='1000ms'
+          fill='freeze'
+          from='1'
+          to='0'
+          keyTimes='0; 1'
+          gpa:status='inactive'
+          gpa:current-start-time='10000ms'
+          gpa:current-end-time='11000ms'/>
   </circle>
 </svg>

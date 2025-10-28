@@ -18,19 +18,19 @@
             y='60'
             width='20'
             height='20'>
-      <animate
-              id='rotate'
-              attributeName='transform'
-              begin='0ms'
-              dur='1000ms'
-              repeatCount='3'
-              from='rotate(0, 60, 70)'
-              to='rotate(360, 60, 70)'
-              keyTimes='0; 1'
-              additive='sum'
-              gpa:status='running'
-              gpa:current-start-time='0ms'
-              gpa:current-end-time='3000ms'/>
+    <animate
+            id='rotate'
+            attributeName='transform'
+            begin='0ms'
+            dur='1000ms'
+            repeatCount='3'
+            from='rotate(0, 60, 70)'
+            to='rotate(360, 60, 70)'
+            keyTimes='0; 1'
+            additive='sum'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:current-end-time='3000ms'/>
     </rect>
   </g>
 </svg>

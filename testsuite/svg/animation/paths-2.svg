@@ -10,14 +10,14 @@
   <path
           stroke='rgb(0,0,0)'
           d='M 0 0 h 200 v 100 h -200 z'>
-    <animate
-            attributeName='d'
-            begin='0ms'
-            dur='10000ms'
-            fill='freeze'
-            from='M 0 0 h 10 v 10 h -10 z'
-            to='M 0 0 h 200 v 100 h -200 z'
-            keyTimes='0; 1'
-            gpa:status='done'/>
+  <animate
+          attributeName='d'
+          begin='0ms'
+          dur='10000ms'
+          fill='freeze'
+          from='M 0 0 h 10 v 10 h -10 z'
+          to='M 0 0 h 200 v 100 h -200 z'
+          keyTimes='0; 1'
+          gpa:status='done'/>
   </path>
 </svg>

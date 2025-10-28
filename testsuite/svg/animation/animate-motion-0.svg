@@ -18,15 +18,15 @@
           transform='translate(30, 160) rotate(0, 0, 0) translate(-5, -0)'
           fill='rgb(255,0,0)'
           r='5'>
-    <animateMotion
-            begin='0ms'
-            dur='10000ms'
-            fill='freeze'
-            keyTimes='0; 0.1; 1'
-            keyPoints='0; 0.9; 1'
-            gpa:status='running'
-            gpa:current-start-time='0ms'
-            gpa:current-end-time='10000ms'
-            path='M 30 160 L 270 40'/>
+  <animateMotion
+          begin='0ms'
+          dur='10000ms'
+          fill='freeze'
+          keyTimes='0; 0.1; 1'
+          keyPoints='0; 0.9; 1'
+          gpa:status='running'
+          gpa:current-start-time='0ms'
+          gpa:current-end-time='10000ms'
+          path='M 30 160 L 270 40'/>
   </circle>
 </svg>

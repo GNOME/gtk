@@ -13,11 +13,11 @@
           gpa:stroke-width='1 2 3'
           gpa:stroke='foreground'
           gpa:fill='accent'>
-    <set
-            id='gpa:out-of-state:path0'
-            attributeName='visibility'
-            begin='gpa:states(all).end; 0ms'
-            end='gpa:states(all).begin'
-            to='hidden'/>
+  <set
+          id='gpa:out-of-state:path0'
+          attributeName='visibility'
+          begin='gpa:states(all).end; 0ms'
+          end='gpa:states(all).begin'
+          to='hidden'/>
   </path>
 </svg>

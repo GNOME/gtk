@@ -5,78 +5,78 @@
           cx='0'
           cy='0'
           r='10'>
-    <animate
-            id='begin1'
-            attributeName='opacity'
-            begin='0ms'
-            dur='1000ms'
-            from='0'
-            to='1'
-            keyTimes='0; 1'/>
+  <animate
+          id='begin1'
+          attributeName='opacity'
+          begin='0ms'
+          dur='1000ms'
+          from='0'
+          to='1'
+          keyTimes='0; 1'/>
   </circle>
   <circle
           cx='0'
           cy='0'
           r='10'>
-    <animate
-            id='begin2'
-            attributeName='opacity'
-            begin='10000ms'
-            dur='1000ms'
-            from='0'
-            to='1'
-            keyTimes='0; 1'/>
+  <animate
+          id='begin2'
+          attributeName='opacity'
+          begin='10000ms'
+          dur='1000ms'
+          from='0'
+          to='1'
+          keyTimes='0; 1'/>
   </circle>
   <circle
           cx='0'
           cy='0'
           r='10'>
-    <animate
-            id='begin3'
-            attributeName='opacity'
-            begin='-200ms'
-            dur='1000ms'
-            from='0'
-            to='1'
-            keyTimes='0; 1'/>
+  <animate
+          id='begin3'
+          attributeName='opacity'
+          begin='-200ms'
+          dur='1000ms'
+          from='0'
+          to='1'
+          keyTimes='0; 1'/>
   </circle>
   <circle
           cx='0'
           cy='0'
           r='10'>
-    <animate
-            id='begin4'
-            attributeName='opacity'
-            begin='begin3.begin 200ms'
-            dur='1000ms'
-            from='0'
-            to='1'
-            keyTimes='0; 1'/>
+  <animate
+          id='begin4'
+          attributeName='opacity'
+          begin='begin3.begin 200ms'
+          dur='1000ms'
+          from='0'
+          to='1'
+          keyTimes='0; 1'/>
   </circle>
   <circle
           cx='0'
           cy='0'
           r='10'>
-    <animate
-            id='begin5'
-            attributeName='opacity'
-            begin='begin3.end -20000ms'
-            dur='1000ms'
-            from='0'
-            to='1'
-            keyTimes='0; 1'/>
+  <animate
+          id='begin5'
+          attributeName='opacity'
+          begin='begin3.end -20000ms'
+          dur='1000ms'
+          from='0'
+          to='1'
+          keyTimes='0; 1'/>
   </circle>
   <circle
           cx='0'
           cy='0'
           r='10'>
-    <animate
-            id='begin6'
-            attributeName='opacity'
-            begin='indefinite'
-            dur='1000ms'
-            from='0'
-            to='1'
-            keyTimes='0; 1'/>
+  <animate
+          id='begin6'
+          attributeName='opacity'
+          begin='indefinite'
+          dur='1000ms'
+          from='0'
+          to='1'
+          keyTimes='0; 1'/>
   </circle>
 </svg>
