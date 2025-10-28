@@ -12470,8 +12470,11 @@ gtk_svg_get_weight (GtkSvg *self)
  *
  * Sets the state of the paintable.
  *
- * Use [method@Gtk.Svg.get_n_states] to
- * find out what states @self has.
+ * Use [method@Gtk.Svg.get_n_states] to find out
+ * what states @self has.
+ *
+ * Note that [method@Gtk.Svg.play] must have been
+ * called for the SVG paintable to react to state changes.
  *
  * Since: 4.22
  */
@@ -12602,6 +12605,9 @@ gtk_svg_set_frame_clock (GtkSvg        *self,
  * @self: an SVG paintable
  *
  * Start playing animations.
+ *
+ * Note that this is necessary for state changes as
+ * well.
  *
  * Since: 4.22
  */
