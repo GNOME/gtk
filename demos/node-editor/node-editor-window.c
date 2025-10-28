@@ -196,7 +196,33 @@ highlight_text (NodeEditorWindow *self)
     {
       gunichar c = gtk_text_iter_get_char (&iter);
 
-      if (c == '{')
+      if (c == '/')
+        {
+          GtkTextIter comment_start = iter;
+          gtk_text_iter_forward_char (&iter);
+
+          c = gtk_text_iter_get_char (&iter);
+          if (c == '*')
+            {
+              gtk_text_iter_forward_char (&iter);
+              while (!gtk_text_iter_is_end (&iter))
+                {
+                  c = gtk_text_iter_get_char (&iter);
+                  gtk_text_iter_forward_char (&iter);
+
+                  if (c == '*')
+                    {
+                      c = gtk_text_iter_get_char (&iter);
+                      gtk_text_iter_forward_char (&iter);
+                      if (c == '/')
+                        break;
+                    }
+                }
+            }
+
+          gtk_text_buffer_apply_tag_by_name (self->text_buffer, "comment", &comment_start, &iter);
+        }
+      else if (c == '{')
         {
           GtkTextIter word_end = iter;
           GtkTextIter word_start;
@@ -2085,6 +2111,11 @@ node_editor_window_init (NodeEditorWindow *self)
                           g_object_new (GTK_TYPE_TEXT_TAG,
                                         "name", "error",
                                         "underline", PANGO_UNDERLINE_ERROR,
+                                        NULL));
+  gtk_text_tag_table_add (self->tag_table,
+                          g_object_new (GTK_TYPE_TEXT_TAG,
+                                        "name", "comment",
+                                        "foreground-rgba", &(GdkRGBA) { 0.8, 0.52, 0.5, 1},
                                         NULL));
   gtk_text_tag_table_add (self->tag_table,
                           g_object_new (GTK_TYPE_TEXT_TAG,
