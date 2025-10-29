@@ -1611,6 +1611,12 @@ gtk_application_forget (GtkApplication *application)
   if (!priv->support_save)
     return;
 
+  for (GList *l = priv->windows; l != NULL; l = l->next)
+    {
+      GtkWindow *window = GTK_WINDOW (l->data);
+      gtk_application_impl_window_forget (priv->impl, window);
+    }
+
   gtk_application_impl_forget_state (priv->impl);
 
   priv->forgotten = TRUE;
