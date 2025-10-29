@@ -411,12 +411,13 @@ gtk_application_restore_window (GtkApplication   *application,
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   priv->pending_window_state = gtk_state;
-
   g_signal_emit (application, gtk_application_signals[RESTORE_WINDOW], 0, reason, app_state);
 
   if (priv->pending_window_state)
     {
-      g_warning ("::create-window handler did not create a window");
+      GTK_DEBUG (SESSION, "App didn't restore a toplevel, removing it from session");
+      // TODO: Tell compositor to forget the window state
+      // (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
       priv->pending_window_state = NULL;
     }
 }
