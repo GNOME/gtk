@@ -135,6 +135,8 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
   GSList *iter = wayland->inhibitors;
   GdkSurface *surface;
 
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_removed (impl, window);
+
   while (iter)
     {
       GtkApplicationWaylandInhibitor *inhibitor = iter->data;
