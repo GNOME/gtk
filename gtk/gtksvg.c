@@ -9554,6 +9554,7 @@ parse_shape_attrs (Shape                *shape,
 {
   const char *class_attr = NULL;
   const char *style_attr = NULL;
+  const char *xlink_href_attr = NULL;
 
   for (unsigned int i = 0; attr_names[i]; i++)
     {
@@ -9573,6 +9574,11 @@ parse_shape_attrs (Shape                *shape,
       else if (strcmp (attr_names[i], "style") == 0)
         {
           style_attr = attr_values[i];
+          *handled |= BIT (i);
+        }
+      else if (strcmp (attr_names[i], "xlink:href") == 0)
+        {
+          xlink_href_attr = attr_values[i];
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "id") == 0)
@@ -9611,6 +9617,16 @@ parse_shape_attrs (Shape                *shape,
 
   if (style_attr)
     parse_style_attr (shape, FALSE, style_attr, data, context);
+
+  if (xlink_href_attr && (shape->attrs & BIT (SHAPE_ATTR_HREF)) == 0)
+    {
+      SvgValue *value = shape_attr_parse_value (SHAPE_ATTR_HREF, xlink_href_attr);
+      if (value)
+        {
+          shape_set_base_value (shape, SHAPE_ATTR_HREF, value);
+          svg_value_unref (value);
+        }
+    }
 
   if (class_attr && *class_attr)
     {
