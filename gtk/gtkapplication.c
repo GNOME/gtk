@@ -216,6 +216,7 @@ typedef struct
   char            *help_overlay_path;
   gboolean         support_save;
   GVariant        *pending_window_state;
+  GVariant        *kept_window_state;
   gboolean         restored;
   gboolean         forgotten;
 } GtkApplicationPrivate;
@@ -542,6 +543,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         }
     }
 
+  g_clear_pointer (&priv->kept_window_state, g_variant_unref);
+
   priv->windows = g_list_prepend (priv->windows, window);
   gtk_window_set_application (window, application);
   g_application_hold (G_APPLICATION (application));
@@ -558,19 +561,61 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
 }
 
+static gboolean
+should_remove_from_session (GtkApplication *application,
+                            GtkWindow      *window)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  if (gtk_window_get_transient_for (window))
+    {
+      GTK_DEBUG (SESSION, "Removing transient toplevel from session state");
+      return TRUE;
+    }
+
+  for (GList *l = priv->windows; l != NULL; l = l->next)
+    {
+      GtkWindow *candidate = GTK_WINDOW (l->data);
+      if (candidate != window && !gtk_window_get_transient_for (candidate))
+        {
+          /* This isn't the last non-transient toplevel in the session */
+          GTK_DEBUG (SESSION, "Removing toplevel from session state");
+          return TRUE;
+        }
+    }
+
+  GTK_DEBUG (SESSION, "Keeping last toplevel in session state");
+  return FALSE;
+}
+
+static GVariant *
+collect_window_state (GtkApplication *application,
+                      GtkWindow      *window);
+
 static void
 gtk_application_window_removed (GtkApplication *application,
                                 GtkWindow      *window)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   gpointer old_active;
+  gboolean remove_from_session;
 
   old_active = priv->windows;
+
+  remove_from_session = should_remove_from_session (application, window);
+
+  if (!remove_from_session)
+    {
+      g_assert (!priv->kept_window_state);
+      priv->kept_window_state = collect_window_state (application, window);
+    }
 
   if (priv->impl)
     {
       gtk_application_impl_window_removed (priv->impl, window);
-      gtk_application_impl_window_forget (priv->impl, window);
+
+      if (remove_from_session)
+        gtk_application_impl_window_forget (priv->impl, window);
     }
 
   g_signal_handlers_disconnect_by_func (window,
@@ -664,6 +709,7 @@ gtk_application_finalize (GObject *object)
   g_clear_object (&priv->menubar);
   g_clear_object (&priv->muxer);
   g_clear_object (&priv->accels);
+  g_clear_pointer (&priv->kept_window_state, g_variant_unref);
 
   g_free (priv->help_overlay_path);
 
@@ -1542,17 +1588,25 @@ collect_state (GtkApplication *application)
 
   g_variant_builder_init (&win_builder, G_VARIANT_TYPE ("a(a{sv}a{sv})"));
 
-  GTK_DEBUG (SESSION, "Collecting state for %d windows", g_list_length (priv->windows));
-
-  for (GList *l = priv->windows; l != NULL; l = l->next)
+  if (priv->kept_window_state)
     {
-      GtkWindow *window = GTK_WINDOW (l->data);
-      GVariant *win_state;
+      GTK_DEBUG (SESSION, "Using state of kept last window");
+      g_variant_builder_add_value (&win_builder, priv->kept_window_state);
+    }
+  else
+    {
+      GTK_DEBUG (SESSION, "Collecting state for %d windows", g_list_length (priv->windows));
 
-      win_state = collect_window_state (application, window);
-      g_variant_builder_add_value (&win_builder, win_state);
+      for (GList *l = priv->windows; l != NULL; l = l->next)
+        {
+          GtkWindow *window = GTK_WINDOW (l->data);
+          GVariant *win_state;
 
-      g_variant_unref (win_state);
+          win_state = collect_window_state (application, window);
+          g_variant_builder_add_value (&win_builder, win_state);
+
+          g_variant_unref (win_state);
+        }
     }
 
   g_variant_builder_init (&global_builder, G_VARIANT_TYPE_VARDICT);
@@ -1624,6 +1678,13 @@ gtk_application_forget (GtkApplication *application)
 
   if (!priv->support_save)
     return;
+
+  if (priv->kept_window_state)
+    {
+      // TODO: Tell compositor to forget the window state
+      //       (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
+      g_clear_pointer (&priv->kept_window_state, g_variant_unref);
+    }
 
   for (GList *l = priv->windows; l != NULL; l = l->next)
     {
