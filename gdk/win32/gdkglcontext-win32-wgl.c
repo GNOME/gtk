@@ -580,7 +580,7 @@ gdk_win32_gl_context_wgl_init_basic (GdkWin32Display  *display_win32,
    * we want to ensure that the HDC of the notification HWND that we will
    * also use for our new dummy HDC will have the correct pixel format set
    */
-  g_clear_pointer (&hglrc, wglDeleteContext);
+  g_clear_pointer (&hglrc, gdk_win32_private_wglDeleteContext);
   ReleaseDC (hwnd, hdc);
   DestroyWindow (hwnd);
 
