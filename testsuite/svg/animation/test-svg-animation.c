@@ -96,7 +96,7 @@ render_svg_file (GFile *file, gboolean generate)
       while (strv[i] && strv[i][0] == '#') i++;
 
       if (!g_str_has_prefix (strv[i], "input: "))
-        g_error ("Can't parse %s\n", filename);
+        g_error ("Can't parse %s.%u (expected 'input: ')\n", filename, i);
 
       svg_file = get_sibling (filename, strv[i] + strlen ("input: "));
 
@@ -116,7 +116,7 @@ render_svg_file (GFile *file, gboolean generate)
                 {
                   step.state = g_ascii_strtoull (strv[i] + strlen ("state: "), &end, 10);
                   if ((end && *end != '\0') || step.state > 63)
-                    g_error ("Can't parse %s\n", filename);
+                    g_error ("Can't parse %s.%u (expected a state)\n", filename, i);
                 }
               g_array_append_val (steps, step);
             }
@@ -126,7 +126,7 @@ render_svg_file (GFile *file, gboolean generate)
               step.type = TIME;
               step.time = g_ascii_strtoull (strv[i] + strlen ("time: "), &end, 10);
               if (end && *end != '\0')
-                g_error ("Can't parse %s\n", filename);
+                g_error ("Can't parse %s.%u (expected a time)\n", filename, i);
               g_array_append_val (steps, step);
             }
           else if (g_str_has_prefix (strv[i], "colors: "))
@@ -138,7 +138,7 @@ render_svg_file (GFile *file, gboolean generate)
               for (unsigned int j = 0; j < step.n_colors; j++)
                 {
                   if (!gdk_rgba_parse (&step.colors[j], cols[j]))
-                    g_error ("Can't parse %s\n", filename);
+                    g_error ("Can't parse %s.%u (expected colors)\n", filename, i);
                 }
               g_strfreev (cols);
 
