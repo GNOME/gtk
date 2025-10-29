@@ -333,9 +333,13 @@ gtk_svg_location_init (GtkSvgLocation      *location,
 {
   int lines, chars;
   g_markup_parse_context_get_position (context, &lines, &chars);
-  location->bytes = 0;
   location->lines = lines;
   location->line_chars = chars;
+#if GLIB_CHECK_VERSION (2, 87, 0)
+  location->bytes = g_markup_parse_context_get_offset (context);
+#else
+  location->bytes = 0;
+#endif
 }
 
 typedef struct
