@@ -10,6 +10,7 @@ test_data = [
   'clips.test',
   'colors.test',
   'dashes.test',
+  'gpa-animations.test',
   'gpa-transitions.test',
   'masks.test',
   'paths.test',
