@@ -1,0 +1,49 @@
+<svg
+        width='64'
+        height='64'
+        viewBox='0 0 32 32'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='2000ms'>
+  <circle
+          id='red'
+          fill='none'
+          stroke='rgb(255,0,0)'
+          stroke-dasharray='1 0'
+          pathLength='1'
+          cx='16'
+          cy='16'
+          r='5'>
+  <set
+          id='gpa:out-of-state:red'
+          attributeName='visibility'
+          begin='gpa:states(0).end; 0ms'
+          end='gpa:states(0).begin'
+          to='hidden'
+          gpa:status='done'
+          gpa:computed-simple-duration='indefinite'
+          gpa:current-start-time='0ms'
+          gpa:current-end-time='0ms'/>
+  <animate
+          id='gpa:animation:red-stroke-dasharray'
+          attributeName='stroke-dasharray'
+          begin='gpa:states(0).begin'
+          end='gpa:states(0).end'
+          dur='4000ms'
+          values='0 2; 1 0; 0 2'
+          keyTimes='0; 0.5; 1'
+          gpa:status='running'
+          gpa:current-start-time='0ms'/>
+  <set
+          id='gpa:path-length'
+          attributeName='pathLength'
+          begin='0ms'
+          end='indefinite'
+          to='1'
+          gpa:status='running'
+          gpa:computed-simple-duration='indefinite'
+          gpa:current-start-time='0ms'/>
+  </circle>
+</svg>

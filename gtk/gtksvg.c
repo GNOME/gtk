@@ -6098,7 +6098,9 @@ struct _Animation
   GPtrArray *deps;
 
   struct {
-    unsigned int direction;
+    unsigned int transition;
+    unsigned int transition_easing;
+    unsigned int animation;
     unsigned int easing;
     double origin;
     double segment;
@@ -6540,16 +6542,14 @@ find_current_cycle_and_frame (Animation      *a,
   cycle_start = start + rep * simple_duration;
   cycle_end = cycle_start + simple_duration;
 
-  frame_start = cycle_start;
-  frame_end = cycle_end;
+  frame_start = frame_end = cycle_start;
   for (i = 0; i + 1 < a->n_frames; i++)
     {
+      frame_start = frame_end;
       frame_end = lerp (a->frames[i + 1].time, cycle_start, cycle_end);
 
       if (time < frame_end)
         break;
-
-      frame_start = frame_end;
     }
 
   t = (time - frame_start) / (double) (frame_end - frame_start);
@@ -7030,6 +7030,50 @@ resolve_value (Shape           *shape,
 }
 
 static SvgValue *
+compute_animation_motion_value (Animation      *a,
+                                unsigned int    rep,
+                                unsigned int    frame,
+                                double          frame_t,
+                                ComputeContext *context)
+{
+  double offset;
+  double angle;
+  graphene_point_t orig_pos, final_pos;
+  SvgValue *value;
+  GskPathMeasure *measure;
+
+  measure = shape_get_current_measure (a->shape, context->viewport);
+  get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
+  gsk_path_measure_unref (measure);
+
+  if (frame + 1 < a->n_frames)
+    offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
+  else
+    offset = a->frames[frame].point;
+
+  measure = animation_motion_get_current_measure (a, context->viewport);
+  angle = a->motion.angle;
+  get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
+  value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+
+  if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
+    {
+      SvgValue *end_val, *acc;
+
+      get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
+      end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+      acc = svg_value_accumulate (value, end_val, rep);
+      svg_value_unref (end_val);
+      svg_value_unref (value);
+      value = acc;
+    }
+
+  gsk_path_measure_unref (measure);
+
+  return value;
+}
+
+static SvgValue *
 compute_value_at_time (Animation      *a,
                        ComputeContext *context)
 {
@@ -7107,38 +7151,7 @@ compute_value_at_time (Animation      *a,
     }
   else
     {
-      double offset;
-      double angle;
-      graphene_point_t orig_pos, final_pos;
-      SvgValue *value;
-      GskPathMeasure *measure;
-
-      measure = shape_get_current_measure (a->shape, context->viewport);
-      get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
-      gsk_path_measure_unref (measure);
-
-      offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
-
-      measure = animation_motion_get_current_measure (a, context->viewport);
-      angle = a->motion.angle;
-      get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
-      value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
-
-      if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
-        {
-          SvgValue *end_val, *acc;
-
-          get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
-          end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
-          acc = svg_value_accumulate (value, end_val, rep);
-          svg_value_unref (end_val);
-          svg_value_unref (value);
-          value = acc;
-        }
-
-      gsk_path_measure_unref (measure);
-
-      return value;
+      return compute_animation_motion_value (a, rep, frame, frame_t, context);
     }
 }
 
@@ -7161,11 +7174,18 @@ compute_value_for_animation (Animation      *a,
   else if (a->fill == ANIMATION_FILL_FREEZE)
     {
       /* keep the last value */
-      if (a->repeat_count == 1 &&
-          !(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
+      if (a->repeat_count == 1)
         {
-          dbg_print ("values", "%s: frozen (fast)\n", a->id);
-          return resolve_value (a->shape, context, a->attr, a->frames[a->n_frames - 1].value);
+          if (!(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
+            {
+              dbg_print ("values", "%s: frozen (fast)\n", a->id);
+              return resolve_value (a->shape, context, a->attr, a->frames[a->n_frames - 1].value);
+            }
+          else
+           {
+              dbg_print ("values", "%s: frozen (motion)\n", a->id);
+              return compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
+           }
         }
       else
         {
@@ -7338,12 +7358,7 @@ typedef enum
 
 typedef enum
 {
-  ANIMATION_TYPE_NONE,
-  ANIMATION_TYPE_AUTOMATIC,
-} GpaAnimation;
-
-typedef enum
-{
+  ANIMATION_DIRECTION_NONE,
   ANIMATION_DIRECTION_NORMAL,
   ANIMATION_DIRECTION_ALTERNATE,
   ANIMATION_DIRECTION_REVERSE,
@@ -7490,6 +7505,8 @@ create_transition (Shape             *shape,
                    int64_t            duration,
                    int64_t            delay,
                    GpaEasingFunction  easing,
+                   double             origin,
+                   GpaTransition      type,
                    ShapeAttr          attr,
                    SvgValue          *from,
                    SvgValue          *to)
@@ -7528,6 +7545,10 @@ create_transition (Shape             *shape,
 
   time_spec_add_animation (begin, a);
 
+  a->gpa.transition = type;
+  a->gpa.easing = easing;
+  a->gpa.origin = origin;
+
   a = animation_animate_new ();
   a->simple_duration = duration;
   a->repeat_duration = duration;
@@ -7558,6 +7579,10 @@ create_transition (Shape             *shape,
   g_ptr_array_add (shape->animations, a);
 
   time_spec_add_animation (begin, a);
+
+  a->gpa.transition = type;
+  a->gpa.easing = easing;
+  a->gpa.origin = origin;
 }
 
 static void
@@ -7645,6 +7670,7 @@ create_transitions (Shape             *shape,
     case TRANSITION_TYPE_ANIMATE:
       create_transition (shape, timeline, states,
                          duration, delay, easing,
+                         origin, type,
                          SHAPE_ATTR_STROKE_DASHARRAY,
                          svg_dash_array_new ((double[]) { 0, 2 }, 2),
                          svg_dash_array_new ((double[]) { 1, 0 }, 2));
@@ -7655,6 +7681,7 @@ create_transitions (Shape             *shape,
       if (!G_APPROX_VALUE (origin, 0, 0.001))
         create_transition (shape, timeline, states,
                            duration, delay, easing,
+                         origin, type,
                            SHAPE_ATTR_STROKE_DASHOFFSET,
                            svg_number_new (-origin),
                            svg_number_new (0));
@@ -7662,6 +7689,7 @@ create_transitions (Shape             *shape,
     case TRANSITION_TYPE_MORPH:
       create_transition (shape, timeline, states,
                          duration, delay, easing,
+                         origin, type,
                          SHAPE_ATTR_FILTER,
                          svg_filter_parse ("blur(32) alpha-level(0.2)"),
                          svg_filter_parse ("blur(0) alpha-level(0.2)"));
@@ -7669,6 +7697,7 @@ create_transitions (Shape             *shape,
     case TRANSITION_TYPE_FADE:
       create_transition (shape, timeline, states,
                          duration, delay, easing,
+                         origin, type,
                          SHAPE_ATTR_OPACITY,
                          svg_number_new (0), svg_number_new (1));
       break;
@@ -7860,6 +7889,7 @@ construct_animation_frames (GpaAnimationDirection  direction,
       add_frame (offset, 1,   svg_number_new (0), easing);
       break;
 
+    case ANIMATION_DIRECTION_NONE:
     default:
       g_assert_not_reached ();
     }
@@ -7939,6 +7969,7 @@ repeat_duration_for_direction (GpaAnimationDirection direction,
 {
   switch (direction)
     {
+    case ANIMATION_DIRECTION_NONE:              return 0;
     case ANIMATION_DIRECTION_NORMAL:            return duration;
     case ANIMATION_DIRECTION_ALTERNATE:         return 2 * duration;
     case ANIMATION_DIRECTION_REVERSE:           return duration;
@@ -7969,6 +8000,9 @@ create_animations (Shape                 *shape,
   Animation *a;
   double repeat_duration;
 
+  if (direction == ANIMATION_DIRECTION_NONE)
+    return;
+
   if (duration == 0)
     {
       g_warning ("SVG: not creating zero-duration animations");
@@ -7991,9 +8025,9 @@ create_animations (Shape                 *shape,
                         SHAPE_ATTR_STROKE_DASHARRAY,
                         array);
 
-  a->gpa.direction = direction;
-  a->gpa.origin = origin;
+  a->gpa.animation = direction;
   a->gpa.easing = easing;
+  a->gpa.origin = origin;
   a->gpa.segment = segment;
 
   if (offset->len > 0)
@@ -8025,6 +8059,9 @@ create_attachment (Shape      *shape,
 
   a->has_begin = 1;
   a->has_end = 1;
+  a->has_simple_duration = 1;
+
+  a->simple_duration = 1;
 
   a->id = g_strdup_printf ("gpa:attachment:%s", shape->id);
 
@@ -8043,10 +8080,11 @@ create_attachment (Shape      *shape,
   a->motion.path_ref = g_strdup (attach_to);
 
   a->calc_mode = CALC_MODE_LINEAR;
-  a->fill = ANIMATION_FILL_REMOVE;
+  a->fill = ANIMATION_FILL_FREEZE;
   a->motion.rotate = ROTATE_AUTO;
 
   a->gpa.origin = origin;
+  a->gpa.attach_pos = attach_pos;
 
   a->shape = shape;
   g_ptr_array_add (shape->animations, a);
@@ -8070,16 +8108,16 @@ create_attachment_connection_to (Animation *a,
   if (g_str_has_prefix (da->id, "gpa:animation:"))
     {
       a2->id = g_strdup_printf ("gpa:attachment-animation:%s", a->shape->id);
-      direction = da->gpa.direction;
+      direction = da->gpa.animation;
     }
   else if (g_str_has_prefix (da->id, "gpa:transition:fade-in:"))
     {
-      a2->id = g_strdup_printf ("gpa:transition:fade-in:%s", a->shape->id);
+      a2->id = g_strdup_printf ("gpa:attachment-transition:fade-in:%s", a->shape->id);
       direction = ANIMATION_DIRECTION_NORMAL;
     }
   else if (g_str_has_prefix (da->id, "gpa:transition:fade-out:"))
     {
-      a2->id = g_strdup_printf ("gpa:transition:fade-out:%s", a->shape->id);
+      a2->id = g_strdup_printf ("gpa:attachment-transition:fade-out:%s", a->shape->id);
       direction = ANIMATION_DIRECTION_REVERSE;
     }
   else
@@ -8089,8 +8127,8 @@ create_attachment_connection_to (Animation *a,
   a2->has_end = 1;
   a2->has_simple_duration = 1;
 
-  begin = animation_add_begin (a2, timeline_get_sync (timeline, NULL, da, TIME_SPEC_SIDE_BEGIN, 0));
-  end = animation_add_end (a2, timeline_get_sync (timeline, NULL, da, TIME_SPEC_SIDE_END, 0));
+  begin = animation_add_begin (a2, timeline_get_sync (timeline, da->id, da, TIME_SPEC_SIDE_BEGIN, 0));
+  end = animation_add_end (a2, timeline_get_sync (timeline, da->id, da, TIME_SPEC_SIDE_END, 0));
 
   frames = g_array_new (FALSE, FALSE, sizeof (Frame));
 
@@ -8098,7 +8136,7 @@ create_attachment_connection_to (Animation *a,
                            da->gpa.easing,
                            da->gpa.segment,
                            da->gpa.origin,
-                           a->frames[0].point,
+                           a->gpa.attach_pos,
                            frames);
 
   a2->n_frames = frames->len;
@@ -9048,7 +9086,7 @@ parse_shape_gpa_attrs (Shape                *shape,
   int64_t transition_duration;
   int64_t transition_delay;
   unsigned int transition_easing;
-  unsigned int animation_type;
+  unsigned int has_animation;
   unsigned int animation_direction;
   int64_t animation_duration;
   double animation_repeat;
@@ -9188,23 +9226,23 @@ parse_shape_gpa_attrs (Shape                *shape,
         gtk_svg_invalid_attribute (data->svg, context, "gpa:transition-easing", NULL);
     }
 
-  animation_type = ANIMATION_TYPE_NONE;
+  has_animation = 0;
   if (animation_type_attr)
     {
       if (!parse_enum (animation_type_attr,
                        (const char *[]) { "none", "automatic", }, 2,
-                        &animation_type))
+                        &has_animation))
         gtk_svg_invalid_attribute (data->svg, context, "gpa:animation-type", NULL);
     }
 
-  animation_direction = ANIMATION_DIRECTION_NORMAL;
-  if (animation_direction_attr)
+  animation_direction = ANIMATION_DIRECTION_NONE;
+  if (has_animation && animation_direction_attr)
     {
       if (!parse_enum (animation_direction_attr,
-                       (const char *[]) { "normal", "alternate", "reverse",
+                       (const char *[]) { "none", "normal", "alternate", "reverse",
                                           "reverse-alternate", "in-out",
                                           "in-out-alternate", "in-out-reverse",
-                                          "segment", "segment-alternate" }, 9,
+                                          "segment", "segment-alternate" }, 10,
                         &animation_direction))
         gtk_svg_invalid_attribute (data->svg, context, "gpa:animation-direction", NULL);
     }
@@ -9260,7 +9298,7 @@ parse_shape_gpa_attrs (Shape                *shape,
 
   if (attach_to_attr ||
       transition_type == TRANSITION_TYPE_ANIMATE ||
-      animation_type != ANIMATION_TYPE_NONE)
+      animation_direction != ANIMATION_DIRECTION_NONE)
     create_path_length (shape, data->svg->timeline);
 
   if (attach_to_attr)
@@ -9280,17 +9318,16 @@ parse_shape_gpa_attrs (Shape                *shape,
                       transition_easing,
                       origin);
 
-  if (animation_type != ANIMATION_TYPE_NONE)
-    create_animations (shape,
-                       data->svg->timeline,
-                       states,
-                       data->svg->state,
-                       animation_repeat,
-                       animation_duration,
-                       animation_direction,
-                       animation_easing,
-                       animation_segment,
-                       origin);
+  create_animations (shape,
+                     data->svg->timeline,
+                     states,
+                     data->svg->state,
+                     animation_repeat,
+                     animation_duration,
+                     animation_direction,
+                     animation_easing,
+                     animation_segment,
+                     origin);
 }
 
 /* }}} */
@@ -12365,8 +12402,6 @@ gtk_svg_load_from_bytes (GtkSvg *self,
 /**
  * gtk_svg_serialize:
  * @self: an SVG paintable
- * @flags: flags that influence what content is
- *   included in the serialization
  *
  * Serializes the content of the renderer as SVG.
  *

@@ -1,17 +1,17 @@
 # this test has scripted state changes test animations
 # that are generated from gpa attributes
-input: state-changes.svg
+input: gpa-states.svg
 time: 500
-output: state-changes-0.svg
+output: gpa-states-0.svg
 time: 1000
 state: 0
 time: 1500
-output: state-changes-1.svg
+output: gpa-states-1.svg
 time: 2000
 state: 1
 time: 2500
-output: state-changes-2.svg
+output: gpa-states-2.svg
 time: 3000
 state: 2
 time: 3500
-output: state-changes-3.svg
+output: gpa-states-3.svg

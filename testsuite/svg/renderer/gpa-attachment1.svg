@@ -1,0 +1,11 @@
+
+<svg width='100' height='100' viewBox='0 0 100 100'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'>
+  <path id='line' d='M 10 10 90 90' stroke='black' gpa:states='all'/>
+  <circle id='red' cx='0'  cy='5' r='5' fill='red'
+        gpa:states='all'
+        gpa:attach-to='line'
+        gpa:attach-pos='0'/>
+</svg>
