@@ -8089,8 +8089,8 @@ create_attachment_connection_to (Animation *a,
   a2->has_end = 1;
   a2->has_simple_duration = 1;
 
-  begin = animation_add_begin (a2, timeline_get_sync (timeline, NULL, da, TIME_SPEC_SIDE_BEGIN, 0));
-  end = animation_add_end (a2, timeline_get_sync (timeline, NULL, da, TIME_SPEC_SIDE_END, 0));
+  begin = animation_add_begin (a2, timeline_get_sync (timeline, da->id, da, TIME_SPEC_SIDE_BEGIN, 0));
+  end = animation_add_end (a2, timeline_get_sync (timeline, da->id, da, TIME_SPEC_SIDE_END, 0));
 
   frames = g_array_new (FALSE, FALSE, sizeof (Frame));
 
