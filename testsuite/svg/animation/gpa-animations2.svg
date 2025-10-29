@@ -1,0 +1,15 @@
+<svg width='64' height='64' viewBox='0 0 32 32'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='empty'>
+  <circle id='red'
+        cx='16'
+        cy='16'
+        r='5'
+        fill='none'
+        stroke='red'
+        gpa:animation-type='automatic'
+        gpa:animation-direction='alternate'
+        gpa:animation-duration='2000ms'
+        gpa:states='0'/>
+</svg>

@@ -1,4 +1,4 @@
-# test that a gpa animations work, normal direction
+# test that a gpa animations work, alternate direction
 input: gpa-animations.svg
 time: 0
 output: gpa-animations-0.svg

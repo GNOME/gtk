@@ -13,6 +13,8 @@ test_data = [
   'gpa-animations.test',
   'gpa-states.test',
   'gpa-transitions.test',
+  'gpa-transitions2.test',
+  'gpa-transitions3.test',
   'masks.test',
   'paths.test',
   'priority.test',
