@@ -1491,6 +1491,29 @@ gtk_application_set_screensaver_active (GtkApplication *application,
     }
 }
 
+static GVariant *
+collect_window_state (GtkApplication *application,
+                      GtkWindow      *window)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GVariantBuilder builder;
+  GVariantDict *dict;
+  GVariant *state;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+  gtk_application_impl_collect_window_state (priv->impl, window, &builder);
+
+  dict = g_variant_dict_new (NULL);
+  if (GTK_IS_APPLICATION_WINDOW (window))
+    gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict);
+
+  state = g_variant_new ("(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
+  g_variant_dict_unref (dict);
+
+  g_variant_ref_sink (state);
+  return state;
+}
+
 /* State saving.
  *
  * The state is stored in a GVariant of the following form:
@@ -1524,19 +1547,12 @@ collect_state (GtkApplication *application)
   for (GList *l = priv->windows; l != NULL; l = l->next)
     {
       GtkWindow *window = GTK_WINDOW (l->data);
-      GVariantBuilder builder;
-      GVariantDict *dict;
+      GVariant *win_state;
 
-      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-      gtk_application_impl_collect_window_state (priv->impl, GTK_APPLICATION_WINDOW (l->data), &builder);
+      win_state = collect_window_state (application, window);
+      g_variant_builder_add_value (&win_builder, win_state);
 
-      dict = g_variant_dict_new (NULL);
-      if (GTK_IS_APPLICATION_WINDOW (window))
-        gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict);
-
-      g_variant_builder_add (&win_builder, "(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
-
-      g_variant_dict_unref (dict);
+      g_variant_unref (win_state);
     }
 
   g_variant_builder_init (&global_builder, G_VARIANT_TYPE_VARDICT);
