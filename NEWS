@@ -1,6 +1,101 @@
 Overview of Changes in 4.21.1, xx-xx-xxxx
 =========================================
 
+* GtkSvg is a new paintable implementation that parses
+  a subset of SVG, including animations.
+
+* Bugs fixed:
+  - #7414 Active state is not reset when releasing click outside of popup but
+    inside main window (Carlos Garnacho)
+  - #7671 GL fallback for YCbCr formats on Vulkan is broken (Benjamin Otte)
+  - #7676 `GSK_RENDERER=ngl` makes MacBook Pro's with Dual GPU's use the most
+    power-hungry one by default
+  - #7761 MacOS: \<Control\> is mapped differently based on
+    gtk_application_set_accels_for_action call location
+  - #7795 Change in scrolling behavior (Carlos Garnacho, lbaudin)
+  - #7801 Unaligned access in gdk/gdkmemoryformat.c causes testsuite crashes on
+    SPARC (Gregor Riepl)
+  - #7802 [4.21] CSS-defined icons like GtkSpinner are only shown when present
+    in the gtk icon theme (Jakub Steiner)
+  - #7813 Shaper: Cannot parse SVG (Matthias Clasen)
+  - #7823 svg not scaled with display scale since switch to librsvg (Matthias
+    Clasen)
+  - #7831 Crash with "CSS Blend Modes" demo (Urtsi Santsi)
+  - #7841 Suspected typo "symbolc" in docs/reference/gtk/icon-format.md
+    (Matthias Clasen)
+  - #7848 GTK 4.18: Default GdkDisplay gets unreferenced when offscreen
+    rendering via secondary display, causing crash (Benjamin Otte)
+
+* Changes:
+  - !8041 dropdown: Allow selecting items via touchscreen? (Florian "sp1rit"​)
+  - !9006 path paintable: Be more relaxed about attaching (Matthias Clasen)
+  - !9007 gtk-demo: Fix loading of gpa files (Matthias Clasen)
+  - !9009 icon editor: examples (Jakub Steiner)
+  - !9010 gtk/symbolicpaintable: Fix a leak (Khalid Abu Shawarib)
+  - !9011 macos(docs): update documentation on graphics switching and keyboard
+    shortcuts (Arjan Molenaar)
+  - !9013 path paintable: Add repeat count (Matthias Clasen)
+  - !9015 icon editor: Visualize transition-easing too (Matthias Clasen)
+  - !9018 icon editor: Preserve shape information better (Matthias Clasen)
+  - !9019 icon editor: Preserve shape information better (René de Hesselle,
+    Matthias Clasen)
+  - !9023 dnd: Mark gtk_drop_target_async_get_formats() return value as
+    `transfer none`
+  - !9026 revealer: Add fade-slide values (Hari Rana)
+  - !9027 revealer: Minor refactor (Hari Rana)
+  - !9029 colorchooserdialog: Make scrollable to fit narrow screens (Stefan
+    Hansson)
+  - !9030 Mark free_to_* methods as transfer full (Sergey Bugaev)
+  - !9032 Plug a minor memory leak (Matthias Clasen)
+  - !9033 docs: fix gi-docgen errors in 4.20.2 (oreo639)
+  - !9034 path paintable: Fix an oversight (Matthias Clasen)
+  - !9035 path paintable: Fix an oversight (Matthias Clasen)
+  - !9038 path paintable: Drop general animations (Matthias Clasen)
+  - !9039 icon editor: Drop the state check (Matthias Clasen)
+  - !9041 docs: Update GtkSettings docs (Matthias Clasen)
+  - !9048 gtkapplication-wayland: Iterate inhibitors safely while freeing
+    (Alessandro Astone)
+  - !9049 icon editor: Some UI tweaks (Matthias Clasen)
+  - !9051 Make gdk_rgba_print public (Matthias Clasen)
+  - !9053 gtk: docs: Fix docs for session restore signals (Maximiliano Sandoval)
+  - !9054 gsk: Plug a memory leak (Matthias Clasen)
+  - !9056 Fix various Vulkan YUV handling issues (Benjamin Otte)
+  - !9057 Add an SVG renderer (Matthias Clasen)
+  - !9059 x11: Restore the logic for tracking compositor presence (Sergey
+    Bugaev)
+  - !9060 gdk: Remove GDK_MEMORY_U16 depth (Benjamin Otte)
+  - !9061 docs: Update GDK_GL_DISABLE docs to match implementation (Benjamin
+    Otte)
+  - !9062 a11y: Centralize the logic determining whether an accessible is a
+    password input (Lukáš Tyrychtr, Matthias Clasen)
+  - !9063 icon editor: Add export (Matthias Clasen)
+  - !9064 svg: Fix max state tracking (Matthias Clasen)
+  - !9065 svg: Fix max state tracking (Matthias Clasen)
+  - !9066 node-editor: Fix dark mode toggle (Matthias Clasen)
+  - !9069 svg: Resolve symbolic colors consistently (Matthias Clasen)
+  - !9070 tests: Robustness fix (Matthias Clasen)
+  - !9071 Add assertions to quiet the compiler (Matthias Clasen)
+  - !9073 svg: Parse style (Matthias Clasen)
+  - !9074 svg: Drop an unused argument (Matthias Clasen)
+  - !9075 vulkan: Fix YUYV values when uploading images (Benjamin Otte)
+  - !9077 Add setting and CSS media query for reduced motion (Emmanuele Bassi)
+  - !9078 icon editor: misc fixes (Juan Pablo Ugarte)
+  - !9080 tools: Cosmetics (Matthias Clasen)
+  - !9081 svg: Small cleanup (Matthias Clasen)
+  - !9082 Make it possible to test rendering errors (Matthias Clasen)
+  - !9084 docs: Remove gtk4-icon-browser from Tools and Demos (Chris Mayo)
+  - !9088 Rename GradientUnits to CoordUnits
+  - !9089 Only build CUPS backend when enabled (Dan Yeaw)
+  - !9090 node-editor: syntax-hilight comments
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - English (United Kingdom) (Bruce Cowan)
+  - Slovenian (Martin)
+  - Thai (Aefgh Threenine)
+  - Uighur (Abduqadir Abliz)
+
+
 Overview of Changes in 4.21.0, 29-09-2025
 =========================================
 
