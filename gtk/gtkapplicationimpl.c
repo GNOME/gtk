@@ -56,6 +56,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->before_emit = (gpointer) do_nothing;
   class->window_added = (gpointer) do_nothing;
   class->window_removed = (gpointer) do_nothing;
+  class->window_forget = (gpointer) do_nothing;
   class->active_window_changed = (gpointer) do_nothing;
   class->handle_window_realize = (gpointer) do_nothing;
   class->handle_window_map = (gpointer) do_nothing;
@@ -105,6 +106,13 @@ gtk_application_impl_window_removed (GtkApplicationImpl *impl,
                                      GtkWindow          *window)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->window_removed (impl, window);
+}
+
+void
+gtk_application_impl_window_forget (GtkApplicationImpl *impl,
+                                    GtkWindow          *window)
+{
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->window_forget (impl, window);
 }
 
 void

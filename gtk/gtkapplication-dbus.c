@@ -427,7 +427,12 @@ gtk_application_impl_dbus_window_removed (GtkApplicationImpl *impl,
       g_dbus_connection_unexport_action_group (dbus->session, id);
       g_object_set_qdata (G_OBJECT (window), gtk_application_impl_dbus_export_id_quark (), NULL);
     }
+}
 
+static void
+gtk_application_impl_dbus_window_forget (GtkApplicationImpl *impl,
+                                         GtkWindow          *window)
+{
   g_object_set_qdata (G_OBJECT (window), gtk_application_impl_dbus_window_state_quark (), NULL);
 }
 
@@ -715,6 +720,7 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->shutdown = gtk_application_impl_dbus_shutdown;
   impl_class->window_added = gtk_application_impl_dbus_window_added;
   impl_class->window_removed = gtk_application_impl_dbus_window_removed;
+  impl_class->window_forget = gtk_application_impl_dbus_window_forget;
   impl_class->active_window_changed = gtk_application_impl_dbus_active_window_changed;
   impl_class->set_app_menu = gtk_application_impl_dbus_set_app_menu;
   impl_class->set_menubar = gtk_application_impl_dbus_set_menubar;

@@ -568,7 +568,10 @@ gtk_application_window_removed (GtkApplication *application,
   old_active = priv->windows;
 
   if (priv->impl)
-    gtk_application_impl_window_removed (priv->impl, window);
+    {
+      gtk_application_impl_window_removed (priv->impl, window);
+      gtk_application_impl_window_forget (priv->impl, window);
+    }
 
   g_signal_handlers_disconnect_by_func (window,
                                         gtk_application_window_active_cb,

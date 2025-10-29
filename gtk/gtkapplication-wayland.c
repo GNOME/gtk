@@ -134,7 +134,6 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
 {
   GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
   GSList *iter = wayland->inhibitors;
-  GdkSurface *surface;
 
   GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_removed (impl, window);
 
@@ -156,6 +155,15 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
 
       iter = next;
     }
+}
+
+static void
+gtk_application_impl_wayland_window_forget (GtkApplicationImpl *impl,
+                                            GtkWindow          *window)
+{
+  GdkSurface *surface;
+
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_forget (impl, window);
 
   surface = gtk_native_get_surface (GTK_NATIVE (window));
   gdk_wayland_toplevel_remove_from_session (GDK_TOPLEVEL (surface));
@@ -320,6 +328,7 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
   impl_class->handle_window_realize = gtk_application_impl_wayland_handle_window_realize;
   impl_class->before_emit = gtk_application_impl_wayland_before_emit;
   impl_class->window_removed = gtk_application_impl_wayland_window_removed;
+  impl_class->window_forget = gtk_application_impl_wayland_window_forget;
   impl_class->inhibit = gtk_application_impl_wayland_inhibit;
   impl_class->uninhibit = gtk_application_impl_wayland_uninhibit;
   impl_class->startup = gtk_application_impl_wayland_startup;

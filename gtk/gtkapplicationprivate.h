@@ -88,6 +88,8 @@ typedef struct
                                              GVariant                    *state);
   void        (* window_removed)            (GtkApplicationImpl          *impl,
                                              GtkWindow                   *window);
+  void        (* window_forget)             (GtkApplicationImpl          *impl,
+                                             GtkWindow                   *window);
   void        (* active_window_changed)     (GtkApplicationImpl          *impl,
                                              GtkWindow                   *window);
   void        (* handle_window_realize)     (GtkApplicationImpl          *impl,
@@ -185,6 +187,8 @@ void                    gtk_application_impl_window_added               (GtkAppl
                                                                          GtkWindow                   *window,
                                                                          GVariant                    *state);
 void                    gtk_application_impl_window_removed             (GtkApplicationImpl          *impl,
+                                                                         GtkWindow                   *window);
+void                    gtk_application_impl_window_forget              (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
 void                    gtk_application_impl_active_window_changed      (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
