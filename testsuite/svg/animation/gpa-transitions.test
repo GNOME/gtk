@@ -1,0 +1,16 @@
+# test that a fade transition works
+input: gpa-transitions.svg
+time: 0
+output: gpa-transitions-0.svg
+state: 0
+time: 2000
+output: gpa-transitions-1.svg
+time: 3000
+output: gpa-transitions-2.svg
+time: 4000
+output: gpa-transitions-3.svg
+state: empty
+time: 5000
+output: gpa-transitions-4.svg
+time: 6000
+output: gpa-transitions-5.svg
