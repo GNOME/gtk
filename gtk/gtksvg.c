@@ -6542,16 +6542,14 @@ find_current_cycle_and_frame (Animation      *a,
   cycle_start = start + rep * simple_duration;
   cycle_end = cycle_start + simple_duration;
 
-  frame_start = cycle_start;
-  frame_end = cycle_end;
+  frame_start = frame_end = cycle_start;
   for (i = 0; i + 1 < a->n_frames; i++)
     {
+      frame_start = frame_end;
       frame_end = lerp (a->frames[i + 1].time, cycle_start, cycle_end);
 
       if (time < frame_end)
         break;
-
-      frame_start = frame_end;
     }
 
   t = (time - frame_start) / (double) (frame_end - frame_start);
@@ -7032,6 +7030,50 @@ resolve_value (Shape           *shape,
 }
 
 static SvgValue *
+compute_animation_motion_value (Animation      *a,
+                                unsigned int    rep,
+                                unsigned int    frame,
+                                double          frame_t,
+                                ComputeContext *context)
+{
+  double offset;
+  double angle;
+  graphene_point_t orig_pos, final_pos;
+  SvgValue *value;
+  GskPathMeasure *measure;
+
+  measure = shape_get_current_measure (a->shape, context->viewport);
+  get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
+  gsk_path_measure_unref (measure);
+
+  if (frame + 1 < a->n_frames)
+    offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
+  else
+    offset = a->frames[frame].point;
+
+  measure = animation_motion_get_current_measure (a, context->viewport);
+  angle = a->motion.angle;
+  get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
+  value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+
+  if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
+    {
+      SvgValue *end_val, *acc;
+
+      get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
+      end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+      acc = svg_value_accumulate (value, end_val, rep);
+      svg_value_unref (end_val);
+      svg_value_unref (value);
+      value = acc;
+    }
+
+  gsk_path_measure_unref (measure);
+
+  return value;
+}
+
+static SvgValue *
 compute_value_at_time (Animation      *a,
                        ComputeContext *context)
 {
@@ -7109,38 +7151,7 @@ compute_value_at_time (Animation      *a,
     }
   else
     {
-      double offset;
-      double angle;
-      graphene_point_t orig_pos, final_pos;
-      SvgValue *value;
-      GskPathMeasure *measure;
-
-      measure = shape_get_current_measure (a->shape, context->viewport);
-      get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
-      gsk_path_measure_unref (measure);
-
-      offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
-
-      measure = animation_motion_get_current_measure (a, context->viewport);
-      angle = a->motion.angle;
-      get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
-      value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
-
-      if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
-        {
-          SvgValue *end_val, *acc;
-
-          get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
-          end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
-          acc = svg_value_accumulate (value, end_val, rep);
-          svg_value_unref (end_val);
-          svg_value_unref (value);
-          value = acc;
-        }
-
-      gsk_path_measure_unref (measure);
-
-      return value;
+      return compute_animation_motion_value (a, rep, frame, frame_t, context);
     }
 }
 
@@ -7163,11 +7174,18 @@ compute_value_for_animation (Animation      *a,
   else if (a->fill == ANIMATION_FILL_FREEZE)
     {
       /* keep the last value */
-      if (a->repeat_count == 1 &&
-          !(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
+      if (a->repeat_count == 1)
         {
-          dbg_print ("values", "%s: frozen (fast)\n", a->id);
-          return resolve_value (a->shape, context, a->attr, a->frames[a->n_frames - 1].value);
+          if (!(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
+            {
+              dbg_print ("values", "%s: frozen (fast)\n", a->id);
+              return resolve_value (a->shape, context, a->attr, a->frames[a->n_frames - 1].value);
+            }
+          else
+           {
+              dbg_print ("values", "%s: frozen (motion)\n", a->id);
+              return compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
+           }
         }
       else
         {

@@ -1,0 +1,18 @@
+# test to see what attachments do during transitions
+input: gpa-attachment3.svg
+time: 2000
+output: gpa-attachment3-0.svg
+state: 0
+time: 2500
+output: gpa-attachment3-1.svg
+time: 3000
+output: gpa-attachment3-2.svg
+time: 3500
+output: gpa-attachment3-3.svg
+time: 5000
+state: empty
+output: gpa-attachment3-4.svg
+time: 5500
+output: gpa-attachment3-5.svg
+time: 6000
+output: gpa-attachment3-6.svg

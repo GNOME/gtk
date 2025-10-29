@@ -15,7 +15,7 @@
           gpa:stroke-width='0.25 1 1.5'>
   </path>
   <circle
-          transform='translate(30, 160) rotate(0, 0, 0) translate(-5, -0)'
+          transform='translate(270, 40) rotate(0, 0, 0) translate(-5, -0)'
           fill='rgb(255,0,0)'
           r='5'>
   <animateMotion
