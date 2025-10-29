@@ -12365,8 +12365,6 @@ gtk_svg_load_from_bytes (GtkSvg *self,
 /**
  * gtk_svg_serialize:
  * @self: an SVG paintable
- * @flags: flags that influence what content is
- *   included in the serialization
  *
  * Serializes the content of the renderer as SVG.
  *
