@@ -713,11 +713,15 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
       GdkPaintable *paintable;
 
       texture = gdk_texture_new_from_svg_bytes (bytes, scale, NULL);
-      paintable = gtk_scaler_new (GDK_PAINTABLE (texture), scale);
-      g_object_unref (texture);
-
-      return paintable;
+      if (texture)
+        {
+          paintable = gtk_scaler_new (GDK_PAINTABLE (texture), scale);
+          g_object_unref (texture);
+          return paintable;
+        }
     }
+
+  return NULL;
 }
 
 GdkPaintable *
