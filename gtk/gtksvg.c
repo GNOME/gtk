@@ -8046,7 +8046,7 @@ create_attachment (Shape      *shape,
   a->motion.path_ref = g_strdup (attach_to);
 
   a->calc_mode = CALC_MODE_LINEAR;
-  a->fill = ANIMATION_FILL_REMOVE;
+  a->fill = ANIMATION_FILL_FREEZE;
   a->motion.rotate = ROTATE_AUTO;
 
   a->gpa.origin = origin;
