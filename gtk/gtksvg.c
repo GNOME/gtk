@@ -8025,6 +8025,9 @@ create_attachment (Shape      *shape,
 
   a->has_begin = 1;
   a->has_end = 1;
+  a->has_simple_duration = 1;
+
+  a->simple_duration = 1;
 
   a->id = g_strdup_printf ("gpa:attachment:%s", shape->id);
 
