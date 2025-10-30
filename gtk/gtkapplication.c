@@ -194,6 +194,7 @@ enum {
   PROP_MENUBAR,
   PROP_ACTIVE_WINDOW,
   PROP_SUPPORT_SAVE,
+  PROP_AUTOSAVE_INTERVAL,
   NUM_PROPERTIES
 };
 
@@ -215,6 +216,8 @@ typedef struct
   GtkBuilder      *menus_builder;
   char            *help_overlay_path;
   gboolean         support_save;
+  guint            autosave_interval;
+  guint            autosave_id;
   GVariant        *pending_window_state;
   GVariant        *kept_window_state;
   gboolean         restored;
@@ -224,12 +227,17 @@ typedef struct
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
 static void
+schedule_autosave (GtkApplication *application);
+
+static void
 gtk_application_window_active_cb (GtkWindow      *window,
                                   GParamSpec     *pspec,
                                   GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GList *link;
+
+  schedule_autosave (application);
 
   if (!gtk_window_is_active (window))
     return;
@@ -499,6 +507,7 @@ gtk_application_before_emit (GApplication *app,
     {
       gtk_application_restore (application,
                                gtk_application_impl_get_restore_reason (priv->impl));
+      schedule_autosave (application);
       priv->restored = TRUE;
     }
 }
@@ -517,6 +526,8 @@ gtk_application_init (GtkApplication *application)
   priv->muxer = gtk_action_muxer_new (NULL);
 
   priv->accels = gtk_application_accels_new ();
+
+  priv->autosave_interval = 15;
 }
 
 static void
@@ -665,6 +676,10 @@ gtk_application_get_property (GObject    *object,
       g_value_set_boolean (value, priv->support_save);
       break;
 
+    case PROP_AUTOSAVE_INTERVAL:
+      g_value_set_uint (value, priv->autosave_interval);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -694,6 +709,10 @@ gtk_application_set_property (GObject      *object,
       priv->support_save = g_value_get_boolean (value);
       break;
 
+    case PROP_AUTOSAVE_INTERVAL:
+      priv->autosave_interval = g_value_get_uint (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -710,7 +729,9 @@ gtk_application_finalize (GObject *object)
   g_clear_object (&priv->menubar);
   g_clear_object (&priv->muxer);
   g_clear_object (&priv->accels);
+
   g_clear_pointer (&priv->kept_window_state, g_variant_unref);
+  g_clear_handle_id (&priv->autosave_id, g_source_remove);
 
   g_free (priv->help_overlay_path);
 
@@ -948,6 +969,19 @@ gtk_application_class_init (GtkApplicationClass *class)
     g_param_spec_boolean ("support-save", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_DEPRECATED);
+
+  /**
+   * GtkApplication:autosave-interval:
+   *
+   * The number of seconds between automatic state saves. Defaults to 15.
+   * A value of 0 will opt out of automatic state saving.
+   *
+   * Since: 4.22
+   */
+  gtk_application_props[PROP_AUTOSAVE_INTERVAL] =
+    g_param_spec_uint ("autosave-interval", NULL, NULL,
+                       0, G_MAXUINT, 15,
+                       G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, gtk_application_props);
 }
@@ -1658,6 +1692,7 @@ gtk_application_save (GtkApplication *application)
   g_variant_unref (state);
 
   priv->forgotten = FALSE;
+  schedule_autosave (application);
 }
 
 /**
@@ -1694,6 +1729,10 @@ gtk_application_forget (GtkApplication *application)
     }
 
   gtk_application_impl_forget_state (priv->impl);
+
+  if (priv->autosave_id)
+    GTK_DEBUG (SESSION, "State forgotten, cancelling autosave");
+  g_clear_handle_id (&priv->autosave_id, g_source_remove);
 
   priv->forgotten = TRUE;
 }
@@ -1780,4 +1819,62 @@ gtk_application_restore (GtkApplication   *application,
       GTK_DEBUG (SESSION, "No saved state, not restoring");
       return FALSE;
     }
+}
+
+static gboolean
+any_window_active (GtkApplication *application)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  for (GList *l = priv->windows; l != NULL; l = l->next)
+    {
+      GtkWindow *candidate = GTK_WINDOW (l->data);
+      if (gtk_window_is_active (candidate))
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static gboolean
+autosave_cb (gpointer data)
+{
+  GtkApplication *application = GTK_APPLICATION (data);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  GTK_DEBUG (SESSION, "Autosaving");
+  gtk_application_save (application);
+
+  if (!any_window_active (application))
+    {
+      GTK_DEBUG (SESSION, "App no longer focused, stopping autosave");
+      priv->autosave_id = 0;
+      return G_SOURCE_REMOVE;
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+schedule_autosave (GtkApplication *application)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  if (!priv->support_save)
+    return;
+
+  if (priv->forgotten)
+    return;
+
+  if (priv->autosave_interval == 0)
+    return;
+
+  if (priv->autosave_id != 0)
+    return;
+
+  if (!any_window_active (application))
+    return;
+
+  GTK_DEBUG (SESSION, "Scheduling autosave");
+  priv->autosave_id = g_timeout_add_seconds (priv->autosave_interval, autosave_cb, application);
 }
