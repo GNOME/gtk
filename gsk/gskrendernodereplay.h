@@ -98,6 +98,32 @@ typedef GdkTexture *   (* GskRenderNodeReplayTextureFilter)             (GskRend
                                                                          GdkTexture                     *texture,
                                                                          gpointer                        user_data);
 
+/**
+ * GskRenderNodeReplayFontFilter:
+ * @replay: The replay object used to replay the node
+ * @node: The node the font belongs to
+ * @font: The font to filter
+ * @user_data: The user data
+ *
+ * A function that filters fonts.
+ *
+ * The function will be called by the default replay function for
+ * all nodes with fonts. They will then generate a node using the
+ * returned font.
+ *
+ * It is valid for the function to return the passed in font if
+ * the font shuld not be modified.
+ *
+ * Returns: (transfer full): The filtered font
+ *
+ * Since: 4.22
+ */
+typedef PangoFont  *   (* GskRenderNodeReplayFontFilter)                (GskRenderNodeReplay            *replay,
+                                                                         GskRenderNode                  *node,
+                                                                         PangoFont                      *font,
+                                                                         gpointer                        user_data);
+
+
 GDK_AVAILABLE_IN_4_22
 GskRenderNodeReplay *   gsk_render_node_replay_new                      (void);
 GDK_AVAILABLE_IN_4_22
@@ -134,6 +160,15 @@ GDK_AVAILABLE_IN_4_22
 GdkTexture *            gsk_render_node_replay_filter_texture           (GskRenderNodeReplay            *self,
                                                                          GskRenderNode                  *node,
                                                                          GdkTexture                     *texture);
+GDK_AVAILABLE_IN_4_22
+void                    gsk_render_node_replay_set_font_filter          (GskRenderNodeReplay            *self,
+                                                                         GskRenderNodeReplayFontFilter   filter,
+                                                                         gpointer                        user_data,
+                                                                         GDestroyNotify                  user_destroy);
+GDK_AVAILABLE_IN_4_22
+PangoFont *             gsk_render_node_replay_filter_font              (GskRenderNodeReplay            *self,
+                                                                         GskRenderNode                  *node,
+                                                                         PangoFont                      *font);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderNodeReplay, gsk_render_node_replay_free)
 

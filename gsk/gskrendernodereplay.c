@@ -115,6 +115,10 @@ struct _GskRenderNodeReplay
   GskRenderNodeReplayTextureFilter texture_filter;
   gpointer texture_filter_data;
   GDestroyNotify texture_filter_destroy;
+
+  GskRenderNodeReplayFontFilter font_filter;
+  gpointer font_filter_data;
+  GDestroyNotify font_filter_destroy;
 };
 
 /**
@@ -152,6 +156,7 @@ gsk_render_node_replay_free (GskRenderNodeReplay *self)
   gsk_render_node_replay_set_node_foreach (self, NULL, NULL, NULL);
   gsk_render_node_replay_set_node_filter (self, NULL, NULL, NULL);
   gsk_render_node_replay_set_texture_filter (self, NULL, NULL, NULL);
+  gsk_render_node_replay_set_font_filter (self, NULL, NULL, NULL);
 
   g_free (self);
 }
@@ -376,3 +381,71 @@ gsk_render_node_replay_filter_texture (GskRenderNodeReplay *self,
 
   return result;
 }
+
+/**
+ * gsk_render_node_replay_set_font_filter:
+ * @self: the replay
+ * @filter: (nullable): the font filter function
+ * @user_data: user data to pass to @filter
+ * @user_destroy: destroy notify that will be called to release
+ *   user_data
+ *
+ * Sets a filter function to be called when filtering a node with fonts
+ * or to unset it to not do any filtering.
+ *
+ * You can call [method@GskRenderNodeReplay.filter_font] to filter
+ * a font yourself.
+ *
+ * Since: 4.22
+ **/
+void
+gsk_render_node_replay_set_font_filter (GskRenderNodeReplay           *self,
+                                        GskRenderNodeReplayFontFilter  filter,
+                                        gpointer                       user_data,
+                                        GDestroyNotify                 user_destroy)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (filter || user_data == NULL);
+  g_return_if_fail (user_data || !user_destroy);
+
+  if (self->font_filter_destroy)
+    self->font_filter_destroy (self->font_filter_data);
+
+  if (filter)
+    self->font_filter = filter;
+  self->font_filter_data = user_data;
+  self->font_filter_destroy = user_destroy;
+}
+
+/**
+ * gsk_render_node_replay_filter_font:
+ * @self: the replay
+ * @node: The node the font belongs to
+ * @font: The font to filter
+ *
+ * Filters a font using the current filter function.
+ *
+ * Returns: (transfer full) the filtered font
+ *
+ * Since: 4.22
+ **/
+PangoFont *
+gsk_render_node_replay_filter_font (GskRenderNodeReplay *self,
+                                    GskRenderNode       *node,
+                                    PangoFont           *font)
+{
+  PangoFont *result;
+
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (PANGO_IS_FONT (font), NULL);
+
+  if (!self->font_filter)
+    return g_object_ref (font);
+
+  result = self->font_filter (self, node, font, self->font_filter_data);
+  g_assert (result != NULL);
+
+  return result;
+}
+
