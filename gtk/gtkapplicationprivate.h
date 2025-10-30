@@ -114,6 +114,8 @@ typedef struct
   GtkRestoreReason
                (* get_restore_reason)       (GtkApplicationImpl          *impl);
 
+  void         (* clear_restore_reason)     (GtkApplicationImpl          *impl);
+
   void         (* collect_global_state)     (GtkApplicationImpl          *impl,
                                              GVariantBuilder             *state);
   void         (* restore_global_state)     (GtkApplicationImpl          *impl,
@@ -216,6 +218,8 @@ void                    gtk_application_impl_quartz_setup_menu          (GMenuMo
                                                                          GtkActionMuxer              *muxer);
 
 GtkRestoreReason        gtk_application_impl_get_restore_reason         (GtkApplicationImpl          *impl);
+
+void                    gtk_application_impl_clear_restore_reason       (GtkApplicationImpl          *impl);
 
 void                    gtk_application_impl_collect_global_state       (GtkApplicationImpl          *impl,
                                                                          GVariantBuilder             *builder);

@@ -621,6 +621,13 @@ gtk_application_impl_dbus_get_restore_reason (GtkApplicationImpl *impl)
 }
 
 static void
+gtk_application_impl_dbus_clear_restore_reason (GtkApplicationImpl *impl)
+{
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+  dbus->reason = GTK_RESTORE_REASON_LAUNCH;
+}
+
+static void
 gtk_application_impl_dbus_store_state (GtkApplicationImpl *impl,
                                        GVariant           *state)
 {
@@ -738,6 +745,7 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->inhibit = gtk_application_impl_dbus_inhibit;
   impl_class->uninhibit = gtk_application_impl_dbus_uninhibit;
   impl_class->get_restore_reason = gtk_application_impl_dbus_get_restore_reason;
+  impl_class->clear_restore_reason = gtk_application_impl_dbus_clear_restore_reason;
   impl_class->store_state = gtk_application_impl_dbus_store_state;
   impl_class->forget_state = gtk_application_impl_dbus_forget_state;
   impl_class->retrieve_state = gtk_application_impl_dbus_retrieve_state;

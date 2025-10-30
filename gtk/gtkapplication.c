@@ -620,6 +620,13 @@ gtk_application_window_removed (GtkApplication *application,
     {
       g_assert (!priv->kept_window_state);
       priv->kept_window_state = collect_window_state (application, window);
+
+      /* If we're keeping around the last window, and the window is now gone,
+       * from the user's perspective the app is now gone even if it hasn't
+       * technically quit yet. In case the user relaunches the app before
+       * it manages to quit, let's re-restore state on next startup. */
+      priv->restored = FALSE;
+      gtk_application_impl_clear_restore_reason (priv->impl);
     }
 
   if (priv->impl)
@@ -1738,7 +1745,7 @@ gtk_application_forget (GtkApplication *application)
 }
 
 static void
-restore_state (GtkApplication   *application,
+restore_file_state (GtkApplication   *application,
                GtkRestoreReason  reason,
                GVariant         *state)
 {
@@ -1749,6 +1756,8 @@ restore_state (GtkApplication   *application,
   gboolean handled;
 
   g_return_if_fail (g_variant_is_of_type (state, G_VARIANT_TYPE ("(a{sv}a{sv}a(a{sv}a{sv}))")));
+
+  GTK_DEBUG (SESSION, "Restoring state, reason %s", g_enum_get_value (g_type_class_get (GTK_TYPE_RESTORE_REASON), reason)->value_nick);
 
   g_variant_get (state, "(@a{sv}@a{sv}a(a{sv}a{sv}))", &gtk_state, &app_state, NULL);
 
@@ -1763,7 +1772,7 @@ restore_state (GtkApplication   *application,
 
   while (g_variant_iter_next (iter, "(@a{sv}@a{sv})", &gtk_state, &app_state))
     {
-      GTK_DEBUG (SESSION, "Restore window");
+      GTK_DEBUG (SESSION, "Restoring window");
 
       gtk_application_restore_window (application, reason, app_state, gtk_state);
 
@@ -1772,6 +1781,24 @@ restore_state (GtkApplication   *application,
     }
 
   g_variant_iter_free (iter);
+}
+
+static void
+restore_kept_state (GtkApplication   *application,
+                    GtkRestoreReason  reason)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GVariant *gtk_state;
+  GVariant *app_state;
+
+  GTK_DEBUG (SESSION, "Restoring kept toplevel, reason %s", g_enum_get_value (g_type_class_get (GTK_TYPE_RESTORE_REASON), reason)->value_nick);
+
+  g_variant_get (priv->kept_window_state, "(@a{sv}@a{sv})", &gtk_state, &app_state);
+
+  gtk_application_restore_window (application, reason, app_state, gtk_state);
+
+  g_variant_unref (gtk_state);
+  g_variant_unref (app_state);
 }
 
 /*< private >
@@ -1806,11 +1833,16 @@ gtk_application_restore (GtkApplication   *application,
       return FALSE;
     }
 
+  if (priv->kept_window_state)
+    {
+      restore_kept_state (application, reason);
+      return TRUE;
+    }
+
   state = gtk_application_impl_retrieve_state (priv->impl);
   if (state)
     {
-      GTK_DEBUG (SESSION, "Restore state, reason %s", g_enum_get_value (g_type_class_get (GTK_TYPE_RESTORE_REASON), reason)->value_nick);
-      restore_state (application, reason, state);
+      restore_file_state (application, reason, state);
       g_variant_unref (state);
       return TRUE;
     }

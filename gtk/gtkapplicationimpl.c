@@ -65,6 +65,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->inhibit = (gpointer) do_nothing;
   class->uninhibit = (gpointer) do_nothing;
   class->get_restore_reason = (gpointer) do_nothing;
+  class->clear_restore_reason = (gpointer) do_nothing;
   class->collect_global_state = (gpointer) do_nothing;
   class->restore_global_state = (gpointer) do_nothing;
   class->collect_window_state = (gpointer) do_nothing;
@@ -170,6 +171,12 @@ GtkRestoreReason
 gtk_application_impl_get_restore_reason (GtkApplicationImpl *impl)
 {
   return GTK_APPLICATION_IMPL_GET_CLASS (impl)->get_restore_reason (impl);
+}
+
+void
+gtk_application_impl_clear_restore_reason (GtkApplicationImpl *impl)
+{
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->clear_restore_reason (impl);
 }
 
 void
