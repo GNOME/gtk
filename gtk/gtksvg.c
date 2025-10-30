@@ -107,10 +107,7 @@
  *
  * ## The supported subset of SVG
  *
- * The renderer does not support text or images, only paths. From the
- * shape elements of SVG, only `<circle>`, `<ellipse>`, `<rect>` and
- * `<path>` are supported, leaving out `<line>`, `<polyline>` and
- * `<polygon>`.
+ * The renderer does not support text or images, only shapes and paths.
  *
  * In `<defs>`, only `<clipPath>`, `<mask>`, gradients and shapes are
  * supported, not `<filter>`, `<pattern>` or other things.
@@ -164,6 +161,9 @@ typedef enum
 
 typedef enum
 {
+  SHAPE_LINE,
+  SHAPE_POLY_LINE,
+  SHAPE_POLYGON,
   SHAPE_RECT,
   SHAPE_CIRCLE,
   SHAPE_ELLIPSE,
@@ -214,6 +214,7 @@ typedef enum
   SHAPE_ATTR_Y1,
   SHAPE_ATTR_X2,
   SHAPE_ATTR_Y2,
+  SHAPE_ATTR_POINTS,
   SHAPE_ATTR_SPREAD_METHOD,
   SHAPE_ATTR_GRADIENT_UNITS,
   SHAPE_ATTR_FX,
@@ -3889,6 +3890,142 @@ svg_path_interpolate (const SvgValue *value0,
 }
 
 /* }}} */
+/* {{{ Points */
+
+typedef struct
+{
+  SvgValue base;
+  unsigned int n_values;
+  double values[1];
+} SvgPoints;
+
+static unsigned int
+svg_points_size (unsigned int n)
+{
+  return sizeof (SvgPoints) + (n - 1) * sizeof (double);
+}
+
+static void
+svg_points_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_points_equal (const SvgValue *value0,
+                  const SvgValue *value1)
+{
+  const SvgPoints *p0 = (const SvgPoints *) value0;
+  const SvgPoints *p1 = (const SvgPoints *) value1;
+
+  if (p0->n_values != p1->n_values)
+    return FALSE;
+
+  for (unsigned int i = 0; i < p0->n_values; i++)
+    {
+      if (p0->values[i] != p1->values[i])
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static SvgValue *
+svg_points_accumulate (const SvgValue *value0,
+                       const SvgValue *value1,
+                       int             n)
+{
+  return NULL;
+}
+
+static void
+svg_points_print (const SvgValue *value,
+                  GString        *string)
+{
+  const SvgPoints *p = (const SvgPoints *) value;
+
+  for (unsigned int i = 0; i < p->n_values; i++)
+    {
+      if (i > 0)
+        g_string_append_c (string, ' ');
+      string_append_double (string, p->values[i]);
+    }
+}
+
+static SvgValue * svg_points_interpolate (const SvgValue *value0,
+                                          const SvgValue *value1,
+                                          double          t);
+
+static const SvgValueClass SVG_POINTS_CLASS = {
+  "SvgPoints",
+  svg_points_free,
+  svg_points_equal,
+  svg_points_interpolate,
+  svg_points_accumulate,
+  svg_points_print
+};
+
+static SvgValue *
+svg_points_new_none (void)
+{
+  SvgPoints *result;
+
+  result = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (1));
+  result->n_values = 0;
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_points_parse (const char *value)
+{
+  SvgPoints *result;
+  GArray *values;
+
+  if (strcmp (value, "none") == 0)
+    return svg_path_new_none ();
+
+  values = parse_numbers2 (value, " ", -DBL_MAX, DBL_MAX);
+  if (values->len % 2 != 0)
+    g_array_remove_index (values, values->len - 1);
+
+  result = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (values->len));
+  result->n_values = values->len;
+
+  memcpy (result->values, values->data, sizeof (double) * values->len);
+
+  g_array_unref (values);
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_points_interpolate (const SvgValue *value0,
+                        const SvgValue *value1,
+                        double          t)
+{
+  const SvgPoints *p0 = (const SvgPoints *) value0;
+  const SvgPoints *p1 = (const SvgPoints *) value1;
+  SvgPoints *p;
+
+  if (p0->n_values != p1->n_values)
+    {
+      if (t < 0.5)
+        return svg_value_ref ((SvgValue *) value0);
+      else
+        return svg_value_ref ((SvgValue *) value1);
+    }
+
+  p = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (p0->n_values));
+  p->n_values = p0->n_values;
+
+  for (unsigned int i = 0; i < p0->n_values; i++)
+    p->values[i] = lerp (t, p0->values[i], p1->values[i]);
+
+  return (SvgValue *) p;
+}
+
+/* }}} */
 /* {{{ Clips */
 
 typedef enum
@@ -4769,6 +4906,13 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 0,
     .parse_value = parse_gradient_pos,
   },
+  { .id = SHAPE_ATTR_POINTS,
+    .name = "points",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .parse_value = svg_points_parse,
+  },
   { .id = SHAPE_ATTR_SPREAD_METHOD,
     .name = "spreadMethod",
     .inherited = 0,
@@ -4880,6 +5024,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FX].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
+  shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_points_new_none ();
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (SPREAD_METHOD_PAD);
   shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
@@ -5028,6 +5173,24 @@ struct {
   unsigned int has_gpa_attrs   : 1;
   unsigned int has_color_stops : 1;
 } shape_types[] = {
+  { .name = "line",
+    .has_shapes = 0,
+    .never_rendered = 0,
+    .has_gpa_attrs = 1,
+    .has_color_stops = 0,
+  },
+  { .name = "polyline",
+    .has_shapes = 0,
+    .never_rendered = 0,
+    .has_gpa_attrs = 1,
+    .has_color_stops = 0,
+  },
+  { .name = "polygon",
+    .has_shapes = 0,
+    .never_rendered = 0,
+    .has_gpa_attrs = 1,
+    .has_color_stops = 0,
+  },
   { .name = "rect",
     .has_shapes = 0,
     .never_rendered = 0,
@@ -5137,6 +5300,12 @@ struct _Shape
     struct {
       double x, y, w, h, rx, ry;
     } rect;
+    struct {
+      double x1, y1, x2, y2;
+    } line;
+    struct {
+      SvgValue *points;
+    } polyline;
   } path_for;
 };
 
@@ -5160,6 +5329,9 @@ shape_free (gpointer data)
   g_clear_pointer (&shape->path, gsk_path_unref);
   g_clear_pointer (&shape->measure, gsk_path_measure_unref);
 
+  if (shape->type == SHAPE_POLY_LINE || shape->type == SHAPE_POLYGON)
+    g_clear_pointer (&shape->path_for.polyline.points, svg_value_unref);
+
   g_free (data);
 }
 
@@ -5170,6 +5342,7 @@ shape_attr_get_initial_value (ShapeAttr attr,
                               ShapeType type)
 {
   static SvgValue *default_radial_value;
+  static SvgValue *default_line_value;
 
   if (type == SHAPE_RADIAL_GRADIENT)
     {
@@ -5182,6 +5355,21 @@ shape_attr_get_initial_value (ShapeAttr attr,
             default_radial_value = svg_percentage_new (50);
 
           return default_radial_value;
+        }
+    }
+
+  if (type == SHAPE_LINE)
+    {
+      if (attr == SHAPE_ATTR_X1 ||
+          attr == SHAPE_ATTR_Y1 ||
+          attr == SHAPE_ATTR_X2 ||
+          attr == SHAPE_ATTR_Y2)
+        {
+          if (!default_line_value)
+            default_line_value = svg_number_new (0);
+
+          return default_line_value;
+
         }
     }
 
@@ -5235,7 +5423,8 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
     case SHAPE_ATTR_PATH_LENGTH:
-      return type == SHAPE_RECT || type == SHAPE_CIRCLE ||
+      return type == SHAPE_LINE ||
+             type == SHAPE_RECT || type == SHAPE_CIRCLE ||
              type == SHAPE_ELLIPSE || type == SHAPE_PATH;
     case SHAPE_ATTR_PATH:
       return type == SHAPE_PATH;
@@ -5246,6 +5435,9 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_Y1:
     case SHAPE_ATTR_X2:
     case SHAPE_ATTR_Y2:
+      return type== SHAPE_LINE || type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
+    case SHAPE_ATTR_POINTS:
+      return type == SHAPE_POLY_LINE || type == SHAPE_POLYGON;
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_GRADIENT_UNITS:
       return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
@@ -5271,7 +5463,9 @@ shape_get_path (Shape                 *shape,
 {
   GskPathBuilder *builder;
   double cx, cy, r, x, y, width, height, rx, ry;
+  double x1, y1, x2, y2;
   SvgValue **values;
+  SvgPoints *points;
 
   if (current)
     values = shape->current;
@@ -5280,6 +5474,34 @@ shape_get_path (Shape                 *shape,
 
   switch (shape->type)
     {
+    case SHAPE_LINE:
+      x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->width);
+      y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->height);
+      x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->width);
+      y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->height);
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_move_to (builder, x1, y1);
+      gsk_path_builder_line_to (builder, x2, y2);
+      return gsk_path_builder_free_to_path (builder);
+
+    case SHAPE_POLY_LINE:
+    case SHAPE_POLYGON:
+      builder = gsk_path_builder_new ();
+      points = (SvgPoints *) values[SHAPE_ATTR_POINTS];
+      if (points->n_values > 0)
+        {
+          gsk_path_builder_move_to (builder,
+                                    points->values[0], points->values[1]);
+          for (unsigned int i = 2; i < points->n_values; i += 2)
+            {
+              gsk_path_builder_line_to (builder,
+                                        points->values[i], points->values[i + 1]);
+            }
+          if (shape->type == SHAPE_POLYGON)
+            gsk_path_builder_close (builder);
+        }
+      return gsk_path_builder_free_to_path (builder);
+
     case SHAPE_CIRCLE:
       cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
       cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
@@ -5319,16 +5541,16 @@ shape_get_path (Shape                 *shape,
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_PATH:
-     if (svg_path_get (values[SHAPE_ATTR_PATH]))
-       {
-         return gsk_path_ref (svg_path_get (values[SHAPE_ATTR_PATH]));
-       }
-     else
-       {
-         builder = gsk_path_builder_new ();
-         return gsk_path_builder_free_to_path (builder);
-       }
-     break;
+      if (svg_path_get (values[SHAPE_ATTR_PATH]))
+        {
+          return gsk_path_ref (svg_path_get (values[SHAPE_ATTR_PATH]));
+        }
+      else
+        {
+          builder = gsk_path_builder_new ();
+          return gsk_path_builder_free_to_path (builder);
+        }
+      break;
 
     case SHAPE_GROUP:
     case SHAPE_CLIP_PATH:
@@ -5350,6 +5572,26 @@ shape_get_current_path (Shape                 *shape,
     {
       switch (shape->type)
         {
+        case SHAPE_LINE:
+          if (shape->path_for.line.x1 != svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->width) ||
+              shape->path_for.line.y1 != svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->height) ||
+              shape->path_for.line.x2 != svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->height) ||
+              shape->path_for.line.y2 != svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->height))
+            {
+              g_clear_pointer (&shape->path, gsk_path_unref);
+              g_clear_pointer (&shape->measure, gsk_path_measure_unref);
+            }
+          break;
+
+        case SHAPE_POLY_LINE:
+        case SHAPE_POLYGON:
+          if (!svg_value_equal (shape->path_for.polyline.points, shape->current[SHAPE_ATTR_POINTS]))
+            {
+              g_clear_pointer (&shape->path, gsk_path_unref);
+              g_clear_pointer (&shape->measure, gsk_path_measure_unref);
+            }
+          break;
+
         case SHAPE_CIRCLE:
           if (shape->path_for.circle.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width) ||
               shape->path_for.circle.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height) ||
@@ -5410,6 +5652,19 @@ shape_get_current_path (Shape                 *shape,
 
       switch (shape->type)
         {
+        case SHAPE_LINE:
+          shape->path_for.line.x1 = svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->width);
+          shape->path_for.line.y1 = svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->height);
+          shape->path_for.line.x2 = svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->width);
+          shape->path_for.line.y2 = svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->height);
+          break;
+
+        case SHAPE_POLY_LINE:
+        case SHAPE_POLYGON:
+          g_clear_pointer (&shape->path_for.polyline.points, svg_value_unref);
+          shape->path_for.polyline.points = svg_value_ref (shape->current[SHAPE_ATTR_POINTS]);
+          break;
+
         case SHAPE_CIRCLE:
           shape->path_for.circle.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width);
           shape->path_for.circle.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height);

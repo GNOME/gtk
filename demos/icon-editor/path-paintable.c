@@ -2104,10 +2104,13 @@ path_paintable_duplicate_path (PathPaintable *self,
 
   PathElt elt = g_array_index (self->paths, PathElt, idx);
 
-  gsk_path_ref (elt.path);
-  elt.id = g_strdup (elt.id);
-
   g_array_append_val (self->paths, elt);
+
+  PathElt *pelt = &g_array_index (self->paths, PathElt, self->paths->len - 1);
+
+  gsk_path_ref (pelt->path);
+  pelt->id = g_strdup (pelt->id);
+  pelt->animation.frames = g_memdup2 (pelt->animation.frames, sizeof (KeyFrame) * pelt->animation.n_frames);
 
   g_signal_emit (self, signals[CHANGED], 0);
   g_signal_emit (self, signals[PATHS_CHANGED], 0);

@@ -125,6 +125,8 @@ update_states (StateEditor *self)
   self->updating = FALSE;
 
   repopulate (self);
+
+  g_free (states);
 }
 
 static void

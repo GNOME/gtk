@@ -23,4 +23,16 @@
           rx='4'
           ry='0'>
   </rect>
+  <line
+          x1='10'
+          y1='11'
+          x2='12'
+          y2='13'>
+  </line>
+  <polyline
+          points='0 0 1 1 2 2'>
+  </polyline>
+  <polygon
+          points='100 10 200 10 50 30'>
+  </polygon>
 </svg>
