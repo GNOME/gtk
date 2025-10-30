@@ -107,9 +107,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-gtk_application_impl_x11_collect_window_state (GtkApplicationImpl   *impl,
-                                               GtkApplicationWindow *window,
-                                               GVariantBuilder      *state)
+gtk_application_impl_x11_collect_window_state (GtkApplicationImpl *impl,
+                                               GtkWindow          *window,
+                                               GVariantBuilder    *state)
 {
   GdkSurface *surface;
 

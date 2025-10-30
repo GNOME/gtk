@@ -286,9 +286,9 @@ gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
 }
 
 static void
-gtk_application_impl_wayland_collect_window_state (GtkApplicationImpl   *impl,
-                                                   GtkApplicationWindow *window,
-                                                   GVariantBuilder      *state)
+gtk_application_impl_wayland_collect_window_state (GtkApplicationImpl *impl,
+                                                   GtkWindow          *window,
+                                                   GVariantBuilder    *state)
 {
   GdkSurface *surface;
   const char *session_id;

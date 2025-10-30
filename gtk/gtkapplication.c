@@ -1523,22 +1523,20 @@ collect_state (GtkApplication *application)
 
   for (GList *l = priv->windows; l != NULL; l = l->next)
     {
-      if (GTK_IS_APPLICATION_WINDOW (l->data))
-        {
-          GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (l->data);
-          GVariantBuilder builder;
-          GVariantDict *dict;
+      GtkWindow *window = GTK_WINDOW (l->data);
+      GVariantBuilder builder;
+      GVariantDict *dict;
 
-          g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-          gtk_application_impl_collect_window_state (priv->impl, GTK_APPLICATION_WINDOW (l->data), &builder);
+      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+      gtk_application_impl_collect_window_state (priv->impl, GTK_APPLICATION_WINDOW (l->data), &builder);
 
-          dict = g_variant_dict_new (NULL);
-          gtk_application_window_save (window, dict);
+      dict = g_variant_dict_new (NULL);
+      if (GTK_IS_APPLICATION_WINDOW (window))
+        gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict);
 
-          g_variant_builder_add (&win_builder, "(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
+      g_variant_builder_add (&win_builder, "(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
 
-          g_variant_dict_unref (dict);
-        }
+      g_variant_dict_unref (dict);
     }
 
   g_variant_builder_init (&global_builder, G_VARIANT_TYPE_VARDICT);

@@ -119,7 +119,7 @@ typedef struct
   void         (* restore_global_state)     (GtkApplicationImpl          *impl,
                                              GVariant                    *state);
   void         (* collect_window_state)     (GtkApplicationImpl          *impl,
-                                             GtkApplicationWindow        *window,
+                                             GtkWindow                   *window,
                                              GVariantBuilder             *state);
   void         (* store_state)              (GtkApplicationImpl          *impl,
                                              GVariant                    *state);
@@ -223,7 +223,7 @@ void                    gtk_application_impl_restore_global_state       (GtkAppl
                                                                          GVariant                    *state);
 
 void                    gtk_application_impl_collect_window_state       (GtkApplicationImpl          *impl,
-                                                                         GtkApplicationWindow        *window,
+                                                                         GtkWindow                   *window,
                                                                          GVariantBuilder             *builder);
 
 void                    gtk_application_impl_store_state                (GtkApplicationImpl          *impl,

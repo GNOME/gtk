@@ -187,9 +187,9 @@ gtk_application_impl_restore_global_state (GtkApplicationImpl *impl,
 }
 
 void
-gtk_application_impl_collect_window_state (GtkApplicationImpl   *impl,
-                                           GtkApplicationWindow *window,
-                                           GVariantBuilder      *state)
+gtk_application_impl_collect_window_state (GtkApplicationImpl *impl,
+                                           GtkWindow          *window,
+                                           GVariantBuilder    *state)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->collect_window_state (impl, window, state);
 }
