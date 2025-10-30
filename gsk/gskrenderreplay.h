@@ -73,6 +73,29 @@ typedef gboolean        (* GskRenderReplayNodeForeach)          (GskRenderReplay
                                                                  GskRenderNode                  *node,
                                                                  gpointer                        user_data);
 
+/**
+ * GskRenderReplayTextureFilter:
+ * @replay: The replay object used to replay the node
+ * @texture: The texture to filter
+ * @user_data: The user data
+ *
+ * A function that filters textures.
+ *
+ * The function will be called by the default replay function for
+ * all nodes with textures. They will then generate a node using the
+ * returned texture.
+ *
+ * It is valid for the function to return the passed in texture if
+ * the texture shuld not be modified.
+ *
+ * Returns: (transfer full): The filtered texture
+ *
+ * Since: 4.22
+ */
+typedef GdkTexture *   (* GskRenderReplayTextureFilter)         (GskRenderReplay                *replay,
+                                                                 GdkTexture                     *texture,
+                                                                 gpointer                        user_data);
+
 GDK_AVAILABLE_IN_4_22
 GskRenderReplay *       gsk_render_replay_new                   (void);
 GDK_AVAILABLE_IN_4_22
@@ -99,6 +122,14 @@ GDK_AVAILABLE_IN_4_22
 void                    gsk_render_replay_foreach_node          (GskRenderReplay                *self,
                                                                  GskRenderNode                  *node);
 
+GDK_AVAILABLE_IN_4_22
+void                    gsk_render_replay_set_texture_filter    (GskRenderReplay                *self,
+                                                                 GskRenderReplayTextureFilter    filter,
+                                                                 gpointer                        user_data,
+                                                                 GDestroyNotify                  user_destroy);
+GDK_AVAILABLE_IN_4_22
+GdkTexture *            gsk_render_replay_filter_texture        (GskRenderReplay                *self,
+                                                                 GdkTexture                     *texture);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderReplay, gsk_render_replay_free)
 
