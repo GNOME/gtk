@@ -192,7 +192,7 @@ get_state_file (GtkApplicationImpl *impl,
   else if (dbus->instance_id)
     instance_id = dbus->instance_id;
   else
-    return NULL;
+    instance_id = "fallback";
 
   dir = g_get_user_state_dir ();
 
@@ -295,7 +295,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   if (!support_save || !request_restore (dbus))
     {
-      dbus->reason = GTK_RESTORE_REASON_PRISTINE;
+      dbus->reason = GTK_RESTORE_REASON_LAUNCH;
       dbus->instance_id = NULL;
     }
 
@@ -660,6 +660,17 @@ gtk_application_impl_dbus_retrieve_state (GtkApplicationImpl *impl)
   file = get_state_file (impl, NULL);
   if (!file)
     return NULL;
+
+  if (!g_file_test (file, G_FILE_TEST_EXISTS))
+    {
+      char *old_file;
+
+      old_file = get_state_file (impl, "fallback");
+      if (old_file && g_file_test (old_file, G_FILE_TEST_EXISTS))
+        g_rename (old_file, file);
+
+      g_free (old_file);
+    }
 
   if (g_file_get_contents (file, &contents, &length, NULL))
     {
