@@ -3,4 +3,7 @@
   <circle cx='10' cy='12' r='5.5'/>
   <rect x='1' y='-3' width='100.1' height='22.2222'/>
   <rect x='0' y='0' width='10' height='20' rx='4' ry='0'/>
+  <line x1='10' y1='11' x2='12' y2='13'/>
+  <polyline points='0 0 1 1 2 2'/>
+  <polygon points='100 10 200 10 50 30'/>
 </svg>
