@@ -7386,6 +7386,35 @@ gsk_text_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode *
+gsk_text_node_replay (GskRenderNode   *node,
+                      GskRenderReplay *replay)
+{
+  GskTextNode *self = (GskTextNode *) node;
+  GskRenderNode *result;
+  PangoFont *font;
+
+  font = gsk_render_replay_filter_font (replay, self->font);
+  if (font == self->font)
+    {
+      g_object_unref (font);
+      return gsk_render_node_ref (node);
+    }
+
+  result = gsk_text_node_new2 (font, 
+                               &(PangoGlyphString) {
+                                 self->num_glyphs,
+                                 self->glyphs,
+                                 NULL,
+                               },
+                               &self->color,
+                               &self->offset);
+
+  g_object_unref (font);
+
+  return result;
+}
+
 static void
 gsk_text_node_class_init (gpointer g_class,
                           gpointer class_data)
@@ -7397,7 +7426,7 @@ gsk_text_node_class_init (gpointer g_class,
   node_class->finalize = gsk_text_node_finalize;
   node_class->draw = gsk_text_node_draw;
   node_class->diff = gsk_text_node_diff;
-  node_class->replay = gsk_render_node_replay_as_self;
+  node_class->replay = gsk_text_node_replay;
 }
 
 static inline float
