@@ -6,7 +6,7 @@ _gtk4_image_tool()
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     if [[ "$COMP_CWORD" == "1" ]] ; then
-      local commands="compare convert info relabel show"
+      local commands="compare convert info relabel show play"
       COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
       return 0
     fi
@@ -62,6 +62,12 @@ _gtk4_image_tool()
 
         show)
             opts="--help --undecorated"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        play)
+            opts="--help --undecorated --size"
             COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
             return 0
             ;;

@@ -41,6 +41,22 @@ quit_cb (GtkWidget *widget,
 }
 
 static void
+update_tooltip (GtkWidget    *widget,
+                unsigned int  state)
+{
+  if (state == GTK_SVG_STATE_EMPTY)
+    {
+      gtk_widget_set_tooltip_text (widget, "State: empty");
+    }
+  else
+    {
+      char *text = g_strdup_printf ("State: %u", state);
+      gtk_widget_set_tooltip_text (widget, text);
+      g_free (text);
+    }
+}
+
+static void
 clicked (GtkGestureClick *click,
          int              n_press,
          double           x,
@@ -49,6 +65,9 @@ clicked (GtkGestureClick *click,
 {
   unsigned int state;
   unsigned int n_states;
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (click));
 
   state = gtk_svg_get_state (svg);
   n_states = gtk_svg_get_n_states (svg);
@@ -73,6 +92,7 @@ clicked (GtkGestureClick *click,
     }
 
   gtk_svg_set_state (svg, state);
+  update_tooltip (widget, state);
 }
 
 static void
@@ -127,7 +147,8 @@ load_animation_file (const char *filename)
 
 static void
 show_files (char     **filenames,
-            gboolean   decorated)
+            gboolean   decorated,
+            int        size)
 {
   GtkWidget *sw;
   GtkWidget *window;
@@ -179,11 +200,19 @@ show_files (char     **filenames,
 
       gtk_svg_play (svg);
 
-      picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (svg));
-      gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
-      gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_CONTAIN);
-      gtk_widget_set_hexpand (picture, TRUE);
-      gtk_widget_set_vexpand (picture, TRUE);
+      if (size == 0)
+        {
+          picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (svg));
+          gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
+          gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_CONTAIN);
+          gtk_widget_set_hexpand (picture, TRUE);
+          gtk_widget_set_vexpand (picture, TRUE);
+        }
+      else
+        {
+          picture = gtk_image_new_from_paintable (GDK_PAINTABLE (svg));
+          gtk_image_set_pixel_size (GTK_IMAGE (picture), size);
+        }
 
       click = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), 0);
@@ -192,8 +221,9 @@ show_files (char     **filenames,
 
       if (i > 0)
         gtk_box_append (GTK_BOX (box), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
-
       gtk_box_append (GTK_BOX (box), picture);
+
+      update_tooltip (picture, gtk_svg_get_state (svg));
 
       g_object_unref (svg);
     }
@@ -211,9 +241,10 @@ do_play (int          *argc,
   GOptionContext *context;
   char **filenames = NULL;
   gboolean decorated = TRUE;
+  int size = 0;
   const GOptionEntry entries[] = {
     { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
-
+    { "size", 0, 0, G_OPTION_ARG_INT, &size, N_("SIZE") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
@@ -240,7 +271,7 @@ do_play (int          *argc,
       exit (1);
     }
 
-  show_files (filenames, decorated);
+  show_files (filenames, decorated, size);
 
   g_strfreev (filenames);
 }
