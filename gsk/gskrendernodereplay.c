@@ -111,6 +111,10 @@ struct _GskRenderNodeReplay
   GskRenderNodeReplayNodeForeach node_foreach;
   gpointer node_foreach_data;
   GDestroyNotify node_foreach_destroy;
+
+  GskRenderNodeReplayTextureFilter texture_filter;
+  gpointer texture_filter_data;
+  GDestroyNotify texture_filter_destroy;
 };
 
 /**
@@ -147,6 +151,7 @@ gsk_render_node_replay_free (GskRenderNodeReplay *self)
 
   gsk_render_node_replay_set_node_foreach (self, NULL, NULL, NULL);
   gsk_render_node_replay_set_node_filter (self, NULL, NULL, NULL);
+  gsk_render_node_replay_set_texture_filter (self, NULL, NULL, NULL);
 
   g_free (self);
 }
@@ -305,3 +310,69 @@ gsk_render_node_replay_foreach_node (GskRenderNodeReplay *self,
   gsk_render_node_unref (ignored);
 }
 
+/**
+ * gsk_render_node_replay_set_texture_filter:
+ * @self: the replay
+ * @filter: (nullable): the texture filter function
+ * @user_data: user data to pass to @filter
+ * @user_destroy: destroy notify that will be called to release
+ *   user_data
+ *
+ * Sets a filter function to be called when filtering a node with textures
+ * or to unset it to not do any filtering.
+ *
+ * You can call [method@GskRenderNodeReplay.filter_texture] to filter
+ * a texture yourself.
+ *
+ * Since: 4.22
+ **/
+void
+gsk_render_node_replay_set_texture_filter (GskRenderNodeReplay              *self,
+                                           GskRenderNodeReplayTextureFilter  filter,
+                                           gpointer                          user_data,
+                                           GDestroyNotify                    user_destroy)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (filter || user_data == NULL);
+  g_return_if_fail (user_data || !user_destroy);
+
+  if (self->texture_filter_destroy)
+    self->texture_filter_destroy (self->texture_filter_data);
+
+  if (filter)
+    self->texture_filter = filter;
+  self->texture_filter_data = user_data;
+  self->texture_filter_destroy = user_destroy;
+}
+
+/**
+ * gsk_render_node_replay_filter_texture:
+ * @self: the replay
+ * @node: The node the texture belongs to
+ * @texture: The texture to filter
+ *
+ * Filters a texture using the current filter function.
+ *
+ * Returns: (transfer full) the filtered texture
+ *
+ * Since: 4.22
+ **/
+GdkTexture *
+gsk_render_node_replay_filter_texture (GskRenderNodeReplay *self,
+                                       GskRenderNode       *node,
+                                       GdkTexture          *texture)
+{
+  GdkTexture *result;
+
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+
+  if (!self->texture_filter)
+    return g_object_ref (texture);
+
+  result = self->texture_filter (self, node, texture, self->texture_filter_data);
+  g_assert (result != NULL);
+
+  return result;
+}

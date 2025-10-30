@@ -2769,6 +2769,27 @@ gsk_texture_node_diff (GskRenderNode *node1,
   cairo_region_destroy (sub);
 }
 
+static GskRenderNode *
+gsk_texture_node_replay (GskRenderNode       *node,
+                         GskRenderNodeReplay *replay)
+{
+  GskTextureNode *self = (GskTextureNode *) node;
+  GdkTexture *texture;
+  GskRenderNode *result;
+
+  texture = gsk_render_node_replay_filter_texture (replay, node, self->texture);
+  if (self->texture == texture)
+    {
+      g_object_unref (texture);
+      return gsk_render_node_ref (node);
+    }
+
+  result = gsk_texture_node_new (texture, &node->bounds);
+  g_object_unref (texture);
+
+  return result;
+}
+
 static void
 gsk_texture_node_class_init (gpointer g_class,
                              gpointer class_data)
@@ -2780,7 +2801,7 @@ gsk_texture_node_class_init (gpointer g_class,
   node_class->finalize = gsk_texture_node_finalize;
   node_class->draw = gsk_texture_node_draw;
   node_class->diff = gsk_texture_node_diff;
-  node_class->replay = gsk_render_node_replay_as_self;
+  node_class->replay = gsk_texture_node_replay;
 }
 
 /**
@@ -2960,6 +2981,27 @@ gsk_texture_scale_node_diff (GskRenderNode *node1,
   cairo_region_destroy (sub);
 }
 
+static GskRenderNode *
+gsk_texture_scale_node_replay (GskRenderNode       *node,
+                               GskRenderNodeReplay *replay)
+{
+  GskTextureScaleNode *self = (GskTextureScaleNode *) node;
+  GdkTexture *texture;
+  GskRenderNode *result;
+
+  texture = gsk_render_node_replay_filter_texture (replay, node, self->texture);
+  if (self->texture == texture)
+    {
+      g_object_unref (texture);
+      return gsk_render_node_ref (node);
+    }
+
+  result = gsk_texture_scale_node_new (texture, &node->bounds, self->filter);
+  g_object_unref (texture);
+
+  return result;
+}
+
 static void
 gsk_texture_scale_node_class_init (gpointer g_class,
                                    gpointer class_data)
@@ -2971,7 +3013,7 @@ gsk_texture_scale_node_class_init (gpointer g_class,
   node_class->finalize = gsk_texture_scale_node_finalize;
   node_class->draw = gsk_texture_scale_node_draw;
   node_class->diff = gsk_texture_scale_node_diff;
-  node_class->replay = gsk_render_node_replay_as_self;
+  node_class->replay = gsk_texture_scale_node_replay;
 }
 
 /**
