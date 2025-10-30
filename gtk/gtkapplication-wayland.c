@@ -95,10 +95,11 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   state = gtk_application_impl_dbus_get_window_state (dbus, window);
   if (state)
     {
-      g_variant_lookup (state, "session-id", "s", &id);
-      GTK_DEBUG (SESSION, "Found saved session ID %s", id);
+      if (g_variant_lookup (state, "session-id", "s", &id))
+        GTK_DEBUG (SESSION, "Found saved session ID %s", id);
     }
-  else
+
+  if (!id)
     {
       id = g_uuid_string_random ();
       GTK_DEBUG (SESSION, "No saved session ID, using %s", id);
