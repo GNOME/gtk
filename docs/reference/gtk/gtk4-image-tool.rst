@@ -44,8 +44,8 @@ The ``show`` command displays one or more images, side-by-side.
 
 ``--undecorated``
 
-Removes window decorations. This is meant for rendering of exactly the image
-without any titlebar.
+  Removes window decorations. This is meant for rendering of exactly the
+  image without any titlebar.
 
 Playing
 ^^^^^^^
@@ -56,9 +56,12 @@ where applicable.
 
 ``--undecorated``
 
-Removes window decorations. This is meant for rendering of exactly the
-animation without any titlebar.
+  Removes window decorations. This is meant for rendering of exactly the
+  animation without any titlebar.
 
+``--size=SIZE``
+
+  Show the animation at the given size.
 
 Compare
 ^^^^^^^
