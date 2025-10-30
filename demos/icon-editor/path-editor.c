@@ -603,7 +603,7 @@ path_editor_update (PathEditor *self)
       text = gsk_path_to_string (path);
       gtk_label_set_label (GTK_LABEL (self->path_cmds), text);
 
-      gtk_editable_set_text (GTK_EDITABLE (self->id_label), path_paintable_get_path_id (self->paintable, self->path));
+      gtk_editable_set_text (GTK_EDITABLE (self->id_label), path_paintable_get_path_id (self->paintable, self->path) ?: "");
 
       do_stroke = path_paintable_get_path_stroke (self->paintable, self->path,
                                                   stroke, &symbolic, &color);
