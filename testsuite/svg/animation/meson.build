@@ -19,6 +19,7 @@ test_data = [
   'gpa-transitions2.test',
   'gpa-transitions3.test',
   'masks.test',
+  'negative-delay.test',
   'paths.test',
   'priority.test',
   'states.test',

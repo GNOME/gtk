@@ -7692,6 +7692,7 @@ static void
 create_visibility_setter (Shape        *shape,
                           Timeline     *timeline,
                           uint64_t      states,
+                          int64_t       delay,
                           unsigned int  initial)
 {
   Animation *a = animation_set_new ();
@@ -7700,7 +7701,7 @@ create_visibility_setter (Shape        *shape,
   a->attr = SHAPE_ATTR_VISIBILITY;
 
   a->id = g_strdup_printf ("gpa:out-of-state:%s", shape->id);
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, 0));
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, MAX (0, - delay)));
   time_spec_add_animation (begin, a);
 
   if (!state_match (states, initial))
@@ -7709,7 +7710,7 @@ create_visibility_setter (Shape        *shape,
       time_spec_add_animation (begin, a);
     }
 
-  end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+  end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, - (MAX (0, - delay))));
   time_spec_add_animation (end, a);
 
   a->has_begin = 1;
@@ -7732,9 +7733,10 @@ static void
 create_states (Shape        *shape,
                Timeline     *timeline,
                uint64_t      states,
+               int64_t       delay,
                unsigned int  initial)
 {
-  create_visibility_setter (shape, timeline, states, initial);
+  create_visibility_setter (shape, timeline, states, delay, initial);
 }
 
 /* }}} */
@@ -9567,6 +9569,7 @@ parse_shape_gpa_attrs (Shape                *shape,
   create_states (shape,
                  data->svg->timeline,
                  states,
+                 transition_delay,
                  data->svg->state);
 
   if (attach_to_attr ||
