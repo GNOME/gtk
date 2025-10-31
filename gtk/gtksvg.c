@@ -30,7 +30,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include <glib/gstdio.h>
 
-#include <math.h>
+#include <tgmath.h>
 #include <stdint.h>
 
 /**
