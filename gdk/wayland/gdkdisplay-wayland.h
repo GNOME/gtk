@@ -181,7 +181,7 @@ void       gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
 
 GdkDisplay *_gdk_wayland_display_open (const char *display_name);
 
-void                    gdk_wayland_display_register_session    (GdkDisplay *display,
+gboolean                gdk_wayland_display_register_session    (GdkDisplay *display,
                                                                  enum xx_session_manager_v1_reason reason,
                                                                  const char *name);
 

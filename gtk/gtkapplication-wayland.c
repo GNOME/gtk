@@ -56,10 +56,32 @@ typedef struct
   GtkApplicationImplDBus dbus;
   GSList *inhibitors;
   guint next_cookie;
-
+  gboolean session_mgmt_supported;
 } GtkApplicationImplWayland;
 
 G_DEFINE_TYPE (GtkApplicationImplWayland, gtk_application_impl_wayland, GTK_TYPE_APPLICATION_IMPL_DBUS)
+
+static void
+restore_wayland_fallback_state (GtkWindow *window,
+                                GVariant  *state)
+{
+  int width, height;
+  gboolean is_maximized = FALSE;
+  gboolean is_fullscreen = FALSE;
+
+  g_warning_once ("No Wayland session management state found! Restoring fallback state");
+
+  if (g_variant_lookup (state, "size", "(ii)", &width, &height))
+    gtk_window_set_default_size (window, width, height);
+
+  g_variant_lookup (state, "is-maximized", "b", &is_maximized);
+  g_variant_lookup (state, "is-fullscreen", "b", &is_fullscreen);
+
+  g_object_set (window,
+                "maximized", is_maximized,
+                "fullscreened", is_fullscreen,
+                NULL);
+}
 
 static void
 gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
@@ -95,10 +117,13 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   state = gtk_application_impl_dbus_get_window_state (dbus, window);
   if (state)
     {
-      g_variant_lookup (state, "session-id", "s", &id);
-      GTK_DEBUG (SESSION, "Found saved session ID %s", id);
+      if (g_variant_lookup (state, "session-id", "s", &id))
+        GTK_DEBUG (SESSION, "Found saved session ID %s", id);
+      else
+        restore_wayland_fallback_state (window, state);
     }
-  else
+
+  if (!id)
     {
       id = g_uuid_string_random ();
       GTK_DEBUG (SESSION, "No saved session ID, using %s", id);
@@ -133,7 +158,8 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
 {
   GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
   GSList *iter = wayland->inhibitors;
-  GdkSurface *surface;
+
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_removed (impl, window);
 
   while (iter)
     {
@@ -153,6 +179,15 @@ gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
 
       iter = next;
     }
+}
+
+static void
+gtk_application_impl_wayland_window_forget (GtkApplicationImpl *impl,
+                                            GtkWindow          *window)
+{
+  GdkSurface *surface;
+
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_forget (impl, window);
 
   surface = gtk_native_get_surface (GTK_NATIVE (window));
   gdk_wayland_toplevel_remove_from_session (GDK_TOPLEVEL (surface));
@@ -227,7 +262,7 @@ static void
 gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
                                       gboolean            support_save)
 {
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+  GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
   GdkDisplay *display = gdk_display_get_default ();
   enum xx_session_manager_v1_reason wl_reason;
   char *id = NULL;
@@ -247,7 +282,7 @@ gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
       g_clear_pointer (&state, g_variant_unref);
     }
 
-  switch (dbus->reason)
+  switch (wayland->dbus.reason)
     {
     case GTK_RESTORE_REASON_LAUNCH:
       wl_reason = XX_SESSION_MANAGER_V1_REASON_LAUNCH;
@@ -270,17 +305,44 @@ gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
     }
 
   GTK_DEBUG (SESSION, "Wayland register session ID %s", id);
-  gdk_wayland_display_register_session (display, wl_reason, id);
+  wayland->session_mgmt_supported = gdk_wayland_display_register_session (display, wl_reason, id);
   g_free (id);
 }
 
 static void
-gtk_application_impl_wayland_collect_window_state (GtkApplicationImpl   *impl,
-                                                   GtkApplicationWindow *window,
-                                                   GVariantBuilder      *state)
+collect_wayland_fallback_state (GtkWindow       *window,
+                                GVariantBuilder *state)
 {
+  int width, height;
+  gboolean is_maximized;
+  gboolean is_fullscreen;
+
+  g_warning_once ("Wayland compositor doesn't appear to support session management! Collecting fallback state");
+
+  gtk_window_get_default_size (window, &width, &height);
+  g_variant_builder_add (state, "{sv}", "size", g_variant_new ("(ii)", width, height));
+
+  is_maximized = gtk_window_is_maximized (window);
+  g_variant_builder_add (state, "{sv}", "is-maximized", g_variant_new_boolean (is_maximized));
+
+  is_fullscreen = gtk_window_is_fullscreen (window);
+  g_variant_builder_add (state, "{sv}", "is-fullscreen", g_variant_new_boolean (is_fullscreen));
+}
+
+static void
+gtk_application_impl_wayland_collect_window_state (GtkApplicationImpl *impl,
+                                                   GtkWindow          *window,
+                                                   GVariantBuilder    *state)
+{
+  GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland*) impl;
   GdkSurface *surface;
   const char *session_id;
+
+  if (!wayland->session_mgmt_supported)
+    {
+      collect_wayland_fallback_state (window, state);
+      return;
+    }
 
   surface = gtk_native_get_surface (GTK_NATIVE (window));
 
@@ -317,6 +379,7 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
   impl_class->handle_window_realize = gtk_application_impl_wayland_handle_window_realize;
   impl_class->before_emit = gtk_application_impl_wayland_before_emit;
   impl_class->window_removed = gtk_application_impl_wayland_window_removed;
+  impl_class->window_forget = gtk_application_impl_wayland_window_forget;
   impl_class->inhibit = gtk_application_impl_wayland_inhibit;
   impl_class->uninhibit = gtk_application_impl_wayland_uninhibit;
   impl_class->startup = gtk_application_impl_wayland_startup;

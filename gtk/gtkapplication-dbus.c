@@ -192,11 +192,29 @@ get_state_file (GtkApplicationImpl *impl,
   else if (dbus->instance_id)
     instance_id = dbus->instance_id;
   else
-    return NULL;
+    instance_id = "fallback";
 
   dir = g_get_user_state_dir ();
 
-  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "#", instance_id, ".state", NULL);
+  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "@", instance_id, ".state", NULL);
+}
+
+static void
+debug_override_restore_reason (GtkRestoreReason *reason)
+{
+  const char *str = g_getenv ("GTK_OVERRIDE_RESTORE_REASON");
+  if (G_LIKELY (!str))
+    return;
+  else if (strcmp (str, "pristine") == 0)
+    *reason = GTK_RESTORE_REASON_PRISTINE;
+  else if (strcmp (str, "launch") == 0)
+    *reason = GTK_RESTORE_REASON_LAUNCH;
+  else if (strcmp (str, "recover") == 0)
+    *reason = GTK_RESTORE_REASON_RECOVER;
+  else if (strcmp (str, "restore") == 0)
+    *reason = GTK_RESTORE_REASON_RESTORE;
+  else
+    g_warning ("Unknown GTK_OVERRIDE_RESTORE_REASON value: %s", str);
 }
 
 static gboolean
@@ -295,9 +313,10 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   if (!support_save || !request_restore (dbus))
     {
-      dbus->reason = GTK_RESTORE_REASON_PRISTINE;
+      dbus->reason = GTK_RESTORE_REASON_LAUNCH;
       dbus->instance_id = NULL;
     }
+  debug_override_restore_reason (&dbus->reason);
 
   dbus->application_id = g_application_get_application_id (G_APPLICATION (impl->application));
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
@@ -427,7 +446,12 @@ gtk_application_impl_dbus_window_removed (GtkApplicationImpl *impl,
       g_dbus_connection_unexport_action_group (dbus->session, id);
       g_object_set_qdata (G_OBJECT (window), gtk_application_impl_dbus_export_id_quark (), NULL);
     }
+}
 
+static void
+gtk_application_impl_dbus_window_forget (GtkApplicationImpl *impl,
+                                         GtkWindow          *window)
+{
   g_object_set_qdata (G_OBJECT (window), gtk_application_impl_dbus_window_state_quark (), NULL);
 }
 
@@ -616,6 +640,13 @@ gtk_application_impl_dbus_get_restore_reason (GtkApplicationImpl *impl)
 }
 
 static void
+gtk_application_impl_dbus_clear_restore_reason (GtkApplicationImpl *impl)
+{
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+  dbus->reason = GTK_RESTORE_REASON_LAUNCH;
+}
+
+static void
 gtk_application_impl_dbus_store_state (GtkApplicationImpl *impl,
                                        GVariant           *state)
 {
@@ -655,6 +686,17 @@ gtk_application_impl_dbus_retrieve_state (GtkApplicationImpl *impl)
   file = get_state_file (impl, NULL);
   if (!file)
     return NULL;
+
+  if (!g_file_test (file, G_FILE_TEST_EXISTS))
+    {
+      char *old_file;
+
+      old_file = get_state_file (impl, "fallback");
+      if (old_file && g_file_test (old_file, G_FILE_TEST_EXISTS))
+        g_rename (old_file, file);
+
+      g_free (old_file);
+    }
 
   if (g_file_get_contents (file, &contents, &length, NULL))
     {
@@ -715,12 +757,14 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->shutdown = gtk_application_impl_dbus_shutdown;
   impl_class->window_added = gtk_application_impl_dbus_window_added;
   impl_class->window_removed = gtk_application_impl_dbus_window_removed;
+  impl_class->window_forget = gtk_application_impl_dbus_window_forget;
   impl_class->active_window_changed = gtk_application_impl_dbus_active_window_changed;
   impl_class->set_app_menu = gtk_application_impl_dbus_set_app_menu;
   impl_class->set_menubar = gtk_application_impl_dbus_set_menubar;
   impl_class->inhibit = gtk_application_impl_dbus_inhibit;
   impl_class->uninhibit = gtk_application_impl_dbus_uninhibit;
   impl_class->get_restore_reason = gtk_application_impl_dbus_get_restore_reason;
+  impl_class->clear_restore_reason = gtk_application_impl_dbus_clear_restore_reason;
   impl_class->store_state = gtk_application_impl_dbus_store_state;
   impl_class->forget_state = gtk_application_impl_dbus_forget_state;
   impl_class->retrieve_state = gtk_application_impl_dbus_retrieve_state;

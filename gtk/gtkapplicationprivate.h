@@ -48,14 +48,6 @@ GtkApplicationAccels *  gtk_application_get_application_accels          (GtkAppl
 void                    gtk_application_set_screensaver_active          (GtkApplication           *application,
                                                                          gboolean                  active);
 
-gboolean                gtk_application_restore                         (GtkApplication           *application,
-                                                                         GtkRestoreReason          reason);
-
-void                    gtk_application_restore_window                  (GtkApplication           *application,
-                                                                         GtkRestoreReason          reason,
-                                                                         GVariant                 *app_state,
-                                                                         GVariant                 *gtk_state);
-
 
 #define GTK_TYPE_APPLICATION_IMPL                           (gtk_application_impl_get_type ())
 #define GTK_APPLICATION_IMPL_CLASS(class)                   (G_TYPE_CHECK_CLASS_CAST ((class),                     \
@@ -88,6 +80,8 @@ typedef struct
                                              GVariant                    *state);
   void        (* window_removed)            (GtkApplicationImpl          *impl,
                                              GtkWindow                   *window);
+  void        (* window_forget)             (GtkApplicationImpl          *impl,
+                                             GtkWindow                   *window);
   void        (* active_window_changed)     (GtkApplicationImpl          *impl,
                                              GtkWindow                   *window);
   void        (* handle_window_realize)     (GtkApplicationImpl          *impl,
@@ -112,12 +106,14 @@ typedef struct
   GtkRestoreReason
                (* get_restore_reason)       (GtkApplicationImpl          *impl);
 
+  void         (* clear_restore_reason)     (GtkApplicationImpl          *impl);
+
   void         (* collect_global_state)     (GtkApplicationImpl          *impl,
                                              GVariantBuilder             *state);
   void         (* restore_global_state)     (GtkApplicationImpl          *impl,
                                              GVariant                    *state);
   void         (* collect_window_state)     (GtkApplicationImpl          *impl,
-                                             GtkApplicationWindow        *window,
+                                             GtkWindow                   *window,
                                              GVariantBuilder             *state);
   void         (* store_state)              (GtkApplicationImpl          *impl,
                                              GVariant                    *state);
@@ -186,6 +182,8 @@ void                    gtk_application_impl_window_added               (GtkAppl
                                                                          GVariant                    *state);
 void                    gtk_application_impl_window_removed             (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
+void                    gtk_application_impl_window_forget              (GtkApplicationImpl          *impl,
+                                                                         GtkWindow                   *window);
 void                    gtk_application_impl_active_window_changed      (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
 void                    gtk_application_impl_handle_window_realize      (GtkApplicationImpl          *impl,
@@ -213,13 +211,15 @@ void                    gtk_application_impl_quartz_setup_menu          (GMenuMo
 
 GtkRestoreReason        gtk_application_impl_get_restore_reason         (GtkApplicationImpl          *impl);
 
+void                    gtk_application_impl_clear_restore_reason       (GtkApplicationImpl          *impl);
+
 void                    gtk_application_impl_collect_global_state       (GtkApplicationImpl          *impl,
                                                                          GVariantBuilder             *builder);
 void                    gtk_application_impl_restore_global_state       (GtkApplicationImpl          *impl,
                                                                          GVariant                    *state);
 
 void                    gtk_application_impl_collect_window_state       (GtkApplicationImpl          *impl,
-                                                                         GtkApplicationWindow        *window,
+                                                                         GtkWindow                   *window,
                                                                          GVariantBuilder             *builder);
 
 void                    gtk_application_impl_store_state                (GtkApplicationImpl          *impl,

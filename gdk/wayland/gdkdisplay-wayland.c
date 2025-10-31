@@ -1376,7 +1376,7 @@ gdk_wayland_display_query_registry (GdkDisplay *display,
   return FALSE;
 }
 
-void
+gboolean
 gdk_wayland_display_register_session (GdkDisplay                        *display,
                                       enum xx_session_manager_v1_reason  reason,
                                       const char                        *name)
@@ -1386,7 +1386,7 @@ gdk_wayland_display_register_session (GdkDisplay                        *display
   GDK_DEBUG (MISC, "register session %s, reason %u", name, reason);
 
   if (!display_wayland->xx_session_manager)
-    return;
+    return FALSE;
 
   g_clear_pointer (&display_wayland->session_id, g_free);
   display_wayland->session_id = g_strdup (name);
@@ -1400,6 +1400,7 @@ gdk_wayland_display_register_session (GdkDisplay                        *display
                               display_wayland);
 
   wl_display_roundtrip (display_wayland->wl_display);
+  return TRUE;
 }
 
 void

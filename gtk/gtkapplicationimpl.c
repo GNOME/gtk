@@ -56,6 +56,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->before_emit = (gpointer) do_nothing;
   class->window_added = (gpointer) do_nothing;
   class->window_removed = (gpointer) do_nothing;
+  class->window_forget = (gpointer) do_nothing;
   class->active_window_changed = (gpointer) do_nothing;
   class->handle_window_realize = (gpointer) do_nothing;
   class->handle_window_map = (gpointer) do_nothing;
@@ -64,6 +65,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->inhibit = (gpointer) do_nothing;
   class->uninhibit = (gpointer) do_nothing;
   class->get_restore_reason = (gpointer) do_nothing;
+  class->clear_restore_reason = (gpointer) do_nothing;
   class->collect_global_state = (gpointer) do_nothing;
   class->restore_global_state = (gpointer) do_nothing;
   class->collect_window_state = (gpointer) do_nothing;
@@ -105,6 +107,13 @@ gtk_application_impl_window_removed (GtkApplicationImpl *impl,
                                      GtkWindow          *window)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->window_removed (impl, window);
+}
+
+void
+gtk_application_impl_window_forget (GtkApplicationImpl *impl,
+                                    GtkWindow          *window)
+{
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->window_forget (impl, window);
 }
 
 void
@@ -165,6 +174,12 @@ gtk_application_impl_get_restore_reason (GtkApplicationImpl *impl)
 }
 
 void
+gtk_application_impl_clear_restore_reason (GtkApplicationImpl *impl)
+{
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->clear_restore_reason (impl);
+}
+
+void
 gtk_application_impl_collect_global_state (GtkApplicationImpl *impl,
                                            GVariantBuilder    *state)
 {
@@ -179,9 +194,9 @@ gtk_application_impl_restore_global_state (GtkApplicationImpl *impl,
 }
 
 void
-gtk_application_impl_collect_window_state (GtkApplicationImpl   *impl,
-                                           GtkApplicationWindow *window,
-                                           GVariantBuilder      *state)
+gtk_application_impl_collect_window_state (GtkApplicationImpl *impl,
+                                           GtkWindow          *window,
+                                           GVariantBuilder    *state)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->collect_window_state (impl, window, state);
 }
