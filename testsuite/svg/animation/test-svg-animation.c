@@ -296,9 +296,6 @@ render_svg_file (GFile *file, gboolean generate)
   const GdkRGBA *colors = NULL;
   size_t n_colors = 0;
 
-  steps = g_array_new (FALSE, FALSE, sizeof (Step));
-  g_array_set_clear_func (steps, clear_step);
-
   filename = g_file_peek_path (file);
 
   if (g_str_has_suffix (filename, ".test"))
@@ -310,6 +307,9 @@ render_svg_file (GFile *file, gboolean generate)
       Step step;
       char *p, *end = NULL;
       unsigned int time;
+
+      steps = g_array_new (FALSE, FALSE, sizeof (Step));
+      g_array_set_clear_func (steps, clear_step);
 
       svg_file = g_file_get_path (file);
       p = strrchr (svg_file, '.');
