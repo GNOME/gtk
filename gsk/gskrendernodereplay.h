@@ -50,6 +50,29 @@ typedef GskRenderNode *(* GskRenderNodeReplayNodeFilter)                (GskRend
                                                                          GskRenderNode                  *node,
                                                                          gpointer                        user_data);
 
+/**
+ * GskRenderNodeReplayNodeForeach:
+ * @replay: The replay object used to replay the node
+ * @node: The node to replay
+ * @user_data: The user data
+ *
+ * A function called for every node.
+ *
+ * If this function returns TRUE, the replay will continue and call
+ * the filter function.
+ *
+ * If it returns FALSE, the filter function will not be called and
+ * any child nodes will be skipped.
+ *
+ * Returns: TRUE to descend into this node's child nodes (if any)
+ *   or FALSE to skip them
+ *
+ * Since: 4.22
+ */
+typedef gboolean        (* GskRenderNodeReplayNodeForeach)              (GskRenderNodeReplay            *replay,
+                                                                         GskRenderNode                  *node,
+                                                                         gpointer                        user_data);
+
 GDK_AVAILABLE_IN_4_22
 GskRenderNodeReplay *   gsk_render_node_replay_new                      (void);
 GDK_AVAILABLE_IN_4_22
@@ -65,6 +88,15 @@ GskRenderNode *         gsk_render_node_replay_filter_node              (GskRend
                                                                          GskRenderNode                  *node);
 GDK_AVAILABLE_IN_4_22
 GskRenderNode *         gsk_render_node_replay_default                  (GskRenderNodeReplay            *self,
+                                                                         GskRenderNode                  *node);
+
+GDK_AVAILABLE_IN_4_22
+void                    gsk_render_node_replay_set_node_foreach         (GskRenderNodeReplay            *self,
+                                                                         GskRenderNodeReplayNodeForeach  foreach,
+                                                                         gpointer                        user_data,
+                                                                         GDestroyNotify                  user_destroy);
+GDK_AVAILABLE_IN_4_22
+void                    gsk_render_node_replay_foreach_node             (GskRenderNodeReplay            *self,
                                                                          GskRenderNode                  *node);
 
 
