@@ -36,27 +36,6 @@
                         </style>
                         <property name="focus-on-click">0</property>
                         <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Edit path geometry</property>
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="paintable">
-                              <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/Shaper/document-edit-symbolic.svg</property>
-                              </object>
-                            </property>
-                          </object>
-                        </property>
-                        <signal name="clicked" handler="edit_path" swapped="yes"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <style>
-                          <class name="circular"/>
-                          <class name="small"/>
-                        </style>
-                        <property name="focus-on-click">0</property>
-                        <property name="has-frame">0</property>
                         <property name="tooltip-text" translatable="yes">Duplicate path</property>
                         <property name="child">
                           <object class="GtkImage">
@@ -148,11 +127,39 @@
               <object class="GtkStackPage">
                 <property name="name">label</property>
                 <property name="child">
-                  <object class="GtkLabel" id="path_cmds">
-                    <property name="ellipsize">end</property>
+                  <object class="GtkBox">
+                    <property name="hexpand">0</property>
                     <child>
-                      <object class="GtkGestureClick">
-                        <signal name="pressed" handler="path_cmds_clicked" swapped="yes"/>
+                      <object class="GtkLabel" id="path_cmds">
+                        <property name="ellipsize">end</property>
+                        <child>
+                          <object class="GtkGestureClick">
+                            <signal name="pressed" handler="path_cmds_clicked" swapped="yes"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <style>
+                          <class name="circular"/>
+                          <class name="small"/>
+                        </style>
+                        <property name="hexpand">1</property>
+                        <property name="halign">end</property>
+                        <property name="focus-on-click">0</property>
+                        <property name="has-frame">0</property>
+                        <property name="tooltip-text" translatable="yes">Edit path geometry</property>
+                        <property name="child">
+                          <object class="GtkImage">
+                            <property name="paintable">
+                              <object class="GtkIconPaintable">
+                                <property name="file">resource:///org/gtk/Shaper/document-edit-symbolic.svg</property>
+                              </object>
+                            </property>
+                          </object>
+                        </property>
+                        <signal name="clicked" handler="edit_path" swapped="yes"/>
                       </object>
                     </child>
                   </object>
