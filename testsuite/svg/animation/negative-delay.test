@@ -1,0 +1,15 @@
+# A test for state transitions with negative delay
+input: negative-delay.svg
+time: 0
+output: negative-delay-1.svg
+state: 1
+time: 250
+output: negative-delay-2.svg
+time: 500
+output: negative-delay-3.svg
+time 1000
+state: 0
+time: 1250
+output: negative-delay-4.svg
+time: 1500
+output: negative-delay-5.svg

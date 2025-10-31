@@ -30,7 +30,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include <glib/gstdio.h>
 
-#include <math.h>
+#include <tgmath.h>
 #include <stdint.h>
 
 /**
@@ -55,59 +55,25 @@
  * [method@Gtk.Svg.set_frame_clock] to connect the paintable to a frame clock,
  * and then use [method@Gtk.Svg.play] to start the animation.
  *
- * ## SVG Extensions
  *
- * The paintable supports a number of [custom attributes](icon-format.html)
- * that offer a convenient way to define states, transitions and animations.
- * For example,
+ * ## Error handling
  *
- *     <circle cx='5' cy='5' r='5'
- *             gpa:states='0 1'
- *             gpa:animation-type='automatic'
- *             gpa:animation-direction='segment'
- *             gpa:animation-duration='600ms'/>
+ * Loading an SVG into `GtkSvg` will always produce a (possibly empty)
+ * paintable. GTK will drop things that it can't handle and try to make
+ * sense of the rest.
  *
- * defines the circle to be shown in states 0 and 1,
- * and animates a segment of the circle.
+ * To track errors during parsing or rednering, connect to the
+ * [signal@Gtk.Svg::error] signal.
  *
- * <image src="svg-renderer1.svg">
+ * For parsing errors in the `GTK_SVG_ERROR` domain, the functions
+ * [func@Gtk.SvgError.get_start], [func@Gtk.SvgError.get_end],
+ * [func@Gtk.SvgError.get_element] and [func@Gtk.SvgError.get_attribute]
+ * can be used to obtain information about where the error occurred.
  *
- * Note that the generated animations assume a `pathLengh` value of 1.
- * Setting `pathLength` in your SVG is therefore going to break such
- * generated animations.
- *
- * To connect general SVG animations to the states of the paintable,
- * use the custom `gpa:states(...)` condition in the `begin` and `end`
- * attributes of SVG animation elements. For example,
- *
- *     <animate href='path1'
- *              attributeName='fill'
- *              begin='gpa:states(0).begin'
- *              dur='300ms'
- *              fill='freeze'
- *              from='black'
- *              to='magenta'/>
- *
- * will make the fill color of path1 transition from black to
- * magenta when the renderer enters state 0.
- *
- * <image src="svg-renderer2.svg">
- *
- * Symbolic colors can also be specified as a custom paint server
- * reference, like this: `url(gpa:#warning)`. This works in `fill`
- * and `stroke` attributes, but also when specifying colors in SVG
- * animation attributes like `to` or `values`. Note that the SVG
- * syntax allows for a fallback RGB color to be specified after the
- * url, for compatibility with other SVG consumers:
- *
- *     fill='url(gpa:#warning) orange'
- *
- * In contrast to SVG 1.1 and 2.0, we allow the `transform` attribute
- * to be animated with `<animate>`.
  *
  * ## The supported subset of SVG
  *
- * The renderer does not support text or images, only shapes and paths.
+ * The paintable does not support text or images, only shapes and paths.
  *
  * In `<defs>`, only `<clipPath>`, `<mask>`, gradients and shapes are
  * supported, not `<filter>`, `<pattern>` or other things.
@@ -129,19 +95,72 @@
  *
  * Lastly, there is no CSS support, and no interactivity.
  *
- * ## Error handling
  *
- * Loading an SVG into `GtkSvg` will always produce a (possibly empty)
- * paintable. GTK will drop things that it can't handle and try to make
- * sense of the rest.
+ * ## SVG Extensions
  *
- * To track errors during parsing or rednering, connect to the
- * [signal@Gtk.Svg::error] signal.
+ * The paintable supports a number of [custom attributes](icon-format.html)
+ * that offer a convenient way to define states, transitions and animations.
+ * For example,
  *
- * For parsing errors in the `GTK_SVG_ERROR` domain, the functions
- * [func@Gtk.SvgError.get_start], [func@Gtk.SvgError.get_end],
- * [func@Gtk.SvgError.get_element] and [func@Gtk.SvgError.get_attribute]
- * can be used to obtain information about where the error occurred.
+ *     <circle cx='5' cy='5' r='5'
+ *             gpa:states='0 1'
+ *             gpa:animation-type='automatic'
+ *             gpa:animation-direction='segment'
+ *             gpa:animation-duration='600ms'/>
+ *
+ * defines the circle to be shown in states 0 and 1, and animates a segment
+ * of the circle.
+ *
+ * <image src="svg-renderer1.svg">
+ *
+ * Note that the generated animations assume a `pathLengh` value of 1.
+ * Setting `pathLength` in your SVG is therefore going to interfere with
+ * generated animations.
+ *
+ * To connect general SVG animations to the states of the paintable,
+ * use the custom `gpa:states(...)` condition in the `begin` and `end`
+ * attributes of SVG animation elements. For example,
+ *
+ *     <animate href='path1'
+ *              attributeName='fill'
+ *              begin='gpa:states(0).begin'
+ *              dur='300ms'
+ *              fill='freeze'
+ *              from='black'
+ *              to='magenta'/>
+ *
+ * will make the fill color of path1 transition from black to
+ * magenta when the renderer enters state 0.
+ *
+ * <image src="svg-renderer2.svg">
+ *
+ * The `gpa:states(...)` condition triggers for upcoming state changes
+ * as well, to support fade-out transitions. For example,
+ *
+ *     <animate href='path1'
+ *              attributeName='opacity'
+ *              begin='gpa:states(0).end -300ms'
+ *              dur='300ms'
+ *              fill='freeze'
+ *              from='1'
+ *              to='0'/>
+ *
+ * will start a fade-out of path1 300ms before state 0 ends.
+ *
+ * In addition to `gpa:fill` and `gpa:stroke`, symbolic colors can
+ * also be specified as a custom paint server reference, like this:
+ * `url(gpa:#warning)`. This works in `fill` and `stroke` attributes,
+ * but also when specifying colors in SVG animation attributes like
+ * `to` or `values`.
+ *
+ * Note that the SVG syntax allows for a fallback RGB color to be
+ * specified after the url, for compatibility with other SVG consumers:
+ *
+ *     fill='url(gpa:#warning) orange'
+ *
+ * In contrast to SVG 1.1 and 2.0, we allow the `transform` attribute
+ * to be animated with `<animate>`.
+ *
  *
  * Since: 4.22
  */
@@ -6100,9 +6119,8 @@ static int64_t
 time_spec_get_state_change_delay (TimeSpec *spec)
 {
   if (spec->type == TIME_SPEC_TYPE_STATES &&
-      spec->states.side == TIME_SPEC_SIDE_END &&
-      spec->offset < 0)
-    return -spec->offset;
+      spec->states.side == TIME_SPEC_SIDE_END)
+    return labs (spec->offset);
 
   return 0;
 }
@@ -7674,6 +7692,7 @@ static void
 create_visibility_setter (Shape        *shape,
                           Timeline     *timeline,
                           uint64_t      states,
+                          int64_t       delay,
                           unsigned int  initial)
 {
   Animation *a = animation_set_new ();
@@ -7682,7 +7701,7 @@ create_visibility_setter (Shape        *shape,
   a->attr = SHAPE_ATTR_VISIBILITY;
 
   a->id = g_strdup_printf ("gpa:out-of-state:%s", shape->id);
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, 0));
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, MAX (0, - delay)));
   time_spec_add_animation (begin, a);
 
   if (!state_match (states, initial))
@@ -7691,7 +7710,7 @@ create_visibility_setter (Shape        *shape,
       time_spec_add_animation (begin, a);
     }
 
-  end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+  end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, - (MAX (0, - delay))));
   time_spec_add_animation (end, a);
 
   a->has_begin = 1;
@@ -7714,9 +7733,10 @@ static void
 create_states (Shape        *shape,
                Timeline     *timeline,
                uint64_t      states,
+               int64_t       delay,
                unsigned int  initial)
 {
-  create_visibility_setter (shape, timeline, states, initial);
+  create_visibility_setter (shape, timeline, states, delay, initial);
 }
 
 /* }}} */
@@ -9549,6 +9569,7 @@ parse_shape_gpa_attrs (Shape                *shape,
   create_states (shape,
                  data->svg->timeline,
                  states,
+                 transition_delay,
                  data->svg->state);
 
   if (attach_to_attr ||
