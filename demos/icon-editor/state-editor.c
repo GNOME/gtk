@@ -92,7 +92,7 @@ update_states (StateEditor *self)
   GtkLayoutManager *mgr = gtk_widget_get_layout_manager (GTK_WIDGET (self->grid));
   uint64_t *states;
 
-  states = g_new0 (uint64_t, path_paintable_get_n_paths (self->paintable));
+  states = g_newa0 (uint64_t, path_paintable_get_n_paths (self->paintable));
 
   for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->grid));
        child != NULL;
@@ -125,8 +125,6 @@ update_states (StateEditor *self)
   self->updating = FALSE;
 
   repopulate (self);
-
-  g_free (states);
 }
 
 static void
