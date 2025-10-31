@@ -196,7 +196,7 @@ get_state_file (GtkApplicationImpl *impl,
 
   dir = g_get_user_state_dir ();
 
-  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "#", instance_id, ".state", NULL);
+  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "@", instance_id, ".state", NULL);
 }
 
 static gboolean
