@@ -199,6 +199,24 @@ get_state_file (GtkApplicationImpl *impl,
   return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, "@", instance_id, ".state", NULL);
 }
 
+static void
+debug_override_restore_reason (GtkRestoreReason *reason)
+{
+  const char *str = g_getenv ("GTK_OVERRIDE_RESTORE_REASON");
+  if (G_LIKELY (!str))
+    return;
+  else if (strcmp (str, "pristine") == 0)
+    *reason = GTK_RESTORE_REASON_PRISTINE;
+  else if (strcmp (str, "launch") == 0)
+    *reason = GTK_RESTORE_REASON_LAUNCH;
+  else if (strcmp (str, "recover") == 0)
+    *reason = GTK_RESTORE_REASON_RECOVER;
+  else if (strcmp (str, "restore") == 0)
+    *reason = GTK_RESTORE_REASON_RESTORE;
+  else
+    g_warning ("Unknown GTK_OVERRIDE_RESTORE_REASON value: %s", str);
+}
+
 static gboolean
 request_restore (GtkApplicationImplDBus *dbus)
 {
@@ -298,6 +316,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       dbus->reason = GTK_RESTORE_REASON_LAUNCH;
       dbus->instance_id = NULL;
     }
+  debug_override_restore_reason (&dbus->reason);
 
   dbus->application_id = g_application_get_application_id (G_APPLICATION (impl->application));
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
