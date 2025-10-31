@@ -3394,7 +3394,7 @@ gtk_list_box_row_focus (GtkWidget        *widget,
     }
 
   /* Otherwise, decide based on the direction. */
-  if (direction == GTK_DIR_RIGHT || direction == GTK_DIR_TAB_FORWARD)
+  if (direction == GTK_DIR_RIGHT || direction == GTK_DIR_TAB_FORWARD || direction == GTK_DIR_DOWN)
     {
       /* If a child was focused and focus couldn't be moved within that (see
        * above), let focus leave. */
@@ -3414,7 +3414,7 @@ gtk_list_box_row_focus (GtkWidget        *widget,
 
       return FALSE;
     }
-  else if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
+  else if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD || direction == GTK_DIR_UP)
     {
       /* If the row itself is focused, let focus leave it. */
       if (had_focus)
