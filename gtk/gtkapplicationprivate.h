@@ -48,14 +48,6 @@ GtkApplicationAccels *  gtk_application_get_application_accels          (GtkAppl
 void                    gtk_application_set_screensaver_active          (GtkApplication           *application,
                                                                          gboolean                  active);
 
-gboolean                gtk_application_restore                         (GtkApplication           *application,
-                                                                         GtkRestoreReason          reason);
-
-void                    gtk_application_restore_window                  (GtkApplication           *application,
-                                                                         GtkRestoreReason          reason,
-                                                                         GVariant                 *app_state,
-                                                                         GVariant                 *gtk_state);
-
 
 #define GTK_TYPE_APPLICATION_IMPL                           (gtk_application_impl_get_type ())
 #define GTK_APPLICATION_IMPL_CLASS(class)                   (G_TYPE_CHECK_CLASS_CAST ((class),                     \

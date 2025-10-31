@@ -410,26 +410,6 @@ gtk_application_startup (GApplication *g_application)
   gdk_profiler_end_mark (before, "Application startup", NULL);
 }
 
-void
-gtk_application_restore_window (GtkApplication   *application,
-                                GtkRestoreReason  reason,
-                                GVariant         *app_state,
-                                GVariant         *gtk_state)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-
-  priv->pending_window_state = gtk_state;
-  g_signal_emit (application, gtk_application_signals[RESTORE_WINDOW], 0, reason, app_state);
-
-  if (priv->pending_window_state)
-    {
-      GTK_DEBUG (SESSION, "App didn't restore a toplevel, removing it from session");
-      // TODO: Tell compositor to forget the window state
-      // (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
-      priv->pending_window_state = NULL;
-    }
-}
-
 static void
 gtk_application_shutdown (GApplication *g_application)
 {
@@ -494,6 +474,9 @@ gtk_application_add_platform_data (GApplication    *application,
     }
 }
 
+static gboolean
+gtk_application_restore (GtkApplication   *application);
+
 static void
 gtk_application_before_emit (GApplication *app,
                              GVariant     *platform_data)
@@ -505,8 +488,7 @@ gtk_application_before_emit (GApplication *app,
 
   if (priv->support_save && !priv->restored)
     {
-      gtk_application_restore (application,
-                               gtk_application_impl_get_restore_reason (priv->impl));
+      gtk_application_restore (application);
       schedule_autosave (application);
       priv->restored = TRUE;
     }
@@ -1745,6 +1727,26 @@ gtk_application_forget (GtkApplication *application)
 }
 
 static void
+restore_window (GtkApplication   *application,
+                GtkRestoreReason  reason,
+                GVariant         *app_state,
+                GVariant         *gtk_state)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  priv->pending_window_state = gtk_state;
+  g_signal_emit (application, gtk_application_signals[RESTORE_WINDOW], 0, reason, app_state);
+
+  if (priv->pending_window_state)
+    {
+      GTK_DEBUG (SESSION, "App didn't restore a toplevel, removing it from session");
+      // TODO: Tell compositor to forget the window state
+      // (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
+      priv->pending_window_state = NULL;
+    }
+}
+
+static void
 restore_file_state (GtkApplication   *application,
                GtkRestoreReason  reason,
                GVariant         *state)
@@ -1774,7 +1776,7 @@ restore_file_state (GtkApplication   *application,
     {
       GTK_DEBUG (SESSION, "Restoring window");
 
-      gtk_application_restore_window (application, reason, app_state, gtk_state);
+      restore_window (application, reason, app_state, gtk_state);
 
       g_variant_unref (gtk_state);
       g_variant_unref (app_state);
@@ -1795,37 +1797,20 @@ restore_kept_state (GtkApplication   *application,
 
   g_variant_get (priv->kept_window_state, "(@a{sv}@a{sv})", &gtk_state, &app_state);
 
-  gtk_application_restore_window (application, reason, app_state, gtk_state);
+  restore_window (application, reason, app_state, gtk_state);
 
   g_variant_unref (gtk_state);
   g_variant_unref (app_state);
 }
 
-/*< private >
- * gtk_application_restore:
- * @application: a `GtkApplication`
- * @reason: the reason to restore
- *
- * Restores previously saved state.
- *
- * See [method@Gtk.Application.save] for a way to save application state.
- *
- * If [property@Gtk.Application:register-session] is set, `GtkApplication`
- * calls this function automatically in the default `::activate` handler.
- *
- * Note that you need to handle the [signal@Gtk.Application::create-window]
- * signal to make restoring state work.
- *
- * Returns: true if state is being restored, false otherwise
- *
- * Since: 4.22
- */
-gboolean
-gtk_application_restore (GtkApplication   *application,
-                         GtkRestoreReason  reason)
+static gboolean
+gtk_application_restore (GtkApplication   *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkRestoreReason reason;
   GVariant *state;
+
+  reason = gtk_application_impl_get_restore_reason (priv->impl);
 
   if (reason == GTK_RESTORE_REASON_PRISTINE)
     {
