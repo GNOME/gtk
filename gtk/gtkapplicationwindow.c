@@ -725,6 +725,12 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
    * fullscreen, or window size should not be saved as
    * part of this, they are handled by GTK.
    *
+   * You must be careful to be robust in the face of app upgrades and downgrades:
+   * the @state might have been created by a previous or occasionally even a future
+   * version of your app. Do not assume that a given key exists in the state.
+   * Apps must try to restore state saved by a previous version, but are free to
+   * discard state if it was written by a future version.
+   *
    * See [signal@Gtk.Application::restore-window].
    *
    * Returns: true to stop stop further handlers from running

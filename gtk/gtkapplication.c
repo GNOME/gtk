@@ -86,13 +86,10 @@
  * activate (GApplication *gapp)
  * {
  *   GtkApplication *app = GTK_APPLICATION (gapp);
- *   GList *list;
  *   GtkWindow *window;
  *
- *   list = gtk_application_get_windows (app);
- *   if (list)
- *     window = list->data;
- *   else
+ *   window = gtk_application_get_active_window (app);
+ *   if (!window)
  *     window = create_window (app);
  *
  *   gtk_window_present (window);
@@ -150,9 +147,10 @@
  * [signal@GtkApplication::save-state] signals, which can be used
  * for global state that is not connected to any window.
  *
- * `GtkApplication` saves state before shutdown, but applications
- * can also call [method@Gtk.Application.save] themselves at opportune
- * times.
+ * `GtkApplication` automatically saves state before app shutdown, and by
+ * default periodically auto-saves app state (as configured by the
+ * [property@Gtk.Application:autosave-interval] property). Applications can
+ * also call [method@Gtk.Application.save] themselves at opportune times.
  *
  * # Inhibiting
  *
@@ -819,15 +817,29 @@ gtk_application_class_init (GtkApplicationClass *class)
    * GtkApplication::restore-window:
    * @application: the `GtkApplication` which emitted the signal
    * @reason: the reason this window is restored
-   * @state: (nullable): the state to restore, as saved by a [signal@Gtk.ApplicationWindow::save-state] handler
+   * @state: an "a{sv}" `GVariant` with state to restore, as saved by a [signal@Gtk.ApplicationWindow::save-state] handler
    *
-   * Emitted when application state is restored.
+   * Emitted when an application's per-window state is restored.
    *
    * In response to this signal, you should create a new application
-   * window, and add it to @application. If @reason and @state are passed,
-   * they should be applied to the newly created window.
+   * window, add it to @application, apply the provided @state, and present it.
+   * The application can use the @reason to determine how much of the state
+   * should be restored.
    *
-   * `GtkApplication` will call [method@Gtk.Window.present] on the window.
+   * You must be careful to be robust in the face of app upgrades and downgrades:
+   * the @state might have been created by a previous or occasionally even a future
+   * version of your app. Do not assume that a given key exists in the state.
+   * Apps must try to restore state saved by a previous version, but are free to
+   * discard state if it was written by a future version.
+   *
+   * GTK will remember which window the user was using most recently, and will
+   * emit this signal for that window first. Thus, if you decide that the provided
+   * @reason means that only one window should be restored, you can reliably
+   * ignore emissions if a window already exists
+   *
+   * Note that this signal is not emitted only during the app's initial launch.
+   * If all windows are closed but the app keeps running, the signal will be
+   * emitted the next time a new window is opened.
    *
    * Since: 4.22
    */
@@ -845,7 +857,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * @application: the `GtkApplication` which emitted the signal
    * @dict: a `GVariantDict`
    *
-   * Emitted when the application is saving state.
+   * Emitted when the application is saving global state.
    *
    * The handler for this signal should persist any
    * global state of @application into @dict.
@@ -856,7 +868,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * per-window state.
    *
    * Returns: true to stop stop further handlers from running
-   2
+   *
    * Since: 4.22
    */
   gtk_application_signals[SAVE_STATE] =
@@ -875,7 +887,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * @reason: the reason for restoring state
    * @state: an "a{sv}" `GVariant` with state to restore
    *
-   * Emitted when application state is restored.
+   * Emitted when application global state is restored.
    *
    * The handler for this signal should do the opposite of what the
    * corresponding handler for [signal@Gtk.Application::save-state]
