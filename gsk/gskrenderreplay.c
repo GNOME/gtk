@@ -33,6 +33,72 @@
  * to filter each individual node and then run
  * [method@Gsk.RenderReplay.filter_node] on the nodes you want to filter.
  *
+ * An easier method exists to just walk the node tree and extract information
+ * without any modifications. If you want to do that, the functions
+ * [method@Gsk.RenderReplay.set_node_foreach] exists. You can also call
+ * [method@Gsk.RenderReplay.foreach_node] to run that function. Note that
+ * the previously mentioned complex functionality will still be invoked if you
+ * have set up a function for it, but its result will not be returned.
+ *
+ * Here is an example that combines both approaches to print the whole tree:
+ *
+ * ```c
+ * #include <gtk/gtk.h>
+ * 
+ * static GskRenderNode *
+ * print_nodes (GskRenderReplay *replay,
+ *              GskRenderNode   *node,
+ *              gpointer         user_data)
+ * {
+ *   int *depth = user_data;
+ *   GskRenderNode *result;
+ * 
+ *   g_print ("%*s%s\n", 2 * *depth, "", g_type_name_from_instance ((GTypeInstance *) node));
+ *   
+ *   *depth += 1;
+ *   result = gsk_render_replay_default (replay, node);
+ *   *depth -= 1;
+ * 
+ *   return result;
+ * }
+ * 
+ * int
+ * main (int argc, char *argv[])
+ * {
+ *   GFile *file;
+ *   GBytes *bytes;
+ *   GskRenderNode *node;
+ *   GskRenderReplay *replay;
+ *   int depth = 0;
+ * 
+ *   gtk_init ();
+ * 
+ *   if (argc < 2)
+ *     {
+ *       g_print ("usage: %s NODEFILE\n", argv[0]);
+ *       return 0;
+ *     }
+ * 
+ *   file = g_file_new_for_commandline_arg (argv[1]);
+ *   bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+ *   g_object_unref (file);
+ *   if (bytes == NULL)
+ *     return 1;
+ * 
+ *   node = gsk_render_node_deserialize (bytes, NULL, NULL);
+ *   g_bytes_unref (bytes);
+ *   if (node == NULL)
+ *     return 1;
+ * 
+ *   replay = gsk_render_replay_new ();
+ *   gsk_render_replay_set_node_filter (replay, print_nodes, &depth, NULL);
+ *   gsk_render_node_foreach_node (replay, node);
+ *   gsk_render_node_unref (node);
+ * 
+ *   return 0;
+ * }
+ * ```
+ *
  * Since: 4.22
  */
 
@@ -41,6 +107,10 @@ struct _GskRenderReplay
   GskRenderReplayNodeFilter node_filter;
   gpointer node_filter_data;
   GDestroyNotify node_filter_destroy;
+
+  GskRenderReplayNodeForeach node_foreach;
+  gpointer node_foreach_data;
+  GDestroyNotify node_foreach_destroy;
 };
 
 /**
@@ -75,6 +145,7 @@ gsk_render_replay_free (GskRenderReplay *self)
 {
   g_return_if_fail (self != NULL);
 
+  gsk_render_replay_set_node_foreach (self, NULL, NULL, NULL);
   gsk_render_replay_set_node_filter (self, NULL, NULL, NULL);
 
   g_free (self);
@@ -153,6 +224,12 @@ gsk_render_replay_filter_node (GskRenderReplay *self,
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
 
+  if (self->node_foreach &&
+      !self->node_foreach (self, node, self->node_foreach_data))
+    {
+      return gsk_render_node_ref (node);
+    }
+
   if (self->node_filter)
     return self->node_filter (self, node, self->node_filter_data);
   else
@@ -189,3 +266,62 @@ gsk_render_replay_default (GskRenderReplay *self,
 
   return GSK_RENDER_NODE_GET_CLASS (node)->replay (node, self);
 }
+
+/**
+ * gsk_render_replay_set_node_foreach:
+ * @filter: The function to call for all nodes
+ * @user_data: user data to pass to @func
+ * @user_destroy: destroy notify that will be called to release
+ *   user_data
+ *
+ * Sets the function to call for every node.
+ *
+ * This function is called before the node filter, so if it returns
+ * FALSE, the node filter will never be called.
+ *
+ * Since: 4.22
+ */
+void
+gsk_render_replay_set_node_foreach (GskRenderReplay            *self,
+                                    GskRenderReplayNodeForeach  foreach,
+                                    gpointer                    user_data,
+                                    GDestroyNotify              user_destroy)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (foreach || user_data == NULL);
+  g_return_if_fail (user_data || !user_destroy);
+
+  if (self->node_foreach_destroy)
+    self->node_foreach_destroy (self->node_foreach_data);
+
+  self->node_foreach = foreach;
+  self->node_foreach_data = user_data;
+  self->node_foreach_destroy = user_destroy;
+}
+
+/**
+ * gsk_render_replay_foreach_node:
+ * @self: the replay
+ * @node: the node to replay
+ *
+ * Calls the filter and foreach functions for each node.
+ *
+ * This function calls [method@Gsk.RenderReplay.filter_node] internally,
+ * but discards the result assuming no changes were made.
+ *
+ * Since: 4.22
+ **/
+void
+gsk_render_replay_foreach_node (GskRenderReplay *self,
+                                GskRenderNode       *node)
+{
+  GskRenderNode *ignored;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+  ignored = gsk_render_replay_filter_node (self, node);
+
+  gsk_render_node_unref (ignored);
+}
+
