@@ -10,6 +10,8 @@
             r='0.5'
             spreadMethod='pad'
             gradientUnits='objectBoundingBox'
+            fx='0.5'
+            fy='0.5'
             fr='0.2'>
       <stop
               offset='0'

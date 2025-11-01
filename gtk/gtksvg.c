@@ -9325,6 +9325,15 @@ parse_shape_attrs (Shape                *shape,
       else if ((shape->attrs & (BIT (SHAPE_ATTR_RX) | BIT (SHAPE_ATTR_RY))) == BIT (SHAPE_ATTR_RY))
         shape_set_base_value (shape, SHAPE_ATTR_RX, shape->base[SHAPE_ATTR_RY]);
     }
+
+  if (shape_has_attr (shape->type, SHAPE_ATTR_FX) &&
+      shape_has_attr (shape->type, SHAPE_ATTR_FY))
+    {
+      if ((shape->attrs & (BIT (SHAPE_ATTR_CX) | BIT (SHAPE_ATTR_FX))) == BIT (SHAPE_ATTR_CX))
+        shape_set_base_value (shape, SHAPE_ATTR_FX, shape->base[SHAPE_ATTR_CX]);
+      if ((shape->attrs & (BIT (SHAPE_ATTR_CY) | BIT (SHAPE_ATTR_FY))) == BIT (SHAPE_ATTR_CY))
+        shape_set_base_value (shape, SHAPE_ATTR_FY, shape->base[SHAPE_ATTR_CY]);
+    }
 }
 
 static void
