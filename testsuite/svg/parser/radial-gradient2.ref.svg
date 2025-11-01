@@ -10,6 +10,8 @@
             r='50'
             spreadMethod='pad'
             gradientUnits='userSpaceOnUse'
+            fx='150'
+            fy='100'
             fr='20'>
       <stop
               offset='0'

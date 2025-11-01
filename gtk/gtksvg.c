@@ -6195,9 +6195,8 @@ timeline_get_sync (Timeline     *timeline,
                    int64_t       offset)
 {
   TimeSpec spec = { .type = TIME_SPEC_TYPE_SYNC,
-                    .sync = { .base = base, .side = side },
+                    .sync = { .ref = (char *) ref, .base = base, .side = side },
                     .offset = offset };
-  spec.sync.ref = g_strdup (ref);
   return timeline_get_time_spec (timeline, &spec);
 }
 
@@ -9326,6 +9325,15 @@ parse_shape_attrs (Shape                *shape,
       else if ((shape->attrs & (BIT (SHAPE_ATTR_RX) | BIT (SHAPE_ATTR_RY))) == BIT (SHAPE_ATTR_RY))
         shape_set_base_value (shape, SHAPE_ATTR_RX, shape->base[SHAPE_ATTR_RY]);
     }
+
+  if (shape_has_attr (shape->type, SHAPE_ATTR_FX) &&
+      shape_has_attr (shape->type, SHAPE_ATTR_FY))
+    {
+      if ((shape->attrs & (BIT (SHAPE_ATTR_CX) | BIT (SHAPE_ATTR_FX))) == BIT (SHAPE_ATTR_CX))
+        shape_set_base_value (shape, SHAPE_ATTR_FX, shape->base[SHAPE_ATTR_CX]);
+      if ((shape->attrs & (BIT (SHAPE_ATTR_CY) | BIT (SHAPE_ATTR_FY))) == BIT (SHAPE_ATTR_CY))
+        shape_set_base_value (shape, SHAPE_ATTR_FY, shape->base[SHAPE_ATTR_CY]);
+    }
 }
 
 static void
@@ -11357,29 +11365,26 @@ paint_radial_gradient (Shape                 *gradient,
                        const graphene_rect_t *bounds,
                        PaintContext          *context)
 {
+  graphene_point_t start_center;
+  graphene_point_t end_center;
+  double start_radius, end_radius;
   graphene_point_t center;
-  double r, fr;
   double radius, start, end;
   GskColorStop *stops;
   double offset;
   GskTransform *gradient_transform;
   graphene_rect_t gradient_bounds;
 
-  graphene_point_init (&center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->width),
-                                svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->height));
+  graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->width),
+                                    svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->height));
+  start_radius = svg_number_get (gradient->current[SHAPE_ATTR_FR], normalized_diagonal (context->viewport));
 
-  if ((((gradient->attrs & BIT (SHAPE_ATTR_FX)) != 0 &&
-        svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->width) != center.x)) ||
-      (((gradient->attrs & BIT (SHAPE_ATTR_FY)) != 0 &&
-        svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->height) != center.y)))
+  graphene_point_init (&end_center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->width),
+                                    svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->height));
+  end_radius = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
+
+  if (!graphene_point_equal (&start_center, &end_center))
     gtk_svg_rendering_error (context->svg, "non-concentric radial gradients are not implemented");
-
-  r = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
-  fr = svg_number_get (gradient->current[SHAPE_ATTR_FR], normalized_diagonal (context->viewport));
-
-  radius = MAX (r, fr);
-  start = fr / radius;
-  end = r / radius;
 
   stops = g_newa (GskColorStop, gradient->color_stops->len);
   offset = 0;
@@ -11412,6 +11417,19 @@ paint_radial_gradient (Shape                 *gradient,
   gradient_transform = gsk_transform_invert (gradient_transform);
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
+
+  if (start_radius > end_radius)
+    {
+      radius = start_radius;
+      center = start_center;
+    }
+  else
+    {
+      radius = end_radius;
+      center = end_center;
+    }
+  start = start_radius / radius;
+  end = end_radius / radius;
 
   switch (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]))
     {

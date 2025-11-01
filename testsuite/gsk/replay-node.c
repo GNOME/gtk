@@ -44,6 +44,7 @@ replay_linear_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   gsize n_stops;
   GskHueInterpolation hue;
   GdkColorState *interp;
+  GskGradientSpreadMethod spread_method;
 
   gsk_render_node_get_bounds (node, &bounds);
   start_point = gsk_linear_gradient_node_get_start (node);
@@ -54,15 +55,15 @@ replay_linear_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   hue = gsk_gradient_node_get_hue_interpolation (node);
 
   if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
-    gtk_snapshot_add_repeating_linear_gradient (snapshot, &bounds,
-                                                start_point, end_point,
-                                                interp, hue,
-                                                stops, n_stops);
+    spread_method = GSK_GRADIENT_SPREAD_METHOD_REPEAT;
   else
-    gtk_snapshot_add_linear_gradient (snapshot, &bounds,
-                                      start_point, end_point,
-                                      interp, hue,
-                                      stops, n_stops);
+    spread_method = GSK_GRADIENT_SPREAD_METHOD_PAD;
+
+  gtk_snapshot_add_linear_gradient (snapshot, &bounds,
+                                    start_point, end_point,
+                                    spread_method,
+                                    interp, hue,
+                                    stops, n_stops);
 }
 
 static void
@@ -79,17 +80,18 @@ replay_radial_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   const GskGradientStop *stops = gsk_gradient_node_get_stops (node);
   GskHueInterpolation hue = gsk_gradient_node_get_hue_interpolation (node);
   GdkColorState *interp = gsk_gradient_node_get_interpolation (node);
+  GskGradientSpreadMethod spread_method;
 
   if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
-    gtk_snapshot_add_repeating_radial_gradient (snapshot, &bounds, center,
-                                                hradius, vradius, start, end,
-                                                interp, hue,
-                                                stops, n_stops);
+    spread_method = GSK_GRADIENT_SPREAD_METHOD_REPEAT;
   else
-    gtk_snapshot_add_radial_gradient (snapshot, &bounds, center,
-                                      hradius, vradius, start, end,
-                                      interp, hue,
-                                      stops, n_stops);
+    spread_method = GSK_GRADIENT_SPREAD_METHOD_PAD;
+
+  gtk_snapshot_add_radial_gradient (snapshot, &bounds, center,
+                                    hradius, vradius, start, end,
+                                    spread_method,
+                                    interp, hue,
+                                    stops, n_stops);
 }
 
 static void
