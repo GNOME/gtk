@@ -2449,20 +2449,15 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   if (interpolation == NULL)
     interpolation = GDK_COLOR_STATE_SRGB;
 
-  if (repeating)
-    result = gsk_repeating_linear_gradient_node_new2 (&bounds,
-                                                      &start, &end,
-                                                      interpolation,
-                                                      hue_interpolation,
-                                                      (GskGradientStop *) stops->data,
-                                                      stops->len);
-  else
-    result = gsk_linear_gradient_node_new2 (&bounds,
-                                            &start, &end,
-                                            interpolation,
-                                            hue_interpolation,
-                                            (GskGradientStop *) stops->data,
-                                            stops->len);
+  result = gsk_linear_gradient_node_new2 (&bounds,
+                                          &start, &end,
+                                          repeating
+                                            ? GSK_GRADIENT_SPREAD_METHOD_REPEAT
+                                            : GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                          interpolation,
+                                          hue_interpolation,
+                                          (GskGradientStop *) stops->data,
+                                          stops->len);
 
   clear_stops (&stops);
   clear_color_state (&interpolation);
@@ -2542,18 +2537,13 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
                             "\"start\" must be larger than \"end\"");
       result = NULL;
     }
-  else if (repeating)
-    result = gsk_repeating_radial_gradient_node_new2 (&bounds, &center,
-                                                      hradius, vradius,
-                                                      start, end,
-                                                      interpolation,
-                                                      hue_interpolation,
-                                                      (GskGradientStop *) stops->data,
-                                                      stops->len);
   else
     result = gsk_radial_gradient_node_new2 (&bounds, &center,
                                             hradius, vradius,
                                             start, end,
+                                            repeating
+                                              ? GSK_GRADIENT_SPREAD_METHOD_REPEAT
+                                              : GSK_GRADIENT_SPREAD_METHOD_PAD,
                                             interpolation,
                                             hue_interpolation,
                                             (GskGradientStop *) stops->data,

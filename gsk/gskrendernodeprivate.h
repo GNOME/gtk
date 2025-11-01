@@ -208,16 +208,16 @@ typedef enum
   GSK_HUE_INTERPOLATION_DECREASING,
 } GskHueInterpolation;
 
+typedef enum
+{
+  GSK_GRADIENT_SPREAD_METHOD_PAD,
+  GSK_GRADIENT_SPREAD_METHOD_REPEAT,
+} GskGradientSpreadMethod;
+
 GskRenderNode * gsk_linear_gradient_node_new2           (const graphene_rect_t   *bounds,
                                                          const graphene_point_t  *start,
                                                          const graphene_point_t  *end,
-                                                         GdkColorState           *interpolation,
-                                                         GskHueInterpolation      hue_interpolation,
-                                                         const GskGradientStop   *stops,
-                                                         gsize                    n_stops);
-GskRenderNode * gsk_repeating_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *start,
-                                                         const graphene_point_t  *end,
+                                                         GskGradientSpreadMethod  spread_method,
                                                          GdkColorState           *interpolation,
                                                          GskHueInterpolation      hue_interpolation,
                                                          const GskGradientStop   *stops,
@@ -236,16 +236,7 @@ GskRenderNode * gsk_radial_gradient_node_new2           (const graphene_rect_t  
                                                          float                    vradius,
                                                          float                    start,
                                                          float                    end,
-                                                         GdkColorState           *interpolation,
-                                                         GskHueInterpolation      hue_interpolation,
-                                                         const GskGradientStop   *stops,
-                                                         gsize                    n_stops);
-GskRenderNode * gsk_repeating_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *center,
-                                                         float                    hradius,
-                                                         float                    vradius,
-                                                         float                    start,
-                                                         float                    end,
+                                                         GskGradientSpreadMethod  spread_method,
                                                          GdkColorState           *interpolation,
                                                          GskHueInterpolation      hue_interpolation,
                                                          const GskGradientStop   *stops,

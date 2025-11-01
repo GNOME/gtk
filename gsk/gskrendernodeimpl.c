@@ -765,6 +765,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
 
   node = gsk_linear_gradient_node_new2 (bounds,
                                         start, end,
+                                        GSK_GRADIENT_SPREAD_METHOD_PAD,
                                         GDK_COLOR_STATE_SRGB,
                                         GSK_HUE_INTERPOLATION_SHORTER,
                                         stops, n_color_stops);
@@ -780,6 +781,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * @bounds: the rectangle to render the linear gradient into
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
+ * @spread_method: what to do about colors outside the `[start,end]` range
  * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
  * @color_stops: (array length=n_color_stops): a pointer to an array of
@@ -794,13 +796,14 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * Returns: (transfer full) (type GskLinearGradientNode): A new `GskRenderNode`
  */
 GskRenderNode *
-gsk_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
-                               const graphene_point_t *start,
-                               const graphene_point_t *end,
-                               GdkColorState          *interpolation,
-                               GskHueInterpolation     hue_interpolation,
-                               const GskGradientStop  *stops,
-                               gsize                   n_stops)
+gsk_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
+                               const graphene_point_t  *start,
+                               const graphene_point_t  *end,
+                               GskGradientSpreadMethod  spread_method,
+                               GdkColorState           *interpolation,
+                               GskHueInterpolation      hue_interpolation,
+                               const GskGradientStop   *stops,
+                               gsize                    n_stops)
 {
   GskLinearGradientNode *self;
   GskRenderNode *node;
@@ -817,7 +820,10 @@ gsk_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
     g_return_val_if_fail (stops[i].offset >= stops[i - 1].offset, NULL);
   g_return_val_if_fail (stops[n_stops - 1].offset <= 1, NULL);
 
-  self = gsk_render_node_alloc (GSK_LINEAR_GRADIENT_NODE);
+  if (spread_method == GSK_GRADIENT_SPREAD_METHOD_PAD)
+    self = gsk_render_node_alloc (GSK_LINEAR_GRADIENT_NODE);
+  else
+    self = gsk_render_node_alloc (GSK_REPEATING_LINEAR_GRADIENT_NODE);
   node = (GskRenderNode *) self;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -880,78 +886,15 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
       gdk_color_init_from_rgba (&stops[i].color, &color_stops[i].color);
     }
 
-  node = gsk_repeating_linear_gradient_node_new2 (bounds,
-                                                  start, end,
-                                                  GDK_COLOR_STATE_SRGB,
-                                                  GSK_HUE_INTERPOLATION_SHORTER,
-                                                  stops, n_color_stops);
+  node = gsk_linear_gradient_node_new2 (bounds,
+                                        start, end,
+                                        GSK_GRADIENT_SPREAD_METHOD_REPEAT,
+                                        GDK_COLOR_STATE_SRGB,
+                                        GSK_HUE_INTERPOLATION_SHORTER,
+                                        stops, n_color_stops);
 
   for (gsize i = 0; i < n_color_stops; i++)
     gdk_color_finish (&stops[i].color);
-
-  return node;
-}
-
-/*< private >
- * gsk_repeating_linear_gradient_node_new2:
- * @bounds: the rectangle to render the linear gradient into
- * @start: the point at which the linear gradient will begin
- * @end: the point at which the linear gradient will finish
- * @interpolation: the color state to interpolate in
- * @hue_interpolation: how to interpolate if @interpolation is polar
- * @stops: (array length=n_color_stops): a pointer to an array of
- * `GskGradientStop` defining the gradient. The offsets of all color stops
- *   must be increasing. The first stop's offset must be >= 0 and the last
- *   stop's offset must be <= 1.
- * @n_stops: the number of elements in @stops
- *
- * Creates a `GskRenderNode` that will create a repeating linear gradient
- * from the given points and color stops, and render that into the area
- * given by @bounds.
- *
- * Returns: (transfer full) (type GskRepeatingLinearGradientNode): A new `GskRenderNode`
- */
-GskRenderNode *
-gsk_repeating_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
-                                         const graphene_point_t *start,
-                                         const graphene_point_t *end,
-                                         GdkColorState          *interpolation,
-                                         GskHueInterpolation     hue_interpolation,
-                                         const GskGradientStop  *stops,
-                                         gsize                   n_stops)
-{
-  GskLinearGradientNode *self;
-  GskRenderNode *node;
-  gboolean opaque;
-
-  g_return_val_if_fail (bounds != NULL, NULL);
-  g_return_val_if_fail (start != NULL, NULL);
-  g_return_val_if_fail (end != NULL, NULL);
-  g_return_val_if_fail (stops != NULL, NULL);
-  g_return_val_if_fail (n_stops >= 2, NULL);
-  g_return_val_if_fail (stops[0].offset >= 0, NULL);
-
-  for (gsize i = 1; i < n_stops; i++)
-    g_return_val_if_fail (stops[i].offset >= stops[i - 1].offset, NULL);
-  g_return_val_if_fail (stops[n_stops - 1].offset <= 1, NULL);
-
-  self = gsk_render_node_alloc (GSK_REPEATING_LINEAR_GRADIENT_NODE);
-  node = (GskRenderNode *) self;
-
-  gsk_rect_init_from_rect (&node->bounds, bounds);
-  gsk_rect_normalize (&node->bounds);
-  graphene_point_init_from_point (&self->start, start);
-  graphene_point_init_from_point (&self->end, end);
-
-  gsk_gradient_line_init (&self->line,
-                          interpolation,
-                          hue_interpolation,
-                          stops, n_stops,
-                          &opaque);
-
-  node->fully_opaque = opaque;
-  node->preferred_depth = gdk_color_state_get_depth (interpolation);
-  node->is_hdr = color_state_is_hdr (interpolation);
 
   return node;
 }
@@ -1305,6 +1248,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   node = gsk_radial_gradient_node_new2 (bounds, center,
                                         hradius, vradius,
                                         start, end,
+                                        GSK_GRADIENT_SPREAD_METHOD_PAD,
                                         GDK_COLOR_STATE_SRGB,
                                         GSK_HUE_INTERPOLATION_SHORTER,
                                         stops, n_color_stops);
@@ -1323,6 +1267,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
  * @vradius: the vertical radius
  * @start: a percentage >= 0 that defines the start of the gradient around @center
  * @end: a percentage >= 0 that defines the end of the gradient around @center
+ * @spread_method: what to do about colors outside the `[start,end]` range
  * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
  * @stops: (array length=n_color_stops): a pointer to an array of
@@ -1346,6 +1291,7 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
                                float                    vradius,
                                float                    start,
                                float                    end,
+                               GskGradientSpreadMethod  spread_method,
                                GdkColorState           *interpolation,
                                GskHueInterpolation      hue_interpolation,
                                const GskGradientStop   *stops,
@@ -1370,7 +1316,10 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
     g_return_val_if_fail (stops[i].offset >= stops[i - 1].offset, NULL);
   g_return_val_if_fail (stops[n_stops - 1].offset <= 1, NULL);
 
-  self = gsk_render_node_alloc (GSK_RADIAL_GRADIENT_NODE);
+  if (spread_method == GSK_GRADIENT_SPREAD_METHOD_PAD)
+    self = gsk_render_node_alloc (GSK_RADIAL_GRADIENT_NODE);
+  else
+    self = gsk_render_node_alloc (GSK_REPEATING_RADIAL_GRADIENT_NODE);
   node = (GskRenderNode *) self;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -1449,95 +1398,16 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
       gdk_color_init_from_rgba (&stops[i].color, &color_stops[i].color);
     }
 
-  node = gsk_repeating_radial_gradient_node_new2 (bounds, center,
-                                                  hradius, vradius,
-                                                  start, end,
-                                                  GDK_COLOR_STATE_SRGB,
-                                                  GSK_HUE_INTERPOLATION_SHORTER,
-                                                  stops, n_color_stops);
+  node = gsk_radial_gradient_node_new2 (bounds, center,
+                                        hradius, vradius,
+                                        start, end,
+                                        GSK_GRADIENT_SPREAD_METHOD_REPEAT,
+                                        GDK_COLOR_STATE_SRGB,
+                                        GSK_HUE_INTERPOLATION_SHORTER,
+                                        stops, n_color_stops);
 
   for (gsize i = 0; i < n_color_stops; i++)
     gdk_color_finish (&stops[i].color);
-
-  return node;
-}
-
-/*< private >
- * gsk_repeating_radial_gradient_node_new2:
- * @bounds: the bounds of the node
- * @center: the center of the gradient
- * @hradius: the horizontal radius
- * @vradius: the vertical radius
- * @start: a percentage >= 0 that defines the start of the gradient around @center
- * @end: a percentage >= 0 that defines the end of the gradient around @center
- * @interpolation: the color state to interpolate in
- * @hue_interpolation: how to interpolate if @interpolation is polar
- * @stops: (array length=n_color_stops): a pointer to an array of
- *   `GskGradientStop` defining the gradient. The offsets of all color stops
- *   must be increasing. The first stop's offset must be >= 0 and the last
- *   stop's offset must be <= 1.
- * @n_stops: the number of elements in @stops
- *
- * Creates a `GskRenderNode` that draws a repeating radial gradient.
- *
- * The radial gradient starts around @center. The size of the gradient
- * is dictated by @hradius in horizontal orientation and by @vradius
- * in vertical orientation.
- *
- * Returns: (transfer full) (type GskRepeatingRadialGradientNode): A new `GskRenderNode`
- */
-GskRenderNode *
-gsk_repeating_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
-                                         const graphene_point_t  *center,
-                                         float                    hradius,
-                                         float                    vradius,
-                                         float                    start,
-                                         float                    end,
-                                         GdkColorState           *interpolation,
-                                         GskHueInterpolation      hue_interpolation,
-                                         const GskGradientStop   *stops,
-                                         gsize                    n_stops)
-{
-  GskRadialGradientNode *self;
-  GskRenderNode *node;
-  gboolean opaque;
-
-  g_return_val_if_fail (bounds != NULL, NULL);
-  g_return_val_if_fail (center != NULL, NULL);
-  g_return_val_if_fail (hradius > 0., NULL);
-  g_return_val_if_fail (vradius > 0., NULL);
-  g_return_val_if_fail (start >= 0., NULL);
-  g_return_val_if_fail (end >= 0., NULL);
-  g_return_val_if_fail (end > start, NULL);
-  g_return_val_if_fail (stops != NULL, NULL);
-  g_return_val_if_fail (n_stops >= 2, NULL);
-  g_return_val_if_fail (stops[0].offset >= 0, NULL);
-
-  for (gsize i = 1; i < n_stops; i++)
-    g_return_val_if_fail (stops[i].offset >= stops[i - 1].offset, NULL);
-  g_return_val_if_fail (stops[n_stops - 1].offset <= 1, NULL);
-
-  self = gsk_render_node_alloc (GSK_REPEATING_RADIAL_GRADIENT_NODE);
-  node = (GskRenderNode *) self;
-
-  gsk_rect_init_from_rect (&node->bounds, bounds);
-  gsk_rect_normalize (&node->bounds);
-  graphene_point_init_from_point (&self->center, center);
-
-  self->hradius = hradius;
-  self->vradius = vradius;
-  self->start = start;
-  self->end = end;
-
-  gsk_gradient_line_init (&self->line,
-                          interpolation,
-                          hue_interpolation,
-                          stops, n_stops,
-                          &opaque);
-
-  node->fully_opaque = opaque;
-  node->preferred_depth = gdk_color_state_get_depth (interpolation);
-  node->is_hdr = color_state_is_hdr (interpolation);
 
   return node;
 }
