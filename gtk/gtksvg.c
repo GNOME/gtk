@@ -6195,9 +6195,8 @@ timeline_get_sync (Timeline     *timeline,
                    int64_t       offset)
 {
   TimeSpec spec = { .type = TIME_SPEC_TYPE_SYNC,
-                    .sync = { .base = base, .side = side },
+                    .sync = { .ref = (char *) ref, .base = base, .side = side },
                     .offset = offset };
-  spec.sync.ref = g_strdup (ref);
   return timeline_get_time_spec (timeline, &spec);
 }
 
