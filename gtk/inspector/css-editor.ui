@@ -33,18 +33,11 @@
           <class name="toolbar"/>
         </style>
         <child>
-          <object class="GtkToggleButton" id="disable_button">
-            <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
-            <property name="child">
-              <object class="GtkImage">
-                <property name="paintable">
-                  <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/media-playback-pause-symbolic.svg</property>
-                  </object>
-                </property>
-              </object>
-            </property>
-            <signal name="toggled" handler="disable_toggled"/>
+          <object class="GtkSwitch" id="enable_switch">
+            <property name="valign">center</property>
+            <property name="active">true</property>
+            <property name="tooltip-text" translatable="yes">Enable this custom CSS</property>
+            <signal name="notify::active" handler="enable_switch_changed"/>
           </object>
         </child>
         <child>

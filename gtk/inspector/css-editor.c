@@ -34,6 +34,7 @@
 #include "gtktextiter.h"
 #include "gtktextview.h"
 #include "gtktogglebutton.h"
+#include "gtkswitch.h"
 #include "gtktooltip.h"
 #include "gtksettings.h"
 #include "gtkdropdown.h"
@@ -46,7 +47,7 @@ struct _GtkInspectorCssEditorPrivate
   GtkTextBuffer *text;
   GdkDisplay *display;
   GtkCssProvider *provider;
-  GtkToggleButton *disable_button;
+  GtkSwitch *enable_switch;
   GtkDropDown *color_scheme;
   GtkDropDown *contrast;
   guint timeout;
@@ -133,11 +134,11 @@ set_initial_text (GtkInspectorCssEditor *ce)
   autosave_file = get_autosave_path ();
 
   if (g_file_get_contents (autosave_file, &initial_text, &len, NULL))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ce->priv->disable_button), TRUE);
+    gtk_switch_set_active (GTK_SWITCH (ce->priv->enable_switch), FALSE);
   else
     initial_text = g_strconcat ("/*\n",
                                 _("You can type here any CSS rule recognized by GTK."), "\n",
-                                _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
+                                _("You can temporarily disable this custom CSS by toggling the switch above."), "\n\n",
                                 _("Changes are applied instantly and globally, for the whole application."), "\n",
                                 "*/\n\n", NULL);
   gtk_text_buffer_set_text (GTK_TEXT_BUFFER (ce->priv->text), initial_text, -1);
@@ -166,19 +167,20 @@ autosave_contents (GtkInspectorCssEditor *ce)
 }
 
 static void
-disable_toggled (GtkToggleButton       *button,
-                 GtkInspectorCssEditor *ce)
+enable_switch_changed (GtkSwitch             *sw,
+                       GParamSpec            *pspec,
+                       GtkInspectorCssEditor *ce)
 {
   if (!ce->priv->display)
     return;
 
-  if (gtk_toggle_button_get_active (button))
-    gtk_style_context_remove_provider_for_display (ce->priv->display,
-                                                   GTK_STYLE_PROVIDER (ce->priv->provider));
-  else
+  if (gtk_switch_get_active (sw))
     gtk_style_context_add_provider_for_display (ce->priv->display,
                                                 GTK_STYLE_PROVIDER (ce->priv->provider),
                                                 GTK_STYLE_PROVIDER_PRIORITY_INSPECTOR);
+  else
+    gtk_style_context_remove_provider_for_display (ce->priv->display,
+                                                   GTK_STYLE_PROVIDER (ce->priv->provider));
 }
 
 static void
@@ -488,10 +490,10 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/css-editor.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, text);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, view);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, disable_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, enable_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, color_scheme);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, contrast);
-  gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, enable_switch_changed);
   gtk_widget_class_bind_template_callback (widget_class, toggle_deprecations);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
