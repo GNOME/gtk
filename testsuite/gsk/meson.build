@@ -668,6 +668,7 @@ internal_tests = [
   [ 'not-diff' ],
   [ 'misc'],
   [ 'path-private' ],
+  [ 'rect'],
   [ 'rounded-rect'],
   [ 'scaling', [ 'scaling.c', '../gdk/gdktestutils.c' ] ],
   [ 'transform' ],
