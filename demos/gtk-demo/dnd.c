@@ -417,12 +417,15 @@ drag_begin (GtkDragSource *source,
   GdkPaintable *paintable;
   Hotspot *hotspot;
   GtkWidget *trash;
+  GtkSvg *trash_paintable;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = CANVAS_ITEM (g_object_get_data (G_OBJECT (canvas), "dragged-item"));
   hotspot = (Hotspot *) g_object_get_data (G_OBJECT (canvas), "hotspot");
 
   trash = g_object_get_data (G_OBJECT (canvas), "trash");
+  trash_paintable = GTK_SVG (gtk_image_get_paintable (GTK_IMAGE (trash)));
+  gtk_svg_set_state (trash_paintable, 0);
   gtk_widget_set_visible (trash, TRUE);
 
   paintable = canvas_item_get_drag_icon (item);
@@ -491,7 +494,8 @@ static gboolean
 drop_in_trash (GtkDropTarget *target,
                const GValue  *value,
                double         x,
-               double         y)
+               double         y,
+               GtkSvg        *trash_paintable)
 {
   GtkWidget *item;
   GtkWidget *canvas;
@@ -501,11 +505,30 @@ drop_in_trash (GtkDropTarget *target,
   item = g_value_get_object (value);
   canvas = gtk_widget_get_parent (item);
 
+  gtk_svg_set_state (trash_paintable, 0);
+
   gtk_fixed_remove (GTK_FIXED (canvas), item);
 
   gtk_widget_set_visible (trash, FALSE);
 
   return TRUE;
+}
+
+static GdkDragAction
+enter_trash (GtkDropTarget *target,
+             double         x,
+             double         y,
+             GtkSvg        *trash_paintable)
+{
+  gtk_svg_set_state (trash_paintable, 1);
+  return GDK_ACTION_MOVE;
+}
+
+static void
+leave_trash (GtkDropTarget *target,
+             GtkSvg        *trash_paintable)
+{
+  gtk_svg_set_state (trash_paintable, 0);
 }
 
 static void
@@ -657,6 +680,7 @@ canvas_new (void)
   GtkDragSource *source;
   GtkDropTarget *dest;
   GtkGesture *gesture;
+  GtkSvg *trash_paintable;
   GtkWidget *trash;
 
   canvas = gtk_fixed_new ();
@@ -681,7 +705,10 @@ canvas_new (void)
   g_signal_connect (gesture, "released", G_CALLBACK (released_cb), NULL);
   gtk_widget_add_controller (canvas, GTK_EVENT_CONTROLLER (gesture));
 
-  trash = gtk_image_new_from_icon_name ("user-trash-symbolic");
+  trash_paintable = gtk_svg_new_from_resource ("/dnd/user-trash-opening.gpa");
+  gtk_svg_play (trash_paintable);
+  trash = gtk_image_new_from_paintable (GDK_PAINTABLE (trash_paintable));
+  g_object_unref (trash_paintable);
   gtk_image_set_pixel_size (GTK_IMAGE (trash), 64);
   gtk_widget_add_css_class (trash, "trash");
 
@@ -689,7 +716,11 @@ canvas_new (void)
   gtk_widget_set_visible (trash, FALSE);
 
   dest = gtk_drop_target_new (GTK_TYPE_WIDGET, GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drop", G_CALLBACK (drop_in_trash), NULL);
+
+  g_signal_connect (dest, "enter", G_CALLBACK (enter_trash), trash_paintable);
+  g_signal_connect (dest, "leave", G_CALLBACK (leave_trash), trash_paintable);
+
+  g_signal_connect (dest, "drop", G_CALLBACK (drop_in_trash), trash_paintable);
   gtk_widget_add_controller (trash, GTK_EVENT_CONTROLLER (dest));
   g_object_set_data (G_OBJECT (canvas), "trash", trash);
 

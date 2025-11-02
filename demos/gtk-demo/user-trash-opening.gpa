@@ -1,0 +1,64 @@
+<svg width='24' height='24'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='trash bin deleted wastebasket user folder'
+     gpa:state='0'>
+  <g transform='translate(0 8)'>
+    <g>
+      <path d='M 15 4 L 1 4'
+            id='path1'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            gpa:states='0 1'
+            class='foreground-stroke transparent-fill'/>
+      <path d='M 5 4 L 5 3 C 5 1.89543045, 5.89543056 1, 7 1 L 9 1 C 10.1045694 1, 11 1.89543045, 11 3 L 11 4'
+            id='path2'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            gpa:states='0 1'
+            class='foreground-stroke transparent-fill'/>
+      <animateTransform
+          attributeName='transform'
+          begin='gpa:states(1).begin'
+          dur='200ms'
+          type='rotate'
+          from='0 1 3'
+          to='-45 1 3'
+          fill='freeze' />
+      <animateTransform
+          attributeName='transform'
+          begin='gpa:states(1).end'
+          dur='200ms'
+          type='rotate'
+          from='-45 1 3'
+          to='0 1 3'
+          fill='freeze' />
+    </g>
+    <g>
+      <path d='M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 4'
+            id='path0'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            gpa:states='0 1'
+            class='foreground-stroke transparent-fill'/>
+      <path d='M 6.5 7 L 6.5 12 M 9.49961376 7 L 9.49961376 12'
+            id='path3'
+            stroke-width='1'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            gpa:states='0 1'
+            class='foreground-stroke transparent-fill'/>
+    </g>
+  </g>
+</svg>

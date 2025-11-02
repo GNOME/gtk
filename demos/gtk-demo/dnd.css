@@ -35,7 +35,3 @@ image.rainbow3 {
  83.2% { background: linear-gradient(140deg,orange,yellow,green,blue,purple,red); }
  100% { background: linear-gradient(140deg,red,orange,yellow,green,blue,purple); }
 }
-
-.trash:drop(active) {
-  color: red;
-}

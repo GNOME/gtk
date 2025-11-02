@@ -1,0 +1,9 @@
+<svg>
+  <g>
+    <animate
+        attributeName='fill'
+        begin='gpa:states(1) ; 0ms'
+        values='red;green'
+        />
+  </g>
+</svg>

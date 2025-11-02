@@ -892,14 +892,11 @@ parse_enum (const char    *value,
   return FALSE;
 }
 
-static GskPath *
-make_ellipse_path (double cx, double cy,
-                   double rx, double ry)
+static void
+path_builder_add_ellipse (GskPathBuilder *builder,
+                          double cx, double cy,
+                          double rx, double ry)
 {
-  GskPathBuilder *builder;
-
-  builder = gsk_path_builder_new ();
-
   gsk_path_builder_move_to  (builder, cx + rx, cy);
   gsk_path_builder_conic_to (builder, cx + rx, cy + ry,
                                       cx,      cy + ry, M_SQRT1_2);
@@ -910,8 +907,6 @@ make_ellipse_path (double cx, double cy,
   gsk_path_builder_conic_to (builder, cx + rx, cy - ry,
                                       cx + rx, cy,      M_SQRT1_2);
   gsk_path_builder_close    (builder);
-
-  return gsk_path_builder_free_to_path (builder);
 }
 
 static gboolean
@@ -5296,9 +5291,14 @@ shape_type_lookup (const char *name,
 struct _Shape
 {
   ShapeType type;
+  Shape *parent;
   uint64_t attrs;
   char *id;
   gboolean display;
+
+  /* Dependency order for computing updates */
+  Shape *first;
+  Shape *next;
 
   SvgValue *base[G_N_ELEMENTS (shape_attrs)];
   SvgValue *current[G_N_ELEMENTS (shape_attrs)];
@@ -5306,6 +5306,7 @@ struct _Shape
   GPtrArray *shapes;
   GPtrArray *animations;
   GPtrArray *color_stops;
+  GPtrArray *deps;
 
   GskPath *path;
   GskPathMeasure *measure;
@@ -5344,6 +5345,7 @@ shape_free (gpointer data)
   g_clear_pointer (&shape->shapes, g_ptr_array_unref);
   g_clear_pointer (&shape->animations, g_ptr_array_unref);
   g_clear_pointer (&shape->color_stops, g_ptr_array_unref);
+  g_clear_pointer (&shape->deps, g_ptr_array_unref);
 
   g_clear_pointer (&shape->path, gsk_path_unref);
   g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -5396,18 +5398,23 @@ shape_attr_get_initial_value (ShapeAttr attr,
 }
 
 static Shape *
-shape_new (ShapeType type)
+shape_new (Shape     *parent,
+           ShapeType  type)
 {
   Shape *shape = g_new0 (Shape, 1);
 
   memset (shape, 0, sizeof (Shape));
 
+  shape->parent = parent;
   shape->type = type;
   shape->attrs = 0;
   shape->display = TRUE;
 
   for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
-    shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
+    {
+      shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
+      shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
+    }
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
 
@@ -5481,10 +5488,7 @@ shape_get_path (Shape                 *shape,
                 gboolean               current)
 {
   GskPathBuilder *builder;
-  double cx, cy, r, x, y, width, height, rx, ry;
-  double x1, y1, x2, y2;
   SvgValue **values;
-  SvgPoints *points;
 
   if (current)
     values = shape->current;
@@ -5494,73 +5498,95 @@ shape_get_path (Shape                 *shape,
   switch (shape->type)
     {
     case SHAPE_LINE:
-      x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->width);
-      y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->height);
-      x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->width);
-      y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->height);
       builder = gsk_path_builder_new ();
-      gsk_path_builder_move_to (builder, x1, y1);
-      gsk_path_builder_line_to (builder, x2, y2);
+      if (values[SHAPE_ATTR_X1] && values[SHAPE_ATTR_Y1] &&
+          values[SHAPE_ATTR_X2] && values[SHAPE_ATTR_Y2])
+        {
+          double x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->width);
+          double y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->height);
+          double x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->width);
+          double y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->height);
+          gsk_path_builder_move_to (builder, x1, y1);
+          gsk_path_builder_line_to (builder, x2, y2);
+        }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_POLY_LINE:
     case SHAPE_POLYGON:
       builder = gsk_path_builder_new ();
-      points = (SvgPoints *) values[SHAPE_ATTR_POINTS];
-      if (points->n_values > 0)
+      if (values[SHAPE_ATTR_POINTS])
         {
-          gsk_path_builder_move_to (builder,
-                                    points->values[0], points->values[1]);
-          for (unsigned int i = 2; i < points->n_values; i += 2)
+          SvgPoints *points = (SvgPoints *) values[SHAPE_ATTR_POINTS];
+          if (points->n_values > 0)
             {
-              gsk_path_builder_line_to (builder,
-                                        points->values[i], points->values[i + 1]);
+              gsk_path_builder_move_to (builder,
+                                        points->values[0], points->values[1]);
+              for (unsigned int i = 2; i < points->n_values; i += 2)
+                {
+                  gsk_path_builder_line_to (builder,
+                                            points->values[i], points->values[i + 1]);
+                }
+              if (shape->type == SHAPE_POLYGON)
+                gsk_path_builder_close (builder);
             }
-          if (shape->type == SHAPE_POLYGON)
-            gsk_path_builder_close (builder);
         }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_CIRCLE:
-      cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-      cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
-      r = svg_number_get (values[SHAPE_ATTR_R], normalized_diagonal (viewport));
       builder = gsk_path_builder_new ();
-      gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), r);
+      if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] && values[SHAPE_ATTR_R])
+        {
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
+          double r = svg_number_get (values[SHAPE_ATTR_R], normalized_diagonal (viewport));
+          gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), r);
+        }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_ELLIPSE:
-      cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-      cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
-      rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-      ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
-      return make_ellipse_path (cx, cy, rx, ry);
+      builder = gsk_path_builder_new ();
+      if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] &&
+          values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
+        {
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          path_builder_add_ellipse (builder, cx, cy, rx, ry);
+        }
+      return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_RECT:
-      x = svg_number_get (values[SHAPE_ATTR_X], viewport->width);
-      y = svg_number_get (values[SHAPE_ATTR_Y], viewport->height);
-      width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->width);
-      height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->height);
-      rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-      ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
       builder = gsk_path_builder_new ();
-      if (rx == 0 || ry == 0)
-        gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
-      else
-        gsk_path_builder_add_rounded_rect (builder,
-                                           &(GskRoundedRect) {
-                                             .bounds = GRAPHENE_RECT_INIT (x, y, width, height),
-                                             .corner = {
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                             }
-                                          });
+      if (values[SHAPE_ATTR_X] && values[SHAPE_ATTR_Y] &&
+          values[SHAPE_ATTR_WIDTH] && values[SHAPE_ATTR_HEIGHT] &&
+          values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
+        {
+          double x = svg_number_get (values[SHAPE_ATTR_X], viewport->width);
+          double y = svg_number_get (values[SHAPE_ATTR_Y], viewport->height);
+          double width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->width);
+          double height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          if (rx == 0 || ry == 0)
+            gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
+          else
+            gsk_path_builder_add_rounded_rect (builder,
+                                               &(GskRoundedRect) {
+                                                 .bounds = GRAPHENE_RECT_INIT (x, y, width, height),
+                                                 .corner = {
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                 }
+                                              });
+        }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_PATH:
-      if (svg_path_get (values[SHAPE_ATTR_PATH]))
+      if (values[SHAPE_ATTR_PATH] &&
+          svg_path_get (values[SHAPE_ATTR_PATH]))
         {
           return gsk_path_ref (svg_path_get (values[SHAPE_ATTR_PATH]));
         }
@@ -5905,9 +5931,8 @@ time_spec_equal (const void *p1,
 }
 
 static gboolean
-time_spec_parse (TimeSpec    *spec,
-                 const char  *value,
-                 GError     **error)
+time_spec_parse (TimeSpec   *spec,
+                 const char *value)
 {
   const char *side_str;
   const char *offset_str;
@@ -7599,11 +7624,9 @@ compute_current_values_for_shape (Shape          *shape,
     {
       Shape *parent = context->parent;
       context->parent = shape;
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          Shape *sh = g_ptr_array_index (shape->shapes, i);
-          compute_current_values_for_shape (sh, context);
-        }
+
+      for (Shape *sh = shape->first; sh; sh = sh->next)
+        compute_current_values_for_shape (sh, context);
       context->parent = parent;
     }
 }
@@ -8530,9 +8553,9 @@ parse_base_animation_attrs (Animation            *a,
           TimeSpec *begin;
           GError *error = NULL;
 
-          if (!time_spec_parse (&spec, strv[i], &error))
+          if (!time_spec_parse (&spec, strv[i]))
             {
-              gtk_svg_invalid_attribute (data->svg, context, "begin", "%s", error->message);
+              gtk_svg_invalid_attribute (data->svg, context, "begin", NULL);
               g_clear_error (&error);
               continue;
             }
@@ -8564,9 +8587,9 @@ parse_base_animation_attrs (Animation            *a,
           TimeSpec *end;
           GError *error = NULL;
 
-          if (!time_spec_parse (&spec, strv[i], &error))
+          if (!time_spec_parse (&spec, strv[i]))
             {
-              gtk_svg_invalid_attribute (data->svg, context, "end", "%s", error->message);
+              gtk_svg_invalid_attribute (data->svg, context, "end", NULL);
               g_clear_error (&error);
               continue;
             }
@@ -10080,7 +10103,7 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else if (shape_type_lookup (element_name, &shape_type))
     {
-      shape = shape_new (shape_type);
+      shape = shape_new (data->current_shape, shape_type);
     }
   else if (strcmp (element_name, "stop") == 0)
     {
@@ -10233,8 +10256,85 @@ end_element_cb (GMarkupParseContext *context,
     }
 }
 
+static gboolean
+shape_common_ancestor (Shape  *shape0,
+                       Shape  *shape1,
+                       Shape **ancestor0,
+                       Shape **ancestor1)
+{
+  Shape *parent0, *parent1;
+  unsigned int depth0, depth1;
+
+  depth0 = 0;
+  parent0 = shape0;
+  while (parent0->parent)
+    {
+      parent0 = parent0->parent;
+      depth0++;
+    }
+
+  depth1 = 0;
+  parent1 = shape1;
+  while (parent1->parent)
+    {
+      parent1 = parent1->parent;
+      depth1++;
+    }
+
+  if (parent0 != parent1)
+    return FALSE;
+
+  while (depth0 > depth1)
+    {
+      shape0 = shape0->parent;
+      depth0--;
+    }
+
+  while (depth1 > depth0)
+    {
+      shape1 = shape1->parent;
+      depth1--;
+    }
+
+  while (shape0->parent != shape1->parent)
+    {
+      shape0 = shape0->parent;
+      shape1 = shape1->parent;
+    }
+
+  *ancestor0 = shape0;
+  *ancestor1 = shape1;
+  return TRUE;
+}
+
+static void
+add_dependency (Shape *shape0,
+                Shape *shape1)
+{
+  if (!shape0->deps)
+    shape0->deps = g_ptr_array_new ();
+  g_ptr_array_add (shape0->deps, shape1);
+}
+
+/* Record the fact that when computing updated
+ * values, shape2 must be handled before shape1
+ */
+static void
+add_dependency_to_common_ancestor (Shape *shape0,
+                                   Shape *shape1)
+{
+  Shape *anc0, *anc1;
+
+  if (shape_common_ancestor (shape0, shape1, &anc0, &anc1))
+    {
+      g_assert (anc0->parent == anc1->parent);
+      add_dependency (anc0, anc1);
+    }
+}
+
 static void
 resolve_clip_ref (SvgValue   *value,
+                  Shape      *shape,
                   ParserData *data)
 {
   SvgClip *clip = (SvgClip *) value;
@@ -10251,12 +10351,16 @@ resolve_clip_ref (SvgValue   *value,
                                    "Shape with ID %s not a <clipPath> (resolving clip-path)",
                                    clip->ref.ref);
       else
-        clip->ref.shape = target;
+        {
+          clip->ref.shape = target;
+          add_dependency_to_common_ancestor (shape, target);
+        }
     }
 }
 
 static void
 resolve_mask_ref (SvgValue   *value,
+                  Shape      *shape,
                   ParserData *data)
 {
   SvgMask *mask = (SvgMask *) value;
@@ -10273,12 +10377,16 @@ resolve_mask_ref (SvgValue   *value,
                                    "Shape with ID %s not a <mask> (resolving mask)",
                                    mask->ref);
       else
-        mask->shape = target;
+        {
+          mask->shape = target;
+          add_dependency_to_common_ancestor (shape, target);
+        }
     }
 }
 
 static void
 resolve_href_ref (SvgValue   *value,
+                  Shape      *shape,
                   ParserData *data)
 {
   SvgHref *href = (SvgHref *) value;
@@ -10289,12 +10397,16 @@ resolve_href_ref (SvgValue   *value,
       if (!target)
         gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", href->ref);
       else
-        href->shape = target;
+        {
+          href->shape = target;
+          add_dependency_to_common_ancestor (shape, target);
+        }
     }
 }
 
 static void
 resolve_paint_ref (SvgValue   *value,
+                   Shape      *shape,
                    ParserData *data)
 {
   SvgPaint *paint = (SvgPaint *) value;
@@ -10308,7 +10420,10 @@ resolve_paint_ref (SvgValue   *value,
                target->type != SHAPE_RADIAL_GRADIENT)
         gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a gradient (resolving fill or stroke)", paint->gradient.ref);
       else
-        paint->gradient.shape = target;
+        {
+          paint->gradient.shape = target;
+          add_dependency_to_common_ancestor (shape, target);
+        }
     }
 }
 
@@ -10341,23 +10456,23 @@ resolve_animation_refs (Shape      *shape,
       if (a->attr == SHAPE_ATTR_CLIP_PATH)
         {
           for (unsigned int j = 0; j < a->n_frames; j++)
-            resolve_clip_ref (a->frames[j].value, data);
+            resolve_clip_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_MASK)
         {
           for (unsigned int j = 0; j < a->n_frames; j++)
-            resolve_mask_ref (a->frames[j].value, data);
+            resolve_mask_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_HREF)
         {
           for (unsigned int j = 0; j < a->n_frames; j++)
-            resolve_href_ref (a->frames[j].value, data);
+            resolve_href_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_FILL ||
                a->attr == SHAPE_ATTR_STROKE)
         {
           for (unsigned int j = 0; j < a->n_frames; j++)
-            resolve_paint_ref (a->frames[j].value, data);
+            resolve_paint_ref (a->frames[j].value, a->shape, data);
         }
 
       if (a->motion.path_ref)
@@ -10367,11 +10482,17 @@ resolve_animation_refs (Shape      *shape,
             gtk_svg_invalid_reference (data->svg,
                                        "No path with ID %s (resolving <mpath>",
                                        a->motion.path_ref);
-          else if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
-            /* a's path is attached to a->motion.path_shape
-             * Make sure it moves along with transitions and animations
-             */
-            create_attachment_connection (a, a->motion.path_shape, data->svg->timeline);
+          else
+            {
+              add_dependency_to_common_ancestor (a->shape, a->motion.path_shape);
+              if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
+                {
+                  /* a's path is attached to a->motion.path_shape
+                   * Make sure it moves along with transitions and animations
+                   */
+                  create_attachment_connection (a, a->motion.path_shape, data->svg->timeline);
+                }
+            }
         }
     }
 
@@ -10389,14 +10510,87 @@ static void
 resolve_shape_refs (Shape      *shape,
                     ParserData *data)
 {
-  resolve_clip_ref (shape->base[SHAPE_ATTR_CLIP_PATH], data);
-  resolve_mask_ref (shape->base[SHAPE_ATTR_MASK], data);
-  resolve_href_ref (shape->base[SHAPE_ATTR_HREF], data);
-  resolve_paint_ref (shape->base[SHAPE_ATTR_FILL], data);
-  resolve_paint_ref (shape->base[SHAPE_ATTR_STROKE], data);
+  resolve_clip_ref (shape->base[SHAPE_ATTR_CLIP_PATH], shape, data);
+  resolve_mask_ref (shape->base[SHAPE_ATTR_MASK], shape, data);
+  resolve_href_ref (shape->base[SHAPE_ATTR_HREF], shape, data);
+  resolve_paint_ref (shape->base[SHAPE_ATTR_FILL], shape, data);
+  resolve_paint_ref (shape->base[SHAPE_ATTR_STROKE], shape, data);
 }
 
 static void gtk_svg_clear_content (GtkSvg *self);
+
+static gboolean
+can_add (Shape      *shape,
+         GHashTable *waiting)
+{
+  if (shape->deps)
+    {
+      for (unsigned int i = 0; i < shape->deps->len; i++)
+        {
+          Shape *dep = g_ptr_array_index (shape->deps, i);
+          if (g_hash_table_contains (waiting, dep))
+            return FALSE;
+        }
+    }
+
+  return TRUE;
+}
+
+static void
+compute_update_order (Shape  *shape,
+                      GtkSvg *svg)
+{
+  if (shape_types[shape->type].has_shapes)
+    {
+      GHashTable *waiting;
+      unsigned int n_waiting;
+      gboolean has_cycle = FALSE;
+      Shape *last = NULL;
+
+      waiting = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          compute_update_order (sh, svg);
+
+          g_hash_table_add (waiting, sh);
+        }
+
+      n_waiting = g_hash_table_size (waiting);
+
+      while (n_waiting > 0)
+        {
+          GHashTableIter iter;
+          Shape *key;
+
+          g_hash_table_iter_init (&iter, waiting);
+          while (g_hash_table_iter_next (&iter, (gpointer *) &key, NULL))
+            {
+              if (can_add (key, waiting) || has_cycle)
+                {
+                  if (last)
+                    last->next = key;
+                  else
+                    shape->first = key;
+                  last = key;
+                  last->next = NULL;
+                  g_hash_table_iter_remove (&iter);
+                }
+            }
+
+          if (g_hash_table_size (waiting) == n_waiting)
+            {
+              gtk_svg_update_error (svg, "Cyclic dependency detected");
+              has_cycle = TRUE;
+            }
+
+          n_waiting = g_hash_table_size (waiting);
+        }
+
+      g_hash_table_unref (waiting);
+    }
+}
 
 static void
 gtk_svg_init_from_bytes (GtkSvg *self,
@@ -10460,12 +10654,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
       a->shape = g_hash_table_lookup (data.shapes, a->href);
       if (!a->shape)
-        {
-          g_set_error (&error, GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_REFERENCE,
-                       "No shape with ID %s (resolving begin or end attribute)", a->href);
-          gtk_svg_emit_error (self, error);
-          g_clear_error (&error);
-        }
+        gtk_svg_invalid_reference (self,
+                                   "No shape with ID %s (resolving begin or end attribute)",
+                                   a->href);
 
       g_ptr_array_add (a->shape->animations, a);
     }
@@ -10481,6 +10672,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     }
 
   resolve_animation_refs (self->content, &data);
+
+  compute_update_order (self->content, self);
 
   self->state_change_delay = timeline_get_state_change_delay (self->timeline);
 
@@ -11926,7 +12119,7 @@ gtk_svg_init (GtkSvg *self)
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
 
   self->timeline = timeline_new ();
-  self->content = shape_new (SHAPE_GROUP);
+  self->content = shape_new (NULL, SHAPE_GROUP);
 }
 
 static void
@@ -12591,7 +12784,7 @@ gtk_svg_clear_content (GtkSvg *self)
   shape_free (self->content);
 
   self->timeline = timeline_new ();
-  self->content = shape_new (SHAPE_GROUP);
+  self->content = shape_new (NULL, SHAPE_GROUP);
 
   self->width = 0;
   self->height = 0;

@@ -1,0 +1,14 @@
+<svg>
+  <circle id='circle' r='5'/>
+  <animateMotion href='#circle'
+        begin='0ms'
+        dur='1s'
+        keyTimes='0; 1'
+        keyPoints='0; 1'>
+    <mpath href='#rect'/>
+  </animateMotion>
+  <g id='group'>
+    <rect id='rect' width='5' height='5'/>
+    <use href='#circle'/>
+  </g>
+</svg>
