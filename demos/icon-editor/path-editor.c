@@ -651,6 +651,12 @@ repopulate_attach_to (PathEditor *self)
 }
 
 static void
+paths_changed (PathEditor *self)
+{
+  repopulate_attach_to (self);
+}
+
+static void
 path_editor_update (PathEditor *self)
 {
   if (self->paintable && self->path != (size_t) -1)
@@ -867,6 +873,9 @@ path_editor_finalize (GObject *object)
 {
   PathEditor *self = PATH_EDITOR (object);
 
+  if (self->paintable)
+    g_signal_handlers_disconnect_by_func (self->paintable, paths_changed, self);
+
   g_clear_object (&self->path_image);
   g_clear_object (&self->paintable);
 
@@ -980,10 +989,16 @@ path_editor_set_paintable (PathEditor    *self,
 
   g_clear_object (&self->path_image);
 
+  if (self->paintable)
+    g_signal_handlers_disconnect_by_func (self->paintable, paths_changed, self);
+
   if (!g_set_object (&self->paintable, paintable))
     return;
 
   self->path = (size_t) -1;
+
+  if (self->paintable)
+    g_signal_connect_swapped (self->paintable, "paths-changed", G_CALLBACK (paths_changed), self);
 
   path_editor_update (self);
 
