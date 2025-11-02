@@ -18,6 +18,7 @@ test_data = [
   'animate-timing.svg',
   'animate-transform.svg',
   'bad-attr.svg',
+  'bad-time.svg',
   'clip.svg',
   'containers.svg',
   'dashes.svg',
