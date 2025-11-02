@@ -22,6 +22,7 @@ test_data = [
   'clip.svg',
   'containers.svg',
   'dashes.svg',
+  'dep-cycle.svg',
   'ellipse.svg',
   'filters.svg',
   'gpa-attributes.svg',
