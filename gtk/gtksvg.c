@@ -5914,9 +5914,8 @@ time_spec_equal (const void *p1,
 }
 
 static gboolean
-time_spec_parse (TimeSpec    *spec,
-                 const char  *value,
-                 GError     **error)
+time_spec_parse (TimeSpec   *spec,
+                 const char *value)
 {
   const char *side_str;
   const char *offset_str;
@@ -8537,9 +8536,9 @@ parse_base_animation_attrs (Animation            *a,
           TimeSpec *begin;
           GError *error = NULL;
 
-          if (!time_spec_parse (&spec, strv[i], &error))
+          if (!time_spec_parse (&spec, strv[i]))
             {
-              gtk_svg_invalid_attribute (data->svg, context, "begin", "%s", error->message);
+              gtk_svg_invalid_attribute (data->svg, context, "begin", NULL);
               g_clear_error (&error);
               continue;
             }
@@ -8571,9 +8570,9 @@ parse_base_animation_attrs (Animation            *a,
           TimeSpec *end;
           GError *error = NULL;
 
-          if (!time_spec_parse (&spec, strv[i], &error))
+          if (!time_spec_parse (&spec, strv[i]))
             {
-              gtk_svg_invalid_attribute (data->svg, context, "end", "%s", error->message);
+              gtk_svg_invalid_attribute (data->svg, context, "end", NULL);
               g_clear_error (&error);
               continue;
             }
@@ -10637,12 +10636,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
       a->shape = g_hash_table_lookup (data.shapes, a->href);
       if (!a->shape)
-        {
-          g_set_error (&error, GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_REFERENCE,
-                       "No shape with ID %s (resolving begin or end attribute)", a->href);
-          gtk_svg_emit_error (self, error);
-          g_clear_error (&error);
-        }
+        gtk_svg_invalid_reference (self,
+                                   "No shape with ID %s (resolving begin or end attribute)",
+                                   a->href);
 
       g_ptr_array_add (a->shape->animations, a);
     }
