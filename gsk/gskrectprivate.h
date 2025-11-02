@@ -161,6 +161,77 @@ gsk_rect_coverage (const graphene_rect_t *r1,
 }
 
 /**
+ * gsk_rect_subtract:
+ * @m: a valid rectangle for the minuend
+ * @s: a valid rectangle for the subtrahend
+ * @res: The result, may be the same as `m` or `s`
+ *
+ * Computes the largest rectangle that is fully covered by
+ * m and does not contain any part of s.
+ *
+ * Returns: TRUE if a rectangle was returned, FALSE if the subtrahend
+ *   fully covers the minuend and no valid rectangle remains.
+ **/
+static inline gboolean
+gsk_rect_subtract (const graphene_rect_t *m,
+                   const graphene_rect_t *s,
+                   graphene_rect_t       *res)
+{
+  graphene_rect_t cur = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  float tmp, size = 0.0f;
+
+  /* left */
+  tmp = MIN (s->origin.x - m->origin.x, m->size.width);
+  if (tmp * m->size.height > size)
+    {
+      cur = GRAPHENE_RECT_INIT (m->origin.x,
+                                m->origin.y,
+                                tmp,
+                                m->size.height);
+      size = cur.size.width * cur.size.height;
+    }
+
+  /* right */
+  tmp = MIN (m->origin.x + m->size.width - (s->origin.x + s->size.width), m->size.width);
+  if (tmp * m->size.height > size)
+    {
+      cur = GRAPHENE_RECT_INIT (MAX (m->origin.x, s->origin.x + s->size.width),
+                                m->origin.y,
+                                tmp,
+                                m->size.height);
+      size = cur.size.width * cur.size.height;
+    }
+
+  /* top */
+  tmp = MIN (s->origin.y - m->origin.y, m->size.height);
+  if (tmp * m->size.width > size)
+    {
+      cur = GRAPHENE_RECT_INIT (m->origin.x,
+                                m->origin.y,
+                                m->size.width,
+                                tmp);
+      size = cur.size.width * cur.size.height;
+    }
+
+  /* bottom */
+  tmp = MIN (m->origin.y + m->size.height - (s->origin.y + s->size.height), m->size.height);
+  if (tmp * m->size.width > size)
+    {
+      cur = GRAPHENE_RECT_INIT (m->origin.x,
+                                MAX (m->origin.y, s->origin.y + s->size.height),
+                                m->size.width,
+                                tmp);
+      size = cur.size.width * cur.size.height;
+    }
+
+  if (size <= 0)
+    return FALSE;
+
+  *res = cur;
+  return TRUE;
+}
+
+/**
  * gsk_rect_snap_to_grid:
  * @src: rectangle to snap
  * @grid_scale: the scale of the grid
