@@ -314,7 +314,7 @@ gsk_color_node_new2 (const GdkColor        *color,
   node = (GskRenderNode *) self;
   node->fully_opaque = gdk_color_is_opaque (color);
   node->preferred_depth = GDK_MEMORY_NONE;
-  node->is_hdr = color_state_is_hdr (color->color_state);
+  node->is_hdr = gdk_color_is_srgb (color);
 
   gdk_color_init_copy (&self->color, color);
 
@@ -6429,7 +6429,7 @@ gsk_shadow_node_new2 (GskRenderNode        *child,
       gdk_color_init_copy (&self->shadows[i].color, &shadows[i].color);
       graphene_point_init_from_point (&self->shadows[i].offset, &shadows[i].offset);
       self->shadows[i].radius = shadows[i].radius;
-      is_hdr = is_hdr || color_state_is_hdr (shadows[i].color.color_state);
+      is_hdr = is_hdr || gdk_color_is_srgb (&shadows[i].color);
     }
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
@@ -7123,7 +7123,7 @@ gsk_text_node_new2 (PangoFont              *font,
   self = gsk_render_node_alloc (GSK_TEXT_NODE);
   node = (GskRenderNode *) self;
   node->preferred_depth = GDK_MEMORY_NONE;
-  node->is_hdr = color_state_is_hdr (color->color_state);
+  node->is_hdr = gdk_color_is_srgb (color);
 
   self->fontmap = g_object_ref (pango_font_get_font_map (font));
   self->font = g_object_ref (font);
