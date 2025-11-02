@@ -5411,7 +5411,10 @@ shape_new (Shape     *parent,
   shape->display = TRUE;
 
   for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
-    shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
+    {
+      shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
+      shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
+    }
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
 
