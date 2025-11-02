@@ -121,6 +121,7 @@
   </gresource>
   <gresource prefix="/dnd">
     <file>dnd.css</file>
+    <file>user-trash-opening.gpa</file>
   </gresource>
   <gresource prefix="/errorstates">
     <file>errorstates.ui</file>
