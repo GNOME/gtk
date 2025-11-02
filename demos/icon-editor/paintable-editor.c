@@ -127,12 +127,12 @@ update_summary (PaintableEditor *self)
       if (state == STATE_UNSET)
         {
           summary1 = g_strdup ("Current state: -1");
-          summary2 = g_strdup_printf ("%lu path elements", path_paintable_get_n_paths (self->paintable));
+          summary2 = g_strdup_printf ("%" G_GSIZE_FORMAT " path elements", path_paintable_get_n_paths (self->paintable));
         }
       else
         {
           summary1 = g_strdup_printf ("Current state: %u", state);
-          summary2 = g_strdup_printf ("%lu path elements, %u in current state", path_paintable_get_n_paths (self->paintable), n);
+          summary2 = g_strdup_printf ("%" G_GSIZE_FORMAT " path elements, %u in current state", path_paintable_get_n_paths (self->paintable), n);
         }
 
       gtk_label_set_label (self->summary1, summary1);

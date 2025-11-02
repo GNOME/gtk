@@ -60,12 +60,12 @@ add_error_context (const GError *error,
         {
           if (end->lines != start->lines || end->line_chars != start->line_chars)
             g_string_append_printf (string,
-                                    "%lu.%lu - %lu.%lu: ",
+                                    "%" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT " - %" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT ": ",
                                     start->lines, start->line_chars,
                                     end->lines, end->line_chars);
           else
             g_string_append_printf (string,
-                                    "%lu.%lu: ",
+                                    "%" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT ": ",
                                     start->lines, start->line_chars);
         }
 

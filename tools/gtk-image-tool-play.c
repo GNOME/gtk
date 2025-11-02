@@ -108,11 +108,11 @@ error_cb (GtkSvg *svg, GError *error)
       if (start)
         {
           if (end->lines != start->lines || end->line_chars != start->line_chars)
-            g_print ("%lu.%lu - %lu.%lu: ",
+            g_print ("%" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT " - %" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT ": ",
                      start->lines, start->line_chars,
                      end->lines, end->line_chars);
           else
-            g_print ("%lu.%lu: ", start->lines, start->line_chars);
+            g_print ("%" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT ": ", start->lines, start->line_chars);
         }
 
       if (element && attribute)
