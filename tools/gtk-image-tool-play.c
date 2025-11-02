@@ -142,6 +142,8 @@ load_animation_file (const char *filename)
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), NULL);
   gtk_svg_load_from_bytes (svg, bytes);
 
+  g_bytes_unref (bytes);
+
   return svg;
 }
 
