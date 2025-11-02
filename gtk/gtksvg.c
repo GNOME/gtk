@@ -892,14 +892,11 @@ parse_enum (const char    *value,
   return FALSE;
 }
 
-static GskPath *
-make_ellipse_path (double cx, double cy,
-                   double rx, double ry)
+static void
+path_builder_add_ellipse (GskPathBuilder *builder,
+                          double cx, double cy,
+                          double rx, double ry)
 {
-  GskPathBuilder *builder;
-
-  builder = gsk_path_builder_new ();
-
   gsk_path_builder_move_to  (builder, cx + rx, cy);
   gsk_path_builder_conic_to (builder, cx + rx, cy + ry,
                                       cx,      cy + ry, M_SQRT1_2);
@@ -910,8 +907,6 @@ make_ellipse_path (double cx, double cy,
   gsk_path_builder_conic_to (builder, cx + rx, cy - ry,
                                       cx + rx, cy,      M_SQRT1_2);
   gsk_path_builder_close    (builder);
-
-  return gsk_path_builder_free_to_path (builder);
 }
 
 static gboolean
@@ -5490,10 +5485,7 @@ shape_get_path (Shape                 *shape,
                 gboolean               current)
 {
   GskPathBuilder *builder;
-  double cx, cy, r, x, y, width, height, rx, ry;
-  double x1, y1, x2, y2;
   SvgValue **values;
-  SvgPoints *points;
 
   if (current)
     values = shape->current;
@@ -5503,73 +5495,95 @@ shape_get_path (Shape                 *shape,
   switch (shape->type)
     {
     case SHAPE_LINE:
-      x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->width);
-      y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->height);
-      x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->width);
-      y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->height);
       builder = gsk_path_builder_new ();
-      gsk_path_builder_move_to (builder, x1, y1);
-      gsk_path_builder_line_to (builder, x2, y2);
+      if (values[SHAPE_ATTR_X1] && values[SHAPE_ATTR_Y1] &&
+          values[SHAPE_ATTR_X2] && values[SHAPE_ATTR_Y2])
+        {
+          double x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->width);
+          double y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->height);
+          double x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->width);
+          double y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->height);
+          gsk_path_builder_move_to (builder, x1, y1);
+          gsk_path_builder_line_to (builder, x2, y2);
+        }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_POLY_LINE:
     case SHAPE_POLYGON:
       builder = gsk_path_builder_new ();
-      points = (SvgPoints *) values[SHAPE_ATTR_POINTS];
-      if (points->n_values > 0)
+      if (values[SHAPE_ATTR_POINTS])
         {
-          gsk_path_builder_move_to (builder,
-                                    points->values[0], points->values[1]);
-          for (unsigned int i = 2; i < points->n_values; i += 2)
+          SvgPoints *points = (SvgPoints *) values[SHAPE_ATTR_POINTS];
+          if (points->n_values > 0)
             {
-              gsk_path_builder_line_to (builder,
-                                        points->values[i], points->values[i + 1]);
+              gsk_path_builder_move_to (builder,
+                                        points->values[0], points->values[1]);
+              for (unsigned int i = 2; i < points->n_values; i += 2)
+                {
+                  gsk_path_builder_line_to (builder,
+                                            points->values[i], points->values[i + 1]);
+                }
+              if (shape->type == SHAPE_POLYGON)
+                gsk_path_builder_close (builder);
             }
-          if (shape->type == SHAPE_POLYGON)
-            gsk_path_builder_close (builder);
         }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_CIRCLE:
-      cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-      cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
-      r = svg_number_get (values[SHAPE_ATTR_R], normalized_diagonal (viewport));
       builder = gsk_path_builder_new ();
-      gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), r);
+      if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] && values[SHAPE_ATTR_R])
+        {
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
+          double r = svg_number_get (values[SHAPE_ATTR_R], normalized_diagonal (viewport));
+          gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), r);
+        }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_ELLIPSE:
-      cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-      cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
-      rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-      ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
-      return make_ellipse_path (cx, cy, rx, ry);
+      builder = gsk_path_builder_new ();
+      if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] &&
+          values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
+        {
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          path_builder_add_ellipse (builder, cx, cy, rx, ry);
+        }
+      return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_RECT:
-      x = svg_number_get (values[SHAPE_ATTR_X], viewport->width);
-      y = svg_number_get (values[SHAPE_ATTR_Y], viewport->height);
-      width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->width);
-      height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->height);
-      rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-      ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
       builder = gsk_path_builder_new ();
-      if (rx == 0 || ry == 0)
-        gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
-      else
-        gsk_path_builder_add_rounded_rect (builder,
-                                           &(GskRoundedRect) {
-                                             .bounds = GRAPHENE_RECT_INIT (x, y, width, height),
-                                             .corner = {
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                               GRAPHENE_SIZE_INIT (rx, ry),
-                                             }
-                                          });
+      if (values[SHAPE_ATTR_X] && values[SHAPE_ATTR_Y] &&
+          values[SHAPE_ATTR_WIDTH] && values[SHAPE_ATTR_HEIGHT] &&
+          values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
+        {
+          double x = svg_number_get (values[SHAPE_ATTR_X], viewport->width);
+          double y = svg_number_get (values[SHAPE_ATTR_Y], viewport->height);
+          double width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->width);
+          double height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          if (rx == 0 || ry == 0)
+            gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
+          else
+            gsk_path_builder_add_rounded_rect (builder,
+                                               &(GskRoundedRect) {
+                                                 .bounds = GRAPHENE_RECT_INIT (x, y, width, height),
+                                                 .corner = {
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                   GRAPHENE_SIZE_INIT (rx, ry),
+                                                 }
+                                              });
+        }
       return gsk_path_builder_free_to_path (builder);
 
     case SHAPE_PATH:
-      if (svg_path_get (values[SHAPE_ATTR_PATH]))
+      if (values[SHAPE_ATTR_PATH] &&
+          svg_path_get (values[SHAPE_ATTR_PATH]))
         {
           return gsk_path_ref (svg_path_get (values[SHAPE_ATTR_PATH]));
         }
@@ -10527,6 +10541,7 @@ compute_update_order (Shape  *shape,
     {
       GHashTable *waiting;
       unsigned int n_waiting;
+      gboolean has_cycle = FALSE;
       Shape *last = NULL;
 
       waiting = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -10549,7 +10564,7 @@ compute_update_order (Shape  *shape,
           g_hash_table_iter_init (&iter, waiting);
           while (g_hash_table_iter_next (&iter, (gpointer *) &key, NULL))
             {
-              if (can_add (key, waiting))
+              if (can_add (key, waiting) || has_cycle)
                 {
                   if (last)
                     last->next = key;
@@ -10564,7 +10579,7 @@ compute_update_order (Shape  *shape,
           if (g_hash_table_size (waiting) == n_waiting)
             {
               gtk_svg_update_error (svg, "Cyclic dependency detected");
-              break;
+              has_cycle = TRUE;
             }
 
           n_waiting = g_hash_table_size (waiting);
