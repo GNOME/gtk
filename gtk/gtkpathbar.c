@@ -410,6 +410,8 @@ set_button_image_get_info_cb (GObject      *source,
         break;
     };
 
+  g_object_unref (info);
+
 out:
   g_free (data);
 }
