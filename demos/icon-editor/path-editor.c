@@ -561,7 +561,7 @@ edit_path (PathEditor *self)
                           path_paintable_get_width (self->paintable),
                           path_paintable_get_height (self->paintable));
 
-  g_string_append_printf (str, "<path id='path%lu'\n"
+  g_string_append_printf (str, "<path id='path%" G_GSIZE_FORMAT "'\n"
                                "      d='",
                           self->path);
   gsk_path_print (path, str);
@@ -577,7 +577,7 @@ edit_path (PathEditor *self)
   g_string_append (str, "</svg>");
   bytes = g_string_free_to_bytes (str);
 
-  name = g_strdup_printf ("org.gtk.Shaper-path%lu.svg", self->path);
+  name = g_strdup_printf ("org.gtk.Shaper-path%" G_GSIZE_FORMAT ".svg", self->path);
   filename = g_build_filename (g_get_user_cache_dir (), name, NULL);
   file = g_file_new_for_path (filename);
   ostream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &error));
@@ -645,7 +645,7 @@ repopulate_attach_to (PathEditor *self)
       if (path_paintable_get_path_id (self->paintable, i))
         gtk_string_list_take (model, g_strdup (path_paintable_get_path_id (self->paintable, i)));
       else
-        gtk_string_list_take (model, g_strdup_printf ("Path %lu", i));
+        gtk_string_list_take (model, g_strdup_printf ("Path %" G_GSIZE_FORMAT, i));
    }
  gtk_drop_down_set_model (self->attach_to, G_LIST_MODEL (model));
 }
