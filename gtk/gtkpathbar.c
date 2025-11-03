@@ -753,6 +753,7 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
       GList *l;
 
       gtk_path_bar_clear_buttons (info->path_bar);
+      g_list_free (info->path_bar->button_list);
       info->path_bar->button_list = g_list_reverse (info->new_buttons);
       info->path_bar->fake_root = info->fake_root;
 
