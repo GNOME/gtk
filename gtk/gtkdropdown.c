@@ -212,7 +212,6 @@ row_activated (GtkListView *listview,
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
   gtk_popover_popdown (GTK_POPOVER (self->popup));
 
-  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (self->popup_selection), position);
   /* reset the filter so positions are 1-1 */
   filter = gtk_filter_list_model_get_filter (GTK_FILTER_LIST_MODEL (self->filter_model));
   if (GTK_IS_STRING_FILTER (filter))
