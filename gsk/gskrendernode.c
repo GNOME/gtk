@@ -834,3 +834,9 @@ gsk_render_node_is_hdr (const GskRenderNode *node)
 {
   return node->is_hdr;
 }
+
+gboolean
+gsk_render_node_clears_background (const GskRenderNode *node)
+{
+  return node->clears_background;
+}
