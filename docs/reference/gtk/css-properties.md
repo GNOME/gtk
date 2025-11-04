@@ -222,7 +222,7 @@ done with
 |-gtk-icon-palette| Color palette, as explained above | used to recolor symbolic icons |
 |-gtk-icon-shadow| [Shadow](https://www.w3.org/TR/css-backgrounds-3/#typedef-shadow) or `none` | applied to builtin and application-loaded icons |
 |-gtk-icon-filter| [Filter value list](https://www.w3.org/TR/filter-effects-1/#typedef-filter-value-list) or `none` | applied to builtin and application-loaded icons |
-|-gtk-icon-weight | [Font weight](https://www.w3.org/TR/css3-fonts/#font-weight-prop) | applied to builtin and application-loaded, stroked symbolic icons |
+|-gtk-icon-weight | Like [font weight](https://www.w3.org/TR/css3-fonts/#font-weight-prop) | applied to builtin and application-loaded, stroked symbolic icons |
 |transform| [CSS Transforms Level 1](https://www.w3.org/TR/css-transforms-1/#transform-property) | |
 |transform-origin| [CSS Transforms Level 1](https://www.w3.org/TR/css-transforms-1/#transform-origin-property) | CSS allows specifying a z component|
 |min-width| [CSS Box Model Level 3](https://www.w3.org/TR/css3-box/#min-width) | CSS allows percentages |
