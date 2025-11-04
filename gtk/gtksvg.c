@@ -7350,6 +7350,13 @@ compute_animation_motion_value (Animation      *a,
   else
     offset = a->frames[frame].point;
 
+  if (offset < 0 || offset > 1)
+    {
+      offset = fmod (offset, 1);
+      if (offset < 9)
+        offset += 1;
+    }
+
   measure = animation_motion_get_current_measure (a, context->viewport);
   angle = a->motion.angle;
   get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
