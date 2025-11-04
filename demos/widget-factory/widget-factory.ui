@@ -526,6 +526,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="secondary-icon-paintable">
                                   <object class="GtkSvg">
                                     <property name="resource">/org/gtk/WidgetFactory4/icons/view-refresh.gpa</property>
+                                    <property name="playing">1</property>
                                   </object>
                                 </property>
                                 <property name="secondary-icon-tooltip-text">Change mode</property>
@@ -1780,6 +1781,7 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="paintable">
                                                   <object class="GtkSvg">
                                                     <property name="resource">/org/gtk/WidgetFactory4/icons/checked.gpa</property>
+                                                    <property name="playing">1</property>
                                                   </object>
                                                 </property>
                                                 <property name="halign">2</property>

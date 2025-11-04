@@ -71,7 +71,7 @@ gtk_css_value_enum_print (const GtkCssValue *value,
   g_string_append (string, value->name);
 }
 
-/* GtkBorderStyle */
+/* {{{ GtkBorderStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_BORDER_STYLE = {
   "GtkCssBorderStyleValue",
@@ -130,7 +130,8 @@ _gtk_css_border_style_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssBlendMode */
+/* }}} */
+/* {{{ GtkCssBlendMode */
 
 static const GtkCssValueClass GTK_CSS_VALUE_BLEND_MODE = {
   "GtkCssBlendModeValue",
@@ -195,7 +196,8 @@ _gtk_css_blend_mode_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontSize */
+/* }}} */
+/* {{{ GtkCssFontSize */
 
 static double
 get_dpi (GtkCssStyle *style)
@@ -342,7 +344,8 @@ _gtk_css_font_size_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* PangoStyle */
+/* }}} */
+/* {{{ PangoStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_STYLE = {
   "GtkCssFontStyleValue",
@@ -394,7 +397,8 @@ _gtk_css_font_style_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* PangoWeight */
+/* }}} */
+/* {{{ PangoWeight */
 
 #define BOLDER -1
 #define LIGHTER -2
@@ -491,7 +495,8 @@ gtk_css_font_weight_value_get (const GtkCssValue *value)
 #undef BOLDER
 #undef LIGHTER
 
-/* PangoStretch */
+/* }}} */
+/* {{{ PangoStretch */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_STRETCH = {
   "GtkCssFontStretchValue",
@@ -549,7 +554,8 @@ _gtk_css_font_stretch_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkTextDecorationStyle */
+/* }}} */
+/* {{{ GtkTextDecorationStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_STYLE = {
   "GtkCssTextDecorationStyleValue",
@@ -601,7 +607,8 @@ _gtk_css_text_decoration_style_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssArea */
+/* }}} */
+/* {{{ GtkCssArea */
 
 static const GtkCssValueClass GTK_CSS_VALUE_AREA = {
   "GtkCssAreaValue",
@@ -659,7 +666,8 @@ _gtk_css_area_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssDirection */
+/* }}} */
+/* {{{ GtkCssDirection */
 
 static const GtkCssValueClass GTK_CSS_VALUE_DIRECTION = {
   "GtkCssDirectionValue",
@@ -721,7 +729,8 @@ _gtk_css_direction_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssPlayState */
+/* }}} */
+/* {{{ GtkCssPlayState */
 
 static const GtkCssValueClass GTK_CSS_VALUE_PLAY_STATE = {
   "GtkCssPlayStateValue",
@@ -778,7 +787,8 @@ _gtk_css_play_state_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFillMode */
+/* }}} */
+/* {{{ GtkCssFillMode */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FILL_MODE = {
   "GtkCssFillModeValue",
@@ -837,7 +847,8 @@ _gtk_css_fill_mode_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssIconStyle */
+/* }}} */
+/* {{{ GtkCssIconStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_ICON_STYLE = {
   "GtkCssIconStyleValue",
@@ -895,7 +906,8 @@ _gtk_css_icon_style_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontKerning */
+/* }}} */
+/* {{{ GtkCssFontKerning */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_KERNING = {
   "GtkCssFontKerningValue",
@@ -953,7 +965,8 @@ _gtk_css_font_kerning_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontVariantPos */
+/* }}} */
+/* {{{ GtkCssFontVariantPos */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_POSITION = {
   "GtkCssFontVariationPositionValue",
@@ -1011,7 +1024,8 @@ _gtk_css_font_variant_position_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontVariantCaps */
+/* }}} */
+/* {{{ GtkCssFontVariantCaps */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_CAPS = {
   "GtkCssFontVariantCapsValue",
@@ -1073,7 +1087,8 @@ _gtk_css_font_variant_caps_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontVariantAlternate */
+/* }}} */
+/* {{{ GtkCssFontVariantAlternate */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_ALTERNATE = {
   "GtkCssFontVariantAlternateValue",
@@ -1166,7 +1181,8 @@ gtk_css_value_flags_print (const FlagsValue  *values,
     }
 }
 
-/* GtkTextDecorationLine */
+/* }}} */
+/* {{{ GtkTextDecorationLine */
 
 static FlagsValue text_decoration_line_values[] = {
   { GTK_CSS_TEXT_DECORATION_LINE_NONE, "none" },
@@ -1260,7 +1276,8 @@ _gtk_css_text_decoration_line_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontVariantLigature */
+/* }}} */
+/* {{{ GtkCssFontVariantLigature */
 
 static FlagsValue font_variant_ligature_values[] = {
   { GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL, "normal" },
@@ -1370,7 +1387,8 @@ _gtk_css_font_variant_ligature_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontVariantNumeric */
+/* }}} */
+/* {{{ GtkCssFontVariantNumeric */
 
 static FlagsValue font_variant_numeric_values[] = {
   { GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL, "normal" },
@@ -1475,7 +1493,8 @@ _gtk_css_font_variant_numeric_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssFontVariantEastAsian */
+/* }}} */
+/* {{{ GtkCssFontVariantEastAsian */
 
 static FlagsValue font_variant_east_asian_values[] = {
   { GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL, "normal" },
@@ -1587,7 +1606,8 @@ _gtk_css_font_variant_east_asian_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkTextTransform */
+/* }}} */
+/* {{{ GtkTextTransform */
 
 static const GtkCssValueClass GTK_CSS_VALUE_TEXT_TRANSFORM = {
   "GtkCssTextTransformValue",
@@ -1639,3 +1659,6 @@ _gtk_css_text_transform_value_get (const GtkCssValue *value)
 
   return value->value;
 }
+
+/* }}} */
+/* vim:set foldmethod=marker: */
