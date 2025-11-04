@@ -133,7 +133,7 @@ gtk_css_image_paintable_get_dynamic_image (GtkCssImage *image,
 
 static void
 gtk_css_image_paintable_print (GtkCssImage *image,
-                             GString     *string)
+                               GString     *string)
 {
   g_string_append (string, "none /* FIXME */");
 }
