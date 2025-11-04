@@ -5421,11 +5421,16 @@ invoke_exported_closures (GdkWindow *window)
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GList *l;
 
+  if (gdk_window_is_destroyed (window))
+    g_warning ("gdk_wayland_window_export_handle() callback called on destroyed window. "
+               "Make sure you called gdk_wayland_window_unexport_handle().");
+
   for (l = impl->exported.closures; l; l = l->next)
     {
       ExportedClosure *closure = l->data;
 
-      closure->callback (window, impl->exported.handle, closure->user_data);
+      if (! gdk_window_is_destroyed (window))
+        closure->callback (window, impl->exported.handle, closure->user_data);
 
       if (closure->destroy_func)
         closure->destroy_func (closure->user_data);
