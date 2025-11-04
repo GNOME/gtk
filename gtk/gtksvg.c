@@ -3014,8 +3014,10 @@ svg_paint_resolve (SvgValue      *value,
     {
       if (paint->symbolic < n_colors)
         return svg_paint_new_rgba (&colors[paint->symbolic]);
-      else
+      else if (GTK_SYMBOLIC_COLOR_FOREGROUND < n_colors)
         return svg_paint_new_rgba (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
+      else
+        return svg_paint_new_black ();
     }
   else
     {
