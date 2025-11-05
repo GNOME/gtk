@@ -1,6 +1,6 @@
 /*
  * GTK - The GIMP Toolkit
- * Copyright (C) 2024 Sergey Bugaev
+ * Copyright (C) 2024-2025 Sergey Bugaev
  * All rights reserved.
  *
  * This Library is free software; you can redistribute it and/or
@@ -180,6 +180,78 @@ gtk_show_uri_win32_finish (GtkWindow    *parent,
                            GError      **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, parent), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+open_containing_folder_win32_in_thread (GTask        *task,
+                                        gpointer      source_object,
+                                        gpointer      task_data,
+                                        GCancellable *cancellable)
+{
+  HRESULT hr;
+  PIDLIST_ABSOLUTE pidl;
+  char *error_message;
+
+  hr = CoInitializeEx (NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+  if (!SUCCEEDED (hr))
+    {
+      error_message = g_win32_error_message (hr);
+      g_task_return_new_error (task, G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to initialize COM: %s", error_message);
+      g_free (error_message);
+      return;
+    }
+
+  pidl = ILCreateFromPathW ((const gunichar2 *) task_data);
+  /* Note: this API doesn't use an A/W version split. */
+  hr = SHOpenFolderAndSelectItems (pidl, 0, NULL, 0);
+  ILFree (pidl);
+
+  if (SUCCEEDED (hr))
+    g_task_return_boolean (task, TRUE);
+  else
+    {
+      error_message = g_win32_error_message (hr);
+      g_task_return_new_error (task, G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "SHOpenFolderAndSelectItems failed: %s", error_message);
+      g_free (error_message);
+    }
+
+  CoUninitialize ();
+}
+
+void
+gtk_open_containing_folder_win32 (const char         *path,
+                                  GCancellable       *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer            user_data)
+{
+  GTask *task;
+  gunichar2 *path_utf16;
+  GError *error = NULL;
+
+  g_return_if_fail (path != NULL);
+
+  task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gtk_open_containing_folder_win32);
+
+  /* Note: path is UTF-8 encoded here. */
+  path_utf16 = g_utf8_to_utf16 (path, -1, NULL, NULL, &error);
+
+  g_task_set_task_data (task, path_utf16, g_free);
+  g_task_run_in_thread (task, open_containing_folder_win32_in_thread);
+  g_object_unref (task);
+}
+
+gboolean
+gtk_open_containing_folder_win32_finish (GAsyncResult *result,
+                                         GError      **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
