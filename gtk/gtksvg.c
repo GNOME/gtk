@@ -1755,7 +1755,7 @@ static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
 };
 
 static SvgEnum spread_method_values[] = {
-  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_PAD , "pad" },
+  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_PAD, "pad" },
   { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_REFLECT, "reflect" },
   { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_REPEAT, "repeat" },
 };
@@ -11552,24 +11552,24 @@ paint_linear_gradient (Shape                 *gradient,
                        PaintContext          *context)
 {
   graphene_point_t start, end;
-  GskGradientStop *stops;
   double offset;
   GskTransform *transform, *gradient_transform;
-  GskRepeat repeat;
+  GskGradient *g;
 
-  stops = g_newa (GskGradientStop, gradient->color_stops->len);
+  g = gsk_gradient_new ();
   offset = 0;
   for (unsigned int i = 0; i < gradient->color_stops->len; i++)
     {
       ColorStop *cs = g_ptr_array_index (gradient->color_stops, i);
       SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+      GdkColor color;
 
       g_assert (stop_color->kind == PAINT_COLOR);
-      stops[i].offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
-      gdk_color_init_from_rgba (&stops[i].color, &stop_color->color);
-      stops[i].color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
-      stops[i].transition_hint = 0.5;
-      offset = stops[i].offset;
+      offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
+      gdk_color_init_from_rgba (&color, &stop_color->color);
+      color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      gsk_gradient_add_stop (g, offset, 0.5, &color);
+      gdk_color_finish (&color);
     }
 
   transform = NULL;
@@ -11600,14 +11600,11 @@ paint_linear_gradient (Shape                 *gradient,
   transform_gradient_line (transform, &start, &end, &start, &end);
   gsk_transform_unref (transform);
 
-  repeat = svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]);
+  gsk_gradient_set_repeat (g, svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]));
 
-  gtk_snapshot_add_linear_gradient (context->snapshot, bounds,
-                                    &start, &end,
-                                    repeat,
-                                    GDK_COLOR_STATE_SRGB,
-                                    GSK_HUE_INTERPOLATION_SHORTER,
-                                    stops, gradient->color_stops->len);
+  gtk_snapshot_add_linear_gradient (context->snapshot, bounds, &start, &end, g);
+
+  gsk_gradient_free (g);
 }
 
 static void
@@ -11618,11 +11615,10 @@ paint_radial_gradient (Shape                 *gradient,
   graphene_point_t start_center;
   graphene_point_t end_center;
   double start_radius, end_radius;
-  GskGradientStop *stops;
   double offset;
   GskTransform *gradient_transform;
   graphene_rect_t gradient_bounds;
-  GskRepeat repeat;
+  GskGradient *g;
 
   graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->width),
                                     svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->height));
@@ -11632,19 +11628,20 @@ paint_radial_gradient (Shape                 *gradient,
                                     svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->height));
   end_radius = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
 
-  stops = g_newa (GskGradientStop, gradient->color_stops->len);
+  g = gsk_gradient_new ();
   offset = 0;
   for (unsigned int i = 0; i < gradient->color_stops->len; i++)
     {
       ColorStop *cs = g_ptr_array_index (gradient->color_stops, i);
       SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+      GdkColor color;
 
       g_assert (stop_color->kind == PAINT_COLOR);
-      stops[i].offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
-      gdk_color_init_from_rgba (&stops[i].color, &stop_color->color);
-      stops[i].color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
-      stops[i].transition_hint = 0.5;
-      offset = stops[i].offset;
+      offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
+      gdk_color_init_from_rgba (&color, &stop_color->color);
+      color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      gsk_gradient_add_stop (g, offset, 0.5, &color);
+      gdk_color_finish (&color);
     }
 
   gtk_snapshot_save (context->snapshot);
@@ -11665,17 +11662,15 @@ paint_radial_gradient (Shape                 *gradient,
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
 
-  repeat = svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]);
+  gsk_gradient_set_repeat (g, svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]));
 
   gtk_snapshot_add_radial_gradient (context->snapshot,
                                     &gradient_bounds,
                                     &start_center, start_radius,
                                     &end_center, end_radius,
                                     1,
-                                    repeat,
-                                    GDK_COLOR_STATE_SRGB,
-                                    GSK_HUE_INTERPOLATION_SHORTER,
-                                    stops, gradient->color_stops->len);
+                                    g);
+  gsk_gradient_free (g);
 
   gtk_snapshot_restore (context->snapshot);
 }

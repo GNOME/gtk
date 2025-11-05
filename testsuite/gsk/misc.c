@@ -235,6 +235,36 @@ test_vulkan_renderer (void)
 #endif
 }
 
+static void
+test_gradient_opaque (void)
+{
+  GskGradient *gradient;
+
+  gradient = gsk_gradient_new ();
+
+  g_assert_false (gsk_gradient_is_opaque (gradient));
+
+  gsk_gradient_add_stop (gradient, 0, 0.5, &GDK_COLOR_SRGB (0,0,0,1));
+
+  g_assert_true (gsk_gradient_is_opaque (gradient));
+  g_assert_nonnull (gsk_gradient_check_single_color (gradient));
+
+  gsk_gradient_add_stop (gradient, 0.5, 0.5, &GDK_COLOR_SRGB (1,0,1,1));
+
+  g_assert_true (gsk_gradient_is_opaque (gradient));
+  g_assert_null (gsk_gradient_check_single_color (gradient));
+
+  gsk_gradient_set_repeat (gradient, GSK_REPEAT_REPEAT);
+
+  g_assert_true (gsk_gradient_is_opaque (gradient));
+
+  gsk_gradient_set_repeat (gradient, GSK_REPEAT_NONE);
+
+  g_assert_false (gsk_gradient_is_opaque (gradient));
+
+  gsk_gradient_free (gradient);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -249,6 +279,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/renderer/cairo", test_cairo_renderer);
   g_test_add_func ("/renderer/gl", test_gl_renderer);
   g_test_add_func ("/renderer/vulkan", test_vulkan_renderer);
+  g_test_add_func ("/gradient/opaque", test_gradient_opaque);
 
   return g_test_run ();
 }

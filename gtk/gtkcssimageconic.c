@@ -41,6 +41,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
   GskGradientStop *stops;
   int i, last;
   double offset, hint;
+  GskGradient *gradient;
 
   stops = g_newa (GskGradientStop, self->n_stops);
 
@@ -100,8 +101,15 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
       last = i;
     }
 
+  gradient = gsk_gradient_new ();
+  for (i = 0; i < self->n_stops; i++)
+    gsk_gradient_add_stop (gradient, stops[i].offset, stops[i].transition_hint, &stops[i].color);
+
   if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
+
+  gsk_gradient_set_interpolation (gradient, gtk_css_color_space_get_color_state (self->color_space));
+  gsk_gradient_set_hue_interpolation (gradient, gtk_css_hue_interpolation_to_hue_interpolation (self->hue_interp));
 
   gtk_snapshot_add_conic_gradient (
           snapshot,
@@ -109,12 +117,12 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),
                                 _gtk_css_position_value_get_y (self->center, height)),
           gtk_css_number_value_get (self->rotation, 360),
-          gtk_css_color_space_get_color_state (self->color_space),
-          gtk_css_hue_interpolation_to_hue_interpolation (self->hue_interp),
-          stops, self->n_stops);
+          gradient);
 
   for (i = 0; i < self->n_stops; i++)
     gdk_color_finish (&stops[i].color);
+
+  gsk_gradient_free (gradient);
 }
 
 static guint

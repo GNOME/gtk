@@ -1212,10 +1212,11 @@ populate_render_node_properties (GListStore    *store,
       {
         const graphene_point_t *start = gsk_linear_gradient_node_get_start (node);
         const graphene_point_t *end = gsk_linear_gradient_node_get_end (node);
-        const gsize n_stops = gsk_gradient_node_get_n_stops (node);
-        const GskGradientStop *stops = gsk_gradient_node_get_stops (node);
-        GdkColorState *interpolation = gsk_gradient_node_get_interpolation (node);
-        GskHueInterpolation hue_interpolation = gsk_gradient_node_get_hue_interpolation (node);
+        const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
+        const gsize n_stops = gsk_gradient_get_n_stops (gradient);
+        const GskGradientStop *stops = gsk_gradient_get_stops (gradient);
+        GdkColorState *interpolation = gsk_gradient_get_interpolation (gradient);
+        GskHueInterpolation hue_interpolation = gsk_gradient_get_hue_interpolation (gradient);
         int i;
         GString *s;
         GdkTexture *texture;
@@ -1250,10 +1251,11 @@ populate_render_node_properties (GListStore    *store,
         const float end = gsk_radial_gradient_node_get_end (node);
         const float hradius = gsk_radial_gradient_node_get_hradius (node);
         const float vradius = gsk_radial_gradient_node_get_vradius (node);
-        const gsize n_stops = gsk_gradient_node_get_n_stops (node);
-        const GskGradientStop *stops = gsk_gradient_node_get_stops (node);
-        GdkColorState *interpolation = gsk_gradient_node_get_interpolation (node);
-        GskHueInterpolation hue_interpolation = gsk_gradient_node_get_hue_interpolation (node);
+        const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
+        const gsize n_stops = gsk_gradient_get_n_stops (gradient);
+        const GskGradientStop *stops = gsk_gradient_get_stops (gradient);
+        GdkColorState *interpolation = gsk_gradient_get_interpolation (gradient);
+        GskHueInterpolation hue_interpolation = gsk_gradient_get_hue_interpolation (gradient);
         int i;
         GString *s;
         GdkTexture *texture;
@@ -1286,10 +1288,11 @@ populate_render_node_properties (GListStore    *store,
       {
         const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
         const float rotation = gsk_conic_gradient_node_get_rotation (node);
-        const gsize n_stops = gsk_gradient_node_get_n_stops (node);
-        const GskGradientStop *stops = gsk_gradient_node_get_stops (node);
-        GdkColorState *interpolation = gsk_gradient_node_get_interpolation (node);
-        GskHueInterpolation hue_interpolation = gsk_gradient_node_get_hue_interpolation (node);
+        const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
+        const gsize n_stops = gsk_gradient_get_n_stops (gradient);
+        const GskGradientStop *stops = gsk_gradient_get_stops (gradient);
+        GdkColorState *interpolation = gsk_gradient_get_interpolation (gradient);
+        GskHueInterpolation hue_interpolation = gsk_gradient_get_hue_interpolation (gradient);
         gsize i;
         GString *s;
         GdkTexture *texture;
