@@ -2321,6 +2321,7 @@ parse_color_state_rule (GtkCssParser *parser,
                             &start, &end,
                             "Not a valid cicp tuple: %s", error->message);
       g_error_free (error);
+      g_free (name);
       return TRUE;
     }
 

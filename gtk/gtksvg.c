@@ -3014,8 +3014,10 @@ svg_paint_resolve (SvgValue      *value,
     {
       if (paint->symbolic < n_colors)
         return svg_paint_new_rgba (&colors[paint->symbolic]);
-      else
+      else if (GTK_SYMBOLIC_COLOR_FOREGROUND < n_colors)
         return svg_paint_new_rgba (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
+      else
+        return svg_paint_new_black ();
     }
   else
     {
@@ -7349,6 +7351,13 @@ compute_animation_motion_value (Animation      *a,
     offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
   else
     offset = a->frames[frame].point;
+
+  if (offset < 0 || offset > 1)
+    {
+      offset = fmod (offset, 1);
+      if (offset < 9)
+        offset += 1;
+    }
 
   measure = animation_motion_get_current_measure (a, context->viewport);
   angle = a->motion.angle;
