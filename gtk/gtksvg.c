@@ -79,8 +79,7 @@
  * In `<defs>`, only `<clipPath>`, `<mask>`, gradients and shapes are
  * supported, not `<filter>`, `<pattern>` or other things.
  *
- * Gradient templating is not implemented, and radial gradients with
- * `fx,fy != cx,cy` are not supported.
+ * Gradient templating is not implemented.
  *
  * The support for filters is limited to filter functions minus
  * `drop-shadow()` plus a custom `alpha-level()` function, which
@@ -11632,9 +11631,6 @@ paint_radial_gradient (Shape                 *gradient,
   graphene_point_init (&end_center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->width),
                                     svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->height));
   end_radius = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
-
-  if (!graphene_point_equal (&start_center, &end_center))
-    gtk_svg_rendering_error (context->svg, "non-concentric radial gradients are not implemented");
 
   stops = g_newa (GskGradientStop, gradient->color_stops->len);
   offset = 0;
