@@ -355,7 +355,6 @@ gtk_file_launcher_set_writable (GtkFileLauncher *self,
 /* {{{ Async implementation */
 
 #ifndef GDK_WINDOWING_ANDROID
-#ifndef G_OS_WIN32
 static void
 open_done (GObject      *source,
            GAsyncResult *result,
@@ -364,15 +363,19 @@ open_done (GObject      *source,
   GTask *task = G_TASK (data);
   GError *error = NULL;
 
+#ifndef G_OS_WIN32
   if (!gtk_openuri_portal_open_finish (result, &error))
+#else
+  if (!gtk_open_containing_folder_win32_finish (result, &error))
+#endif
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
 
   g_object_unref (task);
 }
-#endif
 
+#ifndef G_OS_WIN32
 static void
 show_item_done (GObject      *source,
                 GAsyncResult *result,
@@ -440,6 +443,7 @@ show_item (GtkWindow    *parent,
                           show_item_done,
                           task);
 }
+#endif /* G_OS_WIN32 */
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
@@ -688,13 +692,15 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       return;
     }
 
-#ifdef GDK_WINDOWING_ANDROID
+#if defined (G_OS_WIN32)
+  const char *path = g_file_peek_path (self->file);
+  gtk_open_containing_folder_win32 (path, cancellable, open_done, task);
+#elif defined (GDK_WINDOWING_ANDROID)
   g_task_return_new_error (task,
                            GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                            "Operation not supported");
   g_object_unref (task);
 #else
-#ifndef G_OS_WIN32
   if (gtk_openuri_portal_is_available ())
     {
       GtkOpenuriFlags flags = 0;
@@ -702,7 +708,6 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       gtk_openuri_portal_open_async (self->file, TRUE, flags, parent, cancellable, open_done, task);
     }
   else
-#endif // not G_OS_WIN32
     {
       char *uri = g_file_get_uri (self->file);
 
@@ -710,7 +715,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
 
       g_free (uri);
     }
-#endif // not GDK_WINDOWING_ANDROID
+#endif
 }
 
 /**
