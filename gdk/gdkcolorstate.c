@@ -653,6 +653,8 @@ GdkDefaultColorState gdk_default_color_states[] = {
   },
 };
 
+G_STATIC_ASSERT (G_N_ELEMENTS (gdk_default_color_states) == GDK_COLOR_STATE_N_IDS);
+
 static gboolean
 gdk_builtin_color_state_equal (GdkColorState *self,
                                GdkColorState *other)
