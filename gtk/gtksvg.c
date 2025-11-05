@@ -1746,13 +1746,6 @@ svg_visibility_parse (const char *string)
   return NULL;
 }
 
-typedef enum
-{
-  SPREAD_METHOD_PAD,
-  SPREAD_METHOD_REFLECT,
-  SPREAD_METHOD_REPEAT,
-} SpreadMethod;
-
 static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
   "SvgSpreadMethod",
   svg_enum_free,
@@ -1763,13 +1756,13 @@ static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
 };
 
 static SvgEnum spread_method_values[] = {
-  { { &SVG_SPREAD_METHOD_CLASS, 1 }, SPREAD_METHOD_PAD, "pad" },
-  { { &SVG_SPREAD_METHOD_CLASS, 1 }, SPREAD_METHOD_REFLECT, "reflect" },
-  { { &SVG_SPREAD_METHOD_CLASS, 1 }, SPREAD_METHOD_REPEAT, "repeat" },
+  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_PAD , "pad" },
+  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_REFLECT, "reflect" },
+  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_REPEAT, "repeat" },
 };
 
 static SvgValue *
-svg_spread_method_new (SpreadMethod value)
+svg_spread_method_new (GskRepeat value)
 {
   return svg_value_ref ((SvgValue *) &visibility_values[value]);
 }
@@ -5044,7 +5037,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_points_new_none ();
-  shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (SPREAD_METHOD_PAD);
+  shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
   shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
@@ -11608,12 +11601,7 @@ paint_linear_gradient (Shape                 *gradient,
   transform_gradient_line (transform, &start, &end, &start, &end);
   gsk_transform_unref (transform);
 
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REPEAT)
-    repeat = GSK_REPEAT_REPEAT;
-  else if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REFLECT)
-    repeat = GSK_REPEAT_REFLECT;
-  else
-    repeat = GSK_REPEAT_PAD;
+  repeat = svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]);
 
   gtk_snapshot_add_linear_gradient (context->snapshot, bounds,
                                     &start, &end,
@@ -11681,12 +11669,7 @@ paint_radial_gradient (Shape                 *gradient,
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
 
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REPEAT)
-    repeat = GSK_REPEAT_REPEAT;
-  else if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REFLECT)
-    repeat = GSK_REPEAT_REFLECT;
-  else
-    repeat = GSK_REPEAT_PAD;
+  repeat = svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]);
 
   gtk_snapshot_add_radial_gradient (context->snapshot,
                                     &gradient_bounds,
