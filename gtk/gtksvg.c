@@ -170,7 +170,9 @@
 /* Max. nesting level of paint calls we allow */
 #define MAX_DEPTH 256
 
+#ifndef _MSC_VER
 #define DEBUG
+#endif /* _MSC_VER */
 
 typedef enum
 {
@@ -8518,6 +8520,7 @@ parse_base_animation_attrs (Animation            *a,
   const char *restart_attr = NULL;
   const char *attr_name_attr = NULL;
   const char *ignored = NULL;
+  ShapeAttr attr;
 
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
@@ -8706,6 +8709,7 @@ parse_base_animation_attrs (Animation            *a,
         a->restart = (AnimationRestart) value;
     }
 
+  attr = a->attr;
   if (a->type == ANIMATION_TYPE_MOTION)
     {
       if (attr_name_attr)
@@ -8727,10 +8731,14 @@ parse_base_animation_attrs (Animation            *a,
       gtk_svg_missing_attribute (data->svg, context, "attributeName", NULL);
       return FALSE;
     }
-  else if (!shape_attr_lookup (attr_name_attr, &a->attr, data->current_shape->type))
+  else if (!shape_attr_lookup (attr_name_attr, &attr, data->current_shape->type))
     {
       gtk_svg_missing_attribute (data->svg, context, "attributeName", "can't animate '%s'", attr_name_attr);
       return FALSE;
+    }
+  else
+    {
+      a->attr = attr;
     }
 
   return TRUE;
