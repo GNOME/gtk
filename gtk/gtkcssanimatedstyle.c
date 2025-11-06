@@ -77,6 +77,7 @@ DEFINE_VALUES (BORDER, Border, border)
 DEFINE_VALUES (ICON, Icon, icon)
 DEFINE_VALUES (OUTLINE, Outline, outline)
 DEFINE_VALUES (FONT, Font, font)
+DEFINE_VALUES (TEXT_DECORATION, TextDecoration, text_decoration)
 DEFINE_VALUES (FONT_VARIANT, FontVariant, font_variant)
 DEFINE_VALUES (ANIMATION, Animation, animation)
 DEFINE_VALUES (TRANSITION, Transition, transition)
@@ -192,6 +193,7 @@ DEFINE_UNSHARE (GtkCssBorderValues, border)
 DEFINE_UNSHARE (GtkCssIconValues, icon)
 DEFINE_UNSHARE (GtkCssOutlineValues, outline)
 DEFINE_UNSHARE (GtkCssFontValues, font)
+DEFINE_UNSHARE (GtkCssTextDecorationValues, text_decoration)
 DEFINE_UNSHARE (GtkCssFontVariantValues, font_variant)
 DEFINE_UNSHARE (GtkCssAnimationValues, animation)
 DEFINE_UNSHARE (GtkCssTransitionValues, transition)
@@ -264,16 +266,16 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       gtk_css_take_value (&style->font->line_height, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
-      unshare_font_variant (animated);
-      gtk_css_take_value (&style->font_variant->text_decoration_line, value);
+      unshare_text_decoration (animated);
+      gtk_css_take_value (&style->text_decoration->text_decoration_line, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
-      unshare_font_variant (animated);
-      gtk_css_take_value (&style->font_variant->text_decoration_color, value);
+      unshare_text_decoration (animated);
+      gtk_css_take_value (&style->text_decoration->text_decoration_color, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
-      unshare_font_variant (animated);
-      gtk_css_take_value (&style->font_variant->text_decoration_style, value);
+      unshare_text_decoration (animated);
+      gtk_css_take_value (&style->text_decoration->text_decoration_style, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_TRANSFORM:
       unshare_font_variant (animated);
@@ -656,6 +658,7 @@ gtk_css_animated_style_recompute (GtkCssAnimatedStyle *style)
   gtk_css_icon_values_recompute (style, &context);
   gtk_css_outline_values_recompute (style, &context);
   gtk_css_font_values_recompute (style, &context);
+  gtk_css_text_decoration_values_recompute (style, &context);
   gtk_css_font_variant_values_recompute (style, &context);
   gtk_css_animation_values_recompute (style, &context);
   gtk_css_transition_values_recompute (style, &context);
@@ -1050,6 +1053,7 @@ gtk_css_animated_style_new (GtkCssStyle      *base_style,
   style->icon = (GtkCssIconValues *)gtk_css_values_ref ((GtkCssValues *)base_style->icon);
   style->outline = (GtkCssOutlineValues *)gtk_css_values_ref ((GtkCssValues *)base_style->outline);
   style->font = (GtkCssFontValues *)gtk_css_values_ref ((GtkCssValues *)base_style->font);
+  style->text_decoration = (GtkCssTextDecorationValues *)gtk_css_values_ref ((GtkCssValues *)base_style->text_decoration);
   style->font_variant = (GtkCssFontVariantValues *)gtk_css_values_ref ((GtkCssValues *)base_style->font_variant);
   style->animation = (GtkCssAnimationValues *)gtk_css_values_ref ((GtkCssValues *)base_style->animation);
   style->transition = (GtkCssTransitionValues *)gtk_css_values_ref ((GtkCssValues *)base_style->transition);
@@ -1124,6 +1128,7 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   style->icon = (GtkCssIconValues *)gtk_css_values_ref ((GtkCssValues *)base_style->icon);
   style->outline = (GtkCssOutlineValues *)gtk_css_values_ref ((GtkCssValues *)base_style->outline);
   style->font = (GtkCssFontValues *)gtk_css_values_ref ((GtkCssValues *)base_style->font);
+  style->text_decoration = (GtkCssTextDecorationValues *)gtk_css_values_ref ((GtkCssValues *)base_style->text_decoration);
   style->font_variant = (GtkCssFontVariantValues *)gtk_css_values_ref ((GtkCssValues *)base_style->font_variant);
   style->animation = (GtkCssAnimationValues *)gtk_css_values_ref ((GtkCssValues *)base_style->animation);
   style->transition = (GtkCssTransitionValues *)gtk_css_values_ref ((GtkCssValues *)base_style->transition);

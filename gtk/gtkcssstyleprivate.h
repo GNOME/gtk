@@ -49,6 +49,8 @@ typedef enum {
   GTK_CSS_OUTLINE_INITIAL_VALUES,
   GTK_CSS_FONT_VALUES,
   GTK_CSS_FONT_INITIAL_VALUES,
+  GTK_CSS_TEXT_DECORATION_VALUES,
+  GTK_CSS_TEXT_DECORATION_INITIAL_VALUES,
   GTK_CSS_FONT_VARIANT_VALUES,
   GTK_CSS_FONT_VARIANT_INITIAL_VALUES,
   GTK_CSS_ANIMATION_VALUES,
@@ -69,6 +71,7 @@ typedef struct _GtkCssBorderValues GtkCssBorderValues;
 typedef struct _GtkCssIconValues GtkCssIconValues;
 typedef struct _GtkCssOutlineValues GtkCssOutlineValues;
 typedef struct _GtkCssFontValues GtkCssFontValues;
+typedef struct _GtkCssTextDecorationValues GtkCssTextDecorationValues;
 typedef struct _GtkCssFontVariantValues GtkCssFontVariantValues;
 typedef struct _GtkCssAnimationValues GtkCssAnimationValues;
 typedef struct _GtkCssTransitionValues GtkCssTransitionValues;
@@ -164,12 +167,17 @@ struct _GtkCssFontValues {
   GtkCssValue *line_height;
 };
 
-struct _GtkCssFontVariantValues {
+struct _GtkCssTextDecorationValues {
   GtkCssValues base;
 
   GtkCssValue *text_decoration_line;
   GtkCssValue *text_decoration_color;
   GtkCssValue *text_decoration_style;
+};
+
+struct _GtkCssFontVariantValues {
+  GtkCssValues base;
+
   GtkCssValue *text_transform;
   GtkCssValue *font_kerning;
   GtkCssValue *font_variant_ligatures;
@@ -259,23 +267,24 @@ struct _GtkCssStyle
 {
   GObject parent;
 
-  GtkCssCoreValues        *core;
-  GtkCssBackgroundValues  *background;
-  GtkCssBorderValues      *border;
-  GtkCssIconValues        *icon;
-  GtkCssOutlineValues     *outline;
-  GtkCssFontValues        *font;
-  GtkCssFontVariantValues *font_variant;
-  GtkCssAnimationValues   *animation;
-  GtkCssTransitionValues  *transition;
-  GtkCssSizeValues        *size;
-  GtkCssOtherValues       *other;
-  GtkCssUsedValues        *used;
+  GtkCssCoreValues           *core;
+  GtkCssBackgroundValues     *background;
+  GtkCssBorderValues         *border;
+  GtkCssIconValues           *icon;
+  GtkCssOutlineValues        *outline;
+  GtkCssFontValues           *font;
+  GtkCssTextDecorationValues *text_decoration;
+  GtkCssFontVariantValues    *font_variant;
+  GtkCssAnimationValues      *animation;
+  GtkCssTransitionValues     *transition;
+  GtkCssSizeValues           *size;
+  GtkCssOtherValues          *other;
+  GtkCssUsedValues           *used;
 
-  GtkCssVariableSet       *variables;
+  GtkCssVariableSet          *variables;
 
-  GtkCssValue             *variable_values;
-  int                      n_variable_values;
+  GtkCssValue                *variable_values;
+  int                         n_variable_values;
 };
 
 struct _GtkCssStyleClass
@@ -362,6 +371,10 @@ void gtk_css_outline_values_compute_changes_and_affects (GtkCssStyle *style1,
                                                       GtkBitmask    **changes,
                                                       GtkCssAffects *affects);
 void gtk_css_font_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_text_decoration_values_compute_changes_and_affects (GtkCssStyle *style1,
                                                       GtkCssStyle *style2,
                                                       GtkBitmask    **changes,
                                                       GtkCssAffects *affects);

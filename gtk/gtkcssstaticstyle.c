@@ -126,6 +126,7 @@ DEFINE_VALUES (BORDER, Border, border)
 DEFINE_VALUES (ICON, Icon, icon)
 DEFINE_VALUES (OUTLINE, Outline, outline)
 DEFINE_VALUES (FONT, Font, font)
+DEFINE_VALUES (TEXT_DECORATION, TextDecoration, text_decoration)
 DEFINE_VALUES (FONT_VARIANT, FontVariant, font_variant)
 DEFINE_VALUES (ANIMATION, Animation, animation)
 DEFINE_VALUES (TRANSITION, Transition, transition)
@@ -161,6 +162,7 @@ verify_style_groups (void)
   VERIFY_MASK (icon);
   VERIFY_MASK (outline);
   VERIFY_MASK (font);
+  VERIFY_MASK (text_decoration);
   VERIFY_MASK (font_variant);
   VERIFY_MASK (animation);
   VERIFY_MASK (transition);
@@ -261,6 +263,7 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
   gtk_css_icon_values_init ();
   gtk_css_outline_values_init ();
   gtk_css_font_values_init ();
+  gtk_css_text_decoration_values_init ();
   gtk_css_font_variant_values_init ();
   gtk_css_animation_values_init ();
   gtk_css_transition_values_init ();
@@ -344,13 +347,13 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       gtk_css_take_value (&style->font->line_height, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
-      gtk_css_take_value (&style->font_variant->text_decoration_line, value);
+      gtk_css_take_value (&style->text_decoration->text_decoration_line, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
-      gtk_css_take_value (&style->font_variant->text_decoration_color, value);
+      gtk_css_take_value (&style->text_decoration->text_decoration_color, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
-      gtk_css_take_value (&style->font_variant->text_decoration_style, value);
+      gtk_css_take_value (&style->text_decoration->text_decoration_style, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_TRANSFORM:
       gtk_css_take_value (&style->font_variant->text_transform, value);
@@ -748,26 +751,24 @@ gtk_css_font_create_initial_values (void)
 }
 
 static GtkCssValues *
-gtk_css_font_variant_create_initial_values (void)
+gtk_css_text_decoration_create_initial_values (void)
 {
-  GtkCssFontVariantValues *values;
+  GtkCssTextDecorationValues *values;
   GtkCssComputeContext context = { NULL, };
 
-  values = (GtkCssFontVariantValues *)gtk_css_values_new (GTK_CSS_FONT_VARIANT_INITIAL_VALUES);
+  values = (GtkCssTextDecorationValues *)gtk_css_values_new (GTK_CSS_TEXT_DECORATION_INITIAL_VALUES);
 
   values->text_decoration_line = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_LINE, &context);
   values->text_decoration_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR, &context);
   values->text_decoration_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE, &context);
-  values->text_transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_TRANSFORM, &context);
-  values->font_kerning = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_KERNING, &context);
-  values->font_variant_ligatures = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES, &context);
-  values->font_variant_position = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_POSITION, &context);
-  values->font_variant_caps = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_CAPS, &context);
-  values->font_variant_numeric = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC, &context);
-  values->font_variant_alternates = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES, &context);
-  values->font_variant_east_asian = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN, &context);
 
   return (GtkCssValues *)values;
+}
+
+static GtkCssValues *
+gtk_css_font_variant_create_initial_values (void)
+{
+  return NULL;
 }
 
 static GtkCssValues *
@@ -902,7 +903,7 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
       style->background = (GtkCssBackgroundValues *)gtk_css_values_ref (gtk_css_background_initial_values);
       style->border = (GtkCssBorderValues *)gtk_css_values_ref (gtk_css_border_initial_values);
       style->outline = (GtkCssOutlineValues *)gtk_css_values_ref (gtk_css_outline_initial_values);
-      style->font_variant = (GtkCssFontVariantValues *)gtk_css_values_ref (gtk_css_font_variant_initial_values);
+      style->text_decoration = (GtkCssTextDecorationValues *)gtk_css_values_ref (gtk_css_text_decoration_initial_values);
       style->animation = (GtkCssAnimationValues *)gtk_css_values_ref (gtk_css_animation_initial_values);
       style->transition = (GtkCssTransitionValues *)gtk_css_values_ref (gtk_css_transition_initial_values);
       style->size = (GtkCssSizeValues *)gtk_css_values_ref (gtk_css_size_initial_values);
@@ -913,12 +914,14 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
           style->core = (GtkCssCoreValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->core);
           style->icon = (GtkCssIconValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->icon);
           style->font = (GtkCssFontValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->font);
+          style->font_variant = (GtkCssFontVariantValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->font_variant);
         }
       else
         {
           gtk_css_core_values_new_compute (sstyle, lookup, &context);
           gtk_css_icon_values_new_compute (sstyle, lookup, &context);
           gtk_css_font_values_new_compute (sstyle, lookup, &context);
+          gtk_css_font_variant_values_new_compute (sstyle, lookup, &context);
         }
 
       goto resolve;
@@ -954,8 +957,13 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   else
     gtk_css_font_values_new_compute (sstyle, lookup, &context);
 
-  if (gtk_css_font_variant_values_unset (lookup))
-    style->font_variant = (GtkCssFontVariantValues *)gtk_css_values_ref (gtk_css_font_variant_initial_values);
+  if (gtk_css_text_decoration_values_unset (lookup))
+    style->text_decoration = (GtkCssTextDecorationValues *)gtk_css_values_ref (gtk_css_text_decoration_initial_values);
+  else
+    gtk_css_text_decoration_values_new_compute (sstyle, lookup, &context);
+
+  if (parent_style && gtk_css_font_variant_values_unset (lookup))
+    style->font_variant = (GtkCssFontVariantValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->font_variant);
   else
     gtk_css_font_variant_values_new_compute (sstyle, lookup, &context);
 
