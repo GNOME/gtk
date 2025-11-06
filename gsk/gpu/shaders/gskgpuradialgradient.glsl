@@ -4,6 +4,7 @@
 
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
 #define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
+#define VARIATION_CONCENTRIC    ((GSK_VARIATION & (1u << 2)) == (1u << 2))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -18,8 +19,8 @@ PASS_FLAT(9) vec4 _offsets0;
 PASS_FLAT(10) vec3 _offsets1;
 PASS_FLAT(11) vec4 _hints0;
 PASS_FLAT(12) vec3 _hints1;
-PASS_FLAT(13) vec4 _center_radius;
-PASS_FLAT(14) vec2 _startend;
+PASS_FLAT(13) vec4 _start_circle; /* xy are center, zw the radii */
+PASS_FLAT(14) vec4 _end_circle;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -36,21 +37,21 @@ IN(8) vec4 in_offsets0;
 IN(9) vec3 in_offsets1;
 IN(10) vec4 in_hints0;
 IN(11) vec3 in_hints1;
-IN(12) vec4 in_center_radius;
-IN(13) vec2 in_startend;
+IN(12) vec4 in_start_circle;
+IN(13) vec4 in_end_circle;
 
 void
 run (out vec2 pos)
 {
   Rect r = rect_from_gsk (in_rect);
-  
+
   pos = rect_get_position (r);
 
   _pos = pos;
   _rect = r;
 
-  _center_radius = in_center_radius;
-  _startend = in_startend;
+  _start_circle = in_start_circle;
+  _end_circle = in_end_circle;
 
   _color0 = color_premultiply (in_color0);
   _color1 = color_premultiply (in_color1);
@@ -91,6 +92,11 @@ get_gradient_color (float offset)
 {
   vec4 color;
   float f;
+
+  if (VARIATION_REPEATING)
+    offset = fract (offset);
+  else
+    offset = clamp (offset, 0.0, 1.0);
 
   if (offset <= _offsets0[3])
     {
@@ -156,14 +162,69 @@ get_gradient_color (float offset)
 vec4
 get_gradient_color_at (vec2 pos)
 {
-  float offset = length (pos / _center_radius.zw);
-  offset = (offset - _startend.x) / (_startend.y - _startend.x);
-  if (VARIATION_REPEATING)
-    offset = fract (offset);
-  else
-    offset = clamp (offset, 0.0, 1.0);
+  vec2 scale = vec2 (1, _start_circle.z / _start_circle.w);
 
-  return output_color_from_alt (get_gradient_color (offset));
+  if (VARIATION_CONCENTRIC)
+    {
+      float off = length ((pos - _end_circle.xy) * scale);
+      off = (off - _start_circle.z) / (_end_circle.z - _start_circle.z);
+      return output_color_from_alt (get_gradient_color (off));
+    }
+  else
+    {
+      float off;
+
+      vec2 c1 = _start_circle.xy * scale;
+      float r1 = _start_circle.z;
+      vec2 c2 = c1 + (_end_circle.xy - _start_circle.xy) * scale;
+      float r2 = _end_circle.z;
+
+      vec2 p = c1 + (pos - _start_circle.xy) * scale;
+
+      vec2 cd = c2 - c1;
+      vec2 pd = p - c1;
+      float dr = r2 - r1;
+
+      float a = cd.x * cd.x + cd.y * cd.y - dr * dr;
+      float b = pd.x * cd.x + pd.y * cd.y + r1 * dr;
+      float c = pd.x * pd.x + pd.y * pd.y - r1 * r1;
+
+      if (a == 0.0)
+        {
+          if (b != 0.0)
+            {
+              float t = 1.0/2.0 * c / b;
+              if (VARIATION_REPEATING)
+                {
+                  if (t * dr >= -r1)
+                    return output_color_from_alt (get_gradient_color (t));
+                }
+              else
+                {
+                  if (0.0 <= t && t <= 1.0)
+                    return output_color_from_alt (get_gradient_color (t));
+                }
+            }
+
+          return output_color_from_alt (vec4(0.0, 0.0, 0.0, 0.0));
+        }
+
+      float discr = b * b - a * c;
+
+      if (discr >= 0.0)
+        {
+          float sqrtdiscr = sqrt (discr);
+          float t0 = (b + sqrtdiscr) / a;
+          float t1 = (b - sqrtdiscr) / a;
+
+          if (t0 * dr >= -r1)
+            return output_color_from_alt (get_gradient_color (t0));
+          else if (t1 * dr >= -r1)
+            return output_color_from_alt (get_gradient_color (t1));
+        }
+    }
+
+  return output_color_from_alt (vec4(0.0, 0.0, 0.0, 0.0));
 }
 
 void
@@ -172,7 +233,7 @@ run (out vec4 color,
 {
   float alpha = rect_coverage (_rect, _pos);
 
-  vec2 pos = _pos / GSK_GLOBAL_SCALE - _center_radius.xy;
+  vec2 pos = _pos / GSK_GLOBAL_SCALE;
   if (VARIATION_SUPERSAMPLING)
     {
       vec2 dpos = 0.25 * fwidth (pos);
@@ -184,7 +245,7 @@ run (out vec4 color,
     }
   else
     {
-      color = output_color_alpha (get_gradient_color_at (pos), alpha);;
+      color = output_color_alpha (get_gradient_color_at (pos), alpha);
     }
 
   position = _pos;

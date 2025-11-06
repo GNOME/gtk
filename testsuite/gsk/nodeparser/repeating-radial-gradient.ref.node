@@ -1,9 +1,7 @@
 repeating-radial-gradient {
   bounds: 0 0 50 50;
-  center: 20 30;
-  hradius: 30;
-  vradius: 20;
-  start: 0.25;
-  end: 0.75;
+  start: 20 30 7.5;
+  end: 20 30 22.5;
+  aspect-ratio: 1.5;
   stops: 0 rgb(255,0,255), 1 rgb(0,255,0);
 }

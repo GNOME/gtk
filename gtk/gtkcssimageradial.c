@@ -219,12 +219,10 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
 
   gtk_snapshot_add_radial_gradient (snapshot,
                                     &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                    &GRAPHENE_POINT_INIT (x, y),
-                                    hradius, vradius,
-                                    start, end,
-                                    radial->repeating
-                                      ? GSK_REPEAT_REPEAT
-                                      : GSK_REPEAT_PAD,
+                                    &GRAPHENE_POINT_INIT (x, y), hradius * start,
+                                    &GRAPHENE_POINT_INIT (x, y), hradius * end,
+                                    hradius / vradius,
+                                    radial->repeating ? GSK_REPEAT_REPEAT : GSK_REPEAT_PAD,
                                     gtk_css_color_space_get_color_state (radial->color_space),
                                     gtk_css_hue_interpolation_to_hue_interpolation (radial->hue_interp),
                                     stops, radial->n_stops);

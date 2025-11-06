@@ -125,19 +125,19 @@ gsk_adjust_hue (GdkColorState       *ics,
 }
 
 void
-gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
-                            GskGpuShaderClip        clip,
-                            GdkColorState          *ccs,
-                            float                   opacity,
-                            const graphene_point_t *offset,
-                            GdkColorState          *ics,
-                            GskHueInterpolation     hue_interp,
-                            gboolean                repeating,
-                            const graphene_rect_t  *rect,
-                            const graphene_point_t *start,
-                            const graphene_point_t *end,
-                            const GskGradientStop  *stops,
-                            gsize                   n_stops)
+gsk_gpu_linear_gradient_op (GskGpuFrame             *frame,
+                            GskGpuShaderClip         clip,
+                            GdkColorState           *ccs,
+                            float                    opacity,
+                            const graphene_point_t  *offset,
+                            GdkColorState           *ics,
+                            GskHueInterpolation      hue_interp,
+                            GskRepeat                repeat,
+                            const graphene_rect_t   *rect,
+                            const graphene_point_t  *start,
+                            const graphene_point_t  *end,
+                            const GskGradientStop   *stops,
+                            gsize                    n_stops)
 {
   GskGpuLineargradientInstance *instance;
 
@@ -151,7 +151,7 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
                            &GSK_GPU_LINEAR_GRADIENT_OP_CLASS,
                            ccs ? gsk_gpu_color_states_create (ccs, TRUE, ics, TRUE)
                                : gsk_gpu_color_states_create_equal (TRUE, TRUE),
-                           (repeating ? VARIATION_REPEATING : 0) |
+                           (repeat == GSK_REPEAT_REPEAT ? VARIATION_REPEATING : 0) |
                            (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,
                            NULL,

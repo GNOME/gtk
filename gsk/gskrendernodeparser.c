@@ -2407,6 +2407,23 @@ parse_color_node (GtkCssParser *parser,
   return node;
 }
 
+static gboolean
+parse_repeat (GtkCssParser *parser,
+              Context      *context,
+              gpointer      out_val)
+{
+  GskRepeat *ret = out_val;
+
+  if (gtk_css_parser_try_ident (parser, "pad"))
+    *ret = GSK_REPEAT_PAD;
+  else if (gtk_css_parser_try_ident (parser, "repeat"))
+    *ret = GSK_REPEAT_REPEAT;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
 static GskRenderNode *
 parse_linear_gradient_node_internal (GtkCssParser *parser,
                                      Context      *context,
@@ -2418,6 +2435,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  GskRepeat repeat = GSK_REPEAT_PAD;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "start", parse_point, NULL, &start },
@@ -2425,10 +2443,18 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "repeat", parse_repeat, NULL, &repeat },
   };
   GskRenderNode *result;
+  gsize n_decls = G_N_ELEMENTS (declarations);
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (repeating)
+    {
+      repeat = GSK_REPEAT_REPEAT;
+      n_decls = n_decls - 1;
+    }
+
+  parse_declarations (parser, context, declarations, n_decls);
   if (stops == NULL)
     {
       GskGradientStop from = {
@@ -2452,9 +2478,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
 
   result = gsk_linear_gradient_node_new2 (&bounds,
                                           &start, &end,
-                                          repeating
-                                            ? GSK_REPEAT_REPEAT
-                                            : GSK_REPEAT_PAD,
+                                          repeat,
                                           interpolation,
                                           hue_interpolation,
                                           (GskGradientStop *) stops->data,
@@ -2480,6 +2504,67 @@ parse_repeating_linear_gradient_node (GtkCssParser *parser,
   return parse_linear_gradient_node_internal (parser, context, TRUE);
 }
 
+typedef struct
+{
+  graphene_point_t center;
+  double radius;
+  gboolean has_center;
+  gboolean has_radius;
+} ParsedCircle;
+
+static gboolean
+parse_circle (GtkCssParser *parser,
+              Context      *context,
+              gpointer      out_circle)
+{
+  ParsedCircle *circle = out_circle;
+  double num[3];
+
+  if (!gtk_css_parser_consume_number (parser, &num[0]))
+    return FALSE;
+
+  if (gtk_css_parser_has_number (parser))
+    {
+      if (!gtk_css_parser_consume_number (parser, &num[1]) ||
+          !gtk_css_parser_consume_number (parser, &num[2]))
+        return FALSE;
+
+      circle->center.x = num[0];
+      circle->center.y = num[1];
+      circle->radius = num[2];
+      circle->has_center = TRUE;
+      circle->has_radius = TRUE;
+    }
+  else
+    {
+      circle->radius = num[0];
+      circle->has_center = FALSE;
+      circle->has_radius = TRUE;
+    }
+
+  return TRUE;
+}
+
+typedef struct
+{
+  double value;
+  gboolean has_value;
+} ParsedNumber;
+
+static gboolean
+parse_positive_number (GtkCssParser *parser,
+                       Context      *context,
+                       gpointer      out_number)
+{
+  ParsedNumber *number = out_number;
+
+  if (!parse_positive_double (parser, context, &number->value))
+    return FALSE;
+
+  number->has_value = TRUE;
+  return TRUE;
+}
+
 static GskRenderNode *
 parse_radial_gradient_node_internal (GtkCssParser *parser,
                                      Context      *context,
@@ -2489,25 +2574,46 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   graphene_point_t center = GRAPHENE_POINT_INIT (25, 25);
   double hradius = 25.0;
   double vradius = 25.0;
-  double start = 0;
-  double end = 1.0;
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  ParsedCircle start = {
+    .center = { .x = 25, .y = 25 },
+    .radius = 0,
+    .has_center = FALSE,
+    .has_radius = FALSE
+  };
+  ParsedCircle end = {
+    .center = { .x = 25, .y = 25 },
+    .radius = 1,
+    .has_center = FALSE,
+    .has_radius = FALSE
+  };
+  ParsedNumber aspect_ratio = { .has_value = FALSE };
+  GskRepeat repeat = GSK_REPEAT_PAD;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "center", parse_point, NULL, &center },
     { "hradius", parse_strictly_positive_double, NULL, &hradius },
     { "vradius", parse_strictly_positive_double, NULL, &vradius },
-    { "start", parse_positive_double, NULL, &start },
-    { "end", parse_positive_double, NULL, &end },
+    { "start", parse_circle, NULL, &start },
+    { "end", parse_circle, NULL, &end },
+    { "aspect-ratio", parse_positive_number, NULL, &aspect_ratio },
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "repeat", parse_repeat, NULL, &repeat },
   };
   GskRenderNode *result;
+  gsize n_decls = G_N_ELEMENTS (declarations);
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (repeating)
+    {
+      repeat = GSK_REPEAT_REPEAT;
+      n_decls = n_decls - 1;
+    }
+
+  parse_declarations (parser, context, declarations, n_decls);
   if (stops == NULL)
     {
       GskGradientStop from = {
@@ -2529,7 +2635,22 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   if (interpolation == NULL)
     interpolation = GDK_COLOR_STATE_SRGB;
 
-  if (end <= start)
+  if (!start.has_center)
+    {
+      start.center = center;
+      start.radius *= hradius;
+    }
+
+  if (!end.has_center)
+    {
+      end.center = center;
+      end.radius *= hradius;
+    }
+
+  if (!aspect_ratio.has_value)
+    aspect_ratio.value = hradius / vradius;
+
+  if (end.radius <= start.radius)
     {
       gtk_css_parser_error (parser,
                             GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
@@ -2539,16 +2660,17 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
       result = NULL;
     }
   else
-    result = gsk_radial_gradient_node_new2 (&bounds, &center,
-                                            hradius, vradius,
-                                            start, end,
-                                            repeating
-                                              ? GSK_REPEAT_REPEAT
-                                              : GSK_REPEAT_PAD,
-                                            interpolation,
-                                            hue_interpolation,
-                                            (GskGradientStop *) stops->data,
-                                            stops->len);
+    {
+      result = gsk_radial_gradient_node_new2 (&bounds,
+                                              &start.center, start.radius,
+                                              &end.center, end.radius,
+                                              aspect_ratio.value,
+                                              repeat,
+                                              interpolation,
+                                              hue_interpolation,
+                                              (GskGradientStop *) stops->data,
+                                              stops->len);
+    }
 
   clear_stops (&stops);
   clear_color_state (&interpolation);
@@ -4547,6 +4669,35 @@ append_point_param (Printer                *p,
 }
 
 static void
+append_circle_param (Printer                *p,
+                     const char             *param_name,
+                     const graphene_point_t *center,
+                     float                   radius)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  append_point (p->str, center);
+  g_string_append_c (p->str, ' ');
+  string_append_double (p->str, radius);
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
+append_repeat_param (Printer    *p,
+                     const char *param_name,
+                     GskRepeat   value)
+{
+  const char *names[] = { "pad", "repeat" };
+
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  gtk_css_print_string (p->str, names[value], TRUE);
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
 append_string_param (Printer    *p,
                      const char *param_name,
                      const char *value)
@@ -5415,6 +5566,10 @@ render_node_print (Printer       *p,
         append_stops_param (p, "stops", gsk_gradient_node_get_stops (node),
                                         gsk_gradient_node_get_n_stops (node));
 
+        if (gsk_render_node_get_node_type (node) == GSK_RADIAL_GRADIENT_NODE &&
+            gsk_gradient_node_get_repeat (node) != GSK_REPEAT_PAD)
+          append_repeat_param (p, "repeat", gsk_gradient_node_get_repeat (node));
+
         append_color_state_param (p, "interpolation",
                                   gsk_gradient_node_get_interpolation (node),
                                   GDK_COLOR_STATE_SRGB);
@@ -5435,14 +5590,20 @@ render_node_print (Printer       *p,
           start_node (p, "radial-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
-        append_point_param (p, "center", gsk_radial_gradient_node_get_center (node));
-        append_float_param (p, "hradius", gsk_radial_gradient_node_get_hradius (node), 0.0f);
-        append_float_param (p, "vradius", gsk_radial_gradient_node_get_vradius (node), 0.0f);
-        append_float_param (p, "start", gsk_radial_gradient_node_get_start (node), 0.0f);
-        append_float_param (p, "end", gsk_radial_gradient_node_get_end (node), 1.0f);
+        append_circle_param (p, "start",
+                             gsk_radial_gradient_node_get_start_center (node),
+                             gsk_radial_gradient_node_get_start_radius (node));
+        append_circle_param (p, "end",
+                             gsk_radial_gradient_node_get_end_center (node),
+                             gsk_radial_gradient_node_get_end_radius (node));
+        append_float_param (p, "aspect-ratio", gsk_radial_gradient_node_get_aspect_ratio (node), 1);
 
         append_stops_param (p, "stops", gsk_gradient_node_get_stops (node),
                                         gsk_gradient_node_get_n_stops (node));
+
+        if (gsk_render_node_get_node_type (node) == GSK_RADIAL_GRADIENT_NODE &&
+            gsk_gradient_node_get_repeat (node) != GSK_REPEAT_PAD)
+          append_repeat_param (p, "repeat", gsk_gradient_node_get_repeat (node));
 
         append_color_state_param (p, "interpolation",
                                   gsk_gradient_node_get_interpolation (node),

@@ -231,11 +231,11 @@ GskHueInterpolation
                                                         (const GskRenderNode *node);
 
 GskRenderNode * gsk_radial_gradient_node_new2           (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *center,
-                                                         float                    hradius,
-                                                         float                    vradius,
-                                                         float                    start,
-                                                         float                    end,
+                                                         const graphene_point_t  *start_center,
+                                                         float                    start_radius,
+                                                         const graphene_point_t  *end_center,
+                                                         float                    end_radius,
+                                                         float                    aspect_ratio,
                                                          GskRepeat                repeat,
                                                          GdkColorState           *interpolation,
                                                          GskHueInterpolation      hue_interpolation,
@@ -251,5 +251,13 @@ GskRenderNode * gsk_conic_gradient_node_new2            (const graphene_rect_t  
                                                          gsize                    n_stops);
 void                    gsk_cairo_node_set_surface              (GskRenderNode          *node,
                                                                  cairo_surface_t        *surface);
+
+const graphene_point_t *gsk_radial_gradient_node_get_start_center     (const GskRenderNode *node) G_GNUC_PURE;
+const graphene_point_t *gsk_radial_gradient_node_get_end_center       (const GskRenderNode *node) G_GNUC_PURE;
+float                   gsk_radial_gradient_node_get_start_radius     (const GskRenderNode *node) G_GNUC_PURE;
+float                   gsk_radial_gradient_node_get_end_radius       (const GskRenderNode *node) G_GNUC_PURE;
+float                   gsk_radial_gradient_node_get_aspect_ratio     (const GskRenderNode *node) G_GNUC_PURE;
+
+GskRepeat               gsk_gradient_node_get_repeat                  (const GskRenderNode *node) G_GNUC_PURE;
 
 G_END_DECLS

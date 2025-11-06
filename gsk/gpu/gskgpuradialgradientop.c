@@ -11,6 +11,7 @@
 
 #define VARIATION_SUPERSAMPLING (1 << 0)
 #define VARIATION_REPEATING     (1 << 1)
+#define VARIATION_CONCENTRIC    (1 << 2)
 
 typedef struct _GskGpuRadialGradientOp GskGpuRadialGradientOp;
 
@@ -54,21 +55,21 @@ static const GskGpuShaderOpClass GSK_GPU_RADIAL_GRADIENT_OP_CLASS = {
 };
 
 void
-gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
-                            GskGpuShaderClip        clip,
-                            GdkColorState          *ccs,
-                            float                   opacity,
-                            const graphene_point_t *offset,
-                            GdkColorState          *ics,
-                            GskHueInterpolation     hue_interp,
-                            gboolean                repeating,
-                            const graphene_rect_t  *rect,
-                            const graphene_point_t *center,
-                            const graphene_point_t *radius,
-                            float                   start,
-                            float                   end,
-                            const GskGradientStop  *stops,
-                            gsize                   n_stops)
+gsk_gpu_radial_gradient_op (GskGpuFrame             *frame,
+                            GskGpuShaderClip         clip,
+                            GdkColorState           *ccs,
+                            float                    opacity,
+                            const graphene_point_t  *offset,
+                            GdkColorState           *ics,
+                            GskHueInterpolation      hue_interp,
+                            GskRepeat                repeat,
+                            const graphene_rect_t   *rect,
+                            const graphene_point_t  *start_center,
+                            const graphene_point_t  *start_radius,
+                            const graphene_point_t  *end_center,
+                            const graphene_point_t  *end_radius,
+                            const GskGradientStop   *stops,
+                            gsize                    n_stops)
 {
   GskGpuRadialgradientInstance *instance;
 
@@ -82,18 +83,19 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
                            &GSK_GPU_RADIAL_GRADIENT_OP_CLASS,
                            ccs ? gsk_gpu_color_states_create (ccs, TRUE, ics, TRUE)
                                : gsk_gpu_color_states_create_equal (TRUE, TRUE),
-                           (repeating ? VARIATION_REPEATING : 0) |
-                           (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
+                           (repeat == GSK_REPEAT_REPEAT ? VARIATION_REPEATING : 0) |
+                           (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0) |
+                           (graphene_point_equal (start_center, end_center) ? VARIATION_CONCENTRIC : 0),
                            clip,
                            NULL,
                            NULL,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_point_to_float (center, offset, instance->center_radius);
-  gsk_gpu_point_to_float (radius, graphene_point_zero(), &instance->center_radius[2]);
-  instance->startend[0] = start;
-  instance->startend[1] = end;
+  gsk_gpu_point_to_float (start_center, offset, instance->start_circle);
+  gsk_gpu_point_to_float (start_radius, graphene_point_zero(), &instance->start_circle[2]);
+  gsk_gpu_point_to_float (end_center, offset, instance->end_circle);
+  gsk_gpu_point_to_float (end_radius, graphene_point_zero(), &instance->end_circle[2]);
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 6)].color, ics, opacity, instance->color6);
   instance->offsets1[2] = stops[MIN (n_stops - 1, 6)].offset;
   instance->hints1[2] = stops[MIN (n_stops - 1, 6)].transition_hint;

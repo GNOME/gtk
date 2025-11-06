@@ -28,6 +28,7 @@
 #include "gtktypebuiltins.h"
 #include "gtk/css/gtkcss.h"
 #include "gtk/css/gtkcssparserprivate.h"
+#include "gtksnapshotprivate.h"
 #include <glib/gstdio.h>
 
 #include <tgmath.h>
@@ -11633,12 +11634,11 @@ paint_radial_gradient (Shape                 *gradient,
   graphene_point_t start_center;
   graphene_point_t end_center;
   double start_radius, end_radius;
-  graphene_point_t center;
-  double radius, start, end;
-  GskColorStop *stops;
+  GskGradientStop *stops;
   double offset;
   GskTransform *gradient_transform;
   graphene_rect_t gradient_bounds;
+  GskRepeat repeat;
 
   graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->width),
                                     svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->height));
@@ -11651,7 +11651,7 @@ paint_radial_gradient (Shape                 *gradient,
   if (!graphene_point_equal (&start_center, &end_center))
     gtk_svg_rendering_error (context->svg, "non-concentric radial gradients are not implemented");
 
-  stops = g_newa (GskColorStop, gradient->color_stops->len);
+  stops = g_newa (GskGradientStop, gradient->color_stops->len);
   offset = 0;
   for (unsigned int i = 0; i < gradient->color_stops->len; i++)
     {
@@ -11660,8 +11660,9 @@ paint_radial_gradient (Shape                 *gradient,
 
       g_assert (stop_color->kind == PAINT_COLOR);
       stops[i].offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
-      stops[i].color = stop_color->color;
+      gdk_color_init_from_rgba (&stops[i].color, &stop_color->color);
       stops[i].color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      stops[i].transition_hint = 0.5;
       offset = stops[i].offset;
     }
 
@@ -11683,41 +11684,20 @@ paint_radial_gradient (Shape                 *gradient,
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
 
-  if (start_radius > end_radius)
-    {
-      radius = start_radius;
-      center = start_center;
-    }
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REPEAT)
+    repeat = GSK_REPEAT_REPEAT;
   else
-    {
-      radius = end_radius;
-      center = end_center;
-    }
-  start = start_radius / radius;
-  end = end_radius / radius;
+    repeat = GSK_REPEAT_PAD;
 
-  switch (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]))
-    {
-    case SPREAD_METHOD_PAD:
-      gtk_snapshot_append_radial_gradient (context->snapshot,
-                                           &gradient_bounds,
-                                           &center, radius, radius,
-                                           start, end,
-                                           stops, gradient->color_stops->len);
-      break;
-    case SPREAD_METHOD_REFLECT:
-      gtk_svg_rendering_error (context->svg, "the 'reflect' spreadMethod is not implemented");
-      G_GNUC_FALLTHROUGH;
-    case SPREAD_METHOD_REPEAT:
-      gtk_snapshot_append_repeating_radial_gradient (context->snapshot,
-                                                     &gradient_bounds,
-                                                     &center, radius, radius,
-                                                     start, end,
-                                                     stops, gradient->color_stops->len);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+  gtk_snapshot_add_radial_gradient (context->snapshot,
+                                    &gradient_bounds,
+                                    &start_center, start_radius,
+                                    &end_center, end_radius,
+                                    1,
+                                    repeat,
+                                    GDK_COLOR_STATE_SRGB,
+                                    GSK_HUE_INTERPOLATION_SHORTER,
+                                    stops, gradient->color_stops->len);
 
   gtk_snapshot_restore (context->snapshot);
 }

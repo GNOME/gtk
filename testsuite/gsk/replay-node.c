@@ -87,8 +87,10 @@ replay_radial_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   else
     repeat = GSK_REPEAT_PAD;
 
-  gtk_snapshot_add_radial_gradient (snapshot, &bounds, center,
-                                    hradius, vradius, start, end,
+  gtk_snapshot_add_radial_gradient (snapshot, &bounds,
+                                    center, hradius * start,
+                                    center, hradius * end,
+                                    hradius / vradius,
                                     repeat,
                                     interp, hue,
                                     stops, n_stops);

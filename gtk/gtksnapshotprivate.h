@@ -84,16 +84,17 @@ void                    gtk_snapshot_add_linear_gradient        (GtkSnapshot    
                                                                  gsize                    n_stops);
 void                    gtk_snapshot_add_radial_gradient        (GtkSnapshot             *snapshot,
                                                                  const graphene_rect_t   *bounds,
-                                                                 const graphene_point_t  *center,
-                                                                 float                    hradius,
-                                                                 float                    vradius,
-                                                                 float                    start,
-                                                                 float                    end,
+                                                                 const graphene_point_t  *start_center,
+                                                                 float                    start_radius,
+                                                                 const graphene_point_t  *end_center,
+                                                                 float                    end_radius,
+                                                                 float                    aspect_ratio,
                                                                  GskRepeat                repeat,
                                                                  GdkColorState           *interpolation,
                                                                  GskHueInterpolation      hue_interpolation,
                                                                  const GskGradientStop   *stops,
                                                                  gsize                    n_stops);
+
 void                    gtk_snapshot_add_conic_gradient         (GtkSnapshot             *snapshot,
                                                                  const graphene_rect_t   *bounds,
                                                                  const graphene_point_t  *center,

@@ -2938,9 +2938,10 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
     }
 
   gtk_snapshot_add_radial_gradient (snapshot,
-                                    bounds, center,
-                                    hradius, vradius,
-                                    start, end,
+                                    bounds,
+                                    center, hradius * start,
+                                    center, hradius * end,
+                                    hradius / vradius,
                                     GSK_REPEAT_PAD,
                                     GDK_COLOR_STATE_SRGB,
                                     GSK_HUE_INTERPOLATION_SHORTER,
@@ -2956,11 +2957,11 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
  * gtk_snapshot_add_radial_gradient:
  * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the readial gradient into
- * @center: the center point for the radial gradient
- * @hradius: the horizontal radius
- * @vradius: the vertical radius
- * @start: the start position (on the horizontal axis)
- * @end: the end position (on the horizontal axis)
+ * @start_center: the center for the start circle
+ * @start_radius: the radius for the start circle
+ * @end_center: the center for the end circle
+ * @end_radius: the radius for the end circle
+ * @aspect_ratio: the aspect ratio of the circles
  * @repeat: what to do about colors outside the `[start,end]` range
  * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
@@ -2970,18 +2971,18 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
  * Appends a radial gradient node with the given stops to @snapshot.
  */
 void
-gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
-                                  const graphene_rect_t   *bounds,
-                                  const graphene_point_t  *center,
-                                  float                    hradius,
-                                  float                    vradius,
-                                  float                    start,
-                                  float                    end,
-                                  GskRepeat                repeat,
-                                  GdkColorState           *interpolation,
-                                  GskHueInterpolation      hue_interpolation,
-                                  const GskGradientStop   *stops,
-                                  gsize                    n_stops)
+gtk_snapshot_add_radial_gradient (GtkSnapshot            *snapshot,
+                                  const graphene_rect_t  *bounds,
+                                  const graphene_point_t *start_center,
+                                  float                   start_radius,
+                                  const graphene_point_t *end_center,
+                                  float                   end_radius,
+                                  float                   aspect_ratio,
+                                  GskRepeat               repeat,
+                                  GdkColorState          *interpolation,
+                                  GskHueInterpolation     hue_interpolation,
+                                  const GskGradientStop  *stops,
+                                  gsize                   n_stops)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -2990,7 +2991,11 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
   const GdkColor *first_color;
 
   g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (center != NULL);
+  g_return_if_fail (start_center != NULL);
+  g_return_if_fail (start_radius > 0);
+  g_return_if_fail (end_center != NULL);
+  g_return_if_fail (end_radius > 0);
+  g_return_if_fail (aspect_ratio > 0);
   g_return_if_fail (stops != NULL);
   g_return_if_fail (n_stops > 1);
 
@@ -3009,16 +3014,19 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
 
   if (need_gradient)
     {
-      graphene_point_t real_center;
+      graphene_point_t real_start;
+      graphene_point_t real_end;
 
-      real_center.x = scale_x * center->x + dx;
-      real_center.y = scale_y * center->y + dy;
+      real_start.x = scale_x * start_center->x + dx;
+      real_start.y = scale_y * start_center->y + dy;
+
+      real_end.x = scale_x * end_center->x + dx;
+      real_end.y = scale_y * end_center->y + dy;
 
       node = gsk_radial_gradient_node_new2 (&real_bounds,
-                                            &real_center,
-                                            hradius * scale_x,
-                                            vradius * scale_y,
-                                            start, end,
+                                            &real_start, start_radius * scale_x,
+                                            &real_end, end_radius * scale_x,
+                                            aspect_ratio * (scale_x / scale_y),
                                             repeat,
                                             interpolation,
                                             hue_interpolation,
@@ -3067,10 +3075,10 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
       gdk_color_init_from_rgba (&stops2[i].color, &stops[i].color);
     }
 
-  gtk_snapshot_add_radial_gradient (snapshot,
-                                    bounds, center,
-                                    hradius, vradius,
-                                    start, end,
+  gtk_snapshot_add_radial_gradient (snapshot, bounds,
+                                    center, hradius * start,
+                                    center, hradius * end,
+                                    hradius / vradius,
                                     GSK_REPEAT_REPEAT,
                                     GDK_COLOR_STATE_SRGB,
                                     GSK_HUE_INTERPOLATION_SHORTER,

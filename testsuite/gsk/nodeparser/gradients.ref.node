@@ -19,11 +19,9 @@ linear-gradient {
 }
 radial-gradient {
   bounds: 10 10 100 100;
-  center: 25 26;
-  hradius: 10;
-  vradius: 20;
-  start: 0.1;
-  end: 0.9;
+  start: 25 26 1;
+  end: 25 26 9;
+  aspect-ratio: 0.5;
   stops: 0 rgb(0,0,0), 0.5 color(rec2100-pq 0.4 0.5 0.6), 1 rgb(170,255,0);
   interpolation: rec2100-pq;
   hue-interpolation: increasing;
