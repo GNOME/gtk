@@ -440,7 +440,7 @@ TRANSFORM_PAIR (rec2100_linear_to_oklch, rec2100_linear_to_oklab, oklab_to_oklch
 TRANSFORM_PAIR (oklch_to_srgb,           oklch_to_oklab,          oklab_to_srgb)
 TRANSFORM_PAIR (oklch_to_srgb_linear,    oklch_to_oklab,          oklab_to_srgb_linear)
 TRANSFORM_PAIR (oklch_to_rec2100_pq,     oklch_to_oklab,          oklab_to_rec2100_pq)
-TRANSFORM_PAIR (oklch_to_rec2100_linear, oklch_to_oklab,          oklab_to_rec2100_pq)
+TRANSFORM_PAIR (oklch_to_rec2100_linear, oklch_to_oklab,          oklab_to_rec2100_linear)
 
 /* }}} */
 /* {{{ Default implementation */
