@@ -142,7 +142,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
                                                                  gpointer           user_data);
 
 #define GSK_TYPE_DEBUG_NODE                     (gsk_debug_node_get_type())
-#define GSK_TYPE_COLOR_NODE                     (gsk_color_node_get_type())
 #define GSK_TYPE_TEXTURE_NODE                   (gsk_texture_node_get_type())
 #define GSK_TYPE_TEXTURE_SCALE_NODE             (gsk_texture_scale_node_get_type())
 #define GSK_TYPE_LINEAR_GRADIENT_NODE           (gsk_linear_gradient_node_get_type())
@@ -174,7 +173,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_COMPONENT_TRANSFER_NODE        (gsk_component_transfer_node_get_type())
 
 typedef struct _GskDebugNode                    GskDebugNode;
-typedef struct _GskColorNode                    GskColorNode;
 typedef struct _GskTextureNode                  GskTextureNode;
 typedef struct _GskTextureScaleNode             GskTextureScaleNode;
 typedef struct _GskLinearGradientNode           GskLinearGradientNode;
@@ -214,14 +212,6 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_debug_node_get_child                (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const char *            gsk_debug_node_get_message              (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_color_node_get_type                 (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
-                                                                 const graphene_rect_t    *bounds);
-GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_color_node_get_color                (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;

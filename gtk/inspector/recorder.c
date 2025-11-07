@@ -44,6 +44,7 @@
 #include <gtk/gtkcolumnviewcolumn.h>
 #include <gtk/gtknative.h>
 #include <gtk/gtkprivate.h>
+#include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>

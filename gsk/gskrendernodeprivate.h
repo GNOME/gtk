@@ -141,10 +141,6 @@ _gsk_render_node_ref (GskRenderNode *node)
   return node;
 }
 
-GskRenderNode *         gsk_color_node_new2                     (const GdkColor         *color,
-                                                                 const graphene_rect_t  *bounds);
-const GdkColor *        gsk_color_node_get_gdk_color            (const GskRenderNode    *node);
-
 GskRenderNode *         gsk_border_node_new2                    (const GskRoundedRect   *outline,
                                                                  const float             border_width[4],
                                                                  const GdkColor          border_color[4]);

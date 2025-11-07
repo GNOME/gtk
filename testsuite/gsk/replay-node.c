@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <gtk/gtksnapshotprivate.h>
+#include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include "../gdk/udmabuf.h"
 

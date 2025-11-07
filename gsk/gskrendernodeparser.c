@@ -23,16 +23,17 @@
 
 #include "gskrendernodeparserprivate.h"
 
+#include "gskcolornodeprivate.h"
+#include "gskcomponenttransferprivate.h"
+#include "gskenumtypes.h"
+#include "gskgradientprivate.h"
+#include "gskprivate.h"
 #include "gskpath.h"
 #include "gskpathbuilder.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskstroke.h"
 #include "gsktransformprivate.h"
-#include "gskenumtypes.h"
-#include "gskcomponenttransferprivate.h"
-#include "gskprivate.h"
-#include "gskgradientprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkcolorprivate.h"
