@@ -311,6 +311,11 @@ struct _GskLinearGradientNode
   graphene_point_t end;
 };
 
+struct _GskRepeatingLinearGradientNode
+{
+  GskLinearGradientNode parent;
+};
+
 static void
 gsk_linear_gradient_node_finalize (GskRenderNode *node)
 {
@@ -857,6 +862,11 @@ struct _GskRadialGradientNode
   float end_radius;
   float aspect_ratio;
   float hradius;
+};
+
+struct _GskRepeatingRadialGradientNode
+{
+  GskRadialGradientNode parent;
 };
 
 static void
@@ -9302,96 +9312,39 @@ gsk_render_node_init_content_serializers (void)
 /* }}} */
 /* {{{ Type registration */
 
-GType gsk_render_node_types[GSK_RENDER_NODE_TYPE_N_TYPES];
-
-#ifndef I_
-# define I_(str) g_intern_static_string ((str))
-#endif
-
-#define GSK_DEFINE_RENDER_NODE_TYPE(type_name, TYPE_ENUM_VALUE) \
-GType \
-type_name ## _get_type (void) { \
-  gsk_render_node_init_types (); \
-  g_assert (gsk_render_node_types[TYPE_ENUM_VALUE] != G_TYPE_INVALID); \
-  return gsk_render_node_types[TYPE_ENUM_VALUE]; \
-}
-
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_container_node, GSK_CONTAINER_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_cairo_node, GSK_CAIRO_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_color_node, GSK_COLOR_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_linear_gradient_node, GSK_LINEAR_GRADIENT_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_linear_gradient_node, GSK_REPEATING_LINEAR_GRADIENT_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_radial_gradient_node, GSK_RADIAL_GRADIENT_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_radial_gradient_node, GSK_REPEATING_RADIAL_GRADIENT_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_conic_gradient_node, GSK_CONIC_GRADIENT_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_border_node, GSK_BORDER_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_texture_node, GSK_TEXTURE_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_texture_scale_node, GSK_TEXTURE_SCALE_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_inset_shadow_node, GSK_INSET_SHADOW_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_outset_shadow_node, GSK_OUTSET_SHADOW_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_transform_node, GSK_TRANSFORM_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_opacity_node, GSK_OPACITY_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_color_matrix_node, GSK_COLOR_MATRIX_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeat_node, GSK_REPEAT_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_clip_node, GSK_CLIP_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_rounded_clip_node, GSK_ROUNDED_CLIP_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_fill_node, GSK_FILL_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_stroke_node, GSK_STROKE_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_shadow_node, GSK_SHADOW_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_blend_node, GSK_BLEND_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_cross_fade_node, GSK_CROSS_FADE_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_text_node, GSK_TEXT_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_blur_node, GSK_BLUR_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_mask_node, GSK_MASK_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_gl_shader_node, GSK_GL_SHADER_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_subsurface_node, GSK_SUBSURFACE_NODE)
-GSK_DEFINE_RENDER_NODE_TYPE (gsk_component_transfer_node, GSK_COMPONENT_TRANSFER_NODE)
-
-#define GSK_INIT_NODE_TYPE_WITH_STRUCT(TYPE, T_N, S_N, t_n) \
-  gsk_render_node_types[TYPE] = gsk_render_node_type_register_static (I_(#T_N), \
-                                                                      sizeof (S_N), \
-                                                                      t_n ## _class_init);
-
-#define GSK_INIT_NODE_TYPE(TYPE, T_N, t_n) GSK_INIT_NODE_TYPE_WITH_STRUCT (TYPE, T_N, T_N, t_n)
-
-static void
-gsk_render_node_init_types_once (void)
-{
-  GSK_INIT_NODE_TYPE (GSK_CONTAINER_NODE, GskContainerNode, gsk_container_node)
-  GSK_INIT_NODE_TYPE (GSK_CAIRO_NODE, GskCairoNode, gsk_cairo_node)
-  GSK_INIT_NODE_TYPE (GSK_COLOR_NODE, GskColorNode, gsk_color_node)
-  GSK_INIT_NODE_TYPE (GSK_LINEAR_GRADIENT_NODE, GskLinearGradientNode, gsk_linear_gradient_node)
-  GSK_INIT_NODE_TYPE_WITH_STRUCT (GSK_REPEATING_LINEAR_GRADIENT_NODE, GskRepeatingLinearGradientNode, GskLinearGradientNode, gsk_repeating_linear_gradient_node)
-  GSK_INIT_NODE_TYPE (GSK_RADIAL_GRADIENT_NODE, GskRadialGradientNode, gsk_radial_gradient_node)
-  GSK_INIT_NODE_TYPE_WITH_STRUCT (GSK_REPEATING_RADIAL_GRADIENT_NODE, GskRepeatingRadialGradientNode, GskRadialGradientNode, gsk_repeating_radial_gradient_node)
-  GSK_INIT_NODE_TYPE (GSK_CONIC_GRADIENT_NODE, GskConicGradientNode, gsk_conic_gradient_node)
-  GSK_INIT_NODE_TYPE (GSK_BORDER_NODE, GskBorderNode, gsk_border_node)
-  GSK_INIT_NODE_TYPE (GSK_TEXTURE_NODE, GskTextureNode, gsk_texture_node)
-  GSK_INIT_NODE_TYPE (GSK_TEXTURE_SCALE_NODE, GskTextureScaleNode, gsk_texture_scale_node)
-  GSK_INIT_NODE_TYPE (GSK_INSET_SHADOW_NODE, GskInsetShadowNode, gsk_inset_shadow_node)
-  GSK_INIT_NODE_TYPE (GSK_OUTSET_SHADOW_NODE, GskOutsetShadowNode, gsk_outset_shadow_node)
-  GSK_INIT_NODE_TYPE (GSK_TRANSFORM_NODE, GskTransformNode, gsk_transform_node)
-  GSK_INIT_NODE_TYPE (GSK_OPACITY_NODE, GskOpacityNode, gsk_opacity_node)
-  GSK_INIT_NODE_TYPE (GSK_COLOR_MATRIX_NODE, GskColorMatrixNode, gsk_color_matrix_node)
-  GSK_INIT_NODE_TYPE (GSK_REPEAT_NODE, GskRepeatNode, gsk_repeat_node)
-  GSK_INIT_NODE_TYPE (GSK_CLIP_NODE, GskClipNode, gsk_clip_node)
-  GSK_INIT_NODE_TYPE (GSK_ROUNDED_CLIP_NODE, GskRoundedClipNode, gsk_rounded_clip_node)
-  GSK_INIT_NODE_TYPE (GSK_SHADOW_NODE, GskShadowNode, gsk_shadow_node)
-  GSK_INIT_NODE_TYPE (GSK_BLEND_NODE, GskBlendNode, gsk_blend_node)
-  GSK_INIT_NODE_TYPE (GSK_CROSS_FADE_NODE, GskCrossFadeNode, gsk_cross_fade_node)
-  GSK_INIT_NODE_TYPE (GSK_TEXT_NODE, GskTextNode, gsk_text_node)
-  GSK_INIT_NODE_TYPE (GSK_BLUR_NODE, GskBlurNode, gsk_blur_node)
-  GSK_INIT_NODE_TYPE (GSK_MASK_NODE, GskMaskNode, gsk_mask_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskContainerNode, gsk_container_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskCairoNode, gsk_cairo_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskColorNode, gsk_color_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskLinearGradientNode, gsk_linear_gradient_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskRepeatingLinearGradientNode, gsk_repeating_linear_gradient_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskRadialGradientNode, gsk_radial_gradient_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskRepeatingRadialGradientNode, gsk_repeating_radial_gradient_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskConicGradientNode, gsk_conic_gradient_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskBorderNode, gsk_border_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskTextureNode, gsk_texture_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskTextureScaleNode, gsk_texture_scale_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskInsetShadowNode, gsk_inset_shadow_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskOutsetShadowNode, gsk_outset_shadow_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskTransformNode, gsk_transform_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskOpacityNode, gsk_opacity_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskColorMatrixNode, gsk_color_matrix_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskRepeatNode, gsk_repeat_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskClipNode, gsk_clip_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskRoundedClipNode, gsk_rounded_clip_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskFillNode, gsk_fill_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskStrokeNode, gsk_stroke_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskShadowNode, gsk_shadow_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskBlendNode, gsk_blend_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskCrossFadeNode, gsk_cross_fade_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskTextNode, gsk_text_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskBlurNode, gsk_blur_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskMaskNode, gsk_mask_node)
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  GSK_INIT_NODE_TYPE (GSK_GL_SHADER_NODE, GskGLShaderNode, gsk_gl_shader_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskGLShaderNode, gsk_gl_shader_node)
 G_GNUC_END_IGNORE_DEPRECATIONS
-  GSK_INIT_NODE_TYPE (GSK_DEBUG_NODE, GskDebugNode, gsk_debug_node)
-  GSK_INIT_NODE_TYPE (GSK_FILL_NODE, GskFillNode, gsk_fill_node)
-  GSK_INIT_NODE_TYPE (GSK_STROKE_NODE, GskStrokeNode, gsk_stroke_node)
-  GSK_INIT_NODE_TYPE (GSK_SUBSURFACE_NODE, GskSubsurfaceNode, gsk_subsurface_node)
-  GSK_INIT_NODE_TYPE (GSK_COMPONENT_TRANSFER_NODE, GskComponentTransferNode, gsk_component_transfer_node)
-}
+GSK_DEFINE_RENDER_NODE_TYPE (GskDebugNode, gsk_debug_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskSubsurfaceNode, gsk_subsurface_node)
+GSK_DEFINE_RENDER_NODE_TYPE (GskComponentTransferNode, gsk_component_transfer_node)
 
 /*< private >
  * gsk_render_node_init_types:
@@ -9406,7 +9359,6 @@ gsk_render_node_init_types (void)
   if (g_once_init_enter (&register_types__volatile))
     {
       gboolean initialized = TRUE;
-      gsk_render_node_init_types_once ();
       gsk_render_node_init_content_serializers ();
       g_once_init_leave (&register_types__volatile, initialized);
     }

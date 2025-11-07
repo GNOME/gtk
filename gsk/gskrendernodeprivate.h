@@ -11,15 +11,6 @@ G_BEGIN_DECLS
 
 typedef struct _GskRenderNodeClass GskRenderNodeClass;
 
-/* Keep this in sync with the GskRenderNodeType enumeration.
- *
- * We don't add an "n-types" value to avoid having to handle
- * it in every single switch.
- */
-#define GSK_RENDER_NODE_TYPE_N_TYPES    (GSK_COMPONENT_TRANSFER_NODE + 1)
-
-extern GType gsk_render_node_types[];
-
 #define GSK_IS_RENDER_NODE_TYPE(node,type) \
   (G_TYPE_INSTANCE_GET_CLASS ((node), GSK_TYPE_RENDER_NODE, GskRenderNodeClass)->node_type == (type))
 
@@ -67,6 +58,21 @@ struct _GskRenderNodeClass
 };
 
 void            gsk_render_node_init_types              (void);
+
+#define GSK_DEFINE_RENDER_NODE_TYPE(TypeName, type_name) \
+GType \
+type_name##_get_type (void) \
+{ \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
+    { \
+      GType g_define_type_id = gsk_render_node_type_register_static (g_intern_static_string (#TypeName), \
+                                                                     sizeof (TypeName), \
+                                                                     type_name ## _class_init); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+    } \
+  return static_g_define_type_id; \
+}
 
 GType           gsk_render_node_type_register_static    (const char                  *node_name,
                                                          gsize                        instance_size,
