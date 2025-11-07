@@ -19,6 +19,7 @@
 
 #define __GSK_H_INSIDE__
 
+#include <gsk/gskcolornode.h>
 #include <gsk/gskenums.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>

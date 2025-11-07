@@ -22,14 +22,15 @@
 
 #include "gskoffloadprivate.h"
 
+#include "gskcolornodeprivate.h"
+#include "gskdebugprivate.h"
 #include "gskrendernode.h"
 #include "gskrectprivate.h"
-#include "gskroundedrectprivate.h"
-#include "gsktransformprivate.h"
-#include "gskdebugprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gdksurfaceprivate.h"
+#include "gskroundedrectprivate.h"
 #include "gdkrgbaprivate.h"
+#include "gdksurfaceprivate.h"
+#include "gsktransformprivate.h"
 
 #include <graphene.h>
 

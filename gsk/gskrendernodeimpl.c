@@ -22,6 +22,7 @@
 
 #include "gskcairoblurprivate.h"
 #include "gskcairorenderer.h"
+#include "gskcolornode.h"
 #include "gskdebugprivate.h"
 #include "gskdiffprivate.h"
 #include "gskpathprivate.h"
@@ -115,170 +116,6 @@ region_union_region_affine (cairo_region_t       *region,
       gdk_rectangle_transform_affine (&rect, scale_x, scale_y, offset_x, offset_y, &rect);
       cairo_region_union_rectangle (region, &rect);
     }
-}
-
-/* }}} */
-/* {{{ GSK_COLOR_NODE */
-
-/**
- * GskColorNode:
- *
- * A render node for a solid color.
- */
-struct _GskColorNode
-{
-  GskRenderNode render_node;
-  GdkColor color;
-};
-
-static void
-gsk_color_node_finalize (GskRenderNode *node)
-{
-  GskColorNode *self = (GskColorNode *) node;
-  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_COLOR_NODE));
-
-  gdk_color_finish (&self->color);
-
-  parent_class->finalize (node);
-}
-
-static void
-gsk_color_node_draw (GskRenderNode *node,
-                     cairo_t       *cr,
-                     GdkColorState *ccs)
-{
-  GskColorNode *self = (GskColorNode *) node;
-
-  gdk_cairo_set_source_color (cr, ccs, &self->color);
-  gdk_cairo_rect (cr, &node->bounds);
-  cairo_fill (cr);
-}
-
-static void
-gsk_color_node_diff (GskRenderNode *node1,
-                     GskRenderNode *node2,
-                     GskDiffData   *data)
-{
-  GskColorNode *self1 = (GskColorNode *) node1;
-  GskColorNode *self2 = (GskColorNode *) node2;
-
-  if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
-      gdk_color_equal (&self1->color, &self2->color))
-    return;
-
-  gsk_render_node_diff_impossible (node1, node2, data);
-}
-
-static void
-gsk_color_node_class_init (gpointer g_class,
-                           gpointer class_data)
-{
-  GskRenderNodeClass *node_class = g_class;
-
-  node_class->node_type = GSK_COLOR_NODE;
-
-  node_class->finalize = gsk_color_node_finalize;
-  node_class->draw = gsk_color_node_draw;
-  node_class->diff = gsk_color_node_diff;
-  node_class->replay = gsk_render_node_replay_as_self;
-}
-
-/**
- * gsk_color_node_get_color:
- * @node: (type GskColorNode): a `GskRenderNode`
- *
- * Retrieves the color of the given @node.
- *
- * The value returned by this function will not be correct
- * if the render node was created for a non-sRGB color.
- *
- * Returns: (transfer none): the color of the node
- */
-const GdkRGBA *
-gsk_color_node_get_color (const GskRenderNode *node)
-{
-  GskColorNode *self = (GskColorNode *) node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_NODE), NULL);
-
-  /* NOTE: This is only correct for nodes with sRGB colors */
-  return (const GdkRGBA *) &self->color.values;
-}
-
-/*< private >
- * gsk_color_node_get_gdk_color:
- * @node: (type GskColorNode): a `GskRenderNode`
- *
- * Retrieves the color of the given @node.
- *
- * Returns: (transfer none): the color of the node
- */
-const GdkColor *
-gsk_color_node_get_gdk_color (const GskRenderNode *node)
-{
-  GskColorNode *self = (GskColorNode *) node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_NODE), NULL);
-
-  return &self->color;
-}
-
-/**
- * gsk_color_node_new:
- * @rgba: a `GdkRGBA` specifying a color
- * @bounds: the rectangle to render the color into
- *
- * Creates a `GskRenderNode` that will render the color specified by @rgba into
- * the area given by @bounds.
- *
- * Returns: (transfer full) (type GskColorNode): A new `GskRenderNode`
- */
-GskRenderNode *
-gsk_color_node_new (const GdkRGBA         *rgba,
-                    const graphene_rect_t *bounds)
-{
-  GdkColor color;
-  GskRenderNode *node;
-
-  gdk_color_init_from_rgba (&color, rgba);
-  node = gsk_color_node_new2 (&color, bounds);
-  gdk_color_finish (&color);
-
-  return node;
-}
-
-/*< private >
- * gsk_color_node_new2:
- * @color: a `GdkColor` specifying a color
- * @bounds: the rectangle to render the color into
- *
- * Creates a `GskRenderNode` that will render the color specified by @color
- * into the area given by @bounds.
- *
- * Returns: (transfer full) (type GskColorNode): A new `GskRenderNode`
- */
-GskRenderNode *
-gsk_color_node_new2 (const GdkColor        *color,
-                     const graphene_rect_t *bounds)
-{
-  GskColorNode *self;
-  GskRenderNode *node;
-
-  g_return_val_if_fail (color != NULL, NULL);
-  g_return_val_if_fail (bounds != NULL, NULL);
-
-  self = gsk_render_node_alloc (GSK_TYPE_COLOR_NODE);
-  node = (GskRenderNode *) self;
-  node->fully_opaque = gdk_color_is_opaque (color);
-  node->preferred_depth = GDK_MEMORY_NONE;
-  node->is_hdr = gdk_color_is_srgb (color);
-
-  gdk_color_init_copy (&self->color, color);
-
-  gsk_rect_init_from_rect (&node->bounds, bounds);
-  gsk_rect_normalize (&node->bounds);
-
-  return node;
 }
 
 /* }}} */
@@ -9314,7 +9151,6 @@ gsk_render_node_init_content_serializers (void)
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskContainerNode, gsk_container_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskCairoNode, gsk_cairo_node)
-GSK_DEFINE_RENDER_NODE_TYPE (GskColorNode, gsk_color_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskLinearGradientNode, gsk_linear_gradient_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskRepeatingLinearGradientNode, gsk_repeating_linear_gradient_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskRadialGradientNode, gsk_radial_gradient_node)

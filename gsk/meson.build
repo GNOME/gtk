@@ -1,5 +1,6 @@
 gsk_public_sources = files([
   'gskcairorenderer.c',
+  'gskcolornode.c',
   'gskcomponenttransfer.c',
   'gskdiff.c',
   'gskglshader.c',
@@ -85,6 +86,7 @@ gsk_f16c_sources = files([
 
 gsk_public_headers = files([
   'gskcairorenderer.h',
+  'gskcolornode.h',
   'gskcomponenttransfer.h',
   'gskenums.h',
   'gskglshader.h',
