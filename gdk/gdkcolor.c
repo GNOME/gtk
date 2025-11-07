@@ -164,6 +164,21 @@ gboolean
 }
 
 /*< private >
+ * gdk_color_is_srgb:
+ * @self: a `GdkColor`
+ *
+ * Returns whether @self is inside the sRGB color volume.
+ *
+ * Returns: `TRUE` if @self if inside the sRGB color volume
+ */
+gboolean
+gdk_color_is_srgb (const GdkColor *self)
+{
+  return self->color_state == GDK_COLOR_STATE_SRGB ||
+         self->color_state == GDK_COLOR_STATE_SRGB_LINEAR;
+}
+
+/*< private >
  * gdk_color_convert:
  * @self: the `GdkColor` to store the result in
  * @color_state: the target color start
