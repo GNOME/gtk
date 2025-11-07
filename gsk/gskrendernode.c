@@ -37,6 +37,7 @@
 
 #include "gskrendernodeprivate.h"
 
+#include "gskcontainernodeprivate.h"
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeparserprivate.h"

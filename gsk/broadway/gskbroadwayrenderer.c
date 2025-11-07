@@ -5,6 +5,7 @@
 #include "broadway/gdkprivate-broadway.h"
 
 #include "gskcolornode.h"
+#include "gskcontainernode.h"
 #include "gskdebugprivate.h"
 #include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
