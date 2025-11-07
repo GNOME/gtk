@@ -372,7 +372,7 @@ gsk_gpu_cache_get_texture_hash_table (GskGpuCache   *cache,
       return cache->texture_cache;
     }
   else if (GDK_IS_DEFAULT_COLOR_STATE (color_state))
-    { 
+    {
       GdkColorStateId id = GDK_DEFAULT_COLOR_STATE_ID (color_state);
 
       if (cache->ccs_texture_caches[id] == NULL)
@@ -890,6 +890,8 @@ gsk_gpu_cache_dispose (GObject *object)
   gsk_gpu_cached_glyph_finish_cache (self);
 
   g_clear_pointer (&self->tile_cache, g_hash_table_unref);
+  for (int i = 0; i < GDK_COLOR_STATE_N_IDS; i++)
+    g_clear_pointer (&self->ccs_texture_caches[i], g_hash_table_unref);
   g_hash_table_unref (self->texture_cache);
 
   G_OBJECT_CLASS (gsk_gpu_cache_parent_class)->dispose (object);
