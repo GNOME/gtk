@@ -3,8 +3,10 @@
 #include "common.glsl"
 
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
-#define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
-#define VARIATION_CONCENTRIC    ((GSK_VARIATION & (1u << 2)) == (1u << 2))
+#define VARIATION_CONCENTRIC    ((GSK_VARIATION & (1u << 1)) == (1u << 1))
+#define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 2)) == (1u << 2))
+#define VARIATION_REFLECTING    ((GSK_VARIATION & (1u << 3)) == (1u << 3))
+#define VARIATION_BLANK         ((GSK_VARIATION & (1u << 4)) == (1u << 4))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -93,10 +95,26 @@ get_gradient_color (float offset)
   vec4 color;
   float f;
 
-  if (VARIATION_REPEATING)
-    offset = fract (offset);
-  else
-    offset = clamp (offset, 0.0, 1.0);
+  if (VARIATION_BLANK)
+    {
+      if (offset < 0.0 || offset > 1.0)
+        return vec4(0.0, 0.0, 0.0, 0.0);
+    }
+  else if (VARIATION_REPEATING)
+    {
+      offset = fract (offset);
+    }
+  else if (VARIATION_REFLECTING)
+    {
+      if ((int (floor (offset))) % 2 == 0)
+        offset = fract (offset);
+      else
+        offset = 1.0 - fract (offset);
+    }
+  else /* pad */
+    {
+      offset = clamp (offset, 0.0, 1.0);
+    }
 
   if (offset <= _offsets0[3])
     {
@@ -162,7 +180,7 @@ get_gradient_color (float offset)
 vec4
 get_gradient_color_at (vec2 pos)
 {
-  vec2 scale = vec2 (1, _start_circle.z / _start_circle.w);
+  vec2 scale = vec2 (1, _end_circle.z / _end_circle.w);
 
   if (VARIATION_CONCENTRIC)
     {
@@ -194,16 +212,8 @@ get_gradient_color_at (vec2 pos)
           if (b != 0.0)
             {
               float t = 1.0/2.0 * c / b;
-              if (VARIATION_REPEATING)
-                {
-                  if (t * dr >= -r1)
-                    return output_color_from_alt (get_gradient_color (t));
-                }
-              else
-                {
-                  if (0.0 <= t && t <= 1.0)
-                    return output_color_from_alt (get_gradient_color (t));
-                }
+              if (t * dr >= -r1)
+                return output_color_from_alt (get_gradient_color (t));
             }
 
           return output_color_from_alt (vec4(0.0, 0.0, 0.0, 0.0));

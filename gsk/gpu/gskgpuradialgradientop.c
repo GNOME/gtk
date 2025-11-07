@@ -10,8 +10,10 @@
 #include "gpu/shaders/gskgpuradialgradientinstance.h"
 
 #define VARIATION_SUPERSAMPLING (1 << 0)
-#define VARIATION_REPEATING     (1 << 1)
-#define VARIATION_CONCENTRIC    (1 << 2)
+#define VARIATION_CONCENTRIC    (1 << 1)
+#define VARIATION_REPEATING     (1 << 2)
+#define VARIATION_REFLECTING    (1 << 3)
+#define VARIATION_BLANK         (1 << 4)
 
 typedef struct _GskGpuRadialGradientOp GskGpuRadialGradientOp;
 
@@ -84,6 +86,8 @@ gsk_gpu_radial_gradient_op (GskGpuFrame             *frame,
                            ccs ? gsk_gpu_color_states_create (ccs, TRUE, ics, TRUE)
                                : gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            (repeat == GSK_REPEAT_REPEAT ? VARIATION_REPEATING : 0) |
+                           (repeat == GSK_REPEAT_REFLECT ? VARIATION_REFLECTING : 0) |
+                           (repeat == GSK_REPEAT_NONE ? VARIATION_BLANK : 0) |
                            (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0) |
                            (graphene_point_equal (start_center, end_center) ? VARIATION_CONCENTRIC : 0),
                            clip,

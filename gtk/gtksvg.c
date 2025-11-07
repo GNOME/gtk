@@ -11560,11 +11560,12 @@ paint_linear_gradient (Shape                 *gradient,
                        PaintContext          *context)
 {
   graphene_point_t start, end;
-  GskColorStop *stops;
+  GskGradientStop *stops;
   double offset;
   GskTransform *transform, *gradient_transform;
+  GskRepeat repeat;
 
-  stops = g_newa (GskColorStop, gradient->color_stops->len);
+  stops = g_newa (GskGradientStop, gradient->color_stops->len);
   offset = 0;
   for (unsigned int i = 0; i < gradient->color_stops->len; i++)
     {
@@ -11573,8 +11574,9 @@ paint_linear_gradient (Shape                 *gradient,
 
       g_assert (stop_color->kind == PAINT_COLOR);
       stops[i].offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
-      stops[i].color = stop_color->color;
+      gdk_color_init_from_rgba (&stops[i].color, &stop_color->color);
       stops[i].color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      stops[i].transition_hint = 0.5;
       offset = stops[i].offset;
     }
 
@@ -11606,24 +11608,19 @@ paint_linear_gradient (Shape                 *gradient,
   transform_gradient_line (transform, &start, &end, &start, &end);
   gsk_transform_unref (transform);
 
-  switch (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]))
-    {
-    case SPREAD_METHOD_PAD:
-      gtk_snapshot_append_linear_gradient (context->snapshot,
-                                           bounds, &start, &end,
-                                           stops, gradient->color_stops->len);
-      break;
-    case SPREAD_METHOD_REFLECT:
-      gtk_svg_rendering_error (context->svg, "the 'reflect' spreadMethod is not implemented");
-      G_GNUC_FALLTHROUGH;
-    case SPREAD_METHOD_REPEAT:
-      gtk_snapshot_append_repeating_linear_gradient (context->snapshot,
-                                                     bounds, &start, &end,
-                                                     stops, gradient->color_stops->len);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REPEAT)
+    repeat = GSK_REPEAT_REPEAT;
+  else if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REFLECT)
+    repeat = GSK_REPEAT_REFLECT;
+  else
+    repeat = GSK_REPEAT_PAD;
+
+  gtk_snapshot_add_linear_gradient (context->snapshot, bounds,
+                                    &start, &end,
+                                    repeat,
+                                    GDK_COLOR_STATE_SRGB,
+                                    GSK_HUE_INTERPOLATION_SHORTER,
+                                    stops, gradient->color_stops->len);
 }
 
 static void
@@ -11686,6 +11683,8 @@ paint_radial_gradient (Shape                 *gradient,
 
   if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REPEAT)
     repeat = GSK_REPEAT_REPEAT;
+  else if (svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]) == SPREAD_METHOD_REFLECT)
+    repeat = GSK_REPEAT_REFLECT;
   else
     repeat = GSK_REPEAT_PAD;
 

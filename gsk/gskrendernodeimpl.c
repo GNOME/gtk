@@ -639,11 +639,17 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
     {
       switch (self->repeat)
         {
+        case GSK_REPEAT_NONE:
+          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_NONE);
+          break;
         case GSK_REPEAT_PAD:
           cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
           break;
         case GSK_REPEAT_REPEAT:
           cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+          break;
+        case GSK_REPEAT_REFLECT:
+          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REFLECT);
           break;
         default:
           g_assert_not_reached ();
@@ -1128,11 +1134,17 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
     {
       switch (self->repeat)
         {
+        case GSK_REPEAT_NONE:
+          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_NONE);
+          break;
         case GSK_REPEAT_PAD:
           cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
           break;
         case GSK_REPEAT_REPEAT:
           cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+          break;
+        case GSK_REPEAT_REFLECT:
+          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REFLECT);
           break;
         default:
           g_assert_not_reached ();
@@ -1367,11 +1379,10 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
     g_return_val_if_fail (stops[i].offset >= stops[i - 1].offset, NULL);
   g_return_val_if_fail (stops[n_stops - 1].offset <= 1, NULL);
 
-  if (repeat == GSK_REPEAT_PAD)
-    self = gsk_render_node_alloc (GSK_RADIAL_GRADIENT_NODE);
-  else
-    self = gsk_render_node_alloc (GSK_REPEATING_RADIAL_GRADIENT_NODE);
+  self = gsk_render_node_alloc (GSK_RADIAL_GRADIENT_NODE);
   node = (GskRenderNode *) self;
+
+  self->repeat = repeat;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);

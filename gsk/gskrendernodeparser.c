@@ -2414,10 +2414,14 @@ parse_repeat (GtkCssParser *parser,
 {
   GskRepeat *ret = out_val;
 
-  if (gtk_css_parser_try_ident (parser, "pad"))
+  if (gtk_css_parser_try_ident (parser, "none"))
+    *ret = GSK_REPEAT_NONE;
+  else if (gtk_css_parser_try_ident (parser, "pad"))
     *ret = GSK_REPEAT_PAD;
   else if (gtk_css_parser_try_ident (parser, "repeat"))
     *ret = GSK_REPEAT_REPEAT;
+  else if (gtk_css_parser_try_ident (parser, "reflect"))
+    *ret = GSK_REPEAT_REFLECT;
   else
     return FALSE;
 
@@ -4688,13 +4692,10 @@ append_repeat_param (Printer    *p,
                      const char *param_name,
                      GskRepeat   value)
 {
-  const char *names[] = { "pad", "repeat" };
+  const char *names[] = { "pad", "repeat", "reflect" };
 
   _indent (p);
-  g_string_append_printf (p->str, "%s: ", param_name);
-  gtk_css_print_string (p->str, names[value], TRUE);
-  g_string_append_c (p->str, ';');
-  g_string_append_c (p->str, '\n');
+  g_string_append_printf (p->str, "%s: %s;\n", param_name, names[value]);
 }
 
 static void

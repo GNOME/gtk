@@ -374,7 +374,7 @@ Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
 
 Possible values for the repeat property are:
 
-    repeat: pad | repeat
+    repeat: none | pad | repeat | reflect
 
 ### mask
 

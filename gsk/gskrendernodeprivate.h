@@ -210,8 +210,10 @@ typedef enum
 
 typedef enum
 {
+  GSK_REPEAT_NONE,
   GSK_REPEAT_PAD,
   GSK_REPEAT_REPEAT,
+  GSK_REPEAT_REFLECT,
 } GskRepeat;
 
 GskRenderNode * gsk_linear_gradient_node_new2           (const graphene_rect_t   *bounds,
