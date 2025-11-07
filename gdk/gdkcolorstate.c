@@ -682,7 +682,10 @@ gdk_builtin_color_state_get_convert_to (GdkColorState  *color_state,
 {
   GdkBuiltinColorState *self = (GdkBuiltinColorState *) color_state;
 
-  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
+  if (GDK_IS_DEFAULT_COLOR_STATE (target))
+    return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
+
+  return NULL;
 }
 
 static GdkFloatColorConvert
@@ -691,7 +694,10 @@ gdk_builtin_color_state_get_convert_from (GdkColorState  *color_state,
 {
   GdkBuiltinColorState *self = (GdkBuiltinColorState *) color_state;
 
-  return self->convert_from[GDK_DEFAULT_COLOR_STATE_ID (source)];
+  if (GDK_IS_DEFAULT_COLOR_STATE (source))
+    return self->convert_from[GDK_DEFAULT_COLOR_STATE_ID (source)];
+
+  return NULL;
 }
 
 static const GdkCicp *
