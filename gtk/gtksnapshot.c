@@ -2888,7 +2888,12 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
 
   color = gsk_gradient_check_single_color (gradient);
-  if (color == NULL)
+  if (color && gsk_radial_gradient_fills_plane (start_center, start_radius,
+                                                end_center, end_radius))
+    {
+      node = gsk_color_node_new2 (color, &real_bounds);
+    }
+  else
     {
       graphene_point_t real_start;
       graphene_point_t real_end;
@@ -2904,10 +2909,6 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
                                             &real_end, end_radius * scale_x,
                                             aspect_ratio * (scale_x / scale_y),
                                             gradient);
-    }
-  else
-    {
-      node = gsk_color_node_new2 (color, &real_bounds);
     }
 
   gtk_snapshot_append_node_internal (snapshot, node);

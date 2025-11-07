@@ -208,6 +208,11 @@ float                   gsk_radial_gradient_node_get_start_radius     (const Gsk
 float                   gsk_radial_gradient_node_get_end_radius       (const GskRenderNode *node) G_GNUC_PURE;
 float                   gsk_radial_gradient_node_get_aspect_ratio     (const GskRenderNode *node) G_GNUC_PURE;
 
+gboolean gsk_radial_gradient_fills_plane (const graphene_point_t *c1,
+                                          float                   r1,
+                                          const graphene_point_t *c2,
+                                          float                   r2);
+
 void                    gsk_cairo_node_set_surface      (GskRenderNode          *node,
                                                          cairo_surface_t        *surface);
 

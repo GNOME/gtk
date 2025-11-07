@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskgradientprivate.h"
 
 #include <gobject/gvaluecollector.h>
 
@@ -265,6 +266,58 @@ test_gradient_opaque (void)
   gsk_gradient_free (gradient);
 }
 
+static void
+test_radial_gradient_opaque (void)
+{
+  GskRenderNode *node;
+  GskGradient *gradient;
+  GskColorStop stops[] = {
+    { 0.f, (GdkRGBA) { 0, 0, 0, 1} },
+    { 1.f, (GdkRGBA) { 1, 0, 1, 1} },
+  };
+  graphene_rect_t rect;
+
+  gradient = gsk_gradient_new ();
+  gsk_gradient_add_color_stops (gradient, stops, G_N_ELEMENTS (stops));
+
+  node = gsk_radial_gradient_node_new2 (&GRAPHENE_RECT_INIT (0, 0, 50, 50),
+                                        &GRAPHENE_POINT_INIT (25, 25),
+                                        10,
+                                        &GRAPHENE_POINT_INIT (25, 25),
+                                        5,
+                                        1,
+                                        gradient);
+
+  g_assert_true (gsk_render_node_get_opaque_rect (node, &rect));
+  gsk_render_node_unref (node);
+
+  node = gsk_radial_gradient_node_new2 (&GRAPHENE_RECT_INIT (0, 0, 50, 50),
+                                        &GRAPHENE_POINT_INIT (25, 25),
+                                        10,
+                                        &GRAPHENE_POINT_INIT (35, 25),
+                                        5,
+                                        1,
+                                        gradient);
+
+  g_assert_false (gsk_render_node_get_opaque_rect (node, &rect));
+  gsk_render_node_unref (node);
+
+  gsk_gradient_set_repeat (gradient, GSK_REPEAT_NONE);
+
+  node = gsk_radial_gradient_node_new2 (&GRAPHENE_RECT_INIT (0, 0, 50, 50),
+                                        &GRAPHENE_POINT_INIT (25, 25),
+                                        10,
+                                        &GRAPHENE_POINT_INIT (25, 25),
+                                        5,
+                                        1,
+                                        gradient);
+
+  g_assert_false (gsk_render_node_get_opaque_rect (node, &rect));
+  gsk_render_node_unref (node);
+
+  gsk_gradient_free (gradient);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -280,6 +333,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/renderer/gl", test_gl_renderer);
   g_test_add_func ("/renderer/vulkan", test_vulkan_renderer);
   g_test_add_func ("/gradient/opaque", test_gradient_opaque);
+  g_test_add_func ("/rendernode/radial-gradient/opaque", test_radial_gradient_opaque);
 
   return g_test_run ();
 }

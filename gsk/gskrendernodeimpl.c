@@ -1120,6 +1120,28 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   return node;
 }
 
+static gboolean
+circle_contains_circle (const graphene_point_t *c1,
+                        float                   r1,
+                        const graphene_point_t *c2,
+                        float                   r2)
+{
+  return graphene_point_distance (c1, c2, NULL, NULL) + r2 < r1;
+}
+
+/* If the circles are not fully contained in each other,
+ * the gradient is a cone that does *not* cover the whole plane
+ */
+gboolean
+gsk_radial_gradient_fills_plane (const graphene_point_t *c1,
+                                 float                   r1,
+                                 const graphene_point_t *c2,
+                                 float                   r2)
+{
+  return circle_contains_circle (c1, r1, c2, r2) ||
+         circle_contains_circle (c2, r2, c1, r1);
+}
+
 /*< private >
  * gsk_radial_gradient_node_new2:
  * @bounds: the bounds of the node
@@ -1176,7 +1198,10 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
 
   gsk_gradient_init_copy (&self->gradient, gradient);
 
-  node->fully_opaque = gsk_gradient_is_opaque (gradient);
+  node->fully_opaque = gsk_gradient_is_opaque (gradient) &&
+                       gsk_radial_gradient_fills_plane (start_center, start_radius,
+                                                        end_center, end_radius);
+
   node->preferred_depth = gdk_color_state_get_depth (gsk_gradient_get_interpolation (gradient));
   node->is_hdr = color_state_is_hdr (gsk_gradient_get_interpolation (gradient));
 
