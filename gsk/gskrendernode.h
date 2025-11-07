@@ -153,7 +153,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
 #define GSK_TYPE_CAIRO_NODE                     (gsk_cairo_node_get_type())
-#define GSK_TYPE_CONTAINER_NODE                 (gsk_container_node_get_type())
 #define GSK_TYPE_TRANSFORM_NODE                 (gsk_transform_node_get_type())
 #define GSK_TYPE_OPACITY_NODE                   (gsk_opacity_node_get_type())
 #define GSK_TYPE_COLOR_MATRIX_NODE              (gsk_color_matrix_node_get_type())
@@ -184,7 +183,6 @@ typedef struct _GskBorderNode                   GskBorderNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskCairoNode                    GskCairoNode;
-typedef struct _GskContainerNode                GskContainerNode;
 typedef struct _GskTransformNode                GskTransformNode;
 typedef struct _GskOpacityNode                  GskOpacityNode;
 typedef struct _GskColorMatrixNode              GskColorMatrixNode;
@@ -383,17 +381,6 @@ GDK_AVAILABLE_IN_ALL
 cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 cairo_surface_t *       gsk_cairo_node_get_surface              (GskRenderNode            *node);
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_container_node_get_type             (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_container_node_new                  (GskRenderNode           **children,
-                                                                 guint                     n_children);
-GDK_AVAILABLE_IN_ALL
-guint                   gsk_container_node_get_n_children       (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_container_node_get_child            (const GskRenderNode      *node,
-                                                                 guint                     idx) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_transform_node_get_type             (void) G_GNUC_CONST;

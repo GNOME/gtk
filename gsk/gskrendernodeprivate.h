@@ -90,9 +90,6 @@ void            gsk_render_node_diff                    (GskRenderNode          
 void            gsk_render_node_diff_impossible         (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
                                                          GskDiffData                 *data);
-void            gsk_container_node_diff_with            (GskRenderNode               *container,
-                                                         GskRenderNode               *other,
-                                                         GskDiffData                 *data);
 void            gsk_render_node_draw_ccs                (GskRenderNode               *node,
                                                          cairo_t                     *cr,
                                                          GdkColorState               *ccs);
@@ -111,16 +108,11 @@ void            gsk_text_node_serialize_glyphs          (GskRenderNode          
 cairo_hint_style_t
                 gsk_text_node_get_font_hint_style       (const GskRenderNode         *self) G_GNUC_PURE;
 
-GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode         *node,
-                                                         guint                       *n_children);
-
 void            gsk_transform_node_get_translate        (const GskRenderNode         *node,
                                                          float                       *dx,
                                                          float                       *dy);
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
-
-gboolean        gsk_container_node_is_disjoint          (const GskRenderNode         *node) G_GNUC_PURE;
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
 #define gsk_render_node_unref(node) _gsk_render_node_unref(node)
