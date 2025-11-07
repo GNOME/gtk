@@ -68,6 +68,21 @@ struct _GskRenderNodeClass
 
 void            gsk_render_node_init_types              (void);
 
+#define GSK_DEFINE_NODE_TYPE(TypeName, type_name) \
+GType \
+type_name##_get_type (void) \
+{ \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
+    { \
+      GType g_define_type_id = gsk_render_node_type_register_static (g_intern_static_string (#TypeName), \
+                                                                     sizeof (TypeName), \
+                                                                     type_name ## _class_init); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+    } \
+  return static_g_define_type_id; \
+}
+
 GType           gsk_render_node_type_register_static    (const char                  *node_name,
                                                          gsize                        instance_size,
                                                          GClassInitFunc               class_init);
