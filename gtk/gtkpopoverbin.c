@@ -9,6 +9,8 @@
 #include "gtkpopoverbin.h"
 
 #include "gtkbinlayout.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
@@ -43,7 +45,46 @@ enum
 
 static GParamSpec *obj_props[N_PROPS];
 
-G_DEFINE_FINAL_TYPE (GtkPopoverBin, gtk_popover_bin, GTK_TYPE_WIDGET)
+static GtkBuildableIface *parent_buildable_iface;
+
+static void gtk_popover_bin_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkPopoverBin, gtk_popover_bin, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                      gtk_popover_bin_buildable_iface_init))
+
+static void
+gtk_popover_bin_buildable_add_child (GtkBuildable *buildable,
+                                     GtkBuilder   *builder,
+                                     GObject      *child,
+                                     const char   *type)
+{
+  if (GTK_IS_WIDGET (child))
+    {
+      if (GTK_IS_POPOVER (child))
+        {
+          gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "popover");
+          gtk_popover_bin_set_popover (GTK_POPOVER_BIN (buildable), GTK_WIDGET (child));
+        }
+      else
+        {
+          gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "child");
+          gtk_popover_bin_set_child (GTK_POPOVER_BIN (buildable), GTK_WIDGET (child));
+        }
+    }
+  else
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
+}
+
+static void
+gtk_popover_bin_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_popover_bin_buildable_add_child;
+}
 
 static void
 on_popover_destroy (GtkPopoverBin *self)
