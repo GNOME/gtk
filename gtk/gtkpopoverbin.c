@@ -122,6 +122,26 @@ gtk_popover_bin_get_property (GObject *gobject,
 }
 
 static void
+gtk_popover_bin_compute_expand (GtkWidget *widget,
+                                gboolean *hexpand_p,
+                                gboolean *vexpand_p)
+{
+  GtkPopoverBin *self = GTK_POPOVER_BIN (widget);
+  gboolean hexpand = FALSE, vexpand = FALSE;
+
+  if (self->child != NULL)
+    {
+      hexpand = gtk_widget_compute_expand (self->child, GTK_ORIENTATION_HORIZONTAL);
+      vexpand = gtk_widget_compute_expand (self->child, GTK_ORIENTATION_VERTICAL);
+    }
+
+  if (hexpand_p != NULL)
+    *hexpand_p = hexpand;
+  if (vexpand_p != NULL)
+    *vexpand_p = vexpand;
+}
+
+static void
 gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -130,6 +150,10 @@ gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
   gobject_class->set_property = gtk_popover_bin_set_property;
   gobject_class->get_property = gtk_popover_bin_get_property;
   gobject_class->dispose = gtk_popover_bin_dispose;
+
+  widget_class->focus = gtk_widget_focus_child;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
+  widget_class->compute_expand = gtk_popover_bin_compute_expand;
 
   /**
    * GtkPopoverBin:menu-model:
