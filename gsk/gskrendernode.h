@@ -141,7 +141,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
                                                                  GskParseErrorFunc  error_func,
                                                                  gpointer           user_data);
 
-#define GSK_TYPE_DEBUG_NODE                     (gsk_debug_node_get_type())
 #define GSK_TYPE_TEXTURE_NODE                   (gsk_texture_node_get_type())
 #define GSK_TYPE_TEXTURE_SCALE_NODE             (gsk_texture_scale_node_get_type())
 #define GSK_TYPE_LINEAR_GRADIENT_NODE           (gsk_linear_gradient_node_get_type())
@@ -171,7 +170,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 #define GSK_TYPE_COMPONENT_TRANSFER_NODE        (gsk_component_transfer_node_get_type())
 
-typedef struct _GskDebugNode                    GskDebugNode;
 typedef struct _GskTextureNode                  GskTextureNode;
 typedef struct _GskTextureScaleNode             GskTextureScaleNode;
 typedef struct _GskLinearGradientNode           GskLinearGradientNode;
@@ -200,16 +198,6 @@ typedef struct _GskMaskNode                     GskMaskNode;
 typedef struct _GskGLShaderNode                 GskGLShaderNode GDK_DEPRECATED_TYPE_IN_4_16_FOR(GtkGLArea);
 typedef struct _GskSubsurfaceNode               GskSubsurfaceNode;
 typedef struct _GskComponentTransferNode        GskComponentTransferNode;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_debug_node_get_type                 (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_debug_node_new                      (GskRenderNode            *child,
-                                                                 char                     *message);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_debug_node_get_child                (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const char *            gsk_debug_node_get_message              (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;

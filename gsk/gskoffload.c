@@ -24,6 +24,7 @@
 
 #include "gskcolornodeprivate.h"
 #include "gskcontainernodeprivate.h"
+#include "gskdebugnode.h"
 #include "gskdebugprivate.h"
 #include "gskrendernode.h"
 #include "gskrectprivate.h"

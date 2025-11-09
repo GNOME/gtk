@@ -6,6 +6,7 @@
 
 #include "gskcolornode.h"
 #include "gskcontainernode.h"
+#include "gskdebugnode.h"
 #include "gskdebugprivate.h"
 #include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
