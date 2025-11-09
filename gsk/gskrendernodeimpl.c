@@ -8568,7 +8568,7 @@ gsk_subsurface_node_new (GskRenderNode *child,
 
 /**
  * gsk_subsurface_node_get_child:
- * @node: (type GskSubsurfaceNode): a debug `GskRenderNode`
+ * @node: (type GskSubsurfaceNode): a subsurface `GskRenderNode`
  *
  * Gets the child node that is getting drawn by the given @node.
  *
@@ -8586,7 +8586,7 @@ gsk_subsurface_node_get_child (const GskRenderNode *node)
 
 /**
  * gsk_subsurface_node_get_subsurface: (skip)
- * @node: (type GskDebugNode): a debug `GskRenderNode`
+ * @node: (type GskDebugNode): a subsurface `GskRenderNode`
  *
  * Gets the subsurface that was set on this node
  *
@@ -8789,7 +8789,7 @@ gsk_component_transfer_node_new (GskRenderNode              *child,
 
 /**
  * gsk_component_transfer_node_get_child:
- * @node: (type GskComponentTransferNode): a debug `GskRenderNode`
+ * @node: (type GskComponentTransferNode): a component transfer `GskRenderNode`
  *
  * Gets the child node that is getting drawn by the given @node.
  *
@@ -8807,7 +8807,7 @@ gsk_component_transfer_node_get_child (const GskRenderNode *node)
 
 /**
  * gsk_component_transfer_node_get_transfer:
- * @node: (type GskComponentTransferNode): a debug `GskRenderNode`
+ * @node: (type GskComponentTransferNode): a component transfer `GskRenderNode`
  * @component: a value between 0 and 3 to indicate the red, green, blue
  *   or alpha component
  *
