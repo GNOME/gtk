@@ -55,6 +55,7 @@ gsk_gpu_download_op_finish (GskGpuOp *op)
   if (self->create_func)
     self->create_func (self);
 
+  gdk_color_state_unref (self->color_state);
   g_object_unref (self->image);
   g_clear_object (&self->buffer);
 }
