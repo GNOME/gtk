@@ -26,6 +26,7 @@
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcontainernodeprivate.h"
+#include "gskdebugnode.h"
 #include "gskenumtypes.h"
 #include "gskgradientprivate.h"
 #include "gskprivate.h"

@@ -21,6 +21,7 @@
 
 #include <gsk/gskcolornode.h>
 #include <gsk/gskcontainernode.h>
+#include <gsk/gskdebugnode.h>
 #include <gsk/gskenums.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>
