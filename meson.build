@@ -646,7 +646,6 @@ if x11_enabled
 endif
 
 if broadway_enabled
-  pc_gdk_extra_libs += ['-lz']
   backend_immodules += ['broadway']
 endif
 
@@ -891,6 +890,10 @@ pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
 gdk_packages = ' '.join([ pango_pkgname, pango_req,
                        'pangocairo', pango_req,
                        'gdk-pixbuf-2.0', gdk_pixbuf_req ])
+
+if broadway_enabled
+  gdk_packages += ' zlib'
+endif
 
 cairo_packages = ''
 
