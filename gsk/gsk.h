@@ -21,9 +21,11 @@
 
 #include <gsk/gskcaironode.h>
 #include <gsk/gskcolornode.h>
+#include <gsk/gskcopynode.h>
 #include <gsk/gskcontainernode.h>
 #include <gsk/gskdebugnode.h>
 #include <gsk/gskenums.h>
+#include <gsk/gskpastenode.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>
 #include <gsk/gskpathmeasure.h>

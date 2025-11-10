@@ -44,6 +44,7 @@ node_attach (const GskRenderNode *node,
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
     case GSK_TEXT_NODE:
+    case GSK_PASTE_NODE:
       return gsk_render_node_ref ((GskRenderNode *)node);
 
     case GSK_TRANSFORM_NODE:
@@ -214,6 +215,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                              gsk_component_transfer_node_get_transfer (node, 3));
       gsk_render_node_unref (child);
       return res;
+
+    case GSK_COPY_NODE:
+      child = node_attach (gsk_copy_node_get_child (node), surface, idx);
+      res = gsk_copy_node_new (child);
+      gsk_render_node_unref (child);
+      return res;
+
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();

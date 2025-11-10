@@ -8680,6 +8680,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   GSK_INIT_NODE_TYPE (GSK_STROKE_NODE, GskStrokeNode, gsk_stroke_node)
   GSK_INIT_NODE_TYPE (GSK_SUBSURFACE_NODE, GskSubsurfaceNode, gsk_subsurface_node)
   GSK_INIT_NODE_TYPE (GSK_COMPONENT_TRANSFER_NODE, GskComponentTransferNode, gsk_component_transfer_node)
+  gsk_render_node_types[GSK_COPY_NODE] = gsk_copy_node_get_type ();
+  gsk_render_node_types[GSK_PASTE_NODE] = gsk_paste_node_get_type ();
 }
 
 /*< private >
