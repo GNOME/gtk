@@ -29,6 +29,7 @@
 #include "gskcomponenttransfernode.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcontainernodeprivate.h"
+#include "gskcopynode.h"
 #include "gskcrossfadenode.h"
 #include "gskdebugnode.h"
 #include "gskenumtypes.h"
@@ -36,9 +37,10 @@
 #include "gskglshadernode.h"
 #include "gskgradientprivate.h"
 #include "gskopacitynode.h"
-#include "gskprivate.h"
+#include "gskpastenode.h"
 #include "gskpath.h"
 #include "gskpathbuilder.h"
+#include "gskprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrepeatnode.h"
@@ -3980,6 +3982,46 @@ parse_component_transfer_node (GtkCssParser *parser,
   return result;
 }
 
+static GskRenderNode *
+parse_copy_node (GtkCssParser *parser,
+                 Context      *context)
+{
+  GskRenderNode *child = NULL;
+  const Declaration declarations[] = {
+    { "child", parse_node, clear_node, &child },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+
+  result = gsk_copy_node_new (child);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
+parse_paste_node (GtkCssParser *parser,
+                  Context      *context)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  gsize depth = 0;
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "depth", parse_size, NULL, &depth},
+  };
+  GskRenderNode *node;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+
+  node = gsk_paste_node_new (&bounds, depth);
+
+  return node;
+}
+
 static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
@@ -4020,6 +4062,8 @@ parse_node (GtkCssParser *parser,
     { "mask", parse_mask_node },
     { "subsurface", parse_subsurface_node },
     { "component-transfer", parse_component_transfer_node },
+    { "copy", parse_copy_node },
+    { "paste", parse_paste_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4293,6 +4337,7 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_CONIC_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
+    case GSK_PASTE_NODE:
       /* no children */
       break;
 
@@ -4393,6 +4438,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_COMPONENT_TRANSFER_NODE:
       printer_init_duplicates_for_node (printer, gsk_component_transfer_node_get_child (node));
+      break;
+
+    case GSK_COPY_NODE:
+      printer_init_duplicates_for_node (printer, gsk_copy_node_get_child (node));
       break;
 
     default:
@@ -4593,6 +4642,15 @@ append_unsigned_param (Printer    *p,
 {
   _indent (p);
   g_string_append_printf (p->str, "%s: %u;\n", param_name, value);
+}
+
+static void
+append_size_param (Printer    *p,
+                   const char *param_name,
+                   gsize       value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: %" G_GSIZE_FORMAT ";\n", param_name, value);
 }
 
 static void
@@ -6251,6 +6309,24 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_component_transfer_param (p, "blue", gsk_component_transfer_node_get_transfer (node, 2));
         append_component_transfer_param (p, "alpha", gsk_component_transfer_node_get_transfer (node, 3));
 
+        end_node (p);
+      }
+      break;
+
+    case GSK_COPY_NODE:
+      {
+        start_node (p, "copy", node_name);
+        append_node_param (p, "child", gsk_debug_node_get_child (node));
+        end_node (p);
+      }
+      break;
+
+    case GSK_PASTE_NODE:
+      {
+        start_node (p, "paste", node_name);
+        append_rect_param (p, "bounds", &node->bounds);
+        if (gsk_paste_node_get_depth (node) != 0)
+          append_size_param (p, "depth", gsk_paste_node_get_depth (node));
         end_node (p);
       }
       break;
