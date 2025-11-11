@@ -4,7 +4,8 @@
 
 $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
-$assets: if($contrast=='normal', 'assets', 'assets-hc');
+$asset_prefix: if($contrast=='normal', '', 'hc-');
+$assets: 'assets';
 $backdrop_transition: 200ms ease-out;
 $button_transition: all 200ms $ease-out-quad;
 $focus_transition: outline-width 200ms $ease-out-quad, outline-offset 200ms $ease-out-quad;
@@ -2641,9 +2642,9 @@ check {
   border-radius: 3px;
   -gtk-icon-size: 14px;
 
-  &:checked { -gtk-icon-source: -gtk-recolor(url("#{$assets}/check-symbolic.svg")); }
+  &:checked { -gtk-icon-source: -gtk-recolor(url("#{$assets}/#{$asset_prefix}check-symbolic.svg")); }
 
-  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("#{$assets}/dash-symbolic.svg")); }
+  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("#{$assets}/#{$asset_prefix}dash-symbolic.svg")); }
 }
 
 %radio,
@@ -2651,9 +2652,9 @@ radio {
   border-radius: 100%;
   -gtk-icon-size: 14px;
 
-  &:checked { -gtk-icon-source: -gtk-recolor(url("#{$assets}/bullet-symbolic.svg")); }
+  &:checked { -gtk-icon-source: -gtk-recolor(url("#{$assets}/#{$asset_prefix}bullet-symbolic.svg")); }
 
-  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("#{$assets}/dash-symbolic.svg")); }
+  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("#{$assets}/#{$asset_prefix}dash-symbolic.svg")); }
 }
 
 treeview.view check,
@@ -2906,7 +2907,6 @@ scale {
   // *WARNING* scale with marks madness following
 
   // FIXME: OSD and selected list rows missing, I don't feel like adding the other 144 assets needed for those...
-  $suffix: if($variant == 'light', '', '-dark');
 
   @each $dir_class, $dir_infix in ('horizontal', 'horz'),
                                   ('vertical', 'vert') {
@@ -2923,7 +2923,7 @@ scale {
               // an asymmetric slider asset is used here, so the margins are uneven, the smaller
               // margin is set on the point side.
               margin: -10px;
-              $_scale_asset: '#{$assets}/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
+              $_scale_asset: '#{$assets}/#{$asset_prefix}slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$asset_suffix}';
               border-style: none;
               border-radius: 0;
 
@@ -4311,19 +4311,19 @@ cursor-handle {
                   (':hover','-hover'),
                   (':active','-active') { //no need for insensitive and backdrop
     &.top#{$s}:dir(ltr), &.bottom#{$s}:dir(rtl) {
-      $_url: '#{$assets}/text-select-start#{$as}#{$asset_suffix}';
+      $_url: '#{$assets}/#{$asset_prefix}text-select-start#{$as}#{$asset_suffix}';
       -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
                                     url('#{$_url}@2.png'));
     }
 
     &.bottom#{$s}:dir(ltr), &.top#{$s}:dir(rtl) {
-      $_url: '#{$assets}/text-select-end#{$as}#{$asset_suffix}';
+      $_url: '#{$assets}/#{$asset_prefix}text-select-end#{$as}#{$asset_suffix}';
       -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
                                     url('#{$_url}@2.png'));
     }
 
     &.insertion-cursor#{$s}:dir(ltr), &.insertion-cursor#{$s}:dir(rtl) {
-      $_url: '#{$assets}/slider-horz-scale-has-marks-above#{$as}#{$asset_suffix}';
+      $_url: '#{$assets}/#{$asset_prefix}slider-horz-scale-has-marks-above#{$as}#{$asset_suffix}';
       -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
                                     url('#{$_url}@2.png'));
     }

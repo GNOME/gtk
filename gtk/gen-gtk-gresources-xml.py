@@ -49,13 +49,9 @@ xml += '\n'
 for f in get_files('theme/Default/assets', '.svg'):
   xml += '    <file preprocess=\'xml-stripblanks\'>theme/Default/assets/{0}</file>\n'.format(f)
 
-for f in get_files('theme/Default/assets-hc', '.png'):
-  xml += '    <file>theme/Default/assets-hc/{0}</file>\n'.format(f)
 
 xml += '\n'
 
-for f in get_files('theme/Default/assets-hc', '.svg'):
-  xml += '    <file preprocess=\'xml-stripblanks\'>theme/Default/assets-hc/{0}</file>\n'.format(f)
 
 for f in get_files('ui', '.ui'):
   xml += '    <file>ui/{0}</file>\n'.format(f)
