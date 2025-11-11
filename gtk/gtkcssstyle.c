@@ -337,6 +337,8 @@ gtk_css_style_get_computed_value (GtkCssStyle *style,
       return style->animation->animation_fill_mode;
     case GTK_CSS_PROPERTY_OPACITY:
       return style->other->opacity;
+    case GTK_CSS_PROPERTY_BACKDROP_FILTER:
+      return style->other->backdrop_filter;
     case GTK_CSS_PROPERTY_FILTER:
       return style->other->filter;
     case GTK_CSS_PROPERTY_CARET_COLOR:
