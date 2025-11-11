@@ -130,7 +130,7 @@ container:fedora:
 
 .container.android:
   variables:
-    BASE_TAG: '2025-08-05.0'
+    BASE_TAG: '2025-11-11.0'
     FDO_DISTRIBUTION_VERSION: sid
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -450,10 +450,8 @@ android:
     - mkdir -p subprojects/packagefiles/
     - cp -f pixiewood/prepare/wraps/glib/hack.patch subprojects/packagefiles/glib_hack.patch
     - sed -i 's/\[provide\]/diff_files = glib_hack.patch\n\n\0/' subprojects/glib.wrap
-    # Drop this as soon as Debian/the container has meson >= 1.7.0
-    - git clone --depth 1 https://github.com/mesonbuild/meson.git --branch 1.8.2
   script:
-    - ./meson/meson.py setup
+    - meson setup
             --cross-file "${ANDROID_HOME}/toolchain.cross"
             --cross-file "pixiewood/prepare/arch/$ARCH.cross"
             --cross-file "pixiewood/prepare/android.cross"
@@ -462,7 +460,7 @@ android:
             ${BACKEND_FLAGS}
             ${FEATURE_FLAGS}
             _build
-    - ./meson/meson.py compile -C _build
+    - meson compile -C _build
   artifacts:
     when: always
     paths:
@@ -487,13 +485,12 @@ android:
   before_script:
     - .gitlab-ci/show-info-linux.sh
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
-    - git clone --depth 1 https://github.com/mesonbuild/meson.git # TODO: affix to a tag as soon as one exists that contains 98b1980
     - git clone --depth 1 https://github.com/sp1ritCS/mini-studio.git
   script:
     # This should be included in the repo itself once it's been merged into meson and released
     - >
       find demos/ -type f -name 'meson.build' -exec sed -i "s/^executable.*$/\0 android_exe_type: 'application',/" {} \;
-    - ./pixiewood/pixiewood prepare --release -s "${ANDROID_HOME}" -a ./mini-studio --meson ./meson/meson.py "build-aux/android/${APPID}.xml"
+    - ./pixiewood/pixiewood prepare --release -s "${ANDROID_HOME}" -a ./mini-studio "build-aux/android/${APPID}.xml"
     - ./pixiewood/pixiewood generate
     - ./pixiewood/pixiewood build
     - mkdir -p apks/${APPID}/
