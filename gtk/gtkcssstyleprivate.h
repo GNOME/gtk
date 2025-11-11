@@ -227,6 +227,7 @@ struct _GtkCssOtherValues {
   GtkCssValue *transform;
   GtkCssValue *transform_origin;
   GtkCssValue *opacity;
+  GtkCssValue *backdrop_filter;
   GtkCssValue *filter;
 };
 

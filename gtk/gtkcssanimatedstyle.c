@@ -571,6 +571,10 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_other (animated);
       gtk_css_take_value (&style->other->opacity, value);
       break;
+    case GTK_CSS_PROPERTY_BACKDROP_FILTER:
+      unshare_other (animated);
+      gtk_css_take_value (&style->other->backdrop_filter, value);
+      break;
     case GTK_CSS_PROPERTY_FILTER:
       unshare_other (animated);
       gtk_css_take_value (&style->other->filter, value);

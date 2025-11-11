@@ -574,6 +574,9 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
     case GTK_CSS_PROPERTY_OPACITY:
       gtk_css_take_value (&style->other->opacity, value);
       break;
+    case GTK_CSS_PROPERTY_BACKDROP_FILTER:
+      gtk_css_take_value (&style->other->backdrop_filter, value);
+      break;
     case GTK_CSS_PROPERTY_FILTER:
       gtk_css_take_value (&style->other->filter, value);
       break;
@@ -843,6 +846,7 @@ gtk_css_other_create_initial_values (void)
   values->transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSFORM, &context);
   values->transform_origin = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSFORM_ORIGIN, &context);
   values->opacity = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OPACITY, &context);
+  values->backdrop_filter = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKDROP_FILTER, &context);
   values->filter = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FILTER, &context);
 
   return (GtkCssValues *)values;

@@ -1427,6 +1427,12 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_POSTEFFECT,
                                           opacity_parse,
                                           gtk_css_number_value_new (1, GTK_CSS_NUMBER));
+  gtk_css_style_property_register        ("backdrop-filter",
+                                          GTK_CSS_PROPERTY_BACKDROP_FILTER,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_POSTEFFECT,
+                                          filter_value_parse,
+                                          gtk_css_filter_value_new_none ());
   gtk_css_style_property_register        ("filter",
                                           GTK_CSS_PROPERTY_FILTER,
                                           GTK_STYLE_PROPERTY_ANIMATED,
