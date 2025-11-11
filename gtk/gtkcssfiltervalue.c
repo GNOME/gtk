@@ -26,6 +26,8 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 
+#include "gsk/gskcairoblurprivate.h"
+
 typedef union _GtkCssFilter GtkCssFilter;
 
 typedef enum {
@@ -57,7 +59,6 @@ struct _GtkCssValue {
 };
 
 static GtkCssValue *    gtk_css_filter_value_alloc           (guint                  n_values);
-static gboolean         gtk_css_filter_value_is_none         (const GtkCssValue     *value);
 
 static void
 gtk_css_filter_clear (GtkCssFilter *filter)
@@ -739,7 +740,7 @@ gtk_css_filter_value_new_none (void)
   return gtk_css_value_ref (&filter_none_singleton);
 }
 
-static gboolean
+gboolean
 gtk_css_filter_value_is_none (const GtkCssValue *value)
 {
   return value->n_filters == 0;
@@ -929,18 +930,21 @@ fail:
   return NULL;
 }
 
-void
+/* Returns: extra size due to blur radii */
+double
 gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
                                     GtkSnapshot       *snapshot)
 {
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
   gboolean all_opacity;
+  double extra_size;
   int i, j;
 
   if (gtk_css_filter_value_is_none (filter))
-    return;
+    return 0;
 
+  extra_size = 0;
   i = 0;
   while (i < filter->n_filters)
     {
@@ -960,6 +964,7 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
             {
               double std_dev = gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
               gtk_snapshot_push_blur (snapshot, 2 * std_dev);
+              extra_size += gsk_cairo_blur_compute_pixels (std_dev);
             }
           else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
             {
@@ -971,6 +976,8 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
 
       i = j + 1;
     }
+
+  return extra_size;
 }
 
 void

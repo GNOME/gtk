@@ -29,7 +29,9 @@ G_BEGIN_DECLS
 GtkCssValue *   gtk_css_filter_value_new_none           (void);
 GtkCssValue *   gtk_css_filter_value_parse              (GtkCssParser           *parser);
 
-void            gtk_css_filter_value_push_snapshot      (const GtkCssValue      *filter,
+gboolean        gtk_css_filter_value_is_none            (const GtkCssValue      *filter);
+
+double          gtk_css_filter_value_push_snapshot      (const GtkCssValue      *filter,
                                                          GtkSnapshot            *snapshot);
 void            gtk_css_filter_value_pop_snapshot       (const GtkCssValue      *filter,
                                                          GtkSnapshot            *snapshot);
