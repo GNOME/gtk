@@ -7,6 +7,7 @@ gsk_public_sources = files([
   'gskcomponenttransfernode.c',
   'gskcontainernode.c',
   'gskcopynode.c',
+  'gskcopypasteutils.c',
   'gskcrossfadenode.c',
   'gskdebugnode.c',
   'gskdiff.c',
