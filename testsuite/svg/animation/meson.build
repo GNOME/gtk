@@ -32,6 +32,7 @@ foreach testname : test_data
   test('svg animation ' + testname, test_renderer,
         args: [ '--tap',
                 '-k',
+                '--output', meson.current_build_dir(),
                 join_paths(meson.current_source_dir(), testname),
               ],
         protocol: 'tap',
