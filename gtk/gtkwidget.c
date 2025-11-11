@@ -11954,7 +11954,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssBoxes boxes;
-  GtkCssValue *filter_value;
+  GtkCssValue *filter_value, *backdrop_filter_value;
   double css_opacity, opacity;
   GtkCssStyle *style;
 
@@ -11972,6 +11972,25 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   gtk_snapshot_push_debug (snapshot,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
+
+  backdrop_filter_value = style->other->backdrop_filter;
+  if (!gtk_css_filter_value_is_none (backdrop_filter_value))
+    {
+      const GskRoundedRect *border_box = gtk_css_boxes_get_border_box (&boxes);
+      graphene_rect_t bounds;
+      double extra_size;
+      gtk_snapshot_push_copy (snapshot);
+      gtk_snapshot_push_rounded_clip (snapshot, border_box);
+      extra_size = gtk_css_filter_value_push_snapshot (backdrop_filter_value, snapshot);
+      bounds = gtk_css_boxes_get_border_box (&boxes)->bounds;
+      graphene_rect_inset (&bounds, - extra_size, - extra_size);
+      gtk_snapshot_append_paste (snapshot,
+                                 &bounds,
+                                 0);
+      gtk_css_filter_value_pop_snapshot (backdrop_filter_value, snapshot);
+      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_pop (snapshot);
+    }
 
   filter_value = style->other->filter;
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
