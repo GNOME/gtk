@@ -274,6 +274,7 @@ Possible values for the transfer propertes are:
 | center            | `<point>`       | 25, 25         | always      |
 | rotation          | `<number>`      | 0              | always      |
 | stops             | `<color-stops>` | 0 #AF0, 1 #F0C | always      |
+| repeat            | `<repeat>`      | pad            | non-default |
 | interpolation     | `<color-state>` | srgb           | non-default |
 | hue-interpolation | `<hue-interp>`  | shorter        | non-default |
 
