@@ -47,6 +47,7 @@ struct _GtkCssImageConic
 
   GtkCssValue *center;
   GtkCssValue *rotation;
+  guint repeating : 1;
 
   GtkCssColorSpace color_space;
   GtkCssHueInterpolation hue_interp;
