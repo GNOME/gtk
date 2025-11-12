@@ -1802,6 +1802,9 @@ gsk_conic_gradient_node_new2 (const graphene_rect_t   *bounds,
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (center != NULL, NULL);
 
+  if (gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
+    g_warning_once ("Repeating conic gradients are not supported yet");
+
   self = gsk_render_node_alloc (GSK_CONIC_GRADIENT_NODE);
   node = (GskRenderNode *) self;
 
