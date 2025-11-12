@@ -540,9 +540,9 @@ interpolate_color_stops (GdkColorState         *ccs,
                          GdkColorState         *interpolation,
                          GskHueInterpolation    hue_interpolation,
                          float                  offset1,
-                         GdkColor              *color1,
+                         const GdkColor        *color1,
                          float                  offset2,
-                         GdkColor              *color2,
+                         const GdkColor        *color2,
                          float                  transition_hint,
                          ColorStopCallback      callback,
                          gpointer               data)
@@ -774,7 +774,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
 
   node = gsk_linear_gradient_node_new2 (bounds,
                                         start, end,
-                                        GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                        GSK_REPEAT_PAD,
                                         GDK_COLOR_STATE_SRGB,
                                         GSK_HUE_INTERPOLATION_SHORTER,
                                         stops, n_color_stops);
@@ -790,7 +790,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * @bounds: the rectangle to render the linear gradient into
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
- * @spread_method: what to do about colors outside the `[start,end]` range
+ * @repeat: what to do about colors outside the `[start,end]` range
  * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
  * @color_stops: (array length=n_color_stops): a pointer to an array of
@@ -808,7 +808,7 @@ GskRenderNode *
 gsk_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
                                const graphene_point_t  *start,
                                const graphene_point_t  *end,
-                               GskGradientSpreadMethod  spread_method,
+                               GskRepeat                repeat,
                                GdkColorState           *interpolation,
                                GskHueInterpolation      hue_interpolation,
                                const GskGradientStop   *stops,
@@ -829,7 +829,7 @@ gsk_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
     g_return_val_if_fail (stops[i].offset >= stops[i - 1].offset, NULL);
   g_return_val_if_fail (stops[n_stops - 1].offset <= 1, NULL);
 
-  if (spread_method == GSK_GRADIENT_SPREAD_METHOD_PAD)
+  if (repeat == GSK_REPEAT_PAD)
     self = gsk_render_node_alloc (GSK_LINEAR_GRADIENT_NODE);
   else
     self = gsk_render_node_alloc (GSK_REPEATING_LINEAR_GRADIENT_NODE);
@@ -897,7 +897,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
 
   node = gsk_linear_gradient_node_new2 (bounds,
                                         start, end,
-                                        GSK_GRADIENT_SPREAD_METHOD_REPEAT,
+                                        GSK_REPEAT_REPEAT,
                                         GDK_COLOR_STATE_SRGB,
                                         GSK_HUE_INTERPOLATION_SHORTER,
                                         stops, n_color_stops);
@@ -1257,7 +1257,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   node = gsk_radial_gradient_node_new2 (bounds, center,
                                         hradius, vradius,
                                         start, end,
-                                        GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                        GSK_REPEAT_PAD,
                                         GDK_COLOR_STATE_SRGB,
                                         GSK_HUE_INTERPOLATION_SHORTER,
                                         stops, n_color_stops);
@@ -1276,7 +1276,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
  * @vradius: the vertical radius
  * @start: a percentage >= 0 that defines the start of the gradient around @center
  * @end: a percentage >= 0 that defines the end of the gradient around @center
- * @spread_method: what to do about colors outside the `[start,end]` range
+ * @repeat: what to do about colors outside the `[start,end]` range
  * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
  * @stops: (array length=n_color_stops): a pointer to an array of
@@ -1300,7 +1300,7 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
                                float                    vradius,
                                float                    start,
                                float                    end,
-                               GskGradientSpreadMethod  spread_method,
+                               GskRepeat                repeat,
                                GdkColorState           *interpolation,
                                GskHueInterpolation      hue_interpolation,
                                const GskGradientStop   *stops,
@@ -1325,7 +1325,7 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
     g_return_val_if_fail (stops[i].offset >= stops[i - 1].offset, NULL);
   g_return_val_if_fail (stops[n_stops - 1].offset <= 1, NULL);
 
-  if (spread_method == GSK_GRADIENT_SPREAD_METHOD_PAD)
+  if (repeat == GSK_REPEAT_PAD)
     self = gsk_render_node_alloc (GSK_RADIAL_GRADIENT_NODE);
   else
     self = gsk_render_node_alloc (GSK_REPEATING_RADIAL_GRADIENT_NODE);
@@ -1410,7 +1410,7 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   node = gsk_radial_gradient_node_new2 (bounds, center,
                                         hradius, vradius,
                                         start, end,
-                                        GSK_GRADIENT_SPREAD_METHOD_REPEAT,
+                                        GSK_REPEAT_REPEAT,
                                         GDK_COLOR_STATE_SRGB,
                                         GSK_HUE_INTERPOLATION_SHORTER,
                                         stops, n_color_stops);

@@ -54,6 +54,7 @@ foreach testname : test_data
   test('svg parser ' + testname, test_parser,
         args: [ '--tap',
                 '-k',
+                '--output', meson.current_build_dir(),
                 join_paths(meson.current_source_dir(), testname),
               ],
         protocol: 'tap',

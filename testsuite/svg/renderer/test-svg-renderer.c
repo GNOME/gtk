@@ -25,24 +25,109 @@
 #include "testsuite/testutils.h"
 
 static char *
-test_get_sibling_file (const char *svg_file, const char *ext)
+file_replace_extension (const char *old_file,
+                        const char *old_ext,
+                        const char *new_ext)
 {
   GString *file = g_string_new (NULL);
 
-  if (g_str_has_suffix (svg_file, ".svg"))
-    g_string_append_len (file, svg_file, strlen (svg_file) - 4);
+  if (g_str_has_suffix (old_file, old_ext))
+    g_string_append_len (file, old_file, strlen (old_file) - strlen (old_ext));
   else
-    g_string_append (file, svg_file);
+    g_string_append (file, old_file);
 
-  g_string_append (file, ext);
+  g_string_append (file, new_ext);
 
-  if (!g_file_test (file->str, G_FILE_TEST_EXISTS))
+  return g_string_free (file, FALSE);
+}
+
+static char *
+test_get_sibling_file (const char *svg_file, const char *ext)
+{
+  char *file;
+
+  file = file_replace_extension (svg_file, ".svg", ext);
+
+  if (!g_file_test (file, G_FILE_TEST_EXISTS))
     {
-      g_string_free (file, TRUE);
+      g_free (file);
       return NULL;
     }
 
-  return g_string_free (file, FALSE);
+  return file;
+}
+
+static const char *arg_output_dir;
+
+static const char *
+get_output_dir (void)
+{
+  static const char *output_dir = NULL;
+  GError *error = NULL;
+  GFile *file;
+
+  if (output_dir)
+    return output_dir;
+
+  if (arg_output_dir)
+    output_dir = arg_output_dir;
+  else
+    output_dir = g_get_tmp_dir ();
+
+  /* Just try to create the output directory.
+   * If it already exists, that's exactly what we wanted to check,
+   * so we can happily skip that error.
+   */
+  file = g_file_new_for_path (output_dir);
+  if (!g_file_make_directory_with_parents (file, NULL, &error))
+    {
+      g_object_unref (file);
+
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
+        {
+          g_error ("Failed to create output dir: %s", error->message);
+          g_error_free (error);
+          return NULL;
+        }
+      g_error_free (error);
+    }
+  else
+    g_object_unref (file);
+
+  return output_dir;
+}
+
+static char *
+get_output_file (const char *file,
+                 const char *extension)
+{
+  const char *dir;
+  char *result, *base;
+  char *name;
+
+  dir = get_output_dir ();
+  base = g_path_get_basename (file);
+  name = file_replace_extension (base, ".svg", extension);
+  result = g_strconcat (dir, G_DIR_SEPARATOR_S, name, NULL);
+
+  g_free (base);
+  g_free (name);
+
+  return result;
+}
+
+static void
+save_output (const char *contents,
+             const char *input_file,
+             const char *extension)
+{
+  char *filename = get_output_file (input_file, extension);
+  gboolean result;
+
+  g_print ("Storing test output at %s\n", filename);
+  result = g_file_set_contents (filename, contents, strlen (contents), NULL);
+  g_assert_true (result);
+  g_free (filename);
 }
 
 static void
@@ -163,6 +248,13 @@ render_svg_file (GFile *file, gboolean generate)
       g_test_message ("Resulting file doesn't match reference:\n%s", diff);
       g_test_fail ();
     }
+
+  if (diff || g_test_verbose ())
+    {
+       save_output (g_bytes_get_data (bytes, NULL), svg_file, ".out.nodes");
+       save_output (diff, svg_file, ".nodes.diff");
+    }
+
   g_free (reference_file);
   g_clear_pointer (&diff,g_free);
 
@@ -177,6 +269,13 @@ render_svg_file (GFile *file, gboolean generate)
           g_test_message ("Errors don't match expected errors:\n%s", diff);
           g_test_fail ();
         }
+
+      if (diff || g_test_verbose ())
+        {
+           save_output (errors->str, svg_file, ".out.errors");
+           save_output (diff, svg_file, ".errors.diff");
+        }
+
       g_free (diff);
     }
   else
@@ -275,6 +374,14 @@ add_tests_for_files_in_directory (GFile *dir)
 int
 main (int argc, char **argv)
 {
+  GOptionEntry options[] = {
+    { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
+    { NULL }
+  };
+  GOptionContext *context;
+  GError *error = NULL;
+
+
   if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
     {
       GFile *file;
@@ -289,6 +396,22 @@ main (int argc, char **argv)
     }
 
   gtk_test_init (&argc, &argv);
+
+  context = g_option_context_new ("");
+  g_option_context_add_main_entries (context, options, NULL);
+  g_option_context_set_ignore_unknown_options (context, TRUE);
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+      g_error ("Option parsing failed: %s\n", error->message);
+      return 1;
+    }
+  else if (argc != 3 && argc != 2)
+    {
+      char *help = g_option_context_get_help (context, TRUE, NULL);
+      g_print ("%s", help);
+      return 1;
+    }
 
   if (argc < 2)
     {
