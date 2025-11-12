@@ -7891,6 +7891,61 @@ create_transition (Shape             *shape,
   a->gpa.transition = type;
   a->gpa.easing = easing;
   a->gpa.origin = origin;
+
+  if (delay > 0)
+    {
+      a = animation_set_new ();
+      a->attr = attr;
+      a->simple_duration = duration;
+      a->repeat_duration = duration;
+      a->repeat_count = 1;
+
+      a->id = g_strdup_printf ("gpa:transition:delay-in:%s:%s", shape_attrs[attr].name, shape->id);
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+      time_spec_add_animation (begin, a);
+
+      a->has_begin = 1;
+      a->has_simple_duration = 1;
+      a->has_repeat_duration = 1;
+
+      a->n_frames = 2;
+      a->frames = g_new0 (Frame, a->n_frames);
+      a->frames[0].time = 0;
+      a->frames[1].time = 1;
+      a->frames[0].value = svg_value_ref (from);
+      a->frames[1].value = svg_value_ref (from);
+
+      a->fill = ANIMATION_FILL_FREEZE;
+
+      a->shape = shape;
+      g_ptr_array_add (shape->animations, a);
+
+      a = animation_set_new ();
+      a->attr = attr;
+      a->simple_duration = duration;
+      a->repeat_duration = duration;
+      a->repeat_count = 1;
+
+      a->id = g_strdup_printf ("gpa:transition:delay-out:%s:%s", shape_attrs[attr].name, shape->id);
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, 0));
+      time_spec_add_animation (begin, a);
+
+      a->has_begin = 1;
+      a->has_simple_duration = 1;
+      a->has_repeat_duration = 1;
+
+      a->n_frames = 2;
+      a->frames = g_new0 (Frame, a->n_frames);
+      a->frames[0].time = 0;
+      a->frames[1].time = 1;
+      a->frames[0].value = svg_value_ref (to);
+      a->frames[1].value = svg_value_ref (to);
+
+      a->fill = ANIMATION_FILL_FREEZE;
+
+      a->shape = shape;
+      g_ptr_array_add (shape->animations, a);
+    }
 }
 
 static void
