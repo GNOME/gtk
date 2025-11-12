@@ -1600,9 +1600,11 @@ typedef enum {
  *    would be presented if they were made. Value type: [enum@AccessibleAutocomplete]
  * @GTK_ACCESSIBLE_PROPERTY_DESCRIPTION: Defines a string value that describes
  *    or annotates the current element. Value type: string
- * @GTK_ACCESSIBLE_PROPERTY_HAS_POPUP: Indicates the availability and type of
- *    interactive popup element, such as menu or dialog, that can be triggered
- *    by an element.
+ * @GTK_ACCESSIBLE_PROPERTY_HAS_POPUP: Indicates the availability of interactive
+ *    popup element, such as menu or popover, that can be triggered by an
+ *    element. Contrary to “aria-haspopup”, it doesn't indicate the type of the
+ *    element, as such it cannot be used to indicate the availability of more
+ *    complex elements such as dialog. Value type: boolean
  * @GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS: Indicates keyboard shortcuts that an
  *    author has implemented to activate or give focus to an element. Value type:
  *    string. The format of the value is a space-separated list of shortcuts, with
