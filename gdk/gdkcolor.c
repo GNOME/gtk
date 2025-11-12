@@ -266,7 +266,7 @@ gdk_color_print (const GdkColor *self,
 }
 
 /*< private >
- * gdk_color_print:
+ * gdk_color_to_string:
  * @self: the `GdkColor` to print
  *
  * Create a string representation of @self.

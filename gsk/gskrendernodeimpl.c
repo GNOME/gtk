@@ -80,6 +80,15 @@ color_state_is_hdr (GdkColorState *color_state)
          rendering_cs != GDK_COLOR_STATE_SRGB_LINEAR;
 }
 
+static gboolean
+has_empty_clip (cairo_t *cr)
+{
+  double x1, y1, x2, y2;
+
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+  return x1 >= x2 || y1 >= y2;
+}
+
 /* apply a rectangle that bounds @rect in
  * pixel-aligned device coordinates.
  *
@@ -2944,15 +2953,6 @@ gsk_inset_shadow_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
-static gboolean
-has_empty_clip (cairo_t *cr)
-{
-  double x1, y1, x2, y2;
-
-  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-  return x1 >= x2 || y1 >= y2;
-}
-
 static void
 draw_shadow (cairo_t              *cr,
              GdkColorState        *ccs,
@@ -4354,15 +4354,14 @@ gsk_container_node_new (GskRenderNode **children,
     {
       graphene_rect_t child_opaque;
       gboolean have_opaque;
-      gboolean is_hdr;
 
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
       self->children[0] = gsk_render_node_ref (children[0]);
       node->preferred_depth = children[0]->preferred_depth;
       gsk_rect_init_from_rect (&node->bounds, &(children[0]->bounds));
-      have_opaque = gsk_render_node_get_opaque_rect (self->children[0], &self->opaque);
-      is_hdr = gsk_render_node_is_hdr (self->children[0]);
+      have_opaque = gsk_render_node_get_opaque_rect (children[0], &self->opaque);
+      node->is_hdr = gsk_render_node_is_hdr (children[0]);
 
       for (guint i = 1; i < n_children; i++)
         {
@@ -4370,7 +4369,7 @@ gsk_container_node_new (GskRenderNode **children,
           self->disjoint = self->disjoint && !gsk_rect_intersects (&node->bounds, &(children[i]->bounds));
           graphene_rect_union (&node->bounds, &(children[i]->bounds), &node->bounds);
           node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
-          if (gsk_render_node_get_opaque_rect (self->children[i], &child_opaque))
+          if (gsk_render_node_get_opaque_rect (children[i], &child_opaque))
             {
               if (have_opaque)
                 gsk_rect_coverage (&self->opaque, &child_opaque, &self->opaque);
@@ -4381,11 +4380,10 @@ gsk_container_node_new (GskRenderNode **children,
                 }
             }
 
-          is_hdr |= gsk_render_node_is_hdr (self->children[i]);
+          node->is_hdr |= gsk_render_node_is_hdr (self->children[i]);
         }
 
       node->fully_opaque = have_opaque && graphene_rect_equal (&node->bounds, &self->opaque);
-      node->is_hdr = is_hdr;
    }
 
   return node;
@@ -8438,7 +8436,7 @@ gsk_subsurface_node_new (GskRenderNode *child,
 
 /**
  * gsk_subsurface_node_get_child:
- * @node: (type GskSubsurfaceNode): a debug `GskRenderNode`
+ * @node: (type GskSubsurfaceNode): a subsurface `GskRenderNode`
  *
  * Gets the child node that is getting drawn by the given @node.
  *
@@ -8456,7 +8454,7 @@ gsk_subsurface_node_get_child (const GskRenderNode *node)
 
 /**
  * gsk_subsurface_node_get_subsurface: (skip)
- * @node: (type GskDebugNode): a debug `GskRenderNode`
+ * @node: (type GskDebugNode): a subsurface `GskRenderNode`
  *
  * Gets the subsurface that was set on this node
  *
@@ -8667,7 +8665,7 @@ gsk_component_transfer_node_new (GskRenderNode              *child,
 
 /**
  * gsk_component_transfer_node_get_child:
- * @node: (type GskComponentTransferNode): a debug `GskRenderNode`
+ * @node: (type GskComponentTransferNode): a component transfer `GskRenderNode`
  *
  * Gets the child node that is getting drawn by the given @node.
  *
@@ -8685,7 +8683,7 @@ gsk_component_transfer_node_get_child (const GskRenderNode *node)
 
 /**
  * gsk_component_transfer_node_get_transfer:
- * @node: (type GskComponentTransferNode): a debug `GskRenderNode`
+ * @node: (type GskComponentTransferNode): a component transfer `GskRenderNode`
  * @component: a value between 0 and 3 to indicate the red, green, blue
  *   or alpha component
  *
