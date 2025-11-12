@@ -12,6 +12,7 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *app_picker;
+static GtkWidget *open_folder_button;
 static GtkWidget *print_button;
 
 static void
@@ -25,6 +26,8 @@ set_file (GFile    *file,
     {
       gtk_widget_set_sensitive (app_picker, FALSE);
       g_object_set_data (G_OBJECT (app_picker), "file", NULL);
+      gtk_widget_set_sensitive (open_folder_button, FALSE);
+      g_object_set_data (G_OBJECT (open_folder_button), "file", NULL);
       return;
     }
 
@@ -34,6 +37,8 @@ set_file (GFile    *file,
 
   gtk_widget_set_sensitive (app_picker, TRUE);
   g_object_set_data_full (G_OBJECT (app_picker), "file", g_object_ref (file), g_object_unref);
+  gtk_widget_set_sensitive (open_folder_button, TRUE);
+  g_object_set_data_full (G_OBJECT (open_folder_button), "file", g_object_ref (file), g_object_unref);
 
   info = g_file_query_info (file, "standard::content-type", 0, NULL, NULL);
   if (strcmp (g_file_info_get_content_type (info), "application/pdf") == 0)
@@ -124,6 +129,36 @@ open_app (GtkButton *picker)
   launcher = gtk_file_launcher_new (file);
 
   gtk_file_launcher_launch (launcher, parent, NULL, open_app_done, NULL);
+
+  g_object_unref (launcher);
+}
+
+static void
+open_folder_done (GObject      *source,
+                  GAsyncResult *result,
+                  gpointer      data)
+{
+  GtkFileLauncher *launcher = GTK_FILE_LAUNCHER (source);
+  GError *error = NULL;
+
+  if (!gtk_file_launcher_open_containing_folder_finish (launcher, result, &error))
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+    }
+}
+
+static void
+open_folder (GtkButton *picker)
+{
+  GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (picker)));
+  GtkFileLauncher *launcher;
+  GFile *file;
+
+  file = G_FILE (g_object_get_data (G_OBJECT (picker), "file"));
+  launcher = gtk_file_launcher_new (file);
+
+  gtk_file_launcher_open_containing_folder (launcher, parent, NULL, open_folder_done, NULL);
 
   g_object_unref (launcher);
 }
@@ -298,6 +333,15 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_sensitive (app_picker, FALSE);
     g_signal_connect (app_picker, "clicked", G_CALLBACK (open_app), NULL);
     gtk_box_append (GTK_BOX (picker), app_picker);
+    open_folder_button = gtk_button_new_from_icon_name ("folder-symbolic");
+    gtk_widget_set_halign (open_folder_button, GTK_ALIGN_END);
+    gtk_accessible_update_property (GTK_ACCESSIBLE (open_folder_button),
+                                    GTK_ACCESSIBLE_PROPERTY_LABEL, "Open in Folder",
+                                    GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                    -1);
+    gtk_widget_set_sensitive (open_folder_button, FALSE);
+    g_signal_connect (open_folder_button, "clicked", G_CALLBACK (open_folder), NULL);
+    gtk_box_append (GTK_BOX (picker), open_folder_button);
 
     print_button = gtk_button_new_from_icon_name ("printer-symbolic");
     gtk_widget_set_tooltip_text (print_button, "Print File");
