@@ -12750,6 +12750,8 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
   g_string_append (s, "<svg");
   indent_for_attr (s, 0);
+  g_string_append (s, "xmlns='http://www.w3.org/2000/svg'");
+  indent_for_attr (s, 0);
   g_string_append (s, "width='");
   string_append_double (s, self->width);
   g_string_append_c (s, '\'');
