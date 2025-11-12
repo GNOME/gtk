@@ -1,0 +1,15 @@
+color {
+  bounds: 0 0 50 50;
+  color: rgb(0,0,255);
+}
+opacity {
+  opacity: 1;
+  child: mask {
+    source: color "node1" {
+      bounds: 0 0 50 50;
+      color: rgb(255,0,0);
+    }
+    mask: "node1";
+    porter-duff: clear;
+  }
+}
