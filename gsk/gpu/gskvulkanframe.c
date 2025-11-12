@@ -176,28 +176,6 @@ gsk_vulkan_frame_begin (GskGpuFrame           *frame,
                                      opaque);
 }
 
-static void
-gsk_vulkan_frame_end (GskGpuFrame    *frame,
-                      GdkDrawContext *context)
-{
-  GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
-
-  gdk_draw_context_end_frame_full (context, &self->vk_fence);
-}
-
-static void
-gsk_vulkan_frame_sync (GskGpuFrame *frame)
-{
-  GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
-  GskVulkanDevice *device;
-
-  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
-
-  GSK_VK_CHECK (vkQueueSubmit, gsk_vulkan_device_get_vk_queue (device),
-                               0, NULL,
-                               self->vk_fence);
-}
-
 static GskGpuImage *
 gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
                                  gboolean      with_mipmap,
@@ -349,10 +327,13 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
 
   if (pass_type == GSK_RENDER_PASS_PRESENT)
     {
+      GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gsk_gpu_frame_get_context (frame));
       gsk_vulkan_semaphores_add_wait (&semaphores,
                                       self->vk_acquire_semaphore,
                                       0,
                                       VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
+      gsk_vulkan_semaphores_add_signal (&semaphores,
+                                        gdk_vulkan_context_get_present_semaphore (context));
     }
 
   state.vk_command_buffer = self->vk_command_buffer;
@@ -385,7 +366,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                                        .pWaitSemaphoreValues = gsk_semaphore_values_get_data (&semaphores.wait_semaphore_values),
                                   } : NULL,
                                },
-                               VK_NULL_HANDLE);
+                               self->vk_fence);
 
   gsk_semaphores_clear (&semaphores.wait_semaphores);
   gsk_semaphore_values_clear (&semaphores.wait_semaphore_values);
@@ -429,8 +410,6 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   gpu_frame_class->setup = gsk_vulkan_frame_setup;
   gpu_frame_class->cleanup = gsk_vulkan_frame_cleanup;
   gpu_frame_class->begin = gsk_vulkan_frame_begin;
-  gpu_frame_class->end = gsk_vulkan_frame_end;
-  gpu_frame_class->sync = gsk_vulkan_frame_sync;
   gpu_frame_class->upload_texture = gsk_vulkan_frame_upload_texture;
   gpu_frame_class->create_vertex_buffer = gsk_vulkan_frame_create_vertex_buffer;
   gpu_frame_class->create_globals_buffer = gsk_vulkan_frame_create_globals_buffer;

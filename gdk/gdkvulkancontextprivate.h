@@ -95,6 +95,7 @@ uint32_t                gdk_vulkan_context_get_n_images                 (GdkVulk
 VkImage                 gdk_vulkan_context_get_image                    (GdkVulkanContext      *context,
                                                                          guint                  id);
 uint32_t                gdk_vulkan_context_get_draw_index               (GdkVulkanContext      *context);
+VkSemaphore             gdk_vulkan_context_get_present_semaphore        (GdkVulkanContext      *context);
 
 #else /* !GDK_RENDERING_VULKAN */
 
