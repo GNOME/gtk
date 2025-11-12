@@ -430,13 +430,6 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   device = gdk_vulkan_context_get_device (context);
 
-  /*
-   * Wait for device to be idle because this function is also called in window resizes.
-   * And if we destroy old swapchain it also destroy the old VkImages, those images could
-   * be in use by a vulkan render.
-   */
-  vkDeviceWaitIdle (device);
-
   res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceCapabilitiesKHR, gdk_vulkan_context_get_physical_device (context),
                                                                  priv->surface,
                                                                  &capabilities);
