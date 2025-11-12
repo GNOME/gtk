@@ -1624,7 +1624,8 @@ path_paintable_save (PathPaintable *self,
   GStrv keywords;
   char buffer[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_string_append_printf (str, "<svg width='%s' height='%s'",
+  g_string_append (str, "<svg xmlns='http://www.w3.org/2000/svg'");
+  g_string_append_printf (str, "\n     width='%s' height='%s'",
                           g_ascii_formatd (buffer, sizeof (buffer), "%g", path_paintable_get_width (self)),
                           g_ascii_formatd (buffer, sizeof (buffer), "%g", path_paintable_get_height (self)));
   g_string_append (str, "\n     xmlns:gpa='https://www.gtk.org/grappa'");
