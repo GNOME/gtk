@@ -413,27 +413,21 @@ replay_component_transfer_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_copy_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-  GtkSnapshot *snapshot2;
-  GskRenderNode *node2;
-
-  snapshot2 = gtk_snapshot_new ();
-  replay_node (gsk_copy_node_get_child (node), snapshot2);
-  node2 = gsk_copy_node_new (gtk_snapshot_free_to_node (snapshot2));
-  gtk_snapshot_append_node (snapshot, node2);
-  gsk_render_node_unref (node2);
+  gtk_snapshot_push_copy (snapshot);
+  replay_node (gsk_copy_node_get_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
 replay_paste_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-  GskRenderNode *node2;
   graphene_rect_t bounds;
 
   gsk_render_node_get_bounds (node, &bounds);
 
-  node2 = gsk_paste_node_new (&bounds, gsk_paste_node_get_depth (node));
-  gtk_snapshot_append_node (snapshot, node2);
-  gsk_render_node_unref (node2);
+  gtk_snapshot_append_paste (snapshot,
+                             &bounds,
+                             gsk_paste_node_get_depth (node));
 }
 
 void
