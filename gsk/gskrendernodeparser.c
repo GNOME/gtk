@@ -2453,8 +2453,8 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   result = gsk_linear_gradient_node_new2 (&bounds,
                                           &start, &end,
                                           repeating
-                                            ? GSK_GRADIENT_SPREAD_METHOD_REPEAT
-                                            : GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                            ? GSK_REPEAT_REPEAT
+                                            : GSK_REPEAT_PAD,
                                           interpolation,
                                           hue_interpolation,
                                           (GskGradientStop *) stops->data,
@@ -2543,8 +2543,8 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
                                             hradius, vradius,
                                             start, end,
                                             repeating
-                                              ? GSK_GRADIENT_SPREAD_METHOD_REPEAT
-                                              : GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                              ? GSK_REPEAT_REPEAT
+                                              : GSK_REPEAT_PAD,
                                             interpolation,
                                             hue_interpolation,
                                             (GskGradientStop *) stops->data,

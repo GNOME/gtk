@@ -281,8 +281,8 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
       &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
       &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
       linear->repeating
-        ? GSK_GRADIENT_SPREAD_METHOD_REPEAT
-        : GSK_GRADIENT_SPREAD_METHOD_PAD,
+        ? GSK_REPEAT_REPEAT
+        : GSK_REPEAT_PAD,
       gtk_css_color_space_get_color_state (linear->color_space),
       gtk_css_hue_interpolation_to_hue_interpolation (linear->hue_interp),
       stops, linear->n_stops);

@@ -223,8 +223,8 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
                                     hradius, vradius,
                                     start, end,
                                     radial->repeating
-                                      ? GSK_GRADIENT_SPREAD_METHOD_REPEAT
-                                      : GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                      ? GSK_REPEAT_REPEAT
+                                      : GSK_REPEAT_PAD,
                                     gtk_css_color_space_get_color_state (radial->color_space),
                                     gtk_css_hue_interpolation_to_hue_interpolation (radial->hue_interp),
                                     stops, radial->n_stops);

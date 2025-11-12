@@ -2646,7 +2646,7 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
 
   gtk_snapshot_add_linear_gradient (snapshot, bounds,
                                     start_point, end_point,
-                                    GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                    GSK_REPEAT_PAD,
                                     GDK_COLOR_STATE_SRGB,
                                     GSK_HUE_INTERPOLATION_SHORTER,
                                     stops2, n_stops);
@@ -2663,7 +2663,7 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
  * @bounds: the rectangle to render the linear gradient into
  * @start_point: the point at which the linear gradient will begin
  * @end_point: the point at which the linear gradient will finish
- * @spread_method: what to do about colors outside the `[start,end]` range
+ * @repeat: what to do about colors outside the `[start,end]` range
  * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
  * @stops: (array length=n_stops): the color stops defining the gradient
@@ -2676,7 +2676,7 @@ gtk_snapshot_add_linear_gradient (GtkSnapshot             *snapshot,
                                   const graphene_rect_t   *bounds,
                                   const graphene_point_t  *start_point,
                                   const graphene_point_t  *end_point,
-                                  GskGradientSpreadMethod  spread_method,
+                                  GskRepeat                repeat,
                                   GdkColorState           *interpolation,
                                   GskHueInterpolation      hue_interpolation,
                                   const GskGradientStop   *stops,
@@ -2731,7 +2731,7 @@ gtk_snapshot_add_linear_gradient (GtkSnapshot             *snapshot,
       node = gsk_linear_gradient_node_new2 (&real_bounds,
                                             &real_start_point,
                                             &real_end_point,
-                                            spread_method,
+                                            repeat,
                                             interpolation,
                                             hue_interpolation,
                                             stops, n_stops);
@@ -2775,7 +2775,7 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
 
   gtk_snapshot_add_linear_gradient (snapshot, bounds,
                                     start_point, end_point,
-                                    GSK_GRADIENT_SPREAD_METHOD_REPEAT,
+                                    GSK_REPEAT_REPEAT,
                                     GDK_COLOR_STATE_SRGB,
                                     GSK_HUE_INTERPOLATION_SHORTER,
                                     stops2, n_stops);
@@ -2941,7 +2941,7 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
                                     bounds, center,
                                     hradius, vradius,
                                     start, end,
-                                    GSK_GRADIENT_SPREAD_METHOD_PAD,
+                                    GSK_REPEAT_PAD,
                                     GDK_COLOR_STATE_SRGB,
                                     GSK_HUE_INTERPOLATION_SHORTER,
                                     stops2, n_stops);
@@ -2961,7 +2961,7 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
  * @vradius: the vertical radius
  * @start: the start position (on the horizontal axis)
  * @end: the end position (on the horizontal axis)
- * @spread_method: what to do about colors outside the `[start,end]` range
+ * @repeat: what to do about colors outside the `[start,end]` range
  * @interpolation: the color state to interpolate in
  * @hue_interpolation: how to interpolate if @interpolation is polar
  * @stops: (array length=n_stops): the color stops defining the gradient
@@ -2977,7 +2977,7 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
                                   float                    vradius,
                                   float                    start,
                                   float                    end,
-                                  GskGradientSpreadMethod  spread_method,
+                                  GskRepeat                repeat,
                                   GdkColorState           *interpolation,
                                   GskHueInterpolation      hue_interpolation,
                                   const GskGradientStop   *stops,
@@ -3019,7 +3019,7 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
                                             hradius * scale_x,
                                             vradius * scale_y,
                                             start, end,
-                                            spread_method,
+                                            repeat,
                                             interpolation,
                                             hue_interpolation,
                                             stops, n_stops);
@@ -3071,7 +3071,7 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
                                     bounds, center,
                                     hradius, vradius,
                                     start, end,
-                                    GSK_GRADIENT_SPREAD_METHOD_REPEAT,
+                                    GSK_REPEAT_REPEAT,
                                     GDK_COLOR_STATE_SRGB,
                                     GSK_HUE_INTERPOLATION_SHORTER,
                                     stops2, n_stops);

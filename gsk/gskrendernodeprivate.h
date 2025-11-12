@@ -210,14 +210,14 @@ typedef enum
 
 typedef enum
 {
-  GSK_GRADIENT_SPREAD_METHOD_PAD,
-  GSK_GRADIENT_SPREAD_METHOD_REPEAT,
-} GskGradientSpreadMethod;
+  GSK_REPEAT_PAD,
+  GSK_REPEAT_REPEAT,
+} GskRepeat;
 
 GskRenderNode * gsk_linear_gradient_node_new2           (const graphene_rect_t   *bounds,
                                                          const graphene_point_t  *start,
                                                          const graphene_point_t  *end,
-                                                         GskGradientSpreadMethod  spread_method,
+                                                         GskRepeat                repeat,
                                                          GdkColorState           *interpolation,
                                                          GskHueInterpolation      hue_interpolation,
                                                          const GskGradientStop   *stops,
@@ -236,7 +236,7 @@ GskRenderNode * gsk_radial_gradient_node_new2           (const graphene_rect_t  
                                                          float                    vradius,
                                                          float                    start,
                                                          float                    end,
-                                                         GskGradientSpreadMethod  spread_method,
+                                                         GskRepeat                repeat,
                                                          GdkColorState           *interpolation,
                                                          GskHueInterpolation      hue_interpolation,
                                                          const GskGradientStop   *stops,
