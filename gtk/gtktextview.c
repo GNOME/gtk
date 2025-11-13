@@ -8084,8 +8084,8 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   /* text-decoration */
 
-  decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
-  decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
+  decoration_line = _gtk_css_text_decoration_line_value_get (style->text_decoration->text_decoration_line);
+  decoration_style = _gtk_css_text_decoration_style_value_get (style->text_decoration->text_decoration_style);
   decoration_color = gtk_css_color_value_get_rgba (style->used->text_decoration_color);
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)

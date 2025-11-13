@@ -80,7 +80,7 @@ compute_change (GtkCssStyleChange *change)
                                                      &change->affects);
 
   if (change->old_style->font_variant != change->new_style->font_variant ||
-      (color_changed && gtk_css_value_contains_current_color (change->old_style->font_variant->text_decoration_color)))
+      (color_changed && gtk_css_value_contains_current_color (change->old_style->text_decoration->text_decoration_color)))
     gtk_css_font_variant_values_compute_changes_and_affects (change->old_style,
                                                              change->new_style,
                                                              &change->changes,

@@ -93,10 +93,13 @@ static const int font_props[] = {
   GTK_CSS_PROPERTY_LINE_HEIGHT,
 };
 
-static const int font_variant_props[] = {
+static const int text_decoration_props[] = {
   GTK_CSS_PROPERTY_TEXT_DECORATION_LINE,
   GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
   GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE,
+};
+
+static const int font_variant_props[] = {
   GTK_CSS_PROPERTY_TEXT_TRANSFORM,
   GTK_CSS_PROPERTY_FONT_KERNING,
   GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES,
