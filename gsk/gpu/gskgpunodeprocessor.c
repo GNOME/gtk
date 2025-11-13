@@ -2747,6 +2747,8 @@ gsk_gpu_node_processor_conic_gradient_op (GskGpuNodeProcessor   *self,
                              gsk_gradient_get_repeat (gradient),
                              &node->bounds,
                              gsk_conic_gradient_node_get_center (node),
+                             gsk_gradient_get_stop_offset (gradient, 0),
+                             gsk_gradient_get_stop_offset (gradient, gsk_gradient_get_n_stops (gradient) - 1),
                              gsk_conic_gradient_node_get_angle (node),
                              stops,
                              n_stops);
