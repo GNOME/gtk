@@ -1,4 +1,4 @@
-repeating-linear-gradient {
+linear-gradient {
   bounds: 0 0 50 50;
   start: 50 0;
   end: 25 25;

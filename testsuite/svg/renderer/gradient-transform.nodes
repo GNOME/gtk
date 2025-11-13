@@ -3,10 +3,8 @@ fill {
     transform: translate(50, 50) scale(200, 100) translate(0.5, 0.5) rotate(45) translate(-0.5, -0.5);
     child: radial-gradient {
       bounds: -0.207107 -0.207107 1.41421 1.41421;
-      center: 0.5 0.5;
-      hradius: 0.5;
-      vradius: 0.5;
-      start: 0.4;
+      start: 0.5 0.5 0.2;
+      end: 0.5 0.5 0.5;
       stops: 0 rgb(0,128,0), 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 0.99 rgb(255,255,0), 1 rgb(0,0,255);
     }
   }

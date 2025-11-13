@@ -15,7 +15,7 @@ void                    gsk_gpu_linear_gradient_op                      (GskGpuF
                                                                          const graphene_point_t         *offset,
                                                                          GdkColorState                  *ics,
                                                                          GskHueInterpolation             hue_interp,
-                                                                         gboolean                        repeating,
+                                                                         GskRepeat                       repeat,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *start,
                                                                          const graphene_point_t         *end,

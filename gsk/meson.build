@@ -3,6 +3,7 @@ gsk_public_sources = files([
   'gskcomponenttransfer.c',
   'gskdiff.c',
   'gskglshader.c',
+  'gskgradient.c',
   'gskoffload.c',
   'gskpath.c',
   'gskpathbuilder.c',

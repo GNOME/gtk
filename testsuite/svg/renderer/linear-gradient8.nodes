@@ -1,5 +1,5 @@
 stroke {
-  child: repeating-linear-gradient {
+  child: linear-gradient {
     bounds: 45 45 210 110;
     start: 0 0;
     end: 20 10;

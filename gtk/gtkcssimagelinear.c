@@ -148,6 +148,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
   double start, end; /* position of first/last point on gradient line - with gradient line being [0, 1] */
   double offset, hint;
   int i, last;
+  GskGradient *gradient;
 
   if (linear->side)
     {
@@ -272,23 +273,28 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
       last = i;
     }
 
+  gradient = gsk_gradient_new ();
+  for (i = 0; i < linear->n_stops; i++)
+    gsk_gradient_add_stop (gradient, stops[i].offset, stops[i].transition_hint, &stops[i].color);
+
   if (linear->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
+
+  gsk_gradient_set_interpolation (gradient, gtk_css_color_space_get_color_state (linear->color_space));
+  gsk_gradient_set_hue_interpolation (gradient, gtk_css_hue_interpolation_to_hue_interpolation (linear->hue_interp));
+  gsk_gradient_set_repeat (gradient, linear->repeating ? GSK_REPEAT_REPEAT : GSK_REPEAT_PAD);
 
   gtk_snapshot_add_linear_gradient (
       snapshot,
       &GRAPHENE_RECT_INIT (0, 0, width, height),
       &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
       &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
-      linear->repeating
-        ? GSK_REPEAT_REPEAT
-        : GSK_REPEAT_PAD,
-      gtk_css_color_space_get_color_state (linear->color_space),
-      gtk_css_hue_interpolation_to_hue_interpolation (linear->hue_interp),
-      stops, linear->n_stops);
+      gradient);
 
   for (i = 0; i < linear->n_stops; i++)
     gdk_color_finish (&stops[i].color);
+
+  gsk_gradient_free (gradient);
 }
 
 static guint

@@ -360,16 +360,21 @@ Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 
 ### linear-gradient
 
-| property          | syntax          | default        | printed     |
-| ----------------- | --------------- | -------------- | ----------- |
-| bounds            | `<rect>`        | 50             | always      |
-| start             | `<point>`       | 0 0            | always      |
-| end               | `<point>`       | 0 50           | always      |
-| stops             | `<color-stops>` | 0 #AF0, 1 #F0C | always      |
-| interpolation     | `<color-state>` | srgb           | non-default |
-| hue-interpolation | `<hue-interp>`  | shorter        | non-default |
+| property          | syntax            | default        | printed     |
+| ----------------- | ----------------- | -------------- | ----------- |
+| bounds            | `<rect>`          | 50             | always      |
+| start             | `<point>`         | 0 0            | always      |
+| end               | `<point>`         | 0 50           | always      |
+| stops             | `<color-stops>`   | 0 #AF0, 1 #F0C | always      |
+| repeat            | `<repeat>`        | pad            | non-default |
+| interpolation     | `<color-state>`   | srgb           | non-default |
+| hue-interpolation | `<hue-interp>`    | shorter        | non-default |
 
 Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
+
+Possible values for the repeat property are:
+
+    repeat: none | pad | repeat | reflect
 
 ### mask
 
@@ -409,19 +414,34 @@ Creates a node like `gsk_outset_shadow_node_new()` with the given properties.
 
 ### radial-gradient
 
-| property          | syntax          | default        | printed     |
-| ----------------- | --------------- | -------------- | ----------- |
-| bounds            | `<rect>`        | 50             | always      |
-| center            | `<point>`       | 25 25          | always      |
-| hradius           | `<number>`      | 25             | always      |
-| vradius           | `<number>`      | 25             | always      |
-| start             | `<number>`      | 0              | always      |
-| end               | `<number>`      | 1              | always      |
-| stops             | `<color-stops>` | 0 #AF0, 1 #F0C | always      |
-| interpolation     | `<color-state>` | srgb           | non-default |
-| hue-interpolation | `<hue-interp>`  | shorter        | non-default |
+| property          | syntax              | default        | printed     |
+| ----------------- | ------------------- | -------------- | ----------- |
+| bounds            | `<rect>`            | 50             | always      |
+|                   |                     |                |             |
+| center            | `<point>`           | 25 25          | never       |
+| hradius           | `<number>`          | 25             | never       |
+| vradius           | `<number>`          | 25             | never       |
+|                   |                     |                |             |
+| start             | `<point>? <number>` | 25 25 0        | always      |
+| end               | `<point>? <number>` | 25 25 25       | always      |
+| aspect-ratio      | `<number>`          | 1              | non-default |
+|                   |                     |                |             |
+| stops             | `<color-stops>`     | 0 #AF0, 1 #F0C | always      |
+| repeat            | `<repeat>`          | pad            | non-default |
+| interpolation     | `<color-state>`     | srgb           | non-default |
+| hue-interpolation | `<hue-interp>`      | shorter        | non-default |
 
-Creates a node like `gsk_radial_gradient_node_new()` with the given properties.
+Creates a gradient like the SVG `<radialGradient>` element. The
+`start` and `end` properties specify the start and end circles as
+center point plus radius.
+
+The optional `aspect-ratio` property allows turning both circles into
+ellipses by scaling the X axis of both circles by the given amount.
+
+A deprecated method exists when only using a single center for both
+circles. In that case the `center`, `hradius`, `vradius`, `start` and
+`end` properties are consulted to generate a node like with
+`gsk_radial_gradient_node_new()`.
 
 ### repeat
 
@@ -445,20 +465,33 @@ Creates a node like `gsk_repeat_node_new()` with the given properties.
 Creates a node like `gsk_repeating_linear_gradient_node_new()` with the given
 properties.
 
-### repeating radial-gradient
+This node is deprecated. It is equal to using a linear-gradient, the only
+difference is that the default value for the "repeat" property is "repeat".
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| bounds   | `<rect>`         | 50                     | always      |
-| center   | `<point>`        | 25 25                  | always      |
-| hradius  | `<number>`       | 25                     | always      |
-| vradius  | `<number>`       | 25                     | always      |
-| start    | `<number>`       | 0                      | always      |
-| end      | `<number>`       | 1                      | always      |
-| stops    | `<color-stops>`  | 0 #AF0, 1 #F0C         | always      |
+### repeating-radial-gradient
 
-Creates a node like `gsk_repeating_radial_gradient_node_new()` with the given
-properties.
+| property          | syntax              | default                | printed     |
+| ----------------- | ------------------- | ---------------------- | ----------- |
+| bounds            | `<rect>`            | 50                     | always      |
+|                   |                     |                        |             |
+| center            | `<point>`           | 25 25                  | never       |
+| hradius           | `<number>`          | 25                     | never       |
+| vradius           | `<number>`          | 25                     | never       |
+|                   |                     |                        |             |
+| start             | `<point>? <number>` | 25 25 0                | always      |
+| end               | `<point>? <number>` | 25 25 25               | always      |
+| aspect-ratio      | `<number>`          | 1                      | non-default |
+|                   |                     |                        |             |
+| stops             | `<color-stops>`     | 0 #AF0, 1 #F0C         | always      |
+| interpolation     | `<color-state>`     | srgb                   | non-default |
+| hue-interpolation | `<hue-interp>`      | shorter                | non-default |
+
+Creates a repeating radial gradient.
+
+See the `radial-gradient` documentation for details about the properties.
+
+This node is deprecated. It is equal to using a radial-gradient, the only
+difference is that the default value for the "repeat" property is "repeat".
 
 ### rounded-clip
 

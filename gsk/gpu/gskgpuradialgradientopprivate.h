@@ -15,12 +15,12 @@ void                    gsk_gpu_radial_gradient_op                      (GskGpuF
                                                                          const graphene_point_t         *offset,
                                                                          GdkColorState                  *ics,
                                                                          GskHueInterpolation             hue_interp,
-                                                                         gboolean                        repeating,
+                                                                         GskRepeat                       repeat,
                                                                          const graphene_rect_t          *rect,
-                                                                         const graphene_point_t         *center,
-                                                                         const graphene_point_t         *radius,
-                                                                         float                           start,
-                                                                         float                           end,
+                                                                         const graphene_point_t         *start_center,
+                                                                         const graphene_point_t         *start_radius,
+                                                                         const graphene_point_t         *end_center,
+                                                                         const graphene_point_t         *end_radius,
                                                                          const GskGradientStop          *stops,
                                                                          gsize                           n_stops);
 

@@ -1,5 +1,5 @@
 fill {
-  child: repeating-linear-gradient {
+  child: linear-gradient {
     bounds: 50 50 200 100;
     start: 0 0;
     end: 20 10;
