@@ -1132,10 +1132,13 @@ gtk_at_context_set_accessible_relation (GtkATContext          *self,
 
   gboolean res = FALSE;
 
-  /* We update the reverse relation first, so we can still access
-  * the current value if we're removing it.
+  /* We are setting the relation to a new value,
+  * so we must get rid of the reverse relations first.
   */
-  update_reverse_relation (self, relation, value);
+  update_reverse_relation (self, relation, NULL);
+  /* Now, we can create the new reverse relations if it makes sense. */
+  if (value != NULL)
+    update_reverse_relation (self, relation, value);
 
   if (value != NULL)
     res = gtk_accessible_attribute_set_add (self->relations, relation, value);
