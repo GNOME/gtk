@@ -598,6 +598,9 @@ gtk_reference_list_accessible_value_append (GtkAccessibleValue *value,
   g_return_if_fail (value != NULL);
   g_return_if_fail (value->value_class == &GTK_REFERENCE_LIST_ACCESSIBLE_VALUE);
 
+  if (g_list_find (self->refs, ref) != NULL)
+    return;
+
   self->refs = g_list_append (self->refs, ref);
 
   g_object_weak_ref (G_OBJECT (ref), remove_weak_ref_from_list, self);
@@ -612,6 +615,15 @@ gtk_reference_list_accessible_value_remove (GtkAccessibleValue *value,
   g_return_if_fail (value != NULL);
   g_return_if_fail (value->value_class == &GTK_REFERENCE_LIST_ACCESSIBLE_VALUE);
 
+  if (g_list_find (self->refs, ref) == NULL)
+    {
+      g_warning ("Trying to remove accessible '%s', but it cannot be found in "
+                 "the reference list %p",
+                 G_OBJECT_TYPE_NAME (ref),
+                 value);
+      return;
+    }
+
   self->refs = g_list_remove (self->refs, ref);
 
   g_object_weak_unref (G_OBJECT (ref), remove_weak_ref_from_list, self);
@@ -623,7 +635,7 @@ gtk_reference_list_accessible_value_remove (GtkAccessibleValue *value,
 
 typedef enum {
   GTK_ACCESSIBLE_COLLECT_INVALID = -1,
-  
+
   /* true/false */
   GTK_ACCESSIBLE_COLLECT_BOOLEAN = 0,
 
@@ -1403,7 +1415,7 @@ gtk_accessible_value_collect_value (const GtkAccessibleCollect  *cstate,
 
             value = gtk_accessible_list_get_objects (boxed);
           }
-        else 
+        else
           {
             value = g_list_copy (g_value_get_pointer (value_));
           }
