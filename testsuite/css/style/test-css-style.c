@@ -148,6 +148,7 @@ out:
   g_free (output);
   g_free (ui_file);
   g_free (css_file);
+  g_object_unref (builder);
 }
 
 static void
