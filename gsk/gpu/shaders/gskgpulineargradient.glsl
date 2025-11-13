@@ -5,7 +5,7 @@
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
 #define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
 #define VARIATION_REFLECTING    ((GSK_VARIATION & (1u << 2)) == (1u << 2))
-#define VARIATION_BLANK         ((GSK_VARIATION & (1u << 4)) == (1u << 3))
+#define VARIATION_BLANK         ((GSK_VARIATION & (1u << 3)) == (1u << 3))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
