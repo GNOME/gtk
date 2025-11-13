@@ -7312,6 +7312,8 @@ gtk_widget_get_ancestor (GtkWidget *widget,
                          GType      widget_type)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (G_TYPE_IS_INTERFACE (widget_type) ||
+                        g_type_is_a (widget_type, GTK_TYPE_WIDGET), NULL);
 
   while (widget && !g_type_is_a (G_OBJECT_TYPE (widget), widget_type))
     {
