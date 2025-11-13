@@ -218,7 +218,4 @@ gboolean gsk_radial_gradient_fills_plane (const graphene_point_t *c1,
                                           const graphene_point_t *c2,
                                           float                   r2);
 
-void                    gsk_cairo_node_set_surface      (GskRenderNode          *node,
-                                                         cairo_surface_t        *surface);
-
 G_END_DECLS
