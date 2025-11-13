@@ -576,13 +576,11 @@ update_accessible_properties (GtkModelButton *button)
                                   GTK_ACCESSIBLE_STATE_EXPANDED);
     }
 
+  gtk_accessible_reset_relation (GTK_ACCESSIBLE (button), GTK_ACCESSIBLE_RELATION_CONTROLS);
   if (button->popover)
     gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
                                     GTK_ACCESSIBLE_RELATION_CONTROLS, button->popover, NULL,
                                     -1);
-  else
-    gtk_accessible_reset_relation (GTK_ACCESSIBLE (button),
-                                   GTK_ACCESSIBLE_RELATION_CONTROLS);
 
   if (button->role == GTK_BUTTON_ROLE_CHECK ||
       button->role == GTK_BUTTON_ROLE_RADIO)
@@ -593,6 +591,7 @@ update_accessible_properties (GtkModelButton *button)
     gtk_accessible_reset_state (GTK_ACCESSIBLE (button),
                                 GTK_ACCESSIBLE_STATE_CHECKED);
 
+  gtk_accessible_reset_relation (GTK_ACCESSIBLE (button), GTK_ACCESSIBLE_RELATION_LABELLED_BY);
   gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, button->label, NULL,
                                   -1);
@@ -713,6 +712,7 @@ gtk_model_button_set_text (GtkModelButton *button,
   update_visibility (button);
   update_tooltip (button);
 
+  gtk_accessible_reset_relation (GTK_ACCESSIBLE (button), GTK_ACCESSIBLE_RELATION_LABELLED_BY);
   gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, button->label, NULL,
                                   -1);
