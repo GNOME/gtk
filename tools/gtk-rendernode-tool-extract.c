@@ -37,18 +37,14 @@ static guint font_count;
 
 static GHashTable *fonts;
 
-static void
-extract_texture (GskRenderNode *node,
-                 const char    *basename)
+static GdkTexture *
+extract_texture (GskRenderReplay *replay,
+                 GdkTexture      *texture,
+                 gpointer         user_data)
 {
-  GdkTexture *texture;
+  const char *basename = user_data;
   char *filename;
   char *path;
-
-  if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
-    texture = gsk_texture_node_get_texture (node);
-  else
-    texture = gsk_texture_scale_node_get_texture (node);
 
   do {
     filename = g_strdup_printf ("%s-texture-%u.png", basename, texture_count);
@@ -77,13 +73,16 @@ extract_texture (GskRenderNode *node,
   g_free (filename);
 
   texture_count++;
+
+  return g_object_ref (texture);
 }
 
-static void
-extract_font (GskRenderNode *node,
-              const char    *basename)
+static PangoFont *
+extract_font (GskRenderReplay *replay,
+              PangoFont       *font,
+              gpointer         user_data)
 {
-  PangoFont *font;
+  const char *basename = user_data;
   hb_font_t *hb_font;
   hb_face_t *hb_face;
   hb_blob_t *hb_blob;
@@ -93,7 +92,6 @@ extract_font (GskRenderNode *node,
   char *path;
   char *sum;
 
-  font = gsk_text_node_get_font (node);
   hb_font = pango_font_get_hb_font (font);
   hb_face = hb_font_get_face (hb_font);
   hb_blob = hb_face_reference_blob (hb_face);
@@ -102,7 +100,7 @@ extract_font (GskRenderNode *node,
     {
       hb_blob_destroy (hb_blob);
       g_warning ("Failed to extract font data\n");
-      return;
+      return g_object_ref (font);
     }
 
   data = hb_blob_get_data (hb_blob, &length);
@@ -116,7 +114,7 @@ extract_font (GskRenderNode *node,
     {
       g_free (sum);
       hb_blob_destroy (hb_blob);
-      return;
+      return g_object_ref (font);
     }
 
   g_hash_table_add (fonts, sum);
@@ -155,124 +153,15 @@ extract_font (GskRenderNode *node,
   g_free (filename);
 
   font_count++;
-}
 
-static void
-extract_from_node (GskRenderNode *node,
-                   const char    *basename)
-{
-  switch (gsk_render_node_get_node_type (node))
-    {
-    case GSK_CONTAINER_NODE:
-      for (unsigned int i = 0; i < gsk_container_node_get_n_children (node); i++)
-        extract_from_node (gsk_container_node_get_child (node, i), basename);
-      break;
-
-    case GSK_CAIRO_NODE:
-    case GSK_COLOR_NODE:
-    case GSK_LINEAR_GRADIENT_NODE:
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_RADIAL_GRADIENT_NODE:
-    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-    case GSK_CONIC_GRADIENT_NODE:
-    case GSK_BORDER_NODE:
-    case GSK_INSET_SHADOW_NODE:
-    case GSK_OUTSET_SHADOW_NODE:
-      break;
-
-    case GSK_TEXTURE_NODE:
-    case GSK_TEXTURE_SCALE_NODE:
-      extract_texture (node, basename);
-      break;
-
-    case GSK_TRANSFORM_NODE:
-      extract_from_node (gsk_transform_node_get_child (node), basename);
-      break;
-
-    case GSK_OPACITY_NODE:
-      extract_from_node (gsk_opacity_node_get_child (node), basename);
-      break;
-
-    case GSK_COLOR_MATRIX_NODE:
-      extract_from_node (gsk_color_matrix_node_get_child (node), basename);
-      break;
-
-    case GSK_REPEAT_NODE:
-      extract_from_node (gsk_repeat_node_get_child (node), basename);
-      break;
-
-    case GSK_CLIP_NODE:
-      extract_from_node (gsk_clip_node_get_child (node), basename);
-      break;
-
-    case GSK_ROUNDED_CLIP_NODE:
-      extract_from_node (gsk_rounded_clip_node_get_child (node), basename);
-      break;
-
-    case GSK_SHADOW_NODE:
-      extract_from_node (gsk_shadow_node_get_child (node), basename);
-      break;
-
-    case GSK_BLEND_NODE:
-      extract_from_node (gsk_blend_node_get_bottom_child (node), basename);
-      extract_from_node (gsk_blend_node_get_top_child (node), basename);
-      break;
-
-    case GSK_CROSS_FADE_NODE:
-      extract_from_node (gsk_cross_fade_node_get_start_child (node), basename);
-      extract_from_node (gsk_cross_fade_node_get_end_child (node), basename);
-      break;
-
-    case GSK_TEXT_NODE:
-      extract_font (node, basename);
-      break;
-
-    case GSK_BLUR_NODE:
-      extract_from_node (gsk_blur_node_get_child (node), basename);
-      break;
-
-    case GSK_DEBUG_NODE:
-      extract_from_node (gsk_debug_node_get_child (node), basename);
-      break;
-
-    case GSK_GL_SHADER_NODE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      for (unsigned int i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
-        extract_from_node (gsk_gl_shader_node_get_child (node, i), basename);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
-
-    case GSK_MASK_NODE:
-      extract_from_node (gsk_mask_node_get_source (node), basename);
-      extract_from_node (gsk_mask_node_get_mask (node), basename);
-      break;
-
-    case GSK_FILL_NODE:
-      extract_from_node (gsk_fill_node_get_child (node), basename);
-      break;
-
-    case GSK_STROKE_NODE:
-      extract_from_node (gsk_stroke_node_get_child (node), basename);
-      break;
-
-    case GSK_SUBSURFACE_NODE:
-      extract_from_node (gsk_subsurface_node_get_child (node), basename);
-      break;
-
-    case GSK_COMPONENT_TRANSFER_NODE:
-      extract_from_node (gsk_component_transfer_node_get_child (node), basename);
-      break;
-
-    case GSK_NOT_A_RENDER_NODE:
-    default:
-      g_assert_not_reached ();
-    }
+  return g_object_ref (font);
 }
 
 static void
 file_extract (const char *filename)
 {
-  GskRenderNode  *node;
+  GskRenderNode *node;
+  GskRenderReplay *replay;
   char *basename, *dot;
 
   node = load_node_file (filename);
@@ -281,8 +170,19 @@ file_extract (const char *filename)
   if (dot)
     *dot = 0;
 
-  extract_from_node (node, basename);
+  replay = gsk_render_replay_new ();
+  gsk_render_replay_set_texture_filter (replay,
+                                        extract_texture,
+                                        basename,
+                                        g_free);
+  gsk_render_replay_set_font_filter (replay,
+                                     extract_font,
+                                     g_strdup (basename),
+                                     g_free);
 
+  gsk_render_replay_foreach_node (replay, node);
+
+  gsk_render_replay_free (replay);
   gsk_render_node_unref (node);
 }
 

@@ -27,6 +27,7 @@
 #include "gskpathprivate.h"
 #include "gskrectprivate.h"
 #include "gskrendererprivate.h"
+#include "gskrenderreplay.h"
 #include "gskroundedrectprivate.h"
 #include "gskstrokeprivate.h"
 #include "gsktransformprivate.h"
@@ -68,6 +69,13 @@
 G_LOCK_DEFINE_STATIC (rgba);
 
 /* {{{ Utilities */
+
+static GskRenderNode *
+gsk_render_node_replay_as_self (GskRenderNode   *node,
+                                GskRenderReplay *replay)
+{
+  return gsk_render_node_ref (node);
+}
 
 static inline gboolean
 color_state_is_hdr (GdkColorState *color_state)
@@ -224,6 +232,7 @@ gsk_color_node_class_init (gpointer g_class,
   node_class->finalize = gsk_color_node_finalize;
   node_class->draw = gsk_color_node_draw;
   node_class->diff = gsk_color_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -639,6 +648,7 @@ gsk_linear_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_linear_gradient_node_finalize;
   node_class->draw = gsk_linear_gradient_node_draw;
   node_class->diff = gsk_linear_gradient_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 static void
@@ -652,6 +662,7 @@ gsk_repeating_linear_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_linear_gradient_node_finalize;
   node_class->draw = gsk_linear_gradient_node_draw;
   node_class->diff = gsk_linear_gradient_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -1043,6 +1054,7 @@ gsk_radial_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_radial_gradient_node_finalize;
   node_class->draw = gsk_radial_gradient_node_draw;
   node_class->diff = gsk_radial_gradient_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 static void
@@ -1056,6 +1068,7 @@ gsk_repeating_radial_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_radial_gradient_node_finalize;
   node_class->draw = gsk_radial_gradient_node_draw;
   node_class->diff = gsk_radial_gradient_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -1829,6 +1842,7 @@ gsk_conic_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_conic_gradient_node_finalize;
   node_class->draw = gsk_conic_gradient_node_draw;
   node_class->diff = gsk_conic_gradient_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -2254,6 +2268,7 @@ gsk_border_node_class_init (gpointer g_class,
   node_class->finalize = gsk_border_node_finalize;
   node_class->draw = gsk_border_node_draw;
   node_class->diff = gsk_border_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -2605,6 +2620,27 @@ gsk_texture_node_diff (GskRenderNode *node1,
   cairo_region_destroy (sub);
 }
 
+static GskRenderNode *
+gsk_texture_node_replay (GskRenderNode   *node,
+                         GskRenderReplay *replay)
+{
+  GskTextureNode *self = (GskTextureNode *) node;
+  GdkTexture *texture;
+  GskRenderNode *result;
+
+  texture = gsk_render_replay_filter_texture (replay, self->texture);
+  if (self->texture == texture)
+    {
+      g_object_unref (texture);
+      return gsk_render_node_ref (node);
+    }
+
+  result = gsk_texture_node_new (texture, &node->bounds);
+  g_object_unref (texture);
+
+  return result;
+}
+
 static void
 gsk_texture_node_class_init (gpointer g_class,
                              gpointer class_data)
@@ -2616,6 +2652,7 @@ gsk_texture_node_class_init (gpointer g_class,
   node_class->finalize = gsk_texture_node_finalize;
   node_class->draw = gsk_texture_node_draw;
   node_class->diff = gsk_texture_node_diff;
+  node_class->replay = gsk_texture_node_replay;
 }
 
 /**
@@ -2795,6 +2832,27 @@ gsk_texture_scale_node_diff (GskRenderNode *node1,
   cairo_region_destroy (sub);
 }
 
+static GskRenderNode *
+gsk_texture_scale_node_replay (GskRenderNode   *node,
+                               GskRenderReplay *replay)
+{
+  GskTextureScaleNode *self = (GskTextureScaleNode *) node;
+  GdkTexture *texture;
+  GskRenderNode *result;
+
+  texture = gsk_render_replay_filter_texture (replay, self->texture);
+  if (self->texture == texture)
+    {
+      g_object_unref (texture);
+      return gsk_render_node_ref (node);
+    }
+
+  result = gsk_texture_scale_node_new (texture, &node->bounds, self->filter);
+  g_object_unref (texture);
+
+  return result;
+}
+
 static void
 gsk_texture_scale_node_class_init (gpointer g_class,
                                    gpointer class_data)
@@ -2806,6 +2864,7 @@ gsk_texture_scale_node_class_init (gpointer g_class,
   node_class->finalize = gsk_texture_scale_node_finalize;
   node_class->draw = gsk_texture_scale_node_draw;
   node_class->diff = gsk_texture_scale_node_diff;
+  node_class->replay = gsk_texture_scale_node_replay;
 }
 
 /**
@@ -3326,6 +3385,7 @@ gsk_inset_shadow_node_class_init (gpointer g_class,
   node_class->finalize = gsk_inset_shadow_node_finalize;
   node_class->draw = gsk_inset_shadow_node_draw;
   node_class->diff = gsk_inset_shadow_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -3721,6 +3781,7 @@ gsk_outset_shadow_node_class_init (gpointer g_class,
   node_class->finalize = gsk_outset_shadow_node_finalize;
   node_class->draw = gsk_outset_shadow_node_draw;
   node_class->diff = gsk_outset_shadow_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -4009,6 +4070,7 @@ gsk_cairo_node_class_init (gpointer g_class,
 
   node_class->finalize = gsk_cairo_node_finalize;
   node_class->draw = gsk_cairo_node_draw;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
@@ -4266,6 +4328,40 @@ gsk_container_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode *
+gsk_container_node_replay (GskRenderNode   *node,
+                           GskRenderReplay *replay)
+{
+  GskContainerNode *self = (GskContainerNode *) node;
+  GskRenderNode *result;
+  GPtrArray *array;
+  gboolean changed;
+  guint i;
+
+  array = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
+  changed = FALSE;
+
+  for (i = 0; i < self->n_children; i++)
+    {
+      GskRenderNode *replayed = gsk_render_replay_filter_node (replay, self->children[i]);
+
+      if (replayed != self->children[i])
+        changed = TRUE;
+
+      if (replayed != NULL)
+        g_ptr_array_add (array, replayed);
+    }
+
+  if (!changed)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_container_node_new ((GskRenderNode **) array->pdata, array->len);
+
+  g_ptr_array_unref (array);
+
+  return result;
+}
+
 static gboolean
 gsk_container_node_get_opaque_rect (GskRenderNode   *node,
                                     graphene_rect_t *opaque)
@@ -4290,6 +4386,7 @@ gsk_container_node_class_init (gpointer g_class,
   node_class->finalize = gsk_container_node_finalize;
   node_class->draw = gsk_container_node_draw;
   node_class->diff = gsk_container_node_diff;
+  node_class->replay = gsk_container_node_replay;
   node_class->get_opaque_rect = gsk_container_node_get_opaque_rect;
 }
 
@@ -4576,6 +4673,28 @@ gsk_transform_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode *
+gsk_transform_node_replay (GskRenderNode   *node,
+                           GskRenderReplay *replay)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_transform_node_new (child, self->transform);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static gboolean
 gsk_transform_node_get_opaque_rect (GskRenderNode   *node,
                                     graphene_rect_t *opaque)
@@ -4607,6 +4726,7 @@ gsk_transform_node_class_init (gpointer g_class,
   node_class->draw = gsk_transform_node_draw;
   node_class->can_diff = gsk_transform_node_can_diff;
   node_class->diff = gsk_transform_node_diff;
+  node_class->replay = gsk_transform_node_replay;
   node_class->get_opaque_rect = gsk_transform_node_get_opaque_rect;
 }
 
@@ -4761,6 +4881,28 @@ gsk_opacity_node_diff (GskRenderNode *node1,
     gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode *
+gsk_opacity_node_replay (GskRenderNode   *node,
+                         GskRenderReplay *replay)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_opacity_node_new (child, self->opacity);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_opacity_node_class_init (gpointer g_class,
                              gpointer class_data)
@@ -4772,6 +4914,7 @@ gsk_opacity_node_class_init (gpointer g_class,
   node_class->finalize = gsk_opacity_node_finalize;
   node_class->draw = gsk_opacity_node_draw;
   node_class->diff = gsk_opacity_node_diff;
+  node_class->replay = gsk_opacity_node_replay;
 }
 
 /**
@@ -4984,6 +5127,28 @@ nope:
   return;
 }
 
+static GskRenderNode *
+gsk_color_matrix_node_replay (GskRenderNode   *node,
+                              GskRenderReplay *replay)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_color_matrix_node_new (child, &self->color_matrix, &self->color_offset);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_color_matrix_node_class_init (gpointer g_class,
                                   gpointer class_data)
@@ -4995,6 +5160,7 @@ gsk_color_matrix_node_class_init (gpointer g_class,
   node_class->finalize = gsk_color_matrix_node_finalize;
   node_class->draw = gsk_color_matrix_node_draw;
   node_class->diff = gsk_color_matrix_node_diff;
+  node_class->replay = gsk_color_matrix_node_replay;
 }
 
 /**
@@ -5287,6 +5453,28 @@ gsk_repeat_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode *
+gsk_repeat_node_replay (GskRenderNode   *node,
+                        GskRenderReplay *replay)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_repeat_node_new (&node->bounds, child, &self->child_bounds);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_repeat_node_class_init (gpointer g_class,
                             gpointer class_data)
@@ -5298,6 +5486,7 @@ gsk_repeat_node_class_init (gpointer g_class,
   node_class->finalize = gsk_repeat_node_finalize;
   node_class->draw = gsk_repeat_node_draw;
   node_class->diff = gsk_repeat_node_diff;
+  node_class->replay = gsk_repeat_node_replay;
 }
 
 /**
@@ -5465,6 +5654,28 @@ gsk_clip_node_get_opaque_rect (GskRenderNode   *node,
   return graphene_rect_intersection (&self->clip, &child_opaque, opaque);
 }
 
+static GskRenderNode *
+gsk_clip_node_replay (GskRenderNode   *node,
+                      GskRenderReplay *replay)
+{
+  GskClipNode *self = (GskClipNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_clip_node_new (child, &self->clip);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_clip_node_class_init (gpointer g_class,
                           gpointer class_data)
@@ -5476,6 +5687,7 @@ gsk_clip_node_class_init (gpointer g_class,
   node_class->finalize = gsk_clip_node_finalize;
   node_class->draw = gsk_clip_node_draw;
   node_class->diff = gsk_clip_node_diff;
+  node_class->replay = gsk_clip_node_replay;
   node_class->get_opaque_rect = gsk_clip_node_get_opaque_rect;
 }
 
@@ -5651,6 +5863,28 @@ gsk_rounded_clip_node_get_opaque_rect (GskRenderNode   *node,
   return TRUE;
 }
 
+static GskRenderNode *
+gsk_rounded_clip_node_replay (GskRenderNode   *node,
+                              GskRenderReplay *replay)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_rounded_clip_node_new (child, &self->clip);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_rounded_clip_node_class_init (gpointer g_class,
                                   gpointer class_data)
@@ -5662,6 +5896,7 @@ gsk_rounded_clip_node_class_init (gpointer g_class,
   node_class->finalize = gsk_rounded_clip_node_finalize;
   node_class->draw = gsk_rounded_clip_node_draw;
   node_class->diff = gsk_rounded_clip_node_diff;
+  node_class->replay = gsk_rounded_clip_node_replay;
   node_class->get_opaque_rect = gsk_rounded_clip_node_get_opaque_rect;
 }
 
@@ -5823,6 +6058,28 @@ gsk_fill_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode *
+gsk_fill_node_replay (GskRenderNode   *node,
+                      GskRenderReplay *replay)
+{
+  GskFillNode *self = (GskFillNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_fill_node_new (child, self->path, self->fill_rule);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_fill_node_class_init (gpointer g_class,
                           gpointer class_data)
@@ -5834,6 +6091,7 @@ gsk_fill_node_class_init (gpointer g_class,
   node_class->finalize = gsk_fill_node_finalize;
   node_class->draw = gsk_fill_node_draw;
   node_class->diff = gsk_fill_node_diff;
+  node_class->replay = gsk_fill_node_replay;
 }
 
 /**
@@ -6030,6 +6288,28 @@ gsk_stroke_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode *
+gsk_stroke_node_replay (GskRenderNode   *node,
+                        GskRenderReplay *replay)
+{
+  GskStrokeNode *self = (GskStrokeNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_stroke_node_new (child, self->path, &self->stroke);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_stroke_node_class_init (gpointer g_class,
                             gpointer class_data)
@@ -6041,6 +6321,7 @@ gsk_stroke_node_class_init (gpointer g_class,
   node_class->finalize = gsk_stroke_node_finalize;
   node_class->draw = gsk_stroke_node_draw;
   node_class->diff = gsk_stroke_node_diff;
+  node_class->replay = gsk_stroke_node_replay;
 }
 
 /**
@@ -6309,6 +6590,28 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
   bounds->size.height += top + bottom;
 }
 
+static GskRenderNode *
+gsk_shadow_node_replay (GskRenderNode   *node,
+                        GskRenderReplay *replay)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_shadow_node_new2 (child, self->shadows, self->n_shadows);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_shadow_node_class_init (gpointer g_class,
                             gpointer class_data)
@@ -6320,6 +6623,7 @@ gsk_shadow_node_class_init (gpointer g_class,
   node_class->finalize = gsk_shadow_node_finalize;
   node_class->draw = gsk_shadow_node_draw;
   node_class->diff = gsk_shadow_node_diff;
+  node_class->replay = gsk_shadow_node_replay;
 }
 
 /**
@@ -6618,6 +6922,39 @@ gsk_blend_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode *
+gsk_blend_node_replay (GskRenderNode   *node,
+                       GskRenderReplay *replay)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+  GskRenderNode *result, *top, *bottom;
+
+  top = gsk_render_replay_filter_node (replay, self->top);
+  bottom = gsk_render_replay_filter_node (replay, self->bottom);
+
+  if (top == NULL)
+    {
+      if (bottom == NULL)
+        return NULL;
+
+      top = gsk_container_node_new (NULL, 0);
+    }
+  else if (bottom == NULL)
+    {
+      bottom = gsk_container_node_new (NULL, 0);
+    }
+
+  if (top == self->top && bottom == self->bottom)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_blend_node_new (bottom, top, self->blend_mode);
+
+  gsk_render_node_unref (top);
+  gsk_render_node_unref (bottom);
+
+  return result;
+}
+
 static void
 gsk_blend_node_class_init (gpointer g_class,
                            gpointer class_data)
@@ -6629,6 +6966,7 @@ gsk_blend_node_class_init (gpointer g_class,
   node_class->finalize = gsk_blend_node_finalize;
   node_class->draw = gsk_blend_node_draw;
   node_class->diff = gsk_blend_node_diff;
+  node_class->replay = gsk_blend_node_replay;
 }
 
 /**
@@ -6789,6 +7127,42 @@ gsk_cross_fade_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode *
+gsk_cross_fade_node_replay (GskRenderNode   *node,
+                            GskRenderReplay *replay)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+  GskRenderNode *result, *start, *end;
+
+  start = gsk_render_replay_filter_node (replay, self->start);
+  end = gsk_render_replay_filter_node (replay, self->end);
+
+  if (start == NULL)
+    {
+      if (end == NULL)
+        return NULL;
+
+      result = gsk_opacity_node_new (end, self->progress);
+    }
+  else if (end == NULL)
+    {
+      result = gsk_opacity_node_new (start, 1.0 - self->progress);
+    }
+  else if (start == self->start && end == self->end)
+    {
+      result = gsk_render_node_ref (node);
+    }
+  else
+    {
+      result = gsk_cross_fade_node_new (start, end, self->progress);
+    }
+
+  g_clear_pointer (&start, gsk_render_node_unref);
+  g_clear_pointer (&end, gsk_render_node_unref);
+
+  return result;
+}
+
 static gboolean
 gsk_cross_fade_node_get_opaque_rect (GskRenderNode   *node,
                                      graphene_rect_t *opaque)
@@ -6814,6 +7188,7 @@ gsk_cross_fade_node_class_init (gpointer g_class,
   node_class->finalize = gsk_cross_fade_node_finalize;
   node_class->draw = gsk_cross_fade_node_draw;
   node_class->diff = gsk_cross_fade_node_diff;
+  node_class->replay = gsk_cross_fade_node_replay;
   node_class->get_opaque_rect = gsk_cross_fade_node_get_opaque_rect;
 }
 
@@ -7011,6 +7386,35 @@ gsk_text_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode *
+gsk_text_node_replay (GskRenderNode   *node,
+                      GskRenderReplay *replay)
+{
+  GskTextNode *self = (GskTextNode *) node;
+  GskRenderNode *result;
+  PangoFont *font;
+
+  font = gsk_render_replay_filter_font (replay, self->font);
+  if (font == self->font)
+    {
+      g_object_unref (font);
+      return gsk_render_node_ref (node);
+    }
+
+  result = gsk_text_node_new2 (font, 
+                               &(PangoGlyphString) {
+                                 self->num_glyphs,
+                                 self->glyphs,
+                                 NULL,
+                               },
+                               &self->color,
+                               &self->offset);
+
+  g_object_unref (font);
+
+  return result;
+}
+
 static void
 gsk_text_node_class_init (gpointer g_class,
                           gpointer class_data)
@@ -7022,6 +7426,7 @@ gsk_text_node_class_init (gpointer g_class,
   node_class->finalize = gsk_text_node_finalize;
   node_class->draw = gsk_text_node_draw;
   node_class->diff = gsk_text_node_diff;
+  node_class->replay = gsk_text_node_replay;
 }
 
 static inline float
@@ -7522,6 +7927,28 @@ gsk_blur_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode *
+gsk_blur_node_replay (GskRenderNode   *node,
+                      GskRenderReplay *replay)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_blur_node_new (child, self->radius);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_blur_node_class_init (gpointer g_class,
                           gpointer class_data)
@@ -7533,6 +7960,7 @@ gsk_blur_node_class_init (gpointer g_class,
   node_class->finalize = gsk_blur_node_finalize;
   node_class->draw = gsk_blur_node_draw;
   node_class->diff = gsk_blur_node_diff;
+  node_class->replay = gsk_blur_node_replay;
 }
 
 /**
@@ -7751,6 +8179,44 @@ gsk_mask_node_diff (GskRenderNode *node1,
   gsk_render_node_diff (self1->mask, self2->mask, data);
 }
 
+static GskRenderNode *
+gsk_mask_node_replay (GskRenderNode   *node,
+                      GskRenderReplay *replay)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+  GskRenderNode *result, *source, *mask;
+
+  source = gsk_render_replay_filter_node (replay, self->source);
+  mask = gsk_render_replay_filter_node (replay, self->mask);
+
+  if (source == NULL)
+    {
+      g_clear_pointer (&mask, gsk_render_node_unref);
+      return NULL;
+    }
+
+  if (mask == NULL)
+    {
+      if (self->mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+        result = gsk_render_node_ref (source);
+      else
+        result = NULL;
+    }
+  else if (source == self->source && mask == self->mask)
+    {
+      result = gsk_render_node_ref (node);
+    }
+  else
+    {
+      result = gsk_mask_node_new (source, mask, self->mask_mode);
+    }
+
+  g_clear_pointer (&source, gsk_render_node_unref);
+  g_clear_pointer (&mask, gsk_render_node_unref);
+
+  return result;
+}
+
 static void
 gsk_mask_node_class_init (gpointer g_class,
                           gpointer class_data)
@@ -7762,6 +8228,7 @@ gsk_mask_node_class_init (gpointer g_class,
   node_class->finalize = gsk_mask_node_finalize;
   node_class->draw = gsk_mask_node_draw;
   node_class->diff = gsk_mask_node_diff;
+  node_class->replay = gsk_mask_node_replay;
 }
 
 /**
@@ -7934,6 +8401,28 @@ gsk_debug_node_get_opaque_rect (GskRenderNode   *node,
   return gsk_render_node_get_opaque_rect (self->child, out_opaque);
 }
 
+static GskRenderNode *
+gsk_debug_node_replay (GskRenderNode   *node,
+                       GskRenderReplay *replay)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_debug_node_new (child, self->message);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_debug_node_class_init (gpointer g_class,
                            gpointer class_data)
@@ -7946,6 +8435,7 @@ gsk_debug_node_class_init (gpointer g_class,
   node_class->draw = gsk_debug_node_draw;
   node_class->can_diff = gsk_debug_node_can_diff;
   node_class->diff = gsk_debug_node_diff;
+  node_class->replay = gsk_debug_node_replay;
   node_class->get_opaque_rect = gsk_debug_node_get_opaque_rect;
 }
 
@@ -8091,6 +8581,51 @@ gsk_gl_shader_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode *
+gsk_gl_shader_node_replay (GskRenderNode   *node,
+                           GskRenderReplay *replay)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+  GskRenderNode *result;
+  GskRenderNode **children;
+  gboolean changed, all_empty;
+  guint i;
+
+  children = g_new (GskRenderNode *, self->n_children);
+  changed = FALSE;
+  all_empty = TRUE;
+
+  for (i = 0; i < self->n_children; i++)
+    {
+      children[i] = gsk_render_replay_filter_node (replay, self->children[i]);
+
+      if (children[i] == NULL)
+        children[i] = gsk_container_node_new (NULL, 0);
+      else
+        all_empty = FALSE;
+
+      if (children[i] != self->children[i])
+        changed = TRUE;
+    }
+
+  if (!changed)
+    result = gsk_render_node_ref (node);
+  else if (all_empty)
+    result = NULL;
+  else
+    result = gsk_gl_shader_node_new (self->shader,
+                                     &node->bounds,
+                                     self->args,
+                                     children,
+                                     self->n_children);
+
+  for (i = 0; i < self->n_children; i++)
+    gsk_render_node_unref (children[i]);
+  g_free (children);
+
+  return result;
+}
+
 static void
 gsk_gl_shader_node_class_init (gpointer g_class,
                                gpointer class_data)
@@ -8102,6 +8637,7 @@ gsk_gl_shader_node_class_init (gpointer g_class,
   node_class->finalize = gsk_gl_shader_node_finalize;
   node_class->draw = gsk_gl_shader_node_draw;
   node_class->diff = gsk_gl_shader_node_diff;
+  node_class->replay = gsk_gl_shader_node_replay;
 }
 
 /**
@@ -8348,6 +8884,28 @@ gsk_subsurface_node_get_opaque_rect (GskRenderNode   *node,
   return gsk_render_node_get_opaque_rect (self->child, out_opaque);
 }
 
+static GskRenderNode *
+gsk_subsurface_node_replay (GskRenderNode   *node,
+                            GskRenderReplay *replay)
+{
+  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_subsurface_node_new (child, self->subsurface);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static void
 gsk_subsurface_node_class_init (gpointer g_class,
                                 gpointer class_data)
@@ -8360,6 +8918,7 @@ gsk_subsurface_node_class_init (gpointer g_class,
   node_class->draw = gsk_subsurface_node_draw;
   node_class->can_diff = gsk_subsurface_node_can_diff;
   node_class->diff = gsk_subsurface_node_diff;
+  node_class->replay = gsk_subsurface_node_replay;
   node_class->get_opaque_rect = gsk_subsurface_node_get_opaque_rect;
 }
 
@@ -8587,6 +9146,7 @@ gsk_component_transfer_node_class_init (gpointer g_class,
   node_class->draw = gsk_component_transfer_node_draw;
   node_class->can_diff = gsk_component_transfer_node_can_diff;
   node_class->diff = gsk_component_transfer_node_diff;
+  node_class->replay = gsk_render_node_replay_as_self;
 }
 
 /**
