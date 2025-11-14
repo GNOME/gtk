@@ -25,6 +25,64 @@
 
 G_BEGIN_DECLS
 
+typedef struct _Shape Shape;
+typedef struct _Timeline Timeline;
+
+typedef enum
+{
+  ALIGN_MIN = 1 << 0,
+  ALIGN_MID = 1 << 1,
+  ALIGN_MAX = 1 << 2,
+} Align;
+
+typedef enum
+{
+  MEET,
+  SLICE,
+} MeetOrSlice;
+
+typedef enum
+{
+  GTK_SVG_RUN_MODE_STOPPED,
+  GTK_SVG_RUN_MODE_DISCRETE,
+  GTK_SVG_RUN_MODE_CONTINUOUS,
+} GtkSvgRunMode;
+
+struct _GtkSvg
+{
+  GObject parent_instance;
+  Shape *content;
+
+  double width, height;
+  graphene_rect_t view_box;
+  graphene_rect_t bounds;
+
+  Align align;
+  MeetOrSlice meet_or_slice;
+
+  double weight;
+  unsigned int state;
+  unsigned int max_state;
+  int64_t state_change_delay;
+
+  int64_t load_time;
+  int64_t current_time;
+
+  gboolean playing;
+  GtkSvgRunMode run_mode;
+  GdkFrameClock *clock;
+  unsigned long clock_update_id;
+  unsigned int periodic_update_id;
+
+  int64_t next_update;
+  unsigned int pending_invalidate;
+  gboolean advance_after_snapshot;
+
+  unsigned int gpa_version;
+
+  Timeline *timeline;
+};
+
 void           gtk_svg_set_load_time   (GtkSvg                *self,
                                         int64_t                load_time);
 
@@ -33,13 +91,6 @@ void           gtk_svg_set_playing     (GtkSvg                *self,
 
 void           gtk_svg_advance         (GtkSvg                *self,
                                         int64_t                current_time);
-
-typedef enum
-{
-  GTK_SVG_RUN_MODE_STOPPED,
-  GTK_SVG_RUN_MODE_DISCRETE,
-  GTK_SVG_RUN_MODE_CONTINUOUS,
-} GtkSvgRunMode;
 
 GtkSvgRunMode  gtk_svg_get_run_mode    (GtkSvg *self);
 

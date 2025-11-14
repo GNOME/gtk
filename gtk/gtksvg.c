@@ -248,62 +248,12 @@ typedef enum
   SHAPE_ATTR_STOP_OPACITY,
 } ShapeAttr;
 
-typedef enum
-{
-  ALIGN_MIN = 1 << 0,
-  ALIGN_MID = 1 << 1,
-  ALIGN_MAX = 1 << 2,
-} Align;
-
 #define ALIGN_XY(x,y) ((x) | ((y) << 3))
 
 #define ALIGN_GET_X(x) ((x) & 7)
 #define ALIGN_GET_Y(x) ((x) >> 3)
 
-typedef enum
-{
-  MEET,
-  SLICE,
-} MeetOrSlice;
-
 typedef struct _Animation Animation;
-typedef struct _Shape Shape;
-typedef struct _Timeline Timeline;
-
-struct _GtkSvg
-{
-  GObject parent_instance;
-  Shape *content;
-
-  double width, height;
-  graphene_rect_t view_box;
-  graphene_rect_t bounds;
-
-  Align align;
-  MeetOrSlice meet_or_slice;
-
-  double weight;
-  unsigned int state;
-  unsigned int max_state;
-  int64_t state_change_delay;
-
-  int64_t load_time;
-  int64_t current_time;
-
-  gboolean playing;
-  GtkSvgRunMode run_mode;
-  GdkFrameClock *clock;
-  unsigned long clock_update_id;
-  unsigned int periodic_update_id;
-
-  int64_t next_update;
-  unsigned int pending_invalidate;
-  gboolean advance_after_snapshot;
-
-  unsigned int gpa_version;
-
-  Timeline *timeline;
-};
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
 
