@@ -136,6 +136,16 @@ replay_partial_node (const PartialNode *replay)
       gsk_render_node_unref (node);
       node = tmp;
     }
+  if (gsk_render_node_clears_background (node))
+    {
+      /* Wrap in something that blocks background writes from
+       * going through.
+       * Paste nodes are meant to work like textures.
+       */
+      GskRenderNode *tmp = gsk_opacity_node_new (node, 1.0);
+      gsk_render_node_unref (node);
+      node = tmp;
+    }
 
   return node;
 }

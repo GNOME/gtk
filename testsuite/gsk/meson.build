@@ -159,6 +159,7 @@ compare_render_tests = [
   'outset-shadow-scale-offset',
   'outset_shadow_simple',
   'paste-behind-clip',
+  'paste-no-porter-duff',
   'paste-with-depth',
   'premul-color',
   'radial-gradient-premultiplied-nocairo',
