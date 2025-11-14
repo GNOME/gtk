@@ -1,0 +1,19 @@
+composite {
+  child: color "node1" {
+    bounds: 0 0 50 50;
+    color: rgb(255,0,0);
+  }
+  mask: "node1";
+  operator: clear;
+}
+copy {
+  child: container {
+    color {
+      bounds: 0 0 50 50;
+      color: rgb(0,0,255);
+    }
+    paste {
+      bounds: 0 0 50 50;
+    }
+  }
+}
