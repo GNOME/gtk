@@ -362,15 +362,16 @@ set_random_icons (IconEditorWindow *self)
     {
       uint32_t r;
       g_autofree char *path;
-      g_autoptr (PathPaintable) paintable = NULL;
+      g_autoptr (GtkSvg) paintable = NULL;
 
       do {
         r = g_random_int_range (0, (uint32_t) G_N_ELEMENTS (names));
       } while (gtk_bitset_contains (used, r));
 
       path = g_strconcat ("/org/gtk/libgtk/icons/", names[r], ".svg", NULL);
-      paintable = path_paintable_new_from_resource (path);
-      path_paintable_set_state (paintable, 0);
+      paintable = gtk_svg_new_from_resource (path);
+      gtk_svg_set_state (paintable, 0);
+      gtk_svg_play (paintable);
       g_object_bind_property (self, "weight",
                               paintable, "weight",
                               G_BINDING_SYNC_CREATE);

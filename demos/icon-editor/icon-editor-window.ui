@@ -229,9 +229,9 @@
                           <object class="GtkImage">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
-                              <object class="PathPaintable">
+                              <object class="GtkSvg">
                                 <property name="resource">/org/gtk/Shaper/example1.gpa</property>
-                                <property name="state">0</property>
+                                <property name="playing">1</property>
                               </object>
                             </property>
                           </object>
@@ -251,9 +251,9 @@
                           <object class="GtkImage">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
-                              <object class="PathPaintable">
+                              <object class="GtkSvg">
                                 <property name="resource">/org/gtk/Shaper/example2.gpa</property>
-                                <property name="state">0</property>
+                                <property name="playing">1</property>
                               </object>
                             </property>
                           </object>
@@ -273,9 +273,9 @@
                           <object class="GtkImage">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
-                              <object class="PathPaintable">
+                              <object class="GtkSvg">
                                 <property name="resource">/org/gtk/Shaper/example3.gpa</property>
-                                <property name="state">0</property>
+                                <property name="playing">1</property>
                               </object>
                             </property>
                           </object>
@@ -295,9 +295,9 @@
                           <object class="GtkImage">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
-                              <object class="PathPaintable">
+                              <object class="GtkSvg">
                                 <property name="resource">/org/gtk/Shaper/example4.gpa</property>
-                                <property name="state">0</property>
+                                <property name="playing">1</property>
                               </object>
                             </property>
                           </object>
@@ -317,9 +317,9 @@
                           <object class="GtkImage">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
-                              <object class="PathPaintable">
+                              <object class="GtkSvg">
                                 <property name="resource">/org/gtk/Shaper/example5.gpa</property>
-                                <property name="state">0</property>
+                                <property name="playing">1</property>
                               </object>
                             </property>
                           </object>
@@ -339,9 +339,9 @@
                           <object class="GtkImage">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
-                              <object class="PathPaintable">
+                              <object class="GtkSvg">
                                 <property name="resource">/org/gtk/Shaper/example6.gpa</property>
-                                <property name="state">0</property>
+                                <property name="playing">1</property>
                               </object>
                             </property>
                           </object>

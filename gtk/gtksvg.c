@@ -26,7 +26,6 @@
 #include "gtkenums.h"
 #include "gtksymbolicpaintable.h"
 #include "gtktypebuiltins.h"
-#include "gtk/css/gtkcss.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtksnapshotprivate.h"
 #include <glib/gstdio.h>

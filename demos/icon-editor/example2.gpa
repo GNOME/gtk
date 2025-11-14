@@ -1,5 +1,6 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:state='0'
      gpa:version='1'
      gpa:keywords='signature color sign animation'>
   <path d='M 0.764585316 12.5 L 15.5 12.5'
