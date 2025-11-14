@@ -1,5 +1,6 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:state='0'
      gpa:version='1'
      gpa:keywords='bell ringinging ring alarm'>
   <path d='M 7.6266017 2 Q 8 2.03941107, 8.37339783 2'
