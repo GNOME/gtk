@@ -22,9 +22,11 @@
 #pragma once
 
 #include "gtksvg.h"
+#include "gtkenums.h"
 
 G_BEGIN_DECLS
 
+typedef struct _SvgValue SvgValue;
 typedef struct _Shape Shape;
 typedef struct _Timeline Timeline;
 
@@ -79,9 +81,208 @@ struct _GtkSvg
   gboolean advance_after_snapshot;
 
   unsigned int gpa_version;
+  char *gpa_keywords;
 
   Timeline *timeline;
 };
+
+typedef enum
+{
+  SHAPE_LINE,
+  SHAPE_POLY_LINE,
+  SHAPE_POLYGON,
+  SHAPE_RECT,
+  SHAPE_CIRCLE,
+  SHAPE_ELLIPSE,
+  SHAPE_PATH,
+  SHAPE_GROUP,
+  SHAPE_CLIP_PATH,
+  SHAPE_MASK,
+  SHAPE_DEFS,
+  SHAPE_USE,
+  SHAPE_LINEAR_GRADIENT,
+  SHAPE_RADIAL_GRADIENT,
+} ShapeType;
+
+typedef enum
+{
+  SHAPE_ATTR_VISIBILITY,
+  SHAPE_ATTR_TRANSFORM,
+  SHAPE_ATTR_OPACITY,
+  SHAPE_ATTR_FILTER,
+  SHAPE_ATTR_CLIP_PATH,
+  SHAPE_ATTR_CLIP_RULE,
+  SHAPE_ATTR_MASK,
+  SHAPE_ATTR_MASK_TYPE,
+  SHAPE_ATTR_FILL,
+  SHAPE_ATTR_FILL_OPACITY,
+  SHAPE_ATTR_FILL_RULE,
+  SHAPE_ATTR_STROKE,
+  SHAPE_ATTR_STROKE_OPACITY,
+  SHAPE_ATTR_STROKE_WIDTH,
+  SHAPE_ATTR_STROKE_LINECAP,
+  SHAPE_ATTR_STROKE_LINEJOIN,
+  SHAPE_ATTR_STROKE_MITERLIMIT,
+  SHAPE_ATTR_STROKE_DASHARRAY,
+  SHAPE_ATTR_STROKE_DASHOFFSET,
+  SHAPE_ATTR_HREF,
+  SHAPE_ATTR_PATH_LENGTH,
+  SHAPE_ATTR_PATH,
+  SHAPE_ATTR_CX,
+  SHAPE_ATTR_CY,
+  SHAPE_ATTR_R,
+  SHAPE_ATTR_X,
+  SHAPE_ATTR_Y,
+  SHAPE_ATTR_WIDTH,
+  SHAPE_ATTR_HEIGHT,
+  SHAPE_ATTR_RX,
+  SHAPE_ATTR_RY,
+  SHAPE_ATTR_X1,
+  SHAPE_ATTR_Y1,
+  SHAPE_ATTR_X2,
+  SHAPE_ATTR_Y2,
+  SHAPE_ATTR_POINTS,
+  SHAPE_ATTR_SPREAD_METHOD,
+  SHAPE_ATTR_GRADIENT_UNITS,
+  SHAPE_ATTR_FX,
+  SHAPE_ATTR_FY,
+  SHAPE_ATTR_FR,
+  /* Things below are custom */
+  SHAPE_ATTR_STROKE_MINWIDTH,
+  SHAPE_ATTR_STROKE_MAXWIDTH,
+  SHAPE_ATTR_STOP_OFFSET,
+  SHAPE_ATTR_STOP_COLOR,
+  SHAPE_ATTR_STOP_OPACITY,
+} ShapeAttr;
+
+#define N_SHAPE_ATTRS (SHAPE_ATTR_STOP_OPACITY + 1)
+
+typedef enum
+{
+  GPA_TRANSITION_NONE,
+  GPA_TRANSITION_ANIMATE,
+  GPA_TRANSITION_MORPH,
+  GPA_TRANSITION_FADE,
+} GpaTransition;
+
+typedef enum
+{
+  GPA_ANIMATION_NONE,
+  GPA_ANIMATION_NORMAL,
+  GPA_ANIMATION_ALTERNATE,
+  GPA_ANIMATION_REVERSE,
+  GPA_ANIMATION_REVERSE_ALTERNATE,
+  GPA_ANIMATION_IN_OUT,
+  GPA_ANIMATION_IN_OUT_ALTERNATE,
+  GPA_ANIMATION_IN_OUT_REVERSE,
+  GPA_ANIMATION_SEGMENT,
+  GPA_ANIMATION_SEGMENT_ALTERNATE,
+} GpaAnimation;
+
+typedef enum
+{
+  GPA_EASING_LINEAR,
+  GPA_EASING_EASE_IN_OUT,
+  GPA_EASING_EASE_IN,
+  GPA_EASING_EASE_OUT,
+  GPA_EASING_EASE,
+} GpaEasing;
+
+struct _Shape
+{
+  ShapeType type;
+  Shape *parent;
+  uint64_t attrs;
+  char *id;
+  gboolean display;
+
+  /* Dependency order for computing updates */
+  Shape *first;
+  Shape *next;
+
+  SvgValue *base[N_SHAPE_ATTRS];
+  SvgValue *current[N_SHAPE_ATTRS];
+
+  GPtrArray *shapes;
+  GPtrArray *animations;
+  GPtrArray *color_stops;
+  GPtrArray *deps;
+
+  GskPath *path;
+  GskPathMeasure *measure;
+  union {
+    struct {
+      double cx, cy, r;
+    } circle;
+    struct {
+      double cx, cy, rx, ry;
+    } ellipse;
+    struct {
+      double x, y, w, h, rx, ry;
+    } rect;
+    struct {
+      double x1, y1, x2, y2;
+    } line;
+    struct {
+      SvgValue *points;
+    } polyline;
+  } path_for;
+
+  struct {
+    uint64_t states;
+    GpaTransition transition;
+    GpaEasing transition_easing;
+    int64_t transition_duration;
+    int64_t transition_delay;
+    GpaAnimation animation;
+    GpaEasing animation_easing;
+    int64_t animation_duration;
+    double animation_repeat;
+    double animation_segment;
+    double origin;
+    struct {
+      char *ref;
+      Shape *shape;
+      double pos;
+    } attach;
+  } gpa;
+};
+
+typedef enum
+{
+  SVG_UNIT_NONE,
+  SVG_UNIT_PERCENT,
+  SVG_UNIT_LENGTH,
+} SvgUnit;
+
+typedef enum
+{
+  PAINT_NONE,
+  PAINT_COLOR,
+  PAINT_SYMBOLIC,
+  PAINT_GRADIENT,
+} PaintKind;
+
+double
+gtk_svg_attr_get_number (Shape                 *shape,
+                         ShapeAttr              attr,
+                         const graphene_size_t *viewport);
+
+GskPath *
+gtk_svg_attr_get_path   (Shape                 *shape,
+                         ShapeAttr              attr);
+
+unsigned int
+gtk_svg_attr_get_enum   (Shape                 *shape,
+                         ShapeAttr              attr);
+
+PaintKind
+gtk_svg_attr_get_paint  (Shape                 *shape,
+                         ShapeAttr              attr,
+                         GtkSymbolicColor      *symbolic,
+                         GdkRGBA               *color);
+
+/* --- */
 
 void           gtk_svg_set_load_time   (GtkSvg                *self,
                                         int64_t                load_time);
@@ -108,5 +309,6 @@ GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
                                         const GdkRGBA         *colors,
                                         size_t                 n_colors,
                                         GtkSvgSerializeFlags   flags);
+
 
 G_END_DECLS
