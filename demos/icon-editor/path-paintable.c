@@ -48,7 +48,6 @@ typedef struct
   } transition;
 
   struct {
-    AnimationType type;
     AnimationDirection direction;
     float duration;
     float repeat;
@@ -178,8 +177,7 @@ path_elt_equal (PathElt *elt1,
   if (elt1->states != elt2->states)
     return FALSE;
 
-  if (elt1->animation.type != elt2->animation.type ||
-      elt1->animation.direction != elt2->animation.direction ||
+  if (elt1->animation.direction != elt2->animation.direction ||
       elt1->animation.duration != elt2->animation.duration ||
       elt1->animation.repeat != elt2->animation.repeat ||
       elt1->animation.easing != elt2->animation.easing)
@@ -620,7 +618,7 @@ start_element_cb (GMarkupParseContext  *context,
   float transition_duration;
   float transition_delay;
   EasingFunction transition_easing;
-  AnimationType animation_type;
+  unsigned int has_animation;
   AnimationDirection animation_direction;
   float animation_duration;
   float animation_repeat;
@@ -1152,23 +1150,23 @@ start_element_cb (GMarkupParseContext  *context,
         }
     }
 
-  animation_type = ANIMATION_TYPE_NONE;
+  has_animation = 0;
   if (animation_type_attr)
     {
       if (!parse_enum ("gpa:animation-type", animation_type_attr,
                        (const char *[]) { "none", "automatic", }, 2,
-                        &animation_type, error))
+                        &has_animation, error))
         goto cleanup;
     }
 
   animation_direction = ANIMATION_DIRECTION_NORMAL;
-  if (animation_direction_attr)
+  if (has_animation && animation_direction_attr)
     {
       if (!parse_enum ("gpa:animation-direction", animation_direction_attr,
-                       (const char *[]) { "normal", "alternate", "reverse",
+                       (const char *[]) { "none", "normal", "alternate", "reverse",
                                           "reverse-alternate", "in-out",
                                           "in-out-alternate", "in-out-reverse",
-                                          "segment", "segment-alternate" }, 9,
+                                          "segment", "segment-alternate" }, 10,
                         &animation_direction, error))
         goto cleanup;
     }
@@ -1225,7 +1223,7 @@ start_element_cb (GMarkupParseContext  *context,
   idx = path_paintable_add_path (data->paintable, path, shape_type, shape_params);
 
   path_paintable_set_path_states (data->paintable, idx, states);
-  path_paintable_set_path_animation (data->paintable, idx, animation_type, animation_direction, animation_duration, animation_repeat, animation_easing, animation_segment);
+  path_paintable_set_path_animation (data->paintable, idx, animation_direction, animation_duration, animation_repeat, animation_easing, animation_segment);
   path_paintable_set_path_animation_timing (data->paintable, idx, animation_easing, CALC_MODE_SPLINE, (KeyFrame *) animation_keyframes->data, animation_keyframes->len);
   path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_delay, transition_easing);
   path_paintable_set_path_origin (data->paintable, idx, origin);
@@ -1405,20 +1403,17 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  if (path_paintable_get_path_animation_type (self, idx) != ANIMATION_TYPE_NONE)
+  if (path_paintable_get_path_animation_direction (self, idx) != ANIMATION_DIRECTION_NONE)
     {
-      const char *type[] = { "none", "automatic", "external" };
-
-      g_string_append_printf (str, "\n        gpa:animation-type='%s'", type[path_paintable_get_path_animation_type (self, idx)]);
+      g_string_append (str, "\n        gpa:animation-type='automatic'");
       has_gtk_attr = TRUE;
-    }
 
-  if (path_paintable_get_path_animation_direction (self, idx) != ANIMATION_DIRECTION_NORMAL)
-    {
-      const char *direction[] = { "normal", "alternate", "reverse", "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse", "segment", "segment-alternate" };
+      if (path_paintable_get_path_animation_direction (self, idx) != ANIMATION_DIRECTION_NORMAL)
+        {
+          const char *direction[] = { "none", "normal", "alternate", "reverse", "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse", "segment", "segment-alternate" };
 
-      g_string_append_printf (str, "\n        gpa:animation-direction='%s'", direction[path_paintable_get_path_animation_direction (self, idx)]);
-      has_gtk_attr = TRUE;
+          g_string_append_printf (str, "\n        gpa:animation-direction='%s'", direction[path_paintable_get_path_animation_direction (self, idx)]);
+        }
     }
 
   if (path_paintable_get_path_animation_duration (self, idx) != 0)
@@ -1996,7 +1991,6 @@ path_paintable_add_path (PathPaintable *self,
   elt.transition.easing = EASING_FUNCTION_LINEAR;
   elt.transition.origin = 0;
 
-  elt.animation.type = ANIMATION_TYPE_NONE;
   elt.animation.direction = ANIMATION_DIRECTION_NORMAL;
   elt.animation.duration = 0;
   elt.animation.repeat = G_MAXFLOAT;
@@ -2220,7 +2214,6 @@ path_paintable_set_path_transition (PathPaintable   *self,
 void
 path_paintable_set_path_animation (PathPaintable      *self,
                                    size_t              idx,
-                                   AnimationType       type,
                                    AnimationDirection  direction,
                                    float               duration,
                                    float               repeat,
@@ -2232,15 +2225,13 @@ path_paintable_set_path_animation (PathPaintable      *self,
 
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
-  if (elt->animation.type == type &&
-      elt->animation.direction == direction &&
+  if (elt->animation.direction == direction &&
       elt->animation.duration == duration &&
       elt->animation.repeat == repeat &&
       elt->animation.easing == easing &&
       elt->animation.segment == segment)
     return;
 
-  elt->animation.type = type;
   elt->animation.direction = direction;
   elt->animation.duration = duration;
   elt->animation.repeat = repeat;
@@ -2248,17 +2239,6 @@ path_paintable_set_path_animation (PathPaintable      *self,
   elt->animation.segment = segment;
 
   g_signal_emit (self, signals[CHANGED], 0);
-}
-
-AnimationType
-path_paintable_get_path_animation_type (PathPaintable *self,
-                                        size_t         idx)
-{
-  g_return_val_if_fail (idx < self->paths->len, ANIMATION_TYPE_NONE);
-
-  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-  return elt->animation.type;
 }
 
 AnimationDirection
@@ -2695,7 +2675,6 @@ path_paintable_copy (PathPaintable *self)
                                           path_paintable_get_path_transition_easing (self, i));
       path_paintable_set_path_origin (other, i, path_paintable_get_path_origin (self, i));
       path_paintable_set_path_animation (other, i,
-                                         path_paintable_get_path_animation_type (self, i),
                                          path_paintable_get_path_animation_direction (self, i),
                                          path_paintable_get_path_animation_duration (self, i),
                                          path_paintable_get_path_animation_repeat (self, i),
@@ -2772,7 +2751,6 @@ path_paintable_combine (PathPaintable *one,
                                       path_paintable_get_path_origin (two, i));
 
       path_paintable_set_path_animation (res, idx,
-                                         path_paintable_get_path_animation_type (two, i),
                                          path_paintable_get_path_animation_direction (two, i),
                                          path_paintable_get_path_animation_duration (two, i),
                                          path_paintable_get_path_animation_repeat (two, i),
@@ -2835,7 +2813,7 @@ path_paintable_get_compatibility (PathPaintable *self)
         compat = MAX (compat, GTK_4_20);
 
       if (elt->transition.type != TRANSITION_TYPE_NONE ||
-          elt->animation.type != ANIMATION_TYPE_NONE ||
+          elt->animation.direction != ANIMATION_DIRECTION_NONE ||
           elt->attach.to != (size_t) - 1)
         compat = MAX (compat, GTK_4_22);
     }

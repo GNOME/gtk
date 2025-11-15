@@ -45,7 +45,6 @@ struct _PathEditor
   GtkSpinButton *transition_duration;
   GtkSpinButton *transition_delay;
   GtkDropDown *transition_easing;
-  GtkDropDown *animation_type;
   GtkDropDown *animation_direction;
   GtkSpinButton *animation_duration;
   GtkSpinButton *animation_repeat;
@@ -254,7 +253,6 @@ path_editor_get_path_image (PathEditor *self)
 static void
 animation_changed (PathEditor *self)
 {
-  AnimationType type;
   AnimationDirection direction;
   float duration;
   float repeat;
@@ -267,7 +265,6 @@ animation_changed (PathEditor *self)
   if (self->updating)
     return;
 
-  type = (AnimationType) gtk_drop_down_get_selected (self->animation_type);
   direction = (AnimationDirection) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   if (gtk_check_button_get_active (self->infty_check))
@@ -277,7 +274,7 @@ animation_changed (PathEditor *self)
   segment = gtk_spin_button_get_value (self->animation_segment);
   easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
 
-  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, repeat, easing, segment);
+  path_paintable_set_path_animation (self->paintable, self->path, direction, duration, repeat, easing, segment);
 
   frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
   n_frames = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
@@ -703,9 +700,6 @@ path_editor_update (PathEditor *self)
       gtk_range_set_value (GTK_RANGE (self->origin),
                            path_paintable_get_path_origin (self->paintable, self->path));
 
-      gtk_drop_down_set_selected (self->animation_type,
-                                  path_paintable_get_path_animation_type (self->paintable, self->path));
-
       gtk_drop_down_set_selected (self->animation_direction,
                                   path_paintable_get_path_animation_direction (self->paintable, self->path));
 
@@ -925,7 +919,6 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_duration);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_delay);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_easing);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_duration);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);

@@ -51,12 +51,7 @@ typedef enum
 
 typedef enum
 {
-  ANIMATION_TYPE_NONE,
-  ANIMATION_TYPE_AUTOMATIC,
-} AnimationType;
-
-typedef enum
-{
+  ANIMATION_DIRECTION_NONE,
   ANIMATION_DIRECTION_NORMAL,
   ANIMATION_DIRECTION_ALTERNATE,
   ANIMATION_DIRECTION_REVERSE,
@@ -162,16 +157,11 @@ uint64_t        path_paintable_get_path_states     (PathPaintable   *self,
 
 void            path_paintable_set_path_animation  (PathPaintable     *self,
                                                     size_t             idx,
-                                                    AnimationType      type,
                                                     AnimationDirection direction,
                                                     float              duration,
                                                     float              repeat,
                                                     EasingFunction     easing,
                                                     float              segment);
-AnimationType
-                path_paintable_get_path_animation_type
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
 AnimationDirection
                 path_paintable_get_path_animation_direction
                                                    (PathPaintable     *self,
