@@ -88,15 +88,6 @@ color_state_is_hdr (GdkColorState *color_state)
          rendering_cs != GDK_COLOR_STATE_SRGB_LINEAR;
 }
 
-static gboolean
-has_empty_clip (cairo_t *cr)
-{
-  double x1, y1, x2, y2;
-
-  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-  return x1 >= x2 || y1 >= y2;
-}
-
 /* apply a rectangle that bounds @rect in
  * pixel-aligned device coordinates.
  *
@@ -2893,7 +2884,7 @@ draw_shadow (cairo_t              *cr,
 {
   cairo_t *shadow_cr;
 
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   gdk_cairo_set_source_color (cr, ccs, color);
@@ -3028,7 +3019,7 @@ draw_shadow_corner (cairo_t               *cr,
       return;
     }
 
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   /* At this point we're drawing a blurred outset corner. The only
@@ -4753,7 +4744,7 @@ gsk_opacity_node_draw (GskRenderNode *node,
   gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);
 
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   cairo_push_group (cr);
@@ -4986,7 +4977,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   gdk_cairo_rect (cr, &node->bounds);
   cairo_clip (cr);
 
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   cairo_push_group (cr);
@@ -6144,7 +6135,7 @@ gsk_stroke_node_draw (GskRenderNode *node,
     {
       gsk_cairo_rectangle_pixel_aligned (cr, &self->child->bounds);
       cairo_clip (cr);
-      if (has_empty_clip (cr))
+      if (gdk_cairo_is_all_clipped (cr))
         return;
 
       cairo_push_group (cr);
@@ -6375,7 +6366,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
   /* clip so the blur area stays small */
   gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   for (i = 0; i < self->n_shadows; i++)
@@ -6780,7 +6771,7 @@ gsk_blend_node_draw (GskRenderNode *node,
 {
   GskBlendNode *self = (GskBlendNode *) node;
 
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   if (!gdk_color_state_equal (ccs, GDK_COLOR_STATE_SRGB))
@@ -6989,7 +6980,7 @@ gsk_cross_fade_node_draw (GskRenderNode *node,
 {
   GskCrossFadeNode *self = (GskCrossFadeNode *) node;
 
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
@@ -8020,7 +8011,7 @@ gsk_mask_node_draw (GskRenderNode *node,
   gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);
 
-  if (has_empty_clip (cr))
+  if (gdk_cairo_is_all_clipped (cr))
     return;
 
   cairo_push_group (cr);

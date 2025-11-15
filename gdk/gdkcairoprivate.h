@@ -232,3 +232,11 @@ gdk_cairo_region_to_debug_string (const cairo_region_t *region)
   return g_string_free (string, FALSE);
 }
 
+static inline gboolean
+gdk_cairo_is_all_clipped (cairo_t *cr)
+{
+  double x1, y1, x2, y2;
+
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+  return x1 >= x2 || y1 >= y2;
+}
