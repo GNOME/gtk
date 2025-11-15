@@ -24,6 +24,7 @@ gsk_public_sources = files([
   'gskrenderreplay.c',
   'gskroundedrect.c',
   'gskstroke.c',
+  'gskstrokenode.c',
   'gsktransform.c',
   'gpu/gskglrenderer.c',
   'gpu/gskvulkanrenderer.c',
@@ -109,6 +110,7 @@ gsk_public_headers = files([
   'gskrenderreplay.h',
   'gskroundedrect.h',
   'gskstroke.h',
+  'gskstrokenode.h',
   'gsktransform.h',
   'gsktypes.h',
 ])

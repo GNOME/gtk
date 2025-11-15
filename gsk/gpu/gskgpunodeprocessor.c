@@ -48,6 +48,7 @@
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gskstrokenode.h"
 #include "gsktransformprivate.h"
 #include "gskprivate.h"
 

@@ -38,6 +38,7 @@
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskstroke.h"
+#include "gskstrokenode.h"
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
