@@ -401,7 +401,7 @@
                   <object class="MiniGraph">
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
-                    <property name="easing-function" bind-source="transition_easing" bind-property="selected" bind-flags="sync-create"/>
+                    <property name="easing" bind-source="transition_easing" bind-property="selected" bind-flags="sync-create"/>
                   </object>
                 </property>
               </object>
@@ -612,7 +612,7 @@
                   <object class="MiniGraph" id="mini_graph">
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
-                    <property name="easing-function" bind-source="animation_easing" bind-property="selected" bind-flags="sync-create"/>
+                    <property name="easing" bind-source="animation_easing" bind-property="selected" bind-flags="sync-create"/>
                   </object>
                 </property>
               </object>

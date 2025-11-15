@@ -40,19 +40,19 @@ typedef struct
   uint64_t states;
 
   struct {
-    TransitionType type;
+    GpaTransition type;
     float duration;
     float delay;
-    EasingFunction easing;
+    GpaEasing easing;
     float origin;
   } transition;
 
   struct {
-    AnimationDirection direction;
+    GpaAnimation direction;
     float duration;
     float repeat;
     float segment;
-    EasingFunction easing;
+    GpaEasing easing;
     CalcMode mode;
     KeyFrame *frames;
     unsigned int n_frames;
@@ -614,16 +614,16 @@ start_element_cb (GMarkupParseContext  *context,
   GdkRGBA fill_color;
   float fill_opacity;
   uint64_t states;
-  TransitionType transition_type;;
+  GpaTransition transition_type;;
   float transition_duration;
   float transition_delay;
-  EasingFunction transition_easing;
+  GpaEasing transition_easing;
   unsigned int has_animation;
-  AnimationDirection animation_direction;
+  GpaAnimation animation_direction;
   float animation_duration;
   float animation_repeat;
   float animation_segment;
-  unsigned int animation_easing;
+  GpaEasing animation_easing;
   GArray *animation_keyframes = NULL;
   float origin;
   size_t idx;
@@ -1100,7 +1100,7 @@ start_element_cb (GMarkupParseContext  *context,
 
   fill_color.alpha *= fill_opacity;
 
-  transition_type = TRANSITION_TYPE_NONE;
+  transition_type = GPA_TRANSITION_NONE;
   if (transition_type_attr)
     {
       if (!parse_enum ("gpa:transition-type", transition_type_attr,
@@ -1123,7 +1123,7 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  transition_easing = EASING_FUNCTION_LINEAR;
+  transition_easing = GPA_EASING_LINEAR;
   if (transition_easing_attr)
     {
       if (!parse_enum ("gpa:transition-easing", transition_easing_attr,
@@ -1159,7 +1159,7 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  animation_direction = ANIMATION_DIRECTION_NORMAL;
+  animation_direction = GPA_ANIMATION_NORMAL;
   if (has_animation && animation_direction_attr)
     {
       if (!parse_enum ("gpa:animation-direction", animation_direction_attr,
@@ -1194,7 +1194,7 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  animation_easing = EASING_FUNCTION_LINEAR;
+  animation_easing = GPA_EASING_LINEAR;
   if (animation_easing_attr)
     {
       if (!parse_enum ("gpa:animation-easing", animation_easing_attr,
@@ -1403,12 +1403,12 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  if (path_paintable_get_path_animation_direction (self, idx) != ANIMATION_DIRECTION_NONE)
+  if (path_paintable_get_path_animation_direction (self, idx) != GPA_ANIMATION_NONE)
     {
       g_string_append (str, "\n        gpa:animation-type='automatic'");
       has_gtk_attr = TRUE;
 
-      if (path_paintable_get_path_animation_direction (self, idx) != ANIMATION_DIRECTION_NORMAL)
+      if (path_paintable_get_path_animation_direction (self, idx) != GPA_ANIMATION_NORMAL)
         {
           const char *direction[] = { "none", "normal", "alternate", "reverse", "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse", "segment", "segment-alternate" };
 
@@ -1432,7 +1432,7 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  if (path_paintable_get_path_animation_easing (self, idx) != EASING_FUNCTION_LINEAR)
+  if (path_paintable_get_path_animation_easing (self, idx) != GPA_EASING_LINEAR)
     {
       g_string_append_printf (str, "\n        gpa:animation-easing='%s'",
                               easing[path_paintable_get_path_animation_easing (self, idx)]);
@@ -1447,7 +1447,7 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  if (path_paintable_get_path_transition_type (self, idx) != TRANSITION_TYPE_NONE)
+  if (path_paintable_get_path_transition_type (self, idx) != GPA_TRANSITION_NONE)
     {
       const char *transition[] = { "none", "animate", "morph", "fade" };
 
@@ -1471,7 +1471,7 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  if (path_paintable_get_path_transition_easing (self, idx) != EASING_FUNCTION_LINEAR)
+  if (path_paintable_get_path_transition_easing (self, idx) != GPA_EASING_LINEAR)
     {
       g_string_append_printf (str, "\n        gpa:transition-easing='%s'",
                               easing[path_paintable_get_path_transition_easing (self, idx)]);
@@ -1985,17 +1985,17 @@ path_paintable_add_path (PathPaintable *self,
 
   elt.states = ALL_STATES;
 
-  elt.transition.type = TRANSITION_TYPE_NONE;
+  elt.transition.type = GPA_TRANSITION_NONE;
   elt.transition.duration = 0;
   elt.transition.delay = 0;
-  elt.transition.easing = EASING_FUNCTION_LINEAR;
+  elt.transition.easing = GPA_EASING_LINEAR;
   elt.transition.origin = 0;
 
-  elt.animation.direction = ANIMATION_DIRECTION_NORMAL;
+  elt.animation.direction = GPA_ANIMATION_NORMAL;
   elt.animation.duration = 0;
   elt.animation.repeat = G_MAXFLOAT;
   elt.animation.segment = 0.2;
-  elt.animation.easing = EASING_FUNCTION_LINEAR;
+  elt.animation.easing = GPA_EASING_LINEAR;
   elt.animation.mode = CALC_MODE_LINEAR;
   elt.animation.frames = NULL;
   elt.animation.n_frames = 0;
@@ -2184,10 +2184,10 @@ path_paintable_get_path_id (PathPaintable *self,
 void
 path_paintable_set_path_transition (PathPaintable   *self,
                                     size_t           idx,
-                                    TransitionType   type,
+                                    GpaTransition    type,
                                     float            duration,
                                     float            delay,
-                                    EasingFunction   easing)
+                                    GpaEasing        easing)
 {
   g_return_if_fail (idx < self->paths->len);
   g_return_if_fail (duration >= 0);
@@ -2205,7 +2205,7 @@ path_paintable_set_path_transition (PathPaintable   *self,
   elt->transition.delay = delay;
   elt->transition.easing = easing;
 
-  if (elt->fill.enabled && elt->transition.type == TRANSITION_TYPE_ANIMATE)
+  if (elt->fill.enabled && elt->transition.type == GPA_TRANSITION_ANIMATE)
     g_warning ("Can't currently transition fills");
 
   g_signal_emit (self, signals[CHANGED], 0);
@@ -2214,10 +2214,10 @@ path_paintable_set_path_transition (PathPaintable   *self,
 void
 path_paintable_set_path_animation (PathPaintable      *self,
                                    size_t              idx,
-                                   AnimationDirection  direction,
+                                   GpaAnimation        direction,
                                    float               duration,
                                    float               repeat,
-                                   EasingFunction      easing,
+                                   GpaEasing           easing,
                                    float               segment)
 {
   g_return_if_fail (idx < self->paths->len);
@@ -2241,11 +2241,11 @@ path_paintable_set_path_animation (PathPaintable      *self,
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
-AnimationDirection
+GpaAnimation
 path_paintable_get_path_animation_direction (PathPaintable *self,
                                              size_t         idx)
 {
-  g_return_val_if_fail (idx < self->paths->len, ANIMATION_DIRECTION_NORMAL);
+  g_return_val_if_fail (idx < self->paths->len, GPA_ANIMATION_NONE);
 
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
@@ -2274,7 +2274,7 @@ path_paintable_get_path_animation_repeat (PathPaintable *self,
   return elt->animation.repeat;
 }
 
-EasingFunction
+GpaEasing
 path_paintable_get_path_animation_easing (PathPaintable *self,
                                           size_t         idx)
 {
@@ -2299,7 +2299,7 @@ path_paintable_get_path_animation_segment (PathPaintable *self,
 void
 path_paintable_set_path_animation_timing (PathPaintable  *self,
                                           size_t          idx,
-                                          EasingFunction  easing,
+                                          GpaEasing       easing,
                                           CalcMode        mode,
                                           const KeyFrame *frames,
                                           unsigned int    n_frames)
@@ -2400,7 +2400,7 @@ path_paintable_set_path_fill (PathPaintable   *self,
   elt->fill.symbolic = symbolic;
   elt->fill.color = *color;
 
-  if (elt->fill.enabled && elt->transition.type == TRANSITION_TYPE_ANIMATE)
+  if (elt->fill.enabled && elt->transition.type == GPA_TRANSITION_ANIMATE)
     g_warning ("Can't currently transition fills");
 
   g_signal_emit (self, signals[CHANGED], 0);
@@ -2550,11 +2550,11 @@ path_paintable_get_path_states (PathPaintable *self,
   return elt->states;
 }
 
-TransitionType
+GpaTransition
 path_paintable_get_path_transition_type (PathPaintable *self,
                                          size_t         idx)
 {
-  g_return_val_if_fail (idx< self->paths->len, TRANSITION_TYPE_NONE);
+  g_return_val_if_fail (idx< self->paths->len, GPA_TRANSITION_NONE);
 
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
@@ -2583,7 +2583,7 @@ path_paintable_get_path_transition_delay (PathPaintable *self,
   return elt->transition.delay;
 }
 
-EasingFunction
+GpaEasing
 path_paintable_get_path_transition_easing (PathPaintable *self,
                                            size_t         idx)
 {
@@ -2812,8 +2812,8 @@ path_paintable_get_compatibility (PathPaintable *self)
       if (elt->stroke.enabled)
         compat = MAX (compat, GTK_4_20);
 
-      if (elt->transition.type != TRANSITION_TYPE_NONE ||
-          elt->animation.direction != ANIMATION_DIRECTION_NONE ||
+      if (elt->transition.type != GPA_TRANSITION_NONE ||
+          elt->animation.direction != GPA_ANIMATION_NONE ||
           elt->attach.to != (size_t) - 1)
         compat = MAX (compat, GTK_4_22);
     }

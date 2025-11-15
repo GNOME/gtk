@@ -55,7 +55,7 @@ struct _MiniGraph
 {
   GtkWidget parent_instance;
 
-  EasingFunction easing;
+  GpaEasing easing;
   CalcMode mode;
 
   int path_size;
@@ -91,7 +91,7 @@ update_keyframes (MiniGraph *self)
   self->frames[1].time = 1;
   memcpy (self->frames[1].params, easing_funcs[self->easing].params, 4 * sizeof (float));
 
-  if (self->easing == EASING_FUNCTION_LINEAR)
+  if (self->easing == GPA_EASING_LINEAR)
     self->mode = CALC_MODE_LINEAR;
   else
     self->mode = CALC_MODE_SPLINE;
@@ -221,7 +221,7 @@ struct _MiniGraphClass
 };
 
 enum {
-  PROP_EASING_FUNCTION = 1,
+  PROP_EASING = 1,
   PROP_CALC_MODE,
   NUM_PROPERTIES,
 };
@@ -233,7 +233,7 @@ G_DEFINE_TYPE (MiniGraph, mini_graph, GTK_TYPE_WIDGET)
 static void
 mini_graph_init (MiniGraph *self)
 {
-  self->easing = EASING_FUNCTION_LINEAR;
+  self->easing = GPA_EASING_LINEAR;
   self->mode = CALC_MODE_SPLINE;
 
   update_keyframes (self);
@@ -260,8 +260,8 @@ mini_graph_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_EASING_FUNCTION:
-      mini_graph_set_easing_function (self, g_value_get_uint (value));
+    case PROP_EASING:
+      mini_graph_set_easing (self, g_value_get_uint (value));
       break;
 
     case PROP_CALC_MODE:
@@ -284,7 +284,7 @@ mini_graph_get_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_EASING_FUNCTION:
+    case PROP_EASING:
       g_value_set_uint (value, self->easing);
       break;
 
@@ -308,8 +308,8 @@ mini_graph_class_init (MiniGraphClass *class)
   object_class->set_property = mini_graph_set_property;
   object_class->get_property = mini_graph_get_property;
 
-  properties[PROP_EASING_FUNCTION] =
-    g_param_spec_uint ("easing-function", NULL, NULL,
+  properties[PROP_EASING] =
+    g_param_spec_uint ("easing", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
@@ -331,7 +331,7 @@ mini_graph_new (void)
 
 void
 mini_graph_set_params (MiniGraph      *self,
-                       EasingFunction  easing,
+                       GpaEasing       easing,
                        CalcMode        mode,
                        const KeyFrame *frames,
                        unsigned int    n_frames)
@@ -344,7 +344,7 @@ mini_graph_set_params (MiniGraph      *self,
 
   self->easing = easing;
 
-  if (easing == EASING_FUNCTION_CUSTOM)
+  if (easing == GPA_EASING_CUSTOM)
     {
       self->mode = mode;
       if (self->frames != frames)
@@ -360,13 +360,13 @@ mini_graph_set_params (MiniGraph      *self,
   g_clear_pointer (&self->path, gsk_path_unref);
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EASING_FUNCTION]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EASING]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CALC_MODE]);
 }
 
 void
-mini_graph_set_easing_function (MiniGraph      *self,
-                                EasingFunction  easing)
+mini_graph_set_easing (MiniGraph *self,
+                       GpaEasing  easing)
 {
   mini_graph_set_params (self, easing, self->mode, self->frames, self->n_frames);
 }

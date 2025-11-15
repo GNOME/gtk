@@ -253,10 +253,10 @@ path_editor_get_path_image (PathEditor *self)
 static void
 animation_changed (PathEditor *self)
 {
-  AnimationDirection direction;
+  GpaAnimation direction;
   float duration;
   float repeat;
-  EasingFunction easing;
+  GpaEasing easing;
   CalcMode mode = CALC_MODE_SPLINE;
   float segment;
   const KeyFrame *frames;
@@ -265,14 +265,14 @@ animation_changed (PathEditor *self)
   if (self->updating)
     return;
 
-  direction = (AnimationDirection) gtk_drop_down_get_selected (self->animation_direction);
+  direction = (GpaAnimation) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   if (gtk_check_button_get_active (self->infty_check))
     repeat = G_MAXFLOAT;
   else
     repeat = gtk_spin_button_get_value (self->animation_repeat);
   segment = gtk_spin_button_get_value (self->animation_segment);
-  easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
+  easing = (GpaEasing) gtk_drop_down_get_selected (self->animation_easing);
 
   path_paintable_set_path_animation (self->paintable, self->path, direction, duration, repeat, easing, segment);
 
@@ -286,18 +286,18 @@ animation_changed (PathEditor *self)
 static void
 transition_changed (PathEditor *self)
 {
-  TransitionType type;
+  GpaTransition type;
   float duration;
   float delay;
-  EasingFunction easing;
+  GpaEasing easing;
 
   if (self->updating)
     return;
 
-  type = (TransitionType) gtk_drop_down_get_selected (self->transition_type);
+  type = (GpaTransition) gtk_drop_down_get_selected (self->transition_type);
   duration = gtk_spin_button_get_value (self->transition_duration);
   delay = gtk_spin_button_get_value (self->transition_delay);
-  easing = (EasingFunction) gtk_drop_down_get_selected (self->transition_easing);
+  easing = (GpaEasing) gtk_drop_down_get_selected (self->transition_easing);
 
   path_paintable_set_path_transition (self->paintable, self->path, type, duration, delay, easing);
 }
