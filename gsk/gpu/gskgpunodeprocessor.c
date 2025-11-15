@@ -43,6 +43,7 @@
 #include "gskcontainernodeprivate.h"
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
+#include "gskfillnode.h"
 #include "gskpath.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"

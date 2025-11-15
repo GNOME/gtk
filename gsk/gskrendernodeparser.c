@@ -29,6 +29,7 @@
 #include "gskcontainernodeprivate.h"
 #include "gskdebugnode.h"
 #include "gskenumtypes.h"
+#include "gskfillnode.h"
 #include "gskglshadernode.h"
 #include "gskgradientprivate.h"
 #include "gskprivate.h"
