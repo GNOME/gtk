@@ -257,10 +257,7 @@ animation_changed (PathEditor *self)
   float duration;
   float repeat;
   GpaEasing easing;
-  CalcMode mode = CALC_MODE_SPLINE;
   float segment;
-  const KeyFrame *frames;
-  unsigned int n_frames;
 
   if (self->updating)
     return;
@@ -276,11 +273,7 @@ animation_changed (PathEditor *self)
 
   path_paintable_set_path_animation (self->paintable, self->path, direction, duration, repeat, easing, segment);
 
-  frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
-  n_frames = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
-  path_paintable_set_path_animation_timing (self->paintable, self->path, easing, mode, frames, n_frames);
-
-  mini_graph_set_params (self->mini_graph, easing, mode, frames, n_frames);
+  mini_graph_set_easing (self->mini_graph, easing);
 }
 
 static void
@@ -721,11 +714,8 @@ path_editor_update (PathEditor *self)
       gtk_drop_down_set_selected (self->animation_easing,
                                   path_paintable_get_path_animation_easing (self->paintable, self->path));
 
-      mini_graph_set_params (self->mini_graph,
-                             path_paintable_get_path_animation_easing (self->paintable, self->path),
-                             path_paintable_get_path_animation_mode (self->paintable, self->path),
-                             path_paintable_get_path_animation_frames (self->paintable, self->path),
-                             path_paintable_get_path_animation_n_frames (self->paintable, self->path));
+      mini_graph_set_easing (self->mini_graph,
+                             path_paintable_get_path_animation_easing (self->paintable, self->path));
 
       gtk_spin_button_set_value (self->animation_segment,
                                  path_paintable_get_path_animation_segment (self->paintable, self->path));

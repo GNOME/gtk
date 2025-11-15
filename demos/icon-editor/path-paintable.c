@@ -53,9 +53,6 @@ typedef struct
     float repeat;
     float segment;
     GpaEasing easing;
-    CalcMode mode;
-    KeyFrame *frames;
-    unsigned int n_frames;
   } animation;
 
   struct {
@@ -124,7 +121,6 @@ clear_path_elt (gpointer data)
   PathElt *elt = data;
 
   gsk_path_unref (elt->path);
-  g_free (elt->animation.frames);
   g_free (elt->id);
 }
 
@@ -519,37 +515,6 @@ origin_parse (const char *text,
   return TRUE;
 }
 
-static struct {
-  float params[4];
-} easing_funcs[] = {
-  { { 0, 0, 1, 1 } },
-  { { 0.42, 0, 0.58, 1 } },
-  { { 0.42, 0, 1, 1 } },
-  { { 0, 0, 0.58, 1 } },
-  { { 0.25, 0.1, 0.25, 1 } },
-};
-
-
-static GArray *
-construct_animation_frames (unsigned int easing, GError **error)
-{
-  GArray *res = g_array_new (FALSE, TRUE, sizeof (KeyFrame));
-
-  KeyFrame frame;
-
-  frame.value = 0;
-  frame.time = 0;
-  memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
-  g_array_append_val (res, frame);
-
-  frame.value = 1;
-  frame.time = 1;
-  memcpy (frame.params, easing_funcs[easing].params, 4 * sizeof (float));
-  g_array_append_val (res, frame);
-
-  return res;
-}
-
 static inline gboolean
 g_strv_has (GStrv       strv,
             const char *s)
@@ -624,7 +589,6 @@ start_element_cb (GMarkupParseContext  *context,
   float animation_repeat;
   float animation_segment;
   GpaEasing animation_easing;
-  GArray *animation_keyframes = NULL;
   float origin;
   size_t idx;
   AttachData attach;
@@ -1204,11 +1168,6 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  animation_keyframes = construct_animation_frames (animation_easing, error);
-  if (!animation_keyframes)
-    goto cleanup;
-
-
   attach.to = g_strdup (attach_to_attr);
   attach.pos = 0;
   if (attach_pos_attr)
@@ -1224,7 +1183,6 @@ start_element_cb (GMarkupParseContext  *context,
 
   path_paintable_set_path_states (data->paintable, idx, states);
   path_paintable_set_path_animation (data->paintable, idx, animation_direction, animation_duration, animation_repeat, animation_easing, animation_segment);
-  path_paintable_set_path_animation_timing (data->paintable, idx, animation_easing, CALC_MODE_SPLINE, (KeyFrame *) animation_keyframes->data, animation_keyframes->len);
   path_paintable_set_path_transition (data->paintable, idx, transition_type, transition_duration, transition_delay, transition_easing);
   path_paintable_set_path_origin (data->paintable, idx, origin);
   path_paintable_set_path_fill (data->paintable, idx, fill_attr != NULL, fill_rule, fill_symbolic, &fill_color);
@@ -1242,7 +1200,6 @@ start_element_cb (GMarkupParseContext  *context,
 cleanup:
   g_clear_pointer (&path, gsk_path_unref);
   g_clear_pointer (&stroke, gsk_stroke_free);
-  g_clear_pointer (&animation_keyframes, g_array_unref);
 }
 
 static void
@@ -1996,9 +1953,6 @@ path_paintable_add_path (PathPaintable *self,
   elt.animation.repeat = G_MAXFLOAT;
   elt.animation.segment = 0.2;
   elt.animation.easing = GPA_EASING_LINEAR;
-  elt.animation.mode = CALC_MODE_LINEAR;
-  elt.animation.frames = NULL;
-  elt.animation.n_frames = 0;
 
   elt.fill.enabled = FALSE;
   elt.fill.rule = GSK_FILL_RULE_WINDING;
@@ -2105,7 +2059,6 @@ path_paintable_duplicate_path (PathPaintable *self,
 
   gsk_path_ref (pelt->path);
   pelt->id = g_strdup (pelt->id);
-  pelt->animation.frames = g_memdup2 (pelt->animation.frames, sizeof (KeyFrame) * pelt->animation.n_frames);
 
   g_signal_emit (self, signals[CHANGED], 0);
   g_signal_emit (self, signals[PATHS_CHANGED], 0);
@@ -2294,69 +2247,6 @@ path_paintable_get_path_animation_segment (PathPaintable *self,
   PathElt *elt = &g_array_index (self->paths, PathElt, idx);
 
   return elt->animation.segment;
-}
-
-void
-path_paintable_set_path_animation_timing (PathPaintable  *self,
-                                          size_t          idx,
-                                          GpaEasing       easing,
-                                          CalcMode        mode,
-                                          const KeyFrame *frames,
-                                          unsigned int    n_frames)
-{
-  g_return_if_fail (idx < self->paths->len);
-
-  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-  if (elt->animation.easing == easing &&
-      elt->animation.mode == mode &&
-      elt->animation.n_frames == n_frames &&
-      memcmp (elt->animation.frames, frames, sizeof (KeyFrame) * n_frames) == 0)
-    return;
-
-  elt->animation.easing = easing;
-  elt->animation.mode = mode;
-  if (frames != elt->animation.frames)
-    {
-      g_free (elt->animation.frames);
-      elt->animation.frames = g_memdup2 (frames, sizeof (KeyFrame) * n_frames);
-      elt->animation.n_frames = n_frames;
-    }
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-CalcMode
-path_paintable_get_path_animation_mode (PathPaintable *self,
-                                        size_t         idx)
-{
-  g_return_val_if_fail (idx < self->paths->len, CALC_MODE_LINEAR);
-
-  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-  return elt->animation.mode;
-}
-
-unsigned int
-path_paintable_get_path_animation_n_frames (PathPaintable *self,
-                                            size_t         idx)
-{
-  g_return_val_if_fail (idx < self->paths->len, 0);
-
-  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-  return elt->animation.n_frames;
-}
-
-const KeyFrame *
-path_paintable_get_path_animation_frames (PathPaintable *self,
-                                          size_t         idx)
-{
-  g_return_val_if_fail (idx < self->paths->len, NULL);
-
-  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
-
-  return elt->animation.frames;
 }
 
 void

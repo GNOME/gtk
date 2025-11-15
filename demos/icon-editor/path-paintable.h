@@ -44,13 +44,6 @@ typedef enum
 
 typedef enum
 {
-  CALC_MODE_LINEAR,
-  CALC_MODE_DISCRETE,
-  CALC_MODE_SPLINE,
-} CalcMode;
-
-typedef enum
-{
   GPA_ANIMATION_NONE,
   GPA_ANIMATION_NORMAL,
   GPA_ANIMATION_ALTERNATE,
@@ -175,29 +168,6 @@ GpaEasing       path_paintable_get_path_animation_easing
                                                    (PathPaintable     *self,
                                                     size_t             idx);
 float           path_paintable_get_path_animation_segment
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-typedef struct
-{
-  float time;
-  float value;
-  float params[4];
-} KeyFrame;
-
-void            path_paintable_set_path_animation_timing
-                                                   (PathPaintable     *self,
-                                                    size_t             idx,
-                                                    GpaEasing          easing,
-                                                    CalcMode           mode,
-                                                    const KeyFrame    *frames,
-                                                    unsigned int       n_frames);
-CalcMode        path_paintable_get_path_animation_mode
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-unsigned int    path_paintable_get_path_animation_n_frames
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-const KeyFrame *path_paintable_get_path_animation_frames
                                                    (PathPaintable     *self,
                                                     size_t             idx);
 

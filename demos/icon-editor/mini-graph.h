@@ -8,14 +8,5 @@ G_DECLARE_FINAL_TYPE (MiniGraph, mini_graph, MINI, GRAPH, GtkWidget)
 
 GtkWidget * mini_graph_new (void);
 
-void mini_graph_set_params (MiniGraph      *self,
-                            GpaEasing       easing,
-                            CalcMode        mode,
-                            const KeyFrame *frames,
-                            unsigned int    n_frames);
-
 void mini_graph_set_easing (MiniGraph *self,
                             GpaEasing  easing);
-
-void mini_graph_set_calc_mode (MiniGraph *self,
-                               CalcMode   mode);
