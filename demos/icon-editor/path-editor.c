@@ -265,7 +265,7 @@ animation_changed (PathEditor *self)
   direction = (GpaAnimation) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   if (gtk_check_button_get_active (self->infty_check))
-    repeat = G_MAXFLOAT;
+    repeat = INFINITY;
   else
     repeat = gtk_spin_button_get_value (self->animation_repeat);
   segment = gtk_spin_button_get_value (self->animation_segment);
@@ -699,7 +699,7 @@ path_editor_update (PathEditor *self)
       gtk_spin_button_set_value (self->animation_duration,
                                  path_paintable_get_path_animation_duration (self->paintable, self->path));
 
-      if (path_paintable_get_path_animation_repeat (self->paintable, self->path) == G_MAXFLOAT)
+      if (isinf (path_paintable_get_path_animation_repeat (self->paintable, self->path)) == 1)
         {
           gtk_check_button_set_active (self->infty_check, TRUE);
           gtk_spin_button_set_value (self->animation_repeat, 1);

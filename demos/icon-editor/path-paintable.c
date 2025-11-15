@@ -1142,11 +1142,11 @@ start_element_cb (GMarkupParseContext  *context,
         goto cleanup;
     }
 
-  animation_repeat = G_MAXFLOAT;
+  animation_repeat = INFINITY;
   if (animation_repeat_attr)
     {
       if (strcmp (animation_repeat_attr, "indefinite") == 0)
-        animation_repeat = G_MAXFLOAT;
+        animation_repeat = INFINITY;
       else if (!parse_float ("gpa:animation-repeat", animation_repeat_attr, POSITIVE, &animation_repeat, error))
         goto cleanup;
     }
@@ -1381,7 +1381,7 @@ path_paintable_save_path (PathPaintable *self,
       has_gtk_attr = TRUE;
     }
 
-  if (path_paintable_get_path_animation_repeat (self, idx) != G_MAXFLOAT)
+  if (isfinite (path_paintable_get_path_animation_repeat (self, idx)) == 1)
     {
       g_string_append_printf (str, "\n        gpa:animation-repeat='%s'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g",
@@ -1950,7 +1950,7 @@ path_paintable_add_path (PathPaintable *self,
 
   elt.animation.direction = GPA_ANIMATION_NORMAL;
   elt.animation.duration = 0;
-  elt.animation.repeat = G_MAXFLOAT;
+  elt.animation.repeat = INFINITY;
   elt.animation.segment = 0.2;
   elt.animation.easing = GPA_EASING_LINEAR;
 
