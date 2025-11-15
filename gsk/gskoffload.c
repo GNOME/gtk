@@ -30,9 +30,11 @@
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gsksubsurfacenode.h"
+#include "gsktransformprivate.h"
+
 #include "gdkrgbaprivate.h"
 #include "gdksurfaceprivate.h"
-#include "gsktransformprivate.h"
 
 #include <graphene.h>
 

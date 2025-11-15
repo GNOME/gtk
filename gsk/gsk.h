@@ -36,6 +36,7 @@
 #include <gsk/gskroundedrect.h>
 #include <gsk/gskstroke.h>
 #include <gsk/gskstrokenode.h>
+#include <gsk/gsksubsurfacenode.h>
 #include <gsk/gsktransform.h>
 #include <gsk/gskglshader.h>
 #include <gsk/gskcomponenttransfer.h>

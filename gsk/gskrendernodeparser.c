@@ -39,6 +39,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskstroke.h"
 #include "gskstrokenode.h"
+#include "gsksubsurfacenode.h"
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"

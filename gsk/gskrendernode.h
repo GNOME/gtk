@@ -187,7 +187,6 @@ typedef struct _GskCrossFadeNode                GskCrossFadeNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskMaskNode                     GskMaskNode;
-typedef struct _GskSubsurfaceNode               GskSubsurfaceNode;
 typedef struct _GskComponentTransferNode        GskComponentTransferNode;
 
 GDK_AVAILABLE_IN_ALL
@@ -500,16 +499,6 @@ GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_get_mask                   (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_4_10
 GskMaskMode            gsk_mask_node_get_mask_mode              (const GskRenderNode      *node);
-
-GDK_AVAILABLE_IN_4_14
-GType                   gsk_subsurface_node_get_type            (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_4_14
-GskRenderNode *         gsk_subsurface_node_new                 (GskRenderNode            *child,
-                                                                 gpointer                  subsurface);
-GDK_AVAILABLE_IN_4_14
-GskRenderNode *         gsk_subsurface_node_get_child           (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_14
-gpointer                gsk_subsurface_node_get_subsurface      (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_4_20
 GType                   gsk_component_transfer_node_get_type    (void) G_GNUC_CONST;

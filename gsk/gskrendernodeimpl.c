@@ -31,6 +31,7 @@
 #include "gskrenderreplay.h"
 #include "gskroundedrectprivate.h"
 #include "gskstrokenode.h"
+#include "gsksubsurfacenode.h"
 #include "gsktransformprivate.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskprivate.h"
@@ -41,7 +42,6 @@
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkrectangleprivate.h"
-#include "gdk/gdksubsurfaceprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkrgbaprivate.h"
@@ -7037,211 +7037,6 @@ gsk_mask_node_get_mask_mode (const GskRenderNode *node)
 }
 
 /* }}} */
-/* {{{ GSK_SUBSURFACE_NODE */
-
-/**
- * GskSubsurfaceNode:
- *
- * A render node that potentially diverts a part of the scene graph to a subsurface.
- *
- * Since: 4.14
- */
-struct _GskSubsurfaceNode
-{
-  GskRenderNode render_node;
-
-  GskRenderNode *child;
-  GdkSubsurface *subsurface;
-};
-
-static void
-gsk_subsurface_node_finalize (GskRenderNode *node)
-{
-  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
-  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_SUBSURFACE_NODE));
-
-  gsk_render_node_unref (self->child);
-  g_clear_object (&self->subsurface);
-
-  parent_class->finalize (node);
-}
-
-static void
-gsk_subsurface_node_draw (GskRenderNode *node,
-                          cairo_t       *cr,
-                          GdkColorState *ccs)
-{
-  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
-
-  gsk_render_node_draw_ccs (self->child, cr, ccs);
-}
-
-static gboolean
-gsk_subsurface_node_can_diff (const GskRenderNode *node1,
-                              const GskRenderNode *node2)
-{
-  GskSubsurfaceNode *self1 = (GskSubsurfaceNode *) node1;
-  GskSubsurfaceNode *self2 = (GskSubsurfaceNode *) node2;
-
-  return self1->subsurface == self2->subsurface;
-}
-
-static void
-gsk_subsurface_node_diff (GskRenderNode *node1,
-                          GskRenderNode *node2,
-                          GskDiffData   *data)
-{
-  GskSubsurfaceNode *self1 = (GskSubsurfaceNode *) node1;
-  GskSubsurfaceNode *self2 = (GskSubsurfaceNode *) node2;
-
-  if (self1->subsurface != self2->subsurface)
-    {
-      /* Shouldn't happen, can_diff() avoids this, but to be sure */
-      gsk_render_node_diff_impossible (node1, node2, data);
-    }
-  else if (self1->subsurface && self1->subsurface->parent != data->surface)
-    {
-      /* The inspector case */
-      gsk_render_node_diff (self1->child, self2->child, data);
-    }
-  else if (self1->subsurface && gdk_subsurface_get_texture (self1->subsurface) != NULL)
-    {
-      /* offloaded, no contents to compare */
-    }
-  else
-    {
-      /* not offloaded, diff the children */
-      gsk_render_node_diff (self1->child, self2->child, data);
-    }
-}
-
-static gboolean
-gsk_subsurface_node_get_opaque_rect (GskRenderNode   *node,
-                                     graphene_rect_t *out_opaque)
-{
-  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
-
-  return gsk_render_node_get_opaque_rect (self->child, out_opaque);
-}
-
-static GskRenderNode *
-gsk_subsurface_node_replay (GskRenderNode   *node,
-                            GskRenderReplay *replay)
-{
-  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
-  GskRenderNode *result, *child;
-
-  child = gsk_render_replay_filter_node (replay, self->child);
-
-  if (child == NULL)
-    return NULL;
-
-  if (child == self->child)
-    result = gsk_render_node_ref (node);
-  else
-    result = gsk_subsurface_node_new (child, self->subsurface);
-
-  gsk_render_node_unref (child);
-
-  return result;
-}
-
-static void
-gsk_subsurface_node_class_init (gpointer g_class,
-                                gpointer class_data)
-{
-  GskRenderNodeClass *node_class = g_class;
-
-  node_class->node_type = GSK_SUBSURFACE_NODE;
-
-  node_class->finalize = gsk_subsurface_node_finalize;
-  node_class->draw = gsk_subsurface_node_draw;
-  node_class->can_diff = gsk_subsurface_node_can_diff;
-  node_class->diff = gsk_subsurface_node_diff;
-  node_class->replay = gsk_subsurface_node_replay;
-  node_class->get_opaque_rect = gsk_subsurface_node_get_opaque_rect;
-}
-
-/**
- * gsk_subsurface_node_new: (skip)
- * @child: The child to divert to a subsurface
- * @subsurface: (nullable): the subsurface to use
- *
- * Creates a `GskRenderNode` that will possibly divert the child
- * node to a subsurface.
- *
- * Note: Since subsurfaces are currently private, these nodes cannot
- * currently be created outside of GTK. See
- * [GtkGraphicsOffload](../gtk4/class.GraphicsOffload.html).
- *
- * Returns: (transfer full) (type GskSubsurfaceNode): A new `GskRenderNode`
- *
- * Since: 4.14
- */
-GskRenderNode *
-gsk_subsurface_node_new (GskRenderNode *child,
-                         gpointer       subsurface)
-{
-  GskSubsurfaceNode *self;
-  GskRenderNode *node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
-
-  self = gsk_render_node_alloc (GSK_TYPE_SUBSURFACE_NODE);
-  node = (GskRenderNode *) self;
-  node->fully_opaque = child->fully_opaque;
-
-  self->child = gsk_render_node_ref (child);
-  if (subsurface)
-    self->subsurface = g_object_ref (subsurface);
-  else
-    self->subsurface = NULL;
-
-  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
-
-  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
-  node->is_hdr = gsk_render_node_is_hdr (child);
-
-  return node;
-}
-
-/**
- * gsk_subsurface_node_get_child:
- * @node: (type GskSubsurfaceNode): a subsurface `GskRenderNode`
- *
- * Gets the child node that is getting drawn by the given @node.
- *
- * Returns: (transfer none): the child `GskRenderNode`
- *
- * Since: 4.14
- */
-GskRenderNode *
-gsk_subsurface_node_get_child (const GskRenderNode *node)
-{
-  const GskSubsurfaceNode *self = (const GskSubsurfaceNode *) node;
-
-  return self->child;
-}
-
-/**
- * gsk_subsurface_node_get_subsurface: (skip)
- * @node: (type GskDebugNode): a subsurface `GskRenderNode`
- *
- * Gets the subsurface that was set on this node
- *
- * Returns: (transfer none) (nullable): the subsurface
- *
- * Since: 4.14
- */
-gpointer
-gsk_subsurface_node_get_subsurface (const GskRenderNode *node)
-{
-  const GskSubsurfaceNode *self = (const GskSubsurfaceNode *) node;
-
-  return self->subsurface;
-}
-
-/* }}} */
 /* {{{ GSK_COMPONENT_TRANSFER_NODE */
 
 /**
@@ -7719,7 +7514,6 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskCrossFadeNode, gsk_cross_fade_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskTextNode, gsk_text_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskBlurNode, gsk_blur_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskMaskNode, gsk_mask_node)
-GSK_DEFINE_RENDER_NODE_TYPE (GskSubsurfaceNode, gsk_subsurface_node)
 GSK_DEFINE_RENDER_NODE_TYPE (GskComponentTransferNode, gsk_component_transfer_node)
 
 /*< private >
