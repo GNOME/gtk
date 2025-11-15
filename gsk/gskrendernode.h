@@ -24,7 +24,6 @@
 
 #include <gsk/gskroundedrect.h>
 #include <gsk/gsktypes.h>
-#include <gsk/gskglshader.h>
 #include <gtk/css/gtkcss.h>
 
 G_BEGIN_DECLS
@@ -165,7 +164,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
 #define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
 #define GSK_TYPE_MASK_NODE                      (gsk_mask_node_get_type())
-#define GSK_TYPE_GL_SHADER_NODE                 (gsk_gl_shader_node_get_type())
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 #define GSK_TYPE_COMPONENT_TRANSFER_NODE        (gsk_component_transfer_node_get_type())
 
@@ -193,7 +191,6 @@ typedef struct _GskCrossFadeNode                GskCrossFadeNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskMaskNode                     GskMaskNode;
-typedef struct _GskGLShaderNode                 GskGLShaderNode GDK_DEPRECATED_TYPE_IN_4_16_FOR(GtkGLArea);
 typedef struct _GskSubsurfaceNode               GskSubsurfaceNode;
 typedef struct _GskComponentTransferNode        GskComponentTransferNode;
 
@@ -533,28 +530,6 @@ GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_get_mask                   (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_4_10
 GskMaskMode            gsk_mask_node_get_mask_mode              (const GskRenderNode      *node);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
-GType                   gsk_gl_shader_node_get_type             (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
-GskRenderNode *         gsk_gl_shader_node_new                  (GskGLShader              *shader,
-                                                                 const graphene_rect_t    *bounds,
-                                                                 GBytes                   *args,
-                                                                 GskRenderNode           **children,
-                                                                 guint                     n_children);
-GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
-guint                   gsk_gl_shader_node_get_n_children       (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
-GskRenderNode *         gsk_gl_shader_node_get_child            (const GskRenderNode      *node,
-                                                                 guint                     idx) G_GNUC_PURE;
-GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
-GBytes *                gsk_gl_shader_node_get_args             (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
-GskGLShader *           gsk_gl_shader_node_get_shader           (const GskRenderNode      *node) G_GNUC_PURE;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 GDK_AVAILABLE_IN_4_14
 GType                   gsk_subsurface_node_get_type            (void) G_GNUC_CONST;
