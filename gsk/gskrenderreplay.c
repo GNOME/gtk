@@ -377,7 +377,7 @@ gsk_render_replay_set_texture_filter (GskRenderReplay              *self,
  *
  * Filters a texture using the current filter function.
  *
- * Returns: (transfer full) the filtered texture
+ * Returns: (transfer full): the filtered texture
  *
  * Since: 4.22
  **/
@@ -441,7 +441,7 @@ gsk_render_replay_set_font_filter (GskRenderReplay           *self,
  *
  * Filters a font using the current filter function.
  *
- * Returns: (transfer full) the filtered font
+ * Returns: (transfer full): the filtered font
  *
  * Since: 4.22
  **/
