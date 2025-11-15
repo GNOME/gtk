@@ -6392,7 +6392,6 @@ struct _Animation
 
   struct {
     unsigned int transition;
-    unsigned int transition_easing;
     unsigned int animation;
     unsigned int easing;
     double origin;
