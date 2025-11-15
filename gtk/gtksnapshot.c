@@ -479,11 +479,7 @@ gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  if (state->data.opacity.opacity == 1.0)
-    {
-      opacity_node = node;
-    }
-  else if (state->data.opacity.opacity == 0.0)
+  if (state->data.opacity.opacity == 0.0)
     {
       GdkRGBA color = GDK_RGBA ("00000000");
       graphene_rect_t bounds;
