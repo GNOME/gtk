@@ -10,7 +10,6 @@ icon_editor_sources = [
   'paintable-editor.c',
   'path-editor.c',
   'path-paintable.c',
-  'range-editor.c',
   'state-editor.c',
 ]
 

@@ -401,7 +401,7 @@
                   <object class="MiniGraph">
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
-                    <property name="easing-function" bind-source="transition_easing" bind-property="selected" bind-flags="sync-create"/>
+                    <property name="easing" bind-source="transition_easing" bind-property="selected" bind-flags="sync-create"/>
                   </object>
                 </property>
               </object>
@@ -425,64 +425,23 @@
                 <property name="xalign">1</property>
                 <property name="label" translatable="yes">_Animation</property>
                 <property name="use-underline">1</property>
-                <property name="mnemonic-widget">animation_type</property>
+                <property name="mnemonic-widget">animation_direction</property>
               </object>
             </property>
             <layout>
               <property name="row">9</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkDropDown" id="animation_type">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <signal name="notify::selected" handler="animation_changed" swapped="yes"/>
-            <property name="model">
-              <object class="GtkStringList">
-                <items>
-                  <item>None</item>
-                  <item>Automatic</item>
-                </items>
-              </object>
-            </property>
-            <layout>
-              <property name="row">9</property>
-              <property name="column">1</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="animation_direction_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">animation_expander</lookup>
-              </closure>
-            </binding>
-            <property name="label" translatable="yes">_Direction</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">animation_direction</property>
-            <property name="xalign">1</property>
-            <layout>
-              <property name="row">10</property>
               <property name="column">0</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkDropDown" id="animation_direction">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">animation_expander</lookup>
-              </closure>
-            </binding>
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="notify::selected" handler="animation_changed" swapped="yes"/>
             <property name="model">
               <object class="GtkStringList">
                 <items>
+                  <item>None</item>
                   <item>Normal</item>
                   <item>Alternate</item>
                   <item>Reverse</item>
@@ -496,7 +455,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">10</property>
+              <property name="row">9</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -653,7 +612,7 @@
                   <object class="MiniGraph" id="mini_graph">
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
-                    <property name="easing-function" bind-source="animation_easing" bind-property="selected" bind-flags="sync-create"/>
+                    <property name="easing" bind-source="animation_easing" bind-property="selected" bind-flags="sync-create"/>
                   </object>
                 </property>
               </object>

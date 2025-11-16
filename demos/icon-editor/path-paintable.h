@@ -26,47 +26,35 @@
 
 typedef enum
 {
-  TRANSITION_TYPE_NONE,
-  TRANSITION_TYPE_ANIMATE,
-  TRANSITION_TYPE_MORPH,
-  TRANSITION_TYPE_FADE,
-} TransitionType;
+  GPA_TRANSITION_NONE,
+  GPA_TRANSITION_ANIMATE,
+  GPA_TRANSITION_MORPH,
+  GPA_TRANSITION_FADE,
+} GpaTransition;
 
 typedef enum
 {
-  EASING_FUNCTION_LINEAR,
-  EASING_FUNCTION_EASE_IN_OUT,
-  EASING_FUNCTION_EASE_IN,
-  EASING_FUNCTION_EASE_OUT,
-  EASING_FUNCTION_EASE,
-  EASING_FUNCTION_CUSTOM,
-} EasingFunction;
+  GPA_EASING_LINEAR,
+  GPA_EASING_EASE_IN_OUT,
+  GPA_EASING_EASE_IN,
+  GPA_EASING_EASE_OUT,
+  GPA_EASING_EASE,
+  GPA_EASING_CUSTOM,
+} GpaEasing;
 
 typedef enum
 {
-  CALC_MODE_LINEAR,
-  CALC_MODE_DISCRETE,
-  CALC_MODE_SPLINE,
-} CalcMode;
-
-typedef enum
-{
-  ANIMATION_TYPE_NONE,
-  ANIMATION_TYPE_AUTOMATIC,
-} AnimationType;
-
-typedef enum
-{
-  ANIMATION_DIRECTION_NORMAL,
-  ANIMATION_DIRECTION_ALTERNATE,
-  ANIMATION_DIRECTION_REVERSE,
-  ANIMATION_DIRECTION_REVERSE_ALTERNATE,
-  ANIMATION_DIRECTION_IN_OUT,
-  ANIMATION_DIRECTION_IN_OUT_ALTERNATE,
-  ANIMATION_DIRECTION_IN_OUT_REVERSE,
-  ANIMATION_DIRECTION_SEGMENT,
-  ANIMATION_DIRECTION_SEGMENT_ALTERNATE,
-} AnimationDirection;
+  GPA_ANIMATION_NONE,
+  GPA_ANIMATION_NORMAL,
+  GPA_ANIMATION_ALTERNATE,
+  GPA_ANIMATION_REVERSE,
+  GPA_ANIMATION_REVERSE_ALTERNATE,
+  GPA_ANIMATION_IN_OUT,
+  GPA_ANIMATION_IN_OUT_ALTERNATE,
+  GPA_ANIMATION_IN_OUT_REVERSE,
+  GPA_ANIMATION_SEGMENT,
+  GPA_ANIMATION_SEGMENT_ALTERNATE,
+} GpaAnimation;
 
 typedef enum
 {
@@ -162,18 +150,12 @@ uint64_t        path_paintable_get_path_states     (PathPaintable   *self,
 
 void            path_paintable_set_path_animation  (PathPaintable     *self,
                                                     size_t             idx,
-                                                    AnimationType      type,
-                                                    AnimationDirection direction,
+                                                    GpaAnimation       direction,
                                                     float              duration,
                                                     float              repeat,
-                                                    EasingFunction     easing,
+                                                    GpaEasing          easing,
                                                     float              segment);
-AnimationType
-                path_paintable_get_path_animation_type
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-AnimationDirection
-                path_paintable_get_path_animation_direction
+GpaAnimation    path_paintable_get_path_animation_direction
                                                    (PathPaintable     *self,
                                                     size_t             idx);
 float           path_paintable_get_path_animation_duration
@@ -182,43 +164,20 @@ float           path_paintable_get_path_animation_duration
 float           path_paintable_get_path_animation_repeat
                                                    (PathPaintable     *self,
                                                     size_t             idx);
-EasingFunction  path_paintable_get_path_animation_easing
+GpaEasing       path_paintable_get_path_animation_easing
                                                    (PathPaintable     *self,
                                                     size_t             idx);
 float           path_paintable_get_path_animation_segment
                                                    (PathPaintable     *self,
                                                     size_t             idx);
-typedef struct
-{
-  float time;
-  float value;
-  float params[4];
-} KeyFrame;
-
-void            path_paintable_set_path_animation_timing
-                                                   (PathPaintable     *self,
-                                                    size_t             idx,
-                                                    EasingFunction     easing,
-                                                    CalcMode           mode,
-                                                    const KeyFrame    *frames,
-                                                    unsigned int       n_frames);
-CalcMode        path_paintable_get_path_animation_mode
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-unsigned int    path_paintable_get_path_animation_n_frames
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-const KeyFrame *path_paintable_get_path_animation_frames
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
 
 void            path_paintable_set_path_transition (PathPaintable   *self,
                                                     size_t           idx,
-                                                    TransitionType  transition,
+                                                    GpaTransition    transition,
                                                     float            duration,
                                                     float            delay,
-                                                    EasingFunction   easing);
-TransitionType  path_paintable_get_path_transition_type
+                                                    GpaEasing        easing);
+GpaTransition   path_paintable_get_path_transition_type
                                                    (PathPaintable   *self,
                                                     size_t           idx);
 float           path_paintable_get_path_transition_duration
@@ -227,7 +186,7 @@ float           path_paintable_get_path_transition_duration
 float           path_paintable_get_path_transition_delay
                                                    (PathPaintable   *self,
                                                     size_t           idx);
-EasingFunction  path_paintable_get_path_transition_easing
+GpaEasing       path_paintable_get_path_transition_easing
                                                    (PathPaintable   *self,
                                                     size_t           idx);
 

@@ -45,7 +45,6 @@ struct _PathEditor
   GtkSpinButton *transition_duration;
   GtkSpinButton *transition_delay;
   GtkDropDown *transition_easing;
-  GtkDropDown *animation_type;
   GtkDropDown *animation_direction;
   GtkSpinButton *animation_duration;
   GtkSpinButton *animation_repeat;
@@ -254,53 +253,44 @@ path_editor_get_path_image (PathEditor *self)
 static void
 animation_changed (PathEditor *self)
 {
-  AnimationType type;
-  AnimationDirection direction;
+  GpaAnimation direction;
   float duration;
   float repeat;
-  EasingFunction easing;
-  CalcMode mode = CALC_MODE_SPLINE;
+  GpaEasing easing;
   float segment;
-  const KeyFrame *frames;
-  unsigned int n_frames;
 
   if (self->updating)
     return;
 
-  type = (AnimationType) gtk_drop_down_get_selected (self->animation_type);
-  direction = (AnimationDirection) gtk_drop_down_get_selected (self->animation_direction);
+  direction = (GpaAnimation) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   if (gtk_check_button_get_active (self->infty_check))
-    repeat = G_MAXFLOAT;
+    repeat = INFINITY;
   else
     repeat = gtk_spin_button_get_value (self->animation_repeat);
   segment = gtk_spin_button_get_value (self->animation_segment);
-  easing = (EasingFunction) gtk_drop_down_get_selected (self->animation_easing);
+  easing = (GpaEasing) gtk_drop_down_get_selected (self->animation_easing);
 
-  path_paintable_set_path_animation (self->paintable, self->path, type, direction, duration, repeat, easing, segment);
+  path_paintable_set_path_animation (self->paintable, self->path, direction, duration, repeat, easing, segment);
 
-  frames = path_paintable_get_path_animation_frames (self->paintable, self->path);
-  n_frames = path_paintable_get_path_animation_n_frames (self->paintable, self->path);
-  path_paintable_set_path_animation_timing (self->paintable, self->path, easing, mode, frames, n_frames);
-
-  mini_graph_set_params (self->mini_graph, easing, mode, frames, n_frames);
+  mini_graph_set_easing (self->mini_graph, easing);
 }
 
 static void
 transition_changed (PathEditor *self)
 {
-  TransitionType type;
+  GpaTransition type;
   float duration;
   float delay;
-  EasingFunction easing;
+  GpaEasing easing;
 
   if (self->updating)
     return;
 
-  type = (TransitionType) gtk_drop_down_get_selected (self->transition_type);
+  type = (GpaTransition) gtk_drop_down_get_selected (self->transition_type);
   duration = gtk_spin_button_get_value (self->transition_duration);
   delay = gtk_spin_button_get_value (self->transition_delay);
-  easing = (EasingFunction) gtk_drop_down_get_selected (self->transition_easing);
+  easing = (GpaEasing) gtk_drop_down_get_selected (self->transition_easing);
 
   path_paintable_set_path_transition (self->paintable, self->path, type, duration, delay, easing);
 }
@@ -703,16 +693,13 @@ path_editor_update (PathEditor *self)
       gtk_range_set_value (GTK_RANGE (self->origin),
                            path_paintable_get_path_origin (self->paintable, self->path));
 
-      gtk_drop_down_set_selected (self->animation_type,
-                                  path_paintable_get_path_animation_type (self->paintable, self->path));
-
       gtk_drop_down_set_selected (self->animation_direction,
                                   path_paintable_get_path_animation_direction (self->paintable, self->path));
 
       gtk_spin_button_set_value (self->animation_duration,
                                  path_paintable_get_path_animation_duration (self->paintable, self->path));
 
-      if (path_paintable_get_path_animation_repeat (self->paintable, self->path) == G_MAXFLOAT)
+      if (isinf (path_paintable_get_path_animation_repeat (self->paintable, self->path)) == 1)
         {
           gtk_check_button_set_active (self->infty_check, TRUE);
           gtk_spin_button_set_value (self->animation_repeat, 1);
@@ -727,11 +714,8 @@ path_editor_update (PathEditor *self)
       gtk_drop_down_set_selected (self->animation_easing,
                                   path_paintable_get_path_animation_easing (self->paintable, self->path));
 
-      mini_graph_set_params (self->mini_graph,
-                             path_paintable_get_path_animation_easing (self->paintable, self->path),
-                             path_paintable_get_path_animation_mode (self->paintable, self->path),
-                             path_paintable_get_path_animation_frames (self->paintable, self->path),
-                             path_paintable_get_path_animation_n_frames (self->paintable, self->path));
+      mini_graph_set_easing (self->mini_graph,
+                             path_paintable_get_path_animation_easing (self->paintable, self->path));
 
       gtk_spin_button_set_value (self->animation_segment,
                                  path_paintable_get_path_animation_segment (self->paintable, self->path));
@@ -925,7 +909,6 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_duration);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_delay);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_easing);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_type);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_duration);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
