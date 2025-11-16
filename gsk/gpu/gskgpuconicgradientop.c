@@ -64,8 +64,6 @@ gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
                            GskRepeat               repeat,
                            const graphene_rect_t  *rect,
                            const graphene_point_t *center,
-                           float                   start,
-                           float                   end,
                            float                   angle,
                            const GskGradientStop  *stops,
                            gsize                   n_stops)
@@ -93,8 +91,6 @@ gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_point_to_float (center, offset, instance->center);
-  instance->range[0] = start;
-  instance->range[1] = end;
   instance->angle = angle;
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 6)].color, ics, opacity, instance->color6);
   instance->offsets1[2] = stops[MIN (n_stops - 1, 6)].offset;

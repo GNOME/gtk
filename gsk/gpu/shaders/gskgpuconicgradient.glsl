@@ -22,7 +22,6 @@ PASS_FLAT(11) vec4 _hints0;
 PASS_FLAT(12) vec3 _hints1;
 PASS_FLAT(13) vec2 _center;
 PASS_FLAT(14) float _angle;
-PASS_FLAT(15) vec2 _range;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -41,7 +40,6 @@ IN(10) vec4 in_hints0;
 IN(11) vec3 in_hints1;
 IN(12) vec2 in_center;
 IN(13) float in_angle;
-IN(14) vec2 in_range;
 
 void
 run (out vec2 pos)
@@ -55,7 +53,6 @@ run (out vec2 pos)
 
   _center = in_center;
   _angle = in_angle;
-  _range = in_range;
 
   _color0 = color_premultiply (in_color0);
   _color1 = color_premultiply (in_color1);
@@ -161,38 +158,33 @@ get_gradient_color (float offset)
 vec4
 get_gradient_color_at (vec2 pos)
 {
+  float start = _offsets0[0];
+  float end = _offsets1[2];
   float offset = atan (pos.y, pos.x);
   offset = degrees (offset + _angle) / 360.0;
 
-  offset = fract (offset);
-
-  offset = (offset - _range.x) / (_range.y - _range.x);
-
   if (VARIATION_BLANK)
     {
-      if (offset < 0.0 || offset > 1.0)
+      if (offset < start || offset > end)
         return vec4(0.0, 0.0, 0.0, 0.0);
     }
   else if (VARIATION_REPEATING)
     {
-      offset = fract (offset);
+      offset = start + fract ((offset - start) / (end - start)) * (end - start);
     }
   else if (VARIATION_REFLECTING)
     {
-      if (int (floor (offset)) % 2 == 0)
-       offset = fract (offset);
+      if ((int (floor ((offset - start) / (end - start)))) % 2 == 0)
+       offset = start + fract ((offset - start) / (end - start)) * (end - start);
       else
-       offset = 1.0 - fract (offset);
+       offset = start + (1.0 - fract ((offset - start) / (end - start))) * (end - start);
     }
   else
     {
       if (offset < 0.0)
-        return output_color_from_alt (_color0);
-      else if (offset > 1.0)
-        return output_color_from_alt (_color6);
+        offset += 1.0;
+      offset = clamp (offset, start, end);
     }
-
-  offset = offset * (_range.y - _range.x) + _range.x;
 
   return output_color_from_alt (get_gradient_color (offset));
 }
