@@ -2734,7 +2734,6 @@ parse_conic_gradient_node (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
-  GskRepeat repeat[2] = { GSK_REPEAT_PAD, GSK_REPEAT_PAD };
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "center", parse_point, NULL, &center },
@@ -2776,7 +2775,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
     }
   gsk_gradient_set_interpolation (gradient, interpolation);
   gsk_gradient_set_hue_interpolation (gradient, hue_interpolation);
-  gsk_gradient_set_repeat (gradient, repeat[0]);
+  gsk_gradient_set_repeat (gradient, GSK_REPEAT_PAD);
 
   result = gsk_conic_gradient_node_new2 (&bounds, &center, rotation, gradient);
 
