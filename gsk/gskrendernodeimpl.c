@@ -1554,27 +1554,6 @@ gdk_rgba_color_interpolate (GdkRGBA       *dest,
 }
 
 static void
-gdk_rgba_color_interpolate_with_hint (GdkRGBA       *dest,
-                                      const GdkRGBA *src1,
-                                      const GdkRGBA *src2,
-                                      double         progress,
-                                      double         hint)
-{
-  double C;
-
-  if (hint <= 0)
-    C = 1;
-  else if (hint >= 1)
-    C = 0;
-  else if (hint == 0.5)
-    C = progress;
-  else
-    C = pow (progress, - M_LN2 / log (hint));
-
-  gdk_rgba_color_interpolate (dest, src1, src2, C);
-}
-
-static void
 add_color_stop_to_array (float    offset,
                          GdkColorState *ccs,
                          float    values[4],
@@ -1587,37 +1566,6 @@ add_color_stop_to_array (float    offset,
   gdk_color_init (&stop.color, ccs, values);
 
   g_array_append_val (stops, stop);
-}
-
-static void
-interpolate_between (cairo_pattern_t *pattern,
-                     float            radius,
-                     double           angle1,
-                     double           angle2,
-                     double           transition_hint,
-                     const GdkRGBA   *color1,
-                     const GdkRGBA   *color2)
-{
-  double start_angle, end_angle;
-
-  for (start_angle = angle1; start_angle < angle2; start_angle = end_angle)
-    {
-      float start_color[4], end_color[4];
-
-      end_angle = (floor (start_angle / 45) + 1) * 45;
-      end_angle = MIN (end_angle, angle2);
-
-      gdk_rgba_color_interpolate_with_hint ((GdkRGBA *) &start_color, color1, color2, (start_angle - angle1) / (angle2 - angle1), transition_hint);
-
-      gdk_rgba_color_interpolate_with_hint ((GdkRGBA *) &end_color, color1, color2, (end_angle - angle1) / (angle2 - angle1), transition_hint);
-
-      gsk_conic_gradient_node_add_patch (pattern,
-                                         radius,
-                                         DEG_TO_RAD (start_angle),
-                                         start_color,
-                                         DEG_TO_RAD (end_angle),
-                                         end_color);
-    }
 }
 
 static void
@@ -1678,130 +1626,79 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
         }
     }
 
-  if (gsk_gradient_get_repeat (gradient) == GSK_REPEAT_PAD ||
-      gsk_gradient_get_repeat (gradient) == GSK_REPEAT_NONE)
+  for (i = 0; i <= stops->len; i++)
     {
-      for (i = 0; i <= stops->len; i++)
-        {
-          GskGradientStop *stop1 = &g_array_index (stops, GskGradientStop, MAX (i, 1) - 1);
-          GskGradientStop *stop2 = &g_array_index (stops, GskGradientStop, MIN (i, stops->len - 1));
-          double offset1 = i > 0 ? stop1->offset : 0;
-          double offset2 = i < n_stops ? stop2->offset : 1;
-          double transition_hint = i > 0 && i < n_stops ? stop2->transition_hint : 0.5;
-          float color1[4];
-          float color2[4];
-
-          offset1 = offset1 * 360 + self->rotation - 90;
-          offset2 = offset2 * 360 + self->rotation - 90;
-
-          if (gsk_gradient_get_repeat (gradient) == GSK_REPEAT_NONE &&
-              (i == 0 || i == stops->len))
-            {
-              memset (color1, 0, sizeof (float) * 4);
-              memset (color2, 0, sizeof (float) * 4);
-            }
-          else
-            {
-              gdk_color_to_float (&stop1->color, ccs, color1);
-              gdk_color_to_float (&stop2->color, ccs, color2);
-            }
-
-          interpolate_between (pattern, radius,
-                               offset1, offset2,
-                               transition_hint,
-                               (const GdkRGBA *) color1,
-                               (const GdkRGBA *) color2);
-        }
-    }
-  else if (gsk_gradient_get_repeat (gradient) == GSK_REPEAT_REPEAT ||
-           gsk_gradient_get_repeat (gradient) == GSK_REPEAT_REFLECT)
-    {
-      GskGradientStop *stop1, *stop2;
-      double angle1, angle2;
+      GskGradientStop *stop1 = &g_array_index (stops, GskGradientStop, MAX (i, 1) - 1);
+      GskGradientStop *stop2 = &g_array_index (stops, GskGradientStop, MIN (i, stops->len - 1));
+      double offset1 = i > 0 ? stop1->offset : 0;
+      double offset2 = i < n_stops ? stop2->offset : 1;
+      double transition_hint = i > 0 && i < n_stops ? stop2->transition_hint : 0.5;
+      double start_angle, end_angle;
       float color1[4];
       float color2[4];
-      float offset;
+      double exp;
 
-      if (gsk_gradient_get_repeat (gradient) == GSK_REPEAT_REFLECT)
+      offset1 = offset1 * 360 + self->rotation - 90;
+      offset2 = offset2 * 360 + self->rotation - 90;
+
+      gdk_color_to_float (&stop1->color, ccs, color1);
+      gdk_color_to_float (&stop2->color, ccs, color2);
+
+      if (transition_hint <= 0)
+        exp = 0;
+      else if (transition_hint >= 1)
+        exp = INFINITY;
+      else if (transition_hint == 0.5)
+        exp = 1;
+      else
+        exp = - M_LN2 / logf (transition_hint);
+
+      for (start_angle = offset1; start_angle < offset2; start_angle = end_angle)
         {
-          const GskGradientStop *last_stop = &g_array_index (stops, GskGradientStop, stops->len - 1);
-          float last_offset = last_stop->offset;
-          unsigned int len = stops->len;
+          float f, C;
+          float start_color[4], end_color[4];
 
-          for (i = 1; i < len; i++)
-            {
-              const GskGradientStop *stop = &g_array_index (stops, GskGradientStop, len - 1 - i);
-              GskGradientStop s;
+          end_angle = (floor (start_angle / 45) + 1) * 45;
+          end_angle = MIN (end_angle, offset2);
 
-              s.offset = last_offset + (last_offset - stop->offset);
-              s.transition_hint = stop->transition_hint;
-              gdk_color_init_copy (&s.color, &stop->color);
-              g_array_append_val (stops, s);
-            }
-        }
+          f = (start_angle - offset1) / (offset2 - offset1);
+          if (transition_hint <= 0)
+            C = 1;
+          else if (transition_hint >= 1)
+            C = 0;
+          else if (transition_hint == 0.5)
+            C = f;
+          else
+            C = powf (f, exp);
 
-      stop1 = &g_array_index (stops, GskGradientStop, 0);
-      stop2 = &g_array_index (stops, GskGradientStop, stops->len - 1);
+          gdk_rgba_color_interpolate ((GdkRGBA *) &start_color,
+                                      (const GdkRGBA *) &color1,
+                                      (const GdkRGBA *) &color2,
+                                      C);
 
-      offset = stop1->offset;
-      while (offset > 0)
-        offset = offset - (stop2->offset - stop1->offset);
+          f = (end_angle - offset1) / (offset2 - offset1);
+          if (transition_hint <= 0)
+            C = 1;
+          else if (transition_hint >= 1)
+            C = 0;
+          else if (transition_hint == 0.5)
+            C = f;
+          else
+            C = powf (f, exp);
 
-      angle1 = offset * 360;
-      stop2 = stop1;
-      angle2 = angle1;
+          gdk_rgba_color_interpolate ((GdkRGBA *) &end_color,
+                                      (const GdkRGBA *) &color1,
+                                      (const GdkRGBA *) &color2,
+                                      C);
 
-      for (i = 1; angle2 < 360; i = (i + 1) % stops->len)
-        {
-          stop1 = stop2;
-          stop2 = &g_array_index (stops, GskGradientStop, i);
-          angle1 = angle2;
-
-          if (i == 0)
-            continue;
-
-          angle2 = angle1 + (stop2->offset - stop1->offset) * 360;
-
-          if (angle2 < 0)
-            continue;
-
-          gdk_color_to_float (&stop1->color, ccs, color1);
-          gdk_color_to_float (&stop2->color, ccs, color2);
-
-          if (angle1 < 0)
-            {
-              GdkRGBA color;
-              gdk_rgba_color_interpolate_with_hint (&color,
-                                                    (const GdkRGBA *) color1,
-                                                    (const GdkRGBA *) color2,
-                                                    (angle2) / (angle2 - angle1),
-                                                    stop2->transition_hint);
-              memcpy (color1, &color, sizeof (float) * 4);
-              angle1 = 0;
-            }
-
-          if (angle2 > 360)
-            {
-              GdkRGBA color;
-
-              gdk_rgba_color_interpolate_with_hint (&color,
-                                                    (const GdkRGBA *) color1,
-                                                    (const GdkRGBA *) color2,
-                                                    (360 - angle1) / (angle2 - angle1), stop2->transition_hint);
-              memcpy (color2, &color, sizeof (float) * 4);
-              angle2 = 360;
-            }
-
-          interpolate_between (pattern, radius,
-                               angle1 + self->rotation - 90,
-                               angle2 + self->rotation - 90,
-                               stop2->transition_hint,
-                               (const GdkRGBA *) color1,
-                               (const GdkRGBA *) color2);
+          gsk_conic_gradient_node_add_patch (pattern,
+                                             radius,
+                                             DEG_TO_RAD (start_angle),
+                                             start_color,
+                                             DEG_TO_RAD (end_angle),
+                                             end_color);
         }
     }
-  else
-    g_assert_not_reached ();
 
   g_array_unref (stops);
 
