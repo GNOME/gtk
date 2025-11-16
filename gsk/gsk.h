@@ -21,6 +21,8 @@
 
 #include <gsk/gskcaironode.h>
 #include <gsk/gskcolornode.h>
+#include <gsk/gskcomponenttransfer.h>
+#include <gsk/gskcomponenttransfernode.h>
 #include <gsk/gskcontainernode.h>
 #include <gsk/gskdebugnode.h>
 #include <gsk/gskenums.h>
@@ -39,7 +41,6 @@
 #include <gsk/gsksubsurfacenode.h>
 #include <gsk/gsktransform.h>
 #include <gsk/gskglshader.h>
-#include <gsk/gskcomponenttransfer.h>
 
 #include <gsk/gskcairorenderer.h>
 #include <gsk/gpu/gskvulkanrenderer.h>

@@ -163,7 +163,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
 #define GSK_TYPE_MASK_NODE                      (gsk_mask_node_get_type())
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
-#define GSK_TYPE_COMPONENT_TRANSFER_NODE        (gsk_component_transfer_node_get_type())
 
 typedef struct _GskTextureNode                  GskTextureNode;
 typedef struct _GskTextureScaleNode             GskTextureScaleNode;
@@ -187,7 +186,6 @@ typedef struct _GskCrossFadeNode                GskCrossFadeNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskMaskNode                     GskMaskNode;
-typedef struct _GskComponentTransferNode        GskComponentTransferNode;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;
@@ -499,22 +497,6 @@ GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_get_mask                   (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_4_10
 GskMaskMode            gsk_mask_node_get_mask_mode              (const GskRenderNode      *node);
-
-GDK_AVAILABLE_IN_4_20
-GType                   gsk_component_transfer_node_get_type    (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_4_20
-GskRenderNode *         gsk_component_transfer_node_new         (GskRenderNode              *child,
-                                                                 const GskComponentTransfer *r,
-                                                                 const GskComponentTransfer *g,
-                                                                 const GskComponentTransfer *b,
-                                                                 const GskComponentTransfer *a);
-GDK_AVAILABLE_IN_4_20
-GskRenderNode *         gsk_component_transfer_node_get_child   (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_20
-const GskComponentTransfer *
-                        gsk_component_transfer_node_get_transfer (const GskRenderNode     *node,
-                                                                  guint                    component) G_GNUC_PURE;
 
 /**
  * GSK_VALUE_HOLDS_RENDER_NODE:

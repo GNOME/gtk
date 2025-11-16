@@ -25,6 +25,7 @@
 
 #include "gskcaironodeprivate.h"
 #include "gskcolornodeprivate.h"
+#include "gskcomponenttransfernode.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcontainernodeprivate.h"
 #include "gskdebugnode.h"

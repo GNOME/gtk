@@ -40,6 +40,7 @@
 
 #include "gskcairoblurprivate.h"
 #include "gskcolornodeprivate.h"
+#include "gskcomponenttransfernode.h"
 #include "gskcontainernodeprivate.h"
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
