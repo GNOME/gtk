@@ -84,7 +84,8 @@ size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 size_t          path_paintable_add_path            (PathPaintable   *self,
                                                     GskPath         *path,
                                                     ShapeType        shape_type,
-                                                    float            shape_params[6]);
+                                                    float           *params,
+                                                    unsigned int     n_params);
 void            path_paintable_delete_path         (PathPaintable   *self,
                                                     size_t           idx);
 void            path_paintable_move_path           (PathPaintable   *self,
@@ -97,6 +98,19 @@ void            path_paintable_set_path            (PathPaintable   *self,
                                                     GskPath         *path);
 GskPath *       path_paintable_get_path            (PathPaintable   *self,
                                                     size_t           idx);
+
+void            path_paintable_set_path_shape      (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    GskPath         *path,
+                                                    ShapeType        shape_type,
+                                                    float           *params,
+                                                    unsigned int     n_params);
+
+ShapeType       path_paintable_get_path_shape_type (PathPaintable   *self,
+                                                    size_t           idx);
+float *         path_paintable_get_path_shape_params (PathPaintable   *self,
+                                                      size_t           idx,
+                                                      size_t          *n_params);
 
 gboolean        path_paintable_set_path_id         (PathPaintable   *self,
                                                     size_t           idx,

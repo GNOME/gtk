@@ -36,9 +36,28 @@ struct _PathEditor
   gboolean updating;
 
   GtkGrid *grid;
+  GtkDropDown *shape_dropdown;
   GtkStack *path_cmds_stack;
   GtkLabel *path_cmds;
   GtkEntry *path_cmds_entry;
+  GtkBox *polyline_box;
+  GtkEntry *line_x1;
+  GtkEntry *line_y1;
+  GtkEntry *line_x2;
+  GtkEntry *line_y2;
+  GtkEntry *circle_cx;
+  GtkEntry *circle_cy;
+  GtkEntry *circle_r;
+  GtkEntry *ellipse_cx;
+  GtkEntry *ellipse_cy;
+  GtkEntry *ellipse_rx;
+  GtkEntry *ellipse_ry;
+  GtkEntry *rect_x;
+  GtkEntry *rect_y;
+  GtkEntry *rect_width;
+  GtkEntry *rect_height;
+  GtkEntry *rect_rx;
+  GtkEntry *rect_ry;
   GtkEditableLabel *id_label;
   GtkDropDown *origin;
   GtkDropDown *transition_type;
@@ -141,6 +160,140 @@ path_to_svg_path (GskPath *path)
 /* }}} */
 /* {{{ Callbacks */
 
+enum
+{
+  LINE,
+  RECTANGLE,
+  CIRCLE,
+  ELLIPSE,
+  POLYLINE,
+  POLYGON,
+  PATH,
+};
+
+static void
+shape_changed (PathEditor *self)
+{
+  int res = 0;
+  float params[6];
+
+  switch (gtk_drop_down_get_selected (self->shape_dropdown))
+    {
+    case LINE:
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_x1)), "%f", &params[0]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_y1)), "%f", &params[1]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_x2)), "%f", &params[2]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_y2)), "%f", &params[3]);
+      if (res == 4)
+        path_paintable_set_path_shape (self->paintable, self->path,
+                                       NULL, SHAPE_LINE, params, 4);
+      break;
+    case CIRCLE:
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cx)), "%f", &params[0]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cy)), "%f", &params[1]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_r)), "%f", &params[2]);
+      if (res == 3)
+        path_paintable_set_path_shape (self->paintable, self->path,
+                                       NULL, SHAPE_CIRCLE, params, 3);
+      break;
+    case ELLIPSE:
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_cx)), "%f", &params[0]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_cy)), "%f", &params[1]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_rx)), "%f", &params[2]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_ry)), "%f", &params[3]);
+      if (res == 4)
+        path_paintable_set_path_shape (self->paintable, self->path,
+                                       NULL, SHAPE_ELLIPSE, params, 4);
+      break;
+    case RECTANGLE:
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_x)), "%f", &params[0]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_y)), "%f", &params[1]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_width)), "%f", &params[2]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_height)), "%f", &params[3]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_rx)), "%f", &params[4]);
+      res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_ry)), "%f", &params[5]);
+      if (res == 6)
+        path_paintable_set_path_shape (self->paintable, self->path,
+                                       NULL, SHAPE_RECT, params, 6);
+      break;
+    case POLYLINE:
+    case POLYGON:
+      {
+        unsigned int n_rows = 0;
+        float *parms;
+        unsigned int i;
+
+        for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->polyline_box)); child; child = gtk_widget_get_next_sibling (child))
+          n_rows++;
+
+        parms = g_new (float, 2 * n_rows);
+
+        i = 0;
+        for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->polyline_box)); child; child = gtk_widget_get_next_sibling (child))
+          {
+            GtkWidget *widget = gtk_widget_get_first_child (child);
+            res += sscanf (gtk_editable_get_text (GTK_EDITABLE (widget)), "%f", &parms[i++]);
+            widget = gtk_widget_get_next_sibling (widget);
+            res += sscanf (gtk_editable_get_text (GTK_EDITABLE (widget)), "%f", &parms[i++]);
+          }
+
+        if (res == 2 * n_rows)
+          {
+            if (gtk_drop_down_get_selected (self->shape_dropdown) == POLYLINE)
+              path_paintable_set_path_shape (self->paintable, self->path,
+                                             NULL, SHAPE_POLY_LINE, parms, 2 * n_rows);
+            else
+              path_paintable_set_path_shape (self->paintable, self->path,
+                                             NULL, SHAPE_POLYGON, parms, 2 * n_rows);
+          }
+
+        g_free (parms);
+      }
+      break;
+    case PATH:
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_clear_object (&self->path_image);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH_IMAGE]);
+}
+
+static void
+delete_row (GtkWidget  *button,
+            PathEditor *self)
+{
+  GtkWidget *row = gtk_widget_get_parent (button);
+  gtk_box_remove (GTK_BOX (gtk_widget_get_parent (row)), row);
+  shape_changed (self);
+}
+
+static void
+add_row (PathEditor *self)
+{
+  GtkBox *box;
+  GtkEntry *entry;
+  GtkButton *button;
+
+  box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
+  gtk_widget_add_css_class (GTK_WIDGET (box), "linked");
+  entry = GTK_ENTRY (gtk_entry_new ());
+  gtk_editable_set_text (GTK_EDITABLE (entry), "0");
+  g_signal_connect_swapped (entry, "activate", G_CALLBACK (shape_changed), self);
+  gtk_box_append (box, GTK_WIDGET (entry));
+  entry = GTK_ENTRY (gtk_entry_new ());
+  gtk_editable_set_text (GTK_EDITABLE (entry), "0");
+  g_signal_connect_swapped (entry, "activate", G_CALLBACK (shape_changed), self);
+  gtk_box_append (box, GTK_WIDGET (entry));
+  button = GTK_BUTTON (gtk_button_new_from_icon_name ("user-trash-symbolic"));
+  g_signal_connect (button, "clicked", G_CALLBACK (delete_row), self);
+  gtk_box_append (box, GTK_WIDGET (button));
+
+  gtk_box_append (self->polyline_box, GTK_WIDGET (box));
+  shape_changed (self);
+}
+
 static void
 path_editor_update_path (PathEditor *self,
                          GskPath    *path)
@@ -232,7 +385,7 @@ path_editor_get_path_image (PathEditor *self)
       float shape_params[6] = { 0, };
 
       self->path_image = path_paintable_new ();
-      path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path), SHAPE_PATH, shape_params);
+      path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path), SHAPE_PATH, shape_params, 0);
 
       do_stroke = path_paintable_get_path_stroke (self->paintable, self->path,
                                                   stroke, &stroke_symbolic, &stroke_color);
@@ -441,6 +594,27 @@ bool_and_bool (GObject  *object,
                gboolean  b2)
 {
   return b1 && b2;
+}
+
+static gboolean
+bool_and_bool_and_uint_equal (GObject  *object,
+                              gboolean  b1,
+                              gboolean  b2,
+                              guint     u1,
+                              guint     u2)
+{
+  return b1 && b2 && (u1 == u2);
+}
+
+static gboolean
+bool_and_bool_and_uint_one_of_two (GObject  *object,
+                                   gboolean  b1,
+                                   gboolean  b2,
+                                   guint     u1,
+                                   guint     u2,
+                                   guint     u3)
+{
+  return b1 && b2 && (u1 == u2 || u1 == u3);
 }
 
 static gboolean
@@ -665,6 +839,9 @@ path_editor_update (PathEditor *self)
       float pos;
       float width;
       float min_width, max_width;
+      float *params;
+      size_t n_params;
+      char buffer[128];
 
       self->updating = TRUE;
 
@@ -672,6 +849,63 @@ path_editor_update (PathEditor *self)
       text = gsk_path_to_string (path);
       gtk_label_set_label (GTK_LABEL (self->path_cmds), text);
       gtk_editable_set_text (GTK_EDITABLE (self->path_cmds_entry), text);
+
+      gtk_editable_set_text (GTK_EDITABLE (self->line_x1), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->line_y1), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->line_x2), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->line_y2), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->circle_cx), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->circle_cy), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->circle_r), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cx), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cy), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_rx), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_ry), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->rect_x), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->rect_y), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->rect_width), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->rect_height), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->rect_rx), "0");
+      gtk_editable_set_text (GTK_EDITABLE (self->rect_ry), "0");
+
+      params = path_paintable_get_path_shape_params (self->paintable, self->path, &n_params);
+      switch ((unsigned int) path_paintable_get_path_shape_type (self->paintable, self->path))
+        {
+        case SHAPE_LINE:
+          gtk_editable_set_text (GTK_EDITABLE (self->line_x1), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+          gtk_editable_set_text (GTK_EDITABLE (self->line_y1), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[1]));
+          gtk_editable_set_text (GTK_EDITABLE (self->line_x2), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[2]));
+          gtk_editable_set_text (GTK_EDITABLE (self->line_y2), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[3]));
+          gtk_drop_down_set_selected (self->shape_dropdown, LINE);
+          break;
+        case SHAPE_CIRCLE:
+          gtk_editable_set_text (GTK_EDITABLE (self->circle_cx), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+          gtk_editable_set_text (GTK_EDITABLE (self->circle_cy), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[1]));
+          gtk_editable_set_text (GTK_EDITABLE (self->circle_r), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[2]));
+          gtk_drop_down_set_selected (self->shape_dropdown, CIRCLE);
+          break;
+        case SHAPE_ELLIPSE:
+          gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cx), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+          gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cy), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[1]));
+          gtk_editable_set_text (GTK_EDITABLE (self->ellipse_rx), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[2]));
+          gtk_editable_set_text (GTK_EDITABLE (self->ellipse_ry), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[3]));
+          gtk_drop_down_set_selected (self->shape_dropdown, ELLIPSE);
+          break;
+        case SHAPE_RECT:
+          gtk_editable_set_text (GTK_EDITABLE (self->rect_x), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+          gtk_editable_set_text (GTK_EDITABLE (self->rect_y), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[1]));
+          gtk_editable_set_text (GTK_EDITABLE (self->rect_width), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[2]));
+          gtk_editable_set_text (GTK_EDITABLE (self->rect_height), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[3]));
+          gtk_editable_set_text (GTK_EDITABLE (self->rect_rx), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[4]));
+          gtk_editable_set_text (GTK_EDITABLE (self->rect_ry), g_ascii_formatd (buffer, sizeof (buffer), "%g", params[5]));
+          gtk_drop_down_set_selected (self->shape_dropdown, RECTANGLE);
+          break;
+        case SHAPE_PATH:
+          gtk_drop_down_set_selected (self->shape_dropdown, PATH);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
 
       gtk_editable_set_text (GTK_EDITABLE (self->id_label), path_paintable_get_path_id (self->paintable, self->path) ?: "");
 
@@ -900,9 +1134,28 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/Shaper/path-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, PathEditor, grid);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, shape_dropdown);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds_stack);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds_entry);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, polyline_box);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_x1);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_y1);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_x2);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_y2);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, circle_cx);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, circle_cy);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, circle_r);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_cx);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_cy);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_rx);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_ry);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_x);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_y);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_width);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_height);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_rx);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_ry);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, id_label);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, origin);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_type);
@@ -937,6 +1190,8 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, fill_changed);
   gtk_widget_class_bind_template_callback (widget_class, attach_changed);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool);
+  gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_equal);
+  gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_one_of_two);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_and);
   gtk_widget_class_bind_template_callback (widget_class, uint_equal);
   gtk_widget_class_bind_template_callback (widget_class, edit_path);
@@ -946,6 +1201,9 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, path_cmds_clicked);
   gtk_widget_class_bind_template_callback (widget_class, path_cmds_activated);
   gtk_widget_class_bind_template_callback (widget_class, path_cmds_key);
+  gtk_widget_class_bind_template_callback (widget_class, shape_changed);
+  gtk_widget_class_bind_template_callback (widget_class, add_row);
+  gtk_widget_class_bind_template_callback (widget_class, delete_row);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }

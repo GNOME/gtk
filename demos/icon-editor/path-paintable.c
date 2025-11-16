@@ -28,12 +28,22 @@ typedef struct
   ShapeType shape_type;
   union {
     struct {
+      float x1, y1, x2, y2;
+    } line;
+    struct {
       float cx, cy, r;
     } circle;
+    struct {
+      float cx, cy, rx, ry;
+    } ellipse;
     struct {
       float x, y, width, height, rx, ry;
     } rect;
     float shape_params[6];
+    struct {
+      float *params;
+      unsigned int n_params;
+    } polyline;
   };
 
   char *id;
@@ -122,6 +132,10 @@ clear_path_elt (gpointer data)
 
   gsk_path_unref (elt->path);
   g_free (elt->id);
+
+  if (elt->shape_type == SHAPE_POLY_LINE ||
+      elt->shape_type == SHAPE_POLYGON)
+    g_free (elt->polyline.params);
 }
 
 static void
@@ -228,8 +242,17 @@ path_elt_equal (PathElt *elt1,
 /* {{{ Parser */
 
 static GskPath *
-circle_path_new (float cx,
-                 float cy,
+line_path_new (float x1, float y1,
+               float x2, float y2)
+{
+  GskPathBuilder *builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, x1, y1);
+  gsk_path_builder_line_to (builder, x2, y2);
+  return gsk_path_builder_free_to_path (builder);
+}
+
+static GskPath *
+circle_path_new (float cx, float cy,
                  float radius)
 {
   GskPathBuilder *builder = gsk_path_builder_new ();
@@ -238,19 +261,34 @@ circle_path_new (float cx,
 }
 
 static GskPath *
-rect_path_new (float x,
-               float y,
-               float width,
-               float height,
-               float rx,
-               float ry)
+ellipse_path_new (float cx, float cy,
+                  float rx, float ry)
+{
+  GskPathBuilder *builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to  (builder, cx + rx, cy);
+  gsk_path_builder_conic_to (builder, cx + rx, cy + ry,
+                                      cx,      cy + ry, M_SQRT1_2);
+  gsk_path_builder_conic_to (builder, cx - rx, cy + ry,
+                                      cy - rx, cy,      M_SQRT1_2);
+  gsk_path_builder_conic_to (builder, cx - rx, cy - ry,
+                                      cx,      cy - ry, M_SQRT1_2);
+  gsk_path_builder_conic_to (builder, cx + rx, cy - ry,
+                                      cx + rx, cy,      M_SQRT1_2);
+  gsk_path_builder_close    (builder);
+  return gsk_path_builder_free_to_path (builder);
+}
+
+static GskPath *
+rect_path_new (float x, float y,
+               float w, float h,
+               float rx, float ry)
 {
   GskPathBuilder *builder = gsk_path_builder_new ();
   if (rx == 0 && ry == 0)
-    gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
+    gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, w, h));
   else
     gsk_path_builder_add_rounded_rect (builder,
-                                       &(GskRoundedRect) { .bounds = GRAPHENE_RECT_INIT (x, y, width, height),
+                                       &(GskRoundedRect) { .bounds = GRAPHENE_RECT_INIT (x, y, w, h),
                                                            .corner = {
                                                              GRAPHENE_SIZE_INIT (rx, ry),
                                                              GRAPHENE_SIZE_INIT (rx, ry),
@@ -258,6 +296,25 @@ rect_path_new (float x,
                                                              GRAPHENE_SIZE_INIT (rx, ry)
                                                            }
                                                          });
+  return gsk_path_builder_free_to_path (builder);
+}
+
+static GskPath *
+polyline_path_new (float        *params,
+                   unsigned int  n_params,
+                   gboolean      close)
+{
+  GskPathBuilder *builder = gsk_path_builder_new ();
+
+  if (n_params > 1)
+    {
+      gsk_path_builder_move_to (builder, params[0], params[1]);
+      for (unsigned int i = 2; i + 1 < n_params; i += 2)
+        gsk_path_builder_line_to (builder, params[i], params[i + 1]);
+      if (close)
+        gsk_path_builder_close (builder);
+    }
+
   return gsk_path_builder_free_to_path (builder);
 }
 
@@ -285,10 +342,8 @@ extract_shapes (GtkSvg         *svg,
 
       switch (shape->type)
         {
-        case SHAPE_LINE:
         case SHAPE_POLY_LINE:
         case SHAPE_POLYGON:
-        case SHAPE_ELLIPSE:
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
         case SHAPE_MASK:
@@ -300,20 +355,17 @@ extract_shapes (GtkSvg         *svg,
                        "Unsupported shape: %s", shape_name[shape->type]);
           return FALSE;
 
-        case SHAPE_RECT:
-
+        case SHAPE_LINE:
           {
-            float x, y, width, height, rx, ry;
+            float x1, y1, x2, y2;
             g_autoptr (GskPath) path = NULL;
-            x = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X, viewport);
-            y = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y, viewport);
-            width = gtk_svg_attr_get_number (shape, SHAPE_ATTR_WIDTH, viewport);
-            height = gtk_svg_attr_get_number (shape, SHAPE_ATTR_HEIGHT, viewport);
-            rx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
-            ry = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RY, viewport);
-            path = rect_path_new (x, y, width, height, rx, ry);
-            idx = path_paintable_add_path (paintable, path, SHAPE_RECT,
-                                           (float[]) { x, y, width, height, rx, ry });
+            x1 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X1, viewport);
+            y1 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y1, viewport);
+            x2 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X2, viewport);
+            y2 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y2, viewport);
+            path = line_path_new (x1, y1, x2, y2);
+            idx = path_paintable_add_path (paintable, path, SHAPE_LINE,
+                                           (float *) &(float[]) { x1, y1, x2, y2 }, 4);
           }
           break;
         case SHAPE_CIRCLE:
@@ -325,7 +377,35 @@ extract_shapes (GtkSvg         *svg,
             r = gtk_svg_attr_get_number (shape, SHAPE_ATTR_R, viewport);
             path = circle_path_new (cx, cy, r);
             idx = path_paintable_add_path (paintable, path, SHAPE_CIRCLE,
-                                           (float[]) { cx, cy, r, 0, 0, 0  });
+                                           (float *) &(float[]) { cx, cy, r }, 3);
+          }
+          break;
+        case SHAPE_ELLIPSE:
+          {
+            float cx, cy, rx, ry;
+            g_autoptr (GskPath) path = NULL;
+            cx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
+            cy = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
+            rx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
+            ry = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RY, viewport);
+            path = ellipse_path_new (cx, cy, rx, ry);
+            idx = path_paintable_add_path (paintable, path, SHAPE_ELLIPSE,
+                                           (float *) &(float[]) { cx, cy, rx, ry }, 4);
+          }
+          break;
+        case SHAPE_RECT:
+          {
+            float x, y, width, height, rx, ry;
+            g_autoptr (GskPath) path = NULL;
+            x = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X, viewport);
+            y = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y, viewport);
+            width = gtk_svg_attr_get_number (shape, SHAPE_ATTR_WIDTH, viewport);
+            height = gtk_svg_attr_get_number (shape, SHAPE_ATTR_HEIGHT, viewport);
+            rx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
+            ry = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RY, viewport);
+            path = rect_path_new (x, y, width, height, rx, ry);
+            idx = path_paintable_add_path (paintable, path, SHAPE_RECT,
+                                           (float *) &(float[]) { x, y, width, height, rx, ry }, 6);
           }
           break;
         case SHAPE_PATH:
@@ -333,7 +413,7 @@ extract_shapes (GtkSvg         *svg,
             g_autoptr (GskPath) path = NULL;
             path = gtk_svg_attr_get_path (shape, SHAPE_ATTR_PATH);
             idx = path_paintable_add_path (paintable, path, SHAPE_PATH,
-                                           (float[]) { 0, 0, 0, 0, 0, 0  });
+                                           (float *) &(float[]) { 0, 0, 0, 0, 0, 0 }, 0);
           }
           break;
         default:
@@ -472,7 +552,19 @@ path_paintable_save_path (PathPaintable *self,
 
   stroke = gsk_stroke_new (1);
 
-  if (elt->shape_type == SHAPE_CIRCLE)
+  if (elt->shape_type == SHAPE_LINE)
+    {
+      g_string_append (str,  "  <line");
+      g_string_append_printf (str, " x1='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->line.x1));
+      g_string_append_printf (str, " y1='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->line.y1));
+      g_string_append_printf (str, " x2='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->line.x2));
+      g_string_append_printf (str, " y2='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->line.y2));
+    }
+  else if (elt->shape_type == SHAPE_CIRCLE)
     {
       g_string_append (str,  "  <circle");
       g_string_append_printf (str, " cx='%s'",
@@ -481,6 +573,18 @@ path_paintable_save_path (PathPaintable *self,
                               g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->circle.cy));
       g_string_append_printf (str, " r='%s'",
                               g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->circle.r));
+    }
+  else if (elt->shape_type == SHAPE_ELLIPSE)
+    {
+      g_string_append (str,  "  <ellipse");
+      g_string_append_printf (str, " cx='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->ellipse.cx));
+      g_string_append_printf (str, " cy='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->ellipse.cy));
+      g_string_append_printf (str, " rx='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->ellipse.rx));
+      g_string_append_printf (str, " ry='%s'",
+                              g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->ellipse.ry));
     }
   else if (elt->shape_type == SHAPE_RECT)
     {
@@ -500,6 +604,26 @@ path_paintable_save_path (PathPaintable *self,
           g_string_append_printf (str, " ry='%s'",
                                   g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->rect.ry));
         }
+    }
+  else if (elt->shape_type == SHAPE_POLY_LINE ||
+           elt->shape_type == SHAPE_POLYGON)
+    {
+      if (elt->shape_type == SHAPE_POLY_LINE)
+        g_string_append (str, "  <polyline points='");
+      else
+        g_string_append (str, "  <polygon points='");
+
+      if (elt->polyline.n_params == 0)
+        g_string_append (str, "none");
+      else
+        for (unsigned int i = 0; i < elt->polyline.n_params; i++)
+          {
+            if (i > 0)
+              g_string_append_c (str, ' ');
+            g_string_append (str, g_ascii_formatd (buffer, sizeof (buffer), "%g", elt->polyline.params[i]));
+          }
+
+      g_string_append_c (str, '\'');
     }
   else if (elt->shape_type == SHAPE_PATH)
     {
@@ -1074,33 +1198,69 @@ path_paintable_get_height (PathPaintable *self)
   return self->height;
 }
 
+static void
+set_shape_and_params (PathElt      *elt,
+                      ShapeType     shape_type,
+                      float        *params,
+                      unsigned int  n_params)
+{
+  if (elt->shape_type == SHAPE_POLY_LINE ||
+      elt->shape_type == SHAPE_POLYGON)
+    g_free (elt->polyline.params);
+
+  elt->shape_type = shape_type;
+
+  if (shape_type == SHAPE_LINE)
+    {
+      elt->line.x1 = params[0];
+      elt->line.y1 = params[1];
+      elt->line.x2 = params[2];
+      elt->line.y2 = params[3];
+    }
+  else if (shape_type == SHAPE_CIRCLE)
+    {
+      elt->circle.cx = params[0];
+      elt->circle.cy = params[1];
+      elt->circle.r = params[2];
+    }
+  else if (shape_type == SHAPE_ELLIPSE)
+    {
+      elt->ellipse.cx = params[0];
+      elt->ellipse.cy = params[1];
+      elt->ellipse.rx = params[2];
+      elt->ellipse.ry = params[3];
+    }
+  else if (shape_type == SHAPE_RECT)
+    {
+      elt->rect.x = params[0];
+      elt->rect.y = params[1];
+      elt->rect.width = params[2];
+      elt->rect.height = params[3];
+      elt->rect.rx = params[4];
+      elt->rect.ry = params[5];
+    }
+  else if (shape_type == SHAPE_POLY_LINE ||
+           shape_type == SHAPE_POLYGON)
+    {
+      elt->polyline.params = g_new (float, n_params);
+      elt->polyline.n_params = n_params;
+      memcpy (elt->polyline.params, params, sizeof (float) * n_params);
+    }
+}
+
 size_t
 path_paintable_add_path (PathPaintable *self,
                          GskPath       *path,
                          ShapeType      shape_type,
-                         float          params[6])
+                         float         *params,
+                         unsigned int   n_params)
 {
   PathElt elt;
 
   elt.path = gsk_path_ref (path);
   elt.id = NULL;
 
-  elt.shape_type = shape_type;
-  if (shape_type == SHAPE_CIRCLE)
-    {
-      elt.circle.cx = params[0];
-      elt.circle.cy = params[1];
-      elt.circle.r = params[2];
-    }
-  else if (shape_type == SHAPE_RECT)
-    {
-      elt.rect.x = params[0];
-      elt.rect.y = params[1];
-      elt.rect.width = params[2];
-      elt.rect.height = params[3];
-      elt.rect.rx = params[4];
-      elt.rect.ry = params[5];
-    }
+  set_shape_and_params (&elt, shape_type, params, n_params);
 
   elt.states = ALL_STATES;
 
@@ -1237,6 +1397,49 @@ path_paintable_set_path (PathPaintable *self,
 
   g_clear_pointer (&elt->path, gsk_path_unref);
   elt->path = gsk_path_ref (path);
+
+  g_signal_emit (self, signals[CHANGED], 0);
+}
+
+void
+path_paintable_set_path_shape (PathPaintable *self,
+                               size_t         idx,
+                               GskPath       *path,
+                               ShapeType      shape_type,
+                               float         *params,
+                               unsigned int   n_params)
+{
+  g_return_if_fail (idx < self->paths->len);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  set_shape_and_params (elt, shape_type, params, n_params);
+
+  g_clear_pointer (&elt->path, gsk_path_unref);
+  if (path)
+    elt->path = gsk_path_ref (path);
+  else
+    switch ((unsigned int) shape_type)
+      {
+      case SHAPE_LINE:
+        elt->path = line_path_new (params[0], params[1], params[2], params[3]);
+        break;
+      case SHAPE_CIRCLE:
+        elt->path = circle_path_new (params[0], params[1], params[2]);
+        break;
+      case SHAPE_ELLIPSE:
+        elt->path = ellipse_path_new (params[0], params[1], params[2], params[3]);
+        break;
+      case SHAPE_RECT:
+        elt->path = rect_path_new (params[0], params[1], params[2], params[3], params[4], params[5]);
+        break;
+      case SHAPE_POLY_LINE:
+      case SHAPE_POLYGON:
+        elt->path = polyline_path_new (params, n_params, shape_type == SHAPE_POLYGON);
+        break;
+      default:
+        g_assert_not_reached ();
+      }
 
   g_signal_emit (self, signals[CHANGED], 0);
 }
@@ -1591,6 +1794,49 @@ path_paintable_get_path (PathPaintable *self,
   return elt->path;
 }
 
+ShapeType
+path_paintable_get_path_shape_type (PathPaintable *self,
+                                    size_t         idx)
+{
+  g_return_val_if_fail (idx < self->paths->len, SHAPE_PATH);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  return elt->shape_type;
+}
+
+float *
+path_paintable_get_path_shape_params (PathPaintable *self,
+                                      size_t         idx,
+                                      size_t        *n_params)
+{
+  g_return_val_if_fail (idx < self->paths->len, NULL);
+
+  PathElt *elt = &g_array_index (self->paths, PathElt, idx);
+
+  switch ((unsigned int) elt->shape_type)
+    {
+    case SHAPE_RECT:
+      *n_params = 6;
+      break;
+    case SHAPE_CIRCLE:
+      *n_params = 3;
+      break;
+    case SHAPE_ELLIPSE:
+      *n_params = 4;
+      break;
+    case SHAPE_LINE:
+      *n_params = 4;
+      break;
+    case SHAPE_PATH:
+      *n_params = 0;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+  return elt->shape_params;
+}
+
 uint64_t
 path_paintable_get_path_states (PathPaintable *self,
                                 size_t         idx)
@@ -1717,8 +1963,21 @@ path_paintable_copy (PathPaintable *self)
   for (size_t i = 0; i < self->paths->len; i++)
     {
       PathElt *elt = &g_array_index (self->paths, PathElt, i);
+      float *params;
+      unsigned int n_params;
 
-      path_paintable_add_path (other, elt->path, elt->shape_type, elt->shape_params);
+      if (elt->shape_type == SHAPE_POLY_LINE || elt->shape_type == SHAPE_POLYGON)
+        {
+          params = elt->polyline.params;
+          n_params = elt->polyline.n_params;
+        }
+      else
+        {
+          params = elt->shape_params;
+          n_params = 6;
+        }
+
+      path_paintable_add_path (other, elt->path, elt->shape_type, params, n_params);
       path_paintable_set_path_states (other, i, path_paintable_get_path_states (self, i));
       path_paintable_set_path_transition (other, i,
                                           path_paintable_get_path_transition_type (self, i),
@@ -1791,8 +2050,21 @@ path_paintable_combine (PathPaintable *one,
       size_t attach_to = (size_t) -1;
       float attach_pos = 0;
       PathElt *elt = &g_array_index (two->paths, PathElt, i);
+      float *params;
+      unsigned int n_params;
 
-      idx = path_paintable_add_path (res, elt->path, elt->shape_type, elt->shape_params);
+      if (elt->shape_type == SHAPE_POLY_LINE || elt->shape_type == SHAPE_POLYGON)
+        {
+          params = elt->polyline.params;
+          n_params = elt->polyline.n_params;
+        }
+      else
+        {
+          params = elt->shape_params;
+          n_params = 6;
+        }
+
+      idx = path_paintable_add_path (res, elt->path, elt->shape_type, params, n_params);
 
       path_paintable_set_path_transition (res, idx,
                                           path_paintable_get_path_transition_type (two, i),

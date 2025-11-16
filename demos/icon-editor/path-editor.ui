@@ -104,23 +104,587 @@
         </child>
 
         <child>
-          <object class="GtkLabel" id="path_label">
+          <object class="GtkExpander" id="shape_expander">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="label" translatable="yes">_Path</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">path_cmds</property>
-            <property name="xalign">1</property>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="shape_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">_Shape</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">shape_dropdown</property>
+              </object>
+            </property>
             <layout>
               <property name="row">1</property>
               <property name="column">0</property>
             </layout>
           </object>
         </child>
+
         <child>
-          <object class="GtkStack" id="path_cmds_stack">
+          <object class="GtkDropDown" id="shape_dropdown">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <signal name="notify::selected" handler="shape_changed" swapped="yes"/>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Line</item>
+                  <item>Rectangle</item>
+                  <item>Circle</item>
+                  <item>Ellipse</item>
+                  <item>Polyline</item>
+                  <item>Polygon</item>
+                  <item>Path</item>
+                </items>
+              </object>
+            </property>
             <layout>
               <property name="row">1</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="line_start_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>0</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Start</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">line_x1</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>0</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="line_x1">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="line_y1">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="line_end_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>0</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_End</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">line_x2</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>0</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="line_x2">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="line_y2">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="rect_origin_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>1</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Origin</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">rect_x</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">4</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>1</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">4</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="rect_x">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="rect_y">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="rect_size_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>1</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Size</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">rect_width</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">5</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>1</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">5</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="rect_width">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="rect_height">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="rect_radius_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>1</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Radius</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">rect_rx</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">6</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>1</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">6</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="rect_rx">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="rect_ry">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="circle_center_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>2</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Center</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">circle_cx</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>2</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">7</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="circle_cx">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="circle_cy">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="circle_radius_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>2</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Radius</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">circle_r</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">8</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="circle_r">
+            <property name="text">0</property>
+            <signal name="activate" handler="shape_changed" swapped="yes"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>2</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">8</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="ellipse_center_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>3</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Center</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">ellipse_cx</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">9</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>3</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">9</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="ellipse_cx">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="ellipse_cy">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="ellipse_radius_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>3</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Radius</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">circle_r</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">10</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>3</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">10</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkEntry" id="ellipse_rx">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="ellipse_ry">
+                <property name="text">0</property>
+                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="poly_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_two">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>4</constant>
+                <constant type='guint'>5</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Points</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">circle_r</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">11</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_two">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>4</constant>
+                <constant type='guint'>5</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">10</property>
+              <property name="column">1</property>
+            </layout>
+            <child>
+              <object class="GtkBox" id="polyline_box">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkBox">
+                    <style><class name="linked"/></style>
+                    <child>
+                      <object class="GtkEntry">
+                        <property name="text">0</property>
+                        <signal name="activate" handler="shape_changed" swapped="yes"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry">
+                        <property name="text">0</property>
+                        <signal name="activate" handler="shape_changed" swapped="yes"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="icon-name">user-trash-symbolic</property>
+                        <signal name="clicked" handler="delete_row" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="valign">start</property>
+                <property name="icon-name">list-add-symbolic</property>
+                <signal name="clicked" handler="add_row" swapped="yes"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="path_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>6</constant>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Path</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">path_cmds</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">12</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="path_cmds_stack">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>6</constant>
+              </closure>
+            </binding>
+            <layout>
+              <property name="row">12</property>
               <property name="column">1</property>
             </layout>
             <child>
@@ -186,20 +750,30 @@
 
         <child>
           <object class="GtkLabel" id="origin_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+              </closure>
+            </binding>
             <property name="label" translatable="yes">_Origin</property>
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">origin</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">2</property>
+              <property name="row">13</property>
               <property name="column">0</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkScale" id="origin">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+              </closure>
+            </binding>
             <signal name="value-changed" handler="origin_changed" swapped="yes"/>
             <property name="adjustment">
               <object class="GtkAdjustment">
@@ -214,7 +788,7 @@
               <mark value="1" position="bottom"/>
             </marks>
             <layout>
-              <property name="row">2</property>
+              <property name="row">13</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -227,7 +801,7 @@
             <property name="valign">center</property>
             <property name="margin-start">10</property>
             <property name="label-widget">
-              <object class="GtkLabel" id="transition_label">
+              <object class="GtkLabel">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
                 <property name="label" translatable="yes">_Transition</property>
@@ -236,7 +810,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">5</property>
+              <property name="row">14</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -256,7 +830,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">5</property>
+              <property name="row">14</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -275,7 +849,7 @@
             <property name="mnemonic-widget">transition_duration</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">6</property>
+              <property name="row">15</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -299,7 +873,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">6</property>
+              <property name="row">15</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -318,7 +892,7 @@
             <property name="mnemonic-widget">transition_delay</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">7</property>
+              <property name="row">16</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -342,7 +916,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">7</property>
+              <property name="row">16</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -361,7 +935,7 @@
             <property name="mnemonic-widget">transition_easing</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">8</property>
+              <property name="row">17</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -407,7 +981,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">8</property>
+              <property name="row">17</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -429,7 +1003,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">9</property>
+              <property name="row">18</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -455,7 +1029,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">9</property>
+              <property name="row">18</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -474,7 +1048,7 @@
             <property name="mnemonic-widget">animation_duration</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">11</property>
+              <property name="row">20</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -498,7 +1072,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">11</property>
+              <property name="row">20</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -517,7 +1091,7 @@
             <property name="mnemonic-widget">animation_repeat</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">12</property>
+              <property name="row">21</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -554,7 +1128,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">12</property>
+              <property name="row">21</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -573,7 +1147,7 @@
             <property name="mnemonic-widget">animation_easing</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">13</property>
+              <property name="row">22</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -618,7 +1192,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">13</property>
+              <property name="row">22</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -637,7 +1211,7 @@
             <property name="mnemonic-widget">animation_segment</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">15</property>
+              <property name="row">24</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -661,7 +1235,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">15</property>
+              <property name="row">24</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -683,7 +1257,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">16</property>
+              <property name="row">25</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -693,7 +1267,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
             <layout>
-              <property name="row">16</property>
+              <property name="row">25</property>
               <property name="column">1</property>
             </layout>
             <signal name="notify::symbolic" handler="stroke_changed" swapped="yes"/>
@@ -722,7 +1296,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">17</property>
+              <property name="row">26</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -749,7 +1323,7 @@
             </property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">17</property>
+              <property name="row">26</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -770,7 +1344,7 @@
             <property name="mnemonic-widget">min_width</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">18</property>
+              <property name="row">27</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -798,7 +1372,7 @@
             </property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">18</property>
+              <property name="row">27</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -818,7 +1392,7 @@
             <property name="mnemonic-widget">max_width</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">20</property>
+              <property name="row">30</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -846,7 +1420,7 @@
             </property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">20</property>
+              <property name="row">30</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -865,7 +1439,7 @@
             <property name="mnemonic-widget">line_join</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">21</property>
+              <property name="row">31</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -889,7 +1463,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">21</property>
+              <property name="row">31</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -908,7 +1482,7 @@
             <property name="mnemonic-widget">line_cap</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">22</property>
+              <property name="row">32</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -932,7 +1506,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">22</property>
+              <property name="row">32</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -954,7 +1528,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">23</property>
+              <property name="row">33</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -964,7 +1538,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
             <layout>
-              <property name="row">23</property>
+              <property name="row">33</property>
               <property name="column">1</property>
             </layout>
             <signal name="notify::symbolic" handler="fill_changed" swapped="yes"/>
@@ -985,7 +1559,7 @@
             <property name="mnemonic-widget">fill_rule</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">24</property>
+              <property name="row">34</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1008,7 +1582,7 @@
             </property>
             <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
             <layout>
-              <property name="row">24</property>
+              <property name="row">34</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1030,7 +1604,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">25</property>
+              <property name="row">35</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1040,7 +1614,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
             <layout>
-              <property name="row">25</property>
+              <property name="row">35</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1059,7 +1633,7 @@
             <property name="mnemonic-widget">attach_at</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">26</property>
+              <property name="row">36</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1086,7 +1660,7 @@
               <mark value="1" position="bottom"/>
             </marks>
             <layout>
-              <property name="row">26</property>
+              <property name="row">36</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1097,6 +1671,13 @@
   </template>
   <object class="GtkSizeGroup" id="sg">
     <widgets>
+      <widget name="shape_expander"/>
+      <widget name="line_start_label"/>
+      <widget name="line_end_label"/>
+      <widget name="circle_center_label"/>
+      <widget name="circle_radius_label"/>
+      <widget name="ellipse_center_label"/>
+      <widget name="ellipse_radius_label"/>
       <widget name="path_label"/>
       <widget name="origin_label"/>
       <widget name="transition_expander"/>
