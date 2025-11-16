@@ -3,9 +3,6 @@
 #include "common.glsl"
 
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
-#define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
-#define VARIATION_REFLECTING    ((GSK_VARIATION & (1u << 2)) == (1u << 2))
-#define VARIATION_BLANK         ((GSK_VARIATION & (1u << 3)) == (1u << 3))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -158,34 +155,9 @@ get_gradient_color (float offset)
 vec4
 get_gradient_color_at (vec2 pos)
 {
-  float start = _offsets0[0];
-  float end = _offsets1[2];
   float offset = atan (pos.y, pos.x);
   offset = degrees (offset + _angle) / 360.0;
-
-  if (VARIATION_BLANK)
-    {
-      if (offset < start || offset > end)
-        return vec4(0.0, 0.0, 0.0, 0.0);
-    }
-  else if (VARIATION_REPEATING)
-    {
-      offset = start + fract ((offset - start) / (end - start)) * (end - start);
-    }
-  else if (VARIATION_REFLECTING)
-    {
-      if ((int (floor ((offset - start) / (end - start)))) % 2 == 0)
-       offset = start + fract ((offset - start) / (end - start)) * (end - start);
-      else
-       offset = start + (1.0 - fract ((offset - start) / (end - start))) * (end - start);
-    }
-  else
-    {
-      if (offset < 0.0)
-        offset += 1.0;
-      offset = clamp (offset, start, end);
-    }
-
+  offset = fract (offset);
   return output_color_from_alt (get_gradient_color (offset));
 }
 
