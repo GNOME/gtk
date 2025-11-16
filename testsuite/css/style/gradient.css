@@ -10,15 +10,6 @@ label {
   background-image: radial-gradient(farthest-corner at 50% 30px, yellow, red 30%, blue);
 }
 
-button {
-  background-image: repeating-radial-gradient(at 50% 50%, yellow, red 30%, blue);
-}
-
 image {
   background-image: conic-gradient(from 25deg at 50% 30px, yellow, red 30%, blue);
 }
-
-checkbutton {
-  background-image: repeating-conic-gradient(from 10deg at 50% 50%, yellow, red 30deg, blue 60%);
-}
-

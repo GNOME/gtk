@@ -535,7 +535,6 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
     { "radial-gradient", _gtk_css_image_radial_get_type },
     { "repeating-radial-gradient", _gtk_css_image_radial_get_type },
     { "conic-gradient", gtk_css_image_conic_get_type },
-    { "repeating-conic-gradient", gtk_css_image_conic_get_type },
     { "cross-fade", gtk_css_image_cross_fade_get_type },
     { "image", _gtk_css_image_fallback_get_type }
   };

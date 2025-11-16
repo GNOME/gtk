@@ -3,9 +3,6 @@
 #include "common.glsl"
 
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
-#define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
-#define VARIATION_REFLECTING    ((GSK_VARIATION & (1u << 2)) == (1u << 2))
-#define VARIATION_BLANK         ((GSK_VARIATION & (1u << 3)) == (1u << 3))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -22,7 +19,6 @@ PASS_FLAT(11) vec4 _hints0;
 PASS_FLAT(12) vec3 _hints1;
 PASS_FLAT(13) vec2 _center;
 PASS_FLAT(14) float _angle;
-PASS_FLAT(15) vec2 _range;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -41,7 +37,6 @@ IN(10) vec4 in_hints0;
 IN(11) vec3 in_hints1;
 IN(12) vec2 in_center;
 IN(13) float in_angle;
-IN(14) vec2 in_range;
 
 void
 run (out vec2 pos)
@@ -55,7 +50,6 @@ run (out vec2 pos)
 
   _center = in_center;
   _angle = in_angle;
-  _range = in_range;
 
   _color0 = color_premultiply (in_color0);
   _color1 = color_premultiply (in_color1);
@@ -163,37 +157,7 @@ get_gradient_color_at (vec2 pos)
 {
   float offset = atan (pos.y, pos.x);
   offset = degrees (offset + _angle) / 360.0;
-
   offset = fract (offset);
-
-  offset = (offset - _range.x) / (_range.y - _range.x);
-
-  if (VARIATION_BLANK)
-    {
-      if (offset < 0.0 || offset > 1.0)
-        return vec4(0.0, 0.0, 0.0, 0.0);
-    }
-  else if (VARIATION_REPEATING)
-    {
-      offset = fract (offset);
-    }
-  else if (VARIATION_REFLECTING)
-    {
-      if (int (floor (offset)) % 2 == 0)
-       offset = fract (offset);
-      else
-       offset = 1.0 - fract (offset);
-    }
-  else
-    {
-      if (offset < 0.0)
-        return output_color_from_alt (_color0);
-      else if (offset > 1.0)
-        return output_color_from_alt (_color6);
-    }
-
-  offset = offset * (_range.y - _range.x) + _range.x;
-
   return output_color_from_alt (get_gradient_color (offset));
 }
 
