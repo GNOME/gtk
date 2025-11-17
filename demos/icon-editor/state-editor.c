@@ -69,7 +69,7 @@ get_paintable_for_path (PathPaintable *paintable,
   PathPaintable *path_image;
 
   path_image = path_paintable_new ();
-  path_paintable_add_path (path_image, path_paintable_get_path (paintable, path), SHAPE_PATH, shape_params);
+  path_paintable_add_path (path_image, path_paintable_get_path (paintable, path), SHAPE_PATH, shape_params, 0);
 
   do_stroke = path_paintable_get_path_stroke (paintable, path,
                                               stroke, &stroke_symbolic, &stroke_color);

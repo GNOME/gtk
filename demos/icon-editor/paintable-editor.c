@@ -437,7 +437,7 @@ paintable_editor_add_path (PaintableEditor *self)
                    path_paintable_get_width (self->paintable));
   path = gsk_path_parse (buffer);
   g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
-  path_paintable_add_path (self->paintable, path, SHAPE_PATH, shape_params);
+  path_paintable_add_path (self->paintable, path, SHAPE_PATH, shape_params, 0);
   append_path_editor (self, path_paintable_get_n_paths (self->paintable) - 1);
   g_signal_handlers_unblock_by_func (self->paintable, paths_changed, self);
 }

@@ -22,39 +22,8 @@
 #pragma once
 
 #include <gtk/gtk.h>
+#include "gtk/gtksvgprivate.h"
 #include <stdint.h>
-
-typedef enum
-{
-  GPA_TRANSITION_NONE,
-  GPA_TRANSITION_ANIMATE,
-  GPA_TRANSITION_MORPH,
-  GPA_TRANSITION_FADE,
-} GpaTransition;
-
-typedef enum
-{
-  GPA_EASING_LINEAR,
-  GPA_EASING_EASE_IN_OUT,
-  GPA_EASING_EASE_IN,
-  GPA_EASING_EASE_OUT,
-  GPA_EASING_EASE,
-  GPA_EASING_CUSTOM,
-} GpaEasing;
-
-typedef enum
-{
-  GPA_ANIMATION_NONE,
-  GPA_ANIMATION_NORMAL,
-  GPA_ANIMATION_ALTERNATE,
-  GPA_ANIMATION_REVERSE,
-  GPA_ANIMATION_REVERSE_ALTERNATE,
-  GPA_ANIMATION_IN_OUT,
-  GPA_ANIMATION_IN_OUT_ALTERNATE,
-  GPA_ANIMATION_IN_OUT_REVERSE,
-  GPA_ANIMATION_SEGMENT,
-  GPA_ANIMATION_SEGMENT_ALTERNATE,
-} GpaAnimation;
 
 typedef enum
 {
@@ -64,7 +33,7 @@ typedef enum
 } GtkCompatibility;
 
 #define NO_STATES 0
-#define ALL_STATES 0xffffffff
+#define ALL_STATES G_MAXUINT
 #define STATE_UNSET ((unsigned int) -1)
 
 
@@ -112,17 +81,11 @@ GStrv           path_paintable_get_keywords        (PathPaintable   *self);
 
 size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 
-typedef enum
-{
-  SHAPE_CIRCLE,
-  SHAPE_RECT,
-  SHAPE_PATH,
-} ShapeType;
-
 size_t          path_paintable_add_path            (PathPaintable   *self,
                                                     GskPath         *path,
                                                     ShapeType        shape_type,
-                                                    float            shape_params[6]);
+                                                    float           *params,
+                                                    unsigned int     n_params);
 void            path_paintable_delete_path         (PathPaintable   *self,
                                                     size_t           idx);
 void            path_paintable_move_path           (PathPaintable   *self,
@@ -135,6 +98,19 @@ void            path_paintable_set_path            (PathPaintable   *self,
                                                     GskPath         *path);
 GskPath *       path_paintable_get_path            (PathPaintable   *self,
                                                     size_t           idx);
+
+void            path_paintable_set_path_shape      (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    GskPath         *path,
+                                                    ShapeType        shape_type,
+                                                    float           *params,
+                                                    unsigned int     n_params);
+
+ShapeType       path_paintable_get_path_shape_type (PathPaintable   *self,
+                                                    size_t           idx);
+float *         path_paintable_get_path_shape_params (PathPaintable   *self,
+                                                      size_t           idx,
+                                                      size_t          *n_params);
 
 gboolean        path_paintable_set_path_id         (PathPaintable   *self,
                                                     size_t           idx,
