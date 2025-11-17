@@ -114,6 +114,7 @@ void            gsk_transform_node_get_translate        (const GskRenderNode    
                                                          float                       *dy);
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_clears_background       (const GskRenderNode         *node) G_GNUC_PURE;
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)

@@ -23,6 +23,7 @@
 #include "gskcolornode.h"
 #include "gskcontainernode.h"
 #include "gskcopynode.h"
+#include "gskopacitynode.h"
 #include "gskpastenode.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
@@ -113,6 +114,7 @@ replay_partial_node (const PartialNode *replay)
         case GSK_SUBSURFACE_NODE:
         case GSK_COPY_NODE:
         case GSK_PASTE_NODE:
+        case GSK_COMPOSITE_NODE:
           /* These all don't record anything, so we never
            * encounter them */
         case GSK_NOT_A_RENDER_NODE:
@@ -183,6 +185,7 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
     case GSK_BLUR_NODE:
     case GSK_GL_SHADER_NODE:
     case GSK_MASK_NODE:
+    case GSK_COMPOSITE_NODE:
       /* record a new background for each child */
       {
         const PartialNode *saved = recording->nodes;

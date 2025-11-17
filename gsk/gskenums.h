@@ -117,6 +117,15 @@
  * Since: 4.22
  */
 
+/**
+ * GSK_COMPOSITE_NODE:
+ *
+ * A node that combines a child with the background using Porter/Duff
+ * operations.
+ *
+ * Since: 4.22
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
@@ -152,6 +161,7 @@ typedef enum {
   GSK_COMPONENT_TRANSFER_NODE,
   GSK_COPY_NODE,
   GSK_PASTE_NODE,
+  GSK_COMPOSITE_NODE,
 } GskRenderNodeType;
 
 /**
@@ -222,6 +232,44 @@ typedef enum {
   GSK_BLEND_MODE_SATURATION,
   GSK_BLEND_MODE_LUMINOSITY
 } GskBlendMode;
+
+/**
+ * GskPorterDuff:
+ * GSK_PORTER_DUFF_SOURCE:
+ * GSK_PORTER_DUFF_DEST:
+ * GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+ * GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+ * GSK_PORTER_DUFF_SOURCE_IN_DEST:
+ * GSK_PORTER_DUFF_DEST_IN_SOURCE:
+ * GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+ * GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+ * GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+ * GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+ * GSK_PORTER_DUFF_XOR:
+ * GSK_PORTER_DUFF_CLEAR:
+ *
+ * The 12 compositing modes defined by the seminal paper
+ * by Thomas Porter and Tom Duff.
+ *
+ * They are used in SVG, PDF and in Cairo with `cairo_operator_t`.
+ *
+ * Since: 4.22
+ */
+typedef enum
+{
+  GSK_PORTER_DUFF_SOURCE,
+  GSK_PORTER_DUFF_DEST,
+  GSK_PORTER_DUFF_SOURCE_OVER_DEST,
+  GSK_PORTER_DUFF_DEST_OVER_SOURCE,
+  GSK_PORTER_DUFF_SOURCE_IN_DEST,
+  GSK_PORTER_DUFF_DEST_IN_SOURCE,
+  GSK_PORTER_DUFF_SOURCE_OUT_DEST,
+  GSK_PORTER_DUFF_DEST_OUT_SOURCE,
+  GSK_PORTER_DUFF_SOURCE_ATOP_DEST,
+  GSK_PORTER_DUFF_DEST_ATOP_SOURCE,
+  GSK_PORTER_DUFF_XOR,
+  GSK_PORTER_DUFF_CLEAR
+} GskPorterDuff;
 
 /**
  * GskCorner:

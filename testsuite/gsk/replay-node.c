@@ -430,6 +430,16 @@ replay_paste_node (GskRenderNode *node, GtkSnapshot *snapshot)
                              gsk_paste_node_get_depth (node));
 }
 
+static void
+replay_composite_node (GskRenderNode *node, GtkSnapshot *snapshot)
+{
+  gtk_snapshot_push_composite (snapshot, gsk_composite_node_get_operator (node));
+  replay_node (gsk_composite_node_get_mask (node), snapshot);
+  gtk_snapshot_pop (snapshot);
+  replay_node (gsk_composite_node_get_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
+}
+
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
@@ -555,6 +565,10 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 
     case GSK_PASTE_NODE:
       replay_paste_node (node, snapshot);
+      break;
+
+    case GSK_COMPOSITE_NODE:
+      replay_composite_node (node, snapshot);
       break;
 
     case GSK_SUBSURFACE_NODE:
