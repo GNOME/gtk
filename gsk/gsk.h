@@ -25,6 +25,7 @@
 #include <gsk/gskcomponenttransfer.h>
 #include <gsk/gskcomponenttransfernode.h>
 #include <gsk/gskcontainernode.h>
+#include <gsk/gskcrossfadenode.h>
 #include <gsk/gskdebugnode.h>
 #include <gsk/gskenums.h>
 #include <gsk/gskfillnode.h>

@@ -29,6 +29,7 @@
 #include "gskcomponenttransfernode.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcontainernodeprivate.h"
+#include "gskcrossfadenode.h"
 #include "gskdebugnode.h"
 #include "gskenumtypes.h"
 #include "gskfillnode.h"

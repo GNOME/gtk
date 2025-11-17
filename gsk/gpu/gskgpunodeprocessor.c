@@ -43,6 +43,7 @@
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
 #include "gskcontainernodeprivate.h"
+#include "gskcrossfadenode.h"
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
 #include "gskfillnode.h"
