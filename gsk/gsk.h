@@ -37,6 +37,7 @@
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskrenderreplay.h>
+#include <gsk/gskrepeatnode.h>
 #include <gsk/gskroundedrect.h>
 #include <gsk/gskstroke.h>
 #include <gsk/gskstrokenode.h>

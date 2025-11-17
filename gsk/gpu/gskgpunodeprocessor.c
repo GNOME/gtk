@@ -50,6 +50,7 @@
 #include "gskpath.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
+#include "gskrepeatnode.h"
 #include "gskroundedrectprivate.h"
 #include "gskstrokenode.h"
 #include "gsksubsurfacenode.h"
