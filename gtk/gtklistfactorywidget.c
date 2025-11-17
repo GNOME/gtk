@@ -443,19 +443,6 @@ gtk_list_factory_widget_click_gesture_released (GtkGestureClick      *gesture,
 {
   GtkListFactoryWidgetPrivate *priv = gtk_list_factory_widget_get_instance_private (self);
 
-  if (priv->activatable)
-    {
-      if (n_press == 1 && priv->single_click_activate)
-        {
-          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-          gtk_widget_activate_action (GTK_WIDGET (self),
-                                      "list.activate-item",
-                                      "u",
-                                      gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)));
-          return;
-        }
-    }
-
   if (priv->selectable)
     {
       GdkModifierType state;
@@ -476,6 +463,19 @@ gtk_list_factory_widget_click_gesture_released (GtkGestureClick      *gesture,
                                   "(ubb)",
                                   gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)), modify, extend);
     }
+
+  if (priv->activatable)
+    {
+      if (n_press == 1 && priv->single_click_activate)
+        {
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+          gtk_widget_activate_action (GTK_WIDGET (self),
+                                      "list.activate-item",
+                                      "u",
+                                      gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)));
+        }
+    }
+
 }
 
 static void
