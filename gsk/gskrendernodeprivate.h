@@ -72,7 +72,7 @@ GType           gsk_render_node_type_register_static    (const char             
                                                          gsize                        instance_size,
                                                          GClassInitFunc               class_init);
 
-gpointer        gsk_render_node_alloc                   (GskRenderNodeType            node_type);
+gpointer        gsk_render_node_alloc                   (GType                        node_type);
 
 void            _gsk_render_node_unref                  (GskRenderNode               *node);
 

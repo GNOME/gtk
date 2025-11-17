@@ -281,20 +281,16 @@ gsk_render_node_type_register_static (const char     *node_name,
 
 /*< private >
  * gsk_render_node_alloc:
- * @node_type: the `GskRenderNode` type to instantiate
+ * @node_type: the `GType to instantiate
  *
  * Instantiates a new `GskRenderNode` for the given @node_type.
  *
  * Returns: (transfer full) (type GskRenderNode): the newly created `GskRenderNode`
  */
 gpointer
-gsk_render_node_alloc (GskRenderNodeType node_type)
+gsk_render_node_alloc (GType node_type)
 {
-  g_return_val_if_fail (node_type > GSK_NOT_A_RENDER_NODE, NULL);
-  g_return_val_if_fail (node_type < GSK_RENDER_NODE_TYPE_N_TYPES, NULL);
-
-  g_assert (gsk_render_node_types[node_type] != G_TYPE_INVALID);
-  return g_type_create_instance (gsk_render_node_types[node_type]);
+  return g_type_create_instance (node_type);
 }
 
 /**
