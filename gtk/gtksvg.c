@@ -1196,8 +1196,7 @@ svg_value_interpolate (const SvgValue *value0,
                        const SvgValue *value1,
                        double          t)
 {
-  if (value0->class != value1->class)
-    return NULL;
+  g_return_val_if_fail (value0->class == value1->class, svg_value_ref ((SvgValue *) value0));
 
   if (t == 0)
     return svg_value_ref ((SvgValue *) value0);
@@ -1217,8 +1216,7 @@ svg_value_accumulate (const SvgValue *value0,
                       const SvgValue *value1,
                       int             n)
 {
-  if (value0->class != value1->class)
-    return NULL;
+  g_return_val_if_fail (value0->class == value1->class, svg_value_ref ((SvgValue *) value0));
 
   if (n == 0)
     return svg_value_ref ((SvgValue *) value0);
