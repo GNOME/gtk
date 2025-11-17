@@ -10700,6 +10700,35 @@ serialize_shape_attrs (GString              *s,
 }
 
 static void
+states_to_string (GString  *s,
+                  uint64_t  states)
+{
+  if (states == ALL_STATES)
+    {
+      g_string_append (s, "all");
+    }
+  else if (states == NO_STATES)
+    {
+      g_string_append (s, "none");
+    }
+  else
+    {
+      gboolean first = TRUE;
+
+      for (unsigned int u = 0; u < 64; u++)
+        {
+          if ((states & (G_GUINT64_CONSTANT (1) << u)) != 0)
+            {
+              if (!first)
+                g_string_append_c (s, ' ');
+              g_string_append_printf (s, "%u", u);
+              first = FALSE;
+            }
+        }
+    }
+}
+
+static void
 serialize_gpa_attrs (GString              *s,
                      GtkSvg               *svg,
                      int                   indent,
@@ -10743,6 +10772,119 @@ serialize_gpa_attrs (GString              *s,
       g_string_append (s, "gpa:fill='");
       svg_paint_print_gpa (values[SHAPE_ATTR_FILL], s);
       g_string_append_c (s, '\'');
+    }
+
+  if (flags & GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS)
+    {
+      if (shape->gpa.states != ALL_STATES)
+        {
+          indent_for_attr (s, indent);
+          g_string_append (s, "gpa:states='");
+          states_to_string (s, shape->gpa.states);
+          g_string_append_c (s, '\'');
+        }
+
+      if (shape->gpa.transition != GPA_TRANSITION_NONE)
+        {
+          const char *names[] = { "none", "animate", "morph", "fade" };
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:transition-type='%s'", names[shape->gpa.transition]);
+        }
+
+      if (shape->gpa.transition_easing != GPA_EASING_LINEAR)
+        {
+          const char *names[] = { "linear", "ease-in-out", "ease-in", "ease-out", "ease" };
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:transition-easing='%s'", names[shape->gpa.transition_easing]);
+        }
+
+      if (shape->gpa.transition_duration != 0)
+        {
+          char buffer[128];
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:transition-duration='%sms'",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", shape->gpa.transition_duration / (double) G_TIME_SPAN_MILLISECOND));
+        }
+
+      if (shape->gpa.transition_delay != 0)
+        {
+          char buffer[128];
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:transition-delay='%sms'",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", shape->gpa.transition_delay / (double) G_TIME_SPAN_MILLISECOND));
+        }
+
+      if (shape->gpa.animation != GPA_ANIMATION_NONE)
+        {
+          const char *names[] = { "none", "normal", "alternate", "reverse",
+            "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse",
+            "segment", "segment-alternate" };
+          indent_for_attr (s, indent);
+          g_string_append (s, "gpa:animation-type='automatic'");
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:animation-direction='%s'", names[shape->gpa.animation]);
+          indent_for_attr (s, indent);
+        }
+
+      if (shape->gpa.animation_easing != GPA_EASING_LINEAR)
+        {
+          const char *names[] = { "linear", "ease-in-out", "ease-in", "ease-out", "ease" };
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:animation-easing='%s'", names[shape->gpa.animation_easing]);
+        }
+
+      if (shape->gpa.animation_duration != 0)
+        {
+          char buffer[128];
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:animation-duration='%sms'",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", shape->gpa.animation_duration / (double) G_TIME_SPAN_MILLISECOND));
+        }
+
+      if (shape->gpa.animation_repeat != DBL_MAX)
+        {
+          char buffer[128];
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:animation-repeat='%s'",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", shape->gpa.animation_repeat));
+        }
+
+      if (shape->gpa.animation_segment != 0.2)
+        {
+          char buffer[128];
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:animation-segment='%s'",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", shape->gpa.animation_segment));
+        }
+
+      if (shape->gpa.origin != 0)
+        {
+          char buffer[128];
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:origin='%s'",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", shape->gpa.origin));
+        }
+
+      if (shape->gpa.attach.ref)
+        {
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:attach-to='%s'", shape->gpa.attach.ref);
+        }
+
+      if (shape->gpa.attach.pos != 0)
+        {
+          char buffer[128];
+          indent_for_attr (s, indent);
+          g_string_append_printf (s, "gpa:attach-pos='%s'",
+                                  g_ascii_formatd (buffer, sizeof (buffer),
+                                                   "%g", shape->gpa.attach.pos));
+        }
     }
 }
 
@@ -11121,8 +11263,14 @@ serialize_animation (GString              *s,
                      Animation            *a,
                      GtkSvgSerializeFlags  flags)
 {
-  if ((flags & GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION))
+  if (flags & GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION)
     return;
+
+  if (flags & GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS)
+    {
+      if (a->id && g_str_has_prefix (a->id, "gpa:"))
+        return;
+    }
 
   switch (a->type)
     {
@@ -12658,6 +12806,11 @@ gtk_svg_serialize_full (GtkSvg               *self,
         g_string_append (s, "gpa:state='empty'");
       else
         g_string_append_printf (s, "gpa:state='%u'", self->state);
+      if (self->gpa_keywords)
+        {
+          indent_for_attr (s, 0);
+          g_string_append_printf (s, "gpa:keywords='%s'", self->gpa_keywords);
+        }
     }
 
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
@@ -12784,6 +12937,9 @@ gtk_svg_attr_get_paint (Shape            *shape,
     value = shape_attr_get_initial_value (attr, shape->type);
 
   paint = (SvgPaint *) value;
+
+  *symbolic = 0xffff;
+  *color = (GdkRGBA) { 0, 0, 0, 1 };
 
   switch (paint->kind)
     {
