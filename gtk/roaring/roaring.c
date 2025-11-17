@@ -26,10 +26,12 @@
 _Pragma ("GCC diagnostic ignored \"-Wswitch-default\"")
 _Pragma ("GCC diagnostic ignored \"-Wredundant-decls\"")
 _Pragma ("GCC diagnostic ignored \"-Wunused-function\"")
+_Pragma ("GCC diagnostic ignored \"-Wnull-dereference\"")
 #elif defined (__clang__)
 _Pragma ("clang diagnostic ignored \"-Wswitch-default\"")
 _Pragma ("clang diagnostic ignored \"-Wredundant-decls\"")
 _Pragma ("clang diagnostic ignored \"-Wunused-function\"")
+_Pragma ("clang diagnostic ignored \"-Wnull-dereference\"")
 #endif
 
 /* used for http://dmalloc.com/ Dmalloc - Debug Malloc Library */
