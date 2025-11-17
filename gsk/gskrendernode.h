@@ -151,7 +151,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
 #define GSK_TYPE_TRANSFORM_NODE                 (gsk_transform_node_get_type())
-#define GSK_TYPE_OPACITY_NODE                   (gsk_opacity_node_get_type())
 #define GSK_TYPE_COLOR_MATRIX_NODE              (gsk_color_matrix_node_get_type())
 #define GSK_TYPE_REPEAT_NODE                    (gsk_repeat_node_get_type())
 #define GSK_TYPE_CLIP_NODE                      (gsk_clip_node_get_type())
@@ -175,7 +174,6 @@ typedef struct _GskBorderNode                   GskBorderNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskTransformNode                GskTransformNode;
-typedef struct _GskOpacityNode                  GskOpacityNode;
 typedef struct _GskColorMatrixNode              GskColorMatrixNode;
 typedef struct _GskRepeatNode                   GskRepeatNode;
 typedef struct _GskClipNode                     GskClipNode;
@@ -358,16 +356,6 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_transform_node_get_child            (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_node_get_transform        (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_opacity_node_get_type               (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,
-                                                                 float                     opacity);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_opacity_node_get_child              (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-float                   gsk_opacity_node_get_opacity            (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_color_matrix_node_get_type          (void) G_GNUC_CONST;

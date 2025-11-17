@@ -9,6 +9,7 @@
 #include "gskcontainernode.h"
 #include "gskdebugnode.h"
 #include "gskdebugprivate.h"
+#include "gskopacitynode.h"
 #include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"

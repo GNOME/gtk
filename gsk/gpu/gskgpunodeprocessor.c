@@ -45,6 +45,7 @@
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
 #include "gskfillnode.h"
+#include "gskopacitynode.h"
 #include "gskpath.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"

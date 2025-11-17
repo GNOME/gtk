@@ -28,6 +28,7 @@
 #include <gsk/gskenums.h>
 #include <gsk/gskfillnode.h>
 #include <gsk/gskglshadernode.h>
+#include <gsk/gskopacitynode.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>
 #include <gsk/gskpathmeasure.h>

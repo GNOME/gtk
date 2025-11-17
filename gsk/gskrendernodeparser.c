@@ -33,6 +33,7 @@
 #include "gskfillnode.h"
 #include "gskglshadernode.h"
 #include "gskgradientprivate.h"
+#include "gskopacitynode.h"
 #include "gskprivate.h"
 #include "gskpath.h"
 #include "gskpathbuilder.h"
