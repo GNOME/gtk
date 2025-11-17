@@ -58,12 +58,6 @@
 #define MAX_CAIRO_IMAGE_WIDTH 16384
 #define MAX_CAIRO_IMAGE_HEIGHT 16384
 
-/* maximal number of rectangles we keep in a diff region before we throw
- * the towel and just use the bounding box of the parent node.
- * Meant to avoid performance corner cases.
- */
-#define MAX_RECTS_IN_DIFF 30
-
 /* This lock protects all on-demand created legacy rgba data of
  * render nodes.
  */
