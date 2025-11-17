@@ -6435,11 +6435,6 @@ enum {
 };
 
 /**
- * Create a new roaring array
- */
-static roaring_array_t *ra_create(void);
-
-/**
  * Initialize an existing roaring array with the specified capacity (in number
  * of containers)
  */
@@ -6449,12 +6444,6 @@ static bool ra_init_with_capacity(roaring_array_t *new_ra, uint32_t cap);
  * Initialize with zero capacity
  */
 static void ra_init(roaring_array_t *t);
-
-/**
- * Copies this roaring array, we assume that dest is not initialized
- */
-static bool ra_copy(const roaring_array_t *source, roaring_array_t *dest,
-             bool copy_on_write);
 
 /*
  * Shrinks the capacity, returns the number of bytes saved.
