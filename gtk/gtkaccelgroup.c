@@ -990,6 +990,758 @@ gtk_accelerator_print_label (GString        *gstring,
     }
 }
 
+/* See https://www.w3.org/TR/uievents-key/#named-key-attribute-values for the
+ * list of WAI-ARIA named key attribute values. */
+static const gchar *
+keyval_get_accessible_name (guint accelerator_key)
+{
+  switch (accelerator_key)
+  {
+    case GDK_KEY_Alt_L:
+    case GDK_KEY_Alt_R:
+      return "Alt";
+
+    case GDK_KEY_Mode_switch:
+    case GDK_KEY_ISO_Level3_Shift:
+    case GDK_KEY_ISO_Level3_Latch:
+    case GDK_KEY_ISO_Level3_Lock:
+    case GDK_KEY_ISO_Level5_Shift:
+    case GDK_KEY_ISO_Level5_Latch:
+    case GDK_KEY_ISO_Level5_Lock:
+      return "AltGraph";
+
+    case GDK_KEY_Caps_Lock:
+      return "CapsLock";
+
+    case GDK_KEY_Control_L:
+    case GDK_KEY_Control_R:
+      return "Control";
+
+    /* Firefox treats these as "Alt" */
+    case GDK_KEY_Meta_L:
+    case GDK_KEY_Meta_R:
+      return "Meta";
+
+    case GDK_KEY_Num_Lock:
+      return "NumLock";
+
+    case GDK_KEY_Scroll_Lock:
+      return "ScrollLock";
+
+    case GDK_KEY_Shift_L:
+    case GDK_KEY_Shift_R:
+    case GDK_KEY_Shift_Lock:
+      return "Shift";
+
+    /* Firefox treats these as "Meta" */
+    case GDK_KEY_Super_L:
+    case GDK_KEY_Super_R:
+      return "Super";
+
+    /* Firefox treats these as "Meta" */
+    case GDK_KEY_Hyper_L:
+    case GDK_KEY_Hyper_R:
+      return "Hyper";
+
+    case GDK_KEY_Return:
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_ISO_Enter:
+    case GDK_KEY_3270_Enter:
+      return "Enter";
+
+    case GDK_KEY_Tab:
+    case GDK_KEY_ISO_Left_Tab:
+    case GDK_KEY_KP_Tab:
+      return "Tab";
+
+    case GDK_KEY_Down:
+    case GDK_KEY_KP_Down:
+      return "ArrowDown";
+
+    case GDK_KEY_Left:
+    case GDK_KEY_KP_Left:
+      return "ArrowLeft";
+
+    case GDK_KEY_Right:
+    case GDK_KEY_KP_Right:
+      return "ArrowRight";
+
+    case GDK_KEY_Up:
+    case GDK_KEY_KP_Up:
+      return "ArrowUp";
+
+    case GDK_KEY_End:
+    case GDK_KEY_KP_End:
+      return "End";
+
+    case GDK_KEY_Home:
+    case GDK_KEY_KP_Home:
+      return "Home";
+
+    case GDK_KEY_Page_Down:
+    case GDK_KEY_KP_Page_Down:
+      return "PageDown";
+
+    case GDK_KEY_Page_Up:
+    case GDK_KEY_KP_Page_Up:
+      return "PageUp";
+
+    case GDK_KEY_BackSpace:
+      return "Backspace";
+
+    case GDK_KEY_Clear:
+      return "Clear";
+
+    case GDK_KEY_Copy:
+      return "Copy";
+
+    case GDK_KEY_3270_CursorSelect:
+      return "CrSel";
+
+    case GDK_KEY_Cut:
+      return "Cut";
+
+    case GDK_KEY_Delete:
+    case GDK_KEY_KP_Delete:
+      return "Delete";
+
+    case GDK_KEY_3270_EraseEOF:
+      return "EraseEof";
+
+    case GDK_KEY_3270_ExSelect:
+      return "ExSel";
+
+    case GDK_KEY_Insert:
+    case GDK_KEY_KP_Insert:
+      return "Insert";
+
+    case GDK_KEY_Paste:
+      return "Paste";
+
+    case GDK_KEY_Redo:
+      return "Redo";
+
+    case GDK_KEY_Undo:
+      return "Undo";
+
+    case GDK_KEY_3270_Attn:
+      return "Attn";
+
+    case GDK_KEY_Cancel:
+      return "Cancel";
+
+    case GDK_KEY_Menu:
+      return "ContextMenu";
+
+    case GDK_KEY_Escape:
+      return "Escape";
+
+    case GDK_KEY_Execute:
+      return "Execute";
+
+    case GDK_KEY_Find:
+      return "Find";
+
+    case GDK_KEY_Help:
+      return "Help";
+
+    case GDK_KEY_Pause:
+    case GDK_KEY_Break:
+      return "Pause";
+
+    case GDK_KEY_3270_Play:
+      return "Play";
+
+    case GDK_KEY_Select:
+      return "Select";
+
+    case GDK_KEY_ZoomIn:
+      return "ZoomIn";
+
+    case GDK_KEY_ZoomOut:
+      return "ZoomOut";
+
+    case GDK_KEY_MonBrightnessDown:
+      return "BrightnessDown";
+
+    case GDK_KEY_MonBrightnessUp:
+      return "BrightnessUp";
+
+    case GDK_KEY_Eject:
+      return "Eject";
+
+    case GDK_KEY_LogOff:
+      return "LogOff";
+
+    case GDK_KEY_PowerDown:
+    case GDK_KEY_PowerOff:
+      return "PowerOff";
+
+    case GDK_KEY_3270_PrintScreen:
+    case GDK_KEY_Print:
+    case GDK_KEY_Sys_Req:
+      return "PrintScreen";
+
+    case GDK_KEY_Hibernate:
+      return "Hibernate";
+
+    case GDK_KEY_Standby:
+    case GDK_KEY_Suspend:
+    case GDK_KEY_Sleep:
+      return "Standby";
+
+    case GDK_KEY_WakeUp:
+      return "WakeUp";
+
+    case GDK_KEY_MultipleCandidate:
+      return "AllCandidates";
+
+    case GDK_KEY_Eisu_Shift:
+    case GDK_KEY_Eisu_toggle:
+      return "Alphanumeric";
+
+    case GDK_KEY_Codeinput:
+      return "CodeInput";
+
+    case GDK_KEY_Multi_key:
+      return "Compose";
+
+    case GDK_KEY_Henkan:
+      return "Convert";
+
+    case GDK_KEY_dead_grave:
+    case GDK_KEY_dead_acute:
+    case GDK_KEY_dead_circumflex:
+    case GDK_KEY_dead_tilde:
+    case GDK_KEY_dead_macron:
+    case GDK_KEY_dead_breve:
+    case GDK_KEY_dead_abovedot:
+    case GDK_KEY_dead_diaeresis:
+    case GDK_KEY_dead_abovering:
+    case GDK_KEY_dead_doubleacute:
+    case GDK_KEY_dead_caron:
+    case GDK_KEY_dead_cedilla:
+    case GDK_KEY_dead_ogonek:
+    case GDK_KEY_dead_iota:
+    case GDK_KEY_dead_voiced_sound:
+    case GDK_KEY_dead_semivoiced_sound:
+    case GDK_KEY_dead_belowdot:
+    case GDK_KEY_dead_hook:
+    case GDK_KEY_dead_horn:
+    case GDK_KEY_dead_stroke:
+    case GDK_KEY_dead_abovecomma:
+    case GDK_KEY_dead_abovereversedcomma:
+    case GDK_KEY_dead_doublegrave:
+    case GDK_KEY_dead_belowring:
+    case GDK_KEY_dead_belowmacron:
+    case GDK_KEY_dead_belowcircumflex:
+    case GDK_KEY_dead_belowtilde:
+    case GDK_KEY_dead_belowbreve:
+    case GDK_KEY_dead_belowdiaeresis:
+    case GDK_KEY_dead_invertedbreve:
+    case GDK_KEY_dead_belowcomma:
+    case GDK_KEY_dead_currency:
+    case GDK_KEY_dead_a:
+    case GDK_KEY_dead_A:
+    case GDK_KEY_dead_e:
+    case GDK_KEY_dead_E:
+    case GDK_KEY_dead_i:
+    case GDK_KEY_dead_I:
+    case GDK_KEY_dead_o:
+    case GDK_KEY_dead_O:
+    case GDK_KEY_dead_u:
+    case GDK_KEY_dead_U:
+    case GDK_KEY_dead_small_schwa:
+    case GDK_KEY_dead_capital_schwa:
+    case GDK_KEY_dead_greek:
+      return "Dead";
+
+    case GDK_KEY_ISO_First_Group:
+      return "GroupFirst";
+
+    case GDK_KEY_ISO_Last_Group:
+      return "GroupLast";
+
+    case GDK_KEY_ISO_Next_Group:
+      return "GroupNext";
+
+    case GDK_KEY_ISO_Prev_Group:
+      return "GroupPrevious";
+
+    case GDK_KEY_Muhenkan:
+      return "NonConvert";
+
+    case GDK_KEY_PreviousCandidate:
+      return "PreviousCandidate";
+
+    case GDK_KEY_SingleCandidate:
+      return "SingleCandidate";
+
+    case GDK_KEY_Hankaku:
+      return "Hankaku";
+
+    case GDK_KEY_Hiragana:
+      return "Hiragana";
+
+    case GDK_KEY_Hiragana_Katakana:
+      return "HiraganaKatakana";
+
+    case GDK_KEY_Kana_Lock:
+    case GDK_KEY_Kana_Shift:
+      return "KanaMode";
+
+    case GDK_KEY_Kanji:
+      return "KanjiMode";
+
+    case GDK_KEY_Katakana:
+      return "Katakana";
+
+    case GDK_KEY_Romaji:
+      return "Romaji";
+
+    case GDK_KEY_Zenkaku:
+      return "Zenkaku";
+
+    case GDK_KEY_Zenkaku_Hankaku:
+      return "ZenkakuHankaku";
+
+    case GDK_KEY_F1:
+    case GDK_KEY_KP_F1:
+      return "F1";
+
+    case GDK_KEY_F2:
+    case GDK_KEY_KP_F2:
+      return "F2";
+
+    case GDK_KEY_F3:
+    case GDK_KEY_KP_F3:
+      return "F3";
+
+    case GDK_KEY_F4:
+    case GDK_KEY_KP_F4:
+      return "F4";
+
+    case GDK_KEY_F5:
+      return "F5";
+
+    case GDK_KEY_F6:
+      return "F6";
+
+    case GDK_KEY_F7:
+      return "F7";
+
+    case GDK_KEY_F8:
+      return "F8";
+
+    case GDK_KEY_F9:
+      return "F9";
+
+    case GDK_KEY_F10:
+      return "F10";
+
+    case GDK_KEY_F11:
+      return "F11";
+
+    case GDK_KEY_F12:
+      return "F12";
+
+    case GDK_KEY_F13:
+      return "F13";
+
+    case GDK_KEY_F14:
+      return "F14";
+
+    case GDK_KEY_F15:
+      return "F15";
+
+    case GDK_KEY_F16:
+      return "F16";
+
+    case GDK_KEY_F17:
+      return "F17";
+
+    case GDK_KEY_F18:
+      return "F18";
+
+    case GDK_KEY_F19:
+      return "F19";
+
+    case GDK_KEY_F20:
+      return "F20";
+
+    case GDK_KEY_F21:
+      return "F21";
+
+    case GDK_KEY_F22:
+      return "F22";
+
+    case GDK_KEY_F23:
+      return "F23";
+
+    case GDK_KEY_F24:
+      return "F24";
+
+    case GDK_KEY_F25:
+      return "F25";
+
+    case GDK_KEY_F26:
+      return "F26";
+
+    case GDK_KEY_F27:
+      return "F27";
+
+    case GDK_KEY_F28:
+      return "F28";
+
+    case GDK_KEY_F29:
+      return "F29";
+
+    case GDK_KEY_F30:
+      return "F30";
+
+    case GDK_KEY_F31:
+      return "F31";
+
+    case GDK_KEY_F32:
+      return "F32";
+
+    case GDK_KEY_F33:
+      return "F33";
+
+    case GDK_KEY_F34:
+      return "F34";
+
+    case GDK_KEY_F35:
+      return "F35";
+
+    case GDK_KEY_Close:
+      return "Close";
+
+    case GDK_KEY_MailForward:
+      return "MailForward";
+
+    case GDK_KEY_Reply:
+      return "MailReply";
+
+    case GDK_KEY_Send:
+      return "MailSend";
+
+    case GDK_KEY_AudioForward:
+      return "MediaFastForward";
+
+    case GDK_KEY_AudioPause:
+      return "MediaPause";
+
+    case GDK_KEY_AudioPlay:
+      return "MediaPlay";
+
+    case GDK_KEY_AudioRecord:
+      return "MediaRecord";
+
+    case GDK_KEY_AudioRewind:
+      return "MediaRewind";
+
+    case GDK_KEY_AudioStop:
+      return "MediaStop";
+
+    case GDK_KEY_AudioNext:
+      return "MediaTrackNext";
+
+    case GDK_KEY_AudioPrev:
+      return "MediaTrackPrevious";
+
+    case GDK_KEY_New:
+      return "New";
+
+    case GDK_KEY_Open:
+      return "Open";
+
+    case GDK_KEY_Save:
+      return "Save";
+
+    case GDK_KEY_Spell:
+      return "SpellCheck";
+
+    case GDK_KEY_AudioLowerVolume:
+      return "AudioVolumeDown";
+
+    case GDK_KEY_AudioRaiseVolume:
+      return "AudioVolumeUp";
+
+    case GDK_KEY_AudioMute:
+      return "AudioVolumeMute";
+
+    case GDK_KEY_Calculator:
+      return "LaunchCalculator";
+
+    case GDK_KEY_Calendar:
+      return "LaunchCalendar";
+
+    case GDK_KEY_Mail:
+      return "LaunchMail";
+
+    case GDK_KEY_CD:
+    case GDK_KEY_Video:
+    case GDK_KEY_AudioMedia:
+      return "LaunchMediaPlayer";
+
+    case GDK_KEY_Music:
+      return "LaunchMusicPlayer";
+
+    case GDK_KEY_MyComputer:
+    case GDK_KEY_Explorer:
+      return "LaunchMyComputer";
+
+    case GDK_KEY_ScreenSaver:
+      return "LaunchScreenSaver";
+
+    case GDK_KEY_Excel:
+      return "LaunchSpreadsheet";
+
+    case GDK_KEY_WWW:
+      return "LaunchWebBrowser";
+
+    case GDK_KEY_WebCam:
+      return "LaunchWebCam";
+
+    case GDK_KEY_Word:
+      return "LaunchWordProcessor";
+
+    case GDK_KEY_Launch0:
+      return "LaunchApplication1";
+
+    case GDK_KEY_Launch1:
+      return "LaunchApplication2";
+
+    case GDK_KEY_Launch2:
+      return "LaunchApplication3";
+
+    case GDK_KEY_Launch3:
+      return "LaunchApplication4";
+
+    case GDK_KEY_Launch4:
+      return "LaunchApplication5";
+
+    case GDK_KEY_Launch5:
+      return "LaunchApplication6";
+
+    case GDK_KEY_Launch6:
+      return "LaunchApplication7";
+
+    case GDK_KEY_Launch7:
+      return "LaunchApplication8";
+
+    case GDK_KEY_Launch8:
+      return "LaunchApplication9";
+
+    case GDK_KEY_Launch9:
+      return "LaunchApplication10";
+
+    case GDK_KEY_LaunchA:
+      return "LaunchApplication11";
+
+    case GDK_KEY_LaunchB:
+      return "LaunchApplication12";
+
+    case GDK_KEY_LaunchC:
+      return "LaunchApplication13";
+
+    case GDK_KEY_LaunchD:
+      return "LaunchApplication14";
+
+    case GDK_KEY_LaunchE:
+      return "LaunchApplication15";
+
+    case GDK_KEY_LaunchF:
+      return "LaunchApplication16";
+
+    case GDK_KEY_Back:
+      return "BrowserBack";
+
+    case GDK_KEY_Forward:
+      return "BrowserForward";
+
+    case GDK_KEY_HomePage:
+      return "BrowserHome";
+
+    case GDK_KEY_Refresh:
+    case GDK_KEY_Reload:
+      return "BrowserRefresh";
+
+    case GDK_KEY_Search:
+      return "BrowserSearch";
+
+    case GDK_KEY_Stop:
+      return "BrowserStop";
+
+    case GDK_KEY_Red:
+      return "ColorF0Red";
+
+    case GDK_KEY_Green:
+      return "ColorF1Green";
+
+    case GDK_KEY_Yellow:
+      return "ColorF2Yellow";
+
+    case GDK_KEY_Blue:
+      return "ColorF3Blue";
+
+    case GDK_KEY_BrightnessAdjust:
+      return "Dimmer";
+
+    case GDK_KEY_AudioRandomPlay:
+      return "RandomToggle";
+
+    case GDK_KEY_Subtitle:
+      return "Subtitle";
+
+    case GDK_KEY_Next_VMode:
+      return "VideoModeNext";
+
+    default:
+      return NULL;
+  }
+}
+
+static gboolean
+append_keyval_accessible_graph (guint    accelerator_key,
+                                GString *gstring)
+{
+  gunichar ch;
+
+  ch = gdk_keyval_to_unicode (accelerator_key);
+  if (ch == ' ')
+    {
+      /* The [WAI-ARIA](https://www.w3.org/TR/wai-aria/#aria-keyshortcuts)
+       * reference states that "Space" is used for the spacebar.
+       */
+      g_string_append (gstring, "Space");
+      return TRUE;
+    }
+  else if (ch && g_unichar_isgraph (ch))
+    {
+      g_string_append_unichar (gstring, g_unichar_toupper (ch));
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
+/* See https://www.w3.org/TR/uievents-key/#named-key-attribute-values for the
+ * list of WAI-ARIA named key attribute values. */
+static gboolean
+append_keyval_accessible_name (guint    accelerator_key,
+                               GString *gstring)
+{
+  const gchar *name;
+
+  name = keyval_get_accessible_name (accelerator_key);
+  if (name != NULL)
+    {
+      g_string_append (gstring, name);
+      return TRUE;
+    }
+
+    return FALSE;
+}
+/**
+ * gtk_accelerator_get_accessible_label:
+ * @accelerator_key: accelerator keyval
+ * @accelerator_mods: accelerator modifier mask
+ *
+ * Generates an accessible description of an accelerator.
+ *
+ * This function is similar to [func@Gtk.accelerator_get_label] but it is meant
+ * for accessibility layers labels rather than user-facing labels. The output
+ * of this function is fit for [enum@Gtk.AccessibleProperty.KEY_SHORTCUTS].
+ *
+ * For more information, see the [WAI-ARIA](https://www.w3.org/TR/wai-aria/#aria-keyshortcuts)
+ * reference.
+ *
+ * Returns: (transfer full): a newly-allocated string representing the accelerator
+ *
+ * Since: 4.22
+ */
+char *
+gtk_accelerator_get_accessible_label (guint           accelerator_key,
+                                      GdkModifierType accelerator_mods)
+{
+  GString *gstring;
+  gboolean seen_mod = FALSE;
+
+  gstring = g_string_new (NULL);
+
+  if (accelerator_mods & GDK_SHIFT_MASK)
+    {
+      g_string_append (gstring, "Shift");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_CONTROL_MASK)
+    {
+      if (seen_mod)
+        g_string_append (gstring, "+");
+
+      g_string_append (gstring, "Control");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_ALT_MASK)
+    {
+      if (seen_mod)
+        g_string_append (gstring, "+");
+
+      g_string_append (gstring, "Alt");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_SUPER_MASK)
+    {
+      if (seen_mod)
+        g_string_append (gstring, "+");
+
+      /* According to the [WAI-ARIA](https://www.w3.org/TR/uievents-key/#:~:text="Super")
+       * reference, "Super" is considered a legacy key and its support isn't
+       * required. */
+      g_string_append (gstring, "Super");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_HYPER_MASK)
+    {
+      if (seen_mod)
+        g_string_append (gstring, "+");
+
+      /* According to the [WAI-ARIA](https://www.w3.org/TR/uievents-key/#:~:text="Hyper")
+       * reference, "Hyper" is considered a legacy key and its support isn't
+       * required. */
+      g_string_append (gstring, "Hyper");
+      seen_mod = TRUE;
+    }
+
+  if (accelerator_mods & GDK_META_MASK)
+    {
+      if (seen_mod)
+        g_string_append (gstring, "+");
+
+      g_string_append (gstring, "Meta");
+      seen_mod = TRUE;
+    }
+
+  if (seen_mod)
+    g_string_append (gstring, "+");
+
+  if (!append_keyval_accessible_name (accelerator_key, gstring) &&
+      !append_keyval_accessible_graph (accelerator_key, gstring))
+    {
+      g_string_append (gstring, "Unidentified");
+    }
+
+  return g_string_free (gstring, FALSE);
+}
+
 /**
  * gtk_accelerator_get_default_mod_mask:
  *
