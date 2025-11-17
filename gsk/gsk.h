@@ -20,6 +20,7 @@
 #define __GSK_H_INSIDE__
 
 #include <gsk/gskcaironode.h>
+#include <gsk/gskcolormatrixnode.h>
 #include <gsk/gskcolornode.h>
 #include <gsk/gskcomponenttransfer.h>
 #include <gsk/gskcomponenttransfernode.h>

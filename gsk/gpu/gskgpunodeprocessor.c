@@ -39,6 +39,7 @@
 #include "gskgpuutilsprivate.h"
 
 #include "gskcairoblurprivate.h"
+#include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
 #include "gskcontainernodeprivate.h"

@@ -24,6 +24,7 @@
 #include "gskrendernodeparserprivate.h"
 
 #include "gskcaironodeprivate.h"
+#include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
 #include "gskcomponenttransferprivate.h"
