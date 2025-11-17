@@ -1609,8 +1609,14 @@ typedef enum {
  *    author has implemented to activate or give focus to an element. Value type:
  *    string. The format of the value is a space-separated list of shortcuts, with
  *    each shortcut consisting of one or more modifiers (`Control`, `Alt` or `Shift`),
- *    followed by a non-modifier key, all separated by `+`.
- *    Examples: `F2`, `Alt-F`, `Control+Shift+N`
+ *    followed by a non-modifier key, all separated by `+`. The
+ *    [WAI-ARIA](https://www.w3.org/TR/wai-aria/#aria-keyshortcuts) reference
+ *    specifies how to build keyboard shortcuts strings, with specific values
+ *    for each key which are the same regardless of the language, so these
+ *    strings can't be built from localized key names. You can convert an
+ *    accelerator into the matching key shortcuts label with
+ *    [func@Gtk.accelerator_get_accessible_label].
+ *    Examples: `F2`, `Alt+F`, `Control+Shift+N`
  * @GTK_ACCESSIBLE_PROPERTY_LABEL: Defines a string value that labels the current
  *    element. Value type: string
  * @GTK_ACCESSIBLE_PROPERTY_LEVEL: Defines the hierarchical level of an element
