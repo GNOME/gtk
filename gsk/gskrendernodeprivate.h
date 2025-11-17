@@ -11,15 +11,6 @@ G_BEGIN_DECLS
 
 typedef struct _GskRenderNodeClass GskRenderNodeClass;
 
-/* Keep this in sync with the GskRenderNodeType enumeration.
- *
- * We don't add an "n-types" value to avoid having to handle
- * it in every single switch.
- */
-#define GSK_RENDER_NODE_TYPE_N_TYPES    (GSK_COMPONENT_TRANSFER_NODE + 1)
-
-extern GType gsk_render_node_types[];
-
 #define GSK_IS_RENDER_NODE_TYPE(node,type) \
   (G_TYPE_INSTANCE_GET_CLASS ((node), GSK_TYPE_RENDER_NODE, GskRenderNodeClass)->node_type == (type))
 
@@ -68,11 +59,26 @@ struct _GskRenderNodeClass
 
 void            gsk_render_node_init_types              (void);
 
+#define GSK_DEFINE_RENDER_NODE_TYPE(TypeName, type_name) \
+GType \
+type_name##_get_type (void) \
+{ \
+  static _g_type_once_init_type static_g_define_type_id = 0; \
+  if (_g_type_once_init_enter (&static_g_define_type_id)) \
+    { \
+      GType g_define_type_id = gsk_render_node_type_register_static (g_intern_static_string (#TypeName), \
+                                                                     sizeof (TypeName), \
+                                                                     type_name ## _class_init); \
+      _g_type_once_init_leave (&static_g_define_type_id, g_define_type_id); \
+    } \
+  return static_g_define_type_id; \
+}
+
 GType           gsk_render_node_type_register_static    (const char                  *node_name,
                                                          gsize                        instance_size,
                                                          GClassInitFunc               class_init);
 
-gpointer        gsk_render_node_alloc                   (GskRenderNodeType            node_type);
+gpointer        gsk_render_node_alloc                   (GType                        node_type);
 
 void            _gsk_render_node_unref                  (GskRenderNode               *node);
 
@@ -83,9 +89,6 @@ void            gsk_render_node_diff                    (GskRenderNode          
                                                          GskDiffData                 *data);
 void            gsk_render_node_diff_impossible         (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
-                                                         GskDiffData                 *data);
-void            gsk_container_node_diff_with            (GskRenderNode               *container,
-                                                         GskRenderNode               *other,
                                                          GskDiffData                 *data);
 void            gsk_render_node_draw_ccs                (GskRenderNode               *node,
                                                          cairo_t                     *cr,
@@ -105,16 +108,11 @@ void            gsk_text_node_serialize_glyphs          (GskRenderNode          
 cairo_hint_style_t
                 gsk_text_node_get_font_hint_style       (const GskRenderNode         *self) G_GNUC_PURE;
 
-GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode         *node,
-                                                         guint                       *n_children);
-
 void            gsk_transform_node_get_translate        (const GskRenderNode         *node,
                                                          float                       *dx,
                                                          float                       *dy);
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
-
-gboolean        gsk_container_node_is_disjoint          (const GskRenderNode         *node) G_GNUC_PURE;
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
 #define gsk_render_node_unref(node) _gsk_render_node_unref(node)
@@ -125,10 +123,6 @@ _gsk_render_node_ref (GskRenderNode *node)
   g_atomic_ref_count_inc (&node->ref_count);
   return node;
 }
-
-GskRenderNode *         gsk_color_node_new2                     (const GdkColor         *color,
-                                                                 const graphene_rect_t  *bounds);
-const GdkColor *        gsk_color_node_get_gdk_color            (const GskRenderNode    *node);
 
 GskRenderNode *         gsk_border_node_new2                    (const GskRoundedRect   *outline,
                                                                  const float             border_width[4],
@@ -214,8 +208,5 @@ gboolean gsk_radial_gradient_fills_plane (const graphene_point_t *c1,
                                           float                   r1,
                                           const graphene_point_t *c2,
                                           float                   r2);
-
-void                    gsk_cairo_node_set_surface      (GskRenderNode          *node,
-                                                         cairo_surface_t        *surface);
 
 G_END_DECLS

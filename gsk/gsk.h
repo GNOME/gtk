@@ -19,7 +19,15 @@
 
 #define __GSK_H_INSIDE__
 
+#include <gsk/gskcaironode.h>
+#include <gsk/gskcolornode.h>
+#include <gsk/gskcomponenttransfer.h>
+#include <gsk/gskcomponenttransfernode.h>
+#include <gsk/gskcontainernode.h>
+#include <gsk/gskdebugnode.h>
 #include <gsk/gskenums.h>
+#include <gsk/gskfillnode.h>
+#include <gsk/gskglshadernode.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>
 #include <gsk/gskpathmeasure.h>
@@ -29,9 +37,10 @@
 #include <gsk/gskrenderreplay.h>
 #include <gsk/gskroundedrect.h>
 #include <gsk/gskstroke.h>
+#include <gsk/gskstrokenode.h>
+#include <gsk/gsksubsurfacenode.h>
 #include <gsk/gsktransform.h>
 #include <gsk/gskglshader.h>
-#include <gsk/gskcomponenttransfer.h>
 
 #include <gsk/gskcairorenderer.h>
 #include <gsk/gpu/gskvulkanrenderer.h>

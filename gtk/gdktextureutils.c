@@ -16,7 +16,7 @@
 
 #include "config.h"
 
-#include <gdk/gdk.h>
+#include <gsk/gsk.h>
 #include "gdktextureutilsprivate.h"
 #include "gtkscalerprivate.h"
 #include "gtksnapshot.h"
