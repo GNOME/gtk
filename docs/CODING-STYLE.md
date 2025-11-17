@@ -94,8 +94,6 @@ The "no block for single statements" rule has only four exceptions:
                                               and_another_one,
                                               plus_one);
     }
-  else
-    another_single_statement (arg1, arg2);
 ```
 
   2. if the condition is composed of many lines:
