@@ -761,7 +761,7 @@ struct _GskVulkanShaderSpecialization
   guint32 variation;
 };
 
-static VkPipelineColorBlendAttachmentState blend_attachment_states[4] = {
+static VkPipelineColorBlendAttachmentState blend_attachment_states[] = {
   [GSK_GPU_BLEND_NONE] = {
     .blendEnable = VK_FALSE,
     .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
@@ -808,6 +808,45 @@ static VkPipelineColorBlendAttachmentState blend_attachment_states[4] = {
                     | VK_COLOR_COMPONENT_G_BIT
                     | VK_COLOR_COMPONENT_B_BIT
   },
+  [GSK_GPU_BLEND_MASK_ONE] = {
+    .blendEnable = VK_TRUE,
+    .colorBlendOp = VK_BLEND_OP_ADD,
+    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
+    .dstColorBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
+    .alphaBlendOp = VK_BLEND_OP_ADD,
+    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+    .dstAlphaBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
+    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                    | VK_COLOR_COMPONENT_R_BIT
+                    | VK_COLOR_COMPONENT_G_BIT
+                    | VK_COLOR_COMPONENT_B_BIT
+  },
+  [GSK_GPU_BLEND_MASK_ALPHA] = {
+    .blendEnable = VK_TRUE,
+    .colorBlendOp = VK_BLEND_OP_ADD,
+    .srcColorBlendFactor = VK_BLEND_FACTOR_DST_ALPHA,
+    .dstColorBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
+    .alphaBlendOp = VK_BLEND_OP_ADD,
+    .srcAlphaBlendFactor = VK_BLEND_FACTOR_DST_ALPHA,
+    .dstAlphaBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
+    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                    | VK_COLOR_COMPONENT_R_BIT
+                    | VK_COLOR_COMPONENT_G_BIT
+                    | VK_COLOR_COMPONENT_B_BIT
+  },
+  [GSK_GPU_BLEND_MASK_INV_ALPHA] = {
+    .blendEnable = VK_TRUE,
+    .colorBlendOp = VK_BLEND_OP_ADD,
+    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
+    .dstColorBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
+    .alphaBlendOp = VK_BLEND_OP_ADD,
+    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
+    .dstAlphaBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
+    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                    | VK_COLOR_COMPONENT_R_BIT
+                    | VK_COLOR_COMPONENT_G_BIT
+                    | VK_COLOR_COMPONENT_B_BIT
+  },
 };
 
 VkPipeline
@@ -841,6 +880,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   cached_result = g_hash_table_lookup (self->pipeline_cache, &cache_key);
   if (cached_result)
     return cached_result->vk_pipeline;
+
+  g_assert (blend <= G_N_ELEMENTS (blend_attachment_states));
 
   display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
 

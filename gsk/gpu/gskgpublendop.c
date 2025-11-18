@@ -42,6 +42,15 @@ gsk_gpu_blend_op_print (GskGpuOp    *op,
       case GSK_GPU_BLEND_CLEAR:
         gsk_gpu_print_string (string, "clear");
         break;
+      case GSK_GPU_BLEND_MASK_ONE:
+        gsk_gpu_print_string (string, "mask-one");
+        break;
+      case GSK_GPU_BLEND_MASK_ALPHA:
+        gsk_gpu_print_string (string, "mask-alpha");
+        break;
+      case GSK_GPU_BLEND_MASK_INV_ALPHA:
+        gsk_gpu_print_string (string, "mask-inv-alpha");
+        break;
       default:
         g_assert_not_reached ();
         break;
@@ -91,6 +100,21 @@ gsk_gpu_blend_op_gl_command (GskGpuOp          *op,
         glBlendFunc (GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
         break;
 
+      case GSK_GPU_BLEND_MASK_ONE:
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_ONE, GL_SRC1_ALPHA);
+        break;
+      
+      case GSK_GPU_BLEND_MASK_ALPHA:
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_DST_ALPHA, GL_SRC1_ALPHA);
+        break;
+      
+      case GSK_GPU_BLEND_MASK_INV_ALPHA:
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_ONE_MINUS_DST_ALPHA, GL_SRC1_ALPHA);
+        break;
+      
       default:
         g_assert_not_reached ();
         break;
