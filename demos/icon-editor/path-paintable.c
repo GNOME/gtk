@@ -325,7 +325,7 @@ extract_shapes (GtkSvg         *svg,
 {
   const graphene_size_t *viewport = &svg->view_box.size;
   const char *shape_name[] = {
-    "line", "polyLine", "polygon", "rect" "circle", "ellipse",
+    "line", "polyline", "polygon", "rect", "circle", "ellipse",
     "path", "group", "clipPath", "mask", "defs", "use",
     "linearGradient", "radialGradient"
   };
@@ -342,12 +342,12 @@ extract_shapes (GtkSvg         *svg,
 
       switch (shape->type)
         {
-        case SHAPE_POLY_LINE:
-        case SHAPE_POLYGON:
+        case SHAPE_DEFS:
+          continue;
+
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
         case SHAPE_MASK:
-        case SHAPE_DEFS:
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
@@ -355,10 +355,27 @@ extract_shapes (GtkSvg         *svg,
                        "Unsupported shape: %s", shape_name[shape->type]);
           return FALSE;
 
+        case SHAPE_POLY_LINE:
+        case SHAPE_POLYGON:
+          {
+            g_autoptr (GskPath) path = NULL;
+            unsigned int n_params;
+            double *parms = gtk_svg_attr_get_points (shape, SHAPE_ATTR_POINTS, &n_params);
+            float *params;
+
+            params = g_newa (float, n_params);
+            for (unsigned int j = 0; j < n_params; j++)
+              params[j] = parms[j];
+
+            path = polyline_path_new (params, n_params, shape->type == SHAPE_POLYGON);
+            idx = path_paintable_add_path (paintable, NULL, shape->type, params, n_params);
+          }
+          break;
+
         case SHAPE_LINE:
           {
-            float x1, y1, x2, y2;
             g_autoptr (GskPath) path = NULL;
+            float x1, y1, x2, y2;
             x1 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X1, viewport);
             y1 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y1, viewport);
             x2 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X2, viewport);
@@ -370,8 +387,8 @@ extract_shapes (GtkSvg         *svg,
           break;
         case SHAPE_CIRCLE:
           {
-            float cx, cy, r;
             g_autoptr (GskPath) path = NULL;
+            float cx, cy, r;
             cx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
             cy = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
             r = gtk_svg_attr_get_number (shape, SHAPE_ATTR_R, viewport);
@@ -382,8 +399,8 @@ extract_shapes (GtkSvg         *svg,
           break;
         case SHAPE_ELLIPSE:
           {
-            float cx, cy, rx, ry;
             g_autoptr (GskPath) path = NULL;
+            float cx, cy, rx, ry;
             cx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
             cy = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
             rx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
@@ -395,8 +412,8 @@ extract_shapes (GtkSvg         *svg,
           break;
         case SHAPE_RECT:
           {
-            float x, y, width, height, rx, ry;
             g_autoptr (GskPath) path = NULL;
+            float x, y, width, height, rx, ry;
             x = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X, viewport);
             y = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y, viewport);
             width = gtk_svg_attr_get_number (shape, SHAPE_ATTR_WIDTH, viewport);
