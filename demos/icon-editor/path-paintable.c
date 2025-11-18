@@ -2196,22 +2196,6 @@ path_paintable_get_max_state (PathPaintable *self)
   return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self)));
 }
 
-static inline gboolean
-g_strv_same (GStrv self,
-             GStrv other)
-{
-  if (self == other)
-    return TRUE;
-
-  if ((!self || self[0] == NULL) &&
-      (!other || other[0] == NULL))
-    return TRUE;
-
-  return self && other &&
-         g_strv_equal ((const char * const *) self,
-                       (const char * const *) other);
-}
-
 gboolean
 path_paintable_equal (PathPaintable *self,
                       PathPaintable *other)
