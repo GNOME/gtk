@@ -12727,6 +12727,27 @@ gtk_svg_attr_get_paint (Shape            *shape,
   return paint->kind;
 }
 
+double *
+gtk_svg_attr_get_points (Shape        *shape,
+                         ShapeAttr     attr,
+                         unsigned int *n_params)
+{
+  g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
+  SvgValue *value;
+  SvgPoints *points;
+
+  if (shape->attrs & BIT (attr))
+    value = shape_get_base_value (shape, NULL, attr);
+  else
+    value = shape_attr_get_initial_value (attr, shape->type);
+
+  points = (SvgPoints *) value;
+
+  *n_params = points->n_values;
+
+  return points->values;
+}
+
 /* }}} */
 /* }}} */
 /* {{{ Public API */
