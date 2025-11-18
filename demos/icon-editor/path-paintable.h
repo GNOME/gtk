@@ -76,8 +76,8 @@ double          path_paintable_get_width           (PathPaintable   *self);
 double          path_paintable_get_height          (PathPaintable   *self);
 
 void            path_paintable_set_keywords        (PathPaintable   *self,
-                                                    GStrv            keywords);
-GStrv           path_paintable_get_keywords        (PathPaintable   *self);
+                                                    const char      *keywords);
+const char *    path_paintable_get_keywords        (PathPaintable   *self);
 
 size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 

@@ -197,12 +197,8 @@ size_changed (PaintableEditor *self)
 static void
 keywords_changed (PaintableEditor *self)
 {
-  const char *text;
-  g_auto (GStrv) keywords = NULL;
-
-  text = gtk_editable_get_text (GTK_EDITABLE (self->keywords));
-  keywords = g_strsplit (text, " ", 0);
-  path_paintable_set_keywords (self->paintable, keywords);
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->keywords));
+  path_paintable_set_keywords (self->paintable, text);
 }
 
 /* }}} */
@@ -371,19 +367,10 @@ paintable_editor_set_paintable (PaintableEditor *self,
     {
       g_autofree char *width = NULL;
       g_autofree char *height = NULL;
+      const char *keywords;
 
-      if (path_paintable_get_keywords (paintable))
-        {
-          g_autofree char *keywords = NULL;
-
-          keywords = g_strjoinv (" ", path_paintable_get_keywords (paintable));
-          gtk_editable_set_text (GTK_EDITABLE (self->keywords), keywords);
-        }
-      else
-        {
-          gtk_editable_set_text (GTK_EDITABLE (self->keywords), "");
-        }
-
+      keywords = path_paintable_get_keywords (paintable);
+      gtk_editable_set_text (GTK_EDITABLE (self->keywords), keywords ? keywords : "");
       width = g_strdup_printf ("%g", path_paintable_get_width (paintable));
       gtk_editable_set_text (GTK_EDITABLE (self->width), width);
       height = g_strdup_printf ("%g", path_paintable_get_height (paintable));

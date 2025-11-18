@@ -100,7 +100,7 @@ struct _PathPaintable
   unsigned int state;
   float weight;
 
-  GStrv keywords;
+  char *keywords;
   GdkPaintable *render_paintable;
 };
 
@@ -484,11 +484,10 @@ parse_symbolic_svg (PathPaintable  *paintable,
                     GError        **error)
 {
   g_autoptr (GtkSvg) svg = gtk_svg_new_from_bytes (bytes);
-  g_auto (GStrv) keywords = g_strsplit (svg->gpa_keywords, " ", 0);
 
   path_paintable_set_size (paintable, svg->width, svg->height);
   path_paintable_set_state (paintable, svg->state);
-  path_paintable_set_keywords (paintable, keywords);
+  path_paintable_set_keywords (paintable, svg->gpa_keywords);
 
   return extract_shapes (svg, paintable, error);
 }
@@ -856,8 +855,8 @@ path_paintable_save (PathPaintable *self,
                      GString       *str,
                      unsigned int   initial_state)
 {
-  GStrv keywords;
   char buffer[G_ASCII_DTOSTR_BUF_SIZE];
+  const char *keywords;
 
   g_string_append (str, "<svg xmlns='http://www.w3.org/2000/svg'");
   g_string_append_printf (str, "\n     width='%s' height='%s'",
@@ -869,16 +868,7 @@ path_paintable_save (PathPaintable *self,
 
   keywords = path_paintable_get_keywords (self);
   if (keywords)
-    {
-      g_string_append (str,      "\n     gpa:keywords='");
-      for (unsigned int i = 0; keywords[i]; i++)
-        {
-          if (i > 0)
-            g_string_append_c (str, ' ');
-          g_string_append (str, keywords[i]);
-        }
-      g_string_append_c (str, '\'');
-    }
+    g_string_append_printf (str,      "\n     gpa:keywords='%s'", keywords);
 
   if (initial_state != (unsigned int) -1)
     g_string_append_printf (str,      "\n     gpa:state='%u'", initial_state);
@@ -996,7 +986,7 @@ path_paintable_dispose (GObject *object)
   PathPaintable *self = PATH_PAINTABLE (object);
 
   g_array_unref (self->paths);
-  g_clear_pointer (&self->keywords, g_strfreev);
+  g_free (self->keywords);
 
   if (self->render_paintable)
     {
@@ -1760,15 +1750,13 @@ path_paintable_get_attach_path (PathPaintable *self,
 
 void
 path_paintable_set_keywords (PathPaintable *self,
-                             GStrv          keywords)
+                             const char    *keywords)
 {
-  g_clear_pointer (&self->keywords, g_strfreev);
-  self->keywords = g_strdupv (keywords);
-
-  g_signal_emit (self, signals[CHANGED], 0);
+  if (g_set_str (&self->keywords, keywords))
+    g_signal_emit (self, signals[CHANGED], 0);
 }
 
-GStrv
+const char *
 path_paintable_get_keywords (PathPaintable *self)
 {
   return self->keywords;
@@ -2218,7 +2206,7 @@ path_paintable_equal (PathPaintable *self,
   if (self->paths->len != other->paths->len)
     return FALSE;
 
-  if (!g_strv_same (self->keywords, other->keywords))
+  if (g_strcmp0 (self->keywords, other->keywords) != 0)
     return FALSE;
 
   for (size_t i = 0; i < self->paths->len; i++)
