@@ -5,10 +5,12 @@
 #include "broadway/gdkprivate-broadway.h"
 
 #include "gskcaironode.h"
+#include "gskcolormatrixnode.h"
 #include "gskcolornode.h"
 #include "gskcontainernode.h"
 #include "gskdebugnode.h"
 #include "gskdebugprivate.h"
+#include "gskopacitynode.h"
 #include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"

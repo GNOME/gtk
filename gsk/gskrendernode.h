@@ -151,14 +151,10 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
 #define GSK_TYPE_TRANSFORM_NODE                 (gsk_transform_node_get_type())
-#define GSK_TYPE_OPACITY_NODE                   (gsk_opacity_node_get_type())
-#define GSK_TYPE_COLOR_MATRIX_NODE              (gsk_color_matrix_node_get_type())
-#define GSK_TYPE_REPEAT_NODE                    (gsk_repeat_node_get_type())
 #define GSK_TYPE_CLIP_NODE                      (gsk_clip_node_get_type())
 #define GSK_TYPE_ROUNDED_CLIP_NODE              (gsk_rounded_clip_node_get_type())
 #define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
 #define GSK_TYPE_BLEND_NODE                     (gsk_blend_node_get_type())
-#define GSK_TYPE_CROSS_FADE_NODE                (gsk_cross_fade_node_get_type())
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
 #define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
 #define GSK_TYPE_MASK_NODE                      (gsk_mask_node_get_type())
@@ -175,14 +171,10 @@ typedef struct _GskBorderNode                   GskBorderNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskTransformNode                GskTransformNode;
-typedef struct _GskOpacityNode                  GskOpacityNode;
-typedef struct _GskColorMatrixNode              GskColorMatrixNode;
-typedef struct _GskRepeatNode                   GskRepeatNode;
 typedef struct _GskClipNode                     GskClipNode;
 typedef struct _GskRoundedClipNode              GskRoundedClipNode;
 typedef struct _GskShadowNode                   GskShadowNode;
 typedef struct _GskBlendNode                    GskBlendNode;
-typedef struct _GskCrossFadeNode                GskCrossFadeNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskMaskNode                     GskMaskNode;
@@ -360,41 +352,6 @@ GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_node_get_transform        (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
-GType                   gsk_opacity_node_get_type               (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,
-                                                                 float                     opacity);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_opacity_node_get_child              (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-float                   gsk_opacity_node_get_opacity            (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_color_matrix_node_get_type          (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_color_matrix_node_new               (GskRenderNode            *child,
-                                                                 const graphene_matrix_t  *color_matrix,
-                                                                 const graphene_vec4_t    *color_offset);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_color_matrix_node_get_child         (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const graphene_matrix_t *
-                        gsk_color_matrix_node_get_color_matrix  (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const graphene_vec4_t * gsk_color_matrix_node_get_color_offset  (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_repeat_node_get_type                (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_repeat_node_new                     (const graphene_rect_t    *bounds,
-                                                                 GskRenderNode            *child,
-                                                                 const graphene_rect_t    *child_bounds);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_repeat_node_get_child               (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const graphene_rect_t * gsk_repeat_node_get_child_bounds        (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
 GType                   gsk_clip_node_get_type                  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
@@ -440,19 +397,6 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_blend_node_get_top_child            (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 GskBlendMode            gsk_blend_node_get_blend_mode           (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_cross_fade_node_get_type            (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode            *start,
-                                                                 GskRenderNode            *end,
-                                                                 float                     progress);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_cross_fade_node_get_start_child     (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_cross_fade_node_get_end_child       (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-float                   gsk_cross_fade_node_get_progress        (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_text_node_get_type                  (void) G_GNUC_CONST;
