@@ -17,6 +17,7 @@
 #include "gskgpucolorizeopprivate.h"
 #include "gskgpucolormatrixopprivate.h"
 #include "gskgpucomponenttransferopprivate.h"
+#include "gskgpucompositeopprivate.h"
 #include "gskgpucoloropprivate.h"
 #include "gskgpuconicgradientopprivate.h"
 #include "gskgpuconvertbuiltinopprivate.h"
@@ -42,6 +43,7 @@
 #include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
+#include "gskcompositenode.h"
 #include "gskcontainernodeprivate.h"
 #include "gskcrossfadenode.h"
 #include "gskdebugprivate.h"
@@ -3821,6 +3823,187 @@ gsk_gpu_node_processor_add_paste_node (GskGpuNodeProcessor *self,
   g_warning_once ("Bug: The GPU renderer should never see paste nodes");
 }
 
+static gboolean
+gsk_gpu_porter_duff_needs_mask_output (GskPorterDuff op)
+{
+  switch (op)
+  {
+    case GSK_PORTER_DUFF_DEST:
+    case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+    case GSK_PORTER_DUFF_CLEAR:
+      return FALSE;
+
+    case GSK_PORTER_DUFF_SOURCE:
+    case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+    case GSK_PORTER_DUFF_SOURCE_IN_DEST:
+    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+    case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+    case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+    case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+    case GSK_PORTER_DUFF_XOR:
+      return TRUE;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+  }
+}
+
+static void
+gsk_gpu_node_processor_set_porter_duff (GskGpuNodeProcessor *self,
+                                        GskPorterDuff        op)
+{
+  switch (op)
+    {
+    case GSK_PORTER_DUFF_SOURCE:
+      /* these don't matter as long as the mask is there */
+    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+      self->blend = GSK_GPU_BLEND_MASK_ONE;
+      break;
+
+    case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+    case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+    case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+    case GSK_PORTER_DUFF_XOR:
+      self->blend = GSK_GPU_BLEND_MASK_INV_ALPHA;
+      break;
+
+    case GSK_PORTER_DUFF_SOURCE_IN_DEST:
+    case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+      self->blend = GSK_GPU_BLEND_MASK_ALPHA;
+      break;
+
+    case GSK_PORTER_DUFF_CLEAR:
+      self->blend = GSK_GPU_BLEND_CLEAR;
+      break;
+
+    case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+      self->blend = GSK_GPU_BLEND_OVER;
+      break;
+
+    case GSK_PORTER_DUFF_DEST:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  gsk_gpu_node_processor_sync_globals (self, 0);
+}
+
+static void
+gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
+{
+  GskRenderNode *child;
+  GskGpuImage *mask_image;
+  graphene_rect_t bounds, mask_rect;
+  GskPorterDuff op;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
+    return;
+
+  op = gsk_composite_node_get_operator (node);
+  child = gsk_composite_node_get_child (node);
+
+  /* There is a no-op operator... */
+  if (op == GSK_PORTER_DUFF_DEST)
+    return;
+  
+  gsk_gpu_node_processor_set_porter_duff (self, op);
+
+  mask_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                         0,
+                                                         &bounds,
+                                                         gsk_composite_node_get_mask (node),
+                                                         &mask_rect);
+  if (mask_image == NULL)
+    return;
+
+  if (op == GSK_PORTER_DUFF_CLEAR)
+    {
+      gsk_gpu_texture_op (self->frame,
+                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
+                          &self->offset,
+                          &(GskGpuShaderImage) {
+                              mask_image,
+                              GSK_GPU_SAMPLER_DEFAULT,
+                              &mask_rect,
+                              &mask_rect,
+                          });
+    }
+  else
+    {
+      GskGpuImage *child_image;
+      graphene_rect_t child_rect;
+
+      child_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                              0,
+                                                              &bounds,
+                                                              child,
+                                                              &child_rect);
+      if (child_image == NULL)
+        /* FIXME */
+        child_image = g_object_ref (mask_image);
+
+      if (gsk_gpu_porter_duff_needs_mask_output (op))
+        {
+          gsk_gpu_composite_op (self->frame,
+                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                                &bounds,
+                                &self->offset,
+                                self->opacity,
+                                op,
+                                &(GskGpuShaderImage) {
+                                    child_image,
+                                    GSK_GPU_SAMPLER_DEFAULT,
+                                    NULL,
+                                    &child_rect,
+                                },
+                                &(GskGpuShaderImage) {
+                                    mask_image,
+                                    GSK_GPU_SAMPLER_DEFAULT,
+                                    NULL,
+                                    &mask_rect,
+                                });
+        }
+      else if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_DUAL_BLEND))
+        {
+          gsk_gpu_mask_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                           &bounds,
+                           &self->offset,
+                           self->opacity,
+                           GSK_MASK_MODE_ALPHA,
+                           &(GskGpuShaderImage) {
+                             child_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             NULL,
+                             &child_rect,
+                           },
+                           &(GskGpuShaderImage) {
+                             mask_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             NULL,
+                             &mask_rect,
+                           });
+        }
+      else
+        {
+          g_warning_once ("FIXME: Implement compositing without dual blending support.");
+        }
+
+      g_object_unref (child_image);
+    }
+
+  g_object_unref (mask_image);
+
+  self->blend = GSK_GPU_BLEND_OVER;
+  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+}
+
 static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
@@ -4179,6 +4362,13 @@ static const struct
     0,
     0,
     gsk_gpu_node_processor_add_paste_node,
+    NULL,
+    NULL,
+  },
+  [GSK_COMPOSITE_NODE] = {
+    0,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_composite_node,
     NULL,
     NULL,
   },
