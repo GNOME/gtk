@@ -282,6 +282,11 @@ gtk_svg_attr_get_paint  (Shape                 *shape,
                          GtkSymbolicColor      *symbolic,
                          GdkRGBA               *color);
 
+double *
+gtk_svg_attr_get_points (Shape                 *shape,
+                         ShapeAttr              attr,
+                         unsigned int          *n_params);
+
 /* --- */
 
 void           gtk_svg_set_load_time   (GtkSvg                *self,

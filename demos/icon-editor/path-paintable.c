@@ -100,7 +100,7 @@ struct _PathPaintable
   unsigned int state;
   float weight;
 
-  GStrv keywords;
+  char *keywords;
   GdkPaintable *render_paintable;
 };
 
@@ -325,7 +325,7 @@ extract_shapes (GtkSvg         *svg,
 {
   const graphene_size_t *viewport = &svg->view_box.size;
   const char *shape_name[] = {
-    "line", "polyLine", "polygon", "rect" "circle", "ellipse",
+    "line", "polyline", "polygon", "rect", "circle", "ellipse",
     "path", "group", "clipPath", "mask", "defs", "use",
     "linearGradient", "radialGradient"
   };
@@ -342,12 +342,12 @@ extract_shapes (GtkSvg         *svg,
 
       switch (shape->type)
         {
-        case SHAPE_POLY_LINE:
-        case SHAPE_POLYGON:
+        case SHAPE_DEFS:
+          continue;
+
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
         case SHAPE_MASK:
-        case SHAPE_DEFS:
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
@@ -355,10 +355,27 @@ extract_shapes (GtkSvg         *svg,
                        "Unsupported shape: %s", shape_name[shape->type]);
           return FALSE;
 
+        case SHAPE_POLY_LINE:
+        case SHAPE_POLYGON:
+          {
+            g_autoptr (GskPath) path = NULL;
+            unsigned int n_params;
+            double *parms = gtk_svg_attr_get_points (shape, SHAPE_ATTR_POINTS, &n_params);
+            float *params;
+
+            params = g_newa (float, n_params);
+            for (unsigned int j = 0; j < n_params; j++)
+              params[j] = parms[j];
+
+            path = polyline_path_new (params, n_params, shape->type == SHAPE_POLYGON);
+            idx = path_paintable_add_path (paintable, NULL, shape->type, params, n_params);
+          }
+          break;
+
         case SHAPE_LINE:
           {
-            float x1, y1, x2, y2;
             g_autoptr (GskPath) path = NULL;
+            float x1, y1, x2, y2;
             x1 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X1, viewport);
             y1 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y1, viewport);
             x2 = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X2, viewport);
@@ -370,8 +387,8 @@ extract_shapes (GtkSvg         *svg,
           break;
         case SHAPE_CIRCLE:
           {
-            float cx, cy, r;
             g_autoptr (GskPath) path = NULL;
+            float cx, cy, r;
             cx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
             cy = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
             r = gtk_svg_attr_get_number (shape, SHAPE_ATTR_R, viewport);
@@ -382,8 +399,8 @@ extract_shapes (GtkSvg         *svg,
           break;
         case SHAPE_ELLIPSE:
           {
-            float cx, cy, rx, ry;
             g_autoptr (GskPath) path = NULL;
+            float cx, cy, rx, ry;
             cx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
             cy = gtk_svg_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
             rx = gtk_svg_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
@@ -395,8 +412,8 @@ extract_shapes (GtkSvg         *svg,
           break;
         case SHAPE_RECT:
           {
-            float x, y, width, height, rx, ry;
             g_autoptr (GskPath) path = NULL;
+            float x, y, width, height, rx, ry;
             x = gtk_svg_attr_get_number (shape, SHAPE_ATTR_X, viewport);
             y = gtk_svg_attr_get_number (shape, SHAPE_ATTR_Y, viewport);
             width = gtk_svg_attr_get_number (shape, SHAPE_ATTR_WIDTH, viewport);
@@ -484,11 +501,10 @@ parse_symbolic_svg (PathPaintable  *paintable,
                     GError        **error)
 {
   g_autoptr (GtkSvg) svg = gtk_svg_new_from_bytes (bytes);
-  g_auto (GStrv) keywords = g_strsplit (svg->gpa_keywords, " ", 0);
 
   path_paintable_set_size (paintable, svg->width, svg->height);
   path_paintable_set_state (paintable, svg->state);
-  path_paintable_set_keywords (paintable, keywords);
+  path_paintable_set_keywords (paintable, svg->gpa_keywords);
 
   return extract_shapes (svg, paintable, error);
 }
@@ -648,15 +664,12 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_animation_direction (self, idx) != GPA_ANIMATION_NONE)
     {
+      const char *direction[] = { "none", "normal", "alternate", "reverse", "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse", "segment", "segment-alternate" };
+
       g_string_append (str, "\n        gpa:animation-type='automatic'");
       has_gtk_attr = TRUE;
 
-      if (path_paintable_get_path_animation_direction (self, idx) != GPA_ANIMATION_NORMAL)
-        {
-          const char *direction[] = { "none", "normal", "alternate", "reverse", "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse", "segment", "segment-alternate" };
-
-          g_string_append_printf (str, "\n        gpa:animation-direction='%s'", direction[path_paintable_get_path_animation_direction (self, idx)]);
-        }
+      g_string_append_printf (str, "\n        gpa:animation-direction='%s'", direction[path_paintable_get_path_animation_direction (self, idx)]);
     }
 
   if (path_paintable_get_path_animation_duration (self, idx) != 0)
@@ -859,8 +872,8 @@ path_paintable_save (PathPaintable *self,
                      GString       *str,
                      unsigned int   initial_state)
 {
-  GStrv keywords;
   char buffer[G_ASCII_DTOSTR_BUF_SIZE];
+  const char *keywords;
 
   g_string_append (str, "<svg xmlns='http://www.w3.org/2000/svg'");
   g_string_append_printf (str, "\n     width='%s' height='%s'",
@@ -872,16 +885,7 @@ path_paintable_save (PathPaintable *self,
 
   keywords = path_paintable_get_keywords (self);
   if (keywords)
-    {
-      g_string_append (str,      "\n     gpa:keywords='");
-      for (unsigned int i = 0; keywords[i]; i++)
-        {
-          if (i > 0)
-            g_string_append_c (str, ' ');
-          g_string_append (str, keywords[i]);
-        }
-      g_string_append_c (str, '\'');
-    }
+    g_string_append_printf (str,      "\n     gpa:keywords='%s'", keywords);
 
   if (initial_state != (unsigned int) -1)
     g_string_append_printf (str,      "\n     gpa:state='%u'", initial_state);
@@ -999,7 +1003,7 @@ path_paintable_dispose (GObject *object)
   PathPaintable *self = PATH_PAINTABLE (object);
 
   g_array_unref (self->paths);
-  g_clear_pointer (&self->keywords, g_strfreev);
+  g_free (self->keywords);
 
   if (self->render_paintable)
     {
@@ -1763,15 +1767,13 @@ path_paintable_get_attach_path (PathPaintable *self,
 
 void
 path_paintable_set_keywords (PathPaintable *self,
-                             GStrv          keywords)
+                             const char    *keywords)
 {
-  g_clear_pointer (&self->keywords, g_strfreev);
-  self->keywords = g_strdupv (keywords);
-
-  g_signal_emit (self, signals[CHANGED], 0);
+  if (g_set_str (&self->keywords, keywords))
+    g_signal_emit (self, signals[CHANGED], 0);
 }
 
-GStrv
+const char *
 path_paintable_get_keywords (PathPaintable *self)
 {
   return self->keywords;
@@ -2194,22 +2196,6 @@ path_paintable_get_max_state (PathPaintable *self)
   return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self)));
 }
 
-static inline gboolean
-g_strv_same (GStrv self,
-             GStrv other)
-{
-  if (self == other)
-    return TRUE;
-
-  if ((!self || self[0] == NULL) &&
-      (!other || other[0] == NULL))
-    return TRUE;
-
-  return self && other &&
-         g_strv_equal ((const char * const *) self,
-                       (const char * const *) other);
-}
-
 gboolean
 path_paintable_equal (PathPaintable *self,
                       PathPaintable *other)
@@ -2221,7 +2207,7 @@ path_paintable_equal (PathPaintable *self,
   if (self->paths->len != other->paths->len)
     return FALSE;
 
-  if (!g_strv_same (self->keywords, other->keywords))
+  if (g_strcmp0 (self->keywords, other->keywords) != 0)
     return FALSE;
 
   for (size_t i = 0; i < self->paths->len; i++)

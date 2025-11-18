@@ -279,7 +279,8 @@ gsk_render_replay_default (GskRenderReplay *self,
 
 /**
  * gsk_render_replay_set_node_foreach:
- * @filter: The function to call for all nodes
+ * @self: the replay
+ * @foreach: the function to call for all nodes
  * @user_data: user data to pass to @func
  * @user_destroy: destroy notify that will be called to release
  *   user_data
@@ -323,7 +324,7 @@ gsk_render_replay_set_node_foreach (GskRenderReplay            *self,
  **/
 void
 gsk_render_replay_foreach_node (GskRenderReplay *self,
-                                GskRenderNode       *node)
+                                GskRenderNode   *node)
 {
   GskRenderNode *ignored;
 
