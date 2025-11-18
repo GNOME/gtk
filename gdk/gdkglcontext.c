@@ -108,6 +108,7 @@ const GdkDebugKey gdk_gl_feature_keys[] = {
   { "buffer-storage", GDK_GL_FEATURE_BUFFER_STORAGE, "GL_EXT_buffer_storage" },
   { "external-objects", GDK_GL_FEATURE_EXTERNAL_OBJECTS, "GL_EXT_memory_object and GL_EXT_semaphore"},
   { "external-objects-win32", GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32, "GL_EXT_memory_object_win32 and GL_EXT_semaphore_win32" },
+  { "blend-func-extended", GDK_GL_FEATURE_BLEND_FUNC_EXTENDED, "GL_EXT_blend_func_extended" },
 };
 
 typedef struct _GdkGLContextPrivate GdkGLContextPrivate;
@@ -1814,6 +1815,11 @@ gdk_gl_context_check_features (GdkGLContext *context)
           epoxy_has_gl_extension ("GL_EXT_semaphore_win32"))
         features |= GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32;
     }
+
+  if (gdk_gl_context_check_version (context, "3.3", "9.9") ||
+      epoxy_has_gl_extension ("GL_ARB_blend_func_extended") ||
+      epoxy_has_gl_extension ("GL_EXT_blend_func_extended"))
+    features |= GDK_GL_FEATURE_BLEND_FUNC_EXTENDED;
 
   return features;
 }
