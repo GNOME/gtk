@@ -1772,11 +1772,17 @@ static void
 gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
 {
+  GskRenderNode *child;
   float old_opacity = self->opacity;
 
   self->opacity *= gsk_opacity_node_get_opacity (node);
 
-  gsk_gpu_node_processor_add_node (self, gsk_opacity_node_get_child (node));
+  child = gsk_opacity_node_get_child (node);
+
+  if (gsk_render_node_clears_background (child))
+    gsk_gpu_node_processor_add_without_opacity (self, child);
+  else
+    gsk_gpu_node_processor_add_node (self, child);
 
   self->opacity = old_opacity;
 }
