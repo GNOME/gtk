@@ -7884,10 +7884,15 @@ create_animation (Shape        *shape,
   a = animation_animate_new ();
   a->repeat_count = repeat;
   a->simple_duration = duration;
+  if (repeat == DBL_MAX)
+    a->repeat_duration = INDEFINITE;
+  else
+    a->repeat_duration =duration * repeat;
 
   a->has_begin = 1;
   a->has_end = 1;
   a->has_simple_duration = 1;
+  a->has_repeat_count = 1;
 
   a->id = g_strdup_printf ("gpa:animation:%s-%s", shape->id, shape_attrs[attr].name);
 
@@ -9427,11 +9432,11 @@ parse_shape_gpa_attrs (Shape                *shape,
         gtk_svg_invalid_attribute (data->svg, context, "gpa:animation-duration", NULL);
     }
 
-  animation_repeat = INFINITY;
+  animation_repeat = DBL_MAX;
   if (animation_repeat_attr)
     {
       if (strcmp (animation_repeat_attr, "indefinite") == 0)
-        animation_repeat = INFINITY;
+        animation_repeat = DBL_MAX;
       else if (!parse_number (animation_repeat_attr, 0, DBL_MAX, &animation_repeat))
         gtk_svg_invalid_attribute (data->svg, context, "gpa:animation-repeat", NULL);
     }

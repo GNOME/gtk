@@ -32,6 +32,7 @@
           begin='gpa:states(0).begin'
           end='gpa:states(0).end'
           dur='2000ms'
+          repeatCount='indefinite'
           from='0 2'
           to='1 0'
           keyTimes='0; 1'
