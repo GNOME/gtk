@@ -154,5 +154,6 @@ typedef enum {
   GSK_GPU_OPTIMIZE_TO_IMAGE             = 1 <<  5,
   GSK_GPU_OPTIMIZE_OCCLUSION_CULLING    = 1 <<  6,
   GSK_GPU_OPTIMIZE_REPEAT               = 1 <<  7,
+  GSK_GPU_OPTIMIZE_DUAL_BLEND           = 1 <<  8,
 } GskGpuOptimizations;
 
