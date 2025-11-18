@@ -86,4 +86,10 @@
 #define SLICE_BOTTOM_LEFT 6u
 #define SLICE_LEFT 7u
 
+#define GSK_REPEAT_NONE 0u
+#define GSK_REPEAT_PAD 1u
+#define GSK_REPEAT_REPEAT 2u
+#define GSK_REPEAT_REFLECT 3u
+#define GSK_REPEAT_MASK 3u
+
 #endif

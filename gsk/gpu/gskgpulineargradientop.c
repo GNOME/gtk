@@ -9,9 +9,7 @@
 #include "gpu/shaders/gskgpulineargradientinstance.h"
 
 #define VARIATION_SUPERSAMPLING (1 << 0)
-#define VARIATION_REPEATING     (1 << 1)
-#define VARIATION_REFLECTING    (1 << 2)
-#define VARIATION_BLANK         (1 << 3)
+#define VARIATION_REPEAT(repeat) ((repeat) << 1)
 
 typedef struct _GskGpuLinearGradientOp GskGpuLinearGradientOp;
 
@@ -26,9 +24,9 @@ gsk_gpu_linear_gradient_op_print_instance (GskGpuShaderOp *shader,
                                            GString        *string)
 {
   GskGpuLineargradientInstance *instance = (GskGpuLineargradientInstance *) instance_;
+  const char *repeat_modes[] = { "none", "pad", "repeat", "reflect" };
 
-  if (shader->variation & VARIATION_REPEATING)
-    gsk_gpu_print_string (string, "repeating");
+  gsk_gpu_print_string (string, repeat_modes[shader->variation >> 2]);
   gsk_gpu_print_rect (string, instance->rect);
 }
 
@@ -153,9 +151,7 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
                            &GSK_GPU_LINEAR_GRADIENT_OP_CLASS,
                            ccs ? gsk_gpu_color_states_create (ccs, TRUE, ics, TRUE)
                                : gsk_gpu_color_states_create_equal (TRUE, TRUE),
-                           (repeat == GSK_REPEAT_REPEAT ? VARIATION_REPEATING : 0) |
-                           (repeat == GSK_REPEAT_REFLECT ? VARIATION_REFLECTING : 0) |
-                           (repeat == GSK_REPEAT_NONE ? VARIATION_BLANK : 0) |
+                           VARIATION_REPEAT (repeat) |
                            (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,
                            NULL,
