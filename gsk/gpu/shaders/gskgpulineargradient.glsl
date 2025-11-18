@@ -1,11 +1,10 @@
 #define GSK_N_TEXTURES 0
 
 #include "common.glsl"
+#include "enums.glsl"
 
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
-#define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
-#define VARIATION_REFLECTING    ((GSK_VARIATION & (1u << 2)) == (1u << 2))
-#define VARIATION_BLANK         ((GSK_VARIATION & (1u << 3)) == (1u << 3))
+#define GSK_REPEAT ((GSK_VARIATION >> 1) & GSK_REPEAT_MASK)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -158,22 +157,25 @@ get_gradient_color (float offset)
 vec4
 get_gradient_color_at (float offset)
 {
-  if (VARIATION_BLANK)
+  switch (GSK_REPEAT)
     {
+    case GSK_REPEAT_NONE:
       if (offset < 0.0 || offset > 1.0)
         return vec4(0.0, 0.0, 0.0, 0.0);
-    }
-  else if (VARIATION_REPEATING)
-    offset = fract (offset);
-  else if (VARIATION_REFLECTING)
-    {
+      break;
+    case GSK_REPEAT_REPEAT:
+      offset = fract (offset);
+      break;
+    case GSK_REPEAT_REFLECT:
       if ((int (floor (offset))) % 2 == 0)
         offset = fract (offset);
       else
         offset = 1.0 - fract (offset);
+      break;
+    case GSK_REPEAT_PAD:
+      offset = clamp (offset, 0.0, 1.0);
+      break;
     }
-  else
-    offset = clamp (offset, 0.0, 1.0);
 
   return output_color_from_alt (get_gradient_color (offset));
 }
