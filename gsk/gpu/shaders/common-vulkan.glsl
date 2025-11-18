@@ -37,11 +37,22 @@ layout(set = 1, binding = 0) uniform sampler2D GSK_TEXTURE1_ARRAY[3];
 #define GSK_TEXTURE1_1 GSK_TEXTURE1_ARRAY[1]
 #define GSK_TEXTURE1_2 GSK_TEXTURE1_ARRAY[2]
 layout(location = 0) out vec4 out_color;
+#ifdef GSK_DUAL_BLEND
+layout(location = 0, index = 1) out vec4 out_mask;
+#endif
 
 void
 gsk_set_output_color (vec4 color)
 {
   out_color = color;
 }
+
+#ifdef GSK_DUAL_BLEND
+void
+gsk_set_output_mask (vec4 mask)
+{
+  out_mask = mask;
+}
+#endif
 
 #endif

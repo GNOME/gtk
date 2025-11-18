@@ -93,4 +93,13 @@ gsk_set_output_color (vec4 color)
   out_color = color;
 }
 
+#ifdef GSK_DUAL_BLEND
+layout(location = 0, index = 1) out vec4 out_mask;
+void
+gsk_set_output_mask (vec4 mask)
+{
+  out_mask = mask;
+}
+#endif
+
 #endif
