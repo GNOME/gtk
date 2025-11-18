@@ -648,15 +648,12 @@ path_paintable_save_path (PathPaintable *self,
 
   if (path_paintable_get_path_animation_direction (self, idx) != GPA_ANIMATION_NONE)
     {
+      const char *direction[] = { "none", "normal", "alternate", "reverse", "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse", "segment", "segment-alternate" };
+
       g_string_append (str, "\n        gpa:animation-type='automatic'");
       has_gtk_attr = TRUE;
 
-      if (path_paintable_get_path_animation_direction (self, idx) != GPA_ANIMATION_NORMAL)
-        {
-          const char *direction[] = { "none", "normal", "alternate", "reverse", "reverse-alternate", "in-out", "in-out-alternate", "in-out-reverse", "segment", "segment-alternate" };
-
-          g_string_append_printf (str, "\n        gpa:animation-direction='%s'", direction[path_paintable_get_path_animation_direction (self, idx)]);
-        }
+      g_string_append_printf (str, "\n        gpa:animation-direction='%s'", direction[path_paintable_get_path_animation_direction (self, idx)]);
     }
 
   if (path_paintable_get_path_animation_duration (self, idx) != 0)
