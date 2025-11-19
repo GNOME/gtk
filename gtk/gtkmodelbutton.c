@@ -596,12 +596,18 @@ update_accessible_properties (GtkModelButton *button)
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, button->label, NULL,
                                   -1);
 
-  if (button->accel_label)
+  if (button->accel)
     {
-      const char *text = gtk_label_get_label (GTK_LABEL (button->accel_label));
+      guint key;
+      GdkModifierType mods;
+      char *text;
+
+      gtk_accelerator_parse (button->accel, &key, &mods);
+      text = gtk_accelerator_get_accessible_label (key, mods);
       gtk_accessible_update_property (GTK_ACCESSIBLE (button),
                                       GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS, text,
                                       -1);
+      g_free (text);
     }
   else
     gtk_accessible_reset_property (GTK_ACCESSIBLE (button),

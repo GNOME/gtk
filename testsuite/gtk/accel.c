@@ -22,12 +22,13 @@ test_one_accel (const char      *accel,
                 GdkModifierType  exp_mods,
                 guint            exp_key,
 		const char      *exp_label,
+		const char      *exp_accessible_label,
 		gboolean         has_keysym)
 {
   guint accel_key;
   GdkModifierType mods;
   guint *keycodes;
-  char *label, *name;
+  char *label, *accessible_label, *name;
   gboolean ret;
 
   accel_key = 0;
@@ -62,6 +63,10 @@ test_one_accel (const char      *accel,
 
   g_assert_cmpstr (label, ==, exp_label);
 
+  accessible_label = gtk_accelerator_get_accessible_label (accel_key, mods);
+
+  g_assert_cmpstr (accessible_label, ==, exp_accessible_label);
+
   name = gtk_accelerator_name_with_keycode (NULL,
 					    accel_key,
 					    *keycodes,
@@ -70,55 +75,56 @@ test_one_accel (const char      *accel,
 
   g_free (keycodes);
   g_free (label);
+  g_free (accessible_label);
   g_free (name);
 }
 
 static void
 accel1 (void)
 {
-  test_one_accel ("0xb3", 0, 0xb3, "0xb3", FALSE);
+  test_one_accel ("0xb3", 0, 0xb3, "0xb3", "Unidentified", FALSE);
 }
 
 static void
 accel2 (void)
 {
-  test_one_accel ("<Control><Alt>z", GDK_CONTROL_MASK|GDK_ALT_MASK, GDK_KEY_z, "Ctrl+Alt+Z", TRUE);
+  test_one_accel ("<Control><Alt>z", GDK_CONTROL_MASK|GDK_ALT_MASK, GDK_KEY_z, "Ctrl+Alt+Z", "Control+Alt+Z", TRUE);
 }
 
 static void
 accel3 (void)
 {
-  test_one_accel ("KP_7", 0, GDK_KEY_KP_7, "KP 7", TRUE);
+  test_one_accel ("KP_7", 0, GDK_KEY_KP_7, "KP 7", "7", TRUE);
 }
 
 static void
 accel4 (void)
 {
-  test_one_accel ("<Control>KP_7", GDK_CONTROL_MASK, GDK_KEY_KP_7, "Ctrl+KP 7", TRUE);
+  test_one_accel ("<Control>KP_7", GDK_CONTROL_MASK, GDK_KEY_KP_7, "Ctrl+KP 7", "Control+7", TRUE);
 }
 
 static void
 accel5 (void)
 {
-  test_one_accel ("<Shift>exclam", GDK_SHIFT_MASK, GDK_KEY_exclam, "Shift+!", TRUE);
+  test_one_accel ("<Shift>exclam", GDK_SHIFT_MASK, GDK_KEY_exclam, "Shift+!", "Shift+!", TRUE);
 }
 
 static void
 accel6 (void)
 {
-  test_one_accel ("<Hyper>x", GDK_HYPER_MASK, GDK_KEY_x, "Hyper+X", TRUE);
+  test_one_accel ("<Hyper>x", GDK_HYPER_MASK, GDK_KEY_x, "Hyper+X", "Hyper+X", TRUE);
 }
 
 static void
 accel7 (void)
 {
-  test_one_accel ("<Super>x", GDK_SUPER_MASK, GDK_KEY_x, "Super+X", TRUE);
+  test_one_accel ("<Super>x", GDK_SUPER_MASK, GDK_KEY_x, "Super+X", "Super+X", TRUE);
 }
 
 static void
 accel8 (void)
 {
-  test_one_accel ("<Meta>x", GDK_META_MASK, GDK_KEY_x, "Meta+X", TRUE);
+  test_one_accel ("<Meta>x", GDK_META_MASK, GDK_KEY_x, "Meta+X", "Meta+X", TRUE);
 }
 
 static void
