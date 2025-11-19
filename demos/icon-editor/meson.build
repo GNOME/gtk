@@ -21,7 +21,7 @@ icon_editor_resources = gnome.compile_resources('icon_editor_resources',
 
 executable('gtk4-icon-editor',
   sources: [icon_editor_sources, icon_editor_resources],
-  c_args: common_cflags,
+  c_args: common_cflags + ['-DGTK_COMPILATION'],
   dependencies: [ libgtk_static_dep, gmodule_headers_dep, profile_conf_h ],
   include_directories: confinc,
   win_subsystem: 'windows',
