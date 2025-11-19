@@ -280,6 +280,7 @@ variants = {
   'replay': '--replay',
   'clip': '--clip',
   'colorflip': '--colorflip',
+  'opaque': '--opaque',
 }
 
 compare_xfails = {

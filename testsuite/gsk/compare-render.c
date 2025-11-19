@@ -594,6 +594,93 @@ colorflip_create_reference (GskRenderer   *renderer,
   return result;
 }
 
+static gboolean
+rect_shrink_to_int (graphene_rect_t *rect)
+{
+  float x1 = floor (rect->origin.x + rect->size.width);
+  float y1 = floor (rect->origin.y + rect->size.height);
+
+  rect->origin.x = ceil (rect->origin.x);
+  rect->origin.y = ceil (rect->origin.y);
+  rect->size.width = x1 - rect->origin.x;
+  rect->size.height = y1 - rect->origin.y;
+
+  return rect->size.width >=0 && rect->size.height >= 0;
+}
+
+static gpointer
+opaque_setup (GskRenderNode *node)
+{
+  graphene_rect_t opaque;
+
+  if (!gsk_render_node_get_opaque_rect (node, &opaque))
+    {
+      g_test_skip ("Node has no opaque rect");
+      return NULL;
+    }
+
+  if (!rect_shrink_to_int (&opaque))
+    {
+      g_test_skip ("Opaque rect is too small, so it rounds to nothing.");
+      return NULL;
+    }
+
+  return g_memdup2 (&opaque, sizeof (graphene_rect_t));
+}
+
+static GskRenderNode *
+opaque_create_test (GskRenderNode *node,
+                    gconstpointer  data)
+{
+  const graphene_rect_t *opaque = data;
+  graphene_matrix_t matrix;
+  GskRenderNode *clip, *result;
+
+  /* clip to opaque region */
+  clip = gsk_clip_node_new (node, opaque);
+
+  /* Turn image to white, don't touch alpha */
+  graphene_matrix_init_from_float (&matrix,
+                                   (const float []) { 0, 0, 0, 0,
+                                                      0, 0, 0, 0,
+                                                      0, 0, 0, 0,
+                                                      1, 1, 1, 1 });
+  result = gsk_color_matrix_node_new (clip, &matrix, graphene_vec4_zero ());
+
+  gsk_render_node_unref (clip);
+
+  return result;
+}
+
+static GdkTexture *
+opaque_create_reference (GskRenderer   *renderer,
+                         GdkTexture    *texture,
+                         gconstpointer  user_data)
+{
+  const graphene_rect_t *rect = user_data;
+  GBytes *bytes;
+  guchar *data;
+  gsize stride, size;
+  GdkTexture *result;
+
+  stride = ((gsize) rect->size.width + 3) & ~3;
+  size = stride * rect->size.height;
+
+  data = g_malloc (size);
+  memset (data, 0xFF, size);
+  bytes = g_bytes_new_take (data, size);
+
+  result = gdk_memory_texture_new (rect->size.width,
+                                   rect->size.height,
+                                   GDK_MEMORY_A8,
+                                   bytes,
+                                   stride);
+
+  g_bytes_unref (bytes);
+
+  return result;
+}
+
 typedef enum
 {
   KEEP_BOUNDS = (1 << 0),
@@ -667,6 +754,14 @@ static const TestSetup test_setups[] = {
     .create_test = colorflip_create_test,
     .create_reference = colorflip_create_reference,
   },
+  {
+    .name = "opaque",
+    .description = "Check the opaque rect",
+    .setup = opaque_setup,
+    .free = g_free,
+    .create_test = opaque_create_test,
+    .create_reference = opaque_create_reference,
+  },
 };
 
 static void
@@ -690,7 +785,16 @@ run_single_test (const TestSetup *setup,
     render_bounds = NULL;
 
   if (setup->setup)
-    test_data = setup->setup (org_test);
+    {
+      test_data = setup->setup (org_test);
+
+      if (test_data == NULL && g_test_failed ())
+        {
+          /* Allow tests to fail/skip when setting up if
+           * they return NULL */
+          return;
+        }
+    }
   else
     test_data = NULL;
 
@@ -816,6 +920,7 @@ main (int argc, char **argv)
     { test_setups[5].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[5], test_setups[5].description, NULL },
     { test_setups[6].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[6], test_setups[6].description, NULL },
     { test_setups[7].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[7], test_setups[7].description, NULL },
+    { test_setups[8].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[8], test_setups[8].description, NULL },
     { NULL }
   };
   GOptionContext *context;
