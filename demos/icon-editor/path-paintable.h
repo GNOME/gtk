@@ -53,9 +53,6 @@ GBytes *        path_paintable_serialize_as_svg    (PathPaintable  *self);
 
 PathPaintable * path_paintable_copy                (PathPaintable   *self);
 
-PathPaintable * path_paintable_combine             (PathPaintable   *one,
-                                                    PathPaintable   *two);
-
 gboolean        path_paintable_equal               (PathPaintable   *self,
                                                     PathPaintable   *other);
 
