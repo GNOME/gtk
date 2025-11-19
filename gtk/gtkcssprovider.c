@@ -942,6 +942,7 @@ gtk_css_provider_notify (GObject    *object,
     {
     case PROP_PREFERS_COLOR_SCHEME:
     case PROP_PREFERS_CONTRAST:
+    case PROP_PREFERS_REDUCED_MOTION:
       maybe_rerender_style_sheet (css_provider);
       break;
     default:
