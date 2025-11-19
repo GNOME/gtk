@@ -80,6 +80,7 @@ struct _GtkInspectorVisual
   GtkWidget *theme_combo;
   GtkWidget *color_scheme_combo;
   GtkWidget *contrast_combo;
+  GtkWidget *motion_combo;
   GtkWidget *icon_combo;
   GtkWidget *cursor_combo;
   GtkWidget *cursor_size_spin;
@@ -717,6 +718,14 @@ init_contrast (GtkInspectorVisual *vis)
 }
 
 static void
+init_reduced_motion (GtkInspectorVisual *vis)
+{
+  g_object_bind_property (vis->settings, "gtk-interface-reduced-motion",
+                          vis->motion_combo, "selected",
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+}
+
+static void
 fill_icons (const char *path,
             GHashTable  *t)
 {
@@ -1260,6 +1269,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, theme_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, color_scheme_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, contrast_combo);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, motion_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_size_spin);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_size_adjustment);
@@ -1310,6 +1320,7 @@ gtk_inspector_visual_set_display (GtkInspectorVisual *vis,
   init_theme (vis);
   init_colorscheme (vis);
   init_contrast (vis);
+  init_reduced_motion (vis);
   init_icons (vis);
   init_cursors (vis);
   init_cursor_size (vis);
