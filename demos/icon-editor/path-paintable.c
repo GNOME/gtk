@@ -1936,65 +1936,11 @@ path_paintable_get_path_stroke (PathPaintable *self,
 PathPaintable *
 path_paintable_copy (PathPaintable *self)
 {
+  g_autoptr (GBytes) bytes = NULL;
   PathPaintable *other;
-  GskStroke *stroke;
-  gboolean enabled;
-  GskFillRule rule = GSK_FILL_RULE_WINDING;
-  unsigned int symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
-  GdkRGBA color = (GdkRGBA) { 0, 0, 0, 1 };
-  size_t to = (size_t) -1;
-  float pos = 0;
 
-  other = path_paintable_new ();
-
-  path_paintable_set_size (other, self->width, self->height);
-  path_paintable_set_keywords (other, self->keywords);
-
-  stroke = gsk_stroke_new (1);
-
-  for (size_t i = 0; i < self->paths->len; i++)
-    {
-      PathElt *elt = &g_array_index (self->paths, PathElt, i);
-      float *params;
-      unsigned int n_params;
-
-      if (elt->shape_type == SHAPE_POLY_LINE || elt->shape_type == SHAPE_POLYGON)
-        {
-          params = elt->polyline.params;
-          n_params = elt->polyline.n_params;
-        }
-      else
-        {
-          params = elt->shape_params;
-          n_params = 6;
-        }
-
-      path_paintable_add_path (other, elt->path, elt->shape_type, params, n_params);
-      path_paintable_set_path_states (other, i, path_paintable_get_path_states (self, i));
-      path_paintable_set_path_transition (other, i,
-                                          path_paintable_get_path_transition_type (self, i),
-                                          path_paintable_get_path_transition_duration (self, i),
-                                          path_paintable_get_path_transition_delay (self, i),
-                                          path_paintable_get_path_transition_easing (self, i));
-      path_paintable_set_path_origin (other, i, path_paintable_get_path_origin (self, i));
-      path_paintable_set_path_animation (other, i,
-                                         path_paintable_get_path_animation_direction (self, i),
-                                         path_paintable_get_path_animation_duration (self, i),
-                                         path_paintable_get_path_animation_repeat (self, i),
-                                         path_paintable_get_path_animation_easing (self, i),
-                                         path_paintable_get_path_animation_segment (self, i));
-
-      enabled = path_paintable_get_path_fill (self, i, &rule, &symbolic, &color);
-      path_paintable_set_path_fill (other, i, enabled, rule, symbolic, &color);
-
-      enabled = path_paintable_get_path_stroke (self, i, stroke, &symbolic, &color);
-      path_paintable_set_path_stroke (other, i, enabled, stroke, symbolic, &color);
-
-      path_paintable_get_attach_path (self, i, &to, &pos);
-      path_paintable_attach_path (other, i, to, pos);
-    }
-
-  gsk_stroke_free (stroke);
+  bytes = path_paintable_serialize (self, self->state);
+  other = path_paintable_new_from_bytes (bytes, NULL);
 
   return other;
 }
