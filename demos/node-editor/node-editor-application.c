@@ -351,7 +351,7 @@ node_editor_application_new (void)
                       "application-id", "org.gtk.gtk4.NodeEditor",
                       "flags", G_APPLICATION_HANDLES_OPEN | G_APPLICATION_NON_UNIQUE,
                       "version", version,
-                      "support-save", TRUE,
+                      "support-save", FALSE,
                       NULL);
 
   g_application_add_main_option (G_APPLICATION (app), "reset", 0, 0,G_OPTION_ARG_NONE, "Remove autosave content", NULL);
