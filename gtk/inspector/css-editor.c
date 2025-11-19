@@ -50,6 +50,7 @@ struct _GtkInspectorCssEditorPrivate
   GtkSwitch *enable_switch;
   GtkDropDown *color_scheme;
   GtkDropDown *contrast;
+  GtkDropDown *reduced_motion;
   guint timeout;
   GList *errors;
   gboolean show_deprecations;
@@ -288,18 +289,21 @@ save_clicked (GtkButton             *button,
 }
 
 static void
-color_scheme_changed (GtkDropDown           *dropdown,
-                      GParamSpec            *pspec,
-                      GtkInspectorCssEditor *ce)
+settings_changed (GtkDropDown           *dropdown,
+                  GParamSpec            *pspec,
+                  GtkInspectorCssEditor *ce)
 {
   GtkInterfaceColorScheme color_scheme = gtk_drop_down_get_selected (ce->priv->color_scheme) + 1;
   GtkInterfaceColorScheme system_color_scheme;
   GtkInterfaceContrast contrast = gtk_drop_down_get_selected (ce->priv->contrast) + 1;
   GtkInterfaceContrast system_contrast;
+  GtkReducedMotion reduced_motion = gtk_drop_down_get_selected (ce->priv->reduced_motion);
+  GtkReducedMotion system_reduced_motion;
 
   g_object_get (gtk_settings_get_for_display (ce->priv->display),
                 "gtk-interface-color-scheme", &system_color_scheme,
                 "gtk-interface-contrast", &system_contrast,
+                "gtk-interface-reduced-motion", &system_reduced_motion,
                 NULL);
 
   if (color_scheme == GTK_INTERFACE_COLOR_SCHEME_DEFAULT)
@@ -308,18 +312,22 @@ color_scheme_changed (GtkDropDown           *dropdown,
   if (contrast == GTK_INTERFACE_CONTRAST_NO_PREFERENCE)
     contrast = system_contrast;
 
+  if (reduced_motion == GTK_REDUCED_MOTION_NO_PREFERENCE)
+    reduced_motion = system_reduced_motion;
+
   g_object_set (ce->priv->provider,
                 "prefers-color-scheme", color_scheme,
                 "prefers-contrast", contrast,
+                "prefers-reduced-motion", reduced_motion,
                 NULL);
 }
 
 static void
-system_color_scheme_changed (GtkSettings           *settings,
-                             GParamSpec            *pspec,
-                             GtkInspectorCssEditor *ce)
+system_settings_changed (GtkSettings           *settings,
+                         GParamSpec            *pspec,
+                         GtkInspectorCssEditor *ce)
 {
-  color_scheme_changed (NULL, NULL, ce);
+  settings_changed (NULL, NULL, ce);
 }
 
 static void
@@ -427,11 +435,13 @@ add_provider (GtkInspectorCssEditor *ce,
   GtkSettings *settings = gtk_settings_get_for_display (display);
 
   g_signal_connect_object (settings, "notify::gtk-interface-color-scheme",
-                           G_CALLBACK (system_color_scheme_changed), ce, 0);
+                           G_CALLBACK (system_settings_changed), ce, 0);
   g_signal_connect_object (settings, "notify::gtk-interface-contrast",
-                           G_CALLBACK (system_color_scheme_changed), ce, 0);
+                           G_CALLBACK (system_settings_changed), ce, 0);
+  g_signal_connect_object (settings, "notify::gtk-interface-reduced-motion",
+                           G_CALLBACK (system_settings_changed), ce, 0);
 
-  system_color_scheme_changed (settings, NULL, ce);
+  system_settings_changed (settings, NULL, ce);
 
   gtk_style_context_add_provider_for_display (display,
                                               GTK_STYLE_PROVIDER (ce->priv->provider),
@@ -493,12 +503,13 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, enable_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, color_scheme);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, contrast);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, reduced_motion);
   gtk_widget_class_bind_template_callback (widget_class, enable_switch_changed);
   gtk_widget_class_bind_template_callback (widget_class, toggle_deprecations);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
-  gtk_widget_class_bind_template_callback (widget_class, color_scheme_changed);
+  gtk_widget_class_bind_template_callback (widget_class, settings_changed);
 }
 
 void
