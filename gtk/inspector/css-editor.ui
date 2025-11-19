@@ -72,7 +72,7 @@
         </child>
         <child>
           <object class="GtkDropDown" id="color_scheme">
-            <signal name="notify::selected" handler="color_scheme_changed"/>
+            <signal name="notify::selected" handler="settings_changed"/>
             <property name="tooltip-text">Color scheme to use for this CSS</property>
             <property name="model">
               <object class="GtkStringList">
@@ -88,7 +88,7 @@
         </child>
         <child>
           <object class="GtkDropDown" id="contrast">
-            <signal name="notify::selected" handler="color_scheme_changed"/>
+            <signal name="notify::selected" handler="settings_changed"/>
             <property name="tooltip-text">Contrast level to use for this CSS</property>
             <property name="model">
               <object class="GtkStringList">
@@ -96,6 +96,21 @@
                   <item>System contrast</item>
                   <item>More contrast</item>
                   <item>Less contrast</item>
+                </items>
+              </object>
+            </property>
+            <property name="selected">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="reduced_motion">
+            <signal name="notify::selected" handler="settings_changed"/>
+            <property name="tooltip-text">Reduced motion level to use for this CSS</property>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>System reduced motion</item>
+                  <item>Reduced motion</item>
                 </items>
               </object>
             </property>
