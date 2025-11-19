@@ -551,7 +551,7 @@ gtk_css_scanner_new (GtkCssProvider *provider,
     {
       GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
 
-      scanner->media_features = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssDiscreteMediaFeature), 2);
+      scanner->media_features = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssDiscreteMediaFeature), 3);
 
       feature.name = "prefers-color-scheme";
 
@@ -942,6 +942,7 @@ gtk_css_provider_notify (GObject    *object,
     {
     case PROP_PREFERS_COLOR_SCHEME:
     case PROP_PREFERS_CONTRAST:
+    case PROP_PREFERS_REDUCED_MOTION:
       maybe_rerender_style_sheet (css_provider);
       break;
     default:
