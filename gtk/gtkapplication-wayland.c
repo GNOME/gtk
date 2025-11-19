@@ -69,7 +69,7 @@ restore_wayland_fallback_state (GtkWindow *window,
   gboolean is_maximized = FALSE;
   gboolean is_fullscreen = FALSE;
 
-  g_warning_once ("No Wayland session management state found! Restoring fallback state");
+  GTK_DEBUG (SESSION, "No Wayland session management state found! Restoring fallback state");
 
   if (g_variant_lookup (state, "size", "(ii)", &width, &height))
     gtk_window_set_default_size (window, width, height);
@@ -317,7 +317,7 @@ collect_wayland_fallback_state (GtkWindow       *window,
   gboolean is_maximized;
   gboolean is_fullscreen;
 
-  g_warning_once ("Wayland compositor doesn't appear to support session management! Collecting fallback state");
+  GTK_DEBUG (SESSION, "Wayland compositor doesn't appear to support session management! Collecting fallback state");
 
   gtk_window_get_default_size (window, &width, &height);
   g_variant_builder_add (state, "{sv}", "size", g_variant_new ("(ii)", width, height));

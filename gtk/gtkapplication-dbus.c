@@ -244,7 +244,10 @@ request_restore (GtkApplicationImplDBus *dbus)
                                        &error);
   if (!reply)
     {
-      g_warning ("Failed to register restore: %s", error->message);
+      if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD))
+        GTK_DEBUG (SESSION, "gnome-session does not support session saving");
+      else
+        g_warning ("Failed to register restore: %s", error->message);
       return FALSE;
     }
 
