@@ -292,6 +292,15 @@ The syntax for color stops is:
 
 The default value for transition hints is 0.5.
 
+### copy
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| child    | `<node>`         | color { }              | always      |
+
+Creates a copy node that retains the background for pasting by a paste
+node as part of the child.
+
 ### cross-fade
 
 | property | syntax           | default                | printed     |
@@ -411,6 +420,16 @@ Creates a node like `gsk_transform_node_new()` with the given properties.
 | spread   | `<number>`       | 0                      | non-default |
 
 Creates a node like `gsk_outset_shadow_node_new()` with the given properties.
+
+### paste
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| bounds   | `<rect>`         | 50                     | always      |
+| depth    | `<number>`       | 0                      | non-default |
+
+Paste the copied contents of a previous copy node. The 0-indexed depth
+parameter defines the copy node to paste from.
 
 ### radial-gradient
 
