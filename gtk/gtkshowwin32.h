@@ -1,6 +1,6 @@
 /*
  * GTK - The GIMP Toolkit
- * Copyright (C) 2024 Sergey Bugaev
+ * Copyright (C) 2024-2025 Sergey Bugaev
  * All rights reserved.
  *
  * This Library is free software; you can redistribute it and/or
@@ -35,5 +35,13 @@ void gtk_show_uri_win32 (GtkWindow          *parent,
 gboolean gtk_show_uri_win32_finish (GtkWindow    *parent,
                                     GAsyncResult *result,
                                     GError      **error);
+
+void gtk_open_containing_folder_win32 (const char         *path,
+                                       GCancellable       *cancellable,
+                                       GAsyncReadyCallback callback,
+                                       gpointer            user_data);
+
+gboolean gtk_open_containing_folder_win32_finish (GAsyncResult *result,
+                                                  GError      **error);
 
 G_END_DECLS

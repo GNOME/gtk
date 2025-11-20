@@ -384,17 +384,17 @@ does not support them.
 `debug`
 : GL_KHR_debug
 
-`unpack-subimage`
-:GL_EXT_unpack_subimage
-
-`half-float`
-:GL_OES_vertex_half_float
-
-`sync`
-:GL_ARB_sync
-
 `base-instance`
-:GL_EXT_base_instance
+: GL_ARB_base_instance
+
+`buffer-storage`
+: GL_EXT_buffer_storage
+
+`external-objects`
+: GL_EXT_memory_object and GL_EXT_semaphore
+
+`external-objects-win32`
+: GL_EXT_memory_object_win32 and GL_EXT_semaphore_win32
 
 ### `GDK_VULKAN_DISABLE`
 

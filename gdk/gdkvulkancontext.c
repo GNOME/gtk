@@ -51,6 +51,18 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "swapchain-maintenance", GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE, "Do not use advanced swapchain features" },
   { "portability-subset", GDK_VULKAN_FEATURE_PORTABILITY_SUBSET, "Vulkan implementation is non-conformant" },
 };
+
+/* arbitrarily chosen to be 2 * GSK_GPU_MAX_FRAMES */
+#define MAX_PRESENTS 8
+
+typedef struct _GdkVulkanPresent GdkVulkanPresent;
+struct _GdkVulkanPresent
+{
+  VkSemaphore vk_semaphore;
+  VkFence vk_fence;
+  VkSwapchainKHR vk_swapchain;
+  guint32 image_index;
+};
 #endif
 
 /**
@@ -85,9 +97,10 @@ struct _GdkVulkanContextPrivate {
   guint n_images;
   VkImage *images;
   cairo_region_t **regions;
-#endif
 
-  guint32 draw_index;
+  GdkVulkanPresent presents[MAX_PRESENTS];
+  gsize latest_present;
+#endif
 
   guint vulkan_ref: 1;
 };
@@ -367,6 +380,35 @@ fallback_present_mode:
   return VK_PRESENT_MODE_FIFO_KHR;
 }
 
+/* This is a quite hacky way to avoid proper refcounting... */
+static void
+gdk_vulkan_context_unref_swapchain (GdkVulkanContext *self,
+                                    VkSwapchainKHR    vk_swapchain)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
+  gsize i, count;
+
+  count = 0;
+
+  if (priv->swapchain == vk_swapchain)
+    count++;
+
+  for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+    {
+      if (priv->presents[i].vk_swapchain == vk_swapchain)
+        count++;
+    }
+
+  g_assert (count > 0);
+
+  if (count > 1)
+    return;
+
+  vkDestroySwapchainKHR (gdk_vulkan_context_get_device (self),
+                         vk_swapchain,
+                         NULL);
+}
+
 static gboolean
 gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                     GError           **error)
@@ -387,13 +429,6 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
              gdk_surface_get_height (surface));
 
   device = gdk_vulkan_context_get_device (context);
-
-  /*
-   * Wait for device to be idle because this function is also called in window resizes.
-   * And if we destroy old swapchain it also destroy the old VkImages, those images could
-   * be in use by a vulkan render.
-   */
-  vkDeviceWaitIdle (device);
 
   res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceCapabilitiesKHR, gdk_vulkan_context_get_physical_device (context),
                                                                  priv->surface,
@@ -493,9 +528,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   if (priv->swapchain != VK_NULL_HANDLE)
     {
-      vkDestroySwapchainKHR (device,
-                             priv->swapchain,
-                             NULL);
+      gdk_vulkan_context_unref_swapchain (context, priv->swapchain);
       for (i = 0; i < priv->n_images; i++)
         {
           cairo_region_destroy (priv->regions[i]);
@@ -649,6 +682,124 @@ physical_device_check_features (VkPhysicalDevice device)
   return features;
 }
 
+static gboolean
+gdk_vulkan_present_is_busy (GdkVulkanContext *self,
+                            GdkVulkanPresent *present)
+{
+  VkResult res;
+
+  if (present->vk_swapchain == NULL)
+    return FALSE;
+
+  if (!present->vk_fence)
+    return TRUE;
+  
+  res = vkGetFenceStatus (gdk_vulkan_context_get_device (self), present->vk_fence);
+  if (res != VK_SUCCESS)
+    return TRUE;
+
+  GDK_VK_CHECK (vkResetFences, gdk_vulkan_context_get_device (self),
+                               1,
+                               &present->vk_fence);
+
+  gdk_vulkan_context_unref_swapchain (self, present->vk_swapchain);
+  present->vk_swapchain = VK_NULL_HANDLE;
+
+  return FALSE;
+}
+
+static void
+gdk_vulkan_context_wait_present (GdkVulkanContext *self,
+                                 gboolean          wait_all)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
+
+  if (!gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+    {
+      gsize i;
+      /* See https://www.khronos.org/blog/resolving-longstanding-issues-with-wsi for
+       * why this is necessary without the extension.
+       */
+      vkDeviceWaitIdle (gdk_vulkan_context_get_device (self));
+
+      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+        {
+          if (priv->presents[i].vk_swapchain)
+            {
+              gdk_vulkan_context_unref_swapchain (self, priv->presents[i].vk_swapchain);
+              priv->presents[i].vk_swapchain = VK_NULL_HANDLE;
+            }
+        }
+    }
+  else
+    {
+      VkFence fences[G_N_ELEMENTS (priv->presents)];
+      gsize i, n_fences;
+
+      n_fences = 0;
+      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+        {
+          if (priv->presents[i].vk_swapchain)
+            {
+              fences[n_fences++] = priv->presents[i].vk_fence;
+            }
+        }
+
+      GDK_VK_CHECK (vkWaitForFences, gdk_vulkan_context_get_device (self),
+                                     n_fences,
+                                     fences,
+                                     wait_all,
+                                     INT64_MAX);
+    }
+}
+
+static GdkVulkanPresent *
+gdk_vulkan_context_start_present (GdkVulkanContext *self)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
+  gsize i;
+
+  while (TRUE)
+    {
+      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+        {
+          if (!gdk_vulkan_present_is_busy (self, &priv->presents[i]))
+            {
+              GdkVulkanPresent *result = &priv->presents[i];
+              priv->latest_present = i;
+
+              return result;
+            }
+        }
+
+      gdk_vulkan_context_wait_present (self, FALSE);
+    }
+}
+
+static void
+gdk_vulkan_context_release_presents (GdkVulkanContext *self,
+                                     guint32           image_index)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
+  gsize i;
+
+  /* We use fences with swapchain-maintenance */
+  if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+    return;
+
+  for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+    {
+      if (priv->presents[i].vk_swapchain != priv->swapchain)
+        continue;
+
+      if (priv->presents[i].image_index == image_index)
+        {
+          gdk_vulkan_context_unref_swapchain (self, priv->presents[i].vk_swapchain);
+          priv->presents[i].vk_swapchain = VK_NULL_HANDLE;
+        }
+    }
+}
+
 static void
 gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                                 gpointer         context_data,
@@ -663,6 +814,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
   GdkColorState *color_state;
   VkResult acquire_result;
   VkSemaphore draw_semaphore;
+  GdkVulkanPresent *present;
   guint i;
 
   g_assert (context_data != NULL);
@@ -695,6 +847,8 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
       cairo_region_union (priv->regions[i], region);
     }
 
+  present = gdk_vulkan_context_start_present (context);
+
   while (TRUE)
     {
       acquire_result = GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
@@ -702,7 +856,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                                                             UINT64_MAX,
                                                             draw_semaphore,
                                                             VK_NULL_HANDLE,
-                                                            &priv->draw_index);
+                                                            &present->image_index);
       if ((acquire_result == VK_ERROR_OUT_OF_DATE_KHR) ||
           (acquire_result == VK_SUBOPTIMAL_KHR))
         {
@@ -721,7 +875,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                                .pWaitDstStageMask = &mask,
                              },
                              VK_NULL_HANDLE);
-              vkQueueWaitIdle (gdk_vulkan_context_get_queue (context));
 
               if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
                 {
@@ -735,7 +888,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                                               .pNext = NULL,
                                               .swapchain = priv->swapchain,
                                               .imageIndexCount = 1,
-                                              .pImageIndices = &priv->draw_index,
+                                              .pImageIndices = &present->image_index,
                                             });
                 }
             }
@@ -750,7 +903,10 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
       break;
     }
 
-  cairo_region_union (region, priv->regions[priv->draw_index]);
+  gdk_vulkan_context_release_presents (context, present->image_index);
+  present->vk_swapchain = priv->swapchain;
+
+  cairo_region_union (region, priv->regions[present->image_index]);
 
   if (priv->current_depth == GDK_MEMORY_U8_SRGB)
     *out_color_state = gdk_color_state_get_no_srgb_tf (color_state);
@@ -766,20 +922,23 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkVulkanPresent *present;
   VkPresentRegionsKHR present_regions;
   VkPresentRegionKHR present_region;
   VkSwapchainPresentFenceInfoEXT fence_info;
   void *pNext = NULL;
 
-  g_assert (context_data != NULL);
+  g_assert (context_data == NULL);
 
-  if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+  present = &priv->presents[priv->latest_present];
+
+  if (present->vk_fence)
     {
       fence_info = (VkSwapchainPresentFenceInfoEXT) {
           .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT,
           .pNext = pNext,
           .swapchainCount = 1,
-          .pFences = context_data,
+          .pFences = &present->vk_fence
       };
       pNext = &fence_info;
     }
@@ -815,27 +974,22 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
   GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
                                    &(VkPresentInfoKHR) {
                                        .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
-                                       .waitSemaphoreCount = 0,
-                                       .pWaitSemaphores = NULL,
+                                       .waitSemaphoreCount = 1,
+                                       .pWaitSemaphores = (VkSemaphore[]) {
+                                           present->vk_semaphore
+                                       },
                                        .swapchainCount = 1,
                                        .pSwapchains = (VkSwapchainKHR[]) {
                                            priv->swapchain
                                        },
                                        .pImageIndices = (uint32_t[]) {
-                                           priv->draw_index
+                                           present->image_index
                                        },
                                        .pNext = pNext,
                                    });
 
-  cairo_region_destroy (priv->regions[priv->draw_index]);
-  priv->regions[priv->draw_index] = cairo_region_create ();
-
-  if (!gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
-    {
-      GDK_VK_CHECK (vkQueueSubmit, gdk_vulkan_context_get_queue (context),
-                                   0, NULL,
-                                   *(VkFence *) context_data);
-    }
+  cairo_region_destroy (priv->regions[present->image_index]);
+  priv->regions[present->image_index] = cairo_region_create ();
 }
 
 static gboolean
@@ -888,6 +1042,7 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
     }
   else
     {
+      VkDevice vk_device;
       uint32_t n_formats;
 
       GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceFormatsKHR, gdk_vulkan_context_get_physical_device (self),
@@ -999,6 +1154,28 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
         priv->formats[GDK_MEMORY_U16] = priv->formats[GDK_MEMORY_FLOAT32];
       priv->formats[GDK_MEMORY_NONE] = priv->formats[GDK_MEMORY_U8];
 
+      vk_device = gdk_vulkan_context_get_device (self);
+
+      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+        {
+          GDK_VK_CHECK (vkCreateSemaphore, vk_device,
+                                           &(VkSemaphoreCreateInfo) {
+                                               .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                                           },
+                                           NULL,
+                                           &priv->presents[i].vk_semaphore);
+
+          if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+            {
+              GDK_VK_CHECK (vkCreateFence, vk_device,
+                                           &(VkFenceCreateInfo) {
+                                               .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                                           },
+                                           NULL,
+                                           &priv->presents[i].vk_fence);
+            }
+        }
+
       if (!gdk_vulkan_context_check_swapchain (self, error))
         goto out_surface;
 
@@ -1018,8 +1195,33 @@ gdk_vulkan_context_surface_detach (GdkDrawContext *context)
 {
   GdkVulkanContext *self = GDK_VULKAN_CONTEXT (context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
-  VkDevice device;
+  VkDevice vk_device;
   guint i;
+
+  vk_device = gdk_vulkan_context_get_device (self);
+
+  gdk_vulkan_context_wait_present (self, TRUE);
+
+  for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+    {
+      g_assert (!gdk_vulkan_present_is_busy (self, &priv->presents[i]));
+      if (priv->presents[i].vk_swapchain)
+        {
+          gdk_vulkan_context_unref_swapchain (self, priv->presents[i].vk_swapchain);
+          priv->presents[i].vk_swapchain = NULL;
+        }
+      vkDestroySemaphore (vk_device,
+                          priv->presents[i].vk_semaphore,
+                          NULL);
+      priv->presents[i].vk_semaphore = VK_NULL_HANDLE;
+      if (priv->presents[i].vk_fence)
+        {
+          vkDestroyFence (vk_device,
+                          priv->presents[i].vk_fence,
+                          NULL);
+          priv->presents[i].vk_fence = VK_NULL_HANDLE;
+        }
+    }
 
   for (i = 0; i < priv->n_images; i++)
     {
@@ -1029,13 +1231,9 @@ gdk_vulkan_context_surface_detach (GdkDrawContext *context)
   g_clear_pointer (&priv->images, g_free);
   priv->n_images = 0;
 
-  device = gdk_vulkan_context_get_device (self);
-
   if (priv->swapchain != VK_NULL_HANDLE)
     {
-      vkDestroySwapchainKHR (device,
-                             priv->swapchain,
-                             NULL);
+      gdk_vulkan_context_unref_swapchain (self, priv->swapchain);
       priv->swapchain = VK_NULL_HANDLE;
     }
 
@@ -1482,7 +1680,17 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
 
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
 
-  return priv->draw_index;
+  return priv->presents[priv->latest_present].image_index;
+}
+
+VkSemaphore
+gdk_vulkan_context_get_present_semaphore (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
+
+  return priv->presents[priv->latest_present].vk_semaphore;
 }
 
 static gboolean

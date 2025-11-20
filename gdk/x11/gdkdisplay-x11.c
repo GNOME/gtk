@@ -586,6 +586,12 @@ gdk_check_edge_constraints_changed (GdkSurface *surface)
   do_net_wm_state_changes (surface);
 }
 
+static char *
+get_cm_name (GdkDisplay *display)
+{
+  return g_strdup_printf ("_NET_WM_CM_S%d", DefaultScreen (GDK_DISPLAY_XDISPLAY (display)));
+}
+
 static Window
 get_event_xwindow (const XEvent *xevent)
 {
@@ -1048,6 +1054,22 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     default:
+#ifdef HAVE_XFIXES
+      if (xevent->type - display_x11->xfixes_event_base == XFixesSelectionNotify)
+        {
+          XFixesSelectionNotifyEvent *selection_notify = (XFixesSelectionNotifyEvent *)xevent;
+          char *cm_name;
+
+          cm_name = get_cm_name (display);
+          if (selection_notify->selection == gdk_x11_get_xatom_by_name_for_display (display, cm_name))
+            {
+              gboolean composited = selection_notify->owner != None;
+
+              gdk_display_set_composited (display, composited);
+            }
+          g_free (cm_name);
+        }
+#endif
 #ifdef HAVE_RANDR
       if (xevent->type - display_x11->xrandr_event_base == RRScreenChangeNotify ||
           xevent->type - display_x11->xrandr_event_base == RRNotify)
@@ -1647,7 +1669,7 @@ gdk_x11_display_open (const char *display_name)
    * notification, and then setup the initial state of
    * is_composited to avoid a race condition here.
    */
-  cm_name = g_strdup_printf ("_NET_WM_CM_S%d", DefaultScreen (GDK_DISPLAY_XDISPLAY (display)));
+  cm_name = get_cm_name (display);
   gdk_x11_display_request_selection_notification (display, cm_name);
   gdk_display_set_composited (GDK_DISPLAY (display),
                               XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
