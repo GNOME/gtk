@@ -1,3 +1,41 @@
+Overview of Changes in 4.20.3, 20-11-2025
+=========================================
+
+* Bugs fixed:
+  - #7795 Change in scrolling behavior (lbaudin, Carlos Garnacho)
+  - #7801 Unaligned access in gdk/gdkmemoryformat.c causes testsuite crashes on
+    SPARC (Benjamin Otte)
+  - #7813 Shaper: Cannot parse SVG (Matthias Clasen)
+  - #7823 svg not scaled with display scale since switch to librsvg (Matthias
+    Clasen)
+  - #7848 GTK 4.18: Default GdkDisplay gets unreferenced when offscreen
+    rendering via secondary display, causing crash (Benjamin Otte)
+  - #7857 Feature: Add Win32 impl for gtk_file_launcher_open_containing_folder()
+    (Sergey Bugaev)
+  - #7866 Vulkan: Validation: vkQueuePresentKHR(): PRESENT_AFTER_WRITE hazard
+    detected. (Benjamin Otte)
+  - #7867 ModelButton: Increasingly long hang when switching AdwMultiLayoutView
+    (Emmanuele Bassi)
+
+* Changes:
+  - !9021 ci: Update Rust to 1.89.0 (René de Hesselle)
+  - !9036 [4.20] vulkan: Disable YCbCr to RGB conversions for fallback formats
+    (Robert Mader)
+  - !9042 backport non-smooth scrolling fixes to 4.20 (lbaudin, Carlos Garnacho)
+  - !9076 [4.20] vulkan: Fix YUYV values when uploading images (Benjamin Otte,
+    Matthias Clasen)
+  - !9150 [4.20] Fix touch dropdown selection (!8041) properly (Alice)
+  - !9154 [4.20] emoji: Update data to CLDR 48 (Jeremy Bícha)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - English (United Kingdom) (Bruce Cowan)
+  - German (Christian Kirbach)
+  - Serbian (Милош Поповић)
+  - Thai (Aefgh Threenine)
+  - Uighur (Abduqadir Abliz)
+
+
 Overview of Changes in 4.20.2, 29-09-2025
 =========================================
 
