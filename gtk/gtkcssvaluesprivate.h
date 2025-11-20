@@ -149,6 +149,7 @@ static const int other_props[] = {
   GTK_CSS_PROPERTY_TRANSFORM,
   GTK_CSS_PROPERTY_TRANSFORM_ORIGIN,
   GTK_CSS_PROPERTY_OPACITY,
+  GTK_CSS_PROPERTY_BACKDROP_FILTER,
   GTK_CSS_PROPERTY_FILTER,
 };
 
@@ -205,7 +206,7 @@ static const int used_props_map[] = {
   10, /* icon-shadow */
   -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
   12, /* caret-color */
   13, /* secondary-caret-color */
   -1, -1, -1, 

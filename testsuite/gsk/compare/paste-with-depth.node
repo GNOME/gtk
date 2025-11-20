@@ -1,0 +1,47 @@
+color {
+  bounds: 0 0 50 50;
+  color: rgb(255,255,0);
+}
+copy {
+  child: container {
+    color {
+      bounds: 0 0 50 50;
+      color: rgb(0,0,255);
+    }
+    copy {
+      child: container {
+        color {
+          bounds: 0 0 50 50;
+          color: rgb(255,0,0);
+        }
+        copy {
+          child: container {
+            color {
+              bounds: 0 0 50 50;
+              color: rgb(0,255,0);
+            }
+            copy {
+              child: container {
+                paste {
+                  bounds: 0 0 50 50;
+                  depth: 2;
+                }
+                paste {
+                  bounds: 0 0 25 50;
+                  depth: 1;
+                }
+                paste {
+                  bounds: 0 0 25 25;
+                  depth: 3;
+                }
+                paste {
+                  bounds: 25 25 25 25;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

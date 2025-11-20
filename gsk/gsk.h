@@ -24,6 +24,7 @@
 #include <gsk/gskcolornode.h>
 #include <gsk/gskcomponenttransfer.h>
 #include <gsk/gskcomponenttransfernode.h>
+#include <gsk/gskcopynode.h>
 #include <gsk/gskcontainernode.h>
 #include <gsk/gskcrossfadenode.h>
 #include <gsk/gskdebugnode.h>
@@ -31,6 +32,7 @@
 #include <gsk/gskfillnode.h>
 #include <gsk/gskglshadernode.h>
 #include <gsk/gskopacitynode.h>
+#include <gsk/gskpastenode.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>
 #include <gsk/gskpathmeasure.h>

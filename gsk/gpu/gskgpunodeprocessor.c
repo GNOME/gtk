@@ -3802,6 +3802,20 @@ gsk_gpu_get_subsurface_node_as_image (GskGpuFrame           *frame,
 }
 
 static void
+gsk_gpu_node_processor_add_copy_node (GskGpuNodeProcessor *self,
+                                      GskRenderNode       *node)
+{
+  g_warning_once ("Bug: The GPU renderer should never see copy nodes");
+}
+
+static void
+gsk_gpu_node_processor_add_paste_node (GskGpuNodeProcessor *self,
+                                       GskRenderNode       *node)
+{
+  g_warning_once ("Bug: The GPU renderer should never see paste nodes");
+}
+
+static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
@@ -4145,6 +4159,20 @@ static const struct
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_component_transfer_node,
+    NULL,
+    NULL,
+  },
+  [GSK_COPY_NODE] = {
+    0,
+    0,
+    gsk_gpu_node_processor_add_copy_node,
+    NULL,
+    NULL,
+  },
+  [GSK_PASTE_NODE] = {
+    0,
+    0,
+    gsk_gpu_node_processor_add_paste_node,
     NULL,
     NULL,
   },

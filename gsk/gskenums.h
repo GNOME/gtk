@@ -101,6 +101,22 @@
  * Since: 4.20
  */
 
+/**
+ * GSK_COPY_NODE:
+ *
+ * A node that copies the rendering canvas to be pasted later.
+ *
+ * Since: 4.22
+ */
+
+/**
+ * GSK_PASTE_NODE:
+ *
+ * A node that pastes a previously copied canvas.
+ *
+ * Since: 4.22
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
@@ -134,6 +150,8 @@ typedef enum {
   GSK_STROKE_NODE,
   GSK_SUBSURFACE_NODE,
   GSK_COMPONENT_TRANSFER_NODE,
+  GSK_COPY_NODE,
+  GSK_PASTE_NODE,
 } GskRenderNodeType;
 
 /**

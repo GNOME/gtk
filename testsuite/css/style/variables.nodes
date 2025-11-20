@@ -151,6 +151,7 @@ window.background:dir(ltr)
       animation-delay: 0; /* variables.css:85:3-14 */
       animation-fill-mode: none; /* variables.css:85:3-14 */
       opacity: 1; /* variables.css:85:3-14 */
+      backdrop-filter: none; /* variables.css:85:3-14 */
       filter: none; /* variables.css:85:3-14 */
       caret-color: rgb(255,255,255); /* variables.css:85:3-14 */
       -gtk-secondary-caret-color: rgb(255,255,255); /* variables.css:85:3-14 */

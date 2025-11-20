@@ -1,0 +1,25 @@
+color {
+  bounds: -40 -40 80 80;
+  color: rgb(0,0,255);
+}
+clip {
+  clip: -20 -20 40 40;
+  child: container {
+    color {
+      bounds: -40 -40 80 80;
+      color: rgb(255,255,0);
+    }
+    color {
+      bounds: -20 -20 40 40;
+      color: rgb(255,0,0);
+    }
+    copy {
+      child: transform {
+        transform: scale(0.5);
+        child: paste {
+          bounds: -40 -40 80 80;
+        }
+      }
+    }
+  }
+}

@@ -410,6 +410,26 @@ replay_component_transfer_node (GskRenderNode *node, GtkSnapshot *snapshot)
   gsk_render_node_unref (node2);
 }
 
+static void
+replay_copy_node (GskRenderNode *node, GtkSnapshot *snapshot)
+{
+  gtk_snapshot_push_copy (snapshot);
+  replay_node (gsk_copy_node_get_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
+}
+
+static void
+replay_paste_node (GskRenderNode *node, GtkSnapshot *snapshot)
+{
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (node, &bounds);
+
+  gtk_snapshot_append_paste (snapshot,
+                             &bounds,
+                             gsk_paste_node_get_depth (node));
+}
+
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
@@ -527,6 +547,14 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 
     case GSK_COMPONENT_TRANSFER_NODE:
       replay_component_transfer_node (node, snapshot);
+      break;
+
+    case GSK_COPY_NODE:
+      replay_copy_node (node, snapshot);
+      break;
+
+    case GSK_PASTE_NODE:
+      replay_paste_node (node, snapshot);
       break;
 
     case GSK_SUBSURFACE_NODE:
