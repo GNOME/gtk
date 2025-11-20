@@ -171,16 +171,6 @@ ensure_render_paintable (PathPaintable *self)
 }
 
 static gboolean
-path_equal (GskPath *p1,
-            GskPath *p2)
-{
-  g_autofree char *s1 = gsk_path_to_string (p1);
-  g_autofree char *s2 = gsk_path_to_string (p2);
-
-  return strcmp (s1, s2) == 0;
-}
-
-static gboolean
 path_elt_equal (PathElt *elt1,
                 PathElt *elt2)
 {
@@ -232,7 +222,7 @@ path_elt_equal (PathElt *elt1,
       elt1->attach.position != elt2->attach.position)
     return FALSE;
 
-  if (!path_equal (elt1->path, elt2->path))
+  if (!gsk_path_equal (elt1->path, elt2->path))
     return FALSE;
 
   return TRUE;
