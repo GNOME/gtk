@@ -36,8 +36,8 @@ setups = [
   },
   { 'name': 'wayland_minimal',
     'backend': 'wayland', 'if': wayland_enabled,
-    'env': [ 'GDK_GL_DISABLE=all',
-             'GDK_VULKAN_DISABLE=all'
+    'env': [ 'GDK_GL_DISABLE=all:blend-func-extended',
+             'GDK_VULKAN_DISABLE=all:dual-source-blend'
     ],
   },
   { 'backend': 'win32', 'if': os_win32 },
