@@ -26,7 +26,7 @@
 
 static gboolean using_tap;
 
-static gboolean
+static const char *
 parse_float (const char *input,
              float      *out)
 {
@@ -35,36 +35,54 @@ parse_float (const char *input,
 
   f = g_ascii_strtod (input, &s);
 
-  if (errno == ERANGE || s == input || *s != 0 ||
+  if (errno == ERANGE || s == input ||
       isinf (f) || isnan (f))
-    return FALSE;
+    return NULL;
 
   *out = f;
-  return TRUE;
+  return s;
+}
+
+static const char *
+skip_whitespace (const char *s)
+{
+  while (g_ascii_isspace (*s))
+    s++;
+
+  return s;
 }
 
 static gboolean
-parse_rect_from_filename (const char      *filename,
-                          graphene_rect_t *out_rect)
+parse_rect_from_bytes (GBytes          *bytes,
+                       graphene_rect_t *out_rect)
 {
-  char **parts;
-  gsize n;
-  gboolean result;
+  const char *s;
 
-  parts = g_strsplit (filename, "-", -1);
-  n = g_strv_length (parts);
-  if (g_str_has_suffix (parts[n-1], ".node"))
-    parts[n-1][strlen(parts[n-1])-5] = 0;
-  
-  result = n > 4 &&
-           parse_float (parts[n-4], &out_rect->origin.x) &&
-           parse_float (parts[n-3], &out_rect->origin.y) &&
-           parse_float (parts[n-2], &out_rect->size.width) &&
-           parse_float (parts[n-1], &out_rect->size.height);
+  s = g_bytes_get_data (bytes, NULL);
 
-  g_strfreev (parts);
+  if (s[0] != '/' || s[1] != '*')
+    return FALSE;
+  s = skip_whitespace (s + 2);
+  s = parse_float (s, &out_rect->origin.x);
+  if (s == NULL)
+    return FALSE;
+  s = skip_whitespace (s);
+  s = parse_float (s, &out_rect->origin.y);
+  if (s == NULL)
+    return FALSE;
+  s = skip_whitespace (s);
+  s = parse_float (s, &out_rect->size.width);
+  if (s == NULL)
+    return FALSE;
+  s = skip_whitespace (s);
+  s = parse_float (s, &out_rect->size.height);
+  if (s == NULL)
+    return FALSE;
+  s = skip_whitespace (s);
+  if (s[0] != '*' || s[1] != '/')
+    return FALSE;
 
-  return result;
+  return TRUE;
 }
 
 static void
@@ -112,11 +130,10 @@ test_opaqueness (GFile *file)
   g_assert_nonnull (bytes);
 
   node = gsk_render_node_deserialize (bytes, deserialize_error_func, file);
-  g_bytes_unref (bytes);
   is_opaque = gsk_render_node_get_opaque_rect (node, &opaque);
 
   node_file = g_file_get_path (file);
-  if (parse_rect_from_filename (node_file, &expected))
+  if (parse_rect_from_bytes (bytes, &expected))
     {
       if (is_opaque)
         {
@@ -149,6 +166,7 @@ test_opaqueness (GFile *file)
         }
     }
 
+  g_bytes_unref (bytes);
   gsk_render_node_unref (node);
   g_free (node_file);
 }
