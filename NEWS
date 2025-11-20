@@ -1,5 +1,115 @@
-Overview of Changes in 4.21.2, xx-xx-xxxx
+Overview of Changes in 4.21.3, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.21.2, 20-11-2025
+=========================================
+
+* GSK:
+ - GskRenderNodeReplay is a new API that can assist with manipulating
+   render node trees in various ways
+ - The new copy and paste node types allow referring to the 'background'
+   during rendering, which enables new features such as backdrop-filter
+ - The new composite node type allows to combine rendering with the
+   'background' in more interesting ways than just rendering it on top
+ - Radial gradients can be defined with non-concentric circles
+
+* GtkSvg
+ - <line>, <polyline> and <polygon> are now supported
+ - Gradients are fully supported, including non-concentric radial
+   gradients and reflecting as a spread method
+
+* CSS:
+ - A reduced-motion setting has been added, and is exposed to CSS
+   via media queries
+ - the backdrop-filter property is supported
+
+* GtkEmojiChooser:
+ - The Emoji chooser has been updated for CLDR 48
+
+* GtkFontDialog:
+ - The language filtering has been improved
+
+* Bugs fixed:
+  - GNOME/libadwaita#892 Adw.PreferencesDialog focus move (Alice Mikhaylenko)
+  - #4062 gtk_media_file_set_input_stream assertion failure when using GStreamer
+    backend
+  - #7820 Follow-up on loose ends in the state saving support
+  - #7857 Feature: Add Win32 impl for gtk_file_launcher_open_containing_folder()
+    (Sergey Bugaev)
+  - #7862 icon-editor: SVG not viewable in firefox (Matthias Clasen)
+  - #7866 Vulkan: Validation: vkQueuePresentKHR(): PRESENT_AFTER_WRITE hazard
+    detected. (Benjamin Otte)
+  - #7867 ModelButton: Increasingly long hang when switching AdwMultiLayoutView
+    (Emmanuele Bassi)
+  - #7872 modelbutton: Accels not accessible in non-English (Adrien Plazas)
+  - #7877 Have a toggle for reduce motion in inspector (Emmanuele Bassi)
+  - #7878 CSS tab in inspector doesn't follow reduce-motion (Emmanuele Bassi)
+  - https://gitlab.freedesktop.org/mesa/mesa/-/issues/
+
+* Changes:
+  - !7186 media: Add a bin to handle input streams (Matthias Clasen)
+  - !8826 fontchooser: Add a search bar to filter the language list (Sudip Shil)
+  - !9055 API: Add GskRenderNodeReplay (Benjamin Otte)
+  - !9096 image tool: Some refinement (Matthias Clasen)
+  - !9097 svg: Support the remaining shapes (Matthias Clasen)
+  - !9099 Tie up state saving loose ends (Adrian Vovk)
+  - !9103 icon editor: Plug a memory leak (Matthias Clasen)
+  - !9105 svg: Make fx,fy default to cx,cy (Matthias Clasen)
+  - !9106 svg: Take dependencies into account (Matthias Clasen)
+  - !9107 inspector: css-editor: Replace disable button with a switch (Jules
+    Maselbas)
+  - !9108 svg: fix printf format for size_t variables (g.willems)
+  - !9109 gtkfilechoosercell: Actually add long pressure gesture (Marco Trevisan
+    (Treviño))
+  - !9110 pathbar: Plug a memory leak (Matthias Clasen)
+  - !9111 Fix touch dropdown selection (!8041) properly (Florian "sp1rit"​)
+  - !9112 Cosmetics: Add section markers (Matthias Clasen)
+  - !9114 svg: Allow keyPoints to be outside of [0, 1] (Matthias Clasen)
+  - !9115 Rework radial gradients (Matthias Clasen)
+  - !9116 svg: fix Windows builds (g.willems)
+  - !9117 win32: Add a facility to open containing folder (Sergey Bugaev)
+  - !9118 css: Fix some properties' inheritance (Adrien Plazas)
+  - !9121 gsk: Don't leak ccs_texture_caches (Doug Nazar)
+  - !9122 colorstate: Add a static assert (Benjamin Otte)
+  - !9124 Merge the theme assets and rework the generation script (Berk Elyesa
+    Yıldırım)
+  - !9125 Split rendernodes into their own files (Benjamin Otte)
+  - !9126 Add copy and paste rendernodes (Benjamin Otte)
+  - !9127 ci: use system meson for android
+  - !9128 vulkan: Rework swapchain present implementation (Benjamin Otte)
+  - !9129 doc: Fix GTK_ACCESSIBLE_PROPERTY_HAS_POPUP (Adrien Plazas)
+  - !9130 gsk: Add gdk_color_is_srgb() (Benjamin Otte)
+  - !9131 svg: Collect test output (Matthias Clasen)
+  - !9132 svg: Fix animate transitions with delay (Matthias Clasen)
+  - !9134 Reset ModelButton accessible relations (Emmanuele Bassi)
+  - !9135 Support repeating conic gradients (Matthias Clasen)
+  - !9136 widget: Sanity-check ancestor type (Sergey Bugaev)
+  - !9137 a11y: When setting an accessible relation, clear out previous reverse
+    ones (Lukáš Tyrychtr)
+  - !9139 gsk: Typo fix (Matthias Clasen)
+  - !9140 Fix repeating conic gradients (Matthias Clasen)
+  - !9143 icon editor: Get rid of AnimationType (Matthias Clasen)
+  - !9144 Revert "gsk: Fix the conic gradient implementation" (Benjamin Otte)
+  - !9145 gtk: Document GTK_DEBUG_SESSION (Maximiliano Sandoval)
+  - !9146 modelbutton: Use accessible keyshortcuts labels (Adrien Plazas)
+  - !9149 svg: Turn simple NULL returns on errors into return_if_fail()
+    (Benjamin Otte)
+  - !9151 icon editor: Allow more shapes (Matthias Clasen)
+  - !9152 emoji: Update data to CLDR 48 (Jeremy Bícha)
+  - !9153 Some more rendernode splitoffs (Matthias Clasen)
+  - !9156 gsk: Change the linear gradient shader api (Matthias Clasen)
+  - !9157 Some icon editor fixes (Matthias Clasen)
+  - !9158 icon-editor: fix msys2 linker failure (g.willems)
+  - !9159 API: Add GskCompositeNode (Benjamin Otte)
+  - !9160 testsuite: Add an "opaque" run to compare-render (Benjamin Otte)
+  - !9161 node editor: Unset GtkApplication:save-state (Matthias Clasen)
+  - !9162 cssprovider: Actually reload when prefers-reduced-motion changes
+    (Alice Mikhaylenko)
+
+* Translation updates:
+  - Serbian (Милош Поповић)
+  - Slovenian (Martin)
+
 
 Overview of Changes in 4.21.1, 29-10-2025
 =========================================
