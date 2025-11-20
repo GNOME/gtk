@@ -54,6 +54,7 @@ compare_render_tests = [
   'color-states',
   'component-transfer-levels',
   'component-transfer-linear',
+  'composite-everything',
   'conic-gradient-premultiplied-nocairo',
   'conic-gradient-with-64-colorstops',
   'container-single-child-offscreen-for-opacity',
