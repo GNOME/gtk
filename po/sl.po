@@ -11,18 +11,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-11-07 22:23+0000\n"
-"PO-Revision-Date: 2025-11-08 15:33+0100\n"
+"POT-Creation-Date: 2025-11-20 16:06+0000\n"
+"PO-Revision-Date: 2025-11-20 18:28+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
+"n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.8\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -53,22 +53,22 @@ msgstr "Ni mogoče brati iz praznega odložišča."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Ni skladnih zapisov za prenos vsebine odložišča."
 
-#: gdk/gdkcolorstate.c:1081
+#: gdk/gdkcolorstate.c:1089
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: nedoločeni parametri niso podprti"
 
-#: gdk/gdkcolorstate.c:1127
+#: gdk/gdkcolorstate.c:1135
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: funkcija prenosa %u ni podprta"
 
-#: gdk/gdkcolorstate.c:1158
+#: gdk/gdkcolorstate.c:1166
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: Primarne barve %u niso podprte"
 
-#: gdk/gdkcolorstate.c:1185
+#: gdk/gdkcolorstate.c:1193
 #, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp: Koeficienti matrike %u, %s niso podprti"
@@ -84,11 +84,11 @@ msgstr "Ni mogoče določiti vsebine kot »%s«."
 msgid "Cannot provide contents as %s"
 msgstr "Ni mogoče določiti vsebine kot %s."
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:471
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:472
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1742
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1957
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Podpora Vulkan je onemogočena z GDK_DISABLE"
 
@@ -150,24 +150,24 @@ msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 msgid "No compatible formats to transfer contents."
 msgstr "Ni skladnih zapisov za prenos vsebine."
 
-#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:654
+#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:654
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:661
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:661
 #: gdk/win32/gdkglcontext-win32-wgl.c:784 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
-#: gdk/gdkglcontext.c:1439
+#: gdk/gdkglcontext.c:1440
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL ES API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1451
+#: gdk/gdkglcontext.c:1452
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1462
+#: gdk/gdkglcontext.c:1463
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Program ne podpira vmesnika API %s"
@@ -175,12 +175,12 @@ msgstr "Program ne podpira vmesnika API %s"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2253
+#: gdk/gdkglcontext.c:2259
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 
-#: gdk/gdkglcontext.c:2264
+#: gdk/gdkglcontext.c:2270
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Poskus uporabe %s, vendar je onemogočeno prek GDK_DISABLE"
@@ -664,8 +664,8 @@ msgstr ""
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
-"%lx."
+"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:836
 #, c-format
@@ -715,8 +715,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
-"%lx."
+"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:956
 #, c-format
@@ -904,7 +904,7 @@ msgstr "Izrisovalnik ne podpira OpenGL ES 3.0"
 msgid "OpenGL 3.3 required"
 msgstr "Potrebujete OpenGL 3.3"
 
-#: gsk/gpu/gskvulkanrenderer.c:159
+#: gsk/gpu/gskvulkanrenderer.c:161
 msgid "Vulkan support disabled during GTK build"
 msgstr "Podpora za Vulkan je med gradnjo GTK onemogočena"
 
@@ -1153,7 +1153,7 @@ msgid "Pick a Font"
 msgstr "Izberite pisavo"
 
 #: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3854
-#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:328
+#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:360
 msgid "Font"
 msgstr "Pisava"
 
@@ -1845,7 +1845,7 @@ msgstr "_Zapri"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:556
+#: gtk/gtkapplication-dbus.c:559
 msgid "Reason not specified"
 msgstr "Vzrok ni naveden"
 
@@ -2649,7 +2649,7 @@ msgid "Name"
 msgstr "Ime"
 
 #: gtk/gtkfilechooserwidget.c:7478 gtk/inspector/resource-list.ui:98
-#: gtk/ui/gtkfontchooserwidget.ui:220 gtk/ui/gtkfontchooserwidget.ui:386
+#: gtk/ui/gtkfontchooserwidget.ui:229 gtk/ui/gtkfontchooserwidget.ui:395
 #: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "Velikost"
@@ -2700,74 +2700,79 @@ msgstr "Nedoločeno"
 msgid "Change Font Features"
 msgstr "Spremeni lastnosti pisave"
 
-#: gtk/gtkfontchooserwidget.c:1491
+#: gtk/gtkfontchooserwidget.c:1335
+msgctxt "Search placeholder for font language"
+msgid "Language…"
+msgstr "Jezik …"
+
+#: gtk/gtkfontchooserwidget.c:1600
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Širina"
 
-#: gtk/gtkfontchooserwidget.c:1492
+#: gtk/gtkfontchooserwidget.c:1601
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Teža"
 
-#: gtk/gtkfontchooserwidget.c:1493
+#: gtk/gtkfontchooserwidget.c:1602
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Ležeče"
 
-#: gtk/gtkfontchooserwidget.c:1494
+#: gtk/gtkfontchooserwidget.c:1603
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Nagib"
 
-#: gtk/gtkfontchooserwidget.c:1495
+#: gtk/gtkfontchooserwidget.c:1604
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Optična velikost"
 
-#: gtk/gtkfontchooserwidget.c:2053
+#: gtk/gtkfontchooserwidget.c:2162
 msgctxt "Font feature value"
 msgid "Default"
 msgstr "Privzeto"
 
-#: gtk/gtkfontchooserwidget.c:2070
+#: gtk/gtkfontchooserwidget.c:2179
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Omogoči"
 
-#: gtk/gtkfontchooserwidget.c:2406 gtk/inspector/visual.ui:73
+#: gtk/gtkfontchooserwidget.c:2515 gtk/inspector/visual.ui:73
 msgid "Default"
 msgstr "Privzeto"
 
-#: gtk/gtkfontchooserwidget.c:2469
+#: gtk/gtkfontchooserwidget.c:2578
 msgid "Ligatures"
 msgstr "Ligature"
 
-#: gtk/gtkfontchooserwidget.c:2470
+#: gtk/gtkfontchooserwidget.c:2579
 msgid "Letter Case"
 msgstr "Črke"
 
-#: gtk/gtkfontchooserwidget.c:2471
+#: gtk/gtkfontchooserwidget.c:2580
 msgid "Number Case"
 msgstr "Številke"
 
-#: gtk/gtkfontchooserwidget.c:2472
+#: gtk/gtkfontchooserwidget.c:2581
 msgid "Number Spacing"
 msgstr "Številski razmiki"
 
-#: gtk/gtkfontchooserwidget.c:2473
+#: gtk/gtkfontchooserwidget.c:2582
 msgid "Numeric Extras"
 msgstr "Številski dodatki"
 
-#: gtk/gtkfontchooserwidget.c:2474
+#: gtk/gtkfontchooserwidget.c:2583
 msgid "Fractions"
 msgstr "Ulomki"
 
-#: gtk/gtkfontchooserwidget.c:2475
+#: gtk/gtkfontchooserwidget.c:2584
 msgid "Style Variations"
 msgstr "Različice sloga"
 
-#: gtk/gtkfontchooserwidget.c:2477
+#: gtk/gtkfontchooserwidget.c:2586
 msgid "Character Variations"
 msgstr "Različice znakov"
 
@@ -4656,21 +4661,21 @@ msgctxt "propagation limit"
 msgid "Native"
 msgstr "Izvorno"
 
-#: gtk/inspector/css-editor.c:140
+#: gtk/inspector/css-editor.c:141
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Vpisati je mogoče katerokoli pravilo CSS, ki ga GTK prepozna."
 
-#: gtk/inspector/css-editor.c:141
+#: gtk/inspector/css-editor.c:142
 msgid ""
 "You can temporarily disable this custom CSS by toggling the switch above."
 msgstr ""
 "Ta CSS po meri lahko začasno onemogočite s preklopom zgornjega stikala."
 
-#: gtk/inspector/css-editor.c:142
+#: gtk/inspector/css-editor.c:143
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr "Spremembe so uveljavljene takoj za vse gradnike seje programa."
 
-#: gtk/inspector/css-editor.c:242
+#: gtk/inspector/css-editor.c:243
 #, c-format
 msgid "Saving CSS failed"
 msgstr "Shranjevanje CSS je spodletelo"
@@ -4937,7 +4942,7 @@ msgstr "Števec sličic"
 msgid "Frame Rate"
 msgstr "Hitrost sličic"
 
-#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:358
+#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:390
 msgid "Scale"
 msgstr "Merilo pisave"
 
@@ -5065,7 +5070,7 @@ msgstr "Vir:"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:2212
+#: gtk/inspector/recorder.c:2249
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
@@ -5236,7 +5241,7 @@ msgstr "Svetla"
 msgid "System Contrast"
 msgstr "Sistemska kontrastna"
 
-#: gtk/inspector/visual.ui:107
+#: gtk/inspector/visual.ui:107 gtk/inspector/visual.ui:140
 msgid "No Preference"
 msgstr "Izbira ni navedena"
 
@@ -5248,24 +5253,32 @@ msgstr "Več"
 msgid "Less"
 msgstr "Manj"
 
-#: gtk/inspector/visual.ui:127
+#: gtk/inspector/visual.ui:126
+msgid "System Reduced Motion"
+msgstr "Sistemsko zmanjšano gibanje"
+
+#: gtk/inspector/visual.ui:141
+msgid "Reduced"
+msgstr "Zmanjšano"
+
+#: gtk/inspector/visual.ui:159
 msgid "Cursor Theme"
 msgstr "Tema kazalke"
 
-#: gtk/inspector/visual.ui:152
+#: gtk/inspector/visual.ui:184
 msgid "Cursor Size"
 msgstr "Velikost kazalca"
 
-#: gtk/inspector/visual.ui:188
+#: gtk/inspector/visual.ui:220
 msgid "Icon Theme"
 msgstr "Tema ikon"
 
-#: gtk/inspector/visual.ui:213
+#: gtk/inspector/visual.ui:245
 msgid "Text Direction"
 msgstr "Usmerjenost besedila"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:228
+#: gtk/inspector/visual.ui:260
 msgid ""
 "Left-to-Right\n"
 "Right-to-Left"
@@ -5273,20 +5286,20 @@ msgstr ""
 "Z leve proti desni\n"
 "Z desne proti levi"
 
-#: gtk/inspector/visual.ui:245
+#: gtk/inspector/visual.ui:277
 msgid "Animations"
 msgstr "Animacije"
 
-#: gtk/inspector/visual.ui:270
+#: gtk/inspector/visual.ui:302
 msgid "Slowdown"
 msgstr "Upočasni"
 
-#: gtk/inspector/visual.ui:405
+#: gtk/inspector/visual.ui:437
 msgid "Rendering"
 msgstr "Izrisovanje"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:420
+#: gtk/inspector/visual.ui:452
 msgctxt "Font rendering"
 msgid ""
 "Automatic\n"
@@ -5295,66 +5308,66 @@ msgstr ""
 "Samodejno\n"
 "Ročno"
 
-#: gtk/inspector/visual.ui:447
+#: gtk/inspector/visual.ui:479
 msgid "Show Framerate"
 msgstr "Pokaži hitrost sličic"
 
-#: gtk/inspector/visual.ui:472
+#: gtk/inspector/visual.ui:504
 msgid "Show Graphic Updates"
 msgstr "Pokaži grafične posodobitve"
 
-#: gtk/inspector/visual.ui:492
+#: gtk/inspector/visual.ui:524
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 "Obarva vsa mesta, kjer trenutni izrisovalnik uporablja Kairo namesto GPU."
 
-#: gtk/inspector/visual.ui:498
+#: gtk/inspector/visual.ui:530
 msgid "Show Cairo Rendering"
 msgstr "Pokaži izrisovanje Cairo"
 
-#: gtk/inspector/visual.ui:523
+#: gtk/inspector/visual.ui:555
 msgid "Show Baselines"
 msgstr "Pokaži črte vrstic"
 
-#: gtk/inspector/visual.ui:551
+#: gtk/inspector/visual.ui:583
 msgid "Show Layout Borders"
 msgstr "Pokaži razporeditev okvirjev"
 
-#: gtk/inspector/visual.ui:616
+#: gtk/inspector/visual.ui:648
 msgid "CSS Padding"
 msgstr "Blazinjenje CSS"
 
-#: gtk/inspector/visual.ui:626
+#: gtk/inspector/visual.ui:658
 msgid "CSS Border"
 msgstr "Obroba CSS"
 
-#: gtk/inspector/visual.ui:636
+#: gtk/inspector/visual.ui:668
 msgid "CSS Margin"
 msgstr "Rob CSS"
 
-#: gtk/inspector/visual.ui:646
+#: gtk/inspector/visual.ui:678
 msgid "Widget Margin"
 msgstr "Robovi gradnika"
 
-#: gtk/inspector/visual.ui:681
+#: gtk/inspector/visual.ui:713
 msgid "Show Focus"
 msgstr "Pokaži žarišče"
 
-#: gtk/inspector/visual.ui:706
+#: gtk/inspector/visual.ui:738
 msgid "Show Accessibility warnings"
 msgstr "Pokaži opozorila o dostopnosti"
 
-#: gtk/inspector/visual.ui:731
+#: gtk/inspector/visual.ui:763
 msgid "Show Graphics Offload"
 msgstr "Pokaži grafično razbremenitev"
 
-#: gtk/inspector/visual.ui:766
+#: gtk/inspector/visual.ui:798
 msgid "Show Touch UI"
 msgstr "Pokaži vmesnik na dotik"
 
-#: gtk/inspector/visual.ui:797
+#: gtk/inspector/visual.ui:829
 msgid "Inspect Inspector"
 msgstr "Preuči inšpektorja"
 
@@ -7250,24 +7263,24 @@ msgstr "Pisava s stalno širino"
 msgid "Language"
 msgstr "Jezik"
 
-#: gtk/ui/gtkfontchooserwidget.ui:201 gtk/ui/gtkfontchooserwidget.ui:203
-#: gtk/ui/gtkfontchooserwidget.ui:353 gtk/ui/gtkfontchooserwidget.ui:357
+#: gtk/ui/gtkfontchooserwidget.ui:210 gtk/ui/gtkfontchooserwidget.ui:212
+#: gtk/ui/gtkfontchooserwidget.ui:362 gtk/ui/gtkfontchooserwidget.ui:366
 msgid "Preview Font"
 msgstr "Predogled pisave"
 
-#: gtk/ui/gtkfontchooserwidget.ui:299
+#: gtk/ui/gtkfontchooserwidget.ui:308
 msgid "No Fonts Found"
 msgstr "Ni najdenih pisav"
 
-#: gtk/ui/gtkfontchooserwidget.ui:337
+#: gtk/ui/gtkfontchooserwidget.ui:346
 msgid "Font Name"
 msgstr "Ime pisave"
 
-#: gtk/ui/gtkfontchooserwidget.ui:382
+#: gtk/ui/gtkfontchooserwidget.ui:391
 msgid "Font Variation Axes"
 msgstr "Osi variacij pisave"
 
-#: gtk/ui/gtkfontchooserwidget.ui:430
+#: gtk/ui/gtkfontchooserwidget.ui:439
 msgid "Font Features"
 msgstr "Funkcionalnosti pisave"
 
@@ -7632,7 +7645,7 @@ msgstr ""
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
 #: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
 #: tools/gtk-rendernode-tool-convert.c:98
-#: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
+#: tools/gtk-rendernode-tool-extract.c:198 tools/gtk-rendernode-tool-info.c:131
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
 msgstr "DATOTEKA"
@@ -8500,7 +8513,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Preizkusno izrisovanje datoteke .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:320 tools/gtk-rendernode-tool-info.c:252
+#: tools/gtk-rendernode-tool-extract.c:220 tools/gtk-rendernode-tool-info.c:153
 #: tools/gtk-rendernode-tool-render.c:300 tools/gtk-rendernode-tool-show.c:150
 #, c-format
 msgid "No .node file specified\n"
@@ -8576,54 +8589,54 @@ msgstr "Ni določene datoeke .svg\n"
 msgid "Can only accept a single .svg file\n"
 msgstr "Sprejeti je mogoče le eno datoteko .svg\n"
 
-#: tools/gtk-rendernode-tool-extract.c:73
-#: tools/gtk-rendernode-tool-extract.c:149
+#: tools/gtk-rendernode-tool-extract.c:69
+#: tools/gtk-rendernode-tool-extract.c:147
 #, c-format
 msgid "Failed to write %s\n"
 msgstr "Zapisovanje %s ni uspelo\n"
 
-#: tools/gtk-rendernode-tool-extract.c:296
+#: tools/gtk-rendernode-tool-extract.c:196
 msgid "Directory to use"
 msgstr "Mapa za uporabo"
 
-#: tools/gtk-rendernode-tool-extract.c:296
+#: tools/gtk-rendernode-tool-extract.c:196
 msgid "DIRECTORY"
 msgstr "MAPA"
 
-#: tools/gtk-rendernode-tool-extract.c:297
+#: tools/gtk-rendernode-tool-extract.c:197
 msgid "Be verbose"
 msgstr "Podrobni izpis"
 
-#: tools/gtk-rendernode-tool-extract.c:307
+#: tools/gtk-rendernode-tool-extract.c:207
 msgid "Extract data urls from the render node."
 msgstr "Izvlecite URL-je podatkov iz vozlišča za izrisovanje."
 
-#: tools/gtk-rendernode-tool-extract.c:326 tools/gtk-rendernode-tool-info.c:258
+#: tools/gtk-rendernode-tool-extract.c:226 tools/gtk-rendernode-tool-info.c:159
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Sprejeti je mogoče le eno datoteko .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:197
+#: tools/gtk-rendernode-tool-info.c:97
 msgid "Number of nodes:"
 msgstr "Število vozlišč:"
 
-#: tools/gtk-rendernode-tool-info.c:204
+#: tools/gtk-rendernode-tool-info.c:104
 msgid "Depth:"
 msgstr "Globina:"
 
-#: tools/gtk-rendernode-tool-info.c:207
+#: tools/gtk-rendernode-tool-info.c:107
 msgid "Bounds:"
 msgstr "Meje:"
 
-#: tools/gtk-rendernode-tool-info.c:208
+#: tools/gtk-rendernode-tool-info.c:108
 msgid "Origin:"
 msgstr "Izvor:"
 
-#: tools/gtk-rendernode-tool-info.c:212 tools/gtk-rendernode-tool-info.c:218
+#: tools/gtk-rendernode-tool-info.c:112 tools/gtk-rendernode-tool-info.c:118
 msgid "Opaque part:"
 msgstr "Neprosojni del:"
 
-#: tools/gtk-rendernode-tool-info.c:239
+#: tools/gtk-rendernode-tool-info.c:140
 msgid "Provide information about the render node."
 msgstr "Navesti je traba podrobnosti o vozlišču za izrisovanje."
 
