@@ -148,6 +148,7 @@ gsk_copy_node_new (GskRenderNode *child)
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   self->render_node.is_hdr = gsk_render_node_is_hdr (child);
+  self->render_node.clears_background = gsk_render_node_clears_background (child);
 
   return node;
 }

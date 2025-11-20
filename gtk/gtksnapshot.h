@@ -115,6 +115,9 @@ void            gtk_snapshot_push_mask                  (GtkSnapshot            
                                                          GskMaskMode             mask_mode);
 GDK_AVAILABLE_IN_4_22
 void            gtk_snapshot_push_copy                  (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_4_22
+void            gtk_snapshot_push_composite             (GtkSnapshot            *snapshot,
+                                                         GskPorterDuff           op);
 
 
 GDK_AVAILABLE_IN_ALL

@@ -212,26 +212,46 @@ gsk_texture1 (vec2 pos)
 #endif
 
 void            run                             (out vec4 color,
+#ifdef GSK_DUAL_BLEND
+                                                 out vec4 mask,
+#endif
                                                  out vec2 pos);
 
 void
 main_clip_none (void)
 {
   vec4 color;
+#ifdef GSK_DUAL_BLEND
+  vec4 mask;
+#endif
   vec2 pos;
 
+#ifdef GSK_DUAL_BLEND
+  run (color, mask, pos);
+#else
   run (color, pos);
+#endif
 
   gsk_set_output_color (color);
+#ifdef GSK_DUAL_BLEND
+  gsk_set_output_mask (mask);
+#endif
 }
 
 void
 main_clip_rect (void)
 {
   vec4 color;
+#ifdef GSK_DUAL_BLEND
+  vec4 mask;
+#endif
   vec2 pos;
 
+#ifdef GSK_DUAL_BLEND
+  run (color, mask, pos);
+#else
   run (color, pos);
+#endif
 
   Rect clip = rect_from_gsk (GSK_GLOBAL_CLIP_RECT);
 
@@ -239,15 +259,26 @@ main_clip_rect (void)
   color *= coverage;
 
   gsk_set_output_color (color);
+#ifdef GSK_DUAL_BLEND
+  mask *= coverage;
+  gsk_set_output_mask (mask);
+#endif
 }
 
 void
 main_clip_rounded (void)
 {
   vec4 color;
+#ifdef GSK_DUAL_BLEND
+  vec4 mask;
+#endif
   vec2 pos;
 
+#ifdef GSK_DUAL_BLEND
+  run (color, mask, pos);
+#else
   run (color, pos);
+#endif
 
   RoundedRect clip = rounded_rect_from_gsk (GSK_GLOBAL_CLIP);
 
@@ -255,6 +286,10 @@ main_clip_rounded (void)
   color *= coverage;
 
   gsk_set_output_color (color);
+#ifdef GSK_DUAL_BLEND
+  mask *= coverage;
+  gsk_set_output_mask (mask);
+#endif
 }
 
 void

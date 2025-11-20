@@ -400,6 +400,8 @@ gsk_gl_device_load_shader (GskGLDevice       *self,
   g_string_append (preamble, "\n");
   if (self->api == GDK_GL_API_GLES)
     {
+      if (gdk_display_get_gl_context (gsk_gpu_device_get_display (GSK_GPU_DEVICE (self))))
+        g_string_append (preamble, "#extension GL_EXT_blend_func_extended : require\n");
       if (gsk_gpu_shader_flags_has_external_textures (flags))
         {
           g_string_append (preamble, "#extension GL_OES_EGL_image_external_essl3 : require\n");

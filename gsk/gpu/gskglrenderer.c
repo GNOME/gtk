@@ -67,6 +67,8 @@ gsk_gl_renderer_create_context (GskGpuRenderer       *renderer,
     }
 
   *supported = -1;
+  if (!gdk_gl_context_has_feature (context, GDK_GL_FEATURE_BLEND_FUNC_EXTENDED))
+    *supported &= ~GSK_GPU_OPTIMIZE_DUAL_BLEND;
 
   return GDK_DRAW_CONTEXT (context);
 }

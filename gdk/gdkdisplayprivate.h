@@ -46,19 +46,20 @@ G_BEGIN_DECLS
 typedef struct _GdkDisplayClass GdkDisplayClass;
 
 typedef enum {
-  GDK_VULKAN_FEATURE_DMABUF                     = 1 << 0,
-  GDK_VULKAN_FEATURE_WIN32                      = 1 << 1,
-  GDK_VULKAN_FEATURE_YCBCR                      = 1 << 2,
-  GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE         = 1 << 3,
-  GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 4,
-  GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 5,
-  GDK_VULKAN_FEATURE_WIN32_SEMAPHORE            = 1 << 6,
-  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 7,
-  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 8,
-  GDK_VULKAN_FEATURE_PORTABILITY_SUBSET         = 1 << 9,
+  GDK_VULKAN_FEATURE_DUAL_SOURCE_BLEND          = 1 << 0,
+  GDK_VULKAN_FEATURE_DMABUF                     = 1 << 1,
+  GDK_VULKAN_FEATURE_WIN32                      = 1 << 2,
+  GDK_VULKAN_FEATURE_YCBCR                      = 1 << 3,
+  GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE         = 1 << 4,
+  GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 5,
+  GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 6,
+  GDK_VULKAN_FEATURE_WIN32_SEMAPHORE            = 1 << 7,
+  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 8,
+  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 9,
+  GDK_VULKAN_FEATURE_PORTABILITY_SUBSET         = 1 << 10,
 } GdkVulkanFeatures;
 
-#define GDK_VULKAN_N_FEATURES 6
+#define GDK_VULKAN_N_FEATURES 11
 
 #ifdef GDK_RENDERING_VULKAN
 extern const GdkDebugKey gdk_vulkan_feature_keys[];

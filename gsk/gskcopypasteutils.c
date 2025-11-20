@@ -23,6 +23,7 @@
 #include "gskcolornode.h"
 #include "gskcontainernode.h"
 #include "gskcopynode.h"
+#include "gskopacitynode.h"
 #include "gskpastenode.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
@@ -113,6 +114,7 @@ replay_partial_node (const PartialNode *replay)
         case GSK_SUBSURFACE_NODE:
         case GSK_COPY_NODE:
         case GSK_PASTE_NODE:
+        case GSK_COMPOSITE_NODE:
           /* These all don't record anything, so we never
            * encounter them */
         case GSK_NOT_A_RENDER_NODE:
@@ -133,6 +135,16 @@ replay_partial_node (const PartialNode *replay)
           g_warning ("Trying to paste non-invertible transform, ignoring.");
           tmp = NULL;
         }
+      gsk_render_node_unref (node);
+      node = tmp;
+    }
+  if (gsk_render_node_clears_background (node))
+    {
+      /* Wrap in something that blocks background writes from
+       * going through.
+       * Paste nodes are meant to work like textures.
+       */
+      GskRenderNode *tmp = gsk_opacity_node_new (node, 1.0);
       gsk_render_node_unref (node);
       node = tmp;
     }
@@ -183,6 +195,7 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
     case GSK_BLUR_NODE:
     case GSK_GL_SHADER_NODE:
     case GSK_MASK_NODE:
+    case GSK_COMPOSITE_NODE:
       /* record a new background for each child */
       {
         const PartialNode *saved = recording->nodes;

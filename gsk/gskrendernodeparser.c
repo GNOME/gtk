@@ -28,6 +28,7 @@
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
 #include "gskcomponenttransferprivate.h"
+#include "gskcompositenode.h"
 #include "gskcontainernodeprivate.h"
 #include "gskcopynode.h"
 #include "gskcrossfadenode.h"
@@ -1818,6 +1819,14 @@ parse_mask_mode (GtkCssParser *parser,
   gtk_css_parser_error_syntax (parser, "Not a valid mask mode.");
 
   return FALSE;
+}
+
+static gboolean
+parse_porter_duff (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      out_rule)
+{
+  return parse_enum (parser, GSK_TYPE_PORTER_DUFF, out_rule);
 }
 
 static PangoFont *
@@ -4022,6 +4031,34 @@ parse_paste_node (GtkCssParser *parser,
   return node;
 }
 
+static GskRenderNode *
+parse_composite_node (GtkCssParser *parser,
+                      Context      *context)
+{
+  GskRenderNode *child = NULL;
+  GskRenderNode *mask = NULL;
+  GskPorterDuff porter_duff = GSK_PORTER_DUFF_SOURCE_OVER_DEST; 
+  const Declaration declarations[] = {
+    { "child", parse_node, clear_node, &child },
+    { "mask", parse_node, clear_node, &mask },
+    { "operator", parse_porter_duff, NULL, &porter_duff },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+  if (mask == NULL)
+    mask = gsk_color_node_new (&GDK_RGBA("FFFFFF"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+
+  result = gsk_composite_node_new (child, mask, porter_duff);
+
+  gsk_render_node_unref (child);
+  gsk_render_node_unref (mask);
+
+  return result;
+}
+
 static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
@@ -4064,6 +4101,7 @@ parse_node (GtkCssParser *parser,
     { "component-transfer", parse_component_transfer_node },
     { "copy", parse_copy_node },
     { "paste", parse_paste_node },
+    { "composite", parse_composite_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4442,6 +4480,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_COPY_NODE:
       printer_init_duplicates_for_node (printer, gsk_copy_node_get_child (node));
+      break;
+
+    case GSK_COMPOSITE_NODE:
+      printer_init_duplicates_for_node (printer, gsk_composite_node_get_child (node));
+      printer_init_duplicates_for_node (printer, gsk_composite_node_get_mask (node));
       break;
 
     default:
@@ -6329,6 +6372,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           append_size_param (p, "depth", gsk_paste_node_get_depth (node));
         end_node (p);
       }
+      break;
+
+    case GSK_COMPOSITE_NODE:
+      start_node (p, "composite", node_name);
+      append_node_param (p, "child", gsk_composite_node_get_child (node));
+      append_node_param (p, "mask", gsk_composite_node_get_mask (node));
+      append_enum_param (p, "operator", GSK_TYPE_PORTER_DUFF, gsk_composite_node_get_operator (node));
+      end_node (p);
       break;
 
     default:

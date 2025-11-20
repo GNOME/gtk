@@ -1,0 +1,1019 @@
+color {
+  color: #000;
+  bounds: -10 -10 910 910;
+}
+
+opacity {
+  opacity: 1.0;
+  child: container {
+
+color {
+  color: #F0C00080;
+  bounds: 0 0 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 0 0 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 40 40 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 40 40 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 0 0 140 140;
+  }
+  operator: source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 0 150 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 0 150 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 40 190 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 40 190 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 0 150 140 140;
+  }
+  operator: dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 150 0 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 150 0 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 190 40 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 190 40 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 150 0 140 140;
+  }
+  operator: source-over-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 150 150 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 150 150 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 190 190 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 190 190 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 150 150 140 140;
+  }
+  operator: dest-over-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 300 0 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 300 0 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 340 40 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 340 40 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 300 0 140 140;
+  }
+  operator: source-in-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 300 150 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 300 150 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 340 190 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 340 190 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 300 150 140 140;
+  }
+  operator: dest-in-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 450 0 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 450 0 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 490 40 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 490 40 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 450 0 140 140;
+  }
+  operator: source-out-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 450 150 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 450 150 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 490 190 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 490 190 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 450 150 140 140;
+  }
+  operator: dest-out-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 600 0 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 600 0 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 640 40 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 640 40 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 600 0 140 140;
+  }
+  operator: source-atop-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 600 150 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 600 150 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 640 190 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 640 190 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 600 150 140 140;
+  }
+  operator: dest-atop-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 750 0 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 750 0 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 790 40 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 790 40 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 750 0 140 140;
+  }
+  operator: xor;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 750 150 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 750 150 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 790 190 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 790 190 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF;
+    bounds: 750 150 140 140;
+  }
+  operator: clear;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 0 300 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 0 300 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 40 340 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 40 340 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 0 300 140 140;
+  }
+  operator: source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 0 450 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 0 450 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 40 490 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 40 490 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 0 450 140 140;
+  }
+  operator: dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 150 300 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 150 300 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 190 340 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 190 340 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 150 300 140 140;
+  }
+  operator: source-over-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 150 450 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 150 450 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 190 490 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 190 490 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 150 450 140 140;
+  }
+  operator: dest-over-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 300 300 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 300 300 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 340 340 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 340 340 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 300 300 140 140;
+  }
+  operator: source-in-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 300 450 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 300 450 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 340 490 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 340 490 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 300 450 140 140;
+  }
+  operator: dest-in-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 450 300 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 450 300 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 490 340 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 490 340 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 450 300 140 140;
+  }
+  operator: source-out-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 450 450 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 450 450 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 490 490 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 490 490 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 450 450 140 140;
+  }
+  operator: dest-out-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 600 300 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 600 300 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 640 340 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 640 340 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 600 300 140 140;
+  }
+  operator: source-atop-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 600 450 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 600 450 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 640 490 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 640 490 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 600 450 140 140;
+  }
+  operator: dest-atop-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 750 300 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 750 300 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 790 340 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 790 340 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 750 300 140 140;
+  }
+  operator: xor;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 750 450 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 750 450 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 790 490 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 790 490 100 100;
+    }
+  }
+  mask: color {
+    color: #FFFA;
+    bounds: 750 450 140 140;
+  }
+  operator: clear;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 0 600 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 0 600 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 40 640 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 40 640 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 0 600 140 140;
+  }
+  operator: source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 0 750 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 0 750 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 40 790 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 40 790 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 0 750 140 140;
+  }
+  operator: dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 150 600 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 150 600 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 190 640 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 190 640 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 150 600 140 140;
+  }
+  operator: source-over-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 150 750 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 150 750 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 190 790 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 190 790 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 150 750 140 140;
+  }
+  operator: dest-over-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 300 600 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 300 600 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 340 640 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 340 640 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 300 600 140 140;
+  }
+  operator: source-in-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 300 750 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 300 750 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 340 790 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 340 790 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 300 750 140 140;
+  }
+  operator: dest-in-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 450 600 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 450 600 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 490 640 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 490 640 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 450 600 140 140;
+  }
+  operator: source-out-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 450 750 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 450 750 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 490 790 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 490 790 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 450 750 140 140;
+  }
+  operator: dest-out-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 600 600 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 600 600 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 640 640 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 640 640 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 600 600 140 140;
+  }
+  operator: source-atop-dest;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 600 750 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 600 750 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 640 790 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 640 790 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 600 750 140 140;
+  }
+  operator: dest-atop-source;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 750 600 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 750 600 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 790 640 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 790 640 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 750 600 140 140;
+  }
+  operator: xor;
+}
+
+color {
+  color: #F0C00080;
+  bounds: 750 750 100 100;
+}
+border {
+  colors: #F0C000;
+   widths: 15;
+  outline: 750 750 100 100;
+}
+composite {
+  child: container {
+    color {
+      color: #00C0F080;
+      bounds: 790 790 100 100;
+    }
+    border {
+      colors: #00C0F0;
+      widths: 15;
+      outline: 790 790 100 100;
+    }
+  }
+  mask: color {
+    color: #FFF5;
+    bounds: 750 750 140 140;
+  }
+  operator: clear;
+}
+
+}
+}

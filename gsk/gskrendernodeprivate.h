@@ -28,6 +28,7 @@ struct _GskRenderNode
   guint preferred_depth : GDK_MEMORY_DEPTH_BITS;
   guint fully_opaque : 1;
   guint is_hdr : 1;
+  guint clears_background : 1; /* mostly relevant for tracking opacity */
 };
 
 typedef struct
@@ -113,6 +114,8 @@ void            gsk_transform_node_get_translate        (const GskRenderNode    
                                                          float                       *dy);
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_clears_background       (const GskRenderNode         *node) G_GNUC_PURE;
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
 #define gsk_render_node_unref(node) _gsk_render_node_unref(node)

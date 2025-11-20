@@ -147,6 +147,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     struct {
       GdkSubsurface *subsurface;
     } subsurface;
+    struct {
+      GskPorterDuff op;
+      GskRenderNode *mask;
+    } composite;
   } data;
 };
 
@@ -1781,6 +1785,87 @@ gtk_snapshot_push_copy (GtkSnapshot *snapshot)
                            NULL);
 }
 
+static GskRenderNode *
+gtk_snapshot_collect_composite_child (GtkSnapshot      *snapshot,
+                                      GtkSnapshotState *state,
+                                      GskRenderNode   **nodes,
+                                      guint             n_nodes)
+{
+  GskRenderNode *child, *mask, *result;
+
+  mask = state->data.composite.mask;
+  child = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (child == NULL)
+    return NULL;
+
+  if (mask == NULL)
+    {
+      gsk_render_node_unref (child);
+      return NULL;
+    }
+
+  result = gsk_composite_node_new (child, mask, state->data.composite.op);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static void
+gtk_snapshot_clear_composite_child (GtkSnapshotState *state)
+{
+  g_clear_pointer (&(state->data.composite.mask), gsk_render_node_unref);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_composite_mask (GtkSnapshot      *snapshot,
+                                     GtkSnapshotState *state,
+                                     GskRenderNode   **nodes,
+                                     guint             n_nodes)
+{
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_composite_child);
+
+  prev_state->data.composite.mask = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  return NULL;
+}
+
+/**
+ * gtk_snapshot_push_composite:
+ * @snapshot: a #GtkSnapshot
+ * @op: The Porter/Duff compositing operator to use
+ *
+ * Until the first call to [method@Gtk.Snapshot.pop], the
+ * mask image for the mask operation will be recorded.
+ *
+ * After that call, the child image will be recorded until
+ * the second call to [method@Gtk.Snapshot.pop].
+ *
+ * Calling this function requires 2 subsequent calls to gtk_snapshot_pop().
+ *
+ * Since: 4.22
+ */
+void
+gtk_snapshot_push_composite (GtkSnapshot   *snapshot,
+                             GskPorterDuff  op)
+{
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *child_state;
+
+  child_state = gtk_snapshot_push_state (snapshot,
+                                         current_state->transform,
+                                         gtk_snapshot_collect_composite_child,
+                                         gtk_snapshot_clear_composite_child);
+
+  child_state->data.composite.op= op;
+
+  gtk_snapshot_push_state (snapshot,
+                           child_state->transform,
+                           gtk_snapshot_collect_composite_mask,
+                           NULL);
+}
 
 static GskRenderNode *
 gtk_snapshot_collect_cross_fade_end (GtkSnapshot      *snapshot,

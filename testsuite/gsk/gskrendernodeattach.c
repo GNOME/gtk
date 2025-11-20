@@ -222,6 +222,17 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gsk_render_node_unref (child);
       return res;
 
+    case GSK_COMPOSITE_NODE:
+      {
+        GskRenderNode *mask;
+        child = node_attach (gsk_composite_node_get_child (node), surface, idx);
+        mask = node_attach (gsk_composite_node_get_mask (node), surface, idx);
+        res = gsk_composite_node_new (child, mask, gsk_composite_node_get_operator (node));
+        gsk_render_node_unref (child);
+        gsk_render_node_unref (mask);
+        return res;
+      }
+
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();

@@ -69,7 +69,10 @@ typedef enum {
   GSK_GPU_BLEND_NONE,
   GSK_GPU_BLEND_OVER,
   GSK_GPU_BLEND_ADD,
-  GSK_GPU_BLEND_CLEAR
+  GSK_GPU_BLEND_CLEAR,
+  GSK_GPU_BLEND_MASK_ONE,
+  GSK_GPU_BLEND_MASK_ALPHA,
+  GSK_GPU_BLEND_MASK_INV_ALPHA,
 } GskGpuBlend;
 
 /* We only need this for the final VkImageLayout, but don't tell anyone */
@@ -154,5 +157,6 @@ typedef enum {
   GSK_GPU_OPTIMIZE_TO_IMAGE             = 1 <<  5,
   GSK_GPU_OPTIMIZE_OCCLUSION_CULLING    = 1 <<  6,
   GSK_GPU_OPTIMIZE_REPEAT               = 1 <<  7,
+  GSK_GPU_OPTIMIZE_DUAL_BLEND           = 1 <<  8,
 } GskGpuOptimizations;
 

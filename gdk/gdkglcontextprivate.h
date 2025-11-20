@@ -34,6 +34,7 @@ typedef enum {
   GDK_GL_FEATURE_BUFFER_STORAGE             = 1 << 2,
   GDK_GL_FEATURE_EXTERNAL_OBJECTS           = 1 << 3,
   GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32     = 1 << 4,
+  GDK_GL_FEATURE_BLEND_FUNC_EXTENDED        = 1 << 5,
 } GdkGLFeatures;
 
 #define GDK_GL_N_FEATURES 3

@@ -292,6 +292,23 @@ The syntax for color stops is:
 
 The default value for transition hints is 0.5.
 
+### composite
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| child    | `<node>`         | color { }              | always      |
+| mask     | `<node>`         | color { }              | always      |
+| operator | `<porter-duff>`  | source-over-dest       | always      |
+
+Creates a node like `gsk_composite_node_new()` with the given properties.
+
+Possible values for the operator property are:
+
+    porter-duff: source | dest | source-over-dest | dest-over-source |
+                 source-in-dest | dest-in-source | source-out-dest |
+                 dest-out-source | source-atop-dest | dest-atop-source |
+                 xor | clear
+
 ### copy
 
 | property | syntax           | default                | printed     |
