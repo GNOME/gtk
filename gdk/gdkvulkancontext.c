@@ -692,7 +692,7 @@ gdk_vulkan_present_is_busy (GdkVulkanContext *self,
 {
   VkResult res;
 
-  if (present->vk_swapchain == NULL)
+  if (!present->vk_swapchain)
     return FALSE;
 
   if (!present->vk_fence)
@@ -1200,7 +1200,7 @@ gdk_vulkan_context_surface_detach (GdkDrawContext *context)
       if (priv->presents[i].vk_swapchain)
         {
           gdk_vulkan_context_unref_swapchain (self, priv->presents[i].vk_swapchain);
-          priv->presents[i].vk_swapchain = NULL;
+          priv->presents[i].vk_swapchain = VK_NULL_HANDLE;
         }
       vkDestroySemaphore (vk_device,
                           priv->presents[i].vk_semaphore,
@@ -1533,7 +1533,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
     }
 
   gdk_profiler_end_markf (begin_time,
-                          "Save Vulkan pipeline cache", "%s size %lu",
+                          "Save Vulkan pipeline cache", "%s size %zu",
                           g_file_peek_path (file), size);
 
   g_object_unref (file);
