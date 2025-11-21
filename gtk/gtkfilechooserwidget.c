@@ -1451,10 +1451,6 @@ visit_file_cb (GSimpleAction *action,
   g_clear_object (&info);
 }
 
-#define FILE_MANAGER_DBUS_NAME "org.freedesktop.FileManager1"
-#define FILE_MANAGER_DBUS_IFACE "org.freedesktop.FileManager1"
-#define FILE_MANAGER_DBUS_PATH "/org/freedesktop/FileManager1"
-
 /* Callback used when the "Open this folder" menu item is activated */
 static void
 open_folder_cb (GSimpleAction *action,
