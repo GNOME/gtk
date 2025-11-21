@@ -1,0 +1,33 @@
+* {
+  all: unset;
+}
+
+window {
+  padding: 20px;
+  background: repeating-linear-gradient(#FF0000 0px 5px, #00FF00 5px 10px);
+}
+
+label {
+  min-width: 100px;
+  min-height: 100px;
+}
+
+#opacity-property {
+  backdrop-filter: invert(100%);
+  opacity: 40%;
+}
+
+#opacity-filter {
+  backdrop-filter: invert(100%) opacity(40%);
+}
+
+#both {
+  backdrop-filter: opacity(80%) invert(100%);
+  opacity: 50%;
+}
+
+#reference {
+  background: repeating-linear-gradient(#996666 0px 5px, #669966 5px 10px);
+  min-width: 300px;
+  min-height: 100px;
+}

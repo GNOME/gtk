@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <property name="decorated">false</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="name">reference</property>
+      </object>
+    </property>
+</object>

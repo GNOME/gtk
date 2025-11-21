@@ -11980,6 +11980,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
       graphene_rect_t bounds;
       double extra_size;
       gtk_snapshot_push_copy (snapshot);
+      if (opacity < 1.0)
+        gtk_snapshot_push_opacity (snapshot, opacity);
       gtk_snapshot_push_rounded_clip (snapshot, border_box);
       extra_size = gtk_css_filter_value_push_snapshot (backdrop_filter_value, snapshot);
       bounds = gtk_css_boxes_get_border_box (&boxes)->bounds;
@@ -11988,8 +11990,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                                  &bounds,
                                  0);
       gtk_css_filter_value_pop_snapshot (backdrop_filter_value, snapshot);
-      gtk_snapshot_pop (snapshot);
-      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_pop (snapshot); /* clip */
+      if (opacity < 1.0)
+        gtk_snapshot_pop (snapshot); /* opacity */
+      gtk_snapshot_pop (snapshot); /* copy */
     }
 
   filter_value = style->other->filter;
