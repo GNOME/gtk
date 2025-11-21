@@ -26,6 +26,9 @@
 
 G_BEGIN_DECLS
 
+#define INDEFINITE G_MAXINT64
+#define REPEAT_FOREVER ((double)INFINITY)
+
 typedef struct _SvgValue SvgValue;
 typedef struct _Shape Shape;
 typedef struct _Timeline Timeline;

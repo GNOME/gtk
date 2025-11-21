@@ -164,8 +164,6 @@
  * Since: 4.22
  */
 
-#define INDEFINITE G_MAXINT64
-
 /* Max. nesting level of paint calls we allow */
 #define MAX_DEPTH 256
 
@@ -6292,7 +6290,7 @@ animation_init (Animation *a)
   a->end = NULL;
 
   a->simple_duration = INDEFINITE;
-  a->repeat_count = DBL_MAX;
+  a->repeat_count = REPEAT_FOREVER;
   a->repeat_duration = INDEFINITE;
 
   a->fill = ANIMATION_FILL_REMOVE;
@@ -6640,7 +6638,7 @@ determine_repeat_duration (Animation *a)
 {
   if (a->repeat_duration < INDEFINITE)
     return a->repeat_duration;
-  else if (a->simple_duration < INDEFINITE && a->repeat_count < DBL_MAX)
+  else if (a->simple_duration < INDEFINITE && a->repeat_count != REPEAT_FOREVER)
     return a->simple_duration * a->repeat_count;
   else if (a->current.end < INDEFINITE)
     return a->current.end - a->current.begin;
@@ -6660,7 +6658,7 @@ determine_simple_duration (Animation *a)
 
   repeat_duration = determine_repeat_duration (a);
 
-  if (repeat_duration < INDEFINITE && a->repeat_count < DBL_MAX)
+  if (repeat_duration < INDEFINITE && a->repeat_count != REPEAT_FOREVER)
     return (int64_t) (repeat_duration / a->repeat_count);
 
   return INDEFINITE;
@@ -7932,7 +7930,7 @@ create_animation (Shape        *shape,
   a = animation_animate_new ();
   a->repeat_count = repeat;
   a->simple_duration = duration;
-  if (repeat == DBL_MAX)
+  if (repeat == REPEAT_FOREVER)
     a->repeat_duration = INDEFINITE;
   else
     a->repeat_duration =duration * repeat;
@@ -8537,12 +8535,12 @@ parse_base_animation_attrs (Animation            *a,
         }
     }
 
-  a->repeat_count = DBL_MAX;
+  a->repeat_count = REPEAT_FOREVER;
   if (repeat_count_attr)
     {
       a->has_repeat_count = 1;
       if (strcmp (repeat_count_attr, "indefinite") == 0)
-        a->repeat_count = DBL_MAX;
+        a->repeat_count = REPEAT_FOREVER;
       else if (!parse_number (repeat_count_attr, 0, DBL_MAX, &a->repeat_count))
         {
           gtk_svg_invalid_attribute (data->svg, context, "repeatCount", NULL);
@@ -8575,7 +8573,7 @@ parse_base_animation_attrs (Animation            *a,
     }
   else if (a->has_repeat_count && a->has_simple_duration && !a->has_repeat_duration)
     {
-      if (a->repeat_count == DBL_MAX)
+      if (a->repeat_count == REPEAT_FOREVER)
         a->repeat_duration = INDEFINITE;
       else
         a->repeat_duration = a->simple_duration * a->repeat_count;
@@ -8583,13 +8581,13 @@ parse_base_animation_attrs (Animation            *a,
   else if (a->has_repeat_duration && a->has_simple_duration && !a->has_repeat_count)
     {
       if (a->repeat_duration == INDEFINITE)
-        a->repeat_count = DBL_MAX;
+        a->repeat_count = REPEAT_FOREVER;
       else
         a->repeat_count = a->repeat_duration / a->simple_duration;
     }
   else if (a->has_repeat_duration && a->has_repeat_count && !a->has_simple_duration)
     {
-      if (a->repeat_duration == INDEFINITE || a->repeat_count == DBL_MAX)
+      if (a->repeat_duration == INDEFINITE || a->repeat_count == REPEAT_FOREVER)
         a->simple_duration = INDEFINITE;
       else
         a->simple_duration = a->repeat_duration / a->repeat_count;
@@ -9480,11 +9478,11 @@ parse_shape_gpa_attrs (Shape                *shape,
         gtk_svg_invalid_attribute (data->svg, context, "gpa:animation-duration", NULL);
     }
 
-  animation_repeat = DBL_MAX;
+  animation_repeat = REPEAT_FOREVER;
   if (animation_repeat_attr)
     {
       if (strcmp (animation_repeat_attr, "indefinite") == 0)
-        animation_repeat = DBL_MAX;
+        animation_repeat = REPEAT_FOREVER;
       else if (!parse_number (animation_repeat_attr, 0, DBL_MAX, &animation_repeat))
         gtk_svg_invalid_attribute (data->svg, context, "gpa:animation-repeat", NULL);
     }
@@ -10844,7 +10842,7 @@ serialize_gpa_attrs (GString              *s,
                                                    "%g", shape->gpa.animation_duration / (double) G_TIME_SPAN_MILLISECOND));
         }
 
-      if (shape->gpa.animation_repeat != DBL_MAX)
+      if (shape->gpa.animation_repeat != REPEAT_FOREVER)
         {
           char buffer[128];
           indent_for_attr (s, indent);
@@ -10941,7 +10939,7 @@ serialize_base_animation_attrs (GString   *s,
   if (a->has_repeat_count)
     {
       indent_for_attr (s, indent);
-      if (a->repeat_count == DBL_MAX)
+      if (a->repeat_count == REPEAT_FOREVER)
         {
           g_string_append (s, "repeatCount='indefinite'");
         }
