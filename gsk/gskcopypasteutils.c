@@ -290,6 +290,7 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
           {
             GskRenderNode *child = replay_partial_node (paste->nodes_copied);
             result = gsk_clip_node_new (child, &node->bounds);
+            gsk_render_node_unref (child);
           }
         else
           result = NULL;
