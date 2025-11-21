@@ -133,7 +133,7 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                   GskPath *path = path_paintable_get_path (self->paintable, i);
                   float origin = path_paintable_get_path_origin (self->paintable, i);
                   size_t attach_to;
-                  float attach_pos;
+                  double attach_pos;
 
                   graphene_point_t pos;
                   g_autoptr (GskPath) dot = NULL;

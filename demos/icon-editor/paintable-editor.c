@@ -410,7 +410,7 @@ paintable_editor_add_path (PaintableEditor *self)
 {
   g_autoptr (GskPath) path = NULL;
   char buffer[128];
-  float shape_params[6] = { 0, };
+  double shape_params[6] = { 0, };
 
   if (path_paintable_get_n_paths (self->paintable) == 0)
     path_paintable_set_size (self->paintable, 100.f, 100.f);

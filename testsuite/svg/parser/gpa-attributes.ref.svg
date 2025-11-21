@@ -4,7 +4,8 @@
         height='16'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state='empty'>
+        gpa:state='empty'
+        gpa:keywords='just some test'>
   <path
           id='path0'
           fill='url("#gpa:accent") rgb(0,34,255)'
