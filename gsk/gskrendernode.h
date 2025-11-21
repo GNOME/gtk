@@ -147,7 +147,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_RADIAL_GRADIENT_NODE           (gsk_radial_gradient_node_get_type())
 #define GSK_TYPE_REPEATING_RADIAL_GRADIENT_NODE (gsk_repeating_radial_gradient_node_get_type())
 #define GSK_TYPE_CONIC_GRADIENT_NODE            (gsk_conic_gradient_node_get_type())
-#define GSK_TYPE_BORDER_NODE                    (gsk_border_node_get_type())
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
 #define GSK_TYPE_TRANSFORM_NODE                 (gsk_transform_node_get_type())
@@ -167,7 +166,6 @@ typedef struct _GskRepeatingLinearGradientNode  GskRepeatingLinearGradientNode;
 typedef struct _GskRadialGradientNode           GskRadialGradientNode;
 typedef struct _GskRepeatingRadialGradientNode  GskRepeatingRadialGradientNode;
 typedef struct _GskConicGradientNode            GskConicGradientNode;
-typedef struct _GskBorderNode                   GskBorderNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskTransformNode                GskTransformNode;
@@ -283,19 +281,6 @@ GskRenderNode *         gsk_repeating_radial_gradient_node_new      (const graph
                                                                      float                     end,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_border_node_get_type                (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_border_node_new                     (const GskRoundedRect     *outline,
-                                                                 const float               border_width[4],
-                                                                 const GdkRGBA             border_color[4]);
-GDK_AVAILABLE_IN_ALL
-const GskRoundedRect *  gsk_border_node_get_outline             (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const float *           gsk_border_node_get_widths              (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_border_node_get_colors              (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_inset_shadow_node_get_type          (void) G_GNUC_CONST;
