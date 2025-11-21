@@ -39,6 +39,9 @@
 #include "gskgpuuploadopprivate.h"
 #include "gskgpuutilsprivate.h"
 
+#include "gskblendnode.h"
+#include "gskblurnode.h"
+#include "gskbordernode.h"
 #include "gskcairoblurprivate.h"
 #include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"

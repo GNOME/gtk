@@ -1,4 +1,7 @@
 gsk_public_sources = files([
+  'gskblendnode.c',
+  'gskblurnode.c',
+  'gskbordernode.c',
   'gskcaironode.c',
   'gskcairorenderer.c',
   'gskcolormatrixnode.c',
@@ -102,6 +105,9 @@ gsk_f16c_sources = files([
 ])
 
 gsk_public_headers = files([
+  'gskblendnode.h',
+  'gskblurnode.h',
+  'gskbordernode.h',
   'gskcaironode.h',
   'gskcairorenderer.h',
   'gskcolormatrixnode.h',
