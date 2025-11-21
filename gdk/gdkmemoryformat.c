@@ -6614,7 +6614,7 @@ gdk_memory_mipmap_same_format_linear (gpointer data)
     }
 
   ADD_MARK (before,
-            "Mipmap linear (thread)", "size %lux%lu, lod %u, %lu rows",
+            "Mipmap linear (thread)", "size %zux%zu, lod %u, %zu rows",
             mipmap->src_layout.width, mipmap->src_layout.height, mipmap->lod_level, rows);
 }
 

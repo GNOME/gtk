@@ -1533,7 +1533,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
     }
 
   gdk_profiler_end_markf (begin_time,
-                          "Save Vulkan pipeline cache", "%s size %lu",
+                          "Save Vulkan pipeline cache", "%s size %zu",
                           g_file_peek_path (file), size);
 
   g_object_unref (file);
