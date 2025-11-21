@@ -65,7 +65,7 @@ get_paintable_for_path (PathPaintable *paintable,
   unsigned int fill_symbolic = 0;
   GdkRGBA fill_color;
   GskFillRule rule;
-  float shape_params[6] = { 0, };
+  double shape_params[6] = { 0, };
   PathPaintable *path_image;
 
   path_image = path_paintable_new ();
