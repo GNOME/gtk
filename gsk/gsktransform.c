@@ -2413,6 +2413,8 @@ gsk_transform_new (void)
  * Transforms a rectangle using the given transform.
  *
  * The result is the bounding box containing the coplanar quad.
+ *
+ * The input and output rect may point to the same rectangle.
  */
 void
 gsk_transform_transform_bounds (GskTransform          *self,

@@ -2696,23 +2696,11 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   gsk_gradient_set_hue_interpolation (gradient, hue_interpolation);
   gsk_gradient_set_repeat (gradient, repeat);
 
-  if (end.radius <= start.radius)
-    {
-      gtk_css_parser_error (parser,
-                            GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
-                            gtk_css_parser_get_block_location (parser),
-                            gtk_css_parser_get_end_location (parser),
-                            "\"start\" must be larger than \"end\"");
-      result = NULL;
-    }
-  else
-    {
-      result = gsk_radial_gradient_node_new2 (&bounds,
-                                              &start.center, start.radius,
-                                              &end.center, end.radius,
-                                              aspect_ratio.value,
-                                              gradient);
-    }
+  result = gsk_radial_gradient_node_new2 (&bounds,
+                                          &start.center, start.radius,
+                                          &end.center, end.radius,
+                                          aspect_ratio.value,
+                                          gradient);
 
   clear_stops (&stops);
   clear_color_state (&interpolation);

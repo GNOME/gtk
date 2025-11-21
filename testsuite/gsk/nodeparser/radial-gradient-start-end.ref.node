@@ -1,5 +1,17 @@
 radial-gradient {
   bounds: 0 0 50 50;
+  start: 25 25 25;
+  end: 25 25 0;
+  stops: 0 color(srgb 0.667 1 0), 1 rgb(255,0,204);
+}
+radial-gradient {
+  bounds: 0 0 50 50;
+  start: 25 25 12.5;
+  end: 25 25 12.5;
+  stops: 0 color(srgb 0.667 1 0), 1 rgb(255,0,204);
+}
+radial-gradient {
+  bounds: 0 0 50 50;
   start: 25 25 0;
   end: 25 25 25;
   stops: 0 color(srgb 0.667 1 0), 1 rgb(255,0,204);

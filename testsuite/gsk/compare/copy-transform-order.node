@@ -1,0 +1,75 @@
+color {
+  bounds: 0 0 50 50;
+  color: rgb(0,0,255);
+}
+color {
+  bounds: 50 0 50 50;
+  color: rgb(0,85,255);
+}
+color {
+  bounds: 100 0 50 50;
+  color: rgb(0,170,255);
+}
+color {
+  bounds: 150 0 50 50;
+  color: rgb(0,255,255);
+}
+color {
+  bounds: 0 50 50 50;
+  color: rgb(85,0,255);
+}
+color {
+  bounds: 50 50 50 50;
+  color: rgb(85,85,255);
+}
+color {
+  bounds: 100 50 50 50;
+  color: rgb(85,170,255);
+}
+color {
+  bounds: 150 50 50 50;
+  color: rgb(85,255,255);
+}
+color {
+  bounds: 0 100 50 50;
+  color: rgb(170,0,255);
+}
+color {
+  bounds: 50 100 50 50;
+  color: rgb(170,85,255);
+}
+color {
+  bounds: 100 100 50 50;
+  color: rgb(170,170,255);
+}
+color {
+  bounds: 150 100 50 50;
+  color: rgb(170,255,255);
+}
+color {
+  bounds: 0 150 50 50;
+  color: rgb(255,0,255);
+}
+color {
+  bounds: 50 150 50 50;
+  color: rgb(255,85,255);
+}
+color {
+  bounds: 100 150 50 50;
+  color: rgb(255,170,255);
+}
+color {
+  bounds: 150 150 50 50;
+  color: rgb(255,255,255);
+}
+transform {
+  transform: scale(2);
+  child: transform {
+    transform: translate(20, 20);
+    child: copy {
+      child: paste {
+        bounds: 0 0 60 60;
+      }
+    }
+  }
+}

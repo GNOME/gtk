@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <property name="decorated">false</property>
+    <property name="child">
+      <object class="GtkBox">
+        <child>
+          <object class="GtkLabel">
+            <property name="name">opacity-property</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="name">opacity-filter</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="name">both</property>
+          </object>
+        </child>
+      </object>
+    </property>
+</object>

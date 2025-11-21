@@ -1773,11 +1773,13 @@ gtk_snapshot_collect_copy (GtkSnapshot      *snapshot,
 void
 gtk_snapshot_push_copy (GtkSnapshot *snapshot)
 {
-  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *current_state;
 
   /* need identity here because the coords are used
    * by pastes */
   gtk_snapshot_ensure_identity (snapshot);
+
+  current_state = gtk_snapshot_get_current_state (snapshot);
 
   gtk_snapshot_push_state (snapshot,
                            current_state->transform,

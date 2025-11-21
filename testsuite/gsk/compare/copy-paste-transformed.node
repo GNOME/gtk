@@ -1,0 +1,8 @@
+transform {
+  transform: translate(50, 50);
+  child: copy {
+    child: paste {
+      bounds: 0 0 50 50;
+    }
+  }
+}
