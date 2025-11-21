@@ -1695,6 +1695,46 @@ svg_coord_units_parse (const char *string)
   return NULL;
 }
 
+typedef enum
+{
+  PAINT_ORDER_NORMAL,
+  PAINT_ORDER_REVERSE,
+} PaintOrder;
+
+static const SvgValueClass SVG_PAINT_ORDER_CLASS = {
+  "SvgPaintOrder",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum paint_order_values[] = {
+  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_NORMAL, "normal" },
+  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_REVERSE, "stroke fill" },
+};
+
+static SvgValue *
+svg_paint_order_new (PaintOrder value)
+{
+  return svg_value_ref ((SvgValue *) &paint_order_values[value]);
+}
+
+static SvgValue *
+svg_paint_order_parse (const char *string)
+{
+  if (strcmp (string, "normal") == 0 ||
+      strcmp (string, "fill") == 0 ||
+      strcmp (string, "fill stroke") == 0)
+    return svg_paint_order_new (PAINT_ORDER_NORMAL);
+  else if (strcmp (string, "stroke") == 0 ||
+           strcmp (string, "stroke fill") == 0)
+    return svg_paint_order_new (PAINT_ORDER_REVERSE);
+  else
+    return NULL;
+}
+
 /* }}} */
 /* {{{ Transforms */
 
@@ -4672,6 +4712,13 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 1,
     .parse_value = parse_dash_offset,
   },
+  { .id = SHAPE_ATTR_PAINT_ORDER,
+    .name = "paint-order",
+    .inherited = 1,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = svg_paint_order_parse,
+  },
   { .id = SHAPE_ATTR_HREF,
     .name = "href",
     .inherited = 0,
@@ -4889,6 +4936,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STROKE_MITERLIMIT].initial_value = svg_number_new (4);
   shape_attrs[SHAPE_ATTR_STROKE_DASHARRAY].initial_value = svg_dash_array_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_DASHOFFSET].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_PAINT_ORDER].initial_value = svg_paint_order_new (PAINT_ORDER_NORMAL);
   shape_attrs[SHAPE_ATTR_HREF].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_PATH_LENGTH].initial_value = svg_number_new (-1);
   shape_attrs[SHAPE_ATTR_PATH].initial_value = svg_path_new_none ();
@@ -11606,11 +11654,93 @@ shape_create_stroke (Shape        *shape,
 }
 
 static void
+fill_shape (Shape        *shape,
+            GskPath      *path,
+            PaintContext *context)
+{
+  SvgPaint *paint;
+  graphene_rect_t bounds;
+
+  paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
+  if (paint->kind != PAINT_NONE && gsk_path_get_bounds (path, &bounds))
+    {
+      GskFillRule fill_rule;
+      double opacity;
+
+      fill_rule = svg_enum_get (shape->current[SHAPE_ATTR_FILL_RULE]);
+      opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
+      if (paint->kind == PAINT_COLOR)
+        {
+          GdkRGBA color = paint->color;
+          color.alpha *= opacity;
+          gtk_snapshot_append_fill (context->snapshot, path, fill_rule, &color);
+        }
+      else if (paint->kind == PAINT_GRADIENT)
+        {
+          if (opacity < 1)
+            gtk_snapshot_push_opacity (context->snapshot, opacity);
+
+          gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
+          paint_gradient (paint->gradient.shape, &bounds, context);
+          gtk_snapshot_pop (context->snapshot);
+
+          if (opacity < 1)
+            gtk_snapshot_pop (context->snapshot);
+        }
+      else
+        g_assert_not_reached ();
+   }
+}
+
+static void
+stroke_shape (Shape        *shape,
+              GskPath      *path,
+              PaintContext *context)
+{
+  SvgPaint *paint;
+
+  paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
+  if (paint->kind != PAINT_NONE)
+    {
+      GskStroke *stroke;
+      graphene_rect_t bounds;
+
+      stroke = shape_create_stroke (shape, context);
+      if (gsk_path_get_stroke_bounds (path, stroke, &bounds))
+        {
+          double opacity;
+
+          opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
+          if (paint->kind == PAINT_COLOR)
+            {
+              GdkRGBA color = paint->color;
+              color.alpha *= opacity;
+              gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
+            }
+          else if (paint->kind == PAINT_GRADIENT)
+            {
+              if (opacity < 1)
+                gtk_snapshot_push_opacity (context->snapshot, opacity);
+
+              gtk_snapshot_push_stroke (context->snapshot, path, stroke);
+              paint_gradient (paint->gradient.shape, &bounds, context);
+              gtk_snapshot_pop (context->snapshot);
+
+              if (opacity < 1)
+                gtk_snapshot_pop (context->snapshot);
+            }
+          else
+            g_assert_not_reached ();
+        }
+      gsk_stroke_free (stroke);
+    }
+}
+
+static void
 paint_shape (Shape        *shape,
              PaintContext *context)
 {
   GskPath *path;
-  graphene_rect_t bounds;
 
   if (shape->type == SHAPE_USE)
     {
@@ -11658,75 +11788,21 @@ paint_shape (Shape        *shape,
 
   if (context->op == RENDERING || context->op == MASKING)
     {
-      SvgPaint *paint;
-
-      paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
-      if (paint->kind != PAINT_NONE && gsk_path_get_bounds (path, &bounds))
+      if (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]) == PAINT_ORDER_NORMAL)
         {
-          GskFillRule fill_rule;
-          double opacity;
-
-          fill_rule = svg_enum_get (shape->current[SHAPE_ATTR_FILL_RULE]);
-          opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
-          if (paint->kind == PAINT_COLOR)
-            {
-              GdkRGBA color = paint->color;
-              color.alpha *= opacity;
-              gtk_snapshot_append_fill (context->snapshot, path, fill_rule, &color);
-            }
-          else if (paint->kind == PAINT_GRADIENT)
-            {
-              if (opacity < 1)
-                gtk_snapshot_push_opacity (context->snapshot, opacity);
-
-              gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
-              paint_gradient (paint->gradient.shape, &bounds, context);
-              gtk_snapshot_pop (context->snapshot);
-
-              if (opacity < 1)
-                gtk_snapshot_pop (context->snapshot);
-            }
-          else
-            g_assert_not_reached ();
+          fill_shape (shape, path, context);
+          stroke_shape (shape, path, context);
         }
-
-      paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
-      if (paint->kind != PAINT_NONE)
+      else
         {
-          GskStroke *stroke;
-
-          stroke = shape_create_stroke (shape, context);
-          if (gsk_path_get_stroke_bounds (path, stroke, &bounds))
-            {
-              double opacity;
-
-              opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
-              if (paint->kind == PAINT_COLOR)
-                {
-                  GdkRGBA color = paint->color;
-                  color.alpha *= opacity;
-                  gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
-                }
-              else if (paint->kind == PAINT_GRADIENT)
-                {
-                  if (opacity < 1)
-                    gtk_snapshot_push_opacity (context->snapshot, opacity);
-
-                  gtk_snapshot_push_stroke (context->snapshot, path, stroke);
-                  paint_gradient (paint->gradient.shape, &bounds, context);
-                  gtk_snapshot_pop (context->snapshot);
-
-                  if (opacity < 1)
-                    gtk_snapshot_pop (context->snapshot);
-                }
-              else
-                g_assert_not_reached ();
-            }
-          gsk_stroke_free (stroke);
+          stroke_shape (shape, path, context);
+          fill_shape (shape, path, context);
         }
     }
   else if (context->op == CLIPPING)
     {
+      graphene_rect_t bounds;
+
       /* Clip mask - see language in the spec about 'raw geometry' */
       if (gsk_path_get_bounds (path, &bounds))
         {

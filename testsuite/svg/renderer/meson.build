@@ -32,6 +32,7 @@ test_data = [
   'more-filters.svg',
   'not-rendered.svg',
   'opacity.svg',
+  'paint-order.svg',
   'percentage.svg',
   'polygon.svg',
   'polyline.svg',
