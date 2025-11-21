@@ -151,7 +151,7 @@ ensure_render_paintable (PathPaintable *self)
     {
       g_autoptr (GBytes) bytes = NULL;
 
-      bytes = path_paintable_serialize_as_gpa (self, self->state);
+      bytes = path_paintable_serialize (self, self->state);
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), self->weight);
@@ -1939,7 +1939,7 @@ path_paintable_copy (PathPaintable *self)
   g_autoptr (GBytes) bytes = NULL;
   PathPaintable *other;
 
-  bytes = path_paintable_serialize_as_gpa (self, self->state);
+  bytes = path_paintable_serialize (self, self->state);
   other = path_paintable_new_from_bytes (bytes, NULL);
 
   return other;
@@ -2087,8 +2087,8 @@ path_paintable_new_from_resource (const char *resource)
 }
 
 GBytes *
-path_paintable_serialize_as_gpa (PathPaintable *self,
-                                 unsigned int   initial_state)
+path_paintable_serialize (PathPaintable *self,
+                          unsigned int   initial_state)
 {
   GString *str = g_string_new ("");
 

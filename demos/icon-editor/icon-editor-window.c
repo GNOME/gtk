@@ -547,7 +547,7 @@ save_to_file (IconEditorWindow *self,
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
 
-  bytes = path_paintable_serialize_as_gpa (self->paintable, self->initial_state);
+  bytes = path_paintable_serialize (self->paintable, self->initial_state);
   if (!g_file_replace_contents (file,
                                 g_bytes_get_data (bytes, NULL),
                                 g_bytes_get_size (bytes),
