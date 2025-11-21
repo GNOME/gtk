@@ -138,7 +138,7 @@ replay_partial_node (const PartialNode *replay)
       gsk_render_node_unref (node);
       node = tmp;
     }
-  if (gsk_render_node_clears_background (node))
+  if (node && gsk_render_node_clears_background (node))
     {
       /* Wrap in something that blocks background writes from
        * going through.

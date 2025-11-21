@@ -52,6 +52,7 @@ compare_render_tests = [
   'color-matrix-merge',
   'color-matrix-parsing',
   'color-states',
+  'copy-paste',
   'component-transfer-levels',
   'component-transfer-linear',
   'composite-everything',
