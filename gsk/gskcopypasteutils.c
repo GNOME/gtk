@@ -123,20 +123,25 @@ replay_partial_node (const PartialNode *replay)
         }
     }
 
-  if (transform)
+  if (node && transform)
     {
-      GskRenderNode *tmp;
-
       transform = gsk_transform_invert (transform);
       if (transform)
-        tmp = gsk_transform_node_new (node, transform);
+        {
+          GskRenderNode *tmp;
+
+          if (node)
+            {
+              tmp = gsk_transform_node_new (node, transform);
+              gsk_render_node_unref (node);
+              node = tmp;
+            }
+          gsk_transform_unref (transform);
+        }
       else
         {
           g_warning ("Trying to paste non-invertible transform, ignoring.");
-          tmp = NULL;
         }
-      gsk_render_node_unref (node);
-      node = tmp;
     }
   if (node && gsk_render_node_clears_background (node))
     {
