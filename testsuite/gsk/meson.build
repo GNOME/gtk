@@ -54,6 +54,7 @@ compare_render_tests = [
   'color-states',
   'copy-paste',
   'copy-paste-transformed',
+  'copy-transform-order',
   'component-transfer-levels',
   'component-transfer-linear',
   'composite-everything',

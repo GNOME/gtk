@@ -65,9 +65,14 @@ replay_partial_node (const PartialNode *replay)
       switch (replay->node_type)
         {
         case GSK_TRANSFORM_NODE:
-          if (node)
-            node = gsk_transform_node_new (node, replay->transform);
-          transform = gsk_transform_transform (transform, replay->transform);
+          {
+            GskTransform *tmp;
+            if (node)
+              node = gsk_transform_node_new (node, replay->transform);
+            tmp = gsk_transform_transform (gsk_transform_ref (replay->transform), transform);
+            gsk_transform_unref (transform);
+            transform = tmp;
+          }
           break;
 
         case GSK_CONTAINER_NODE:
