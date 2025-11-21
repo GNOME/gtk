@@ -161,8 +161,9 @@ gsk_debug_node_new (GskRenderNode *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
-  self->render_node.is_hdr = gsk_render_node_is_hdr (child);
-  self->render_node.clears_background = gsk_render_node_clears_background (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
+  node->clears_background = gsk_render_node_clears_background (child);
+  node->copy_mode = gsk_render_node_get_copy_mode (child);
 
   return node;
 }

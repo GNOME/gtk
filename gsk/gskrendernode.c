@@ -842,3 +842,9 @@ gsk_render_node_clears_background (const GskRenderNode *node)
 {
   return node->clears_background;
 }
+
+GskCopyMode
+gsk_render_node_get_copy_mode (const GskRenderNode *node)
+{
+  return node->copy_mode;
+}
