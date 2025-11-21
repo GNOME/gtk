@@ -4,6 +4,7 @@
 
 #include "broadway/gdkprivate-broadway.h"
 
+#include "gskblendnode.h"
 #include "gskblurnode.h"
 #include "gskbordernode.h"
 #include "gskcaironode.h"
