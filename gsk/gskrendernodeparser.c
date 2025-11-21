@@ -23,6 +23,7 @@
 
 #include "gskrendernodeparserprivate.h"
 
+#include "gskblurnode.h"
 #include "gskbordernode.h"
 #include "gskcaironodeprivate.h"
 #include "gskcolormatrixnode.h"

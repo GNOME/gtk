@@ -155,7 +155,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
 #define GSK_TYPE_BLEND_NODE                     (gsk_blend_node_get_type())
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
-#define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
 #define GSK_TYPE_MASK_NODE                      (gsk_mask_node_get_type())
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 
@@ -174,7 +173,6 @@ typedef struct _GskRoundedClipNode              GskRoundedClipNode;
 typedef struct _GskShadowNode                   GskShadowNode;
 typedef struct _GskBlendNode                    GskBlendNode;
 typedef struct _GskTextNode                     GskTextNode;
-typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskMaskNode                     GskMaskNode;
 
 GDK_AVAILABLE_IN_ALL
@@ -403,16 +401,6 @@ GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_get_color                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t *gsk_text_node_get_offset                (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_blur_node_get_type                  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_blur_node_new                       (GskRenderNode            *child,
-                                                                 float                     radius);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_blur_node_get_child                 (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-float                   gsk_blur_node_get_radius                (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_4_10
 GType                  gsk_mask_node_get_type                   (void) G_GNUC_CONST;

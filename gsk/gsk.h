@@ -19,6 +19,7 @@
 
 #define __GSK_H_INSIDE__
 
+#include <gsk/gskblurnode.h>
 #include <gsk/gskbordernode.h>
 #include <gsk/gskcaironode.h>
 #include <gsk/gskcolormatrixnode.h>
