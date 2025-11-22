@@ -1,16 +1,26 @@
 /* Overlay/Transparency
- * #Keywords: GtkOverlay, GtkSnapshot, blur
+ * #Keywords: GtkOverlay, GtkSnapshot, blur, backdrop-filter
  *
  * Blur the background behind an overlay.
  */
 
 #include <gtk/gtk.h>
-#include "bluroverlay.h"
 
 GtkWidget *
 do_transparent (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
+  static GtkCssProvider *css_provider = NULL;
+
+  if (!css_provider)
+    {
+      css_provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_resource (css_provider, "/transparent/transparent.css");
+
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (css_provider),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 
   if (!window)
     {
@@ -27,7 +37,7 @@ do_transparent (GtkWidget *do_widget)
 
       gtk_window_set_title (GTK_WINDOW (window), "Transparency");
 
-      overlay = blur_overlay_new ();
+      overlay = gtk_overlay_new ();
       gtk_window_set_child (GTK_WINDOW (window), overlay);
 
       button = gtk_button_new_with_label ("Don't click this button!");
@@ -36,12 +46,13 @@ do_transparent (GtkWidget *do_widget)
       gtk_widget_set_margin_end (label, 50);
       gtk_widget_set_margin_top (label, 50);
       gtk_widget_set_margin_bottom (label, 50);
+      gtk_widget_add_css_class (button, "blur-overlay");
 
       gtk_widget_set_opacity (button, 0.7);
       gtk_widget_set_halign (button, GTK_ALIGN_FILL);
       gtk_widget_set_valign (button, GTK_ALIGN_START);
 
-      blur_overlay_add_overlay (BLUR_OVERLAY (overlay), button, 5.0);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
 
       button = gtk_button_new_with_label ("Maybe this one?");
       label = gtk_button_get_child (GTK_BUTTON (button));
@@ -49,15 +60,16 @@ do_transparent (GtkWidget *do_widget)
       gtk_widget_set_margin_end (label, 50);
       gtk_widget_set_margin_top (label, 50);
       gtk_widget_set_margin_bottom (label, 50);
+      gtk_widget_add_css_class (button, "blur-overlay");
 
       gtk_widget_set_opacity (button, 0.7);
       gtk_widget_set_halign (button, GTK_ALIGN_FILL);
       gtk_widget_set_valign (button, GTK_ALIGN_END);
 
-      blur_overlay_add_overlay (BLUR_OVERLAY (overlay), button, 5.0);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
 
       picture = gtk_picture_new_for_resource ("/transparent/portland-rose.jpg");
-      blur_overlay_set_child (BLUR_OVERLAY (overlay), picture);
+      gtk_overlay_set_child (GTK_OVERLAY (overlay), picture);
     }
 
   if (!gtk_widget_get_visible (window))

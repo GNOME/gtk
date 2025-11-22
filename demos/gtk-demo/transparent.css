@@ -1,0 +1,3 @@
+.blur-overlay {
+  backdrop-filter: blur(14px);
+}
