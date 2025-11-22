@@ -848,3 +848,15 @@ gsk_render_node_get_copy_mode (const GskRenderNode *node)
 {
   return node->copy_mode;
 }
+
+gboolean
+gsk_render_node_contains_subsurface_node (const GskRenderNode *node)
+{
+  return node->contains_subsurface_node;
+}
+
+gboolean
+gsk_render_node_contains_paste_node (const GskRenderNode *node)
+{
+  return node->contains_paste_node;
+}

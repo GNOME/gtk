@@ -119,6 +119,7 @@ gsk_paste_node_new (const graphene_rect_t *bounds,
   node = (GskRenderNode *) self;
   node->fully_opaque = FALSE;
   node->preferred_depth = GDK_MEMORY_NONE;
+  node->contains_paste_node = TRUE;
 
   self->depth = depth;
 

@@ -277,6 +277,8 @@ gsk_container_node_new (GskRenderNode **children,
       node->is_hdr = gsk_render_node_is_hdr (children[0]);
       node->clears_background = gsk_render_node_clears_background (children[0]);
       node->copy_mode = gsk_render_node_get_copy_mode (children[0]);
+      node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (children[0]);
+      node->contains_paste_node = gsk_render_node_contains_paste_node (children[0]);
 
       for (guint i = 1; i < n_children; i++)
         {
@@ -309,6 +311,8 @@ gsk_container_node_new (GskRenderNode **children,
 
           node->is_hdr |= gsk_render_node_is_hdr (children[i]);
           node->copy_mode = MAX (node->copy_mode, gsk_render_node_get_copy_mode (children[i]));
+          node->contains_subsurface_node |= gsk_render_node_contains_subsurface_node (children[i]);
+          node->contains_paste_node |= gsk_render_node_contains_paste_node (children[i]);
         }
 
       node->fully_opaque = have_opaque && graphene_rect_equal (&node->bounds, &self->opaque);
