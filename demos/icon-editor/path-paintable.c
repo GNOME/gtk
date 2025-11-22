@@ -34,7 +34,6 @@ struct _PathPaintable
 enum
 {
   PROP_STATE = 1,
-  PROP_MAX_STATE,
   PROP_WEIGHT,
   PROP_RESOURCE,
   NUM_PROPERTIES,
@@ -221,10 +220,6 @@ path_paintable_get_property (GObject      *object,
       g_value_set_uint (value, path_paintable_get_state (self));
       break;
 
-    case PROP_MAX_STATE:
-      g_value_set_uint (value, path_paintable_get_max_state (self));
-      break;
-
     case PROP_WEIGHT:
       g_value_set_double (value, path_paintable_get_weight (self));
       break;
@@ -303,16 +298,6 @@ path_paintable_class_init (PathPaintableClass *class)
     g_param_spec_uint ("state", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * PathPaintable:max-state:
-   *
-   * The maximum state of the paintable.
-   */
-  properties[PROP_MAX_STATE] =
-    g_param_spec_uint ("max-state", NULL, NULL,
-                       0, G_MAXUINT - 1, 0,
-                       G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_WEIGHT] =
     g_param_spec_double ("weight", NULL, NULL,
@@ -499,8 +484,6 @@ path_paintable_delete_path (PathPaintable *self,
   Shape *shape = path_paintable_get_shape (self, idx);
 
   svg_shape_delete (shape);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_STATE]);
 
   g_signal_emit (self, signals[CHANGED], 0);
   g_signal_emit (self, signals[PATHS_CHANGED], 0);
@@ -699,7 +682,6 @@ path_paintable_set_path_states (PathPaintable *self,
 
   shape->gpa.states = states;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_STATE]);
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
@@ -1261,6 +1243,7 @@ path_paintable_get_compatibility (PathPaintable *self)
   PaintKind kind;
   GtkSymbolicColor symbolic;
   GdkRGBA color;
+  PaintOrder paint_order;
 
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
     {
@@ -1299,6 +1282,10 @@ path_paintable_get_compatibility (PathPaintable *self)
       if (shape->gpa.transition != GPA_TRANSITION_NONE ||
           shape->gpa.animation != GPA_ANIMATION_NONE ||
           shape->gpa.attach.ref != NULL)
+        compat = MAX (compat, GTK_4_22);
+
+      paint_order = svg_shape_attr_get_enum (shape, SHAPE_ATTR_PAINT_ORDER);
+      if (paint_order != PAINT_ORDER_NORMAL)
         compat = MAX (compat, GTK_4_22);
     }
 
@@ -1351,7 +1338,7 @@ path_paintable_get_weight (PathPaintable *self)
 }
 
 unsigned int
-path_paintable_get_max_state (PathPaintable *self)
+path_paintable_get_n_states (PathPaintable *self)
 {
   return gtk_svg_get_n_states (self->svg);
 }
@@ -1412,6 +1399,26 @@ GBytes *
 path_paintable_serialize_as_svg (PathPaintable *self)
 {
   return gtk_svg_serialize (self->svg);
+}
+
+PaintOrder
+path_paintable_get_paint_order (PathPaintable *self,
+                                size_t         idx)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  return (PaintOrder) svg_shape_attr_get_enum (shape, SHAPE_ATTR_PAINT_ORDER);
+}
+
+void
+path_paintable_set_paint_order (PathPaintable *self,
+                                size_t         idx,
+                                PaintOrder     order)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  svg_shape_attr_set (shape, SHAPE_ATTR_PAINT_ORDER, svg_paint_order_new (order));
+  g_signal_emit (self, signals[CHANGED], 0);
 }
 
 /* }}} */

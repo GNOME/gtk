@@ -60,7 +60,7 @@ void            path_paintable_set_state           (PathPaintable   *self,
                                                     unsigned int     state);
 unsigned int    path_paintable_get_state           (PathPaintable   *self);
 
-unsigned int    path_paintable_get_max_state       (PathPaintable   *self);
+unsigned int    path_paintable_get_n_states        (PathPaintable   *self);
 
 void            path_paintable_set_weight          (PathPaintable   *self,
                                                     double           weight);
@@ -217,3 +217,11 @@ void            path_paintable_get_attach_path     (PathPaintable   *self,
 
 GtkCompatibility
                 path_paintable_get_compatibility   (PathPaintable   *self);
+
+PaintOrder      path_paintable_get_paint_order     (PathPaintable   *self,
+                                                    size_t           idx);
+
+void            path_paintable_set_paint_order     (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    PaintOrder       order);
+
