@@ -204,7 +204,7 @@ repopulate (StateEditor *self)
 static void
 paths_changed (StateEditor *self)
 {
-  self->max_state = MAX (self->max_state, path_paintable_get_max_state (self->paintable));
+  self->max_state = MAX (self->max_state, path_paintable_get_n_states (self->paintable) - 1);
 
   repopulate (self);
 }
