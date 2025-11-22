@@ -412,7 +412,7 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
   g_return_val_if_fail (viewport->size.width > 0, NULL);
   g_return_val_if_fail (viewport->size.height > 0, NULL);
 
-  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
+  root = gsk_render_node_replace_copy_paste (root);
 
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
 
@@ -460,7 +460,7 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   renderer_class = GSK_RENDERER_GET_CLASS (renderer);
 
-  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
+  root = gsk_render_node_replace_copy_paste (root);
   clip = cairo_region_copy (region);
 
   if (renderer_class->supports_offload && gdk_has_feature (GDK_FEATURE_OFFLOAD))
