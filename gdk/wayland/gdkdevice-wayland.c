@@ -411,9 +411,9 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
                                   wl_fixed_from_int (0),
                                   wl_fixed_from_double (w),
                                   wl_fixed_from_double (h));
-          wp_viewport_set_destination (pointer->pointer_surface_viewport, w * scale, h * scale);
+          wp_viewport_set_destination (pointer->pointer_surface_viewport, w / scale, h / scale);
         }
-      wl_surface_damage (pointer->pointer_surface,  0, 0, w, h);
+      wl_surface_damage (pointer->pointer_surface,  0, 0, w / scale, h / scale);
       wl_surface_commit (pointer->pointer_surface);
     }
   else
