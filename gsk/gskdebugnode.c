@@ -105,7 +105,7 @@ gsk_debug_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_debug_node_new (child, self->message);
+    result = gsk_debug_node_new (child, g_strdup (self->message));
 
   gsk_render_node_unref (child);
 
