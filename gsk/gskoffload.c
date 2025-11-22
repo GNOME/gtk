@@ -526,11 +526,12 @@ visit_node (GskOffload    *self,
             {
               GskRenderNodeType type = GSK_RENDER_NODE_TYPE (node);
 
-              if (type != GSK_CONTAINER_NODE &&
-                  type != GSK_TRANSFORM_NODE &&
-                  type != GSK_CLIP_NODE &&
-                  type != GSK_ROUNDED_CLIP_NODE &&
-                  type != GSK_DEBUG_NODE)
+              if (!gsk_render_node_contains_subsurface_node (node) ||
+                  (type != GSK_CONTAINER_NODE &&
+                   type != GSK_TRANSFORM_NODE &&
+                   type != GSK_CLIP_NODE &&
+                   type != GSK_ROUNDED_CLIP_NODE &&
+                   type != GSK_DEBUG_NODE))
                 {
                   GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
                                      "[%p]   Lowering because a %s overlaps",
@@ -541,6 +542,9 @@ visit_node (GskOffload    *self,
             }
         }
     }
+
+  if (!gsk_render_node_contains_subsurface_node (node))
+    return;
 
   has_clip = update_clip (self, &transformed_bounds);
 
@@ -765,7 +769,7 @@ gsk_offload_new (GdkSurface     *surface,
       info->had_background = gdk_subsurface_get_background_rect (info->subsurface, &rect);
     }
 
-  if (self->n_subsurfaces > 0)
+  if (self->n_subsurfaces > 0 && gsk_render_node_contains_subsurface_node (root))
     {
       push_rect_clip (self, &GSK_ROUNDED_RECT_INIT (0, 0,
                                                     gdk_surface_get_width (surface),
