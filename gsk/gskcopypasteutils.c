@@ -339,6 +339,8 @@ gsk_render_node_replace_copy_paste (GskRenderNode *node)
   if (result == NULL)
     result = gsk_color_node_new (&GDK_RGBA_TRANSPARENT, &node->bounds);
 
+  gsk_render_node_unref (node);
+
   return result;
 }
 
