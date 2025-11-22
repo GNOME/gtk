@@ -26,10 +26,9 @@
 #include "gskcopynode.h"
 #include "gskopacitynode.h"
 #include "gskpastenode.h"
-#include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
-#include "gsktransformprivate.h"
+#include "gsktransform.h"
 
 #include "gdk/gdkrgbaprivate.h"
 
