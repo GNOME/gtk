@@ -84,6 +84,7 @@ struct _PathEditor
   GtkScale *attach_at;
   GtkSizeGroup *sg;
   GtkButton *move_down;
+  GtkDropDown *paint_order;
 };
 
 enum
@@ -469,6 +470,13 @@ id_changed (PathEditor *self)
   id = gtk_editable_get_text (GTK_EDITABLE (self->id_label));
   if (!path_paintable_set_path_id (self->paintable, self->path, id))
     gtk_widget_error_bell (GTK_WIDGET (self->id_label));
+}
+
+static void
+paint_order_changed (PathEditor *self)
+{
+  unsigned int value = gtk_drop_down_get_selected (self->paint_order);
+  path_paintable_set_paint_order (self->paintable, self->path, value);
 }
 
 static void
@@ -1012,6 +1020,8 @@ path_editor_update (PathEditor *self)
       if (self->path + 1 == path_paintable_get_n_paths (self->paintable))
         gtk_widget_set_sensitive (GTK_WIDGET (self->move_down), FALSE);
 
+      gtk_drop_down_set_selected (self->paint_order,
+                                  path_paintable_get_paint_order (self->paintable, self->path));
       self->updating = FALSE;
 
       g_clear_object (&self->path_image);
@@ -1190,11 +1200,13 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, attach_at);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, move_down);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, sg);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, paint_order);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
   gtk_widget_class_bind_template_callback (widget_class, origin_changed);
   gtk_widget_class_bind_template_callback (widget_class, id_changed);
+  gtk_widget_class_bind_template_callback (widget_class, paint_order_changed);
   gtk_widget_class_bind_template_callback (widget_class, stroke_changed);
   gtk_widget_class_bind_template_callback (widget_class, fill_changed);
   gtk_widget_class_bind_template_callback (widget_class, attach_changed);

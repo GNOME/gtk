@@ -1243,6 +1243,7 @@ path_paintable_get_compatibility (PathPaintable *self)
   PaintKind kind;
   GtkSymbolicColor symbolic;
   GdkRGBA color;
+  PaintOrder paint_order;
 
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
     {
@@ -1281,6 +1282,10 @@ path_paintable_get_compatibility (PathPaintable *self)
       if (shape->gpa.transition != GPA_TRANSITION_NONE ||
           shape->gpa.animation != GPA_ANIMATION_NONE ||
           shape->gpa.attach.ref != NULL)
+        compat = MAX (compat, GTK_4_22);
+
+      paint_order = svg_shape_attr_get_enum (shape, SHAPE_ATTR_PAINT_ORDER);
+      if (paint_order != PAINT_ORDER_NORMAL)
         compat = MAX (compat, GTK_4_22);
     }
 
@@ -1394,6 +1399,26 @@ GBytes *
 path_paintable_serialize_as_svg (PathPaintable *self)
 {
   return gtk_svg_serialize (self->svg);
+}
+
+PaintOrder
+path_paintable_get_paint_order (PathPaintable *self,
+                                size_t         idx)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  return (PaintOrder) svg_shape_attr_get_enum (shape, SHAPE_ATTR_PAINT_ORDER);
+}
+
+void
+path_paintable_set_paint_order (PathPaintable *self,
+                                size_t         idx,
+                                PaintOrder     order)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  svg_shape_attr_set (shape, SHAPE_ATTR_PAINT_ORDER, svg_paint_order_new (order));
+  g_signal_emit (self, signals[CHANGED], 0);
 }
 
 /* }}} */

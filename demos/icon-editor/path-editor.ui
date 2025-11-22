@@ -1242,6 +1242,116 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="paint_order_label">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">1</property>
+            <property name="xalign">1</property>
+            <property name="label" translatable="yes">_Paint order</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">paint_order</property>
+            <layout>
+              <property name="row">25</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkDropDown" id="paint_order">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <signal name="notify::selected" handler="paint_order_changed" swapped="yes"/>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Fill, Stroke</item>
+                  <item>Stroke, Fill</item>
+                </items>
+              </object>
+            </property>
+            <layout>
+              <property name="row">25</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkExpander" id="fill_expander">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="fill_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">_Fill</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">fill_paint</property>
+              </object>
+            </property>
+            <layout>
+              <property name="row">26</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ColorEditor" id="fill_paint">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <layout>
+              <property name="row">26</property>
+              <property name="column">1</property>
+            </layout>
+            <signal name="notify::symbolic" handler="fill_changed" swapped="yes"/>
+            <signal name="notify::color" handler="fill_changed" swapped="yes"/>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="fill_rule_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">fill_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Rule</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">fill_rule</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">27</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="fill_rule">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">fill_expander</lookup>
+              </closure>
+            </binding>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Winding</item>
+                  <item>Even-Odd</item>
+                </items>
+              </object>
+            </property>
+            <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
+            <layout>
+              <property name="row">27</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkExpander" id="stroke_expander">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
@@ -1257,7 +1367,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">25</property>
+              <property name="row">28</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1267,7 +1377,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
             <layout>
-              <property name="row">25</property>
+              <property name="row">28</property>
               <property name="column">1</property>
             </layout>
             <signal name="notify::symbolic" handler="stroke_changed" swapped="yes"/>
@@ -1296,7 +1406,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">26</property>
+              <property name="row">29</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1323,7 +1433,7 @@
             </property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">26</property>
+              <property name="row">29</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1344,7 +1454,7 @@
             <property name="mnemonic-widget">min_width</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">27</property>
+              <property name="row">30</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1372,7 +1482,7 @@
             </property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">27</property>
+              <property name="row">30</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1392,7 +1502,7 @@
             <property name="mnemonic-widget">max_width</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">30</property>
+              <property name="row">31</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1420,7 +1530,7 @@
             </property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">30</property>
+              <property name="row">31</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1439,7 +1549,7 @@
             <property name="mnemonic-widget">line_join</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">31</property>
+              <property name="row">32</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1463,7 +1573,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">31</property>
+              <property name="row">32</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1482,7 +1592,7 @@
             <property name="mnemonic-widget">line_cap</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">32</property>
+              <property name="row">33</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1506,83 +1616,7 @@
             </property>
             <signal name="notify::selected" handler="stroke_changed" swapped="yes"/>
             <layout>
-              <property name="row">32</property>
-              <property name="column">1</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkExpander" id="fill_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="hexpand">0</property>
-            <property name="valign">center</property>
-            <property name="margin-start">10</property>
-            <property name="label-widget">
-              <object class="GtkLabel" id="fill_label">
-                <property name="hexpand">1</property>
-                <property name="xalign">1</property>
-                <property name="label" translatable="yes">_Fill</property>
-                <property name="use-underline">1</property>
-                <property name="mnemonic-widget">fill_paint</property>
-              </object>
-            </property>
-            <layout>
               <property name="row">33</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="ColorEditor" id="fill_paint">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="hexpand">0</property>
-            <layout>
-              <property name="row">33</property>
-              <property name="column">1</property>
-            </layout>
-            <signal name="notify::symbolic" handler="fill_changed" swapped="yes"/>
-            <signal name="notify::color" handler="fill_changed" swapped="yes"/>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="fill_rule_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">fill_expander</lookup>
-              </closure>
-            </binding>
-            <property name="label" translatable="yes">_Rule</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">fill_rule</property>
-            <property name="xalign">1</property>
-            <layout>
-              <property name="row">34</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkDropDown" id="fill_rule">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">fill_expander</lookup>
-              </closure>
-            </binding>
-            <property name="model">
-              <object class="GtkStringList">
-                <items>
-                  <item>Winding</item>
-                  <item>Even-Odd</item>
-                </items>
-              </object>
-            </property>
-            <signal name="notify::selected" handler="fill_changed" swapped="yes"/>
-            <layout>
-              <property name="row">34</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1689,6 +1723,7 @@
       <widget name="animation_repeat_label"/>
       <widget name="animation_easing_label"/>
       <widget name="animation_segment_label"/>
+      <widget name="paint_order_label"/>
       <widget name="stroke_expander"/>
       <widget name="width_expander"/>
       <widget name="line_min_label"/>
