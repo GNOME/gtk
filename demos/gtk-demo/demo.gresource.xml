@@ -404,8 +404,7 @@
   </gresource>
   <gresource prefix="/transparent">
     <file>portland-rose.jpg</file>
-    <file>bluroverlay.h</file>
-    <file>bluroverlay.c</file>
+    <file>transparent.css</file>
   </gresource>
   <gresource prefix="/markup">
     <file>markup.txt</file>

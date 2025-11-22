@@ -114,7 +114,6 @@ demos = files([
 gtkdemo_deps = [ libgtk_dep, gmodule_headers_dep ]
 
 extra_demo_sources = files([
-  'bluroverlay.c',
   'demochild.c',
   'demoimage.c',
   'demolayout.c',

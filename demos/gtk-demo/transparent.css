@@ -1,0 +1,26 @@
+.floating-controls {
+  margin: 10px;
+  border-spacing: 10px;
+}
+
+.blur-overlay {
+  backdrop-filter: blur(14px);
+  background: none;
+  background-color: transparent;
+  color: white;
+  transition-property: background-color, color;
+  transition-duration: 1s;
+}
+
+.blur-overlay:hover {
+  backdrop-filter: blur(14px);
+  background: none;
+  background-color: rgba(200, 200, 200, 0.9);
+  color: black;
+}
+
+.blur-overlay:active {
+  background: none;
+  background-color: white;
+  color: black;
+}
