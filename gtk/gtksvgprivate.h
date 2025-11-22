@@ -267,6 +267,12 @@ typedef enum
   PAINT_GRADIENT,
 } PaintKind;
 
+typedef enum
+{
+  PAINT_ORDER_NORMAL,
+  PAINT_ORDER_REVERSE,
+} PaintOrder;
+
 double
 svg_shape_attr_get_number (Shape                 *shape,
                            ShapeAttr              attr,
@@ -305,6 +311,7 @@ SvgValue * svg_number_new (double value);
 SvgValue * svg_linecap_new (GskLineCap value);
 SvgValue * svg_linejoin_new (GskLineJoin value);
 SvgValue * svg_fill_rule_new (GskFillRule rule);
+SvgValue * svg_paint_order_new (PaintOrder order);
 SvgValue * svg_paint_new_none (void);
 SvgValue * svg_paint_new_symbolic (GtkSymbolicColor symbolic);
 SvgValue * svg_paint_new_rgba (const GdkRGBA *rgba);

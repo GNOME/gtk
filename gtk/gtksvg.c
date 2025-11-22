@@ -1693,12 +1693,6 @@ svg_coord_units_parse (const char *string)
   return NULL;
 }
 
-typedef enum
-{
-  PAINT_ORDER_NORMAL,
-  PAINT_ORDER_REVERSE,
-} PaintOrder;
-
 static const SvgValueClass SVG_PAINT_ORDER_CLASS = {
   "SvgPaintOrder",
   svg_enum_free,
@@ -1713,7 +1707,7 @@ static SvgEnum paint_order_values[] = {
   { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_REVERSE, "stroke fill" },
 };
 
-static SvgValue *
+SvgValue *
 svg_paint_order_new (PaintOrder value)
 {
   return svg_value_ref ((SvgValue *) &paint_order_values[value]);
