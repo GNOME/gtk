@@ -65,11 +65,10 @@ get_paintable_for_path (PathPaintable *paintable,
   unsigned int fill_symbolic = 0;
   GdkRGBA fill_color;
   GskFillRule rule;
-  double shape_params[6] = { 0, };
   PathPaintable *path_image;
 
   path_image = path_paintable_new ();
-  path_paintable_add_path (path_image, path_paintable_get_path (paintable, path), SHAPE_PATH, shape_params, 0);
+  path_paintable_add_path (path_image, path_paintable_get_path (paintable, path));
 
   do_stroke = path_paintable_get_path_stroke (paintable, path,
                                               stroke, &stroke_symbolic, &stroke_color);

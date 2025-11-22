@@ -79,7 +79,8 @@ const char *    path_paintable_get_keywords        (PathPaintable   *self);
 size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 
 size_t          path_paintable_add_path            (PathPaintable   *self,
-                                                    GskPath         *path,
+                                                    GskPath         *path);
+size_t          path_paintable_add_shape           (PathPaintable   *self,
                                                     ShapeType        shape_type,
                                                     double          *params,
                                                     unsigned int     n_params);
@@ -96,18 +97,19 @@ void            path_paintable_set_path            (PathPaintable   *self,
 GskPath *       path_paintable_get_path            (PathPaintable   *self,
                                                     size_t           idx);
 
-void            path_paintable_set_path_shape      (PathPaintable   *self,
+void            path_paintable_set_shape           (PathPaintable   *self,
                                                     size_t           idx,
-                                                    GskPath         *path,
                                                     ShapeType        shape_type,
                                                     double          *params,
                                                     unsigned int     n_params);
 
 ShapeType       path_paintable_get_path_shape_type (PathPaintable   *self,
                                                     size_t           idx);
-double *        path_paintable_get_path_shape_params (PathPaintable   *self,
-                                                      size_t           idx,
-                                                      size_t          *n_params);
+unsigned int    path_paintable_get_n_shape_params  (PathPaintable   *self,
+                                                    size_t           idx);
+void            path_paintable_get_shape_params    (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    double          *params);
 
 gboolean        path_paintable_set_path_id         (PathPaintable   *self,
                                                     size_t           idx,

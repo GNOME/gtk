@@ -34,6 +34,7 @@ struct _PathEditor
   PathPaintable *path_image;
 
   gboolean updating;
+  gboolean deleted;
 
   GtkGrid *grid;
   GtkDropDown *shape_dropdown;
@@ -185,16 +186,16 @@ shape_changed (PathEditor *self)
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_x2)), "%lf", &params[2]);
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_y2)), "%lf", &params[3]);
       if (res == 4)
-        path_paintable_set_path_shape (self->paintable, self->path,
-                                       NULL, SHAPE_LINE, params, 4);
+        path_paintable_set_shape (self->paintable, self->path,
+                                  SHAPE_LINE, params, 4);
       break;
     case CIRCLE:
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cx)), "%lf", &params[0]);
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cy)), "%lf", &params[1]);
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_r)), "%lf", &params[2]);
       if (res == 3)
-        path_paintable_set_path_shape (self->paintable, self->path,
-                                       NULL, SHAPE_CIRCLE, params, 3);
+        path_paintable_set_shape (self->paintable, self->path,
+                                  SHAPE_CIRCLE, params, 3);
       break;
     case ELLIPSE:
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_cx)), "%lf", &params[0]);
@@ -202,8 +203,8 @@ shape_changed (PathEditor *self)
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_rx)), "%lf", &params[2]);
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_ry)), "%lf", &params[3]);
       if (res == 4)
-        path_paintable_set_path_shape (self->paintable, self->path,
-                                       NULL, SHAPE_ELLIPSE, params, 4);
+        path_paintable_set_shape (self->paintable, self->path,
+                                  SHAPE_ELLIPSE, params, 4);
       break;
     case RECTANGLE:
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_x)), "%lf", &params[0]);
@@ -213,8 +214,8 @@ shape_changed (PathEditor *self)
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_rx)), "%lf", &params[4]);
       res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_ry)), "%lf", &params[5]);
       if (res == 6)
-        path_paintable_set_path_shape (self->paintable, self->path,
-                                       NULL, SHAPE_RECT, params, 6);
+        path_paintable_set_shape (self->paintable, self->path,
+                                  SHAPE_RECT, params, 6);
       break;
     case POLYLINE:
     case POLYGON:
@@ -240,11 +241,11 @@ shape_changed (PathEditor *self)
         if (res == 2 * n_rows)
           {
             if (gtk_drop_down_get_selected (self->shape_dropdown) == POLYLINE)
-              path_paintable_set_path_shape (self->paintable, self->path,
-                                             NULL, SHAPE_POLY_LINE, parms, 2 * n_rows);
+              path_paintable_set_shape (self->paintable, self->path,
+                                        SHAPE_POLY_LINE, parms, 2 * n_rows);
             else
-              path_paintable_set_path_shape (self->paintable, self->path,
-                                             NULL, SHAPE_POLYGON, parms, 2 * n_rows);
+              path_paintable_set_shape (self->paintable, self->path,
+                                        SHAPE_POLYGON, parms, 2 * n_rows);
           }
       }
       break;
@@ -380,10 +381,9 @@ path_editor_get_path_image (PathEditor *self)
       unsigned int fill_symbolic = 0;
       GdkRGBA fill_color;
       GskFillRule rule;
-      double shape_params[6] = { 0, };
 
       self->path_image = path_paintable_new ();
-      path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path), SHAPE_PATH, shape_params, 0);
+      path_paintable_add_path (self->path_image, path_paintable_get_path (self->paintable, self->path));
 
       do_stroke = path_paintable_get_path_stroke (self->paintable, self->path,
                                                   stroke, &stroke_symbolic, &stroke_color);
@@ -416,7 +416,7 @@ animation_changed (PathEditor *self)
   direction = (GpaAnimation) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   if (gtk_check_button_get_active (self->infty_check))
-    repeat = INFINITY;
+    repeat = REPEAT_FOREVER;
   else
     repeat = gtk_spin_button_get_value (self->animation_repeat);
   segment = gtk_spin_button_get_value (self->animation_segment);
@@ -790,6 +790,8 @@ duplicate_path (PathEditor *self)
 static void
 delete_path (PathEditor *self)
 {
+  self->deleted = TRUE;
+
   path_paintable_delete_path (self->paintable, self->path);
 }
 
@@ -815,6 +817,9 @@ repopulate_attach_to (PathEditor *self)
 static void
 paths_changed (PathEditor *self)
 {
+  if (self->deleted)
+    return;
+
   repopulate_attach_to (self);
 }
 
@@ -866,7 +871,9 @@ path_editor_update (PathEditor *self)
       gtk_editable_set_text (GTK_EDITABLE (self->rect_rx), "0");
       gtk_editable_set_text (GTK_EDITABLE (self->rect_ry), "0");
 
-      params = path_paintable_get_path_shape_params (self->paintable, self->path, &n_params);
+      n_params = path_paintable_get_n_shape_params (self->paintable, self->path);
+      params = g_newa (double, n_params);
+      path_paintable_get_shape_params (self->paintable, self->path, params);
       switch ((unsigned int) path_paintable_get_path_shape_type (self->paintable, self->path))
         {
         case SHAPE_LINE:
@@ -901,6 +908,10 @@ path_editor_update (PathEditor *self)
         case SHAPE_PATH:
           gtk_drop_down_set_selected (self->shape_dropdown, PATH);
           break;
+        case SHAPE_POLY_LINE:
+        case SHAPE_POLYGON:
+          // FIXME
+          break;
         default:
           g_assert_not_reached ();
         }
@@ -931,7 +942,7 @@ path_editor_update (PathEditor *self)
       gtk_spin_button_set_value (self->animation_duration,
                                  path_paintable_get_path_animation_duration (self->paintable, self->path));
 
-      if (isinf (path_paintable_get_path_animation_repeat (self->paintable, self->path)) == 1)
+      if (path_paintable_get_path_animation_repeat (self->paintable, self->path) == REPEAT_FOREVER)
         {
           gtk_check_button_set_active (self->infty_check, TRUE);
           gtk_spin_button_set_value (self->animation_repeat, 1);
