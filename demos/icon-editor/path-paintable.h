@@ -225,3 +225,9 @@ void            path_paintable_set_paint_order     (PathPaintable   *self,
                                                     size_t           idx,
                                                     PaintOrder       order);
 
+double          path_paintable_get_opacity         (PathPaintable   *self,
+                                                    size_t           idx);
+
+void            path_paintable_set_opacity         (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    double           opacity);

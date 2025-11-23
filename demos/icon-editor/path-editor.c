@@ -85,6 +85,7 @@ struct _PathEditor
   GtkSizeGroup *sg;
   GtkButton *move_down;
   GtkDropDown *paint_order;
+  GtkScale *opacity;
 };
 
 enum
@@ -477,6 +478,13 @@ paint_order_changed (PathEditor *self)
 {
   unsigned int value = gtk_drop_down_get_selected (self->paint_order);
   path_paintable_set_paint_order (self->paintable, self->path, value);
+}
+
+static void
+opacity_changed (PathEditor *self)
+{
+  double value = gtk_range_get_value (GTK_RANGE (self->opacity));
+  path_paintable_set_opacity (self->paintable, self->path, value);
 }
 
 static void
@@ -1022,6 +1030,9 @@ path_editor_update (PathEditor *self)
 
       gtk_drop_down_set_selected (self->paint_order,
                                   path_paintable_get_paint_order (self->paintable, self->path));
+
+      gtk_range_set_value (GTK_RANGE (self->opacity),
+                           path_paintable_get_opacity (self->paintable, self->path));
       self->updating = FALSE;
 
       g_clear_object (&self->path_image);
@@ -1201,12 +1212,14 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, move_down);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, sg);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, paint_order);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, opacity);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
   gtk_widget_class_bind_template_callback (widget_class, origin_changed);
   gtk_widget_class_bind_template_callback (widget_class, id_changed);
   gtk_widget_class_bind_template_callback (widget_class, paint_order_changed);
+  gtk_widget_class_bind_template_callback (widget_class, opacity_changed);
   gtk_widget_class_bind_template_callback (widget_class, stroke_changed);
   gtk_widget_class_bind_template_callback (widget_class, fill_changed);
   gtk_widget_class_bind_template_callback (widget_class, attach_changed);
