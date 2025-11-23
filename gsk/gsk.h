@@ -46,6 +46,7 @@
 #include <gsk/gskrendernode.h>
 #include <gsk/gskrenderreplay.h>
 #include <gsk/gskrepeatnode.h>
+#include <gsk/gskroundedclipnode.h>
 #include <gsk/gskroundedrect.h>
 #include <gsk/gskstroke.h>
 #include <gsk/gskstrokenode.h>

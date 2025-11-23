@@ -15,6 +15,7 @@
 #include "gskdebugnode.h"
 #include "gskdebugprivate.h"
 #include "gskopacitynode.h"
+#include "gskroundedclipnode.h"
 #include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"

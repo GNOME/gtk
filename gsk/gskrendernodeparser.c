@@ -46,6 +46,7 @@
 #include "gskpath.h"
 #include "gskpathbuilder.h"
 #include "gskprivate.h"
+#include "gskroundedclipnode.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrepeatnode.h"
