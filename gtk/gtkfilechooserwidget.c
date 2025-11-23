@@ -3558,7 +3558,6 @@ show_and_select_files (GtkFileChooserWidget *impl,
 
       file = walk->data;
 
-      /* Is it a hidden file? */
 
       info = _gtk_file_system_model_get_info_for_file (fsmodel, file);
       if (!info)
@@ -3572,6 +3571,8 @@ show_and_select_files (GtkFileChooserWidget *impl,
           gboolean has_is_hidden = g_file_info_has_attribute (info, "standard::is-hidden");
           gboolean has_is_backup = g_file_info_has_attribute (info, "standard::is-backup");
 
+          /* Is it a hidden file? */
+
           if (!enabled_hidden &&
               ((has_is_hidden && g_file_info_get_is_hidden (info)) ||
                (has_is_backup && g_file_info_get_is_backup (info))))
@@ -3579,17 +3580,17 @@ show_and_select_files (GtkFileChooserWidget *impl,
               set_show_hidden (impl, TRUE);
               enabled_hidden = TRUE;
             }
-        }
 
-      /* Is it a filtered file? */
+          /* Is it a filtered file? */
 
-      if (g_file_info_get_attribute_boolean (info, "filechooser::filtered-out"))
-        {
-          /* Maybe we should have a way to ask the fsmodel if it had filtered a file */
-          if (!removed_filters)
+          if (g_file_info_get_attribute_boolean (info, "filechooser::filtered-out"))
             {
-              set_current_filter (impl, NULL);
-              removed_filters = TRUE;
+              /* Maybe we should have a way to ask the fsmodel if it had filtered a file */
+              if (!removed_filters)
+                {
+                  set_current_filter (impl, NULL);
+                  removed_filters = TRUE;
+                }
             }
         }
 
