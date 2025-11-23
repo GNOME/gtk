@@ -1235,6 +1235,7 @@ path_paintable_get_compatibility (PathPaintable *self)
    * - Transitions
    * - Animations
    * - Attachments
+   * - Anything else
    *
    * This is informational.
    * Icons may still render (in a degraded fashion) with older GTK.
@@ -1244,6 +1245,7 @@ path_paintable_get_compatibility (PathPaintable *self)
   GtkSymbolicColor symbolic;
   GdkRGBA color;
   PaintOrder paint_order;
+  double opacity;
 
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
     {
@@ -1286,6 +1288,10 @@ path_paintable_get_compatibility (PathPaintable *self)
 
       paint_order = svg_shape_attr_get_enum (shape, SHAPE_ATTR_PAINT_ORDER);
       if (paint_order != PAINT_ORDER_NORMAL)
+        compat = MAX (compat, GTK_4_22);
+
+      opacity = svg_shape_attr_get_number (shape, SHAPE_ATTR_OPACITY, NULL);
+      if (opacity != 1)
         compat = MAX (compat, GTK_4_22);
     }
 
@@ -1418,6 +1424,26 @@ path_paintable_set_paint_order (PathPaintable *self,
   Shape *shape = path_paintable_get_shape (self, idx);
 
   svg_shape_attr_set (shape, SHAPE_ATTR_PAINT_ORDER, svg_paint_order_new (order));
+  g_signal_emit (self, signals[CHANGED], 0);
+}
+
+double
+path_paintable_get_opacity (PathPaintable *self,
+                            size_t         idx)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  return (PaintOrder) svg_shape_attr_get_number (shape, SHAPE_ATTR_OPACITY, NULL);
+}
+
+void
+path_paintable_set_opacity (PathPaintable *self,
+                            size_t         idx,
+                            double         opacity)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  svg_shape_attr_set (shape, SHAPE_ATTR_OPACITY, svg_number_new (opacity));
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
