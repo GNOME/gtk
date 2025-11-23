@@ -3954,13 +3954,6 @@ svg_points_interpolate (const SvgValue *value0,
 /* }}} */
 /* {{{ Clips */
 
-typedef enum
-{
-  CLIP_NONE,
-  CLIP_PATH,
-  CLIP_REF,
-} ClipKind;
-
 typedef struct
 {
   SvgValue base;
@@ -4056,14 +4049,14 @@ static const SvgValueClass SVG_CLIP_CLASS = {
   svg_clip_print
 };
 
-static SvgValue *
+SvgValue *
 svg_clip_new_none (void)
 {
   static SvgClip none = { { &SVG_CLIP_CLASS, 1 }, CLIP_NONE };
   return svg_value_ref ((SvgValue *) &none);
 }
 
-static SvgValue *
+SvgValue *
 svg_clip_new_path (GskPath *path)
 {
   SvgClip *result;
@@ -13146,6 +13139,30 @@ svg_shape_get_path (Shape                 *shape,
                     const graphene_size_t *viewport)
 {
   return shape_get_path (shape, viewport, FALSE);
+}
+
+ClipKind
+svg_shape_attr_get_clip (Shape      *shape,
+                         ShapeAttr   attr,
+                         GskPath   **path)
+{
+  g_return_val_if_fail (shape_has_attr (shape->type, attr), CLIP_NONE);
+  SvgValue *value;
+  SvgClip *clip;
+
+  if (shape->attrs & BIT (attr))
+    value = shape_get_base_value (shape, NULL, attr);
+  else
+    value = shape_attr_get_initial_value (attr, shape->type);
+
+  clip = (SvgClip *) value;
+
+  if (clip->kind == CLIP_PATH)
+    *path = clip->path;
+  else
+    *path = NULL;
+
+  return clip->kind;
 }
 
 void
