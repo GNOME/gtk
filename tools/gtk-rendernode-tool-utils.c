@@ -61,6 +61,7 @@ load_node_file (const char *filename)
 {
   GFile *file;
   GBytes *bytes;
+  GskRenderNode *result;
   GError *error = NULL;
 
   file = g_file_new_for_commandline_arg (filename);
@@ -74,7 +75,11 @@ load_node_file (const char *filename)
       exit (1);
     }
 
-  return gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
+  result = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
+
+  g_bytes_unref (bytes);
+
+  return result;
 }
 
 /* keep in sync with gsk/gskrenderer.c */
