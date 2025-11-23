@@ -8,6 +8,7 @@
 #include "gskblurnode.h"
 #include "gskbordernode.h"
 #include "gskcaironode.h"
+#include "gskclipnode.h"
 #include "gskcolormatrixnode.h"
 #include "gskcolornode.h"
 #include "gskcontainernode.h"

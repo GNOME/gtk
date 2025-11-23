@@ -27,6 +27,7 @@
 #include "gskblurnode.h"
 #include "gskbordernode.h"
 #include "gskcaironodeprivate.h"
+#include "gskclipnode.h"
 #include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"

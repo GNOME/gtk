@@ -22,6 +22,7 @@
 
 #include "gskoffloadprivate.h"
 
+#include "gskclipnode.h"
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
 #include "gskcontainernodeprivate.h"

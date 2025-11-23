@@ -20,6 +20,7 @@
 
 #include "gskcopypasteutilsprivate.h"
 
+#include "gskclipnode.h"
 #include "gskcolornode.h"
 #include "gskcontainernode.h"
 #include "gskcopynode.h"

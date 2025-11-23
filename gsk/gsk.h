@@ -23,6 +23,7 @@
 #include <gsk/gskblurnode.h>
 #include <gsk/gskbordernode.h>
 #include <gsk/gskcaironode.h>
+#include <gsk/gskclipnode.h>
 #include <gsk/gskcolormatrixnode.h>
 #include <gsk/gskcolornode.h>
 #include <gsk/gskcomponenttransfer.h>

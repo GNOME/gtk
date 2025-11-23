@@ -150,7 +150,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
 #define GSK_TYPE_TRANSFORM_NODE                 (gsk_transform_node_get_type())
-#define GSK_TYPE_CLIP_NODE                      (gsk_clip_node_get_type())
 #define GSK_TYPE_ROUNDED_CLIP_NODE              (gsk_rounded_clip_node_get_type())
 #define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
@@ -167,7 +166,6 @@ typedef struct _GskConicGradientNode            GskConicGradientNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskTransformNode                GskTransformNode;
-typedef struct _GskClipNode                     GskClipNode;
 typedef struct _GskRoundedClipNode              GskRoundedClipNode;
 typedef struct _GskShadowNode                   GskShadowNode;
 typedef struct _GskTextNode                     GskTextNode;
@@ -331,16 +329,6 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_transform_node_get_child            (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_node_get_transform        (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_clip_node_get_type                  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
-                                                                 const graphene_rect_t    *clip);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_clip_node_get_child                 (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const graphene_rect_t * gsk_clip_node_get_clip                  (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_rounded_clip_node_get_type          (void) G_GNUC_CONST;
