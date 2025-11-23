@@ -525,7 +525,7 @@ visit_node (GskRenderReplay *replay,
     {
       GskOffloadInfo *info = &self->subsurfaces[i];
 
-      if (info->can_raise)
+      if (info->can_offload && info->can_raise)
         {
           if (gsk_rect_intersects (&transformed_bounds, &info->texture_rect) ||
               gsk_rect_intersects (&transformed_bounds, &info->background_rect))
