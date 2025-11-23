@@ -19,13 +19,13 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#include "path-editor.h"
+#include "shape-editor.h"
 #include "path-paintable.h"
 #include "color-editor.h"
 #include "mini-graph.h"
 
 
-struct _PathEditor
+struct _ShapeEditor
 {
   GtkWidget parent_instance;
 
@@ -176,7 +176,7 @@ enum
 };
 
 static void
-shape_changed (PathEditor *self)
+shape_changed (ShapeEditor *self)
 {
   int res = 0;
   double params[6];
@@ -263,8 +263,8 @@ shape_changed (PathEditor *self)
 }
 
 static void
-delete_row (GtkWidget  *button,
-            PathEditor *self)
+delete_row (GtkWidget   *button,
+            ShapeEditor *self)
 {
   GtkWidget *row = gtk_widget_get_parent (button);
   gtk_box_remove (GTK_BOX (gtk_widget_get_parent (row)), row);
@@ -272,7 +272,7 @@ delete_row (GtkWidget  *button,
 }
 
 static void
-add_row (PathEditor *self)
+add_row (ShapeEditor *self)
 {
   GtkBox *box;
   GtkEntry *entry;
@@ -297,8 +297,8 @@ add_row (PathEditor *self)
 }
 
 static void
-path_editor_update_path (PathEditor *self,
-                         GskPath    *path)
+shape_editor_update_path (ShapeEditor *self,
+                          GskPath     *path)
 {
   g_autofree char *text = NULL;
 
@@ -312,7 +312,7 @@ path_editor_update_path (PathEditor *self,
 }
 
 static void
-path_cmds_clicked (PathEditor *self)
+path_cmds_clicked (ShapeEditor *self)
 {
   gtk_stack_set_visible_child_name (self->path_cmds_stack, "entry");
 
@@ -320,7 +320,7 @@ path_cmds_clicked (PathEditor *self)
 }
 
 static gboolean
-path_cmds_key (PathEditor      *self,
+path_cmds_key (ShapeEditor     *self,
                unsigned int     keyval,
                unsigned int     keycode,
                GdkModifierType  state)
@@ -344,7 +344,7 @@ path_cmds_key (PathEditor      *self,
 }
 
 static void
-path_cmds_activated (PathEditor *self)
+path_cmds_activated (ShapeEditor *self)
 {
   const char *text;
   g_autoptr (GskPath) path = NULL;
@@ -368,11 +368,11 @@ path_cmds_activated (PathEditor *self)
       gtk_stack_set_visible_child_name (self->path_cmds_stack, "label");
     }
 
-  path_editor_update_path (self, path);
+  shape_editor_update_path (self, path);
 }
 
 static PathPaintable *
-path_editor_get_path_image (PathEditor *self)
+shape_editor_get_path_image (ShapeEditor *self)
 {
   if (!self->path_image)
     {
@@ -405,7 +405,7 @@ path_editor_get_path_image (PathEditor *self)
 }
 
 static void
-animation_changed (PathEditor *self)
+animation_changed (ShapeEditor *self)
 {
   GpaAnimation direction;
   double duration;
@@ -431,7 +431,7 @@ animation_changed (PathEditor *self)
 }
 
 static void
-transition_changed (PathEditor *self)
+transition_changed (ShapeEditor *self)
 {
   GpaTransition type;
   double duration;
@@ -450,7 +450,7 @@ transition_changed (PathEditor *self)
 }
 
 static void
-origin_changed (PathEditor *self)
+origin_changed (ShapeEditor *self)
 {
   double origin;
 
@@ -462,7 +462,7 @@ origin_changed (PathEditor *self)
 }
 
 static void
-id_changed (PathEditor *self)
+id_changed (ShapeEditor *self)
 {
   const char *id;
 
@@ -475,21 +475,21 @@ id_changed (PathEditor *self)
 }
 
 static void
-paint_order_changed (PathEditor *self)
+paint_order_changed (ShapeEditor *self)
 {
   unsigned int value = gtk_drop_down_get_selected (self->paint_order);
   path_paintable_set_paint_order (self->paintable, self->path, value);
 }
 
 static void
-opacity_changed (PathEditor *self)
+opacity_changed (ShapeEditor *self)
 {
   double value = gtk_range_get_value (GTK_RANGE (self->opacity));
   path_paintable_set_opacity (self->paintable, self->path, value);
 }
 
 static void
-stroke_changed (PathEditor *self)
+stroke_changed (ShapeEditor *self)
 {
   gboolean do_stroke;
   double width;
@@ -547,7 +547,7 @@ stroke_changed (PathEditor *self)
 }
 
 static void
-fill_changed (PathEditor *self)
+fill_changed (ShapeEditor *self)
 {
   gboolean do_fill;
   unsigned int selected;
@@ -587,7 +587,7 @@ fill_changed (PathEditor *self)
 }
 
 static void
-attach_changed (PathEditor *self)
+attach_changed (ShapeEditor *self)
 {
   size_t selected;
   double pos;
@@ -653,9 +653,9 @@ uint_equal (GObject      *object,
 }
 
 static void
-show_error (PathEditor *self,
-            const char *title,
-            const char *detail)
+show_error (ShapeEditor *self,
+            const char  *title,
+            const char  *detail)
 {
   GtkWindow *window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
   g_autoptr (GtkAlertDialog) alert = NULL;
@@ -670,7 +670,7 @@ temp_file_changed (GFileMonitor      *monitor,
                    GFile             *file,
                    GFile             *other,
                    GFileMonitorEvent  event,
-                   PathEditor        *self)
+                   ShapeEditor       *self)
 {
   if (event == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT)
     {
@@ -693,7 +693,7 @@ temp_file_changed (GFileMonitor      *monitor,
           return;
         }
 
-      path_editor_update_path (self, path_paintable_get_path (paintable, 0));
+      shape_editor_update_path (self, path_paintable_get_path (paintable, 0));
     }
 }
 
@@ -712,7 +712,7 @@ file_launched (GObject      *source,
 }
 
 static void
-edit_path (PathEditor *self)
+edit_path (ShapeEditor *self)
 {
   GString *str;
   g_autoptr (GBytes) bytes = NULL;
@@ -796,19 +796,19 @@ edit_path (PathEditor *self)
 }
 
 static void
-move_path_down (PathEditor *self)
+move_path_down (ShapeEditor *self)
 {
   path_paintable_move_path (self->paintable, self->path, self->path + 1);
 }
 
 static void
-duplicate_path (PathEditor *self)
+duplicate_path (ShapeEditor *self)
 {
   path_paintable_duplicate_path (self->paintable, self->path);
 }
 
 static void
-delete_path (PathEditor *self)
+delete_path (ShapeEditor *self)
 {
   self->deleted = TRUE;
 
@@ -816,7 +816,7 @@ delete_path (PathEditor *self)
 }
 
 static void
-repopulate_attach_to (PathEditor *self)
+repopulate_attach_to (ShapeEditor *self)
 {
   g_autoptr (GtkStringList) model = NULL;
 
@@ -835,7 +835,7 @@ repopulate_attach_to (PathEditor *self)
 }
 
 static void
-paths_changed (PathEditor *self)
+paths_changed (ShapeEditor *self)
 {
   if (self->deleted)
     return;
@@ -844,7 +844,7 @@ paths_changed (PathEditor *self)
 }
 
 static void
-path_editor_update (PathEditor *self)
+shape_editor_update (ShapeEditor *self)
 {
   if (self->paintable && self->path != (size_t) -1)
     {
@@ -1048,35 +1048,35 @@ path_editor_update (PathEditor *self)
 /* }}} */
 /* {{{ GObject boilerplate */
 
-struct _PathEditorClass
+struct _ShapeEditorClass
 {
   GtkWidgetClass parent_class;
 };
 
-G_DEFINE_TYPE (PathEditor, path_editor, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (ShapeEditor, shape_editor, GTK_TYPE_WIDGET)
 
 static void
-path_editor_init (PathEditor *self)
+shape_editor_init (ShapeEditor *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
-path_editor_set_property (GObject      *object,
-                          unsigned int  prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
+shape_editor_set_property (GObject      *object,
+                           unsigned int  prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
 {
-  PathEditor *self = PATH_EDITOR (object);
+  ShapeEditor *self = SHAPE_EDITOR (object);
 
   switch (prop_id)
     {
     case PROP_PAINTABLE:
-      path_editor_set_paintable (self, g_value_get_object (value));
+      shape_editor_set_paintable (self, g_value_get_object (value));
       break;
 
     case PROP_PATH:
-      path_editor_set_path (self, g_value_get_uint64 (value));
+      shape_editor_set_path (self, g_value_get_uint64 (value));
       break;
 
     default:
@@ -1086,12 +1086,12 @@ path_editor_set_property (GObject      *object,
 }
 
 static void
-path_editor_get_property (GObject      *object,
-                          unsigned int  prop_id,
-                          GValue       *value,
-                          GParamSpec   *pspec)
+shape_editor_get_property (GObject      *object,
+                           unsigned int  prop_id,
+                           GValue       *value,
+                           GParamSpec   *pspec)
 {
-  PathEditor *self = PATH_EDITOR (object);
+  ShapeEditor *self = SHAPE_EDITOR (object);
 
   switch (prop_id)
     {
@@ -1104,7 +1104,7 @@ path_editor_get_property (GObject      *object,
       break;
 
     case PROP_PATH_IMAGE:
-      g_value_set_object (value, path_editor_get_path_image (self));
+      g_value_set_object (value, shape_editor_get_path_image (self));
       break;
 
     default:
@@ -1114,17 +1114,17 @@ path_editor_get_property (GObject      *object,
 }
 
 static void
-path_editor_dispose (GObject *object)
+shape_editor_dispose (GObject *object)
 {
-  gtk_widget_dispose_template (GTK_WIDGET (object), PATH_EDITOR_TYPE);
+  gtk_widget_dispose_template (GTK_WIDGET (object), SHAPE_EDITOR_TYPE);
 
-  G_OBJECT_CLASS (path_editor_parent_class)->dispose (object);
+  G_OBJECT_CLASS (shape_editor_parent_class)->dispose (object);
 }
 
 static void
-path_editor_finalize (GObject *object)
+shape_editor_finalize (GObject *object)
 {
-  PathEditor *self = PATH_EDITOR (object);
+  ShapeEditor *self = SHAPE_EDITOR (object);
 
   if (self->paintable)
     g_signal_handlers_disconnect_by_func (self->paintable, paths_changed, self);
@@ -1132,11 +1132,11 @@ path_editor_finalize (GObject *object)
   g_clear_object (&self->path_image);
   g_clear_object (&self->paintable);
 
-  G_OBJECT_CLASS (path_editor_parent_class)->finalize (object);
+  G_OBJECT_CLASS (shape_editor_parent_class)->finalize (object);
 }
 
 static void
-path_editor_class_init (PathEditorClass *class)
+shape_editor_class_init (ShapeEditorClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
@@ -1144,10 +1144,10 @@ path_editor_class_init (PathEditorClass *class)
   g_type_ensure (COLOR_EDITOR_TYPE);
   g_type_ensure (MINI_GRAPH_TYPE);
 
-  object_class->set_property = path_editor_set_property;
-  object_class->get_property = path_editor_get_property;
-  object_class->dispose = path_editor_dispose;
-  object_class->finalize = path_editor_finalize;
+  object_class->set_property = shape_editor_set_property;
+  object_class->get_property = shape_editor_get_property;
+  object_class->dispose = shape_editor_dispose;
+  object_class->finalize = shape_editor_finalize;
 
   properties[PROP_PAINTABLE] =
     g_param_spec_object ("paintable", NULL, NULL,
@@ -1166,59 +1166,59 @@ path_editor_class_init (PathEditorClass *class)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/Shaper/path-editor.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/Shaper/shape-editor.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, grid);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, shape_dropdown);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds_stack);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds_entry);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, polyline_box);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_x1);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_y1);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_x2);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_y2);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, circle_cx);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, circle_cy);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, circle_r);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_cx);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_cy);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_rx);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, ellipse_ry);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_x);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_y);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_width);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_height);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_rx);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, rect_ry);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, id_label);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, origin);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_type);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_duration);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_delay);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, transition_easing);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_direction);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_duration);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_segment);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_repeat);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, infty_check);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, animation_easing);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, mini_graph);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, stroke_paint);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, min_width);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_width);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, max_width);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_join);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, line_cap);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, fill_paint);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, fill_rule);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, attach_to);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, attach_at);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, move_down);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, sg);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, paint_order);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, opacity);
-  gtk_widget_class_bind_template_child (widget_class, PathEditor, miter_limit);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, grid);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, shape_dropdown);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, path_cmds_stack);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, path_cmds);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, path_cmds_entry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, polyline_box);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_x1);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_y1);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_x2);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_y2);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, circle_cx);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, circle_cy);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, circle_r);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, ellipse_cx);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, ellipse_cy);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, ellipse_rx);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, ellipse_ry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, rect_x);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, rect_y);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, rect_width);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, rect_height);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, rect_rx);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, rect_ry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, id_label);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, origin);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transition_type);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transition_duration);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transition_delay);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transition_easing);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, animation_direction);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, animation_duration);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, animation_segment);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, animation_repeat);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, infty_check);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, animation_easing);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, mini_graph);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, stroke_paint);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, min_width);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_width);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, max_width);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_join);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_cap);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, fill_paint);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, fill_rule);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, attach_to);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, attach_at);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, move_down);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, sg);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, paint_order);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, miter_limit);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -1251,21 +1251,21 @@ path_editor_class_init (PathEditorClass *class)
 /* }}} */
 /* {{{ Public API */
 
-PathEditor *
-path_editor_new (PathPaintable *paintable,
-                 size_t         path)
+ShapeEditor *
+shape_editor_new (PathPaintable *paintable,
+                  size_t         path)
 {
-  return g_object_new (PATH_EDITOR_TYPE,
+  return g_object_new (SHAPE_EDITOR_TYPE,
                        "paintable", paintable,
                        "path", path,
                        NULL);
 }
 
 void
-path_editor_set_paintable (PathEditor    *self,
-                           PathPaintable *paintable)
+shape_editor_set_paintable (ShapeEditor    *self,
+                            PathPaintable *paintable)
 {
-  g_return_if_fail (PATH_IS_EDITOR (self));
+  g_return_if_fail (SHAPE_IS_EDITOR (self));
   g_return_if_fail (paintable == NULL || PATH_IS_PAINTABLE (paintable));
 
   g_clear_object (&self->path_image);
@@ -1281,7 +1281,7 @@ path_editor_set_paintable (PathEditor    *self,
   if (self->paintable)
     g_signal_connect_swapped (self->paintable, "paths-changed", G_CALLBACK (paths_changed), self);
 
-  path_editor_update (self);
+  shape_editor_update (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
@@ -1289,18 +1289,18 @@ path_editor_set_paintable (PathEditor    *self,
 }
 
 PathPaintable *
-path_editor_get_paintable (PathEditor *self)
+shape_editor_get_paintable (ShapeEditor *self)
 {
-  g_return_val_if_fail (PATH_IS_EDITOR (self), NULL);
+  g_return_val_if_fail (SHAPE_IS_EDITOR (self), NULL);
 
   return self->paintable;
 }
 
 void
-path_editor_set_path (PathEditor *self,
-                      size_t      path)
+shape_editor_set_path (ShapeEditor *self,
+                       size_t      path)
 {
-  g_return_if_fail (PATH_IS_EDITOR (self));
+  g_return_if_fail (SHAPE_IS_EDITOR (self));
   g_return_if_fail ((self->paintable == NULL && path == 0) ||
                     (self->paintable && path < path_paintable_get_n_paths (self->paintable)));
 
@@ -1309,23 +1309,23 @@ path_editor_set_path (PathEditor *self,
 
   self->path = path;
 
-  path_editor_update (self);
+  shape_editor_update (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
 }
 
 size_t
-path_editor_get_path (PathEditor *self)
+shape_editor_get_path (ShapeEditor *self)
 {
-  g_return_val_if_fail (PATH_IS_EDITOR (self), 0);
+  g_return_val_if_fail (SHAPE_IS_EDITOR (self), 0);
 
   return self->path;
 }
 
 void
-path_editor_edit_path (PathEditor *self)
+shape_editor_edit_path (ShapeEditor *self)
 {
-  g_return_if_fail (PATH_IS_EDITOR (self));
+  g_return_if_fail (SHAPE_IS_EDITOR (self));
 
   edit_path (self);
 }

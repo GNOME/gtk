@@ -8,8 +8,8 @@ icon_editor_sources = [
   'main.c',
   'mini-graph.c',
   'paintable-editor.c',
-  'path-editor.c',
   'path-paintable.c',
+  'shape-editor.c',
   'state-editor.c',
 ]
 

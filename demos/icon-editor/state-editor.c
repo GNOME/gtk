@@ -20,7 +20,7 @@
  */
 
 #include "state-editor.h"
-#include "path-editor.h"
+#include "shape-editor.h"
 #include "path-paintable.h"
 
 struct _StateEditor
@@ -285,7 +285,7 @@ state_editor_class_init (StateEditorClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  g_type_ensure (PATH_EDITOR_TYPE);
+  g_type_ensure (SHAPE_EDITOR_TYPE);
 
   object_class->dispose = state_editor_dispose;
   object_class->finalize = state_editor_finalize;

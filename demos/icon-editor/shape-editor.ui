@@ -1,5 +1,5 @@
 <interface>
-  <template class="PathEditor" parent="GtkWidget">
+  <template class="ShapeEditor" parent="GtkWidget">
     <child>
       <object class="GtkGrid" id="grid">
         <child>
@@ -12,7 +12,7 @@
                 <child>
                   <object class="GtkImage">
                     <property name="pixel-size">20</property>
-                    <property name="paintable" bind-source="PathEditor" bind-property="path-image"/>
+                    <property name="paintable" bind-source="ShapeEditor" bind-property="path-image"/>
                     <accessibility>
                       <property name="label" translatable="yes">Path</property>
                     </accessibility>
