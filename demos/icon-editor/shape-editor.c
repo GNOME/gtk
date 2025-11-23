@@ -35,6 +35,7 @@ struct _ShapeEditor
 
   gboolean updating;
   gboolean deleted;
+  ShapeAttr externally_editing;
 
   GtkGrid *grid;
   GtkDropDown *shape_dropdown;
@@ -87,6 +88,9 @@ struct _ShapeEditor
   GtkDropDown *paint_order;
   GtkScale *opacity;
   GtkScale *miter_limit;
+  GtkStack *clip_path_cmds_stack;
+  GtkLabel *clip_path_cmds;
+  GtkEntry *clip_path_cmds_entry;
 };
 
 enum
@@ -369,6 +373,83 @@ path_cmds_activated (ShapeEditor *self)
     }
 
   shape_editor_update_path (self, path);
+}
+
+static void
+shape_editor_update_clip_path (ShapeEditor *self,
+                               GskPath     *path)
+{
+  if (gsk_path_is_empty (path))
+    {
+      gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), "—");
+      path_paintable_set_clip_path (self->paintable, self->path, NULL);
+    }
+  else
+    {
+      g_autofree char *text = gsk_path_to_string (path);
+      gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), text);
+      path_paintable_set_clip_path (self->paintable, self->path, path);
+    }
+}
+
+static void
+clip_path_cmds_clicked (ShapeEditor *self)
+{
+  gtk_stack_set_visible_child_name (self->clip_path_cmds_stack, "entry");
+
+  gtk_entry_grab_focus_without_selecting (self->clip_path_cmds_entry);
+}
+
+static gboolean
+clip_path_cmds_key (ShapeEditor     *self,
+                    unsigned int     keyval,
+                    unsigned int     keycode,
+                    GdkModifierType  state)
+{
+  if (keyval == GDK_KEY_Escape)
+    {
+      GskPath *path;
+      g_autofree char *text = NULL;
+
+      path = path_paintable_get_clip_path (self->paintable, self->path);
+      text = gsk_path_to_string (path);
+      gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), text);
+
+      gtk_widget_remove_css_class (GTK_WIDGET (self->clip_path_cmds_entry), "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->clip_path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
+      gtk_stack_set_visible_child_name (self->clip_path_cmds_stack, "label");
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+clip_path_cmds_activated (ShapeEditor *self)
+{
+  const char *text;
+  g_autoptr (GskPath) path = NULL;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (self->clip_path_cmds_entry));
+  path = gsk_path_parse (text);
+
+  if (!path)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (self->clip_path_cmds_entry));
+      gtk_widget_add_css_class (GTK_WIDGET (self->clip_path_cmds_entry), "error");
+      gtk_accessible_update_state (GTK_ACCESSIBLE (self->clip_path_cmds_entry),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
+      return;
+    }
+  else
+    {
+      gtk_widget_remove_css_class (GTK_WIDGET (self->clip_path_cmds_entry), "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->clip_path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
+      gtk_stack_set_visible_child_name (self->clip_path_cmds_stack, "label");
+    }
+
+  shape_editor_update_clip_path (self, path);
 }
 
 static PathPaintable *
@@ -678,6 +759,7 @@ temp_file_changed (GFileMonitor      *monitor,
       g_autoptr (GBytes) bytes = NULL;
       g_autoptr (GError) error = NULL;
       g_autoptr (PathPaintable) paintable = NULL;
+      g_autoptr (GskPath) path = NULL;
 
       bytes = g_file_load_bytes (file, NULL, NULL, &error);
       if (!bytes)
@@ -693,7 +775,14 @@ temp_file_changed (GFileMonitor      *monitor,
           return;
         }
 
-      shape_editor_update_path (self, path_paintable_get_path (paintable, 0));
+      path = path_paintable_get_path_by_id (paintable, "path0");
+
+      if (self->externally_editing == SHAPE_ATTR_PATH)
+        shape_editor_update_path (self, path);
+      else if (self->externally_editing == SHAPE_ATTR_CLIP_PATH)
+        shape_editor_update_clip_path (self, path);
+      else
+        g_assert_not_reached ();
     }
 }
 
@@ -712,7 +801,9 @@ file_launched (GObject      *source,
 }
 
 static void
-edit_path (ShapeEditor *self)
+edit_path_externally (ShapeEditor  *self,
+                      GskPath      *path_in,
+                      ShapeAttr     attr)
 {
   GString *str;
   g_autoptr (GBytes) bytes = NULL;
@@ -732,7 +823,10 @@ edit_path (ShapeEditor *self)
   g_autoptr(GtkFileLauncher) launcher = NULL;
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
 
-  path = path_to_svg_path (path_paintable_get_path (self->paintable, self->path));
+  self->externally_editing = attr;
+
+  if (path_in)
+    path = path_to_svg_path (path_in);
 
   stroke = gsk_stroke_new (1);
   path_paintable_get_path_stroke (self->paintable, self->path,
@@ -743,23 +837,35 @@ edit_path (ShapeEditor *self)
                           path_paintable_get_width (self->paintable),
                           path_paintable_get_height (self->paintable));
 
-  g_string_append_printf (str, "<path id='path%" G_GSIZE_FORMAT "'\n"
-                               "      d='",
-                          self->path);
-  gsk_path_print (path, str);
-  g_string_append_printf (str, "'\n"
-                          "      fill='none'\n"
-                          "      stroke='black'\n"
-                          "      stroke-width='%g'\n"
-                          "      stroke-linejoin='%s'\n"
-                          "      stroke-linecap='%s'/>\n",
-                          gsk_stroke_get_line_width (stroke),
-                          linejoin[gsk_stroke_get_line_join (stroke)],
-                          linecap[gsk_stroke_get_line_cap (stroke)]);
+  g_string_append (str, "<path id='path0'\n"
+                        "      d='");
+  if (path)
+    gsk_path_print (path, str);
+
+  g_string_append (str, "'\n");
+
+  if (attr == SHAPE_ATTR_PATH)
+    g_string_append_printf (str,
+                            "      fill='none'\n"
+                            "      stroke='black'\n"
+                            "      stroke-width='%g'\n"
+                            "      stroke-linejoin='%s'\n"
+                            "      stroke-linecap='%s'/>\n",
+                            gsk_stroke_get_line_width (stroke),
+                            linejoin[gsk_stroke_get_line_join (stroke)],
+                            linecap[gsk_stroke_get_line_cap (stroke)]);
+  else
+    g_string_append (str,
+                     "      fill='black'\n"
+                     "      stroke='none'/>\n");
+
   g_string_append (str, "</svg>");
   bytes = g_string_free_to_bytes (str);
 
-  name = g_strdup_printf ("org.gtk.Shaper-path%" G_GSIZE_FORMAT ".svg", self->path);
+  name = g_strdup_printf ("org.gtk.Shaper-%s%" G_GSIZE_FORMAT ".svg",
+                          attr == SHAPE_ATTR_PATH ? "path" : "clip-path",
+                          self->path);
+
   filename = g_build_filename (g_get_user_cache_dir (), name, NULL);
   file = g_file_new_for_path (filename);
   ostream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &error));
@@ -793,6 +899,22 @@ edit_path (ShapeEditor *self)
   gtk_file_launcher_set_writable (launcher, TRUE);
 
   gtk_file_launcher_launch (launcher, GTK_WINDOW (root), NULL, file_launched, self);
+}
+
+static void
+edit_path (ShapeEditor *self)
+{
+  edit_path_externally (self,
+                        path_paintable_get_path (self->paintable, self->path),
+                        SHAPE_ATTR_PATH);
+}
+
+static void
+edit_clip_path (ShapeEditor *self)
+{
+  edit_path_externally (self,
+                        path_paintable_get_clip_path (self->paintable, self->path),
+                        SHAPE_ATTR_CLIP_PATH);
 }
 
 static void
@@ -872,6 +994,7 @@ shape_editor_update (ShapeEditor *self)
       text = gsk_path_to_string (path);
       gtk_label_set_label (GTK_LABEL (self->path_cmds), text);
       gtk_editable_set_text (GTK_EDITABLE (self->path_cmds_entry), text);
+      g_clear_pointer (&text, g_free);
 
       gtk_editable_set_text (GTK_EDITABLE (self->line_x1), "0");
       gtk_editable_set_text (GTK_EDITABLE (self->line_y1), "0");
@@ -1038,6 +1161,20 @@ shape_editor_update (ShapeEditor *self)
 
       gtk_range_set_value (GTK_RANGE (self->opacity),
                            path_paintable_get_opacity (self->paintable, self->path));
+
+      path = path_paintable_get_clip_path (self->paintable, self->path);
+      if (path && !gsk_path_is_empty (path))
+        {
+          text = gsk_path_to_string (path);
+          gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), text);
+          gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), text);
+        }
+      else
+        {
+          gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), "—");
+          gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), "");
+        }
+
       self->updating = FALSE;
 
       g_clear_object (&self->path_image);
@@ -1219,6 +1356,9 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, paint_order);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, miter_limit);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_stack);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_entry);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -1244,6 +1384,10 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, shape_changed);
   gtk_widget_class_bind_template_callback (widget_class, add_row);
   gtk_widget_class_bind_template_callback (widget_class, delete_row);
+  gtk_widget_class_bind_template_callback (widget_class, edit_clip_path);
+  gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_activated);
+  gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_key);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }

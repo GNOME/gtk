@@ -97,6 +97,9 @@ void            path_paintable_set_path            (PathPaintable   *self,
 GskPath *       path_paintable_get_path            (PathPaintable   *self,
                                                     size_t           idx);
 
+GskPath *       path_paintable_get_path_by_id      (PathPaintable   *self,
+                                                    const char      *id);
+
 void            path_paintable_set_shape           (PathPaintable   *self,
                                                     size_t           idx,
                                                     ShapeType        shape_type,
@@ -231,3 +234,10 @@ double          path_paintable_get_opacity         (PathPaintable   *self,
 void            path_paintable_set_opacity         (PathPaintable   *self,
                                                     size_t           idx,
                                                     double           opacity);
+
+GskPath *       path_paintable_get_clip_path       (PathPaintable   *self,
+                                                    size_t           idx);
+
+void            path_paintable_set_clip_path       (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    GskPath         *path);

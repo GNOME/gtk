@@ -1246,12 +1246,14 @@ path_paintable_get_compatibility (PathPaintable *self)
    * Icons may still render (in a degraded fashion) with older GTK.
    */
   GtkCompatibility compat = GTK_4_0;
-  PaintKind kind;
+  PaintKind paint_kind;
   GtkSymbolicColor symbolic;
   GdkRGBA color;
   PaintOrder paint_order;
   double opacity;
   double miterlimit;
+  ClipKind clip_kind;
+  GskPath *clip_path;
 
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
     {
@@ -1283,8 +1285,8 @@ path_paintable_get_compatibility (PathPaintable *self)
           g_assert_not_reached ();
         }
 
-      kind = svg_shape_attr_get_paint (shape, SHAPE_ATTR_STROKE, &symbolic, &color);
-      if (kind != PAINT_NONE)
+      paint_kind = svg_shape_attr_get_paint (shape, SHAPE_ATTR_STROKE, &symbolic, &color);
+      if (paint_kind != PAINT_NONE)
         compat = MAX (compat, GTK_4_20);
 
       if (shape->gpa.transition != GPA_TRANSITION_NONE ||
@@ -1303,9 +1305,54 @@ path_paintable_get_compatibility (PathPaintable *self)
       miterlimit = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MITERLIMIT, NULL);
       if (miterlimit != 4)
         compat = MAX (compat, GTK_4_22);
+
+      clip_kind = svg_shape_attr_get_clip (shape, SHAPE_ATTR_CLIP_PATH, &clip_path);
+      if (clip_kind != CLIP_NONE)
+        compat = MAX (compat, GTK_4_22);
+
+      if (compat == GTK_4_22)
+        break;
     }
 
   return compat;
+}
+
+GskPath *
+path_paintable_get_path_by_id (PathPaintable *self,
+                               const char    *id)
+{
+  graphene_size_t *viewport = &self->svg->view_box.size;
+
+  for (size_t i = 0; i < self->svg->content->shapes->len; i++)
+    {
+      Shape *shape = g_ptr_array_index (self->svg->content->shapes, i);
+
+      switch (shape->type)
+        {
+        case SHAPE_PATH:
+        case SHAPE_LINE:
+        case SHAPE_POLY_LINE:
+        case SHAPE_POLYGON:
+        case SHAPE_RECT:
+        case SHAPE_CIRCLE:
+        case SHAPE_ELLIPSE:
+          if (g_strcmp0 (shape->id, id) == 0)
+            return svg_shape_get_path (shape, viewport);
+          break;
+        case SHAPE_GROUP:
+        case SHAPE_CLIP_PATH:
+        case SHAPE_MASK:
+        case SHAPE_DEFS:
+        case SHAPE_USE:
+        case SHAPE_LINEAR_GRADIENT:
+        case SHAPE_RADIAL_GRADIENT:
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  return NULL;
 }
 
 /* }}} */
@@ -1454,6 +1501,32 @@ path_paintable_set_opacity (PathPaintable *self,
   Shape *shape = path_paintable_get_shape (self, idx);
 
   svg_shape_attr_set (shape, SHAPE_ATTR_OPACITY, svg_number_new (opacity));
+  g_signal_emit (self, signals[CHANGED], 0);
+}
+
+GskPath *
+path_paintable_get_clip_path (PathPaintable *self,
+                              size_t         idx)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+  GskPath *path = NULL;
+
+  svg_shape_attr_get_clip (shape, SHAPE_ATTR_CLIP_PATH, &path);
+
+  return path;
+}
+
+void
+path_paintable_set_clip_path (PathPaintable *self,
+                              size_t         idx,
+                              GskPath       *path)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  if (path)
+    svg_shape_attr_set (shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (path));
+  else
+    svg_shape_attr_set (shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
