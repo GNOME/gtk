@@ -17,7 +17,7 @@ label {
   opacity: 40%;
 }
 
-#opacity-filter {
+#opacity-backdrop-filter {
   backdrop-filter: invert(100%) opacity(40%);
 }
 
@@ -26,8 +26,13 @@ label {
   opacity: 50%;
 }
 
+#opacity-filter {
+  backdrop-filter: invert(100%);
+  filter: opacity(40%);
+}
+
 #reference {
   background: repeating-linear-gradient(#996666 0px 5px, #669966 5px 10px);
-  min-width: 300px;
+  min-width: 400px;
   min-height: 100px;
 }
