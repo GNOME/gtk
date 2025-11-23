@@ -313,6 +313,10 @@ char *
 svg_shape_attr_get_transform (Shape              *shape,
                               ShapeAttr           attr);
 
+char *
+svg_shape_attr_get_filter    (Shape              *shape,
+                              ShapeAttr           attr);
+
 GskPath *
 svg_shape_get_path        (Shape                 *shape,
                            const graphene_size_t *viewport);
@@ -338,6 +342,7 @@ SvgValue * svg_path_new (GskPath *path);
 SvgValue * svg_clip_new_none (void);
 SvgValue * svg_clip_new_path (GskPath *path);
 SvgValue * svg_transform_parse (const char *value);
+SvgValue * svg_filter_parse (const char *value);
 
 Shape * svg_shape_add (Shape     *parent,
                        ShapeType  type);

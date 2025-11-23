@@ -3150,7 +3150,7 @@ fail:
   return NULL;
 }
 
-static SvgValue *
+SvgValue *
 svg_filter_parse (const char *value)
 {
   SvgValue *filter;
@@ -13182,6 +13182,28 @@ svg_shape_attr_get_transform (Shape     *shape,
   transform = (SvgTransform *) value;
 
   if (transform->transforms[0].type != TRANSFORM_NONE)
+    svg_value_print (value, s);
+
+  return g_string_free (s, FALSE);
+}
+
+char *
+svg_shape_attr_get_filter (Shape     *shape,
+                           ShapeAttr  attr)
+{
+  g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
+  SvgValue *value;
+  SvgFilter *filter;
+  GString *s = g_string_new ("");
+
+  if (shape->attrs & BIT (attr))
+    value = shape_get_base_value (shape, NULL, attr);
+  else
+    value = shape_attr_get_initial_value (attr, shape->type);
+
+  filter = (SvgFilter *) value;
+
+  if (filter->functions[0].kind != FILTER_NONE)
     svg_value_print (value, s);
 
   return g_string_free (s, FALSE);
