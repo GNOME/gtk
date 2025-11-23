@@ -34,6 +34,7 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
     <file alias='cursor/copy'>cursors/copy_cursor.png</file>
     <file alias='cursor/crosshair'>cursors/crosshair_cursor.png</file>
     <file alias='cursor/default'>cursors/default_cursor.png</file>
+    <file alias='cursor/dnd-ask'>cursors/dnd_ask_cursor.png</file>
     <file alias='cursor/e-resize'>cursors/e_resize_cursor.png</file>
     <file alias='cursor/ew-resize'>cursors/ew_resize_cursor.png</file>
     <file alias='cursor/grabbing'>cursors/grabbing_cursor.png</file>
@@ -45,6 +46,7 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
     <file alias='cursor/no-drop'>cursors/no_drop_cursor.png</file>
     <file alias='cursor/not-allowed'>cursors/not_allowed_cursor.png</file>
     <file alias='cursor/n-resize'>cursors/n_resize_cursor.png</file>
+    <file alias='cursor/ns-resize'>cursors/ns_resize_cursor.png</file>
     <file alias='cursor/nw-resize'>cursors/nw_resize_cursor.png</file>
     <file alias='cursor/nwse-resize'>cursors/nwse_resize_cursor.png</file>
     <file alias='cursor/pointer'>cursors/pointer_cursor.png</file>
@@ -58,7 +60,7 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
     <file alias='cursor/wait'>cursors/wait_cursor.png</file>
     <file alias='cursor/w-resize'>cursors/w_resize_cursor.png</file>
     <file alias='cursor/zoom-in'>cursors/zoom_in_cursor.png</file>
-    <file alias='cursor/zoom_out'>cursors/zoom_out_cursor.png</file>
+    <file alias='cursor/zoom-out'>cursors/zoom_out_cursor.png</file>
 '''
 
 def get_files(subdir,extension):
