@@ -20,7 +20,7 @@
  */
 
 #include "paintable-editor.h"
-#include "path-editor.h"
+#include "shape-editor.h"
 #include "path-paintable.h"
 
 static void size_changed (PaintableEditor *self);
@@ -65,7 +65,7 @@ G_DEFINE_TYPE (PaintableEditor, paintable_editor, GTK_TYPE_WIDGET)
 /* {{{ Utilities, callbacks */
 
 static void
-clear_path_editors (PaintableEditor *self)
+clear_shape_editors (PaintableEditor *self)
 {
   GtkWidget *child;
 
@@ -73,13 +73,13 @@ clear_path_editors (PaintableEditor *self)
     gtk_box_remove (self->path_elts, child);
 }
 
-static PathEditor *
-append_path_editor (PaintableEditor *self,
-                    gsize           idx)
+static ShapeEditor *
+append_shape_editor (PaintableEditor *self,
+                     gsize           idx)
 {
-  PathEditor *pe;
+  ShapeEditor *pe;
 
-  pe = path_editor_new (self->paintable, idx);
+  pe = shape_editor_new (self->paintable, idx);
   gtk_box_append (self->path_elts, GTK_WIDGET (pe));
   gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
@@ -87,11 +87,11 @@ append_path_editor (PaintableEditor *self,
 }
 
 static void
-create_path_editors (PaintableEditor *self)
+create_shape_editors (PaintableEditor *self)
 {
   gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
   for (size_t i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-    append_path_editor (self, i);
+    append_shape_editor (self, i);
 }
 
 static void
@@ -167,8 +167,8 @@ update_compat (PaintableEditor *self)
 static void
 paths_changed (PaintableEditor *self)
 {
-  clear_path_editors (self);
-  create_path_editors (self);
+  clear_shape_editors (self);
+  create_shape_editors (self);
   update_size (self);
   update_summary (self);
 }
@@ -268,7 +268,7 @@ paintable_editor_dispose (GObject *object)
 
   g_clear_object (&self->paintable);
 
-  clear_path_editors (self);
+  clear_shape_editors (self);
 
   gtk_widget_dispose_template (GTK_WIDGET (object), PAINTABLE_EDITOR_TYPE);
 
@@ -287,7 +287,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  g_type_ensure (PATH_EDITOR_TYPE);
+  g_type_ensure (SHAPE_EDITOR_TYPE);
 
   object_class->dispose = paintable_editor_dispose;
   object_class->finalize = paintable_editor_finalize;
@@ -359,7 +359,7 @@ paintable_editor_set_paintable (PaintableEditor *self,
       g_signal_handlers_disconnect_by_func (self->paintable, update_summary, self);
     }
 
-  clear_path_editors (self);
+  clear_shape_editors (self);
 
   g_set_object (&self->paintable, paintable);
 
@@ -383,7 +383,7 @@ paintable_editor_set_paintable (PaintableEditor *self,
       g_signal_connect_swapped (paintable, "notify::state",
                                 G_CALLBACK (update_summary), self);
 
-      create_path_editors (self);
+      create_shape_editors (self);
       update_summary (self);
       update_compat (self);
     }
@@ -424,7 +424,7 @@ paintable_editor_add_path (PaintableEditor *self)
   path = gsk_path_parse (buffer);
   g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
   path_paintable_add_path (self->paintable, path);
-  append_path_editor (self, path_paintable_get_n_paths (self->paintable) - 1);
+  append_shape_editor (self, path_paintable_get_n_paths (self->paintable) - 1);
   g_signal_handlers_unblock_by_func (self->paintable, paths_changed, self);
 }
 

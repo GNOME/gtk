@@ -273,6 +273,13 @@ typedef enum
   PAINT_ORDER_REVERSE,
 } PaintOrder;
 
+typedef enum
+{
+  CLIP_NONE,
+  CLIP_PATH,
+  CLIP_REF,
+} ClipKind;
+
 double
 svg_shape_attr_get_number (Shape                 *shape,
                            ShapeAttr              attr,
@@ -302,6 +309,11 @@ svg_shape_attr_set        (Shape                 *shape,
                            ShapeAttr              attr,
                            SvgValue              *value);
 
+ClipKind
+svg_shape_attr_get_clip   (Shape                 *shape,
+                           ShapeAttr              attr,
+                           GskPath              **path);
+
 GskPath *
 svg_shape_get_path        (Shape                 *shape,
                            const graphene_size_t *viewport);
@@ -318,6 +330,8 @@ SvgValue * svg_paint_new_rgba (const GdkRGBA *rgba);
 SvgValue * svg_points_new (double *values,
                            unsigned int n_values);
 SvgValue * svg_path_new (GskPath *path);
+SvgValue * svg_clip_new_none (void);
+SvgValue * svg_clip_new_path (GskPath *path);
 
 Shape * svg_shape_add (Shape     *parent,
                        ShapeType  type);
