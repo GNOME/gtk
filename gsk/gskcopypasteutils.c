@@ -141,13 +141,13 @@ replay_partial_node (const PartialNode *replay)
               gsk_render_node_unref (node);
               node = tmp;
             }
-          gsk_transform_unref (transform);
         }
       else
         {
           g_warning ("Trying to paste non-invertible transform, ignoring.");
         }
     }
+  g_clear_pointer (&transform, gsk_transform_unref);
   if (node && gsk_render_node_clears_background (node))
     {
       /* Wrap in something that blocks background writes from
