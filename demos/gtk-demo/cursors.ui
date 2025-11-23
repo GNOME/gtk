@@ -262,6 +262,24 @@
     <property name="hotspot-y">11</property>
     <property name="fallback">move_cursor</property>
   </object>
+  <object class="GdkCursor" id="dnd-ask_cursor">
+    <property name="name">dnd-ask</property>
+  </object>
+  <object class="GdkCursor" id="dnd-ask_cursor_image">
+    <property name="texture">resource:///org/gtk/libgdk/cursor/dnd-ask</property>
+    <property name="hotspot-x">12</property>
+    <property name="hotspot-y">11</property>
+  </object>
+  <object class="GdkCursor" id="dnd-ask_cursor_fallback">
+    <property name="name">dnd-ask</property>
+    <property name="fallback">dnd-ask_cursor_image</property>
+  </object>
+  <object class="GdkCursor" id="dnd-ask_cursor_image_fallback">
+    <property name="texture">resource:///org/gtk/libgdk/cursor/dnd-ask</property>
+    <property name="hotspot-x">12</property>
+    <property name="hotspot-y">11</property>
+    <property name="fallback">dnd-ask_cursor</property>
+  </object>
   <object class="GdkCursor" id="no-drop_cursor">
     <property name="name">no-drop</property>
   </object>
@@ -351,6 +369,24 @@
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">all-scroll_cursor</property>
+  </object>
+  <object class="GdkCursor" id="all-resize_cursor">
+    <property name="name">all-resize</property>
+  </object>
+  <object class="GdkCursor" id="all-resize_cursor_image">
+    <property name="texture">resource:///org/gtk/libgdk/cursor/all-resize</property>
+    <property name="hotspot-x">15</property>
+    <property name="hotspot-y">15</property>
+  </object>
+  <object class="GdkCursor" id="all-resize_cursor_fallback">
+    <property name="name">all-resize</property>
+    <property name="fallback">all-resize_cursor_image</property>
+  </object>
+  <object class="GdkCursor" id="all-resize_cursor_image_fallback">
+    <property name="texture">resource:///org/gtk/libgdk/cursor/all-resize</property>
+    <property name="hotspot-x">15</property>
+    <property name="hotspot-y">15</property>
+    <property name="fallback">all-resize_cursor</property>
   </object>
   <object class="GdkCursor" id="col-resize_cursor">
     <property name="name">col-resize</property>
@@ -1676,6 +1712,70 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/dnd-ask</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label">dnd-ask</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">dnd-ask_cursor</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;dnd-ask&quot; named cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">dnd-ask_cursor_image</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">dnd-ask_cursor_fallback</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;dnd-ask&quot; named cursor falling back to an image cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">dnd-ask_cursor_image_fallback</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;dnd-ask&quot; cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkImage">
                                 <property name="paintable">resource:///org/gtk/libgdk/cursor/no-drop</property>
                               </object>
                             </child>
@@ -1990,6 +2090,70 @@
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor_image_fallback</property>
                                 <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;all-scroll&quot; cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/all-resize</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label">all-resize</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">all-resize_cursor</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;all-resize&quot; named cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">all-resize_cursor_image</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">all-resize_cursor_fallback</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;all-resize&quot; named cursor falling back to an image cursor</property>
+                                <style><class name="cursorbg"/></style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFrame">
+                                <property name="width-request">32</property>
+                                <property name="height-request">32</property>
+                                <property name="cursor">all-resize_cursor_image_fallback</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;all-resize&quot; cursor</property>
                                 <style><class name="cursorbg"/></style>
                               </object>
                             </child>
