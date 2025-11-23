@@ -1656,6 +1656,49 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="miter_limit_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Miter limit</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">miter_limit</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">35</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="miter_limit">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">stroke_expander</lookup>
+              </closure>
+            </binding>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">25</property>
+                <property name="value">4</property>
+                <property name="step-increment">0.1</property>
+                <property name="page-size">0</property>
+              </object>
+            </property>
+            <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <layout>
+              <property name="row">35</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkExpander" id="attach_expander">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
@@ -1671,7 +1714,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">35</property>
+              <property name="row">36</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1681,7 +1724,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
             <layout>
-              <property name="row">35</property>
+              <property name="row">36</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1700,7 +1743,7 @@
             <property name="mnemonic-widget">attach_at</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">36</property>
+              <property name="row">37</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1727,7 +1770,7 @@
               <mark value="1" position="bottom"/>
             </marks>
             <layout>
-              <property name="row">36</property>
+              <property name="row">37</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1765,6 +1808,7 @@
       <widget name="line_max_label"/>
       <widget name="line_join_label"/>
       <widget name="line_cap_label"/>
+      <widget name="miter_limit_label"/>
       <widget name="fill_expander"/>
       <widget name="fill_rule_label"/>
       <widget name="attach_expander"/>
