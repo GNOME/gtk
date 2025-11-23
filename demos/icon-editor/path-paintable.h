@@ -248,3 +248,10 @@ char *          path_paintable_get_transform       (PathPaintable   *self,
 gboolean        path_paintable_set_transform       (PathPaintable   *self,
                                                     size_t           idx,
                                                     const char      *transform);
+
+char *          path_paintable_get_filter          (PathPaintable   *self,
+                                                    size_t           idx);
+
+gboolean        path_paintable_set_filter          (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    const char      *filter);

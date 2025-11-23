@@ -1316,6 +1316,11 @@ path_paintable_get_compatibility (PathPaintable *self)
         compat = MAX (compat, GTK_4_22);
       g_free (str);
 
+      str = svg_shape_attr_get_filter (shape, SHAPE_ATTR_FILTER);
+      if (g_strcmp0 (str, "none") != 0)
+        compat = MAX (compat, GTK_4_22);
+      g_free (str);
+
       if (compat == GTK_4_22)
         break;
     }
@@ -1562,6 +1567,36 @@ path_paintable_set_transform (PathPaintable *self,
     return FALSE;
 
   svg_shape_attr_set (shape, SHAPE_ATTR_TRANSFORM, value);
+  g_signal_emit (self, signals[CHANGED], 0);
+  return TRUE;
+}
+
+char *
+path_paintable_get_filter (PathPaintable *self,
+                           size_t         idx)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  return svg_shape_attr_get_filter (shape, SHAPE_ATTR_FILTER);
+}
+
+gboolean
+path_paintable_set_filter (PathPaintable *self,
+                           size_t         idx,
+                           const char    *filter)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+  SvgValue *value;
+
+  if (filter && *filter)
+    value = svg_filter_parse (filter);
+  else
+    value = svg_filter_parse ("none");
+
+  if (!value)
+    return FALSE;
+
+  svg_shape_attr_set (shape, SHAPE_ATTR_FILTER, value);
   g_signal_emit (self, signals[CHANGED], 0);
   return TRUE;
 }
