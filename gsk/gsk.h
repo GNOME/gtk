@@ -23,6 +23,7 @@
 #include <gsk/gskblurnode.h>
 #include <gsk/gskbordernode.h>
 #include <gsk/gskcaironode.h>
+#include <gsk/gskclipnode.h>
 #include <gsk/gskcolormatrixnode.h>
 #include <gsk/gskcolornode.h>
 #include <gsk/gskcomponenttransfer.h>
@@ -35,6 +36,7 @@
 #include <gsk/gskenums.h>
 #include <gsk/gskfillnode.h>
 #include <gsk/gskglshadernode.h>
+#include <gsk/gskmasknode.h>
 #include <gsk/gskopacitynode.h>
 #include <gsk/gskpastenode.h>
 #include <gsk/gskpath.h>
@@ -45,6 +47,7 @@
 #include <gsk/gskrendernode.h>
 #include <gsk/gskrenderreplay.h>
 #include <gsk/gskrepeatnode.h>
+#include <gsk/gskroundedclipnode.h>
 #include <gsk/gskroundedrect.h>
 #include <gsk/gskstroke.h>
 #include <gsk/gskstrokenode.h>

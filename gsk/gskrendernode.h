@@ -150,11 +150,8 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
 #define GSK_TYPE_TRANSFORM_NODE                 (gsk_transform_node_get_type())
-#define GSK_TYPE_CLIP_NODE                      (gsk_clip_node_get_type())
-#define GSK_TYPE_ROUNDED_CLIP_NODE              (gsk_rounded_clip_node_get_type())
 #define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
-#define GSK_TYPE_MASK_NODE                      (gsk_mask_node_get_type())
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 
 typedef struct _GskTextureNode                  GskTextureNode;
@@ -167,8 +164,6 @@ typedef struct _GskConicGradientNode            GskConicGradientNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskTransformNode                GskTransformNode;
-typedef struct _GskClipNode                     GskClipNode;
-typedef struct _GskRoundedClipNode              GskRoundedClipNode;
 typedef struct _GskShadowNode                   GskShadowNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskMaskNode                     GskMaskNode;
@@ -333,26 +328,6 @@ GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_node_get_transform        (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
-GType                   gsk_clip_node_get_type                  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
-                                                                 const graphene_rect_t    *clip);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_clip_node_get_child                 (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const graphene_rect_t * gsk_clip_node_get_clip                  (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_rounded_clip_node_get_type          (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_rounded_clip_node_new               (GskRenderNode            *child,
-                                                                 const GskRoundedRect     *clip);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_rounded_clip_node_get_child         (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const GskRoundedRect *  gsk_rounded_clip_node_get_clip          (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
 GType                   gsk_shadow_node_get_type                (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_shadow_node_new                     (GskRenderNode            *child,
@@ -386,19 +361,6 @@ GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_get_color                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t *gsk_text_node_get_offset                (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_4_10
-GType                  gsk_mask_node_get_type                   (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_4_10
-GskRenderNode *        gsk_mask_node_new                        (GskRenderNode            *source,
-                                                                 GskRenderNode            *mask,
-                                                                 GskMaskMode               mask_mode);
-GDK_AVAILABLE_IN_4_10
-GskRenderNode *        gsk_mask_node_get_source                 (const GskRenderNode      *node);
-GDK_AVAILABLE_IN_4_10
-GskRenderNode *        gsk_mask_node_get_mask                   (const GskRenderNode      *node);
-GDK_AVAILABLE_IN_4_10
-GskMaskMode            gsk_mask_node_get_mask_mode              (const GskRenderNode      *node);
 
 /**
  * GSK_VALUE_HOLDS_RENDER_NODE:
