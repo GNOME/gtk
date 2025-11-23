@@ -2132,7 +2132,7 @@ fail:
   return NULL;
 }
 
-static SvgValue *
+SvgValue *
 svg_transform_parse (const char *value)
 {
   SvgValue *tf;
@@ -13163,6 +13163,28 @@ svg_shape_attr_get_clip (Shape      *shape,
     *path = NULL;
 
   return clip->kind;
+}
+
+char *
+svg_shape_attr_get_transform (Shape     *shape,
+                              ShapeAttr  attr)
+{
+  g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
+  SvgValue *value;
+  SvgTransform *transform;
+  GString *s = g_string_new ("");
+
+  if (shape->attrs & BIT (attr))
+    value = shape_get_base_value (shape, NULL, attr);
+  else
+    value = shape_attr_get_initial_value (attr, shape->type);
+
+  transform = (SvgTransform *) value;
+
+  if (transform->transforms[0].type != TRANSFORM_NONE)
+    svg_value_print (value, s);
+
+  return g_string_free (s, FALSE);
 }
 
 void
