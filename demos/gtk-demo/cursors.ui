@@ -4,7 +4,7 @@
     <property name="name">default</property>
   </object>
   <object class="GdkCursor" id="default_cursor_image">
-    <property name="texture">resource:///cursors/images/default_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/default</property>
     <property name="hotspot-x">5</property>
     <property name="hotspot-y">5</property>
   </object>
@@ -13,7 +13,7 @@
     <property name="fallback">default_cursor_image</property>
   </object>
   <object class="GdkCursor" id="default_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/default_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/default</property>
     <property name="hotspot-x">5</property>
     <property name="hotspot-y">5</property>
     <property name="fallback">default_cursor</property>
@@ -50,7 +50,7 @@
     <property name="name">context-menu</property>
   </object>
   <object class="GdkCursor" id="context-menu_cursor_image">
-    <property name="texture">resource:///cursors/images/context_menu_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/context-menu</property>
     <property name="hotspot-x">5</property>
     <property name="hotspot-y">5</property>
   </object>
@@ -59,7 +59,7 @@
     <property name="fallback">context-menu_cursor_image</property>
   </object>
   <object class="GdkCursor" id="context-menu_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/context_menu_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/context-menu</property>
     <property name="hotspot-x">5</property>
     <property name="hotspot-y">5</property>
     <property name="fallback">context-menu_cursor</property>
@@ -68,7 +68,7 @@
     <property name="name">help</property>
   </object>
   <object class="GdkCursor" id="help_cursor_image">
-    <property name="texture">resource:///cursors/images/help_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/help</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">27</property>
   </object>
@@ -77,7 +77,7 @@
     <property name="fallback">help_cursor_image</property>
   </object>
   <object class="GdkCursor" id="help_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/help_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/help</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">27</property>
     <property name="fallback">help_cursor</property>
@@ -86,7 +86,7 @@
     <property name="name">pointer</property>
   </object>
   <object class="GdkCursor" id="pointer_cursor_image">
-    <property name="texture">resource:///cursors/images/pointer_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/pointer</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">9</property>
   </object>
@@ -95,7 +95,7 @@
     <property name="fallback">pointer_cursor_image</property>
   </object>
   <object class="GdkCursor" id="pointer_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/pointer_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/pointer</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">9</property>
     <property name="fallback">pointer_cursor</property>
@@ -104,7 +104,7 @@
     <property name="name">progress</property>
   </object>
   <object class="GdkCursor" id="progress_cursor_image">
-    <property name="texture">resource:///cursors/images/progress_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/progress</property>
     <property name="hotspot-x">5</property>
     <property name="hotspot-y">4</property>
   </object>
@@ -113,7 +113,7 @@
     <property name="fallback">progress_cursor_image</property>
   </object>
   <object class="GdkCursor" id="progress_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/progress_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/progress</property>
     <property name="hotspot-x">5</property>
     <property name="hotspot-y">4</property>
     <property name="fallback">progress_cursor</property>
@@ -122,7 +122,7 @@
     <property name="name">wait</property>
   </object>
   <object class="GdkCursor" id="wait_cursor_image">
-    <property name="texture">resource:///cursors/images/wait_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/wait</property>
     <property name="hotspot-x">11</property>
     <property name="hotspot-y">11</property>
   </object>
@@ -131,7 +131,7 @@
     <property name="fallback">wait_cursor_image</property>
   </object>
   <object class="GdkCursor" id="wait_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/wait_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/wait</property>
     <property name="hotspot-x">11</property>
     <property name="hotspot-y">11</property>
     <property name="fallback">wait_cursor</property>
@@ -140,7 +140,7 @@
     <property name="name">cell</property>
   </object>
   <object class="GdkCursor" id="cell_cursor_image">
-    <property name="texture">resource:///cursors/images/cell_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/cell</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">15</property>
   </object>
@@ -149,7 +149,7 @@
     <property name="fallback">cell_cursor_image</property>
   </object>
   <object class="GdkCursor" id="cell_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/cell_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/cell</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">cell_cursor</property>
@@ -158,7 +158,7 @@
     <property name="name">crosshair</property>
   </object>
   <object class="GdkCursor" id="crosshair_cursor_image">
-    <property name="texture">resource:///cursors/images/crosshair_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/crosshair</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">15</property>
   </object>
@@ -167,7 +167,7 @@
     <property name="fallback">crosshair_cursor_image</property>
   </object>
   <object class="GdkCursor" id="crosshair_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/crosshair_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/crosshair</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">crosshair_cursor</property>
@@ -176,7 +176,7 @@
     <property name="name">text</property>
   </object>
   <object class="GdkCursor" id="text_cursor_image">
-    <property name="texture">resource:///cursors/images/text_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/text</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">15</property>
   </object>
@@ -185,7 +185,7 @@
     <property name="fallback">text_cursor_image</property>
   </object>
   <object class="GdkCursor" id="text_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/text_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/text</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">text_cursor</property>
@@ -194,7 +194,7 @@
     <property name="name">vertical-text</property>
   </object>
   <object class="GdkCursor" id="vertical-text_cursor_image">
-    <property name="texture">resource:///cursors/images/vertical_text_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/vertical-text</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">15</property>
   </object>
@@ -203,7 +203,7 @@
     <property name="fallback">vertical-text_cursor_image</property>
   </object>
   <object class="GdkCursor" id="vertical-text_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/vertical_text_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/vertical-text</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">vertical-text_cursor</property>
@@ -212,7 +212,7 @@
     <property name="name">alias</property>
   </object>
   <object class="GdkCursor" id="alias_cursor_image">
-    <property name="texture">resource:///cursors/images/alias_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/alias</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
   </object>
@@ -221,7 +221,7 @@
     <property name="fallback">alias_cursor_image</property>
   </object>
   <object class="GdkCursor" id="alias_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/alias_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/alias</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
     <property name="fallback">alias_cursor</property>
@@ -230,7 +230,7 @@
     <property name="name">copy</property>
   </object>
   <object class="GdkCursor" id="copy_cursor_image">
-    <property name="texture">resource:///cursors/images/copy_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/copy</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
   </object>
@@ -239,7 +239,7 @@
     <property name="fallback">copy_cursor_image</property>
   </object>
   <object class="GdkCursor" id="copy_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/copy_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/copy</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
     <property name="fallback">copy_cursor</property>
@@ -248,7 +248,7 @@
     <property name="name">move</property>
   </object>
   <object class="GdkCursor" id="move_cursor_image">
-    <property name="texture">resource:///cursors/images/move_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/move</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
   </object>
@@ -257,7 +257,7 @@
     <property name="fallback">move_cursor_image</property>
   </object>
   <object class="GdkCursor" id="move_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/move_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/move</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
     <property name="fallback">move_cursor</property>
@@ -266,7 +266,7 @@
     <property name="name">no-drop</property>
   </object>
   <object class="GdkCursor" id="no-drop_cursor_image">
-    <property name="texture">resource:///cursors/images/no_drop_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/no-drop</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
   </object>
@@ -275,7 +275,7 @@
     <property name="fallback">no-drop_cursor_image</property>
   </object>
   <object class="GdkCursor" id="no-drop_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/no_drop_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/no-drop</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
     <property name="fallback">no-drop_cursor</property>
@@ -284,7 +284,7 @@
     <property name="name">not-allowed</property>
   </object>
   <object class="GdkCursor" id="not-allowed_cursor_image">
-    <property name="texture">resource:///cursors/images/not_allowed_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/not-allowed</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
   </object>
@@ -293,7 +293,7 @@
     <property name="fallback">not-allowed_cursor_image</property>
   </object>
   <object class="GdkCursor" id="not-allowed_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/not_allowed_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/not-allowed</property>
     <property name="hotspot-x">12</property>
     <property name="hotspot-y">11</property>
     <property name="fallback">not-allowed_cursor</property>
@@ -302,7 +302,7 @@
     <property name="name">grab</property>
   </object>
   <object class="GdkCursor" id="grab_cursor_image">
-    <property name="texture">resource:///cursors/images/grab_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/grab</property>
     <property name="hotspot-x">10</property>
     <property name="hotspot-y">6</property>
   </object>
@@ -311,7 +311,7 @@
     <property name="fallback">grab_cursor_image</property>
   </object>
   <object class="GdkCursor" id="grab_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/grab_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/grab</property>
     <property name="hotspot-x">10</property>
     <property name="hotspot-y">6</property>
     <property name="fallback">grab_cursor</property>
@@ -320,7 +320,7 @@
     <property name="name">grabbing</property>
   </object>
   <object class="GdkCursor" id="grabbing_cursor_image">
-    <property name="texture">resource:///cursors/images/grabbing_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/grabbing</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">14</property>
   </object>
@@ -329,7 +329,7 @@
     <property name="fallback">grabbing_cursor_image</property>
   </object>
   <object class="GdkCursor" id="grabbing_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/grabbing_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/grabbing</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">14</property>
     <property name="fallback">grabbing_cursor</property>
@@ -338,7 +338,7 @@
     <property name="name">all-scroll</property>
   </object>
   <object class="GdkCursor" id="all-scroll_cursor_image">
-    <property name="texture">resource:///cursors/images/all_scroll_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/all-scroll</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">15</property>
   </object>
@@ -347,7 +347,7 @@
     <property name="fallback">all-scroll_cursor_image</property>
   </object>
   <object class="GdkCursor" id="all-scroll_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/all_scroll_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/all-scroll</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">all-scroll_cursor</property>
@@ -356,7 +356,7 @@
     <property name="name">col-resize</property>
   </object>
   <object class="GdkCursor" id="col-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/col_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/col-resize</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">15</property>
   </object>
@@ -365,7 +365,7 @@
     <property name="fallback">col-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="col-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/col_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/col-resize</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">col-resize_cursor</property>
@@ -374,7 +374,7 @@
     <property name="name">row-resize</property>
   </object>
   <object class="GdkCursor" id="row-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/row_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/row-resize</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">17</property>
   </object>
@@ -383,7 +383,7 @@
     <property name="fallback">row-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="row-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/row_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/row-resize</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">17</property>
     <property name="fallback">row-resize_cursor</property>
@@ -392,7 +392,7 @@
     <property name="name">n-resize</property>
   </object>
   <object class="GdkCursor" id="n-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/n_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/n-resize</property>
     <property name="hotspot-x">17</property>
     <property name="hotspot-y">7</property>
   </object>
@@ -401,7 +401,7 @@
     <property name="fallback">n-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="n-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/n_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/n-resize</property>
     <property name="hotspot-x">17</property>
     <property name="hotspot-y">7</property>
     <property name="fallback">n-resize_cursor</property>
@@ -410,7 +410,7 @@
     <property name="name">e-resize</property>
   </object>
   <object class="GdkCursor" id="e-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/e_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/e-resize</property>
     <property name="hotspot-x">25</property>
     <property name="hotspot-y">17</property>
   </object>
@@ -419,7 +419,7 @@
     <property name="fallback">e-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="e-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/e_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/e-resize</property>
     <property name="hotspot-x">25</property>
     <property name="hotspot-y">17</property>
     <property name="fallback">e-resize_cursor</property>
@@ -428,7 +428,7 @@
     <property name="name">s-resize</property>
   </object>
   <object class="GdkCursor" id="s-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/s_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/s-resize</property>
     <property name="hotspot-x">17</property>
     <property name="hotspot-y">23</property>
   </object>
@@ -437,7 +437,7 @@
     <property name="fallback">s-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="s-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/s_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/s-resize</property>
     <property name="hotspot-x">17</property>
     <property name="hotspot-y">23</property>
     <property name="fallback">s-resize_cursor</property>
@@ -446,7 +446,7 @@
     <property name="name">w-resize</property>
   </object>
   <object class="GdkCursor" id="w-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/w_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/w-resize</property>
     <property name="hotspot-x">8</property>
     <property name="hotspot-y">17</property>
   </object>
@@ -455,7 +455,7 @@
     <property name="fallback">w-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="w-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/w_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/w-resize</property>
     <property name="hotspot-x">8</property>
     <property name="hotspot-y">17</property>
     <property name="fallback">w-resize_cursor</property>
@@ -464,7 +464,7 @@
     <property name="name">ne-resize</property>
   </object>
   <object class="GdkCursor" id="ne-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/ne_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/ne-resize</property>
     <property name="hotspot-x">20</property>
     <property name="hotspot-y">13</property>
   </object>
@@ -473,7 +473,7 @@
     <property name="fallback">ne-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="ne-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/ne_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/ne-resize</property>
     <property name="hotspot-x">20</property>
     <property name="hotspot-y">13</property>
     <property name="fallback">ne-resize_cursor</property>
@@ -482,7 +482,7 @@
     <property name="name">nw-resize</property>
   </object>
   <object class="GdkCursor" id="nw-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/nw_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/nw-resize</property>
     <property name="hotspot-x">13</property>
     <property name="hotspot-y">13</property>
   </object>
@@ -491,7 +491,7 @@
     <property name="fallback">nw-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="nw-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/nw_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/nw-resize</property>
     <property name="hotspot-x">13</property>
     <property name="hotspot-y">13</property>
     <property name="fallback">nw-resize_cursor</property>
@@ -500,7 +500,7 @@
     <property name="name">se-resize</property>
   </object>
   <object class="GdkCursor" id="se-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/se_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/se-resize</property>
     <property name="hotspot-x">19</property>
     <property name="hotspot-y">19</property>
   </object>
@@ -509,7 +509,7 @@
     <property name="fallback">se-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="se-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/se_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/se-resize</property>
     <property name="hotspot-x">19</property>
     <property name="hotspot-y">19</property>
     <property name="fallback">se-resize_cursor</property>
@@ -518,7 +518,7 @@
     <property name="name">sw-resize</property>
   </object>
   <object class="GdkCursor" id="sw-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/sw_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/sw-resize</property>
     <property name="hotspot-x">13</property>
     <property name="hotspot-y">19</property>
   </object>
@@ -527,7 +527,7 @@
     <property name="fallback">sw-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="sw-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/sw_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/sw-resize</property>
     <property name="hotspot-x">13</property>
     <property name="hotspot-y">19</property>
     <property name="fallback">sw-resize_cursor</property>
@@ -536,7 +536,7 @@
     <property name="name">ew-resize</property>
   </object>
   <object class="GdkCursor" id="ew-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/ew_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/ew-resize</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">15</property>
   </object>
@@ -545,7 +545,7 @@
     <property name="fallback">ew-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="ew-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/ew_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/ew-resize</property>
     <property name="hotspot-x">16</property>
     <property name="hotspot-y">15</property>
     <property name="fallback">ew-resize_cursor</property>
@@ -554,7 +554,7 @@
     <property name="name">ns-resize</property>
   </object>
   <object class="GdkCursor" id="ns-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/ns_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/ns-resize</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">17</property>
   </object>
@@ -563,7 +563,7 @@
     <property name="fallback">ns-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="ns-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/ns_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/ns-resize</property>
     <property name="hotspot-x">15</property>
     <property name="hotspot-y">17</property>
     <property name="fallback">ns-resize_cursor</property>
@@ -572,7 +572,7 @@
     <property name="name">nesw-resize</property>
   </object>
   <object class="GdkCursor" id="nesw-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/nesw_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/nesw-resize</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">14</property>
   </object>
@@ -581,7 +581,7 @@
     <property name="fallback">nesw-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="nesw-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/nesw_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/nesw-resize</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">14</property>
     <property name="fallback">nesw-resize_cursor</property>
@@ -590,7 +590,7 @@
     <property name="name">nwse-resize</property>
   </object>
   <object class="GdkCursor" id="nwse-resize_cursor_image">
-    <property name="texture">resource:///cursors/images/nwse_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/nwse-resize</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">14</property>
   </object>
@@ -599,7 +599,7 @@
     <property name="fallback">nwse-resize_cursor_image</property>
   </object>
   <object class="GdkCursor" id="nwse-resize_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/nwse_resize_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/nwse-resize</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">14</property>
     <property name="fallback">nwse-resize_cursor</property>
@@ -608,7 +608,7 @@
     <property name="name">zoom-in</property>
   </object>
   <object class="GdkCursor" id="zoom-in_cursor_image">
-    <property name="texture">resource:///cursors/images/zoom_in_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/zoom-in</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">13</property>
   </object>
@@ -617,7 +617,7 @@
     <property name="fallback">zoom-in_cursor_image</property>
   </object>
   <object class="GdkCursor" id="zoom-in_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/zoom_in_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/zoom-in</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">13</property>
     <property name="fallback">zoom-in_cursor</property>
@@ -626,7 +626,7 @@
     <property name="name">zoom-out</property>
   </object>
   <object class="GdkCursor" id="zoom-out_cursor_image">
-    <property name="texture">resource:///cursors/images/zoom_out_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/zoom-out</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">13</property>
   </object>
@@ -635,7 +635,7 @@
     <property name="fallback">zoom-out_cursor_image</property>
   </object>
   <object class="GdkCursor" id="zoom-out_cursor_image_fallback">
-    <property name="texture">resource:///cursors/images/zoom_out_cursor.png</property>
+    <property name="texture">resource:///org/gtk/libgdk/cursor/zoom-out</property>
     <property name="hotspot-x">14</property>
     <property name="hotspot-y">13</property>
     <property name="fallback">zoom-out_cursor</property>
@@ -678,7 +678,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/default_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/default</property>
                               </object>
                             </child>
                             <child>
@@ -882,7 +882,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/context_menu_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/context-menu</property>
                               </object>
                             </child>
                             <child>
@@ -946,7 +946,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/help_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/help</property>
                               </object>
                             </child>
                             <child>
@@ -1010,7 +1010,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/pointer_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/pointer</property>
                               </object>
                             </child>
                             <child>
@@ -1074,7 +1074,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/progress_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/progress</property>
                               </object>
                             </child>
                             <child>
@@ -1138,7 +1138,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/wait_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/wait</property>
                               </object>
                             </child>
                             <child>
@@ -1215,7 +1215,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/cell_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/cell</property>
                               </object>
                             </child>
                             <child>
@@ -1279,7 +1279,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/crosshair_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/crosshair</property>
                               </object>
                             </child>
                             <child>
@@ -1343,7 +1343,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/text_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/text</property>
                               </object>
                             </child>
                             <child>
@@ -1407,7 +1407,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/vertical_text_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/vertical-text</property>
                               </object>
                             </child>
                             <child>
@@ -1484,7 +1484,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/alias_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/alias</property>
                               </object>
                             </child>
                             <child>
@@ -1548,7 +1548,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/copy_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/copy</property>
                               </object>
                             </child>
                             <child>
@@ -1612,7 +1612,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/move_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/move</property>
                               </object>
                             </child>
                             <child>
@@ -1676,7 +1676,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/no_drop_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/no-drop</property>
                               </object>
                             </child>
                             <child>
@@ -1740,7 +1740,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/not_allowed_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/not-allowed</property>
                               </object>
                             </child>
                             <child>
@@ -1804,7 +1804,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/grab_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/grab</property>
                               </object>
                             </child>
                             <child>
@@ -1868,7 +1868,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/grabbing_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/grabbing</property>
                               </object>
                             </child>
                             <child>
@@ -1945,7 +1945,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/all_scroll_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/all-scroll</property>
                               </object>
                             </child>
                             <child>
@@ -2009,7 +2009,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/col_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/col-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2073,7 +2073,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/row_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/row-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2137,7 +2137,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/n_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/n-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2201,7 +2201,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/e_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/e-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2265,7 +2265,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/s_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/s-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2329,7 +2329,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/w_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/w-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2393,7 +2393,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/ne_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/ne-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2457,7 +2457,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/nw_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/nw-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2521,7 +2521,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/sw_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/sw-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2585,7 +2585,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/se_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/se-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2649,7 +2649,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/ew_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/ew-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2713,7 +2713,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/ns_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/ns-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2777,7 +2777,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/nesw_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/nesw-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2841,7 +2841,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/nwse_resize_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/nwse-resize</property>
                               </object>
                             </child>
                             <child>
@@ -2918,7 +2918,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/zoom_in_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/zoom-in</property>
                               </object>
                             </child>
                             <child>
@@ -2982,7 +2982,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="paintable">resource:///cursors/images/zoom_out_cursor.png</property>
+                                <property name="paintable">resource:///org/gtk/libgdk/cursor/zoom-out</property>
                               </object>
                             </child>
                             <child>
