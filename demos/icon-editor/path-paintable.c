@@ -1254,6 +1254,7 @@ path_paintable_get_compatibility (PathPaintable *self)
   double miterlimit;
   ClipKind clip_kind;
   GskPath *clip_path;
+  char *str;
 
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
     {
@@ -1309,6 +1310,11 @@ path_paintable_get_compatibility (PathPaintable *self)
       clip_kind = svg_shape_attr_get_clip (shape, SHAPE_ATTR_CLIP_PATH, &clip_path);
       if (clip_kind != CLIP_NONE)
         compat = MAX (compat, GTK_4_22);
+
+      str = svg_shape_attr_get_transform (shape, SHAPE_ATTR_TRANSFORM);
+      if (g_strcmp0 (str, "none") != 0)
+        compat = MAX (compat, GTK_4_22);
+      g_free (str);
 
       if (compat == GTK_4_22)
         break;
@@ -1528,6 +1534,36 @@ path_paintable_set_clip_path (PathPaintable *self,
   else
     svg_shape_attr_set (shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
   g_signal_emit (self, signals[CHANGED], 0);
+}
+
+char *
+path_paintable_get_transform (PathPaintable *self,
+                              size_t         idx)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+
+  return svg_shape_attr_get_transform (shape, SHAPE_ATTR_TRANSFORM);
+}
+
+gboolean
+path_paintable_set_transform (PathPaintable *self,
+                              size_t         idx,
+                              const char    *transform)
+{
+  Shape *shape = path_paintable_get_shape (self, idx);
+  SvgValue *value;
+
+  if (transform && *transform)
+    value = svg_transform_parse (transform);
+  else
+    value = svg_transform_parse ("none");
+
+  if (!value)
+    return FALSE;
+
+  svg_shape_attr_set (shape, SHAPE_ATTR_TRANSFORM, value);
+  g_signal_emit (self, signals[CHANGED], 0);
+  return TRUE;
 }
 
 /* }}} */
