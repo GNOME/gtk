@@ -86,6 +86,7 @@ struct _PathEditor
   GtkButton *move_down;
   GtkDropDown *paint_order;
   GtkScale *opacity;
+  GtkScale *miter_limit;
 };
 
 enum
@@ -495,6 +496,7 @@ stroke_changed (PathEditor *self)
   double min, max;
   GskLineJoin line_join;
   GskLineCap line_cap;
+  double miter_limit;
   unsigned int selected;
   unsigned int symbolic;
   const GdkRGBA *color;
@@ -505,6 +507,7 @@ stroke_changed (PathEditor *self)
 
   line_join = gtk_drop_down_get_selected (self->line_join);
   line_cap = gtk_drop_down_get_selected (self->line_cap);
+  miter_limit = gtk_range_get_value (GTK_RANGE (self->miter_limit));
 
   width = gtk_spin_button_get_value (self->line_width);
   min = gtk_spin_button_get_value (self->min_width);
@@ -513,6 +516,7 @@ stroke_changed (PathEditor *self)
   stroke = gsk_stroke_new (width);
   gsk_stroke_set_line_join (stroke, line_join);
   gsk_stroke_set_line_cap (stroke, line_cap);
+  gsk_stroke_set_miter_limit (stroke, miter_limit);
 
   selected = color_editor_get_color_type (self->stroke_paint);
   if (selected == 0)
@@ -998,6 +1002,7 @@ path_editor_update (PathEditor *self)
 
       gtk_drop_down_set_selected (self->line_join, (unsigned int) gsk_stroke_get_line_join (stroke));
       gtk_drop_down_set_selected (self->line_cap, (unsigned int) gsk_stroke_get_line_cap (stroke));
+      gtk_range_set_value (GTK_RANGE (self->miter_limit), gsk_stroke_get_miter_limit (stroke));
 
       do_fill = path_paintable_get_path_fill (self->paintable, self->path,
                                               &fill_rule, &symbolic, &color);
@@ -1213,6 +1218,7 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, sg);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, paint_order);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, opacity);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, miter_limit);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
