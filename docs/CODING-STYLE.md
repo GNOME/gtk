@@ -94,8 +94,13 @@ The "no block for single statements" rule has only four exceptions:
                                               and_another_one,
                                               plus_one);
     }
-  else
-    another_single_statement (arg1, arg2);
+
+  /* invalid */
+  if (condition)
+    a_single_statement_with_many_arguments (some_lengthy_argument,
+                                            another_lengthy_argument,
+                                            and_another_one,
+                                            plus_one);
 ```
 
   2. if the condition is composed of many lines:
@@ -109,6 +114,13 @@ The "no block for single statements" rule has only four exceptions:
     {
       a_single_statement ();
     }
+
+  /* invalid */
+  if (condition1 ||
+      (condition2 && condition3) ||
+      condition4 ||
+      (condition5 && (condition6 || condition7)))
+    a_single_statement ();
 ```
 
   3. Nested if's, in which case the block should be placed on the
