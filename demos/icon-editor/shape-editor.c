@@ -91,6 +91,8 @@ struct _ShapeEditor
   GtkStack *clip_path_cmds_stack;
   GtkLabel *clip_path_cmds;
   GtkEntry *clip_path_cmds_entry;
+  GtkEntry *transform;
+  GtkEntry *filter;
 };
 
 enum
@@ -450,6 +452,46 @@ clip_path_cmds_activated (ShapeEditor *self)
     }
 
   shape_editor_update_clip_path (self, path);
+}
+
+static void
+transform_changed (ShapeEditor *self)
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->transform));
+
+  if (path_paintable_set_transform (self->paintable, self->path, text))
+    {
+      gtk_widget_remove_css_class (GTK_WIDGET (self->transform), "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->transform), GTK_ACCESSIBLE_STATE_INVALID);
+    }
+  else
+    {
+      gtk_widget_error_bell (GTK_WIDGET (self->transform));
+      gtk_widget_add_css_class (GTK_WIDGET (self->transform), "error");
+      gtk_accessible_update_state (GTK_ACCESSIBLE (self->transform),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
+    }
+}
+
+static void
+filter_changed (ShapeEditor *self)
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->filter));
+
+  if (path_paintable_set_filter (self->paintable, self->path, text))
+    {
+      gtk_widget_remove_css_class (GTK_WIDGET (self->filter), "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->filter), GTK_ACCESSIBLE_STATE_INVALID);
+    }
+  else
+    {
+      gtk_widget_error_bell (GTK_WIDGET (self->filter));
+      gtk_widget_add_css_class (GTK_WIDGET (self->filter), "error");
+      gtk_accessible_update_state (GTK_ACCESSIBLE (self->filter),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
+    }
 }
 
 static PathPaintable *
@@ -1168,12 +1210,20 @@ shape_editor_update (ShapeEditor *self)
           text = gsk_path_to_string (path);
           gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), text);
           gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), text);
+          g_clear_pointer (&text, g_free);
         }
       else
         {
           gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), "—");
           gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), "");
         }
+
+      text = path_paintable_get_transform (self->paintable, self->path);
+      gtk_editable_set_text (GTK_EDITABLE (self->transform), text);
+
+      g_free (text);
+      text = path_paintable_get_filter (self->paintable, self->path);
+      gtk_editable_set_text (GTK_EDITABLE (self->filter), text);
 
       self->updating = FALSE;
 
@@ -1359,6 +1409,8 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_stack);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_entry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, filter);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -1388,6 +1440,8 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_clicked);
   gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_activated);
   gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_key);
+  gtk_widget_class_bind_template_callback (widget_class, transform_changed);
+  gtk_widget_class_bind_template_callback (widget_class, filter_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }

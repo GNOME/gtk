@@ -304,21 +304,30 @@ svg_shape_attr_get_points (Shape                 *shape,
                            ShapeAttr              attr,
                            unsigned int          *n_params);
 
-void
-svg_shape_attr_set        (Shape                 *shape,
-                           ShapeAttr              attr,
-                           SvgValue              *value);
-
 ClipKind
 svg_shape_attr_get_clip   (Shape                 *shape,
                            ShapeAttr              attr,
                            GskPath              **path);
 
+char *
+svg_shape_attr_get_transform (Shape              *shape,
+                              ShapeAttr           attr);
+
+char *
+svg_shape_attr_get_filter    (Shape              *shape,
+                              ShapeAttr           attr);
+
 GskPath *
 svg_shape_get_path        (Shape                 *shape,
                            const graphene_size_t *viewport);
 
+void
+svg_shape_attr_set        (Shape                 *shape,
+                           ShapeAttr              attr,
+                           SvgValue              *value);
+
 void       svg_value_unref (SvgValue *value);
+
 SvgValue * svg_number_new (double value);
 SvgValue * svg_linecap_new (GskLineCap value);
 SvgValue * svg_linejoin_new (GskLineJoin value);
@@ -332,6 +341,8 @@ SvgValue * svg_points_new (double *values,
 SvgValue * svg_path_new (GskPath *path);
 SvgValue * svg_clip_new_none (void);
 SvgValue * svg_clip_new_path (GskPath *path);
+SvgValue * svg_transform_parse (const char *value);
+SvgValue * svg_filter_parse (const char *value);
 
 Shape * svg_shape_add (Shape     *parent,
                        ShapeType  type);

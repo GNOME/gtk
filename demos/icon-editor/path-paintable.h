@@ -241,3 +241,17 @@ GskPath *       path_paintable_get_clip_path       (PathPaintable   *self,
 void            path_paintable_set_clip_path       (PathPaintable   *self,
                                                     size_t           idx,
                                                     GskPath         *path);
+
+char *          path_paintable_get_transform       (PathPaintable   *self,
+                                                    size_t           idx);
+
+gboolean        path_paintable_set_transform       (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    const char      *transform);
+
+char *          path_paintable_get_filter          (PathPaintable   *self,
+                                                    size_t           idx);
+
+gboolean        path_paintable_set_filter          (PathPaintable   *self,
+                                                    size_t           idx,
+                                                    const char      *filter);
