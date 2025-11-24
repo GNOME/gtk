@@ -11957,6 +11957,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkCssValue *filter_value, *backdrop_filter_value;
   double css_opacity, opacity;
   GtkCssStyle *style;
+  gboolean has_backdrop_filter;
 
   style = gtk_css_node_get_style (priv->cssnode);
 
@@ -11974,14 +11975,23 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                            G_OBJECT_TYPE_NAME (widget), widget);
 
   backdrop_filter_value = style->other->backdrop_filter;
-  if (!gtk_css_filter_value_is_none (backdrop_filter_value))
+  has_backdrop_filter = !gtk_css_filter_value_is_none (backdrop_filter_value);
+
+  if (has_backdrop_filter)
+    gtk_snapshot_push_copy (snapshot);
+
+  filter_value = style->other->filter;
+  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+
+  if (opacity < 1.0)
+    gtk_snapshot_push_opacity (snapshot, opacity);
+
+  if (has_backdrop_filter)
     {
       const GskRoundedRect *border_box = gtk_css_boxes_get_border_box (&boxes);
       graphene_rect_t bounds;
       double extra_size;
-      gtk_snapshot_push_copy (snapshot);
-      if (opacity < 1.0)
-        gtk_snapshot_push_opacity (snapshot, opacity);
+
       gtk_snapshot_push_rounded_clip (snapshot, border_box);
       extra_size = gtk_css_filter_value_push_snapshot (backdrop_filter_value, snapshot);
       bounds = gtk_css_boxes_get_border_box (&boxes)->bounds;
@@ -11991,16 +12001,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                                  0);
       gtk_css_filter_value_pop_snapshot (backdrop_filter_value, snapshot);
       gtk_snapshot_pop (snapshot); /* clip */
-      if (opacity < 1.0)
-        gtk_snapshot_pop (snapshot); /* opacity */
-      gtk_snapshot_pop (snapshot); /* copy */
     }
-
-  filter_value = style->other->filter;
-  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
-
-  if (opacity < 1.0)
-    gtk_snapshot_push_opacity (snapshot, opacity);
 
   gtk_css_style_snapshot_background (&boxes, snapshot);
   gtk_css_style_snapshot_border (&boxes, snapshot);
@@ -12023,7 +12024,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
-  gtk_snapshot_pop (snapshot);
+  if (has_backdrop_filter)
+    gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_pop (snapshot); /* debug */
 
   return gtk_snapshot_pop_collect (snapshot);
 }

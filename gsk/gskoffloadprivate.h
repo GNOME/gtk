@@ -36,6 +36,8 @@ typedef struct
   GdkDihedral transform;
   graphene_rect_t background_rect;
 
+  guint n_nodes;
+
   guint was_offloaded : 1;
   guint can_offload   : 1;
   guint is_offloaded  : 1;

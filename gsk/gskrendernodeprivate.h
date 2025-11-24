@@ -9,6 +9,17 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  /* No pixels are copied */
+  GSK_COPY_NONE = 0,
+  /* Pixels that are copied will be pasted to the same pixel */
+  GSK_COPY_SAME_PIXEL,
+  /* Pixels are copied and and will be pasted whereever */
+  GSK_COPY_ANY
+} GskCopyMode;
+
+#define GSK_COPY_MODE_BITS 2
+
 typedef struct _GskRenderNodeClass GskRenderNodeClass;
 
 #define GSK_IS_RENDER_NODE_TYPE(node,type) \
@@ -26,9 +37,12 @@ struct _GskRenderNode
   graphene_rect_t bounds;
 
   guint preferred_depth : GDK_MEMORY_DEPTH_BITS;
+  guint copy_mode : GSK_COPY_MODE_BITS;
   guint fully_opaque : 1;
   guint is_hdr : 1;
   guint clears_background : 1; /* mostly relevant for tracking opacity */
+  guint contains_subsurface_node : 1; /* contains a subsurface node */
+  guint contains_paste_node : 1; /* contains a paste node that has no matching copy node */
 };
 
 typedef struct
@@ -116,6 +130,9 @@ GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode    
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_clears_background       (const GskRenderNode         *node) G_GNUC_PURE;
+GskCopyMode     gsk_render_node_get_copy_mode           (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_contains_subsurface_node(const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_contains_paste_node     (const GskRenderNode         *node) G_GNUC_PURE;
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
 #define gsk_render_node_unref(node) _gsk_render_node_unref(node)

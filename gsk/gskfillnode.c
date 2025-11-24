@@ -185,6 +185,9 @@ gsk_fill_node_new (GskRenderNode *child,
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
   node->clears_background = gsk_render_node_clears_background (child);
+  node->copy_mode = gsk_render_node_get_copy_mode (child);
+  node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
+  node->contains_paste_node = gsk_render_node_contains_paste_node (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);

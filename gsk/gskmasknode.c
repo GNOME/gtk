@@ -247,25 +247,31 @@ gsk_mask_node_new (GskRenderNode *source,
                    GskMaskMode    mask_mode)
 {
   GskMaskNode *self;
+  GskRenderNode *node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (source), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (mask), NULL);
 
   self = gsk_render_node_alloc (GSK_TYPE_MASK_NODE);
+  node = (GskRenderNode *) self;
   self->source = gsk_render_node_ref (source);
   self->mask = gsk_render_node_ref (mask);
   self->mask_mode = mask_mode;
 
   if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
-    self->render_node.bounds = source->bounds;
-  else if (!gsk_rect_intersection (&source->bounds, &mask->bounds, &self->render_node.bounds))
-    self->render_node.bounds = *graphene_rect_zero ();
+    node->bounds = source->bounds;
+  else if (!gsk_rect_intersection (&source->bounds, &mask->bounds, &node->bounds))
+    node->bounds = *graphene_rect_zero ();
 
-  self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
-  self->render_node.is_hdr = gsk_render_node_is_hdr (source) ||
+  node->preferred_depth = gsk_render_node_get_preferred_depth (source);
+  node->is_hdr = gsk_render_node_is_hdr (source) ||
                              gsk_render_node_is_hdr (mask);
+  node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (source) ||
+                                   gsk_render_node_contains_subsurface_node (mask);
+  node->contains_paste_node = gsk_render_node_contains_paste_node (source) ||
+                              gsk_render_node_contains_paste_node (mask);
 
-  return &self->render_node;
+  return node;
 }
 
 /**

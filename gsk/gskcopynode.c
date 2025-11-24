@@ -147,8 +147,11 @@ gsk_copy_node_new (GskRenderNode *child)
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
-  self->render_node.is_hdr = gsk_render_node_is_hdr (child);
-  self->render_node.clears_background = gsk_render_node_clears_background (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
+  node->clears_background = gsk_render_node_clears_background (child);
+  node->copy_mode = GSK_COPY_ANY;
+  node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
+  node->contains_paste_node = gsk_render_node_contains_paste_node (child);
 
   return node;
 }

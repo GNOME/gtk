@@ -191,7 +191,7 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
 
       display = gsk_gpu_device_get_display (gsk_gpu_frame_get_device (frame));
       glcontext = gdk_display_get_gl_context (display);
-      if (gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
+      if (glcontext && gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
         {
           gdk_gl_context_make_current (glcontext);
 
