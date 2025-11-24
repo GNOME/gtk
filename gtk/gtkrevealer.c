@@ -31,6 +31,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtksnapshotprivate.h"
 
 /**
  * GtkRevealer:
@@ -184,6 +185,32 @@ get_child_size_scale (GtkRevealer    *revealer,
     }
 }
 
+static gboolean
+get_is_fading_type (GtkRevealerTransitionType transition_type)
+{
+  switch (transition_type)
+    {
+    case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN:
+      return TRUE;
+
+    case GTK_REVEALER_TRANSITION_TYPE_NONE:
+    case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
+    case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
+    case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+    case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT:
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT:
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_UP:
+    case GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN:
+    default:
+      return FALSE;
+    }
+}
+
 static void
 gtk_revealer_set_position (GtkRevealer *revealer,
                            double       pos)
@@ -203,20 +230,11 @@ gtk_revealer_set_position (GtkRevealer *revealer,
     }
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
     gtk_widget_queue_draw (GTK_WIDGET (revealer));
-  else if (transition != GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
+  else
     gtk_widget_queue_resize (GTK_WIDGET (revealer));
-
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE ||
-      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT ||
-      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT ||
-      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP ||
-      transition == GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN)
-    {
-      gtk_widget_set_opacity (GTK_WIDGET (revealer), revealer->current_pos);
-      gtk_widget_queue_draw (GTK_WIDGET (revealer));
-    }
 
   if (revealer->current_pos == revealer->target_pos)
     {
@@ -613,6 +631,32 @@ gtk_revealer_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_revealer_snapshot (GtkWidget   *widget,
+                       GtkSnapshot *snapshot)
+{
+  GtkRevealer *revealer = GTK_REVEALER (widget);
+  gboolean animation_running = (revealer->target_pos != revealer->current_pos);
+  GtkWidget *child;
+  gboolean is_fade;
+
+  if (animation_running)
+    is_fade = get_is_fading_type (revealer->transition_type);
+  else
+    is_fade = FALSE;
+
+  if (is_fade)
+    gtk_snapshot_push_opacity (snapshot, revealer->current_pos);
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    gtk_widget_snapshot_child (widget, child, snapshot);
+
+  if (is_fade)
+    gtk_snapshot_pop (snapshot);
+}
+
+static void
 gtk_revealer_buildable_add_child (GtkBuildable *buildable,
                                   GtkBuilder   *builder,
                                   GObject      *child,
@@ -645,6 +689,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->measure = gtk_revealer_measure;
   widget_class->compute_expand = gtk_revealer_compute_expand;
   widget_class->get_request_mode = gtk_revealer_get_request_mode;
+  widget_class->snapshot = gtk_revealer_snapshot;
 
   /**
    * GtkRevealer:transition-type:
