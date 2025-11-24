@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskrepeatnode.h"
+#include "gskrepeatnodeprivate.h"
 
 #include "gskrectprivate.h"
 #include "gskrenderreplay.h"
@@ -37,6 +37,7 @@ struct _GskRepeatNode
 
   GskRenderNode *child;
   graphene_rect_t child_bounds;
+  GskRepeat repeat;
 };
 
 static void
@@ -205,7 +206,8 @@ gsk_repeat_node_diff (GskRenderNode *node1,
   GskRepeatNode *self2 = (GskRepeatNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
-      gsk_rect_equal (&self1->child_bounds, &self2->child_bounds))
+      gsk_rect_equal (&self1->child_bounds, &self2->child_bounds) &&
+      self1->repeat == self2->repeat)
     {
       cairo_region_t *sub;
 
@@ -237,7 +239,7 @@ gsk_repeat_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_repeat_node_new (&node->bounds, child, &self->child_bounds);
+    result = gsk_repeat_node_new2 (&node->bounds, child, &self->child_bounds, self->repeat);
 
   gsk_render_node_unref (child);
 
@@ -260,22 +262,11 @@ gsk_repeat_node_class_init (gpointer g_class,
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskRepeatNode, gsk_repeat_node)
 
-/**
- * gsk_repeat_node_new:
- * @bounds: The bounds of the area to be painted
- * @child: The child to repeat
- * @child_bounds: (nullable): The area of the child to repeat or %NULL to
- *     use the child's bounds
- *
- * Creates a `GskRenderNode` that will repeat the drawing of @child across
- * the given @bounds.
- *
- * Returns: (transfer full) (type GskRepeatNode): A new `GskRenderNode`
- */
 GskRenderNode *
-gsk_repeat_node_new (const graphene_rect_t *bounds,
-                     GskRenderNode         *child,
-                     const graphene_rect_t *child_bounds)
+gsk_repeat_node_new2 (const graphene_rect_t  *bounds,
+                      GskRenderNode          *child,
+                      const graphene_rect_t  *child_bounds,
+                      GskRepeat               repeat)
 {
   GskRepeatNode *self;
   GskRenderNode *node;
@@ -290,6 +281,7 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
   gsk_rect_normalize (&node->bounds);
 
   self->child = gsk_render_node_ref (child);
+  self->repeat = repeat;
 
   if (child_bounds)
     {
@@ -310,6 +302,29 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
   node->contains_paste_node = gsk_render_node_contains_paste_node (child);
 
   return node;
+}
+
+/**
+ * gsk_repeat_node_new:
+ * @bounds: The bounds of the area to be painted
+ * @child: The child to repeat
+ * @child_bounds: (nullable): The area of the child to repeat or %NULL to
+ *     use the child's bounds
+ *
+ * Creates a `GskRenderNode` that will repeat the drawing of @child across
+ * the given @bounds.
+ *
+ * Returns: (transfer full) (type GskRepeatNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_repeat_node_new (const graphene_rect_t *bounds,
+                     GskRenderNode         *child,
+                     const graphene_rect_t *child_bounds)
+{
+  g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  return gsk_repeat_node_new2 (bounds, child, child_bounds, GSK_REPEAT_REPEAT);
 }
 
 /**
@@ -342,4 +357,12 @@ gsk_repeat_node_get_child_bounds (const GskRenderNode *node)
   const GskRepeatNode *self = (const GskRepeatNode *) node;
 
   return &self->child_bounds;
+}
+
+GskRepeat
+gsk_repeat_node_get_repeat (GskRenderNode *node)
+{
+  const GskRepeatNode *self = (const GskRepeatNode *) node;
+
+  return self->repeat;
 }
