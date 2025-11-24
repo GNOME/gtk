@@ -270,7 +270,7 @@ path_paintable_set_property (GObject      *object,
 }
 
 static void
-path_paintable_changed (PathPaintable *self)
+path_paintable_real_changed (PathPaintable *self)
 {
   g_clear_object (&self->render_paintable);
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
@@ -321,7 +321,7 @@ path_paintable_class_init (PathPaintableClass *class)
     g_signal_new_class_handler ("changed",
                                 G_TYPE_FROM_CLASS (object_class),
                                 G_SIGNAL_RUN_LAST,
-                                G_CALLBACK (path_paintable_changed),
+                                G_CALLBACK (path_paintable_real_changed),
                                 NULL, NULL,
                                 NULL,
                                 G_TYPE_NONE, 0);
@@ -344,7 +344,7 @@ path_paintable_class_init (PathPaintableClass *class)
 }
 
 /* }}} */
-/* {{{ Private API */
+/* {{{ API */
 
 PathPaintable *
 path_paintable_new (void)
@@ -376,7 +376,7 @@ path_paintable_get_height (PathPaintable *self)
   return self->svg->height;
 }
 
-static Shape *
+Shape *
 path_paintable_get_shape (PathPaintable *self,
                           size_t         path)
 {
@@ -478,199 +478,6 @@ path_paintable_add_shape (PathPaintable *self,
 }
 
 void
-path_paintable_delete_path (PathPaintable *self,
-                            size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  svg_shape_delete (shape);
-
-  g_signal_emit (self, signals[CHANGED], 0);
-  g_signal_emit (self, signals[PATHS_CHANGED], 0);
-}
-
-void
-path_paintable_move_path (PathPaintable *self,
-                          size_t         idx,
-                          size_t         new_pos)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  g_ptr_array_remove (self->svg->content->shapes, shape);
-  g_ptr_array_insert (self->svg->content->shapes, new_pos, shape);
-
-  g_signal_emit (self, signals[CHANGED], 0);
-  g_signal_emit (self, signals[PATHS_CHANGED], 0);
-}
-
-void
-path_paintable_duplicate_path (PathPaintable *self,
-                               gsize          idx)
-{
-  graphene_size_t *viewport = &self->svg->view_box.size;
-  gsize idx2;
-  gboolean do_fill, do_stroke;
-  GtkSymbolicColor symbolic;
-  GskFillRule fill_rule;
-  GdkRGBA color;
-  GskStroke *stroke;
-  double *params;
-  unsigned int n_params;
-  double p[6];
-  GskPath *path;
-  double min = 0;
-  double max = 100;
-  size_t to = (size_t) -1;
-  double pos = 0;
-
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  switch ((unsigned int) shape->type)
-    {
-    case SHAPE_POLY_LINE:
-    case SHAPE_POLYGON:
-      params = svg_shape_attr_get_points (shape, SHAPE_ATTR_POINTS, &n_params);
-      idx2 = path_paintable_add_shape (self, shape->type, params, n_params);
-      break;
-    case SHAPE_LINE:
-      p[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_X1, viewport);
-      p[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_Y1, viewport);
-      p[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_X2, viewport);
-      p[3] = svg_shape_attr_get_number (shape, SHAPE_ATTR_Y2, viewport);
-      idx2 = path_paintable_add_shape (self, shape->type, p, 4);
-      break;
-    case SHAPE_CIRCLE:
-      p[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
-      p[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
-      p[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_R, viewport);
-      idx2 = path_paintable_add_shape (self, shape->type, p, 3);
-      break;
-    case SHAPE_ELLIPSE:
-      p[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
-      p[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
-      p[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
-      p[3] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RY, viewport);
-      idx2 = path_paintable_add_shape (self, shape->type, p, 4);
-      break;
-    case SHAPE_RECT:
-      p[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_X, viewport);
-      p[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_Y, viewport);
-      p[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_WIDTH, viewport);
-      p[3] = svg_shape_attr_get_number (shape, SHAPE_ATTR_HEIGHT, viewport);
-      p[4] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
-      p[5] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RY, viewport);
-      idx2 = path_paintable_add_shape (self, shape->type, p, 6);
-      break;
-    case SHAPE_PATH:
-      path = svg_shape_attr_get_path (shape, SHAPE_ATTR_PATH);
-      idx2 = path_paintable_add_path (self, path);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  path_paintable_set_path_id (self, idx2,
-                              path_paintable_get_path_id (self, idx));
-  path_paintable_set_path_states (self, idx2,
-                                  path_paintable_get_path_states (self, idx));
-  do_fill = path_paintable_get_path_fill (self, idx, &fill_rule, &symbolic, &color);
-  path_paintable_set_path_fill (self, idx2, do_fill, fill_rule, symbolic, &color);
-  stroke = gsk_stroke_new (1);
-  do_stroke = path_paintable_get_path_stroke (self, idx, stroke, &symbolic, &color);
-  path_paintable_set_path_stroke (self, idx2, do_stroke, stroke, symbolic, &color);
-  gsk_stroke_free (stroke);
-
-  path_paintable_get_path_stroke_variation (self, idx, &min, &max);
-  path_paintable_set_path_stroke_variation (self, idx2, min, max);
-
-  path_paintable_set_path_animation (self, idx2,
-                                     path_paintable_get_path_animation_direction (self, idx),
-                                     path_paintable_get_path_animation_duration (self, idx),
-                                     path_paintable_get_path_animation_repeat (self, idx),
-                                     path_paintable_get_path_animation_easing (self, idx),
-                                     path_paintable_get_path_animation_segment (self, idx));
-
-  path_paintable_set_path_transition (self, idx2,
-                                      path_paintable_get_path_transition_type (self, idx),
-                                      path_paintable_get_path_transition_duration (self, idx),
-                                      path_paintable_get_path_transition_delay (self, idx),
-                                      path_paintable_get_path_transition_easing (self, idx));
-
-  path_paintable_set_path_origin (self, idx2,
-                                  path_paintable_get_path_origin (self, idx));
-
-  path_paintable_get_attach_path (self, idx, &to, &pos);
-  if (to != (gsize) -1)
-    path_paintable_attach_path (self, idx2, to, pos);
-
-  g_signal_emit (self, signals[CHANGED], 0);
-  g_signal_emit (self, signals[PATHS_CHANGED], 0);
-}
-
-void
-path_paintable_set_path (PathPaintable *self,
-                         size_t         idx,
-                         GskPath       *path)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  shape->type = SHAPE_PATH;
-
-  svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (path));
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-void
-path_paintable_set_shape (PathPaintable *self,
-                          size_t         idx,
-                          ShapeType      shape_type,
-                          double        *params,
-                          unsigned int   n_params)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  shape->type = shape_type;
-
-  switch ((unsigned int) shape_type)
-    {
-    case SHAPE_LINE:
-      svg_shape_attr_set (shape, SHAPE_ATTR_X1, svg_number_new (params[0]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_Y1, svg_number_new (params[1]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_X2, svg_number_new (params[2]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_Y2, svg_number_new (params[3]));
-      break;
-    case SHAPE_CIRCLE:
-      svg_shape_attr_set (shape, SHAPE_ATTR_CX, svg_number_new (params[0]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_CY, svg_number_new (params[1]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_R, svg_number_new (params[2]));
-      break;
-    case SHAPE_ELLIPSE:
-      svg_shape_attr_set (shape, SHAPE_ATTR_CX, svg_number_new (params[0]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_CY, svg_number_new (params[1]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_RX, svg_number_new (params[2]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_RY, svg_number_new (params[3]));
-      break;
-    case SHAPE_RECT:
-      svg_shape_attr_set (shape, SHAPE_ATTR_X, svg_number_new (params[0]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_Y, svg_number_new (params[1]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_WIDTH, svg_number_new (params[2]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_HEIGHT, svg_number_new (params[3]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_RX, svg_number_new (params[4]));
-      svg_shape_attr_set (shape, SHAPE_ATTR_RY, svg_number_new (params[5]));
-      break;
-    case SHAPE_POLY_LINE:
-    case SHAPE_POLYGON:
-      svg_shape_attr_set (shape, SHAPE_ATTR_POINTS, svg_points_new (params, n_params));
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-void
 path_paintable_set_path_states (PathPaintable *self,
                                 size_t         idx,
                                 uint64_t       states)
@@ -685,31 +492,6 @@ path_paintable_set_path_states (PathPaintable *self,
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
-gboolean
-path_paintable_set_path_id (PathPaintable *self,
-                            size_t         idx,
-                            const char    *id)
-{
-#if 0
-  for (size_t i = 0; i < self->paths->len; i++)
-    {
-      PathElt *elt = &g_array_index (self->paths, PathElt, i);
-
-      if (i != idx &&
-          elt->id != NULL && id != NULL &&
-          strcmp (elt->id, id) == 0)
-        return FALSE;
-    }
-#endif
-
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  if (g_set_str (&shape->id, id))
-    g_signal_emit (self, signals[CHANGED], 0);
-
-  return TRUE;
-}
-
 const char *
 path_paintable_get_path_id (PathPaintable *self,
                             size_t         idx)
@@ -717,121 +499,6 @@ path_paintable_get_path_id (PathPaintable *self,
   Shape *shape = path_paintable_get_shape (self, idx);
 
   return shape->id;
-}
-
-void
-path_paintable_set_path_transition (PathPaintable   *self,
-                                    size_t           idx,
-                                    GpaTransition    type,
-                                    double           duration,
-                                    double           delay,
-                                    GpaEasing        easing)
-{
-  g_return_if_fail (duration >= 0);
-
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  if (shape->gpa.transition == type &&
-      shape->gpa.transition_duration == duration * G_TIME_SPAN_MILLISECOND &&
-      shape->gpa.transition_delay == delay * G_TIME_SPAN_MILLISECOND &&
-      shape->gpa.transition_easing == easing)
-    return;
-
-  shape->gpa.transition = type;
-  shape->gpa.transition_duration = duration * G_TIME_SPAN_MILLISECOND;
-  shape->gpa.transition_delay = delay * G_TIME_SPAN_MILLISECOND;
-  shape->gpa.transition_easing = easing;
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-void
-path_paintable_set_path_animation (PathPaintable      *self,
-                                   size_t              idx,
-                                   GpaAnimation        direction,
-                                   double              duration,
-                                   double              repeat,
-                                   GpaEasing           easing,
-                                   double              segment)
-{
-  g_return_if_fail (duration >= 0);
-
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  if (shape->gpa.animation == direction &&
-      shape->gpa.animation_duration == duration * G_TIME_SPAN_MILLISECOND &&
-      shape->gpa.animation_repeat == repeat &&
-      shape->gpa.animation_easing == easing &&
-      shape->gpa.animation_segment == segment)
-    return;
-
-  shape->gpa.animation = direction;
-  shape->gpa.animation_duration = duration * G_TIME_SPAN_MILLISECOND;
-  shape->gpa.animation_repeat = repeat;
-  shape->gpa.animation_easing = easing;
-  shape->gpa.animation_segment = segment;
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-GpaAnimation
-path_paintable_get_path_animation_direction (PathPaintable *self,
-                                             size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.animation;
-}
-
-double
-path_paintable_get_path_animation_duration (PathPaintable *self,
-                                            size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.animation_duration / (double) G_TIME_SPAN_MILLISECOND;
-}
-
-double
-path_paintable_get_path_animation_repeat (PathPaintable *self,
-                                          size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.animation_repeat;
-}
-
-GpaEasing
-path_paintable_get_path_animation_easing (PathPaintable *self,
-                                          size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.animation_easing;
-}
-
-double
-path_paintable_get_path_animation_segment (PathPaintable *self,
-                                           size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.animation_segment;
-}
-
-void
-path_paintable_set_path_origin (PathPaintable *self,
-                                size_t         idx,
-                                double         origin)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  if (shape->gpa.origin == origin)
-    return;
-
-  shape->gpa.origin = origin;
-
-  g_signal_emit (self, signals[CHANGED], 0);
 }
 
 void
@@ -922,72 +589,6 @@ path_paintable_set_path_stroke (PathPaintable *self,
 }
 
 void
-path_paintable_set_path_stroke_variation (PathPaintable *self,
-                                          size_t         idx,
-                                          double         min_width,
-                                          double         max_width)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-  graphene_size_t *viewport = &self->svg->view_box.size;
-  double min, max;
-
-  min = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MINWIDTH, viewport);
-  max = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MAXWIDTH, viewport);
-
-  if (min == min_width && max == max_width)
-    return;
-
-  svg_shape_attr_set (shape, SHAPE_ATTR_STROKE_MINWIDTH, svg_number_new (min_width));
-  svg_shape_attr_set (shape, SHAPE_ATTR_STROKE_MAXWIDTH, svg_number_new (max_width));
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-void
-path_paintable_get_path_stroke_variation (PathPaintable *self,
-                                          size_t         idx,
-                                          double        *min_width,
-                                          double        *max_width)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-  graphene_size_t *viewport = &self->svg->view_box.size;
-
-  *min_width = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MINWIDTH, viewport);
-  *min_width = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MAXWIDTH, viewport);
-}
-
-void
-path_paintable_attach_path (PathPaintable *self,
-                            size_t         idx,
-                            size_t         to,
-                            double         pos)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-  size_t cto = (size_t) -1;
-  double cpos = 0;
-
-  path_paintable_get_attach_path (self, idx, &cto, &cpos);
-  if (cto == to && cpos == pos)
-    return;
-
-  if (to != (size_t) -1)
-    {
-      Shape *s = path_paintable_get_shape (self, to);
-      g_set_str (&shape->gpa.attach.ref, shape->id);
-      shape->gpa.attach.shape = s;
-      shape->gpa.attach.pos = pos;
-    }
-  else
-    {
-      g_clear_pointer (&shape->gpa.attach.ref, g_free);
-      shape->gpa.attach.shape = NULL;
-      shape->gpa.attach.pos = pos;
-    }
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-void
 path_paintable_get_attach_path (PathPaintable *self,
                                 size_t         idx,
                                 size_t        *to,
@@ -1035,96 +636,7 @@ path_paintable_get_path (PathPaintable *self,
   Shape *shape = path_paintable_get_shape (self, idx);
   graphene_size_t *viewport = &self->svg->view_box.size;
 
-  if (shape->type == SHAPE_PATH)
-    return svg_shape_attr_get_path (shape, SHAPE_ATTR_PATH);
-  else
-    return svg_shape_get_path (shape, viewport);
-}
-
-ShapeType
-path_paintable_get_path_shape_type (PathPaintable *self,
-                                    size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->type;
-}
-
-unsigned int
-path_paintable_get_n_shape_params (PathPaintable *self,
-                                   size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  switch ((unsigned int) shape->type)
-    {
-    case SHAPE_RECT: return 6;
-    case SHAPE_CIRCLE: return 3;
-    case SHAPE_ELLIPSE: return 4;
-    case SHAPE_LINE: return 4;
-    case SHAPE_PATH: return 0;
-    case SHAPE_POLY_LINE:
-    case SHAPE_POLYGON:
-      {
-        unsigned int n;
-        svg_shape_attr_get_points (shape, SHAPE_ATTR_POINTS, &n);
-        return n;
-      }
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-void
-path_paintable_get_shape_params (PathPaintable *self,
-                                 size_t         idx,
-                                 double        *params)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-  graphene_size_t *viewport = &self->svg->view_box.size;
-
-  switch ((unsigned int) shape->type)
-    {
-    case SHAPE_RECT:
-      params[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_X, viewport);
-      params[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_Y, viewport);
-      params[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_WIDTH, viewport);
-      params[3] = svg_shape_attr_get_number (shape, SHAPE_ATTR_HEIGHT, viewport);
-      params[4] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
-      params[5] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RY, viewport);
-      break;
-    case SHAPE_CIRCLE:
-      params[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
-      params[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
-      params[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_R, viewport);
-      break;
-    case SHAPE_ELLIPSE:
-      params[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CX, viewport);
-      params[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_CY, viewport);
-      params[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RX, viewport);
-      params[3] = svg_shape_attr_get_number (shape, SHAPE_ATTR_RY, viewport);
-      break;
-    case SHAPE_LINE:
-      params[0] = svg_shape_attr_get_number (shape, SHAPE_ATTR_X1, viewport);
-      params[1] = svg_shape_attr_get_number (shape, SHAPE_ATTR_Y1, viewport);
-      params[2] = svg_shape_attr_get_number (shape, SHAPE_ATTR_X2, viewport);
-      params[3] = svg_shape_attr_get_number (shape, SHAPE_ATTR_Y2, viewport);
-      break;
-    case SHAPE_PATH:
-      break;
-    case SHAPE_POLY_LINE:
-    case SHAPE_POLYGON:
-      {
-        unsigned int n;
-        double *p;
-        p = svg_shape_attr_get_points (shape, SHAPE_ATTR_POINTS, &n);
-        memcpy (params, p, sizeof (double) * n);
-      }
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
+  return svg_shape_get_path (shape, viewport);
 }
 
 uint64_t
@@ -1134,42 +646,6 @@ path_paintable_get_path_states (PathPaintable *self,
   Shape *shape = path_paintable_get_shape (self, idx);
 
   return shape->gpa.states;
-}
-
-GpaTransition
-path_paintable_get_path_transition_type (PathPaintable *self,
-                                         size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.transition;
-}
-
-double
-path_paintable_get_path_transition_duration (PathPaintable *self,
-                                             size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.transition_duration / (double) G_TIME_SPAN_MILLISECOND;
-}
-
-double
-path_paintable_get_path_transition_delay (PathPaintable *self,
-                                          size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.transition_delay / (double) G_TIME_SPAN_MILLISECOND;
-}
-
-GpaEasing
-path_paintable_get_path_transition_easing (PathPaintable *self,
-                                           size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return shape->gpa.transition_easing;
 }
 
 double
@@ -1366,8 +842,11 @@ path_paintable_get_path_by_id (PathPaintable *self,
   return NULL;
 }
 
-/* }}} */
-/* {{{ Public API */
+Shape *
+path_paintable_get_content (PathPaintable *self)
+{
+  return self->svg->content;
+}
 
 void
 path_paintable_set_state (PathPaintable *self,
@@ -1475,130 +954,138 @@ path_paintable_serialize_as_svg (PathPaintable *self)
   return gtk_svg_serialize (self->svg);
 }
 
-PaintOrder
-path_paintable_get_paint_order (PathPaintable *self,
-                                size_t         idx)
+const graphene_size_t *
+path_paintable_get_viewport (PathPaintable *self)
 {
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return (PaintOrder) svg_shape_attr_get_enum (shape, SHAPE_ATTR_PAINT_ORDER);
+  return &self->svg->view_box.size;
 }
 
 void
-path_paintable_set_paint_order (PathPaintable *self,
-                                size_t         idx,
-                                PaintOrder     order)
+path_paintable_changed (PathPaintable *self)
 {
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  svg_shape_attr_set (shape, SHAPE_ATTR_PAINT_ORDER, svg_paint_order_new (order));
   g_signal_emit (self, signals[CHANGED], 0);
-}
-
-double
-path_paintable_get_opacity (PathPaintable *self,
-                            size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return (PaintOrder) svg_shape_attr_get_number (shape, SHAPE_ATTR_OPACITY, NULL);
 }
 
 void
-path_paintable_set_opacity (PathPaintable *self,
-                            size_t         idx,
-                            double         opacity)
+path_paintable_paths_changed (PathPaintable *self)
 {
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  svg_shape_attr_set (shape, SHAPE_ATTR_OPACITY, svg_number_new (opacity));
-  g_signal_emit (self, signals[CHANGED], 0);
+  g_signal_emit (self, signals[PATHS_CHANGED], 0);
 }
 
-GskPath *
-path_paintable_get_clip_path (PathPaintable *self,
-                              size_t         idx)
+Shape *
+shape_duplicate (Shape *shape)
 {
-  Shape *shape = path_paintable_get_shape (self, idx);
-  GskPath *path = NULL;
+  Shape *copy = g_new0 (Shape, 1);
 
-  svg_shape_attr_get_clip (shape, SHAPE_ATTR_CLIP_PATH, &path);
+  copy->type = shape->type;
+  copy->parent = shape->parent;
+  copy->attrs = shape->attrs;
+  copy->id = NULL;
+  copy->display = shape->display;
+  for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)
+    {
+      if (shape->base[i])
+        copy->base[i] = svg_value_ref (shape->base[i]);
+    }
 
-  return path;
-}
+  copy->animations = g_ptr_array_new ();
 
-void
-path_paintable_set_clip_path (PathPaintable *self,
-                              size_t         idx,
-                              GskPath       *path)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
+  copy->gpa.states = shape->gpa.states;
+  copy->gpa.transition = shape->gpa.transition;
+  copy->gpa.transition_easing = shape->gpa.transition_easing;
+  copy->gpa.transition_duration = shape->gpa.transition_duration;
+  copy->gpa.transition_delay = shape->gpa.transition_delay;
+  copy->gpa.animation = shape->gpa.animation;
+  copy->gpa.animation_easing = shape->gpa.animation_easing;
+  copy->gpa.animation_duration = shape->gpa.animation_duration;
+  copy->gpa.animation_repeat = shape->gpa.animation_repeat;
+  copy->gpa.animation_segment = shape->gpa.animation_segment;
+  copy->gpa.origin = shape->gpa.origin;
+  copy->gpa.attach.ref = NULL;
+  copy->gpa.attach.shape = NULL;
+  copy->gpa.attach.pos = 0;
 
-  if (path)
-    svg_shape_attr_set (shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (path));
-  else
-    svg_shape_attr_set (shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-char *
-path_paintable_get_transform (PathPaintable *self,
-                              size_t         idx)
-{
-  Shape *shape = path_paintable_get_shape (self, idx);
-
-  return svg_shape_attr_get_transform (shape, SHAPE_ATTR_TRANSFORM);
+  return copy;
 }
 
 gboolean
-path_paintable_set_transform (PathPaintable *self,
-                              size_t         idx,
-                              const char    *transform)
+shape_is_graphical (Shape *shape)
 {
-  Shape *shape = path_paintable_get_shape (self, idx);
-  SvgValue *value;
-
-  if (transform && *transform)
-    value = svg_transform_parse (transform);
-  else
-    value = svg_transform_parse ("none");
-
-  if (!value)
-    return FALSE;
-
-  svg_shape_attr_set (shape, SHAPE_ATTR_TRANSFORM, value);
-  g_signal_emit (self, signals[CHANGED], 0);
-  return TRUE;
+  switch (shape->type)
+    {
+    case SHAPE_LINE:
+    case SHAPE_POLY_LINE:
+    case SHAPE_POLYGON:
+    case SHAPE_RECT:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+      return TRUE;
+    case SHAPE_GROUP:
+    case SHAPE_CLIP_PATH:
+    case SHAPE_MASK:
+    case SHAPE_DEFS:
+    case SHAPE_USE:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+    }
 }
 
-char *
-path_paintable_get_filter (PathPaintable *self,
-                           size_t         idx)
+static gboolean
+shape_is_group (Shape *shape)
 {
-  Shape *shape = path_paintable_get_shape (self, idx);
+  switch (shape->type)
+    {
+    case SHAPE_LINE:
+    case SHAPE_POLY_LINE:
+    case SHAPE_POLYGON:
+    case SHAPE_RECT:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+      return FALSE;
+    case SHAPE_GROUP:
+    case SHAPE_CLIP_PATH:
+    case SHAPE_MASK:
+    case SHAPE_DEFS:
+      return TRUE;
+    case SHAPE_USE:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+static Shape *
+get_shape_by_id (Shape      *shape,
+                 const char *id)
+{
+  for (unsigned int i = 0; i < shape->shapes->len; i++)
+    {
+      Shape *sh = g_ptr_array_index (shape->shapes, i);
 
-  return svg_shape_attr_get_filter (shape, SHAPE_ATTR_FILTER);
+      if (g_strcmp0 (sh->id, id) == 0)
+        return sh;
+      else if (shape_is_group (sh))
+        {
+          Shape *sh2 = get_shape_by_id (sh, id);
+          if (sh2)
+            return sh2;
+        }
+    }
+
+  return NULL;
 }
 
-gboolean
-path_paintable_set_filter (PathPaintable *self,
-                           size_t         idx,
-                           const char    *filter)
+Shape *
+path_paintable_get_shape_by_id (PathPaintable *self,
+                                const char    *id)
 {
-  Shape *shape = path_paintable_get_shape (self, idx);
-  SvgValue *value;
-
-  if (filter && *filter)
-    value = svg_filter_parse (filter);
-  else
-    value = svg_filter_parse ("none");
-
-  if (!value)
-    return FALSE;
-
-  svg_shape_attr_set (shape, SHAPE_ATTR_FILTER, value);
-  g_signal_emit (self, signals[CHANGED], 0);
-  return TRUE;
+  return get_shape_by_id (self->svg->content, id);
 }
 
 /* }}} */

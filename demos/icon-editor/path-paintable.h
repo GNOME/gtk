@@ -84,39 +84,12 @@ size_t          path_paintable_add_shape           (PathPaintable   *self,
                                                     ShapeType        shape_type,
                                                     double          *params,
                                                     unsigned int     n_params);
-void            path_paintable_delete_path         (PathPaintable   *self,
-                                                    size_t           idx);
-void            path_paintable_move_path           (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    size_t           new_idx);
-void            path_paintable_duplicate_path      (PathPaintable   *self,
-                                                    gsize            idx);
-void            path_paintable_set_path            (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    GskPath         *path);
 GskPath *       path_paintable_get_path            (PathPaintable   *self,
                                                     size_t           idx);
 
 GskPath *       path_paintable_get_path_by_id      (PathPaintable   *self,
                                                     const char      *id);
 
-void            path_paintable_set_shape           (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    ShapeType        shape_type,
-                                                    double          *params,
-                                                    unsigned int     n_params);
-
-ShapeType       path_paintable_get_path_shape_type (PathPaintable   *self,
-                                                    size_t           idx);
-unsigned int    path_paintable_get_n_shape_params  (PathPaintable   *self,
-                                                    size_t           idx);
-void            path_paintable_get_shape_params    (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    double          *params);
-
-gboolean        path_paintable_set_path_id         (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    const char      *id);
 const char *    path_paintable_get_path_id         (PathPaintable   *self,
                                                     size_t           idx);
 
@@ -126,51 +99,6 @@ void            path_paintable_set_path_states     (PathPaintable   *self,
 uint64_t        path_paintable_get_path_states     (PathPaintable   *self,
                                                     size_t           idx);
 
-void            path_paintable_set_path_animation  (PathPaintable     *self,
-                                                    size_t             idx,
-                                                    GpaAnimation       direction,
-                                                    double             duration,
-                                                    double             repeat,
-                                                    GpaEasing          easing,
-                                                    double             segment);
-GpaAnimation    path_paintable_get_path_animation_direction
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-double          path_paintable_get_path_animation_duration
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-double          path_paintable_get_path_animation_repeat
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-GpaEasing       path_paintable_get_path_animation_easing
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-double          path_paintable_get_path_animation_segment
-                                                   (PathPaintable     *self,
-                                                    size_t             idx);
-
-void            path_paintable_set_path_transition (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    GpaTransition    transition,
-                                                    double           duration,
-                                                    double           delay,
-                                                    GpaEasing        easing);
-GpaTransition   path_paintable_get_path_transition_type
-                                                   (PathPaintable   *self,
-                                                    size_t           idx);
-double          path_paintable_get_path_transition_duration
-                                                   (PathPaintable   *self,
-                                                    size_t           idx);
-double          path_paintable_get_path_transition_delay
-                                                   (PathPaintable   *self,
-                                                    size_t           idx);
-GpaEasing       path_paintable_get_path_transition_easing
-                                                   (PathPaintable   *self,
-                                                    size_t           idx);
-
-void            path_paintable_set_path_origin     (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    double           origin);
 double          path_paintable_get_path_origin     (PathPaintable   *self,
                                                     size_t           idx);
 
@@ -198,21 +126,6 @@ gboolean        path_paintable_get_path_stroke     (PathPaintable   *self,
                                                     unsigned int    *symbolic,
                                                     GdkRGBA         *color);
 
-void            path_paintable_set_path_stroke_variation
-                                                   (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    double           min_width,
-                                                    double           max_width);
-void            path_paintable_get_path_stroke_variation
-                                                   (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    double          *min_width,
-                                                    double          *max_width);
-
-void            path_paintable_attach_path         (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    size_t           to,
-                                                    double           pos);
 void            path_paintable_get_attach_path     (PathPaintable   *self,
                                                     size_t           idx,
                                                     size_t          *to,
@@ -221,37 +134,19 @@ void            path_paintable_get_attach_path     (PathPaintable   *self,
 GtkCompatibility
                 path_paintable_get_compatibility   (PathPaintable   *self);
 
-PaintOrder      path_paintable_get_paint_order     (PathPaintable   *self,
+Shape *         path_paintable_get_shape           (PathPaintable   *self,
                                                     size_t           idx);
 
-void            path_paintable_set_paint_order     (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    PaintOrder       order);
+Shape *         path_paintable_get_shape_by_id     (PathPaintable   *self,
+                                                    const char      *id);
 
-double          path_paintable_get_opacity         (PathPaintable   *self,
-                                                    size_t           idx);
+Shape *         path_paintable_get_content         (PathPaintable   *self);
 
-void            path_paintable_set_opacity         (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    double           opacity);
+const graphene_size_t *
+                path_paintable_get_viewport        (PathPaintable   *self);
 
-GskPath *       path_paintable_get_clip_path       (PathPaintable   *self,
-                                                    size_t           idx);
+void            path_paintable_changed             (PathPaintable   *self);
+void            path_paintable_paths_changed       (PathPaintable   *self);
 
-void            path_paintable_set_clip_path       (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    GskPath         *path);
-
-char *          path_paintable_get_transform       (PathPaintable   *self,
-                                                    size_t           idx);
-
-gboolean        path_paintable_set_transform       (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    const char      *transform);
-
-char *          path_paintable_get_filter          (PathPaintable   *self,
-                                                    size_t           idx);
-
-gboolean        path_paintable_set_filter          (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    const char      *filter);
+Shape *         shape_duplicate                    (Shape *shape);
+gboolean        shape_is_graphical                 (Shape *shape);

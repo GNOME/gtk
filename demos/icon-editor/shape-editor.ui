@@ -139,6 +139,7 @@
                   <item>Polyline</item>
                   <item>Polygon</item>
                   <item>Path</item>
+                  <item>Group</item>
                 </items>
               </object>
             </property>
@@ -751,9 +752,11 @@
         <child>
           <object class="GtkLabel" id="origin_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>7</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">_Origin</property>
@@ -769,9 +772,11 @@
         <child>
           <object class="GtkScale" id="origin">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>7</constant>
               </closure>
             </binding>
             <signal name="value-changed" handler="origin_changed" swapped="yes"/>
@@ -795,6 +800,26 @@
         </child>
 
         <child>
+          <object class="GtkBox" id="children">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">shape_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>7</constant>
+              </closure>
+            </binding>
+            <property name="orientation">vertical</property>
+            <property name="margin-start">20</property>
+            <layout>
+              <property name="row">14</property>
+              <property name="column">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkExpander" id="transition_expander">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
@@ -810,7 +835,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">14</property>
+              <property name="row">15</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -830,7 +855,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">14</property>
+              <property name="row">15</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -849,7 +874,7 @@
             <property name="mnemonic-widget">transition_duration</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">15</property>
+              <property name="row">16</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -873,7 +898,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">15</property>
+              <property name="row">16</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -892,7 +917,7 @@
             <property name="mnemonic-widget">transition_delay</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">16</property>
+              <property name="row">17</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -916,7 +941,7 @@
             <property name="numeric">1</property>
             <property name="digits">2</property>
             <layout>
-              <property name="row">16</property>
+              <property name="row">17</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -935,7 +960,7 @@
             <property name="mnemonic-widget">transition_easing</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">17</property>
+              <property name="row">18</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -981,7 +1006,7 @@
               </object>
             </child>
             <layout>
-              <property name="row">17</property>
+              <property name="row">18</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1003,7 +1028,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">18</property>
+              <property name="row">19</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1029,7 +1054,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">18</property>
+              <property name="row">19</property>
               <property name="column">1</property>
             </layout>
           </object>
