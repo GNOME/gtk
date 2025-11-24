@@ -1,5 +1,42 @@
-Overview of Changes in 4.21.3, xx-xx-xxxx
+Overview of Changes in 4.21.3, 24-11-2025
 =========================================
+
+This is quick follow-up release to address some memory leaks and
+other issues with the new backdrop-filter functionality.
+
+* Bugs fixed:
+  - #7880 Backdrop filter does not correctly interact with opacity (Benjamin
+    Otte)
+  - #7882 Backdrop filter does not correctly behave with scale (Benjamin Otte)
+  - #7883 gtk 4.20.3 fails to build on 32-bit architectures (Benjamin Otte)
+  - #7885 Backdrop filter does not work with offloaded content (Benjamin Otte)
+  - #7888 Dynamic cursors are incorrectly sized in mixed-DPI environment
+    (Matthias Clasen)
+  - #7889 Backdrop filter doesn't work with filter: opacity() (Benjamin Otte)
+
+* Changes:
+  - !9168 svg: Support the paint-order attribute (Matthias Clasen)
+  - !9169 icon editor: Use gsk_path_equal (Matthias Clasen)
+  - !9170 vulkan: Don't treat Vulkan objects as pointers or 32bit breaks
+    (Benjamin Otte)
+  - !9172 rendernodeparser: Remove outdated warning (Benjamin Otte)
+  - !9173 filechooser: Drop unused defines (Guido Günther)
+  - !9174 icon editor: Use GtkSvg for storage (Matthias Clasen)
+  - !9175 Split nodes on 'b' (Matthias Clasen)
+  - !9176 gtk-demo: Use blur-overlay in a demo (Matthias Clasen)
+  - !9177 gsk: Avoid a double-free (Matthias Clasen)
+  - !9179 icon editor: Drop a property (Matthias Clasen)
+  - !9181 icon editor: Allow setting opacity (Matthias Clasen)
+  - !9182 For main (Matthias Clasen)
+  - !9183 icon editor: Allow setting miter limit (Matthias Clasen)
+  - !9186 icon editor: Rename PathEditor to ShapeEditor (Matthias Clasen)
+  - !9187 gsk: Add GskRenderNode.copy_mode (Benjamin Otte)
+  - !9188 icon editor: Rename PathEditor to ShapeEditor (Matthias Clasen)
+
+* Translation updates:
+  - Slovenian (Martin)
+  - Turkish (Sabri Ünal)
+
 
 Overview of Changes in 4.21.2, 20-11-2025
 =========================================
