@@ -1,0 +1,6600 @@
+repeat {
+  bounds: 0 0 40 40;
+  child: container {
+    color {
+      bounds: -10 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: -10 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: -20 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: -20 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 0 40 40;
+  child: container {
+    color {
+      bounds: 55 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 55 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 45 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 45 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 0 40 40;
+  child: container {
+    color {
+      bounds: 120 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 120 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 110 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 110 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 0 40 40;
+  child: container {
+    color {
+      bounds: 185 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 185 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 175 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 175 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 0 40 40;
+  child: container {
+    color {
+      bounds: 250 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 250 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 240 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 240 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 50 40 40;
+  child: container {
+    color {
+      bounds: -10 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: -10 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: -20 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: -20 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 50 40 40;
+  child: container {
+    color {
+      bounds: 55 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 55 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 45 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 45 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 50 40 40;
+  child: container {
+    color {
+      bounds: 120 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 120 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 110 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 110 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 50 40 40;
+  child: container {
+    color {
+      bounds: 185 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 185 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 175 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 175 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 50 40 40;
+  child: container {
+    color {
+      bounds: 250 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 250 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 240 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 240 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 100 40 40;
+  child: container {
+    color {
+      bounds: -10 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: -10 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: -20 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: -20 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 100 40 40;
+  child: container {
+    color {
+      bounds: 55 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 55 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 45 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 45 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 100 40 40;
+  child: container {
+    color {
+      bounds: 120 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 120 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 110 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 110 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 100 40 40;
+  child: container {
+    color {
+      bounds: 185 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 185 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 175 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 175 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 100 40 40;
+  child: container {
+    color {
+      bounds: 250 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 250 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 240 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 240 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 150 40 40;
+  child: container {
+    color {
+      bounds: -10 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: -10 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: -20 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: -20 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 150 40 40;
+  child: container {
+    color {
+      bounds: 55 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 55 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 45 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 45 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 150 40 40;
+  child: container {
+    color {
+      bounds: 120 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 120 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 110 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 110 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 150 40 40;
+  child: container {
+    color {
+      bounds: 185 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 185 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 175 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 175 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 150 40 40;
+  child: container {
+    color {
+      bounds: 250 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 250 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 240 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 240 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 200 40 40;
+  child: container {
+    color {
+      bounds: -10 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: -10 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: -20 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: -20 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 200 40 40;
+  child: container {
+    color {
+      bounds: 55 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 55 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 45 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 45 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 200 40 40;
+  child: container {
+    color {
+      bounds: 120 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 120 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 110 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 110 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 200 40 40;
+  child: container {
+    color {
+      bounds: 185 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 185 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 175 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 175 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 200 40 40;
+  child: container {
+    color {
+      bounds: 250 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 250 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 240 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 240 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 275 0 40 40;
+  child: container {
+    color {
+      bounds: 265 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 265 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 255 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 255 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 0 40 40;
+  child: container {
+    color {
+      bounds: 330 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 330 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 320 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 320 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 0 40 40;
+  child: container {
+    color {
+      bounds: 395 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 395 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 385 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 385 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 0 40 40;
+  child: container {
+    color {
+      bounds: 460 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 460 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 450 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 450 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 0 40 40;
+  child: container {
+    color {
+      bounds: 525 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 525 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 515 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 515 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 50 40 40;
+  child: container {
+    color {
+      bounds: 265 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 265 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 255 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 255 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 50 40 40;
+  child: container {
+    color {
+      bounds: 330 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 330 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 320 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 320 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 50 40 40;
+  child: container {
+    color {
+      bounds: 395 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 395 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 385 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 385 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 50 40 40;
+  child: container {
+    color {
+      bounds: 460 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 460 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 450 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 450 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 50 40 40;
+  child: container {
+    color {
+      bounds: 525 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 525 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 515 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 515 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 100 40 40;
+  child: container {
+    color {
+      bounds: 265 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 265 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 255 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 255 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 100 40 40;
+  child: container {
+    color {
+      bounds: 330 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 330 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 320 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 320 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 100 40 40;
+  child: container {
+    color {
+      bounds: 395 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 395 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 385 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 385 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 100 40 40;
+  child: container {
+    color {
+      bounds: 460 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 460 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 450 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 450 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 100 40 40;
+  child: container {
+    color {
+      bounds: 525 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 525 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 515 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 515 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 150 40 40;
+  child: container {
+    color {
+      bounds: 265 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 265 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 255 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 255 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 150 40 40;
+  child: container {
+    color {
+      bounds: 330 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 330 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 320 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 320 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 150 40 40;
+  child: container {
+    color {
+      bounds: 395 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 395 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 385 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 385 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 150 40 40;
+  child: container {
+    color {
+      bounds: 460 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 460 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 450 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 450 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 150 40 40;
+  child: container {
+    color {
+      bounds: 525 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 525 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 515 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 515 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 200 40 40;
+  child: container {
+    color {
+      bounds: 265 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 265 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 255 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 255 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 200 40 40;
+  child: container {
+    color {
+      bounds: 330 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 330 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 320 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 320 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 200 40 40;
+  child: container {
+    color {
+      bounds: 395 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 395 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 385 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 385 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 200 40 40;
+  child: container {
+    color {
+      bounds: 460 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 460 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 450 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 450 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 200 40 40;
+  child: container {
+    color {
+      bounds: 525 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 525 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 515 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 515 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 550 0 40 40;
+  child: container {
+    color {
+      bounds: 540 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 540 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 530 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 530 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 0 40 40;
+  child: container {
+    color {
+      bounds: 605 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 605 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 595 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 595 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 0 40 40;
+  child: container {
+    color {
+      bounds: 670 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 670 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 660 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 660 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 0 40 40;
+  child: container {
+    color {
+      bounds: 735 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 735 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 725 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 725 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 0 40 40;
+  child: container {
+    color {
+      bounds: 800 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 800 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 790 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 790 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 50 40 40;
+  child: container {
+    color {
+      bounds: 540 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 540 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 530 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 530 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 50 40 40;
+  child: container {
+    color {
+      bounds: 605 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 605 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 595 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 595 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 50 40 40;
+  child: container {
+    color {
+      bounds: 670 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 670 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 660 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 660 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 50 40 40;
+  child: container {
+    color {
+      bounds: 735 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 735 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 725 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 725 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 50 40 40;
+  child: container {
+    color {
+      bounds: 800 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 800 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 790 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 790 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 100 40 40;
+  child: container {
+    color {
+      bounds: 540 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 540 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 530 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 530 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 100 40 40;
+  child: container {
+    color {
+      bounds: 605 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 605 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 595 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 595 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 100 40 40;
+  child: container {
+    color {
+      bounds: 670 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 670 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 660 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 660 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 100 40 40;
+  child: container {
+    color {
+      bounds: 735 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 735 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 725 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 725 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 100 40 40;
+  child: container {
+    color {
+      bounds: 800 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 800 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 790 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 790 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 150 40 40;
+  child: container {
+    color {
+      bounds: 540 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 540 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 530 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 530 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 150 40 40;
+  child: container {
+    color {
+      bounds: 605 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 605 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 595 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 595 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 150 40 40;
+  child: container {
+    color {
+      bounds: 670 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 670 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 660 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 660 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 150 40 40;
+  child: container {
+    color {
+      bounds: 735 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 735 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 725 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 725 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 150 40 40;
+  child: container {
+    color {
+      bounds: 800 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 800 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 790 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 790 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 200 40 40;
+  child: container {
+    color {
+      bounds: 540 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 540 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 530 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 530 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 200 40 40;
+  child: container {
+    color {
+      bounds: 605 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 605 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 595 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 595 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 200 40 40;
+  child: container {
+    color {
+      bounds: 670 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 670 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 660 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 660 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 200 40 40;
+  child: container {
+    color {
+      bounds: 735 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 735 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 725 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 725 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 200 40 40;
+  child: container {
+    color {
+      bounds: 800 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 800 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 790 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 790 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 825 0 40 40;
+  child: container {
+    color {
+      bounds: 815 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 815 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 805 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 805 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 0 40 40;
+  child: container {
+    color {
+      bounds: 880 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 880 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 870 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 870 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 0 40 40;
+  child: container {
+    color {
+      bounds: 945 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 945 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 935 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 935 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 0 40 40;
+  child: container {
+    color {
+      bounds: 1010 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1010 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1000 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1000 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 0 40 40;
+  child: container {
+    color {
+      bounds: 1075 -20 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1075 -10 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1065 -10 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1065 -20 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 50 40 40;
+  child: container {
+    color {
+      bounds: 815 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 815 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 805 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 805 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 50 40 40;
+  child: container {
+    color {
+      bounds: 880 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 880 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 870 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 870 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 50 40 40;
+  child: container {
+    color {
+      bounds: 945 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 945 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 935 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 935 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 50 40 40;
+  child: container {
+    color {
+      bounds: 1010 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1010 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1000 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1000 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 50 40 40;
+  child: container {
+    color {
+      bounds: 1075 45 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1075 55 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1065 55 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1065 45 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 100 40 40;
+  child: container {
+    color {
+      bounds: 815 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 815 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 805 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 805 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 100 40 40;
+  child: container {
+    color {
+      bounds: 880 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 880 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 870 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 870 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 100 40 40;
+  child: container {
+    color {
+      bounds: 945 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 945 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 935 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 935 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 100 40 40;
+  child: container {
+    color {
+      bounds: 1010 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1010 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1000 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1000 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 100 40 40;
+  child: container {
+    color {
+      bounds: 1075 110 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1075 120 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1065 120 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1065 110 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 150 40 40;
+  child: container {
+    color {
+      bounds: 815 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 815 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 805 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 805 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 150 40 40;
+  child: container {
+    color {
+      bounds: 880 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 880 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 870 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 870 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 150 40 40;
+  child: container {
+    color {
+      bounds: 945 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 945 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 935 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 935 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 150 40 40;
+  child: container {
+    color {
+      bounds: 1010 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1010 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1000 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1000 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 150 40 40;
+  child: container {
+    color {
+      bounds: 1075 175 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1075 185 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1065 185 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1065 175 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 200 40 40;
+  child: container {
+    color {
+      bounds: 815 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 815 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 805 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 805 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 200 40 40;
+  child: container {
+    color {
+      bounds: 880 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 880 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 870 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 870 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 200 40 40;
+  child: container {
+    color {
+      bounds: 945 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 945 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 935 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 935 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 200 40 40;
+  child: container {
+    color {
+      bounds: 1010 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1010 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1000 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1000 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 200 40 40;
+  child: container {
+    color {
+      bounds: 1075 240 10 10;
+      color: red;
+    }
+    color {
+      bounds: 1075 250 10 10;
+      color: lime;
+    }
+    color {
+      bounds: 1065 250 10 10;
+      color: blue;
+    }
+    color {
+      bounds: 1065 240 10 10;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 0 275 40 40;
+  child: container {
+    color {
+      bounds: -30 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: -30 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: -50 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: -50 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 275 40 40;
+  child: container {
+    color {
+      bounds: 45 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 45 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 25 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 25 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 275 40 40;
+  child: container {
+    color {
+      bounds: 120 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 120 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 100 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 100 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 275 40 40;
+  child: container {
+    color {
+      bounds: 195 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 195 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 175 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 175 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 275 40 40;
+  child: container {
+    color {
+      bounds: 270 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 270 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 250 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 250 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 325 40 40;
+  child: container {
+    color {
+      bounds: -30 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: -30 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: -50 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: -50 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 325 40 40;
+  child: container {
+    color {
+      bounds: 45 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 45 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 25 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 25 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 325 40 40;
+  child: container {
+    color {
+      bounds: 120 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 120 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 100 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 100 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 325 40 40;
+  child: container {
+    color {
+      bounds: 195 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 195 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 175 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 175 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 325 40 40;
+  child: container {
+    color {
+      bounds: 270 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 270 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 250 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 250 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 375 40 40;
+  child: container {
+    color {
+      bounds: -30 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: -30 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: -50 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: -50 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 375 40 40;
+  child: container {
+    color {
+      bounds: 45 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 45 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 25 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 25 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 375 40 40;
+  child: container {
+    color {
+      bounds: 120 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 120 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 100 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 100 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 375 40 40;
+  child: container {
+    color {
+      bounds: 195 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 195 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 175 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 175 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 375 40 40;
+  child: container {
+    color {
+      bounds: 270 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 270 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 250 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 250 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 425 40 40;
+  child: container {
+    color {
+      bounds: -30 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: -30 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: -50 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: -50 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 425 40 40;
+  child: container {
+    color {
+      bounds: 45 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 45 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 25 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 25 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 425 40 40;
+  child: container {
+    color {
+      bounds: 120 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 120 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 100 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 100 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 425 40 40;
+  child: container {
+    color {
+      bounds: 195 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 195 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 175 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 175 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 425 40 40;
+  child: container {
+    color {
+      bounds: 270 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 270 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 250 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 250 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 475 40 40;
+  child: container {
+    color {
+      bounds: -30 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: -30 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: -50 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: -50 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 475 40 40;
+  child: container {
+    color {
+      bounds: 45 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 45 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 25 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 25 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 475 40 40;
+  child: container {
+    color {
+      bounds: 120 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 120 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 100 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 100 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 475 40 40;
+  child: container {
+    color {
+      bounds: 195 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 195 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 175 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 175 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 475 40 40;
+  child: container {
+    color {
+      bounds: 270 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 270 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 250 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 250 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 275 275 40 40;
+  child: container {
+    color {
+      bounds: 245 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 245 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 225 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 225 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 275 40 40;
+  child: container {
+    color {
+      bounds: 320 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 320 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 300 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 300 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 275 40 40;
+  child: container {
+    color {
+      bounds: 395 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 395 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 375 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 375 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 275 40 40;
+  child: container {
+    color {
+      bounds: 470 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 470 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 450 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 450 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 275 40 40;
+  child: container {
+    color {
+      bounds: 545 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 545 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 525 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 525 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 325 40 40;
+  child: container {
+    color {
+      bounds: 245 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 245 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 225 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 225 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 325 40 40;
+  child: container {
+    color {
+      bounds: 320 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 320 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 300 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 300 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 325 40 40;
+  child: container {
+    color {
+      bounds: 395 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 395 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 375 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 375 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 325 40 40;
+  child: container {
+    color {
+      bounds: 470 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 470 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 450 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 450 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 325 40 40;
+  child: container {
+    color {
+      bounds: 545 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 545 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 525 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 525 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 375 40 40;
+  child: container {
+    color {
+      bounds: 245 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 245 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 225 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 225 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 375 40 40;
+  child: container {
+    color {
+      bounds: 320 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 320 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 300 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 300 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 375 40 40;
+  child: container {
+    color {
+      bounds: 395 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 395 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 375 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 375 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 375 40 40;
+  child: container {
+    color {
+      bounds: 470 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 470 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 450 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 450 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 375 40 40;
+  child: container {
+    color {
+      bounds: 545 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 545 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 525 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 525 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 425 40 40;
+  child: container {
+    color {
+      bounds: 245 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 245 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 225 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 225 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 425 40 40;
+  child: container {
+    color {
+      bounds: 320 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 320 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 300 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 300 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 425 40 40;
+  child: container {
+    color {
+      bounds: 395 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 395 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 375 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 375 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 425 40 40;
+  child: container {
+    color {
+      bounds: 470 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 470 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 450 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 450 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 425 40 40;
+  child: container {
+    color {
+      bounds: 545 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 545 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 525 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 525 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 475 40 40;
+  child: container {
+    color {
+      bounds: 245 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 245 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 225 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 225 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 475 40 40;
+  child: container {
+    color {
+      bounds: 320 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 320 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 300 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 300 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 475 40 40;
+  child: container {
+    color {
+      bounds: 395 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 395 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 375 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 375 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 475 40 40;
+  child: container {
+    color {
+      bounds: 470 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 470 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 450 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 450 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 475 40 40;
+  child: container {
+    color {
+      bounds: 545 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 545 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 525 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 525 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 550 275 40 40;
+  child: container {
+    color {
+      bounds: 520 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 520 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 500 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 500 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 275 40 40;
+  child: container {
+    color {
+      bounds: 595 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 595 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 575 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 575 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 275 40 40;
+  child: container {
+    color {
+      bounds: 670 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 670 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 650 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 650 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 275 40 40;
+  child: container {
+    color {
+      bounds: 745 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 745 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 725 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 725 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 275 40 40;
+  child: container {
+    color {
+      bounds: 820 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 820 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 800 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 800 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 325 40 40;
+  child: container {
+    color {
+      bounds: 520 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 520 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 500 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 500 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 325 40 40;
+  child: container {
+    color {
+      bounds: 595 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 595 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 575 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 575 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 325 40 40;
+  child: container {
+    color {
+      bounds: 670 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 670 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 650 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 650 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 325 40 40;
+  child: container {
+    color {
+      bounds: 745 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 745 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 725 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 725 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 325 40 40;
+  child: container {
+    color {
+      bounds: 820 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 820 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 800 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 800 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 375 40 40;
+  child: container {
+    color {
+      bounds: 520 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 520 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 500 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 500 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 375 40 40;
+  child: container {
+    color {
+      bounds: 595 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 595 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 575 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 575 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 375 40 40;
+  child: container {
+    color {
+      bounds: 670 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 670 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 650 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 650 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 375 40 40;
+  child: container {
+    color {
+      bounds: 745 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 745 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 725 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 725 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 375 40 40;
+  child: container {
+    color {
+      bounds: 820 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 820 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 800 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 800 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 425 40 40;
+  child: container {
+    color {
+      bounds: 520 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 520 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 500 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 500 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 425 40 40;
+  child: container {
+    color {
+      bounds: 595 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 595 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 575 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 575 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 425 40 40;
+  child: container {
+    color {
+      bounds: 670 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 670 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 650 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 650 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 425 40 40;
+  child: container {
+    color {
+      bounds: 745 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 745 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 725 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 725 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 425 40 40;
+  child: container {
+    color {
+      bounds: 820 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 820 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 800 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 800 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 475 40 40;
+  child: container {
+    color {
+      bounds: 520 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 520 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 500 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 500 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 475 40 40;
+  child: container {
+    color {
+      bounds: 595 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 595 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 575 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 575 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 475 40 40;
+  child: container {
+    color {
+      bounds: 670 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 670 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 650 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 650 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 475 40 40;
+  child: container {
+    color {
+      bounds: 745 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 745 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 725 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 725 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 475 40 40;
+  child: container {
+    color {
+      bounds: 820 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 820 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 800 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 800 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 825 275 40 40;
+  child: container {
+    color {
+      bounds: 795 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 795 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 775 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 775 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 275 40 40;
+  child: container {
+    color {
+      bounds: 870 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 870 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 850 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 850 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 275 40 40;
+  child: container {
+    color {
+      bounds: 945 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 945 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 925 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 925 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 275 40 40;
+  child: container {
+    color {
+      bounds: 1020 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1020 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1000 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1000 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 275 40 40;
+  child: container {
+    color {
+      bounds: 1095 225 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1095 245 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1075 245 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1075 225 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 325 40 40;
+  child: container {
+    color {
+      bounds: 795 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 795 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 775 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 775 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 325 40 40;
+  child: container {
+    color {
+      bounds: 870 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 870 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 850 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 850 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 325 40 40;
+  child: container {
+    color {
+      bounds: 945 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 945 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 925 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 925 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 325 40 40;
+  child: container {
+    color {
+      bounds: 1020 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1020 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1000 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1000 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 325 40 40;
+  child: container {
+    color {
+      bounds: 1095 300 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1095 320 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1075 320 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1075 300 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 375 40 40;
+  child: container {
+    color {
+      bounds: 795 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 795 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 775 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 775 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 375 40 40;
+  child: container {
+    color {
+      bounds: 870 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 870 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 850 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 850 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 375 40 40;
+  child: container {
+    color {
+      bounds: 945 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 945 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 925 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 925 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 375 40 40;
+  child: container {
+    color {
+      bounds: 1020 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1020 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1000 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1000 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 375 40 40;
+  child: container {
+    color {
+      bounds: 1095 375 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1095 395 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1075 395 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1075 375 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 425 40 40;
+  child: container {
+    color {
+      bounds: 795 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 795 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 775 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 775 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 425 40 40;
+  child: container {
+    color {
+      bounds: 870 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 870 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 850 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 850 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 425 40 40;
+  child: container {
+    color {
+      bounds: 945 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 945 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 925 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 925 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 425 40 40;
+  child: container {
+    color {
+      bounds: 1020 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1020 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1000 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1000 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 425 40 40;
+  child: container {
+    color {
+      bounds: 1095 450 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1095 470 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1075 470 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1075 450 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 475 40 40;
+  child: container {
+    color {
+      bounds: 795 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 795 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 775 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 775 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 475 40 40;
+  child: container {
+    color {
+      bounds: 870 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 870 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 850 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 850 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 475 40 40;
+  child: container {
+    color {
+      bounds: 945 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 945 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 925 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 925 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 475 40 40;
+  child: container {
+    color {
+      bounds: 1020 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1020 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1000 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1000 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 475 40 40;
+  child: container {
+    color {
+      bounds: 1095 525 20 20;
+      color: red;
+    }
+    color {
+      bounds: 1095 545 20 20;
+      color: lime;
+    }
+    color {
+      bounds: 1075 545 20 20;
+      color: blue;
+    }
+    color {
+      bounds: 1075 525 20 20;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 0 550 40 40;
+  child: container {
+    color {
+      bounds: -9990 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9990 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14990 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14990 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 550 40 40;
+  child: container {
+    color {
+      bounds: -4935 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4935 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9935 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9935 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 550 40 40;
+  child: container {
+    color {
+      bounds: 120 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 120 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4880 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4880 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 550 40 40;
+  child: container {
+    color {
+      bounds: 5175 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5175 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 175 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 175 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 550 40 40;
+  child: container {
+    color {
+      bounds: 10230 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10230 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5230 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5230 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 600 40 40;
+  child: container {
+    color {
+      bounds: -9990 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9990 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14990 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14990 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 600 40 40;
+  child: container {
+    color {
+      bounds: -4935 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4935 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9935 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9935 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 600 40 40;
+  child: container {
+    color {
+      bounds: 120 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 120 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4880 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4880 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 600 40 40;
+  child: container {
+    color {
+      bounds: 5175 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5175 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 175 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 175 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 600 40 40;
+  child: container {
+    color {
+      bounds: 10230 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10230 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5230 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5230 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 650 40 40;
+  child: container {
+    color {
+      bounds: -9990 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9990 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14990 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14990 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 650 40 40;
+  child: container {
+    color {
+      bounds: -4935 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4935 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9935 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9935 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 650 40 40;
+  child: container {
+    color {
+      bounds: 120 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 120 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4880 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4880 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 650 40 40;
+  child: container {
+    color {
+      bounds: 5175 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5175 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 175 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 175 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 650 40 40;
+  child: container {
+    color {
+      bounds: 10230 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10230 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5230 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5230 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 700 40 40;
+  child: container {
+    color {
+      bounds: -9990 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9990 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14990 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14990 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 700 40 40;
+  child: container {
+    color {
+      bounds: -4935 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4935 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9935 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9935 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 700 40 40;
+  child: container {
+    color {
+      bounds: 120 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 120 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4880 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4880 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 700 40 40;
+  child: container {
+    color {
+      bounds: 5175 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5175 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 175 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 175 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 700 40 40;
+  child: container {
+    color {
+      bounds: 10230 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10230 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5230 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5230 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 0 750 40 40;
+  child: container {
+    color {
+      bounds: -9990 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9990 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14990 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14990 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 50 750 40 40;
+  child: container {
+    color {
+      bounds: -4935 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4935 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9935 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9935 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 100 750 40 40;
+  child: container {
+    color {
+      bounds: 120 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 120 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4880 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4880 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 150 750 40 40;
+  child: container {
+    color {
+      bounds: 5175 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5175 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 175 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 175 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 200 750 40 40;
+  child: container {
+    color {
+      bounds: 10230 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10230 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5230 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5230 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: none;
+}
+repeat {
+  bounds: 275 550 40 40;
+  child: container {
+    color {
+      bounds: -9715 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9715 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14715 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14715 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 550 40 40;
+  child: container {
+    color {
+      bounds: -4660 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4660 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9660 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9660 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 550 40 40;
+  child: container {
+    color {
+      bounds: 395 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 395 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4605 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4605 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 550 40 40;
+  child: container {
+    color {
+      bounds: 5450 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5450 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 450 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 450 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 550 40 40;
+  child: container {
+    color {
+      bounds: 10505 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10505 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5505 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5505 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 600 40 40;
+  child: container {
+    color {
+      bounds: -9715 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9715 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14715 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14715 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 600 40 40;
+  child: container {
+    color {
+      bounds: -4660 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4660 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9660 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9660 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 600 40 40;
+  child: container {
+    color {
+      bounds: 395 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 395 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4605 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4605 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 600 40 40;
+  child: container {
+    color {
+      bounds: 5450 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5450 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 450 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 450 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 600 40 40;
+  child: container {
+    color {
+      bounds: 10505 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10505 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5505 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5505 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 650 40 40;
+  child: container {
+    color {
+      bounds: -9715 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9715 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14715 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14715 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 650 40 40;
+  child: container {
+    color {
+      bounds: -4660 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4660 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9660 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9660 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 650 40 40;
+  child: container {
+    color {
+      bounds: 395 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 395 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4605 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4605 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 650 40 40;
+  child: container {
+    color {
+      bounds: 5450 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5450 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 450 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 450 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 650 40 40;
+  child: container {
+    color {
+      bounds: 10505 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10505 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5505 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5505 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 700 40 40;
+  child: container {
+    color {
+      bounds: -9715 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9715 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14715 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14715 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 700 40 40;
+  child: container {
+    color {
+      bounds: -4660 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4660 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9660 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9660 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 700 40 40;
+  child: container {
+    color {
+      bounds: 395 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 395 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4605 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4605 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 700 40 40;
+  child: container {
+    color {
+      bounds: 5450 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5450 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 450 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 450 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 700 40 40;
+  child: container {
+    color {
+      bounds: 10505 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10505 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5505 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5505 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 275 750 40 40;
+  child: container {
+    color {
+      bounds: -9715 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9715 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14715 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14715 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 325 750 40 40;
+  child: container {
+    color {
+      bounds: -4660 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4660 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9660 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9660 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 375 750 40 40;
+  child: container {
+    color {
+      bounds: 395 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 395 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4605 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4605 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 425 750 40 40;
+  child: container {
+    color {
+      bounds: 5450 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5450 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 450 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 450 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 475 750 40 40;
+  child: container {
+    color {
+      bounds: 10505 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10505 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5505 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5505 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: pad;
+}
+repeat {
+  bounds: 550 550 40 40;
+  child: container {
+    color {
+      bounds: -9440 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9440 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14440 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14440 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 550 40 40;
+  child: container {
+    color {
+      bounds: -4385 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4385 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9385 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9385 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 550 40 40;
+  child: container {
+    color {
+      bounds: 670 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 670 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4330 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4330 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 550 40 40;
+  child: container {
+    color {
+      bounds: 5725 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5725 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 725 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 725 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 550 40 40;
+  child: container {
+    color {
+      bounds: 10780 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10780 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5780 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5780 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 600 40 40;
+  child: container {
+    color {
+      bounds: -9440 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9440 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14440 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14440 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 600 40 40;
+  child: container {
+    color {
+      bounds: -4385 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4385 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9385 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9385 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 600 40 40;
+  child: container {
+    color {
+      bounds: 670 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 670 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4330 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4330 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 600 40 40;
+  child: container {
+    color {
+      bounds: 5725 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5725 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 725 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 725 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 600 40 40;
+  child: container {
+    color {
+      bounds: 10780 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10780 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5780 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5780 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 650 40 40;
+  child: container {
+    color {
+      bounds: -9440 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9440 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14440 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14440 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 650 40 40;
+  child: container {
+    color {
+      bounds: -4385 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4385 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9385 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9385 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 650 40 40;
+  child: container {
+    color {
+      bounds: 670 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 670 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4330 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4330 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 650 40 40;
+  child: container {
+    color {
+      bounds: 5725 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5725 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 725 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 725 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 650 40 40;
+  child: container {
+    color {
+      bounds: 10780 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10780 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5780 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5780 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 700 40 40;
+  child: container {
+    color {
+      bounds: -9440 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9440 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14440 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14440 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 700 40 40;
+  child: container {
+    color {
+      bounds: -4385 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4385 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9385 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9385 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 700 40 40;
+  child: container {
+    color {
+      bounds: 670 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 670 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4330 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4330 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 700 40 40;
+  child: container {
+    color {
+      bounds: 5725 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5725 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 725 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 725 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 700 40 40;
+  child: container {
+    color {
+      bounds: 10780 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10780 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5780 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5780 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 550 750 40 40;
+  child: container {
+    color {
+      bounds: -9440 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9440 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14440 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14440 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 600 750 40 40;
+  child: container {
+    color {
+      bounds: -4385 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4385 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9385 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9385 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 650 750 40 40;
+  child: container {
+    color {
+      bounds: 670 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 670 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4330 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4330 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 700 750 40 40;
+  child: container {
+    color {
+      bounds: 5725 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 5725 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 725 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 725 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 750 750 40 40;
+  child: container {
+    color {
+      bounds: 10780 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 10780 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 5780 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 5780 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: repeat;
+}
+repeat {
+  bounds: 825 550 40 40;
+  child: container {
+    color {
+      bounds: -9165 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9165 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14165 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14165 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 550 40 40;
+  child: container {
+    color {
+      bounds: -4110 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4110 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9110 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9110 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 550 40 40;
+  child: container {
+    color {
+      bounds: 945 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 945 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4055 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4055 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 550 40 40;
+  child: container {
+    color {
+      bounds: 6000 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 6000 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 1000 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 1000 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 550 40 40;
+  child: container {
+    color {
+      bounds: 11055 -14440 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 11055 -9440 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 6055 -9440 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 6055 -14440 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 600 40 40;
+  child: container {
+    color {
+      bounds: -9165 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9165 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14165 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14165 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 600 40 40;
+  child: container {
+    color {
+      bounds: -4110 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4110 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9110 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9110 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 600 40 40;
+  child: container {
+    color {
+      bounds: 945 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 945 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4055 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4055 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 600 40 40;
+  child: container {
+    color {
+      bounds: 6000 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 6000 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 1000 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 1000 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 600 40 40;
+  child: container {
+    color {
+      bounds: 11055 -9385 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 11055 -4385 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 6055 -4385 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 6055 -9385 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 650 40 40;
+  child: container {
+    color {
+      bounds: -9165 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9165 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14165 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14165 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 650 40 40;
+  child: container {
+    color {
+      bounds: -4110 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4110 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9110 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9110 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 650 40 40;
+  child: container {
+    color {
+      bounds: 945 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 945 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4055 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4055 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 650 40 40;
+  child: container {
+    color {
+      bounds: 6000 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 6000 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 1000 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 1000 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 650 40 40;
+  child: container {
+    color {
+      bounds: 11055 -4330 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 11055 670 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 6055 670 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 6055 -4330 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 700 40 40;
+  child: container {
+    color {
+      bounds: -9165 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9165 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14165 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14165 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 700 40 40;
+  child: container {
+    color {
+      bounds: -4110 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4110 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9110 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9110 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 700 40 40;
+  child: container {
+    color {
+      bounds: 945 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 945 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4055 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4055 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 700 40 40;
+  child: container {
+    color {
+      bounds: 6000 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 6000 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 1000 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 1000 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 700 40 40;
+  child: container {
+    color {
+      bounds: 11055 725 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 11055 5725 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 6055 5725 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 6055 725 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 825 750 40 40;
+  child: container {
+    color {
+      bounds: -9165 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -9165 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -14165 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -14165 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 875 750 40 40;
+  child: container {
+    color {
+      bounds: -4110 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: -4110 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -9110 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -9110 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 925 750 40 40;
+  child: container {
+    color {
+      bounds: 945 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 945 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: -4055 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: -4055 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 975 750 40 40;
+  child: container {
+    color {
+      bounds: 6000 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 6000 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 1000 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 1000 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}
+repeat {
+  bounds: 1025 750 40 40;
+  child: container {
+    color {
+      bounds: 11055 5780 5000 5000;
+      color: red;
+    }
+    color {
+      bounds: 11055 10780 5000 5000;
+      color: lime;
+    }
+    color {
+      bounds: 6055 10780 5000 5000;
+      color: blue;
+    }
+    color {
+      bounds: 6055 5780 5000 5000;
+      color: yellow;
+    }
+  }
+  repeat: reflect;
+}

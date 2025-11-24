@@ -180,6 +180,7 @@ compare_render_tests = [
   'repeat-node-tiling-horizontal',
   'repeat-node-tiling-vertical',
   'repeat-noninteger-nocairo',
+  'repeat-repeat',
   'repeat-repeats',
   'repeat-repeats-nested',
   'repeat-scaling',
