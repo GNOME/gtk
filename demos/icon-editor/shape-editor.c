@@ -95,6 +95,10 @@ struct _ShapeEditor
   GtkEntry *transform;
   GtkEntry *filter;
   GtkBox *children;
+  GtkDropDown *primitive_transform;
+  GtkEntry *transform_x;
+  GtkEntry *transform_y;
+  GtkEntry *transform_angle;
 };
 
 enum
@@ -182,6 +186,27 @@ enum
   GROUP,
 };
 
+static gboolean
+get_number_from_entry (GtkEntry *entry,
+                       double   *value)
+{
+  if (!sscanf (gtk_editable_get_text (GTK_EDITABLE (entry)), "%lf", value))
+    {
+      gtk_widget_error_bell (GTK_WIDGET (entry));
+      gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
+      gtk_accessible_update_state (GTK_ACCESSIBLE (entry),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
+      return FALSE;
+    }
+  else
+    {
+      gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_STATE_INVALID);
+      return TRUE;
+    }
+}
+
 static void
 shape_changed (ShapeEditor *self)
 {
@@ -193,11 +218,10 @@ shape_changed (ShapeEditor *self)
       {
         double x1, y1, x2, y2;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_x1)), "%lf", &x1);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_y1)), "%lf", &y1);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_x2)), "%lf", &x2);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_y2)), "%lf", &y2);
-        if (res != 4)
+        if (!get_number_from_entry (self->line_x1, &x1) ||
+            !get_number_from_entry (self->line_y1, &y1) ||
+            !get_number_from_entry (self->line_x2, &x2) ||
+            !get_number_from_entry (self->line_y2, &y2))
           return;
 
         self->shape->type = SHAPE_LINE;
@@ -212,10 +236,9 @@ shape_changed (ShapeEditor *self)
       {
         double cx, cy, r;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cx)), "%lf", &cx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cy)), "%lf", &cy);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_r)), "%lf", &r);
-        if (res != 3)
+        if (!get_number_from_entry (self->circle_cx, &cx) ||
+            !get_number_from_entry (self->circle_cy, &cy) ||
+            !get_number_from_entry (self->circle_r, &r))
           return;
 
         self->shape->type = SHAPE_CIRCLE;
@@ -229,11 +252,10 @@ shape_changed (ShapeEditor *self)
       {
         double cx, cy, rx, ry;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_cx)), "%lf", &cx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_cy)), "%lf", &cy);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_rx)), "%lf", &rx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_ry)), "%lf", &ry);
-        if (res != 4)
+        if (!get_number_from_entry (self->ellipse_cx, &cx) ||
+            !get_number_from_entry (self->ellipse_cy, &cy) ||
+            !get_number_from_entry (self->ellipse_rx, &rx) ||
+            !get_number_from_entry (self->ellipse_ry, &ry))
           return;
 
         self->shape->type = SHAPE_ELLIPSE;
@@ -248,13 +270,12 @@ shape_changed (ShapeEditor *self)
       {
         double x, y, width, height, rx, ry;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_x)), "%lf", &x);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_y)), "%lf", &y);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_width)), "%lf", &width);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_height)), "%lf", &height);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_rx)), "%lf", &rx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_ry)), "%lf", &ry);
-        if (res != 6)
+        if (!get_number_from_entry (self->rect_x, &x) ||
+            !get_number_from_entry (self->rect_y, &y) ||
+            !get_number_from_entry (self->rect_width, &width) ||
+            !get_number_from_entry (self->rect_height, &height) ||
+            !get_number_from_entry (self->rect_rx, &rx) ||
+            !get_number_from_entry (self->rect_ry, &ry))
           return;
 
         self->shape->type = SHAPE_RECT;
@@ -283,16 +304,19 @@ shape_changed (ShapeEditor *self)
         for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->polyline_box)); child; child = gtk_widget_get_next_sibling (child))
           {
             GtkWidget *widget = gtk_widget_get_first_child (child);
-            res += sscanf (gtk_editable_get_text (GTK_EDITABLE (widget)), "%lf", &parms[i++]);
+            if (!get_number_from_entry (GTK_ENTRY (widget), &parms[i++]))
+              return;
+
             widget = gtk_widget_get_next_sibling (widget);
-            res += sscanf (gtk_editable_get_text (GTK_EDITABLE (widget)), "%lf", &parms[i++]);
+            if (!get_number_from_entry (GTK_ENTRY (widget), &parms[i++]))
+              return;
           }
 
         if (res != 2 * n_rows)
           return;
 
         if (gtk_drop_down_get_selected (self->shape_dropdown) == POLYLINE)
-          self->shape->type = SHAPE_POLY_LINE;
+          self->shape->type = SHAPE_POLYLINE;
         else
           self->shape->type = SHAPE_POLYGON;
 
@@ -557,6 +581,188 @@ filter_changed (ShapeEditor *self)
       gtk_accessible_update_state (GTK_ACCESSIBLE (self->filter),
                                    GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
                                    -1);
+    }
+}
+
+enum
+{
+  TRANSFORM_NONE,
+  TRANSFORM_TRANSLATE,
+  TRANSFORM_ROTATE,
+  TRANSFORM_SCALE,
+  TRANSFORM_SKEW_X,
+  TRANSFORM_SKEW_Y,
+};
+
+static void
+add_primitive_transform (ShapeEditor *self)
+{
+  switch (gtk_drop_down_get_selected (self->primitive_transform))
+    {
+    case TRANSFORM_NONE:
+      break;
+
+    case TRANSFORM_TRANSLATE:
+      {
+        double x, y;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_x, &x) ||
+            !get_number_from_entry (self->transform_y, &y))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        g_string_append (s, " translate(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    case TRANSFORM_ROTATE:
+      {
+        double x, y, angle;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_x, &x) ||
+            !get_number_from_entry (self->transform_y, &y) ||
+            !get_number_from_entry (self->transform_angle, &angle))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        g_string_append (s, " rotate(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", angle));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    case TRANSFORM_SCALE:
+      {
+        double x, y;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_x, &x) ||
+            !get_number_from_entry (self->transform_y, &y))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        g_string_append (s, " scale(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    case TRANSFORM_SKEW_X:
+    case TRANSFORM_SKEW_Y:
+      {
+        double angle;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_angle, &angle))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        if (gtk_drop_down_get_selected (self->primitive_transform) == TRANSFORM_SKEW_X)
+          g_string_append (s, " skewX(");
+        else
+          g_string_append (s, " skewY(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", angle));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  gtk_drop_down_set_selected (self->primitive_transform, 0);
+}
+
+static void
+remove_primitive_transform (ShapeEditor *self)
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->transform));
+  SvgValue *value;
+
+  if (!text || !*text)
+    return;
+
+  value = svg_transform_parse (text);
+  if (value)
+    {
+      SvgValue *value2 = svg_transform_drop_last (value);
+      svg_value_unref (value);
+      value = value2;
+    }
+
+  if (value)
+    {
+      g_autofree char *new_text = NULL;
+
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+      path_paintable_changed (self->paintable);
+
+      new_text = svg_shape_attr_get_transform (self->shape, SHAPE_ATTR_TRANSFORM);
+      gtk_editable_set_text (GTK_EDITABLE (self->transform), new_text);
     }
 }
 
@@ -921,6 +1127,18 @@ bool_and_bool_and_uint_one_of_two (GObject  *object,
                                    guint     u3)
 {
   return b1 && b2 && (u1 == u2 || u1 == u3);
+}
+
+static gboolean
+bool_and_bool_and_uint_one_of_three (GObject  *object,
+                                     gboolean  b1,
+                                     gboolean  b2,
+                                     guint     u1,
+                                     guint     u2,
+                                     guint     u3,
+                                     guint     u4)
+{
+  return b1 && b2 && (u1 == u2 || u1 == u3 || u1 == u4);
 }
 
 static gboolean
@@ -1345,7 +1563,7 @@ shape_editor_update (ShapeEditor *self)
           gtk_drop_down_set_selected (self->shape_dropdown, PATH);
           break;
 
-        case SHAPE_POLY_LINE:
+        case SHAPE_POLYLINE:
         case SHAPE_POLYGON:
           // FIXME
           break;
@@ -1628,6 +1846,10 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, filter);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, children);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, primitive_transform);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_x);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_y);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_angle);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -1642,6 +1864,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_equal);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_unequal);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_one_of_two);
+  gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_one_of_three);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_and);
   gtk_widget_class_bind_template_callback (widget_class, uint_equal);
   gtk_widget_class_bind_template_callback (widget_class, edit_path);
@@ -1660,6 +1883,8 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_key);
   gtk_widget_class_bind_template_callback (widget_class, transform_changed);
   gtk_widget_class_bind_template_callback (widget_class, filter_changed);
+  gtk_widget_class_bind_template_callback (widget_class, add_primitive_transform);
+  gtk_widget_class_bind_template_callback (widget_class, remove_primitive_transform);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }

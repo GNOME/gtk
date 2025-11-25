@@ -463,7 +463,7 @@ path_paintable_add_shape (PathPaintable *self,
       svg_shape_attr_set (shape, SHAPE_ATTR_RX, svg_number_new (params[4]));
       svg_shape_attr_set (shape, SHAPE_ATTR_RY, svg_number_new (params[5]));
       break;
-    case SHAPE_POLY_LINE:
+    case SHAPE_POLYLINE:
     case SHAPE_POLYGON:
       svg_shape_attr_set (shape, SHAPE_ATTR_POINTS, svg_points_new (params, n_params));
       break;
@@ -742,7 +742,7 @@ path_paintable_get_compatibility (PathPaintable *self)
           compat = MAX (compat, GTK_4_0);
           break;
         case SHAPE_LINE:
-        case SHAPE_POLY_LINE:
+        case SHAPE_POLYLINE:
         case SHAPE_POLYGON:
         case SHAPE_RECT:
         case SHAPE_CIRCLE:
@@ -818,7 +818,7 @@ path_paintable_get_path_by_id (PathPaintable *self,
         {
         case SHAPE_PATH:
         case SHAPE_LINE:
-        case SHAPE_POLY_LINE:
+        case SHAPE_POLYLINE:
         case SHAPE_POLYGON:
         case SHAPE_RECT:
         case SHAPE_CIRCLE:
@@ -1014,7 +1014,7 @@ shape_is_graphical (Shape *shape)
   switch (shape->type)
     {
     case SHAPE_LINE:
-    case SHAPE_POLY_LINE:
+    case SHAPE_POLYLINE:
     case SHAPE_POLYGON:
     case SHAPE_RECT:
     case SHAPE_CIRCLE:
@@ -1040,7 +1040,7 @@ shape_is_group (Shape *shape)
   switch (shape->type)
     {
     case SHAPE_LINE:
-    case SHAPE_POLY_LINE:
+    case SHAPE_POLYLINE:
     case SHAPE_POLYGON:
     case SHAPE_RECT:
     case SHAPE_CIRCLE:

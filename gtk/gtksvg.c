@@ -2616,6 +2616,21 @@ svg_transform_get_gsk (SvgTransform *tf)
   return t;
 }
 
+SvgValue *
+svg_transform_drop_last (SvgValue *orig)
+{
+  SvgTransform *to = (SvgTransform *) orig;
+  SvgTransform *tf;
+
+  if (to->n_transforms == 1)
+    return svg_transform_new_none ();
+
+  tf = svg_transform_alloc (to->n_transforms - 1);
+  memcpy (tf->transforms, to->transforms, tf->n_transforms * sizeof (PrimitiveTransform));
+
+  return (SvgValue *) tf;
+}
+
 /* }}} */
 /* {{{ Paint */
 
@@ -5222,7 +5237,7 @@ shape_free (gpointer data)
   g_clear_pointer (&shape->path, gsk_path_unref);
   g_clear_pointer (&shape->measure, gsk_path_measure_unref);
 
-  if (shape->type == SHAPE_POLY_LINE || shape->type == SHAPE_POLYGON)
+  if (shape->type == SHAPE_POLYLINE || shape->type == SHAPE_POLYGON)
     g_clear_pointer (&shape->path_for.polyline.points, svg_value_unref);
 
   g_free (shape->gpa.attach.ref);
@@ -5337,7 +5352,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_Y2:
       return type== SHAPE_LINE || type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_POINTS:
-      return type == SHAPE_POLY_LINE || type == SHAPE_POLYGON;
+      return type == SHAPE_POLYLINE || type == SHAPE_POLYGON;
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_GRADIENT_UNITS:
       return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
@@ -5385,7 +5400,7 @@ shape_get_path (Shape                 *shape,
         }
       return gsk_path_builder_free_to_path (builder);
 
-    case SHAPE_POLY_LINE:
+    case SHAPE_POLYLINE:
     case SHAPE_POLYGON:
       builder = gsk_path_builder_new ();
       if (values[SHAPE_ATTR_POINTS])
@@ -5502,7 +5517,7 @@ shape_get_current_path (Shape                 *shape,
             }
           break;
 
-        case SHAPE_POLY_LINE:
+        case SHAPE_POLYLINE:
         case SHAPE_POLYGON:
           if (!svg_value_equal (shape->path_for.polyline.points, shape->current[SHAPE_ATTR_POINTS]))
             {
@@ -5578,7 +5593,7 @@ shape_get_current_path (Shape                 *shape,
           shape->path_for.line.y2 = svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->height);
           break;
 
-        case SHAPE_POLY_LINE:
+        case SHAPE_POLYLINE:
         case SHAPE_POLYGON:
           g_clear_pointer (&shape->path_for.polyline.points, svg_value_unref);
           shape->path_for.polyline.points = svg_value_ref (shape->current[SHAPE_ATTR_POINTS]);
