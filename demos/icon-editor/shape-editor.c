@@ -182,6 +182,27 @@ enum
   GROUP,
 };
 
+static gboolean
+get_number_from_entry (GtkEntry *entry,
+                       double   *value)
+{
+  if (!sscanf (gtk_editable_get_text (GTK_EDITABLE (entry)), "%lf", value))
+    {
+      gtk_widget_error_bell (GTK_WIDGET (entry));
+      gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
+      gtk_accessible_update_state (GTK_ACCESSIBLE (entry),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
+      return FALSE;
+    }
+  else
+    {
+      gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_STATE_INVALID);
+      return TRUE;
+    }
+}
+
 static void
 shape_changed (ShapeEditor *self)
 {
@@ -193,11 +214,10 @@ shape_changed (ShapeEditor *self)
       {
         double x1, y1, x2, y2;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_x1)), "%lf", &x1);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_y1)), "%lf", &y1);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_x2)), "%lf", &x2);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->line_y2)), "%lf", &y2);
-        if (res != 4)
+        if (!get_number_from_entry (self->line_x1, &x1) ||
+            !get_number_from_entry (self->line_y1, &y1) ||
+            !get_number_from_entry (self->line_x2, &x2) ||
+            !get_number_from_entry (self->line_y2, &y2))
           return;
 
         self->shape->type = SHAPE_LINE;
@@ -212,10 +232,9 @@ shape_changed (ShapeEditor *self)
       {
         double cx, cy, r;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cx)), "%lf", &cx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_cy)), "%lf", &cy);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->circle_r)), "%lf", &r);
-        if (res != 3)
+        if (!get_number_from_entry (self->circle_cx, &cx) ||
+            !get_number_from_entry (self->circle_cy, &cy) ||
+            !get_number_from_entry (self->circle_r, &r))
           return;
 
         self->shape->type = SHAPE_CIRCLE;
@@ -229,11 +248,10 @@ shape_changed (ShapeEditor *self)
       {
         double cx, cy, rx, ry;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_cx)), "%lf", &cx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_cy)), "%lf", &cy);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_rx)), "%lf", &rx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->ellipse_ry)), "%lf", &ry);
-        if (res != 4)
+        if (!get_number_from_entry (self->ellipse_cx, &cx) ||
+            !get_number_from_entry (self->ellipse_cy, &cy) ||
+            !get_number_from_entry (self->ellipse_rx, &rx) ||
+            !get_number_from_entry (self->ellipse_ry, &ry))
           return;
 
         self->shape->type = SHAPE_ELLIPSE;
@@ -248,13 +266,12 @@ shape_changed (ShapeEditor *self)
       {
         double x, y, width, height, rx, ry;
 
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_x)), "%lf", &x);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_y)), "%lf", &y);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_width)), "%lf", &width);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_height)), "%lf", &height);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_rx)), "%lf", &rx);
-        res += sscanf (gtk_editable_get_text (GTK_EDITABLE (self->rect_ry)), "%lf", &ry);
-        if (res != 6)
+        if (!get_number_from_entry (self->rect_x, &x) ||
+            !get_number_from_entry (self->rect_y, &y) ||
+            !get_number_from_entry (self->rect_width, &width) ||
+            !get_number_from_entry (self->rect_height, &height) ||
+            !get_number_from_entry (self->rect_rx, &rx) ||
+            !get_number_from_entry (self->rect_ry, &ry))
           return;
 
         self->shape->type = SHAPE_RECT;
@@ -283,9 +300,12 @@ shape_changed (ShapeEditor *self)
         for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->polyline_box)); child; child = gtk_widget_get_next_sibling (child))
           {
             GtkWidget *widget = gtk_widget_get_first_child (child);
-            res += sscanf (gtk_editable_get_text (GTK_EDITABLE (widget)), "%lf", &parms[i++]);
+            if (!get_number_from_entry (GTK_ENTRY (widget), &parms[i++]))
+              return;
+
             widget = gtk_widget_get_next_sibling (widget);
-            res += sscanf (gtk_editable_get_text (GTK_EDITABLE (widget)), "%lf", &parms[i++]);
+            if (!get_number_from_entry (GTK_ENTRY (widget), &parms[i++]))
+              return;
           }
 
         if (res != 2 * n_rows)
