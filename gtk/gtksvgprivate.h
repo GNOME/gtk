@@ -280,76 +280,62 @@ typedef enum
   CLIP_REF,
 } ClipKind;
 
-double
-svg_shape_attr_get_number (Shape                 *shape,
-                           ShapeAttr              attr,
-                           const graphene_size_t *viewport);
+double       svg_shape_attr_get_number    (Shape                 *shape,
+                                           ShapeAttr              attr,
+                                           const graphene_size_t *viewport);
+GskPath *    svg_shape_attr_get_path      (Shape                 *shape,
+                                           ShapeAttr              attr);
+unsigned int svg_shape_attr_get_enum      (Shape                 *shape,
+                                           ShapeAttr              attr);
+PaintKind    svg_shape_attr_get_paint     (Shape                 *shape,
+                                           ShapeAttr              attr,
+                                           GtkSymbolicColor      *symbolic,
+                                           GdkRGBA               *color);
+double *     svg_shape_attr_get_points    (Shape                 *shape,
+                                           ShapeAttr              attr,
+                                           unsigned int          *n_params);
+ClipKind     svg_shape_attr_get_clip      (Shape                 *shape,
+                                           ShapeAttr              attr,
+                                           GskPath              **path);
+char *       svg_shape_attr_get_transform (Shape                 *shape,
+                                           ShapeAttr              attr);
+char *       svg_shape_attr_get_filter    (Shape                 *shape,
+                                           ShapeAttr              attr);
+GskPath *    svg_shape_get_path           (Shape                 *shape,
+                                           const graphene_size_t *viewport);
+void         svg_shape_attr_set           (Shape                 *shape,
+                                           ShapeAttr              attr,
+                                           SvgValue              *value);
 
-GskPath *
-svg_shape_attr_get_path   (Shape                 *shape,
-                           ShapeAttr              attr);
+SvgValue *   svg_value_ref          (SvgValue         *value);
+void         svg_value_unref        (SvgValue         *value);
 
-unsigned int
-svg_shape_attr_get_enum   (Shape                 *shape,
-                           ShapeAttr              attr);
+SvgValue *   svg_number_new         (double            value);
+SvgValue *   svg_linecap_new        (GskLineCap        value);
+SvgValue *   svg_linejoin_new       (GskLineJoin       value);
+SvgValue *   svg_fill_rule_new      (GskFillRule       rule);
+SvgValue *   svg_paint_order_new    (PaintOrder        order);
+SvgValue *   svg_paint_new_none     (void);
+SvgValue *   svg_paint_new_symbolic (GtkSymbolicColor  symbolic);
+SvgValue *   svg_paint_new_rgba     (const GdkRGBA    *rgba);
+SvgValue *   svg_points_new         (double           *values,
+                                     unsigned int      n_values);
+SvgValue *   svg_path_new           (GskPath          *path);
+SvgValue *   svg_clip_new_none      (void);
+SvgValue *   svg_clip_new_path      (GskPath          *path);
+SvgValue *   svg_transform_parse    (const char       *value);
+SvgValue *   svg_filter_parse       (const char       *value);
 
-PaintKind
-svg_shape_attr_get_paint  (Shape                 *shape,
-                           ShapeAttr              attr,
-                           GtkSymbolicColor      *symbolic,
-                           GdkRGBA               *color);
-
-double *
-svg_shape_attr_get_points (Shape                 *shape,
-                           ShapeAttr              attr,
-                           unsigned int          *n_params);
-
-ClipKind
-svg_shape_attr_get_clip   (Shape                 *shape,
-                           ShapeAttr              attr,
-                           GskPath              **path);
-
-char *
-svg_shape_attr_get_transform (Shape              *shape,
-                              ShapeAttr           attr);
-
-char *
-svg_shape_attr_get_filter    (Shape              *shape,
-                              ShapeAttr           attr);
-
-GskPath *
-svg_shape_get_path        (Shape                 *shape,
-                           const graphene_size_t *viewport);
-
-void
-svg_shape_attr_set        (Shape                 *shape,
-                           ShapeAttr              attr,
-                           SvgValue              *value);
-
-void       svg_value_unref (SvgValue *value);
-
-SvgValue * svg_number_new (double value);
-SvgValue * svg_linecap_new (GskLineCap value);
-SvgValue * svg_linejoin_new (GskLineJoin value);
-SvgValue * svg_fill_rule_new (GskFillRule rule);
-SvgValue * svg_paint_order_new (PaintOrder order);
-SvgValue * svg_paint_new_none (void);
-SvgValue * svg_paint_new_symbolic (GtkSymbolicColor symbolic);
-SvgValue * svg_paint_new_rgba (const GdkRGBA *rgba);
-SvgValue * svg_points_new (double *values,
-                           unsigned int n_values);
-SvgValue * svg_path_new (GskPath *path);
-SvgValue * svg_clip_new_none (void);
-SvgValue * svg_clip_new_path (GskPath *path);
-SvgValue * svg_transform_parse (const char *value);
-SvgValue * svg_filter_parse (const char *value);
-
-Shape * svg_shape_add (Shape     *parent,
-                       ShapeType  type);
-
-void    svg_shape_delete (Shape  *shape);
+Shape *      svg_shape_add          (Shape            *parent,
+                                     ShapeType         type);
+void         svg_shape_delete       (Shape            *shape);
 
 /* --- */
+
+GtkSvg *       gtk_svg_copy            (GtkSvg                *orig);
+
+gboolean       gtk_svg_equal           (GtkSvg                *svg1,
+                                        GtkSvg                *svg2);
 
 void           gtk_svg_set_load_time   (GtkSvg                *self,
                                         int64_t                load_time);
@@ -360,9 +346,9 @@ void           gtk_svg_set_playing     (GtkSvg                *self,
 void           gtk_svg_advance         (GtkSvg                *self,
                                         int64_t                current_time);
 
-GtkSvgRunMode  gtk_svg_get_run_mode    (GtkSvg *self);
+GtkSvgRunMode  gtk_svg_get_run_mode    (GtkSvg                *self);
 
-int64_t        gtk_svg_get_next_update (GtkSvg *self);
+int64_t        gtk_svg_get_next_update (GtkSvg                *self);
 
 typedef enum
 {
@@ -377,11 +363,6 @@ GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
                                         const GdkRGBA         *colors,
                                         size_t                 n_colors,
                                         GtkSvgSerializeFlags   flags);
-
-GtkSvg * gtk_svg_copy (GtkSvg *orig);
-
-gboolean gtk_svg_equal (GtkSvg *svg1,
-                        GtkSvg *svg2);
 
 
 G_END_DECLS

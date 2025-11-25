@@ -30,13 +30,6 @@ G_DECLARE_FINAL_TYPE (ShapeEditor, shape_editor, SHAPE, EDITOR, GtkWidget)
 
 
 ShapeEditor *    shape_editor_new          (PathPaintable *paintable,
-                                            size_t         idx);
+                                            Shape         *shape);
 
-void            shape_editor_set_paintable (ShapeEditor   *self,
-                                            PathPaintable *paintable);
-PathPaintable * shape_editor_get_paintable (ShapeEditor   *self);
-
-void            shape_editor_set_path      (ShapeEditor   *self,
-                                            size_t         idx);
-size_t          shape_editor_get_path      (ShapeEditor   *self);
 void            shape_editor_edit_path     (ShapeEditor   *self);

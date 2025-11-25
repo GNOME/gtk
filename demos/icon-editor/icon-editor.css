@@ -129,66 +129,12 @@ PaintableEditor separator {
   background: none;
 }
 
-rangeeditor > trough {
-  border: 1px solid var(--trough-border-color);
-  border-radius: 3px;
-  background: var(--trough-background);
-  min-height: 6px;
-}
-
-rangeeditor > trough > highlight {
-  background: var(--highlight);
-}
-
-rangeeditor > mark > indicator {
-  min-width: 1px;
-  min-height: 6px;
-  background-color: currentColor;
-}
-
-rangeeditor > mark {
-  min-width: 13px;
-  min-height: 12px;
-  margin-top: -3px;
-  margin-bottom: -3px;
-  margin-left: -6px;
-  margin-right: -6px;
-}
-
-rangeeditor > trough > slider.left {
-  min-width: 10px;
-  min-height: 18px;
-  margin: -9px 0px;
-  border-top-left-radius: 100%;
-  border-bottom-left-radius: 100%;
-  outline-color: var(--slider-outline-color);
-  border-color: var(--slider-border-color);
-  background-image: var(--slider-background);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
-  border-width: 1px;
-  border-style: solid;
-}
-
-rangeeditor > trough > slider.right {
-  min-width: 10px;
-  min-height: 18px;
-  margin: -9px 0px;
-  border-top-right-radius: 100%;
-  border-bottom-right-radius: 100%;
-  outline-color: var(--slider-outline-color);
-  border-color: var(--slider-border-color);
-  background-image: var(--slider-background);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
-  border-width: 1px;
-  border-style: solid;
-}
-
 .grid-image,
 .grid-button {
   margin: 10px;
 }
 
-.grid-button popover > contents > box,
+.grid-button popover > contents > box:not(.alpha-editor),
 .grid-button popover > contents > StateEditor {
   border-spacing: 10px;
   margin: 10px;
@@ -213,4 +159,12 @@ rangeeditor > trough > slider.right {
 .state-editor .buttons {
   border-spacing: 10px;
   margin: 10px;
+}
+
+box.alpha-editor.tight {
+  border-spacing: 0px;
+}
+
+box.alpha-editor > scale {
+  min-width: 120px;
 }

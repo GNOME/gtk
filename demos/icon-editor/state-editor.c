@@ -54,35 +54,22 @@ G_DEFINE_TYPE (StateEditor, state_editor, GTK_TYPE_WINDOW)
 static void repopulate (StateEditor *self);
 
 static GdkPaintable *
-get_paintable_for_path (PathPaintable *paintable,
-                        gsize          path)
+get_paintable_for_shape (StateEditor *self,
+                         Shape       *shape)
 {
-  gboolean do_stroke;
-  g_autoptr (GskStroke) stroke = gsk_stroke_new (1);
-  unsigned int stroke_symbolic = 0;
-  GdkRGBA stroke_color;
-  gboolean do_fill;
-  unsigned int fill_symbolic = 0;
-  GdkRGBA fill_color;
-  GskFillRule rule;
-  PathPaintable *path_image;
+  GtkSvg *svg = gtk_svg_new ();
+  g_autoptr (GBytes) bytes = NULL;
 
-  path_image = path_paintable_new ();
-  path_paintable_add_path (path_image, path_paintable_get_path (paintable, path));
+  svg->width = path_paintable_get_width (self->paintable);
+  svg->height = path_paintable_get_height (self->paintable);
 
-  do_stroke = path_paintable_get_path_stroke (paintable, path,
-                                              stroke, &stroke_symbolic, &stroke_color);
-  do_fill = path_paintable_get_path_fill (paintable, path,
-                                          &rule, &fill_symbolic, &fill_color);
+  g_ptr_array_add (svg->content->shapes, shape_duplicate (shape));
 
-  path_paintable_set_path_stroke (path_image, 0, do_stroke, stroke, stroke_symbolic, &stroke_color);
-  path_paintable_set_path_fill (path_image, 0, do_fill, rule, fill_symbolic, &fill_color);
-  path_paintable_set_size (path_image,
-                           path_paintable_get_width (paintable),
-                           path_paintable_get_height (paintable));
-  path_paintable_set_state (path_image, 0);
-
-  return GDK_PAINTABLE (path_image);
+  bytes = gtk_svg_serialize (svg);
+  g_object_unref (svg);
+  svg = gtk_svg_new_from_bytes (bytes);
+  gtk_svg_play (svg);
+  return GDK_PAINTABLE (svg);
 }
 
 static void
@@ -154,6 +141,46 @@ clear_paths (StateEditor *self)
 }
 
 static void
+create_paths_for_shape (StateEditor *self,
+                        Shape       *shape)
+{
+  for (unsigned int i = 0; i < shape->shapes->len; i++)
+    {
+      Shape *sh = g_ptr_array_index (shape->shapes, i);
+
+      if (sh->type == SHAPE_GROUP)
+        {
+          create_paths_for_shape (self, sh);
+          continue;
+        }
+      else if (shape_is_graphical (sh))
+        {
+          uint64_t states = sh->gpa.states;
+          GdkPaintable *paintable = get_paintable_for_shape (self, sh);
+          const char *id = sh->id;
+          GtkWidget *child;
+
+          child = gtk_image_new_from_paintable (paintable);
+          gtk_image_set_pixel_size (GTK_IMAGE (child), 20);
+          g_object_unref (paintable);
+          gtk_grid_attach (self->grid, child, -2, i, 1, 1);
+
+          child = gtk_label_new (id);
+          gtk_grid_attach (self->grid, child, -1, i, 1, 1);
+
+          for (unsigned int j = 0; j <= self->max_state; j++)
+            {
+              child = gtk_check_button_new ();
+              gtk_check_button_set_active (GTK_CHECK_BUTTON (child),
+                                           (states & ((G_GUINT64_CONSTANT (1) << j))) != 0);
+              g_signal_connect_swapped (child, "notify::active", G_CALLBACK (update_states), self);
+              gtk_grid_attach (self->grid, child, j, i, 1, 1);
+            }
+        }
+    }
+}
+
+static void
 create_paths (StateEditor *self)
 {
   GtkWidget *child;
@@ -166,29 +193,7 @@ create_paths (StateEditor *self)
       g_free (s);
     }
 
-  for (unsigned int i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-    {
-      uint64_t states = path_paintable_get_path_states (self->paintable, i);
-      GdkPaintable *paintable = get_paintable_for_path (self->paintable, i);
-      const char *id = path_paintable_get_path_id (self->paintable, i);
-
-      child = gtk_image_new_from_paintable (paintable);
-      gtk_image_set_pixel_size (GTK_IMAGE (child), 20);
-      g_object_unref (paintable);
-      gtk_grid_attach (self->grid, child, -2, i, 1, 1);
-
-      child = gtk_label_new (id);
-      gtk_grid_attach (self->grid, child, -1, i, 1, 1);
-
-      for (unsigned int j = 0; j <= self->max_state; j++)
-        {
-          child = gtk_check_button_new ();
-          gtk_check_button_set_active (GTK_CHECK_BUTTON (child),
-                                       (states & ((G_GUINT64_CONSTANT (1) << j))) != 0);
-          g_signal_connect_swapped (child, "notify::active", G_CALLBACK (update_states), self);
-          gtk_grid_attach (self->grid, child, j, i, 1, 1);
-        }
-    }
+  create_paths_for_shape (self, path_paintable_get_content (self->paintable));
 }
 
 static void
@@ -308,7 +313,7 @@ state_editor_class_init (StateEditorClass *class)
 }
 
 /* }}} */
-/* {{{ Public API */
+ /* {{{ Public API */
 
 StateEditor *
 state_editor_new (void)
