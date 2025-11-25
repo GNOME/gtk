@@ -16,4 +16,4 @@ compose-parse.c in this directory. You run it like this:
   compose-parse Compose sequences-little-endian sequences-big-endian chars gtkcomposedata.h
 
 The GTK build expects the resulting files to be in the source tree,
-in the gtk/cmompose directory.
+in the gtk/compose directory.
