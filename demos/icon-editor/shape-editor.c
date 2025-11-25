@@ -1035,7 +1035,9 @@ edit_path_externally (ShapeEditor  *self,
     path = path_to_svg_path (path_in);
 
   str = g_string_new ("");
-  g_string_append_printf (str, "<svg width='%g' height='%g'>\n", viewport->width, viewport->height);
+  g_string_append_printf (str, "<svg width='%g' height='%g'>\n",
+                          path_paintable_get_width (self->paintable),
+                          path_paintable_get_height (self->paintable));
 
   g_string_append (str, "<path id='path0'\n"
                         "      d='");
