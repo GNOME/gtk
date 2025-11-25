@@ -292,7 +292,7 @@ shape_changed (ShapeEditor *self)
           return;
 
         if (gtk_drop_down_get_selected (self->shape_dropdown) == POLYLINE)
-          self->shape->type = SHAPE_POLY_LINE;
+          self->shape->type = SHAPE_POLYLINE;
         else
           self->shape->type = SHAPE_POLYGON;
 
@@ -1345,7 +1345,7 @@ shape_editor_update (ShapeEditor *self)
           gtk_drop_down_set_selected (self->shape_dropdown, PATH);
           break;
 
-        case SHAPE_POLY_LINE:
+        case SHAPE_POLYLINE:
         case SHAPE_POLYGON:
           // FIXME
           break;

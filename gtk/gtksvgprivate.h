@@ -92,7 +92,7 @@ struct _GtkSvg
 typedef enum
 {
   SHAPE_LINE,
-  SHAPE_POLY_LINE,
+  SHAPE_POLYLINE,
   SHAPE_POLYGON,
   SHAPE_RECT,
   SHAPE_CIRCLE,
