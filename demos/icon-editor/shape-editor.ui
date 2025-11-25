@@ -1362,20 +1362,36 @@
         </child>
 
         <child>
-          <object class="GtkScale" id="opacity">
+          <object class="GtkBox">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <signal name="value-changed" handler="opacity_changed" swapped="yes"/>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">1</property>
-                <property name="step-increment">0.1</property>
-              </object>
-            </property>
             <layout>
               <property name="row">26</property>
               <property name="column">1</property>
             </layout>
+            <style>
+              <class name="alpha-editor"/>
+              <class name="tight"/>
+            </style>
+            <child>
+              <object class="GtkSpinButton" id="opacity_spin">
+                <property name="adjustment">alpha_adj</property>
+                <property name="valign">baseline-center</property>
+                <property name="numeric">1</property>
+                <property name="digits">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale" id="opacity">
+                <signal name="value-changed" handler="opacity_changed" swapped="yes"/>
+                <property name="adjustment">
+                  <object class="GtkAdjustment" id="alpha_adj">
+                    <property name="lower">0</property>
+                    <property name="upper">1</property>
+                    <property name="step-increment">0.1</property>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
 

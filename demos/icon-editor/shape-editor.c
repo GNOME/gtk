@@ -87,6 +87,7 @@ struct _ShapeEditor
   GtkButton *move_down;
   GtkDropDown *paint_order;
   GtkScale *opacity;
+  GtkSpinButton *opacity_spin;
   GtkScale *miter_limit;
   GtkStack *clip_path_cmds_stack;
   GtkLabel *clip_path_cmds;
@@ -1492,6 +1493,15 @@ static void
 shape_editor_init (ShapeEditor *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  /* We want a numeric entry, but there's no space for buttons, so... */
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->opacity_spin));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_BUTTON (child))
+        gtk_widget_set_visible (child, FALSE);
+    }
 }
 
 static void
@@ -1608,6 +1618,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, sg);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, paint_order);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity_spin);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, miter_limit);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_stack);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds);
