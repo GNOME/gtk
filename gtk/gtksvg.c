@@ -1036,7 +1036,7 @@ svg_value_alloc (const SvgValueClass *class,
   return value;
 }
 
-static SvgValue *
+SvgValue *
 svg_value_ref (SvgValue *value)
 {
   value->ref_count += 1;
