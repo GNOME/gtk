@@ -1267,13 +1267,91 @@
         </child>
 
         <child>
+          <object class="GtkExpander" id="attach_expander">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="attach_to_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">_Attach</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">attach_to</property>
+              </object>
+            </property>
+            <layout>
+              <property name="row">25</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="attach_to">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
+            <layout>
+              <property name="row">25</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="attach_at_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">attach_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Position</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">attach_at</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">26</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="attach_at">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">attach_expander</lookup>
+              </closure>
+            </binding>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">1</property>
+                <property name="step-increment">0.1</property>
+              </object>
+            </property>
+            <signal name="value-changed" handler="attach_changed" swapped="yes"/>
+            <marks>
+              <mark value="0" position="bottom"/>
+              <mark value="0.5" position="bottom"/>
+              <mark value="1" position="bottom"/>
+            </marks>
+            <layout>
+              <property name="row">26</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkLabel" id="clip_path_label">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="label" translatable="yes">_Clip Path</property>
             <property name="use-underline">1</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">25</property>
+              <property name="row">27</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1282,7 +1360,7 @@
           <object class="GtkStack" id="clip_path_cmds_stack">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <layout>
-              <property name="row">25</property>
+              <property name="row">27</property>
               <property name="column">1</property>
             </layout>
             <child>
@@ -1347,55 +1425,6 @@
         </child>
 
         <child>
-          <object class="GtkLabel" id="opacity_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Opacity</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">opacity</property>
-            <layout>
-              <property name="row">26</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkBox">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <layout>
-              <property name="row">26</property>
-              <property name="column">1</property>
-            </layout>
-            <style>
-              <class name="alpha-editor"/>
-              <class name="tight"/>
-            </style>
-            <child>
-              <object class="GtkSpinButton" id="opacity_spin">
-                <property name="adjustment">alpha_adj</property>
-                <property name="valign">baseline-center</property>
-                <property name="numeric">1</property>
-                <property name="digits">3</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale" id="opacity">
-                <signal name="value-changed" handler="opacity_changed" swapped="yes"/>
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="alpha_adj">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-              </object>
-            </child>
-          </object>
-        </child>
-
-        <child>
           <object class="GtkExpander" id="transform_expander">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
@@ -1411,7 +1440,7 @@
               </object>
             </property>
             <layout>
-              <property name="row">27</property>
+              <property name="row">28</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1421,7 +1450,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="activate" handler="transform_changed" swapped="yes"/>
             <layout>
-              <property name="row">27</property>
+              <property name="row">28</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1437,7 +1466,7 @@
             </binding>
             <property name="hexpand">0</property>
             <layout>
-              <property name="row">28</property>
+              <property name="row">29</property>
               <property name="column">1</property>
             </layout>
             <child>
@@ -1497,7 +1526,7 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">transform_x</property>
             <layout>
-              <property name="row">29</property>
+              <property name="row">30</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1518,7 +1547,7 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">transform_x</property>
             <layout>
-              <property name="row">29</property>
+              <property name="row">30</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1539,7 +1568,7 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">transform_x</property>
             <layout>
-              <property name="row">29</property>
+              <property name="row">30</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1557,7 +1586,7 @@
               </closure>
             </binding>
             <layout>
-              <property name="row">29</property>
+              <property name="row">30</property>
               <property name="column">1</property>
             </layout>
             <child>
@@ -1589,7 +1618,7 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">transform_angle</property>
             <layout>
-              <property name="row">30</property>
+              <property name="row">31</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1607,7 +1636,7 @@
               </closure>
             </binding>
             <layout>
-              <property name="row">30</property>
+              <property name="row">31</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1622,7 +1651,7 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">filter</property>
             <layout>
-              <property name="row">35</property>
+              <property name="row">34</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1632,9 +1661,58 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="activate" handler="filter_changed" swapped="yes"/>
             <layout>
+              <property name="row">34</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="opacity_label">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">1</property>
+            <property name="xalign">1</property>
+            <property name="label" translatable="yes">_Opacity</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">opacity</property>
+            <layout>
+              <property name="row">35</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkBox">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <layout>
               <property name="row">35</property>
               <property name="column">1</property>
             </layout>
+            <style>
+              <class name="alpha-editor"/>
+              <class name="tight"/>
+            </style>
+            <child>
+              <object class="GtkSpinButton" id="opacity_spin">
+                <property name="adjustment">alpha_adj</property>
+                <property name="valign">baseline-center</property>
+                <property name="numeric">1</property>
+                <property name="digits">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale" id="opacity">
+                <signal name="value-changed" handler="opacity_changed" swapped="yes"/>
+                <property name="adjustment">
+                  <object class="GtkAdjustment" id="alpha_adj">
+                    <property name="lower">0</property>
+                    <property name="upper">1</property>
+                    <property name="step-increment">0.1</property>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
 
@@ -2057,84 +2135,6 @@
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">45</property>
-              <property name="column">1</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkExpander" id="attach_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="hexpand">0</property>
-            <property name="valign">center</property>
-            <property name="margin-start">10</property>
-            <property name="label-widget">
-              <object class="GtkLabel" id="attach_to_label">
-                <property name="hexpand">1</property>
-                <property name="xalign">1</property>
-                <property name="label" translatable="yes">_Attach</property>
-                <property name="use-underline">1</property>
-                <property name="mnemonic-widget">attach_to</property>
-              </object>
-            </property>
-            <layout>
-              <property name="row">46</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkDropDown" id="attach_to">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
-            <layout>
-              <property name="row">46</property>
-              <property name="column">1</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="attach_at_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">attach_expander</lookup>
-              </closure>
-            </binding>
-            <property name="label" translatable="yes">_Position</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">attach_at</property>
-            <property name="xalign">1</property>
-            <layout>
-              <property name="row">47</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkScale" id="attach_at">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">attach_expander</lookup>
-              </closure>
-            </binding>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">1</property>
-                <property name="step-increment">0.1</property>
-              </object>
-            </property>
-            <signal name="value-changed" handler="attach_changed" swapped="yes"/>
-            <marks>
-              <mark value="0" position="bottom"/>
-              <mark value="0.5" position="bottom"/>
-              <mark value="1" position="bottom"/>
-            </marks>
-            <layout>
-              <property name="row">47</property>
               <property name="column">1</property>
             </layout>
           </object>
