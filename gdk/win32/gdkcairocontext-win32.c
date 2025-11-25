@@ -134,8 +134,9 @@ gdk_win32_cairo_context_surface_detach (GdkDrawContext *context)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (context);
   GdkSurface *surface = gdk_draw_context_get_surface (context);
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_draw_context_get_display (context));
 
-  if (!GDK_SURFACE_DESTROYED (surface))
+  if (!GDK_SURFACE_DESTROYED (surface) && gdk_win32_display_get_dcomp_device (display))
     gdk_win32_surface_set_dcomp_content (GDK_WIN32_SURFACE (surface), NULL);
 
   gdk_win32_com_clear (&self->staging_texture);
