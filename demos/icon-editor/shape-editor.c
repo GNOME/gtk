@@ -95,6 +95,10 @@ struct _ShapeEditor
   GtkEntry *transform;
   GtkEntry *filter;
   GtkBox *children;
+  GtkDropDown *primitive_transform;
+  GtkEntry *transform_x;
+  GtkEntry *transform_y;
+  GtkEntry *transform_angle;
 };
 
 enum
@@ -580,6 +584,188 @@ filter_changed (ShapeEditor *self)
     }
 }
 
+enum
+{
+  TRANSFORM_NONE,
+  TRANSFORM_TRANSLATE,
+  TRANSFORM_ROTATE,
+  TRANSFORM_SCALE,
+  TRANSFORM_SKEW_X,
+  TRANSFORM_SKEW_Y,
+};
+
+static void
+add_primitive_transform (ShapeEditor *self)
+{
+  switch (gtk_drop_down_get_selected (self->primitive_transform))
+    {
+    case TRANSFORM_NONE:
+      break;
+
+    case TRANSFORM_TRANSLATE:
+      {
+        double x, y;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_x, &x) ||
+            !get_number_from_entry (self->transform_y, &y))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        g_string_append (s, " translate(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    case TRANSFORM_ROTATE:
+      {
+        double x, y, angle;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_x, &x) ||
+            !get_number_from_entry (self->transform_y, &y) ||
+            !get_number_from_entry (self->transform_angle, &angle))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        g_string_append (s, " rotate(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", angle));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    case TRANSFORM_SCALE:
+      {
+        double x, y;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_x, &x) ||
+            !get_number_from_entry (self->transform_y, &y))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        g_string_append (s, " scale(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
+        g_string_append (s, ", ");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    case TRANSFORM_SKEW_X:
+    case TRANSFORM_SKEW_Y:
+      {
+        double angle;
+        GString *s;
+        char buffer[128];
+        SvgValue *value;
+
+        if (!get_number_from_entry (self->transform_angle, &angle))
+          return;
+
+        s = g_string_new ("");
+        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
+        if (gtk_drop_down_get_selected (self->primitive_transform) == TRANSFORM_SKEW_X)
+          g_string_append (s, " skewX(");
+        else
+          g_string_append (s, " skewY(");
+        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", angle));
+        g_string_append (s, ")");
+
+        value = svg_transform_parse (s->str);
+        if (value)
+          {
+            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+            path_paintable_changed (self->paintable);
+            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+          }
+
+        g_string_free (s, TRUE);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  gtk_drop_down_set_selected (self->primitive_transform, 0);
+}
+
+static void
+remove_primitive_transform (ShapeEditor *self)
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->transform));
+  SvgValue *value;
+
+  if (!text || !*text)
+    return;
+
+  value = svg_transform_parse (text);
+  if (value)
+    {
+      SvgValue *value2 = svg_transform_drop_last (value);
+      svg_value_unref (value);
+      value = value2;
+    }
+
+  if (value)
+    {
+      g_autofree char *new_text = NULL;
+
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
+      path_paintable_changed (self->paintable);
+
+      new_text = svg_shape_attr_get_transform (self->shape, SHAPE_ATTR_TRANSFORM);
+      gtk_editable_set_text (GTK_EDITABLE (self->transform), new_text);
+    }
+}
+
 static GdkPaintable *
 shape_editor_get_path_image (ShapeEditor *self)
 {
@@ -941,6 +1127,18 @@ bool_and_bool_and_uint_one_of_two (GObject  *object,
                                    guint     u3)
 {
   return b1 && b2 && (u1 == u2 || u1 == u3);
+}
+
+static gboolean
+bool_and_bool_and_uint_one_of_three (GObject  *object,
+                                     gboolean  b1,
+                                     gboolean  b2,
+                                     guint     u1,
+                                     guint     u2,
+                                     guint     u3,
+                                     guint     u4)
+{
+  return b1 && b2 && (u1 == u2 || u1 == u3 || u1 == u4);
 }
 
 static gboolean
@@ -1648,6 +1846,10 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, filter);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, children);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, primitive_transform);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_x);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_y);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_angle);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -1662,6 +1864,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_equal);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_unequal);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_one_of_two);
+  gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_one_of_three);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_and);
   gtk_widget_class_bind_template_callback (widget_class, uint_equal);
   gtk_widget_class_bind_template_callback (widget_class, edit_path);
@@ -1680,6 +1883,8 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_key);
   gtk_widget_class_bind_template_callback (widget_class, transform_changed);
   gtk_widget_class_bind_template_callback (widget_class, filter_changed);
+  gtk_widget_class_bind_template_callback (widget_class, add_primitive_transform);
+  gtk_widget_class_bind_template_callback (widget_class, remove_primitive_transform);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
