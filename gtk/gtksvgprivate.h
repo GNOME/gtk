@@ -324,6 +324,7 @@ SvgValue *   svg_path_new           (GskPath          *path);
 SvgValue *   svg_clip_new_none      (void);
 SvgValue *   svg_clip_new_path      (GskPath          *path);
 SvgValue *   svg_transform_parse    (const char       *value);
+SvgValue *   svg_transform_drop_last (SvgValue        *orig);
 SvgValue *   svg_filter_parse       (const char       *value);
 
 Shape *      svg_shape_add          (Shape            *parent,
