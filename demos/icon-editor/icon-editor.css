@@ -134,7 +134,7 @@ PaintableEditor separator {
   margin: 10px;
 }
 
-.grid-button popover > contents > box,
+.grid-button popover > contents > box:not(.alpha-editor),
 .grid-button popover > contents > StateEditor {
   border-spacing: 10px;
   margin: 10px;
@@ -159,4 +159,12 @@ PaintableEditor separator {
 .state-editor .buttons {
   border-spacing: 10px;
   margin: 10px;
+}
+
+box.alpha-editor.tight {
+  border-spacing: 0px;
+}
+
+box.alpha-editor > scale {
+  min-width: 120px;
 }

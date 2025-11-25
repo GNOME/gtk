@@ -33,6 +33,7 @@ struct _ColorEditor
   GtkStack *stack;
   ColorPaintable *indicator;
   GtkColorDialogButton *custom;
+  GtkSpinButton *alpha_spin;
 };
 
 enum
@@ -63,6 +64,17 @@ static void
 color_editor_init (ColorEditor *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  /* We want a numeric entry, but there's no space
+   * for buttons, so...
+   */
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->alpha_spin));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_BUTTON (child))
+        gtk_widget_set_visible (child, FALSE);
+    }
 }
 
 static void
@@ -182,6 +194,7 @@ color_editor_class_init (ColorEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ColorEditor, stack);
   gtk_widget_class_bind_template_child (widget_class, ColorEditor, indicator);
   gtk_widget_class_bind_template_child (widget_class, ColorEditor, custom);
+  gtk_widget_class_bind_template_child (widget_class, ColorEditor, alpha_spin);
 
   gtk_widget_class_set_css_name (widget_class, "ColorEditor");
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
