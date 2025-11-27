@@ -1,3 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <path d="M8.07.918L1 7.988h3v4h8v-4h3.143zM4 12.988v2h8v-2z" style="marker:none" color="#bebebe" fill="#2e3436"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='caps lock allcaps'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 6 7 L 6 11 L 10 11 L 10 7 L 12.5 7 L 8 2 L 3.5 7 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 6 14 L 10 14'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

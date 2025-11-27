@@ -1,3 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-<path d="M6.003 1s-3 0-3 3v5s.044 1.419.028 2c0 1-.537 1.413-1.404 2.121-.627.49-.774 1.31-.307 1.697.43.356 1.162.304 1.66-.343L4 13c.698-1.014.983-1.876 1-3l.003-6C5.003 3 6 3 6 3v6.574L9.003 6.5V4c0-1 .997-1 .997-1l.003 2.5L12 3.465c.338-.312.503-.465 1-.465l.003 1L9 8h4s.003 1-1 1H8l-2 2c0 .426 0 2.006 2 2.006L12.003 13s3 0 2.997-2.99V1z" fill="#2e3436"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='leaf category nature emoji-nature power-profile-power-saver'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 1 14 L 2.1116972 12.8883028 C 2.68046784 12.3195324, 3.00000048 11.5481129, 3 10.7437496 L 3 6 C 3 3.23857617, 5.23857641 1, 8 1 L 15 1 L 15 9 C 15 11.7614241, 12.7614241 14, 10 14 L 9 14'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path3'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 10.4429531 7.51006699 L 12.484375 7.51006699 M 8.49193287 9.92670345 L 8.49193287 6.4375 M 15 1 L 9.53880787 8.80170345 C 8.57438087 10.1794558, 6.9983983 11, 5.31663704 11 L 3 11'
+          gpa:stroke-width='0.25 1 2'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

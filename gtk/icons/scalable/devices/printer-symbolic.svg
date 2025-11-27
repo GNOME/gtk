@@ -1,4 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 5 1 c -0.550781 0 -1 0.449219 -1 1 v 1 h 8 v -1 c 0 -0.550781 -0.449219 -1 -1 -1 z m -3 3 c -1.109375 0 -2 0.890625 -2 2 v 4 c 0 1.109375 0.890625 2 2 2 v 1 c 0 1.089844 0.910156 2 2 2 h 8 c 1.089844 0 2 -0.910156 2 -2 v -1 c 1.109375 0 2 -0.890625 2 -2 v -4 c 0 -1.109375 -0.890625 -2 -2 -2 z m 2 6 h 8 v 3 h -8 z m 0 0" fill="#2e3436"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='printer printer-printing paper sheet lpt document-print'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 4 11 L 4 15 L 12 15 L 12 11 M 5 5 L 5 3 C 5 2.44771528, 5.44771528 2, 6 2 L 10 2 C 10.5522852 2, 11 2.44771528, 11 3 L 11 5 M 1 7 L 1 10 C 1 10.5522852, 1.44771528 11, 2 11 L 4 11 L 4 10 C 4 9.44771576, 4.44771528 9, 5 9 L 11 9 C 11.5522852 9, 12 9.44771576, 12 10 L 12 11 L 14 11 C 14.5522852 11, 15 10.5522852, 15 10 L 15 7 C 15 5.89543056, 14.1045694 5, 13 5 L 3 5 C 1.89543045 5, 1 5.89543056, 1 7 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

@@ -1,4 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 5 1 c -1.644531 0 -3 1.355469 -3 3 v 6.996094 h 1 v -0.996094 h 1 v -6 c 0 -0.570312 0.429688 -1 1 -1 h 4 v 1.5 c 0 1 0.5 1.5 1.5 1.5 h 1.5 v 7 h 1 v 1 h 1 v -8.5 c 0 -0.265625 -0.105469 -0.519531 -0.292969 -0.707031 l -3.5 -3.5 c -0.1875 -0.1875 -0.441406 -0.292969 -0.707031 -0.292969 z m 8 13 h -1 v 0.992188 h -1 v 1 h 1 v -0.992188 h 1 z m -2 0.992188 v -1 h -1 v 1 z m -1 0 h -1 v 1 h 1 z m -1 0 v -1 h -1 v 1 z m -1 0 h -1 v 1 h 1 z m -1 0 v -1 h -1 v 1 z m -1 0 h -1 v 1 h 1 z m -1 0 v -1 h -1 v 1 z m -1 0 h -1 v 1 h 1 z m -1 0 v -1 h -1 v 1 z m 0 -1 h 1 v -1 h -1 z m 0 -1 v -1 h -1 v 1 z m 0 -1 h 1 v -1 h -1 z m 0 0" fill="#2e3436"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='folder documents document template folder-templates'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 13 9 L 13 6 C 13 5.35971069, 12.7456465 4.74564648, 12.2928934 4.29289341 L 10.7071066 2.70710683 C 10.2543535 2.254354, 9.64028931 2.00000024, 9 2 L 5 2 C 3.89543056 2, 3 2.89543056, 3 4 L 3 7'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 8.53103447 2 L 8.53103447 6.49655151 L 10.4965525 6.49655151 C 11.8791685 6.49655199, 13 7.61738396, 13 9'
+          gpa:stroke-width='0.25 1 1.5'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path2'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-opacity='0.25'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 7 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 9'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

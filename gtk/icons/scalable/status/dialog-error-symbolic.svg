@@ -1,4 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 8 1 c -3.871094 0 -7 3.128906 -7 7 s 3.128906 7 7 7 s 7 -3.128906 7 -7 s -3.128906 -7 -7 -7 z m -4 6 h 8 v 2 h -8 z m 0 0" fill="#2e3436"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='1'
+        gpa:keywords='dialog-error one-way sign traffic'>
+  <path
+          id='path0'
+          fill='url("#gpa:foreground") rgb(0,0,0)'
+          fill-rule='nonzero'
+          stroke='none'
+          d='M 8 1 C 4.12890577 1, 1 4.12890577, 1 8 C 1 11.8710938, 4.12890577 15, 8 15 C 11.8710938 15, 15 11.8710938, 15 8 C 15 4.12890577, 11.8710938 1, 8 1 Z M 5.4968462 6.26896524 L 10.5169458 6.26896524 C 11.476017 6.26896524, 12.2534981 7.04644632, 12.2534981 8.00551796 L 12.2534981 8.00827789 C 12.2534971 8.9673481, 11.476016 9.74482822, 10.5169458 9.74482822 L 5.4968462 9.74482822 C 4.53777504 9.74482822, 3.7602942 8.96734715, 3.7602942 8.00827599 L 3.7602942 8.00551605 C 3.76029515 7.04644537, 4.53777552 6.26896524, 5.4968462 6.26896524 Z'
+          gpa:states='1'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 8 1 C 4.12890577 1, 1 4.12890577, 1 8 C 1 11.8710938, 4.12890577 15, 8 15 C 11.8710938 15, 15 11.8710938, 15 8 C 15 4.12890577, 11.8710938 1, 8 1 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'
+          gpa:states='0'>
+  </path>
+  <path
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 5.4968462 6.26896524 L 10.5169458 6.26896524 C 11.476017 6.26896524, 12.2534981 7.04644632, 12.2534981 8.00551796 L 12.2534981 8.00827789 C 12.2534971 8.9673481, 11.476016 9.74482822, 10.5169458 9.74482822 L 5.4968462 9.74482822 C 4.53777504 9.74482822, 3.7602942 8.96734715, 3.7602942 8.00827599 L 3.7602942 8.00551605 C 3.76029515 7.04644537, 4.53777552 6.26896524, 5.4968462 6.26896524 Z'
+          gpa:stroke-width='0.25 1 2'
+          gpa:stroke='foreground'
+          gpa:fill='none'
+          gpa:states='0'>
+  </path>
 </svg>

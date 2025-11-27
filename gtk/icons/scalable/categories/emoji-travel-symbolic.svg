@@ -1,3 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-  <path d="M3.003 1a1 1 0 00-.97.758l-1 4a1 1 0 00-.03.242v.04c-.564.094-1 .561-1 1.153v4.614c0 .592.436 1.059 1 1.154V14.5c0 .277.223.5.5.5h2c.277 0 .5-.223.5-.5V13h8v1.5c0 .277.223.5.5.5h2c.277 0 .5-.223.5-.5v-1.54c.564-.094 1-.561 1-1.153V7.193c0-.592-.436-1.059-1-1.154V6a1 1 0 00-.03-.242l-1-4a1 1 0 00-.97-.758zm.781 2h8.438l.75 3H3.034zm-.281 5a1.5 1.5 0 011.5 1.5 1.5 1.5 0 01-1.5 1.5 1.5 1.5 0 01-1.5-1.5 1.5 1.5 0 011.5-1.5zm9 0a1.5 1.5 0 011.5 1.5 1.5 1.5 0 01-1.5 1.5 1.5 1.5 0 01-1.5-1.5 1.5 1.5 0 011.5-1.5z" fill="#2e3436" fill-rule="evenodd"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='car travel transport route category emoji-travel'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 1.8482759 7 L 2.54125094 3.991575 C 2.80975699 2.82590461, 3.84753227 1.99999988, 5.0437274 2 L 10.9562731 2 C 12.1446133 1.99999988, 13.1677561 2.83877611, 13.4008083 4.00403976 L 14 7'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 13.5 9.5 C 13.5 10.0522852, 13.0522852 10.5, 12.5 10.5 C 11.9477148 10.5, 11.5 10.0522852, 11.5 9.5 C 11.5 8.94771576, 11.9477148 8.5, 12.5 8.5 C 13.0522852 8.5, 13.5 8.94771576, 13.5 9.5 Z M 4.5 9.5 C 4.5 10.0522852, 4.05228519 10.5, 3.5 10.5 C 2.94771504 10.5, 2.5 10.0522852, 2.5 9.5 C 2.5 8.94771576, 2.94771504 8.5, 3.5 8.5 C 4.05228519 8.5, 4.5 8.94771576, 4.5 9.5 Z'
+          gpa:stroke-width='0.25 1 1.5'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path2'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 4 12 L 4 13 C 4 13.5522852, 3.55228519 14, 3 14 C 2.44771481 14, 2 13.5522852, 2 13 L 2 12 M 14 12 L 14 13 C 14 13.5522852, 13.5522842 14, 13 14 C 12.4477158 14, 12 13.5522852, 12 13 L 12 12'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path3'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 1 8 L 1 11 C 1 11.5522852, 1.44771528 12, 2 12 L 14 12 C 14.5522852 12, 15 11.5522852, 15 11 L 15 8 C 15 7.44771528, 14.5522852 7, 14 7 L 2 7 C 1.44771528 7, 1 7.44771528, 1 8 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

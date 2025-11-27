@@ -1,7 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <g fill="#2e3436">
-        <path d="m 10.804688 10 c -0.8125 0.144531 -1.105469 1.15625 -0.5 1.71875 l 3 3 c 0.957031 0.9375 2.363281 -0.5 1.40625 -1.4375 l -3 -3 c -0.238282 -0.242188 -0.578126 -0.347656 -0.90625 -0.28125 z m 0 0"/>
-        <path d="m 6.5 0 c -3.578125 0 -6.5 2.921875 -6.5 6.5 s 2.921875 6.496094 6.5 6.496094 s 6.5 -2.917969 6.5 -6.496094 s -2.921875 -6.5 -6.5 -6.5 z m 0 2 c 2.496094 0 4.5 2.003906 4.5 4.5 s -2.003906 4.496094 -4.5 4.496094 s -4.5 -2 -4.5 -4.496094 s 2.003906 -4.5 4.5 -4.5 z m 0 0"/>
-    </g>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='system-search loupe edit-find system-search folder-saved-search preferences-system-search'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 14 14 L 10.3891287 10.3890696 M 12 6.51379299 C 11.992382 9.55135918, 9.52377319 12.007618, 6.48620701 12 C 3.44864082 11.992382, 0.992382228 9.52377319, 0.99999994 6.48620701 C 1.00761747 3.44864082, 3.47622681 0.992382169, 6.51379299 0.99999994 C 9.55135918 1.00761747, 12.007618 3.47622681, 12 6.51379299 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

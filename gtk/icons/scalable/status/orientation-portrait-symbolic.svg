@@ -1,4 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 13.0625 2.167969 c 0 -0.617188 -0.496094 -1.113281 -1.113281 -1.113281 h -7.84375 c -0.617188 0 -1.113281 0.496093 -1.113281 1.113281 v 11.738281 c 0 0.617188 0.496093 1.113281 1.113281 1.113281 h 7.84375 c 0.617187 0 1.113281 -0.496093 1.113281 -1.113281 z m -3 5.839843 l -4.0625 3.992188 v -8 z m 0 0" fill="#2e3436"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='page orientation print portrait'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 10.8413792 0.99999994 L 5.15862083 0.999999821 C 3.96644783 1.00000012, 3 1.96644735, 3 3.1586206 L 3.00000119 12.8413782 C 3 14.0335531, 3.96644783 15.000001, 5.15862131 14.999999 L 10.8413792 15 C 12.0335531 15, 13 14.0335512, 13.000001 12.8413792 L 13 3.1586206 C 13 1.96644747, 12.0335522 1, 10.8413792 0.99999994 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 6.50000048 5 L 9.5 8 L 6.49999952 11.000001'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

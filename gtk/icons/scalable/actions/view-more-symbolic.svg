@@ -1,4 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 7.996094 0 c -1.105469 0 -2 0.894531 -2 2 s 0.894531 2 2 2 c 1.101562 0 2 -0.894531 2 -2 s -0.898438 -2 -2 -2 z m 0 6 c -1.105469 0 -2 0.894531 -2 2 s 0.894531 2 2 2 c 1.101562 0 2 -0.894531 2 -2 s -0.898438 -2 -2 -2 z m 0 6 c -1.105469 0 -2 0.894531 -2 2 s 0.894531 2 2 2 c 1.101562 0 2 -0.894531 2 -2 s -0.898438 -2 -2 -2 z m 0 0" fill="#2e3436"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='view-more kebab more inline menu'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 9 14 C 9 14.5522852, 8.55228519 15, 8 15 C 7.44771528 15, 7 14.5522852, 7 14 C 7 13.4477148, 7.44771528 13, 8 13 C 8.55228519 13, 9 13.4477148, 9 14 M 9 8 C 9 8.55228519, 8.55228519 9, 8 9 C 7.44771528 9, 7 8.55228519, 7 8 C 7 7.44771528, 7.44771528 7, 8 7 C 8.55228519 7, 9 7.44771528, 9 8 M 9 2 C 9 2.55228472, 8.55228519 3, 8 3 C 7.44771528 3, 7 2.55228472, 7 2 C 7 1.44771528, 7.44771528 1, 8 1 C 8.55228519 1, 9 1.44771528, 9 2'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

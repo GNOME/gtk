@@ -1,7 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
-    <g fill="#2e3436">
-        <path d="m 6 5 c -0.550781 0 -1 0.449219 -1 1 s 0.449219 1 1 1 s 1 -0.449219 1 -1 s -0.449219 -1 -1 -1 z m 3.5 3 l -2 2 l -1.5 -1 l -2 2 v 0.5 c 0 0.5 0.5 0.5 0.5 0.5 h 7 s 0.472656 -0.035156 0.5 -0.5 v -1 z m 0 0"/>
-        <path d="m 4 1 c -1.644531 0 -3 1.355469 -3 3 v 8 c 0 1.644531 1.355469 3 3 3 h 8 c 1.644531 0 3 -1.355469 3 -3 v -8 c 0 -1.644531 -1.355469 -3 -3 -3 z m 0 2 h 8 c 0.570312 0 1 0.429688 1 1 v 8 c 0 0.570312 -0.429688 1 -1 1 h -8 c -0.570312 0 -1 -0.429688 -1 -1 v -8 c 0 -0.570312 0.429688 -1 1 -1 z m 0 0"/>
-    </g>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='preferences-desktop-wallpaper folder image photo picture folder-pictures image-x-generic'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 2 12 L 2 4 C 2 2.9000001, 2.9000001 2, 4 2 L 12 2 C 13.1045694 2, 14 2.89543056, 14 4 L 14 12 C 14 13.1045694, 13.1045694 14, 12 14 L 4 14 C 2.89543056 14, 2 13.1045694, 2 12 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path2'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 5 6.51379299 C 5.00761747 7.34222031, 5.68536568 8.00761795, 6.51379299 8 C 7.34222031 7.99238253, 8.00761795 7.31463432, 8 6.48620701 C 7.99238253 5.65777969, 7.31463432 4.99238253, 6.48620701 5 C 5.65777969 5.00761747, 4.99238253 5.68536568, 5 6.51379299 Z M 2.79999995 13.6000004 L 6.11999989 10.3000002 L 7.61999989 11.3000002 L 9.5 9.39999962 L 13.4399996 13.3900003'
+          gpa:stroke-width='0.25 1 2'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>
