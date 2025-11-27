@@ -51,55 +51,153 @@ gsk_repeat_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+/* function should be in gdkcairoprivate.h, but headers... */
+static void
+gdk_cairo_pattern_set_repeat (cairo_pattern_t *pattern,
+                              GskRepeat        repeat)
+{
+  cairo_extend_t extend[] = {
+    [GSK_REPEAT_NONE] = CAIRO_EXTEND_NONE,
+    [GSK_REPEAT_PAD] = CAIRO_EXTEND_PAD,
+    [GSK_REPEAT_REPEAT] = CAIRO_EXTEND_REPEAT,
+    [GSK_REPEAT_REFLECT] = CAIRO_EXTEND_REFLECT,
+  };
+
+  cairo_pattern_set_extend (pattern, extend[repeat]);
+}
+
 static void
 gsk_repeat_node_draw_tiled (cairo_t                *cr,
                             GdkColorState          *ccs,
                             const graphene_rect_t  *rect,
-                            float                   x,
-                            float                   y,
+                            GskRepeat               repeat,
                             GskRenderNode          *child,
                             const graphene_rect_t  *child_bounds)
 {
   cairo_pattern_t *pattern;
+  cairo_surface_t *child_surface;
+  cairo_t *child_cr;
   cairo_matrix_t matrix;
+  double width, height, det, xscale, yscale;
 
-  cairo_save (cr);
-  /* reset the clip so we get an unclipped pattern for repeating */
-  cairo_reset_clip (cr);
-  cairo_translate (cr,
-                   x * child_bounds->size.width,
-                   y * child_bounds->size.height);
-  gdk_cairo_rect (cr, child_bounds);
-  cairo_clip (cr);
+  cairo_get_matrix (cr, &matrix);
+  cairo_surface_get_device_scale (cairo_get_target (cr), &xscale, &yscale);
+  det = matrix.xx * matrix.yy - matrix.xy * matrix.yx;
+  if (matrix.xx != 0 || matrix.yx != 0)
+    {
+      width = sqrt (matrix.xx * matrix.xx + matrix.yx * matrix.yx);
+      height = det / width;
+    }
+  else if (matrix.yx != 0 || matrix.yy != 0)
+    {
+      height = sqrt (matrix.yx * matrix.yx + matrix.yy * matrix.yy);
+      width = det / height;
+    }
+  else
+    {
+      g_return_if_reached ();
+    }
 
-  cairo_push_group (cr);
-  gsk_render_node_draw_ccs (child, cr, ccs);
-  pattern = cairo_pop_group (cr);
-  cairo_restore (cr);
+  width = ABS (ceil (width * child_bounds->size.width * xscale));
+  height = ABS (ceil (height * child_bounds->size.height * yscale));
 
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_pattern_get_matrix (pattern, &matrix);
-  cairo_matrix_translate (&matrix,
-                          - x * child_bounds->size.width,
-                          - y * child_bounds->size.height);
-  cairo_pattern_set_matrix (pattern, &matrix);
+  child_surface = cairo_surface_create_similar (cairo_get_group_target (cr), 
+                                                CAIRO_CONTENT_COLOR_ALPHA,
+                                                width, height);
+  xscale = width / child_bounds->size.width;
+  yscale = height / child_bounds->size.height;
+  cairo_surface_set_device_scale (child_surface, xscale, yscale);
+  cairo_surface_set_device_offset (child_surface,
+                                   - xscale * child_bounds->origin.x,
+                                   - yscale * child_bounds->origin.y);
+  child_cr = cairo_create (child_surface);
+  gsk_render_node_draw_ccs (child, child_cr, ccs);
+  cairo_destroy (child_cr);
+
+  pattern = cairo_pattern_create_for_surface (child_surface);
+  cairo_surface_write_to_png (child_surface, "foo.png");
+  gdk_cairo_pattern_set_repeat (pattern, repeat);
+
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
 
   gdk_cairo_rect (cr, rect);
   cairo_fill (cr);
+
+  cairo_surface_destroy (child_surface);
 }
 
 static void
-gsk_repeat_node_draw (GskRenderNode *node,
-                      cairo_t       *cr,
-                      GdkColorState *ccs)
+gsk_repeat_node_draw_none (GskRenderNode *node,
+                           cairo_t       *cr,
+                           GdkColorState *ccs)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+
+  gdk_cairo_rect (cr, &node->bounds);
+  cairo_clip (cr);
+  if (!gsk_rect_contains_rect (&self->child_bounds, &self->child->bounds))
+    {
+      gdk_cairo_rect (cr, &self->child_bounds);
+      cairo_clip (cr);
+    }
+  gsk_render_node_draw_ccs (self->child, cr, ccs);
+  return;
+}
+
+static void
+gsk_repeat_node_draw_pad (GskRenderNode *node,
+                          cairo_t       *cr,
+                          GdkColorState *ccs)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+  graphene_rect_t clip_bounds, draw_bounds;
+
+  _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
+  if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+    return;
+
+  if (gsk_rect_intersection (&clip_bounds, &self->child_bounds, &draw_bounds))
+    {
+      /* everything fine, the repeated area is visible */
+    }
+  else
+    {
+      draw_bounds.size.width = MIN (self->child_bounds.size.width, clip_bounds.size.width);
+      if (self->child_bounds.origin.x + self->child_bounds.size.width - draw_bounds.size.width < clip_bounds.origin.x)
+        draw_bounds.origin.x = self->child_bounds.origin.x + self->child_bounds.size.width - draw_bounds.size.width;
+      else if (self->child_bounds.origin.x < clip_bounds.origin.x)
+        draw_bounds.origin.x = clip_bounds.origin.x;
+      else
+        draw_bounds.origin.x = self->child_bounds.origin.x;
+
+      draw_bounds.size.height = MIN (self->child_bounds.size.height, clip_bounds.size.height);
+      if (self->child_bounds.origin.y + self->child_bounds.size.height - draw_bounds.size.height < clip_bounds.origin.y)
+        draw_bounds.origin.y = self->child_bounds.origin.y + self->child_bounds.size.height - draw_bounds.size.height;
+      else if (self->child_bounds.origin.y < clip_bounds.origin.y)
+        draw_bounds.origin.y = clip_bounds.origin.y;
+      else
+        draw_bounds.origin.y = self->child_bounds.origin.y;
+    }
+
+  gsk_repeat_node_draw_tiled (cr,
+                              ccs,
+                              &clip_bounds,
+                              self->repeat,
+                              self->child,
+                              &draw_bounds);
+}
+
+static void
+gsk_repeat_node_draw_repeat (GskRenderNode *node,
+                             cairo_t       *cr,
+                             GdkColorState *ccs)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
   graphene_rect_t clip_bounds;
   float tile_left, tile_right, tile_top, tile_bottom;
 
-  gdk_cairo_rectangle_snap_to_grid (cr, &node->bounds);
+  gdk_cairo_rect (cr, &node->bounds);
   cairo_clip (cr);
   _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
 
@@ -120,8 +218,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
           gsk_repeat_node_draw_tiled (cr,
                                       ccs,
                                       &clip_bounds,
-                                      ceilf (tile_left),
-                                      ceilf (tile_top),
+                                      self->repeat,
                                       self->child,
                                       &self->child_bounds);
         }
@@ -143,8 +240,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
                                               clip_bounds.size.width,
                                               end_y - start_y
                                           ),
-                                          ceilf (tile_left),
-                                          y,
+                                          self->repeat,
                                           self->child,
                                           &self->child_bounds);
             }
@@ -169,8 +265,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
                                           end_x - start_x,
                                           clip_bounds.size.height
                                       ),
-                                      x,
-                                      ceilf (tile_top),
+                                      self->repeat,
                                       self->child,
                                       &self->child_bounds);
         }
@@ -194,6 +289,139 @@ gsk_repeat_node_draw (GskRenderNode *node,
               cairo_restore (cr);
             }
         }
+    }
+}
+
+static void
+gsk_repeat_node_draw_reflect (GskRenderNode *node,
+                              cairo_t       *cr,
+                              GdkColorState *ccs)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+  graphene_rect_t clip_bounds, draw_bounds;
+  float tile_left, tile_right, tile_top, tile_bottom, x_steps, y_steps;
+
+  gdk_cairo_rect (cr, &node->bounds);
+  cairo_clip (cr);
+  _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
+
+  tile_left = (clip_bounds.origin.x - self->child_bounds.origin.x) / self->child_bounds.size.width;
+  tile_right = (clip_bounds.origin.x + clip_bounds.size.width - self->child_bounds.origin.x) / self->child_bounds.size.width;
+  tile_top = (clip_bounds.origin.y - self->child_bounds.origin.y) / self->child_bounds.size.height;
+  tile_bottom = (clip_bounds.origin.y + clip_bounds.size.height - self->child_bounds.origin.y) / self->child_bounds.size.height;
+
+  if (clip_bounds.size.width >= self->child_bounds.size.width)
+    {
+      /* the tile is fully contained at least once */
+      draw_bounds.origin.x = self->child_bounds.origin.x;
+      draw_bounds.size.width = self->child_bounds.size.width;
+      x_steps = 0;
+    }
+  else if (ceilf (tile_left) <= floorf (tile_right))
+    {
+      /* one side of the tile gets reflected */
+      draw_bounds.size.width = clip_bounds.size.width;
+      if (((int) ceilf (tile_left)) % 2)
+        {
+          x_steps = floorf (tile_left);
+          draw_bounds.origin.x = self->child_bounds.origin.x + self->child_bounds.size.width - draw_bounds.size.width;
+        }
+      else
+        {
+          x_steps = ceilf (tile_left);
+          draw_bounds.origin.x = self->child_bounds.origin.x;
+        }
+    }
+  else
+    {
+      /* a middle part of the tile is visible */
+      x_steps = floorf (tile_left);
+      draw_bounds.size.width = clip_bounds.size.width;
+      draw_bounds.origin.x = self->child_bounds.origin.x + (tile_left - x_steps) * self->child_bounds.size.width;
+      if ((int) x_steps % 2)
+        {
+          draw_bounds.origin.x = self->child_bounds.origin.x + (1 - tile_left + x_steps) * self->child_bounds.size.width - draw_bounds.size.width;
+          cairo_translate (cr, draw_bounds.size.width, 0);
+          clip_bounds.origin.x -= draw_bounds.size.width;
+        }
+    }
+  
+  if (clip_bounds.size.height >= self->child_bounds.size.height)
+    {
+      /* the tile is fully contained at least once */
+      draw_bounds.origin.y = self->child_bounds.origin.y;
+      draw_bounds.size.height = self->child_bounds.size.height;
+      y_steps = 0;
+    }
+  else if (ceilf (tile_top) <= floorf (tile_bottom))
+    {
+      /* one side of the tile gets reflected */
+      draw_bounds.size.height = clip_bounds.size.height;
+      if (((int) ceilf (tile_top)) % 2)
+        {
+          y_steps = floorf (tile_top);
+          draw_bounds.origin.y = self->child_bounds.origin.y + self->child_bounds.size.height - draw_bounds.size.height;
+        }
+      else
+        {
+          y_steps = ceilf (tile_top);
+          draw_bounds.origin.y = self->child_bounds.origin.y;
+        }
+    }
+  else
+    {
+      /* a middle part of the tile is visible */
+      y_steps = floorf (tile_top);
+      draw_bounds.size.height = clip_bounds.size.height;
+      draw_bounds.origin.y = self->child_bounds.origin.y + (tile_top - y_steps) * self->child_bounds.size.height;
+      if ((int) y_steps % 2)
+        {
+          draw_bounds.origin.y = self->child_bounds.origin.y + (1 - tile_top + y_steps) * self->child_bounds.size.height - draw_bounds.size.height;
+          cairo_translate (cr, 0, draw_bounds.size.height);
+          clip_bounds.origin.y -= draw_bounds.size.height;
+        }
+    }
+  
+  cairo_translate (cr, x_steps * self->child_bounds.size.width, y_steps * self->child_bounds.size.height);
+  clip_bounds.origin.x -= x_steps * self->child_bounds.size.width;
+  clip_bounds.origin.y -= y_steps * self->child_bounds.size.height;
+
+  gsk_repeat_node_draw_tiled (cr,
+                              ccs,
+                              &clip_bounds,
+                              self->repeat,
+                              self->child,
+                              &draw_bounds);
+}
+
+static void
+gsk_repeat_node_draw (GskRenderNode *node,
+                      cairo_t       *cr,
+                      GdkColorState *ccs)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+
+  switch (self->repeat)
+    {
+      case GSK_REPEAT_NONE:
+        gsk_repeat_node_draw_none (node, cr, ccs);
+        break;
+
+      case GSK_REPEAT_PAD:
+        gsk_repeat_node_draw_pad (node, cr, ccs);
+        break;
+
+      case GSK_REPEAT_REPEAT:
+        gsk_repeat_node_draw_repeat (node, cr, ccs);
+        break;
+
+      case GSK_REPEAT_REFLECT:
+        gsk_repeat_node_draw_reflect (node, cr, ccs);
+        break;
+
+      default:
+        g_assert_not_reached ();
+        break;
     }
 }
 
