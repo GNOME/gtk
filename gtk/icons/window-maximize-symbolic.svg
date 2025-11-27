@@ -1,14 +1,21 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='rectangle square window maximize'
-     gpa:state='0'>
-  <path d='M 5 5 L 5 11 L 11 11 L 11 5 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='window-maximize'>
+  <path
+          id='window'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 4 2 L 12 2 C 13.1079998 2, 14 2.89199996, 14 4 L 14 12 C 14 13.1079998, 13.1079998 14, 12 14 L 4 14 C 2.89199996 14, 2 13.1079998, 2 12 L 2 4 C 2 2.89199996, 2.89199996 2, 4 2 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

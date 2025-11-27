@@ -1,22 +1,33 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='folder'
-     gpa:state='0'>
-  <path d='M 1 4 L 1 12 C 1 13.1045694, 1.89543045 14, 3 14 L 13 14 C 14.1045694 14, 15 13.1045694, 15 12 L 15 6 C 15 4.89543056, 14.1045694 4, 13 4 L 9.55862045 4 C 9.20094204 4, 8.85791302 3.85791254, 8.60499573 3.60499549 L 7.39500427 2.39500451 C 7.14208698 2.14208746, 6.79905796 2, 6.44137907 2 L 3 2 C 1.89543045 2, 1 2.89543056, 1 4 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 1 4.5 L 9.48965549 4.5 L 10 4'
-        id='path1'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='folder user-desktop directory dir path inode-directory'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 1 4 L 1 12 C 1 13.1045694, 1.89543045 14, 3 14 L 13 14 C 14.1045694 14, 15 13.1045694, 15 12 L 15 6 C 15 4.89543056, 14.1045694 4, 13 4 L 9.55862045 4 C 9.20094204 4, 8.85791302 3.85791254, 8.60499573 3.60499549 L 7.39500427 2.39500451 C 7.14208698 2.14208746, 6.79905796 2, 6.44137907 2 L 3 2 C 1.89543045 2, 1 2.89543056, 1 4 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 1 4.5 L 9.48965549 4.5 C 9.7689724 4.5, 10 4.26825714, 10 4'
+          gpa:stroke-width='0.25 1 1.5'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

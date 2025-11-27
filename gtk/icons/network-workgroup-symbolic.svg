@@ -1,30 +1,45 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='LAN network workgroup nodes'
-     gpa:state='0'>
-  <path d='M 9 7.5 L 15 7.5 M 1 7.5 L 7 7.5 M 13.5 14 C 13.5 14.8284273, 12.8284273 15.5, 12 15.5 C 11.1715727 15.5, 10.5 14.8284273, 10.5 14 C 10.5 13.1715727, 11.1715727 12.5, 12 12.5 C 12.8284273 12.5, 13.5 13.1715727, 13.5 14 Z M 5.5 14 C 5.5 14.8284273, 4.82842731 15.5, 4 15.5 C 3.17157292 15.5, 2.5 14.8284273, 2.5 14 C 2.5 13.1715727, 3.17157292 12.5, 4 12.5 C 4.82842731 12.5, 5.5 13.1715727, 5.5 14 Z'
-        id='path0'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 11.1586208 2.83987331 L 12.8413792 2.83987331 C 14.0372553 2.83987331, 15 3.80261803, 15 4.99849367 L 15 7.84137917 C 15 9.03725529, 14.0372553 10, 12.8413792 10 L 11.1586208 10 C 9.96274471 10, 9 9.03725529, 9 7.84137917 L 9 4.99849367 C 9 3.80261803, 9.96274471 2.83987331, 11.1586208 2.83987331 Z M 3.1586206 2.83987331 L 4.84137917 2.83987331 C 6.03725529 2.83987331, 7 3.80261803, 7 4.99849367 L 7 7.84137917 C 7 9.03725529, 6.03725529 10, 4.84137917 10 L 3.1586206 10 C 1.96274483 10, 1 9.03725529, 1 7.84137917 L 1 4.99849367 C 1 3.80261803, 1.96274483 2.83987331, 3.1586206 2.83987331 Z'
-        id='path1'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 12 10 L 12 12.5 M 4 12.5 L 4 10 M 2.5 14 L 0 14 M 10.5 14 L 5.5 14 M 13.5 14 L 16 14'
-        id='path2'
-        stroke-width='2'
-        stroke-linecap='butt'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='LAN network workgroup nodes'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 9 7.5 L 15 7.5 M 1 7.5 L 7 7.5 M 13.5 14 C 13.5 14.8284273, 12.8284273 15.5, 12 15.5 C 11.1715727 15.5, 10.5 14.8284273, 10.5 14 C 10.5 13.1715727, 11.1715727 12.5, 12 12.5 C 12.8284273 12.5, 13.5 13.1715727, 13.5 14 Z M 5.5 14 C 5.5 14.8284273, 4.82842731 15.5, 4 15.5 C 3.17157292 15.5, 2.5 14.8284273, 2.5 14 C 2.5 13.1715727, 3.17157292 12.5, 4 12.5 C 4.82842731 12.5, 5.5 13.1715727, 5.5 14 Z'
+          gpa:stroke-width='0.25 1 1.5'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 11.1586208 2.83987331 L 12.8413792 2.83987331 C 14.0372553 2.83987331, 15 3.80261803, 15 4.99849367 L 15 7.84137917 C 15 9.03725529, 14.0372553 10, 12.8413792 10 L 11.1586208 10 C 9.96274471 10, 9 9.03725529, 9 7.84137917 L 9 4.99849367 C 9 3.80261803, 9.96274471 2.83987331, 11.1586208 2.83987331 Z M 3.1586206 2.83987331 L 4.84137917 2.83987331 C 6.03725529 2.83987331, 7 3.80261803, 7 4.99849367 L 7 7.84137917 C 7 9.03725529, 6.03725529 10, 4.84137917 10 L 3.1586206 10 C 1.96274483 10, 1 9.03725529, 1 7.84137917 L 1 4.99849367 C 1 3.80261803, 1.96274483 2.83987331, 3.1586206 2.83987331 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path2'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='butt'
+          stroke-linejoin='round'
+          d='M 12 10 L 12 12.5 M 4 12.5 L 4 10 M 2.5 14 L 0 14 M 10.5 14 L 5.5 14 M 13.5 14 L 16 14'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

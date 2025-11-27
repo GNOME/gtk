@@ -1,3 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
-  <path class="foreground-stroke transparent-fill" stroke="#241F30" stroke-width="2" d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='switch on O active'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 12 8 C 12 10.2091389, 10.2091389 12, 8 12 C 5.79086113 12, 4 10.2091389, 4 8 C 4 5.79086113, 5.79086113 4, 8 4 C 10.2091389 4, 12 5.79086113, 12 8 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>
