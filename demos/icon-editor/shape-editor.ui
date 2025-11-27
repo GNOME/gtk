@@ -666,7 +666,7 @@
             </binding>
             <property name="label" translatable="yes">_Path</property>
             <property name="use-underline">1</property>
-            <property name="mnemonic-widget">path_cmds</property>
+            <property name="mnemonic-widget">path_editor</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">12</property>
@@ -675,7 +675,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkStack" id="path_cmds_stack">
+          <object class="PathEditor" id="path_editor">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool_and_uint_equal">
                 <lookup name="expanded">expander</lookup>
@@ -688,64 +688,7 @@
               <property name="row">12</property>
               <property name="column">1</property>
             </layout>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">label</property>
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="hexpand">0</property>
-                    <child>
-                      <object class="GtkLabel" id="path_cmds">
-                        <property name="ellipsize">end</property>
-                        <child>
-                          <object class="GtkGestureClick">
-                            <signal name="pressed" handler="path_cmds_clicked" swapped="yes"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <style>
-                          <class name="circular"/>
-                          <class name="small"/>
-                        </style>
-                        <property name="hexpand">1</property>
-                        <property name="halign">end</property>
-                        <property name="focus-on-click">0</property>
-                        <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Edit path geometry</property>
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="paintable">
-                              <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/Shaper/document-edit-symbolic.svg</property>
-                              </object>
-                            </property>
-                          </object>
-                        </property>
-                        <signal name="clicked" handler="edit_path" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">entry</property>
-                <property name="child">
-                  <object class="GtkEntry" id="path_cmds_entry">
-                    <signal name="activate" handler="path_cmds_activated" swapped="yes"/>
-                    <child>
-                      <object class="GtkEventControllerKey">
-                        <signal name="key-pressed" handler="path_cmds_key" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
+            <signal name="notify::path" handler="path_changed" swapped="yes"/>
           </object>
         </child>
 
@@ -1349,6 +1292,7 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="label" translatable="yes">_Clip Path</property>
             <property name="use-underline">1</property>
+            <property name="mnemonic-widget">clip_path_editor</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">27</property>
@@ -1357,70 +1301,13 @@
           </object>
         </child>
         <child>
-          <object class="GtkStack" id="clip_path_cmds_stack">
+          <object class="PathEditor" id="clip_path_editor">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <layout>
               <property name="row">27</property>
               <property name="column">1</property>
             </layout>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">label</property>
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="hexpand">0</property>
-                    <child>
-                      <object class="GtkLabel" id="clip_path_cmds">
-                        <property name="ellipsize">end</property>
-                        <child>
-                          <object class="GtkGestureClick">
-                            <signal name="pressed" handler="clip_path_cmds_clicked" swapped="yes"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <style>
-                          <class name="circular"/>
-                          <class name="small"/>
-                        </style>
-                        <property name="hexpand">1</property>
-                        <property name="halign">end</property>
-                        <property name="focus-on-click">0</property>
-                        <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Edit clip path geometry</property>
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="paintable">
-                              <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/Shaper/document-edit-symbolic.svg</property>
-                              </object>
-                            </property>
-                          </object>
-                        </property>
-                        <signal name="clicked" handler="edit_clip_path" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">entry</property>
-                <property name="child">
-                  <object class="GtkEntry" id="clip_path_cmds_entry">
-                    <signal name="activate" handler="clip_path_cmds_activated" swapped="yes"/>
-                    <child>
-                      <object class="GtkEventControllerKey">
-                        <signal name="key-pressed" handler="clip_path_cmds_key" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
+            <signal name="notify::path" handler="clip_path_changed" swapped="yes"/>
           </object>
         </child>
 

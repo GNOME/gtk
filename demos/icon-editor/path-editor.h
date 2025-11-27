@@ -25,9 +25,14 @@
 #include "path-paintable.h"
 
 
-#define SHAPE_EDITOR_TYPE (shape_editor_get_type ())
-G_DECLARE_FINAL_TYPE (ShapeEditor, shape_editor, SHAPE, EDITOR, GtkWidget)
+#define PATH_EDITOR_TYPE (path_editor_get_type ())
+G_DECLARE_FINAL_TYPE (PathEditor, path_editor, PATH, EDITOR, GtkWidget)
 
 
-ShapeEditor *    shape_editor_new          (PathPaintable *paintable,
-                                            Shape         *shape);
+PathEditor *    path_editor_new         (GskPath    *path,
+                                         double      width,
+                                         double      height);
+
+void            path_editor_set_path    (PathEditor *self,
+                                         GskPath    *path);
+GskPath *       path_editor_get_path    (PathEditor *self);
