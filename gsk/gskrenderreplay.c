@@ -255,7 +255,7 @@ gsk_render_replay_filter_node (GskRenderReplay *self,
  *
  * The default method calls [method@Gsk.RenderReplay.filter_node]
  * on all its child nodes and the filter functions for all its
- * proeprties. If none of them are changed, it returns the passed
+ * properties. If none of them are changed, it returns the passed
  * in node. Otherwise it constructs a new node with the changed
  * children and properties.
  *
