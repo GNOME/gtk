@@ -145,6 +145,28 @@ gsk_repeat_node_draw_none (GskRenderNode *node,
   return;
 }
 
+void
+gsk_repeat_node_compute_rect_for_pad (const graphene_rect_t *draw_bounds,
+                                      const graphene_rect_t *child_bounds,
+                                      graphene_rect_t       *result)
+{
+  result->size.width = MIN (child_bounds->size.width, draw_bounds->size.width);
+  if (child_bounds->origin.x + child_bounds->size.width - result->size.width < draw_bounds->origin.x)
+    result->origin.x = child_bounds->origin.x + child_bounds->size.width - result->size.width;
+  else if (child_bounds->origin.x < draw_bounds->origin.x)
+    result->origin.x = draw_bounds->origin.x;
+  else
+    result->origin.x = child_bounds->origin.x;
+
+  result->size.height = MIN (child_bounds->size.height, draw_bounds->size.height);
+  if (child_bounds->origin.y + child_bounds->size.height - result->size.height < draw_bounds->origin.y)
+    result->origin.y = child_bounds->origin.y + child_bounds->size.height - result->size.height;
+  else if (child_bounds->origin.y < draw_bounds->origin.y)
+    result->origin.y = draw_bounds->origin.y;
+  else
+    result->origin.y = child_bounds->origin.y;
+}
+
 static void
 gsk_repeat_node_draw_pad (GskRenderNode *node,
                           cairo_t       *cr,
@@ -157,28 +179,7 @@ gsk_repeat_node_draw_pad (GskRenderNode *node,
   if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
     return;
 
-  if (gsk_rect_intersection (&clip_bounds, &self->child_bounds, &draw_bounds))
-    {
-      /* everything fine, the repeated area is visible */
-    }
-  else
-    {
-      draw_bounds.size.width = MIN (self->child_bounds.size.width, clip_bounds.size.width);
-      if (self->child_bounds.origin.x + self->child_bounds.size.width - draw_bounds.size.width < clip_bounds.origin.x)
-        draw_bounds.origin.x = self->child_bounds.origin.x + self->child_bounds.size.width - draw_bounds.size.width;
-      else if (self->child_bounds.origin.x < clip_bounds.origin.x)
-        draw_bounds.origin.x = clip_bounds.origin.x;
-      else
-        draw_bounds.origin.x = self->child_bounds.origin.x;
-
-      draw_bounds.size.height = MIN (self->child_bounds.size.height, clip_bounds.size.height);
-      if (self->child_bounds.origin.y + self->child_bounds.size.height - draw_bounds.size.height < clip_bounds.origin.y)
-        draw_bounds.origin.y = self->child_bounds.origin.y + self->child_bounds.size.height - draw_bounds.size.height;
-      else if (self->child_bounds.origin.y < clip_bounds.origin.y)
-        draw_bounds.origin.y = clip_bounds.origin.y;
-      else
-        draw_bounds.origin.y = self->child_bounds.origin.y;
-    }
+  gsk_repeat_node_compute_rect_for_pad (&clip_bounds, &self->child_bounds, &draw_bounds);
 
   gsk_repeat_node_draw_tiled (cr,
                               ccs,
