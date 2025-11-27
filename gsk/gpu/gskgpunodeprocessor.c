@@ -58,7 +58,7 @@
 #include "gskpath.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gskrepeatnode.h"
+#include "gskrepeatnodeprivate.h"
 #include "gskroundedclipnode.h"
 #include "gskroundedrectprivate.h"
 #include "gskstrokenode.h"
@@ -3426,12 +3426,22 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
   const graphene_rect_t *child_bounds;
   graphene_rect_t bounds;
   float tile_left, tile_right, tile_top, tile_bottom;
+  GskRepeat repeat;
   gboolean avoid_offscreen;
 
   child = gsk_repeat_node_get_child (node);
   child_bounds = gsk_repeat_node_get_child_bounds (node);
   if (gsk_rect_is_empty (child_bounds))
     return;
+
+  repeat = gsk_repeat_node_get_repeat (node);
+  if (repeat == GSK_REPEAT_NONE)
+    {
+      gsk_gpu_node_processor_add_node_clipped (self,
+                                               child,
+                                               &node->bounds);
+      return;
+    }
 
   gsk_gpu_node_processor_get_clip_bounds (self, &bounds);
   if (!gsk_rect_intersection (&bounds, &node->bounds, &bounds))
