@@ -31,6 +31,7 @@
 
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 #include "gsk/gskstrokeprivate.h"
 
@@ -95,6 +96,7 @@ struct _GtkSnapshotState {
     struct {
       graphene_rect_t bounds;
       graphene_rect_t child_bounds;
+      GskRepeat repeat;
     } repeat;
     struct {
       graphene_rect_t bounds;
@@ -772,6 +774,7 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
   GskRenderNode *node, *repeat_node;
   const graphene_rect_t *bounds = &state->data.repeat.bounds;
   const graphene_rect_t *child_bounds = &state->data.repeat.child_bounds;
+  GskRepeat repeat = state->data.repeat.repeat;
 
   node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
   if (node == NULL)
@@ -790,9 +793,10 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
       return color_node;
     }
 
-  repeat_node = gsk_repeat_node_new (bounds,
-                                     node,
-                                     child_bounds->size.width > 0 ? child_bounds : NULL);
+  repeat_node = gsk_repeat_node_new2 (bounds,
+                                      node,
+                                      child_bounds->size.width > 0 ? child_bounds : NULL,
+                                      repeat);
 
   gsk_render_node_unref (node);
 
@@ -902,21 +906,11 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
     gtk_snapshot_autopush_transform (snapshot);
 }
 
-/**
- * gtk_snapshot_push_repeat:
- * @snapshot: a `GtkSnapshot`
- * @bounds: the bounds within which to repeat
- * @child_bounds: (nullable): the bounds of the child or %NULL
- *   to use the full size of the collected child node
- *
- * Creates a node that repeats the child node.
- *
- * The child is recorded until the next call to [method@Gtk.Snapshot.pop].
- */
 void
-gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
-                          const graphene_rect_t *bounds,
-                          const graphene_rect_t *child_bounds)
+gtk_snapshot_push_repeat2 (GtkSnapshot           *snapshot,
+                           const graphene_rect_t *bounds,
+                           const graphene_rect_t *child_bounds,
+                           GskRepeat              repeat)
 {
   GtkSnapshotState *state;
   gboolean empty_child_bounds = FALSE;
@@ -941,6 +935,26 @@ gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
 
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.repeat.bounds);
   state->data.repeat.child_bounds = real_child_bounds;
+  state->data.repeat.repeat = repeat;
+}
+
+/**
+ * gtk_snapshot_push_repeat:
+ * @snapshot: a `GtkSnapshot`
+ * @bounds: the bounds within which to repeat
+ * @child_bounds: (nullable): the bounds of the child or %NULL
+ *   to use the full size of the collected child node
+ *
+ * Creates a node that repeats the child node.
+ *
+ * The child is recorded until the next call to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
+                          const graphene_rect_t *bounds,
+                          const graphene_rect_t *child_bounds)
+{
+  gtk_snapshot_push_repeat2 (snapshot, bounds, child_bounds, GSK_REPEAT_REPEAT);
 }
 
 static GskRenderNode *
