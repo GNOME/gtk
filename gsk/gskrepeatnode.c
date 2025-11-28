@@ -293,6 +293,107 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
     }
 }
 
+/*<private>
+ * gsk_repeat_node_compute_rect_for_reflect:
+ * @draw_bounds: the area that should be drawn
+ * @child_bounds: the bounds of the child
+ * @child_rect: (out caller-allocates): the part of the child that is needed
+ * @pos: (out caller-allocates): where to place the top left of the child rect
+ *
+ * Computes the part of the child bounds that need to be rendered into an offscreen
+ * and where to place that so that when rendering it into the passed in draw bounds
+ * with REFLECT it will produce the correct output.
+ **/
+void
+gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
+                                          const graphene_rect_t *child_bounds,
+                                          graphene_rect_t       *child_rect,
+                                          graphene_point_t      *pos)
+{
+  float tile_left, tile_right, tile_top, tile_bottom;
+
+  tile_left = (draw_bounds->origin.x - child_bounds->origin.x) / child_bounds->size.width;
+  tile_right = (draw_bounds->origin.x + draw_bounds->size.width - child_bounds->origin.x) / child_bounds->size.width;
+  tile_top = (draw_bounds->origin.y - child_bounds->origin.y) / child_bounds->size.height;
+  tile_bottom = (draw_bounds->origin.y + draw_bounds->size.height - child_bounds->origin.y) / child_bounds->size.height;
+
+  if (draw_bounds->size.width >= child_bounds->size.width)
+    {
+      /* the tile is fully contained at least once */
+      child_rect->origin.x = child_bounds->origin.x;
+      child_rect->size.width = child_bounds->size.width;
+      pos->x = child_rect->origin.x;
+    }
+  else if (ceilf (tile_left) <= floorf (tile_right))
+    {
+      /* one side of the tile gets reflected */
+      child_rect->size.width = draw_bounds->size.width;
+      if (((int) ceilf (tile_left)) % 2)
+        {
+          /* ...normal | mirrored... */
+          child_rect->origin.x = child_bounds->origin.x + child_bounds->size.width - child_rect->size.width;
+          pos->x = child_bounds->origin.x + ceilf (tile_left) * child_bounds->size.width - child_rect->size.width;
+        }
+      else
+        {
+          /* ...mirrored | normal... */
+          child_rect->origin.x = child_bounds->origin.x;
+          pos->x = child_rect->origin.x + ceilf (tile_left) * child_bounds->size.width;
+        }
+    }
+  else
+    {
+      /* a middle part of the tile is visible */
+      float steps = floorf (tile_left);
+      child_rect->size.width = draw_bounds->size.width;
+      child_rect->origin.x = child_bounds->origin.x + (tile_left - steps) * child_bounds->size.width;
+      pos->x = child_rect->origin.x + steps * child_bounds->size.width;
+      if ((int) steps % 2)
+        {
+          child_rect->origin.x = child_bounds->origin.x + (1 - tile_left + steps) * child_bounds->size.width - child_rect->size.width;
+          pos->x -= child_rect->size.width;
+        }
+    }
+  
+  if (draw_bounds->size.height >= child_bounds->size.height)
+    {
+      /* the tile is fully contained at least once */
+      child_rect->origin.y = child_bounds->origin.y;
+      child_rect->size.height = child_bounds->size.height;
+      pos->y = child_rect->origin.y;
+    }
+  else if (ceilf (tile_top) <= floorf (tile_bottom))
+    {
+      /* one side of the tile gets reflected */
+      child_rect->size.height = draw_bounds->size.height;
+      if (((int) ceilf (tile_top)) % 2)
+        {
+          /* ...normal | mirrored... */
+          child_rect->origin.y = child_bounds->origin.y + child_bounds->size.height - child_rect->size.height;
+          pos->y = child_bounds->origin.y + ceilf (tile_top) * child_bounds->size.height - child_rect->size.height;
+        }
+      else
+        {
+          /* ...mirrored | normal... */
+          child_rect->origin.y = child_bounds->origin.y;
+          pos->y = child_rect->origin.y + ceilf (tile_top) * child_bounds->size.height;
+        }
+    }
+  else
+    {
+      /* a middle part of the tile is visible */
+      float steps = floorf (tile_top);
+      child_rect->size.height = draw_bounds->size.height;
+      child_rect->origin.y = child_bounds->origin.y + (tile_top - steps) * child_bounds->size.height;
+      pos->y = child_rect->origin.y + steps * child_bounds->size.height;
+      if ((int) steps % 2)
+        {
+          child_rect->origin.y = child_bounds->origin.y + (1 - tile_top + steps) * child_bounds->size.height - child_rect->size.height;
+          pos->y -= child_rect->size.height;
+        }
+    }
+}
+
 static void
 gsk_repeat_node_draw_reflect (GskRenderNode *node,
                               cairo_t       *cr,
@@ -300,92 +401,22 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
   graphene_rect_t clip_bounds, draw_bounds;
-  float tile_left, tile_right, tile_top, tile_bottom, x_steps, y_steps;
+  graphene_point_t draw_pos;
 
   gdk_cairo_rect (cr, &node->bounds);
   cairo_clip (cr);
   _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
 
-  tile_left = (clip_bounds.origin.x - self->child_bounds.origin.x) / self->child_bounds.size.width;
-  tile_right = (clip_bounds.origin.x + clip_bounds.size.width - self->child_bounds.origin.x) / self->child_bounds.size.width;
-  tile_top = (clip_bounds.origin.y - self->child_bounds.origin.y) / self->child_bounds.size.height;
-  tile_bottom = (clip_bounds.origin.y + clip_bounds.size.height - self->child_bounds.origin.y) / self->child_bounds.size.height;
+  gsk_repeat_node_compute_rect_for_reflect (&clip_bounds,
+                                            &self->child_bounds,
+                                            &draw_bounds,
+                                            &draw_pos);
 
-  if (clip_bounds.size.width >= self->child_bounds.size.width)
-    {
-      /* the tile is fully contained at least once */
-      draw_bounds.origin.x = self->child_bounds.origin.x;
-      draw_bounds.size.width = self->child_bounds.size.width;
-      x_steps = 0;
-    }
-  else if (ceilf (tile_left) <= floorf (tile_right))
-    {
-      /* one side of the tile gets reflected */
-      draw_bounds.size.width = clip_bounds.size.width;
-      if (((int) ceilf (tile_left)) % 2)
-        {
-          x_steps = floorf (tile_left);
-          draw_bounds.origin.x = self->child_bounds.origin.x + self->child_bounds.size.width - draw_bounds.size.width;
-        }
-      else
-        {
-          x_steps = ceilf (tile_left);
-          draw_bounds.origin.x = self->child_bounds.origin.x;
-        }
-    }
-  else
-    {
-      /* a middle part of the tile is visible */
-      x_steps = floorf (tile_left);
-      draw_bounds.size.width = clip_bounds.size.width;
-      draw_bounds.origin.x = self->child_bounds.origin.x + (tile_left - x_steps) * self->child_bounds.size.width;
-      if ((int) x_steps % 2)
-        {
-          draw_bounds.origin.x = self->child_bounds.origin.x + (1 - tile_left + x_steps) * self->child_bounds.size.width - draw_bounds.size.width;
-          cairo_translate (cr, draw_bounds.size.width, 0);
-          clip_bounds.origin.x -= draw_bounds.size.width;
-        }
-    }
-  
-  if (clip_bounds.size.height >= self->child_bounds.size.height)
-    {
-      /* the tile is fully contained at least once */
-      draw_bounds.origin.y = self->child_bounds.origin.y;
-      draw_bounds.size.height = self->child_bounds.size.height;
-      y_steps = 0;
-    }
-  else if (ceilf (tile_top) <= floorf (tile_bottom))
-    {
-      /* one side of the tile gets reflected */
-      draw_bounds.size.height = clip_bounds.size.height;
-      if (((int) ceilf (tile_top)) % 2)
-        {
-          y_steps = floorf (tile_top);
-          draw_bounds.origin.y = self->child_bounds.origin.y + self->child_bounds.size.height - draw_bounds.size.height;
-        }
-      else
-        {
-          y_steps = ceilf (tile_top);
-          draw_bounds.origin.y = self->child_bounds.origin.y;
-        }
-    }
-  else
-    {
-      /* a middle part of the tile is visible */
-      y_steps = floorf (tile_top);
-      draw_bounds.size.height = clip_bounds.size.height;
-      draw_bounds.origin.y = self->child_bounds.origin.y + (tile_top - y_steps) * self->child_bounds.size.height;
-      if ((int) y_steps % 2)
-        {
-          draw_bounds.origin.y = self->child_bounds.origin.y + (1 - tile_top + y_steps) * self->child_bounds.size.height - draw_bounds.size.height;
-          cairo_translate (cr, 0, draw_bounds.size.height);
-          clip_bounds.origin.y -= draw_bounds.size.height;
-        }
-    }
-  
-  cairo_translate (cr, x_steps * self->child_bounds.size.width, y_steps * self->child_bounds.size.height);
-  clip_bounds.origin.x -= x_steps * self->child_bounds.size.width;
-  clip_bounds.origin.y -= y_steps * self->child_bounds.size.height;
+  draw_pos.x -= draw_bounds.origin.x;
+  draw_pos.y -= draw_bounds.origin.y;
+  cairo_translate (cr, - draw_pos.x, - draw_pos.y);
+  clip_bounds.origin.x += draw_pos.x;
+  clip_bounds.origin.y += draw_pos.y;
 
   gsk_repeat_node_draw_tiled (cr,
                               ccs,

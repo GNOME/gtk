@@ -3480,6 +3480,31 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
     }
   else if (repeat == GSK_REPEAT_REFLECT)
     {
+      graphene_rect_t clipped_child_bounds;
+      graphene_point_t pos;
+      GskGpuImage *image;
+
+      gsk_repeat_node_compute_rect_for_reflect (&bounds,
+                                                child_bounds,
+                                                &clipped_child_bounds,
+                                                &pos);
+      image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                        GSK_GPU_AS_IMAGE_EXACT_SIZE,
+                                                        &clipped_child_bounds,
+                                                        child,
+                                                        &clipped_child_bounds);
+      g_return_if_fail (image);
+      clipped_child_bounds.origin = pos;
+      gsk_gpu_texture_op (self->frame,
+                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                          &self->offset,
+                          &(GskGpuShaderImage) {
+                              image,
+                              GSK_GPU_SAMPLER_REFLECT,
+                              &bounds,
+                              &clipped_child_bounds
+                          });
+      g_object_unref (image);
     }
   else
     {
