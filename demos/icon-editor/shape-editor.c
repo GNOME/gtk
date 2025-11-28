@@ -20,6 +20,7 @@
  */
 
 #include "shape-editor.h"
+#include "alpha-editor.h"
 #include "path-paintable.h"
 #include "color-editor.h"
 #include "mini-graph.h"
@@ -86,8 +87,7 @@ struct _ShapeEditor
   GtkSizeGroup *sg;
   GtkButton *move_down;
   GtkDropDown *paint_order;
-  GtkScale *opacity;
-  GtkSpinButton *opacity_spin;
+  AlphaEditor *opacity;
   GtkScale *miter_limit;
   GtkStack *clip_path_cmds_stack;
   GtkLabel *clip_path_cmds;
@@ -905,7 +905,7 @@ paint_order_changed (ShapeEditor *self)
 static void
 opacity_changed (ShapeEditor *self)
 {
-  double value = gtk_range_get_value (GTK_RANGE (self->opacity));
+  double value = alpha_editor_get_alpha (self->opacity);
 
   if (self->updating)
     return;
@@ -1675,8 +1675,8 @@ shape_editor_update (ShapeEditor *self)
       gtk_drop_down_set_selected (self->paint_order,
                                   svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_PAINT_ORDER));
 
-      gtk_range_set_value (GTK_RANGE (self->opacity),
-                           svg_shape_attr_get_number (self->shape, SHAPE_ATTR_OPACITY, viewport));
+      alpha_editor_set_alpha (self->opacity,
+                              svg_shape_attr_get_number (self->shape, SHAPE_ATTR_OPACITY, viewport));
 
       svg_shape_attr_get_clip (self->shape, SHAPE_ATTR_CLIP_PATH, &path);
       if (path && !gsk_path_is_empty (path))
@@ -1721,15 +1721,6 @@ static void
 shape_editor_init (ShapeEditor *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  /* We want a numeric entry, but there's no space for buttons, so... */
-  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->opacity_spin));
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      if (GTK_IS_BUTTON (child))
-        gtk_widget_set_visible (child, FALSE);
-    }
 }
 
 static void
@@ -1781,6 +1772,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   g_type_ensure (COLOR_EDITOR_TYPE);
+  g_type_ensure (alpha_editor_get_type ());
   g_type_ensure (MINI_GRAPH_TYPE);
 
   object_class->get_property = shape_editor_get_property;
@@ -1846,7 +1838,6 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, sg);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, paint_order);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity_spin);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, miter_limit);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_stack);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds);

@@ -1,4 +1,5 @@
 icon_editor_sources = [
+  'alpha-editor.c',
   'border-paintable.c',
   'color-editor.c',
   'color-paintable.c',

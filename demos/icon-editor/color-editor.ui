@@ -52,41 +52,12 @@
                           <object class="GtkLabel" id="alpha_label">
                             <property name="label" translatable="yes">_Alpha</property>
                             <property name="use-underline">1</property>
-                            <property name="mnemonic-widget">alpha_spin</property>
+                            <property name="mnemonic-widget">alpha_editor</property>
                             <property name="valign">baseline-center</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkBox">
-                            <style>
-                              <class name="alpha-editor"/>
-                              <class name="tight"/>
-                            </style>
-                            <child>
-                              <object class="GtkSpinButton" id="alpha_spin">
-                                <property name="adjustment">alpha_adj</property>
-                                <property name="valign">baseline-center</property>
-                                <property name="numeric">1</property>
-                                <property name="digits">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkScale">
-                                <property name="valign">baseline-center</property>
-                                <accessibility>
-                                  <relation name="labelled-by">alpha_label</relation>
-                                </accessibility>
-                                <property name="orientation">horizontal</property>
-                                <property name="adjustment">
-                                  <object class="GtkAdjustment" id="alpha_adj">
-                                    <property name="lower">0</property>
-                                    <property name="upper">1</property>
-                                    <property name="step-increment">0.01</property>
-                                    <property name="page-increment">0.1</property>
-                                  </object>
-                                </property>
-                              </object>
-                            </child>
+                          <object class="AlphaEditor" id="alpha_editor">
                           </object>
                         </child>
                       </object>
@@ -98,7 +69,7 @@
                     <property name="paintable">
                       <object class="ColorPaintable" id="indicator">
                         <property name="symbolic" bind-source="ColorEditor" bind-property="symbolic" bind-flags="sync-create"/>
-                        <property name="alpha" bind-source="alpha_adj" bind-property="value" bind-flags="bidirectional | sync-create"/>
+                        <property name="alpha" bind-source="alpha_editor" bind-property="alpha" bind-flags="bidirectional | sync-create"/>
                       </object>
                     </property>
                   </object>

@@ -5,6 +5,7 @@
     <file preprocess="xml-stripblanks">org.gtk.Shaper.Devel.svg</file>
     <file preprocess="xml-stripblanks">org.gtk.Shaper-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icon-editor-window.ui</file>
+    <file preprocess="xml-stripblanks">alpha-editor.ui</file>
     <file preprocess="xml-stripblanks">paintable-editor.ui</file>
     <file preprocess="xml-stripblanks">shape-editor.ui</file>
     <file preprocess="xml-stripblanks">state-editor.ui</file>
