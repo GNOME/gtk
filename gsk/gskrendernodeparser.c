@@ -1458,7 +1458,7 @@ parse_color_arg (GtkCssParser *parser,
 {
   ColorArgData *d = data;
   GdkColorState *color_state;
-  float values[4], clamped[4];
+  float values[4];
 
   if (!parse_color_state (parser, d->context, &color_state))
     return 0;
@@ -1487,20 +1487,7 @@ parse_color_arg (GtkCssParser *parser,
       values[3] = 1;
     }
 
-  gdk_color_state_clamp (color_state, values, clamped);
-  if (values[0] != clamped[0] ||
-      values[1] != clamped[1] ||
-      values[2] != clamped[2] ||
-      values[3] != clamped[3])
-    {
-      gtk_css_parser_error (parser,
-                            GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
-                            gtk_css_parser_get_block_location (parser),
-                            gtk_css_parser_get_end_location (parser),
-                            "Color values out of range for color state");
-    }
-
-  gdk_color_init (d->color, color_state, clamped);
+  gdk_color_init (d->color, color_state, values);
   return 1;
 }
 
