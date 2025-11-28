@@ -985,7 +985,10 @@ stroke_changed (ShapeEditor *self)
   if (!do_stroke)
     svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE, svg_paint_new_none ());
   else if (symbolic != 0xffff)
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE, svg_paint_new_symbolic (symbolic));
+    {
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE, svg_paint_new_symbolic (symbolic));
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_OPACITY, svg_number_new (color->alpha));
+    }
   else
     svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE, svg_paint_new_rgba (color));
 
@@ -1050,7 +1053,10 @@ fill_changed (ShapeEditor *self)
   if (!do_fill)
     svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL, svg_paint_new_none ());
   else if (symbolic != 0xffff)
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL, svg_paint_new_symbolic (symbolic));
+    {
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL, svg_paint_new_symbolic (symbolic));
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL_OPACITY, svg_number_new (color->alpha));
+    }
   else
     svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL, svg_paint_new_rgba (color));
 
