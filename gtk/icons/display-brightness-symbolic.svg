@@ -1,33 +1,22 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='display brightness lightness light sun weather-clear'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 14 8 L 15 8 M 12.2799997 3.71000004 L 13 3.00999999 M 8 2 L 8 1 M 3.72000003 3.71000004 L 3 3 M 1 8 L 2 8 M 3 12.9899998 L 3.72000003 12.2799997 M 8 15 L 8 14 M 13 13 L 12.2799997 12.2799997'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1.88168'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6 6 C 4.89543056 7.10456944, 4.89543056 8.89543056, 6 10 C 7.10456944 11.1045694, 8.89543056 11.1045694, 10 10 C 11.1045694 8.89543056, 11.1045694 7.10456944, 10 6 C 8.89543056 4.89543056, 7.10456944 4.89543056, 6 6 Z'
-          gpa:stroke-width='0.47042 1.88168 2.82252'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='display brightness lightness light sun'
+     gpa:state='0'>
+  <path d='M 14 8 L 15 8 M 12.2799997 3.71000004 L 13 3.00999999 M 8 2 L 8 1 M 3.72000003 3.71000004 L 3 3 M 1 8 L 2 8 M 3 12.9899998 L 3.72000003 12.2799997 M 8 15 L 8 14 M 13 13 L 12.2799997 12.2799997'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 11 8 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106769 o 3 0, 3 3, 0.707106769 z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

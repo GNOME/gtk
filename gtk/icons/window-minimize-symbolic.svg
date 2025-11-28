@@ -1,21 +1,14 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='window-minimize'>
-  <path
-          id='min'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 4 12 L 12 12'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='window minimize line panel'
+     gpa:state='0'>
+  <path d='M 5 11 L 11 11'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

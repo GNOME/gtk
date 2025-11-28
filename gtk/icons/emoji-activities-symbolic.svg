@@ -1,45 +1,30 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='tennis ball circle category activities emoji-activities'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 1 8 C 1 11.8659935, 4.13400698 15, 8 15 C 11.8659935 15, 15 11.8659935, 15 8 C 15 4.13400698, 11.8659935 1, 8 1 C 4.13400698 1, 1 4.13400698, 1 8 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 1.21347904 9.71184921 C 2.74070096 8.65392876, 4.79530287 8.78681278, 6.17352629 10.0326471 C 7.55174971 11.2784815, 7.89075089 13.3092756, 6.99191427 14.9352198'
-          gpa:stroke-width='0.25 1 1.5'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path2'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 14.7545033 6.18365192 C 13.1960068 7.32041836, 11.0673723 7.26497984, 9.57016087 6.04863071 C 8.07294941 4.83228159, 7.58271503 2.76012659, 8.37618351 1.00184441'
-          gpa:stroke-width='0.25 1 1.5'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='tennis ball circle category activities'
+     gpa:state='0'>
+  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 1.21347904 9.71184921 C 2.74070096 8.65392876, 4.79530287 8.78681278, 6.17352629 10.0326471 C 7.55174971 11.2784815, 7.89075089 13.3092756, 6.99191427 14.9352198'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 14.7545033 6.18365192 C 13.1960068 7.32041836, 11.0673723 7.26497984, 9.57016087 6.04863071 C 8.07294941 4.83228159, 7.58271503 2.76012659, 8.37618351 1.00184441'
+        id='path2'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

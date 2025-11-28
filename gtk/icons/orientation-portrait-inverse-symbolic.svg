@@ -1,33 +1,23 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='page orientation print portrait inverse'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 5.15862083 1 L 10.8413792 1 C 12.0016909 1, 13 1.99830878, 13 3.1586206 L 13 12.8413792 C 13 14.0016909, 12.0016909 15, 10.8413792 15 L 5.15862083 15 C 3.9983089 15, 3 14.0016909, 3 12.8413792 L 3 3.1586206 C 3 1.99830878, 3.9983089 1, 5.15862083 1 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 9.5361948 11.000001 L 6.5361948 8.00000095 L 9.53619576 5'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='page orientation print portrait inverse'
+     gpa:state='0'>
+  <path d='M 9.19573021 10.958909 L 6.19573116 7.95890951 L 9.19573116 4.95890951 Z'
+        id='path0'
+        stroke-width='0.5'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-stroke foreground-fill'/>
+  <path d='M 5.15862083 1 L 10.8413792 1 O 13 1, 13 3.1586206, 0.707106769 L 13 12.8413792 O 13 15, 10.8413792 15, 0.707106769 L 5.15862083 15 O 3 15, 3 12.8413792, 0.707106769 L 3 3.1586206 O 3 1, 5.15862083 1, 0.707106769 Z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

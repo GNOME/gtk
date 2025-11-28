@@ -1,33 +1,22 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='lock locked changes-prevent channel-secure network-wireless-encrypted system-lock-screen'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 11 8 L 11 5 C 11 3.34314585, 9.65685463 2, 8 2 C 6.34314585 2, 5 3.34314585, 5 5 L 5 8'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 3 14 L 3 9 C 3 8.39999962, 3.4000001 8, 4 8 L 12 8 C 12.6000004 8, 13 8.39999962, 13 9 L 13 14 L 3 14 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='lock locked changes prevent'
+     gpa:state='0'>
+  <path d='M 11 8 L 11 5 C 11 3.34314585, 9.65685463 2, 8 2 C 6.34314585 2, 5 3.34314585, 5 5 L 5 8'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 3 14 L 3 9 C 3 8.39999962, 3.4000001 8, 4 8 L 12 8 C 12.6000004 8, 13 8.39999962, 13 9 L 13 14 L 3 14 Z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

@@ -1,33 +1,22 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='folder-documents document blank empty text sheet text-x-generic'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 6 C 13 5.35971069, 12.7456465 4.74564648, 12.2928934 4.29289341 L 10.7071066 2.70710683 C 10.2543535 2.254354, 9.64028931 2.00000024, 9 2 L 5 2 C 3.89543056 2, 3 2.89543056, 3 4 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 8.53103447 2 L 8.53103447 6.49655151 L 10.4965525 6.49655151 C 11.8791685 6.49655199, 13 7.61738396, 13 9'
-          gpa:stroke-width='0.25 1 1.5'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='folder documents document blank empty text sheet'
+     gpa:state='0'>
+  <path d='M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 6 C 13 5.35971069, 12.7456465 4.74564648, 12.2928934 4.29289341 L 10.7071066 2.70710683 C 10.2543535 2.254354, 9.64028931 2.00000024, 9 2 L 5 2 C 3.89543056 2, 3 2.89543056, 3 4 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 8.53103447 2 L 8.53103447 6.49655151 L 10.4965525 6.49655151 C 11.8791685 6.49655199, 13 7.61738396, 13 9'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>
