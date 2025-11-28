@@ -1,33 +1,22 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='eye hide view-conceal user-not-tracked'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 1 1 L 15 15 M 4.33199978 4.33199978 C 6.73600006 2.40799999, 10.3190002 2.6500001, 12.4259996 5.05900002 L 15 8 L 12.4259996 10.941 Q 12.0719995 11.3459997, 11.6680002 11.6680002 M 8.97799969 12.868 C 6.96407986 13.2096891, 4.91734314 12.4798479, 3.57399988 10.941 L 1 8 L 2.5250001 6.42399979'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6.58599997 6.58599997 C 7.0912056 6.08056784, 7.82770491 5.88310051, 8.51799965 6.06799984 C 9.20804787 6.25296211, 9.74703789 6.79195213, 9.93200016 7.48199987 C 10.1168995 8.17229462, 9.91943169 8.9087944, 9.41399956 9.41399956'
-          gpa:stroke-width='0.25 1 1.5'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='eye view conceal hide'
+     gpa:state='0'>
+  <path d='M 1 1 L 15 15 M 4.33199978 4.33199978 C 6.73600006 2.40799999, 10.3190002 2.6500001, 12.4259996 5.05900002 L 15 8 L 12.4259996 10.941 Q 12.0719995 11.3459997, 11.6680002 11.6680002 M 8.97799969 12.868 C 6.96407986 13.2096891, 4.91734314 12.4798479, 3.57399988 10.941 L 1 8 L 2.5250001 6.42399979'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 6.58599997 6.58599997 C 7.0912056 6.08056784, 7.82770491 5.88310051, 8.51799965 6.06799984 C 9.20804787 6.25296211, 9.74703789 6.79195213, 9.93200016 7.48199987 C 10.1168995 8.17229462, 9.91943169 8.9087944, 9.41399956 9.41399956'
+        id='path1'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

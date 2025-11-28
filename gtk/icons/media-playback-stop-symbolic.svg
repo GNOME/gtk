@@ -1,34 +1,13 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='1'
-        gpa:keywords='media-playback-stop square'>
-  <path
-          id='path0'
-          fill='url("#gpa:foreground") rgb(0,0,0)'
-          fill-rule='nonzero'
-          stroke='none'
-          d='M 3 4.5 L 3 11.5 C 3 12.3284273, 3.67157292 13, 4.5 13 L 11.5 13 C 12.3284273 13, 13 12.3284273, 13 11.5 L 13 4.5 C 13 3.67157292, 12.3284273 3, 11.5 3 L 4.5 3 C 3.67157292 3, 3 3.67157292, 3 4.5 Z'
-          gpa:states='1'
-          gpa:transition-type='fade'
-          gpa:transition-duration='200ms'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 3 4.5 L 3 11.5 C 3 12.3284273, 3.67157292 13, 4.5 13 L 11.5 13 C 12.3284273 13, 13 12.3284273, 13 11.5 L 13 4.5 C 13 3.67157292, 12.3284273 3, 11.5 3 L 4.5 3 C 3.67157292 3, 3 3.67157292, 3 4.5 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'
-          gpa:states='0'
-          gpa:transition-type='fade'
-          gpa:transition-duration='200ms'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='media playback stop square'>
+  <path d='M 4.5 3 L 11.5 3 O 13 3, 13 4.5, 0.707106769 L 13 11.5 O 13 13, 11.5 13, 0.707106769 L 4.5 13 O 3 13, 3 11.5, 0.707106769 L 3 4.5 O 3 3, 4.5 3, 0.707106769 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

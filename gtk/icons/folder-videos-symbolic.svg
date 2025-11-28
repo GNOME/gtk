@@ -1,33 +1,23 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='camra-video camera-webfolder videos movie clip video-x-generic folder-videos'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 7.00716591 4 L 12.9928341 4 C 14.0717354 4, 15 4.92826462, 15 6.00716591 L 15 10.9928341 C 15 12.0717354, 14.0717354 13, 12.9928341 13 L 7.00716591 13 C 5.92826462 13, 5 12.0717354, 5 10.9928341 L 5 6.00716591 C 5 4.92826462, 5.92826462 4, 7.00716591 4 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 5 8.46093845 L 1 5 L 1 12 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='video camera folder videos movie clip'
+     gpa:state='0'>
+  <path d='M 7.00716591 4 L 12.9928341 4 O 15 4, 15 6.00716591, 0.707106769 L 15 10.9928341 O 15 13, 12.9928341 13, 0.707106769 L 7.00716591 13 O 5 13, 5 10.9928341, 0.707106769 L 5 6.00716591 O 5 4, 7.00716591 4, 0.707106769 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 5 8.46093845 L 1 5 L 1 12 Z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-stroke foreground-fill'/>
 </svg>

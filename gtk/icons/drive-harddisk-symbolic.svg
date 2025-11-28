@@ -1,45 +1,39 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='drive-harddisk drive-harddisk-system drive-harddisk-ieee1394 hdd ssd nvme media harddisk'>
-  <path
-          id='border'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 2 13 L 2 3 C 2 1.89999998, 2.9000001 1, 4 1 L 12 1 C 13.1045694 1, 14 1.89543045, 14 3 L 14 13 C 14 14.1045694, 13.1045694 15, 12 15 L 4 15 C 2.89543056 15, 2 14.1045694, 2 13 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='head'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 5.53448296 10 L 8 10 C 6.34314585 10, 5 8.65685463, 5 7 L 5 9.46551704 C 5 9.76070404, 5.23929596 10, 5.53448296 10 Z M 11 7 C 11 8.65685463, 9.65685463 10, 8 10 C 6.34314585 10, 5 8.65685463, 5 7 C 5 5.34314585, 6.34314585 4, 8 4 C 9.65685463 4, 11 5.34314585, 11 7 Z'
-          gpa:stroke-width='0.5 2 2'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='edge'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='0.5'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 14 10.75 C 14 11.8545694, 13.1045694 12.75, 12 12.75 L 4 12.75 C 2.89543056 12.75, 2 11.8545694, 2 10.75'
-          gpa:stroke-width='0.25 0.5 2'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='disk drive hdd ssd nvme media harddisk'
+     gpa:state='0'>
+  <path d='M 2 13 L 2 3 C 2 1.89999998, 2.9000001 1, 4 1 L 12 1 C 13.1045694 1, 14 1.89543045, 14 3 L 14 13 C 14 14.1045694, 13.1045694 15, 12 15 L 4 15 C 2.89543056 15, 2 14.1045694, 2 13 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 11 7 C 11 8.65685463, 9.65685463 10, 8 10 C 6.34314585 10, 5 8.65685463, 5 7 C 5 5.34314585, 6.34314585 4, 8 4 C 9.65685463 4, 11 5.34314585, 11 7 Z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 5 10 L 8 10 C 6.34314585 10, 5 8.65685463, 5 7 L 5 10 Z'
+        id='path2'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-stroke foreground-fill'/>
+  <path d='M 14 10.5 C 14 11.6045694, 13.1045694 12.5, 12 12.5 L 4 12.5 C 2.89543056 12.5, 2 11.6045694, 2 10.5'
+        id='path3'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

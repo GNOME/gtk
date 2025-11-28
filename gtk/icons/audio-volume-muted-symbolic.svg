@@ -1,49 +1,21 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='1'
-        gpa:keywords='audio-volume-muted sound audio mute disabled'>
-  <path
-          id='stroke'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'
-          gpa:states='0'>
-  </path>
-  <path
-          id='x'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 10 10 L 14 6 M 10 6 L 14 10'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'
-          gpa:states='0 1'>
-  </path>
-  <path
-          id='fill'
-          fill='url("#gpa:foreground") rgb(0,0,0)'
-          fill-rule='nonzero'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='foreground'
-          gpa:states='1'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='sound audio mute disabled'>
+  <path d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 10 10 L 14 6 M 10 6 L 14 10'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

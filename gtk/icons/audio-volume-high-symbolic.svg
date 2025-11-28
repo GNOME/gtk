@@ -1,66 +1,34 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='1'
-        gpa:keywords='multimedia-volume-control audio-volume-high sound loud audio speaker volume'>
-  <path
-          id='outline'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'
-          gpa:states='0'>
-  </path>
-  <path
-          id='wave1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 10.1852732 4.95939684 C 11.2715759 6.84092855, 11.2715759 9.15907097, 10.1852732 11.0406027'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'
-          gpa:states='0 1'
-          gpa:transition-type='animate'
-          gpa:origin='0.5'>
-  </path>
-  <path
-          id='wave2'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 13.5790482 2.99999976 C 15.3653765 6.09401035, 15.3653765 9.90598965, 13.5790482 13'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'
-          gpa:states='0 1'
-          gpa:transition-type='animate'
-          gpa:origin='0.5'>
-  </path>
-  <path
-          id='fill'
-          fill='url("#gpa:foreground") rgb(0,0,0)'
-          fill-rule='nonzero'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='foreground'
-          gpa:states='1'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='sound audio volume high loud'
+     gpa:state='1'>
+  <path d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 10.1852732 4.95939684 C 11.2715759 6.84092855, 11.2715759 9.15907097, 10.1852732 11.0406027'
+        id='path1'
+        gpa:origin='0.5'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'
+        gpa:stroke='foreground'/>
+  <path d='M 13.5790482 2.99999976 C 15.3653765 6.09401035, 15.3653765 9.90598965, 13.5790482 13'
+        id='path2'
+        gpa:origin='0.5'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'
+        gpa:stroke='foreground'/>
 </svg>

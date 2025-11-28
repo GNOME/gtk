@@ -1,21 +1,14 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='list-remove-all remove item list'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 12 10 L 15 10 M 4 11 L 6 11 M 9 7 L 1 7 L 1 15 L 9 15 Z M 12 13 L 15 13 M 12 7 L 15 7 M 1 4 L 15 4 M 1 1 L 15 1'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='remove item list'
+     gpa:state='0'>
+  <path d='M 12 10 L 15 10 M 4 11 L 6 11 M 9 7 L 1 7 L 1 15 L 9 15 Z M 12 13 L 15 13 M 12 7 L 15 7 M 1 4 L 15 4 M 1 1 L 15 1'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

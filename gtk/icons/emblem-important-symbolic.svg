@@ -1,33 +1,22 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='round important warning attention explamation mark dialog-warning emblem-important'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 1 8 C 1 11.8659935, 4.13400698 15, 8 15 C 11.8659935 15, 15 11.8659935, 15 8 C 15 4.13400698, 11.8659935 1, 8 1 C 4.13400698 1, 1 4.13400698, 1 8 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 8.09550667 11 C 8.09550667 11.0527468, 8.05274677 11.0955057, 8 11.0955057 C 7.9472537 11.0955057, 7.90449429 11.0527468, 7.90449381 11 C 7.90449429 10.9472532, 7.9472537 10.9044943, 8 10.9044943 C 8.05274677 10.9044943, 8.09550667 10.9472532, 8.09550667 11 M 8 4 L 8 8'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='round important warning attention explamation mark'
+     gpa:state='0'>
+  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 8.09550667 11 C 8.09550667 11.0527468, 8.05274677 11.0955057, 8 11.0955057 C 7.9472537 11.0955057, 7.90449429 11.0527468, 7.90449381 11 C 7.90449429 10.9472532, 7.9472537 10.9044943, 8 10.9044943 C 8.05274677 10.9044943, 8.09550667 10.9472532, 8.09550667 11 M 8 4 L 8 8'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

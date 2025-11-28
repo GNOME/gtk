@@ -1,45 +1,28 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='emoji-symbols circle triangle square'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 7 9 C 5.34375 9, 4 10.34375, 4 12 C 4 13.65625, 5.34375 15, 7 15 C 8.65625 15, 10 13.65625, 10 12 C 10 10.34375, 8.65625 9, 7 9 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 11.6914062 2 C 11.6679659 2, 11.644536 2, 11.6210957 2.00391006 C 11.2851562 2.01953101, 10.9804688 2.20703101, 10.8125 2.5 L 8.49218655 6.5 C 8.10546875 7.16406202, 8.58203125 8, 9.35546875 8 L 14 8 C 14.7695312 8, 15.2460928 7.16406202, 14.8632812 6.5 L 12.5429688 2.5 C 12.3632812 2.19140601, 12.0390615 2.00390601, 11.6914062 2 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path2'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 4.5 1 C 4.24218798 1, 3.98828101 1.09765601, 3.79296899 1.29296899 L 1.29296899 3.79296899 C 0.902343988 4.18359423, 0.902343988 4.81640577, 1.29296899 5.20703077 L 3.79296899 7.70703077 C 4.18359423 8.09765625, 4.81640577 8.09765625, 5.20703077 7.70703077 L 7.70703077 5.20703077 C 8.09765625 4.81640577, 8.09765625 4.18359423, 7.70703077 3.79296899 L 5.20703077 1.29296899 C 5.01171923 1.09765601, 4.75781202 1, 4.5 1 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'>
+  <path d='M 7 9 C 5.34375 9, 4 10.34375, 4 12 C 4 13.65625, 5.34375 15, 7 15 C 8.65625 15, 10 13.65625, 10 12 C 10 10.34375, 8.65625 9, 7 9 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 11.6914062 2 C 11.6679659 2, 11.644536 2, 11.6210957 2.00391006 C 11.2851562 2.01953101, 10.9804688 2.20703101, 10.8125 2.5 L 8.49218655 6.5 C 8.10546875 7.16406202, 8.58203125 8, 9.35546875 8 L 14 8 C 14.7695312 8, 15.2460928 7.16406202, 14.8632812 6.5 L 12.5429688 2.5 C 12.3632812 2.19140601, 12.0390615 2.00390601, 11.6914062 2 Z'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 4.5 1 C 4.24218798 1, 3.98828101 1.09765601, 3.79296899 1.29296899 L 1.29296899 3.79296899 C 0.902343988 4.18359423, 0.902343988 4.81640577, 1.29296899 5.20703077 L 3.79296899 7.70703077 C 4.18359423 8.09765625, 4.81640577 8.09765625, 5.20703077 7.70703077 L 7.70703077 5.20703077 C 8.09765625 4.81640577, 8.09765625 4.18359423, 7.70703077 3.79296899 L 5.20703077 1.29296899 C 5.01171923 1.09765601, 4.75781202 1, 4.5 1 Z'
+        id='path2'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

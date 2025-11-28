@@ -1,81 +1,60 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='remote server network LAN'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 10 14 L 13 14'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 6 14 L 3 14'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path2'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 7.99609423 12 L 7.99609423 10'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path3'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6.51191902 14 C 6.51191902 14.8218431, 7.1781559 15.488081, 8 15.488081 C 8.82184315 15.488081, 9.48808193 14.8218431, 9.48808193 14 C 9.48808193 13.1781569, 8.82184315 12.51192, 8 12.51192 C 7.1781559 12.51192, 6.51191902 13.1781569, 6.51191902 14 Z'
-          gpa:stroke-width='0.5 1 2'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path4'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 1 4.04164886 L 1 6.95835114 C 1.00000012 8.63820744, 2.36179256 10, 4.04164886 10 L 11.9583511 10 C 13.6382074 10, 15 8.63820744, 15 6.95835114 L 15 4.04164886 C 15 2.36179256, 13.6382074 1.00000012, 11.9583511 1.00000012 L 4.04164886 1 C 2.36179256 1.00000012, 1.00000012 2.36179256, 1.00000012 4.04164886 Z'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path5'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 8 5 L 8.07653904 5 M 5 5 L 5.07653904 5'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='remote server network LAN'
+     gpa:state='0'>
+  <path d='M 10 14 L 13 14'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='square'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 6 14 L 3 14'
+        id='path1'
+        stroke-width='2'
+        stroke-linecap='square'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 9.50000191 14'
+        id='path2'
+        stroke-width='1'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 7.99609423 12 L 7.99609423 10'
+        id='path3'
+        stroke-width='2'
+        stroke-linecap='square'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 9.51171875 14.0058594 o 0 1.50585961, -1.50585961 1.50585961, 0.707106769 o -1.50585961 0, -1.50585961 -1.50585961, 0.707106769 o 0 -1.50585961, 1.50585961 -1.50585961, 0.707106769 o 1.50585961 0, 1.50585961 1.50585961, 0.707106769 z'
+        id='path4'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 4.04164886 1 L 11.9583511 1 O 15 1, 15 4.04164886, 0.707106769 L 15 6.95835114 O 15 10, 11.9583511 10, 0.707106769 L 4.04164886 10 O 1 10, 1 6.95835114, 0.707106769 L 1 4.04164886 O 1 1, 4.04164886 1, 0.707106769 Z'
+        id='path5'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
+  <path d='M 8 4 C 8.5539999 4, 9 4.4460001, 9 5 C 9 5.5539999, 8.5539999 6, 8 6 C 7.4460001 6, 7 5.5539999, 7 5 C 7 4.4460001, 7.4460001 4, 8 4 Z M 5 4 C 5.5539999 4, 6 4.4460001, 6 5 C 6 5.5539999, 5.5539999 6, 5 6 C 4.4460001 6, 4 5.5539999, 4 5 C 4 4.4460001, 4.4460001 4, 5 4 Z'
+        id='path6'
+        stroke='none'
+        fill-rule='winding'
+        fill='rgb(0,0,0)'
+        class='foreground-fill'/>
 </svg>
