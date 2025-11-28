@@ -72,7 +72,8 @@ gsk_repeat_node_draw_tiled (cairo_t                *cr,
                             const graphene_rect_t  *rect,
                             GskRepeat               repeat,
                             GskRenderNode          *child,
-                            const graphene_rect_t  *child_bounds)
+                            const graphene_rect_t  *child_bounds,
+                            const graphene_point_t *pos)
 {
   cairo_pattern_t *pattern;
   cairo_surface_t *child_surface;
@@ -107,16 +108,18 @@ gsk_repeat_node_draw_tiled (cairo_t                *cr,
   xscale = width / child_bounds->size.width;
   yscale = height / child_bounds->size.height;
   cairo_surface_set_device_scale (child_surface, xscale, yscale);
-  cairo_surface_set_device_offset (child_surface,
-                                   - xscale * child_bounds->origin.x,
-                                   - yscale * child_bounds->origin.y);
   child_cr = cairo_create (child_surface);
+  cairo_translate (child_cr,
+                   - child_bounds->origin.x,
+                   - child_bounds->origin.y);
   gsk_render_node_draw_ccs (child, child_cr, ccs);
   cairo_destroy (child_cr);
 
   pattern = cairo_pattern_create_for_surface (child_surface);
   cairo_surface_write_to_png (child_surface, "foo.png");
   gdk_cairo_pattern_set_repeat (pattern, repeat);
+  cairo_matrix_init_translate (&matrix, -pos->x, -pos->y);
+  cairo_pattern_set_matrix (pattern, &matrix);
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
@@ -186,7 +189,8 @@ gsk_repeat_node_draw_pad (GskRenderNode *node,
                               &clip_bounds,
                               self->repeat,
                               self->child,
-                              &draw_bounds);
+                              &draw_bounds,
+                              &draw_bounds.origin);
 }
 
 static void
@@ -221,7 +225,8 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                       &clip_bounds,
                                       self->repeat,
                                       self->child,
-                                      &self->child_bounds);
+                                      &self->child_bounds,
+                                      &self->child_bounds.origin);
         }
       else
         {
@@ -243,7 +248,16 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                           ),
                                           self->repeat,
                                           self->child,
-                                          &self->child_bounds);
+                                          &GRAPHENE_RECT_INIT (
+                                              self->child_bounds.origin.x,
+                                              start_y - y * self->child_bounds.size.height,
+                                              self->child_bounds.size.width,
+                                              end_y - start_y
+                                          ),
+                                          &GRAPHENE_POINT_INIT (
+                                            self->child_bounds.origin.x,
+                                            start_y
+                                          ));
             }
         }
     }
@@ -256,7 +270,7 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
         {
           float start_x = MAX (clip_bounds.origin.x,
                                self->child_bounds.origin.x + x * self->child_bounds.size.width);
-          float end_x = MAX (clip_bounds.origin.x + clip_bounds.size.width,
+          float end_x = MIN (clip_bounds.origin.x + clip_bounds.size.width,
                              self->child_bounds.origin.x + (x + 1) * self->child_bounds.size.width);
           gsk_repeat_node_draw_tiled (cr,
                                       ccs,
@@ -268,7 +282,16 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                       ),
                                       self->repeat,
                                       self->child,
-                                      &self->child_bounds);
+                                      &GRAPHENE_RECT_INIT (
+                                          start_x - x * self->child_bounds.size.width,
+                                          self->child_bounds.origin.y,
+                                          end_x - start_x,
+                                          self->child_bounds.size.height
+                                      ),
+                                      &GRAPHENE_POINT_INIT (
+                                        start_x,
+                                        self->child_bounds.origin.y
+                                      ));
         }
     }
   else
@@ -412,18 +435,13 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
                                             &draw_bounds,
                                             &draw_pos);
 
-  draw_pos.x -= draw_bounds.origin.x;
-  draw_pos.y -= draw_bounds.origin.y;
-  cairo_translate (cr, - draw_pos.x, - draw_pos.y);
-  clip_bounds.origin.x += draw_pos.x;
-  clip_bounds.origin.y += draw_pos.y;
-
   gsk_repeat_node_draw_tiled (cr,
                               ccs,
                               &clip_bounds,
                               self->repeat,
                               self->child,
-                              &draw_bounds);
+                              &draw_bounds,
+                              &draw_pos);
 }
 
 static void
