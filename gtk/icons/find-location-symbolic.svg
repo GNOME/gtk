@@ -1,14 +1,21 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='geolocation find location gps glonass'
-     gpa:state='0'>
-  <path d='M 9 8 C 9 8.55228519, 8.55228519 9, 8 9 C 7.44771528 9, 7 8.55228519, 7 8 C 7 7.44771528, 7.44771528 7, 8 7 C 8.55228519 7, 9 7.44771528, 9 8 Z M 15 8 L 13 8 M 8 1 L 8 3 M 1 8 L 3 8 M 8 15 L 8 13 M 13 8 C 13 10.7614241, 10.7614241 13, 8 13 C 5.23857641 13, 3 10.7614241, 3 8 C 3 5.23857641, 5.23857641 3, 8 3 C 10.7614241 3, 13 5.23857641, 13 8 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='geolocation find-location gps glonass target'>
+  <path
+          id='target'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 9 8 C 9 8.55228519, 8.55228519 9, 8 9 C 7.44771528 9, 7 8.55228519, 7 8 C 7 7.44771528, 7.44771528 7, 8 7 C 8.55228519 7, 9 7.44771528, 9 8 Z M 15 8 L 13 8 M 8 1 L 8 3 M 1 8 L 3 8 M 8 15 L 8 13 M 13 8 C 13 10.7614241, 10.7614241 13, 8 13 C 5.23857641 13, 3 10.7614241, 3 8 C 3 5.23857641, 5.23857641 3, 8 3 C 10.7614241 3, 13 5.23857641, 13 8 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

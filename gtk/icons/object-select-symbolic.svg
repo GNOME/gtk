@@ -1,14 +1,21 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='checkmark check select object'
-     gpa:state='0'>
-  <path d='M 3 9 L 6 12 L 13 4'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='object-select checkmark check select object'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 9 L 6 12 L 13 4'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path fill="none" d="M10 3v10L5.006 8Z" class="foreground-stroke transparent-fill" style="fill:#000;fill-opacity:0;stroke:#241f31;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"/></svg>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='pan-left arrow left start'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 10 3 L 10 13 L 5 8 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+</svg>

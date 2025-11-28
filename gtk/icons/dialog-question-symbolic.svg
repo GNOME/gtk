@@ -1,30 +1,45 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='dialog question ask prompt questionmark'
-     gpa:state='0'>
-  <path d='M 6.50168562 0.498314232 L 0.498314232 6.50168562 C -0.329181671 7.32918167, -0.329181671 8.67081738, 0.498314261 9.4983139 L 6.50168562 15.5016861 C 7.32918167 16.3291817, 8.67081738 16.3291817, 9.4983139 15.5016861 L 15.5016861 9.4983139 C 16.3291817 8.67081738, 16.3291817 7.32918167, 15.5016861 6.50168562 L 9.4983139 0.498314232 C 8.67081738 -0.329181671, 7.32918167 -0.329181671, 6.50168562 0.498314261 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 6 7 C 6 5.89543056, 6.89543056 5, 8 5 C 9.10456944 5, 10 5.89543056, 10 7 C 10 7.55228472, 9.55228519 8, 9 8 C 8.44771481 8, 8 8.44771481, 8 9 L 8 10'
-        id='path1'
-        stroke-width='2'
-        stroke-linecap='butt'
-        stroke-linejoin='miter'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 7.95703125 12 L 8.046875 12'
-        id='path2'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='dialog-question ask prompt questionmark'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 6.50168562 0.498314232 L 0.498314232 6.50168562 C -0.329181671 7.32918167, -0.329181671 8.67081738, 0.498314261 9.4983139 L 6.50168562 15.5016861 C 7.32918167 16.3291817, 8.67081738 16.3291817, 9.4983139 15.5016861 L 15.5016861 9.4983139 C 16.3291817 8.67081738, 16.3291817 7.32918167, 15.5016861 6.50168562 L 9.4983139 0.498314232 C 8.67081738 -0.329181671, 7.32918167 -0.329181671, 6.50168562 0.498314261 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='butt'
+          stroke-linejoin='miter'
+          d='M 6 7 C 6 5.89543056, 6.89543056 5, 8 5 C 9.10456944 5, 10 5.89543056, 10 7 C 10 8.59709549, 8 8.69847298, 8 10'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path2'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 7.95703125 12 L 8.046875 12'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

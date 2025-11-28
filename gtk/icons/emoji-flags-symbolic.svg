@@ -1,14 +1,33 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='flag category'
-     gpa:state='0'>
-  <path d='M 2 1 L 2 13.484375 C 2 14.3214312, 2.67856836 15, 3.515625 15 C 4.34405184 14.9913702, 5.00862932 14.3128023, 5 13.484375 L 5 8 C 5.96164894 8.0656023, 6.80971432 8.65368176, 7.20828009 9.53130245 C 7.71785307 10.4490395, 8.68998623 11.0130758, 9.73962212 11 L 14 11 L 14 4 L 11.5849247 4 C 10.638423 3.99999976, 9.79811287 3.39433837, 9.49880314 2.49640799 C 9.1986618 1.60113776, 8.35931587 0.998370111, 7.41507483 1 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='preferences-desktop-locale flag category emoji-flags'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 2 L 3 11 L 5 11 C 8 11, 7.26037788 13, 10 13 L 14 13 L 14 4 L 10 4 C 7.82625818 4, 8.52329445 1.9939183, 5 2 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 11 L 3 14 C 3 14.5522852, 2.55228472 15, 2 15 C 1.44771528 15, 1 14.5522852, 1 14 L 1 2 C 1 1.44771528, 1.44771528 1, 2 1 C 2.55228472 1, 3 1.44771528, 3 2'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

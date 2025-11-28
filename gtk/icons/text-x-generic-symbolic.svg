@@ -1,92 +1,33 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="16"
-   height="16"
-   gpa:version="1"
-   gpa:keywords="document blank empty text sheet"
-   gpa:state="0"
-   version="1.1"
-   id="svg1"
-   sodipodi:docname="text-x-generic-symbolic.svg"
-   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:gpa="https://www.gtk.org/grappa">
-  <defs
-     id="defs1">
-    <inkscape:path-effect
-       effect="fillet_chamfer"
-       id="path-effect1"
-       is_visible="true"
-       lpeversion="1"
-       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,2.5034485,0,1 @ F,0,1,1,0,0,0,1"
-       radius="0"
-       unit="px"
-       method="auto"
-       mode="F"
-       chamfer_steps="1"
-       flexible="false"
-       use_knot_distance="true"
-       apply_no_radius="true"
-       apply_with_radius="true"
-       only_selected="false"
-       hide_knots="false" />
-  </defs>
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="11.313708"
-     inkscape:cx="11.534679"
-     inkscape:cy="20.417708"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg1">
-    <inkscape:grid
-       id="grid1"
-       units="px"
-       originx="0"
-       originy="0"
-       spacingx="1"
-       spacingy="1"
-       empcolor="#0099e5"
-       empopacity="0.30196078"
-       color="#0099e5"
-       opacity="0.14901961"
-       empspacing="5"
-       enabled="true"
-       visible="false" />
-  </sodipodi:namedview>
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='folder-documents document blank empty text sheet text-x-generic'>
   <path
-     d="M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 6 C 13 5.35971069, 12.7456465 4.74564648, 12.2928934 4.29289341 L 10.7071066 2.70710683 C 10.2543535 2.254354, 9.64028931 2.00000024, 9 2 L 5 2 C 3.89543056 2, 3 2.89543056, 3 4 Z"
-     id="path0"
-     stroke-width="2"
-     stroke-linecap="round"
-     stroke-linejoin="round"
-     stroke="rgb(0,0,0)"
-     fill="none"
-     class="foreground-stroke transparent-fill" />
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 6 C 13 5.35971069, 12.7456465 4.74564648, 12.2928934 4.29289341 L 10.7071066 2.70710683 C 10.2543535 2.254354, 9.64028931 2.00000024, 9 2 L 5 2 C 3.89543056 2, 3 2.89543056, 3 4 Z'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
   <path
-     d="m 8.5310345,2 v 4.4965515 l 1.9655175,0 A 2.5034485,2.5034485 45 0 1 13,9"
-     id="path1"
-     stroke-width="1"
-     stroke-linecap="round"
-     stroke-linejoin="round"
-     stroke="#000000"
-     fill="none"
-     class="foreground-stroke transparent-fill"
-     inkscape:path-effect="#path-effect1"
-     inkscape:original-d="M 8.5310345,2 V 6.4965515 H 13 V 9"
-     sodipodi:nodetypes="cccc" />
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 8.53103447 2 L 8.53103447 6.49655151 L 10.4965525 6.49655151 C 11.8791685 6.49655199, 13 7.61738396, 13 9'
+          gpa:stroke-width='0.25 1 1.5'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

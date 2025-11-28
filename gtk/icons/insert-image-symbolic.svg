@@ -1,30 +1,45 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='insert image'
-     gpa:state='0'>
-  <path d='M 3 2 L 3 8 C 3 8.55228519, 3.44771528 9, 4 9 L 12 9 C 12.5522852 9, 13 8.55228519, 13 8 L 13 2 C 13 1.44771528, 12.5522852 1, 12 1 L 4 1 C 3.44771528 1, 3 1.44771528, 3 2'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 5 6 L 6 5 L 7 6 L 9 4 L 11 6'
-        id='path1'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 5 13 L 8 15 L 11 13'
-        id='path2'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='insert-image picture frame inject'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 2 L 3 8 C 3 8.55228519, 3.44771528 9, 4 9 L 12 9 C 12.5522852 9, 13 8.55228519, 13 8 L 13 2 C 13 1.44771528, 12.5522852 1, 12 1 L 4 1 C 3.44771528 1, 3 1.44771528, 3 2'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 5 6 L 6 5 L 7 6 L 9 4 L 11 6'
+          gpa:stroke-width='0.25 1 1.5'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path2'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 5 13 L 8 15 L 11 13'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

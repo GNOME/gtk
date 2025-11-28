@@ -1,23 +1,46 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='pipette color picker'
-     gpa:state='0'>
+     gpa:keywords='pipette color picker color-select'
+     gpa:state='1'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 1 15 L 2 14 L 2 12 L 8 6 L 10 8 L 4 14 L 2 14'
         id='path0'
+        gpa:states='0 1'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
         fill='none'
-        class='foreground-stroke transparent-fill'/>
+        class='foreground-stroke transparent-fill'
+        gpa:stroke='foreground'/>
   <path d='M 6 4 L 6.84399986 3.1559999 C 7.48247957 2.5176518, 8.51751995 2.5176518, 9.15600014 3.1559999 L 10 4 L 11.71 2.27699995 C 11.9777927 2.00716686, 12.3420086 1.85507154, 12.7221699 1.85432088 C 13.1023302 1.85357034, 13.467144 2.00422645, 13.7360001 2.273 C 14.2809105 2.83392143, 14.2697344 3.72984624, 13.7110004 4.27699995 L 12 6 L 12.8439999 6.84399986 C 13.4823475 7.48247957, 13.4823475 8.51751995, 12.8439999 9.15600014 L 12 10 Z'
         id='path1'
+        gpa:states='1'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
-        fill-rule='winding'
+        fill-rule='nonzero'
         fill='rgb(0,0,0)'
-        class='foreground-stroke foreground-fill'/>
+        class='foreground-stroke foreground-fill'
+        gpa:stroke='foreground'
+        gpa:fill='foreground'/>
+  <path d='M 6 4 L 6.84399986 3.1559999 C 7.48247957 2.5176518, 8.51751995 2.5176518, 9.15600014 3.1559999 L 10 4 L 11.71 2.27699995 C 11.9777927 2.00716686, 12.3420086 1.85507154, 12.7221699 1.85432088 C 13.1023302 1.85357034, 13.467144 2.00422645, 13.7360001 2.273 C 14.2809105 2.83392143, 14.2697344 3.72984624, 13.7110004 4.27699995 L 12 6 L 12.8439999 6.84399986 C 13.4823475 7.48247957, 13.4823475 8.51751995, 12.8439999 9.15600014 L 12 10 Z'
+        id='path2'
+        gpa:states='0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill-rule='nonzero'
+        fill-opacity='0.25'
+        fill='rgb(0,0,0)'
+        class='foreground-stroke foreground-fill not-initial-state'
+        gpa:stroke='foreground'
+        gpa:fill='foreground'/>
 </svg>
