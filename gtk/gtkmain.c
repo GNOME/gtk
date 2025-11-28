@@ -1390,10 +1390,7 @@ handle_pointing_event (GdkEvent *event)
   type = gdk_event_get_event_type (event);
   sequence = gdk_event_get_event_sequence (event);
 
-  if (type == GDK_SCROLL &&
-      (gdk_device_get_source (device) == GDK_SOURCE_TOUCHPAD ||
-       gdk_device_get_source (device) == GDK_SOURCE_TRACKPOINT ||
-       gdk_device_get_source (device) == GDK_SOURCE_MOUSE))
+  if (type == GDK_SCROLL && !gdk_event_get_device_tool (event))
     {
       /* A bit of a kludge, resolve target lookups for scrolling devices
        * on the seat pointer.
