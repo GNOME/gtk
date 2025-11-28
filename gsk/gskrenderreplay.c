@@ -163,7 +163,8 @@ gsk_render_replay_free (GskRenderReplay *self)
 
 /**
  * gsk_render_replay_set_node_filter:
- * @filter: The function to call to replay nodes
+ * @filter: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the function to call to replay nodes
  * @user_data: user data to pass to @func
  * @user_destroy: destroy notify that will be called to release
  *   user_data
@@ -280,7 +281,8 @@ gsk_render_replay_default (GskRenderReplay *self,
 /**
  * gsk_render_replay_set_node_foreach:
  * @self: the replay
- * @foreach: the function to call for all nodes
+ * @foreach: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the function to call for all nodes
  * @user_data: user data to pass to @func
  * @user_destroy: destroy notify that will be called to release
  *   user_data
@@ -339,7 +341,8 @@ gsk_render_replay_foreach_node (GskRenderReplay *self,
 /**
  * gsk_render_replay_set_texture_filter:
  * @self: the replay
- * @filter: (nullable): the texture filter function
+ * @filter: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the texture filter function
  * @user_data: user data to pass to @filter
  * @user_destroy: destroy notify that will be called to release
  *   user_data
@@ -403,7 +406,8 @@ gsk_render_replay_filter_texture (GskRenderReplay *self,
 /**
  * gsk_render_replay_set_font_filter:
  * @self: the replay
- * @filter: (nullable): the font filter function
+ * @filter: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the font filter function
  * @user_data: user data to pass to @filter
  * @user_destroy: destroy notify that will be called to release
  *   user_data
