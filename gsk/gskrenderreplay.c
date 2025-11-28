@@ -167,7 +167,7 @@ gsk_render_replay_free (GskRenderReplay *self)
  *   the function to call to replay nodes
  * @user_data: user data to pass to @func
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets the function to use as a node filter.
  *
@@ -178,7 +178,7 @@ gsk_render_replay_free (GskRenderReplay *self)
  *
  * * create a replacement node and return that
  *
- * * discard the node by returning %NULL
+ * * discard the node by returning `NULL`
  *
  * * call [method@Gsk.RenderReplay.default] to have the default handler
  *   run for this node, which calls your function on its children
@@ -285,12 +285,12 @@ gsk_render_replay_default (GskRenderReplay *self,
  *   the function to call for all nodes
  * @user_data: user data to pass to @func
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets the function to call for every node.
  *
  * This function is called before the node filter, so if it returns
- * FALSE, the node filter will never be called.
+ * false, the node filter will never be called.
  *
  * Since: 4.22
  */
@@ -345,7 +345,7 @@ gsk_render_replay_foreach_node (GskRenderReplay *self,
  *   the texture filter function
  * @user_data: user data to pass to @filter
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets a filter function to be called by [method@Gsk.RenderReplay.default]
  * for nodes that contain textures.
@@ -410,7 +410,7 @@ gsk_render_replay_filter_texture (GskRenderReplay *self,
  *   the font filter function
  * @user_data: user data to pass to @filter
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets a filter function to be called by [method@Gsk.RenderReplay.default]
  * for nodes that contain fonts.
