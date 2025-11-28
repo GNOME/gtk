@@ -1358,6 +1358,8 @@ static void
 duplicate_path (ShapeEditor *self)
 {
   g_ptr_array_add (self->shape->parent->shapes, shape_duplicate (self->shape));
+  path_paintable_changed (self->paintable);
+  path_paintable_paths_changed (self->paintable);
 }
 
 static void
