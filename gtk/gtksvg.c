@@ -10670,6 +10670,8 @@ serialize_shape_attrs (GString              *s,
                        Shape                *shape,
                        GtkSvgSerializeFlags  flags)
 {
+  GString *classes = g_string_new ("");
+
   if (shape->id)
     {
       indent_for_attr (s, indent);
@@ -10705,8 +10707,60 @@ serialize_shape_attrs (GString              *s,
               svg_value_print (value, s);
               g_string_append_c (s, '\'');
             }
+
+          if (value && attr == SHAPE_ATTR_FILL)
+            {
+              SvgPaint *paint = (SvgPaint *) value;
+
+              if (paint->kind == PAINT_NONE)
+                {
+                  g_string_append_printf (classes, "%stransparent-fill",
+                                          classes->len > 0 ? " " : "");
+                }
+              else if (paint->kind == PAINT_SYMBOLIC)
+                {
+                  const char *names[] = {
+                    "foreground-fill",
+                    "error-fill",
+                    "warning-fill",
+                    "success-fill",
+                    "accent-fill",
+                  };
+
+                  g_string_append_printf (classes, "%s%s",
+                                          classes->len > 0 ? " " : "",
+                                          names[paint->symbolic]);
+                }
+            }
+          if (value && attr == SHAPE_ATTR_STROKE)
+            {
+              SvgPaint *paint = (SvgPaint *) value;
+
+              if (paint->kind == PAINT_SYMBOLIC)
+                {
+                  const char *names[] = {
+                    "foreground-stroke",
+                    "error-stroke",
+                    "warning-stroke",
+                    "success-stroke",
+                    "accent-stroke",
+                  };
+
+                  g_string_append_printf (classes, "%s%s",
+                                          classes->len > 0 ? " " : "",
+                                          names[paint->symbolic]);
+                }
+            }
         }
     }
+
+  if (flags & GTK_SVG_SERIALIZE_SYMBOLIC_COMPAT)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "class='%s'", classes->str);
+    }
+
+  g_string_free (classes, TRUE);
 }
 
 static void
