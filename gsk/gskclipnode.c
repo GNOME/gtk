@@ -106,6 +106,18 @@ gsk_clip_node_get_opaque_rect (GskRenderNode   *node,
   return graphene_rect_intersection (&self->clip, &child_opaque, opaque);
 }
 
+static GskRenderNode **
+gsk_clip_node_get_children (GskRenderNode *node,
+                            gsize         *n_children)
+{
+  GskClipNode *self = (GskClipNode *) node;
+
+  *n_children = 1;
+  
+  return &self->child;
+}
+
+
 static GskRenderNode *
 gsk_clip_node_replay (GskRenderNode   *node,
                       GskRenderReplay *replay)
@@ -139,6 +151,7 @@ gsk_clip_node_class_init (gpointer g_class,
   node_class->finalize = gsk_clip_node_finalize;
   node_class->draw = gsk_clip_node_draw;
   node_class->diff = gsk_clip_node_diff;
+  node_class->get_children = gsk_clip_node_get_children;
   node_class->replay = gsk_clip_node_replay;
   node_class->get_opaque_rect = gsk_clip_node_get_opaque_rect;
 }

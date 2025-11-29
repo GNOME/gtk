@@ -169,6 +169,17 @@ nope:
   return;
 }
 
+static GskRenderNode **
+gsk_color_matrix_node_get_children (GskRenderNode *node,
+                                    gsize         *n_children)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+
+  *n_children = 1;
+  
+  return &self->child;
+}
+
 static GskRenderNode *
 gsk_color_matrix_node_replay (GskRenderNode   *node,
                               GskRenderReplay *replay)
@@ -202,6 +213,7 @@ gsk_color_matrix_node_class_init (gpointer g_class,
   node_class->finalize = gsk_color_matrix_node_finalize;
   node_class->draw = gsk_color_matrix_node_draw;
   node_class->diff = gsk_color_matrix_node_diff;
+  node_class->get_children = gsk_color_matrix_node_get_children;
   node_class->replay = gsk_color_matrix_node_replay;
 }
 

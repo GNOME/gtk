@@ -66,6 +66,8 @@ struct _GskRenderNodeClass
   void          (* diff)                                (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
                                                          GskDiffData                 *data);
+  GskRenderNode**(* get_children)                       (GskRenderNode               *node,
+                                                         gsize                       *n_children);
   GskRenderNode*(* replay)                              (GskRenderNode               *node,
                                                          GskRenderReplay             *replay);
   gboolean      (* get_opaque_rect)                     (GskRenderNode               *node,
@@ -114,6 +116,8 @@ void            gsk_render_node_draw_with_color_state   (GskRenderNode          
 void            gsk_render_node_draw_fallback           (GskRenderNode               *node,
                                                          cairo_t                     *cr);
 
+GskRenderNode **gsk_render_node_get_children            (GskRenderNode               *node,
+                                                         gsize                       *n_children);
 bool            gsk_border_node_get_uniform             (const GskRenderNode         *self) G_GNUC_PURE;
 bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self) G_GNUC_PURE;
 
