@@ -358,6 +358,7 @@ typedef enum
   GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION = 1 << 1,
   GTK_SVG_SERIALIZE_INCLUDE_STATE     = 1 << 2,
   GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS = 1 << 3,
+  GTK_SVG_SERIALIZE_SYMBOLIC_COMPAT   = 1 << 4,
 } GtkSvgSerializeFlags;
 
 GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
