@@ -21,6 +21,8 @@
 
 #include "gdk/gdksubsurfaceprivate.h"
 #include "gsk/gskrendernodeprivate.h"
+/* for GskRepeat */
+#include "gsk/gskgradientprivate.h"
 
 G_BEGIN_DECLS
 
@@ -46,6 +48,10 @@ GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot    
 
 void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
                                                                  GdkSubsurface          *subsurface);
+void                    gtk_snapshot_push_repeat2               (GtkSnapshot            *snapshot,
+                                                                 const graphene_rect_t  *bounds,
+                                                                 const graphene_rect_t  *child_bounds,
+                                                                 GskRepeat               repeat);
 
 void                    gtk_snapshot_add_color                  (GtkSnapshot            *snapshot,
                                                                  const GdkColor         *color,

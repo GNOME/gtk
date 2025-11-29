@@ -205,6 +205,11 @@ gsk_gl_device_setup_samplers (GskGLDevice *self)
       .mag_filter = GL_LINEAR,
       .wrap = GL_REPEAT,
     },
+    [GSK_GPU_SAMPLER_REFLECT] = {
+      .min_filter = GL_LINEAR,
+      .mag_filter = GL_LINEAR,
+      .wrap = GL_MIRRORED_REPEAT,
+    },
     [GSK_GPU_SAMPLER_NEAREST] = {
       .min_filter = GL_NEAREST,
       .mag_filter = GL_NEAREST,

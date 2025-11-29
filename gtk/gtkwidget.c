@@ -11995,10 +11995,25 @@ gtk_widget_create_render_node (GtkWidget   *widget,
       gtk_snapshot_push_rounded_clip (snapshot, border_box);
       extra_size = gtk_css_filter_value_push_snapshot (backdrop_filter_value, snapshot);
       bounds = gtk_css_boxes_get_border_box (&boxes)->bounds;
-      graphene_rect_inset (&bounds, - extra_size, - extra_size);
-      gtk_snapshot_append_paste (snapshot,
-                                 &bounds,
-                                 0);
+      if (extra_size)
+        {
+          graphene_rect_t enlarged = bounds;
+          graphene_rect_inset (&enlarged, - extra_size, - extra_size);
+          gtk_snapshot_push_repeat2 (snapshot,
+                                     &enlarged,
+                                     &bounds, 
+                                     GSK_REPEAT_REFLECT);
+          gtk_snapshot_append_paste (snapshot,
+                                     &bounds,
+                                     0);
+          gtk_snapshot_pop (snapshot);
+        }
+      else
+        {
+          gtk_snapshot_append_paste (snapshot,
+                                     &bounds,
+                                     0);
+        }
       gtk_css_filter_value_pop_snapshot (backdrop_filter_value, snapshot);
       gtk_snapshot_pop (snapshot); /* clip */
     }

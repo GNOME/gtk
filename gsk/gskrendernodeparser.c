@@ -47,10 +47,10 @@
 #include "gskpath.h"
 #include "gskpathbuilder.h"
 #include "gskprivate.h"
+#include "gskrendernodeprivate.h"
+#include "gskrepeatnodeprivate.h"
 #include "gskroundedclipnode.h"
 #include "gskroundedrectprivate.h"
-#include "gskrendernodeprivate.h"
-#include "gskrepeatnode.h"
 #include "gskstroke.h"
 #include "gskstrokenode.h"
 #include "gsksubsurfacenode.h"
@@ -3369,10 +3369,12 @@ parse_repeat_node (GtkCssParser *parser,
   GskRenderNode *child = NULL;
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
   graphene_rect_t child_bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GskRepeat repeat = GSK_REPEAT_REPEAT;
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
     { "bounds", parse_rect, NULL, &bounds },
     { "child-bounds", parse_rect, NULL, &child_bounds },
+    { "repeat", parse_repeat, NULL, &repeat },
   };
   GskRenderNode *result;
   guint parse_result;
@@ -3386,7 +3388,7 @@ parse_repeat_node (GtkCssParser *parser,
   if (!(parse_result & (1 << 2)))
     gsk_render_node_get_bounds (child, &child_bounds);
 
-  result = gsk_repeat_node_new (&bounds, child, &child_bounds);
+  result = gsk_repeat_node_new2 (&bounds, child, &child_bounds, repeat);
 
   gsk_render_node_unref (child);
 
@@ -6205,6 +6207,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_REPEAT_NODE:
       {
         GskRenderNode *child = gsk_repeat_node_get_child (node);
+        GskRepeat repeat = gsk_repeat_node_get_repeat (node);
         const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (node);
 
         start_node (p, "repeat", node_name);
@@ -6214,6 +6217,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         if (!graphene_rect_equal (child_bounds, &child->bounds))
           append_rect_param (p, "child-bounds", child_bounds);
         append_node_param (p, "child", gsk_repeat_node_get_child (node));
+        if (repeat != GSK_REPEAT_REPEAT)
+          append_repeat_param (p, "repeat", repeat);
 
         end_node (p);
       }
