@@ -96,6 +96,16 @@ gsk_cross_fade_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static void
+gsk_cross_fade_node_foreach (GskRenderNode   *node,
+                             GskRenderReplay *replay)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  gsk_render_replay_foreach_node (replay, self->start);
+  gsk_render_replay_foreach_node (replay, self->end);
+}
+
 static GskRenderNode *
 gsk_cross_fade_node_replay (GskRenderNode   *node,
                             GskRenderReplay *replay)
@@ -157,6 +167,7 @@ gsk_cross_fade_node_class_init (gpointer g_class,
   node_class->finalize = gsk_cross_fade_node_finalize;
   node_class->draw = gsk_cross_fade_node_draw;
   node_class->diff = gsk_cross_fade_node_diff;
+  node_class->foreach = gsk_cross_fade_node_foreach;
   node_class->replay = gsk_cross_fade_node_replay;
   node_class->get_opaque_rect = gsk_cross_fade_node_get_opaque_rect;
 }

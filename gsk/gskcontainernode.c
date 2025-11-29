@@ -170,6 +170,19 @@ gsk_container_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static void
+gsk_container_node_foreach (GskRenderNode   *node,
+                            GskRenderReplay *replay)
+{
+  GskContainerNode *self = (GskContainerNode *) node;
+  guint i;
+
+  for (i = 0; i < self->n_children; i++)
+    {
+      gsk_render_replay_foreach_node (replay, self->children[i]);
+    }
+}
+
 static GskRenderNode *
 gsk_container_node_replay (GskRenderNode   *node,
                            GskRenderReplay *replay)
@@ -228,6 +241,7 @@ gsk_container_node_class_init (gpointer g_class,
   node_class->finalize = gsk_container_node_finalize;
   node_class->draw = gsk_container_node_draw;
   node_class->diff = gsk_container_node_diff;
+  node_class->foreach = gsk_container_node_foreach;
   node_class->replay = gsk_container_node_replay;
   node_class->get_opaque_rect = gsk_container_node_get_opaque_rect;
 }

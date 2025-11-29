@@ -66,6 +66,8 @@ struct _GskRenderNodeClass
   void          (* diff)                                (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
                                                          GskDiffData                 *data);
+  void          (* foreach)                             (GskRenderNode               *node,
+                                                         GskRenderReplay             *replay);
   GskRenderNode*(* replay)                              (GskRenderNode               *node,
                                                          GskRenderReplay             *replay);
   gboolean      (* get_opaque_rect)                     (GskRenderNode               *node,

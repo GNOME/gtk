@@ -161,6 +161,12 @@ gsk_render_node_real_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static void
+gsk_render_node_real_foreach (GskRenderNode   *node,
+                              GskRenderReplay *replay)
+{
+}
+
 static GskRenderNode *
 gsk_render_node_real_replay (GskRenderNode   *node,
                              GskRenderReplay *replay)
@@ -184,6 +190,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->finalize = gsk_render_node_finalize;
   klass->can_diff = gsk_render_node_real_can_diff;
   klass->diff = gsk_render_node_real_diff;
+  klass->foreach = gsk_render_node_real_foreach;
   klass->replay = gsk_render_node_real_replay;
   klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
 }

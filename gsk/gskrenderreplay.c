@@ -203,6 +203,16 @@ gsk_render_replay_set_node_filter (GskRenderReplay           *self,
   self->node_filter_destroy = user_destroy;
 }
 
+static gboolean
+gsk_render_replay_run_foreach (GskRenderReplay *self,
+                               GskRenderNode   *node)
+{
+  if (!self->node_foreach)
+    return TRUE;
+
+  return self->node_foreach (self, node, self->node_foreach_data);
+}
+
 /**
  * gsk_render_replay_filter_node:
  * @self: the replay
@@ -235,11 +245,8 @@ gsk_render_replay_filter_node (GskRenderReplay *self,
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
 
-  if (self->node_foreach &&
-      !self->node_foreach (self, node, self->node_foreach_data))
-    {
-      return gsk_render_node_ref (node);
-    }
+  if (!gsk_render_replay_run_foreach (self, node))
+    return gsk_render_node_ref (node);
 
   if (self->node_filter)
     return self->node_filter (self, node, self->node_filter_data);
@@ -312,6 +319,14 @@ gsk_render_replay_set_node_foreach (GskRenderReplay            *self,
   self->node_foreach_destroy = user_destroy;
 }
 
+static gboolean
+gsk_render_replay_foreach_can_fastpath (GskRenderReplay *self)
+{
+  return !self->node_filter &&
+         !self->texture_filter &&
+         !self->font_filter;
+}
+
 /**
  * gsk_render_replay_foreach_node:
  * @self: the replay
@@ -333,9 +348,19 @@ gsk_render_replay_foreach_node (GskRenderReplay *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  ignored = gsk_render_replay_filter_node (self, node);
+  if (gsk_render_replay_foreach_can_fastpath (self))
+    {
+      if (!gsk_render_replay_run_foreach (self, node))
+        return;
 
-  gsk_render_node_unref (ignored);
+      GSK_RENDER_NODE_GET_CLASS (node)->foreach (node, self);
+    }
+  else
+    {
+      ignored = gsk_render_replay_filter_node (self, node);
+
+      gsk_render_node_unref (ignored);
+    }
 }
 
 /**

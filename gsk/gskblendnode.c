@@ -140,6 +140,16 @@ gsk_blend_node_diff (GskRenderNode *node1,
     }
 }
 
+static void
+gsk_blend_node_foreach (GskRenderNode   *node,
+                        GskRenderReplay *replay)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+
+  gsk_render_replay_foreach_node (replay, self->top);
+  gsk_render_replay_foreach_node (replay, self->bottom);
+}
+
 static GskRenderNode *
 gsk_blend_node_replay (GskRenderNode   *node,
                        GskRenderReplay *replay)
@@ -184,6 +194,7 @@ gsk_blend_node_class_init (gpointer g_class,
   node_class->finalize = gsk_blend_node_finalize;
   node_class->draw = gsk_blend_node_draw;
   node_class->diff = gsk_blend_node_diff;
+  node_class->foreach = gsk_blend_node_foreach;
   node_class->replay = gsk_blend_node_replay;
 }
 

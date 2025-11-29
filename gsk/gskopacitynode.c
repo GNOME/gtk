@@ -86,6 +86,15 @@ gsk_opacity_node_diff (GskRenderNode *node1,
     gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static void
+gsk_opacity_node_foreach (GskRenderNode   *node,
+                          GskRenderReplay *replay)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+
+  gsk_render_replay_foreach_node (replay, self->child);
+}
+
 static GskRenderNode *
 gsk_opacity_node_replay (GskRenderNode   *node,
                          GskRenderReplay *replay)
@@ -119,6 +128,7 @@ gsk_opacity_node_class_init (gpointer g_class,
   node_class->finalize = gsk_opacity_node_finalize;
   node_class->draw = gsk_opacity_node_draw;
   node_class->diff = gsk_opacity_node_diff;
+  node_class->foreach = gsk_opacity_node_foreach;
   node_class->replay = gsk_opacity_node_replay;
 }
 

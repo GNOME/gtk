@@ -169,6 +169,15 @@ nope:
   return;
 }
 
+static void
+gsk_color_matrix_node_foreach (GskRenderNode   *node,
+                               GskRenderReplay *replay)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+
+  gsk_render_replay_foreach_node (replay, self->child);
+}
+
 static GskRenderNode *
 gsk_color_matrix_node_replay (GskRenderNode   *node,
                               GskRenderReplay *replay)
@@ -202,6 +211,7 @@ gsk_color_matrix_node_class_init (gpointer g_class,
   node_class->finalize = gsk_color_matrix_node_finalize;
   node_class->draw = gsk_color_matrix_node_draw;
   node_class->diff = gsk_color_matrix_node_diff;
+  node_class->foreach = gsk_color_matrix_node_foreach;
   node_class->replay = gsk_color_matrix_node_replay;
 }
 

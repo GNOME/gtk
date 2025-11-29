@@ -171,6 +171,16 @@ gsk_mask_node_diff (GskRenderNode *node1,
   gsk_render_node_diff (self1->mask, self2->mask, data);
 }
 
+static void
+gsk_mask_node_foreach (GskRenderNode   *node,
+                       GskRenderReplay *replay)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+
+  gsk_render_replay_foreach_node (replay, self->source);
+  gsk_render_replay_foreach_node (replay, self->mask);
+}
+
 static GskRenderNode *
 gsk_mask_node_replay (GskRenderNode   *node,
                       GskRenderReplay *replay)
@@ -220,6 +230,7 @@ gsk_mask_node_class_init (gpointer g_class,
   node_class->finalize = gsk_mask_node_finalize;
   node_class->draw = gsk_mask_node_draw;
   node_class->diff = gsk_mask_node_diff;
+  node_class->foreach = gsk_mask_node_foreach;
   node_class->replay = gsk_mask_node_replay;
 }
 

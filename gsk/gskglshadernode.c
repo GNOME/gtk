@@ -99,6 +99,19 @@ gsk_gl_shader_node_diff (GskRenderNode *node1,
     }
 }
 
+static void
+gsk_gl_shader_node_foreach (GskRenderNode   *node,
+                            GskRenderReplay *replay)
+{
+  GskGLShaderNode *self = (GskGLShaderNode *) node;
+  guint i;
+
+  for (i = 0; i < self->n_children; i++)
+    {
+      gsk_render_replay_foreach_node (replay, self->children[i]);
+    }
+}
+
 static GskRenderNode *
 gsk_gl_shader_node_replay (GskRenderNode   *node,
                            GskRenderReplay *replay)
@@ -155,6 +168,7 @@ gsk_gl_shader_node_class_init (gpointer g_class,
   node_class->finalize = gsk_gl_shader_node_finalize;
   node_class->draw = gsk_gl_shader_node_draw;
   node_class->diff = gsk_gl_shader_node_diff;
+  node_class->foreach = gsk_gl_shader_node_foreach;
   node_class->replay = gsk_gl_shader_node_replay;
 }
 
