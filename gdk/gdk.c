@@ -417,9 +417,24 @@ gdk_running_in_sandbox (void)
 #define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
 
 static gboolean portals_disabled;
+static GHashTable *disabled_portals = NULL;
 
 void
-gdk_disable_portals (void)
+gdk_disable_portals (const char **portal_interfaces)
+{
+  if (G_LIKELY (disabled_portals == NULL))
+    disabled_portals = g_hash_table_new (g_str_hash, g_str_equal);
+
+  for (unsigned int i = 0; portal_interfaces[i] != NULL; i++)
+    {
+      const char *interface_name = portal_interfaces[i];
+
+      g_hash_table_add (disabled_portals, g_strdup (interface_name));
+    }
+}
+
+void
+gdk_disable_all_portals (void)
 {
   portals_disabled = TRUE;
 }
@@ -562,6 +577,10 @@ gdk_display_should_use_portal (GdkDisplay *display,
     return TRUE;
 
   if (portals_disabled)
+    return FALSE;
+
+  if (disabled_portals != NULL &&
+      g_hash_table_contains (disabled_portals, portal_interface))
     return FALSE;
 
   if (gdk_running_in_sandbox ())
