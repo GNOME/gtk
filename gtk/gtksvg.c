@@ -10671,6 +10671,9 @@ serialize_shape_attrs (GString              *s,
                        GtkSvgSerializeFlags  flags)
 {
   GString *classes = g_string_new ("");
+  const char *names[] = {
+    "foreground", "error", "warning", "success", "accent",
+  };
 
   if (shape->id)
     {
@@ -10719,16 +10722,9 @@ serialize_shape_attrs (GString              *s,
                 }
               else if (paint->kind == PAINT_SYMBOLIC)
                 {
-                  const char *names[] = {
-                    "foreground-fill",
-                    "error-fill",
-                    "warning-fill",
-                    "success-fill",
-                    "accent-fill",
-                  };
-
-                  g_string_append_printf (classes, "%s%s",
+                  g_string_append_printf (classes, "%s%s %s-fill",
                                           classes->len > 0 ? " " : "",
+                                          names[paint->symbolic],
                                           names[paint->symbolic]);
                 }
             }
@@ -10738,15 +10734,7 @@ serialize_shape_attrs (GString              *s,
 
               if (paint->kind == PAINT_SYMBOLIC)
                 {
-                  const char *names[] = {
-                    "foreground-stroke",
-                    "error-stroke",
-                    "warning-stroke",
-                    "success-stroke",
-                    "accent-stroke",
-                  };
-
-                  g_string_append_printf (classes, "%s%s",
+                  g_string_append_printf (classes, "%s%s-stroke",
                                           classes->len > 0 ? " " : "",
                                           names[paint->symbolic]);
                 }
