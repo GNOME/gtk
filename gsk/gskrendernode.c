@@ -188,8 +188,6 @@ gsk_render_node_real_render_opacity (GskRenderNode   *node,
                                      GskRectRenderer *renderer,
                                      const GSList    *copies)
 {
-  if (node->fully_opaque)
-    gsk_rect_renderer_add_rect (renderer, &node->bounds);
 }
 
 static void
@@ -682,7 +680,10 @@ gsk_render_node_render_opacity (GskRenderNode   *self,
 
   depth++;
 
-  GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, renderer, copies);
+  if (self->fully_opaque)
+    gsk_rect_renderer_add_rect (renderer, &self->bounds);
+  else
+    GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, renderer, copies);
 
   depth--;
 
