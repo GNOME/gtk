@@ -127,6 +127,27 @@ gsk_rounded_clip_node_get_opaque_rect (GskRenderNode   *node,
 }
 
 static void
+gsk_rounded_clip_node_render_opacity (GskRenderNode   *node,
+                                      GskRectRenderer *renderer,
+                                      const GSList    *copies)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+  GskRectRenderer child_renderer;
+
+  child_renderer = GSK_RECT_RENDERER_INIT_COPY (renderer);
+  gsk_render_node_render_opacity (self->child, &child_renderer, copies);
+
+  if (gsk_render_node_clears_background (self->child) &&
+      !gsk_rect_renderer_contains_rect (&child_renderer, &self->clip.bounds))
+    gsk_rect_renderer_subtract_rect (renderer, &self->clip.bounds);
+
+  gsk_rect_renderer_intersect_rounded_rect (&child_renderer, &self->clip);
+  gsk_rect_renderer_add (renderer, &child_renderer);
+
+  gsk_rect_renderer_finish (&child_renderer);
+}
+
+static void
 gsk_rounded_clip_node_foreach (GskRenderNode   *node,
                                GskRenderReplay *replay)
 {
@@ -171,6 +192,7 @@ gsk_rounded_clip_node_class_init (gpointer g_class,
   node_class->foreach = gsk_rounded_clip_node_foreach;
   node_class->replay = gsk_rounded_clip_node_replay;
   node_class->get_opaque_rect = gsk_rounded_clip_node_get_opaque_rect;
+  node_class->render_opacity = gsk_rounded_clip_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskRoundedClipNode, gsk_rounded_clip_node)

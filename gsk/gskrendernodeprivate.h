@@ -6,6 +6,7 @@
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkcolorprivate.h"
 #include "gskgradientprivate.h"
+#include "gskrectrendererprivate.h"
 
 G_BEGIN_DECLS
 
@@ -72,6 +73,9 @@ struct _GskRenderNodeClass
                                                          GskRenderReplay             *replay);
   gboolean      (* get_opaque_rect)                     (GskRenderNode               *node,
                                                          graphene_rect_t             *out_opaque);
+  void          (* render_opacity)                      (GskRenderNode               *node,
+                                                         GskRectRenderer             *renderer,
+                                                         const GSList                *copies);
 };
 
 void            gsk_render_node_init_types              (void);
@@ -115,6 +119,10 @@ void            gsk_render_node_draw_with_color_state   (GskRenderNode          
                                                          GdkColorState               *color_state);
 void            gsk_render_node_draw_fallback           (GskRenderNode               *node,
                                                          cairo_t                     *cr);
+
+void            gsk_render_node_render_opacity          (GskRenderNode               *self,
+                                                         GskRectRenderer             *renderer,
+                                                         const GSList                *copies);
 
 bool            gsk_border_node_get_uniform             (const GskRenderNode         *self) G_GNUC_PURE;
 bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self) G_GNUC_PURE;

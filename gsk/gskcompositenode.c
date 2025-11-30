@@ -297,6 +297,67 @@ gsk_composite_node_get_opaque_rect (GskRenderNode   *node,
 }
 
 static void
+gsk_composite_node_render_opacity (GskRenderNode   *node,
+                                   GskRectRenderer *renderer,
+                                   const GSList    *copies)
+{
+  GskCompositeNode *self = (GskCompositeNode *) node;
+
+  switch (self->op)
+    {
+      case GSK_PORTER_DUFF_SOURCE:
+      case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+
+      case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+      case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+        {
+          GskRectRenderer child_renderer = GSK_RECT_RENDERER_INIT_EMPTY ();
+
+          gsk_render_node_render_opacity (self->child, &child_renderer, copies);
+
+          if (!gsk_rect_renderer_contains_rect (&child_renderer, &self->mask->bounds))
+            {
+              GskRectRenderer mask_renderer = GSK_RECT_RENDERER_INIT_EMPTY ();
+              gsk_render_node_render_opacity (self->mask, &mask_renderer, copies);
+              gsk_rect_renderer_intersect (&child_renderer, &mask_renderer);
+              gsk_rect_renderer_finish (&mask_renderer);
+
+              if (self->op != GSK_PORTER_DUFF_SOURCE_OVER_DEST &&
+                  self->op != GSK_PORTER_DUFF_DEST_OVER_SOURCE)
+                gsk_rect_renderer_subtract_rect (renderer, &self->mask->bounds);
+            }
+          else
+            {
+              gsk_rect_renderer_intersect_rect (&child_renderer, &self->mask->bounds);
+            }
+
+          gsk_rect_renderer_add (renderer, &child_renderer);
+          gsk_rect_renderer_finish (&child_renderer);
+        }
+        break;
+
+      case GSK_PORTER_DUFF_DEST:
+      case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+        /* no changes */
+        break;
+
+      case GSK_PORTER_DUFF_SOURCE_IN_DEST:
+      case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+      case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+      case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+      case GSK_PORTER_DUFF_XOR:
+        /* feel free to implement these. For now: */
+      case GSK_PORTER_DUFF_CLEAR:
+        gsk_rect_renderer_subtract_rect (renderer, &self->mask->bounds);
+        break;
+
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+}
+
+static void
 gsk_composite_node_class_init (gpointer g_class,
                            gpointer class_data)
 {
@@ -310,6 +371,7 @@ gsk_composite_node_class_init (gpointer g_class,
   node_class->foreach = gsk_composite_node_foreach;
   node_class->replay = gsk_composite_node_replay;
   node_class->get_opaque_rect = gsk_composite_node_get_opaque_rect;
+  node_class->render_opacity = gsk_composite_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskCompositeNode, gsk_composite_node)

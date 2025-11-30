@@ -61,6 +61,26 @@ gsk_paste_node_replay (GskRenderNode   *node,
 }
 
 static void
+gsk_paste_node_render_opacity (GskRenderNode   *node,
+                               GskRectRenderer *renderer,
+                               const GSList    *copies)
+{
+  GskPasteNode *self = (GskPasteNode *) node;
+  const GskRectRenderer *paste;
+  GskRectRenderer clipped;
+
+  copies = g_slist_nth ((GSList *) copies, self->depth);
+  if (copies == NULL)
+    return;
+
+  paste = copies->data;
+  clipped = GSK_RECT_RENDERER_INIT_COPY (paste);
+  gsk_rect_renderer_intersect_rect (&clipped, &node->bounds);
+  gsk_rect_renderer_add (renderer, &clipped);
+  gsk_rect_renderer_finish (&clipped);
+}
+
+static void
 gsk_paste_node_class_init (gpointer g_class,
                            gpointer class_data)
 {
@@ -71,6 +91,7 @@ gsk_paste_node_class_init (gpointer g_class,
   node_class->draw = gsk_paste_node_draw;
   node_class->diff = gsk_paste_node_diff;
   node_class->replay = gsk_paste_node_replay;
+  node_class->render_opacity = gsk_paste_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskPasteNode, gsk_paste_node)

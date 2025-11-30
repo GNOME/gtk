@@ -184,6 +184,15 @@ gsk_render_node_real_get_opaque_rect (GskRenderNode   *node,
 }
 
 static void
+gsk_render_node_real_render_opacity (GskRenderNode   *node,
+                                     GskRectRenderer *renderer,
+                                     const GSList    *copies)
+{
+  if (node->fully_opaque)
+    gsk_rect_renderer_add_rect (renderer, &node->bounds);
+}
+
+static void
 gsk_render_node_class_init (GskRenderNodeClass *klass)
 {
   klass->node_type = GSK_NOT_A_RENDER_NODE;
@@ -193,6 +202,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->foreach = gsk_render_node_real_foreach;
   klass->replay = gsk_render_node_real_replay;
   klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
+  klass->render_opacity = gsk_render_node_real_render_opacity;
 }
 
 static void
@@ -638,6 +648,9 @@ gboolean
 gsk_render_node_get_opaque_rect (GskRenderNode   *self,
                                  graphene_rect_t *out_opaque)
 {
+  GskRectRenderer renderer;
+  gboolean result;
+
   g_return_val_if_fail (GSK_IS_RENDER_NODE (self), FALSE);
   g_return_val_if_fail (out_opaque != NULL, FALSE);
 
@@ -647,7 +660,25 @@ gsk_render_node_get_opaque_rect (GskRenderNode   *self,
       return TRUE;
     }
 
+#if 0
   return GSK_RENDER_NODE_GET_CLASS (self)->get_opaque_rect (self, out_opaque);
+#endif
+  renderer = GSK_RECT_RENDERER_INIT_EMPTY ();
+  gsk_render_node_render_opacity (self, &renderer, NULL);
+  result = !gsk_rect_renderer_is_empty (&renderer);
+  if (result)
+    *out_opaque = *gsk_rect_renderer_get_rect (&renderer);
+  gsk_rect_renderer_finish (&renderer);
+
+  return result;
+}
+
+void
+gsk_render_node_render_opacity (GskRenderNode   *self,
+                                GskRectRenderer *renderer,
+                                const GSList    *copies)
+{
+  GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, renderer, copies);
 }
 
 /**

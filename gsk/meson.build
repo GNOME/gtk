@@ -53,6 +53,7 @@ gsk_private_sources = files([
   'gskcurveintersect.c',
   'gskdebug.c',
   'gskprivate.c',
+  'gskrectrenderer.c',
   'gl/fp16.c',
   'gpu/gskglbuffer.c',
   'gpu/gskgldevice.c',

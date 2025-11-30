@@ -99,6 +99,16 @@ gsk_debug_node_foreach (GskRenderNode   *node,
   gsk_render_replay_foreach_node (replay, self->child);
 }
 
+static void
+gsk_debug_node_render_opacity (GskRenderNode   *node,
+                               GskRectRenderer *renderer,
+                               const GSList    *copies)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  gsk_render_node_render_opacity (self->child, renderer, copies);
+}
+
 static GskRenderNode *
 gsk_debug_node_replay (GskRenderNode   *node,
                        GskRenderReplay *replay)
@@ -136,6 +146,7 @@ gsk_debug_node_class_init (gpointer g_class,
   node_class->foreach = gsk_debug_node_foreach;
   node_class->replay = gsk_debug_node_replay;
   node_class->get_opaque_rect = gsk_debug_node_get_opaque_rect;
+  node_class->render_opacity = gsk_debug_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskDebugNode, gsk_debug_node)

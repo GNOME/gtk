@@ -89,6 +89,20 @@ gsk_copy_node_foreach (GskRenderNode   *node,
   gsk_render_replay_foreach_node (replay, self->child);
 }
 
+static void
+gsk_copy_node_render_opacity (GskRenderNode   *node,
+                              GskRectRenderer *renderer,
+                              const GSList    *copies)
+{
+  GskCopyNode *self = (GskCopyNode *) node;
+  GskRectRenderer saved = GSK_RECT_RENDERER_INIT_COPY (renderer);
+  const GSList copy = { &saved, (GSList *) copies };
+
+  gsk_render_node_render_opacity (self->child, renderer, &copy);
+
+  gsk_rect_renderer_finish (&saved);
+}
+
 static GskRenderNode *
 gsk_copy_node_replay (GskRenderNode   *node,
                       GskRenderReplay *replay)
@@ -125,6 +139,7 @@ gsk_copy_node_class_init (gpointer g_class,
   node_class->foreach = gsk_copy_node_foreach;
   node_class->replay = gsk_copy_node_replay;
   node_class->get_opaque_rect = gsk_copy_node_get_opaque_rect;
+  node_class->render_opacity = gsk_copy_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskCopyNode, gsk_copy_node)
