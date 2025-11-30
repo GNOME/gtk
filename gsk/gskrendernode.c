@@ -678,7 +678,21 @@ gsk_render_node_render_opacity (GskRenderNode   *self,
                                 GskRectRenderer *renderer,
                                 const GSList    *copies)
 {
+  static guint depth = 0;
+
+  depth++;
+
   GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, renderer, copies);
+
+  depth--;
+
+  if (GSK_DEBUG_CHECK (OPACITY))
+    {
+      g_print ("%*s%g %g %g %g %s\n", 2 * depth, "",
+               renderer->rect.origin.x, renderer->rect.origin.y,
+               renderer->rect.size.width, renderer->rect.size.height,
+               g_type_name_from_instance ((GTypeInstance *) self));
+    }
 }
 
 /**
