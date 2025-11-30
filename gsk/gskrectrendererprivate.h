@@ -36,6 +36,8 @@ void                    gsk_rect_renderer_intersect_rect                (GskRect
 void                    gsk_rect_renderer_intersect_rounded_rect        (GskRectRenderer               *self,
                                                                          const GskRoundedRect          *rect);
 
+void                    gsk_rect_renderer_shrink                        (GskRectRenderer               *self,
+                                                                         const graphene_size_t         *size);
 void                    gsk_rect_renderer_transform                     (GskRectRenderer               *self,
                                                                          GskTransform                  *transform);
 

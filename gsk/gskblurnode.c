@@ -281,6 +281,25 @@ gsk_blur_node_diff (GskRenderNode *node1,
 }
 
 static void
+gsk_blur_node_render_opacity (GskRenderNode   *node,
+                              GskRectRenderer *renderer,
+                              const GSList    *copies)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+  GskRectRenderer child_renderer;
+  float clip_radius;
+
+  child_renderer = GSK_RECT_RENDERER_INIT_COPY (renderer);
+  gsk_render_node_render_opacity (self->child, &child_renderer, copies);
+
+  clip_radius = gsk_cairo_blur_compute_pixels (self->radius / 2.0);
+  gsk_rect_renderer_shrink (&child_renderer, &GRAPHENE_SIZE_INIT (clip_radius, clip_radius));
+  gsk_rect_renderer_add (renderer, &child_renderer);
+
+  gsk_rect_renderer_finish (&child_renderer);
+}
+
+static void
 gsk_blur_node_foreach (GskRenderNode   *node,
                        GskRenderReplay *replay)
 {
@@ -324,6 +343,7 @@ gsk_blur_node_class_init (gpointer g_class,
   node_class->diff = gsk_blur_node_diff;
   node_class->foreach = gsk_blur_node_foreach;
   node_class->replay = gsk_blur_node_replay;
+  node_class->render_opacity = gsk_blur_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskBlurNode, gsk_blur_node)

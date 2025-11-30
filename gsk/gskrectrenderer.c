@@ -117,6 +117,16 @@ gsk_rect_renderer_intersect_rounded_rect (GskRectRenderer      *self,
 }
 
 void
+gsk_rect_renderer_shrink (GskRectRenderer       *self,
+                          const graphene_size_t *size)
+{
+  if (gsk_rect_renderer_is_empty (self))
+    return;
+
+  graphene_rect_inset (&self->rect, size->width, size->height);
+}
+
+void
 gsk_rect_renderer_transform (GskRectRenderer *self,
                              GskTransform    *transform)
 {
