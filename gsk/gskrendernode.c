@@ -192,13 +192,6 @@ static void
 gsk_render_node_real_render_opacity (GskRenderNode  *node,
                                      GskOpacityData *data)
 {
-  if (node->fully_opaque)
-    {
-      if (gsk_rect_is_empty (&data->opaque))
-        data->opaque = node->bounds;
-      else
-        gsk_rect_coverage (&data->opaque, &node->bounds, &data->opaque);
-    }
 }
 
 static void
@@ -732,7 +725,17 @@ gsk_render_node_render_opacity (GskRenderNode  *self,
 
   depth++;
 
-  GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, data);
+  if (self->fully_opaque)
+    {
+      if (gsk_rect_is_empty (&data->opaque))
+        data->opaque = self->bounds;
+      else
+        gsk_rect_coverage (&data->opaque, &self->bounds, &data->opaque);
+    }
+  else
+    {
+      GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, data);
+    }
 
   depth--;
 
