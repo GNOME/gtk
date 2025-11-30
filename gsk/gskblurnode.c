@@ -280,6 +280,31 @@ gsk_blur_node_diff (GskRenderNode *node1,
     }
 }
 
+static void
+gsk_blur_node_render_opacity (GskRenderNode  *node,
+                              GskOpacityData *data)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+  GskOpacityData child_data = GSK_OPACITY_DATA_INIT_EMPTY (data->copies);
+
+  gsk_render_node_render_opacity (self->child, &child_data);
+
+  if (!gsk_rect_is_empty (&child_data.opaque))
+    {
+      float clip_radius = gsk_cairo_blur_compute_pixels (self->radius / 2.0);
+
+      graphene_rect_inset (&child_data.opaque, clip_radius, clip_radius);
+
+      if (!gsk_rect_is_empty (&child_data.opaque))
+        {
+          if (gsk_rect_is_empty (&data->opaque))
+            data->opaque = child_data.opaque;
+          else
+            gsk_rect_coverage (&data->opaque, &child_data.opaque, &data->opaque);
+        }
+    }
+}
+
 static GskRenderNode **
 gsk_blur_node_get_children (GskRenderNode *node,
                             gsize         *n_children)
@@ -326,6 +351,7 @@ gsk_blur_node_class_init (gpointer g_class,
   node_class->diff = gsk_blur_node_diff;
   node_class->get_children = gsk_blur_node_get_children;
   node_class->replay = gsk_blur_node_replay;
+  node_class->render_opacity = gsk_blur_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskBlurNode, gsk_blur_node)

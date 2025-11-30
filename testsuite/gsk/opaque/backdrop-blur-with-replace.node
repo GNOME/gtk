@@ -1,0 +1,55 @@
+/* 50 50 200 100 */
+
+repeat {
+  bounds: 50 50 200 100;
+  child: conic-gradient {
+    bounds: 0 0 30 30;
+    center: 15 15;
+    stops: 0.25 lemonchiffon,
+           0.25 skyblue,
+           0.5 skyblue,
+           0.5 lemonchiffon,
+           0.75 lemonchiffon,
+           0.75 skyblue;
+  }
+}
+
+repeat {
+  bounds: 50 50 200 100;
+  child: border {
+    outline: 0 0 15 15;
+    widths: 1 1 0 0;
+    colors: black;
+  }
+}
+
+copy {
+  child: composite {
+    child: container {
+      blur {
+        blur: 6;
+        child: paste {
+          bounds: 50 50 200 100;
+        }
+      }
+      color {
+        color: #FFF2;
+        bounds: 50 50 200 100;
+      }
+      text {
+        font: "Inter Bold 24";
+        glyphs: "Opaque?";
+        color: black;
+        offset: 85 110;
+      }
+    }
+    mask: rounded-clip {
+      clip: 60 60 180 80 / 40;
+      child: color {
+        bounds: 50 50 200 100;
+        color: white;
+      }
+    }
+    operator: source;
+  }
+}
