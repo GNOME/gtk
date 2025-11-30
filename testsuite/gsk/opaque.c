@@ -91,7 +91,10 @@ deserialize_error_func (const GskParseLocation *start,
                         const GError           *error,
                         gpointer                user_data)
 {
-  GString *string = g_string_new (user_data);
+  GFile *file = user_data;
+  GString *string = g_string_new ("");
+
+  g_string_append (string, g_file_peek_path (file));
 
   g_string_append_printf (string, ":%zu:%zu",
                           start->lines + 1, start->line_chars + 1);
