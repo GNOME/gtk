@@ -3457,7 +3457,15 @@ gsk_transform_node_render_opacity (GskRenderNode  *node,
   GskTransformNode *self = (GskTransformNode *) node;
 
   if (gsk_transform_get_fine_category (self->transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
-    return;
+    {
+      /* too complex, skip child */
+      if (gsk_render_node_clears_background (node) && !gsk_rect_is_empty (&data->opaque))
+        {
+          if (!gsk_rect_subtract (&data->opaque, &node->bounds, &data->opaque))
+            data->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+        }
+      return;
+    }
 
   if (!gsk_rect_is_empty (&data->opaque))
     {
