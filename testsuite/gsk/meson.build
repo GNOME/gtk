@@ -53,6 +53,7 @@ compare_render_tests = [
   'color-matrix-parsing',
   'color-states',
   'composite-rotated-mask',
+  'composite-source-all-opaque-with-complex-mask',
   'copy-paste',
   'copy-paste-transformed',
   'copy-transform-order',
