@@ -1055,7 +1055,9 @@ svg_value_unref (SvgValue *value)
   value->class->free (value);
 }
 
-static gboolean
+G_DEFINE_BOXED_TYPE (SvgValue, svg_value, svg_value_ref, svg_value_unref)
+
+gboolean
 svg_value_equal (const SvgValue *value0,
                  const SvgValue *value1)
 {
@@ -1107,6 +1109,14 @@ svg_value_print (const SvgValue *value,
                  GString        *string)
 {
   value->class->print (value, string);
+}
+
+char *
+svg_value_to_string (const SvgValue *value)
+{
+  GString *s = g_string_new ("");
+  svg_value_print (value, s);
+  return g_string_free (s, FALSE);
 }
 
 /* }}} */
@@ -1730,17 +1740,6 @@ svg_paint_order_parse (const char *string)
 /* }}} */
 /* {{{ Transforms */
 
-typedef enum
-{
-  TRANSFORM_NONE,
-  TRANSFORM_TRANSLATE,
-  TRANSFORM_SCALE,
-  TRANSFORM_ROTATE,
-  TRANSFORM_SKEW_X,
-  TRANSFORM_SKEW_Y,
-  TRANSFORM_MATRIX,
-} TransformType;
-
 typedef struct
 {
   TransformType type;
@@ -1868,14 +1867,14 @@ svg_transform_alloc (unsigned int n)
   return t;
 }
 
-static SvgValue *
+SvgValue *
 svg_transform_new_none (void)
 {
   static SvgTransform none = { { &SVG_TRANSFORM_CLASS, 1 }, 1, { { TRANSFORM_NONE, } }};
   return svg_value_ref ((SvgValue *) &none);
 }
 
-static SvgValue *
+SvgValue *
 svg_transform_new_translate (double x, double y)
 {
   SvgTransform *tf = svg_transform_alloc (1);
@@ -1885,7 +1884,7 @@ svg_transform_new_translate (double x, double y)
   return (SvgValue *) tf;
 }
 
-static SvgValue *
+SvgValue *
 svg_transform_new_scale (double x, double y)
 {
   SvgTransform *tf = svg_transform_alloc (1);
@@ -1895,7 +1894,7 @@ svg_transform_new_scale (double x, double y)
   return (SvgValue *) tf;
 }
 
-static SvgValue *
+SvgValue *
 svg_transform_new_rotate (double angle, double x, double y)
 {
   SvgTransform *tf = svg_transform_alloc (1);
@@ -1906,7 +1905,7 @@ svg_transform_new_rotate (double angle, double x, double y)
   return (SvgValue *) tf;
 }
 
-static SvgValue *
+SvgValue *
 svg_transform_new_skew_x (double angle)
 {
   SvgTransform *tf = svg_transform_alloc (1);
@@ -1915,12 +1914,21 @@ svg_transform_new_skew_x (double angle)
   return (SvgValue *) tf;
 }
 
-static SvgValue *
+SvgValue *
 svg_transform_new_skew_y (double angle)
 {
   SvgTransform *tf = svg_transform_alloc (1);
   tf->transforms[0].type = TRANSFORM_SKEW_Y;
   tf->transforms[0].skew_y.angle = angle;
+  return (SvgValue *) tf;
+}
+
+SvgValue *
+svg_transform_new_matrix (double params[6])
+{
+  SvgTransform *tf = svg_transform_alloc (1);
+  tf->transforms[0].type = TRANSFORM_MATRIX;
+  memcpy (tf->transforms[0].matrix.m, params, sizeof (double) * 6);
   return (SvgValue *) tf;
 }
 
@@ -13049,6 +13057,85 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
 /* }}} */
 /* {{{ Getters and setters */
+
+unsigned int
+svg_transform_get_n_transforms (const SvgValue *value)
+{
+  SvgTransform *tf = (SvgTransform *) value;
+
+  return tf->n_transforms;
+}
+
+SvgValue *
+svg_transform_get_transform (const SvgValue *value,
+                             unsigned int    pos)
+{
+  SvgTransform *tf = (SvgTransform *) value;
+
+  switch (tf->transforms[pos].type)
+    {
+    case TRANSFORM_NONE:
+      return svg_transform_new_none ();
+    case TRANSFORM_TRANSLATE:
+      return svg_transform_new_translate (tf->transforms[pos].translate.x,
+                                          tf->transforms[pos].translate.y);
+    case TRANSFORM_SCALE:
+      return svg_transform_new_scale (tf->transforms[pos].scale.x,
+                                      tf->transforms[pos].scale.y);
+    case TRANSFORM_ROTATE:
+      return svg_transform_new_rotate (tf->transforms[pos].rotate.angle,
+                                       tf->transforms[pos].rotate.x,
+                                       tf->transforms[pos].rotate.y);
+    case TRANSFORM_SKEW_X:
+      return svg_transform_new_skew_x (tf->transforms[pos].skew_x.angle);
+    case TRANSFORM_SKEW_Y:
+      return svg_transform_new_skew_y (tf->transforms[pos].skew_y.angle);
+    case TRANSFORM_MATRIX:
+      return svg_transform_new_matrix (tf->transforms[pos].matrix.m);
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+TransformType
+svg_transform_get_primitive (const SvgValue *value,
+                             unsigned int    pos,
+                             double          params[6])
+{
+  SvgTransform *tf = (SvgTransform *) value;
+
+  switch (tf->transforms[pos].type)
+    {
+    case TRANSFORM_NONE:
+      break;
+    case TRANSFORM_TRANSLATE:
+      params[0] = tf->transforms[pos].translate.x;
+      params[1] = tf->transforms[pos].translate.y;
+      break;
+    case TRANSFORM_SCALE:
+      params[0] = tf->transforms[pos].scale.x;
+      params[1] = tf->transforms[pos].scale.y;
+      break;
+    case TRANSFORM_ROTATE:
+      params[0] = tf->transforms[pos].rotate.angle;
+      params[1] = tf->transforms[pos].rotate.x;
+      params[2] = tf->transforms[pos].rotate.y;
+      break;
+    case TRANSFORM_SKEW_X:
+      params[0] = tf->transforms[pos].skew_x.angle;
+      break;
+    case TRANSFORM_SKEW_Y:
+      params[0] = tf->transforms[pos].skew_y.angle;
+      break;
+    case TRANSFORM_MATRIX:
+      memcpy (params, tf->transforms[pos].matrix.m, sizeof (double) * 6);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return tf->transforms[pos].type;
+}
 
 double
 svg_shape_attr_get_number (Shape                 *shape,

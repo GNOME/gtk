@@ -280,6 +280,17 @@ typedef enum
   CLIP_REF,
 } ClipKind;
 
+typedef enum
+{
+  TRANSFORM_NONE,
+  TRANSFORM_TRANSLATE,
+  TRANSFORM_SCALE,
+  TRANSFORM_ROTATE,
+  TRANSFORM_SKEW_X,
+  TRANSFORM_SKEW_Y,
+  TRANSFORM_MATRIX,
+} TransformType;
+
 double       svg_shape_attr_get_number    (Shape                 *shape,
                                            ShapeAttr              attr,
                                            const graphene_size_t *viewport);
@@ -309,6 +320,10 @@ void         svg_shape_attr_set           (Shape                 *shape,
 
 SvgValue *   svg_value_ref          (SvgValue         *value);
 void         svg_value_unref        (SvgValue         *value);
+GType        svg_value_get_type     (void) G_GNUC_CONST;
+gboolean     svg_value_equal        (const SvgValue   *self,
+                                     const SvgValue   *other);
+char *       svg_value_to_string    (const SvgValue   *self);
 
 SvgValue *   svg_number_new         (double            value);
 SvgValue *   svg_linecap_new        (GskLineCap        value);
@@ -324,7 +339,24 @@ SvgValue *   svg_path_new           (GskPath          *path);
 SvgValue *   svg_clip_new_none      (void);
 SvgValue *   svg_clip_new_path      (GskPath          *path);
 SvgValue *   svg_transform_parse    (const char       *value);
+unsigned int svg_transform_get_n_transforms (const SvgValue *value);
+SvgValue *   svg_transform_get_transform    (const SvgValue *value,
+                                             unsigned int    pos);
+TransformType svg_transform_get_primitive (const SvgValue *value,
+                                           unsigned int    pos,
+                                           double          params[6]);
 SvgValue *   svg_transform_drop_last (SvgValue        *orig);
+SvgValue *   svg_transform_new_none (void);
+SvgValue *   svg_transform_new_translate (double x,
+                                          double y);
+SvgValue *   svg_transform_new_scale     (double x,
+                                          double y);
+SvgValue *   svg_transform_new_rotate    (double angle,
+                                          double x,
+                                          double y);
+SvgValue *   svg_transform_new_skew_x    (double angle);
+SvgValue *   svg_transform_new_skew_y    (double angle);
+SvgValue *   svg_transform_new_matrix    (double params[6]);
 SvgValue *   svg_filter_parse       (const char       *value);
 
 Shape *      svg_shape_add          (Shape            *parent,
