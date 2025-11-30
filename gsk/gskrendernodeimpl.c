@@ -3467,7 +3467,12 @@ gsk_transform_node_render_opacity (GskRenderNode   *node,
   GskTransform *inverse;
 
   if (gsk_transform_get_fine_category (self->transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
-    return;
+    {
+      /* too complex, skip it */
+      if (gsk_render_node_clears_background (node))
+        gsk_rect_renderer_subtract_rect (renderer, &node->bounds);
+      return;
+    }
 
   inverse = gsk_transform_invert (gsk_transform_ref (self->transform));
   if (inverse == NULL)
