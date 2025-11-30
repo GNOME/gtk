@@ -22,7 +22,7 @@ if not exist %HOMEPATH%\.cargo\bin\rustup.exe rustup-init -y --default-toolchain
 rustup target add %RUST_HOST% || goto :error
 
 pip3 install --upgrade --user meson==1.8.2 || goto :error
-meson setup _build -Dbackend_max_links=1 -Ddebug=false -Dwin32-backend=true -Dmedia-gstreamer=disabled -Dvulkan=disabled -Dsysprof=disabled -Dglib:sysprof=disabled -Daccesskit=enabled -Dlibxml2:werror=false -Daccesskit-c:triplet=%RUST_HOST% %~1 || goto :error
+meson setup _build -Dbackend_max_links=1 -Ddebug=false -Dwin32-backend=true -Dmedia-gstreamer=disabled -Dvulkan=disabled -Dsysprof=disabled -Dglib:sysprof=disabled -Daccesskit=enabled -Daccesskit-c:triplet=%RUST_HOST% %~1 || goto :error
 ninja -C _build || goto :error
 
 goto :EOF
