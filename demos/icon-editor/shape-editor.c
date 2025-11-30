@@ -25,6 +25,7 @@
 #include "color-editor.h"
 #include "mini-graph.h"
 #include "path-editor.h"
+#include "transform-editor.h"
 
 
 struct _ShapeEditor
@@ -1410,6 +1411,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   g_type_ensure (alpha_editor_get_type ());
   g_type_ensure (MINI_GRAPH_TYPE);
   g_type_ensure (PATH_EDITOR_TYPE);
+  g_type_ensure (transform_editor_get_type ());
 
   object_class->get_property = shape_editor_get_property;
   object_class->dispose = shape_editor_dispose;

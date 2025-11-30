@@ -168,3 +168,7 @@ AlphaEditor.tight {
 AlphaEditor > scale {
   min-width: 120px;
 }
+
+grid.tight {
+  border-spacing: 0;
+}

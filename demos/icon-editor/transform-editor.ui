@@ -1,0 +1,277 @@
+<interface>
+  <template class="TransformEditor" parent="GtkWidget">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="hexpand">0</property>
+        <child>
+          <object class="GtkDropDown" id="primitive_transform">
+            <signal name="notify::selected" handler="transform_type_changed" swapped="yes"/>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>None</item>
+                  <item>Translate</item>
+                  <item>Scale</item>
+                  <item>Rotate</item>
+                  <item>Skew X</item>
+                  <item>Skew Y</item>
+                  <item>Matrix</item>
+                </items>
+              </object>
+            </property>
+            <property name="list-factory">
+              <object class="GtkBuilderListItemFactory">
+                <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <child>
+          <object class="GtkImage">
+            <binding name="paintable">
+              <closure type="GdkPaintable" function="transform_get_icon">
+                <lookup name="position">GtkListItem</lookup>
+              </closure>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <binding name="label">
+              <lookup name="string" type="GtkStringObject">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+
+]]>
+                </property>
+              </object>
+            </property>
+            <property name="factory">
+              <object class="GtkBuilderListItemFactory">
+                <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkImage">
+        <binding name="paintable">
+          <closure type="GdkPaintable" function="transform_get_icon">
+            <lookup name="position">GtkListItem</lookup>
+          </closure>
+        </binding>
+        <binding name="tooltip-text">
+          <lookup name="string" type="GtkStringObject">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+
+]]>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="transform_angle">
+            <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+            <property name="hexpand">1</property>
+            <property name="numeric">1</property>
+            <property name="digits">1</property>
+            <property name="width-chars">4</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">-300000</property>
+                <property name="upper">3000000</property>
+                <property name="step-increment">1</property>
+                <property name="page-increment">10</property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="center_row">
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkSpinButton" id="transform_x">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="hexpand">1</property>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                   <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="transform_y">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="hexpand">1</property>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                   <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkGrid" id="transform_params">
+            <style>
+              <class name="tight"/>
+            </style>
+            <child>
+              <object class="GtkSpinButton" id="transform_param0">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="transform_param1">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="transform_param2">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="transform_param3">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="transform_param4">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+                <layout>
+                  <property name="row">2</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="transform_param5">
+                <signal name="notify::value" handler="transform_changed" swapped="yes"/>
+                <property name="numeric">1</property>
+                <property name="digits">1</property>
+                <property name="width-chars">4</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">-300000</property>
+                    <property name="upper">3000000</property>
+                    <property name="step-increment">1</property>
+                    <property name="page-increment">10</property>
+                  </object>
+                </property>
+                <layout>
+                  <property name="row">2</property>
+                  <property name="column">1</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

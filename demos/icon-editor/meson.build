@@ -13,6 +13,7 @@ icon_editor_sources = [
   'path-paintable.c',
   'shape-editor.c',
   'state-editor.c',
+  'transform-editor.c',
 ]
 
 icon_editor_resources = gnome.compile_resources('icon_editor_resources',
