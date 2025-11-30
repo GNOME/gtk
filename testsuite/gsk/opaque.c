@@ -106,6 +106,9 @@ deserialize_error_func (const GskParseLocation *start,
       g_string_append_printf (string, "%zu", end->line_chars + 1);
     }
 
+  g_string_append_c (string, ' ');
+  g_string_append (string, error->message);
+
   g_test_message ("%s", string->str);
   g_string_free (string, TRUE);
   
