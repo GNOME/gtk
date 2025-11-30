@@ -40,6 +40,7 @@
 #include "gskcontainernodeprivate.h"
 #include "gskcopypasteutilsprivate.h"
 #include "gskdebugprivate.h"
+#include "gskrectprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeparserprivate.h"
 
@@ -188,6 +189,19 @@ gsk_render_node_real_get_opaque_rect (GskRenderNode   *node,
 }
 
 static void
+gsk_render_node_real_render_opacity (GskRenderNode  *node,
+                                     GskOpacityData *data)
+{
+  if (node->fully_opaque)
+    {
+      if (gsk_rect_is_empty (&data->opaque))
+        data->opaque = node->bounds;
+      else
+        gsk_rect_coverage (&data->opaque, &node->bounds, &data->opaque);
+    }
+}
+
+static void
 gsk_render_node_class_init (GskRenderNodeClass *klass)
 {
   klass->node_type = GSK_NOT_A_RENDER_NODE;
@@ -197,6 +211,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->get_children = gsk_render_node_real_get_children;
   klass->replay = gsk_render_node_real_replay;
   klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
+  klass->render_opacity = gsk_render_node_real_render_opacity;
 }
 
 static void
@@ -685,6 +700,9 @@ gboolean
 gsk_render_node_get_opaque_rect (GskRenderNode   *self,
                                  graphene_rect_t *out_opaque)
 {
+  GskOpacityData data = GSK_OPACITY_DATA_INIT_EMPTY (NULL);
+  gboolean result;
+
   g_return_val_if_fail (GSK_IS_RENDER_NODE (self), FALSE);
   g_return_val_if_fail (out_opaque != NULL, FALSE);
 
@@ -694,7 +712,23 @@ gsk_render_node_get_opaque_rect (GskRenderNode   *self,
       return TRUE;
     }
 
+#if 0
   return GSK_RENDER_NODE_GET_CLASS (self)->get_opaque_rect (self, out_opaque);
+#else
+  gsk_render_node_render_opacity (self, &data);
+  result = !gsk_rect_is_empty (&data.opaque);
+  if (result)
+    *out_opaque = data.opaque;
+#endif
+
+  return result;
+}
+
+void
+gsk_render_node_render_opacity (GskRenderNode  *self,
+                                GskOpacityData *data)
+{
+  GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, data);
 }
 
 /**

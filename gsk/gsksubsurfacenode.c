@@ -125,6 +125,15 @@ gsk_subsurface_node_get_children (GskRenderNode *node,
   return &self->child;
 }
 
+static void
+gsk_subsurface_node_render_opacity (GskRenderNode  *node,
+                                    GskOpacityData *data)
+{
+  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
+
+  gsk_render_node_render_opacity (self->child, data);
+}
+
 static GskRenderNode *
 gsk_subsurface_node_replay (GskRenderNode   *node,
                             GskRenderReplay *replay)
@@ -162,6 +171,7 @@ gsk_subsurface_node_class_init (gpointer g_class,
   node_class->get_children = gsk_subsurface_node_get_children;
   node_class->replay = gsk_subsurface_node_replay;
   node_class->get_opaque_rect = gsk_subsurface_node_get_opaque_rect;
+  node_class->render_opacity = gsk_subsurface_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskSubsurfaceNode, gsk_subsurface_node)

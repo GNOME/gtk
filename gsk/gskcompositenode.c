@@ -303,8 +303,76 @@ gsk_composite_node_get_opaque_rect (GskRenderNode   *node,
 }
 
 static void
+gsk_composite_node_render_opacity (GskRenderNode  *node,
+                                   GskOpacityData *data)
+{
+  GskCompositeNode *self = (GskCompositeNode *) node;
+
+  switch (self->op)
+    {
+      case GSK_PORTER_DUFF_SOURCE:
+      case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
+
+      case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+      case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
+        {
+          GskOpacityData child_data = GSK_OPACITY_DATA_INIT_EMPTY (data->copies);
+
+          gsk_render_node_render_opacity (self->child, &child_data);
+
+          if (!gsk_rect_contains_rect (&child_data.opaque, &self->mask->bounds))
+            {
+              GskOpacityData mask_data = GSK_OPACITY_DATA_INIT_EMPTY (data->copies);
+              gboolean empty;
+
+              gsk_render_node_render_opacity (self->mask, &mask_data);
+              empty = !gsk_rect_intersection (&child_data.opaque, &mask_data.opaque, &child_data.opaque);
+
+              if (!empty &&
+                  self->op != GSK_PORTER_DUFF_SOURCE_OVER_DEST &&
+                  self->op != GSK_PORTER_DUFF_DEST_OVER_SOURCE)
+                {
+                  if (!gsk_rect_subtract (&data->opaque, &self->mask->bounds, &data->opaque))
+                    data->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+                }
+            }
+          else
+            {
+              gsk_rect_intersection (&child_data.opaque, &self->mask->bounds, &child_data.opaque);
+            }
+
+          if (gsk_rect_is_empty (&data->opaque))
+            data->opaque = child_data.opaque;
+          else
+            gsk_rect_coverage (&data->opaque, &child_data.opaque, &data->opaque);
+        }
+        break;
+
+      case GSK_PORTER_DUFF_DEST:
+      case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
+        /* no changes */
+        break;
+
+      case GSK_PORTER_DUFF_SOURCE_IN_DEST:
+      case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+      case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
+      case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
+      case GSK_PORTER_DUFF_XOR:
+        /* feel free to implement these. For now: */
+      case GSK_PORTER_DUFF_CLEAR:
+        if (!gsk_rect_subtract (&data->opaque, &self->mask->bounds, &data->opaque))
+          data->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+        break;
+
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+}
+
+static void
 gsk_composite_node_class_init (gpointer g_class,
-                           gpointer class_data)
+                               gpointer class_data)
 {
   GskRenderNodeClass *node_class = g_class;
 
@@ -316,6 +384,7 @@ gsk_composite_node_class_init (gpointer g_class,
   node_class->get_children = gsk_composite_node_get_children;
   node_class->replay = gsk_composite_node_replay;
   node_class->get_opaque_rect = gsk_composite_node_get_opaque_rect;
+  node_class->render_opacity = gsk_composite_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskCompositeNode, gsk_composite_node)

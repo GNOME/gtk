@@ -3451,6 +3451,34 @@ gsk_transform_node_get_opaque_rect (GskRenderNode   *node,
 }
 
 static void
+gsk_transform_node_render_opacity (GskRenderNode  *node,
+                                   GskOpacityData *data)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+
+  if (gsk_transform_get_fine_category (self->transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
+    return;
+
+  if (!gsk_rect_is_empty (&data->opaque))
+    {
+      GskTransform *inverse;
+
+      inverse = gsk_transform_invert (gsk_transform_ref (self->transform));
+      if (inverse == NULL)
+        return;
+
+      gsk_transform_transform_bounds (inverse, &data->opaque, &data->opaque);
+      gsk_transform_unref (inverse);
+    }
+
+
+  gsk_render_node_render_opacity (self->child, data);
+
+  if (!gsk_rect_is_empty (&data->opaque))
+    gsk_transform_transform_bounds (self->transform, &data->opaque, &data->opaque);
+}
+
+static void
 gsk_transform_node_class_init (gpointer g_class,
                                gpointer class_data)
 {
@@ -3465,6 +3493,7 @@ gsk_transform_node_class_init (gpointer g_class,
   node_class->get_children = gsk_transform_node_get_children;
   node_class->replay = gsk_transform_node_replay;
   node_class->get_opaque_rect = gsk_transform_node_get_opaque_rect;
+  node_class->render_opacity = gsk_transform_node_render_opacity;
 }
 
 /**

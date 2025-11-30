@@ -126,6 +126,56 @@ gsk_rounded_clip_node_get_opaque_rect (GskRenderNode   *node,
   return TRUE;
 }
 
+static void
+gsk_rounded_clip_node_render_opacity (GskRenderNode  *node,
+                                      GskOpacityData *data)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+  GskOpacityData child_data;
+  graphene_rect_t opaque, wide_opaque, high_opaque;
+  double start, end;
+
+  child_data = GSK_OPACITY_DATA_INIT_COPY (data);
+  gsk_render_node_render_opacity (self->child, &child_data);
+
+  if (gsk_render_node_clears_background (self->child) &&
+      !gsk_rect_contains_rect (&child_data.opaque, &self->clip.bounds))
+    {
+      if (!gsk_rect_subtract (&data->opaque, &self->clip.bounds, &data->opaque))
+        data->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+    }
+
+  if (!gsk_rect_is_empty (&child_data.opaque))
+    {
+      wide_opaque = self->clip.bounds;
+      start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].height, self->clip.corner[GSK_CORNER_TOP_RIGHT].height);
+      end = MAX(self->clip.corner[GSK_CORNER_BOTTOM_LEFT].height, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].height);
+      wide_opaque.size.height -= MIN (wide_opaque.size.height, start + end);
+      wide_opaque.origin.y += start;
+      graphene_rect_intersection (&wide_opaque, &child_data.opaque, &wide_opaque);
+
+      high_opaque = self->clip.bounds;
+      start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].width, self->clip.corner[GSK_CORNER_BOTTOM_LEFT].width);
+      end = MAX(self->clip.corner[GSK_CORNER_TOP_RIGHT].width, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].width);
+      high_opaque.size.width -= MIN (high_opaque.size.width, start + end);
+      high_opaque.origin.x += start;
+      graphene_rect_intersection (&high_opaque, &child_data.opaque, &high_opaque);
+
+      if (wide_opaque.size.width * wide_opaque.size.height > high_opaque.size.width * high_opaque.size.height)
+        opaque = wide_opaque;
+      else
+        opaque = high_opaque;
+
+      if (!gsk_rect_is_empty (&opaque))
+        {
+          if (gsk_rect_is_empty (&child_data.opaque))
+            data->opaque = opaque;
+          else
+            gsk_rect_coverage (&data->opaque, &opaque, &data->opaque);
+        }
+    }
+}
+
 static GskRenderNode **
 gsk_rounded_clip_node_get_children (GskRenderNode *node,
                                     gsize         *n_children)
@@ -173,6 +223,7 @@ gsk_rounded_clip_node_class_init (gpointer g_class,
   node_class->get_children = gsk_rounded_clip_node_get_children;
   node_class->replay = gsk_rounded_clip_node_replay;
   node_class->get_opaque_rect = gsk_rounded_clip_node_get_opaque_rect;
+  node_class->render_opacity = gsk_rounded_clip_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskRoundedClipNode, gsk_rounded_clip_node)

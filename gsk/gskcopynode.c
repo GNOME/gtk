@@ -97,6 +97,21 @@ gsk_copy_node_get_children (GskRenderNode *node,
   return &self->child;
 }
 
+static void
+gsk_copy_node_render_opacity (GskRenderNode  *node,
+                              GskOpacityData *data)
+{
+  GskCopyNode *self = (GskCopyNode *) node;
+  graphene_rect_t saved = data->opaque;
+  GSList copy = { &saved, (GSList *) data->copies };
+
+  data->copies = &copy;
+
+  gsk_render_node_render_opacity (self->child, data);
+
+  data->copies = data->copies->next;
+}
+
 static GskRenderNode *
 gsk_copy_node_replay (GskRenderNode   *node,
                       GskRenderReplay *replay)
@@ -133,6 +148,7 @@ gsk_copy_node_class_init (gpointer g_class,
   node_class->get_children = gsk_copy_node_get_children;
   node_class->replay = gsk_copy_node_replay;
   node_class->get_opaque_rect = gsk_copy_node_get_opaque_rect;
+  node_class->render_opacity = gsk_copy_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskCopyNode, gsk_copy_node)
