@@ -163,10 +163,11 @@ gsk_render_replay_free (GskRenderReplay *self)
 
 /**
  * gsk_render_replay_set_node_filter:
- * @filter: The function to call to replay nodes
+ * @filter: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the function to call to replay nodes
  * @user_data: user data to pass to @func
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets the function to use as a node filter.
  *
@@ -177,7 +178,7 @@ gsk_render_replay_free (GskRenderReplay *self)
  *
  * * create a replacement node and return that
  *
- * * discard the node by returning %NULL
+ * * discard the node by returning `NULL`
  *
  * * call [method@Gsk.RenderReplay.default] to have the default handler
  *   run for this node, which calls your function on its children
@@ -255,7 +256,7 @@ gsk_render_replay_filter_node (GskRenderReplay *self,
  *
  * The default method calls [method@Gsk.RenderReplay.filter_node]
  * on all its child nodes and the filter functions for all its
- * proeprties. If none of them are changed, it returns the passed
+ * properties. If none of them are changed, it returns the passed
  * in node. Otherwise it constructs a new node with the changed
  * children and properties.
  *
@@ -280,15 +281,16 @@ gsk_render_replay_default (GskRenderReplay *self,
 /**
  * gsk_render_replay_set_node_foreach:
  * @self: the replay
- * @foreach: the function to call for all nodes
+ * @foreach: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the function to call for all nodes
  * @user_data: user data to pass to @func
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets the function to call for every node.
  *
  * This function is called before the node filter, so if it returns
- * FALSE, the node filter will never be called.
+ * false, the node filter will never be called.
  *
  * Since: 4.22
  */
@@ -339,10 +341,11 @@ gsk_render_replay_foreach_node (GskRenderReplay *self,
 /**
  * gsk_render_replay_set_texture_filter:
  * @self: the replay
- * @filter: (nullable): the texture filter function
+ * @filter: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the texture filter function
  * @user_data: user data to pass to @filter
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets a filter function to be called by [method@Gsk.RenderReplay.default]
  * for nodes that contain textures.
@@ -403,10 +406,11 @@ gsk_render_replay_filter_texture (GskRenderReplay *self,
 /**
  * gsk_render_replay_set_font_filter:
  * @self: the replay
- * @filter: (nullable): the font filter function
+ * @filter: (nullable) (scope notified) (closure user_data) (destroy user_destroy):
+ *   the font filter function
  * @user_data: user data to pass to @filter
  * @user_destroy: destroy notify that will be called to release
- *   user_data
+ *   the user data parameter
  *
  * Sets a filter function to be called by [method@Gsk.RenderReplay.default]
  * for nodes that contain fonts.

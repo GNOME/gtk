@@ -32,6 +32,8 @@
  *
  * A render node that uses Porter/Duff compositing operators to combine
  * its child with the background.
+ *
+ * Since: 4.22
  */
 struct _GskCompositeNode
 {
