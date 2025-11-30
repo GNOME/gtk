@@ -762,6 +762,7 @@ create_wgl_context (GdkGLContext    *context,
   GdkGLVersion version;
 
   hglrc = NULL;
+  hglrc_base = NULL;
 
   if (display_win32->hasWglARBCreateContext)
     {
