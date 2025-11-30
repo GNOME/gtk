@@ -519,7 +519,6 @@ void gdk_dmanipulation_initialize (GdkWin32Display *display)
 void gdk_dmanipulation_initialize_surface (GdkSurface *surface)
 {
   GdkWin32Surface *surface_win32;
-  HRESULT hr;
   IDirectManipulationManager *dmanipulation_manager = GDK_DISPLAY_GET_DMANIP_MANAGER (gdk_surface_get_display (surface));
 
   if (!dmanipulation_manager)
@@ -533,8 +532,8 @@ void gdk_dmanipulation_initialize_surface (GdkSurface *surface)
   create_viewport (surface, GESTURE_ZOOM,
                    &surface_win32->dmanipulation_viewport_zoom);
 
-  hr = IDirectManipulationManager_Activate (dmanipulation_manager,
-                                            GDK_SURFACE_HWND (surface));
+  IDirectManipulationManager_Activate (dmanipulation_manager,
+                                       GDK_SURFACE_HWND (surface));
 }
 
 void gdk_dmanipulation_finalize_surface (GdkSurface *surface)
