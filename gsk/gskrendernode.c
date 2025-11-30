@@ -728,7 +728,21 @@ void
 gsk_render_node_render_opacity (GskRenderNode  *self,
                                 GskOpacityData *data)
 {
+  static guint depth = 0;
+
+  depth++;
+
   GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, data);
+
+  depth--;
+
+  if (GSK_DEBUG_CHECK (OPACITY))
+    {
+      gdk_debug_message ("%*s%g %g %g %g %s", 2 * depth, "",
+                         data->opaque.origin.x, data->opaque.origin.y,
+                         data->opaque.size.width, data->opaque.size.height,
+                         g_type_name_from_instance ((GTypeInstance *) self));
+    }
 }
 
 /**
