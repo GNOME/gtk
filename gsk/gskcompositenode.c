@@ -183,6 +183,8 @@ gsk_composite_node_draw (GskRenderNode *node,
 
   if (gsk_render_node_is_fully_opaque (self->mask))
     {
+      gdk_cairo_rect (cr, &self->mask->bounds);
+      cairo_clip (cr);
       cairo_push_group (cr);
       gsk_render_node_draw_ccs (self->child, cr, ccs);
       cairo_pop_group_to_source (cr);

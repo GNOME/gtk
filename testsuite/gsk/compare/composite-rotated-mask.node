@@ -1,0 +1,44 @@
+color {
+  bounds: -50 -50 100 100;
+  color: rgb(0,255,0);
+}
+transform {
+  transform: rotate(45) translate(-25, -25);
+  child: composite {
+    child: color {
+      bounds: 0 0 50 50;
+      color: rgb(255,0,204);
+    }
+    mask: color {
+      bounds: 0 0 50 50;
+      color: rgb(255,0,204);
+    }
+    operator: clear;
+  }
+}
+container "node1" {
+  color "node2" {
+    bounds: -10 -40 16 16;
+    color: rgb(0,0,0);
+  }
+  color "node3" {
+    bounds: -20 -30 16 16;
+    color: rgb(0,0,0);
+  }
+  color "node4" {
+    bounds: -30 -20 16 16;
+    color: rgb(0,0,0);
+  }
+}
+transform {
+  transform: rotate(90);
+  child: "node1";
+}
+transform {
+  transform: rotate(180);
+  child: "node1";
+}
+transform {
+  transform: rotate(270);
+  child: "node1";
+}

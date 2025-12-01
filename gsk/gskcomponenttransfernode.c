@@ -22,6 +22,7 @@
 
 #include "gskcomponenttransferprivate.h"
 #include "gskrendernodeprivate.h"
+#include "gskrenderreplay.h"
 #include "gskrectprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
@@ -160,7 +161,26 @@ static GskRenderNode *
 gsk_component_transfer_node_replay (GskRenderNode   *node,
                                     GskRenderReplay *replay)
 {
-  return gsk_render_node_ref (node);
+  GskComponentTransferNode *self = (GskComponentTransferNode *) node;
+  GskRenderNode *result, *child;
+
+  child = gsk_render_replay_filter_node (replay, self->child);
+
+  if (child == NULL)
+    return NULL;
+
+  if (child == self->child)
+    result = gsk_render_node_ref (node);
+  else
+    result = gsk_component_transfer_node_new (child,
+                                              &self->transfer[0],
+                                              &self->transfer[1],
+                                              &self->transfer[2],
+                                              &self->transfer[3]);
+
+  gsk_render_node_unref (child);
+
+  return result;
 }
 
 static void

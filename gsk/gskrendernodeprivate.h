@@ -123,9 +123,6 @@ void            gsk_text_node_serialize_glyphs          (GskRenderNode          
 cairo_hint_style_t
                 gsk_text_node_get_font_hint_style       (const GskRenderNode         *self) G_GNUC_PURE;
 
-void            gsk_transform_node_get_translate        (const GskRenderNode         *node,
-                                                         float                       *dx,
-                                                         float                       *dy);
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
