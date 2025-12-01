@@ -302,6 +302,18 @@ gsk_d3d12_device_create_samplers (GskD3d12Device *self)
           .MinLOD = 0.0f,
           .MaxLOD = 0.0f
       },
+      [GSK_GPU_SAMPLER_REFLECT] = {
+          .Filter = D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT,
+          .AddressU = D3D12_TEXTURE_ADDRESS_MODE_MIRROR,
+          .AddressV = D3D12_TEXTURE_ADDRESS_MODE_MIRROR,
+          .AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .MipLODBias = 0.0f,
+          .MaxAnisotropy = 1,
+          .ComparisonFunc = D3D12_COMPARISON_FUNC_NONE,
+          .BorderColor = { 0.0f , 0.0f , 0.0f , 0.0f },
+          .MinLOD = 0.0f,
+          .MaxLOD = 0.0f
+      },
       [GSK_GPU_SAMPLER_NEAREST] = {
           .Filter = D3D12_FILTER_MIN_MAG_MIP_POINT,
           .AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
