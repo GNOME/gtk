@@ -5,6 +5,7 @@ and/or use gtk-doc annotations.  -->
 <repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:doc="http://www.gtk.org/introspection/doc/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GdkPixbuf" version="2.0"/>
   <include name="Gio" version="2.0"/>
@@ -12,6 +13,7 @@ and/or use gtk-doc annotations.  -->
   <include name="cairo" version="1.0"/>
   <package name="gdk-3.0"/>
   <c:include name="gdk/gdk.h"/>
+  <doc:format name="unknown"/>
   <namespace name="Gdk"
              version="3.0"
              shared-library="libgdk-3.so.0"
@@ -1186,12 +1188,17 @@ platforms can be found in the CSS specification:
 - ![](nesw_resize_cursor.png) "nesw-resize"
 - ![](nwse_resize_cursor.png) "nwse-resize"
 - ![](zoom_in_cursor.png) "zoom-in"
-- ![](zoom_out_cursor.png) "zoom-out"</doc>
+- ![](zoom_out_cursor.png) "zoom-out"
+
+Additionally, the following cursor names are supported, which are
+not in the CSS specification:
+- ![](dnd_ask_cursor.png) "dnd-ask"
+- ![](all_resize_cursor.png) "all-resize"</doc>
         <source-position filename="gdk/gdkcursor.h" line="240"/>
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkcursor.c"
-               line="289">a new #GdkCursor, or %NULL if there is no
+               line="294">a new #GdkCursor, or %NULL if there is no
   cursor with the given name</doc>
           <type name="Cursor" c:type="GdkCursor*"/>
         </return-value>
@@ -1215,7 +1222,7 @@ platforms can be found in the CSS specification:
                    version="2.4">
         <doc xml:space="preserve"
              filename="gdk/gdkcursor.c"
-             line="303">Creates a new cursor from a pixbuf.
+             line="308">Creates a new cursor from a pixbuf.
 
 Not all GDK backends support RGBA cursors. If they are not
 supported, a monochrome approximation will be displayed.
@@ -1237,32 +1244,32 @@ sufficently new version of the X Render extension.</doc>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
                filename="gdk/gdkcursor.c"
-               line="329">a new #GdkCursor.</doc>
+               line="334">a new #GdkCursor.</doc>
           <type name="Cursor" c:type="GdkCursor*"/>
         </return-value>
         <parameters>
           <parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="305">the #GdkDisplay for which the cursor will be created</doc>
+                 line="310">the #GdkDisplay for which the cursor will be created</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </parameter>
           <parameter name="pixbuf" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="306">the #GdkPixbuf containing the cursor image</doc>
+                 line="311">the #GdkPixbuf containing the cursor image</doc>
             <type name="GdkPixbuf.Pixbuf" c:type="GdkPixbuf*"/>
           </parameter>
           <parameter name="x" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="307">the horizontal offset of the “hotspot” of the cursor.</doc>
+                 line="312">the horizontal offset of the “hotspot” of the cursor.</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
           <parameter name="y" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="308">the vertical offset of the “hotspot” of the cursor.</doc>
+                 line="313">the vertical offset of the “hotspot” of the cursor.</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
         </parameters>
@@ -1272,7 +1279,7 @@ sufficently new version of the X Render extension.</doc>
                    version="3.10">
         <doc xml:space="preserve"
              filename="gdk/gdkcursor.c"
-             line="379">Creates a new cursor from a cairo image surface.
+             line="384">Creates a new cursor from a cairo image surface.
 
 Not all GDK backends support RGBA cursors. If they are not
 supported, a monochrome approximation will be displayed.
@@ -1289,32 +1296,32 @@ sufficently new version of the X Render extension.</doc>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
                filename="gdk/gdkcursor.c"
-               line="400">a new #GdkCursor.</doc>
+               line="405">a new #GdkCursor.</doc>
           <type name="Cursor" c:type="GdkCursor*"/>
         </return-value>
         <parameters>
           <parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="381">the #GdkDisplay for which the cursor will be created</doc>
+                 line="386">the #GdkDisplay for which the cursor will be created</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </parameter>
           <parameter name="surface" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="382">the cairo image surface containing the cursor pixel data</doc>
+                 line="387">the cairo image surface containing the cursor pixel data</doc>
             <type name="cairo.Surface" c:type="cairo_surface_t*"/>
           </parameter>
           <parameter name="x" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="383">the horizontal offset of the “hotspot” of the cursor</doc>
+                 line="388">the horizontal offset of the “hotspot” of the cursor</doc>
             <type name="gdouble" c:type="gdouble"/>
           </parameter>
           <parameter name="y" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="384">the vertical offset of the “hotspot” of the cursor</doc>
+                 line="389">the vertical offset of the “hotspot” of the cursor</doc>
             <type name="gdouble" c:type="gdouble"/>
           </parameter>
         </parameters>
@@ -1348,19 +1355,19 @@ sufficently new version of the X Render extension.</doc>
               version="2.2">
         <doc xml:space="preserve"
              filename="gdk/gdkcursor.c"
-             line="419">Returns the display on which the #GdkCursor is defined.</doc>
+             line="424">Returns the display on which the #GdkCursor is defined.</doc>
         <source-position filename="gdk/gdkcursor.h" line="243"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcursor.c"
-               line="425">the #GdkDisplay associated to @cursor</doc>
+               line="430">the #GdkDisplay associated to @cursor</doc>
           <type name="Display" c:type="GdkDisplay*"/>
         </return-value>
         <parameters>
           <instance-parameter name="cursor" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="421">a #GdkCursor.</doc>
+                 line="426">a #GdkCursor.</doc>
             <type name="Cursor" c:type="GdkCursor*"/>
           </instance-parameter>
         </parameters>
@@ -1370,7 +1377,7 @@ sufficently new version of the X Render extension.</doc>
               version="2.8">
         <doc xml:space="preserve"
              filename="gdk/gdkcursor.c"
-             line="438">Returns a #GdkPixbuf with the image used to display the cursor.
+             line="443">Returns a #GdkPixbuf with the image used to display the cursor.
 
 Note that depending on the capabilities of the windowing system and
 on the cursor, GDK may not be able to obtain the image data. In this
@@ -1379,7 +1386,7 @@ case, %NULL is returned.</doc>
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkcursor.c"
-               line="448">a #GdkPixbuf representing
+               line="453">a #GdkPixbuf representing
   @cursor, or %NULL</doc>
           <type name="GdkPixbuf.Pixbuf" c:type="GdkPixbuf*"/>
         </return-value>
@@ -1387,7 +1394,7 @@ case, %NULL is returned.</doc>
           <instance-parameter name="cursor" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="440">a #GdkCursor</doc>
+                 line="445">a #GdkCursor</doc>
             <type name="Cursor" c:type="GdkCursor*"/>
           </instance-parameter>
         </parameters>
@@ -1397,7 +1404,7 @@ case, %NULL is returned.</doc>
               version="3.10">
         <doc xml:space="preserve"
              filename="gdk/gdkcursor.c"
-             line="499">Returns a cairo image surface with the image used to display the cursor.
+             line="504">Returns a cairo image surface with the image used to display the cursor.
 
 Note that depending on the capabilities of the windowing system and
 on the cursor, GDK may not be able to obtain the image data. In this
@@ -1406,7 +1413,7 @@ case, %NULL is returned.</doc>
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkcursor.c"
-               line="513">a #cairo_surface_t
+               line="518">a #cairo_surface_t
   representing @cursor, or %NULL</doc>
           <type name="cairo.Surface" c:type="cairo_surface_t*"/>
         </return-value>
@@ -1414,7 +1421,7 @@ case, %NULL is returned.</doc>
           <instance-parameter name="cursor" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="501">a #GdkCursor</doc>
+                 line="506">a #GdkCursor</doc>
             <type name="Cursor" c:type="GdkCursor*"/>
           </instance-parameter>
           <parameter name="x_hot"
@@ -1425,7 +1432,7 @@ case, %NULL is returned.</doc>
                      allow-none="1">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="502">Location to store the hotspot x position,
+                 line="507">Location to store the hotspot x position,
   or %NULL</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
@@ -1437,7 +1444,7 @@ case, %NULL is returned.</doc>
                      allow-none="1">
             <doc xml:space="preserve"
                  filename="gdk/gdkcursor.c"
-                 line="504">Location to store the hotspot y position,
+                 line="509">Location to store the hotspot y position,
   or %NULL</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
@@ -4896,19 +4903,19 @@ for @display</doc>
               version="3.20">
         <doc xml:space="preserve"
              filename="gdk/gdkdisplay.c"
-             line="2487">Returns the default #GdkSeat for this display.</doc>
+             line="2494">Returns the default #GdkSeat for this display.</doc>
         <source-position filename="gdk/gdkdisplay.h" line="177"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkdisplay.c"
-               line="2493">the default seat.</doc>
+               line="2500">the default seat.</doc>
           <type name="Seat" c:type="GdkSeat*"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2489">a #GdkDisplay</doc>
+                 line="2496">a #GdkDisplay</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </instance-parameter>
         </parameters>
@@ -5007,12 +5014,12 @@ with gdk_event_free().</doc>
               version="3.22">
         <doc xml:space="preserve"
              filename="gdk/gdkdisplay.c"
-             line="2579">Gets a monitor associated with this display.</doc>
+             line="2586">Gets a monitor associated with this display.</doc>
         <source-position filename="gdk/gdkdisplay.h" line="185"/>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkdisplay.c"
-               line="2586">the #GdkMonitor, or %NULL if
+               line="2593">the #GdkMonitor, or %NULL if
    @monitor_num is not a valid monitor number</doc>
           <type name="Monitor" c:type="GdkMonitor*"/>
         </return-value>
@@ -5020,13 +5027,13 @@ with gdk_event_free().</doc>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2581">a #GdkDisplay</doc>
+                 line="2588">a #GdkDisplay</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="monitor_num" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2582">number of the monitor</doc>
+                 line="2589">number of the monitor</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -5036,32 +5043,32 @@ with gdk_event_free().</doc>
               version="3.22">
         <doc xml:space="preserve"
              filename="gdk/gdkdisplay.c"
-             line="2628">Gets the monitor in which the point (@x, @y) is located,
+             line="2635">Gets the monitor in which the point (@x, @y) is located,
 or a nearby monitor if the point is not in any monitor.</doc>
         <source-position filename="gdk/gdkdisplay.h" line="190"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkdisplay.c"
-               line="2637">the monitor containing the point</doc>
+               line="2644">the monitor containing the point</doc>
           <type name="Monitor" c:type="GdkMonitor*"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2630">a #GdkDisplay</doc>
+                 line="2637">a #GdkDisplay</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2631">the x coordinate of the point</doc>
+                 line="2638">the x coordinate of the point</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="y" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2632">the y coordinate of the point</doc>
+                 line="2639">the y coordinate of the point</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -5071,27 +5078,27 @@ or a nearby monitor if the point is not in any monitor.</doc>
               version="3.22">
         <doc xml:space="preserve"
              filename="gdk/gdkdisplay.c"
-             line="2689">Gets the monitor in which the largest area of @window
+             line="2696">Gets the monitor in which the largest area of @window
 resides, or a monitor close to @window if it is outside
 of all monitors.</doc>
         <source-position filename="gdk/gdkdisplay.h" line="194"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkdisplay.c"
-               line="2698">the monitor with the largest overlap with @window</doc>
+               line="2705">the monitor with the largest overlap with @window</doc>
           <type name="Monitor" c:type="GdkMonitor*"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2691">a #GdkDisplay</doc>
+                 line="2698">a #GdkDisplay</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2692">a #GdkWindow</doc>
+                 line="2699">a #GdkWindow</doc>
             <type name="Window" c:type="GdkWindow*"/>
           </parameter>
         </parameters>
@@ -5101,7 +5108,7 @@ of all monitors.</doc>
               version="3.22">
         <doc xml:space="preserve"
              filename="gdk/gdkdisplay.c"
-             line="2528">Gets the number of monitors that belong to @display.
+             line="2535">Gets the number of monitors that belong to @display.
 
 The returned number is valid until the next emission of the
 #GdkDisplay::monitor-added or #GdkDisplay::monitor-removed signal.</doc>
@@ -5109,14 +5116,14 @@ The returned number is valid until the next emission of the
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkdisplay.c"
-               line="2537">the number of monitors</doc>
+               line="2544">the number of monitors</doc>
           <type name="gint" c:type="int"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2530">a #GdkDisplay</doc>
+                 line="2537">a #GdkDisplay</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </instance-parameter>
         </parameters>
@@ -5242,7 +5249,7 @@ mask for a given display.</doc>
               version="3.22">
         <doc xml:space="preserve"
              filename="gdk/gdkdisplay.c"
-             line="2602">Gets the primary monitor for the display.
+             line="2609">Gets the primary monitor for the display.
 
 The primary monitor is considered the monitor where the “main desktop”
 lives. While normal application windows typically allow the window
@@ -5252,7 +5259,7 @@ such as panels should place themselves on the primary monitor.</doc>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkdisplay.c"
-               line="2613">the primary monitor, or %NULL if no primary
+               line="2620">the primary monitor, or %NULL if no primary
     monitor is configured by the user</doc>
           <type name="Monitor" c:type="GdkMonitor*"/>
         </return-value>
@@ -5260,7 +5267,7 @@ such as panels should place themselves on the primary monitor.</doc>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2604">a #GdkDisplay</doc>
+                 line="2611">a #GdkDisplay</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </instance-parameter>
         </parameters>
@@ -5457,12 +5464,12 @@ The list is statically allocated and should not be freed.</doc>
               version="3.20">
         <doc xml:space="preserve"
              filename="gdk/gdkdisplay.c"
-             line="2509">Returns the list of seats known to @display.</doc>
+             line="2516">Returns the list of seats known to @display.</doc>
         <source-position filename="gdk/gdkdisplay.h" line="180"/>
         <return-value transfer-ownership="container">
           <doc xml:space="preserve"
                filename="gdk/gdkdisplay.c"
-               line="2515">the
+               line="2522">the
          list of seats known to the #GdkDisplay</doc>
           <type name="GLib.List" c:type="GList*">
             <type name="Seat"/>
@@ -5472,7 +5479,7 @@ The list is statically allocated and should not be freed.</doc>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkdisplay.c"
-                 line="2511">a #GdkDisplay</doc>
+                 line="2518">a #GdkDisplay</doc>
             <type name="Display" c:type="GdkDisplay*"/>
           </instance-parameter>
         </parameters>
@@ -11580,7 +11587,7 @@ that is currently set by calling gdk_gl_context_clear_current().</doc>
                 version="3.16">
         <doc xml:space="preserve"
              filename="gdk/gdkglcontext.c"
-             line="1022">Clears the current #GdkGLContext.
+             line="1023">Clears the current #GdkGLContext.
 
 Any OpenGL call after this function returns will be ignored
 until gdk_gl_context_make_current() is called.</doc>
@@ -11594,12 +11601,12 @@ until gdk_gl_context_make_current() is called.</doc>
                 version="3.16">
         <doc xml:space="preserve"
              filename="gdk/gdkglcontext.c"
-             line="1047">Retrieves the current #GdkGLContext.</doc>
+             line="1048">Retrieves the current #GdkGLContext.</doc>
         <source-position filename="gdk/gdkglcontext.h" line="88"/>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkglcontext.c"
-               line="1052">the current #GdkGLContext, or %NULL</doc>
+               line="1053">the current #GdkGLContext, or %NULL</doc>
           <type name="GLContext" c:type="GdkGLContext*"/>
         </return-value>
       </function>
@@ -11631,19 +11638,19 @@ until gdk_gl_context_make_current() is called.</doc>
               version="3.16">
         <doc xml:space="preserve"
              filename="gdk/gdkglcontext.c"
-             line="934">Retrieves the #GdkDisplay the @context is created for</doc>
+             line="935">Retrieves the #GdkDisplay the @context is created for</doc>
         <source-position filename="gdk/gdkglcontext.h" line="46"/>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkglcontext.c"
-               line="940">a #GdkDisplay or %NULL</doc>
+               line="941">a #GdkDisplay or %NULL</doc>
           <type name="Display" c:type="GdkDisplay*"/>
         </return-value>
         <parameters>
           <instance-parameter name="context" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkglcontext.c"
-                 line="936">a #GdkGLContext</doc>
+                 line="937">a #GdkGLContext</doc>
             <type name="GLContext" c:type="GdkGLContext*"/>
           </instance-parameter>
         </parameters>
@@ -11716,19 +11723,19 @@ gdk_gl_context_set_required_version().</doc>
               version="3.16">
         <doc xml:space="preserve"
              filename="gdk/gdkglcontext.c"
-             line="974">Retrieves the #GdkGLContext that this @context share data with.</doc>
+             line="975">Retrieves the #GdkGLContext that this @context share data with.</doc>
         <source-position filename="gdk/gdkglcontext.h" line="50"/>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkglcontext.c"
-               line="980">a #GdkGLContext or %NULL</doc>
+               line="981">a #GdkGLContext or %NULL</doc>
           <type name="GLContext" c:type="GdkGLContext*"/>
         </return-value>
         <parameters>
           <instance-parameter name="context" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkglcontext.c"
-                 line="976">a #GdkGLContext</doc>
+                 line="977">a #GdkGLContext</doc>
             <type name="GLContext" c:type="GdkGLContext*"/>
           </instance-parameter>
         </parameters>
@@ -11760,7 +11767,7 @@ gdk_gl_context_set_required_version().</doc>
               version="3.16">
         <doc xml:space="preserve"
              filename="gdk/gdkglcontext.c"
-             line="994">Retrieves the OpenGL version of the @context.
+             line="995">Retrieves the OpenGL version of the @context.
 
 The @context must be realized prior to calling this function.</doc>
         <source-position filename="gdk/gdkglcontext.h" line="52"/>
@@ -11771,7 +11778,7 @@ The @context must be realized prior to calling this function.</doc>
           <instance-parameter name="context" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkglcontext.c"
-                 line="996">a #GdkGLContext</doc>
+                 line="997">a #GdkGLContext</doc>
             <type name="GLContext" c:type="GdkGLContext*"/>
           </instance-parameter>
           <parameter name="major"
@@ -11780,7 +11787,7 @@ The @context must be realized prior to calling this function.</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="gdk/gdkglcontext.c"
-                 line="997">return location for the major version</doc>
+                 line="998">return location for the major version</doc>
             <type name="gint" c:type="int*"/>
           </parameter>
           <parameter name="minor"
@@ -11789,7 +11796,7 @@ The @context must be realized prior to calling this function.</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="gdk/gdkglcontext.c"
-                 line="998">return location for the minor version</doc>
+                 line="999">return location for the minor version</doc>
             <type name="gint" c:type="int*"/>
           </parameter>
         </parameters>
@@ -11800,19 +11807,19 @@ The @context must be realized prior to calling this function.</doc>
               version="3.16">
         <doc xml:space="preserve"
              filename="gdk/gdkglcontext.c"
-             line="954">Retrieves the #GdkWindow used by the @context.</doc>
+             line="955">Retrieves the #GdkWindow used by the @context.</doc>
         <source-position filename="gdk/gdkglcontext.h" line="48"/>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve"
                filename="gdk/gdkglcontext.c"
-               line="960">a #GdkWindow or %NULL</doc>
+               line="961">a #GdkWindow or %NULL</doc>
           <type name="Window" c:type="GdkWindow*"/>
         </return-value>
         <parameters>
           <instance-parameter name="context" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/gdkglcontext.c"
-                 line="956">a #GdkGLContext</doc>
+                 line="957">a #GdkGLContext</doc>
             <type name="GLContext" c:type="GdkGLContext*"/>
           </instance-parameter>
         </parameters>
@@ -24725,7 +24732,7 @@ See gdk_keymap_get_caps_lock_state().</doc>
       <source-position filename="gdk/gdkdevice.h" line="110"/>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="MICRO_VERSION" value="42" c:type="GDK_MICRO_VERSION">
+    <constant name="MICRO_VERSION" value="52" c:type="GDK_MICRO_VERSION">
       <source-position filename="gdk/gdkversionmacros.h" line="29"/>
       <type name="gint" c:type="gint"/>
     </constant>
@@ -35761,7 +35768,7 @@ operations.</doc>
               c:identifier="gdk_cairo_region_create_from_surface">
       <doc xml:space="preserve"
            filename="gdk/gdkcairo.c"
-           line="442">Creates region that describes covers the area where the given
+           line="443">Creates region that describes covers the area where the given
 @surface is more than 50% opaque.
 
 This function takes into account device offsets that might be
@@ -35770,14 +35777,14 @@ set with cairo_surface_set_device_offset().</doc>
       <return-value transfer-ownership="full">
         <doc xml:space="preserve"
              filename="gdk/gdkcairo.c"
-             line="452">A #cairo_region_t; must be freed with cairo_region_destroy()</doc>
+             line="453">A #cairo_region_t; must be freed with cairo_region_destroy()</doc>
         <type name="cairo.Region" c:type="cairo_region_t*"/>
       </return-value>
       <parameters>
         <parameter name="surface" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="444">a cairo surface</doc>
+               line="445">a cairo surface</doc>
           <type name="cairo.Surface" c:type="cairo_surface_t*"/>
         </parameter>
       </parameters>
@@ -35815,7 +35822,7 @@ set with cairo_surface_set_device_offset().</doc>
               version="2.8">
       <doc xml:space="preserve"
            filename="gdk/gdkcairo.c"
-           line="311">Sets the given pixbuf as the source pattern for @cr.
+           line="312">Sets the given pixbuf as the source pattern for @cr.
 
 The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
 so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.</doc>
@@ -35827,25 +35834,25 @@ so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.</doc>
         <parameter name="cr" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="313">a cairo context</doc>
+               line="314">a cairo context</doc>
           <type name="cairo.Context" c:type="cairo_t*"/>
         </parameter>
         <parameter name="pixbuf" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="314">a #GdkPixbuf</doc>
+               line="315">a #GdkPixbuf</doc>
           <type name="GdkPixbuf.Pixbuf" c:type="const GdkPixbuf*"/>
         </parameter>
         <parameter name="pixbuf_x" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="315">X coordinate of location to place upper left corner of @pixbuf</doc>
+               line="316">X coordinate of location to place upper left corner of @pixbuf</doc>
           <type name="gdouble" c:type="gdouble"/>
         </parameter>
         <parameter name="pixbuf_y" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="316">Y coordinate of location to place upper left corner of @pixbuf</doc>
+               line="317">Y coordinate of location to place upper left corner of @pixbuf</doc>
           <type name="gdouble" c:type="gdouble"/>
         </parameter>
       </parameters>
@@ -35880,7 +35887,7 @@ so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.</doc>
               version="2.24">
       <doc xml:space="preserve"
            filename="gdk/gdkcairo.c"
-           line="350">Sets the given window as the source pattern for @cr.
+           line="351">Sets the given window as the source pattern for @cr.
 
 The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
 so that the origin of @window is @x, @y. The window contains all its
@@ -35896,25 +35903,25 @@ visible part of @window, so use this function with care.</doc>
         <parameter name="cr" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="352">a cairo context</doc>
+               line="353">a cairo context</doc>
           <type name="cairo.Context" c:type="cairo_t*"/>
         </parameter>
         <parameter name="window" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="353">a #GdkWindow</doc>
+               line="354">a #GdkWindow</doc>
           <type name="Window" c:type="GdkWindow*"/>
         </parameter>
         <parameter name="x" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="354">X coordinate of location to place upper left corner of @window</doc>
+               line="355">X coordinate of location to place upper left corner of @window</doc>
           <type name="gdouble" c:type="gdouble"/>
         </parameter>
         <parameter name="y" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="355">Y coordinate of location to place upper left corner of @window</doc>
+               line="356">Y coordinate of location to place upper left corner of @window</doc>
           <type name="gdouble" c:type="gdouble"/>
         </parameter>
       </parameters>
@@ -35924,26 +35931,26 @@ visible part of @window, so use this function with care.</doc>
               version="3.10">
       <doc xml:space="preserve"
            filename="gdk/gdkcairo.c"
-           line="269">Creates an image surface with the same contents as
+           line="270">Creates an image surface with the same contents as
 the pixbuf.</doc>
       <source-position filename="gdk/gdkcairo.h" line="72"/>
       <return-value transfer-ownership="full">
         <doc xml:space="preserve"
              filename="gdk/gdkcairo.c"
-             line="278">a new cairo surface, must be freed with cairo_surface_destroy()</doc>
+             line="279">a new cairo surface, must be freed with cairo_surface_destroy()</doc>
         <type name="cairo.Surface" c:type="cairo_surface_t*"/>
       </return-value>
       <parameters>
         <parameter name="pixbuf" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="271">a #GdkPixbuf</doc>
+               line="272">a #GdkPixbuf</doc>
           <type name="GdkPixbuf.Pixbuf" c:type="const GdkPixbuf*"/>
         </parameter>
         <parameter name="scale" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="272">the scale of the new surface, or 0 to use same as @window</doc>
+               line="273">the scale of the new surface, or 0 to use same as @window</doc>
           <type name="gint" c:type="int"/>
         </parameter>
         <parameter name="for_window"
@@ -35952,7 +35959,7 @@ the pixbuf.</doc>
                    allow-none="1">
           <doc xml:space="preserve"
                filename="gdk/gdkcairo.c"
-               line="273">The window this will be drawn to, or %NULL</doc>
+               line="274">The window this will be drawn to, or %NULL</doc>
           <type name="Window" c:type="GdkWindow*"/>
         </parameter>
       </parameters>

@@ -5,6 +5,7 @@ and/or use gtk-doc annotations.  -->
 <repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:doc="http://www.gtk.org/introspection/doc/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="Gdk" version="3.0"/>
   <include name="GdkPixbuf" version="2.0"/>
@@ -14,6 +15,7 @@ and/or use gtk-doc annotations.  -->
   <include name="xlib" version="2.0"/>
   <package name="gdk-x11-3.0"/>
   <c:include name="gdk/gdkx.h"/>
+  <doc:format name="unknown"/>
   <namespace name="GdkX11"
              version="3.0"
              shared-library="libgdk-3.so.0"
@@ -590,19 +592,19 @@ using GDK_XID_TO_POINTER().</doc>
                 version="3.16">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkglcontext-x11.c"
-             line="1362">Retrieves the version of the GLX implementation.</doc>
+             line="1371">Retrieves the version of the GLX implementation.</doc>
         <source-position filename="gdk/x11/gdkx11glcontext.h" line="43"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/x11/gdkglcontext-x11.c"
-               line="1370">%TRUE if GLX is available</doc>
+               line="1379">%TRUE if GLX is available</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkglcontext-x11.c"
-                 line="1364">a #GdkDisplay</doc>
+                 line="1373">a #GdkDisplay</doc>
             <type name="Gdk.Display" c:type="GdkDisplay*"/>
           </parameter>
           <parameter name="major"
@@ -611,7 +613,7 @@ using GDK_XID_TO_POINTER().</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkglcontext-x11.c"
-                 line="1365">return location for the GLX major version</doc>
+                 line="1374">return location for the GLX major version</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
           <parameter name="minor"
@@ -620,7 +622,7 @@ using GDK_XID_TO_POINTER().</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkglcontext-x11.c"
-                 line="1366">return location for the GLX minor version</doc>
+                 line="1375">return location for the GLX minor version</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
         </parameters>
@@ -1617,7 +1619,7 @@ a window manager change.</doc>
                    version="2.24">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="1207">Wraps a native window in a #GdkWindow. The function will try to
+             line="1217">Wraps a native window in a #GdkWindow. The function will try to
 look up the window using gdk_x11_window_lookup_for_display() first.
 If it does not find it there, it will create a new window.
 
@@ -1628,7 +1630,7 @@ was already known to GDK, a new reference to the existing
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
                filename="gdk/x11/gdkwindow-x11.c"
-               line="1220">a #GdkWindow wrapper for the native
+               line="1230">a #GdkWindow wrapper for the native
   window, or %NULL if the window has been destroyed. The wrapper
   will be newly created, if one doesn’t exist already.</doc>
           <type name="Gdk.Window" c:type="GdkWindow*"/>
@@ -1637,13 +1639,13 @@ was already known to GDK, a new reference to the existing
           <parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="1209">the #GdkDisplay where the window handle comes from.</doc>
+                 line="1219">the #GdkDisplay where the window handle comes from.</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </parameter>
           <parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="1210">an Xlib Window</doc>
+                 line="1220">an Xlib Window</doc>
             <type name="xlib.Window" c:type="Window"/>
           </parameter>
         </parameters>
@@ -1683,19 +1685,19 @@ was already known to GDK, a new reference to the existing
               version="3.10">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="2220">Gets the number of the workspace @window is on.</doc>
+             line="2230">Gets the number of the workspace @window is on.</doc>
         <source-position filename="gdk/x11/gdkx11window.h" line="81"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/x11/gdkwindow-x11.c"
-               line="2226">the current workspace of @window</doc>
+               line="2236">the current workspace of @window</doc>
           <type name="guint32" c:type="guint32"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="2222">a #GdkWindow</doc>
+                 line="2232">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
         </parameters>
@@ -1703,19 +1705,19 @@ was already known to GDK, a new reference to the existing
       <method name="get_xid" c:identifier="gdk_x11_window_get_xid">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="5651">Returns the X resource (window) belonging to a #GdkWindow.</doc>
+             line="5661">Returns the X resource (window) belonging to a #GdkWindow.</doc>
         <source-position filename="gdk/x11/gdkx11window.h" line="57"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/x11/gdkwindow-x11.c"
-               line="5657">the ID of @drawable’s X resource.</doc>
+               line="5667">the ID of @drawable’s X resource.</doc>
           <type name="xlib.Window" c:type="Window"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="5653">a native #GdkWindow.</doc>
+                 line="5663">a native #GdkWindow.</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
         </parameters>
@@ -1725,7 +1727,7 @@ was already known to GDK, a new reference to the existing
               version="2.8">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="2150">Moves the window to the correct workspace when running under a
+             line="2160">Moves the window to the correct workspace when running under a
 window manager that supports multiple workspaces, as described
 in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
 Will not do anything if the window is already on all workspaces.</doc>
@@ -1737,7 +1739,7 @@ Will not do anything if the window is already on all workspaces.</doc>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="2152">a #GdkWindow</doc>
+                 line="2162">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
         </parameters>
@@ -1747,7 +1749,7 @@ Will not do anything if the window is already on all workspaces.</doc>
               version="3.10">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="2238">Moves the window to the given workspace when running unde a
+             line="2248">Moves the window to the given workspace when running unde a
 window manager that supports multiple workspaces, as described
 in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.</doc>
         <source-position filename="gdk/x11/gdkx11window.h" line="83"/>
@@ -1758,13 +1760,13 @@ in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-s
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="2240">a #GdkWindow</doc>
+                 line="2250">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="desktop" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="2241">the number of the workspace to move the window to</doc>
+                 line="2251">the number of the workspace to move the window to</doc>
             <type name="guint32" c:type="guint32"/>
           </parameter>
         </parameters>
@@ -1776,7 +1778,7 @@ in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-s
               deprecated-version="3.12">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="3784">This is the same as gdk_window_set_shadow_width() but it only works
+             line="3794">This is the same as gdk_window_set_shadow_width() but it only works
 on GdkX11Window.</doc>
         <doc-deprecated xml:space="preserve">Use gdk_window_set_shadow_width() instead.</doc-deprecated>
         <source-position filename="gdk/x11/gdkx11window.h" line="69"/>
@@ -1787,31 +1789,31 @@ on GdkX11Window.</doc>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3786">a #GdkWindow</doc>
+                 line="3796">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="left" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3787">The left extent</doc>
+                 line="3797">The left extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="right" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3788">The right extent</doc>
+                 line="3798">The right extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="top" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3789">The top extent</doc>
+                 line="3799">The top extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="bottom" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3790">The bottom extent</doc>
+                 line="3800">The bottom extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -1821,7 +1823,7 @@ on GdkX11Window.</doc>
               version="3.8">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="5696">This function can be used to disable frame synchronization for a window.
+             line="5706">This function can be used to disable frame synchronization for a window.
 Normally frame synchronziation will be enabled or disabled based on whether
 the system has a compositor that supports frame synchronization, but if
 the window is not directly managed by the window manager, then frame
@@ -1835,13 +1837,13 @@ embedded via the XEMBED protocol.</doc>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="5698">a native #GdkWindow</doc>
+                 line="5708">a native #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="frame_sync_enabled" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="5699">whether frame-synchronization should be enabled</doc>
+                 line="5709">whether frame-synchronization should be enabled</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
@@ -1851,7 +1853,7 @@ embedded via the XEMBED protocol.</doc>
               version="3.4">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="3716">Set a hint for the window manager, requesting that the titlebar
+             line="3726">Set a hint for the window manager, requesting that the titlebar
 should be hidden when the window is maximized.
 
 Note that this property is automatically updated by GTK+, so this
@@ -1865,14 +1867,14 @@ to create toplevel windows.</doc>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3718">a #GdkWindow</doc>
+                 line="3728">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="hide_titlebar_when_maximized"
                      transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3719">whether to hide the titlebar when
+                 line="3729">whether to hide the titlebar when
                                maximized</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
@@ -1883,7 +1885,7 @@ to create toplevel windows.</doc>
               version="3.2">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="3809">GTK+ applications can request a dark theme variant. In order to
+             line="3819">GTK+ applications can request a dark theme variant. In order to
 make other applications - namely window managers using GTK+ for
 themeing - aware of this choice, GTK+ uses this function to
 export the requested theme variant as _GTK_THEME_VARIANT property
@@ -1900,13 +1902,13 @@ to create toplevel windows.</doc>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3811">a #GdkWindow</doc>
+                 line="3821">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="variant" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3812">the theme variant to export</doc>
+                 line="3822">the theme variant to export</doc>
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -1916,7 +1918,7 @@ to create toplevel windows.</doc>
               version="2.6">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="3611">The application can use this call to update the _NET_WM_USER_TIME
+             line="3621">The application can use this call to update the _NET_WM_USER_TIME
 property on a toplevel window.  This property stores an Xserver
 time which represents the time of the last user input event
 received for this window.  This property may be used by the window
@@ -1936,13 +1938,13 @@ events bypassing GDK.</doc>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3613">A toplevel #GdkWindow</doc>
+                 line="3623">A toplevel #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="timestamp" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3614">An XServer timestamp to which the property should be set</doc>
+                 line="3624">An XServer timestamp to which the property should be set</doc>
             <type name="guint32" c:type="guint32"/>
           </parameter>
         </parameters>
@@ -1952,7 +1954,7 @@ events bypassing GDK.</doc>
               version="3.4">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="3676">This function modifies or removes an arbitrary X11 window
+             line="3686">This function modifies or removes an arbitrary X11 window
 property of type UTF8_STRING.  If the given @window is
 not a toplevel window, it is ignored.</doc>
         <source-position filename="gdk/x11/gdkx11window.h" line="62"/>
@@ -1963,13 +1965,13 @@ not a toplevel window, it is ignored.</doc>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3678">a #GdkWindow</doc>
+                 line="3688">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="name" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3679">Property name, will be interned as an X atom</doc>
+                 line="3689">Property name, will be interned as an X atom</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="value"
@@ -1978,7 +1980,7 @@ not a toplevel window, it is ignored.</doc>
                      allow-none="1">
             <doc xml:space="preserve"
                  filename="gdk/x11/gdkwindow-x11.c"
-                 line="3680">Property value, or %NULL to delete</doc>
+                 line="3690">Property value, or %NULL to delete</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
@@ -2602,19 +2604,19 @@ available. Otherwise behaves like a transparent pattern.</doc>
               c:identifier="gdk_x11_get_server_time">
       <doc xml:space="preserve"
            filename="gdk/x11/gdkwindow-x11.c"
-           line="5612">Routine to get the current X server time stamp.</doc>
+           line="5622">Routine to get the current X server time stamp.</doc>
       <source-position filename="gdk/x11/gdkx11window.h" line="111"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="gdk/x11/gdkwindow-x11.c"
-             line="5621">the time stamp.</doc>
+             line="5631">the time stamp.</doc>
         <type name="guint32" c:type="guint32"/>
       </return-value>
       <parameters>
         <parameter name="window" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="gdk/x11/gdkwindow-x11.c"
-               line="5614">a #GdkWindow, used for communication
+               line="5624">a #GdkWindow, used for communication
          with the server.  The window must have
          GDK_PROPERTY_CHANGE_MASK in its events mask or a hang will
          result.</doc>
