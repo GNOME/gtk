@@ -151,7 +151,7 @@ on the circumstances:
   ```
 
   Remember that you have to include `gio/gdesktopappinfo.h` and use the
-  `gio-unix-2.0` pkg-config file when using [`ctor@Gio.DesktopAppInfo.new`].
+  `gio-unix-2.0` pkg-config file when using [`ctor@GioUnix.DesktopAppInfo.new`].
 
 - If you are launching a custom commandline, you can still use [`method@Gio.AppInfo.launch`]
   with a [`iface@Gio.AppInfo`] that is constructed with [`func@Gio.AppInfo.create_from_commandline`],
