@@ -3274,7 +3274,6 @@ struct _GskTransformNode
 
   GskRenderNode *child;
   GskTransform *transform;
-  float dx, dy;
 };
 
 static void
@@ -3496,11 +3495,6 @@ gsk_transform_node_new (GskRenderNode *child,
   self->child = gsk_render_node_ref (child);
   self->transform = gsk_transform_ref (transform);
 
-  if (category >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
-    gsk_transform_to_translate (transform, &self->dx, &self->dy);
-  else
-    self->dx = self->dy = 0;
-
   gsk_transform_transform_bounds (self->transform,
                                   &child->bounds,
                                   &node->bounds);
@@ -3545,17 +3539,6 @@ gsk_transform_node_get_transform (const GskRenderNode *node)
   const GskTransformNode *self = (const GskTransformNode *) node;
 
   return self->transform;
-}
-
-void
-gsk_transform_node_get_translate (const GskRenderNode *node,
-                                  float               *dx,
-                                  float               *dy)
-{
-  const GskTransformNode *self = (const GskTransformNode *) node;
-
-  *dx = self->dx;
-  *dy = self->dy;
 }
 
 /* }}} */
