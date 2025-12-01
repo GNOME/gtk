@@ -291,7 +291,7 @@ gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
 
   content_formats = gdk_content_provider_ref_formats (priv->content);
   content_formats = gdk_content_formats_union_serialize_mime_types (content_formats);
-  mime_type = gdk_content_formats_match_mime_type (content_formats, formats);
+  mime_type = gdk_content_formats_match_mime_type (formats, content_formats);
 
   if (mime_type != NULL)
     {
