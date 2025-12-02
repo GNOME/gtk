@@ -161,10 +161,14 @@ PaintableEditor separator {
   margin: 10px;
 }
 
-box.alpha-editor.tight {
+AlphaEditor.tight {
   border-spacing: 0px;
 }
 
-box.alpha-editor > scale {
+AlphaEditor > scale {
   min-width: 120px;
+}
+
+grid.tight {
+  border-spacing: 0;
 }

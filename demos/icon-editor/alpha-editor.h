@@ -22,12 +22,13 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "path-paintable.h"
 
 
-#define SHAPE_EDITOR_TYPE (shape_editor_get_type ())
-G_DECLARE_FINAL_TYPE (ShapeEditor, shape_editor, SHAPE, EDITOR, GtkWidget)
+G_DECLARE_FINAL_TYPE (AlphaEditor, alpha_editor, ALPHA, EDITOR, GtkWidget)
 
 
-ShapeEditor *    shape_editor_new          (PathPaintable *paintable,
-                                            Shape         *shape);
+AlphaEditor *   alpha_editor_new (void);
+
+double          alpha_editor_get_alpha (AlphaEditor *self);
+void            alpha_editor_set_alpha (AlphaEditor *self,
+                                        double       alpha);

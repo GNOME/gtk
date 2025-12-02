@@ -5,10 +5,13 @@
     <file preprocess="xml-stripblanks">org.gtk.Shaper.Devel.svg</file>
     <file preprocess="xml-stripblanks">org.gtk.Shaper-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icon-editor-window.ui</file>
+    <file preprocess="xml-stripblanks">alpha-editor.ui</file>
     <file preprocess="xml-stripblanks">paintable-editor.ui</file>
     <file preprocess="xml-stripblanks">shape-editor.ui</file>
     <file preprocess="xml-stripblanks">state-editor.ui</file>
     <file preprocess="xml-stripblanks">color-editor.ui</file>
+    <file preprocess="xml-stripblanks">path-editor.ui</file>
+    <file preprocess="xml-stripblanks">transform-editor.ui</file>
     <file preprocess="xml-stripblanks">help-window.ui</file>
     <file preprocess="xml-stripblanks">document-edit-symbolic.svg</file>
     <file preprocess="xml-stripblanks">settings-symbolic.svg</file>
@@ -21,5 +24,12 @@
     <file preprocess="xml-stripblanks">example6.gpa</file>
     <file alias="icon-format.md">../../docs/reference/gtk/icon-format.md</file>
     <file>icon-editor.css</file>
+    <file preprocess="xml-stripblanks">identity-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">translate-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">rotate-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">scale-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">shear-x-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">shear-y-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">transform-symbolic.svg</file>
   </gresource>
 </gresources>

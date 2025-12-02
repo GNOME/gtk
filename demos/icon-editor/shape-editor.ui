@@ -8,7 +8,6 @@
             <property name="valign">center</property>
             <property name="label-widget">
               <object class="GtkBox">
-                <property name="hexpand">0</property>
                 <child>
                   <object class="GtkImage">
                     <property name="pixel-size">20</property>
@@ -666,7 +665,7 @@
             </binding>
             <property name="label" translatable="yes">_Path</property>
             <property name="use-underline">1</property>
-            <property name="mnemonic-widget">path_cmds</property>
+            <property name="mnemonic-widget">path_editor</property>
             <property name="xalign">1</property>
             <layout>
               <property name="row">12</property>
@@ -675,7 +674,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkStack" id="path_cmds_stack">
+          <object class="PathEditor" id="path_editor">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool_and_uint_equal">
                 <lookup name="expanded">expander</lookup>
@@ -688,64 +687,7 @@
               <property name="row">12</property>
               <property name="column">1</property>
             </layout>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">label</property>
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="hexpand">0</property>
-                    <child>
-                      <object class="GtkLabel" id="path_cmds">
-                        <property name="ellipsize">end</property>
-                        <child>
-                          <object class="GtkGestureClick">
-                            <signal name="pressed" handler="path_cmds_clicked" swapped="yes"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <style>
-                          <class name="circular"/>
-                          <class name="small"/>
-                        </style>
-                        <property name="hexpand">1</property>
-                        <property name="halign">end</property>
-                        <property name="focus-on-click">0</property>
-                        <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Edit path geometry</property>
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="paintable">
-                              <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/Shaper/document-edit-symbolic.svg</property>
-                              </object>
-                            </property>
-                          </object>
-                        </property>
-                        <signal name="clicked" handler="edit_path" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">entry</property>
-                <property name="child">
-                  <object class="GtkEntry" id="path_cmds_entry">
-                    <signal name="activate" handler="path_cmds_activated" swapped="yes"/>
-                    <child>
-                      <object class="GtkEventControllerKey">
-                        <signal name="key-pressed" handler="path_cmds_key" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
+            <signal name="notify::path" handler="path_changed" swapped="yes"/>
           </object>
         </child>
 
@@ -1267,131 +1209,104 @@
         </child>
 
         <child>
+          <object class="GtkExpander" id="attach_expander">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">0</property>
+            <property name="valign">center</property>
+            <property name="margin-start">10</property>
+            <property name="label-widget">
+              <object class="GtkLabel" id="attach_to_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">_Attach</property>
+                <property name="use-underline">1</property>
+                <property name="mnemonic-widget">attach_to</property>
+              </object>
+            </property>
+            <layout>
+              <property name="row">25</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="attach_to">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
+            <layout>
+              <property name="row">25</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="attach_at_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">attach_expander</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_Position</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">attach_at</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">26</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale" id="attach_at">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">attach_expander</lookup>
+              </closure>
+            </binding>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">0</property>
+                <property name="upper">1</property>
+                <property name="step-increment">0.1</property>
+              </object>
+            </property>
+            <signal name="value-changed" handler="attach_changed" swapped="yes"/>
+            <marks>
+              <mark value="0" position="bottom"/>
+              <mark value="0.5" position="bottom"/>
+              <mark value="1" position="bottom"/>
+            </marks>
+            <layout>
+              <property name="row">26</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkLabel" id="clip_path_label">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="label" translatable="yes">_Clip Path</property>
             <property name="use-underline">1</property>
+            <property name="mnemonic-widget">clip_path_editor</property>
             <property name="xalign">1</property>
             <layout>
-              <property name="row">25</property>
+              <property name="row">27</property>
               <property name="column">0</property>
             </layout>
           </object>
         </child>
         <child>
-          <object class="GtkStack" id="clip_path_cmds_stack">
+          <object class="PathEditor" id="clip_path_editor">
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <layout>
-              <property name="row">25</property>
+              <property name="row">27</property>
               <property name="column">1</property>
             </layout>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">label</property>
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="hexpand">0</property>
-                    <child>
-                      <object class="GtkLabel" id="clip_path_cmds">
-                        <property name="ellipsize">end</property>
-                        <child>
-                          <object class="GtkGestureClick">
-                            <signal name="pressed" handler="clip_path_cmds_clicked" swapped="yes"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <style>
-                          <class name="circular"/>
-                          <class name="small"/>
-                        </style>
-                        <property name="hexpand">1</property>
-                        <property name="halign">end</property>
-                        <property name="focus-on-click">0</property>
-                        <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Edit clip path geometry</property>
-                        <property name="child">
-                          <object class="GtkImage">
-                            <property name="paintable">
-                              <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/Shaper/document-edit-symbolic.svg</property>
-                              </object>
-                            </property>
-                          </object>
-                        </property>
-                        <signal name="clicked" handler="edit_clip_path" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">entry</property>
-                <property name="child">
-                  <object class="GtkEntry" id="clip_path_cmds_entry">
-                    <signal name="activate" handler="clip_path_cmds_activated" swapped="yes"/>
-                    <child>
-                      <object class="GtkEventControllerKey">
-                        <signal name="key-pressed" handler="clip_path_cmds_key" swapped="yes"/>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="opacity_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Opacity</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">opacity</property>
-            <layout>
-              <property name="row">26</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkBox">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <layout>
-              <property name="row">26</property>
-              <property name="column">1</property>
-            </layout>
-            <style>
-              <class name="alpha-editor"/>
-              <class name="tight"/>
-            </style>
-            <child>
-              <object class="GtkSpinButton" id="opacity_spin">
-                <property name="adjustment">alpha_adj</property>
-                <property name="valign">baseline-center</property>
-                <property name="numeric">1</property>
-                <property name="digits">3</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScale" id="opacity">
-                <signal name="value-changed" handler="opacity_changed" swapped="yes"/>
-                <property name="adjustment">
-                  <object class="GtkAdjustment" id="alpha_adj">
-                    <property name="lower">0</property>
-                    <property name="upper">1</property>
-                    <property name="step-increment">0.1</property>
-                  </object>
-                </property>
-              </object>
-            </child>
+            <signal name="notify::path" handler="clip_path_changed" swapped="yes"/>
           </object>
         </child>
 
@@ -1411,203 +1326,55 @@
               </object>
             </property>
             <layout>
-              <property name="row">27</property>
+              <property name="row">28</property>
               <property name="column">0</property>
             </layout>
           </object>
         </child>
         <child>
-          <object class="GtkEntry" id="transform">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <signal name="activate" handler="transform_changed" swapped="yes"/>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkEntry" id="transform">
+                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                <property name="hexpand">1</property>
+                <signal name="activate" handler="transform_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <binding name="visible">
+                  <closure type="gboolean" function="bool_and_bool">
+                    <lookup name="expanded">expander</lookup>
+                    <lookup name="expanded">transform_expander</lookup>
+                  </closure>
+                </binding>
+                <style>
+                  <class name="flat"/>
+                  <class name="circular"/>
+                </style>
+                <property name="icon-name">list-add-symbolic</property>
+                <property name="tooltip-text">Add Transform</property>
+                <signal name="clicked" handler="add_primitive_transform" swapped="yes"/>
+              </object>
+            </child>
             <layout>
-              <property name="row">27</property>
+              <property name="row">28</property>
               <property name="column">1</property>
             </layout>
           </object>
         </child>
 
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="transform_box">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transform_expander</lookup>
               </closure>
             </binding>
-            <property name="hexpand">0</property>
+            <property name="orientation">vertical</property>
             <layout>
-              <property name="row">28</property>
-              <property name="column">1</property>
-            </layout>
-            <child>
-              <object class="GtkDropDown" id="primitive_transform">
-                <property name="halign">start</property>
-                <property name="hexpand">1</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item>None</item>
-                      <item>Translate</item>
-                      <item>Rotate</item>
-                      <item>Scale</item>
-                      <item>Skew X</item>
-                      <item>Skew Y</item>
-                    </items>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <binding name="sensitive">
-                  <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
-                    <constant type='gboolean'>1</constant>
-                    <constant type='gboolean'>1</constant>
-                    <lookup name="selected">primitive_transform</lookup>
-                    <constant type='guint'>0</constant>
-                  </closure>
-                </binding>
-                <property name="icon-name">list-add-symbolic</property>
-                <signal name="clicked" handler="add_primitive_transform" swapped="yes"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="icon-name">list-remove-symbolic</property>
-                <signal name="clicked" handler="remove_primitive_transform" swapped="yes"/>
-              </object>
-            </child>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="translate_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>1</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Delta</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_x</property>
-            <layout>
-              <property name="row">29</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="rotate_center_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>2</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Center</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_x</property>
-            <layout>
-              <property name="row">29</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="scale_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>3</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Scale</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_x</property>
-            <layout>
-              <property name="row">29</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_three">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>1</constant>
-                <constant type='guint'>2</constant>
-                <constant type='guint'>3</constant>
-              </closure>
-            </binding>
-            <layout>
-              <property name="row">29</property>
-              <property name="column">1</property>
-            </layout>
-            <child>
-              <object class="GtkEntry" id="transform_x">
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="transform_y">
-              </object>
-            </child>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="angle_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_three">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>2</constant>
-                <constant type='guint'>4</constant>
-                <constant type='guint'>5</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Angle</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_angle</property>
-            <layout>
-              <property name="row">30</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkEntry" id="transform_angle">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_three">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>2</constant>
-                <constant type='guint'>4</constant>
-                <constant type='guint'>5</constant>
-              </closure>
-            </binding>
-            <layout>
-              <property name="row">30</property>
+              <property name="row">32</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -1622,7 +1389,7 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">filter</property>
             <layout>
-              <property name="row">35</property>
+              <property name="row">34</property>
               <property name="column">0</property>
             </layout>
           </object>
@@ -1632,9 +1399,35 @@
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <signal name="activate" handler="filter_changed" swapped="yes"/>
             <layout>
+              <property name="row">34</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="opacity_label">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">1</property>
+            <property name="xalign">1</property>
+            <property name="label" translatable="yes">_Opacity</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">opacity</property>
+            <layout>
+              <property name="row">35</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="AlphaEditor" id="opacity">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <layout>
               <property name="row">35</property>
               <property name="column">1</property>
             </layout>
+            <signal name="notify::alpha" handler="opacity_changed" swapped="yes"/>
           </object>
         </child>
 
@@ -2062,84 +1855,6 @@
           </object>
         </child>
 
-        <child>
-          <object class="GtkExpander" id="attach_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <property name="hexpand">0</property>
-            <property name="valign">center</property>
-            <property name="margin-start">10</property>
-            <property name="label-widget">
-              <object class="GtkLabel" id="attach_to_label">
-                <property name="hexpand">1</property>
-                <property name="xalign">1</property>
-                <property name="label" translatable="yes">_Attach</property>
-                <property name="use-underline">1</property>
-                <property name="mnemonic-widget">attach_to</property>
-              </object>
-            </property>
-            <layout>
-              <property name="row">46</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkDropDown" id="attach_to">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
-            <layout>
-              <property name="row">46</property>
-              <property name="column">1</property>
-            </layout>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="attach_at_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">attach_expander</lookup>
-              </closure>
-            </binding>
-            <property name="label" translatable="yes">_Position</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">attach_at</property>
-            <property name="xalign">1</property>
-            <layout>
-              <property name="row">47</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkScale" id="attach_at">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">attach_expander</lookup>
-              </closure>
-            </binding>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">1</property>
-                <property name="step-increment">0.1</property>
-              </object>
-            </property>
-            <signal name="value-changed" handler="attach_changed" swapped="yes"/>
-            <marks>
-              <mark value="0" position="bottom"/>
-              <mark value="0.5" position="bottom"/>
-              <mark value="1" position="bottom"/>
-            </marks>
-            <layout>
-              <property name="row">47</property>
-              <property name="column">1</property>
-            </layout>
-          </object>
-        </child>
-
       </object>
     </child>
   </template>
@@ -2167,10 +1882,6 @@
       <widget name="clip_path_label"/>
       <widget name="opacity_label"/>
       <widget name="transform_expander"/>
-      <widget name="translate_label"/>
-      <widget name="rotate_center_label"/>
-      <widget name="angle_label"/>
-      <widget name="scale_label"/>
       <widget name="filter_label"/>
       <widget name="stroke_expander"/>
       <widget name="width_expander"/>

@@ -159,7 +159,6 @@ icon_editor_application_startup (GApplication *app)
   const char *close_accels[2] = { "<Ctrl>C", NULL };
   const char *save_accels[2] = { "<Ctrl>S", NULL };
   const char *help_accels[2] = { "<Ctrl>H", NULL };
-  const char *about_accels[2] = { "<Ctrl>A", NULL };
   GtkCssProvider *provider;
   GtkSettings *settings;
 
@@ -173,7 +172,6 @@ icon_editor_application_startup (GApplication *app)
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.close", close_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.save", save_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.help", help_accels);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.about", about_accels);
 
   provider = gtk_css_provider_new ();
   settings = gtk_settings_get_default ();

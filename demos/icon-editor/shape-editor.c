@@ -20,9 +20,12 @@
  */
 
 #include "shape-editor.h"
+#include "alpha-editor.h"
 #include "path-paintable.h"
 #include "color-editor.h"
 #include "mini-graph.h"
+#include "path-editor.h"
+#include "transform-editor.h"
 
 
 struct _ShapeEditor
@@ -39,9 +42,7 @@ struct _ShapeEditor
 
   GtkGrid *grid;
   GtkDropDown *shape_dropdown;
-  GtkStack *path_cmds_stack;
-  GtkLabel *path_cmds;
-  GtkEntry *path_cmds_entry;
+  PathEditor *path_editor;
   GtkBox *polyline_box;
   GtkEntry *line_x1;
   GtkEntry *line_y1;
@@ -86,19 +87,13 @@ struct _ShapeEditor
   GtkSizeGroup *sg;
   GtkButton *move_down;
   GtkDropDown *paint_order;
-  GtkScale *opacity;
-  GtkSpinButton *opacity_spin;
+  AlphaEditor *opacity;
   GtkScale *miter_limit;
-  GtkStack *clip_path_cmds_stack;
-  GtkLabel *clip_path_cmds;
-  GtkEntry *clip_path_cmds_entry;
+  PathEditor *clip_path_editor;
   GtkEntry *transform;
+  GtkBox *transform_box;
   GtkEntry *filter;
   GtkBox *children;
-  GtkDropDown *primitive_transform;
-  GtkEntry *transform_x;
-  GtkEntry *transform_y;
-  GtkEntry *transform_angle;
 };
 
 enum
@@ -109,69 +104,6 @@ enum
 
 static GParamSpec *properties[NUM_PROPERTIES];
 
-/* {{{ Path-to-SVG */
-
-static gboolean
-collect_path (GskPathOperation        op,
-              const graphene_point_t *pts,
-              size_t                  n_pts,
-              float                   weight,
-              gpointer                user_data)
-{
-  GskPathBuilder *builder = user_data;
-
-  switch (op)
-    {
-    case GSK_PATH_MOVE:
-      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
-      break;
-
-    case GSK_PATH_CLOSE:
-      gsk_path_builder_close (builder);
-      break;
-
-    case GSK_PATH_LINE:
-      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
-      break;
-
-    case GSK_PATH_QUAD:
-      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y,
-                                         pts[2].x, pts[2].y);
-      break;
-
-    case GSK_PATH_CUBIC:
-      gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y,
-                                          pts[2].x, pts[2].y,
-                                          pts[3].x, pts[3].y);
-      break;
-
-    case GSK_PATH_CONIC:
-      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y,
-                                          pts[2].x, pts[2].y,
-                                          weight);
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  return TRUE;
-}
-
-static GskPath *
-path_to_svg_path (GskPath *path)
-{
-  GskPathBuilder *builder = gsk_path_builder_new ();
-
-  gsk_path_foreach (path,
-                    GSK_PATH_FOREACH_ALLOW_QUAD | GSK_PATH_FOREACH_ALLOW_CUBIC,
-                    collect_path,
-                    builder);
-
-  return gsk_path_builder_free_to_path (builder);
-}
-
-/* }}} */
 /* {{{ Callbacks */
 
 enum
@@ -381,68 +313,12 @@ shape_editor_update_path (ShapeEditor *self,
 
   g_clear_object (&self->path_image);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH_IMAGE]);
-
-  text = gsk_path_to_string (path);
-  gtk_label_set_label (self->path_cmds, text);
 }
 
 static void
-path_cmds_clicked (ShapeEditor *self)
+path_changed (ShapeEditor *self)
 {
-  gtk_stack_set_visible_child_name (self->path_cmds_stack, "entry");
-
-  gtk_entry_grab_focus_without_selecting (self->path_cmds_entry);
-}
-
-static gboolean
-path_cmds_key (ShapeEditor     *self,
-               unsigned int     keyval,
-               unsigned int     keycode,
-               GdkModifierType  state)
-{
-  if (keyval == GDK_KEY_Escape)
-    {
-      GskPath *path;
-      g_autofree char *text = NULL;
-
-      path = svg_shape_get_path (self->shape, path_paintable_get_viewport (self->paintable));
-      text = gsk_path_to_string (path);
-      gtk_editable_set_text (GTK_EDITABLE (self->path_cmds_entry), text);
-
-      gtk_widget_remove_css_class (GTK_WIDGET (self->path_cmds_entry), "error");
-      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
-      gtk_stack_set_visible_child_name (self->path_cmds_stack, "label");
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-path_cmds_activated (ShapeEditor *self)
-{
-  const char *text;
-  g_autoptr (GskPath) path = NULL;
-
-  text = gtk_editable_get_text (GTK_EDITABLE (self->path_cmds_entry));
-  path = gsk_path_parse (text);
-
-  if (!path)
-    {
-      gtk_widget_error_bell (GTK_WIDGET (self->path_cmds_entry));
-      gtk_widget_add_css_class (GTK_WIDGET (self->path_cmds_entry), "error");
-      gtk_accessible_update_state (GTK_ACCESSIBLE (self->path_cmds_entry),
-                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
-                                   -1);
-      return;
-    }
-  else
-    {
-      gtk_widget_remove_css_class (GTK_WIDGET (self->path_cmds_entry), "error");
-      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
-      gtk_stack_set_visible_child_name (self->path_cmds_stack, "label");
-    }
-
+  GskPath *path = path_editor_get_path (self->path_editor);
   shape_editor_update_path (self, path);
 }
 
@@ -451,100 +327,181 @@ shape_editor_update_clip_path (ShapeEditor *self,
                                GskPath     *path)
 {
   if (gsk_path_is_empty (path))
-    {
-      gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), "—");
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
-    }
+    svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
   else
-    {
-      g_autofree char *text = gsk_path_to_string (path);
-      gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), text);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (path));
-    }
+    svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (path));
   path_paintable_changed (self->paintable);
 }
 
 static void
-clip_path_cmds_clicked (ShapeEditor *self)
+clip_path_changed (ShapeEditor *self)
 {
-  gtk_stack_set_visible_child_name (self->clip_path_cmds_stack, "entry");
-
-  gtk_entry_grab_focus_without_selecting (self->clip_path_cmds_entry);
-}
-
-static gboolean
-clip_path_cmds_key (ShapeEditor     *self,
-                    unsigned int     keyval,
-                    unsigned int     keycode,
-                    GdkModifierType  state)
-{
-  if (keyval == GDK_KEY_Escape)
-    {
-      GskPath *path = NULL;
-      g_autofree char *text = NULL;
-
-      svg_shape_attr_get_clip (self->shape, SHAPE_ATTR_CLIP_PATH, &path);
-      if (path)
-        text = gsk_path_to_string (path);
-      else
-        text = g_strdup ("");
-
-      gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), text);
-
-      gtk_widget_remove_css_class (GTK_WIDGET (self->clip_path_cmds_entry), "error");
-      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->clip_path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
-      gtk_stack_set_visible_child_name (self->clip_path_cmds_stack, "label");
-      return TRUE;
-    }
-
-  return FALSE;
+  GskPath *path = path_editor_get_path (self->clip_path_editor);
+  shape_editor_update_clip_path (self, path);
 }
 
 static void
-clip_path_cmds_activated (ShapeEditor *self)
+set_transform (ShapeEditor *self,
+               SvgValue    *tf)
 {
-  const char *text;
-  g_autoptr (GskPath) path = NULL;
+  svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, tf);
+  path_paintable_changed (self->paintable);
+  gtk_widget_remove_css_class (GTK_WIDGET (self->transform), "error");
+  gtk_accessible_reset_state (GTK_ACCESSIBLE (self->transform), GTK_ACCESSIBLE_STATE_INVALID);
+}
 
-  text = gtk_editable_get_text (GTK_EDITABLE (self->clip_path_cmds_entry));
-  path = gsk_path_parse (text);
+static void
+primitive_transform_changed (ShapeEditor *self)
+{
+  GString *s = g_string_new ("");
+  SvgValue *value;
 
-  if (!path)
+  for (GtkWidget *row = gtk_widget_get_first_child (GTK_WIDGET (self->transform_box));
+       row != NULL;
+       row = gtk_widget_get_next_sibling (row))
     {
-      gtk_widget_error_bell (GTK_WIDGET (self->clip_path_cmds_entry));
-      gtk_widget_add_css_class (GTK_WIDGET (self->clip_path_cmds_entry), "error");
-      gtk_accessible_update_state (GTK_ACCESSIBLE (self->clip_path_cmds_entry),
-                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
-                                   -1);
-      return;
+      TransformEditor *e = TRANSFORM_EDITOR (gtk_widget_get_first_child (row));
+      SvgValue *tf = transform_editor_get_transform (e);
+      double params[6] = { 0, };
+      TransformType type = svg_transform_get_primitive (tf, 0, params);
+      char buffer[128];
+      const char *names[] = { "none", "translate", "scale", "rotate", "skew_x", "skew_y", "matrix" };
+
+      if (type == TRANSFORM_NONE)
+        continue;
+
+      if (s->len > 0)
+        g_string_append_c (s, ' ');
+
+      g_string_append (s, names[type]);
+      g_string_append_c (s, '(');
+
+      if (type == TRANSFORM_SKEW_X || type == TRANSFORM_SKEW_Y)
+        {
+          g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+        }
+      else if (type == TRANSFORM_ROTATE)
+        {
+          g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+          g_string_append (s, ", ");
+          g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[1]));
+          g_string_append (s, ", ");
+          g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[2]));
+        }
+      else if (type == TRANSFORM_TRANSLATE || type == TRANSFORM_SCALE)
+        {
+          g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+          g_string_append (s, ", ");
+          g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[1]));
+        }
+      else if (type == TRANSFORM_MATRIX)
+        {
+          g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[0]));
+          for (unsigned int i = 1; i < 6; i++)
+            {
+              g_string_append (s, ", ");
+              g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", params[i]));
+            }
+        }
+      else
+        g_assert_not_reached ();
+
+      g_string_append_c (s, ')');
     }
+
+  gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
+
+  if (s->len > 0)
+    value = svg_transform_parse (s->str);
   else
+    value = svg_transform_parse ("none");
+
+  set_transform (self, value);
+
+  g_string_free (s, TRUE);
+}
+
+static void
+remove_primitive_transform (GtkButton   *button,
+                            ShapeEditor *self)
+{
+  GtkWidget *row = gtk_widget_get_parent (GTK_WIDGET (button));
+  gtk_box_remove (GTK_BOX (gtk_widget_get_parent (row)), row);
+  primitive_transform_changed (self);
+}
+
+static void
+add_transform_editor (ShapeEditor *self,
+                      SvgValue    *value)
+{
+  TransformEditor *e;
+  GtkBox *box;
+  GtkButton *button;
+
+  box = GTK_BOX (gtk_box_new (0, GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (self->transform_box, GTK_WIDGET (box));
+  gtk_widget_set_hexpand (GTK_WIDGET (box), FALSE);
+
+  e = transform_editor_new ();
+  transform_editor_set_transform (e, value);
+  g_signal_connect_swapped (e, "notify::transform",
+                            G_CALLBACK (primitive_transform_changed), self);
+  gtk_box_append (box, GTK_WIDGET (e));
+
+  button = GTK_BUTTON (gtk_button_new_from_icon_name ("user-trash-symbolic"));
+  gtk_button_set_has_frame (button, FALSE);
+  gtk_widget_add_css_class (GTK_WIDGET (button), "circular");
+  gtk_widget_set_hexpand (GTK_WIDGET (button), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (button), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (button), "Remove Transform");
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (remove_primitive_transform), self);
+
+  gtk_box_append (box, GTK_WIDGET (button));
+}
+
+static void
+populate_transform (ShapeEditor *self,
+                    SvgValue    *tf)
+{
+  unsigned int n;
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->transform_box));
+       child != NULL;
+       child = gtk_widget_get_first_child (GTK_WIDGET (self->transform_box)))
     {
-      gtk_widget_remove_css_class (GTK_WIDGET (self->clip_path_cmds_entry), "error");
-      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->clip_path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
-      gtk_stack_set_visible_child_name (self->clip_path_cmds_stack, "label");
+      gtk_box_remove (self->transform_box, child);
     }
 
-  shape_editor_update_clip_path (self, path);
+  if (!tf)
+    return;
+
+  n = svg_transform_get_n_transforms (tf);
+
+  for (unsigned int i = 0; i < n; i++)
+    {
+      SvgValue *value = svg_transform_get_transform (tf, i);
+      add_transform_editor (self, value);
+      svg_value_unref (value);
+    }
 }
 
 static void
 transform_changed (ShapeEditor *self)
 {
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self->transform));
-  SvgValue *value;
+  SvgValue *tf;
 
   if (text && *text)
-    value = svg_transform_parse (text);
+    tf = svg_transform_parse (text);
   else
-    value = svg_transform_parse ("none");
+    tf = svg_transform_parse ("none");
 
-  if (value)
+  if (tf)
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
-      path_paintable_changed (self->paintable);
-      gtk_widget_remove_css_class (GTK_WIDGET (self->transform), "error");
-      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->transform), GTK_ACCESSIBLE_STATE_INVALID);
+      populate_transform (self, tf);
+      set_transform (self, tf);
     }
   else
     {
@@ -584,186 +541,13 @@ filter_changed (ShapeEditor *self)
     }
 }
 
-enum
-{
-  TRANSFORM_NONE,
-  TRANSFORM_TRANSLATE,
-  TRANSFORM_ROTATE,
-  TRANSFORM_SCALE,
-  TRANSFORM_SKEW_X,
-  TRANSFORM_SKEW_Y,
-};
-
 static void
 add_primitive_transform (ShapeEditor *self)
 {
-  switch (gtk_drop_down_get_selected (self->primitive_transform))
-    {
-    case TRANSFORM_NONE:
-      break;
-
-    case TRANSFORM_TRANSLATE:
-      {
-        double x, y;
-        GString *s;
-        char buffer[128];
-        SvgValue *value;
-
-        if (!get_number_from_entry (self->transform_x, &x) ||
-            !get_number_from_entry (self->transform_y, &y))
-          return;
-
-        s = g_string_new ("");
-        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
-        g_string_append (s, " translate(");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
-        g_string_append (s, ", ");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
-        g_string_append (s, ")");
-
-        value = svg_transform_parse (s->str);
-        if (value)
-          {
-            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
-            path_paintable_changed (self->paintable);
-            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
-          }
-
-        g_string_free (s, TRUE);
-      }
-      break;
-
-    case TRANSFORM_ROTATE:
-      {
-        double x, y, angle;
-        GString *s;
-        char buffer[128];
-        SvgValue *value;
-
-        if (!get_number_from_entry (self->transform_x, &x) ||
-            !get_number_from_entry (self->transform_y, &y) ||
-            !get_number_from_entry (self->transform_angle, &angle))
-          return;
-
-        s = g_string_new ("");
-        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
-        g_string_append (s, " rotate(");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", angle));
-        g_string_append (s, ", ");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
-        g_string_append (s, ", ");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
-        g_string_append (s, ")");
-
-        value = svg_transform_parse (s->str);
-        if (value)
-          {
-            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
-            path_paintable_changed (self->paintable);
-            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
-          }
-
-        g_string_free (s, TRUE);
-      }
-      break;
-
-    case TRANSFORM_SCALE:
-      {
-        double x, y;
-        GString *s;
-        char buffer[128];
-        SvgValue *value;
-
-        if (!get_number_from_entry (self->transform_x, &x) ||
-            !get_number_from_entry (self->transform_y, &y))
-          return;
-
-        s = g_string_new ("");
-        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
-        g_string_append (s, " scale(");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
-        g_string_append (s, ", ");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
-        g_string_append (s, ")");
-
-        value = svg_transform_parse (s->str);
-        if (value)
-          {
-            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
-            path_paintable_changed (self->paintable);
-            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
-          }
-
-        g_string_free (s, TRUE);
-      }
-      break;
-
-    case TRANSFORM_SKEW_X:
-    case TRANSFORM_SKEW_Y:
-      {
-        double angle;
-        GString *s;
-        char buffer[128];
-        SvgValue *value;
-
-        if (!get_number_from_entry (self->transform_angle, &angle))
-          return;
-
-        s = g_string_new ("");
-        g_string_append (s, gtk_editable_get_text (GTK_EDITABLE (self->transform)));
-        if (gtk_drop_down_get_selected (self->primitive_transform) == TRANSFORM_SKEW_X)
-          g_string_append (s, " skewX(");
-        else
-          g_string_append (s, " skewY(");
-        g_string_append (s, g_ascii_formatd (buffer, sizeof (buffer), "%g", angle));
-        g_string_append (s, ")");
-
-        value = svg_transform_parse (s->str);
-        if (value)
-          {
-            svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
-            path_paintable_changed (self->paintable);
-            gtk_editable_set_text (GTK_EDITABLE (self->transform), s->str);
-          }
-
-        g_string_free (s, TRUE);
-      }
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  gtk_drop_down_set_selected (self->primitive_transform, 0);
-}
-
-static void
-remove_primitive_transform (ShapeEditor *self)
-{
-  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->transform));
-  SvgValue *value;
-
-  if (!text || !*text)
-    return;
-
-  value = svg_transform_parse (text);
-  if (value)
-    {
-      SvgValue *value2 = svg_transform_drop_last (value);
-      svg_value_unref (value);
-      value = value2;
-    }
-
-  if (value)
-    {
-      g_autofree char *new_text = NULL;
-
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, value);
-      path_paintable_changed (self->paintable);
-
-      new_text = svg_shape_attr_get_transform (self->shape, SHAPE_ATTR_TRANSFORM);
-      gtk_editable_set_text (GTK_EDITABLE (self->transform), new_text);
-    }
+  g_print ("add primitive\n");
+  SvgValue *value = svg_transform_new_none ();
+  add_transform_editor (self, value);
+  svg_value_unref (value);
 }
 
 static GdkPaintable *
@@ -905,7 +689,7 @@ paint_order_changed (ShapeEditor *self)
 static void
 opacity_changed (ShapeEditor *self)
 {
-  double value = gtk_range_get_value (GTK_RANGE (self->opacity));
+  double value = alpha_editor_get_alpha (self->opacity);
 
   if (self->updating)
     return;
@@ -1165,189 +949,6 @@ uint_equal (GObject      *object,
 }
 
 static void
-show_error (ShapeEditor *self,
-            const char  *title,
-            const char  *detail)
-{
-  GtkWindow *window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
-  g_autoptr (GtkAlertDialog) alert = NULL;
-
-  alert = gtk_alert_dialog_new ("title");
-  gtk_alert_dialog_set_detail (alert, detail);
-  gtk_alert_dialog_show (alert, window);
-}
-
-static void
-temp_file_changed (GFileMonitor      *monitor,
-                   GFile             *file,
-                   GFile             *other,
-                   GFileMonitorEvent  event,
-                   ShapeEditor       *self)
-{
-  if (event == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT)
-    {
-      g_autoptr (GFileMonitor) the_monitor = monitor;
-      g_autoptr (GBytes) bytes = NULL;
-      g_autoptr (GError) error = NULL;
-      g_autoptr (PathPaintable) paintable = NULL;
-      g_autoptr (GskPath) path = NULL;
-
-      bytes = g_file_load_bytes (file, NULL, NULL, &error);
-      if (!bytes)
-        {
-          show_error (self, "Editing Failed", error->message);
-          return;
-        }
-
-      paintable = path_paintable_new_from_bytes (bytes, &error);
-      if (!paintable)
-        {
-          show_error (self, "Editing Failed", error->message);
-          return;
-        }
-
-      path = path_paintable_get_path_by_id (paintable, "path0");
-
-      if (self->externally_editing == SHAPE_ATTR_PATH)
-        shape_editor_update_path (self, path);
-      else if (self->externally_editing == SHAPE_ATTR_CLIP_PATH)
-        shape_editor_update_clip_path (self, path);
-      else
-        g_assert_not_reached ();
-    }
-}
-
-static void
-file_launched (GObject      *source,
-               GAsyncResult *result,
-               gpointer      data)
-{
-  GtkFileLauncher *launcher = GTK_FILE_LAUNCHER (source);
-  g_autoptr (GError) error = NULL;
-
-  if (!gtk_file_launcher_launch_finish (launcher, result, &error))
-    {
-      g_print ("Failed to launch path editor: %s", error->message);
-    }
-}
-
-static void
-edit_path_externally (ShapeEditor  *self,
-                      GskPath      *path_in,
-                      ShapeAttr     attr)
-{
-  GString *str;
-  g_autoptr (GBytes) bytes = NULL;
-  g_autofree char *filename = NULL;
-  g_autoptr (GFile) file = NULL;
-  g_autoptr (GOutputStream) ostream = NULL;
-  gssize written;
-  g_autoptr (GError) error = NULL;
-  GFileMonitor *monitor;
-  const char *linecaps[] = { "butt", "round", "square" };
-  const char *linejoins[] = { "miter", "round", "bevel" };
-  g_autoptr (GskPath) path = NULL;
-  g_autoptr(GtkFileLauncher) launcher = NULL;
-  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
-  const graphene_size_t *viewport;
-
-  self->externally_editing = attr;
-
-  viewport = path_paintable_get_viewport (self->paintable);
-
-  if (path_in)
-    path = path_to_svg_path (path_in);
-
-  str = g_string_new ("");
-  g_string_append_printf (str, "<svg width='%g' height='%g'>\n",
-                          path_paintable_get_width (self->paintable),
-                          path_paintable_get_height (self->paintable));
-
-  g_string_append (str, "<path id='path0'\n"
-                        "      d='");
-  if (path)
-    gsk_path_print (path, str);
-
-  g_string_append (str, "'\n");
-
-  if (attr == SHAPE_ATTR_PATH)
-    {
-      double width = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_WIDTH, viewport);
-      GskLineCap linecap = svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_STROKE_LINECAP);
-      GskLineJoin linejoin = svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_STROKE_LINEJOIN);
-      double miterlimit = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_MITERLIMIT, viewport);
-
-      g_string_append_printf (str,
-                              "      fill='none'\n"
-                              "      stroke='black'\n"
-                              "      stroke-width='%g'\n"
-                              "      stroke-miterlimit='%g'\n"
-                              "      stroke-linejoin='%s'\n"
-                              "      stroke-linecap='%s'/>\n",
-                              width, miterlimit, linejoins[linejoin], linecaps[linecap]);
-    }
-  else
-    {
-      g_string_append (str,
-                       "      fill='black'\n"
-                       "      stroke='none'/>\n");
-    }
-
-  g_string_append (str, "</svg>");
-  bytes = g_string_free_to_bytes (str);
-
-  filename = g_build_filename (g_get_user_cache_dir (), "org.gtk.Shaper-path.svg", NULL);
-  file = g_file_new_for_path (filename);
-  ostream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &error));
-  if (!ostream)
-    {
-      show_error (self, "Editing Failed", error->message);
-      return;
-    }
-
-  written = g_output_stream_write_bytes (ostream, bytes, NULL, &error);
-  if (written == -1)
-    {
-      show_error (self, "Editing Failed", error->message);
-      return;
-    }
-
-  g_output_stream_close (ostream, NULL, NULL);
-
-  monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
-  if (error)
-    {
-      show_error (self, "Editing Failed", error->message);
-      return;
-    }
-
-  g_signal_connect_object (monitor, "changed",
-                           G_CALLBACK (temp_file_changed), self, G_CONNECT_DEFAULT);
-
-  launcher = gtk_file_launcher_new (file);
-
-  gtk_file_launcher_set_writable (launcher, TRUE);
-
-  gtk_file_launcher_launch (launcher, GTK_WINDOW (root), NULL, file_launched, self);
-}
-
-static void
-edit_path (ShapeEditor *self)
-{
-  const graphene_size_t *viewport = path_paintable_get_viewport (self->paintable);
-  GskPath *path = svg_shape_get_path (self->shape, viewport);
-  edit_path_externally (self, path, SHAPE_ATTR_PATH);
-}
-
-static void
-edit_clip_path (ShapeEditor *self)
-{
-  GskPath *path = NULL;
-  svg_shape_attr_get_clip (self->shape, SHAPE_ATTR_CLIP_PATH, &path);
-  edit_path_externally (self, path, SHAPE_ATTR_CLIP_PATH);
-}
-
-static void
 move_path_down (ShapeEditor *self)
 {
   Shape *parent = self->shape->parent;
@@ -1471,10 +1072,11 @@ shape_editor_update (ShapeEditor *self)
       if (self->shape->type != SHAPE_GROUP)
         {
           path = svg_shape_get_path (self->shape, viewport);
-          text = gsk_path_to_string (path);
-          gtk_label_set_label (GTK_LABEL (self->path_cmds), text);
-          gtk_editable_set_text (GTK_EDITABLE (self->path_cmds_entry), text);
-          g_clear_pointer (&text, g_free);
+          path_editor_set_path (self->path_editor, path);
+          g_object_set (self->path_editor,
+                        "width", path_paintable_get_width (self->paintable),
+                        "height", path_paintable_get_height (self->paintable),
+                        NULL);
         }
 
       gtk_editable_set_text (GTK_EDITABLE (self->line_x1), "0");
@@ -1675,25 +1277,38 @@ shape_editor_update (ShapeEditor *self)
       gtk_drop_down_set_selected (self->paint_order,
                                   svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_PAINT_ORDER));
 
-      gtk_range_set_value (GTK_RANGE (self->opacity),
-                           svg_shape_attr_get_number (self->shape, SHAPE_ATTR_OPACITY, viewport));
+      alpha_editor_set_alpha (self->opacity,
+                              svg_shape_attr_get_number (self->shape, SHAPE_ATTR_OPACITY, viewport));
 
       svg_shape_attr_get_clip (self->shape, SHAPE_ATTR_CLIP_PATH, &path);
-      if (path && !gsk_path_is_empty (path))
+      if (path)
         {
-          text = gsk_path_to_string (path);
-          gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), text);
-          gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), text);
-          g_clear_pointer (&text, g_free);
+          path_editor_set_path (self->clip_path_editor, path);
         }
       else
         {
-          gtk_label_set_label (GTK_LABEL (self->clip_path_cmds), "—");
-          gtk_editable_set_text (GTK_EDITABLE (self->clip_path_cmds_entry), "");
+          path = gsk_path_builder_free_to_path (gsk_path_builder_new ());
+          path_editor_set_path (self->clip_path_editor, path);
+          gsk_path_unref (path);
         }
+
+      g_object_set (self->clip_path_editor,
+                    "width", path_paintable_get_width (self->paintable),
+                    "height", path_paintable_get_height (self->paintable),
+                    NULL);
 
       text = svg_shape_attr_get_transform (self->shape, SHAPE_ATTR_TRANSFORM);
       gtk_editable_set_text (GTK_EDITABLE (self->transform), text);
+
+      SvgValue *tf;
+      if (text && *text)
+        tf = svg_transform_parse (text);
+       else
+        tf = svg_transform_new_none ();
+
+      populate_transform (self, tf);
+      svg_value_unref (tf);
+
       g_clear_pointer (&text, g_free);
 
       text = svg_shape_attr_get_filter (self->shape, SHAPE_ATTR_FILTER);
@@ -1721,15 +1336,6 @@ static void
 shape_editor_init (ShapeEditor *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  /* We want a numeric entry, but there's no space for buttons, so... */
-  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->opacity_spin));
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      if (GTK_IS_BUTTON (child))
-        gtk_widget_set_visible (child, FALSE);
-    }
 }
 
 static void
@@ -1781,7 +1387,10 @@ shape_editor_class_init (ShapeEditorClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   g_type_ensure (COLOR_EDITOR_TYPE);
+  g_type_ensure (alpha_editor_get_type ());
   g_type_ensure (MINI_GRAPH_TYPE);
+  g_type_ensure (PATH_EDITOR_TYPE);
+  g_type_ensure (transform_editor_get_type ());
 
   object_class->get_property = shape_editor_get_property;
   object_class->dispose = shape_editor_dispose;
@@ -1798,9 +1407,7 @@ shape_editor_class_init (ShapeEditorClass *class)
 
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, grid);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, shape_dropdown);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, path_cmds_stack);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, path_cmds);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, path_cmds_entry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, path_editor);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, polyline_box);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_x1);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, line_y1);
@@ -1846,18 +1453,12 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, sg);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, paint_order);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, opacity_spin);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, miter_limit);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_stack);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_cmds_entry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, clip_path_editor);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, filter);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, children);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, primitive_transform);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_x);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_y);
-  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_angle);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_box);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -1875,24 +1476,17 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, bool_and_bool_and_uint_one_of_three);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_and);
   gtk_widget_class_bind_template_callback (widget_class, uint_equal);
-  gtk_widget_class_bind_template_callback (widget_class, edit_path);
   gtk_widget_class_bind_template_callback (widget_class, duplicate_path);
   gtk_widget_class_bind_template_callback (widget_class, move_path_down);
   gtk_widget_class_bind_template_callback (widget_class, delete_path);
-  gtk_widget_class_bind_template_callback (widget_class, path_cmds_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, path_cmds_activated);
-  gtk_widget_class_bind_template_callback (widget_class, path_cmds_key);
   gtk_widget_class_bind_template_callback (widget_class, shape_changed);
   gtk_widget_class_bind_template_callback (widget_class, add_row);
   gtk_widget_class_bind_template_callback (widget_class, delete_row);
-  gtk_widget_class_bind_template_callback (widget_class, edit_clip_path);
-  gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_activated);
-  gtk_widget_class_bind_template_callback (widget_class, clip_path_cmds_key);
   gtk_widget_class_bind_template_callback (widget_class, transform_changed);
   gtk_widget_class_bind_template_callback (widget_class, filter_changed);
   gtk_widget_class_bind_template_callback (widget_class, add_primitive_transform);
-  gtk_widget_class_bind_template_callback (widget_class, remove_primitive_transform);
+  gtk_widget_class_bind_template_callback (widget_class, path_changed);
+  gtk_widget_class_bind_template_callback (widget_class, clip_path_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
@@ -1910,14 +1504,6 @@ shape_editor_new (PathPaintable *paintable,
   self->shape = shape;
   shape_editor_update (self);
   return self;
-}
-
-void
-shape_editor_edit_path (ShapeEditor *self)
-{
-  g_return_if_fail (SHAPE_IS_EDITOR (self));
-
-  edit_path (self);
 }
 
 /* }}} */

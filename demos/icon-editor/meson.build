@@ -1,4 +1,5 @@
 icon_editor_sources = [
+  'alpha-editor.c',
   'border-paintable.c',
   'color-editor.c',
   'color-paintable.c',
@@ -8,9 +9,11 @@ icon_editor_sources = [
   'main.c',
   'mini-graph.c',
   'paintable-editor.c',
+  'path-editor.c',
   'path-paintable.c',
   'shape-editor.c',
   'state-editor.c',
+  'transform-editor.c',
 ]
 
 icon_editor_resources = gnome.compile_resources('icon_editor_resources',

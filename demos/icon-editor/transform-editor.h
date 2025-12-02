@@ -22,12 +22,14 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "path-paintable.h"
+#include "gtksvgprivate.h"
 
 
-#define SHAPE_EDITOR_TYPE (shape_editor_get_type ())
-G_DECLARE_FINAL_TYPE (ShapeEditor, shape_editor, SHAPE, EDITOR, GtkWidget)
+G_DECLARE_FINAL_TYPE (TransformEditor, transform_editor, TRANSFORM, EDITOR, GtkWidget)
 
 
-ShapeEditor *    shape_editor_new          (PathPaintable *paintable,
-                                            Shape         *shape);
+TransformEditor *       transform_editor_new (void);
+
+SvgValue *              transform_editor_get_transform (TransformEditor *self);
+void                    transform_editor_set_transform (TransformEditor *self,
+                                                        SvgValue        *transform);
