@@ -13,29 +13,27 @@
           fill='url("#gpa:foreground") rgb(0,0,0)'
           stroke='url("#gpa:foreground") rgb(0,0,0)'
           d='M 0 0 L 100 100'
-          gpa:stroke='foreground'
-          gpa:fill='foreground'>
+          class='foreground foreground-fill foreground-stroke'>
   </path>
   <path
           id='path2'
           fill='url("#gpa:warning") rgb(245,121,0)'
           stroke='url("#gpa:warning") rgb(245,121,0)'
           d='M 0 0 L 100 100'
-          gpa:stroke='warning'
-          gpa:fill='warning'>
+          class='warning warning-fill warning-stroke'>
   </path>
   <path
           id='path3'
           fill='url("#gpa:accent") rgb(0,34,255)'
           stroke='url("#gpa:accent") rgb(0,34,255)'
           d='M 0 0 L 100 100'
-          gpa:stroke='accent'
-          gpa:fill='accent'>
+          class='accent accent-fill accent-stroke'>
   </path>
   <path
           id='path4'
           fill='url("#gpa:foreground") rgb(0,0,0)'
-          d='M 0 0 L 100 100'>
+          d='M 0 0 L 100 100'
+          class='foreground foreground-fill'>
   </path>
   <path
           id='path5'
@@ -45,6 +43,7 @@
   <path
           id='path6'
           fill='none'
-          d='M 0 0 L 100 100'>
+          d='M 0 0 L 100 100'
+          class='transparent-fill'>
   </path>
 </svg>

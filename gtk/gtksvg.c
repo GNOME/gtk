@@ -9187,7 +9187,7 @@ parse_shape_attrs (Shape                *shape,
   if (style_attr)
     parse_style_attr (shape, style_attr, data, context);
 
-  if (class_attr)
+  if (class_attr && *class_attr)
     {
       GStrv classes = g_strsplit (class_attr, " ", 0);
       SvgValue *value;
@@ -10735,7 +10735,9 @@ serialize_shape_attrs (GString              *s,
         }
     }
 
-  if (flags & GTK_SVG_SERIALIZE_SYMBOLIC_COMPAT)
+  if (shape_types[shape->type].has_gpa_attrs &&
+      (flags & GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS) == 0 &&
+      classes->len > 0)
     {
       indent_for_attr (s, indent);
       g_string_append_printf (s, "class='%s'", classes->str);
@@ -10783,6 +10785,9 @@ serialize_gpa_attrs (GString              *s,
   SvgValue **values;
   SvgPaint *paint;
 
+  if (svg->gpa_version == 0 || !shape_types[shape->type].has_gpa_attrs)
+    return;
+
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     values = shape->current;
   else
@@ -10819,7 +10824,7 @@ serialize_gpa_attrs (GString              *s,
       g_string_append_c (s, '\'');
     }
 
-  if (flags & GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS)
+  if ((flags & GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS) == 0)
     {
       if (shape->gpa.states != ALL_STATES)
         {
@@ -11311,7 +11316,7 @@ serialize_animation (GString              *s,
   if (flags & GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION)
     return;
 
-  if (flags & GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS)
+  if ((flags & GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS) == 0)
     {
       if (a->id && g_str_has_prefix (a->id, "gpa:"))
         return;
@@ -12512,9 +12517,7 @@ gtk_svg_copy (GtkSvg *orig)
   GBytes *bytes = NULL;
   GtkSvg *svg;
 
-  bytes = gtk_svg_serialize_full (orig,
-                                  NULL, 0,
-                                  GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS);
+  bytes = gtk_svg_serialize_full (orig, NULL, 0, GTK_SVG_SERIALIZE_DEFAULT);
   svg = gtk_svg_new_from_bytes (bytes);
   g_bytes_unref (bytes);
 

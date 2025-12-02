@@ -940,10 +940,7 @@ path_paintable_serialize (PathPaintable *self,
   unsigned int state = self->svg->state;
 
   self->svg->state = initial_state;
-  bytes = gtk_svg_serialize_full (self->svg,
-                                  NULL, 0,
-                                  GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS |
-                                  GTK_SVG_SERIALIZE_SYMBOLIC_COMPAT);
+  bytes = gtk_svg_serialize (self->svg);
   self->svg->state = state;
 
   return bytes;

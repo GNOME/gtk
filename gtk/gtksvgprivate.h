@@ -384,12 +384,11 @@ int64_t        gtk_svg_get_next_update (GtkSvg                *self);
 
 typedef enum
 {
-  GTK_SVG_SERIALIZE_DEFAULT           = 0,
-  GTK_SVG_SERIALIZE_AT_CURRENT_TIME   = 1 << 0,
-  GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION = 1 << 1,
-  GTK_SVG_SERIALIZE_INCLUDE_STATE     = 1 << 2,
-  GTK_SVG_SERIALIZE_INCLUDE_GPA_ATTRS = 1 << 3,
-  GTK_SVG_SERIALIZE_SYMBOLIC_COMPAT   = 1 << 4,
+  GTK_SVG_SERIALIZE_DEFAULT            = 0,
+  GTK_SVG_SERIALIZE_AT_CURRENT_TIME    = 1 << 0,
+  GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION  = 1 << 1,
+  GTK_SVG_SERIALIZE_INCLUDE_STATE      = 1 << 2,
+  GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS   = 1 << 3,
 } GtkSvgSerializeFlags;
 
 GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
