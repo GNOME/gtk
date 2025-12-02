@@ -1,34 +1,15 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='object category bulb light'
+     gpa:keywords='object category bulb light emoji-objects dialog-info modern emoji-objects dialog-information'
      gpa:state='0'>
-  <path d='M 6 7 L 7 8 L 8.15241337 6.98137951 L 9.00010204 8 L 10 7'
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+  <path d='M 4.59518576 9 L 5.25358295 10 M 11.2320251 8.99999905 L 10.6293793 10 M 5.25358295 10 L 10.6293793 10 L 10 13 L 6 13 Z M 4.59518576 9 C 2.76247311 7.16728687, 2.76247311 4.19587278, 4.59518576 2.36316013 C 6.42789841 0.530447721, 9.39931202 0.530447841, 11.2320251 2.36316013 C 13.0647383 4.19587278, 13.0647383 7.16728735, 11.2320251 8.99999905 M 7 14 L 9 14 C 9 14.5522852, 8.55228519 15, 8 15 C 7.44771528 15, 7 14.5522852, 7 14 Z'
         id='path0'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 9 13 L 9 14 C 9 14.3572655, 8.80940056 14.6873922, 8.5 14.866025 C 8.19059849 15.0446577, 7.80940104 15.0446577, 7.5 14.866025 C 7.19059896 14.6873922, 7 14.3572655, 7 14 L 7 13'
-        id='path1'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 9.9535799 11.0000038 L 10.6861715 10.5244646 C 12.7919588 9.30874443, 13.8186178 6.83028412, 13.1892862 4.48169184 C 12.5599527 2.13309956, 10.4315529 0.499995559, 7.99999952 0.4999955 C 5.56844568 0.499995321, 3.44004512 2.13309908, 2.81071281 4.48169136 C 2.18138051 6.83028364, 3.20804 9.30874443, 5.31382751 10.5244646 L 6.0464201 11.0000038'
-        id='path2'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 9.95358562 11 L 6 12 M 9.95358562 12 L 6 13 M 6 13 L 10 13 M 6 11 L 10 11'
-        id='path3'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'

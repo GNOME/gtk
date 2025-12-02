@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='value increase plus'
+     gpa:keywords='value-increase plus'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 8 4 L 8 12 M 4 8 L 12 8'
         id='path0'
         stroke-width='2'

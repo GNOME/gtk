@@ -1,22 +1,35 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='home directory folder house'
-     gpa:state='0'>
-  <path d='M 2 13 L 2 6.94000006 C 1.99903393 6.34513569, 2.2629199 5.78071308, 2.72000003 5.4000001 L 7.36000013 1.52999997 C 7.73078108 1.22116637, 8.2692194 1.22116637, 8.64000034 1.52999997 L 13.2799997 5.4000001 C 13.7370796 5.78071308, 14.0009661 6.34513569, 14 6.94000006 L 14 13 C 14 14.1045694, 13.1045694 15, 12 15 L 4 15 C 2.89543056 15, 2 14.1045694, 2 13 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 6.0068965 15 L 6.0068965 9 L 10 9 L 10 15 Z'
-        id='path1'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='go-home user-home home directory folder house'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 2 13 L 2 6.94000006 C 1.99903393 6.34513569, 2.2629199 5.78071308, 2.72000003 5.4000001 L 7.36000013 1.52999997 C 7.73078108 1.22116637, 8.2692194 1.22116637, 8.64000034 1.52999997 L 13.2799997 5.4000001 C 13.7370796 5.78071308, 14.0009661 6.34513569, 14 6.94000006 L 14 13 C 14 14.1045694, 13.1045694 15, 12 15 L 4 15 C 2.89543056 15, 2 14.1045694, 2 13 Z'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 6.0068965 15 L 6.0068965 9 L 10 9 L 10 15 Z'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke-width='0.25 1 1.5'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

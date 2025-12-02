@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='view kebab more inline menu'
+     gpa:keywords='view-more kebab more inline menu'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 9 14 C 9 14.5522852, 8.55228519 15, 8 15 C 7.44771528 15, 7 14.5522852, 7 14 C 7 13.4477148, 7.44771528 13, 8 13 C 8.55228519 13, 9 13.4477148, 9 14 M 9 8 C 9 8.55228519, 8.55228519 9, 8 9 C 7.44771528 9, 7 8.55228519, 7 8 C 7 7.44771528, 7.44771528 7, 8 7 C 8.55228519 7, 9 7.44771528, 9 8 M 9 2 C 9 2.55228472, 8.55228519 3, 8 3 C 7.44771528 3, 7 2.55228472, 7 2 C 7 1.44771528, 7.44771528 1, 8 1 C 8.55228519 1, 9 1.44771528, 9 2'
         id='path0'
         stroke-width='2'

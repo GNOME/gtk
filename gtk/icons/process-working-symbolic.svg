@@ -1,30 +1,36 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='animation overlap progress process working spinner spinning'>
-  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
-        id='path0'
-        gpa:transition-type='fade'
-        gpa:transition-duration='1000ms'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke-opacity='0.2'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'
-        gpa:stroke='foreground'/>
-  <path d='M 1 8 C 1 4.23732758, 4.23732758 1, 8 1'
-        id='path1'
-        gpa:animation-direction='segment'
-        gpa:animation-duration='2000ms'
-        gpa:transition-type='fade'
-        gpa:transition-duration='1000ms'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'
-        gpa:stroke='foreground'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='animation overlap'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-opacity='0.2'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 15 8 C 15 11.7626724, 11.7626724 15, 8 15 C 4.23732758 15, 1 11.7626724, 1 8 C 1 4.23732758, 4.23732758 1, 8 1 C 11.7626724 1, 15 4.23732758, 15 8 Z'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 1 8 C 1 4.23732758, 4.23732758 1, 8 1'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

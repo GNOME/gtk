@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='menu hamburger open'
+     gpa:keywords='open-menu hamburger open'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 2 13 L 14 13 M 2 8 L 14 8 M 2 3 L 14 3'
         id='path0'
         stroke-width='2'

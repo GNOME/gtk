@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='lock locked changes prevent'
+     gpa:keywords='lock locked changes-prevent channel-secure network-wireless-encrypted system-lock-screen'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 11 8 L 11 5 C 11 3.34314585, 9.65685463 2, 8 2 C 6.34314585 2, 5 3.34314585, 5 5 L 5 8'
         id='path0'
         stroke-width='2'
