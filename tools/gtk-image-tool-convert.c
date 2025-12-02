@@ -96,6 +96,36 @@ save_image (const char      *filename,
   g_object_unref (builder);
 }
 
+static void
+convert_svg (const char *filename,
+             const char *output)
+{
+  char *contents;
+  gsize size;
+  GError *error = NULL;
+  GBytes *bytes;
+  GtkSvg *svg;
+
+  if (!g_file_get_contents (filename, &contents, &size, &error))
+    g_error ("%s", error->message);
+
+  bytes = g_bytes_new_take (contents, size);
+  svg = gtk_svg_new_from_bytes (bytes);
+  g_bytes_unref (bytes);
+
+  bytes = gtk_svg_serialize (svg);
+  if (!bytes)
+    g_error ("Failed to serialize");
+
+  if (!g_file_set_contents (output,
+                            g_bytes_get_data (bytes, NULL),
+                            g_bytes_get_size (bytes),
+                            &error))
+    g_error ("%s", error->message);
+
+  g_bytes_unref (bytes);
+}
+
 void
 do_convert (int          *argc,
             const char ***argv)
@@ -196,7 +226,10 @@ do_convert (int          *argc,
   if (!color_state)
     color_state = gdk_color_state_get_srgb ();
 
-  save_image (filenames[0], filenames[1], format, color_state);
+  if (g_str_has_suffix (filenames[0], ".svg"))
+    convert_svg (filenames[0], filenames[1]);
+  else
+    save_image (filenames[0], filenames[1], format, color_state);
 
   g_strfreev (filenames);
 }
