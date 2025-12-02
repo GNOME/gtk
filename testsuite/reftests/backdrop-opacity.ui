@@ -24,6 +24,12 @@
             <property name="name">opacity-filter</property>
           </object>
         </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="name">opacity-widget</property>
+            <property name="opacity">0.4</property>
+          </object>
+        </child>
       </object>
     </property>
 </object>
