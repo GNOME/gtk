@@ -555,20 +555,22 @@ if os_linux
   )
 
   offload_tests = [
-    'simple.node',
-    'transforms.node',
-    'deep.node',
-    'move.node',
-    'start_offloading.node',
-    'stop_offloading.node',
-    'source.node',
-    'nested.node',
-    'clipped.node',
-    'not-clipped.node',
-    'complex-clip.node',
     'background.node',
     'background2.node',
     'bad-transform.node',
+    'clipped.node',
+    'complex-clip.node',
+    'composite-after.node',
+    'composite-before.node',
+    'deep.node',
+    'move.node',
+    'nested.node',
+    'not-clipped.node',
+    'simple.node',
+    'source.node',
+    'start_offloading.node',
+    'stop_offloading.node',
+    'transforms.node',
   ]
 
   foreach test : offload_tests

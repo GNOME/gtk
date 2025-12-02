@@ -1,0 +1,24 @@
+composite {
+  child: color "foo" {
+    bounds: 3 3 4 4;
+  }
+  mask: "foo";
+  operator: clear;
+}
+
+subsurface {
+  child: texture {
+    bounds: 0 0 20 20;
+    texture: memory {
+      format: RGB8;
+      width: 20;
+      height: 20;
+      offset: 0;
+      stride: 60;
+      data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4z8AwikbRKBpFQwEBAPlENa6wBAAA\
+");
+    }
+  }
+}
+

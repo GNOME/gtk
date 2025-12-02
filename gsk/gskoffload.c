@@ -539,11 +539,22 @@ visit_node (GskRenderReplay *replay,
                    type != GSK_ROUNDED_CLIP_NODE &&
                    type != GSK_DEBUG_NODE))
                 {
-                  GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                     "[%p]   Lowering because a %s overlaps",
-                                     info->subsurface,
-                                     g_type_name_from_instance ((GTypeInstance *) node));
-                  info->can_raise = FALSE;
+                  if (gsk_render_node_clears_background (node))
+                    {
+                      GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                         "[%p]   Disabling because a %s clears the background",
+                                         info->subsurface,
+                                         g_type_name_from_instance ((GTypeInstance *) node));
+                      info->can_offload = FALSE;
+                    }
+                  else
+                    {
+                      GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                         "[%p]   Lowering because a %s overlaps",
+                                         info->subsurface,
+                                         g_type_name_from_instance ((GTypeInstance *) node));
+                      info->can_raise = FALSE;
+                    }
                 }
             }
         }
