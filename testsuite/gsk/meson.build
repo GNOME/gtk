@@ -469,6 +469,7 @@ node_parser_tests = [
   'huge-angle.ref.node',
   'mask-modes.node',
   'mask-modes.ref.node',
+  'no-unnecessary-names.node',
   'node-names.node',
   'node-names-everywhere.errors',
   'node-names-everywhere.node',

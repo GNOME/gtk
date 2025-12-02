@@ -4337,10 +4337,16 @@ printer_init_duplicates_for_node (Printer       *printer,
 {
   gpointer name;
 
-  if (!g_hash_table_lookup_extended (printer->named_nodes, node, NULL, &name))
-    g_hash_table_insert (printer->named_nodes, node, NULL);
-  else if (name == NULL)
-    g_hash_table_insert (printer->named_nodes, node, g_strdup (""));
+  if (g_hash_table_lookup_extended (printer->named_nodes, node, NULL, &name))
+    {
+      /* We've handled this node before */
+
+      if (name == NULL)
+        g_hash_table_insert (printer->named_nodes, node, g_strdup (""));
+      return;
+    }
+
+  g_hash_table_insert (printer->named_nodes, node, NULL);
 
   switch (gsk_render_node_get_node_type (node))
     {
