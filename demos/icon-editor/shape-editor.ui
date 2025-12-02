@@ -8,7 +8,6 @@
             <property name="valign">center</property>
             <property name="label-widget">
               <object class="GtkBox">
-                <property name="hexpand">0</property>
                 <child>
                   <object class="GtkImage">
                     <property name="pixel-size">20</property>
@@ -1333,9 +1332,31 @@
           </object>
         </child>
         <child>
-          <object class="GtkEntry" id="transform">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-            <signal name="activate" handler="transform_changed" swapped="yes"/>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkEntry" id="transform">
+                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                <property name="hexpand">1</property>
+                <signal name="activate" handler="transform_changed" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <binding name="visible">
+                  <closure type="gboolean" function="bool_and_bool">
+                    <lookup name="expanded">expander</lookup>
+                    <lookup name="expanded">transform_expander</lookup>
+                  </closure>
+                </binding>
+                <style>
+                  <class name="flat"/>
+                  <class name="circular"/>
+                </style>
+                <property name="icon-name">list-add-symbolic</property>
+                <property name="tooltip-text">Add Transform</property>
+                <signal name="clicked" handler="add_primitive_transform" swapped="yes"/>
+              </object>
+            </child>
             <layout>
               <property name="row">28</property>
               <property name="column">1</property>
@@ -1344,186 +1365,16 @@
         </child>
 
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="transform_box">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_bool">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transform_expander</lookup>
               </closure>
             </binding>
-            <property name="hexpand">0</property>
+            <property name="orientation">vertical</property>
             <layout>
-              <property name="row">29</property>
-              <property name="column">1</property>
-            </layout>
-            <child>
-              <object class="GtkDropDown" id="primitive_transform">
-                <property name="halign">start</property>
-                <property name="hexpand">1</property>
-                <property name="model">
-                  <object class="GtkStringList">
-                    <items>
-                      <item>None</item>
-                      <item>Translate</item>
-                      <item>Rotate</item>
-                      <item>Scale</item>
-                      <item>Skew X</item>
-                      <item>Skew Y</item>
-                    </items>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <binding name="sensitive">
-                  <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
-                    <constant type='gboolean'>1</constant>
-                    <constant type='gboolean'>1</constant>
-                    <lookup name="selected">primitive_transform</lookup>
-                    <constant type='guint'>0</constant>
-                  </closure>
-                </binding>
-                <property name="icon-name">list-add-symbolic</property>
-                <signal name="clicked" handler="add_primitive_transform" swapped="yes"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="icon-name">list-remove-symbolic</property>
-                <signal name="clicked" handler="remove_primitive_transform" swapped="yes"/>
-              </object>
-            </child>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="translate_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>1</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Delta</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_x</property>
-            <layout>
-              <property name="row">30</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="rotate_center_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>2</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Center</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_x</property>
-            <layout>
-              <property name="row">30</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="scale_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>3</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Scale</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_x</property>
-            <layout>
-              <property name="row">30</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_three">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>1</constant>
-                <constant type='guint'>2</constant>
-                <constant type='guint'>3</constant>
-              </closure>
-            </binding>
-            <layout>
-              <property name="row">30</property>
-              <property name="column">1</property>
-            </layout>
-            <child>
-              <object class="GtkEntry" id="transform_x">
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="transform_y">
-              </object>
-            </child>
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkLabel" id="angle_label">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_three">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>2</constant>
-                <constant type='guint'>4</constant>
-                <constant type='guint'>5</constant>
-              </closure>
-            </binding>
-            <property name="hexpand">1</property>
-            <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Angle</property>
-            <property name="use-underline">1</property>
-            <property name="mnemonic-widget">transform_angle</property>
-            <layout>
-              <property name="row">31</property>
-              <property name="column">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkEntry" id="transform_angle">
-            <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_three">
-                <lookup name="expanded">expander</lookup>
-                <lookup name="expanded">transform_expander</lookup>
-                <lookup name="selected">primitive_transform</lookup>
-                <constant type='guint'>2</constant>
-                <constant type='guint'>4</constant>
-                <constant type='guint'>5</constant>
-              </closure>
-            </binding>
-            <layout>
-              <property name="row">31</property>
+              <property name="row">32</property>
               <property name="column">1</property>
             </layout>
           </object>
@@ -2031,10 +1882,6 @@
       <widget name="clip_path_label"/>
       <widget name="opacity_label"/>
       <widget name="transform_expander"/>
-      <widget name="translate_label"/>
-      <widget name="rotate_center_label"/>
-      <widget name="angle_label"/>
-      <widget name="scale_label"/>
       <widget name="filter_label"/>
       <widget name="stroke_expander"/>
       <widget name="width_expander"/>
