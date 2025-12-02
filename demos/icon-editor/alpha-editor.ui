@@ -17,6 +17,7 @@
       <object class="GtkScale">
         <property name="valign">baseline-center</property>
         <property name="orientation">horizontal</property>
+        <property name="hexpand">1</property>
         <property name="adjustment">
           <object class="GtkAdjustment" id="alpha_adj">
             <property name="lower">0</property>
