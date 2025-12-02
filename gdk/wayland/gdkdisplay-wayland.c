@@ -722,7 +722,8 @@ gdk_wayland_display_dispose (GObject *object)
       display_wayland->selection = NULL;
     }
 
-  g_list_free_full (display_wayland->async_roundtrips, (GDestroyNotify) wl_callback_destroy);
+  g_clear_list (&display_wayland->async_roundtrips,
+                (GDestroyNotify) wl_callback_destroy);
 
   if (display_wayland->known_globals)
     {
@@ -730,7 +731,7 @@ gdk_wayland_display_dispose (GObject *object)
       display_wayland->known_globals = NULL;
     }
 
-  g_list_free_full (display_wayland->on_has_globals_closures, g_free);
+  g_clear_list (&display_wayland->on_has_globals_closures, g_free);
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->dispose (object);
 }
