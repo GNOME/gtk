@@ -33,6 +33,11 @@ label {
 
 #reference {
   background: repeating-linear-gradient(#996666 0px 5px, #669966 5px 10px);
-  min-width: 400px;
+  min-width: 500px;
   min-height: 100px;
 }
+
+#opacity-widget {
+  backdrop-filter: invert(100%);
+}
+
