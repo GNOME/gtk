@@ -345,7 +345,6 @@ SvgValue *   svg_transform_get_transform    (const SvgValue *value,
 TransformType svg_transform_get_primitive (const SvgValue *value,
                                            unsigned int    pos,
                                            double          params[6]);
-SvgValue *   svg_transform_drop_last (SvgValue        *orig);
 SvgValue *   svg_transform_new_none (void);
 SvgValue *   svg_transform_new_translate (double x,
                                           double y);

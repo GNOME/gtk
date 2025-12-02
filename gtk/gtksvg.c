@@ -2624,21 +2624,6 @@ svg_transform_get_gsk (SvgTransform *tf)
   return t;
 }
 
-SvgValue *
-svg_transform_drop_last (SvgValue *orig)
-{
-  SvgTransform *to = (SvgTransform *) orig;
-  SvgTransform *tf;
-
-  if (to->n_transforms == 1)
-    return svg_transform_new_none ();
-
-  tf = svg_transform_alloc (to->n_transforms - 1);
-  memcpy (tf->transforms, to->transforms, tf->n_transforms * sizeof (PrimitiveTransform));
-
-  return (SvgValue *) tf;
-}
-
 /* }}} */
 /* {{{ Paint */
 
