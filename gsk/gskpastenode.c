@@ -49,8 +49,28 @@ gsk_paste_node_diff (GskRenderNode *node1,
                      GskRenderNode *node2,
                      GskDiffData   *data)
 {
-  /* FIXME: how do we implement this? */
-  gsk_render_node_diff_impossible (node1, node2, data);
+  GskPasteNode *self1 = (GskPasteNode *) node1;
+  GskPasteNode *self2 = (GskPasteNode *) node2;
+  const GSList *copy;
+  cairo_region_t *sub;
+  cairo_rectangle_int_t bounds;
+
+  if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->depth != self2->depth)
+    {
+      gsk_render_node_diff_impossible (node1, node2, data);
+      return;
+    }
+
+  copy = g_slist_nth (data->copies, self1->depth);
+  if (copy == NULL)
+    return;
+
+  sub = cairo_region_copy (copy->data);
+  gsk_rect_to_cairo_grow (&node1->bounds, &bounds);
+  cairo_region_intersect_rectangle (sub, &bounds);
+  cairo_region_union (data->region, sub);
+  cairo_region_destroy (sub);
 }
 
 static GskRenderNode *

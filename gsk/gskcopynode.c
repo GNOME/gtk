@@ -67,8 +67,14 @@ gsk_copy_node_diff (GskRenderNode *node1,
 {
   GskCopyNode *self1 = (GskCopyNode *) node1;
   GskCopyNode *self2 = (GskCopyNode *) node2;
+  GSList copy = { cairo_region_copy (data->region), data->copies };
+
+  data->copies = &copy;
 
   gsk_render_node_diff (self1->child, self2->child, data);
+
+  cairo_region_destroy (copy.data);
+  data->copies = copy.next;
 }
 
 static gboolean
