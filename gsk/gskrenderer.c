@@ -480,7 +480,7 @@ gsk_renderer_render (GskRenderer          *renderer,
     }
   else
     {
-      gsk_render_node_diff (priv->prev_node, root, &(GskDiffData) { clip, priv->surface });
+      gsk_render_node_diff (priv->prev_node, root, &(GskDiffData) { clip, NULL, priv->surface });
     }
 
   renderer_class->render (renderer, root, clip);

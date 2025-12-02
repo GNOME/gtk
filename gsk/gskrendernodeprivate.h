@@ -48,6 +48,7 @@ struct _GskRenderNode
 typedef struct
 {
   cairo_region_t *region;
+  GSList *copies;
   GdkSurface *surface;
 } GskDiffData;
 

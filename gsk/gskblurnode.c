@@ -260,7 +260,7 @@ gsk_blur_node_diff (GskRenderNode *node1,
 
       clip_radius = ceil (gsk_cairo_blur_compute_pixels (self1->radius / 2.0));
       sub = cairo_region_create ();
-      gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->surface });
+      gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->copies, data->surface });
 
       n = cairo_region_num_rectangles (sub);
       for (i = 0; i < n; i++)

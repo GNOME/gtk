@@ -480,7 +480,7 @@ parse_node_file (GFile *file, const char *generate)
       g_clear_pointer (&diff, g_free);
       g_clear_pointer (&reference_file, g_free);
 
-      gsk_render_node_diff (node, node2, &(GskDiffData) { clip, surface });
+      gsk_render_node_diff (node, node2, &(GskDiffData) { clip, NULL, surface });
 
       if (g_strcmp0 (generate, "diff") == 0)
         {
