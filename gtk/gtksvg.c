@@ -12023,6 +12023,9 @@ render_shape (Shape        *shape,
   if (!shape->display)
     return;
 
+  if (shape->type == SHAPE_DEFS)
+    return;
+
   if (context->op == RENDERING && shape_types[shape->type].never_rendered)
     return;
 
