@@ -26,6 +26,7 @@ struct _AlphaEditor
   GtkWidget parent_instance;
 
   GtkSpinButton *alpha_spin;
+  GtkScale *alpha_scale;
 
   double alpha;
 };
@@ -143,6 +144,7 @@ alpha_editor_class_init (AlphaEditorClass *class)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/Shaper/alpha-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, AlphaEditor, alpha_spin);
+  gtk_widget_class_bind_template_child (widget_class, AlphaEditor, alpha_scale);
 
   gtk_widget_class_set_css_name (widget_class, "AlphaEditor");
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);

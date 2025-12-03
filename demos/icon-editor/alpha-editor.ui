@@ -14,7 +14,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkScale">
+      <object class="GtkScale" id="alpha_scale">
         <property name="valign">baseline-center</property>
         <property name="orientation">horizontal</property>
         <property name="hexpand">1</property>
