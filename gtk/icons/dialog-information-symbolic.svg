@@ -1,18 +1,15 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='dialog info information'
+     gpa:keywords='object category bulb light emoji-objects dialog-info modern emoji-objects dialog-information'
      gpa:state='0'>
-  <path d='M 13 6 C 13 9.31999969, 10 10.5799999, 10 10.5799999 L 10 14 L 6 14 L 6 10.5799999 C 6 10.5799999, 3 9.31999969, 3 6 C 3 -0.666999996, 13 -0.666999996, 13 6'
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+  <path d='M 4.59518576 9 L 5.25358295 10 M 11.2320251 8.99999905 L 10.6293793 10 M 5.25358295 10 L 10.6293793 10 L 10 13 L 6 13 Z M 4.59518576 9 C 2.76247311 7.16728687, 2.76247311 4.19587278, 4.59518576 2.36316013 C 6.42789841 0.530447721, 9.39931202 0.530447841, 11.2320251 2.36316013 C 13.0647383 4.19587278, 13.0647383 7.16728735, 11.2320251 8.99999905 M 7 14 L 9 14 C 9 14.5522852, 8.55228519 15, 8 15 C 7.44771528 15, 7 14.5522852, 7 14 Z'
         id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 7.97300005 15.0039997 Z'
-        id='path1'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'

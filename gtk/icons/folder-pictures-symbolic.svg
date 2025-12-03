@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='folder image photo picture'
+     gpa:keywords='preferences-desktop-wallpaper folder image photo picture folder-pictures image-x-generic'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 2 12 L 2 4 C 2 2.9000001, 2.9000001 2, 4 2 L 12 2 C 13.1045694 2, 14 2.89543056, 14 4 L 14 12 C 14 13.1045694, 13.1045694 14, 12 14 L 4 14 C 2.89543056 14, 2 13.1045694, 2 12 Z'
         id='path0'
         stroke-width='2'
@@ -11,20 +16,14 @@
         stroke='rgb(0,0,0)'
         fill='none'
         class='foreground-stroke transparent-fill'/>
-  <path d='M 6.5 6 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z'
-        id='path1'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 2.79999995 13.6000004 L 6.11999989 10.3000002 L 7.61999989 11.3000002 L 9.5 9.39999962 L 13.4399996 13.3900003'
+  <path d='M 5 6.51379299 C 5.00761747 7.34222031, 5.68536568 8.00761795, 6.51379299 8 C 7.34222031 7.99238253, 8.00761795 7.31463432, 8 6.48620701 C 7.99238253 5.65777969, 7.31463432 4.99238253, 6.48620701 5 C 5.65777969 5.00761747, 4.99238253 5.68536568, 5 6.51379299 Z M 2.79999995 13.6000004 L 6.11999989 10.3000002 L 7.61999989 11.3000002 L 9.5 9.39999962 L 13.4399996 13.3900003'
         id='path2'
         stroke-width='1'
         stroke-linecap='round'
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
+        gpa:stroke-width='0.25 1 2'
         fill='none'
-        class='foreground-stroke transparent-fill'/>
+        class='foreground-stroke transparent-fill'
+        gpa:stroke='foreground'/>
 </svg>

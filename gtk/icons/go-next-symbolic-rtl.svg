@@ -1,7 +1,7 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='arrow next rtl'
+     gpa:keywords='arrow point previous'
      gpa:state='0'>
   <path d='M 11 2 L 5 8 L 11 14'
         id='path0'

@@ -1,63 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="16"
-   height="16"
-   gpa:version="1"
-   gpa:keywords="system search loupe"
-   gpa:state="0"
-   version="1.1"
-   id="svg1"
-   sodipodi:docname="system-search-symbolic.svg"
-   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:gpa="https://www.gtk.org/grappa">
-  <defs
-     id="defs1" />
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="true"
-     inkscape:zoom="1"
-     inkscape:cx="10"
-     inkscape:cy="10"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg1">
-    <inkscape:grid
-       id="grid1"
-       units="px"
-       originx="0"
-       originy="0"
-       spacingx="1"
-       spacingy="1"
-       empcolor="#0099e5"
-       empopacity="0.30196078"
-       color="#0099e5"
-       opacity="0.14901961"
-       empspacing="5"
-       enabled="true"
-       visible="true" />
-  </sodipodi:namedview>
-  <path
-     d="M 10.391029,10.391029 14,14 M 12,6.5 C 12,9.5375662 9.5375662,12 6.5,12 3.4624338,12 1,9.5375662 1,6.5 1,3.4624338 3.4624338,1 6.5,1 9.5375662,1 12,3.4624338 12,6.5 Z"
-     id="path0"
-     stroke-width="2"
-     stroke-linecap="round"
-     stroke-linejoin="round"
-     stroke="#000000"
-     fill="none"
-     class="foreground-stroke transparent-fill"
-     sodipodi:nodetypes="ccsssss" />
+<svg width='16' height='16'
+     xmlns:gpa='https://www.gtk.org/grappa'
+     gpa:version='1'
+     gpa:keywords='system-search loupe edit-find system-search folder-saved-search preferences-system-search'
+     gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+  <path d='M 14 14 L 10.3891287 10.3890696 M 12 6.51379299 C 11.992382 9.55135918, 9.52377319 12.007618, 6.48620701 12 C 3.44864082 11.992382, 0.992382228 9.52377319, 0.99999994 6.48620701 C 1.00761747 3.44864082, 3.47622681 0.992382169, 6.51379299 0.99999994 C 9.55135918 1.00761747, 12.007618 3.47622681, 12 6.51379299 Z'
+        id='path0'
+        stroke-width='2'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        stroke='rgb(0,0,0)'
+        fill='none'
+        class='foreground-stroke transparent-fill'/>
 </svg>

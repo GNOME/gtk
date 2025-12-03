@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='eye view conceal hide'
+     gpa:keywords='eye hide view-conceal user-not-tracked'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 1 1 L 15 15 M 4.33199978 4.33199978 C 6.73600006 2.40799999, 10.3190002 2.6500001, 12.4259996 5.05900002 L 15 8 L 12.4259996 10.941 Q 12.0719995 11.3459997, 11.6680002 11.6680002 M 8.97799969 12.868 C 6.96407986 13.2096891, 4.91734314 12.4798479, 3.57399988 10.941 L 1 8 L 2.5250001 6.42399979'
         id='path0'
         stroke-width='2'

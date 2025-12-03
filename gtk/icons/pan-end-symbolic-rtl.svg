@@ -1,9 +1,14 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='pan end rtl'
+     gpa:keywords='pan-left arrow left start'
      gpa:state='0'>
-  <path d='M 10 3 L 10 13 L 5.00600004 8 Z'
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+  <path d='M 10 3 L 10 13 L 5 8 Z'
         id='path0'
         stroke-width='2'
         stroke-linecap='round'

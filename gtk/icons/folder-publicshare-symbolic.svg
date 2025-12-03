@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='share link public folder'
+     gpa:keywords='share link public folder folder-publicshare preferences-system-sharing'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 15.03125 12.9960938 C 15.03125 14.1006632, 14.1358194 14.9960938, 13.03125 14.9960938 C 11.9266806 14.9960938, 11.03125 14.1006632, 11.03125 12.9960938 C 11.03125 11.8915243, 11.9266806 10.9960938, 13.03125 10.9960938 C 14.1358194 10.9960938, 15.03125 11.8915243, 15.03125 12.9960938 Z M 5 8 C 5 9.10456944, 4.10456944 10, 3 10 C 1.89543045 10, 1 9.10456944, 1 8 C 1 6.89543056, 1.89543045 6, 3 6 C 4.10456944 6, 5 6.89543056, 5 8 Z M 15 3 C 15 4.10456944, 14.1045694 5, 13 5 C 11.8954306 5, 11 4.10456944, 11 3 C 11 1.89543045, 11.8954306 1, 13 1 C 14.1045694 1, 15 1.89543045, 15 3 Z'
         id='path0'
         stroke-width='2'

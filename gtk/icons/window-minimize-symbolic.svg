@@ -1,10 +1,15 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='window minimize line panel'
+     gpa:keywords='window-minimize'
      gpa:state='0'>
-  <path d='M 5 11 L 11 11'
-        id='path0'
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+  <path d='M 4 12 L 12 12'
+        id='min'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'

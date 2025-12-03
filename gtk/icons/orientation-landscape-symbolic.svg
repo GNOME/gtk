@@ -1,23 +1,35 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='page orientation print landscape'
-     gpa:state='0'>
-  <path d='M 3.1586206 3 L 12.8413792 3 O 15 3, 15 5.15862083, 0.707106769 L 15 10.8413792 O 15 13, 12.8413792 13, 0.707106769 L 3.1586206 13 O 1 13, 1 10.8413792, 0.707106769 L 1 5.15862083 O 1 3, 3.1586206 3, 0.707106769 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 5 9.99998951 L 8 6.99998951 L 11 9.99998951 Z'
-        id='path1'
-        stroke-width='0.5'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill-rule='winding'
-        fill='rgb(0,0,0)'
-        class='foreground-stroke foreground-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='page orientation print landscape up'>
+  <path
+          id='path0'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 1 5.15862083 L 1 10.8413792 C 1.00000024 12.0335522, 1.96644759 13, 3.15862083 13 L 12.8413792 13 C 14.0335522 13, 15 12.0335522, 15 10.8413792 L 15 5.15862083 C 15 3.96644759, 14.0335522 3.00000024, 12.8413792 3.00000024 L 3.15862083 3 C 1.96644759 3.00000024, 1.00000024 3.96644759, 1.00000012 5.15862083 Z'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='url("#gpa:foreground") rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 5 9.5 L 8 6.5 L 11 9.5'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke-width='0.5 2 3'
+          gpa:stroke='foreground'
+          gpa:fill='none'>
+  </path>
 </svg>

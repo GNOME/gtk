@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='pan down'
+     gpa:keywords='pan-down arrow'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 3 6 L 13 6 L 8 11 Z'
         id='path0'
         stroke-width='2'

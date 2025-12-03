@@ -1,6 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'>
+     gpa:version='1'
+     gpa:keywords='emoji-symbols circle triangle square'
+     gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 7 9 C 5.34375 9, 4 10.34375, 4 12 C 4 13.65625, 5.34375 15, 7 15 C 8.65625 15, 10 13.65625, 10 12 C 10 10.34375, 8.65625 9, 7 9 Z'
         id='path0'
         stroke-width='2'

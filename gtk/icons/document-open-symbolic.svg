@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='folder open document'
+     gpa:keywords='folder-open document document-open folder-drag-accept'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 4 11 L 5.47399998 8.05200005 C 5.79666519 7.40714836, 6.4559269 6.99990034, 7.17700005 7 L 13.2370005 7 C 13.8192186 6.99966431, 14.3634796 7.28890514, 14.6889772 7.77163696 C 15.0144749 8.25436878, 15.0785809 8.86736965, 14.8599997 9.40699959 L 13.4099998 12.9899998 C 13.1625767 13.600914, 12.5691166 14.0005112, 11.9099998 14 L 2.79999995 14 C 1.80588734 14, 0.999999821 13.1941128, 1 12.1999998 L 1 4.26599979 C 1.00000012 3.01452255, 2.01452279 2, 3.26600003 2 L 6 2 L 8 4 L 11 4 C 12.1045694 4, 13 4.89543056, 13 6 L 13 7'
         id='path0'
         stroke-width='2'

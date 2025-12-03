@@ -1,8 +1,13 @@
 <svg width='16' height='16'
      xmlns:gpa='https://www.gtk.org/grappa'
      gpa:version='1'
-     gpa:keywords='info information'
+     gpa:keywords='preferences-system-details info information info-outline help-about'
      gpa:state='0'>
+  <style type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
   <path d='M 8 5 L 8 5.01000023 M 7 8 L 8 8 L 8 11 M 15 8 C 15 11.8659935, 11.8659935 15, 8 15 C 4.13400698 15, 1 11.8659935, 1 8 C 1 4.13400698, 4.13400698 1, 8 1 C 11.8659935 1, 15 4.13400698, 15 8'
         id='path0'
         stroke-width='2'
