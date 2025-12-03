@@ -12,7 +12,7 @@
           clip-rule='nonzero'
           mask='none'
           mask-type='luminance'
-          fill='url("#gpa:foreground") rgb(0,0,0)'
+          fill='none'
           fill-opacity='1'
           fill-rule='nonzero'
           stroke='none'
@@ -24,6 +24,6 @@
           stroke-dashoffset='0'
           pathLength='400'
           d='M 0 0 L 100 100'
-          gpa:stroke-width='0.25 1 1.5'>
+          class='transparent-fill'>
   </path>
 </svg>

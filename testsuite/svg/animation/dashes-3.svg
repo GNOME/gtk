@@ -12,8 +12,7 @@
           id='p'
           stroke='rgb(0,0,0)'
           stroke-width='1'
-          d='M 30 160 L 270 40'
-          gpa:stroke-width='0.25 1 1.5'>
+          d='M 30 160 L 270 40'>
   <animate
           id='dashes'
           attributeName='stroke-dasharray'

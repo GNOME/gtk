@@ -12,8 +12,7 @@
           stroke-miterlimit='10'
           stroke-dasharray='0 10 1 2'
           stroke-dashoffset='-20'
-          d='M 0 0 L 100 100'
-          gpa:stroke-width='50.1 200.4 300.6'>
+          d='M 0 0 L 100 100'>
   </path>
   <circle
           id='circle'
@@ -27,7 +26,6 @@
           stroke-dashoffset='10'
           cx='0'
           cy='0'
-          r='1'
-          gpa:stroke-width='0 0 0'>
+          r='1'>
   </circle>
 </svg>

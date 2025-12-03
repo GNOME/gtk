@@ -38,8 +38,7 @@
           transform='scale(10, 10)'
           opacity='0.5'
           stroke='rgb(0,0,255)'
-          stroke-width='10'
-          gpa:stroke-width='2.5 10 15'>
+          stroke-width='10'>
     <circle
             clip-path='url(#soo messy)'
             mask='url(#messy too)'
@@ -48,8 +47,7 @@
             stroke-width='0.5'
             cx='10'
             cy='10'
-            r='8'
-            gpa:stroke-width='0.125 0.5 0.75'>
+            r='8'>
     <animate
             attributeName='fill'
             begin='5000ms'
@@ -87,14 +85,12 @@
       <path
               stroke='rgb(0,0,0)'
               stroke-width='1'
-              d='M 0 10 L 20 10'
-              gpa:stroke-width='0.25 1 1.5'>
+              d='M 0 10 L 20 10'>
       </path>
       <path
               stroke='rgb(0,0,0)'
               stroke-width='1'
-              d='M 10 0 L 10 20'
-              gpa:stroke-width='0.25 1 1.5'>
+              d='M 10 0 L 10 20'>
       </path>
     </g>
   </g>
@@ -102,8 +98,7 @@
           id='p'
           stroke='rgb(0,0,0)'
           stroke-width='1'
-          d='M 30 160 L 270 40'
-          gpa:stroke-width='0.25 1 1.5'>
+          d='M 30 160 L 270 40'>
   <animate
           attributeName='stroke-dasharray'
           begin='5000ms'

@@ -448,7 +448,8 @@ render_svg_file (GFile *file, gboolean generate)
             output = gtk_svg_serialize_full (svg,
                                              colors, n_colors,
                                              GTK_SVG_SERIALIZE_AT_CURRENT_TIME |
-                                             GTK_SVG_SERIALIZE_INCLUDE_STATE);
+                                             GTK_SVG_SERIALIZE_INCLUDE_STATE |
+                                             GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS);
             if (generate)
               {
                 if (!g_file_set_contents (step->output,

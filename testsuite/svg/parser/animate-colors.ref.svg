@@ -60,7 +60,7 @@
           stroke='rgb(0,0,0)'
           stroke-width='2'
           d='M 90 10 L 110 10 L 100 30 Z'
-          gpa:stroke-width='0.5 2 3'>
+          class='transparent-fill'>
   <animate
           attributeName='stroke'
           dur='4000ms'
@@ -75,8 +75,7 @@
           x='90'
           y='50'
           width='20'
-          height='20'
-          gpa:stroke-width='0.75 3 4.5'>
+          height='20'>
   <animate
           attributeName='fill'
           dur='2000ms'
