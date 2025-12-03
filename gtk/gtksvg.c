@@ -639,7 +639,7 @@ parse_numbers2 (const char *value,
   GArray *array;
   GStrv strv;
 
-  strv = g_strsplit (value, sep, 0);
+  strv = g_strsplit_set (value, sep, 0);
 
   array = g_array_new (FALSE, FALSE, sizeof (double));
 
@@ -3923,7 +3923,7 @@ svg_points_parse (const char *value)
   if (strcmp (value, "none") == 0)
     return svg_path_new_none ();
 
-  values = parse_numbers2 (value, " ", -DBL_MAX, DBL_MAX);
+  values = parse_numbers2 (value, ", ", -DBL_MAX, DBL_MAX);
   if (values->len % 2 != 0)
     g_array_remove_index (values, values->len - 1);
 
