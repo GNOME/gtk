@@ -562,6 +562,7 @@ if os_linux
     'complex-clip.node',
     'composite-after.node',
     'composite-before.node',
+    'copied-no-offload.node',
     'deep.node',
     'move.node',
     'nested.node',

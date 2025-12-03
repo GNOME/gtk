@@ -1,0 +1,24 @@
+copy {
+  child: container {
+    subsurface {
+      child: texture {
+        texture: memory {
+          format: RGB8;
+          width: 20;
+          height: 20;
+          offset: 0;
+          stride: 60;
+          data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4z8AwikbRKBpFQwEBAPlENa6wBAAA\
+");
+        }
+      }
+    }
+    transform {
+      transform: translate(30, 0);
+      child: paste {
+        bounds: 0 0 20 20;
+      }
+    }
+  }
+}

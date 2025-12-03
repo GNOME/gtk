@@ -599,6 +599,43 @@ visit_node (GskOffload    *self,
       break;
 
     case GSK_CONTAINER_NODE:
+      {
+        GskRenderNode **children;
+        gsize i, okay, n_children;
+        gboolean was_impossible = self->offload_impossible;
+
+        children = gsk_render_node_get_children (node, &n_children);
+
+        if (!was_impossible &&
+            (gsk_render_node_clears_background (node) ||
+             gsk_render_node_get_copy_mode (node) != GSK_COPY_NONE))
+          {
+            for (okay = n_children; okay > 0; okay--)
+              {
+                if (gsk_render_node_clears_background (children[okay - 1]))
+                  break;
+
+                if (gsk_render_node_get_copy_mode (children[okay - 1]) != GSK_COPY_NONE)
+                  {
+                    okay--;
+                    break;
+                  }
+              }
+            self->offload_impossible = TRUE;
+          }
+        else
+          okay = 0;
+
+        for (i = 0; i < n_children ; i++)
+          {
+            if (i == okay)
+              self->offload_impossible = was_impossible;
+
+            visit_node (self, children[i]);
+          }
+      }
+      break;
+
     case GSK_DEBUG_NODE:
       /* keep going */
       visit_children (self, node);
