@@ -21,6 +21,8 @@ test_data = [
   'bad-time.svg',
   'clip.svg',
   'containers.svg',
+  'crash1.svg',
+  'crash2.svg',
   'dashes.svg',
   'dep-cycle.svg',
   'ellipse.svg',

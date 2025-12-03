@@ -9105,9 +9105,17 @@ parse_style_attr (Shape               *shape,
                                      shape_attr_get_presentation (attr, shape->type),
                                      prop_val);
         }
-      else
+      else if (shape_has_attr (shape->type, attr))
         {
           shape_set_base_value (shape, attr, value);
+          svg_value_unref (value);
+        }
+      else
+        {
+          gtk_svg_invalid_attribute (data->svg, context,
+                                     "style", "'%s' is not an attribute of <%s>",
+                                     shape_attr_get_presentation (attr, shape->type),
+                                     shape_types[shape->type].name);
           svg_value_unref (value);
         }
 
