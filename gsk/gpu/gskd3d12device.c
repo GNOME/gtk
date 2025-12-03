@@ -639,7 +639,7 @@ gsk_d3d12_device_compile_shader (const char         *shader_name,
   return shader;
 }
 
-static const D3D12_BLEND_DESC blend_descs[4] = {
+static const D3D12_BLEND_DESC blend_descs[] = {
   [GSK_GPU_BLEND_NONE] = {
     .AlphaToCoverageEnable = false,
     .IndependentBlendEnable = false,
@@ -702,6 +702,57 @@ static const D3D12_BLEND_DESC blend_descs[4] = {
       },
     }
   },
+  [GSK_GPU_BLEND_MASK_ONE] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = true,
+        .LogicOpEnable = false,
+        .SrcBlend = D3D12_BLEND_ONE,
+        .DestBlend = D3D12_BLEND_SRC1_ALPHA,
+        .BlendOp = D3D12_BLEND_OP_ADD,
+        .SrcBlendAlpha = D3D12_BLEND_ONE,
+        .DestBlendAlpha = D3D12_BLEND_SRC1_ALPHA,
+        .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
+  [GSK_GPU_BLEND_MASK_ALPHA] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = true,
+        .LogicOpEnable = false,
+        .SrcBlend = D3D12_BLEND_DEST_ALPHA,
+        .DestBlend = D3D12_BLEND_SRC1_ALPHA,
+        .BlendOp = D3D12_BLEND_OP_ADD,
+        .SrcBlendAlpha = D3D12_BLEND_DEST_ALPHA,
+        .DestBlendAlpha = D3D12_BLEND_SRC1_ALPHA,
+        .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
+  [GSK_GPU_BLEND_MASK_INV_ALPHA] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = true,
+        .LogicOpEnable = false,
+        .SrcBlend = D3D12_BLEND_INV_DEST_ALPHA,
+        .DestBlend = D3D12_BLEND_SRC1_ALPHA,
+        .BlendOp = D3D12_BLEND_OP_ADD,
+        .SrcBlendAlpha = D3D12_BLEND_INV_DEST_ALPHA,
+        .DestBlendAlpha = D3D12_BLEND_SRC1_ALPHA,
+        .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
 };
 
 ID3D12PipelineState *
@@ -732,6 +783,8 @@ gsk_d3d12_device_get_d3d12_pipeline_state (GskD3d12Device            *self,
   result = g_hash_table_lookup (self->pipeline_cache, &cache_key);
   if (result)
     return result;
+
+  g_assert (blend <= G_N_ELEMENTS (blend_descs));
 
   for (i = 0; i < N_STAGES; i++)
     {
