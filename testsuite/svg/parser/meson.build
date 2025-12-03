@@ -47,7 +47,8 @@ test_data = [
   'style.svg',
   'times.svg',
   'transforms.svg',
-  'use.svg'
+  'use.svg',
+  'viewbox.svg'
 ]
 
 foreach testname : test_data

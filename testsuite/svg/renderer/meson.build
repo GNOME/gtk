@@ -47,6 +47,7 @@ test_data = [
   'spec-rect.svg',
   'style.svg',
   'use.svg',
+  'viewbox.svg'
 ]
 
 foreach testname : test_data
