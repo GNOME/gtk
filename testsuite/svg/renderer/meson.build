@@ -9,6 +9,7 @@ test_data = [
   'circular.svg',
   'clip.svg',
   'ellipse.svg',
+  'ellipse2.svg',
   'filter.svg',
   'gpa-attachment1.svg',
   'gpa-attachment2.svg',
