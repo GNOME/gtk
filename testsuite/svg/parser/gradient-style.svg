@@ -1,0 +1,137 @@
+<svg id="svg-root"
+     viewBox="0 0 1000 5000"
+     xmlns:svg="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:html="http://www.w3.org/1999/xhtml">
+  <defs id="defs">
+    <!-- Only cx/cy/r for a plain SVG1.1-like gradient. -->
+    <radialGradient
+       id="plain_svg11_gradient"
+       gradientUnits="userSpaceOnUse"
+
+       cx="500" cy="500" r="200">
+      <stop style="stop-color:#aa88ff" offset="0%"/>
+      <stop style="stop-color:#ffddcc" offset="50%"/>
+      <stop style="stop-color:#bbffee" offset="100%"/>
+    </radialGradient>
+
+
+    <!-- cx/cy/r/fx/fy with the focus point inside the circle, for a "full" SVG1.1 gradient. -->
+    <radialGradient
+       id="full_svg11_gradient"
+       gradientUnits="userSpaceOnUse"
+
+       cx="500" cy="1500" r="200"
+       fx="600" fy="1600">
+      <stop style="stop-color:#aa88ff" offset="0%"/>
+      <stop style="stop-color:#ffddcc" offset="50%"/>
+      <stop style="stop-color:#bbffee" offset="100%"/>
+    </radialGradient>
+
+
+    <!-- cx/cy/r/fx/fy with the focus point outside the circle. -->
+    <radialGradient
+       id="full_svg11_outside_gradient"
+       gradientUnits="userSpaceOnUse"
+
+       cx="500" cy="2500" r="200"
+       fx="800" fy="2500">
+      <stop style="stop-color:#aa88ff" offset="0%"/>
+      <stop style="stop-color:#ffddcc" offset="50%"/>
+      <stop style="stop-color:#bbffee" offset="100%"/>
+    </radialGradient>
+
+
+    <!-- cx/cy/r/fx/fy/fr inside the circle. -->
+    <radialGradient
+       id="svg2_inside_gradient"
+       gradientUnits="userSpaceOnUse"
+
+       cx="500" cy="3500"  r="200"
+       fx="600" fy="3600" fr="50">
+      <stop style="stop-color:#aa88ff" offset="0%"/>
+      <stop style="stop-color:#ffddcc" offset="50%"/>
+      <stop style="stop-color:#bbffee" offset="100%"/>
+    </radialGradient>
+
+
+    <!-- cx/cy/r/fx/fy/fr outside the circle. -->
+    <radialGradient
+       id="svg2_outside_gradient"
+       gradientUnits="userSpaceOnUse"
+
+       cx="500" cy="4500"  r="200"
+       fx="800" fy="4500" fr="50">
+      <stop style="stop-color:#aa88ff" offset="0%"/>
+      <stop style="stop-color:#ffddcc" offset="50%"/>
+      <stop style="stop-color:#bbffee" offset="100%"/>
+    </radialGradient>
+  </defs>
+  <g id="layer1">
+    <rect
+       id="rec1" style="fill:url(#plain_svg11_gradient)"
+       width="900" height="800"
+       x="50" y="100" />
+
+    <rect
+       id="rec2" style="fill:url(#full_svg11_gradient)"
+       width="900" height="800"
+       x="50" y="1100" />
+
+    <rect
+       id="rec3" style="fill:url(#full_svg11_outside_gradient)"
+       width="900" height="800"
+       x="50" y="2100" />
+
+    <rect
+       id="rec4" style="fill:url(#svg2_inside_gradient)"
+       width="900" height="800"
+       x="50" y="3100" />
+
+    <rect
+       id="rec5" style="fill:url(#svg2_outside_gradient)"
+       width="900" height="800"
+       x="50" y="4100" />
+
+
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle1"
+       cx="500" cy="500" r="200" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle2"
+       cx="500" cy="1500" r="200" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle2_2"
+       cx="600" cy="1600" r="1" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle3"
+       cx="500" cy="2500" r="200" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle3_2"
+       cx="800" cy="2500" r="1" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle4"
+       cx="500" cy="3500" r="200" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle4_2"
+       cx="600" cy="3600" r="50" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle5"
+       cx="500" cy="4500" r="200" />
+    <circle
+       style="fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1"
+       id="circle5_2"
+       cx="800" cy="4500" r="50" />
+  </g>
+</svg>
+
+
+

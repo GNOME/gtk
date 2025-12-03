@@ -9046,6 +9046,7 @@ consume_to_semicolon (const char **p)
 
 static void
 parse_style_attr (Shape               *shape,
+                  gboolean             for_stop,
                   const char          *style_attr,
                   ParserData          *data,
                   GMarkupParseContext *context)
@@ -9105,7 +9106,9 @@ parse_style_attr (Shape               *shape,
                                      shape_attr_get_presentation (attr, shape->type),
                                      prop_val);
         }
-      else if (shape_has_attr (shape->type, attr))
+      else if (shape_has_attr (shape->type, attr) ||
+               (for_stop && attr >= SHAPE_ATTR_STOP_OFFSET &&
+                            attr <= SHAPE_ATTR_STOP_OPACITY))
         {
           shape_set_base_value (shape, attr, value);
           svg_value_unref (value);
@@ -9193,7 +9196,7 @@ parse_shape_attrs (Shape                *shape,
     }
 
   if (style_attr)
-    parse_style_attr (shape, style_attr, data, context);
+    parse_style_attr (shape, FALSE, style_attr, data, context);
 
   if (class_attr && *class_attr)
     {
@@ -10120,7 +10123,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       if (style_attr)
-        parse_style_attr (data->current_shape, style_attr, data, context);
+        parse_style_attr (data->current_shape, TRUE, style_attr, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
