@@ -1,0 +1,12 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='256'
+        height='256'
+        viewBox='-128 -128 256 256'>
+  <circle
+          fill='rgb(0,0,0)'
+          cx='0'
+          cy='0'
+          r='64'>
+  </circle>
+</svg>

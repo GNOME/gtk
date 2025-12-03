@@ -12129,8 +12129,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.depth = 0;
 
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_scale (snapshot, sx, sy);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
+  gtk_snapshot_scale (snapshot, sx, sy);
 
   render_shape (self->content, &paint_context);
 
