@@ -57,6 +57,8 @@ struct _GtkTextHandle
   GtkBorder border;
   int dx;
   int dy;
+  guint surface_transform_changed_cb;
+
   guint role : 2;
   guint dragged : 1;
   guint mode_visible : 1;
@@ -310,9 +312,35 @@ text_handle_set_up_gesture (GtkTextHandle *handle)
 }
 
 static void
+unset_surface_transform_changed_cb (gpointer user_data)
+{
+  GtkTextHandle *handle = GTK_TEXT_HANDLE (user_data);
+
+  handle->surface_transform_changed_cb = 0;
+}
+
+static gboolean
+surface_transform_changed_cb (GtkWidget               *widget,
+                              const graphene_matrix_t *transform,
+                              gpointer                 user_data)
+{
+  GtkTextHandle *handle = GTK_TEXT_HANDLE (user_data);
+
+  gtk_text_handle_present_surface (handle);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
 gtk_text_handle_map (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
+
+  handle->surface_transform_changed_cb =
+    gtk_widget_add_surface_transform_changed_callback (gtk_widget_get_parent (widget),
+                                                       surface_transform_changed_cb,
+                                                       widget,
+                                                       unset_surface_transform_changed_cb);
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->map (widget);
 
@@ -327,6 +355,10 @@ static void
 gtk_text_handle_unmap (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
+
+  gtk_widget_remove_surface_transform_changed_callback (gtk_widget_get_parent (widget),
+                                                        handle->surface_transform_changed_cb);
+  handle->surface_transform_changed_cb = 0;
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->unmap (widget);
   gdk_surface_hide (handle->surface);
