@@ -781,7 +781,7 @@ path_builder_add_ellipse (GskPathBuilder *builder,
   gsk_path_builder_conic_to (builder, cx + rx, cy + ry,
                                       cx,      cy + ry, M_SQRT1_2);
   gsk_path_builder_conic_to (builder, cx - rx, cy + ry,
-                                      cy - rx, cy,      M_SQRT1_2);
+                                      cx - rx, cy,      M_SQRT1_2);
   gsk_path_builder_conic_to (builder, cx - rx, cy - ry,
                                       cx,      cy - ry, M_SQRT1_2);
   gsk_path_builder_conic_to (builder, cx + rx, cy - ry,
