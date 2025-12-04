@@ -4992,6 +4992,13 @@ shape_attr_lookup (const char *name,
       return TRUE;
     }
 
+  if (type == SHAPE_MASK &&
+      strcmp (name, "maskContentUnits") == 0)
+    {
+      *attr = SHAPE_ATTR_UNITS;
+      return TRUE;
+    }
+
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
       if (strcmp (name, shape_attrs[i].name) == 0)
@@ -5014,6 +5021,9 @@ shape_attr_get_presentation (ShapeAttr attr,
 
   if (type == SHAPE_CLIP_PATH && attr == SHAPE_ATTR_UNITS)
     return "clipPathUnits";
+
+  if (type == SHAPE_MASK && attr == SHAPE_ATTR_UNITS)
+    return "maskContentUnits";
 
   return shape_attrs[attr].name;
 }
@@ -5294,7 +5304,7 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
-  if (type == SHAPE_CLIP_PATH)
+  if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK)
     {
       if (attr == SHAPE_ATTR_UNITS)
         return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
@@ -5373,7 +5383,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_UNITS:
       return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
-             type == SHAPE_CLIP_PATH;
+             type == SHAPE_CLIP_PATH || type == SHAPE_MASK;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
@@ -11645,7 +11655,27 @@ push_context (Shape        *shape,
 
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (shape->current[SHAPE_ATTR_MASK_TYPE]));
 
+      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+        {
+          graphene_rect_t bounds;
+          GskPath *path;
+
+          path = shape_get_current_path (shape, context->viewport);
+          if (!gsk_path_get_bounds (path, &bounds))
+            graphene_rect_init_from_rect (&bounds, graphene_rect_zero ());
+          gsk_path_unref (path);
+
+          gtk_snapshot_save (context->snapshot);
+          gtk_snapshot_translate (context->snapshot, &bounds.origin);
+          gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+        }
+
       render_shape (mask->shape, context);
+
+      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+        {
+          gtk_snapshot_restore (context->snapshot);
+        }
 
       gtk_snapshot_pop (context->snapshot);
 
