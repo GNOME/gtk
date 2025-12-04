@@ -535,10 +535,12 @@ gtk_revealer_size_allocate (GtkWidget *widget,
   switch (effective_transition (revealer))
     {
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width - child_width, 0));
       break;
 
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
+    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0, height - child_height));
       break;
 
@@ -576,8 +578,6 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
     case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_LEFT:
     case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_UP:
-    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_DOWN:
-    case GTK_REVEALER_TRANSITION_TYPE_FADE_SLIDE_RIGHT:
     default:
       break;
     }
