@@ -460,13 +460,14 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   renderer_class = GSK_RENDERER_GET_CLASS (renderer);
 
-  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
   clip = cairo_region_copy (region);
 
   if (renderer_class->supports_offload && gdk_has_feature (GDK_FEATURE_OFFLOAD))
     offload = gsk_offload_new (priv->surface, root, clip);
   else
     offload = NULL;
+
+  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
 
   if (region == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
