@@ -60,7 +60,7 @@ struct _GskOffload
   GSList *clips;
 
   Clip *current_clip;
-  gboolean offload_impossible;
+  const char *offload_impossible;
 
   GskOffloadInfo *last_info;
 };
@@ -602,7 +602,7 @@ visit_node (GskOffload    *self,
       {
         GskRenderNode **children;
         gsize i, okay, n_children;
-        gboolean was_impossible = self->offload_impossible;
+        const char *was_impossible = self->offload_impossible;
 
         children = gsk_render_node_get_children (node, &n_children);
 
@@ -613,15 +613,18 @@ visit_node (GskOffload    *self,
             for (okay = n_children; okay > 0; okay--)
               {
                 if (gsk_render_node_clears_background (children[okay - 1]))
-                  break;
+                  {
+                    self->offload_impossible = "Composite operations";
+                    break;
+                  }
 
                 if (gsk_render_node_get_copy_mode (children[okay - 1]) != GSK_COPY_NONE)
                   {
+                    self->offload_impossible = "Copied contents";
                     okay--;
                     break;
                   }
               }
-            self->offload_impossible = TRUE;
           }
         else
           okay = 0;
@@ -657,8 +660,8 @@ visit_node (GskOffload    *self,
     case GSK_COMPOSITE_NODE:
       /* cannot offload */
       {
-        gboolean was_impossible = self->offload_impossible;
-        self->offload_impossible = TRUE;
+        const char *was_impossible = self->offload_impossible;
+        self->offload_impossible = g_type_name_from_instance ((GTypeInstance *) node);
         visit_children (self, node);
         self->offload_impossible = was_impossible;
       }
@@ -710,10 +713,8 @@ visit_node (GskOffload    *self,
 
         if (!transform_rounded_rect (self, clip, &transformed_clip))
           {
-            gboolean was_impossible = self->offload_impossible;
-            GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                               "🗙 Non-dihedral transform, giving up");
-            self->offload_impossible = TRUE;
+            const char *was_impossible = self->offload_impossible;
+            self->offload_impossible = "Non-dihedral transform";
             visit_node (self, gsk_rounded_clip_node_get_child (node));
             self->offload_impossible = was_impossible;
           }
@@ -789,8 +790,8 @@ complex_clip:
             else if (self->offload_impossible)
               {
                 GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                   "[%p] 🗙 Impossible to offload",
-                                   subsurface);
+                                   "[%p] 🗙 %s",
+                                   subsurface, self->offload_impossible);
               }
             else if (!self->current_clip->is_fully_contained)
               {
