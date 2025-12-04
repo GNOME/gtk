@@ -9219,7 +9219,8 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
 
-      shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
+      if (!(shape->attrs & BIT (SHAPE_ATTR_FILL)))
+        shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
       svg_value_unref (value);
 
       if (g_strv_has (classes, "success-stroke"))
@@ -9233,7 +9234,8 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_none ();
 
-      shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
+      if (!(shape->attrs & BIT (SHAPE_ATTR_FILL)))
+        shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
       svg_value_unref (value);
 
       g_strfreev (classes);

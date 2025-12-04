@@ -124,7 +124,7 @@
   <rect
           id='test-frame'
           fill='none'
-          stroke='none'
+          stroke='rgb(0,0,0)'
           x='1'
           y='1'
           width='478'
