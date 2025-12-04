@@ -5729,8 +5729,11 @@ shape_get_current_bounds (Shape                 *shape,
             if (shape_get_current_bounds (sh, viewport, &b))
               {
                 transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
-                gsk_transform_transform_bounds (transform, &b, bounds);
-                graphene_rect_union (&b, bounds, bounds);
+                gsk_transform_transform_bounds (transform, &b, &b);
+                if (i == 0)
+                  graphene_rect_init_from_rect (bounds, &b);
+                else
+                  graphene_rect_union (bounds, &b, bounds);
                 gsk_transform_unref (transform);
               }
           }
