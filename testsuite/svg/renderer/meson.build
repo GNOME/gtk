@@ -8,6 +8,7 @@ test_data = [
   'circle.svg',
   'circular.svg',
   'clip.svg',
+  'dashes.svg',
   'ellipse.svg',
   'ellipse2.svg',
   'filter.svg',

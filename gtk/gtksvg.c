@@ -11824,12 +11824,17 @@ shape_create_stroke (Shape        *shape,
       double *dashes = (double *) dasharray->dashes;
       unsigned int len = dasharray->n_dashes;
       double path_length;
+      double length;
       double offset;
+      GskPathMeasure *measure;
 
-      if (shape->attrs & BIT (SHAPE_ATTR_PATH_LENGTH))
-        path_length = svg_number_get (shape->current[SHAPE_ATTR_PATH_LENGTH], 1);
-      else /* FIXME makes mixing animations hard */
-        path_length = 1;
+      measure = shape_get_current_measure (shape, context->viewport);
+      length = gsk_path_measure_get_length (measure);
+      gsk_path_measure_unref (measure);
+
+      path_length = svg_number_get (shape->current[SHAPE_ATTR_PATH_LENGTH], 1);
+      if (path_length < 0)
+        path_length = length;
 
       offset = svg_number_get (shape->current[SHAPE_ATTR_STROKE_DASHOFFSET], path_length);
 
@@ -11837,13 +11842,6 @@ shape_create_stroke (Shape        *shape,
 
       if (path_length > 0)
         {
-          GskPathMeasure *measure;
-          double length;
-
-          measure = shape_get_current_measure (shape, context->viewport);
-          length = gsk_path_measure_get_length (measure);
-          gsk_path_measure_unref (measure);
-
           for (unsigned int i = 0; i < len; i++)
             vals[i] = dashes[i] / path_length * length;
 
