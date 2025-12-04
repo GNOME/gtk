@@ -226,7 +226,8 @@ do_convert (int          *argc,
   if (!color_state)
     color_state = gdk_color_state_get_srgb ();
 
-  if (g_str_has_suffix (filenames[0], ".svg"))
+  if (g_str_has_suffix (filenames[0], ".svg") &&
+      g_str_has_suffix (filenames[1], ".svg"))
     convert_svg (filenames[0], filenames[1]);
   else
     save_image (filenames[0], filenames[1], format, color_state);

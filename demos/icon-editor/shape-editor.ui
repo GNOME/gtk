@@ -4,7 +4,7 @@
       <object class="GtkGrid" id="grid">
         <child>
           <object class="GtkExpander" id="expander">
-            <property name="hexpand">0</property>
+            <property name="hexpand">1</property>
             <property name="valign">center</property>
             <property name="label-widget">
               <object class="GtkBox">
@@ -1333,9 +1333,9 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <child>
               <object class="GtkEntry" id="transform">
-                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
                 <property name="hexpand">1</property>
                 <signal name="activate" handler="transform_changed" swapped="yes"/>
               </object>
