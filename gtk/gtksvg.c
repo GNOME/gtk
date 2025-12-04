@@ -3470,7 +3470,7 @@ svg_dash_array_parse (const char *value)
       unsigned int n;
       SvgDashArray *dashes;
 
-      strv = g_strsplit (value, " ", 0);
+      strv = g_strsplit_set (value, ", ", 0);
       n = g_strv_length (strv);
 
       dashes = svg_dash_array_alloc (n);

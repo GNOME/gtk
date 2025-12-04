@@ -6,4 +6,8 @@
           stroke-dasharray='1 2 3'
           d=''>
   </path>
+  <path
+          stroke-dasharray='1 2 3'
+          d=''>
+  </path>
 </svg>
