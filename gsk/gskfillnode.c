@@ -117,6 +117,17 @@ gsk_fill_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode **
+gsk_fill_node_get_children (GskRenderNode *node,
+                            gsize         *n_children)
+{
+  GskFillNode *self = (GskFillNode *) node;
+
+  *n_children = 1;
+
+  return &self->child;
+}
+
 static GskRenderNode *
 gsk_fill_node_replay (GskRenderNode   *node,
                       GskRenderReplay *replay)
@@ -150,6 +161,7 @@ gsk_fill_node_class_init (gpointer g_class,
   node_class->finalize = gsk_fill_node_finalize;
   node_class->draw = gsk_fill_node_draw;
   node_class->diff = gsk_fill_node_diff;
+  node_class->get_children = gsk_fill_node_get_children;
   node_class->replay = gsk_fill_node_replay;
 }
 

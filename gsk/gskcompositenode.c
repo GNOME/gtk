@@ -39,8 +39,13 @@ struct _GskCompositeNode
 {
   GskRenderNode render_node;
 
-  GskRenderNode *child;
-  GskRenderNode *mask;
+  union {
+    GskRenderNode *children[2];
+    struct {
+      GskRenderNode *child;
+      GskRenderNode *mask;
+    };
+  };
   GskPorterDuff op;
 };
 
@@ -243,6 +248,17 @@ gsk_composite_node_diff (GskRenderNode *node1,
   gsk_render_node_diff (self1->mask, self2->mask, data);
 }
 
+static GskRenderNode **
+gsk_composite_node_get_children (GskRenderNode *node,
+                                 gsize         *n_children)
+{
+  GskCompositeNode *self = (GskCompositeNode *) node;
+
+  *n_children = G_N_ELEMENTS (self->children);
+
+  return self->children;
+}
+
 static GskRenderNode *
 gsk_composite_node_replay (GskRenderNode   *node,
                            GskRenderReplay *replay)
@@ -297,6 +313,7 @@ gsk_composite_node_class_init (gpointer g_class,
   node_class->finalize = gsk_composite_node_finalize;
   node_class->draw = gsk_composite_node_draw;
   node_class->diff = gsk_composite_node_diff;
+  node_class->get_children = gsk_composite_node_get_children;
   node_class->replay = gsk_composite_node_replay;
   node_class->get_opaque_rect = gsk_composite_node_get_opaque_rect;
 }

@@ -3408,6 +3408,17 @@ gsk_transform_node_diff (GskRenderNode *node1,
     }
 }
 
+static GskRenderNode **
+gsk_transform_node_get_children (GskRenderNode *node,
+                                 gsize         *n_children)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+
+  *n_children = 1;
+  
+  return &self->child;
+}
+
 static GskRenderNode *
 gsk_transform_node_replay (GskRenderNode   *node,
                            GskRenderReplay *replay)
@@ -3461,6 +3472,7 @@ gsk_transform_node_class_init (gpointer g_class,
   node_class->draw = gsk_transform_node_draw;
   node_class->can_diff = gsk_transform_node_can_diff;
   node_class->diff = gsk_transform_node_diff;
+  node_class->get_children = gsk_transform_node_get_children;
   node_class->replay = gsk_transform_node_replay;
   node_class->get_opaque_rect = gsk_transform_node_get_opaque_rect;
 }
@@ -3701,6 +3713,17 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
   bounds->size.height += top + bottom;
 }
 
+static GskRenderNode **
+gsk_shadow_node_get_children (GskRenderNode *node,
+                              gsize         *n_children)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+
+  *n_children = 1;
+  
+  return &self->child;
+}
+
 static GskRenderNode *
 gsk_shadow_node_replay (GskRenderNode   *node,
                         GskRenderReplay *replay)
@@ -3734,6 +3757,7 @@ gsk_shadow_node_class_init (gpointer g_class,
   node_class->finalize = gsk_shadow_node_finalize;
   node_class->draw = gsk_shadow_node_draw;
   node_class->diff = gsk_shadow_node_diff;
+  node_class->get_children = gsk_shadow_node_get_children;
   node_class->replay = gsk_shadow_node_replay;
 }
 

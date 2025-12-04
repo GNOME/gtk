@@ -4081,7 +4081,7 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
   GskRenderNode **children;
-  guint i, n_children;
+  gsize i, n_children;
 
   if (self->opacity < 1.0 && !gsk_container_node_is_disjoint (node))
     {
@@ -4089,7 +4089,7 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  children = gsk_container_node_get_children (node, &n_children);
+  children = gsk_render_node_get_children (node, &n_children);
 
   if (node->fully_opaque && !gsk_container_node_is_disjoint (node) && n_children > 0)
     {
@@ -4118,9 +4118,9 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
   GskRenderNode **children;
   graphene_rect_t opaque;
   int i;
-  guint n;
+  gsize n;
 
-  children = gsk_container_node_get_children (node, &n);
+  children = gsk_render_node_get_children (node, &n);
   if (n == 0)
     return FALSE;
 

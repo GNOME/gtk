@@ -161,6 +161,15 @@ gsk_render_node_real_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static GskRenderNode **
+gsk_render_node_real_get_children (GskRenderNode *node,
+                                   gsize         *n_children)
+{
+  *n_children = 0;
+
+  return NULL;
+}
+
 static GskRenderNode *
 gsk_render_node_real_replay (GskRenderNode   *node,
                              GskRenderReplay *replay)
@@ -184,6 +193,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->finalize = gsk_render_node_finalize;
   klass->can_diff = gsk_render_node_real_can_diff;
   klass->diff = gsk_render_node_real_diff;
+  klass->get_children = gsk_render_node_real_get_children;
   klass->replay = gsk_render_node_real_replay;
   klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
 }
@@ -507,6 +517,13 @@ gsk_render_node_draw_fallback (GskRenderNode *node,
       cairo_surface_destroy (surface);
       cairo_restore (cr);
     }
+}
+
+GskRenderNode **
+gsk_render_node_get_children (GskRenderNode *node,
+                              gsize         *n_children)
+{
+  return GSK_RENDER_NODE_GET_CLASS (node)->get_children (node, n_children);
 }
 
 /*

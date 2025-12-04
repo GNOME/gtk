@@ -40,8 +40,13 @@ struct _GskMaskNode
 {
   GskRenderNode render_node;
 
-  GskRenderNode *mask;
-  GskRenderNode *source;
+  union {
+    GskRenderNode *children[2];
+    struct {
+      GskRenderNode *mask;
+      GskRenderNode *source;
+    };
+  };
   GskMaskMode mask_mode;
 };
 
@@ -171,6 +176,17 @@ gsk_mask_node_diff (GskRenderNode *node1,
   gsk_render_node_diff (self1->mask, self2->mask, data);
 }
 
+static GskRenderNode **
+gsk_mask_node_get_children (GskRenderNode *node,
+                            gsize         *n_children)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+
+  *n_children = G_N_ELEMENTS (self->children);
+
+  return self->children;
+}
+
 static GskRenderNode *
 gsk_mask_node_replay (GskRenderNode   *node,
                       GskRenderReplay *replay)
@@ -220,6 +236,7 @@ gsk_mask_node_class_init (gpointer g_class,
   node_class->finalize = gsk_mask_node_finalize;
   node_class->draw = gsk_mask_node_draw;
   node_class->diff = gsk_mask_node_diff;
+  node_class->get_children = gsk_mask_node_get_children;
   node_class->replay = gsk_mask_node_replay;
 }
 

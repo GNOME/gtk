@@ -37,8 +37,13 @@ struct _GskCrossFadeNode
 {
   GskRenderNode render_node;
 
-  GskRenderNode *start;
-  GskRenderNode *end;
+  union {
+    GskRenderNode *children[2];
+    struct {
+      GskRenderNode *start;
+      GskRenderNode *end;
+    };
+  };
   float          progress;
 };
 
@@ -94,6 +99,17 @@ gsk_cross_fade_node_diff (GskRenderNode *node1,
     }
 
   gsk_render_node_diff_impossible (node1, node2, data);
+}
+
+static GskRenderNode **
+gsk_cross_fade_node_get_children (GskRenderNode *node,
+                                  gsize         *n_children)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  *n_children = G_N_ELEMENTS (self->children);
+
+  return self->children;
 }
 
 static GskRenderNode *
@@ -157,6 +173,7 @@ gsk_cross_fade_node_class_init (gpointer g_class,
   node_class->finalize = gsk_cross_fade_node_finalize;
   node_class->draw = gsk_cross_fade_node_draw;
   node_class->diff = gsk_cross_fade_node_diff;
+  node_class->get_children = gsk_cross_fade_node_get_children;
   node_class->replay = gsk_cross_fade_node_replay;
   node_class->get_opaque_rect = gsk_cross_fade_node_get_opaque_rect;
 }
