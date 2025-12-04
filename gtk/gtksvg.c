@@ -11500,33 +11500,26 @@ typedef struct
   size_t n_colors;
   double weight;
   RenderOp op;
-  GskFillRule clip_rule;
   GSList *op_stack;
   int depth;
 } PaintContext;
 
 static void
 push_op (PaintContext *context,
-         RenderOp      op,
-         GskFillRule   clip_rule)
+         RenderOp      op)
 {
-  unsigned int val = ((context->op << 16) | context->clip_rule);
-  context->op_stack = g_slist_prepend (context->op_stack, GUINT_TO_POINTER (val));
+  context->op_stack = g_slist_prepend (context->op_stack, GUINT_TO_POINTER (context->op));
   context->op = op;
-  context->clip_rule = clip_rule;
 }
 
 static void
 pop_op (PaintContext *context)
 {
   GSList *tos = context->op_stack;
-  guint val;
 
   g_assert (tos != NULL);
 
-  val = GPOINTER_TO_UINT (tos->data);
-  context->op = val >> 16;
-  context->clip_rule = val & 0xffff;
+  context->op = GPOINTER_TO_UINT (tos->data);
 
   context->op_stack = context->op_stack->next;
   g_slist_free_1 (tos);
@@ -11608,7 +11601,7 @@ push_context (Shape        *shape,
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
     {
-      push_op (context, CLIPPING, svg_enum_get (shape->current[SHAPE_ATTR_CLIP_RULE]));
+      push_op (context, CLIPPING);
       gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
 
       /* Clip mask - see language in the spec about 'raw geometry' */
@@ -11651,7 +11644,7 @@ push_context (Shape        *shape,
 
   if (mask->kind != MASK_NONE && (mask->shape != NULL))
     {
-      push_op (context, MASKING, context->clip_rule);
+      push_op (context, MASKING);
 
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (shape->current[SHAPE_ATTR_MASK_TYPE]));
 
@@ -12091,8 +12084,10 @@ paint_shape (Shape        *shape,
       if (gsk_path_get_bounds (path, &bounds))
         {
           GdkRGBA color = { 0, 0, 0, 1 };
+          GskFillRule clip_rule;
 
-          gtk_snapshot_push_fill (context->snapshot, path, context->clip_rule);
+          clip_rule = svg_enum_get (shape->current[SHAPE_ATTR_CLIP_RULE]);
+          gtk_snapshot_push_fill (context->snapshot, path, clip_rule);
           gtk_snapshot_append_color (context->snapshot, &color, &bounds);
           gtk_snapshot_pop (context->snapshot);
         }
@@ -12212,7 +12207,6 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.weight = self->weight >= 1 ? self->weight : weight;
   paint_context.op = RENDERING;
   paint_context.op_stack = NULL;
-  paint_context.clip_rule = GSK_FILL_RULE_WINDING;
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
 
