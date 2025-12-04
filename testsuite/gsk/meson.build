@@ -563,6 +563,7 @@ if os_linux
     'composite-after.node',
     'composite-before.node',
     'copied-no-offload.node',
+    'copy-allows-offload.node',
     'deep.node',
     'move.node',
     'nested.node',

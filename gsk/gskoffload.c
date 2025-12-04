@@ -637,6 +637,7 @@ visit_node (GskOffload    *self,
       break;
 
     case GSK_DEBUG_NODE:
+    case GSK_COPY_NODE:
       /* keep going */
       visit_children (self, node);
       break;
@@ -653,7 +654,6 @@ visit_node (GskOffload    *self,
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
     case GSK_COMPONENT_TRANSFER_NODE:
-    case GSK_COPY_NODE:
     case GSK_COMPOSITE_NODE:
       /* cannot offload */
       {
