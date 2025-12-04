@@ -4969,6 +4969,10 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STOP_OPACITY].initial_value = svg_number_new (1);
 }
 
+/* Some attributes use different names for different shapes:
+ * SHAPE_ATTR_TRANSFORM: transform vs gradientTransform
+ * SHAPE_ATTR_UNITS: gradientUnits vs clipPathUnits vs maskContentUnits
+ */
 static gboolean
 shape_attr_lookup (const char *name,
                    ShapeAttr  *attr,
@@ -4976,7 +4980,17 @@ shape_attr_lookup (const char *name,
 {
   if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
       strcmp (name, "gradientTransform") == 0)
-    name = "transform";
+    {
+      *attr = SHAPE_ATTR_TRANSFORM;
+      return TRUE;
+    }
+
+  if (type == SHAPE_CLIP_PATH &&
+      strcmp (name, "clipPathUnits") == 0)
+    {
+      *attr = SHAPE_ATTR_UNITS;
+      return TRUE;
+    }
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
@@ -4986,6 +5000,7 @@ shape_attr_lookup (const char *name,
           return TRUE;
         }
     }
+
   return FALSE;
 }
 
@@ -4996,6 +5011,9 @@ shape_attr_get_presentation (ShapeAttr attr,
   if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
       attr == SHAPE_ATTR_TRANSFORM)
     return "gradientTransform";
+
+  if (type == SHAPE_CLIP_PATH && attr == SHAPE_ATTR_UNITS)
+    return "clipPathUnits";
 
   return shape_attrs[attr].name;
 }
@@ -5276,6 +5294,12 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
+  if (type == SHAPE_CLIP_PATH)
+    {
+      if (attr == SHAPE_ATTR_UNITS)
+        return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
+    }
+
   return shape_attrs[attr].initial_value;
 }
 
@@ -5348,7 +5372,8 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_POLYLINE || type == SHAPE_POLYGON;
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_UNITS:
-      return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
+      return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
+             type == SHAPE_CLIP_PATH;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
@@ -11576,6 +11601,7 @@ push_context (Shape        *shape,
       push_op (context, CLIPPING, svg_enum_get (shape->current[SHAPE_ATTR_CLIP_RULE]));
       gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
 
+      /* Clip mask - see language in the spec about 'raw geometry' */
       if (clip->kind == CLIP_PATH)
         {
           gtk_snapshot_append_fill (context->snapshot,
@@ -11585,7 +11611,27 @@ push_context (Shape        *shape,
         }
       else
         {
+          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            {
+              graphene_rect_t bounds;
+              GskPath *path;
+
+              path = shape_get_current_path (shape, context->viewport);
+              if (!gsk_path_get_bounds (path, &bounds))
+                graphene_rect_init_from_rect (&bounds, graphene_rect_zero ());
+              gsk_path_unref (path);
+
+              gtk_snapshot_save (context->snapshot);
+              gtk_snapshot_translate (context->snapshot, &bounds.origin);
+              gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+            }
+
           render_shape (clip->ref.shape, context);
+
+          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            {
+              gtk_snapshot_restore (context->snapshot);
+            }
         }
 
       gtk_snapshot_pop (context->snapshot);
@@ -12012,7 +12058,6 @@ paint_shape (Shape        *shape,
     {
       graphene_rect_t bounds;
 
-      /* Clip mask - see language in the spec about 'raw geometry' */
       if (gsk_path_get_bounds (path, &bounds))
         {
           GdkRGBA color = { 0, 0, 0, 1 };
@@ -12021,7 +12066,6 @@ paint_shape (Shape        *shape,
           gtk_snapshot_append_color (context->snapshot, &color, &bounds);
           gtk_snapshot_pop (context->snapshot);
         }
-
     }
 
   gsk_path_unref (path);
