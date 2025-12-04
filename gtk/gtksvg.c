@@ -639,7 +639,7 @@ parse_numbers2 (const char *value,
   GArray *array;
   GStrv strv;
 
-  strv = g_strsplit (value, sep, 0);
+  strv = g_strsplit_set (value, sep, 0);
 
   array = g_array_new (FALSE, FALSE, sizeof (double));
 
@@ -3923,7 +3923,7 @@ svg_points_parse (const char *value)
   if (strcmp (value, "none") == 0)
     return svg_path_new_none ();
 
-  values = parse_numbers2 (value, " ", -DBL_MAX, DBL_MAX);
+  values = parse_numbers2 (value, ", ", -DBL_MAX, DBL_MAX);
   if (values->len % 2 != 0)
     g_array_remove_index (values, values->len - 1);
 
@@ -9046,6 +9046,7 @@ consume_to_semicolon (const char **p)
 
 static void
 parse_style_attr (Shape               *shape,
+                  gboolean             for_stop,
                   const char          *style_attr,
                   ParserData          *data,
                   GMarkupParseContext *context)
@@ -9105,9 +9106,19 @@ parse_style_attr (Shape               *shape,
                                      shape_attr_get_presentation (attr, shape->type),
                                      prop_val);
         }
-      else
+      else if (shape_has_attr (shape->type, attr) ||
+               (for_stop && attr >= SHAPE_ATTR_STOP_OFFSET &&
+                            attr <= SHAPE_ATTR_STOP_OPACITY))
         {
           shape_set_base_value (shape, attr, value);
+          svg_value_unref (value);
+        }
+      else
+        {
+          gtk_svg_invalid_attribute (data->svg, context,
+                                     "style", "'%s' is not an attribute of <%s>",
+                                     shape_attr_get_presentation (attr, shape->type),
+                                     shape_types[shape->type].name);
           svg_value_unref (value);
         }
 
@@ -9185,7 +9196,7 @@ parse_shape_attrs (Shape                *shape,
     }
 
   if (style_attr)
-    parse_style_attr (shape, style_attr, data, context);
+    parse_style_attr (shape, FALSE, style_attr, data, context);
 
   if (class_attr && *class_attr)
     {
@@ -10112,7 +10123,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       if (style_attr)
-        parse_style_attr (data->current_shape, style_attr, data, context);
+        parse_style_attr (data->current_shape, TRUE, style_attr, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -12021,6 +12032,9 @@ render_shape (Shape        *shape,
               PaintContext *context)
 {
   if (!shape->display)
+    return;
+
+  if (shape->type == SHAPE_DEFS)
     return;
 
   if (context->op == RENDERING && shape_types[shape->type].never_rendered)
