@@ -5521,6 +5521,8 @@ shape_get_path (Shape                 *shape,
     case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
+      g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -5603,6 +5605,8 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
+          g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
+          break;
         default:
           g_assert_not_reached ();
         }
@@ -5679,6 +5683,70 @@ shape_get_current_measure (Shape                 *shape,
     }
 
   return gsk_path_measure_ref (shape->measure);
+}
+
+static gboolean
+shape_get_current_bounds (Shape                 *shape,
+                          const graphene_size_t *viewport,
+                          graphene_rect_t       *bounds)
+{
+  gboolean ret = FALSE;
+
+  graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
+
+  switch (shape->type)
+    {
+    case SHAPE_LINE:
+    case SHAPE_POLYLINE:
+    case SHAPE_POLYGON:
+    case SHAPE_RECT:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+      {
+        GskPath *path = shape_get_current_path (shape, viewport);
+        ret = gsk_path_get_tight_bounds (path, bounds);
+        gsk_path_unref (path);
+      }
+      break;
+    case SHAPE_USE:
+      {
+        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        if (use_shape)
+          ret = shape_get_current_bounds (use_shape, viewport, bounds);
+      }
+      break;
+    case SHAPE_GROUP:
+    case SHAPE_CLIP_PATH:
+    case SHAPE_MASK:
+      {
+        for (unsigned int i = 0; i < shape->shapes->len; i++)
+          {
+            Shape *sh = g_ptr_array_index (shape->shapes, i);
+            GskTransform *transform;
+            graphene_rect_t b;
+
+            if (shape_get_current_bounds (sh, viewport, &b))
+              {
+                transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
+                gsk_transform_transform_bounds (transform, &b, bounds);
+                graphene_rect_union (&b, bounds, bounds);
+                gsk_transform_unref (transform);
+              }
+          }
+        ret = TRUE;
+      }
+      break;
+    case SHAPE_DEFS:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+      g_error ("attempt to get the bounds of a %s", shape_types[shape->type].name);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return ret;
 }
 
 static unsigned int
@@ -11617,16 +11685,14 @@ push_context (Shape        *shape,
           if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
             {
               graphene_rect_t bounds;
-              GskPath *path;
-
-              path = shape_get_current_path (shape, context->viewport);
-              if (!gsk_path_get_bounds (path, &bounds))
-                graphene_rect_init_from_rect (&bounds, graphene_rect_zero ());
-              gsk_path_unref (path);
 
               gtk_snapshot_save (context->snapshot);
-              gtk_snapshot_translate (context->snapshot, &bounds.origin);
-              gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+
+              if (shape_get_current_bounds (shape, context->viewport, &bounds))
+                {
+                  gtk_snapshot_translate (context->snapshot, &bounds.origin);
+                  gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+                }
             }
 
           render_shape (clip->ref.shape, context);
@@ -11651,16 +11717,14 @@ push_context (Shape        *shape,
       if (svg_enum_get (mask->shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
           graphene_rect_t bounds;
-          GskPath *path;
-
-          path = shape_get_current_path (shape, context->viewport);
-          if (!gsk_path_get_bounds (path, &bounds))
-            graphene_rect_init_from_rect (&bounds, graphene_rect_zero ());
-          gsk_path_unref (path);
 
           gtk_snapshot_save (context->snapshot);
-          gtk_snapshot_translate (context->snapshot, &bounds.origin);
-          gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+
+          if (shape_get_current_bounds (shape, context->viewport, &bounds))
+            {
+              gtk_snapshot_translate (context->snapshot, &bounds.origin);
+              gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+            }
         }
 
       render_shape (mask->shape, context);

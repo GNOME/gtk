@@ -691,6 +691,9 @@ add_tight_bounds (GskPathOperation        op,
   GskCurve c;
   GskBoundingBox b;
 
+  if (op == GSK_PATH_MOVE)
+    return TRUE;
+
   gsk_curve_init_foreach (&c, op, pts, n_pts, weight);
   gsk_curve_get_tight_bounds (&c, &b);
   gsk_bounding_box_union (&b, bounds, bounds);
