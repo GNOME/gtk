@@ -1048,7 +1048,7 @@ gtk_image_snapshot (GtkWidget   *widget,
       if (baseline == -1)
         y = floor(height - ceil (h)) / 2;
       else
-        y = CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - ceil (h));
+        y = CLAMP (baseline - floor (ceil (h) * gtk_image_get_baseline_align (image)), 0, height - ceil (h));
 
       if (x != 0 || y != 0)
         {
