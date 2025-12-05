@@ -467,8 +467,6 @@ gsk_renderer_render (GskRenderer          *renderer,
   else
     offload = NULL;
 
-  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
-
   if (region == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
       cairo_region_union_rectangle (clip,
@@ -482,6 +480,8 @@ gsk_renderer_render (GskRenderer          *renderer,
     {
       gsk_render_node_diff (priv->prev_node, root, &(GskDiffData) { clip, NULL, priv->surface });
     }
+
+  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
 
   renderer_class->render (renderer, root, clip);
 
