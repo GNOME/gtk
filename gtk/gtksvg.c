@@ -11666,6 +11666,17 @@ push_context (Shape        *shape,
   if (svg_number_get (opacity, 1) != 1)
     gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
 
+
+  if (tf->transforms[0].type != TRANSFORM_NONE)
+    {
+      GskTransform *transform;
+
+      transform = svg_transform_get_gsk (tf);
+      gtk_snapshot_save (context->snapshot);
+      gtk_snapshot_transform (context->snapshot, transform);
+      gsk_transform_unref (transform);
+    }
+
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
     {
@@ -11738,16 +11749,6 @@ push_context (Shape        *shape,
 
       pop_op (context);
     }
-
-  if (tf->transforms[0].type != TRANSFORM_NONE)
-    {
-      GskTransform *transform;
-
-      transform = svg_transform_get_gsk (tf);
-      gtk_snapshot_save (context->snapshot);
-      gtk_snapshot_transform (context->snapshot, transform);
-      gsk_transform_unref (transform);
-    }
 }
 
 static void
@@ -11760,6 +11761,13 @@ pop_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
 
+  if (clip->kind == CLIP_PATH ||
+      (clip->kind == CLIP_REF && clip->ref.shape != NULL))
+    gtk_snapshot_pop (context->snapshot);
+
+  if (mask->kind != MASK_NONE && (mask->shape != NULL))
+    gtk_snapshot_pop (context->snapshot);
+
   if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
 
@@ -11769,13 +11777,6 @@ pop_context (Shape        *shape,
   for (unsigned int i = 0; i < filter->n_functions; i++)
     if (filter->functions[i].kind != FILTER_NONE)
       gtk_snapshot_pop (context->snapshot);
-
-  if (clip->kind == CLIP_PATH ||
-      (clip->kind == CLIP_REF && clip->ref.shape != NULL))
-    gtk_snapshot_pop (context->snapshot);
-
-  if (mask->kind != MASK_NONE && (mask->shape != NULL))
-    gtk_snapshot_pop (context->snapshot);
 }
 
 static void

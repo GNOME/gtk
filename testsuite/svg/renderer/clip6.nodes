@@ -1,0 +1,93 @@
+mask {
+  source: transform {
+    transform: translate(0, 12.5) scale(0.208333);
+    child: fill {
+      child: color {
+        bounds: 10 10 430 80;
+        color: rgb(255,0,136);
+      }
+      path: "\
+M 10 10 h 430 v 80 h -430 z";
+      fill-rule: winding;
+    }
+  }
+  mask: transform {
+    transform: translate(0, 12.5) scale(0.208333) translate(10, 10) scale(430, 80);
+    child: fill {
+      child: color {
+        bounds: 0.25 0.5 0.6 1;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0.25 0.5 h 0.600000024 v 1 h -0.600000024 z";
+      fill-rule: winding;
+    }
+  }
+}
+transform {
+  transform: translate(0, 12.5) scale(0.208333);
+  child: container {
+    stroke {
+      child: color {
+        bounds: 115 48 262 44;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 117 50 h 258 v 40 h -258 z";
+      line-width: 4;
+      line-cap: butt;
+      line-join: miter;
+    }
+    mask {
+      source: transform {
+        transform: translate(100, 200) rotate(315);
+        child: fill {
+          child: color {
+            bounds: 0 0 120 120;
+            color: rgb(0,0,255);
+          }
+          path: "\
+M 0 0 h 120 v 120 h -120 z";
+          fill-rule: winding;
+        }
+      }
+      mask: transform {
+        transform: translate(100, 200) rotate(315);
+        child: fill {
+          child: color {
+            bounds: 60 60 80 80;
+            color: rgb(0,0,0);
+          }
+          path: "\
+M 60 60 h 80 v 80 h -80 z";
+          fill-rule: winding;
+        }
+      }
+    }
+    transform {
+      transform: translate(100, 200) rotate(315);
+      child: stroke {
+        child: color {
+          bounds: 58 58 64 64;
+          color: rgb(0,0,0);
+        }
+        path: "\
+M 60 60 h 60 v 60 h -60 z";
+        line-width: 4;
+        line-cap: butt;
+        line-join: miter;
+      }
+    }
+    stroke {
+      child: color {
+        bounds: 0.5 0.5 479 359;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 1 1 h 478 v 358 h -478 z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
