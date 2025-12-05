@@ -3361,30 +3361,17 @@ gsk_transform_node_diff (GskRenderNode *node1,
 
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       {
-        cairo_region_t *sub;
         float dx, dy;
         gsk_transform_to_translate (self1->transform, &dx, &dy);
-        sub = cairo_region_create ();
-        gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->surface });
-        cairo_region_translate (sub, floorf (dx), floorf (dy));
-        if (floorf (dx) != dx)
+        if (floorf (dx) == dx && floorf (dy) != dy)
           {
-            cairo_region_t *tmp = cairo_region_copy (sub);
-            cairo_region_translate (tmp, 1, 0);
-            cairo_region_union (sub, tmp);
-            cairo_region_destroy (tmp);
+            cairo_region_translate (data->region, -dx, -dy);
+            gsk_render_node_diff (self1->child, self2->child, data);
+            cairo_region_translate (data->region, dx, dy);
+            break;
           }
-        if (floorf (dy) != dy)
-          {
-            cairo_region_t *tmp = cairo_region_copy (sub);
-            cairo_region_translate (tmp, 0, 1);
-            cairo_region_union (sub, tmp);
-            cairo_region_destroy (tmp);
-          }
-        cairo_region_union (data->region, sub);
-        cairo_region_destroy (sub);
       }
-      break;
+      G_GNUC_FALLTHROUGH;
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
@@ -3392,6 +3379,7 @@ gsk_transform_node_diff (GskRenderNode *node1,
         float scale_x, scale_y, dx, dy;
         gsk_transform_to_affine (self1->transform, &scale_x, &scale_y, &dx, &dy);
         sub = cairo_region_create ();
+        region_union_region_affine (sub, data->region, 1.0f / scale_x, 1.0f / scale_y, - dx / scale_x, - dy / scale_y);
         gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->surface });
         region_union_region_affine (data->region, sub, scale_x, scale_y, dx, dy);
         cairo_region_destroy (sub);
