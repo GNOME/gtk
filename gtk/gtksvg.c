@@ -9780,19 +9780,38 @@ start_element_cb (GMarkupParseContext  *context,
       width = data->svg->view_box.size.width;
       if (width_attr)
         {
-          if (!parse_length (width_attr, 0, DBL_MAX, &width))
+          SvgValue *value;
+
+          value = svg_number_parse (width_attr, 0, DBL_MAX, PERCENTAGE | LENGTH);
+          if (value)
+            {
+              width = svg_number_get (value, data->svg->view_box.size.width);
+              svg_value_unref (value);
+            }
+          else
             gtk_svg_invalid_attribute (data->svg, context, "width", NULL);
         }
 
       height = data->svg->view_box.size.height;
       if (height_attr)
         {
-          if (!parse_length (height_attr, 0, DBL_MAX, &height))
+          SvgValue *value;
+
+          value = svg_number_parse (height_attr, 0, DBL_MAX, PERCENTAGE | LENGTH);
+          if (value)
+            {
+              height = svg_number_get (value, data->svg->view_box.size.height);
+              svg_value_unref (value);
+            }
+          else
             gtk_svg_invalid_attribute (data->svg, context, "height", NULL);
         }
 
       data->svg->width = width;
       data->svg->height = height;
+
+      data->svg->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
+      data->svg->meet_or_slice = MEET;
 
       if (preserve_aspect_ratio_attr)
         {
