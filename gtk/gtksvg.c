@@ -1782,6 +1782,42 @@ svg_blend_mode_parse (const char *string)
   return NULL;
 }
 
+typedef enum {
+  ISOLATION_AUTO,
+  ISOLATION_ISOLATE,
+} Isolation;
+
+static const SvgValueClass SVG_ISOLATION_CLASS = {
+  "SvgIsolation",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum isolation_values[] = {
+  { { &SVG_ISOLATION_CLASS, 1 }, ISOLATION_AUTO, "auto" },
+  { { &SVG_ISOLATION_CLASS, 1 }, ISOLATION_ISOLATE, "isolate" },
+};
+
+static SvgValue *
+svg_isolation_new (Isolation mode)
+{
+  return svg_value_ref ((SvgValue *) &isolation_values[mode]);
+}
+
+static SvgValue *
+svg_isolation_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (isolation_values); i++)
+    {
+      if (strcmp (string, isolation_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &isolation_values[i]);
+    }
+  return NULL;
+}
+
 /* }}} */
 /* {{{ Transforms */
 
@@ -4796,6 +4832,14 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 1,
     .parse_value = svg_blend_mode_parse,
   },
+  { .id = SHAPE_ATTR_ISOLATION,
+    .name = "isolation",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 1,
+    .parse_value = svg_isolation_parse,
+  },
   { .id = SHAPE_ATTR_HREF,
     .name = "href",
     .inherited = 0,
@@ -5045,6 +5089,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STROKE_DASHOFFSET].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_PAINT_ORDER].initial_value = svg_paint_order_new (PAINT_ORDER_NORMAL);
   shape_attrs[SHAPE_ATTR_BLEND_MODE].initial_value = svg_blend_mode_new (GSK_BLEND_MODE_DEFAULT);
+  shape_attrs[SHAPE_ATTR_ISOLATION].initial_value = svg_isolation_new (ISOLATION_AUTO);
   shape_attrs[SHAPE_ATTR_HREF].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_PATH_LENGTH].initial_value = svg_number_new (-1);
   shape_attrs[SHAPE_ATTR_PATH].initial_value = svg_path_new_none ();
@@ -11768,6 +11813,7 @@ push_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+  SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     {
@@ -11791,6 +11837,11 @@ push_context (Shape        *shape,
 
   if (context->op != CLIPPING)
     {
+      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+        {
+          gtk_snapshot_push_opacity (context->snapshot, 1);
+        }
+
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
         {
           graphene_rect_t bounds;
@@ -11947,6 +11998,7 @@ pop_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+  SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
 
   if (context->op != CLIPPING)
     {
@@ -11972,6 +12024,9 @@ pop_context (Shape        *shape,
           gtk_snapshot_pop (context->snapshot);
           gtk_snapshot_pop (context->snapshot);
         }
+
+      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+        gtk_snapshot_pop (context->snapshot);
     }
 
   if (shape->type == SHAPE_USE)

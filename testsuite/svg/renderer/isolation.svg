@@ -1,0 +1,22 @@
+<svg width="260" height="260" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="260" height="200" fill="lightgray" />
+
+  <g style='isolation: auto'>
+    <rect x="20" y="20" width="80" height="80"
+          fill='red'
+          style='mix-blend-mode: multiply'/>
+    <circle cx="80" cy="80" r="50"
+          fill='blue'
+          style='mix-blend-mode: screen'/>
+  </g>
+
+  <g style='isolation: isolate' transform='translate(130,0)' >
+    <rect x="20" y="20" width="80" height="80"
+          fill='red'
+          style='mix-blend-mode: multiply'/>
+    <circle cx="80" cy="80" r="50"
+          fill='blue'
+          style='mix-blend-mode: screen'/>
+  </g>
+
+</svg>

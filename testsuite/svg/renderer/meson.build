@@ -27,6 +27,7 @@ test_data = [
   'initial-state2.svg',
   'initial-state3.svg',
   'initial-state4.svg',
+  'isolation.svg',
   'line.svg',
   'linear-gradient1.svg',
   'linear-gradient2.svg',
