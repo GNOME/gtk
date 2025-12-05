@@ -492,6 +492,8 @@ gsk_repeat_node_diff (GskRenderNode *node1,
 
       sub = cairo_region_create();
       gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->copies, data->surface });
+      gsk_rect_to_cairo_grow (&self1->child_bounds, &clip_rect);
+      cairo_region_intersect_rectangle (sub, &clip_rect);
       if (cairo_region_is_empty (sub))
         {
           cairo_region_destroy (sub);
