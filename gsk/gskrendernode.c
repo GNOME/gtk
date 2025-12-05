@@ -38,6 +38,7 @@
 #include "gskrendernodeprivate.h"
 
 #include "gskcontainernodeprivate.h"
+#include "gskcopypasteutilsprivate.h"
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeparserprivate.h"
@@ -422,6 +423,8 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
 
   ccs = gdk_color_state_get_rendering_color_state (color_state);
 
+  node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
+
   if (gdk_color_state_equal (color_state, ccs))
     {
       gsk_render_node_draw_ccs (node, cr, ccs);
@@ -441,6 +444,8 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
       cairo_paint (cr);
       cairo_restore (cr);
     }
+
+  gsk_render_node_unref (node);
 }
 
 /**

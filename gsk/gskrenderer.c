@@ -38,7 +38,6 @@
 #include "gskdebugprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskoffloadprivate.h"
-#include "gskcopypasteutilsprivate.h"
 
 #include "gskenumtypes.h"
 
@@ -412,11 +411,7 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
   g_return_val_if_fail (viewport->size.width > 0, NULL);
   g_return_val_if_fail (viewport->size.height > 0, NULL);
 
-  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
-
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
-
-  gsk_render_node_unref (root);
 
   return texture;
 }
@@ -481,14 +476,12 @@ gsk_renderer_render (GskRenderer          *renderer,
       gsk_render_node_diff (priv->prev_node, root, &(GskDiffData) { clip, NULL, priv->surface });
     }
 
-  root = gsk_render_node_replace_copy_paste (gsk_render_node_ref (root));
-
   renderer_class->render (renderer, root, clip);
 
   g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
   cairo_region_destroy (clip);
   g_clear_pointer (&offload, gsk_offload_free);
-  priv->prev_node = root;
+  priv->prev_node = gsk_render_node_ref (root);
 }
 
 static GType
