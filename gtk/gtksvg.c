@@ -11611,61 +11611,63 @@ push_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
 
-  for (unsigned int i = filter->n_functions; i > 0; i--)
+  if (context->op != CLIPPING)
     {
-      FilterFunction *f = &filter->functions[i - 1];
-
-      switch (f->kind)
+      for (unsigned int i = filter->n_functions; i > 0; i--)
         {
-        case FILTER_NONE:
-          break;
-        case FILTER_BLUR:
-          gtk_snapshot_push_blur (context->snapshot, f->value);
-          break;
-        case FILTER_OPACITY:
-          gtk_snapshot_push_opacity (context->snapshot, f->value);
-          break;
-        case FILTER_BRIGHTNESS:
-        case FILTER_CONTRAST:
-        case FILTER_GRAYSCALE:
-        case FILTER_HUE_ROTATE:
-        case FILTER_INVERT:
-        case FILTER_SATURATE:
-        case FILTER_SEPIA:
-          {
-            graphene_matrix_t matrix;
-            graphene_vec4_t offset;
-            svg_filter_get_matrix (f, &matrix, &offset);
-            gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
-          }
-          break;
-        case FILTER_ALPHA_LEVEL:
-          {
-            GskComponentTransfer *identity, *alpha;
-            float values[10];
+          FilterFunction *f = &filter->functions[i - 1];
 
-            identity = gsk_component_transfer_new_identity ();
-            for (unsigned int j = 0; j < 10; j++)
+          switch (f->kind)
+            {
+            case FILTER_NONE:
+              break;
+            case FILTER_BLUR:
+              gtk_snapshot_push_blur (context->snapshot, f->value);
+              break;
+            case FILTER_OPACITY:
+              gtk_snapshot_push_opacity (context->snapshot, f->value);
+              break;
+            case FILTER_BRIGHTNESS:
+            case FILTER_CONTRAST:
+            case FILTER_GRAYSCALE:
+            case FILTER_HUE_ROTATE:
+            case FILTER_INVERT:
+            case FILTER_SATURATE:
+            case FILTER_SEPIA:
               {
-                if ((j + 1) / 10.0 <= f->value)
-                  values[j] = 0;
-                else
-                  values[j] = 1;
+                graphene_matrix_t matrix;
+                graphene_vec4_t offset;
+                svg_filter_get_matrix (f, &matrix, &offset);
+                gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
               }
-            alpha = gsk_component_transfer_new_discrete (10, values);
-            gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
-            gsk_component_transfer_free (identity);
-            gsk_component_transfer_free (alpha);
-          }
-          break;
-        default:
-          g_assert_not_reached ();
+              break;
+            case FILTER_ALPHA_LEVEL:
+              {
+                GskComponentTransfer *identity, *alpha;
+                float values[10];
+
+                identity = gsk_component_transfer_new_identity ();
+                for (unsigned int j = 0; j < 10; j++)
+                  {
+                    if ((j + 1) / 10.0 <= f->value)
+                      values[j] = 0;
+                    else
+                      values[j] = 1;
+                  }
+                alpha = gsk_component_transfer_new_discrete (10, values);
+                gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
+                gsk_component_transfer_free (identity);
+                gsk_component_transfer_free (alpha);
+              }
+              break;
+            default:
+              g_assert_not_reached ();
+            }
         }
+
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
     }
-
-  if (svg_number_get (opacity, 1) != 1)
-    gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
-
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     {
@@ -11771,12 +11773,15 @@ pop_context (Shape        *shape,
   if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
 
-  if (svg_number_get (opacity, 1) != 1)
-    gtk_snapshot_pop (context->snapshot);
+  if (context->op != CLIPPING)
+    {
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_pop (context->snapshot);
 
-  for (unsigned int i = 0; i < filter->n_functions; i++)
-    if (filter->functions[i].kind != FILTER_NONE)
-      gtk_snapshot_pop (context->snapshot);
+      for (unsigned int i = 0; i < filter->n_functions; i++)
+        if (filter->functions[i].kind != FILTER_NONE)
+          gtk_snapshot_pop (context->snapshot);
+    }
 }
 
 static void
