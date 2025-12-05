@@ -11779,6 +11779,16 @@ push_context (Shape        *shape,
       gsk_transform_unref (transform);
     }
 
+  if (shape->type == SHAPE_USE)
+    {
+      double x, y;
+
+      x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
+      y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
+      gtk_snapshot_save (context->snapshot);
+      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
+    }
+
   if (context->op != CLIPPING)
     {
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
@@ -11963,6 +11973,9 @@ pop_context (Shape        *shape,
           gtk_snapshot_pop (context->snapshot);
         }
     }
+
+  if (shape->type == SHAPE_USE)
+    gtk_snapshot_restore (context->snapshot);
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
@@ -12280,11 +12293,6 @@ paint_shape (Shape        *shape,
         {
           Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
           ComputeContext use_context;
-          double x, y;
-          x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
-          y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
-          gtk_snapshot_save (context->snapshot);
-          gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
 
           /* FIXME: this isn't the best way of doing this */
           use_context.svg = context->svg;
@@ -12296,8 +12304,6 @@ paint_shape (Shape        *shape,
           compute_current_values_for_shape (use_shape, &use_context);
 
           render_shape (use_shape, context);
-
-          gtk_snapshot_restore (context->snapshot);
         }
       return;
     }
