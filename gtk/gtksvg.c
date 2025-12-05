@@ -1737,6 +1737,51 @@ svg_paint_order_parse (const char *string)
     return NULL;
 }
 
+static const SvgValueClass SVG_BLEND_MODE_CLASS = {
+  "SvgBlendMode",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum blend_mode_values[] = {
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DEFAULT, "normal" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_MULTIPLY, "multiply" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SCREEN, "screen" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_OVERLAY, "overlay" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DARKEN, "darken" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_LIGHTEN, "lighten" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR_DODGE, "color-dodge" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR_BURN, "color-burn" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_HARD_LIGHT, "hard-light" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SOFT_LIGHT, "soft-light" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DIFFERENCE, "difference" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_EXCLUSION, "exclusiohn" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR, "color" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_HUE, "hue" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SATURATION, "saturation" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_LUMINOSITY, "luminosity" },
+};
+
+static SvgValue *
+svg_blend_mode_new (GskBlendMode mode)
+{
+  return svg_value_ref ((SvgValue *) &blend_mode_values[mode]);
+}
+
+static SvgValue *
+svg_blend_mode_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (blend_mode_values); i++)
+    {
+      if (strcmp (string, blend_mode_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &blend_mode_values[i]);
+    }
+  return NULL;
+}
+
 /* }}} */
 /* {{{ Transforms */
 
@@ -4743,6 +4788,14 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_paint_order_parse,
   },
+  { .id = SHAPE_ATTR_BLEND_MODE,
+    .name = "mix-blend-mode",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 1,
+    .parse_value = svg_blend_mode_parse,
+  },
   { .id = SHAPE_ATTR_HREF,
     .name = "href",
     .inherited = 0,
@@ -4991,6 +5044,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STROKE_DASHARRAY].initial_value = svg_dash_array_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_DASHOFFSET].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_PAINT_ORDER].initial_value = svg_paint_order_new (PAINT_ORDER_NORMAL);
+  shape_attrs[SHAPE_ATTR_BLEND_MODE].initial_value = svg_blend_mode_new (GSK_BLEND_MODE_DEFAULT);
   shape_attrs[SHAPE_ATTR_HREF].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_PATH_LENGTH].initial_value = svg_number_new (-1);
   shape_attrs[SHAPE_ATTR_PATH].initial_value = svg_path_new_none ();
@@ -11713,64 +11767,7 @@ push_context (Shape        *shape,
   SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
-
-  if (context->op != CLIPPING)
-    {
-      for (unsigned int i = filter->n_functions; i > 0; i--)
-        {
-          FilterFunction *f = &filter->functions[i - 1];
-
-          switch (f->kind)
-            {
-            case FILTER_NONE:
-              break;
-            case FILTER_BLUR:
-              gtk_snapshot_push_blur (context->snapshot, f->value);
-              break;
-            case FILTER_OPACITY:
-              gtk_snapshot_push_opacity (context->snapshot, f->value);
-              break;
-            case FILTER_BRIGHTNESS:
-            case FILTER_CONTRAST:
-            case FILTER_GRAYSCALE:
-            case FILTER_HUE_ROTATE:
-            case FILTER_INVERT:
-            case FILTER_SATURATE:
-            case FILTER_SEPIA:
-              {
-                graphene_matrix_t matrix;
-                graphene_vec4_t offset;
-                svg_filter_get_matrix (f, &matrix, &offset);
-                gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
-              }
-              break;
-            case FILTER_ALPHA_LEVEL:
-              {
-                GskComponentTransfer *identity, *alpha;
-                float values[10];
-
-                identity = gsk_component_transfer_new_identity ();
-                for (unsigned int j = 0; j < 10; j++)
-                  {
-                    if ((j + 1) / 10.0 <= f->value)
-                      values[j] = 0;
-                    else
-                      values[j] = 1;
-                  }
-                alpha = gsk_component_transfer_new_discrete (10, values);
-                gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
-                gsk_component_transfer_free (identity);
-                gsk_component_transfer_free (alpha);
-              }
-              break;
-            default:
-              g_assert_not_reached ();
-            }
-        }
-
-      if (svg_number_get (opacity, 1) != 1)
-        gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
-    }
+  SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     {
@@ -11780,6 +11777,21 @@ push_context (Shape        *shape,
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_transform (context->snapshot, transform);
       gsk_transform_unref (transform);
+    }
+
+  if (context->op != CLIPPING)
+    {
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        {
+          graphene_rect_t bounds;
+
+          shape_get_current_bounds (shape, context->viewport, &bounds);
+
+          gtk_snapshot_push_copy (context->snapshot);
+          gtk_snapshot_push_blend (context->snapshot, svg_enum_get (blend));
+          gtk_snapshot_append_paste (context->snapshot, &bounds, 0);
+          gtk_snapshot_pop (context->snapshot);
+        }
     }
 
   if (clip->kind == CLIP_PATH ||
@@ -11854,6 +11866,65 @@ push_context (Shape        *shape,
 
       pop_op (context);
     }
+
+  if (context->op != CLIPPING)
+    {
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
+
+      for (unsigned int i = filter->n_functions; i > 0; i--)
+        {
+          FilterFunction *f = &filter->functions[i - 1];
+
+          switch (f->kind)
+            {
+            case FILTER_NONE:
+              break;
+            case FILTER_BLUR:
+              gtk_snapshot_push_blur (context->snapshot, f->value);
+              break;
+            case FILTER_OPACITY:
+              gtk_snapshot_push_opacity (context->snapshot, f->value);
+              break;
+            case FILTER_BRIGHTNESS:
+            case FILTER_CONTRAST:
+            case FILTER_GRAYSCALE:
+            case FILTER_HUE_ROTATE:
+            case FILTER_INVERT:
+            case FILTER_SATURATE:
+            case FILTER_SEPIA:
+              {
+                graphene_matrix_t matrix;
+                graphene_vec4_t offset;
+                svg_filter_get_matrix (f, &matrix, &offset);
+                gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
+              }
+              break;
+            case FILTER_ALPHA_LEVEL:
+              {
+                GskComponentTransfer *identity, *alpha;
+                float values[10];
+
+                identity = gsk_component_transfer_new_identity ();
+                for (unsigned int j = 0; j < 10; j++)
+                  {
+                    if ((j + 1) / 10.0 <= f->value)
+                      values[j] = 0;
+                    else
+                      values[j] = 1;
+                  }
+                alpha = gsk_component_transfer_new_discrete (10, values);
+                gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
+                gsk_component_transfer_free (identity);
+                gsk_component_transfer_free (alpha);
+              }
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+    }
+
 }
 
 static void
@@ -11865,26 +11936,36 @@ pop_context (Shape        *shape,
   SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
+  SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+
+  if (context->op != CLIPPING)
+    {
+      for (unsigned int i = 0; i < filter->n_functions; i++)
+        if (filter->functions[i].kind != FILTER_NONE)
+          gtk_snapshot_pop (context->snapshot);
+
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_pop (context->snapshot);
+    }
+
+  if (mask->kind != MASK_NONE && (mask->shape != NULL))
+    gtk_snapshot_pop (context->snapshot);
 
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
     gtk_snapshot_pop (context->snapshot);
 
-  if (mask->kind != MASK_NONE && (mask->shape != NULL))
-    gtk_snapshot_pop (context->snapshot);
+  if (context->op != CLIPPING)
+    {
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        {
+          gtk_snapshot_pop (context->snapshot);
+          gtk_snapshot_pop (context->snapshot);
+        }
+    }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
-
-  if (context->op != CLIPPING)
-    {
-      if (svg_number_get (opacity, 1) != 1)
-        gtk_snapshot_pop (context->snapshot);
-
-      for (unsigned int i = 0; i < filter->n_functions; i++)
-        if (filter->functions[i].kind != FILTER_NONE)
-          gtk_snapshot_pop (context->snapshot);
-    }
 }
 
 static void
@@ -12387,7 +12468,11 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
   gtk_snapshot_scale (snapshot, sx, sy);
 
+  gtk_snapshot_push_opacity (snapshot, 1.0);
+
   render_shape (self->content, &paint_context);
+
+  gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_restore (snapshot);
 

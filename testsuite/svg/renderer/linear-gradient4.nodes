@@ -1,22 +1,27 @@
-fill {
-  child: linear-gradient {
-    bounds: 50 50 200 100;
-    start: 110 20;
-    end: 150 100;
-    stops: 0 rgb(0,0,0), 0.5 rgb(0,0,0), 0.5 rgb(255,255,255), 1 rgb(255,255,255);
-  }
-  path: "\
+opacity {
+  opacity: 1;
+  child: container {
+    fill {
+      child: linear-gradient {
+        bounds: 50 50 200 100;
+        start: 110 20;
+        end: 150 100;
+        stops: 0 rgb(0,0,0), 0.5 rgb(0,0,0), 0.5 rgb(255,255,255), 1 rgb(255,255,255);
+      }
+      path: "\
 M 50 50 h 200 v 100 h -200 z";
-  fill-rule: winding;
-}
-stroke {
-  child: color {
-    bounds: 49 49 202 102;
-    color: rgb(0,0,0);
-  }
-  path: "\
+      fill-rule: winding;
+    }
+    stroke {
+      child: color {
+        bounds: 49 49 202 102;
+        color: rgb(0,0,0);
+      }
+      path: "\
 M 50 50 h 200 v 100 h -200 z";
-  line-width: 2;
-  line-cap: butt;
-  line-join: miter;
+      line-width: 2;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
 }

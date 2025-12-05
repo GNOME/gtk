@@ -1,34 +1,39 @@
-fill {
-  child: color {
-    bounds: 10 10 80 80;
-    color: rgb(0,0,0);
-  }
-  path: "\
+opacity {
+  opacity: 1;
+  child: container {
+    fill {
+      child: color {
+        bounds: 10 10 80 80;
+        color: rgb(0,0,0);
+      }
+      path: "\
 M 10 10\
 L 90 90";
-  fill-rule: winding;
-}
-stroke {
-  child: color {
-    bounds: 6 6 88 88;
-    color: rgb(0,0,0);
-  }
-  path: "\
-M 10 10\
-L 90 90";
-  line-width: 1;
-  line-cap: butt;
-  line-join: miter;
-}
-transform {
-  transform: translate(50, 50) rotate(45) translate(-5, -5);
-  child: fill {
-    child: color {
-      bounds: -5 0 10 10;
-      color: rgb(255,0,0);
+      fill-rule: winding;
     }
-    path: "\
+    stroke {
+      child: color {
+        bounds: 6 6 88 88;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 10 10\
+L 90 90";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    transform {
+      transform: translate(50, 50) rotate(45) translate(-5, -5);
+      child: fill {
+        child: color {
+          bounds: -5 0 10 10;
+          color: rgb(255,0,0);
+        }
+        path: "\
 M 5 5 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
-    fill-rule: winding;
+        fill-rule: winding;
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ test_renderer = executable('test-svg-renderer',
 )
 
 test_data = [
+  'blend-mode.svg',
   'circle.svg',
   'circular.svg',
   'clip.svg',

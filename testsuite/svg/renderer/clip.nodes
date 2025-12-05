@@ -1,20 +1,23 @@
-mask {
-  source: fill {
-    child: color {
-      bounds: 20 20 80 80;
-      color: rgb(0,0,0);
-    }
-    path: "\
+opacity {
+  opacity: 1;
+  child: mask {
+    source: fill {
+      child: color {
+        bounds: 20 20 80 80;
+        color: rgb(0,0,0);
+      }
+      path: "\
 M 100 60 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-    fill-rule: winding;
-  }
-  mask: fill {
-    child: color {
-      bounds: 0 0 80 80;
-      color: rgb(0,0,0);
+      fill-rule: winding;
     }
-    path: "\
+    mask: fill {
+      child: color {
+        bounds: 0 0 80 80;
+        color: rgb(0,0,0);
+      }
+      path: "\
 M 80 40 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-    fill-rule: winding;
+      fill-rule: winding;
+    }
   }
 }
