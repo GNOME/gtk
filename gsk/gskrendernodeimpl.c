@@ -3379,7 +3379,9 @@ gsk_transform_node_diff (GskRenderNode *node1,
         float scale_x, scale_y, dx, dy;
         gsk_transform_to_affine (self1->transform, &scale_x, &scale_y, &dx, &dy);
         sub = cairo_region_create ();
-        region_union_region_affine (sub, data->region, 1.0f / scale_x, 1.0f / scale_y, - dx / scale_x, - dy / scale_y);
+        if (gsk_render_node_get_copy_mode (node1) != GSK_COPY_NONE ||
+            gsk_render_node_get_copy_mode (node2) != GSK_COPY_NONE)
+          region_union_region_affine (sub, data->region, 1.0f / scale_x, 1.0f / scale_y, - dx / scale_x, - dy / scale_y);
         gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->surface });
         region_union_region_affine (data->region, sub, scale_x, scale_y, dx, dy);
         cairo_region_destroy (sub);
