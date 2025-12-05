@@ -55,6 +55,8 @@ struct _GskContourClass
                                                  GString                *string);
   gboolean              (* get_bounds)          (const GskContour       *contour,
                                                  GskBoundingBox         *bounds);
+  gboolean              (* get_tight_bounds)    (const GskContour       *contour,
+                                                 GskBoundingBox         *bounds);
   gboolean              (* get_stroke_bounds)   (const GskContour       *contour,
                                                  const GskStroke        *stroke,
                                                  GskBoundingBox         *bounds);
@@ -674,6 +676,40 @@ gsk_standard_contour_get_bounds (const GskContour *contour,
     return FALSE;
 
   *bounds = self->bounds;
+
+  return bounds->max.x > bounds->min.x && bounds->max.y > bounds->min.y;
+}
+
+static gboolean
+add_tight_bounds (GskPathOperation        op,
+                  const graphene_point_t *pts,
+                  gsize                   n_pts,
+                  float                   weight,
+                  gpointer                user_data)
+{
+  GskBoundingBox *bounds = user_data;
+  GskCurve c;
+  GskBoundingBox b;
+
+  gsk_curve_init_foreach (&c, op, pts, n_pts, weight);
+  gsk_curve_get_tight_bounds (&c, &b);
+  gsk_bounding_box_union (&b, bounds, bounds);
+
+  return TRUE;
+}
+
+static gboolean
+gsk_standard_contour_get_tight_bounds (const GskContour *contour,
+                                       GskBoundingBox   *bounds)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+
+  if (self->n_points == 0)
+    return FALSE;
+
+  gsk_bounding_box_init (bounds, &self->points[0].pt, &self->points[0].pt);
+  for (gsize i = 0; i < self->n_ops; i ++)
+    gsk_pathop_foreach (self->ops[i], add_tight_bounds, bounds);
 
   return bounds->max.x > bounds->min.x && bounds->max.y > bounds->min.y;
 }
@@ -1303,6 +1339,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_flags,
   gsk_contour_print_default,
   gsk_standard_contour_get_bounds,
+  gsk_standard_contour_get_tight_bounds,
   gsk_standard_contour_get_stroke_bounds,
   gsk_standard_contour_foreach,
   gsk_standard_contour_reverse,
@@ -1783,6 +1820,7 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_get_flags,
   gsk_circle_contour_print,
   gsk_circle_contour_get_bounds,
+  gsk_circle_contour_get_bounds,
   gsk_circle_contour_get_stroke_bounds,
   gsk_circle_contour_foreach,
   gsk_circle_contour_reverse,
@@ -2143,6 +2181,7 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_get_flags,
   gsk_rect_contour_print,
   gsk_rect_contour_get_bounds,
+  gsk_rect_contour_get_bounds,
   gsk_rect_contour_get_stroke_bounds,
   gsk_rect_contour_foreach,
   gsk_rect_contour_reverse,
@@ -2219,6 +2258,21 @@ gsk_rounded_rect_contour_get_bounds (const GskContour *contour,
   return TRUE;
 }
 
+static gboolean
+gsk_rounded_rect_contour_get_tight_bounds (const GskContour *contour,
+                                           GskBoundingBox   *bounds)
+{
+  GskPath *path;
+  graphene_rect_t b;
+  gboolean ret;
+
+  path = convert_to_standard_contour (contour);
+  ret = gsk_path_get_tight_bounds (path, &b);
+  gsk_bounding_box_init_from_rect (bounds, &b);
+  gsk_path_unref (path);
+
+  return ret;
+}
 static gboolean
 gsk_rounded_rect_contour_get_stroke_bounds (const GskContour *contour,
                                             const GskStroke  *stroke,
@@ -2489,6 +2543,7 @@ static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
   gsk_rounded_rect_contour_get_flags,
   gsk_contour_print_default,
   gsk_rounded_rect_contour_get_bounds,
+  gsk_rounded_rect_contour_get_tight_bounds,
   gsk_rounded_rect_contour_get_stroke_bounds,
   gsk_rounded_rect_contour_foreach,
   gsk_rounded_rect_contour_reverse,
@@ -2621,6 +2676,13 @@ gsk_contour_get_bounds (const GskContour *self,
                         GskBoundingBox   *bounds)
 {
   return self->klass->get_bounds (self, bounds);
+}
+
+gboolean
+gsk_contour_get_tight_bounds (const GskContour *self,
+                              GskBoundingBox   *bounds)
+{
+  return self->klass->get_tight_bounds (self, bounds);
 }
 
 gboolean

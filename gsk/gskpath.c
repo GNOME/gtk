@@ -352,7 +352,8 @@ gsk_path_is_closed (GskPath *self)
  *
  * The returned bounds may be larger than necessary, because this
  * function aims to be fast, not accurate. The bounds are guaranteed
- * to contain the path.
+ * to contain the path. For accurate bounds, use
+ * [method@Gsk.Path.get_tight_bounds].
  *
  * It is possible that the returned rectangle has 0 width and/or height.
  * This can happen when the path only describes a point or an
@@ -390,6 +391,51 @@ gsk_path_get_bounds (GskPath         *self,
       GskBoundingBox tmp;
 
       gsk_contour_get_bounds (self->contours[i], &tmp);
+      gsk_bounding_box_union (&b, &tmp, &b);
+    }
+
+  gsk_bounding_box_to_rect (&b, bounds);
+
+  return TRUE;
+}
+
+/**
+ * gsk_path_get_tight_bounds:
+ * @self: a path
+ * @bounds: (out caller-allocates): return location for the bounds
+ *
+ * Computes the tight bounds of the given path.
+ *
+ * This function works harder than [method@Gsk.Path.get_bounds] to
+ * produce the smallest possible bounds.
+ *
+ * Returns: true if the path has bounds, false if the path is known
+ *   to be empty and have no bounds
+ *
+ * Since: 4.22
+ */
+gboolean
+gsk_path_get_tight_bounds (GskPath         *self,
+                           graphene_rect_t *bounds)
+{
+  GskBoundingBox b;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (bounds != NULL, FALSE);
+
+  if (self->n_contours == 0)
+    {
+      graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
+      return FALSE;
+    }
+
+  gsk_contour_get_tight_bounds (self->contours[0], &b);
+
+  for (gsize i = 1; i < self->n_contours; i++)
+    {
+      GskBoundingBox tmp;
+
+      gsk_contour_get_tight_bounds (self->contours[i], &tmp);
       gsk_bounding_box_union (&b, &tmp, &b);
     }
 
