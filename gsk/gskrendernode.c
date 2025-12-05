@@ -38,6 +38,7 @@
 #include "gskrendernodeprivate.h"
 
 #include "gskcontainernodeprivate.h"
+#include "gskcopypasteutilsprivate.h"
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeparserprivate.h"
@@ -422,6 +423,8 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
 
   ccs = gdk_color_state_get_rendering_color_state (color_state);
 
+  node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
+
   if (gdk_color_state_equal (color_state, ccs))
     {
       gsk_render_node_draw_ccs (node, cr, ccs);
@@ -441,6 +444,8 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
       cairo_paint (cr);
       cairo_restore (cr);
     }
+
+  gsk_render_node_unref (node);
 }
 
 /**
@@ -604,8 +609,12 @@ gsk_render_node_diff (GskRenderNode  *node1,
                       GskRenderNode  *node2,
                       GskDiffData    *data)
 {
+  static guint depth = 0;
+
   if (node1 == node2)
     return;
+
+  depth++;
 
   if (gsk_render_node_get_node_type (node1) == gsk_render_node_get_node_type (node2))
     {
@@ -622,6 +631,34 @@ gsk_render_node_diff (GskRenderNode  *node1,
   else
     {
       gsk_render_node_diff_impossible (node1, node2, data);
+    }
+
+  depth--;
+
+  if (GSK_DEBUG_CHECK (DIFF))
+    {
+      cairo_rectangle_int_t extents;
+
+      cairo_region_get_extents (data->region, &extents);
+      if (extents.width > 0 && extents.height > 0)
+        {
+          gsize i, n, pixels;
+
+          pixels = 0;
+          n = cairo_region_num_rectangles (data->region);
+          for (i = 0; i < n; i++)
+            {
+              cairo_rectangle_int_t rect;
+              cairo_region_get_rectangle (data->region, i, &rect);
+              pixels += rect.width * rect.height;
+            }
+          gdk_debug_message ("%*s%zu rects, %zu pixels, bounds %d %d %d %d %s", 2 * depth, "",
+                             n,
+                             pixels,
+                             extents.x, extents.y,
+                             extents.width, extents.height,
+                             g_type_name_from_instance ((GTypeInstance *) node1));
+        }
     }
 }
 

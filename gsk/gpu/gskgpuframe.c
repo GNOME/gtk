@@ -14,6 +14,7 @@
 #include "gskgpuuploadopprivate.h"
 #include "gskgpuutilsprivate.h"
 
+#include "gskcopypasteutilsprivate.h"
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 
@@ -812,11 +813,15 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 {
   GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
 
+  node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
+
   gsk_gpu_frame_cleanup (self);
 
   gsk_gpu_frame_record (self, timestamp, target, target_color_state, clip, node, viewport, texture);
 
   gsk_gpu_frame_submit (self, pass_type);
+
+  gsk_render_node_unref (node);
 }
 
 static gboolean
