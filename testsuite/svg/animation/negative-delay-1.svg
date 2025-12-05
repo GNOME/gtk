@@ -10,7 +10,7 @@
   <path
           id='line1'
           fill='none'
-          stroke='rgb(190,190,190)'
+          stroke='rgb(0,0,0)'
           stroke-width='2'
           stroke-linecap='round'
           stroke-linejoin='round'
@@ -81,7 +81,7 @@
           id='line2'
           visibility='hidden'
           fill='none'
-          stroke='rgb(190,190,190)'
+          stroke='rgb(0,0,0)'
           stroke-width='2'
           stroke-linecap='round'
           stroke-linejoin='round'

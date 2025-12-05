@@ -1,0 +1,274 @@
+transform {
+  transform: translate(0, 12.5) scale(0.104167) translate(320, 200);
+  child: container {
+    fill {
+      child: color {
+        bounds: 0 0 100 100;
+        color: rgb(0,255,0);
+      }
+      path: "\
+M 0 0 h 100 v 100 h -100 z";
+      fill-rule: winding;
+    }
+    transform {
+      transform: translate(110, 0);
+      child: fill {
+        child: color {
+          bounds: 0 0 100 100;
+          color: rgb(0,255,0);
+        }
+        path: "\
+M 0 0 h 100 v 100 h -100 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(220, 0);
+      child: fill {
+        child: color {
+          bounds: 0 0 100 100;
+          color: rgb(0,255,0);
+        }
+        path: "\
+M 0 0 h 100 v 100 h -100 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(0, 110);
+      child: container {
+        fill {
+          child: color {
+            bounds: 0.5 0.5 99 99;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 0.5 0.5 h 99 v 99 h -99 z";
+          fill-rule: winding;
+        }
+        fill {
+          child: color {
+            bounds: 0 0 100 100;
+            color: rgb(0,255,0);
+          }
+          path: "\
+M 0 0 h 100 v 100 h -100 z";
+          fill-rule: winding;
+        }
+      }
+    }
+    transform {
+      transform: translate(110, 110);
+      child: container {
+        fill {
+          child: color {
+            bounds: 0.5 0.5 99 99;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 0.5 0.5 h 99 v 99 h -99 z";
+          fill-rule: winding;
+        }
+        mask {
+          source: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(0,255,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+          mask: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(0,0,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+        }
+      }
+    }
+    transform {
+      transform: translate(220, 110);
+      child: container {
+        fill {
+          child: color {
+            bounds: 0.5 0.5 99 99;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 0.5 0.5 h 99 v 99 h -99 z";
+          fill-rule: winding;
+        }
+        mask {
+          source: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(0,255,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+          mask: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(0,0,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+        }
+      }
+    }
+    transform {
+      transform: translate(0, 220);
+      child: container {
+        fill {
+          child: color {
+            bounds: 0 0 100 100;
+            color: rgb(0,255,0);
+          }
+          path: "\
+M 0 0 h 100 v 100 h -100 z";
+          fill-rule: winding;
+        }
+        mask {
+          source: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+          mask: fill {
+            child: color {
+              bounds: 40 40 20 20;
+              color: rgb(0,0,0);
+            }
+            path: "\
+M 40 40 h 20 v 20 h -20 z";
+            fill-rule: winding;
+          }
+        }
+        fill {
+          child: color {
+            bounds: 39 39 22 22;
+            color: rgb(0,255,0);
+          }
+          path: "\
+M 39 39 h 22 v 22 h -22 z";
+          fill-rule: winding;
+        }
+      }
+    }
+    transform {
+      transform: translate(110, 220);
+      child: container {
+        fill {
+          child: color {
+            bounds: 0 0 100 100;
+            color: rgb(0,255,0);
+          }
+          path: "\
+M 0 0 h 100 v 100 h -100 z";
+          fill-rule: winding;
+        }
+        mask {
+          source: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+          mask: fill {
+            child: color {
+              bounds: 40 40 20 20;
+              color: rgb(0,0,0);
+            }
+            path: "\
+M 40 40 h 20 v 20 h -20 z";
+            fill-rule: winding;
+          }
+        }
+        fill {
+          child: color {
+            bounds: 39 39 22 22;
+            color: rgb(0,255,0);
+          }
+          path: "\
+M 39 39 h 22 v 22 h -22 z";
+          fill-rule: winding;
+        }
+      }
+    }
+    transform {
+      transform: translate(220, 220);
+      child: container {
+        fill {
+          child: color {
+            bounds: 0.5 0.5 99 99;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 0.5 0.5 h 99 v 99 h -99 z";
+          fill-rule: winding;
+        }
+        mask {
+          source: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(0,255,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+          mask: fill {
+            child: color {
+              bounds: 0 0 100 100;
+              color: rgb(0,0,0);
+            }
+            path: "\
+M 0 0 h 100 v 100 h -100 z";
+            fill-rule: winding;
+          }
+        }
+      }
+    }
+    stroke {
+      child: color {
+        bounds: -0.5 -0.5 321 321;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 0 h 320 v 320 h -320 z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+transform {
+  transform: translate(0, 12.5) scale(0.208333);
+  child: stroke {
+    child: color {
+      bounds: 0.5 0.5 479 359;
+      color: rgb(0,0,0);
+    }
+    path: "\
+M 1 1 h 478 v 358 h -478 z";
+    line-width: 1;
+    line-cap: butt;
+    line-join: miter;
+  }
+}

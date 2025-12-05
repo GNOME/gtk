@@ -12,8 +12,7 @@
         gpa:states='0'
         gpa:transition-type='animate'
         gpa:transition-duration='500ms'
-        gpa:transition-delay='-250ms'
-        class='foreground-stroke transparent-fill'/>
+        gpa:transition-delay='-250ms'/>
   <path id='line2'
         d='M 100 0 L 0 100'
         stroke-width='2'
@@ -24,6 +23,5 @@
         gpa:states='1'
         gpa:transition-type='animate'
         gpa:transition-duration='500ms'
-        gpa:transition-delay='-250ms'
-        class='foreground-stroke transparent-fill'/>
+        gpa:transition-delay='-250ms'/>
 </svg>

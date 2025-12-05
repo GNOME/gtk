@@ -3470,7 +3470,7 @@ svg_dash_array_parse (const char *value)
       unsigned int n;
       SvgDashArray *dashes;
 
-      strv = g_strsplit (value, " ", 0);
+      strv = g_strsplit_set (value, ", ", 0);
       n = g_strv_length (strv);
 
       dashes = svg_dash_array_alloc (n);
@@ -4854,7 +4854,7 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 0,
     .parse_value = svg_spread_method_parse,
   },
-  { .id = SHAPE_ATTR_GRADIENT_UNITS,
+  { .id = SHAPE_ATTR_UNITS,
     .name = "gradientUnits",
     .inherited = 0,
     .discrete = 1,
@@ -4961,7 +4961,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_points_new_none ();
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
-  shape_attrs[SHAPE_ATTR_GRADIENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
+  shape_attrs[SHAPE_ATTR_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -4969,6 +4969,10 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STOP_OPACITY].initial_value = svg_number_new (1);
 }
 
+/* Some attributes use different names for different shapes:
+ * SHAPE_ATTR_TRANSFORM: transform vs gradientTransform
+ * SHAPE_ATTR_UNITS: gradientUnits vs clipPathUnits vs maskContentUnits
+ */
 static gboolean
 shape_attr_lookup (const char *name,
                    ShapeAttr  *attr,
@@ -4976,7 +4980,24 @@ shape_attr_lookup (const char *name,
 {
   if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
       strcmp (name, "gradientTransform") == 0)
-    name = "transform";
+    {
+      *attr = SHAPE_ATTR_TRANSFORM;
+      return TRUE;
+    }
+
+  if (type == SHAPE_CLIP_PATH &&
+      strcmp (name, "clipPathUnits") == 0)
+    {
+      *attr = SHAPE_ATTR_UNITS;
+      return TRUE;
+    }
+
+  if (type == SHAPE_MASK &&
+      strcmp (name, "maskContentUnits") == 0)
+    {
+      *attr = SHAPE_ATTR_UNITS;
+      return TRUE;
+    }
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
@@ -4986,6 +5007,7 @@ shape_attr_lookup (const char *name,
           return TRUE;
         }
     }
+
   return FALSE;
 }
 
@@ -4996,6 +5018,12 @@ shape_attr_get_presentation (ShapeAttr attr,
   if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
       attr == SHAPE_ATTR_TRANSFORM)
     return "gradientTransform";
+
+  if (type == SHAPE_CLIP_PATH && attr == SHAPE_ATTR_UNITS)
+    return "clipPathUnits";
+
+  if (type == SHAPE_MASK && attr == SHAPE_ATTR_UNITS)
+    return "maskContentUnits";
 
   return shape_attrs[attr].name;
 }
@@ -5276,6 +5304,12 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
+  if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK)
+    {
+      if (attr == SHAPE_ATTR_UNITS)
+        return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
+    }
+
   return shape_attrs[attr].initial_value;
 }
 
@@ -5347,8 +5381,9 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_POINTS:
       return type == SHAPE_POLYLINE || type == SHAPE_POLYGON;
     case SHAPE_ATTR_SPREAD_METHOD:
-    case SHAPE_ATTR_GRADIENT_UNITS:
-      return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
+    case SHAPE_ATTR_UNITS:
+      return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
+             type == SHAPE_CLIP_PATH || type == SHAPE_MASK;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
@@ -5486,6 +5521,8 @@ shape_get_path (Shape                 *shape,
     case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
+      g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -5568,6 +5605,8 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
+          g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
+          break;
         default:
           g_assert_not_reached ();
         }
@@ -5644,6 +5683,70 @@ shape_get_current_measure (Shape                 *shape,
     }
 
   return gsk_path_measure_ref (shape->measure);
+}
+
+static gboolean
+shape_get_current_bounds (Shape                 *shape,
+                          const graphene_size_t *viewport,
+                          graphene_rect_t       *bounds)
+{
+  gboolean ret = FALSE;
+
+  graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
+
+  switch (shape->type)
+    {
+    case SHAPE_LINE:
+    case SHAPE_POLYLINE:
+    case SHAPE_POLYGON:
+    case SHAPE_RECT:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+      {
+        GskPath *path = shape_get_current_path (shape, viewport);
+        ret = gsk_path_get_tight_bounds (path, bounds);
+        gsk_path_unref (path);
+      }
+      break;
+    case SHAPE_USE:
+      {
+        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        if (use_shape)
+          ret = shape_get_current_bounds (use_shape, viewport, bounds);
+      }
+      break;
+    case SHAPE_GROUP:
+    case SHAPE_CLIP_PATH:
+    case SHAPE_MASK:
+      {
+        for (unsigned int i = 0; i < shape->shapes->len; i++)
+          {
+            Shape *sh = g_ptr_array_index (shape->shapes, i);
+            GskTransform *transform;
+            graphene_rect_t b;
+
+            if (shape_get_current_bounds (sh, viewport, &b))
+              {
+                transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
+                gsk_transform_transform_bounds (transform, &b, bounds);
+                graphene_rect_union (&b, bounds, bounds);
+                gsk_transform_unref (transform);
+              }
+          }
+        ret = TRUE;
+      }
+      break;
+    case SHAPE_DEFS:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+      g_error ("attempt to get the bounds of a %s", shape_types[shape->type].name);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return ret;
 }
 
 static unsigned int
@@ -9219,7 +9322,8 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
 
-      shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
+      if (!(shape->attrs & BIT (SHAPE_ATTR_FILL)))
+        shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
       svg_value_unref (value);
 
       if (g_strv_has (classes, "success-stroke"))
@@ -9233,7 +9337,8 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_none ();
 
-      shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
+      if (!(shape->attrs & BIT (SHAPE_ATTR_FILL)))
+        shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
       svg_value_unref (value);
 
       g_strfreev (classes);
@@ -9675,19 +9780,38 @@ start_element_cb (GMarkupParseContext  *context,
       width = data->svg->view_box.size.width;
       if (width_attr)
         {
-          if (!parse_length (width_attr, 0, DBL_MAX, &width))
+          SvgValue *value;
+
+          value = svg_number_parse (width_attr, 0, DBL_MAX, PERCENTAGE | LENGTH);
+          if (value)
+            {
+              width = svg_number_get (value, data->svg->view_box.size.width);
+              svg_value_unref (value);
+            }
+          else
             gtk_svg_invalid_attribute (data->svg, context, "width", NULL);
         }
 
       height = data->svg->view_box.size.height;
       if (height_attr)
         {
-          if (!parse_length (height_attr, 0, DBL_MAX, &height))
+          SvgValue *value;
+
+          value = svg_number_parse (height_attr, 0, DBL_MAX, PERCENTAGE | LENGTH);
+          if (value)
+            {
+              height = svg_number_get (value, data->svg->view_box.size.height);
+              svg_value_unref (value);
+            }
+          else
             gtk_svg_invalid_attribute (data->svg, context, "height", NULL);
         }
 
       data->svg->width = width;
       data->svg->height = height;
+
+      data->svg->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
+      data->svg->meet_or_slice = MEET;
 
       if (preserve_aspect_ratio_attr)
         {
@@ -11463,33 +11587,26 @@ typedef struct
   size_t n_colors;
   double weight;
   RenderOp op;
-  GskFillRule clip_rule;
   GSList *op_stack;
   int depth;
 } PaintContext;
 
 static void
 push_op (PaintContext *context,
-         RenderOp      op,
-         GskFillRule   clip_rule)
+         RenderOp      op)
 {
-  unsigned int val = ((context->op << 16) | context->clip_rule);
-  context->op_stack = g_slist_prepend (context->op_stack, GUINT_TO_POINTER (val));
+  context->op_stack = g_slist_prepend (context->op_stack, GUINT_TO_POINTER (context->op));
   context->op = op;
-  context->clip_rule = clip_rule;
 }
 
 static void
 pop_op (PaintContext *context)
 {
   GSList *tos = context->op_stack;
-  guint val;
 
   g_assert (tos != NULL);
 
-  val = GPOINTER_TO_UINT (tos->data);
-  context->op = val >> 16;
-  context->clip_rule = val & 0xffff;
+  context->op = GPOINTER_TO_UINT (tos->data);
 
   context->op_stack = context->op_stack->next;
   g_slist_free_1 (tos);
@@ -11513,95 +11630,62 @@ push_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
 
-  for (unsigned int i = filter->n_functions; i > 0; i--)
+  if (context->op != CLIPPING)
     {
-      FilterFunction *f = &filter->functions[i - 1];
-
-      switch (f->kind)
+      for (unsigned int i = filter->n_functions; i > 0; i--)
         {
-        case FILTER_NONE:
-          break;
-        case FILTER_BLUR:
-          gtk_snapshot_push_blur (context->snapshot, f->value);
-          break;
-        case FILTER_OPACITY:
-          gtk_snapshot_push_opacity (context->snapshot, f->value);
-          break;
-        case FILTER_BRIGHTNESS:
-        case FILTER_CONTRAST:
-        case FILTER_GRAYSCALE:
-        case FILTER_HUE_ROTATE:
-        case FILTER_INVERT:
-        case FILTER_SATURATE:
-        case FILTER_SEPIA:
-          {
-            graphene_matrix_t matrix;
-            graphene_vec4_t offset;
-            svg_filter_get_matrix (f, &matrix, &offset);
-            gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
-          }
-          break;
-        case FILTER_ALPHA_LEVEL:
-          {
-            GskComponentTransfer *identity, *alpha;
-            float values[10];
+          FilterFunction *f = &filter->functions[i - 1];
 
-            identity = gsk_component_transfer_new_identity ();
-            for (unsigned int j = 0; j < 10; j++)
+          switch (f->kind)
+            {
+            case FILTER_NONE:
+              break;
+            case FILTER_BLUR:
+              gtk_snapshot_push_blur (context->snapshot, f->value);
+              break;
+            case FILTER_OPACITY:
+              gtk_snapshot_push_opacity (context->snapshot, f->value);
+              break;
+            case FILTER_BRIGHTNESS:
+            case FILTER_CONTRAST:
+            case FILTER_GRAYSCALE:
+            case FILTER_HUE_ROTATE:
+            case FILTER_INVERT:
+            case FILTER_SATURATE:
+            case FILTER_SEPIA:
               {
-                if ((j + 1) / 10.0 <= f->value)
-                  values[j] = 0;
-                else
-                  values[j] = 1;
+                graphene_matrix_t matrix;
+                graphene_vec4_t offset;
+                svg_filter_get_matrix (f, &matrix, &offset);
+                gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
               }
-            alpha = gsk_component_transfer_new_discrete (10, values);
-            gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
-            gsk_component_transfer_free (identity);
-            gsk_component_transfer_free (alpha);
-          }
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-    }
+              break;
+            case FILTER_ALPHA_LEVEL:
+              {
+                GskComponentTransfer *identity, *alpha;
+                float values[10];
 
-  if (svg_number_get (opacity, 1) != 1)
-    gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
-
-  if (clip->kind == CLIP_PATH ||
-      (clip->kind == CLIP_REF && clip->ref.shape != NULL))
-    {
-      push_op (context, CLIPPING, svg_enum_get (shape->current[SHAPE_ATTR_CLIP_RULE]));
-      gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
-
-      if (clip->kind == CLIP_PATH)
-        {
-          gtk_snapshot_append_fill (context->snapshot,
-                                    clip->path,
-                                    GSK_FILL_RULE_WINDING, /* FIXME fill rule */
-                                    &(GdkRGBA) { 1, 1, 1, 1 });
-        }
-      else
-        {
-          render_shape (clip->ref.shape, context);
+                identity = gsk_component_transfer_new_identity ();
+                for (unsigned int j = 0; j < 10; j++)
+                  {
+                    if ((j + 1) / 10.0 <= f->value)
+                      values[j] = 0;
+                    else
+                      values[j] = 1;
+                  }
+                alpha = gsk_component_transfer_new_discrete (10, values);
+                gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
+                gsk_component_transfer_free (identity);
+                gsk_component_transfer_free (alpha);
+              }
+              break;
+            default:
+              g_assert_not_reached ();
+            }
         }
 
-      gtk_snapshot_pop (context->snapshot);
-
-      pop_op (context);
-    }
-
-  if (mask->kind != MASK_NONE && (mask->shape != NULL))
-    {
-      push_op (context, MASKING, context->clip_rule);
-
-      gtk_snapshot_push_mask (context->snapshot, svg_enum_get (shape->current[SHAPE_ATTR_MASK_TYPE]));
-
-      render_shape (mask->shape, context);
-
-      gtk_snapshot_pop (context->snapshot);
-
-      pop_op (context);
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
     }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
@@ -11612,6 +11696,79 @@ push_context (Shape        *shape,
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_transform (context->snapshot, transform);
       gsk_transform_unref (transform);
+    }
+
+  if (clip->kind == CLIP_PATH ||
+      (clip->kind == CLIP_REF && clip->ref.shape != NULL))
+    {
+      push_op (context, CLIPPING);
+      gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
+
+      /* Clip mask - see language in the spec about 'raw geometry' */
+      if (clip->kind == CLIP_PATH)
+        {
+          gtk_snapshot_append_fill (context->snapshot,
+                                    clip->path,
+                                    GSK_FILL_RULE_WINDING, /* FIXME fill rule */
+                                    &(GdkRGBA) { 1, 1, 1, 1 });
+        }
+      else
+        {
+          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            {
+              graphene_rect_t bounds;
+
+              gtk_snapshot_save (context->snapshot);
+
+              if (shape_get_current_bounds (shape, context->viewport, &bounds))
+                {
+                  gtk_snapshot_translate (context->snapshot, &bounds.origin);
+                  gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+                }
+            }
+
+          render_shape (clip->ref.shape, context);
+
+          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            {
+              gtk_snapshot_restore (context->snapshot);
+            }
+        }
+
+      gtk_snapshot_pop (context->snapshot);
+
+      pop_op (context);
+    }
+
+  if (mask->kind != MASK_NONE && (mask->shape != NULL))
+    {
+      push_op (context, MASKING);
+
+      gtk_snapshot_push_mask (context->snapshot, svg_enum_get (shape->current[SHAPE_ATTR_MASK_TYPE]));
+
+      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+        {
+          graphene_rect_t bounds;
+
+          gtk_snapshot_save (context->snapshot);
+
+          if (shape_get_current_bounds (shape, context->viewport, &bounds))
+            {
+              gtk_snapshot_translate (context->snapshot, &bounds.origin);
+              gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+            }
+        }
+
+      render_shape (mask->shape, context);
+
+      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+        {
+          gtk_snapshot_restore (context->snapshot);
+        }
+
+      gtk_snapshot_pop (context->snapshot);
+
+      pop_op (context);
     }
 }
 
@@ -11625,22 +11782,25 @@ pop_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
 
-  if (tf->transforms[0].type != TRANSFORM_NONE)
-    gtk_snapshot_restore (context->snapshot);
-
-  if (svg_number_get (opacity, 1) != 1)
-    gtk_snapshot_pop (context->snapshot);
-
-  for (unsigned int i = 0; i < filter->n_functions; i++)
-    if (filter->functions[i].kind != FILTER_NONE)
-      gtk_snapshot_pop (context->snapshot);
-
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
     gtk_snapshot_pop (context->snapshot);
 
   if (mask->kind != MASK_NONE && (mask->shape != NULL))
     gtk_snapshot_pop (context->snapshot);
+
+  if (tf->transforms[0].type != TRANSFORM_NONE)
+    gtk_snapshot_restore (context->snapshot);
+
+  if (context->op != CLIPPING)
+    {
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_pop (context->snapshot);
+
+      for (unsigned int i = 0; i < filter->n_functions; i++)
+        if (filter->functions[i].kind != FILTER_NONE)
+          gtk_snapshot_pop (context->snapshot);
+    }
 }
 
 static void
@@ -11670,7 +11830,7 @@ paint_linear_gradient (Shape                 *gradient,
     }
 
   transform = NULL;
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       transform = gsk_transform_translate (transform, &bounds->origin);
       transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
@@ -11743,7 +11903,7 @@ paint_radial_gradient (Shape                 *gradient,
 
   gtk_snapshot_save (context->snapshot);
 
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_GRADIENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       gtk_snapshot_translate (context->snapshot, &bounds->origin);
       gtk_snapshot_scale (context->snapshot,  bounds->size.width, bounds->size.height);
@@ -11824,12 +11984,17 @@ shape_create_stroke (Shape        *shape,
       double *dashes = (double *) dasharray->dashes;
       unsigned int len = dasharray->n_dashes;
       double path_length;
+      double length;
       double offset;
+      GskPathMeasure *measure;
 
-      if (shape->attrs & BIT (SHAPE_ATTR_PATH_LENGTH))
-        path_length = svg_number_get (shape->current[SHAPE_ATTR_PATH_LENGTH], 1);
-      else /* FIXME makes mixing animations hard */
-        path_length = 1;
+      measure = shape_get_current_measure (shape, context->viewport);
+      length = gsk_path_measure_get_length (measure);
+      gsk_path_measure_unref (measure);
+
+      path_length = svg_number_get (shape->current[SHAPE_ATTR_PATH_LENGTH], 1);
+      if (path_length < 0)
+        path_length = length;
 
       offset = svg_number_get (shape->current[SHAPE_ATTR_STROKE_DASHOFFSET], path_length);
 
@@ -11837,13 +12002,6 @@ shape_create_stroke (Shape        *shape,
 
       if (path_length > 0)
         {
-          GskPathMeasure *measure;
-          double length;
-
-          measure = shape_get_current_measure (shape, context->viewport);
-          length = gsk_path_measure_get_length (measure);
-          gsk_path_measure_unref (measure);
-
           for (unsigned int i = 0; i < len; i++)
             vals[i] = dashes[i] / path_length * length;
 
@@ -12012,16 +12170,16 @@ paint_shape (Shape        *shape,
     {
       graphene_rect_t bounds;
 
-      /* Clip mask - see language in the spec about 'raw geometry' */
       if (gsk_path_get_bounds (path, &bounds))
         {
           GdkRGBA color = { 0, 0, 0, 1 };
+          GskFillRule clip_rule;
 
-          gtk_snapshot_push_fill (context->snapshot, path, context->clip_rule);
+          clip_rule = svg_enum_get (shape->current[SHAPE_ATTR_CLIP_RULE]);
+          gtk_snapshot_push_fill (context->snapshot, path, clip_rule);
           gtk_snapshot_append_color (context->snapshot, &color, &bounds);
           gtk_snapshot_pop (context->snapshot);
         }
-
     }
 
   gsk_path_unref (path);
@@ -12138,7 +12296,6 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.weight = self->weight >= 1 ? self->weight : weight;
   paint_context.op = RENDERING;
   paint_context.op_stack = NULL;
-  paint_context.clip_rule = GSK_FILL_RULE_WINDING;
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
 

@@ -113,6 +113,10 @@ GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_bounds                     (GskPath                *self,
                                                                  graphene_rect_t        *bounds) G_GNUC_WARN_UNUSED_RESULT;
 
+GDK_AVAILABLE_IN_4_22
+gboolean                gsk_path_get_tight_bounds               (GskPath                *self,
+                                                                 graphene_rect_t        *bounds) G_GNUC_WARN_UNUSED_RESULT;
+
 GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_stroke_bounds              (GskPath                *self,
                                                                  const GskStroke        *stroke,

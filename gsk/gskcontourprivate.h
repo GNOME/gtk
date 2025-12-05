@@ -55,6 +55,8 @@ void                    gsk_contour_print                       (const GskContou
                                                                  GString                *string);
 gboolean                gsk_contour_get_bounds                  (const GskContour       *self,
                                                                  GskBoundingBox         *bounds);
+gboolean                gsk_contour_get_tight_bounds            (const GskContour       *self,
+                                                                 GskBoundingBox         *bounds);
 gboolean                gsk_contour_get_stroke_bounds           (const GskContour       *self,
                                                                  const GskStroke        *stroke,
                                                                  GskBoundingBox         *bounds);
