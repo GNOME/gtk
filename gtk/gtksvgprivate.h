@@ -197,10 +197,10 @@ typedef enum
 struct _Shape
 {
   ShapeType type;
+  gboolean display;
   Shape *parent;
   uint64_t attrs;
   char *id;
-  gboolean display;
 
   /* Dependency order for computing updates */
   Shape *first;
@@ -256,10 +256,10 @@ struct _Shape
 
 typedef enum
 {
-  SVG_UNIT_NONE,
-  SVG_UNIT_PERCENT,
-  SVG_UNIT_LENGTH,
-} SvgUnit;
+  SVG_DIMENSION_NUMBER,
+  SVG_DIMENSION_PERCENTAGE,
+  SVG_DIMENSION_LENGTH,
+} SvgDimension;
 
 typedef enum
 {
