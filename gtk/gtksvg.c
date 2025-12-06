@@ -4639,12 +4639,6 @@ parse_positive_length_percentage (const char *value)
 }
 
 static SvgValue *
-parse_gradient_pos (const char *value)
-{
-  return svg_number_parse (value, 0, DBL_MAX, PERCENTAGE);
-}
-
-static SvgValue *
 parse_offset (const char *value)
 {
   return svg_number_parse (value, 0, 1, PERCENTAGE);
@@ -4948,7 +4942,7 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = 0,
     .presentation = 0,
     .only_css = 0,
-    .parse_value = parse_gradient_pos,
+    .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_Y1,
     .name = "y1",
@@ -4956,7 +4950,7 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = 0,
     .presentation = 0,
     .only_css = 0,
-    .parse_value = parse_gradient_pos,
+    .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_X2,
     .name = "x2",
@@ -4964,7 +4958,7 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = 0,
     .presentation = 0,
     .only_css = 0,
-    .parse_value = parse_gradient_pos,
+    .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_Y2,
     .name = "y2",
@@ -4972,7 +4966,7 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = 0,
     .presentation = 0,
     .only_css = 0,
-    .parse_value = parse_gradient_pos,
+    .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_POINTS,
     .name = "points",
