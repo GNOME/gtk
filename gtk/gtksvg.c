@@ -4694,12 +4694,6 @@ parse_miterlimit (const char *value)
 }
 
 static SvgValue *
-parse_dash_offset (const char *value)
-{
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
-}
-
-static SvgValue *
 parse_any_length (const char *value)
 {
   return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
@@ -4893,7 +4887,7 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = 0,
     .presentation = 1,
     .only_css = 0,
-    .parse_value = parse_dash_offset,
+    .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_PAINT_ORDER,
     .name = "paint-order",
