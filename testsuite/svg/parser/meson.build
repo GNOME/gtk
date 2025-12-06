@@ -42,6 +42,7 @@ test_data = [
   'many-errors.svg',
   'paint.svg',
   'percentage.svg',
+  'polygon.svg',
   'radial-gradient1.svg',
   'radial-gradient2.svg',
   'radial-gradient3.svg',
