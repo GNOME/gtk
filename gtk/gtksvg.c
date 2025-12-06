@@ -1387,12 +1387,8 @@ svg_number_parse (const char   *value,
       else
         return NULL;
     }
-  if (dim == SVG_DIMENSION_PERCENTAGE)
-    {
-      if (f < -100 || f > 100)
-        return NULL;
-    }
-  else
+
+  if (dim != SVG_DIMENSION_PERCENTAGE)
     {
       if (f < min || f > max)
         return NULL;
