@@ -3460,16 +3460,22 @@ typedef enum
 
 typedef struct
 {
+  SvgDimension dim;
+  double value;
+} Number;
+
+typedef struct
+{
   SvgValue base;
   DashArrayKind kind;
   unsigned int n_dashes;
-  double dashes[2];
+  Number dashes[2];
 } SvgDashArray;
 
 static unsigned int
 svg_dash_array_size (unsigned int n)
 {
-  return sizeof (SvgDashArray) + (n - 2) * sizeof (double);
+  return sizeof (SvgDashArray) + MAX (n - 2, 0) * sizeof (Number);
 }
 
 static void
@@ -3479,39 +3485,41 @@ svg_dash_array_free (SvgValue *da)
 }
 
 static gboolean
-svg_dash_array_equal (const SvgValue *value1,
-                      const SvgValue *value2)
+svg_dash_array_equal (const SvgValue *value0,
+                      const SvgValue *value1)
 {
+  const SvgDashArray *da0 = (const SvgDashArray *) value0;
   const SvgDashArray *da1 = (const SvgDashArray *) value1;
-  const SvgDashArray *da2 = (const SvgDashArray *) value2;
 
-  if (da1->kind != da2->kind)
+  if (da0->kind != da1->kind)
     return FALSE;
 
-  if (da1->kind == DASH_ARRAY_NONE)
+  if (da0->kind == DASH_ARRAY_NONE)
     return TRUE;
 
-  if (da1->n_dashes != da2->n_dashes)
+  if (da0->n_dashes != da1->n_dashes)
     return FALSE;
 
-  for (unsigned int i = 0; i < da1->n_dashes; i++)
+  for (unsigned int i = 0; i < da0->n_dashes; i++)
     {
-      if (da1->dashes[i] != da2->dashes[i])
+      if (da0->dashes[i].dim != da1->dashes[i].dim)
+        return FALSE;
+      if (da0->dashes[i].value != da1->dashes[i].value)
         return FALSE;
     }
 
   return TRUE;
 }
 
-static SvgValue * svg_dash_array_interpolate (const SvgValue *value1,
-                                              const SvgValue *value2,
+static SvgValue * svg_dash_array_interpolate (const SvgValue *value0,
+                                              const SvgValue *value1,
                                               double          t);
 
 static void svg_dash_array_print (const SvgValue *value,
                                   GString        *s);
 
-static SvgValue * svg_dash_array_accumulate (const SvgValue *value1,
-                                             const SvgValue *value2,
+static SvgValue * svg_dash_array_accumulate (const SvgValue *value0,
+                                             const SvgValue *value1,
                                              int             n);
 
 static const SvgValueClass SVG_DASH_ARRAY_CLASS = {
@@ -3545,18 +3553,28 @@ static SvgValue *
 svg_dash_array_new (double       *values,
                     unsigned int  n)
 {
-  static SvgDashArray da01 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { 0, 1 } };
-  static SvgDashArray da10 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { 1, 0 } };
+  static SvgDashArray da01 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_DIMENSION_NUMBER, 0 }, { SVG_DIMENSION_NUMBER, 1 } } };
+  static SvgDashArray da10 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_DIMENSION_NUMBER, 1 }, { SVG_DIMENSION_NUMBER, 0 } } };
 
   if (n == 2 && values[0] == 0 && values[1] == 1)
-    return svg_value_ref ((SvgValue *) &da01);
+    {
+      return svg_value_ref ((SvgValue *) &da01);
+    }
   else if (n == 2 && values[0] == 1 && values[1] == 0)
-    return svg_value_ref ((SvgValue *) &da10);
+    {
+      return svg_value_ref ((SvgValue *) &da10);
+    }
   else
     {
       SvgDashArray *a = svg_dash_array_alloc (n);
-      memcpy (a->dashes, values, sizeof (double) * n);
+
       a->kind = DASH_ARRAY_DASHES;
+      for (unsigned int i = 0; i < n; i++)
+        {
+          a->dashes[i].dim = SVG_DIMENSION_NUMBER;
+          a->dashes[i].value = values[i];
+        }
+
       return (SvgValue *) a;
     }
 }
@@ -3582,7 +3600,9 @@ svg_dash_array_parse (const char *value)
 
       for (unsigned int i = 0; strv[i]; i++)
         {
-          if (!parse_number (strv[i], -DBL_MAX, DBL_MAX, &dashes->dashes[i]))
+          if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
+                              &dashes->dashes[i].value, &dashes->dashes[i].dim))
+
             {
               svg_value_unref ((SvgValue *) dashes);
               dashes = NULL;
@@ -3611,7 +3631,11 @@ svg_dash_array_print (const SvgValue *value,
         {
           if (i > 0)
             g_string_append_c (s, ' ');
-          string_append_double (s, dashes->dashes[i]);
+          string_append_double (s, dashes->dashes[i].value);
+          if (dashes->dashes[i].dim == SVG_DIMENSION_PERCENTAGE)
+            g_string_append (s, "%");
+          else if (dashes->dashes[i].dim == SVG_DIMENSION_LENGTH)
+            g_string_append (s, "px");
         }
     }
 }
@@ -3623,16 +3647,11 @@ svg_dash_array_interpolate (const SvgValue *value0,
 {
   const SvgDashArray *a0 = (const SvgDashArray *) value0;
   const SvgDashArray *a1 = (const SvgDashArray *) value1;
-  SvgDashArray *a;
+  SvgDashArray *a = NULL;
   unsigned int n_dashes;
 
   if (a0->kind != a1->kind)
-    {
-      if (t < 0.5)
-        return svg_value_ref ((SvgValue *) value0);
-      else
-        return svg_value_ref ((SvgValue *) value1);
-    }
+    goto out;
 
   if (a0->kind == DASH_ARRAY_NONE)
     return (SvgValue *) svg_dash_array_new_none ();
@@ -3643,10 +3662,26 @@ svg_dash_array_interpolate (const SvgValue *value0,
   a->kind = a0->kind;
 
   for (unsigned int i = 0; i < n_dashes; i++)
-    a->dashes[i] = lerp (t, a0->dashes[i % a0->n_dashes],
-                            a1->dashes[i % a1->n_dashes]);
+    {
+      if (a0->dashes[i % a0->n_dashes].dim != a1->dashes[i %a1->n_dashes].dim)
+        {
+          g_clear_pointer ((SvgValue **)&a, svg_value_unref);
+          break;
+        }
 
-  return (SvgValue *) a;
+      a->dashes[i].dim = a0->dashes[i % a0->n_dashes].dim;
+      a->dashes[i].value = lerp (t, a0->dashes[i % a0->n_dashes].value,
+                                    a1->dashes[i % a1->n_dashes].value);
+    }
+
+out:
+  if (a)
+    return (SvgValue *) a;
+
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
 }
 
 static SvgValue *
@@ -3655,6 +3690,33 @@ svg_dash_array_accumulate (const SvgValue *value0,
                            int             n)
 {
   return NULL;
+}
+
+static SvgValue *
+svg_dash_array_resolve (const SvgValue        *value,
+                        const graphene_size_t *viewport)
+{
+  SvgDashArray *orig = (SvgDashArray *) value;
+  SvgDashArray *a;
+  double size;
+
+  if (orig->kind == DASH_ARRAY_NONE)
+    return svg_value_ref ((SvgValue *) orig);
+
+  a = svg_dash_array_alloc (orig->n_dashes);
+  a->kind = orig->kind;
+
+  size = normalized_diagonal (viewport);
+  for (unsigned int i = 0; i < orig->n_dashes; i++)
+    {
+      a->dashes[i].dim = SVG_DIMENSION_NUMBER;
+      if (orig->dashes[i].dim == SVG_DIMENSION_PERCENTAGE)
+        a->dashes[i].value = orig->dashes[i].value / 100 * size;
+      else
+        a->dashes[i].value = orig->dashes[i].value;
+    }
+
+  return (SvgValue *) a;
 }
 
 /* }}} */
@@ -7484,6 +7546,10 @@ resolve_value (Shape           *shape,
   else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
     {
       return svg_paint_resolve (value, context->colors, context->n_colors);
+    }
+  else if (attr == SHAPE_ATTR_STROKE_DASHARRAY)
+    {
+      return svg_dash_array_resolve (value, context->viewport);
     }
   else
    {
@@ -12231,7 +12297,7 @@ shape_create_stroke (Shape        *shape,
   dasharray = (SvgDashArray *) shape->current[SHAPE_ATTR_STROKE_DASHARRAY];
   if (dasharray->kind != DASH_ARRAY_NONE)
     {
-      double *dashes = (double *) dasharray->dashes;
+      Number *dashes = dasharray->dashes;
       unsigned int len = dasharray->n_dashes;
       double path_length;
       double length;
@@ -12253,14 +12319,20 @@ shape_create_stroke (Shape        *shape,
       if (path_length > 0)
         {
           for (unsigned int i = 0; i < len; i++)
-            vals[i] = dashes[i] / path_length * length;
+            {
+              g_assert (dashes[i].dim != SVG_DIMENSION_PERCENTAGE);
+              vals[i] = dashes[i].value / path_length * length;
+            }
 
           offset = offset / path_length * length;
         }
       else
         {
           for (unsigned int i = 0; i < len; i++)
-            vals[i] = dashes[i];
+            {
+              g_assert (dashes[i].dim != SVG_DIMENSION_PERCENTAGE);
+              vals[i] = dashes[i].value;
+            }
         }
 
       gsk_stroke_set_dash (stroke, vals, len);

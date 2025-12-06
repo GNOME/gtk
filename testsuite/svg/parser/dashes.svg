@@ -1,4 +1,5 @@
 <svg>
   <path d="" stroke-dasharray="1 2 3"/>
   <path d="" stroke-dasharray="1,2,3"/>
+  <path d="" stroke-dasharray="1,2 3px 4cm 5%"/>
 </svg>
