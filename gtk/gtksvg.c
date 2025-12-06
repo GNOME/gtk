@@ -1227,7 +1227,7 @@ svg_value_is_initial (const SvgValue *value)
 typedef struct
 {
   SvgValue base;
-  SvgUnit unit;
+  SvgDimension dim;
   double value;
 } SvgNumber;
 
@@ -1244,11 +1244,11 @@ svg_number_equal (const SvgValue *value0,
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
 
-  return n0->unit == n1->unit && n0->value == n1->value;
+  return n0->dim == n1->dim && n0->value == n1->value;
 }
 
-static SvgValue * svg_number_new_full (SvgUnit unit,
-                                       double  value);
+static SvgValue * svg_number_new_full (SvgDimension dim,
+                                       double       value);
 
 static SvgValue *
 svg_number_interpolate (const SvgValue *value0,
@@ -1258,10 +1258,10 @@ svg_number_interpolate (const SvgValue *value0,
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
 
-  if (n0->unit != n1->unit)
+  if (n0->dim != n1->dim)
     return NULL;
 
-  return svg_number_new_full (n0->unit, lerp (t, n0->value, n1->value));
+  return svg_number_new_full (n0->dim, lerp (t, n0->value, n1->value));
 }
 
 static SvgValue *
@@ -1272,10 +1272,10 @@ svg_number_accumulate (const SvgValue *value0,
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
 
-  if (n0->unit != n1->unit)
+  if (n0->dim != n1->dim)
     return NULL;
 
-  return svg_number_new_full (n0->unit, accumulate (n0->value, n1->value, n));
+  return svg_number_new_full (n0->dim, accumulate (n0->value, n1->value, n));
 }
 
 static void
@@ -1285,9 +1285,9 @@ svg_number_print (const SvgValue *value,
   const SvgNumber *n = (const SvgNumber *) value;
 
   string_append_double (string, n->value);
-  if (n->unit == SVG_UNIT_PERCENT)
+  if (n->dim == SVG_DIMENSION_PERCENTAGE)
     g_string_append_c (string, '%');
-  else if (n->unit == SVG_UNIT_LENGTH)
+  else if (n->dim == SVG_DIMENSION_LENGTH)
     g_string_append (string, "px");
 }
 
@@ -1304,8 +1304,8 @@ SvgValue *
 svg_number_new (double value)
 {
   static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NONE, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NONE, .value = 1 },
+    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 1 },
   };
   SvgNumber *result;
 
@@ -1313,7 +1313,7 @@ svg_number_new (double value)
     return svg_value_ref ((SvgValue *) &singletons[(int) value]);
 
   result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
-  result->unit = SVG_UNIT_NONE;
+  result->dim = SVG_DIMENSION_NUMBER;
   result->value = value;
 
   return (SvgValue *) result;
@@ -1323,9 +1323,9 @@ static SvgValue *
 svg_percentage_new (double value)
 {
   static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENT, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENT, .value = 50 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENT, .value = 100 },
+    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_PERCENTAGE, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_PERCENTAGE, .value = 50 },
+    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_PERCENTAGE, .value = 100 },
   };
   SvgNumber *result;
 
@@ -1338,25 +1338,25 @@ svg_percentage_new (double value)
 
   result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
   result->value = value;
-  result->unit = SVG_UNIT_PERCENT;
+  result->dim = SVG_DIMENSION_PERCENTAGE;
 
   return (SvgValue *) result;
 }
 
 static SvgValue *
-svg_number_new_full (SvgUnit unit,
-                     double  value)
+svg_number_new_full (SvgDimension dim,
+                     double       value)
 {
-  if (unit == SVG_UNIT_NONE)
+  if (dim == SVG_DIMENSION_NUMBER)
     return svg_number_new (value);
-  else if (unit == SVG_UNIT_PERCENT)
+  else if (dim == SVG_DIMENSION_PERCENTAGE)
     return svg_percentage_new (value);
   else
     {
       SvgNumber *result;
       result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
       result->value = value;
-      result->unit = SVG_UNIT_LENGTH;
+      result->dim = SVG_DIMENSION_LENGTH;
       return (SvgValue *) result;
     }
 }
@@ -1375,19 +1375,19 @@ svg_number_parse (const char   *value,
 {
   char *end = NULL;
   double f;
-  SvgUnit unit = SVG_UNIT_NONE;
+  SvgDimension dim = SVG_DIMENSION_NUMBER;
 
   f = g_ascii_strtod (value, &end);
   if (end && *end != '\0')
     {
       if (*end == '%' && (flags & PERCENTAGE))
-        unit = SVG_UNIT_PERCENT;
+        dim = SVG_DIMENSION_PERCENTAGE;
       else if (strcmp (end, "px") == 0 && (flags & LENGTH))
-        unit = SVG_UNIT_NONE;
+        dim = SVG_DIMENSION_LENGTH;
       else
         return NULL;
     }
-  if (unit == SVG_UNIT_PERCENT)
+  if (dim == SVG_DIMENSION_PERCENTAGE)
     {
       if (f < -100 || f > 100)
         return NULL;
@@ -1398,7 +1398,7 @@ svg_number_parse (const char   *value,
         return NULL;
     }
 
-  return svg_number_new_full (unit, f);
+  return svg_number_new_full (dim, f);
 }
 
 static double
@@ -1406,7 +1406,7 @@ svg_number_get (const SvgValue *value,
                 double          one_hundred_percent)
 {
   const SvgNumber *n = (const SvgNumber *)value;
-  if (n->unit == SVG_UNIT_PERCENT)
+  if (n->dim == SVG_DIMENSION_PERCENTAGE)
     return n->value / 100 * one_hundred_percent;
   else
     return n->value;
