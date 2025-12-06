@@ -1737,6 +1737,87 @@ svg_paint_order_parse (const char *string)
     return NULL;
 }
 
+static const SvgValueClass SVG_BLEND_MODE_CLASS = {
+  "SvgBlendMode",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum blend_mode_values[] = {
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DEFAULT, "normal" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_MULTIPLY, "multiply" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SCREEN, "screen" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_OVERLAY, "overlay" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DARKEN, "darken" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_LIGHTEN, "lighten" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR_DODGE, "color-dodge" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR_BURN, "color-burn" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_HARD_LIGHT, "hard-light" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SOFT_LIGHT, "soft-light" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DIFFERENCE, "difference" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_EXCLUSION, "exclusiohn" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR, "color" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_HUE, "hue" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SATURATION, "saturation" },
+  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_LUMINOSITY, "luminosity" },
+};
+
+static SvgValue *
+svg_blend_mode_new (GskBlendMode mode)
+{
+  return svg_value_ref ((SvgValue *) &blend_mode_values[mode]);
+}
+
+static SvgValue *
+svg_blend_mode_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (blend_mode_values); i++)
+    {
+      if (strcmp (string, blend_mode_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &blend_mode_values[i]);
+    }
+  return NULL;
+}
+
+typedef enum {
+  ISOLATION_AUTO,
+  ISOLATION_ISOLATE,
+} Isolation;
+
+static const SvgValueClass SVG_ISOLATION_CLASS = {
+  "SvgIsolation",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum isolation_values[] = {
+  { { &SVG_ISOLATION_CLASS, 1 }, ISOLATION_AUTO, "auto" },
+  { { &SVG_ISOLATION_CLASS, 1 }, ISOLATION_ISOLATE, "isolate" },
+};
+
+static SvgValue *
+svg_isolation_new (Isolation mode)
+{
+  return svg_value_ref ((SvgValue *) &isolation_values[mode]);
+}
+
+static SvgValue *
+svg_isolation_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (isolation_values); i++)
+    {
+      if (strcmp (string, isolation_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &isolation_values[i]);
+    }
+  return NULL;
+}
+
 /* }}} */
 /* {{{ Transforms */
 
@@ -4575,7 +4656,8 @@ typedef struct
   ShapeAttr id;
   unsigned int inherited : 1;
   unsigned int discrete  : 1;
-  unsigned int presentation : 1;
+  unsigned int presentation : 1; /* whether to accept initial/inherit as values */
+  unsigned int only_css : 1;     /* whether this can be set outside of style */
   SvgValue * (* parse_value)      (const char *value);
   SvgValue * (* parse_for_values) (const char *value);
   SvgValue *initial_value;
@@ -4587,6 +4669,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 1,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_visibility_parse,
   },
   { .id = SHAPE_ATTR_TRANSFORM,
@@ -4594,6 +4677,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_transform_parse,
   },
   { .id = SHAPE_ATTR_OPACITY,
@@ -4601,6 +4685,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_opacity,
   },
   { .id = SHAPE_ATTR_FILTER,
@@ -4608,6 +4693,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_filter_parse,
   },
   { .id = SHAPE_ATTR_CLIP_PATH,
@@ -4615,6 +4701,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 1,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_clip_parse,
   },
   { .id = SHAPE_ATTR_CLIP_RULE,
@@ -4622,6 +4709,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 1,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_fill_rule_parse,
   },
   { .id = SHAPE_ATTR_MASK,
@@ -4629,6 +4717,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 1,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_mask_parse,
   },
   { .id = SHAPE_ATTR_MASK_TYPE,
@@ -4636,6 +4725,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 1,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_mask_type_parse,
   },
   { .id = SHAPE_ATTR_FILL,
@@ -4643,6 +4733,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_paint_parse,
   },
   { .id = SHAPE_ATTR_FILL_OPACITY,
@@ -4650,6 +4741,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_opacity,
   },
   { .id = SHAPE_ATTR_FILL_RULE,
@@ -4657,6 +4749,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 1,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_fill_rule_parse,
   },
   { .id = SHAPE_ATTR_STROKE,
@@ -4664,6 +4757,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_paint_parse,
   },
   { .id = SHAPE_ATTR_STROKE_OPACITY,
@@ -4671,6 +4765,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_opacity,
   },
   { .id = SHAPE_ATTR_STROKE_WIDTH,
@@ -4678,6 +4773,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_stroke_width,
   },
   { .id = SHAPE_ATTR_STROKE_LINECAP,
@@ -4685,6 +4781,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 1,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_linecap_parse,
   },
   { .id = SHAPE_ATTR_STROKE_LINEJOIN,
@@ -4692,6 +4789,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 1,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_linejoin_parse,
   },
   { .id = SHAPE_ATTR_STROKE_MITERLIMIT,
@@ -4699,6 +4797,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_miterlimit,
   },
   { .id = SHAPE_ATTR_STROKE_DASHARRAY,
@@ -4706,6 +4805,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_dash_array_parse,
   },
   { .id = SHAPE_ATTR_STROKE_DASHOFFSET,
@@ -4713,6 +4813,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_dash_offset,
   },
   { .id = SHAPE_ATTR_PAINT_ORDER,
@@ -4720,13 +4821,31 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 1,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_paint_order_parse,
+  },
+  { .id = SHAPE_ATTR_BLEND_MODE,
+    .name = "mix-blend-mode",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 1,
+    .parse_value = svg_blend_mode_parse,
+  },
+  { .id = SHAPE_ATTR_ISOLATION,
+    .name = "isolation",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 1,
+    .parse_value = svg_isolation_parse,
   },
   { .id = SHAPE_ATTR_HREF,
     .name = "href",
     .inherited = 0,
     .discrete = 1,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_href_parse,
   },
   { .id = SHAPE_ATTR_PATH_LENGTH,
@@ -4734,6 +4853,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_positive_length,
     .parse_for_values = parse_any_length,
   },
@@ -4742,6 +4862,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = svg_path_parse,
   },
   { .id = SHAPE_ATTR_CX,
@@ -4749,6 +4870,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_CY,
@@ -4756,6 +4878,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_R,
@@ -4763,6 +4886,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
@@ -4771,6 +4895,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_Y,
@@ -4778,6 +4903,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_WIDTH,
@@ -4785,6 +4911,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
@@ -4793,6 +4920,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
@@ -4801,6 +4929,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
@@ -4809,6 +4938,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 1,
+    .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
@@ -4817,6 +4947,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_gradient_pos,
   },
   { .id = SHAPE_ATTR_Y1,
@@ -4824,6 +4955,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_gradient_pos,
   },
   { .id = SHAPE_ATTR_X2,
@@ -4831,6 +4963,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_gradient_pos,
   },
   { .id = SHAPE_ATTR_Y2,
@@ -4838,6 +4971,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_gradient_pos,
   },
   { .id = SHAPE_ATTR_POINTS,
@@ -4845,6 +4979,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_points_parse,
   },
   { .id = SHAPE_ATTR_SPREAD_METHOD,
@@ -4852,6 +4987,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 1,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_spread_method_parse,
   },
   { .id = SHAPE_ATTR_UNITS,
@@ -4859,24 +4995,31 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 1,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_coord_units_parse,
   },
   { .id = SHAPE_ATTR_FX,
     .name = "fx",
     .inherited = 0,
     .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_FY,
     .name = "fy",
     .inherited = 0,
     .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_FR,
     .name = "fr",
     .inherited = 0,
     .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
@@ -4885,6 +5028,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_stroke_width,
   },
   { .id = SHAPE_ATTR_STROKE_MAXWIDTH,
@@ -4892,6 +5036,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 1,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_stroke_width,
   },
   { .id = SHAPE_ATTR_STOP_OFFSET,
@@ -4899,6 +5044,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_offset,
   },
   { .id = SHAPE_ATTR_STOP_COLOR,
@@ -4906,6 +5052,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = svg_paint_parse,
   },
   { .id = SHAPE_ATTR_STOP_OPACITY,
@@ -4913,6 +5060,7 @@ static ShapeAttribute shape_attrs[] = {
     .inherited = 0,
     .discrete = 0,
     .presentation = 0,
+    .only_css = 0,
     .parse_value = parse_opacity,
   },
 };
@@ -4940,6 +5088,8 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STROKE_DASHARRAY].initial_value = svg_dash_array_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_DASHOFFSET].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_PAINT_ORDER].initial_value = svg_paint_order_new (PAINT_ORDER_NORMAL);
+  shape_attrs[SHAPE_ATTR_BLEND_MODE].initial_value = svg_blend_mode_new (GSK_BLEND_MODE_DEFAULT);
+  shape_attrs[SHAPE_ATTR_ISOLATION].initial_value = svg_isolation_new (ISOLATION_AUTO);
   shape_attrs[SHAPE_ATTR_HREF].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_PATH_LENGTH].initial_value = svg_number_new (-1);
   shape_attrs[SHAPE_ATTR_PATH].initial_value = svg_path_new_none ();
@@ -5399,6 +5549,17 @@ shape_has_attr (ShapeType type,
     }
 }
 
+static gboolean
+shape_can_set_attr (ShapeType type,
+                    ShapeAttr attr,
+                    gboolean  in_css)
+{
+  if (!shape_has_attr (type, attr))
+    return FALSE;
+
+  return in_css || (shape_attrs[attr].only_css == 0);
+}
+
 static GskPath *
 shape_get_path (Shape                 *shape,
                 const graphene_size_t *viewport,
@@ -5729,8 +5890,11 @@ shape_get_current_bounds (Shape                 *shape,
             if (shape_get_current_bounds (sh, viewport, &b))
               {
                 transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
-                gsk_transform_transform_bounds (transform, &b, bounds);
-                graphene_rect_union (&b, bounds, bounds);
+                gsk_transform_transform_bounds (transform, &b, &b);
+                if (i == 0)
+                  graphene_rect_init_from_rect (bounds, &b);
+                else
+                  graphene_rect_union (bounds, &b, bounds);
                 gsk_transform_unref (transform);
               }
           }
@@ -9209,7 +9373,7 @@ parse_style_attr (Shape               *shape,
                                      shape_attr_get_presentation (attr, shape->type),
                                      prop_val);
         }
-      else if (shape_has_attr (shape->type, attr) ||
+      else if (shape_can_set_attr (shape->type, attr, TRUE) ||
                (for_stop && attr >= SHAPE_ATTR_STOP_OFFSET &&
                             attr <= SHAPE_ATTR_STOP_OPACITY))
         {
@@ -9277,11 +9441,7 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (shape_attr_lookup (attr_names[i], &attr, shape->type))
         {
-          if (!shape_has_attr (shape->type, attr))
-            {
-              gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
-            }
-          else
+          if (shape_can_set_attr (shape->type, attr, FALSE))
             {
               SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
               if (!value)
@@ -9294,6 +9454,11 @@ parse_shape_attrs (Shape                *shape,
                   svg_value_unref (value);
                 }
             }
+          else
+            {
+              gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
+            }
+
           *handled |= BIT (i);
         }
     }
@@ -10799,6 +10964,7 @@ serialize_shape_attrs (GString              *s,
                        GtkSvgSerializeFlags  flags)
 {
   GString *classes = g_string_new ("");
+  GString *style = g_string_new ("");
   const char *names[] = {
     "foreground", "error", "warning", "success", "accent",
   };
@@ -10833,10 +10999,20 @@ serialize_shape_attrs (GString              *s,
               ((shape->attrs & BIT (attr)) != 0 ||
                !svg_value_equal (value, shape_attr_get_initial_value (attr, shape->type))))
             {
-              indent_for_attr (s, indent);
-              g_string_append_printf (s, "%s='", shape_attr_get_presentation (attr, shape->type));
-              svg_value_print (value, s);
-              g_string_append_c (s, '\'');
+              if (shape_can_set_attr (shape->type, attr, FALSE))
+                {
+                  indent_for_attr (s, indent);
+                  g_string_append_printf (s, "%s='", shape_attr_get_presentation (attr, shape->type));
+                  svg_value_print (value, s);
+                  g_string_append_c (s, '\'');
+                }
+              else
+                {
+                  if (style->len > 0)
+                    g_string_append (style, "; ");
+                  g_string_append_printf (style, "%s: ", shape_attr_get_presentation (attr, shape->type));
+                  svg_value_print (value, style);
+                }
             }
 
           if (value && attr == SHAPE_ATTR_FILL)
@@ -10878,7 +11054,14 @@ serialize_shape_attrs (GString              *s,
       g_string_append_printf (s, "class='%s'", classes->str);
     }
 
+  if (style->len > 0)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "style='%s'", style->str);
+    }
+
   g_string_free (classes, TRUE);
+  g_string_free (style, TRUE);
 }
 
 static void
@@ -11629,64 +11812,8 @@ push_context (Shape        *shape,
   SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
-
-  if (context->op != CLIPPING)
-    {
-      for (unsigned int i = filter->n_functions; i > 0; i--)
-        {
-          FilterFunction *f = &filter->functions[i - 1];
-
-          switch (f->kind)
-            {
-            case FILTER_NONE:
-              break;
-            case FILTER_BLUR:
-              gtk_snapshot_push_blur (context->snapshot, f->value);
-              break;
-            case FILTER_OPACITY:
-              gtk_snapshot_push_opacity (context->snapshot, f->value);
-              break;
-            case FILTER_BRIGHTNESS:
-            case FILTER_CONTRAST:
-            case FILTER_GRAYSCALE:
-            case FILTER_HUE_ROTATE:
-            case FILTER_INVERT:
-            case FILTER_SATURATE:
-            case FILTER_SEPIA:
-              {
-                graphene_matrix_t matrix;
-                graphene_vec4_t offset;
-                svg_filter_get_matrix (f, &matrix, &offset);
-                gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
-              }
-              break;
-            case FILTER_ALPHA_LEVEL:
-              {
-                GskComponentTransfer *identity, *alpha;
-                float values[10];
-
-                identity = gsk_component_transfer_new_identity ();
-                for (unsigned int j = 0; j < 10; j++)
-                  {
-                    if ((j + 1) / 10.0 <= f->value)
-                      values[j] = 0;
-                    else
-                      values[j] = 1;
-                  }
-                alpha = gsk_component_transfer_new_discrete (10, values);
-                gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
-                gsk_component_transfer_free (identity);
-                gsk_component_transfer_free (alpha);
-              }
-              break;
-            default:
-              g_assert_not_reached ();
-            }
-        }
-
-      if (svg_number_get (opacity, 1) != 1)
-        gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
-    }
+  SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+  SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     {
@@ -11696,6 +11823,36 @@ push_context (Shape        *shape,
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_transform (context->snapshot, transform);
       gsk_transform_unref (transform);
+    }
+
+  if (shape->type == SHAPE_USE)
+    {
+      double x, y;
+
+      x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
+      y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
+      gtk_snapshot_save (context->snapshot);
+      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
+    }
+
+  if (context->op != CLIPPING)
+    {
+      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+        {
+          gtk_snapshot_push_opacity (context->snapshot, 1);
+        }
+
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        {
+          graphene_rect_t bounds;
+
+          shape_get_current_bounds (shape, context->viewport, &bounds);
+
+          gtk_snapshot_push_copy (context->snapshot);
+          gtk_snapshot_push_blend (context->snapshot, svg_enum_get (blend));
+          gtk_snapshot_append_paste (context->snapshot, &bounds, 0);
+          gtk_snapshot_pop (context->snapshot);
+        }
     }
 
   if (clip->kind == CLIP_PATH ||
@@ -11770,6 +11927,65 @@ push_context (Shape        *shape,
 
       pop_op (context);
     }
+
+  if (context->op != CLIPPING)
+    {
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
+
+      for (unsigned int i = filter->n_functions; i > 0; i--)
+        {
+          FilterFunction *f = &filter->functions[i - 1];
+
+          switch (f->kind)
+            {
+            case FILTER_NONE:
+              break;
+            case FILTER_BLUR:
+              gtk_snapshot_push_blur (context->snapshot, f->value);
+              break;
+            case FILTER_OPACITY:
+              gtk_snapshot_push_opacity (context->snapshot, f->value);
+              break;
+            case FILTER_BRIGHTNESS:
+            case FILTER_CONTRAST:
+            case FILTER_GRAYSCALE:
+            case FILTER_HUE_ROTATE:
+            case FILTER_INVERT:
+            case FILTER_SATURATE:
+            case FILTER_SEPIA:
+              {
+                graphene_matrix_t matrix;
+                graphene_vec4_t offset;
+                svg_filter_get_matrix (f, &matrix, &offset);
+                gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
+              }
+              break;
+            case FILTER_ALPHA_LEVEL:
+              {
+                GskComponentTransfer *identity, *alpha;
+                float values[10];
+
+                identity = gsk_component_transfer_new_identity ();
+                for (unsigned int j = 0; j < 10; j++)
+                  {
+                    if ((j + 1) / 10.0 <= f->value)
+                      values[j] = 0;
+                    else
+                      values[j] = 1;
+                  }
+                alpha = gsk_component_transfer_new_discrete (10, values);
+                gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
+                gsk_component_transfer_free (identity);
+                gsk_component_transfer_free (alpha);
+              }
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+    }
+
 }
 
 static void
@@ -11781,26 +11997,43 @@ pop_context (Shape        *shape,
   SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
+  SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+  SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
+
+  if (context->op != CLIPPING)
+    {
+      for (unsigned int i = 0; i < filter->n_functions; i++)
+        if (filter->functions[i].kind != FILTER_NONE)
+          gtk_snapshot_pop (context->snapshot);
+
+      if (svg_number_get (opacity, 1) != 1)
+        gtk_snapshot_pop (context->snapshot);
+    }
+
+  if (mask->kind != MASK_NONE && (mask->shape != NULL))
+    gtk_snapshot_pop (context->snapshot);
 
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
     gtk_snapshot_pop (context->snapshot);
 
-  if (mask->kind != MASK_NONE && (mask->shape != NULL))
-    gtk_snapshot_pop (context->snapshot);
+  if (context->op != CLIPPING)
+    {
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        {
+          gtk_snapshot_pop (context->snapshot);
+          gtk_snapshot_pop (context->snapshot);
+        }
+
+      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+        gtk_snapshot_pop (context->snapshot);
+    }
+
+  if (shape->type == SHAPE_USE)
+    gtk_snapshot_restore (context->snapshot);
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
-
-  if (context->op != CLIPPING)
-    {
-      if (svg_number_get (opacity, 1) != 1)
-        gtk_snapshot_pop (context->snapshot);
-
-      for (unsigned int i = 0; i < filter->n_functions; i++)
-        if (filter->functions[i].kind != FILTER_NONE)
-          gtk_snapshot_pop (context->snapshot);
-    }
 }
 
 static void
@@ -12115,11 +12348,6 @@ paint_shape (Shape        *shape,
         {
           Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
           ComputeContext use_context;
-          double x, y;
-          x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
-          y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
-          gtk_snapshot_save (context->snapshot);
-          gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
 
           /* FIXME: this isn't the best way of doing this */
           use_context.svg = context->svg;
@@ -12131,8 +12359,6 @@ paint_shape (Shape        *shape,
           compute_current_values_for_shape (use_shape, &use_context);
 
           render_shape (use_shape, context);
-
-          gtk_snapshot_restore (context->snapshot);
         }
       return;
     }
@@ -12303,7 +12529,11 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
   gtk_snapshot_scale (snapshot, sx, sy);
 
+  gtk_snapshot_push_opacity (snapshot, 1.0);
+
   render_shape (self->content, &paint_context);
+
+  gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_restore (snapshot);
 

@@ -1,31 +1,34 @@
-mask {
-  source: fill {
-    child: color {
-      bounds: 30 30 40 40;
-      color: rgb(255,0,0);
-    }
-    path: "\
+opacity {
+  opacity: 1;
+  child: mask {
+    source: fill {
+      child: color {
+        bounds: 30 30 40 40;
+        color: rgb(255,0,0);
+      }
+      path: "\
 M 70 50 o 0 20, -20 20, 0.707106769 o -20 0, -20 -20, 0.707106769 o 0 -20, 20 -20, 0.707106769 o 20 0, 20 20, 0.707106769 z";
-    fill-rule: winding;
-  }
-  mask: container {
-    fill {
-      child: color {
-        bounds: 0 0 50 50;
-        color: rgb(0,0,0);
-      }
-      path: "\
-M 0 0 h 50 v 50 h -50 z";
       fill-rule: winding;
     }
-    fill {
-      child: color {
-        bounds: 50 50 50 50;
-        color: rgb(0,0,0);
+    mask: container {
+      fill {
+        child: color {
+          bounds: 0 0 50 50;
+          color: rgb(0,0,0);
+        }
+        path: "\
+M 0 0 h 50 v 50 h -50 z";
+        fill-rule: winding;
       }
-      path: "\
+      fill {
+        child: color {
+          bounds: 50 50 50 50;
+          color: rgb(0,0,0);
+        }
+        path: "\
 M 50 50 h 50 v 50 h -50 z";
-      fill-rule: winding;
+        fill-rule: winding;
+      }
     }
   }
 }

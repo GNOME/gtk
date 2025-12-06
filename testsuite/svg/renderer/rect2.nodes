@@ -1,25 +1,28 @@
-transform {
-  transform: rotate(30);
-  child: container {
-    fill {
-      child: color {
-        bounds: 10 10 50 20;
-        color: rgb(0,0,0);
-      }
-      path: "\
+opacity {
+  opacity: 1;
+  child: transform {
+    transform: rotate(30);
+    child: container {
+      fill {
+        child: color {
+          bounds: 10 10 50 20;
+          color: rgb(0,0,0);
+        }
+        path: "\
 M 10 10 h 50 v 20 h -50 z";
-      fill-rule: winding;
-    }
-    stroke {
-      child: color {
-        bounds: 9.5 9.5 51 21;
-        color: rgb(255,0,0);
+        fill-rule: winding;
       }
-      path: "\
+      stroke {
+        child: color {
+          bounds: 9.5 9.5 51 21;
+          color: rgb(255,0,0);
+        }
+        path: "\
 M 10 10 h 50 v 20 h -50 z";
-      line-width: 1;
-      line-cap: butt;
-      line-join: miter;
+        line-width: 1;
+        line-cap: butt;
+        line-join: miter;
+      }
     }
   }
 }

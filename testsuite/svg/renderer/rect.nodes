@@ -1,20 +1,25 @@
-fill {
-  child: color {
-    bounds: 10 10 50 50;
-    color: rgb(0,0,0);
-  }
-  path: "\
+opacity {
+  opacity: 1;
+  child: container {
+    fill {
+      child: color {
+        bounds: 10 10 50 50;
+        color: rgb(0,0,0);
+      }
+      path: "\
 M 10 10 h 50 v 50 h -50 z";
-  fill-rule: winding;
-}
-stroke {
-  child: color {
-    bounds: 9.5 9.5 51 51;
-    color: rgb(255,0,0);
-  }
-  path: "\
+      fill-rule: winding;
+    }
+    stroke {
+      child: color {
+        bounds: 9.5 9.5 51 51;
+        color: rgb(255,0,0);
+      }
+      path: "\
 M 10 10 h 50 v 50 h -50 z";
-  line-width: 1;
-  line-cap: butt;
-  line-join: miter;
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
 }

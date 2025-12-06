@@ -1,30 +1,35 @@
-fill {
-  child: color {
-    bounds: 10 10 50 50;
-    color: rgb(0,0,0);
-  }
-  path: "\
+opacity {
+  opacity: 1;
+  child: container {
+    fill {
+      child: color {
+        bounds: 10 10 50 50;
+        color: rgb(0,0,0);
+      }
+      path: "\
 M 20 10\
 L 50 10 O 60 10, 60 25, 0.707106769\
 L 60 45 O 60 60, 50 60, 0.707106769\
 L 20 60 O 10 60, 10 45, 0.707106769\
 L 10 25 O 10 10, 20 10, 0.707106769\
 Z";
-  fill-rule: winding;
-}
-stroke {
-  child: color {
-    bounds: 9 9 52 52;
-    color: rgb(255,0,0);
-  }
-  path: "\
+      fill-rule: winding;
+    }
+    stroke {
+      child: color {
+        bounds: 9 9 52 52;
+        color: rgb(255,0,0);
+      }
+      path: "\
 M 20 10\
 L 50 10 O 60 10, 60 25, 0.707106769\
 L 60 45 O 60 60, 50 60, 0.707106769\
 L 20 60 O 10 60, 10 45, 0.707106769\
 L 10 25 O 10 10, 20 10, 0.707106769\
 Z";
-  line-width: 1;
-  line-cap: butt;
-  line-join: miter;
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
 }

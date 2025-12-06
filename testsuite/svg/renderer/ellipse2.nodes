@@ -1,10 +1,13 @@
-fill {
-  child: color {
-    bounds: 0.707107 0 341.293 218;
-    color: rgb(0,0,0);
-  }
-  path: "\
+opacity {
+  opacity: 1;
+  child: fill {
+    child: color {
+      bounds: 0.707107 0 341.293 218;
+      color: rgb(0,0,0);
+    }
+    path: "\
 M 342 122 O 342 218, 246 218, 0.707106769 O 150 218, 150 122, 0.707106769 O 150 26, 246 26, 0.707106769 O 342 26, 342 122, 0.707106769\
 Z";
-  fill-rule: winding;
+    fill-rule: winding;
+  }
 }
