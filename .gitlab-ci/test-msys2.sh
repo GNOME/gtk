@@ -29,7 +29,8 @@ pacman --noconfirm -S --needed \
     ${MINGW_PACKAGE_PREFIX}-python-gobject \
     ${MINGW_PACKAGE_PREFIX}-shaderc \
     ${MINGW_PACKAGE_PREFIX}-vulkan \
-    ${MINGW_PACKAGE_PREFIX}-vulkan-headers
+    ${MINGW_PACKAGE_PREFIX}-vulkan-headers \
+    ${MINGW_PACKAGE_PREFIX}-sassc
 
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"
