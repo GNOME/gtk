@@ -641,6 +641,7 @@ visit_node (GskOffload    *self,
 
     case GSK_DEBUG_NODE:
     case GSK_COPY_NODE:
+    case GSK_ISOLATION_NODE:
       /* keep going */
       visit_children (self, node);
       break;

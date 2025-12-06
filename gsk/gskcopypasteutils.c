@@ -24,6 +24,7 @@
 #include "gskcolornode.h"
 #include "gskcontainernode.h"
 #include "gskcopynode.h"
+#include "gskisolationnode.h"
 #include "gskopacitynode.h"
 #include "gskpastenode.h"
 #include "gskrendernodeprivate.h"
@@ -120,6 +121,7 @@ replay_partial_node (const PartialNode *replay)
         case GSK_COPY_NODE:
         case GSK_PASTE_NODE:
         case GSK_COMPOSITE_NODE:
+        case GSK_ISOLATION_NODE:
           /* These all don't record anything, so we never
            * encounter them */
         case GSK_NOT_A_RENDER_NODE:
@@ -212,6 +214,20 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
         recording->nodes = NULL;
         result = gsk_render_replay_default (replay, node);
         recording->nodes = saved;
+      }
+      break;
+
+    case GSK_ISOLATION_NODE:
+      /* Do either of the 2 above, depending on flags */
+      {
+        GskIsolation allowed = gsk_isolation_node_get_allowed (node);
+        Recording saved = *recording;
+        if (!(allowed & GSK_ISOLATION_BACKGROUND))
+          recording->nodes = NULL;
+        if (!(allowed & GSK_ISOLATION_COPY_PASTE))
+          recording->copies = NULL;
+        result = gsk_render_replay_default (replay, node);
+        *recording = saved;
       }
       break;
 

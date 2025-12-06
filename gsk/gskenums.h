@@ -126,6 +126,14 @@
  * Since: 4.22
  */
 
+/**
+ * GSK_ISOLATION_NODE:
+ *
+ * A node that isolated content of its child from previous content.
+ *
+ * Since: 4.22
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
@@ -162,6 +170,7 @@ typedef enum {
   GSK_COPY_NODE,
   GSK_PASTE_NODE,
   GSK_COMPOSITE_NODE,
+  GSK_ISOLATION_NODE,
 } GskRenderNodeType;
 
 /**
@@ -318,6 +327,29 @@ typedef enum {
   GSK_FILL_RULE_WINDING,
   GSK_FILL_RULE_EVEN_ODD
 } GskFillRule;
+
+/**
+ * GskIsolation:
+ * @GSK_ISOLATION_NONE: No isolation is defined.
+ * @GSK_ISOLATION_BACKGROUND: Whether background should be made available.
+ *   If the background is not available, future operations will be rendered
+ *   to a transparent background and combined with previous operations later.
+ * @GSK_ISOLATION_COPY_PASTE: Whether copies should be available to paste nodes.
+ *   If copies are not available, paste nodes can only paste from copies that
+ *   are made inside the isolated operations.
+ *
+ * These flags describe the types of isolations possible with a
+ * [struct@Gsk.IsolationNode].
+ *
+ * More isolation options may be added in the future.
+ *
+ * Since: 4.22
+ */
+typedef enum {
+  GSK_ISOLATION_NONE       = 1 << 0,
+  GSK_ISOLATION_BACKGROUND = 1 << 1,
+  GSK_ISOLATION_COPY_PASTE = 1 << 2
+} GskIsolation;
 
 /**
  * GskLineCap:

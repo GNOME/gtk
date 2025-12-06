@@ -123,6 +123,7 @@ compare_render_tests = [
   'inter-hinting',
   'inter-optical-scaling',
   'invalid-transform',
+  'isolation',
   'issue-3615',
   'linear-gradient-interpolation-nocairo',
   'linear-gradient-3d-nocairo',

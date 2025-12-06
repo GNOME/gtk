@@ -41,6 +41,7 @@
 #include "gskfillnode.h"
 #include "gskglshadernode.h"
 #include "gskgradientprivate.h"
+#include "gskisolationnode.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
 #include "gskpastenode.h"
@@ -293,6 +294,58 @@ parse_enum (GtkCssParser *parser,
   g_type_class_unref (class);
 
   return TRUE;
+}
+
+static gboolean
+parse_flags (GtkCssParser *parser,
+             GType         type,
+             gpointer      out_value)
+{
+  GFlagsClass *class;
+  GFlagsValue *v;
+  char *name;
+  gboolean result = TRUE;
+  int value = 0;
+
+  class = g_type_class_ref (type);
+
+  do
+    {
+      name = gtk_css_parser_consume_ident (parser);
+      if (name == NULL)
+        {
+          result = FALSE;
+          break;
+        }
+
+      v = g_flags_get_value_by_nick (class, name);
+      g_free (name);
+      if (v == NULL)
+        {
+          gtk_css_parser_error_value (parser, "Unknown value \"%s\" for flags \"%s\"",
+                                      name, g_type_name (type));
+          return FALSE;
+        }
+
+      if (v->value == 0)
+        {
+          if (value != 0)
+            {
+              gtk_css_parser_error_value (parser, "The zero value must appear alone");
+              result = FALSE;
+            }
+          break;
+        }
+
+      value |= v->value;
+    }
+  while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT));
+
+  *(int*) out_value = value;
+
+  g_type_class_unref (class);
+
+  return result;
 }
 
 static gboolean
@@ -4043,6 +4096,37 @@ parse_composite_node (GtkCssParser *parser,
 }
 
 static gboolean
+parse_isolation (GtkCssParser *parser,
+                 Context      *context,
+                 gpointer      out)
+{
+  return parse_flags (parser, GSK_TYPE_ISOLATION, out);
+}
+
+static GskRenderNode *
+parse_isolation_node (GtkCssParser *parser,
+                      Context      *context)
+{
+  GskRenderNode *child = NULL;
+  GskIsolation allowed = 0;
+  const Declaration declarations[] = {
+    { "child", parse_node, clear_node, &child },
+    { "allowed", parse_isolation, NULL, &allowed },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+
+  result = gsk_isolation_node_new (child, allowed);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
             gpointer      out_node)
@@ -4085,6 +4169,7 @@ parse_node (GtkCssParser *parser,
     { "copy", parse_copy_node },
     { "paste", parse_paste_node },
     { "composite", parse_composite_node },
+    { "isolation", parse_isolation_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4393,6 +4478,7 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_COMPONENT_TRANSFER_NODE:
     case GSK_COPY_NODE:
     case GSK_COMPOSITE_NODE:
+    case GSK_ISOLATION_NODE:
       {
         GskRenderNode **children;
         gsize i, n_children;
@@ -4787,6 +4873,42 @@ append_enum_param (Printer    *p,
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
   g_string_append (p->str, enum_to_nick (type, value));
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
+append_flags_param (Printer    *p,
+                    const char *param_name,
+                    GType       type,
+                    int         value)
+{
+  GFlagsClass *class;
+  guint i;
+
+  _indent (p);
+
+  g_string_append_printf (p->str, "%s:", param_name);
+
+  class = g_type_class_ref (type);
+
+  g_assert ((value & class->mask) == value);
+
+  for (i = 0; i < class->n_values; i++)
+    {
+      if ((class->values[i].value & value) == class->values[i].value)
+        {
+          g_string_append_c (p->str, ' ');
+          g_string_append (p->str, class->values[i].value_nick);
+          value &= ~class->values[i].value;
+          /* This covers the case where value started as 0 and we want to print the 0 value */
+          if (value == 0)
+            break;
+        }
+    }
+
+  g_assert (value == 0);
+
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
@@ -6302,6 +6424,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       append_enum_param (p, "operator", GSK_TYPE_PORTER_DUFF, gsk_composite_node_get_operator (node));
       end_node (p);
       break;
+
+    case GSK_ISOLATION_NODE:
+      start_node (p, "isolation", node_name);
+      append_node_param (p, "child", gsk_isolation_node_get_child (node));
+      if (gsk_isolation_node_get_allowed (node) != 0)
+        append_flags_param (p, "isolation", GSK_TYPE_ISOLATION, gsk_isolation_node_get_allowed (node));
+      end_node (p);
+      break;
+
 
     default:
       g_error ("Unhandled node: %s", g_type_name_from_instance ((GTypeInstance *) node));

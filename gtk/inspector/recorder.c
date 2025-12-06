@@ -307,6 +307,7 @@ get_roles (GskRenderNodeType node_type)
     case GSK_COLOR_NODE:
     case GSK_TEXTURE_NODE:
     case GSK_TEXTURE_SCALE_NODE:
+    case GSK_ISOLATION_NODE:
     case GSK_NOT_A_RENDER_NODE:
     default:
       return NULL;
@@ -488,6 +489,8 @@ node_type_name (GskRenderNodeType type)
       return "Paste";
     case GSK_COMPOSITE_NODE:
       return "Composite";
+    case GSK_ISOLATION_NODE:
+      return "Isolation";
     }
 }
 
@@ -529,6 +532,7 @@ node_name (GskRenderNode *node)
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
     case GSK_COMPOSITE_NODE:
+    case GSK_ISOLATION_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -1740,6 +1744,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         g_free (tmp);
       }
       break;
+
+    case GSK_ISOLATION_NODE:
+      {
+        GskIsolation allowed = gsk_isolation_node_get_allowed (node);
+        gchar *tmp = g_enum_to_string (GSK_TYPE_ISOLATION, allowed);
+        add_text_row (store, "Allowed", "%s", tmp);
+        g_free (tmp);
+      }
 
     case GSK_NOT_A_RENDER_NODE:
     default:
