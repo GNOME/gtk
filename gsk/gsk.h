@@ -36,6 +36,7 @@
 #include <gsk/gskenums.h>
 #include <gsk/gskfillnode.h>
 #include <gsk/gskglshadernode.h>
+#include <gsk/gskisolationnode.h>
 #include <gsk/gskmasknode.h>
 #include <gsk/gskopacitynode.h>
 #include <gsk/gskpastenode.h>

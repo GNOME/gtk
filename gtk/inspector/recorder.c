@@ -63,8 +63,9 @@
 #include <gdk/gdktextureprivate.h>
 #include <gdk/gdkrgbaprivate.h>
 #include <gdk/gdkcolorstateprivate.h>
-#include "gtk/gtkdebug.h"
 #include "gtk/gtkbuiltiniconprivate.h"
+#include "gtk/gtkdebug.h"
+#include "gtk/gtkpopcountprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
 #include "gdk/gdkcairoprivate.h"
 
@@ -307,6 +308,7 @@ get_roles (GskRenderNodeType node_type)
     case GSK_COLOR_NODE:
     case GSK_TEXTURE_NODE:
     case GSK_TEXTURE_SCALE_NODE:
+    case GSK_ISOLATION_NODE:
     case GSK_NOT_A_RENDER_NODE:
     default:
       return NULL;
@@ -488,6 +490,8 @@ node_type_name (GskRenderNodeType type)
       return "Paste";
     case GSK_COMPOSITE_NODE:
       return "Composite";
+    case GSK_ISOLATION_NODE:
+      return "Isolation";
     }
 }
 
@@ -529,6 +533,7 @@ node_name (GskRenderNode *node)
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
     case GSK_COMPOSITE_NODE:
+    case GSK_ISOLATION_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -1721,6 +1726,25 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         GskPorterDuff operator = gsk_composite_node_get_operator (node);
         gchar *tmp = g_enum_to_string (GSK_TYPE_PORTER_DUFF, operator);
         add_text_row (store, "Operator", "%s", tmp);
+        g_free (tmp);
+      }
+      break;
+
+    case GSK_ISOLATION_NODE:
+      {
+        GskIsolation isolations = gsk_isolation_node_get_isolations (node);
+        gchar *tmp;
+        if (gtk_popcount (GSK_ISOLATION_ALL & ~isolations) < gtk_popcount (isolations))
+          {
+            isolations = GSK_ISOLATION_ALL & ~isolations;
+            tmp = g_flags_to_string (GSK_TYPE_ISOLATION, isolations);
+            add_text_row (store, "Disabled features", "%s", tmp);
+          }
+        else
+          {
+            tmp = g_flags_to_string (GSK_TYPE_ISOLATION, isolations);
+            add_text_row (store, "Enabled features", "%s", tmp);
+          }
         g_free (tmp);
       }
       break;

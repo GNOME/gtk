@@ -384,6 +384,21 @@ uniforms in the shader.
 
 Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 
+### isolation
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| child    | `<node>`         | color { }              | always      |
+| message  | `<isolations>`   | all                    | non-default |
+
+Creates a node like `gsk_isolation_node_new()` with the given properties.
+
+Possible values for the isolations property are:
+
+    isolations: none | all | <isolation>* | not <isolation>*
+
+    isolation: background | copy-paste
+
 ### linear-gradient
 
 | property          | syntax            | default        | printed     |

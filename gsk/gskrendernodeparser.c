@@ -41,6 +41,7 @@
 #include "gskfillnode.h"
 #include "gskglshadernode.h"
 #include "gskgradientprivate.h"
+#include "gskisolationnode.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
 #include "gskpastenode.h"
@@ -70,6 +71,7 @@
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssserializerprivate.h"
+#include "gtk/gtkpopcountprivate.h"
 
 #ifdef GDK_WINDOWING_WIN32
 #include "gdk/win32/gdkd3d12texturebuilder.h"
@@ -4030,7 +4032,7 @@ parse_composite_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS(declarations));
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
   if (mask == NULL)
@@ -4040,6 +4042,103 @@ parse_composite_node (GtkCssParser *parser,
 
   gsk_render_node_unref (child);
   gsk_render_node_unref (mask);
+
+  return result;
+}
+
+static struct {
+  const char *name;
+  GskIsolation value;
+} isolation_flags[] = {
+  { "background", GSK_ISOLATION_BACKGROUND },
+  { "copy-paste", GSK_ISOLATION_COPY_PASTE }
+};
+
+static gboolean
+parse_isolation_flags (GtkCssParser *parser,
+                       GskIsolation *out_result)
+{
+  GskIsolation result = 0;
+  guint i;
+
+  do
+    {
+      for (i = 0; i < G_N_ELEMENTS (isolation_flags); i++)
+        {
+          if (gtk_css_parser_try_ident (parser, isolation_flags[i].name))
+            {
+              if (result & isolation_flags[i].value)
+                {
+                  gtk_css_parser_error_value (parser, "Duplicate value");
+                  return FALSE;
+                }
+              result |= isolation_flags[i].value;
+              break;
+            }
+        }
+    }
+  while (i < G_N_ELEMENTS (isolation_flags));
+
+  if (result == 0)
+    {
+      gtk_css_parser_error_value (parser, "Expected an isolation feature");
+      return FALSE;
+    }
+
+  *out_result = result;
+  return TRUE;
+}
+
+static gboolean
+parse_isolation (GtkCssParser *parser,
+                 Context      *context,
+                 gpointer      out)
+{
+  GskIsolation isolation;
+
+  if (gtk_css_parser_try_ident (parser, "none"))
+    {
+      isolation = GSK_ISOLATION_NONE;
+    }
+  else if (gtk_css_parser_try_ident (parser, "all"))
+    {
+      isolation = GSK_ISOLATION_ALL;
+    }
+  else if (gtk_css_parser_try_ident (parser, "not"))
+    {
+      if (!parse_isolation_flags (parser, &isolation))
+        return FALSE;
+      isolation = GSK_ISOLATION_ALL & ~isolation;
+    }
+  else
+    {
+      if (!parse_isolation_flags (parser, &isolation))
+        return FALSE;
+    }
+
+  *(GskIsolation *) out = isolation;
+  return TRUE;
+}
+
+static GskRenderNode *
+parse_isolation_node (GtkCssParser *parser,
+                      Context      *context)
+{
+  GskRenderNode *child = NULL;
+  GskIsolation features = GSK_ISOLATION_ALL;
+  const Declaration declarations[] = {
+    { "child", parse_node, clear_node, &child },
+    { "isolations", parse_isolation, NULL, &features },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+
+  result = gsk_isolation_node_new (child, features);
+
+  gsk_render_node_unref (child);
 
   return result;
 }
@@ -4087,6 +4186,7 @@ parse_node (GtkCssParser *parser,
     { "copy", parse_copy_node },
     { "paste", parse_paste_node },
     { "composite", parse_composite_node },
+    { "isolation", parse_isolation_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4395,6 +4495,7 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_COMPONENT_TRANSFER_NODE:
     case GSK_COPY_NODE:
     case GSK_COMPOSITE_NODE:
+    case GSK_ISOLATION_NODE:
       {
         GskRenderNode **children;
         gsize i, n_children;
@@ -5543,6 +5644,46 @@ append_component_transfer_param (Printer                    *p,
 }
 
 static void
+append_isolation_param (Printer      *p,
+                        const char   *param_name,
+                        GskIsolation  isolation)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s:", param_name);
+
+  if (isolation == GSK_ISOLATION_NONE)
+    {
+      g_string_append (p->str, " none");
+    }
+  else if (isolation == GSK_ISOLATION_ALL)
+    {
+      g_string_append (p->str, " all");
+    }
+  else
+    {
+      gsize i;
+
+      if (gtk_popcount (GSK_ISOLATION_ALL & ~isolation) < gtk_popcount (isolation))
+        {
+          g_string_append (p->str, " not");
+          isolation = GSK_ISOLATION_ALL & ~isolation;
+        }
+
+      for (i = 0; i < G_N_ELEMENTS (isolation_flags); i++)
+        {
+          if (isolation & isolation_flags[i].value)
+            {
+              g_string_append_c (p->str, ' ');
+              g_string_append (p->str, isolation_flags[i].name);
+            }
+        }
+    }
+
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -6302,6 +6443,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       append_node_param (p, "child", gsk_composite_node_get_child (node));
       append_node_param (p, "mask", gsk_composite_node_get_mask (node));
       append_enum_param (p, "operator", GSK_TYPE_PORTER_DUFF, gsk_composite_node_get_operator (node));
+      end_node (p);
+      break;
+
+    case GSK_ISOLATION_NODE:
+      start_node (p, "isolation", node_name);
+      append_node_param (p, "child", gsk_isolation_node_get_child (node));
+      if (gsk_isolation_node_get_isolations (node) != GSK_ISOLATION_ALL)
+        append_isolation_param (p, "isolations", gsk_isolation_node_get_isolations (node));
       end_node (p);
       break;
 
