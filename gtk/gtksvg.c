@@ -12312,7 +12312,7 @@ shape_create_stroke (Shape        *shape,
       if (path_length < 0)
         path_length = length;
 
-      offset = svg_number_get (shape->current[SHAPE_ATTR_STROKE_DASHOFFSET], path_length);
+      offset = svg_number_get (shape->current[SHAPE_ATTR_STROKE_DASHOFFSET], normalized_diagonal (context->viewport));
 
       float *vals = g_newa (float, len);
 
