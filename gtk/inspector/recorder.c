@@ -258,52 +258,26 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 G_DEFINE_TYPE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_WIDGET)
 
-typedef struct
+static const char **
+get_roles (GskRenderNodeType node_type)
 {
-  GskRenderNode *node;
-  const char *role;
-} RenderNode;
+  static const char *blend_node_roles[] = { "Bottom", "Top", NULL };
+  static const char *mask_node_roles[] = { "Source", "Mask", NULL };
+  static const char *cross_fade_node_roles[] = { "Start", "End", NULL };
+  static const char *composite_node_roles[] = { "Child", "Mask", NULL };
 
-static GListModel *
-create_render_node_list_model (RenderNode *nodes,
-                               guint       n_nodes)
-{
-  GListStore *store;
-  guint i;
-
-  /* can't put render nodes into list models - they're not GObjects */
-  store = g_list_store_new (GDK_TYPE_PAINTABLE);
-
-  for (i = 0; i < n_nodes; i++)
+  switch (node_type)
     {
-      graphene_rect_t bounds;
-      GdkPaintable *paintable;
-
-      gsk_render_node_get_bounds (nodes[i].node, &bounds);
-      paintable = gtk_render_node_paintable_new (nodes[i].node, &bounds);
-      g_object_set_data (G_OBJECT (paintable), "role", (gpointer) nodes[i].role);
-      g_list_store_append (store, paintable);
-      g_object_unref (paintable);
-    }
-
-  return G_LIST_MODEL (store);
-}
-
-static GListModel *
-create_list_model_for_render_node (GskRenderNode *node)
-{
-  switch (gsk_render_node_get_node_type (node))
-    {
-    default:
-    case GSK_NOT_A_RENDER_NODE:
-      g_assert_not_reached ();
-      return NULL;
-
+    case GSK_BLEND_NODE:
+      return blend_node_roles;
+    case GSK_MASK_NODE:
+      return mask_node_roles;
+    case GSK_CROSS_FADE_NODE:
+      return cross_fade_node_roles;
+    case GSK_COMPOSITE_NODE:
+      return composite_node_roles;
+    case GSK_CONTAINER_NODE:
     case GSK_CAIRO_NODE:
-    case GSK_TEXT_NODE:
-    case GSK_TEXTURE_NODE:
-    case GSK_TEXTURE_SCALE_NODE:
-    case GSK_COLOR_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_RADIAL_GRADIENT_NODE:
@@ -312,112 +286,65 @@ create_list_model_for_render_node (GskRenderNode *node)
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
-    case GSK_PASTE_NODE:
-      /* no children */
-      return NULL;
-
     case GSK_TRANSFORM_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_transform_node_get_child (node), NULL }, 1);
-
     case GSK_OPACITY_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_opacity_node_get_child (node), NULL }, 1);
-
     case GSK_COLOR_MATRIX_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_color_matrix_node_get_child (node), NULL }, 1);
-
-    case GSK_BLUR_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_blur_node_get_child (node), NULL }, 1);
-
     case GSK_REPEAT_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_repeat_node_get_child (node), NULL }, 1);
-
     case GSK_CLIP_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_clip_node_get_child (node), NULL }, 1);
-
     case GSK_ROUNDED_CLIP_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_rounded_clip_node_get_child (node), NULL }, 1);
-
     case GSK_FILL_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_fill_node_get_child (node), NULL }, 1);
-
     case GSK_STROKE_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_stroke_node_get_child (node), NULL }, 1);
-
     case GSK_SHADOW_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_shadow_node_get_child (node), NULL }, 1);
-
-    case GSK_BLEND_NODE:
-      return create_render_node_list_model ((RenderNode[2]) { { gsk_blend_node_get_bottom_child (node), "Bottom" },
-                                                              { gsk_blend_node_get_top_child (node), "Top" } }, 2);
-
-    case GSK_MASK_NODE:
-      return create_render_node_list_model ((RenderNode[2]) { { gsk_mask_node_get_source (node), "Source" },
-                                                              { gsk_mask_node_get_mask (node), "Mask" } }, 2);
-
-    case GSK_CROSS_FADE_NODE:
-      return create_render_node_list_model ((RenderNode[2]) { { gsk_cross_fade_node_get_start_child (node), "Start" },
-                                                              { gsk_cross_fade_node_get_end_child (node), "End" } }, 2);
-
+    case GSK_TEXT_NODE:
+    case GSK_BLUR_NODE:
     case GSK_GL_SHADER_NODE:
-      {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-        GListStore *store = g_list_store_new (GDK_TYPE_PAINTABLE);
-
-        for (guint i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
-          {
-            GskRenderNode *child = gsk_gl_shader_node_get_child (node, i);
-            graphene_rect_t bounds;
-            GdkPaintable *paintable;
-
-            gsk_render_node_get_bounds (child, &bounds);
-            paintable = gtk_render_node_paintable_new (child, &bounds);
-            g_list_store_append (store, paintable);
-            g_object_unref (paintable);
-          }
-
-        return G_LIST_MODEL (store);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      }
-
-    case GSK_CONTAINER_NODE:
-      {
-        GListStore *store;
-        guint i;
-
-        /* can't put render nodes into list models - they're not GObjects */
-        store = g_list_store_new (GDK_TYPE_PAINTABLE);
-
-        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
-          {
-            GskRenderNode *child = gsk_container_node_get_child (node, i);
-            graphene_rect_t bounds;
-            GdkPaintable *paintable;
-
-            gsk_render_node_get_bounds (child, &bounds);
-            paintable = gtk_render_node_paintable_new (child, &bounds);
-            g_list_store_append (store, paintable);
-            g_object_unref (paintable);
-          }
-
-        return G_LIST_MODEL (store);
-      }
-
-    case GSK_DEBUG_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_debug_node_get_child (node), NULL }, 1);
-
     case GSK_SUBSURFACE_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_subsurface_node_get_child (node), NULL }, 1);
-
     case GSK_COMPONENT_TRANSFER_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_component_transfer_node_get_child (node), NULL }, 1);
-
     case GSK_COPY_NODE:
-      return create_render_node_list_model (&(RenderNode) { gsk_copy_node_get_child (node), NULL }, 1);
-
-    case GSK_COMPOSITE_NODE:
-      return create_render_node_list_model ((RenderNode[2]) { { gsk_composite_node_get_child (node), "Child" },
-                                                              { gsk_composite_node_get_mask (node), "Mask" } }, 2);
+    case GSK_PASTE_NODE:
+    case GSK_DEBUG_NODE:
+    case GSK_COLOR_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      return NULL;
     }
+};
+
+static GListModel *
+create_list_model_for_render_node (GskRenderNode *node)
+{
+  GskRenderNode **children;
+  gsize i, n_children;
+  GListStore *store;
+  const char **roles;
+
+  /* can't put render nodes into list models - they're not GObjects */
+  store = g_list_store_new (GDK_TYPE_PAINTABLE);
+
+  children = gsk_render_node_get_children (node, &n_children);
+  roles = get_roles (gsk_render_node_get_node_type (node));
+
+  for (i = 0; i < n_children; i++)
+    {
+      graphene_rect_t bounds;
+      GdkPaintable *paintable;
+
+      gsk_render_node_get_bounds (children[i], &bounds);
+      paintable = gtk_render_node_paintable_new (children[i], &bounds);
+      if (roles)
+        {
+          if (roles[i])
+            g_object_set_data (G_OBJECT (paintable), "role", (gpointer) roles[i]);
+          else
+            roles = NULL;
+        }
+      g_list_store_append (store, paintable);
+      g_object_unref (paintable);
+    }
+
+  return G_LIST_MODEL (store);
 }
 
 static GListModel *
