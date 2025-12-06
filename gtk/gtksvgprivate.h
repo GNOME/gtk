@@ -197,10 +197,10 @@ typedef enum
 struct _Shape
 {
   ShapeType type;
+  gboolean display;
   Shape *parent;
   uint64_t attrs;
   char *id;
-  gboolean display;
 
   /* Dependency order for computing updates */
   Shape *first;
