@@ -5272,25 +5272,36 @@ shape_attr_lookup (const char *name,
                    ShapeAttr  *attr,
                    ShapeType   type)
 {
-  if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
-      strcmp (name, "gradientTransform") == 0)
+  if (type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT)
     {
-      *attr = SHAPE_ATTR_TRANSFORM;
-      return TRUE;
+      if (strcmp (name, "gradientTransform") == 0)
+        {
+          *attr = SHAPE_ATTR_TRANSFORM;
+          return TRUE;
+        }
     }
 
-  if (type == SHAPE_CLIP_PATH &&
-      strcmp (name, "clipPathUnits") == 0)
+  if (type == SHAPE_CLIP_PATH)
     {
-      *attr = SHAPE_ATTR_CONTENT_UNITS;
-      return TRUE;
+      if (strcmp (name, "clipPathUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_CONTENT_UNITS;
+          return TRUE;
+        }
     }
 
-  if (type == SHAPE_MASK &&
-      strcmp (name, "maskContentUnits") == 0)
+  if (type == SHAPE_MASK)
     {
-      *attr = SHAPE_ATTR_CONTENT_UNITS;
-      return TRUE;
+      if (strcmp (name, "maskContentUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_CONTENT_UNITS;
+          return TRUE;
+        }
+      if (strcmp (name, "maskUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_BOUND_UNITS;
+          return TRUE;
+        }
     }
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
