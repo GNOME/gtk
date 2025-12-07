@@ -67,8 +67,13 @@ replay_partial_node (const PartialNode *replay)
         case GSK_TRANSFORM_NODE:
           {
             GskTransform *tmp;
+            GskRenderNode *tmp_node;
             if (node)
-              node = gsk_transform_node_new (node, replay->transform);
+              {
+                tmp_node = gsk_transform_node_new (node, replay->transform);
+                gsk_render_node_unref (node);
+                node = tmp_node;
+              }
             tmp = gsk_transform_transform (gsk_transform_ref (replay->transform), transform);
             gsk_transform_unref (transform);
             transform = tmp;
