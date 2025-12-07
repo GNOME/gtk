@@ -95,6 +95,7 @@ enum
   PROP_KEEP_ASPECT_RATIO,
   PROP_CAN_SHRINK,
   PROP_CONTENT_FIT,
+  PROP_ISOLATE_CONTENTS,
   NUM_PROPERTIES
 };
 
@@ -106,8 +107,9 @@ struct _GtkPicture
   GFile *file;
 
   char *alternative_text;
-  guint can_shrink : 1;
   GtkContentFit content_fit;
+  guint can_shrink : 1;
+  guint isolate_contents : 1;
 };
 
 struct _GtkPictureClass
@@ -138,7 +140,8 @@ gtk_picture_snapshot (GtkWidget   *widget,
   height = gtk_widget_get_height (widget);
   ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
 
-  gtk_snapshot_push_isolation (snapshot, GSK_ISOLATION_ALL);
+  if (self->isolate_contents)
+    gtk_snapshot_push_isolation (snapshot, GSK_ISOLATION_ALL);
 
   if (self->content_fit == GTK_CONTENT_FIT_FILL || ratio == 0)
     {
@@ -207,7 +210,8 @@ gtk_picture_snapshot (GtkWidget   *widget,
       gtk_snapshot_restore (snapshot);
     }
 
-  gtk_snapshot_pop (snapshot); /* isolation */
+  if (self->isolate_contents)
+    gtk_snapshot_pop (snapshot); /* isolation */
 }
 
 static GtkSizeRequestMode
@@ -324,6 +328,10 @@ gtk_picture_set_property (GObject      *object,
       gtk_picture_set_content_fit (self, g_value_get_enum (value));
       break;
 
+    case PROP_ISOLATE_CONTENTS:
+      gtk_picture_set_isolate_contents (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -364,6 +372,10 @@ gtk_picture_get_property (GObject     *object,
 
     case PROP_CONTENT_FIT:
       g_value_set_enum (value, self->content_fit);
+      break;
+
+    case PROP_ISOLATE_CONTENTS:
+      g_value_set_boolean (value, self->isolate_contents);
       break;
 
     default:
@@ -520,6 +532,18 @@ gtk_picture_class_init (GtkPictureClass *class)
                          GTK_CONTENT_FIT_CONTAIN,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPicture:isolate-contents:
+   *
+   * If the rendering of the contents is isolated from the rest of the widget tree.
+   *
+   * Since: 4.22
+   */
+  properties[PROP_ISOLATE_CONTENTS] =
+      g_param_spec_boolean ("isolate-contents", NULL, NULL,
+                            TRUE,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("picture"));
@@ -531,6 +555,7 @@ gtk_picture_init (GtkPicture *self)
 {
   self->can_shrink = TRUE;
   self->content_fit = GTK_CONTENT_FIT_CONTAIN;
+  self->isolate_contents = TRUE;
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
@@ -1022,7 +1047,7 @@ gtk_picture_get_keep_aspect_ratio (GtkPicture *self)
  * @self: a `GtkPicture`
  * @can_shrink: if @self can be made smaller than its contents
  *
- * If set to %TRUE, the @self can be made smaller than its contents.
+ * If set to %TRUE, then @self can be made smaller than its contents.
  *
  * The contents will then be scaled down when rendering.
  *
@@ -1124,6 +1149,58 @@ gtk_picture_get_content_fit (GtkPicture *self)
   g_return_val_if_fail (GTK_IS_PICTURE (self), FALSE);
 
   return self->content_fit;
+}
+
+/**
+ * gtk_picture_set_isolate_contents:
+ * @self: a `GtkPicture`
+ * @isolate_contents: if contents are rendered separately
+ *
+ * If set to true, then the contents will be rendered individually.
+ *
+ * If set to false they will be able to erase or otherwise mix with
+ * the background.
+ *
+ * GTK supports finer grained isolation, in rare cases where you need
+ * this, you can use [method@Gtk.Snapshot.push_isolation] yourself to
+ * achieve this.
+ *
+ * By default contents are isolated.
+ *
+ * Since: 4.22
+ */
+void
+gtk_picture_set_isolate_contents (GtkPicture *self,
+                                  gboolean    isolate_contents)
+{
+  g_return_if_fail (GTK_IS_PICTURE (self));
+
+  if (self->isolate_contents == isolate_contents)
+    return;
+
+  self->isolate_contents = isolate_contents;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ISOLATE_CONTENTS]);
+}
+
+/**
+ * gtk_picture_get_isolate_contents:
+ * @self: a `GtkPicture`
+ *
+ * Returns whether the contents are isolated.
+ *
+ * Returns: True if contents are isolated
+ *
+ * Since 4.22
+ */
+gboolean
+gtk_picture_get_isolate_contents (GtkPicture *self)
+{
+  g_return_val_if_fail (GTK_IS_PICTURE (self), TRUE);
+
+  return self->isolate_contents;
 }
 
 /**

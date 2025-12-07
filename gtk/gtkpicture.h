@@ -85,6 +85,12 @@ void            gtk_picture_set_content_fit             (GtkPicture             
 GDK_AVAILABLE_IN_4_8
 GtkContentFit   gtk_picture_get_content_fit             (GtkPicture             *self);
 
+GDK_AVAILABLE_IN_4_22
+void            gtk_picture_set_isolate_contents        (GtkPicture             *self,
+                                                         gboolean                isolate_contents);
+GDK_AVAILABLE_IN_4_22
+gboolean        gtk_picture_get_isolate_contents        (GtkPicture             *self);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_picture_set_alternative_text        (GtkPicture             *self,
                                                          const char             *alternative_text);
