@@ -1,0 +1,8 @@
+<svg width="200" height="200">
+  <defs>
+    <pattern id="rotatedSquares" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect x="0" y="0" width="10" height="10" fill="green"/>
+    </pattern>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#rotatedSquares)"/>
+</svg>

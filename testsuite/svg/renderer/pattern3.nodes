@@ -1,0 +1,34 @@
+opacity {
+  opacity: 1;
+  child: fill {
+    child: transform {
+      transform: translate(100, 100) rotate(45) translate(-100, -100);
+      child: repeat {
+        bounds: 29.2893 29.2893 141.421 141.421;
+        child: container {
+          fill {
+            child: color {
+              bounds: 0 0 20 10;
+              color: rgb(255,0,0);
+            }
+            path: "\
+M 0 0 h 20 v 10 h -20 z";
+            fill-rule: winding;
+          }
+          fill {
+            child: color {
+              bounds: 0 10 20 10;
+              color: rgb(0,0,255);
+            }
+            path: "\
+M 0 10 h 20 v 10 h -20 z";
+            fill-rule: winding;
+          }
+        }
+      }
+    }
+    path: "\
+M 50 50 h 100 v 100 h -100 z";
+    fill-rule: winding;
+  }
+}

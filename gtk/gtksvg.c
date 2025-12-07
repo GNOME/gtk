@@ -75,8 +75,8 @@
  *
  * The paintable does not support text or images, only shapes and paths.
  *
- * In `<defs>`, only `<clipPath>`, `<mask>`, gradients and shapes are
- * supported, not `<filter>`, `<pattern>` or other things.
+ * In `<defs>`, only `<clipPath>`, `<mask>`, gradients, shapes and
+ * patterns are supported, not `<filter>` or other things.
  *
  * Gradient templating is not implemented.
  *
@@ -5643,6 +5643,25 @@ shape_attr_lookup (const char *name,
         }
     }
 
+  if (type == SHAPE_PATTERN)
+    {
+      if (strcmp (name, "patternTransform") == 0)
+        {
+          *attr = SHAPE_ATTR_TRANSFORM;
+          return TRUE;
+        }
+      if (strcmp (name, "patternContentUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_CONTENT_UNITS;
+          return TRUE;
+        }
+      if (strcmp (name, "patternUnits") == 0)
+        {
+        *attr = SHAPE_ATTR_BOUND_UNITS;
+        return TRUE;
+        }
+    }
+
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
       if (strcmp (name, shape_attrs[i].name) == 0)
@@ -5668,6 +5687,15 @@ shape_attr_get_presentation (ShapeAttr attr,
 
   if (type == SHAPE_MASK && attr == SHAPE_ATTR_CONTENT_UNITS)
     return "maskContentUnits";
+
+  if (type == SHAPE_PATTERN && attr == SHAPE_ATTR_CONTENT_UNITS)
+    return "patternContentUnits";
+
+  if (type == SHAPE_PATTERN && attr == SHAPE_ATTR_BOUND_UNITS)
+    return "patternUnits";
+
+  if (type == SHAPE_PATTERN && attr == SHAPE_ATTR_TRANSFORM)
+    return "patternTransform";
 
   return shape_attrs[attr].name;
 }
@@ -5864,6 +5892,12 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 1,
   },
+  { .name = "pattern",
+    .has_shapes = 1,
+    .never_rendered = 1,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+  },
 };
 
 static gboolean
@@ -5950,7 +5984,7 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
-  if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK)
+  if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK || type == SHAPE_PATTERN)
     {
       if (attr == SHAPE_ATTR_CONTENT_UNITS)
         return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
@@ -6015,7 +6049,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_Y:
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_HEIGHT:
-      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK;
+      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
@@ -6038,9 +6072,9 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_CONTENT_UNITS:
       return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
-             type == SHAPE_CLIP_PATH || type == SHAPE_MASK;
+             type == SHAPE_CLIP_PATH || type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_BOUND_UNITS:
-      return type == SHAPE_MASK;
+      return type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
@@ -6052,7 +6086,8 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_FR:
       return type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_VIEW_BOX:
-      return FALSE;
+    case SHAPE_ATTR_CONTENT_FIT:
+      return type == SHAPE_PATTERN;
     default:
       return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
@@ -6195,6 +6230,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
+    case SHAPE_PATTERN:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -6279,6 +6315,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
+        case SHAPE_PATTERN:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -6337,6 +6374,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
+        case SHAPE_PATTERN:
         default:
           g_assert_not_reached ();
         }
@@ -6393,6 +6431,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_GROUP:
     case SHAPE_CLIP_PATH:
     case SHAPE_MASK:
+    case SHAPE_PATTERN:
       {
         for (unsigned int i = 0; i < shape->shapes->len; i++)
           {
@@ -6417,7 +6456,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_DEFS:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
-      g_error ("attempt to get the bounds of a %s", shape_types[shape->type].name);
+      g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
       break;
     default:
       g_assert_not_reached ();
@@ -10577,8 +10616,7 @@ start_element_cb (GMarkupParseContext  *context,
       skip_element (data, context, "Ignoring metadata and style elements: <%s>", element_name);
       return;
     }
-  else if (strcmp (element_name, "filter") == 0 ||
-           strcmp (element_name, "pattern") == 0)
+  else if (strcmp (element_name, "filter") == 0)
     {
       skip_element (data, context, "Ignoring unsupported element: <%s>", element_name);
       return;
@@ -11187,7 +11225,8 @@ resolve_paint_ref (SvgValue   *value,
       if (!target)
         gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->server.ref);
       else if (target->type != SHAPE_LINEAR_GRADIENT &&
-               target->type != SHAPE_RADIAL_GRADIENT)
+               target->type != SHAPE_RADIAL_GRADIENT &&
+               target->type != SHAPE_PATTERN)
         gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", paint->server.ref);
       else
         {
@@ -12730,6 +12769,95 @@ paint_radial_gradient (Shape                 *gradient,
 }
 
 static void
+paint_pattern (Shape                 *pattern,
+               const graphene_rect_t *bounds,
+               PaintContext          *context)
+{
+  SvgViewBox *view_box = (SvgViewBox *) pattern->current[SHAPE_ATTR_VIEW_BOX];
+  SvgContentFit *content_fit = (SvgContentFit *) pattern->current[SHAPE_ATTR_CONTENT_FIT];
+  graphene_rect_t pattern_bounds, child_bounds;
+  double tx, ty;
+  double sx, sy;
+  GskTransform *transform;
+  double dx, dy;
+
+  if (svg_enum_get (pattern->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+    {
+      dx = bounds->origin.x + svg_number_get (pattern->current[SHAPE_ATTR_X], 1) * bounds->size.width;
+      dy = bounds->origin.y + svg_number_get (pattern->current[SHAPE_ATTR_Y], 1) * bounds->size.height;
+      child_bounds.origin.x = 0;
+      child_bounds.origin.y = 0;
+      child_bounds.size.width = svg_number_get (pattern->current[SHAPE_ATTR_WIDTH], 1) * bounds->size.width;
+      child_bounds.size.height = svg_number_get (pattern->current[SHAPE_ATTR_HEIGHT], 1) * bounds->size.height;
+    }
+  else
+    {
+      dx = svg_number_get (pattern->current[SHAPE_ATTR_X], context->viewport->size.width);
+      dy = svg_number_get (pattern->current[SHAPE_ATTR_Y], context->viewport->size.height);
+      child_bounds.origin.x = 0;
+      child_bounds.origin.y = 0;
+      child_bounds.size.width = svg_number_get (pattern->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+      child_bounds.size.height = svg_number_get (pattern->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+    }
+
+  if (!view_box->unset)
+    {
+      compute_viewport_transform (content_fit->is_none,
+                                  content_fit->align_x,
+                                  content_fit->align_y,
+                                  content_fit->meet,
+                                  &view_box->view_box,
+                                  child_bounds.origin.x, child_bounds.origin.y,
+                                  child_bounds.size.width, child_bounds.size.height,
+                                  &sx, &sy, &tx, &ty);
+    }
+  else
+    {
+      if (svg_enum_get (pattern->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+        {
+          tx = 0;
+          ty = 0;
+          sx = bounds->size.width;
+          sy = bounds->size.height;
+        }
+      else
+        {
+          sx = sy = 1;
+          tx = ty = 0;
+        }
+    }
+
+  child_bounds.origin.x += dx;
+  child_bounds.origin.y += dy;
+
+  tx += dx;
+  ty += dy;
+
+  transform = svg_transform_get_gsk ((SvgTransform *) pattern->current[SHAPE_ATTR_TRANSFORM]);
+  gtk_snapshot_transform (context->snapshot, transform);
+
+  transform = gsk_transform_invert (transform);
+  gsk_transform_transform_bounds (transform, bounds, &pattern_bounds);
+  gsk_transform_unref (transform);
+
+  gtk_snapshot_push_repeat (context->snapshot, &pattern_bounds, &child_bounds);
+
+  gtk_snapshot_save (context->snapshot);
+  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
+  gtk_snapshot_scale (context->snapshot, sx, sy);
+
+  for (int i = 0; i < pattern->shapes->len; i++)
+    {
+      Shape *s = g_ptr_array_index (pattern->shapes, i);
+      render_shape (s, context);
+    }
+
+  gtk_snapshot_restore (context->snapshot);
+
+  gtk_snapshot_pop (context->snapshot);
+}
+
+static void
 paint_server (Shape                 *server,
               const graphene_rect_t *bounds,
               PaintContext          *context)
@@ -12757,6 +12885,10 @@ paint_server (Shape                 *server,
         paint_linear_gradient (server, bounds, context);
       else
         paint_radial_gradient (server, bounds, context);
+    }
+  else if (server->type == SHAPE_PATTERN)
+    {
+      paint_pattern (server, bounds, context);
     }
 }
 

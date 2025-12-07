@@ -105,6 +105,7 @@ typedef enum
   SHAPE_USE,
   SHAPE_LINEAR_GRADIENT,
   SHAPE_RADIAL_GRADIENT,
+  SHAPE_PATTERN,
 } ShapeType;
 
 typedef enum

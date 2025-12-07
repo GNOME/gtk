@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     viewBox="0 0 300 200" >
+
+  <defs>
+    <pattern id="TrianglePattern"
+             patternUnits="userSpaceOnUse"
+             x="0" y="0" width="50" height="50"
+             viewBox="0 0 10 10" >
+      <path d="M 0 0 L 7 0 L 3.5 7 z"
+            fill="plum"
+            stroke="blue" />
+    </pattern>
+  </defs>
+
+  <ellipse fill="url(#TrianglePattern)"
+           stroke="black"
+           stroke-width="2"
+           cx="150" cy="100" rx="125" ry="75" />
+</svg>
