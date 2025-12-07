@@ -61,11 +61,9 @@ struct _GtkSvg
 
   double width, height;
   SvgValue *view_box;
+  SvgValue *content_fit;
   graphene_rect_t bounds;
   graphene_rect_t viewport;
-
-  unsigned int align;
-  MeetOrSlice meet_or_slice;
 
   double weight;
   unsigned int state;
@@ -157,6 +155,7 @@ typedef enum
   SHAPE_ATTR_FY,
   SHAPE_ATTR_FR,
   SHAPE_ATTR_VIEW_BOX,
+  SHAPE_ATTR_CONTENT_FIT,
   /* Things below are custom */
   SHAPE_ATTR_STROKE_MINWIDTH,
   SHAPE_ATTR_STROKE_MAXWIDTH,

@@ -831,55 +831,6 @@ path_builder_add_ellipse (GskPathBuilder *builder,
   gsk_path_builder_close    (builder);
 }
 
-static gboolean
-parse_align (const char   *value,
-             unsigned int *res)
-{
-  struct {
-    const char *name;
-    unsigned int value;
-  } values[] = {
-    { "none", 0 },
-    { "xMinYMin", ALIGN_XY (ALIGN_MIN, ALIGN_MIN) },
-    { "xMidYMin", ALIGN_XY (ALIGN_MID, ALIGN_MIN) },
-    { "xMaxYMin", ALIGN_XY (ALIGN_MAX, ALIGN_MIN) },
-    { "xMinYMid", ALIGN_XY (ALIGN_MIN, ALIGN_MID) },
-    { "xMidYMid", ALIGN_XY (ALIGN_MID, ALIGN_MID) },
-    { "xMaxYMid", ALIGN_XY (ALIGN_MAX, ALIGN_MID) },
-    { "xMinYMax", ALIGN_XY (ALIGN_MIN, ALIGN_MAX) },
-    { "xMidYMax", ALIGN_XY (ALIGN_MID, ALIGN_MAX) },
-    { "xMaxYMax", ALIGN_XY (ALIGN_MAX, ALIGN_MAX) },
-  };
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (values); i++)
-    {
-      if (strcmp (values[i].name, value) == 0)
-        {
-          *res = values[i].value;
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
-static gboolean
-parse_meet (const char   *value,
-            unsigned int *res)
-{
-  if (strcmp (value, "meet") == 0)
-    {
-      *res = MEET;
-      return TRUE;
-    }
-  else if (strcmp (value, "slice") == 0)
-    {
-      *res = SLICE;
-      return TRUE;
-    }
-  return FALSE;
-}
-
 static inline gboolean
 g_strv_has (GStrv       strv,
             const char *s)
@@ -888,8 +839,10 @@ g_strv_has (GStrv       strv,
 }
 
 static void
-compute_viewport_transform (Align                  align,
-                            MeetOrSlice            meet_or_slice,
+compute_viewport_transform (gboolean               none,
+                            Align                  align_x,
+                            Align                  align_y,
+                            MeetOrSlice            meet,
                             const graphene_rect_t *vb,
                             double e_x,          double e_y,
                             double e_width,      double e_height,
@@ -901,22 +854,22 @@ compute_viewport_transform (Align                  align,
   sx = e_width / vb->size.width;
   sy = e_height / vb->size.height;
 
-  if (align != 0 && meet_or_slice == MEET)
+  if (!none && meet == MEET)
     sx = sy = MIN (sx, sy);
-  else if (align != 0 && meet_or_slice == SLICE)
+  else if (!none && meet == SLICE)
     sx = sy = MAX (sx, sy);
 
   tx = e_x - vb->origin.x * sx;
   ty = e_y - vb->origin.y * sy;
 
-  if (ALIGN_GET_X (align) == ALIGN_MID)
+  if (align_x == ALIGN_MID)
     tx += (e_width - vb->size.width * sx) / 2;
-  else if (ALIGN_GET_X (align) == ALIGN_MAX)
+  else if (align_x == ALIGN_MAX)
     tx += (e_width - vb->size.width * sx);
 
-  if (ALIGN_GET_Y (align) == ALIGN_MID)
+  if (align_y == ALIGN_MID)
     ty += (e_height - vb->size.height * sy) / 2;
-  else if (ALIGN_GET_Y (align) == ALIGN_MAX)
+  else if (align_y == ALIGN_MAX)
     ty += (e_height - vb->size.height * sy);
 
   *scale_x = sx;
@@ -4745,6 +4698,204 @@ svg_view_box_parse (const char *value)
 }
 
 /* }}} */
+/* {{{ ContentFit */
+
+typedef struct
+{
+  SvgValue base;
+  gboolean is_none;
+  Align align_x;
+  Align align_y;
+  MeetOrSlice meet;
+} SvgContentFit;
+
+static void
+svg_content_fit_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_content_fit_equal (const SvgValue *value0,
+                       const SvgValue *value1)
+{
+  const SvgContentFit *v0 = (const SvgContentFit *) value0;
+  const SvgContentFit *v1 = (const SvgContentFit *) value1;
+
+  if (v0->is_none || v1->is_none)
+    return v0->is_none == v1->is_none;
+
+  return v0->align_x == v1->align_x &&
+         v0->align_y == v1->align_y &&
+         v0->meet == v1->meet;
+}
+
+static SvgValue *
+svg_content_fit_interpolate (const SvgValue *value0,
+                             const SvgValue *value1,
+                             double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+static SvgValue *
+svg_content_fit_accumulate (const SvgValue *value0,
+                            const SvgValue *value1,
+                            int             n)
+{
+  return NULL;
+}
+
+static void
+svg_content_fit_print (const SvgValue *value,
+                       GString        *string)
+{
+  const SvgContentFit *v = (const SvgContentFit *) value;
+
+  if (v->is_none)
+    {
+      g_string_append (string, "none");
+    }
+  else
+    {
+      const char *align[] = { "Min", "Mid", "Max" };
+
+      g_string_append_c (string, 'x');
+      g_string_append (string, align[v->align_x]);
+      g_string_append_c (string, 'Y');
+      g_string_append (string, align[v->align_y]);
+    }
+
+  if (v->meet != MEET)
+    {
+      const char *meet[] = { "meet", "slice" };
+
+      g_string_append_c (string, ' ');
+      g_string_append (string, meet[v->meet]);
+    }
+}
+
+static const SvgValueClass SVG_CONTENT_FIT_CLASS = {
+  "SvgContentFit",
+  svg_content_fit_free,
+  svg_content_fit_equal,
+  svg_content_fit_interpolate,
+  svg_content_fit_accumulate,
+  svg_content_fit_print,
+};
+
+static SvgValue *
+svg_content_fit_new_none (void)
+{
+  SvgContentFit *v;
+
+  v = (SvgContentFit *) svg_value_alloc (&SVG_CONTENT_FIT_CLASS, sizeof (SvgContentFit));
+
+  v->is_none = TRUE;
+
+  return (SvgValue *) v;
+}
+
+static SvgValue *
+svg_content_fit_new (Align       align_x,
+                     Align       align_y,
+                     MeetOrSlice meet)
+{
+  SvgContentFit *v;
+
+  v = (SvgContentFit *) svg_value_alloc (&SVG_CONTENT_FIT_CLASS, sizeof (SvgContentFit));
+
+  v->is_none = FALSE;
+  v->align_x = align_x;
+  v->align_y = align_y;
+  v->meet = meet;
+
+  return (SvgValue *) v;
+}
+
+static gboolean
+parse_coord_align (const char *value,
+                   Align      *align)
+{
+  if (strncmp (value, "Min", 3) == 0)
+    *align = ALIGN_MIN;
+  else if (strncmp (value, "Mid", 3) == 0)
+    *align = ALIGN_MID;
+  else if (strncmp (value, "Max", 3) == 0)
+    *align = ALIGN_MAX;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+parse_align (const char *value,
+             Align      *align_x,
+             Align      *align_y)
+{
+  if (strlen (value) != 8)
+    return FALSE;
+
+  if (value[0] != 'x' || value[4] != 'Y')
+    return FALSE;
+
+  if (!parse_coord_align (value + 1, align_x) ||
+      !parse_coord_align (value + 5, align_y))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+parse_meet (const char  *value,
+            MeetOrSlice *meet)
+{
+  if (strcmp (value, "meet") == 0)
+    *meet = MEET;
+  else if (strcmp (value, "slice") == 0)
+    *meet = SLICE;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+static SvgValue *
+svg_content_fit_parse (const char *value)
+{
+  GStrv strv;
+  Align align_x;
+  Align align_y;
+  MeetOrSlice meet;
+
+  if (strcmp (value, "none") == 0)
+    return svg_content_fit_new_none ();
+
+  strv = g_strsplit (value, " ", 0);
+  if (g_strv_length (strv) > 2)
+    return NULL;
+
+  if (!parse_align (strv[0], &align_x, &align_y))
+    return NULL;
+
+  if (strv[1])
+    {
+      if (!parse_meet (strv[1], &meet))
+        return NULL;
+    }
+  else
+    {
+      meet = MEET;
+    }
+
+  return svg_content_fit_new (align_x, align_y, meet);
+}
+
+/* }}} */
 /* {{{ References */
 
 typedef enum
@@ -5343,6 +5494,14 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_view_box_parse,
   },
+  { .id = SHAPE_ATTR_CONTENT_FIT,
+    .name = "preserveAspectRatio",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_content_fit_parse,
+  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -5434,6 +5593,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_BOUND_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_VIEW_BOX].initial_value = svg_view_box_new_unset ();
+  shape_attrs[SHAPE_ATTR_CONTENT_FIT].initial_value = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -10359,42 +10519,21 @@ start_element_cb (GMarkupParseContext  *context,
       data->svg->width = width;
       data->svg->height = height;
 
-      data->svg->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
-      data->svg->meet_or_slice = MEET;
-
       if (preserve_aspect_ratio_attr)
         {
-          GStrv strv;
-          unsigned int align;
-          unsigned int meet;
+          SvgValue *v;
 
-          strv = g_strsplit (preserve_aspect_ratio_attr, " ", 0);
-          if (g_strv_length (strv) == 1)
+          v = svg_content_fit_parse (preserve_aspect_ratio_attr);
+          svg_value_unref (data->svg->content_fit);
+          if (v)
             {
-              if (!parse_align (strv[0], &align))
-                {
-                  gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
-                }
-              else
-                {
-                  data->svg->align = align;
-                  data->svg->meet_or_slice = MEET;
-                }
-            }
-          else if (g_strv_length (strv) == 2)
-            {
-
-              if (parse_align (strv[0], &align) &&
-                  parse_meet (strv[1], &meet))
-                {
-                  data->svg->align = align;
-                  data->svg->meet_or_slice = meet;
-                }
-              else
-                gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+              data->svg->content_fit = v;
             }
           else
-            gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+            {
+              data->svg->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+              gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+            }
         }
 
       if (state_attr)
@@ -12893,6 +13032,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   graphene_rect_t view_box;
   double sx, sy, tx, ty;
   SvgViewBox *vb = (SvgViewBox *) self->view_box;
+  SvgContentFit *cf = (SvgContentFit *) self->content_fit;
 
   if (vb->unset)
     graphene_rect_init (&view_box, 0, 0, self->width, self->height);
@@ -12901,8 +13041,10 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
   graphene_rect_init (&self->viewport, 0, 0, width, height);
 
-  compute_viewport_transform (self->align,
-                              self->meet_or_slice,
+  compute_viewport_transform (cf->is_none,
+                              cf->align_x,
+                              cf->align_y,
+                              cf->meet,
                               &view_box,
                               0, 0, width, height,
                               &sx, &sy, &tx, &ty);
@@ -13066,6 +13208,7 @@ gtk_svg_init (GtkSvg *self)
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
 
   self->view_box = svg_view_box_new_unset ();
+  self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
   graphene_rect_init (&self->viewport, 0, 0, 0, 0);
 
   self->timeline = timeline_new ();
@@ -13087,6 +13230,7 @@ gtk_svg_dispose (GObject *object)
   g_free (self->gpa_keywords);
 
   g_clear_pointer (&self->view_box, svg_value_unref);
+  g_clear_pointer (&self->content_fit, svg_value_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -13466,11 +13610,8 @@ gtk_svg_equal (GtkSvg *svg1,
 {
   if (svg1->width != svg2->width ||
       svg1->height != svg2->height ||
-      !svg_value_equal (svg1->view_box, svg2->view_box))
-    return FALSE;
-
-  if (svg1->align != svg2->align ||
-      svg1->meet_or_slice != svg2->meet_or_slice)
+      !svg_value_equal (svg1->view_box, svg2->view_box) ||
+      !svg_value_equal (svg1->content_fit, svg2->content_fit))
     return FALSE;
 
   if (svg1->gpa_version != svg2->gpa_version ||
@@ -13763,6 +13904,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
                         GtkSvgSerializeFlags  flags)
 {
   GString *s = g_string_new ("");
+  SvgValue *default_content_fit;
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     {
@@ -13812,34 +13954,15 @@ gtk_svg_serialize_full (GtkSvg               *self,
       g_string_append_c (s, '\'');
     }
 
-  if (self->align != ALIGN_XY (ALIGN_MID, ALIGN_MID) ||
-      self->meet_or_slice != MEET)
+  default_content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+  if (!svg_value_equal (self->content_fit, default_content_fit))
     {
       indent_for_attr (s, 0);
       g_string_append (s, "preserveAspectRatio='");
-      if (self->align == 0)
-        {
-          g_string_append (s, "none");
-        }
-      else
-        {
-          const char *aligns[] = { "Min", "Mid", "Max" };
-
-          g_string_append_c (s, 'x');
-          g_string_append (s, aligns[ALIGN_GET_X (self->align)]);
-          g_string_append_c (s, 'Y');
-          g_string_append (s, aligns[ALIGN_GET_Y (self->align)]);
-
-          if (self->meet_or_slice != MEET)
-            {
-              const char *meets[] = { "meet", "slice" };
-
-              g_string_append_c (s, ' ');
-              g_string_append (s, meets[self->meet_or_slice]);
-            }
-        }
+      svg_value_print (self->content_fit, s);
       g_string_append_c (s, '\'');
     }
+  svg_value_unref (default_content_fit);
 
   if (self->gpa_version > 0 || (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE))
     {
@@ -14280,8 +14403,8 @@ gtk_svg_clear_content (GtkSvg *self)
   svg_value_unref (self->view_box);
   self->view_box = svg_view_box_new_unset ();
 
-  self->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
-  self->meet_or_slice = MEET;
+  svg_value_unref (self->content_fit);
+  self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
 
   self->state = 0;
   self->max_state = 0;
