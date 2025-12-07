@@ -4613,6 +4613,138 @@ svg_mask_parse (const char *value)
 }
 
 /* }}} */
+/* {{{ Viewbox */
+
+typedef struct
+{
+  SvgValue base;
+  gboolean unset;
+  graphene_rect_t view_box;
+} SvgViewBox;
+
+static void
+svg_view_box_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_view_box_equal (const SvgValue *value0,
+                    const SvgValue *value1)
+{
+  const SvgViewBox *v0 = (const SvgViewBox *) value0;
+  const SvgViewBox *v1 = (const SvgViewBox *) value1;
+
+  if (v0->unset != v1->unset)
+    return FALSE;
+
+  if (v0->unset)
+    return TRUE;
+
+  return graphene_rect_equal (&v0->view_box, &v1->view_box);
+}
+
+static SvgValue * svg_view_box_new (const graphene_rect_t *view_box);
+
+static SvgValue *
+svg_view_box_interpolate (const SvgValue *value0,
+                          const SvgValue *value1,
+                          double          t)
+{
+  const SvgViewBox *v0 = (const SvgViewBox *) value0;
+  const SvgViewBox *v1 = (const SvgViewBox *) value1;
+  graphene_rect_t b;
+
+  if (v0->unset || v1->unset)
+    {
+      if (t < 0.5)
+        return svg_value_ref ((SvgValue *) value0);
+      else
+        return svg_value_ref ((SvgValue *) value1);
+    }
+
+  graphene_rect_interpolate (&v0->view_box, &v1->view_box, t, &b);
+
+  return svg_view_box_new (&b);
+}
+
+static SvgValue *
+svg_view_box_accumulate (const SvgValue *value0,
+                         const SvgValue *value1,
+                         int             n)
+{
+  return NULL;
+}
+
+static void
+svg_view_box_print (const SvgValue *value,
+                    GString        *string)
+{
+  const SvgViewBox *v = (const SvgViewBox *) value;
+
+  if (v->unset)
+    return;
+
+  string_append_double (string, v->view_box.origin.x);
+  g_string_append_c (string, ' ');
+  string_append_double (string, v->view_box.origin.y);
+  g_string_append_c (string, ' ');
+  string_append_double (string, v->view_box.size.width);
+  g_string_append_c (string, ' ');
+  string_append_double (string, v->view_box.size.height);
+}
+
+static const SvgValueClass SVG_VIEW_BOX_CLASS = {
+  "SvgViewBox",
+  svg_view_box_free,
+  svg_view_box_equal,
+  svg_view_box_interpolate,
+  svg_view_box_accumulate,
+  svg_view_box_print,
+};
+
+static SvgValue *
+svg_view_box_new_unset (void)
+{
+  static SvgViewBox unset = { { &SVG_VIEW_BOX_CLASS, 1 }, TRUE, { { 0, 0 }, { 0, 0 } } };
+
+  return svg_value_ref ((SvgValue *) &unset);
+}
+
+static SvgValue *
+svg_view_box_new (const graphene_rect_t *box)
+{
+  SvgViewBox *result;
+
+  result = (SvgViewBox *) svg_value_alloc (&SVG_VIEW_BOX_CLASS, sizeof (SvgViewBox));
+  result->unset = FALSE;
+  graphene_rect_init_from_rect (&result->view_box, box);
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_view_box_parse (const char *value)
+{
+  GStrv strv;
+  unsigned int n;
+  double x, y, w, h;
+
+  strv = g_strsplit_set (value, ", ", 0);
+  n = g_strv_length (strv);
+  if (n != 4 ||
+      !parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) ||
+      !parse_length (strv[1], -DBL_MAX, DBL_MAX, &y) ||
+      !parse_length (strv[2], 0, DBL_MAX, &w) ||
+      !parse_length (strv[3], 0, DBL_MAX, &h))
+    return NULL;
+
+  g_strfreev (strv);
+
+  return svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h));
+}
+
+/* }}} */
 /* {{{ References */
 
 typedef enum
@@ -5203,6 +5335,14 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
+  { .id = SHAPE_ATTR_VIEW_BOX,
+    .name = "viewBox",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_view_box_parse,
+  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -5293,6 +5433,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
   shape_attrs[SHAPE_ATTR_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_BOUND_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
+  shape_attrs[SHAPE_ATTR_VIEW_BOX].initial_value = svg_view_box_new_unset ();
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -5750,6 +5891,8 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_FY:
     case SHAPE_ATTR_FR:
       return type == SHAPE_RADIAL_GRADIENT;
+    case SHAPE_ATTR_VIEW_BOX:
+      return FALSE;
     default:
       return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
@@ -10165,24 +10308,22 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (viewbox_attr)
         {
-          GStrv strv;
-          unsigned int n;
-          double x, y, w, h;
+          SvgValue *v;
 
-          strv = g_strsplit (viewbox_attr, " ", 0);
-          n = g_strv_length (strv);
-          if (n != 4 ||
-              !parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) ||
-              !parse_length (strv[1], -DBL_MAX, DBL_MAX, &y) ||
-              !parse_length (strv[2], 0, DBL_MAX, &w) ||
-              !parse_length (strv[3], 0, DBL_MAX, &h))
-            gtk_svg_invalid_attribute (data->svg, context, "viewBox", NULL);
+          v = svg_view_box_parse (viewbox_attr);
+          svg_value_unref (data->svg->view_box);
+          if (v)
+            {
+              data->svg->view_box = v;
+            }
           else
-            graphene_rect_init (&data->svg->view_box, x, y, w, h);
-          g_strfreev (strv);
+            {
+              data->svg->view_box = svg_view_box_new_unset ();
+              gtk_svg_invalid_attribute (data->svg, context, "viewBox", NULL);
+            }
         }
 
-      width = data->svg->view_box.size.width;
+      width = ((SvgViewBox *) data->svg->view_box)->view_box.size.width;
       if (width_attr)
         {
           SvgValue *value;
@@ -10190,14 +10331,14 @@ start_element_cb (GMarkupParseContext  *context,
           value = svg_number_parse (width_attr, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
           if (value)
             {
-              width = svg_number_get (value, data->svg->view_box.size.width);
+              width = svg_number_get (value, width);
               svg_value_unref (value);
             }
           else
             gtk_svg_invalid_attribute (data->svg, context, "width", NULL);
         }
 
-      height = data->svg->view_box.size.height;
+      height = ((SvgViewBox *) data->svg->view_box)->view_box.size.height;
       if (height_attr)
         {
           SvgValue *value;
@@ -10205,7 +10346,7 @@ start_element_cb (GMarkupParseContext  *context,
           value = svg_number_parse (height_attr, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
           if (value)
             {
-              height = svg_number_get (value, data->svg->view_box.size.height);
+              height = svg_number_get (value, height);
               svg_value_unref (value);
             }
           else
@@ -12645,7 +12786,7 @@ paint_shape (Shape        *shape,
 
           /* FIXME: this isn't the best way of doing this */
           use_context.svg = context->svg;
-          use_context.viewport = &context->svg->view_box;
+          use_context.viewport = &context->svg->viewport;
           use_context.parent = shape;
           use_context.current_time = context->current_time;
           use_context.colors = context->colors;
@@ -12751,11 +12892,12 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   PaintContext paint_context;
   graphene_rect_t view_box;
   double sx, sy, tx, ty;
+  SvgViewBox *vb = (SvgViewBox *) self->view_box;
 
-  if (self->view_box.size.width == 0 || self->view_box.size.height == 0)
+  if (vb->unset)
     graphene_rect_init (&view_box, 0, 0, self->width, self->height);
   else
-    view_box = self->view_box;
+    view_box = vb->view_box;
 
   graphene_rect_init (&self->viewport, 0, 0, width, height);
 
@@ -12863,12 +13005,16 @@ static double
 gtk_svg_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
   GtkSvg *self = GTK_SVG (paintable);
+  SvgViewBox *vb = (SvgViewBox *) self->view_box;
 
   if (self->width > 0 && self->height > 0)
     return self->width / self->height;
 
-  if (self->view_box.size.width > 0 && self->view_box.size.height > 0)
-    return self->view_box.size.width / self->view_box.size.height;
+  if (!vb->unset)
+    {
+      if (vb->view_box.size.width > 0 && vb->view_box.size.height > 0)
+        return vb->view_box.size.width / vb->view_box.size.height;
+    }
 
   return 0;
 }
@@ -12919,6 +13065,9 @@ gtk_svg_init (GtkSvg *self)
   self->playing = FALSE;
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
 
+  self->view_box = svg_view_box_new_unset ();
+  graphene_rect_init (&self->viewport, 0, 0, 0, 0);
+
   self->timeline = timeline_new ();
   self->content = shape_new (NULL, SHAPE_GROUP);
 }
@@ -12936,6 +13085,8 @@ gtk_svg_dispose (GObject *object)
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
+
+  g_clear_pointer (&self->view_box, svg_value_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -13315,7 +13466,7 @@ gtk_svg_equal (GtkSvg *svg1,
 {
   if (svg1->width != svg2->width ||
       svg1->height != svg2->height ||
-      !graphene_rect_equal (&svg1->view_box, &svg2->view_box))
+      !svg_value_equal (svg1->view_box, svg2->view_box))
     return FALSE;
 
   if (svg1->align != svg2->align ||
@@ -13653,17 +13804,11 @@ gtk_svg_serialize_full (GtkSvg               *self,
   string_append_double (s, self->height);
   g_string_append_c (s, '\'');
 
-  if (self->view_box.size.width != 0 && self->view_box.size.height != 0)
+  if (!((SvgViewBox *) self->view_box)->unset)
     {
       indent_for_attr (s, 0);
       g_string_append (s, "viewBox='");
-      string_append_double (s, self->view_box.origin.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, self->view_box.origin.y);
-      g_string_append_c (s, ' ');
-      string_append_double (s, self->view_box.size.width);
-      g_string_append_c (s, ' ');
-      string_append_double (s, self->view_box.size.height);
+      svg_value_print (self->view_box, s);
       g_string_append_c (s, '\'');
     }
 
@@ -14128,8 +14273,12 @@ gtk_svg_clear_content (GtkSvg *self)
 
   self->width = 0;
   self->height = 0;
-  graphene_rect_init (&self->view_box, 0, 0, 0, 0);
+  svg_value_unref (self->view_box);
+  self->view_box = svg_view_box_new_unset ();
   graphene_rect_init (&self->viewport, 0, 0, 0, 0);
+
+  svg_value_unref (self->view_box);
+  self->view_box = svg_view_box_new_unset ();
 
   self->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
   self->meet_or_slice = MEET;

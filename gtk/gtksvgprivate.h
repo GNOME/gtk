@@ -60,7 +60,7 @@ struct _GtkSvg
   Shape *content;
 
   double width, height;
-  graphene_rect_t view_box;
+  SvgValue *view_box;
   graphene_rect_t bounds;
   graphene_rect_t viewport;
 
@@ -156,6 +156,7 @@ typedef enum
   SHAPE_ATTR_FX,
   SHAPE_ATTR_FY,
   SHAPE_ATTR_FR,
+  SHAPE_ATTR_VIEW_BOX,
   /* Things below are custom */
   SHAPE_ATTR_STROKE_MINWIDTH,
   SHAPE_ATTR_STROKE_MAXWIDTH,
