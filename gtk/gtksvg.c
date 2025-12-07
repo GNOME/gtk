@@ -887,6 +887,44 @@ g_strv_has (GStrv       strv,
   return g_strv_contains ((const char * const *) strv, s);
 }
 
+static void
+compute_viewport_transform (Align                  align,
+                            MeetOrSlice            meet_or_slice,
+                            const graphene_rect_t *vb,
+                            double e_x,          double e_y,
+                            double e_width,      double e_height,
+                            double *scale_x,     double *scale_y,
+                            double *translate_x, double *translate_y)
+{
+  double sx, sy, tx, ty;
+
+  sx = e_width / vb->size.width;
+  sy = e_height / vb->size.height;
+
+  if (align != 0 && meet_or_slice == MEET)
+    sx = sy = MIN (sx, sy);
+  else if (align != 0 && meet_or_slice == SLICE)
+    sx = sy = MAX (sx, sy);
+
+  tx = e_x - vb->origin.x * sx;
+  ty = e_y - vb->origin.y * sy;
+
+  if (ALIGN_GET_X (align) == ALIGN_MID)
+    tx += (e_width - vb->size.width * sx) / 2;
+  else if (ALIGN_GET_X (align) == ALIGN_MAX)
+    tx += (e_width - vb->size.width * sx);
+
+  if (ALIGN_GET_Y (align) == ALIGN_MID)
+    ty += (e_height - vb->size.height * sy) / 2;
+  else if (ALIGN_GET_Y (align) == ALIGN_MAX)
+    ty += (e_height - vb->size.height * sy);
+
+  *scale_x = sx;
+  *scale_y = sy;
+  *translate_x = tx;
+  *translate_y = ty;
+}
+
 /* }}} */
 /* {{{ Gradients */
 
@@ -12697,43 +12735,6 @@ render_shape (Shape        *shape,
 /* {{{ GtkSymbolicPaintable implementation */
 
 static void
-compute_viewport_transform (GtkSvg *self,
-                            const graphene_rect_t *vb,
-                            double e_x, double e_y,
-                            double e_width, double e_height,
-                            double *scale_x, double *scale_y,
-                            double *translate_x, double *translate_y)
-{
-  double sx, sy, tx, ty;
-
-  sx = e_width / vb->size.width;
-  sy = e_height / vb->size.height;
-
-  if (self->align != 0 && self->meet_or_slice == MEET)
-    sx = sy = MIN (sx, sy);
-  else if (self->align != 0 && self->meet_or_slice == SLICE)
-    sx = sy = MAX (sx, sy);
-
-  tx = e_x - vb->origin.x * sx;
-  ty = e_y - vb->origin.y * sy;
-
-  if (ALIGN_GET_X (self->align) == ALIGN_MID)
-    tx += (e_width - vb->size.width * sx) / 2;
-  else if (ALIGN_GET_X (self->align) == ALIGN_MAX)
-    tx += (e_width - vb->size.width * sx);
-
-  if (ALIGN_GET_Y (self->align) == ALIGN_MID)
-    ty += (e_height - vb->size.height * sy) / 2;
-  else if (ALIGN_GET_Y (self->align) == ALIGN_MAX)
-    ty += (e_height - vb->size.height * sy);
-
-  *scale_x = sx;
-  *scale_y = sy;
-  *translate_x = tx;
-  *translate_y = ty;
-}
-
-static void
 gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               GtkSnapshot           *snapshot,
                               double                 width,
@@ -12753,7 +12754,9 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   else
     view_box = self->view_box;
 
-  compute_viewport_transform (self, &view_box,
+  compute_viewport_transform (self->align,
+                              self->meet_or_slice,
+                              &view_box,
                               0, 0, width, height,
                               &sx, &sy, &tx, &ty);
 
