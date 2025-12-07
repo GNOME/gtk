@@ -268,7 +268,7 @@ typedef enum
   PAINT_NONE,
   PAINT_COLOR,
   PAINT_SYMBOLIC,
-  PAINT_GRADIENT,
+  PAINT_SERVER,
 } PaintKind;
 
 typedef enum
