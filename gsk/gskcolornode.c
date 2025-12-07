@@ -51,11 +51,11 @@ gsk_color_node_finalize (GskRenderNode *node)
 static void
 gsk_color_node_draw (GskRenderNode *node,
                      cairo_t       *cr,
-                     GdkColorState *ccs)
+                     GskCairoData  *data)
 {
   GskColorNode *self = (GskColorNode *) node;
 
-  gdk_cairo_set_source_color (cr, ccs, &self->color);
+  gdk_cairo_set_source_color (cr, data->ccs, &self->color);
   gdk_cairo_rect (cr, &node->bounds);
   cairo_fill (cr);
 }

@@ -53,11 +53,11 @@ gsk_debug_node_finalize (GskRenderNode *node)
 static void
 gsk_debug_node_draw (GskRenderNode *node,
                      cairo_t       *cr,
-                     GdkColorState *ccs)
+                     GskCairoData  *data)
 {
   GskDebugNode *self = (GskDebugNode *) node;
 
-  gsk_render_node_draw_ccs (self->child, cr, ccs);
+  gsk_render_node_draw_full (self->child, cr, data);
 }
 
 static gboolean

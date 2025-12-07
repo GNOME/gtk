@@ -176,7 +176,7 @@ gsk_composite_node_finalize (GskRenderNode *node)
 static void
 gsk_composite_node_draw (GskRenderNode *node,
                          cairo_t       *cr,
-                         GdkColorState *ccs)
+                         GskCairoData  *data)
 {
   GskCompositeNode *self = (GskCompositeNode *) node;
 
@@ -191,7 +191,7 @@ gsk_composite_node_draw (GskRenderNode *node,
       gdk_cairo_rect (cr, &self->mask->bounds);
       cairo_clip (cr);
       cairo_push_group (cr);
-      gsk_render_node_draw_ccs (self->child, cr, ccs);
+      gsk_render_node_draw_full (self->child, cr, data);
       cairo_pop_group_to_source (cr);
       cairo_set_operator (cr, gsk_porter_duff_to_cairo_operator (self->op));
       cairo_paint (cr);
@@ -211,7 +211,7 @@ gsk_composite_node_draw (GskRenderNode *node,
 
       /* Then, draw the child into the offscreen as if no mask existed */
       cairo_push_group (cr);
-      gsk_render_node_draw_ccs (self->child, cr, ccs);
+      gsk_render_node_draw_full (self->child, cr, data);
       cairo_pop_group_to_source (cr);
       cairo_set_operator (cr, gsk_porter_duff_to_cairo_operator (self->op));
       cairo_paint (cr);
@@ -219,7 +219,7 @@ gsk_composite_node_draw (GskRenderNode *node,
       /* Next, clear according to the mask */
       cairo_pop_group_to_source (cr);
       cairo_push_group (cr);
-      gsk_render_node_draw_ccs (self->mask, cr, ccs);
+      gsk_render_node_draw_full (self->mask, cr, data);
       mask_pattern = cairo_pop_group (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
       cairo_mask (cr, mask_pattern);

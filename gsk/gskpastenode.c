@@ -39,7 +39,7 @@ struct _GskPasteNode
 static void
 gsk_paste_node_draw (GskRenderNode *node,
                      cairo_t       *cr,
-                     GdkColorState *ccs)
+                     GskCairoData  *data)
 {
   /* FIXME */
 }

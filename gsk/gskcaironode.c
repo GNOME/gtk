@@ -52,14 +52,14 @@ gsk_cairo_node_finalize (GskRenderNode *node)
 static void
 gsk_cairo_node_draw (GskRenderNode *node,
                      cairo_t       *cr,
-                     GdkColorState *ccs)
+                     GskCairoData  *data)
 {
   GskCairoNode *self = (GskCairoNode *) node;
 
   if (self->surface == NULL)
     return;
 
-  if (gdk_color_state_equal (ccs, GDK_COLOR_STATE_SRGB))
+  if (gdk_color_state_equal (data->ccs, GDK_COLOR_STATE_SRGB))
     {
       cairo_set_source_surface (cr, self->surface, 0, 0);
       cairo_paint (cr);
@@ -75,7 +75,7 @@ gsk_cairo_node_draw (GskRenderNode *node,
       cairo_paint (cr);
       gdk_cairo_surface_convert_color_state (cairo_get_group_target (cr),
                                              GDK_COLOR_STATE_SRGB,
-                                             ccs);
+                                             data->ccs);
       cairo_pop_group_to_source (cr);
       cairo_paint (cr);
       cairo_restore (cr);

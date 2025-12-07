@@ -59,11 +59,11 @@ gsk_subsurface_node_finalize (GskRenderNode *node)
 static void
 gsk_subsurface_node_draw (GskRenderNode *node,
                           cairo_t       *cr,
-                          GdkColorState *ccs)
+                          GskCairoData  *data)
 {
   GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
 
-  gsk_render_node_draw_ccs (self->child, cr, ccs);
+  gsk_render_node_draw_full (self->child, cr, data);
 }
 
 static gboolean

@@ -53,7 +53,7 @@ gsk_opacity_node_finalize (GskRenderNode *node)
 static void
 gsk_opacity_node_draw (GskRenderNode *node,
                        cairo_t       *cr,
-                       GdkColorState *ccs)
+                       GskCairoData  *data)
 {
   GskOpacityNode *self = (GskOpacityNode *) node;
 
@@ -66,7 +66,7 @@ gsk_opacity_node_draw (GskRenderNode *node,
 
   cairo_push_group (cr);
 
-  gsk_render_node_draw_ccs (self->child, cr, ccs);
+  gsk_render_node_draw_full (self->child, cr, data);
 
   cairo_pop_group_to_source (cr);
   cairo_paint_with_alpha (cr, self->opacity);

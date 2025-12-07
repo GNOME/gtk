@@ -109,7 +109,7 @@ apply_luminance_to_pattern (cairo_pattern_t *pattern,
 static void
 gsk_mask_node_draw (GskRenderNode *node,
                     cairo_t       *cr,
-                    GdkColorState *ccs)
+                    GskCairoData  *data)
 {
   GskMaskNode *self = (GskMaskNode *) node;
   cairo_pattern_t *mask_pattern;
@@ -124,11 +124,11 @@ gsk_mask_node_draw (GskRenderNode *node,
     return;
 
   cairo_push_group (cr);
-  gsk_render_node_draw_ccs (self->source, cr, ccs);
+  gsk_render_node_draw_full (self->source, cr, data);
   cairo_pop_group_to_source (cr);
 
   cairo_push_group (cr);
-  gsk_render_node_draw_ccs (self->mask, cr, ccs);
+  gsk_render_node_draw_full (self->mask, cr, data);
   mask_pattern = cairo_pop_group (cr);
 
   switch (self->mask_mode)

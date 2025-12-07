@@ -53,7 +53,7 @@ gsk_clip_node_finalize (GskRenderNode *node)
 static void
 gsk_clip_node_draw (GskRenderNode *node,
                     cairo_t       *cr,
-                    GdkColorState *ccs)
+                    GskCairoData  *data)
 {
   GskClipNode *self = (GskClipNode *) node;
 
@@ -62,7 +62,7 @@ gsk_clip_node_draw (GskRenderNode *node,
   gdk_cairo_rect (cr, &self->clip);
   cairo_clip (cr);
 
-  gsk_render_node_draw_ccs (self->child, cr, ccs);
+  gsk_render_node_draw_full (self->child, cr, data);
 
   cairo_restore (cr);
 }
