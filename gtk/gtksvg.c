@@ -5124,7 +5124,7 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_spread_method_parse,
   },
-  { .id = SHAPE_ATTR_UNITS,
+  { .id = SHAPE_ATTR_CONTENT_UNITS,
     .name = "gradientUnits",
     .inherited = 0,
     .discrete = 1,
@@ -5245,7 +5245,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_points_new_none ();
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
-  shape_attrs[SHAPE_ATTR_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
+  shape_attrs[SHAPE_ATTR_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -5255,7 +5255,7 @@ shape_attr_init_default_values (void)
 
 /* Some attributes use different names for different shapes:
  * SHAPE_ATTR_TRANSFORM: transform vs gradientTransform
- * SHAPE_ATTR_UNITS: gradientUnits vs clipPathUnits vs maskContentUnits
+ * SHAPE_ATTR_CONTENT_UNITS: gradientUnits vs clipPathUnits vs maskContentUnits
  */
 static gboolean
 shape_attr_lookup (const char *name,
@@ -5272,14 +5272,14 @@ shape_attr_lookup (const char *name,
   if (type == SHAPE_CLIP_PATH &&
       strcmp (name, "clipPathUnits") == 0)
     {
-      *attr = SHAPE_ATTR_UNITS;
+      *attr = SHAPE_ATTR_CONTENT_UNITS;
       return TRUE;
     }
 
   if (type == SHAPE_MASK &&
       strcmp (name, "maskContentUnits") == 0)
     {
-      *attr = SHAPE_ATTR_UNITS;
+      *attr = SHAPE_ATTR_CONTENT_UNITS;
       return TRUE;
     }
 
@@ -5303,10 +5303,10 @@ shape_attr_get_presentation (ShapeAttr attr,
       attr == SHAPE_ATTR_TRANSFORM)
     return "gradientTransform";
 
-  if (type == SHAPE_CLIP_PATH && attr == SHAPE_ATTR_UNITS)
+  if (type == SHAPE_CLIP_PATH && attr == SHAPE_ATTR_CONTENT_UNITS)
     return "clipPathUnits";
 
-  if (type == SHAPE_MASK && attr == SHAPE_ATTR_UNITS)
+  if (type == SHAPE_MASK && attr == SHAPE_ATTR_CONTENT_UNITS)
     return "maskContentUnits";
 
   return shape_attrs[attr].name;
@@ -5590,7 +5590,7 @@ shape_attr_get_initial_value (ShapeAttr attr,
 
   if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK)
     {
-      if (attr == SHAPE_ATTR_UNITS)
+      if (attr == SHAPE_ATTR_CONTENT_UNITS)
         return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
     }
 
@@ -5665,7 +5665,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_POINTS:
       return type == SHAPE_POLYLINE || type == SHAPE_POLYGON;
     case SHAPE_ATTR_SPREAD_METHOD:
-    case SHAPE_ATTR_UNITS:
+    case SHAPE_ATTR_CONTENT_UNITS:
       return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
              type == SHAPE_CLIP_PATH || type == SHAPE_MASK;
     case SHAPE_ATTR_STOP_OFFSET:
@@ -12033,7 +12033,7 @@ push_context (Shape        *shape,
         }
       else
         {
-          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
             {
               graphene_rect_t bounds;
 
@@ -12048,7 +12048,7 @@ push_context (Shape        *shape,
 
           render_shape (clip->ref.shape, context);
 
-          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
             {
               gtk_snapshot_restore (context->snapshot);
             }
@@ -12065,7 +12065,7 @@ push_context (Shape        *shape,
 
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (shape->current[SHAPE_ATTR_MASK_TYPE]));
 
-      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
           graphene_rect_t bounds;
 
@@ -12080,7 +12080,7 @@ push_context (Shape        *shape,
 
       render_shape (mask->shape, context);
 
-      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
           gtk_snapshot_restore (context->snapshot);
         }
@@ -12225,7 +12225,7 @@ paint_linear_gradient (Shape                 *gradient,
     }
 
   transform = NULL;
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       transform = gsk_transform_translate (transform, &bounds->origin);
       transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
@@ -12298,7 +12298,7 @@ paint_radial_gradient (Shape                 *gradient,
 
   gtk_snapshot_save (context->snapshot);
 
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (gradient->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       gtk_snapshot_translate (context->snapshot, &bounds->origin);
       gtk_snapshot_scale (context->snapshot,  bounds->size.width, bounds->size.height);
