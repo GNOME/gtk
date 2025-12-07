@@ -1021,6 +1021,8 @@ gtk_image_snapshot (GtkWidget   *widget,
   height = gtk_widget_get_height (widget);
   ratio = gdk_paintable_get_intrinsic_aspect_ratio (GDK_PAINTABLE (image->icon_helper));
 
+  gtk_snapshot_push_isolation (snapshot, GSK_ISOLATION_ALL);
+
   if (ratio == 0)
     {
       gdk_paintable_snapshot (GDK_PAINTABLE (image->icon_helper), snapshot, width, height);
@@ -1060,6 +1062,8 @@ gtk_image_snapshot (GtkWidget   *widget,
           gdk_paintable_snapshot (GDK_PAINTABLE (image->icon_helper), snapshot, w, h);
         }
     }
+
+  gtk_snapshot_pop (snapshot); /* isolation */
 }
 
 static void

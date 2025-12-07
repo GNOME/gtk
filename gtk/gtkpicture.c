@@ -138,6 +138,8 @@ gtk_picture_snapshot (GtkWidget   *widget,
   height = gtk_widget_get_height (widget);
   ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
 
+  gtk_snapshot_push_isolation (snapshot, GSK_ISOLATION_ALL);
+
   if (self->content_fit == GTK_CONTENT_FIT_FILL || ratio == 0)
     {
       if (GTK_IS_SYMBOLIC_PAINTABLE (self->paintable))
@@ -204,6 +206,8 @@ gtk_picture_snapshot (GtkWidget   *widget,
         gdk_paintable_snapshot (self->paintable, snapshot, w, h);
       gtk_snapshot_restore (snapshot);
     }
+
+  gtk_snapshot_pop (snapshot); /* isolation */
 }
 
 static GtkSizeRequestMode
