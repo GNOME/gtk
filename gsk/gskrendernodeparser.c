@@ -559,6 +559,7 @@ parse_dmabuf_fourcc (GtkCssParser *parser,
       if (strlen (fourcc_str) != 4)
         {
           gtk_css_parser_error_value (parser, "fourccs must be 4 characters long");
+          g_free (fourcc_str);
           return FALSE;
         }
 
@@ -566,6 +567,7 @@ parse_dmabuf_fourcc (GtkCssParser *parser,
                (fourcc_str[1] <<  8) |
                (fourcc_str[2] << 16) |
                (fourcc_str[3] << 24);
+      g_free (fourcc_str);
     }
   else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
     {
