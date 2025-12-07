@@ -24,6 +24,7 @@
 #include "gtksvgprivate.h"
 
 #include "gtkenums.h"
+#include "gtkmain.h"
 #include "gtksymbolicpaintable.h"
 #include "gtktypebuiltins.h"
 #include "gtk/css/gtkcssparserprivate.h"
@@ -5376,6 +5377,84 @@ svg_orient_parse (const char *value)
 }
 
 /* }}} */
+/* {{{ Language */
+
+typedef struct
+{
+  SvgValue base;
+  PangoLanguage *value;
+} SvgLanguage;
+
+static void
+svg_language_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_language_equal (const SvgValue *value0,
+                    const SvgValue *value1)
+{
+  const SvgLanguage *l0 = (const SvgLanguage *)value0;
+  const SvgLanguage *l1 = (const SvgLanguage *)value1;
+
+  return l0->value == l1->value;
+}
+
+static SvgValue *
+svg_language_interpolate (const SvgValue *value0,
+                          const SvgValue *value1,
+                          double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+
+
+static SvgValue *
+svg_language_accumulate (const SvgValue *value0,
+                         const SvgValue *value1,
+                         int             n)
+{
+  return svg_value_ref ((SvgValue *)value0);
+}
+
+static void
+svg_language_print (const SvgValue *value,
+                    GString        *string)
+{
+  const SvgLanguage *l = (const SvgLanguage *)value;
+  g_string_append (string, pango_language_to_string (l->value));
+}
+
+static PangoLanguage *
+svg_language_get (const SvgValue *value)
+{
+  const SvgLanguage *l = (const SvgLanguage *)value;
+  return l->value;
+}
+
+static const SvgValueClass SVG_LANGUAGE_CLASS = {
+  "SvgLanguage",
+  svg_language_free,
+  svg_language_equal,
+  svg_language_interpolate,
+  svg_language_accumulate,
+  svg_language_print,
+};
+
+static SvgValue *
+svg_language_new (PangoLanguage *language)
+{
+  SvgLanguage *result = (SvgLanguage *)svg_value_alloc (&SVG_LANGUAGE_CLASS, sizeof (SvgLanguage));
+  result->value = language;
+  return (SvgValue *) result;
+}
+
+/* }}} */
 /* {{{ References */
 
 typedef enum
@@ -5604,6 +5683,15 @@ color_stop_attr_idx (ShapeAttr attr)
 /* {{{ Attributes */
 
 static SvgValue *
+parse_language (const char *value)
+{
+  PangoLanguage *lang = pango_language_from_string (value);
+  if (!lang)
+    return NULL;
+  return svg_language_new (lang);
+}
+
+static SvgValue *
 parse_opacity (const char *value)
 {
   return svg_number_parse (value, 0, 1, NUMBER|PERCENTAGE);
@@ -5691,6 +5779,12 @@ typedef struct
 } ShapeAttribute;
 
 static ShapeAttribute shape_attrs[] = {
+  { .id = SHAPE_ATTR_LANG,
+    .name = "lang",
+    .inherited = 1,
+    .discrete = 0,
+    .parse_value = parse_language,
+  },
   { .id = SHAPE_ATTR_VISIBILITY,
     .name = "visibility",
     .inherited = 1,
@@ -6183,6 +6277,7 @@ static ShapeAttribute shape_attrs[] = {
 static void
 shape_attr_init_default_values (void)
 {
+  shape_attrs[SHAPE_ATTR_LANG].initial_value = svg_language_new (gtk_get_default_language ());
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
@@ -6318,6 +6413,18 @@ shape_attr_lookup (const char *name,
           *attr = SHAPE_ATTR_HEIGHT;
           return TRUE;
         }
+    }
+
+  /*
+   * In theory, lang & xml:lang are different attributes and if
+   * both are set, lang should be preferred. In an effort of not
+   * polluting the attr array anymore than it already is, we treat
+   * xml:lang as an alias to lang.
+   */
+  if (strcmp (name, "xml:lang") == 0)
+    {
+      *attr = SHAPE_ATTR_LANG;
+      return TRUE;
     }
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
@@ -6743,6 +6850,8 @@ shape_has_attr (ShapeType type,
 {
   switch ((unsigned int) attr)
     {
+    case SHAPE_ATTR_LANG:
+      return TRUE;
     case SHAPE_ATTR_HREF:
       return type == SHAPE_USE;
     case SHAPE_ATTR_CX:
