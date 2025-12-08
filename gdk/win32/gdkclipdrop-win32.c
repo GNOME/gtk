@@ -2185,7 +2185,7 @@ transmute_cf_text_to_utf8_string (const guchar    *data,
 {
   char *ptr, *p, *q, *endp;
   char *result;
-  glong wclen, u8_len;
+  glong u8_len;
   wchar_t *wstr;
 
   /* Strip out \r */
@@ -2193,19 +2193,16 @@ transmute_cf_text_to_utf8_string (const guchar    *data,
   p = ptr;
   q = ptr;
   endp = ptr + length / 2;
-  wclen = 0;
 
   while (p < endp)
     {
       if (*p != '\r')
         {
           *q++ = *p;
-          wclen++;
         }
       else if (p + 1 > endp || *(p + 1) != '\n')
         {
           *q++ = '\n';
-          wclen++;
         }
 
       p++;
