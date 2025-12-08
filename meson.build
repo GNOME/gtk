@@ -495,7 +495,7 @@ tiff_dep          = dependency('libtiff-4', 'tiff')
 jpeg_dep          = dependency('libjpeg', 'jpeg')
 rsvg_dep          = dependency('librsvg-2.0', version: rsvg_req, required: false)
 if not rsvg_dep.found()
-  rsvg_dep        = dependency('librsvg-2.0', version: ['>= 2.40.23', '< 2.41'])
+  rsvg_dep        = dependency('librsvg-2.0', version: ['>= 2.40.20', '< 2.41'])
 endif
 epoxy_dep         = dependency('epoxy', version: epoxy_req)
 xkbdep            = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
