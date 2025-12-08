@@ -9684,7 +9684,7 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_none ();
 
-      if (!(shape->attrs & BIT (SHAPE_ATTR_FILL)))
+      if (!(shape->attrs & BIT (SHAPE_ATTR_STROKE)))
         shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
       svg_value_unref (value);
 
@@ -11315,7 +11315,7 @@ serialize_gpa_attrs (GString              *s,
       g_string_append_c (s, '\'');
     }
 
-  paint = (SvgPaint *) values[SHAPE_ATTR_STROKE];
+  paint = (SvgPaint *) values[SHAPE_ATTR_FILL];
   if (shape->attrs & BIT (SHAPE_ATTR_FILL) && paint->kind == PAINT_SYMBOLIC)
     {
       indent_for_attr (s, indent);
