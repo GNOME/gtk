@@ -22,6 +22,7 @@
 #pragma once
 
 #include "gtksvg.h"
+#include "gtkbitmaskprivate.h"
 #include "gtkenums.h"
 
 G_BEGIN_DECLS
@@ -200,7 +201,7 @@ struct _Shape
   ShapeType type;
   gboolean display;
   Shape *parent;
-  uint64_t attrs;
+  GtkBitmask *attrs;
   char *id;
 
   /* Dependency order for computing updates */
