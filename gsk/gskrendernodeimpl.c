@@ -3431,25 +3431,6 @@ gsk_transform_node_replay (GskRenderNode   *node,
   return result;
 }
 
-static gboolean
-gsk_transform_node_get_opaque_rect (GskRenderNode   *node,
-                                    graphene_rect_t *opaque)
-{
-  GskTransformNode *self = (GskTransformNode *) node;
-  graphene_rect_t child_opaque;
-
-  if (gsk_transform_get_fine_category (self->transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
-    return FALSE;
-
-  if (!gsk_render_node_get_opaque_rect (self->child, &child_opaque))
-    return FALSE;
-
-  gsk_transform_transform_bounds (self->transform,
-                                  &child_opaque,
-                                  opaque);
-  return TRUE;
-}
-
 static void
 gsk_transform_node_render_opacity (GskRenderNode  *node,
                                    GskOpacityData *data)
@@ -3500,7 +3481,6 @@ gsk_transform_node_class_init (gpointer g_class,
   node_class->diff = gsk_transform_node_diff;
   node_class->get_children = gsk_transform_node_get_children;
   node_class->replay = gsk_transform_node_replay;
-  node_class->get_opaque_rect = gsk_transform_node_get_opaque_rect;
   node_class->render_opacity = gsk_transform_node_render_opacity;
 }
 

@@ -85,8 +85,6 @@ struct _GskRenderNodeClass
                                                          gsize                       *n_children);
   GskRenderNode*(* replay)                              (GskRenderNode               *node,
                                                          GskRenderReplay             *replay);
-  gboolean      (* get_opaque_rect)                     (GskRenderNode               *node,
-                                                         graphene_rect_t             *out_opaque);
   void          (* render_opacity)                      (GskRenderNode               *node,
                                                          GskOpacityData              *data);
 };

@@ -40,7 +40,6 @@ struct _GskContainerNode
   GskRenderNode render_node;
 
   gboolean disjoint;
-  graphene_rect_t opaque; /* Can be 0 0 0 0 to mean no opacity */
   guint n_children;
   GskRenderNode **children;
 };
@@ -215,19 +214,6 @@ gsk_container_node_replay (GskRenderNode   *node,
   return result;
 }
 
-static gboolean
-gsk_container_node_get_opaque_rect (GskRenderNode   *node,
-                                    graphene_rect_t *opaque)
-{
-  GskContainerNode *self = (GskContainerNode *) node;
-
-  if (self->opaque.size.width <= 0 && self->opaque.size.height <= 0)
-    return FALSE;
-
-  *opaque = self->opaque;
-  return TRUE;
-}
-
 static void
 gsk_container_node_render_opacity (GskRenderNode  *node,
                                    GskOpacityData *data)
@@ -254,7 +240,6 @@ gsk_container_node_class_init (gpointer g_class,
   node_class->diff = gsk_container_node_diff;
   node_class->get_children = gsk_container_node_get_children;
   node_class->replay = gsk_container_node_replay;
-  node_class->get_opaque_rect = gsk_container_node_get_opaque_rect;
   node_class->render_opacity = gsk_container_node_render_opacity;
 }
 
@@ -291,15 +276,11 @@ gsk_container_node_new (GskRenderNode **children,
     }
   else
     {
-      graphene_rect_t child_opaque;
-      gboolean have_opaque;
-
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
       self->children[0] = gsk_render_node_ref (children[0]);
       node->preferred_depth = children[0]->preferred_depth;
       gsk_rect_init_from_rect (&node->bounds, &(children[0]->bounds));
-      have_opaque = gsk_render_node_get_opaque_rect (children[0], &self->opaque);
       node->is_hdr = gsk_render_node_is_hdr (children[0]);
       node->clears_background = gsk_render_node_clears_background (children[0]);
       node->copy_mode = gsk_render_node_get_copy_mode (children[0]);
@@ -312,36 +293,12 @@ gsk_container_node_new (GskRenderNode **children,
           self->disjoint = self->disjoint && !gsk_rect_intersects (&node->bounds, &(children[i]->bounds));
           graphene_rect_union (&node->bounds, &(children[i]->bounds), &node->bounds);
           node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
-          if (gsk_render_node_clears_background (children[i]))
-            {
-              node->clears_background  = TRUE;
-              if (!children[i]->fully_opaque && have_opaque)
-                {
-                  if (!gsk_rect_subtract (&self->opaque, &children[i]->bounds, &self->opaque))
-                    {
-                      have_opaque = FALSE;
-                      self->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-                    }
-                }
-            }
-          if (gsk_render_node_get_opaque_rect (children[i], &child_opaque))
-            {
-              if (have_opaque)
-                gsk_rect_coverage (&self->opaque, &child_opaque, &self->opaque);
-              else
-                {
-                  self->opaque = child_opaque;
-                  have_opaque = TRUE;
-                }
-            }
-
+          node->clears_background |= gsk_render_node_clears_background (children[i]);
           node->is_hdr |= gsk_render_node_is_hdr (children[i]);
           node->copy_mode = MAX (node->copy_mode, gsk_render_node_get_copy_mode (children[i]));
           node->contains_subsurface_node |= gsk_render_node_contains_subsurface_node (children[i]);
           node->contains_paste_node |= gsk_render_node_contains_paste_node (children[i]);
         }
-
-      node->fully_opaque = have_opaque && graphene_rect_equal (&node->bounds, &self->opaque);
    }
 
   return node;

@@ -285,23 +285,6 @@ gsk_composite_node_replay (GskRenderNode   *node,
   return result;
 }
 
-static gboolean
-gsk_composite_node_get_opaque_rect (GskRenderNode   *node,
-                                    graphene_rect_t *out_opaque)
-{
-  GskCompositeNode *self = (GskCompositeNode *) node;
-  graphene_rect_t mask_opaque, child_opaque;
-
-  if (gsk_porter_duff_clears_foreground (self->op))
-    return FALSE;
-
-  if (!gsk_render_node_get_opaque_rect (self->child, &child_opaque) ||
-      !gsk_render_node_get_opaque_rect (self->mask, &mask_opaque))
-    return FALSE;
-
-  return gsk_rect_intersection (&child_opaque, &mask_opaque, out_opaque);
-}
-
 static void
 gsk_composite_node_render_opacity (GskRenderNode  *node,
                                    GskOpacityData *data)
@@ -383,7 +366,6 @@ gsk_composite_node_class_init (gpointer g_class,
   node_class->diff = gsk_composite_node_diff;
   node_class->get_children = gsk_composite_node_get_children;
   node_class->replay = gsk_composite_node_replay;
-  node_class->get_opaque_rect = gsk_composite_node_get_opaque_rect;
   node_class->render_opacity = gsk_composite_node_render_opacity;
 }
 

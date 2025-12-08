@@ -118,15 +118,6 @@ gsk_isolation_node_diff (GskRenderNode *node1,
     }
 }
 
-static gboolean
-gsk_isolation_node_get_opaque_rect (GskRenderNode   *node,
-                                    graphene_rect_t *out_opaque)
-{
-  GskIsolationNode *self = (GskIsolationNode *) node;
-
-  return gsk_render_node_get_opaque_rect (self->child, out_opaque);
-}
-
 static GskRenderNode **
 gsk_isolation_node_get_children (GskRenderNode *node,
                                  gsize         *n_children)
@@ -201,7 +192,6 @@ gsk_isolation_node_class_init (gpointer g_class,
   node_class->diff = gsk_isolation_node_diff;
   node_class->get_children = gsk_isolation_node_get_children;
   node_class->replay = gsk_isolation_node_replay;
-  node_class->get_opaque_rect = gsk_isolation_node_get_opaque_rect;
   node_class->render_opacity = gsk_isolation_node_render_opacity;
 }
 

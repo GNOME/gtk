@@ -181,13 +181,6 @@ gsk_render_node_real_replay (GskRenderNode   *node,
   return gsk_render_node_ref (node);
 }
 
-static gboolean
-gsk_render_node_real_get_opaque_rect (GskRenderNode   *node,
-                                      graphene_rect_t *out_opaque)
-{
-  return FALSE;
-}
-
 static void
 gsk_render_node_real_render_opacity (GskRenderNode  *node,
                                      GskOpacityData *data)
@@ -203,7 +196,6 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->diff = gsk_render_node_real_diff;
   klass->get_children = gsk_render_node_real_get_children;
   klass->replay = gsk_render_node_real_replay;
-  klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
   klass->render_opacity = gsk_render_node_real_render_opacity;
 }
 
@@ -705,14 +697,10 @@ gsk_render_node_get_opaque_rect (GskRenderNode   *self,
       return TRUE;
     }
 
-#if 0
-  return GSK_RENDER_NODE_GET_CLASS (self)->get_opaque_rect (self, out_opaque);
-#else
   gsk_render_node_render_opacity (self, &data);
   result = !gsk_rect_is_empty (&data.opaque);
   if (result)
     *out_opaque = data.opaque;
-#endif
 
   return result;
 }
