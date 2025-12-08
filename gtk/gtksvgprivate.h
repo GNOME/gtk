@@ -36,9 +36,9 @@ typedef struct _Timeline Timeline;
 
 typedef enum
 {
-  ALIGN_MIN = 1 << 0,
-  ALIGN_MID = 1 << 1,
-  ALIGN_MAX = 1 << 2,
+  ALIGN_MIN,
+  ALIGN_MID,
+  ALIGN_MAX,
 } Align;
 
 typedef enum
@@ -63,7 +63,7 @@ struct _GtkSvg
   graphene_rect_t view_box;
   graphene_rect_t bounds;
 
-  Align align;
+  unsigned int align;
   MeetOrSlice meet_or_slice;
 
   double weight;
