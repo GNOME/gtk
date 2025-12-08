@@ -177,10 +177,10 @@ typedef enum
   VISIBILITY_VISIBLE,
 } Visibility;
 
-#define ALIGN_XY(x,y) ((x) | ((y) << 3))
+#define ALIGN_XY(x,y) ((x) | ((y) << 2))
 
-#define ALIGN_GET_X(x) ((x) & 7)
-#define ALIGN_GET_Y(x) ((x) >> 3)
+#define ALIGN_GET_X(x) ((x) & 3)
+#define ALIGN_GET_Y(x) ((x) >> 2)
 
 typedef struct _Animation Animation;
 
@@ -13638,6 +13638,35 @@ gtk_svg_serialize_full (GtkSvg               *self,
       string_append_double (s, self->view_box.size.width);
       g_string_append_c (s, ' ');
       string_append_double (s, self->view_box.size.height);
+      g_string_append_c (s, '\'');
+    }
+
+  if (self->align != ALIGN_XY (ALIGN_MID, ALIGN_MID) ||
+      self->meet_or_slice != MEET)
+    {
+      indent_for_attr (s, 0);
+      g_string_append (s, "preserveAspectRatio='");
+      if (self->align == 0)
+        {
+          g_string_append (s, "none");
+        }
+      else
+        {
+          const char *aligns[] = { "Min", "Mid", "Max" };
+
+          g_string_append_c (s, 'x');
+          g_string_append (s, aligns[ALIGN_GET_X (self->align)]);
+          g_string_append_c (s, 'Y');
+          g_string_append (s, aligns[ALIGN_GET_Y (self->align)]);
+
+          if (self->meet_or_slice != MEET)
+            {
+              const char *meets[] = { "meet", "slice" };
+
+              g_string_append_c (s, ' ');
+              g_string_append (s, meets[self->meet_or_slice]);
+            }
+        }
       g_string_append_c (s, '\'');
     }
 

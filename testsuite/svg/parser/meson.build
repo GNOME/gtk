@@ -52,7 +52,9 @@ test_data = [
   'times.svg',
   'transforms.svg',
   'use.svg',
-  'viewbox.svg'
+  'viewbox.svg',
+  'viewbox2.svg',
+  'viewbox3.svg',
 ]
 
 foreach testname : test_data
