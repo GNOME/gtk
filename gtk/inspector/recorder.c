@@ -1117,6 +1117,21 @@ add_texture_rows (GListStore *store,
 }
 
 static void
+add_rect_row (GListStore            *store,
+              const char            *label,
+              const graphene_rect_t *rect)
+{
+  add_text_row (store, label,
+                       "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
+                       rect->origin.x,
+                       rect->origin.y,
+                       rect->origin.x + rect->size.width,
+                       rect->origin.y + rect->size.height,
+                       rect->size.width,
+                       rect->size.height);
+}
+
+static void
 populate_render_node_properties (GListStore    *store,
                                  GskRenderNode *node,
                                  const char    *role)
@@ -1132,24 +1147,10 @@ populate_render_node_properties (GListStore    *store,
 
   add_text_row (store, "Type", "%s", node_type_name (gsk_render_node_get_node_type (node)));
 
-  add_text_row (store, "Bounds",
-                       "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
-                       bounds.origin.x,
-                       bounds.origin.y,
-                       bounds.origin.x + bounds.size.width,
-                       bounds.origin.y + bounds.size.height,
-                       bounds.size.width,
-                       bounds.size.height);
+  add_rect_row (store, "Bounds", &bounds);
 
   if (gsk_render_node_get_opaque_rect (node, &opaque))
-    add_text_row (store, "Opaque",
-                         "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
-                         opaque.origin.x,
-                         opaque.origin.y,
-                         opaque.origin.x + opaque.size.width,
-                         opaque.origin.y + opaque.size.height,
-                         opaque.size.width,
-                         opaque.size.height);
+    add_rect_row (store, "Opaque", &opaque);
   else
     add_text_row (store, "Opaque", "no");
 
@@ -1523,9 +1524,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         float rect[12];
 
         gsk_rounded_rect_to_float (outline, graphene_point_zero (), rect);
-        add_text_row (store, "Outline",
-                             "%.2f x %.2f + %.2f + %.2f",
-                             rect[2], rect[3], rect[0], rect[1]);
+        add_rect_row (store, "Outline", &outline->bounds);
 
         add_color_row (store, "Color", color);
 
@@ -1540,12 +1539,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (node);
 
-        add_text_row (store, "Child Bounds",
-                             "%.2f x %.2f + %.2f + %.2f",
-                             child_bounds->size.width,
-                             child_bounds->size.height,
-                             child_bounds->origin.x,
-                             child_bounds->origin.y);
+        add_rect_row (store, "Child Bounds", child_bounds);
       }
       break;
 
@@ -1587,24 +1581,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_CLIP_NODE:
       {
         const graphene_rect_t *clip = gsk_clip_node_get_clip (node);
-        add_text_row (store, "Clip",
-                             "%.2f x %.2f + %.2f + %.2f",
-                             clip->size.width,
-                             clip->size.height,
-                             clip->origin.x,
-                             clip->origin.y);
+        add_rect_row (store, "Clip", clip);
       }
       break;
 
     case GSK_ROUNDED_CLIP_NODE:
       {
         const GskRoundedRect *clip = gsk_rounded_clip_node_get_clip (node);
-        add_text_row (store, "Clip",
-                             "%.2f x %.2f + %.2f + %.2f",
-                             clip->bounds.size.width,
-                             clip->bounds.size.height,
-                             clip->bounds.origin.x,
-                             clip->bounds.origin.y);
+        add_rect_row (store, "Clip", &clip->bounds);
 
         add_text_row (store, "Top Left Corner Size", "%.2f x %.2f", clip->corner[0].width, clip->corner[0].height);
         add_text_row (store, "Top Right Corner Size", "%.2f x %.2f", clip->corner[1].width, clip->corner[1].height);
