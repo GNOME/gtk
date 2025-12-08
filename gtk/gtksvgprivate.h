@@ -297,7 +297,7 @@ typedef enum
 
 double       svg_shape_attr_get_number    (Shape                 *shape,
                                            ShapeAttr              attr,
-                                           const graphene_size_t *viewport);
+                                           const graphene_rect_t *viewport);
 GskPath *    svg_shape_attr_get_path      (Shape                 *shape,
                                            ShapeAttr              attr);
 unsigned int svg_shape_attr_get_enum      (Shape                 *shape,
@@ -317,7 +317,7 @@ char *       svg_shape_attr_get_transform (Shape                 *shape,
 char *       svg_shape_attr_get_filter    (Shape                 *shape,
                                            ShapeAttr              attr);
 GskPath *    svg_shape_get_path           (Shape                 *shape,
-                                           const graphene_size_t *viewport);
+                                           const graphene_rect_t *viewport);
 void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);

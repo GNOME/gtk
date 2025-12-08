@@ -142,7 +142,7 @@ Shape *         path_paintable_get_shape_by_id     (PathPaintable   *self,
 
 Shape *         path_paintable_get_content         (PathPaintable   *self);
 
-const graphene_size_t *
+const graphene_rect_t *
                 path_paintable_get_viewport        (PathPaintable   *self);
 
 void            path_paintable_changed             (PathPaintable   *self);

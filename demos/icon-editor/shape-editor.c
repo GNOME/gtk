@@ -711,7 +711,7 @@ stroke_changed (ShapeEditor *self)
   unsigned int symbolic, stroke_symbolic;
   const GdkRGBA *color;
   GdkRGBA stroke_color;
-  const graphene_size_t *viewport;
+  const graphene_rect_t *viewport;
   PaintKind kind;
 
   if (self->updating)
@@ -1061,7 +1061,7 @@ shape_editor_update (ShapeEditor *self)
       double line_width;
       double min_width, max_width;
       char buffer[128];
-      const graphene_size_t *viewport;
+      const graphene_rect_t *viewport;
       PaintKind kind;
       unsigned int idx;
 

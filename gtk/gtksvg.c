@@ -508,9 +508,9 @@ lcm (unsigned int a,
 }
 
 static double
-normalized_diagonal (const graphene_size_t *viewport)
+normalized_diagonal (const graphene_rect_t *viewport)
 {
-  return hypot (viewport->width, viewport->height) / M_SQRT2;
+  return hypot (viewport->size.width, viewport->size.height) / M_SQRT2;
 }
 
 static inline double
@@ -3732,7 +3732,7 @@ svg_dash_array_accumulate (const SvgValue *value0,
 
 static SvgValue *
 svg_dash_array_resolve (const SvgValue        *value,
-                        const graphene_size_t *viewport)
+                        const graphene_rect_t *viewport)
 {
   SvgDashArray *orig = (SvgDashArray *) value;
   SvgDashArray *a;
@@ -4199,7 +4199,7 @@ svg_points_interpolate (const SvgValue *value0,
 
 static SvgValue *
 svg_points_resolve (const SvgValue        *value,
-                    const graphene_size_t *viewport)
+                    const graphene_rect_t *viewport)
 {
   SvgPoints *orig = (SvgPoints *) value;
   SvgPoints *p;
@@ -5768,7 +5768,7 @@ shape_can_set_attr (ShapeType type,
 
 static GskPath *
 shape_get_path (Shape                 *shape,
-                const graphene_size_t *viewport,
+                const graphene_rect_t *viewport,
                 gboolean               current)
 {
   GskPathBuilder *builder;
@@ -5786,10 +5786,10 @@ shape_get_path (Shape                 *shape,
       if (values[SHAPE_ATTR_X1] && values[SHAPE_ATTR_Y1] &&
           values[SHAPE_ATTR_X2] && values[SHAPE_ATTR_Y2])
         {
-          double x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->width);
-          double y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->height);
-          double x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->width);
-          double y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->height);
+          double x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->size.width);
+          double y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->size.height);
+          double x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->size.width);
+          double y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->size.height);
           gsk_path_builder_move_to (builder, x1, y1);
           gsk_path_builder_line_to (builder, x2, y2);
         }
@@ -5824,8 +5824,8 @@ shape_get_path (Shape                 *shape,
       builder = gsk_path_builder_new ();
       if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] && values[SHAPE_ATTR_R])
         {
-          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->size.width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->size.height);
           double r = svg_number_get (values[SHAPE_ATTR_R], normalized_diagonal (viewport));
           gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), r);
         }
@@ -5836,10 +5836,10 @@ shape_get_path (Shape                 *shape,
       if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] &&
           values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
         {
-          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
-          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->size.width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->size.height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->size.width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->size.height);
           path_builder_add_ellipse (builder, cx, cy, rx, ry);
         }
       return gsk_path_builder_free_to_path (builder);
@@ -5850,12 +5850,12 @@ shape_get_path (Shape                 *shape,
           values[SHAPE_ATTR_WIDTH] && values[SHAPE_ATTR_HEIGHT] &&
           values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
         {
-          double x = svg_number_get (values[SHAPE_ATTR_X], viewport->width);
-          double y = svg_number_get (values[SHAPE_ATTR_Y], viewport->height);
-          double width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->width);
-          double height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->height);
-          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          double x = svg_number_get (values[SHAPE_ATTR_X], viewport->size.width);
+          double y = svg_number_get (values[SHAPE_ATTR_Y], viewport->size.height);
+          double width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->size.width);
+          double height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->size.height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->size.width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->size.height);
           if (rx == 0 || ry == 0)
             gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
           else
@@ -5901,17 +5901,17 @@ shape_get_path (Shape                 *shape,
 
 static GskPath *
 shape_get_current_path (Shape                 *shape,
-                        const graphene_size_t *viewport)
+                        const graphene_rect_t *viewport)
 {
   if (shape->path)
     {
       switch (shape->type)
         {
         case SHAPE_LINE:
-          if (shape->path_for.line.x1 != svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->width) ||
-              shape->path_for.line.y1 != svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->height) ||
-              shape->path_for.line.x2 != svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->height) ||
-              shape->path_for.line.y2 != svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->height))
+          if (shape->path_for.line.x1 != svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->size.width) ||
+              shape->path_for.line.y1 != svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->size.height) ||
+              shape->path_for.line.x2 != svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->size.height) ||
+              shape->path_for.line.y2 != svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->size.height))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
               g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -5928,8 +5928,8 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_CIRCLE:
-          if (shape->path_for.circle.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width) ||
-              shape->path_for.circle.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height) ||
+          if (shape->path_for.circle.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width) ||
+              shape->path_for.circle.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height) ||
               shape->path_for.circle.r != svg_number_get (shape->current[SHAPE_ATTR_R], normalized_diagonal (viewport)))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
@@ -5938,10 +5938,10 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_ELLIPSE:
-          if (shape->path_for.ellipse.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width) ||
-              shape->path_for.ellipse.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height) ||
-              shape->path_for.ellipse.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width) ||
-              shape->path_for.ellipse.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height))
+          if (shape->path_for.ellipse.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width) ||
+              shape->path_for.ellipse.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height) ||
+              shape->path_for.ellipse.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width) ||
+              shape->path_for.ellipse.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
               g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -5949,12 +5949,12 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_RECT:
-          if (shape->path_for.rect.x != svg_number_get (shape->current[SHAPE_ATTR_X], viewport->width) ||
-              shape->path_for.rect.y != svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->height) ||
-              shape->path_for.rect.w != svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->width) ||
-              shape->path_for.rect.h != svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->height) ||
-              shape->path_for.rect.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width) ||
-              shape->path_for.rect.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height))
+          if (shape->path_for.rect.x != svg_number_get (shape->current[SHAPE_ATTR_X], viewport->size.width) ||
+              shape->path_for.rect.y != svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->size.height) ||
+              shape->path_for.rect.w != svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->size.width) ||
+              shape->path_for.rect.h != svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->size.height) ||
+              shape->path_for.rect.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width) ||
+              shape->path_for.rect.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
               g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -5990,10 +5990,10 @@ shape_get_current_path (Shape                 *shape,
       switch (shape->type)
         {
         case SHAPE_LINE:
-          shape->path_for.line.x1 = svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->width);
-          shape->path_for.line.y1 = svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->height);
-          shape->path_for.line.x2 = svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->width);
-          shape->path_for.line.y2 = svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->height);
+          shape->path_for.line.x1 = svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->size.width);
+          shape->path_for.line.y1 = svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->size.height);
+          shape->path_for.line.x2 = svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->size.width);
+          shape->path_for.line.y2 = svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->size.height);
           break;
 
         case SHAPE_POLYLINE:
@@ -6003,25 +6003,25 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_CIRCLE:
-          shape->path_for.circle.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width);
-          shape->path_for.circle.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height);
+          shape->path_for.circle.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width);
+          shape->path_for.circle.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height);
           shape->path_for.circle.r = svg_number_get (shape->current[SHAPE_ATTR_R], normalized_diagonal (viewport));
           break;
 
         case SHAPE_ELLIPSE:
-          shape->path_for.ellipse.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width);
-          shape->path_for.ellipse.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height);
-          shape->path_for.ellipse.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width);
-          shape->path_for.ellipse.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height);
+          shape->path_for.ellipse.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width);
+          shape->path_for.ellipse.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height);
+          shape->path_for.ellipse.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width);
+          shape->path_for.ellipse.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height);
           break;
 
         case SHAPE_RECT:
-          shape->path_for.rect.x = svg_number_get (shape->current[SHAPE_ATTR_X], viewport->width);
-          shape->path_for.rect.y = svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->height);
-          shape->path_for.rect.w = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->width);
-          shape->path_for.rect.h = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->height);
-          shape->path_for.rect.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width);
-          shape->path_for.rect.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height);
+          shape->path_for.rect.x = svg_number_get (shape->current[SHAPE_ATTR_X], viewport->size.width);
+          shape->path_for.rect.y = svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->size.height);
+          shape->path_for.rect.w = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->size.width);
+          shape->path_for.rect.h = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->size.height);
+          shape->path_for.rect.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width);
+          shape->path_for.rect.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height);
           break;
 
         case SHAPE_PATH:
@@ -6044,7 +6044,7 @@ shape_get_current_path (Shape                 *shape,
 
 static GskPathMeasure *
 shape_get_current_measure (Shape                 *shape,
-                           const graphene_size_t *viewport)
+                           const graphene_rect_t *viewport)
 {
   if (!shape->measure)
     {
@@ -6058,7 +6058,7 @@ shape_get_current_measure (Shape                 *shape,
 
 static gboolean
 shape_get_current_bounds (Shape                 *shape,
-                          const graphene_size_t *viewport,
+                          const graphene_rect_t *viewport,
                           graphene_rect_t       *bounds)
 {
   gboolean ret = FALSE;
@@ -6939,7 +6939,7 @@ fill_from_values (Animation     *a,
 
 static GskPath *
 animation_motion_get_path (Animation             *a,
-                           const graphene_size_t *viewport,
+                           const graphene_rect_t *viewport,
                            gboolean               current)
 {
   g_assert (a->type == ANIMATION_TYPE_MOTION);
@@ -6954,21 +6954,21 @@ animation_motion_get_path (Animation             *a,
 
 static GskPath *
 animation_motion_get_base_path (Animation             *a,
-                                const graphene_size_t *viewport)
+                                const graphene_rect_t *viewport)
 {
   return animation_motion_get_path (a, viewport, FALSE);
 }
 
 static GskPath *
 animation_motion_get_current_path (Animation             *a,
-                                   const graphene_size_t *viewport)
+                                   const graphene_rect_t *viewport)
 {
   return animation_motion_get_path (a, viewport, TRUE);
 }
 
 static GskPathMeasure *
 animation_motion_get_current_measure (Animation             *a,
-                                      const graphene_size_t *viewport)
+                                      const graphene_rect_t *viewport)
 {
   g_assert (a->type == ANIMATION_TYPE_MOTION);
 
@@ -7650,7 +7650,7 @@ get_transform_data_for_motion (GskPathMeasure   *measure,
 
 typedef struct {
   GtkSvg *svg;
-  const graphene_size_t *viewport;
+  const graphene_rect_t *viewport;
   Shape *parent; /* Can be different from the actual parent, for <use> */
   int64_t current_time;
   const GdkRGBA *colors;
@@ -11852,9 +11852,9 @@ serialize_animation_motion (GString              *s,
       GskPath *path;
 
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-        path = animation_motion_get_current_path (a, &svg->view_box.size);
+        path = animation_motion_get_current_path (a, &svg->view_box);
       else
-        path = animation_motion_get_base_path (a, &svg->view_box.size);
+        path = animation_motion_get_base_path (a, &svg->view_box);
       if (path)
         {
           indent_for_attr (s, indent);
@@ -12005,7 +12005,7 @@ typedef enum
 typedef struct
 {
   GtkSvg *svg;
-  const graphene_size_t *viewport;
+  const graphene_rect_t *viewport;
   GtkSnapshot *snapshot;
   graphene_rect_t bounds;
   int64_t current_time;
@@ -12072,8 +12072,8 @@ push_context (Shape        *shape,
     {
       double x, y;
 
-      x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
-      y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
+      x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
+      y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
     }
@@ -12170,10 +12170,10 @@ push_context (Shape        *shape,
             }
           else
             {
-              mask_clip.origin.x = svg_number_get (mask->shape->current[SHAPE_ATTR_X], context->viewport->width);
-              mask_clip.origin.y = svg_number_get (mask->shape->current[SHAPE_ATTR_Y], context->viewport->height);
-              mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], context->viewport->width);
-              mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], context->viewport->height);
+              mask_clip.origin.x = svg_number_get (mask->shape->current[SHAPE_ATTR_X], context->viewport->size.width);
+              mask_clip.origin.y = svg_number_get (mask->shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
+              mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+              mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
               has_clip = TRUE;
             }
 
@@ -12358,11 +12358,11 @@ paint_linear_gradient (Shape                 *gradient,
   else
     {
       graphene_point_init (&start,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X1], context->viewport->width),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], context->viewport->height));
+                           svg_number_get (gradient->current[SHAPE_ATTR_X1], context->viewport->size.width),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], context->viewport->size.height));
       graphene_point_init (&end,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X2], context->viewport->width),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], context->viewport->height));
+                           svg_number_get (gradient->current[SHAPE_ATTR_X2], context->viewport->size.width),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], context->viewport->size.height));
     }
 
   gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_TRANSFORM]);
@@ -12391,12 +12391,12 @@ paint_radial_gradient (Shape                 *gradient,
   graphene_rect_t gradient_bounds;
   GskGradient *g;
 
-  graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->width),
-                                    svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->height));
+  graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->size.width),
+                                    svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->size.height));
   start_radius = svg_number_get (gradient->current[SHAPE_ATTR_FR], normalized_diagonal (context->viewport));
 
-  graphene_point_init (&end_center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->width),
-                                    svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->height));
+  graphene_point_init (&end_center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->size.width),
+                                    svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->size.height));
   end_radius = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
 
   g = gsk_gradient_new ();
@@ -12642,7 +12642,7 @@ paint_shape (Shape        *shape,
 
           /* FIXME: this isn't the best way of doing this */
           use_context.svg = context->svg;
-          use_context.viewport = &context->svg->view_box.size;
+          use_context.viewport = &context->svg->view_box;
           use_context.parent = shape;
           use_context.current_time = context->current_time;
           use_context.colors = context->colors;
@@ -12761,7 +12761,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               &sx, &sy, &tx, &ty);
 
   compute_context.svg = self;
-  compute_context.viewport = &view_box.size;
+  compute_context.viewport = &view_box;
   compute_context.colors = colors;
   compute_context.n_colors = n_colors;
   compute_context.current_time = self->current_time;
@@ -12770,7 +12770,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   compute_current_values_for_shape (self->content, &compute_context);
 
   paint_context.svg = self;
-  paint_context.viewport = &view_box.size;
+  paint_context.viewport = &view_box;
   paint_context.snapshot = snapshot;
   paint_context.bounds = self->bounds;
   paint_context.colors = colors;
@@ -13624,7 +13624,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
       ComputeContext context;
       context.svg = self;
-      context.viewport = &self->view_box.size;
+      context.viewport = &self->view_box;
       context.current_time = self->current_time;
       context.parent = NULL;
       context.colors = col;
@@ -13814,7 +13814,7 @@ svg_transform_get_primitive (const SvgValue *value,
 double
 svg_shape_attr_get_number (Shape                 *shape,
                            ShapeAttr              attr,
-                           const graphene_size_t *viewport)
+                           const graphene_rect_t *viewport)
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr) ||
                         (attr == SHAPE_ATTR_STROKE_MINWIDTH ||
@@ -13833,13 +13833,13 @@ svg_shape_attr_get_number (Shape                 *shape,
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_CX:
       g_assert (viewport);
-      return svg_number_get (value, viewport->width);
+      return svg_number_get (value, viewport->size.width);
     case SHAPE_ATTR_Y:
     case SHAPE_ATTR_HEIGHT:
     case SHAPE_ATTR_RY:
     case SHAPE_ATTR_CY:
       g_assert (viewport);
-      return svg_number_get (value, viewport->height);
+      return svg_number_get (value, viewport->size.height);
     case SHAPE_ATTR_R:
       g_assert (viewport);
       return svg_number_get (value, normalized_diagonal (viewport));
@@ -13963,7 +13963,7 @@ svg_shape_attr_get_points (Shape        *shape,
 
 GskPath *
 svg_shape_get_path (Shape                 *shape,
-                    const graphene_size_t *viewport)
+                    const graphene_rect_t *viewport)
 {
   return shape_get_path (shape, viewport, FALSE);
 }
