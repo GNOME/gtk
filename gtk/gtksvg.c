@@ -5557,6 +5557,8 @@ shape_free (gpointer data)
 
   g_free (shape->gpa.attach.ref);
 
+  _gtk_bitmask_free (shape->attrs);
+
   g_free (data);
 }
 
@@ -5625,8 +5627,9 @@ shape_new (Shape     *parent,
 
   shape->parent = parent;
   shape->type = type;
-  shape->attrs = 0;
   shape->display = TRUE;
+
+  shape->attrs = _gtk_bitmask_new ();
 
   for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
     {
@@ -6973,7 +6976,7 @@ shape_get_base_value (Shape        *shape,
 {
   if (attr < SHAPE_ATTR_STOP_OFFSET)
     {
-      if ((shape->attrs & BIT (attr)) == 0)
+      if (!_gtk_bitmask_get (shape->attrs, attr))
         {
           if (parent && shape_attrs[attr].inherited)
             return parent->current[attr];
@@ -7017,7 +7020,7 @@ shape_set_base_value (Shape        *shape,
     {
       g_clear_pointer (&shape->base[attr], svg_value_unref);
       shape->base[attr] = svg_value_ref (value);
-      shape->attrs |= BIT (attr);
+      shape->attrs = _gtk_bitmask_set (shape->attrs, attr, TRUE);
     }
   else
     {
@@ -9638,7 +9641,7 @@ parse_shape_attrs (Shape                *shape,
   if (style_attr)
     parse_style_attr (shape, FALSE, style_attr, data, context);
 
-  if (xlink_href_attr && (shape->attrs & BIT (SHAPE_ATTR_HREF)) == 0)
+  if (xlink_href_attr && !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF))
     {
       SvgValue *value = shape_attr_parse_value (SHAPE_ATTR_HREF, xlink_href_attr);
       if (value)
@@ -9669,7 +9672,7 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
 
-      if (!(shape->attrs & BIT (SHAPE_ATTR_FILL)))
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
         shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
       svg_value_unref (value);
 
@@ -9684,23 +9687,23 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_none ();
 
-      if (!(shape->attrs & BIT (SHAPE_ATTR_STROKE)))
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
         shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
       svg_value_unref (value);
 
       g_strfreev (classes);
     }
 
-  if (shape->attrs & BIT (SHAPE_ATTR_STROKE_WIDTH))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH))
     {
-      if (!(shape->attrs & BIT (SHAPE_ATTR_STROKE_MINWIDTH)))
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MINWIDTH))
         {
           SvgValue *v;
           v = svg_number_new (0.25 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, v);
           svg_value_unref (v);
         }
-      if (!(shape->attrs & BIT (SHAPE_ATTR_STROKE_MAXWIDTH)))
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MAXWIDTH))
         {
           SvgValue *v;
           v = svg_number_new (1.5 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
@@ -9709,17 +9712,19 @@ parse_shape_attrs (Shape                *shape,
         }
     }
 
-  if (shape->attrs & (BIT (SHAPE_ATTR_CLIP_PATH) | BIT (SHAPE_ATTR_MASK) | BIT (SHAPE_ATTR_HREF)))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CLIP_PATH) ||
+      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MASK) ||
+      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF))
     g_ptr_array_add (data->pending_refs, shape);
 
-  if (shape->attrs & BIT (SHAPE_ATTR_FILL))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
       if (paint->kind == PAINT_GRADIENT)
         g_ptr_array_add (data->pending_refs, shape);
     }
 
-  if (shape->attrs & BIT (SHAPE_ATTR_STROKE))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
       if (paint->kind == PAINT_GRADIENT)
@@ -9729,18 +9734,22 @@ parse_shape_attrs (Shape                *shape,
   if (shape_has_attr (shape->type, SHAPE_ATTR_RX) &&
       shape_has_attr (shape->type, SHAPE_ATTR_RY))
     {
-      if ((shape->attrs & (BIT (SHAPE_ATTR_RX) | BIT (SHAPE_ATTR_RY))) == BIT (SHAPE_ATTR_RX))
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RX) &&
+          !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RY))
         shape_set_base_value (shape, SHAPE_ATTR_RY, shape->base[SHAPE_ATTR_RX]);
-      else if ((shape->attrs & (BIT (SHAPE_ATTR_RX) | BIT (SHAPE_ATTR_RY))) == BIT (SHAPE_ATTR_RY))
+      else if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RY) &&
+               !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RX))
         shape_set_base_value (shape, SHAPE_ATTR_RX, shape->base[SHAPE_ATTR_RY]);
     }
 
   if (shape_has_attr (shape->type, SHAPE_ATTR_FX) &&
       shape_has_attr (shape->type, SHAPE_ATTR_FY))
     {
-      if ((shape->attrs & (BIT (SHAPE_ATTR_CX) | BIT (SHAPE_ATTR_FX))) == BIT (SHAPE_ATTR_CX))
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CX) &&
+          !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FX))
         shape_set_base_value (shape, SHAPE_ATTR_FX, shape->base[SHAPE_ATTR_CX]);
-      if ((shape->attrs & (BIT (SHAPE_ATTR_CY) | BIT (SHAPE_ATTR_FY))) == BIT (SHAPE_ATTR_CY))
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CY) &&
+          !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FY))
         shape_set_base_value (shape, SHAPE_ATTR_FY, shape->base[SHAPE_ATTR_CY]);
     }
 }
@@ -9998,7 +10007,7 @@ parse_shape_gpa_attrs (Shape                *shape,
     g_ptr_array_add (data->pending_refs, shape);
 
   /* our dasharray-based animations require unit path length */
-  if (shape->attrs & BIT (SHAPE_ATTR_PATH_LENGTH))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_PATH_LENGTH))
     gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set pathLength and use gpa features");
 
   create_states (shape,
@@ -11168,7 +11177,8 @@ serialize_shape_attrs (GString              *s,
       if (!shape_has_attr (shape->type, attr))
         continue;
 
-      if ((shape->attrs & BIT (attr)) || (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
+      if (_gtk_bitmask_get (shape->attrs, attr) ||
+          (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
         {
           SvgValue *value;
 
@@ -11178,7 +11188,7 @@ serialize_shape_attrs (GString              *s,
             value = shape_get_base_value (shape, NULL, attr);
 
           if (value &&
-              ((shape->attrs & BIT (attr)) != 0 ||
+              (_gtk_bitmask_get (shape->attrs, attr) ||
                !svg_value_equal (value, shape_attr_get_initial_value (attr, shape->type))))
             {
               if (shape_can_set_attr (shape->type, attr, FALSE))
@@ -11293,8 +11303,8 @@ serialize_gpa_attrs (GString              *s,
   else
     values = shape->base;
 
-  if ((shape->attrs & BIT (SHAPE_ATTR_STROKE_MINWIDTH)) ||
-      (shape->attrs & BIT (SHAPE_ATTR_STROKE_MAXWIDTH)))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MINWIDTH) ||
+      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MAXWIDTH))
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:stroke-width='");
@@ -11307,7 +11317,8 @@ serialize_gpa_attrs (GString              *s,
     }
 
   paint = (SvgPaint *) values[SHAPE_ATTR_STROKE];
-  if (shape->attrs & BIT (SHAPE_ATTR_STROKE) && paint->kind == PAINT_SYMBOLIC)
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) &&
+      paint->kind == PAINT_SYMBOLIC)
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:stroke='");
@@ -11316,7 +11327,8 @@ serialize_gpa_attrs (GString              *s,
     }
 
   paint = (SvgPaint *) values[SHAPE_ATTR_FILL];
-  if (shape->attrs & BIT (SHAPE_ATTR_FILL) && paint->kind == PAINT_SYMBOLIC)
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) &&
+      paint->kind == PAINT_SYMBOLIC)
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:fill='");
@@ -12087,7 +12099,10 @@ push_context (Shape        *shape,
 
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (mask->shape->current[SHAPE_ATTR_MASK_TYPE]));
 
-      if (mask->shape->attrs & (BIT (SHAPE_ATTR_X) | BIT (SHAPE_ATTR_Y) | BIT (SHAPE_ATTR_WIDTH) | BIT (SHAPE_ATTR_HEIGHT)))
+      if (_gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_X) ||
+          _gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_Y) ||
+          _gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_WIDTH) ||
+          _gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_HEIGHT))
         {
            graphene_rect_t mask_clip;
 
@@ -13759,7 +13774,7 @@ svg_shape_attr_get_number (Shape                 *shape,
                          attr == SHAPE_ATTR_STROKE_MAXWIDTH), 0);
   SvgValue *value;
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13804,7 +13819,7 @@ svg_shape_attr_get_path (Shape     *shape,
   SvgValue *value;
   GskPath *path;
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13823,7 +13838,7 @@ svg_shape_attr_get_enum (Shape     *shape,
   g_return_val_if_fail (shape_has_attr (shape->type, attr), 0);
   SvgValue *value;
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13841,7 +13856,7 @@ svg_shape_attr_get_paint (Shape            *shape,
   SvgValue *value;
   SvgPaint *paint;
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13879,7 +13894,7 @@ svg_shape_attr_get_points (Shape        *shape,
   SvgPoints *points;
   double *ret;
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13915,7 +13930,7 @@ svg_shape_attr_get_clip (Shape      *shape,
   SvgValue *value;
   SvgClip *clip;
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13939,7 +13954,7 @@ svg_shape_attr_get_transform (Shape     *shape,
   SvgTransform *transform;
   GString *s = g_string_new ("");
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13961,7 +13976,7 @@ svg_shape_attr_get_filter (Shape     *shape,
   SvgFilter *filter;
   GString *s = g_string_new ("");
 
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
     value = shape_attr_get_initial_value (attr, shape->type);
@@ -13979,10 +13994,10 @@ svg_shape_attr_set (Shape     *shape,
                     ShapeAttr  attr,
                     SvgValue  *value)
 {
-  if (shape->attrs & BIT (attr))
+  if (_gtk_bitmask_get (shape->attrs, attr))
     svg_value_unref (shape->base[attr]);
   shape->base[attr] = value;
-  shape->attrs |= BIT (attr);
+  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, TRUE);
 }
 
 Shape *
