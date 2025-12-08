@@ -546,7 +546,7 @@ path_paintable_set_path_stroke (PathPaintable *self,
                                 const GdkRGBA *color)
 {
   Shape *shape = path_paintable_get_shape (self, idx);
-  graphene_rect_t *viewport = &self->svg->view_box;
+  graphene_rect_t *viewport = &self->svg->viewport;
   PaintKind kind;
   GtkSymbolicColor stroke_symbolic;
   GdkRGBA stroke_color;
@@ -634,7 +634,7 @@ path_paintable_get_path (PathPaintable *self,
                          size_t         idx)
 {
   Shape *shape = path_paintable_get_shape (self, idx);
-  const graphene_rect_t *viewport = &self->svg->view_box;
+  const graphene_rect_t *viewport = &self->svg->viewport;
 
   return svg_shape_get_path (shape, viewport);
 }
@@ -678,7 +678,7 @@ path_paintable_get_path_stroke (PathPaintable *self,
                                 GdkRGBA       *color)
 {
   Shape *shape = path_paintable_get_shape (self, idx);
-  const graphene_rect_t *viewport = &self->svg->view_box;
+  const graphene_rect_t *viewport = &self->svg->viewport;
 
   gsk_stroke_set_line_width (stroke, svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_WIDTH, viewport));
   gsk_stroke_set_line_cap (stroke, svg_shape_attr_get_enum (shape, SHAPE_ATTR_STROKE_LINECAP));
@@ -808,7 +808,7 @@ GskPath *
 path_paintable_get_path_by_id (PathPaintable *self,
                                const char    *id)
 {
-  const graphene_rect_t *viewport = &self->svg->view_box;
+  const graphene_rect_t *viewport = &self->svg->viewport;
 
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
     {
@@ -955,7 +955,7 @@ path_paintable_serialize_as_svg (PathPaintable *self)
 const graphene_rect_t *
 path_paintable_get_viewport (PathPaintable *self)
 {
-  return &self->svg->view_box;
+  return &self->svg->viewport;
 }
 
 void

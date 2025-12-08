@@ -10212,6 +10212,9 @@ start_element_cb (GMarkupParseContext  *context,
             gtk_svg_invalid_attribute (data->svg, context, "height", NULL);
         }
 
+      /* Just a fallback - this gets set at snapshot time */
+      graphene_rect_init (&data->svg->viewport, 0, 0, width, height);
+
       data->svg->width = width;
       data->svg->height = height;
 
@@ -11852,9 +11855,9 @@ serialize_animation_motion (GString              *s,
       GskPath *path;
 
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-        path = animation_motion_get_current_path (a, &svg->view_box);
+        path = animation_motion_get_current_path (a, &svg->viewport);
       else
-        path = animation_motion_get_base_path (a, &svg->view_box);
+        path = animation_motion_get_base_path (a, &svg->viewport);
       if (path)
         {
           indent_for_attr (s, indent);
@@ -12754,6 +12757,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   else
     view_box = self->view_box;
 
+  graphene_rect_init (&self->viewport, 0, 0, width, height);
+
   compute_viewport_transform (self->align,
                               self->meet_or_slice,
                               &view_box,
@@ -12761,7 +12766,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               &sx, &sy, &tx, &ty);
 
   compute_context.svg = self;
-  compute_context.viewport = &view_box;
+  compute_context.viewport = &self->viewport;
   compute_context.colors = colors;
   compute_context.n_colors = n_colors;
   compute_context.current_time = self->current_time;
@@ -12770,7 +12775,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   compute_current_values_for_shape (self->content, &compute_context);
 
   paint_context.svg = self;
-  paint_context.viewport = &view_box;
+  paint_context.viewport = &self->viewport;
   paint_context.snapshot = snapshot;
   paint_context.bounds = self->bounds;
   paint_context.colors = colors;
@@ -13593,6 +13598,9 @@ pad_colors (GdkRGBA        col[5],
  * a 'gpa:status' attribute on animation elements that
  * reflects whether they are currently running.
  *
+ * When serializing the 'shadow DOM', the viewport from the
+ * most recently drawn frame is used to resolve percentages.
+ *
  * Returns: the serialized contents
  *
  * Since: 4.22
@@ -13624,7 +13632,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
       ComputeContext context;
       context.svg = self;
-      context.viewport = &self->view_box;
+      context.viewport = &self->viewport;
       context.current_time = self->current_time;
       context.parent = NULL;
       context.colors = col;
@@ -14121,6 +14129,8 @@ gtk_svg_clear_content (GtkSvg *self)
   self->width = 0;
   self->height = 0;
   graphene_rect_init (&self->view_box, 0, 0, 0, 0);
+  graphene_rect_init (&self->viewport, 0, 0, 0, 0);
+
   self->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
   self->meet_or_slice = MEET;
 

@@ -62,6 +62,7 @@ struct _GtkSvg
   double width, height;
   graphene_rect_t view_box;
   graphene_rect_t bounds;
+  graphene_rect_t viewport;
 
   unsigned int align;
   MeetOrSlice meet_or_slice;
