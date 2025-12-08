@@ -1,0 +1,18 @@
+/* 0 0 200 200 */
+
+/* use a repeat node to trigger fully opaque check,
+   because repeat nodes can only track opacity that way */
+repeat {
+  bounds: 0 0 200 200;
+  child: container {
+    color {
+      color: red;
+      bounds: 0 0 50 50;
+    }
+    color {
+      color: blue;
+      bounds: 50 0 50 50;
+    }
+  }
+}
+  

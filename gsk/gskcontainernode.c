@@ -40,6 +40,7 @@ struct _GskContainerNode
   GskRenderNode render_node;
 
   gboolean disjoint;
+  graphene_rect_t opaque; /* Can be 0 0 0 0 to mean no opacity */
   guint n_children;
   GskRenderNode **children;
 };
@@ -214,12 +215,33 @@ gsk_container_node_replay (GskRenderNode   *node,
   return result;
 }
 
+static gboolean
+gsk_container_node_can_cache_opacity (GskContainerNode *self)
+{
+  GskRenderNode *node = (GskRenderNode *) self;
+
+  return !gsk_render_node_contains_paste_node (node) &&
+         !gsk_render_node_clears_background (node);
+}
+
 static void
 gsk_container_node_render_opacity (GskRenderNode  *node,
                                    GskOpacityData *data)
 {
   GskContainerNode *self = (GskContainerNode *) node;
   guint i;
+
+  if (gsk_container_node_can_cache_opacity (self))
+    {
+      if (!gsk_rect_is_empty (&self->opaque))
+        {
+          if (gsk_rect_is_empty (&data->opaque))
+            data->opaque = self->opaque;
+          else
+            gsk_rect_coverage (&data->opaque, &self->opaque, &data->opaque);
+        }
+      return;
+    }
 
   for (i = 0; i < self->n_children; i++)
     {
@@ -262,6 +284,7 @@ gsk_container_node_new (GskRenderNode **children,
 {
   GskContainerNode *self;
   GskRenderNode *node;
+  guint i;
 
   self = gsk_render_node_alloc (GSK_TYPE_CONTAINER_NODE);
   node = (GskRenderNode *) self;
@@ -287,7 +310,7 @@ gsk_container_node_new (GskRenderNode **children,
       node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (children[0]);
       node->contains_paste_node = gsk_render_node_contains_paste_node (children[0]);
 
-      for (guint i = 1; i < n_children; i++)
+      for (i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
           self->disjoint = self->disjoint && !gsk_rect_intersects (&node->bounds, &(children[i]->bounds));
@@ -298,6 +321,19 @@ gsk_container_node_new (GskRenderNode **children,
           node->copy_mode = MAX (node->copy_mode, gsk_render_node_get_copy_mode (children[i]));
           node->contains_subsurface_node |= gsk_render_node_contains_subsurface_node (children[i]);
           node->contains_paste_node |= gsk_render_node_contains_paste_node (children[i]);
+        }
+
+      if (gsk_container_node_can_cache_opacity (self))
+        {
+          GskOpacityData data = GSK_OPACITY_DATA_INIT_EMPTY (NULL);
+
+          for (i = 0; i < self->n_children; i++)
+            {
+              gsk_render_node_render_opacity (self->children[i], &data);
+            }
+          self->opaque = data.opaque;
+
+          node->fully_opaque = gsk_rect_contains_rect (&self->opaque, &node->bounds);
         }
    }
 
