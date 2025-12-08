@@ -68,7 +68,7 @@ gdk_cairo_pattern_set_repeat (cairo_pattern_t *pattern,
 
 static void
 gsk_repeat_node_draw_tiled (cairo_t                *cr,
-                            GdkColorState          *ccs,
+                            GskCairoData           *data,
                             const graphene_rect_t  *rect,
                             GskRepeat               repeat,
                             GskRenderNode          *child,
@@ -112,7 +112,7 @@ gsk_repeat_node_draw_tiled (cairo_t                *cr,
   cairo_translate (child_cr,
                    - child_bounds->origin.x,
                    - child_bounds->origin.y);
-  gsk_render_node_draw_ccs (child, child_cr, ccs);
+  gsk_render_node_draw_full (child, child_cr, data);
   cairo_destroy (child_cr);
 
   pattern = cairo_pattern_create_for_surface (child_surface);
@@ -133,7 +133,7 @@ gsk_repeat_node_draw_tiled (cairo_t                *cr,
 static void
 gsk_repeat_node_draw_none (GskRenderNode *node,
                            cairo_t       *cr,
-                           GdkColorState *ccs)
+                           GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
 
@@ -144,7 +144,7 @@ gsk_repeat_node_draw_none (GskRenderNode *node,
       gdk_cairo_rect (cr, &self->child_bounds);
       cairo_clip (cr);
     }
-  gsk_render_node_draw_ccs (self->child, cr, ccs);
+  gsk_render_node_draw_full (self->child, cr, data);
   return;
 }
 
@@ -173,7 +173,7 @@ gsk_repeat_node_compute_rect_for_pad (const graphene_rect_t *draw_bounds,
 static void
 gsk_repeat_node_draw_pad (GskRenderNode *node,
                           cairo_t       *cr,
-                          GdkColorState *ccs)
+                          GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
   graphene_rect_t clip_bounds, draw_bounds;
@@ -185,7 +185,7 @@ gsk_repeat_node_draw_pad (GskRenderNode *node,
   gsk_repeat_node_compute_rect_for_pad (&clip_bounds, &self->child_bounds, &draw_bounds);
 
   gsk_repeat_node_draw_tiled (cr,
-                              ccs,
+                              data,
                               &clip_bounds,
                               self->repeat,
                               self->child,
@@ -196,7 +196,7 @@ gsk_repeat_node_draw_pad (GskRenderNode *node,
 static void
 gsk_repeat_node_draw_repeat (GskRenderNode *node,
                              cairo_t       *cr,
-                             GdkColorState *ccs)
+                             GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
   graphene_rect_t clip_bounds;
@@ -221,7 +221,7 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
         {
           /* tile in both directions */
           gsk_repeat_node_draw_tiled (cr,
-                                      ccs,
+                                      data,
                                       &clip_bounds,
                                       self->repeat,
                                       self->child,
@@ -239,7 +239,7 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
               float end_y = MAX (clip_bounds.origin.y + clip_bounds.size.height,
                                  self->child_bounds.origin.y + (y + 1) * self->child_bounds.size.height);
               gsk_repeat_node_draw_tiled (cr,
-                                          ccs,
+                                          data,
                                           &GRAPHENE_RECT_INIT (
                                               clip_bounds.origin.x,
                                               start_y,
@@ -273,7 +273,7 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
           float end_x = MIN (clip_bounds.origin.x + clip_bounds.size.width,
                              self->child_bounds.origin.x + (x + 1) * self->child_bounds.size.width);
           gsk_repeat_node_draw_tiled (cr,
-                                      ccs,
+                                      data,
                                       &GRAPHENE_RECT_INIT (
                                           start_x,
                                           clip_bounds.origin.y,
@@ -309,7 +309,7 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                y * self->child_bounds.size.height);
               gdk_cairo_rect (cr, &self->child_bounds);
               cairo_clip (cr);
-              gsk_render_node_draw_ccs (self->child, cr, ccs);
+              gsk_render_node_draw_full (self->child, cr, data);
               cairo_restore (cr);
             }
         }
@@ -420,7 +420,7 @@ gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
 static void
 gsk_repeat_node_draw_reflect (GskRenderNode *node,
                               cairo_t       *cr,
-                              GdkColorState *ccs)
+                              GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
   graphene_rect_t clip_bounds, draw_bounds;
@@ -436,7 +436,7 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
                                             &draw_pos);
 
   gsk_repeat_node_draw_tiled (cr,
-                              ccs,
+                              data,
                               &clip_bounds,
                               self->repeat,
                               self->child,
@@ -447,26 +447,26 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
 static void
 gsk_repeat_node_draw (GskRenderNode *node,
                       cairo_t       *cr,
-                      GdkColorState *ccs)
+                      GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
 
   switch (self->repeat)
     {
       case GSK_REPEAT_NONE:
-        gsk_repeat_node_draw_none (node, cr, ccs);
+        gsk_repeat_node_draw_none (node, cr, data);
         break;
 
       case GSK_REPEAT_PAD:
-        gsk_repeat_node_draw_pad (node, cr, ccs);
+        gsk_repeat_node_draw_pad (node, cr, data);
         break;
 
       case GSK_REPEAT_REPEAT:
-        gsk_repeat_node_draw_repeat (node, cr, ccs);
+        gsk_repeat_node_draw_repeat (node, cr, data);
         break;
 
       case GSK_REPEAT_REFLECT:
-        gsk_repeat_node_draw_reflect (node, cr, ccs);
+        gsk_repeat_node_draw_reflect (node, cr, data);
         break;
 
       default:

@@ -52,6 +52,11 @@ typedef struct
   GdkSurface *surface;
 } GskDiffData;
 
+typedef struct
+{
+  GdkColorState *ccs;
+} GskCairoData;
+
 struct _GskRenderNodeClass
 {
   GTypeClass parent_class;
@@ -61,7 +66,7 @@ struct _GskRenderNodeClass
   void          (* finalize)                            (GskRenderNode               *node);
   void          (* draw)                                (GskRenderNode               *node,
                                                          cairo_t                     *cr,
-                                                         GdkColorState               *ccs);
+                                                         GskCairoData                *data);
   gboolean      (* can_diff)                            (const GskRenderNode         *node1,
                                                          const GskRenderNode         *node2);
   void          (* diff)                                (GskRenderNode               *node1,
@@ -108,9 +113,9 @@ void            gsk_render_node_diff                    (GskRenderNode          
 void            gsk_render_node_diff_impossible         (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
                                                          GskDiffData                 *data);
-void            gsk_render_node_draw_ccs                (GskRenderNode               *node,
+void            gsk_render_node_draw_full               (GskRenderNode               *node,
                                                          cairo_t                     *cr,
-                                                         GdkColorState               *ccs);
+                                                         GskCairoData                *data);
 void            gsk_render_node_draw_with_color_state   (GskRenderNode               *node,
                                                          cairo_t                     *cr,
                                                          GdkColorState               *color_state);

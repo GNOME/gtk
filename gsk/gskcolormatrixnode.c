@@ -122,7 +122,7 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
 static void
 gsk_color_matrix_node_draw (GskRenderNode *node,
                             cairo_t       *cr,
-                            GdkColorState *ccs)
+                            GskCairoData  *data)
 {
   GskColorMatrixNode *self = (GskColorMatrixNode *) node;
   cairo_pattern_t *pattern;
@@ -136,7 +136,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
 
   cairo_push_group (cr);
 
-  gsk_render_node_draw_ccs (self->child, cr, ccs);
+  gsk_render_node_draw_full (self->child, cr, data);
 
   pattern = cairo_pop_group (cr);
   apply_color_matrix_to_pattern (pattern, &self->color_matrix, &self->color_offset);

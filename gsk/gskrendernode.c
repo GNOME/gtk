@@ -383,16 +383,16 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
 }
 
 void
-gsk_render_node_draw_ccs (GskRenderNode *node,
-                          cairo_t       *cr,
-                          GdkColorState *ccs)
+gsk_render_node_draw_full (GskRenderNode *node,
+                           cairo_t       *cr,
+                           GskCairoData  *data)
 {
   /* Check that the calling function did pass a correct color state */
-  g_assert (ccs == gdk_color_state_get_rendering_color_state (ccs));
+  g_assert (data->ccs == gdk_color_state_get_rendering_color_state (data->ccs));
 
   cairo_save (cr);
 
-  GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr, ccs);
+  GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr, data);
 
   if (GSK_DEBUG_CHECK (GEOMETRY))
     {
@@ -419,15 +419,15 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
                                        cairo_t       *cr,
                                        GdkColorState *color_state)
 {
-  GdkColorState *ccs;
+  GskCairoData data;
 
-  ccs = gdk_color_state_get_rendering_color_state (color_state);
+  data.ccs = gdk_color_state_get_rendering_color_state (color_state);
 
   node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
 
-  if (gdk_color_state_equal (color_state, ccs))
+  if (gdk_color_state_equal (color_state, data.ccs))
     {
-      gsk_render_node_draw_ccs (node, cr, ccs);
+      gsk_render_node_draw_full (node, cr, &data);
     }
   else
     {
@@ -436,9 +436,9 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
       cairo_clip (cr);
       cairo_push_group (cr);
 
-      gsk_render_node_draw_ccs (node, cr, ccs);
+      gsk_render_node_draw_full (node, cr, &data);
       gdk_cairo_surface_convert_color_state (cairo_get_group_target (cr),
-                                             ccs,
+                                             data.ccs,
                                              color_state);
       cairo_pop_group_to_source (cr);
       cairo_paint (cr);

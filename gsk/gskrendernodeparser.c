@@ -4356,6 +4356,14 @@ printer_init_duplicates_for_node (Printer       *printer,
       printer_init_collect_font_info (printer, node);
       break;
 
+    case GSK_TEXTURE_NODE:
+      printer_init_check_texture (printer, gsk_texture_node_get_texture (node));
+      break;
+
+    case GSK_TEXTURE_SCALE_NODE:
+      printer_init_check_texture (printer, gsk_texture_scale_node_get_texture (node));
+      break;
+
     case GSK_COLOR_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
@@ -4367,115 +4375,36 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_CONIC_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
     case GSK_PASTE_NODE:
-      /* no children */
-      break;
-
-    case GSK_TEXTURE_NODE:
-      printer_init_check_texture (printer, gsk_texture_node_get_texture (node));
-      break;
-
-    case GSK_TEXTURE_SCALE_NODE:
-      printer_init_check_texture (printer, gsk_texture_scale_node_get_texture (node));
-      break;
-
     case GSK_TRANSFORM_NODE:
-      printer_init_duplicates_for_node (printer, gsk_transform_node_get_child (node));
-      break;
-
     case GSK_OPACITY_NODE:
-      printer_init_duplicates_for_node (printer, gsk_opacity_node_get_child (node));
-      break;
-
     case GSK_COLOR_MATRIX_NODE:
-      printer_init_duplicates_for_node (printer, gsk_color_matrix_node_get_child (node));
-      break;
-
     case GSK_BLUR_NODE:
-      printer_init_duplicates_for_node (printer, gsk_blur_node_get_child (node));
-      break;
-
     case GSK_REPEAT_NODE:
-      printer_init_duplicates_for_node (printer, gsk_repeat_node_get_child (node));
-      break;
-
     case GSK_CLIP_NODE:
-      printer_init_duplicates_for_node (printer, gsk_clip_node_get_child (node));
-      break;
-
     case GSK_ROUNDED_CLIP_NODE:
-      printer_init_duplicates_for_node (printer, gsk_rounded_clip_node_get_child (node));
-      break;
-
     case GSK_SHADOW_NODE:
-      printer_init_duplicates_for_node (printer, gsk_shadow_node_get_child (node));
-      break;
-
     case GSK_DEBUG_NODE:
-      printer_init_duplicates_for_node (printer, gsk_debug_node_get_child (node));
-      break;
-
     case GSK_FILL_NODE:
-      printer_init_duplicates_for_node (printer, gsk_fill_node_get_child (node));
-      break;
-
     case GSK_STROKE_NODE:
-      printer_init_duplicates_for_node (printer, gsk_stroke_node_get_child (node));
-      break;
-
     case GSK_BLEND_NODE:
-      printer_init_duplicates_for_node (printer, gsk_blend_node_get_bottom_child (node));
-      printer_init_duplicates_for_node (printer, gsk_blend_node_get_top_child (node));
-      break;
-
     case GSK_MASK_NODE:
-      printer_init_duplicates_for_node (printer, gsk_mask_node_get_source (node));
-      printer_init_duplicates_for_node (printer, gsk_mask_node_get_mask (node));
-      break;
-
     case GSK_CROSS_FADE_NODE:
-      printer_init_duplicates_for_node (printer, gsk_cross_fade_node_get_start_child (node));
-      printer_init_duplicates_for_node (printer, gsk_cross_fade_node_get_end_child (node));
-      break;
-
     case GSK_GL_SHADER_NODE:
-      {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-        guint i;
-
-        for (i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
-          {
-            printer_init_duplicates_for_node (printer, gsk_gl_shader_node_get_child (node, i));
-          }
-G_GNUC_END_IGNORE_DEPRECATIONS
-      }
-      break;
-
     case GSK_CONTAINER_NODE:
+    case GSK_SUBSURFACE_NODE:
+    case GSK_COMPONENT_TRANSFER_NODE:
+    case GSK_COPY_NODE:
+    case GSK_COMPOSITE_NODE:
       {
-        guint i;
+        GskRenderNode **children;
+        gsize i, n_children;
 
-        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+        children = gsk_render_node_get_children (node, &n_children);
+        for (i = 0; i < n_children; i++)
           {
-            printer_init_duplicates_for_node (printer, gsk_container_node_get_child (node, i));
+            printer_init_duplicates_for_node (printer, children[i]);
           }
       }
-      break;
-
-    case GSK_SUBSURFACE_NODE:
-      printer_init_duplicates_for_node (printer, gsk_subsurface_node_get_child (node));
-      break;
-
-    case GSK_COMPONENT_TRANSFER_NODE:
-      printer_init_duplicates_for_node (printer, gsk_component_transfer_node_get_child (node));
-      break;
-
-    case GSK_COPY_NODE:
-      printer_init_duplicates_for_node (printer, gsk_copy_node_get_child (node));
-      break;
-
-    case GSK_COMPOSITE_NODE:
-      printer_init_duplicates_for_node (printer, gsk_composite_node_get_child (node));
-      printer_init_duplicates_for_node (printer, gsk_composite_node_get_mask (node));
       break;
 
     default:

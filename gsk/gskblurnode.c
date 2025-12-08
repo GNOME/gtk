@@ -203,7 +203,7 @@ blur_image_surface (cairo_surface_t *surface, int radius, int iterations)
 static void
 gsk_blur_node_draw (GskRenderNode *node,
                     cairo_t       *cr,
-                    GdkColorState *ccs)
+                    GskCairoData  *data)
 {
   GskBlurNode *self = (GskBlurNode *) node;
   cairo_surface_t *surface;
@@ -229,7 +229,7 @@ gsk_blur_node_draw (GskRenderNode *node,
                                    - blur_bounds.origin.y);
 
   cr2 = cairo_create (surface);
-  gsk_render_node_draw_ccs (self->child, cr2, ccs);
+  gsk_render_node_draw_full (self->child, cr2, data);
   cairo_destroy (cr2);
 
   blur_image_surface (surface, (int) ceil (0.5 * self->radius), 3);

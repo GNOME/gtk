@@ -61,7 +61,7 @@ gsk_fill_node_finalize (GskRenderNode *node)
 static void
 gsk_fill_node_draw (GskRenderNode *node,
                     cairo_t       *cr,
-                    GdkColorState *ccs)
+                    GskCairoData  *data)
 {
   GskFillNode *self = (GskFillNode *) node;
 
@@ -81,13 +81,13 @@ gsk_fill_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (self->child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&self->child->bounds, &node->bounds))
     {
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, gsk_color_node_get_color (self->child));
+      gdk_cairo_set_source_rgba_ccs (cr, data->ccs, gsk_color_node_get_color (self->child));
       cairo_fill (cr);
     }
   else
     {
       cairo_clip (cr);
-      gsk_render_node_draw_ccs (self->child, cr, ccs);
+      gsk_render_node_draw_full (self->child, cr, data);
     }
 }
 

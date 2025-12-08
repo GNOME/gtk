@@ -90,8 +90,8 @@ gsk_border_node_mesh_add_patch (cairo_pattern_t *pattern,
 
 static void
 gsk_border_node_draw (GskRenderNode *node,
-                       cairo_t       *cr,
-                       GdkColorState *ccs)
+                      cairo_t       *cr,
+                      GskCairoData  *data)
 {
   GskBorderNode *self = (GskBorderNode *) node;
   GskRoundedRect inside;
@@ -111,7 +111,7 @@ gsk_border_node_draw (GskRenderNode *node,
       gdk_color_equal (&self->border_color[0], &self->border_color[2]) &&
       gdk_color_equal (&self->border_color[0], &self->border_color[3]))
     {
-      gdk_cairo_set_source_color (cr, ccs, &self->border_color[0]);
+      gdk_cairo_set_source_color (cr, data->ccs, &self->border_color[0]);
     }
   else
     {
@@ -153,7 +153,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[0] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
-                                          ccs,
+                                          data->ccs,
                                           &self->border_color[0],
                                           0, 0,
                                           tl.x, tl.y,
@@ -165,7 +165,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[1] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
-                                          ccs,
+                                          data->ccs,
                                           &self->border_color[1],
                                           bounds->size.width, 0,
                                           br.x, tl.y,
@@ -177,7 +177,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[2] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
-                                          ccs,
+                                          data->ccs,
                                           &self->border_color[2],
                                           0, bounds->size.height,
                                           tl.x, br.y,
@@ -189,7 +189,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[3] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
-                                          ccs,
+                                          data->ccs,
                                           &self->border_color[3],
                                           0, 0,
                                           tl.x, tl.y,

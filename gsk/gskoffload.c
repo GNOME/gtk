@@ -24,10 +24,10 @@
 
 #include "gskclipnode.h"
 #include "gskcolornodeprivate.h"
-#include "gskcomponenttransfernode.h"
 #include "gskcontainernodeprivate.h"
 #include "gskdebugnode.h"
 #include "gskdebugprivate.h"
+#include "gskopacitynode.h"
 #include "gskrendernode.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
@@ -120,8 +120,10 @@ find_texture_to_attach (GskOffload          *self,
           node = gsk_subsurface_node_get_child (node);
           break;
 
-        case GSK_COMPONENT_TRANSFER_NODE:
-          node = gsk_component_transfer_node_get_child (node);
+        case GSK_OPACITY_NODE:
+          if (gsk_opacity_node_get_opacity (node) < 1.0)
+            goto out;
+          node = gsk_opacity_node_get_child (node);
           break;
 
         case GSK_CONTAINER_NODE:
