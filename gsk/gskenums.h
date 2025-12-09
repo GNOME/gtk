@@ -134,6 +134,14 @@
  * Since: 4.22
  */
 
+/**
+ * GSK_DISPLACEMENT_NODE:
+ *
+ * A node that displaces content according to some mask.
+ *
+ * Since: 4.22
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
@@ -171,6 +179,7 @@ typedef enum {
   GSK_PASTE_NODE,
   GSK_COMPOSITE_NODE,
   GSK_ISOLATION_NODE,
+  GSK_DISPLACEMENT_NODE,
 } GskRenderNodeType;
 
 /**
