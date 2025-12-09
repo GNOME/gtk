@@ -30,6 +30,7 @@ main (int argc, char *argv[])
   GFileEnumerator *dir;
   int row;
   GtkWidget *label;
+  GPtrArray *files;
 
   gtk_init ();
 
@@ -53,6 +54,22 @@ main (int argc, char *argv[])
   if (!dir)
     g_error ("%s", error->message);
 
+  files = g_ptr_array_new_with_free_func (g_free);
+  while (1)
+    {
+      GFile *child;
+
+      if (!g_file_enumerator_iterate (dir, NULL, &child, NULL, &error))
+        g_error ("%s", error->message);
+
+      if (!child)
+        break;
+
+      g_ptr_array_add (files, g_file_get_path (child));
+    }
+
+  g_ptr_array_sort_values (files, (GCompareFunc) strcmp);
+
   label = gtk_label_new ("rsvg");
   gtk_label_set_xalign (GTK_LABEL (label), 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 1, -1, 1, 1);
@@ -62,7 +79,7 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), label, 2, -1, 1, 1);
 
   row = 0;
-  while (1)
+  for (unsigned int i = 0; i < files->len; i++)
     {
       GFile *child;
       const char *path;
@@ -71,13 +88,9 @@ main (int argc, char *argv[])
       GBytes *bytes;
       GtkWidget *img;
 
-      if (!g_file_enumerator_iterate (dir, NULL, &child, NULL, &error))
-        g_error ("%s", error->message);
+      path = g_ptr_array_index (files, i);
 
-      if (!child)
-        break;
-
-      path = g_file_peek_path (child);
+      child = g_file_new_for_path (path);
 
       if (!g_str_has_suffix (path, ".svg") ||
           g_str_has_suffix (path, ".ref.svg"))
@@ -118,6 +131,7 @@ main (int argc, char *argv[])
       g_free (basename);
     }
 
+  g_ptr_array_unref (files);
   g_object_unref (dir);
   g_object_unref (file);
 
