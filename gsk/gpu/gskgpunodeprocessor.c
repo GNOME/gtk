@@ -4472,6 +4472,13 @@ static const struct
     NULL,
     NULL,
   },
+  [GSK_DISPLACEMENT_NODE] = {
+    0,
+    GSK_GPU_HANDLE_OPACITY,
+    NULL,
+    NULL,
+    NULL,
+  },
 };
 
 static void

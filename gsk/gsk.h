@@ -33,6 +33,7 @@
 #include <gsk/gskcontainernode.h>
 #include <gsk/gskcrossfadenode.h>
 #include <gsk/gskdebugnode.h>
+#include <gsk/gskdisplacementnode.h>
 #include <gsk/gskenums.h>
 #include <gsk/gskfillnode.h>
 #include <gsk/gskglshadernode.h>
