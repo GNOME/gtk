@@ -5997,9 +5997,6 @@ static SvgValue *
 shape_attr_get_initial_value (ShapeAttr attr,
                               ShapeType type)
 {
-  static SvgValue *default_radial_value;
-  static SvgValue *default_line_value;
-
   if (type == SHAPE_RADIAL_GRADIENT)
     {
       /* Radial gradients have conflicting initial values. Yay */
@@ -6007,6 +6004,8 @@ shape_attr_get_initial_value (ShapeAttr attr,
           attr == SHAPE_ATTR_CY ||
           attr == SHAPE_ATTR_R)
         {
+          static SvgValue *default_radial_value = NULL;
+
           if (!default_radial_value)
             default_radial_value = svg_percentage_new (50);
 
@@ -6021,6 +6020,8 @@ shape_attr_get_initial_value (ShapeAttr attr,
           attr == SHAPE_ATTR_X2 ||
           attr == SHAPE_ATTR_Y2)
         {
+          static SvgValue *default_line_value = NULL;
+
           if (!default_line_value)
             default_line_value = svg_number_new (0);
 
@@ -6032,15 +6033,36 @@ shape_attr_get_initial_value (ShapeAttr attr,
   if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK || type == SHAPE_PATTERN)
     {
       if (attr == SHAPE_ATTR_CONTENT_UNITS)
-        return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
+        {
+          static SvgValue *default_content_units_value = NULL;
+
+          if (!default_content_units_value)
+            default_content_units_value = svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
+
+          return default_content_units_value;
+        }
     }
 
   if (type == SHAPE_MASK)
     {
       if (attr == SHAPE_ATTR_X || attr == SHAPE_ATTR_Y)
-        return svg_percentage_new (-10);
+        {
+          static SvgValue *default_mask_pos_value = NULL;
+
+          if (!default_mask_pos_value)
+            default_mask_pos_value = svg_percentage_new (-10);
+
+          return default_mask_pos_value;
+        }
       else if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
-        return svg_percentage_new (120);
+        {
+          static SvgValue *default_mask_size_value = NULL;
+
+          if (!default_mask_size_value)
+            default_mask_size_value = svg_percentage_new (120);
+
+          return default_mask_size_value;
+        }
     }
 
   return shape_attrs[attr].initial_value;
