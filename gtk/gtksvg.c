@@ -9272,6 +9272,8 @@ typedef struct
     GtkSvgLocation start;
     char *reason;
   } skip;
+  gboolean collect_text;
+  GString *text;
 } ParserData;
 
 /* {{{ Animation attribute */
@@ -10494,6 +10496,50 @@ skip_element (ParserData          *data,
   va_end (args);
 }
 
+static gboolean
+has_ancestor (GMarkupParseContext *context,
+              const char          *elt)
+{
+  const GSList *list;
+
+  for (list = g_markup_parse_context_get_element_stack (context);
+       list != NULL;
+       list = list->next)
+    {
+      const char *name = list->data;
+      if (strcmp (name, elt) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+check_ancestors (GMarkupParseContext *context,
+                 ...)
+{
+  const GSList *list;
+  va_list args;
+  const char *name;
+
+  list = g_markup_parse_context_get_element_stack (context);
+
+  va_start (args, context);
+  while ((name = va_arg (args, const char *)) != NULL)
+    {
+      list = list->next;
+
+      if (list == NULL)
+        return FALSE;
+
+      if (strcmp (name, (const char *) list->data) != 0)
+        return FALSE;
+    }
+  va_end (args);
+
+  return TRUE;
+}
+
 static void
 start_element_cb (GMarkupParseContext  *context,
                   const char           *element_name,
@@ -10640,10 +10686,36 @@ start_element_cb (GMarkupParseContext  *context,
 
       return;
     }
+  else if (strcmp (element_name, "metadata") == 0)
+    {
+      return;
+    }
+  else if (strcmp (element_name, "rdf:RDF") == 0 ||
+           strcmp (element_name, "cc:Work") == 0 ||
+           strcmp (element_name, "dc:subject") == 0 ||
+           strcmp (element_name, "rdf:Bag") == 0 ||
+           strcmp (element_name, "rdf:li") == 0)
+    {
+      if (!has_ancestor (context, "metadata"))
+        skip_element (data, context, "Ignoring RDF elements outside <metadata>: <%s>", element_name);
+
+      if (strcmp (element_name, "rdf:li") == 0)
+        {
+          /* Verify we're in the right place */
+          if (check_ancestors (context, "rdf:Bag", "dc:subject", "cc:Work", "rdf:RDF", "metadata", NULL))
+            {
+              data->collect_text = TRUE;
+              g_string_set_size (data->text, 0);
+            }
+          else
+            skip_element (data, context, "Ignoring RDF element in wrong context: <%s>", element_name);
+        }
+
+      return;
+    }
   else if (strcmp (element_name, "style") == 0 ||
            strcmp (element_name, "title") == 0 ||
            strcmp (element_name, "desc") == 0 ||
-           strcmp (element_name, "metadata") == 0 ||
            g_str_has_prefix (element_name, "sodipodi:") ||
            g_str_has_prefix (element_name, "inkscape:"))
     {
@@ -11054,6 +11126,8 @@ end_element_cb (GMarkupParseContext *context,
   ParserData *data = user_data;
   ShapeType shape_type;
 
+  data->collect_text = FALSE;
+
   if (data->skip.to != NULL)
     {
       if (data->skip.to == g_markup_parse_context_get_element_stack (context))
@@ -11079,7 +11153,11 @@ end_element_cb (GMarkupParseContext *context,
       return;
     }
 
-  if (shape_type_lookup (element_name, &shape_type))
+  if (strcmp (element_name, "rdf:li") == 0)
+    {
+      g_set_str (&data->svg->gpa_keywords, data->text->str);
+    }
+  else if (shape_type_lookup (element_name, &shape_type))
     {
       GSList *tos = data->shape_stack;
 
@@ -11096,6 +11174,21 @@ end_element_cb (GMarkupParseContext *context,
     {
       data->current_animation = NULL;
     }
+}
+
+static void
+text_cb (GMarkupParseContext  *context,
+         const char           *text,
+         size_t                len,
+         gpointer              user_data,
+         GError              **error)
+{
+  ParserData *data = user_data;
+
+  if (!data->collect_text)
+    return;
+
+  g_string_append_len (data->text, text, len);
 }
 
 static gboolean
@@ -11453,7 +11546,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   GMarkupParser parser = {
     start_element_cb,
     end_element_cb,
-    NULL,
+    text_cb,
     NULL,
     NULL,
   };
@@ -11469,6 +11562,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.pending_refs = g_ptr_array_new ();
   data.skip.to = NULL;
   data.skip.reason = NULL;
+  data.text = g_string_new ("");
+  data.collect_text = FALSE;
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
   if (!g_markup_parse_context_parse (context,
@@ -11533,6 +11628,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_hash_table_unref (data.animations);
   g_ptr_array_unref (data.pending_animations);
   g_ptr_array_unref (data.pending_refs);
+  g_string_free (data.text, TRUE);
 }
 
 /* }}} */
@@ -13379,6 +13475,9 @@ gtk_svg_init (GtkSvg *self)
 
   self->timeline = timeline_new ();
   self->content = shape_new (NULL, SHAPE_GROUP);
+
+  self->views = g_hash_table_new (g_str_hash, g_str_equal);
+  self->view = NULL;
 }
 
 static void
@@ -13397,6 +13496,7 @@ gtk_svg_dispose (GObject *object)
 
   g_clear_pointer (&self->view_box, svg_value_unref);
   g_clear_pointer (&self->content_fit, svg_value_unref);
+  g_clear_pointer (&self->views, g_hash_table_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -13787,6 +13887,36 @@ gtk_svg_equal (GtkSvg *svg1,
   return shape_equal (svg1->content, svg2->content);
 }
 
+const char **
+gtk_svg_get_views (GtkSvg *svg)
+{
+  return (const char **) g_hash_table_get_keys_as_array (svg->views, NULL);
+}
+
+void
+gtk_svg_set_view (GtkSvg     *svg,
+                  const char *id)
+{
+  Shape *view = g_hash_table_lookup (svg->views, id);
+
+  if (view)
+    {
+      svg->view = view;
+
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (svg));
+      gdk_paintable_invalidate_size (GDK_PAINTABLE (svg));
+    }
+}
+
+const char *
+gtk_svg_get_view (GtkSvg *svg)
+{
+  if (svg->view)
+    return svg->view->id;
+
+  return NULL;
+}
+
 /* {{{ Animation */
 
 static void
@@ -14101,12 +14231,29 @@ gtk_svg_serialize_full (GtkSvg               *self,
     }
 
   g_string_append (s, "<svg");
+
   indent_for_attr (s, 0);
   g_string_append (s, "xmlns='http://www.w3.org/2000/svg'");
+  indent_for_attr (s, 0);
+  g_string_append (s, "xmlns:svg='http://www.w3.org/2000/svg'");
+  if (self->gpa_keywords)
+    {
+      /* we only need these to write out keywords in a way
+       * that inkscape understand.s
+       */
+      indent_for_attr (s, 0);
+      g_string_append (s, "xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'");
+      indent_for_attr (s, 0);
+      g_string_append (s, "xmlns:cc='http://creativecommons.org/ns#'");
+      indent_for_attr (s, 0);
+      g_string_append (s, "xmlns:dc='http://purl.org/dc/elements/1.1/'");
+    }
+
   indent_for_attr (s, 0);
   g_string_append (s, "width='");
   string_append_double (s, self->width);
   g_string_append_c (s, '\'');
+
   indent_for_attr (s, 0);
   g_string_append (s, "height='");
   string_append_double (s, self->height);
@@ -14164,6 +14311,32 @@ gtk_svg_serialize_full (GtkSvg               *self,
     }
 
   g_string_append (s, ">");
+
+  if (self->gpa_keywords)
+    {
+      indent_for_elt (s, 2);
+      g_string_append (s, "<metadata>");
+      indent_for_elt (s, 4);
+      g_string_append (s, "<rdf:RDF>");
+      indent_for_elt (s, 6);
+      g_string_append (s, "<cc:Work>");
+      indent_for_elt (s, 8);
+      g_string_append (s, "<dc:subject>");
+      indent_for_elt (s, 10);
+      g_string_append (s, "<rdf:Bag>");
+      indent_for_elt (s, 12);
+      g_string_append_printf (s, "<rdf:li>%s</rdf:li>\n", self->gpa_keywords);
+      indent_for_elt (s, 10);
+      g_string_append (s, "</rdf:Bag>");
+      indent_for_elt (s, 8);
+      g_string_append (s, "</dc:subject>");
+      indent_for_elt (s, 6);
+      g_string_append (s, "</cc:Work>");
+      indent_for_elt (s, 4);
+      g_string_append (s, "</rdf:RDF>");
+      indent_for_elt (s, 2);
+      g_string_append (s, "</metadata>");
+    }
 
   serialize_shape (s, self, 0, self->content, flags);
   g_string_append (s, "\n</svg>\n");
@@ -14577,6 +14750,9 @@ gtk_svg_clear_content (GtkSvg *self)
   self->state_change_delay = 0;
 
   self->gpa_version = 0;
+
+  g_hash_table_remove_all (self->views);
+  self->view = NULL;
 }
 
 /* {{{ Constructors */
