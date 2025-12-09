@@ -1,0 +1,31 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='300'
+        height='200'
+        viewBox='0 0 300 200'>
+  <defs>
+    <pattern
+            id='TrianglePattern'
+            x='0'
+            y='0'
+            width='50px'
+            height='50px'
+            patternUnits='userSpaceOnUse'
+            viewBox='0 0 10 10'>
+      <path
+              fill='rgb(221,160,221)'
+              stroke='rgb(0,0,255)'
+              d='M 0 0 L 7 0 L 3.5 7 Z'>
+      </path>
+    </pattern>
+  </defs>
+  <ellipse
+          fill='url(#TrianglePattern)'
+          stroke='rgb(0,0,0)'
+          stroke-width='2'
+          cx='150'
+          cy='100'
+          rx='125'
+          ry='75'>
+  </ellipse>
+</svg>

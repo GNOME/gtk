@@ -75,8 +75,8 @@
  *
  * The paintable does not support text or images, only shapes and paths.
  *
- * In `<defs>`, only `<clipPath>`, `<mask>`, gradients and shapes are
- * supported, not `<filter>`, `<pattern>` or other things.
+ * In `<defs>`, only `<clipPath>`, `<mask>`, gradients, shapes and
+ * patterns are supported, not `<filter>` or other things.
  *
  * Gradient templating is not implemented.
  *
@@ -235,7 +235,7 @@ gtk_svg_location_init (GtkSvgLocation      *location,
   g_markup_parse_context_get_position (context, &lines, &chars);
   location->lines = lines;
   location->line_chars = chars;
-#if GLIB_CHECK_VERSION (2, 87, 0)
+#if GLIB_CHECK_VERSION (2, 88, 0)
   location->bytes = g_markup_parse_context_get_offset (context);
 #else
   location->bytes = 0;
@@ -508,9 +508,9 @@ lcm (unsigned int a,
 }
 
 static double
-normalized_diagonal (const graphene_size_t *viewport)
+normalized_diagonal (const graphene_rect_t *viewport)
 {
-  return hypot (viewport->width, viewport->height) / M_SQRT2;
+  return hypot (viewport->size.width, viewport->size.height) / M_SQRT2;
 }
 
 static inline double
@@ -831,60 +831,51 @@ path_builder_add_ellipse (GskPathBuilder *builder,
   gsk_path_builder_close    (builder);
 }
 
-static gboolean
-parse_align (const char   *value,
-             unsigned int *res)
-{
-  struct {
-    const char *name;
-    unsigned int value;
-  } values[] = {
-    { "none", 0 },
-    { "xMinYMin", ALIGN_XY (ALIGN_MIN, ALIGN_MIN) },
-    { "xMidYMin", ALIGN_XY (ALIGN_MID, ALIGN_MIN) },
-    { "xMaxYMin", ALIGN_XY (ALIGN_MAX, ALIGN_MIN) },
-    { "xMinYMid", ALIGN_XY (ALIGN_MIN, ALIGN_MID) },
-    { "xMidYMid", ALIGN_XY (ALIGN_MID, ALIGN_MID) },
-    { "xMaxYMid", ALIGN_XY (ALIGN_MAX, ALIGN_MID) },
-    { "xMinYMax", ALIGN_XY (ALIGN_MIN, ALIGN_MAX) },
-    { "xMidYMax", ALIGN_XY (ALIGN_MID, ALIGN_MAX) },
-    { "xMaxYMax", ALIGN_XY (ALIGN_MAX, ALIGN_MAX) },
-  };
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (values); i++)
-    {
-      if (strcmp (values[i].name, value) == 0)
-        {
-          *res = values[i].value;
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
-static gboolean
-parse_meet (const char   *value,
-            unsigned int *res)
-{
-  if (strcmp (value, "meet") == 0)
-    {
-      *res = MEET;
-      return TRUE;
-    }
-  else if (strcmp (value, "slice") == 0)
-    {
-      *res = SLICE;
-      return TRUE;
-    }
-  return FALSE;
-}
-
 static inline gboolean
 g_strv_has (GStrv       strv,
             const char *s)
 {
   return g_strv_contains ((const char * const *) strv, s);
+}
+
+static void
+compute_viewport_transform (gboolean               none,
+                            Align                  align_x,
+                            Align                  align_y,
+                            MeetOrSlice            meet,
+                            const graphene_rect_t *vb,
+                            double e_x,          double e_y,
+                            double e_width,      double e_height,
+                            double *scale_x,     double *scale_y,
+                            double *translate_x, double *translate_y)
+{
+  double sx, sy, tx, ty;
+
+  sx = e_width / vb->size.width;
+  sy = e_height / vb->size.height;
+
+  if (!none && meet == MEET)
+    sx = sy = MIN (sx, sy);
+  else if (!none && meet == SLICE)
+    sx = sy = MAX (sx, sy);
+
+  tx = e_x - vb->origin.x * sx;
+  ty = e_y - vb->origin.y * sy;
+
+  if (align_x == ALIGN_MID)
+    tx += (e_width - vb->size.width * sx) / 2;
+  else if (align_x == ALIGN_MAX)
+    tx += (e_width - vb->size.width * sx);
+
+  if (align_y == ALIGN_MID)
+    ty += (e_height - vb->size.height * sy) / 2;
+  else if (align_y == ALIGN_MAX)
+    ty += (e_height - vb->size.height * sy);
+
+  *scale_x = sx;
+  *scale_y = sy;
+  *translate_x = tx;
+  *translate_y = ty;
 }
 
 /* }}} */
@@ -2741,7 +2732,7 @@ typedef struct
     struct {
       char *ref;
       Shape *shape;
-    } gradient;
+    } server;
   };
 } SvgPaint;
 
@@ -2750,8 +2741,8 @@ svg_paint_free (SvgValue *value)
 {
   SvgPaint *paint = (SvgPaint *) value;
 
-  if (paint->kind == PAINT_GRADIENT)
-    g_free (paint->gradient.ref);
+  if (paint->kind == PAINT_SERVER)
+    g_free (paint->server.ref);
 
   g_free (value);
 }
@@ -2774,9 +2765,9 @@ svg_paint_equal (const SvgValue *value0,
       return paint0->symbolic == paint1->symbolic;
     case PAINT_COLOR:
       return gdk_rgba_equal (&paint0->color, &paint1->color);
-    case PAINT_GRADIENT:
-      return paint0->gradient.shape == paint1->gradient.shape &&
-             g_strcmp0 (paint0->gradient.ref, paint1->gradient.ref) == 0;
+    case PAINT_SERVER:
+      return paint0->server.shape == paint1->server.shape &&
+             g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0;
     default:
       g_assert_not_reached ();
     }
@@ -2868,14 +2859,14 @@ svg_paint_new_black (void)
 }
 
 static SvgValue *
-svg_paint_new_gradient (Shape      *shape,
-                        const char *ref)
+svg_paint_new_server (Shape      *shape,
+                      const char *ref)
 {
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
-  paint->kind = PAINT_GRADIENT;
-  paint->gradient.shape = shape;
-  paint->gradient.ref = g_strdup (ref);
+  paint->kind = PAINT_SERVER;
+  paint->server.shape = shape;
+  paint->server.ref = g_strdup (ref);
 
   return (SvgValue *) paint;
 }
@@ -2911,9 +2902,9 @@ svg_paint_parse (const char *value)
               parse_symbolic_color (url + strlen ("#gpa:"), &symbolic))
             paint = svg_paint_new_symbolic (symbolic);
           else if (url[0] == '#')
-            paint = svg_paint_new_gradient (NULL, url + 1);
+            paint = svg_paint_new_server (NULL, url + 1);
           else
-            paint = svg_paint_new_gradient (NULL, url);
+            paint = svg_paint_new_server (NULL, url);
         }
 
       g_free (url);
@@ -2972,8 +2963,8 @@ svg_paint_print (const SvgValue *value,
                               colors[paint->symbolic].fallback);
       break;
 
-    case PAINT_GRADIENT:
-      g_string_append_printf (s, "url(#%s)", paint->gradient.ref);
+    case PAINT_SERVER:
+      g_string_append_printf (s, "url(#%s)", paint->server.ref);
       break;
 
     default:
@@ -3004,8 +2995,8 @@ svg_paint_print_gpa (const SvgValue *value,
       g_string_append (s, symbolic[paint->symbolic]);
       break;
 
-    case PAINT_GRADIENT:
-      g_string_append_printf  (s, "url(#%s)", paint->gradient.ref);
+    case PAINT_SERVER:
+      g_string_append_printf  (s, "url(#%s)", paint->server.ref);
       break;
 
     default:
@@ -3694,7 +3685,7 @@ svg_dash_array_accumulate (const SvgValue *value0,
 
 static SvgValue *
 svg_dash_array_resolve (const SvgValue        *value,
-                        const graphene_size_t *viewport)
+                        const graphene_rect_t *viewport)
 {
   SvgDashArray *orig = (SvgDashArray *) value;
   SvgDashArray *a;
@@ -4161,7 +4152,7 @@ svg_points_interpolate (const SvgValue *value0,
 
 static SvgValue *
 svg_points_resolve (const SvgValue        *value,
-                    const graphene_size_t *viewport)
+                    const graphene_rect_t *viewport)
 {
   SvgPoints *orig = (SvgPoints *) value;
   SvgPoints *p;
@@ -4572,6 +4563,336 @@ svg_mask_parse (const char *value)
 
       return res;
     }
+}
+
+/* }}} */
+/* {{{ Viewbox */
+
+typedef struct
+{
+  SvgValue base;
+  gboolean unset;
+  graphene_rect_t view_box;
+} SvgViewBox;
+
+static void
+svg_view_box_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_view_box_equal (const SvgValue *value0,
+                    const SvgValue *value1)
+{
+  const SvgViewBox *v0 = (const SvgViewBox *) value0;
+  const SvgViewBox *v1 = (const SvgViewBox *) value1;
+
+  if (v0->unset != v1->unset)
+    return FALSE;
+
+  if (v0->unset)
+    return TRUE;
+
+  return graphene_rect_equal (&v0->view_box, &v1->view_box);
+}
+
+static SvgValue * svg_view_box_new (const graphene_rect_t *view_box);
+
+static SvgValue *
+svg_view_box_interpolate (const SvgValue *value0,
+                          const SvgValue *value1,
+                          double          t)
+{
+  const SvgViewBox *v0 = (const SvgViewBox *) value0;
+  const SvgViewBox *v1 = (const SvgViewBox *) value1;
+  graphene_rect_t b;
+
+  if (v0->unset || v1->unset)
+    {
+      if (t < 0.5)
+        return svg_value_ref ((SvgValue *) value0);
+      else
+        return svg_value_ref ((SvgValue *) value1);
+    }
+
+  graphene_rect_interpolate (&v0->view_box, &v1->view_box, t, &b);
+
+  return svg_view_box_new (&b);
+}
+
+static SvgValue *
+svg_view_box_accumulate (const SvgValue *value0,
+                         const SvgValue *value1,
+                         int             n)
+{
+  return NULL;
+}
+
+static void
+svg_view_box_print (const SvgValue *value,
+                    GString        *string)
+{
+  const SvgViewBox *v = (const SvgViewBox *) value;
+
+  if (v->unset)
+    return;
+
+  string_append_double (string, v->view_box.origin.x);
+  g_string_append_c (string, ' ');
+  string_append_double (string, v->view_box.origin.y);
+  g_string_append_c (string, ' ');
+  string_append_double (string, v->view_box.size.width);
+  g_string_append_c (string, ' ');
+  string_append_double (string, v->view_box.size.height);
+}
+
+static const SvgValueClass SVG_VIEW_BOX_CLASS = {
+  "SvgViewBox",
+  svg_view_box_free,
+  svg_view_box_equal,
+  svg_view_box_interpolate,
+  svg_view_box_accumulate,
+  svg_view_box_print,
+};
+
+static SvgValue *
+svg_view_box_new_unset (void)
+{
+  static SvgViewBox unset = { { &SVG_VIEW_BOX_CLASS, 1 }, TRUE, { { 0, 0 }, { 0, 0 } } };
+
+  return svg_value_ref ((SvgValue *) &unset);
+}
+
+static SvgValue *
+svg_view_box_new (const graphene_rect_t *box)
+{
+  SvgViewBox *result;
+
+  result = (SvgViewBox *) svg_value_alloc (&SVG_VIEW_BOX_CLASS, sizeof (SvgViewBox));
+  result->unset = FALSE;
+  graphene_rect_init_from_rect (&result->view_box, box);
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_view_box_parse (const char *value)
+{
+  GStrv strv;
+  unsigned int n;
+  double x, y, w, h;
+
+  strv = g_strsplit_set (value, ", ", 0);
+  n = g_strv_length (strv);
+  if (n != 4 ||
+      !parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) ||
+      !parse_length (strv[1], -DBL_MAX, DBL_MAX, &y) ||
+      !parse_length (strv[2], 0, DBL_MAX, &w) ||
+      !parse_length (strv[3], 0, DBL_MAX, &h))
+    return NULL;
+
+  g_strfreev (strv);
+
+  return svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h));
+}
+
+/* }}} */
+/* {{{ ContentFit */
+
+typedef struct
+{
+  SvgValue base;
+  gboolean is_none;
+  Align align_x;
+  Align align_y;
+  MeetOrSlice meet;
+} SvgContentFit;
+
+static void
+svg_content_fit_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_content_fit_equal (const SvgValue *value0,
+                       const SvgValue *value1)
+{
+  const SvgContentFit *v0 = (const SvgContentFit *) value0;
+  const SvgContentFit *v1 = (const SvgContentFit *) value1;
+
+  if (v0->is_none || v1->is_none)
+    return v0->is_none == v1->is_none;
+
+  return v0->align_x == v1->align_x &&
+         v0->align_y == v1->align_y &&
+         v0->meet == v1->meet;
+}
+
+static SvgValue *
+svg_content_fit_interpolate (const SvgValue *value0,
+                             const SvgValue *value1,
+                             double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+static SvgValue *
+svg_content_fit_accumulate (const SvgValue *value0,
+                            const SvgValue *value1,
+                            int             n)
+{
+  return NULL;
+}
+
+static void
+svg_content_fit_print (const SvgValue *value,
+                       GString        *string)
+{
+  const SvgContentFit *v = (const SvgContentFit *) value;
+
+  if (v->is_none)
+    {
+      g_string_append (string, "none");
+    }
+  else
+    {
+      const char *align[] = { "Min", "Mid", "Max" };
+
+      g_string_append_c (string, 'x');
+      g_string_append (string, align[v->align_x]);
+      g_string_append_c (string, 'Y');
+      g_string_append (string, align[v->align_y]);
+    }
+
+  if (v->meet != MEET)
+    {
+      const char *meet[] = { "meet", "slice" };
+
+      g_string_append_c (string, ' ');
+      g_string_append (string, meet[v->meet]);
+    }
+}
+
+static const SvgValueClass SVG_CONTENT_FIT_CLASS = {
+  "SvgContentFit",
+  svg_content_fit_free,
+  svg_content_fit_equal,
+  svg_content_fit_interpolate,
+  svg_content_fit_accumulate,
+  svg_content_fit_print,
+};
+
+static SvgValue *
+svg_content_fit_new_none (void)
+{
+  SvgContentFit *v;
+
+  v = (SvgContentFit *) svg_value_alloc (&SVG_CONTENT_FIT_CLASS, sizeof (SvgContentFit));
+
+  v->is_none = TRUE;
+
+  return (SvgValue *) v;
+}
+
+static SvgValue *
+svg_content_fit_new (Align       align_x,
+                     Align       align_y,
+                     MeetOrSlice meet)
+{
+  SvgContentFit *v;
+
+  v = (SvgContentFit *) svg_value_alloc (&SVG_CONTENT_FIT_CLASS, sizeof (SvgContentFit));
+
+  v->is_none = FALSE;
+  v->align_x = align_x;
+  v->align_y = align_y;
+  v->meet = meet;
+
+  return (SvgValue *) v;
+}
+
+static gboolean
+parse_coord_align (const char *value,
+                   Align      *align)
+{
+  if (strncmp (value, "Min", 3) == 0)
+    *align = ALIGN_MIN;
+  else if (strncmp (value, "Mid", 3) == 0)
+    *align = ALIGN_MID;
+  else if (strncmp (value, "Max", 3) == 0)
+    *align = ALIGN_MAX;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+parse_align (const char *value,
+             Align      *align_x,
+             Align      *align_y)
+{
+  if (strlen (value) != 8)
+    return FALSE;
+
+  if (value[0] != 'x' || value[4] != 'Y')
+    return FALSE;
+
+  if (!parse_coord_align (value + 1, align_x) ||
+      !parse_coord_align (value + 5, align_y))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+parse_meet (const char  *value,
+            MeetOrSlice *meet)
+{
+  if (strcmp (value, "meet") == 0)
+    *meet = MEET;
+  else if (strcmp (value, "slice") == 0)
+    *meet = SLICE;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+static SvgValue *
+svg_content_fit_parse (const char *value)
+{
+  GStrv strv;
+  Align align_x;
+  Align align_y;
+  MeetOrSlice meet;
+
+  if (strcmp (value, "none") == 0)
+    return svg_content_fit_new_none ();
+
+  strv = g_strsplit (value, " ", 0);
+  if (g_strv_length (strv) > 2)
+    return NULL;
+
+  if (!parse_align (strv[0], &align_x, &align_y))
+    return NULL;
+
+  if (strv[1])
+    {
+      if (!parse_meet (strv[1], &meet))
+        return NULL;
+    }
+  else
+    {
+      meet = MEET;
+    }
+
+  return svg_content_fit_new (align_x, align_y, meet);
 }
 
 /* }}} */
@@ -5165,6 +5486,22 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
+  { .id = SHAPE_ATTR_VIEW_BOX,
+    .name = "viewBox",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_view_box_parse,
+  },
+  { .id = SHAPE_ATTR_CONTENT_FIT,
+    .name = "preserveAspectRatio",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_content_fit_parse,
+  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -5255,6 +5592,8 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
   shape_attrs[SHAPE_ATTR_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_BOUND_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
+  shape_attrs[SHAPE_ATTR_VIEW_BOX].initial_value = svg_view_box_new_unset ();
+  shape_attrs[SHAPE_ATTR_CONTENT_FIT].initial_value = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -5272,25 +5611,55 @@ shape_attr_lookup (const char *name,
                    ShapeAttr  *attr,
                    ShapeType   type)
 {
-  if ((type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT) &&
-      strcmp (name, "gradientTransform") == 0)
+  if (type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT)
     {
-      *attr = SHAPE_ATTR_TRANSFORM;
-      return TRUE;
+      if (strcmp (name, "gradientTransform") == 0)
+        {
+          *attr = SHAPE_ATTR_TRANSFORM;
+          return TRUE;
+        }
     }
 
-  if (type == SHAPE_CLIP_PATH &&
-      strcmp (name, "clipPathUnits") == 0)
+  if (type == SHAPE_CLIP_PATH)
     {
-      *attr = SHAPE_ATTR_CONTENT_UNITS;
-      return TRUE;
+      if (strcmp (name, "clipPathUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_CONTENT_UNITS;
+          return TRUE;
+        }
     }
 
-  if (type == SHAPE_MASK &&
-      strcmp (name, "maskContentUnits") == 0)
+  if (type == SHAPE_MASK)
     {
-      *attr = SHAPE_ATTR_CONTENT_UNITS;
-      return TRUE;
+      if (strcmp (name, "maskContentUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_CONTENT_UNITS;
+          return TRUE;
+        }
+      if (strcmp (name, "maskUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_BOUND_UNITS;
+          return TRUE;
+        }
+    }
+
+  if (type == SHAPE_PATTERN)
+    {
+      if (strcmp (name, "patternTransform") == 0)
+        {
+          *attr = SHAPE_ATTR_TRANSFORM;
+          return TRUE;
+        }
+      if (strcmp (name, "patternContentUnits") == 0)
+        {
+          *attr = SHAPE_ATTR_CONTENT_UNITS;
+          return TRUE;
+        }
+      if (strcmp (name, "patternUnits") == 0)
+        {
+        *attr = SHAPE_ATTR_BOUND_UNITS;
+        return TRUE;
+        }
     }
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
@@ -5318,6 +5687,15 @@ shape_attr_get_presentation (ShapeAttr attr,
 
   if (type == SHAPE_MASK && attr == SHAPE_ATTR_CONTENT_UNITS)
     return "maskContentUnits";
+
+  if (type == SHAPE_PATTERN && attr == SHAPE_ATTR_CONTENT_UNITS)
+    return "patternContentUnits";
+
+  if (type == SHAPE_PATTERN && attr == SHAPE_ATTR_BOUND_UNITS)
+    return "patternUnits";
+
+  if (type == SHAPE_PATTERN && attr == SHAPE_ATTR_TRANSFORM)
+    return "patternTransform";
 
   return shape_attrs[attr].name;
 }
@@ -5514,6 +5892,12 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 1,
   },
+  { .name = "pattern",
+    .has_shapes = 1,
+    .never_rendered = 1,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+  },
 };
 
 static gboolean
@@ -5600,7 +5984,7 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
-  if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK)
+  if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK || type == SHAPE_PATTERN)
     {
       if (attr == SHAPE_ATTR_CONTENT_UNITS)
         return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
@@ -5665,7 +6049,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_Y:
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_HEIGHT:
-      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK;
+      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
@@ -5688,9 +6072,9 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_SPREAD_METHOD:
     case SHAPE_ATTR_CONTENT_UNITS:
       return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
-             type == SHAPE_CLIP_PATH || type == SHAPE_MASK;
+             type == SHAPE_CLIP_PATH || type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_BOUND_UNITS:
-      return type == SHAPE_MASK;
+      return type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
@@ -5701,6 +6085,9 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_FY:
     case SHAPE_ATTR_FR:
       return type == SHAPE_RADIAL_GRADIENT;
+    case SHAPE_ATTR_VIEW_BOX:
+    case SHAPE_ATTR_CONTENT_FIT:
+      return type == SHAPE_PATTERN;
     default:
       return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
@@ -5719,7 +6106,7 @@ shape_can_set_attr (ShapeType type,
 
 static GskPath *
 shape_get_path (Shape                 *shape,
-                const graphene_size_t *viewport,
+                const graphene_rect_t *viewport,
                 gboolean               current)
 {
   GskPathBuilder *builder;
@@ -5737,10 +6124,10 @@ shape_get_path (Shape                 *shape,
       if (values[SHAPE_ATTR_X1] && values[SHAPE_ATTR_Y1] &&
           values[SHAPE_ATTR_X2] && values[SHAPE_ATTR_Y2])
         {
-          double x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->width);
-          double y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->height);
-          double x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->width);
-          double y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->height);
+          double x1 = svg_number_get (values[SHAPE_ATTR_X1], viewport->size.width);
+          double y1 = svg_number_get (values[SHAPE_ATTR_Y1], viewport->size.height);
+          double x2 = svg_number_get (values[SHAPE_ATTR_X2], viewport->size.width);
+          double y2 = svg_number_get (values[SHAPE_ATTR_Y2], viewport->size.height);
           gsk_path_builder_move_to (builder, x1, y1);
           gsk_path_builder_line_to (builder, x2, y2);
         }
@@ -5775,8 +6162,8 @@ shape_get_path (Shape                 *shape,
       builder = gsk_path_builder_new ();
       if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] && values[SHAPE_ATTR_R])
         {
-          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->size.width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->size.height);
           double r = svg_number_get (values[SHAPE_ATTR_R], normalized_diagonal (viewport));
           gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (cx, cy), r);
         }
@@ -5787,10 +6174,10 @@ shape_get_path (Shape                 *shape,
       if (values[SHAPE_ATTR_CX] && values[SHAPE_ATTR_CY] &&
           values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
         {
-          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->width);
-          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->height);
-          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          double cx = svg_number_get (values[SHAPE_ATTR_CX], viewport->size.width);
+          double cy = svg_number_get (values[SHAPE_ATTR_CY], viewport->size.height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->size.width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->size.height);
           path_builder_add_ellipse (builder, cx, cy, rx, ry);
         }
       return gsk_path_builder_free_to_path (builder);
@@ -5801,12 +6188,12 @@ shape_get_path (Shape                 *shape,
           values[SHAPE_ATTR_WIDTH] && values[SHAPE_ATTR_HEIGHT] &&
           values[SHAPE_ATTR_RX] && values[SHAPE_ATTR_RY])
         {
-          double x = svg_number_get (values[SHAPE_ATTR_X], viewport->width);
-          double y = svg_number_get (values[SHAPE_ATTR_Y], viewport->height);
-          double width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->width);
-          double height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->height);
-          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->width);
-          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->height);
+          double x = svg_number_get (values[SHAPE_ATTR_X], viewport->size.width);
+          double y = svg_number_get (values[SHAPE_ATTR_Y], viewport->size.height);
+          double width = svg_number_get (values[SHAPE_ATTR_WIDTH], viewport->size.width);
+          double height = svg_number_get (values[SHAPE_ATTR_HEIGHT],viewport->size.height);
+          double rx = svg_number_get (values[SHAPE_ATTR_RX], viewport->size.width);
+          double ry = svg_number_get (values[SHAPE_ATTR_RY], viewport->size.height);
           if (rx == 0 || ry == 0)
             gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
           else
@@ -5843,6 +6230,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
+    case SHAPE_PATTERN:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -5852,17 +6240,17 @@ shape_get_path (Shape                 *shape,
 
 static GskPath *
 shape_get_current_path (Shape                 *shape,
-                        const graphene_size_t *viewport)
+                        const graphene_rect_t *viewport)
 {
   if (shape->path)
     {
       switch (shape->type)
         {
         case SHAPE_LINE:
-          if (shape->path_for.line.x1 != svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->width) ||
-              shape->path_for.line.y1 != svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->height) ||
-              shape->path_for.line.x2 != svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->height) ||
-              shape->path_for.line.y2 != svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->height))
+          if (shape->path_for.line.x1 != svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->size.width) ||
+              shape->path_for.line.y1 != svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->size.height) ||
+              shape->path_for.line.x2 != svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->size.height) ||
+              shape->path_for.line.y2 != svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->size.height))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
               g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -5879,8 +6267,8 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_CIRCLE:
-          if (shape->path_for.circle.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width) ||
-              shape->path_for.circle.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height) ||
+          if (shape->path_for.circle.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width) ||
+              shape->path_for.circle.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height) ||
               shape->path_for.circle.r != svg_number_get (shape->current[SHAPE_ATTR_R], normalized_diagonal (viewport)))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
@@ -5889,10 +6277,10 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_ELLIPSE:
-          if (shape->path_for.ellipse.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width) ||
-              shape->path_for.ellipse.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height) ||
-              shape->path_for.ellipse.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width) ||
-              shape->path_for.ellipse.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height))
+          if (shape->path_for.ellipse.cx != svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width) ||
+              shape->path_for.ellipse.cy != svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height) ||
+              shape->path_for.ellipse.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width) ||
+              shape->path_for.ellipse.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
               g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -5900,12 +6288,12 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_RECT:
-          if (shape->path_for.rect.x != svg_number_get (shape->current[SHAPE_ATTR_X], viewport->width) ||
-              shape->path_for.rect.y != svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->height) ||
-              shape->path_for.rect.w != svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->width) ||
-              shape->path_for.rect.h != svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->height) ||
-              shape->path_for.rect.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width) ||
-              shape->path_for.rect.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height))
+          if (shape->path_for.rect.x != svg_number_get (shape->current[SHAPE_ATTR_X], viewport->size.width) ||
+              shape->path_for.rect.y != svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->size.height) ||
+              shape->path_for.rect.w != svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->size.width) ||
+              shape->path_for.rect.h != svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->size.height) ||
+              shape->path_for.rect.rx != svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width) ||
+              shape->path_for.rect.ry != svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
               g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -5927,6 +6315,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
+        case SHAPE_PATTERN:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -5941,10 +6330,10 @@ shape_get_current_path (Shape                 *shape,
       switch (shape->type)
         {
         case SHAPE_LINE:
-          shape->path_for.line.x1 = svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->width);
-          shape->path_for.line.y1 = svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->height);
-          shape->path_for.line.x2 = svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->width);
-          shape->path_for.line.y2 = svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->height);
+          shape->path_for.line.x1 = svg_number_get (shape->current[SHAPE_ATTR_X1], viewport->size.width);
+          shape->path_for.line.y1 = svg_number_get (shape->current[SHAPE_ATTR_Y1], viewport->size.height);
+          shape->path_for.line.x2 = svg_number_get (shape->current[SHAPE_ATTR_X2], viewport->size.width);
+          shape->path_for.line.y2 = svg_number_get (shape->current[SHAPE_ATTR_Y2], viewport->size.height);
           break;
 
         case SHAPE_POLYLINE:
@@ -5954,25 +6343,25 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_CIRCLE:
-          shape->path_for.circle.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width);
-          shape->path_for.circle.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height);
+          shape->path_for.circle.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width);
+          shape->path_for.circle.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height);
           shape->path_for.circle.r = svg_number_get (shape->current[SHAPE_ATTR_R], normalized_diagonal (viewport));
           break;
 
         case SHAPE_ELLIPSE:
-          shape->path_for.ellipse.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->width);
-          shape->path_for.ellipse.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->height);
-          shape->path_for.ellipse.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width);
-          shape->path_for.ellipse.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height);
+          shape->path_for.ellipse.cx = svg_number_get (shape->current[SHAPE_ATTR_CX], viewport->size.width);
+          shape->path_for.ellipse.cy = svg_number_get (shape->current[SHAPE_ATTR_CY], viewport->size.height);
+          shape->path_for.ellipse.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width);
+          shape->path_for.ellipse.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height);
           break;
 
         case SHAPE_RECT:
-          shape->path_for.rect.x = svg_number_get (shape->current[SHAPE_ATTR_X], viewport->width);
-          shape->path_for.rect.y = svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->height);
-          shape->path_for.rect.w = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->width);
-          shape->path_for.rect.h = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->height);
-          shape->path_for.rect.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->width);
-          shape->path_for.rect.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->height);
+          shape->path_for.rect.x = svg_number_get (shape->current[SHAPE_ATTR_X], viewport->size.width);
+          shape->path_for.rect.y = svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->size.height);
+          shape->path_for.rect.w = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->size.width);
+          shape->path_for.rect.h = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->size.height);
+          shape->path_for.rect.rx = svg_number_get (shape->current[SHAPE_ATTR_RX], viewport->size.width);
+          shape->path_for.rect.ry = svg_number_get (shape->current[SHAPE_ATTR_RY], viewport->size.height);
           break;
 
         case SHAPE_PATH:
@@ -5985,6 +6374,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
+        case SHAPE_PATTERN:
         default:
           g_assert_not_reached ();
         }
@@ -5995,7 +6385,7 @@ shape_get_current_path (Shape                 *shape,
 
 static GskPathMeasure *
 shape_get_current_measure (Shape                 *shape,
-                           const graphene_size_t *viewport)
+                           const graphene_rect_t *viewport)
 {
   if (!shape->measure)
     {
@@ -6009,7 +6399,7 @@ shape_get_current_measure (Shape                 *shape,
 
 static gboolean
 shape_get_current_bounds (Shape                 *shape,
-                          const graphene_size_t *viewport,
+                          const graphene_rect_t *viewport,
                           graphene_rect_t       *bounds)
 {
   gboolean ret = FALSE;
@@ -6041,6 +6431,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_GROUP:
     case SHAPE_CLIP_PATH:
     case SHAPE_MASK:
+    case SHAPE_PATTERN:
       {
         for (unsigned int i = 0; i < shape->shapes->len; i++)
           {
@@ -6065,7 +6456,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_DEFS:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
-      g_error ("attempt to get the bounds of a %s", shape_types[shape->type].name);
+      g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
       break;
     default:
       g_assert_not_reached ();
@@ -6890,7 +7281,7 @@ fill_from_values (Animation     *a,
 
 static GskPath *
 animation_motion_get_path (Animation             *a,
-                           const graphene_size_t *viewport,
+                           const graphene_rect_t *viewport,
                            gboolean               current)
 {
   g_assert (a->type == ANIMATION_TYPE_MOTION);
@@ -6905,21 +7296,21 @@ animation_motion_get_path (Animation             *a,
 
 static GskPath *
 animation_motion_get_base_path (Animation             *a,
-                                const graphene_size_t *viewport)
+                                const graphene_rect_t *viewport)
 {
   return animation_motion_get_path (a, viewport, FALSE);
 }
 
 static GskPath *
 animation_motion_get_current_path (Animation             *a,
-                                   const graphene_size_t *viewport)
+                                   const graphene_rect_t *viewport)
 {
   return animation_motion_get_path (a, viewport, TRUE);
 }
 
 static GskPathMeasure *
 animation_motion_get_current_measure (Animation             *a,
-                                      const graphene_size_t *viewport)
+                                      const graphene_rect_t *viewport)
 {
   g_assert (a->type == ANIMATION_TYPE_MOTION);
 
@@ -7601,7 +7992,7 @@ get_transform_data_for_motion (GskPathMeasure   *measure,
 
 typedef struct {
   GtkSvg *svg;
-  const graphene_size_t *viewport;
+  const graphene_rect_t *viewport;
   Shape *parent; /* Can be different from the actual parent, for <use> */
   int64_t current_time;
   const GdkRGBA *colors;
@@ -9720,14 +10111,14 @@ parse_shape_attrs (Shape                *shape,
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
-      if (paint->kind == PAINT_GRADIENT)
+      if (paint->kind == PAINT_SERVER)
         g_ptr_array_add (data->pending_refs, shape);
     }
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
-      if (paint->kind == PAINT_GRADIENT)
+      if (paint->kind == PAINT_SERVER)
         g_ptr_array_add (data->pending_refs, shape);
     }
 
@@ -10116,24 +10507,22 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (viewbox_attr)
         {
-          GStrv strv;
-          unsigned int n;
-          double x, y, w, h;
+          SvgValue *v;
 
-          strv = g_strsplit (viewbox_attr, " ", 0);
-          n = g_strv_length (strv);
-          if (n != 4 ||
-              !parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) ||
-              !parse_length (strv[1], -DBL_MAX, DBL_MAX, &y) ||
-              !parse_length (strv[2], 0, DBL_MAX, &w) ||
-              !parse_length (strv[3], 0, DBL_MAX, &h))
-            gtk_svg_invalid_attribute (data->svg, context, "viewBox", NULL);
+          v = svg_view_box_parse (viewbox_attr);
+          svg_value_unref (data->svg->view_box);
+          if (v)
+            {
+              data->svg->view_box = v;
+            }
           else
-            graphene_rect_init (&data->svg->view_box, x, y, w, h);
-          g_strfreev (strv);
+            {
+              data->svg->view_box = svg_view_box_new_unset ();
+              gtk_svg_invalid_attribute (data->svg, context, "viewBox", NULL);
+            }
         }
 
-      width = data->svg->view_box.size.width;
+      width = ((SvgViewBox *) data->svg->view_box)->view_box.size.width;
       if (width_attr)
         {
           SvgValue *value;
@@ -10141,14 +10530,14 @@ start_element_cb (GMarkupParseContext  *context,
           value = svg_number_parse (width_attr, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
           if (value)
             {
-              width = svg_number_get (value, data->svg->view_box.size.width);
+              width = svg_number_get (value, width);
               svg_value_unref (value);
             }
           else
             gtk_svg_invalid_attribute (data->svg, context, "width", NULL);
         }
 
-      height = data->svg->view_box.size.height;
+      height = ((SvgViewBox *) data->svg->view_box)->view_box.size.height;
       if (height_attr)
         {
           SvgValue *value;
@@ -10156,52 +10545,34 @@ start_element_cb (GMarkupParseContext  *context,
           value = svg_number_parse (height_attr, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
           if (value)
             {
-              height = svg_number_get (value, data->svg->view_box.size.height);
+              height = svg_number_get (value, height);
               svg_value_unref (value);
             }
           else
             gtk_svg_invalid_attribute (data->svg, context, "height", NULL);
         }
 
+      /* Just a fallback - this gets set at snapshot time */
+      graphene_rect_init (&data->svg->viewport, 0, 0, width, height);
+
       data->svg->width = width;
       data->svg->height = height;
 
-      data->svg->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
-      data->svg->meet_or_slice = MEET;
-
       if (preserve_aspect_ratio_attr)
         {
-          GStrv strv;
-          unsigned int align;
-          unsigned int meet;
+          SvgValue *v;
 
-          strv = g_strsplit (preserve_aspect_ratio_attr, " ", 0);
-          if (g_strv_length (strv) == 1)
+          v = svg_content_fit_parse (preserve_aspect_ratio_attr);
+          svg_value_unref (data->svg->content_fit);
+          if (v)
             {
-              if (!parse_align (strv[0], &align))
-                {
-                  gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
-                }
-              else
-                {
-                  data->svg->align = align;
-                  data->svg->meet_or_slice = MEET;
-                }
-            }
-          else if (g_strv_length (strv) == 2)
-            {
-
-              if (parse_align (strv[0], &align) &&
-                  parse_meet (strv[1], &meet))
-                {
-                  data->svg->align = align;
-                  data->svg->meet_or_slice = meet;
-                }
-              else
-                gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+              data->svg->content_fit = v;
             }
           else
-            gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+            {
+              data->svg->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+              gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+            }
         }
 
       if (state_attr)
@@ -10245,8 +10616,7 @@ start_element_cb (GMarkupParseContext  *context,
       skip_element (data, context, "Ignoring metadata and style elements: <%s>", element_name);
       return;
     }
-  else if (strcmp (element_name, "filter") == 0 ||
-           strcmp (element_name, "pattern") == 0)
+  else if (strcmp (element_name, "filter") == 0)
     {
       skip_element (data, context, "Ignoring unsupported element: <%s>", element_name);
       return;
@@ -10849,17 +11219,18 @@ resolve_paint_ref (SvgValue   *value,
 {
   SvgPaint *paint = (SvgPaint *) value;
 
-  if (paint->kind == PAINT_GRADIENT && paint->gradient.shape == NULL)
+  if (paint->kind == PAINT_SERVER && paint->server.shape == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, paint->gradient.ref);
+      Shape *target = g_hash_table_lookup (data->shapes, paint->server.ref);
       if (!target)
-        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->gradient.ref);
+        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->server.ref);
       else if (target->type != SHAPE_LINEAR_GRADIENT &&
-               target->type != SHAPE_RADIAL_GRADIENT)
-        gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a gradient (resolving fill or stroke)", paint->gradient.ref);
+               target->type != SHAPE_RADIAL_GRADIENT &&
+               target->type != SHAPE_PATTERN)
+        gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", paint->server.ref);
       else
         {
-          paint->gradient.shape = target;
+          paint->server.shape = target;
           add_dependency_to_common_ancestor (shape, target);
         }
     }
@@ -11803,9 +12174,9 @@ serialize_animation_motion (GString              *s,
       GskPath *path;
 
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-        path = animation_motion_get_current_path (a, &svg->view_box.size);
+        path = animation_motion_get_current_path (a, &svg->viewport);
       else
-        path = animation_motion_get_base_path (a, &svg->view_box.size);
+        path = animation_motion_get_base_path (a, &svg->viewport);
       if (path)
         {
           indent_for_attr (s, indent);
@@ -11956,7 +12327,7 @@ typedef enum
 typedef struct
 {
   GtkSvg *svg;
-  const graphene_size_t *viewport;
+  const graphene_rect_t *viewport;
   GtkSnapshot *snapshot;
   graphene_rect_t bounds;
   int64_t current_time;
@@ -12023,8 +12394,8 @@ push_context (Shape        *shape,
     {
       double x, y;
 
-      x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->width);
-      y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->height);
+      x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
+      y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
     }
@@ -12121,10 +12492,10 @@ push_context (Shape        *shape,
             }
           else
             {
-              mask_clip.origin.x = svg_number_get (mask->shape->current[SHAPE_ATTR_X], context->viewport->width);
-              mask_clip.origin.y = svg_number_get (mask->shape->current[SHAPE_ATTR_Y], context->viewport->height);
-              mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], context->viewport->width);
-              mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], context->viewport->height);
+              mask_clip.origin.x = svg_number_get (mask->shape->current[SHAPE_ATTR_X], context->viewport->size.width);
+              mask_clip.origin.y = svg_number_get (mask->shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
+              mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+              mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
               has_clip = TRUE;
             }
 
@@ -12309,11 +12680,11 @@ paint_linear_gradient (Shape                 *gradient,
   else
     {
       graphene_point_init (&start,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X1], context->viewport->width),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], context->viewport->height));
+                           svg_number_get (gradient->current[SHAPE_ATTR_X1], context->viewport->size.width),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], context->viewport->size.height));
       graphene_point_init (&end,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X2], context->viewport->width),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], context->viewport->height));
+                           svg_number_get (gradient->current[SHAPE_ATTR_X2], context->viewport->size.width),
+                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], context->viewport->size.height));
     }
 
   gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_TRANSFORM]);
@@ -12342,12 +12713,12 @@ paint_radial_gradient (Shape                 *gradient,
   graphene_rect_t gradient_bounds;
   GskGradient *g;
 
-  graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->width),
-                                    svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->height));
+  graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->size.width),
+                                    svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->size.height));
   start_radius = svg_number_get (gradient->current[SHAPE_ATTR_FR], normalized_diagonal (context->viewport));
 
-  graphene_point_init (&end_center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->width),
-                                    svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->height));
+  graphene_point_init (&end_center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->size.width),
+                                    svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->size.height));
   end_radius = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
 
   g = gsk_gradient_new ();
@@ -12398,30 +12769,127 @@ paint_radial_gradient (Shape                 *gradient,
 }
 
 static void
-paint_gradient (Shape                 *gradient,
-                const graphene_rect_t *bounds,
-                PaintContext          *context)
+paint_pattern (Shape                 *pattern,
+               const graphene_rect_t *bounds,
+               PaintContext          *context)
 {
-  if (!gradient)
-    return;
+  SvgViewBox *view_box = (SvgViewBox *) pattern->current[SHAPE_ATTR_VIEW_BOX];
+  SvgContentFit *content_fit = (SvgContentFit *) pattern->current[SHAPE_ATTR_CONTENT_FIT];
+  graphene_rect_t pattern_bounds, child_bounds;
+  double tx, ty;
+  double sx, sy;
+  GskTransform *transform;
+  double dx, dy;
 
-  if (gradient->color_stops->len == 0)
-    return;
-
-  if (gradient->color_stops->len == 1)
+  if (svg_enum_get (pattern->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
-      ColorStop *cs = g_ptr_array_index (gradient->color_stops, 0);
-      SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
-      GdkRGBA color = stop_color->color;
-      color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
-      gtk_snapshot_append_color (context->snapshot, &color, bounds);
-      return;
+      dx = bounds->origin.x + svg_number_get (pattern->current[SHAPE_ATTR_X], 1) * bounds->size.width;
+      dy = bounds->origin.y + svg_number_get (pattern->current[SHAPE_ATTR_Y], 1) * bounds->size.height;
+      child_bounds.origin.x = 0;
+      child_bounds.origin.y = 0;
+      child_bounds.size.width = svg_number_get (pattern->current[SHAPE_ATTR_WIDTH], 1) * bounds->size.width;
+      child_bounds.size.height = svg_number_get (pattern->current[SHAPE_ATTR_HEIGHT], 1) * bounds->size.height;
+    }
+  else
+    {
+      dx = svg_number_get (pattern->current[SHAPE_ATTR_X], context->viewport->size.width);
+      dy = svg_number_get (pattern->current[SHAPE_ATTR_Y], context->viewport->size.height);
+      child_bounds.origin.x = 0;
+      child_bounds.origin.y = 0;
+      child_bounds.size.width = svg_number_get (pattern->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+      child_bounds.size.height = svg_number_get (pattern->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
     }
 
-  if (gradient->type == SHAPE_LINEAR_GRADIENT)
-    paint_linear_gradient (gradient, bounds, context);
+  if (!view_box->unset)
+    {
+      compute_viewport_transform (content_fit->is_none,
+                                  content_fit->align_x,
+                                  content_fit->align_y,
+                                  content_fit->meet,
+                                  &view_box->view_box,
+                                  child_bounds.origin.x, child_bounds.origin.y,
+                                  child_bounds.size.width, child_bounds.size.height,
+                                  &sx, &sy, &tx, &ty);
+    }
   else
-    paint_radial_gradient (gradient, bounds, context);
+    {
+      if (svg_enum_get (pattern->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+        {
+          tx = 0;
+          ty = 0;
+          sx = bounds->size.width;
+          sy = bounds->size.height;
+        }
+      else
+        {
+          sx = sy = 1;
+          tx = ty = 0;
+        }
+    }
+
+  child_bounds.origin.x += dx;
+  child_bounds.origin.y += dy;
+
+  tx += dx;
+  ty += dy;
+
+  transform = svg_transform_get_gsk ((SvgTransform *) pattern->current[SHAPE_ATTR_TRANSFORM]);
+  gtk_snapshot_transform (context->snapshot, transform);
+
+  transform = gsk_transform_invert (transform);
+  gsk_transform_transform_bounds (transform, bounds, &pattern_bounds);
+  gsk_transform_unref (transform);
+
+  gtk_snapshot_push_repeat (context->snapshot, &pattern_bounds, &child_bounds);
+
+  gtk_snapshot_save (context->snapshot);
+  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
+  gtk_snapshot_scale (context->snapshot, sx, sy);
+
+  for (int i = 0; i < pattern->shapes->len; i++)
+    {
+      Shape *s = g_ptr_array_index (pattern->shapes, i);
+      render_shape (s, context);
+    }
+
+  gtk_snapshot_restore (context->snapshot);
+
+  gtk_snapshot_pop (context->snapshot);
+}
+
+static void
+paint_server (Shape                 *server,
+              const graphene_rect_t *bounds,
+              PaintContext          *context)
+{
+  if (!server)
+    return;
+
+  if (server->type == SHAPE_LINEAR_GRADIENT ||
+      server->type == SHAPE_RADIAL_GRADIENT)
+    {
+      if (server->color_stops->len == 0)
+        return;
+
+      if (server->color_stops->len == 1)
+        {
+          ColorStop *cs = g_ptr_array_index (server->color_stops, 0);
+          SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+          GdkRGBA color = stop_color->color;
+          color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+          gtk_snapshot_append_color (context->snapshot, &color, bounds);
+          return;
+        }
+
+      if (server->type == SHAPE_LINEAR_GRADIENT)
+        paint_linear_gradient (server, bounds, context);
+      else
+        paint_radial_gradient (server, bounds, context);
+    }
+  else if (server->type == SHAPE_PATTERN)
+    {
+      paint_pattern (server, bounds, context);
+    }
 }
 
 static GskStroke *
@@ -12513,13 +12981,13 @@ fill_shape (Shape        *shape,
           color.alpha *= opacity;
           gtk_snapshot_append_fill (context->snapshot, path, fill_rule, &color);
         }
-      else if (paint->kind == PAINT_GRADIENT)
+      else if (paint->kind == PAINT_SERVER)
         {
           if (opacity < 1)
             gtk_snapshot_push_opacity (context->snapshot, opacity);
 
           gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
-          paint_gradient (paint->gradient.shape, &bounds, context);
+          paint_server (paint->server.shape, &bounds, context);
           gtk_snapshot_pop (context->snapshot);
 
           if (opacity < 1)
@@ -12555,13 +13023,13 @@ stroke_shape (Shape        *shape,
               color.alpha *= opacity;
               gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
             }
-          else if (paint->kind == PAINT_GRADIENT)
+          else if (paint->kind == PAINT_SERVER)
             {
               if (opacity < 1)
                 gtk_snapshot_push_opacity (context->snapshot, opacity);
 
               gtk_snapshot_push_stroke (context->snapshot, path, stroke);
-              paint_gradient (paint->gradient.shape, &bounds, context);
+              paint_server (paint->server.shape, &bounds, context);
               gtk_snapshot_pop (context->snapshot);
 
               if (opacity < 1)
@@ -12589,7 +13057,7 @@ paint_shape (Shape        *shape,
 
           /* FIXME: this isn't the best way of doing this */
           use_context.svg = context->svg;
-          use_context.viewport = &context->svg->view_box.size;
+          use_context.viewport = &context->svg->viewport;
           use_context.parent = shape;
           use_context.current_time = context->current_time;
           use_context.colors = context->colors;
@@ -12682,43 +13150,6 @@ render_shape (Shape        *shape,
 /* {{{ GtkSymbolicPaintable implementation */
 
 static void
-compute_viewport_transform (GtkSvg *self,
-                            const graphene_rect_t *vb,
-                            double e_x, double e_y,
-                            double e_width, double e_height,
-                            double *scale_x, double *scale_y,
-                            double *translate_x, double *translate_y)
-{
-  double sx, sy, tx, ty;
-
-  sx = e_width / vb->size.width;
-  sy = e_height / vb->size.height;
-
-  if (self->align != 0 && self->meet_or_slice == MEET)
-    sx = sy = MIN (sx, sy);
-  else if (self->align != 0 && self->meet_or_slice == SLICE)
-    sx = sy = MAX (sx, sy);
-
-  tx = e_x - vb->origin.x * sx;
-  ty = e_y - vb->origin.y * sy;
-
-  if (ALIGN_GET_X (self->align) == ALIGN_MID)
-    tx += (e_width - vb->size.width * sx) / 2;
-  else if (ALIGN_GET_X (self->align) == ALIGN_MAX)
-    tx += (e_width - vb->size.width * sx);
-
-  if (ALIGN_GET_Y (self->align) == ALIGN_MID)
-    ty += (e_height - vb->size.height * sy) / 2;
-  else if (ALIGN_GET_Y (self->align) == ALIGN_MAX)
-    ty += (e_height - vb->size.height * sy);
-
-  *scale_x = sx;
-  *scale_y = sy;
-  *translate_x = tx;
-  *translate_y = ty;
-}
-
-static void
 gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               GtkSnapshot           *snapshot,
                               double                 width,
@@ -12732,18 +13163,26 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   PaintContext paint_context;
   graphene_rect_t view_box;
   double sx, sy, tx, ty;
+  SvgViewBox *vb = (SvgViewBox *) self->view_box;
+  SvgContentFit *cf = (SvgContentFit *) self->content_fit;
 
-  if (self->view_box.size.width == 0 || self->view_box.size.height == 0)
+  if (vb->unset)
     graphene_rect_init (&view_box, 0, 0, self->width, self->height);
   else
-    view_box = self->view_box;
+    view_box = vb->view_box;
 
-  compute_viewport_transform (self, &view_box,
+  graphene_rect_init (&self->viewport, 0, 0, width, height);
+
+  compute_viewport_transform (cf->is_none,
+                              cf->align_x,
+                              cf->align_y,
+                              cf->meet,
+                              &view_box,
                               0, 0, width, height,
                               &sx, &sy, &tx, &ty);
 
   compute_context.svg = self;
-  compute_context.viewport = &view_box.size;
+  compute_context.viewport = &self->viewport;
   compute_context.colors = colors;
   compute_context.n_colors = n_colors;
   compute_context.current_time = self->current_time;
@@ -12752,7 +13191,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   compute_current_values_for_shape (self->content, &compute_context);
 
   paint_context.svg = self;
-  paint_context.viewport = &view_box.size;
+  paint_context.viewport = &self->viewport;
   paint_context.snapshot = snapshot;
   paint_context.bounds = self->bounds;
   paint_context.colors = colors;
@@ -12840,12 +13279,16 @@ static double
 gtk_svg_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
   GtkSvg *self = GTK_SVG (paintable);
+  SvgViewBox *vb = (SvgViewBox *) self->view_box;
 
   if (self->width > 0 && self->height > 0)
     return self->width / self->height;
 
-  if (self->view_box.size.width > 0 && self->view_box.size.height > 0)
-    return self->view_box.size.width / self->view_box.size.height;
+  if (!vb->unset)
+    {
+      if (vb->view_box.size.width > 0 && vb->view_box.size.height > 0)
+        return vb->view_box.size.width / vb->view_box.size.height;
+    }
 
   return 0;
 }
@@ -12896,6 +13339,10 @@ gtk_svg_init (GtkSvg *self)
   self->playing = FALSE;
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
 
+  self->view_box = svg_view_box_new_unset ();
+  self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+  graphene_rect_init (&self->viewport, 0, 0, 0, 0);
+
   self->timeline = timeline_new ();
   self->content = shape_new (NULL, SHAPE_GROUP);
 }
@@ -12913,6 +13360,9 @@ gtk_svg_dispose (GObject *object)
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
+
+  g_clear_pointer (&self->view_box, svg_value_unref);
+  g_clear_pointer (&self->content_fit, svg_value_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -13292,11 +13742,8 @@ gtk_svg_equal (GtkSvg *svg1,
 {
   if (svg1->width != svg2->width ||
       svg1->height != svg2->height ||
-      !graphene_rect_equal (&svg1->view_box, &svg2->view_box))
-    return FALSE;
-
-  if (svg1->align != svg2->align ||
-      svg1->meet_or_slice != svg2->meet_or_slice)
+      !svg_value_equal (svg1->view_box, svg2->view_box) ||
+      !svg_value_equal (svg1->content_fit, svg2->content_fit))
     return FALSE;
 
   if (svg1->gpa_version != svg2->gpa_version ||
@@ -13575,6 +14022,9 @@ pad_colors (GdkRGBA        col[5],
  * a 'gpa:status' attribute on animation elements that
  * reflects whether they are currently running.
  *
+ * When serializing the 'shadow DOM', the viewport from the
+ * most recently drawn frame is used to resolve percentages.
+ *
  * Returns: the serialized contents
  *
  * Since: 4.22
@@ -13586,6 +14036,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
                         GtkSvgSerializeFlags  flags)
 {
   GString *s = g_string_new ("");
+  SvgValue *default_content_fit;
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     {
@@ -13606,7 +14057,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
       ComputeContext context;
       context.svg = self;
-      context.viewport = &self->view_box.size;
+      context.viewport = &self->viewport;
       context.current_time = self->current_time;
       context.parent = NULL;
       context.colors = col;
@@ -13627,48 +14078,23 @@ gtk_svg_serialize_full (GtkSvg               *self,
   string_append_double (s, self->height);
   g_string_append_c (s, '\'');
 
-  if (self->view_box.size.width != 0 && self->view_box.size.height != 0)
+  if (!((SvgViewBox *) self->view_box)->unset)
     {
       indent_for_attr (s, 0);
       g_string_append (s, "viewBox='");
-      string_append_double (s, self->view_box.origin.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, self->view_box.origin.y);
-      g_string_append_c (s, ' ');
-      string_append_double (s, self->view_box.size.width);
-      g_string_append_c (s, ' ');
-      string_append_double (s, self->view_box.size.height);
+      svg_value_print (self->view_box, s);
       g_string_append_c (s, '\'');
     }
 
-  if (self->align != ALIGN_XY (ALIGN_MID, ALIGN_MID) ||
-      self->meet_or_slice != MEET)
+  default_content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+  if (!svg_value_equal (self->content_fit, default_content_fit))
     {
       indent_for_attr (s, 0);
       g_string_append (s, "preserveAspectRatio='");
-      if (self->align == 0)
-        {
-          g_string_append (s, "none");
-        }
-      else
-        {
-          const char *aligns[] = { "Min", "Mid", "Max" };
-
-          g_string_append_c (s, 'x');
-          g_string_append (s, aligns[ALIGN_GET_X (self->align)]);
-          g_string_append_c (s, 'Y');
-          g_string_append (s, aligns[ALIGN_GET_Y (self->align)]);
-
-          if (self->meet_or_slice != MEET)
-            {
-              const char *meets[] = { "meet", "slice" };
-
-              g_string_append_c (s, ' ');
-              g_string_append (s, meets[self->meet_or_slice]);
-            }
-        }
+      svg_value_print (self->content_fit, s);
       g_string_append_c (s, '\'');
     }
+  svg_value_unref (default_content_fit);
 
   if (self->gpa_version > 0 || (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE))
     {
@@ -13796,7 +14222,7 @@ svg_transform_get_primitive (const SvgValue *value,
 double
 svg_shape_attr_get_number (Shape                 *shape,
                            ShapeAttr              attr,
-                           const graphene_size_t *viewport)
+                           const graphene_rect_t *viewport)
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr) ||
                         (attr == SHAPE_ATTR_STROKE_MINWIDTH ||
@@ -13815,13 +14241,13 @@ svg_shape_attr_get_number (Shape                 *shape,
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_CX:
       g_assert (viewport);
-      return svg_number_get (value, viewport->width);
+      return svg_number_get (value, viewport->size.width);
     case SHAPE_ATTR_Y:
     case SHAPE_ATTR_HEIGHT:
     case SHAPE_ATTR_RY:
     case SHAPE_ATTR_CY:
       g_assert (viewport);
-      return svg_number_get (value, viewport->height);
+      return svg_number_get (value, viewport->size.height);
     case SHAPE_ATTR_R:
       g_assert (viewport);
       return svg_number_get (value, normalized_diagonal (viewport));
@@ -13898,7 +14324,7 @@ svg_shape_attr_get_paint (Shape            *shape,
   switch (paint->kind)
     {
     case PAINT_NONE:
-    case PAINT_GRADIENT:
+    case PAINT_SERVER:
       break;
     case PAINT_SYMBOLIC:
       *symbolic = paint->symbolic;
@@ -13945,7 +14371,7 @@ svg_shape_attr_get_points (Shape        *shape,
 
 GskPath *
 svg_shape_get_path (Shape                 *shape,
-                    const graphene_size_t *viewport)
+                    const graphene_rect_t *viewport)
 {
   return shape_get_path (shape, viewport, FALSE);
 }
@@ -14102,9 +14528,15 @@ gtk_svg_clear_content (GtkSvg *self)
 
   self->width = 0;
   self->height = 0;
-  graphene_rect_init (&self->view_box, 0, 0, 0, 0);
-  self->align = ALIGN_XY (ALIGN_MID, ALIGN_MID);
-  self->meet_or_slice = MEET;
+  svg_value_unref (self->view_box);
+  self->view_box = svg_view_box_new_unset ();
+  graphene_rect_init (&self->viewport, 0, 0, 0, 0);
+
+  svg_value_unref (self->view_box);
+  self->view_box = svg_view_box_new_unset ();
+
+  svg_value_unref (self->content_fit);
+  self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
 
   self->state = 0;
   self->max_state = 0;

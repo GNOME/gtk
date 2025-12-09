@@ -60,11 +60,10 @@ struct _GtkSvg
   Shape *content;
 
   double width, height;
-  graphene_rect_t view_box;
+  SvgValue *view_box;
+  SvgValue *content_fit;
   graphene_rect_t bounds;
-
-  unsigned int align;
-  MeetOrSlice meet_or_slice;
+  graphene_rect_t viewport;
 
   double weight;
   unsigned int state;
@@ -106,6 +105,7 @@ typedef enum
   SHAPE_USE,
   SHAPE_LINEAR_GRADIENT,
   SHAPE_RADIAL_GRADIENT,
+  SHAPE_PATTERN,
 } ShapeType;
 
 typedef enum
@@ -155,6 +155,8 @@ typedef enum
   SHAPE_ATTR_FX,
   SHAPE_ATTR_FY,
   SHAPE_ATTR_FR,
+  SHAPE_ATTR_VIEW_BOX,
+  SHAPE_ATTR_CONTENT_FIT,
   /* Things below are custom */
   SHAPE_ATTR_STROKE_MINWIDTH,
   SHAPE_ATTR_STROKE_MAXWIDTH,
@@ -268,7 +270,7 @@ typedef enum
   PAINT_NONE,
   PAINT_COLOR,
   PAINT_SYMBOLIC,
-  PAINT_GRADIENT,
+  PAINT_SERVER,
 } PaintKind;
 
 typedef enum
@@ -297,7 +299,7 @@ typedef enum
 
 double       svg_shape_attr_get_number    (Shape                 *shape,
                                            ShapeAttr              attr,
-                                           const graphene_size_t *viewport);
+                                           const graphene_rect_t *viewport);
 GskPath *    svg_shape_attr_get_path      (Shape                 *shape,
                                            ShapeAttr              attr);
 unsigned int svg_shape_attr_get_enum      (Shape                 *shape,
@@ -317,7 +319,7 @@ char *       svg_shape_attr_get_transform (Shape                 *shape,
 char *       svg_shape_attr_get_filter    (Shape                 *shape,
                                            ShapeAttr              attr);
 GskPath *    svg_shape_get_path           (Shape                 *shape,
-                                           const graphene_size_t *viewport);
+                                           const graphene_rect_t *viewport);
 void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);

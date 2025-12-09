@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="200" height="200"
+     viewBox="0 0 200 200">
+
+  <defs>
+    <pattern id="pattern1" x="0" y="0" width="25" height="25"
+             patternUnits="userSpaceOnUse">
+      <circle cx="12.5" cy="12.5" r="10" fill="red" stroke="black" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <ellipse fill="url(#pattern1)" cx="100" cy="100" rx="80" ry="60"/>
+</svg>
