@@ -486,5 +486,3 @@ gsk_composite_node_get_operator (const GskRenderNode *node)
   return self->op;
 }
 
-G_END_DECLS
-
