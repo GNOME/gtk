@@ -4911,20 +4911,31 @@ svg_content_fit_parse (const char *value)
 
   strv = g_strsplit (value, " ", 0);
   if (g_strv_length (strv) > 2)
-    return NULL;
+    {
+      g_strfreev (strv);
+      return NULL;
+    }
 
   if (!parse_align (strv[0], &align_x, &align_y))
-    return NULL;
+    {
+      g_strfreev (strv);
+      return NULL;
+    }
 
   if (strv[1])
     {
       if (!parse_meet (strv[1], &meet))
-        return NULL;
+        {
+          g_strfreev (strv);
+          return NULL;
+        }
     }
   else
     {
       meet = MEET;
     }
+
+  g_strfreev (strv);
 
   return svg_content_fit_new (align_x, align_y, meet);
 }
