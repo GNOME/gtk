@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: stroke {
     child: linear-gradient {
       bounds: 45 45 210 110;

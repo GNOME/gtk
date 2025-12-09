@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: stroke {
     child: color {
       bounds: 6 5 98 89;

@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: transform {
     transform: translate(0, 12.5) scale(0.208333);
     child: container {

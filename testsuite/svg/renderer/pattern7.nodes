@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: fill {
     child: transform {
       transform: rotate(45);

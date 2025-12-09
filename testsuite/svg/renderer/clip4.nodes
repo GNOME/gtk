@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: mask {
     source: transform {
       transform: translate(0, 25) scale(0.5);

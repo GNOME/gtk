@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: fill {
     child: transform {
       transform: translate(100, 100) rotate(45) translate(-100, -100);

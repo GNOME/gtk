@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: fill {
     child: color {
       bounds: 0.707107 0 341.293 218;
