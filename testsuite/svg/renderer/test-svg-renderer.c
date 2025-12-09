@@ -413,6 +413,8 @@ main (int argc, char **argv)
       return 1;
     }
 
+  g_option_context_free (context);
+
   if (argc < 2)
     {
       const char *basedir;
