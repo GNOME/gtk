@@ -153,6 +153,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       GskPorterDuff op;
       GskRenderNode *mask;
     } composite;
+    struct {
+      GskIsolation allowed;
+    } isolation;
   } data;
 };
 
@@ -524,6 +527,56 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
                                    gtk_snapshot_collect_opacity,
                                    NULL);
   state->data.opacity.opacity = CLAMP (opacity, 0.0, 1.0);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_isolation (GtkSnapshot      *snapshot,
+                                GtkSnapshotState *state,
+                                GskRenderNode   **nodes,
+                                guint             n_nodes)
+{
+  GskRenderNode *node, *isolation_node;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (node == NULL)
+    return NULL;
+
+  isolation_node = gsk_isolation_node_new (node, state->data.isolation.allowed);
+  gsk_render_node_unref (node);
+
+  return isolation_node;
+}
+
+/**
+ * gtk_snapshot_push_isolation:
+ * @snapshot: a `GtkSnapshot`
+ * @features: features that are isolated
+ *
+ * Isolates the following drawing operations from previous ones.
+ *
+ * You can express "everything but these flags" in a forward compatible
+ * way by using bit math:
+ * `GSK_ISOLATION_ALL & ~(GSK_ISOLATION_BACKGROUND | GSK_ISOLATION_COPY_PASTE)`
+ * will isolate everything but background and copy/paste.
+ *
+ * For what isolation features exist, see [flags@Gsk.Isolation].
+ *
+ * Content is isolated until the next call to [method@Gtk.Snapshot.pop].
+ *
+ * Since: 4.22
+ */
+void
+gtk_snapshot_push_isolation (GtkSnapshot  *snapshot,
+                             GskIsolation  allowed)
+{
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_isolation,
+                                   NULL);
+  state->data.isolation.allowed = allowed;
 }
 
 static GskRenderNode *

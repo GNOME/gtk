@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: container {
     fill {
       child: color {
@@ -44,8 +43,7 @@ M 130 80 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
         }
       }
     }
-    opacity {
-      opacity: 1;
+    isolation {
       child: transform {
         transform: translate(130, 0);
         child: container {

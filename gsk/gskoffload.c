@@ -27,6 +27,7 @@
 #include "gskcontainernodeprivate.h"
 #include "gskdebugnode.h"
 #include "gskdebugprivate.h"
+#include "gskisolationnode.h"
 #include "gskopacitynode.h"
 #include "gskrendernode.h"
 #include "gskrectprivate.h"
@@ -124,6 +125,10 @@ find_texture_to_attach (GskOffload          *self,
           if (gsk_opacity_node_get_opacity (node) < 1.0)
             goto out;
           node = gsk_opacity_node_get_child (node);
+          break;
+
+        case GSK_ISOLATION_NODE:
+          node = gsk_isolation_node_get_child (node);
           break;
 
         case GSK_CONTAINER_NODE:
@@ -643,6 +648,7 @@ visit_node (GskOffload    *self,
 
     case GSK_DEBUG_NODE:
     case GSK_COPY_NODE:
+    case GSK_ISOLATION_NODE:
       /* keep going */
       visit_children (self, node);
       break;

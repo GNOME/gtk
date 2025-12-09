@@ -53,6 +53,7 @@
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
 #include "gskfillnode.h"
+#include "gskisolationnode.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
 #include "gskpath.h"
@@ -4077,6 +4078,26 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_isolation_node (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
+{
+  GskRenderNode *child = gsk_isolation_node_get_child (node);
+  GskIsolation isolations = gsk_isolation_node_get_isolations (node);
+
+  if (isolations & GSK_ISOLATION_BACKGROUND)
+    {
+      if (gsk_render_node_get_copy_mode (child) != GSK_COPY_NONE ||
+          gsk_render_node_clears_background (child))
+        {
+          gsk_gpu_node_processor_add_without_opacity (self, child);
+          return;
+        }
+    }
+  
+  gsk_gpu_node_processor_add_node (self, child);
+}
+
+static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
@@ -4441,6 +4462,13 @@ static const struct
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_composite_node,
+    NULL,
+    NULL,
+  },
+  [GSK_ISOLATION_NODE] = {
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_isolation_node,
     NULL,
     NULL,
   },

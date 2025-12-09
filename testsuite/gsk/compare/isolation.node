@@ -1,0 +1,103 @@
+color {
+  bounds: 0 0 200 50;
+  color: rgb(0,255,0);
+}
+copy {
+  child: isolation {
+    child: container "node1" {
+      composite {
+        child: color {
+          bounds: 0 0 50 50;
+          color: rgb(255,0,204);
+        }
+        mask: color {
+          bounds: 15 15 20 20;
+          color: rgb(255,0,204);
+        }
+        operator: clear;
+      }
+      copy {
+        child: transform {
+          transform: translate(0, 50);
+          child: paste {
+            bounds: 0 0 50 50;
+          }
+        }
+      }
+      transform {
+        transform: translate(0, 100);
+        child: paste {
+          bounds: 0 0 50 50;
+        }
+      }
+    }
+    isolations: none;
+  }
+}
+transform {
+  transform: translate(50, 0);
+  child: copy {
+    child: isolation {
+      child: "node1";
+      isolations: background;
+    }
+  }
+}
+transform {
+  transform: translate(100, 0);
+  child: copy {
+    child: isolation {
+      child: "node1";
+      isolations: copy-paste;
+    }
+  }
+}
+transform {
+  transform: translate(150, 0);
+  child: copy {
+    child: isolation {
+      child: "node1";
+      isolations: background copy-paste;
+    }
+  }
+}
+color {
+  bounds: 0 150 200 50;
+  color: rgb(255,0,0);
+}
+transform {
+  transform: translate(0, 150);
+  child: copy {
+    child: isolation {
+      child: "node1";
+      isolations: not background copy-paste;
+    }
+  }
+}
+transform {
+  transform: translate(50, 150);
+  child: copy {
+    child: isolation {
+      child: "node1";
+      isolations: not copy-paste;
+    }
+  }
+}
+transform {
+  transform: translate(100, 150);
+  child: copy {
+    child: isolation {
+      child: "node1";
+      isolations: not background;
+    }
+  }
+}
+transform {
+  transform: translate(150, 150);
+  child: copy {
+    child: isolation {
+      child: "node1";
+      isolations: all;
+    }
+  }
+}

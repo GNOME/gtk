@@ -443,6 +443,14 @@ replay_composite_node (GskRenderNode *node, GtkSnapshot *snapshot)
   gtk_snapshot_pop (snapshot);
 }
 
+static void
+replay_isolation_node (GskRenderNode *node, GtkSnapshot *snapshot)
+{
+  gtk_snapshot_push_isolation (snapshot, gsk_isolation_node_get_isolations (node));
+  replay_node (gsk_isolation_node_get_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
+}
+
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
@@ -572,6 +580,10 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 
     case GSK_COMPOSITE_NODE:
       replay_composite_node (node, snapshot);
+      break;
+
+    case GSK_ISOLATION_NODE:
+      replay_isolation_node (node, snapshot);
       break;
 
     case GSK_SUBSURFACE_NODE:

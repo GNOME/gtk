@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: container {
     fill {
       child: transform {

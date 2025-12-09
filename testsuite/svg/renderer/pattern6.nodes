@@ -1,5 +1,4 @@
-opacity {
-  opacity: 1;
+isolation {
   child: fill {
     child: repeat {
       bounds: 0.707107 0 179.293 160;

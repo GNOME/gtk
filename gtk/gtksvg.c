@@ -12404,7 +12404,7 @@ push_context (Shape        *shape,
     {
       if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
         {
-          gtk_snapshot_push_opacity (context->snapshot, 1);
+          gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_ALL);
         }
 
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
@@ -13206,7 +13206,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
   gtk_snapshot_scale (snapshot, sx, sy);
 
-  gtk_snapshot_push_opacity (snapshot, 1.0);
+  gtk_snapshot_push_isolation (snapshot, GSK_ISOLATION_ALL);
 
   render_shape (self->content, &paint_context);
 
