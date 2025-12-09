@@ -613,6 +613,37 @@ string_append_double (GString *s,
   g_string_append (s, buf);
 }
 
+static char **
+strsplit_set (const char *str,
+              const char *sep)
+{
+  const char *p, *p0;
+  GPtrArray *array = g_ptr_array_new ();
+
+  p = str;
+  while (*p)
+    {
+      while (*p == ' ')
+        p++;
+
+      if (!*p)
+        break;
+
+      while (strchr (sep, *p))
+        p++;
+
+      p0 = p;
+      while (!strchr (sep, *p))
+        p++;
+
+      g_ptr_array_add (array, g_strndup (p0, p - p0));
+    }
+
+  g_ptr_array_add (array, NULL);
+
+  return (char **) g_ptr_array_free (array, FALSE);
+}
+
 enum
 {
   NUMBER     = 1 << 0,
@@ -680,7 +711,7 @@ parse_numbers2 (const char *value,
   GArray *array;
   GStrv strv;
 
-  strv = g_strsplit_set (value, sep, 0);
+  strv = strsplit_set (value, sep);
 
   array = g_array_new (FALSE, FALSE, sizeof (double));
 
@@ -3583,7 +3614,7 @@ svg_dash_array_parse (const char *value)
       unsigned int n;
       SvgDashArray *dashes;
 
-      strv = g_strsplit_set (value, ", ", 0);
+      strv = strsplit_set (value, ", ");
       n = g_strv_length (strv);
 
       dashes = svg_dash_array_alloc (n);
@@ -4094,7 +4125,7 @@ svg_points_parse (const char *value)
       unsigned int n;
       SvgPoints *p;
 
-      strv = g_strsplit_set (value, ", ", 0);
+      strv = strsplit_set (value, ", ");
       n = g_strv_length (strv);
 
       if (n % 2 == 1)
@@ -4682,19 +4713,22 @@ svg_view_box_parse (const char *value)
   GStrv strv;
   unsigned int n;
   double x, y, w, h;
+  SvgValue *res = NULL;
 
-  strv = g_strsplit_set (value, ", ", 0);
+  strv = strsplit_set (value, ", ");
   n = g_strv_length (strv);
-  if (n != 4 ||
-      !parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) ||
-      !parse_length (strv[1], -DBL_MAX, DBL_MAX, &y) ||
-      !parse_length (strv[2], 0, DBL_MAX, &w) ||
-      !parse_length (strv[3], 0, DBL_MAX, &h))
-    return NULL;
+  if (n == 4 &&
+      parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) &&
+      parse_length (strv[1], -DBL_MAX, DBL_MAX, &y) &&
+      parse_length (strv[2], 0, DBL_MAX, &w) &&
+      parse_length (strv[3], 0, DBL_MAX, &h))
+    {
+      res = (SvgValue *) svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h));
+    }
 
   g_strfreev (strv);
 
-  return svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h));
+  return res;
 }
 
 /* }}} */
