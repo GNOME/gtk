@@ -30,7 +30,9 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
+#ifdef HAVE_UDMABUF
 #include <linux/udmabuf.h>
+#endif
 #include <epoxy/egl.h>
 #include <errno.h>
 
@@ -612,6 +614,7 @@ gdk_dmabuf_new_for_bytes (GBytes  *bytes,
 
   munmap (data, size);
 
+#ifdef HAVE_UDMABUF
   dmabuf_fd = ioctl (udmabuf_fd,
                      UDMABUF_CREATE,
                      &(struct udmabuf_create) {
@@ -620,6 +623,7 @@ gdk_dmabuf_new_for_bytes (GBytes  *bytes,
                        .offset = 0,
                        .size = size
                      });
+#endif
 
   if (dmabuf_fd < 0)
     {

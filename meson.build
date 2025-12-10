@@ -741,6 +741,7 @@ if not libdrm_dep.found()
 endif
 
 cdata.set('HAVE_DMABUF', cc.has_header('linux/dma-buf.h'))
+cdata.set('HAVE_UDMABUF', cc.has_header('linux/udmabuf.h'))
 
 cloudproviders_dep = dependency('cloudproviders',
   required: get_option('cloudproviders'),
