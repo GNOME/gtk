@@ -20,52 +20,60 @@ M 100 100 h 1000 v 150 h -1000 z";
 M 250 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
         fill-rule: winding;
       }
-      opacity {
-        opacity: 0.8;
-        child: fill {
-          child: color {
-            bounds: 350 50 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
+      isolation {
+        child: opacity {
+          opacity: 0.8;
+          child: fill {
+            child: color {
+              bounds: 350 50 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
 M 450 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
+            fill-rule: winding;
+          }
         }
       }
-      opacity {
-        opacity: 0.6;
-        child: fill {
-          child: color {
-            bounds: 550 50 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
+      isolation {
+        child: opacity {
+          opacity: 0.6;
+          child: fill {
+            child: color {
+              bounds: 550 50 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
 M 650 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
+            fill-rule: winding;
+          }
         }
       }
-      opacity {
-        opacity: 0.4;
-        child: fill {
-          child: color {
-            bounds: 750 50 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
+      isolation {
+        child: opacity {
+          opacity: 0.4;
+          child: fill {
+            child: color {
+              bounds: 750 50 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
 M 850 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
+            fill-rule: winding;
+          }
         }
       }
-      opacity {
-        opacity: 0.2;
-        child: fill {
-          child: color {
-            bounds: 950 50 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
+      isolation {
+        child: opacity {
+          opacity: 0.2;
+          child: fill {
+            child: color {
+              bounds: 950 50 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
 M 1050 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
+            fill-rule: winding;
+          }
         }
       }
       fill {
@@ -86,94 +94,110 @@ M 232.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 5
 M 267.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
         fill-rule: winding;
       }
-      opacity {
-        child: container {
-          fill {
-            child: color {
-              bounds: 332.5 200 100 100;
-              color: rgb(255,0,0);
-            }
-            path: "\
-M 432.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-            fill-rule: winding;
-          }
-          fill {
-            child: color {
-              bounds: 367.5 200 100 100;
-              color: rgb(0,128,0);
-            }
-            path: "\
-M 467.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-            fill-rule: winding;
-          }
-        }
-      }
-      opacity {
-        child: fill {
-          child: color {
-            bounds: 532.5 200 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 632.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
-      opacity {
-        child: fill {
-          child: color {
-            bounds: 567.5 200 100 100;
-            color: rgb(0,128,0);
-          }
-          path: "\
-M 667.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
-      opacity {
-        child: fill {
-          child: color {
-            bounds: 767.5 200 100 100;
-            color: rgb(0,128,0);
-          }
-          path: "\
-M 867.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
-      opacity {
-        child: fill {
-          child: color {
-            bounds: 732.5 200 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 832.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
-      opacity {
-        child: container {
-          opacity {
-            child: fill {
+      isolation {
+        child: opacity {
+          child: container {
+            fill {
               child: color {
-                bounds: 932.5 200 100 100;
+                bounds: 332.5 200 100 100;
                 color: rgb(255,0,0);
               }
               path: "\
-M 1032.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+M 432.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
               fill-rule: winding;
             }
-          }
-          opacity {
-            child: fill {
+            fill {
               child: color {
-                bounds: 967.5 200 100 100;
+                bounds: 367.5 200 100 100;
                 color: rgb(0,128,0);
               }
               path: "\
-M 1067.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+M 467.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
               fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolation {
+        child: opacity {
+          child: fill {
+            child: color {
+              bounds: 532.5 200 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
+M 632.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+            fill-rule: winding;
+          }
+        }
+      }
+      isolation {
+        child: opacity {
+          child: fill {
+            child: color {
+              bounds: 567.5 200 100 100;
+              color: rgb(0,128,0);
+            }
+            path: "\
+M 667.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+            fill-rule: winding;
+          }
+        }
+      }
+      isolation {
+        child: opacity {
+          child: fill {
+            child: color {
+              bounds: 767.5 200 100 100;
+              color: rgb(0,128,0);
+            }
+            path: "\
+M 867.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+            fill-rule: winding;
+          }
+        }
+      }
+      isolation {
+        child: opacity {
+          child: fill {
+            child: color {
+              bounds: 732.5 200 100 100;
+              color: rgb(255,0,0);
+            }
+            path: "\
+M 832.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+            fill-rule: winding;
+          }
+        }
+      }
+      isolation {
+        child: opacity {
+          child: container {
+            isolation {
+              child: opacity {
+                child: fill {
+                  child: color {
+                    bounds: 932.5 200 100 100;
+                    color: rgb(255,0,0);
+                  }
+                  path: "\
+M 1032.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+                  fill-rule: winding;
+                }
+              }
+            }
+            isolation {
+              child: opacity {
+                child: fill {
+                  child: color {
+                    bounds: 967.5 200 100 100;
+                    color: rgb(0,128,0);
+                  }
+                  path: "\
+M 1067.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+                  fill-rule: winding;
+                }
+              }
             }
           }
         }

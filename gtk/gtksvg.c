@@ -12542,12 +12542,35 @@ push_context (Shape        *shape,
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
   SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
+  gboolean isolate = FALSE;
+
+  if (context->op != CLIPPING)
+    {
+      if (context->op == MASKING && shape->type == SHAPE_MASK)
+        isolate = TRUE;
+
+      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+        isolate = TRUE;
+
+      if (svg_number_get (opacity, 1) != 1)
+        isolate = TRUE;
+
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        isolate = TRUE;
+
+      if (filter->n_functions > 0 &&
+          filter->functions[0].kind != FILTER_NONE)
+        isolate = TRUE;
+    }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     {
       GskTransform *transform;
 
       transform = svg_transform_get_gsk (tf);
+      if (gsk_transform_get_category (transform) <= GSK_TRANSFORM_CATEGORY_3D)
+        isolate = TRUE;
+
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_transform (context->snapshot, transform);
       gsk_transform_unref (transform);
@@ -12565,10 +12588,8 @@ push_context (Shape        *shape,
 
   if (context->op != CLIPPING)
     {
-      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
-        {
-          gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_ALL);
-        }
+      if (isolate)
+        gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_ALL);
 
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
         {
@@ -12765,6 +12786,37 @@ pop_context (Shape        *shape,
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
   SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
+  gboolean isolate = FALSE;
+
+  if (context->op != CLIPPING)
+    {
+      if (context->op == MASKING && shape->type == SHAPE_MASK)
+        isolate = TRUE;
+
+      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+        isolate = TRUE;
+
+      if (svg_number_get (opacity, 1) != 1)
+        isolate = TRUE;
+
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        isolate = TRUE;
+
+      if (filter->n_functions > 0 &&
+          filter->functions[0].kind != FILTER_NONE)
+        isolate = TRUE;
+    }
+
+  if (tf->transforms[0].type != TRANSFORM_NONE)
+    {
+      GskTransform *transform;
+
+      transform = svg_transform_get_gsk (tf);
+      if (gsk_transform_get_category (transform) <= GSK_TRANSFORM_CATEGORY_3D)
+        isolate = TRUE;
+
+      gsk_transform_unref (transform);
+    }
 
   if (context->op != CLIPPING)
     {
@@ -12791,7 +12843,7 @@ pop_context (Shape        *shape,
           gtk_snapshot_pop (context->snapshot);
         }
 
-      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+      if (isolate)
         gtk_snapshot_pop (context->snapshot);
     }
 
