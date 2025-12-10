@@ -87,6 +87,9 @@ struct _GtkSvg
   char *gpa_keywords;
 
   Timeline *timeline;
+
+  Shape *view;
+  GHashTable *views;
 };
 
 typedef enum
@@ -402,5 +405,9 @@ GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
                                         size_t                 n_colors,
                                         GtkSvgSerializeFlags   flags);
 
+const char ** gtk_svg_get_views (GtkSvg     *svg);
+void          gtk_svg_set_view  (GtkSvg     *svg,
+                                 const char *id);
+const char *  gtk_svg_get_view  (GtkSvg     *svg);
 
 G_END_DECLS
