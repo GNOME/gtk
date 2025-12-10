@@ -238,7 +238,7 @@ render_svg_file (GFile *file, gboolean generate)
       goto out;
     }
 
-  reference_file = test_get_sibling_file (svg_file, ".nodes");
+  reference_file = test_get_sibling_file (svg_file, ".node");
 
   diff = diff_bytes_with_file (reference_file, bytes, &error);
   g_assert_no_error (error);
@@ -251,8 +251,8 @@ render_svg_file (GFile *file, gboolean generate)
 
   if (diff || g_test_verbose ())
     {
-       save_output (g_bytes_get_data (bytes, NULL), svg_file, ".out.nodes");
-       save_output (diff, svg_file, ".nodes.diff");
+       save_output (g_bytes_get_data (bytes, NULL), svg_file, ".out.node");
+       save_output (diff, svg_file, ".node.diff");
     }
 
   g_free (reference_file);
