@@ -81,6 +81,22 @@ gsk_paste_node_replay (GskRenderNode   *node,
 }
 
 static void
+gsk_paste_node_render_opacity (GskRenderNode  *node,
+                               GskOpacityData *data)
+{
+  GskPasteNode *self = (GskPasteNode *) node;
+  const graphene_rect_t *copy;
+  graphene_rect_t clipped;
+
+  copy = g_slist_nth_data (data->copies, self->depth);
+  if (copy == NULL)
+    return;
+
+  if (gsk_rect_intersection (copy, &node->bounds, &clipped))
+    gsk_rect_coverage (&data->opaque, &clipped, &data->opaque);
+}
+
+static void
 gsk_paste_node_class_init (gpointer g_class,
                            gpointer class_data)
 {
@@ -91,6 +107,7 @@ gsk_paste_node_class_init (gpointer g_class,
   node_class->draw = gsk_paste_node_draw;
   node_class->diff = gsk_paste_node_diff;
   node_class->replay = gsk_paste_node_replay;
+  node_class->render_opacity = gsk_paste_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskPasteNode, gsk_paste_node)

@@ -40,6 +40,7 @@
 #include "gskcontainernodeprivate.h"
 #include "gskcopypasteutilsprivate.h"
 #include "gskdebugprivate.h"
+#include "gskrectprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeparserprivate.h"
 
@@ -180,11 +181,10 @@ gsk_render_node_real_replay (GskRenderNode   *node,
   return gsk_render_node_ref (node);
 }
 
-static gboolean
-gsk_render_node_real_get_opaque_rect (GskRenderNode   *node,
-                                      graphene_rect_t *out_opaque)
+static void
+gsk_render_node_real_render_opacity (GskRenderNode  *node,
+                                     GskOpacityData *data)
 {
-  return FALSE;
 }
 
 static void
@@ -196,7 +196,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->diff = gsk_render_node_real_diff;
   klass->get_children = gsk_render_node_real_get_children;
   klass->replay = gsk_render_node_real_replay;
-  klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
+  klass->render_opacity = gsk_render_node_real_render_opacity;
 }
 
 static void
@@ -685,6 +685,9 @@ gboolean
 gsk_render_node_get_opaque_rect (GskRenderNode   *self,
                                  graphene_rect_t *out_opaque)
 {
+  GskOpacityData data = GSK_OPACITY_DATA_INIT_EMPTY (NULL);
+  gboolean result;
+
   g_return_val_if_fail (GSK_IS_RENDER_NODE (self), FALSE);
   g_return_val_if_fail (out_opaque != NULL, FALSE);
 
@@ -694,7 +697,43 @@ gsk_render_node_get_opaque_rect (GskRenderNode   *self,
       return TRUE;
     }
 
-  return GSK_RENDER_NODE_GET_CLASS (self)->get_opaque_rect (self, out_opaque);
+  gsk_render_node_render_opacity (self, &data);
+  result = !gsk_rect_is_empty (&data.opaque);
+  if (result)
+    *out_opaque = data.opaque;
+
+  return result;
+}
+
+void
+gsk_render_node_render_opacity (GskRenderNode  *self,
+                                GskOpacityData *data)
+{
+  static guint depth = 0;
+
+  depth++;
+
+  if (self->fully_opaque)
+    {
+      if (gsk_rect_is_empty (&data->opaque))
+        data->opaque = self->bounds;
+      else
+        gsk_rect_coverage (&data->opaque, &self->bounds, &data->opaque);
+    }
+  else
+    {
+      GSK_RENDER_NODE_GET_CLASS (self)->render_opacity (self, data);
+    }
+
+  depth--;
+
+  if (GSK_DEBUG_CHECK (OPACITY))
+    {
+      gdk_debug_message ("%*s%g %g %g %g %s", 2 * depth, "",
+                         data->opaque.origin.x, data->opaque.origin.y,
+                         data->opaque.size.width, data->opaque.size.height,
+                         g_type_name_from_instance ((GTypeInstance *) self));
+    }
 }
 
 /**

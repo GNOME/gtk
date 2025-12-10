@@ -1,0 +1,16 @@
+/* 0 0 32 32 */
+
+color {
+  color: red;
+  bounds: 0 0 32 32;
+}
+
+composite {
+  child: color {
+    color: white;
+  }
+  mask: fill {
+    path: "m 13 6 h 6 v 7 h 6 v 7 h -7 v 7 h -6 v -7 h -7 v -6 h 7 z";
+  }
+  operator: source;
+}

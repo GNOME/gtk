@@ -118,15 +118,6 @@ gsk_isolation_node_diff (GskRenderNode *node1,
     }
 }
 
-static gboolean
-gsk_isolation_node_get_opaque_rect (GskRenderNode   *node,
-                                    graphene_rect_t *out_opaque)
-{
-  GskIsolationNode *self = (GskIsolationNode *) node;
-
-  return gsk_render_node_get_opaque_rect (self->child, out_opaque);
-}
-
 static GskRenderNode **
 gsk_isolation_node_get_children (GskRenderNode *node,
                                  gsize         *n_children)
@@ -136,6 +127,34 @@ gsk_isolation_node_get_children (GskRenderNode *node,
   *n_children = 1;
 
   return &self->child;
+}
+
+static void
+gsk_isolation_node_render_opacity (GskRenderNode  *node,
+                                   GskOpacityData *data)
+{
+  GskIsolationNode *self = (GskIsolationNode *) node;
+  GskOpacityData child_data = GSK_OPACITY_DATA_INIT_EMPTY (NULL);
+
+  if (!gsk_isolation_node_is_isolating (self, GSK_ISOLATION_BACKGROUND))
+    child_data.opaque = data->opaque;
+
+  if (!gsk_isolation_node_is_isolating (self, GSK_ISOLATION_COPY_PASTE))
+    child_data.copies = data->copies;
+
+  gsk_render_node_render_opacity (self->child, &child_data);
+
+  if (gsk_isolation_node_is_isolating (self, GSK_ISOLATION_BACKGROUND))
+    {
+      if (gsk_rect_is_empty (&data->opaque))
+        data->opaque = child_data.opaque;
+      else
+        gsk_rect_coverage (&data->opaque, &child_data.opaque, &data->opaque);
+    }
+  else
+    {
+      data->opaque = child_data.opaque;
+    }
 }
 
 static GskRenderNode *
@@ -173,7 +192,7 @@ gsk_isolation_node_class_init (gpointer g_class,
   node_class->diff = gsk_isolation_node_diff;
   node_class->get_children = gsk_isolation_node_get_children;
   node_class->replay = gsk_isolation_node_replay;
-  node_class->get_opaque_rect = gsk_isolation_node_get_opaque_rect;
+  node_class->render_opacity = gsk_isolation_node_render_opacity;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskIsolationNode, gsk_isolation_node)

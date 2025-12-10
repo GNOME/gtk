@@ -3431,23 +3431,40 @@ gsk_transform_node_replay (GskRenderNode   *node,
   return result;
 }
 
-static gboolean
-gsk_transform_node_get_opaque_rect (GskRenderNode   *node,
-                                    graphene_rect_t *opaque)
+static void
+gsk_transform_node_render_opacity (GskRenderNode  *node,
+                                   GskOpacityData *data)
 {
   GskTransformNode *self = (GskTransformNode *) node;
-  graphene_rect_t child_opaque;
 
   if (gsk_transform_get_fine_category (self->transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
-    return FALSE;
+    {
+      /* too complex, skip child */
+      if (gsk_render_node_clears_background (node) && !gsk_rect_is_empty (&data->opaque))
+        {
+          if (!gsk_rect_subtract (&data->opaque, &node->bounds, &data->opaque))
+            data->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+        }
+      return;
+    }
 
-  if (!gsk_render_node_get_opaque_rect (self->child, &child_opaque))
-    return FALSE;
+  if (!gsk_rect_is_empty (&data->opaque))
+    {
+      GskTransform *inverse;
 
-  gsk_transform_transform_bounds (self->transform,
-                                  &child_opaque,
-                                  opaque);
-  return TRUE;
+      inverse = gsk_transform_invert (gsk_transform_ref (self->transform));
+      if (inverse == NULL)
+        return;
+
+      gsk_transform_transform_bounds (inverse, &data->opaque, &data->opaque);
+      gsk_transform_unref (inverse);
+    }
+
+
+  gsk_render_node_render_opacity (self->child, data);
+
+  if (!gsk_rect_is_empty (&data->opaque))
+    gsk_transform_transform_bounds (self->transform, &data->opaque, &data->opaque);
 }
 
 static void
@@ -3464,7 +3481,7 @@ gsk_transform_node_class_init (gpointer g_class,
   node_class->diff = gsk_transform_node_diff;
   node_class->get_children = gsk_transform_node_get_children;
   node_class->replay = gsk_transform_node_replay;
-  node_class->get_opaque_rect = gsk_transform_node_get_opaque_rect;
+  node_class->render_opacity = gsk_transform_node_render_opacity;
 }
 
 /**

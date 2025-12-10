@@ -1,0 +1,12 @@
+/* 0 0 100 50 */
+
+color {
+  bounds: 0 0 50 50;
+}
+copy {
+  child: transform {
+    transform: translate(50, 0);
+    child: paste {
+    }
+  }
+}

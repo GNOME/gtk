@@ -54,6 +54,15 @@ typedef struct
 
 typedef struct
 {
+  graphene_rect_t opaque;
+  GSList *copies;
+} GskOpacityData;
+
+#define GSK_OPACITY_DATA_INIT_EMPTY(copies) { GRAPHENE_RECT_INIT(0, 0, 0, 0), (copies) }
+#define GSK_OPACITY_DATA_INIT_COPY(data) (*(data))
+
+typedef struct
+{
   GdkColorState *ccs;
 } GskCairoData;
 
@@ -76,8 +85,8 @@ struct _GskRenderNodeClass
                                                          gsize                       *n_children);
   GskRenderNode*(* replay)                              (GskRenderNode               *node,
                                                          GskRenderReplay             *replay);
-  gboolean      (* get_opaque_rect)                     (GskRenderNode               *node,
-                                                         graphene_rect_t             *out_opaque);
+  void          (* render_opacity)                      (GskRenderNode               *node,
+                                                         GskOpacityData              *data);
 };
 
 void            gsk_render_node_init_types              (void);
@@ -121,9 +130,12 @@ void            gsk_render_node_draw_with_color_state   (GskRenderNode          
                                                          GdkColorState               *color_state);
 void            gsk_render_node_draw_fallback           (GskRenderNode               *node,
                                                          cairo_t                     *cr);
+void            gsk_render_node_render_opacity          (GskRenderNode               *self,
+                                                         GskOpacityData              *data);
 
 GskRenderNode **gsk_render_node_get_children            (GskRenderNode               *node,
                                                          gsize                       *n_children);
+
 bool            gsk_border_node_get_uniform             (const GskRenderNode         *self) G_GNUC_PURE;
 bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self) G_GNUC_PURE;
 
