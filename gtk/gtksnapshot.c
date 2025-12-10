@@ -1656,11 +1656,11 @@ gtk_snapshot_collect_blend_top (GtkSnapshot      *snapshot,
               ? gsk_render_node_ref (state->data.blend.bottom_node)
               : NULL;
 
-  g_assert (top_node != NULL || bottom_node != NULL);
-
   /* XXX: Is this necessary? Do we need a NULL node? */
   if (top_node == NULL)
-    top_node = gsk_color_node_new (&transparent, &bottom_node->bounds);
+    top_node = gsk_color_node_new (&transparent,
+                                   bottom_node ? &bottom_node->bounds
+                                               : &GRAPHENE_RECT_INIT (0, 0, 0, 0));
   if (bottom_node == NULL)
     bottom_node = gsk_color_node_new (&transparent, &top_node->bounds);
 
