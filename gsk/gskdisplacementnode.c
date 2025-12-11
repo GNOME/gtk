@@ -102,12 +102,10 @@ sample_image (guchar *image,
 
   ix = round (x);
   iy = round (y);
-  if (ix != CLAMP (ix, 0, width - 1))
-    DEBUG ("x = [0, %d, %zu]\n", ix, width);
-  if (iy != CLAMP (iy, 0, height - 1))
-    DEBUG ("y = [0, %d, %zu]\n", iy, height);
-  ix = CLAMP (ix, 0, width - 1);
-  iy = CLAMP (iy, 0, height - 1);
+
+  if (ix < 0 || ix >= width ||
+      iy < 0 || iy >= height)
+    return 0; /* transparent */
 
   return *(guint32 *) (image + iy * stride + ix * sizeof (guint32));
 }
@@ -226,10 +224,14 @@ gsk_displacement_node_draw (GskRenderNode *node,
   cairo_t *child_cr;
   graphene_rect_t child_bounds;
 
+  child_bounds = node->bounds;
+  graphene_rect_inset (&child_bounds, - self->max.width, - self->max.height);
+  if (!gsk_rect_intersection (&child_bounds, &self->child->bounds, &child_bounds))
+    return;
+
   /* clip so the push_group() creates a smaller surface */
   gdk_cairo_rect (cr, &node->bounds);
   cairo_clip (cr);
-
   if (gdk_cairo_is_all_clipped (cr))
     return;
 
@@ -237,8 +239,6 @@ gsk_displacement_node_draw (GskRenderNode *node,
   gsk_render_node_draw_full (self->displacement, cr, data);
   displacement = cairo_pop_group (cr);
 
-  child_bounds = node->bounds;
-  graphene_rect_inset (&child_bounds, - self->max.width, - self->max.height);
   child_surface = gdk_cairo_create_similar_surface (cr, CAIRO_CONTENT_COLOR_ALPHA, &child_bounds);
   child_cr = cairo_create (child_surface);
   gsk_render_node_draw_full (self->child, child_cr, data);
