@@ -284,3 +284,71 @@ gdk_cairo_rectangle_snap_to_grid (cairo_t               *cr,
   cairo_restore (cr);
 }
 
+/**
+ * gdk_cairo_create_similar_surface:
+ * @cr: cairo context
+ * @content: the kind of surface to create
+ * @bounds: the bounds to create the surface for
+ *
+ * Creates a surface for offscreen rendering that isn't
+ * confined by Cairo's clipping behavior. So this is
+ * useful as an alternative to cairo_push_group() if
+ * you want a guarantee that the whole area will be
+ * created, for example when blurring and needing a larger
+ * input area.
+ *
+ * This function will set the surface's device scale and offset.
+ *
+ * Once done with rendering to the returned surface, you
+ * can render it to the given bounds with this code:
+ * 
+ * ```c
+ * cairo_set_source_surface (cr, surface);
+ * cairo_paint (cr);
+ * ```
+ * 
+ * Returns: a new cairo surface 
+ **/
+static inline cairo_surface_t *
+gdk_cairo_create_similar_surface (cairo_t               *cr,
+                                  cairo_content_t        content,
+                                  const graphene_rect_t *bounds)
+{
+  cairo_matrix_t matrix;
+  double xscale, yscale, det, width, height;
+  cairo_surface_t *surface;
+
+  cairo_get_matrix (cr, &matrix);
+  cairo_surface_get_device_scale (cairo_get_target (cr), &xscale, &yscale);
+  det = matrix.xx * matrix.yy - matrix.xy * matrix.yx;
+  if (matrix.xx != 0 || matrix.yx != 0)
+    {
+      width = sqrt (matrix.xx * matrix.xx + matrix.yx * matrix.yx);
+      height = det / width;
+    }
+  else if (matrix.yx != 0 || matrix.yy != 0)
+    {
+      height = sqrt (matrix.yx * matrix.yx + matrix.yy * matrix.yy);
+      width = det / height;
+    }
+  else
+    {
+      g_return_val_if_reached (NULL);
+    }
+
+  width = ABS (ceil (width * bounds->size.width * xscale));
+  height = ABS (ceil (height * bounds->size.height * yscale));
+
+  surface = cairo_surface_create_similar (cairo_get_group_target (cr), 
+                                          content,
+                                          width, height);
+  xscale = width / bounds->size.width;
+  yscale = height / bounds->size.height;
+  cairo_surface_set_device_scale (surface, xscale, yscale);
+  cairo_surface_set_device_offset (surface,
+                                   - bounds->origin.x * xscale,
+                                   - bounds->origin.y * yscale);
+
+  return surface;
+}
+
