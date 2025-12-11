@@ -471,7 +471,8 @@ gtk_scale_button_init (GtkScaleButton *button)
   gtk_range_set_adjustment (GTK_RANGE (priv->scale), priv->adjustment);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (button),
-                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (priv->adjustment),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (priv->adjustment) -
+                                                                     gtk_adjustment_get_page_size (priv->adjustment),
                                   GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (priv->adjustment),
                                   GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (priv->adjustment),
                                   -1);
@@ -756,7 +757,8 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
       g_object_notify (G_OBJECT (button), "adjustment");
 
       gtk_accessible_update_property (GTK_ACCESSIBLE (button),
-                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment) -
+                                                                         gtk_adjustment_get_page_size (adjustment),
                                       GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
                                       GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
                                       -1);

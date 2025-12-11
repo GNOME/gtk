@@ -689,6 +689,8 @@ gtk_range_set_adjustment (GtkRange      *range,
 
   if (priv->adjustment != adjustment)
     {
+      double accessible_max;
+
       if (priv->adjustment)
 	{
 	  g_signal_handlers_disconnect_by_func (priv->adjustment,
@@ -710,8 +712,14 @@ gtk_range_set_adjustment (GtkRange      *range,
 			G_CALLBACK (gtk_range_adjustment_value_changed),
 			range);
 
+      accessible_max = gtk_adjustment_get_upper (adjustment) -
+                       gtk_adjustment_get_page_size (adjustment);
+
+      if (priv->restrict_to_fill_level)
+        accessible_max = MIN (accessible_max, priv->fill_level);
+
       gtk_accessible_update_property (GTK_ACCESSIBLE (range),
-                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, accessible_max,
                                       GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
                                       GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
                                       -1);
@@ -721,6 +729,24 @@ gtk_range_set_adjustment (GtkRange      *range,
 
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ADJUSTMENT]);
     }
+}
+
+static void
+update_accessible_range (GtkRange *range)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+  double upper = gtk_adjustment_get_upper (priv->adjustment);
+  double lower = gtk_adjustment_get_lower (priv->adjustment);
+  double page_size = gtk_adjustment_get_page_size (priv->adjustment);
+  double accessible_max = upper - page_size;
+
+  if (priv->restrict_to_fill_level)
+    accessible_max = MIN (accessible_max, priv->fill_level);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (range),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, accessible_max,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, lower,
+                                  -1);
 }
 
 static gboolean
@@ -1231,6 +1257,8 @@ gtk_range_set_restrict_to_fill_level (GtkRange *range,
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_RESTRICT_TO_FILL_LEVEL]);
 
       gtk_range_set_value (range, gtk_range_get_value (range));
+
+      update_accessible_range (range);
     }
 }
 
@@ -1292,7 +1320,10 @@ gtk_range_set_fill_level (GtkRange *range,
         gtk_widget_queue_allocate (GTK_WIDGET (range));
 
       if (priv->restrict_to_fill_level)
-        gtk_range_set_value (range, gtk_range_get_value (range));
+        {
+          gtk_range_set_value (range, gtk_range_get_value (range));
+          update_accessible_range (range);
+        }
     }
 }
 
@@ -2473,10 +2504,7 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
 
   gtk_widget_queue_allocate (priv->trough_widget);
 
-  gtk_accessible_update_property (GTK_ACCESSIBLE (range),
-                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, upper,
-                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, lower,
-                                  -1);
+  update_accessible_range (range);
 
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
