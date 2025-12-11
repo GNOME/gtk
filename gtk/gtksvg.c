@@ -12601,6 +12601,8 @@ typedef struct
   RenderOp op;
   GSList *op_stack;
   int depth;
+  Shape *ctx_shape;
+  GSList *ctx_shape_stack;
 } PaintContext;
 
 static void
@@ -12619,8 +12621,27 @@ pop_op (PaintContext *context)
   g_assert (tos != NULL);
 
   context->op = GPOINTER_TO_UINT (tos->data);
-
   context->op_stack = context->op_stack->next;
+  g_slist_free_1 (tos);
+}
+
+static void
+push_ctx_shape (PaintContext *context,
+                Shape        *shape)
+{
+  context->ctx_shape_stack = g_slist_prepend (context->ctx_shape_stack, context->ctx_shape);
+  context->ctx_shape = shape;
+}
+
+static void
+pop_ctx_shape (PaintContext *context)
+{
+  GSList *tos = context->ctx_shape_stack;
+
+  g_assert (tos != NULL);
+
+  context->ctx_shape = (Shape *) tos->data;
+  context->ctx_shape_stack = context->ctx_shape_stack->next;
   g_slist_free_1 (tos);
 }
 
@@ -13275,6 +13296,41 @@ shape_create_stroke (Shape        *shape,
   return stroke;
 }
 
+static const SvgPaint *
+get_context_paint (const SvgPaint *paint,
+                   GSList         *ctx_stack)
+{
+  switch (paint->kind)
+    {
+    case PAINT_NONE:
+        return NULL;
+    case PAINT_COLOR:
+    case PAINT_SERVER:
+    case PAINT_SYMBOLIC:
+      return paint;
+    case PAINT_CONTEXT_FILL:
+    case PAINT_CONTEXT_STROKE:
+      if (ctx_stack->data)
+        {
+          Shape *ctx_shape = ctx_stack->data;
+          SvgValue *ctx_value;
+
+          if (paint->kind == PAINT_CONTEXT_FILL)
+            ctx_value = ctx_shape->current[SHAPE_ATTR_FILL];
+          else
+            ctx_value = ctx_shape->current[SHAPE_ATTR_STROKE];
+
+          return get_context_paint ((const SvgPaint *) ctx_value,
+                                    ctx_stack->next);
+        }
+      else
+        return NULL;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static void
 fill_shape (Shape        *shape,
             GskPath      *path,
@@ -13282,36 +13338,58 @@ fill_shape (Shape        *shape,
 {
   SvgPaint *paint;
   graphene_rect_t bounds;
+  GskFillRule fill_rule;
+  double opacity;
 
   paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
-  if (paint->kind != PAINT_NONE && gsk_path_get_bounds (path, &bounds))
+
+  if (paint->kind == PAINT_NONE)
+    return;
+
+  if (!gsk_path_get_bounds (path, &bounds))
+    return;
+
+  fill_rule = svg_enum_get (shape->current[SHAPE_ATTR_FILL_RULE]);
+  opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
+
+retry:
+  switch (paint->kind)
     {
-      GskFillRule fill_rule;
-      double opacity;
+    case PAINT_NONE:
+      break;
+    case PAINT_COLOR:
+      {
+        GdkRGBA color = paint->color;
+        color.alpha *= opacity;
+        gtk_snapshot_append_fill (context->snapshot, path, fill_rule, &color);
+      }
+      break;
+    case PAINT_SERVER:
+      {
+        if (opacity < 1)
+          gtk_snapshot_push_opacity (context->snapshot, opacity);
 
-      fill_rule = svg_enum_get (shape->current[SHAPE_ATTR_FILL_RULE]);
-      opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
-      if (paint->kind == PAINT_COLOR)
-        {
-          GdkRGBA color = paint->color;
-          color.alpha *= opacity;
-          gtk_snapshot_append_fill (context->snapshot, path, fill_rule, &color);
-        }
-      else if (paint->kind == PAINT_SERVER)
-        {
-          if (opacity < 1)
-            gtk_snapshot_push_opacity (context->snapshot, opacity);
+        gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
+        paint_server (paint->server.shape, &bounds, context);
+        gtk_snapshot_pop (context->snapshot);
 
-          gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
-          paint_server (paint->server.shape, &bounds, context);
+        if (opacity < 1)
           gtk_snapshot_pop (context->snapshot);
-
-          if (opacity < 1)
-            gtk_snapshot_pop (context->snapshot);
-        }
-      else
-        g_assert_not_reached ();
-   }
+      }
+      break;
+    case PAINT_CONTEXT_FILL:
+    case PAINT_CONTEXT_STROKE:
+      {
+        GSList ctx_stack = { context->ctx_shape, context->ctx_shape_stack };
+        paint = (SvgPaint *) get_context_paint (paint, &ctx_stack);
+        if (paint)
+          goto retry;
+      }
+      break;
+    case PAINT_SYMBOLIC:
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static void
@@ -13320,42 +13398,61 @@ stroke_shape (Shape        *shape,
               PaintContext *context)
 {
   SvgPaint *paint;
+  GskStroke *stroke;
+  graphene_rect_t bounds;
+  double opacity;
 
   paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
-  if (paint->kind != PAINT_NONE)
+
+  if (paint->kind == PAINT_NONE)
+    return;
+
+  stroke = shape_create_stroke (shape, context);
+  if (!gsk_path_get_stroke_bounds (path, stroke, &bounds))
+    return;
+
+  opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
+
+retry:
+  switch (paint->kind)
     {
-      GskStroke *stroke;
-      graphene_rect_t bounds;
+    case PAINT_NONE:
+      break;
+    case PAINT_COLOR:
+      {
+        GdkRGBA color = paint->color;
+        color.alpha *= opacity;
+        gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
+      }
+      break;
+    case PAINT_SERVER:
+      {
+        if (opacity < 1)
+          gtk_snapshot_push_opacity (context->snapshot, opacity);
 
-      stroke = shape_create_stroke (shape, context);
-      if (gsk_path_get_stroke_bounds (path, stroke, &bounds))
-        {
-          double opacity;
+        gtk_snapshot_push_stroke (context->snapshot, path, stroke);
+        paint_server (paint->server.shape, &bounds, context);
+        gtk_snapshot_pop (context->snapshot);
 
-          opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
-          if (paint->kind == PAINT_COLOR)
-            {
-              GdkRGBA color = paint->color;
-              color.alpha *= opacity;
-              gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
-            }
-          else if (paint->kind == PAINT_SERVER)
-            {
-              if (opacity < 1)
-                gtk_snapshot_push_opacity (context->snapshot, opacity);
-
-              gtk_snapshot_push_stroke (context->snapshot, path, stroke);
-              paint_server (paint->server.shape, &bounds, context);
-              gtk_snapshot_pop (context->snapshot);
-
-              if (opacity < 1)
-                gtk_snapshot_pop (context->snapshot);
-            }
-          else
-            g_assert_not_reached ();
-        }
-      gsk_stroke_free (stroke);
+        if (opacity < 1)
+          gtk_snapshot_pop (context->snapshot);
+      }
+      break;
+    case PAINT_CONTEXT_FILL:
+    case PAINT_CONTEXT_STROKE:
+      {
+        GSList ctx_stack = { context->ctx_shape, context->ctx_shape_stack };
+        paint = (SvgPaint *) get_context_paint (paint, &ctx_stack);
+        if (paint)
+          goto retry;
+      }
+      break;
+    case PAINT_SYMBOLIC:
+    default:
+      g_assert_not_reached ();
     }
+
+  gsk_stroke_free (stroke);
 }
 
 static void
@@ -13387,7 +13484,9 @@ paint_shape (Shape        *shape,
           use_context.n_colors = context->n_colors;
           compute_current_values_for_shape (use_shape, &use_context);
 
+          push_ctx_shape (context, shape);
           render_shape (use_shape, context);
+          pop_ctx_shape (context);
         }
       return;
     }
@@ -13565,6 +13664,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.weight = self->weight >= 1 ? self->weight : weight;
   paint_context.op = RENDERING;
   paint_context.op_stack = NULL;
+  paint_context.ctx_shape = NULL;
+  paint_context.ctx_shape_stack = NULL;
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
 
