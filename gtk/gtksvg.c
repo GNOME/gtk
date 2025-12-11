@@ -10194,14 +10194,20 @@ parse_shape_attrs (Shape                *shape,
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MINWIDTH))
         {
           SvgValue *v;
-          v = svg_number_new (0.25 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          if (shape->base[SHAPE_ATTR_STROKE_WIDTH]->class == &SVG_NUMBER_CLASS)
+            v = svg_number_new (0.25 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          else
+            v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, v);
           svg_value_unref (v);
         }
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MAXWIDTH))
         {
           SvgValue *v;
-          v = svg_number_new (1.5 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          if (shape->base[SHAPE_ATTR_STROKE_WIDTH]->class == &SVG_NUMBER_CLASS)
+            v = svg_number_new (1.5 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          else
+            v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, v);
           svg_value_unref (v);
         }
