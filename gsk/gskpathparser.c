@@ -147,7 +147,7 @@ static gboolean
 parse_command (const char **p,
                char        *cmd)
 {
-  char *s;
+  const char *s;
   const char *allowed;
 
   if (*cmd == 'X')
