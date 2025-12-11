@@ -295,6 +295,10 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_NOT_ENOUGH_SPACE_KHR:
       return "The application did not provide enough space to return all the required data. (VK_ERROR_NOT_ENOUGH_SPACE_KHR)";
 #endif
+#if VK_HEADER_VERSION >= 335
+    case VK_ERROR_PRESENT_TIMING_QUEUE_FULL_EXT:
+      return "The swapchain's internal timing queue is full. (VK_ERROR_PRESENT_TIMING_QUEUE_FULL_EXT)";
+#endif
 
     case VK_RESULT_MAX_ENUM:
     default:
