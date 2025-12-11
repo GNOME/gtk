@@ -1235,6 +1235,7 @@ svg_keyword_print (const SvgValue *value,
                    GString        *string)
 {
   const SvgKeyword *k = (const SvgKeyword *) value;
+
   switch (k->keyword)
     {
     case SVG_INHERIT:
@@ -1261,6 +1262,7 @@ static SvgValue *
 svg_inherit_new (void)
 {
   static SvgKeyword inherit = { { &SVG_KEYWORD_CLASS, 1 }, SVG_INHERIT };
+
   return svg_value_ref ((SvgValue *) &inherit);
 }
 
@@ -1268,6 +1270,7 @@ static SvgValue *
 svg_initial_new (void)
 {
   static SvgKeyword initial = { { &SVG_KEYWORD_CLASS, 1 }, SVG_INITIAL };
+
   return svg_value_ref ((SvgValue *) &initial);
 }
 
@@ -1451,6 +1454,9 @@ svg_number_get (const SvgValue *value,
                 double          one_hundred_percent)
 {
   const SvgNumber *n = (const SvgNumber *)value;
+
+  g_assert (value->class == &SVG_NUMBER_CLASS);
+
   if (n->dim == SVG_DIMENSION_PERCENTAGE)
     return n->value / 100 * one_hundred_percent;
   else
@@ -1534,6 +1540,8 @@ static SvgEnum fill_rule_values[] = {
 SvgValue *
 svg_fill_rule_new (GskFillRule value)
 {
+  g_assert (value < G_N_ELEMENTS (fill_rule_values));
+
   return svg_value_ref ((SvgValue *) &fill_rule_values[value]);
 }
 
@@ -1602,6 +1610,8 @@ static SvgEnum line_cap_values[] = {
 SvgValue *
 svg_linecap_new (GskLineCap value)
 {
+  g_assert (value < G_N_ELEMENTS (line_cap_values));
+
   return svg_value_ref ((SvgValue *) &line_cap_values[value]);
 }
 
@@ -1634,6 +1644,8 @@ static SvgEnum line_join_values[] = {
 SvgValue *
 svg_linejoin_new (GskLineJoin value)
 {
+  g_assert (value < G_N_ELEMENTS (line_join_values));
+
   return svg_value_ref ((SvgValue *) &line_join_values[value]);
 }
 
@@ -1665,6 +1677,8 @@ static SvgEnum visibility_values[] = {
 static SvgValue *
 svg_visibility_new (Visibility value)
 {
+  g_assert (value < G_N_ELEMENTS (visibility_values));
+
   return svg_value_ref ((SvgValue *) &visibility_values[value]);
 }
 
@@ -1697,7 +1711,9 @@ static SvgEnum spread_method_values[] = {
 static SvgValue *
 svg_spread_method_new (GskRepeat value)
 {
-  return svg_value_ref ((SvgValue *) &visibility_values[value]);
+  g_assert (value < G_N_ELEMENTS (spread_method_values));
+
+  return svg_value_ref ((SvgValue *) &spread_method_values[value]);
 }
 
 static SvgValue *
@@ -1734,6 +1750,8 @@ static SvgEnum coord_units_values[] = {
 static SvgValue *
 svg_coord_units_new (CoordUnits value)
 {
+  g_assert (value < G_N_ELEMENTS (coord_units_values));
+
   return svg_value_ref ((SvgValue *) &coord_units_values[value]);
 }
 
@@ -1765,6 +1783,8 @@ static SvgEnum paint_order_values[] = {
 SvgValue *
 svg_paint_order_new (PaintOrder value)
 {
+  g_assert (value < G_N_ELEMENTS (paint_order_values));
+
   return svg_value_ref ((SvgValue *) &paint_order_values[value]);
 }
 
@@ -1811,9 +1831,11 @@ static SvgEnum blend_mode_values[] = {
 };
 
 static SvgValue *
-svg_blend_mode_new (GskBlendMode mode)
+svg_blend_mode_new (GskBlendMode value)
 {
-  return svg_value_ref ((SvgValue *) &blend_mode_values[mode]);
+  g_assert (value < G_N_ELEMENTS (blend_mode_values));
+
+  return svg_value_ref ((SvgValue *) &blend_mode_values[value]);
 }
 
 static SvgValue *
@@ -1847,9 +1869,11 @@ static SvgEnum isolation_values[] = {
 };
 
 static SvgValue *
-svg_isolation_new (Isolation mode)
+svg_isolation_new (Isolation value)
 {
-  return svg_value_ref ((SvgValue *) &isolation_values[mode]);
+  g_assert (value < G_N_ELEMENTS (isolation_values));
+
+  return svg_value_ref ((SvgValue *) &isolation_values[value]);
 }
 
 static SvgValue *
@@ -3012,6 +3036,8 @@ svg_paint_print_gpa (const SvgValue *value,
     "foreground", "error", "warning", "success", "accent",
   };
 
+  g_assert (value->class == &SVG_PAINT_CLASS);
+
   switch (paint->kind)
     {
     case PAINT_NONE:
@@ -3041,6 +3067,8 @@ svg_paint_resolve (SvgValue      *value,
                    size_t         n_colors)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
+
+  g_assert (value->class == &SVG_PAINT_CLASS);
 
   if (paint->kind == PAINT_SYMBOLIC)
     {
@@ -3722,6 +3750,8 @@ svg_dash_array_resolve (const SvgValue        *value,
   SvgDashArray *a;
   double size;
 
+  g_assert (value->class == &SVG_DASH_ARRAY_CLASS);
+
   if (orig->kind == DASH_ARRAY_NONE)
     return svg_value_ref ((SvgValue *) orig);
 
@@ -3811,6 +3841,7 @@ static SvgValue *
 svg_path_new_none (void)
 {
   static SvgPath none = { { &SVG_PATH_CLASS, 1 }, NULL };
+
   return svg_value_ref ((SvgValue *) &none);
 }
 
@@ -3848,6 +3879,8 @@ static GskPath *
 svg_path_get (const SvgValue *value)
 {
   const SvgPath *p = (const SvgPath *) value;
+
+  g_assert (value->class == &SVG_PATH_CLASS);
 
   return p->path;
 }
@@ -4188,6 +4221,8 @@ svg_points_resolve (const SvgValue        *value,
   SvgPoints *orig = (SvgPoints *) value;
   SvgPoints *p;
   double size;
+
+  g_assert (value->class == &SVG_POINTS_CLASS);
 
   if (orig->n_values == 0)
     return svg_value_ref ((SvgValue *) orig);
@@ -10159,14 +10194,20 @@ parse_shape_attrs (Shape                *shape,
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MINWIDTH))
         {
           SvgValue *v;
-          v = svg_number_new (0.25 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          if (shape->base[SHAPE_ATTR_STROKE_WIDTH]->class == &SVG_NUMBER_CLASS)
+            v = svg_number_new (0.25 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          else
+            v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, v);
           svg_value_unref (v);
         }
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MAXWIDTH))
         {
           SvgValue *v;
-          v = svg_number_new (1.5 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          if (shape->base[SHAPE_ATTR_STROKE_WIDTH]->class == &SVG_NUMBER_CLASS)
+            v = svg_number_new (1.5 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
+          else
+            v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, v);
           svg_value_unref (v);
         }
