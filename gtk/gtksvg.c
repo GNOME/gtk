@@ -2833,6 +2833,8 @@ svg_paint_equal (const SvgValue *value0,
   switch (paint0->kind)
     {
     case PAINT_NONE:
+    case PAINT_CONTEXT_FILL:
+    case PAINT_CONTEXT_STROKE:
       return TRUE;
     case PAINT_SYMBOLIC:
       return paint0->symbolic == paint1->symbolic;
@@ -2880,12 +2882,24 @@ parse_symbolic_color (const char       *value,
   return TRUE;
 }
 
+static SvgValue *
+svg_paint_new_simple (PaintKind kind)
+{
+  static SvgPaint paint_values[] = {
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_NONE },
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_CONTEXT_FILL },
+    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_CONTEXT_STROKE },
+  };
+
+  g_assert (kind < G_N_ELEMENTS (paint_values));
+
+  return svg_value_ref ((SvgValue *) &paint_values[kind]);
+}
+
 SvgValue *
 svg_paint_new_none (void)
 {
-  static SvgPaint none = { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_NONE };
-
-  return svg_value_ref ((SvgValue *) &none);
+  return svg_paint_new_simple (PAINT_NONE);
 }
 
 SvgValue *
@@ -2951,7 +2965,15 @@ svg_paint_parse (const char *value)
 
   if (strcmp (value, "none") == 0)
     {
-      return svg_paint_new_none ();
+      return svg_paint_new_simple (PAINT_NONE);
+    }
+  else if (strcmp (value, "context-fill") == 0)
+    {
+      return svg_paint_new_simple (PAINT_CONTEXT_FILL);
+    }
+  else if (strcmp (value, "context-stroke") == 0)
+    {
+      return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
     }
   else if (gdk_rgba_parse (&color, value))
     {
@@ -2996,6 +3018,10 @@ svg_paint_parse_gpa (const char *value)
 
   if (strcmp (value, "none") == 0)
     return svg_paint_new_none ();
+  else if (strcmp (value, "context-fill") == 0)
+    return svg_paint_new_simple (PAINT_CONTEXT_FILL);
+  else if (strcmp (value, "context-stroke") == 0)
+    return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
   else if (parse_symbolic_color (value, &symbolic))
     return svg_paint_new_symbolic (symbolic);
   else if (gdk_rgba_parse (&rgba, value))
@@ -3024,6 +3050,14 @@ svg_paint_print (const SvgValue *value,
     {
     case PAINT_NONE:
       g_string_append (s, "none");
+      break;
+
+    case PAINT_CONTEXT_FILL:
+      g_string_append (s, "context-fill");
+      break;
+
+    case PAINT_CONTEXT_STROKE:
+      g_string_append (s, "context-stroke");
       break;
 
     case PAINT_COLOR:
@@ -3060,6 +3094,14 @@ svg_paint_print_gpa (const SvgValue *value,
     {
     case PAINT_NONE:
       g_string_append (s, "none");
+      break;
+
+    case PAINT_CONTEXT_FILL:
+      g_string_append (s, "context-fill");
+      break;
+
+    case PAINT_CONTEXT_STROKE:
+      g_string_append (s, "context-stroke");
       break;
 
     case PAINT_COLOR:
@@ -14725,6 +14767,8 @@ svg_shape_attr_get_paint (Shape            *shape,
   switch (paint->kind)
     {
     case PAINT_NONE:
+    case PAINT_CONTEXT_FILL:
+    case PAINT_CONTEXT_STROKE:
     case PAINT_SERVER:
       break;
     case PAINT_SYMBOLIC:
