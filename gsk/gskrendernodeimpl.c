@@ -405,7 +405,8 @@ gsk_linear_gradient_node_diff (GskRenderNode *node1,
   GskLinearGradientNode *self1 = (GskLinearGradientNode *) node1;
   GskLinearGradientNode *self2 = (GskLinearGradientNode *) node2;
 
-  if (graphene_point_equal (&self1->start, &self2->start) &&
+  if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
+      graphene_point_equal (&self1->start, &self2->start) &&
       graphene_point_equal (&self1->end, &self2->end) &&
       gsk_gradient_equal (&self1->gradient, &self2->gradient))
     return;
@@ -813,7 +814,8 @@ gsk_radial_gradient_node_diff (GskRenderNode *node1,
   GskRadialGradientNode *self1 = (GskRadialGradientNode *) node1;
   GskRadialGradientNode *self2 = (GskRadialGradientNode *) node2;
 
-  if (!graphene_point_equal (&self1->start_center, &self2->start_center) ||
+  if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      !graphene_point_equal (&self1->start_center, &self2->start_center) ||
       self1->start_radius != self2->start_radius ||
       !graphene_point_equal (&self1->end_center, &self2->end_center) ||
       self1->end_radius != self2->end_radius ||
@@ -1501,7 +1503,8 @@ gsk_conic_gradient_node_diff (GskRenderNode *node1,
   GskConicGradientNode *self1 = (GskConicGradientNode *) node1;
   GskConicGradientNode *self2 = (GskConicGradientNode *) node2;
 
-  if (!graphene_point_equal (&self1->center, &self2->center) ||
+  if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      !graphene_point_equal (&self1->center, &self2->center) ||
       self1->rotation != self2->rotation ||
       !gsk_gradient_equal (&self1->gradient, &self2->gradient))
     {
