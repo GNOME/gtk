@@ -27,6 +27,12 @@
 
 #include "gdk/gdkcairoprivate.h"
 
+#if 0
+#define DEBUG g_print
+#else
+#define DEBUG(...)
+#endif
+
 /**
  * GskDisplacementNode:
  *
@@ -64,12 +70,187 @@ gsk_displacement_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+static float
+get_channel (guint32 pixel,
+             guint   channel)
+{
+  float alpha = (pixel >> 24) / 255.0;
+  float result;
+
+  if (channel == 3)
+    return alpha;
+  
+  if (alpha == 0.0f)
+    return 0.0f;
+
+  result = (pixel >> 8 * (2 - channel)) & 0xFF;
+  result = result / 255.0f;
+  /* unpremultiply */
+  result /= alpha;
+  return result;
+}
+
+static guint32
+sample_image (guchar *image,
+              gsize   width,
+              gsize   height,
+              gsize   stride,
+              float   x,
+              float   y)
+{
+  int ix, iy;
+
+  ix = round (x);
+  iy = round (y);
+  if (ix != CLAMP (ix, 0, width - 1))
+    DEBUG ("x = [0, %d, %zu]\n", ix, width);
+  if (iy != CLAMP (iy, 0, height - 1))
+    DEBUG ("y = [0, %d, %zu]\n", iy, height);
+  ix = CLAMP (ix, 0, width - 1);
+  iy = CLAMP (iy, 0, height - 1);
+
+  return *(guint32 *) (image + iy * stride + ix * sizeof (guint32));
+}
+
+static void
+cairo_surface_get_device_matrix (cairo_surface_t *surface,
+                                 cairo_matrix_t  *matrix)
+{
+  cairo_surface_get_device_scale (surface, &matrix->xx, &matrix->yy);
+  cairo_surface_get_device_offset (surface, &matrix->x0, &matrix->y0);
+  matrix->yx = matrix->xy = 0;
+}
+
+static void
+get_matrix (cairo_pattern_t *pattern,
+            cairo_surface_t *surface,
+            cairo_matrix_t  *out_matrix)
+{
+  cairo_matrix_t pattern_matrix, surface_matrix;
+
+  cairo_pattern_get_matrix (pattern, &pattern_matrix);
+  cairo_surface_get_device_matrix (surface, &surface_matrix);
+
+  DEBUG ("pattern: %g %g %g\n         %g %g %g\n",
+           pattern_matrix.xx, pattern_matrix.yx, pattern_matrix.x0,
+           pattern_matrix.yx, pattern_matrix.yy, pattern_matrix.y0);
+  DEBUG ("surface: %g %g %g\n         %g %g %g\n",
+           surface_matrix.xx, surface_matrix.yx, surface_matrix.x0,
+           surface_matrix.yx, surface_matrix.yy, surface_matrix.y0);
+
+  cairo_matrix_multiply (out_matrix, &pattern_matrix, &surface_matrix);
+}
+
+static void
+apply_displacement (GskDisplacementNode *self,
+                    cairo_surface_t     *image_surface,
+                    cairo_pattern_t     *displacement_pattern)
+{
+  cairo_surface_t *d_surface, *d_image, *i_image;
+  cairo_matrix_t d_matrix, i_matrix;
+  guchar *d_data, *i_data;
+  gsize x, y, d_width, d_height, d_stride, i_width, i_height, i_stride;
+  double s, t;
+  float h, v;
+  guint32* pixel_data;
+
+  cairo_pattern_get_surface (displacement_pattern, &d_surface);
+  d_image = cairo_surface_map_to_image (d_surface, NULL);
+  g_assert (cairo_image_surface_get_format (d_image) == CAIRO_FORMAT_ARGB32);
+  get_matrix (displacement_pattern, d_surface, &d_matrix);
+  d_data = cairo_image_surface_get_data (d_image);
+  d_width = cairo_image_surface_get_width (d_image);
+  d_height = cairo_image_surface_get_height (d_image);
+  d_stride = cairo_image_surface_get_stride (d_image);
+  DEBUG ("displacement image: %zu %zu\n", d_width, d_height);
+
+  i_image = cairo_surface_map_to_image (image_surface, NULL);
+  g_assert (cairo_image_surface_get_format (i_image) == CAIRO_FORMAT_ARGB32);
+  cairo_surface_get_device_matrix (image_surface, &i_matrix);
+  DEBUG ("image:   %g %g %g\n         %g %g %g\n",
+           i_matrix.xx, i_matrix.yx, i_matrix.x0,
+           i_matrix.yx, i_matrix.yy, i_matrix.y0);
+  i_data = cairo_image_surface_get_data (i_image);
+  i_width = cairo_image_surface_get_width (i_image);
+  i_height = cairo_image_surface_get_height (i_image);
+  i_stride = cairo_image_surface_get_stride (i_image);
+  DEBUG ("child image: %zu %zu\n", i_width, i_height);
+
+  cairo_matrix_invert (&d_matrix);
+
+  for (y = 0; y < d_height; y++)
+    {
+      pixel_data = (guint32 *) d_data;
+      for (x = 0; x < d_width; x++)
+        {
+          s = x;
+          t = y;
+          DEBUG ("pixel       : %08X\n", pixel_data[x]);
+          DEBUG ("coordinate  : %zu %zu\n", x, y);
+          cairo_matrix_transform_point (&d_matrix, &s, &t);
+          DEBUG ("node space  : %g %g\n", s, t);
+          h = get_channel (pixel_data[x], self->channels[0]);
+          v = get_channel (pixel_data[x], self->channels[1]);
+          DEBUG ("displacement: %g %g\n", h, v);
+          h = CLAMP (self->scale.width * (h - self->offset.x), -self->max.width, self->max.width);
+          v = CLAMP (self->scale.height * (v - self->offset.y), -self->max.height, self->max.height);
+          DEBUG ("transformed : %g %g\n", h, v);
+          s += h;
+          t += v;
+          DEBUG ("coordinate  : %g %g\n", s, t);
+          cairo_matrix_transform_point (&i_matrix, &s, &t);
+          DEBUG ("final       : %g %g\n", s, t);
+
+          pixel_data[x] = sample_image (i_data, i_width, i_height, i_stride, s, t);
+          DEBUG ("result      : %08X\n", pixel_data[x]);
+        }
+      d_data += d_stride;
+    }
+
+  cairo_surface_mark_dirty (d_image);
+  cairo_surface_unmap_image (d_surface, d_image);
+  /* https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/487 */
+  cairo_surface_mark_dirty (d_surface);
+  cairo_surface_write_to_png (d_surface, "foo.png");
+  cairo_surface_unmap_image (image_surface, i_image);
+}
+
 static void
 gsk_displacement_node_draw (GskRenderNode *node,
                             cairo_t       *cr,
                             GskCairoData  *data)
 {
-  /* FIXME */
+  GskDisplacementNode *self = (GskDisplacementNode *) node;
+  cairo_pattern_t *displacement;
+  cairo_surface_t *child_surface;
+  cairo_t *child_cr;
+  graphene_rect_t child_bounds;
+
+  /* clip so the push_group() creates a smaller surface */
+  gdk_cairo_rect (cr, &node->bounds);
+  cairo_clip (cr);
+
+  if (gdk_cairo_is_all_clipped (cr))
+    return;
+
+  cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
+  gsk_render_node_draw_full (self->displacement, cr, data);
+  displacement = cairo_pop_group (cr);
+
+  child_bounds = node->bounds;
+  graphene_rect_inset (&child_bounds, - self->max.width, - self->max.height);
+  child_surface = gdk_cairo_create_similar_surface (cr, CAIRO_CONTENT_COLOR_ALPHA, &child_bounds);
+  child_cr = cairo_create (child_surface);
+  gsk_render_node_draw_full (self->child, child_cr, data);
+  cairo_destroy (child_cr);
+
+  apply_displacement (self, child_surface, displacement);
+
+  cairo_set_source (cr, displacement);
+  cairo_paint (cr);
+
+  cairo_surface_destroy (child_surface);
+  cairo_pattern_destroy (displacement);
 }
 
 static void
