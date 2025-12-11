@@ -72,7 +72,7 @@ void            gtk_snapshot_push_opacity               (GtkSnapshot            
                                                          double                  opacity);
 GDK_AVAILABLE_IN_4_22
 void            gtk_snapshot_push_isolation             (GtkSnapshot            *snapshot,
-                                                         GskIsolation            allowed);
+                                                         GskIsolation            features);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_blur                  (GtkSnapshot            *snapshot,
                                                          double                  radius);
