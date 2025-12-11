@@ -1,0 +1,54 @@
+isolation {
+  child: container {
+    transform {
+      transform: translate(20, 10);
+      child: container {
+        fill {
+          child: color {
+            bounds: -10 -10 20 20;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
+          fill-rule: winding;
+        }
+        stroke {
+          child: color {
+            bounds: -11 -11 21.5 22;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
+          line-width: 1;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+    }
+    transform {
+      transform: translate(10, 20);
+      child: container {
+        fill {
+          child: color {
+            bounds: -10 -10 20 20;
+            color: rgb(0,0,255);
+          }
+          path: "\
+M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
+          fill-rule: winding;
+        }
+        stroke {
+          child: color {
+            bounds: -11 -11 21.5 22;
+            color: rgb(0,0,255);
+          }
+          path: "\
+M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
+          line-width: 1;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+    }
+  }
+}

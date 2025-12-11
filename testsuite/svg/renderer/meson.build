@@ -65,6 +65,7 @@ test_data = [
   'spec-rect.svg',
   'style.svg',
   'use.svg',
+  'use2.svg',
   'viewbox.svg'
 ]
 

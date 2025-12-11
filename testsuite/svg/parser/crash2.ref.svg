@@ -14,6 +14,7 @@
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
+            paint-order='markers fill stroke'
             x='-247.125'
             y='-54.6681'
             width='5.02925'

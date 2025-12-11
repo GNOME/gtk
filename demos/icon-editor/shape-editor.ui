@@ -1453,8 +1453,12 @@
             <property name="model">
               <object class="GtkStringList">
                 <items>
-                  <item>Fill, Stroke</item>
-                  <item>Stroke, Fill</item>
+                  <item>Fill, Stroke, Markers</item>
+                  <item>Fill, Markers, Stroke</item>
+                  <item>Stroke, Fill, Markers</item>
+                  <item>Stroke, Markers, Fill</item>
+                  <item>Markers, Fill, Stroke</item>
+                  <item>Markers, Stroke, Fill</item>
                 </items>
               </object>
             </property>

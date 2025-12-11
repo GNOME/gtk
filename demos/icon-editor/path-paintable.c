@@ -773,7 +773,7 @@ path_paintable_get_compatibility (PathPaintable *self)
         compat = MAX (compat, GTK_4_22);
 
       paint_order = svg_shape_attr_get_enum (shape, SHAPE_ATTR_PAINT_ORDER);
-      if (paint_order != PAINT_ORDER_NORMAL)
+      if (paint_order != PAINT_ORDER_FILL_STROKE_MARKERS)
         compat = MAX (compat, GTK_4_22);
 
       opacity = svg_shape_attr_get_number (shape, SHAPE_ATTR_OPACITY, NULL);
