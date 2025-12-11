@@ -75,14 +75,12 @@
  *
  * The paintable does not support text or images, only shapes and paths.
  *
- * In `<defs>`, only `<clipPath>`, `<mask>`, gradients, shapes and
- * patterns are supported, not `<filter>` or other things.
- *
  * Gradient templating is not implemented.
  *
  * The support for filters is limited to filter functions minus
  * `drop-shadow()` plus a custom `alpha-level()` function, which
- * implements one particular case of feComponentTransfer.
+ * implements one particular case of feComponentTransfer. `<filter>`
+ * is not supported.
  *
  * The `transform-origin` and `transform-box` attributes are not supported.
  *
@@ -92,7 +90,7 @@
  * In animation elements, the parsing of `begin` and `end` attributes
  * is limited, and the `by`, `min` and `max` attributes are not supported.
  *
- * Lastly, there is no CSS support, and no interactivity.
+ * Lastly, there is only minimal CSS support, and no interactivity.
  *
  *
  * ## SVG Extensions
