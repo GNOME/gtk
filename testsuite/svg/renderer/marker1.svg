@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     viewBox="0 0 300 200" >
+
+  <marker id="marker1"
+        orient="auto"
+        markerUnits='userSpaceOnUse'
+        markerWidth='5' markerHeight='5'>
+    <circle cx='0' cy='0' r='5' fill='context-stroke'/>
+  </marker>
+
+  <rect
+        marker='url(#marker1)'
+        x="150" y="100" width="125" height="75"
+        paint-order='markers fill stroke'
+        stroke='blue' fill='none' />
+</svg>

@@ -1,0 +1,75 @@
+isolation {
+  child: container {
+    transform {
+      transform: translate(150, 100);
+      child: fill {
+        child: color {
+          bounds: -5 -5 10 10;
+          color: rgb(0,0,255);
+        }
+        path: "\
+M 5 0 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(275, 100) rotate(45);
+      child: fill {
+        child: color {
+          bounds: -5 -5 10 10;
+          color: rgb(0,0,255);
+        }
+        path: "\
+M 5 0 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(275, 175) rotate(135);
+      child: fill {
+        child: color {
+          bounds: -5 -5 10 10;
+          color: rgb(0,0,255);
+        }
+        path: "\
+M 5 0 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(150, 175) rotate(45);
+      child: fill {
+        child: color {
+          bounds: -5 -5 10 10;
+          color: rgb(0,0,255);
+        }
+        path: "\
+M 5 0 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(150, 100) rotate(270);
+      child: fill {
+        child: color {
+          bounds: -5 -5 10 10;
+          color: rgb(0,0,255);
+        }
+        path: "\
+M 5 0 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    stroke {
+      child: color {
+        bounds: 149.5 99.5 126 76;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 150 100 h 125 v 75 h -125 z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}

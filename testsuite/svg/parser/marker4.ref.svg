@@ -1,0 +1,31 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='300'
+        height='200'
+        viewBox='0 0 300 200'>
+  <marker
+          id='m1'
+          stroke='rgb(0,0,255)'
+          markerWidth='10'
+          markerHeight='10'
+          refX='0'
+          refY='5'
+          markerUnits='userSpaceOnUse'
+          orient='auto-start-reverse'>
+    <polygon
+            points='0 0 10 5 0 10'>
+    </polygon>
+  </marker>
+  <line
+          fill='none'
+          stroke='rgb(0,0,255)'
+          x1='50'
+          y1='50'
+          x2='200'
+          y2='150'
+          marker-start='url(#m1)'
+          marker-end='url(#m1)'
+          class='transparent-fill'>
+  </line>
+</svg>
