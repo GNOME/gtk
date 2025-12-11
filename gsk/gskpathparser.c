@@ -117,9 +117,9 @@ parse_nonnegative_number (const char **p,
  * final NUL byte in this case, and we walk off
  * the end of the string. Oops
  */
-static inline char *
+static inline const char *
 _strchr (const char *str,
-           int         c)
+         int         c)
 {
   if (c == 0)
     return NULL;

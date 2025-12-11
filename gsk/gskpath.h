@@ -134,6 +134,12 @@ GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_end_point                  (GskPath                *self,
                                                                  GskPathPoint           *result);
 
+GDK_AVAILABLE_IN_4_22
+gboolean                gsk_path_get_next                       (GskPath                *self,
+                                                                 GskPathPoint           *point);
+GDK_AVAILABLE_IN_4_22
+gboolean                gsk_path_get_previous                   (GskPath                *self,
+                                                                 GskPathPoint           *point);
 GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_closest_point              (GskPath                *self,
                                                                  const graphene_point_t *point,

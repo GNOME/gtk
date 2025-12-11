@@ -597,6 +597,98 @@ gsk_path_get_end_point (GskPath      *self,
 }
 
 /**
+ * gsk_path_get_next:
+ * @self: a path
+ * @point: (inout): the current point
+ *
+ * Moves @point to the next vertex.
+ *
+ * An empty path has no points, so false
+ * is returned in this case.
+ *
+ * Returns: true if @point was set
+ *
+ * Since: 4.22
+ */
+gboolean
+gsk_path_get_next (GskPath      *self,
+                   GskPathPoint *point)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (point != NULL, FALSE);
+
+  if (self->n_contours == 0)
+    return FALSE;
+
+  if (point->t < 1)
+    {
+      point->t = 1;
+    }
+  else if (point->idx < gsk_contour_get_n_ops (self->contours[point->contour]) - 1)
+    {
+      point->idx++;
+    }
+  else if (point->contour < self->n_contours - 1)
+    {
+      point->contour++;
+      point->idx = 0;
+      point->t = 0;
+    }
+  else
+    {
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+/**
+ * gsk_path_get_previous:
+ * @self: a path
+ * @point: (inout): the current point
+ *
+ * Moves @point to the previous vertex.
+ *
+ * An empty path has no points, so false
+ * is returned in this case.
+ *
+ * Returns: true if @point was set
+ *
+ * Since: 4.22
+ */
+gboolean
+gsk_path_get_previous (GskPath      *self,
+                       GskPathPoint *point)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (point != NULL, FALSE);
+
+  if (self->n_contours == 0)
+    return FALSE;
+
+  if (point->t > 0)
+    {
+      point->t = 0;
+    }
+  else if (point->idx > 0)
+    {
+      point->idx--;
+    }
+  else if (point->contour > 0)
+    {
+      point->contour--;
+      point->idx = gsk_contour_get_n_ops (self->contours[point->contour]) - 1;
+      point->t = 1;
+    }
+  else
+    {
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+/**
  * gsk_path_get_closest_point:
  * @self: a path
  * @point: the point
