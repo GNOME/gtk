@@ -23,6 +23,7 @@ tests = [
   { 'name': 'levelbar' },
   { 'name': 'passwordentry' },
   { 'name': 'progressbar' },
+  { 'name': 'scale' },
   { 'name': 'scrollbar' },
   { 'name': 'searchentry' },
   { 'name': 'separator' },

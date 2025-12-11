@@ -306,7 +306,8 @@ gtk_scrollbar_adjustment_changed (GtkAdjustment *adjustment,
   GtkScrollbar *self = data;
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (self),
-                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment) -
+                                                                     gtk_adjustment_get_page_size (adjustment),
                                   GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
                                   -1);
 }
@@ -359,7 +360,8 @@ gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
                         G_CALLBACK (gtk_scrollbar_adjustment_value_changed), self);
 
       gtk_accessible_update_property (GTK_ACCESSIBLE (self),
-                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment),
+                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment) -
+                                                                         gtk_adjustment_get_page_size (adjustment),
                                       GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, gtk_adjustment_get_lower (adjustment),
                                       GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, gtk_adjustment_get_value (adjustment),
                                       -1);
