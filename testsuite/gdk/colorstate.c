@@ -3,8 +3,6 @@
 #include <gdk/gdk.h>
 #include <math.h>
 
-#ifdef HAVE_DRM_FOURCC_H
-#endif
 #include "udmabuf.h"
 
 typedef enum {

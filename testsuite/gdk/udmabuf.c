@@ -2,7 +2,7 @@
 
 #include "udmabuf.h"
 
-#ifdef HAVE_DMABUF
+#if defined(HAVE_DMABUF) && defined(HAVE_UDMABUF)
 
 #include <inttypes.h>
 #include <fcntl.h>
