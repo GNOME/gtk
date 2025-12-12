@@ -411,7 +411,7 @@ notify_cursor_location (GtkIMContextWayland *context)
 
   rect = context->cursor_rect;
   if (!gtk_widget_compute_point (context->widget,
-                                 GTK_WIDGET (gtk_widget_get_root (context->widget)),
+                                 GTK_WIDGET (gtk_widget_get_native (context->widget)),
                                  &GRAPHENE_POINT_INIT (rect.x, rect.y),
                                  &p))
     graphene_point_init (&p, rect.x, rect.y);
