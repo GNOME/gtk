@@ -62,6 +62,7 @@ struct _GtkSvg
   double width, height;
   SvgValue *view_box;
   SvgValue *content_fit;
+  SvgValue *overflow;
   graphene_rect_t bounds;
   graphene_rect_t viewport;
 
@@ -117,6 +118,7 @@ typedef enum
   SHAPE_ATTR_VISIBILITY,
   SHAPE_ATTR_TRANSFORM,
   SHAPE_ATTR_OPACITY,
+  SHAPE_ATTR_OVERFLOW,
   SHAPE_ATTR_FILTER,
   SHAPE_ATTR_CLIP_PATH,
   SHAPE_ATTR_CLIP_RULE,

@@ -5,6 +5,7 @@
 
   <marker id="marker1"
         orient="auto"
+        overflow='visible'
         markerUnits='userSpaceOnUse'
         markerWidth='5' markerHeight='5'>
     <circle cx='0' cy='0' r='5' fill='context-stroke'/>
