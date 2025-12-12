@@ -1,0 +1,62 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='205'
+        height='155'
+        viewBox='0 0 205 155'>
+  <marker
+          id='marker1'
+          markerWidth='5'
+          markerHeight='5'
+          markerUnits='strokeWidth'
+          orient='auto'>
+    <circle
+            fill='context-stroke'
+            cx='0'
+            cy='0'
+            r='2'>
+    </circle>
+  </marker>
+  <rect
+          fill='none'
+          stroke='rgb(0,0,255)'
+          stroke-width='3'
+          paint-order='markers fill stroke'
+          x='40'
+          y='40'
+          width='125'
+          height='75'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
+          class='transparent-fill'>
+  </rect>
+  <rect
+          fill='none'
+          stroke='rgb(128,0,128)'
+          stroke-width='2'
+          paint-order='markers fill stroke'
+          x='60'
+          y='50'
+          width='85'
+          height='55'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
+          class='transparent-fill'>
+  </rect>
+  <rect
+          fill='none'
+          stroke='rgb(255,0,0)'
+          stroke-width='1'
+          paint-order='markers fill stroke'
+          x='80'
+          y='60'
+          width='45'
+          height='35'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
+          class='transparent-fill'>
+  </rect>
+</svg>

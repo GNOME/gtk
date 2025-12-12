@@ -75,14 +75,12 @@
  *
  * The paintable does not support text or images, only shapes and paths.
  *
- * In `<defs>`, only `<clipPath>`, `<mask>`, gradients, shapes and
- * patterns are supported, not `<filter>` or other things.
- *
  * Gradient templating is not implemented.
  *
  * The support for filters is limited to filter functions minus
  * `drop-shadow()` plus a custom `alpha-level()` function, which
- * implements one particular case of feComponentTransfer.
+ * implements one particular case of feComponentTransfer. `<filter>`
+ * is not supported.
  *
  * The `transform-origin` and `transform-box` attributes are not supported.
  *
@@ -92,7 +90,7 @@
  * In animation elements, the parsing of `begin` and `end` attributes
  * is limited, and the `by`, `min` and `max` attributes are not supported.
  *
- * Lastly, there is no CSS support, and no interactivity.
+ * Lastly, there is only minimal CSS support, and no interactivity.
  *
  *
  * ## SVG Extensions
@@ -1901,6 +1899,43 @@ svg_isolation_parse (const char *string)
     {
       if (strcmp (string, isolation_values[i].name) == 0)
         return svg_value_ref ((SvgValue *) &isolation_values[i]);
+    }
+  return NULL;
+}
+
+typedef enum
+{
+  MARKER_UNITS_STROKE_WIDTH,
+  MARKER_UNITS_USER_SPACE_ON_USE,
+} MarkerUnits;
+
+static const SvgValueClass SVG_MARKER_UNITS_CLASS = {
+  "SvgMarkerUnits",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum marker_units_values[] = {
+  { { &SVG_MARKER_UNITS_CLASS, 1 }, MARKER_UNITS_STROKE_WIDTH, "strokeWidth" },
+  { { &SVG_MARKER_UNITS_CLASS, 1 }, MARKER_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
+};
+
+static SvgValue *
+svg_marker_units_new (MarkerUnits value)
+{
+  return svg_value_ref ((SvgValue *) &marker_units_values[value]);
+}
+
+static SvgValue *
+svg_marker_units_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (marker_units_values); i++)
+    {
+      if (strcmp (string, marker_units_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &marker_units_values[i]);
     }
   return NULL;
 }
@@ -5036,12 +5071,146 @@ svg_content_fit_parse (const char *value)
 }
 
 /* }}} */
+/* {{{ Orient */
+
+typedef enum {
+  ORIENT_AUTO,
+  ORIENT_ANGLE,
+} OrientKind;
+
+typedef struct
+{
+  SvgValue base;
+  OrientKind kind;
+  gboolean start_reverse;
+  double angle;
+} SvgOrient;
+
+static void
+svg_orient_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_orient_equal (const SvgValue *value0,
+                  const SvgValue *value1)
+{
+  const SvgOrient *v0 = (const SvgOrient *) value0;
+  const SvgOrient *v1 = (const SvgOrient *) value1;
+
+  if (v0->kind != v1->kind)
+    return FALSE;
+
+  if (v0->kind == ORIENT_AUTO)
+    return v0->start_reverse == v1->start_reverse;
+  else
+    return v0->angle == v1->angle;
+}
+
+static SvgValue *svg_orient_new_angle (double angle);
+
+static SvgValue *
+svg_orient_interpolate (const SvgValue *value0,
+                        const SvgValue *value1,
+                        double          t)
+{
+  const SvgOrient *v0 = (const SvgOrient *) value0;
+  const SvgOrient *v1 = (const SvgOrient *) value1;
+
+  if (v0->kind == v1->kind && v0->kind == ORIENT_ANGLE)
+    return svg_orient_new_angle (lerp (v0->angle, v1->angle, t));
+
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+static SvgValue *
+svg_orient_accumulate (const SvgValue *value0,
+                       const SvgValue *value1,
+                       int             n)
+{
+  return NULL;
+}
+
+static void
+svg_orient_print (const SvgValue *value,
+                  GString        *string)
+{
+  const SvgOrient *v = (const SvgOrient *) value;
+
+  if (v->kind == ORIENT_ANGLE)
+    string_append_double (string, v->angle);
+  else if (v->start_reverse)
+    g_string_append (string, "auto-start-reverse");
+  else
+    g_string_append (string, "auto");
+}
+
+static const SvgValueClass SVG_ORIENT_CLASS = {
+  "SvgOrient",
+  svg_orient_free,
+  svg_orient_equal,
+  svg_orient_interpolate,
+  svg_orient_accumulate,
+  svg_orient_print,
+};
+
+static SvgValue *
+svg_orient_new_angle (double angle)
+{
+  SvgOrient *v;
+
+  v = (SvgOrient *) svg_value_alloc (&SVG_ORIENT_CLASS, sizeof (SvgOrient));
+
+  v->kind = ORIENT_ANGLE;
+  v->angle = angle;
+
+  return (SvgValue *) v;
+}
+
+static SvgValue *
+svg_orient_new_auto (gboolean start_reverse)
+{
+  SvgOrient *v;
+
+  v = (SvgOrient *) svg_value_alloc (&SVG_ORIENT_CLASS, sizeof (SvgOrient));
+
+  v->kind = ORIENT_AUTO;
+  v->start_reverse = start_reverse;
+
+  return (SvgValue *) v;
+}
+
+static SvgValue *
+svg_orient_parse (const char *value)
+{
+  if (strcmp (value, "auto") == 0)
+    return svg_orient_new_auto (FALSE);
+  else if (strcmp (value, "auto-start-reverse") == 0)
+    return svg_orient_new_auto (TRUE);
+  else
+    {
+      double f;
+      SvgDimension dim;
+
+      if (!parse_numeric (value, -DBL_MAX, DBL_MAX, NUMBER, &f, &dim))
+        return NULL;
+
+      return svg_orient_new_angle (f);
+    }
+}
+
+/* }}} */
 /* {{{ References */
 
 typedef enum
 {
   HREF_NONE,
   HREF_REF,
+  HREF_URL,
 } HrefKind;
 
 typedef struct
@@ -5058,7 +5227,7 @@ svg_href_free (SvgValue *value)
 {
   const SvgHref *r = (const SvgHref *) value;
 
-  if (r->kind == HREF_REF)
+  if (r->kind != HREF_NONE)
     g_free (r->ref);
 
   g_free (value);
@@ -5076,9 +5245,10 @@ svg_href_equal (const SvgValue *value1,
 
   switch (r1->kind)
     {
-    case MASK_NONE:
+    case HREF_NONE:
       return TRUE;
-    case MASK_REF:
+    case HREF_REF:
+    case HREF_URL:
       return r1->shape == r2->shape &&
              g_strcmp0 (r1->ref, r2->ref) == 0;
     default:
@@ -5104,6 +5274,7 @@ svg_href_accumulate (const SvgValue *value1,
 {
   return NULL;
 }
+
 static void
 svg_href_print (const SvgValue *value,
                 GString        *string)
@@ -5117,6 +5288,9 @@ svg_href_print (const SvgValue *value,
       break;
     case HREF_REF:
       g_string_append_printf (string, "#%s", r->ref);
+      break;
+    case HREF_URL:
+      g_string_append_printf (string, "url(#%s)", r->ref);
       break;
     default:
       g_assert_not_reached ();
@@ -5153,6 +5327,19 @@ svg_href_new_ref (const char *ref)
 }
 
 static SvgValue *
+svg_href_new_url (const char *ref)
+{
+  SvgHref *result;
+
+  result = (SvgHref *) svg_value_alloc (&SVG_HREF_CLASS, sizeof (SvgHref));
+  result->kind = HREF_URL;
+  result->ref = g_strdup (ref);
+  result->shape = NULL;
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
 svg_href_parse (const char *value)
 {
   if (strcmp (value, "none") == 0)
@@ -5161,6 +5348,40 @@ svg_href_parse (const char *value)
     return svg_href_new_ref (value + 1);
   else
     return svg_href_new_ref (value);
+}
+
+static SvgValue *
+svg_href_parse_url (const char *value)
+{
+  if (strcmp (value, "none") == 0)
+    {
+      return svg_href_new_none ();
+    }
+  else
+    {
+      GtkCssParser *parser;
+      GBytes *bytes;
+      char *url;
+      SvgValue *res = NULL;
+
+      bytes = g_bytes_new_static (value, strlen (value));
+      parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+
+      url = gtk_css_parser_consume_url (parser);
+      if (url)
+        {
+          if (url[0] == '#')
+            res = svg_href_new_url (url + 1);
+          else
+            res = svg_href_new_url (url);
+        }
+
+      g_free (url);
+      gtk_css_parser_unref (parser);
+      g_bytes_unref (bytes);
+
+      return res;
+    }
 }
 
 /* }}} */
@@ -5243,6 +5464,32 @@ static SvgValue *
 parse_offset (const char *value)
 {
   return svg_number_parse (value, 0, 1, NUMBER|PERCENTAGE);
+}
+
+static SvgValue *
+parse_ref_x (const char *value)
+{
+  if (strcmp (value, "left") == 0)
+    return svg_percentage_new (0);
+  else if (strcmp (value, "center") == 0)
+    return svg_percentage_new (50);
+  else if (strcmp (value, "right") == 0)
+    return svg_percentage_new (100);
+  else
+    return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+}
+
+static SvgValue *
+parse_ref_y (const char *value)
+{
+  if (strcmp (value, "top") == 0)
+    return svg_percentage_new (0);
+  else if (strcmp (value, "center") == 0)
+    return svg_percentage_new (50);
+  else if (strcmp (value, "bottom") == 0)
+    return svg_percentage_new (100);
+  else
+    return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
 }
 
 typedef struct
@@ -5642,6 +5889,62 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_content_fit_parse,
   },
+  { .id = SHAPE_ATTR_REF_X,
+    .name = "refX",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = parse_ref_x,
+  },
+  { .id = SHAPE_ATTR_REF_Y,
+    .name = "refY",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = parse_ref_y,
+  },
+  { .id = SHAPE_ATTR_MARKER_UNITS,
+    .name = "markerUnits",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_marker_units_parse,
+  },
+  { .id = SHAPE_ATTR_MARKER_ORIENT,
+    .name = "orient",
+    .inherited = 0,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_orient_parse,
+  },
+  { .id = SHAPE_ATTR_MARKER_START,
+    .name = "marker-start",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_href_parse_url,
+  },
+  { .id = SHAPE_ATTR_MARKER_MID,
+    .name = "marker-mid",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_href_parse_url,
+  },
+  { .id = SHAPE_ATTR_MARKER_END,
+    .name = "marker-end",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_href_parse_url,
+  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -5734,6 +6037,13 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_BOUND_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_VIEW_BOX].initial_value = svg_view_box_new_unset ();
   shape_attrs[SHAPE_ATTR_CONTENT_FIT].initial_value = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+  shape_attrs[SHAPE_ATTR_REF_X].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_REF_Y].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_MARKER_UNITS].initial_value = svg_marker_units_new (MARKER_UNITS_STROKE_WIDTH);
+  shape_attrs[SHAPE_ATTR_MARKER_ORIENT].initial_value = svg_orient_new_angle (0);
+  shape_attrs[SHAPE_ATTR_MARKER_START].initial_value = svg_href_new_none ();
+  shape_attrs[SHAPE_ATTR_MARKER_MID].initial_value = svg_href_new_none ();
+  shape_attrs[SHAPE_ATTR_MARKER_END].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -5802,6 +6112,20 @@ shape_attr_lookup (const char *name,
         }
     }
 
+  if (type == SHAPE_MARKER)
+    {
+      if (strcmp (name, "markerWidth") == 0)
+        {
+          *attr = SHAPE_ATTR_WIDTH;
+          return TRUE;
+        }
+      if (strcmp (name, "markerHeight") == 0)
+        {
+          *attr = SHAPE_ATTR_HEIGHT;
+          return TRUE;
+        }
+    }
+
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
       if (strcmp (name, shape_attrs[i].name) == 0)
@@ -5836,6 +6160,12 @@ shape_attr_get_presentation (ShapeAttr attr,
 
   if (type == SHAPE_PATTERN && attr == SHAPE_ATTR_TRANSFORM)
     return "patternTransform";
+
+  if (type == SHAPE_MARKER && attr == SHAPE_ATTR_WIDTH)
+    return "markerWidth";
+
+  if (type == SHAPE_MARKER && attr == SHAPE_ATTR_HEIGHT)
+    return "markerHeight";
 
   return shape_attrs[attr].name;
 }
@@ -6038,6 +6368,12 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
+  { .name = "marker",
+    .has_shapes = 1,
+    .never_rendered = 1,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+  },
 };
 
 static gboolean
@@ -6209,9 +6545,11 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_CIRCLE || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_X:
     case SHAPE_ATTR_Y:
+      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_HEIGHT:
-      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK || type == SHAPE_PATTERN;
+      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK ||
+             type == SHAPE_PATTERN || type == SHAPE_MARKER;
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
@@ -6250,6 +6588,17 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_VIEW_BOX:
     case SHAPE_ATTR_CONTENT_FIT:
       return type == SHAPE_PATTERN;
+    case SHAPE_ATTR_REF_X:
+    case SHAPE_ATTR_REF_Y:
+    case SHAPE_ATTR_MARKER_UNITS:
+    case SHAPE_ATTR_MARKER_ORIENT:
+      return type == SHAPE_MARKER;
+    case SHAPE_ATTR_MARKER_START:
+    case SHAPE_ATTR_MARKER_MID:
+    case SHAPE_ATTR_MARKER_END:
+      return type == SHAPE_RECT || type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
+             type == SHAPE_PATH || type == SHAPE_POLYLINE ||
+             type == SHAPE_POLYGON || type == SHAPE_LINE;
     default:
       return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
@@ -6393,6 +6742,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
     case SHAPE_PATTERN:
+    case SHAPE_MARKER:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -6478,6 +6828,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
+        case SHAPE_MARKER:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -6537,6 +6888,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
+        case SHAPE_MARKER:
         default:
           g_assert_not_reached ();
         }
@@ -6594,6 +6946,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_CLIP_PATH:
     case SHAPE_MASK:
     case SHAPE_PATTERN:
+    case SHAPE_MARKER:
       {
         for (unsigned int i = 0; i < shape->shapes->len; i++)
           {
@@ -10169,6 +10522,16 @@ parse_shape_attrs (Shape                *shape,
           shape->display = strcmp (attr_values[i], "none") != 0;
           *handled |= BIT (i);
         }
+      else if (strcmp (attr_names[i], "marker") == 0 &&
+               shape_has_attr (shape->type, SHAPE_ATTR_MARKER_START))
+        {
+          SvgValue *value = svg_href_parse_url (attr_values[i]);
+          shape_set_base_value (shape, SHAPE_ATTR_MARKER_START, value);
+          shape_set_base_value (shape, SHAPE_ATTR_MARKER_MID, value);
+          shape_set_base_value (shape, SHAPE_ATTR_MARKER_END, value);
+          svg_value_unref (value);
+          *handled |= BIT (i);
+        }
       else if (shape_attr_lookup (attr_names[i], &attr, shape->type))
         {
           if (shape_can_set_attr (shape->type, attr, FALSE))
@@ -10275,7 +10638,10 @@ parse_shape_attrs (Shape                *shape,
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CLIP_PATH) ||
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MASK) ||
-      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF))
+      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF) ||
+      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MARKER_START) ||
+      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MARKER_MID) ||
+      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MARKER_END))
     g_ptr_array_add (data->pending_refs, shape);
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
@@ -11460,11 +11826,39 @@ resolve_href_ref (SvgValue   *value,
 {
   SvgHref *href = (SvgHref *) value;
 
-  if (href->kind == HREF_REF && href->shape == NULL)
+  if (href->kind != HREF_NONE && href->shape == NULL)
     {
       Shape *target = g_hash_table_lookup (data->shapes, href->ref);
       if (!target)
         gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", href->ref);
+      else
+        {
+          href->shape = target;
+          add_dependency_to_common_ancestor (shape, target);
+        }
+    }
+}
+
+static void
+resolve_marker_ref (SvgValue   *value,
+                    Shape      *shape,
+                    ParserData *data)
+{
+  SvgHref *href = (SvgHref *) value;
+
+  if (href->kind != HREF_NONE && href->shape == NULL)
+    {
+      Shape *target = g_hash_table_lookup (data->shapes, href->ref);
+      if (!target)
+        {
+          gtk_svg_invalid_reference (data->svg, "No shape with ID %s", href->ref);
+        }
+      else if (target->type != SHAPE_MARKER)
+        {
+          gtk_svg_invalid_reference (data->svg,
+                                     "Shape with ID %s not a <marker>",
+                                     href->ref);
+        }
       else
         {
           href->shape = target;
@@ -11546,6 +11940,13 @@ resolve_animation_refs (Shape      *shape,
           for (unsigned int j = 0; j < a->n_frames; j++)
             resolve_href_ref (a->frames[j].value, a->shape, data);
         }
+      else if (a->attr == SHAPE_ATTR_MARKER_START ||
+               a->attr == SHAPE_ATTR_MARKER_MID ||
+               a->attr == SHAPE_ATTR_MARKER_END)
+        {
+          for (unsigned int j = 0; j < a->n_frames; j++)
+            resolve_marker_ref (a->frames[j].value, a->shape, data);
+        }
       else if (a->attr == SHAPE_ATTR_FILL ||
                a->attr == SHAPE_ATTR_STROKE)
         {
@@ -11591,6 +11992,9 @@ resolve_shape_refs (Shape      *shape,
   resolve_clip_ref (shape->base[SHAPE_ATTR_CLIP_PATH], shape, data);
   resolve_mask_ref (shape->base[SHAPE_ATTR_MASK], shape, data);
   resolve_href_ref (shape->base[SHAPE_ATTR_HREF], shape, data);
+  resolve_marker_ref (shape->base[SHAPE_ATTR_MARKER_START], shape, data);
+  resolve_marker_ref (shape->base[SHAPE_ATTR_MARKER_MID], shape, data);
+  resolve_marker_ref (shape->base[SHAPE_ATTR_MARKER_END], shape, data);
   resolve_paint_ref (shape->base[SHAPE_ATTR_FILL], shape, data);
   resolve_paint_ref (shape->base[SHAPE_ATTR_STROKE], shape, data);
   resolve_attach_ref (shape, data);
@@ -12583,9 +12987,10 @@ serialize_shape (GString              *s,
 
 typedef enum
 {
-  RENDERING,
   CLIPPING,
   MASKING,
+  RENDERING,
+  MARKERS,
 } RenderOp;
 
 typedef struct
@@ -13455,11 +13860,131 @@ retry:
   gsk_stroke_free (stroke);
 }
 
+typedef enum {
+  VERTEX_START,
+  VERTEX_MID,
+  VERTEX_END,
+} VertexKind;
+
+static gboolean
+paint_marker (Shape              *shape,
+              GskPath            *path,
+              PaintContext       *context,
+              const GskPathPoint *point,
+              VertexKind          kind)
+{
+  ShapeAttr attrs[] = { SHAPE_ATTR_MARKER_START, SHAPE_ATTR_MARKER_MID, SHAPE_ATTR_MARKER_END };
+  SvgHref *href;
+  SvgOrient *orient;
+  SvgValue *units;
+  Shape *marker;
+  double scale;
+  graphene_point_t vertex;
+  double angle;
+  double x, y;
+  double width, height;
+
+  gsk_path_point_get_position (point, path, &vertex);
+
+  href = (SvgHref *) shape->current[attrs[kind]];
+  if (href->kind == HREF_NONE)
+    return TRUE;
+
+  marker = href->shape;
+
+  orient = (SvgOrient *) marker->current[SHAPE_ATTR_MARKER_ORIENT];
+  units = marker->current[SHAPE_ATTR_MARKER_UNITS];
+
+  if (svg_enum_get (units) == MARKER_UNITS_STROKE_WIDTH)
+    scale = svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], 1);
+  else
+    scale = 1;
+
+  if (orient->kind == ORIENT_AUTO)
+    {
+      if (kind == VERTEX_START)
+        {
+          angle = gsk_path_point_get_rotation (point, path, GSK_PATH_TO_END);
+          if (orient->start_reverse)
+            angle += 180;
+        }
+      else if (kind == VERTEX_END)
+        {
+          angle = gsk_path_point_get_rotation (point, path, GSK_PATH_FROM_START);
+        }
+      else
+        {
+          angle = (gsk_path_point_get_rotation (point, path, GSK_PATH_TO_END) +
+                   gsk_path_point_get_rotation (point, path, GSK_PATH_FROM_START)) / 2;
+        }
+    }
+  else
+    {
+      angle = orient->angle;
+    }
+
+  width = svg_number_get (marker->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+  height = svg_number_get (marker->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+
+  gtk_snapshot_save (context->snapshot);
+
+  x = svg_number_get (marker->current[SHAPE_ATTR_REF_X], width);
+  y = svg_number_get (marker->current[SHAPE_ATTR_REF_Y], height);
+
+  gtk_snapshot_translate (context->snapshot, &vertex);
+  gtk_snapshot_scale (context->snapshot, scale, scale);
+  gtk_snapshot_rotate (context->snapshot, angle);
+  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-x, -y));
+
+  render_shape (marker, context);
+
+  gtk_snapshot_restore (context->snapshot);
+
+  return TRUE;
+}
+
 static void
 paint_markers (Shape        *shape,
                GskPath      *path,
                PaintContext *context)
 {
+  GskPathPoint point, point1;
+
+  if (gsk_path_is_empty (path))
+    return;
+
+  if (((SvgHref *) shape->current[SHAPE_ATTR_MARKER_START])->kind == HREF_NONE &&
+      ((SvgHref *) shape->current[SHAPE_ATTR_MARKER_MID])->kind == HREF_NONE &&
+      ((SvgHref *) shape->current[SHAPE_ATTR_MARKER_END])->kind == HREF_NONE)
+    return;
+
+  push_op (context, MARKERS);
+  push_ctx_shape (context, shape);
+
+  if (!gsk_path_get_start_point (path, &point))
+    return;
+
+  paint_marker (shape, path, context, &point, VERTEX_START);
+
+  if (gsk_path_get_next (path, &point))
+    {
+      while (1)
+        {
+          point1 = point;
+          if (!gsk_path_get_next (path, &point1))
+            {
+              break;
+            }
+
+          paint_marker (shape, path, context, &point, VERTEX_MID);
+          point = point1;
+        }
+    }
+
+  paint_marker (shape, path, context, &point, VERTEX_END);
+
+  pop_ctx_shape (context);
+  pop_op (context);
 }
 
 static void
@@ -13507,63 +14032,7 @@ paint_shape (Shape        *shape,
 
   path = shape_get_current_path (shape, context->viewport);
 
-  if (context->op == RENDERING || context->op == MASKING)
-    {
-      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
-        {
-        case PAINT_ORDER_FILL_STROKE_MARKERS:
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-          fill_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
-          stroke_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_MARKERS_FILL_STROKE:
-        case PAINT_ORDER_MARKERS_STROKE_FILL:
-          paint_markers (shape, path, context);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-
-      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
-        {
-        case PAINT_ORDER_MARKERS_FILL_STROKE:
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-          fill_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_FILL_STROKE_MARKERS:
-        case PAINT_ORDER_MARKERS_STROKE_FILL:
-          stroke_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
-          paint_markers (shape, path, context);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-
-      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
-        {
-        case PAINT_ORDER_MARKERS_STROKE_FILL:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
-          fill_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_MARKERS_FILL_STROKE:
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-          stroke_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-        case PAINT_ORDER_FILL_STROKE_MARKERS:
-          paint_markers (shape, path, context);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-    }
-  else if (context->op == CLIPPING)
+  if (context->op == CLIPPING)
     {
       graphene_rect_t bounds;
 
@@ -13576,6 +14045,62 @@ paint_shape (Shape        *shape,
           gtk_snapshot_push_fill (context->snapshot, path, clip_rule);
           gtk_snapshot_append_color (context->snapshot, &color, &bounds);
           gtk_snapshot_pop (context->snapshot);
+        }
+    }
+  else
+    {
+      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+        {
+        case PAINT_ORDER_FILL_STROKE_MARKERS:
+        case PAINT_ORDER_FILL_MARKERS_STROKE:
+          fill_shape (shape, path, context);
+          break;
+        case PAINT_ORDER_STROKE_FILL_MARKERS:
+        case PAINT_ORDER_STROKE_MARKERS_FILL:
+          stroke_shape (shape, path, context);
+          break;
+        case PAINT_ORDER_MARKERS_FILL_STROKE:
+        case PAINT_ORDER_MARKERS_STROKE_FILL:
+          paint_markers (shape, path, context);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+        {
+        case PAINT_ORDER_MARKERS_FILL_STROKE:
+        case PAINT_ORDER_STROKE_FILL_MARKERS:
+          fill_shape (shape, path, context);
+          break;
+        case PAINT_ORDER_FILL_STROKE_MARKERS:
+        case PAINT_ORDER_MARKERS_STROKE_FILL:
+          stroke_shape (shape, path, context);
+          break;
+        case PAINT_ORDER_FILL_MARKERS_STROKE:
+        case PAINT_ORDER_STROKE_MARKERS_FILL:
+          paint_markers (shape, path, context);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+        {
+        case PAINT_ORDER_MARKERS_STROKE_FILL:
+        case PAINT_ORDER_STROKE_MARKERS_FILL:
+          fill_shape (shape, path, context);
+          break;
+        case PAINT_ORDER_MARKERS_FILL_STROKE:
+        case PAINT_ORDER_FILL_MARKERS_STROKE:
+          stroke_shape (shape, path, context);
+          break;
+        case PAINT_ORDER_STROKE_FILL_MARKERS:
+        case PAINT_ORDER_FILL_STROKE_MARKERS:
+          paint_markers (shape, path, context);
+          break;
+        default:
+          g_assert_not_reached ();
         }
     }
 

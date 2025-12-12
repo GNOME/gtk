@@ -1,0 +1,20 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     viewBox="0 0 300 200" >
+
+  <marker id="m1"
+        orient="auto-start-reverse"
+        markerUnits='userSpaceOnUse'
+        markerWidth='10' markerHeight='10'
+        refX='0' refY='5'
+        stroke='blue'>
+    <polygon points='0 0 10 5 0 10'/>
+  </marker>
+
+  <line
+        marker-start='url(#m1)'
+        marker-end='url(#m1)'
+        x1="50" y1="50" x2='200' y2='150'
+        stroke='blue' fill='none' />
+</svg>
