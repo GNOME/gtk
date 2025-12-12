@@ -4193,12 +4193,13 @@ gtk_menu_scroll_by (GtkMenu *menu,
   /* Since arrows are shown, reduce view height even more */
   view_height -= arrow_border.bottom;
 
-  if ((priv->scroll_offset + view_height <= priv->requested_height) &&
-      (offset + view_height > priv->requested_height))
-    offset = priv->requested_height - view_height;
-
   if (offset != priv->scroll_offset)
-    gtk_menu_scroll_to (menu, offset, GTK_MENU_SCROLL_FLAG_NONE);
+    {
+      offset = CLAMP (offset,
+                      MIN (priv->scroll_offset, 0),
+                      MAX (priv->scroll_offset, priv->requested_height - view_height));
+      gtk_menu_scroll_to (menu, offset, GTK_MENU_SCROLL_FLAG_NONE);
+    }
 }
 
 static gboolean
