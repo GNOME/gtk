@@ -15,7 +15,7 @@ filename = sys.argv[1]
 # data types that are allowed to be used as varying.
 # If you need to add a data type here, ensure that it works as expected
 # on Adreno before adding it.
-allowed_varying = {"uint", "float", "vec2", "vec3", "vec4", "mat2", "mat3", "mat4", "Rect", "RoundedRect"}
+allowed_varying = {"uint", "float", "vec2", "vec3", "vec4", "uvec2", "mat2", "mat3", "mat4", "Rect", "RoundedRect"}
 
 with open(filename) as f:
     lines = f.readlines()
