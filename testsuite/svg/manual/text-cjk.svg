@@ -1,0 +1,22 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" version="2.0">
+	<d:SVGTestCase xmlns:d="http://www.w3.org/2000/02/svg/testsuite/description/" author="Florian Leander Singer" status="accepted">
+		<d:testDescription xmlns="http://www.w3.org/1999/xhtml" href="http://www.w3.org/TR/SVG11/text.html#TextElement">
+			<p>Test text rendering differences resulting from different lang attributes.</p>
+		</d:testDescription>
+		<d:operatorScript xmlns="http://www.w3.org/1999/xhtml">
+			<p>Run the test. No interaction required.</p>
+		</d:operatorScript>
+		<d:passCriteria xmlns="http://www.w3.org/1999/xhtml">
+			<p>The test is passed if:</p>
+			<ul>
+				<li>The glyph above the word "Chineese" has a rectangle in the bottom left of the upper part</li>
+				<li>The glyph above the word "Japaneese" has a rectangle in the bottom right of the upper part</li>
+			</ul>
+		</d:passCriteria>
+	</d:SVGTestCase>
+
+	<text font-family="Noto Sans CJK" lang="zh" x="32" y="10" font-size="72" writing-mode="vertical-rl">骨</text>
+	<text font-family="SVGFreeSansASCII,sans-serif" font-size="12" x="4" y="96">Chineese</text>
+	<text font-family="Noto Sans CJK" lang="ja" x="96" y="10" font-size="72" writing-mode="vertical-rl">骨</text>
+	<text font-family="SVGFreeSansASCII,sans-serif" font-size="12" x="66" y="96">Japaneese</text>
+</svg>

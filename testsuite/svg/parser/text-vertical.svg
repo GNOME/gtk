@@ -1,0 +1,11 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" version="2.0">
+	<defs>
+		<linearGradient id="gr">
+			<stop offset="0%" stop-color="red" />
+			<stop offset="100%" stop-color="blue" />
+		</linearGradient>
+	</defs>
+	<text x="32" y="10" visibility="visible" font-size="16" fill="url(#gr)" writing-mode="vertical-rl">Alpha <tspan fill="#000000">私は車</tspan>がありません</text>
+	<text x="64" y="64" font-size="16" fill-opacity=".5" text-anchor="middle">Hello</text>
+	<text x="96" y="10" font-size="16" fill="url(#gr)" writing-mode="vertical-lr">Beta <tspan fill="#000000">私は車</tspan>がありません</text>
+</svg>
