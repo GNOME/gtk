@@ -1,0 +1,8 @@
+.aspect-frame-demo aspectframe {
+  margin: 6px;
+  border: 1px dotted red;
+}
+
+.aspect-frame-demo aspectframe > * {
+  border: 1px dotted blue;
+}

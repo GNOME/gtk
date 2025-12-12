@@ -11,6 +11,10 @@
     <file>application.ui</file>
     <file>menus.ui</file>
   </gresource>
+  <gresource prefix="/aspect_frame">
+    <file>ducky.png</file>
+    <file>aspect_frame.css</file>
+  </gresource>
   <gresource prefix="/builder">
     <file>demo.ui</file>
   </gresource>
@@ -219,6 +223,7 @@
   </gresource>
   <gresource prefix="/sources">
     <file>application_demo.c</file>
+    <file>aspect_frame.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
     <file>clipboard.c</file>

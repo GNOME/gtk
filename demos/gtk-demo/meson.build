@@ -2,6 +2,7 @@
 # demo app, which means alphabetized by demo title, not filename
 demos = files([
   'application_demo.c',
+  'aspect_frame.c',
   'assistant.c',
   'builder.c',
   'clipboard.c',
