@@ -1940,6 +1940,47 @@ svg_marker_units_parse (const char *string)
   return NULL;
 }
 
+typedef enum
+{
+  OVERFLOW_VISIBLE,
+  OVERFLOW_HIDDEN,
+  OVERFLOW_AUTO,
+} SvgOverflow;
+
+static const SvgValueClass SVG_OVERFLOW_CLASS = {
+  "SvgOverflow",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum overflow_values[] = {
+  { { &SVG_OVERFLOW_CLASS, 1 }, OVERFLOW_VISIBLE, "visible" },
+  { { &SVG_OVERFLOW_CLASS, 1 }, OVERFLOW_HIDDEN, "hidden" },
+  { { &SVG_OVERFLOW_CLASS, 1 }, OVERFLOW_AUTO, "auto" },
+};
+
+static SvgValue *
+svg_overflow_new (SvgOverflow value)
+{
+  g_assert (value < G_N_ELEMENTS (overflow_values));
+
+  return svg_value_ref ((SvgValue *) &overflow_values[value]);
+}
+
+static SvgValue *
+svg_overflow_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (overflow_values); i++)
+    {
+      if (strcmp (string, overflow_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &overflow_values[i]);
+    }
+  return NULL;
+}
+
 /* }}} */
 /* {{{ Transforms */
 
@@ -5530,6 +5571,14 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = parse_opacity,
   },
+  { .id = SHAPE_ATTR_OVERFLOW,
+    .name = "overflow",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 0,
+    .parse_value = svg_overflow_parse,
+  },
   { .id = SHAPE_ATTR_FILTER,
     .name = "filter",
     .inherited = 0,
@@ -5993,6 +6042,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
+  shape_attrs[SHAPE_ATTR_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
   shape_attrs[SHAPE_ATTR_FILTER].initial_value = svg_filter_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_PATH].initial_value = svg_clip_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
@@ -6496,6 +6546,19 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
+  if (type == SHAPE_MARKER || type == SHAPE_PATTERN)
+    {
+      if (attr == SHAPE_ATTR_OVERFLOW)
+        {
+          static SvgValue *default_overflow = NULL;
+
+          if (!default_overflow)
+            default_overflow = svg_overflow_new (OVERFLOW_HIDDEN);
+
+          return default_overflow;
+        }
+    }
+
   return shape_attrs[attr].initial_value;
 }
 
@@ -6599,6 +6662,8 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_RECT || type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
              type == SHAPE_PATH || type == SHAPE_POLYLINE ||
              type == SHAPE_POLYGON || type == SHAPE_LINE;
+    case SHAPE_ATTR_OVERFLOW:
+      return type == SHAPE_PATTERN || type == SHAPE_MARKER;
     default:
       return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
@@ -11065,6 +11130,7 @@ start_element_cb (GMarkupParseContext  *context,
       const char *version_attr = NULL;
       const char *keywords_attr = NULL;
       const char *preserve_aspect_ratio_attr = NULL;
+      const char *overflow_attr = NULL;
       double width, height;
 
       if (data->current_shape != data->svg->content)
@@ -11080,6 +11146,7 @@ start_element_cb (GMarkupParseContext  *context,
                                 "height", &height_attr,
                                 "viewBox", &viewbox_attr,
                                 "preserveAspectRatio", &preserve_aspect_ratio_attr,
+                                "overflow", &overflow_attr,
                                 "gpa:state", &state_attr,
                                 "gpa:version", &version_attr,
                                 "gpa:keywords", &keywords_attr,
@@ -11152,6 +11219,21 @@ start_element_cb (GMarkupParseContext  *context,
             {
               data->svg->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
               gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
+            }
+        }
+
+      if (overflow_attr)
+        {
+          SvgValue *v = svg_overflow_parse (overflow_attr);
+
+          if (v)
+            {
+              svg_value_unref (data->svg->overflow);
+              data->svg->overflow = v;
+            }
+          else
+            {
+              gtk_svg_invalid_attribute (data->svg, context, "overflow", NULL);
             }
         }
 
@@ -13936,7 +14018,13 @@ paint_marker (Shape              *shape,
   gtk_snapshot_rotate (context->snapshot, angle);
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-x, -y));
 
+  if (svg_enum_get (marker->current[SHAPE_ATTR_OVERFLOW]) == OVERFLOW_HIDDEN)
+    gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
   render_shape (marker, context);
+
+  if (svg_enum_get (marker->current[SHAPE_ATTR_OVERFLOW]) == OVERFLOW_HIDDEN)
+    gtk_snapshot_pop (context->snapshot);
 
   gtk_snapshot_restore (context->snapshot);
 
@@ -14194,6 +14282,9 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
 
+  if (svg_enum_get (self->overflow) == OVERFLOW_HIDDEN)
+    gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
   gtk_snapshot_scale (snapshot, sx, sy);
@@ -14205,6 +14296,9 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_restore (snapshot);
+
+  if (svg_enum_get (self->overflow) == OVERFLOW_HIDDEN)
+    gtk_snapshot_pop (snapshot);
 
   if (self->advance_after_snapshot)
     {
@@ -14333,13 +14427,11 @@ gtk_svg_init (GtkSvg *self)
 
   self->view_box = svg_view_box_new_unset ();
   self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+  self->overflow = svg_overflow_new (OVERFLOW_VISIBLE);
   graphene_rect_init (&self->viewport, 0, 0, 0, 0);
 
   self->timeline = timeline_new ();
   self->content = shape_new (NULL, SHAPE_GROUP);
-
-  self->views = g_hash_table_new (g_str_hash, g_str_equal);
-  self->view = NULL;
 }
 
 static void
@@ -14358,7 +14450,7 @@ gtk_svg_dispose (GObject *object)
 
   g_clear_pointer (&self->view_box, svg_value_unref);
   g_clear_pointer (&self->content_fit, svg_value_unref);
-  g_clear_pointer (&self->views, g_hash_table_unref);
+  g_clear_pointer (&self->overflow, svg_value_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -14749,36 +14841,6 @@ gtk_svg_equal (GtkSvg *svg1,
   return shape_equal (svg1->content, svg2->content);
 }
 
-const char **
-gtk_svg_get_views (GtkSvg *svg)
-{
-  return (const char **) g_hash_table_get_keys_as_array (svg->views, NULL);
-}
-
-void
-gtk_svg_set_view (GtkSvg     *svg,
-                  const char *id)
-{
-  Shape *view = g_hash_table_lookup (svg->views, id);
-
-  if (view)
-    {
-      svg->view = view;
-
-      gdk_paintable_invalidate_contents (GDK_PAINTABLE (svg));
-      gdk_paintable_invalidate_size (GDK_PAINTABLE (svg));
-    }
-}
-
-const char *
-gtk_svg_get_view (GtkSvg *svg)
-{
-  if (svg->view)
-    return svg->view->id;
-
-  return NULL;
-}
-
 /* {{{ Animation */
 
 static void
@@ -15063,6 +15125,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 {
   GString *s = g_string_new ("");
   SvgValue *default_content_fit;
+  SvgValue *default_overflow;
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     {
@@ -15138,6 +15201,16 @@ gtk_svg_serialize_full (GtkSvg               *self,
       g_string_append_c (s, '\'');
     }
   svg_value_unref (default_content_fit);
+
+  default_overflow = svg_overflow_new (OVERFLOW_VISIBLE);
+  if (!svg_value_equal (self->overflow, default_overflow))
+    {
+      indent_for_attr (s, 0);
+      g_string_append (s, "overflow='");
+      svg_value_print (self->overflow, s);
+      g_string_append_c (s, '\'');
+    }
+  svg_value_unref (default_overflow);
 
   if (self->gpa_version > 0 || (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE))
     {
@@ -15608,15 +15681,13 @@ gtk_svg_clear_content (GtkSvg *self)
 
   svg_value_unref (self->content_fit);
   self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
+  self->overflow = svg_overflow_new (OVERFLOW_VISIBLE);
 
   self->state = 0;
   self->max_state = 0;
   self->state_change_delay = 0;
 
   self->gpa_version = 0;
-
-  g_hash_table_remove_all (self->views);
-  self->view = NULL;
 }
 
 /* {{{ Constructors */

@@ -6,11 +6,9 @@
   <marker id="m1"
         orient="auto-start-reverse"
         markerUnits='userSpaceOnUse'
-        markerWidth='10' markerHeight='10'
-        overflow='visible'
-        refX='0' refY='5'
-        stroke='blue'>
-    <polygon points='0 0 10 5 0 10'/>
+        markerWidth='10' markerHeight='20'
+        refX='0' refY='0'>
+    <polygon points='0 -5 10 0 0 5'/>
   </marker>
 
   <line

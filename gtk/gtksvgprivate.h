@@ -62,6 +62,7 @@ struct _GtkSvg
   double width, height;
   SvgValue *view_box;
   SvgValue *content_fit;
+  SvgValue *overflow;
   graphene_rect_t bounds;
   graphene_rect_t viewport;
 
@@ -87,9 +88,6 @@ struct _GtkSvg
   char *gpa_keywords;
 
   Timeline *timeline;
-
-  Shape *view;
-  GHashTable *views;
 };
 
 typedef enum
@@ -117,6 +115,7 @@ typedef enum
   SHAPE_ATTR_VISIBILITY,
   SHAPE_ATTR_TRANSFORM,
   SHAPE_ATTR_OPACITY,
+  SHAPE_ATTR_OVERFLOW,
   SHAPE_ATTR_FILTER,
   SHAPE_ATTR_CLIP_PATH,
   SHAPE_ATTR_CLIP_RULE,
@@ -418,10 +417,5 @@ GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
                                         const GdkRGBA         *colors,
                                         size_t                 n_colors,
                                         GtkSvgSerializeFlags   flags);
-
-const char ** gtk_svg_get_views (GtkSvg     *svg);
-void          gtk_svg_set_view  (GtkSvg     *svg,
-                                 const char *id);
-const char *  gtk_svg_get_view  (GtkSvg     *svg);
 
 G_END_DECLS

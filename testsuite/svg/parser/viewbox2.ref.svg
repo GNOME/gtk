@@ -4,7 +4,8 @@
         width='256'
         height='256'
         viewBox='0 0 10 10'
-        preserveAspectRatio='none'>
+        preserveAspectRatio='none'
+        overflow='hidden'>
   <circle
           fill='rgb(0,0,0)'
           cx='0'
