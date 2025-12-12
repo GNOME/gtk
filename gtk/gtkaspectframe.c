@@ -67,10 +67,12 @@ struct _GtkAspectFrame
   GtkWidget parent_instance;
 
   GtkWidget    *child;
-  gboolean      obey_child;
   float         xalign;
   float         yalign;
   float         ratio;
+  int           cached_min_size[2];
+  int           cached_min_baseline;
+  gboolean      obey_child;
 };
 
 struct _GtkAspectFrameClass
@@ -199,12 +201,26 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
 }
 
 static void
+gtk_aspect_frame_resize_func (GtkWidget *widget)
+{
+  GtkAspectFrame *self = GTK_ASPECT_FRAME (widget);
+
+  self->cached_min_size[GTK_ORIENTATION_VERTICAL] = -1;
+  self->cached_min_size[GTK_ORIENTATION_HORIZONTAL] = -1;
+  self->cached_min_baseline = -1;
+}
+
+static void
 gtk_aspect_frame_init (GtkAspectFrame *self)
 {
+  GtkWidget *widget = GTK_WIDGET (self);
+
   self->xalign = 0.5;
   self->yalign = 0.5;
   self->ratio = 1.0;
   self->obey_child = TRUE;
+
+  widget->priv->resize_func = gtk_aspect_frame_resize_func;
 }
 
 static void
@@ -361,7 +377,7 @@ gtk_aspect_frame_set_xalign (GtkAspectFrame *self,
   self->xalign = xalign;
 
   g_object_notify (G_OBJECT (self), "xalign");
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 /**
@@ -403,7 +419,10 @@ gtk_aspect_frame_set_yalign (GtkAspectFrame *self,
   self->yalign = yalign;
 
   g_object_notify (G_OBJECT (self), "yalign");
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  if (self->cached_min_baseline != -1)
+    gtk_widget_queue_resize (GTK_WIDGET (self));
+  else
+    gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 /**
@@ -444,7 +463,8 @@ gtk_aspect_frame_set_ratio (GtkAspectFrame *self,
   self->ratio = ratio;
 
   g_object_notify (G_OBJECT (self), "ratio");
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  if (!self->obey_child)
+    gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 /**
@@ -506,6 +526,32 @@ gtk_aspect_frame_get_obey_child (GtkAspectFrame *self)
   return self->obey_child;
 }
 
+static double
+get_effective_ratio (GtkAspectFrame *self)
+{
+  double ratio;
+  GtkRequisition child_requisition;
+
+  if (!self->obey_child || !self->child)
+    return self->ratio;
+
+  gtk_widget_get_preferred_size (self->child, NULL, &child_requisition);
+
+  if (child_requisition.height != 0)
+    {
+      ratio = ((double) child_requisition.width /
+               child_requisition.height);
+      if (ratio < MIN_RATIO)
+        ratio = MIN_RATIO;
+    }
+  else if (child_requisition.width != 0)
+    ratio = MAX_RATIO;
+  else
+    ratio = 1.0;
+
+  return ratio;
+}
+
 static void
 get_full_allocation (GtkAspectFrame *self,
                      GtkAllocation  *child_allocation)
@@ -526,27 +572,8 @@ compute_child_allocation (GtkAspectFrame *self,
     {
       GtkAllocation full_allocation;
 
-      if (self->obey_child)
-        {
-          GtkRequisition child_requisition;
-
-          gtk_widget_get_preferred_size (self->child, &child_requisition, NULL);
-          if (child_requisition.height != 0)
-            {
-              ratio = ((double) child_requisition.width /
-                       child_requisition.height);
-              if (ratio < MIN_RATIO)
-                ratio = MIN_RATIO;
-            }
-          else if (child_requisition.width != 0)
-            ratio = MAX_RATIO;
-          else
-            ratio = 1.0;
-        }
-      else
-        ratio = self->ratio;
-
       get_full_allocation (self, &full_allocation);
+      ratio = get_effective_ratio (self);
 
       if (ratio * full_allocation.height > full_allocation.width)
         {
@@ -567,6 +594,83 @@ compute_child_allocation (GtkAspectFrame *self,
 }
 
 static void
+gtk_aspect_frame_compute_minimum_size (GtkAspectFrame *self,
+                                       double          ratio)
+{
+  GtkSizeRequestMode request_mode;
+  int start_width, end_width, height, baseline;
+
+  /* Note that our minimum size never depends on for-size */
+
+  request_mode = gtk_widget_get_request_mode (self->child);
+  if (request_mode == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+    {
+      int min_width, min_height, min_baseline;
+
+      gtk_widget_measure (self->child, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &min_width, NULL, NULL, NULL);
+      gtk_widget_measure (self->child, GTK_ORIENTATION_VERTICAL, -1,
+                          &min_height, NULL, &min_baseline, NULL);
+      self->cached_min_size[GTK_ORIENTATION_HORIZONTAL] = MAX (min_width, ceil (min_height * ratio));
+      self->cached_min_size[GTK_ORIENTATION_VERTICAL] = MAX (min_height, ceil (min_width / ratio));
+
+      if (min_baseline != -1)
+        self->cached_min_baseline = min_baseline + self->yalign *
+          (self->cached_min_size[GTK_ORIENTATION_VERTICAL] - min_height);
+      else
+        self->cached_min_baseline = -1;
+      return;
+    }
+
+  /* TODO: width-for-height version */
+
+  gtk_widget_measure (self->child, GTK_ORIENTATION_HORIZONTAL,
+                      -1, &start_width, NULL, NULL, NULL);
+  gtk_widget_measure (self->child, GTK_ORIENTATION_VERTICAL,
+                      start_width, &height, NULL, NULL, NULL);
+
+  end_width = ceil (height * ratio);
+  /* See if the minimum width in fact already fits */
+  if (start_width >= end_width)
+    {
+      end_width = start_width;
+      goto found;
+    }
+  /* Otherwise, we know that end_width is certain to fit.
+   *
+   * Invariant: start_fit doesn't fit, end_width does.
+   */
+  while (start_width + 1 < end_width)
+    {
+      int mid_width;
+
+      mid_width = (start_width + 1 + end_width) / 2;
+      g_assert (mid_width > start_width);
+      gtk_widget_measure (self->child, GTK_ORIENTATION_VERTICAL,
+                          mid_width, &height, NULL, NULL, NULL);
+      if (mid_width >= height * ratio)
+        end_width = mid_width;
+      else
+        start_width = mid_width;
+    }
+
+found:
+  self->cached_min_size[GTK_ORIENTATION_HORIZONTAL] = end_width;
+  self->cached_min_size[GTK_ORIENTATION_VERTICAL] = ceil (end_width / ratio);
+
+  gtk_widget_measure (self->child, GTK_ORIENTATION_VERTICAL,
+                      end_width, &height, NULL,
+                      &baseline, NULL);
+  g_assert (height <= self->cached_min_size[GTK_ORIENTATION_VERTICAL]);
+  if (baseline != -1)
+    self->cached_min_baseline = baseline + self->yalign *
+      (self->cached_min_size[GTK_ORIENTATION_VERTICAL] - height);
+  else
+    self->cached_min_baseline = -1;
+
+}
+
+static void
 gtk_aspect_frame_measure (GtkWidget      *widget,
                           GtkOrientation  orientation,
                           int             for_size,
@@ -576,23 +680,76 @@ gtk_aspect_frame_measure (GtkWidget      *widget,
                           int             *natural_baseline)
 {
   GtkAspectFrame *self = GTK_ASPECT_FRAME (widget);
+  double ratio;
+  int natural_constraint;
 
-  if (self->child && gtk_widget_get_visible (self->child))
+  if (!self->child || !gtk_widget_get_visible (self->child))
     {
-      int child_min, child_nat;
+      *minimum = *natural = 0;
+      *minimum_baseline = *natural_baseline = -1;
+      return;
+    }
 
-      gtk_widget_measure (self->child,
-                          orientation, for_size,
-                          &child_min, &child_nat,
-                          NULL, NULL);
+  ratio = get_effective_ratio (self);
 
-      *minimum = child_min;
-      *natural = child_nat;
+  if (self->cached_min_size[orientation] == -1)
+    gtk_aspect_frame_compute_minimum_size (self, ratio);
+
+  *minimum = self->cached_min_size[orientation];
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    *minimum_baseline = self->cached_min_baseline;
+
+  if (for_size != -1)
+    {
+      /* For any specific size, our natural size follows the ratio */
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        *natural = ceil (for_size * ratio);
+      else
+        *natural = ceil (for_size / ratio);
+      g_assert (*natural >= *minimum);
+
+      if (orientation == GTK_ORIENTATION_VERTICAL && *minimum_baseline != -1)
+        {
+          int child_min, child_nat;
+          int child_min_baseline;
+
+          gtk_widget_measure (self->child, GTK_ORIENTATION_VERTICAL,
+                              for_size, &child_min, &child_nat,
+                              &child_min_baseline, natural_baseline);
+          if (*natural >= child_nat)
+            *natural_baseline += (*natural - child_nat) * self->yalign;
+          else
+            {
+              /* Interpolate from child's min baseline to its nat baseline */
+              double progress = ((double) (*natural - child_min)) / (child_nat - child_min);
+              *natural_baseline = child_min_baseline + (*natural_baseline - child_min_baseline) * progress;
+            }
+        }
     }
   else
     {
-      *minimum = 0;
-      *natural = 0;
+      /* Our overall natural size is such that we can fit the child
+       * at its natural size, in both orientations.
+       */
+      gtk_widget_measure (self->child, orientation, -1,
+                          NULL, natural,
+                          NULL, natural_baseline);
+      if (!self->obey_child)
+        {
+          int natural_opposite;
+
+          gtk_widget_measure (self->child,
+                              OPPOSITE_ORIENTATION (orientation), -1,
+                              NULL, &natural_opposite, NULL, NULL);
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+            natural_constraint = ceil (natural_opposite * ratio);
+          else
+            natural_constraint = ceil (natural_opposite / ratio);
+
+          if (*natural_baseline != -1 && natural_constraint > *natural)
+            *natural_baseline += (natural_constraint - *natural) * self->yalign;
+          *natural = MAX (*natural, natural_constraint);
+        }
     }
 }
 
@@ -634,11 +791,19 @@ static GtkSizeRequestMode
 gtk_aspect_frame_get_request_mode (GtkWidget *widget)
 {
   GtkAspectFrame *self = GTK_ASPECT_FRAME (widget);
+  GtkSizeRequestMode request_mode;
 
-  if (self->child)
-    return gtk_widget_get_request_mode (self->child);
-  else
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  /* Our natural size always depends on for-size, so we're never
+   * constant-size, even when our child is.
+   */
+
+  if (!self->child)
+    return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+
+  request_mode = gtk_widget_get_request_mode (self->child);
+  if (request_mode != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+    return request_mode;
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 /**
