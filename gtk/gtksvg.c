@@ -14432,9 +14432,6 @@ gtk_svg_init (GtkSvg *self)
 
   self->timeline = timeline_new ();
   self->content = shape_new (NULL, SHAPE_GROUP);
-
-  self->views = g_hash_table_new (g_str_hash, g_str_equal);
-  self->view = NULL;
 }
 
 static void
@@ -14454,7 +14451,6 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->view_box, svg_value_unref);
   g_clear_pointer (&self->content_fit, svg_value_unref);
   g_clear_pointer (&self->overflow, svg_value_unref);
-  g_clear_pointer (&self->views, g_hash_table_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -14843,36 +14839,6 @@ gtk_svg_equal (GtkSvg *svg1,
     return FALSE;
 
   return shape_equal (svg1->content, svg2->content);
-}
-
-const char **
-gtk_svg_get_views (GtkSvg *svg)
-{
-  return (const char **) g_hash_table_get_keys_as_array (svg->views, NULL);
-}
-
-void
-gtk_svg_set_view (GtkSvg     *svg,
-                  const char *id)
-{
-  Shape *view = g_hash_table_lookup (svg->views, id);
-
-  if (view)
-    {
-      svg->view = view;
-
-      gdk_paintable_invalidate_contents (GDK_PAINTABLE (svg));
-      gdk_paintable_invalidate_size (GDK_PAINTABLE (svg));
-    }
-}
-
-const char *
-gtk_svg_get_view (GtkSvg *svg)
-{
-  if (svg->view)
-    return svg->view->id;
-
-  return NULL;
 }
 
 /* {{{ Animation */
@@ -15722,9 +15688,6 @@ gtk_svg_clear_content (GtkSvg *self)
   self->state_change_delay = 0;
 
   self->gpa_version = 0;
-
-  g_hash_table_remove_all (self->views);
-  self->view = NULL;
 }
 
 /* {{{ Constructors */
