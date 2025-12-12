@@ -13879,7 +13879,29 @@ serialize_shape (GString              *s,
         serialize_animation (s, svg, indent, a, flags);
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape->type == SHAPE_TEXT || shape->type == SHAPE_TSPAN)
+    {
+      for (guint i = 0; i < shape->text->len; i++)
+        {
+          TextNode *node = &g_array_index (shape->text, TextNode, i);
+          switch (node->type)
+            {
+            case TEXT_NODE_SHAPE:
+              serialize_shape (s, svg, indent + 2, node->shape.shape, flags);
+              break;
+            case TEXT_NODE_CHARACTERS:
+              {
+                char *escaped = g_markup_escape_text (node->characters.text, -1);
+                g_string_append (s, escaped);
+                g_free (escaped);
+              }
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+    }
+  else if (shape_types[shape->type].has_shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
