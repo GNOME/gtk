@@ -584,10 +584,17 @@ markup_filter_attributes (const char *element_name,
 
       ptr = va_arg (ap, const char **);
 
-      *ptr = NULL;
+      if (ptr)
+        *ptr = NULL;
       for (unsigned int i = 0; attr_names[i]; i++)
         {
-          if (strcmp (attr_names[i], name) == 0)
+          if (g_str_has_suffix (name, "*") &&
+              strncmp (attr_names[i], name, strlen (name) - 1) == 0)
+            {
+              g_assert (ptr == NULL);
+              *handled |= G_GUINT64_CONSTANT(1) << i;
+            }
+          else if (strcmp (attr_names[i], name) == 0)
             {
               *ptr = attr_values[i];
               *handled |= G_GUINT64_CONSTANT(1) << i;
@@ -11150,6 +11157,7 @@ start_element_cb (GMarkupParseContext  *context,
                                 "gpa:state", &state_attr,
                                 "gpa:version", &version_attr,
                                 "gpa:keywords", &keywords_attr,
+                                "xmlns*", NULL,
                                 NULL);
 
       if (viewbox_attr)
