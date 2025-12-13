@@ -6431,6 +6431,12 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
+  { .name = "svg",
+    .has_shapes = 1,
+    .never_rendered = 0,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+  },
 };
 
 static gboolean
@@ -6618,10 +6624,10 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_CIRCLE || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_X:
     case SHAPE_ATTR_Y:
-      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK || type == SHAPE_PATTERN;
+      return type == SHAPE_SVG || type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK || type == SHAPE_PATTERN;
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_HEIGHT:
-      return type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK ||
+      return type == SHAPE_SVG || type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK ||
              type == SHAPE_PATTERN || type == SHAPE_MARKER;
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_RY:
@@ -6660,7 +6666,7 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_VIEW_BOX:
     case SHAPE_ATTR_CONTENT_FIT:
-      return type == SHAPE_PATTERN;
+      return type == SHAPE_SVG || type == SHAPE_PATTERN;
     case SHAPE_ATTR_REF_X:
     case SHAPE_ATTR_REF_Y:
     case SHAPE_ATTR_MARKER_UNITS:
@@ -6673,7 +6679,7 @@ shape_has_attr (ShapeType type,
              type == SHAPE_PATH || type == SHAPE_POLYLINE ||
              type == SHAPE_POLYGON || type == SHAPE_LINE;
     case SHAPE_ATTR_OVERFLOW:
-      return type == SHAPE_PATTERN || type == SHAPE_MARKER;
+      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_MARKER;
     default:
       return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
@@ -6818,6 +6824,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_RADIAL_GRADIENT:
     case SHAPE_PATTERN:
     case SHAPE_MARKER:
+    case SHAPE_SVG:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -6904,6 +6911,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
         case SHAPE_MARKER:
+        case SHAPE_SVG:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -6964,6 +6972,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
         case SHAPE_MARKER:
+        case SHAPE_SVG:
         default:
           g_assert_not_reached ();
         }
@@ -7022,6 +7031,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_MASK:
     case SHAPE_PATTERN:
     case SHAPE_MARKER:
+    case SHAPE_SVG:
       {
         for (unsigned int i = 0; i < shape->shapes->len; i++)
           {
@@ -11750,6 +11760,10 @@ end_element_cb (GMarkupParseContext *context,
     {
       g_set_str (&data->svg->gpa_keywords, data->text->str);
     }
+  else if (strcmp (element_name, "svg") == 0)
+    {
+      return;
+    }
   else if (shape_type_lookup (element_name, &shape_type))
     {
       GSList *tos = data->shape_stack;
@@ -13186,6 +13200,9 @@ needs_isolation (Shape        *shape,
       SvgFilter *filter = (SvgFilter *) shape->current[SHAPE_ATTR_FILTER];
       SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
       GskTransform *transform;
+
+      if (shape->type == SHAPE_SVG && shape->parent == NULL)
+        return TRUE;
 
       if (context->op == MASKING && shape->type == SHAPE_MASK)
         return TRUE;
