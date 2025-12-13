@@ -13146,6 +13146,45 @@ static void pop_context (Shape        *shape,
 static void render_shape (Shape        *shape,
                           PaintContext *context);
 
+static gboolean
+needs_isolation (Shape        *shape,
+                 PaintContext *context)
+{
+  if (context->op != CLIPPING)
+    {
+      SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
+      SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
+      SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+      SvgFilter *filter = (SvgFilter *) shape->current[SHAPE_ATTR_FILTER];
+      SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
+      GskTransform *transform;
+
+      if (context->op == MASKING && shape->type == SHAPE_MASK)
+        return TRUE;
+
+      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+        return TRUE;
+
+      if (svg_number_get (opacity, 1) != 1)
+        return TRUE;
+
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        return TRUE;
+
+      if (filter->n_functions > 0 && filter->functions[0].kind != FILTER_NONE)
+        return TRUE;
+
+      transform = svg_transform_get_gsk (tf);
+      if (gsk_transform_get_category (transform) <= GSK_TRANSFORM_CATEGORY_3D)
+        {
+          gsk_transform_unref (transform);
+          return TRUE;
+        }
+      gsk_transform_unref (transform);
+    }
+
+  return FALSE;
+}
 
 static void
 push_context (Shape        *shape,
@@ -13157,35 +13196,10 @@ push_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
-  SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
-  gboolean isolate = FALSE;
-
-  if (context->op != CLIPPING)
-    {
-      if (context->op == MASKING && shape->type == SHAPE_MASK)
-        isolate = TRUE;
-
-      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
-        isolate = TRUE;
-
-      if (svg_number_get (opacity, 1) != 1)
-        isolate = TRUE;
-
-      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
-        isolate = TRUE;
-
-      if (filter->n_functions > 0 &&
-          filter->functions[0].kind != FILTER_NONE)
-        isolate = TRUE;
-    }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     {
-      GskTransform *transform;
-
-      transform = svg_transform_get_gsk (tf);
-      if (gsk_transform_get_category (transform) <= GSK_TRANSFORM_CATEGORY_3D)
-        isolate = TRUE;
+      GskTransform *transform = svg_transform_get_gsk (tf);
 
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_transform (context->snapshot, transform);
@@ -13204,7 +13218,7 @@ push_context (Shape        *shape,
 
   if (context->op != CLIPPING)
     {
-      if (isolate)
+      if (needs_isolation (shape, context))
         gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_ALL);
 
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
@@ -13401,38 +13415,6 @@ pop_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
-  SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
-  gboolean isolate = FALSE;
-
-  if (context->op != CLIPPING)
-    {
-      if (context->op == MASKING && shape->type == SHAPE_MASK)
-        isolate = TRUE;
-
-      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
-        isolate = TRUE;
-
-      if (svg_number_get (opacity, 1) != 1)
-        isolate = TRUE;
-
-      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
-        isolate = TRUE;
-
-      if (filter->n_functions > 0 &&
-          filter->functions[0].kind != FILTER_NONE)
-        isolate = TRUE;
-    }
-
-  if (tf->transforms[0].type != TRANSFORM_NONE)
-    {
-      GskTransform *transform;
-
-      transform = svg_transform_get_gsk (tf);
-      if (gsk_transform_get_category (transform) <= GSK_TRANSFORM_CATEGORY_3D)
-        isolate = TRUE;
-
-      gsk_transform_unref (transform);
-    }
 
   if (context->op != CLIPPING)
     {
@@ -13459,7 +13441,7 @@ pop_context (Shape        *shape,
           gtk_snapshot_pop (context->snapshot);
         }
 
-      if (isolate)
+      if (needs_isolation (shape, context))
         gtk_snapshot_pop (context->snapshot);
     }
 
