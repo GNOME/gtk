@@ -520,6 +520,11 @@ android:demo:
   variables:
     APPID: org.gtk.Demo4
 
+android:nodeeditor:
+  extends: '.android-defaults'
+  variables:
+    APPID: org.gtk.gtk4.NodeEditor
+
 android-signer:
   extends:
     - .distribution.android
@@ -528,7 +533,7 @@ android-signer:
     paths:
       - apks
     expire_in: 1 day
-  needs: [ 'android:demo' ]
+  needs: [ 'android:demo', 'android:nodeeditor' ]
   before_script:
     - |
       if [ -z ${ANDROID_KEYSTORE_ENC} ]; then

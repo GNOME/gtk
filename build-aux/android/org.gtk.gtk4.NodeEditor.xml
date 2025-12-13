@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app xmlns="https://sp1rit.arpa/pixiewood/" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <metainfo vercalc="sem121010">
+    <xi:include href="build://x86_64/demos/node-editor/org.gtk.gtk4.NodeEditor.appdata.xml" parse="xml"/>
+  </metainfo>
+  <style>
+    <theme name="gtk" accent="#3584e4"/>
+    <icon type="generate">
+      <drawable target="foreground" scale=".45" type="svg" path="src://demos/node-editor/data/scalable/apps/org.gtk.gtk4.NodeEditor.svg"/>
+      <color target="background">#FFFFFF</color>
+      <drawable target="monochrome" scale=".425" type="svg" path="src://demos/node-editor/data/symbolic/apps/org.gtk.gtk4.NodeEditor-symbolic.svg"/>
+    </icon>
+  </style>
+  <dependencies>
+    <glib>
+      <patch>hack</patch>
+    </glib>
+    <cairo/>
+    <fontconfig/>
+  </dependencies>
+  <build target="gtk4-node-editor" java-sources="gdk/android/glue/java/">
+    <configure-options>
+      <option>-Dmedia-gstreamer=disabled</option>
+      <option>-Dbuild-demos=true</option>
+      <option>-Dbuild-testsuite=false</option>
+      <option>-Dbuild-examples=false</option>
+      <option>-Dbuild-tests=false</option>
+    </configure-options>
+  </build>
+</app>
