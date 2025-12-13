@@ -6575,6 +6575,31 @@ shape_attr_get_initial_value (ShapeAttr  attr,
         }
     }
 
+  if (shape->type == SHAPE_SVG)
+    {
+      if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
+        {
+          static SvgValue *default_size = NULL;
+
+          if (!default_size)
+            default_size = svg_percentage_new (100);
+
+          return default_size;
+        }
+
+      if (attr == SHAPE_ATTR_OVERFLOW)
+        {
+          SvgValue *value;
+
+          if (shape->parent != NULL)
+            value = svg_overflow_new (OVERFLOW_HIDDEN);
+          else
+            value = svg_overflow_new (OVERFLOW_VISIBLE);
+          svg_value_unref (value);
+          return value;
+        }
+    }
+
   return shape_attrs[attr].initial_value;
 }
 
@@ -11135,161 +11160,13 @@ start_element_cb (GMarkupParseContext  *context,
 {
   ParserData *data = user_data;
   ShapeType shape_type;
-  Shape *shape;
+  Shape *shape = NULL;
   uint64_t handled = 0;
 
   if (data->skip.to)
     return;
 
-  if (strcmp (element_name, "svg") == 0)
-    {
-      const char *width_attr = NULL;
-      const char *height_attr = NULL;
-      const char *viewbox_attr = NULL;
-      const char *state_attr = NULL;
-      const char *version_attr = NULL;
-      const char *keywords_attr = NULL;
-      const char *preserve_aspect_ratio_attr = NULL;
-      const char *overflow_attr = NULL;
-      double width, height;
-
-      if (data->current_shape != data->svg->content)
-        {
-          skip_element (data, context, "Nested <svg> elements are not supported");
-          return;
-        }
-
-      markup_filter_attributes (element_name,
-                                attr_names, attr_values,
-                                &handled,
-                                "width", &width_attr,
-                                "height", &height_attr,
-                                "viewBox", &viewbox_attr,
-                                "preserveAspectRatio", &preserve_aspect_ratio_attr,
-                                "overflow", &overflow_attr,
-                                "gpa:state", &state_attr,
-                                "gpa:version", &version_attr,
-                                "gpa:keywords", &keywords_attr,
-                                "xmlns*", NULL,
-                                NULL);
-
-      if (viewbox_attr)
-        {
-          SvgValue *v;
-
-          v = svg_view_box_parse (viewbox_attr);
-          svg_value_unref (data->svg->view_box);
-          if (v)
-            {
-              data->svg->view_box = v;
-            }
-          else
-            {
-              data->svg->view_box = svg_view_box_new_unset ();
-              gtk_svg_invalid_attribute (data->svg, context, "viewBox", NULL);
-            }
-        }
-
-      width = ((SvgViewBox *) data->svg->view_box)->view_box.size.width;
-      if (width_attr)
-        {
-          SvgValue *value;
-
-          value = svg_number_parse (width_attr, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
-          if (value)
-            {
-              width = svg_number_get (value, width);
-              svg_value_unref (value);
-            }
-          else
-            gtk_svg_invalid_attribute (data->svg, context, "width", NULL);
-        }
-
-      height = ((SvgViewBox *) data->svg->view_box)->view_box.size.height;
-      if (height_attr)
-        {
-          SvgValue *value;
-
-          value = svg_number_parse (height_attr, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
-          if (value)
-            {
-              height = svg_number_get (value, height);
-              svg_value_unref (value);
-            }
-          else
-            gtk_svg_invalid_attribute (data->svg, context, "height", NULL);
-        }
-
-      /* Just a fallback - this gets set at snapshot time */
-      graphene_rect_init (&data->svg->viewport, 0, 0, width, height);
-
-      data->svg->width = width;
-      data->svg->height = height;
-
-      if (preserve_aspect_ratio_attr)
-        {
-          SvgValue *v;
-
-          v = svg_content_fit_parse (preserve_aspect_ratio_attr);
-          svg_value_unref (data->svg->content_fit);
-          if (v)
-            {
-              data->svg->content_fit = v;
-            }
-          else
-            {
-              data->svg->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
-              gtk_svg_invalid_attribute (data->svg, context, "preserveAspectRatio", NULL);
-            }
-        }
-
-      if (overflow_attr)
-        {
-          SvgValue *v = svg_overflow_parse (overflow_attr);
-
-          if (v)
-            {
-              svg_value_unref (data->svg->overflow);
-              data->svg->overflow = v;
-            }
-          else
-            {
-              gtk_svg_invalid_attribute (data->svg, context, "overflow", NULL);
-            }
-        }
-
-      if (state_attr)
-        {
-          double v;
-
-          if (strcmp (state_attr, "empty") == 0)
-            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
-          else if (!parse_number (state_attr, -1, 63, &v))
-            gtk_svg_invalid_attribute (data->svg, context, "gpa:state", NULL);
-          else if (v < 0)
-            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
-          else
-            gtk_svg_set_state (data->svg, (unsigned int) CLAMP (v, 0, 63));
-        }
-
-      if (version_attr)
-        {
-          unsigned int version;
-          char *end;
-
-          version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
-          if ((end && *end != '\0') || version != 1)
-            gtk_svg_invalid_attribute (data->svg, context, "gpa:version", "must be 1");
-          else
-            data->svg->gpa_version = version;
-        }
-
-      if (keywords_attr)
-        data->svg->gpa_keywords = g_strdup (keywords_attr);
-
-      return;
-    }
-  else if (strcmp (element_name, "metadata") == 0)
+  if (strcmp (element_name, "metadata") == 0)
     {
       return;
     }
@@ -11618,10 +11495,6 @@ start_element_cb (GMarkupParseContext  *context,
 
       return;
     }
-  else if (shape_type_lookup (element_name, &shape_type))
-    {
-      shape = shape_new (data->current_shape, shape_type);
-    }
   else if (strcmp (element_name, "stop") == 0)
     {
       const char *parent = g_markup_parse_context_get_element_stack (context)->next->data;
@@ -11688,17 +11561,69 @@ start_element_cb (GMarkupParseContext  *context,
 
       return;
     }
+  else if (shape_type_lookup (element_name, &shape_type))
+    {
+      shape = shape_new (data->current_shape, shape_type);
+    }
   else
     {
       skip_element (data, context, "Unknown element: <%s>", element_name);
       return;
     }
 
-  if (!shape_types[data->current_shape->type].has_shapes)
+  if (data->current_shape &&
+      !shape_types[data->current_shape->type].has_shapes)
     {
       shape_free (shape);
       skip_element (data, context, "Parent element can't contain shapes");
       return;
+    }
+
+  if (data->current_shape == NULL && shape->type == SHAPE_SVG)
+    {
+      const char *state_attr = NULL;
+      const char *version_attr = NULL;
+      const char *keywords_attr = NULL;
+
+      data->svg->content = shape;
+
+      markup_filter_attributes (element_name,
+                                attr_names, attr_values,
+                                &handled,
+                                "xmlns*", NULL,
+                                "gpa:state", &state_attr,
+                                "gpa:version", &version_attr,
+                                "gpa:keywords", &keywords_attr,
+                                NULL);
+
+      if (state_attr)
+        {
+          double v;
+
+          if (strcmp (state_attr, "empty") == 0)
+            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
+          else if (!parse_number (state_attr, -1, 63, &v))
+            gtk_svg_invalid_attribute (data->svg, context, "gpa:state", NULL);
+          else if (v < 0)
+            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
+          else
+            gtk_svg_set_state (data->svg, (unsigned int) CLAMP (v, 0, 63));
+        }
+
+      if (version_attr)
+        {
+          unsigned int version;
+          char *end;
+
+          version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
+          if ((end && *end != '\0') || version != 1)
+            gtk_svg_invalid_attribute (data->svg, context, "gpa:version", "must be 1");
+          else
+            data->svg->gpa_version = version;
+        }
+
+      if (keywords_attr)
+        data->svg->gpa_keywords = g_strdup (keywords_attr);
     }
 
   parse_shape_attrs (shape,
@@ -11712,7 +11637,9 @@ start_element_cb (GMarkupParseContext  *context,
 
   gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
-  g_ptr_array_add (data->current_shape->shapes, shape);
+  if (data->current_shape)
+    g_ptr_array_add (data->current_shape->shapes, shape);
+
   data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
   data->current_shape = shape;
 
@@ -11759,10 +11686,6 @@ end_element_cb (GMarkupParseContext *context,
   if (strcmp (element_name, "rdf:li") == 0)
     {
       g_set_str (&data->svg->gpa_keywords, data->text->str);
-    }
-  else if (strcmp (element_name, "svg") == 0)
-    {
-      return;
     }
   else if (shape_type_lookup (element_name, &shape_type))
     {
@@ -12197,8 +12120,10 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   };
   GError *error = NULL;
 
+  g_clear_pointer (&self->content, shape_free);
+
   data.svg = self;
-  data.current_shape = self->content;
+  data.current_shape = NULL;
   data.shape_stack = NULL;
   data.shapes = g_hash_table_new (g_str_hash, g_str_equal);
   data.animations = g_hash_table_new (g_str_hash, g_str_equal);
@@ -12228,7 +12153,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     }
   else
     {
-      g_assert (data.current_shape == self->content);
+      g_assert (data.current_shape == NULL);
       g_assert (data.shape_stack == NULL);
       g_assert (data.current_animation == NULL);
       g_assert (data.skip.to == NULL);
@@ -12236,6 +12161,24 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     }
 
   g_markup_parse_context_free (context);
+
+  if (self->content == NULL)
+    self->content = shape_new (NULL, SHAPE_SVG);
+
+  if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_VIEW_BOX))
+    {
+      SvgViewBox *vb = (SvgViewBox *) self->content->base[SHAPE_ATTR_VIEW_BOX];
+      self->width = vb->view_box.size.width;
+      self->height = vb->view_box.size.height;
+    }
+
+  if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
+    self->width = svg_number_get (self->content->base[SHAPE_ATTR_WIDTH], 1);
+
+  if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
+    self->height = svg_number_get (self->content->base[SHAPE_ATTR_HEIGHT], 1);
+
+  graphene_rect_init (&self->viewport, 0, 0, self->width, self->height);
 
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
     {
@@ -13103,8 +13046,10 @@ typedef enum
 typedef struct
 {
   GtkSvg *svg;
-  GSList *viewport_stack;
+  double width;
+  double height;
   const graphene_rect_t *viewport;
+  GSList *viewport_stack;
   GtkSnapshot *snapshot;
   int64_t current_time;
   const GdkRGBA *colors;
@@ -13241,6 +13186,61 @@ push_context (Shape        *shape,
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+
+  if (shape->type == SHAPE_SVG)
+    {
+      double x, y, width, height;
+      SvgViewBox *vb;
+      SvgContentFit *cf;
+      SvgValue *overflow;
+      double sx, sy, tx, ty;
+      graphene_rect_t view_box;
+      graphene_rect_t *viewport;
+
+      if (shape->parent == NULL)
+        {
+          x = 0;
+          y = 0;
+        }
+      else
+        {
+          x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
+          y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
+        }
+
+      width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+      height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+
+      vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
+      cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
+      overflow = shape->current[SHAPE_ATTR_OVERFLOW];
+
+      if (vb->unset)
+        graphene_rect_init (&view_box, 0, 0, width, height);
+      else
+        view_box = vb->view_box;
+
+      viewport = g_new (graphene_rect_t, 1);
+      graphene_rect_init (viewport, x, y, width, height);
+
+      compute_viewport_transform (cf->is_none,
+                                  cf->align_x,
+                                  cf->align_y,
+                                  cf->meet,
+                                  &view_box,
+                                  x, y, width, height,
+                                  &sx, &sy, &tx, &ty);
+
+      push_viewport (context, viewport);
+
+      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+        gtk_snapshot_push_clip (context->snapshot, viewport);
+
+      gtk_snapshot_save (context->snapshot);
+
+      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
+      gtk_snapshot_scale (context->snapshot, sx, sy);
+    }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     {
@@ -13447,7 +13447,6 @@ push_context (Shape        *shape,
             }
         }
     }
-
 }
 
 static void
@@ -13495,6 +13494,18 @@ pop_context (Shape        *shape,
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
+
+  if (shape->type == SHAPE_SVG)
+    {
+      SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
+
+      gtk_snapshot_restore (context->snapshot);
+
+      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+        gtk_snapshot_pop (context->snapshot);
+
+      g_free ((gpointer) pop_viewport (context));
+   }
 }
 
 static void
@@ -14243,6 +14254,7 @@ render_shape (Shape        *shape,
     return;
 
   context->depth++;
+
   if (context->depth > MAX_DEPTH)
     {
       gtk_svg_rendering_error (context->svg,
@@ -14273,25 +14285,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   GtkSvg *self = GTK_SVG (paintable);
   ComputeContext compute_context;
   PaintContext paint_context;
-  graphene_rect_t view_box;
-  double sx, sy, tx, ty;
-  SvgViewBox *vb = (SvgViewBox *) self->view_box;
-  SvgContentFit *cf = (SvgContentFit *) self->content_fit;
-
-  if (vb->unset)
-    graphene_rect_init (&view_box, 0, 0, self->width, self->height);
-  else
-    view_box = vb->view_box;
 
   graphene_rect_init (&self->viewport, 0, 0, width, height);
-
-  compute_viewport_transform (cf->is_none,
-                              cf->align_x,
-                              cf->align_y,
-                              cf->meet,
-                              &view_box,
-                              0, 0, width, height,
-                              &sx, &sy, &tx, &ty);
 
   compute_context.svg = self;
   compute_context.viewport = &self->viewport;
@@ -14316,23 +14311,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
 
-  if (svg_enum_get (self->overflow) == OVERFLOW_HIDDEN)
-    gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
-
-  gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tx, ty));
-  gtk_snapshot_scale (snapshot, sx, sy);
-
-  gtk_snapshot_push_isolation (snapshot, GSK_ISOLATION_ALL);
-
   render_shape (self->content, &paint_context);
-
-  gtk_snapshot_pop (snapshot);
-
-  gtk_snapshot_restore (snapshot);
-
-  if (svg_enum_get (self->overflow) == OVERFLOW_HIDDEN)
-    gtk_snapshot_pop (snapshot);
 
   if (self->advance_after_snapshot)
     {
@@ -14399,11 +14378,12 @@ static double
 gtk_svg_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
   GtkSvg *self = GTK_SVG (paintable);
-  SvgViewBox *vb = (SvgViewBox *) self->view_box;
+  SvgViewBox *vb;
 
   if (self->width > 0 && self->height > 0)
     return self->width / self->height;
 
+  vb = (SvgViewBox *) self->content->current[SHAPE_ATTR_VIEW_BOX];
   if (!vb->unset)
     {
       if (vb->view_box.size.width > 0 && vb->view_box.size.height > 0)
@@ -14459,13 +14439,10 @@ gtk_svg_init (GtkSvg *self)
   self->playing = FALSE;
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
 
-  self->view_box = svg_view_box_new_unset ();
-  self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
-  self->overflow = svg_overflow_new (OVERFLOW_VISIBLE);
   graphene_rect_init (&self->viewport, 0, 0, 0, 0);
 
+  self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
-  self->content = shape_new (NULL, SHAPE_GROUP);
 }
 
 static void
@@ -14476,15 +14453,11 @@ gtk_svg_dispose (GObject *object)
   frame_clock_disconnect (self);
   g_clear_handle_id (&self->pending_invalidate, g_source_remove);
 
-  shape_free (self->content);
-  timeline_free (self->timeline);
+  g_clear_pointer (&self->content, shape_free);
+  g_clear_pointer (&self->timeline, timeline_free);
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
-
-  g_clear_pointer (&self->view_box, svg_value_unref);
-  g_clear_pointer (&self->content_fit, svg_value_unref);
-  g_clear_pointer (&self->overflow, svg_value_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -14862,12 +14835,6 @@ gboolean
 gtk_svg_equal (GtkSvg *svg1,
                GtkSvg *svg2)
 {
-  if (svg1->width != svg2->width ||
-      svg1->height != svg2->height ||
-      !svg_value_equal (svg1->view_box, svg2->view_box) ||
-      !svg_value_equal (svg1->content_fit, svg2->content_fit))
-    return FALSE;
-
   if (svg1->gpa_version != svg2->gpa_version ||
       g_strcmp0 (svg1->gpa_keywords, svg2->gpa_keywords) != 0)
     return FALSE;
@@ -15158,8 +15125,6 @@ gtk_svg_serialize_full (GtkSvg               *self,
                         GtkSvgSerializeFlags  flags)
 {
   GString *s = g_string_new ("");
-  SvgValue *default_content_fit;
-  SvgValue *default_overflow;
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     {
@@ -15208,44 +15173,6 @@ gtk_svg_serialize_full (GtkSvg               *self,
       g_string_append (s, "xmlns:dc='http://purl.org/dc/elements/1.1/'");
     }
 
-  indent_for_attr (s, 0);
-  g_string_append (s, "width='");
-  string_append_double (s, self->width);
-  g_string_append_c (s, '\'');
-
-  indent_for_attr (s, 0);
-  g_string_append (s, "height='");
-  string_append_double (s, self->height);
-  g_string_append_c (s, '\'');
-
-  if (!((SvgViewBox *) self->view_box)->unset)
-    {
-      indent_for_attr (s, 0);
-      g_string_append (s, "viewBox='");
-      svg_value_print (self->view_box, s);
-      g_string_append_c (s, '\'');
-    }
-
-  default_content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
-  if (!svg_value_equal (self->content_fit, default_content_fit))
-    {
-      indent_for_attr (s, 0);
-      g_string_append (s, "preserveAspectRatio='");
-      svg_value_print (self->content_fit, s);
-      g_string_append_c (s, '\'');
-    }
-  svg_value_unref (default_content_fit);
-
-  default_overflow = svg_overflow_new (OVERFLOW_VISIBLE);
-  if (!svg_value_equal (self->overflow, default_overflow))
-    {
-      indent_for_attr (s, 0);
-      g_string_append (s, "overflow='");
-      svg_value_print (self->overflow, s);
-      g_string_append_c (s, '\'');
-    }
-  svg_value_unref (default_overflow);
-
   if (self->gpa_version > 0 || (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE))
     {
       indent_for_attr (s, 0);
@@ -15279,6 +15206,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
         }
     }
 
+  serialize_shape_attrs (s, self, 0, self->content, flags);
   g_string_append (s, ">");
 
   if (self->gpa_keywords)
@@ -15698,24 +15626,13 @@ gtk_svg_set_playing (GtkSvg   *self,
 static void
 gtk_svg_clear_content (GtkSvg *self)
 {
-  timeline_free (self->timeline);
-  shape_free (self->content);
+  g_clear_pointer (&self->timeline, timeline_free);
+  g_clear_pointer (&self->content, shape_free);
 
+  self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
-  self->content = shape_new (NULL, SHAPE_GROUP);
 
-  self->width = 0;
-  self->height = 0;
-  svg_value_unref (self->view_box);
-  self->view_box = svg_view_box_new_unset ();
   graphene_rect_init (&self->viewport, 0, 0, 0, 0);
-
-  svg_value_unref (self->view_box);
-  self->view_box = svg_view_box_new_unset ();
-
-  svg_value_unref (self->content_fit);
-  self->content_fit = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
-  self->overflow = svg_overflow_new (OVERFLOW_VISIBLE);
 
   self->state = 0;
   self->max_state = 0;

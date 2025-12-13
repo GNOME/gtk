@@ -1,0 +1,73 @@
+isolation {
+  child: container {
+    transform {
+      transform: translate(10, 10);
+      child: fill {
+        child: color {
+          bounds: -20 -20 100 100;
+          color: rgb(255,0,0);
+        }
+        path: "\
+M 80 30 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    clip {
+      clip: 90 10 60 60;
+      child: transform {
+        transform: translate(90, 10);
+        child: fill {
+          child: color {
+            bounds: -20 -20 100 100;
+            color: rgb(0,0,255);
+          }
+          path: "\
+M 80 30 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+          fill-rule: winding;
+        }
+      }
+    }
+    clip {
+      clip: 170 10 60 60;
+      child: transform {
+        transform: translate(170, 10);
+        child: fill {
+          child: color {
+            bounds: -20 -20 100 100;
+            color: rgb(0,128,0);
+          }
+          path: "\
+M 80 30 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+          fill-rule: winding;
+        }
+      }
+    }
+    transform {
+      transform: translate(10, 90);
+      child: fill {
+        child: color {
+          bounds: -20 -20 100 100;
+          color: rgb(255,255,0);
+        }
+        path: "\
+M 80 30 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    clip {
+      clip: 90 90 60 60;
+      child: transform {
+        transform: translate(90, 90);
+        child: fill {
+          child: color {
+            bounds: -20 -20 100 100;
+            color: rgb(128,0,128);
+          }
+          path: "\
+M 80 30 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+          fill-rule: winding;
+        }
+      }
+    }
+  }
+}

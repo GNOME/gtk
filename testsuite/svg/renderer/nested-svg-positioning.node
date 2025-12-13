@@ -1,0 +1,100 @@
+isolation {
+  child: container {
+    transform {
+      transform: translate(30, 30);
+      child: fill {
+        child: color {
+          bounds: 0 0 50 50;
+          color: rgb(255,0,0);
+        }
+        path: "\
+M 0 0 h 50 v 50 h -50 z";
+        fill-rule: winding;
+      }
+    }
+    clip {
+      clip: 100 30 60 60;
+      child: transform {
+        transform: translate(100, 30);
+        child: fill {
+          child: color {
+            bounds: 0 0 100 100;
+            color: rgb(0,0,255);
+          }
+          path: "\
+M 0 0 h 100 v 100 h -100 z";
+          fill-rule: winding;
+        }
+      }
+    }
+    transform {
+      transform: translate(50, 100);
+      child: fill {
+        child: color {
+          bounds: 5 5 70 50;
+          color: rgb(0,128,0);
+        }
+        path: "\
+M 5 5 h 70 v 50 h -70 z";
+        fill-rule: winding;
+      }
+    }
+    fill {
+      child: color {
+        bounds: 5 5 30 30;
+        color: rgb(255,255,0);
+      }
+      path: "\
+M 35 20 o 0 15, -15 15, 0.707106769 o -15 0, -15 -15, 0.707106769 o 0 -15, 15 -15, 0.707106769 o 15 0, 15 15, 0.707106769 z";
+      fill-rule: winding;
+    }
+    transform {
+      transform: translate(-10, -10);
+      child: fill {
+        child: color {
+          bounds: 10 10 40 40;
+          color: rgb(128,0,128);
+        }
+        path: "\
+M 10 10 h 40 v 40 h -40 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(10, 200);
+      child: fill {
+        child: color {
+          bounds: 0 0 40 40;
+          color: rgb(255,165,0);
+        }
+        path: "\
+M 0 0 h 40 v 40 h -40 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(60, 200);
+      child: fill {
+        child: color {
+          bounds: 0 0 40 40;
+          color: rgb(255,192,203);
+        }
+        path: "\
+M 0 0 h 40 v 40 h -40 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(110, 200);
+      child: fill {
+        child: color {
+          bounds: 0 0 40 40;
+          color: rgb(0,255,255);
+        }
+        path: "\
+M 0 0 h 40 v 40 h -40 z";
+        fill-rule: winding;
+      }
+    }
+  }
+}

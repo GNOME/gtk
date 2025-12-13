@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <svg width="120" height="40" viewBox="0 0 1200 400"
-     xmlns="http://www.w3.org/2000/svg" version="1.1">
+     xmlns="http://www.w3.org/2000/svg">
   <desc>Example ellipse01 - examples of ellipses</desc>
 
   <!-- Show outline of viewport using 'rect' element -->

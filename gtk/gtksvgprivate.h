@@ -60,9 +60,6 @@ struct _GtkSvg
   Shape *content;
 
   double width, height;
-  SvgValue *view_box;
-  SvgValue *content_fit;
-  SvgValue *overflow;
   graphene_rect_t bounds;
   graphene_rect_t viewport;
 

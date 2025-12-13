@@ -1,14 +1,14 @@
 <svg
         xmlns='http://www.w3.org/2000/svg'
         xmlns:svg='http://www.w3.org/2000/svg'
-        width='64'
-        height='64'
-        viewBox='0 0 32 32'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
         gpa:state='empty'
         gpa:state-change-delay='0ms'
-        gpa:time-since-load='4000ms'>
+        gpa:time-since-load='4000ms'
+        width='64'
+        height='64'
+        viewBox='0 0 32 32'>
   <circle
           id='red'
           visibility='hidden'

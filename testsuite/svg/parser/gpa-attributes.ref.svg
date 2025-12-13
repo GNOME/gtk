@@ -4,12 +4,12 @@
         xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
         xmlns:cc='http://creativecommons.org/ns#'
         xmlns:dc='http://purl.org/dc/elements/1.1/'
-        width='16'
-        height='16'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
         gpa:state='empty'
-        gpa:keywords='just some test'>
+        gpa:keywords='just some test'
+        width='16'
+        height='16'>
   <metadata>
     <rdf:RDF>
       <cc:Work>

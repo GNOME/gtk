@@ -8,7 +8,6 @@
       </circle>
       <animate attributeName='rx' href='#fools!'/>
     </circle>
-    <svg>again?</svg>
     <path d='mnopq'/>
     <rect width='50' height='40' fill='fluid' stroke='red'/>
     <animate attributeName='width'>
