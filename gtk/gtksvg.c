@@ -13080,7 +13080,6 @@ typedef struct
   GtkSvg *svg;
   const graphene_rect_t *viewport;
   GtkSnapshot *snapshot;
-  graphene_rect_t bounds;
   int64_t current_time;
   const GdkRGBA *colors;
   size_t n_colors;
@@ -14271,7 +14270,6 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.svg = self;
   paint_context.viewport = &self->viewport;
   paint_context.snapshot = snapshot;
-  paint_context.bounds = self->bounds;
   paint_context.colors = colors;
   paint_context.n_colors = n_colors;
   paint_context.weight = self->weight >= 1 ? self->weight : weight;
