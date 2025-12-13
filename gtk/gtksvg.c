@@ -13086,6 +13086,7 @@ typedef enum
 typedef struct
 {
   GtkSvg *svg;
+  GSList *viewport_stack;
   const graphene_rect_t *viewport;
   GtkSnapshot *snapshot;
   int64_t current_time;
@@ -13137,6 +13138,30 @@ pop_ctx_shape (PaintContext *context)
   context->ctx_shape = (Shape *) tos->data;
   context->ctx_shape_stack = context->ctx_shape_stack->next;
   g_slist_free_1 (tos);
+}
+
+static void
+push_viewport (PaintContext          *context,
+               const graphene_rect_t *viewport)
+{
+  context->viewport_stack = g_slist_prepend (context->viewport_stack,
+                                             (gpointer) context->viewport);
+  context->viewport = viewport;
+}
+
+static const graphene_rect_t *
+pop_viewport (PaintContext *context)
+{
+  GSList *tos = context->viewport_stack;
+  const graphene_rect_t *viewport = context->viewport;
+
+  g_assert (tos != NULL);
+
+  context->viewport = (const graphene_rect_t *) tos->data;
+  context->viewport_stack = tos->next;
+  g_slist_free_1 (tos);
+
+  return viewport;
 }
 
 static void paint_shape (Shape        *shape,
@@ -14259,6 +14284,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
   paint_context.svg = self;
   paint_context.viewport = &self->viewport;
+  paint_context.viewport_stack = NULL;
   paint_context.snapshot = snapshot;
   paint_context.colors = colors;
   paint_context.n_colors = n_colors;
