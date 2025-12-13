@@ -156,6 +156,7 @@ typedef struct _Block {
  * UNUSED STACK
  */
 
+#ifdef HAVE_MMAP
 static inline void
 unused_push (void **stack, void *ptr)
 {
@@ -182,6 +183,7 @@ unused_peek (void **stack)
 	g_assert (stack);
 	return *stack;
 }
+#endif
 
 /* -----------------------------------------------------------------------------
  * POOL META DATA ALLOCATION

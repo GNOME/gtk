@@ -486,7 +486,6 @@ gdk_create_dummy_wgl_context (GdkWin32Display *display_win32,
 {
   PIXELFORMATDESCRIPTOR pfd = {0};
   int pixel_format;
-  HGLRC hglrc;
 
   pixel_format = choose_pixel_format_opengl32 (display_win32, hdc);
   if (pixel_format == 0)
@@ -707,7 +706,6 @@ create_wgl_context_with_attribs (HDC           hdc,
                                  GdkGLVersion *version)
 {
   HGLRC hglrc;
-  GdkWin32GLContextWGL *context_wgl;
   const GdkGLVersion *supported_versions = gdk_gl_versions_get_for_api (GDK_GL_API_GL);
   guint i;
 
@@ -764,6 +762,7 @@ create_wgl_context (GdkGLContext    *context,
   GdkGLVersion version;
 
   hglrc = NULL;
+  hglrc_base = NULL;
 
   if (display_win32->hasWglARBCreateContext)
     {

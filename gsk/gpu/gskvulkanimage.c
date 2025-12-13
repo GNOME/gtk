@@ -1770,8 +1770,8 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
                        flags |
                        (needs_conversion ? GSK_GPU_IMAGE_EXTERNAL : 0) |
                        (desc.MipLevels > 1 ? GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP : 0),
-                       shader_op,
                        GSK_GPU_CONVERSION_NONE,
+                       shader_op,
                        format,
                        desc.Width, desc.Height);
 

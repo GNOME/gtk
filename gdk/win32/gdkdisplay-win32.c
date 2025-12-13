@@ -514,7 +514,7 @@ gdk_win32_display_create_d3d_devices (GdkWin32Display    *self,
 static void
 gdk_win32_display_init_dcomp (GdkWin32Display *self)
 {
-  const GUID my_IID_IDCompositionDevice = { 0xC37EA93A,0xE7AA,0x450D,0xB1,0x6F,0x97,0x46,0xCB,0x04,0x07,0xF3 };
+  const GUID my_IID_IDCompositionDevice = { 0xC37EA93A,0xE7AA,0x450D, { 0xB1,0x6F,0x97,0x46,0xCB,0x04,0x07,0xF3 } };
   IDXGIDevice *dxgi_device;
 
   if (!gdk_has_feature (GDK_FEATURE_DCOMP))

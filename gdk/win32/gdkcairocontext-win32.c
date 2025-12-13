@@ -89,7 +89,6 @@ gdk_win32_cairo_context_surface_attach (GdkDrawContext  *context,
   ID3D11Device *d3d11_device;
   IDXGISwapChain1 *swap_chain;
   guint width, height;
-  HRESULT hr;
 
   display = GDK_WIN32_DISPLAY (gdk_draw_context_get_display (context));
   surface = GDK_WIN32_SURFACE (gdk_draw_context_get_surface (context));
@@ -153,8 +152,6 @@ gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext  *draw_context,
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   cairo_t *cr;
-  cairo_rectangle_int_t extents;
-  POINT offset;
   GdkWin32Display *display;
   ID3D11Device *d3d11_device;
   ID3D11DeviceContext *d3d11_context;

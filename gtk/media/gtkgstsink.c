@@ -676,7 +676,6 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       ID3D12Fence *fence;
       guint64 fence_wait;
       GError *error = NULL;
-      int i;
 
       builder = gdk_d3d12_texture_builder_new ();
       gdk_d3d12_texture_builder_set_resource (builder, gst_d3d12_memory_get_resource_handle (dmem));

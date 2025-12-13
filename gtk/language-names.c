@@ -40,7 +40,7 @@ get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
 {
   wchar_t *langname_w = NULL;
   wchar_t locale_abbrev_w[9];
-  gchar *langname, *locale_abbrev, *locale, *p;
+  gchar *langname, *locale_abbrev, *locale;
   gint i;
   const LCTYPE iso639_lctypes[] = { LOCALE_SISO639LANGNAME, LOCALE_SISO639LANGNAME2 };
   GHashTable *ht_scripts_langs = (GHashTable *) param;
@@ -59,7 +59,6 @@ get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
   GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, langname_size);
   langname = g_utf16_to_utf8 (langname_w, -1, NULL, NULL, NULL);
   locale = g_utf16_to_utf8 (locale_w, -1, NULL, NULL, NULL);
-  p = strchr (locale, '-');
   lang = pango_language_from_string (locale);
   if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
     g_hash_table_insert (ht_scripts_langs, lang, langname);

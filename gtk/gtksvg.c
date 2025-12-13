@@ -7426,7 +7426,7 @@ time_spec_get_state_change_delay (TimeSpec *spec)
 {
   if (spec->type == TIME_SPEC_TYPE_STATES &&
       spec->states.side == TIME_SPEC_SIDE_END)
-    return labs (spec->offset);
+    return ABS (spec->offset);
 
   return 0;
 }

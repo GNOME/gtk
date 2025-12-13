@@ -147,22 +147,6 @@ gdk_surface_win32_finalize (GObject *object)
 }
 
 static void
-_gdk_win32_get_window_client_area_rect (GdkSurface *surface,
-                                        int         scale,
-                                        RECT       *rect)
-{
-  int x, y, width, height;
-
-  gdk_surface_get_geometry (surface, &x, &y, NULL, NULL);
-  width = gdk_surface_get_width (surface);
-  height = gdk_surface_get_height (surface);
-  rect->left = x * scale;
-  rect->top = y * scale;
-  rect->right = rect->left + width * scale;
-  rect->bottom = rect->top + height * scale;
-}
-
-static void
 gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
                                         GdkSurface    *surface)
 {

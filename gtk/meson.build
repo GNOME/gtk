@@ -1231,7 +1231,8 @@ if build_gir
       dependencies: libgdk_dep,
       header: 'gdk/win32/gdkwin32.h',
       extra_args: gir_args,
-      fatal_warnings: get_option('werror'),
+      # https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/574
+      fatal_warnings: false,
     )
     gtk_dep_sources += gdk_win32_gir
   endif

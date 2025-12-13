@@ -99,7 +99,6 @@ gdk_win32_vulkan_context_surface_attach (GdkDrawContext  *context,
   GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (context);
   GdkSurface *surface;
   GdkWin32Display *display;
-  VkResult result;
   IUnknown *dcomp_surface;
   guint width, height;
 

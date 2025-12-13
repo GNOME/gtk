@@ -178,7 +178,8 @@ _gtk_get_localedir (void)
       /* GTK_LOCALEDIR ends in either /lib/locale or
        * /share/locale. Scan for that slash.
        */
-      p = GTK_LOCALEDIR + strlen (GTK_LOCALEDIR);
+      p = GTK_LOCALEDIR;
+      p += strlen (GTK_LOCALEDIR);
       while (*--p != '/')
         ;
       while (*--p != '/')

@@ -346,7 +346,6 @@ msys2-ucrt64:
 
 msys2-clang64:
   extends: .mingw-defaults
-  when: manual
   needs: []
   variables:
     MSYSTEM: "CLANG64"
