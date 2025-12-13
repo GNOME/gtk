@@ -6482,10 +6482,10 @@ shape_free (gpointer data)
 static void animation_free (gpointer data);
 
 static SvgValue *
-shape_attr_get_initial_value (ShapeAttr attr,
-                              ShapeType type)
+shape_attr_get_initial_value (ShapeAttr  attr,
+                              Shape     *shape)
 {
-  if (type == SHAPE_RADIAL_GRADIENT)
+  if (shape->type == SHAPE_RADIAL_GRADIENT)
     {
       /* Radial gradients have conflicting initial values. Yay */
       if (attr == SHAPE_ATTR_CX ||
@@ -6501,7 +6501,7 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
-  if (type == SHAPE_LINE)
+  if (shape->type == SHAPE_LINE)
     {
       if (attr == SHAPE_ATTR_X1 ||
           attr == SHAPE_ATTR_Y1 ||
@@ -6518,7 +6518,9 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
-  if (type == SHAPE_CLIP_PATH || type == SHAPE_MASK || type == SHAPE_PATTERN)
+  if (shape->type == SHAPE_CLIP_PATH ||
+      shape->type == SHAPE_MASK ||
+      shape->type == SHAPE_PATTERN)
     {
       if (attr == SHAPE_ATTR_CONTENT_UNITS)
         {
@@ -6531,7 +6533,7 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
-  if (type == SHAPE_MASK)
+  if (shape->type == SHAPE_MASK)
     {
       if (attr == SHAPE_ATTR_X || attr == SHAPE_ATTR_Y)
         {
@@ -6553,7 +6555,8 @@ shape_attr_get_initial_value (ShapeAttr attr,
         }
     }
 
-  if (type == SHAPE_MARKER || type == SHAPE_PATTERN)
+  if (shape->type == SHAPE_MARKER ||
+      shape->type == SHAPE_PATTERN)
     {
       if (attr == SHAPE_ATTR_OVERFLOW)
         {
@@ -6585,8 +6588,8 @@ shape_new (Shape     *parent,
 
   for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
     {
-      shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
-      shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type));
+      shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
+      shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
     }
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
@@ -7060,11 +7063,11 @@ shape_add_color_stop (Shape *shape)
   g_assert (shape_types[shape->type].has_color_stops);
 
   stop->base[COLOR_STOP_OFFSET] =
-    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OFFSET, shape->type));
+    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OFFSET, shape));
   stop->base[COLOR_STOP_COLOR] =
-    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_COLOR, shape->type));
+    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_COLOR, shape));
   stop->base[COLOR_STOP_OPACITY] =
-    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OPACITY, shape->type));
+    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OPACITY, shape));
 
   g_ptr_array_add (shape->color_stops, stop);
 
@@ -7959,18 +7962,18 @@ shape_get_base_value (Shape        *shape,
           if (parent && shape_attrs[attr].inherited)
             return parent->current[attr];
           else
-            return shape_attr_get_initial_value (attr, shape->type);
+            return shape_attr_get_initial_value (attr, shape);
         }
       else if (svg_value_is_inherit (shape->base[attr]))
         {
           if (parent)
             return parent->current[attr];
           else
-            return shape_attr_get_initial_value (attr, shape->type);
+            return shape_attr_get_initial_value (attr, shape);
         }
       else if (svg_value_is_initial (shape->base[attr]))
         {
-          return shape_attr_get_initial_value (attr, shape->type);
+          return shape_attr_get_initial_value (attr, shape);
         }
 
       return shape->base[attr];
@@ -8594,14 +8597,14 @@ resolve_value (Shape           *shape,
 {
   if (svg_value_is_initial (value))
     {
-      return svg_value_ref (shape_attr_get_initial_value (attr, shape->type));
+      return svg_value_ref (shape_attr_get_initial_value (attr, shape));
     }
   else if (svg_value_is_inherit (value))
     {
       if (context->parent)
         return svg_value_ref (context->parent->current[attr]);
       else
-        return svg_value_ref (shape_attr_get_initial_value (attr, shape->type));
+        return svg_value_ref (shape_attr_get_initial_value (attr, shape));
     }
   else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
     {
@@ -12318,7 +12321,7 @@ serialize_shape_attrs (GString              *s,
 
           if (value &&
               (_gtk_bitmask_get (shape->attrs, attr) ||
-               !svg_value_equal (value, shape_attr_get_initial_value (attr, shape->type))))
+               !svg_value_equal (value, shape_attr_get_initial_value (attr, shape))))
             {
               if (shape_can_set_attr (shape->type, attr, FALSE))
                 {
@@ -15388,7 +15391,7 @@ svg_shape_attr_get_number (Shape                 *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   switch ((unsigned int) attr)
     {
@@ -15433,7 +15436,7 @@ svg_shape_attr_get_path (Shape     *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   path = svg_path_get (value);
   if (path)
@@ -15452,7 +15455,7 @@ svg_shape_attr_get_enum (Shape     *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   return svg_enum_get (value);
 }
@@ -15470,7 +15473,7 @@ svg_shape_attr_get_paint (Shape            *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   paint = (SvgPaint *) value;
 
@@ -15510,7 +15513,7 @@ svg_shape_attr_get_points (Shape        *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   points = (SvgPoints *) value;
 
@@ -15546,7 +15549,7 @@ svg_shape_attr_get_clip (Shape      *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   clip = (SvgClip *) value;
 
@@ -15570,7 +15573,7 @@ svg_shape_attr_get_transform (Shape     *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   transform = (SvgTransform *) value;
 
@@ -15592,7 +15595,7 @@ svg_shape_attr_get_filter (Shape     *shape,
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_get_base_value (shape, NULL, attr);
   else
-    value = shape_attr_get_initial_value (attr, shape->type);
+    value = shape_attr_get_initial_value (attr, shape);
 
   filter = (SvgFilter *) value;
 
