@@ -1622,13 +1622,10 @@ headerbar {
       margin: 0;
     }
 
-    &.start {
-      margin-left: -6px;
-
-      > button:first-child {
-        padding-left: 6px;
-      }
+    &.start > image.icon {
+      -gtk-icon-size: 20px;
     }
+
     &.end {
       margin-right: -6px;
 
