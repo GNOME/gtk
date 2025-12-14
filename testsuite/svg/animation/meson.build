@@ -18,6 +18,7 @@ test_data = [
   'gpa-transitions.test',
   'gpa-transitions2.test',
   'gpa-transitions3.test',
+  'gradient-animation.test',
   'masks.test',
   'negative-delay.test',
   'paths.test',

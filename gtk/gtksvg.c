@@ -567,6 +567,50 @@ ease (double *params,
           +     3 * y1         ) * t;
 }
 
+static gboolean
+has_ancestor (GMarkupParseContext *context,
+              const char          *elt)
+{
+  const GSList *list;
+
+  for (list = g_markup_parse_context_get_element_stack (context);
+       list != NULL;
+       list = list->next)
+    {
+      const char *name = list->data;
+      if (strcmp (name, elt) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+check_ancestors (GMarkupParseContext *context,
+                 ...)
+{
+  const GSList *list;
+  va_list args;
+  const char *name;
+
+  list = g_markup_parse_context_get_element_stack (context);
+
+  va_start (args, context);
+  while ((name = va_arg (args, const char *)) != NULL)
+    {
+      list = list->next;
+
+      if (list == NULL)
+        return FALSE;
+
+      if (strcmp (name, (const char *) list->data) != 0)
+        return FALSE;
+    }
+  va_end (args);
+
+  return TRUE;
+}
+
 static void
 markup_filter_attributes (const char *element_name,
                           const char **attr_names,
@@ -5463,6 +5507,19 @@ color_stop_free (gpointer v)
   g_free (stop);
 }
 
+static unsigned int
+color_stop_attr_idx (ShapeAttr attr)
+{
+  switch ((unsigned int) attr)
+    {
+    case SHAPE_ATTR_STOP_OFFSET: return COLOR_STOP_OFFSET;
+    case SHAPE_ATTR_STOP_COLOR: return COLOR_STOP_COLOR;
+    case SHAPE_ATTR_STOP_OPACITY: return COLOR_STOP_OPACITY;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* }}} */
 /* {{{ Attributes */
 
@@ -6289,40 +6346,6 @@ shape_attr_parse_values (ShapeAttr      attr,
 
   g_strfreev (strv);
   return array;
-}
-
-/* Animations can apply either to shape attributes or to color
- * stop attributes. Since there can be an arbitrary number of
- * color stops, we encode the attr and the color stop index in
- * an unsigned int.
- *
- * Attributes < SHAPE_ATTR_STOP_OFFSET are stored in the Shape,
- * attr values above that refer to values stored in color stops.
- */
-
-typedef struct
-{
-  unsigned int idx;
-  unsigned int attr;
-} StopRef;
-
-static StopRef
-stop_ref (unsigned int attr)
-{
-  return (StopRef) { (attr - SHAPE_ATTR_STOP_OFFSET) / N_STOP_PROPS,
-                     (attr - SHAPE_ATTR_STOP_OFFSET) % N_STOP_PROPS };
-}
-
-static ShapeAttr
-shape_attr_ref (unsigned int attr)
-{
-  StopRef s;
-
-  if (attr < SHAPE_ATTR_STOP_OFFSET)
-    return attr;
-
-  s = stop_ref (attr);
-  return SHAPE_ATTR_STOP_OFFSET + s.attr;
 }
 
 /*  }}} */
@@ -7677,8 +7700,14 @@ struct _Animation
   AnimationStatus status;
   char *id;
   char *href;
+  /* shape, attr, and idx together identify the attribute
+   * that this animation modifies. idx is only relevant
+   * for gradients and filters, where it identifies the
+   * index of the color stop or filter primitive.
+   */
   Shape *shape;
   unsigned int attr;
+  unsigned int idx;
 
   unsigned int has_simple_duration : 1;
   unsigned int has_repeat_count    : 1;
@@ -7965,7 +7994,8 @@ animation_motion_get_current_measure (Animation             *a,
 
 static SvgValue *
 shape_get_current_value (Shape        *shape,
-                         unsigned int  attr)
+                         unsigned int  attr,
+                         unsigned int  idx)
 {
   if (attr < SHAPE_ATTR_STOP_OFFSET)
     {
@@ -7973,22 +8003,21 @@ shape_get_current_value (Shape        *shape,
     }
   else
     {
-      StopRef s;
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
 
-      s = stop_ref (attr);
-      stop = g_ptr_array_index (shape->color_stops, s.idx);
+      stop = g_ptr_array_index (shape->color_stops, idx);
 
-      return stop->current[s.attr];
+      return stop->current[color_stop_attr_idx (attr)];
     }
 }
 
 static SvgValue *
 shape_get_base_value (Shape        *shape,
                       Shape        *parent,
-                      unsigned int  attr)
+                      ShapeAttr     attr,
+                      unsigned int  idx)
 {
   if (attr < SHAPE_ATTR_STOP_OFFSET)
     {
@@ -8015,21 +8044,20 @@ shape_get_base_value (Shape        *shape,
     }
   else
     {
-      StopRef s;
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
 
-      s = stop_ref (attr);
-      stop = g_ptr_array_index (shape->color_stops, s.idx);
+      stop = g_ptr_array_index (shape->color_stops, idx);
 
-      return stop->base[s.attr];
+      return stop->base[color_stop_attr_idx (attr)];
     }
 }
 
 static void
 shape_set_base_value (Shape        *shape,
-                      unsigned int  attr,
+                      ShapeAttr     attr,
+                      unsigned int  idx,
                       SvgValue     *value)
 {
   if (attr < SHAPE_ATTR_STOP_OFFSET)
@@ -8043,17 +8071,17 @@ shape_set_base_value (Shape        *shape,
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
-      /* set the values of the last color stop */
-      attr -= SHAPE_ATTR_STOP_OFFSET;
-      stop = g_ptr_array_index (shape->color_stops, shape->color_stops->len - 1);
-      g_clear_pointer (&stop->base[attr], svg_value_unref);
-      stop->base[attr] = svg_value_ref (value);
+
+      stop = g_ptr_array_index (shape->color_stops, idx);
+      g_clear_pointer (&stop->base[color_stop_attr_idx (attr)], svg_value_unref);
+      stop->base[color_stop_attr_idx (attr)] = svg_value_ref (value);
     }
 }
 
 static void
 shape_set_current_value (Shape        *shape,
-                         unsigned int  attr,
+                         ShapeAttr     attr,
+                         unsigned int  idx,
                          SvgValue     *value)
 {
   if (attr < SHAPE_ATTR_STOP_OFFSET)
@@ -8065,17 +8093,16 @@ shape_set_current_value (Shape        *shape,
     }
   else
     {
-      StopRef s;
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
-      s = stop_ref (attr);
-      stop = g_ptr_array_index (shape->color_stops, s.idx);
+
+      stop = g_ptr_array_index (shape->color_stops, idx);
 
       if (value)
         svg_value_ref (value);
-      g_clear_pointer (&stop->current[s.attr], svg_value_unref);
-      stop->current[s.attr] = value;
+      g_clear_pointer (&stop->current[color_stop_attr_idx (attr)], svg_value_unref);
+      stop->current[color_stop_attr_idx (attr)] = value;
     }
 }
 
@@ -8215,7 +8242,7 @@ animation_update_run_mode (Animation *a,
           a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
           a->next_invalidate = frame_end;
         }
-      else if (shape_attrs[shape_attr_ref (a->attr)].discrete)
+      else if (shape_attrs[a->attr].discrete)
         {
           a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
           if (frame_t < 0.5)
@@ -8728,7 +8755,7 @@ compute_value_at_time (Animation      *a,
   if (a->calc_mode == CALC_MODE_DISCRETE)
     return resolve_value (a->shape, context, a->attr, a->frames[frame].value);
 
-  if (shape_attrs[shape_attr_ref (a->attr)].discrete)
+  if (shape_attrs[a->attr].discrete)
     return resolve_value (a->shape, context, a->attr,
                           frame_t < 0.5 ? a->frames[frame].value
                                         : a->frames[frame + 1].value);
@@ -8893,26 +8920,24 @@ shape_init_current_values (Shape          *shape,
           SvgValue *value;
 
           value = resolve_value (shape, context, attr,
-                                 shape_get_base_value (shape, context->parent, attr));
-          shape_set_current_value (shape, attr, value);
+                                 shape_get_base_value (shape, context->parent, attr, 0));
+          shape_set_current_value (shape, attr, 0, value);
           svg_value_unref (value);
         }
     }
 
   if (shape_types[shape->type].has_color_stops)
     {
-      unsigned int attr = SHAPE_ATTR_STOP_OFFSET;
       for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
         {
-          for (StopProperties prop = 0; prop < N_STOP_PROPS; prop++)
+          for (ShapeAttr attr = SHAPE_ATTR_STOP_OFFSET; attr <= SHAPE_ATTR_STOP_OPACITY; attr++)
             {
               SvgValue *value;
 
               value = resolve_value (shape, context, attr,
-                                     shape_get_base_value (shape, NULL, attr));
-              shape_set_current_value (shape, attr, value);
+                                     shape_get_base_value (shape, NULL, attr, idx));
+              shape_set_current_value (shape, attr, idx, value);
               svg_value_unref (value);
-              attr++;
             }
         }
     }
@@ -8945,7 +8970,6 @@ compute_current_values_for_shape (Shape          *shape,
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
-      ShapeAttr attr = a->attr;
       SvgValue *val;
 
       if (a->status == ANIMATION_STATUS_INACTIVE)
@@ -8958,14 +8982,14 @@ compute_current_values_for_shape (Shape          *shape,
             {
               SvgValue *end_val;
 
-              end_val = svg_value_accumulate (val, shape_get_current_value (shape, attr), 1);
-              shape_set_current_value (shape, attr, end_val);
+              end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
+              shape_set_current_value (shape, a->attr, a->idx, end_val);
 
               svg_value_unref (end_val);
             }
           else
             {
-              shape_set_current_value (shape, attr, val);
+              shape_set_current_value (shape, a->attr, a->idx, val);
             }
 
           svg_value_unref (val);
@@ -10101,6 +10125,7 @@ parse_base_animation_attrs (Animation            *a,
     {
       const char *expected;
 
+      /* FIXME: if href is set, current_shape might be the wrong shape */
       expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, data->current_shape->type);
       if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
         gtk_svg_invalid_attribute (data->svg, context, "attributeName",
@@ -10112,6 +10137,7 @@ parse_base_animation_attrs (Animation            *a,
       gtk_svg_missing_attribute (data->svg, context, "attributeName", NULL);
       return FALSE;
     }
+  /* FIXME: if href is set, current_shape might be the wrong shape */
   else if (!shape_attr_lookup (attr_name_attr, &attr, data->current_shape->type))
     {
       gtk_svg_missing_attribute (data->svg, context, "attributeName", "can't animate '%s'", attr_name_attr);
@@ -10120,6 +10146,9 @@ parse_base_animation_attrs (Animation            *a,
   else
     {
       a->attr = attr;
+      /* FIXME: if href is set, current_shape might be the wrong shape */
+      if (check_ancestors (context, "stop", NULL))
+        a->idx = data->current_shape->color_stops->len - 1;
     }
 
   return TRUE;
@@ -10522,6 +10551,13 @@ parse_style_attr (Shape               *shape,
   char *name;
   char *prop_val;
   SvgValue *value;
+  unsigned int idx = 0;
+
+  if (for_stop)
+    {
+      g_assert (shape->color_stops->len > 0);
+      idx = shape->color_stops->len - 1;
+    }
 
   while (*p)
     {
@@ -10576,7 +10612,7 @@ parse_style_attr (Shape               *shape,
                (for_stop && attr >= SHAPE_ATTR_STOP_OFFSET &&
                             attr <= SHAPE_ATTR_STOP_OPACITY))
         {
-          shape_set_base_value (shape, attr, value);
+          shape_set_base_value (shape, attr, idx, value);
           svg_value_unref (value);
         }
       else
@@ -10648,9 +10684,9 @@ parse_shape_attrs (Shape                *shape,
                shape_has_attr (shape->type, SHAPE_ATTR_MARKER_START))
         {
           SvgValue *value = svg_href_parse_url (attr_values[i]);
-          shape_set_base_value (shape, SHAPE_ATTR_MARKER_START, value);
-          shape_set_base_value (shape, SHAPE_ATTR_MARKER_MID, value);
-          shape_set_base_value (shape, SHAPE_ATTR_MARKER_END, value);
+          shape_set_base_value (shape, SHAPE_ATTR_MARKER_START, 0, value);
+          shape_set_base_value (shape, SHAPE_ATTR_MARKER_MID, 0, value);
+          shape_set_base_value (shape, SHAPE_ATTR_MARKER_END, 0, value);
           svg_value_unref (value);
           *handled |= BIT (i);
         }
@@ -10665,7 +10701,7 @@ parse_shape_attrs (Shape                *shape,
                 }
               else
                 {
-                  shape_set_base_value (shape, attr, value);
+                  shape_set_base_value (shape, attr, 0, value);
                   svg_value_unref (value);
                 }
             }
@@ -10686,7 +10722,7 @@ parse_shape_attrs (Shape                *shape,
       SvgValue *value = shape_attr_parse_value (SHAPE_ATTR_HREF, xlink_href_attr);
       if (value)
         {
-          shape_set_base_value (shape, SHAPE_ATTR_HREF, value);
+          shape_set_base_value (shape, SHAPE_ATTR_HREF, 0, value);
           svg_value_unref (value);
         }
     }
@@ -10713,7 +10749,7 @@ parse_shape_attrs (Shape                *shape,
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
 
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
-        shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
+        shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
       svg_value_unref (value);
 
       if (g_strv_has (classes, "success-stroke"))
@@ -10728,7 +10764,7 @@ parse_shape_attrs (Shape                *shape,
         value = svg_paint_new_none ();
 
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
-        shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
+        shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
       svg_value_unref (value);
 
       g_strfreev (classes);
@@ -10743,7 +10779,7 @@ parse_shape_attrs (Shape                *shape,
             v = svg_number_new (0.25 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
           else
             v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, v);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, 0, v);
           svg_value_unref (v);
         }
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MAXWIDTH))
@@ -10753,7 +10789,7 @@ parse_shape_attrs (Shape                *shape,
             v = svg_number_new (1.5 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
           else
             v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, v);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, 0, v);
           svg_value_unref (v);
         }
     }
@@ -10785,10 +10821,10 @@ parse_shape_attrs (Shape                *shape,
     {
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RX) &&
           !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RY))
-        shape_set_base_value (shape, SHAPE_ATTR_RY, shape->base[SHAPE_ATTR_RX]);
+        shape_set_base_value (shape, SHAPE_ATTR_RY, 0, shape->base[SHAPE_ATTR_RX]);
       else if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RY) &&
                !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_RX))
-        shape_set_base_value (shape, SHAPE_ATTR_RX, shape->base[SHAPE_ATTR_RY]);
+        shape_set_base_value (shape, SHAPE_ATTR_RX, 0, shape->base[SHAPE_ATTR_RY]);
     }
 
   if (shape_has_attr (shape->type, SHAPE_ATTR_FX) &&
@@ -10796,10 +10832,10 @@ parse_shape_attrs (Shape                *shape,
     {
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CX) &&
           !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FX))
-        shape_set_base_value (shape, SHAPE_ATTR_FX, shape->base[SHAPE_ATTR_CX]);
+        shape_set_base_value (shape, SHAPE_ATTR_FX, 0, shape->base[SHAPE_ATTR_CX]);
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CY) &&
           !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FY))
-        shape_set_base_value (shape, SHAPE_ATTR_FY, shape->base[SHAPE_ATTR_CY]);
+        shape_set_base_value (shape, SHAPE_ATTR_FY, 0, shape->base[SHAPE_ATTR_CY]);
     }
 }
 
@@ -10874,7 +10910,7 @@ parse_shape_gpa_attrs (Shape                *shape,
       value = svg_paint_parse_gpa (stroke_attr);
       if (value)
         {
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE, value);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
           svg_value_unref (value);
         }
       else
@@ -10888,7 +10924,7 @@ parse_shape_gpa_attrs (Shape                *shape,
       value = svg_paint_parse_gpa (fill_attr);
       if (value)
         {
-          shape_set_base_value (shape, SHAPE_ATTR_FILL, value);
+          shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
           svg_value_unref (value);
         }
       else
@@ -10906,13 +10942,13 @@ parse_shape_gpa_attrs (Shape                *shape,
           len == 3)
         {
           value = svg_number_new (v[0]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, value);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, 0, value);
           svg_value_unref (value);
           value = svg_number_new (v[1]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, value);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
           svg_value_unref (value);
           value = svg_number_new (v[2]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, value);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, 0, value);
           svg_value_unref (value);
         }
       else
@@ -11116,50 +11152,6 @@ skip_element (ParserData          *data,
   va_start (args, format);
   g_vasprintf (&data->skip.reason, format, args);
   va_end (args);
-}
-
-static gboolean
-has_ancestor (GMarkupParseContext *context,
-              const char          *elt)
-{
-  const GSList *list;
-
-  for (list = g_markup_parse_context_get_element_stack (context);
-       list != NULL;
-       list = list->next)
-    {
-      const char *name = list->data;
-      if (strcmp (name, elt) == 0)
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-check_ancestors (GMarkupParseContext *context,
-                 ...)
-{
-  const GSList *list;
-  va_list args;
-  const char *name;
-
-  list = g_markup_parse_context_get_element_stack (context);
-
-  va_start (args, context);
-  while ((name = va_arg (args, const char *)) != NULL)
-    {
-      list = list->next;
-
-      if (list == NULL)
-        return FALSE;
-
-      if (strcmp (name, (const char *) list->data) != 0)
-        return FALSE;
-    }
-  va_end (args);
-
-  return TRUE;
 }
 
 static void
@@ -11512,6 +11504,7 @@ start_element_cb (GMarkupParseContext  *context,
       const char *parent = g_markup_parse_context_get_element_stack (context)->next->data;
       SvgValue *value;
       const char *style_attr = NULL;
+      unsigned int idx;
 
       if (strcmp (parent, "linearGradient") != 0 &&
           strcmp (parent, "radialGradient") != 0)
@@ -11521,6 +11514,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       shape_add_color_stop (data->current_shape);
+      idx = data->current_shape->color_stops->len - 1;
       for (unsigned int i = 0; attr_names[i]; i++)
         {
           if (strcmp (attr_names[i], "offset") == 0)
@@ -11529,7 +11523,7 @@ start_element_cb (GMarkupParseContext  *context,
               value = shape_attr_parse_value (SHAPE_ATTR_STOP_OFFSET, attr_values[i]);
               if (value)
                 {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OFFSET, value);
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OFFSET, idx, value);
                   svg_value_unref (value);
                 }
               else
@@ -11541,7 +11535,7 @@ start_element_cb (GMarkupParseContext  *context,
               value = shape_attr_parse_value (SHAPE_ATTR_STOP_COLOR, attr_values[i]);
               if (value)
                 {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_COLOR, value);
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_COLOR, idx, value);
                   svg_value_unref (value);
                 }
               else
@@ -11553,7 +11547,7 @@ start_element_cb (GMarkupParseContext  *context,
               value = shape_attr_parse_value (SHAPE_ATTR_STOP_OPACITY, attr_values[i]);
               if (value)
                 {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OPACITY, value);
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OPACITY, idx, value);
                   svg_value_unref (value);
                 }
               else
@@ -12284,9 +12278,9 @@ serialize_shape_attrs (GString              *s,
           SvgValue *value;
 
           if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-            value = shape_get_current_value (shape, attr);
+            value = shape_get_current_value (shape, attr, 0);
           else
-            value = shape_get_base_value (shape, NULL, attr);
+            value = shape_get_base_value (shape, NULL, attr, 0);
 
           if (value &&
               (_gtk_bitmask_get (shape->attrs, attr) ||
@@ -12988,8 +12982,7 @@ serialize_color_stop (GString              *s,
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
-      if (SHAPE_ATTR_STOP_OPACITY + N_STOP_PROPS * idx <= a->attr &&
-          a->attr < SHAPE_ATTR_STOP_OPACITY + N_STOP_PROPS * (idx + 1))
+      if (a->idx == idx)
         {
           serialize_animation (s, svg, indent + 2, a, flags);
         }
@@ -15365,7 +15358,7 @@ svg_shape_attr_get_number (Shape                 *shape,
   SvgValue *value;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 
@@ -15410,7 +15403,7 @@ svg_shape_attr_get_path (Shape     *shape,
   GskPath *path;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 
@@ -15429,7 +15422,7 @@ svg_shape_attr_get_enum (Shape     *shape,
   SvgValue *value;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 
@@ -15447,7 +15440,7 @@ svg_shape_attr_get_paint (Shape            *shape,
   SvgPaint *paint;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 
@@ -15487,7 +15480,7 @@ svg_shape_attr_get_points (Shape        *shape,
   double *ret;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 
@@ -15523,7 +15516,7 @@ svg_shape_attr_get_clip (Shape      *shape,
   SvgClip *clip;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 
@@ -15547,7 +15540,7 @@ svg_shape_attr_get_transform (Shape     *shape,
   GString *s = g_string_new ("");
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 
@@ -15569,7 +15562,7 @@ svg_shape_attr_get_filter (Shape     *shape,
   GString *s = g_string_new ("");
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    value = shape_get_base_value (shape, NULL, attr);
+    value = shape_get_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_get_initial_value (attr, shape);
 

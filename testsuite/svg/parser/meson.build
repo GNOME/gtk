@@ -28,6 +28,7 @@ test_data = [
   'ellipse.svg',
   'filters.svg',
   'gpa-attributes.svg',
+  'gradient-animation.svg',
   'gradient-style.svg',
   'linear-gradient1.svg',
   'linear-gradient2.svg',
