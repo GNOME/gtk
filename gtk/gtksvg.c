@@ -567,6 +567,50 @@ ease (double *params,
           +     3 * y1         ) * t;
 }
 
+static gboolean
+has_ancestor (GMarkupParseContext *context,
+              const char          *elt)
+{
+  const GSList *list;
+
+  for (list = g_markup_parse_context_get_element_stack (context);
+       list != NULL;
+       list = list->next)
+    {
+      const char *name = list->data;
+      if (strcmp (name, elt) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+check_ancestors (GMarkupParseContext *context,
+                 ...)
+{
+  const GSList *list;
+  va_list args;
+  const char *name;
+
+  list = g_markup_parse_context_get_element_stack (context);
+
+  va_start (args, context);
+  while ((name = va_arg (args, const char *)) != NULL)
+    {
+      list = list->next;
+
+      if (list == NULL)
+        return FALSE;
+
+      if (strcmp (name, (const char *) list->data) != 0)
+        return FALSE;
+    }
+  va_end (args);
+
+  return TRUE;
+}
+
 static void
 markup_filter_attributes (const char *element_name,
                           const char **attr_names,
@@ -11116,50 +11160,6 @@ skip_element (ParserData          *data,
   va_start (args, format);
   g_vasprintf (&data->skip.reason, format, args);
   va_end (args);
-}
-
-static gboolean
-has_ancestor (GMarkupParseContext *context,
-              const char          *elt)
-{
-  const GSList *list;
-
-  for (list = g_markup_parse_context_get_element_stack (context);
-       list != NULL;
-       list = list->next)
-    {
-      const char *name = list->data;
-      if (strcmp (name, elt) == 0)
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-check_ancestors (GMarkupParseContext *context,
-                 ...)
-{
-  const GSList *list;
-  va_list args;
-  const char *name;
-
-  list = g_markup_parse_context_get_element_stack (context);
-
-  va_start (args, context);
-  while ((name = va_arg (args, const char *)) != NULL)
-    {
-      list = list->next;
-
-      if (list == NULL)
-        return FALSE;
-
-      if (strcmp (name, (const char *) list->data) != 0)
-        return FALSE;
-    }
-  va_end (args);
-
-  return TRUE;
 }
 
 static void
