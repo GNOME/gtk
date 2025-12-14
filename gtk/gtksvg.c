@@ -2383,7 +2383,7 @@ static SvgEnum font_variant_values[] = {
 static SvgValue *
 svg_font_variant_new (PangoVariant value)
 {
-  return svg_value_ref ((SvgValue *)&font_style_values[value]);
+  return svg_value_ref ((SvgValue *)&font_variant_values[value]);
 }
 
 static SvgValue *
