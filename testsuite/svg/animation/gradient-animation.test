@@ -1,0 +1,8 @@
+# animate color stop attributes
+input: gradient-animation.svg
+time: 0
+output: gradient-animation-0.svg
+time: 500
+output: gradient-animation-1.svg
+time: 1000
+output: gradient-animation-2.svg
