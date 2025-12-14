@@ -70,6 +70,7 @@ test_data = [
   'radial-gradient3.svg',
   'rect.svg',
   'rect2.svg',
+  'render-after-use.svg',
   'rounded-rect.svg',
   'spec-ellipse.svg',
   'spec-opacity.svg',

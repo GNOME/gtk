@@ -218,6 +218,8 @@ struct _Shape
   Shape *first;
   Shape *next;
 
+  gboolean computed_for_use;
+
   SvgValue *base[N_SHAPE_ATTRS];
   SvgValue *current[N_SHAPE_ATTRS];
 

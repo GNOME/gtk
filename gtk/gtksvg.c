@@ -8916,7 +8916,19 @@ shape_init_current_values (Shape          *shape,
             }
         }
     }
+}
 
+static void
+mark_as_computed_for_use (Shape    *shape,
+                          gboolean  computed_for_use)
+{
+  shape->computed_for_use = computed_for_use;
+
+  if (shape_types[shape->type].has_shapes)
+    {
+      for (Shape *sh = shape->first; sh; sh = sh->next)
+        mark_as_computed_for_use (sh, computed_for_use);
+    }
 }
 
 static void
@@ -14121,6 +14133,24 @@ paint_markers (Shape        *shape,
 }
 
 static void
+recompute_current_values (Shape        *shape,
+                          Shape        *parent,
+                          PaintContext *context)
+{
+  ComputeContext ctx;
+
+  /* FIXME: this isn't the best way of doing this */
+  ctx.svg = context->svg;
+  ctx.viewport = context->viewport;
+  ctx.parent = parent;
+  ctx.current_time = context->current_time;
+  ctx.colors = context->colors;
+  ctx.n_colors = context->n_colors;
+
+  compute_current_values_for_shape (shape, &ctx);
+}
+
+static void
 paint_shape (Shape        *shape,
              PaintContext *context)
 {
@@ -14131,22 +14161,23 @@ paint_shape (Shape        *shape,
       if (((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape != NULL)
         {
           Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
-          ComputeContext use_context;
 
-          /* FIXME: this isn't the best way of doing this */
-          use_context.svg = context->svg;
-          use_context.viewport = &context->svg->viewport;
-          use_context.parent = shape;
-          use_context.current_time = context->current_time;
-          use_context.colors = context->colors;
-          use_context.n_colors = context->n_colors;
-          compute_current_values_for_shape (use_shape, &use_context);
+          mark_as_computed_for_use (use_shape, FALSE);
+          recompute_current_values (use_shape, shape, context);
 
           push_ctx_shape (context, shape);
           render_shape (use_shape, context);
           pop_ctx_shape (context);
+
+          mark_as_computed_for_use (use_shape, TRUE);
         }
       return;
+    }
+
+  if (shape->computed_for_use)
+    {
+      recompute_current_values (shape, shape->parent, context);
+      mark_as_computed_for_use (shape, FALSE);
     }
 
   if (shape_types[shape->type].has_shapes)
