@@ -1,0 +1,28 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" version="2.0">
+	<d:SVGTestCase xmlns:d="http://www.w3.org/2000/02/svg/testsuite/description/" author="Florian Leander Singer" status="accepted">
+		<d:testDescription xmlns="http://www.w3.org/1999/xhtml" href="http://www.w3.org/TR/SVG11/text.html#TextElement">
+			<p>Test vertical text rendering</p>
+		</d:testDescription>
+		<d:operatorScript xmlns="http://www.w3.org/1999/xhtml">
+			<p>Run the test. No interaction required.</p>
+		</d:operatorScript>
+		<d:passCriteria xmlns="http://www.w3.org/1999/xhtml">
+			<p>The test is passed if:</p>
+			<ul>
+				<li>The string on the left side is vertical and with the exception of the first three non-latin glyphs has a red to blue horizontal gradient</li>
+				<li>The string &apos;Hello&apos; is semi-transparent (appears gray on white background)</li>
+				<li>The string on the right is readable and has the same gradient as the string on the left</li>
+			</ul>
+		</d:passCriteria>
+	</d:SVGTestCase>
+
+	<defs>
+		<linearGradient id="gr">
+			<stop offset="0%" stop-color="red" />
+			<stop offset="100%" stop-color="blue" />
+		</linearGradient>
+	</defs>
+	<text x="32" y="10" font-family="Noto Sans CJK" font-size="16" fill="url(#gr)" writing-mode="vertical-rl"><tspan font-family="SVGFreeSansASCII,sans-serif">Alpha</tspan> <tspan fill="#000000">私は車</tspan>がありません</text>
+	<text x="64" y="64" font-family="SVGFreeSansASCII,sans-serif" font-size="16" fill-opacity=".5" text-anchor="middle">Hello</text>
+	<text x="96" y="10" font-family="Noto Sans CJK" font-size="16" fill="url(#gr)" writing-mode="vertical-lr"><tspan font-family="SVGFreeSansASCII,sans-serif">Beta</tspan> <tspan fill="#000000">私は車</tspan>がありません</text>
+</svg>

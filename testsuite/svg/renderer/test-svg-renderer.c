@@ -380,7 +380,26 @@ main (int argc, char **argv)
   };
   GOptionContext *context;
   GError *error = NULL;
+  const char *srcdir = g_getenv ("G_TEST_SRCDIR");
+  const char *static_fonts[] = {
+    "SVGFreeSans.ttf",
+    "FreeSerif.otf",
+    "FreeSerifItalic.otf",
+    "FreeSerifBold.otf",
+    "FreeSerifBoldItalic.otf"
+  };
 
+  if (srcdir)
+    for (size_t i = 0; i < G_N_ELEMENTS (static_fonts); i++)
+      {
+        char *fontpath = g_build_path (G_DIR_SEPARATOR_S, srcdir, "resources", static_fonts[i], NULL);
+        if (!pango_font_map_add_font_file (pango_cairo_font_map_get_default (), fontpath, &error))
+          {
+            g_warning ("Failed to load %s: %s", static_fonts[i], error->message);
+            g_clear_error (&error);
+          }
+        g_free (fontpath);
+      }
 
   if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
     {

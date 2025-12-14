@@ -105,11 +105,14 @@ typedef enum
   SHAPE_RADIAL_GRADIENT,
   SHAPE_PATTERN,
   SHAPE_MARKER,
+  SHAPE_TEXT,
+  SHAPE_TSPAN,
   SHAPE_SVG,
 } ShapeType;
 
 typedef enum
 {
+  SHAPE_ATTR_LANG,
   SHAPE_ATTR_VISIBILITY,
   SHAPE_ATTR_TRANSFORM,
   SHAPE_ATTR_OPACITY,
@@ -165,6 +168,20 @@ typedef enum
   SHAPE_ATTR_MARKER_START,
   SHAPE_ATTR_MARKER_MID,
   SHAPE_ATTR_MARKER_END,
+  SHAPE_ATTR_TEXT_ANCHOR,
+  SHAPE_ATTR_DX,
+  SHAPE_ATTR_DY,
+  SHAPE_ATTR_UNICODE_BIDI,
+  SHAPE_ATTR_DIRECTION,
+  SHAPE_ATTR_WRITING_MODE,
+  SHAPE_ATTR_FONT_FAMILY,
+  SHAPE_ATTR_FONT_STYLE,
+  SHAPE_ATTR_FONT_VARIANT,
+  SHAPE_ATTR_FONT_WEIGHT,
+  SHAPE_ATTR_FONT_STRECH, // Deprecated & not part of SVG2!
+  SHAPE_ATTR_FONT_SIZE,
+  SHAPE_ATTR_LETTER_SPACING,
+  SHAPE_ATTR_TEXT_DECORATION,
   SHAPE_ATTR_STROKE_MINWIDTH,
   SHAPE_ATTR_STROKE_MAXWIDTH,
   SHAPE_ATTR_STOP_OFFSET,
@@ -204,6 +221,29 @@ typedef enum
   GPA_EASING_EASE_OUT,
   GPA_EASING_EASE,
 } GpaEasing;
+
+typedef enum
+{
+  TEXT_NODE_SHAPE,
+  TEXT_NODE_CHARACTERS
+} TextNodeType;
+
+typedef struct
+{
+  TextNodeType type;
+  union {
+    struct {
+      Shape *shape;
+      gboolean has_bounds; // FALSE for text nodes without any character children
+      graphene_rect_t bounds;
+    } shape;
+    struct {
+      char *text;
+      PangoLayout *layout;
+      double x, y, r;
+    } characters;
+  };
+} TextNode;
 
 struct _Shape
 {
@@ -246,6 +286,9 @@ struct _Shape
       SvgValue *points;
     } polyline;
   } path_for;
+
+  // GArray<TextNode>
+  GArray *text;
 
   struct {
     uint64_t states;

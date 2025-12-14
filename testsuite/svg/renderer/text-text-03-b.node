@@ -1,0 +1,122 @@
+isolation {
+  child: container {
+    transform {
+      transform: translate(0, 0.125) scale(0.00208333) translate(19, 32);
+      child: text {
+        color: rgb(0,0,255);
+        font: "FreeSerif 32px";
+        glyphs: 49 18, 77 9, 66 14, 74 9, "n";
+        offset: 0 29;
+      }
+    }
+    transform {
+      transform: translate(0, 0.125) scale(0.00208333) translate(142, 32);
+      child: text {
+        color: rgb(0,0,255);
+        font: "FreeSerif Italic 32px";
+        glyphs: 42 11, 85 9, "a", 77 9, 74 9, 68 14;
+        offset: 0 29;
+      }
+    }
+    transform {
+      transform: translate(0, 0.125) scale(0.00208333) translate(257, 31);
+      child: text {
+        color: rgb(0,0,255);
+        font: "FreeSerif Bold 32px";
+        glyphs: 35 21, "o", 77 9, 69 18;
+        offset: 0 29;
+      }
+    }
+    transform {
+      transform: translate(0, 0.125) scale(0.00208333) translate(224, 81);
+      child: container {
+        text {
+          color: rgb(0,0,255);
+          font: "FreeSerif 32px";
+          glyphs: 54 23, "nd", 70 14, 83 11, 77 9, 74 9, "n", 70 14;
+          offset: 0 29;
+        }
+        color {
+          bounds: 0 33 128 2;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+    transform {
+      transform: translate(0, 0.125) scale(0.00208333) translate(39, 118);
+      child: container {
+        text {
+          color: rgb(255,0,255);
+          font: "FreeSerif 32px";
+          glyphs: 45 20, 74 9, "n", 70 14, 1 11, 85 9, "h", 83 11, "ough";
+          offset: 0 29;
+        }
+        color {
+          bounds: 0 20 170 2;
+          color: rgb(255,0,255);
+        }
+      }
+    }
+    transform {
+      transform: translate(0, 0.125) scale(0.00208333) translate(1, 171);
+      child: container {
+        text {
+          font: "FreeSerif Bold Italic 32px";
+          glyphs: 35 21, "o", 77 9, "d,", 1 11, 74 9, 85 9, "a", 77 9, 74 9, 68 14, 1 11, "a", 79 18, "d", 1 11, 86 18, 79 18, "d", 70 14, 83 12, 77 9, 74 9, 79 18, 70 14, "d";
+          offset: 0 29;
+        }
+        color {
+          bounds: -1 33 365 2;
+          color: rgb(0,0,0);
+        }
+      }
+    }
+    transform {
+      transform: translate(0, 0.125) scale(0.00208333);
+      child: container {
+        stroke {
+          child: color {
+            bounds: 49 224 382 66;
+            color: rgb(0,0,0);
+          }
+          path: "\
+M 50 225 h 380 v 64 h -380 z";
+          line-width: 2;
+          line-cap: butt;
+          line-join: miter;
+        }
+        text {
+          font: "SVGFreeSansASCII 24px";
+          glyphs: 38 16, 66 13, "c", 73 13, 1 7, 77 5, 74 5, 79 13, 70 13, 1 7, 80 13, 71 7, 1 7, 85 7, 70 13, "x", 85 7, 1 7, 88 17, 73 13, 74 5, "c", 73 13, 1 7, 71 7, 77 5, 80 13, 88 17, "s", 1 7, 74 5, 79 13, 1 7, 66 13, 1 7;
+          offset: 55 245;
+        }
+        text {
+          font: "SVGFreeSansASCII 24px";
+          glyphs: 83 8, 70 13, "c", 85 7, 66 13, 79 13, 72 13, 86 13, 77 5, 66 13, 83 8, 1 7, 67 13, 80 13, "x", 1 7, 73 13, 66 13, "s", 1 7, 85 7, 80 13, 1 7, 67 13, 70 13, 1 7, 67 13, 83 8, 80 13, "k", 70 13, 79 13;
+          offset: 55 265;
+        }
+        text {
+          font: "SVGFreeSansASCII 24px";
+          glyphs: 74 5, 79 13, 85 7, 80 13, 1 7, "s", 70 13, 81 13, 66 13, 83 8, 66 13, 85 7, 70 13, 69 13, 1 7, 77 5, 74 5, 79 13, 70 13, "s", 15 7;
+          offset: 55 285;
+        }
+        text {
+          font: "SVGFreeSansASCII 32px";
+          glyphs: 5 18, 51 23, 70 18, "v", 74 7, "s", 74 7, 80 18, 79 18, 27 9, 1 9, 18 18, 15 9, 26 18, 1 9, 5 18;
+          offset: 10 340;
+        }
+        stroke {
+          child: color {
+            bounds: 0.5 0.5 479 359;
+            color: rgb(0,0,0);
+          }
+          path: "\
+M 1 1 h 478 v 358 h -478 z";
+          line-width: 1;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+    }
+  }
+}

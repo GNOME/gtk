@@ -24,6 +24,7 @@
 #include "gtksvgprivate.h"
 
 #include "gtkenums.h"
+#include "gtkmain.h"
 #include "gtksymbolicpaintable.h"
 #include "gtktypebuiltins.h"
 #include "gtk/css/gtkcssparserprivate.h"
@@ -1019,6 +1020,53 @@ transform_gradient_line (GskTransform *transform,
   *end_out = e;
 }
 
+/*  }}} */
+/* {{{ Text */
+
+static char *
+text_chomp (const char *in,
+            gboolean   *lastwasspace)
+{
+  size_t len = strlen (in);
+  GString *ret = g_string_sized_new (len);
+
+  for (size_t i = 0; i < len; i++)
+    {
+      if (in[i] == '\n')
+        continue;
+      if (in[i] == '\t' || in[i] == ' ')
+        {
+          if (*lastwasspace)
+            continue;
+          g_string_append_c (ret, ' ');
+          *lastwasspace = TRUE;
+          continue;
+        }
+      g_string_append_c (ret, in[i]);
+      *lastwasspace = FALSE;
+    }
+
+  return g_string_free_and_steal (ret);
+}
+
+
+static void
+text_node_clear (TextNode *self)
+{
+  switch (self->type)
+    {
+    case TEXT_NODE_SHAPE:
+      // shape node not owned
+      break;
+    case TEXT_NODE_CHARACTERS:
+      g_assert (self->characters.layout == NULL);
+      g_free (self->characters.text);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* }}} */
 /* {{{ gpa things */
 
@@ -1513,6 +1561,86 @@ svg_number_get (const SvgValue *value,
 }
 
 /* }}} */
+/* {{{ Strings */
+
+typedef struct
+{
+  SvgValue base;
+  char *value;
+} SvgString;
+
+static void
+svg_string_free (SvgValue *value)
+{
+  SvgString *s = (SvgString *)value;
+  g_free (s->value);
+  g_free (s);
+}
+
+static gboolean
+svg_string_equal (const SvgValue *value0,
+                  const SvgValue *value1)
+{
+  const SvgString *s0 = (const SvgString *)value0;
+  const SvgString *s1 = (const SvgString *)value1;
+
+  return g_strcmp0 (s0->value, s1->value) == 0;
+}
+
+static SvgValue *
+svg_string_interpolate (const SvgValue *value0,
+                        const SvgValue *value1,
+                        double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+static SvgValue *
+svg_string_accumulate (const SvgValue *value0,
+                       const SvgValue *value1,
+                       int             n)
+{
+  return svg_value_ref ((SvgValue *)value0);
+}
+
+static void
+svg_string_print (const SvgValue *value,
+                  GString        *string)
+{
+  const SvgString *s = (const SvgString *)value;
+  gchar *escaped = g_markup_escape_text (s->value, strlen (s->value));
+  g_string_append (string, escaped);
+  g_free (escaped);
+}
+
+static const char *
+svg_string_get (const SvgValue *value)
+{
+  const SvgString *s = (const SvgString *)value;
+  return s->value;
+}
+
+static const SvgValueClass SVG_STRING_CLASS = {
+  "SvgString",
+  svg_string_free,
+  svg_string_equal,
+  svg_string_interpolate,
+  svg_string_accumulate,
+  svg_string_print,
+};
+
+static SvgValue *
+svg_string_new (const char *str)
+{
+  SvgString *result = (SvgString *)svg_value_alloc (&SVG_STRING_CLASS, sizeof (SvgString));
+  result->value = g_strdup (str);
+  return (SvgValue *) result;
+}
+
+/* }}} */
 /* {{{ Enums */
 
 typedef struct
@@ -1917,6 +2045,45 @@ svg_blend_mode_parse (const char *string)
 }
 
 typedef enum {
+  TEXT_ANCHOR_START,
+  TEXT_ANCHOR_MIDDLE,
+  TEXT_ANCHOR_END
+} TextAnchor;
+
+static const SvgValueClass SVG_TEXT_ANCHOR_CLASS = {
+  "SvgTextAnchor",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum text_anchor_values[] = {
+  { { &SVG_TEXT_ANCHOR_CLASS, 1 }, TEXT_ANCHOR_START, "start" },
+  { { &SVG_TEXT_ANCHOR_CLASS, 1 }, TEXT_ANCHOR_MIDDLE, "middle" },
+  { { &SVG_TEXT_ANCHOR_CLASS, 1 }, TEXT_ANCHOR_END, "end" },
+};
+
+static SvgValue *
+svg_text_anchor_new (TextAnchor value)
+{
+  g_assert (value < G_N_ELEMENTS (text_anchor_values));
+  return svg_value_ref ((SvgValue *)&text_anchor_values[value]);
+}
+
+static SvgValue *
+svg_text_anchor_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (text_anchor_values); i++)
+    {
+      if (strcmp (string, text_anchor_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *)&text_anchor_values[i]);
+    }
+  return NULL;
+}
+
+typedef enum {
   ISOLATION_AUTO,
   ISOLATION_ISOLATE,
 } Isolation;
@@ -1991,6 +2158,45 @@ svg_marker_units_parse (const char *string)
   return NULL;
 }
 
+
+typedef enum {
+  UNICODE_BIDI_NORMAL,
+  UNICODE_BIDI_EMBED,
+  UNICODE_BIDI_OVERRIDE
+} UnicodeBidi;
+
+static const SvgValueClass SVG_UNICODE_BIDI_CLASS = {
+  "SvgUnicodeBidi",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum unicode_bidi_values[] = {
+  { { &SVG_UNICODE_BIDI_CLASS, 1 }, UNICODE_BIDI_NORMAL, "normal" },
+  { { &SVG_UNICODE_BIDI_CLASS, 1 }, UNICODE_BIDI_EMBED, "embed" },
+  { { &SVG_UNICODE_BIDI_CLASS, 1 }, UNICODE_BIDI_OVERRIDE, "bidi-override" },
+};
+
+static SvgValue *
+svg_unicode_bidi_new (UnicodeBidi value)
+{
+  return svg_value_ref ((SvgValue *)&unicode_bidi_values[value]);
+}
+
+static SvgValue *
+svg_unicode_bidi_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (unicode_bidi_values); i++)
+    {
+      if (strcmp (string, unicode_bidi_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *)&unicode_bidi_values[i]);
+    }
+  return NULL;
+}
+
 typedef enum
 {
   OVERFLOW_VISIBLE,
@@ -2028,6 +2234,203 @@ svg_overflow_parse (const char *string)
     {
       if (strcmp (string, overflow_values[i].name) == 0)
         return svg_value_ref ((SvgValue *) &overflow_values[i]);
+    }
+  return NULL;
+}
+
+static const SvgValueClass SVG_DIRECTION_CLASS = {
+  "SvgDirection",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum direction_values[] = {
+  { { &SVG_DIRECTION_CLASS, 1 }, PANGO_DIRECTION_LTR, "ltr" },
+  { { &SVG_DIRECTION_CLASS, 1 }, PANGO_DIRECTION_RTL, "rtl" },
+};
+
+static SvgValue *
+svg_direction_new (PangoDirection value)
+{
+  g_return_val_if_fail (value <= PANGO_DIRECTION_RTL, NULL);
+  return svg_value_ref ((SvgValue *)&direction_values[value]);
+}
+
+static SvgValue *
+svg_direction_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (direction_values); i++)
+    {
+      if (strcmp (string, direction_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *)&direction_values[i]);
+    }
+  return NULL;
+}
+
+typedef enum {
+  WRITING_MODE_HORIZONTAL_TB,
+  WRITING_MODE_VERTICAL_RL,
+  WRITING_MODE_VERTICAL_LR,
+
+  /* SVG 1.1 legacy properties */
+  WRITING_MODE_LEGACY_LR,
+  WRITING_MODE_LEGACY_LR_TB,
+  WRITING_MODE_LEGACY_RL,
+  WRITING_MODE_LEGACY_RL_TB,
+  WRITING_MODE_LEGACY_TB,
+  WRITING_MODE_LEGACY_TB_RL,
+} WritingMode;
+
+static const gboolean is_vertical_writing_mode[] = {
+  FALSE, TRUE, TRUE,
+  FALSE, FALSE, FALSE, FALSE, TRUE, TRUE
+};
+
+static const SvgValueClass SVG_WRITING_MODE_CLASS = {
+  "SvgWritingMode",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum writing_mode_values[] = {
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_HORIZONTAL_TB, "horizontal-tb" },
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_VERTICAL_RL, "vertical-rl" },
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_VERTICAL_LR, "vertical-lr" },
+
+  /* SVG 1.1 legacy properties */
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_LR, "lr" },
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_LR_TB, "lr-tb" },
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_RL, "rl" },
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_RL_TB, "rl-tb" },
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_TB, "tb" },
+  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_TB_RL, "tb-rl" },
+};
+
+static SvgValue *
+svg_writing_mode_new (WritingMode value)
+{
+  return svg_value_ref ((SvgValue *)&writing_mode_values[value]);
+}
+
+static SvgValue *
+svg_writing_mode_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (writing_mode_values); i++)
+    {
+      if (strcmp (string, writing_mode_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *)&writing_mode_values[i]);
+    }
+  return NULL;
+}
+
+static const SvgValueClass SVG_FONT_STYLE_CLASS = {
+  "SvgFontStyle",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum font_style_values[] = {
+  { { &SVG_FONT_STYLE_CLASS, 1 }, PANGO_STYLE_NORMAL, "normal" },
+  { { &SVG_FONT_STYLE_CLASS, 1 }, PANGO_STYLE_OBLIQUE, "oblique" },
+  { { &SVG_FONT_STYLE_CLASS, 1 }, PANGO_STYLE_ITALIC, "italic" },
+};
+
+static SvgValue *
+svg_font_style_new (PangoStyle value)
+{
+  return svg_value_ref ((SvgValue *)&font_style_values[value]);
+}
+
+static SvgValue *
+svg_font_style_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (font_style_values); i++)
+    {
+      if (strcmp (string, font_style_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *)&font_style_values[i]);
+    }
+  return NULL;
+}
+
+static const SvgValueClass SVG_FONT_VARIANT_CLASS = {
+  "SvgFontVariant",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum font_variant_values[] = {
+  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_NORMAL, "normal" },
+  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_SMALL_CAPS, "small-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_ALL_SMALL_CAPS, "all-small-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_PETITE_CAPS, "petite-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_ALL_PETITE_CAPS, "all-petite-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_UNICASE, "unicase" },
+  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_TITLE_CAPS, "titling-caps" },
+};
+
+static SvgValue *
+svg_font_variant_new (PangoVariant value)
+{
+  return svg_value_ref ((SvgValue *)&font_style_values[value]);
+}
+
+static SvgValue *
+svg_font_variant_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (font_variant_values); i++)
+    {
+      if (strcmp (string, font_variant_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *)&font_variant_values[i]);
+    }
+  return NULL;
+}
+
+static const SvgValueClass SVG_FONT_STRETCH_CLASS = {
+  "SvgFontStretch",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum font_stretch_values[] = {
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_ULTRA_CONDENSED, "ultra-condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_EXTRA_CONDENSED, "extra-condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_CONDENSED, "condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_SEMI_CONDENSED, "semi-condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_NORMAL, "normal" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_SEMI_EXPANDED, "semi-expanded" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_EXPANDED, "expanded" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_EXTRA_EXPANDED, "extra-expanded" },
+  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_ULTRA_EXPANDED, "ultra-expanded" },
+};
+
+static SvgValue *
+svg_font_stretch_new (PangoStretch value)
+{
+  return svg_value_ref ((SvgValue *)&font_stretch_values[value]);
+}
+
+static SvgValue *
+svg_font_stretch_parse (const char *string)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (font_stretch_values); i++)
+    {
+      if (strcmp (string, font_stretch_values[i].name) == 0)
+        return svg_value_ref ((SvgValue *)&font_stretch_values[i]);
     }
   return NULL;
 }
@@ -5296,6 +5699,210 @@ svg_orient_parse (const char *value)
 }
 
 /* }}} */
+/* {{{ Language */
+
+typedef struct
+{
+  SvgValue base;
+  PangoLanguage *value;
+} SvgLanguage;
+
+static void
+svg_language_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_language_equal (const SvgValue *value0,
+                    const SvgValue *value1)
+{
+  const SvgLanguage *l0 = (const SvgLanguage *)value0;
+  const SvgLanguage *l1 = (const SvgLanguage *)value1;
+
+  return l0->value == l1->value;
+}
+
+static SvgValue *
+svg_language_interpolate (const SvgValue *value0,
+                          const SvgValue *value1,
+                          double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+
+
+static SvgValue *
+svg_language_accumulate (const SvgValue *value0,
+                         const SvgValue *value1,
+                         int             n)
+{
+  return svg_value_ref ((SvgValue *)value0);
+}
+
+static void
+svg_language_print (const SvgValue *value,
+                    GString        *string)
+{
+  const SvgLanguage *l = (const SvgLanguage *)value;
+  g_string_append (string, pango_language_to_string (l->value));
+}
+
+static PangoLanguage *
+svg_language_get (const SvgValue *value)
+{
+  const SvgLanguage *l = (const SvgLanguage *)value;
+  return l->value;
+}
+
+static const SvgValueClass SVG_LANGUAGE_CLASS = {
+  "SvgLanguage",
+  svg_language_free,
+  svg_language_equal,
+  svg_language_interpolate,
+  svg_language_accumulate,
+  svg_language_print,
+};
+
+static SvgValue *
+svg_language_new (PangoLanguage *language)
+{
+  SvgLanguage *result = (SvgLanguage *)svg_value_alloc (&SVG_LANGUAGE_CLASS, sizeof (SvgLanguage));
+  result->value = language;
+  return (SvgValue *) result;
+}
+
+/* }}} */
+/* {{{ Text decoration */
+
+typedef enum {
+  TEXT_DECORATION_NONE        = 0,
+  TEXT_DECORATION_UNDERLINE   = 1 << 0,
+  TEXT_DECORATION_OVERLINE    = 1 << 1,
+  TEXT_DECORATION_LINE_TROUGH = 1 << 2,
+} TextDecoration;
+
+static const struct {
+  const char *name;
+  TextDecoration value;
+} text_decorations[] = {
+  { .name = "underline", .value = TEXT_DECORATION_UNDERLINE },
+  { .name = "overline", .value = TEXT_DECORATION_OVERLINE },
+  { .name = "line-through", .value = TEXT_DECORATION_LINE_TROUGH },
+};
+
+typedef struct
+{
+  SvgValue base;
+  TextDecoration value;
+} SvgTextDecoration;
+
+static void
+svg_text_decoration_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_text_decoration_equal (const SvgValue *value0,
+                           const SvgValue *value1)
+{
+  const SvgTextDecoration *d0 = (const SvgTextDecoration *)value0;
+  const SvgTextDecoration *d1 = (const SvgTextDecoration *)value1;
+
+  return d0->value == d1->value;
+}
+
+static SvgValue *
+svg_text_decoration_interpolate (const SvgValue *value0,
+                                 const SvgValue *value1,
+                                 double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+static SvgValue *
+svg_text_decoration_accumulate (const SvgValue *value0,
+                                const SvgValue *value1,
+                                int             n)
+{
+  return svg_value_ref ((SvgValue *)value0);
+}
+
+static void
+svg_text_decoration_print (const SvgValue *value,
+                           GString        *string)
+{
+  const SvgTextDecoration *d = (const SvgTextDecoration *)value;
+  gboolean has_value = FALSE;
+  for (size_t i = 0; i < G_N_ELEMENTS (text_decorations); i++)
+    if (d->value & text_decorations[i].value)
+      {
+        if (has_value)
+          g_string_append_c (string, ' ');
+        g_string_append (string, text_decorations[i].name);
+        has_value = TRUE;
+      }
+}
+
+static TextDecoration
+svg_text_decoration_get (const SvgValue *value)
+{
+  const SvgTextDecoration *d = (const SvgTextDecoration *)value;
+  return d->value;
+}
+
+static const SvgValueClass SVG_TEXT_DECORATION_CLASS = {
+  "SvgTextDecoration",
+  svg_text_decoration_free,
+  svg_text_decoration_equal,
+  svg_text_decoration_interpolate,
+  svg_text_decoration_accumulate,
+  svg_text_decoration_print,
+};
+
+static SvgValue *
+svg_text_decoration_new (TextDecoration decoration)
+{
+  SvgTextDecoration *result = (SvgTextDecoration *)svg_value_alloc (&SVG_TEXT_DECORATION_CLASS, sizeof (SvgTextDecoration));
+  result->value = decoration;
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_text_decoration_parse (const char *text)
+{
+  TextDecoration val = TEXT_DECORATION_NONE;
+  char **decorations = g_strsplit (text, " ", 0);
+  for (size_t i = 0; decorations[i]; i++)
+    for (size_t j = 0; j < G_N_ELEMENTS (text_decorations); j++)
+      if (g_strcmp0 (decorations[i], text_decorations[j].name) == 0)
+        val |= text_decorations[j].value;
+  g_strfreev (decorations);
+  return svg_text_decoration_new (val);
+}
+
+
+static SvgValue *
+svg_text_decoration_resolve (const SvgValue *value, const SvgValue *parent)
+{
+  TextDecoration ret;
+  if (!parent)
+    return svg_value_ref ((SvgValue *)value);
+
+  ret = svg_text_decoration_get (parent);
+  ret |= svg_text_decoration_get (value);
+  return svg_text_decoration_new (ret);
+}
+
+/* }}} */
 /* {{{ References */
 
 typedef enum
@@ -5524,6 +6131,15 @@ color_stop_attr_idx (ShapeAttr attr)
 /* {{{ Attributes */
 
 static SvgValue *
+parse_language (const char *value)
+{
+  PangoLanguage *lang = pango_language_from_string (value);
+  if (!lang)
+    return NULL;
+  return svg_language_new (lang);
+}
+
+static SvgValue *
 parse_opacity (const char *value)
 {
   return svg_number_parse (value, 0, 1, NUMBER|PERCENTAGE);
@@ -5563,6 +6179,38 @@ static SvgValue *
 parse_positive_length_percentage (const char *value)
 {
   return svg_number_parse (value, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+}
+
+static const struct {
+  const char *name;
+  int value;
+} named_font_weights[] = {
+  { .name ="normal", .value = PANGO_WEIGHT_NORMAL },
+  { .name ="bold",   .value = PANGO_WEIGHT_BOLD },
+
+  /*
+   * The relative weights lighter/bolder *should* be
+   * relative to their parent element. For now we'll
+   * just hard-code them like legacy rsvg did.
+   */
+  { .name = "lighter", .value = PANGO_WEIGHT_LIGHT },
+  { .name = "bolder", .value = PANGO_WEIGHT_ULTRABOLD },
+};
+static SvgValue *
+parse_font_weight (const char *value)
+{
+  for (guint i = 0; i < G_N_ELEMENTS(named_font_weights); i++)
+    if (g_strcmp0 (named_font_weights[i].name, value) == 0)
+      return svg_number_new (named_font_weights[i].value);
+  return svg_number_parse (value, 0, DBL_MAX, NUMBER|LENGTH);
+}
+
+static SvgValue *
+parse_letter_spacing (const char *value)
+{
+  if (g_strcmp0 (value, "normal") == 0)
+    return svg_number_new (0.);
+  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
 }
 
 static SvgValue *
@@ -5611,6 +6259,12 @@ typedef struct
 } ShapeAttribute;
 
 static ShapeAttribute shape_attrs[] = {
+  { .id = SHAPE_ATTR_LANG,
+    .name = "lang",
+    .inherited = 1,
+    .discrete = 0,
+    .parse_value = parse_language,
+  },
   { .id = SHAPE_ATTR_VISIBILITY,
     .name = "visibility",
     .inherited = 1,
@@ -6058,6 +6712,99 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_href_parse_url,
   },
+  { .id = SHAPE_ATTR_TEXT_ANCHOR,
+    .name = "text-anchor",
+    .inherited = 1,
+    .discrete = 1,
+    .parse_value = svg_text_anchor_parse,
+  },
+  { .id = SHAPE_ATTR_DX,
+    .name = "dx",
+    .inherited = 0,
+    .discrete = 0,
+    .parse_value = parse_length_percentage,
+  },
+  { .id = SHAPE_ATTR_DY,
+    .name = "dy",
+    .inherited = 0,
+    .discrete = 0,
+    .parse_value = parse_length_percentage,
+  },
+  { .id = SHAPE_ATTR_UNICODE_BIDI,
+    .name = "unicode-bidi",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_unicode_bidi_parse,
+  },
+  { .id = SHAPE_ATTR_DIRECTION,
+    .name = "direction",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_direction_parse,
+  },
+  { .id = SHAPE_ATTR_WRITING_MODE,
+    .name = "writing-mode",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_writing_mode_parse,
+  },
+  { .id = SHAPE_ATTR_FONT_FAMILY,
+    .name = "font-family",
+    .inherited = 1,
+    .discrete = 0,
+    .parse_value = svg_string_new,
+  },
+  { .id = SHAPE_ATTR_FONT_STYLE,
+    .name = "font-style",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_font_style_parse,
+  },
+  { .id = SHAPE_ATTR_FONT_VARIANT,
+    .name = "font-variant",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_font_variant_parse,
+  },
+  { .id = SHAPE_ATTR_FONT_WEIGHT,
+    .name = "font-weight",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = parse_font_weight,
+  },
+  { .id = SHAPE_ATTR_FONT_STRECH,
+    .name = "font-stretch",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_font_stretch_parse,
+  },
+  { .id = SHAPE_ATTR_FONT_SIZE,
+    .name = "font-size",
+    .inherited = 1,
+    .discrete = 0,
+    .parse_value = parse_length_percentage, // TODO: more units & string sizes
+  },
+  { .id = SHAPE_ATTR_LETTER_SPACING,
+    .name = "letter-spacing",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = parse_letter_spacing, // TODO: more units & string sizes
+  },
+  { .id = SHAPE_ATTR_TEXT_DECORATION,
+    .name = "text-decoration",
+    .inherited = 1, // rsvg doesn't inherit, firefox does
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_text_decoration_parse,
+  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -6103,6 +6850,7 @@ static ShapeAttribute shape_attrs[] = {
 static void
 shape_attr_init_default_values (void)
 {
+  shape_attrs[SHAPE_ATTR_LANG].initial_value = svg_language_new (gtk_get_default_language ());
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
@@ -6145,6 +6893,21 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FX].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
+  shape_attrs[SHAPE_ATTR_TEXT_ANCHOR].initial_value = svg_text_anchor_new (TEXT_ANCHOR_START);
+  shape_attrs[SHAPE_ATTR_DX].initial_value = svg_number_new (0.);
+  shape_attrs[SHAPE_ATTR_DY].initial_value = svg_number_new (0.);
+  shape_attrs[SHAPE_ATTR_UNICODE_BIDI].initial_value = svg_unicode_bidi_new (UNICODE_BIDI_NORMAL);
+  shape_attrs[SHAPE_ATTR_DIRECTION].initial_value = svg_direction_new (PANGO_DIRECTION_LTR);
+  shape_attrs[SHAPE_ATTR_WRITING_MODE].initial_value = svg_writing_mode_new (WRITING_MODE_HORIZONTAL_TB);
+  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new (NULL);
+  shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_number_new (PANGO_WEIGHT_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_STRECH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
+  // rsvg has a default font size of 12, where as firefox has 16
+  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (16.);
+  shape_attrs[SHAPE_ATTR_LETTER_SPACING].initial_value = svg_number_new (0.);
+  shape_attrs[SHAPE_ATTR_TEXT_DECORATION].initial_value = svg_text_decoration_new (TEXT_DECORATION_NONE);
   shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_points_new_none ();
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
   shape_attrs[SHAPE_ATTR_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
@@ -6238,6 +7001,18 @@ shape_attr_lookup (const char *name,
           *attr = SHAPE_ATTR_HEIGHT;
           return TRUE;
         }
+    }
+
+  /*
+   * In theory, lang & xml:lang are different attributes and if
+   * both are set, lang should be preferred. In an effort of not
+   * polluting the attr array anymore than it already is, we treat
+   * xml:lang as an alias to lang.
+   */
+  if (strcmp (name, "xml:lang") == 0)
+    {
+      *attr = SHAPE_ATTR_LANG;
+      return TRUE;
     }
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
@@ -6454,6 +7229,18 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
+  { .name = "text",
+    .has_shapes = 1,
+    .never_rendered = 0,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+  },
+  { .name = "tspan",
+    .has_shapes = 1,
+    .never_rendered = 1,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+  },
   { .name = "svg",
     .has_shapes = 1,
     .never_rendered = 0,
@@ -6497,6 +7284,8 @@ shape_free (gpointer data)
 
   g_clear_pointer (&shape->path, gsk_path_unref);
   g_clear_pointer (&shape->measure, gsk_path_measure_unref);
+
+  g_clear_pointer (&shape->text, g_array_unref);
 
   if (shape->type == SHAPE_POLYLINE || shape->type == SHAPE_POLYGON)
     g_clear_pointer (&shape->path_for.polyline.points, svg_value_unref);
@@ -6654,6 +7443,12 @@ shape_new (Shape     *parent,
   if (shape_types[type].has_color_stops)
     shape->color_stops = g_ptr_array_new_with_free_func (color_stop_free);
 
+  if (type == SHAPE_TEXT || type == SHAPE_TSPAN)
+    {
+      shape->text = g_array_new (FALSE, FALSE, sizeof(TextNode));
+      g_array_set_clear_func (shape->text, (GDestroyNotify)text_node_clear);
+    }
+
   return shape;
 }
 
@@ -6663,6 +7458,8 @@ shape_has_attr (ShapeType type,
 {
   switch ((unsigned int) attr)
     {
+    case SHAPE_ATTR_LANG:
+      return TRUE;
     case SHAPE_ATTR_HREF:
       return type == SHAPE_USE;
     case SHAPE_ATTR_CX:
@@ -6672,7 +7469,10 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_CIRCLE || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_X:
     case SHAPE_ATTR_Y:
-      return type == SHAPE_SVG || type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK || type == SHAPE_PATTERN;
+      return type == SHAPE_RECT || type == SHAPE_USE ||
+             type == SHAPE_MASK || type == SHAPE_PATTERN ||
+             type == SHAPE_TEXT || type == SHAPE_TSPAN ||
+             type == SHAPE_SVG;
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_HEIGHT:
       return type == SHAPE_SVG || type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK ||
@@ -6728,6 +7528,27 @@ shape_has_attr (ShapeType type,
              type == SHAPE_POLYGON || type == SHAPE_LINE;
     case SHAPE_ATTR_OVERFLOW:
       return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_MARKER;
+    case SHAPE_ATTR_TEXT_ANCHOR:
+      /* text-anchor behaviour on <tspan> is *wierd*,
+       * so we'll follow rsvg and only support it for
+       * <text> nodes.
+       */
+      return type == SHAPE_TEXT;
+    case SHAPE_ATTR_DX:
+    case SHAPE_ATTR_DY:
+    case SHAPE_ATTR_UNICODE_BIDI:
+    case SHAPE_ATTR_DIRECTION:
+    case SHAPE_ATTR_WRITING_MODE:
+    case SHAPE_ATTR_LETTER_SPACING:
+    case SHAPE_ATTR_TEXT_DECORATION:
+      return type == SHAPE_TEXT || type == SHAPE_TSPAN;
+    case SHAPE_ATTR_FONT_FAMILY:
+    case SHAPE_ATTR_FONT_STYLE:
+    case SHAPE_ATTR_FONT_VARIANT:
+    case SHAPE_ATTR_FONT_WEIGHT:
+    case SHAPE_ATTR_FONT_STRECH:
+    case SHAPE_ATTR_FONT_SIZE:
+      return TRUE;
     default:
       return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
     }
@@ -6872,6 +7693,8 @@ shape_get_path (Shape                 *shape,
     case SHAPE_RADIAL_GRADIENT:
     case SHAPE_PATTERN:
     case SHAPE_MARKER:
+    case SHAPE_TEXT:
+    case SHAPE_TSPAN:
     case SHAPE_SVG:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
@@ -6959,6 +7782,8 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
         case SHAPE_MARKER:
+	case SHAPE_TEXT:
+        case SHAPE_TSPAN:
         case SHAPE_SVG:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
@@ -7020,6 +7845,8 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
         case SHAPE_MARKER:
+        case SHAPE_TEXT:
+        case SHAPE_TSPAN:
         case SHAPE_SVG:
         default:
           g_assert_not_reached ();
@@ -7105,6 +7932,10 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
       g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
+      break;
+    case SHAPE_TEXT:
+    case SHAPE_TSPAN:
+      g_critical ("TODO");
       break;
     default:
       g_assert_not_reached ();
@@ -8679,6 +9510,13 @@ resolve_value (Shape           *shape,
   else if (attr == SHAPE_ATTR_POINTS)
     {
       return svg_points_resolve (value, context->viewport);
+    }
+  else if (attr == SHAPE_ATTR_TEXT_DECORATION)
+    {
+      if (context->parent)
+        return svg_text_decoration_resolve (value, context->parent->current[attr]);
+      else
+        return svg_value_ref (value);
     }
   else
    {
@@ -11647,6 +12485,16 @@ start_element_cb (GMarkupParseContext  *context,
     g_ptr_array_add (data->current_shape->shapes, shape);
 
   data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
+
+  if (data->current_shape && (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN) && shape->type == SHAPE_TSPAN)
+  {
+    TextNode node = {
+      .type = TEXT_NODE_SHAPE,
+      .shape = { .shape = shape },
+    };
+    g_array_append_val (data->current_shape->text, node);
+  }
+
   data->current_shape = shape;
 
   if (shape->id)
@@ -11720,6 +12568,16 @@ text_cb (GMarkupParseContext  *context,
          GError              **error)
 {
   ParserData *data = user_data;
+
+  if (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN)
+    {
+      TextNode node = {
+        .type = TEXT_NODE_CHARACTERS,
+        .characters = { .text = g_strndup (text, len) }
+      };
+      g_array_append_val (data->current_shape->text, node);
+      return;
+    }
 
   if (!data->collect_text)
     return;
@@ -13021,7 +13879,29 @@ serialize_shape (GString              *s,
         serialize_animation (s, svg, indent, a, flags);
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape->type == SHAPE_TEXT || shape->type == SHAPE_TSPAN)
+    {
+      for (guint i = 0; i < shape->text->len; i++)
+        {
+          TextNode *node = &g_array_index (shape->text, TextNode, i);
+          switch (node->type)
+            {
+            case TEXT_NODE_SHAPE:
+              serialize_shape (s, svg, indent + 2, node->shape.shape, flags);
+              break;
+            case TEXT_NODE_CHARACTERS:
+              {
+                char *escaped = g_markup_escape_text (node->characters.text, -1);
+                g_string_append (s, escaped);
+                g_free (escaped);
+              }
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+    }
+  else if (shape_types[shape->type].has_shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -14125,6 +15005,330 @@ paint_markers (Shape        *shape,
   pop_op (context);
 }
 
+#define SVG_DEFAULT_DPI 96.0
+static PangoLayout *
+text_create_layout (Shape            *self,
+                    const char       *text,
+                    graphene_point_t *origin,
+                    graphene_rect_t  *bounds,
+                    gboolean         *is_vertical,
+                    double           *rotation)
+{
+  PangoContext *context;
+  UnicodeBidi uni;
+  PangoDirection direction;
+  WritingMode wmode;
+  PangoGravity gravity;
+  PangoFontDescription *font_desc;
+  const char *font_family;
+  PangoLayout *layout;
+  PangoAttrList *attr_list;
+  PangoAttribute *attr;
+  TextDecoration decoration;
+  int w,h;
+  PangoLayoutIter *iter;
+  double offset;
+
+
+  context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
+  pango_context_set_language (context, svg_language_get (self->current[SHAPE_ATTR_LANG]));
+
+  uni = svg_enum_get (self->current[SHAPE_ATTR_UNICODE_BIDI]);
+  direction = svg_enum_get (self->current[SHAPE_ATTR_DIRECTION]);
+  wmode = svg_enum_get (self->current[SHAPE_ATTR_WRITING_MODE]);
+  switch (wmode)
+    {
+    case WRITING_MODE_HORIZONTAL_TB:
+      gravity = PANGO_GRAVITY_SOUTH;
+      break;
+    case WRITING_MODE_VERTICAL_LR:
+      // See note about having vertical-lr rotate -90° instead, below
+    case WRITING_MODE_VERTICAL_RL:
+      gravity = PANGO_GRAVITY_EAST;
+      break;
+    case WRITING_MODE_LEGACY_LR:
+    case WRITING_MODE_LEGACY_LR_TB:
+      direction = PANGO_DIRECTION_LTR;
+      gravity = PANGO_GRAVITY_SOUTH;
+      break;
+    case WRITING_MODE_LEGACY_RL:
+    case WRITING_MODE_LEGACY_RL_TB:
+      direction = PANGO_DIRECTION_RTL;
+      gravity = PANGO_GRAVITY_SOUTH;
+      break;
+    case WRITING_MODE_LEGACY_TB:
+    case WRITING_MODE_LEGACY_TB_RL:
+      direction = PANGO_DIRECTION_LTR;
+      gravity = PANGO_GRAVITY_EAST;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+  pango_context_set_base_gravity (context, gravity);
+
+  if (uni == UNICODE_BIDI_OVERRIDE || uni == UNICODE_BIDI_EMBED)
+    pango_context_set_base_dir (context, direction);
+
+  font_desc = pango_font_description_copy (pango_context_get_font_description (context));
+
+  font_family = svg_string_get (self->current[SHAPE_ATTR_FONT_FAMILY]);
+  if (font_family)
+    pango_font_description_set_family_static (font_desc, font_family);
+
+  pango_font_description_set_style (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STYLE]));
+  pango_font_description_set_variant (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_VARIANT]));
+  pango_font_description_set_weight (font_desc, svg_number_get (self->current[SHAPE_ATTR_FONT_WEIGHT], 1000.));
+  pango_font_description_set_stretch (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STRECH]));
+
+  pango_font_description_set_size (font_desc,
+                                   svg_number_get (self->current[SHAPE_ATTR_FONT_SIZE], 1.) *
+                                   PANGO_SCALE / SVG_DEFAULT_DPI * 72);
+
+  layout = pango_layout_new (context);
+  pango_layout_set_font_description (layout, font_desc);
+  pango_font_description_free (font_desc);
+
+  attr_list = pango_attr_list_new ();
+
+  attr = pango_attr_letter_spacing_new (svg_number_get (self->current[SHAPE_ATTR_LETTER_SPACING], 1.) * PANGO_SCALE);
+  attr->start_index = 0;
+  attr->end_index = G_MAXINT;
+  pango_attr_list_insert (attr_list, attr);
+
+  decoration = svg_text_decoration_get (self->current[SHAPE_ATTR_TEXT_DECORATION]);
+  if (text)
+    {
+      if (decoration & TEXT_DECORATION_UNDERLINE)
+        {
+          attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          attr->start_index = 0;
+          attr->end_index = -1;
+          pango_attr_list_insert (attr_list, attr);
+        }
+      if (decoration & TEXT_DECORATION_OVERLINE)
+        {
+          attr = pango_attr_overline_new (PANGO_OVERLINE_SINGLE);
+          attr->start_index = 0;
+          attr->end_index = -1;
+          pango_attr_list_insert (attr_list, attr);
+        }
+      if (decoration & TEXT_DECORATION_LINE_TROUGH)
+        {
+          attr = pango_attr_strikethrough_new (TRUE);
+          attr->start_index = 0;
+          attr->end_index = -1;
+          pango_attr_list_insert (attr_list, attr);
+        }
+    }
+
+  pango_layout_set_attributes (layout, attr_list);
+  pango_attr_list_unref (attr_list);
+
+  pango_layout_set_text (layout, text, -1);
+
+  pango_layout_set_alignment (layout, (direction == PANGO_DIRECTION_LTR) ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT);
+
+  pango_layout_get_size (layout, &w, &h);
+  iter = pango_layout_get_iter (layout);
+  offset = pango_layout_iter_get_baseline (iter) / (double)PANGO_SCALE;
+  pango_layout_iter_free (iter);
+  switch (wmode)
+    {
+    case WRITING_MODE_HORIZONTAL_TB:
+    case WRITING_MODE_LEGACY_LR:
+    case WRITING_MODE_LEGACY_LR_TB:
+    case WRITING_MODE_LEGACY_RL:
+    case WRITING_MODE_LEGACY_RL_TB:
+      *origin = GRAPHENE_POINT_INIT (0., -offset);
+      *bounds = GRAPHENE_RECT_INIT (0., -offset, w / (double)PANGO_SCALE, h / (double)PANGO_SCALE);
+      *is_vertical = FALSE;
+      *rotation = 0.;
+      break;
+    case WRITING_MODE_VERTICAL_LR:
+      /* Firefox uses 90° here (like for the other vertical modes), while rsvg uses -90°
+       * I came to the conclusion that implementing -90° properly (rsvg doesn't) doesn't
+       * quite work with the current text handling architecture, so we'll just do what the
+       * web browsers do.
+       */
+    case WRITING_MODE_VERTICAL_RL:
+    case WRITING_MODE_LEGACY_TB:
+    case WRITING_MODE_LEGACY_TB_RL:
+      *origin = GRAPHENE_POINT_INIT (offset, 0.);
+      *bounds = GRAPHENE_RECT_INIT (offset - h / (double)PANGO_SCALE, 0., h / (double)PANGO_SCALE, w / (double)PANGO_SCALE);
+      *is_vertical = TRUE;
+      *rotation = 90.;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_object_unref (context);
+  return layout;
+}
+
+static gboolean
+generate_layouts (Shape           *self,
+                  double          *x,
+                  double          *y,
+                  gboolean        *lastwasspace,
+                  graphene_rect_t *bounds)
+{
+  double xs = 0.;
+  double ys = 0.;
+  gboolean lwss = TRUE;
+  double dx, dy;
+
+  g_assert (self->type == SHAPE_TEXT || self->type == SHAPE_TSPAN);
+
+  if (!x)
+    x = &xs;
+  if (!y)
+    y = &ys;
+  if (!lastwasspace)
+    lastwasspace = &lwss;
+
+  if (_gtk_bitmask_get (self->attrs, SHAPE_ATTR_X))
+    *x = svg_number_get (self->current[SHAPE_ATTR_X], 1);
+  if (_gtk_bitmask_get (self->attrs, SHAPE_ATTR_Y))
+    *y = svg_number_get (self->current[SHAPE_ATTR_Y], 1);
+
+  dx = svg_number_get (self->current[SHAPE_ATTR_DX], 1);
+  dy = svg_number_get (self->current[SHAPE_ATTR_DY], 1);
+  *x += dx;
+  *y += dy;
+
+  gboolean set_bounds = FALSE;
+#define ADD_BBOX(box) do {                          \
+  if (!set_bounds)                                  \
+    {                                               \
+      graphene_rect_init_from_rect (bounds, (box)); \
+      set_bounds = TRUE;                            \
+    }                                               \
+  else                                              \
+    {                                               \
+      graphene_rect_t res;                          \
+      graphene_rect_union (bounds, (box), &res);    \
+      graphene_rect_init_from_rect (bounds, &res);  \
+    }                                               \
+} while(0);
+
+  for (guint i = 0; i < self->text->len; i++)
+    {
+      TextNode *node = &g_array_index (self->text, TextNode, i);
+      switch (node->type)
+        {
+        case TEXT_NODE_SHAPE:
+          node->shape.has_bounds = generate_layouts (node->shape.shape, x, y, lastwasspace, &node->shape.bounds);
+          if (node->shape.has_bounds)
+            ADD_BBOX (&node->shape.bounds)
+          break;
+        case TEXT_NODE_CHARACTERS:
+          {
+            graphene_point_t origin;
+            graphene_rect_t cbounds;
+            gboolean is_vertical;
+            char *text = text_chomp (node->characters.text, lastwasspace);
+            node->characters.layout = text_create_layout (self, text, &origin, &cbounds, &is_vertical, &node->characters.r);
+            g_free (text);
+
+            node->characters.x = *x + origin.x;
+            node->characters.y = *y + origin.y;
+
+            graphene_rect_offset (&cbounds, *x, *y);
+            ADD_BBOX (&cbounds)
+
+            if (is_vertical)
+              *y += cbounds.size.height;
+            else
+              *x += cbounds.size.width;
+          }
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+#undef ADD_BBOX
+  return set_bounds;
+}
+
+static void
+render_text (Shape                 *self,
+             PaintContext          *context,
+             SvgPaint              *paint,
+             const graphene_rect_t *bounds)
+{
+  g_assert (self->type == SHAPE_TEXT || self->type == SHAPE_TSPAN);
+
+  for (guint i = 0; i < self->text->len; i++)
+    {
+      TextNode *node = &g_array_index (self->text, TextNode, i);
+      switch (node->type)
+        {
+        case TEXT_NODE_SHAPE:
+          {
+            SvgPaint *cpaint = paint;
+            const graphene_rect_t *cbounds = bounds;
+            if (_gtk_bitmask_get (node->shape.shape->attrs, SHAPE_ATTR_FILL))
+              {
+                cpaint = (SvgPaint *) node->shape.shape->current[SHAPE_ATTR_FILL];
+                if (node->shape.has_bounds)
+                  cbounds = &node->shape.bounds;
+              }
+            render_text (node->shape.shape, context, cpaint, cbounds);
+          }
+          break;
+        case TEXT_NODE_CHARACTERS:
+          {
+            double opacity;
+            if (paint->kind == PAINT_NONE)
+              goto skip;
+
+#if 0
+            GskRoundedRect brd;
+            gsk_rounded_rect_init_from_rect (&brd, bounds, 0.f);
+            GdkRGBA red = (GdkRGBA){ .red = 1., .green = 0., .blue = 0., .alpha = 1. };
+            gtk_snapshot_append_border (context->snapshot, &brd, (const float[4]){ 3.f, 3.f, 3.f, 3.f }, (const GdkRGBA[4]){ red, red, red, red });
+#endif
+
+            gtk_snapshot_save (context->snapshot);
+            opacity = svg_number_get (self->current[SHAPE_ATTR_FILL_OPACITY], 1);
+            if (paint->kind == PAINT_COLOR)
+              {
+                GdkRGBA color = paint->color;
+                color.alpha *= opacity;
+                gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
+                gtk_snapshot_rotate (context->snapshot, node->characters.r);
+                gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &color);
+              }
+            else if (paint->kind == PAINT_SERVER)
+              {
+                if (opacity < 1)
+                  gtk_snapshot_push_opacity (context->snapshot, opacity);
+
+                gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
+                gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
+                gtk_snapshot_rotate (context->snapshot, node->characters.r);
+                gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &(GdkRGBA){ .red = 0., .green = 0., .blue = 0., .alpha = 1. });
+                gtk_snapshot_pop (context->snapshot);
+                paint_server (paint->server.shape, bounds, context);
+                gtk_snapshot_pop (context->snapshot);
+
+                if (opacity < 1)
+                  gtk_snapshot_pop (context->snapshot);
+              }
+            gtk_snapshot_restore (context->snapshot);
+
+skip:
+            g_clear_object (&node->characters.layout);
+          }
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
 static void
 recompute_current_values (Shape        *shape,
                           Shape        *parent,
@@ -14171,6 +15375,48 @@ paint_shape (Shape        *shape,
     {
       recompute_current_values (shape, shape->parent, context);
       mark_as_computed_for_use (shape, FALSE);
+    }
+
+  if (shape->type == SHAPE_TEXT)
+    {
+      TextAnchor anchor;
+      WritingMode wmode;
+      graphene_rect_t bounds;
+
+      if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
+        return;
+
+      anchor = svg_enum_get (shape->current[SHAPE_ATTR_TEXT_ANCHOR]);
+      wmode = svg_enum_get (shape->current[SHAPE_ATTR_WRITING_MODE]);
+      if (!generate_layouts (shape, NULL, NULL, NULL, &bounds))
+        return;
+
+      gtk_snapshot_save (context->snapshot);
+      switch (anchor)
+        {
+        case TEXT_ANCHOR_START:
+          break;
+        case TEXT_ANCHOR_MIDDLE:
+          if (is_vertical_writing_mode[wmode])
+            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (0., -bounds.size.height / 2.));
+          else
+            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-bounds.size.width / 2., 0.));
+          break;
+        case TEXT_ANCHOR_END:
+          if (is_vertical_writing_mode[wmode])
+            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (0., -bounds.size.height));
+          else
+            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-bounds.size.width, 0.));
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      render_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+
+      gtk_snapshot_restore (context->snapshot);
+
+      return;
     }
 
   if (shape_types[shape->type].has_shapes)
@@ -15593,12 +16839,32 @@ svg_shape_add (Shape     *parent,
 
   g_ptr_array_add (parent->shapes, shape);
 
+  if ((parent->type == SHAPE_TEXT || parent->type == SHAPE_TSPAN) && type == SHAPE_TSPAN)
+    {
+      TextNode node = {
+        .type = TEXT_NODE_SHAPE,
+        .shape = { .shape = shape }
+      };
+      g_array_append_val (parent->text, node);
+    }
+
   return shape;
 }
 
 void
 svg_shape_delete (Shape *shape)
 {
+  if (shape->text)
+    for (guint i = 0; i < shape->text->len; i++)
+      {
+        TextNode *node = &g_array_index (shape->text, TextNode, i);
+        if (node->type == TEXT_NODE_SHAPE && node->shape.shape == shape)
+          {
+            g_array_remove_index (shape->text, i);
+            break;
+          }
+      }
+
   g_ptr_array_remove (shape->parent->shapes, shape);
 }
 
