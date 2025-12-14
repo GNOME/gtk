@@ -1700,6 +1700,21 @@ svg_enum_get (const SvgValue *value)
   return e->value;
 }
 
+static SvgValue *
+svg_enum_parse (const SvgEnum  values[],
+                unsigned int   n_values,
+                const char    *string)
+{
+  for (unsigned int i = 0; i < n_values; i++)
+    {
+      if (values[i].name && strcmp (string, values[i].name) == 0)
+        return svg_value_ref ((SvgValue *) &values[i]);
+    }
+  return NULL;
+}
+
+/* {{{ Fill rule */ 
+
 static const SvgValueClass SVG_FILL_RULE_CLASS = {
   "SvgFillRule",
   svg_enum_free,
@@ -1718,20 +1733,17 @@ SvgValue *
 svg_fill_rule_new (GskFillRule value)
 {
   g_assert (value < G_N_ELEMENTS (fill_rule_values));
-
   return svg_value_ref ((SvgValue *) &fill_rule_values[value]);
 }
 
 static SvgValue *
 svg_fill_rule_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (fill_rule_values); i++)
-    {
-      if (strcmp (string, fill_rule_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &fill_rule_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (fill_rule_values, G_N_ELEMENTS (fill_rule_values), string);
 }
+
+/* }}} */
+/* {{{ Mask type */
 
 static const SvgValueClass SVG_MASK_TYPE_CLASS = {
   "SvgMaskType",
@@ -1761,13 +1773,11 @@ svg_mask_type_new (GskMaskMode value)
 static SvgValue *
 svg_mask_type_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (mask_type_values); i++)
-    {
-      if (strcmp (string, mask_type_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &mask_type_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (mask_type_values, G_N_ELEMENTS (mask_type_values), string);
 }
+
+/* }}} */
+/* {{{ Line cap */
 
 static const SvgValueClass SVG_LINE_CAP_CLASS = {
   "SvgLineCap",
@@ -1788,20 +1798,17 @@ SvgValue *
 svg_linecap_new (GskLineCap value)
 {
   g_assert (value < G_N_ELEMENTS (line_cap_values));
-
   return svg_value_ref ((SvgValue *) &line_cap_values[value]);
 }
 
 static SvgValue *
 svg_linecap_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (line_cap_values); i++)
-    {
-      if (strcmp (string, line_cap_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &line_cap_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (line_cap_values, G_N_ELEMENTS (line_cap_values), string);
 }
+
+/* }}} */
+/* {{{ Line join */
 
 static const SvgValueClass SVG_LINE_JOIN_CLASS = {
   "SvgLineJoin",
@@ -1822,20 +1829,17 @@ SvgValue *
 svg_linejoin_new (GskLineJoin value)
 {
   g_assert (value < G_N_ELEMENTS (line_join_values));
-
   return svg_value_ref ((SvgValue *) &line_join_values[value]);
 }
 
 static SvgValue *
 svg_linejoin_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (line_join_values); i++)
-    {
-      if (strcmp (string, line_join_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &line_join_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (line_join_values, G_N_ELEMENTS (line_join_values), string);
 }
+
+/* }}} */
+/* {{{ Visibility */
 
 static const SvgValueClass SVG_VISIBILITY_CLASS = {
   "SvgVisibility",
@@ -1855,20 +1859,17 @@ static SvgValue *
 svg_visibility_new (Visibility value)
 {
   g_assert (value < G_N_ELEMENTS (visibility_values));
-
   return svg_value_ref ((SvgValue *) &visibility_values[value]);
 }
 
 static SvgValue *
 svg_visibility_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (visibility_values); i++)
-    {
-      if (strcmp (string, visibility_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &visibility_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (visibility_values, G_N_ELEMENTS (visibility_values), string);
 }
+
+/* }}} */
+/* {{{ Spread method */
 
 static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
   "SvgSpreadMethod",
@@ -1889,20 +1890,17 @@ static SvgValue *
 svg_spread_method_new (GskRepeat value)
 {
   g_assert (value < G_N_ELEMENTS (spread_method_values));
-
   return svg_value_ref ((SvgValue *) &spread_method_values[value]);
 }
 
 static SvgValue *
 svg_spread_method_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (spread_method_values); i++)
-    {
-      if (strcmp (string, spread_method_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &spread_method_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (spread_method_values, G_N_ELEMENTS (spread_method_values), string);
 }
+
+/* }}} */
+/* {{{ Coord units */
 
 typedef enum
 {
@@ -1928,20 +1926,17 @@ static SvgValue *
 svg_coord_units_new (CoordUnits value)
 {
   g_assert (value < G_N_ELEMENTS (coord_units_values));
-
   return svg_value_ref ((SvgValue *) &coord_units_values[value]);
 }
 
 static SvgValue *
 svg_coord_units_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (coord_units_values); i++)
-    {
-      if (strcmp (string, coord_units_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &coord_units_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (coord_units_values, G_N_ELEMENTS (coord_units_values), string);
 }
+
+/* }}} */
+/* {{{ Paint order */
 
 static const SvgValueClass SVG_PAINT_ORDER_CLASS = {
   "SvgPaintOrder",
@@ -1965,7 +1960,6 @@ SvgValue *
 svg_paint_order_new (PaintOrder value)
 {
   g_assert (value < G_N_ELEMENTS (paint_order_values));
-
   return svg_value_ref ((SvgValue *) &paint_order_values[value]);
 }
 
@@ -1996,6 +1990,9 @@ svg_paint_order_parse (const char *string)
 
   return NULL;
 }
+
+/* }}} */
+/* {{{ Blend mode */
 
 static const SvgValueClass SVG_BLEND_MODE_CLASS = {
   "SvgBlendMode",
@@ -2029,20 +2026,17 @@ static SvgValue *
 svg_blend_mode_new (GskBlendMode value)
 {
   g_assert (value < G_N_ELEMENTS (blend_mode_values));
-
   return svg_value_ref ((SvgValue *) &blend_mode_values[value]);
 }
 
 static SvgValue *
 svg_blend_mode_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (blend_mode_values); i++)
-    {
-      if (strcmp (string, blend_mode_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &blend_mode_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (blend_mode_values, G_N_ELEMENTS (blend_mode_values), string);
 }
+
+/* }}} */
+/* {{{ Text anchor */
 
 typedef enum {
   TEXT_ANCHOR_START,
@@ -2075,13 +2069,11 @@ svg_text_anchor_new (TextAnchor value)
 static SvgValue *
 svg_text_anchor_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (text_anchor_values); i++)
-    {
-      if (strcmp (string, text_anchor_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *)&text_anchor_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (text_anchor_values, G_N_ELEMENTS (text_anchor_values), string);
 }
+
+/* }}} */
+/* {{{ Isolation */
 
 typedef enum {
   ISOLATION_AUTO,
@@ -2106,20 +2098,17 @@ static SvgValue *
 svg_isolation_new (Isolation value)
 {
   g_assert (value < G_N_ELEMENTS (isolation_values));
-
   return svg_value_ref ((SvgValue *) &isolation_values[value]);
 }
 
 static SvgValue *
 svg_isolation_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (isolation_values); i++)
-    {
-      if (strcmp (string, isolation_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &isolation_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (isolation_values, G_N_ELEMENTS (isolation_values), string);
 }
+
+/* }}} */
+/* {{{ Marker units */
 
 typedef enum
 {
@@ -2144,20 +2133,18 @@ static SvgEnum marker_units_values[] = {
 static SvgValue *
 svg_marker_units_new (MarkerUnits value)
 {
+  g_assert (value < G_N_ELEMENTS (marker_units_values));
   return svg_value_ref ((SvgValue *) &marker_units_values[value]);
 }
 
 static SvgValue *
 svg_marker_units_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (marker_units_values); i++)
-    {
-      if (strcmp (string, marker_units_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &marker_units_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (marker_units_values, G_N_ELEMENTS (marker_units_values), string);
 }
 
+/* }}} */
+/* {{{ Unicode bidi */
 
 typedef enum {
   UNICODE_BIDI_NORMAL,
@@ -2183,19 +2170,18 @@ static SvgEnum unicode_bidi_values[] = {
 static SvgValue *
 svg_unicode_bidi_new (UnicodeBidi value)
 {
-  return svg_value_ref ((SvgValue *)&unicode_bidi_values[value]);
+  g_assert (value < G_N_ELEMENTS (unicode_bidi_values));
+  return svg_value_ref ((SvgValue *) &unicode_bidi_values[value]);
 }
 
 static SvgValue *
 svg_unicode_bidi_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (unicode_bidi_values); i++)
-    {
-      if (strcmp (string, unicode_bidi_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *)&unicode_bidi_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (unicode_bidi_values, G_N_ELEMENTS (unicode_bidi_values), string);
 }
+
+/* }}} */
+/* {{{ Overflow */
 
 typedef enum
 {
@@ -2223,20 +2209,17 @@ static SvgValue *
 svg_overflow_new (SvgOverflow value)
 {
   g_assert (value < G_N_ELEMENTS (overflow_values));
-
   return svg_value_ref ((SvgValue *) &overflow_values[value]);
 }
 
 static SvgValue *
 svg_overflow_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (overflow_values); i++)
-    {
-      if (strcmp (string, overflow_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *) &overflow_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (overflow_values, G_N_ELEMENTS (overflow_values), string);
 }
+
+/* }}} */
+/* {{{ Direction */
 
 static const SvgValueClass SVG_DIRECTION_CLASS = {
   "SvgDirection",
@@ -2262,13 +2245,11 @@ svg_direction_new (PangoDirection value)
 static SvgValue *
 svg_direction_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (direction_values); i++)
-    {
-      if (strcmp (string, direction_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *)&direction_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (direction_values, G_N_ELEMENTS (direction_values), string);
 }
+
+/* }}} */
+/* {{{ Writing mode */
 
 typedef enum {
   WRITING_MODE_HORIZONTAL_TB,
@@ -2315,19 +2296,18 @@ static SvgEnum writing_mode_values[] = {
 static SvgValue *
 svg_writing_mode_new (WritingMode value)
 {
-  return svg_value_ref ((SvgValue *)&writing_mode_values[value]);
+  g_assert (value < G_N_ELEMENTS (writing_mode_values));
+  return svg_value_ref ((SvgValue *) &writing_mode_values[value]);
 }
 
 static SvgValue *
 svg_writing_mode_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (writing_mode_values); i++)
-    {
-      if (strcmp (string, writing_mode_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *)&writing_mode_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (writing_mode_values, G_N_ELEMENTS (writing_mode_values), string);
 }
+
+/* }}} */
+/* {{{ Font style */
 
 static const SvgValueClass SVG_FONT_STYLE_CLASS = {
   "SvgFontStyle",
@@ -2347,19 +2327,18 @@ static SvgEnum font_style_values[] = {
 static SvgValue *
 svg_font_style_new (PangoStyle value)
 {
-  return svg_value_ref ((SvgValue *)&font_style_values[value]);
+  g_assert (value < G_N_ELEMENTS (font_style_values));
+  return svg_value_ref ((SvgValue *) &font_style_values[value]);
 }
 
 static SvgValue *
 svg_font_style_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (font_style_values); i++)
-    {
-      if (strcmp (string, font_style_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *)&font_style_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (font_style_values, G_N_ELEMENTS (font_style_values), string);
 }
+
+/* }}} */
+/* {{{ Font variant */
 
 static const SvgValueClass SVG_FONT_VARIANT_CLASS = {
   "SvgFontVariant",
@@ -2383,19 +2362,18 @@ static SvgEnum font_variant_values[] = {
 static SvgValue *
 svg_font_variant_new (PangoVariant value)
 {
-  return svg_value_ref ((SvgValue *)&font_style_values[value]);
+  g_assert (value < G_N_ELEMENTS (font_variant_values));
+  return svg_value_ref ((SvgValue *) &font_variant_values[value]);
 }
 
 static SvgValue *
 svg_font_variant_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (font_variant_values); i++)
-    {
-      if (strcmp (string, font_variant_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *)&font_variant_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (font_variant_values, G_N_ELEMENTS (font_variant_values), string);
 }
+
+/* }}} */
+/* {{{ Font stretch */
 
 static const SvgValueClass SVG_FONT_STRETCH_CLASS = {
   "SvgFontStretch",
@@ -2421,20 +2399,17 @@ static SvgEnum font_stretch_values[] = {
 static SvgValue *
 svg_font_stretch_new (PangoStretch value)
 {
-  return svg_value_ref ((SvgValue *)&font_stretch_values[value]);
+  g_assert (value < G_N_ELEMENTS (font_stretch_values));
+  return svg_value_ref ((SvgValue *) &font_stretch_values[value]);
 }
 
 static SvgValue *
 svg_font_stretch_parse (const char *string)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (font_stretch_values); i++)
-    {
-      if (strcmp (string, font_stretch_values[i].name) == 0)
-        return svg_value_ref ((SvgValue *)&font_stretch_values[i]);
-    }
-  return NULL;
+  return svg_enum_parse (font_stretch_values, G_N_ELEMENTS (font_stretch_values), string);
 }
 
+/* }}} */
 /* }}} */
 /* {{{ Transforms */
 
