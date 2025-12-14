@@ -1,14 +1,14 @@
 <svg
         xmlns='http://www.w3.org/2000/svg'
         xmlns:svg='http://www.w3.org/2000/svg'
-        width='300'
-        height='200'
-        viewBox='0 0 300 200'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
         gpa:state='empty'
         gpa:state-change-delay='0ms'
-        gpa:time-since-load='11000ms'>
+        gpa:time-since-load='11000ms'
+        width='300'
+        height='200'
+        viewBox='0 0 300 200'>
   <path
           id='p'
           stroke='rgb(0,0,0)'

@@ -1,0 +1,64 @@
+isolation {
+  child: container {
+    transform {
+      transform: translate(10, 10);
+      child: fill {
+        child: color {
+          bounds: 0 0 50 50;
+          color: rgb(255,0,0);
+        }
+        path: "\
+M 0 0 h 50 v 50 h -50 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(70, 10) scale(0.5);
+      child: fill {
+        child: color {
+          bounds: 0 0 100 100;
+          color: rgb(0,0,255);
+        }
+        path: "\
+M 100 50 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(130, 10) scale(0.6, 0.3);
+      child: fill {
+        child: color {
+          bounds: 0 0 100 100;
+          color: rgb(0,128,0);
+        }
+        path: "\
+M 0 0 h 100 v 100 h -100 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(10, 70);
+      child: fill {
+        child: color {
+          bounds: -15 -15 80 80;
+          color: rgb(255,255,0);
+        }
+        path: "\
+M 65 25 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
+        fill-rule: winding;
+      }
+    }
+    transform {
+      transform: translate(80, 80) scale(0.6) translate(20, 20);
+      child: fill {
+        child: color {
+          bounds: 0 0 100 100;
+          color: rgb(128,0,128);
+        }
+        path: "\
+M 0 0 h 100 v 100 h -100 z";
+        fill-rule: winding;
+      }
+    }
+  }
+}

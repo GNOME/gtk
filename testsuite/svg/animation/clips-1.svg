@@ -1,14 +1,14 @@
 <svg
         xmlns='http://www.w3.org/2000/svg'
         xmlns:svg='http://www.w3.org/2000/svg'
-        width='30'
-        height='20'
-        viewBox='0 0 30 20'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
         gpa:state='0'
         gpa:state-change-delay='0ms'
-        gpa:time-since-load='1000ms'>
+        gpa:time-since-load='1000ms'
+        width='30'
+        height='20'
+        viewBox='0 0 30 20'>
   <clipPath
           id='clip1'>
     <circle

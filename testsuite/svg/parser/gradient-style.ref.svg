@@ -1,8 +1,7 @@
 <svg
         xmlns='http://www.w3.org/2000/svg'
         xmlns:svg='http://www.w3.org/2000/svg'
-        width='1000'
-        height='5000'
+        id='svg-root'
         viewBox='0 0 1000 5000'>
   <defs
           id='defs'>

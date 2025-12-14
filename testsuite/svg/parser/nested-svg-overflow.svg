@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">
+  <svg x="10" y="10" width="60" height="60" overflow="visible">
+    <circle cx="30" cy="30" r="50" fill="red"/>
+  </svg>
+
+  <!-- overflow="hidden" - content should be clipped -->
+  <svg x="90" y="10" width="60" height="60" overflow="hidden">
+    <circle cx="30" cy="30" r="50" fill="blue"/>
+  </svg>
+
+  <!-- overflow="scroll" (treated as hidden) -->
+  <svg x="170" y="10" width="60" height="60" overflow="scroll">
+    <circle cx="30" cy="30" r="50" fill="green"/>
+  </svg>
+
+  <!-- overflow="auto" (treated as hidden) -->
+  <svg x="10" y="90" width="60" height="60" overflow="auto">
+    <circle cx="30" cy="30" r="50" fill="yellow"/>
+  </svg>
+
+  <!-- Default overflow behavior (should be hidden) -->
+  <svg x="90" y="90" width="60" height="60">
+    <circle cx="30" cy="30" r="50" fill="purple"/>
+  </svg>
+</svg>

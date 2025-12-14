@@ -1,11 +1,11 @@
 <svg
         xmlns='http://www.w3.org/2000/svg'
         xmlns:svg='http://www.w3.org/2000/svg'
+        overflow='hidden'
         width='256'
         height='256'
         viewBox='0 0 10 10'
-        preserveAspectRatio='none'
-        overflow='hidden'>
+        preserveAspectRatio='none'>
   <circle
           fill='rgb(0,0,0)'
           cx='0'

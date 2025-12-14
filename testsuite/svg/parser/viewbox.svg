@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
+<svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
 	<circle cx="0" cy="0" r="64" fill="black"/>
 </svg>
