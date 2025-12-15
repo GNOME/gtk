@@ -6061,14 +6061,7 @@ svg_href_parse_url (const char *value)
 /* }}} */
 /* {{{ Color stops */
 
-typedef enum
-{
-  COLOR_STOP_OFFSET,
-  COLOR_STOP_COLOR,
-  COLOR_STOP_OPACITY,
-} StopProperties;
-
-#define N_STOP_PROPS (COLOR_STOP_OPACITY + 1)
+#define N_STOP_PROPS N_STOP_ATTRS
 
 typedef struct
 {
@@ -6089,17 +6082,11 @@ color_stop_free (gpointer v)
   g_free (stop);
 }
 
-static unsigned int
+static inline unsigned int
 color_stop_attr_idx (ShapeAttr attr)
 {
-  switch ((unsigned int) attr)
-    {
-    case SHAPE_ATTR_STOP_OFFSET: return COLOR_STOP_OFFSET;
-    case SHAPE_ATTR_STOP_COLOR: return COLOR_STOP_COLOR;
-    case SHAPE_ATTR_STOP_OPACITY: return COLOR_STOP_OPACITY;
-    default:
-      g_assert_not_reached ();
-    }
+  g_assert (attr >= FIRST_STOP_ATTR && attr <= LAST_STOP_ATTR);
+  return attr - FIRST_STOP_ATTR;
 }
 
 /* }}} */
@@ -7246,7 +7233,7 @@ shape_free (gpointer data)
 
   g_clear_pointer (&shape->id, g_free);
 
-  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
+  for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)
     {
       g_clear_pointer (&shape->base[i], svg_value_unref);
       g_clear_pointer (&shape->current[i], svg_value_unref);
@@ -7926,12 +7913,8 @@ shape_add_color_stop (Shape *shape)
 
   g_assert (shape_types[shape->type].has_color_stops);
 
-  stop->base[COLOR_STOP_OFFSET] =
-    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OFFSET, shape));
-  stop->base[COLOR_STOP_COLOR] =
-    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_COLOR, shape));
-  stop->base[COLOR_STOP_OPACITY] =
-    svg_value_ref (shape_attr_get_initial_value (SHAPE_ATTR_STOP_OPACITY, shape));
+  for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
+    stop->base[color_stop_attr_idx (attr)] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
 
   g_ptr_array_add (shape->color_stops, stop);
 
@@ -8803,11 +8786,11 @@ shape_get_current_value (Shape        *shape,
                          unsigned int  attr,
                          unsigned int  idx)
 {
-  if (attr < SHAPE_ATTR_STOP_OFFSET)
+  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
     {
       return shape->current[attr];
     }
-  else
+  else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
       ColorStop *stop;
 
@@ -8817,6 +8800,8 @@ shape_get_current_value (Shape        *shape,
 
       return stop->current[color_stop_attr_idx (attr)];
     }
+  else
+    g_assert_not_reached ();
 }
 
 static SvgValue *
@@ -8825,7 +8810,7 @@ shape_get_base_value (Shape        *shape,
                       ShapeAttr     attr,
                       unsigned int  idx)
 {
-  if (attr < SHAPE_ATTR_STOP_OFFSET)
+  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
     {
       if (!_gtk_bitmask_get (shape->attrs, attr))
         {
@@ -8848,7 +8833,7 @@ shape_get_base_value (Shape        *shape,
 
       return shape->base[attr];
     }
-  else
+  else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
       ColorStop *stop;
 
@@ -8858,6 +8843,8 @@ shape_get_base_value (Shape        *shape,
 
       return stop->base[color_stop_attr_idx (attr)];
     }
+  else
+    g_assert_not_reached ();
 }
 
 static void
@@ -8866,13 +8853,13 @@ shape_set_base_value (Shape        *shape,
                       unsigned int  idx,
                       SvgValue     *value)
 {
-  if (attr < SHAPE_ATTR_STOP_OFFSET)
+  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
     {
       g_clear_pointer (&shape->base[attr], svg_value_unref);
       shape->base[attr] = svg_value_ref (value);
       shape->attrs = _gtk_bitmask_set (shape->attrs, attr, TRUE);
     }
-  else
+  else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
       ColorStop *stop;
 
@@ -8882,6 +8869,8 @@ shape_set_base_value (Shape        *shape,
       g_clear_pointer (&stop->base[color_stop_attr_idx (attr)], svg_value_unref);
       stop->base[color_stop_attr_idx (attr)] = svg_value_ref (value);
     }
+  else
+    g_assert_not_reached ();
 }
 
 static void
@@ -8890,14 +8879,14 @@ shape_set_current_value (Shape        *shape,
                          unsigned int  idx,
                          SvgValue     *value)
 {
-  if (attr < SHAPE_ATTR_STOP_OFFSET)
+  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
     {
       if (value)
         svg_value_ref (value);
       g_clear_pointer (&shape->current[attr], svg_value_unref);
       shape->current[attr] = value;
     }
-  else
+  else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
       ColorStop *stop;
 
@@ -8910,6 +8899,8 @@ shape_set_current_value (Shape        *shape,
       g_clear_pointer (&stop->current[color_stop_attr_idx (attr)], svg_value_unref);
       stop->current[color_stop_attr_idx (attr)] = value;
     }
+  else
+    g_assert_not_reached ();
 }
 
 /* }}} */
@@ -13100,7 +13091,7 @@ serialize_shape_attrs (GString              *s,
       g_string_append (s, "display='none'");
     }
 
-  for (ShapeAttr attr = 0; attr < G_N_ELEMENTS (shape_attrs); attr++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
       if (!shape_has_attr (shape->type, attr))
         continue;
@@ -14383,13 +14374,13 @@ paint_linear_gradient (Shape                 *gradient,
   for (unsigned int i = 0; i < gradient->color_stops->len; i++)
     {
       ColorStop *cs = g_ptr_array_index (gradient->color_stops, i);
-      SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+      SvgPaint *stop_color = (SvgPaint *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
       GdkColor color;
 
       g_assert (stop_color->kind == PAINT_COLOR);
-      offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
+      offset = MAX (svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OFFSET)], 1), offset);
       gdk_color_init_from_rgba (&color, &stop_color->color);
-      color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
       gsk_gradient_add_stop (g, offset, 0.5, &color);
       gdk_color_finish (&color);
     }
@@ -14455,13 +14446,13 @@ paint_radial_gradient (Shape                 *gradient,
   for (unsigned int i = 0; i < gradient->color_stops->len; i++)
     {
       ColorStop *cs = g_ptr_array_index (gradient->color_stops, i);
-      SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+      SvgPaint *stop_color = (SvgPaint *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
       GdkColor color;
 
       g_assert (stop_color->kind == PAINT_COLOR);
-      offset = MAX (svg_number_get (cs->current[COLOR_STOP_OFFSET], 1), offset);
+      offset = MAX (svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OFFSET)], 1), offset);
       gdk_color_init_from_rgba (&color, &stop_color->color);
-      color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+      color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
       gsk_gradient_add_stop (g, offset, 0.5, &color);
       gdk_color_finish (&color);
     }
@@ -14603,9 +14594,9 @@ paint_server (Shape                 *server,
       if (server->color_stops->len == 1)
         {
           ColorStop *cs = g_ptr_array_index (server->color_stops, 0);
-          SvgPaint *stop_color = (SvgPaint *) cs->current[COLOR_STOP_COLOR];
+          SvgPaint *stop_color = (SvgPaint *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
           GdkRGBA color = stop_color->color;
-          color.alpha *= svg_number_get (cs->current[COLOR_STOP_OPACITY], 1);
+          color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
           gtk_snapshot_append_color (context->snapshot, &color, bounds);
           return;
         }
