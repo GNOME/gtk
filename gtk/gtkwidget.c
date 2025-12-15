@@ -3826,7 +3826,7 @@ adjust_for_align (GtkAlign  align,
           nat_baseline > -1 &&
           *allocated_baseline > -1)
         {
-          *allocated_pos = *allocated_baseline - nat_baseline;
+          *allocated_pos += *allocated_baseline - nat_baseline;
           *allocated_size = MIN (*allocated_size, natural_size);
           *allocated_baseline = nat_baseline;
           break;
