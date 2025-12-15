@@ -4345,9 +4345,9 @@ svg_filter_accumulate (const SvgValue *value0,
 #define B 0.0722
 
 static gboolean
-svg_filter_get_matrix (FilterFunction    *f,
-                       graphene_matrix_t *matrix,
-                       graphene_vec4_t   *offset)
+filter_function_get_matrix (FilterFunction    *f,
+                            graphene_matrix_t *matrix,
+                            graphene_vec4_t   *offset)
 {
   double v, c, s;
 
@@ -4427,6 +4427,20 @@ svg_filter_get_matrix (FilterFunction    *f,
     default:
       g_assert_not_reached ();
     }
+}
+
+static gboolean
+svg_filter_is_none (SvgValue *value)
+{
+  SvgFilter *f = (SvgFilter *) value;
+
+  for (unsigned int i = 0; i < f->n_functions; i++)
+    {
+      if (f->functions[i].kind != FILTER_NONE)
+        return FALSE;
+    }
+
+  return TRUE;
 }
 
 /* }}} */
@@ -14286,7 +14300,7 @@ needs_isolation (Shape        *shape,
       SvgValue *isolation = shape->current[SHAPE_ATTR_ISOLATION];
       SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
       SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
-      SvgFilter *filter = (SvgFilter *) shape->current[SHAPE_ATTR_FILTER];
+      SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
       SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
       GskTransform *transform;
 
@@ -14305,7 +14319,7 @@ needs_isolation (Shape        *shape,
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
         return TRUE;
 
-      if (filter->n_functions > 0 && filter->functions[0].kind != FILTER_NONE)
+      if (!svg_filter_is_none (filter))
         return TRUE;
 
       transform = svg_transform_get_gsk (tf);
@@ -14324,7 +14338,7 @@ static void
 push_group (Shape        *shape,
             PaintContext *context)
 {
-  SvgFilter *filter = (SvgFilter *) shape->current[SHAPE_ATTR_FILTER];
+  SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
   SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
@@ -14535,58 +14549,8 @@ push_group (Shape        *shape,
       if (svg_number_get (opacity, 1) != 1)
         gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
 
-      for (unsigned int i = filter->n_functions; i > 0; i--)
-        {
-          FilterFunction *f = &filter->functions[i - 1];
-
-          switch (f->kind)
-            {
-            case FILTER_NONE:
-              break;
-            case FILTER_BLUR:
-              gtk_snapshot_push_blur (context->snapshot, 2 * f->value);
-              break;
-            case FILTER_OPACITY:
-              gtk_snapshot_push_opacity (context->snapshot, f->value);
-              break;
-            case FILTER_BRIGHTNESS:
-            case FILTER_CONTRAST:
-            case FILTER_GRAYSCALE:
-            case FILTER_HUE_ROTATE:
-            case FILTER_INVERT:
-            case FILTER_SATURATE:
-            case FILTER_SEPIA:
-              {
-                graphene_matrix_t matrix;
-                graphene_vec4_t offset;
-                svg_filter_get_matrix (f, &matrix, &offset);
-                gtk_snapshot_push_color_matrix (context->snapshot, &matrix, &offset);
-              }
-              break;
-            case FILTER_ALPHA_LEVEL:
-              {
-                GskComponentTransfer *identity, *alpha;
-                float values[10];
-
-                identity = gsk_component_transfer_new_identity ();
-                for (unsigned int j = 0; j < 10; j++)
-                  {
-                    if ((j + 1) / 10.0 <= f->value)
-                      values[j] = 0;
-                    else
-                      values[j] = 1;
-                  }
-                alpha = gsk_component_transfer_new_discrete (10, values);
-                gtk_snapshot_push_component_transfer (context->snapshot, identity, identity, identity, alpha);
-                gsk_component_transfer_free (identity);
-                gsk_component_transfer_free (alpha);
-              }
-              break;
-            case FILTER_REF:
-            default:
-              g_assert_not_reached ();
-            }
-        }
+      if (!svg_filter_is_none (filter))
+        gtk_snapshot_push_collect (context->snapshot);
     }
 }
 
@@ -14594,7 +14558,7 @@ static void
 pop_group (Shape        *shape,
            PaintContext *context)
 {
-  SvgFilter *filter = (SvgFilter *) shape->current[SHAPE_ATTR_FILTER];
+  SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
   SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
@@ -14603,9 +14567,71 @@ pop_group (Shape        *shape,
 
   if (context->op != CLIPPING)
     {
-      for (unsigned int i = 0; i < filter->n_functions; i++)
-        if (filter->functions[i].kind != FILTER_NONE)
-          gtk_snapshot_pop (context->snapshot);
+      if (!svg_filter_is_none (filter))
+        {
+          SvgFilter *f = (SvgFilter *) filter;
+          GskRenderNode *child, *result;
+
+          result = gtk_snapshot_pop_collect (context->snapshot);
+          for (unsigned int i = 0; i < f->n_functions; i++)
+            {
+              FilterFunction *ff = &f->functions[i];
+
+              child = result;
+              switch (ff->kind)
+                {
+                case FILTER_NONE:
+                  result = gsk_render_node_ref (child);
+                  break;
+                case FILTER_BLUR:
+                  result = gsk_blur_node_new (child, 2 * ff->value);
+                  break;
+                case FILTER_OPACITY:
+                  result = gsk_opacity_node_new (child, ff->value);
+                  break;
+                case FILTER_BRIGHTNESS:
+                case FILTER_CONTRAST:
+                case FILTER_GRAYSCALE:
+                case FILTER_HUE_ROTATE:
+                case FILTER_INVERT:
+                case FILTER_SATURATE:
+                case FILTER_SEPIA:
+                  {
+                    graphene_matrix_t matrix;
+                    graphene_vec4_t offset;
+                    filter_function_get_matrix (ff, &matrix, &offset);
+                    result = gsk_color_matrix_node_new (child, &matrix, &offset);
+                  }
+                  break;
+                case FILTER_ALPHA_LEVEL:
+                  {
+                    GskComponentTransfer *identity, *alpha;
+                    float values[10];
+
+                    identity = gsk_component_transfer_new_identity ();
+                    for (unsigned int j = 0; j < 10; j++)
+                      {
+                        if ((j + 1) / 10.0 <= ff->value)
+                          values[j] = 0;
+                        else
+                          values[j] = 1;
+                      }
+                    alpha = gsk_component_transfer_new_discrete (10, values);
+                    result = gsk_component_transfer_node_new (child, identity, identity, identity, alpha);
+                    gsk_component_transfer_free (identity);
+                    gsk_component_transfer_free (alpha);
+                  }
+                  break;
+                case FILTER_REF:
+                default:
+                  g_assert_not_reached ();
+                }
+              gsk_render_node_unref (child);
+            }
+
+          gtk_snapshot_append_node (context->snapshot, result);
+          gsk_render_node_unref (result);
+        }
 
       if (svg_number_get (opacity, 1) != 1)
         gtk_snapshot_pop (context->snapshot);
