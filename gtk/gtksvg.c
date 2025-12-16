@@ -7505,7 +7505,8 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_MARKER_END:
       return type == SHAPE_RECT || type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
              type == SHAPE_PATH || type == SHAPE_POLYLINE ||
-             type == SHAPE_POLYGON || type == SHAPE_LINE;
+             type == SHAPE_POLYGON || type == SHAPE_LINE || type == SHAPE_GROUP ||
+             type == SHAPE_USE;
     case SHAPE_ATTR_OVERFLOW:
       return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_MARKER;
     case SHAPE_ATTR_TEXT_ANCHOR:
@@ -14990,9 +14991,9 @@ paint_marker (Shape              *shape,
   y = svg_number_get (marker->current[SHAPE_ATTR_REF_Y], height);
 
   gtk_snapshot_translate (context->snapshot, &vertex);
-  gtk_snapshot_scale (context->snapshot, scale, scale);
   gtk_snapshot_rotate (context->snapshot, angle);
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-x, -y));
+  gtk_snapshot_scale (context->snapshot, scale, scale);
 
   if (svg_enum_get (marker->current[SHAPE_ATTR_OVERFLOW]) == OVERFLOW_HIDDEN)
     gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
