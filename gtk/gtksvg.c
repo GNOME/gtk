@@ -184,6 +184,8 @@ typedef enum
 #define ALIGN_GET_X(x) ((x) & 3)
 #define ALIGN_GET_Y(x) ((x) >> 2)
 
+#define DEG_TO_RAD(x) ((x) * G_PI / 180)
+
 typedef struct _Animation Animation;
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
@@ -4015,6 +4017,7 @@ svg_filter_get_matrix (FilterFunction    *f,
       graphene_vec4_init (offset, 0.0, 0.0, 0.0, 0.0);
       return TRUE;
     case FILTER_HUE_ROTATE:
+      v = DEG_TO_RAD (v);
       c = cos (v);
       s = sin (v);
       graphene_matrix_init_from_float (matrix, (float[16]) {
