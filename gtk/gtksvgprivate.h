@@ -405,7 +405,7 @@ SvgValue *   svg_paint_order_new    (PaintOrder        order);
 SvgValue *   svg_paint_new_none     (void);
 SvgValue *   svg_paint_new_symbolic (GtkSymbolicColor  symbolic);
 SvgValue *   svg_paint_new_rgba     (const GdkRGBA    *rgba);
-SvgValue *   svg_points_new         (double           *values,
+SvgValue *   svg_numbers_new        (double           *values,
                                      unsigned int      n_values);
 SvgValue *   svg_path_new           (GskPath          *path);
 SvgValue *   svg_clip_new_none      (void);
