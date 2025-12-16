@@ -28,6 +28,7 @@
 #include "gtksymbolicpaintable.h"
 #include "gtktypebuiltins.h"
 #include "gtk/css/gtkcssparserprivate.h"
+#include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtksnapshotprivate.h"
 #include <glib/gstdio.h>
 
@@ -74,7 +75,9 @@
  *
  * ## The supported subset of SVG
  *
- * The paintable does not support text or images, only shapes and paths.
+ * The paintable supports much of SVG 2, some notable exceptions.
+ *
+ * Among the graphical elements, `<symbol>` is not supported.
  *
  * Gradient templating is not implemented.
  *
@@ -5961,10 +5964,10 @@ svg_href_print (const SvgValue *value,
       g_string_append (string, "none");
       break;
     case HREF_REF:
-      g_string_append_printf (string, "#%s", r->ref);
+      g_string_append_printf (string, "%s", r->ref);
       break;
     case HREF_URL:
-      g_string_append_printf (string, "url(#%s)", r->ref);
+      g_string_append_printf (string, "url(%s)", r->ref);
       break;
     default:
       g_assert_not_reached ();
@@ -6018,8 +6021,6 @@ svg_href_parse (const char *value)
 {
   if (strcmp (value, "none") == 0)
     return svg_href_new_none ();
-  else if (value[0] == '#')
-    return svg_href_new_ref (value + 1);
   else
     return svg_href_new_ref (value);
 }
@@ -6043,12 +6044,7 @@ svg_href_parse_url (const char *value)
 
       url = gtk_css_parser_consume_url (parser);
       if (url)
-        {
-          if (url[0] == '#')
-            res = svg_href_new_url (url + 1);
-          else
-            res = svg_href_new_url (url);
-        }
+        res = svg_href_new_url (url);
 
       g_free (url);
       gtk_css_parser_unref (parser);
@@ -6056,6 +6052,18 @@ svg_href_parse_url (const char *value)
 
       return res;
     }
+}
+
+static const char *
+svg_href_get_id (SvgHref *href)
+{
+  if (href->kind == HREF_NONE)
+    return NULL;
+
+  if (href->ref[0] == '#')
+    return href->ref + 1;
+  else
+    return href->ref;
 }
 
 /* }}} */
@@ -7209,6 +7217,12 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
   },
+  { .name = "image",
+    .has_shapes = 0,
+    .never_rendered = 0,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+   },
 };
 
 static gboolean
@@ -7423,7 +7437,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_LANG:
       return TRUE;
     case SHAPE_ATTR_HREF:
-      return type == SHAPE_USE;
+      return type == SHAPE_USE || type == SHAPE_IMAGE;
     case SHAPE_ATTR_CX:
     case SHAPE_ATTR_CY:
       return type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE || type == SHAPE_RADIAL_GRADIENT;
@@ -7434,11 +7448,12 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_RECT || type == SHAPE_USE ||
              type == SHAPE_MASK || type == SHAPE_PATTERN ||
              type == SHAPE_TEXT || type == SHAPE_TSPAN ||
-             type == SHAPE_SVG;
+             type == SHAPE_SVG || type == SHAPE_IMAGE;
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_HEIGHT:
-      return type == SHAPE_SVG || type == SHAPE_RECT || type == SHAPE_USE || type == SHAPE_MASK ||
-             type == SHAPE_PATTERN || type == SHAPE_MARKER;
+      return type == SHAPE_SVG || type == SHAPE_RECT || type == SHAPE_USE ||
+             type == SHAPE_MASK || type == SHAPE_PATTERN || type == SHAPE_MARKER ||
+             type == SHAPE_IMAGE;
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
@@ -7476,7 +7491,7 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_VIEW_BOX:
     case SHAPE_ATTR_CONTENT_FIT:
-      return type == SHAPE_SVG || type == SHAPE_PATTERN;
+      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_IMAGE;
     case SHAPE_ATTR_REF_X:
     case SHAPE_ATTR_REF_Y:
     case SHAPE_ATTR_MARKER_UNITS:
@@ -7658,6 +7673,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
     case SHAPE_SVG:
+    case SHAPE_IMAGE:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -7744,9 +7760,10 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
         case SHAPE_MARKER:
-	case SHAPE_TEXT:
+        case SHAPE_TEXT:
         case SHAPE_TSPAN:
         case SHAPE_SVG:
+        case SHAPE_IMAGE:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -7810,6 +7827,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_TEXT:
         case SHAPE_TSPAN:
         case SHAPE_SVG:
+        case SHAPE_IMAGE:
         default:
           g_assert_not_reached ();
         }
@@ -7897,6 +7915,7 @@ shape_get_current_bounds (Shape                 *shape,
       break;
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
+    case SHAPE_IMAGE:
       g_critical ("TODO");
       break;
     default:
@@ -12686,11 +12705,14 @@ resolve_href_ref (SvgValue   *value,
 {
   SvgHref *href = (SvgHref *) value;
 
+  if (shape->type == SHAPE_IMAGE)
+    return; /* Image href is always external */
+
   if (href->kind != HREF_NONE && href->shape == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, href->ref);
+      Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
       if (!target)
-        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", href->ref);
+        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", svg_href_get_id (href));
       else
         {
           href->shape = target;
@@ -12708,7 +12730,7 @@ resolve_marker_ref (SvgValue   *value,
 
   if (href->kind != HREF_NONE && href->shape == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, href->ref);
+      Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
       if (!target)
         {
           gtk_svg_invalid_reference (data->svg, "No shape with ID %s", href->ref);
@@ -13983,6 +14005,61 @@ static void pop_context (Shape        *shape,
                          PaintContext *context);
 static void render_shape (Shape        *shape,
                           PaintContext *context);
+
+static GdkTexture *
+load_texture (const char  *string,
+              GError     **error)
+{
+  GdkTexture *texture = NULL;
+
+  if (g_str_has_prefix (string, "data:"))
+    {
+      GBytes *bytes = gtk_css_data_url_parse (string, NULL, NULL);
+
+      if (bytes)
+        {
+          texture = gdk_texture_new_from_bytes (bytes, error);
+          g_bytes_unref (bytes);
+
+          return texture;
+        }
+    }
+  else if (g_str_has_prefix (string, "resource:"))
+    {
+      texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
+    }
+  else
+    {
+      texture = gdk_texture_new_from_filename (string, error);
+    }
+
+  return texture;
+}
+
+static GdkTexture *
+get_texture (GtkSvg     *svg,
+             const char *string)
+{
+  GdkTexture *texture;
+
+  texture = g_hash_table_lookup (svg->images, string);
+  if (!texture)
+    {
+      GError *error = NULL;
+
+      texture = load_texture (string, &error);
+      if (!texture)
+        {
+          gtk_svg_rendering_error (svg, "Could not load image for href '%s': %s", string, error->message);
+          g_error_free (error);
+          return NULL;
+        }
+
+      g_hash_table_insert (svg->images, g_strdup (string), texture);
+    }
+
+  return texture;
+}
 
 static gboolean
 needs_isolation (Shape        *shape,
@@ -15296,6 +15373,53 @@ skip:
 }
 
 static void
+render_image (Shape        *shape,
+              PaintContext *context)
+{
+  SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+  SvgContentFit *content_fit = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
+  GdkTexture *texture;
+  graphene_rect_t vb;
+  double sx, sy, tx, ty;
+  double x, y, width, height;
+
+  if (href->kind == HREF_NONE)
+    return;
+
+  texture = get_texture (context->svg, svg_href_get_id (href));
+
+  if (!texture)
+    return;
+
+  graphene_rect_init (&vb,
+                      0, 0,
+                      gdk_texture_get_width (texture),
+                      gdk_texture_get_height (texture));
+
+  x = context->viewport->origin.x + svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
+  y = context->viewport->origin.y + svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
+  width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+  height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+
+  compute_viewport_transform (content_fit->is_none,
+                              content_fit->align_x,
+                              content_fit->align_y,
+                              content_fit->meet,
+                              &vb,
+                              x, y, width, height,
+                              &sx, &sy, &tx, &ty);
+
+  gtk_snapshot_save (context->snapshot);
+
+  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
+  gtk_snapshot_scale (context->snapshot, sx, sy);
+
+  gtk_snapshot_append_texture (context->snapshot, texture, &vb);
+
+  gtk_snapshot_restore (context->snapshot);
+}
+
+static void
 recompute_current_values (Shape        *shape,
                           Shape        *parent,
                           PaintContext *context)
@@ -15381,6 +15505,13 @@ paint_shape (Shape        *shape,
       render_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
 
       gtk_snapshot_restore (context->snapshot);
+
+      return;
+    }
+
+  if (shape->type == SHAPE_IMAGE)
+    {
+      render_image (shape, context);
 
       return;
     }
@@ -15679,6 +15810,8 @@ gtk_svg_init (GtkSvg *self)
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
+
+  self->images = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 }
 
 static void
@@ -15691,6 +15824,7 @@ gtk_svg_dispose (GObject *object)
 
   g_clear_pointer (&self->content, shape_free);
   g_clear_pointer (&self->timeline, timeline_free);
+  g_clear_pointer (&self->images, g_hash_table_unref);
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
@@ -16884,9 +17018,11 @@ gtk_svg_clear_content (GtkSvg *self)
 {
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->content, shape_free);
+  g_clear_pointer (&self->images, g_hash_table_unref);
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
+  self->images = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 
   graphene_rect_init (&self->viewport, 0, 0, 0, 0);
 

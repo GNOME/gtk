@@ -30,6 +30,7 @@ test_data = [
   'gpa-attributes.svg',
   'gradient-animation.svg',
   'gradient-style.svg',
+  'image.svg',
   'linear-gradient1.svg',
   'linear-gradient2.svg',
   'linear-gradient3.svg',

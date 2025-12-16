@@ -3,7 +3,7 @@
     <circle id='circle1' cx='1' cy='2' r='3'/>
   </defs>
   <g>
-    <use href='circle1'/>
-    <use href='circle1' x='10'/>
+    <use href='#circle1'/>
+    <use href='#circle1' x='10'/>
   </g>
 </svg>

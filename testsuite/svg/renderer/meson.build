@@ -23,6 +23,7 @@ test_data = [
   'gpa-attachment2.svg',
   'gpa-attachment3.svg',
   'gradient-transform.svg',
+  'image.svg',
   'initial-state1.svg',
   'initial-state2.svg',
   'initial-state3.svg',
