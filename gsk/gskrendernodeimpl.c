@@ -3490,7 +3490,7 @@ gsk_transform_node_class_init (gpointer g_class,
 /**
  * gsk_transform_node_new:
  * @child: The node to transform
- * @transform: (transfer none): The transform to apply
+ * @transform: (transfer none) (nullable): The transform to apply
  *
  * Creates a `GskRenderNode` that will transform the given @child
  * with the given @transform.
@@ -3506,7 +3506,6 @@ gsk_transform_node_new (GskRenderNode *child,
   GskTransformCategory category;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
-  g_return_val_if_fail (transform != NULL, NULL);
 
   category = gsk_transform_get_category (transform);
 
