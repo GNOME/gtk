@@ -1533,11 +1533,15 @@ svg_number_new (double value)
   static SvgNumber singletons[] = {
     { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 0 },
     { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 1 },
+    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 2 },
   };
   SvgNumber *result;
 
-  if (value == 0 || value == 1)
-    return svg_value_ref ((SvgValue *) &singletons[(int) value]);
+  for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
+    {
+      if (value == singletons[i].value)
+        return svg_value_ref ((SvgValue *) &singletons[i]);
+    }
 
   result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
   result->dim = SVG_DIMENSION_NUMBER;
