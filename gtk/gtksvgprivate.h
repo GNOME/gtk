@@ -85,6 +85,8 @@ struct _GtkSvg
   char *gpa_keywords;
 
   Timeline *timeline;
+
+  GHashTable *images;
 };
 
 typedef enum
@@ -108,6 +110,7 @@ typedef enum
   SHAPE_TEXT,
   SHAPE_TSPAN,
   SHAPE_SVG,
+  SHAPE_IMAGE,
 } ShapeType;
 
 typedef enum
