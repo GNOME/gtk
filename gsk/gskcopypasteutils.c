@@ -322,10 +322,10 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
                 gsk_render_node_unref (child);
               }
             else
-              result = NULL;
+              result = gsk_container_node_new (NULL, 0);
           }
         else
-          result = NULL;
+          result = gsk_container_node_new (NULL, 0);
       }
       break;
 
