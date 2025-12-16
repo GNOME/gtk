@@ -7466,7 +7466,7 @@ shape_new (Shape     *parent,
 
   shape->attrs = _gtk_bitmask_new ();
 
-  for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
       shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
       shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
@@ -9798,7 +9798,7 @@ static void
 shape_init_current_values (Shape          *shape,
                            ComputeContext *context)
 {
-  for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
       if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
         {
@@ -9815,7 +9815,7 @@ shape_init_current_values (Shape          *shape,
     {
       for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
         {
-          for (ShapeAttr attr = SHAPE_ATTR_STOP_OFFSET; attr <= SHAPE_ATTR_STOP_OPACITY; attr++)
+          for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
             {
               SvgValue *value;
 
