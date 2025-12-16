@@ -1,0 +1,89 @@
+isolation {
+  child: container {
+    isolation {
+      child: clip {
+        clip: 6 6 48 48;
+        child: clip {
+          clip: 6 6 48 48;
+          child: color-matrix {
+            matrix: matrix3d(0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+            child: fill {
+              child: color {
+                bounds: 10 10 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 10 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 56 6 48 48;
+        child: clip {
+          clip: 56 6 48 48;
+          child: color-matrix {
+            matrix: matrix3d(0.6063, 0.1063, 0.1063, 0, 0.3576, 0.8576, 0.3576, 0, 0.0361, 0.0361, 0.5361, 0, 0, 0, 0, 1);
+            child: fill {
+              child: color {
+                bounds: 60 10 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 60 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 106 6 48 48;
+        child: clip {
+          clip: 106 6 48 48;
+          child: color-matrix {
+            matrix: matrix3d(0.993865, 0.00399998, -0.0214933, 0, -0.019331, 1.00373, 0.0198684, 0, 0.0254655, -0.00773058, 1.00162, 0, 0, 0, 0, 1);
+            child: fill {
+              child: color {
+                bounds: 110 10 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 110 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 6 56 48 48;
+        child: clip {
+          clip: 6 56 48 48;
+          child: color-matrix {
+            matrix: matrix3d(0, 0, 0, 0.2126, 0, 0, 0, 0.7152, 0, 0, 0, 0.0722, 0, 0, 0, 0);
+            child: fill {
+              child: color {
+                bounds: 10 60 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 10 60 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+  }
+  isolations: background;
+}

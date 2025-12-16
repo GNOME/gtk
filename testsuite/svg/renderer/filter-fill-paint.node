@@ -1,0 +1,114 @@
+isolation {
+  child: container {
+    isolation {
+      child: clip {
+        clip: -5 -5 60 60;
+        child: clip {
+          clip: -5 -5 60 60;
+          child: container {
+            clip {
+              clip: -5 -5 60 60;
+              child: blur {
+                blur: 20;
+                child: fill {
+                  child: color {
+                    bounds: -5 -5 60 60;
+                    color: rgb(0,0,255);
+                  }
+                  path: "\
+M -5 -5 h 60 v 60 h -60 z";
+                  fill-rule: winding;
+                }
+              }
+            }
+            fill {
+              child: color {
+                bounds: 10 10 30 30;
+                color: rgb(0,0,255);
+              }
+              path: "\
+M 10 10 h 30 v 30 h -30 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 25 25 60 60;
+        child: clip {
+          clip: 25 25 60 60;
+          child: container {
+            clip {
+              clip: 25 25 60 60;
+              child: blur {
+                blur: 20;
+                child: fill {
+                  child: color {
+                    bounds: 25 25 60 60;
+                    color: rgb(255,0,0);
+                  }
+                  path: "\
+M 25 25 h 60 v 60 h -60 z";
+                  fill-rule: winding;
+                }
+              }
+            }
+            fill {
+              child: color {
+                bounds: 40 40 30 30;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 40 40 h 30 v 30 h -30 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 55 55 60 60;
+        child: clip {
+          clip: 55 55 60 60;
+          child: container {
+            clip {
+              clip: 55 55 60 60;
+              child: blur {
+                blur: 20;
+                child: fill {
+                  child: linear-gradient {
+                    bounds: 55 55 60 60;
+                    start: 55 55;
+                    end: 115 55;
+                    stops: 0 rgb(255,255,0), 1 rgb(128,0,128);
+                  }
+                  path: "\
+M 55 55 h 60 v 60 h -60 z";
+                  fill-rule: winding;
+                }
+              }
+            }
+            fill {
+              child: linear-gradient {
+                bounds: 70 70 30 30;
+                start: 70 70;
+                end: 100 70;
+                stops: 0 rgb(255,255,0), 1 rgb(128,0,128);
+              }
+              path: "\
+M 70 70 h 30 v 30 h -30 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+  }
+  isolations: background;
+}

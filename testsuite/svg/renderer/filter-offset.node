@@ -1,0 +1,36 @@
+isolation {
+  child: isolation {
+    child: clip {
+      clip: 16 16 48 48;
+      child: clip {
+        clip: 16 16 48 48;
+        child: container {
+          fill "node1" {
+            child: color {
+              bounds: 20 20 40 40;
+              color: rgb(0,0,255);
+            }
+            path: "\
+M 20 20 h 40 v 40 h -40 z";
+            fill-rule: winding;
+          }
+          clip {
+            clip: 16 16 48 48;
+            child: color-matrix {
+              matrix: matrix3d(0.997006, 0.00198016, -0.0107677, 0, -0.00973358, 1.00189, 0.00986793, 0, 0.0127272, -0.00387242, 1.0009, 0, 0, 0, 0, 1);
+              child: clip {
+                clip: 16 16 48 48;
+                child: transform {
+                  transform: translate(10, 10);
+                  child: "node1";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    isolations: background;
+  }
+  isolations: background;
+}

@@ -1,0 +1,14 @@
+<svg width="100" height="100" xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <filter id="merge">
+      <feOffset in="SourceGraphic" dx="10" dy="10" result="offset"/>
+      <feFlood flood-color="red" result="red"/>
+      <feMerge>
+        <feMergeNode in="red"/>
+        <feMergeNode in="offset"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="30" y="30" width="40" height="40" fill="blue" filter="url(#merge)"/>
+</svg>

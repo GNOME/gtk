@@ -1,0 +1,48 @@
+isolation {
+  child: isolation {
+    child: clip {
+      clip: 26 26 48 48;
+      child: clip {
+        clip: 26 26 48 48;
+        child: container {
+          clip {
+            clip: 26 26 48 48;
+            child: mask {
+              source: clip {
+                clip: 26 26 48 48;
+                child: color {
+                  bounds: 26 26 48 48;
+                  color: rgba(0,0,0,0.5);
+                }
+              }
+              mask: clip {
+                clip: 26 26 48 48;
+                child: transform {
+                  transform: translate(5, 5);
+                  child: clip {
+                    clip: 26 26 48 48;
+                    child: blur {
+                      blur: 4;
+                      child: fill "node1" {
+                        child: color {
+                          bounds: 30 30 40 40;
+                          color: rgb(0,0,255);
+                        }
+                        path: "\
+M 30 30 h 40 v 40 h -40 z";
+                        fill-rule: winding;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          "node1";
+        }
+      }
+    }
+    isolations: background;
+  }
+  isolations: background;
+}

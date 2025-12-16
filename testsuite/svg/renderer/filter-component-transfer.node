@@ -1,0 +1,91 @@
+isolation {
+  child: container {
+    isolation {
+      child: clip {
+        clip: 6 6 48 48;
+        child: clip {
+          clip: 6 6 48 48;
+          child: component-transfer {
+            child: fill {
+              child: color {
+                bounds: 10 10 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 10 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+            red: table(0, 0.5, 1);
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 56 6 48 48;
+        child: clip {
+          clip: 56 6 48 48;
+          child: component-transfer {
+            child: fill {
+              child: color {
+                bounds: 60 10 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 60 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+            red: gamma(1, 2, 0);
+            green: gamma(1, 2, 0);
+            blue: gamma(1, 2, 0);
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 106 6 48 48;
+        child: clip {
+          clip: 106 6 48 48;
+          child: component-transfer {
+            child: fill {
+              child: color {
+                bounds: 110 10 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 110 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+            red: linear(0.5, 0.2);
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 6 56 48 48;
+        child: clip {
+          clip: 6 56 48 48;
+          child: component-transfer {
+            child: fill {
+              child: color {
+                bounds: 10 60 40 40;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 10 60 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+            red: discrete(0, 0.5, 1);
+          }
+        }
+      }
+      isolations: background;
+    }
+  }
+  isolations: background;
+}

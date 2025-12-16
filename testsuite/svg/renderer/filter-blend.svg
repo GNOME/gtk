@@ -1,0 +1,9 @@
+<svg width="100" height="100" xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <filter id="blend">
+      <feFlood flood-color="red" result="red"/>
+      <feBlend in="SourceGraphic" in2="red" mode="multiply"/>
+    </filter>
+  </defs>
+  <rect x="20" y="20" width="60" height="60" fill="blue" filter="url(#blend)"/>
+</svg>

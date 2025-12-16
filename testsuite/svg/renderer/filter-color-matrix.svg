@@ -1,0 +1,20 @@
+<svg width="200" height="100" xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <filter id="matrix">
+      <feColorMatrix type="matrix" values="0 1 0 0 0  1 0 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+    </filter>
+    <filter id="saturate">
+      <feColorMatrix type="saturate" values="0.5"/>
+    </filter>
+    <filter id="hueRotate">
+      <feColorMatrix type="hueRotate" values="90"/>
+    </filter>
+    <filter id="luminanceToAlpha">
+      <feColorMatrix type="luminanceToAlpha"/>
+    </filter>
+  </defs>
+  <rect x="10" y="10" width="40" height="40" fill="red" filter="url(#matrix)"/>
+  <rect x="60" y="10" width="40" height="40" fill="red" filter="url(#saturate)"/>
+  <rect x="110" y="10" width="40" height="40" fill="red" filter="url(#hueRotate)"/>
+  <rect x="10" y="60" width="40" height="40" fill="red" filter="url(#luminanceToAlpha)"/>
+</svg>

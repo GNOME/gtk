@@ -1,0 +1,24 @@
+isolation {
+  child: isolation {
+    child: clip {
+      clip: 10 10 100 100;
+      child: clip {
+        clip: 10 10 100 100;
+        child: blur {
+          blur: 10;
+          child: fill {
+            child: color {
+              bounds: 20 20 60 60;
+              color: rgb(0,0,255);
+            }
+            path: "\
+M 20 20 h 60 v 60 h -60 z";
+            fill-rule: winding;
+          }
+        }
+      }
+    }
+    isolations: background;
+  }
+  isolations: background;
+}
