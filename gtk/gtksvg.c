@@ -5961,10 +5961,10 @@ svg_href_print (const SvgValue *value,
       g_string_append (string, "none");
       break;
     case HREF_REF:
-      g_string_append_printf (string, "#%s", r->ref);
+      g_string_append_printf (string, "%s", r->ref);
       break;
     case HREF_URL:
-      g_string_append_printf (string, "url(#%s)", r->ref);
+      g_string_append_printf (string, "url(%s)", r->ref);
       break;
     default:
       g_assert_not_reached ();
@@ -6018,8 +6018,6 @@ svg_href_parse (const char *value)
 {
   if (strcmp (value, "none") == 0)
     return svg_href_new_none ();
-  else if (value[0] == '#')
-    return svg_href_new_ref (value + 1);
   else
     return svg_href_new_ref (value);
 }
@@ -6043,12 +6041,7 @@ svg_href_parse_url (const char *value)
 
       url = gtk_css_parser_consume_url (parser);
       if (url)
-        {
-          if (url[0] == '#')
-            res = svg_href_new_url (url + 1);
-          else
-            res = svg_href_new_url (url);
-        }
+        res = svg_href_new_url (url);
 
       g_free (url);
       gtk_css_parser_unref (parser);
@@ -6056,6 +6049,18 @@ svg_href_parse_url (const char *value)
 
       return res;
     }
+}
+
+static const char *
+svg_href_get_id (SvgHref *href)
+{
+  if (href->kind == HREF_NONE)
+    return NULL;
+
+  if (href->ref[0] == '#')
+    return href->ref + 1;
+  else
+    return href->ref;
 }
 
 /* }}} */
@@ -12688,9 +12693,9 @@ resolve_href_ref (SvgValue   *value,
 
   if (href->kind != HREF_NONE && href->shape == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, href->ref);
+      Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
       if (!target)
-        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", href->ref);
+        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", svg_href_get_id (href));
       else
         {
           href->shape = target;
@@ -12708,7 +12713,7 @@ resolve_marker_ref (SvgValue   *value,
 
   if (href->kind != HREF_NONE && href->shape == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, href->ref);
+      Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
       if (!target)
         {
           gtk_svg_invalid_reference (data->svg, "No shape with ID %s", href->ref);
