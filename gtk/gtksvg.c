@@ -965,6 +965,64 @@ compute_viewport_transform (gboolean               none,
 }
 
 /* }}} */
+/* {{{ Image loading */
+
+static GdkTexture *
+load_texture (const char  *string,
+              GError     **error)
+{
+  GdkTexture *texture = NULL;
+
+  if (g_str_has_prefix (string, "data:"))
+    {
+      GBytes *bytes = gtk_css_data_url_parse (string, NULL, NULL);
+
+      if (bytes)
+        {
+          texture = gdk_texture_new_from_bytes (bytes, error);
+          g_bytes_unref (bytes);
+
+          return texture;
+        }
+    }
+  else if (g_str_has_prefix (string, "resource:"))
+    {
+      texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
+    }
+  else
+    {
+      texture = gdk_texture_new_from_filename (string, error);
+    }
+
+  return texture;
+}
+
+static GdkTexture *
+get_texture (GtkSvg     *svg,
+             const char *string)
+{
+  GdkTexture *texture;
+
+  texture = g_hash_table_lookup (svg->images, string);
+  if (!texture)
+    {
+      GError *error = NULL;
+
+      texture = load_texture (string, &error);
+      if (!texture)
+        {
+          gtk_svg_rendering_error (svg, "Could not load image for href '%s': %s", string, error->message);
+          g_error_free (error);
+          return NULL;
+        }
+
+      g_hash_table_insert (svg->images, g_strdup (string), texture);
+    }
+
+  return texture;
+}
+
+/* }}} */
 /* {{{ Gradients */
 
 static void
@@ -14009,61 +14067,6 @@ static void pop_context (Shape        *shape,
                          PaintContext *context);
 static void render_shape (Shape        *shape,
                           PaintContext *context);
-
-static GdkTexture *
-load_texture (const char  *string,
-              GError     **error)
-{
-  GdkTexture *texture = NULL;
-
-  if (g_str_has_prefix (string, "data:"))
-    {
-      GBytes *bytes = gtk_css_data_url_parse (string, NULL, NULL);
-
-      if (bytes)
-        {
-          texture = gdk_texture_new_from_bytes (bytes, error);
-          g_bytes_unref (bytes);
-
-          return texture;
-        }
-    }
-  else if (g_str_has_prefix (string, "resource:"))
-    {
-      texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
-    }
-  else
-    {
-      texture = gdk_texture_new_from_filename (string, error);
-    }
-
-  return texture;
-}
-
-static GdkTexture *
-get_texture (GtkSvg     *svg,
-             const char *string)
-{
-  GdkTexture *texture;
-
-  texture = g_hash_table_lookup (svg->images, string);
-  if (!texture)
-    {
-      GError *error = NULL;
-
-      texture = load_texture (string, &error);
-      if (!texture)
-        {
-          gtk_svg_rendering_error (svg, "Could not load image for href '%s': %s", string, error->message);
-          g_error_free (error);
-          return NULL;
-        }
-
-      g_hash_table_insert (svg->images, g_strdup (string), texture);
-    }
-
-  return texture;
-}
 
 static gboolean
 needs_isolation (Shape        *shape,
