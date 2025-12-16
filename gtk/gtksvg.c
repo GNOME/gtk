@@ -1746,7 +1746,6 @@ svg_numbers_new_none (void)
   return (SvgValue *) result;
 }
 
-G_GNUC_UNUSED
 static SvgValue *
 svg_numbers_parse (const char *value)
 {
