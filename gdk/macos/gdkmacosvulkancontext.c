@@ -93,13 +93,10 @@ static gboolean
 gdk_macos_vulkan_context_surface_attach (GdkDrawContext  *context,
                                          GError         **error)
 {
-  GdkSurface *surface;
-  NSView *view;
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+  NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
   NSWindow *window;
   double scale = gdk_surface_get_scale_factor (surface);
-  
-  surface = gdk_draw_context_get_surface (context);
-  view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
 
   CAMetalLayer *layer = [CAMetalLayer layer];
   [layer setOpaque:NO];
