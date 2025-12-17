@@ -121,6 +121,8 @@ typedef PangoFont  *   (* GskRenderReplayFontFilter)            (GskRenderReplay
 
 
 GDK_AVAILABLE_IN_4_22
+GType                   gsk_render_replay_get_type              (void);
+GDK_AVAILABLE_IN_4_22
 GskRenderReplay *       gsk_render_replay_new                   (void);
 GDK_AVAILABLE_IN_4_22
 void                    gsk_render_replay_free                  (GskRenderReplay                *self);
