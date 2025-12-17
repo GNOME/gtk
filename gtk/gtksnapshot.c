@@ -154,7 +154,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       GskRenderNode *mask;
     } composite;
     struct {
-      GskIsolation allowed;
+      GskIsolation features;
     } isolation;
   } data;
 };
@@ -541,7 +541,7 @@ gtk_snapshot_collect_isolation (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  isolation_node = gsk_isolation_node_new (node, state->data.isolation.allowed);
+  isolation_node = gsk_isolation_node_new (node, state->data.isolation.features);
   gsk_render_node_unref (node);
 
   return isolation_node;
@@ -567,7 +567,7 @@ gtk_snapshot_collect_isolation (GtkSnapshot      *snapshot,
  */
 void
 gtk_snapshot_push_isolation (GtkSnapshot  *snapshot,
-                             GskIsolation  allowed)
+                             GskIsolation  features)
 {
   GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
@@ -576,7 +576,7 @@ gtk_snapshot_push_isolation (GtkSnapshot  *snapshot,
                                    current_state->transform,
                                    gtk_snapshot_collect_isolation,
                                    NULL);
-  state->data.isolation.allowed = allowed;
+  state->data.isolation.features = features;
 }
 
 static GskRenderNode *

@@ -3244,10 +3244,6 @@ parse_transform_node (GtkCssParser *parser,
   if (child == NULL)
     child = create_default_render_node ();
 
-  /* This is very much cheating, isn't it? */
-  if (transform == NULL)
-    transform = gsk_transform_new ();
-
   result = gsk_transform_node_new (child, transform);
 
   gsk_render_node_unref (child);
