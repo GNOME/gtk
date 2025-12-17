@@ -698,14 +698,23 @@ set_bounds (GtkAccessible *accessible, accesskit_node *node)
       accesskit_rect bounds = {0, 0, width, height};
 
       if (GTK_IS_ROOT (accessible) && GTK_IS_NATIVE (accessible))
-        gtk_native_get_surface_transform (GTK_NATIVE (accessible), &p.x, &p.y);
+        {
+          GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (accessible));
+          accesskit_affine scale = accesskit_affine_scale (gdk_surface_get_scale (surface));
+          accesskit_affine translate;
+
+          gtk_native_get_surface_transform (GTK_NATIVE (accessible), &p.x, &p.y);
+          translate = accesskit_affine_translate (p);
+
+          transform = accesskit_affine_mul (scale, translate);
+        }
       else
         {
           p.x = x;
           p.y = y;
+          transform = accesskit_affine_translate (p);
         }
 
-      transform = accesskit_affine_translate (p);
       accesskit_node_set_transform (node, transform);
       accesskit_node_set_bounds (node, bounds);
     }

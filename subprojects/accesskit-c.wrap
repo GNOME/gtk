@@ -1,8 +1,8 @@
 [wrap-git]
 directory = accesskit-c
 url = https://github.com/AccessKit/accesskit-c.git
-revision = 0.17.0
+revision = 0.18.0
 depth = 1
 
 [provide]
-dependency_names = accesskit-c-0.17
+dependency_names = accesskit-c-0.18
