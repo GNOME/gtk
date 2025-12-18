@@ -14242,10 +14242,10 @@ push_group (Shape        *shape,
 
   if (shape->type == SHAPE_SVG)
     {
+      SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
+      SvgContentFit *cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
+      SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
       double x, y, width, height;
-      SvgViewBox *vb;
-      SvgContentFit *cf;
-      SvgValue *overflow;
       double sx, sy, tx, ty;
       graphene_rect_t view_box;
       graphene_rect_t *viewport;
@@ -14264,17 +14264,13 @@ push_group (Shape        *shape,
       width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
       height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
-      vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
-      cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
-      overflow = shape->current[SHAPE_ATTR_OVERFLOW];
-
       if (vb->unset)
         graphene_rect_init (&view_box, 0, 0, width, height);
       else
         view_box = vb->view_box;
 
       viewport = g_new (graphene_rect_t, 1);
-      graphene_rect_init (viewport, x, y, width, height);
+      graphene_rect_init_from_rect (viewport, &view_box);
 
       compute_viewport_transform (cf->is_none,
                                   cf->align_x,
@@ -14286,13 +14282,13 @@ push_group (Shape        *shape,
 
       push_viewport (context, viewport);
 
-      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
-        gtk_snapshot_push_clip (context->snapshot, viewport);
-
       gtk_snapshot_save (context->snapshot);
 
       gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
       gtk_snapshot_scale (context->snapshot, sx, sy);
+
+      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+        gtk_snapshot_push_clip (context->snapshot, viewport);
     }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
@@ -14552,10 +14548,10 @@ pop_group (Shape        *shape,
     {
       SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
 
-      gtk_snapshot_restore (context->snapshot);
-
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         gtk_snapshot_pop (context->snapshot);
+
+      gtk_snapshot_restore (context->snapshot);
 
       g_free ((gpointer) pop_viewport (context));
    }
