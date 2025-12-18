@@ -1,0 +1,126 @@
+isolation {
+  child: container {
+    stroke {
+      child: color {
+        bounds: 46 46 8 58;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 50 50\
+L 50 100";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    stroke {
+      child: color {
+        bounds: 196 46 8 58;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 200 50\
+L 200 100";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    stroke {
+      child: color {
+        bounds: 46 46 158 8;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 50 50\
+L 200 50";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    transform {
+      transform: translate(50, 50) rotate(180) translate(-0, -5) scale(3, 1);
+      child: clip {
+        clip: 0 0 30 10;
+        child: container {
+          fill {
+            child: color {
+              bounds: 0 0 10 10;
+              color: rgb(0,0,0);
+            }
+            path: "\
+M 0 0\
+L 10 5\
+L 0 10\
+Z";
+            fill-rule: winding;
+          }
+          stroke {
+            child: color {
+              bounds: -4 -4 18 18;
+              color: rgb(0,0,255);
+            }
+            path: "\
+M 0 0\
+L 10 5\
+L 0 10\
+Z";
+            line-width: 1;
+            line-cap: butt;
+            line-join: miter;
+          }
+          fill {
+            child: color {
+              bounds: -1 4 2 2;
+              color: rgb(255,0,0);
+            }
+            path: "\
+M 1 5 o 0 1, -1 1, 0.707106769 o -1 0, -1 -1, 0.707106769 o 0 -1, 1 -1, 0.707106769 o 1 0, 1 1, 0.707106769 z";
+            fill-rule: winding;
+          }
+        }
+      }
+    }
+    clip {
+      clip: 200 45 90 10;
+      child: transform {
+        transform: translate(200, 45) scale(3, 1);
+        child: container {
+          fill {
+            child: color {
+              bounds: 0 0 10 10;
+              color: rgb(0,0,0);
+            }
+            path: "\
+M 0 0\
+L 10 5\
+L 0 10\
+Z";
+            fill-rule: winding;
+          }
+          stroke {
+            child: color {
+              bounds: -4 -4 18 18;
+              color: rgb(0,0,255);
+            }
+            path: "\
+M 0 0\
+L 10 5\
+L 0 10\
+Z";
+            line-width: 1;
+            line-cap: butt;
+            line-join: miter;
+          }
+          fill {
+            child: color {
+              bounds: -1 4 2 2;
+              color: rgb(255,0,0);
+            }
+            path: "\
+M 1 5 o 0 1, -1 1, 0.707106769 o -1 0, -1 -1, 0.707106769 o 0 -1, 1 -1, 0.707106769 o 1 0, 1 1, 0.707106769 z";
+            fill-rule: winding;
+          }
+        }
+      }
+    }
+  }
+}

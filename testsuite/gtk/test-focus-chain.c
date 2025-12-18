@@ -174,7 +174,7 @@ generate_focus_chain (GtkWidget        *window,
 static GtkDirectionType
 get_dir_for_file (const char *path)
 {
-  char *p;
+  const char *p;
   int i;
 
   p = strrchr (path, '.');

@@ -965,6 +965,64 @@ compute_viewport_transform (gboolean               none,
 }
 
 /* }}} */
+/* {{{ Image loading */
+
+static GdkTexture *
+load_texture (const char  *string,
+              GError     **error)
+{
+  GdkTexture *texture = NULL;
+
+  if (g_str_has_prefix (string, "data:"))
+    {
+      GBytes *bytes = gtk_css_data_url_parse (string, NULL, NULL);
+
+      if (bytes)
+        {
+          texture = gdk_texture_new_from_bytes (bytes, error);
+          g_bytes_unref (bytes);
+
+          return texture;
+        }
+    }
+  else if (g_str_has_prefix (string, "resource:"))
+    {
+      texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
+    }
+  else
+    {
+      texture = gdk_texture_new_from_filename (string, error);
+    }
+
+  return texture;
+}
+
+static GdkTexture *
+get_texture (GtkSvg     *svg,
+             const char *string)
+{
+  GdkTexture *texture;
+
+  texture = g_hash_table_lookup (svg->images, string);
+  if (!texture)
+    {
+      GError *error = NULL;
+
+      texture = load_texture (string, &error);
+      if (!texture)
+        {
+          gtk_svg_rendering_error (svg, "Could not load image for href '%s': %s", string, error->message);
+          g_error_free (error);
+          return NULL;
+        }
+
+      g_hash_table_insert (svg->images, g_strdup (string), texture);
+    }
+
+  return texture;
+}
+
+/* }}} */
 /* {{{ Gradients */
 
 static void
@@ -1475,11 +1533,15 @@ svg_number_new (double value)
   static SvgNumber singletons[] = {
     { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 0 },
     { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 1 },
+    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 2 },
   };
   SvgNumber *result;
 
-  if (value == 0 || value == 1)
-    return svg_value_ref ((SvgValue *) &singletons[(int) value]);
+  for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
+    {
+      if (value == singletons[i].value)
+        return svg_value_ref ((SvgValue *) &singletons[i]);
+    }
 
   result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
   result->dim = SVG_DIMENSION_NUMBER;
@@ -7408,7 +7470,7 @@ shape_new (Shape     *parent,
 
   shape->attrs = _gtk_bitmask_new ();
 
-  for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
       shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
       shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
@@ -7494,7 +7556,8 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_VIEW_BOX:
     case SHAPE_ATTR_CONTENT_FIT:
-      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_IMAGE;
+      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_IMAGE ||
+             type == SHAPE_MARKER;
     case SHAPE_ATTR_REF_X:
     case SHAPE_ATTR_REF_Y:
     case SHAPE_ATTR_MARKER_UNITS:
@@ -7505,7 +7568,8 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_MARKER_END:
       return type == SHAPE_RECT || type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
              type == SHAPE_PATH || type == SHAPE_POLYLINE ||
-             type == SHAPE_POLYGON || type == SHAPE_LINE;
+             type == SHAPE_POLYGON || type == SHAPE_LINE || type == SHAPE_GROUP ||
+             type == SHAPE_USE;
     case SHAPE_ATTR_OVERFLOW:
       return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_MARKER;
     case SHAPE_ATTR_TEXT_ANCHOR:
@@ -8803,6 +8867,29 @@ animation_motion_get_current_measure (Animation             *a,
 /* }}} */
 /* {{{ Animated attributes */
 
+/* Animation works by
+ * - updating the current time
+ * - walking the shape tree and applying the relevant
+ *   animations to produce current values
+ * - rendering the next frame based on these values
+ *
+ * When walking the shape tree, we need to do so in an order
+ * that ensures values are computed before they are used by
+ * other animations (e.g. a motion animation needs to use the
+ * updated path of the shape it uses to compute the next position).
+ * This update order is determined at parse time.
+ *
+ * It is sometimes necessary to compute new values during
+ * rendering (e.g. for <use>, where the <use> element replaces
+ * the parent of the referred to shape for inheritance purposes).
+ *
+ * To drive the animation, we compute the next update time
+ * based on the characteristics of the animations that we have.
+ * E.g. <set> animations only need to update at the start and
+ * at the end. Animating discrete values such as enums also
+ * only update when the value changes, while continuous
+ * interpolation requires an update for every frame.
+ */
 static SvgValue *
 shape_get_current_value (Shape        *shape,
                          unsigned int  attr,
@@ -9739,7 +9826,7 @@ static void
 shape_init_current_values (Shape          *shape,
                            ComputeContext *context)
 {
-  for (ShapeAttr attr = 0; attr < SHAPE_ATTR_STOP_OFFSET; attr++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
       if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
         {
@@ -9756,7 +9843,7 @@ shape_init_current_values (Shape          *shape,
     {
       for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
         {
-          for (ShapeAttr attr = SHAPE_ATTR_STOP_OFFSET; attr <= SHAPE_ATTR_STOP_OPACITY; attr++)
+          for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
             {
               SvgValue *value;
 
@@ -10710,6 +10797,22 @@ create_attachment_connection (Animation *a,
 /* }}} */
 /* {{{ Parser */
 
+/* The parser creates the shape tree. We maintain a current shape,
+ * and a current animation. Some things are done in a post-processing
+ * step: finding the shape that an animation belongs to, resolving
+ * other kinds of shape references, determining the proper order
+ * for computing updated values.
+ *
+ * Note that we treat images, text, markers, gradients, filters as
+ * shapes, but not color stops and filter primitives. Animations
+ * are their own thing too.
+ *
+ * So each shapes can have multiple
+ * - child shapes
+ * - animations
+ * - color stops
+ * - filter primitives
+ */
 typedef struct
 {
   GtkSvg *svg;
@@ -10729,7 +10832,7 @@ typedef struct
   GString *text;
 } ParserData;
 
-/* {{{ Animation attribute */
+/* {{{ Animation attributes */
 
 static gboolean
 parse_base_animation_attrs (Animation            *a,
@@ -12573,6 +12676,8 @@ text_cb (GMarkupParseContext  *context,
   g_string_append_len (data->text, text, len);
 }
 
+/* {{{ Href handling, dependency tracking */
+
 static gboolean
 shape_common_ancestor (Shape  *shape0,
                        Shape  *shape1,
@@ -12960,6 +13065,8 @@ compute_update_order (Shape  *shape,
     }
 }
 
+/* }}} */
+
 static void
 gtk_svg_init_from_bytes (GtkSvg *self,
                          GBytes *bytes)
@@ -13076,6 +13183,19 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
 /* }}} */
 /* {{{ Serialization */
+
+/* We don't aim for 100% accurate reproduction here, so
+ * we allow values to be normalized, and we don't necessarily
+ * preserve explicitly set default values. Animations are
+ * always emitted as children of the shape they belong to,
+ * regardless of where they were placed in the original svg.
+ *
+ * In addition to the original DOM values, we allow serializing
+ * 'snapshots' of a running animation at a given time, which
+ * is very useful for tests. When doing so, we can also write
+ * out some internal state in custom attributes, which is,
+ * again, useful for tests.
+ */
 
 static void
 indent_for_elt (GString *s,
@@ -13911,6 +14031,22 @@ serialize_shape (GString              *s,
 /* }}} */
 /* {{{ Rendering */
 
+/* Rendering works by walking the shape tree from the top.
+ * For each shape, we set up a 'compositing group' before
+ * rendering the content of the shape. Establishing a group
+ * involves handling transforms, opacity, filters, blending,
+ * masking and clipping.
+ *
+ * This is the core of the rendering machinery:
+ *
+ * push_group (shape, context);
+ * paint_shape (shape, context);
+ * pop_group (shape, context);
+ *
+ * This process is highly recursive. For example obtaining
+ * the clip path or mask may require rendering a different
+ * part of the shape tree (in a special mode).
+ */
 typedef enum
 {
   CLIPPING,
@@ -13938,6 +14074,11 @@ typedef struct
   GSList *ctx_shape_stack;
 } PaintContext;
 
+/* Our paint machinery can be used in different modes - for
+ * creating clip paths, masks, for rendering markers, and
+ * regular rendering. Since these operation are mutually
+ * recursive, we maintain a stack of modes, aka RenderOps.
+ */
 static void
 push_op (PaintContext *context,
          RenderOp      op)
@@ -13958,6 +14099,10 @@ pop_op (PaintContext *context)
   g_slist_free_1 (tos);
 }
 
+/* In certain contexts (use, and markers), paint can be
+ * context-fill or context-stroke. Again, this can be
+ * recursive, so we have a stack of context shapes.
+ */
 static void
 push_ctx_shape (PaintContext *context,
                 Shape        *shape)
@@ -13978,6 +14123,10 @@ pop_ctx_shape (PaintContext *context)
   g_slist_free_1 (tos);
 }
 
+/* Viewports are used to resolve percentages in lengths.
+ * Nested svg elements create new viewports, and we have
+ * a stack of them.
+ */
 static void
 push_viewport (PaintContext          *context,
                const graphene_rect_t *viewport)
@@ -14002,67 +14151,16 @@ pop_viewport (PaintContext *context)
   return viewport;
 }
 
-static void paint_shape (Shape        *shape,
-                         PaintContext *context);
-static void pop_context (Shape        *shape,
-                         PaintContext *context);
+static void push_group   (Shape        *shape,
+                          PaintContext *context);
+static void pop_group    (Shape        *shape,
+                          PaintContext *context);
+static void paint_shape  (Shape        *shape,
+                          PaintContext *context);
 static void render_shape (Shape        *shape,
                           PaintContext *context);
 
-static GdkTexture *
-load_texture (const char  *string,
-              GError     **error)
-{
-  GdkTexture *texture = NULL;
-
-  if (g_str_has_prefix (string, "data:"))
-    {
-      GBytes *bytes = gtk_css_data_url_parse (string, NULL, NULL);
-
-      if (bytes)
-        {
-          texture = gdk_texture_new_from_bytes (bytes, error);
-          g_bytes_unref (bytes);
-
-          return texture;
-        }
-    }
-  else if (g_str_has_prefix (string, "resource:"))
-    {
-      texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
-    }
-  else
-    {
-      texture = gdk_texture_new_from_filename (string, error);
-    }
-
-  return texture;
-}
-
-static GdkTexture *
-get_texture (GtkSvg     *svg,
-             const char *string)
-{
-  GdkTexture *texture;
-
-  texture = g_hash_table_lookup (svg->images, string);
-  if (!texture)
-    {
-      GError *error = NULL;
-
-      texture = load_texture (string, &error);
-      if (!texture)
-        {
-          gtk_svg_rendering_error (svg, "Could not load image for href '%s': %s", string, error->message);
-          g_error_free (error);
-          return NULL;
-        }
-
-      g_hash_table_insert (svg->images, g_strdup (string), texture);
-    }
-
-  return texture;
-}
+/* {{{ Groups */
 
 static gboolean
 needs_isolation (Shape        *shape,
@@ -14108,8 +14206,8 @@ needs_isolation (Shape        *shape,
 }
 
 static void
-push_context (Shape        *shape,
-              PaintContext *context)
+push_group (Shape        *shape,
+            PaintContext *context)
 {
   SvgFilter *filter = (SvgFilter *) shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
@@ -14381,8 +14479,8 @@ push_context (Shape        *shape,
 }
 
 static void
-pop_context (Shape        *shape,
-             PaintContext *context)
+pop_group (Shape        *shape,
+           PaintContext *context)
 {
   SvgFilter *filter = (SvgFilter *) shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
@@ -14438,6 +14536,9 @@ pop_context (Shape        *shape,
       g_free ((gpointer) pop_viewport (context));
    }
 }
+
+/* }}} */
+/* {{{ Paint servers */
 
 static void
 paint_linear_gradient (Shape                 *gradient,
@@ -14692,6 +14793,9 @@ paint_server (Shape                 *server,
     }
 }
 
+/* }}} */
+/* {{{ Shape rendering */
+
 static GskStroke *
 shape_create_stroke (Shape        *shape,
                      PaintContext *context)
@@ -14924,6 +15028,9 @@ typedef enum {
   VERTEX_END,
 } VertexKind;
 
+/* }}} */
+/* {{{ Markers */
+
 static gboolean
 paint_marker (Shape              *shape,
               GskPath            *path,
@@ -14939,8 +15046,12 @@ paint_marker (Shape              *shape,
   double scale;
   graphene_point_t vertex;
   double angle;
-  double x, y;
-  double width, height;
+  double x, y, width, height;
+  SvgViewBox *vb;
+  SvgContentFit *cf;
+  SvgValue *overflow;
+  double sx, sy, tx, ty;
+  graphene_rect_t view_box;
 
   gsk_path_point_get_position (point, path, &vertex);
 
@@ -14984,22 +15095,46 @@ paint_marker (Shape              *shape,
   width = svg_number_get (marker->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
   height = svg_number_get (marker->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
-  gtk_snapshot_save (context->snapshot);
-
   x = svg_number_get (marker->current[SHAPE_ATTR_REF_X], width);
   y = svg_number_get (marker->current[SHAPE_ATTR_REF_Y], height);
 
+  width *= scale;
+  height *= scale;
+  x *= scale;
+  y *= scale;
+
+  vb = (SvgViewBox *) marker->current[SHAPE_ATTR_VIEW_BOX];
+  cf = (SvgContentFit *) marker->current[SHAPE_ATTR_CONTENT_FIT];
+  overflow = marker->current[SHAPE_ATTR_OVERFLOW];
+
+  if (vb->unset)
+    graphene_rect_init (&view_box, 0, 0, width, height);
+  else
+    view_box = vb->view_box;
+
+  compute_viewport_transform (cf->is_none,
+                              cf->align_x,
+                              cf->align_y,
+                              cf->meet,
+                              &view_box,
+                              0, 0, width, height,
+                              &sx, &sy, &tx, &ty);
+
+  gtk_snapshot_save (context->snapshot);
+
   gtk_snapshot_translate (context->snapshot, &vertex);
-  gtk_snapshot_scale (context->snapshot, scale, scale);
   gtk_snapshot_rotate (context->snapshot, angle);
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-x, -y));
 
-  if (svg_enum_get (marker->current[SHAPE_ATTR_OVERFLOW]) == OVERFLOW_HIDDEN)
+  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
+  gtk_snapshot_scale (context->snapshot, sx, sy);
+
+  if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
     gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   render_shape (marker, context);
 
-  if (svg_enum_get (marker->current[SHAPE_ATTR_OVERFLOW]) == OVERFLOW_HIDDEN)
+  if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
     gtk_snapshot_pop (context->snapshot);
 
   gtk_snapshot_restore (context->snapshot);
@@ -15050,6 +15185,9 @@ paint_markers (Shape        *shape,
   pop_ctx_shape (context);
   pop_op (context);
 }
+
+/* }}} */
+/* {{{ Text rendering */
 
 #define SVG_DEFAULT_DPI 96.0
 static PangoLayout *
@@ -15375,6 +15513,9 @@ skip:
     }
 }
 
+/* }}} */
+/* {{{ Image rendering */
+
 static void
 render_image (Shape        *shape,
               PaintContext *context)
@@ -15421,6 +15562,8 @@ render_image (Shape        *shape,
 
   gtk_snapshot_restore (context->snapshot);
 }
+
+/* }}} */
 
 static void
 recompute_current_values (Shape        *shape,
@@ -15533,6 +15676,12 @@ paint_shape (Shape        *shape,
   if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
     return;
 
+  /* Below is where we render *actual* content (i.e. graphical
+   * shapes that have paths). This involves filling, stroking
+   * and placing markers, in the order determined by paint-order.
+   * Unless we are clipping, in which case we just fill to
+   * create a 1-bit mask of the 'raw geometry'.
+   */
   path = shape_get_current_path (shape, context->viewport);
 
   if (context->op == CLIPPING)
@@ -15633,9 +15782,9 @@ render_shape (Shape        *shape,
       return;
     }
 
-  push_context (shape, context);
+  push_group (shape, context);
   paint_shape (shape, context);
-  pop_context (shape, context);
+  pop_group (shape, context);
 
   context->depth--;
 }
