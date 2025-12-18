@@ -494,6 +494,17 @@ gtk_svg_rendering_error (GtkSvg     *self,
 /* }}} */
 /* {{{ Helpers */
 
+static inline void
+_sincos (double x, double *_sin, double *_cos)
+{
+#ifdef HAVE_SINCOS
+  sincos (x, _sin, _cos);
+#else
+  *_sin = sin (x);
+  *_cos = cos (x);
+#endif
+}
+
 static unsigned int
 gcd (unsigned int a,
      unsigned int b)
@@ -4071,8 +4082,7 @@ svg_filter_get_matrix (FilterFunction    *f,
       return TRUE;
     case FILTER_HUE_ROTATE:
       v = DEG_TO_RAD (v);
-      c = cos (v);
-      s = sin (v);
+      _sincos (DEG_TO_RAD (v), &s, &c);
       graphene_matrix_init_from_float (matrix, (float[16]) {
           0.213 + 0.787 * c - 0.213 * s,
           0.213 - 0.213 * c + 0.143 * s,
