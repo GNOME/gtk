@@ -14433,7 +14433,7 @@ push_group (Shape        *shape,
             case FILTER_NONE:
               break;
             case FILTER_BLUR:
-              gtk_snapshot_push_blur (context->snapshot, f->value);
+              gtk_snapshot_push_blur (context->snapshot, 2 * f->value);
               break;
             case FILTER_OPACITY:
               gtk_snapshot_push_opacity (context->snapshot, f->value);

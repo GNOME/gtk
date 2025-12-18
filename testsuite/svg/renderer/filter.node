@@ -1,7 +1,7 @@
 isolation {
   child: isolation {
     child: blur {
-      blur: 2;
+      blur: 4;
       child: container {
         fill {
           child: color {

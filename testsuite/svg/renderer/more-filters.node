@@ -11,7 +11,7 @@ M 10 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
     }
     isolation {
       child: blur {
-        blur: 5;
+        blur: 10;
         child: fill {
           child: color {
             bounds: 0 0 20 20;
@@ -161,7 +161,7 @@ M 110 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -
               matrix: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
               offset: 0.5 0.5 0.5 0;
               child: blur {
-                blur: 5;
+                blur: 10;
                 child: fill {
                   child: color {
                     bounds: 0 20 10 10;
