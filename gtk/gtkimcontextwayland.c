@@ -32,6 +32,7 @@
 typedef struct _GtkIMContextWaylandGlobal GtkIMContextWaylandGlobal;
 typedef struct _GtkIMContextWayland GtkIMContextWayland;
 typedef struct _GtkIMContextWaylandClass GtkIMContextWaylandClass;
+typedef struct _GtkIMContextPreeditSegment GtkIMContextPreeditSegment;
 
 struct _GtkIMContextWaylandGlobal
 {
@@ -57,10 +58,18 @@ struct _GtkIMContextWaylandClass
   GtkIMContextClass parent_class;
 };
 
+struct _GtkIMContextPreeditSegment
+{
+  unsigned int hint_flags;
+  int start_idx;
+  int end_idx;
+};
+
 struct preedit {
   char *text;
   int cursor_begin;
   int cursor_end;
+  GArray *style_hints;
 };
 
 struct surrounding_delete {
@@ -224,6 +233,7 @@ text_input_preedit_apply (GtkIMContextWaylandGlobal *global)
     g_signal_emit_by_name (context, "preedit-start");
 
   g_free (context->current_preedit.text);
+  g_clear_pointer (&context->current_preedit.style_hints, g_array_unref);
   context->current_preedit = context->pending_preedit;
   context->pending_preedit = defaults;
 
@@ -551,7 +561,9 @@ gtk_im_context_wayland_finalize (GObject *object)
   g_clear_object (&context->widget);
   g_free (context->surrounding.text);
   g_free (context->current_preedit.text);
+  g_clear_pointer (&context->current_preedit.style_hints, g_array_unref);
   g_free (context->pending_preedit.text);
+  g_clear_pointer (&context->pending_preedit.style_hints, g_array_unref);
   g_free (context->pending_commit);
 
   G_OBJECT_CLASS (gtk_im_context_wayland_parent_class)->finalize (object);
@@ -746,6 +758,78 @@ text_input_preedit_hint (void                                *data,
                          uint32_t                             end,
                          enum zwp_text_input_v3_preedit_hint  hint)
 {
+  GtkIMContextWaylandGlobal *global = data;
+  GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (global->current);
+  GtkIMContextPreeditSegment *segment, new_segment;
+  int first_start_idx = G_MAXINT, last_end_idx = -1;
+  unsigned int i;
+
+  if (!context->pending_preedit.style_hints)
+    {
+      context->pending_preedit.style_hints =
+        g_array_new (FALSE, FALSE, sizeof (GtkIMContextPreeditSegment));
+    }
+
+  /* Convert to a list of non-overlapping segments */
+  for (i = 0; i < context->pending_preedit.style_hints->len; i++)
+    {
+      segment = &g_array_index (context->current_preedit.style_hints,
+                                GtkIMContextPreeditSegment, i);
+
+      /* This segment is unaffected by the new hint */
+      if (begin >= segment->end_idx || end < segment->start_idx)
+        continue;
+
+      if (begin <= segment->start_idx && end >= segment->end_idx)
+        {
+          /* Segment is affected as a whole */
+          segment->hint_flags |= (1 << hint);
+        }
+      else
+        {
+          if (end < segment->end_idx)
+            {
+              /* Partition at the end */
+              new_segment.start_idx = end;
+              new_segment.end_idx = segment->end_idx;
+              new_segment.hint_flags = (1 << hint);
+              segment->end_idx = end;
+              g_array_insert_val (context->pending_preedit.style_hints, i + 1, new_segment);
+            }
+
+          if (begin > segment->start_idx)
+            {
+              /* Partition at the beginning */
+              new_segment.start_idx = segment->start_idx;
+              new_segment.end_idx = begin;
+              new_segment.hint_flags = (1 << hint);
+              segment->start_idx = begin;
+              g_array_insert_val (context->pending_preedit.style_hints, i, new_segment);
+            }
+        }
+
+      first_start_idx = MIN (segment->start_idx, first_start_idx);
+      last_end_idx = segment->end_idx;
+    }
+
+  /* Prepend any missing segment */
+  if (begin < first_start_idx)
+    {
+      new_segment.start_idx = begin;
+      new_segment.end_idx = first_start_idx;
+      new_segment.hint_flags = (1 << hint);
+      g_array_prepend_val (context->pending_preedit.style_hints, new_segment);
+      last_end_idx = MAX (last_end_idx, end);
+    }
+
+  /* Append any missing segment */
+  if (last_end_idx >= 0 && end > last_end_idx)
+    {
+      new_segment.start_idx = last_end_idx;
+      new_segment.end_idx = end;
+      new_segment.hint_flags = (1 << hint);
+      g_array_append_val (context->pending_preedit.style_hints, new_segment);
+    }
 }
 
 static const struct zwp_text_input_v3_listener text_input_listener = {
