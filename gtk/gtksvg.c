@@ -11100,7 +11100,7 @@ parse_base_animation_attrs (Animation            *a,
     {
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */
-      if (check_ancestors (context, "stop", NULL))
+      if (has_ancestor (context, "stop"))
         a->idx = data->current_shape->color_stops->len - 1;
     }
 
