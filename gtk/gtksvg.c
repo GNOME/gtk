@@ -968,22 +968,21 @@ compute_viewport_transform (gboolean               none,
 /* {{{ Image loading */
 
 static GdkTexture *
-load_texture (const char  *string,
-              GError     **error)
+load_texture (const char *string)
 {
-  GdkTexture *texture = NULL;
+  GdkTexture *texture;
 
   if (g_str_has_prefix (string, "data:"))
     {
-      GBytes *bytes = gtk_css_data_url_parse (string, NULL, NULL);
+      GBytes *bytes;
 
-      if (bytes)
-        {
-          texture = gdk_texture_new_from_bytes (bytes, error);
-          g_bytes_unref (bytes);
+      bytes = gtk_css_data_url_parse (string, NULL, NULL);
 
-          return texture;
-        }
+      if (!bytes)
+        return NULL;
+
+      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      g_bytes_unref (bytes);
     }
   else if (g_str_has_prefix (string, "resource:"))
     {
@@ -991,7 +990,7 @@ load_texture (const char  *string,
     }
   else
     {
-      texture = gdk_texture_new_from_filename (string, error);
+      texture = gdk_texture_new_from_filename (string, NULL);
     }
 
   return texture;
@@ -1006,17 +1005,9 @@ get_texture (GtkSvg     *svg,
   texture = g_hash_table_lookup (svg->images, string);
   if (!texture)
     {
-      GError *error = NULL;
-
-      texture = load_texture (string, &error);
-      if (!texture)
-        {
-          gtk_svg_rendering_error (svg, "Could not load image for href '%s': %s", string, error->message);
-          g_error_free (error);
-          return NULL;
-        }
-
-      g_hash_table_insert (svg->images, g_strdup (string), texture);
+      texture = load_texture (string);
+      if (texture)
+        g_hash_table_insert (svg->images, g_strdup (string), texture);
     }
 
   return texture;
@@ -5948,6 +5939,10 @@ svg_text_decoration_resolve (const SvgValue *value, const SvgValue *parent)
 /* }}} */
 /* {{{ References */
 
+/* The difference between HREF_REF and HREF_URL is about
+ * the accepted syntax: plain fragment vs url()
+ */
+
 typedef enum
 {
   HREF_NONE,
@@ -5962,6 +5957,7 @@ typedef struct
 
   char *ref;
   Shape *shape;
+  GdkTexture *texture;
 } SvgHref;
 
 static void
@@ -5992,6 +5988,7 @@ svg_href_equal (const SvgValue *value1,
     case HREF_REF:
     case HREF_URL:
       return r1->shape == r2->shape &&
+             r1->texture == r2->texture &&
              g_strcmp0 (r1->ref, r2->ref) == 0;
     default:
       g_assert_not_reached ();
@@ -7982,8 +7979,25 @@ shape_get_current_bounds (Shape                 *shape,
       break;
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
-    case SHAPE_IMAGE:
       g_critical ("TODO");
+      break;
+    case SHAPE_IMAGE:
+      {
+        SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+
+        if (href->texture)
+          {
+            graphene_rect_init (bounds,
+                                0, 0,
+                                gdk_texture_get_width (href->texture),
+                                gdk_texture_get_height (href->texture));
+          }
+         else
+          {
+            graphene_rect_init (bounds, 0, 0, 0, 0);
+          }
+        ret = TRUE;
+      }
       break;
     default:
       g_assert_not_reached ();
@@ -12813,10 +12827,20 @@ resolve_href_ref (SvgValue   *value,
 {
   SvgHref *href = (SvgHref *) value;
 
-  if (shape->type == SHAPE_IMAGE)
-    return; /* Image href is always external */
+  if (href->kind == HREF_NONE)
+    return;
 
-  if (href->kind != HREF_NONE && href->shape == NULL)
+  if (shape->type == SHAPE_IMAGE)
+    {
+      href->texture = get_texture (data->svg, href->ref);
+
+      if (href->texture == NULL)
+        gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>)", href->ref);
+
+      return; /* Image href is always external */
+    }
+
+  if (href->shape == NULL)
     {
       Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
       if (!target)
@@ -15522,23 +15546,21 @@ render_image (Shape        *shape,
 {
   SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
   SvgContentFit *content_fit = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
-  GdkTexture *texture;
   graphene_rect_t vb;
   double sx, sy, tx, ty;
   double x, y, width, height;
 
-  if (href->kind == HREF_NONE)
-    return;
-
-  texture = get_texture (context->svg, svg_href_get_id (href));
-
-  if (!texture)
-    return;
+  if (!href->texture)
+    {
+      gtk_svg_rendering_error (context->svg,
+                               "No content for <image>");
+      return;
+    }
 
   graphene_rect_init (&vb,
                       0, 0,
-                      gdk_texture_get_width (texture),
-                      gdk_texture_get_height (texture));
+                      gdk_texture_get_width (href->texture),
+                      gdk_texture_get_height (href->texture));
 
   x = context->viewport->origin.x + svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
   y = context->viewport->origin.y + svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
@@ -15558,7 +15580,7 @@ render_image (Shape        *shape,
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
   gtk_snapshot_scale (context->snapshot, sx, sy);
 
-  gtk_snapshot_append_texture (context->snapshot, texture, &vb);
+  gtk_snapshot_append_texture (context->snapshot, href->texture, &vb);
 
   gtk_snapshot_restore (context->snapshot);
 }
