@@ -259,6 +259,9 @@ render_svg_file (GFile *file, gboolean generate)
   g_clear_pointer (&diff,g_free);
 
   errors_file = test_get_sibling_file (svg_file, ".errors");
+  if (errors_file == NULL)
+    errors_file = g_strdup ("/dev/null");
+
   if (errors_file)
     {
       diff = diff_string_with_file (errors_file, errors->str, errors->len, &error);

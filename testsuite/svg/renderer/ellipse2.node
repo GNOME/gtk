@@ -9,4 +9,5 @@ M 342 122 O 342 218, 246 218, 0.707106769 O 150 218, 150 122, 0.707106769 O 150 
 Z";
     fill-rule: winding;
   }
+  isolations: background;
 }

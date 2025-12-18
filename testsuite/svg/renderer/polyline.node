@@ -13,4 +13,5 @@ L 50 9";
     line-cap: butt;
     line-join: miter;
   }
+  isolations: background;
 }

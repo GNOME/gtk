@@ -24,16 +24,19 @@ M 100 50 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
         fill-rule: winding;
       }
     }
-    transform {
-      transform: translate(130, 10) scale(0.6, 0.3);
-      child: fill {
-        child: color {
-          bounds: 0 0 100 100;
-          color: rgb(0,128,0);
-        }
-        path: "\
+    clip {
+      clip: 130 10 60 30;
+      child: transform {
+        transform: translate(130, 10) scale(0.6, 0.3);
+        child: fill {
+          child: color {
+            bounds: 0 0 100 100;
+            color: rgb(0,128,0);
+          }
+          path: "\
 M 0 0 h 100 v 100 h -100 z";
-        fill-rule: winding;
+          fill-rule: winding;
+        }
       }
     }
     transform {
@@ -61,4 +64,5 @@ M 0 0 h 100 v 100 h -100 z";
       }
     }
   }
+  isolations: background;
 }

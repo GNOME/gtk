@@ -22,4 +22,5 @@ M 60 50 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
       fill-rule: winding;
     }
   }
+  isolations: background;
 }

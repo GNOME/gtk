@@ -43,4 +43,5 @@ Z";
       }
     }
   }
+  isolations: background;
 }

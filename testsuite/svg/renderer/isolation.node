@@ -27,6 +27,7 @@ M 20 20 h 80 v 80 h -80 z";
           }
         }
       }
+      isolations: background;
     }
     isolation {
       child: copy {
@@ -46,6 +47,7 @@ M 130 80 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
           }
         }
       }
+      isolations: background;
     }
     isolation {
       child: container {
@@ -70,6 +72,7 @@ M 20 20 h 80 v 80 h -80 z";
               }
             }
           }
+          isolations: background;
         }
         isolation {
           child: transform {
@@ -92,8 +95,11 @@ M 130 80 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
               }
             }
           }
+          isolations: background;
         }
       }
+      isolations: background;
     }
   }
+  isolations: background;
 }

@@ -41,4 +41,5 @@ M 0 16 h 32 v 32 h -32 z";
       line-join: miter;
     }
   }
+  isolations: background;
 }

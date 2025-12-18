@@ -14,4 +14,5 @@ Z";
     line-cap: butt;
     line-join: miter;
   }
+  isolations: background;
 }

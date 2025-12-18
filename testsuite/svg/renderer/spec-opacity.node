@@ -33,6 +33,7 @@ M 450 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -47,6 +48,7 @@ M 650 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -61,6 +63,7 @@ M 850 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -75,6 +78,7 @@ M 1050 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       fill {
         child: color {
@@ -117,6 +121,7 @@ M 467.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 5
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -130,6 +135,7 @@ M 632.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 5
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -143,6 +149,7 @@ M 667.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 5
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -156,6 +163,7 @@ M 867.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 5
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -169,6 +177,7 @@ M 832.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 5
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -185,6 +194,7 @@ M 1032.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 
                   fill-rule: winding;
                 }
               }
+              isolations: background;
             }
             isolation {
               child: opacity {
@@ -198,10 +208,13 @@ M 1067.5 250 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 
                   fill-rule: winding;
                 }
               }
+              isolations: background;
             }
           }
         }
+        isolations: background;
       }
     }
   }
+  isolations: background;
 }

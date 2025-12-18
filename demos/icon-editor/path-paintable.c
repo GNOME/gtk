@@ -465,7 +465,7 @@ path_paintable_add_shape (PathPaintable *self,
       break;
     case SHAPE_POLYLINE:
     case SHAPE_POLYGON:
-      svg_shape_attr_set (shape, SHAPE_ATTR_POINTS, svg_points_new (params, n_params));
+      svg_shape_attr_set (shape, SHAPE_ATTR_POINTS, svg_numbers_new (params, n_params));
       break;
     default:
       g_assert_not_reached ();

@@ -8,4 +8,5 @@ isolation {
 M 30 20 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
     fill-rule: winding;
   }
+  isolations: background;
 }

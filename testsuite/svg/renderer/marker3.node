@@ -87,4 +87,5 @@ M 150 100 h 125 v 75 h -125 z";
       line-join: miter;
     }
   }
+  isolations: background;
 }

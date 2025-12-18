@@ -252,7 +252,7 @@ shape_changed (ShapeEditor *self)
         else
           self->shape->type = SHAPE_POLYGON;
 
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_POINTS, svg_points_new (parms, 2 * n_rows));
+        svg_shape_attr_set (self->shape, SHAPE_ATTR_POINTS, svg_numbers_new (parms, 2 * n_rows));
         path_paintable_changed (self->paintable);
       }
       break;

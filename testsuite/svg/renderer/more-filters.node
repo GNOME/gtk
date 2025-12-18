@@ -11,7 +11,7 @@ M 10 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
     }
     isolation {
       child: blur {
-        blur: 5;
+        blur: 10;
         child: fill {
           child: color {
             bounds: 0 0 20 20;
@@ -22,6 +22,7 @@ M 20 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: color-matrix {
@@ -36,6 +37,7 @@ M 30 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: color-matrix {
@@ -51,6 +53,7 @@ M 40 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: color-matrix {
@@ -65,10 +68,11 @@ M 50 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: color-matrix {
-        matrix: matrix3d(0.618879, 0.163503, -0.494107, 0, -0.296163, 1.01552, 0.715, 0, 0.677283, -0.179023, 0.779107, 0, 0, 0, 0, 1);
+        matrix: matrix3d(0.997006, 0.00198016, -0.0107677, 0, -0.00973358, 1.00189, 0.00986793, 0, 0.0127272, -0.00387242, 1.0009, 0, 0, 0, 0, 1);
         child: fill {
           child: color {
             bounds: 40 0 20 20;
@@ -79,6 +83,7 @@ M 60 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: color-matrix {
@@ -94,6 +99,7 @@ M 70 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: opacity {
@@ -108,6 +114,7 @@ M 80 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: color-matrix {
@@ -122,6 +129,7 @@ M 90 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -1
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: color-matrix {
@@ -136,6 +144,7 @@ M 100 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -
           fill-rule: winding;
         }
       }
+      isolations: background;
     }
     isolation {
       child: component-transfer {
@@ -150,6 +159,7 @@ M 110 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -
         }
         alpha: discrete(0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
       }
+      isolations: background;
     }
     isolation {
       child: component-transfer {
@@ -161,7 +171,7 @@ M 110 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -
               matrix: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
               offset: 0.5 0.5 0.5 0;
               child: blur {
-                blur: 5;
+                blur: 10;
                 child: fill {
                   child: color {
                     bounds: 0 20 10 10;
@@ -177,6 +187,8 @@ M 0 20 h 10 v 10 h -10 z";
         }
         alpha: discrete(0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
       }
+      isolations: background;
     }
   }
+  isolations: background;
 }

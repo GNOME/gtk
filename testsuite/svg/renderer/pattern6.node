@@ -31,4 +31,5 @@ M 180 100 O 180 160, 100 160, 0.707106769 O 20 160, 20 100, 0.707106769 O 20 40,
 Z";
     fill-rule: winding;
   }
+  isolations: background;
 }

@@ -52,7 +52,7 @@ M 100 50 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
       }
     }
     clip {
-      clip: 150 100 60 120;
+      clip: 120 100 120 120;
       child: transform {
         transform: translate(120, 100) scale(1.2);
         child: fill {
@@ -67,4 +67,5 @@ M 0 0 h 100 v 100 h -100 z";
       }
     }
   }
+  isolations: background;
 }

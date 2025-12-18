@@ -11,4 +11,5 @@ M 64 0 o 0 64, -64 64, 0.707106769 o -64 0, -64 -64, 0.707106769 o 0 -64, 64 -64
       fill-rule: winding;
     }
   }
+  isolations: background;
 }

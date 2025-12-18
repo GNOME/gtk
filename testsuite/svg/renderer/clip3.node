@@ -109,4 +109,5 @@ M 30 30 h 10 v 10 h -10 z";
       }
     }
   }
+  isolations: background;
 }

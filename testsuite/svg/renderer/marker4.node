@@ -75,4 +75,5 @@ Z";
       }
     }
   }
+  isolations: background;
 }

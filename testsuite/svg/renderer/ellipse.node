@@ -21,4 +21,5 @@ Z";
       fill-rule: winding;
     }
   }
+  isolations: background;
 }

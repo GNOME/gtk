@@ -494,6 +494,17 @@ gtk_svg_rendering_error (GtkSvg     *self,
 /* }}} */
 /* {{{ Helpers */
 
+static inline void
+_sincos (double x, double *_sin, double *_cos)
+{
+#ifdef HAVE_SINCOS
+  sincos (x, _sin, _cos);
+#else
+  *_sin = sin (x);
+  *_cos = cos (x);
+#endif
+}
+
 static unsigned int
 gcd (unsigned int a,
      unsigned int b)
@@ -968,22 +979,21 @@ compute_viewport_transform (gboolean               none,
 /* {{{ Image loading */
 
 static GdkTexture *
-load_texture (const char  *string,
-              GError     **error)
+load_texture (const char *string)
 {
-  GdkTexture *texture = NULL;
+  GdkTexture *texture;
 
   if (g_str_has_prefix (string, "data:"))
     {
-      GBytes *bytes = gtk_css_data_url_parse (string, NULL, NULL);
+      GBytes *bytes;
 
-      if (bytes)
-        {
-          texture = gdk_texture_new_from_bytes (bytes, error);
-          g_bytes_unref (bytes);
+      bytes = gtk_css_data_url_parse (string, NULL, NULL);
 
-          return texture;
-        }
+      if (!bytes)
+        return NULL;
+
+      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      g_bytes_unref (bytes);
     }
   else if (g_str_has_prefix (string, "resource:"))
     {
@@ -991,7 +1001,7 @@ load_texture (const char  *string,
     }
   else
     {
-      texture = gdk_texture_new_from_filename (string, error);
+      texture = gdk_texture_new_from_filename (string, NULL);
     }
 
   return texture;
@@ -1006,17 +1016,9 @@ get_texture (GtkSvg     *svg,
   texture = g_hash_table_lookup (svg->images, string);
   if (!texture)
     {
-      GError *error = NULL;
-
-      texture = load_texture (string, &error);
-      if (!texture)
-        {
-          gtk_svg_rendering_error (svg, "Could not load image for href '%s': %s", string, error->message);
-          g_error_free (error);
-          return NULL;
-        }
-
-      g_hash_table_insert (svg->images, g_strdup (string), texture);
+      texture = load_texture (string);
+      if (texture)
+        g_hash_table_insert (svg->images, g_strdup (string), texture);
     }
 
   return texture;
@@ -1625,6 +1627,266 @@ svg_number_get (const SvgValue *value,
     return n->value / 100 * one_hundred_percent;
   else
     return n->value;
+}
+
+/* }}} */
+/* {{{ Number sequences */
+
+typedef struct
+{
+  SvgDimension dim;
+  double value;
+} Number;
+
+typedef struct
+{
+  SvgValue base;
+  unsigned int n_values;
+  Number values[1];
+} SvgNumbers;
+
+static unsigned int
+svg_numbers_size (unsigned int n)
+{
+  return sizeof (SvgNumbers) + MAX (n - 1, 0) * sizeof (Number);
+}
+
+static void
+svg_numbers_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_numbers_equal (const SvgValue *value0,
+                   const SvgValue *value1)
+{
+  const SvgNumbers *p0 = (const SvgNumbers *) value0;
+  const SvgNumbers *p1 = (const SvgNumbers *) value1;
+
+  if (p0->n_values != p1->n_values)
+    return FALSE;
+
+  for (unsigned int i = 0; i < p0->n_values; i++)
+    {
+      if (p0->values[i].dim != p1->values[i].dim)
+        return FALSE;
+      if (p0->values[i].value != p1->values[i].value)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static SvgValue *
+svg_numbers_accumulate (const SvgValue *value0,
+                        const SvgValue *value1,
+                        int             n)
+{
+  return NULL;
+}
+
+static void
+svg_numbers_print (const SvgValue *value,
+                   GString        *string)
+{
+  const SvgNumbers *p = (const SvgNumbers *) value;
+
+  for (unsigned int i = 0; i < p->n_values; i++)
+    {
+      if (i > 0)
+        g_string_append_c (string, ' ');
+      string_append_double (string, p->values[i].value);
+      if (p->values[i].dim == SVG_DIMENSION_PERCENTAGE)
+        g_string_append (string, "%");
+      else if (p->values[i].dim == SVG_DIMENSION_LENGTH)
+        g_string_append (string, "px");
+    }
+}
+
+static SvgValue * svg_numbers_interpolate (const SvgValue *value0,
+                                           const SvgValue *value1,
+                                           double          t);
+
+static const SvgValueClass SVG_NUMBERS_CLASS = {
+  "SvgNumbers",
+  svg_numbers_free,
+  svg_numbers_equal,
+  svg_numbers_interpolate,
+  svg_numbers_accumulate,
+  svg_numbers_print
+};
+
+SvgValue *
+svg_numbers_new (double       *values,
+                 unsigned int  n_values)
+{
+  SvgNumbers *result;
+
+  result = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n_values));
+  result->n_values = n_values;
+
+  for (unsigned int i = 0; i < n_values; i++)
+    {
+      result->values[i].dim = SVG_DIMENSION_NUMBER;
+      result->values[i].value = values[i];
+    }
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_numbers_new_none (void)
+{
+  SvgNumbers *result;
+
+  result = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (1));
+  result->n_values = 0;
+
+  return (SvgValue *) result;
+}
+
+G_GNUC_UNUSED
+static SvgValue *
+svg_numbers_parse (const char *value)
+{
+  if (strcmp (value, "none") == 0)
+    {
+      return svg_numbers_new_none ();
+    }
+  else
+    {
+      GStrv strv;
+      unsigned int n;
+      SvgNumbers *p;
+
+      strv = strsplit_set (value, ", ");
+      n = g_strv_length (strv);
+
+      if (n % 2 == 1)
+        n--;
+
+      p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n));
+      p->n_values = n;
+
+      for (unsigned int i = 0; i < n; i++)
+        {
+          if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
+                              &p->values[i].value, &p->values[i].dim))
+
+            {
+              svg_value_unref ((SvgValue *) p);
+              p = NULL;
+              break;
+            }
+       }
+      g_strfreev (strv);
+
+      return (SvgValue *) p;
+    }
+}
+
+static SvgValue *
+svg_numbers_interpolate (const SvgValue *value0,
+                         const SvgValue *value1,
+                         double          t)
+{
+  const SvgNumbers *p0 = (const SvgNumbers *) value0;
+  const SvgNumbers *p1 = (const SvgNumbers *) value1;
+  SvgNumbers *p;
+
+  if (p0->n_values != p1->n_values)
+    {
+      if (t < 0.5)
+        return svg_value_ref ((SvgValue *) value0);
+      else
+        return svg_value_ref ((SvgValue *) value1);
+    }
+
+  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (p0->n_values));
+  p->n_values = p0->n_values;
+
+  for (unsigned int i = 0; i < p0->n_values; i++)
+    {
+      g_assert (p0->values[i].dim != SVG_DIMENSION_PERCENTAGE);
+      p->values[i].dim = SVG_DIMENSION_NUMBER;
+      p->values[i].value = lerp (t, p0->values[i].value, p1->values[i].value);
+    }
+
+  return (SvgValue *) p;
+}
+
+static SvgValue *
+svg_numbers_resolve (const SvgValue        *value,
+                     const graphene_rect_t *viewport)
+{
+  SvgNumbers *orig = (SvgNumbers *) value;
+  SvgNumbers *p;
+  double size;
+
+  g_assert (value->class == &SVG_NUMBERS_CLASS);
+
+  if (orig->n_values == 0)
+    return svg_value_ref ((SvgValue *) orig);
+
+  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (orig->n_values));
+  p->n_values = orig->n_values;
+
+  size = normalized_diagonal (viewport);
+  for (unsigned int i = 0; i < orig->n_values; i++)
+    {
+      p->values[i].dim = SVG_DIMENSION_NUMBER;
+      if (orig->values[i].dim == SVG_DIMENSION_PERCENTAGE)
+        p->values[i].value = orig->values[i].value / 100 * size;
+      else
+        p->values[i].value = orig->values[i].value;
+    }
+
+  return (SvgValue *) p;
+}
+
+/* }}} */
+/* {{{ Points */
+
+/* Points are just like number, with an even number of them */
+
+static SvgValue *
+svg_points_parse (const char *value)
+{
+  if (strcmp (value, "none") == 0)
+    {
+      return svg_numbers_new_none ();
+    }
+  else
+    {
+      GStrv strv;
+      unsigned int n;
+      SvgNumbers *p;
+
+      strv = strsplit_set (value, ", ");
+      n = g_strv_length (strv);
+
+      if (n % 2 == 1)
+        n--;
+
+      p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n));
+      p->n_values = n;
+
+      for (unsigned int i = 0; i < n; i++)
+        {
+          if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
+                              &p->values[i].value, &p->values[i].dim))
+
+            {
+              svg_value_unref ((SvgValue *) p);
+              p = NULL;
+              break;
+            }
+       }
+      g_strfreev (strv);
+
+      return (SvgValue *) p;
+    }
 }
 
 /* }}} */
@@ -4080,8 +4342,7 @@ svg_filter_get_matrix (FilterFunction    *f,
       return TRUE;
     case FILTER_HUE_ROTATE:
       v = DEG_TO_RAD (v);
-      c = cos (v);
-      s = sin (v);
+      _sincos (DEG_TO_RAD (v), &s, &c);
       graphene_matrix_init_from_float (matrix, (float[16]) {
           0.213 + 0.787 * c - 0.213 * s,
           0.213 - 0.213 * c + 0.143 * s,
@@ -4140,12 +4401,6 @@ typedef enum
   DASH_ARRAY_NONE,
   DASH_ARRAY_DASHES,
 } DashArrayKind;
-
-typedef struct
-{
-  SvgDimension dim;
-  double value;
-} Number;
 
 typedef struct
 {
@@ -4665,215 +4920,6 @@ svg_path_interpolate (const SvgValue *value0,
     return svg_value_ref ((SvgValue *) value0);
   else
     return svg_value_ref ((SvgValue *) value1);
-}
-
-/* }}} */
-/* {{{ Points */
-
-typedef struct
-{
-  SvgValue base;
-  unsigned int n_values;
-  Number values[1];
-} SvgPoints;
-
-static unsigned int
-svg_points_size (unsigned int n)
-{
-  return sizeof (SvgPoints) + MAX (n - 1, 0) * sizeof (Number);
-}
-
-static void
-svg_points_free (SvgValue *value)
-{
-  g_free (value);
-}
-
-static gboolean
-svg_points_equal (const SvgValue *value0,
-                  const SvgValue *value1)
-{
-  const SvgPoints *p0 = (const SvgPoints *) value0;
-  const SvgPoints *p1 = (const SvgPoints *) value1;
-
-  if (p0->n_values != p1->n_values)
-    return FALSE;
-
-  for (unsigned int i = 0; i < p0->n_values; i++)
-    {
-      if (p0->values[i].dim != p1->values[i].dim)
-        return FALSE;
-      if (p0->values[i].value != p1->values[i].value)
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static SvgValue *
-svg_points_accumulate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       int             n)
-{
-  return NULL;
-}
-
-static void
-svg_points_print (const SvgValue *value,
-                  GString        *string)
-{
-  const SvgPoints *p = (const SvgPoints *) value;
-
-  for (unsigned int i = 0; i < p->n_values; i++)
-    {
-      if (i > 0)
-        g_string_append_c (string, ' ');
-      string_append_double (string, p->values[i].value);
-      if (p->values[i].dim == SVG_DIMENSION_PERCENTAGE)
-        g_string_append (string, "%");
-      else if (p->values[i].dim == SVG_DIMENSION_LENGTH)
-        g_string_append (string, "px");
-    }
-}
-
-static SvgValue * svg_points_interpolate (const SvgValue *value0,
-                                          const SvgValue *value1,
-                                          double          t);
-
-static const SvgValueClass SVG_POINTS_CLASS = {
-  "SvgPoints",
-  svg_points_free,
-  svg_points_equal,
-  svg_points_interpolate,
-  svg_points_accumulate,
-  svg_points_print
-};
-
-static SvgValue *
-svg_points_new_none (void)
-{
-  SvgPoints *result;
-
-  result = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (1));
-  result->n_values = 0;
-
-  return (SvgValue *) result;
-}
-
-SvgValue *
-svg_points_new (double       *values,
-                unsigned int  n_values)
-{
-  SvgPoints *result;
-
-  result = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (n_values));
-  result->n_values = n_values;
-
-  for (unsigned int i = 0; i < n_values; i++)
-    {
-      result->values[i].dim = SVG_DIMENSION_NUMBER;
-      result->values[i].value = values[i];
-    }
-
-  return (SvgValue *) result;
-}
-
-static SvgValue *
-svg_points_parse (const char *value)
-{
-  if (strcmp (value, "none") == 0)
-    {
-      return svg_path_new_none ();
-    }
-  else
-    {
-      GStrv strv;
-      unsigned int n;
-      SvgPoints *p;
-
-      strv = strsplit_set (value, ", ");
-      n = g_strv_length (strv);
-
-      if (n % 2 == 1)
-        n--;
-
-      p = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (n));
-      p->n_values = n;
-
-      for (unsigned int i = 0; i < n; i++)
-        {
-          if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
-                              &p->values[i].value, &p->values[i].dim))
-
-            {
-              svg_value_unref ((SvgValue *) p);
-              p = NULL;
-              break;
-            }
-       }
-      g_strfreev (strv);
-
-      return (SvgValue *) p;
-    }
-}
-
-static SvgValue *
-svg_points_interpolate (const SvgValue *value0,
-                        const SvgValue *value1,
-                        double          t)
-{
-  const SvgPoints *p0 = (const SvgPoints *) value0;
-  const SvgPoints *p1 = (const SvgPoints *) value1;
-  SvgPoints *p;
-
-  if (p0->n_values != p1->n_values)
-    {
-      if (t < 0.5)
-        return svg_value_ref ((SvgValue *) value0);
-      else
-        return svg_value_ref ((SvgValue *) value1);
-    }
-
-  p = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (p0->n_values));
-  p->n_values = p0->n_values;
-
-  for (unsigned int i = 0; i < p0->n_values; i++)
-    {
-      g_assert (p0->values[i].dim != SVG_DIMENSION_PERCENTAGE);
-      p->values[i].dim = SVG_DIMENSION_NUMBER;
-      p->values[i].value = lerp (t, p0->values[i].value, p1->values[i].value);
-    }
-
-  return (SvgValue *) p;
-}
-
-static SvgValue *
-svg_points_resolve (const SvgValue        *value,
-                    const graphene_rect_t *viewport)
-{
-  SvgPoints *orig = (SvgPoints *) value;
-  SvgPoints *p;
-  double size;
-
-  g_assert (value->class == &SVG_POINTS_CLASS);
-
-  if (orig->n_values == 0)
-    return svg_value_ref ((SvgValue *) orig);
-
-  p = (SvgPoints *) svg_value_alloc (&SVG_POINTS_CLASS, svg_points_size (orig->n_values));
-  p->n_values = orig->n_values;
-
-  size = normalized_diagonal (viewport);
-  for (unsigned int i = 0; i < orig->n_values; i++)
-    {
-      p->values[i].dim = SVG_DIMENSION_NUMBER;
-      if (orig->values[i].dim == SVG_DIMENSION_PERCENTAGE)
-        p->values[i].value = orig->values[i].value / 100 * size;
-      else
-        p->values[i].value = orig->values[i].value;
-    }
-
-  return (SvgValue *) p;
 }
 
 /* }}} */
@@ -5948,6 +5994,10 @@ svg_text_decoration_resolve (const SvgValue *value, const SvgValue *parent)
 /* }}} */
 /* {{{ References */
 
+/* The difference between HREF_REF and HREF_URL is about
+ * the accepted syntax: plain fragment vs url()
+ */
+
 typedef enum
 {
   HREF_NONE,
@@ -5962,6 +6012,7 @@ typedef struct
 
   char *ref;
   Shape *shape;
+  GdkTexture *texture;
 } SvgHref;
 
 static void
@@ -5992,6 +6043,7 @@ svg_href_equal (const SvgValue *value1,
     case HREF_REF:
     case HREF_URL:
       return r1->shape == r2->shape &&
+             r1->texture == r2->texture &&
              g_strcmp0 (r1->ref, r2->ref) == 0;
     default:
       g_assert_not_reached ();
@@ -6943,7 +6995,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (16.);
   shape_attrs[SHAPE_ATTR_LETTER_SPACING].initial_value = svg_number_new (0.);
   shape_attrs[SHAPE_ATTR_TEXT_DECORATION].initial_value = svg_text_decoration_new (TEXT_DECORATION_NONE);
-  shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_points_new_none ();
+  shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_numbers_new_none ();
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
   shape_attrs[SHAPE_ATTR_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_BOUND_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
@@ -7643,19 +7695,19 @@ shape_get_path (Shape                 *shape,
       builder = gsk_path_builder_new ();
       if (values[SHAPE_ATTR_POINTS])
         {
-          SvgPoints *points = (SvgPoints *) values[SHAPE_ATTR_POINTS];
-          if (points->n_values > 0)
+          SvgNumbers *numbers = (SvgNumbers *) values[SHAPE_ATTR_POINTS];
+          if (numbers->n_values > 0)
             {
-              g_assert (points->values[0].dim != SVG_DIMENSION_PERCENTAGE);
-              g_assert (points->values[1].dim != SVG_DIMENSION_PERCENTAGE);
+              g_assert (numbers->values[0].dim != SVG_DIMENSION_PERCENTAGE);
+              g_assert (numbers->values[1].dim != SVG_DIMENSION_PERCENTAGE);
               gsk_path_builder_move_to (builder,
-                                        points->values[0].value, points->values[1].value);
-              for (unsigned int i = 2; i < points->n_values; i += 2)
+                                        numbers->values[0].value, numbers->values[1].value);
+              for (unsigned int i = 2; i < numbers->n_values; i += 2)
                 {
-                  g_assert (points->values[i].dim != SVG_DIMENSION_PERCENTAGE);
-                  g_assert (points->values[i+1].dim != SVG_DIMENSION_PERCENTAGE);
+                  g_assert (numbers->values[i].dim != SVG_DIMENSION_PERCENTAGE);
+                  g_assert (numbers->values[i+1].dim != SVG_DIMENSION_PERCENTAGE);
                   gsk_path_builder_line_to (builder,
-                                            points->values[i].value, points->values[i + 1].value);
+                                            numbers->values[i].value, numbers->values[i + 1].value);
                 }
               if (shape->type == SHAPE_POLYGON)
                 gsk_path_builder_close (builder);
@@ -7982,8 +8034,25 @@ shape_get_current_bounds (Shape                 *shape,
       break;
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
-    case SHAPE_IMAGE:
       g_critical ("TODO");
+      break;
+    case SHAPE_IMAGE:
+      {
+        SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+
+        if (href->texture)
+          {
+            graphene_rect_init (bounds,
+                                0, 0,
+                                gdk_texture_get_width (href->texture),
+                                gdk_texture_get_height (href->texture));
+          }
+         else
+          {
+            graphene_rect_init (bounds, 0, 0, 0, 0);
+          }
+        ret = TRUE;
+      }
       break;
     default:
       g_assert_not_reached ();
@@ -9584,7 +9653,7 @@ resolve_value (Shape           *shape,
     }
   else if (attr == SHAPE_ATTR_POINTS)
     {
-      return svg_points_resolve (value, context->viewport);
+      return svg_numbers_resolve (value, context->viewport);
     }
   else if (attr == SHAPE_ATTR_TEXT_DECORATION)
     {
@@ -11076,7 +11145,7 @@ parse_base_animation_attrs (Animation            *a,
     {
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */
-      if (check_ancestors (context, "stop", NULL))
+      if (has_ancestor (context, "stop"))
         a->idx = data->current_shape->color_stops->len - 1;
     }
 
@@ -12813,10 +12882,20 @@ resolve_href_ref (SvgValue   *value,
 {
   SvgHref *href = (SvgHref *) value;
 
-  if (shape->type == SHAPE_IMAGE)
-    return; /* Image href is always external */
+  if (href->kind == HREF_NONE)
+    return;
 
-  if (href->kind != HREF_NONE && href->shape == NULL)
+  if (shape->type == SHAPE_IMAGE)
+    {
+      href->texture = get_texture (data->svg, href->ref);
+
+      if (href->texture == NULL)
+        gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>)", href->ref);
+
+      return; /* Image href is always external */
+    }
+
+  if (href->shape == NULL)
     {
       Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
       if (!target)
@@ -14218,10 +14297,10 @@ push_group (Shape        *shape,
 
   if (shape->type == SHAPE_SVG)
     {
+      SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
+      SvgContentFit *cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
+      SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
       double x, y, width, height;
-      SvgViewBox *vb;
-      SvgContentFit *cf;
-      SvgValue *overflow;
       double sx, sy, tx, ty;
       graphene_rect_t view_box;
       graphene_rect_t *viewport;
@@ -14240,17 +14319,13 @@ push_group (Shape        *shape,
       width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
       height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
-      vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
-      cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
-      overflow = shape->current[SHAPE_ATTR_OVERFLOW];
-
       if (vb->unset)
         graphene_rect_init (&view_box, 0, 0, width, height);
       else
         view_box = vb->view_box;
 
       viewport = g_new (graphene_rect_t, 1);
-      graphene_rect_init (viewport, x, y, width, height);
+      graphene_rect_init_from_rect (viewport, &view_box);
 
       compute_viewport_transform (cf->is_none,
                                   cf->align_x,
@@ -14262,13 +14337,13 @@ push_group (Shape        *shape,
 
       push_viewport (context, viewport);
 
-      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
-        gtk_snapshot_push_clip (context->snapshot, viewport);
-
       gtk_snapshot_save (context->snapshot);
 
       gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
       gtk_snapshot_scale (context->snapshot, sx, sy);
+
+      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+        gtk_snapshot_push_clip (context->snapshot, viewport);
     }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
@@ -14293,7 +14368,7 @@ push_group (Shape        *shape,
   if (context->op != CLIPPING)
     {
       if (needs_isolation (shape, context))
-        gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_ALL);
+        gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_BACKGROUND);
 
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
         {
@@ -14433,7 +14508,7 @@ push_group (Shape        *shape,
             case FILTER_NONE:
               break;
             case FILTER_BLUR:
-              gtk_snapshot_push_blur (context->snapshot, f->value);
+              gtk_snapshot_push_blur (context->snapshot, 2 * f->value);
               break;
             case FILTER_OPACITY:
               gtk_snapshot_push_opacity (context->snapshot, f->value);
@@ -14528,10 +14603,10 @@ pop_group (Shape        *shape,
     {
       SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
 
-      gtk_snapshot_restore (context->snapshot);
-
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         gtk_snapshot_pop (context->snapshot);
+
+      gtk_snapshot_restore (context->snapshot);
 
       g_free ((gpointer) pop_viewport (context));
    }
@@ -15522,23 +15597,21 @@ render_image (Shape        *shape,
 {
   SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
   SvgContentFit *content_fit = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
-  GdkTexture *texture;
   graphene_rect_t vb;
   double sx, sy, tx, ty;
   double x, y, width, height;
 
-  if (href->kind == HREF_NONE)
-    return;
-
-  texture = get_texture (context->svg, svg_href_get_id (href));
-
-  if (!texture)
-    return;
+  if (!href->texture)
+    {
+      gtk_svg_rendering_error (context->svg,
+                               "No content for <image>");
+      return;
+    }
 
   graphene_rect_init (&vb,
                       0, 0,
-                      gdk_texture_get_width (texture),
-                      gdk_texture_get_height (texture));
+                      gdk_texture_get_width (href->texture),
+                      gdk_texture_get_height (href->texture));
 
   x = context->viewport->origin.x + svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
   y = context->viewport->origin.y + svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
@@ -15558,7 +15631,7 @@ render_image (Shape        *shape,
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
   gtk_snapshot_scale (context->snapshot, sx, sy);
 
-  gtk_snapshot_append_texture (context->snapshot, texture, &vb);
+  gtk_snapshot_append_texture (context->snapshot, href->texture, &vb);
 
   gtk_snapshot_restore (context->snapshot);
 }
@@ -16974,7 +17047,7 @@ svg_shape_attr_get_points (Shape        *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
   SvgValue *value;
-  SvgPoints *points;
+  SvgNumbers *numbers;
   double *ret;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
@@ -16982,16 +17055,16 @@ svg_shape_attr_get_points (Shape        *shape,
   else
     value = shape_attr_get_initial_value (attr, shape);
 
-  points = (SvgPoints *) value;
+  numbers = (SvgNumbers *) value;
 
-  *n_params = points->n_values;
+  *n_params = numbers->n_values;
 
-  ret = g_new0 (double, points->n_values);
+  ret = g_new0 (double, numbers->n_values);
 
-  for (unsigned int i = 0; i < points->n_values; i++)
+  for (unsigned int i = 0; i < numbers->n_values; i++)
     {
       /* FIXME: What about the dimension */
-      ret[i] = points->values[i].value;
+      ret[i] = numbers->values[i].value;
     }
 
   return ret;

@@ -375,6 +375,7 @@ M -247.125 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -389,6 +390,7 @@ M -242.095993 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -403,6 +405,7 @@ M -237.067001 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -417,6 +420,7 @@ M -232.037994 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -431,6 +435,7 @@ M -227.007996 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -445,6 +450,7 @@ M -227.007996 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -459,6 +465,7 @@ M -221.979004 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -473,6 +480,7 @@ M -216.949997 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -487,6 +495,7 @@ M -211.921005 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -501,6 +510,7 @@ M -206.891006 102.158997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -515,6 +525,7 @@ M -247.125 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -529,6 +540,7 @@ M -242.095993 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -543,6 +555,7 @@ M -237.067001 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -557,6 +570,7 @@ M -232.037994 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -571,6 +585,7 @@ M -227.007996 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -585,6 +600,7 @@ M -227.007996 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -599,6 +615,7 @@ M -221.979004 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -613,6 +630,7 @@ M -216.949997 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -627,6 +645,7 @@ M -211.921005 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -641,6 +660,7 @@ M -206.891006 141.365997 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       fill {
         child: color {
@@ -745,6 +765,7 @@ M -247.125 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -759,6 +780,7 @@ M -242.095993 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -773,6 +795,7 @@ M -237.067001 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -787,6 +810,7 @@ M -232.037994 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -801,6 +825,7 @@ M -227.007996 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -815,6 +840,7 @@ M -227.007996 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -829,6 +855,7 @@ M -221.979004 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -843,6 +870,7 @@ M -216.949997 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -857,6 +885,7 @@ M -211.921005 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -871,6 +900,7 @@ M -206.891006 219.779999 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -885,6 +915,7 @@ M -149.416 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -899,6 +930,7 @@ M -144.386993 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -913,6 +945,7 @@ M -139.358002 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -927,6 +960,7 @@ M -134.328995 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -941,6 +975,7 @@ M -129.298996 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -955,6 +990,7 @@ M -129.298996 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -969,6 +1005,7 @@ M -124.269997 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -983,6 +1020,7 @@ M -119.240997 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -997,6 +1035,7 @@ M -114.211998 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1011,6 +1050,7 @@ M -109.181999 181.453003 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1025,6 +1065,7 @@ M -149.416 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1039,6 +1080,7 @@ M -144.386993 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1053,6 +1095,7 @@ M -139.358002 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1067,6 +1110,7 @@ M -134.328995 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1081,6 +1125,7 @@ M -129.298996 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1095,6 +1140,7 @@ M -129.298996 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1109,6 +1155,7 @@ M -124.269997 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1123,6 +1170,7 @@ M -119.240997 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1137,6 +1185,7 @@ M -114.211998 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1151,6 +1200,7 @@ M -109.181999 220.660004 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1165,6 +1215,7 @@ M -149.416 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1179,6 +1230,7 @@ M -144.386993 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1193,6 +1245,7 @@ M -139.358002 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1207,6 +1260,7 @@ M -134.328995 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1221,6 +1275,7 @@ M -129.298996 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1235,6 +1290,7 @@ M -129.298996 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1249,6 +1305,7 @@ M -124.269997 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1263,6 +1320,7 @@ M -119.240997 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1277,6 +1335,7 @@ M -114.211998 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1291,6 +1350,7 @@ M -109.181999 -54.6680984 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       fill {
         child: color {
@@ -1395,6 +1455,7 @@ M -149.416 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1409,6 +1470,7 @@ M -144.386993 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1423,6 +1485,7 @@ M -139.358002 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1437,6 +1500,7 @@ M -134.328995 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1451,6 +1515,7 @@ M -129.298996 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1465,6 +1530,7 @@ M -129.298996 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1479,6 +1545,7 @@ M -124.269997 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1493,6 +1560,7 @@ M -119.240997 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1507,6 +1575,7 @@ M -114.211998 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1521,6 +1590,7 @@ M -109.181999 23.7455006 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1535,6 +1605,7 @@ M -149.416 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1549,6 +1620,7 @@ M -144.386993 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1563,6 +1635,7 @@ M -139.358002 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1577,6 +1650,7 @@ M -134.328995 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1591,6 +1665,7 @@ M -129.298996 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1605,6 +1680,7 @@ M -129.298996 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1619,6 +1695,7 @@ M -124.269997 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1633,6 +1710,7 @@ M -119.240997 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1647,6 +1725,7 @@ M -114.211998 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -1661,6 +1740,7 @@ M -109.181999 62.9524002 h 5.02925014 v 32.6724014 h -5.02925014 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
       fill {
         child: color {
@@ -1975,6 +2055,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2047,6 +2128,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2119,6 +2201,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2191,6 +2274,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2266,6 +2350,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2338,6 +2423,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2413,6 +2499,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2488,6 +2575,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2560,6 +2648,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2635,6 +2724,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: opacity {
@@ -2699,6 +2789,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2774,6 +2865,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2849,6 +2941,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2921,6 +3014,7 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
       isolation {
         child: transform {
@@ -2993,7 +3087,9 @@ M -145.561005 -11.8929996 h 177.513 v 7.7518301 h -177.513 z";
             }
           }
         }
+        isolations: background;
       }
     }
   }
+  isolations: background;
 }
