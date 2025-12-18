@@ -48,4 +48,5 @@ Z";
       }
     }
   }
+  isolations: background;
 }

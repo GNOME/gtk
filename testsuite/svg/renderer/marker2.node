@@ -214,4 +214,5 @@ M 80 60 h 45 v 35 h -45 z";
       line-join: miter;
     }
   }
+  isolations: background;
 }

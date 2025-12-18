@@ -64,4 +64,5 @@ M 0 0 h 100 v 100 h -100 z";
       }
     }
   }
+  isolations: background;
 }

@@ -19,4 +19,5 @@ M 15 0 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.70710
       fill-rule: winding;
     }
   }
+  isolations: background;
 }

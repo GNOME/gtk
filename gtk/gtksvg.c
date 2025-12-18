@@ -14323,7 +14323,7 @@ push_group (Shape        *shape,
   if (context->op != CLIPPING)
     {
       if (needs_isolation (shape, context))
-        gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_ALL);
+        gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_BACKGROUND);
 
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
         {

@@ -23,4 +23,5 @@ L 90 90";
       line-join: miter;
     }
   }
+  isolations: background;
 }

@@ -127,4 +127,5 @@ Z";
       }
     }
   }
+  isolations: background;
 }

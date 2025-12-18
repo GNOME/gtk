@@ -21,4 +21,5 @@ M 70 50 o 0 20, -20 20, 0.707106769 o -20 0, -20 -20, 0.707106769 o 0 -20, 20 -2
       line-join: miter;
     }
   }
+  isolations: background;
 }

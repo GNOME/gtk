@@ -30,4 +30,5 @@ M 0 10 h 20 v 10 h -20 z";
 M 50 50 h 100 v 100 h -100 z";
     fill-rule: winding;
   }
+  isolations: background;
 }

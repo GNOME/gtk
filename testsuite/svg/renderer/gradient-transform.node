@@ -26,4 +26,5 @@ M 50 50 h 200 v 100 h -200 z";
       line-join: miter;
     }
   }
+  isolations: background;
 }

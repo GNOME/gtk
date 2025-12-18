@@ -24,4 +24,5 @@ M 10 10 h 50 v 20 h -50 z";
       }
     }
   }
+  isolations: background;
 }

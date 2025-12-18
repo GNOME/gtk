@@ -30,4 +30,5 @@ M 50 50 h 50 v 50 h -50 z";
       }
     }
   }
+  isolations: background;
 }

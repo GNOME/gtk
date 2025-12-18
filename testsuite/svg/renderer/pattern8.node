@@ -54,4 +54,5 @@ Z";
       line-join: miter;
     }
   }
+  isolations: background;
 }

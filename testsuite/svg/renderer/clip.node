@@ -19,4 +19,5 @@ M 80 40 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -4
       fill-rule: winding;
     }
   }
+  isolations: background;
 }

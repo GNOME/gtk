@@ -157,4 +157,5 @@ M 1 1 h 478 v 358 h -478 z";
       }
     }
   }
+  isolations: background;
 }
