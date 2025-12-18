@@ -40,6 +40,7 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkemojichooser.h"
+#include "gtkimcontextprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkjoinedmenuprivate.h"
 #include "gtkmagnifierprivate.h"
@@ -5230,8 +5231,9 @@ gtk_text_view_realize (GtkWidget *widget)
 
   if (gtk_widget_is_sensitive (widget))
     {
-      gtk_im_context_set_client_widget (GTK_TEXT_VIEW (widget)->priv->im_context,
-                                        widget);
+      gtk_im_context_set_parent_node (priv->im_context,
+                                      priv->text_window->css_node);
+      gtk_im_context_set_client_widget (priv->im_context, widget);
     }
 
   gtk_text_view_ensure_layout (text_view);
@@ -5267,6 +5269,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 
   gtk_im_context_set_client_widget (priv->im_context, NULL);
+  gtk_im_context_set_parent_node (priv->im_context, NULL);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
 }
