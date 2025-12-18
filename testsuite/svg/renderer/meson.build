@@ -44,6 +44,8 @@ test_data = [
   'marker3.svg',
   'marker4.svg',
   'marker5.svg',
+  'marker6.svg',
+  'marker7.svg',
   'mask.svg',
   'more-filters.svg',
   'nested-svg.svg',

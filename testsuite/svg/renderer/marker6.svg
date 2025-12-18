@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 300 200" >
+
+  <marker id="m1"
+        orient="auto-start-reverse"
+        markerUnits='userSpaceOnUse'
+        overflow='hidden'
+        markerWidth='30' markerHeight='10'
+        viewBox='0 0 10 10'
+        preserveAspectRatio='none'
+        refX='0%' refY='50%'
+        stroke='blue'>
+    <polygon points='0 0 10 5 0 10'/>
+    <circle cx='0' cy='5' r='1' fill='red' stroke='none'/>
+  </marker>
+
+  <polyline
+        points='50 50 50 100'
+        stroke='blue' fill='none' />
+  <polyline
+        points='200 50 200 100'
+        stroke='blue' fill='none' />
+
+  <polyline
+        marker-start='url(#m1)'
+        marker-end='url(#m1)'
+        points='50 50 200 50'
+        stroke='blue' fill='none' />
+</svg>

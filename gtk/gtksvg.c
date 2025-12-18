@@ -7556,7 +7556,8 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_VIEW_BOX:
     case SHAPE_ATTR_CONTENT_FIT:
-      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_IMAGE;
+      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_IMAGE ||
+             type == SHAPE_MARKER;
     case SHAPE_ATTR_REF_X:
     case SHAPE_ATTR_REF_Y:
     case SHAPE_ATTR_MARKER_UNITS:
@@ -15045,8 +15046,12 @@ paint_marker (Shape              *shape,
   double scale;
   graphene_point_t vertex;
   double angle;
-  double x, y;
-  double width, height;
+  double x, y, width, height;
+  SvgViewBox *vb;
+  SvgContentFit *cf;
+  SvgValue *overflow;
+  double sx, sy, tx, ty;
+  graphene_rect_t view_box;
 
   gsk_path_point_get_position (point, path, &vertex);
 
@@ -15090,22 +15095,46 @@ paint_marker (Shape              *shape,
   width = svg_number_get (marker->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
   height = svg_number_get (marker->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
-  gtk_snapshot_save (context->snapshot);
-
   x = svg_number_get (marker->current[SHAPE_ATTR_REF_X], width);
   y = svg_number_get (marker->current[SHAPE_ATTR_REF_Y], height);
+
+  width *= scale;
+  height *= scale;
+  x *= scale;
+  y *= scale;
+
+  vb = (SvgViewBox *) marker->current[SHAPE_ATTR_VIEW_BOX];
+  cf = (SvgContentFit *) marker->current[SHAPE_ATTR_CONTENT_FIT];
+  overflow = marker->current[SHAPE_ATTR_OVERFLOW];
+
+  if (vb->unset)
+    graphene_rect_init (&view_box, 0, 0, width, height);
+  else
+    view_box = vb->view_box;
+
+  compute_viewport_transform (cf->is_none,
+                              cf->align_x,
+                              cf->align_y,
+                              cf->meet,
+                              &view_box,
+                              0, 0, width, height,
+                              &sx, &sy, &tx, &ty);
+
+  gtk_snapshot_save (context->snapshot);
 
   gtk_snapshot_translate (context->snapshot, &vertex);
   gtk_snapshot_rotate (context->snapshot, angle);
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-x, -y));
-  gtk_snapshot_scale (context->snapshot, scale, scale);
 
-  if (svg_enum_get (marker->current[SHAPE_ATTR_OVERFLOW]) == OVERFLOW_HIDDEN)
+  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
+  gtk_snapshot_scale (context->snapshot, sx, sy);
+
+  if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
     gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   render_shape (marker, context);
 
-  if (svg_enum_get (marker->current[SHAPE_ATTR_OVERFLOW]) == OVERFLOW_HIDDEN)
+  if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
     gtk_snapshot_pop (context->snapshot);
 
   gtk_snapshot_restore (context->snapshot);
