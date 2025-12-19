@@ -103,6 +103,7 @@ test_data = [
   'style.svg',
   'text-align-01-b.svg',
   'text-fonts-02-t.svg',
+  'text-stroke-gradient.svg',
   'text-text-03-b.svg',
   'text-text-10-t.svg',
   'use.svg',
