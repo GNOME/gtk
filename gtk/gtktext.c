@@ -155,10 +155,9 @@
  * ├── undershoot.left
  * ├── undershoot.right
  * ├── [selection]
- * ├── [cursor-handle[.top]
- * ├── [cursor-handle.bottom]
  * ├── [block-cursor]
  * ├── [cursor-handle[.top/.bottom][.insertion-cursor]]
+ * ├── [preedit[.whole][.selection][.prediction][.prefix/.suffix][.spelling-error][.compose-error]]
  * ╰── [window.popup]
  * ```
  *
@@ -181,6 +180,19 @@
  * class depending on where they are shown in relation to the selection. If
  * there is just a single handle for the text cursor, it gets the style class
  * `.insertion-cursor`.
+ *
+ * If using an input method with a pre-edit buffer, this string will be styled
+ * with the `preedit` CSS node, the different style classes express the possible
+ * roles of a piece of text in the pre-edit buffer:
+ *
+ * - `.whole` denotes the parts of the pre-edit buffer without a special role
+ * - `.selection`, `.prefix` and `.suffix` style classes will be used to
+ *   highlight the specific portions of the pre-edit buffer being edited and its
+ *   surroundings
+ * - `.prediction` will be used for parts of the pre-edit buffer not typed by the
+ *   user (e.g. autocompletion)
+ * - `.spelling-error` and `.compose-error` will be respectively used to indicate
+ *   errors in spelling or character composition (e.g. non-existent transliterations).
  *
  * # Accessibility
  *

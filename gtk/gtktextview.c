@@ -124,6 +124,7 @@
  * ├── border.top
  * ├── border.left
  * ├── text
+ * │   ├── [preedit[.whole][.selection][.prediction][.prefix/.suffix][.spelling-error][.compose-error]]
  * │   ╰── [selection]
  * ├── border.right
  * ├── border.bottom
@@ -139,6 +140,19 @@
  *
  * If a context menu is opened, the window node will appear as a subnode
  * of the main node.
+ *
+ * If using an input method with a pre-edit buffer, this string will be styled
+ * with a `preedit` subnode of the `text` node. the different style classes
+ * express the possible roles of a piece of text in the pre-edit buffer:
+ *
+ * - `.whole` denotes the parts of the pre-edit buffer without a special role
+ * - `.selection`, `.prefix` and `.suffix` style classes will be used to
+ *   highlight the specific portions of the pre-edit buffer being edited and its
+ *   surroundings
+ * - `.prediction` will be used for parts of the pre-edit buffer not typed by the
+ *   user (e.g. autocompletion)
+ * - `.spelling-error` and `.compose-error` will be respectively used to indicate
+ *   errors in spelling or character composition (e.g. non-existent transliterations).
  *
  * ## Accessibility
  *
