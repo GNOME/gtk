@@ -40,6 +40,8 @@ test_data = [
   'gpa-attachment1.svg',
   'gpa-attachment2.svg',
   'gpa-attachment3.svg',
+  'gradient-templates1.svg',
+  'gradient-templates2.svg',
   'gradient-transform.svg',
   'image.svg',
   'initial-state1.svg',

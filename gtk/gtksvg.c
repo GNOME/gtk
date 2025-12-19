@@ -8929,7 +8929,8 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_LANG:
       return TRUE;
     case SHAPE_ATTR_HREF:
-      return type == SHAPE_USE || type == SHAPE_IMAGE;
+      return type == SHAPE_USE || type == SHAPE_IMAGE ||
+             type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_CX:
     case SHAPE_ATTR_CY:
       return type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE || type == SHAPE_RADIAL_GRADIENT;
@@ -14516,13 +14517,12 @@ resolve_href_ref (SvgValue   *value,
           href->shape = target;
           add_dependency_to_common_ancestor (shape, target);
         }
-      else if (shape->type == SHAPE_USE)
+      else
         {
-          gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <use>)", svg_href_get_id (href));
-        }
-      else if (shape->type == SHAPE_FILTER)
-        {
-          gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving <feImage>)", svg_href_get_id (href));
+          gtk_svg_invalid_reference (data->svg,
+                                     "No shape with ID %s (resolving href in <%s>)",
+                                     svg_href_get_id (href),
+                                     shape_types[shape->type].name);
         }
     }
 }
@@ -17063,21 +17063,83 @@ pop_group (Shape        *shape,
 /* }}} */
 /* {{{ Paint servers */
 
-static void
-paint_linear_gradient (Shape                 *gradient,
-                       const graphene_rect_t *bounds,
-                       PaintContext          *context)
+static gboolean
+type_is_gradient (ShapeType type)
 {
-  graphene_point_t start, end;
-  double offset;
-  GskTransform *transform, *gradient_transform;
+  return shape_types[type].has_color_stops;
+}
+
+static gboolean
+template_type_compatible (ShapeType type1,
+                          ShapeType type2)
+{
+  return type1 == type2 ||
+         (type_is_gradient (type1) && type_is_gradient (type2));
+}
+
+static SvgValue *
+paint_server_get_current_value (Shape        *shape,
+                                ShapeAttr     attr,
+                                PaintContext *context)
+{
+  if (!_gtk_bitmask_get (shape->attrs, attr))
+    {
+      SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+
+      if (href->shape)
+        {
+          if (template_type_compatible (href->shape->type, shape->type))
+            return paint_server_get_current_value (href->shape, attr, context);
+
+          gtk_svg_invalid_reference (context->svg,
+                                     "<%s> can not use a <%s> as template (while resolving href %s)",
+                                     shape_types[shape->type].name,
+                                     shape_types[href->shape->type].name,
+                                     href->ref);
+        }
+    }
+
+  return shape->current[attr];
+}
+
+static GPtrArray *
+gradient_get_color_stops (Shape        *shape,
+                          PaintContext *context)
+{
+  if (shape->color_stops->len == 0)
+    {
+      SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+
+      if (href->shape)
+        {
+          if (template_type_compatible (href->shape->type, shape->type))
+            return gradient_get_color_stops (href->shape, context);
+
+          gtk_svg_invalid_reference (context->svg,
+                                     "<%s> can not use a <%s> as template (while collecting color stops)",
+                                     shape_types[shape->type].name,
+                                     shape_types[href->shape->type].name);
+        }
+    }
+
+  return shape->color_stops;
+}
+
+static GskGradient *
+gradient_get_gsk_gradient (Shape        *gradient,
+                           PaintContext *context)
+{
   GskGradient *g;
+  GPtrArray *color_stops;
+  double offset;
+
+  color_stops = gradient_get_color_stops (gradient, context);
 
   g = gsk_gradient_new ();
   offset = 0;
-  for (unsigned int i = 0; i < gradient->color_stops->len; i++)
+  for (unsigned int i = 0; i < color_stops->len; i++)
     {
-      ColorStop *cs = g_ptr_array_index (gradient->color_stops, i);
+      ColorStop *cs = g_ptr_array_index (color_stops, i);
       SvgPaint *stop_color = (SvgPaint *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
       GdkColor color;
 
@@ -17089,35 +17151,79 @@ paint_linear_gradient (Shape                 *gradient,
       gdk_color_finish (&color);
     }
 
+  return g;
+}
+
+static GPtrArray *
+pattern_get_shapes (Shape        *shape,
+                    PaintContext *context)
+{
+  if (shape->shapes->len == 0)
+    {
+      SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+
+      if (href->shape)
+        {
+          if (template_type_compatible (href->shape->type, shape->type))
+            return pattern_get_shapes (href->shape, context);
+
+          gtk_svg_invalid_reference (context->svg,
+                                     "<%s> can not use a <%s> as template (while collecting pattern content)",
+                                     shape_types[shape->type].name,
+                                     shape_types[href->shape->type].name);
+        }
+    }
+
+  return shape->shapes;
+}
+
+static void
+paint_linear_gradient (Shape                 *gradient,
+                       const graphene_rect_t *bounds,
+                       PaintContext          *context)
+{
+  graphene_point_t start, end;
+  GskTransform *transform, *gradient_transform;
+  GskGradient *g;
+  SvgValue *x1 = paint_server_get_current_value (gradient, SHAPE_ATTR_X1, context);
+  SvgValue *y1 = paint_server_get_current_value (gradient, SHAPE_ATTR_Y1, context);
+  SvgValue *x2 = paint_server_get_current_value (gradient, SHAPE_ATTR_X2, context);
+  SvgValue *y2 = paint_server_get_current_value (gradient, SHAPE_ATTR_Y2, context);
+  SvgValue *tf = paint_server_get_current_value (gradient, SHAPE_ATTR_TRANSFORM, context);
+  SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
+  SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
+
+  g = gradient_get_gsk_gradient (gradient, context);
+
   transform = NULL;
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       transform = gsk_transform_translate (transform, &bounds->origin);
       transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
       graphene_point_init (&start,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X1], 1),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], 1));
+                           svg_number_get (x1, 1),
+                           svg_number_get (y1, 1));
       graphene_point_init (&end,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X2], 1),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], 1));
+                           svg_number_get (x2, 1),
+                           svg_number_get (y2, 1));
     }
   else
     {
       graphene_point_init (&start,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X1], context->viewport->size.width),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y1], context->viewport->size.height));
+                           svg_number_get (x1, context->viewport->size.width),
+                           svg_number_get (y1, context->viewport->size.height));
       graphene_point_init (&end,
-                           svg_number_get (gradient->current[SHAPE_ATTR_X2], context->viewport->size.width),
-                           svg_number_get (gradient->current[SHAPE_ATTR_Y2], context->viewport->size.height));
+                           svg_number_get (x2, context->viewport->size.width),
+                           svg_number_get (y2, context->viewport->size.height));
     }
 
-  gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_TRANSFORM]);
+  gradient_transform = svg_transform_get_gsk ((SvgTransform *) tf);
   transform = gsk_transform_transform (transform, gradient_transform);
   gsk_transform_unref (gradient_transform);
   transform_gradient_line (transform, &start, &end, &start, &end);
   gsk_transform_unref (transform);
 
-  gsk_gradient_set_repeat (g, svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]));
+  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
   gtk_snapshot_add_linear_gradient (context->snapshot, bounds, &start, &end, g);
 
@@ -17132,38 +17238,34 @@ paint_radial_gradient (Shape                 *gradient,
   graphene_point_t start_center;
   graphene_point_t end_center;
   double start_radius, end_radius;
-  double offset;
   GskTransform *gradient_transform;
   graphene_rect_t gradient_bounds;
   GskGradient *g;
+  SvgValue *fx = paint_server_get_current_value (gradient, SHAPE_ATTR_FX, context);
+  SvgValue *fy = paint_server_get_current_value (gradient, SHAPE_ATTR_FY, context);
+  SvgValue *fr = paint_server_get_current_value (gradient, SHAPE_ATTR_FR, context);
+  SvgValue *cx = paint_server_get_current_value (gradient, SHAPE_ATTR_CX, context);
+  SvgValue *cy = paint_server_get_current_value (gradient, SHAPE_ATTR_CY, context);
+  SvgValue *r = paint_server_get_current_value (gradient, SHAPE_ATTR_R, context);
+  SvgValue *tf = paint_server_get_current_value (gradient, SHAPE_ATTR_TRANSFORM, context);
+  SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
+  SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
-  graphene_point_init (&start_center, svg_number_get (gradient->current[SHAPE_ATTR_FX], context->viewport->size.width),
-                                    svg_number_get (gradient->current[SHAPE_ATTR_FY], context->viewport->size.height));
-  start_radius = svg_number_get (gradient->current[SHAPE_ATTR_FR], normalized_diagonal (context->viewport));
+  graphene_point_init (&start_center,
+                       svg_number_get (fx, context->viewport->size.width),
+                       svg_number_get (fy, context->viewport->size.height));
+  start_radius = svg_number_get (fr, normalized_diagonal (context->viewport));
 
-  graphene_point_init (&end_center, svg_number_get (gradient->current[SHAPE_ATTR_CX], context->viewport->size.width),
-                                    svg_number_get (gradient->current[SHAPE_ATTR_CY], context->viewport->size.height));
-  end_radius = svg_number_get (gradient->current[SHAPE_ATTR_R], normalized_diagonal (context->viewport));
+  graphene_point_init (&end_center,
+                       svg_number_get (cx, context->viewport->size.width),
+                       svg_number_get (cy, context->viewport->size.height));
+  end_radius = svg_number_get (r, normalized_diagonal (context->viewport));
 
-  g = gsk_gradient_new ();
-  offset = 0;
-  for (unsigned int i = 0; i < gradient->color_stops->len; i++)
-    {
-      ColorStop *cs = g_ptr_array_index (gradient->color_stops, i);
-      SvgPaint *stop_color = (SvgPaint *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
-      GdkColor color;
-
-      g_assert (stop_color->kind == PAINT_COLOR);
-      offset = MAX (svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OFFSET)], 1), offset);
-      gdk_color_init_from_rgba (&color, &stop_color->color);
-      color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
-      gsk_gradient_add_stop (g, offset, 0.5, &color);
-      gdk_color_finish (&color);
-    }
+  g = gradient_get_gsk_gradient (gradient, context);
 
   gtk_snapshot_save (context->snapshot);
 
-  if (svg_enum_get (gradient->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       gtk_snapshot_translate (context->snapshot, &bounds->origin);
       gtk_snapshot_scale (context->snapshot,  bounds->size.width, bounds->size.height);
@@ -17172,14 +17274,14 @@ paint_radial_gradient (Shape                 *gradient,
   else
     graphene_rect_init_from_rect (&gradient_bounds, bounds);
 
-  gradient_transform = svg_transform_get_gsk ((SvgTransform *) gradient->current[SHAPE_ATTR_TRANSFORM]);
+  gradient_transform = svg_transform_get_gsk ((SvgTransform *) tf);
   gtk_snapshot_transform (context->snapshot, gradient_transform);
 
   gradient_transform = gsk_transform_invert (gradient_transform);
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
 
-  gsk_gradient_set_repeat (g, svg_enum_get (gradient->current[SHAPE_ATTR_SPREAD_METHOD]));
+  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
   gtk_snapshot_add_radial_gradient (context->snapshot,
                                     &gradient_bounds,
@@ -17197,47 +17299,55 @@ paint_pattern (Shape                 *pattern,
                const graphene_rect_t *bounds,
                PaintContext          *context)
 {
-  SvgViewBox *view_box = (SvgViewBox *) pattern->current[SHAPE_ATTR_VIEW_BOX];
-  SvgContentFit *content_fit = (SvgContentFit *) pattern->current[SHAPE_ATTR_CONTENT_FIT];
   graphene_rect_t pattern_bounds, child_bounds;
   double tx, ty;
   double sx, sy;
   GskTransform *transform;
   double dx, dy;
+  SvgValue *bound_units = paint_server_get_current_value (pattern, SHAPE_ATTR_BOUND_UNITS, context);
+  SvgValue *content_units = paint_server_get_current_value (pattern, SHAPE_ATTR_CONTENT_UNITS, context);
+  SvgValue *x = paint_server_get_current_value (pattern, SHAPE_ATTR_X, context);
+  SvgValue *y = paint_server_get_current_value (pattern, SHAPE_ATTR_Y, context);
+  SvgValue *width = paint_server_get_current_value (pattern, SHAPE_ATTR_WIDTH, context);
+  SvgValue *height = paint_server_get_current_value (pattern, SHAPE_ATTR_HEIGHT, context);
+  SvgValue *tf = paint_server_get_current_value (pattern, SHAPE_ATTR_TRANSFORM, context);
+  SvgViewBox *vb = (SvgViewBox *) paint_server_get_current_value (pattern, SHAPE_ATTR_VIEW_BOX, context);
+  SvgContentFit *cf = (SvgContentFit *) paint_server_get_current_value (pattern, SHAPE_ATTR_CONTENT_FIT, context);
+  GPtrArray *shapes;
 
-  if (svg_enum_get (pattern->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+  if (svg_enum_get (bound_units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
-      dx = bounds->origin.x + svg_number_get (pattern->current[SHAPE_ATTR_X], 1) * bounds->size.width;
-      dy = bounds->origin.y + svg_number_get (pattern->current[SHAPE_ATTR_Y], 1) * bounds->size.height;
+      dx = bounds->origin.x + svg_number_get (x, 1) * bounds->size.width;
+      dy = bounds->origin.y + svg_number_get (y, 1) * bounds->size.height;
       child_bounds.origin.x = 0;
       child_bounds.origin.y = 0;
-      child_bounds.size.width = svg_number_get (pattern->current[SHAPE_ATTR_WIDTH], 1) * bounds->size.width;
-      child_bounds.size.height = svg_number_get (pattern->current[SHAPE_ATTR_HEIGHT], 1) * bounds->size.height;
+      child_bounds.size.width = svg_number_get (width, 1) * bounds->size.width;
+      child_bounds.size.height = svg_number_get (height, 1) * bounds->size.height;
     }
   else
     {
-      dx = svg_number_get (pattern->current[SHAPE_ATTR_X], context->viewport->size.width);
-      dy = svg_number_get (pattern->current[SHAPE_ATTR_Y], context->viewport->size.height);
+      dx = svg_number_get (x, context->viewport->size.width);
+      dy = svg_number_get (y, context->viewport->size.height);
       child_bounds.origin.x = 0;
       child_bounds.origin.y = 0;
-      child_bounds.size.width = svg_number_get (pattern->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
-      child_bounds.size.height = svg_number_get (pattern->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+      child_bounds.size.width = svg_number_get (width, context->viewport->size.width);
+      child_bounds.size.height = svg_number_get (height, context->viewport->size.height);
     }
 
-  if (!view_box->unset)
+  if (!vb->unset)
     {
-      compute_viewport_transform (content_fit->is_none,
-                                  content_fit->align_x,
-                                  content_fit->align_y,
-                                  content_fit->meet,
-                                  &view_box->view_box,
+      compute_viewport_transform (cf->is_none,
+                                  cf->align_x,
+                                  cf->align_y,
+                                  cf->meet,
+                                  &vb->view_box,
                                   child_bounds.origin.x, child_bounds.origin.y,
                                   child_bounds.size.width, child_bounds.size.height,
                                   &sx, &sy, &tx, &ty);
     }
   else
     {
-      if (svg_enum_get (pattern->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+      if (svg_enum_get (content_units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
           tx = 0;
           ty = 0;
@@ -17257,7 +17367,7 @@ paint_pattern (Shape                 *pattern,
   tx += dx;
   ty += dy;
 
-  transform = svg_transform_get_gsk ((SvgTransform *) pattern->current[SHAPE_ATTR_TRANSFORM]);
+  transform = svg_transform_get_gsk ((SvgTransform *) tf);
   gtk_snapshot_transform (context->snapshot, transform);
 
   transform = gsk_transform_invert (transform);
@@ -17270,9 +17380,10 @@ paint_pattern (Shape                 *pattern,
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
   gtk_snapshot_scale (context->snapshot, sx, sy);
 
-  for (int i = 0; i < pattern->shapes->len; i++)
+  shapes = pattern_get_shapes (pattern, context);
+  for (int i = 0; i < shapes->len; i++)
     {
-      Shape *s = g_ptr_array_index (pattern->shapes, i);
+      Shape *s = g_ptr_array_index (shapes, i);
       render_shape (s, context);
     }
 
@@ -17292,12 +17403,16 @@ paint_server (Shape                 *server,
   if (server->type == SHAPE_LINEAR_GRADIENT ||
       server->type == SHAPE_RADIAL_GRADIENT)
     {
-      if (server->color_stops->len == 0)
+      GPtrArray *color_stops;
+
+      color_stops = gradient_get_color_stops (server, context);
+
+      if (color_stops->len == 0)
         return;
 
-      if (server->color_stops->len == 1)
+      if (color_stops->len == 1)
         {
-          ColorStop *cs = g_ptr_array_index (server->color_stops, 0);
+          ColorStop *cs = g_ptr_array_index (color_stops, 0);
           SvgPaint *stop_color = (SvgPaint *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
           GdkRGBA color = stop_color->color;
           color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
