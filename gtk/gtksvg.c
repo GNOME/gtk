@@ -10451,6 +10451,16 @@ shape_get_current_value (Shape        *shape,
 
       return stop->current[color_stop_attr_idx (attr)];
     }
+  else if (FIRST_FILTER_ATTR <= attr && attr <= LAST_FILTER_ATTR)
+    {
+      FilterPrimitive *f;
+
+      g_assert (shape_types[shape->type].has_filters);
+
+      f = g_ptr_array_index (shape->filters, idx);
+
+      return f->current[filter_attr_idx (f->type, attr)];
+    }
   else
     g_assert_not_reached ();
 }
