@@ -142,6 +142,20 @@ gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
     }
 }
 
+#if GST_CHECK_VERSION (1,27, 90)
+static void
+gtk_gst_media_file_update_loop (GtkGstMediaFile *self)
+{
+  GstStructure *config;
+  gboolean loop;
+
+  config = gst_play_get_config (self->play);
+  loop = gtk_media_stream_get_loop (GTK_MEDIA_STREAM (self));
+  gst_play_config_set_loop (config, loop ? GST_PLAY_LOOP_TRACK : GST_PLAY_LOOP_NONE);
+  gst_play_set_config (self->play, config);
+}
+#endif
+
 static void
 gtk_gst_media_file_position_updated_cb (GstPlaySignalAdapter *adapter,
                                         GstClockTime          time,
@@ -204,7 +218,9 @@ gtk_gst_media_file_end_of_stream_cb (GstPlaySignalAdapter *adapter,
 
   if (gtk_media_stream_get_loop (GTK_MEDIA_STREAM (self)))
     {
+#if !GST_CHECK_VERSION (1,27, 90)
       gst_play_seek (self->play, 0);
+#endif
       return;
     }
 
@@ -252,6 +268,9 @@ gtk_gst_media_file_destroy_play (GtkGstMediaFile *self)
   g_signal_handlers_disconnect_by_func (self->play_adapter, gtk_gst_media_file_seek_done_cb, self);
   g_signal_handlers_disconnect_by_func (self->play_adapter, gtk_gst_media_file_error_cb, self);
   g_signal_handlers_disconnect_by_func (self->playbin, gtk_gst_media_file_source_setup_cb, self);
+#if GST_CHECK_VERSION (1,27, 90)
+  g_signal_handlers_disconnect_by_func (self, gtk_gst_media_file_update_loop, NULL);
+#endif
   g_object_unref (self->play_adapter);
   gst_play_stop (self->play);
   g_object_unref (self->play);
@@ -278,6 +297,11 @@ gtk_gst_media_file_create_play (GtkGstMediaFile *file)
 
   g_object_get (self->play, "pipeline", &self->playbin, NULL);
   g_signal_connect (self->playbin, "source-setup", G_CALLBACK (gtk_gst_media_file_source_setup_cb), self);
+
+#if GST_CHECK_VERSION (1,27, 90)
+  g_signal_connect (self, "notify::loop", G_CALLBACK (gtk_gst_media_file_update_loop), NULL);
+  gtk_gst_media_file_update_loop (self);
+#endif
 }
 
 static void
