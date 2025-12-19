@@ -32,7 +32,7 @@ cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
 vulkan_req         = '>= 1.3'
-gstreamer_req      = '>= 1.24.0'
+gstreamer_req      = '>= 1.27.90'
 gi_req             = '>= 1.84'
 
 fs = import('fs')
