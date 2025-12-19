@@ -79,35 +79,15 @@ gsk_repeat_node_draw_tiled (cairo_t                *cr,
   cairo_surface_t *child_surface;
   cairo_t *child_cr;
   cairo_matrix_t matrix;
-  double width, height, det, xscale, yscale;
 
-  cairo_get_matrix (cr, &matrix);
-  cairo_surface_get_device_scale (cairo_get_target (cr), &xscale, &yscale);
-  det = matrix.xx * matrix.yy - matrix.xy * matrix.yx;
-  if (matrix.xx != 0 || matrix.yx != 0)
-    {
-      width = sqrt (matrix.xx * matrix.xx + matrix.yx * matrix.yx);
-      height = det / width;
-    }
-  else if (matrix.yx != 0 || matrix.yy != 0)
-    {
-      height = sqrt (matrix.yx * matrix.yx + matrix.yy * matrix.yy);
-      width = det / height;
-    }
-  else
-    {
-      g_return_if_reached ();
-    }
-
-  width = ABS (ceil (width * child_bounds->size.width * xscale));
-  height = ABS (ceil (height * child_bounds->size.height * yscale));
-
-  child_surface = cairo_surface_create_similar (cairo_get_group_target (cr), 
-                                                CAIRO_CONTENT_COLOR_ALPHA,
-                                                width, height);
-  xscale = width / child_bounds->size.width;
-  yscale = height / child_bounds->size.height;
-  cairo_surface_set_device_scale (child_surface, xscale, yscale);
+  child_surface = gdk_cairo_create_similar_surface (cr,
+                                                    CAIRO_CONTENT_COLOR_ALPHA,
+                                                    &GRAPHENE_RECT_INIT (
+                                                        0, 0,
+                                                        child_bounds->size.width,
+                                                        child_bounds->size.height));
+  if (child_surface == NULL)
+    return;
   child_cr = cairo_create (child_surface);
   cairo_translate (child_cr,
                    - child_bounds->origin.x,

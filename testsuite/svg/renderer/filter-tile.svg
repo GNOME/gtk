@@ -1,0 +1,8 @@
+<svg width="100" height="100">
+  <defs>
+    <filter id="tile">
+      <feTile in="SourceGraphic" x="0" y="0" width="20" height="20"/>
+    </filter>
+  </defs>
+  <rect x="5" y="5" width="10" height="10" fill="blue" filter="url(#tile)"/>
+</svg>

@@ -1,0 +1,52 @@
+isolation {
+  child: container {
+    isolation {
+      child: clip {
+        clip: 2 2 112 112;
+        child: clip {
+          clip: 2 2 112 112;
+          child: shadow {
+            shadows: rgba(255,0,0,0.5) 8 8 8;
+            child: fill {
+              child: color {
+                bounds: 10 10 80 80;
+                color: rgb(0,0,0);
+              }
+              path: "\
+M 90 50 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 96 6 56 56;
+        child: clip {
+          clip: 96 6 56 56;
+          child: shadow {
+            shadows: rgba(255,0,0,0.5) 8 8 8;
+            child: fill {
+              child: color {
+                bounds: 100 10 40 40;
+                color: rgb(0,0,0);
+              }
+              path: "\
+M 110 10\
+L 130 10 O 140 10, 140 20, 0.707106769\
+L 140 40 O 140 50, 130 50, 0.707106769\
+L 110 50 O 100 50, 100 40, 0.707106769\
+L 100 20 O 100 10, 110 10, 0.707106769\
+Z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+  }
+  isolations: background;
+}

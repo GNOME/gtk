@@ -1,0 +1,13 @@
+<svg width="100" height="100" xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <filter id="offset" primitiveUnits='objectBoundingBox'>
+      <feOffset dx="0.3" dy="0.3"/>
+      <feColorMatrix type='hueRotate' values='45' result='rotated'/>
+      <feMerge>
+        <feMergeNode in='SourceGraphic'/>
+        <feMergeNode in='rotated'/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="20" y="20" width="40" height="40" fill="blue" filter="url(#offset)"/>
+</svg>

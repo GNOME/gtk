@@ -1,0 +1,89 @@
+isolation {
+  child: container {
+    isolation {
+      child: clip {
+        clip: 14 14 72 72;
+        child: clip {
+          clip: 14 14 72 72;
+          child: transform {
+            transform: translate(5, 5);
+            child: fill {
+              child: color {
+                bounds: 20 20 60 60;
+                color: rgb(0,0,255);
+              }
+              path: "\
+M 20 20 h 60 v 60 h -60 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 100 10 80 80;
+        child: clip {
+          clip: 100 10 80 80;
+          child: transform {
+            transform: translate(5, 5);
+            child: fill {
+              child: color {
+                bounds: 120 20 60 60;
+                color: rgb(0,128,0);
+              }
+              path: "\
+M 120 20 h 60 v 60 h -60 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 208 8 84 84;
+        child: clip {
+          clip: 208 8 84 84;
+          child: transform {
+            transform: translate(6, 6);
+            child: fill {
+              child: color {
+                bounds: 220 20 60 60;
+                color: rgb(255,0,0);
+              }
+              path: "\
+M 220 20 h 60 v 60 h -60 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 200 100 100 100;
+        child: clip {
+          clip: 200 100 100 100;
+          child: transform {
+            transform: translate(3, 3);
+            child: fill {
+              child: color {
+                bounds: 220 120 60 60;
+                color: rgb(128,0,128);
+              }
+              path: "\
+M 220 120 h 60 v 60 h -60 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+  }
+  isolations: background;
+}

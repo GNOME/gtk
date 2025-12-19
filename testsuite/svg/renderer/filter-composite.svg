@@ -1,0 +1,29 @@
+<svg width="300" height="200" xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <filter id="over">
+      <feFlood flood-color="red" flood-opacity="0.7" result="red"/>
+      <feComposite in="SourceGraphic" in2="red" operator="over"/>
+    </filter>
+    <filter id="in">
+      <feFlood flood-color="red" result="red"/>
+      <feComposite in="SourceGraphic" in2="red" operator="in"/>
+    </filter>
+    <filter id="out">
+      <feFlood flood-color="red" result="red"/>
+      <feComposite in="SourceGraphic" in2="red" operator="out"/>
+    </filter>
+    <filter id="atop">
+      <feFlood flood-color="red" result="red"/>
+      <feComposite in="SourceGraphic" in2="red" operator="atop"/>
+    </filter>
+    <filter id="xor">
+      <feFlood flood-color="red" result="red"/>
+      <feComposite in="SourceGraphic" in2="red" operator="xor"/>
+    </filter>
+  </defs>
+  <rect x="10" y="10" width="40" height="40" fill="blue" filter="url(#over)"/>
+  <rect x="60" y="10" width="40" height="40" fill="blue" filter="url(#in)"/>
+  <rect x="110" y="10" width="40" height="40" fill="blue" filter="url(#out)"/>
+  <rect x="160" y="10" width="40" height="40" fill="blue" filter="url(#atop)"/>
+  <rect x="210" y="10" width="40" height="40" fill="blue" filter="url(#xor)"/>
+</svg>

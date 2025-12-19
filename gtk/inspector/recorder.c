@@ -51,6 +51,7 @@
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gsktransformprivate.h>
 #include <gsk/gskcomponenttransferprivate.h>
+#include <gsk/gskdisplacementnodeprivate.h>
 
 #include <cairo-gobject.h>
 #include <glib/gi18n-lib.h>
@@ -267,6 +268,7 @@ get_roles (GskRenderNodeType node_type)
   static const char *mask_node_roles[] = { "Source", "Mask", NULL };
   static const char *cross_fade_node_roles[] = { "Start", "End", NULL };
   static const char *composite_node_roles[] = { "Child", "Mask", NULL };
+  static const char *displacement_node_roles[] = { "Child", "Displacement", NULL };
 
   switch (node_type)
     {
@@ -278,6 +280,8 @@ get_roles (GskRenderNodeType node_type)
       return cross_fade_node_roles;
     case GSK_COMPOSITE_NODE:
       return composite_node_roles;
+    case GSK_DISPLACEMENT_NODE:
+      return displacement_node_roles;
     case GSK_CONTAINER_NODE:
     case GSK_CAIRO_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
@@ -492,6 +496,8 @@ node_type_name (GskRenderNodeType type)
       return "Composite";
     case GSK_ISOLATION_NODE:
       return "Isolation";
+    case GSK_DISPLACEMENT_NODE:
+      return "Displacement";
     }
 }
 
@@ -534,6 +540,7 @@ node_name (GskRenderNode *node)
     case GSK_PASTE_NODE:
     case GSK_COMPOSITE_NODE:
     case GSK_ISOLATION_NODE:
+    case GSK_DISPLACEMENT_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -1746,6 +1753,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
             add_text_row (store, "Enabled features", "%s", tmp);
           }
         g_free (tmp);
+      }
+      break;
+
+    case GSK_DISPLACEMENT_NODE:
+      {
       }
       break;
 

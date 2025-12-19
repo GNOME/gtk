@@ -1,0 +1,159 @@
+isolation {
+  child: container {
+    isolation {
+      child: clip {
+        clip: 6 6 48 48;
+        child: clip {
+          clip: 6 6 48 48;
+          child: container {
+            clip {
+              clip: 6 6 48 48;
+              child: color {
+                bounds: 6 6 48 48;
+                color: rgba(255,0,0,0.7);
+              }
+            }
+            fill {
+              child: color {
+                bounds: 10 10 40 40;
+                color: rgb(0,0,255);
+              }
+              path: "\
+M 10 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 56 6 48 48;
+        child: clip {
+          clip: 56 6 48 48;
+          child: mask {
+            source: fill {
+              child: color {
+                bounds: 60 10 40 40;
+                color: rgb(0,0,255);
+              }
+              path: "\
+M 60 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+            mask: clip {
+              clip: 56 6 48 48;
+              child: color {
+                bounds: 56 6 48 48;
+                color: rgb(255,0,0);
+              }
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 106 6 48 48;
+        child: clip {
+          clip: 106 6 48 48;
+          child: mask {
+            mode: inverted-alpha;
+            source: fill {
+              child: color {
+                bounds: 110 10 40 40;
+                color: rgb(0,0,255);
+              }
+              path: "\
+M 110 10 h 40 v 40 h -40 z";
+              fill-rule: winding;
+            }
+            mask: clip {
+              clip: 106 6 48 48;
+              child: color {
+                bounds: 106 6 48 48;
+                color: rgb(255,0,0);
+              }
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 156 6 48 48;
+        child: clip {
+          clip: 156 6 48 48;
+          child: isolation {
+            child: container {
+              clip {
+                clip: 156 6 48 48;
+                child: color {
+                  bounds: 156 6 48 48;
+                  color: rgb(255,0,0);
+                }
+              }
+              composite {
+                child: fill {
+                  child: color {
+                    bounds: 160 10 40 40;
+                    color: rgb(0,0,255);
+                  }
+                  path: "\
+M 160 10 h 40 v 40 h -40 z";
+                  fill-rule: winding;
+                }
+                mask: color {
+                  bounds: 156 6 48 48;
+                  color: rgb(0,0,0);
+                }
+                operator: source-atop-dest;
+              }
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+    isolation {
+      child: clip {
+        clip: 206 6 48 48;
+        child: clip {
+          clip: 206 6 48 48;
+          child: isolation {
+            child: container {
+              clip {
+                clip: 206 6 48 48;
+                child: color {
+                  bounds: 206 6 48 48;
+                  color: rgb(255,0,0);
+                }
+              }
+              composite {
+                child: fill {
+                  child: color {
+                    bounds: 210 10 40 40;
+                    color: rgb(0,0,255);
+                  }
+                  path: "\
+M 210 10 h 40 v 40 h -40 z";
+                  fill-rule: winding;
+                }
+                mask: color {
+                  bounds: 206 6 48 48;
+                  color: rgb(0,0,0);
+                }
+                operator: xor;
+              }
+            }
+          }
+        }
+      }
+      isolations: background;
+    }
+  }
+  isolations: background;
+}

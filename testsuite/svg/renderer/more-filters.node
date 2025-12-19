@@ -164,22 +164,38 @@ M 110 10 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -
     isolation {
       child: component-transfer {
         child: color-matrix {
-          matrix: matrix3d(0.475704, 0.257555, 0.203639, 0, 0.658432, 0.779397, 0.470727, 0, 0.129114, 0.115298, 0.278385, 0, 0, 0, 0, 1);
-          child: opacity {
-            opacity: 0.75;
-            child: color-matrix {
-              matrix: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-              offset: 0.5 0.5 0.5 0;
-              child: blur {
-                blur: 10;
-                child: fill {
-                  child: color {
-                    bounds: 0 20 10 10;
-                    color: rgb(0,0,0);
-                  }
-                  path: "\
+          matrix: matrix3d(0.54475, 0.26175, 0.204, 0, 0.57675, 0.7645, 0.4005, 0, 0.14175, 0.126, 0.34825, 0, 0, 0, 0, 1);
+          child: color-matrix {
+            matrix: matrix3d(0.80315, 0.05315, 0.05315, 0, 0.1788, 0.9288, 0.1788, 0, 0.01805, 0.01805, 0.76805, 0, 0, 0, 0, 1);
+            child: opacity {
+              opacity: 0.75;
+              child: color-matrix {
+                matrix: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                offset: 0.5 0.5 0.5 0;
+                child: color-matrix {
+                  matrix: matrix3d(0.997006, 0.00198016, -0.0107677, 0, -0.00973358, 1.00189, 0.00986793, 0, 0.0127272, -0.00387242, 1.0009, 0, 0, 0, 0, 1);
+                  child: color-matrix {
+                    matrix: matrix3d(0.2126, 0.2126, 0.2126, 0, 0.7152, 0.7152, 0.7152, 0, 0.0722, 0.0722, 0.0722, 0, 0, 0, 0, 1);
+                    child: color-matrix {
+                      matrix: matrix3d(1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1);
+                      offset: -0.25 -0.25 -0.25 0;
+                      child: color-matrix {
+                        matrix: matrix3d(0.75, 0, 0, 0, 0, 0.75, 0, 0, 0, 0, 0.75, 0, 0, 0, 0, 1);
+                        child: blur {
+                          blur: 10;
+                          child: fill {
+                            child: color {
+                              bounds: 0 20 10 10;
+                              color: rgb(0,0,0);
+                            }
+                            path: "\
 M 0 20 h 10 v 10 h -10 z";
-                  fill-rule: winding;
+                            fill-rule: winding;
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

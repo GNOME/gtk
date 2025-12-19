@@ -18,6 +18,7 @@
 #include "gskrendernodeattach.h"
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskdisplacementnodeprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
 
@@ -238,6 +239,25 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       res = gsk_isolation_node_new (child, gsk_isolation_node_get_isolations (node));
       gsk_render_node_unref (child);
       return res;
+
+    case GSK_DISPLACEMENT_NODE:
+      {
+        GskRenderNode *displacement;
+        graphene_rect_t bounds;
+        gsk_render_node_get_bounds ((GskRenderNode *) node, &bounds);
+        child = node_attach (gsk_displacement_node_get_child (node), surface, idx);
+        displacement = node_attach (gsk_displacement_node_get_displacement (node), surface, idx);
+        res = gsk_displacement_node_new (&bounds,
+                                         child,
+                                         displacement,
+                                         gsk_displacement_node_get_channels (node),
+                                         gsk_displacement_node_get_max (node),
+                                         gsk_displacement_node_get_scale (node),
+                                         gsk_displacement_node_get_offset (node));
+        gsk_render_node_unref (child);
+        gsk_render_node_unref (displacement);
+        return res;
+      }
 
     case GSK_NOT_A_RENDER_NODE:
     default:

@@ -762,6 +762,7 @@ path_paintable_get_compatibility (PathPaintable *self)
         case SHAPE_TSPAN:
         case SHAPE_SVG:
         case SHAPE_IMAGE:
+        case SHAPE_FILTER:
           compat = MAX (compat, GTK_4_22);
           continue;
         default:
@@ -845,6 +846,7 @@ path_paintable_get_path_by_id (PathPaintable *self,
         case SHAPE_TSPAN:
         case SHAPE_SVG:
         case SHAPE_IMAGE:
+        case SHAPE_FILTER:
           break;
         default:
           g_assert_not_reached ();
@@ -1044,6 +1046,7 @@ shape_is_graphical (Shape *shape)
     case SHAPE_MARKER:
     case SHAPE_SVG:
     case SHAPE_IMAGE:
+    case SHAPE_FILTER:
       return FALSE;
     default:
       g_assert_not_reached ();
@@ -1077,6 +1080,7 @@ shape_is_group (Shape *shape)
     case SHAPE_RADIAL_GRADIENT:
     case SHAPE_PATTERN:
     case SHAPE_IMAGE:
+    case SHAPE_FILTER:
       return FALSE;
     default:
       g_assert_not_reached ();

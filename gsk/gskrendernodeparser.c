@@ -37,6 +37,7 @@
 #include "gskcopynode.h"
 #include "gskcrossfadenode.h"
 #include "gskdebugnode.h"
+#include "gskdisplacementnodeprivate.h"
 #include "gskenumtypes.h"
 #include "gskfillnode.h"
 #include "gskglshadernode.h"
@@ -4140,6 +4141,105 @@ parse_isolation_node (GtkCssParser *parser,
 }
 
 static gboolean
+parse_scale (GtkCssParser *parser,
+             Context      *context,
+             gpointer      out)
+{
+  double d1, d2;
+
+  if (!gtk_css_parser_consume_number (parser, &d1))
+    return FALSE;
+
+  if (gtk_css_parser_has_number (parser))
+    {
+      if (!gtk_css_parser_consume_number (parser, &d2))
+        return FALSE;
+    }
+  else
+    {
+      d2 = d1;
+    }
+
+  *(graphene_size_t *) out = GRAPHENE_SIZE_INIT (d1, d2);
+  return TRUE;
+}
+
+static gboolean
+parse_channels (GtkCssParser *parser,
+                Context      *context,
+                gpointer      out)
+{
+  const char *names[] = { "red", "green", "blue", "alpha" };
+  guint tmp[2];
+  guint *channels = out;
+  gsize i, j;
+
+  for (i = 0; i < G_N_ELEMENTS (tmp); i++)
+    {
+      for (j = 0; j < G_N_ELEMENTS (names); j++)
+        {
+          if (gtk_css_parser_try_ident (parser, names[j]))
+            {
+              tmp[i] = j;
+              break;
+            }
+        }
+      if (j == G_N_ELEMENTS (names))
+        {
+          gtk_css_parser_error_value (parser, "Not a valid channel name");
+          return FALSE;
+        }
+    }
+
+  for (i = 0; i < G_N_ELEMENTS (tmp); i++)
+    channels[i] = tmp[i];
+
+  return TRUE;
+}
+
+static GskRenderNode *
+parse_displacement_node (GtkCssParser *parser,
+                         Context      *context)
+{
+  GskRenderNode *child = NULL, *displacement = NULL;
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  guint channels[2] = { 0, 1 };
+  graphene_size_t max = { 5, 5 };
+  graphene_size_t scale = { 10, 10 };
+  /* using size_t because parse function */
+  graphene_size_t offset = { 0.5, 0.5 };
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "child", parse_node, clear_node, &child },
+    { "displacement", parse_node, clear_node, &displacement },
+    { "max", parse_scale, NULL, &max },
+    { "scale", parse_scale, NULL, &scale },
+    { "offset", parse_scale, NULL, &offset },
+    { "channels", parse_channels, NULL, channels }
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+  if (displacement == NULL)
+    displacement = create_default_render_node ();
+
+  result = gsk_displacement_node_new (&bounds,
+                                      child,
+                                      displacement,
+                                      channels,
+                                      &max,
+                                      &scale,
+                                      &GRAPHENE_POINT_INIT (offset.width, offset.height));
+
+  gsk_render_node_unref (child);
+  gsk_render_node_unref (displacement);
+
+  return result;
+}
+
+static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
             gpointer      out_node)
@@ -4183,6 +4283,7 @@ parse_node (GtkCssParser *parser,
     { "paste", parse_paste_node },
     { "composite", parse_composite_node },
     { "isolation", parse_isolation_node },
+    { "displacement", parse_displacement_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4492,6 +4593,7 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_COPY_NODE:
     case GSK_COMPOSITE_NODE:
     case GSK_ISOLATION_NODE:
+    case GSK_DISPLACEMENT_NODE:
       {
         GskRenderNode **children;
         gsize i, n_children;
@@ -5680,6 +5782,23 @@ append_isolation_param (Printer      *p,
 }
 
 static void
+append_two_float_param (Printer    *p,
+                        const char *param_name,
+                        float       value1,
+                        float       value2)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  string_append_double (p->str, value1);
+  if (value1 != value2)
+    {
+      g_string_append_c (p->str, ' ');
+      string_append_double (p->str, value2);
+    }
+  g_string_append (p->str, ";\n");
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -6448,6 +6567,23 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (gsk_isolation_node_get_isolations (node) != GSK_ISOLATION_ALL)
         append_isolation_param (p, "isolations", gsk_isolation_node_get_isolations (node));
       end_node (p);
+      break;
+
+    case GSK_DISPLACEMENT_NODE:
+      {
+        const graphene_size_t *max, *scale;
+        const graphene_point_t *offset;
+        max = gsk_displacement_node_get_max (node);
+        scale = gsk_displacement_node_get_scale (node);
+        offset = gsk_displacement_node_get_offset (node);
+        start_node (p, "displacement", node_name);
+        append_node_param (p, "child", gsk_displacement_node_get_child (node));
+        append_node_param (p, "displacement", gsk_displacement_node_get_displacement (node));
+        append_two_float_param (p, "max", max->width, max->height);
+        append_two_float_param (p, "scale", scale->width, scale->height);
+        append_two_float_param (p, "offset", offset->x, offset->y);
+        end_node (p);
+      }
       break;
 
     default:

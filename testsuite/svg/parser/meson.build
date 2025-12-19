@@ -7,6 +7,7 @@ test_parser = executable('test-svg-parser',
 test_data = [
   'all-animations.svg',
   'all-attributes.svg',
+  'all-filters.svg',
   'all-shapes.svg',
   'animate-advanced.svg',
   'animate-basic.svg',

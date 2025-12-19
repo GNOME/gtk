@@ -1,0 +1,28 @@
+<svg width="400" height="200" xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <!-- filterUnits=objectBoundingBox (default), primitiveUnits=userSpaceOnUse (default) -->
+    <filter id="filter1">
+      <feOffset dx="5" dy="5"/>
+    </filter>
+
+    <!-- filterUnits=userSpaceOnUse, primitiveUnits=userSpaceOnUse -->
+    <filter id="filter2" filterUnits="userSpaceOnUse" x="100" y="10" width="80" height="80">
+      <feOffset dx="5" dy="5"/>
+    </filter>
+
+    <!-- filterUnits=objectBoundingBox, primitiveUnits=objectBoundingBox -->
+    <filter id="filter3" filterUnits="objectBoundingBox" primitiveUnits="objectBoundingBox" x="-0.2" y="-0.2" width="1.4" height="1.4">
+      <feOffset dx="0.1" dy="0.1"/>
+    </filter>
+
+    <!-- filterUnits=userSpaceOnUse, primitiveUnits=objectBoundingBox -->
+    <filter id="filter4" filterUnits="userSpaceOnUse" primitiveUnits="objectBoundingBox" x="200" y="100" width="100" height="100">
+      <feOffset dx="0.05" dy="0.05"/>
+    </filter>
+  </defs>
+
+  <rect x="20" y="20" width="60" height="60" fill="blue" filter="url(#filter1)"/>
+  <rect x="120" y="20" width="60" height="60" fill="green" filter="url(#filter2)"/>
+  <rect x="220" y="20" width="60" height="60" fill="red" filter="url(#filter3)"/>
+  <rect x="220" y="120" width="60" height="60" fill="purple" filter="url(#filter4)"/>
+</svg>

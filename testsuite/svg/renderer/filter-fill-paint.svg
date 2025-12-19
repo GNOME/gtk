@@ -1,0 +1,21 @@
+<svg
+        viewBox='0 0 110 110'
+        xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <linearGradient id='gradient'>
+      <stop offset='0' stop-color='yellow'/>
+      <stop offset='1' stop-color='purple'/>
+    </linearGradient>
+    <filter id="filter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="FillPaint" stdDeviation="10" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="10" y="10" width="30" height='30' fill="blue" filter="url(#filter)"/>
+  <rect x="40" y="40" width="30" height='30' fill="red" filter="url(#filter)"/>
+  <rect x="70" y="70" width="30" height='30' fill="url(#gradient)" filter="url(#filter)"/>
+</svg>

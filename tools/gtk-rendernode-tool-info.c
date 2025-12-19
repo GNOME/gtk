@@ -29,7 +29,7 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 
-#define N_NODE_TYPES (GSK_ISOLATION_NODE + 1)
+#define N_NODE_TYPES (GSK_DISPLACEMENT_NODE + 1)
 
 typedef struct {
   unsigned int counts[N_NODE_TYPES];

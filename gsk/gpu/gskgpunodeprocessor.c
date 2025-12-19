@@ -24,6 +24,7 @@
 #include "gskgpuconvertcicpopprivate.h"
 #include "gskgpuconvertopprivate.h"
 #include "gskgpucrossfadeopprivate.h"
+#include "gskgpudisplacementopprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
@@ -52,6 +53,7 @@
 #include "gskcrossfadenode.h"
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
+#include "gskdisplacementnodeprivate.h"
 #include "gskfillnode.h"
 #include "gskisolationnode.h"
 #include "gskmasknode.h"
@@ -3072,6 +3074,66 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_displacement_node (GskGpuNodeProcessor *self,
+                                              GskRenderNode       *node)
+{
+  graphene_rect_t bounds, child_bounds, displacement_rect, child_rect;
+  GskRenderNode *displacement_child, *child;
+  GskGpuImage *displacement_image, *child_image;
+  const graphene_size_t *max;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
+    return;
+
+  displacement_child = gsk_displacement_node_get_displacement (node);
+  child = gsk_displacement_node_get_child (node);
+  max = gsk_displacement_node_get_max (node);
+
+  child_bounds = bounds;
+  graphene_rect_inset (&child_bounds, - max->width, - max->height);
+  child_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                          0,
+                                                          &child_bounds,
+                                                          child,
+                                                          &child_rect);
+  if (child_image == NULL)
+    return;
+
+  displacement_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                                 0,
+                                                                 &bounds,
+                                                                 displacement_child,
+                                                                 &displacement_rect);
+  if (displacement_image == NULL)
+    return; /* technically we have to render TRANSPARENT everywhere */
+
+  gsk_gpu_displacement_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                           &self->offset,
+                           self->opacity,
+                           &bounds,
+                           &(GskGpuShaderImage) {
+                               child_image,
+                               GSK_GPU_SAMPLER_TRANSPARENT,
+                               NULL,
+                               &child_rect
+                           },
+                           &(GskGpuShaderImage) {
+                               displacement_image,
+                               GSK_GPU_SAMPLER_TRANSPARENT,
+                               NULL,
+                               &displacement_rect
+                           },
+                           gsk_displacement_node_get_channels (node),
+                           max,
+                           gsk_displacement_node_get_scale (node),
+                           gsk_displacement_node_get_offset (node));
+
+  g_object_unref (displacement_image);
+  g_object_unref (child_image);
+}
+
+static void
 gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
                                       GskRenderNode       *node)
 {
@@ -4469,6 +4531,13 @@ static const struct
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_isolation_node,
+    NULL,
+    NULL,
+  },
+  [GSK_DISPLACEMENT_NODE] = {
+    0,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_displacement_node,
     NULL,
     NULL,
   },

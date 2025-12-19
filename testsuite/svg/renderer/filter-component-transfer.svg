@@ -1,0 +1,30 @@
+<svg width="200" height="100" xmlns='http://www.w3.org/2000/svg'>
+  <defs>
+    <filter id="gamma">
+      <feComponentTransfer>
+        <feFuncR type="gamma" exponent="2"/>
+        <feFuncG type="gamma" exponent="2"/>
+        <feFuncB type="gamma" exponent="2"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="table">
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0 0.5 1"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="linear">
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="0.5" intercept="0.2"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="discrete">
+      <feComponentTransfer>
+        <feFuncR type="discrete" tableValues="0 0.5 1"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect x="10" y="10" width="40" height="40" fill="red" filter="url(#table)"/>
+  <rect x="60" y="10" width="40" height="40" fill="red" filter="url(#gamma)"/>
+  <rect x="110" y="10" width="40" height="40" fill="red" filter="url(#linear)"/>
+  <rect x="10" y="60" width="40" height="40" fill="red" filter="url(#discrete)"/>
+</svg>

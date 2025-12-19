@@ -1,0 +1,16 @@
+isolation {
+  child: isolation {
+    child: clip {
+      clip: 14 14 72 72;
+      child: clip {
+        clip: 26 26 48 48;
+        child: color {
+          bounds: 26 26 48 48;
+          color: rgb(255,0,0);
+        }
+      }
+    }
+    isolations: background;
+  }
+  isolations: background;
+}
