@@ -126,7 +126,6 @@ gsk_public_headers = files([
   'gskcopynode.h',
   'gskcrossfadenode.h',
   'gskdebugnode.h',
-  'gskdisplacementnode.h',
   'gskenums.h',
   'gskfillnode.h',
   'gskglshader.h',

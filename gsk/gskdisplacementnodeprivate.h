@@ -30,9 +30,7 @@ typedef struct _GskDisplacementNode                GskDisplacementNode;
 
 #define GSK_TYPE_DISPLACEMENT_NODE (gsk_displacement_node_get_type())
 
-GDK_AVAILABLE_IN_4_22
 GType                   gsk_displacement_node_get_type          (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_4_22
 GskRenderNode *         gsk_displacement_node_new               (const graphene_rect_t    *bounds,
                                                                  GskRenderNode            *child,
                                                                  GskRenderNode            *displacement,
@@ -40,17 +38,11 @@ GskRenderNode *         gsk_displacement_node_new               (const graphene_
                                                                  const graphene_size_t    *max,
                                                                  const graphene_size_t    *scale,
                                                                  const graphene_point_t   *offset);
-GDK_AVAILABLE_IN_4_22
 GskRenderNode *         gsk_displacement_node_get_child         (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_22
 GskRenderNode *         gsk_displacement_node_get_displacement  (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_22
 const guint *           gsk_displacement_node_get_channels      (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_22
 const graphene_size_t * gsk_displacement_node_get_max           (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_22
 const graphene_size_t * gsk_displacement_node_get_scale         (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_22
 const graphene_point_t *gsk_displacement_node_get_offset        (const GskRenderNode      *node) G_GNUC_PURE;
 
 G_END_DECLS

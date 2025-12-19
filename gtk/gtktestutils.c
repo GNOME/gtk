@@ -26,6 +26,7 @@
 #include "gtkbutton.h"
 #include "gtktextview.h"
 #include "gtkrange.h"
+#include "gsk/gskdisplacementnodeprivate.h"
 
 #include <locale.h>
 #include <string.h>

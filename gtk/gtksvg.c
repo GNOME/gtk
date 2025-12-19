@@ -31,7 +31,7 @@
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtksnapshotprivate.h"
 #include "gsk/gskcolornodeprivate.h"
-#include "gsk/gskdisplacementnode.h"
+#include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
 #include <glib/gstdio.h>
 

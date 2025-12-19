@@ -37,7 +37,7 @@
 #include "gskcopynode.h"
 #include "gskcrossfadenode.h"
 #include "gskdebugnode.h"
-#include "gskdisplacementnode.h"
+#include "gskdisplacementnodeprivate.h"
 #include "gskenumtypes.h"
 #include "gskfillnode.h"
 #include "gskglshadernode.h"

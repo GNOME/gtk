@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskdisplacementnode.h"
+#include "gskdisplacementnodeprivate.h"
 
 #include "gskcontainernodeprivate.h"
 #include "gskrectprivate.h"
@@ -33,7 +33,7 @@
 #define DEBUG(...)
 #endif
 
-/**
+/*< private >
  * GskDisplacementNode:
  *
  * A render node that uses a displacement map to offset each pixel of the
@@ -386,7 +386,7 @@ gsk_displacement_node_class_init (gpointer g_class,
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskDisplacementNode, gsk_displacement_node)
 
-/**
+/*< private >
  * gsk_displacement_node_new:
  * @bounds: The rectangle to apply to
  * @child: The child to displace
@@ -457,7 +457,7 @@ gsk_displacement_node_new (const graphene_rect_t  *bounds,
   return node;
 }
 
-/**
+/*< private >
  * gsk_displacement_node_get_child:
  * @node: (type GskDisplacementNode): a displacement `GskRenderNode`
  *
@@ -475,7 +475,7 @@ gsk_displacement_node_get_child (const GskRenderNode *node)
   return self->child;
 }
 
-/**
+/*< private >
  * gsk_displacement_node_get_displacement:
  * @node: (type GskDisplacementNode): a displacement `GskRenderNode`
  *

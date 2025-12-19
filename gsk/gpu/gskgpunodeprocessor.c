@@ -53,7 +53,7 @@
 #include "gskcrossfadenode.h"
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
-#include "gskdisplacementnode.h"
+#include "gskdisplacementnodeprivate.h"
 #include "gskfillnode.h"
 #include "gskisolationnode.h"
 #include "gskmasknode.h"

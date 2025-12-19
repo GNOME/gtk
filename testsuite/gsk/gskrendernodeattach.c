@@ -18,6 +18,7 @@
 #include "gskrendernodeattach.h"
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskdisplacementnodeprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
 

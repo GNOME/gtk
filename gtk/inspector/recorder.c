@@ -51,6 +51,7 @@
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gsktransformprivate.h>
 #include <gsk/gskcomponenttransferprivate.h>
+#include <gsk/gskdisplacementnodeprivate.h>
 
 #include <cairo-gobject.h>
 #include <glib/gi18n-lib.h>
