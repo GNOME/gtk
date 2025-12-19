@@ -2785,7 +2785,7 @@ gdk_wayland_tablet_flush_frame_events (GdkWaylandTabletData *tablet,
 
   for (l = events; l; l = l->next)
     {
-      TabletEvent *tablet_event = events->data;
+      TabletEvent *tablet_event = l->data;
       GdkEvent *event = NULL;
 
       if (!tablet->current_tool)
