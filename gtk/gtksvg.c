@@ -12764,6 +12764,9 @@ parse_base_animation_attrs (Animation            *a,
         a->restart = (AnimationRestart) value;
     }
 
+  if (attr_name_attr && strcmp (attr_name_attr, "xlink:href") == 0)
+    attr_name_attr = "href";
+
   attr = a->attr;
   if (a->type == ANIMATION_TYPE_MOTION)
     {
@@ -12796,10 +12799,6 @@ parse_base_animation_attrs (Animation            *a,
         a->idx = data->current_shape->color_stops->len - 1;
       else if (has_ancestor (context, "filter"))
         a->idx = data->current_shape->filters->len - 1;
-    }
-  else if (strcmp (attr_name_attr, "xlink:href") == 0)
-    {
-      a->attr = SHAPE_ATTR_HREF;
     }
   else
     {
