@@ -2284,8 +2284,8 @@ static SvgEnum spread_method_values[] = {
 static SvgValue *
 svg_spread_method_new (GskRepeat value)
 {
-  g_assert (value < G_N_ELEMENTS (spread_method_values));
-  return svg_value_ref ((SvgValue *) &spread_method_values[value]);
+  g_assert (value != GSK_REPEAT_NONE && (value - 1) < G_N_ELEMENTS (spread_method_values));
+  return svg_value_ref ((SvgValue *) &spread_method_values[value - 1]);
 }
 
 static SvgValue *
