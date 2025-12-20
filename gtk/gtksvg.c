@@ -11478,10 +11478,41 @@ static void
 compute_current_values_for_shape (Shape          *shape,
                                   ComputeContext *context)
 {
+  const graphene_rect_t *old_viewport = NULL;
+  graphene_rect_t viewport;
+
   if (!shape->display)
     return;
 
   shape_init_current_values (shape, context);
+
+  if (shape->type == SHAPE_SVG)
+    {
+      SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
+      double width, height;
+
+      if (shape->parent == NULL)
+        {
+          width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->svg->current_width);
+          height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->svg->current_height);
+
+        }
+      else
+        {
+          g_assert (context->viewport != NULL);
+
+          width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+          height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+        }
+
+      if (vb->unset)
+        graphene_rect_init (&viewport, 0, 0, width, height);
+      else
+        graphene_rect_init_from_rect (&viewport, &vb->view_box);
+
+      old_viewport = context->viewport;
+      context->viewport = &viewport;
+    }
 
   g_ptr_array_sort_values (shape->animations, compare_anim);
 
@@ -11522,6 +11553,11 @@ compute_current_values_for_shape (Shape          *shape,
       for (Shape *sh = shape->first; sh; sh = sh->next)
         compute_current_values_for_shape (sh, context);
       context->parent = parent;
+    }
+
+  if (shape->type == SHAPE_SVG)
+    {
+      context->viewport = old_viewport;
     }
 }
 
@@ -14937,8 +14973,6 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
     self->height = svg_number_get (self->content->base[SHAPE_ATTR_HEIGHT], 1);
 
-  graphene_rect_init (&self->viewport, 0, 0, self->width, self->height);
-
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
     {
       Animation *a = g_ptr_array_index (data.pending_animations, i);
@@ -15664,9 +15698,9 @@ serialize_animation_motion (GString              *s,
       GskPath *path;
 
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-        path = animation_motion_get_current_path (a, &svg->viewport);
+        path = animation_motion_get_current_path (a, NULL);
       else
-        path = animation_motion_get_base_path (a, &svg->viewport);
+        path = animation_motion_get_base_path (a, NULL);
       if (path)
         {
           indent_for_attr (s, indent);
@@ -16826,20 +16860,24 @@ push_group (Shape        *shape,
         {
           x = 0;
           y = 0;
+          width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->svg->current_width);
+          height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->svg->current_height);
+
         }
       else
         {
+          g_assert (context->viewport != NULL);
+
           x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
           y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
+          width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+          height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
         }
-
-      width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
-      height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
       if (vb->unset)
         graphene_rect_init (&view_box, 0, 0, width, height);
       else
-        view_box = vb->view_box;
+        graphene_rect_init_from_rect (&view_box, &vb->view_box);
 
       viewport = g_new (graphene_rect_t, 1);
       graphene_rect_init_from_rect (viewport, &view_box);
@@ -18638,10 +18676,11 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   ComputeContext compute_context;
   PaintContext paint_context;
 
-  graphene_rect_init (&self->viewport, 0, 0, width, height);
+  self->current_width = width;
+  self->current_height = height;
 
   compute_context.svg = self;
-  compute_context.viewport = &self->viewport;
+  compute_context.viewport = NULL;
   compute_context.colors = colors;
   compute_context.n_colors = n_colors;
   compute_context.current_time = self->current_time;
@@ -18650,7 +18689,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   compute_current_values_for_shape (self->content, &compute_context);
 
   paint_context.svg = self;
-  paint_context.viewport = &self->viewport;
+  paint_context.viewport = NULL;
   paint_context.viewport_stack = NULL;
   paint_context.snapshot = snapshot;
   paint_context.colors = colors;
@@ -18790,8 +18829,6 @@ gtk_svg_init (GtkSvg *self)
   self->next_update = INDEFINITE;
   self->playing = FALSE;
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
-
-  graphene_rect_init (&self->viewport, 0, 0, 0, 0);
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
@@ -19500,7 +19537,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
       ComputeContext context;
       context.svg = self;
-      context.viewport = &self->viewport;
+      context.viewport = NULL;
       context.current_time = self->current_time;
       context.parent = NULL;
       context.colors = col;
@@ -20009,8 +20046,10 @@ gtk_svg_clear_content (GtkSvg *self)
   self->timeline = timeline_new ();
   self->images = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 
-  graphene_rect_init (&self->viewport, 0, 0, 0, 0);
-
+  self->width = 0;
+  self->height = 0;
+  self->current_width = 0;
+  self->current_height = 0;
   self->state = 0;
   self->max_state = 0;
   self->state_change_delay = 0;

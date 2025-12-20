@@ -59,9 +59,9 @@ struct _GtkSvg
   GObject parent_instance;
   Shape *content;
 
-  double width, height;
-  graphene_rect_t bounds;
-  graphene_rect_t viewport;
+  double width, height; /* Intrinsic size */
+
+  double current_width, current_height; /* last snapshot size */
 
   double weight;
   unsigned int state;
