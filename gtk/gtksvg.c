@@ -12725,12 +12725,7 @@ parse_base_animation_attrs (Animation            *a,
       return FALSE;
     }
   /* FIXME: if href is set, current_shape might be the wrong shape */
-  else if (!shape_attr_lookup (attr_name_attr, &attr, data->current_shape->type))
-    {
-      gtk_svg_missing_attribute (data->svg, context, "attributeName", "can't animate '%s'", attr_name_attr);
-      return FALSE;
-    }
-  else
+  else if (shape_attr_lookup (attr_name_attr, &attr, data->current_shape->type))
     {
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */
@@ -12738,6 +12733,15 @@ parse_base_animation_attrs (Animation            *a,
         a->idx = data->current_shape->color_stops->len - 1;
       else if (has_ancestor (context, "filter"))
         a->idx = data->current_shape->filters->len - 1;
+    }
+  else if (strcmp (attr_name_attr, "xlink:href") == 0)
+    {
+      a->attr = SHAPE_ATTR_HREF;
+    }
+  else
+    {
+      gtk_svg_missing_attribute (data->svg, context, "attributeName", "can't animate '%s'", attr_name_attr);
+      return FALSE;
     }
 
   return TRUE;

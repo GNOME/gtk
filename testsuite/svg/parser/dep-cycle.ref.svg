@@ -4,13 +4,6 @@
   <circle
           id='circle'
           r='5'>
-  <animateMotion
-          begin='0ms'
-          dur='1000ms'
-          keyTimes='0; 1'
-          keyPoints='0; 1'>
-    <mpath href='rect'/>
-  </animateMotion>
   </circle>
   <g
           id='group'>
