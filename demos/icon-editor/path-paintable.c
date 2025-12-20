@@ -941,7 +941,7 @@ path_paintable_new_from_resource (const char *resource)
 
   res = path_paintable_new_from_bytes (bytes, &error);
   if (!res)
-    g_error ("Failed to parse %s: %s", resource, error->message);
+    g_error ("Failed to parse %s: %s", resource, error ? error->message : "");
 
   return res;
 }
