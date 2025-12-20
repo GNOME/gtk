@@ -824,7 +824,7 @@ parse_numbers (const char   *value,
 {
   GStrv strv;
 
-  strv = g_strsplit (value, sep, 0);
+  strv = strsplit_set (value, sep);
   *n_values = g_strv_length (strv);
 
   for (unsigned int i = 0; strv[i]; i++)
@@ -13001,7 +13001,7 @@ parse_value_animation_attrs (Animation            *a,
               break;
             }
 
-          if (!parse_numbers (s, " ", 0, 1, spline, 4, &m) ||
+          if (!parse_numbers (s, ", ", 0, 1, spline, 4, &m) ||
               m != 4)
             {
               gtk_svg_invalid_attribute (data->svg, context, "keySplines", NULL);
