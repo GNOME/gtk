@@ -7405,7 +7405,23 @@ parse_ref_y (const char *value)
 static SvgValue *
 parse_number_optional_number (const char *value)
 {
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER);
+  SvgNumbers *numbers = (SvgNumbers *) svg_numbers_parse (value);
+  if (numbers->n_values == 2)
+    {
+      return (SvgValue *) numbers;
+    }
+  else if (numbers->n_values == 1)
+    {
+      double vals[2];
+
+      vals[0] = vals[1] = numbers->values[0].value;
+      svg_value_unref ((SvgValue *) numbers);
+      return svg_numbers_new (vals, 2);
+    }
+  else
+    {
+      return NULL;
+    }
 }
 
 typedef struct
@@ -8321,7 +8337,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FE_IN].initial_value = svg_filter_primitive_ref_new (DEFAULT_SOURCE);
   shape_attrs[SHAPE_ATTR_FE_IN2].initial_value = svg_filter_primitive_ref_new (DEFAULT_SOURCE);
-  shape_attrs[SHAPE_ATTR_FE_STD_DEV].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FE_STD_DEV].initial_value = svg_numbers_new ((double[]) { 2, 2 }, 2);
   shape_attrs[SHAPE_ATTR_FE_BLUR_EDGE_MODE].initial_value = svg_edge_mode_new (EDGE_MODE_NONE);
   shape_attrs[SHAPE_ATTR_FE_BLEND_MODE].initial_value = svg_blend_mode_new (GSK_BLEND_MODE_DEFAULT);
   shape_attrs[SHAPE_ATTR_FE_BLEND_COMPOSITE].initial_value = svg_blend_composite_new (BLEND_COMPOSITE);
@@ -16309,10 +16325,18 @@ apply_filter_tree (Shape         *shape,
             double std_dev;
             EdgeMode edge_mode;
             GskRenderNode *child;
+            SvgNumbers *num;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
-            std_dev = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV), 1);
+
+            num = (SvgNumbers *) filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
+            if (num->values[0].value != num->values[1].value)
+              gtk_svg_rendering_error (context->svg,
+                                       "Separate x/y values for stdDeviation not supported");
+            std_dev = num->values[0].value;
+
             edge_mode = svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_BLUR_EDGE_MODE));
+
             switch (edge_mode)
               {
              case EDGE_MODE_DUPLICATE:
@@ -16559,9 +16583,14 @@ apply_filter_tree (Shape         *shape,
             SvgPaint *paint;
             SvgValue *alpha;
             GskShadowEntry shadow;
+            SvgNumbers *num;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
-            std_dev = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV), 1);
+            num = (SvgNumbers *) filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
+            if (num->values[0].value != num->values[1].value)
+              gtk_svg_rendering_error (context->svg,
+                                       "Separate x/y values for stdDeviation not supported");
+            std_dev = num->values[0].value;
 
             if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
               {
