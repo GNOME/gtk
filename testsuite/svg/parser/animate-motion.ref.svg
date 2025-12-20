@@ -23,18 +23,45 @@
   <circle
           fill='rgb(255,0,0)'
           r='5'>
+  <animateMotion
+          dur='5000ms'
+          repeatCount='indefinite'
+          keyTimes='0; 1'
+          keyPoints='0; 0'>
+    <mpath href='motionPath1'/>
+  </animateMotion>
   </circle>
   <rect
           fill='rgb(0,0,255)'
           width='8'
           height='8'>
+  <animateMotion
+          dur='4000ms'
+          repeatCount='indefinite'
+          keyTimes='0; 1'
+          keyPoints='0; 0'
+          path='M 20 60 C 20 60, 50 90, 100 60 C 150 30, 180 30, 180 60'/>
   </rect>
   <circle
           fill='rgb(0,128,0)'
           r='6'>
+  <animateMotion
+          dur='6000ms'
+          repeatCount='indefinite'
+          keyTimes='0; 0.8; 1'
+          keyPoints='0; 0.5; 1'>
+    <mpath href='motionPath2'/>
+  </animateMotion>
   </circle>
   <circle
           fill='rgb(0,128,0)'
           r='6'>
+  <animateMotion
+          dur='6000ms'
+          repeatCount='indefinite'
+          keyTimes='0; 0.8; 1'
+          keyPoints='0; 0.5; 1'>
+    <mpath href='motionPath2'/>
+  </animateMotion>
   </circle>
 </svg>

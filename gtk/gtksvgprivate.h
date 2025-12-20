@@ -118,6 +118,7 @@ typedef enum
 {
   SHAPE_ATTR_LANG,
   FIRST_SHAPE_ATTR = SHAPE_ATTR_LANG,
+  SHAPE_ATTR_DISPLAY,
   SHAPE_ATTR_VISIBILITY,
   SHAPE_ATTR_TRANSFORM,
   SHAPE_ATTR_OPACITY,
@@ -290,7 +291,6 @@ typedef struct
 struct _Shape
 {
   ShapeType type;
-  gboolean display;
   Shape *parent;
   GtkBitmask *attrs;
   char *id;

@@ -2265,6 +2265,45 @@ svg_visibility_parse (const char *string)
 }
 
 /* }}} */
+/* {{{ Display */
+
+typedef enum
+{
+  DISPLAY_NONE,
+  DISPLAY_INLINE,
+} SvgDisplay;
+
+static const SvgValueClass SVG_DISPLAY_CLASS = {
+  "SvgDisplay",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum display_values[] = {
+  { { &SVG_DISPLAY_CLASS, 1 }, DISPLAY_NONE, "none" },
+  { { &SVG_DISPLAY_CLASS, 1 }, DISPLAY_INLINE, "inline" },
+};
+
+static SvgValue *
+svg_display_new (SvgDisplay value)
+{
+  g_assert (value < G_N_ELEMENTS (display_values));
+  return svg_value_ref ((SvgValue *) &display_values[value]);
+}
+
+static SvgValue *
+svg_display_parse (const char *string)
+{
+  if (strcmp (string, "none") == 0)
+    return svg_display_new (DISPLAY_NONE);
+  else
+    return svg_display_new (DISPLAY_INLINE);
+}
+
+/* }}} */
 /* {{{ Spread method */
 
 static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
@@ -7445,11 +7484,19 @@ static ShapeAttribute shape_attrs[] = {
     .discrete = 0,
     .parse_value = parse_language,
   },
+  { .id = SHAPE_ATTR_DISPLAY,
+    .name = "display",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 0,
+    .parse_value = svg_display_parse,
+  },
   { .id = SHAPE_ATTR_VISIBILITY,
     .name = "visibility",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 0,
+    .presentation = 1,
     .only_css = 0,
     .parse_value = svg_visibility_parse,
   },
@@ -8254,6 +8301,7 @@ static void
 shape_attr_init_default_values (void)
 {
   shape_attrs[SHAPE_ATTR_LANG].initial_value = svg_language_new (gtk_get_default_language ());
+  shape_attrs[SHAPE_ATTR_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
@@ -8921,6 +8969,24 @@ shape_attr_get_initial_value (ShapeAttr  attr,
         }
     }
 
+  if (shape->type == SHAPE_CLIP_PATH ||
+      shape->type == SHAPE_MASK ||
+      shape->type == SHAPE_DEFS ||
+      shape->type == SHAPE_MARKER ||
+      shape->type == SHAPE_PATTERN ||
+      shape->type == SHAPE_LINEAR_GRADIENT ||
+      shape->type == SHAPE_RADIAL_GRADIENT)
+    {
+      if (attr == SHAPE_ATTR_DISPLAY)
+        {
+          SvgValue *value;
+
+          value = svg_display_new (DISPLAY_NONE);
+          svg_value_unref (value);
+          return value;
+        }
+    }
+
   return shape_attrs[attr].initial_value;
 }
 
@@ -8934,7 +9000,6 @@ shape_new (Shape     *parent,
 
   shape->parent = parent;
   shape->type = type;
-  shape->display = TRUE;
 
   shape->attrs = _gtk_bitmask_new ();
 
@@ -8971,6 +9036,7 @@ shape_has_attr (ShapeType type,
   switch ((unsigned int) attr)
     {
     case SHAPE_ATTR_LANG:
+    case SHAPE_ATTR_DISPLAY:
       return TRUE;
     case SHAPE_ATTR_HREF:
       return type == SHAPE_USE || type == SHAPE_IMAGE ||
@@ -11498,9 +11564,6 @@ compute_current_values_for_shape (Shape          *shape,
   const graphene_rect_t *old_viewport = NULL;
   graphene_rect_t viewport;
 
-  if (!shape->display)
-    return;
-
   shape_init_current_values (shape, context);
 
   if (shape->type == SHAPE_SVG)
@@ -13266,11 +13329,6 @@ parse_shape_attrs (Shape                *shape,
       else if (strcmp (attr_names[i], "id") == 0)
         {
           shape->id = g_strdup (attr_values[i]);
-          *handled |= BIT (i);
-        }
-      else if (strcmp (attr_names[i], "display") == 0)
-        {
-          shape->display = strcmp (attr_values[i], "none") != 0;
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "marker") == 0 &&
@@ -15092,12 +15150,6 @@ serialize_shape_attrs (GString              *s,
     {
       indent_for_attr (s, indent);
       g_string_append_printf (s, "id='%s'", shape->id);
-    }
-
-  if (!shape->display)
-    {
-      indent_for_attr (s, indent);
-      g_string_append (s, "display='none'");
     }
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
@@ -18685,8 +18737,13 @@ static void
 render_shape (Shape        *shape,
               PaintContext *context)
 {
-  if (!shape->display)
-    return;
+  if (shape->type != SHAPE_MASK && shape->type != SHAPE_CLIP_PATH)
+    {
+      if ((context->op == RENDERING || context->op == MASKING ||
+           context->op == CLIPPING) &&
+          svg_enum_get (shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+        return;
+    }
 
   if (shape->type == SHAPE_DEFS)
     return;
@@ -19233,8 +19290,7 @@ shape_equal (Shape *shape1,
              Shape *shape2)
 {
   if (shape1->type != shape2->type ||
-      g_strcmp0 (shape1->id, shape2->id) != 0 ||
-      shape1->display != shape2->display)
+      g_strcmp0 (shape1->id, shape2->id) != 0)
     return FALSE;
 
   for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)

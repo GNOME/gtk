@@ -992,7 +992,6 @@ shape_duplicate (Shape *shape)
   copy->parent = shape->parent;
   copy->attrs = shape->attrs;
   copy->id = NULL;
-  copy->display = shape->display;
   for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)
     {
       if (shape->base[i])
