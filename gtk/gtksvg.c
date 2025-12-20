@@ -67,7 +67,7 @@
  * paintable. GTK will drop things that it can't handle and try to make
  * sense of the rest.
  *
- * To track errors during parsing or rednering, connect to the
+ * To track errors during parsing or rendering, connect to the
  * [signal@Gtk.Svg::error] signal.
  *
  * For parsing errors in the `GTK_SVG_ERROR` domain, the functions
@@ -80,9 +80,8 @@
  *
  * The paintable supports much of SVG 2, some notable exceptions.
  *
- * Among the graphical elements, `<symbol>` is not supported.
- *
- * Gradient templating is not implemented.
+ * Among the graphical elements, `<symbol>` and `<textPath>`
+ * are not supported.
  *
  * All filter functions except `drop-shadow()` are supported, plus a
  * custom `alpha-level()` function, which implements one particular
@@ -1033,6 +1032,34 @@ get_texture (GtkSvg     *svg,
     }
 
   return texture;
+}
+
+/* }}} */
+/* {{{ Pango utilities */
+
+static GskPath *
+pango_layout_to_path (PangoLayout *layout)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  cairo_path_t *path;
+  GskPathBuilder *builder;
+  PangoRectangle rect;
+
+  pango_layout_get_pixel_extents (layout, &rect, NULL);
+  surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA,
+                                            &(cairo_rectangle_t) { rect.x, rect.y, rect.width, rect.height });
+
+  cr = cairo_create (surface);
+  pango_cairo_layout_path (cr, layout);
+  path = cairo_copy_path (cr);
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_cairo_path (builder, path);
+  cairo_path_destroy (path);
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+
+  return gsk_path_builder_free_to_path (builder);
 }
 
 /* }}} */
@@ -17434,6 +17461,12 @@ paint_server (Shape                 *server,
 /* }}} */
 /* {{{ Shapes */
 
+static gboolean
+shape_is_text (Shape *shape)
+{
+  return shape->type == SHAPE_TEXT || shape->type == SHAPE_TSPAN;
+}
+
 static GskStroke *
 shape_create_stroke (Shape        *shape,
                      PaintContext *context)
@@ -17462,6 +17495,13 @@ shape_create_stroke (Shape        *shape,
       double length;
       double offset;
       GskPathMeasure *measure;
+
+      if (shape_is_text (shape))
+        {
+          gtk_svg_rendering_error (context->svg,
+                                   "Dashing of stroked text is not supported");
+          return stroke;
+        }
 
       measure = shape_get_current_measure (shape, context->viewport);
       length = gsk_path_measure_get_length (measure);
@@ -18075,10 +18115,30 @@ generate_layouts (Shape           *self,
 }
 
 static void
-render_text (Shape                 *self,
-             PaintContext          *context,
-             SvgPaint              *paint,
-             const graphene_rect_t *bounds)
+clear_layouts (Shape *self)
+{
+  for (guint i = 0; i < self->text->len; i++)
+    {
+      TextNode *node = &g_array_index (self->text, TextNode, i);
+      switch (node->type)
+        {
+        case TEXT_NODE_SHAPE:
+          clear_layouts (node->shape.shape);
+          break;
+        case TEXT_NODE_CHARACTERS:
+          g_clear_object (&node->characters.layout);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
+static void
+fill_text (Shape                 *self,
+           PaintContext          *context,
+           SvgPaint              *paint,
+           const graphene_rect_t *bounds)
 {
   g_assert (self->type == SHAPE_TEXT || self->type == SHAPE_TSPAN);
 
@@ -18097,7 +18157,7 @@ render_text (Shape                 *self,
                 if (node->shape.has_bounds)
                   cbounds = &node->shape.bounds;
               }
-            render_text (node->shape.shape, context, cpaint, cbounds);
+            fill_text (node->shape.shape, context, cpaint, cbounds);
           }
           break;
         case TEXT_NODE_CHARACTERS:
@@ -18141,8 +18201,84 @@ render_text (Shape                 *self,
               }
             gtk_snapshot_restore (context->snapshot);
 
-skip:
-            g_clear_object (&node->characters.layout);
+skip: ;
+          }
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
+static void
+stroke_text (Shape                 *self,
+             PaintContext          *context,
+             SvgPaint              *paint,
+             GskStroke             *stroke,
+             const graphene_rect_t *bounds)
+{
+  g_assert (self->type == SHAPE_TEXT || self->type == SHAPE_TSPAN);
+
+  for (guint i = 0; i < self->text->len; i++)
+    {
+      TextNode *node = &g_array_index (self->text, TextNode, i);
+      switch (node->type)
+        {
+        case TEXT_NODE_SHAPE:
+          {
+            SvgPaint *cpaint = paint;
+            const graphene_rect_t *cbounds = bounds;
+            if (_gtk_bitmask_get (node->shape.shape->attrs, SHAPE_ATTR_STROKE))
+              {
+                cpaint = (SvgPaint *) node->shape.shape->current[SHAPE_ATTR_STROKE];
+                if (node->shape.has_bounds)
+                  cbounds = &node->shape.bounds;
+              }
+            stroke_text (node->shape.shape, context, cpaint, stroke, cbounds);
+          }
+          break;
+        case TEXT_NODE_CHARACTERS:
+          {
+            GskPath *path;
+            double opacity;
+
+            if (paint->kind == PAINT_NONE)
+              goto skip;
+
+            gtk_snapshot_save (context->snapshot);
+            opacity = svg_number_get (self->current[SHAPE_ATTR_STROKE_OPACITY], 1);
+            if (paint->kind == PAINT_COLOR)
+              {
+                GdkRGBA color = paint->color;
+                color.alpha *= opacity;
+                gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
+                gtk_snapshot_rotate (context->snapshot, node->characters.r);
+                path = pango_layout_to_path (node->characters.layout);
+                gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
+                gsk_path_unref (path);
+              }
+            else if (paint->kind == PAINT_SERVER)
+              {
+             
+                if (opacity < 1)
+                  gtk_snapshot_push_opacity (context->snapshot, opacity);
+
+                gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
+                gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
+                gtk_snapshot_rotate (context->snapshot, node->characters.r);
+                path = pango_layout_to_path (node->characters.layout);
+                gtk_snapshot_append_stroke (context->snapshot, path, stroke, &(GdkRGBA) { 0, 0, 0, 1 });
+                gsk_path_unref (path);
+                gtk_snapshot_pop (context->snapshot);
+                paint_server (paint->server.shape, bounds, context);
+                gtk_snapshot_pop (context->snapshot);
+
+                if (opacity < 1)
+                  gtk_snapshot_pop (context->snapshot);
+              }
+            gtk_snapshot_restore (context->snapshot);
+
+skip: ;
           }
           break;
         default:
@@ -18254,6 +18390,7 @@ paint_shape (Shape        *shape,
       TextAnchor anchor;
       WritingMode wmode;
       graphene_rect_t bounds;
+      GskStroke *stroke;
 
       if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
         return;
@@ -18284,7 +18421,43 @@ paint_shape (Shape        *shape,
           g_assert_not_reached ();
         }
 
-      render_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+      stroke = shape_create_stroke (shape, context);
+
+      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+        {
+        case PAINT_ORDER_FILL_STROKE_MARKERS:
+        case PAINT_ORDER_FILL_MARKERS_STROKE:
+        case PAINT_ORDER_MARKERS_FILL_STROKE:
+          fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+          break;
+        case PAINT_ORDER_STROKE_FILL_MARKERS:
+        case PAINT_ORDER_STROKE_MARKERS_FILL:
+        case PAINT_ORDER_MARKERS_STROKE_FILL:
+          stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+        {
+        case PAINT_ORDER_FILL_STROKE_MARKERS:
+        case PAINT_ORDER_FILL_MARKERS_STROKE:
+        case PAINT_ORDER_MARKERS_FILL_STROKE:
+          stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
+          break;
+        case PAINT_ORDER_STROKE_FILL_MARKERS:
+        case PAINT_ORDER_STROKE_MARKERS_FILL:
+        case PAINT_ORDER_MARKERS_STROKE_FILL:
+          fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      clear_layouts (shape);
+
+      gsk_stroke_free (stroke);
 
       gtk_snapshot_restore (context->snapshot);
 

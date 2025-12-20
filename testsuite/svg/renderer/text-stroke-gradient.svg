@@ -1,0 +1,86 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='100%'
+        height='100%'
+        viewBox='0 0 480 360'>
+  <defs>
+  </defs>
+  <g
+          id='test-body-content'
+          font-family='SVGFreeSansASCII,sans-serif'
+          font-size='18'>
+    <defs>
+    </defs>
+    <g
+            transform='scale(1, 1.5)'>
+      <linearGradient
+              id='Gradient'
+              x1='10'
+              y1='10'
+              x2='440'
+              y2='10'
+              gradientUnits='userSpaceOnUse'>
+        <stop
+                offset='0'
+                stop-color='rgb(0,0,255)'
+                stop-opacity='1'>
+        </stop>
+        <stop
+                offset='1'
+                stop-color='rgb(0,255,0)'
+                stop-opacity='1'>
+        </stop>
+      </linearGradient>
+      <text
+              fill='url(#Gradient)'
+              x='20'
+              y='70'
+              font-family='SVGFreeSansASCII,sans-serif'
+              font-size='68'>Gradient on fill
+      </text>
+      <text
+              fill='none'
+              stroke='url(#Gradient)'
+              stroke-width='3'
+              x='20'
+              y='160'
+              font-family='SVGFreeSansASCII,sans-serif'
+              font-size='55'>Gradient on stroke
+      </text>
+    </g>
+    <g
+            font-family='SVGFreeSansASCII,sans-serif'
+            font-size='28'>
+      <text
+              x='40'
+              y='145'>Linear gradient on filled text
+      </text>
+      <text
+              x='30'
+              y='280'>Linear gradient on stroke of text
+      </text>
+    </g>
+  </g>
+  <g
+          font-family='SVGFreeSansASCII,sans-serif'
+          font-size='32'>
+    <text
+            id='revision'
+            fill='rgb(0,0,0)'
+            stroke='none'
+            x='10'
+            y='340'>$Revision: 1.13 $
+    </text>
+  </g>
+  <rect
+          id='test-frame'
+          fill='none'
+          stroke='rgb(0,0,0)'
+          x='1'
+          y='1'
+          width='478'
+          height='358'
+          class='transparent-fill'>
+  </rect>
+</svg>
