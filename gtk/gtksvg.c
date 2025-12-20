@@ -18499,6 +18499,21 @@ render_image (Shape        *shape,
 
 /* }}} */
 
+static gboolean
+shape_is_degenerate (Shape *shape)
+{
+  if (shape->type == SHAPE_RECT)
+    return svg_number_get (shape->current[SHAPE_ATTR_WIDTH], 1) <= 0 ||
+           svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], 1) <= 0;
+  else if (shape->type == SHAPE_CIRCLE)
+    return svg_number_get (shape->current[SHAPE_ATTR_R], 1) <= 0;
+  else if (shape->type == SHAPE_ELLIPSE)
+    return svg_number_get (shape->current[SHAPE_ATTR_RX], 1) <= 0 ||
+           svg_number_get (shape->current[SHAPE_ATTR_RY], 1) <= 0;
+  else
+    return FALSE;
+}
+
 static void
 recompute_current_values (Shape        *shape,
                           Shape        *parent,
@@ -18645,6 +18660,9 @@ paint_shape (Shape        *shape,
     }
 
   if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
+    return;
+
+  if (shape_is_degenerate (shape))
     return;
 
   /* Below is where we render *actual* content (i.e. graphical
