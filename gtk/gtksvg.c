@@ -759,7 +759,7 @@ parse_numeric (const char   *value,
       else if (strcmp (end, "cm") == 0)
         *f *= 96./2.54;
       else if (strcmp (end, "mm") == 0)
-        *f *= 96./2.54 * 10;
+        *f *= 96./25.4;
       else
         return FALSE;
     }
