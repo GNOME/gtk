@@ -17100,7 +17100,7 @@ push_group (Shape        *shape,
       pop_op (context);
     }
 
-  if (context->op != CLIPPING)
+  if (context->op != CLIPPING && shape->type != SHAPE_MASK)
     {
       if (svg_number_get (opacity, 1) != 1)
         gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
@@ -17121,7 +17121,7 @@ pop_group (Shape        *shape,
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
 
-  if (context->op != CLIPPING)
+  if (context->op != CLIPPING && shape->type != SHAPE_MASK)
     {
       if (!svg_filter_is_none (filter))
         {
