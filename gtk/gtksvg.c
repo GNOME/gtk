@@ -666,7 +666,8 @@ markup_filter_attributes (const char *element_name,
             }
           else if (strcmp (attr_names[i], name) == 0)
             {
-              *ptr = attr_values[i];
+              if (ptr)
+                *ptr = attr_values[i];
               *handled |= G_GUINT64_CONSTANT(1) << i;
               break;
             }
