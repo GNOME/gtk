@@ -93,6 +93,12 @@ struct _GtkInspectorMiscInfo
   GtkWidget *is_toplevel;
   GtkWidget *child_visible_row;
   GtkWidget *child_visible;
+  GtkWidget *intrinsic_size_row;
+  GtkWidget *intrinsic_size;
+  GtkWidget *aspect_ratio_row;
+  GtkWidget *aspect_ratio;
+  GtkWidget *paintable_flags_row;
+  GtkWidget *paintable_flags;
 
   guint update_source_id;
   gint64 last_frame;
@@ -469,6 +475,26 @@ update_info (gpointer data)
       gtk_label_set_label (GTK_LABEL (sl->color_state), gdk_color_state_get_name (gdk_surface_get_color_state (GDK_SURFACE (sl->object))));
     }
 
+  if (GDK_IS_PAINTABLE (sl->object))
+    {
+      char buf[64];
+      char *value;
+
+      g_snprintf (buf, sizeof (buf), "%d x %d",
+                  gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (sl->object)),
+                  gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (sl->object)));
+      gtk_label_set_label (GTK_LABEL (sl->intrinsic_size), buf);
+
+      g_snprintf (buf, sizeof (buf), "%.2g",
+                  gdk_paintable_get_intrinsic_aspect_ratio (GDK_PAINTABLE (sl->object)));
+      gtk_label_set_label (GTK_LABEL (sl->aspect_ratio), buf);
+
+      value = g_flags_to_string (GDK_TYPE_PAINTABLE_FLAGS,
+                                 gdk_paintable_get_flags (GDK_PAINTABLE (sl->object)));
+      gtk_label_set_label (GTK_LABEL (sl->paintable_flags), value);
+      g_free (value);
+    }
+
   return G_SOURCE_CONTINUE;
 }
 
@@ -534,6 +560,9 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   gtk_widget_set_visible (sl->framerate_row, GDK_IS_FRAME_CLOCK (object));
   gtk_widget_set_visible (sl->scale_row, GDK_IS_SURFACE (object));
   gtk_widget_set_visible (sl->color_state_row, GDK_IS_SURFACE (object));
+  gtk_widget_set_visible (sl->intrinsic_size_row, GDK_IS_PAINTABLE (object));
+  gtk_widget_set_visible (sl->aspect_ratio_row, GDK_IS_PAINTABLE (object));
+  gtk_widget_set_visible (sl->paintable_flags_row, GDK_IS_PAINTABLE (object));
 
   if (GTK_IS_WIDGET (object))
     {
@@ -657,6 +686,12 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, is_toplevel);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, child_visible_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, child_visible);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, intrinsic_size_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, intrinsic_size);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, aspect_ratio_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, aspect_ratio);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, paintable_flags_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, paintable_flags);
 
   gtk_widget_class_bind_template_callback (widget_class, update_measure_picture);
   gtk_widget_class_bind_template_callback (widget_class, measure_picture_drag_prepare);
