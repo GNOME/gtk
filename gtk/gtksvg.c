@@ -2713,7 +2713,7 @@ static SvgFilterPrimitiveRef filter_primitive_ref_values[] = {
      { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = BACKGROUND_IMAGE, .ref = "BackgroundImage", },
      { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = BACKGROUND_ALPHA, .ref = "BackgroundAlpha", },
      { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = FILL_PAINT, .ref = "FillPaint", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = STROKE_PAINT, .ref = "FillPaint", },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = STROKE_PAINT, .ref = "StrokePaint", },
   };
 
 static SvgValue *
@@ -16111,6 +16111,8 @@ static void render_shape (Shape        *shape,
                           PaintContext *context);
 static void fill_shape   (Shape        *shape,
                           GskPath      *path,
+                          SvgPaint     *paint,
+                          double        opacity,
                           PaintContext *context);
 
 /* {{{ Filters */
@@ -16229,13 +16231,26 @@ get_input_for_ref (SvgValue              *in,
       {
         GskPath *path;
         GskPathBuilder *builder;
+        SvgPaint *paint;
+        double opacity;
+
+        if (ref->type == FILL_PAINT)
+          {
+            paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
+            opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
+          }
+        else
+          {
+            paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
+            opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
+          }
 
         builder = gsk_path_builder_new ();
         gsk_path_builder_add_rect (builder, subregion);
         path = gsk_path_builder_free_to_path (builder);
 
         gtk_snapshot_push_collect (context->snapshot);
-        fill_shape (shape, path, context);
+        fill_shape (shape, path, paint, opacity, context);
         node = gtk_snapshot_pop_collect (context->snapshot);
         res = filter_result_new (node, subregion);
         gsk_render_node_unref (node);
@@ -17660,14 +17675,12 @@ get_context_paint (const SvgPaint *paint,
 static void
 fill_shape (Shape        *shape,
             GskPath      *path,
+            SvgPaint     *paint,
+            double        opacity,
             PaintContext *context)
 {
-  SvgPaint *paint;
   graphene_rect_t bounds;
   GskFillRule fill_rule;
-  double opacity;
-
-  paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
 
   if (paint->kind == PAINT_NONE)
     return;
@@ -17676,7 +17689,6 @@ fill_shape (Shape        *shape,
     return;
 
   fill_rule = svg_enum_get (shape->current[SHAPE_ATTR_FILL_RULE]);
-  opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
 
 retry:
   switch (paint->kind)
@@ -18591,11 +18603,14 @@ paint_shape (Shape        *shape,
     }
   else
     {
+      SvgPaint *paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
+      double opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
+
       switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
         {
         case PAINT_ORDER_FILL_STROKE_MARKERS:
         case PAINT_ORDER_FILL_MARKERS_STROKE:
-          fill_shape (shape, path, context);
+          fill_shape (shape, path, paint, opacity, context);
           break;
         case PAINT_ORDER_STROKE_FILL_MARKERS:
         case PAINT_ORDER_STROKE_MARKERS_FILL:
@@ -18613,7 +18628,7 @@ paint_shape (Shape        *shape,
         {
         case PAINT_ORDER_MARKERS_FILL_STROKE:
         case PAINT_ORDER_STROKE_FILL_MARKERS:
-          fill_shape (shape, path, context);
+          fill_shape (shape, path, paint, opacity, context);
           break;
         case PAINT_ORDER_FILL_STROKE_MARKERS:
         case PAINT_ORDER_MARKERS_STROKE_FILL:
@@ -18631,7 +18646,7 @@ paint_shape (Shape        *shape,
         {
         case PAINT_ORDER_MARKERS_STROKE_FILL:
         case PAINT_ORDER_STROKE_MARKERS_FILL:
-          fill_shape (shape, path, context);
+          fill_shape (shape, path, paint, opacity, context);
           break;
         case PAINT_ORDER_MARKERS_FILL_STROKE:
         case PAINT_ORDER_FILL_MARKERS_STROKE:
