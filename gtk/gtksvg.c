@@ -14984,10 +14984,20 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     }
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
-    self->width = svg_number_get (self->content->base[SHAPE_ATTR_WIDTH], 1);
+    {
+      SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_WIDTH];
+
+      if (v->dim != SVG_DIMENSION_PERCENTAGE)
+        self->width = v->value;
+    }
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
-    self->height = svg_number_get (self->content->base[SHAPE_ATTR_HEIGHT], 1);
+    {
+      SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_HEIGHT];
+
+      if (v->dim != SVG_DIMENSION_PERCENTAGE)
+        self->height = v->value;
+    }
 
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
     {
