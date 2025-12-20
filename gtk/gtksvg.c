@@ -16855,14 +16855,16 @@ push_group (Shape        *shape,
       double sx, sy, tx, ty;
       graphene_rect_t view_box;
       graphene_rect_t *viewport;
+      double w, h;
 
       if (shape->parent == NULL)
         {
           x = 0;
           y = 0;
-          width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->svg->current_width);
-          height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->svg->current_height);
-
+          width = context->svg->current_width;
+          height = context->svg->current_height;
+          w = context->svg->width;
+          h = context->svg->height;
         }
       else
         {
@@ -16872,10 +16874,12 @@ push_group (Shape        *shape,
           y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
           width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
           height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+          w = width;
+          h = height;
         }
 
       if (vb->unset)
-        graphene_rect_init (&view_box, 0, 0, width, height);
+        graphene_rect_init (&view_box, 0, 0, w, h);
       else
         graphene_rect_init_from_rect (&view_box, &vb->view_box);
 
