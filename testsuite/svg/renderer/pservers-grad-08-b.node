@@ -2,7 +2,7 @@ isolation {
   child: container {
     mask {
       source: transform {
-        transform: translate(0, 0.125) scale(0.00208333, 0.003125);
+        transform: scale(1, 1.5);
         child: linear-gradient {
           bounds: 20 15 440 69;
           start: 10 10;
@@ -11,7 +11,7 @@ isolation {
         }
       }
       mask: transform {
-        transform: translate(0, 0.125) scale(0.00208333, 0.003125) translate(20, 15);
+        transform: scale(1, 1.5) translate(20, 15);
         child: text {
           font: "SVGFreeSansASCII 68px";
           glyphs: 40 53, 83 23, 66 38, 69 38, 74 15, 70 38, 79 38, 85 19, 1 19, 80 38, 79 38, 1 19, 71 19, 74 15, 77 15, 77 15;
@@ -21,7 +21,7 @@ isolation {
     }
     mask {
       source: transform {
-        transform: translate(0, 0.125) scale(0.00208333, 0.003125);
+        transform: scale(1, 1.5);
         child: linear-gradient {
           bounds: 20 116 455 55;
           start: 10 10;
@@ -30,7 +30,7 @@ isolation {
         }
       }
       mask: transform {
-        transform: translate(0, 0.125) scale(0.00208333, 0.003125) translate(20, 116);
+        transform: scale(1, 1.5) translate(20, 116);
         child: stroke {
           child: color {
             bounds: -9.57812 -9.5625 473.797 67.0625;
@@ -379,43 +379,31 @@ Z";
         }
       }
     }
-    transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(40, 122);
-      child: text {
-        font: "SVGFreeSansASCII 28px";
-        glyphs: 45 16, 74 6, 79 16, 70 16, 66 16, 83 9, 1 8, 72 16, 83 9, 66 16, 69 16, 74 6, 70 16, 79 16, 85 8, 1 8, 80 16, 79 16, 1 8, 71 8, 74 6, 77 6, 77 6, 70 16, 69 16, 1 8, 85 8, 70 16, "x", 85 8;
-        offset: 0 23;
-      }
+    text {
+      font: "SVGFreeSansASCII 28px";
+      glyphs: 45 16, 74 6, 79 16, 70 16, 66 16, 83 9, 1 8, 72 16, 83 9, 66 16, 69 16, 74 6, 70 16, 79 16, 85 8, 1 8, 80 16, 79 16, 1 8, 71 8, 74 6, 77 6, 77 6, 70 16, 69 16, 1 8, 85 8, 70 16, "x", 85 8;
+      offset: 40 145;
     }
-    transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(30, 257);
-      child: text {
-        font: "SVGFreeSansASCII 28px";
-        glyphs: 45 16, 74 6, 79 16, 70 16, 66 16, 83 9, 1 8, 72 16, 83 9, 66 16, 69 16, 74 6, 70 16, 79 16, 85 8, 1 8, 80 16, 79 16, 1 8, "s", 85 8, 83 9, 80 16, "k", 70 16, 1 8, 80 16, 71 8, 1 8, 85 8, 70 16, "x", 85 8;
-        offset: 0 23;
-      }
+    text {
+      font: "SVGFreeSansASCII 28px";
+      glyphs: 45 16, 74 6, 79 16, 70 16, 66 16, 83 9, 1 8, 72 16, 83 9, 66 16, 69 16, 74 6, 70 16, 79 16, 85 8, 1 8, 80 16, 79 16, 1 8, "s", 85 8, 83 9, 80 16, "k", 70 16, 1 8, 80 16, 71 8, 1 8, 85 8, 70 16, "x", 85 8;
+      offset: 30 280;
     }
-    transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(10, 314);
-      child: text {
-        font: "SVGFreeSansASCII 32px";
-        glyphs: 5 18, 51 23, 70 18, "v", 74 7, "s", 74 7, 80 18, 79 18, 27 9, 1 9, 18 18, 15 9, 18 18, 20 18, 1 9, 5 18;
-        offset: 0 26;
-      }
+    text {
+      font: "SVGFreeSansASCII 32px";
+      glyphs: 5 18, 51 23, 70 18, "v", 74 7, "s", 74 7, 80 18, 79 18, 27 9, 1 9, 18 18, 15 9, 18 18, 20 18, 1 9, 5 18;
+      offset: 10 340;
     }
-    transform {
-      transform: translate(0, 0.125) scale(0.00208333);
-      child: stroke {
-        child: color {
-          bounds: 0.5 0.5 479 359;
-          color: rgb(0,0,0);
-        }
-        path: "\
+    stroke {
+      child: color {
+        bounds: 0.5 0.5 479 359;
+        color: rgb(0,0,0);
+      }
+      path: "\
 M 1 1 h 478 v 358 h -478 z";
-        line-width: 1;
-        line-cap: butt;
-        line-join: miter;
-      }
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
     }
   }
   isolations: background;

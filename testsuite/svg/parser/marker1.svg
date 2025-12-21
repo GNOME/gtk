@@ -10,7 +10,9 @@
   </marker>
 
   <rect
-        marker='url(#marker1)'
+        marker-start='url(#marker1)'
+        marker-end='url(#marker1)'
+        marker-mid='url(#marker1)'
         x="150" y="100" width="125" height="75"
         paint-order='markers fill stroke'
         stroke='blue' fill='none' />

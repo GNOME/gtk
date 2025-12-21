@@ -13,7 +13,7 @@ L 200 50";
       line-join: miter;
     }
     transform {
-      transform: translate(50, 50) rotate(180) translate(-0, -2) scale(2);
+      transform: translate(50, 50) rotate(180) translate(-0, -3) scale(3);
       child: fill {
         child: color {
           bounds: 0 0 1 2;
@@ -28,7 +28,7 @@ Z";
       }
     }
     transform {
-      transform: translate(200, 48) scale(2);
+      transform: translate(200, 47) scale(3);
       child: fill {
         child: color {
           bounds: 0 0 1 2;
@@ -55,7 +55,7 @@ L 200 75";
       line-join: miter;
     }
     transform {
-      transform: translate(50, 75) rotate(180) translate(-0, -3) scale(3);
+      transform: translate(50, 75) rotate(180) translate(-0, -4.5) scale(4.5);
       child: fill {
         child: color {
           bounds: 0 0 1 2;
@@ -70,7 +70,7 @@ Z";
       }
     }
     transform {
-      transform: translate(200, 72) scale(3);
+      transform: translate(200, 70.5) scale(4.5);
       child: fill {
         child: color {
           bounds: 0 0 1 2;
@@ -97,7 +97,7 @@ L 200 100";
       line-join: miter;
     }
     transform {
-      transform: translate(50, 100) rotate(180) translate(-0, -4) scale(4);
+      transform: translate(50, 100) rotate(180) translate(-0, -6) scale(6);
       child: fill {
         child: color {
           bounds: 0 0 1 2;
@@ -112,7 +112,7 @@ Z";
       }
     }
     transform {
-      transform: translate(200, 96) scale(4);
+      transform: translate(200, 94) scale(6);
       child: fill {
         child: color {
           bounds: 0 0 1 2;

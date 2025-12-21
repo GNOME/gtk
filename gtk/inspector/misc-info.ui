@@ -674,6 +674,81 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkListBoxRow" id="intrinsic_size_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Paintable Size</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="intrinsic_size">
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="aspect_ratio_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Paintable Aspect Ratio</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="aspect_ratio">
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="paintable_flags_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Paintable Flags</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="paintable_flags">
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

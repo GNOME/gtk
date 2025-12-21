@@ -1,7 +1,7 @@
 isolation {
   child: container {
     transform {
-      transform: translate(40, 40);
+      transform: translate(40, 40) scale(3);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -13,7 +13,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(165, 40) rotate(45);
+      transform: translate(165, 40) rotate(45) scale(3);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -25,7 +25,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(165, 115) rotate(135);
+      transform: translate(165, 115) rotate(135) scale(3);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -37,7 +37,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(40, 115) rotate(45);
+      transform: translate(40, 115) rotate(45) scale(3);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -49,7 +49,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(40, 40) rotate(270);
+      transform: translate(40, 40) rotate(270) scale(3);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -72,7 +72,7 @@ M 40 40 h 125 v 75 h -125 z";
       line-join: miter;
     }
     transform {
-      transform: translate(60, 50);
+      transform: translate(60, 50) scale(2);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -84,7 +84,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(145, 50) rotate(45);
+      transform: translate(145, 50) rotate(45) scale(2);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -96,7 +96,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(145, 105) rotate(135);
+      transform: translate(145, 105) rotate(135) scale(2);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -108,7 +108,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(60, 105) rotate(45);
+      transform: translate(60, 105) rotate(45) scale(2);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;
@@ -120,7 +120,7 @@ M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106
       }
     }
     transform {
-      transform: translate(60, 50) rotate(270);
+      transform: translate(60, 50) rotate(270) scale(2);
       child: fill {
         child: color {
           bounds: -2 -2 4 4;

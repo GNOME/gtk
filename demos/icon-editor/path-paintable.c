@@ -28,6 +28,7 @@ struct _PathPaintable
   GObject parent_instance;
 
   GtkSvg *svg;
+  graphene_rect_t viewport;
   GdkPaintable *render_paintable;
 };
 
@@ -94,6 +95,9 @@ parse_symbolic_svg (PathPaintable  *paintable,
   g_autoptr (GtkSvg) svg = gtk_svg_new_from_bytes (bytes);
 
   g_set_object (&paintable->svg, svg);
+  graphene_rect_init (&paintable->viewport, 0, 0,
+                      svg->width,
+                      svg->height);
 
   return TRUE;
 }
@@ -546,7 +550,6 @@ path_paintable_set_path_stroke (PathPaintable *self,
                                 const GdkRGBA *color)
 {
   Shape *shape = path_paintable_get_shape (self, idx);
-  graphene_rect_t *viewport = &self->svg->viewport;
   PaintKind kind;
   GtkSymbolicColor stroke_symbolic;
   GdkRGBA stroke_color;
@@ -556,10 +559,10 @@ path_paintable_set_path_stroke (PathPaintable *self,
   double miterlimit;
 
   kind = svg_shape_attr_get_paint (shape, SHAPE_ATTR_STROKE, &stroke_symbolic, &stroke_color);
-  width = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_WIDTH, viewport);
+  width = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_WIDTH, &self->viewport);
   linecap = svg_shape_attr_get_enum (shape, SHAPE_ATTR_STROKE_LINEJOIN);
   linejoin = svg_shape_attr_get_enum (shape, SHAPE_ATTR_STROKE_LINEJOIN);
-  miterlimit = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MITERLIMIT, viewport);
+  miterlimit = svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MITERLIMIT, &self->viewport);
 
   if (enabled == (kind != PAINT_NONE) &&
       width == gsk_stroke_get_line_width (stroke) &&
@@ -634,9 +637,8 @@ path_paintable_get_path (PathPaintable *self,
                          size_t         idx)
 {
   Shape *shape = path_paintable_get_shape (self, idx);
-  const graphene_rect_t *viewport = &self->svg->viewport;
 
-  return svg_shape_get_path (shape, viewport);
+  return svg_shape_get_path (shape, &self->viewport);
 }
 
 uint64_t
@@ -678,12 +680,11 @@ path_paintable_get_path_stroke (PathPaintable *self,
                                 GdkRGBA       *color)
 {
   Shape *shape = path_paintable_get_shape (self, idx);
-  const graphene_rect_t *viewport = &self->svg->viewport;
 
-  gsk_stroke_set_line_width (stroke, svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_WIDTH, viewport));
+  gsk_stroke_set_line_width (stroke, svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_WIDTH, &self->viewport));
   gsk_stroke_set_line_cap (stroke, svg_shape_attr_get_enum (shape, SHAPE_ATTR_STROKE_LINECAP));
   gsk_stroke_set_line_join (stroke, svg_shape_attr_get_enum (shape, SHAPE_ATTR_STROKE_LINEJOIN));
-  gsk_stroke_set_miter_limit (stroke, svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MITERLIMIT, viewport));
+  gsk_stroke_set_miter_limit (stroke, svg_shape_attr_get_number (shape, SHAPE_ATTR_STROKE_MITERLIMIT, &self->viewport));
 
   return svg_shape_attr_get_paint (shape, SHAPE_ATTR_STROKE, symbolic, color);
 }
@@ -815,8 +816,6 @@ GskPath *
 path_paintable_get_path_by_id (PathPaintable *self,
                                const char    *id)
 {
-  const graphene_rect_t *viewport = &self->svg->viewport;
-
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
     {
       Shape *shape = g_ptr_array_index (self->svg->content->shapes, i);
@@ -831,7 +830,7 @@ path_paintable_get_path_by_id (PathPaintable *self,
         case SHAPE_CIRCLE:
         case SHAPE_ELLIPSE:
           if (g_strcmp0 (shape->id, id) == 0)
-            return svg_shape_get_path (shape, viewport);
+            return svg_shape_get_path (shape, &self->viewport);
           break;
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
@@ -941,7 +940,7 @@ path_paintable_new_from_resource (const char *resource)
 
   res = path_paintable_new_from_bytes (bytes, &error);
   if (!res)
-    g_error ("Failed to parse %s: %s", resource, error->message);
+    g_error ("Failed to parse %s: %s", resource, error ? error->message : "");
 
   return res;
 }
@@ -969,7 +968,7 @@ path_paintable_serialize_as_svg (PathPaintable *self)
 const graphene_rect_t *
 path_paintable_get_viewport (PathPaintable *self)
 {
-  return &self->svg->viewport;
+  return &self->viewport;
 }
 
 void
@@ -993,7 +992,6 @@ shape_duplicate (Shape *shape)
   copy->parent = shape->parent;
   copy->attrs = shape->attrs;
   copy->id = NULL;
-  copy->display = shape->display;
   for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)
     {
       if (shape->base[i])

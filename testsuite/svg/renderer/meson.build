@@ -108,7 +108,8 @@ test_data = [
   'text-text-10-t.svg',
   'use.svg',
   'use2.svg',
-  'viewbox.svg'
+  'viewbox.svg',
+  'viewports.svg',
 ]
 
 foreach testname : test_data

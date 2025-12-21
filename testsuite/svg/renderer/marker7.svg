@@ -6,7 +6,7 @@
         orient="auto-start-reverse"
         markerUnits='strokeWidth'
         overflow='hidden'
-        markerWidth='2' markerHeight='2'
+        markerWidth='3' markerHeight='3'
         viewBox='0 0 2 2'
         preserveAspectRatio='none'
         refX='0' refY='1'>

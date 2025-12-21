@@ -1,6 +1,6 @@
 isolation {
   child: transform {
-    transform: translate(300.689, 64.6681);
+    transform: translate(300.922, 64.6681);
     child: container {
       fill {
         child: color {

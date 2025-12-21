@@ -111,14 +111,5 @@
   <circle
           fill='rgb(255,0,0)'
           r='5'>
-  <animateMotion
-          begin='5000ms'
-          dur='5000ms'
-          repeatCount='20'
-          fill='freeze'
-          keyTimes='0; 0.2; 1'
-          keyPoints='0; 0.8; 1'>
-    <mpath href='p'/>
-  </animateMotion>
   </circle>
 </svg>

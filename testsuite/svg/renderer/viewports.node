@@ -1,0 +1,50 @@
+isolation {
+  child: container {
+    stroke {
+      child: color {
+        bounds: -0.5 -0.5 481 361;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 0 h 480 v 360 h -480 z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    clip {
+      clip: 20 20 200 200;
+      child: transform {
+        transform: translate(20, 20);
+        child: stroke {
+          child: color {
+            bounds: -0.5 -0.5 201 201;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 0 0 h 200 v 200 h -200 z";
+          line-width: 1;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+    }
+    clip {
+      clip: 0 0 200 200;
+      child: transform {
+        transform: translate(-40, -40) scale(2);
+        child: stroke {
+          child: color {
+            bounds: -0.5 -0.5 101 101;
+            color: rgb(0,0,255);
+          }
+          path: "\
+M 0 0 h 100 v 100 h -100 z";
+          line-width: 1;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+    }
+  }
+  isolations: background;
+}

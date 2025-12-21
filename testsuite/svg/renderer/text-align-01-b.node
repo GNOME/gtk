@@ -1,15 +1,12 @@
 isolation {
   child: container {
-    transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(5, 12);
-      child: text {
-        font: "SVGFreeSansASCII 34px";
-        glyphs: 53 21, 70 19, "s", 85 9, 1 9, 8 6, 85 9, 70 19, "x", 85 9, 14 11, 66 19, 79 19, "c", 73 19, 80 19, 83 11, 8 6, 1 9, 9 11, 73 19, 80 19, 83 11, 74 8, "z", 80 19, 79 19, 85 9, 66 19, 77 8, 10 11;
-        offset: 0 28;
-      }
+    text {
+      font: "SVGFreeSansASCII 34px";
+      glyphs: 53 21, 70 19, "s", 85 9, 1 9, 8 6, 85 9, 70 19, "x", 85 9, 14 11, 66 19, 79 19, "c", 73 19, 80 19, 83 11, 8 6, 1 9, 9 11, 73 19, 80 19, 83 11, 74 8, "z", 80 19, 79 19, 85 9, 66 19, 77 8, 10 11;
+      offset: 5 40;
     }
     transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(230, 130);
+      transform: translate(230, 130);
       child: container {
         stroke {
           child: color {
@@ -40,7 +37,7 @@ M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106
       }
     }
     transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(230, 180);
+      transform: translate(230, 180);
       child: container {
         stroke {
           child: color {
@@ -71,7 +68,7 @@ M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106
       }
     }
     transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(230, 230);
+      transform: translate(230, 230);
       child: container {
         stroke {
           child: color {
@@ -103,7 +100,7 @@ M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106
       }
     }
     transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(230, 280);
+      transform: translate(230, 280);
       child: container {
         stroke {
           child: color {
@@ -134,27 +131,21 @@ M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106
         }
       }
     }
-    transform {
-      transform: translate(0, 0.125) scale(0.00208333) translate(10, 314);
-      child: text {
-        font: "SVGFreeSansASCII 32px";
-        glyphs: 5 18, 51 23, 70 18, "v", 74 7, "s", 74 7, 80 18, 79 18, 27 9, 1 9, 18 18, 15 9, 25 18, 1 9, 5 18;
-        offset: 0 26;
-      }
+    text {
+      font: "SVGFreeSansASCII 32px";
+      glyphs: 5 18, 51 23, 70 18, "v", 74 7, "s", 74 7, 80 18, 79 18, 27 9, 1 9, 18 18, 15 9, 25 18, 1 9, 5 18;
+      offset: 10 340;
     }
-    transform {
-      transform: translate(0, 0.125) scale(0.00208333);
-      child: stroke {
-        child: color {
-          bounds: 0.5 0.5 479 359;
-          color: rgb(0,0,0);
-        }
-        path: "\
-M 1 1 h 478 v 358 h -478 z";
-        line-width: 1;
-        line-cap: butt;
-        line-join: miter;
+    stroke {
+      child: color {
+        bounds: 0.5 0.5 479 359;
+        color: rgb(0,0,0);
       }
+      path: "\
+M 1 1 h 478 v 358 h -478 z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
     }
   }
   isolations: background;

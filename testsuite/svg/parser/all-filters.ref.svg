@@ -18,7 +18,7 @@
               height='50%'
               result='blurred_source'
               in='SourceGraphic'
-              stdDeviation='0.2'
+              stdDeviation='0.2 0.2'
               edgeMode='duplicate'>
       </feGaussianBlur>
       <feBlend

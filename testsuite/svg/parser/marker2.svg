@@ -10,21 +10,21 @@
   </marker>
 
   <rect
-        marker='url(#marker1)'
+        style='marker:url(#marker1);'
         x="40" y="40" width="125" height="75"
         paint-order='markers fill stroke'
         stroke-width='3'
         stroke='blue' fill='none' />
 
   <rect
-        marker='url(#marker1)'
+        style='marker:url(#marker1);'
         x="60" y="50" width="85" height="55"
         paint-order='markers fill stroke'
         stroke-width='2'
         stroke='purple' fill='none' />
 
   <rect
-        marker='url(#marker1)'
+        style='marker:url(#marker1);'
         x="80" y="60" width="45" height="35"
         paint-order='markers fill stroke'
         stroke-width='1'

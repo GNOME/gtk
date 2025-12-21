@@ -106,7 +106,7 @@ main (int argc, char *argv[])
       if (svg)
         {
           img = gtk_picture_new_for_paintable (svg);
-          gtk_picture_set_can_shrink (GTK_PICTURE (img), FALSE);
+          gtk_picture_set_can_shrink (GTK_PICTURE (img), 1);
           gtk_grid_attach (GTK_GRID (grid), img, 1, row, 1, 1);
           g_object_unref (svg);
         }
@@ -116,7 +116,7 @@ main (int argc, char *argv[])
       if (svg)
         {
           img = gtk_picture_new_for_paintable (svg);
-          gtk_picture_set_can_shrink (GTK_PICTURE (img), FALSE);
+          gtk_picture_set_can_shrink (GTK_PICTURE (img), 1);
           gtk_grid_attach (GTK_GRID (grid), img, 2, row, 1, 1);
           g_object_unref (svg);
           g_bytes_unref (bytes);

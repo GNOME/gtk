@@ -15,7 +15,7 @@ L 200 150";
     transform {
       transform: translate(50, 50) rotate(213.69);
       child: clip {
-        clip: 0 0 10 20;
+        clip: 0 0 10 10;
         child: fill {
           child: color {
             bounds: 0 -5 10 10;
@@ -33,7 +33,7 @@ Z";
     transform {
       transform: translate(200, 150) rotate(33.6901);
       child: clip {
-        clip: 0 0 10 20;
+        clip: 0 0 10 10;
         child: fill {
           child: color {
             bounds: 0 -5 10 10;
