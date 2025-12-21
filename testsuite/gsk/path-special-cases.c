@@ -338,6 +338,9 @@ test_empty_path (void)
 
   g_assert_false (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (0, 0), INFINITY, &point, NULL));
 
+  g_assert_false (gsk_path_get_start_point (path, &point));
+  g_assert_false (gsk_path_get_end_point (path, &point));
+
   gsk_path_unref (path);
 }
 
@@ -1329,6 +1332,57 @@ check_path_point (const GskPathPoint     *point,
 }
 
 static void
+test_zero_length (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  char *s;
+  graphene_rect_t bounds;
+  GskPathPoint point;
+  graphene_vec2_t v1, v2;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, 10, 10);
+  path = gsk_path_builder_free_to_path (builder);
+
+  g_assert_false (gsk_path_is_empty (path));
+  g_assert_false (gsk_path_is_closed (path));
+
+  s = gsk_path_to_string (path);
+  g_assert_cmpstr (s, ==, "M 10 10");
+  g_free (s);
+
+  g_assert_true (gsk_path_get_bounds (path, &bounds));
+  g_assert_true (graphene_rect_equal (&bounds, &GRAPHENE_RECT_INIT (10, 10, 0, 0)));
+
+  g_assert_false (gsk_path_in_fill (path, &GRAPHENE_POINT_INIT (0, 0), GSK_FILL_RULE_WINDING));
+
+  g_assert_true (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (0, 0), INFINITY, &point, NULL));
+
+  check_path_point (&point, path,
+                    &GRAPHENE_POINT_INIT (10, 10),
+                    graphene_vec2_init (&v1, 0, 0),
+                    graphene_vec2_init (&v2, 0, 0),
+                    0, 0);
+
+  g_assert_true (gsk_path_get_start_point (path, &point));
+  check_path_point (&point, path,
+                    &GRAPHENE_POINT_INIT (10, 10),
+                    graphene_vec2_init (&v1, 0, 0),
+                    graphene_vec2_init (&v2, 0, 0),
+                    0, 0);
+
+  g_assert_true (gsk_path_get_end_point (path, &point));
+  check_path_point (&point, path,
+                    &GRAPHENE_POINT_INIT (10, 10),
+                    graphene_vec2_init (&v1, 0, 0),
+                    graphene_vec2_init (&v2, 0, 0),
+                    0, 0);
+
+  gsk_path_unref (path);
+}
+
+static void
 test_rounded_rect_plain (void)
 {
   GskPathBuilder *builder;
@@ -1741,6 +1795,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rounded-rect/parse", test_rounded_rect_parse);
   g_test_add_func ("/path/circle/plain", test_circle_plain);
   g_test_add_func ("/path/circle/zero", test_circle_zero);
+  g_test_add_func ("/path/zero-length", test_zero_length);
 
   return g_test_run ();
 }
