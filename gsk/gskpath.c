@@ -560,6 +560,7 @@ gsk_path_get_start_point (GskPath      *self,
    */
   result->contour = 0;
   result->idx = 1;
+  result->idx = MIN (1, gsk_contour_get_n_ops (self->contours[0]) - 1);
   result->t = 0;
 
   return TRUE;
