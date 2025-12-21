@@ -3635,6 +3635,9 @@ transform_parser_parse (GtkCssParser *parser)
         }
 
       g_array_append_val (array, transform);
+
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_skip (parser);
     }
 
   if (array->len == 0)
