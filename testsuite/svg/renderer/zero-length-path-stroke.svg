@@ -1,0 +1,52 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        width='480'
+        height='360'
+        viewBox='0 0 480 360'
+        stroke-linejoin='bevel'
+        stroke-width='10'>
+  <g transform='translate(0,0)'>
+    <path d='M10,10'
+          stroke-linecap='round'
+          stroke='red'
+          fill='none'/>
+    <path d='M30,10'
+          stroke-linecap='square'
+          stroke='green'
+          fill='none'/>
+    <path d='M50,10'
+          stroke-linecap='butt'
+          stroke='blue'
+          fill='none'/>
+  </g>
+
+  <g transform='translate(0,30)'>
+    <path d='M10,10z'
+          stroke-linecap='round'
+          stroke='red'
+          fill='none'/>
+    <path d='M30,10z'
+          stroke-linecap='square'
+          stroke='green'
+          fill='none'/>
+    <path d='M50,10z'
+          stroke-linecap='butt'
+          stroke='blue'
+          fill='none'/>
+  </g>
+
+  <g transform='translate(0,60)'>
+    <path d='M10,10L10,10'
+          stroke-linecap='round'
+          stroke='red'
+          fill='none'/>
+    <path d='M30,10L30,10'
+          stroke-linecap='square'
+          stroke='green'
+          fill='none'/>
+    <path d='M50,10L50,10'
+          stroke-linecap='butt'
+          stroke='blue'
+          fill='none'/>
+  </g>
+</svg>

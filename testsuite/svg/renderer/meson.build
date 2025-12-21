@@ -110,6 +110,7 @@ test_data = [
   'use2.svg',
   'viewbox.svg',
   'viewports.svg',
+  'zero-length-path-stroke.svg',
 ]
 
 foreach testname : test_data
