@@ -60,6 +60,12 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
                                                                  GskContour             *contour);
 
+
+/* implemented in gskstrokenode.c */
+void                    gsk_cairo_stroke_path                   (cairo_t                *cr,
+                                                                 GskPath                *path,
+                                                                 GskStroke              *stroke);
+
 static inline void
 gsk_cairo_set_fill_rule (cairo_t     *cr,
                          GskFillRule  fill_rule)

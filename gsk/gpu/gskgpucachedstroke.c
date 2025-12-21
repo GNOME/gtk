@@ -12,6 +12,7 @@
 #include "gskenumtypes.h"
 #include "gskrectprivate.h"
 #include "gskstrokeprivate.h"
+#include "gskpathprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkcolorprivate.h"
@@ -135,10 +136,7 @@ stroke_path (gpointer  data,
   StrokeData *stroke = data;
 
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
-
-  gsk_stroke_to_cairo (&stroke->stroke, cr);
-  gsk_path_to_cairo (stroke->path, cr);
-  cairo_stroke (cr);
+  gsk_cairo_stroke_path (cr, stroke->path, &stroke->stroke);
 }
 
 static void

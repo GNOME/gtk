@@ -22,7 +22,7 @@
 
 #include "gskcolornodeprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gskpath.h"
+#include "gskpathprivate.h"
 #include "gskrectprivate.h"
 #include "gskrenderreplay.h"
 #include "gskstrokeprivate.h"
@@ -60,6 +60,16 @@ gsk_stroke_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+void
+gsk_cairo_stroke_path (cairo_t   *cr,
+                       GskPath   *path,
+                       GskStroke *stroke)
+{
+  gsk_stroke_to_cairo (stroke, cr);
+  gsk_path_to_cairo (path, cr);
+  cairo_stroke (cr);
+}
+
 static void
 gsk_stroke_node_draw (GskRenderNode *node,
                       cairo_t       *cr,
@@ -84,10 +94,7 @@ gsk_stroke_node_draw (GskRenderNode *node,
       cairo_pop_group_to_source (cr);
     }
 
-  gsk_stroke_to_cairo (&self->stroke, cr);
-
-  gsk_path_to_cairo (self->path, cr);
-  cairo_stroke (cr);
+  gsk_cairo_stroke_path (cr, self->path, &self->stroke);
 }
 
 static void
