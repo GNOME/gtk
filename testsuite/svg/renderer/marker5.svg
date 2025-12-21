@@ -6,6 +6,7 @@
         orient="auto-start-reverse"
         markerUnits='userSpaceOnUse'
         markerWidth='10' markerHeight='20'
+        viewBox='0 5 10 10'
         refX='0' refY='0'>
     <polygon points='0 -5 10 0 0 5'/>
   </marker>

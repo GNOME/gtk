@@ -6,26 +6,31 @@
         orient="auto"
         overflow='visible'
         markerUnits='strokeWidth'
+        viewBox='0 0 5 5'
         markerWidth='5' markerHeight='5'>
     <circle cx='0' cy='0' r='2' fill='context-stroke'/>
   </marker>
 
   <rect
-        marker='url(#marker1)'
+        style='marker:url(#marker1);'
         x="40" y="40" width="125" height="75"
         paint-order='markers fill stroke'
         stroke-width='3'
         stroke='blue' fill='none' />
 
   <rect
-        marker='url(#marker1)'
+        marker-start='url(#marker1)'
+        marker-mid='url(#marker1)'
+        marker-end='url(#marker1)'
         x="60" y="50" width="85" height="55"
         paint-order='markers fill stroke'
         stroke-width='2'
         stroke='purple' fill='none' />
 
   <rect
-        marker='url(#marker1)'
+        marker-start='url(#marker1)'
+        marker-end='url(#marker1)'
+        marker-mid='url(#marker1)'
         x="80" y="60" width="45" height="35"
         paint-order='markers fill stroke'
         stroke-width='1'

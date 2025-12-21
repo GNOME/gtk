@@ -13215,6 +13215,7 @@ parse_style_attr (Shape               *shape,
   char *prop_val;
   SvgValue *value;
   unsigned int idx = 0;
+  gboolean is_marker_shorthand;
 
   if (for_stop)
     {
@@ -13224,6 +13225,7 @@ parse_style_attr (Shape               *shape,
 
   while (*p)
     {
+      is_marker_shorthand = FALSE;
       skip_whitespace (&p);
       name = consume_ident (&p);
       if (!name)
@@ -13234,7 +13236,13 @@ parse_style_attr (Shape               *shape,
           continue;
         }
 
-      if (!shape_attr_lookup (name, &attr, shape->type))
+      if (strcmp (name, "marker") == 0 &&
+          shape_has_attr (shape->type, SHAPE_ATTR_MARKER_START))
+        {
+          attr = SHAPE_ATTR_MARKER_START;
+          is_marker_shorthand = TRUE;
+        }
+      else if (!shape_attr_lookup (name, &attr, shape->type))
         {
           gtk_svg_invalid_attribute (data->svg, context,
                                      "style", "while parsing 'style': unsupported property '%s'",
@@ -13276,6 +13284,11 @@ parse_style_attr (Shape               *shape,
                             attr <= SHAPE_ATTR_STOP_OPACITY))
         {
           shape_set_base_value (shape, attr, idx, value);
+          if (is_marker_shorthand)
+            {
+              shape_set_base_value (shape, SHAPE_ATTR_MARKER_MID, idx, value);
+              shape_set_base_value (shape, SHAPE_ATTR_MARKER_END, idx, value);
+            }
           svg_value_unref (value);
         }
       else
@@ -13336,16 +13349,6 @@ parse_shape_attrs (Shape                *shape,
       else if (strcmp (attr_names[i], "id") == 0)
         {
           shape->id = g_strdup (attr_values[i]);
-          *handled |= BIT (i);
-        }
-      else if (strcmp (attr_names[i], "marker") == 0 &&
-               shape_has_attr (shape->type, SHAPE_ATTR_MARKER_START))
-        {
-          SvgValue *value = svg_href_parse_url (attr_values[i]);
-          shape_set_base_value (shape, SHAPE_ATTR_MARKER_START, 0, value);
-          shape_set_base_value (shape, SHAPE_ATTR_MARKER_MID, 0, value);
-          shape_set_base_value (shape, SHAPE_ATTR_MARKER_END, 0, value);
-          svg_value_unref (value);
           *handled |= BIT (i);
         }
       else if (shape_attr_lookup (attr_names[i], &attr, shape->type))
@@ -17939,20 +17942,33 @@ paint_marker (Shape              *shape,
       angle = orient->angle;
     }
 
+  vb = (SvgViewBox *) marker->current[SHAPE_ATTR_VIEW_BOX];
+  cf = (SvgContentFit *) marker->current[SHAPE_ATTR_CONTENT_FIT];
+  overflow = marker->current[SHAPE_ATTR_OVERFLOW];
+
   width = svg_number_get (marker->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
   height = svg_number_get (marker->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
-  x = svg_number_get (marker->current[SHAPE_ATTR_REF_X], width);
-  y = svg_number_get (marker->current[SHAPE_ATTR_REF_Y], height);
+  SvgNumber *n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_X];
+  if (n->dim == SVG_DIMENSION_PERCENTAGE)
+    x = n->value / 100 * width;
+  else if (!vb->unset)
+    x = n->value / vb->view_box.size.width * width;
+  else
+    x = n->value;
+
+  n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_Y];
+  if (n->dim == SVG_DIMENSION_PERCENTAGE)
+    y = n->value / 100 * height;
+  else if (!vb->unset)
+    y = n->value / vb->view_box.size.height * height;
+  else
+    y = n->value;
 
   width *= scale;
   height *= scale;
   x *= scale;
   y *= scale;
-
-  vb = (SvgViewBox *) marker->current[SHAPE_ATTR_VIEW_BOX];
-  cf = (SvgContentFit *) marker->current[SHAPE_ATTR_CONTENT_FIT];
-  overflow = marker->current[SHAPE_ATTR_OVERFLOW];
 
   if (vb->unset)
     graphene_rect_init (&view_box, 0, 0, width, height);
@@ -17970,6 +17986,7 @@ paint_marker (Shape              *shape,
   gtk_snapshot_save (context->snapshot);
 
   gtk_snapshot_translate (context->snapshot, &vertex);
+
   gtk_snapshot_rotate (context->snapshot, angle);
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-x, -y));
 
@@ -17977,7 +17994,7 @@ paint_marker (Shape              *shape,
   gtk_snapshot_scale (context->snapshot, sx, sy);
 
   if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
-    gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
+    gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, vb->view_box.size.width, vb->view_box.size.height));
 
   render_shape (marker, context);
 

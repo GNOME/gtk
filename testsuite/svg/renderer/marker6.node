@@ -39,7 +39,7 @@ L 200 50";
     transform {
       transform: translate(50, 50) rotate(180) translate(-0, -5) scale(3, 1);
       child: clip {
-        clip: 0 0 30 10;
+        clip: 0 0 10 10;
         child: container {
           fill {
             child: color {
@@ -80,7 +80,7 @@ M 1 5 o 0 1, -1 1, 0.707106769 o -1 0, -1 -1, 0.707106769 o 0 -1, 1 -1, 0.707106
       }
     }
     clip {
-      clip: 200 45 90 10;
+      clip: 200 45 30 10;
       child: transform {
         transform: translate(200, 45) scale(3, 1);
         child: container {
