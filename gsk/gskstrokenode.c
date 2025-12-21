@@ -213,6 +213,10 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskStrokeNode, gsk_stroke_node)
  *
  * The area is filled with @child.
  *
+ * GSK aims to follow the SVG semantics for stroking paths.
+ * E.g. zero-length contours will get round or square line
+ * caps drawn, regardless whether they are closed or not.
+ *
  * Returns: (transfer none) (type GskStrokeNode): A new #GskRenderNode
  *
  * Since: 4.14
