@@ -5030,6 +5030,9 @@ svg_filter_needs_backdrop (SvgValue *value)
       if (f->functions[i].kind != FILTER_REF)
         continue;
 
+      if (f->functions[i].ref.shape == NULL)
+        continue;
+
       if (filter_needs_backdrop (f->functions[i].ref.shape))
         return TRUE;
     }
@@ -16242,6 +16245,12 @@ apply_alpha_only (GskRenderNode *child)
 }
 
 static GskRenderNode *
+empty_node (void)
+{
+  return gsk_container_node_new (NULL, 0);
+}
+
+static GskRenderNode *
 error_node (const graphene_rect_t *bounds)
 {
   GdkRGBA pink = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
@@ -16358,9 +16367,13 @@ get_input_for_ref (SvgValue              *in,
         gtk_snapshot_push_collect (context->snapshot);
         fill_shape (shape, path, paint, opacity, context);
         node = gtk_snapshot_pop_collect (context->snapshot);
-        res = filter_result_new (node, subregion);
-        gsk_render_node_unref (node);
 
+        if (!node)
+          node = empty_node ();
+
+        res = filter_result_new (node, subregion);
+
+        gsk_render_node_unref (node);
         gsk_path_unref (path);
         return res;
       }
@@ -16384,6 +16397,9 @@ apply_filter_tree (Shape         *shape,
   graphene_rect_t filter_region;
   GHashTable *results;
   graphene_rect_t bounds;
+
+  if (filter->filters->len == 0)
+    return empty_node ();
 
   if (!shape_get_current_bounds (shape, context->viewport, &bounds))
     return gsk_render_node_ref (source);
@@ -16746,7 +16762,7 @@ apply_filter_tree (Shape         *shape,
 
             if (href->kind == HREF_NONE)
               {
-                result = gsk_container_node_new (NULL, 0);
+                result = empty_node ();
               }
             else if (href->texture != NULL)
               {
@@ -16873,15 +16889,18 @@ apply_filter_functions (SvgValue      *filter,
                         GskRenderNode *source)
 {
   SvgFilter *f = (SvgFilter *) filter;
-  GskRenderNode *result;
+  GskRenderNode *result = NULL;
 
-  result = source;
   for (unsigned int i = 0; i < f->n_functions; i++)
     {
       FilterFunction *ff = &f->functions[i];
-      GskRenderNode *child = result;
+      GskRenderNode *child;
 
-      child = result;
+      if (i == 0)
+        child = gsk_render_node_ref (source);
+      else
+        child = result;
+
       switch (ff->kind)
         {
         case FILTER_NONE:
@@ -16928,6 +16947,12 @@ apply_filter_functions (SvgValue      *filter,
           }
           break;
         case FILTER_REF:
+          if (ff->ref.shape == NULL)
+            {
+              gsk_render_node_unref (child);
+              return gsk_render_node_ref (source);
+            }
+
           result = apply_filter_tree (shape, ff->ref.shape, context, child);
           break;
         default:
@@ -17236,7 +17261,7 @@ pop_group (Shape        *shape,
           node = gtk_snapshot_pop_collect (context->snapshot);
 
           if (!node)
-            node = gsk_container_node_new (NULL, 0);
+            node = empty_node ();
 
           node = apply_filter_functions (filter, context, shape, node);
 
