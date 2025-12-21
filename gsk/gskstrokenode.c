@@ -23,6 +23,7 @@
 #include "gskcolornodeprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskpathprivate.h"
+#include "gskcontourprivate.h"
 #include "gskrectprivate.h"
 #include "gskrenderreplay.h"
 #include "gskstrokeprivate.h"
@@ -68,6 +69,33 @@ gsk_cairo_stroke_path (cairo_t   *cr,
   gsk_stroke_to_cairo (stroke, cr);
   gsk_path_to_cairo (path, cr);
   cairo_stroke (cr);
+
+  /* Cairo draws caps for zero-length subpaths with round caps,
+   * but not square. So we do it ourselves.
+   */
+  if (gsk_stroke_get_line_cap (stroke) == GSK_LINE_CAP_SQUARE)
+    {
+      double width = gsk_stroke_get_line_width (stroke);
+
+      for (size_t i = 0; i < gsk_path_get_n_contours (path); i++)
+        {
+          const GskContour *c = gsk_path_get_contour (path, i);
+
+          if ((gsk_contour_get_flags (c) & GSK_PATH_ZERO_LENGTH) != 0)
+            {
+              GskPathPoint point = { .contour = i, .idx = 0, .t = 0 };
+              graphene_point_t p;
+
+              gsk_contour_get_position (c, &point, &p);
+              cairo_rectangle (cr,
+                               p.x - width / 2,
+                               p.y - width / 2,
+                               width,
+                               width);
+              cairo_fill (cr);
+            }
+        }
+    }
 }
 
 static void
