@@ -263,6 +263,48 @@ test_rect_winding (void)
   gsk_path_unref (path1);
 }
 
+static void
+test_zero_length (void)
+{
+  GskPath *path;
+  const GskContour *contour;
+  GskStroke *stroke;
+  graphene_rect_t bounds;
+  gboolean ret;
+
+  stroke = gsk_stroke_new (10);
+  gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
+
+  path = gsk_path_parse ("M10,10z");
+  g_assert_true (gsk_path_get_n_contours (path) == 1);
+  contour = gsk_path_get_contour (path, 0);
+  g_assert_true (gsk_contour_get_flags (contour) & GSK_PATH_ZERO_LENGTH);
+  ret = gsk_path_get_stroke_bounds (path, stroke, &bounds);
+  g_assert_true (ret);
+  g_assert_true (bounds.size.width >= 10 && bounds.size.height >= 10);
+  gsk_path_unref (path);
+
+  path = gsk_path_parse ("M10,10L10,10");
+  g_assert_true (gsk_path_get_n_contours (path) == 1);
+  contour = gsk_path_get_contour (path, 0);
+  g_assert_true (gsk_contour_get_flags (contour) & GSK_PATH_ZERO_LENGTH);
+  ret = gsk_path_get_stroke_bounds (path, stroke, &bounds);
+  g_assert_true (ret);
+  g_assert_true (bounds.size.width >= 10 && bounds.size.height >= 10);
+  gsk_path_unref (path);
+
+  path = gsk_path_parse ("M10,10L12,12");
+  g_assert_true (gsk_path_get_n_contours (path) == 1);
+  contour = gsk_path_get_contour (path, 0);
+  g_assert_false (gsk_contour_get_flags (contour) & GSK_PATH_ZERO_LENGTH);
+  ret = gsk_path_get_stroke_bounds (path, stroke, &bounds);
+  g_assert_true (ret);
+  g_assert_true (bounds.size.width >= 10 && bounds.size.height >= 10);
+  gsk_path_unref (path);
+
+  gsk_stroke_free (stroke);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -274,6 +316,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rounded-rect/winding", test_rounded_rect_winding);
   g_test_add_func ("/path/rect/roundtrip", test_rect_roundtrip);
   g_test_add_func ("/path/rect/winding", test_rect_winding);
+  g_test_add_func ("/path/zero-length", test_zero_length);
 
   return g_test_run ();
 }

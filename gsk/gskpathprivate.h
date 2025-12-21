@@ -30,6 +30,8 @@ typedef enum
 {
   /* path has only lines */
   GSK_PATH_FLAT,
+  /* all points of the path are identical */
+  GSK_PATH_ZERO_LENGTH,
   /* all contours are closed */
   GSK_PATH_CLOSED
 } GskPathFlags;
