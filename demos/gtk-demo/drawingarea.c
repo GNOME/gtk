@@ -68,7 +68,6 @@ draw_brush (GtkWidget *widget,
             double     x,
             double     y)
 {
-  GdkRectangle update_rect;
   cairo_t *cr;
 
   if (surface == NULL ||
@@ -76,16 +75,15 @@ draw_brush (GtkWidget *widget,
       cairo_image_surface_get_height (surface) != gtk_widget_get_height (widget))
     create_surface (widget);
 
-  update_rect.x = x - 3;
-  update_rect.y = y - 3;
-  update_rect.width = 6;
-  update_rect.height = 6;
-
   /* Paint to the surface, where we store our state */
   cr = cairo_create (surface);
 
-  gdk_cairo_rectangle (cr, &update_rect);
-  cairo_fill (cr);
+  cairo_move_to (cr, x, y);
+  cairo_line_to (cr, x, y);
+  cairo_set_line_width (cr, 6);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_stroke (cr);
 
   cairo_destroy (cr);
 
@@ -105,6 +103,7 @@ drag_begin (GtkGestureDrag *gesture,
   start_y = y;
 
   draw_brush (area, x, y);
+
 }
 
 static void
