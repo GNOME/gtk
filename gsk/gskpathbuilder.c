@@ -612,11 +612,6 @@ gsk_path_builder_line_to (GskPathBuilder *self,
 {
   g_return_if_fail (self != NULL);
 
-  /* skip the line if it goes to the same point */
-  if (graphene_point_equal (&self->current_point,
-                            &GRAPHENE_POINT_INIT (x, y)))
-    return;
-
   gsk_path_builder_append_current (self,
                                    GSK_PATH_LINE,
                                    1, (graphene_point_t[1]) {
