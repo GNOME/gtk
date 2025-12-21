@@ -223,6 +223,18 @@ format_time (int64_t time)
   return format_time_buf (buf, 64, time);
 }
 
+#if 0
+static void
+print_rect (const char *label,
+            const graphene_rect_t *rect)
+{
+  g_print ("%s: %g %g %g %g\n",
+           label,
+           rect->origin.x, rect->origin.y,
+           rect->size.width, rect->size.height);
+}
+#endif
+
 #define dbg_print(cond, fmt,...) \
   G_STMT_START { \
     if (strstr (g_getenv ("SVG_DEBUG") ?:"", cond)) \
@@ -235,6 +247,7 @@ format_time (int64_t time)
 
 #else
 #define dbg_print(cond,fmt,...)
+#define print_rect (label, rect)
 #endif
 
 /* }}} */
@@ -9576,19 +9589,14 @@ shape_get_current_bounds (Shape                 *shape,
       break;
     case SHAPE_IMAGE:
       {
-        SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+        double x, y, width, height;
 
-        if (href->texture)
-          {
-            graphene_rect_init (bounds,
-                                0, 0,
-                                gdk_texture_get_width (href->texture),
-                                gdk_texture_get_height (href->texture));
-          }
-        else
-          {
-            graphene_rect_init (bounds, 0, 0, 0, 0);
-          }
+        x = viewport->origin.x + svg_number_get (shape->current[SHAPE_ATTR_X], viewport->size.width);
+        y = viewport->origin.y + svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->size.height);
+        width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->size.width);
+        height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->size.height);
+
+        graphene_rect_init (bounds, x, y, width, height);
         ret = TRUE;
       }
       break;
