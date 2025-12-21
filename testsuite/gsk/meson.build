@@ -247,6 +247,7 @@ compare_render_tests = [
   'yuv-matrix-memory-rgba',
   'yuv-matrix-memory-yuyv',
   'z-transform-clipping-bounds-nocairo',
+  'zero-length-path-stroke',
 ]
 
 # These tests are either slow or need lots of memory.

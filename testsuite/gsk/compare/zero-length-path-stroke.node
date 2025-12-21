@@ -1,0 +1,45 @@
+clip {
+  clip: 7 7 6 6;
+  child: stroke {
+    child: color {
+      bounds: 0 0 20 20;
+      color: rgb(255,0,0);
+    }
+    path: "\
+M 10 10\
+L 10 10";
+    line-width: 10;
+    line-cap: round;
+    line-join: miter;
+  }
+}
+transform {
+  transform: translate(20, 0);
+  child: stroke {
+    child: color {
+      bounds: 0 0 20 20;
+      color: rgb(0,255,0);
+    }
+    path: "\
+M 10 10\
+L 10 10";
+    line-width: 10;
+    line-cap: square;
+    line-join: miter;
+  }
+}
+transform {
+  transform: translate(40, 0);
+  child: stroke {
+    child: color {
+      bounds: 0 0 20 20;
+      color: rgb(0,0,255);
+    }
+    path: "\
+M 10 10\
+L 10 10";
+    line-width: 10;
+    line-cap: butt;
+    line-join: miter;
+  }
+}
