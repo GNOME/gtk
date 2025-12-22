@@ -5030,6 +5030,9 @@ svg_filter_needs_backdrop (SvgValue *value)
       if (f->functions[i].kind != FILTER_REF)
         continue;
 
+      if (f->functions[i].ref.shape == NULL)
+        continue;
+
       if (filter_needs_backdrop (f->functions[i].ref.shape))
         return TRUE;
     }
@@ -9330,11 +9333,23 @@ shape_get_path (Shape                 *shape,
         }
       break;
 
+    case SHAPE_USE:
+      {
+        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        if (use_shape)
+          {
+            return shape_get_path (use_shape, viewport, current);
+          }
+        else
+          {
+            builder = gsk_path_builder_new ();
+            return gsk_path_builder_free_to_path (builder);
+          }
+      }
     case SHAPE_GROUP:
     case SHAPE_CLIP_PATH:
     case SHAPE_MASK:
     case SHAPE_DEFS:
-    case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
     case SHAPE_PATTERN:
@@ -9421,11 +9436,14 @@ shape_get_current_path (Shape                 *shape,
             }
           break;
 
+        case SHAPE_USE:
+          g_clear_pointer (&shape->path, gsk_path_unref);
+          break;
+
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
         case SHAPE_MASK:
         case SHAPE_DEFS:
-        case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
@@ -9445,6 +9463,7 @@ shape_get_current_path (Shape                 *shape,
   if (!shape->path)
     {
       shape->path = shape_get_path (shape, viewport, TRUE);
+      shape->valid_bounds = FALSE;
 
       switch (shape->type)
         {
@@ -9484,13 +9503,13 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_PATH:
+        case SHAPE_USE:
           break;
 
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
         case SHAPE_MASK:
         case SHAPE_DEFS:
-        case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
@@ -9527,9 +9546,11 @@ shape_get_current_bounds (Shape                 *shape,
                           const graphene_rect_t *viewport,
                           graphene_rect_t       *bounds)
 {
+  GskTransform *transform;
+  graphene_rect_t b;
   gboolean ret = FALSE;
 
-  graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
+  graphene_rect_init_from_rect (&b, graphene_rect_zero ());
 
   switch (shape->type)
     {
@@ -9540,17 +9561,23 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_CIRCLE:
     case SHAPE_ELLIPSE:
     case SHAPE_PATH:
-      {
-        GskPath *path = shape_get_current_path (shape, viewport);
-        ret = gsk_path_get_tight_bounds (path, bounds);
-        gsk_path_unref (path);
-      }
+      if (!shape->valid_bounds)
+        {
+          GskPath *path = shape_get_current_path (shape, viewport);
+          if (!gsk_path_get_tight_bounds (shape->path, &shape->bounds))
+            graphene_rect_init (&shape->bounds, 0, 0, 0, 0);
+          shape->valid_bounds = TRUE;
+          gsk_path_unref (path);
+        }
+      graphene_rect_init_from_rect (&b, &shape->bounds);
+      ret = TRUE;
       break;
     case SHAPE_USE:
       {
         Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
         if (use_shape)
-          ret = shape_get_current_bounds (use_shape, viewport, bounds);
+          ret = shape_get_current_bounds (use_shape, viewport, &b);
+        ret = TRUE;
       }
       break;
     case SHAPE_GROUP:
@@ -9559,36 +9586,26 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_PATTERN:
     case SHAPE_MARKER:
     case SHAPE_SVG:
-      {
-        for (unsigned int i = 0; i < shape->shapes->len; i++)
-          {
-            Shape *sh = g_ptr_array_index (shape->shapes, i);
-            GskTransform *transform;
-            graphene_rect_t b;
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          graphene_rect_t b2;
 
-            if (shape_get_current_bounds (sh, viewport, &b))
-              {
-                transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
-                gsk_transform_transform_bounds (transform, &b, &b);
-                if (i == 0)
-                  graphene_rect_init_from_rect (bounds, &b);
-                else
-                  graphene_rect_union (bounds, &b, bounds);
-                gsk_transform_unref (transform);
-              }
-          }
-        ret = TRUE;
-      }
-      break;
-    case SHAPE_DEFS:
-    case SHAPE_LINEAR_GRADIENT:
-    case SHAPE_RADIAL_GRADIENT:
-    case SHAPE_FILTER:
-      g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
+          if (shape_get_current_bounds (sh, viewport, &b2))
+            {
+              if (i == 0)
+                graphene_rect_init_from_rect (&b, &b2);
+              else
+                graphene_rect_union (&b, &b2, &b);
+            }
+        }
+      ret = TRUE;
       break;
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
-      g_critical ("TODO");
+      if (!shape->valid_bounds)
+        g_critical ("TODO");
+      graphene_rect_init_from_rect (bounds, &shape->bounds);
       break;
     case SHAPE_IMAGE:
       {
@@ -9603,9 +9620,19 @@ shape_get_current_bounds (Shape                 *shape,
         ret = TRUE;
       }
       break;
+    case SHAPE_DEFS:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+    case SHAPE_FILTER:
+      g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
+      break;
     default:
       g_assert_not_reached ();
     }
+
+  transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
+  gsk_transform_transform_bounds (transform, &b, bounds);
+  gsk_transform_unref (transform);
 
   return ret;
 }
@@ -16218,6 +16245,12 @@ apply_alpha_only (GskRenderNode *child)
 }
 
 static GskRenderNode *
+empty_node (void)
+{
+  return gsk_container_node_new (NULL, 0);
+}
+
+static GskRenderNode *
 error_node (const graphene_rect_t *bounds)
 {
   GdkRGBA pink = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
@@ -16334,9 +16367,13 @@ get_input_for_ref (SvgValue              *in,
         gtk_snapshot_push_collect (context->snapshot);
         fill_shape (shape, path, paint, opacity, context);
         node = gtk_snapshot_pop_collect (context->snapshot);
-        res = filter_result_new (node, subregion);
-        gsk_render_node_unref (node);
 
+        if (!node)
+          node = empty_node ();
+
+        res = filter_result_new (node, subregion);
+
+        gsk_render_node_unref (node);
         gsk_path_unref (path);
         return res;
       }
@@ -16360,6 +16397,9 @@ apply_filter_tree (Shape         *shape,
   graphene_rect_t filter_region;
   GHashTable *results;
   graphene_rect_t bounds;
+
+  if (filter->filters->len == 0)
+    return empty_node ();
 
   if (!shape_get_current_bounds (shape, context->viewport, &bounds))
     return gsk_render_node_ref (source);
@@ -16722,7 +16762,7 @@ apply_filter_tree (Shape         *shape,
 
             if (href->kind == HREF_NONE)
               {
-                result = gsk_container_node_new (NULL, 0);
+                result = empty_node ();
               }
             else if (href->texture != NULL)
               {
@@ -16849,15 +16889,18 @@ apply_filter_functions (SvgValue      *filter,
                         GskRenderNode *source)
 {
   SvgFilter *f = (SvgFilter *) filter;
-  GskRenderNode *result;
+  GskRenderNode *result = NULL;
 
-  result = source;
   for (unsigned int i = 0; i < f->n_functions; i++)
     {
       FilterFunction *ff = &f->functions[i];
-      GskRenderNode *child = result;
+      GskRenderNode *child;
 
-      child = result;
+      if (i == 0)
+        child = gsk_render_node_ref (source);
+      else
+        child = result;
+
       switch (ff->kind)
         {
         case FILTER_NONE:
@@ -16904,6 +16947,12 @@ apply_filter_functions (SvgValue      *filter,
           }
           break;
         case FILTER_REF:
+          if (ff->ref.shape == NULL)
+            {
+              gsk_render_node_unref (child);
+              return gsk_render_node_ref (source);
+            }
+
           result = apply_filter_tree (shape, ff->ref.shape, context, child);
           break;
         default:
@@ -16919,8 +16968,35 @@ apply_filter_functions (SvgValue      *filter,
 /* {{{ Groups */
 
 static gboolean
-needs_isolation (Shape        *shape,
-                 PaintContext *context)
+needs_copy (Shape         *shape,
+            PaintContext  *context,
+            const char   **reason)
+{
+  if (context->op != CLIPPING)
+    {
+      SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
+      SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
+
+      if (svg_filter_needs_backdrop (filter))
+        {
+          if (reason) *reason = "filter";
+          return TRUE;
+        }
+
+      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+        {
+          if (reason) *reason = "blending";
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+needs_isolation (Shape         *shape,
+                 PaintContext  *context,
+                 const char   **reason)
 {
   if (context->op != CLIPPING)
     {
@@ -16932,26 +17008,45 @@ needs_isolation (Shape        *shape,
       GskTransform *transform;
 
       if (shape->type == SHAPE_SVG && shape->parent == NULL)
-        return TRUE;
+        {
+          if (reason) *reason = "toplevel <svg>";
+          return TRUE;
+        }
 
       if (context->op == MASKING && shape->type == SHAPE_MASK)
-        return TRUE;
+        {
+          if (reason) *reason = "<mask>";
+          return TRUE;
+        }
 
       if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
-        return TRUE;
+        {
+          if (reason) *reason = "isolate attribute";
+          return TRUE;
+        }
 
       if (svg_number_get (opacity, 1) != 1)
-        return TRUE;
+        {
+          if (reason) *reason = "opacity";
+          return TRUE;
+        }
 
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
-        return TRUE;
+        {
+          if (reason) *reason = "blending";
+          return TRUE;
+        }
 
       if (!svg_filter_is_none (filter))
-        return TRUE;
+        {
+          if (reason) *reason = "filter";
+          return TRUE;
+        }
 
       transform = svg_transform_get_gsk (tf);
       if (gsk_transform_get_category (transform) <= GSK_TRANSFORM_CATEGORY_3D)
         {
+          if (reason) *reason = "3D transform";
           gsk_transform_unref (transform);
           return TRUE;
         }
@@ -17052,11 +17147,19 @@ push_group (Shape        *shape,
 
   if (context->op != CLIPPING)
     {
-      if (svg_filter_needs_backdrop (filter))
-        gtk_snapshot_push_copy (context->snapshot);
+      const char *reason;
 
-      if (needs_isolation (shape, context))
-        gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_BACKGROUND);
+      if (needs_copy (shape, context, &reason))
+        {
+          gtk_snapshot_push_debug (context->snapshot, "copy for %s", reason);
+          gtk_snapshot_push_copy (context->snapshot);
+        }
+
+      if (needs_isolation (shape, context, &reason))
+        {
+          gtk_snapshot_push_debug (context->snapshot, "isolate for %s", reason);
+          gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_BACKGROUND);
+        }
 
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
         {
@@ -17064,7 +17167,6 @@ push_group (Shape        *shape,
 
           shape_get_current_bounds (shape, context->viewport, &bounds);
 
-          gtk_snapshot_push_copy (context->snapshot);
           gtk_snapshot_push_blend (context->snapshot, svg_enum_get (blend));
           gtk_snapshot_append_paste (context->snapshot, &bounds, 0);
           gtk_snapshot_pop (context->snapshot);
@@ -17113,7 +17215,7 @@ push_group (Shape        *shape,
       pop_op (context);
     }
 
-  if (mask->kind != MASK_NONE && (mask->shape != NULL))
+  if (mask->kind != MASK_NONE && mask->shape != NULL)
     {
       gboolean has_clip = FALSE;
 
@@ -17212,7 +17314,7 @@ pop_group (Shape        *shape,
           node = gtk_snapshot_pop_collect (context->snapshot);
 
           if (!node)
-            node = gsk_container_node_new (NULL, 0);
+            node = empty_node ();
 
           node = apply_filter_functions (filter, context, shape, node);
 
@@ -17224,8 +17326,10 @@ pop_group (Shape        *shape,
         gtk_snapshot_pop (context->snapshot);
     }
 
-  if (mask->kind != MASK_NONE && (mask->shape != NULL))
-    gtk_snapshot_pop (context->snapshot);
+  if (mask->kind != MASK_NONE && mask->shape != NULL)
+    {
+      gtk_snapshot_pop (context->snapshot);
+    }
 
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
@@ -17236,14 +17340,19 @@ pop_group (Shape        *shape,
       if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
         {
           gtk_snapshot_pop (context->snapshot);
+        }
+
+      if (needs_isolation (shape, context, NULL))
+        {
+          gtk_snapshot_pop (context->snapshot);
           gtk_snapshot_pop (context->snapshot);
         }
 
-      if (needs_isolation (shape, context))
-        gtk_snapshot_pop (context->snapshot);
-
-      if (svg_filter_needs_backdrop (filter))
-        gtk_snapshot_pop (context->snapshot);
+      if (needs_copy (shape, context, NULL))
+        {
+          gtk_snapshot_pop (context->snapshot);
+          gtk_snapshot_pop (context->snapshot);
+        }
     }
 
   if (shape->type == SHAPE_USE)
@@ -18363,6 +18472,7 @@ fill_text (Shape                 *self,
 #endif
 
             gtk_snapshot_save (context->snapshot);
+
             opacity = svg_number_get (self->current[SHAPE_ATTR_FILL_OPACITY], 1);
             if (paint->kind == PAINT_COLOR)
               {
@@ -18388,6 +18498,7 @@ fill_text (Shape                 *self,
                 if (opacity < 1)
                   gtk_snapshot_pop (context->snapshot);
               }
+
             gtk_snapshot_restore (context->snapshot);
 
 skip: ;
@@ -18595,6 +18706,7 @@ paint_shape (Shape        *shape,
       WritingMode wmode;
       graphene_rect_t bounds;
       GskStroke *stroke;
+      float dx, dy;
 
       if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
         return;
@@ -18604,26 +18716,34 @@ paint_shape (Shape        *shape,
       if (!generate_layouts (shape, NULL, NULL, NULL, &bounds))
         return;
 
-      gtk_snapshot_save (context->snapshot);
+      dx = dy = 0;
       switch (anchor)
         {
         case TEXT_ANCHOR_START:
           break;
         case TEXT_ANCHOR_MIDDLE:
           if (is_vertical_writing_mode[wmode])
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (0., -bounds.size.height / 2.));
+            dy = - bounds.size.height / 2;
           else
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-bounds.size.width / 2., 0.));
+            dx = - bounds.size.width / 2;
           break;
         case TEXT_ANCHOR_END:
           if (is_vertical_writing_mode[wmode])
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (0., -bounds.size.height));
+            dy = - bounds.size.height;
           else
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-bounds.size.width, 0.));
+            dx = - bounds.size.width;
           break;
         default:
           g_assert_not_reached ();
         }
+
+      graphene_rect_init (&shape->bounds,
+                          bounds.origin.x + dx, bounds.origin.y + dy,
+                          bounds.size.width, bounds.size.height);
+      shape->valid_bounds = TRUE;
+
+      gtk_snapshot_save (context->snapshot);
+      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (dx, dy));
 
       stroke = shape_create_stroke (shape, context);
 

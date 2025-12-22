@@ -300,6 +300,7 @@ struct _Shape
   Shape *next;
 
   gboolean computed_for_use;
+  gboolean valid_bounds;
 
   SvgValue *base[N_SHAPE_ATTRS];
   SvgValue *current[N_SHAPE_ATTRS];
@@ -312,6 +313,7 @@ struct _Shape
 
   GskPath *path;
   GskPathMeasure *measure;
+  graphene_rect_t bounds;
   union {
     struct {
       double cx, cy, r;

@@ -25,6 +25,7 @@ test_data = [
   'filter-component-transfer.svg',
   'filter-composite.svg',
   'filter-dropshadow.svg',
+  'filter-empty.svg',
   'filter-fill-paint.svg',
   'filter-flood.svg',
   'filter-gaussian-blur.svg',
