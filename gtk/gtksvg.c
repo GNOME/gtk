@@ -12856,6 +12856,29 @@ parse_base_animation_attrs (Animation            *a,
   return TRUE;
 }
 
+static GArray *
+create_default_times (CalcMode      calc_mode,
+                      unsigned int  n_values)
+{
+  GArray *times;
+  double n;
+
+  if (calc_mode == CALC_MODE_DISCRETE)
+    n = n_values;
+  else
+    n = n_values - 1;
+
+  times = g_array_new (FALSE, FALSE, sizeof (double));
+
+  for (unsigned int i = 0; i < n_values; i++)
+    {
+      double d = i / (double) n;
+      g_array_append_val (times, d);
+    }
+
+  return times;
+}
+
 static gboolean
 parse_value_animation_attrs (Animation            *a,
                              const char           *element_name,
@@ -13037,69 +13060,46 @@ parse_value_animation_attrs (Animation            *a,
         }
     }
 
-  if (times == NULL)
+  if (times != NULL)
     {
-      unsigned int n_values;
-      double n;
-
-      if (values == NULL)
-        n_values = 2;
-      else
-        n_values = values->len;
-
-      if (a->calc_mode == CALC_MODE_DISCRETE)
-        n = n_values;
-      else
-        n = n_values - 1;
-
-      times = g_array_new (FALSE, FALSE, sizeof (double));
-
-      for (unsigned int i = 0; i < n_values; i++)
+      if (values && times->len != values->len)
         {
-          double d = i / (double) n;
-          g_array_append_val (times, d);
-        }
-    }
-
-  g_assert (times != NULL);
-
-  if (values && times->len != values->len)
-    {
-      gtk_svg_invalid_attribute (data->svg, context, NULL,
-                                 "The values and keyTimes attributes must "
-                                 "have the same number of items");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  if (g_array_index (times, double, 0) != 0)
-    {
-      gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
-                                 "The first keyTimes value must be 0");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  if (a->calc_mode != CALC_MODE_DISCRETE && g_array_index (times, double, times->len - 1) != 1)
-    {
-      gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
-                                 "The last keyTimes value must be 1");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  for (unsigned int i = 1; i < times->len; i++)
-    {
-      if (g_array_index (times, double, i) < g_array_index (times, double, i - 1))
-        {
-          gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
-                                     "The keyTimes values must be increasing");
+          gtk_svg_invalid_attribute (data->svg, context, NULL,
+                                     "The values and keyTimes attributes must "
+                                     "have the same number of items");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
           return FALSE;
+        }
+
+      if (g_array_index (times, double, 0) != 0)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
+                                     "The first keyTimes value must be 0");
+          g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&times, g_array_unref);
+          return FALSE;
+        }
+
+      if (a->calc_mode != CALC_MODE_DISCRETE && g_array_index (times, double, times->len - 1) != 1)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
+                                     "The last keyTimes value must be 1");
+          g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&times, g_array_unref);
+          return FALSE;
+        }
+
+      for (unsigned int i = 1; i < times->len; i++)
+        {
+          if (g_array_index (times, double, i) < g_array_index (times, double, i - 1))
+            {
+              gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
+                                         "The keyTimes values must be increasing");
+              g_clear_pointer (&values, g_ptr_array_unref);
+              g_clear_pointer (&times, g_array_unref);
+              return FALSE;
+            }
         }
     }
 
@@ -13140,6 +13140,9 @@ parse_value_animation_attrs (Animation            *a,
 
       g_strfreev (strv);
 
+      if (times == NULL)
+        times = create_default_times (a->calc_mode, n + 1);
+
       if (n != times->len - 1)
         {
           gtk_svg_invalid_attribute (data->svg, context, "keySplines", "wrong number of values");
@@ -13149,6 +13152,11 @@ parse_value_animation_attrs (Animation            *a,
           return FALSE;
         }
     }
+
+  if (times == NULL)
+    times = create_default_times (a->calc_mode, values ? values->len : 2);
+
+  g_assert (times != NULL);
 
   fill_from_values (a,
                     (double *) times->data,
