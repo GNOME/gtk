@@ -11398,7 +11398,7 @@ compute_animation_motion_value (Animation      *a,
         }
     }
 
-  if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
+  if (a->accumulate == ANIMATION_ACCUMULATE_SUM && rep > 0)
     {
       SvgValue *end_val, *acc;
 
@@ -11479,7 +11479,7 @@ compute_value_at_time (Animation      *a,
           ival = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
         }
 
-      if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
+      if (a->accumulate == ANIMATION_ACCUMULATE_SUM && rep > 0)
         {
           SvgValue *aval;
 
