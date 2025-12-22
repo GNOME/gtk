@@ -7,7 +7,8 @@
         gpa:state-change-delay='0ms'
         gpa:time-since-load='1750ms'
         width='100'
-        height='100'>
+        height='100'
+        viewBox='0 0 100 100'>
   <g
           fill-opacity='0.75'
           stroke='none'>

@@ -16,7 +16,7 @@
           d='M 30 160 L 270 40'>
   </path>
   <circle
-          transform='translate(256.667, 46.6667) rotate(0, 0, 0) translate(-5, -0)'
+          transform='translate(256.667, 46.6667) rotate(0, 0, 0)'
           fill='rgb(255,0,0)'
           r='5'>
   <animateMotion

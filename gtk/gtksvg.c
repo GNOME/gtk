@@ -3449,17 +3449,19 @@ svg_transform_new_rotate_and_shift (double angle,
                                     graphene_point_t *orig,
                                     graphene_point_t *final)
 {
-  SvgTransform *tf = svg_transform_alloc (3);
+  SvgTransform *tf = svg_transform_alloc (2);
   tf->transforms[0].type = TRANSFORM_TRANSLATE;
   tf->transforms[0].translate.x = final->x;
   tf->transforms[0].translate.y = final->y;
   tf->transforms[1].type = TRANSFORM_ROTATE;
   tf->transforms[1].rotate.angle = angle;
-  tf->transforms[1].rotate.x = 0;
-  tf->transforms[1].rotate.y = 0;
+  tf->transforms[1].rotate.x = orig->x;
+  tf->transforms[1].rotate.y = orig->y;
+#if 0
   tf->transforms[2].type = TRANSFORM_TRANSLATE;
   tf->transforms[2].translate.x = - orig->x;
   tf->transforms[2].translate.y = - orig->y;
+#endif
   return (SvgValue *) tf;
 }
 
@@ -11328,15 +11330,13 @@ compute_animation_motion_value (Animation      *a,
   SvgValue *value;
   GskPathMeasure *measure;
 
-  if (shape_types[a->shape->type].has_gpa_attrs)
+  graphene_point_init (&orig_pos, 0, 0);
+
+  if (a->id && g_str_has_prefix (a->id, "gpa:"))
     {
       measure = shape_get_current_measure (a->shape, context->viewport);
       get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
       gsk_path_measure_unref (measure);
-    }
-  else
-    {
-      graphene_point_init (&orig_pos, 0, 0);
     }
 
   angle = a->motion.angle;
