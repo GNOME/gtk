@@ -9171,7 +9171,8 @@ shape_has_attr (ShapeType type,
        * so we'll follow rsvg and only support it for
        * <text> nodes.
        */
-      return type == SHAPE_TEXT;
+      return type == SHAPE_TEXT || type == SHAPE_GROUP ||
+             type == SHAPE_USE;
     case SHAPE_ATTR_DX:
     case SHAPE_ATTR_DY:
     case SHAPE_ATTR_UNICODE_BIDI:
