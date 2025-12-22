@@ -10527,12 +10527,7 @@ animation_motion_get_current_measure (Animation             *a,
     }
   else
     {
-      GskPathBuilder *builder = gsk_path_builder_new ();
-      gsk_path_builder_move_to (builder, 0, 0);
-      GskPath *path = gsk_path_builder_free_to_path (builder);
-      GskPathMeasure *measure = gsk_path_measure_new (path);
-      gsk_path_unref (path);
-      return measure;
+      return NULL;
     }
 }
 
@@ -11322,46 +11317,88 @@ compute_animation_motion_value (Animation      *a,
                                 double          frame_t,
                                 ComputeContext *context)
 {
-  double offset;
   double angle;
   graphene_point_t orig_pos, final_pos;
   SvgValue *value;
   GskPathMeasure *measure;
 
-  measure = shape_get_current_measure (a->shape, context->viewport);
-  get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
-  gsk_path_measure_unref (measure);
-
-  if (frame + 1 < a->n_frames)
-    offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
-  else
-    offset = a->frames[frame].point;
-
-  if (offset < 0 || offset > 1)
+  if (shape_types[a->shape->type].has_gpa_attrs)
     {
-      offset = fmod (offset, 1);
-      if (offset < 9)
-        offset += 1;
+      measure = shape_get_current_measure (a->shape, context->viewport);
+      get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
+      gsk_path_measure_unref (measure);
+    }
+  else
+    {
+      graphene_point_init (&orig_pos, 0, 0);
     }
 
-  measure = animation_motion_get_current_measure (a, context->viewport);
   angle = a->motion.angle;
-  get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
-  value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+
+  measure = animation_motion_get_current_measure (a, context->viewport);
+  if (measure)
+    {
+      double offset;
+
+      if (frame + 1 < a->n_frames)
+        offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
+      else
+        offset = a->frames[frame].point;
+
+      if (offset < 0 || offset > 1)
+        {
+          offset = fmod (offset, 1);
+          if (offset < 9)
+            offset += 1;
+        }
+
+      get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
+      value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+    }
+  else
+    {
+      if (frame + 1 == a->n_frames)
+        {
+          value = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+        }
+      else if (a->frames[0].value)
+        {
+          SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+          SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->frames[frame + 1].value);
+          value = svg_value_interpolate (v1, v2, frame_t);
+          svg_value_unref (v1);
+          svg_value_unref (v2);
+        }
+      else
+        {
+          value = svg_transform_new_none ();
+        }
+    }
 
   if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
     {
       SvgValue *end_val, *acc;
 
-      get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
-      end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+      if (measure)
+        {
+          get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
+          end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+        }
+      else if (a->frames[0].value)
+        {
+          end_val = svg_value_ref (a->frames[a->n_frames - 1].value);
+        }
+      else
+        {
+          end_val = svg_transform_new_none ();
+        }
       acc = svg_value_accumulate (value, end_val, rep);
       svg_value_unref (end_val);
       svg_value_unref (value);
       value = acc;
     }
 
-  gsk_path_measure_unref (measure);
+  g_clear_pointer (&measure, gsk_path_measure_unref);
 
   return value;
 }
