@@ -1368,7 +1368,7 @@ svg_value_interpolate (const SvgValue *value0,
   return value1->class->interpolate (value0, value1, t);
 }
 
-/* Compute v = a + n * b */
+/* Compute v = n * b + a */
 static SvgValue *
 svg_value_accumulate (const SvgValue *value0,
                       const SvgValue *value1,
@@ -4066,18 +4066,28 @@ svg_transform_accumulate (const SvgValue *value0,
   const SvgTransform *tf0 = (const SvgTransform *) value0;
   const SvgTransform *tf1 = (const SvgTransform *) value1;
   SvgTransform *tf;
+  int n0;
+
+  if (tf1->n_transforms == 1 && tf1->transforms[0].type == TRANSFORM_NONE)
+    return svg_value_ref ((SvgValue *) value0);
+
+  if (tf0->n_transforms == 1 && tf0->transforms[0].type == TRANSFORM_NONE)
+    {
+      if (n == 1)
+        return svg_value_ref ((SvgValue *) value1);
+
+      n0 = 0;
+    }
+  else
+    n0 = tf0->n_transforms;
 
   /* special-case this one */
   if (tf1->n_transforms == 1 && tf1->transforms[0].type != TRANSFORM_MATRIX)
     {
       PrimitiveTransform *p;
 
-      tf = svg_transform_alloc (tf0->n_transforms + 1);
-      memcpy (tf->transforms,
-              tf0->transforms,
-              tf0->n_transforms * sizeof (PrimitiveTransform));
-
-      p = &tf->transforms[tf0->n_transforms];
+      tf = svg_transform_alloc (n0 + 1);
+      p = &tf->transforms[0];
       memcpy (p, tf1->transforms, sizeof (PrimitiveTransform));
 
       switch (p->type)
@@ -4105,19 +4115,26 @@ svg_transform_accumulate (const SvgValue *value0,
         default:
           g_assert_not_reached ();
         }
+
+      if (n0 > 0)
+        memcpy (tf->transforms + 1,
+                tf0->transforms,
+                n0 * sizeof (PrimitiveTransform));
+
     }
   else
     {
       /* For the general case, simply concatenate all the transforms */
-      tf = svg_transform_alloc (tf0->n_transforms + n * tf1->n_transforms);
+      tf = svg_transform_alloc (n0 + n * tf1->n_transforms);
       for (unsigned int i = 0; i < n; i++)
-        memcpy (&tf->transforms[tf0->n_transforms + i * tf1->n_transforms],
+        memcpy (&tf->transforms[i * tf1->n_transforms],
                 tf1->transforms,
                 tf1->n_transforms * sizeof (PrimitiveTransform));
 
-      memcpy (&tf->transforms[tf0->n_transforms + (n - 1) * tf1->n_transforms],
-              tf0->transforms,
-              tf0->n_transforms * sizeof (PrimitiveTransform));
+      if (n0 > 0)
+        memcpy (&tf->transforms[n * tf1->n_transforms],
+                tf0->transforms,
+                n0 * sizeof (PrimitiveTransform));
     }
 
   return (SvgValue *) tf;
