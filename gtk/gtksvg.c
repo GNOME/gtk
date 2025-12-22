@@ -10263,6 +10263,8 @@ struct _Animation
   AnimationStatus status;
   char *id;
   char *href;
+  int line; /* for resolving ties in order */
+
   /* shape, attr, and idx together identify the attribute
    * that this animation modifies. idx is only relevant
    * for gradients and filters, where it identifies the
@@ -11574,11 +11576,19 @@ compare_anim (gconstpointer a,
   Animation *a2 = (Animation *) b;
   int64_t start1, start2;
 
+  /* It doesn't matter, but we sort by attributes to get
+   * a predictable order
+   */
   if (a1->attr < a2->attr)
     return -1;
   else if (a1->attr > a2->attr)
     return 1;
 
+  /* The situation with animateTransform sv animateMotion
+   * is special: they don't add to each other, and
+   * the accumulate animateMotion transform is always
+   * applied after the accumulate animateTransform.
+   */
   if (a1->attr == SHAPE_ATTR_TRANSFORM)
     {
       if (a1->type == ANIMATION_TYPE_MOTION && a2->type != ANIMATION_TYPE_MOTION)
@@ -11587,8 +11597,12 @@ compare_anim (gconstpointer a,
         return -1;
     }
 
-  /* sort higher priority animations later, so
-   * their effect overrides lower priority ones
+  /* Animation priorities:
+   * - started later > started earlier
+   * - later in document > earlier in document
+   *
+   * Sort higher priority animations to the end
+   * so their effect overrides lower priority ones.
    */
   start1 = get_last_start (a1);
   start2 = get_last_start (a2);
@@ -11596,6 +11610,11 @@ compare_anim (gconstpointer a,
   if (start1 < start2)
     return -1;
   else if (start1 > start2)
+    return 1;
+
+  if (a1->line < a2->line)
+    return -1;
+  else if (a1->line > a2->line)
     return 1;
 
   return 0;
@@ -14129,6 +14148,8 @@ start_element_cb (GMarkupParseContext  *context,
       else
         a = animation_transform_new ();
 
+      g_markup_parse_context_get_position (context, &a->line, NULL);
+
       if (!parse_base_animation_attrs (a,
                                        element_name,
                                        attr_names, attr_values,
@@ -14178,6 +14199,8 @@ start_element_cb (GMarkupParseContext  *context,
       const char *path_attr = NULL;
       const char *rotate_attr = NULL;
       const char *key_points_attr = NULL;
+
+      g_markup_parse_context_get_position (context, &a->line, NULL);
 
       if (data->current_animation)
         {
