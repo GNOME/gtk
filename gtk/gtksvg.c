@@ -10206,6 +10206,7 @@ typedef enum
 {
   CALC_MODE_DISCRETE,
   CALC_MODE_LINEAR,
+  CALC_MODE_PACED,
   CALC_MODE_SPLINE,
 } CalcMode;
 
@@ -12923,9 +12924,14 @@ parse_value_animation_attrs (Animation            *a,
       unsigned int value;
 
       if (!parse_enum (calc_mode_attr,
-                       (const char *[]) { "discrete", "linear", "spline" }, 3,
+                       (const char *[]) { "discrete", "linear", "paced", "spline" }, 4,
                        &value))
         gtk_svg_invalid_attribute (data->svg, context, "calcMode", NULL);
+      else if (value == CALC_MODE_PACED)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "calcMode", "'paced' calc mode is not supported");
+          a->calc_mode = CALC_MODE_LINEAR;
+        }
       else
         a->calc_mode = (CalcMode) value;
    }
@@ -15653,7 +15659,7 @@ serialize_value_animation_attrs (GString   *s,
 
   if (a->calc_mode != CALC_MODE_LINEAR)
     {
-      const char *modes[] = { "discrete", "linear", "spline" };
+      const char *modes[] = { "discrete", "linear", "paced", "spline" };
       indent_for_attr (s, indent);
       g_string_append_printf (s, "calcMode='%s'", modes[a->calc_mode]);
     }
