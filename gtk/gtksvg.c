@@ -10465,15 +10465,18 @@ fill_from_values (Animation     *a,
   a->n_frames = n_values;
   a->frames = g_new0 (Frame, n_values);
 
+  g_assert (n_values > 1);
+
   for (unsigned int i = 0; i < n_values; i++)
     {
-      if (a->type != ANIMATION_TYPE_MOTION)
+      if (values)
         a->frames[i].value = svg_value_ref (values[i]);
       a->frames[i].time = times[i];
       if (i + 1 < n_values && params)
         memcpy (a->frames[i].params, &params[4 * i], sizeof (double) * 4);
       else
         memcpy (a->frames[i].params, linear, sizeof (double) * 4);
+      a->frames[i].point = i / (double) (n_values - 1);
     }
 }
 
@@ -12872,11 +12875,9 @@ parse_value_animation_attrs (Animation            *a,
   const char *additive_attr = NULL;
   const char *accumulate_attr = NULL;
   TransformType transform_type = TRANSFORM_NONE;
-  GArray *times;
-  GArray *params;
+  GArray *times = NULL;
+  GArray *params = NULL;
   GPtrArray *values = NULL;
-  unsigned int n_values;
-  unsigned int n_times;
 
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
@@ -12891,6 +12892,9 @@ parse_value_animation_attrs (Animation            *a,
                             "additive", &additive_attr,
                             "accumulate", &accumulate_attr,
                             NULL);
+
+  if (a->type == ANIMATION_TYPE_MOTION)
+    transform_type = TRANSFORM_TRANSLATE;
 
   if (a->type == ANIMATION_TYPE_TRANSFORM)
     {
@@ -12961,8 +12965,6 @@ parse_value_animation_attrs (Animation            *a,
         a->accumulate = (AnimationAccumulate) value;
    }
 
-  values = NULL;
-  n_values = 0;
   if (values_attr)
     {
       values = shape_attr_parse_values (a->attr, transform_type, values_attr);
@@ -12972,7 +12974,6 @@ parse_value_animation_attrs (Animation            *a,
           g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
-      n_values = values->len;
     }
   else if (from_attr && to_attr)
     {
@@ -12988,11 +12989,8 @@ parse_value_animation_attrs (Animation            *a,
         }
 
       g_free (from_and_to);
-      n_values = 2;
     }
 
-  times = NULL;
-  n_times = 0;
   if (key_times_attr)
     {
       times = parse_numbers2 (key_times_attr, ";", 0, 1);
@@ -13002,60 +13000,46 @@ parse_value_animation_attrs (Animation            *a,
           g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
-      n_times = times->len;
     }
 
-  if (a->type == ANIMATION_TYPE_MOTION)
+  if (a->type != ANIMATION_TYPE_MOTION)
     {
-      if (n_times == 0)
+      if (values == NULL)
         {
-          gtk_svg_missing_attribute (data->svg, context, "keyTimes", NULL);
-          g_clear_pointer (&values, g_ptr_array_unref);
+          gtk_svg_invalid_attribute (data->svg, context, NULL,
+                                     "Either values or from and to must be given");
           g_clear_pointer (&times, g_array_unref);
           return FALSE;
         }
-
-      if (n_values > 0)
-        {
-          gtk_svg_missing_attribute (data->svg, context, "values", NULL);
-          g_clear_pointer (&values, g_ptr_array_unref);
-          g_clear_pointer (&times, g_array_unref);
-          return FALSE;
-        }
-
-      n_values = times->len;
     }
 
-  if (n_times == 0 && n_values == 0)
+  if (times == NULL)
     {
-      gtk_svg_invalid_attribute (data->svg, context, NULL,
-                                 "Either values or from and to must be given");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  if (n_times == 0)
-    {
+      unsigned int n_values;
       double n;
 
-      if (a->calc_mode == CALC_MODE_DISCRETE)
-        n = values->len;
+      if (values == NULL)
+        n_values = 2;
       else
-        n = values->len - 1;
+        n_values = values->len;
 
-      n_times = values->len;
+      if (a->calc_mode == CALC_MODE_DISCRETE)
+        n = n_values;
+      else
+        n = n_values - 1;
 
       times = g_array_new (FALSE, FALSE, sizeof (double));
 
-      for (unsigned int i = 0; i < n_times; i++)
+      for (unsigned int i = 0; i < n_values; i++)
         {
           double d = i / (double) n;
           g_array_append_val (times, d);
         }
     }
 
-  if (n_times != n_values)
+  g_assert (times != NULL);
+
+  if (values && times->len != values->len)
     {
       gtk_svg_invalid_attribute (data->svg, context, NULL,
                                  "The values and keyTimes attributes must "
@@ -13074,7 +13058,7 @@ parse_value_animation_attrs (Animation            *a,
       return FALSE;
     }
 
-  if (a->calc_mode != CALC_MODE_DISCRETE && g_array_index (times, double, n_times - 1) != 1)
+  if (a->calc_mode != CALC_MODE_DISCRETE && g_array_index (times, double, times->len - 1) != 1)
     {
       gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
                                  "The last keyTimes value must be 1");
@@ -13083,7 +13067,7 @@ parse_value_animation_attrs (Animation            *a,
       return FALSE;
     }
 
-  for (unsigned int i = 1; i < n_times; i++)
+  for (unsigned int i = 1; i < times->len; i++)
     {
       if (g_array_index (times, double, i) < g_array_index (times, double, i - 1))
         {
@@ -13093,7 +13077,7 @@ parse_value_animation_attrs (Animation            *a,
           g_clear_pointer (&times, g_array_unref);
           return FALSE;
         }
-   }
+    }
 
   params = 0;
   if (splines_attr)
@@ -13132,7 +13116,7 @@ parse_value_animation_attrs (Animation            *a,
 
       g_strfreev (strv);
 
-      if (n != n_values - 1)
+      if (n != times->len - 1)
         {
           gtk_svg_invalid_attribute (data->svg, context, "keySplines", "wrong number of values");
           g_clear_pointer (&values, g_ptr_array_unref);
@@ -13145,7 +13129,8 @@ parse_value_animation_attrs (Animation            *a,
   fill_from_values (a,
                     (double *) times->data,
                     values ? (SvgValue **) values->pdata : NULL,
-                    params ? (double *) params->data : NULL, n_values);
+                    params ? (double *) params->data : NULL,
+                    times->len);
 
   g_clear_pointer (&values, g_ptr_array_unref);
   g_clear_pointer (&times, g_array_unref);
@@ -14162,7 +14147,7 @@ start_element_cb (GMarkupParseContext  *context,
               return;
             }
 
-          for (unsigned int i = 0; i < MIN (points->len, a->n_frames); i++)
+          for (unsigned int i = 0; i < a->n_frames; i++)
             a->frames[i].point = g_array_index (points, double, i);
 
           g_array_unref (points);
