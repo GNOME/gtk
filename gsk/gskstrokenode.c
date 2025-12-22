@@ -22,7 +22,8 @@
 
 #include "gskcolornodeprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gskpath.h"
+#include "gskpathprivate.h"
+#include "gskcontourprivate.h"
 #include "gskrectprivate.h"
 #include "gskrenderreplay.h"
 #include "gskstrokeprivate.h"
@@ -60,6 +61,43 @@ gsk_stroke_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+void
+gsk_cairo_stroke_path (cairo_t   *cr,
+                       GskPath   *path,
+                       GskStroke *stroke)
+{
+  gsk_stroke_to_cairo (stroke, cr);
+  gsk_path_to_cairo (path, cr);
+  cairo_stroke (cr);
+
+  /* Cairo draws caps for zero-length subpaths with round caps,
+   * but not square. So we do it ourselves.
+   */
+  if (gsk_stroke_get_line_cap (stroke) == GSK_LINE_CAP_SQUARE)
+    {
+      double width = gsk_stroke_get_line_width (stroke);
+
+      for (size_t i = 0; i < gsk_path_get_n_contours (path); i++)
+        {
+          const GskContour *c = gsk_path_get_contour (path, i);
+
+          if ((gsk_contour_get_flags (c) & GSK_PATH_ZERO_LENGTH) != 0)
+            {
+              GskPathPoint point = { .contour = i, .idx = 0, .t = 0 };
+              graphene_point_t p;
+
+              gsk_contour_get_position (c, &point, &p);
+              cairo_rectangle (cr,
+                               p.x - width / 2,
+                               p.y - width / 2,
+                               width,
+                               width);
+              cairo_fill (cr);
+            }
+        }
+    }
+}
+
 static void
 gsk_stroke_node_draw (GskRenderNode *node,
                       cairo_t       *cr,
@@ -84,10 +122,7 @@ gsk_stroke_node_draw (GskRenderNode *node,
       cairo_pop_group_to_source (cr);
     }
 
-  gsk_stroke_to_cairo (&self->stroke, cr);
-
-  gsk_path_to_cairo (self->path, cr);
-  cairo_stroke (cr);
+  gsk_cairo_stroke_path (cr, self->path, &self->stroke);
 }
 
 static void
@@ -177,6 +212,10 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskStrokeNode, gsk_stroke_node)
  * the given @path using the attributes defined in @stroke.
  *
  * The area is filled with @child.
+ *
+ * GSK aims to follow the SVG semantics for stroking paths.
+ * E.g. zero-length contours will get round or square line
+ * caps drawn, regardless whether they are closed or not.
  *
  * Returns: (transfer none) (type GskStrokeNode): A new #GskRenderNode
  *

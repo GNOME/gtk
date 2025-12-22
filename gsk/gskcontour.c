@@ -1443,7 +1443,10 @@ gsk_circle_contour_copy (const GskContour *contour,
 static GskPathFlags
 gsk_circle_contour_get_flags (const GskContour *contour)
 {
-  return GSK_PATH_CLOSED;
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  return GSK_PATH_CLOSED |
+         (self->radius == 0 ? GSK_PATH_ZERO_LENGTH : 0);
 }
 
 static void
@@ -1903,7 +1906,11 @@ gsk_rect_contour_copy (const GskContour *contour,
 static GskPathFlags
 gsk_rect_contour_get_flags (const GskContour *contour)
 {
-  return GSK_PATH_FLAT | GSK_PATH_CLOSED;
+  const GskRectContour *self = (const GskRectContour *) contour;
+
+  return GSK_PATH_FLAT |
+         GSK_PATH_CLOSED |
+         (self->width == 0 && self->height == 0 ? GSK_PATH_ZERO_LENGTH : 0);
 }
 
 static void

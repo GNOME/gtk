@@ -30,6 +30,8 @@ typedef enum
 {
   /* path has only lines */
   GSK_PATH_FLAT,
+  /* all points of the path are identical */
+  GSK_PATH_ZERO_LENGTH,
   /* all contours are closed */
   GSK_PATH_CLOSED
 } GskPathFlags;
@@ -57,6 +59,12 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 
 void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
                                                                  GskContour             *contour);
+
+
+/* implemented in gskstrokenode.c */
+void                    gsk_cairo_stroke_path                   (cairo_t                *cr,
+                                                                 GskPath                *path,
+                                                                 GskStroke              *stroke);
 
 static inline void
 gsk_cairo_set_fill_rule (cairo_t     *cr,

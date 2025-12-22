@@ -164,7 +164,7 @@ gsk_path_builder_ensure_current (GskPathBuilder *self)
   if (self->ops->len != 0)
     return;
 
-  self->flags = GSK_PATH_FLAT;
+  self->flags = GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH;
   g_array_append_vals (self->ops, (gskpathop[1]) { gsk_pathop_encode_index (GSK_PATH_MOVE, 0) }, 1);
   g_array_append_val (self->points, self->current_point);
 }
@@ -187,9 +187,29 @@ static void
 gsk_path_builder_end_current (GskPathBuilder *self)
 {
   GskContour *contour;
+  graphene_point_t *a, *b;
 
   if (self->ops->len == 0)
    return;
+
+  if (self->ops->len == 1)
+    {
+      /* empty paths aren't zero-length */
+      self->flags &= ~GSK_PATH_ZERO_LENGTH;
+    }
+  else
+    {
+      a = &g_array_index (self->points, graphene_point_t, 0);
+      for (size_t i = 1; i < self->points->len; i++)
+        {
+          b = &g_array_index (self->points, graphene_point_t, i);
+          if (a->x != b->x || a->y != b->y)
+            {
+              self->flags &= ~GSK_PATH_ZERO_LENGTH;
+              break;
+            }
+        }
+    }
 
   contour = gsk_standard_contour_new (self->flags,
                                       (GskAlignedPoint *) self->points->data,
@@ -591,11 +611,6 @@ gsk_path_builder_line_to (GskPathBuilder *self,
                           float           y)
 {
   g_return_if_fail (self != NULL);
-
-  /* skip the line if it goes to the same point */
-  if (graphene_point_equal (&self->current_point,
-                            &GRAPHENE_POINT_INIT (x, y)))
-    return;
 
   gsk_path_builder_append_current (self,
                                    GSK_PATH_LINE,
