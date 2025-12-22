@@ -10456,27 +10456,33 @@ animation_has_end (Animation *a,
 static void
 fill_from_values (Animation     *a,
                   double        *times,
+                  unsigned int   n_frames,
                   SvgValue     **values,
                   double        *params,
-                  unsigned int   n_values)
+                  double        *points)
 {
   double linear[] = { 0, 0, 1, 1 };
 
-  a->n_frames = n_values;
-  a->frames = g_new0 (Frame, n_values);
+  g_assert (n_frames > 1);
 
-  g_assert (n_values > 1);
+  a->n_frames = n_frames;
+  a->frames = g_new0 (Frame, n_frames);
 
-  for (unsigned int i = 0; i < n_values; i++)
+  for (unsigned int i = 0; i < n_frames; i++)
     {
+      a->frames[i].time = times[i];
       if (values)
         a->frames[i].value = svg_value_ref (values[i]);
-      a->frames[i].time = times[i];
-      if (i + 1 < n_values && params)
+      else
+        a->frames[i].value = NULL;
+      if (i + 1 < n_frames && params)
         memcpy (a->frames[i].params, &params[4 * i], sizeof (double) * 4);
       else
         memcpy (a->frames[i].params, linear, sizeof (double) * 4);
-      a->frames[i].point = i / (double) (n_values - 1);
+      if (points)
+        a->frames[i].point = points[i];
+      else
+        a->frames[i].point = i / (double) (n_frames - 1);
     }
 }
 
@@ -11418,13 +11424,16 @@ compute_value_at_time (Animation      *a,
   find_current_cycle_and_frame (a, context->svg, context->current_time,
                                 &rep, &frame, &frame_t, &frame_start, &frame_end);
 
-  if (a->calc_mode == CALC_MODE_DISCRETE)
-    return resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+  if (a->calc_mode == CALC_MODE_DISCRETE || shape_attrs[a->attr].discrete)
+    {
+      if (a->calc_mode != CALC_MODE_DISCRETE && frame_t > 0.5)
+        frame = frame + 1;
 
-  if (shape_attrs[a->attr].discrete)
-    return resolve_value (a->shape, context, a->attr,
-                          frame_t < 0.5 ? a->frames[frame].value
-                                        : a->frames[frame + 1].value);
+      if (a->attr != SHAPE_ATTR_TRANSFORM || a->type != ANIMATION_TYPE_MOTION)
+        return resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+      else
+        return compute_animation_motion_value (a, rep, frame, 0, context);
+    }
 
   /* Now we are doing non-discrete linear or spline interpolation */
   if (a->calc_mode == CALC_MODE_SPLINE)
@@ -12936,6 +12945,7 @@ parse_value_animation_attrs (Animation            *a,
   const char *accumulate_attr = NULL;
   TransformType transform_type = TRANSFORM_NONE;
   GArray *times = NULL;
+  GArray *points = NULL;
   GArray *params = NULL;
   GPtrArray *values = NULL;
 
@@ -13067,6 +13077,9 @@ parse_value_animation_attrs (Animation            *a,
       if (values != NULL)
         {
           GskPathBuilder *builder = gsk_path_builder_new ();
+          double length;
+
+          points = g_array_new (FALSE, FALSE, sizeof (double));
 
           for (unsigned int i = 0; i < values->len; i++)
             {
@@ -13077,12 +13090,24 @@ parse_value_animation_attrs (Animation            *a,
               g_assert (f->type == TRANSFORM_TRANSLATE);
 
               if (i == 0)
-                gsk_path_builder_move_to (builder, f->translate.x, f->translate.y);
+                {
+                  length = 0;
+                  gsk_path_builder_move_to (builder, f->translate.x, f->translate.y);
+                }
               else
-                gsk_path_builder_line_to (builder, f->translate.x, f->translate.y);
+                {
+                  length += graphene_point_distance (gsk_path_builder_get_current_point (builder),
+                                                     &GRAPHENE_POINT_INIT (f->translate.x, f->translate.y), NULL, NULL);
+                  gsk_path_builder_line_to (builder, f->translate.x, f->translate.y);
+                }
+              g_array_append_val (points, length);
             }
 
+          for (unsigned int i = 0; i < points->len; i++)
+            g_array_index (points, double, i) /= length;
+
           a->motion.path = gsk_path_builder_free_to_path (builder);
+
           g_clear_pointer (&values, g_ptr_array_unref);
         }
     }
@@ -13191,18 +13216,31 @@ parse_value_animation_attrs (Animation            *a,
     }
 
   if (times == NULL)
-    times = create_default_times (a->calc_mode, values ? values->len : 2);
+    {
+      unsigned int n;
+
+      if (values)
+        n = values->len;
+      else if (points)
+        n = points->len;
+      else
+        n = 2;
+
+      times = create_default_times (a->calc_mode, n);
+    }
 
   g_assert (times != NULL);
 
   fill_from_values (a,
                     (double *) times->data,
+                    times->len,
                     values ? (SvgValue **) values->pdata : NULL,
                     params ? (double *) params->data : NULL,
-                    times->len);
+                    points ? (double *) points->data : NULL);
 
   g_clear_pointer (&values, g_ptr_array_unref);
   g_clear_pointer (&times, g_array_unref);
+  g_clear_pointer (&points, g_array_unref);
   g_clear_pointer (&params, g_array_unref);
 
   return TRUE;
