@@ -8620,6 +8620,14 @@ static SvgValue *
 shape_attr_parse_for_values (ShapeAttr   attr,
                              const char *value)
 {
+  if (shape_attrs[attr].presentation)
+    {
+      if (strcmp (value, "inherit") == 0)
+        return svg_inherit_new ();
+      else if (strcmp (value, "initial") == 0)
+        return svg_initial_new ();
+    }
+
   if (shape_attrs[attr].parse_for_values)
     return shape_attrs[attr].parse_for_values (value);
   else
