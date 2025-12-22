@@ -9330,11 +9330,23 @@ shape_get_path (Shape                 *shape,
         }
       break;
 
+    case SHAPE_USE:
+      {
+        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        if (use_shape)
+          {
+            return shape_get_path (use_shape, viewport, current);
+          }
+        else
+          {
+            builder = gsk_path_builder_new ();
+            return gsk_path_builder_free_to_path (builder);
+          }
+      }
     case SHAPE_GROUP:
     case SHAPE_CLIP_PATH:
     case SHAPE_MASK:
     case SHAPE_DEFS:
-    case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
     case SHAPE_PATTERN:
@@ -9421,11 +9433,14 @@ shape_get_current_path (Shape                 *shape,
             }
           break;
 
+        case SHAPE_USE:
+          g_clear_pointer (&shape->path, gsk_path_unref);
+          break;
+
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
         case SHAPE_MASK:
         case SHAPE_DEFS:
-        case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
@@ -9445,6 +9460,7 @@ shape_get_current_path (Shape                 *shape,
   if (!shape->path)
     {
       shape->path = shape_get_path (shape, viewport, TRUE);
+      shape->valid_bounds = FALSE;
 
       switch (shape->type)
         {
@@ -9484,13 +9500,13 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_PATH:
+        case SHAPE_USE:
           break;
 
         case SHAPE_GROUP:
         case SHAPE_CLIP_PATH:
         case SHAPE_MASK:
         case SHAPE_DEFS:
-        case SHAPE_USE:
         case SHAPE_LINEAR_GRADIENT:
         case SHAPE_RADIAL_GRADIENT:
         case SHAPE_PATTERN:
@@ -9527,9 +9543,11 @@ shape_get_current_bounds (Shape                 *shape,
                           const graphene_rect_t *viewport,
                           graphene_rect_t       *bounds)
 {
+  GskTransform *transform;
+  graphene_rect_t b;
   gboolean ret = FALSE;
 
-  graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
+  graphene_rect_init_from_rect (&b, graphene_rect_zero ());
 
   switch (shape->type)
     {
@@ -9540,17 +9558,23 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_CIRCLE:
     case SHAPE_ELLIPSE:
     case SHAPE_PATH:
-      {
-        GskPath *path = shape_get_current_path (shape, viewport);
-        ret = gsk_path_get_tight_bounds (path, bounds);
-        gsk_path_unref (path);
-      }
+      if (!shape->valid_bounds)
+        {
+          GskPath *path = shape_get_current_path (shape, viewport);
+          if (!gsk_path_get_tight_bounds (shape->path, &shape->bounds))
+            graphene_rect_init (&shape->bounds, 0, 0, 0, 0);
+          shape->valid_bounds = TRUE;
+          gsk_path_unref (path);
+        }
+      graphene_rect_init_from_rect (&b, &shape->bounds);
+      ret = TRUE;
       break;
     case SHAPE_USE:
       {
         Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
         if (use_shape)
-          ret = shape_get_current_bounds (use_shape, viewport, bounds);
+          ret = shape_get_current_bounds (use_shape, viewport, &b);
+        ret = TRUE;
       }
       break;
     case SHAPE_GROUP:
@@ -9559,36 +9583,26 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_PATTERN:
     case SHAPE_MARKER:
     case SHAPE_SVG:
-      {
-        for (unsigned int i = 0; i < shape->shapes->len; i++)
-          {
-            Shape *sh = g_ptr_array_index (shape->shapes, i);
-            GskTransform *transform;
-            graphene_rect_t b;
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          graphene_rect_t b2;
 
-            if (shape_get_current_bounds (sh, viewport, &b))
-              {
-                transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
-                gsk_transform_transform_bounds (transform, &b, &b);
-                if (i == 0)
-                  graphene_rect_init_from_rect (bounds, &b);
-                else
-                  graphene_rect_union (bounds, &b, bounds);
-                gsk_transform_unref (transform);
-              }
-          }
-        ret = TRUE;
-      }
-      break;
-    case SHAPE_DEFS:
-    case SHAPE_LINEAR_GRADIENT:
-    case SHAPE_RADIAL_GRADIENT:
-    case SHAPE_FILTER:
-      g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
+          if (shape_get_current_bounds (sh, viewport, &b2))
+            {
+              if (i == 0)
+                graphene_rect_init_from_rect (&b, &b2);
+              else
+                graphene_rect_union (&b, &b2, &b);
+            }
+        }
+      ret = TRUE;
       break;
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
-      g_critical ("TODO");
+      if (!shape->valid_bounds)
+        g_critical ("TODO");
+      graphene_rect_init_from_rect (bounds, &shape->bounds);
       break;
     case SHAPE_IMAGE:
       {
@@ -9603,9 +9617,19 @@ shape_get_current_bounds (Shape                 *shape,
         ret = TRUE;
       }
       break;
+    case SHAPE_DEFS:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+    case SHAPE_FILTER:
+      g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
+      break;
     default:
       g_assert_not_reached ();
     }
+
+  transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
+  gsk_transform_transform_bounds (transform, &b, bounds);
+  gsk_transform_unref (transform);
 
   return ret;
 }
@@ -18595,6 +18619,7 @@ paint_shape (Shape        *shape,
       WritingMode wmode;
       graphene_rect_t bounds;
       GskStroke *stroke;
+      float dx, dy;
 
       if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
         return;
@@ -18604,26 +18629,34 @@ paint_shape (Shape        *shape,
       if (!generate_layouts (shape, NULL, NULL, NULL, &bounds))
         return;
 
-      gtk_snapshot_save (context->snapshot);
+      dx = dy = 0;
       switch (anchor)
         {
         case TEXT_ANCHOR_START:
           break;
         case TEXT_ANCHOR_MIDDLE:
           if (is_vertical_writing_mode[wmode])
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (0., -bounds.size.height / 2.));
+            dy = - bounds.size.height / 2;
           else
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-bounds.size.width / 2., 0.));
+            dx = - bounds.size.width / 2;
           break;
         case TEXT_ANCHOR_END:
           if (is_vertical_writing_mode[wmode])
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (0., -bounds.size.height));
+            dy = - bounds.size.height;
           else
-            gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-bounds.size.width, 0.));
+            dx = - bounds.size.width;
           break;
         default:
           g_assert_not_reached ();
         }
+
+      graphene_rect_init (&shape->bounds,
+                          bounds.origin.x + dx, bounds.origin.y + dy,
+                          bounds.size.width, bounds.size.height);
+      shape->valid_bounds = TRUE;
+
+      gtk_snapshot_save (context->snapshot);
+      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (dx, dy));
 
       stroke = shape_create_stroke (shape, context);
 
