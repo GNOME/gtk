@@ -13002,7 +13002,31 @@ parse_value_animation_attrs (Animation            *a,
         }
     }
 
-  if (a->type != ANIMATION_TYPE_MOTION)
+  if (a->type == ANIMATION_TYPE_MOTION)
+    {
+      if (values != NULL)
+        {
+          GskPathBuilder *builder = gsk_path_builder_new ();
+
+          for (unsigned int i = 0; i < values->len; i++)
+            {
+              SvgTransform *tf = g_ptr_array_index (values, i);
+              PrimitiveTransform *f = &tf->transforms[0];
+
+              g_assert (tf->n_transforms == 1);
+              g_assert (f->type == TRANSFORM_TRANSLATE);
+
+              if (i == 0)
+                gsk_path_builder_move_to (builder, f->translate.x, f->translate.y);
+              else
+                gsk_path_builder_line_to (builder, f->translate.x, f->translate.y);
+            }
+
+          a->motion.path = gsk_path_builder_free_to_path (builder);
+          g_clear_pointer (&values, g_ptr_array_unref);
+        }
+    }
+  else
     {
       if (values == NULL)
         {
