@@ -411,7 +411,6 @@
     </rect>
     <rect
             id='rect185'
-            opacity='0.999858'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -422,7 +421,6 @@
     </rect>
     <rect
             id='rect187'
-            opacity='0.999858'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -433,7 +431,6 @@
     </rect>
     <rect
             id='rect189'
-            opacity='0.999858'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -444,7 +441,6 @@
     </rect>
     <rect
             id='rect191'
-            opacity='0.999858'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -455,7 +451,6 @@
     </rect>
     <rect
             id='rect193'
-            opacity='0.999858'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -466,7 +461,6 @@
     </rect>
     <rect
             id='rect195'
-            opacity='0.999858'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -477,7 +471,6 @@
     </rect>
     <rect
             id='rect197'
-            opacity='0.999858'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -488,7 +481,6 @@
     </rect>
     <rect
             id='rect199'
-            opacity='0.999858'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -499,7 +491,6 @@
     </rect>
     <rect
             id='rect201'
-            opacity='0.999858'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -510,7 +501,6 @@
     </rect>
     <rect
             id='rect203'
-            opacity='0.999858'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -521,7 +511,6 @@
     </rect>
     <rect
             id='rect209'
-            opacity='0.99634'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -532,7 +521,6 @@
     </rect>
     <rect
             id='rect211'
-            opacity='0.99634'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -543,7 +531,6 @@
     </rect>
     <rect
             id='rect213'
-            opacity='0.99634'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -554,7 +541,6 @@
     </rect>
     <rect
             id='rect215'
-            opacity='0.99634'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -565,7 +551,6 @@
     </rect>
     <rect
             id='rect217'
-            opacity='0.99634'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -576,7 +561,6 @@
     </rect>
     <rect
             id='rect219'
-            opacity='0.99634'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -587,7 +571,6 @@
     </rect>
     <rect
             id='rect221'
-            opacity='0.99634'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -598,7 +581,6 @@
     </rect>
     <rect
             id='rect223'
-            opacity='0.99634'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -609,7 +591,6 @@
     </rect>
     <rect
             id='rect225'
-            opacity='0.99634'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -620,7 +601,6 @@
     </rect>
     <rect
             id='rect227'
-            opacity='0.99634'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -731,7 +711,6 @@
     </rect>
     <rect
             id='rect257'
-            opacity='0.996308'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -742,7 +721,6 @@
     </rect>
     <rect
             id='rect259'
-            opacity='0.996308'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -753,7 +731,6 @@
     </rect>
     <rect
             id='rect261'
-            opacity='0.996308'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -764,7 +741,6 @@
     </rect>
     <rect
             id='rect263'
-            opacity='0.996308'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -775,7 +751,6 @@
     </rect>
     <rect
             id='rect265'
-            opacity='0.996308'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -786,7 +761,6 @@
     </rect>
     <rect
             id='rect267'
-            opacity='0.996308'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -797,7 +771,6 @@
     </rect>
     <rect
             id='rect269'
-            opacity='0.996308'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -808,7 +781,6 @@
     </rect>
     <rect
             id='rect271'
-            opacity='0.996308'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -819,7 +791,6 @@
     </rect>
     <rect
             id='rect273'
-            opacity='0.996308'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -830,7 +801,6 @@
     </rect>
     <rect
             id='rect275'
-            opacity='0.996308'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -841,7 +811,6 @@
     </rect>
     <rect
             id='rect281'
-            opacity='0.997326'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -852,7 +821,6 @@
     </rect>
     <rect
             id='rect283'
-            opacity='0.997326'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -863,7 +831,6 @@
     </rect>
     <rect
             id='rect285'
-            opacity='0.997326'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -874,7 +841,6 @@
     </rect>
     <rect
             id='rect287'
-            opacity='0.997326'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -885,7 +851,6 @@
     </rect>
     <rect
             id='rect289'
-            opacity='0.997326'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -896,7 +861,6 @@
     </rect>
     <rect
             id='rect291'
-            opacity='0.997326'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -907,7 +871,6 @@
     </rect>
     <rect
             id='rect293'
-            opacity='0.997326'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -918,7 +881,6 @@
     </rect>
     <rect
             id='rect295'
-            opacity='0.997326'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -929,7 +891,6 @@
     </rect>
     <rect
             id='rect297'
-            opacity='0.997326'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -940,7 +901,6 @@
     </rect>
     <rect
             id='rect299'
-            opacity='0.997326'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -951,7 +911,6 @@
     </rect>
     <rect
             id='rect305'
-            opacity='0.996356'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -962,7 +921,6 @@
     </rect>
     <rect
             id='rect307'
-            opacity='0.996356'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -973,7 +931,6 @@
     </rect>
     <rect
             id='rect309'
-            opacity='0.996356'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -984,7 +941,6 @@
     </rect>
     <rect
             id='rect311'
-            opacity='0.996356'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -995,7 +951,6 @@
     </rect>
     <rect
             id='rect313'
-            opacity='0.996356'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1006,7 +961,6 @@
     </rect>
     <rect
             id='rect315'
-            opacity='0.996356'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1017,7 +971,6 @@
     </rect>
     <rect
             id='rect317'
-            opacity='0.996356'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1028,7 +981,6 @@
     </rect>
     <rect
             id='rect319'
-            opacity='0.996356'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1039,7 +991,6 @@
     </rect>
     <rect
             id='rect321'
-            opacity='0.996356'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1050,7 +1001,6 @@
     </rect>
     <rect
             id='rect323'
-            opacity='0.996356'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1061,7 +1011,6 @@
     </rect>
     <rect
             id='rect449'
-            opacity='0.996591'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1072,7 +1021,6 @@
     </rect>
     <rect
             id='rect451'
-            opacity='0.996591'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1083,7 +1031,6 @@
     </rect>
     <rect
             id='rect453'
-            opacity='0.996591'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1094,7 +1041,6 @@
     </rect>
     <rect
             id='rect455'
-            opacity='0.996591'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1105,7 +1051,6 @@
     </rect>
     <rect
             id='rect457'
-            opacity='0.996591'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1116,7 +1061,6 @@
     </rect>
     <rect
             id='rect459'
-            opacity='0.996591'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1127,7 +1071,6 @@
     </rect>
     <rect
             id='rect461'
-            opacity='0.996591'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1138,7 +1081,6 @@
     </rect>
     <rect
             id='rect463'
-            opacity='0.996591'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1149,7 +1091,6 @@
     </rect>
     <rect
             id='rect465'
-            opacity='0.996591'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1160,7 +1101,6 @@
     </rect>
     <rect
             id='rect467'
-            opacity='0.996591'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1271,7 +1211,6 @@
     </rect>
     <rect
             id='rect353'
-            opacity='0.997143'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1282,7 +1221,6 @@
     </rect>
     <rect
             id='rect355'
-            opacity='0.997143'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1293,7 +1231,6 @@
     </rect>
     <rect
             id='rect357'
-            opacity='0.997143'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1304,7 +1241,6 @@
     </rect>
     <rect
             id='rect359'
-            opacity='0.997143'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1315,7 +1251,6 @@
     </rect>
     <rect
             id='rect361'
-            opacity='0.997143'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1326,7 +1261,6 @@
     </rect>
     <rect
             id='rect363'
-            opacity='0.997143'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1337,7 +1271,6 @@
     </rect>
     <rect
             id='rect365'
-            opacity='0.997143'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1348,7 +1281,6 @@
     </rect>
     <rect
             id='rect367'
-            opacity='0.997143'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1359,7 +1291,6 @@
     </rect>
     <rect
             id='rect369'
-            opacity='0.997143'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1370,7 +1301,6 @@
     </rect>
     <rect
             id='rect371'
-            opacity='0.997143'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1381,7 +1311,6 @@
     </rect>
     <rect
             id='rect377'
-            opacity='0.996521'
             fill='rgb(255,255,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1392,7 +1321,6 @@
     </rect>
     <rect
             id='rect379'
-            opacity='0.996521'
             fill='rgb(102,128,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1403,7 +1331,6 @@
     </rect>
     <rect
             id='rect381'
-            opacity='0.996521'
             fill='rgb(160,44,44)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1414,7 +1341,6 @@
     </rect>
     <rect
             id='rect383'
-            opacity='0.996521'
             fill='rgb(255,179,128)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1425,7 +1351,6 @@
     </rect>
     <rect
             id='rect385'
-            opacity='0.996521'
             fill='rgb(255,255,255)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1436,7 +1361,6 @@
     </rect>
     <rect
             id='rect387'
-            opacity='0.996521'
             fill='rgb(141,95,211)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1447,7 +1371,6 @@
     </rect>
     <rect
             id='rect389'
-            opacity='0.996521'
             fill='rgb(200,55,113)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1458,7 +1381,6 @@
     </rect>
     <rect
             id='rect391'
-            opacity='0.996521'
             fill='rgb(0,0,0)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1469,7 +1391,6 @@
     </rect>
     <rect
             id='rect393'
-            opacity='0.996521'
             fill='rgb(179,179,179)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1480,7 +1401,6 @@
     </rect>
     <rect
             id='rect395'
-            opacity='0.996521'
             fill='rgb(249,249,249)'
             stroke='none'
             stroke-width='0.0707788'
@@ -1756,7 +1676,6 @@
     <use
             id='use2590'
             transform='translate(-1.22492e-06, 39.1001)'
-            opacity='0.99854'
             href='#g2346'
             x='0'
             y='0'
@@ -1797,7 +1716,6 @@
     <use
             id='use2598'
             transform='translate(-1.22492e-06, 195.5)'
-            opacity='0.997563'
             href='#g2346'
             x='0'
             y='0'
@@ -1818,7 +1736,6 @@
     <use
             id='use2602'
             transform='translate(-1.22492e-06, 273.7)'
-            opacity='0.996107'
             href='#g2346'
             x='0'
             y='0'
@@ -1829,7 +1746,6 @@
     <use
             id='use2604'
             transform='translate(97.709, 235.267)'
-            opacity='0.999634'
             href='#g2346'
             x='0'
             y='0'
@@ -1850,7 +1766,6 @@
     <use
             id='use2608'
             transform='translate(97.709, 0)'
-            opacity='0.997749'
             href='#g2346'
             x='0'
             y='0'
@@ -1861,7 +1776,6 @@
     <use
             id='use2610'
             transform='translate(97.709, 39.1001)'
-            opacity='0.997575'
             href='#g2346'
             x='0'
             y='0'
@@ -1871,7 +1785,6 @@
     <use
             id='use2612'
             transform='translate(97.709, 78.2001)'
-            opacity='0.997971'
             href='#g2346'
             x='0'
             y='0'
@@ -1882,7 +1795,6 @@
     <use
             id='use2614'
             transform='translate(97.709, 117.3)'
-            opacity='0.998124'
             href='#g2346'
             x='0'
             y='0'

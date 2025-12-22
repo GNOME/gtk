@@ -9,8 +9,8 @@ isolation {
 M 0 0 h 260 v 200 h -260 z";
       fill-rule: winding;
     }
-    isolation {
-      child: copy {
+    copy {
+      child: isolation {
         child: blend {
           mode: multiply;
           bottom: paste {
@@ -26,11 +26,11 @@ M 20 20 h 80 v 80 h -80 z";
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
-      isolations: background;
     }
-    isolation {
-      child: copy {
+    copy {
+      child: isolation {
         child: blend {
           mode: screen;
           bottom: paste {
@@ -46,15 +46,15 @@ M 130 80 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
             fill-rule: winding;
           }
         }
+        isolations: background;
       }
-      isolations: background;
     }
     isolation {
       child: container {
-        isolation {
-          child: transform {
-            transform: translate(130, 0);
-            child: copy {
+        transform {
+          transform: translate(130, 0);
+          child: copy {
+            child: isolation {
               child: blend {
                 mode: multiply;
                 bottom: paste {
@@ -70,14 +70,14 @@ M 20 20 h 80 v 80 h -80 z";
                   fill-rule: winding;
                 }
               }
+              isolations: background;
             }
           }
-          isolations: background;
         }
-        isolation {
-          child: transform {
-            transform: translate(130, 0);
-            child: copy {
+        transform {
+          transform: translate(130, 0);
+          child: copy {
+            child: isolation {
               child: blend {
                 mode: screen;
                 bottom: paste {
@@ -93,9 +93,9 @@ M 130 80 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
                   fill-rule: winding;
                 }
               }
+              isolations: background;
             }
           }
-          isolations: background;
         }
       }
       isolations: background;
