@@ -3682,11 +3682,7 @@ primitive_transform_parse (TransformType  type,
   GStrv strv;
   unsigned int n;
 
-  if (strchr (value, ','))
-    strv = g_strsplit (value, ",", 0);
-  else
-    strv = g_strsplit (value, " ", 0);
-
+  strv = strsplit_set (value, ", ");
   n = g_strv_length (strv);
 
   switch (type)
