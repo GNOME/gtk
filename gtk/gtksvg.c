@@ -13357,7 +13357,6 @@ parse_shape_attrs (Shape                *shape,
 {
   const char *class_attr = NULL;
   const char *style_attr = NULL;
-  const char *xlink_href_attr = NULL;
 
   for (unsigned int i = 0; attr_names[i]; i++)
     {
@@ -13377,11 +13376,6 @@ parse_shape_attrs (Shape                *shape,
       else if (strcmp (attr_names[i], "style") == 0)
         {
           style_attr = attr_values[i];
-          *handled |= BIT (i);
-        }
-      else if (strcmp (attr_names[i], "xlink:href") == 0)
-        {
-          xlink_href_attr = attr_values[i];
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "id") == 0)
@@ -13415,16 +13409,6 @@ parse_shape_attrs (Shape                *shape,
 
   if (style_attr)
     parse_style_attr (shape, FALSE, style_attr, data, context);
-
-  if (xlink_href_attr && !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF))
-    {
-      SvgValue *value = shape_attr_parse_value (SHAPE_ATTR_HREF, xlink_href_attr);
-      if (value)
-        {
-          shape_set_base_value (shape, SHAPE_ATTR_HREF, 0, value);
-          svg_value_unref (value);
-        }
-    }
 
   if (class_attr && *class_attr)
     {
@@ -13855,6 +13839,37 @@ skip_element (ParserData          *data,
 }
 
 static void
+replace_xlink_href (const char **attr_names,
+                    const char **attr_values)
+{
+  int href_idx = -1;
+  int xlink_idx = -1;
+  int i;
+
+  for (i = 0; attr_names[i]; i++)
+    {
+      if (strcmp (attr_names[i], "href") == 0)
+        href_idx = i;
+
+      if (strcmp (attr_names[i], "xlink:href") == 0)
+        xlink_idx = i;
+    }
+
+  if (href_idx != -1 && xlink_idx != -1)
+    {
+      /* We've found both. Drop xlink:href */
+      attr_names[xlink_idx] = attr_names[i - 1];
+      attr_values[xlink_idx] = attr_names[i - 1];
+      attr_names[i - 1] = NULL;
+    }
+  else if (xlink_idx != -1)
+    {
+      /* We've found xlink:href, but not href. Replace */
+      attr_names[xlink_idx] = "href";
+    }
+}
+
+static void
 start_element_cb (GMarkupParseContext  *context,
                   const char           *element_name,
                   const char          **attr_names,
@@ -13870,6 +13885,8 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (data->skip.to)
     return;
+
+  replace_xlink_href (attr_names, attr_values);
 
   if (strcmp (element_name, "metadata") == 0)
     {
@@ -14268,7 +14285,6 @@ start_element_cb (GMarkupParseContext  *context,
       const char *style_attr = NULL;
       unsigned int idx;
       gboolean values_set = FALSE;
-      const char *xlink_href_attr = NULL;
 
       if (filter_type == FE_MERGE_NODE)
         {
@@ -14310,11 +14326,6 @@ start_element_cb (GMarkupParseContext  *context,
               handled |= BIT (i);
               style_attr = attr_values[i];
             }
-          else if (strcmp (attr_names[i], "xlink:href") == 0)
-            {
-              handled |= BIT (i);
-              xlink_href_attr = attr_values[i];
-            }
           else if (filter_attr_lookup (filter_type, attr_names[i], &attr))
             {
               SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
@@ -14333,21 +14344,6 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (style_attr)
         parse_style_attr (data->current_shape, FALSE, style_attr, data, context);
-
-      if (xlink_href_attr && filter_type == FE_IMAGE)
-        {
-          FilterPrimitive *f = g_ptr_array_index (data->current_shape->filters, idx);
-
-          if ((f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_IMAGE_HREF))) == 0)
-            {
-              SvgValue *value = shape_attr_parse_value (SHAPE_ATTR_FE_IMAGE_HREF, xlink_href_attr);
-              if (value)
-                {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_FE_IMAGE_HREF, idx, value);
-                  svg_value_unref (value);
-                }
-            }
-        }
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
