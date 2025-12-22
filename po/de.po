@@ -37,8 +37,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-10-15 18:56+0000\n"
-"PO-Revision-Date: 2025-10-17 12:57+0200\n"
+"POT-Creation-Date: 2025-12-17 06:51+0000\n"
+"PO-Revision-Date: 2025-12-19 23:22+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -79,26 +79,25 @@ msgid "No compatible formats to transfer clipboard contents."
 msgstr ""
 "Keine kompatiblen Formate zum Übertragen des Inhalts der Zwischenablage."
 
-#: gdk/gdkcolorstate.c:1081
+#: gdk/gdkcolorstate.c:1089
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: Unbekannte Parameter werden nicht unterstützt"
 
-#: gdk/gdkcolorstate.c:1127
+#: gdk/gdkcolorstate.c:1135
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: Transferformat %u wird nicht unterstützt"
 
-#: gdk/gdkcolorstate.c:1158
+#: gdk/gdkcolorstate.c:1166
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: Primärfarben %u werden nicht unterstützt"
 
-#: gdk/gdkcolorstate.c:1185
-#, fuzzy, c-format
-#| msgid "cicp: Transfer function %u not supported"
+#: gdk/gdkcolorstate.c:1193
+#, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
-msgstr "cicp: Transferformat %u wird nicht unterstützt"
+msgstr "cicp: Matrix-Koeffizienten %u, %s werden nicht unterstützt"
 
 #: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
@@ -115,7 +114,7 @@ msgstr "Inhalt kann nicht als %s bereitgestellt werden"
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuelles Backend unterstützt kein OpenGL"
 
-#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1754
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1962
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Unterstützung für Vulkan ist durch GDK_DISABLE deaktiviert"
 
@@ -937,10 +936,8 @@ msgid "OpenGL 3.3 required"
 msgstr "OpenGL 3.3 erforderlich"
 
 #: gsk/gpu/gskvulkanrenderer.c:159
-#, fuzzy
-#| msgid "Vulkan support disabled via GDK_DISABLE"
 msgid "Vulkan support disabled during GTK build"
-msgstr "Unterstützung für Vulkan ist durch GDK_DISABLE deaktiviert"
+msgstr "Unterstützung für Vulkan wurde während der Erstellung deaktiviert"
 
 #: gtk/a11y/gtkatspiaction.c:288
 msgctxt "accessibility"
@@ -2380,7 +2377,7 @@ msgstr "Eine Datei gleichen Namens ist bereits vorhanden"
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
 #: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
-#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_Abbrechen"
@@ -2718,7 +2715,7 @@ msgid "Save a File"
 msgstr "Eine Datei speichern"
 
 #: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:56
-#: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
+#: gtk/ui/gtkcolorchooserdialog.ui:49 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "Aus_wählen"
 
@@ -2802,11 +2799,8 @@ msgid "Number Spacing"
 msgstr "Zahlenabstand"
 
 #: gtk/gtkfontchooserwidget.c:2473
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Numerators"
 msgid "Numeric Extras"
-msgstr "Zähler"
+msgstr "Numerische Extras"
 
 #: gtk/gtkfontchooserwidget.c:2474
 msgid "Fractions"
@@ -5415,10 +5409,8 @@ msgid "Show Graphics Offload"
 msgstr "Grafiken-Offload zeigen"
 
 #: gtk/inspector/visual.ui:766
-#, fuzzy
-#| msgid "Show Focus"
 msgid "Show Touch UI"
-msgstr "Fokus anzeigen"
+msgstr "Tast-Benutzeroberfläche anzeigen"
 
 #: gtk/inspector/visual.ui:797
 msgid "Inspect Inspector"
@@ -8129,7 +8121,7 @@ msgstr "Knoten-Datei konnte nicht geladen werden: %s\n"
 #: tools/gtk-image-tool-utils.c:89
 #, c-format
 msgid "%s is not a texture node\n"
-msgstr ""
+msgstr "%s ist kein Texturknoten\n"
 
 #: tools/gtk-image-tool-utils.c:315
 #, c-format
@@ -8629,11 +8621,11 @@ msgstr "%s konnte nicht geladen werden: %s\n"
 
 #: tools/gtk-rendernode-tool-convert.c:92
 msgid "Recolor the node"
-msgstr ""
+msgstr "Den Knoten neu färben"
 
 #: tools/gtk-rendernode-tool-convert.c:94
 msgid "Success color"
-msgstr ""
+msgstr "Erfolgsfarbe"
 
 #: tools/gtk-rendernode-tool-convert.c:95
 msgid "Warning color"
@@ -8652,16 +8644,14 @@ msgid "Convert from symbolic svg to node."
 msgstr ""
 
 #: tools/gtk-rendernode-tool-convert.c:177
-#, fuzzy, c-format
-#| msgid "No .ui file specified\n"
+#, c-format
 msgid "No .svg file specified\n"
-msgstr "Es wurde keine .ui-Datei angegeben\n"
+msgstr "Es wurde keine .svg-Datei angegeben\n"
 
 #: tools/gtk-rendernode-tool-convert.c:183
-#, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
+#, c-format
 msgid "Can only accept a single .svg file\n"
-msgstr "Es kann nur eine einzelne .node-Datei akzeptiert werden\n"
+msgstr "Es wird nur eine einzelne .svg-Datei akzeptiert\n"
 
 #: tools/gtk-rendernode-tool-extract.c:73
 #: tools/gtk-rendernode-tool-extract.c:149
@@ -8731,7 +8721,7 @@ msgstr "SVG konnte nicht erzeugt werden: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:271
 msgid "Keep node position unchanged"
-msgstr ""
+msgstr "Die Knotenposition unverändert lassen"
 
 #: tools/gtk-rendernode-tool-render.c:287
 msgid "Render a .node file to an image."
