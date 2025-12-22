@@ -437,6 +437,7 @@ tools/gtk-image-tool.c
 tools/gtk-image-tool-compare.c
 tools/gtk-image-tool-convert.c
 tools/gtk-image-tool-info.c
+tools/gtk-image-tool-play.c
 tools/gtk-image-tool-relabel.c
 tools/gtk-image-tool-show.c
 tools/gtk-image-tool-utils.c

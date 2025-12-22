@@ -9,6 +9,7 @@ demos/gtk-demo/changedisplay.c
 demos/gtk-demo/clipboard.c
 demos/gtk-demo/clipboard.ui
 demos/gtk-demo/combobox.c
+demos/gtk-demo/component_filter.ui
 demos/gtk-demo/constraints_builder.ui
 demos/gtk-demo/constraints.ui
 demos/gtk-demo/cursors.ui
@@ -59,6 +60,13 @@ demos/gtk-demo/stack.ui
 demos/gtk-demo/themes.ui
 demos/gtk-demo/theming.ui
 demos/icon-browser/window.ui
+demos/icon-editor/color-editor.ui
+demos/icon-editor/help-window.ui
+demos/icon-editor/icon-editor-window.ui
+demos/icon-editor/paintable-editor.ui
+demos/icon-editor/path-editor.ui
+demos/icon-editor/shape-editor.ui
+demos/icon-editor/state-editor.ui
 demos/node-editor/help-window.ui
 demos/node-editor/node-editor-window.ui
 demos/print-editor/print-editor.c
