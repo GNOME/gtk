@@ -16254,6 +16254,10 @@ serialize_shape (GString              *s,
                  Shape                *shape,
                  GtkSvgSerializeFlags  flags)
 {
+  if (shape->type == SHAPE_DEFS &&
+      shape->shapes->len == 0)
+    return;
+
   if (indent > 0) /* Hack: this is for <svg> */
     {
       indent_for_elt (s, indent);
