@@ -84,5 +84,37 @@ gsk_cairo_set_fill_rule (cairo_t     *cr,
     }
 }
 
-G_END_DECLS
+/* Callbacks for gsk_path_parse_full
+ * add_rect, add_circle and add_rounded_rect
+ * are optional - the parser will just emit
+ * equivalent ops if they are not provided
+ */
+typedef struct
+{
+  gboolean (* add_op)        (GskPathOperation        op,
+                              const graphene_point_t *pts,
+                              gsize                   n_pts,
+                              float                   weight,
+                              gpointer                user_data);
+  gboolean (* add_arc)       (float                   rx,
+                              float                   ry,
+                              float                   x_axis_rotation,
+                              gboolean                large_arc,
+                              gboolean                positive_sweep,
+                              float                   x,
+                              float                   y,
+                              gpointer                user_data);
+  gboolean (* add_rect)      (const graphene_rect_t  *rect,
+                              gpointer                user_data);
+  gboolean (* add_circle)      (const graphene_point_t *center,
+                                float                    radius,
+                                gpointer                 user_data);
+  gboolean (* add_rounded_rect) (const GskRoundedRect    *rect,
+                                 gpointer                 user_data);
+} GskPathParser;
 
+gboolean gsk_path_parse_full (const char    *string,
+                              GskPathParser *callbacks,
+                              gpointer       data);
+
+G_END_DECLS
