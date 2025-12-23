@@ -10457,11 +10457,24 @@ struct _Animation
   } gpa;
 };
 
+static CalcMode
+default_calc_mode (unsigned int type)
+{
+  switch (type)
+    {
+    case ANIMATION_TYPE_SET: return CALC_MODE_DISCRETE;
+    case ANIMATION_TYPE_MOTION: return CALC_MODE_PACED;
+    default: return CALC_MODE_LINEAR;
+    }
+}
+
 static void
-animation_init (Animation *a)
+animation_init (Animation     *a,
+                AnimationType  type)
 {
   a->status = ANIMATION_STATUS_INACTIVE;
 
+  a->type = type;
   a->begin = NULL;
   a->end = NULL;
 
@@ -10471,7 +10484,7 @@ animation_init (Animation *a)
 
   a->fill = ANIMATION_FILL_REMOVE;
   a->restart = ANIMATION_RESTART_ALWAYS;
-  a->calc_mode = CALC_MODE_LINEAR;
+  a->calc_mode = default_calc_mode (type);
   a->additive = ANIMATION_ADDITIVE_REPLACE;
   a->accumulate = ANIMATION_ACCUMULATE_NONE;
 
@@ -10499,9 +10512,7 @@ static Animation *
 animation_set_new (void)
 {
   Animation *a = g_new0 (Animation, 1);
-  animation_init (a);
-  a->type = ANIMATION_TYPE_SET;
-  a->calc_mode = CALC_MODE_DISCRETE;
+  animation_init (a, ANIMATION_TYPE_SET);
   return a;
 }
 
@@ -10509,8 +10520,7 @@ static Animation *
 animation_animate_new (void)
 {
   Animation *a = g_new0 (Animation, 1);
-  animation_init (a);
-  a->type = ANIMATION_TYPE_ANIMATE;
+  animation_init (a, ANIMATION_TYPE_ANIMATE);
   return a;
 }
 
@@ -10518,8 +10528,7 @@ static Animation *
 animation_transform_new (void)
 {
   Animation *a = g_new0 (Animation, 1);
-  animation_init (a);
-  a->type = ANIMATION_TYPE_TRANSFORM;
+  animation_init (a, ANIMATION_TYPE_TRANSFORM);
   return a;
 }
 
@@ -10527,8 +10536,7 @@ static Animation *
 animation_motion_new (void)
 {
   Animation *a = g_new0 (Animation, 1);
-  animation_init (a);
-  a->type = ANIMATION_TYPE_MOTION;
+  animation_init (a, ANIMATION_TYPE_MOTION);
   a->attr = SHAPE_ATTR_TRANSFORM;
   a->motion.rotate = ROTATE_FIXED;
   a->motion.angle = 0;
@@ -16040,7 +16048,7 @@ serialize_value_animation_attrs (GString   *s,
     }
   g_string_append_c (s, '\'');
 
-  if (a->calc_mode != CALC_MODE_LINEAR)
+  if (a->calc_mode != default_calc_mode (a->type))
     {
       const char *modes[] = { "discrete", "linear", "paced", "spline" };
       indent_for_attr (s, indent);

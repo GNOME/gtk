@@ -85,6 +85,7 @@
           dur='0.001ms'
           fill='freeze'
           keyTimes='0; 1'
+          calcMode='linear'
           keyPoints='1; 1'
           rotate='auto'
           gpa:status='running'
