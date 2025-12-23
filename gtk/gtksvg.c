@@ -13004,6 +13004,7 @@ parse_value_animation_attrs (Animation            *a,
   const char *values_attr = NULL;
   const char *from_attr = NULL;
   const char *to_attr = NULL;
+  const char *by_attr = NULL;
   const char *key_times_attr = NULL;
   const char *splines_attr = NULL;
   const char *additive_attr = NULL;
@@ -13022,6 +13023,7 @@ parse_value_animation_attrs (Animation            *a,
                             "values", &values_attr,
                             "from", &from_attr,
                             "to", &to_attr,
+                            "by", &by_attr,
                             "keyTimes", &key_times_attr,
                             "keySplines", &splines_attr,
                             "additive", &additive_attr,
@@ -13125,6 +13127,27 @@ parse_value_animation_attrs (Animation            *a,
 
       g_free (from_and_to);
     }
+  else if (from_attr && by_attr)
+    {
+      GPtrArray *by;
+      SvgValue *to;
+
+      values = shape_attr_parse_values (a->attr, transform_type, from_attr);
+      by = shape_attr_parse_values (a->attr, transform_type, by_attr);
+
+      if (!values || values->len != 1 || !by || by->len != 1)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL,  "Failed to parse 'from' or 'by'");
+          g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&by, g_ptr_array_unref);
+          return FALSE;
+        }
+
+      to = svg_value_accumulate (g_ptr_array_index (by, 0),
+                                 g_ptr_array_index (values, 0), 1);
+      g_ptr_array_add (values, to);
+      g_ptr_array_unref (by);
+    }
 
   if (key_times_attr)
     {
@@ -13181,7 +13204,7 @@ parse_value_animation_attrs (Animation            *a,
       if (values == NULL)
         {
           gtk_svg_invalid_attribute (data->svg, context, NULL,
-                                     "Either values or from and to must be given");
+                                     "Either values or from/to/by must be given");
           g_clear_pointer (&times, g_array_unref);
           return FALSE;
         }
