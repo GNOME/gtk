@@ -13129,24 +13129,70 @@ parse_value_animation_attrs (Animation            *a,
     }
   else if (from_attr && by_attr)
     {
-      GPtrArray *by;
+      GPtrArray *byvals;
+      SvgValue *from;
+      SvgValue *by;
       SvgValue *to;
 
       values = shape_attr_parse_values (a->attr, transform_type, from_attr);
-      by = shape_attr_parse_values (a->attr, transform_type, by_attr);
+      byvals = shape_attr_parse_values (a->attr, transform_type, by_attr);
 
-      if (!values || values->len != 1 || !by || by->len != 1)
+      if (!values || values->len != 1 || !byvals || byvals->len != 1)
         {
           gtk_svg_invalid_attribute (data->svg, context, NULL,  "Failed to parse 'from' or 'by'");
           g_clear_pointer (&values, g_ptr_array_unref);
-          g_clear_pointer (&by, g_ptr_array_unref);
+          g_clear_pointer (&byvals, g_ptr_array_unref);
           return FALSE;
         }
 
-      to = svg_value_accumulate (g_ptr_array_index (by, 0),
-                                 g_ptr_array_index (values, 0), 1);
+      from = g_ptr_array_index (values, 0);
+      by = g_ptr_array_index (byvals, 0);
+      to = svg_value_accumulate (by, from, 1);
       g_ptr_array_add (values, to);
-      g_ptr_array_unref (by);
+      g_ptr_array_unref (byvals);
+    }
+  else if (to_attr)
+    {
+      /* TODO */
+      gtk_svg_invalid_attribute (data->svg, context, NULL,  "'to' animation is not support");
+      return FALSE;
+    }
+  else if (by_attr)
+    {
+      GPtrArray *byvals;
+      SvgValue *from;
+      SvgValue *by;
+
+      byvals = shape_attr_parse_values (a->attr, transform_type, by_attr);
+
+      if (!byvals || byvals->len != 1)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL,  "Failed to parse 'by'");
+          g_clear_pointer (&byvals, g_ptr_array_unref);
+          return FALSE;
+        }
+
+      by = g_ptr_array_index (byvals, 0);
+      if (by->class == &SVG_NUMBER_CLASS)
+        from = svg_number_new_full (((SvgNumber *)by)->dim, 0);
+      else if (by->class == &SVG_TRANSFORM_CLASS)
+        from = svg_transform_new_none ();
+      else if (by->class == &SVG_PAINT_CLASS &&
+               ((SvgPaint *) by)->kind == PAINT_COLOR)
+        from = svg_paint_new_rgba (&(GdkRGBA) { 0, 0, 0, 0 });
+      else
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL,  "Don't know how to handle this 'by' value");
+          g_ptr_array_unref (byvals);
+          return FALSE;
+        }
+
+      values = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_value_unref);
+      g_ptr_array_add (values, from);
+      g_ptr_array_add (values, svg_value_ref (by));
+      g_ptr_array_unref (byvals);
+
+      a->additive = ANIMATION_ADDITIVE_SUM;
     }
 
   if (key_times_attr)
