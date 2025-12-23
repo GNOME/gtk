@@ -5,26 +5,26 @@
   
   <!-- animateMotion with mpath (note: parser requires href without # prefix) -->
   <circle r="5" fill="red">
-    <animateMotion dur="5s" keyTimes="0;1" repeatCount="indefinite">
+    <animateMotion dur="5s" keyTimes="0;1" repeatCount="indefinite" calcMode='linear'>
       <mpath href="motionPath1"/>
     </animateMotion>
   </circle>
   
   <!-- animateMotion with inline path -->
   <rect width="8" height="8" fill="blue">
-    <animateMotion path="M20,60 C20,60 50,90 100,60 S180,30 180,60" dur="4s" keyTimes="0;1" repeatCount="indefinite"/>
+    <animateMotion path="M20,60 C20,60 50,90 100,60 S180,30 180,60" dur="4s" keyTimes="0;1" repeatCount="indefinite" calcMode='linear'/>
   </rect>
   
   <!-- animateMotion with keyPoints and mpath -->
   <circle r="6" fill="green">
-    <animateMotion dur="6s" keyPoints="0;0.5;1" keyTimes="0;0.8;1" repeatCount="indefinite">
+    <animateMotion dur="6s" keyPoints="0;0.5;1" keyTimes="0;0.8;1" repeatCount="indefinite" calcMode='linear'>
       <mpath href="motionPath2"/>
     </animateMotion>
   </circle>
 
   <!-- animateMotion with hash in mpath href -->
   <circle r="6" fill="green">
-    <animateMotion dur="6s" keyPoints="0;0.5;1" keyTimes="0;0.8;1" repeatCount="indefinite">
+    <animateMotion dur="6s" keyPoints="0;0.5;1" keyTimes="0;0.8;1" repeatCount="indefinite" calcMode='linear'>
       <mpath href="#motionPath2"/>
     </animateMotion>
   </circle>

@@ -27,6 +27,7 @@
           dur='5000ms'
           repeatCount='indefinite'
           keyTimes='0; 1'
+          calcMode='linear'
           keyPoints='0; 1'>
     <mpath href='motionPath1'/>
   </animateMotion>
@@ -39,6 +40,7 @@
           dur='4000ms'
           repeatCount='indefinite'
           keyTimes='0; 1'
+          calcMode='linear'
           keyPoints='0; 1'
           path='M 20 60 C 20 60, 50 90, 100 60 C 150 30, 180 30, 180 60'/>
   </rect>
@@ -49,6 +51,7 @@
           dur='6000ms'
           repeatCount='indefinite'
           keyTimes='0; 0.8; 1'
+          calcMode='linear'
           keyPoints='0; 0.5; 1'>
     <mpath href='motionPath2'/>
   </animateMotion>
@@ -60,6 +63,7 @@
           dur='6000ms'
           repeatCount='indefinite'
           keyTimes='0; 0.8; 1'
+          calcMode='linear'
           keyPoints='0; 0.5; 1'>
     <mpath href='motionPath2'/>
   </animateMotion>

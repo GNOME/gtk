@@ -3,6 +3,7 @@
   <animateMotion href='#circle'
         begin='0ms'
         dur='1s'
+        calcMode='linear'
         keyTimes='0; 1'
         keyPoints='0; 1'>
     <mpath href='#rect'/>

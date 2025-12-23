@@ -23,8 +23,6 @@
           begin='0ms'
           dur='10000ms'
           fill='freeze'
-          keyTimes='0; 0.1; 1'
-          keyPoints='0; 0.9; 1'
           gpa:status='running'
           gpa:current-start-time='0ms'
           gpa:current-end-time='10000ms'

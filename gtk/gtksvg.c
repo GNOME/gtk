@@ -10648,6 +10648,51 @@ fill_from_values (Animation     *a,
     }
 }
 
+static void
+fill_from_path (Animation *a,
+                GskPath   *path)
+{
+  GArray *frames;
+  Frame frame = { .value = NULL, .params = { 0, 0, 1, 1 } };
+  Frame *last;
+  GskPathPoint point;
+  GskPathMeasure *measure;
+  double length;
+  double distance, previous_distance;
+
+  if (!gsk_path_get_start_point (path, &point))
+    return;
+
+  measure = gsk_path_measure_new (path);
+
+  frames = g_array_new (FALSE, FALSE, sizeof (Frame));
+
+  frame.time = 0;
+  frame.point = 0;
+  g_array_append_val (frames, frame);
+
+  length = gsk_path_measure_get_length (measure);
+
+  previous_distance = 0;
+  while (gsk_path_get_next (path, &point))
+    {
+      distance = gsk_path_point_get_distance (&point, measure);
+      frame.point = distance / length;
+      frame.time += (distance - previous_distance) / length;
+      g_array_append_val (frames, frame);
+      previous_distance = distance;
+    }
+
+  last = &g_array_index (frames, Frame, frames->len - 1);
+  last->point = 1;
+  last->time = 1;
+
+  gsk_path_measure_unref (measure);
+
+  a->n_frames = frames->len;
+  a->frames = (Frame *) g_array_free (frames, FALSE);
+}
+
 static GskPath *
 animation_motion_get_path (Animation             *a,
                            const graphene_rect_t *viewport,
@@ -13215,11 +13260,6 @@ parse_value_animation_attrs (Animation            *a,
                        (const char *[]) { "discrete", "linear", "paced", "spline" }, 4,
                        &value))
         gtk_svg_invalid_attribute (data->svg, context, "calcMode", NULL);
-      else if (value == CALC_MODE_PACED)
-        {
-          gtk_svg_invalid_attribute (data->svg, context, "calcMode", "'paced' calc mode is not supported");
-          a->calc_mode = CALC_MODE_LINEAR;
-        }
       else
         a->calc_mode = (CalcMode) value;
    }
@@ -13345,17 +13385,6 @@ parse_value_animation_attrs (Animation            *a,
       a->additive = ANIMATION_ADDITIVE_SUM;
     }
 
-  if (key_times_attr)
-    {
-      times = parse_numbers2 (key_times_attr, ";", 0, 1);
-      if (!times)
-        {
-          gtk_svg_invalid_attribute (data->svg, context, "keyTimes", NULL);
-          g_clear_pointer (&values, g_ptr_array_unref);
-          return FALSE;
-        }
-    }
-
   if (a->type == ANIMATION_TYPE_MOTION)
     {
       if (values != NULL)
@@ -13387,7 +13416,7 @@ parse_value_animation_attrs (Animation            *a,
               g_array_append_val (points, length);
             }
 
-          for (unsigned int i = 0; i < points->len; i++)
+          for (unsigned int i = 1; i < points->len; i++)
             g_array_index (points, double, i) /= length;
 
           a->motion.path = gsk_path_builder_free_to_path (builder);
@@ -13401,7 +13430,46 @@ parse_value_animation_attrs (Animation            *a,
         {
           gtk_svg_invalid_attribute (data->svg, context, NULL,
                                      "Either values or from/to/by must be given");
-          g_clear_pointer (&times, g_array_unref);
+          return FALSE;
+        }
+    }
+
+  if (a->calc_mode == CALC_MODE_PACED)
+    {
+      if (values && values->len > 2)
+        {
+          double length, distance;
+          const SvgValue *v0, *v1;
+
+          /* use value distances to compute evenly paced times */
+          times = g_array_new (FALSE, FALSE, sizeof (double));
+          length = distance = 0;
+          g_array_append_val (times, distance);
+          for (unsigned int i = 1; i < values->len; i++)
+            {
+              v0 = g_ptr_array_index (values, i - 1);
+              v1 = g_ptr_array_index (values, i);
+              distance = svg_value_distance (v0, v1);
+              g_array_append_val (times, distance);
+              length += distance;
+            }
+           for (unsigned int i = 1; i < times->len; i++)
+             {
+               g_array_index (times, double, i) /= length;
+             }
+           for (unsigned int i = 1; i < times->len; i++)
+             {
+               g_array_index (times, double, i) += g_array_index (times, double, i - 1);
+             }
+        }
+    }
+  else if (key_times_attr)
+    {
+      times = parse_numbers2 (key_times_attr, ";", 0, 1);
+      if (!times)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "keyTimes", NULL);
+          g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
     }
@@ -13449,53 +13517,56 @@ parse_value_animation_attrs (Animation            *a,
         }
     }
 
-  params = 0;
-  if (splines_attr)
+  if (a->calc_mode != CALC_MODE_PACED)
     {
-      GStrv strv;
-      unsigned int n;
-
-      params = g_array_new (FALSE, FALSE, sizeof (double));
-
-      strv = g_strsplit (splines_attr, ";", 0);
-      n = g_strv_length (strv);
-      for (unsigned int i = 0; i < n; i++)
+      params = 0;
+      if (splines_attr)
         {
-          double spline[4];
-          unsigned int m;
-          char *s = g_strstrip (strv[i]);
+          GStrv strv;
+          unsigned int n;
 
-          if (*s == '\0' && strv[i+1] == NULL)
+          params = g_array_new (FALSE, FALSE, sizeof (double));
+
+          strv = g_strsplit (splines_attr, ";", 0);
+          n = g_strv_length (strv);
+          for (unsigned int i = 0; i < n; i++)
             {
-              n -= 1;
-              break;
+              double spline[4];
+              unsigned int m;
+              char *s = g_strstrip (strv[i]);
+
+              if (*s == '\0' && strv[i+1] == NULL)
+                {
+                  n -= 1;
+                  break;
+                }
+
+              if (!parse_numbers (s, ", ", 0, 1, spline, 4, &m) ||
+                  m != 4)
+                {
+                  gtk_svg_invalid_attribute (data->svg, context, "keySplines", NULL);
+                  g_clear_pointer (&values, g_ptr_array_unref);
+                  g_clear_pointer (&times, g_array_unref);
+                  g_clear_pointer (&params, g_array_unref);
+                  return FALSE;
+                }
+
+              g_array_append_vals (params, spline, 4);
             }
 
-          if (!parse_numbers (s, ", ", 0, 1, spline, 4, &m) ||
-              m != 4)
+          g_strfreev (strv);
+
+          if (times == NULL)
+            times = create_default_times (a->calc_mode, n + 1);
+
+          if (n != times->len - 1)
             {
-              gtk_svg_invalid_attribute (data->svg, context, "keySplines", NULL);
+              gtk_svg_invalid_attribute (data->svg, context, "keySplines", "wrong number of values");
               g_clear_pointer (&values, g_ptr_array_unref);
               g_clear_pointer (&times, g_array_unref);
               g_clear_pointer (&params, g_array_unref);
               return FALSE;
             }
-
-          g_array_append_vals (params, spline, 4);
-        }
-
-      g_strfreev (strv);
-
-      if (times == NULL)
-        times = create_default_times (a->calc_mode, n + 1);
-
-      if (n != times->len - 1)
-        {
-          gtk_svg_invalid_attribute (data->svg, context, "keySplines", "wrong number of values");
-          g_clear_pointer (&values, g_ptr_array_unref);
-          g_clear_pointer (&times, g_array_unref);
-          g_clear_pointer (&params, g_array_unref);
-          return FALSE;
         }
     }
 
@@ -13580,27 +13651,51 @@ parse_motion_animation_attrs (Animation            *a,
         gtk_svg_invalid_attribute (data->svg, context, "rotate", "failed to parse: %s", rotate_attr);
     }
 
-  if (key_points_attr)
+  if (a->calc_mode != CALC_MODE_PACED)
     {
-      GArray *points = parse_numbers2 (key_points_attr, ";", 0, 1);
-      if (!points)
+      if (key_points_attr)
         {
-          gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "failed to parse: %s", key_points_attr);
+          GArray *points = parse_numbers2 (key_points_attr, ";", 0, 1);
+          if (!points)
+            {
+              gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "failed to parse: %s", key_points_attr);
+              g_array_unref (points);
+              return FALSE;
+            }
+
+          if (points->len != a->n_frames)
+            {
+              gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "wrong number of values");
+              g_array_unref (points);
+              return FALSE;
+            }
+
+          for (unsigned int i = 0; i < a->n_frames; i++)
+            a->frames[i].point = g_array_index (points, double, i);
+
           g_array_unref (points);
+        }
+    }
+
+  if (a->calc_mode == CALC_MODE_PACED)
+    {
+      /* When paced, keyTimes, keyPoints and keySplines
+       * are all ignored, and we calculate times and
+       * points from the path to ensure an even pace
+       */
+
+      g_clear_pointer (&a->frames, g_free);
+      a->n_frames = 0;
+
+      if (a->motion.path)
+        {
+          fill_from_path (a, a->motion.path);
+        }
+      else
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "calcMode", "calcMode='paced' with <mpath> is not implemented");
           return FALSE;
         }
-
-      if (points->len != a->n_frames)
-        {
-          gtk_svg_invalid_attribute (data->svg, context, "keyPoints", "wrong number of values");
-          g_array_unref (points);
-          return FALSE;
-        }
-
-      for (unsigned int i = 0; i < a->n_frames; i++)
-        a->frames[i].point = g_array_index (points, double, i);
-
-      g_array_unref (points);
     }
 
   return TRUE;
@@ -15999,15 +16094,18 @@ serialize_value_animation_attrs (GString   *s,
       g_string_append_c (s, '\'');
     }
 
-  indent_for_attr (s, indent);
-  g_string_append (s, "keyTimes='");
-  for (unsigned int i = 0; i < a->n_frames; i++)
+  if (a->calc_mode != CALC_MODE_PACED)
     {
-      if (i > 0)
-        g_string_append (s, "; ");
-      string_append_double (s, a->frames[i].time);
+      indent_for_attr (s, indent);
+      g_string_append (s, "keyTimes='");
+      for (unsigned int i = 0; i < a->n_frames; i++)
+        {
+          if (i > 0)
+            g_string_append (s, "; ");
+          string_append_double (s, a->frames[i].time);
+        }
+      g_string_append_c (s, '\'');
     }
-  g_string_append_c (s, '\'');
 
   if (a->calc_mode != default_calc_mode (a->type))
     {
@@ -16142,15 +16240,18 @@ serialize_animation_motion (GString              *s,
   serialize_base_animation_attrs (s, svg, indent, a);
   serialize_value_animation_attrs (s, svg, indent, a);
 
-  indent_for_attr (s, indent);
-  g_string_append (s, "keyPoints='");
-  for (unsigned int i = 0; i < a->n_frames; i++)
+  if (a->calc_mode != CALC_MODE_PACED)
     {
-      if (i > 0)
-        g_string_append (s, "; ");
-      string_append_double (s, a->frames[i].point);
+      indent_for_attr (s, indent);
+      g_string_append (s, "keyPoints='");
+      for (unsigned int i = 0; i < a->n_frames; i++)
+        {
+          if (i > 0)
+            g_string_append (s, "; ");
+          string_append_double (s, a->frames[i].point);
+        }
+      g_string_append (s, "'");
     }
-  g_string_append (s, "'");
 
   if (a->motion.rotate != ROTATE_FIXED)
     {
