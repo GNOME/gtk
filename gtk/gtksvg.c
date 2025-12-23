@@ -1404,6 +1404,7 @@ enum
 {
   SVG_INHERIT,
   SVG_INITIAL,
+  SVG_CURRENT,
 };
 
 typedef struct
@@ -1458,6 +1459,9 @@ svg_keyword_print (const SvgValue *value,
     case SVG_INITIAL:
       g_string_append (string, "initial");
       break;
+    case SVG_CURRENT:
+      g_string_append (string, "current");
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -1488,6 +1492,14 @@ svg_initial_new (void)
   return svg_value_ref ((SvgValue *) &initial);
 }
 
+static SvgValue *
+svg_current_new (void)
+{
+  static SvgKeyword current = { { &SVG_KEYWORD_CLASS, 1 }, SVG_CURRENT };
+
+  return svg_value_ref ((SvgValue *) &current);
+}
+
 static gboolean
 svg_value_is_inherit (const SvgValue *value)
 {
@@ -1500,6 +1512,13 @@ svg_value_is_initial (const SvgValue *value)
 {
   return value->class == &SVG_KEYWORD_CLASS &&
          ((const SvgKeyword *) value)->keyword == SVG_INITIAL;
+}
+
+static gboolean
+svg_value_is_current (const SvgValue *value)
+{
+  return value->class == &SVG_KEYWORD_CLASS &&
+         ((const SvgKeyword *) value)->keyword == SVG_CURRENT;
 }
 
 /* }}} */
@@ -11312,6 +11331,11 @@ resolve_value (Shape           *shape,
       else
         return svg_value_ref (shape_attr_get_initial_value (attr, shape));
     }
+  else if (svg_value_is_current (value))
+    {
+      /* FIXME index for color stops */
+      return svg_value_ref (shape->current[attr]);
+    }
   else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
     {
       return svg_paint_resolve (value, context->colors, context->n_colors);
@@ -13153,26 +13177,33 @@ parse_value_animation_attrs (Animation            *a,
     }
   else if (to_attr)
     {
-      /* TODO */
-      gtk_svg_invalid_attribute (data->svg, context, NULL,  "'to' animation is not support");
-      return FALSE;
-    }
-  else if (by_attr)
-    {
-      GPtrArray *byvals;
-      SvgValue *from;
-      SvgValue *by;
+      values = shape_attr_parse_values (a->attr, transform_type, to_attr);
 
-      byvals = shape_attr_parse_values (a->attr, transform_type, by_attr);
-
-      if (!byvals || byvals->len != 1)
+      if (!values || values->len != 1)
         {
-          gtk_svg_invalid_attribute (data->svg, context, NULL,  "Failed to parse 'by'");
-          g_clear_pointer (&byvals, g_ptr_array_unref);
+          gtk_svg_invalid_attribute (data->svg, context, NULL,  "Failed to parse 'to'");
+          g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
 
-      by = g_ptr_array_index (byvals, 0);
+      /* We use a special keyword for this */
+      g_ptr_array_insert (values, 0, svg_current_new ());
+    }
+  else if (by_attr)
+    {
+      SvgValue *from;
+      SvgValue *by;
+
+      values = shape_attr_parse_values (a->attr, transform_type, by_attr);
+
+      if (!values || values->len != 1)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL,  "Failed to parse 'by'");
+          g_clear_pointer (&values, g_ptr_array_unref);
+          return FALSE;
+        }
+
+      by = g_ptr_array_index (values, 0);
       if (by->class == &SVG_NUMBER_CLASS)
         from = svg_number_new_full (((SvgNumber *)by)->dim, 0);
       else if (by->class == &SVG_TRANSFORM_CLASS)
@@ -13183,14 +13214,11 @@ parse_value_animation_attrs (Animation            *a,
       else
         {
           gtk_svg_invalid_attribute (data->svg, context, NULL,  "Don't know how to handle this 'by' value");
-          g_ptr_array_unref (byvals);
+          g_ptr_array_unref (values);
           return FALSE;
         }
 
-      values = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_value_unref);
-      g_ptr_array_add (values, from);
-      g_ptr_array_add (values, svg_value_ref (by));
-      g_ptr_array_unref (byvals);
+      g_ptr_array_insert (values, 0, from);
 
       a->additive = ANIMATION_ADDITIVE_SUM;
     }
@@ -15835,28 +15863,38 @@ serialize_value_animation_attrs (GString   *s,
         }
       else
         {
-          indent_for_attr (s, indent);
-          g_string_append (s, "values='");
-          if (a->type == ANIMATION_TYPE_TRANSFORM &&
-              a->attr == SHAPE_ATTR_TRANSFORM)
+          if (a->n_frames == 2 && svg_value_is_current (a->frames[0].value))
             {
-              for (unsigned int i = 0; i < a->n_frames; i++)
-                {
-                  if (i > 0)
-                    g_string_append (s, "; ");
-                  svg_primitive_transform_print (a->frames[i].value, s);
-                }
+              indent_for_attr (s, indent);
+              g_string_append (s, "to='");
+              svg_value_print (a->frames[1].value, s);
+              g_string_append_c (s, '\'');
             }
           else
             {
-              for (unsigned int i = 0; i < a->n_frames; i++)
+              indent_for_attr (s, indent);
+              g_string_append (s, "values='");
+              if (a->type == ANIMATION_TYPE_TRANSFORM &&
+                  a->attr == SHAPE_ATTR_TRANSFORM)
                 {
-                  if (i > 0)
-                    g_string_append (s, "; ");
-                  svg_value_print (a->frames[i].value, s);
+                  for (unsigned int i = 0; i < a->n_frames; i++)
+                    {
+                      if (i > 0)
+                        g_string_append (s, "; ");
+                      svg_primitive_transform_print (a->frames[i].value, s);
+                    }
                 }
+              else
+                {
+                  for (unsigned int i = 0; i < a->n_frames; i++)
+                    {
+                      if (i > 0)
+                        g_string_append (s, "; ");
+                      svg_value_print (a->frames[i].value, s);
+                    }
+                }
+              g_string_append_c (s, '\'');
             }
-          g_string_append_c (s, '\'');
         }
     }
 
