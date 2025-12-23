@@ -1368,7 +1368,7 @@ svg_value_interpolate (const SvgValue *value0,
   return value1->class->interpolate (value0, value1, t);
 }
 
-/* Compute v = a + n * b */
+/* Compute v = n * b + a */
 static SvgValue *
 svg_value_accumulate (const SvgValue *value0,
                       const SvgValue *value1,
@@ -3449,17 +3449,19 @@ svg_transform_new_rotate_and_shift (double angle,
                                     graphene_point_t *orig,
                                     graphene_point_t *final)
 {
-  SvgTransform *tf = svg_transform_alloc (3);
+  SvgTransform *tf = svg_transform_alloc (2);
   tf->transforms[0].type = TRANSFORM_TRANSLATE;
   tf->transforms[0].translate.x = final->x;
   tf->transforms[0].translate.y = final->y;
   tf->transforms[1].type = TRANSFORM_ROTATE;
   tf->transforms[1].rotate.angle = angle;
-  tf->transforms[1].rotate.x = 0;
-  tf->transforms[1].rotate.y = 0;
+  tf->transforms[1].rotate.x = orig->x;
+  tf->transforms[1].rotate.y = orig->y;
+#if 0
   tf->transforms[2].type = TRANSFORM_TRANSLATE;
   tf->transforms[2].translate.x = - orig->x;
   tf->transforms[2].translate.y = - orig->y;
+#endif
   return (SvgValue *) tf;
 }
 
@@ -3682,11 +3684,7 @@ primitive_transform_parse (TransformType  type,
   GStrv strv;
   unsigned int n;
 
-  if (strchr (value, ','))
-    strv = g_strsplit (value, ",", 0);
-  else
-    strv = g_strsplit (value, " ", 0);
-
+  strv = strsplit_set (value, ", ");
   n = g_strv_length (strv);
 
   switch (type)
@@ -4068,18 +4066,28 @@ svg_transform_accumulate (const SvgValue *value0,
   const SvgTransform *tf0 = (const SvgTransform *) value0;
   const SvgTransform *tf1 = (const SvgTransform *) value1;
   SvgTransform *tf;
+  int n0;
+
+  if (tf1->n_transforms == 1 && tf1->transforms[0].type == TRANSFORM_NONE)
+    return svg_value_ref ((SvgValue *) value0);
+
+  if (tf0->n_transforms == 1 && tf0->transforms[0].type == TRANSFORM_NONE)
+    {
+      if (n == 1)
+        return svg_value_ref ((SvgValue *) value1);
+
+      n0 = 0;
+    }
+  else
+    n0 = tf0->n_transforms;
 
   /* special-case this one */
   if (tf1->n_transforms == 1 && tf1->transforms[0].type != TRANSFORM_MATRIX)
     {
       PrimitiveTransform *p;
 
-      tf = svg_transform_alloc (tf0->n_transforms + 1);
-      memcpy (tf->transforms,
-              tf0->transforms,
-              tf0->n_transforms * sizeof (PrimitiveTransform));
-
-      p = &tf->transforms[tf0->n_transforms];
+      tf = svg_transform_alloc (n0 + 1);
+      p = &tf->transforms[0];
       memcpy (p, tf1->transforms, sizeof (PrimitiveTransform));
 
       switch (p->type)
@@ -4107,19 +4115,26 @@ svg_transform_accumulate (const SvgValue *value0,
         default:
           g_assert_not_reached ();
         }
+
+      if (n0 > 0)
+        memcpy (tf->transforms + 1,
+                tf0->transforms,
+                n0 * sizeof (PrimitiveTransform));
+
     }
   else
     {
       /* For the general case, simply concatenate all the transforms */
-      tf = svg_transform_alloc (tf0->n_transforms + n * tf1->n_transforms);
+      tf = svg_transform_alloc (n0 + n * tf1->n_transforms);
       for (unsigned int i = 0; i < n; i++)
-        memcpy (&tf->transforms[tf0->n_transforms + i * tf1->n_transforms],
+        memcpy (&tf->transforms[i * tf1->n_transforms],
                 tf1->transforms,
                 tf1->n_transforms * sizeof (PrimitiveTransform));
 
-      memcpy (&tf->transforms[tf0->n_transforms + (n - 1) * tf1->n_transforms],
-              tf0->transforms,
-              tf0->n_transforms * sizeof (PrimitiveTransform));
+      if (n0 > 0)
+        memcpy (&tf->transforms[n * tf1->n_transforms],
+                tf0->transforms,
+                n0 * sizeof (PrimitiveTransform));
     }
 
   return (SvgValue *) tf;
@@ -8620,6 +8635,14 @@ static SvgValue *
 shape_attr_parse_for_values (ShapeAttr   attr,
                              const char *value)
 {
+  if (shape_attrs[attr].presentation)
+    {
+      if (strcmp (value, "inherit") == 0)
+        return svg_inherit_new ();
+      else if (strcmp (value, "initial") == 0)
+        return svg_initial_new ();
+    }
+
   if (shape_attrs[attr].parse_for_values)
     return shape_attrs[attr].parse_for_values (value);
   else
@@ -9167,7 +9190,8 @@ shape_has_attr (ShapeType type,
        * so we'll follow rsvg and only support it for
        * <text> nodes.
        */
-      return type == SHAPE_TEXT;
+      return type == SHAPE_TEXT || type == SHAPE_GROUP ||
+             type == SHAPE_USE;
     case SHAPE_ATTR_DX:
     case SHAPE_ATTR_DY:
     case SHAPE_ATTR_UNICODE_BIDI:
@@ -10202,6 +10226,7 @@ typedef enum
 {
   CALC_MODE_DISCRETE,
   CALC_MODE_LINEAR,
+  CALC_MODE_PACED,
   CALC_MODE_SPLINE,
 } CalcMode;
 
@@ -10238,6 +10263,8 @@ struct _Animation
   AnimationStatus status;
   char *id;
   char *href;
+  int line; /* for resolving ties in order */
+
   /* shape, attr, and idx together identify the attribute
    * that this animation modifies. idx is only relevant
    * for gradients and filters, where it identifies the
@@ -10450,24 +10477,33 @@ animation_has_end (Animation *a,
 static void
 fill_from_values (Animation     *a,
                   double        *times,
+                  unsigned int   n_frames,
                   SvgValue     **values,
                   double        *params,
-                  unsigned int   n_values)
+                  double        *points)
 {
   double linear[] = { 0, 0, 1, 1 };
 
-  a->n_frames = n_values;
-  a->frames = g_new0 (Frame, n_values);
+  g_assert (n_frames > 1);
 
-  for (unsigned int i = 0; i < n_values; i++)
+  a->n_frames = n_frames;
+  a->frames = g_new0 (Frame, n_frames);
+
+  for (unsigned int i = 0; i < n_frames; i++)
     {
-      if (a->type != ANIMATION_TYPE_MOTION)
-        a->frames[i].value = svg_value_ref (values[i]);
       a->frames[i].time = times[i];
-      if (i + 1 < n_values && params)
+      if (values)
+        a->frames[i].value = svg_value_ref (values[i]);
+      else
+        a->frames[i].value = NULL;
+      if (i + 1 < n_frames && params)
         memcpy (a->frames[i].params, &params[4 * i], sizeof (double) * 4);
       else
         memcpy (a->frames[i].params, linear, sizeof (double) * 4);
+      if (points)
+        a->frames[i].point = points[i];
+      else
+        a->frames[i].point = i / (double) (n_frames - 1);
     }
 }
 
@@ -10518,12 +10554,7 @@ animation_motion_get_current_measure (Animation             *a,
     }
   else
     {
-      GskPathBuilder *builder = gsk_path_builder_new ();
-      gsk_path_builder_move_to (builder, 0, 0);
-      GskPath *path = gsk_path_builder_free_to_path (builder);
-      GskPathMeasure *measure = gsk_path_measure_new (path);
-      gsk_path_unref (path);
-      return measure;
+      return NULL;
     }
 }
 
@@ -11313,46 +11344,86 @@ compute_animation_motion_value (Animation      *a,
                                 double          frame_t,
                                 ComputeContext *context)
 {
-  double offset;
   double angle;
   graphene_point_t orig_pos, final_pos;
   SvgValue *value;
   GskPathMeasure *measure;
 
-  measure = shape_get_current_measure (a->shape, context->viewport);
-  get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
-  gsk_path_measure_unref (measure);
+  graphene_point_init (&orig_pos, 0, 0);
 
-  if (frame + 1 < a->n_frames)
-    offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
-  else
-    offset = a->frames[frame].point;
-
-  if (offset < 0 || offset > 1)
+  if (a->id && g_str_has_prefix (a->id, "gpa:"))
     {
-      offset = fmod (offset, 1);
-      if (offset < 9)
-        offset += 1;
+      measure = shape_get_current_measure (a->shape, context->viewport);
+      get_transform_data_for_motion (measure, a->gpa.origin, ROTATE_FIXED, &angle, &orig_pos);
+      gsk_path_measure_unref (measure);
     }
 
-  measure = animation_motion_get_current_measure (a, context->viewport);
   angle = a->motion.angle;
-  get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
-  value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
 
-  if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
+  measure = animation_motion_get_current_measure (a, context->viewport);
+  if (measure)
+    {
+      double offset;
+
+      if (frame + 1 < a->n_frames)
+        offset = lerp (frame_t, a->frames[frame].point, a->frames[frame + 1].point);
+      else
+        offset = a->frames[frame].point;
+
+      if (offset < 0 || offset > 1)
+        {
+          offset = fmod (offset, 1);
+          if (offset < 9)
+            offset += 1;
+        }
+
+      get_transform_data_for_motion (measure, offset, a->motion.rotate, &angle, &final_pos);
+      value = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+    }
+  else
+    {
+      if (frame + 1 == a->n_frames)
+        {
+          value = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+        }
+      else if (a->frames[0].value)
+        {
+          SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+          SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->frames[frame + 1].value);
+          value = svg_value_interpolate (v1, v2, frame_t);
+          svg_value_unref (v1);
+          svg_value_unref (v2);
+        }
+      else
+        {
+          value = svg_transform_new_none ();
+        }
+    }
+
+  if (a->accumulate == ANIMATION_ACCUMULATE_SUM && rep > 0)
     {
       SvgValue *end_val, *acc;
 
-      get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
-      end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+      if (measure)
+        {
+          get_transform_data_for_motion (measure, 1, a->motion.rotate, &angle, &final_pos);
+          end_val = svg_transform_new_rotate_and_shift (angle, &orig_pos, &final_pos);
+        }
+      else if (a->frames[0].value)
+        {
+          end_val = svg_value_ref (a->frames[a->n_frames - 1].value);
+        }
+      else
+        {
+          end_val = svg_transform_new_none ();
+        }
       acc = svg_value_accumulate (value, end_val, rep);
       svg_value_unref (end_val);
       svg_value_unref (value);
       value = acc;
     }
 
-  gsk_path_measure_unref (measure);
+  g_clear_pointer (&measure, gsk_path_measure_unref);
 
   return value;
 }
@@ -11372,13 +11443,16 @@ compute_value_at_time (Animation      *a,
   find_current_cycle_and_frame (a, context->svg, context->current_time,
                                 &rep, &frame, &frame_t, &frame_start, &frame_end);
 
-  if (a->calc_mode == CALC_MODE_DISCRETE)
-    return resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+  if (a->calc_mode == CALC_MODE_DISCRETE || shape_attrs[a->attr].discrete)
+    {
+      if (a->calc_mode != CALC_MODE_DISCRETE && frame_t > 0.5)
+        frame = frame + 1;
 
-  if (shape_attrs[a->attr].discrete)
-    return resolve_value (a->shape, context, a->attr,
-                          frame_t < 0.5 ? a->frames[frame].value
-                                        : a->frames[frame + 1].value);
+      if (a->attr != SHAPE_ATTR_TRANSFORM || a->type != ANIMATION_TYPE_MOTION)
+        return resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+      else
+        return compute_animation_motion_value (a, rep, frame, 0, context);
+    }
 
   /* Now we are doing non-discrete linear or spline interpolation */
   if (a->calc_mode == CALC_MODE_SPLINE)
@@ -11407,7 +11481,7 @@ compute_value_at_time (Animation      *a,
           ival = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
         }
 
-      if (a->accumulate == ANIMATION_ACCUMULATE_SUM)
+      if (a->accumulate == ANIMATION_ACCUMULATE_SUM && rep > 0)
         {
           SvgValue *aval;
 
@@ -11502,11 +11576,19 @@ compare_anim (gconstpointer a,
   Animation *a2 = (Animation *) b;
   int64_t start1, start2;
 
+  /* It doesn't matter, but we sort by attributes to get
+   * a predictable order
+   */
   if (a1->attr < a2->attr)
     return -1;
   else if (a1->attr > a2->attr)
     return 1;
 
+  /* The situation with animateTransform sv animateMotion
+   * is special: they don't add to each other, and
+   * the accumulate animateMotion transform is always
+   * applied after the accumulate animateTransform.
+   */
   if (a1->attr == SHAPE_ATTR_TRANSFORM)
     {
       if (a1->type == ANIMATION_TYPE_MOTION && a2->type != ANIMATION_TYPE_MOTION)
@@ -11515,8 +11597,12 @@ compare_anim (gconstpointer a,
         return -1;
     }
 
-  /* sort higher priority animations later, so
-   * their effect overrides lower priority ones
+  /* Animation priorities:
+   * - started later > started earlier
+   * - later in document > earlier in document
+   *
+   * Sort higher priority animations to the end
+   * so their effect overrides lower priority ones.
    */
   start1 = get_last_start (a1);
   start2 = get_last_start (a2);
@@ -11524,6 +11610,11 @@ compare_anim (gconstpointer a,
   if (start1 < start2)
     return -1;
   else if (start1 > start2)
+    return 1;
+
+  if (a1->line < a2->line)
+    return -1;
+  else if (a1->line > a2->line)
     return 1;
 
   return 0;
@@ -11601,6 +11692,7 @@ compute_current_values_for_shape (Shape          *shape,
 {
   const graphene_rect_t *old_viewport = NULL;
   graphene_rect_t viewport;
+  SvgValue *identity, *motion;
 
   shape_init_current_values (shape, context);
 
@@ -11634,6 +11726,8 @@ compute_current_values_for_shape (Shape          *shape,
 
   g_ptr_array_sort_values (shape->animations, compare_anim);
 
+  identity = svg_transform_new_none ();
+  motion = svg_value_ref (identity);
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
@@ -11649,19 +11743,45 @@ compute_current_values_for_shape (Shape          *shape,
             {
               SvgValue *end_val;
 
-              end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
-              shape_set_current_value (shape, a->attr, a->idx, end_val);
-
-              svg_value_unref (end_val);
+              if (a->type == ANIMATION_TYPE_MOTION)
+                {
+                  end_val = svg_value_accumulate (val, motion, 1);
+                  svg_value_unref (motion);
+                  motion = end_val;
+                }
+              else
+                {
+                  end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
+                  shape_set_current_value (shape, a->attr, a->idx, end_val);
+                  svg_value_unref (end_val);
+                }
             }
           else
             {
-              shape_set_current_value (shape, a->attr, a->idx, val);
+              if (a->type == ANIMATION_TYPE_MOTION)
+                {
+                  svg_value_unref (motion);
+                  motion = svg_value_ref (val);
+                }
+              else
+                {
+                  shape_set_current_value (shape, a->attr, a->idx, val);
+                }
             }
 
           svg_value_unref (val);
-        }
+       }
     }
+
+  if (!svg_value_equal (motion, identity))
+    {
+      SvgValue *combined;
+
+      combined = svg_value_accumulate (shape_get_current_value (shape, SHAPE_ATTR_TRANSFORM, 0), motion, 1);
+      shape_set_current_value (shape, SHAPE_ATTR_TRANSFORM, 0, combined);
+      svg_value_unref (combined);
+    }
+  svg_value_unref (identity);
 
   if (shape_types[shape->type].has_shapes)
     {
@@ -12847,6 +12967,29 @@ parse_base_animation_attrs (Animation            *a,
   return TRUE;
 }
 
+static GArray *
+create_default_times (CalcMode      calc_mode,
+                      unsigned int  n_values)
+{
+  GArray *times;
+  double n;
+
+  if (calc_mode == CALC_MODE_DISCRETE)
+    n = n_values;
+  else
+    n = n_values - 1;
+
+  times = g_array_new (FALSE, FALSE, sizeof (double));
+
+  for (unsigned int i = 0; i < n_values; i++)
+    {
+      double d = i / (double) n;
+      g_array_append_val (times, d);
+    }
+
+  return times;
+}
+
 static gboolean
 parse_value_animation_attrs (Animation            *a,
                              const char           *element_name,
@@ -12866,11 +13009,10 @@ parse_value_animation_attrs (Animation            *a,
   const char *additive_attr = NULL;
   const char *accumulate_attr = NULL;
   TransformType transform_type = TRANSFORM_NONE;
-  GArray *times;
-  GArray *params;
+  GArray *times = NULL;
+  GArray *points = NULL;
+  GArray *params = NULL;
   GPtrArray *values = NULL;
-  unsigned int n_values;
-  unsigned int n_times;
 
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
@@ -12885,6 +13027,9 @@ parse_value_animation_attrs (Animation            *a,
                             "additive", &additive_attr,
                             "accumulate", &accumulate_attr,
                             NULL);
+
+  if (a->type == ANIMATION_TYPE_MOTION)
+    transform_type = TRANSFORM_TRANSLATE;
 
   if (a->type == ANIMATION_TYPE_TRANSFORM)
     {
@@ -12919,9 +13064,14 @@ parse_value_animation_attrs (Animation            *a,
       unsigned int value;
 
       if (!parse_enum (calc_mode_attr,
-                       (const char *[]) { "discrete", "linear", "spline" }, 3,
+                       (const char *[]) { "discrete", "linear", "paced", "spline" }, 4,
                        &value))
         gtk_svg_invalid_attribute (data->svg, context, "calcMode", NULL);
+      else if (value == CALC_MODE_PACED)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "calcMode", "'paced' calc mode is not supported");
+          a->calc_mode = CALC_MODE_LINEAR;
+        }
       else
         a->calc_mode = (CalcMode) value;
    }
@@ -12950,8 +13100,6 @@ parse_value_animation_attrs (Animation            *a,
         a->accumulate = (AnimationAccumulate) value;
    }
 
-  values = NULL;
-  n_values = 0;
   if (values_attr)
     {
       values = shape_attr_parse_values (a->attr, transform_type, values_attr);
@@ -12961,7 +13109,6 @@ parse_value_animation_attrs (Animation            *a,
           g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
-      n_values = values->len;
     }
   else if (from_attr && to_attr)
     {
@@ -12977,11 +13124,8 @@ parse_value_animation_attrs (Animation            *a,
         }
 
       g_free (from_and_to);
-      n_values = 2;
     }
 
-  times = NULL;
-  n_times = 0;
   if (key_times_attr)
     {
       times = parse_numbers2 (key_times_attr, ";", 0, 1);
@@ -12991,98 +13135,100 @@ parse_value_animation_attrs (Animation            *a,
           g_clear_pointer (&values, g_ptr_array_unref);
           return FALSE;
         }
-      n_times = times->len;
     }
 
   if (a->type == ANIMATION_TYPE_MOTION)
     {
-      if (n_times == 0)
+      if (values != NULL)
         {
-          gtk_svg_missing_attribute (data->svg, context, "keyTimes", NULL);
+          GskPathBuilder *builder = gsk_path_builder_new ();
+          double length;
+
+          points = g_array_new (FALSE, FALSE, sizeof (double));
+
+          for (unsigned int i = 0; i < values->len; i++)
+            {
+              SvgTransform *tf = g_ptr_array_index (values, i);
+              PrimitiveTransform *f = &tf->transforms[0];
+
+              g_assert (tf->n_transforms == 1);
+              g_assert (f->type == TRANSFORM_TRANSLATE);
+
+              if (i == 0)
+                {
+                  length = 0;
+                  gsk_path_builder_move_to (builder, f->translate.x, f->translate.y);
+                }
+              else
+                {
+                  length += graphene_point_distance (gsk_path_builder_get_current_point (builder),
+                                                     &GRAPHENE_POINT_INIT (f->translate.x, f->translate.y), NULL, NULL);
+                  gsk_path_builder_line_to (builder, f->translate.x, f->translate.y);
+                }
+              g_array_append_val (points, length);
+            }
+
+          for (unsigned int i = 0; i < points->len; i++)
+            g_array_index (points, double, i) /= length;
+
+          a->motion.path = gsk_path_builder_free_to_path (builder);
+
+          g_clear_pointer (&values, g_ptr_array_unref);
+        }
+    }
+  else
+    {
+      if (values == NULL)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL,
+                                     "Either values or from and to must be given");
+          g_clear_pointer (&times, g_array_unref);
+          return FALSE;
+        }
+    }
+
+  if (times != NULL)
+    {
+      if (values && times->len != values->len)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL,
+                                     "The values and keyTimes attributes must "
+                                     "have the same number of items");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
           return FALSE;
         }
 
-      if (n_values > 0)
-        {
-          gtk_svg_missing_attribute (data->svg, context, "values", NULL);
-          g_clear_pointer (&values, g_ptr_array_unref);
-          g_clear_pointer (&times, g_array_unref);
-          return FALSE;
-        }
-
-      n_values = times->len;
-    }
-
-  if (n_times == 0 && n_values == 0)
-    {
-      gtk_svg_invalid_attribute (data->svg, context, NULL,
-                                 "Either values or from and to must be given");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  if (n_times == 0)
-    {
-      double n;
-
-      if (a->calc_mode == CALC_MODE_DISCRETE)
-        n = values->len;
-      else
-        n = values->len - 1;
-
-      n_times = values->len;
-
-      times = g_array_new (FALSE, FALSE, sizeof (double));
-
-      for (unsigned int i = 0; i < n_times; i++)
-        {
-          double d = i / (double) n;
-          g_array_append_val (times, d);
-        }
-    }
-
-  if (n_times != n_values)
-    {
-      gtk_svg_invalid_attribute (data->svg, context, NULL,
-                                 "The values and keyTimes attributes must "
-                                 "have the same number of items");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  if (g_array_index (times, double, 0) != 0)
-    {
-      gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
-                                 "The first keyTimes value must be 0");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  if (a->calc_mode != CALC_MODE_DISCRETE && g_array_index (times, double, n_times - 1) != 1)
-    {
-      gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
-                                 "The last keyTimes value must be 1");
-      g_clear_pointer (&values, g_ptr_array_unref);
-      g_clear_pointer (&times, g_array_unref);
-      return FALSE;
-    }
-
-  for (unsigned int i = 1; i < n_times; i++)
-    {
-      if (g_array_index (times, double, i) < g_array_index (times, double, i - 1))
+      if (g_array_index (times, double, 0) != 0)
         {
           gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
-                                     "The keyTimes values must be increasing");
+                                     "The first keyTimes value must be 0");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
           return FALSE;
         }
-   }
+
+      if (a->calc_mode != CALC_MODE_DISCRETE && g_array_index (times, double, times->len - 1) != 1)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
+                                     "The last keyTimes value must be 1");
+          g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&times, g_array_unref);
+          return FALSE;
+        }
+
+      for (unsigned int i = 1; i < times->len; i++)
+        {
+          if (g_array_index (times, double, i) < g_array_index (times, double, i - 1))
+            {
+              gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
+                                         "The keyTimes values must be increasing");
+              g_clear_pointer (&values, g_ptr_array_unref);
+              g_clear_pointer (&times, g_array_unref);
+              return FALSE;
+            }
+        }
+    }
 
   params = 0;
   if (splines_attr)
@@ -13121,7 +13267,10 @@ parse_value_animation_attrs (Animation            *a,
 
       g_strfreev (strv);
 
-      if (n != n_values - 1)
+      if (times == NULL)
+        times = create_default_times (a->calc_mode, n + 1);
+
+      if (n != times->len - 1)
         {
           gtk_svg_invalid_attribute (data->svg, context, "keySplines", "wrong number of values");
           g_clear_pointer (&values, g_ptr_array_unref);
@@ -13131,13 +13280,32 @@ parse_value_animation_attrs (Animation            *a,
         }
     }
 
+  if (times == NULL)
+    {
+      unsigned int n;
+
+      if (values)
+        n = values->len;
+      else if (points)
+        n = points->len;
+      else
+        n = 2;
+
+      times = create_default_times (a->calc_mode, n);
+    }
+
+  g_assert (times != NULL);
+
   fill_from_values (a,
                     (double *) times->data,
+                    times->len,
                     values ? (SvgValue **) values->pdata : NULL,
-                    params ? (double *) params->data : NULL, n_values);
+                    params ? (double *) params->data : NULL,
+                    points ? (double *) points->data : NULL);
 
   g_clear_pointer (&values, g_ptr_array_unref);
   g_clear_pointer (&times, g_array_unref);
+  g_clear_pointer (&points, g_array_unref);
   g_clear_pointer (&params, g_array_unref);
 
   return TRUE;
@@ -13349,7 +13517,6 @@ parse_shape_attrs (Shape                *shape,
 {
   const char *class_attr = NULL;
   const char *style_attr = NULL;
-  const char *xlink_href_attr = NULL;
 
   for (unsigned int i = 0; attr_names[i]; i++)
     {
@@ -13369,11 +13536,6 @@ parse_shape_attrs (Shape                *shape,
       else if (strcmp (attr_names[i], "style") == 0)
         {
           style_attr = attr_values[i];
-          *handled |= BIT (i);
-        }
-      else if (strcmp (attr_names[i], "xlink:href") == 0)
-        {
-          xlink_href_attr = attr_values[i];
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "id") == 0)
@@ -13407,16 +13569,6 @@ parse_shape_attrs (Shape                *shape,
 
   if (style_attr)
     parse_style_attr (shape, FALSE, style_attr, data, context);
-
-  if (xlink_href_attr && !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF))
-    {
-      SvgValue *value = shape_attr_parse_value (SHAPE_ATTR_HREF, xlink_href_attr);
-      if (value)
-        {
-          shape_set_base_value (shape, SHAPE_ATTR_HREF, 0, value);
-          svg_value_unref (value);
-        }
-    }
 
   if (class_attr && *class_attr)
     {
@@ -13847,6 +13999,37 @@ skip_element (ParserData          *data,
 }
 
 static void
+replace_xlink_href (const char **attr_names,
+                    const char **attr_values)
+{
+  int href_idx = -1;
+  int xlink_idx = -1;
+  int i;
+
+  for (i = 0; attr_names[i]; i++)
+    {
+      if (strcmp (attr_names[i], "href") == 0)
+        href_idx = i;
+
+      if (strcmp (attr_names[i], "xlink:href") == 0)
+        xlink_idx = i;
+    }
+
+  if (href_idx != -1 && xlink_idx != -1)
+    {
+      /* We've found both. Drop xlink:href */
+      attr_names[xlink_idx] = attr_names[i - 1];
+      attr_values[xlink_idx] = attr_names[i - 1];
+      attr_names[i - 1] = NULL;
+    }
+  else if (xlink_idx != -1)
+    {
+      /* We've found xlink:href, but not href. Replace */
+      attr_names[xlink_idx] = "href";
+    }
+}
+
+static void
 start_element_cb (GMarkupParseContext  *context,
                   const char           *element_name,
                   const char          **attr_names,
@@ -13862,6 +14045,8 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (data->skip.to)
     return;
+
+  replace_xlink_href (attr_names, attr_values);
 
   if (strcmp (element_name, "metadata") == 0)
     {
@@ -13992,6 +14177,8 @@ start_element_cb (GMarkupParseContext  *context,
       else
         a = animation_transform_new ();
 
+      g_markup_parse_context_get_position (context, &a->line, NULL);
+
       if (!parse_base_animation_attrs (a,
                                        element_name,
                                        attr_names, attr_values,
@@ -14041,6 +14228,8 @@ start_element_cb (GMarkupParseContext  *context,
       const char *path_attr = NULL;
       const char *rotate_attr = NULL;
       const char *key_points_attr = NULL;
+
+      g_markup_parse_context_get_position (context, &a->line, NULL);
 
       if (data->current_animation)
         {
@@ -14134,7 +14323,7 @@ start_element_cb (GMarkupParseContext  *context,
               return;
             }
 
-          for (unsigned int i = 0; i < MIN (points->len, a->n_frames); i++)
+          for (unsigned int i = 0; i < a->n_frames; i++)
             a->frames[i].point = g_array_index (points, double, i);
 
           g_array_unref (points);
@@ -14260,7 +14449,6 @@ start_element_cb (GMarkupParseContext  *context,
       const char *style_attr = NULL;
       unsigned int idx;
       gboolean values_set = FALSE;
-      const char *xlink_href_attr = NULL;
 
       if (filter_type == FE_MERGE_NODE)
         {
@@ -14302,11 +14490,6 @@ start_element_cb (GMarkupParseContext  *context,
               handled |= BIT (i);
               style_attr = attr_values[i];
             }
-          else if (strcmp (attr_names[i], "xlink:href") == 0)
-            {
-              handled |= BIT (i);
-              xlink_href_attr = attr_values[i];
-            }
           else if (filter_attr_lookup (filter_type, attr_names[i], &attr))
             {
               SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
@@ -14325,21 +14508,6 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (style_attr)
         parse_style_attr (data->current_shape, FALSE, style_attr, data, context);
-
-      if (xlink_href_attr && filter_type == FE_IMAGE)
-        {
-          FilterPrimitive *f = g_ptr_array_index (data->current_shape->filters, idx);
-
-          if ((f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_IMAGE_HREF))) == 0)
-            {
-              SvgValue *value = shape_attr_parse_value (SHAPE_ATTR_FE_IMAGE_HREF, xlink_href_attr);
-              if (value)
-                {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_FE_IMAGE_HREF, idx, value);
-                  svg_value_unref (value);
-                }
-            }
-        }
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -15653,7 +15821,7 @@ serialize_value_animation_attrs (GString   *s,
 
   if (a->calc_mode != CALC_MODE_LINEAR)
     {
-      const char *modes[] = { "discrete", "linear", "spline" };
+      const char *modes[] = { "discrete", "linear", "paced", "spline" };
       indent_for_attr (s, indent);
       g_string_append_printf (s, "calcMode='%s'", modes[a->calc_mode]);
     }

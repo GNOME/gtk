@@ -27,7 +27,7 @@
           dur='5000ms'
           repeatCount='indefinite'
           keyTimes='0; 1'
-          keyPoints='0; 0'>
+          keyPoints='0; 1'>
     <mpath href='motionPath1'/>
   </animateMotion>
   </circle>
@@ -39,7 +39,7 @@
           dur='4000ms'
           repeatCount='indefinite'
           keyTimes='0; 1'
-          keyPoints='0; 0'
+          keyPoints='0; 1'
           path='M 20 60 C 20 60, 50 90, 100 60 C 150 30, 180 30, 180 60'/>
   </rect>
   <circle

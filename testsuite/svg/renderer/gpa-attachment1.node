@@ -23,7 +23,7 @@ L 90 90";
       line-join: miter;
     }
     transform {
-      transform: translate(10, 10) rotate(45) translate(-5, -5);
+      transform: translate(15, 15) rotate(45) translate(-5, -5);
       child: fill {
         child: color {
           bounds: -5 0 10 10;

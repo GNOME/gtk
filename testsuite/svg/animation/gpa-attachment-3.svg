@@ -63,7 +63,7 @@
   </path>
   <circle
           id='red'
-          transform='translate(50, 50) rotate(45, 0, 0) translate(-5, -5)'
+          transform='translate(50, 50) rotate(45, 5, 5)'
           fill='rgb(255,0,0)'
           pathLength='1'
           cx='0'
