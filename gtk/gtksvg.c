@@ -11692,6 +11692,7 @@ compute_current_values_for_shape (Shape          *shape,
 {
   const graphene_rect_t *old_viewport = NULL;
   graphene_rect_t viewport;
+  SvgValue *identity, *motion;
 
   shape_init_current_values (shape, context);
 
@@ -11725,6 +11726,8 @@ compute_current_values_for_shape (Shape          *shape,
 
   g_ptr_array_sort_values (shape->animations, compare_anim);
 
+  identity = svg_transform_new_none ();
+  motion = svg_value_ref (identity);
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
@@ -11740,19 +11743,45 @@ compute_current_values_for_shape (Shape          *shape,
             {
               SvgValue *end_val;
 
-              end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
-              shape_set_current_value (shape, a->attr, a->idx, end_val);
-
-              svg_value_unref (end_val);
+              if (a->type == ANIMATION_TYPE_MOTION)
+                {
+                  end_val = svg_value_accumulate (val, motion, 1);
+                  svg_value_unref (motion);
+                  motion = end_val;
+                }
+              else
+                {
+                  end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
+                  shape_set_current_value (shape, a->attr, a->idx, end_val);
+                  svg_value_unref (end_val);
+                }
             }
           else
             {
-              shape_set_current_value (shape, a->attr, a->idx, val);
+              if (a->type == ANIMATION_TYPE_MOTION)
+                {
+                  svg_value_unref (motion);
+                  motion = svg_value_ref (val);
+                }
+              else
+                {
+                  shape_set_current_value (shape, a->attr, a->idx, val);
+                }
             }
 
           svg_value_unref (val);
-        }
+       }
     }
+
+  if (!svg_value_equal (motion, identity))
+    {
+      SvgValue *combined;
+
+      combined = svg_value_accumulate (shape_get_current_value (shape, SHAPE_ATTR_TRANSFORM, 0), motion, 1);
+      shape_set_current_value (shape, SHAPE_ATTR_TRANSFORM, 0, combined);
+      svg_value_unref (combined);
+    }
+  svg_value_unref (identity);
 
   if (shape_types[shape->type].has_shapes)
     {
