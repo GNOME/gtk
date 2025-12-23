@@ -21,8 +21,16 @@ M 90 50 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -4
             color: rgb(0,0,0);
           }
           path: "\
-M 10 10 h 50 v 50 h -50 z\
-M 30 30 h 10 v 10 h -10 z";
+M 10 10\
+L 60 10\
+L 60 60\
+L 10 60\
+Z\
+M 30 30\
+L 40 30\
+L 40 40\
+L 30 40\
+Z";
           fill-rule: even-odd;
         }
       }
@@ -36,18 +44,34 @@ M 30 30 h 10 v 10 h -10 z";
             color: rgb(0,0,0);
           }
           path: "\
-M 10 10 h 50 v 50 h -50 z\
-M 30 30 h 10 v 10 h -10 z";
+M 10 10\
+L 60 10\
+L 60 60\
+L 10 60\
+Z\
+M 30 30\
+L 40 30\
+L 40 40\
+L 30 40\
+Z";
           fill-rule: even-odd;
         }
         stroke {
           child: color {
-            bounds: 9.5 9.5 51 51;
+            bounds: 6 6 58 58;
             color: rgb(0,0,0);
           }
           path: "\
-M 10 10 h 50 v 50 h -50 z\
-M 30 30 h 10 v 10 h -10 z";
+M 10 10\
+L 60 10\
+L 60 60\
+L 10 60\
+Z\
+M 30 30\
+L 40 30\
+L 40 40\
+L 30 40\
+Z";
           line-width: 1;
           line-cap: butt;
           line-join: miter;
@@ -75,8 +99,16 @@ M 90 50 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -4
             color: rgb(0,0,0);
           }
           path: "\
-M 10 10 h 50 v 50 h -50 z\
-M 30 30 h 10 v 10 h -10 z";
+M 10 10\
+L 60 10\
+L 60 60\
+L 10 60\
+Z\
+M 30 30\
+L 40 30\
+L 40 40\
+L 30 40\
+Z";
           fill-rule: winding;
         }
       }
@@ -90,18 +122,34 @@ M 30 30 h 10 v 10 h -10 z";
             color: rgb(0,0,0);
           }
           path: "\
-M 10 10 h 50 v 50 h -50 z\
-M 30 30 h 10 v 10 h -10 z";
+M 10 10\
+L 60 10\
+L 60 60\
+L 10 60\
+Z\
+M 30 30\
+L 40 30\
+L 40 40\
+L 30 40\
+Z";
           fill-rule: winding;
         }
         stroke {
           child: color {
-            bounds: 9.5 9.5 51 51;
+            bounds: 6 6 58 58;
             color: rgb(0,0,0);
           }
           path: "\
-M 10 10 h 50 v 50 h -50 z\
-M 30 30 h 10 v 10 h -10 z";
+M 10 10\
+L 60 10\
+L 60 60\
+L 10 60\
+Z\
+M 30 30\
+L 40 30\
+L 40 40\
+L 30 40\
+Z";
           line-width: 1;
           line-cap: butt;
           line-join: miter;

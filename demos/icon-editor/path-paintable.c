@@ -418,10 +418,12 @@ path_paintable_add_path (PathPaintable *self,
                          GskPath       *path)
 {
   Shape *shape;
+  g_autofree char *s = NULL;
 
   shape = svg_shape_add (self->svg->content, SHAPE_PATH);
   set_default_shape_attrs (shape);
-  svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (path));
+  s = gsk_path_to_string (path);
+  svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (s));
 
   g_signal_emit (self, signals[CHANGED], 0);
   g_signal_emit (self, signals[PATHS_CHANGED], 0);

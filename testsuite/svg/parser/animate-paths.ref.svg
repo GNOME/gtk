@@ -19,7 +19,7 @@
   <path
           fill='rgb(0,0,255)'
           stroke='none'
-          d='M 60 20 L 80 20'>
+          d='M 60 20 C 60 20, 80 20, 80 20'>
   <animate
           attributeName='fill'
           dur='2000ms'

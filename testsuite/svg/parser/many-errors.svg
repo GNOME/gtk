@@ -15,5 +15,6 @@
       </animate>
     </animate>
     <use></use>
+    <path d='M 0 0 O 10 20 30 40 1'/>
   </g>
 </svg>

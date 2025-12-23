@@ -444,9 +444,9 @@ SvgValue *   svg_paint_new_symbolic (GtkSymbolicColor  symbolic);
 SvgValue *   svg_paint_new_rgba     (const GdkRGBA    *rgba);
 SvgValue *   svg_numbers_new        (double           *values,
                                      unsigned int      n_values);
-SvgValue *   svg_path_new           (GskPath          *path);
+SvgValue *   svg_path_new           (const char *string);
 SvgValue *   svg_clip_new_none      (void);
-SvgValue *   svg_clip_new_path      (GskPath          *path);
+SvgValue *   svg_clip_new_path      (const char *string);
 SvgValue *   svg_transform_parse    (const char       *value);
 unsigned int svg_transform_get_n_transforms (const SvgValue *value);
 SvgValue *   svg_transform_get_transform    (const SvgValue *value,
