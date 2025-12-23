@@ -113,6 +113,7 @@
           dur='0.001ms'
           fill='freeze'
           keyTimes='0; 1'
+          calcMode='linear'
           keyPoints='0.5; 0.5'
           rotate='auto'
           gpa:status='done'>

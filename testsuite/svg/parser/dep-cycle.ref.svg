@@ -8,6 +8,7 @@
           begin='0ms'
           dur='1000ms'
           keyTimes='0; 1'
+          calcMode='linear'
           keyPoints='0; 1'>
     <mpath href='rect'/>
   </animateMotion>
