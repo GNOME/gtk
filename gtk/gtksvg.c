@@ -1292,6 +1292,8 @@ struct _SvgValueClass
                               int             n);
   void       (* print)       (const SvgValue *value,
                               GString        *string);
+  double     (* distance)    (const SvgValue *value0,
+                              const SvgValue *value1);
 };
 
 struct _SvgValue
@@ -1395,6 +1397,20 @@ svg_value_to_string (const SvgValue *value)
   GString *s = g_string_new ("");
   svg_value_print (value, s);
   return g_string_free (s, FALSE);
+}
+
+static double
+svg_value_distance (const SvgValue *value0,
+                    const SvgValue *value1)
+{
+  g_return_val_if_fail (value0->class == value1->class, 1);
+
+  if (value0->class->distance)
+    return value0->class->distance (value0, value1);
+
+  g_warning ("Can't determine distance between %s values",
+             value0->class->name);
+  return 1;
 }
 
 /* }}} */
@@ -1591,13 +1607,31 @@ svg_number_print (const SvgValue *value,
     g_string_append (string, "px");
 }
 
+static double
+svg_number_distance (const SvgValue *value0,
+                     const SvgValue *value1)
+{
+  const SvgNumber *n0 = (const SvgNumber *) value0;
+  const SvgNumber *n1 = (const SvgNumber *) value1;
+
+  if (n0->dim != n1->dim)
+    {
+      g_warning ("Can't determine distance between "
+                 "numbers with different dimensions");
+      return 1;
+    }
+
+  return fabs (n0->value - n1->value);
+}
+
 static const SvgValueClass SVG_NUMBER_CLASS = {
   "SvgNumber",
   svg_number_free,
   svg_number_equal,
   svg_number_interpolate,
   svg_number_accumulate,
-  svg_number_print
+  svg_number_print,
+  svg_number_distance,
 };
 
 SvgValue *
@@ -3377,6 +3411,9 @@ static SvgValue *svg_transform_accumulate  (const SvgValue *v0,
                                             int             n);
 static void      svg_transform_print       (const SvgValue *v,
                                             GString        *string);
+static double    svg_transform_distance    (const SvgValue *v0,
+                                            const SvgValue *v1);
+
 
 static const SvgValueClass SVG_TRANSFORM_CLASS = {
   "SvgTransform",
@@ -3384,7 +3421,8 @@ static const SvgValueClass SVG_TRANSFORM_CLASS = {
   svg_transform_equal,
   svg_transform_interpolate,
   svg_transform_accumulate,
-  svg_transform_print
+  svg_transform_print,
+  svg_transform_distance,
 };
 
 static SvgTransform *
@@ -4173,6 +4211,53 @@ svg_transform_get_gsk (SvgTransform *tf)
   return t;
 }
 
+static double
+svg_transform_distance (const SvgValue *value0,
+                        const SvgValue *value1)
+{
+  const SvgTransform *tf0 = (const SvgTransform *) value0;
+  const SvgTransform *tf1 = (const SvgTransform *) value1;
+  const PrimitiveTransform *p0 = &tf0->transforms[0];
+  const PrimitiveTransform *p1 = &tf1->transforms[0];
+
+  if (tf0->n_transforms > 1 || tf1->n_transforms > 1)
+    {
+      g_warning ("Can't determine distance between complex transforms");
+      return 1;
+    }
+
+  if (p0->type != p1->type)
+    {
+      g_warning ("Can't determine distance between different "
+                 "primitive transform types");
+      return 1;
+    }
+
+  switch (p0->type)
+    {
+    case TRANSFORM_NONE:
+      return 0;
+    case TRANSFORM_TRANSLATE:
+      return hypot (p0->translate.x - p1->translate.x,
+                    p0->translate.y - p1->translate.y);
+      break;
+    case TRANSFORM_SCALE:
+      return hypot (p0->scale.x - p1->scale.x,
+                    p0->scale.y - p1->scale.y);
+          break;
+    case TRANSFORM_ROTATE:
+      return hypot (p0->rotate.angle - p1->rotate.angle, 0);
+    case TRANSFORM_SKEW_X:
+    case TRANSFORM_SKEW_Y:
+    case TRANSFORM_MATRIX:
+      g_warning ("Can't determine distance between these "
+                 "primitive transforms");
+      return 1;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* }}} */
 /* {{{ Paint */
 
@@ -4237,6 +4322,8 @@ static SvgValue *svg_paint_accumulate  (const SvgValue *v0,
                                         int             n);
 static void      svg_paint_print       (const SvgValue *v0,
                                         GString        *string);
+static double    svg_paint_distance    (const SvgValue *v0,
+                                        const SvgValue *v1);
 
 static const SvgValueClass SVG_PAINT_CLASS = {
   "SvgPaint",
@@ -4244,7 +4331,8 @@ static const SvgValueClass SVG_PAINT_CLASS = {
   svg_paint_equal,
   svg_paint_interpolate,
   svg_paint_accumulate,
-  svg_paint_print
+  svg_paint_print,
+  svg_paint_distance,
 };
 
 static gboolean
@@ -4592,6 +4680,32 @@ svg_paint_accumulate (const SvgValue *value0,
     }
 
   return svg_value_ref ((SvgValue *) value0);
+}
+
+static double
+svg_paint_distance (const SvgValue *v0,
+                    const SvgValue *v1)
+{
+  const SvgPaint *p0 = (const SvgPaint *) v0;
+  const SvgPaint *p1 = (const SvgPaint *) v1;
+
+  if (p0->kind != p1->kind)
+    {
+      g_warning ("Can't measure distance between different "
+                 "kinds of paint");
+      return 1;
+    }
+
+  if (p0->kind != PAINT_COLOR)
+    {
+      g_warning ("Can't measure distance between these paints");
+      return 1;
+    }
+
+  return sqrt ((p0->color.red - p1->color.red)*(p0->color.red - p1->color.red) +
+               (p0->color.green - p1->color.green)*(p0->color.green - p1->color.green) +
+               (p0->color.blue - p1->color.blue)*(p0->color.blue - p1->color.blue) +
+               (p0->color.alpha - p1->color.alpha)*(p0->color.alpha - p1->color.alpha));
 }
 
 /* }}} */
