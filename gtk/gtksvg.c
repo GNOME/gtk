@@ -693,12 +693,14 @@ markup_filter_attributes (const char *element_name,
 }
 
 static void
-string_append_double (GString *s,
-                      double   value)
+string_append_double (GString    *s,
+                      const char *prefix,
+                      double      value)
 {
   char buf[64];
 
   g_ascii_formatd (buf, sizeof (buf), "%g", value);
+  g_string_append (s, prefix);
   g_string_append (s, buf);
 }
 
@@ -1600,7 +1602,7 @@ svg_number_print (const SvgValue *value,
 {
   const SvgNumber *n = (const SvgNumber *) value;
 
-  string_append_double (string, n->value);
+  string_append_double (string, "", n->value);
   if (n->dim == SVG_DIMENSION_PERCENTAGE)
     g_string_append_c (string, '%');
   else if (n->dim == SVG_DIMENSION_LENGTH)
@@ -1799,9 +1801,7 @@ svg_numbers_print (const SvgValue *value,
 
   for (unsigned int i = 0; i < p->n_values; i++)
     {
-      if (i > 0)
-        g_string_append_c (string, ' ');
-      string_append_double (string, p->values[i].value);
+      string_append_double (string, i > 0 ? " " : "", p->values[i].value);
       if (p->values[i].dim == SVG_DIMENSION_PERCENTAGE)
         g_string_append (string, "%");
       else if (p->values[i].dim == SVG_DIMENSION_LENGTH)
@@ -3844,31 +3844,27 @@ svg_primitive_transform_print (const SvgValue *value,
   switch (tf->transforms[0].type)
     {
     case TRANSFORM_TRANSLATE:
-      string_append_double (s, tf->transforms[0].translate.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].translate.y);
+      string_append_double (s, "", tf->transforms[0].translate.x);
+      string_append_double (s, " ", tf->transforms[0].translate.y);
       break;
 
     case TRANSFORM_SCALE:
-      string_append_double (s, tf->transforms[0].scale.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].scale.y);
+      string_append_double (s, "", tf->transforms[0].scale.x);
+      string_append_double (s, " ", tf->transforms[0].scale.y);
       break;
 
     case TRANSFORM_ROTATE:
-      string_append_double (s, tf->transforms[0].rotate.angle);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].rotate.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].rotate.y);
+      string_append_double (s, "", tf->transforms[0].rotate.angle);
+      string_append_double (s, " ", tf->transforms[0].rotate.x);
+      string_append_double (s, " ", tf->transforms[0].rotate.y);
       break;
 
     case TRANSFORM_SKEW_X:
-      string_append_double (s, tf->transforms[0].skew_x.angle);
+      string_append_double (s, "", tf->transforms[0].skew_x.angle);
       break;
 
     case TRANSFORM_SKEW_Y:
-      string_append_double (s, tf->transforms[0].skew_y.angle);
+      string_append_double (s, "", tf->transforms[0].skew_y.angle);
       break;
 
     case TRANSFORM_MATRIX:
@@ -3894,51 +3890,36 @@ svg_transform_print (const SvgValue *value,
       switch (t->type)
         {
         case TRANSFORM_TRANSLATE:
-          g_string_append (s, "translate(");
-          string_append_double (s, t->translate.x);
-          g_string_append (s, ", ");
-          string_append_double (s, t->translate.y);
+          string_append_double (s, "translate(", t->translate.x);
+          string_append_double (s, ", ", t->translate.y);
           g_string_append (s, ")");
           break;
         case TRANSFORM_SCALE:
-          g_string_append (s, "scale(");
-          string_append_double (s, t->scale.x);
-          g_string_append (s, ", ");
-          string_append_double (s, t->scale.y);
+          string_append_double (s, "scale(", t->scale.x);
+          string_append_double (s, ", ", t->scale.y);
           g_string_append (s, ")");
           break;
         case TRANSFORM_ROTATE:
-          g_string_append (s, "rotate(");
-          string_append_double (s, t->rotate.angle);
-          g_string_append (s, ", ");
-          string_append_double (s, t->rotate.x);
-          g_string_append (s, ", ");
-          string_append_double (s, t->rotate.y);
+          string_append_double (s, "rotate(", t->rotate.angle);
+          string_append_double (s, ", ", t->rotate.x);
+          string_append_double (s, ", ", t->rotate.y);
           g_string_append (s, ")");
           break;
         case TRANSFORM_SKEW_X:
-          g_string_append (s, "skewX(");
-          string_append_double (s, t->skew_x.angle);
+          string_append_double (s, "skewX(", t->skew_x.angle);
           g_string_append (s, ")");
           break;
         case TRANSFORM_SKEW_Y:
-          g_string_append (s, "skewY(");
-          string_append_double (s, t->skew_y.angle);
+          string_append_double (s, "skewY(", t->skew_y.angle);
           g_string_append (s, ")");
           break;
         case TRANSFORM_MATRIX:
-          g_string_append (s, "matrix(");
-          string_append_double (s, t->matrix.xx);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.yx);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.xy);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.yy);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.dx);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.dy);
+          string_append_double (s, "matrix(", t->matrix.xx);
+          string_append_double (s, ", ", t->matrix.yx);
+          string_append_double (s, ", ", t->matrix.xy);
+          string_append_double (s, ", ", t->matrix.yy);
+          string_append_double (s, ", ", t->matrix.dx);
+          string_append_double (s, ", ", t->matrix.dy);
           g_string_append (s, ")");
           break;
         case TRANSFORM_NONE:
@@ -4952,8 +4933,8 @@ svg_filter_print (const SvgValue *value,
         }
       else
         {
-          g_string_append_printf (s, "%s(", filter_desc[function->kind].name);
-          string_append_double (s, function->value);
+          g_string_append (s, filter_desc[function->kind].name);
+          string_append_double (s, "(", function->value);
           g_string_append (s, ")");
         }
     }
@@ -5361,9 +5342,7 @@ svg_dash_array_print (const SvgValue *value,
     {
       for (unsigned int i = 0; i < dashes->n_dashes; i++)
         {
-          if (i > 0)
-            g_string_append_c (s, ' ');
-          string_append_double (s, dashes->dashes[i].value);
+          string_append_double (s, i > 0 ? " " : "", dashes->dashes[i].value);
           if (dashes->dashes[i].dim == SVG_DIMENSION_PERCENTAGE)
             g_string_append (s, "%");
           else if (dashes->dashes[i].dim == SVG_DIMENSION_LENGTH)
@@ -6177,13 +6156,10 @@ svg_view_box_print (const SvgValue *value,
   if (v->unset)
     return;
 
-  string_append_double (string, v->view_box.origin.x);
-  g_string_append_c (string, ' ');
-  string_append_double (string, v->view_box.origin.y);
-  g_string_append_c (string, ' ');
-  string_append_double (string, v->view_box.size.width);
-  g_string_append_c (string, ' ');
-  string_append_double (string, v->view_box.size.height);
+  string_append_double (string, "", v->view_box.origin.x);
+  string_append_double (string, " ", v->view_box.origin.y);
+  string_append_double (string, " ", v->view_box.size.width);
+  string_append_double (string, " ", v->view_box.size.height);
 }
 
 static const SvgValueClass SVG_VIEW_BOX_CLASS = {
@@ -6520,7 +6496,7 @@ svg_orient_print (const SvgValue *value,
   const SvgOrient *v = (const SvgOrient *) value;
 
   if (v->kind == ORIENT_ANGLE)
-    string_append_double (string, v->angle);
+    string_append_double (string, "", v->angle);
   else if (v->start_reverse)
     g_string_append (string, "auto-start-reverse");
   else
@@ -10079,9 +10055,7 @@ time_spec_print (TimeSpec *spec,
 
   if (!only_nonzero || spec->offset != 0)
     {
-      if (only_nonzero)
-        g_string_append (s, " ");
-      string_append_double (s, spec->offset / (double) G_TIME_SPAN_MILLISECOND);
+      string_append_double (s, only_nonzero ? " " : "", spec->offset / (double) G_TIME_SPAN_MILLISECOND);
       g_string_append (s, "ms");
     }
 }
@@ -15971,8 +15945,7 @@ serialize_base_animation_attrs (GString   *s,
         }
       else
         {
-          g_string_append (s, "dur='");
-          string_append_double (s, a->simple_duration / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s, "dur='", a->simple_duration / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
@@ -15986,8 +15959,7 @@ serialize_base_animation_attrs (GString   *s,
         }
       else
         {
-          g_string_append (s, "repeatCount='");
-          string_append_double (s, a->repeat_count);
+          string_append_double (s, "repeatCount='", a->repeat_count);
           g_string_append (s, "'");
         }
     }
@@ -16001,8 +15973,7 @@ serialize_base_animation_attrs (GString   *s,
         }
       else
         {
-          g_string_append (s, "repeatDur='");
-          string_append_double (s, a->repeat_duration / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s, "repeatDur='", a->repeat_duration / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
@@ -16090,11 +16061,7 @@ serialize_value_animation_attrs (GString   *s,
           if (i > 0)
             g_string_append (s, "; ");
           for (unsigned int j = 0; j < 4; j++)
-            {
-              if (j > 0)
-                g_string_append_c (s, ' ');
-              string_append_double (s, a->frames[i].params[j]);
-            }
+            string_append_double (s, j > 0 ? " " : "", a->frames[i].params[j]);
         }
       g_string_append_c (s, '\'');
     }
@@ -16104,11 +16071,7 @@ serialize_value_animation_attrs (GString   *s,
       indent_for_attr (s, indent);
       g_string_append (s, "keyTimes='");
       for (unsigned int i = 0; i < a->n_frames; i++)
-        {
-          if (i > 0)
-            g_string_append (s, "; ");
-          string_append_double (s, a->frames[i].time);
-        }
+        string_append_double (s, i > 0 ? "; " : "", a->frames[i].time);
       g_string_append_c (s, '\'');
     }
 
@@ -16156,8 +16119,9 @@ serialize_animation_status (GString              *s,
             g_string_append (s, "gpa:computed-simple-duration='indefinite'");
           else
             {
-              g_string_append (s, "gpa:computed-simple-duration='");
-              string_append_double (s, d / (double) G_TIME_SPAN_MILLISECOND);
+              string_append_double (s,
+                                    "gpa:computed-simple-duration='",
+                                    d / (double) G_TIME_SPAN_MILLISECOND);
               g_string_append (s, "ms'");
             }
         }
@@ -16165,16 +16129,18 @@ serialize_animation_status (GString              *s,
       if (a->current.begin != INDEFINITE)
         {
           indent_for_attr (s, indent);
-          g_string_append (s, "gpa:current-start-time='");
-          string_append_double (s, (a->current.begin - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s,
+                                "gpa:current-start-time='",
+                                (a->current.begin - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
 
       if (a->current.end != INDEFINITE)
         {
           indent_for_attr (s, indent);
-          g_string_append (s, "gpa:current-end-time='");
-          string_append_double (s, (a->current.end - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s,
+                                "gpa:current-end-time='",
+                                (a->current.end - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
@@ -16250,11 +16216,7 @@ serialize_animation_motion (GString              *s,
       indent_for_attr (s, indent);
       g_string_append (s, "keyPoints='");
       for (unsigned int i = 0; i < a->n_frames; i++)
-        {
-          if (i > 0)
-            g_string_append (s, "; ");
-          string_append_double (s, a->frames[i].point);
-        }
+        string_append_double (s, i > 0 ? "; " : "", a->frames[i].point);
       g_string_append (s, "'");
     }
 
@@ -16267,8 +16229,7 @@ serialize_animation_motion (GString              *s,
   else if (a->motion.angle != 0)
     {
       indent_for_attr (s, indent);
-      g_string_append (s, "rotate='");
-      string_append_double (s, a->motion.angle);
+      string_append_double (s, "rotate='", a->motion.angle);
       g_string_append (s, "'");
     }
 
@@ -20340,14 +20301,16 @@ gtk_svg_serialize_full (GtkSvg               *self,
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
     {
       indent_for_attr (s, 0);
-      g_string_append (s, "gpa:state-change-delay='");
-      string_append_double (s, (self->state_change_delay) / (double) G_TIME_SPAN_MILLISECOND);
+      string_append_double (s,
+                            "gpa:state-change-delay='",
+                            (self->state_change_delay) / (double) G_TIME_SPAN_MILLISECOND);
       g_string_append (s, "ms'");
       if (self->load_time != INDEFINITE)
         {
           indent_for_attr (s, 0);
-          g_string_append (s, "gpa:time-since-load='");
-          string_append_double (s, (self->current_time - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s,
+                                "gpa:time-since-load='",
+                                (self->current_time - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
