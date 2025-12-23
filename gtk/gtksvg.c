@@ -15932,7 +15932,8 @@ serialize_value_animation_attrs (GString   *s,
     {
       if (a->n_frames == 2)
         {
-          if (a->type != ANIMATION_TYPE_SET)
+          if (a->type != ANIMATION_TYPE_SET &&
+              !svg_value_is_current (a->frames[0].value))
             {
               indent_for_attr (s, indent);
               g_string_append (s, "from='");
@@ -15955,38 +15956,28 @@ serialize_value_animation_attrs (GString   *s,
         }
       else
         {
-          if (a->n_frames == 2 && svg_value_is_current (a->frames[0].value))
+          indent_for_attr (s, indent);
+          g_string_append (s, "values='");
+          if (a->type == ANIMATION_TYPE_TRANSFORM &&
+              a->attr == SHAPE_ATTR_TRANSFORM)
             {
-              indent_for_attr (s, indent);
-              g_string_append (s, "to='");
-              svg_value_print (a->frames[1].value, s);
-              g_string_append_c (s, '\'');
+              for (unsigned int i = 0; i < a->n_frames; i++)
+                {
+                  if (i > 0)
+                    g_string_append (s, "; ");
+                  svg_primitive_transform_print (a->frames[i].value, s);
+                }
             }
           else
             {
-              indent_for_attr (s, indent);
-              g_string_append (s, "values='");
-              if (a->type == ANIMATION_TYPE_TRANSFORM &&
-                  a->attr == SHAPE_ATTR_TRANSFORM)
+              for (unsigned int i = 0; i < a->n_frames; i++)
                 {
-                  for (unsigned int i = 0; i < a->n_frames; i++)
-                    {
-                      if (i > 0)
-                        g_string_append (s, "; ");
-                      svg_primitive_transform_print (a->frames[i].value, s);
-                    }
+                  if (i > 0)
+                    g_string_append (s, "; ");
+                  svg_value_print (a->frames[i].value, s);
                 }
-              else
-                {
-                  for (unsigned int i = 0; i < a->n_frames; i++)
-                    {
-                      if (i > 0)
-                        g_string_append (s, "; ");
-                      svg_value_print (a->frames[i].value, s);
-                    }
-                }
-              g_string_append_c (s, '\'');
             }
+          g_string_append_c (s, '\'');
         }
     }
 
