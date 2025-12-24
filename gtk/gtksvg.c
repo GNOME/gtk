@@ -5049,7 +5049,6 @@ filter_function_get_color_matrix (FilterKind         kind,
       graphene_vec4_init (offset, 0.0, 0.0, 0.0, 0.0);
       return TRUE;
     case FILTER_HUE_ROTATE:
-      v = DEG_TO_RAD (v);
       _sincos (DEG_TO_RAD (v), &s, &c);
       graphene_matrix_init_from_float (matrix, (float[16]) {
           0.213 + 0.787 * c - 0.213 * s,
