@@ -7236,6 +7236,7 @@ static ShapeAttr color_matrix_attrs[] = {
 static ShapeAttr composite_attrs[] = {
   SHAPE_ATTR_FE_X, SHAPE_ATTR_FE_Y, SHAPE_ATTR_FE_WIDTH, SHAPE_ATTR_FE_HEIGHT, SHAPE_ATTR_FE_RESULT,
   SHAPE_ATTR_FE_IN, SHAPE_ATTR_FE_IN2, SHAPE_ATTR_FE_COMPOSITE_OPERATOR,
+  SHAPE_ATTR_FE_COMPOSITE_K1, SHAPE_ATTR_FE_COMPOSITE_K2, SHAPE_ATTR_FE_COMPOSITE_K3, SHAPE_ATTR_FE_COMPOSITE_K4,
 };
 
 static ShapeAttr offset_attrs[] = {
@@ -7283,7 +7284,7 @@ static ShapeAttr dropshadow_attrs[] = {
   SHAPE_ATTR_FE_COLOR, SHAPE_ATTR_FE_OPACITY,
 };
 
-#define N_FILTER_PROPS 11
+#define N_FILTER_PROPS 12
 
 G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (flood_attrs));
 G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (blur_attrs));
@@ -8545,6 +8546,34 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 1,
     .parse_value = svg_composite_operator_parse,
   },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K1,
+    .name = "k1",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K2,
+    .name = "k1",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K3,
+    .name = "k1",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K4,
+    .name = "k1",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
   { .id = SHAPE_ATTR_FE_DISPLACEMENT_SCALE,
     .name = "scale",
     .inherited = 0,
@@ -8733,6 +8762,10 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_COLOR_MATRIX_TYPE].initial_value = svg_color_matrix_type_new (COLOR_MATRIX_TYPE_MATRIX);
   shape_attrs[SHAPE_ATTR_FE_COLOR_MATRIX_VALUES].initial_value = svg_numbers_new_identity_matrix ();
   shape_attrs[SHAPE_ATTR_FE_COMPOSITE_OPERATOR].initial_value = svg_composite_operator_new (COMPOSITE_OPERATOR_OVER);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K1].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K2].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K3].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K4].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DX].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DISPLACEMENT_SCALE].initial_value = svg_number_new (1);
@@ -9454,6 +9487,10 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_FE_COLOR_MATRIX_TYPE:
     case SHAPE_ATTR_FE_COLOR_MATRIX_VALUES:
     case SHAPE_ATTR_FE_COMPOSITE_OPERATOR:
+    case SHAPE_ATTR_FE_COMPOSITE_K1:
+    case SHAPE_ATTR_FE_COMPOSITE_K2:
+    case SHAPE_ATTR_FE_COMPOSITE_K3:
+    case SHAPE_ATTR_FE_COMPOSITE_K4:
     case SHAPE_ATTR_FE_DISPLACEMENT_SCALE:
     case SHAPE_ATTR_FE_DISPLACEMENT_X:
     case SHAPE_ATTR_FE_DISPLACEMENT_Y:
