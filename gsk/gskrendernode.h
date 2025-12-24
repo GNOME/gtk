@@ -166,7 +166,6 @@ typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskTransformNode                GskTransformNode;
 typedef struct _GskShadowNode                   GskShadowNode;
 typedef struct _GskTextNode                     GskTextNode;
-typedef struct _GskMaskNode                     GskMaskNode;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;
