@@ -30,6 +30,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtksnapshotprivate.h"
+#include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
@@ -8554,21 +8555,21 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_K2,
-    .name = "k1",
+    .name = "k2",
     .inherited = 0,
     .discrete = 1,
     .presentation = 1,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_K3,
-    .name = "k1",
+    .name = "k3",
     .inherited = 0,
     .discrete = 1,
     .presentation = 1,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_K4,
-    .name = "k1",
+    .name = "k4",
     .inherited = 0,
     .discrete = 1,
     .presentation = 1,
@@ -17263,9 +17264,14 @@ apply_filter_tree (Shape         *shape,
               }
             else if (svg_op == COMPOSITE_OPERATOR_ARITHMETIC)
               {
-                gtk_svg_rendering_error (context->svg,
-                                         "arithmetic composite operator not supported");
-                result = gsk_container_node_new ((GskRenderNode*[]) { in2->node, in->node }, 2);
+                float k1, k2, k3, k4;
+
+                k1 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K1), 1);
+                k2 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K2), 1);
+                k3 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K3), 1);
+                k4 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K4), 1);
+
+                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, k1, k2, k3, k4);
               }
             else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {
