@@ -13914,6 +13914,15 @@ parse_shape_attrs (Shape                *shape,
       if (*handled & BIT (i))
         continue;
 
+      if (shape->type == SHAPE_SVG &&
+          (g_str_has_prefix (attr_names[i], "xmlns") ||
+           strcmp (attr_names[i], "version") == 0 ||
+           strcmp (attr_names[i], "baseProfile") == 0))
+        {
+          *handled |= BIT (i);
+          continue;
+        }
+
       /* We handle class and style after the loop to
        * enforce priority over fill/stroke
        */
@@ -14847,9 +14856,6 @@ start_element_cb (GMarkupParseContext  *context,
       markup_filter_attributes (element_name,
                                 attr_names, attr_values,
                                 &handled,
-                                "xmlns*", NULL,
-                                "version", NULL,
-                                "baseProfile", NULL,
                                 "gpa:state", &state_attr,
                                 "gpa:version", &version_attr,
                                 "gpa:keywords", &keywords_attr,
