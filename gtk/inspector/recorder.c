@@ -49,6 +49,7 @@
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
+#include <gsk/gsktextnodeprivate.h>
 #include <gsk/gsktransformprivate.h>
 #include <gsk/gskcomponenttransferprivate.h>
 #include <gsk/gskdisplacementnodeprivate.h>

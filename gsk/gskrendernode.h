@@ -150,7 +150,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
 #define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
-#define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 
 typedef struct _GskTextureNode                  GskTextureNode;
@@ -163,7 +162,6 @@ typedef struct _GskConicGradientNode            GskConicGradientNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskShadowNode                   GskShadowNode;
-typedef struct _GskTextNode                     GskTextNode;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;
@@ -327,27 +325,6 @@ const GskShadow *       gsk_shadow_node_get_shadow              (const GskRender
                                                                  gsize                     i) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gsize                   gsk_shadow_node_get_n_shadows           (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_text_node_get_type                  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_text_node_new                       (PangoFont                *font,
-                                                                 PangoGlyphString         *glyphs,
-                                                                 const GdkRGBA            *color,
-                                                                 const graphene_point_t   *offset);
-GDK_AVAILABLE_IN_ALL
-PangoFont *             gsk_text_node_get_font                  (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_2
-gboolean                gsk_text_node_has_color_glyphs          (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-guint                   gsk_text_node_get_num_glyphs            (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const PangoGlyphInfo   *gsk_text_node_get_glyphs                (const GskRenderNode      *node,
-                                                                 guint                    *n_glyphs);
-GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_text_node_get_color                 (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const graphene_point_t *gsk_text_node_get_offset                (const GskRenderNode      *node) G_GNUC_PURE;
 
 /**
  * GSK_VALUE_HOLDS_RENDER_NODE:
