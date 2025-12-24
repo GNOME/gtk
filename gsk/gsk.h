@@ -54,6 +54,7 @@
 #include <gsk/gskstrokenode.h>
 #include <gsk/gsksubsurfacenode.h>
 #include <gsk/gsktransform.h>
+#include <gsk/gsktransformnode.h>
 #include <gsk/gskglshader.h>
 
 #include <gsk/gskcairorenderer.h>

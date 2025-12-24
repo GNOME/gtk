@@ -30,6 +30,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
 #include "gsktransform.h"
+#include "gsktransformnode.h"
 
 #include "gdk/gdkrgbaprivate.h"
 

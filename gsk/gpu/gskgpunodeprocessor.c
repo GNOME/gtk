@@ -66,6 +66,7 @@
 #include "gskroundedrectprivate.h"
 #include "gskstrokenode.h"
 #include "gsksubsurfacenode.h"
+#include "gsktransformnode.h"
 #include "gsktransformprivate.h"
 #include "gskprivate.h"
 
