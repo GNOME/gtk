@@ -97,9 +97,12 @@ gsk_component_transfer_node_draw (GskRenderNode *node,
           g = ((pixel >> 8) & 0xff) / 255.;
           b = ((pixel >> 0) & 0xff) / 255.;
 
-          r /= a;
-          g /= a;
-          b /= a;
+          if (a != 0)
+            {
+              r /= a;
+              g /= a;
+              b /= a;
+            }
 
           r = gsk_component_transfer_apply (&self->transfer[0], r);
           g = gsk_component_transfer_apply (&self->transfer[1], g);
@@ -118,6 +121,8 @@ gsk_component_transfer_node_draw (GskRenderNode *node,
           *(guint32 *)(pixels + y * stride + 4 * x) = pixel;
         }
     }
+
+  cairo_surface_mark_dirty (surface);
 
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
