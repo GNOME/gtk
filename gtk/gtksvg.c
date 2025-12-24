@@ -100,7 +100,7 @@
  * referring to the `<mask>` element by ID.
  *
  * In animation elements, the parsing of `begin` and `end` attributes
- * is limited, and the `by`, `min` and `max` attributes are not supported.
+ * is limited, and the `min` and `max` attributes are not supported.
  *
  * Lastly, there is only minimal CSS support, and no interactivity.
  *
