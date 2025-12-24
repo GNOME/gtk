@@ -3480,6 +3480,7 @@ typedef enum
   COMPOSITE_OPERATOR_ATOP,
   COMPOSITE_OPERATOR_XOR,
   COMPOSITE_OPERATOR_LIGHTER,
+  COMPOSITE_OPERATOR_ARITHMETIC,
 } CompositeOperator;
 
 static const SvgValueClass SVG_COMPOSITE_OPERATOR_CLASS = {
@@ -3498,6 +3499,7 @@ static SvgEnum composite_operator_values[] = {
   { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_ATOP, "atop" },
   { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_XOR, "xor" },
   { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_LIGHTER, "lighter" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_ARITHMETIC, "arithmetic" },
 };
 
 static SvgValue *
@@ -3514,9 +3516,9 @@ svg_composite_operator_parse (const char *string)
 }
 
 static GskPorterDuff
-svg_composite_operator_get_porter_duff (SvgValue *value)
+svg_composite_operator_to_gsk (CompositeOperator op)
 {
-  switch (svg_enum_get (value))
+  switch (op)
     {
     case COMPOSITE_OPERATOR_OVER: return GSK_PORTER_DUFF_SOURCE_OVER_DEST;
     case COMPOSITE_OPERATOR_IN: return GSK_PORTER_DUFF_SOURCE_IN_DEST;
@@ -3524,6 +3526,7 @@ svg_composite_operator_get_porter_duff (SvgValue *value)
     case COMPOSITE_OPERATOR_ATOP: return GSK_PORTER_DUFF_SOURCE_ATOP_DEST;
     case COMPOSITE_OPERATOR_XOR: return GSK_PORTER_DUFF_XOR;
     case COMPOSITE_OPERATOR_LIGHTER: return GSK_PORTER_DUFF_SOURCE; // FIXME
+    case COMPOSITE_OPERATOR_ARITHMETIC: return GSK_PORTER_DUFF_SOURCE; // FIXME
     default:
       g_assert_not_reached ();
     }
@@ -17209,21 +17212,33 @@ apply_filter_tree (Shape         *shape,
         case FE_COMPOSITE:
           {
             FilterResult *in, *in2;
-            GskPorterDuff op;
+            CompositeOperator svg_op;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
             in2 = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN2), &subregion, shape, context, source, results);
-            op = svg_composite_operator_get_porter_duff (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_OPERATOR));
+            svg_op = svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_OPERATOR));
 
-            if (op == GSK_PORTER_DUFF_SOURCE_OVER_DEST)
+            if (svg_op == COMPOSITE_OPERATOR_LIGHTER)
+              {
+                gtk_svg_rendering_error (context->svg,
+                                         "lighter composite operator not supported");
+                result = gsk_container_node_new ((GskRenderNode*[]) { in2->node, in->node }, 2);
+              }
+            else if (svg_op == COMPOSITE_OPERATOR_ARITHMETIC)
+              {
+                gtk_svg_rendering_error (context->svg,
+                                         "arithmetic composite operator not supported");
+                result = gsk_container_node_new ((GskRenderNode*[]) { in2->node, in->node }, 2);
+              }
+            else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {
                 result = gsk_container_node_new ((GskRenderNode*[]) { in2->node, in->node }, 2);
               }
-            else if (op == GSK_PORTER_DUFF_SOURCE_IN_DEST)
+            else if (svg_op == COMPOSITE_OPERATOR_IN)
               {
                 result = gsk_mask_node_new (in->node, in2->node, GSK_MASK_MODE_ALPHA);
               }
-            else if (op == GSK_PORTER_DUFF_SOURCE_OUT_DEST)
+            else if (svg_op == COMPOSITE_OPERATOR_OUT)
               {
                 result = gsk_mask_node_new (in->node, in2->node, GSK_MASK_MODE_INVERTED_ALPHA);
               }
@@ -17231,6 +17246,9 @@ apply_filter_tree (Shape         *shape,
               {
                 graphene_rect_t mask_bounds;
                 GskRenderNode *comp, *mask, *container;
+                GskPorterDuff op;
+
+                op = svg_composite_operator_to_gsk (svg_op);
 
                 graphene_rect_union (&in->bounds, &in2->bounds, &mask_bounds);
                 mask = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 1 }, &mask_bounds);
