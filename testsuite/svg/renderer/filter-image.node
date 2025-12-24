@@ -1,0 +1,76 @@
+isolation {
+  child: isolation {
+    child: clip {
+      clip: -10 -10 120 120;
+      child: clip {
+        clip: 0 0 100 100;
+        child: transform {
+          transform: scale(3.125);
+          child: texture {
+            bounds: 0 0 32 32;
+            texture: memory {
+              format: RGBA8;
+              width: 32;
+              height: 32;
+              offset: 0;
+              stride: 128;
+              data: url("data:application/gzip;base64,\
+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\
+KsmjgiQe2U/NHaP3D4l8Yu8AEAAA\
+");
+            }
+          }
+        }
+      }
+    }
+    isolations: background;
+  }
+  isolations: background;
+}
