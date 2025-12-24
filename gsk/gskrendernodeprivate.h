@@ -139,12 +139,6 @@ GskRenderNode **gsk_render_node_get_children            (GskRenderNode          
 bool            gsk_border_node_get_uniform             (const GskRenderNode         *self) G_GNUC_PURE;
 bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self) G_GNUC_PURE;
 
-void            gsk_text_node_serialize_glyphs          (GskRenderNode               *self,
-                                                         GString                     *str);
-
-cairo_hint_style_t
-                gsk_text_node_get_font_hint_style       (const GskRenderNode         *self) G_GNUC_PURE;
-
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;

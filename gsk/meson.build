@@ -43,7 +43,9 @@ gsk_public_sources = files([
   'gskstroke.c',
   'gskstrokenode.c',
   'gsksubsurfacenode.c',
+  'gsktextnode.c',
   'gsktransform.c',
+  'gsktransformnode.c',
   'gpu/gskglrenderer.c',
   'gpu/gskvulkanrenderer.c',
 ])
@@ -147,7 +149,9 @@ gsk_public_headers = files([
   'gskstroke.h',
   'gskstrokenode.h',
   'gsksubsurfacenode.h',
+  'gsktextnode.h',
   'gsktransform.h',
+  'gsktransformnode.h',
   'gsktypes.h',
 ])
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
