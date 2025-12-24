@@ -306,9 +306,11 @@ shape_editor_update_path (ShapeEditor *self,
                           GskPath     *path)
 {
   g_autofree char *text = NULL;
+  g_autofree char *s = NULL;
 
   self->shape->type = SHAPE_PATH;
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (path));
+  s = gsk_path_to_string (path);
+  svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (s));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -327,9 +329,15 @@ shape_editor_update_clip_path (ShapeEditor *self,
                                GskPath     *path)
 {
   if (gsk_path_is_empty (path))
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
+    {
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
+    }
   else
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (path));
+    {
+      char *s = gsk_path_to_string (path);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (s));
+      g_free (s);
+    }
   path_paintable_changed (self->paintable);
 }
 

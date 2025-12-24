@@ -33,6 +33,7 @@
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
+#include "gsk/gskpathprivate.h"
 #include <glib/gstdio.h>
 
 #include <tgmath.h>
@@ -50,6 +51,7 @@
  * The `GtkSvg` fills or strokes paths with symbolic or fixed
  * colors. It can have multiple states, and paths can be included
  * in a subset of the states. The special 'empty' state is always
+ *
  * available. States can have animation, and the transition between
  * different states can also be animated.
  *
@@ -556,6 +558,22 @@ lerp (double t, double a, double b)
   return a + (b - a) * t;
 }
 
+static inline gboolean
+lerp_bool (double t, gboolean b0, gboolean b1)
+{
+  return (t * b0 + (1 - t) * b1) != 0;
+}
+
+static inline void
+lerp_point (double                  t,
+            const graphene_point_t *p0,
+            const graphene_point_t *p1,
+            graphene_point_t       *p)
+{
+  p->x = lerp (t, p0->x, p1->x);
+  p->y = lerp (t, p0->y, p1->y);
+}
+
 static inline double
 accumulate (double a, double b, int n)
 {
@@ -693,13 +711,24 @@ markup_filter_attributes (const char *element_name,
 }
 
 static void
-string_append_double (GString *s,
-                      double   value)
+string_append_double (GString    *s,
+                      const char *prefix,
+                      double      value)
 {
   char buf[64];
 
   g_ascii_formatd (buf, sizeof (buf), "%g", value);
+  g_string_append (s, prefix);
   g_string_append (s, buf);
+}
+
+static void
+string_append_point (GString                *s,
+                     const char             *prefix,
+                     const graphene_point_t *p)
+{
+  string_append_double (s, prefix, p->x);
+  string_append_double (s, " ", p->y);
 }
 
 static char **
@@ -1185,6 +1214,281 @@ text_node_clear (TextNode *self)
 }
 
 /* }}} */
+/* {{{ Path interpolation */
+
+#define SVG_PATH_ARC 22
+typedef struct
+{
+  unsigned int op;
+  union {
+    struct {
+      graphene_point_t pts[4];
+    } seg;
+    struct {
+      float rx;
+      float ry;
+      float x_axis_rotation;
+      gboolean large_arc;
+      gboolean positive_sweep;
+      float x;
+      float y;
+    } arc;
+  };
+} SvgPathOp;
+
+#define GDK_ARRAY_NAME svg_path_ops
+#define GDK_ARRAY_TYPE_NAME SvgPathOps
+#define GDK_ARRAY_ELEMENT_TYPE SvgPathOp
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+typedef struct
+{
+  SvgPathOps ops;
+} SvgPathData;
+
+static SvgPathData *
+svg_path_data_new (void)
+{
+  SvgPathData *p = g_new0 (SvgPathData, 1);
+  svg_path_ops_init (&p->ops);
+  return p;
+}
+
+static void
+svg_path_data_free (SvgPathData *p)
+{
+  svg_path_ops_clear (&p->ops);
+  g_free (p);
+}
+
+static gboolean
+add_op (GskPathOperation        op,
+        const graphene_point_t *pts,
+        gsize                   n_pts,
+        float                   weight,
+        gpointer                user_data)
+{
+  SvgPathData *p = user_data;
+  SvgPathOp pop;
+
+  if (op == GSK_PATH_CONIC)
+    return FALSE;
+
+  pop.op = op;
+  memset (pop.seg.pts, 0, sizeof (graphene_point_t) * 4);
+  memcpy (pop.seg.pts, pts, sizeof (graphene_point_t) * n_pts);
+
+  svg_path_ops_append (&p->ops, pop);
+
+  return TRUE;
+}
+
+static gboolean
+add_arc (float    rx,
+         float    ry,
+         float    x_axis_rotation,
+         gboolean large_arc,
+         gboolean positive_sweep,
+         float    x,
+         float    y,
+         gpointer user_data)
+{
+  SvgPathData *p = user_data;
+  SvgPathOp pop;
+
+  pop.op = SVG_PATH_ARC;
+  pop.arc.rx = rx;
+  pop.arc.ry = ry;
+  pop.arc.x_axis_rotation = x_axis_rotation;
+  pop.arc.large_arc = large_arc;
+  pop.arc.positive_sweep = positive_sweep;
+  pop.arc.x = x;
+  pop.arc.y = y;
+
+  svg_path_ops_append (&p->ops, pop);
+
+  return TRUE;
+}
+
+static SvgPathData *
+svg_path_data_parse (const char *string)
+{
+  GskPathParser parser = {
+    add_op, add_arc, NULL, NULL, NULL,
+  };
+  SvgPathData *p;
+
+  p = svg_path_data_new ();
+
+  if (!gsk_path_parse_full (string, &parser, p))
+    {
+      svg_path_data_free (p);
+      return NULL;
+    }
+
+  return p;
+}
+
+static void
+svg_path_data_print (SvgPathData *p,
+                     GString     *s)
+{
+  for (unsigned int i = 0; i < svg_path_ops_get_size (&p->ops); i++)
+    {
+      SvgPathOp *op = svg_path_ops_index (&p->ops, i);
+
+      if (i > 0)
+        g_string_append_c (s, ' ');
+
+      switch (op->op)
+        {
+        case GSK_PATH_MOVE:
+          string_append_point (s, "M ", &op->seg.pts[0]);
+          break;
+        case GSK_PATH_CLOSE:
+          g_string_append_printf (s, "Z");
+          break;
+        case GSK_PATH_LINE:
+          string_append_point (s, "L ", &op->seg.pts[1]);
+          break;
+        case GSK_PATH_QUAD:
+          string_append_point (s, "Q ", &op->seg.pts[1]);
+          string_append_point (s, ", ", &op->seg.pts[2]);
+          break;
+        case GSK_PATH_CUBIC:
+          string_append_point (s, "C ", &op->seg.pts[1]);
+          string_append_point (s, ", ", &op->seg.pts[2]);
+          string_append_point (s, ", ", &op->seg.pts[3]);
+          break;
+        case SVG_PATH_ARC:
+          string_append_double (s, "A ", op->arc.rx);
+          string_append_double (s, " ", op->arc.ry);
+          string_append_double (s, " ", op->arc.x_axis_rotation);
+          g_string_append_printf (s, " %d %d", op->arc.large_arc, op->arc.positive_sweep);
+          string_append_double (s, " ", op->arc.x);
+          string_append_double (s, " ", op->arc.y);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
+static SvgPathData *
+svg_path_data_interpolate (SvgPathData *p0,
+                           SvgPathData *p1,
+                           double       t)
+{
+  SvgPathData *p;
+
+  if (svg_path_ops_get_size (&p0->ops) != svg_path_ops_get_size (&p1->ops))
+    return NULL;
+
+  p = svg_path_data_new ();
+
+  svg_path_ops_reserve (&p->ops, svg_path_ops_get_size (&p0->ops));
+
+  for (unsigned int i = 0; i < svg_path_ops_get_size (&p0->ops); i++)
+    {
+      SvgPathOp *op0 = svg_path_ops_index (&p0->ops, i);
+      SvgPathOp *op1 = svg_path_ops_index (&p1->ops, i);
+      SvgPathOp op;
+
+      if (op0->op != op1->op)
+        {
+          svg_path_data_free (p);
+          return NULL;
+        }
+
+      op.op = op0->op;
+
+      switch (op.op)
+        {
+        case GSK_PATH_CUBIC:
+          lerp_point (t, &op0->seg.pts[3], &op1->seg.pts[3], &op.seg.pts[3]);
+          G_GNUC_FALLTHROUGH;
+        case GSK_PATH_QUAD:
+          lerp_point (t, &op0->seg.pts[2], &op1->seg.pts[2], &op.seg.pts[2]);
+          G_GNUC_FALLTHROUGH;
+        case GSK_PATH_LINE:
+        case GSK_PATH_MOVE:
+          lerp_point (t, &op0->seg.pts[1], &op1->seg.pts[1], &op.seg.pts[1]);
+          G_GNUC_FALLTHROUGH;
+        case GSK_PATH_CLOSE:
+          lerp_point (t, &op0->seg.pts[0], &op1->seg.pts[0], &op.seg.pts[0]);
+          break;
+        case SVG_PATH_ARC:
+          op.arc.rx = lerp (t, op0->arc.rx, op1->arc.rx);
+          op.arc.ry = lerp (t, op0->arc.ry, op1->arc.ry);
+          op.arc.x_axis_rotation = lerp (t, op0->arc.x_axis_rotation, op1->arc.x_axis_rotation);
+          op.arc.large_arc = lerp_bool (t, op0->arc.large_arc, op1->arc.large_arc);
+          op.arc.positive_sweep = lerp_bool (t, op0->arc.positive_sweep, op1->arc.positive_sweep);
+          op.arc.x = lerp (t, op0->arc.x, op1->arc.x);
+          op.arc.y = lerp (t, op0->arc.y, op1->arc.y);
+
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      svg_path_ops_append (&p->ops, op);
+    }
+
+  return p;
+}
+
+static GskPath *
+svg_path_data_to_gsk (SvgPathData *p)
+{
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  for (unsigned int i = 0; i < svg_path_ops_get_size (&p->ops); i++)
+    {
+      SvgPathOp *op = svg_path_ops_index (&p->ops, i);
+
+      switch (op->op)
+        {
+        case GSK_PATH_MOVE:
+          gsk_path_builder_move_to (builder, op->seg.pts[0].x, op->seg.pts[0].y);
+          break;
+        case GSK_PATH_CLOSE:
+          gsk_path_builder_close (builder);
+          break;
+        case GSK_PATH_LINE:
+          gsk_path_builder_line_to (builder, op->seg.pts[1].x, op->seg.pts[1].y);
+          break;
+        case GSK_PATH_QUAD:
+          gsk_path_builder_quad_to (builder,
+                                    op->seg.pts[1].x, op->seg.pts[1].y,
+                                    op->seg.pts[2].x, op->seg.pts[2].y);
+          break;
+        case GSK_PATH_CUBIC:
+          gsk_path_builder_cubic_to (builder,
+                                     op->seg.pts[1].x, op->seg.pts[1].y,
+                                     op->seg.pts[2].x, op->seg.pts[2].y,
+                                     op->seg.pts[3].x, op->seg.pts[3].y);
+          break;
+        case SVG_PATH_ARC:
+          gsk_path_builder_svg_arc_to (builder,
+                                       op->arc.rx, op->arc.ry,
+                                       op->arc.x_axis_rotation,
+                                       op->arc.large_arc,
+                                       op->arc.positive_sweep,
+                                       op->arc.x, op->arc.y);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  return gsk_path_builder_free_to_path (builder);
+}
+
+/* }}} */
 /* {{{ gpa things */
 
 #define NO_STATES 0
@@ -1600,7 +1904,7 @@ svg_number_print (const SvgValue *value,
 {
   const SvgNumber *n = (const SvgNumber *) value;
 
-  string_append_double (string, n->value);
+  string_append_double (string, "", n->value);
   if (n->dim == SVG_DIMENSION_PERCENTAGE)
     g_string_append_c (string, '%');
   else if (n->dim == SVG_DIMENSION_LENGTH)
@@ -1801,7 +2105,7 @@ svg_numbers_print (const SvgValue *value,
     {
       if (i > 0)
         g_string_append_c (string, ' ');
-      string_append_double (string, p->values[i].value);
+      string_append_double (string, "", p->values[i].value);
       if (p->values[i].dim == SVG_DIMENSION_PERCENTAGE)
         g_string_append (string, "%");
       else if (p->values[i].dim == SVG_DIMENSION_LENGTH)
@@ -3844,31 +4148,27 @@ svg_primitive_transform_print (const SvgValue *value,
   switch (tf->transforms[0].type)
     {
     case TRANSFORM_TRANSLATE:
-      string_append_double (s, tf->transforms[0].translate.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].translate.y);
+      string_append_double (s, "", tf->transforms[0].translate.x);
+      string_append_double (s, " ", tf->transforms[0].translate.y);
       break;
 
     case TRANSFORM_SCALE:
-      string_append_double (s, tf->transforms[0].scale.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].scale.y);
+      string_append_double (s, "", tf->transforms[0].scale.x);
+      string_append_double (s, " ", tf->transforms[0].scale.y);
       break;
 
     case TRANSFORM_ROTATE:
-      string_append_double (s, tf->transforms[0].rotate.angle);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].rotate.x);
-      g_string_append_c (s, ' ');
-      string_append_double (s, tf->transforms[0].rotate.y);
+      string_append_double (s, "", tf->transforms[0].rotate.angle);
+      string_append_double (s, " ", tf->transforms[0].rotate.x);
+      string_append_double (s, " ", tf->transforms[0].rotate.y);
       break;
 
     case TRANSFORM_SKEW_X:
-      string_append_double (s, tf->transforms[0].skew_x.angle);
+      string_append_double (s, "", tf->transforms[0].skew_x.angle);
       break;
 
     case TRANSFORM_SKEW_Y:
-      string_append_double (s, tf->transforms[0].skew_y.angle);
+      string_append_double (s, "", tf->transforms[0].skew_y.angle);
       break;
 
     case TRANSFORM_MATRIX:
@@ -3894,51 +4194,36 @@ svg_transform_print (const SvgValue *value,
       switch (t->type)
         {
         case TRANSFORM_TRANSLATE:
-          g_string_append (s, "translate(");
-          string_append_double (s, t->translate.x);
-          g_string_append (s, ", ");
-          string_append_double (s, t->translate.y);
+          string_append_double (s, "translate(", t->translate.x);
+          string_append_double (s, ", ", t->translate.y);
           g_string_append (s, ")");
           break;
         case TRANSFORM_SCALE:
-          g_string_append (s, "scale(");
-          string_append_double (s, t->scale.x);
-          g_string_append (s, ", ");
-          string_append_double (s, t->scale.y);
+          string_append_double (s, "scale(", t->scale.x);
+          string_append_double (s, ", ", t->scale.y);
           g_string_append (s, ")");
           break;
         case TRANSFORM_ROTATE:
-          g_string_append (s, "rotate(");
-          string_append_double (s, t->rotate.angle);
-          g_string_append (s, ", ");
-          string_append_double (s, t->rotate.x);
-          g_string_append (s, ", ");
-          string_append_double (s, t->rotate.y);
+          string_append_double (s, "rotate(", t->rotate.angle);
+          string_append_double (s, ", ", t->rotate.x);
+          string_append_double (s, ", ", t->rotate.y);
           g_string_append (s, ")");
           break;
         case TRANSFORM_SKEW_X:
-          g_string_append (s, "skewX(");
-          string_append_double (s, t->skew_x.angle);
+          string_append_double (s, "skewX(",  t->skew_x.angle);
           g_string_append (s, ")");
           break;
         case TRANSFORM_SKEW_Y:
-          g_string_append (s, "skewY(");
-          string_append_double (s, t->skew_y.angle);
+          string_append_double (s, "skewY(", t->skew_y.angle);
           g_string_append (s, ")");
           break;
         case TRANSFORM_MATRIX:
-          g_string_append (s, "matrix(");
-          string_append_double (s, t->matrix.xx);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.yx);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.xy);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.yy);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.dx);
-          g_string_append (s, ", ");
-          string_append_double (s, t->matrix.dy);
+          string_append_double (s, "matrix(", t->matrix.xx);
+          string_append_double (s, ", ", t->matrix.yx);
+          string_append_double (s, ", ", t->matrix.xy);
+          string_append_double (s, ", ", t->matrix.yy);
+          string_append_double (s, ", ", t->matrix.dx);
+          string_append_double (s, ", ", t->matrix.dy);
           g_string_append (s, ")");
           break;
         case TRANSFORM_NONE:
@@ -4952,8 +5237,8 @@ svg_filter_print (const SvgValue *value,
         }
       else
         {
-          g_string_append_printf (s, "%s(", filter_desc[function->kind].name);
-          string_append_double (s, function->value);
+          g_string_append (s, filter_desc[function->kind].name);
+          string_append_double (s, "(", function->value);
           g_string_append (s, ")");
         }
     }
@@ -5363,7 +5648,7 @@ svg_dash_array_print (const SvgValue *value,
         {
           if (i > 0)
             g_string_append_c (s, ' ');
-          string_append_double (s, dashes->dashes[i].value);
+          string_append_double (s, "", dashes->dashes[i].value);
           if (dashes->dashes[i].dim == SVG_DIMENSION_PERCENTAGE)
             g_string_append (s, "%");
           else if (dashes->dashes[i].dim == SVG_DIMENSION_LENGTH)
@@ -5459,6 +5744,7 @@ svg_dash_array_resolve (const SvgValue        *value,
 typedef struct
 {
   SvgValue base;
+  SvgPathData *pdata;
   GskPath *path;
 } SvgPath;
 
@@ -5466,6 +5752,7 @@ static void
 svg_path_free (SvgValue *value)
 {
   SvgPath *p = (SvgPath *) value;
+  g_clear_pointer (&p->pdata, svg_path_data_free);
   g_clear_pointer (&p->path, gsk_path_unref);
   g_free (value);
 }
@@ -5500,8 +5787,8 @@ svg_path_print (const SvgValue *value,
 {
   const SvgPath *p = (const SvgPath *) value;
 
-  if (p->path)
-    gsk_path_print (p->path, string);
+  if (p->pdata)
+    svg_path_data_print (p->pdata, string);
   else
     g_string_append (string, "none");
 }
@@ -5522,174 +5809,49 @@ static const SvgValueClass SVG_PATH_CLASS = {
 static SvgValue *
 svg_path_new_none (void)
 {
-  static SvgPath none = { { &SVG_PATH_CLASS, 1 }, NULL };
+  static SvgPath none = { { &SVG_PATH_CLASS, 1 }, NULL, NULL };
 
   return svg_value_ref ((SvgValue *) &none);
 }
 
-SvgValue *
-svg_path_new (GskPath *path)
+static SvgValue *
+svg_path_new_from_data (SvgPathData *pdata)
 {
   SvgPath *result;
 
+  if (pdata == NULL)
+    return NULL;
+
   result = (SvgPath *) svg_value_alloc (&SVG_PATH_CLASS, sizeof (SvgPath));
-  result->path = gsk_path_ref (path);
+  result->pdata = pdata;
+  result->path = svg_path_data_to_gsk (pdata);
 
   return (SvgValue *) result;
+}
+
+SvgValue *
+svg_path_new (const char *string)
+{
+  return svg_path_new_from_data (svg_path_data_parse (string));
 }
 
 static SvgValue *
 svg_path_parse (const char *value)
 {
-  GskPath *path;
-  SvgValue *v;
-
   if (strcmp (value, "none") == 0)
     return svg_path_new_none ();
-
-  path = gsk_path_parse (value);
-  if (!path)
-    return NULL;
-
-  v = svg_path_new (path);
-  gsk_path_unref (path);
-
-  return v;
+  else
+    return svg_path_new (value);
 }
 
 static GskPath *
-svg_path_get (const SvgValue *value)
+svg_path_get_gsk (const SvgValue *value)
 {
   const SvgPath *p = (const SvgPath *) value;
 
   g_assert (value->class == &SVG_PATH_CLASS);
 
   return p->path;
-}
-
-typedef struct
-{
-  GskPathOperation op;
-  graphene_point_t pts[4];
-  float weight;
-} PathOp;
-
-static gboolean
-collect_op (GskPathOperation        op,
-            const graphene_point_t *pts,
-            gsize                   n_pts,
-            float                   weight,
-            gpointer                user_data)
-{
-  GArray *array = user_data;
-  PathOp path_op;
-
-  path_op.op = op;
-  memset (path_op.pts, 0, sizeof (graphene_point_t) * 4);
-  memcpy (path_op.pts, pts, sizeof (graphene_point_t) * n_pts);
-  path_op.weight = weight;
-
-  g_array_append_val (array, path_op);
-
-  return TRUE;
-}
-
-static GArray *
-path_explode (GskPath *path)
-{
-  GArray *array = g_array_new (FALSE, FALSE, sizeof (PathOp));
-
-  gsk_path_foreach (path,
-                    GSK_PATH_FOREACH_ALLOW_QUAD  |
-                    GSK_PATH_FOREACH_ALLOW_CUBIC |
-                    GSK_PATH_FOREACH_ALLOW_CONIC,
-                    collect_op,
-                    array);
-
-  return array;
-}
-
-static GskPath *
-path_interpolate (GskPath *p0,
-                  GskPath *p1,
-                  double   t)
-{
-  GskPathBuilder *builder;
-  GArray *a0, *a1;
-
-  a0 = path_explode (p0);
-  a1 = path_explode (p1);
-
-  if (a0->len != a1->len)
-    {
-      g_array_unref (a0);
-      g_array_unref (a1);
-      return NULL;
-    }
-
-  builder = gsk_path_builder_new ();
-
-  for (unsigned int i = 0; i < a0->len; i++)
-    {
-      PathOp *op0 = &g_array_index (a0, PathOp, i);
-      PathOp *op1 = &g_array_index (a1, PathOp, i);
-
-      if (op0->op != op1->op)
-        {
-          g_array_unref (a0);
-          g_array_unref (a1);
-          gsk_path_builder_unref (builder);
-          return NULL;
-        }
-
-      switch (op0->op)
-        {
-        case GSK_PATH_MOVE:
-          gsk_path_builder_move_to (builder,
-                                    lerp (t, op0->pts[0].x, op1->pts[0].x),
-                                    lerp (t, op0->pts[0].y, op1->pts[0].y));
-          break;
-        case GSK_PATH_CLOSE:
-          gsk_path_builder_close (builder);
-          break;
-        case GSK_PATH_LINE:
-          gsk_path_builder_line_to (builder,
-                                    lerp (t, op0->pts[1].x, op1->pts[1].x),
-                                    lerp (t, op0->pts[1].y, op1->pts[1].y));
-          break;
-        case GSK_PATH_QUAD:
-          gsk_path_builder_quad_to (builder,
-                                    lerp (t, op0->pts[1].x, op1->pts[1].x),
-                                    lerp (t, op0->pts[1].y, op1->pts[1].y),
-                                    lerp (t, op0->pts[2].x, op1->pts[2].x),
-                                    lerp (t, op0->pts[2].y, op1->pts[2].y));
-          break;
-        case GSK_PATH_CUBIC:
-          gsk_path_builder_cubic_to (builder,
-                                     lerp (t, op0->pts[1].x, op1->pts[1].x),
-                                     lerp (t, op0->pts[1].y, op1->pts[1].y),
-                                     lerp (t, op0->pts[2].x, op1->pts[2].x),
-                                     lerp (t, op0->pts[2].y, op1->pts[2].y),
-                                     lerp (t, op0->pts[3].x, op1->pts[3].x),
-                                     lerp (t, op0->pts[3].y, op1->pts[3].y));
-          break;
-        case GSK_PATH_CONIC:
-          gsk_path_builder_conic_to (builder,
-                                     lerp (t, op0->pts[1].x, op1->pts[1].x),
-                                     lerp (t, op0->pts[1].y, op1->pts[1].y),
-                                     lerp (t, op0->pts[2].x, op1->pts[2].x),
-                                     lerp (t, op0->pts[2].y, op1->pts[2].y),
-                                     lerp (t, op0->weight, op1->weight));
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-    }
-
-  g_array_unref (a0);
-  g_array_unref (a1);
-
-  return gsk_path_builder_free_to_path (builder);
 }
 
 static SvgValue *
@@ -5699,16 +5861,12 @@ svg_path_interpolate (const SvgValue *value0,
 {
   const SvgPath *p0 = (const SvgPath *) value0;
   const SvgPath *p1 = (const SvgPath *) value1;
-  GskPath *path;
+  SvgPathData *p;
 
-  path = path_interpolate (p0->path, p1->path, t);
+  p = svg_path_data_interpolate (p0->pdata, p1->pdata, t);
 
-  if (path)
-    {
-      SvgValue *res = svg_path_new (path);
-      gsk_path_unref (path);
-      return res;
-    }
+  if (p != NULL)
+    return svg_path_new_from_data (p);
 
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -5725,7 +5883,10 @@ typedef struct
   ClipKind kind;
 
   union {
-    GskPath *path;
+    struct {
+      SvgPathData *pdata;
+      GskPath *path;
+    } path;
     struct {
       char *ref;
       Shape *shape;
@@ -5739,9 +5900,14 @@ svg_clip_free (SvgValue *value)
   SvgClip *clip = (SvgClip *) value;
 
   if (clip->kind == CLIP_PATH)
-    g_clear_pointer (&clip->path, gsk_path_unref);
+    {
+      gsk_path_unref (clip->path.path);
+      svg_path_data_free (clip->path.pdata);
+    }
   else if (clip->kind == CLIP_REF)
-    g_free (clip->ref.ref);
+    {
+      g_free (clip->ref.ref);
+    }
 
   g_free (value);
 }
@@ -5761,7 +5927,7 @@ svg_clip_equal (const SvgValue *value0,
     case CLIP_NONE:
       return TRUE;
     case CLIP_PATH:
-      return gsk_path_equal (c0->path, c1->path);
+      return gsk_path_equal (c0->path.path, c1->path.path);
     case CLIP_REF:
       return c0->ref.shape == c1->ref.shape;
     default:
@@ -5794,7 +5960,7 @@ svg_clip_print (const SvgValue *value,
       break;
     case CLIP_PATH:
       g_string_append (string, "path(\"");
-      gsk_path_print (c->path, string);
+      svg_path_data_print (c->path.pdata, string);
       g_string_append (string, "\")");
       break;
     case CLIP_REF:
@@ -5821,16 +5987,25 @@ svg_clip_new_none (void)
   return svg_value_ref ((SvgValue *) &none);
 }
 
-SvgValue *
-svg_clip_new_path (GskPath *path)
+static SvgValue *
+svg_clip_new_from_data (SvgPathData *pdata)
 {
   SvgClip *result;
 
+  if (pdata == NULL)
+    return NULL;
+
   result = (SvgClip *) svg_value_alloc (&SVG_CLIP_CLASS, sizeof (SvgClip));
   result->kind = CLIP_PATH;
-  result->path = gsk_path_ref (path);
-
+  result->path.pdata = pdata;
+  result->path.path = svg_path_data_to_gsk (pdata);
   return (SvgValue *) result;
+}
+
+SvgValue *
+svg_clip_new_path (const char *string)
+{
+  return svg_clip_new_from_data (svg_path_data_parse (string));
 }
 
 static SvgValue *
@@ -5853,7 +6028,6 @@ svg_clip_interpolate (const SvgValue *value0,
 {
   const SvgClip *c0 = (const SvgClip *) value0;
   const SvgClip *c1 = (const SvgClip *) value1;
-  GskPath *path;
 
   if (c0->kind == c1->kind)
     {
@@ -5863,13 +6037,15 @@ svg_clip_interpolate (const SvgValue *value0,
           return svg_clip_new_none ();
 
         case CLIP_PATH:
-          path = path_interpolate (c0->path, c1->path, t);
-          if (path)
-            {
-              SvgValue *v = svg_clip_new_path (path);
-              gsk_path_unref (path);
-              return v;
-            }
+          {
+            SvgPathData *p;
+
+            p = svg_path_data_interpolate (c0->path.pdata,
+                                           c1->path.pdata,
+                                           t);
+            if (p)
+              return svg_clip_new_from_data (p);
+          }
           break;
 
         case CLIP_REF:
@@ -5894,19 +6070,12 @@ parse_clip_path_arg (GtkCssParser *parser,
   char *string;
 
   string = gtk_css_parser_consume_string (parser);
-  if (string)
-    {
-      GskPath *path = gsk_path_parse (string);
-      if (path)
-        {
-          *((GskPath **) data) = path;
-          g_free (string);
-          return 1;
-        }
-      g_free (string);
-    }
+  if (!string)
+    return 0;
 
-  return 0;
+  *((char **) data) = string;
+
+  return 1;
 }
 
 static SvgValue *
@@ -5927,12 +6096,11 @@ svg_clip_parse (const char *value)
 
       if (gtk_css_parser_has_function (parser, "path"))
         {
-          GskPath *path = NULL;
+          char *string;
 
-          if (gtk_css_parser_consume_function (parser, 1, 1, parse_clip_path_arg, &path))
+          if (gtk_css_parser_consume_function (parser, 1, 1, parse_clip_path_arg, &string))
             {
-              res = svg_clip_new_path (path);
-              gsk_path_unref (path);
+              res = svg_clip_new_path (string);
             }
         }
       else
@@ -6177,13 +6345,10 @@ svg_view_box_print (const SvgValue *value,
   if (v->unset)
     return;
 
-  string_append_double (string, v->view_box.origin.x);
-  g_string_append_c (string, ' ');
-  string_append_double (string, v->view_box.origin.y);
-  g_string_append_c (string, ' ');
-  string_append_double (string, v->view_box.size.width);
-  g_string_append_c (string, ' ');
-  string_append_double (string, v->view_box.size.height);
+  string_append_double (string, "", v->view_box.origin.x);
+  string_append_double (string, " ", v->view_box.origin.y);
+  string_append_double (string, " ", v->view_box.size.width);
+  string_append_double (string, " ", v->view_box.size.height);
 }
 
 static const SvgValueClass SVG_VIEW_BOX_CLASS = {
@@ -6520,7 +6685,7 @@ svg_orient_print (const SvgValue *value,
   const SvgOrient *v = (const SvgOrient *) value;
 
   if (v->kind == ORIENT_ANGLE)
-    string_append_double (string, v->angle);
+    string_append_double (string, "", v->angle);
   else if (v->start_reverse)
     g_string_append (string, "auto-start-reverse");
   else
@@ -9478,9 +9643,9 @@ shape_get_path (Shape                 *shape,
 
     case SHAPE_PATH:
       if (values[SHAPE_ATTR_PATH] &&
-          svg_path_get (values[SHAPE_ATTR_PATH]))
+          svg_path_get_gsk (values[SHAPE_ATTR_PATH]))
         {
-          return gsk_path_ref (svg_path_get (values[SHAPE_ATTR_PATH]));
+          return gsk_path_ref (svg_path_get_gsk (values[SHAPE_ATTR_PATH]));
         }
       else
         {
@@ -9585,7 +9750,7 @@ shape_get_current_path (Shape                 *shape,
           break;
 
         case SHAPE_PATH:
-          if (shape->path != svg_path_get (shape->current[SHAPE_ATTR_PATH]))
+          if (shape->path != svg_path_get_gsk (shape->current[SHAPE_ATTR_PATH]))
             {
               g_clear_pointer (&shape->path, gsk_path_unref);
               g_clear_pointer (&shape->measure, gsk_path_measure_unref);
@@ -10079,9 +10244,7 @@ time_spec_print (TimeSpec *spec,
 
   if (!only_nonzero || spec->offset != 0)
     {
-      if (only_nonzero)
-        g_string_append (s, " ");
-      string_append_double (s, spec->offset / (double) G_TIME_SPAN_MILLISECOND);
+      string_append_double (s, only_nonzero ? " " : "", spec->offset / (double) G_TIME_SPAN_MILLISECOND);
       g_string_append (s, "ms");
     }
 }
@@ -15971,8 +16134,7 @@ serialize_base_animation_attrs (GString   *s,
         }
       else
         {
-          g_string_append (s, "dur='");
-          string_append_double (s, a->simple_duration / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s, "dur='", a->simple_duration / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
@@ -15986,8 +16148,7 @@ serialize_base_animation_attrs (GString   *s,
         }
       else
         {
-          g_string_append (s, "repeatCount='");
-          string_append_double (s, a->repeat_count);
+          string_append_double (s, "repeatCount='", a->repeat_count);
           g_string_append (s, "'");
         }
     }
@@ -16001,8 +16162,7 @@ serialize_base_animation_attrs (GString   *s,
         }
       else
         {
-          g_string_append (s, "repeatDur='");
-          string_append_double (s, a->repeat_duration / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s, "repeatDur='", a->repeat_duration / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
@@ -16087,14 +16247,10 @@ serialize_value_animation_attrs (GString   *s,
       g_string_append (s, "keySplines='");
       for (unsigned int i = 0; i + 1 < a->n_frames; i++)
         {
-          if (i > 0)
-            g_string_append (s, "; ");
-          for (unsigned int j = 0; j < 4; j++)
-            {
-              if (j > 0)
-                g_string_append_c (s, ' ');
-              string_append_double (s, a->frames[i].params[j]);
-            }
+          string_append_double (s, i > 0 ? "; " : "", a->frames[i].params[0]);
+          string_append_double (s, " ", a->frames[i].params[1]);
+          string_append_double (s, " ", a->frames[i].params[2]);
+          string_append_double (s, " ", a->frames[i].params[3]);
         }
       g_string_append_c (s, '\'');
     }
@@ -16104,11 +16260,7 @@ serialize_value_animation_attrs (GString   *s,
       indent_for_attr (s, indent);
       g_string_append (s, "keyTimes='");
       for (unsigned int i = 0; i < a->n_frames; i++)
-        {
-          if (i > 0)
-            g_string_append (s, "; ");
-          string_append_double (s, a->frames[i].time);
-        }
+        string_append_double (s, i > 0 ? "; " : "", a->frames[i].time);
       g_string_append_c (s, '\'');
     }
 
@@ -16156,8 +16308,9 @@ serialize_animation_status (GString              *s,
             g_string_append (s, "gpa:computed-simple-duration='indefinite'");
           else
             {
-              g_string_append (s, "gpa:computed-simple-duration='");
-              string_append_double (s, d / (double) G_TIME_SPAN_MILLISECOND);
+              string_append_double (s,
+                                    "gpa:computed-simple-duration='",
+                                    d / (double) G_TIME_SPAN_MILLISECOND);
               g_string_append (s, "ms'");
             }
         }
@@ -16165,16 +16318,18 @@ serialize_animation_status (GString              *s,
       if (a->current.begin != INDEFINITE)
         {
           indent_for_attr (s, indent);
-          g_string_append (s, "gpa:current-start-time='");
-          string_append_double (s, (a->current.begin - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s,
+                                "gpa:current-start-time='",
+                                (a->current.begin - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
 
       if (a->current.end != INDEFINITE)
         {
           indent_for_attr (s, indent);
-          g_string_append (s, "gpa:current-end-time='");
-          string_append_double (s, (a->current.end - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s,
+                                "gpa:current-end-time='",
+                                (a->current.end - svg->load_time) / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
@@ -16250,11 +16405,7 @@ serialize_animation_motion (GString              *s,
       indent_for_attr (s, indent);
       g_string_append (s, "keyPoints='");
       for (unsigned int i = 0; i < a->n_frames; i++)
-        {
-          if (i > 0)
-            g_string_append (s, "; ");
-          string_append_double (s, a->frames[i].point);
-        }
+        string_append_double (s, i > 0 ? "; " : "", a->frames[i].point);
       g_string_append (s, "'");
     }
 
@@ -16267,8 +16418,7 @@ serialize_animation_motion (GString              *s,
   else if (a->motion.angle != 0)
     {
       indent_for_attr (s, indent);
-      g_string_append (s, "rotate='");
-      string_append_double (s, a->motion.angle);
+      string_append_double (s, "rotate='", a->motion.angle);
       g_string_append (s, "'");
     }
 
@@ -17651,7 +17801,7 @@ push_group (Shape        *shape,
       if (clip->kind == CLIP_PATH)
         {
           gtk_snapshot_append_fill (context->snapshot,
-                                    clip->path,
+                                    clip->path.path,
                                     GSK_FILL_RULE_WINDING, /* FIXME fill rule */
                                     &(GdkRGBA) { 1, 1, 1, 1 });
         }
@@ -20340,14 +20490,16 @@ gtk_svg_serialize_full (GtkSvg               *self,
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
     {
       indent_for_attr (s, 0);
-      g_string_append (s, "gpa:state-change-delay='");
-      string_append_double (s, (self->state_change_delay) / (double) G_TIME_SPAN_MILLISECOND);
+      string_append_double (s,
+                            "gpa:state-change-delay='",
+                            (self->state_change_delay) / (double) G_TIME_SPAN_MILLISECOND);
       g_string_append (s, "ms'");
       if (self->load_time != INDEFINITE)
         {
           indent_for_attr (s, 0);
-          g_string_append (s, "gpa:time-since-load='");
-          string_append_double (s, (self->current_time - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          string_append_double (s,
+                                "gpa:time-since-load='",
+                                (self->current_time - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
     }
@@ -20529,7 +20681,7 @@ svg_shape_attr_get_path (Shape     *shape,
   else
     value = shape_attr_get_initial_value (attr, shape);
 
-  path = svg_path_get (value);
+  path = svg_path_get_gsk (value);
   if (path)
     return gsk_path_ref (path);
 
@@ -20645,7 +20797,7 @@ svg_shape_attr_get_clip (Shape      *shape,
   clip = (SvgClip *) value;
 
   if (clip->kind == CLIP_PATH)
-    *path = clip->path;
+    *path = clip->path.path;
   else
     *path = NULL;
 
