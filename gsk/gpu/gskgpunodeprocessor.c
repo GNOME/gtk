@@ -2,6 +2,7 @@
 
 #include "gskgpunodeprocessorprivate.h"
 
+#include "gskgpuarithmeticopprivate.h"
 #include "gskgpuborderopprivate.h"
 #include "gskgpuboxshadowopprivate.h"
 #include "gskgpublendmodeopprivate.h"
@@ -40,6 +41,7 @@
 #include "gskgpuuploadopprivate.h"
 #include "gskgpuutilsprivate.h"
 
+#include "gskarithmeticnodeprivate.h"
 #include "gskblendnode.h"
 #include "gskblurnode.h"
 #include "gskbordernode.h"
@@ -2986,6 +2988,68 @@ gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_arithmetic_node (GskGpuNodeProcessor *self,
+                                            GskRenderNode       *node)
+{
+  float k[4];
+  GskRenderNode *first_child, *second_child;
+  graphene_rect_t first_rect, second_rect;
+  GskGpuImage *first_image, *second_image;
+
+  gsk_arithmetic_node_get_factors (node, &k[0], &k[1], &k[2], &k[3]);
+
+  first_child = gsk_arithmetic_node_get_first_child (node);
+  second_child = gsk_arithmetic_node_get_second_child (node);
+
+  first_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                          0,
+                                                          NULL,
+                                                          first_child,
+                                                          &first_rect);
+  second_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                           0,
+                                                           NULL,
+                                                           second_child,
+                                                           &second_rect);
+
+  if (first_image == NULL)
+    {
+      if (second_image == NULL)
+        return;
+
+      first_image = g_object_ref (second_image);
+      first_rect = *graphene_rect_zero ();
+    }
+  else if (second_image == NULL)
+    {
+      second_image = g_object_ref (first_image);
+      second_rect = *graphene_rect_zero ();
+    }
+
+  gsk_gpu_arithmetic_op (self->frame,
+                         gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         &node->bounds,
+                         &self->offset,
+                         self->opacity,
+                         k,
+                         &(GskGpuShaderImage) {
+                             first_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             NULL,
+                             &first_rect
+                         },
+                         &(GskGpuShaderImage) {
+                             second_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             NULL,
+                             &second_rect
+                         });
+
+  g_object_unref (first_image);
+  g_object_unref (second_image);
+}
+
+static void
 gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
 {
@@ -4540,6 +4604,13 @@ static const struct
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_displacement_node,
+    NULL,
+    NULL,
+  },
+  [GSK_ARITHMETIC_NODE] = {
+    0,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_arithmetic_node,
     NULL,
     NULL,
   },

@@ -142,6 +142,14 @@
  * Since: 4.22
  */
 
+/**
+ * GSK_ARITHMETIC_NODE:
+ *
+ * A node that combines two child nodes in an arithmetic way.
+ *
+ * Since: 4.22
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
@@ -180,6 +188,7 @@ typedef enum {
   GSK_COMPOSITE_NODE,
   GSK_ISOLATION_NODE,
   GSK_DISPLACEMENT_NODE,
+  GSK_ARITHMETIC_NODE,
 } GskRenderNodeType;
 
 /**

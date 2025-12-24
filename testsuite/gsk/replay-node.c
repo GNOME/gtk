@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <gtk/gtksnapshotprivate.h>
+#include <gsk/gskarithmeticnodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskrepeatnodeprivate.h>
@@ -456,6 +457,32 @@ replay_displacement_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   gtk_snapshot_append_node (snapshot, node);
 }
+
+static void
+replay_arithmetic_node (GskRenderNode *node,
+                        GtkSnapshot   *snapshot)
+{
+  float k1, k2, k3, k4;
+  GtkSnapshot *snap;
+  GskRenderNode *node1, *node2;
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
+
+  snap = gtk_snapshot_new ();
+  replay_node (gsk_arithmetic_node_get_first_child (node), snap);
+  node1 = gtk_snapshot_free_to_node (snap);
+
+  snap = gtk_snapshot_new ();
+  replay_node (gsk_arithmetic_node_get_second_child (node), snap);
+  node2 = gtk_snapshot_free_to_node (snap);
+
+  node = gsk_arithmetic_node_new (&bounds, node1, node2, k1, k2, k3, k4);
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
+}
+
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
@@ -593,6 +620,10 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 
     case GSK_DISPLACEMENT_NODE:
       replay_displacement_node (node, snapshot);
+      break;
+
+    case GSK_ARITHMETIC_NODE:
+      replay_arithmetic_node (node, snapshot);
       break;
 
     case GSK_SUBSURFACE_NODE:

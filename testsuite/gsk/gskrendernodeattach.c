@@ -18,6 +18,7 @@
 #include "gskrendernodeattach.h"
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
@@ -256,6 +257,24 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                          gsk_displacement_node_get_offset (node));
         gsk_render_node_unref (child);
         gsk_render_node_unref (displacement);
+        return res;
+      }
+
+    case GSK_ARITHMETIC_NODE:
+      {
+        GskRenderNode *first, *second;
+        float k1, k2, k3, k4;
+        graphene_rect_t bounds;
+
+        gsk_render_node_get_bounds ((GskRenderNode *) node, &bounds);
+
+        first = node_attach (gsk_arithmetic_node_get_first_child (node), surface, idx);
+        second = node_attach (gsk_arithmetic_node_get_second_child (node), surface, idx);
+        gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
+
+        res = gsk_arithmetic_node_new (&bounds, first, second, k1, k2, k3, k4);
+        gsk_render_node_unref (first);
+        gsk_render_node_unref (second);
         return res;
       }
 

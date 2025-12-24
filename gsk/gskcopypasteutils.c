@@ -129,6 +129,7 @@ replay_partial_node (const PartialNode *replay)
         case GSK_COMPOSITE_NODE:
         case GSK_ISOLATION_NODE:
         case GSK_DISPLACEMENT_NODE:
+        case GSK_ARITHMETIC_NODE:
           /* These all don't record anything, so we never
            * encounter them */
         case GSK_NOT_A_RENDER_NODE:
@@ -212,6 +213,7 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
     case GSK_MASK_NODE:
     case GSK_COMPOSITE_NODE:
     case GSK_DISPLACEMENT_NODE:
+    case GSK_ARITHMETIC_NODE:
       /* record a new background for each child */
       {
         const PartialNode *saved = recording->nodes;

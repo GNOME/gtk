@@ -11,6 +11,7 @@ gsk_private_gpu_include_shaders = files([
 ])
 
 gsk_private_gpu_shaders = files([
+  'gskgpuarithmetic.glsl',
   'gskgpublendmode.glsl',
   'gskgpublur.glsl',
   'gskgpuborder.glsl',
