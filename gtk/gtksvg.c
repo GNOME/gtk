@@ -19612,7 +19612,14 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
 
+  if (self->overflow == GTK_OVERFLOW_HIDDEN)
+    gtk_snapshot_push_clip (snapshot,
+                            &GRAPHENE_RECT_INIT (0, 0, width, height));
+
   render_shape (self->content, &paint_context);
+
+  if (self->overflow == GTK_OVERFLOW_HIDDEN)
+    gtk_snapshot_pop (snapshot);
 
   if (self->advance_after_snapshot)
     {
@@ -19733,6 +19740,7 @@ static void
 gtk_svg_init (GtkSvg *self)
 {
   self->weight = -1;
+  self->overflow = GTK_OVERFLOW_HIDDEN;
   self->state = GTK_SVG_STATE_EMPTY;
   self->load_time = INDEFINITE;
   self->state_change_delay = 0;
@@ -20960,6 +20968,47 @@ gtk_svg_clear_content (GtkSvg *self)
   self->state_change_delay = 0;
 
   self->gpa_version = 0;
+}
+
+/*< private >
+ * gtk_svg_set_overflow:
+ * @self: an SVG paintable
+ * @overflow: the new overflow value
+ *
+ * Sets whether the rendering will be clipped
+ * to the bounds.
+ *
+ * Clipping is expected for [interface@Gdk.Paintable]
+ * semantics, so this property should not be
+ * changed when using a `GtkSvg` as a paintable.
+ */
+void
+gtk_svg_set_overflow (GtkSvg      *self,
+                      GtkOverflow  overflow)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  if (self->overflow == overflow)
+    return;
+
+  self->overflow = overflow;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+/*< private >
+ * gtk_svg_get_overflow:
+ * @self: an SVG paintable
+ *
+ * Gets the current overflow value.
+ *
+ * Returns: the current overflow value
+ */
+GtkOverflow
+gtk_svg_get_overflow (GtkSvg *self)
+{
+  g_return_val_if_fail (GTK_IS_SVG (self), GTK_OVERFLOW_HIDDEN);
+
+  return self->overflow;
 }
 
 /* }}} */

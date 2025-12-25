@@ -28,6 +28,7 @@
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
 #include <gtk/gtksnapshot.h>
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 

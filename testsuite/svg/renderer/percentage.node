@@ -1,45 +1,48 @@
-isolation {
-  child: container {
-    fill {
-      child: color {
-        bounds: 32 32 96 96;
-        color: rgb(255,0,0);
-      }
-      path: "\
+clip {
+  clip: 0 0 160 160;
+  child: isolation {
+    child: container {
+      fill {
+        child: color {
+          bounds: 32 32 96 96;
+          color: rgb(255,0,0);
+        }
+        path: "\
 M 128 80 o 0 48, -48 48, 0.707106769 o -48 0, -48 -48, 0.707106769 o 0 -48, 48 -48, 0.707106769 o 48 0, 48 48, 0.707106769 z";
-      fill-rule: winding;
-    }
-    stroke {
-      child: color {
-        bounds: 31 31 97.5 98;
-        color: rgba(0,0,0,0.75);
+        fill-rule: winding;
       }
-      path: "\
+      stroke {
+        child: color {
+          bounds: 31 31 97.5 98;
+          color: rgba(0,0,0,0.75);
+        }
+        path: "\
 M 128 80 o 0 48, -48 48, 0.707106769 o -48 0, -48 -48, 0.707106769 o 0 -48, 48 -48, 0.707106769 o 48 0, 48 48, 0.707106769 z";
-      line-width: 1;
-      line-cap: butt;
-      line-join: miter;
-    }
-    fill {
-      child: color {
-        bounds: 0 16 32 32;
-        color: rgb(255,0,0);
+        line-width: 1;
+        line-cap: butt;
+        line-join: miter;
       }
-      path: "\
+      fill {
+        child: color {
+          bounds: 0 16 32 32;
+          color: rgb(255,0,0);
+        }
+        path: "\
 M 0 16 h 32 v 32 h -32 z";
-      fill-rule: winding;
-    }
-    stroke {
-      child: color {
-        bounds: -0.5 15.5 33 33;
-        color: rgba(0,0,0,0.75);
+        fill-rule: winding;
       }
-      path: "\
+      stroke {
+        child: color {
+          bounds: -0.5 15.5 33 33;
+          color: rgba(0,0,0,0.75);
+        }
+        path: "\
 M 0 16 h 32 v 32 h -32 z";
-      line-width: 1;
-      line-cap: butt;
-      line-join: miter;
+        line-width: 1;
+        line-cap: butt;
+        line-join: miter;
+      }
     }
+    isolations: background;
   }
-  isolations: background;
 }
