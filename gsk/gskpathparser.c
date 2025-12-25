@@ -571,7 +571,7 @@ gsk_path_parse_full (const char    *string,
   p = string;
   while (*p)
     {
-      prev_cmd = cmd;
+      prev_cmd = g_ascii_toupper (cmd);
       repeat = !parse_command (&p, &cmd);
 
       if (after_comma && !repeat)
@@ -692,7 +692,7 @@ gsk_path_parse_full (const char    *string,
                     y1 += y;
                   }
 
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
@@ -716,7 +716,7 @@ gsk_path_parse_full (const char    *string,
               {
                 if (cmd == 'h')
                   x1 += x;
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
 
@@ -740,7 +740,7 @@ gsk_path_parse_full (const char    *string,
               {
                 if (cmd == 'v')
                   y1 += y;
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
 
@@ -773,7 +773,7 @@ gsk_path_parse_full (const char    *string,
                     x2 += x;
                     y2 += y;
                   }
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
@@ -805,7 +805,7 @@ gsk_path_parse_full (const char    *string,
                     x2 += x;
                     y2 += y;
                   }
-                if (_strchr ("CcSs", prev_cmd))
+                if (prev_cmd == 'C' || prev_cmd == 'S')
                   {
                     x0 = 2 * x - prev_x1;
                     y0 = 2 * y - prev_y1;
@@ -815,7 +815,7 @@ gsk_path_parse_full (const char    *string,
                     x0 = x;
                     y0 = y;
                   }
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
@@ -848,7 +848,7 @@ gsk_path_parse_full (const char    *string,
                     x2 += x;
                     y2 += y;
                   }
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
@@ -877,7 +877,7 @@ gsk_path_parse_full (const char    *string,
                     x2 += x;
                     y2 += y;
                   }
-                if (_strchr ("QqTt", prev_cmd))
+                if (prev_cmd == 'Q' || prev_cmd == 'T')
                   {
                     x1 = 2 * x - prev_x1;
                     y1 = 2 * y - prev_y1;
@@ -887,7 +887,7 @@ gsk_path_parse_full (const char    *string,
                     x1 = x;
                     y1 = y;
                   }
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
@@ -920,7 +920,7 @@ gsk_path_parse_full (const char    *string,
                     x2 += x;
                     y2 += y;
                   }
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
@@ -956,7 +956,7 @@ gsk_path_parse_full (const char    *string,
                     y1 += y;
                   }
 
-                if (_strchr ("zZ", prev_cmd))
+                if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
