@@ -118,7 +118,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskPasteNode, gsk_paste_node)
  *
  * Retrieves the index of the copy that should be pasted.
  *
- * Returns: (transfer none): the index of the copy to paste.
+ * Returns: the index of the copy to paste.
  *
  * Since: 4.22
  */

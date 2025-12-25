@@ -468,3 +468,4 @@ gsk_render_replay_filter_font (GskRenderReplay *self,
   return result;
 }
 
+G_DEFINE_POINTER_TYPE (GskRenderReplay, gsk_render_replay)
