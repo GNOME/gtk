@@ -1271,16 +1271,19 @@ add_op (GskPathOperation        op,
         gpointer                user_data)
 {
   SvgPathData *p = user_data;
-  SvgPathOp pop;
+  gsize size;
+  SvgPathOp *pop;
 
   if (op == GSK_PATH_CONIC)
     return FALSE;
 
-  pop.op = op;
-  memset (pop.seg.pts, 0, sizeof (graphene_point_t) * 4);
-  memcpy (pop.seg.pts, pts, sizeof (graphene_point_t) * n_pts);
+  size = svg_path_ops_get_size (&p->ops);
+  svg_path_ops_set_size (&p->ops, size + 1);
+  pop = svg_path_ops_index (&p->ops, size);
 
-  svg_path_ops_append (&p->ops, pop);
+  pop->op = op;
+  memset (pop->seg.pts, 0, sizeof (graphene_point_t) * 4);
+  memcpy (pop->seg.pts, pts, sizeof (graphene_point_t) * n_pts);
 
   return TRUE;
 }
@@ -1296,18 +1299,21 @@ add_arc (float    rx,
          gpointer user_data)
 {
   SvgPathData *p = user_data;
-  SvgPathOp pop;
+  gsize size;
+  SvgPathOp *pop;
 
-  pop.op = SVG_PATH_ARC;
-  pop.arc.rx = rx;
-  pop.arc.ry = ry;
-  pop.arc.x_axis_rotation = x_axis_rotation;
-  pop.arc.large_arc = large_arc;
-  pop.arc.positive_sweep = positive_sweep;
-  pop.arc.x = x;
-  pop.arc.y = y;
+  size = svg_path_ops_get_size (&p->ops);
+  svg_path_ops_set_size (&p->ops, size + 1);
+  pop = svg_path_ops_index (&p->ops, size);
 
-  svg_path_ops_append (&p->ops, pop);
+  pop->op = SVG_PATH_ARC;
+  pop->arc.rx = rx;
+  pop->arc.ry = ry;
+  pop->arc.x_axis_rotation = x_axis_rotation;
+  pop->arc.large_arc = large_arc;
+  pop->arc.positive_sweep = positive_sweep;
+  pop->arc.x = x;
+  pop->arc.y = y;
 
   return TRUE;
 }
