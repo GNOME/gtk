@@ -9926,7 +9926,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_TSPAN:
       if (!shape->valid_bounds)
         g_critical ("TODO");
-      graphene_rect_init_from_rect (bounds, &shape->bounds);
+      graphene_rect_init_from_rect (&b, &shape->bounds);
       break;
     case SHAPE_IMAGE:
       {
@@ -9937,7 +9937,7 @@ shape_get_current_bounds (Shape                 *shape,
         width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->size.width);
         height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->size.height);
 
-        graphene_rect_init (bounds, x, y, width, height);
+        graphene_rect_init (&b, x, y, width, height);
         ret = TRUE;
       }
       break;

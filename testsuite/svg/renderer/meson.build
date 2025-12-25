@@ -29,6 +29,7 @@ test_data = [
   'filter-fill-paint.svg',
   'filter-flood.svg',
   'filter-gaussian-blur.svg',
+  'filter-image.svg',
   'filter-merge.svg',
   'filter-offset.svg',
   'filter-offset2.svg',
