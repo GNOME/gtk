@@ -3,7 +3,7 @@
      gpa:version='1'
      gpa:keywords='animation overlap'
      gpa:state='0'>
-  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
+  <circle cx='8' cy='8' r='7'
         id='path0'
         gpa:transition-type='fade'
         gpa:transition-duration='1'
@@ -15,7 +15,7 @@
         fill='none'
         class='foreground-stroke transparent-fill'
         gpa:stroke='foreground'/>
-  <path d='M 15 8 o 0 7, -7 7, 0.707106769 o -7 0, -7 -7, 0.707106769 o 0 -7, 7 -7, 0.707106769 o 7 0, 7 7, 0.707106769 z'
+  <circle cx='8' cy='8' r='7'
         id='path1'
         gpa:animation-type='automatic'
         gpa:animation-direction='segment'
