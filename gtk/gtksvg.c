@@ -19561,8 +19561,8 @@ render_shape (Shape        *shape,
 /* {{{ GtkSymbolicPaintable implementation */
 
 /* Note that we are doing this in two passes:
- * 1. Update the current values from animations
- * 2. Do the painting with the current values
+ * 1. Update current values from animations
+ * 2. Paint with the current values
  *
  * This is the easiest way to avoid complications due
  * to the fact that animations can have dependencies
@@ -19572,7 +19572,8 @@ render_shape (Shape        *shape,
  * To handle such dependencies correctly, we compute
  * an *update order* which may be different than the
  * paint order that is determined by the document
- * structure.
+ * structure, and use that order in a separate pass
+ * before we paint.
  */
 static void
 gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
