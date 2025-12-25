@@ -96,6 +96,8 @@
     <file>gtkfishbowl.c</file>
     <file>gtkfishbowl.h</file>
     <file>tiger.node</file>
+    <file>tiger.svg</file>
+    <file>spinning-circle.svg</file>
   </gresource>
   <gresource prefix="/frames">
     <file>frames.ui</file>
