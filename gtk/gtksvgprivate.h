@@ -484,6 +484,8 @@ void           gtk_svg_set_load_time   (GtkSvg                *self,
 void           gtk_svg_set_playing     (GtkSvg                *self,
                                         gboolean               playing);
 
+void           gtk_svg_clear_content   (GtkSvg                *self);
+
 void           gtk_svg_advance         (GtkSvg                *self,
                                         int64_t                current_time);
 

@@ -15570,8 +15570,6 @@ resolve_shape_refs (Shape      *shape,
   resolve_filter_image_refs (shape, data);
 }
 
-static void gtk_svg_clear_content (GtkSvg *self);
-
 static gboolean
 can_add (Shape      *shape,
          GHashTable *waiting)
@@ -20904,17 +20902,13 @@ svg_shape_delete (Shape *shape)
 }
 
 /* }}} */
-/* }}} */
-/* {{{ Public API */
 
-/**
+/*< private>
  * gtk_svg_set_playing:
  * @self: an SVG paintable
  * @playing: the new state
  *
  * Sets whether the paintable is animating its content.
- *
- * Since: 4.22
  */
 void
 gtk_svg_set_playing (GtkSvg   *self,
@@ -20940,15 +20934,13 @@ gtk_svg_set_playing (GtkSvg   *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
 }
 
-/**
+/*< private >
  * gtk_svg_clear_content:
  * @self: an SVG paintable
  *
  * Resets the paintable to the initial, empty state.
- *
- * Since: 4.22
  */
-static void
+void
 gtk_svg_clear_content (GtkSvg *self)
 {
   g_clear_pointer (&self->timeline, timeline_free);
@@ -20970,6 +20962,8 @@ gtk_svg_clear_content (GtkSvg *self)
   self->gpa_version = 0;
 }
 
+/* }}} */
+/* {{{ Public API */
 /* {{{ Constructors */
 
 /**
