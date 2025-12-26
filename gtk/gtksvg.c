@@ -7155,12 +7155,10 @@ svg_href_get_id (SvgHref *href)
 /* }}} */
 /* {{{ Color stops */
 
-#define N_STOP_PROPS N_STOP_ATTRS
-
 typedef struct
 {
-  SvgValue *base[N_STOP_PROPS];
-  SvgValue *current[N_STOP_PROPS];
+  SvgValue *base[N_STOP_ATTRS];
+  SvgValue *current[N_STOP_ATTRS];
 } ColorStop;
 
 static void
@@ -7168,7 +7166,7 @@ color_stop_free (gpointer v)
 {
   ColorStop *stop = v;
 
-  for (unsigned int i = 0; i < N_STOP_PROPS; i++)
+  for (unsigned int i = 0; i < N_STOP_ATTRS; i++)
     {
       g_clear_pointer (&stop->base[i], svg_value_unref);
       g_clear_pointer (&stop->current[i], svg_value_unref);
@@ -16556,7 +16554,7 @@ serialize_color_stop (GString              *s,
   else
     values = stop->base;
 
-  for (unsigned int i = 0; i < N_STOP_PROPS; i++)
+  for (unsigned int i = 0; i < N_STOP_ATTRS; i++)
     {
       indent_for_attr (s, indent);
       g_string_append_printf (s, "%s='", names[i]);
@@ -20088,7 +20086,7 @@ static gboolean
 color_stop_equal (ColorStop *stop1,
                   ColorStop *stop2)
 {
-  for (unsigned int i = 0; i < N_STOP_PROPS; i++)
+  for (unsigned int i = 0; i < N_STOP_ATTRS; i++)
     {
       if (!svg_value_equal (stop1->base[i], stop2->base[i]))
         return FALSE;
