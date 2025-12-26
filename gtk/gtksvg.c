@@ -9543,9 +9543,10 @@ shape_has_attr (ShapeType type,
 }
 
 static gboolean
-shape_can_set_attr (Shape     *shape,
-                    ShapeAttr  attr,
-                    gboolean   in_css)
+shape_can_set_attr (Shape        *shape,
+                    ShapeAttr     attr,
+                    gboolean      in_css,
+                    unsigned int  gpa_version)
 {
   /* For filters, whether an attr can be set depends not just
    * on the type of the shape, but also on which type of filter
@@ -9563,6 +9564,10 @@ shape_can_set_attr (Shape     *shape,
     }
 
   if (!shape_has_attr (shape->type, attr))
+    return FALSE;
+
+  if (g_str_has_prefix (shape_attrs[attr].name, "gpa:") &&
+      gpa_version == 0)
     return FALSE;
 
   return in_css || (shape_attrs[attr].only_css == 0);
@@ -14062,7 +14067,7 @@ parse_style_attr (Shape               *shape,
                                      shape_attr_get_presentation (attr, shape->type),
                                      prop_val);
         }
-      else if (shape_can_set_attr (shape, attr, TRUE) ||
+      else if (shape_can_set_attr (shape, attr, TRUE, data->svg->gpa_version) ||
                (for_stop && attr >= SHAPE_ATTR_STOP_OFFSET &&
                             attr <= SHAPE_ATTR_STOP_OPACITY))
         {
@@ -14139,7 +14144,7 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (shape_attr_lookup (attr_names[i], &attr, shape->type))
         {
-          if (shape_can_set_attr (shape, attr, FALSE))
+          if (shape_can_set_attr (shape, attr, FALSE, data->svg->gpa_version))
             {
               SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
               if (!value)
@@ -15890,14 +15895,14 @@ serialize_shape_attrs (GString              *s,
               (_gtk_bitmask_get (shape->attrs, attr) ||
                !svg_value_equal (value, shape_attr_get_initial_value (attr, shape))))
             {
-              if (shape_can_set_attr (shape, attr, FALSE))
+              if (shape_can_set_attr (shape, attr, FALSE, svg->gpa_version))
                 {
                   indent_for_attr (s, indent);
                   g_string_append_printf (s, "%s='", shape_attr_get_presentation (attr, shape->type));
                   svg_value_print (value, s);
                   g_string_append_c (s, '\'');
                 }
-              else
+              else if (shape_attrs[attr].presentation)
                 {
                   if (style->len > 0)
                     g_string_append (style, "; ");
