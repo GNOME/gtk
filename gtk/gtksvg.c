@@ -15859,9 +15859,6 @@ serialize_shape_attrs (GString              *s,
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
-      if (!shape_has_attr (shape->type, attr))
-        continue;
-
       if (_gtk_bitmask_get (shape->attrs, attr) ||
           (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
         {
