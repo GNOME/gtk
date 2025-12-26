@@ -7679,7 +7679,7 @@ parse_opacity (const char *value)
 static SvgValue *
 parse_stroke_width (const char *value)
 {
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|LENGTH);
+  return svg_number_parse (value, 0, DBL_MAX, NUMBER|LENGTH|PERCENTAGE);
 }
 
 static SvgValue *
@@ -18464,7 +18464,7 @@ shape_create_stroke (Shape        *shape,
   double width, min, max;
   SvgDashArray *dasharray;
 
-  width = svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], 1);
+  width = svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], normalized_diagonal (context->viewport));
   min = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], 1);
   max = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], 1);
 
