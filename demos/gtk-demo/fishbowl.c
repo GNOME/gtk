@@ -54,6 +54,37 @@ create_icon (void)
   return image;
 }
 
+static const char * svg_paths[] = {
+  "/org/gtk/libgtk/icons/process-working.gpa",
+  "/org/gtk/libgtk/icons/find-location-symbolic.svg",
+  "/fishbowl/tiger.svg",
+  "/fishbowl/spinning-circle.svg",
+};
+
+static const char *
+get_random_svg_path (void)
+{
+  return svg_paths [g_random_int_range(0, G_N_ELEMENTS (svg_paths))];
+}
+
+GtkWidget *
+create_svg (void)
+{
+  GtkWidget *image;
+  const char *path;
+  GtkSvg *svg;
+
+  image = gtk_image_new ();
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  path = get_random_svg_path ();
+  svg = gtk_svg_new_from_resource (path);
+  gtk_svg_play (svg);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (svg));
+  g_object_unref (svg);
+
+  return image;
+}
+
 static GtkWidget *
 create_button (void)
 {
@@ -202,6 +233,7 @@ static const struct {
   { "Menubutton", create_menu_button,    NULL },
   { "Tiger",      create_tiger,          NULL },
   { "Graph",      create_graph,          NULL },
+  { "SVG",        create_svg,            NULL },
 };
 
 static int selected_widget_type = -1;

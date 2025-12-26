@@ -1,17 +1,20 @@
-isolation {
-  child: stroke {
-    child: color {
-      bounds: 6 5 98 89;
-      color: rgb(255,0,0);
-    }
-    path: "\
+clip {
+  clip: 0 0 100 100;
+  child: isolation {
+    child: stroke {
+      child: color {
+        bounds: 6 5 98 89;
+        color: rgb(255,0,0);
+      }
+      path: "\
 M 10 10\
 L 100 70\
 L 20 90\
 L 50 9";
-    line-width: 1;
-    line-cap: butt;
-    line-join: miter;
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    isolations: background;
   }
-  isolations: background;
 }

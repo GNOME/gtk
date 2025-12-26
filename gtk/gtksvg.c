@@ -1271,16 +1271,19 @@ add_op (GskPathOperation        op,
         gpointer                user_data)
 {
   SvgPathData *p = user_data;
-  SvgPathOp pop;
+  gsize size;
+  SvgPathOp *pop;
 
   if (op == GSK_PATH_CONIC)
     return FALSE;
 
-  pop.op = op;
-  memset (pop.seg.pts, 0, sizeof (graphene_point_t) * 4);
-  memcpy (pop.seg.pts, pts, sizeof (graphene_point_t) * n_pts);
+  size = svg_path_ops_get_size (&p->ops);
+  svg_path_ops_set_size (&p->ops, size + 1);
+  pop = svg_path_ops_index (&p->ops, size);
 
-  svg_path_ops_append (&p->ops, pop);
+  pop->op = op;
+  memset (pop->seg.pts, 0, sizeof (graphene_point_t) * 4);
+  memcpy (pop->seg.pts, pts, sizeof (graphene_point_t) * n_pts);
 
   return TRUE;
 }
@@ -1296,18 +1299,21 @@ add_arc (float    rx,
          gpointer user_data)
 {
   SvgPathData *p = user_data;
-  SvgPathOp pop;
+  gsize size;
+  SvgPathOp *pop;
 
-  pop.op = SVG_PATH_ARC;
-  pop.arc.rx = rx;
-  pop.arc.ry = ry;
-  pop.arc.x_axis_rotation = x_axis_rotation;
-  pop.arc.large_arc = large_arc;
-  pop.arc.positive_sweep = positive_sweep;
-  pop.arc.x = x;
-  pop.arc.y = y;
+  size = svg_path_ops_get_size (&p->ops);
+  svg_path_ops_set_size (&p->ops, size + 1);
+  pop = svg_path_ops_index (&p->ops, size);
 
-  svg_path_ops_append (&p->ops, pop);
+  pop->op = SVG_PATH_ARC;
+  pop->arc.rx = rx;
+  pop->arc.ry = ry;
+  pop->arc.x_axis_rotation = x_axis_rotation;
+  pop->arc.large_arc = large_arc;
+  pop->arc.positive_sweep = positive_sweep;
+  pop->arc.x = x;
+  pop->arc.y = y;
 
   return TRUE;
 }
@@ -15564,8 +15570,6 @@ resolve_shape_refs (Shape      *shape,
   resolve_filter_image_refs (shape, data);
 }
 
-static void gtk_svg_clear_content (GtkSvg *self);
-
 static gboolean
 can_add (Shape      *shape,
          GHashTable *waiting)
@@ -19555,8 +19559,8 @@ render_shape (Shape        *shape,
 /* {{{ GtkSymbolicPaintable implementation */
 
 /* Note that we are doing this in two passes:
- * 1. Update the current values from animations
- * 2. Do the painting with the current values
+ * 1. Update current values from animations
+ * 2. Paint with the current values
  *
  * This is the easiest way to avoid complications due
  * to the fact that animations can have dependencies
@@ -19566,7 +19570,8 @@ render_shape (Shape        *shape,
  * To handle such dependencies correctly, we compute
  * an *update order* which may be different than the
  * paint order that is determined by the document
- * structure.
+ * structure, and use that order in a separate pass
+ * before we paint.
  */
 static void
 gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
@@ -19607,7 +19612,14 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
 
+  if (self->overflow == GTK_OVERFLOW_HIDDEN)
+    gtk_snapshot_push_clip (snapshot,
+                            &GRAPHENE_RECT_INIT (0, 0, width, height));
+
   render_shape (self->content, &paint_context);
+
+  if (self->overflow == GTK_OVERFLOW_HIDDEN)
+    gtk_snapshot_pop (snapshot);
 
   if (self->advance_after_snapshot)
     {
@@ -19728,6 +19740,7 @@ static void
 gtk_svg_init (GtkSvg *self)
 {
   self->weight = -1;
+  self->overflow = GTK_OVERFLOW_HIDDEN;
   self->state = GTK_SVG_STATE_EMPTY;
   self->load_time = INDEFINITE;
   self->state_change_delay = 0;
@@ -20897,17 +20910,13 @@ svg_shape_delete (Shape *shape)
 }
 
 /* }}} */
-/* }}} */
-/* {{{ Public API */
 
-/**
+/*< private>
  * gtk_svg_set_playing:
  * @self: an SVG paintable
  * @playing: the new state
  *
  * Sets whether the paintable is animating its content.
- *
- * Since: 4.22
  */
 void
 gtk_svg_set_playing (GtkSvg   *self,
@@ -20933,15 +20942,13 @@ gtk_svg_set_playing (GtkSvg   *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
 }
 
-/**
+/*< private >
  * gtk_svg_clear_content:
  * @self: an SVG paintable
  *
  * Resets the paintable to the initial, empty state.
- *
- * Since: 4.22
  */
-static void
+void
 gtk_svg_clear_content (GtkSvg *self)
 {
   g_clear_pointer (&self->timeline, timeline_free);
@@ -20963,6 +20970,49 @@ gtk_svg_clear_content (GtkSvg *self)
   self->gpa_version = 0;
 }
 
+/*< private >
+ * gtk_svg_set_overflow:
+ * @self: an SVG paintable
+ * @overflow: the new overflow value
+ *
+ * Sets whether the rendering will be clipped
+ * to the bounds.
+ *
+ * Clipping is expected for [interface@Gdk.Paintable]
+ * semantics, so this property should not be
+ * changed when using a `GtkSvg` as a paintable.
+ */
+void
+gtk_svg_set_overflow (GtkSvg      *self,
+                      GtkOverflow  overflow)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  if (self->overflow == overflow)
+    return;
+
+  self->overflow = overflow;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+/*< private >
+ * gtk_svg_get_overflow:
+ * @self: an SVG paintable
+ *
+ * Gets the current overflow value.
+ *
+ * Returns: the current overflow value
+ */
+GtkOverflow
+gtk_svg_get_overflow (GtkSvg *self)
+{
+  g_return_val_if_fail (GTK_IS_SVG (self), GTK_OVERFLOW_HIDDEN);
+
+  return self->overflow;
+}
+
+/* }}} */
+/* {{{ Public API */
 /* {{{ Constructors */
 
 /**
