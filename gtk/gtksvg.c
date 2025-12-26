@@ -8342,7 +8342,7 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 1,
     .parse_value = parse_font_weight,
   },
-  { .id = SHAPE_ATTR_FONT_STRECH,
+  { .id = SHAPE_ATTR_FONT_STRETCH,
     .name = "font-stretch",
     .inherited = 1,
     .discrete = 0,
@@ -8691,7 +8691,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_number_new (PANGO_WEIGHT_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_STRECH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
   // rsvg has a default font size of 12, where as firefox has 16
   shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (16.);
   shape_attrs[SHAPE_ATTR_LETTER_SPACING].initial_value = svg_number_new (0.);
@@ -9507,7 +9507,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_FONT_STYLE:
     case SHAPE_ATTR_FONT_VARIANT:
     case SHAPE_ATTR_FONT_WEIGHT:
-    case SHAPE_ATTR_FONT_STRECH:
+    case SHAPE_ATTR_FONT_STRETCH:
     case SHAPE_ATTR_FONT_SIZE:
       return TRUE;
     default:
@@ -18860,7 +18860,7 @@ text_create_layout (Shape            *self,
   pango_font_description_set_style (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STYLE]));
   pango_font_description_set_variant (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_VARIANT]));
   pango_font_description_set_weight (font_desc, svg_number_get (self->current[SHAPE_ATTR_FONT_WEIGHT], 1000.));
-  pango_font_description_set_stretch (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STRECH]));
+  pango_font_description_set_stretch (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STRETCH]));
 
   pango_font_description_set_size (font_desc,
                                    svg_number_get (self->current[SHAPE_ATTR_FONT_SIZE], 1.) *
