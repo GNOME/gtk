@@ -15778,11 +15778,16 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
       a->shape = g_hash_table_lookup (data.shapes, a->href);
       if (!a->shape)
-        gtk_svg_invalid_reference (self,
-                                   "No shape with ID %s (resolving begin or end attribute)",
-                                   a->href);
-
-      g_ptr_array_add (a->shape->animations, a);
+        {
+          gtk_svg_invalid_reference (self,
+                                     "No shape with ID %s (resolving begin or end attribute)",
+                                     a->href);
+          animation_free (a);
+        }
+      else
+        {
+          g_ptr_array_add (a->shape->animations, a);
+        }
     }
 
   /* Faster than stealing the items out of the array one-by-one */
