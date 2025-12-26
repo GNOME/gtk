@@ -8740,8 +8740,8 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_MARKER_START].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_MARKER_MID].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_MARKER_END].initial_value = svg_href_new_none ();
-  shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_number_new (0.25);
-  shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_number_new (1.5);
+  shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_percentage_new (25);
+  shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_percentage_new (150);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_STOP_COLOR].initial_value = svg_paint_new_black ();
   shape_attrs[SHAPE_ATTR_STOP_OPACITY].initial_value = svg_number_new (1);
@@ -9435,9 +9435,6 @@ shape_has_attr (ShapeType type,
              type == SHAPE_ELLIPSE || type == SHAPE_PATH;
     case SHAPE_ATTR_PATH:
       return type == SHAPE_PATH;
-    case SHAPE_ATTR_STROKE_MINWIDTH:
-    case SHAPE_ATTR_STROKE_MAXWIDTH:
-      return FALSE;
     case SHAPE_ATTR_X1:
     case SHAPE_ATTR_Y1:
     case SHAPE_ATTR_X2:
@@ -14212,30 +14209,6 @@ parse_shape_attrs (Shape                *shape,
       g_strfreev (classes);
     }
 
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH))
-    {
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MINWIDTH))
-        {
-          SvgValue *v;
-          if (shape->base[SHAPE_ATTR_STROKE_WIDTH]->class == &SVG_NUMBER_CLASS)
-            v = svg_number_new (0.25 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
-          else
-            v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, 0, v);
-          svg_value_unref (v);
-        }
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MAXWIDTH))
-        {
-          SvgValue *v;
-          if (shape->base[SHAPE_ATTR_STROKE_WIDTH]->class == &SVG_NUMBER_CLASS)
-            v = svg_number_new (1.5 * svg_number_get (shape->base[SHAPE_ATTR_STROKE_WIDTH], 1));
-          else
-            v = svg_value_ref (shape->base[SHAPE_ATTR_STROKE_WIDTH]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, 0, v);
-          svg_value_unref (v);
-        }
-    }
-
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CLIP_PATH) ||
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MASK) ||
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF) ||
@@ -14378,26 +14351,32 @@ parse_shape_gpa_attrs (Shape                *shape,
 
   if (strokewidth_attr)
     {
-      double v[3];
-      unsigned int len;
+      GStrv strv;
+      SvgValue *values[3] = { NULL, };
 
-      if (parse_numbers (strokewidth_attr, " ", 0, DBL_MAX, v, 3, &len) &&
-          len == 3)
+      strv = g_strsplit (strokewidth_attr, " ", 0);
+      if (g_strv_length (strv) == 3)
         {
-          value = svg_number_new (v[0]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, 0, value);
-          svg_value_unref (value);
-          value = svg_number_new (v[1]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
-          svg_value_unref (value);
-          value = svg_number_new (v[2]);
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, 0, value);
-          svg_value_unref (value);
+          values[0] = svg_number_parse (strv[0], 0, DBL_MAX, NUMBER | LENGTH | PERCENTAGE);
+          values[1] = svg_number_parse (strv[1], 0, DBL_MAX, NUMBER | LENGTH | PERCENTAGE);
+          values[2] = svg_number_parse (strv[2], 0, DBL_MAX, NUMBER | LENGTH | PERCENTAGE);
+        }
+
+      if (values[0] && values[1] && values[2])
+        {
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, 0, values[0]);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, values[1]);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, 0, values[2]);
         }
       else
         {
           gtk_svg_invalid_attribute (data->svg, context, "gpa:stroke-width", NULL);
         }
+
+      g_clear_pointer (&values[0], svg_value_unref);
+      g_clear_pointer (&values[1], svg_value_unref);
+      g_clear_pointer (&values[2], svg_value_unref);
+      g_strfreev (strv);
     }
 
   states = ALL_STATES;
@@ -16006,19 +15985,6 @@ serialize_gpa_attrs (GString              *s,
     values = shape->current;
   else
     values = shape->base;
-
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MINWIDTH) ||
-      _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_MAXWIDTH))
-    {
-      indent_for_attr (s, indent);
-      g_string_append (s, "gpa:stroke-width='");
-      svg_value_print (values[SHAPE_ATTR_STROKE_MINWIDTH], s);
-      g_string_append_c (s, ' ');
-      svg_value_print (values[SHAPE_ATTR_STROKE_WIDTH], s);
-      g_string_append_c (s, ' ');
-      svg_value_print (values[SHAPE_ATTR_STROKE_MAXWIDTH], s);
-      g_string_append_c (s, '\'');
-    }
 
   paint = (SvgPaint *) values[SHAPE_ATTR_STROKE];
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) &&
@@ -18465,8 +18431,8 @@ shape_create_stroke (Shape        *shape,
   SvgDashArray *dasharray;
 
   width = svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], normalized_diagonal (context->viewport));
-  min = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], 1);
-  max = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], 1);
+  min = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], width);
+  max = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], width);
 
   width = width_apply_weight (width, min, max, context->weight);
 
@@ -20720,9 +20686,7 @@ svg_shape_attr_get_number (Shape                 *shape,
                            ShapeAttr              attr,
                            const graphene_rect_t *viewport)
 {
-  g_return_val_if_fail (shape_has_attr (shape->type, attr) ||
-                        (attr == SHAPE_ATTR_STROKE_MINWIDTH ||
-                         attr == SHAPE_ATTR_STROKE_MAXWIDTH), 0);
+  g_return_val_if_fail (shape_has_attr (shape->type, attr), 0);
   SvgValue *value;
 
   if (_gtk_bitmask_get (shape->attrs, attr))

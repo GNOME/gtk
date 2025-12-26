@@ -146,7 +146,9 @@ The following attributes can be set on elements that specify a path:
 - `gpa:origin`: Where to start the draw transition. A number between 0 and 1
 - `gpa:attach-to`: The ID of another path to attach to
 - `gpa:attach-pos`: Where to attach the path (similar to `gpa:origin`)
-- `gpa:stroke-width`: 3 space-separated numbers, for the minimum, default and maximum stroke-width. The minimum and maximum are used when applying weight
+- `gpa:stroke-width`: 3 space-separated numbers, for the minimum, default and maximum stroke-width. The minimum and maximum are used when applying weight. Deprecated in favor of the following two attributes.
+- `gpa:stroke-minwidth`: The minimum stroke width. Can be a percentage of the stroke-width.
+- `gpa:stroke-maxwidth`: The maximum stroke width. Can be a percentage of the stroke-width.
 
 ## File names and mime type
 

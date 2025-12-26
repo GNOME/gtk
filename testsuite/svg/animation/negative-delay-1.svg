@@ -16,8 +16,7 @@
           stroke-linecap='round'
           stroke-linejoin='round'
           pathLength='1'
-          d='M 0 0 L 100 100'
-          gpa:stroke-width='0.5 2 3'>
+          d='M 0 0 L 100 100'>
   <set
           id='gpa:out-of-state:line1'
           attributeName='visibility'
@@ -87,8 +86,7 @@
           stroke-linecap='round'
           stroke-linejoin='round'
           pathLength='1'
-          d='M 100 0 L 0 100'
-          gpa:stroke-width='0.5 2 3'>
+          d='M 100 0 L 0 100'>
   <set
           id='gpa:out-of-state:line2'
           attributeName='visibility'

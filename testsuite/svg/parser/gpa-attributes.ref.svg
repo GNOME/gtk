@@ -28,8 +28,9 @@
           stroke='url("#gpa:foreground") rgb(0,0,0)'
           stroke-width='2'
           d='M 0 0 L 100 100'
+          gpa:stroke-minwidth='1'
+          gpa:stroke-maxwidth='3'
           class='accent accent-fill foreground-stroke'
-          gpa:stroke-width='1 2 3'
           gpa:stroke='foreground'
           gpa:fill='accent'>
   </path>
