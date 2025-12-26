@@ -18461,13 +18461,14 @@ shape_create_stroke (Shape        *shape,
                      PaintContext *context)
 {
   GskStroke *stroke;
-  double width;
+  double width, min, max;
   SvgDashArray *dasharray;
 
-  width = width_apply_weight (svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], 1),
-                              svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], 1),
-                              svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], 1),
-                              context->weight);
+  width = svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], 1);
+  min = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], 1);
+  max = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], 1);
+
+  width = width_apply_weight (width, min, max, context->weight);
 
   stroke = gsk_stroke_new (width);
 
