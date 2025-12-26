@@ -8412,7 +8412,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   { .id = SHAPE_ATTR_STOP_COLOR,
     .name = "stop-color",
-    .inherited = 0,
+    .inherited = 1,
     .discrete = 0,
     .has_css = 1,
     .only_css = 0,
@@ -8420,7 +8420,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   { .id = SHAPE_ATTR_STOP_OPACITY,
     .name = "stop-opacity",
-    .inherited = 0,
+    .inherited = 1,
     .discrete = 0,
     .has_css = 1,
     .only_css = 0,
@@ -8470,7 +8470,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   { .id = SHAPE_ATTR_FE_COLOR,
     .name = "flood-color",
-    .inherited = 0,
+    .inherited = 1,
     .discrete = 0,
     .has_css = 1,
     .only_css = 0,
@@ -8478,7 +8478,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   { .id = SHAPE_ATTR_FE_OPACITY,
     .name = "flood-opacity",
-    .inherited = 0,
+    .inherited = 1,
     .discrete = 0,
     .has_css = 1,
     .only_css = 0,
@@ -9484,16 +9484,24 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_MASK_TYPE:
       return type == SHAPE_MASK;
     case SHAPE_ATTR_STOP_OFFSET:
+      return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
-      return FALSE;
+      return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
+             type == SHAPE_USE || type == SHAPE_SVG ||
+             type == SHAPE_MARKER || type == SHAPE_PATTERN ||
+             type == SHAPE_DEFS || type == SHAPE_GROUP;
+    case SHAPE_ATTR_FE_COLOR:
+    case SHAPE_ATTR_FE_OPACITY:
+      return type == SHAPE_FILTER ||
+             type == SHAPE_USE || type == SHAPE_SVG ||
+             type == SHAPE_MARKER || type == SHAPE_PATTERN ||
+             type == SHAPE_DEFS || type == SHAPE_GROUP;
     case SHAPE_ATTR_FE_X:
     case SHAPE_ATTR_FE_Y:
     case SHAPE_ATTR_FE_WIDTH:
     case SHAPE_ATTR_FE_HEIGHT:
     case SHAPE_ATTR_FE_RESULT:
-    case SHAPE_ATTR_FE_COLOR:
-    case SHAPE_ATTR_FE_OPACITY:
     case SHAPE_ATTR_FE_IN:
     case SHAPE_ATTR_FE_IN2:
     case SHAPE_ATTR_FE_STD_DEV:
