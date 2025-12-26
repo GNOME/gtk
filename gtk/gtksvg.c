@@ -30,6 +30,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtksnapshotprivate.h"
+#include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
@@ -99,7 +100,7 @@
  * referring to the `<mask>` element by ID.
  *
  * In animation elements, the parsing of `begin` and `end` attributes
- * is limited, and the `by`, `min` and `max` attributes are not supported.
+ * is limited, and the `min` and `max` attributes are not supported.
  *
  * Lastly, there is only minimal CSS support, and no interactivity.
  *
@@ -3480,6 +3481,7 @@ typedef enum
   COMPOSITE_OPERATOR_ATOP,
   COMPOSITE_OPERATOR_XOR,
   COMPOSITE_OPERATOR_LIGHTER,
+  COMPOSITE_OPERATOR_ARITHMETIC,
 } CompositeOperator;
 
 static const SvgValueClass SVG_COMPOSITE_OPERATOR_CLASS = {
@@ -3498,6 +3500,7 @@ static SvgEnum composite_operator_values[] = {
   { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_ATOP, "atop" },
   { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_XOR, "xor" },
   { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_LIGHTER, "lighter" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_ARITHMETIC, "arithmetic" },
 };
 
 static SvgValue *
@@ -3514,9 +3517,9 @@ svg_composite_operator_parse (const char *string)
 }
 
 static GskPorterDuff
-svg_composite_operator_get_porter_duff (SvgValue *value)
+svg_composite_operator_to_gsk (CompositeOperator op)
 {
-  switch (svg_enum_get (value))
+  switch (op)
     {
     case COMPOSITE_OPERATOR_OVER: return GSK_PORTER_DUFF_SOURCE_OVER_DEST;
     case COMPOSITE_OPERATOR_IN: return GSK_PORTER_DUFF_SOURCE_IN_DEST;
@@ -3524,6 +3527,7 @@ svg_composite_operator_get_porter_duff (SvgValue *value)
     case COMPOSITE_OPERATOR_ATOP: return GSK_PORTER_DUFF_SOURCE_ATOP_DEST;
     case COMPOSITE_OPERATOR_XOR: return GSK_PORTER_DUFF_XOR;
     case COMPOSITE_OPERATOR_LIGHTER: return GSK_PORTER_DUFF_SOURCE; // FIXME
+    case COMPOSITE_OPERATOR_ARITHMETIC: return GSK_PORTER_DUFF_SOURCE; // FIXME
     default:
       g_assert_not_reached ();
     }
@@ -7233,6 +7237,7 @@ static ShapeAttr color_matrix_attrs[] = {
 static ShapeAttr composite_attrs[] = {
   SHAPE_ATTR_FE_X, SHAPE_ATTR_FE_Y, SHAPE_ATTR_FE_WIDTH, SHAPE_ATTR_FE_HEIGHT, SHAPE_ATTR_FE_RESULT,
   SHAPE_ATTR_FE_IN, SHAPE_ATTR_FE_IN2, SHAPE_ATTR_FE_COMPOSITE_OPERATOR,
+  SHAPE_ATTR_FE_COMPOSITE_K1, SHAPE_ATTR_FE_COMPOSITE_K2, SHAPE_ATTR_FE_COMPOSITE_K3, SHAPE_ATTR_FE_COMPOSITE_K4,
 };
 
 static ShapeAttr offset_attrs[] = {
@@ -7280,7 +7285,7 @@ static ShapeAttr dropshadow_attrs[] = {
   SHAPE_ATTR_FE_COLOR, SHAPE_ATTR_FE_OPACITY,
 };
 
-#define N_FILTER_PROPS 11
+#define N_FILTER_PROPS 12
 
 G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (flood_attrs));
 G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (blur_attrs));
@@ -8542,6 +8547,34 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 1,
     .parse_value = svg_composite_operator_parse,
   },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K1,
+    .name = "k1",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K2,
+    .name = "k2",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K3,
+    .name = "k3",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
+  { .id = SHAPE_ATTR_FE_COMPOSITE_K4,
+    .name = "k4",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .parse_value = parse_any_number,
+  },
   { .id = SHAPE_ATTR_FE_DISPLACEMENT_SCALE,
     .name = "scale",
     .inherited = 0,
@@ -8730,6 +8763,10 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_COLOR_MATRIX_TYPE].initial_value = svg_color_matrix_type_new (COLOR_MATRIX_TYPE_MATRIX);
   shape_attrs[SHAPE_ATTR_FE_COLOR_MATRIX_VALUES].initial_value = svg_numbers_new_identity_matrix ();
   shape_attrs[SHAPE_ATTR_FE_COMPOSITE_OPERATOR].initial_value = svg_composite_operator_new (COMPOSITE_OPERATOR_OVER);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K1].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K2].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K3].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_FE_COMPOSITE_K4].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DX].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DISPLACEMENT_SCALE].initial_value = svg_number_new (1);
@@ -9451,6 +9488,10 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_FE_COLOR_MATRIX_TYPE:
     case SHAPE_ATTR_FE_COLOR_MATRIX_VALUES:
     case SHAPE_ATTR_FE_COMPOSITE_OPERATOR:
+    case SHAPE_ATTR_FE_COMPOSITE_K1:
+    case SHAPE_ATTR_FE_COMPOSITE_K2:
+    case SHAPE_ATTR_FE_COMPOSITE_K3:
+    case SHAPE_ATTR_FE_COMPOSITE_K4:
     case SHAPE_ATTR_FE_DISPLACEMENT_SCALE:
     case SHAPE_ATTR_FE_DISPLACEMENT_X:
     case SHAPE_ATTR_FE_DISPLACEMENT_Y:
@@ -17209,21 +17250,38 @@ apply_filter_tree (Shape         *shape,
         case FE_COMPOSITE:
           {
             FilterResult *in, *in2;
-            GskPorterDuff op;
+            CompositeOperator svg_op;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
             in2 = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN2), &subregion, shape, context, source, results);
-            op = svg_composite_operator_get_porter_duff (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_OPERATOR));
+            svg_op = svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_OPERATOR));
 
-            if (op == GSK_PORTER_DUFF_SOURCE_OVER_DEST)
+            if (svg_op == COMPOSITE_OPERATOR_LIGHTER)
+              {
+                gtk_svg_rendering_error (context->svg,
+                                         "lighter composite operator not supported");
+                result = gsk_container_node_new ((GskRenderNode*[]) { in2->node, in->node }, 2);
+              }
+            else if (svg_op == COMPOSITE_OPERATOR_ARITHMETIC)
+              {
+                float k1, k2, k3, k4;
+
+                k1 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K1), 1);
+                k2 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K2), 1);
+                k3 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K3), 1);
+                k4 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K4), 1);
+
+                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, k1, k2, k3, k4);
+              }
+            else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {
                 result = gsk_container_node_new ((GskRenderNode*[]) { in2->node, in->node }, 2);
               }
-            else if (op == GSK_PORTER_DUFF_SOURCE_IN_DEST)
+            else if (svg_op == COMPOSITE_OPERATOR_IN)
               {
                 result = gsk_mask_node_new (in->node, in2->node, GSK_MASK_MODE_ALPHA);
               }
-            else if (op == GSK_PORTER_DUFF_SOURCE_OUT_DEST)
+            else if (svg_op == COMPOSITE_OPERATOR_OUT)
               {
                 result = gsk_mask_node_new (in->node, in2->node, GSK_MASK_MODE_INVERTED_ALPHA);
               }
@@ -17231,6 +17289,9 @@ apply_filter_tree (Shape         *shape,
               {
                 graphene_rect_t mask_bounds;
                 GskRenderNode *comp, *mask, *container;
+                GskPorterDuff op;
+
+                op = svg_composite_operator_to_gsk (svg_op);
 
                 graphene_rect_union (&in->bounds, &in2->bounds, &mask_bounds);
                 mask = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 1 }, &mask_bounds);

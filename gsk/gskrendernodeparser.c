@@ -23,6 +23,7 @@
 
 #include "gskrendernodeparserprivate.h"
 
+#include "gskarithmeticnodeprivate.h"
 #include "gskblendnode.h"
 #include "gskblurnode.h"
 #include "gskbordernode.h"
@@ -4167,6 +4168,24 @@ parse_scale (GtkCssParser *parser,
 }
 
 static gboolean
+parse_four_floats (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      out)
+{
+  for (unsigned int i = 0; i < 4; i++)
+    {
+      double n;
+
+      if (!gtk_css_parser_consume_number (parser, &n))
+        return FALSE;
+
+      ((float *) out)[i] = n;
+    }
+
+  return TRUE;
+}
+
+static gboolean
 parse_channels (GtkCssParser *parser,
                 Context      *context,
                 gpointer      out)
@@ -4241,6 +4260,35 @@ parse_displacement_node (GtkCssParser *parser,
   return result;
 }
 
+static GskRenderNode *
+parse_arithmetic_node (GtkCssParser *parser,
+                       Context      *context)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GskRenderNode *first = NULL;
+  GskRenderNode *second = NULL;
+  float k[4] = { 0, 0, 0, 0 };
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "first", parse_node, clear_node, &first },
+    { "second", parse_node, clear_node, &second },
+    { "k", parse_four_floats, NULL, k },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (first == NULL)
+    first = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+  if (second == NULL)
+    second = create_default_render_node ();
+
+  result = gsk_arithmetic_node_new (&bounds, first, second, k[0], k[1], k[2], k[3]);
+
+  gsk_render_node_unref (first);
+  gsk_render_node_unref (second);
+
+  return result;
+}
 static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
@@ -4286,6 +4334,7 @@ parse_node (GtkCssParser *parser,
     { "composite", parse_composite_node },
     { "isolation", parse_isolation_node },
     { "displacement", parse_displacement_node },
+    { "arithmetic", parse_arithmetic_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4596,6 +4645,7 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_COMPOSITE_NODE:
     case GSK_ISOLATION_NODE:
     case GSK_DISPLACEMENT_NODE:
+    case GSK_ARITHMETIC_NODE:
       {
         GskRenderNode **children;
         gsize i, n_children;
@@ -5801,6 +5851,26 @@ append_two_float_param (Printer    *p,
 }
 
 static void
+append_four_float_param (Printer    *p,
+                         const char *param_name,
+                         float       value1,
+                         float       value2,
+                         float       value3,
+                         float       value4)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  string_append_double (p->str, value1);
+  g_string_append_c (p->str, ' ');
+  string_append_double (p->str, value2);
+  g_string_append_c (p->str, ' ');
+  string_append_double (p->str, value3);
+  g_string_append_c (p->str, ' ');
+  string_append_double (p->str, value4);
+  g_string_append (p->str, ";\n");
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -6584,6 +6654,23 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_two_float_param (p, "max", max->width, max->height);
         append_two_float_param (p, "scale", scale->width, scale->height);
         append_two_float_param (p, "offset", offset->x, offset->y);
+        end_node (p);
+      }
+      break;
+
+    case GSK_ARITHMETIC_NODE:
+      {
+        float k1, k2, k3, k4;
+
+        gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
+
+        start_node (p, "arithmetic", node_name);
+
+        append_rect_param (p, "bounds", &node->bounds);
+        append_four_float_param (p, "k", k1, k2, k3, k4);
+        append_node_param (p, "first", gsk_arithmetic_node_get_first_child (node));
+        append_node_param (p, "second", gsk_arithmetic_node_get_second_child (node));
+
         end_node (p);
       }
       break;
