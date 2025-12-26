@@ -19,42 +19,42 @@
           fill='none'
           stroke='rgb(0,0,255)'
           stroke-width='3'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
           paint-order='markers fill stroke'
           x='40'
           y='40'
           width='125'
           height='75'
-          marker-start='url(#marker1)'
-          marker-mid='url(#marker1)'
-          marker-end='url(#marker1)'
           class='transparent-fill'>
   </rect>
   <rect
           fill='none'
           stroke='rgb(128,0,128)'
           stroke-width='2'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
           paint-order='markers fill stroke'
           x='60'
           y='50'
           width='85'
           height='55'
-          marker-start='url(#marker1)'
-          marker-mid='url(#marker1)'
-          marker-end='url(#marker1)'
           class='transparent-fill'>
   </rect>
   <rect
           fill='none'
           stroke='rgb(255,0,0)'
           stroke-width='1'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
           paint-order='markers fill stroke'
           x='80'
           y='60'
           width='45'
           height='35'
-          marker-start='url(#marker1)'
-          marker-mid='url(#marker1)'
-          marker-end='url(#marker1)'
           class='transparent-fill'>
   </rect>
 </svg>

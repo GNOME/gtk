@@ -18,12 +18,12 @@
   <line
           fill='none'
           stroke='rgb(0,0,255)'
+          marker-start='url(#m1)'
+          marker-end='url(#m1)'
           x1='50'
           y1='50'
           x2='200'
           y2='150'
-          marker-start='url(#m1)'
-          marker-end='url(#m1)'
           class='transparent-fill'>
   </line>
 </svg>

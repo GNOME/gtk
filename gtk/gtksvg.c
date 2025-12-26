@@ -7818,12 +7818,6 @@ typedef struct
 } ShapeAttribute;
 
 static ShapeAttribute shape_attrs[] = {
-  { .id = SHAPE_ATTR_LANG,
-    .name = "lang",
-    .inherited = 1,
-    .discrete = 0,
-    .parse_value = parse_language,
-  },
   { .id = SHAPE_ATTR_DISPLAY,
     .name = "display",
     .inherited = 0,
@@ -7856,14 +7850,6 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = parse_opacity,
   },
-  { .id = SHAPE_ATTR_OVERFLOW,
-    .name = "overflow",
-    .inherited = 0,
-    .discrete = 1,
-    .presentation = 1,
-    .only_css = 0,
-    .parse_value = svg_overflow_parse,
-  },
   { .id = SHAPE_ATTR_FILTER,
     .name = "filter",
     .inherited = 0,
@@ -7895,14 +7881,6 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 1,
     .only_css = 0,
     .parse_value = svg_mask_parse,
-  },
-  { .id = SHAPE_ATTR_MASK_TYPE,
-    .name = "mask-type",
-    .inherited = 0,
-    .discrete = 1,
-    .presentation = 1,
-    .only_css = 0,
-    .parse_value = svg_mask_type_parse,
   },
   { .id = SHAPE_ATTR_FILL,
     .name = "fill",
@@ -7992,6 +7970,30 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
+  { .id = SHAPE_ATTR_MARKER_START,
+    .name = "marker-start",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_href_parse_url,
+  },
+  { .id = SHAPE_ATTR_MARKER_MID,
+    .name = "marker-mid",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_href_parse_url,
+  },
+  { .id = SHAPE_ATTR_MARKER_END,
+    .name = "marker-end",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_href_parse_url,
+  },
   { .id = SHAPE_ATTR_PAINT_ORDER,
     .name = "paint-order",
     .inherited = 1,
@@ -8016,14 +8018,6 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 1,
     .parse_value = svg_isolation_parse,
   },
-  { .id = SHAPE_ATTR_HREF,
-    .name = "href",
-    .inherited = 0,
-    .discrete = 1,
-    .presentation = 0,
-    .only_css = 0,
-    .parse_value = svg_href_parse,
-  },
   { .id = SHAPE_ATTR_PATH_LENGTH,
     .name = "pathLength",
     .inherited = 0,
@@ -8032,6 +8026,22 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = parse_positive_length,
     .parse_for_values = parse_any_length,
+  },
+  { .id = SHAPE_ATTR_HREF,
+    .name = "href",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 0,
+    .only_css = 0,
+    .parse_value = svg_href_parse,
+  },
+  { .id = SHAPE_ATTR_OVERFLOW,
+    .name = "overflow",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 0,
+    .parse_value = svg_overflow_parse,
   },
   { .id = SHAPE_ATTR_PATH,
     .name = "d",
@@ -8207,6 +8217,14 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
   },
+  { .id = SHAPE_ATTR_MASK_TYPE,
+    .name = "mask-type",
+    .inherited = 0,
+    .discrete = 1,
+    .presentation = 1,
+    .only_css = 0,
+    .parse_value = svg_mask_type_parse,
+  },
   { .id = SHAPE_ATTR_VIEW_BOX,
     .name = "viewBox",
     .inherited = 0,
@@ -8255,34 +8273,18 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_orient_parse,
   },
-  { .id = SHAPE_ATTR_MARKER_START,
-    .name = "marker-start",
+  { .id = SHAPE_ATTR_LANG,
+    .name = "lang",
     .inherited = 1,
-    .discrete = 0,
+    .discrete = 1,
     .presentation = 0,
-    .only_css = 0,
-    .parse_value = svg_href_parse_url,
-  },
-  { .id = SHAPE_ATTR_MARKER_MID,
-    .name = "marker-mid",
-    .inherited = 1,
-    .discrete = 0,
-    .presentation = 0,
-    .only_css = 0,
-    .parse_value = svg_href_parse_url,
-  },
-  { .id = SHAPE_ATTR_MARKER_END,
-    .name = "marker-end",
-    .inherited = 1,
-    .discrete = 0,
-    .presentation = 0,
-    .only_css = 0,
-    .parse_value = svg_href_parse_url,
+    .parse_value = parse_language,
   },
   { .id = SHAPE_ATTR_TEXT_ANCHOR,
     .name = "text-anchor",
     .inherited = 1,
     .discrete = 1,
+    .presentation = 0,
     .parse_value = svg_text_anchor_parse,
   },
   { .id = SHAPE_ATTR_DX,
@@ -8318,10 +8320,25 @@ static ShapeAttribute shape_attrs[] = {
     .presentation = 1,
     .parse_value = svg_writing_mode_parse,
   },
+  { .id = SHAPE_ATTR_LETTER_SPACING,
+    .name = "letter-spacing",
+    .inherited = 1,
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = parse_letter_spacing, // TODO: more units & string sizes
+  },
+  { .id = SHAPE_ATTR_TEXT_DECORATION,
+    .name = "text-decoration",
+    .inherited = 1, // rsvg doesn't inherit, firefox does
+    .discrete = 0,
+    .presentation = 1,
+    .parse_value = svg_text_decoration_parse,
+  },
   { .id = SHAPE_ATTR_FONT_FAMILY,
     .name = "font-family",
     .inherited = 1,
-    .discrete = 0,
+    .discrete = 1,
+    .presentation = 1,
     .parse_value = svg_string_new,
   },
   { .id = SHAPE_ATTR_FONT_STYLE,
@@ -8334,7 +8351,7 @@ static ShapeAttribute shape_attrs[] = {
   { .id = SHAPE_ATTR_FONT_VARIANT,
     .name = "font-variant",
     .inherited = 1,
-    .discrete = 0,
+    .discrete = 1,
     .presentation = 1,
     .parse_value = svg_font_variant_parse,
   },
@@ -8356,21 +8373,8 @@ static ShapeAttribute shape_attrs[] = {
     .name = "font-size",
     .inherited = 1,
     .discrete = 0,
+    .presentation = 1,
     .parse_value = parse_length_percentage, // TODO: more units & string sizes
-  },
-  { .id = SHAPE_ATTR_LETTER_SPACING,
-    .name = "letter-spacing",
-    .inherited = 1,
-    .discrete = 0,
-    .presentation = 1,
-    .parse_value = parse_letter_spacing, // TODO: more units & string sizes
-  },
-  { .id = SHAPE_ATTR_TEXT_DECORATION,
-    .name = "text-decoration",
-    .inherited = 1, // rsvg doesn't inherit, firefox does
-    .discrete = 0,
-    .presentation = 1,
-    .parse_value = svg_text_decoration_parse,
   },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
@@ -9403,9 +9407,6 @@ shape_has_attr (ShapeType type,
 {
   switch ((unsigned int) attr)
     {
-    case SHAPE_ATTR_LANG:
-    case SHAPE_ATTR_DISPLAY:
-      return TRUE;
     case SHAPE_ATTR_HREF:
       return type == SHAPE_USE || type == SHAPE_IMAGE ||
              type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
@@ -9430,7 +9431,8 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
     case SHAPE_ATTR_PATH_LENGTH:
-      return type == SHAPE_LINE ||
+      return type == SHAPE_LINE || type == SHAPE_POLYLINE ||
+             type == SHAPE_POLYGON ||
              type == SHAPE_RECT || type == SHAPE_CIRCLE ||
              type == SHAPE_ELLIPSE || type == SHAPE_PATH;
     case SHAPE_ATTR_PATH:
@@ -9439,7 +9441,7 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_Y1:
     case SHAPE_ATTR_X2:
     case SHAPE_ATTR_Y2:
-      return type== SHAPE_LINE || type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT;
+      return type== SHAPE_LINE || type == SHAPE_LINEAR_GRADIENT;
     case SHAPE_ATTR_POINTS:
       return type == SHAPE_POLYLINE || type == SHAPE_POLYGON;
     case SHAPE_ATTR_SPREAD_METHOD:
@@ -9449,6 +9451,8 @@ shape_has_attr (ShapeType type,
              type == SHAPE_FILTER;
     case SHAPE_ATTR_BOUND_UNITS:
       return type == SHAPE_MASK || type == SHAPE_PATTERN || type == SHAPE_FILTER;
+    case SHAPE_ATTR_MASK_TYPE:
+      return type == SHAPE_MASK;
     case SHAPE_ATTR_STOP_OFFSET:
     case SHAPE_ATTR_STOP_COLOR:
     case SHAPE_ATTR_STOP_OPACITY:
@@ -9503,22 +9507,33 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_MARKER_UNITS:
     case SHAPE_ATTR_MARKER_ORIENT:
       return type == SHAPE_MARKER;
+    case SHAPE_ATTR_OVERFLOW:
+      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_MARKER;
+    /* path painting properties */
+    case SHAPE_ATTR_FILL:
+    case SHAPE_ATTR_FILL_OPACITY:
+    case SHAPE_ATTR_FILL_RULE:
+    case SHAPE_ATTR_STROKE:
+    case SHAPE_ATTR_STROKE_OPACITY:
+    case SHAPE_ATTR_STROKE_WIDTH:
+    case SHAPE_ATTR_STROKE_LINECAP:
+    case SHAPE_ATTR_STROKE_LINEJOIN:
+    case SHAPE_ATTR_STROKE_MITERLIMIT:
+    case SHAPE_ATTR_STROKE_DASHARRAY:
+    case SHAPE_ATTR_STROKE_DASHOFFSET:
+    case SHAPE_ATTR_PAINT_ORDER:
     case SHAPE_ATTR_MARKER_START:
     case SHAPE_ATTR_MARKER_MID:
     case SHAPE_ATTR_MARKER_END:
-      return type == SHAPE_RECT || type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
-             type == SHAPE_PATH || type == SHAPE_POLYLINE ||
-             type == SHAPE_POLYGON || type == SHAPE_LINE || type == SHAPE_GROUP ||
-             type == SHAPE_USE;
-    case SHAPE_ATTR_OVERFLOW:
-      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_MARKER;
+      return type == SHAPE_LINE || type == SHAPE_POLYLINE ||
+             type == SHAPE_POLYGON || type == SHAPE_RECT ||
+             type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
+             type == SHAPE_PATH || type == SHAPE_TEXT ||
+             type == SHAPE_TSPAN || type == SHAPE_GROUP ||
+             type == SHAPE_USE || type == SHAPE_SVG ||
+             type == SHAPE_MARKER || type == SHAPE_PATTERN;
+    /* text properties */
     case SHAPE_ATTR_TEXT_ANCHOR:
-      /* text-anchor behaviour on <tspan> is *wierd*,
-       * so we'll follow rsvg and only support it for
-       * <text> nodes.
-       */
-      return type == SHAPE_TEXT || type == SHAPE_GROUP ||
-             type == SHAPE_USE;
     case SHAPE_ATTR_DX:
     case SHAPE_ATTR_DY:
     case SHAPE_ATTR_UNICODE_BIDI:
@@ -9526,16 +9541,22 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_WRITING_MODE:
     case SHAPE_ATTR_LETTER_SPACING:
     case SHAPE_ATTR_TEXT_DECORATION:
-      return type == SHAPE_TEXT || type == SHAPE_TSPAN;
+    case SHAPE_ATTR_LANG:
     case SHAPE_ATTR_FONT_FAMILY:
     case SHAPE_ATTR_FONT_STYLE:
     case SHAPE_ATTR_FONT_VARIANT:
     case SHAPE_ATTR_FONT_WEIGHT:
     case SHAPE_ATTR_FONT_STRETCH:
     case SHAPE_ATTR_FONT_SIZE:
-      return TRUE;
+      return type == SHAPE_TEXT || type == SHAPE_TSPAN ||
+             type == SHAPE_GROUP || type == SHAPE_USE ||
+             type == SHAPE_MARKER || type == SHAPE_CLIP_PATH ||
+             type == SHAPE_MASK || type == SHAPE_DEFS ||
+             type == SHAPE_SVG || type == SHAPE_PATTERN;
     default:
-      return type != SHAPE_LINEAR_GRADIENT && type != SHAPE_RADIAL_GRADIENT;
+      return type != SHAPE_LINEAR_GRADIENT &&
+             type != SHAPE_RADIAL_GRADIENT &&
+             type != SHAPE_FILTER;
     }
 }
 
@@ -12014,7 +12035,7 @@ shape_init_current_values (Shape          *shape,
 {
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
-      if (shape_has_attr (shape->type, attr) || shape_attrs[attr].inherited)
+      if (shape_has_attr (shape->type, attr))
         {
           SvgValue *value;
 
@@ -19571,19 +19592,20 @@ static void
 render_shape (Shape        *shape,
               PaintContext *context)
 {
+  if (context->op == RENDERING && shape_types[shape->type].never_rendered)
+    return;
+
+  if (shape->type == SHAPE_DEFS || shape->type == SHAPE_LINEAR_GRADIENT || shape->type == SHAPE_RADIAL_GRADIENT)
+    return;
+
   if (shape->type != SHAPE_MASK && shape->type != SHAPE_CLIP_PATH)
     {
-      if ((context->op == RENDERING || context->op == MASKING ||
+      if ((context->op == RENDERING ||
+           context->op == MASKING ||
            context->op == CLIPPING) &&
           svg_enum_get (shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
         return;
     }
-
-  if (shape->type == SHAPE_DEFS)
-    return;
-
-  if (context->op == RENDERING && shape_types[shape->type].never_rendered)
-    return;
 
   context->depth++;
 

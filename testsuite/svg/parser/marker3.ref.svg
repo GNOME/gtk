@@ -17,14 +17,14 @@
   <rect
           fill='none'
           stroke='rgb(0,0,255)'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
           paint-order='markers fill stroke'
           x='150'
           y='100'
           width='125'
           height='75'
-          marker-start='url(#marker1)'
-          marker-mid='url(#marker1)'
-          marker-end='url(#marker1)'
           class='transparent-fill'>
   </rect>
 </svg>
