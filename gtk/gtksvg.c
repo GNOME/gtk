@@ -8892,18 +8892,6 @@ shape_attr_lookup (const char *name,
         }
     }
 
-  /*
-   * In theory, lang & xml:lang are different attributes and if
-   * both are set, lang should be preferred. In an effort of not
-   * polluting the attr array anymore than it already is, we treat
-   * xml:lang as an alias to lang.
-   */
-  if (strcmp (name, "xml:lang") == 0)
-    {
-      *attr = SHAPE_ATTR_LANG;
-      return TRUE;
-    }
-
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
       if (strcmp (name, shape_attrs[i].name) == 0)
@@ -14605,20 +14593,25 @@ skip_element (ParserData          *data,
 }
 
 static void
-replace_xlink_href (const char **attr_names,
-                    const char **attr_values)
+replace_deprecated_attrs (const char **attr_names,
+                          const char **attr_values)
 {
   int href_idx = -1;
   int xlink_idx = -1;
+  int lang_idx = -1;
+  int xmllang_idx = -1;
   int i;
 
   for (i = 0; attr_names[i]; i++)
     {
       if (strcmp (attr_names[i], "href") == 0)
         href_idx = i;
-
-      if (strcmp (attr_names[i], "xlink:href") == 0)
+      else if (strcmp (attr_names[i], "xlink:href") == 0)
         xlink_idx = i;
+      else if (strcmp (attr_names[i], "lang") == 0)
+        lang_idx = i;
+      else if (strcmp (attr_names[i], "xml:lang") == 0)
+        xmllang_idx = i;
     }
 
   if (href_idx != -1 && xlink_idx != -1)
@@ -14627,11 +14620,32 @@ replace_xlink_href (const char **attr_names,
       attr_names[xlink_idx] = attr_names[i - 1];
       attr_values[xlink_idx] = attr_names[i - 1];
       attr_names[i - 1] = NULL;
+      attr_values[i - 1] = NULL;
+      if (lang_idx == i)
+        lang_idx--;
+      if (xmllang_idx == i)
+        xmllang_idx--;
+      i--;
     }
   else if (xlink_idx != -1)
     {
       /* We've found xlink:href, but not href. Replace */
       attr_names[xlink_idx] = "href";
+    }
+
+  if (lang_idx != -1 && xmllang_idx != -1)
+    {
+      /* We've found both. Drop xml:lang */
+      attr_names[xmllang_idx] = attr_names[i - 1];
+      attr_values[xmllang_idx] = attr_names[i - 1];
+      attr_names[i - 1] = NULL;
+      attr_values[i - 1] = NULL;
+      i--;
+    }
+  else if (xmllang_idx != -1)
+    {
+      /* We've found xml:lang, but not lang. Replace */
+      attr_names[xmllang_idx] = "lang";
     }
 }
 
@@ -14652,7 +14666,7 @@ start_element_cb (GMarkupParseContext  *context,
   if (data->skip.to)
     return;
 
-  replace_xlink_href (attr_names, attr_values);
+  replace_deprecated_attrs (attr_names, attr_values);
 
   if (strcmp (element_name, "metadata") == 0)
     {
