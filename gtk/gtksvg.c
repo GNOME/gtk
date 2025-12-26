@@ -11042,6 +11042,14 @@ shape_get_base_value (Shape        *shape,
     {
       if (!_gtk_bitmask_get (shape->attrs, attr))
         {
+          if (shape->type == SHAPE_RADIAL_GRADIENT)
+            {
+              if (attr == SHAPE_ATTR_FX)
+                return shape_get_base_value (shape, parent, SHAPE_ATTR_CX, idx);
+              else if (attr == SHAPE_ATTR_FY)
+                return shape_get_base_value (shape, parent, SHAPE_ATTR_CY, idx);
+            }
+
           if (parent && shape_attrs[attr].inherited)
             return parent->current[attr];
           else
