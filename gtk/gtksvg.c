@@ -11746,7 +11746,7 @@ resolve_value (Shape           *shape,
     }
   else if (svg_value_is_inherit (value))
     {
-      if (context->parent)
+      if (context->parent && shape_has_attr (context->parent->type, attr))
         return svg_value_ref (context->parent->current[attr]);
       else
         return svg_value_ref (shape_attr_get_initial_value (attr, shape));
