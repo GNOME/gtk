@@ -239,6 +239,8 @@ typedef enum
 #define N_STOP_ATTRS (LAST_STOP_ATTR + 1 - FIRST_STOP_ATTR)
 #define N_FILTER_ATTRS (LAST_FILTER_ATTR + 1 - FIRST_FILTER_ATTR)
 
+#define N_ATTRS (LAST_FILTER_ATTR + 1 - FIRST_SHAPE_ATTR)
+
 typedef enum
 {
   GPA_TRANSITION_NONE,
@@ -307,8 +309,8 @@ struct _Shape
   gboolean computed_for_use;
   gboolean valid_bounds;
 
-  SvgValue *base[N_SHAPE_ATTRS];
-  SvgValue *current[N_SHAPE_ATTRS];
+  SvgValue *base[N_ATTRS];
+  SvgValue *current[N_ATTRS];
 
   GPtrArray *shapes;
   GPtrArray *animations;

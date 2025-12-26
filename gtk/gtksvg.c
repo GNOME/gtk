@@ -10626,7 +10626,9 @@ struct _Animation
   /* shape, attr, and idx together identify the attribute
    * that this animation modifies. idx is only relevant
    * for gradients and filters, where it identifies the
-   * index of the color stop or filter primitive.
+   * index of the color stop or filter primitive. It is
+   * shifted by one, so we can use the value use for the
+   * shapes' own attributes without clashes.
    */
   Shape *shape;
   unsigned int attr;
@@ -11000,7 +11002,7 @@ shape_get_current_value (Shape        *shape,
                          unsigned int  attr,
                          unsigned int  idx)
 {
-  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
+  if (idx == 0)
     {
       return shape->current[attr];
     }
@@ -11009,8 +11011,9 @@ shape_get_current_value (Shape        *shape,
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
+      g_assert (idx <= shape->color_stops->len);
 
-      stop = g_ptr_array_index (shape->color_stops, idx);
+      stop = g_ptr_array_index (shape->color_stops, idx - 1);
 
       return stop->current[color_stop_attr_idx (attr)];
     }
@@ -11019,8 +11022,9 @@ shape_get_current_value (Shape        *shape,
       FilterPrimitive *f;
 
       g_assert (shape_types[shape->type].has_filters);
+      g_assert (idx <= shape->filters->len);
 
-      f = g_ptr_array_index (shape->filters, idx);
+      f = g_ptr_array_index (shape->filters, idx - 1);
 
       return f->current[filter_attr_idx (f->type, attr)];
     }
@@ -11034,7 +11038,7 @@ shape_get_base_value (Shape        *shape,
                       ShapeAttr     attr,
                       unsigned int  idx)
 {
-  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
+  if (idx == 0)
     {
       if (!_gtk_bitmask_get (shape->attrs, attr))
         {
@@ -11062,18 +11066,31 @@ shape_get_base_value (Shape        *shape,
       ColorStop *stop;
 
       g_assert (shape_types[shape->type].has_color_stops);
+      g_assert (idx <= shape->color_stops->len);
 
-      stop = g_ptr_array_index (shape->color_stops, idx);
+      stop = g_ptr_array_index (shape->color_stops, idx - 1);
 
-      return stop->base[color_stop_attr_idx (attr)];
+      if (svg_value_is_inherit (stop->base[color_stop_attr_idx (attr)]))
+        {
+          return shape_get_current_value (shape, attr, 0);
+        }
+      else if (svg_value_is_initial (shape->base[color_stop_attr_idx (attr)]))
+        {
+          return shape_attr_get_initial_value (attr, shape);
+        }
+      else
+        {
+          return stop->base[color_stop_attr_idx (attr)];
+        }
     }
   else if (FIRST_FILTER_ATTR <= attr && attr <= LAST_FILTER_ATTR)
     {
       FilterPrimitive *f;
 
       g_assert (shape_types[shape->type].has_filters);
+      g_assert (idx <= shape->filters->len);
 
-      f = g_ptr_array_index (shape->filters, idx);
+      f = g_ptr_array_index (shape->filters, idx - 1);
 
       return f->base[filter_attr_idx (f->type, attr)];
     }
@@ -11087,7 +11104,7 @@ shape_set_base_value (Shape        *shape,
                       unsigned int  idx,
                       SvgValue     *value)
 {
-  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
+  if (idx == 0)
     {
       g_clear_pointer (&shape->base[attr], svg_value_unref);
       shape->base[attr] = svg_value_ref (value);
@@ -11095,13 +11112,16 @@ shape_set_base_value (Shape        *shape,
     }
   else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
-      ColorStop *stop;
+      if (shape_types[shape->type].has_color_stops)
+        {
+          ColorStop *stop;
 
-      g_assert (shape_types[shape->type].has_color_stops);
+          g_assert (idx <= shape->color_stops->len);
 
-      stop = g_ptr_array_index (shape->color_stops, idx);
-      g_clear_pointer (&stop->base[color_stop_attr_idx (attr)], svg_value_unref);
-      stop->base[color_stop_attr_idx (attr)] = svg_value_ref (value);
+          stop = g_ptr_array_index (shape->color_stops, idx - 1);
+          g_clear_pointer (&stop->base[color_stop_attr_idx (attr)], svg_value_unref);
+          stop->base[color_stop_attr_idx (attr)] = svg_value_ref (value);
+        }
     }
   else if (FIRST_FILTER_ATTR <= attr && attr <= LAST_FILTER_ATTR)
     {
@@ -11109,7 +11129,7 @@ shape_set_base_value (Shape        *shape,
 
       g_assert (shape_types[shape->type].has_filters);
 
-      f = g_ptr_array_index (shape->filters, idx);
+      f = g_ptr_array_index (shape->filters, idx - 1);
       g_clear_pointer (&f->base[filter_attr_idx (f->type, attr)], svg_value_unref);
       f->base[filter_attr_idx (f->type, attr)] = svg_value_ref (value);
       f->attrs |= BIT (filter_attr_idx (f->type, attr));
@@ -11124,7 +11144,7 @@ shape_set_current_value (Shape        *shape,
                          unsigned int  idx,
                          SvgValue     *value)
 {
-  if (FIRST_SHAPE_ATTR <= attr && attr <= LAST_SHAPE_ATTR)
+  if (idx == 0)
     {
       if (value)
         svg_value_ref (value);
@@ -11137,7 +11157,7 @@ shape_set_current_value (Shape        *shape,
 
       g_assert (shape_types[shape->type].has_color_stops);
 
-      stop = g_ptr_array_index (shape->color_stops, idx);
+      stop = g_ptr_array_index (shape->color_stops, idx - 1);
 
       if (value)
         svg_value_ref (value);
@@ -11150,7 +11170,7 @@ shape_set_current_value (Shape        *shape,
 
       g_assert (shape_types[shape->type].has_filters);
 
-      f = g_ptr_array_index (shape->filters, idx);
+      f = g_ptr_array_index (shape->filters, idx - 1);
 
       if (value)
         svg_value_ref (value);
@@ -12040,7 +12060,7 @@ static void
 shape_init_current_values (Shape          *shape,
                            ComputeContext *context)
 {
-  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
       if (shape_has_attr (shape->type, attr))
         {
@@ -12062,8 +12082,8 @@ shape_init_current_values (Shape          *shape,
               SvgValue *value;
 
               value = resolve_value (shape, context, attr,
-                                     shape_get_base_value (shape, NULL, attr, idx));
-              shape_set_current_value (shape, attr, idx, value);
+                                     shape_get_base_value (shape, context->parent, attr, idx + 1));
+              shape_set_current_value (shape, attr, idx + 1, value);
               svg_value_unref (value);
             }
         }
@@ -12081,8 +12101,8 @@ shape_init_current_values (Shape          *shape,
               SvgValue *value;
 
               value = resolve_value (shape, context, attr,
-                                     shape_get_base_value (shape, NULL, attr, idx));
-              shape_set_current_value (shape, attr, idx, value);
+                                     shape_get_base_value (shape, context->parent, attr, idx + 1));
+              shape_set_current_value (shape, attr, idx + 1, value);
               svg_value_unref (value);
             }
         }
@@ -13370,9 +13390,9 @@ parse_base_animation_attrs (Animation            *a,
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */
       if (has_ancestor (context, "stop"))
-        a->idx = data->current_shape->color_stops->len - 1;
+        a->idx = data->current_shape->color_stops->len;
       else if (has_ancestor (context, "filter"))
-        a->idx = data->current_shape->filters->len - 1;
+        a->idx = data->current_shape->filters->len;
     }
   else
     {
@@ -14055,13 +14075,13 @@ parse_style_attr (Shape               *shape,
   if (for_stop)
     {
       g_assert (shape->color_stops->len > 0);
-      idx = shape->color_stops->len - 1;
+      idx = shape->color_stops->len;
     }
   else if (for_filter)
     {
       g_assert (shape->filters->len > 0);
-      idx = shape->filters->len - 1;
-      FilterPrimitive *fp = g_ptr_array_index (shape->filters, idx);
+      idx = shape->filters->len;
+      FilterPrimitive *fp = g_ptr_array_index (shape->filters, idx - 1);
       filter_type = fp->type;
     }
 
@@ -14947,7 +14967,7 @@ start_element_cb (GMarkupParseContext  *context,
               value = shape_attr_parse_value (SHAPE_ATTR_STOP_OFFSET, attr_values[i]);
               if (value)
                 {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OFFSET, idx, value);
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OFFSET, idx + 1, value);
                   svg_value_unref (value);
                 }
               else
@@ -14959,7 +14979,7 @@ start_element_cb (GMarkupParseContext  *context,
               value = shape_attr_parse_value (SHAPE_ATTR_STOP_COLOR, attr_values[i]);
               if (value)
                 {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_COLOR, idx, value);
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_COLOR, idx + 1, value);
                   svg_value_unref (value);
                 }
               else
@@ -14971,7 +14991,7 @@ start_element_cb (GMarkupParseContext  *context,
               value = shape_attr_parse_value (SHAPE_ATTR_STOP_OPACITY, attr_values[i]);
               if (value)
                 {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OPACITY, idx, value);
+                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OPACITY, idx + 1, value);
                   svg_value_unref (value);
                 }
               else
@@ -15043,7 +15063,7 @@ start_element_cb (GMarkupParseContext  *context,
               handled |= BIT (i);
               if (value)
                 {
-                  shape_set_base_value (data->current_shape, attr, idx, value);
+                  shape_set_base_value (data->current_shape, attr, idx + 1, value);
                   svg_value_unref (value);
                 }
               else
@@ -15069,7 +15089,7 @@ start_element_cb (GMarkupParseContext  *context,
 
           if (values->n_values != initial->n_values)
             {
-              shape_set_base_value (data->current_shape, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES, idx, (SvgValue *) initial);
+              shape_set_base_value (data->current_shape, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES, idx + 1, (SvgValue *) initial);
               if (values_set)
                 {
                   /* If this wasn't user-provided, we quietly correct the initial
@@ -16600,7 +16620,7 @@ serialize_color_stop (GString              *s,
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
-      if (a->idx == idx)
+      if (a->idx == idx + 1)
         {
           serialize_animation (s, svg, indent + 2, a, flags);
         }
@@ -16616,7 +16636,7 @@ serialize_filter_begin (GString              *s,
                         int                   indent,
                         Shape                *shape,
                         FilterPrimitive      *f,
-                        unsigned int          filter_idx,
+                        unsigned int          idx,
                         GtkSvgSerializeFlags  flags)
 {
   SvgValue **values;
@@ -16647,8 +16667,7 @@ serialize_filter_begin (GString              *s,
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
-      if (a->idx == filter_idx &&
-          FIRST_FILTER_ATTR <= a->attr && a->attr <= LAST_FILTER_ATTR)
+      if (a->idx == idx + 1)
         serialize_animation (s, svg, indent + 2, a, flags);
     }
 }
@@ -16741,8 +16760,7 @@ serialize_shape (GString              *s,
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
-      if (a->idx == 0 &&
-          FIRST_SHAPE_ATTR <= a->attr && a->attr <= LAST_SHAPE_ATTR)
+      if (a->idx == 0)
         serialize_animation (s, svg, indent, a, flags);
     }
 
@@ -18282,15 +18300,30 @@ paint_radial_gradient (Shape                 *gradient,
   SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
   SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
-  graphene_point_init (&start_center,
-                       svg_number_get (fx, context->viewport->size.width),
-                       svg_number_get (fy, context->viewport->size.height));
-  start_radius = svg_number_get (fr, normalized_diagonal (context->viewport));
+  if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+    {
+      graphene_point_init (&start_center,
+                           svg_number_get (fx, 1),
+                           svg_number_get (fy, 1));
+      start_radius = svg_number_get (fr, 1);
 
-  graphene_point_init (&end_center,
-                       svg_number_get (cx, context->viewport->size.width),
-                       svg_number_get (cy, context->viewport->size.height));
-  end_radius = svg_number_get (r, normalized_diagonal (context->viewport));
+      graphene_point_init (&end_center,
+                           svg_number_get (cx, 1),
+                           svg_number_get (cy, 1));
+      end_radius = svg_number_get (r, 1);
+    }
+  else
+    {
+      graphene_point_init (&start_center,
+                           svg_number_get (fx, context->viewport->size.width),
+                           svg_number_get (fy, context->viewport->size.height));
+      start_radius = svg_number_get (fr, normalized_diagonal (context->viewport));
+
+      graphene_point_init (&end_center,
+                           svg_number_get (cx, context->viewport->size.width),
+                           svg_number_get (cy, context->viewport->size.height));
+      end_radius = svg_number_get (r, normalized_diagonal (context->viewport));
+    }
 
   g = gradient_get_gsk_gradient (gradient, context);
 
