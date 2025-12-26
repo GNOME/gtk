@@ -7461,13 +7461,6 @@ filter_attr_index (FilterPrimitiveType type,
 }
 
 static gboolean
-filter_primitive_has_attr (FilterPrimitiveType type,
-                           ShapeAttr           attr)
-{
-  return filter_attr_index (type, attr) != -1;
-}
-
-static gboolean
 filter_attr_lookup (FilterPrimitiveType  type,
                     const char          *name,
                     ShapeAttr           *attr)
@@ -7810,8 +7803,8 @@ typedef struct
   ShapeAttr id;
   unsigned int inherited : 1;
   unsigned int discrete  : 1;
-  unsigned int presentation : 1; /* whether to accept initial/inherit as values */
-  unsigned int only_css : 1;     /* whether this can be set outside of style */
+  unsigned int has_css : 1;
+  unsigned int only_css : 1;
   SvgValue * (* parse_value)      (const char *value);
   SvgValue * (* parse_for_values) (const char *value);
   SvgValue *initial_value;
@@ -7822,7 +7815,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "display",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_display_parse,
   },
@@ -7830,7 +7823,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "visibility",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_visibility_parse,
   },
@@ -7838,7 +7831,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "transform",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_transform_parse,
   },
@@ -7846,7 +7839,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "opacity",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_opacity,
   },
@@ -7854,7 +7847,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "filter",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_filter_parse,
   },
@@ -7862,7 +7855,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "clip-path",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_clip_parse,
   },
@@ -7870,7 +7863,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "clip-rule",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_fill_rule_parse,
   },
@@ -7878,7 +7871,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "mask",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_mask_parse,
   },
@@ -7886,7 +7879,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "fill",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_paint_parse,
   },
@@ -7894,7 +7887,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "fill-opacity",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_opacity,
   },
@@ -7902,7 +7895,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "fill-rule",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_fill_rule_parse,
   },
@@ -7910,7 +7903,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_paint_parse,
   },
@@ -7918,7 +7911,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke-opacity",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_opacity,
   },
@@ -7926,7 +7919,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke-width",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_stroke_width,
   },
@@ -7934,7 +7927,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke-linecap",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_linecap_parse,
   },
@@ -7942,7 +7935,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke-linejoin",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_linejoin_parse,
   },
@@ -7950,7 +7943,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke-miterlimit",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_miterlimit,
   },
@@ -7958,7 +7951,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke-dasharray",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_dash_array_parse,
   },
@@ -7966,7 +7959,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stroke-dashoffset",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -7974,7 +7967,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "marker-start",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_href_parse_url,
   },
@@ -7982,7 +7975,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "marker-mid",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_href_parse_url,
   },
@@ -7990,7 +7983,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "marker-end",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_href_parse_url,
   },
@@ -7998,7 +7991,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "paint-order",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_paint_order_parse,
   },
@@ -8006,7 +7999,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "mix-blend-mode",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 1,
     .parse_value = svg_blend_mode_parse,
   },
@@ -8014,7 +8007,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "isolation",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 1,
     .parse_value = svg_isolation_parse,
   },
@@ -8022,7 +8015,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "pathLength",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_positive_length,
     .parse_for_values = parse_any_length,
@@ -8031,7 +8024,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "href",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_href_parse,
   },
@@ -8039,7 +8032,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "overflow",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_overflow_parse,
   },
@@ -8047,7 +8040,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "d",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_path_parse,
   },
@@ -8055,7 +8048,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "cx",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8063,7 +8056,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "cy",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8071,7 +8064,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "r",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8080,7 +8073,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "x",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8088,7 +8081,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "y",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8096,7 +8089,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "width",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8105,7 +8098,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "height",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8114,7 +8107,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "rx",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8123,7 +8116,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "ry",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8132,7 +8125,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "x1",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8140,7 +8133,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "y1",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8148,7 +8141,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "x2",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8156,7 +8149,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "y2",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8164,7 +8157,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "points",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_points_parse,
   },
@@ -8172,7 +8165,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "spreadMethod",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_spread_method_parse,
   },
@@ -8180,7 +8173,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "gradientUnits",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_coord_units_parse,
   },
@@ -8188,7 +8181,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "maskUnits",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_coord_units_parse,
   },
@@ -8196,7 +8189,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "fx",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8204,7 +8197,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "fy",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8212,7 +8205,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "fr",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8221,7 +8214,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "mask-type",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_mask_type_parse,
   },
@@ -8229,7 +8222,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "viewBox",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_view_box_parse,
   },
@@ -8237,7 +8230,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "preserveAspectRatio",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_content_fit_parse,
   },
@@ -8245,7 +8238,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "refX",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_ref_x,
   },
@@ -8253,7 +8246,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "refY",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_ref_y,
   },
@@ -8261,7 +8254,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "markerUnits",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_marker_units_parse,
   },
@@ -8269,7 +8262,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "orient",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_orient_parse,
   },
@@ -8277,110 +8270,112 @@ static ShapeAttribute shape_attrs[] = {
     .name = "lang",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 0,
+    .has_css = 0,
     .parse_value = parse_language,
   },
   { .id = SHAPE_ATTR_TEXT_ANCHOR,
     .name = "text-anchor",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 0,
+    .has_css = 1,
     .parse_value = svg_text_anchor_parse,
   },
   { .id = SHAPE_ATTR_DX,
     .name = "dx",
     .inherited = 0,
     .discrete = 0,
+    .has_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_DY,
     .name = "dy",
     .inherited = 0,
     .discrete = 0,
+    .has_css = 0,
     .parse_value = parse_length_percentage,
   },
   { .id = SHAPE_ATTR_UNICODE_BIDI,
     .name = "unicode-bidi",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_unicode_bidi_parse,
   },
   { .id = SHAPE_ATTR_DIRECTION,
     .name = "direction",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_direction_parse,
   },
   { .id = SHAPE_ATTR_WRITING_MODE,
     .name = "writing-mode",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_writing_mode_parse,
   },
   { .id = SHAPE_ATTR_LETTER_SPACING,
     .name = "letter-spacing",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = parse_letter_spacing, // TODO: more units & string sizes
   },
   { .id = SHAPE_ATTR_TEXT_DECORATION,
     .name = "text-decoration",
     .inherited = 1, // rsvg doesn't inherit, firefox does
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_text_decoration_parse,
   },
   { .id = SHAPE_ATTR_FONT_FAMILY,
     .name = "font-family",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_string_new,
   },
   { .id = SHAPE_ATTR_FONT_STYLE,
     .name = "font-style",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_font_style_parse,
   },
   { .id = SHAPE_ATTR_FONT_VARIANT,
     .name = "font-variant",
     .inherited = 1,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_font_variant_parse,
   },
   { .id = SHAPE_ATTR_FONT_WEIGHT,
     .name = "font-weight",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = parse_font_weight,
   },
   { .id = SHAPE_ATTR_FONT_STRETCH,
     .name = "font-stretch",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_font_stretch_parse,
   },
   { .id = SHAPE_ATTR_FONT_SIZE,
     .name = "font-size",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = parse_length_percentage, // TODO: more units & string sizes
   },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_stroke_width,
   },
@@ -8388,7 +8383,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "gpa:stroke-maxwidth",
     .inherited = 1,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_stroke_width,
   },
@@ -8396,7 +8391,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "offset",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_offset,
   },
@@ -8404,7 +8399,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stop-color",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = svg_paint_parse,
   },
@@ -8412,7 +8407,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "stop-opacity",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 1,
     .only_css = 0,
     .parse_value = parse_opacity,
   },
@@ -8420,7 +8415,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "x",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8428,7 +8423,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "y",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_length_percentage,
   },
@@ -8436,7 +8431,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "width",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8445,7 +8440,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "height",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = parse_positive_length_percentage,
     .parse_for_values = parse_length_percentage,
@@ -8454,7 +8449,7 @@ static ShapeAttribute shape_attrs[] = {
     .name = "result",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 0,
+    .has_css = 0,
     .only_css = 0,
     .parse_value = svg_string_new,
   },
@@ -8462,203 +8457,203 @@ static ShapeAttribute shape_attrs[] = {
     .name = "flood-color",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = svg_paint_parse_rgba,
   },
   { .id = SHAPE_ATTR_FE_OPACITY,
     .name = "flood-opacity",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 1,
     .parse_value = parse_opacity,
   },
   { .id = SHAPE_ATTR_FE_IN,
     .name = "in",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_filter_primitive_ref_parse,
   },
   { .id = SHAPE_ATTR_FE_IN2,
     .name = "in2",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_filter_primitive_ref_parse,
   },
   { .id = SHAPE_ATTR_FE_STD_DEV,
     .name = "stdDeviation",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_number_optional_number,
   },
   { .id = SHAPE_ATTR_FE_DX,
     .name = "dx",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_length,
   },
   { .id = SHAPE_ATTR_FE_DY,
     .name = "dy",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_length,
   },
   { .id = SHAPE_ATTR_FE_BLUR_EDGE_MODE,
     .name = "edgeMode",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_edge_mode_parse,
   },
   { .id = SHAPE_ATTR_FE_BLEND_MODE,
     .name = "mode",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_blend_mode_parse,
   },
   { .id = SHAPE_ATTR_FE_BLEND_COMPOSITE,
     .name = "no-composite",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_blend_composite_parse,
   },
   { .id = SHAPE_ATTR_FE_COLOR_MATRIX_TYPE,
     .name = "type",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_color_matrix_type_parse,
   },
   { .id = SHAPE_ATTR_FE_COLOR_MATRIX_VALUES,
     .name = "values",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_numbers_parse,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_OPERATOR,
     .name = "operator",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_composite_operator_parse,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_K1,
     .name = "k1",
     .inherited = 0,
-    .discrete = 1,
-    .presentation = 1,
+    .discrete = 0,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_K2,
     .name = "k2",
     .inherited = 0,
-    .discrete = 1,
-    .presentation = 1,
+    .discrete = 0,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_K3,
     .name = "k3",
     .inherited = 0,
-    .discrete = 1,
-    .presentation = 1,
+    .discrete = 0,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_COMPOSITE_K4,
     .name = "k4",
     .inherited = 0,
-    .discrete = 1,
-    .presentation = 1,
+    .discrete = 0,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_DISPLACEMENT_SCALE,
     .name = "scale",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_DISPLACEMENT_X,
     .name = "xChannelSelector",
     .inherited = 0,
-    .discrete = 1,
-    .presentation = 1,
+    .discrete = 0,
+    .has_css = 0,
     .parse_value = svg_rgba_channel_parse,
   },
   { .id = SHAPE_ATTR_FE_DISPLACEMENT_Y,
     .name = "yChannelSelector",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_rgba_channel_parse,
   },
   { .id = SHAPE_ATTR_FE_IMAGE_HREF,
     .name = "href",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_href_parse,
   },
   { .id = SHAPE_ATTR_FE_IMAGE_CONTENT_FIT,
     .name = "preserveAspectRatio",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_content_fit_parse,
   },
   { .id = SHAPE_ATTR_FE_FUNC_TYPE,
     .name = "type",
     .inherited = 0,
     .discrete = 1,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_component_transfer_type_parse,
   },
   { .id = SHAPE_ATTR_FE_FUNC_VALUES,
     .name = "tableValues",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = svg_numbers_parse,
   },
   { .id = SHAPE_ATTR_FE_FUNC_SLOPE,
     .name = "slope",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_FUNC_INTERCEPT,
     .name = "intercept",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_FUNC_AMPLITUDE,
     .name = "amplitude",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_FUNC_EXPONENT,
     .name = "exponent",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
   { .id = SHAPE_ATTR_FE_FUNC_OFFSET,
     .name = "offset",
     .inherited = 0,
     .discrete = 0,
-    .presentation = 1,
+    .has_css = 0,
     .parse_value = parse_any_number,
   },
 };
@@ -8872,10 +8867,7 @@ shape_attr_lookup (const char *name,
           *attr = SHAPE_ATTR_BOUND_UNITS;
           return TRUE;
         }
-    }
 
-  if (type == SHAPE_FILTER)
-    {
       /* Check for these first to prevent name clashes
        * from messing things up.
        */
@@ -8950,13 +8942,10 @@ static SvgValue *
 shape_attr_parse_value (ShapeAttr   attr,
                         const char *value)
 {
-  if (shape_attrs[attr].presentation)
-    {
-      if (strcmp (value, "inherit") == 0)
-        return svg_inherit_new ();
-      else if (strcmp (value, "initial") == 0)
-        return svg_initial_new ();
-    }
+  if (strcmp (value, "inherit") == 0)
+    return svg_inherit_new ();
+  else if (strcmp (value, "initial") == 0)
+    return svg_initial_new ();
 
   return shape_attrs[attr].parse_value (value);
 }
@@ -8965,13 +8954,10 @@ static SvgValue *
 shape_attr_parse_for_values (ShapeAttr   attr,
                              const char *value)
 {
-  if (shape_attrs[attr].presentation)
-    {
-      if (strcmp (value, "inherit") == 0)
-        return svg_inherit_new ();
-      else if (strcmp (value, "initial") == 0)
-        return svg_initial_new ();
-    }
+  if (strcmp (value, "inherit") == 0)
+    return svg_inherit_new ();
+  else if (strcmp (value, "initial") == 0)
+    return svg_initial_new ();
 
   if (shape_attrs[attr].parse_for_values)
     return shape_attrs[attr].parse_for_values (value);
@@ -9558,37 +9544,6 @@ shape_has_attr (ShapeType type,
              type != SHAPE_RADIAL_GRADIENT &&
              type != SHAPE_FILTER;
     }
-}
-
-static gboolean
-shape_can_set_attr (Shape        *shape,
-                    ShapeAttr     attr,
-                    gboolean      in_css,
-                    unsigned int  gpa_version)
-{
-  /* For filters, whether an attr can be set depends not just
-   * on the type of the shape, but also on which type of filter
-   * we are adding to. Since this is only called during parsing
-   * when filters are added one-by-one, we can just look at
-   * the most recently added one to decide.
-   */
-
-  if (shape->type == SHAPE_FILTER &&
-      shape->filters->len > 0 &&
-      FIRST_FILTER_ATTR <= attr && attr <= LAST_FILTER_ATTR)
-    {
-      FilterPrimitive *f = g_ptr_array_index (shape->filters, shape->filters->len - 1);
-      return filter_primitive_has_attr (f->type, attr);
-    }
-
-  if (!shape_has_attr (shape->type, attr))
-    return FALSE;
-
-  if (g_str_has_prefix (shape_attrs[attr].name, "gpa:") &&
-      gpa_version == 0)
-    return FALSE;
-
-  return in_css || (shape_attrs[attr].only_css == 0);
 }
 
 static GskPath *
@@ -14008,9 +13963,30 @@ consume_to_semicolon (const char **p)
   return g_strndup (q, *p - q);
 }
 
+static gboolean
+attr_lookup (const char          *name,
+             gboolean             for_stop,
+             gboolean             for_filter,
+             ShapeType            type,
+             FilterPrimitiveType  filter_type,
+             ShapeAttr           *attr)
+{
+  if (for_filter)
+    return filter_attr_lookup (filter_type, name, attr);
+
+  if (!shape_attr_lookup (name, attr, type))
+    return FALSE;
+
+  if (for_stop)
+    return FIRST_STOP_ATTR <= *attr && *attr <= LAST_STOP_ATTR;
+
+  return shape_has_attr (type, *attr);
+}
+
 static void
 parse_style_attr (Shape               *shape,
                   gboolean             for_stop,
+                  gboolean             for_filter,
                   const char          *style_attr,
                   ParserData          *data,
                   GMarkupParseContext *context)
@@ -14022,11 +13998,19 @@ parse_style_attr (Shape               *shape,
   SvgValue *value;
   unsigned int idx = 0;
   gboolean is_marker_shorthand;
+  FilterPrimitiveType filter_type = 0;
 
   if (for_stop)
     {
       g_assert (shape->color_stops->len > 0);
       idx = shape->color_stops->len - 1;
+    }
+  else if (for_filter)
+    {
+      g_assert (shape->filters->len > 0);
+      idx = shape->filters->len - 1;
+      FilterPrimitive *fp = g_ptr_array_index (shape->filters, idx);
+      filter_type = fp->type;
     }
 
   while (*p)
@@ -14034,6 +14018,7 @@ parse_style_attr (Shape               *shape,
       is_marker_shorthand = FALSE;
       skip_whitespace (&p);
       name = consume_ident (&p);
+
       if (!name)
         {
           gtk_svg_invalid_attribute (data->svg, context,
@@ -14048,7 +14033,8 @@ parse_style_attr (Shape               *shape,
           attr = SHAPE_ATTR_MARKER_START;
           is_marker_shorthand = TRUE;
         }
-      else if (!shape_attr_lookup (name, &attr, shape->type))
+      else if (!attr_lookup (name, for_stop, for_filter, shape->type, filter_type, &attr) ||
+               !shape_attrs[attr].has_css)
         {
           gtk_svg_invalid_attribute (data->svg, context,
                                      "style", "while parsing 'style': unsupported property '%s'",
@@ -14085,9 +14071,7 @@ parse_style_attr (Shape               *shape,
                                      shape_attr_get_presentation (attr, shape->type),
                                      prop_val);
         }
-      else if (shape_can_set_attr (shape, attr, TRUE, data->svg->gpa_version) ||
-               (for_stop && attr >= SHAPE_ATTR_STOP_OFFSET &&
-                            attr <= SHAPE_ATTR_STOP_OPACITY))
+      else
         {
           shape_set_base_value (shape, attr, idx, value);
           if (is_marker_shorthand)
@@ -14095,14 +14079,6 @@ parse_style_attr (Shape               *shape,
               shape_set_base_value (shape, SHAPE_ATTR_MARKER_MID, idx, value);
               shape_set_base_value (shape, SHAPE_ATTR_MARKER_END, idx, value);
             }
-          svg_value_unref (value);
-        }
-      else
-        {
-          gtk_svg_invalid_attribute (data->svg, context,
-                                     "style", "'%s' is not an attribute of <%s>",
-                                     shape_attr_get_presentation (attr, shape->type),
-                                     shape_types[shape->type].name);
           svg_value_unref (value);
         }
 
@@ -14162,7 +14138,7 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (shape_attr_lookup (attr_names[i], &attr, shape->type))
         {
-          if (shape_can_set_attr (shape, attr, FALSE, data->svg->gpa_version))
+          if (shape_has_attr (shape->type, attr))
             {
               SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
               if (!value)
@@ -14185,7 +14161,7 @@ parse_shape_attrs (Shape                *shape,
     }
 
   if (style_attr)
-    parse_style_attr (shape, FALSE, style_attr, data, context);
+    parse_style_attr (shape, FALSE, FALSE, style_attr, data, context);
 
   if (class_attr && *class_attr)
     {
@@ -14957,7 +14933,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       if (style_attr)
-        parse_style_attr (data->current_shape, TRUE, style_attr, data, context);
+        parse_style_attr (data->current_shape, TRUE, FALSE, style_attr, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -15026,7 +15002,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       if (style_attr)
-        parse_style_attr (data->current_shape, FALSE, style_attr, data, context);
+        parse_style_attr (data->current_shape, FALSE, TRUE, style_attr, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -15895,14 +15871,14 @@ serialize_shape_attrs (GString              *s,
               (_gtk_bitmask_get (shape->attrs, attr) ||
                !svg_value_equal (value, shape_attr_get_initial_value (attr, shape))))
             {
-              if (shape_can_set_attr (shape, attr, FALSE, svg->gpa_version))
+              if (!shape_attrs[attr].only_css)
                 {
                   indent_for_attr (s, indent);
                   g_string_append_printf (s, "%s='", shape_attr_get_presentation (attr, shape->type));
                   svg_value_print (value, s);
                   g_string_append_c (s, '\'');
                 }
-              else if (shape_attrs[attr].presentation)
+              else
                 {
                   if (style->len > 0)
                     g_string_append (style, "; ");
