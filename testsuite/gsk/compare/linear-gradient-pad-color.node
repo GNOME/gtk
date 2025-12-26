@@ -1,0 +1,6 @@
+linear-gradient {
+  bounds: 0 -25 50 100;
+  start: 0 0;
+  end: 0 50;
+  stops: 0 rgb(255,0,0), 0 rgb(0,0,0), 1 rgb(0,0,0), 1 rgb(0,0,255);
+}

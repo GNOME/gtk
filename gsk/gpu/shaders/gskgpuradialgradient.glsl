@@ -110,8 +110,13 @@ get_gradient_color (float offset)
         offset = 1.0 - fract (offset);
       break;
     case GSK_REPEAT_PAD:
-      offset = clamp (offset, 0.0, 1.0);
+      if (offset <= 0.0)
+        return _color0;
+      else if (offset >= 1.0)
+        return _color6;
       break;
+    default:
+      return vec4(1.0, 0.0, 0.8, 1.0);
     }
 
   if (offset <= _offsets0[3])
