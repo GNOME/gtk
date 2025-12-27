@@ -11740,23 +11740,43 @@ static SvgValue *
 resolve_value (Shape           *shape,
                ComputeContext  *context,
                ShapeAttr       attr,
+               unsigned int    idx,
                SvgValue       *value)
 {
   if (svg_value_is_initial (value))
     {
-      return svg_value_ref (shape_attr_get_initial_value (attr, shape));
+      if (idx > 0 && shape->type == SHAPE_FILTER)
+        return svg_value_ref (filter_attr_get_initial_value (shape, g_ptr_array_index (shape->filters, idx - 1), attr));
+      else
+        return svg_value_ref (shape_attr_get_initial_value (attr, shape));
     }
   else if (svg_value_is_inherit (value))
     {
-      if (context->parent && shape_has_attr (context->parent->type, attr))
+      if (idx > 0)
+        return svg_value_ref (shape->current[attr]);
+      else if (context->parent && shape_has_attr (context->parent->type, attr))
         return svg_value_ref (context->parent->current[attr]);
       else
         return svg_value_ref (shape_attr_get_initial_value (attr, shape));
     }
   else if (svg_value_is_current (value))
     {
-      /* FIXME index for color stops */
-      return svg_value_ref (shape->current[attr]);
+      if (idx > 0)
+        {
+          if (shape->type == SHAPE_FILTER)
+            {
+              FilterPrimitive *fp = g_ptr_array_index (shape->filters, idx - 1);
+
+              return svg_value_ref (fp->current[filter_attr_idx (fp->type, attr)]);
+            }
+          else
+            {
+              ColorStop *cs = g_ptr_array_index (shape->color_stops, idx - 1);
+              return svg_value_ref (cs->current[color_stop_attr_idx (attr)]);
+            }
+        }
+      else
+        return svg_value_ref (shape->current[attr]);
     }
   else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
     {
@@ -11830,12 +11850,12 @@ compute_animation_motion_value (Animation      *a,
     {
       if (frame + 1 == a->n_frames)
         {
-          value = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+          value = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
         }
       else if (a->frames[0].value)
         {
-          SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
-          SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->frames[frame + 1].value);
+          SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
+          SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame + 1].value);
           value = svg_value_interpolate (v1, v2, frame_t);
           svg_value_unref (v1);
           svg_value_unref (v2);
@@ -11884,7 +11904,7 @@ compute_value_at_time (Animation      *a,
   int64_t frame_start, frame_end;
 
   if (a->type == ANIMATION_TYPE_SET)
-    return resolve_value (a->shape, context, a->attr, a->frames[0].value);
+    return resolve_value (a->shape, context, a->attr, a->idx, a->frames[0].value);
 
   find_current_cycle_and_frame (a, context->svg, context->current_time,
                                 &rep, &frame, &frame_t, &frame_start, &frame_end);
@@ -11895,7 +11915,7 @@ compute_value_at_time (Animation      *a,
         frame = frame + 1;
 
       if (a->attr != SHAPE_ATTR_TRANSFORM || a->type != ANIMATION_TYPE_MOTION)
-        return resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+        return resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
       else
         return compute_animation_motion_value (a, rep, frame, 0, context);
     }
@@ -11909,11 +11929,11 @@ compute_value_at_time (Animation      *a,
       SvgValue *ival;
 
       if (frame + 1 == a->n_frames)
-        ival = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+        ival = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
       else
         {
-          SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
-          SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->frames[frame + 1].value);
+          SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
+          SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame + 1].value);
           ival = svg_value_interpolate (v1, v2, frame_t);
           svg_value_unref (v1);
           svg_value_unref (v2);
@@ -11924,14 +11944,14 @@ compute_value_at_time (Animation      *a,
                                 "Failed to interpolate %s value (animation %s)",
                                 shape_attr_get_presentation (a->attr, a->shape->type),
                                 a->id);
-          ival = resolve_value (a->shape, context, a->attr, a->frames[frame].value);
+          ival = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
         }
 
       if (a->accumulate == ANIMATION_ACCUMULATE_SUM && rep > 0)
         {
           SvgValue *aval;
 
-          SvgValue *v = resolve_value (a->shape, context, a->attr, a->frames[a->n_frames - 1].value);
+          SvgValue *v = resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
           aval = svg_value_accumulate (ival, v, rep);
           svg_value_unref (v);
 
@@ -11983,7 +12003,7 @@ compute_value_for_animation (Animation      *a,
           if (!(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
             {
               dbg_print ("values", "%s: frozen (fast)\n", a->id);
-              return resolve_value (a->shape, context, a->attr, a->frames[a->n_frames - 1].value);
+              return resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
             }
           else
            {
@@ -12076,7 +12096,7 @@ shape_init_current_values (Shape          *shape,
         {
           SvgValue *value;
 
-          value = resolve_value (shape, context, attr,
+          value = resolve_value (shape, context, attr, 0,
                                  shape_get_base_value (shape, context->parent, attr, 0));
           shape_set_current_value (shape, attr, 0, value);
           svg_value_unref (value);
@@ -12091,7 +12111,7 @@ shape_init_current_values (Shape          *shape,
             {
               SvgValue *value;
 
-              value = resolve_value (shape, context, attr,
+              value = resolve_value (shape, context, attr, idx + 1,
                                      shape_get_base_value (shape, context->parent, attr, idx + 1));
               shape_set_current_value (shape, attr, idx + 1, value);
               svg_value_unref (value);
@@ -12110,7 +12130,7 @@ shape_init_current_values (Shape          *shape,
               ShapeAttr attr = filter_types[f->type].attrs[i];
               SvgValue *value;
 
-              value = resolve_value (shape, context, attr,
+              value = resolve_value (shape, context, attr, idx + 1,
                                      shape_get_base_value (shape, context->parent, attr, idx + 1));
               shape_set_current_value (shape, attr, idx + 1, value);
               svg_value_unref (value);
