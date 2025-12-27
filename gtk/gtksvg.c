@@ -16869,6 +16869,8 @@ serialize_shape (GString              *s,
               g_assert_not_reached ();
             }
         }
+      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
+      return;
     }
   else if (shape_types[shape->type].has_shapes)
     {

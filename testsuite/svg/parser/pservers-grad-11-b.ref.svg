@@ -39,8 +39,7 @@
             x='10'
             y='165'
             font-family='Arial'
-            font-size='12'>Radial gradient on fill of rectangle
-    </text>
+            font-size='12'>Radial gradient on fill of rectangle</text>
     <radialGradient
             id='Grad2'
             cx='295'
@@ -74,8 +73,7 @@
             x='230'
             y='165'
             font-family='Arial'
-            font-size='12'>Radial gradient on stroke of rectangle
-    </text>
+            font-size='12'>Radial gradient on stroke of rectangle</text>
     <radialGradient
             id='Grad3'
             cx='225'
@@ -100,14 +98,12 @@
             x='10'
             y='210'
             font-family='Arial'
-            font-size='50'>Gradient on text fill
-    </text>
+            font-size='50'>Gradient on text fill</text>
     <text
             x='10'
             y='225'
             font-family='Arial'
-            font-size='12'>Radial gradient on text, black to yellow
-    </text>
+            font-size='12'>Radial gradient on text, black to yellow</text>
     <radialGradient
             id='Grad4'
             cx='225'
@@ -134,14 +130,12 @@
             x='10'
             y='270'
             font-family='Arial'
-            font-size='45'>Gradient on text stroke
-    </text>
+            font-size='45'>Gradient on text stroke</text>
     <text
             x='10'
             y='285'
             font-family='Arial'
-            font-size='12'>Radial gradient on stroke of text, black to red
-    </text>
+            font-size='12'>Radial gradient on stroke of text, black to red</text>
   </g>
   <g
           font-family='SVGFreeSansASCII,sans-serif'
@@ -151,8 +145,7 @@
             fill='rgb(0,0,0)'
             stroke='none'
             x='10'
-            y='340'>$Revision: 1.8 $
-    </text>
+            y='340'>$Revision: 1.8 $</text>
   </g>
   <rect
           id='test-frame'

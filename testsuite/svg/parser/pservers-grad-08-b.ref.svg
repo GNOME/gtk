@@ -34,8 +34,7 @@
               x='20'
               y='70'
               font-family='Blocky'
-              font-size='68'>Gradient on fill
-      </text>
+              font-size='68'>Gradient on fill</text>
       <text
               fill='none'
               stroke='url(#Gradient)'
@@ -43,20 +42,17 @@
               x='20'
               y='160'
               font-family='Blocky'
-              font-size='55'>Gradient on stroke
-      </text>
+              font-size='55'>Gradient on stroke</text>
     </g>
     <g
             font-family='SVGFreeSansASCII,sans-serif'
             font-size='28'>
       <text
               x='40'
-              y='145'>Linear gradient on filled text
-      </text>
+              y='145'>Linear gradient on filled text</text>
       <text
               x='30'
-              y='280'>Linear gradient on stroke of text
-      </text>
+              y='280'>Linear gradient on stroke of text</text>
     </g>
   </g>
   <g
@@ -67,8 +63,7 @@
             fill='rgb(0,0,0)'
             stroke='none'
             x='10'
-            y='340'>$Revision: 1.13 $
-    </text>
+            y='340'>$Revision: 1.13 $</text>
   </g>
   <rect
           id='test-frame'
