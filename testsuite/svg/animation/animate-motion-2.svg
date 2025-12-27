@@ -19,11 +19,11 @@
           transform='translate(270, 40) rotate(0, 0, 0)'
           fill='rgb(255,0,0)'
           r='5'>
-  <animateMotion
-          begin='0ms'
-          dur='10000ms'
-          fill='freeze'
-          gpa:status='done'
-          path='M 30 160 L 270 40'/>
+    <animateMotion
+            begin='0ms'
+            dur='10000ms'
+            fill='freeze'
+            gpa:status='done'
+            path='M 30 160 L 270 40'/>
   </circle>
 </svg>

@@ -12256,6 +12256,7 @@ compute_current_values_for_shape (Shape          *shape,
 
       for (Shape *sh = shape->first; sh; sh = sh->next)
         compute_current_values_for_shape (sh, context);
+
       context->parent = parent;
     }
 
@@ -16801,7 +16802,7 @@ serialize_shape (GString              *s,
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
       if (a->idx == 0)
-        serialize_animation (s, svg, indent, a, flags);
+        serialize_animation (s, svg, indent + 2, a, flags);
     }
 
   if (shape->type == SHAPE_TEXT || shape->type == SHAPE_TSPAN)

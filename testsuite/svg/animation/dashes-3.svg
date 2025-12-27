@@ -14,24 +14,24 @@
           stroke='rgb(0,0,0)'
           stroke-width='1'
           d='M 30 160 L 270 40'>
-  <animate
-          id='dashes'
-          attributeName='stroke-dasharray'
-          begin='0ms'
-          dur='10000ms'
-          from='1 1'
-          to='10 10'
-          keyTimes='0; 1'
-          gpa:status='done'/>
-  <animate
-          id='dashes'
-          attributeName='stroke-dasharray'
-          begin='10000ms'
-          dur='1000ms'
-          from='10 10'
-          to='none'
-          keyTimes='0; 1'
-          gpa:status='done'/>
+    <animate
+            id='dashes'
+            attributeName='stroke-dasharray'
+            begin='0ms'
+            dur='10000ms'
+            from='1 1'
+            to='10 10'
+            keyTimes='0; 1'
+            gpa:status='done'/>
+    <animate
+            id='dashes'
+            attributeName='stroke-dasharray'
+            begin='10000ms'
+            dur='1000ms'
+            from='10 10'
+            to='none'
+            keyTimes='0; 1'
+            gpa:status='done'/>
   </path>
   <circle
           fill='rgb(255,0,0)'

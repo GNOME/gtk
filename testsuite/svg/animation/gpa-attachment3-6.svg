@@ -17,76 +17,76 @@
           stroke-dashoffset='-1'
           pathLength='1'
           d='M 10 10 L 90 90'>
-  <set
-          id='gpa:out-of-state:line'
-          attributeName='visibility'
-          begin='gpa:states(0).end; 0ms'
-          end='gpa:states(0).begin'
-          to='hidden'
-          gpa:status='running'
-          gpa:computed-simple-duration='indefinite'
-          gpa:current-start-time='6000ms'/>
-  <animate
-          id='gpa:transition:fade-in:stroke-dasharray:line'
-          attributeName='stroke-dasharray'
-          begin='gpa:states(0).begin'
-          dur='1000ms'
-          repeatDur='1000ms'
-          fill='freeze'
-          from='0 2'
-          to='1 0'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          gpa:status='done'/>
-  <animate
-          id='gpa:transition:fade-out:stroke-dasharray:line'
-          attributeName='stroke-dasharray'
-          begin='gpa:states(0).end -1000ms'
-          dur='1000ms'
-          repeatDur='1000ms'
-          fill='freeze'
-          from='1 0'
-          to='0 2'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          gpa:status='done'/>
-  <animate
-          id='gpa:transition:fade-in:stroke-dashoffset:line'
-          attributeName='stroke-dashoffset'
-          begin='gpa:states(0).begin'
-          dur='1000ms'
-          repeatDur='1000ms'
-          fill='freeze'
-          from='-1'
-          to='0'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          gpa:status='done'/>
-  <animate
-          id='gpa:transition:fade-out:stroke-dashoffset:line'
-          attributeName='stroke-dashoffset'
-          begin='gpa:states(0).end -1000ms'
-          dur='1000ms'
-          repeatDur='1000ms'
-          fill='freeze'
-          from='0'
-          to='-1'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          gpa:status='done'/>
-  <set
-          id='gpa:path-length'
-          attributeName='pathLength'
-          begin='0ms'
-          end='indefinite'
-          to='1'
-          gpa:status='running'
-          gpa:computed-simple-duration='indefinite'
-          gpa:current-start-time='0ms'/>
+    <set
+            id='gpa:out-of-state:line'
+            attributeName='visibility'
+            begin='gpa:states(0).end; 0ms'
+            end='gpa:states(0).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='6000ms'/>
+    <animate
+            id='gpa:transition:fade-in:stroke-dasharray:line'
+            attributeName='stroke-dasharray'
+            begin='gpa:states(0).begin'
+            dur='1000ms'
+            repeatDur='1000ms'
+            fill='freeze'
+            from='0 2'
+            to='1 0'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'/>
+    <animate
+            id='gpa:transition:fade-out:stroke-dasharray:line'
+            attributeName='stroke-dasharray'
+            begin='gpa:states(0).end -1000ms'
+            dur='1000ms'
+            repeatDur='1000ms'
+            fill='freeze'
+            from='1 0'
+            to='0 2'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'/>
+    <animate
+            id='gpa:transition:fade-in:stroke-dashoffset:line'
+            attributeName='stroke-dashoffset'
+            begin='gpa:states(0).begin'
+            dur='1000ms'
+            repeatDur='1000ms'
+            fill='freeze'
+            from='-1'
+            to='0'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'/>
+    <animate
+            id='gpa:transition:fade-out:stroke-dashoffset:line'
+            attributeName='stroke-dashoffset'
+            begin='gpa:states(0).end -1000ms'
+            dur='1000ms'
+            repeatDur='1000ms'
+            fill='freeze'
+            from='0'
+            to='-1'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
   </path>
   <circle
           id='red'
@@ -97,64 +97,64 @@
           cx='0'
           cy='5'
           r='5'>
-  <set
-          id='gpa:out-of-state:red'
-          attributeName='visibility'
-          begin='gpa:states(all).end; 0ms'
-          end='gpa:states(all).begin'
-          to='hidden'
-          gpa:status='running'
-          gpa:computed-simple-duration='indefinite'
-          gpa:current-start-time='6000ms'/>
-  <animateMotion
-          id='gpa:attachment:red'
-          begin='0ms'
-          end='0.001ms'
-          dur='0.001ms'
-          fill='freeze'
-          keyTimes='0; 1'
-          calcMode='linear'
-          keyPoints='0.5; 0.5'
-          rotate='auto'
-          gpa:status='done'>
-    <mpath href='line'/>
-  </animateMotion>
-  <animateMotion
-          id='gpa:attachment-transition:fade-in:red'
-          begin='gpa:transition:fade-in:stroke-dasharray:line.begin'
-          end='gpa:transition:fade-in:stroke-dasharray:line.end'
-          dur='1000ms'
-          fill='freeze'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          keyPoints='1; 0.5'
-          rotate='auto'
-          gpa:status='done'>
-    <mpath href='line'/>
-  </animateMotion>
-  <animateMotion
-          id='gpa:attachment-transition:fade-out:red'
-          begin='gpa:transition:fade-out:stroke-dasharray:line.begin'
-          end='gpa:transition:fade-out:stroke-dasharray:line.end'
-          dur='1000ms'
-          fill='freeze'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          keyPoints='0.5; 1'
-          rotate='auto'
-          gpa:status='done'>
-    <mpath href='line'/>
-  </animateMotion>
-  <set
-          id='gpa:path-length'
-          attributeName='pathLength'
-          begin='0ms'
-          end='indefinite'
-          to='1'
-          gpa:status='running'
-          gpa:computed-simple-duration='indefinite'
-          gpa:current-start-time='0ms'/>
+    <set
+            id='gpa:out-of-state:red'
+            attributeName='visibility'
+            begin='gpa:states(all).end; 0ms'
+            end='gpa:states(all).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='6000ms'/>
+    <animateMotion
+            id='gpa:attachment:red'
+            begin='0ms'
+            end='0.001ms'
+            dur='0.001ms'
+            fill='freeze'
+            keyTimes='0; 1'
+            calcMode='linear'
+            keyPoints='0.5; 0.5'
+            rotate='auto'
+            gpa:status='done'>
+      <mpath href='line'/>
+    </animateMotion>
+    <animateMotion
+            id='gpa:attachment-transition:fade-in:red'
+            begin='gpa:transition:fade-in:stroke-dasharray:line.begin'
+            end='gpa:transition:fade-in:stroke-dasharray:line.end'
+            dur='1000ms'
+            fill='freeze'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            keyPoints='1; 0.5'
+            rotate='auto'
+            gpa:status='done'>
+      <mpath href='line'/>
+    </animateMotion>
+    <animateMotion
+            id='gpa:attachment-transition:fade-out:red'
+            begin='gpa:transition:fade-out:stroke-dasharray:line.begin'
+            end='gpa:transition:fade-out:stroke-dasharray:line.end'
+            dur='1000ms'
+            fill='freeze'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            keyPoints='0.5; 1'
+            rotate='auto'
+            gpa:status='done'>
+      <mpath href='line'/>
+    </animateMotion>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
   </circle>
 </svg>
