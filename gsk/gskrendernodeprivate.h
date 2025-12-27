@@ -134,9 +134,6 @@ void            gsk_render_node_draw_fallback           (GskRenderNode          
 void            gsk_render_node_render_opacity          (GskRenderNode               *self,
                                                          GskOpacityData              *data);
 
-GskRenderNode **gsk_render_node_get_children            (GskRenderNode               *node,
-                                                         gsize                       *n_children);
-
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;

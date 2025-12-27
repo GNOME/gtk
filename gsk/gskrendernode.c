@@ -524,6 +524,19 @@ gsk_render_node_draw_fallback (GskRenderNode *node,
     }
 }
 
+/**
+ * gsk_render_node_get_children:
+ * @self: the render node
+ * @n_children: (out): the number of items in the returned array 
+ *
+ * Gets a list of all children nodes of the rendernode.
+ *
+ * Keep in mind that for various rendernodes, their children have different
+ * semantics, like the mask vs the source of a mask node. If you care about
+ * thse semantics, don't use this function, use the specific getters instead.
+ *
+ * Returns: (transfer none) (nullable) (array length=n_children): The children
+ **/
 GskRenderNode **
 gsk_render_node_get_children (GskRenderNode *node,
                               gsize         *n_children)

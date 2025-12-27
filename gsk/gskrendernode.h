@@ -102,6 +102,9 @@ GskRenderNodeType       gsk_render_node_get_node_type           (const GskRender
 GDK_AVAILABLE_IN_ALL
 void                    gsk_render_node_get_bounds              (GskRenderNode   *node,
                                                                  graphene_rect_t *bounds);
+GDK_AVAILABLE_IN_4_22
+GskRenderNode **        gsk_render_node_get_children            (GskRenderNode   *node,
+                                                                 gsize           *n_children);
 
 GDK_AVAILABLE_IN_4_16
 gboolean                gsk_render_node_get_opaque_rect         (GskRenderNode   *self,
