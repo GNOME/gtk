@@ -9407,7 +9407,7 @@ shape_new (Shape     *parent,
 
   shape->attrs = _gtk_bitmask_new ();
 
-  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
       shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
       shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
