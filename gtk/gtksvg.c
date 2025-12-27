@@ -7143,6 +7143,8 @@ svg_href_parse_url (const char *value)
 static const char *
 svg_href_get_id (SvgHref *href)
 {
+  g_assert (((SvgValue *) href)->class == &SVG_HREF_CLASS);
+
   if (href->kind == HREF_NONE)
     return NULL;
 
