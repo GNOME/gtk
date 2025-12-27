@@ -15,22 +15,22 @@
                 cx='20'
                 cy='20'
                 r='12'>
-        <animate
-                attributeName='cx'
-                begin='3000ms'
-                dur='10000ms'
-                fill='freeze'
-                from='20'
-                to='0'
-                keyTimes='0; 1'/>
-        <animate
-                attributeName='r'
-                begin='3000ms'
-                dur='10000ms'
-                fill='freeze'
-                from='12'
-                to='16'
-                keyTimes='0; 1'/>
+          <animate
+                  attributeName='cx'
+                  begin='3000ms'
+                  dur='10000ms'
+                  fill='freeze'
+                  from='20'
+                  to='0'
+                  keyTimes='0; 1'/>
+          <animate
+                  attributeName='r'
+                  begin='3000ms'
+                  dur='10000ms'
+                  fill='freeze'
+                  from='12'
+                  to='16'
+                  keyTimes='0; 1'/>
         </circle>
       </clipPath>
     </mask>
@@ -49,40 +49,40 @@
             cx='10'
             cy='10'
             r='8'>
-    <animate
-            attributeName='fill'
-            begin='5000ms'
-            dur='5000ms'
-            fill='freeze'
-            values='rgb(255,0,0); rgb(255,255,0); rgb(0,128,0)'
-            keyTimes='0; 0.5; 1'/>
+      <animate
+              attributeName='fill'
+              begin='5000ms'
+              dur='5000ms'
+              fill='freeze'
+              values='rgb(255,0,0); rgb(255,255,0); rgb(0,128,0)'
+              keyTimes='0; 0.5; 1'/>
     </circle>
     <g>
-    <animateTransform
-            id='dreh'
-            attributeName='transform'
-            begin='5000ms'
-            dur='4000ms'
-            from='0 10 10'
-            to='90 10 10'
-            keyTimes='0; 1'
-            type='rotate'/>
-    <animate
-            id='blurit'
-            attributeName='filter'
-            begin='5000ms'
-            dur='2000ms'
-            from='blur(0)'
-            to='blur(12)'
-            keyTimes='0; 1'/>
-    <animate
-            attributeName='filter'
-            begin='blurit.end'
-            dur='2000ms'
-            fill='freeze'
-            from='blur(12)'
-            to='blur(0)'
-            keyTimes='0; 1'/>
+      <animateTransform
+              id='dreh'
+              attributeName='transform'
+              begin='5000ms'
+              dur='4000ms'
+              from='0 10 10'
+              to='90 10 10'
+              keyTimes='0; 1'
+              type='rotate'/>
+      <animate
+              id='blurit'
+              attributeName='filter'
+              begin='5000ms'
+              dur='2000ms'
+              from='blur(0)'
+              to='blur(12)'
+              keyTimes='0; 1'/>
+      <animate
+              attributeName='filter'
+              begin='blurit.end'
+              dur='2000ms'
+              fill='freeze'
+              from='blur(12)'
+              to='blur(0)'
+              keyTimes='0; 1'/>
       <path
               stroke='rgb(0,0,0)'
               stroke-width='1'
@@ -100,25 +100,26 @@
           stroke='rgb(0,0,0)'
           stroke-width='1'
           d='M 30 160 L 270 40'>
-  <animate
-          attributeName='stroke-dasharray'
-          begin='5000ms'
-          dur='10000ms'
-          from='1 1'
-          to='10 10'
-          keyTimes='0; 1'/>
+    <animate
+            attributeName='stroke-dasharray'
+            begin='5000ms'
+            dur='10000ms'
+            from='1 1'
+            to='10 10'
+            keyTimes='0; 1'/>
   </path>
   <circle
           fill='rgb(255,0,0)'
           r='5'>
-  <animateMotion
-          begin='5000ms'
-          dur='5000ms'
-          repeatCount='20'
-          fill='freeze'
-          keyTimes='0; 0.2; 1'
-          keyPoints='0; 0.8; 1'>
-    <mpath href='p'/>
-  </animateMotion>
+    <animateMotion
+            begin='5000ms'
+            dur='5000ms'
+            repeatCount='20'
+            fill='freeze'
+            keyTimes='0; 0.2; 1'
+            calcMode='linear'
+            keyPoints='0; 0.8; 1'>
+      <mpath href='p'/>
+    </animateMotion>
   </circle>
 </svg>

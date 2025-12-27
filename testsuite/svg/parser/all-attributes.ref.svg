@@ -13,7 +13,6 @@
           clip-path='none'
           clip-rule='nonzero'
           mask='none'
-          mask-type='luminance'
           fill='none'
           fill-opacity='1'
           fill-rule='nonzero'
@@ -24,8 +23,12 @@
           stroke-linejoin='miter'
           stroke-dasharray=''
           stroke-dashoffset='0'
-          pathLength='400'
-          d='M 0 0 L 100 100'
+          marker-start='none'
+          marker-mid='none'
+          marker-end='none'
+          paint-order='stroke markers fill'
+          pathLength='99'
+          d='M 0 0 L 10 10'
           class='transparent-fill'>
   </path>
 </svg>

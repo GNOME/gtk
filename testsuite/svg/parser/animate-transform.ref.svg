@@ -10,64 +10,64 @@
           y='40'
           width='20'
           height='20'>
-  <animateTransform
-          attributeName='transform'
-          dur='3000ms'
-          repeatCount='indefinite'
-          from='0 50 50'
-          to='360 50 50'
-          keyTimes='0; 1'
-          type='rotate'/>
+    <animateTransform
+            attributeName='transform'
+            dur='3000ms'
+            repeatCount='indefinite'
+            from='0 50 50'
+            to='360 50 50'
+            keyTimes='0; 1'
+            type='rotate'/>
   </rect>
   <circle
           fill='rgb(0,0,255)'
           cx='30'
           cy='30'
           r='8'>
-  <animateTransform
-          attributeName='transform'
-          dur='2000ms'
-          fill='freeze'
-          from='1 1'
-          to='2 2'
-          keyTimes='0; 1'
-          type='scale'/>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='1 1'
+            to='2 2'
+            keyTimes='0; 1'
+            type='scale'/>
   </circle>
   <circle
           fill='rgb(0,0,255)'
           cx='30'
           cy='30'
           r='8'>
-  <animateTransform
-          attributeName='transform'
-          dur='2000ms'
-          fill='freeze'
-          from='1 1'
-          to='2 2'
-          keyTimes='0; 1'
-          type='scale'/>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='1 1'
+            to='2 2'
+            keyTimes='0; 1'
+            type='scale'/>
   </circle>
   <path
           fill='rgb(0,128,0)'
           d='M 10 10 L 20 10 L 15 20 Z'>
-  <animateTransform
-          attributeName='transform'
-          dur='4000ms'
-          repeatCount='indefinite'
-          values='0 0; 50 50; 0 0'
-          keyTimes='0; 0.5; 1'
-          type='translate'/>
+    <animateTransform
+            attributeName='transform'
+            dur='4000ms'
+            repeatCount='indefinite'
+            values='0 0; 50 50; 0 0'
+            keyTimes='0; 0.5; 1'
+            type='translate'/>
   </path>
   <path
           fill='rgb(0,128,0)'
           d='M 10 10 L 20 10 L 15 20 Z'>
-  <animateTransform
-          attributeName='transform'
-          dur='4000ms'
-          repeatCount='indefinite'
-          values='0 0; 50 0; 0 0'
-          keyTimes='0; 0.5; 1'
-          type='translate'/>
+    <animateTransform
+            attributeName='transform'
+            dur='4000ms'
+            repeatCount='indefinite'
+            values='0 0; 50 0; 0 0'
+            keyTimes='0; 0.5; 1'
+            type='translate'/>
   </path>
   <rect
           fill='rgb(255,165,0)'
@@ -75,14 +75,14 @@
           y='70'
           width='15'
           height='15'>
-  <animateTransform
-          attributeName='transform'
-          dur='2000ms'
-          fill='freeze'
-          from='0 77.5 77.5'
-          to='45 77.5 77.5'
-          keyTimes='0; 1'
-          type='rotate'/>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='0 77.5 77.5'
+            to='45 77.5 77.5'
+            keyTimes='0; 1'
+            type='rotate'/>
   </rect>
   <rect
           fill='rgb(255,165,0)'
@@ -90,13 +90,13 @@
           y='70'
           width='15'
           height='15'>
-  <animateTransform
-          attributeName='transform'
-          dur='2000ms'
-          fill='freeze'
-          from='45 0 0'
-          to='145 10 11'
-          keyTimes='0; 1'
-          type='rotate'/>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='45 0 0'
+            to='145 10 11'
+            keyTimes='0; 1'
+            type='rotate'/>
   </rect>
 </svg>

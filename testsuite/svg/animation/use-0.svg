@@ -29,16 +29,16 @@
   </defs>
   <use
           href='#circle1'>
-  <animate
-          attributeName='href'
-          begin='0ms'
-          dur='1000ms'
-          fill='freeze'
-          from='#circle1'
-          to='#circle2'
-          keyTimes='0; 1'
-          gpa:status='running'
-          gpa:current-start-time='0ms'
-          gpa:current-end-time='1000ms'/>
+    <animate
+            attributeName='href'
+            begin='0ms'
+            dur='1000ms'
+            fill='freeze'
+            from='#circle1'
+            to='#circle2'
+            keyTimes='0; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:current-end-time='1000ms'/>
   </use>
 </svg>

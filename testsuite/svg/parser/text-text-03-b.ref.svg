@@ -33,24 +33,24 @@
             fill='rgb(0,0,255)'
             x='224'
             y='110'
-            font-size='32'
-            text-decoration='underline'>Underline
+            text-decoration='underline'
+            font-size='32'>Underline
     </text>
     <text
             fill='rgb(255,0,255)'
             x='39'
             y='147'
-            font-size='32'
-            text-decoration='line-through'>Line through
+            text-decoration='line-through'
+            font-size='32'>Line through
     </text>
     <text
             fill='rgb(0,0,0)'
             x='1'
             y='200'
+            text-decoration='underline'
             font-style='italic'
             font-weight='700'
-            font-size='32'
-            text-decoration='underline'>Bold, italic and underlined
+            font-size='32'>Bold, italic and underlined
     </text>
     <g>
       <rect

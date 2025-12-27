@@ -18,40 +18,40 @@
           cx='0'
           cy='5'
           r='5'>
-  <set
-          id='gpa:out-of-state:red'
-          attributeName='visibility'
-          begin='gpa:states(0).end; 0ms'
-          end='gpa:states(0).begin'
-          to='hidden'
-          gpa:status='running'
-          gpa:computed-simple-duration='indefinite'
-          gpa:current-start-time='6000ms'/>
-  <animate
-          id='gpa:transition:fade-in:filter:red'
-          attributeName='filter'
-          begin='gpa:states(0).begin'
-          dur='2000ms'
-          repeatDur='2000ms'
-          fill='freeze'
-          from='blur(32) alpha-level(0.2)'
-          to='blur(0) alpha-level(0.2)'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          gpa:status='done'/>
-  <animate
-          id='gpa:transition:fade-out:filter:red'
-          attributeName='filter'
-          begin='gpa:states(0).end -2000ms'
-          dur='2000ms'
-          repeatDur='2000ms'
-          fill='freeze'
-          from='blur(0) alpha-level(0.2)'
-          to='blur(32) alpha-level(0.2)'
-          keySplines='0 0 1 1'
-          keyTimes='0; 1'
-          calcMode='spline'
-          gpa:status='done'/>
+    <set
+            id='gpa:out-of-state:red'
+            attributeName='visibility'
+            begin='gpa:states(0).end; 0ms'
+            end='gpa:states(0).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='6000ms'/>
+    <animate
+            id='gpa:transition:fade-in:filter:red'
+            attributeName='filter'
+            begin='gpa:states(0).begin'
+            dur='2000ms'
+            repeatDur='2000ms'
+            fill='freeze'
+            from='blur(32) alpha-level(0.2)'
+            to='blur(0) alpha-level(0.2)'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'/>
+    <animate
+            id='gpa:transition:fade-out:filter:red'
+            attributeName='filter'
+            begin='gpa:states(0).end -2000ms'
+            dur='2000ms'
+            repeatDur='2000ms'
+            fill='freeze'
+            from='blur(0) alpha-level(0.2)'
+            to='blur(32) alpha-level(0.2)'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'/>
   </circle>
 </svg>

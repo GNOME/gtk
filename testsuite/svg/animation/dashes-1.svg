@@ -15,28 +15,28 @@
           stroke-width='1'
           stroke-dasharray='5.5 5.5'
           d='M 30 160 L 270 40'>
-  <animate
-          id='dashes'
-          attributeName='stroke-dasharray'
-          begin='0ms'
-          dur='10000ms'
-          from='1 1'
-          to='10 10'
-          keyTimes='0; 1'
-          gpa:status='running'
-          gpa:current-start-time='0ms'
-          gpa:current-end-time='10000ms'/>
-  <animate
-          id='dashes'
-          attributeName='stroke-dasharray'
-          begin='10000ms'
-          dur='1000ms'
-          from='10 10'
-          to='none'
-          keyTimes='0; 1'
-          gpa:status='inactive'
-          gpa:current-start-time='10000ms'
-          gpa:current-end-time='11000ms'/>
+    <animate
+            id='dashes'
+            attributeName='stroke-dasharray'
+            begin='0ms'
+            dur='10000ms'
+            from='1 1'
+            to='10 10'
+            keyTimes='0; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:current-end-time='10000ms'/>
+    <animate
+            id='dashes'
+            attributeName='stroke-dasharray'
+            begin='10000ms'
+            dur='1000ms'
+            from='10 10'
+            to='none'
+            keyTimes='0; 1'
+            gpa:status='inactive'
+            gpa:current-start-time='10000ms'
+            gpa:current-end-time='11000ms'/>
   </path>
   <circle
           fill='rgb(255,0,0)'

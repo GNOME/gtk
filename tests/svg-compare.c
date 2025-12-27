@@ -38,6 +38,7 @@ main (int argc, char *argv[])
     { "no-rsvg", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &show_rsvg, "Don't show rsvg rendering", NULL },
     { "no-gtk", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &show_gtk, "Don't show gtk rendering", NULL },
     { "allow-shrink", 0, 0, G_OPTION_ARG_NONE, &allow_shrink, "Allow to shrink rendering", NULL },
+    { NULL, 0 },
   };
   GError *error = NULL;
 

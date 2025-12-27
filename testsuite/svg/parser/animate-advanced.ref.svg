@@ -10,71 +10,71 @@
           y='10'
           width='20'
           height='20'>
-  <animate
-          attributeName='x'
-          dur='4000ms'
-          repeatCount='indefinite'
-          values='10; 50; 80; 10'
-          keyTimes='0; 0.3; 0.7; 1'
-          calcMode='discrete'/>
+    <animate
+            attributeName='x'
+            dur='4000ms'
+            repeatCount='indefinite'
+            values='10; 50; 80; 10'
+            keyTimes='0; 0.3; 0.7; 1'
+            calcMode='discrete'/>
   </rect>
   <circle
           fill='rgb(0,0,255)'
           cx='20'
           cy='60'
           r='8'>
-  <animate
-          attributeName='cx'
-          dur='3000ms'
-          repeatCount='indefinite'
-          values='20; 60; 100; 140'
-          keyTimes='0; 0.333333; 0.666667; 1'/>
+    <animate
+            attributeName='cx'
+            dur='3000ms'
+            repeatCount='indefinite'
+            values='20; 60; 100; 140'
+            keyTimes='0; 0.333333; 0.666667; 1'/>
   </circle>
   <circle
           fill='rgb(0,128,0)'
           cx='30'
           cy='100'
           r='8'>
-  <animate
-          attributeName='cx'
-          dur='2000ms'
-          repeatCount='3'
-          from='30'
-          to='50'
-          keyTimes='0; 1'
-          accumulate='sum'/>
+    <animate
+            attributeName='cx'
+            dur='2000ms'
+            repeatCount='3'
+            from='30'
+            to='50'
+            keyTimes='0; 1'
+            accumulate='sum'/>
   </circle>
   <path
           fill='rgb(255,165,0)'
           d='M 60 20 L 80 20 L 70 40 Z'>
-  <animateTransform
-          attributeName='transform'
-          dur='5000ms'
-          repeatCount='indefinite'
-          values='0 0; 50 0; 50 50; 0 50; 0 0'
-          keySplines='0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1'
-          keyTimes='0; 0.25; 0.5; 0.75; 1'
-          calcMode='spline'
-          type='translate'/>
+    <animateTransform
+            attributeName='transform'
+            dur='5000ms'
+            repeatCount='indefinite'
+            values='0 0; 50 0; 50 50; 0 50; 0 0'
+            keySplines='0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1'
+            keyTimes='0; 0.25; 0.5; 0.75; 1'
+            calcMode='spline'
+            type='translate'/>
   </path>
   <circle
           fill='rgb(0,255,255)'
           cx='130'
           cy='30'
           r='10'>
-  <animate
-          attributeName='r'
-          dur='2000ms'
-          repeatCount='indefinite'
-          values='10; 15; 10'
-          keyTimes='0; 0.5; 1'/>
-  <animate
-          attributeName='r'
-          dur='4000ms'
-          repeatCount='indefinite'
-          from='10'
-          to='15'
-          keyTimes='0; 1'
-          additive='sum'/>
+    <animate
+            attributeName='r'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='10; 15; 10'
+            keyTimes='0; 0.5; 1'/>
+    <animate
+            attributeName='r'
+            dur='4000ms'
+            repeatCount='indefinite'
+            from='10'
+            to='15'
+            keyTimes='0; 1'
+            additive='sum'/>
   </circle>
 </svg>

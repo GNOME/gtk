@@ -33,14 +33,14 @@
           y='0'
           width='20'
           height='10'>
-  <animate
-          attributeName='clip-path'
-          begin='0ms'
-          dur='1000ms'
-          fill='freeze'
-          from='url(#clip1)'
-          to='url(#clip2)'
-          keyTimes='0; 1'
-          gpa:status='done'/>
+    <animate
+            attributeName='clip-path'
+            begin='0ms'
+            dur='1000ms'
+            fill='freeze'
+            from='url(#clip1)'
+            to='url(#clip2)'
+            keyTimes='0; 1'
+            gpa:status='done'/>
   </rect>
 </svg>
