@@ -11798,9 +11798,9 @@ resolve_value (Shape           *shape,
         return svg_value_ref (value);
     }
   else
-   {
-     return svg_value_ref (value);
-   }
+    {
+      return svg_value_ref (value);
+    }
 }
 
 static SvgValue *
