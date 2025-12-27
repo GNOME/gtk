@@ -15581,7 +15581,8 @@ static void
 resolve_animation_refs (Shape      *shape,
                         ParserData *data)
 {
-  /* TODO: detect cycles */
+  unsigned int first;
+
   for (unsigned int i = 0; i < shape->animations->len; i++)
     {
       Animation *a = g_ptr_array_index (shape->animations, i);
@@ -15603,42 +15604,51 @@ resolve_animation_refs (Shape      *shape,
             }
         }
 
+      /* The resolve functions don't know how to handle
+       * our special current keyword, and it gets resolved
+       * later anyway, so skip it.
+       */
+      if (a->frames[0].value && svg_value_is_current (a->frames[0].value))
+        first = 1;
+      else
+        first = 0;
+
       if (a->attr == SHAPE_ATTR_CLIP_PATH)
         {
-          for (unsigned int j = 0; j < a->n_frames; j++)
+          for (unsigned int j = first; j < a->n_frames; j++)
             resolve_clip_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_MASK)
         {
-          for (unsigned int j = 0; j < a->n_frames; j++)
+          for (unsigned int j = first; j < a->n_frames; j++)
             resolve_mask_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_HREF)
         {
-          for (unsigned int j = 0; j < a->n_frames; j++)
+          for (unsigned int j = first; j < a->n_frames; j++)
             resolve_href_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_MARKER_START ||
                a->attr == SHAPE_ATTR_MARKER_MID ||
                a->attr == SHAPE_ATTR_MARKER_END)
         {
-          for (unsigned int j = 0; j < a->n_frames; j++)
+          for (unsigned int j = first; j < a->n_frames; j++)
             resolve_marker_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_FILL ||
                a->attr == SHAPE_ATTR_STROKE)
         {
-          for (unsigned int j = 0; j < a->n_frames; j++)
+          for (unsigned int j = first; j < a->n_frames; j++)
             resolve_paint_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_FILTER)
         {
-          for (unsigned int j = 0; j < a->n_frames; j++)
+          for (unsigned int j = first; j < a->n_frames; j++)
             resolve_filter_ref (a->frames[j].value, a->shape, data);
         }
       else if (a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
         {
-          for (unsigned int j = 0; j < a->n_frames; j++)
+          for (unsigned int j = first; j < a->n_frames; j++)
             resolve_href_ref (a->frames[j].value, a->shape, data);
         }
 
