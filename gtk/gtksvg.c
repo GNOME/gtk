@@ -40,6 +40,10 @@
 #include <tgmath.h>
 #include <stdint.h>
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-fontmap.h>
+#endif
+
 /**
  * GtkSvg:
  *
@@ -1032,7 +1036,8 @@ compute_viewport_transform (gboolean               none,
 /* {{{ Image loading */
 
 static GdkTexture *
-load_texture (const char *string)
+load_texture (const char  *string,
+              GError     **error)
 {
   GdkTexture *texture;
 
@@ -1040,12 +1045,12 @@ load_texture (const char *string)
     {
       GBytes *bytes;
 
-      bytes = gtk_css_data_url_parse (string, NULL, NULL);
+      bytes = gtk_css_data_url_parse (string, NULL, error);
 
       if (bytes == NULL)
         return NULL;
 
-      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      texture = gdk_texture_new_from_bytes (bytes, error);
 
       g_bytes_unref (bytes);
     }
@@ -1055,7 +1060,7 @@ load_texture (const char *string)
     }
   else
     {
-      texture = gdk_texture_new_from_filename (string, NULL);
+      texture = gdk_texture_new_from_filename (string, error);
     }
 
   return texture;
@@ -1070,9 +1075,18 @@ get_texture (GtkSvg     *svg,
   texture = g_hash_table_lookup (svg->images, string);
   if (!texture)
     {
-      texture = load_texture (string);
+      GError *error = NULL;
+
+      texture = load_texture (string, &error);
       if (texture)
-        g_hash_table_insert (svg->images, g_strdup (string), texture);
+        {
+          g_hash_table_insert (svg->images, g_strdup (string), texture);
+        }
+      else
+        {
+          gtk_svg_emit_error (svg, error);
+          g_error_free (error);
+        }
     }
 
   return texture;
@@ -13221,6 +13235,208 @@ typedef struct
   GString *text;
 } ParserData;
 
+/* {{{ Font handling */
+
+static void
+append_base64_with_linebreaks (GString *s,
+                               GBytes  *bytes)
+{
+  const guchar *data;
+  gsize len;
+  gsize max;
+  gsize before;
+  char *out;
+  int state = 0, outlen;
+  int save = 0;
+
+  data = g_bytes_get_data (bytes, &len);
+
+  /* We can use a smaller limit here, since we know the saved state is 0,
+     +1 is needed for trailing \0, also check for unlikely integer overflow */
+  g_return_if_fail (len < ((G_MAXSIZE - 1 - s->len) / 4 - 1) * 3);
+
+  /* The glib docs say:
+   *
+   * The output buffer must be large enough to fit all the data that will
+   * be written to it. Due to the way base64 encodes you will need
+   * at least: (@len / 3 + 1) * 4 + 4 bytes (+ 4 may be needed in case of
+   * non-zero state). If you enable line-breaking you will need at least:
+   * ((@len / 3 + 1) * 4 + 4) / 76 + 1 bytes of extra space.
+   */
+  max = (len / 3 + 1) * 4;
+  max += ((len / 3 + 1) * 4 + 4) / 76 + 1;
+  /* and the null byte */
+  max += 1;
+
+  before = s->len;
+  g_string_set_size (s, s->len + max);
+  out = s->str + before;
+
+  outlen = g_base64_encode_step (data, len, TRUE, out, &state, &save);
+  outlen += g_base64_encode_close (TRUE, out + outlen, &state, &save);
+  out[outlen] = '\0';
+  s->len = before + outlen;
+}
+
+static void
+append_bytes_href (GString    *s,
+                   GBytes     *bytes,
+                   const char *mime_type)
+{
+  g_string_append_printf (s, "data:%s;base64,\\\n", mime_type ? mime_type : "");
+  append_base64_with_linebreaks (s, bytes);
+}
+
+static void
+delete_file (gpointer data)
+{
+  char *path = data;
+
+  g_remove (path);
+  g_free (path);
+}
+
+static void
+ensure_fontmap (GtkSvg *svg)
+{
+  if (svg->fontmap)
+    return;
+
+  svg->fontmap = pango_cairo_font_map_new ();
+
+#if 0
+  /* This isolates us from the system fonts */
+#ifdef HAVE_PANGOFT
+  {
+    FcConfig *config;
+
+    config = FcConfigCreate ();
+    pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (svg->fontmap), config);
+    FcConfigDestroy (config);
+  }
+#endif
+#endif
+
+  svg->font_files = g_ptr_array_new_with_free_func (delete_file);
+}
+
+static PangoFontMap *
+get_fontmap (GtkSvg *svg)
+{
+  if (svg->fontmap)
+    return svg->fontmap;
+  else
+    return pango_cairo_font_map_get_default ();
+}
+
+static gboolean
+add_font_from_file (GtkSvg      *svg,
+                    const char  *path,
+                    GError     **error)
+{
+  ensure_fontmap (svg);
+
+  if (!pango_font_map_add_font_file (svg->fontmap, path, error))
+    return FALSE;
+
+  g_ptr_array_add (svg->font_files, g_strdup (path));
+  return TRUE;
+}
+
+static gboolean
+add_font_from_bytes (GtkSvg      *svg,
+                     GBytes      *bytes,
+                     GError     **error)
+{
+  GFile *file;
+  GIOStream *iostream;
+  GOutputStream *ostream;
+
+  file = g_file_new_tmp ("gtk4-font-XXXXXX.ttf", (GFileIOStream **) &iostream, error);
+  if (!file)
+    return FALSE;
+
+  ostream = g_io_stream_get_output_stream (iostream);
+  if (g_output_stream_write_bytes (ostream, bytes, NULL, error) == -1)
+    {
+      g_object_unref (file);
+      g_object_unref (iostream);
+
+      return FALSE;
+    }
+
+  g_io_stream_close (iostream, NULL, NULL);
+  g_object_unref (iostream);
+
+  if (!add_font_from_file (svg, g_file_peek_path (file), error))
+    {
+      g_file_delete (file, NULL, NULL);
+      g_object_unref (file);
+
+      return FALSE;
+    }
+
+  g_object_unref (file);
+  return TRUE;
+}
+
+static gboolean
+add_font_from_url (GtkSvg              *svg,
+                   GMarkupParseContext *context,
+                   const char          *url)
+{
+  char *scheme;
+  GBytes *bytes;
+  char *mimetype = NULL;
+  GError *error = NULL;
+
+  scheme = g_uri_parse_scheme (url);
+  if (!scheme || g_ascii_strcasecmp (scheme, "data") != 0)
+    {
+      char *start = g_utf8_make_valid (url, 20);
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Unsupported uri scheme for font: %s…", start);
+      g_free (start);
+      return FALSE;
+    }
+
+  g_free (scheme);
+
+  bytes = gtk_css_data_url_parse (url, &mimetype, &error);
+  if (!bytes)
+    {
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Can't parse font data: %s", error->message);
+      g_error_free (error);
+      g_free (mimetype);
+      return FALSE;
+    }
+
+  if (strcmp (mimetype, "font/ttf") != 0)
+    {
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Unsupported mime type for font data: %s", mimetype);
+      g_bytes_unref (bytes);
+      g_free (mimetype);
+      return FALSE;
+    }
+
+  g_free (mimetype);
+
+  if (!add_font_from_bytes (svg, bytes, &error))
+    {
+      g_bytes_unref (bytes);
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Failed to add font: %s", error->message);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  g_bytes_unref (bytes);
+  return TRUE;
+}
+
+/* }}} */
 /* {{{ Animation attributes */
 
 static gboolean
@@ -14819,6 +15035,31 @@ start_element_cb (GMarkupParseContext  *context,
           else
             skip_element (data, context, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
+
+      return;
+    }
+  else if (strcmp (element_name, "font-face") == 0 ||
+           strcmp (element_name, "font-face-src") == 0)
+    {
+      return;
+    }
+  else if (strcmp (element_name, "font-face-uri") == 0)
+    {
+      if (check_ancestors (context, "font-face-src", "font-face", NULL))
+        {
+          for (unsigned int i = 0; attr_names[i]; i++)
+            {
+              if (strcmp (attr_names[i], "href") == 0)
+                {
+                  if (!add_font_from_url (data->svg, context, attr_values[i]))
+                    {
+                      // too bad
+                    }
+                }
+            }
+        }
+      else
+        skip_element (data, context, "Ignoring font element int he wrong context: <%s>", element_name);
 
       return;
     }
@@ -19005,6 +19246,7 @@ paint_markers (Shape        *shape,
 #define SVG_DEFAULT_DPI 96.0
 static PangoLayout *
 text_create_layout (Shape            *self,
+                    PangoFontMap     *fontmap,
                     const char       *text,
                     graphene_point_t *origin,
                     graphene_rect_t  *bounds,
@@ -19027,7 +19269,7 @@ text_create_layout (Shape            *self,
   double offset;
 
 
-  context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
+  context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SHAPE_ATTR_LANG]));
 
   uni = svg_enum_get (self->current[SHAPE_ATTR_UNICODE_BIDI]);
@@ -19165,6 +19407,7 @@ text_create_layout (Shape            *self,
 
 static gboolean
 generate_layouts (Shape           *self,
+                  PangoFontMap    *fontmap,
                   double          *x,
                   double          *y,
                   gboolean        *lastwasspace,
@@ -19215,7 +19458,7 @@ generate_layouts (Shape           *self,
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
-          node->shape.has_bounds = generate_layouts (node->shape.shape, x, y, lastwasspace, &node->shape.bounds);
+          node->shape.has_bounds = generate_layouts (node->shape.shape, fontmap, x, y, lastwasspace, &node->shape.bounds);
           if (node->shape.has_bounds)
             ADD_BBOX (&node->shape.bounds)
           break;
@@ -19225,7 +19468,7 @@ generate_layouts (Shape           *self,
             graphene_rect_t cbounds;
             gboolean is_vertical;
             char *text = text_chomp (node->characters.text, lastwasspace);
-            node->characters.layout = text_create_layout (self, text, &origin, &cbounds, &is_vertical, &node->characters.r);
+            node->characters.layout = text_create_layout (self, fontmap, text, &origin, &cbounds, &is_vertical, &node->characters.r);
             g_free (text);
 
             node->characters.x = *x + origin.x;
@@ -19550,7 +19793,7 @@ paint_shape (Shape        *shape,
 
       anchor = svg_enum_get (shape->current[SHAPE_ATTR_TEXT_ANCHOR]);
       wmode = svg_enum_get (shape->current[SHAPE_ATTR_WRITING_MODE]);
-      if (!generate_layouts (shape, NULL, NULL, NULL, &bounds))
+      if (!generate_layouts (shape, get_fontmap (context->svg), NULL, NULL, NULL, &bounds))
         return;
 
       dx = dy = 0;
@@ -19981,6 +20224,8 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->content, shape_free);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
+  g_clear_object (&self->fontmap);
+  g_clear_pointer (&self->font_files, g_ptr_array_unref);
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
@@ -20762,6 +21007,41 @@ gtk_svg_serialize_full (GtkSvg               *self,
       g_string_append (s, "</metadata>");
     }
 
+  if (self->font_files)
+    {
+      for (unsigned int i = 0; i < self->font_files->len; i++)
+        {
+          const char *file;
+          char *data;
+          gsize len;
+          GBytes *bytes;
+
+          file = g_ptr_array_index (self->font_files, i);
+
+          if (!g_file_get_contents (file, &data, &len, NULL))
+            continue;
+
+          bytes = g_bytes_new_take (data, len);
+
+          indent_for_elt (s, 2);
+          g_string_append (s, "<font-face>");
+          indent_for_elt (s, 4);
+          g_string_append (s, "<font-face-src>");
+          indent_for_elt (s, 6);
+          g_string_append (s, "<font-face-uri");
+          indent_for_attr (s, 6);
+          g_string_append (s, "href='");
+          append_bytes_href (s, bytes, "font/ttf");
+          g_string_append (s, "'/>");
+          indent_for_elt (s, 4);
+          g_string_append (s, "</font-face-src>");
+          indent_for_elt (s, 2);
+          g_string_append (s, "</font-face>");
+
+          g_bytes_unref (bytes);
+        }
+    }
+
   serialize_shape (s, self, 0, self->content, flags);
   g_string_append (s, "\n</svg>\n");
 
@@ -21168,6 +21448,8 @@ gtk_svg_clear_content (GtkSvg *self)
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->content, shape_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
+  g_clear_object (&self->fontmap);
+  g_clear_pointer (&self->font_files, g_ptr_array_unref);
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();

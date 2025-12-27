@@ -88,6 +88,9 @@ struct _GtkSvg
   Timeline *timeline;
 
   GHashTable *images;
+
+  PangoFontMap *fontmap;
+  GPtrArray *font_files;
 };
 
 typedef enum
