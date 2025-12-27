@@ -7159,6 +7159,7 @@ svg_href_get_id (SvgHref *href)
 
 typedef struct
 {
+  unsigned int attrs;
   SvgValue *base[N_STOP_ATTRS];
   SvgValue *current[N_STOP_ATTRS];
 } ColorStop;
@@ -7415,7 +7416,7 @@ static struct {
 typedef struct
 {
   FilterPrimitiveType type;
-  uint64_t attrs;
+  unsigned int attrs;
   SvgValue *base[N_FILTER_ATTRS];
   SvgValue *current[N_FILTER_ATTRS];
 } FilterPrimitive;
@@ -11034,6 +11035,9 @@ shape_get_current_value (Shape        *shape,
     g_assert_not_reached ();
 }
 
+/* We pass parent separately instead of relying
+ * on shape->parent because <use> overrides parent
+ */
 static SvgValue *
 shape_get_base_value (Shape        *shape,
                       Shape        *parent,
@@ -11074,35 +11078,70 @@ shape_get_base_value (Shape        *shape,
   else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
       ColorStop *stop;
+      unsigned int pos;
+      SvgValue *value;
 
       g_assert (shape_types[shape->type].has_color_stops);
       g_assert (idx <= shape->color_stops->len);
 
       stop = g_ptr_array_index (shape->color_stops, idx - 1);
 
-      if (svg_value_is_inherit (stop->base[color_stop_attr_idx (attr)]))
+      pos = color_stop_attr_idx (attr);
+      value = stop->base[pos];
+
+      if ((stop->attrs & BIT (pos)) == 0)
+        {
+          if (shape_attrs[attr].inherited)
+            return shape_get_current_value (shape, attr, 0);
+          else
+            return shape_attr_get_initial_value (attr, shape);
+        }
+      else if (svg_value_is_inherit (value))
         {
           return shape_get_current_value (shape, attr, 0);
         }
-      else if (svg_value_is_initial (shape->base[color_stop_attr_idx (attr)]))
+      else if (svg_value_is_initial (value))
         {
           return shape_attr_get_initial_value (attr, shape);
         }
       else
         {
-          return stop->base[color_stop_attr_idx (attr)];
+          return value;
         }
     }
   else if (FIRST_FILTER_ATTR <= attr && attr <= LAST_FILTER_ATTR)
     {
       FilterPrimitive *f;
+      unsigned int pos;
+      SvgValue *value;
 
       g_assert (shape_types[shape->type].has_filters);
       g_assert (idx <= shape->filters->len);
 
       f = g_ptr_array_index (shape->filters, idx - 1);
 
-      return f->base[filter_attr_idx (f->type, attr)];
+      pos = filter_attr_idx (f->type, attr);
+      value = f->base[pos];
+
+      if ((f->attrs & BIT (pos)) == 0)
+        {
+          if (shape_attrs[attr].inherited)
+            return shape_get_current_value (shape, attr, 0);
+          else
+            return shape_attr_get_initial_value (attr, shape);
+        }
+      else if (svg_value_is_inherit (value))
+        {
+          return shape_get_current_value (shape, attr, 0);
+        }
+      else if (svg_value_is_initial (value))
+        {
+          return shape_attr_get_initial_value (attr, shape);
+        }
+      else
+        {
+          return value;
+        }
     }
   else
     g_assert_not_reached ();
@@ -11122,27 +11161,31 @@ shape_set_base_value (Shape        *shape,
     }
   else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
-      if (shape_types[shape->type].has_color_stops)
-        {
-          ColorStop *stop;
+      ColorStop *stop;
+      unsigned int pos;
 
-          g_assert (idx <= shape->color_stops->len);
+      g_assert (shape_types[shape->type].has_color_stops);
+      g_assert (idx <= shape->color_stops->len);
 
-          stop = g_ptr_array_index (shape->color_stops, idx - 1);
-          g_clear_pointer (&stop->base[color_stop_attr_idx (attr)], svg_value_unref);
-          stop->base[color_stop_attr_idx (attr)] = svg_value_ref (value);
-        }
+      stop = g_ptr_array_index (shape->color_stops, idx - 1);
+      pos = color_stop_attr_idx (attr);
+      g_clear_pointer (&stop->base[pos], svg_value_unref);
+      stop->base[pos] = svg_value_ref (value);
+      stop->attrs |= BIT (pos);
     }
   else if (FIRST_FILTER_ATTR <= attr && attr <= LAST_FILTER_ATTR)
     {
       FilterPrimitive *f;
+      unsigned int pos;
 
       g_assert (shape_types[shape->type].has_filters);
+      g_assert (idx <= shape->filters->len);
 
       f = g_ptr_array_index (shape->filters, idx - 1);
-      g_clear_pointer (&f->base[filter_attr_idx (f->type, attr)], svg_value_unref);
-      f->base[filter_attr_idx (f->type, attr)] = svg_value_ref (value);
-      f->attrs |= BIT (filter_attr_idx (f->type, attr));
+      pos = filter_attr_idx (f->type, attr);
+      g_clear_pointer (&f->base[pos], svg_value_unref);
+      f->base[pos] = svg_value_ref (value);
+      f->attrs |= BIT (pos);
     }
   else
     g_assert_not_reached ();
