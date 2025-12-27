@@ -1,0 +1,196 @@
+<?xml version="1.0" ?>
+<svg height="600" width="600" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs >
+    <g id="l0">
+      <rect width="600" height="600" fill="black"/>
+    </g>
+    <g id="l1">
+      <use xlink:href="#l0" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l0" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l2">
+      <use xlink:href="#l1" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l1" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l3">
+      <use xlink:href="#l2" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l2" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l4">
+      <use xlink:href="#l3" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l3" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l5">
+      <use xlink:href="#l4" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l4" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l6">
+      <use xlink:href="#l5" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l5" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l7">
+      <use xlink:href="#l6" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l6" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l8">
+      <use xlink:href="#l7" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l7" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l9">
+      <use xlink:href="#l8" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l8" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l10">
+      <use xlink:href="#l9" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l9" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l11">
+      <use xlink:href="#l10" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l10" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l12">
+      <use xlink:href="#l11" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l11" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l13">
+      <use xlink:href="#l12" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l12" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l14">
+      <use xlink:href="#l13" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l13" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l15">
+      <use xlink:href="#l14" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l14" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l16">
+      <use xlink:href="#l15" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l15" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+    <g id="l17">
+      <use xlink:href="#l16" transform="translate(0,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(200,0) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(0,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(200,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(400,200) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(0,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(200,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(400,400) scale(0.3333333333333333)"/>
+      <use xlink:href="#l16" transform="translate(500,0) rotate(45) scale(0.233)"/>
+    </g>
+  </defs>
+  <use xlink:href="#l17" transform="scale(1)"/>
+</svg>

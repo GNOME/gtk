@@ -180,7 +180,38 @@
  */
 
 /* Max. nesting level of paint calls we allow */
-#define MAX_DEPTH 256
+#define NESTING_LIMIT 256
+
+/* This is a mitigation for SVG files which create millions of elements
+ * in an attempt to exhaust memory.  We don't allow loading more than
+ * this number of elements during the initial streaming load process.
+ */
+#define LOADING_LIMIT 50000
+
+/* This is a mitigation for the security-related bugs:
+ * https://gitlab.gnome.org/GNOME/librsvg/issues/323
+ * https://gitlab.gnome.org/GNOME/librsvg/issues/515
+ *
+ * Imagine the XML [billion laughs attack], but done in SVG's terms:
+ *
+ * - #323 above creates deeply nested groups of `<use>` elements.
+ * The first one references the second one ten times, the second one
+ * references the third one ten times, and so on.  In the file given,
+ * this causes 10^17 objects to be rendered.  While this does not
+ * exhaust memory, it would take a really long time.
+ *
+ * - #515 has deeply nested references of `<pattern>` elements.  Each
+ * object inside each pattern has an attribute
+ * fill="url(#next_pattern)", so the number of final rendered objects
+ * grows exponentially.
+ *
+ * We deal with both cases by placing a limit on how many references
+ * will be resolved during the SVG rendering process, that is,
+ * how many `url(#foo)` will be resolved.
+ *
+ * [billion laughs attack]: https://bitbucket.org/tiran/defusedxml
+ */
+#define DRAWING_LIMIT 150000
 
 #ifndef _MSC_VER
 #define DEBUG
@@ -13985,9 +14016,11 @@ typedef struct
     const GSList *to;
     GtkSvgLocation start;
     char *reason;
+    gboolean skip_over_target;
   } skip;
   gboolean collect_text;
   GString *text;
+  uint64_t num_loaded_elements;
 } ParserData;
 
 /* {{{ Animation attributes */
@@ -15558,6 +15591,7 @@ skip_element (ParserData          *data,
 
   gtk_svg_location_init (&data->skip.start, context);
   data->skip.to = g_markup_parse_context_get_element_stack (context);
+  data->skip.skip_over_target = TRUE;
 
   va_start (args, format);
   g_vasprintf (&data->skip.reason, format, args);
@@ -15637,6 +15671,15 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (data->skip.to)
     return;
+
+  if (data->num_loaded_elements++ > LOADING_LIMIT)
+    {
+      gtk_svg_location_init (&data->skip.start, context);
+      data->skip.to = g_markup_parse_context_get_element_stack (context)->next;
+      data->skip.reason = g_strdup ("Loading limit exceeded");
+      data->skip.skip_over_target = FALSE;
+      return;
+    }
 
   replace_deprecated_attrs (attr_names, attr_values);
 
@@ -16151,10 +16194,13 @@ end_element_cb (GMarkupParseContext *context,
                                    "%s", data->skip.reason);
           g_clear_pointer (&data->skip.reason, g_free);
           data->skip.to = NULL;
+          if (!data->skip.skip_over_target)
+            goto do_target;
         }
       return;
     }
 
+do_target:
   if (strcmp (element_name, "rdf:li") == 0)
     {
       g_set_str (&data->svg->gpa_keywords, data->text->str);
@@ -16757,6 +16803,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.skip.reason = NULL;
   data.text = g_string_new ("");
   data.collect_text = FALSE;
+  data.num_loaded_elements = 0;
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
   if (!g_markup_parse_context_parse (context,
@@ -17879,6 +17926,7 @@ typedef struct
   GSList *op_stack;
   gboolean op_changed;
   int depth;
+  uint64_t instance_count;
   GSList *ctx_shape_stack;
 } PaintContext;
 
@@ -20889,13 +20937,19 @@ render_shape (Shape        *shape,
         return;
     }
 
+  if (context->instance_count++ > DRAWING_LIMIT)
+    {
+      gtk_svg_rendering_error (context->svg, "excessive instance count, aborting");
+      return;
+    }
+
   context->depth++;
 
-  if (context->depth > MAX_DEPTH)
+  if (context->depth > NESTING_LIMIT)
     {
       gtk_svg_rendering_error (context->svg,
                                "excessive rendering depth (> %d), aborting",
-                               MAX_DEPTH);
+                               NESTING_LIMIT);
       return;
     }
 
@@ -21053,6 +21107,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       paint_context.current_time = self->current_time;
       paint_context.depth = 0;
       paint_context.transforms = NULL;
+      paint_context.instance_count = 0;
 
       gtk_snapshot_push_collect (snapshot);
 

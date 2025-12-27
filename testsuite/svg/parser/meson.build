@@ -73,6 +73,7 @@ test_data = [
   'text-text-10-t.svg',
   'text-vertical.svg',
   'times.svg',
+  'too-many-elements.test',
   'transforms.svg',
   'use.svg',
   'viewbox.svg',

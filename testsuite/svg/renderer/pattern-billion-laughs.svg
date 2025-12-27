@@ -1,0 +1,130 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="40cm" height="20cm" viewBox="0 0 800 400" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="z" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(10,10)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#i)" stroke="yellow"/>
+    </pattern>
+	
+	<pattern id="i" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#h)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#h)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#h)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#h)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#h)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#h)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#h)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#h)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#h)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#h)" stroke="cyan" />
+    </pattern>
+	
+	<pattern id="h" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#g)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#g)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#g)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#g)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#g)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#g)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#g)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#g)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#g)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#g)" stroke="cyan" />
+    </pattern>
+	
+	<pattern id="g" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#f)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#f)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#f)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#f)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#f)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#f)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#f)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#f)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#f)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#f)" stroke="cyan" />
+    </pattern>
+	
+	<pattern id="f" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#e)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#e)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#e)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#e)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#e)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#e)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#e)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#e)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#e)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#e)" stroke="cyan" />
+    </pattern>
+	
+	<pattern id="e" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#d)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#d)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#d)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#d)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#d)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#d)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#d)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#d)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#d)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#d)" stroke="cyan" />
+    </pattern>
+	
+    <pattern id="d" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#c)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#c)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#c)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#c)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#c)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#c)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#c)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#c)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#c)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#c)" stroke="cyan" />
+    </pattern>
+    <pattern id="c" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="url(#b)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#b)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#b)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#b)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#b)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#b)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#b)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#b)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#b)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#b)" stroke="cyan" />
+    </pattern>
+    <pattern id="b" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+	  <rect x="0" y="0" width="20" height="20" fill="url(#a)" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="url(#a)" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="url(#a)" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="url(#a)" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="url(#a)" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="url(#a)" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="url(#a)" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="url(#a)" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="url(#a)" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="url(#a)" stroke="cyan" />
+	  
+    </pattern>
+    <pattern id="a" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(0.5,0.5)">
+      <rect x="0" y="0" width="20" height="20" fill="none" stroke="green" />
+	  <rect x="1" y="1" width="20" height="20" fill="none" stroke="brown" />
+	  <rect x="2" y="2" width="20" height="20" fill="none" stroke="pink" />
+	  <rect x="3" y="3" width="20" height="20" fill="none" stroke="grey" />
+	  <rect x="4" y="3" width="20" height="20" fill="none" stroke="cyan" />
+	  <rect x="5" y="3" width="20" height="20" fill="none" stroke="green" />
+	  <rect x="6" y="3" width="20" height="20" fill="none" stroke="brown" />
+	  <rect x="7" y="3" width="20" height="20" fill="none" stroke="pink" />
+	  <rect x="8" y="3" width="20" height="20" fill="none" stroke="grey" />
+	  <rect x="9" y="3" width="20" height="20" fill="none" stroke="cyan" />
+    </pattern>
+  </defs>
+
+  <ellipse fill="url(#z)" stroke="black" stroke-width="5"  
+           cx="400" cy="200" rx="350" ry="150" />
+		   
+</svg>
