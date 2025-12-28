@@ -1037,9 +1037,10 @@ compute_viewport_transform (gboolean               none,
 
 static GdkTexture *
 load_texture (const char  *string,
+              gboolean     allow_external,
               GError     **error)
 {
-  GdkTexture *texture;
+  GdkTexture *texture = NULL;
 
   if (g_str_has_prefix (string, "data:"))
     {
@@ -1058,7 +1059,7 @@ load_texture (const char  *string,
     {
       texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
     }
-  else
+  else if (allow_external)
     {
       texture = gdk_texture_new_from_filename (string, error);
     }
@@ -1077,12 +1078,14 @@ get_texture (GtkSvg     *svg,
     {
       GError *error = NULL;
 
-      texture = load_texture (string, &error);
+      texture = load_texture (string,
+                              (svg->features & GTK_SVG_EXTERNAL_RESOURCES) != 0,
+                              &error);
       if (texture)
         {
           g_hash_table_insert (svg->images, g_strdup (string), texture);
         }
-      else
+      else if (error)
         {
           gtk_svg_emit_error (svg, error);
           g_error_free (error);
@@ -12336,6 +12339,35 @@ static struct {
   { { 0.25, 0.1, 0.25, 1 } },
 };
 
+static void
+apply_state (Shape        *shape,
+             unsigned int  state)
+{
+  if (shape_types[shape->type].has_gpa_attrs)
+    {
+      SvgValue *value;
+
+      if (state == GTK_SVG_STATE_EMPTY)
+        value = svg_visibility_new (VISIBILITY_HIDDEN);
+      else if (shape->gpa.states & BIT (state))
+        value = svg_visibility_new (VISIBILITY_VISIBLE);
+      else
+        value = svg_visibility_new (VISIBILITY_HIDDEN);
+
+      shape_set_base_value (shape, SHAPE_ATTR_VISIBILITY, 0, value);
+      svg_value_unref (value);
+    }
+
+  if (shape_types[shape->type].has_shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          apply_state (sh, state);
+        }
+    }
+}
+
 /* {{{ Weight variation */
 
 static double
@@ -13304,18 +13336,17 @@ ensure_fontmap (GtkSvg *svg)
 
   svg->fontmap = pango_cairo_font_map_new ();
 
-#if 0
-  /* This isolates us from the system fonts */
+  if ((svg->features & GTK_SVG_SYSTEM_RESOURCES) == 0)
+    {
 #ifdef HAVE_PANGOFT
-  {
-    FcConfig *config;
+      /* This isolates us from the system fonts */
+      FcConfig *config;
 
-    config = FcConfigCreate ();
-    pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (svg->fontmap), config);
-    FcConfigDestroy (config);
-  }
+      config = FcConfigCreate ();
+      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (svg->fontmap), config);
+      FcConfigDestroy (config);
 #endif
-#endif
+    }
 
   svg->font_files = g_ptr_array_new_with_free_func (delete_file);
 }
@@ -14869,6 +14900,9 @@ parse_shape_gpa_attrs (Shape                *shape,
   shape->gpa.attach.shape = NULL;
   shape->gpa.attach.pos = attach_pos;
 
+  if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+    return;
+
   if (attach_to_attr)
     g_ptr_array_add (data->pending_refs, shape);
 
@@ -15074,15 +15108,23 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else if (strcmp (element_name, "set") == 0)
     {
-      Animation *a = animation_set_new ();
+      Animation *a;
       const char *to_attr = NULL;
       SvgValue *value;
+
+      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+        {
+          skip_element (data, context, "Animations are disabled");
+          return;
+        }
 
       if (data->current_animation)
         {
           skip_element (data, context, "Nested animation elements are not allowed: <set>");
           return;
         }
+
+      a = animation_set_new ();
 
       markup_filter_attributes (element_name,
                                 attr_names, attr_values,
@@ -15154,6 +15196,12 @@ start_element_cb (GMarkupParseContext  *context,
            strcmp (element_name, "animateMotion") == 0)
     {
       Animation *a;
+
+      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+        {
+          skip_element (data, context, "Animations are disabled");
+          return;
+        }
 
       if (data->current_animation)
         {
@@ -16093,6 +16141,12 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   g_clear_pointer (&self->content, shape_free);
 
+  if ((self->features & GTK_SVG_SYSTEM_RESOURCES) == 0)
+    {
+      g_assert (self->fontmap == NULL);
+      ensure_fontmap (self);
+    }
+
   data.svg = self;
   data.current_shape = NULL;
   data.shape_stack = NULL;
@@ -16201,6 +16255,10 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_ptr_array_unref (data.pending_animations);
   g_ptr_array_unref (data.pending_refs);
   g_string_free (data.text, TRUE);
+
+  if (self->gpa_version == 1 &&
+      (self->features & GTK_SVG_ANIMATIONS) == 0)
+    apply_state (self->content, self->state);
 }
 
 /* }}} */
@@ -20180,6 +20238,7 @@ struct _GtkSvgClass
 enum
 {
   PROP_RESOURCE = 1,
+  PROP_FEATURES,
   PROP_PLAYING,
   PROP_WEIGHT,
   PROP_STATE,
@@ -20206,6 +20265,8 @@ gtk_svg_init (GtkSvg *self)
   self->next_update = INDEFINITE;
   self->playing = FALSE;
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
+
+  self->features = GTK_SVG_ALL_FEATURES;
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
@@ -20243,6 +20304,10 @@ gtk_svg_get_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_FEATURES:
+      g_value_set_flags (value, self->features);
+      break;
+
     case PROP_PLAYING:
       g_value_set_boolean (value, self->playing);
       break;
@@ -20281,6 +20346,10 @@ gtk_svg_set_property (GObject      *object,
             g_bytes_unref (bytes);
           }
       }
+      break;
+
+    case PROP_FEATURES:
+      gtk_svg_set_features (self, g_value_get_flags (value));
       break;
 
     case PROP_PLAYING:
@@ -20324,6 +20393,21 @@ gtk_svg_class_init (GtkSvgClass *class)
     g_param_spec_string ("resource", NULL, NULL,
                          NULL,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+
+  /**
+   * GtkSvg:features:
+   *
+   * Enabled features for this paintable.
+   *
+   * Note that features have to be set before
+   * loading SVG data to take effect.
+   *
+   * Since: 4.22
+   */
+  properties[PROP_FEATURES] =
+    g_param_spec_flags ("features", NULL, NULL,
+                        GTK_TYPE_SVG_FEATURES, GTK_SVG_ALL_FEATURES,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSvg:playing:
@@ -21734,6 +21818,19 @@ gtk_svg_set_state (GtkSvg       *self,
 
   self->state = state;
 
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0)
+    {
+      if (self->gpa_version == 1)
+        {
+          apply_state (self->content, state);
+
+          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
+      return;
+    }
+
   /* Don't jiggle things while we're still loading */
   if (self->load_time != INDEFINITE)
     {
@@ -21796,6 +21893,52 @@ gtk_svg_get_n_states (GtkSvg *self)
   g_return_val_if_fail (GTK_IS_SVG (self), 0);
 
   return self->max_state + 1;
+}
+
+/**
+ * gtk_svg_set_features:
+ * @self: an SVG paintable
+ * @features: features to enable
+ *
+ * Enables or disables features of the SVG paintable.
+ *
+ * By default, all features are enabled.
+ *
+ * Note that this call only has an effect before the
+ * SVG is loaded.
+ *
+ * Since: 4.22
+ */
+void
+gtk_svg_set_features (GtkSvg         *self,
+                      GtkSvgFeatures  features)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  if (self->features == features)
+    return;
+
+  self->features = features;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FEATURES]);
+}
+
+/**
+ * gtk_svg_get_features:
+ * @self: an SVG paintable
+ *
+ * Returns the currently enabled features.
+ *
+ * Returns: the enabled features
+ *
+ * Since: 4.22
+ */
+GtkSvgFeatures
+gtk_svg_get_features (GtkSvg *self)
+{
+  g_return_val_if_fail (GTK_IS_SVG (self), GTK_SVG_ALL_FEATURES);
+
+  return self->features;
 }
 
 /* }}} */

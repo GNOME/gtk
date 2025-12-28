@@ -67,6 +67,7 @@ struct _GtkSvg
   unsigned int state;
   unsigned int max_state;
   int64_t state_change_delay;
+  GtkSvgFeatures features;
 
   int64_t load_time;
   int64_t current_time;
