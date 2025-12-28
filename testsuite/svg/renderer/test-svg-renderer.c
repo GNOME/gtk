@@ -211,6 +211,11 @@ render_svg_file (GFile *file, gboolean generate)
   svg = gtk_svg_new ();
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), errors);
 
+  /* No system fonts, please */
+  gtk_svg_set_features (svg,
+                        GTK_SVG_ANIMATIONS |
+                        GTK_SVG_EXTERNAL_RESOURCES);
+
   bytes = g_bytes_new_take (contents, length);
   gtk_svg_load_from_bytes (svg, bytes);
   g_clear_pointer (&bytes, g_bytes_unref);
