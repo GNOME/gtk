@@ -10655,6 +10655,14 @@ time_spec_update_for_load_time (TimeSpec *spec,
 }
 
 static void
+time_spec_update_for_pause (TimeSpec *spec,
+                            int64_t   duration)
+{
+  if (spec->time != INDEFINITE)
+    time_spec_set_time (spec, spec->time + duration);
+}
+
+static void
 time_spec_update_for_state (TimeSpec     *spec,
                             unsigned int  previous_state,
                             unsigned int  state,
@@ -10797,6 +10805,17 @@ timeline_set_load_time (Timeline *timeline,
     {
       TimeSpec *spec = g_ptr_array_index (timeline->times, i);
       time_spec_update_for_load_time (spec, load_time);
+    }
+}
+
+static void
+timeline_update_for_pause (Timeline *timeline,
+                           int64_t   duration)
+{
+  for (unsigned int i = 0; i < timeline->times->len; i++)
+    {
+      TimeSpec *spec = g_ptr_array_index (timeline->times, i);
+      time_spec_update_for_pause (spec, duration);
     }
 }
 
@@ -11251,6 +11270,40 @@ animation_motion_get_current_measure (Animation             *a,
   else
     {
       return NULL;
+    }
+}
+
+static void
+animation_update_for_pause (Animation *a,
+                            int64_t    duration)
+{
+  if (a->current.begin != INDEFINITE)
+    a->current.begin += duration;
+  if (a->current.end != INDEFINITE)
+    a->current.end += duration;
+  if (a->previous.begin != INDEFINITE)
+    a->previous.begin += duration;
+  if (a->previous.end != INDEFINITE)
+    a->previous.end += duration;
+}
+
+static void
+animations_update_for_pause (Shape   *shape,
+                             int64_t  duration)
+{
+  for (unsigned int i = 0; i < shape->animations->len; i++)
+    {
+      Animation *a = g_ptr_array_index (shape->animations, i);
+      animation_update_for_pause (a, duration);
+    }
+
+  if (shape_types[shape->type].has_shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          animations_update_for_pause (sh, duration);
+        }
     }
 }
 
@@ -21648,19 +21701,44 @@ void
 gtk_svg_set_playing (GtkSvg   *self,
                      gboolean  playing)
 {
+  int64_t current_time;
+
   if (self->playing == playing)
     return;
 
   self->playing = playing;
 
+  /* FIXME frame time */
+  current_time = MAX (self->current_time, g_get_monotonic_time ());
+
   if (playing)
     {
-      if (self->load_time == INDEFINITE)
-        gtk_svg_set_load_time (self, g_get_monotonic_time ());
+      if (self->load_time != INDEFINITE)
+        {
+          int64_t duration = current_time - self->pause_time;
+
+          /* A simple-minded implementation of pausing:
+           * Forward all definite times by the duration of
+           * the pause, to make it as if that time never
+           * happened.
+           */
+          self->load_time += duration;
+          animations_update_for_pause (self->content, duration);
+          timeline_update_for_pause (self->timeline, duration);
+        }
+      else
+        {
+          gtk_svg_set_load_time (self, g_get_monotonic_time ());
+        }
       schedule_next_update (self);
     }
   else
     {
+      if (self->load_time != INDEFINITE)
+        {
+          self->pause_time = current_time;
+        }
+
       frame_clock_disconnect (self);
       g_clear_handle_id (&self->pending_invalidate, g_source_remove);
     }
