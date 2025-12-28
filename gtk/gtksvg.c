@@ -15557,9 +15557,10 @@ start_element_cb (GMarkupParseContext  *context,
     {
       data->svg->content = shape;
 
-      parse_svg_gpa_attrs (data->svg,
-                           element_name, attr_names, attr_values,
-                           &handled, data, context);
+      if (data->svg->features & GTK_SVG_EXTENSIONS)
+        parse_svg_gpa_attrs (data->svg,
+                             element_name, attr_names, attr_values,
+                             &handled, data, context);
     }
 
   parse_shape_attrs (shape,
@@ -18949,7 +18950,8 @@ shape_create_stroke (Shape        *shape,
   min = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], width);
   max = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], width);
 
-  width = width_apply_weight (width, min, max, context->weight);
+  if (context->svg->features & GTK_SVG_EXTENSIONS)
+    width = width_apply_weight (width, min, max, context->weight);
 
   stroke = gsk_stroke_new (width);
 
@@ -21898,6 +21900,12 @@ gtk_svg_set_state (GtkSvg       *self,
   previous_state = self->state;
 
   self->state = state;
+
+  if ((self->features & GTK_SVG_EXTENSIONS) == 0)
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
+      return;
+    }
 
   if ((self->features & GTK_SVG_ANIMATIONS) == 0)
     {

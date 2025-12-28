@@ -213,8 +213,7 @@ render_svg_file (GFile *file, gboolean generate)
 
   /* No system fonts, please */
   gtk_svg_set_features (svg,
-                        GTK_SVG_ANIMATIONS |
-                        GTK_SVG_EXTERNAL_RESOURCES);
+                        GTK_SVG_ALL_FEATURES & ~GTK_SVG_SYSTEM_RESOURCES);
 
   bytes = g_bytes_new_take (contents, length);
   gtk_svg_load_from_bytes (svg, bytes);
@@ -467,4 +466,3 @@ main (int argc, char **argv)
 
   return g_test_run ();
 }
-

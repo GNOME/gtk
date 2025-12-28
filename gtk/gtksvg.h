@@ -99,6 +99,8 @@ void             gtk_svg_pause             (GtkSvg        *self);
  * @GTK_SVG_EXTERNAL_RESOURCES: Whether to load external
  *   resources, such as images. If disabled, only embedded
  *   images are loaded
+ * @GTK_SVG_EXTENSIONS: Whether to allow gpa extensions, such
+ *   as states and transitions
  *
  * Features of the SVG renderer that can be disabled.
  *
@@ -113,12 +115,14 @@ typedef enum
   GTK_SVG_ANIMATIONS         = 1 << 0,
   GTK_SVG_SYSTEM_RESOURCES   = 1 << 1,
   GTK_SVG_EXTERNAL_RESOURCES = 1 << 2,
+  GTK_SVG_EXTENSIONS         = 1 << 3,
 } GtkSvgFeatures;
 
 #define GTK_SVG_ALL_FEATURES \
   (GTK_SVG_ANIMATIONS | \
    GTK_SVG_SYSTEM_RESOURCES | \
-   GTK_SVG_EXTERNAL_RESOURCES)
+   GTK_SVG_EXTERNAL_RESOURCES | \
+   GTK_SVG_EXTENSIONS)
 
 GDK_AVAILABLE_IN_4_22
 void             gtk_svg_set_features      (GtkSvg         *self,
