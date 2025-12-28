@@ -69,6 +69,8 @@ struct _GtkSvg
   int64_t state_change_delay;
   GtkSvgFeatures features;
 
+  char *resource;
+
   int64_t load_time;
   int64_t current_time;
 

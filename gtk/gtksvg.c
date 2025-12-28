@@ -16261,6 +16261,20 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     apply_state (self->content, self->state);
 }
 
+static void
+gtk_svg_init_from_resource (GtkSvg     *self,
+                            const char *path)
+{
+  GBytes *bytes;
+
+  bytes = g_resources_lookup_data (path, 0, NULL);
+  if (bytes)
+    {
+      gtk_svg_init_from_bytes (self, bytes);
+      g_bytes_unref (bytes);
+    }
+}
+
 /* }}} */
 /* {{{ Serialization */
 
@@ -20304,6 +20318,10 @@ gtk_svg_get_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_RESOURCE:
+      g_value_set_string (value, self->resource);
+      break;
+
     case PROP_FEATURES:
       g_value_set_flags (value, self->features);
       break;
@@ -20337,15 +20355,7 @@ gtk_svg_set_property (GObject      *object,
   switch (property_id)
     {
     case PROP_RESOURCE:
-      {
-        const char *path = g_value_get_string (value);
-        if (path)
-          {
-            GBytes *bytes = g_resources_lookup_data (path, 0, NULL);
-            gtk_svg_init_from_bytes (self, bytes);
-            g_bytes_unref (bytes);
-          }
-      }
+      gtk_svg_load_from_resource (self, g_value_get_string (value));
       break;
 
     case PROP_FEATURES:
@@ -20384,15 +20394,17 @@ gtk_svg_class_init (GtkSvgClass *class)
   /**
    * GtkSvg:resource:
    *
-   * Construct-only property to create a paintable from
-   * a resource in ui files.
+   * Resource to load SVG data from.
+   *
+   * This property is meant to create a paintable
+   * from a resource in ui files.
    *
    * Since: 4.22
    */
   properties[PROP_RESOURCE] =
     g_param_spec_string ("resource", NULL, NULL,
                          NULL,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSvg:features:
@@ -21643,7 +21655,11 @@ gtk_svg_new_from_bytes (GBytes *bytes)
 GtkSvg *
 gtk_svg_new_from_resource (const char *path)
 {
-  return g_object_new (GTK_TYPE_SVG, "resource", path, NULL);
+  GtkSvg *self = g_object_new (GTK_TYPE_SVG, NULL);
+
+  gtk_svg_init_from_resource (self, path);
+
+  return self;
 }
 
 /* }}} */
@@ -21673,6 +21689,37 @@ gtk_svg_load_from_bytes (GtkSvg *self,
   gtk_svg_clear_content (self);
 
   gtk_svg_init_from_bytes (self, bytes);
+}
+
+/**
+ * gtk_svg_load_from_resource:
+ * @self: an SVG paintable
+ * @path: the resource path
+ *
+ * Loads SVG content into an existing SVG paintable.
+ *
+ * To track errors while loading SVG content,
+ * connect to the [signal@Gtk.Svg::error] signal.
+ *
+ * This clears any previously loaded content.
+ *
+ * Since: 4.22
+ */
+void
+gtk_svg_load_from_resource (GtkSvg     *self,
+                            const char *path)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  g_set_str (&self->resource, path);
+
+  gtk_svg_set_playing (self, FALSE);
+  gtk_svg_clear_content (self);
+
+  if (path)
+    gtk_svg_init_from_resource (self, path);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RESOURCE]);
 }
 
 /* }}} */
