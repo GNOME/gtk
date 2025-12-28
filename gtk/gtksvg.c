@@ -14646,6 +14646,57 @@ parse_shape_attrs (Shape                *shape,
 }
 
 static void
+parse_svg_gpa_attrs (GtkSvg               *svg,
+                     const char           *element_name,
+                     const char          **attr_names,
+                     const char          **attr_values,
+                     uint64_t             *handled,
+                     ParserData           *data,
+                     GMarkupParseContext  *context)
+{
+  const char *state_attr = NULL;
+  const char *version_attr = NULL;
+  const char *keywords_attr = NULL;
+
+  markup_filter_attributes (element_name,
+                            attr_names, attr_values,
+                            handled,
+                            "gpa:state", &state_attr,
+                            "gpa:version", &version_attr,
+                            "gpa:keywords", &keywords_attr,
+                            NULL);
+
+  if (state_attr)
+    {
+      double v;
+
+      if (strcmp (state_attr, "empty") == 0)
+        gtk_svg_set_state (svg, GTK_SVG_STATE_EMPTY);
+      else if (!parse_number (state_attr, -1, 63, &v))
+        gtk_svg_invalid_attribute (svg, context, "gpa:state", NULL);
+      else if (v < 0)
+        gtk_svg_set_state (svg, GTK_SVG_STATE_EMPTY);
+      else
+        gtk_svg_set_state (svg, (unsigned int) CLAMP (v, 0, 63));
+    }
+
+  if (version_attr)
+    {
+      unsigned int version;
+      char *end;
+
+      version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
+      if ((end && *end != '\0') || version != 1)
+        gtk_svg_invalid_attribute (svg, context, "gpa:version", "must be 1");
+      else
+        svg->gpa_version = version;
+    }
+
+  if (keywords_attr)
+    svg->gpa_keywords = g_strdup (keywords_attr);
+}
+
+static void
 parse_shape_gpa_attrs (Shape                *shape,
                        const char           *element_name,
                        const char          **attr_names,
@@ -15485,48 +15536,11 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (data->current_shape == NULL && shape->type == SHAPE_SVG)
     {
-      const char *state_attr = NULL;
-      const char *version_attr = NULL;
-      const char *keywords_attr = NULL;
-
       data->svg->content = shape;
 
-      markup_filter_attributes (element_name,
-                                attr_names, attr_values,
-                                &handled,
-                                "gpa:state", &state_attr,
-                                "gpa:version", &version_attr,
-                                "gpa:keywords", &keywords_attr,
-                                NULL);
-
-      if (state_attr)
-        {
-          double v;
-
-          if (strcmp (state_attr, "empty") == 0)
-            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
-          else if (!parse_number (state_attr, -1, 63, &v))
-            gtk_svg_invalid_attribute (data->svg, context, "gpa:state", NULL);
-          else if (v < 0)
-            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
-          else
-            gtk_svg_set_state (data->svg, (unsigned int) CLAMP (v, 0, 63));
-        }
-
-      if (version_attr)
-        {
-          unsigned int version;
-          char *end;
-
-          version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
-          if ((end && *end != '\0') || version != 1)
-            gtk_svg_invalid_attribute (data->svg, context, "gpa:version", "must be 1");
-          else
-            data->svg->gpa_version = version;
-        }
-
-      if (keywords_attr)
-        data->svg->gpa_keywords = g_strdup (keywords_attr);
+      parse_svg_gpa_attrs (data->svg,
+                           element_name, attr_names, attr_values,
+                           &handled, data, context);
     }
 
   parse_shape_attrs (shape,
@@ -21867,7 +21881,7 @@ gtk_svg_set_state (GtkSvg       *self,
 
   if ((self->features & GTK_SVG_ANIMATIONS) == 0)
     {
-      if (self->gpa_version == 1)
+      if (self->gpa_version > 0)
         {
           apply_state (self->content, state);
 
