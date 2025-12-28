@@ -571,4 +571,9 @@ on_data_ready_cb (GObject      *object,
   return nil;
 }
 
+-(id)localObject
+{
+  return nil;
+}
+
 @end
