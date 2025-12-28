@@ -108,7 +108,8 @@ toggle_playing (GtkWidget *widget,
   return TRUE;
 }
 
-static GtkSvg * load_animation_file (const char *filename);
+static GtkSvg * load_animation_file (const char     *filename,
+                                     GtkSvgFeatures  features);
 
 static gboolean
 restart (GtkWidget *widget,
@@ -117,10 +118,14 @@ restart (GtkWidget *widget,
 {
   const char *filename;
   GtkSvg *svg;
+  GtkSvgFeatures features;
+
+  svg = GTK_SVG (gtk_picture_get_paintable (GTK_PICTURE (widget)));
+  features = gtk_svg_get_features (svg);
 
   filename = (const char *) g_object_get_data (G_OBJECT (widget), "filename");
 
-  svg = load_animation_file (filename);
+  svg = load_animation_file (filename, features);
 
   gtk_svg_set_frame_clock (svg, gtk_widget_get_frame_clock (widget));
 
@@ -161,7 +166,8 @@ error_cb (GtkSvg *svg, GError *error)
 }
 
 static GtkSvg *
-load_animation_file (const char *filename)
+load_animation_file (const char     *filename,
+                     GtkSvgFeatures  features)
 {
   char *contents;
   size_t length;
@@ -178,6 +184,7 @@ load_animation_file (const char *filename)
   bytes = g_bytes_new_take (contents, length);
 
   svg = gtk_svg_new ();
+  gtk_svg_set_features (svg, features);
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), NULL);
   gtk_svg_load_from_bytes (svg, bytes);
 
@@ -187,9 +194,10 @@ load_animation_file (const char *filename)
 }
 
 static void
-show_files (char     **filenames,
-            gboolean   decorated,
-            int        size)
+show_files (char           **filenames,
+            gboolean         decorated,
+            int              size,
+            GtkSvgFeatures   features)
 {
   GtkWidget *sw;
   GtkWidget *window;
@@ -239,7 +247,7 @@ show_files (char     **filenames,
       GtkShortcutTrigger *trigger;
       GtkShortcutAction *action;
 
-      svg = load_animation_file (filenames[i]);
+      svg = load_animation_file (filenames[i], features);
 
       gtk_svg_set_frame_clock (svg, gtk_widget_get_frame_clock (window));
 
@@ -304,13 +312,20 @@ do_play (int          *argc,
   char **filenames = NULL;
   gboolean decorated = TRUE;
   int size = 0;
+  gboolean allow_animations = TRUE;
+  gboolean allow_system = TRUE;
+  gboolean allow_external = TRUE;
   const GOptionEntry entries[] = {
     { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
     { "size", 0, 0, G_OPTION_ARG_INT, &size, N_("SIZE") },
+    { "no-animations", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_animations, N_("Don't run animations"), NULL },
+    { "no-system-resources", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_system, N_("Don't use system resources"), NULL },
+    { "no-external-resources", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_external, N_("Don't load external resources"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
   GError *error = NULL;
+  GtkSvgFeatures features;
 
   g_set_prgname ("gtk4-image-tool play");
   context = g_option_context_new (NULL);
@@ -333,7 +348,11 @@ do_play (int          *argc,
       exit (1);
     }
 
-  show_files (filenames, decorated, size);
+  features = (allow_animations ? GTK_SVG_ANIMATIONS : 0) |
+             (allow_system ? GTK_SVG_SYSTEM_RESOURCES : 0) |
+             (allow_external ? GTK_SVG_EXTERNAL_RESOURCES : 0);
+
+  show_files (filenames, decorated, size, features);
 
   g_strfreev (filenames);
 }
