@@ -1096,6 +1096,207 @@ get_texture (GtkSvg     *svg,
 }
 
 /* }}} */
+/* {{{ Font handling */
+
+static void
+append_base64_with_linebreaks (GString *s,
+                               GBytes  *bytes)
+{
+  const guchar *data;
+  gsize len;
+  gsize max;
+  gsize before;
+  char *out;
+  int state = 0, outlen;
+  int save = 0;
+
+  data = g_bytes_get_data (bytes, &len);
+
+  /* We can use a smaller limit here, since we know the saved state is 0,
+     +1 is needed for trailing \0, also check for unlikely integer overflow */
+  g_return_if_fail (len < ((G_MAXSIZE - 1 - s->len) / 4 - 1) * 3);
+
+  /* The glib docs say:
+   *
+   * The output buffer must be large enough to fit all the data that will
+   * be written to it. Due to the way base64 encodes you will need
+   * at least: (@len / 3 + 1) * 4 + 4 bytes (+ 4 may be needed in case of
+   * non-zero state). If you enable line-breaking you will need at least:
+   * ((@len / 3 + 1) * 4 + 4) / 76 + 1 bytes of extra space.
+   */
+  max = (len / 3 + 1) * 4;
+  max += ((len / 3 + 1) * 4 + 4) / 76 + 1;
+  /* and the null byte */
+  max += 1;
+
+  before = s->len;
+  g_string_set_size (s, s->len + max);
+  out = s->str + before;
+
+  outlen = g_base64_encode_step (data, len, TRUE, out, &state, &save);
+  outlen += g_base64_encode_close (TRUE, out + outlen, &state, &save);
+  out[outlen] = '\0';
+  s->len = before + outlen;
+}
+
+static void
+append_bytes_href (GString    *s,
+                   GBytes     *bytes,
+                   const char *mime_type)
+{
+  g_string_append_printf (s, "data:%s;base64,\\\n", mime_type ? mime_type : "");
+  append_base64_with_linebreaks (s, bytes);
+}
+
+static void
+delete_file (gpointer data)
+{
+  char *path = data;
+
+  g_remove (path);
+  g_free (path);
+}
+
+static void
+ensure_fontmap (GtkSvg *svg)
+{
+  if (svg->fontmap)
+    return;
+
+  svg->fontmap = pango_cairo_font_map_new ();
+
+  if ((svg->features & GTK_SVG_SYSTEM_RESOURCES) == 0)
+    {
+#ifdef HAVE_PANGOFT
+      /* This isolates us from the system fonts */
+      FcConfig *config;
+
+      config = FcConfigCreate ();
+      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (svg->fontmap), config);
+      FcConfigDestroy (config);
+#endif
+    }
+
+  svg->font_files = g_ptr_array_new_with_free_func (delete_file);
+}
+
+static PangoFontMap *
+get_fontmap (GtkSvg *svg)
+{
+  if (svg->fontmap)
+    return svg->fontmap;
+  else
+    return pango_cairo_font_map_get_default ();
+}
+
+static gboolean
+add_font_from_file (GtkSvg      *svg,
+                    const char  *path,
+                    GError     **error)
+{
+  ensure_fontmap (svg);
+
+  if (!pango_font_map_add_font_file (svg->fontmap, path, error))
+    return FALSE;
+
+  g_ptr_array_add (svg->font_files, g_strdup (path));
+  return TRUE;
+}
+
+static gboolean
+add_font_from_bytes (GtkSvg      *svg,
+                     GBytes      *bytes,
+                     GError     **error)
+{
+  GFile *file;
+  GIOStream *iostream;
+  GOutputStream *ostream;
+
+  file = g_file_new_tmp ("gtk4-font-XXXXXX.ttf", (GFileIOStream **) &iostream, error);
+  if (!file)
+    return FALSE;
+
+  ostream = g_io_stream_get_output_stream (iostream);
+  if (g_output_stream_write_bytes (ostream, bytes, NULL, error) == -1)
+    {
+      g_object_unref (file);
+      g_object_unref (iostream);
+
+      return FALSE;
+    }
+
+  g_io_stream_close (iostream, NULL, NULL);
+  g_object_unref (iostream);
+
+  if (!add_font_from_file (svg, g_file_peek_path (file), error))
+    {
+      g_file_delete (file, NULL, NULL);
+      g_object_unref (file);
+
+      return FALSE;
+    }
+
+  g_object_unref (file);
+  return TRUE;
+}
+
+static gboolean
+add_font_from_url (GtkSvg              *svg,
+                   GMarkupParseContext *context,
+                   const char          *url)
+{
+  char *scheme;
+  GBytes *bytes;
+  char *mimetype = NULL;
+  GError *error = NULL;
+
+  scheme = g_uri_parse_scheme (url);
+  if (!scheme || g_ascii_strcasecmp (scheme, "data") != 0)
+    {
+      char *start = g_utf8_make_valid (url, 20);
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Unsupported uri scheme for font: %s…", start);
+      g_free (start);
+      return FALSE;
+    }
+
+  g_free (scheme);
+
+  bytes = gtk_css_data_url_parse (url, &mimetype, &error);
+  if (!bytes)
+    {
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Can't parse font data: %s", error->message);
+      g_error_free (error);
+      g_free (mimetype);
+      return FALSE;
+    }
+
+  if (strcmp (mimetype, "font/ttf") != 0)
+    {
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Unsupported mime type for font data: %s", mimetype);
+      g_bytes_unref (bytes);
+      g_free (mimetype);
+      return FALSE;
+    }
+
+  g_free (mimetype);
+
+  if (!add_font_from_bytes (svg, bytes, &error))
+    {
+      g_bytes_unref (bytes);
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Failed to add font: %s", error->message);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  g_bytes_unref (bytes);
+  return TRUE;
+}
+
+/* }}} */
 /* {{{ Pango utilities */
 
 static GskPath *
@@ -13267,207 +13468,6 @@ typedef struct
   GString *text;
 } ParserData;
 
-/* {{{ Font handling */
-
-static void
-append_base64_with_linebreaks (GString *s,
-                               GBytes  *bytes)
-{
-  const guchar *data;
-  gsize len;
-  gsize max;
-  gsize before;
-  char *out;
-  int state = 0, outlen;
-  int save = 0;
-
-  data = g_bytes_get_data (bytes, &len);
-
-  /* We can use a smaller limit here, since we know the saved state is 0,
-     +1 is needed for trailing \0, also check for unlikely integer overflow */
-  g_return_if_fail (len < ((G_MAXSIZE - 1 - s->len) / 4 - 1) * 3);
-
-  /* The glib docs say:
-   *
-   * The output buffer must be large enough to fit all the data that will
-   * be written to it. Due to the way base64 encodes you will need
-   * at least: (@len / 3 + 1) * 4 + 4 bytes (+ 4 may be needed in case of
-   * non-zero state). If you enable line-breaking you will need at least:
-   * ((@len / 3 + 1) * 4 + 4) / 76 + 1 bytes of extra space.
-   */
-  max = (len / 3 + 1) * 4;
-  max += ((len / 3 + 1) * 4 + 4) / 76 + 1;
-  /* and the null byte */
-  max += 1;
-
-  before = s->len;
-  g_string_set_size (s, s->len + max);
-  out = s->str + before;
-
-  outlen = g_base64_encode_step (data, len, TRUE, out, &state, &save);
-  outlen += g_base64_encode_close (TRUE, out + outlen, &state, &save);
-  out[outlen] = '\0';
-  s->len = before + outlen;
-}
-
-static void
-append_bytes_href (GString    *s,
-                   GBytes     *bytes,
-                   const char *mime_type)
-{
-  g_string_append_printf (s, "data:%s;base64,\\\n", mime_type ? mime_type : "");
-  append_base64_with_linebreaks (s, bytes);
-}
-
-static void
-delete_file (gpointer data)
-{
-  char *path = data;
-
-  g_remove (path);
-  g_free (path);
-}
-
-static void
-ensure_fontmap (GtkSvg *svg)
-{
-  if (svg->fontmap)
-    return;
-
-  svg->fontmap = pango_cairo_font_map_new ();
-
-  if ((svg->features & GTK_SVG_SYSTEM_RESOURCES) == 0)
-    {
-#ifdef HAVE_PANGOFT
-      /* This isolates us from the system fonts */
-      FcConfig *config;
-
-      config = FcConfigCreate ();
-      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (svg->fontmap), config);
-      FcConfigDestroy (config);
-#endif
-    }
-
-  svg->font_files = g_ptr_array_new_with_free_func (delete_file);
-}
-
-static PangoFontMap *
-get_fontmap (GtkSvg *svg)
-{
-  if (svg->fontmap)
-    return svg->fontmap;
-  else
-    return pango_cairo_font_map_get_default ();
-}
-
-static gboolean
-add_font_from_file (GtkSvg      *svg,
-                    const char  *path,
-                    GError     **error)
-{
-  ensure_fontmap (svg);
-
-  if (!pango_font_map_add_font_file (svg->fontmap, path, error))
-    return FALSE;
-
-  g_ptr_array_add (svg->font_files, g_strdup (path));
-  return TRUE;
-}
-
-static gboolean
-add_font_from_bytes (GtkSvg      *svg,
-                     GBytes      *bytes,
-                     GError     **error)
-{
-  GFile *file;
-  GIOStream *iostream;
-  GOutputStream *ostream;
-
-  file = g_file_new_tmp ("gtk4-font-XXXXXX.ttf", (GFileIOStream **) &iostream, error);
-  if (!file)
-    return FALSE;
-
-  ostream = g_io_stream_get_output_stream (iostream);
-  if (g_output_stream_write_bytes (ostream, bytes, NULL, error) == -1)
-    {
-      g_object_unref (file);
-      g_object_unref (iostream);
-
-      return FALSE;
-    }
-
-  g_io_stream_close (iostream, NULL, NULL);
-  g_object_unref (iostream);
-
-  if (!add_font_from_file (svg, g_file_peek_path (file), error))
-    {
-      g_file_delete (file, NULL, NULL);
-      g_object_unref (file);
-
-      return FALSE;
-    }
-
-  g_object_unref (file);
-  return TRUE;
-}
-
-static gboolean
-add_font_from_url (GtkSvg              *svg,
-                   GMarkupParseContext *context,
-                   const char          *url)
-{
-  char *scheme;
-  GBytes *bytes;
-  char *mimetype = NULL;
-  GError *error = NULL;
-
-  scheme = g_uri_parse_scheme (url);
-  if (!scheme || g_ascii_strcasecmp (scheme, "data") != 0)
-    {
-      char *start = g_utf8_make_valid (url, 20);
-      gtk_svg_invalid_attribute (svg, context, "href",
-                                 "Unsupported uri scheme for font: %s…", start);
-      g_free (start);
-      return FALSE;
-    }
-
-  g_free (scheme);
-
-  bytes = gtk_css_data_url_parse (url, &mimetype, &error);
-  if (!bytes)
-    {
-      gtk_svg_invalid_attribute (svg, context, "href",
-                                 "Can't parse font data: %s", error->message);
-      g_error_free (error);
-      g_free (mimetype);
-      return FALSE;
-    }
-
-  if (strcmp (mimetype, "font/ttf") != 0)
-    {
-      gtk_svg_invalid_attribute (svg, context, "href",
-                                 "Unsupported mime type for font data: %s", mimetype);
-      g_bytes_unref (bytes);
-      g_free (mimetype);
-      return FALSE;
-    }
-
-  g_free (mimetype);
-
-  if (!add_font_from_bytes (svg, bytes, &error))
-    {
-      g_bytes_unref (bytes);
-      gtk_svg_invalid_attribute (svg, context, "href",
-                                 "Failed to add font: %s", error->message);
-      g_error_free (error);
-      return FALSE;
-    }
-
-  g_bytes_unref (bytes);
-  return TRUE;
-}
-
-/* }}} */
 /* {{{ Animation attributes */
 
 static gboolean
