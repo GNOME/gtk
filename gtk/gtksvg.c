@@ -44,6 +44,8 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
+#include "gdk/gdkrgbaprivate.h"
+
 /**
  * GtkSvg:
  *
@@ -4784,6 +4786,7 @@ typedef struct
     struct {
       char *ref;
       Shape *shape;
+      GdkRGBA fallback;
     } server;
   };
 } SvgPaint;
@@ -4821,7 +4824,8 @@ svg_paint_equal (const SvgValue *value0,
       return gdk_rgba_equal (&paint0->color, &paint1->color);
     case PAINT_SERVER:
       return paint0->server.shape == paint1->server.shape &&
-             g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0;
+             g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0 &&
+             gdk_rgba_equal (&paint0->server.fallback, &paint1->server.fallback);
     default:
       g_assert_not_reached ();
     }
@@ -4928,14 +4932,16 @@ svg_paint_new_black (void)
 }
 
 static SvgValue *
-svg_paint_new_server (Shape      *shape,
-                      const char *ref)
+svg_paint_new_server (Shape         *shape,
+                      const char    *ref,
+                      const GdkRGBA *fallback)
 {
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
   paint->kind = PAINT_SERVER;
   paint->server.shape = shape;
   paint->server.ref = g_strdup (ref);
+  paint->server.fallback = *fallback;
 
   return (SvgValue *) paint;
 }
@@ -4975,13 +4981,21 @@ svg_paint_parse (const char *value)
       url = gtk_css_parser_consume_url (parser);
       if (url)
         {
-          if (g_str_has_prefix (url, "#gpa:") &&
-              parse_symbolic_color (url + strlen ("#gpa:"), &symbolic))
-            paint = svg_paint_new_symbolic (symbolic);
-          else if (url[0] == '#')
-            paint = svg_paint_new_server (NULL, url + 1);
-          else
-            paint = svg_paint_new_server (NULL, url);
+          GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
+
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) || 
+              gtk_css_parser_try_ident (parser, "none") ||
+              gdk_rgba_parser_parse (parser, &fallback))
+            {
+              if (g_str_has_prefix (url, "#gpa:") &&
+                parse_symbolic_color (url + strlen ("#gpa:"), &symbolic))
+                paint = svg_paint_new_symbolic (symbolic);
+              else if (url[0] == '#')
+                paint = svg_paint_new_server (NULL, url + 1, &fallback);
+              else
+                paint = svg_paint_new_server (NULL, url, &fallback);
+            }
         }
 
       g_free (url);
@@ -5065,6 +5079,11 @@ svg_paint_print (const SvgValue *value,
 
     case PAINT_SERVER:
       g_string_append_printf (s, "url(#%s)", paint->server.ref);
+      if (!gdk_rgba_equal (&paint->server.fallback, &GDK_RGBA_TRANSPARENT))
+        {
+          g_string_append_c (s, ' ');
+          gdk_rgba_print (&paint->server.fallback, s);
+        }
       break;
 
     default:
@@ -13938,7 +13957,7 @@ parse_value_animation_attrs (Animation            *a,
         from = svg_transform_new_none ();
       else if (by->class == &SVG_PAINT_CLASS &&
                ((SvgPaint *) by)->kind == PAINT_COLOR)
-        from = svg_paint_new_rgba (&(GdkRGBA) { 0, 0, 0, 0 });
+        from = svg_paint_new_rgba (&GDK_RGBA_TRANSPARENT);
       else
         {
           gtk_svg_invalid_attribute (data->svg, context, NULL,  "Don't know how to handle this 'by' value");
@@ -18870,12 +18889,13 @@ paint_pattern (Shape                 *pattern,
 }
 
 static void
-paint_server (Shape                 *server,
+paint_server (SvgPaint              *paint,
               const graphene_rect_t *bounds,
               PaintContext          *context)
 {
-  if (!server)
-    return;
+  Shape *server = paint->server.shape;
+
+  g_assert (paint->server.shape != NULL);
 
   if (server->type == SHAPE_LINEAR_GRADIENT ||
       server->type == SHAPE_RADIAL_GRADIENT)
@@ -19063,7 +19083,7 @@ retry:
           gtk_snapshot_push_opacity (context->snapshot, opacity);
 
         gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
-        paint_server (paint->server.shape, &bounds, context);
+        paint_server (paint, &bounds, context);
         gtk_snapshot_pop (context->snapshot);
 
         if (opacity < 1)
@@ -19124,7 +19144,7 @@ retry:
           gtk_snapshot_push_opacity (context->snapshot, opacity);
 
         gtk_snapshot_push_stroke (context->snapshot, path, stroke);
-        paint_server (paint->server.shape, &bounds, context);
+        paint_server (paint, &bounds, context);
         gtk_snapshot_pop (context->snapshot);
 
         if (opacity < 1)
@@ -19658,7 +19678,7 @@ fill_text (Shape                 *self,
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &(GdkRGBA){ .red = 0., .green = 0., .blue = 0., .alpha = 1. });
                 gtk_snapshot_pop (context->snapshot);
-                paint_server (paint->server.shape, bounds, context);
+                paint_server (paint, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
 
                 if (opacity < 1)
@@ -19736,7 +19756,7 @@ stroke_text (Shape                 *self,
                 gtk_snapshot_append_stroke (context->snapshot, path, stroke, &(GdkRGBA) { 0, 0, 0, 1 });
                 gsk_path_unref (path);
                 gtk_snapshot_pop (context->snapshot);
-                paint_server (paint->server.shape, bounds, context);
+                paint_server (paint, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
 
                 if (opacity < 1)
