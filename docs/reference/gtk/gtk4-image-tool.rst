@@ -63,6 +63,26 @@ where applicable.
 
   Show the animation at the given size.
 
+``--no-animations``
+
+  Disable animation playback.
+
+``--no-system-resources``
+
+  Disable the use of system fonts. Embedded fonts will still
+  be used.
+
+``--no-external-resources``
+
+  Disable loading of external resources such as images.
+  Embedded images and images that included as resources
+  in the application are still used.
+
+``--no-extensions``
+
+  Disable gpa extensions, such as states, transitions
+  and dynamic stroke weight.
+
 Compare
 ^^^^^^^
 
