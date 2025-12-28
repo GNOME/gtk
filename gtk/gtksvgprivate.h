@@ -383,6 +383,7 @@ typedef enum
   PAINT_COLOR,
   PAINT_SYMBOLIC,
   PAINT_SERVER,
+  PAINT_SERVER_WITH_FALLBACK,
 } PaintKind;
 
 typedef enum

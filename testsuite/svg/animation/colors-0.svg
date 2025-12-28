@@ -23,7 +23,7 @@
               begin='0ms'
               dur='10000ms'
               fill='freeze'
-              values='rgb(255,0,0); rgb(0,255,0); url("#gpa:foreground") rgb(0,0,0); rgb(0,0,255); none; rgb(255,0,0)'
+              values='rgb(255,0,0); rgb(0,255,0); url(#gpa:foreground) rgb(0,0,0); rgb(0,0,255); none; rgb(255,0,0)'
               keyTimes='0; 0.2; 0.4; 0.6; 0.8; 1'
               gpa:status='running'
               gpa:current-start-time='0ms'

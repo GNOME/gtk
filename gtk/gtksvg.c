@@ -4796,7 +4796,7 @@ svg_paint_free (SvgValue *value)
 {
   SvgPaint *paint = (SvgPaint *) value;
 
-  if (paint->kind == PAINT_SERVER)
+  if (paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK)
     g_free (paint->server.ref);
 
   g_free (value);
@@ -4823,6 +4823,7 @@ svg_paint_equal (const SvgValue *value0,
     case PAINT_COLOR:
       return gdk_rgba_equal (&paint0->color, &paint1->color);
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       return paint0->server.shape == paint1->server.shape &&
              g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0 &&
              gdk_rgba_equal (&paint0->server.fallback, &paint1->server.fallback);
@@ -4852,16 +4853,25 @@ static const SvgValueClass SVG_PAINT_CLASS = {
   svg_paint_distance,
 };
 
+static const char *symbolic_colors[] = {
+  "foreground", "error", "warning", "success", "accent"
+};
+
+static const char *symbolic_fallbacks[] = {
+  "rgb(0,0,0)",
+  "rgb(204,0,0)",
+  "rgb(245,121,0)",
+  "rgb(51,209,122)",
+  "rgb(0,34,255)",
+};
+
 static gboolean
 parse_symbolic_color (const char       *value,
                       GtkSymbolicColor *symbolic)
 {
-  const char *sym[] = {
-    "foreground", "error", "warning", "success", "accent"
-  };
   unsigned int u = 0;
 
-  if (!parse_enum (value, sym, G_N_ELEMENTS (sym), &u))
+  if (!parse_enum (value, symbolic_colors, G_N_ELEMENTS (symbolic_colors), &u))
     return FALSE;
 
   *symbolic = u;
@@ -4938,10 +4948,18 @@ svg_paint_new_server (Shape         *shape,
 {
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
-  paint->kind = PAINT_SERVER;
+  if (fallback)
+    {
+      paint->kind = PAINT_SERVER_WITH_FALLBACK;
+      paint->server.fallback = *fallback;
+    }
+  else
+    {
+      paint->kind = PAINT_SERVER;
+      paint->server.fallback = GDK_RGBA_TRANSPARENT;
+    }
   paint->server.shape = shape;
   paint->server.ref = g_strdup (ref);
-  paint->server.fallback = *fallback;
 
   return (SvgValue *) paint;
 }
@@ -4972,7 +4990,6 @@ svg_paint_parse (const char *value)
       GtkCssParser *parser;
       GBytes *bytes;
       char *url;
-      GtkSymbolicColor symbolic;
       SvgValue *paint = NULL;
 
       bytes = g_bytes_new_static (value, strlen (value));
@@ -4982,19 +4999,22 @@ svg_paint_parse (const char *value)
       if (url)
         {
           GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
+          const char *ref;
+
+          if (url[0] == '#')
+            ref = url + 1;
+          else
+            ref = url;
 
           gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) || 
-              gtk_css_parser_try_ident (parser, "none") ||
-              gdk_rgba_parser_parse (parser, &fallback))
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
             {
-              if (g_str_has_prefix (url, "#gpa:") &&
-                parse_symbolic_color (url + strlen ("#gpa:"), &symbolic))
-                paint = svg_paint_new_symbolic (symbolic);
-              else if (url[0] == '#')
-                paint = svg_paint_new_server (NULL, url + 1, &fallback);
-              else
-                paint = svg_paint_new_server (NULL, url, &fallback);
+              paint = svg_paint_new_server (NULL, ref, NULL);
+            }
+          else if (gtk_css_parser_try_ident (parser, "none") ||
+                   gdk_rgba_parser_parse (parser, &fallback))
+            {
+              paint = svg_paint_new_server (NULL, ref, &fallback);
             }
         }
 
@@ -5042,16 +5062,6 @@ svg_paint_print (const SvgValue *value,
                  GString        *s)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
-  struct {
-    const char *symbolic;
-    const char *fallback;
-  } colors[] = {
-    { "foreground", "rgb(0,0,0)", },
-    { "error",      "rgb(204,0,0)", },
-    { "warning",    "rgb(245,121,0)", },
-    { "success",    "rgb(51,209,122)", },
-    { "accent",     "rgb(0,34,255)", },
-  };
 
   switch (paint->kind)
     {
@@ -5072,18 +5082,29 @@ svg_paint_print (const SvgValue *value,
       break;
 
     case PAINT_SYMBOLIC:
-      g_string_append_printf (s, "url(\"#gpa:%s\") %s",
-                              colors[paint->symbolic].symbolic,
-                              colors[paint->symbolic].fallback);
+      g_string_append_printf (s, "url(#gpa:%s) %s",
+                              symbolic_colors[paint->symbolic],
+                              symbolic_fallbacks[paint->symbolic]);
       break;
 
     case PAINT_SERVER:
-      g_string_append_printf (s, "url(#%s)", paint->server.ref);
-      if (!gdk_rgba_equal (&paint->server.fallback, &GDK_RGBA_TRANSPARENT))
-        {
-          g_string_append_c (s, ' ');
-          gdk_rgba_print (&paint->server.fallback, s);
+      {
+        GtkSymbolicColor symbolic;
+
+        g_string_append_printf (s, "url(#%s)", paint->server.ref);
+        if (g_str_has_prefix (paint->server.ref, "gpa:") &&
+            parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+          {
+            g_string_append_c (s, ' ');
+            g_string_append (s, symbolic_fallbacks[symbolic]);
+          }
         }
+      break;
+
+    case PAINT_SERVER_WITH_FALLBACK:
+      g_string_append_printf (s, "url(#%s)", paint->server.ref);
+      g_string_append_c (s, ' ');
+      gdk_rgba_print (&paint->server.fallback, s);
       break;
 
     default:
@@ -5128,6 +5149,12 @@ svg_paint_print_gpa (const SvgValue *value,
       g_string_append_printf  (s, "url(#%s)", paint->server.ref);
       break;
 
+    case PAINT_SERVER_WITH_FALLBACK:
+      g_string_append_printf  (s, "url(#%s)", paint->server.ref);
+      g_string_append_c (s, ' ');
+      gdk_rgba_print (&paint->server.fallback, s);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -5136,7 +5163,8 @@ svg_paint_print_gpa (const SvgValue *value,
 static SvgValue *
 svg_paint_resolve (SvgValue      *value,
                    const GdkRGBA *colors,
-                   size_t         n_colors)
+                   size_t         n_colors,
+                   gboolean       allow_gpa)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
 
@@ -5144,12 +5172,27 @@ svg_paint_resolve (SvgValue      *value,
 
   if (paint->kind == PAINT_SYMBOLIC)
     {
-      if (paint->symbolic < n_colors)
+      if (!allow_gpa)
+        return svg_paint_new_black ();
+      else if (paint->symbolic < n_colors)
         return svg_paint_new_rgba (&colors[paint->symbolic]);
       else if (GTK_SYMBOLIC_COLOR_FOREGROUND < n_colors)
         return svg_paint_new_rgba (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
       else
         return svg_paint_new_black ();
+    }
+  else if ((paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK) &&
+           paint->server.shape == NULL)
+    {
+      GtkSymbolicColor symbolic;
+
+      if (allow_gpa &&
+          g_str_has_prefix (paint->server.ref, "gpa:") &&
+          parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic) &&
+          symbolic < n_colors)
+        return svg_paint_new_rgba (&colors[symbolic]);
+      else
+        return svg_paint_new_rgba (&paint->server.fallback);
     }
   else
     {
@@ -12060,7 +12103,7 @@ resolve_value (Shape           *shape,
     }
   else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
     {
-      return svg_paint_resolve (value, context->colors, context->n_colors);
+      return svg_paint_resolve (value, context->colors, context->n_colors, (context->svg->features & GTK_SVG_EXTENSIONS) != 0);
     }
   else if (attr == SHAPE_ATTR_STROKE_DASHARRAY)
     {
@@ -14575,7 +14618,8 @@ parse_shape_attrs (Shape                *shape,
   if (style_attr)
     parse_style_attr (shape, FALSE, FALSE, style_attr, data, context);
 
-  if (class_attr && *class_attr)
+  if ((data->svg->features & GTK_SVG_EXTENSIONS) != 0 &&
+      class_attr && *class_attr)
     {
       GStrv classes = g_strsplit (class_attr, " ", 0);
       SvgValue *value;
@@ -14630,15 +14674,36 @@ parse_shape_attrs (Shape                *shape,
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
-      if (paint->kind == PAINT_SERVER)
-        g_ptr_array_add (data->pending_refs, shape);
+      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+          paint->kind == PAINT_SYMBOLIC)
+        {
+          SvgValue *value = svg_paint_new_black ();
+          shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
+          svg_value_unref (value);
+        }
+      else if (paint->kind == PAINT_SERVER ||
+               paint->kind == PAINT_SERVER_WITH_FALLBACK)
+        {
+          g_ptr_array_add (data->pending_refs, shape);
+        }
     }
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
-      if (paint->kind == PAINT_SERVER)
-        g_ptr_array_add (data->pending_refs, shape);
+
+      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+          paint->kind == PAINT_SYMBOLIC)
+        {
+          SvgValue *value = svg_paint_new_black ();
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
+          svg_value_unref (value);
+        }
+      else if (paint->kind == PAINT_SERVER ||
+               paint->kind == PAINT_SERVER_WITH_FALLBACK)
+        {
+          g_ptr_array_add (data->pending_refs, shape);
+        }
     }
 
   if (shape_has_attr (shape->type, SHAPE_ATTR_RX) &&
@@ -15885,15 +15950,28 @@ resolve_paint_ref (SvgValue   *value,
 {
   SvgPaint *paint = (SvgPaint *) value;
 
-  if (paint->kind == PAINT_SERVER && paint->server.shape == NULL)
+  if ((paint->kind == PAINT_SERVER ||
+       paint->kind == PAINT_SERVER_WITH_FALLBACK) && paint->server.shape == NULL)
     {
       Shape *target = g_hash_table_lookup (data->shapes, paint->server.ref);
+
       if (!target)
-        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->server.ref);
+        {
+          GtkSymbolicColor symbolic;
+
+          if ((data->svg->features & GTK_SVG_EXTENSIONS) != 0 &&
+              g_str_has_prefix (paint->server.ref, "gpa:") &&
+              parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+            return; /* Handled later */
+
+          gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->server.ref);
+        }
       else if (target->type != SHAPE_LINEAR_GRADIENT &&
                target->type != SHAPE_RADIAL_GRADIENT &&
                target->type != SHAPE_PATTERN)
-        gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", paint->server.ref);
+        {
+          gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", paint->server.ref);
+        }
       else
         {
           paint->server.shape = target;
@@ -16348,9 +16426,6 @@ serialize_shape_attrs (GString              *s,
 {
   GString *classes = g_string_new ("");
   GString *style = g_string_new ("");
-  const char *names[] = {
-    "foreground", "error", "warning", "success", "accent",
-  };
 
   if (shape->id)
     {
@@ -16393,6 +16468,7 @@ serialize_shape_attrs (GString              *s,
           if (value && attr == SHAPE_ATTR_FILL)
             {
               SvgPaint *paint = (SvgPaint *) value;
+              GtkSymbolicColor symbolic;
 
               if (paint->kind == PAINT_NONE)
                 {
@@ -16403,20 +16479,40 @@ serialize_shape_attrs (GString              *s,
                 {
                   g_string_append_printf (classes, "%s%s %s-fill",
                                           classes->len > 0 ? " " : "",
-                                          names[paint->symbolic],
-                                          names[paint->symbolic]);
+                                          symbolic_colors[paint->symbolic],
+                                          symbolic_colors[paint->symbolic]);
                 }
+              else if ((paint->kind == PAINT_SERVER ||
+                        paint->kind == PAINT_SERVER_WITH_FALLBACK) &&
+                       g_str_has_prefix (paint->server.ref, "gpa:") &&
+                       parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+               {
+                  g_string_append_printf (classes, "%s%s %s-fill",
+                                          classes->len > 0 ? " " : "",
+                                          symbolic_colors[symbolic],
+                                          symbolic_colors[symbolic]);
+               }
             }
           if (value && attr == SHAPE_ATTR_STROKE)
             {
               SvgPaint *paint = (SvgPaint *) value;
+              GtkSymbolicColor symbolic;
 
               if (paint->kind == PAINT_SYMBOLIC)
                 {
                   g_string_append_printf (classes, "%s%s-stroke",
                                           classes->len > 0 ? " " : "",
-                                          names[paint->symbolic]);
+                                          symbolic_colors[paint->symbolic]);
                 }
+              else if ((paint->kind == PAINT_SERVER ||
+                        paint->kind == PAINT_SERVER_WITH_FALLBACK) &&
+                       g_str_has_prefix (paint->server.ref, "gpa:") &&
+                       parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+               {
+                  g_string_append_printf (classes, "%s%s-stroke",
+                                          classes->len > 0 ? " " : "",
+                                          symbolic_colors[symbolic]);
+               }
             }
         }
     }
@@ -19024,6 +19120,7 @@ get_context_paint (const SvgPaint *paint,
         return NULL;
     case PAINT_COLOR:
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
     case PAINT_SYMBOLIC:
       return paint;
     case PAINT_CONTEXT_FILL:
@@ -19080,6 +19177,7 @@ retry:
       }
       break;
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       {
         if (opacity < 1)
           gtk_snapshot_push_opacity (context->snapshot, opacity);
@@ -19141,6 +19239,7 @@ retry:
       }
       break;
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       {
         if (opacity < 1)
           gtk_snapshot_push_opacity (context->snapshot, opacity);
@@ -19670,7 +19769,8 @@ fill_text (Shape                 *self,
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &color);
               }
-            else if (paint->kind == PAINT_SERVER)
+            else if (paint->kind == PAINT_SERVER ||
+                     paint->kind == PAINT_SERVER_WITH_FALLBACK)
               {
                 if (opacity < 1)
                   gtk_snapshot_push_opacity (context->snapshot, opacity);
@@ -19745,9 +19845,8 @@ stroke_text (Shape                 *self,
                 gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
                 gsk_path_unref (path);
               }
-            else if (paint->kind == PAINT_SERVER)
+            else if (paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK)
               {
-             
                 if (opacity < 1)
                   gtk_snapshot_push_opacity (context->snapshot, opacity);
 
@@ -21368,6 +21467,7 @@ svg_shape_attr_get_paint (Shape            *shape,
     case PAINT_CONTEXT_FILL:
     case PAINT_CONTEXT_STROKE:
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       break;
     case PAINT_SYMBOLIC:
       *symbolic = paint->symbolic;
