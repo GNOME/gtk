@@ -100,9 +100,10 @@ toggle_playing (GtkWidget *widget,
                 GVariant  *args,
                 gpointer   user_data)
 {
-  GtkSvg *svg = user_data;
+  GtkSvg *svg;
   gboolean playing;
 
+  svg = GTK_SVG (gtk_picture_get_paintable (GTK_PICTURE (widget)));
   g_object_get (svg, "playing", &playing, NULL);
   g_object_set (svg, "playing", !playing, NULL);
   return TRUE;
@@ -116,8 +117,8 @@ restart (GtkWidget *widget,
          GVariant  *args,
          gpointer   user_data)
 {
-  const char *filename;
   GtkSvg *svg;
+  const char *filename;
   GtkSvgFeatures features;
 
   svg = GTK_SVG (gtk_picture_get_paintable (GTK_PICTURE (widget)));
@@ -280,12 +281,12 @@ show_files (char           **filenames,
       trigger = gtk_alternative_trigger_new (
                   gtk_keyval_trigger_new (GDK_KEY_AudioPlay, 0),
                   gtk_keyval_trigger_new (GDK_KEY_P, GDK_CONTROL_MASK));
-      action = gtk_callback_action_new (toggle_playing, svg, NULL);
+      action = gtk_callback_action_new (toggle_playing, NULL, NULL);
       gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (shortcuts), gtk_shortcut_new (trigger, action));
       trigger = gtk_alternative_trigger_new (
                   gtk_keyval_trigger_new (GDK_KEY_AudioRewind, 0),
                   gtk_keyval_trigger_new (GDK_KEY_R, GDK_CONTROL_MASK));
-      action = gtk_callback_action_new (restart, svg, NULL);
+      action = gtk_callback_action_new (restart, NULL, NULL);
       gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (shortcuts), gtk_shortcut_new (trigger, action));
       gtk_widget_add_controller (picture, shortcuts);
 
