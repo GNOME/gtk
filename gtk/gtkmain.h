@@ -86,6 +86,9 @@ void              gtk_disable_setlocale    (void);
 GDK_AVAILABLE_IN_4_18
 void              gtk_disable_portals      (void);
 
+GDK_AVAILABLE_IN_4_22
+void              gtk_disable_portal_interfaces (const char **portal_interfaces);
+
 GDK_AVAILABLE_IN_ALL
 PangoLanguage *   gtk_get_default_language (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL

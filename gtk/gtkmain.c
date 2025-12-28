@@ -283,7 +283,28 @@ gtk_disable_portals (void)
   if (pre_initialized)
     g_warning ("gtk_disable_portals() must be called before gtk_init()");
 
-  gdk_disable_portals ();
+  gdk_disable_all_portals ();
+}
+
+
+/**
+ * gtk_disable_portal_interfaces: (method)
+ * @portal_interfaces: (array zero-terminated=1) (not nullable):
+ *     a %NULL-terminated array of portal interface names to disable
+ *
+ * Prevents GTK from using the specified portals.
+ *
+ * This should only be used in portal implementations, apps must not call it.
+ *
+ * Since: 4.22
+ */
+void
+gtk_disable_portal_interfaces (const char **portal_interfaces)
+{
+  if (pre_initialized)
+    g_warning ("gtk_disable_portal_interfaces() must be called before gtk_init()");
+
+  gdk_disable_portals (portal_interfaces);
 }
 
 #ifdef G_PLATFORM_WIN32
