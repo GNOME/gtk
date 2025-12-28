@@ -316,12 +316,14 @@ do_play (int          *argc,
   gboolean allow_animations = TRUE;
   gboolean allow_system = TRUE;
   gboolean allow_external = TRUE;
+  gboolean allow_extensions = TRUE;
   const GOptionEntry entries[] = {
     { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
     { "size", 0, 0, G_OPTION_ARG_INT, &size, N_("SIZE") },
     { "no-animations", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_animations, N_("Don't run animations"), NULL },
     { "no-system-resources", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_system, N_("Don't use system resources"), NULL },
     { "no-external-resources", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_external, N_("Don't load external resources"), NULL },
+    { "no-extensions", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_extensions, N_("Don't allow gpa extensions"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
@@ -351,7 +353,8 @@ do_play (int          *argc,
 
   features = (allow_animations ? GTK_SVG_ANIMATIONS : 0) |
              (allow_system ? GTK_SVG_SYSTEM_RESOURCES : 0) |
-             (allow_external ? GTK_SVG_EXTERNAL_RESOURCES : 0);
+             (allow_external ? GTK_SVG_EXTERNAL_RESOURCES : 0) |
+             (allow_extensions ? GTK_SVG_EXTENSIONS : 0);
 
   show_files (filenames, decorated, size, features);
 
