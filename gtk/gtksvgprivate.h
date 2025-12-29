@@ -120,6 +120,7 @@ typedef enum
   SHAPE_SVG,
   SHAPE_IMAGE,
   SHAPE_FILTER,
+  SHAPE_SYMBOL,
 } ShapeType;
 
 typedef enum
