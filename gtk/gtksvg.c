@@ -5014,7 +5014,9 @@ svg_paint_parse (const char *value)
           else if (gtk_css_parser_try_ident (parser, "none") ||
                    gdk_rgba_parser_parse (parser, &fallback))
             {
-              paint = svg_paint_new_server (NULL, ref, &fallback);
+              gtk_css_parser_skip_whitespace (parser);
+              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                paint = svg_paint_new_server (NULL, ref, &fallback);
             }
         }
 
@@ -5467,10 +5469,7 @@ filter_parser_parse (GtkCssParser *parser)
     }
 
   if (array->len == 0)
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a filter");
-      goto fail;
-    }
+    goto fail;
 
   filter = svg_filter_alloc (array->len);
   memcpy (filter->functions, array->data, sizeof (FilterFunction) * array->len);

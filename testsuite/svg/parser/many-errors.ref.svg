@@ -17,5 +17,16 @@
     </use>
     <path>
     </path>
+    <circle>
+    </circle>
   </g>
+  <defs>
+    <filter
+            id='myfirstfilter'>
+      <feFlood>
+      </feFlood>
+      <feMerge>
+      </feMerge>
+    </filter>
+  </defs>
 </svg>
