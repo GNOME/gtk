@@ -33,7 +33,7 @@ typedef enum
 } GtkCompatibility;
 
 #define NO_STATES 0
-#define ALL_STATES G_MAXUINT
+#define ALL_STATES G_MAXUINT64
 #define STATE_UNSET ((unsigned int) -1)
 
 

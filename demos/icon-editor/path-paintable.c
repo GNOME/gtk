@@ -189,6 +189,7 @@ static void
 path_paintable_init (PathPaintable *self)
 {
   self->svg = gtk_svg_new ();
+  self->svg->gpa_version = 1;
   gtk_svg_set_state (self->svg, 0);
 }
 
@@ -912,7 +913,7 @@ path_paintable_get_weight (PathPaintable *self)
 unsigned int
 path_paintable_get_n_states (PathPaintable *self)
 {
-  return gtk_svg_get_n_states (self->svg);
+  return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self)));
 }
 
 gboolean

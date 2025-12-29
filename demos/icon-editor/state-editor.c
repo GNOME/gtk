@@ -63,6 +63,10 @@ get_paintable_for_shape (StateEditor *self,
   svg->width = path_paintable_get_width (self->paintable);
   svg->height = path_paintable_get_height (self->paintable);
 
+  svg_shape_attr_set (svg->content,
+                      SHAPE_ATTR_VIEW_BOX,
+                      svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
+
   g_ptr_array_add (svg->content->shapes, shape_duplicate (shape));
 
   bytes = gtk_svg_serialize (svg);
