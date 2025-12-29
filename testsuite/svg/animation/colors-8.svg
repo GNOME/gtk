@@ -16,7 +16,8 @@
             fill='none'
             cx='10'
             cy='10'
-            r='10'>
+            r='10'
+            class='transparent-fill'>
       <animate
               id='fill'
               attributeName='fill'

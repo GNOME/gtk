@@ -17,7 +17,8 @@
           pathLength='1'
           cx='0'
           cy='5'
-          r='5'>
+          r='5'
+          class='transparent-fill'>
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'

@@ -130,7 +130,8 @@
             x='10'
             y='270'
             font-family='Arial'
-            font-size='45'>Gradient on text stroke</text>
+            font-size='45'
+            class='transparent-fill'>Gradient on text stroke</text>
     <text
             x='10'
             y='285'

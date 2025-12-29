@@ -12724,25 +12724,49 @@ create_visibility_setter (Shape        *shape,
                           Timeline     *timeline,
                           uint64_t      states,
                           int64_t       delay,
-                          unsigned int  initial)
+                          unsigned int  initial_state)
 {
   Animation *a = animation_set_new ();
   TimeSpec *begin, *end;
+  Visibility initial_visibility;
+  Visibility opposite_visibility;
+
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_VISIBILITY))
+    initial_visibility = svg_enum_get (shape->base[SHAPE_ATTR_VISIBILITY]);
+  else
+    initial_visibility = VISIBILITY_VISIBLE;
 
   a->attr = SHAPE_ATTR_VISIBILITY;
 
-  a->id = g_strdup_printf ("gpa:out-of-state:%s", shape->id);
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, MAX (0, - delay)));
-  time_spec_add_animation (begin, a);
+  if (initial_visibility == VISIBILITY_VISIBLE)
+    {
+      a->id = g_strdup_printf ("gpa:out-of-state:%s", shape->id);
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, MAX (0, - delay)));
+      time_spec_add_animation (begin, a);
 
-  if (!state_match (states, initial))
+      end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, - (MAX (0, - delay))));
+      time_spec_add_animation (end, a);
+
+      opposite_visibility = VISIBILITY_HIDDEN;
+    }
+  else
+    {
+      a->id = g_strdup_printf ("gpa:in-state:%s", shape->id);
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, MAX (0, - delay)));
+      time_spec_add_animation (begin, a);
+
+      end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (MAX (0, - delay))));
+      time_spec_add_animation (end, a);
+
+      opposite_visibility = VISIBILITY_VISIBLE;
+    }
+
+  if (state_match (states, initial_state) != (initial_visibility == VISIBILITY_VISIBLE))
     {
       begin = animation_add_begin (a, timeline_get_start_of_time (timeline));
       time_spec_add_animation (begin, a);
     }
 
-  end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, - (MAX (0, - delay))));
-  time_spec_add_animation (end, a);
 
   a->has_begin = 1;
   a->has_end = 1;
@@ -12751,8 +12775,8 @@ create_visibility_setter (Shape        *shape,
   a->frames = g_new0 (Frame, a->n_frames);
   a->frames[0].time = 0;
   a->frames[1].time = 1;
-  a->frames[0].value = svg_visibility_new (VISIBILITY_HIDDEN);
-  a->frames[1].value = svg_visibility_new (VISIBILITY_HIDDEN);
+  a->frames[0].value = svg_visibility_new (opposite_visibility);
+  a->frames[1].value = svg_visibility_new (opposite_visibility);
 
   a->fill = ANIMATION_FILL_REMOVE;
 
@@ -16488,6 +16512,19 @@ serialize_shape_attrs (GString              *s,
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
+      if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
+          svg->gpa_version > 0 &&
+          shape_types[shape->type].has_gpa_attrs &&
+          attr == SHAPE_ATTR_VISIBILITY)
+        {
+          if ((shape->gpa.states & BIT (svg->state)) == 0)
+            {
+              indent_for_attr (s, indent);
+              g_string_append_printf (s, "visibility='hidden'");
+              continue;
+            }
+        }
+
       if (_gtk_bitmask_get (shape->attrs, attr) ||
           (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
         {
@@ -16570,8 +16607,7 @@ serialize_shape_attrs (GString              *s,
         }
     }
 
-  if (shape_types[shape->type].has_gpa_attrs &&
-      (flags & GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS) == 0 &&
+  if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
       classes->len > 0)
     {
       indent_for_attr (s, indent);

@@ -42,7 +42,8 @@
               x='20'
               y='160'
               font-family='Blocky'
-              font-size='55'>Gradient on stroke</text>
+              font-size='55'
+              class='transparent-fill'>Gradient on stroke</text>
     </g>
     <g
             font-family='SVGFreeSansASCII,sans-serif'

@@ -11,12 +11,14 @@
         viewBox='0 0 32 32'>
   <circle
           id='red'
+          visibility='hidden'
           filter='blur(16) alpha-level(0.2)'
           fill='none'
           stroke='rgb(255,0,0)'
           cx='0'
           cy='5'
-          r='5'>
+          r='5'
+          class='transparent-fill'>
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'
