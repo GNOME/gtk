@@ -12,8 +12,7 @@
     <text
             x='5'
             y='40'
-            font-size='34'>Test &apos;text-anchor&apos; (horizontal)
-    </text>
+            font-size='34'>Test &apos;text-anchor&apos; (horizontal)</text>
     <g
             id='text-anchor'
             font-size='14'>
@@ -28,8 +27,7 @@
         </circle>
         <text
                 fill='rgb(255,0,255)'
-                font-size='30'>text-anchor:none
-        </text>
+                font-size='30'>text-anchor:none</text>
       </g>
       <g
               transform='translate(230, 180)'>
@@ -43,8 +41,7 @@
         <text
                 fill='rgb(255,0,255)'
                 text-anchor='start'
-                font-size='30'>text-anchor:start
-        </text>
+                font-size='30'>text-anchor:start</text>
       </g>
       <g
               transform='translate(230, 230)'>
@@ -59,8 +56,7 @@
         <text
                 fill='rgb(0,128,0)'
                 text-anchor='middle'
-                font-size='30'>text-anchor:middle
-        </text>
+                font-size='30'>text-anchor:middle</text>
       </g>
       <g
               transform='translate(230, 280)'>
@@ -75,8 +71,7 @@
         <text
                 fill='rgb(0,0,255)'
                 text-anchor='end'
-                font-size='30'>text-anchor:end
-        </text>
+                font-size='30'>text-anchor:end</text>
       </g>
     </g>
   </g>
@@ -88,8 +83,7 @@
             fill='rgb(0,0,0)'
             stroke='none'
             x='10'
-            y='340'>$Revision: 1.8 $
-    </text>
+            y='340'>$Revision: 1.8 $</text>
   </g>
   <rect
           id='test-frame'

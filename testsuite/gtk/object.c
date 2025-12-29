@@ -300,6 +300,35 @@ widget_property_tests (gconstpointer test_data)
   g_object_unref (widget);
 }
 
+static gboolean
+skip_type (GType type)
+{
+  if (type == GDK_TYPE_CLIPBOARD)
+    return TRUE; /* construct-only display */
+
+  if (g_type_is_a (type, GDK_TYPE_TEXTURE))
+    return TRUE; /* non-nullable color-state */
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (type == GSK_TYPE_GL_SHADER)
+    return TRUE; /* non-nullable bytes */
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+  if (type == GTK_TYPE_ALTERNATIVE_TRIGGER)
+    return TRUE; /* criticals on null */
+
+  if (g_type_is_a (type, GTK_TYPE_LAYOUT_CHILD))
+    return TRUE; /* criticals in constructed */
+
+  if (g_type_is_a (type, GTK_TYPE_SHORTCUT_ACTION))
+    return TRUE; /* criticals in constructed */
+
+  if (type == GTK_TYPE_STACK_PAGE)
+    return TRUE; /* can't set null child */
+
+  return FALSE;
+}
+
 /* --- main test program --- */
 int
 main (int   argc,
@@ -317,7 +346,7 @@ main (int   argc,
   /* install a property test for each widget type */
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
-    if (g_type_is_a (otypes[i], GTK_TYPE_WIDGET) &&
+    if (!skip_type (otypes[i]) &&
         G_TYPE_IS_OBJECT (otypes[i]) &&
         !G_TYPE_IS_ABSTRACT (otypes[i]))
       {

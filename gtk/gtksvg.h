@@ -51,6 +51,10 @@ void             gtk_svg_load_from_bytes   (GtkSvg        *self,
                                             GBytes        *bytes);
 
 GDK_AVAILABLE_IN_4_22
+void             gtk_svg_load_from_resource (GtkSvg        *self,
+                                             const char    *path);
+
+GDK_AVAILABLE_IN_4_22
 GBytes *         gtk_svg_serialize         (GtkSvg        *self);
 
 GDK_AVAILABLE_IN_4_22
@@ -84,6 +88,48 @@ void             gtk_svg_play              (GtkSvg        *self);
 
 GDK_AVAILABLE_IN_4_22
 void             gtk_svg_pause             (GtkSvg        *self);
+
+/**
+ * GtkSvgFeatures:
+ * @GTK_SVG_ANIMATIONS: Whether to run animations.
+ *   If disabled, state changes are applied without
+ *   transitions
+ * @GTK_SVG_SYSTEM_RESOURCES: Whether to use system resources,
+ *   such as fonts. If disabled, only embedded fonts are used
+ * @GTK_SVG_EXTERNAL_RESOURCES: Whether to load external
+ *   resources, such as images. If disabled, only embedded
+ *   images are loaded
+ * @GTK_SVG_EXTENSIONS: Whether to allow gpa extensions, such
+ *   as states and transitions
+ *
+ * Features of the SVG renderer that can be disabled.
+ *
+ * By default, all features are enabled.
+ *
+ * New values may be added in the future.
+ *
+ * Since: 4.22
+ */
+typedef enum
+{
+  GTK_SVG_ANIMATIONS         = 1 << 0,
+  GTK_SVG_SYSTEM_RESOURCES   = 1 << 1,
+  GTK_SVG_EXTERNAL_RESOURCES = 1 << 2,
+  GTK_SVG_EXTENSIONS         = 1 << 3,
+} GtkSvgFeatures;
+
+#define GTK_SVG_ALL_FEATURES \
+  (GTK_SVG_ANIMATIONS | \
+   GTK_SVG_SYSTEM_RESOURCES | \
+   GTK_SVG_EXTERNAL_RESOURCES | \
+   GTK_SVG_EXTENSIONS)
+
+GDK_AVAILABLE_IN_4_22
+void             gtk_svg_set_features      (GtkSvg         *self,
+                                            GtkSvgFeatures  features);
+
+GDK_AVAILABLE_IN_4_22
+GtkSvgFeatures   gtk_svg_get_features      (GtkSvg         *self);
 
 typedef enum
 {

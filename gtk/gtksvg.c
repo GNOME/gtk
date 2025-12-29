@@ -40,6 +40,12 @@
 #include <tgmath.h>
 #include <stdint.h>
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-fontmap.h>
+#endif
+
+#include "gdk/gdkrgbaprivate.h"
+
 /**
  * GtkSvg:
  *
@@ -1032,20 +1038,22 @@ compute_viewport_transform (gboolean               none,
 /* {{{ Image loading */
 
 static GdkTexture *
-load_texture (const char *string)
+load_texture (const char  *string,
+              gboolean     allow_external,
+              GError     **error)
 {
-  GdkTexture *texture;
+  GdkTexture *texture = NULL;
 
   if (g_str_has_prefix (string, "data:"))
     {
       GBytes *bytes;
 
-      bytes = gtk_css_data_url_parse (string, NULL, NULL);
+      bytes = gtk_css_data_url_parse (string, NULL, error);
 
       if (bytes == NULL)
         return NULL;
 
-      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      texture = gdk_texture_new_from_bytes (bytes, error);
 
       g_bytes_unref (bytes);
     }
@@ -1053,9 +1061,9 @@ load_texture (const char *string)
     {
       texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
     }
-  else
+  else if (allow_external)
     {
-      texture = gdk_texture_new_from_filename (string, NULL);
+      texture = gdk_texture_new_from_filename (string, error);
     }
 
   return texture;
@@ -1070,12 +1078,224 @@ get_texture (GtkSvg     *svg,
   texture = g_hash_table_lookup (svg->images, string);
   if (!texture)
     {
-      texture = load_texture (string);
+      GError *error = NULL;
+
+      texture = load_texture (string,
+                              (svg->features & GTK_SVG_EXTERNAL_RESOURCES) != 0,
+                              &error);
       if (texture)
-        g_hash_table_insert (svg->images, g_strdup (string), texture);
+        {
+          g_hash_table_insert (svg->images, g_strdup (string), texture);
+        }
+      else if (error)
+        {
+          gtk_svg_emit_error (svg, error);
+          g_error_free (error);
+        }
     }
 
   return texture;
+}
+
+/* }}} */
+/* {{{ Font handling */
+
+static void
+append_base64_with_linebreaks (GString *s,
+                               GBytes  *bytes)
+{
+  const guchar *data;
+  gsize len;
+  gsize max;
+  gsize before;
+  char *out;
+  int state = 0, outlen;
+  int save = 0;
+
+  data = g_bytes_get_data (bytes, &len);
+
+  /* We can use a smaller limit here, since we know the saved state is 0,
+     +1 is needed for trailing \0, also check for unlikely integer overflow */
+  g_return_if_fail (len < ((G_MAXSIZE - 1 - s->len) / 4 - 1) * 3);
+
+  /* The glib docs say:
+   *
+   * The output buffer must be large enough to fit all the data that will
+   * be written to it. Due to the way base64 encodes you will need
+   * at least: (@len / 3 + 1) * 4 + 4 bytes (+ 4 may be needed in case of
+   * non-zero state). If you enable line-breaking you will need at least:
+   * ((@len / 3 + 1) * 4 + 4) / 76 + 1 bytes of extra space.
+   */
+  max = (len / 3 + 1) * 4;
+  max += ((len / 3 + 1) * 4 + 4) / 76 + 1;
+  /* and the null byte */
+  max += 1;
+
+  before = s->len;
+  g_string_set_size (s, s->len + max);
+  out = s->str + before;
+
+  outlen = g_base64_encode_step (data, len, TRUE, out, &state, &save);
+  outlen += g_base64_encode_close (TRUE, out + outlen, &state, &save);
+  out[outlen] = '\0';
+  s->len = before + outlen;
+}
+
+static void
+append_bytes_href (GString    *s,
+                   GBytes     *bytes,
+                   const char *mime_type)
+{
+  g_string_append_printf (s, "data:%s;base64,\\\n", mime_type ? mime_type : "");
+  append_base64_with_linebreaks (s, bytes);
+}
+
+static void
+delete_file (gpointer data)
+{
+  char *path = data;
+
+  g_remove (path);
+  g_free (path);
+}
+
+static void
+ensure_fontmap (GtkSvg *svg)
+{
+  if (svg->fontmap)
+    return;
+
+  svg->fontmap = pango_cairo_font_map_new ();
+
+  if ((svg->features & GTK_SVG_SYSTEM_RESOURCES) == 0)
+    {
+#ifdef HAVE_PANGOFT
+      /* This isolates us from the system fonts */
+      FcConfig *config;
+
+      config = FcConfigCreate ();
+      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (svg->fontmap), config);
+      FcConfigDestroy (config);
+#endif
+    }
+
+  svg->font_files = g_ptr_array_new_with_free_func (delete_file);
+}
+
+static PangoFontMap *
+get_fontmap (GtkSvg *svg)
+{
+  if (svg->fontmap)
+    return svg->fontmap;
+  else
+    return pango_cairo_font_map_get_default ();
+}
+
+static gboolean
+add_font_from_file (GtkSvg      *svg,
+                    const char  *path,
+                    GError     **error)
+{
+  ensure_fontmap (svg);
+
+  if (!pango_font_map_add_font_file (svg->fontmap, path, error))
+    return FALSE;
+
+  g_ptr_array_add (svg->font_files, g_strdup (path));
+  return TRUE;
+}
+
+static gboolean
+add_font_from_bytes (GtkSvg      *svg,
+                     GBytes      *bytes,
+                     GError     **error)
+{
+  GFile *file;
+  GIOStream *iostream;
+  GOutputStream *ostream;
+
+  file = g_file_new_tmp ("gtk4-font-XXXXXX.ttf", (GFileIOStream **) &iostream, error);
+  if (!file)
+    return FALSE;
+
+  ostream = g_io_stream_get_output_stream (iostream);
+  if (g_output_stream_write_bytes (ostream, bytes, NULL, error) == -1)
+    {
+      g_object_unref (file);
+      g_object_unref (iostream);
+
+      return FALSE;
+    }
+
+  g_io_stream_close (iostream, NULL, NULL);
+  g_object_unref (iostream);
+
+  if (!add_font_from_file (svg, g_file_peek_path (file), error))
+    {
+      g_file_delete (file, NULL, NULL);
+      g_object_unref (file);
+
+      return FALSE;
+    }
+
+  g_object_unref (file);
+  return TRUE;
+}
+
+static gboolean
+add_font_from_url (GtkSvg              *svg,
+                   GMarkupParseContext *context,
+                   const char          *url)
+{
+  char *scheme;
+  GBytes *bytes;
+  char *mimetype = NULL;
+  GError *error = NULL;
+
+  scheme = g_uri_parse_scheme (url);
+  if (!scheme || g_ascii_strcasecmp (scheme, "data") != 0)
+    {
+      char *start = g_utf8_make_valid (url, 20);
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Unsupported uri scheme for font: %s…", start);
+      g_free (start);
+      return FALSE;
+    }
+
+  g_free (scheme);
+
+  bytes = gtk_css_data_url_parse (url, &mimetype, &error);
+  if (!bytes)
+    {
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Can't parse font data: %s", error->message);
+      g_error_free (error);
+      g_free (mimetype);
+      return FALSE;
+    }
+
+  if (strcmp (mimetype, "font/ttf") != 0)
+    {
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Unsupported mime type for font data: %s", mimetype);
+      g_bytes_unref (bytes);
+      g_free (mimetype);
+      return FALSE;
+    }
+
+  g_free (mimetype);
+
+  if (!add_font_from_bytes (svg, bytes, &error))
+    {
+      g_bytes_unref (bytes);
+      gtk_svg_invalid_attribute (svg, context, "href",
+                                 "Failed to add font: %s", error->message);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  g_bytes_unref (bytes);
+  return TRUE;
 }
 
 /* }}} */
@@ -4566,6 +4786,7 @@ typedef struct
     struct {
       char *ref;
       Shape *shape;
+      GdkRGBA fallback;
     } server;
   };
 } SvgPaint;
@@ -4575,7 +4796,7 @@ svg_paint_free (SvgValue *value)
 {
   SvgPaint *paint = (SvgPaint *) value;
 
-  if (paint->kind == PAINT_SERVER)
+  if (paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK)
     g_free (paint->server.ref);
 
   g_free (value);
@@ -4602,8 +4823,10 @@ svg_paint_equal (const SvgValue *value0,
     case PAINT_COLOR:
       return gdk_rgba_equal (&paint0->color, &paint1->color);
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       return paint0->server.shape == paint1->server.shape &&
-             g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0;
+             g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0 &&
+             gdk_rgba_equal (&paint0->server.fallback, &paint1->server.fallback);
     default:
       g_assert_not_reached ();
     }
@@ -4630,16 +4853,25 @@ static const SvgValueClass SVG_PAINT_CLASS = {
   svg_paint_distance,
 };
 
+static const char *symbolic_colors[] = {
+  "foreground", "error", "warning", "success", "accent"
+};
+
+static const char *symbolic_fallbacks[] = {
+  "rgb(0,0,0)",
+  "rgb(204,0,0)",
+  "rgb(245,121,0)",
+  "rgb(51,209,122)",
+  "rgb(0,34,255)",
+};
+
 static gboolean
 parse_symbolic_color (const char       *value,
                       GtkSymbolicColor *symbolic)
 {
-  const char *sym[] = {
-    "foreground", "error", "warning", "success", "accent"
-  };
   unsigned int u = 0;
 
-  if (!parse_enum (value, sym, G_N_ELEMENTS (sym), &u))
+  if (!parse_enum (value, symbolic_colors, G_N_ELEMENTS (symbolic_colors), &u))
     return FALSE;
 
   *symbolic = u;
@@ -4710,12 +4942,22 @@ svg_paint_new_black (void)
 }
 
 static SvgValue *
-svg_paint_new_server (Shape      *shape,
-                      const char *ref)
+svg_paint_new_server (Shape         *shape,
+                      const char    *ref,
+                      const GdkRGBA *fallback)
 {
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
-  paint->kind = PAINT_SERVER;
+  if (fallback)
+    {
+      paint->kind = PAINT_SERVER_WITH_FALLBACK;
+      paint->server.fallback = *fallback;
+    }
+  else
+    {
+      paint->kind = PAINT_SERVER;
+      paint->server.fallback = GDK_RGBA_TRANSPARENT;
+    }
   paint->server.shape = shape;
   paint->server.ref = g_strdup (ref);
 
@@ -4748,7 +4990,6 @@ svg_paint_parse (const char *value)
       GtkCssParser *parser;
       GBytes *bytes;
       char *url;
-      GtkSymbolicColor symbolic;
       SvgValue *paint = NULL;
 
       bytes = g_bytes_new_static (value, strlen (value));
@@ -4757,13 +4998,26 @@ svg_paint_parse (const char *value)
       url = gtk_css_parser_consume_url (parser);
       if (url)
         {
-          if (g_str_has_prefix (url, "#gpa:") &&
-              parse_symbolic_color (url + strlen ("#gpa:"), &symbolic))
-            paint = svg_paint_new_symbolic (symbolic);
-          else if (url[0] == '#')
-            paint = svg_paint_new_server (NULL, url + 1);
+          GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
+          const char *ref;
+
+          if (url[0] == '#')
+            ref = url + 1;
           else
-            paint = svg_paint_new_server (NULL, url);
+            ref = url;
+
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+            {
+              paint = svg_paint_new_server (NULL, ref, NULL);
+            }
+          else if (gtk_css_parser_try_ident (parser, "none") ||
+                   gdk_rgba_parser_parse (parser, &fallback))
+            {
+              gtk_css_parser_skip_whitespace (parser);
+              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                paint = svg_paint_new_server (NULL, ref, &fallback);
+            }
         }
 
       g_free (url);
@@ -4810,16 +5064,6 @@ svg_paint_print (const SvgValue *value,
                  GString        *s)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
-  struct {
-    const char *symbolic;
-    const char *fallback;
-  } colors[] = {
-    { "foreground", "rgb(0,0,0)", },
-    { "error",      "rgb(204,0,0)", },
-    { "warning",    "rgb(245,121,0)", },
-    { "success",    "rgb(51,209,122)", },
-    { "accent",     "rgb(0,34,255)", },
-  };
 
   switch (paint->kind)
     {
@@ -4840,13 +5084,29 @@ svg_paint_print (const SvgValue *value,
       break;
 
     case PAINT_SYMBOLIC:
-      g_string_append_printf (s, "url(\"#gpa:%s\") %s",
-                              colors[paint->symbolic].symbolic,
-                              colors[paint->symbolic].fallback);
+      g_string_append_printf (s, "url(#gpa:%s) %s",
+                              symbolic_colors[paint->symbolic],
+                              symbolic_fallbacks[paint->symbolic]);
       break;
 
     case PAINT_SERVER:
+      {
+        GtkSymbolicColor symbolic;
+
+        g_string_append_printf (s, "url(#%s)", paint->server.ref);
+        if (g_str_has_prefix (paint->server.ref, "gpa:") &&
+            parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+          {
+            g_string_append_c (s, ' ');
+            g_string_append (s, symbolic_fallbacks[symbolic]);
+          }
+        }
+      break;
+
+    case PAINT_SERVER_WITH_FALLBACK:
       g_string_append_printf (s, "url(#%s)", paint->server.ref);
+      g_string_append_c (s, ' ');
+      gdk_rgba_print (&paint->server.fallback, s);
       break;
 
     default:
@@ -4891,6 +5151,12 @@ svg_paint_print_gpa (const SvgValue *value,
       g_string_append_printf  (s, "url(#%s)", paint->server.ref);
       break;
 
+    case PAINT_SERVER_WITH_FALLBACK:
+      g_string_append_printf  (s, "url(#%s)", paint->server.ref);
+      g_string_append_c (s, ' ');
+      gdk_rgba_print (&paint->server.fallback, s);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -4899,7 +5165,8 @@ svg_paint_print_gpa (const SvgValue *value,
 static SvgValue *
 svg_paint_resolve (SvgValue      *value,
                    const GdkRGBA *colors,
-                   size_t         n_colors)
+                   size_t         n_colors,
+                   gboolean       allow_gpa)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
 
@@ -4907,12 +5174,27 @@ svg_paint_resolve (SvgValue      *value,
 
   if (paint->kind == PAINT_SYMBOLIC)
     {
-      if (paint->symbolic < n_colors)
+      if (!allow_gpa)
+        return svg_paint_new_black ();
+      else if (paint->symbolic < n_colors)
         return svg_paint_new_rgba (&colors[paint->symbolic]);
       else if (GTK_SYMBOLIC_COLOR_FOREGROUND < n_colors)
         return svg_paint_new_rgba (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
       else
         return svg_paint_new_black ();
+    }
+  else if ((paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK) &&
+           paint->server.shape == NULL)
+    {
+      GtkSymbolicColor symbolic;
+
+      if (allow_gpa &&
+          g_str_has_prefix (paint->server.ref, "gpa:") &&
+          parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic) &&
+          symbolic < n_colors)
+        return svg_paint_new_rgba (&colors[symbolic]);
+      else
+        return svg_paint_new_rgba (&paint->server.fallback);
     }
   else
     {
@@ -5187,10 +5469,7 @@ filter_parser_parse (GtkCssParser *parser)
     }
 
   if (array->len == 0)
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a filter");
-      goto fail;
-    }
+    goto fail;
 
   filter = svg_filter_alloc (array->len);
   memcpy (filter->functions, array->data, sizeof (FilterFunction) * array->len);
@@ -10375,6 +10654,14 @@ time_spec_update_for_load_time (TimeSpec *spec,
 }
 
 static void
+time_spec_update_for_pause (TimeSpec *spec,
+                            int64_t   duration)
+{
+  if (spec->time != INDEFINITE)
+    time_spec_set_time (spec, spec->time + duration);
+}
+
+static void
 time_spec_update_for_state (TimeSpec     *spec,
                             unsigned int  previous_state,
                             unsigned int  state,
@@ -10517,6 +10804,17 @@ timeline_set_load_time (Timeline *timeline,
     {
       TimeSpec *spec = g_ptr_array_index (timeline->times, i);
       time_spec_update_for_load_time (spec, load_time);
+    }
+}
+
+static void
+timeline_update_for_pause (Timeline *timeline,
+                           int64_t   duration)
+{
+  for (unsigned int i = 0; i < timeline->times->len; i++)
+    {
+      TimeSpec *spec = g_ptr_array_index (timeline->times, i);
+      time_spec_update_for_pause (spec, duration);
     }
 }
 
@@ -10971,6 +11269,40 @@ animation_motion_get_current_measure (Animation             *a,
   else
     {
       return NULL;
+    }
+}
+
+static void
+animation_update_for_pause (Animation *a,
+                            int64_t    duration)
+{
+  if (a->current.begin != INDEFINITE)
+    a->current.begin += duration;
+  if (a->current.end != INDEFINITE)
+    a->current.end += duration;
+  if (a->previous.begin != INDEFINITE)
+    a->previous.begin += duration;
+  if (a->previous.end != INDEFINITE)
+    a->previous.end += duration;
+}
+
+static void
+animations_update_for_pause (Shape   *shape,
+                             int64_t  duration)
+{
+  for (unsigned int i = 0; i < shape->animations->len; i++)
+    {
+      Animation *a = g_ptr_array_index (shape->animations, i);
+      animation_update_for_pause (a, duration);
+    }
+
+  if (shape_types[shape->type].has_shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          animations_update_for_pause (sh, duration);
+        }
     }
 }
 
@@ -11823,7 +12155,7 @@ resolve_value (Shape           *shape,
     }
   else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
     {
-      return svg_paint_resolve (value, context->colors, context->n_colors);
+      return svg_paint_resolve (value, context->colors, context->n_colors, (context->svg->features & GTK_SVG_EXTENSIONS) != 0);
     }
   else if (attr == SHAPE_ATTR_STROKE_DASHARRAY)
     {
@@ -12322,6 +12654,35 @@ static struct {
   { { 0.25, 0.1, 0.25, 1 } },
 };
 
+static void
+apply_state (Shape        *shape,
+             unsigned int  state)
+{
+  if (shape_types[shape->type].has_gpa_attrs)
+    {
+      SvgValue *value;
+
+      if (state == GTK_SVG_STATE_EMPTY)
+        value = svg_visibility_new (VISIBILITY_HIDDEN);
+      else if (shape->gpa.states & BIT (state))
+        value = svg_visibility_new (VISIBILITY_VISIBLE);
+      else
+        value = svg_visibility_new (VISIBILITY_HIDDEN);
+
+      shape_set_base_value (shape, SHAPE_ATTR_VISIBILITY, 0, value);
+      svg_value_unref (value);
+    }
+
+  if (shape_types[shape->type].has_shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          apply_state (sh, state);
+        }
+    }
+}
+
 /* {{{ Weight variation */
 
 static double
@@ -12362,25 +12723,49 @@ create_visibility_setter (Shape        *shape,
                           Timeline     *timeline,
                           uint64_t      states,
                           int64_t       delay,
-                          unsigned int  initial)
+                          unsigned int  initial_state)
 {
   Animation *a = animation_set_new ();
   TimeSpec *begin, *end;
+  Visibility initial_visibility;
+  Visibility opposite_visibility;
+
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_VISIBILITY))
+    initial_visibility = svg_enum_get (shape->base[SHAPE_ATTR_VISIBILITY]);
+  else
+    initial_visibility = VISIBILITY_VISIBLE;
 
   a->attr = SHAPE_ATTR_VISIBILITY;
 
-  a->id = g_strdup_printf ("gpa:out-of-state:%s", shape->id);
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, MAX (0, - delay)));
-  time_spec_add_animation (begin, a);
+  if (initial_visibility == VISIBILITY_VISIBLE)
+    {
+      a->id = g_strdup_printf ("gpa:out-of-state:%s", shape->id);
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, MAX (0, - delay)));
+      time_spec_add_animation (begin, a);
 
-  if (!state_match (states, initial))
+      end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, - (MAX (0, - delay))));
+      time_spec_add_animation (end, a);
+
+      opposite_visibility = VISIBILITY_HIDDEN;
+    }
+  else
+    {
+      a->id = g_strdup_printf ("gpa:in-state:%s", shape->id);
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, MAX (0, - delay)));
+      time_spec_add_animation (begin, a);
+
+      end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (MAX (0, - delay))));
+      time_spec_add_animation (end, a);
+
+      opposite_visibility = VISIBILITY_VISIBLE;
+    }
+
+  if (state_match (states, initial_state) != (initial_visibility == VISIBILITY_VISIBLE))
     {
       begin = animation_add_begin (a, timeline_get_start_of_time (timeline));
       time_spec_add_animation (begin, a);
     }
 
-  end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, - (MAX (0, - delay))));
-  time_spec_add_animation (end, a);
 
   a->has_begin = 1;
   a->has_end = 1;
@@ -12389,8 +12774,8 @@ create_visibility_setter (Shape        *shape,
   a->frames = g_new0 (Frame, a->n_frames);
   a->frames[0].time = 0;
   a->frames[1].time = 1;
-  a->frames[0].value = svg_visibility_new (VISIBILITY_HIDDEN);
-  a->frames[1].value = svg_visibility_new (VISIBILITY_HIDDEN);
+  a->frames[0].value = svg_visibility_new (opposite_visibility);
+  a->frames[1].value = svg_visibility_new (opposite_visibility);
 
   a->fill = ANIMATION_FILL_REMOVE;
 
@@ -13691,7 +14076,7 @@ parse_value_animation_attrs (Animation            *a,
         from = svg_transform_new_none ();
       else if (by->class == &SVG_PAINT_CLASS &&
                ((SvgPaint *) by)->kind == PAINT_COLOR)
-        from = svg_paint_new_rgba (&(GdkRGBA) { 0, 0, 0, 0 });
+        from = svg_paint_new_rgba (&GDK_RGBA_TRANSPARENT);
       else
         {
           gtk_svg_invalid_attribute (data->svg, context, NULL,  "Don't know how to handle this 'by' value");
@@ -14309,7 +14694,8 @@ parse_shape_attrs (Shape                *shape,
   if (style_attr)
     parse_style_attr (shape, FALSE, FALSE, style_attr, data, context);
 
-  if (class_attr && *class_attr)
+  if ((data->svg->features & GTK_SVG_EXTENSIONS) != 0 &&
+      class_attr && *class_attr)
     {
       GStrv classes = g_strsplit (class_attr, " ", 0);
       SvgValue *value;
@@ -14364,15 +14750,36 @@ parse_shape_attrs (Shape                *shape,
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
-      if (paint->kind == PAINT_SERVER)
-        g_ptr_array_add (data->pending_refs, shape);
+      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+          paint->kind == PAINT_SYMBOLIC)
+        {
+          SvgValue *value = svg_paint_new_black ();
+          shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
+          svg_value_unref (value);
+        }
+      else if (paint->kind == PAINT_SERVER ||
+               paint->kind == PAINT_SERVER_WITH_FALLBACK)
+        {
+          g_ptr_array_add (data->pending_refs, shape);
+        }
     }
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
     {
       SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
-      if (paint->kind == PAINT_SERVER)
-        g_ptr_array_add (data->pending_refs, shape);
+
+      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+          paint->kind == PAINT_SYMBOLIC)
+        {
+          SvgValue *value = svg_paint_new_black ();
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
+          svg_value_unref (value);
+        }
+      else if (paint->kind == PAINT_SERVER ||
+               paint->kind == PAINT_SERVER_WITH_FALLBACK)
+        {
+          g_ptr_array_add (data->pending_refs, shape);
+        }
     }
 
   if (shape_has_attr (shape->type, SHAPE_ATTR_RX) &&
@@ -14396,6 +14803,57 @@ parse_shape_attrs (Shape                *shape,
           !_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FY))
         shape_set_base_value (shape, SHAPE_ATTR_FY, 0, shape->base[SHAPE_ATTR_CY]);
     }
+}
+
+static void
+parse_svg_gpa_attrs (GtkSvg               *svg,
+                     const char           *element_name,
+                     const char          **attr_names,
+                     const char          **attr_values,
+                     uint64_t             *handled,
+                     ParserData           *data,
+                     GMarkupParseContext  *context)
+{
+  const char *state_attr = NULL;
+  const char *version_attr = NULL;
+  const char *keywords_attr = NULL;
+
+  markup_filter_attributes (element_name,
+                            attr_names, attr_values,
+                            handled,
+                            "gpa:state", &state_attr,
+                            "gpa:version", &version_attr,
+                            "gpa:keywords", &keywords_attr,
+                            NULL);
+
+  if (state_attr)
+    {
+      double v;
+
+      if (strcmp (state_attr, "empty") == 0)
+        gtk_svg_set_state (svg, GTK_SVG_STATE_EMPTY);
+      else if (!parse_number (state_attr, -1, 63, &v))
+        gtk_svg_invalid_attribute (svg, context, "gpa:state", NULL);
+      else if (v < 0)
+        gtk_svg_set_state (svg, GTK_SVG_STATE_EMPTY);
+      else
+        gtk_svg_set_state (svg, (unsigned int) CLAMP (v, 0, 63));
+    }
+
+  if (version_attr)
+    {
+      unsigned int version;
+      char *end;
+
+      version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
+      if ((end && *end != '\0') || version != 1)
+        gtk_svg_invalid_attribute (svg, context, "gpa:version", "must be 1");
+      else
+        svg->gpa_version = version;
+    }
+
+  if (keywords_attr)
+    svg->gpa_keywords = g_strdup (keywords_attr);
 }
 
 static void
@@ -14653,6 +15111,9 @@ parse_shape_gpa_attrs (Shape                *shape,
   shape->gpa.attach.shape = NULL;
   shape->gpa.attach.pos = attach_pos;
 
+  if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+    return;
+
   if (attach_to_attr)
     g_ptr_array_add (data->pending_refs, shape);
 
@@ -14822,6 +15283,31 @@ start_element_cb (GMarkupParseContext  *context,
 
       return;
     }
+  else if (strcmp (element_name, "font-face") == 0 ||
+           strcmp (element_name, "font-face-src") == 0)
+    {
+      return;
+    }
+  else if (strcmp (element_name, "font-face-uri") == 0)
+    {
+      if (check_ancestors (context, "font-face-src", "font-face", NULL))
+        {
+          for (unsigned int i = 0; attr_names[i]; i++)
+            {
+              if (strcmp (attr_names[i], "href") == 0)
+                {
+                  if (!add_font_from_url (data->svg, context, attr_values[i]))
+                    {
+                      // too bad
+                    }
+                }
+            }
+        }
+      else
+        skip_element (data, context, "Ignoring font element int he wrong context: <%s>", element_name);
+
+      return;
+    }
   else if (strcmp (element_name, "style") == 0 ||
            strcmp (element_name, "title") == 0 ||
            strcmp (element_name, "desc") == 0 ||
@@ -14833,15 +15319,23 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else if (strcmp (element_name, "set") == 0)
     {
-      Animation *a = animation_set_new ();
+      Animation *a;
       const char *to_attr = NULL;
       SvgValue *value;
+
+      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+        {
+          skip_element (data, context, "Animations are disabled");
+          return;
+        }
 
       if (data->current_animation)
         {
           skip_element (data, context, "Nested animation elements are not allowed: <set>");
           return;
         }
+
+      a = animation_set_new ();
 
       markup_filter_attributes (element_name,
                                 attr_names, attr_values,
@@ -14913,6 +15407,12 @@ start_element_cb (GMarkupParseContext  *context,
            strcmp (element_name, "animateMotion") == 0)
     {
       Animation *a;
+
+      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+        {
+          skip_element (data, context, "Animations are disabled");
+          return;
+        }
 
       if (data->current_animation)
         {
@@ -15196,48 +15696,12 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (data->current_shape == NULL && shape->type == SHAPE_SVG)
     {
-      const char *state_attr = NULL;
-      const char *version_attr = NULL;
-      const char *keywords_attr = NULL;
-
       data->svg->content = shape;
 
-      markup_filter_attributes (element_name,
-                                attr_names, attr_values,
-                                &handled,
-                                "gpa:state", &state_attr,
-                                "gpa:version", &version_attr,
-                                "gpa:keywords", &keywords_attr,
-                                NULL);
-
-      if (state_attr)
-        {
-          double v;
-
-          if (strcmp (state_attr, "empty") == 0)
-            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
-          else if (!parse_number (state_attr, -1, 63, &v))
-            gtk_svg_invalid_attribute (data->svg, context, "gpa:state", NULL);
-          else if (v < 0)
-            gtk_svg_set_state (data->svg, GTK_SVG_STATE_EMPTY);
-          else
-            gtk_svg_set_state (data->svg, (unsigned int) CLAMP (v, 0, 63));
-        }
-
-      if (version_attr)
-        {
-          unsigned int version;
-          char *end;
-
-          version = (unsigned int) g_ascii_strtoull (version_attr, &end, 10);
-          if ((end && *end != '\0') || version != 1)
-            gtk_svg_invalid_attribute (data->svg, context, "gpa:version", "must be 1");
-          else
-            data->svg->gpa_version = version;
-        }
-
-      if (keywords_attr)
-        data->svg->gpa_keywords = g_strdup (keywords_attr);
+      if (data->svg->features & GTK_SVG_EXTENSIONS)
+        parse_svg_gpa_attrs (data->svg,
+                             element_name, attr_names, attr_values,
+                             &handled, data, context);
     }
 
   parse_shape_attrs (shape,
@@ -15562,15 +16026,28 @@ resolve_paint_ref (SvgValue   *value,
 {
   SvgPaint *paint = (SvgPaint *) value;
 
-  if (paint->kind == PAINT_SERVER && paint->server.shape == NULL)
+  if ((paint->kind == PAINT_SERVER ||
+       paint->kind == PAINT_SERVER_WITH_FALLBACK) && paint->server.shape == NULL)
     {
       Shape *target = g_hash_table_lookup (data->shapes, paint->server.ref);
+
       if (!target)
-        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->server.ref);
+        {
+          GtkSymbolicColor symbolic;
+
+          if ((data->svg->features & GTK_SVG_EXTENSIONS) != 0 &&
+              g_str_has_prefix (paint->server.ref, "gpa:") &&
+              parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+            return; /* Handled later */
+
+          gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->server.ref);
+        }
       else if (target->type != SHAPE_LINEAR_GRADIENT &&
                target->type != SHAPE_RADIAL_GRADIENT &&
                target->type != SHAPE_PATTERN)
-        gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", paint->server.ref);
+        {
+          gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", paint->server.ref);
+        }
       else
         {
           paint->server.shape = target;
@@ -15852,6 +16329,12 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   g_clear_pointer (&self->content, shape_free);
 
+  if ((self->features & GTK_SVG_SYSTEM_RESOURCES) == 0)
+    {
+      g_assert (self->fontmap == NULL);
+      ensure_fontmap (self);
+    }
+
   data.svg = self;
   data.current_shape = NULL;
   data.shape_stack = NULL;
@@ -15960,6 +16443,24 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_ptr_array_unref (data.pending_animations);
   g_ptr_array_unref (data.pending_refs);
   g_string_free (data.text, TRUE);
+
+  if (self->gpa_version == 1 &&
+      (self->features & GTK_SVG_ANIMATIONS) == 0)
+    apply_state (self->content, self->state);
+}
+
+static void
+gtk_svg_init_from_resource (GtkSvg     *self,
+                            const char *path)
+{
+  GBytes *bytes;
+
+  bytes = g_resources_lookup_data (path, 0, NULL);
+  if (bytes)
+    {
+      gtk_svg_init_from_bytes (self, bytes);
+      g_bytes_unref (bytes);
+    }
 }
 
 /* }}} */
@@ -16001,9 +16502,6 @@ serialize_shape_attrs (GString              *s,
 {
   GString *classes = g_string_new ("");
   GString *style = g_string_new ("");
-  const char *names[] = {
-    "foreground", "error", "warning", "success", "accent",
-  };
 
   if (shape->id)
     {
@@ -16013,6 +16511,19 @@ serialize_shape_attrs (GString              *s,
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
+      if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
+          svg->gpa_version > 0 &&
+          shape_types[shape->type].has_gpa_attrs &&
+          attr == SHAPE_ATTR_VISIBILITY)
+        {
+          if ((shape->gpa.states & BIT (svg->state)) == 0)
+            {
+              indent_for_attr (s, indent);
+              g_string_append_printf (s, "visibility='hidden'");
+              continue;
+            }
+        }
+
       if (_gtk_bitmask_get (shape->attrs, attr) ||
           (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
         {
@@ -16046,6 +16557,7 @@ serialize_shape_attrs (GString              *s,
           if (value && attr == SHAPE_ATTR_FILL)
             {
               SvgPaint *paint = (SvgPaint *) value;
+              GtkSymbolicColor symbolic;
 
               if (paint->kind == PAINT_NONE)
                 {
@@ -16056,26 +16568,45 @@ serialize_shape_attrs (GString              *s,
                 {
                   g_string_append_printf (classes, "%s%s %s-fill",
                                           classes->len > 0 ? " " : "",
-                                          names[paint->symbolic],
-                                          names[paint->symbolic]);
+                                          symbolic_colors[paint->symbolic],
+                                          symbolic_colors[paint->symbolic]);
                 }
+              else if ((paint->kind == PAINT_SERVER ||
+                        paint->kind == PAINT_SERVER_WITH_FALLBACK) &&
+                       g_str_has_prefix (paint->server.ref, "gpa:") &&
+                       parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+               {
+                  g_string_append_printf (classes, "%s%s %s-fill",
+                                          classes->len > 0 ? " " : "",
+                                          symbolic_colors[symbolic],
+                                          symbolic_colors[symbolic]);
+               }
             }
           if (value && attr == SHAPE_ATTR_STROKE)
             {
               SvgPaint *paint = (SvgPaint *) value;
+              GtkSymbolicColor symbolic;
 
               if (paint->kind == PAINT_SYMBOLIC)
                 {
                   g_string_append_printf (classes, "%s%s-stroke",
                                           classes->len > 0 ? " " : "",
-                                          names[paint->symbolic]);
+                                          symbolic_colors[paint->symbolic]);
                 }
+              else if ((paint->kind == PAINT_SERVER ||
+                        paint->kind == PAINT_SERVER_WITH_FALLBACK) &&
+                       g_str_has_prefix (paint->server.ref, "gpa:") &&
+                       parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+               {
+                  g_string_append_printf (classes, "%s%s-stroke",
+                                          classes->len > 0 ? " " : "",
+                                          symbolic_colors[symbolic]);
+               }
             }
         }
     }
 
-  if (shape_types[shape->type].has_gpa_attrs &&
-      (flags & GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS) == 0 &&
+  if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
       classes->len > 0)
     {
       indent_for_attr (s, indent);
@@ -16869,6 +17400,8 @@ serialize_shape (GString              *s,
               g_assert_not_reached ();
             }
         }
+      g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
+      return;
     }
   else if (shape_types[shape->type].has_shapes)
     {
@@ -18541,12 +19074,13 @@ paint_pattern (Shape                 *pattern,
 }
 
 static void
-paint_server (Shape                 *server,
+paint_server (SvgPaint              *paint,
               const graphene_rect_t *bounds,
               PaintContext          *context)
 {
-  if (!server)
-    return;
+  Shape *server = paint->server.shape;
+
+  g_assert (paint->server.shape != NULL);
 
   if (server->type == SHAPE_LINEAR_GRADIENT ||
       server->type == SHAPE_RADIAL_GRADIENT)
@@ -18600,7 +19134,8 @@ shape_create_stroke (Shape        *shape,
   min = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], width);
   max = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], width);
 
-  width = width_apply_weight (width, min, max, context->weight);
+  if (context->svg->features & GTK_SVG_EXTENSIONS)
+    width = width_apply_weight (width, min, max, context->weight);
 
   stroke = gsk_stroke_new (width);
 
@@ -18673,6 +19208,7 @@ get_context_paint (const SvgPaint *paint,
         return NULL;
     case PAINT_COLOR:
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
     case PAINT_SYMBOLIC:
       return paint;
     case PAINT_CONTEXT_FILL:
@@ -18729,12 +19265,13 @@ retry:
       }
       break;
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       {
         if (opacity < 1)
           gtk_snapshot_push_opacity (context->snapshot, opacity);
 
         gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
-        paint_server (paint->server.shape, &bounds, context);
+        paint_server (paint, &bounds, context);
         gtk_snapshot_pop (context->snapshot);
 
         if (opacity < 1)
@@ -18790,12 +19327,13 @@ retry:
       }
       break;
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       {
         if (opacity < 1)
           gtk_snapshot_push_opacity (context->snapshot, opacity);
 
         gtk_snapshot_push_stroke (context->snapshot, path, stroke);
-        paint_server (paint->server.shape, &bounds, context);
+        paint_server (paint, &bounds, context);
         gtk_snapshot_pop (context->snapshot);
 
         if (opacity < 1)
@@ -19003,6 +19541,7 @@ paint_markers (Shape        *shape,
 #define SVG_DEFAULT_DPI 96.0
 static PangoLayout *
 text_create_layout (Shape            *self,
+                    PangoFontMap     *fontmap,
                     const char       *text,
                     graphene_point_t *origin,
                     graphene_rect_t  *bounds,
@@ -19025,7 +19564,7 @@ text_create_layout (Shape            *self,
   double offset;
 
 
-  context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
+  context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SHAPE_ATTR_LANG]));
 
   uni = svg_enum_get (self->current[SHAPE_ATTR_UNICODE_BIDI]);
@@ -19163,6 +19702,7 @@ text_create_layout (Shape            *self,
 
 static gboolean
 generate_layouts (Shape           *self,
+                  PangoFontMap    *fontmap,
                   double          *x,
                   double          *y,
                   gboolean        *lastwasspace,
@@ -19213,7 +19753,7 @@ generate_layouts (Shape           *self,
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
-          node->shape.has_bounds = generate_layouts (node->shape.shape, x, y, lastwasspace, &node->shape.bounds);
+          node->shape.has_bounds = generate_layouts (node->shape.shape, fontmap, x, y, lastwasspace, &node->shape.bounds);
           if (node->shape.has_bounds)
             ADD_BBOX (&node->shape.bounds)
           break;
@@ -19223,7 +19763,7 @@ generate_layouts (Shape           *self,
             graphene_rect_t cbounds;
             gboolean is_vertical;
             char *text = text_chomp (node->characters.text, lastwasspace);
-            node->characters.layout = text_create_layout (self, text, &origin, &cbounds, &is_vertical, &node->characters.r);
+            node->characters.layout = text_create_layout (self, fontmap, text, &origin, &cbounds, &is_vertical, &node->characters.r);
             g_free (text);
 
             node->characters.x = *x + origin.x;
@@ -19317,7 +19857,8 @@ fill_text (Shape                 *self,
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &color);
               }
-            else if (paint->kind == PAINT_SERVER)
+            else if (paint->kind == PAINT_SERVER ||
+                     paint->kind == PAINT_SERVER_WITH_FALLBACK)
               {
                 if (opacity < 1)
                   gtk_snapshot_push_opacity (context->snapshot, opacity);
@@ -19327,7 +19868,7 @@ fill_text (Shape                 *self,
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &(GdkRGBA){ .red = 0., .green = 0., .blue = 0., .alpha = 1. });
                 gtk_snapshot_pop (context->snapshot);
-                paint_server (paint->server.shape, bounds, context);
+                paint_server (paint, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
 
                 if (opacity < 1)
@@ -19392,9 +19933,8 @@ stroke_text (Shape                 *self,
                 gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
                 gsk_path_unref (path);
               }
-            else if (paint->kind == PAINT_SERVER)
+            else if (paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK)
               {
-             
                 if (opacity < 1)
                   gtk_snapshot_push_opacity (context->snapshot, opacity);
 
@@ -19405,7 +19945,7 @@ stroke_text (Shape                 *self,
                 gtk_snapshot_append_stroke (context->snapshot, path, stroke, &(GdkRGBA) { 0, 0, 0, 1 });
                 gsk_path_unref (path);
                 gtk_snapshot_pop (context->snapshot);
-                paint_server (paint->server.shape, bounds, context);
+                paint_server (paint, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
 
                 if (opacity < 1)
@@ -19548,7 +20088,7 @@ paint_shape (Shape        *shape,
 
       anchor = svg_enum_get (shape->current[SHAPE_ATTR_TEXT_ANCHOR]);
       wmode = svg_enum_get (shape->current[SHAPE_ATTR_WRITING_MODE]);
-      if (!generate_layouts (shape, NULL, NULL, NULL, &bounds))
+      if (!generate_layouts (shape, get_fontmap (context->svg), NULL, NULL, NULL, &bounds))
         return;
 
       dx = dy = 0;
@@ -19935,6 +20475,7 @@ struct _GtkSvgClass
 enum
 {
   PROP_RESOURCE = 1,
+  PROP_FEATURES,
   PROP_PLAYING,
   PROP_WEIGHT,
   PROP_STATE,
@@ -19962,6 +20503,8 @@ gtk_svg_init (GtkSvg *self)
   self->playing = FALSE;
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
 
+  self->features = GTK_SVG_ALL_FEATURES;
+
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
 
@@ -19979,6 +20522,8 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->content, shape_free);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
+  g_clear_object (&self->fontmap);
+  g_clear_pointer (&self->font_files, g_ptr_array_unref);
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
@@ -19996,6 +20541,14 @@ gtk_svg_get_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_RESOURCE:
+      g_value_set_string (value, self->resource);
+      break;
+
+    case PROP_FEATURES:
+      g_value_set_flags (value, self->features);
+      break;
+
     case PROP_PLAYING:
       g_value_set_boolean (value, self->playing);
       break;
@@ -20025,15 +20578,11 @@ gtk_svg_set_property (GObject      *object,
   switch (property_id)
     {
     case PROP_RESOURCE:
-      {
-        const char *path = g_value_get_string (value);
-        if (path)
-          {
-            GBytes *bytes = g_resources_lookup_data (path, 0, NULL);
-            gtk_svg_init_from_bytes (self, bytes);
-            g_bytes_unref (bytes);
-          }
-      }
+      gtk_svg_load_from_resource (self, g_value_get_string (value));
+      break;
+
+    case PROP_FEATURES:
+      gtk_svg_set_features (self, g_value_get_flags (value));
       break;
 
     case PROP_PLAYING:
@@ -20068,15 +20617,32 @@ gtk_svg_class_init (GtkSvgClass *class)
   /**
    * GtkSvg:resource:
    *
-   * Construct-only property to create a paintable from
-   * a resource in ui files.
+   * Resource to load SVG data from.
+   *
+   * This property is meant to create a paintable
+   * from a resource in ui files.
    *
    * Since: 4.22
    */
   properties[PROP_RESOURCE] =
     g_param_spec_string ("resource", NULL, NULL,
                          NULL,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSvg:features:
+   *
+   * Enabled features for this paintable.
+   *
+   * Note that features have to be set before
+   * loading SVG data to take effect.
+   *
+   * Since: 4.22
+   */
+  properties[PROP_FEATURES] =
+    g_param_spec_flags ("features", NULL, NULL,
+                        GTK_TYPE_SVG_FEATURES, GTK_SVG_ALL_FEATURES,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSvg:playing:
@@ -20760,6 +21326,41 @@ gtk_svg_serialize_full (GtkSvg               *self,
       g_string_append (s, "</metadata>");
     }
 
+  if (self->font_files)
+    {
+      for (unsigned int i = 0; i < self->font_files->len; i++)
+        {
+          const char *file;
+          char *data;
+          gsize len;
+          GBytes *bytes;
+
+          file = g_ptr_array_index (self->font_files, i);
+
+          if (!g_file_get_contents (file, &data, &len, NULL))
+            continue;
+
+          bytes = g_bytes_new_take (data, len);
+
+          indent_for_elt (s, 2);
+          g_string_append (s, "<font-face>");
+          indent_for_elt (s, 4);
+          g_string_append (s, "<font-face-src>");
+          indent_for_elt (s, 6);
+          g_string_append (s, "<font-face-uri");
+          indent_for_attr (s, 6);
+          g_string_append (s, "href='");
+          append_bytes_href (s, bytes, "font/ttf");
+          g_string_append (s, "'/>");
+          indent_for_elt (s, 4);
+          g_string_append (s, "</font-face-src>");
+          indent_for_elt (s, 2);
+          g_string_append (s, "</font-face>");
+
+          g_bytes_unref (bytes);
+        }
+    }
+
   serialize_shape (s, self, 0, self->content, flags);
   g_string_append (s, "\n</svg>\n");
 
@@ -20954,6 +21555,7 @@ svg_shape_attr_get_paint (Shape            *shape,
     case PAINT_CONTEXT_FILL:
     case PAINT_CONTEXT_STROKE:
     case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
       break;
     case PAINT_SYMBOLIC:
       *symbolic = paint->symbolic;
@@ -21134,19 +21736,44 @@ void
 gtk_svg_set_playing (GtkSvg   *self,
                      gboolean  playing)
 {
+  int64_t current_time;
+
   if (self->playing == playing)
     return;
 
   self->playing = playing;
 
+  /* FIXME frame time */
+  current_time = MAX (self->current_time, g_get_monotonic_time ());
+
   if (playing)
     {
-      if (self->load_time == INDEFINITE)
-        gtk_svg_set_load_time (self, g_get_monotonic_time ());
+      if (self->load_time != INDEFINITE)
+        {
+          int64_t duration = current_time - self->pause_time;
+
+          /* A simple-minded implementation of pausing:
+           * Forward all definite times by the duration of
+           * the pause, to make it as if that time never
+           * happened.
+           */
+          self->load_time += duration;
+          animations_update_for_pause (self->content, duration);
+          timeline_update_for_pause (self->timeline, duration);
+        }
+      else
+        {
+          gtk_svg_set_load_time (self, g_get_monotonic_time ());
+        }
       schedule_next_update (self);
     }
   else
     {
+      if (self->load_time != INDEFINITE)
+        {
+          self->pause_time = current_time;
+        }
+
       frame_clock_disconnect (self);
       g_clear_handle_id (&self->pending_invalidate, g_source_remove);
     }
@@ -21166,6 +21793,8 @@ gtk_svg_clear_content (GtkSvg *self)
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->content, shape_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
+  g_clear_object (&self->fontmap);
+  g_clear_pointer (&self->font_files, g_ptr_array_unref);
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
@@ -21275,7 +21904,11 @@ gtk_svg_new_from_bytes (GBytes *bytes)
 GtkSvg *
 gtk_svg_new_from_resource (const char *path)
 {
-  return g_object_new (GTK_TYPE_SVG, "resource", path, NULL);
+  GtkSvg *self = g_object_new (GTK_TYPE_SVG, NULL);
+
+  gtk_svg_init_from_resource (self, path);
+
+  return self;
 }
 
 /* }}} */
@@ -21305,6 +21938,37 @@ gtk_svg_load_from_bytes (GtkSvg *self,
   gtk_svg_clear_content (self);
 
   gtk_svg_init_from_bytes (self, bytes);
+}
+
+/**
+ * gtk_svg_load_from_resource:
+ * @self: an SVG paintable
+ * @path: the resource path
+ *
+ * Loads SVG content into an existing SVG paintable.
+ *
+ * To track errors while loading SVG content,
+ * connect to the [signal@Gtk.Svg::error] signal.
+ *
+ * This clears any previously loaded content.
+ *
+ * Since: 4.22
+ */
+void
+gtk_svg_load_from_resource (GtkSvg     *self,
+                            const char *path)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  g_set_str (&self->resource, path);
+
+  gtk_svg_set_playing (self, FALSE);
+  gtk_svg_clear_content (self);
+
+  if (path)
+    gtk_svg_init_from_resource (self, path);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RESOURCE]);
 }
 
 /* }}} */
@@ -21450,6 +22114,25 @@ gtk_svg_set_state (GtkSvg       *self,
 
   self->state = state;
 
+  if ((self->features & GTK_SVG_EXTENSIONS) == 0)
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
+      return;
+    }
+
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0)
+    {
+      if (self->gpa_version > 0)
+        {
+          apply_state (self->content, state);
+
+          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
+      return;
+    }
+
   /* Don't jiggle things while we're still loading */
   if (self->load_time != INDEFINITE)
     {
@@ -21512,6 +22195,52 @@ gtk_svg_get_n_states (GtkSvg *self)
   g_return_val_if_fail (GTK_IS_SVG (self), 0);
 
   return self->max_state + 1;
+}
+
+/**
+ * gtk_svg_set_features:
+ * @self: an SVG paintable
+ * @features: features to enable
+ *
+ * Enables or disables features of the SVG paintable.
+ *
+ * By default, all features are enabled.
+ *
+ * Note that this call only has an effect before the
+ * SVG is loaded.
+ *
+ * Since: 4.22
+ */
+void
+gtk_svg_set_features (GtkSvg         *self,
+                      GtkSvgFeatures  features)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  if (self->features == features)
+    return;
+
+  self->features = features;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FEATURES]);
+}
+
+/**
+ * gtk_svg_get_features:
+ * @self: an SVG paintable
+ *
+ * Returns the currently enabled features.
+ *
+ * Returns: the enabled features
+ *
+ * Since: 4.22
+ */
+GtkSvgFeatures
+gtk_svg_get_features (GtkSvg *self)
+{
+  g_return_val_if_fail (GTK_IS_SVG (self), GTK_SVG_ALL_FEATURES);
+
+  return self->features;
 }
 
 /* }}} */

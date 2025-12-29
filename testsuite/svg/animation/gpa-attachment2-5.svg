@@ -11,6 +11,7 @@
         viewBox='0 0 100 100'>
   <path
           id='line'
+          visibility='hidden'
           stroke='rgb(0,0,0)'
           stroke-dasharray='0.5 1'
           pathLength='1'

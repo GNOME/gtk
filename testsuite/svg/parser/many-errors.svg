@@ -16,5 +16,15 @@
     </animate>
     <use></use>
     <path d='M 0 0 O 10 20 30 40 1'/>
+    <circle
+        fill='url(#one) none nono'
+        filter='grayscale(1)hue-rotate(45)url(#myfirstfilter) junk at the end'/>
   </g>
+  <defs>
+    <filter id='myfirstfilter'>
+      <feFlood/>
+      <feMerge/>
+      <fefe/>
+    </filter>
+  </defs>
 </svg>

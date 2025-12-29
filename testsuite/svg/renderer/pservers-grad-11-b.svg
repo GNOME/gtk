@@ -1,124 +1,376 @@
-<svg version="1.1" baseProfile="basic" id="svg-root"
-  width="100%" height="100%" viewBox="0 0 480 360"
-  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <!--======================================================================-->
-  <!--=  SVG 1.1 2nd Edition Test Case                                     =-->
-  <!--======================================================================-->
-  <!--=  Copyright 2009 World Wide Web Consortium, (Massachusetts          =-->
-  <!--=  Institute of Technology, European Research Consortium for         =-->
-  <!--=  Informatics and Mathematics (ERCIM), Keio University).            =-->
-  <!--=  All Rights Reserved.                                              =-->
-  <!--=  See http://www.w3.org/Consortium/Legal/.                          =-->
-  <!--======================================================================-->
-  <d:SVGTestCase xmlns:d="http://www.w3.org/2000/02/svg/testsuite/description/"
-    template-version="1.4" reviewer="SVGWG" author="Haroon Sheikh" status="accepted"
-    version="$Revision: 1.8 $" testname="$RCSfile: pservers-grad-11-b.svg,v $">
-    <d:testDescription xmlns="http://www.w3.org/1999/xhtml" href="http://www.w3.org/TR/SVG11/pservers.html#Gradients">
-      <p>
-        Test that the viewer has basic capability to handle radial gradients
-        on fills and stroke of objects and text.
-      </p>
-      <p>
-        This test uses the following elements : &lt;radialGradient&gt;, &lt;stop&gt;
-        and the following properties : stop-color, fill:url(#  ), stroke(url# )
-      </p>
-      <p>
-        From top-down (left to right) the appearance of objects is as follows.
-      </p>
-      <p>
-        The top left rectangle  should be a radial gradient from dark blue (in) to lime (outside).
-        The gradient is applied to the fill of the rectangle.
-      </p>
-      <p>
-        The next rectangle has no fill, but has a thick stroke on which the gradient is
-        applied. The gradient goes from dark orange(in) to pale yellow (out).
-      </p>
-      <p>
-        The next item is a text with a radial gradient on the fill. The gradient goes
-        from green (in) to yellow (out).
-      </p>
-      <p>
-        The last item is a text with a 2 user unit stroke on which a black (in) to magenta
-        (out) linear gradient is applied.
-      </p>
-    </d:testDescription>
-    <d:operatorScript xmlns="http://www.w3.org/1999/xhtml">            
-      <p>Run the test. No interaction required.</p>
-    </d:operatorScript>
-    <d:passCriteria xmlns="http://www.w3.org/1999/xhtml">
-      <p>The test passes if the rendering matches the reference image, apart
-      from any differences in font choice due to CSS2 rules.  Specifically:</p>
-      <ul>
-        <li>The top-left rectangle must be filled with a circular radial gradient
-        with dark blue inside and lime outside.  The center point of the gradient
-        is in the lower-left quadrant of the rectangle.</li>
-        <li>The top-right rectangle has no fill, but a thick stroke which is painted
-        with a radial gradient with dark orange inside and yellow outside.  The
-        center point of this gradient is in the lower-left quadrant of the
-        rectangle.</li>
-        <li>The "Gradient on text fill" text must be filled with a circular radial
-        gradient with green inside and yellow outside.  The center point of the
-        gradient is the center of the text.</li>
-        <li>The "Gradient on text stroke" has no fill, but a stroke which is painted with
-        a circular radial gradient with black inside and pink outside.  The center point of the
-        gradient is the center of the text.</li>
-      </ul>
-    </d:passCriteria>
-  </d:SVGTestCase>
-  <title id="test-title">$RCSfile: pservers-grad-11-b.svg,v $</title>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        id='svg-root'
+        width='100%'
+        height='100%'
+        viewBox='0 0 480 360'>
+  <desc>
+    This is based on the pservers-grad-11-b.svg testcase from
+    the SVG 1.1 testsuite. It has been modified by stripping
+    out data that GtkSvg doesn't handle, and by embedding
+    the used fonts.
+  </desc>
   <defs>
-    <font-face font-family="SVGFreeSansASCII" unicode-range="U+0-7F">
+    <font-face font-family='SvgFreeSansASCII'>
       <font-face-src>
-        <font-face-uri xlink:href="../resources/SVGFreeSans.svg#ascii"/>
+        <font-face-uri href='data:font/ttf;base64,\
+AAEAAAALAIAAAwAwR1NVQiCLJXoAAAE4AAAAVE9TLzJWVF4jAAABjAAAAGBjbWFw+g1+qwAAA2wA \
+AAaqZ2x5ZuuU2U8AAArcAAAeoGhlYWQthLmJAAAA4AAAADZoaGVhBsQDegAAALwAAAAkaG10eMU9 \
+/8gAAAHsAAABgGxvY2F+x3eSAAAKGAAAAMJtYXhwAW8AdAAAARgAAAAgbmFtZUHBaccAACl8AAAC \
+E3Bvc3RFi2pFAAArkAAAApUAAQAAAyD/OAAAA/f/6v/qA7cAAQAAAAAAAAAAAAAAAAAAAGAAAQAA \
+AAEAAKMr7L9fDzz1AAsD6AAAAADlYjs+AAAAAOViOz7/6v8mA7cDAgAAAAgAAgAAAAAAAAABAAAA \
+YABoAAUAAAAAAAIAAAAKAAoAAAD/AAAAAAAAAAEAAAAKADAAPgACREZMVAAObGF0bgAaAAQAAAAA \
+AAAAAQAAAAQAAAAAAAAAAQAAAAFsaWdhAAgAAAABAAAAAQAEAAQAAAABAAgAAQAGAAAAAQAAAAQC \
+DgGQAAUAAAExArwAAACMATECvAAAAeAAMQECAAACAAUDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFBm \
+RWQAwAAgAKADIP84AFoDegDaAAAAAQAAAAAAAAAAAAAAAAACAbAAAAEWAAABFgAAAWMAAAIsAAAC \
+LAAAA3kAAAKbAAAAvwAAAU0AAAFNAAABhQAAAkgAAAEWAAABTQAAARYAAAEW//gCLAAAAiwAAAIs \
+AAACLAAAAiwAAAIsAAACLAAAAiwAAAIsAAACLAAAARYAAAEWAAACSAAAAkgAAAJIAAACLAAAA/cA \
+AAKbAAACmwAAAtIAAALSAAACmwAAAmMAAAMKAAAC0gAAARYAAAH0AAACmwAAAiwAAANBAAAC0gAA \
+AwoAAAKbAAADCgAAAtIAAAKbAAACYwAAAtIAAAKbAAADsAAAApsAAAKbAAACYwAAARYAAAEW//gB \
+FgAAAdUAAAIs/+oBTQAAAiwAAAIsAAAB9AAAAiwAAAIsAAABFgAAAiwAAAIsAAAA3gAAAN7/7gH0 \
+AAAA3gAAA0EAAAIsAAACLAAAAiwAAAIsAAABTQAAAfQAAAEWAAACLAAAAfQAAALSAAAB9AAAAfQA \
+AAH0AAABTgAAAQQAAAFOAAACSAAAAAAABQAAAAMAAAAsAAAABAAAAhoAAQAAAAABFAADAAEAAAAs \
+AAMACgAAAhoABADoAAAABgAEAAEAAgB+AKD//wAAACAAoP//AAAAAAABAAYAwgAAAAEAAgADAAQA \
+BQAGAAcACAAJAAoACwAMAA0ADgAPABAAEQASABMAFAAVABYAFwAYABkAGgAbABwAHQAeAB8AIAAh \
+ACIAIwAkACUAJgAnACgAKQAqACsALAAtAC4ALwAwADEAMgAzADQANQA2ADcAOAA5ADoAOwA8AD0A \
+PgA/AEAAQQBCAEMARABFAEYARwBIAEkASgBLAEwATQBOAE8AUABRAFIAUwBUAFUAVgBXAFgAWQBa \
+AFsAXABdAF4AXwABAAABBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAgMEBQYH \
+CAkKCwwNDg8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9A \
+QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eXwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \
+AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAASQAAAA \
+AAAAAGAAAAAgAAAAIAAAAAEAAAAhAAAAIQAAAAIAAAAiAAAAIgAAAAMAAAAjAAAAIwAAAAQAAAAk \
+AAAAJAAAAAUAAAAlAAAAJQAAAAYAAAAmAAAAJgAAAAcAAAAnAAAAJwAAAAgAAAAoAAAAKAAAAAkA \
+AAApAAAAKQAAAAoAAAAqAAAAKgAAAAsAAAArAAAAKwAAAAwAAAAsAAAALAAAAA0AAAAtAAAALQAA \
+AA4AAAAuAAAALgAAAA8AAAAvAAAALwAAABAAAAAwAAAAMAAAABEAAAAxAAAAMQAAABIAAAAyAAAA \
+MgAAABMAAAAzAAAAMwAAABQAAAA0AAAANAAAABUAAAA1AAAANQAAABYAAAA2AAAANgAAABcAAAA3 \
+AAAANwAAABgAAAA4AAAAOAAAABkAAAA5AAAAOQAAABoAAAA6AAAAOgAAABsAAAA7AAAAOwAAABwA \
+AAA8AAAAPAAAAB0AAAA9AAAAPQAAAB4AAAA+AAAAPgAAAB8AAAA/AAAAPwAAACAAAABAAAAAQAAA \
+ACEAAABBAAAAQQAAACIAAABCAAAAQgAAACMAAABDAAAAQwAAACQAAABEAAAARAAAACUAAABFAAAA \
+RQAAACYAAABGAAAARgAAACcAAABHAAAARwAAACgAAABIAAAASAAAACkAAABJAAAASQAAACoAAABK \
+AAAASgAAACsAAABLAAAASwAAACwAAABMAAAATAAAAC0AAABNAAAATQAAAC4AAABOAAAATgAAAC8A \
+AABPAAAATwAAADAAAABQAAAAUAAAADEAAABRAAAAUQAAADIAAABSAAAAUgAAADMAAABTAAAAUwAA \
+ADQAAABUAAAAVAAAADUAAABVAAAAVQAAADYAAABWAAAAVgAAADcAAABXAAAAVwAAADgAAABYAAAA \
+WAAAADkAAABZAAAAWQAAADoAAABaAAAAWgAAADsAAABbAAAAWwAAADwAAABcAAAAXAAAAD0AAABd \
+AAAAXQAAAD4AAABeAAAAXgAAAD8AAABfAAAAXwAAAEAAAABgAAAAYAAAAEEAAABhAAAAYQAAAEIA \
+AABiAAAAYgAAAEMAAABjAAAAYwAAAEQAAABkAAAAZAAAAEUAAABlAAAAZQAAAEYAAABmAAAAZgAA \
+AEcAAABnAAAAZwAAAEgAAABoAAAAaAAAAEkAAABpAAAAaQAAAEoAAABqAAAAagAAAEsAAABrAAAA \
+awAAAEwAAABsAAAAbAAAAE0AAABtAAAAbQAAAE4AAABuAAAAbgAAAE8AAABvAAAAbwAAAFAAAABw \
+AAAAcAAAAFEAAABxAAAAcQAAAFIAAAByAAAAcgAAAFMAAABzAAAAcwAAAFQAAAB0AAAAdAAAAFUA \
+AAB1AAAAdQAAAFYAAAB2AAAAdgAAAFcAAAB3AAAAdwAAAFgAAAB4AAAAeAAAAFkAAAB5AAAAeQAA \
+AFoAAAB6AAAAegAAAFsAAAB7AAAAewAAAFwAAAB8AAAAfAAAAF0AAAB9AAAAfQAAAF4AAAB+AAAA \
+fgAAAF8AAACgAAAAoAAAAAEAAAAAABQAFAAqAEIAcgDUAU4BvAHMAewCCgIoAj4CVAJiAm4CfAKw \
+AsoDCANWA3IDrAP6BBYEfgTMBN4E+gUMBSAFNAV2BgYGIgZiBpoGwgbaBvAHMgdKB1gHfAeYB6gH \
+wgfaCBgIQgiACMIJEgkkCUoJXAl4CZYJrAnECdYJ5An2CggKFgokCn4KtgrsCyoLZguIC94MBAwY \
+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 \
+UwBhAG4AcwBBAFMAQwBJAEkAUgBlAGcAdQBsAGEAcgBhAHMAYwBpAGkAYQBzAGMAaQBpAFYAZQBy \
+AHMAaQBvAG4AIAAxAC4AMABhAHMAYwBpAGkARwBlAG4AZQByAGEAdABlAGQAIABiAHkAIABzAHYA \
+ZwAyAHQAdABmACAAZgByAG8AbQAgAEYAbwBuAHQAZQBsAGwAbwAgAHAAcgBvAGoAZQBjAHQALgBo \
+AHQAdABwADoALwAvAGYAbwBuAHQAZQBsAGwAbwAuAGMAbwBtAAACAAAAAAAAAAoAAAAAAAAAAAAA \
+AAAAAAAAAAAAAAAAAGABAgEDAQQBBQEGAQcBCAEJAQoBCwEMAQ0BDgEPARABEQESARMBFAEVARYB \
+FwEYARkBGgEbARwBHQEeAR8BIAEhASIBIwEkASUBJgEnASgBKQEqASsBLAEtAS4BLwEwATEBMgEz \
+ATQBNQE2ATcBOAE5AToBOwE8AT0BPgE/AUABQQFCAUMBRAFFAUYBRwFIAUkBSgFLAUwBTQFOAU8B \
+UAFRAVIBUwFUAVUBVgFXAVgBWQFaAVsBXAFdAV4BXwFgAWEABXNwYWNlBmV4Y2xhbQhxdW90ZWRi \
+bApudW1iZXJzaWduBmRvbGxhcgdwZXJjZW50CWFtcGVyc2FuZAtxdW90ZXNpbmdsZQlwYXJlbmxl \
+ZnQKcGFyZW5yaWdodAhhc3RlcmlzawRwbHVzBWNvbW1hBmh5cGhlbgZwZXJpb2QFc2xhc2gEemVy \
+bwNvbmUDdHdvBXRocmVlBGZvdXIEZml2ZQNzaXgFc2V2ZW4FZWlnaHQEbmluZQVjb2xvbglzZW1p \
+Y29sb24EbGVzcwVlcXVhbAdncmVhdGVyCHF1ZXN0aW9uAmF0AUEBQgFDAUQBRQFGAUcBSAFJAUoB \
+SwFMAU0BTgFPAVABUQFSAVMBVAFVAVYBVwFYAVkBWgticmFja2V0bGVmdAliYWNrc2xhc2gMYnJh \
+Y2tldHJpZ2h0C2FzY2lpY2lyY3VtCnVuZGVyc2NvcmUFZ3JhdmUBYQFiAWMBZAFlAWYBZwFoAWkB \
+agFrAWwBbQFuAW8BcAFxAXIBcwF0AXUBdgF3AXgBeQF6CWJyYWNlbGVmdANiYXIKYnJhY2VyaWdo \
+dAphc2NpaXRpbGRlAAAAAAA= \
+'/>
       </font-face-src>
     </font-face>
   </defs>
-  <g id="test-body-content" font-family="SVGFreeSansASCII,sans-serif" font-size="18">
-    <!-- ====================================================================== -->
-    <!-- Very simple black to red radial gradient                      ======== -->
-    <!-- ====================================================================== -->
-    <radialGradient gradientUnits="userSpaceOnUse" id="Grad1" cx="75" cy="100" r="130" fx="75" fy="100">
-      <stop stop-color="#009" offset="0"/>
-      <stop stop-color="#2e2" offset="1"/>
+  <g
+          id='test-body-content'
+          font-family='SVGFreeSansASCII,sans-serif'
+          font-size='18'>
+    <radialGradient
+            id='Grad1'
+            cx='75'
+            cy='100'
+            r='130'
+            gradientUnits='userSpaceOnUse'
+            fx='75'
+            fy='100'>
+      <stop
+              offset='0'
+              stop-color='rgb(0,0,153)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='1'
+              stop-color='rgb(34,238,34)'
+              stop-opacity='1'>
+      </stop>
     </radialGradient>
-    <rect x="10" y="10" width="210" height="140" fill="url(#Grad1)"/>
-    <text font-size="12" x="10" y="165">Radial gradient on fill of rectangle</text>
-    <!-- ====================================================================== -->
-    <!-- Radial gradient on the stroke of a rectangle                  ======== -->
-    <!-- ====================================================================== -->
-    <radialGradient id="Grad2" gradientUnits="userSpaceOnUse" cx="295" cy="100" r="150" fx="295" fy="100">
-      <stop stop-color="#e22" offset="0"/>
-      <stop stop-color="#ff6" offset="1"/>
+    <rect
+            fill='url(#Grad1)'
+            x='10'
+            y='10'
+            width='210'
+            height='140'>
+    </rect>
+    <text
+            x='10'
+            y='165'
+            font-size='12'>Radial gradient on fill of rectangle</text>
+    <radialGradient
+            id='Grad2'
+            cx='295'
+            cy='100'
+            r='150'
+            gradientUnits='userSpaceOnUse'
+            fx='295'
+            fy='100'>
+      <stop
+              offset='0'
+              stop-color='rgb(238,34,34)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='1'
+              stop-color='rgb(255,255,102)'
+              stop-opacity='1'>
+      </stop>
     </radialGradient>
-    <rect x="250" y="30" width="170" height="100" fill="none" stroke="url(#Grad2)" stroke-width="40"/>
-    <text font-size="12" x="230" y="165">Radial gradient on stroke of rectangle</text>
-    <!-- ====================================================================== -->
-    <!-- Gradient on fill of text                                      ======== -->
-    <!-- ====================================================================== -->
-    <radialGradient id="Grad3" gradientUnits="userSpaceOnUse" cx="225" cy="180" r="90" fx="225" fy="180">
-      <stop stop-color="#060" offset="0"/>
-      <stop stop-color="yellow" offset="1"/>
+    <rect
+            fill='none'
+            stroke='url(#Grad2)'
+            stroke-width='40'
+            x='250'
+            y='30'
+            width='170'
+            height='100'
+            class='transparent-fill'>
+    </rect>
+    <text
+            x='230'
+            y='165'
+            font-size='12'>Radial gradient on stroke of rectangle</text>
+    <radialGradient
+            id='Grad3'
+            cx='225'
+            cy='180'
+            r='90'
+            gradientUnits='userSpaceOnUse'
+            fx='225'
+            fy='180'>
+      <stop
+              offset='0'
+              stop-color='rgb(0,102,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='1'
+              stop-color='rgb(255,255,0)'
+              stop-opacity='1'>
+      </stop>
     </radialGradient>
-    <text font-size="50" fill="url(#Grad3)" x="10" y="210">Gradient on text fill</text>
-    <text font-size="12" x="10" y="225">Radial gradient on text, black to yellow</text>
-    <!-- ====================================================================== -->
-    <!-- Gradient on stroke of text                                    ======== -->
-    <!-- ====================================================================== -->
-    <radialGradient id="Grad4" gradientUnits="userSpaceOnUse" cx="225" cy="245" r="90" fx="225" fy="245">
-      <stop stop-color="black" offset="0"/>
-      <stop stop-color="#D6D" offset="1"/>
+    <text
+            fill='url(#Grad3)'
+            x='10'
+            y='210'
+            font-size='50'>Gradient on text fill</text>
+    <text
+            x='10'
+            y='225'
+            font-size='12'>Radial gradient on text, black to yellow</text>
+    <radialGradient
+            id='Grad4'
+            cx='225'
+            cy='245'
+            r='90'
+            gradientUnits='userSpaceOnUse'
+            fx='225'
+            fy='245'>
+      <stop
+              offset='0'
+              stop-color='rgb(0,0,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='1'
+              stop-color='rgb(221,102,221)'
+              stop-opacity='1'>
+      </stop>
     </radialGradient>
-    <text font-size="45" fill="none" stroke="url(#Grad4)" stroke-width="2" x="10" y="270">Gradient on text stroke</text>
-    <text font-size="12" x="10" y="285">Radial gradient on stroke of text, black to red</text>
+    <text
+            fill='none'
+            stroke='url(#Grad4)'
+            stroke-width='2'
+            x='10'
+            y='270'
+            font-size='45'>Gradient on text stroke</text>
+    <text
+            x='10'
+            y='285'
+            font-size='12'>Radial gradient on stroke of text, black to red</text>
   </g>
-  <g font-family="SVGFreeSansASCII,sans-serif" font-size="32">
-    <text id="revision" x="10" y="340" stroke="none" fill="black">$Revision: 1.8 $</text>
+  <g
+          font-family='SVGFreeSansASCII,sans-serif'
+          font-size='32'>
+    <text
+            id='revision'
+            fill='rgb(0,0,0)'
+            stroke='none'
+            x='10'
+            y='340'>$Revision: 1.8 $</text>
   </g>
-  <rect id="test-frame" x="1" y="1" width="478" height="358" fill="none" stroke="#000000"/>
-  <!-- comment out this watermark once the test is approved -->
-  <!--<g id="draft-watermark">
-    <rect x="1" y="1" width="478" height="20" fill="red" stroke="black" stroke-width="1"/>
-    <text font-family="SVGFreeSansASCII,sans-serif" font-weight="bold" font-size="20" x="240"
-      text-anchor="middle" y="18" stroke-width="0.5" stroke="black" fill="white">DRAFT</text>
-  </g>-->
+  <rect
+          id='test-frame'
+          fill='none'
+          stroke='rgb(0,0,0)'
+          x='1'
+          y='1'
+          width='478'
+          height='358'
+          class='transparent-fill'>
+  </rect>
 </svg>

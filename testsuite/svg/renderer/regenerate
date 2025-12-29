@@ -1,0 +1,5 @@
+#! /bin/sh
+
+for i in testsuite/svg/renderer/*.svg; do
+  G_TEST_SRCDIR=testsuite/svg/renderer ./build/testsuite/svg/renderer/test-svg-renderer --generate $i > `dirname $i`/`basename $i .svg`.node
+done
