@@ -508,7 +508,8 @@ gtk_column_view_allocate (GtkWidget *widget,
                        full_width, height - header_height, -1,
                        gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, header_height)));
 
-  gtk_adjustment_configure (self->hadjustment,  x, 0, full_width, width * 0.1, width * 0.9, width);
+  gtk_adjustment_configure (self->hadjustment, x, 0, MAX (full_width, width),
+                            width * 0.1, width * 0.9, width);
 }
 
 static void
