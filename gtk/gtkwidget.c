@@ -4776,6 +4776,9 @@ gtk_widget_handle_crossing (GtkWidget             *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
 
+  if (!priv->event_controllers)
+    return;
+
   g_object_ref (widget);
 
   if (crossing->old_target)
