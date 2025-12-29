@@ -364,6 +364,9 @@ path_paintable_set_size (PathPaintable *self,
   self->svg->width = width;
   self->svg->height = height;
 
+  svg_shape_attr_set (self->svg->content,
+                      SHAPE_ATTR_VIEW_BOX,
+                      svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
   g_signal_emit (self, signals[CHANGED], 0);
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
 }
