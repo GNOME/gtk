@@ -89,8 +89,7 @@
  *
  * The paintable supports much of SVG 2, some notable exceptions.
  *
- * Among the graphical elements, `<symbol>` and `<textPath>`
- * are not supported.
+ * Among the graphical elements, `<textPath>` is not supported.
  *
  * All filter functions except `drop-shadow()` are supported, plus a
  * custom `alpha-level()` function, which implements one particular
@@ -9485,6 +9484,13 @@ struct {
     .has_gpa_attrs = 0,
     .has_color_stops = 0,
     .has_filters = 1,
+  },
+  { .name = "symbol",
+    .has_shapes = 1,
+    .never_rendered = 1,
+    .has_gpa_attrs = 0,
+    .has_color_stops = 0,
+    .has_filters = 0,
    },
 };
 
@@ -9614,8 +9620,7 @@ shape_attr_get_initial_value (ShapeAttr  attr,
         }
     }
 
-  if (shape->type == SHAPE_MARKER ||
-      shape->type == SHAPE_PATTERN)
+  if (shape->type == SHAPE_MARKER || shape->type == SHAPE_PATTERN)
     {
       if (attr == SHAPE_ATTR_OVERFLOW)
         {
@@ -9628,7 +9633,7 @@ shape_attr_get_initial_value (ShapeAttr  attr,
         }
     }
 
-  if (shape->type == SHAPE_SVG)
+  if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
       if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
         {
@@ -9733,12 +9738,14 @@ shape_has_attr (ShapeType type,
              type == SHAPE_MASK || type == SHAPE_PATTERN ||
              type == SHAPE_TEXT || type == SHAPE_TSPAN ||
              type == SHAPE_SVG || type == SHAPE_IMAGE ||
-             type == SHAPE_FILTER;
+             type == SHAPE_FILTER || type == SHAPE_SYMBOL;
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_HEIGHT:
-      return type == SHAPE_SVG || type == SHAPE_RECT || type == SHAPE_USE ||
-             type == SHAPE_MASK || type == SHAPE_PATTERN || type == SHAPE_MARKER ||
-             type == SHAPE_IMAGE || type == SHAPE_FILTER;
+      return type == SHAPE_SVG || type == SHAPE_RECT ||
+             type == SHAPE_USE || type == SHAPE_MASK ||
+             type == SHAPE_PATTERN || type == SHAPE_MARKER ||
+             type == SHAPE_IMAGE || type == SHAPE_FILTER ||
+             type == SHAPE_SYMBOL;
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_RY:
       return type == SHAPE_RECT || type == SHAPE_ELLIPSE;
@@ -9772,13 +9779,15 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_LINEAR_GRADIENT || type == SHAPE_RADIAL_GRADIENT ||
              type == SHAPE_USE || type == SHAPE_SVG ||
              type == SHAPE_MARKER || type == SHAPE_PATTERN ||
-             type == SHAPE_DEFS || type == SHAPE_GROUP;
+             type == SHAPE_DEFS || type == SHAPE_GROUP ||
+             type == SHAPE_SYMBOL;
     case SHAPE_ATTR_FE_COLOR:
     case SHAPE_ATTR_FE_OPACITY:
       return type == SHAPE_FILTER ||
              type == SHAPE_USE || type == SHAPE_SVG ||
              type == SHAPE_MARKER || type == SHAPE_PATTERN ||
-             type == SHAPE_DEFS || type == SHAPE_GROUP;
+             type == SHAPE_DEFS || type == SHAPE_GROUP ||
+             type == SHAPE_SYMBOL;
     case SHAPE_ATTR_FE_X:
     case SHAPE_ATTR_FE_Y:
     case SHAPE_ATTR_FE_WIDTH:
@@ -9820,15 +9829,18 @@ shape_has_attr (ShapeType type,
       return type == SHAPE_RADIAL_GRADIENT;
     case SHAPE_ATTR_VIEW_BOX:
     case SHAPE_ATTR_CONTENT_FIT:
-      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_IMAGE ||
-             type == SHAPE_MARKER;
+      return type == SHAPE_SVG || type == SHAPE_PATTERN ||
+             type == SHAPE_IMAGE || type == SHAPE_MARKER ||
+             type == SHAPE_SYMBOL;
     case SHAPE_ATTR_REF_X:
     case SHAPE_ATTR_REF_Y:
+      return type == SHAPE_MARKER;
     case SHAPE_ATTR_MARKER_UNITS:
     case SHAPE_ATTR_MARKER_ORIENT:
       return type == SHAPE_MARKER;
     case SHAPE_ATTR_OVERFLOW:
-      return type == SHAPE_SVG || type == SHAPE_PATTERN || type == SHAPE_MARKER;
+      return type == SHAPE_SVG || type == SHAPE_PATTERN ||
+             type == SHAPE_MARKER || type == SHAPE_SYMBOL;
     /* path painting properties */
     case SHAPE_ATTR_FILL:
     case SHAPE_ATTR_FILL_OPACITY:
@@ -9851,7 +9863,8 @@ shape_has_attr (ShapeType type,
              type == SHAPE_PATH || type == SHAPE_TEXT ||
              type == SHAPE_TSPAN || type == SHAPE_GROUP ||
              type == SHAPE_USE || type == SHAPE_SVG ||
-             type == SHAPE_MARKER || type == SHAPE_PATTERN;
+             type == SHAPE_MARKER || type == SHAPE_PATTERN ||
+             type == SHAPE_SYMBOL;
     /* text properties */
     case SHAPE_ATTR_TEXT_ANCHOR:
     case SHAPE_ATTR_DX:
@@ -9872,7 +9885,8 @@ shape_has_attr (ShapeType type,
              type == SHAPE_GROUP || type == SHAPE_USE ||
              type == SHAPE_MARKER || type == SHAPE_CLIP_PATH ||
              type == SHAPE_MASK || type == SHAPE_DEFS ||
-             type == SHAPE_SVG || type == SHAPE_PATTERN;
+             type == SHAPE_SVG || type == SHAPE_PATTERN ||
+             type == SHAPE_SYMBOL;
     default:
       return type != SHAPE_LINEAR_GRADIENT &&
              type != SHAPE_RADIAL_GRADIENT &&
@@ -10025,6 +10039,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_SVG:
     case SHAPE_IMAGE:
     case SHAPE_FILTER:
+    case SHAPE_SYMBOL:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -10119,6 +10134,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_SVG:
         case SHAPE_IMAGE:
         case SHAPE_FILTER:
+        case SHAPE_SYMBOL:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -10185,6 +10201,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_SVG:
         case SHAPE_IMAGE:
         case SHAPE_FILTER:
+        case SHAPE_SYMBOL:
         default:
           g_assert_not_reached ();
         }
@@ -10252,6 +10269,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_PATTERN:
     case SHAPE_MARKER:
     case SHAPE_SVG:
+    case SHAPE_SYMBOL:
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
           Shape *sh = g_ptr_array_index (shape->shapes, i);
@@ -12537,7 +12555,7 @@ compute_current_values_for_shape (Shape          *shape,
 
   shape_init_current_values (shape, context);
 
-  if (shape->type == SHAPE_SVG)
+  if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
       SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
       double width, height;
@@ -12550,6 +12568,7 @@ compute_current_values_for_shape (Shape          *shape,
         }
       else
         {
+          // FIXME use parent override for symbol
           g_assert (context->viewport != NULL);
 
           width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
@@ -12635,7 +12654,7 @@ compute_current_values_for_shape (Shape          *shape,
       context->parent = parent;
     }
 
-  if (shape->type == SHAPE_SVG)
+  if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
       context->viewport = old_viewport;
     }
@@ -17460,6 +17479,7 @@ typedef struct
   double weight;
   RenderOp op;
   GSList *op_stack;
+  gboolean op_changed;
   int depth;
   Shape *ctx_shape;
   GSList *ctx_shape_stack;
@@ -17469,6 +17489,12 @@ typedef struct
  * creating clip paths, masks, for rendering markers, and
  * regular rendering. Since these operation are mutually
  * recursive, we maintain a stack of modes, aka RenderOps.
+ *
+ * The op_changed flag is used to treat the topmost shape
+ * in the new mode differently. This is relevant since
+ * markers, clip paths, etc can be nested, and just because
+ * we see a marker while in MARKERS mode does not mean
+ * that we should render it.
  */
 static void
 push_op (PaintContext *context,
@@ -17476,6 +17502,7 @@ push_op (PaintContext *context,
 {
   context->op_stack = g_slist_prepend (context->op_stack, GUINT_TO_POINTER (context->op));
   context->op = op;
+  context->op_changed = TRUE;
 }
 
 static void
@@ -18365,7 +18392,7 @@ needs_isolation (Shape         *shape,
           return TRUE;
         }
 
-      if (context->op == MASKING && shape->type == SHAPE_MASK)
+      if (context->op == MASKING && context->op_changed && shape->type == SHAPE_MASK)
         {
           if (reason) *reason = "<mask>";
           return TRUE;
@@ -18408,6 +18435,17 @@ needs_isolation (Shape         *shape,
   return FALSE;
 }
 
+static gboolean
+shape_is_use_target (Shape        *shape,
+                     PaintContext *context)
+{
+  Shape *ctx_shape = context->ctx_shape;
+
+  return ctx_shape != NULL &&
+         ctx_shape->type == SHAPE_USE &&
+         ((SvgHref *) ctx_shape->current[SHAPE_ATTR_HREF])->shape == shape;
+}
+
 static void
 push_group (Shape        *shape,
             PaintContext *context)
@@ -18419,7 +18457,7 @@ push_group (Shape        *shape,
   SvgTransform *tf = (SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
 
-  if (shape->type == SHAPE_SVG)
+  if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
       SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
       SvgContentFit *cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
@@ -18445,8 +18483,25 @@ push_group (Shape        *shape,
 
           x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
           y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
-          width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
-          height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+
+          if (shape_is_use_target (shape, context))
+            {
+              Shape *use = context->ctx_shape;
+              if (_gtk_bitmask_get (use->attrs, SHAPE_ATTR_WIDTH))
+                width = svg_number_get (use->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+              else
+                width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+              if (_gtk_bitmask_get (use->attrs, SHAPE_ATTR_HEIGHT))
+                height = svg_number_get (use->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+              else
+                height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+            }
+          else
+            {
+              width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+              height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+            }
+
           w = width;
           h = height;
         }
@@ -18713,7 +18768,7 @@ pop_group (Shape        *shape,
   if (tf->transforms[0].type != TRANSFORM_NONE)
     gtk_snapshot_restore (context->snapshot);
 
-  if (shape->type == SHAPE_SVG)
+  if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
       SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
 
@@ -19506,12 +19561,12 @@ paint_markers (Shape        *shape,
       ((SvgHref *) shape->current[SHAPE_ATTR_MARKER_END])->kind == HREF_NONE)
     return;
 
-  push_op (context, MARKERS);
-  push_ctx_shape (context, shape);
-
   if (!gsk_path_get_start_point (path, &point))
     return;
 
+  push_ctx_shape (context, shape);
+
+  push_op (context, MARKERS);
   paint_marker (shape, path, context, &point, VERTEX_START);
 
   if (gsk_path_get_next (path, &point))
@@ -19531,8 +19586,9 @@ paint_markers (Shape        *shape,
 
   paint_marker (shape, path, context, &point, VERTEX_END);
 
-  pop_ctx_shape (context);
   pop_op (context);
+
+  pop_ctx_shape (context);
 }
 
 /* }}} */
@@ -20273,22 +20329,38 @@ paint_shape (Shape        *shape,
   gsk_path_unref (path);
 }
 
+static gboolean
+display_property_applies_to (Shape *shape)
+{
+  return shape->type != SHAPE_MASK &&
+         shape->type != SHAPE_CLIP_PATH &&
+         shape->type != SHAPE_MARKER &&
+         shape->type != SHAPE_SYMBOL;
+}
+
 static void
 render_shape (Shape        *shape,
               PaintContext *context)
 {
-  if (context->op == RENDERING && shape_types[shape->type].never_rendered)
+  gboolean op_changed;
+
+  if (shape->type == SHAPE_DEFS ||
+      shape->type == SHAPE_LINEAR_GRADIENT ||
+      shape->type == SHAPE_RADIAL_GRADIENT)
     return;
 
-  if (shape->type == SHAPE_DEFS || shape->type == SHAPE_LINEAR_GRADIENT || shape->type == SHAPE_RADIAL_GRADIENT)
-    return;
-
-  if (shape->type != SHAPE_MASK && shape->type != SHAPE_CLIP_PATH)
+  if (shape_types[shape->type].never_rendered)
     {
-      if ((context->op == RENDERING ||
-           context->op == MASKING ||
-           context->op == CLIPPING) &&
-          svg_enum_get (shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+      if (!((shape->type == SHAPE_SYMBOL && shape_is_use_target (shape, context)) ||
+           (shape->type == SHAPE_CLIP_PATH && context->op == CLIPPING && context->op_changed) ||
+           (shape->type == SHAPE_MASK && context->op == MASKING && context->op_changed) ||
+           (shape->type == SHAPE_MARKER && context->op == MARKERS && context->op_changed)))
+        return;
+    }
+
+  if (display_property_applies_to (shape))
+    {
+      if (svg_enum_get (shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
         return;
     }
 
@@ -20303,7 +20375,14 @@ render_shape (Shape        *shape,
     }
 
   push_group (shape, context);
+
+  op_changed = context->op_changed;
+  context->op_changed = FALSE;
+
   paint_shape (shape, context);
+
+  context->op_changed = op_changed;
+
   pop_group (shape, context);
 
   context->depth--;

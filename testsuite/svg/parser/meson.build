@@ -64,6 +64,7 @@ test_data = [
   'simple.svg',
   'stroke.svg',
   'style.svg',
+  'symbol.svg',
   'text-align-01-b.svg',
   'text-cjk.svg',
   'text-fonts-02-t.svg',
