@@ -1193,7 +1193,7 @@ gtk_picture_set_isolate_contents (GtkPicture *self,
  *
  * Returns: True if contents are isolated
  *
- * Since 4.22
+ * Since: 4.22
  */
 gboolean
 gtk_picture_get_isolate_contents (GtkPicture *self)
