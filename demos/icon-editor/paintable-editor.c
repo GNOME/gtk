@@ -187,6 +187,8 @@ static void
 changed (PaintableEditor *self)
 {
   update_compat (self);
+  update_size (self);
+  update_summary (self);
 }
 
 static void
@@ -431,7 +433,7 @@ paintable_editor_add_path (PaintableEditor *self)
                    path_paintable_get_width (self->paintable));
   g_ascii_formatd (buffer + strlen (buffer), sizeof (buffer) - strlen (buffer),
                    "%g ",
-                   path_paintable_get_width (self->paintable));
+                   path_paintable_get_height (self->paintable));
   path = gsk_path_parse (buffer);
   g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
   path_paintable_add_path (self->paintable, path);
