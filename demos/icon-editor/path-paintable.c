@@ -189,6 +189,7 @@ static void
 path_paintable_init (PathPaintable *self)
 {
   self->svg = gtk_svg_new ();
+  gtk_svg_set_state (self->svg, 0);
 }
 
 static void
