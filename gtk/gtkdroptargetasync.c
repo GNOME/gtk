@@ -303,13 +303,29 @@ gtk_drop_target_async_handle_crossing (GtkEventController    *controller,
   else
     {
       if (crossing->new_descendent != NULL ||
-          crossing->new_target == widget)
+          crossing->new_target == widget ||
+          self->drop == NULL)
         return;
 
       g_signal_emit (self, signals[DRAG_LEAVE], 0, self->drop);
       g_clear_object (&self->drop);
       gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
     }
+}
+
+static void
+gtk_drop_target_async_reset (GtkEventController *controller)
+{
+  GtkDropTargetAsync *self = GTK_DROP_TARGET_ASYNC (controller);
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+
+  if (self->drop)
+    {
+      g_signal_emit (self, signals[DRAG_LEAVE], 0, self->drop);
+      g_clear_object (&self->drop);
+    }
+  if (widget)
+    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
 }
 
 static void
@@ -382,6 +398,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   controller_class->handle_event = gtk_drop_target_async_handle_event;
   controller_class->filter_event = gtk_drop_target_async_filter_event;
   controller_class->handle_crossing = gtk_drop_target_async_handle_crossing;
+  controller_class->reset = gtk_drop_target_async_reset;
 
   class->accept = gtk_drop_target_async_accept;
   class->drag_enter = gtk_drop_target_async_drag_enter;
