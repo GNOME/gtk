@@ -6606,8 +6606,6 @@ svg_view_box_equal (const SvgValue *value0,
   return graphene_rect_equal (&v0->view_box, &v1->view_box);
 }
 
-static SvgValue * svg_view_box_new (const graphene_rect_t *view_box);
-
 static SvgValue *
 svg_view_box_interpolate (const SvgValue *value0,
                           const SvgValue *value1,
@@ -6670,7 +6668,7 @@ svg_view_box_new_unset (void)
   return svg_value_ref ((SvgValue *) &unset);
 }
 
-static SvgValue *
+SvgValue *
 svg_view_box_new (const graphene_rect_t *box)
 {
   SvgViewBox *result;
