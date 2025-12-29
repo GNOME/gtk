@@ -233,10 +233,17 @@ gtk_drop_target_do_drop (GtkDropTarget *self)
 
   g_signal_emit (self, signals[DROP], 0, &self->value, self->coords.x, self->coords.y, &success);
 
-  if (success)
-    gdk_drop_finish (self->drop, make_action_unique (self->actions & gdk_drop_get_actions (self->drop)));
-  else
-    gdk_drop_finish (self->drop, GDK_ACTION_NONE);
+  if (self->drop)
+    {
+      GdkDragAction action;
+
+      if (success)
+        action = make_action_unique (self->actions & gdk_drop_get_actions (self->drop));
+      else
+        action = GDK_ACTION_NONE;
+
+      gdk_drop_finish (self->drop, action);
+    }
 
   self->dropping = FALSE;
 
@@ -441,7 +448,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
                         G_OBJECT_TYPE_NAME (widget), widget);
             preferred = make_action_unique (preferred);
           }
-        if (preferred &&
+        if (preferred && self->drop &&
             gtk_drop_status (self->drop, self->actions, preferred))
           {
             gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
@@ -520,7 +527,7 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
           preferred = make_action_unique (preferred);
         }
 
-      if (preferred &&
+      if (preferred && self->drop &&
           gtk_drop_status (self->drop, self->actions, preferred))
         {
           gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
