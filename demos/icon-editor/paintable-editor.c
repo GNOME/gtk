@@ -423,6 +423,7 @@ paintable_editor_add_path (PaintableEditor *self)
   g_autoptr (GskPath) path = NULL;
   char buffer[128];
   Shape *content;
+  size_t idx;
 
   if (path_paintable_get_n_paths (self->paintable) == 0)
     path_paintable_set_size (self->paintable, 100.f, 100.f);
@@ -436,7 +437,22 @@ paintable_editor_add_path (PaintableEditor *self)
                    path_paintable_get_height (self->paintable));
   path = gsk_path_parse (buffer);
   g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
-  path_paintable_add_path (self->paintable, path);
+  idx = path_paintable_add_path (self->paintable, path);
+
+  for (unsigned int i = 1; i < 100; i++)
+    {
+      char id[64];
+      g_snprintf (id, sizeof (id), "path%u", i);
+      if (path_paintable_get_shape_by_id (self->paintable, id) == NULL)
+        {
+          Shape *shape;
+
+          shape = path_paintable_get_shape (self->paintable, idx);
+          g_set_str (&shape->id, id);
+          break;
+        }
+    }
+
   content = path_paintable_get_content (self->paintable);
   append_shape_editor (self, g_ptr_array_index (content->shapes, content->shapes->len - 1));
   g_signal_handlers_unblock_by_func (self->paintable, paths_changed, self);
