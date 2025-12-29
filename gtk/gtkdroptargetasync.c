@@ -225,7 +225,7 @@ gtk_drop_target_async_handle_event (GtkEventController *controller,
           return FALSE;
 
         g_signal_emit (self, signals[DRAG_MOTION], 0, drop, x, y, &preferred_action);
-        if (preferred_action &&
+        if (preferred_action && self->drop && !self->rejected &&
             gtk_drop_status (self->drop, self->actions, preferred_action))
           {
             gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
@@ -290,11 +290,11 @@ gtk_drop_target_async_handle_crossing (GtkEventController    *controller,
 
       g_signal_emit (self, signals[ACCEPT], 0, self->drop, &accept);
       self->rejected = !accept;
-      if (self->rejected)
+      if (self->rejected || !self->drop)
         return;
 
       g_signal_emit (self, signals[DRAG_ENTER], 0, self->drop, x, y, &preferred_action);
-      if (preferred_action &&
+      if (preferred_action && self->drop && !self->rejected &&
           gtk_drop_status (self->drop, self->actions, preferred_action))
         {
           gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
