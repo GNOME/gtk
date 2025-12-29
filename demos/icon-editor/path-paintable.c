@@ -401,7 +401,7 @@ set_default_shape_attrs (Shape *shape)
   shape->gpa.transition_easing = GPA_EASING_LINEAR;
   shape->gpa.origin = 0;
 
-  shape->gpa.animation = GPA_ANIMATION_NORMAL;
+  shape->gpa.animation = GPA_ANIMATION_NONE;
   shape->gpa.animation_duration = 0;
   shape->gpa.animation_repeat = REPEAT_FOREVER;
   shape->gpa.animation_segment = 0.2;
