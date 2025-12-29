@@ -1557,6 +1557,20 @@ svg_path_data_parse (const char *string)
   return p;
 }
 
+static SvgPathData *
+svg_path_data_collect (GskPath *path)
+{
+  SvgPathData *p = svg_path_data_new ();
+
+  gsk_path_foreach (path,
+                    GSK_PATH_FOREACH_ALLOW_QUAD |
+                    GSK_PATH_FOREACH_ALLOW_CUBIC,
+                    add_op,
+                    p);
+
+  return p;
+}
+
 static void
 svg_path_data_print (SvgPathData *p,
                      GString     *s)
@@ -6118,9 +6132,9 @@ svg_path_new_from_data (SvgPathData *pdata)
 }
 
 SvgValue *
-svg_path_new (const char *string)
+svg_path_new (GskPath *path)
 {
-  return svg_path_new_from_data (svg_path_data_parse (string));
+  return svg_path_new_from_data (svg_path_data_collect (path));
 }
 
 static SvgValue *
@@ -6129,7 +6143,7 @@ svg_path_parse (const char *value)
   if (strcmp (value, "none") == 0)
     return svg_path_new_none ();
   else
-    return svg_path_new (value);
+    return svg_path_new_from_data (svg_path_data_parse (value));
 }
 
 static GskPath *
@@ -21759,6 +21773,8 @@ svg_shape_attr_set (Shape     *shape,
                     ShapeAttr  attr,
                     SvgValue  *value)
 {
+  g_return_if_fail (value != NULL);
+
   if (_gtk_bitmask_get (shape->attrs, attr))
     svg_value_unref (shape->base[attr]);
   shape->base[attr] = value;

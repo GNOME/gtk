@@ -418,12 +418,10 @@ path_paintable_add_path (PathPaintable *self,
                          GskPath       *path)
 {
   Shape *shape;
-  g_autofree char *s = NULL;
 
   shape = svg_shape_add (self->svg->content, SHAPE_PATH);
   set_default_shape_attrs (shape);
-  s = gsk_path_to_string (path);
-  svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (s));
+  svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (path));
 
   g_signal_emit (self, signals[CHANGED], 0);
   g_signal_emit (self, signals[PATHS_CHANGED], 0);
@@ -994,14 +992,12 @@ shape_duplicate (Shape *shape)
 
   copy->type = shape->type;
   copy->parent = shape->parent;
-  copy->attrs = shape->attrs;
+  copy->attrs = _gtk_bitmask_copy (shape->attrs);
   copy->id = NULL;
-  for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)
-    {
-      if (shape->base[i])
-        copy->base[i] = svg_value_ref (shape->base[i]);
-    }
+  for (unsigned int i = FIRST_SHAPE_ATTR; i <= LAST_FILTER_ATTR; i++)
+    copy->base[i] = svg_value_ref (shape->base[i]);
 
+  copy->shapes = g_ptr_array_new ();
   copy->animations = g_ptr_array_new ();
 
   copy->gpa.states = shape->gpa.states;

@@ -309,8 +309,7 @@ shape_editor_update_path (ShapeEditor *self,
   g_autofree char *s = NULL;
 
   self->shape->type = SHAPE_PATH;
-  s = gsk_path_to_string (path);
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (s));
+  svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (path));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
