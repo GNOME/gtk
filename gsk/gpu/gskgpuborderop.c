@@ -136,7 +136,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
   gsk_gpu_color_to_float (&colors[1], alt, opacity, instance->right_border_color);
   gsk_gpu_color_to_float (&colors[2], alt, opacity, instance->bottom_border_color);
   gsk_gpu_color_to_float (&colors[3], alt, opacity, instance->left_border_color);
-  instance->offset[0] = inside_offset->x;
-  instance->offset[1] = inside_offset->y;
+  instance->inside_offset[0] = inside_offset->x;
+  instance->inside_offset[1] = inside_offset->y;
 }
 

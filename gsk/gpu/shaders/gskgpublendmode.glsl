@@ -1,6 +1,15 @@
-#define GSK_N_TEXTURES 2
+#ifdef GSK_PREAMBLE
+textures = 2;
+var_name = "gsk_gpu_blend_mode";
+struct_name = "GskGpuBlendMode";
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t bottom_rect;
+graphene_rect_t top_rect;
+float opacity;
+#endif
+
+#include "gskgpublendmodeinstance.glsl"
 #include "blendmode.glsl"
 
 PASS(0) vec2 _pos;
@@ -12,11 +21,6 @@ PASS_FLAT(5) float _opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_bottom_rect;
-IN(2) vec4 in_top_rect;
-IN(3) float in_opacity;
 
 void
 run (out vec2 pos)

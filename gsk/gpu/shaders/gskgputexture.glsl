@@ -1,17 +1,18 @@
-#define GSK_N_TEXTURES 1
+#ifdef GSK_PREAMBLE
+textures = 1;
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t tex_rect;
+#endif
+
+#include "gskgputextureinstance.glsl"
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS(2) vec2 _tex_coord;
 
 
-
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_tex_rect;
 
 void
 run (out vec2 pos)

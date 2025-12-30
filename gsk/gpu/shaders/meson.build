@@ -11,32 +11,31 @@ gsk_private_gpu_include_shaders = files([
 ])
 
 converted_shaders = files([
-  'gskgpuboxshadow.glsl',
-])
-
-gsk_private_gpu_shaders = files([
   'gskgpuarithmetic.glsl',
-  'gskgpublendmode.glsl',
-  'gskgpuboxshadow.glsl',
-  'gskgpublur.glsl',
   'gskgpuborder.glsl',
+  'gskgpublendmode.glsl',
+  'gskgpublur.glsl',
+  'gskgpuboxshadow.glsl',
   'gskgpucolor.glsl',
   'gskgpucolorize.glsl',
   'gskgpucolormatrix.glsl',
-  'gskgpucomponenttransfer.glsl',
   'gskgpucomposite.glsl',
-  'gskgpuconicgradient.glsl',
   'gskgpuconvert.glsl',
   'gskgpuconvertbuiltin.glsl',
   'gskgpuconvertcicp.glsl',
   'gskgpucrossfade.glsl',
   'gskgpudisplacement.glsl',
-  'gskgpulineargradient.glsl',
   'gskgpumask.glsl',
-  'gskgpuradialgradient.glsl',
   'gskgpuroundedcolor.glsl',
   'gskgputexture.glsl',
 ])
+
+gsk_private_gpu_shaders = files([
+  'gskgpucomponenttransfer.glsl',
+  'gskgpuconicgradient.glsl',
+  'gskgpulineargradient.glsl',
+  'gskgpuradialgradient.glsl',
+]) + converted_shaders
 
 gsk_private_gpu_shader_headers = []
 gsk_private_gpu_gl_shaders = []
