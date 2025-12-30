@@ -1,6 +1,17 @@
-#define GSK_N_TEXTURES 0
+#ifdef GSK_PREAMBLE
+textures = 0;
+var_name = "gsk_gpu_box_shadow";
+struct_name = "GskGpuBoxShadow";
 
-#include "common.glsl"
+GskRoundedRect outline;
+graphene_rect_t bounds;
+GdkColor color;
+graphene_point_t shadow_offset;
+float shadow_spread;
+float blur_radius;
+#endif
+
+#include "gskgpuboxshadowinstance.glsl"
 
 /* blur radius (aka in_blur_direction) 0 is NOT supported and MUST be caught before */
 
@@ -13,13 +24,6 @@ PASS_FLAT(7) vec4 _color;
 PASS_FLAT(8) vec2 _sigma;
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) mat3x4 in_outline;
-IN(3) vec4 in_bounds;
-IN(4) vec4 in_color;
-IN(5) vec2 in_shadow_offset;
-IN(6) float in_shadow_spread;
-IN(7) float in_blur_radius;
 
 #define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2.0 * PI) / 4.0))
 
