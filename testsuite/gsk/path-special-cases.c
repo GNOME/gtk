@@ -260,6 +260,8 @@ test_rsvg_parse (void)
       "M 10 10 20 30 20 10 10 10 M 40 40 50 50 50 40 Z M 60 40 h 4 v 4 h -4 z" },
     // whitespace at end
     { "M 10 10 z ", "M 10 10 z" },
+    // unexpected char
+    { "M 10 ;", NULL },
   };
   int i;
 
