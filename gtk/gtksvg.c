@@ -19561,6 +19561,9 @@ stroke_shape (Shape        *shape,
   GskStroke *stroke;
   graphene_rect_t bounds;
   double opacity;
+  VectorEffect effect;
+  GskRenderNode *child;
+  GskRenderNode *node;
 
   paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
   paint = get_context_paint (paint, context->ctx_shape_stack);
@@ -19572,38 +19575,62 @@ stroke_shape (Shape        *shape,
     return;
 
   opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
+  effect = svg_enum_get (shape->current[SHAPE_ATTR_VECTOR_EFFECT]);
 
-  switch (paint->kind)
+  if (paint->kind == PAINT_COLOR)
     {
-    case PAINT_NONE:
-      break;
-    case PAINT_COLOR:
-      {
-        GdkRGBA color = paint->color;
-        color.alpha *= opacity;
-        gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
-      }
-      break;
-    case PAINT_SERVER:
-    case PAINT_SERVER_WITH_FALLBACK:
-      {
-        if (opacity < 1)
-          gtk_snapshot_push_opacity (context->snapshot, opacity);
-
-        gtk_snapshot_push_stroke (context->snapshot, path, stroke);
-        paint_server (paint, &bounds, context);
-        gtk_snapshot_pop (context->snapshot);
-
-        if (opacity < 1)
-          gtk_snapshot_pop (context->snapshot);
-      }
-      break;
-    case PAINT_CONTEXT_FILL:
-    case PAINT_CONTEXT_STROKE:
-    case PAINT_SYMBOLIC:
-    default:
-      g_assert_not_reached ();
+      GdkRGBA color = paint->color;
+      color.alpha *= opacity;
+      child = gsk_color_node_new (&color, &bounds);
+      opacity = 1;
     }
+  else
+    {
+      gtk_snapshot_push_collect (context->snapshot);
+      paint_server (paint, &bounds, context);
+      child = gtk_snapshot_pop_collect (context->snapshot);
+    }
+
+  if (effect == VECTOR_EFFECT_NON_SCALING_STROKE)
+    {
+      GskTransform *host_transform = NULL;
+      GskTransform *user_transform = NULL;
+      GskPath *transformed_path = NULL;
+      GskRenderNode *transformed_child;
+      GskRenderNode *stroke_node;
+
+      host_transform = context_get_host_transform (context);
+      user_transform = gsk_transform_invert (gsk_transform_ref (host_transform));
+      transformed_path = gsk_transform_transform_path (user_transform, path);
+
+      transformed_child = gsk_transform_node_new (child, user_transform);
+      stroke_node = gsk_stroke_node_new (transformed_child, transformed_path, stroke);
+
+      node = gsk_transform_node_new (stroke_node, host_transform);
+
+      gsk_render_node_unref (stroke_node);
+      gsk_render_node_unref (transformed_child);
+
+      gsk_path_unref (transformed_path);
+      gsk_transform_unref (user_transform);
+      gsk_transform_unref (host_transform);
+    }
+  else
+    {
+      node = gsk_stroke_node_new (child, path, stroke);
+    }
+
+  gsk_render_node_unref (child);
+
+  if (opacity < 1)
+    {
+      GskRenderNode *node2 = gsk_opacity_node_new (node, opacity);
+      gsk_render_node_unref (node);
+      node = node2;
+    }
+
+  gtk_snapshot_append_node (context->snapshot, node);
+  gsk_render_node_unref (node);
 
   gsk_stroke_free (stroke);
 }
