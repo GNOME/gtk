@@ -3849,6 +3849,42 @@ svg_component_transfer_type_parse (const char *string)
 }
 
 /* }}} */
+/* {{{ Vector effectx */
+
+typedef enum
+{
+  VECTOR_EFFECT_NONE,
+  VECTOR_EFFECT_NON_SCALING_STROKE,
+} VectorEffect;
+
+static const SvgValueClass SVG_VECTOR_EFFECT_CLASS = {
+  "SvgVectorEffect",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum vector_effect_values[] = {
+  { { &SVG_VECTOR_EFFECT_CLASS, 1 }, VECTOR_EFFECT_NONE, "none" },
+  { { &SVG_VECTOR_EFFECT_CLASS, 1 }, VECTOR_EFFECT_NON_SCALING_STROKE, "non-scaling-stroke" },
+};
+
+static SvgValue *
+svg_vector_effect_new (VectorEffect value)
+{
+  g_assert (value < G_N_ELEMENTS (vector_effect_values));
+  return svg_value_ref ((SvgValue *) &vector_effect_values[value]);
+}
+
+static SvgValue *
+svg_vector_effect_parse (const char *string)
+{
+  return svg_enum_parse (vector_effect_values, G_N_ELEMENTS (vector_effect_values), string);
+}
+
+/* }}} */
 /* }}} */
 /* {{{ Transforms */
 
@@ -8327,6 +8363,14 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_overflow_parse,
   },
+  { .id = SHAPE_ATTR_VECTOR_EFFECT,
+    .name = "vector-effect",
+    .inherited = 0,
+    .discrete = 1,
+    .has_css = 0,
+    .only_css = 0,
+    .parse_value = svg_vector_effect_parse,
+  },
   { .id = SHAPE_ATTR_PATH,
     .name = "d",
     .inherited = 0,
@@ -9008,6 +9052,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
+  shape_attrs[SHAPE_ATTR_VECTOR_EFFECT].initial_value = svg_vector_effect_new (VECTOR_EFFECT_NONE);
   shape_attrs[SHAPE_ATTR_FILTER].initial_value = svg_filter_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_PATH].initial_value = svg_clip_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
@@ -9851,6 +9896,11 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_OVERFLOW:
       return type == SHAPE_SVG || type == SHAPE_PATTERN ||
              type == SHAPE_MARKER || type == SHAPE_SYMBOL;
+    case SHAPE_ATTR_VECTOR_EFFECT:
+      return type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
+             type == SHAPE_RECT || type == SHAPE_LINE ||
+             type == SHAPE_POLYLINE || type == SHAPE_POLYGON ||
+             type == SHAPE_PATH || type == SHAPE_USE;
     /* path painting properties */
     case SHAPE_ATTR_FILL:
     case SHAPE_ATTR_FILL_OPACITY:
