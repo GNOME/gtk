@@ -20667,6 +20667,12 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   if (self->overflow == GTK_OVERFLOW_HIDDEN)
     gtk_snapshot_pop (snapshot);
 
+  /* Sanity checks. */
+  g_assert (paint_context.viewport_stack == NULL);
+  g_assert (paint_context.op_stack == NULL);
+  g_assert (paint_context.ctx_shape_stack == NULL);
+  g_assert (paint_context.transforms == NULL);
+
   if (self->advance_after_snapshot)
     {
       self->advance_after_snapshot = FALSE;
