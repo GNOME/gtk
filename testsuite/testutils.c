@@ -57,7 +57,7 @@ diff_bytes_with_file (const char  *file1,
 
   diff = NULL;
 
-  diff_cmd = g_find_program_in_path ("diff");
+  diff_cmd = g_find_program_in_path ("zdiff");
   if (diff_cmd)
     {
       GSubprocess *process;
@@ -115,6 +115,20 @@ diff_bytes_with_file (const char  *file1,
 
       if (!g_file_get_contents (file1, &buf1, &len1, error))
         return NULL;
+
+      if (g_str_has_suffix (file1, ".gz"))
+        {
+          GConverter *decompressor;
+          GBytes *compressed, *decompressed;
+          decompressor = G_CONVERTER (g_zlib_decompressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP));
+          compressed = g_bytes_new_take (buf1, len1);
+          decompressed = g_converter_convert_bytes (decompressor, compressed, error);
+          g_object_unref (decompressor);
+          g_bytes_unref (compressed);
+          if (!decompressed)
+            return NULL;
+          buf1 = g_bytes_unref_to_data (decompressed, &len1);
+        }
 
       if ((len2 != len1) ||
           strncmp (buf2, buf1, len1) != 0)
