@@ -21,7 +21,7 @@ gsk_gpu_component_transfer_op_print_instance (GskGpuShaderOp *shader,
                                               gpointer        instance_,
                                               GString        *string)
 {
-  GskGpuComponenttransferInstance *instance = (GskGpuComponenttransferInstance *) instance_;
+  GskGpuComponentTransferInstance *instance = (GskGpuComponentTransferInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image (string, shader->images[0]);
@@ -39,18 +39,18 @@ static const GskGpuShaderOpClass GSK_GPU_COMPONENT_TRANSFER_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpucomponenttransfer",
-  gsk_gpu_componenttransfer_n_textures,
-  sizeof (GskGpuComponenttransferInstance),
+  gsk_gpu_component_transfer_n_textures,
+  sizeof (GskGpuComponentTransferInstance),
 #ifdef GDK_RENDERING_VULKAN
-  &gsk_gpu_componenttransfer_info,
+  &gsk_gpu_component_transfer_info,
 #endif
   gsk_gpu_component_transfer_op_print_instance,
-  gsk_gpu_componenttransfer_setup_attrib_locations,
-  gsk_gpu_componenttransfer_setup_vao
+  gsk_gpu_component_transfer_setup_attrib_locations,
+  gsk_gpu_component_transfer_setup_vao
 };
 
 static void
-set_param (GskGpuComponenttransferInstance *instance,
+set_param (GskGpuComponentTransferInstance *instance,
            guint                            coord,
            guint                            idx,
            float                            value)
@@ -75,7 +75,7 @@ set_param (GskGpuComponenttransferInstance *instance,
 }
 
 static void
-set_table_value (GskGpuComponenttransferInstance *instance,
+set_table_value (GskGpuComponentTransferInstance *instance,
                  guint                            idx,
                  float                            value)
 {
@@ -100,7 +100,7 @@ set_table_value (GskGpuComponenttransferInstance *instance,
 static void
 copy_component_transfer (const GskComponentTransfer      *transfer,
                          guint                            coord,
-                         GskGpuComponenttransferInstance *instance,
+                         GskGpuComponentTransferInstance *instance,
                          guint                           *n)
 {
   set_param (instance, coord, 0, transfer->kind);
@@ -147,7 +147,7 @@ gsk_gpu_component_transfer_op (GskGpuFrame                *frame,
                                const GskComponentTransfer *blue,
                                const GskComponentTransfer *alpha)
 {
-  GskGpuComponenttransferInstance *instance;
+  GskGpuComponentTransferInstance *instance;
   guint n;
 
   gsk_gpu_shader_op_alloc (frame,
@@ -168,6 +168,6 @@ gsk_gpu_component_transfer_op (GskGpuFrame                *frame,
   copy_component_transfer (blue, 2, instance, &n);
   copy_component_transfer (alpha, 3, instance, &n);
 
-  instance->opacity = opacity;
+  instance->opacity[0] = opacity;
 }
 

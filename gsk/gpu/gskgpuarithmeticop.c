@@ -68,7 +68,7 @@ gsk_gpu_arithmetic_op (GskGpuFrame             *frame,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  instance->opacity = opacity;
+  instance->opacity[0] = opacity;
   gsk_gpu_vec4_to_float (factors, instance->factors);
   gsk_gpu_rect_to_float (first->bounds, offset, instance->first_rect);
   gsk_gpu_rect_to_float (second->bounds, offset, instance->second_rect);

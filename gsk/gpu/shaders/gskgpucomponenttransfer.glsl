@@ -1,4 +1,27 @@
-#define GSK_N_TEXTURES 1
+#ifdef GSK_PREAMBLE
+textures = 1;
+var_name = "gsk_gpu_component_transfer";
+struct_name = "GskGpuComponentTransfer";
+
+graphene_vec4_t params_r;
+graphene_vec4_t params_g;
+graphene_vec4_t params_b;
+graphene_vec4_t params_a;
+graphene_vec4_t table0;
+graphene_vec4_t table1;
+graphene_vec4_t table2;
+graphene_vec4_t table3;
+graphene_vec4_t table4;
+graphene_vec4_t table5;
+graphene_vec4_t table6;
+graphene_vec4_t table7;
+
+graphene_rect_t rect;
+graphene_rect_t tex_rect;
+float opacity;
+#endif
+
+#include "gskgpucomponenttransferinstance.glsl"
 
 #define GSK_COMPONENT_TRANSFER_IDENTITY 0u
 #define GSK_COMPONENT_TRANSFER_LEVELS 1u
@@ -7,7 +30,6 @@
 #define GSK_COMPONENT_TRANSFER_DISCRETE 4u
 #define GSK_COMPONENT_TRANSFER_TABLE 5u
 
-#include "common.glsl"
 #include "color.glsl"
 
 PASS_FLAT(0) vec4 _params_r;
@@ -29,22 +51,6 @@ PASS_FLAT(15) float _opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_params_r;
-IN(1) vec4 in_params_g;
-IN(2) vec4 in_params_b;
-IN(3) vec4 in_params_a;
-IN(4) vec4 in_table0;
-IN(5) vec4 in_table1;
-IN(6) vec4 in_table2;
-IN(7) vec4 in_table3;
-IN(8) vec4 in_table4;
-IN(9) vec4 in_table5;
-IN(10) vec4 in_table6;
-IN(11) vec4 in_table7;
-IN(12) vec4 in_rect;
-IN(13) vec4 in_tex_rect;
-IN(14) float in_opacity;
 
 void
 run (out vec2 pos)

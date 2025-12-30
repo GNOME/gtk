@@ -111,6 +111,11 @@ Type(
     size = 1,
 ),
 Type(
+    type = 'guint32',
+    var_type = VarType.UINT,
+    size = 1,
+),
+Type(
     type = 'graphene_point_t',
     var_type = VarType.FLOAT,
     size = 2,
@@ -121,6 +126,16 @@ Type(
     size = 2,
 ),
 Type(
+    type = 'graphene_vec2_t',
+    var_type = VarType.FLOAT,
+    size = 2,
+),
+Type(
+    type = 'graphene_vec4_t',
+    var_type = VarType.FLOAT,
+    size = 4,
+),
+Type(
     type = 'graphene_rect_t',
     var_type = VarType.FLOAT,
     size = 4,
@@ -129,6 +144,11 @@ Type(
     type = 'GskRoundedRect',
     var_type = VarType.FLOAT,
     size = 12,
+),
+Type(
+    type = 'graphene_matrix_t',
+    var_type = VarType.FLOAT,
+    size = 16,
 ),
 Type(
     type = 'GdkColor',

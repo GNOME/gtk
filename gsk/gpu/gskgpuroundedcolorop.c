@@ -21,7 +21,7 @@ gsk_gpu_rounded_color_op_print_instance (GskGpuShaderOp *shader,
                                          gpointer        instance_,
                                          GString        *string)
 {
-  GskGpuRoundedcolorInstance *instance = (GskGpuRoundedcolorInstance *) instance_;
+  GskGpuRoundedColorInstance *instance = (GskGpuRoundedColorInstance *) instance_;
 
   gsk_gpu_print_rounded_rect (string, instance->outline);
   gsk_gpu_print_rgba (string, instance->color);
@@ -39,14 +39,14 @@ static const GskGpuShaderOpClass GSK_GPU_ROUNDED_COLOR_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpuroundedcolor",
-  gsk_gpu_roundedcolor_n_textures,
-  sizeof (GskGpuRoundedcolorInstance),
+  gsk_gpu_rounded_color_n_textures,
+  sizeof (GskGpuRoundedColorInstance),
 #ifdef GDK_RENDERING_VULKAN
-  &gsk_gpu_roundedcolor_info,
+  &gsk_gpu_rounded_color_info,
 #endif
   gsk_gpu_rounded_color_op_print_instance,
-  gsk_gpu_roundedcolor_setup_attrib_locations,
-  gsk_gpu_roundedcolor_setup_vao
+  gsk_gpu_rounded_color_setup_attrib_locations,
+  gsk_gpu_rounded_color_setup_vao
 };
 
 void
@@ -58,7 +58,7 @@ gsk_gpu_rounded_color_op (GskGpuFrame            *frame,
                           const GskRoundedRect   *outline,
                           const GdkColor         *color)
 {
-  GskGpuRoundedcolorInstance *instance;
+  GskGpuRoundedColorInstance *instance;
   GdkColorState *alt;
 
   alt = gsk_gpu_color_states_find (ccs, color);

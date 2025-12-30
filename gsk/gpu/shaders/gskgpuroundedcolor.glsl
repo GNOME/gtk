@@ -1,4 +1,12 @@
-#define GSK_N_TEXTURES 0
+#ifdef GSK_PREAMBLE
+var_name = "gsk_gpu_rounded_color";
+struct_name = "GskGpuRoundedColor";
+
+GskRoundedRect outline;
+GdkColor color;
+#endif
+
+#include "gskgpuroundedcolorinstance.glsl"
 
 #include "common.glsl"
 
@@ -7,9 +15,6 @@ PASS_FLAT(1) vec4 _color;
 PASS_FLAT(2) RoundedRect _outline;
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) mat3x4 in_outline;
-IN(3) vec4 in_color;
 
 void
 run (out vec2 pos)

@@ -21,7 +21,7 @@ gsk_gpu_blend_mode_op_print_instance (GskGpuShaderOp *shader,
                                       gpointer        instance_,
                                       GString        *string)
 {
-  GskGpuBlendmodeInstance *instance = (GskGpuBlendmodeInstance *) instance_;
+  GskGpuBlendModeInstance *instance = (GskGpuBlendModeInstance *) instance_;
 
   gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
   gsk_gpu_print_rect (string, instance->rect);
@@ -42,14 +42,14 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpublendmode",
-  gsk_gpu_blendmode_n_textures,
-  sizeof (GskGpuBlendmodeInstance),
+  gsk_gpu_blend_mode_n_textures,
+  sizeof (GskGpuBlendModeInstance),
 #ifdef GDK_RENDERING_VULKAN
-  &gsk_gpu_blendmode_info,
+  &gsk_gpu_blend_mode_info,
 #endif
   gsk_gpu_blend_mode_op_print_instance,
-  gsk_gpu_blendmode_setup_attrib_locations,
-  gsk_gpu_blendmode_setup_vao
+  gsk_gpu_blend_mode_setup_attrib_locations,
+  gsk_gpu_blend_mode_setup_vao
 };
 
 void
@@ -62,7 +62,7 @@ gsk_gpu_blend_mode_op (GskGpuFrame             *frame,
                        const GskGpuShaderImage *bottom,
                        const GskGpuShaderImage *top)
 {
-  GskGpuBlendmodeInstance *instance;
+  GskGpuBlendModeInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BLEND_MODE_OP_CLASS,
@@ -74,7 +74,7 @@ gsk_gpu_blend_mode_op (GskGpuFrame             *frame,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  instance->opacity = opacity;
+  instance->opacity[0] = opacity;
   gsk_gpu_rect_to_float (bottom->bounds, offset, instance->bottom_rect);
   gsk_gpu_rect_to_float (top->bounds, offset, instance->top_rect);
 }
