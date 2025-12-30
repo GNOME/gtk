@@ -74,8 +74,13 @@ VarType.UINT = VarType (
 @dataclass
 class Type:
     type: str
+    pointer: bool
     var_type: VarType
     size: int
+    struct_init: str
+
+    def struct_initializer (self, indent, var_name, struct_member, offset):
+        return self.struct_init.format (indent, var_name, struct_member, offset);
 
 @dataclass
 class Input:
@@ -107,53 +112,74 @@ class File:
 types = [
 Type(
     type = 'float',
+    pointer = False,
     var_type = VarType.FLOAT,
     size = 1,
+    struct_init = '{0}instance->{2}[{3}] = {1};'
 ),
 Type(
     type = 'guint32',
+    pointer = False,
     var_type = VarType.UINT,
     size = 1,
+    struct_init = '{0}instance->{2}[{3}] = {1};'
 ),
 Type(
     type = 'graphene_point_t',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
+    struct_init = '{0}gsk_gpu_point_to_float ({1}, offset, &instance->{2}[{3}]);'
 ),
 Type(
     type = 'graphene_size_t',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
+    struct_init = '{0}instance->{2}[{3}] = {1}->width;\n'
+                  '{0}instance->{2}[{3} + 1] = {1}->height;'
 ),
 Type(
     type = 'graphene_vec2_t',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
+    struct_init = '{0}graphene_vec2_to_float ({1}, instance->{2});'
 ),
 Type(
     type = 'graphene_vec4_t',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
+    struct_init = '{0}graphene_vec4_to_float ({1}, instance->{2});'
 ),
 Type(
     type = 'graphene_rect_t',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
+    struct_init = '{0}gsk_gpu_rect_to_float ({1}, offset, instance->{2});'
 ),
 Type(
     type = 'GskRoundedRect',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 12,
+    struct_init = '{0}gsk_rounded_rect_to_float ({1}, offset, instance->{2});'
 ),
 Type(
     type = 'graphene_matrix_t',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 16,
+    struct_init = '{0}graphene_matrix_to_float ({1}, instance->{2});'
 ),
 Type(
     type = 'GdkColor',
+    pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
+    struct_init = '{0}gsk_gpu_color_to_float ({1}, color_space, opacity, instance->{2});'
 ),
 ]
 
@@ -211,6 +237,7 @@ def read_file (filename):
 
 
 def generate_attributes(inputs):
+    inputs = inputs.copy ()
     result = []
     location = 0
     while inputs:
@@ -259,6 +286,31 @@ struct _{file.struct_name}Instance {{''');
     print (f'''}};
 ''')
 
+def print_c_struct_initializer (file, n_attributes, attributes):
+    indent = len (f'''{file.var_name}_instance_init (''')
+    type_len = max (map (lambda var: len ((('const ' if var.type.pointer else '') + var.type.type)), file.variables))
+    type_len = max (type_len, len (file.struct_name + 'Instance'))
+    print (f'''static inline void
+{file.var_name}_instance_init ({(file.struct_name + 'Instance').ljust(type_len)} *instance,
+{''.ljust(indent)}{'GdkColorState'.ljust(type_len)} *color_space,
+{''.ljust(indent)}{'const graphene_point_t'.ljust(type_len)} *offset,
+{''.ljust(indent)}{'float'.ljust(type_len)}  opacity,''')
+
+    variables = [var for var in file.variables if var.name != 'opacity']
+    for pos, var in enumerate (variables):
+        if var.name == 'opacity':
+            continue
+        print (f'''{''.ljust(indent)}{(('const ' if var.type.pointer else '') + var.type.type).ljust (type_len)} {'*' if var.type.pointer else ' '}{var.name}{',' if (pos + 1 < len (variables)) else ')'}''')
+
+    print (f'''{{''')
+    for attr in attributes:
+        size = 0
+        for var in attr.inputs:
+            print (var.type.struct_initializer ('  ', var.name, attr.name, size))
+            size += var.type.size
+
+    print (f'''}}
+''')
 
 def print_gl_setup_vao (file, n_attributes, attributes):
     print(f'''static inline void
@@ -335,6 +387,7 @@ def print_header_file (file, n_attributes, attributes):
 #define {file.var_name}_n_textures {file.n_textures}
 ''')
     print_c_struct (file, n_attributes, attributes)
+    print_c_struct_initializer (file, n_attributes, attributes)
     print_gl_setup_vao (file, n_attributes, attributes)
     print_gl_attrib_locations (file, n_attributes, attributes)
     print_vulkan_info (file, n_attributes, attributes)
