@@ -189,6 +189,8 @@ static void
 path_paintable_init (PathPaintable *self)
 {
   self->svg = gtk_svg_new ();
+  self->svg->gpa_version = 1;
+  gtk_svg_set_state (self->svg, 0);
 }
 
 static void
@@ -364,6 +366,9 @@ path_paintable_set_size (PathPaintable *self,
   self->svg->width = width;
   self->svg->height = height;
 
+  svg_shape_attr_set (self->svg->content,
+                      SHAPE_ATTR_VIEW_BOX,
+                      svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
   g_signal_emit (self, signals[CHANGED], 0);
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
 }
@@ -398,7 +403,7 @@ set_default_shape_attrs (Shape *shape)
   shape->gpa.transition_easing = GPA_EASING_LINEAR;
   shape->gpa.origin = 0;
 
-  shape->gpa.animation = GPA_ANIMATION_NORMAL;
+  shape->gpa.animation = GPA_ANIMATION_NONE;
   shape->gpa.animation_duration = 0;
   shape->gpa.animation_repeat = REPEAT_FOREVER;
   shape->gpa.animation_segment = 0.2;
@@ -418,12 +423,10 @@ path_paintable_add_path (PathPaintable *self,
                          GskPath       *path)
 {
   Shape *shape;
-  g_autofree char *s = NULL;
 
   shape = svg_shape_add (self->svg->content, SHAPE_PATH);
   set_default_shape_attrs (shape);
-  s = gsk_path_to_string (path);
-  svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (s));
+  svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (path));
 
   g_signal_emit (self, signals[CHANGED], 0);
   g_signal_emit (self, signals[PATHS_CHANGED], 0);
@@ -910,7 +913,7 @@ path_paintable_get_weight (PathPaintable *self)
 unsigned int
 path_paintable_get_n_states (PathPaintable *self)
 {
-  return gtk_svg_get_n_states (self->svg);
+  return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self)));
 }
 
 gboolean
@@ -994,14 +997,12 @@ shape_duplicate (Shape *shape)
 
   copy->type = shape->type;
   copy->parent = shape->parent;
-  copy->attrs = shape->attrs;
+  copy->attrs = _gtk_bitmask_copy (shape->attrs);
   copy->id = NULL;
-  for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)
-    {
-      if (shape->base[i])
-        copy->base[i] = svg_value_ref (shape->base[i]);
-    }
+  for (unsigned int i = FIRST_SHAPE_ATTR; i <= LAST_FILTER_ATTR; i++)
+    copy->base[i] = svg_value_ref (shape->base[i]);
 
+  copy->shapes = g_ptr_array_new ();
   copy->animations = g_ptr_array_new ();
 
   copy->gpa.states = shape->gpa.states;

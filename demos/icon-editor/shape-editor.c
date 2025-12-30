@@ -309,8 +309,7 @@ shape_editor_update_path (ShapeEditor *self,
   g_autofree char *s = NULL;
 
   self->shape->type = SHAPE_PATH;
-  s = gsk_path_to_string (path);
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (s));
+  svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (path));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -568,6 +567,10 @@ shape_editor_get_path_image (ShapeEditor *self)
 
       svg->width = path_paintable_get_width (self->paintable);
       svg->height = path_paintable_get_height (self->paintable);
+
+      svg_shape_attr_set (svg->content,
+                          SHAPE_ATTR_VIEW_BOX,
+                          svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
 
       if (self->shape->type != SHAPE_GROUP)
         g_ptr_array_add (svg->content->shapes, shape_duplicate (self->shape));
