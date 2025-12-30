@@ -24,13 +24,13 @@ gsk_gpu_box_shadow_op_print_instance (GskGpuShaderOp *shader,
                                       gpointer        instance_,
                                       GString        *string)
 {
-  GskGpuBoxshadowInstance *instance = (GskGpuBoxshadowInstance *) instance_;
+  GskGpuBoxShadowInstance *instance = (GskGpuBoxShadowInstance *) instance_;
 
   gsk_gpu_print_rounded_rect (string, instance->outline);
   gsk_gpu_print_rgba (string, instance->color);
   g_string_append_printf (string, "%g %g %g %g ",
-                          instance->shadow_offset[0], instance->shadow_offset[1],
-                          instance->blur_radius, instance->shadow_spread);
+                          instance->shadow_offset_shadow_spread_blur_radius[0], instance->shadow_offset_shadow_spread_blur_radius[1],
+                          instance->shadow_offset_shadow_spread_blur_radius[3], instance->shadow_offset_shadow_spread_blur_radius[2]);
 }
 
 #ifdef GDK_RENDERING_VULKAN
@@ -63,14 +63,14 @@ static const GskGpuShaderOpClass GSK_GPU_BOX_SHADOW_OP_CLASS = {
     gsk_gpu_box_shadow_op_gl_command
   },
   "gskgpuboxshadow",
-  gsk_gpu_boxshadow_n_textures,
-  sizeof (GskGpuBoxshadowInstance),
+  gsk_gpu_box_shadow_n_textures,
+  sizeof (GskGpuBoxShadowInstance),
 #ifdef GDK_RENDERING_VULKAN
-  &gsk_gpu_boxshadow_info,
+  &gsk_gpu_box_shadow_info,
 #endif
   gsk_gpu_box_shadow_op_print_instance,
-  gsk_gpu_boxshadow_setup_attrib_locations,
-  gsk_gpu_boxshadow_setup_vao
+  gsk_gpu_box_shadow_setup_attrib_locations,
+  gsk_gpu_box_shadow_setup_vao
 };
 
 void
@@ -87,7 +87,7 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
                        float                   blur_radius,
                        const GdkColor         *color)
 {
-  GskGpuBoxshadowInstance *instance;
+  GskGpuBoxShadowInstance *instance;
   GdkColorState *alt;
 
   /* Use border shader for no blurring */
@@ -107,9 +107,9 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
   gsk_gpu_rect_to_float (bounds, offset, instance->bounds);
   gsk_rounded_rect_to_float (outline, offset, instance->outline);
   gsk_gpu_color_to_float (color, alt, opacity, instance->color);
-  instance->shadow_offset[0] = shadow_offset->x;
-  instance->shadow_offset[1] = shadow_offset->y;
-  instance->shadow_spread = spread;
-  instance->blur_radius = blur_radius;
+  instance->shadow_offset_shadow_spread_blur_radius[0] = shadow_offset->x;
+  instance->shadow_offset_shadow_spread_blur_radius[1] = shadow_offset->y;
+  instance->shadow_offset_shadow_spread_blur_radius[2] = spread;
+  instance->shadow_offset_shadow_spread_blur_radius[3] = blur_radius;
 }
 
