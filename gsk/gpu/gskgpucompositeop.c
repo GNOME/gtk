@@ -74,5 +74,5 @@ gsk_gpu_composite_op (GskGpuFrame             *frame,
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_rect_to_float (source->bounds, offset, instance->source_rect);
   gsk_gpu_rect_to_float (mask->bounds, offset, instance->mask_rect);
-  instance->opacity = opacity;
+  instance->opacity[0] = opacity;
 }

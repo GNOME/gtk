@@ -1,6 +1,13 @@
-#define GSK_N_TEXTURES 2
+#ifdef GSK_PREAMBLE
+textures = 2;
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t source_rect;
+graphene_rect_t mask_rect;
+float opacity;
+#endif
+
+#include "gskgpumaskinstance.glsl"
 
 #define VARIATION_MASK_MODE GSK_VARIATION
 
@@ -13,11 +20,6 @@ PASS_FLAT(7) float _opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_source_rect;
-IN(2) vec4 in_mask_rect;
-IN(3) float in_opacity;
 
 void
 run (out vec2 pos)

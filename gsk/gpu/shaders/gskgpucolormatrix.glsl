@@ -1,6 +1,15 @@
-#define GSK_N_TEXTURES 1
+#ifdef GSK_PREAMBLE
+textures = 1;
+var_name = "gsk_gpu_color_matrix";
+struct_name = "GskGpuColorMatrix";
 
-#include "common.glsl"
+graphene_matrix_t color_matrix;
+graphene_vec4_t color_offset;
+graphene_rect_t rect;
+graphene_rect_t tex_rect;
+#endif
+
+#include "gskgpucolormatrixinstance.glsl"
 
 PASS_FLAT(0) mat4 _color_matrix;
 PASS_FLAT(4) vec4 _color_offset;
@@ -10,11 +19,6 @@ PASS(7) vec2 _tex_coord;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) mat4 in_color_matrix;
-IN(4) vec4 in_color_offset;
-IN(5) vec4 in_rect;
-IN(6) vec4 in_tex_rect;
 
 void
 run (out vec2 pos)

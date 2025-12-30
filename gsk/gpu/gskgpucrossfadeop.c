@@ -20,7 +20,7 @@ gsk_gpu_cross_fade_op_print_instance (GskGpuShaderOp *shader,
                                       gpointer        instance_,
                                       GString        *string)
 {
-  GskGpuCrossfadeInstance *instance = (GskGpuCrossfadeInstance *) instance_;
+  GskGpuCrossFadeInstance *instance = (GskGpuCrossFadeInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image (string, shader->images[0]);
@@ -40,14 +40,14 @@ static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpucrossfade",
-  gsk_gpu_crossfade_n_textures,
-  sizeof (GskGpuCrossfadeInstance),
+  gsk_gpu_cross_fade_n_textures,
+  sizeof (GskGpuCrossFadeInstance),
 #ifdef GDK_RENDERING_VULKAN
-  &gsk_gpu_crossfade_info,
+  &gsk_gpu_cross_fade_info,
 #endif
   gsk_gpu_cross_fade_op_print_instance,
-  gsk_gpu_crossfade_setup_attrib_locations,
-  gsk_gpu_crossfade_setup_vao
+  gsk_gpu_cross_fade_setup_attrib_locations,
+  gsk_gpu_cross_fade_setup_vao
 };
 
 void
@@ -60,7 +60,7 @@ gsk_gpu_cross_fade_op (GskGpuFrame             *frame,
                        const GskGpuShaderImage *start,
                        const GskGpuShaderImage *end)
 {
-  GskGpuCrossfadeInstance *instance;
+  GskGpuCrossFadeInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CROSS_FADE_OP_CLASS,

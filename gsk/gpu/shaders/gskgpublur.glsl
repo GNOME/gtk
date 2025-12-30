@@ -1,6 +1,13 @@
-#define GSK_N_TEXTURES 1
+#ifdef GSK_PREAMBLE
+textures = 1;
 
-#include "common.glsl"
+graphene_rect_t rect;
+GdkColor blur_color;
+graphene_rect_t tex_rect;
+graphene_vec2_t blur_direction;
+#endif
+
+#include "gskgpublurinstance.glsl"
 
 /* blur radius (aka in_blur_direction) 0 is NOT supported and MUST be caught before */
 
@@ -16,11 +23,6 @@ PASS_FLAT(7) vec3 _initial_gaussian;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_blur_color;
-IN(2) vec4 in_tex_rect;
-IN(3) vec2 in_blur_direction;
 
 void
 run (out vec2 pos)

@@ -72,6 +72,6 @@ gsk_gpu_convert_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  instance->opacity = opacity;
+  instance->opacity[0] = opacity;
 }
 

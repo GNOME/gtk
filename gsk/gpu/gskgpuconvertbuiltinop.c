@@ -27,7 +27,7 @@ gsk_gpu_convert_builtin_op_print_instance (GskGpuShaderOp *shader,
                                            gpointer        instance_,
                                            GString        *string)
 {
-  GskGpuConvertbuiltinInstance *instance = (GskGpuConvertbuiltinInstance *) instance_;
+  GskGpuConvertBuiltinInstance *instance = (GskGpuConvertBuiltinInstance *) instance_;
   GdkColorState *builtin = (GdkColorState *) &gdk_builtin_color_states [shader->variation & VARIATION_COLOR_SPACE_MASK];
 
   gsk_gpu_print_rect (string, instance->rect);
@@ -49,14 +49,14 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_BUILTIN_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpuconvertbuiltin",
-  gsk_gpu_convertbuiltin_n_textures,
-  sizeof (GskGpuConvertbuiltinInstance),
+  gsk_gpu_convert_builtin_n_textures,
+  sizeof (GskGpuConvertBuiltinInstance),
 #ifdef GDK_RENDERING_VULKAN
-  &gsk_gpu_convertbuiltin_info,
+  &gsk_gpu_convert_builtin_info,
 #endif
   gsk_gpu_convert_builtin_op_print_instance,
-  gsk_gpu_convertbuiltin_setup_attrib_locations,
-  gsk_gpu_convertbuiltin_setup_vao
+  gsk_gpu_convert_builtin_setup_attrib_locations,
+  gsk_gpu_convert_builtin_setup_vao
 };
 
 static GdkColorState *
@@ -84,7 +84,7 @@ gsk_gpu_convert_from_builtin_op (GskGpuFrame             *frame,
                                  const graphene_point_t  *offset,
                                  const GskGpuShaderImage *image)
 {
-  GskGpuConvertbuiltinInstance *instance;
+  GskGpuConvertBuiltinInstance *instance;
 
   g_assert (GDK_IS_BUILTIN_COLOR_STATE (builtin));
 
@@ -101,7 +101,7 @@ gsk_gpu_convert_from_builtin_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  instance->opacity = opacity;
+  instance->opacity[0] = opacity;
 }
 
 void
@@ -114,7 +114,7 @@ gsk_gpu_convert_to_builtin_op (GskGpuFrame             *frame,
                                const graphene_point_t  *offset,
                                const GskGpuShaderImage *image)
 {
-  GskGpuConvertbuiltinInstance *instance;
+  GskGpuConvertBuiltinInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CONVERT_BUILTIN_OP_CLASS,
@@ -131,5 +131,5 @@ gsk_gpu_convert_to_builtin_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  instance->opacity = opacity;
+  instance->opacity[0] = opacity;
 }

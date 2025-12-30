@@ -1,6 +1,14 @@
-#define GSK_N_TEXTURES 2
+#ifdef GSK_PREAMBLE
+textures = 2;
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t first_rect;
+graphene_rect_t second_rect;
+graphene_vec4_t factors;
+float opacity;
+#endif
+
+#include "gskgpuarithmeticinstance.glsl"
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _first_rect;
@@ -12,12 +20,6 @@ PASS_FLAT(6) vec4 _factors;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_first_rect;
-IN(2) vec4 in_second_rect;
-IN(3) float in_opacity;
-IN(4) vec4 in_factors;
 
 void
 run (out vec2 pos)

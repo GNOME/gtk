@@ -1,6 +1,18 @@
-#define GSK_N_TEXTURES 1
+#ifdef GSK_PREAMBLE
+textures = 1;
+var_name = "gsk_gpu_convert_cicp";
+struct_name = "GskGpuConvertCicp";
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t tex_rect;
+float opacity;
+guint32 color_primaries;
+guint32 transfer_function;
+guint32 matrix_coefficients;
+guint32 range;
+#endif
+
+#include "gskgpuconvertcicpinstance.glsl"
 
 #define VARIATION_OPACITY              (1u << 0)
 #define VARIATION_REVERSE              (1u << 1)
@@ -17,16 +29,8 @@ PASS_FLAT(8) mat3 _yuv;
 PASS_FLAT(11) vec3 _yuv_add;
 PASS_FLAT(12) uint _range;
 
+
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_tex_rect;
-IN(2) float in_opacity;
-IN(3) uint in_color_primaries;
-IN(4) uint in_transfer_function;
-IN(5) uint in_matrix_coefficients;
-IN(6) uint in_range;
-
 
 const mat3 identity = mat3(
   1.0, 0.0, 0.0,

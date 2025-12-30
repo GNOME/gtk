@@ -1,6 +1,14 @@
-#define GSK_N_TEXTURES 1
+#ifdef GSK_PREAMBLE
+textures = 1;
+var_name = "gsk_gpu_convert_builtin";
+struct_name = "GskGpuConvertBuiltin";
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t tex_rect;
+float opacity;
+#endif
+
+#include "gskgpuconvertbuiltininstance.glsl"
 
 #define VARIATION_COLOR_SPACE_MASK     (0xFFu)
 #define VARIATION_OPACITY              (1u << 8)
@@ -17,10 +25,6 @@ PASS(2) vec2 _tex_coord;
 PASS_FLAT(3) float _opacity;
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_tex_rect;
-IN(2) float in_opacity;
 
 void
 run (out vec2 pos)

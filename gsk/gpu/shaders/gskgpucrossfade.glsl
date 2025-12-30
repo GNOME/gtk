@@ -1,6 +1,16 @@
-#define GSK_N_TEXTURES 2
+#ifdef GSK_PREAMBLE
+textures = 2;
+var_name = "gsk_gpu_cross_fade";
+struct_name = "GskGpuCrossFade";
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t start_rect;
+graphene_rect_t end_rect;
+float opacity;
+float progress;
+#endif
+
+#include "gskgpucrossfadeinstance.glsl"
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _start_rect;
@@ -12,11 +22,6 @@ PASS_FLAT(6) float _end_opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_start_rect;
-IN(2) vec4 in_end_rect;
-IN(3) vec2 in_opacity_progress;
 
 void
 run (out vec2 pos)
