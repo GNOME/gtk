@@ -18,9 +18,9 @@ void                    gsk_gpu_radial_gradient_op                      (GskGpuF
                                                                          GskRepeat                       repeat,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *start_center,
-                                                                         const graphene_point_t         *start_radius,
+                                                                         const graphene_size_t          *start_radius,
                                                                          const graphene_point_t         *end_center,
-                                                                         const graphene_point_t         *end_radius,
+                                                                         const graphene_size_t          *end_radius,
                                                                          const GskGradientStop          *stops,
                                                                          gsize                           n_stops);
 

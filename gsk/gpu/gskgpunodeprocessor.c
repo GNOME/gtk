@@ -2743,12 +2743,12 @@ gsk_gpu_node_processor_radial_gradient_op (GskGpuNodeProcessor   *self,
                               gsk_gradient_get_repeat (gradient),
                               &node->bounds,
                               gsk_radial_gradient_node_get_start_center (node),
-                              &GRAPHENE_POINT_INIT (
+                              &GRAPHENE_SIZE_INIT (
                                   gsk_radial_gradient_node_get_start_radius (node),
                                   gsk_radial_gradient_node_get_start_radius (node) / gsk_radial_gradient_node_get_aspect_ratio (node)
                               ),
                               gsk_radial_gradient_node_get_end_center (node),
-                              &GRAPHENE_POINT_INIT (
+                              &GRAPHENE_SIZE_INIT (
                                   gsk_radial_gradient_node_get_end_radius (node),
                                   gsk_radial_gradient_node_get_end_radius (node) / gsk_radial_gradient_node_get_aspect_ratio (node)
                               ),
