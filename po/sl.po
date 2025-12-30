@@ -11,18 +11,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-12-22 18:40+0000\n"
-"PO-Revision-Date: 2025-12-22 23:57+0100\n"
+"POT-Creation-Date: 2025-12-29 19:28+0000\n"
+"PO-Revision-Date: 2025-12-30 21:37+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
+"n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.8\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -664,8 +664,8 @@ msgstr ""
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
-"%lx."
+"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:836
 #, c-format
@@ -715,8 +715,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
-"%lx."
+"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:956
 #, c-format
@@ -5082,7 +5082,7 @@ msgstr "Vir:"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:2251
+#: gtk/inspector/recorder.c:2271
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
@@ -7761,7 +7761,7 @@ msgid "Overwrite existing file"
 msgstr "Prepiši obstoječo datoteko"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-play.c:250
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-play.c:327
 #: tools/gtk-image-tool-relabel.c:86 tools/gtk-image-tool-show.c:119
 #: tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:272
@@ -8034,20 +8034,36 @@ msgstr "Navedite podatke o sliki."
 msgid "Can only accept a single image file\n"
 msgstr "Lahko sprejme samo eno slikovno datoteko\n"
 
-#: tools/gtk-image-tool-play.c:248 tools/gtk-image-tool-show.c:117
+#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:117
 #: tools/gtk-rendernode-tool-show.c:121
 msgid "Don't add a titlebar"
 msgstr "Ne dodaj vrstice naziva"
 
-#: tools/gtk-image-tool-play.c:249 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "VELIKOST"
 
-#: tools/gtk-image-tool-play.c:259
+#: tools/gtk-image-tool-play.c:323
+msgid "Don't run animations"
+msgstr "Ne predvajaj animacij"
+
+#: tools/gtk-image-tool-play.c:324
+msgid "Don't use system resources"
+msgstr "Ne uporabljaj sistemskih virov"
+
+#: tools/gtk-image-tool-play.c:325
+msgid "Don't load external resources"
+msgstr "Ne nalagaj zunanjih virov"
+
+#: tools/gtk-image-tool-play.c:326
+msgid "Don't allow gpa extensions"
+msgstr "Ne dovoli razširitev gpa"
+
+#: tools/gtk-image-tool-play.c:337
 msgid "Show one or more animations."
 msgstr "Prikažite eno ali več animacij."
 
-#: tools/gtk-image-tool-play.c:272
+#: tools/gtk-image-tool-play.c:350
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Nobena datoteka animacije ni navedena\n"
