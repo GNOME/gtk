@@ -1434,6 +1434,72 @@ text_node_clear (TextNode *self)
 }
 
 /* }}} */
+/* {{{ Path transformation */
+
+typedef struct
+{
+  GskPathBuilder *builder;
+  GskTransform *transform;
+} TransformData;
+
+static gboolean
+transform_op (GskPathOperation        op,
+              const graphene_point_t *_pts,
+              gsize                   n_pts,
+              float                   weight,
+              gpointer                user_data)
+{
+  TransformData *t = user_data;
+  graphene_point_t pts[4];
+
+  for (unsigned int i = 0; i < n_pts; i++)
+    gsk_transform_transform_point (t->transform, &_pts[i], &pts[i]);
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (t->builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (t->builder);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (t->builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      break;
+
+    case GSK_PATH_CUBIC:
+      gsk_path_builder_cubic_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_CONIC:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static GskPath *
+gsk_transform_transform_path (GskTransform *transform,
+                              GskPath      *path)
+{
+  TransformData data;
+
+  data.builder = gsk_path_builder_new ();
+  data.transform = transform;
+
+  gsk_path_foreach (path, (GskPathForeachFlags) -1, transform_op, &data);
+
+  return gsk_path_builder_free_to_path (data.builder);
+}
+
+/* }}} */
 /* {{{ Path interpolation */
 
 #define SVG_PATH_ARC 22
