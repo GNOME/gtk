@@ -65,9 +65,9 @@ gsk_gpu_radial_gradient_op (GskGpuFrame             *frame,
                             GskRepeat                repeat,
                             const graphene_rect_t   *rect,
                             const graphene_point_t  *start_center,
-                            const graphene_point_t  *start_radius,
+                            const graphene_size_t   *start_radius,
                             const graphene_point_t  *end_center,
-                            const graphene_point_t  *end_radius,
+                            const graphene_size_t   *end_radius,
                             const GskGradientStop   *stops,
                             gsize                    n_stops)
 {
@@ -93,9 +93,9 @@ gsk_gpu_radial_gradient_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_point_to_float (start_center, offset, instance->start_circle);
-  gsk_gpu_point_to_float (start_radius, graphene_point_zero(), &instance->start_circle[2]);
+  gsk_gpu_size_to_float (start_radius, &instance->start_circle[2]);
   gsk_gpu_point_to_float (end_center, offset, instance->end_circle);
-  gsk_gpu_point_to_float (end_radius, graphene_point_zero(), &instance->end_circle[2]);
+  gsk_gpu_size_to_float (end_radius, &instance->end_circle[2]);
   gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 6)].color, ics, opacity, instance->color6);
   instance->offsets1[2] = stops[MIN (n_stops - 1, 6)].offset;
   instance->hints1[2] = stops[MIN (n_stops - 1, 6)].transition_hint;
