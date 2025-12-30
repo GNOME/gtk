@@ -34,32 +34,6 @@ typedef struct _GtkIconTheme      GtkIconTheme;
 #define GTK_IS_ICON_THEME(obj)     (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_THEME))
 
 /**
- * GtkIconLookupFlags:
- * @GTK_ICON_LOOKUP_FORCE_REGULAR: Try to always load regular icons, even
- *   when symbolic icon names are given
- * @GTK_ICON_LOOKUP_FORCE_SYMBOLIC: Try to always load symbolic icons, even
- *   when regular icon names are given
- * @GTK_ICON_LOOKUP_PRELOAD: Starts loading the texture in the background
- *   so it is ready when later needed.
- *
- * Used to specify options for gtk_icon_theme_lookup_icon().
- */
-/**
- * GTK_ICON_LOOKUP_NONE:
- *
- * Perform a regular lookup.
- *
- * Since: 4.18
- */
-typedef enum
-{
-  GTK_ICON_LOOKUP_NONE GDK_AVAILABLE_ENUMERATOR_IN_4_18 = 0,
-  GTK_ICON_LOOKUP_FORCE_REGULAR  = 1 << 0,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC = 1 << 1,
-  GTK_ICON_LOOKUP_PRELOAD        = 1 << 2,
-} GtkIconLookupFlags;
-
-/**
  * GTK_ICON_THEME_ERROR:
  *
  * The `GQuark` used for `GtkIconThemeError` errors.
