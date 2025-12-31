@@ -233,10 +233,17 @@ gtk_drop_target_do_drop (GtkDropTarget *self)
 
   g_signal_emit (self, signals[DROP], 0, &self->value, self->coords.x, self->coords.y, &success);
 
-  if (success)
-    gdk_drop_finish (self->drop, make_action_unique (self->actions & gdk_drop_get_actions (self->drop)));
-  else
-    gdk_drop_finish (self->drop, GDK_ACTION_NONE);
+  if (self->drop)
+    {
+      GdkDragAction action;
+
+      if (success)
+        action = make_action_unique (self->actions & gdk_drop_get_actions (self->drop));
+      else
+        action = GDK_ACTION_NONE;
+
+      gdk_drop_finish (self->drop, action);
+    }
 
   self->dropping = FALSE;
 
@@ -441,7 +448,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
                         G_OBJECT_TYPE_NAME (widget), widget);
             preferred = make_action_unique (preferred);
           }
-        if (preferred &&
+        if (preferred && self->drop &&
             gtk_drop_status (self->drop, self->actions, preferred))
           {
             gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
@@ -520,7 +527,7 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
           preferred = make_action_unique (preferred);
         }
 
-      if (preferred &&
+      if (preferred && self->drop &&
           gtk_drop_status (self->drop, self->actions, preferred))
         {
           gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
@@ -533,7 +540,8 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
   else
     {
       if (crossing->new_descendent != NULL ||
-          crossing->new_target == widget)
+          crossing->new_target == widget ||
+          self->drop == NULL)
         return;
 
       g_signal_emit (self, signals[LEAVE], 0);
@@ -542,6 +550,16 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
 
       gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
     }
+}
+
+static void
+gtk_drop_target_reset (GtkEventController *controller)
+{
+  GtkDropTarget *self = GTK_DROP_TARGET (controller);
+
+  if (self->drop)
+    g_signal_emit (self, signals[LEAVE], 0);
+  gtk_drop_target_end_drop (self);
 }
 
 static void
@@ -635,6 +653,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   controller_class->handle_event = gtk_drop_target_handle_event;
   controller_class->filter_event = gtk_drop_target_filter_event;
   controller_class->handle_crossing = gtk_drop_target_handle_crossing;
+  controller_class->reset = gtk_drop_target_reset;
 
   class->accept = gtk_drop_target_accept;
   class->enter = gtk_drop_target_enter;
