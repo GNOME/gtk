@@ -239,6 +239,8 @@ gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+
+  gtk_widget_class_set_css_name (widget_class, "popoverbin");
 }
 
 static void
