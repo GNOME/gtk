@@ -93,12 +93,34 @@ on_popover_destroy (GtkPopoverBin *self)
 }
 
 static void
+on_popover_map (GtkPopoverBin *self)
+{
+  gtk_widget_add_css_class (self->child, "has-open-popup");
+}
+
+static void
+on_popover_unmap (GtkPopoverBin *self)
+{
+  gtk_widget_remove_css_class (self->child, "has-open-popup");
+}
+
+static void
 gtk_popover_bin_dispose (GObject *gobject)
 {
   GtkPopoverBin *self = GTK_POPOVER_BIN (gobject);
 
   if (self->popover != NULL)
-    g_signal_handlers_disconnect_by_func (self->popover, on_popover_destroy, self);
+    {
+      g_signal_handlers_disconnect_by_func (self->popover,
+                                            on_popover_destroy,
+                                            self);
+      g_signal_handlers_disconnect_by_func (self->popover,
+                                            on_popover_map,
+                                            self);
+      g_signal_handlers_disconnect_by_func (self->popover,
+                                            on_popover_unmap,
+                                            self);
+    }
 
   g_clear_pointer (&self->popover, gtk_widget_unparent);
   g_clear_pointer (&self->child, gtk_widget_unparent);
@@ -418,6 +440,12 @@ gtk_popover_bin_set_popover (GtkPopoverBin *self,
       g_signal_handlers_disconnect_by_func (self->popover,
                                             on_popover_destroy,
                                             self);
+      g_signal_handlers_disconnect_by_func (self->popover,
+                                            on_popover_map,
+                                            self);
+      g_signal_handlers_disconnect_by_func (self->popover,
+                                            on_popover_unmap,
+                                            self);
 
       gtk_widget_unparent (self->popover);
     }
@@ -429,6 +457,12 @@ gtk_popover_bin_set_popover (GtkPopoverBin *self,
       gtk_widget_set_parent (self->popover, GTK_WIDGET (self));
       g_signal_connect_swapped (self->popover, "destroy",
                                 G_CALLBACK (on_popover_destroy),
+                                self);
+      g_signal_connect_swapped (self->popover, "map",
+                                G_CALLBACK (on_popover_map),
+                                self);
+      g_signal_connect_swapped (self->popover, "unmap",
+                                G_CALLBACK (on_popover_unmap),
                                 self);
     }
 
