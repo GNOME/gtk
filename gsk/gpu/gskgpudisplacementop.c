@@ -25,7 +25,7 @@ gsk_gpu_displacement_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image (string, shader->images[0]);
   gsk_gpu_print_image (string, shader->images[1]);
-  g_string_append_printf (string, "%c%c ", "RGBA"[instance->channels[0]], "RGBA"[instance->channels[1]]);
+  g_string_append_printf (string, "%c%c ", "RGBA"[instance->x_channel], "RGBA"[instance->y_channel]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_DISPLACEMENT_OP_CLASS = {
@@ -77,8 +77,8 @@ gsk_gpu_displacement_op (GskGpuFrame             *frame,
   gsk_gpu_rect_to_float (bounds, offset, instance->rect);
   gsk_gpu_rect_to_float (displacement->bounds, offset, instance->displacement_rect);
   gsk_gpu_rect_to_float (child->bounds, offset, instance->child_rect);
-  instance->channels[0] = channels[0];
-  instance->channels[1] = channels[1];
+  instance->x_channel = channels[0];
+  instance->y_channel = channels[1];
   instance->max[0] = max->width;
   instance->max[1] = max->height;
   instance->scale[0] = scale->width;

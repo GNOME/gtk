@@ -18,11 +18,12 @@ PASS_FLAT(8) float _opacity;
 IN(0) vec4 in_rect;
 IN(1) vec4 in_displacement_rect;
 IN(2) vec4 in_child_rect;
-IN(3) uvec2 in_channels;
-IN(4) vec2 in_max;
-IN(5) vec2 in_scale;
-IN(6) vec2 in_offset;
-IN(7) float in_opacity;
+IN(3) uint in_x_channel;
+IN(4) uint in_y_channel;
+IN(5) vec2 in_max;
+IN(6) vec2 in_scale;
+IN(7) vec2 in_offset;
+IN(8) float in_opacity;
 
 void
 run (out vec2 pos)
@@ -40,7 +41,7 @@ run (out vec2 pos)
   Rect child_rect = rect_from_gsk (in_child_rect);
   _child_rect = child_rect;
 
-  _channels = in_channels;
+  _channels = uvec2(in_x_channel, in_y_channel);
   _max = GSK_GLOBAL_SCALE * in_max;
   _scale = GSK_GLOBAL_SCALE * in_scale;
   _offset = in_offset;
