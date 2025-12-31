@@ -27,5 +27,6 @@
      paint-order='stroke markers fill'
      pathLength='99'
      d='M0,0L10,10'
+     vector-effect='non-scaling-stroke'
     />
 </svg>

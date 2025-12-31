@@ -1,8 +1,15 @@
 <svg width='100' height='100' viewBox='0 0 100 100'>
   <defs>
-    <circle id='circle1' cx='0' cy='0' r='10' stroke='context-fill'/>
+    <circle id='circle1' cx='0' cy='0' r='10' stroke='context-stroke'/>
+    <circle id='circle2' cx='0' cy='0' r='10' stroke='context-fill'/>
+    <use id='circle3' href='#circle2' fill='context-stroke'/>
   </defs>
 
-  <use href='#circle1' x='20' y='10' fill='red' stroke='blue'/>
-  <use href='#circle1' x='10' y='20' fill='blue' stroke='red'/>
+  <g stroke-width='5'>
+    <use href='#circle1' x='30' y='20' fill='red' stroke='blue'/>
+    <use href='#circle1' x='20' y='30' fill='blue' stroke='red'/>
+    <use href='#circle2' x='50' y='40' fill='red' stroke='blue'/>
+    <use href='#circle2' x='40' y='50' fill='blue' stroke='red'/>
+    <use href='#circle3' x='65' y='65' fill='yellow' stroke='magenta'/>
+  </g>
 </svg>

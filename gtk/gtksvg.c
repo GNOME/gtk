@@ -1434,6 +1434,72 @@ text_node_clear (TextNode *self)
 }
 
 /* }}} */
+/* {{{ Path transformation */
+
+typedef struct
+{
+  GskPathBuilder *builder;
+  GskTransform *transform;
+} TransformData;
+
+static gboolean
+transform_op (GskPathOperation        op,
+              const graphene_point_t *_pts,
+              gsize                   n_pts,
+              float                   weight,
+              gpointer                user_data)
+{
+  TransformData *t = user_data;
+  graphene_point_t pts[4];
+
+  for (unsigned int i = 0; i < n_pts; i++)
+    gsk_transform_transform_point (t->transform, &_pts[i], &pts[i]);
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (t->builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (t->builder);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (t->builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      break;
+
+    case GSK_PATH_CUBIC:
+      gsk_path_builder_cubic_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_CONIC:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static GskPath *
+gsk_transform_transform_path (GskTransform *transform,
+                              GskPath      *path)
+{
+  TransformData data;
+
+  data.builder = gsk_path_builder_new ();
+  data.transform = transform;
+
+  gsk_path_foreach (path, (GskPathForeachFlags) -1, transform_op, &data);
+
+  return gsk_path_builder_free_to_path (data.builder);
+}
+
+/* }}} */
 /* {{{ Path interpolation */
 
 #define SVG_PATH_ARC 22
@@ -3846,6 +3912,42 @@ static SvgValue *
 svg_component_transfer_type_parse (const char *string)
 {
   return svg_enum_parse (component_transfer_type_values, G_N_ELEMENTS (component_transfer_type_values), string);
+}
+
+/* }}} */
+/* {{{ Vector effectx */
+
+typedef enum
+{
+  VECTOR_EFFECT_NONE,
+  VECTOR_EFFECT_NON_SCALING_STROKE,
+} VectorEffect;
+
+static const SvgValueClass SVG_VECTOR_EFFECT_CLASS = {
+  "SvgVectorEffect",
+  svg_enum_free,
+  svg_enum_equal,
+  svg_enum_interpolate,
+  svg_enum_accumulate,
+  svg_enum_print,
+};
+
+static SvgEnum vector_effect_values[] = {
+  { { &SVG_VECTOR_EFFECT_CLASS, 1 }, VECTOR_EFFECT_NONE, "none" },
+  { { &SVG_VECTOR_EFFECT_CLASS, 1 }, VECTOR_EFFECT_NON_SCALING_STROKE, "non-scaling-stroke" },
+};
+
+static SvgValue *
+svg_vector_effect_new (VectorEffect value)
+{
+  g_assert (value < G_N_ELEMENTS (vector_effect_values));
+  return svg_value_ref ((SvgValue *) &vector_effect_values[value]);
+}
+
+static SvgValue *
+svg_vector_effect_parse (const char *string)
+{
+  return svg_enum_parse (vector_effect_values, G_N_ELEMENTS (vector_effect_values), string);
 }
 
 /* }}} */
@@ -8327,6 +8429,14 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_overflow_parse,
   },
+  { .id = SHAPE_ATTR_VECTOR_EFFECT,
+    .name = "vector-effect",
+    .inherited = 0,
+    .discrete = 1,
+    .has_css = 0,
+    .only_css = 0,
+    .parse_value = svg_vector_effect_parse,
+  },
   { .id = SHAPE_ATTR_PATH,
     .name = "d",
     .inherited = 0,
@@ -9008,6 +9118,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
+  shape_attrs[SHAPE_ATTR_VECTOR_EFFECT].initial_value = svg_vector_effect_new (VECTOR_EFFECT_NONE);
   shape_attrs[SHAPE_ATTR_FILTER].initial_value = svg_filter_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_PATH].initial_value = svg_clip_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
@@ -9851,6 +9962,11 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_OVERFLOW:
       return type == SHAPE_SVG || type == SHAPE_PATTERN ||
              type == SHAPE_MARKER || type == SHAPE_SYMBOL;
+    case SHAPE_ATTR_VECTOR_EFFECT:
+      return type == SHAPE_CIRCLE || type == SHAPE_ELLIPSE ||
+             type == SHAPE_RECT || type == SHAPE_LINE ||
+             type == SHAPE_POLYLINE || type == SHAPE_POLYGON ||
+             type == SHAPE_PATH || type == SHAPE_USE;
     /* path painting properties */
     case SHAPE_ATTR_FILL:
     case SHAPE_ATTR_FILL_OPACITY:
@@ -17486,6 +17602,7 @@ typedef struct
   const graphene_rect_t *viewport;
   GSList *viewport_stack;
   GtkSnapshot *snapshot;
+  GSList *transforms;
   int64_t current_time;
   const GdkRGBA *colors;
   size_t n_colors;
@@ -17494,7 +17611,6 @@ typedef struct
   GSList *op_stack;
   gboolean op_changed;
   int depth;
-  Shape *ctx_shape;
   GSList *ctx_shape_stack;
 } PaintContext;
 
@@ -17538,8 +17654,7 @@ static void
 push_ctx_shape (PaintContext *context,
                 Shape        *shape)
 {
-  context->ctx_shape_stack = g_slist_prepend (context->ctx_shape_stack, context->ctx_shape);
-  context->ctx_shape = shape;
+  context->ctx_shape_stack = g_slist_prepend (context->ctx_shape_stack, shape);
 }
 
 static void
@@ -17548,8 +17663,6 @@ pop_ctx_shape (PaintContext *context)
   GSList *tos = context->ctx_shape_stack;
 
   g_assert (tos != NULL);
-
-  context->ctx_shape = (Shape *) tos->data;
   context->ctx_shape_stack = context->ctx_shape_stack->next;
   g_slist_free_1 (tos);
 }
@@ -17580,6 +17693,42 @@ pop_viewport (PaintContext *context)
   g_slist_free_1 (tos);
 
   return viewport;
+}
+
+static void
+push_transform (PaintContext *context,
+                GskTransform *transform)
+{
+  context->transforms = g_slist_prepend (context->transforms,
+                                         gsk_transform_ref (transform));
+}
+
+static void
+pop_transform (PaintContext *context)
+{
+  GSList *tos = context->transforms;
+
+  g_assert (tos != NULL);
+
+  context->transforms = tos->next;
+  gsk_transform_unref ((GskTransform *) tos->data);
+  g_slist_free_1 (tos);
+}
+
+static GskTransform *
+context_get_host_transform (PaintContext *context)
+{
+  GskTransform *transform = NULL;
+
+  for (GSList *l = context->transforms; l; l = l->next)
+    {
+      GskTransform *t = l->data;
+
+      t = gsk_transform_invert (gsk_transform_ref (t));
+      transform = gsk_transform_transform (t, transform);
+    }
+
+  return transform;
 }
 
 static void push_group   (Shape        *shape,
@@ -18452,11 +18601,15 @@ static gboolean
 shape_is_use_target (Shape        *shape,
                      PaintContext *context)
 {
-  Shape *ctx_shape = context->ctx_shape;
+  if (context->ctx_shape_stack)
+    {
+      Shape *ctx_shape = context->ctx_shape_stack->data;
 
-  return ctx_shape != NULL &&
-         ctx_shape->type == SHAPE_USE &&
-         ((SvgHref *) ctx_shape->current[SHAPE_ATTR_HREF])->shape == shape;
+      return ctx_shape->type == SHAPE_USE &&
+             ((SvgHref *) ctx_shape->current[SHAPE_ATTR_HREF])->shape == shape;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -18499,7 +18652,7 @@ push_group (Shape        *shape,
 
           if (shape_is_use_target (shape, context))
             {
-              Shape *use = context->ctx_shape;
+              Shape *use = context->ctx_shape_stack->data;
               if (_gtk_bitmask_get (use->attrs, SHAPE_ATTR_WIDTH))
                 width = svg_number_get (use->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
               else
@@ -18537,10 +18690,13 @@ push_group (Shape        *shape,
 
       push_viewport (context, viewport);
 
+      GskTransform *transform = NULL;
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (tx, ty));
+      transform = gsk_transform_scale (transform, sx, sy);
       gtk_snapshot_save (context->snapshot);
-
-      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
-      gtk_snapshot_scale (context->snapshot, sx, sy);
+      gtk_snapshot_transform (context->snapshot, transform);
+      push_transform (context, transform);
+      gsk_transform_unref (transform);
 
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         gtk_snapshot_push_clip (context->snapshot, viewport);
@@ -18550,6 +18706,7 @@ push_group (Shape        *shape,
     {
       GskTransform *transform = svg_transform_get_gsk (tf);
 
+      push_transform (context, transform);
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_transform (context->snapshot, transform);
       gsk_transform_unref (transform);
@@ -18561,8 +18718,11 @@ push_group (Shape        *shape,
 
       x = svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
       y = svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
+      GskTransform *transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y));
+      push_transform (context, transform);
       gtk_snapshot_save (context->snapshot);
-      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (x, y));
+      gtk_snapshot_transform (context->snapshot, transform);
+      gsk_transform_unref (transform);
     }
 
   if (context->op != CLIPPING)
@@ -18613,19 +18773,25 @@ push_group (Shape        *shape,
             {
               graphene_rect_t bounds;
 
+              GskTransform *transform = NULL;
+
               gtk_snapshot_save (context->snapshot);
 
               if (shape_get_current_bounds (shape, context->viewport, &bounds))
                 {
-                  gtk_snapshot_translate (context->snapshot, &bounds.origin);
-                  gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+                  transform = gsk_transform_translate (NULL, &bounds.origin);
+                  transform = gsk_transform_scale (transform, bounds.size.width, bounds.size.height);
+                  gtk_snapshot_transform (context->snapshot, transform);
                 }
+              push_transform (context, transform);
+              gsk_transform_unref (transform);
             }
 
           render_shape (clip->ref.shape, context);
 
           if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
             {
+              pop_transform (context);
               gtk_snapshot_restore (context->snapshot);
             }
         }
@@ -18679,20 +18845,26 @@ push_group (Shape        *shape,
       if (svg_enum_get (mask->shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
           graphene_rect_t bounds;
+          GskTransform *transform = NULL;
 
           gtk_snapshot_save (context->snapshot);
 
           if (shape_get_current_bounds (shape, context->viewport, &bounds))
             {
-              gtk_snapshot_translate (context->snapshot, &bounds.origin);
-              gtk_snapshot_scale (context->snapshot, bounds.size.width, bounds.size.height);
+              transform = gsk_transform_translate (NULL, &bounds.origin);
+              transform = gsk_transform_scale (transform, bounds.size.width, bounds.size.height);
+              gtk_snapshot_transform (context->snapshot, transform);
             }
+
+          push_transform (context, transform);
+          gsk_transform_unref (transform);
         }
 
       render_shape (mask->shape, context);
 
       if (svg_enum_get (mask->shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
+          pop_transform (context);
           gtk_snapshot_restore (context->snapshot);
         }
 
@@ -18776,10 +18948,16 @@ pop_group (Shape        *shape,
     }
 
   if (shape->type == SHAPE_USE)
-    gtk_snapshot_restore (context->snapshot);
+    {
+      pop_transform (context);
+      gtk_snapshot_restore (context->snapshot);
+    }
 
   if (tf->transforms[0].type != TRANSFORM_NONE)
-    gtk_snapshot_restore (context->snapshot);
+    {
+      pop_transform (context);
+      gtk_snapshot_restore (context->snapshot);
+    }
 
   if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
@@ -18788,6 +18966,7 @@ pop_group (Shape        *shape,
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         gtk_snapshot_pop (context->snapshot);
 
+      pop_transform (context);
       gtk_snapshot_restore (context->snapshot);
 
       g_free ((gpointer) pop_viewport (context));
@@ -19012,19 +19191,25 @@ paint_radial_gradient (Shape                 *gradient,
 
   g = gradient_get_gsk_gradient (gradient, context);
 
+  GskTransform *transform = NULL;
   gtk_snapshot_save (context->snapshot);
 
   if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
-      gtk_snapshot_translate (context->snapshot, &bounds->origin);
-      gtk_snapshot_scale (context->snapshot,  bounds->size.width, bounds->size.height);
+      transform = gsk_transform_translate (transform, &bounds->origin);
+      transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
+      gtk_snapshot_transform (context->snapshot, transform);
       graphene_rect_init (&gradient_bounds, 0, 0, 1, 1);
     }
   else
     graphene_rect_init_from_rect (&gradient_bounds, bounds);
 
+  push_transform (context, transform);
+  gsk_transform_unref (transform);
+
   gradient_transform = svg_transform_get_gsk ((SvgTransform *) tf);
   gtk_snapshot_transform (context->snapshot, gradient_transform);
+  push_transform (context, gradient_transform);
 
   gradient_transform = gsk_transform_invert (gradient_transform);
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
@@ -19040,6 +19225,8 @@ paint_radial_gradient (Shape                 *gradient,
                                     g);
   gsk_gradient_free (g);
 
+  pop_transform (context);
+  pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
 }
 
@@ -19116,8 +19303,11 @@ paint_pattern (Shape                 *pattern,
   tx += dx;
   ty += dy;
 
+  gtk_snapshot_save (context->snapshot);
+
   transform = svg_transform_get_gsk ((SvgTransform *) tf);
   gtk_snapshot_transform (context->snapshot, transform);
+  push_transform (context, transform);
 
   transform = gsk_transform_invert (transform);
   gsk_transform_transform_bounds (transform, bounds, &pattern_bounds);
@@ -19126,8 +19316,11 @@ paint_pattern (Shape                 *pattern,
   gtk_snapshot_push_repeat (context->snapshot, &pattern_bounds, &child_bounds);
 
   gtk_snapshot_save (context->snapshot);
-  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
-  gtk_snapshot_scale (context->snapshot, sx, sy);
+  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty));
+  transform = gsk_transform_scale (transform, sx, sy);
+  gtk_snapshot_transform (context->snapshot, transform);
+  push_transform (context, transform);
+  gsk_transform_unref (transform);
 
   shapes = pattern_get_shapes (pattern, context);
   for (int i = 0; i < shapes->len; i++)
@@ -19136,9 +19329,13 @@ paint_pattern (Shape                 *pattern,
       render_shape (s, context);
     }
 
+  pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
 
   gtk_snapshot_pop (context->snapshot);
+
+  pop_transform (context);
+  gtk_snapshot_restore (context->snapshot);
 }
 
 static void
@@ -19266,14 +19463,14 @@ shape_create_stroke (Shape        *shape,
   return stroke;
 }
 
-static const SvgPaint *
-get_context_paint (const SvgPaint *paint,
-                   GSList         *ctx_stack)
+static SvgPaint *
+get_context_paint (SvgPaint *paint,
+                   GSList   *ctx_stack)
 {
   switch (paint->kind)
     {
     case PAINT_NONE:
-        return NULL;
+      break;
     case PAINT_COLOR:
     case PAINT_SERVER:
     case PAINT_SERVER_WITH_FALLBACK:
@@ -19281,25 +19478,26 @@ get_context_paint (const SvgPaint *paint,
       return paint;
     case PAINT_CONTEXT_FILL:
     case PAINT_CONTEXT_STROKE:
-      if (ctx_stack->data)
+      if (ctx_stack)
         {
-          Shape *ctx_shape = ctx_stack->data;
-          SvgValue *ctx_value;
+          Shape *shape = ctx_stack->data;
 
           if (paint->kind == PAINT_CONTEXT_FILL)
-            ctx_value = ctx_shape->current[SHAPE_ATTR_FILL];
+            paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
           else
-            ctx_value = ctx_shape->current[SHAPE_ATTR_STROKE];
+            paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
 
-          return get_context_paint ((const SvgPaint *) ctx_value,
-                                    ctx_stack->next);
+          return get_context_paint (paint, ctx_stack->next);
         }
-      else
-        return NULL;
       break;
     default:
       g_assert_not_reached ();
     }
+
+  paint = (SvgPaint *) svg_paint_new_none ();
+  svg_value_unref ((SvgValue *) paint);
+
+  return paint;
 }
 
 static void
@@ -19312,6 +19510,7 @@ fill_shape (Shape        *shape,
   graphene_rect_t bounds;
   GskFillRule fill_rule;
 
+  paint = get_context_paint (paint, context->ctx_shape_stack);
   if (paint->kind == PAINT_NONE)
     return;
 
@@ -19320,7 +19519,6 @@ fill_shape (Shape        *shape,
 
   fill_rule = svg_enum_get (shape->current[SHAPE_ATTR_FILL_RULE]);
 
-retry:
   switch (paint->kind)
     {
     case PAINT_NONE:
@@ -19348,13 +19546,6 @@ retry:
       break;
     case PAINT_CONTEXT_FILL:
     case PAINT_CONTEXT_STROKE:
-      {
-        GSList ctx_stack = { context->ctx_shape, context->ctx_shape_stack };
-        paint = (SvgPaint *) get_context_paint (paint, &ctx_stack);
-        if (paint)
-          goto retry;
-      }
-      break;
     case PAINT_SYMBOLIC:
     default:
       g_assert_not_reached ();
@@ -19370,9 +19561,12 @@ stroke_shape (Shape        *shape,
   GskStroke *stroke;
   graphene_rect_t bounds;
   double opacity;
+  VectorEffect effect;
+  GskRenderNode *child;
+  GskRenderNode *node;
 
   paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
-
+  paint = get_context_paint (paint, context->ctx_shape_stack);
   if (paint->kind == PAINT_NONE)
     return;
 
@@ -19381,46 +19575,62 @@ stroke_shape (Shape        *shape,
     return;
 
   opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
+  effect = svg_enum_get (shape->current[SHAPE_ATTR_VECTOR_EFFECT]);
 
-retry:
-  switch (paint->kind)
+  if (paint->kind == PAINT_COLOR)
     {
-    case PAINT_NONE:
-      break;
-    case PAINT_COLOR:
-      {
-        GdkRGBA color = paint->color;
-        color.alpha *= opacity;
-        gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
-      }
-      break;
-    case PAINT_SERVER:
-    case PAINT_SERVER_WITH_FALLBACK:
-      {
-        if (opacity < 1)
-          gtk_snapshot_push_opacity (context->snapshot, opacity);
-
-        gtk_snapshot_push_stroke (context->snapshot, path, stroke);
-        paint_server (paint, &bounds, context);
-        gtk_snapshot_pop (context->snapshot);
-
-        if (opacity < 1)
-          gtk_snapshot_pop (context->snapshot);
-      }
-      break;
-    case PAINT_CONTEXT_FILL:
-    case PAINT_CONTEXT_STROKE:
-      {
-        GSList ctx_stack = { context->ctx_shape, context->ctx_shape_stack };
-        paint = (SvgPaint *) get_context_paint (paint, &ctx_stack);
-        if (paint)
-          goto retry;
-      }
-      break;
-    case PAINT_SYMBOLIC:
-    default:
-      g_assert_not_reached ();
+      GdkRGBA color = paint->color;
+      color.alpha *= opacity;
+      child = gsk_color_node_new (&color, &bounds);
+      opacity = 1;
     }
+  else
+    {
+      gtk_snapshot_push_collect (context->snapshot);
+      paint_server (paint, &bounds, context);
+      child = gtk_snapshot_pop_collect (context->snapshot);
+    }
+
+  if (effect == VECTOR_EFFECT_NON_SCALING_STROKE)
+    {
+      GskTransform *host_transform = NULL;
+      GskTransform *user_transform = NULL;
+      GskPath *transformed_path = NULL;
+      GskRenderNode *transformed_child;
+      GskRenderNode *stroke_node;
+
+      host_transform = context_get_host_transform (context);
+      user_transform = gsk_transform_invert (gsk_transform_ref (host_transform));
+      transformed_path = gsk_transform_transform_path (user_transform, path);
+
+      transformed_child = gsk_transform_node_new (child, user_transform);
+      stroke_node = gsk_stroke_node_new (transformed_child, transformed_path, stroke);
+
+      node = gsk_transform_node_new (stroke_node, host_transform);
+
+      gsk_render_node_unref (stroke_node);
+      gsk_render_node_unref (transformed_child);
+
+      gsk_path_unref (transformed_path);
+      gsk_transform_unref (user_transform);
+      gsk_transform_unref (host_transform);
+    }
+  else
+    {
+      node = gsk_stroke_node_new (child, path, stroke);
+    }
+
+  gsk_render_node_unref (child);
+
+  if (opacity < 1)
+    {
+      GskRenderNode *node2 = gsk_opacity_node_new (node, opacity);
+      gsk_render_node_unref (node);
+      node = node2;
+    }
+
+  gtk_snapshot_append_node (context->snapshot, node);
+  gsk_render_node_unref (node);
 
   gsk_stroke_free (stroke);
 }
@@ -19536,15 +19746,19 @@ paint_marker (Shape              *shape,
                               0, 0, width, height,
                               &sx, &sy, &tx, &ty);
 
+  GskTransform *transform = NULL;
+
   gtk_snapshot_save (context->snapshot);
 
-  gtk_snapshot_translate (context->snapshot, &vertex);
+  transform = gsk_transform_translate (transform, &vertex);
+  transform = gsk_transform_rotate (transform, angle);
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (-x, -y));
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (tx, ty));
+  transform = gsk_transform_scale (transform, sx, sy);
 
-  gtk_snapshot_rotate (context->snapshot, angle);
-  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (-x, -y));
-
-  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
-  gtk_snapshot_scale (context->snapshot, sx, sy);
+  gtk_snapshot_transform (context->snapshot, transform);
+  push_transform (context, transform);
+  gsk_transform_unref (transform);
 
   if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
     gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, vb->view_box.size.width, vb->view_box.size.height));
@@ -19554,6 +19768,7 @@ paint_marker (Shape              *shape,
   if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
     gtk_snapshot_pop (context->snapshot);
 
+  pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
 
   return TRUE;
@@ -20069,13 +20284,19 @@ render_image (Shape        *shape,
                               x, y, width, height,
                               &sx, &sy, &tx, &ty);
 
+  GskTransform *transform = NULL;
   gtk_snapshot_save (context->snapshot);
 
-  gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (tx, ty));
-  gtk_snapshot_scale (context->snapshot, sx, sy);
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (tx, ty));
+  transform = gsk_transform_scale (transform, sx, sy);
+
+  gtk_snapshot_transform (context->snapshot, transform);
+  push_transform (context, transform);
+  gsk_transform_unref (transform);
 
   gtk_snapshot_append_texture (context->snapshot, href->texture, &vb);
 
+  pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
 }
 
@@ -20186,8 +20407,13 @@ paint_shape (Shape        *shape,
                           bounds.size.width, bounds.size.height);
       shape->valid_bounds = TRUE;
 
+      GskTransform *transform = NULL;
       gtk_snapshot_save (context->snapshot);
-      gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (dx, dy));
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (dx, dy));
+
+      gtk_snapshot_transform (context->snapshot, transform);
+      push_transform (context, transform);
+      gsk_transform_unref (transform);
 
       stroke = shape_create_stroke (shape, context);
 
@@ -20227,6 +20453,7 @@ paint_shape (Shape        *shape,
 
       gsk_stroke_free (stroke);
 
+      pop_transform (context);
       gtk_snapshot_restore (context->snapshot);
 
       return;
@@ -20453,10 +20680,10 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   paint_context.weight = self->weight >= 1 ? self->weight : weight;
   paint_context.op = RENDERING;
   paint_context.op_stack = NULL;
-  paint_context.ctx_shape = NULL;
   paint_context.ctx_shape_stack = NULL;
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
+  paint_context.transforms = NULL;
 
   if (self->overflow == GTK_OVERFLOW_HIDDEN)
     gtk_snapshot_push_clip (snapshot,
@@ -20466,6 +20693,12 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
   if (self->overflow == GTK_OVERFLOW_HIDDEN)
     gtk_snapshot_pop (snapshot);
+
+  /* Sanity checks. */
+  g_assert (paint_context.viewport_stack == NULL);
+  g_assert (paint_context.op_stack == NULL);
+  g_assert (paint_context.ctx_shape_stack == NULL);
+  g_assert (paint_context.transforms == NULL);
 
   if (self->advance_after_snapshot)
     {
