@@ -54,24 +54,6 @@ gsk_gpu_border_op_print_instance (GskGpuShaderOp *shader,
     }
 }
 
-#ifdef GDK_RENDERING_VULKAN
-static GskGpuOp *
-gsk_gpu_border_op_vk_command (GskGpuOp              *op,
-                              GskGpuFrame           *frame,
-                              GskVulkanCommandState *state)
-{
-  return gsk_gpu_shader_op_vk_command_n (op, frame, state, 8);
-}
-#endif
-
-static GskGpuOp *
-gsk_gpu_border_op_gl_command (GskGpuOp          *op,
-                              GskGpuFrame       *frame,
-                              GskGLCommandState *state)
-{
-  return gsk_gpu_shader_op_gl_command_n (op, frame, state, 8);
-}
-
 static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuBorderOp),
@@ -79,12 +61,13 @@ static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
     gsk_gpu_shader_op_finish,
     gsk_gpu_shader_op_print,
 #ifdef GDK_RENDERING_VULKAN
-    gsk_gpu_border_op_vk_command,
+    gsk_gpu_shader_op_vk_command,
 #endif
-    gsk_gpu_border_op_gl_command
+    gsk_gpu_shader_op_gl_command
   },
   "gskgpuborder",
   gsk_gpu_border_n_textures,
+  gsk_gpu_border_n_instances,
   sizeof (GskGpuBorderInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_border_info,

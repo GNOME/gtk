@@ -41,6 +41,7 @@ static const GskGpuShaderOpClass GSK_GPU_DISPLACEMENT_OP_CLASS = {
   },
   "gskgpudisplacement",
   gsk_gpu_displacement_n_textures,
+  gsk_gpu_displacement_n_instances,
   sizeof (GskGpuDisplacementInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_displacement_info,

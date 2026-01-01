@@ -64,10 +64,9 @@ gsk_gpu_shader_op_print (GskGpuOp    *op,
 
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *
-gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
-                                GskGpuFrame           *frame,
-                                GskVulkanCommandState *state,
-                                gsize                  instance_scale)
+gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
+                              GskGpuFrame           *frame,
+                              GskVulkanCommandState *state)
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
@@ -136,27 +135,19 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   for (i = 0; i < n_ops; i += max_ops_per_draw)
     {
       vkCmdDraw (state->vk_command_buffer,
-                 6 * instance_scale, MIN (max_ops_per_draw, n_ops - i),
+                 shader_op_class->n_instances, MIN (max_ops_per_draw, n_ops - i),
                  0, self->vertex_offset / shader_op_class->vertex_size + i);
     }
  
   return next;
 }
 
-GskGpuOp *
-gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
-                              GskGpuFrame           *frame,
-                              GskVulkanCommandState *state)
-{
-  return gsk_gpu_shader_op_vk_command_n (op, frame, state, 1);
-}
 #endif
 
 GskGpuOp *
-gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
-                                GskGpuFrame       *frame,
-                                GskGLCommandState *state,
-                                gsize              instance_scale)
+gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
+                              GskGpuFrame       *frame,
+                              GskGLCommandState *state)
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
@@ -224,7 +215,7 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
         {
           glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
                                              0,
-                                             6 * instance_scale,
+                                             shader_op_class->n_instances,
                                              MIN (max_ops_per_draw, n_ops - i),
                                              self->vertex_offset / shader_op_class->vertex_size + i);
         }
@@ -234,20 +225,12 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
 
           glDrawArraysInstanced (GL_TRIANGLES,
                                  0,
-                                 6 * instance_scale,
+                                 shader_op_class->n_instances,
                                  MIN (max_ops_per_draw, n_ops - i));
         }
     }
 
   return next;
-}
-
-GskGpuOp *
-gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
-                              GskGpuFrame       *frame,
-                              GskGLCommandState *state)
-{
-  return gsk_gpu_shader_op_gl_command_n (op, frame, state, 1);
 }
 
 void

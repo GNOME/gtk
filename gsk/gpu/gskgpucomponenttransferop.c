@@ -40,6 +40,7 @@ static const GskGpuShaderOpClass GSK_GPU_COMPONENT_TRANSFER_OP_CLASS = {
   },
   "gskgpucomponenttransfer",
   gsk_gpu_componenttransfer_n_textures,
+  gsk_gpu_componenttransfer_n_instances,
   sizeof (GskGpuComponenttransferInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_componenttransfer_info,
