@@ -916,17 +916,6 @@ parse_number (const char *value,
 }
 
 static gboolean
-parse_length (const char *value,
-              double      min,
-              double      max,
-              double     *f)
-{
-  SvgDimension dim;
-
-  return parse_numeric (value, min, max, NUMBER|LENGTH, f, &dim);
-}
-
-static gboolean
 parse_duration (const char *value,
                 int64_t    *f)
 {
@@ -4398,8 +4387,8 @@ primitive_transform_parse (TransformType  type,
         double x, y;
 
         if (n < 1 || n > 2 ||
-            !parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) ||
-            ((n == 2) && !parse_length (strv[1], -DBL_MAX, DBL_MAX, &y)))
+            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &x) ||
+            ((n == 2) && !parse_number (strv[1], -DBL_MAX, DBL_MAX, &y)))
           {
             g_strfreev (strv);
             return NULL;
@@ -4414,8 +4403,8 @@ primitive_transform_parse (TransformType  type,
         double x, y;
 
         if (n < 1 || n > 2 ||
-            !parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) ||
-            ((n == 2) && !parse_length (strv[1], -DBL_MAX, DBL_MAX, &y)))
+            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &x) ||
+            ((n == 2) && !parse_number (strv[1], -DBL_MAX, DBL_MAX, &y)))
           {
             g_strfreev (strv);
             return NULL;
@@ -4432,8 +4421,8 @@ primitive_transform_parse (TransformType  type,
         if ((n != 1 && n != 3) ||
             !parse_number (strv[0], -DBL_MAX, DBL_MAX, &angle) ||
             ((n == 3) &&
-             (!parse_length (strv[1], -DBL_MAX, DBL_MAX, &x) ||
-              !parse_length (strv[2], -DBL_MAX, DBL_MAX, &y))))
+             (!parse_number (strv[1], -DBL_MAX, DBL_MAX, &x) ||
+              !parse_number (strv[2], -DBL_MAX, DBL_MAX, &y))))
           {
             g_strfreev (strv);
             return NULL;
@@ -4448,7 +4437,7 @@ primitive_transform_parse (TransformType  type,
         double angle;
 
         if (n != 1 ||
-            !parse_length (strv[0], -DBL_MAX, DBL_MAX, &angle))
+            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &angle))
           {
             g_strfreev (strv);
             return NULL;
@@ -4463,7 +4452,7 @@ primitive_transform_parse (TransformType  type,
         double angle;
 
         if (n != 1 ||
-            !parse_length (strv[0], -DBL_MAX, DBL_MAX, &angle))
+            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &angle))
           {
             g_strfreev (strv);
             return NULL;
@@ -6791,10 +6780,10 @@ svg_view_box_parse (const char *value)
   strv = strsplit_set (value, ", ");
   n = g_strv_length (strv);
   if (n == 4 &&
-      parse_length (strv[0], -DBL_MAX, DBL_MAX, &x) &&
-      parse_length (strv[1], -DBL_MAX, DBL_MAX, &y) &&
-      parse_length (strv[2], 0, DBL_MAX, &w) &&
-      parse_length (strv[3], 0, DBL_MAX, &h))
+      parse_number (strv[0], -DBL_MAX, DBL_MAX, &x) &&
+      parse_number (strv[1], -DBL_MAX, DBL_MAX, &y) &&
+      parse_number (strv[2], 0, DBL_MAX, &w) &&
+      parse_number (strv[3], 0, DBL_MAX, &h))
     {
       res = (SvgValue *) svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h));
     }
