@@ -181,10 +181,6 @@
     <file>hsla.c</file>
   </gresource>
   <gresource prefix="/paintable_svg">
-    <file>svgpaintable.h</file>
-    <file>svgpaintable.c</file>
-    <file>symbolicpaintable.h</file>
-    <file>symbolicpaintable.c</file>
     <file>org.gtk.gtk4.NodeEditor.Devel.svg</file>
   </gresource>
   <gresource prefix="/shortcuts">

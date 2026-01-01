@@ -5,7 +5,6 @@
  */
 
 #include <gtk/gtk.h>
-#include "symbolicpaintable.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
 
 static guint tick_cb;
