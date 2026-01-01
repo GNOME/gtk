@@ -145,7 +145,7 @@
  *
  * will make the fill color of path1 transition from black to
  * magenta when the renderer enters state 0.
- *
+ * 
  * <image src="svg-renderer2.svg">
  *
  * The `gpa:states(...)` condition triggers for upcoming state changes
@@ -775,55 +775,69 @@ enum
   LENGTH     = 1 << 2,
 };
 
+static const char * unit_names[] = {
+  [SVG_UNIT_NUMBER] = "",
+  [SVG_UNIT_PERCENTAGE] = "%",
+  [SVG_UNIT_PX] = "px",
+  [SVG_UNIT_PT] = "pt",
+  [SVG_UNIT_IN] = "in",
+  [SVG_UNIT_CM] = "cm",
+  [SVG_UNIT_MM] = "mm",
+};
+
 static gboolean
 parse_numeric (const char   *value,
                double        min,
                double        max,
                unsigned int  flags,
                double       *f,
-               SvgDimension *dim)
+               SvgUnit      *unit)
 {
   char *end = NULL;
 
   *f = g_ascii_strtod (value, &end);
   if (end && *end != '\0')
     {
+      unsigned int i;
+
       if (*end == '%')
         {
-          *dim = SVG_DIMENSION_PERCENTAGE;
+          *unit = SVG_UNIT_PERCENTAGE;
           return (flags & PERCENTAGE) != 0;
         }
 
       if ((flags & LENGTH) == 0)
         return FALSE;
 
-      *dim = SVG_DIMENSION_LENGTH;
+      for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
+        {
+          if (strcmp (end, unit_names[i]) == 0)
+            {
+              *unit = i;
+              break;
+            }
+        }
 
-      if (strcmp (end, "px") == 0)
-        ;
-      else if (strcmp (end, "pt") == 0)
-        *f *= 96./72.;
-      else if (strcmp (end, "in") == 0)
-        *f *= 96.;
-      else if (strcmp (end, "cm") == 0)
-        *f *= 96./2.54;
-      else if (strcmp (end, "mm") == 0)
-        *f *= 96./25.4;
-      else
+      if (i == G_N_ELEMENTS (unit_names))
         return FALSE;
+
+      if (*f < min || *f > max)
+        return FALSE;
+
+      return TRUE;
     }
   else
     {
       if (flags & NUMBER)
-        *dim = SVG_DIMENSION_NUMBER;
+        *unit = SVG_UNIT_NUMBER;
       else
         return FALSE;
+
+      if (*f < min || *f > max)
+        return FALSE;
+
+      return TRUE;
     }
-
-  if (*f < min || *f > max)
-    return FALSE;
-
-  return TRUE;
 }
 
 static GArray *
@@ -843,12 +857,12 @@ parse_numbers2 (const char *value,
     {
       char *s = g_strstrip (strv[i]);
       double v;
-      SvgDimension dim;
+      SvgUnit unit;
 
       if (*s == '\0' && strv[i] == NULL)
         break;
 
-      if (!parse_numeric (s, min, max, NUMBER, &v, &dim))
+      if (!parse_numeric (s, min, max, NUMBER, &v, &unit))
         {
           g_array_unref (array);
           g_strfreev (strv);
@@ -879,7 +893,7 @@ parse_numbers (const char   *value,
   for (unsigned int i = 0; strv[i]; i++)
     {
       char *s = g_strstrip (strv[i]);
-      SvgDimension dim;
+      SvgUnit unit;
 
       if (*s == '\0' && strv[i] == NULL)
         {
@@ -893,7 +907,7 @@ parse_numbers (const char   *value,
           return FALSE;
         }
 
-      if (!parse_numeric (s, min, max, NUMBER, &values[i], &dim))
+      if (!parse_numeric (s, min, max, NUMBER, &values[i], &unit))
         {
           g_strfreev (strv);
           return FALSE;
@@ -910,9 +924,9 @@ parse_number (const char *value,
               double      max,
               double     *f)
 {
-  SvgDimension dim;
+  SvgUnit unit;
 
-  return parse_numeric (value, min, max, NUMBER, f, &dim);
+  return parse_numeric (value, min, max, NUMBER, f, &unit);
 }
 
 static gboolean
@@ -1874,25 +1888,38 @@ state_match (uint64_t     states,
 /* }}} */
 /* {{{ Values */
 
+typedef struct {
+  GtkSvg *svg;
+  const graphene_rect_t *viewport;
+  Shape *parent; /* Can be different from the actual parent, for <use> */
+  int64_t current_time;
+  const GdkRGBA *colors;
+  size_t n_colors;
+} ComputeContext;
+
 typedef struct _SvgValueClass SvgValueClass;
 
 struct _SvgValueClass
 {
   const char *name;
 
-  void       (* free)        (SvgValue       *value);
-  gboolean   (* equal)       (const SvgValue *value0,
-                              const SvgValue *value1);
-  SvgValue * (* interpolate) (const SvgValue *value0,
-                              const SvgValue *value1,
-                              double          t);
-  SvgValue * (* accumulate)  (const SvgValue *value0,
-                              const SvgValue *value1,
-                              int             n);
-  void       (* print)       (const SvgValue *value,
-                              GString        *string);
-  double     (* distance)    (const SvgValue *value0,
-                              const SvgValue *value1);
+  void       (* free)        (SvgValue              *value);
+  gboolean   (* equal)       (const SvgValue        *value0,
+                              const SvgValue        *value1);
+  SvgValue * (* interpolate) (const SvgValue        *value0,
+                              const SvgValue        *value1,
+                              double                 t);
+  SvgValue * (* accumulate)  (const SvgValue        *value0,
+                              const SvgValue        *value1,
+                              int                    n);
+  void       (* print)       (const SvgValue        *value,
+                              GString               *string);
+  double     (* distance)    (const SvgValue        *value0,
+                              const SvgValue        *value1);
+  SvgValue * (* resolve)     (const SvgValue        *value,
+                              ShapeAttr              attr,
+                              Shape                 *shape,
+                              ComputeContext        *context);
 };
 
 struct _SvgValue
@@ -1999,17 +2026,39 @@ svg_value_to_string (const SvgValue *value)
 }
 
 static double
+svg_value_default_distance (const SvgValue *value0,
+                            const SvgValue *value1)
+{
+  g_warning ("Can't determine distance between %s values",
+             value0->class->name);
+  return 1;
+}
+
+static double
 svg_value_distance (const SvgValue *value0,
                     const SvgValue *value1)
 {
   g_return_val_if_fail (value0->class == value1->class, 1);
 
-  if (value0->class->distance)
-    return value0->class->distance (value0, value1);
+  return value0->class->distance (value0, value1);
+}
 
-  g_warning ("Can't determine distance between %s values",
-             value0->class->name);
-  return 1;
+static SvgValue *
+svg_value_default_resolve (const SvgValue  *value,
+                           ShapeAttr        attr,
+                           Shape           *shape,
+                           ComputeContext  *context)
+{
+  return svg_value_ref ((SvgValue *) value);
+}
+
+static SvgValue *
+svg_value_resolve (const SvgValue  *value,
+                   ShapeAttr        attr,
+                   Shape           *shape,
+                   ComputeContext  *context)
+{
+  return value->class->resolve (value, attr, shape, context);
 }
 
 /* }}} */
@@ -2089,6 +2138,8 @@ static const SvgValueClass SVG_KEYWORD_CLASS = {
   svg_keyword_interpolate,
   svg_keyword_accumulate,
   svg_keyword_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -2137,12 +2188,12 @@ svg_value_is_current (const SvgValue *value)
 }
 
 /* }}} */
-/* {{{ Numbers */
+/* {{{ Numbers */ 
 
 typedef struct
 {
   SvgValue base;
-  SvgDimension dim;
+  SvgUnit unit;
   double value;
 } SvgNumber;
 
@@ -2159,11 +2210,11 @@ svg_number_equal (const SvgValue *value0,
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
 
-  return n0->dim == n1->dim && n0->value == n1->value;
+  return n0->unit == n1->unit && n0->value == n1->value;
 }
 
-static SvgValue * svg_number_new_full (SvgDimension dim,
-                                       double       value);
+static SvgValue * svg_number_new_full (SvgUnit unit,
+                                       double  value);
 
 static SvgValue *
 svg_number_interpolate (const SvgValue *value0,
@@ -2173,10 +2224,10 @@ svg_number_interpolate (const SvgValue *value0,
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
 
-  if (n0->dim != n1->dim)
+  if (n0->unit != n1->unit)
     return NULL;
 
-  return svg_number_new_full (n0->dim, lerp (t, n0->value, n1->value));
+  return svg_number_new_full (n0->unit, lerp (t, n0->value, n1->value));
 }
 
 static SvgValue *
@@ -2187,10 +2238,10 @@ svg_number_accumulate (const SvgValue *value0,
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
 
-  if (n0->dim != n1->dim)
+  if (n0->unit != n1->unit)
     return NULL;
 
-  return svg_number_new_full (n0->dim, accumulate (n0->value, n1->value, n));
+  return svg_number_new_full (n0->unit, accumulate (n0->value, n1->value, n));
 }
 
 static void
@@ -2198,12 +2249,8 @@ svg_number_print (const SvgValue *value,
                   GString        *string)
 {
   const SvgNumber *n = (const SvgNumber *) value;
-
   string_append_double (string, "", n->value);
-  if (n->dim == SVG_DIMENSION_PERCENTAGE)
-    g_string_append_c (string, '%');
-  else if (n->dim == SVG_DIMENSION_LENGTH)
-    g_string_append (string, "px");
+  g_string_append (string, unit_names[n->unit]);
 }
 
 static double
@@ -2213,14 +2260,96 @@ svg_number_distance (const SvgValue *value0,
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
 
-  if (n0->dim != n1->dim)
-    {
-      g_warning ("Can't determine distance between "
-                 "numbers with different dimensions");
-      return 1;
-    }
+  if (n0->unit != n1->unit)
+    return 1;
 
   return fabs (n0->value - n1->value);
+}
+
+static SvgValue *
+svg_number_resolve (const SvgValue *value,
+                    ShapeAttr       attr,
+                    Shape          *shape,
+                    ComputeContext *context)
+{
+  const SvgNumber *n = (const SvgNumber *) value;
+  const graphene_rect_t *viewport;
+  graphene_rect_t vb;
+
+  if (context->viewport)
+    {
+      viewport = context->viewport;
+    }
+  else
+    {
+      graphene_rect_init (&vb, 0, 0, context->svg->width, context->svg->height);
+      viewport = &vb;
+    }
+
+  switch (n->unit)
+    {
+    case SVG_UNIT_NUMBER:
+    case SVG_UNIT_PX:
+      return svg_value_ref ((SvgValue *) value);
+    case SVG_UNIT_PERCENTAGE:
+      switch ((unsigned int) attr)
+        {
+        case SHAPE_ATTR_OPACITY:
+        case SHAPE_ATTR_FILL_OPACITY:
+        case SHAPE_ATTR_STROKE_OPACITY:
+        case SHAPE_ATTR_STOP_OFFSET:
+          return svg_number_new (n->value / 100);
+        case SHAPE_ATTR_STROKE_WIDTH:
+        case SHAPE_ATTR_R:
+        case SHAPE_ATTR_FR:
+          return svg_number_new_full (SVG_UNIT_PX, n->value * normalized_diagonal (viewport) / 100);
+        case SHAPE_ATTR_CX:
+        case SHAPE_ATTR_RX:
+        case SHAPE_ATTR_FX:
+          return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
+        case SHAPE_ATTR_X:
+        case SHAPE_ATTR_WIDTH:
+          if (shape->type != SHAPE_FILTER)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
+        case SHAPE_ATTR_X1:
+        case SHAPE_ATTR_X2:
+          if (shape->type == SHAPE_LINE)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
+        case SHAPE_ATTR_CY:
+        case SHAPE_ATTR_RY:
+        case SHAPE_ATTR_FY:
+          return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
+        case SHAPE_ATTR_Y:
+        case SHAPE_ATTR_HEIGHT:
+          if (shape->type != SHAPE_FILTER)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
+        case SHAPE_ATTR_Y1:
+        case SHAPE_ATTR_Y2:
+          if (shape->type == SHAPE_LINE)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
+        default:
+          return svg_value_ref ((SvgValue *) value);
+        }
+      break;
+    case SVG_UNIT_PT:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 72);
+    case SVG_UNIT_IN:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96);
+    case SVG_UNIT_CM:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
+    case SVG_UNIT_MM:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static const SvgValueClass SVG_NUMBER_CLASS = {
@@ -2231,15 +2360,16 @@ static const SvgValueClass SVG_NUMBER_CLASS = {
   svg_number_accumulate,
   svg_number_print,
   svg_number_distance,
+  svg_number_resolve,
 };
 
 SvgValue *
 svg_number_new (double value)
 {
   static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 1 },
-    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_NUMBER, .value = 2 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 1 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 2 },
   };
   SvgNumber *result;
 
@@ -2250,7 +2380,7 @@ svg_number_new (double value)
     }
 
   result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
-  result->dim = SVG_DIMENSION_NUMBER;
+  result->unit = SVG_UNIT_NUMBER;
   result->value = value;
 
   return (SvgValue *) result;
@@ -2260,9 +2390,9 @@ static SvgValue *
 svg_percentage_new (double value)
 {
   static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_PERCENTAGE, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_PERCENTAGE, .value = 50 },
-    { { &SVG_NUMBER_CLASS, 1 }, .dim = SVG_DIMENSION_PERCENTAGE, .value = 100 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 50 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 100 },
   };
   SvgNumber *result;
 
@@ -2275,20 +2405,20 @@ svg_percentage_new (double value)
 
   result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
   result->value = value;
-  result->dim = SVG_DIMENSION_PERCENTAGE;
+  result->unit = SVG_UNIT_PERCENTAGE;
 
   return (SvgValue *) result;
 }
 
 static SvgValue *
-svg_number_new_full (SvgDimension dim,
-                     double       value)
+svg_number_new_full (SvgUnit unit,
+                     double  value)
 {
-  if (dim == SVG_DIMENSION_NUMBER)
+  if (unit == SVG_UNIT_NUMBER)
     {
       return svg_number_new (value);
     }
-  else if (dim == SVG_DIMENSION_PERCENTAGE)
+  else if (unit == SVG_UNIT_PERCENTAGE)
     {
       return svg_percentage_new (value);
     }
@@ -2298,7 +2428,7 @@ svg_number_new_full (SvgDimension dim,
 
       result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
       result->value = value;
-      result->dim = SVG_DIMENSION_LENGTH;
+      result->unit = unit;
 
       return (SvgValue *) result;
     }
@@ -2311,12 +2441,12 @@ svg_number_parse (const char   *value,
                   unsigned int  flags)
 {
   double f;
-  SvgDimension dim;
+  SvgUnit unit;
 
-  if (!parse_numeric (value, min, max, flags, &f, &dim))
+  if (!parse_numeric (value, min, max, flags, &f, &unit))
     return NULL;
 
-  return svg_number_new_full (dim, f);
+  return svg_number_new_full (unit, f);
 }
 
 static double
@@ -2327,7 +2457,7 @@ svg_number_get (const SvgValue *value,
 
   g_assert (value->class == &SVG_NUMBER_CLASS);
 
-  if (n->dim == SVG_DIMENSION_PERCENTAGE)
+  if (n->unit == SVG_UNIT_PERCENTAGE)
     return n->value / 100 * one_hundred_percent;
   else
     return n->value;
@@ -2338,7 +2468,7 @@ svg_number_get (const SvgValue *value,
 
 typedef struct
 {
-  SvgDimension dim;
+  SvgUnit unit;
   double value;
 } Number;
 
@@ -2373,7 +2503,7 @@ svg_numbers_equal (const SvgValue *value0,
 
   for (unsigned int i = 0; i < p0->n_values; i++)
     {
-      if (p0->values[i].dim != p1->values[i].dim)
+      if (p0->values[i].unit != p1->values[i].unit)
         return FALSE;
       if (p0->values[i].value != p1->values[i].value)
         return FALSE;
@@ -2401,10 +2531,7 @@ svg_numbers_print (const SvgValue *value,
       if (i > 0)
         g_string_append_c (string, ' ');
       string_append_double (string, "", p->values[i].value);
-      if (p->values[i].dim == SVG_DIMENSION_PERCENTAGE)
-        g_string_append (string, "%");
-      else if (p->values[i].dim == SVG_DIMENSION_LENGTH)
-        g_string_append (string, "px");
+      g_string_append (string, unit_names[p->values[i].unit]);
     }
 }
 
@@ -2412,13 +2539,20 @@ static SvgValue * svg_numbers_interpolate (const SvgValue *value0,
                                            const SvgValue *value1,
                                            double          t);
 
+static SvgValue * svg_numbers_resolve (const SvgValue *value,
+                                       ShapeAttr       attr,
+                                       Shape          *shape,
+                                       ComputeContext *context);
+
 static const SvgValueClass SVG_NUMBERS_CLASS = {
   "SvgNumbers",
   svg_numbers_free,
   svg_numbers_equal,
   svg_numbers_interpolate,
   svg_numbers_accumulate,
-  svg_numbers_print
+  svg_numbers_print,
+  svg_value_default_distance,
+  svg_numbers_resolve,
 };
 
 SvgValue *
@@ -2432,7 +2566,7 @@ svg_numbers_new (double       *values,
 
   for (unsigned int i = 0; i < n_values; i++)
     {
-      result->values[i].dim = SVG_DIMENSION_NUMBER;
+      result->values[i].unit = SVG_UNIT_NUMBER;
       result->values[i].value = values[i];
     }
 
@@ -2505,7 +2639,7 @@ svg_numbers_parse (const char *value)
   for (unsigned int i = 0; i < n; i++)
     {
       if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER,
-                          &p->values[i].value, &p->values[i].dim))
+                          &p->values[i].value, &p->values[i].unit))
 
         {
           svg_value_unref ((SvgValue *) p);
@@ -2540,8 +2674,8 @@ svg_numbers_interpolate (const SvgValue *value0,
 
   for (unsigned int i = 0; i < p0->n_values; i++)
     {
-      g_assert (p0->values[i].dim != SVG_DIMENSION_PERCENTAGE);
-      p->values[i].dim = SVG_DIMENSION_NUMBER;
+      g_assert (p0->values[i].unit != SVG_UNIT_PERCENTAGE);
+      p->values[i].unit = SVG_UNIT_NUMBER;
       p->values[i].value = lerp (t, p0->values[i].value, p1->values[i].value);
     }
 
@@ -2549,8 +2683,10 @@ svg_numbers_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_numbers_resolve (const SvgValue        *value,
-                     const graphene_rect_t *viewport)
+svg_numbers_resolve (const SvgValue *value,
+                     ShapeAttr       attr,
+                     Shape          *shape,
+                     ComputeContext *context)
 {
   SvgNumbers *orig = (SvgNumbers *) value;
   SvgNumbers *p;
@@ -2564,14 +2700,18 @@ svg_numbers_resolve (const SvgValue        *value,
   p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (orig->n_values));
   p->n_values = orig->n_values;
 
-  size = normalized_diagonal (viewport);
+  size = normalized_diagonal (context->viewport);
   for (unsigned int i = 0; i < orig->n_values; i++)
     {
-      p->values[i].dim = SVG_DIMENSION_NUMBER;
-      if (orig->values[i].dim == SVG_DIMENSION_PERCENTAGE)
-        p->values[i].value = orig->values[i].value / 100 * size;
+      if (orig->values[i].unit == SVG_UNIT_PERCENTAGE)
+        {
+          p->values[i].unit = SVG_UNIT_NUMBER;
+          p->values[i].value = orig->values[i].value * size / 100;
+        }
       else
-        p->values[i].value = orig->values[i].value;
+        {
+          p->values[i].value = orig->values[i].value;
+        }
     }
 
   return (SvgValue *) p;
@@ -2607,7 +2747,7 @@ svg_points_parse (const char *value)
       for (unsigned int i = 0; i < n; i++)
         {
           if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
-                              &p->values[i].value, &p->values[i].dim))
+                              &p->values[i].value, &p->values[i].unit))
 
             {
               svg_value_unref ((SvgValue *) p);
@@ -2691,6 +2831,8 @@ static const SvgValueClass SVG_STRING_CLASS = {
   svg_string_interpolate,
   svg_string_accumulate,
   svg_string_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -2783,6 +2925,8 @@ static const SvgValueClass SVG_FILL_RULE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum fill_rule_values[] = {
@@ -2813,6 +2957,8 @@ static const SvgValueClass SVG_MASK_TYPE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum mask_type_values[] = {
@@ -2847,6 +2993,8 @@ static const SvgValueClass SVG_LINE_CAP_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum line_cap_values[] = {
@@ -2878,6 +3026,8 @@ static const SvgValueClass SVG_LINE_JOIN_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum line_join_values[] = {
@@ -2909,6 +3059,8 @@ static const SvgValueClass SVG_VISIBILITY_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum visibility_values[] = {
@@ -2945,6 +3097,8 @@ static const SvgValueClass SVG_DISPLAY_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum display_values[] = {
@@ -2978,6 +3132,8 @@ static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum spread_method_values[] = {
@@ -3015,6 +3171,8 @@ static const SvgValueClass SVG_COORD_UNITS_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum coord_units_values[] = {
@@ -3045,6 +3203,8 @@ static const SvgValueClass SVG_PAINT_ORDER_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum paint_order_values[] = {
@@ -3101,6 +3261,8 @@ static const SvgValueClass SVG_BLEND_MODE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum blend_mode_values[] = {
@@ -3151,6 +3313,8 @@ static const SvgValueClass SVG_TEXT_ANCHOR_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum text_anchor_values[] = {
@@ -3187,6 +3351,8 @@ static const SvgValueClass SVG_ISOLATION_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum isolation_values[] = {
@@ -3223,6 +3389,8 @@ static const SvgValueClass SVG_MARKER_UNITS_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum marker_units_values[] = {
@@ -3259,6 +3427,8 @@ static const SvgValueClass SVG_UNICODE_BIDI_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum unicode_bidi_values[] = {
@@ -3297,6 +3467,8 @@ static const SvgValueClass SVG_OVERFLOW_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum overflow_values[] = {
@@ -3409,6 +3581,8 @@ static const SvgValueClass SVG_FILTER_PRIMITIVE_REF_CLASS = {
   svg_filter_primitive_ref_interpolate,
   svg_filter_primitive_ref_accumulate,
   svg_filter_primitive_ref_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgFilterPrimitiveRef filter_primitive_ref_values[] = {
@@ -3464,6 +3638,8 @@ static const SvgValueClass SVG_DIRECTION_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum direction_values[] = {
@@ -3513,6 +3689,8 @@ static const SvgValueClass SVG_WRITING_MODE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum writing_mode_values[] = {
@@ -3552,6 +3730,8 @@ static const SvgValueClass SVG_FONT_STYLE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum font_style_values[] = {
@@ -3583,6 +3763,8 @@ static const SvgValueClass SVG_FONT_VARIANT_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum font_variant_values[] = {
@@ -3618,6 +3800,8 @@ static const SvgValueClass SVG_FONT_STRETCH_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum font_stretch_values[] = {
@@ -3662,6 +3846,8 @@ static const SvgValueClass SVG_EDGE_MODE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum edge_mode_values[] = {
@@ -3698,6 +3884,8 @@ static const SvgValueClass SVG_BLEND_COMPOSITE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum blend_composite_values[] = {
@@ -3736,6 +3924,8 @@ static const SvgValueClass SVG_COLOR_MATRIX_TYPE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum color_matrix_type_values[] = {
@@ -3779,6 +3969,8 @@ static const SvgValueClass SVG_COMPOSITE_OPERATOR_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum composite_operator_values[] = {
@@ -3839,6 +4031,8 @@ static const SvgValueClass SVG_RGBA_CHANNEL_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum rgba_channel_values[] = {
@@ -3880,6 +4074,8 @@ static const SvgValueClass SVG_COMPONENT_TRANSFER_TYPE_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum component_transfer_type_values[] = {
@@ -3919,6 +4115,8 @@ static const SvgValueClass SVG_VECTOR_EFFECT_CLASS = {
   svg_enum_interpolate,
   svg_enum_accumulate,
   svg_enum_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgEnum vector_effect_values[] = {
@@ -4061,6 +4259,7 @@ static const SvgValueClass SVG_TRANSFORM_CLASS = {
   svg_transform_accumulate,
   svg_transform_print,
   svg_transform_distance,
+  svg_value_default_resolve,
 };
 
 static SvgTransform *
@@ -4944,6 +5143,10 @@ static void      svg_paint_print       (const SvgValue *v0,
                                         GString        *string);
 static double    svg_paint_distance    (const SvgValue *v0,
                                         const SvgValue *v1);
+static SvgValue * svg_paint_resolve    (const SvgValue *value,
+                                        ShapeAttr       attr,
+                                        Shape          *shape,
+                                        ComputeContext *context);
 
 static const SvgValueClass SVG_PAINT_CLASS = {
   "SvgPaint",
@@ -4953,6 +5156,7 @@ static const SvgValueClass SVG_PAINT_CLASS = {
   svg_paint_accumulate,
   svg_paint_print,
   svg_paint_distance,
+  svg_paint_resolve,
 };
 
 static const char *symbolic_colors[] = {
@@ -5265,10 +5469,10 @@ svg_paint_print_gpa (const SvgValue *value,
 }
 
 static SvgValue *
-svg_paint_resolve (SvgValue      *value,
-                   const GdkRGBA *colors,
-                   size_t         n_colors,
-                   gboolean       allow_gpa)
+svg_paint_resolve (const SvgValue *value,
+                   ShapeAttr       attr,
+                   Shape          *shape,
+                   ComputeContext *context)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
 
@@ -5276,12 +5480,12 @@ svg_paint_resolve (SvgValue      *value,
 
   if (paint->kind == PAINT_SYMBOLIC)
     {
-      if (!allow_gpa)
+      if (!(context->svg->features & GTK_SVG_EXTENSIONS))
         return svg_paint_new_black ();
-      else if (paint->symbolic < n_colors)
-        return svg_paint_new_rgba (&colors[paint->symbolic]);
-      else if (GTK_SYMBOLIC_COLOR_FOREGROUND < n_colors)
-        return svg_paint_new_rgba (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
+      else if (paint->symbolic < context->n_colors)
+        return svg_paint_new_rgba (&context->colors[paint->symbolic]);
+      else if (GTK_SYMBOLIC_COLOR_FOREGROUND < context->n_colors)
+        return svg_paint_new_rgba (&context->colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
       else
         return svg_paint_new_black ();
     }
@@ -5290,17 +5494,17 @@ svg_paint_resolve (SvgValue      *value,
     {
       GtkSymbolicColor symbolic;
 
-      if (allow_gpa &&
+      if ((context->svg->features & GTK_SVG_EXTENSIONS) &&
           g_str_has_prefix (paint->server.ref, "gpa:") &&
           parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic) &&
-          symbolic < n_colors)
-        return svg_paint_new_rgba (&colors[symbolic]);
+          symbolic < context->n_colors)
+        return svg_paint_new_rgba (&context->colors[symbolic]);
       else
         return svg_paint_new_rgba (&paint->server.fallback);
     }
   else
     {
-      return svg_value_ref (value);
+      return svg_value_ref ((SvgValue *) value);
     }
 }
 
@@ -5502,7 +5706,9 @@ static const SvgValueClass SVG_FILTER_CLASS = {
   svg_filter_equal,
   svg_filter_interpolate,
   svg_filter_accumulate,
-  svg_filter_print
+  svg_filter_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgFilter *
@@ -5910,7 +6116,7 @@ svg_dash_array_equal (const SvgValue *value0,
 
   for (unsigned int i = 0; i < da0->n_dashes; i++)
     {
-      if (da0->dashes[i].dim != da1->dashes[i].dim)
+      if (da0->dashes[i].unit != da1->dashes[i].unit)
         return FALSE;
       if (da0->dashes[i].value != da1->dashes[i].value)
         return FALSE;
@@ -5929,6 +6135,10 @@ static void svg_dash_array_print (const SvgValue *value,
 static SvgValue * svg_dash_array_accumulate (const SvgValue *value0,
                                              const SvgValue *value1,
                                              int             n);
+static SvgValue * svg_dash_array_resolve    (const SvgValue *value,
+                                             ShapeAttr       attr,
+                                             Shape          *shape,
+                                             ComputeContext *context);
 
 static const SvgValueClass SVG_DASH_ARRAY_CLASS = {
   "SvgFilter",
@@ -5936,7 +6146,9 @@ static const SvgValueClass SVG_DASH_ARRAY_CLASS = {
   svg_dash_array_equal,
   svg_dash_array_interpolate,
   svg_dash_array_accumulate,
-  svg_dash_array_print
+  svg_dash_array_print,
+  svg_value_default_distance,
+  svg_dash_array_resolve,
 };
 
 static SvgDashArray *
@@ -5961,8 +6173,8 @@ static SvgValue *
 svg_dash_array_new (double       *values,
                     unsigned int  n)
 {
-  static SvgDashArray da01 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_DIMENSION_NUMBER, 0 }, { SVG_DIMENSION_NUMBER, 1 } } };
-  static SvgDashArray da10 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_DIMENSION_NUMBER, 1 }, { SVG_DIMENSION_NUMBER, 0 } } };
+  static SvgDashArray da01 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_UNIT_NUMBER, 0 }, { SVG_UNIT_NUMBER, 1 } } };
+  static SvgDashArray da10 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_UNIT_NUMBER, 1 }, { SVG_UNIT_NUMBER, 0 } } };
 
   if (n == 2 && values[0] == 0 && values[1] == 1)
     {
@@ -5979,7 +6191,7 @@ svg_dash_array_new (double       *values,
       a->kind = DASH_ARRAY_DASHES;
       for (unsigned int i = 0; i < n; i++)
         {
-          a->dashes[i].dim = SVG_DIMENSION_NUMBER;
+          a->dashes[i].unit = SVG_UNIT_NUMBER;
           a->dashes[i].value = values[i];
         }
 
@@ -6009,7 +6221,7 @@ svg_dash_array_parse (const char *value)
       for (unsigned int i = 0; strv[i]; i++)
         {
           if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
-                              &dashes->dashes[i].value, &dashes->dashes[i].dim))
+                              &dashes->dashes[i].value, &dashes->dashes[i].unit))
 
             {
               svg_value_unref ((SvgValue *) dashes);
@@ -6040,10 +6252,7 @@ svg_dash_array_print (const SvgValue *value,
           if (i > 0)
             g_string_append_c (s, ' ');
           string_append_double (s, "", dashes->dashes[i].value);
-          if (dashes->dashes[i].dim == SVG_DIMENSION_PERCENTAGE)
-            g_string_append (s, "%");
-          else if (dashes->dashes[i].dim == SVG_DIMENSION_LENGTH)
-            g_string_append (s, "px");
+          g_string_append (s, unit_names[dashes->dashes[i].unit]);
         }
     }
 }
@@ -6071,13 +6280,13 @@ svg_dash_array_interpolate (const SvgValue *value0,
 
   for (unsigned int i = 0; i < n_dashes; i++)
     {
-      if (a0->dashes[i % a0->n_dashes].dim != a1->dashes[i %a1->n_dashes].dim)
+      if (a0->dashes[i % a0->n_dashes].unit != a1->dashes[i %a1->n_dashes].unit)
         {
           g_clear_pointer ((SvgValue **)&a, svg_value_unref);
           break;
         }
 
-      a->dashes[i].dim = a0->dashes[i % a0->n_dashes].dim;
+      a->dashes[i].unit = a0->dashes[i % a0->n_dashes].unit;
       a->dashes[i].value = lerp (t, a0->dashes[i % a0->n_dashes].value,
                                     a1->dashes[i % a1->n_dashes].value);
     }
@@ -6101,8 +6310,10 @@ svg_dash_array_accumulate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_dash_array_resolve (const SvgValue        *value,
-                        const graphene_rect_t *viewport)
+svg_dash_array_resolve (const SvgValue *value,
+                        ShapeAttr       attr,
+                        Shape          *shape,
+                        ComputeContext *context)
 {
   SvgDashArray *orig = (SvgDashArray *) value;
   SvgDashArray *a;
@@ -6116,11 +6327,11 @@ svg_dash_array_resolve (const SvgValue        *value,
   a = svg_dash_array_alloc (orig->n_dashes);
   a->kind = orig->kind;
 
-  size = normalized_diagonal (viewport);
+  size = normalized_diagonal (context->viewport);
   for (unsigned int i = 0; i < orig->n_dashes; i++)
     {
-      a->dashes[i].dim = SVG_DIMENSION_NUMBER;
-      if (orig->dashes[i].dim == SVG_DIMENSION_PERCENTAGE)
+      a->dashes[i].unit = SVG_UNIT_NUMBER;
+      if (orig->dashes[i].unit == SVG_UNIT_PERCENTAGE)
         a->dashes[i].value = orig->dashes[i].value / 100 * size;
       else
         a->dashes[i].value = orig->dashes[i].value;
@@ -6194,7 +6405,9 @@ static const SvgValueClass SVG_PATH_CLASS = {
   svg_path_equal,
   svg_path_interpolate,
   svg_path_accumulate,
-  svg_path_print
+  svg_path_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -6368,7 +6581,9 @@ static const SvgValueClass SVG_CLIP_CLASS = {
   svg_clip_equal,
   svg_clip_interpolate,
   svg_clip_accumulate,
-  svg_clip_print
+  svg_clip_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 SvgValue *
@@ -6607,7 +6822,9 @@ static const SvgValueClass SVG_MASK_CLASS = {
   svg_mask_equal,
   svg_mask_interpolate,
   svg_mask_accumulate,
-  svg_mask_print
+  svg_mask_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -6747,6 +6964,8 @@ static const SvgValueClass SVG_VIEW_BOX_CLASS = {
   svg_view_box_interpolate,
   svg_view_box_accumulate,
   svg_view_box_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -6881,6 +7100,8 @@ static const SvgValueClass SVG_CONTENT_FIT_CLASS = {
   svg_content_fit_interpolate,
   svg_content_fit_accumulate,
   svg_content_fit_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -7088,6 +7309,8 @@ static const SvgValueClass SVG_ORIENT_CLASS = {
   svg_orient_interpolate,
   svg_orient_accumulate,
   svg_orient_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -7126,9 +7349,9 @@ svg_orient_parse (const char *value)
   else
     {
       double f;
-      SvgDimension dim;
+      SvgUnit unit;
 
-      if (!parse_numeric (value, -DBL_MAX, DBL_MAX, NUMBER, &f, &dim))
+      if (!parse_numeric (value, -DBL_MAX, DBL_MAX, NUMBER, &f, &unit))
         return NULL;
 
       return svg_orient_new_angle (f);
@@ -7203,6 +7426,8 @@ static const SvgValueClass SVG_LANGUAGE_CLASS = {
   svg_language_interpolate,
   svg_language_accumulate,
   svg_language_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -7296,6 +7521,11 @@ svg_text_decoration_get (const SvgValue *value)
   return d->value;
 }
 
+static SvgValue * svg_text_decoration_resolve (const SvgValue *value,
+                                               ShapeAttr       attr,
+                                               Shape          *shape,
+                                               ComputeContext *context);
+
 static const SvgValueClass SVG_TEXT_DECORATION_CLASS = {
   "SvgTextDecoration",
   svg_text_decoration_free,
@@ -7303,6 +7533,8 @@ static const SvgValueClass SVG_TEXT_DECORATION_CLASS = {
   svg_text_decoration_interpolate,
   svg_text_decoration_accumulate,
   svg_text_decoration_print,
+  svg_value_default_distance,
+  svg_text_decoration_resolve,
 };
 
 static SvgValue *
@@ -7326,19 +7558,25 @@ svg_text_decoration_parse (const char *text)
   return svg_text_decoration_new (val);
 }
 
-
 static SvgValue *
-svg_text_decoration_resolve (const SvgValue *value, const SvgValue *parent)
+svg_text_decoration_resolve (const SvgValue *value,
+                             ShapeAttr       attr,
+                             Shape          *shape,
+                             ComputeContext *context)
 {
   TextDecoration ret;
-  if (!parent)
+
+  if (!context->parent)
     return svg_value_ref ((SvgValue *)value);
 
-  ret = svg_text_decoration_get (parent);
+  ret = svg_text_decoration_get (context->parent->current[attr]);
+  if (ret == TEXT_DECORATION_NONE)
+    return svg_value_ref ((SvgValue *)value);
+
   ret |= svg_text_decoration_get (value);
+
   return svg_text_decoration_new (ret);
 }
-
 /* }}} */
 /* {{{ References */
 
@@ -7445,7 +7683,9 @@ static const SvgValueClass SVG_HREF_CLASS = {
   svg_href_equal,
   svg_href_interpolate,
   svg_href_accumulate,
-  svg_href_print
+  svg_href_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
 };
 
 static SvgValue *
@@ -10046,14 +10286,14 @@ shape_get_path (Shape                 *shape,
           SvgNumbers *numbers = (SvgNumbers *) values[SHAPE_ATTR_POINTS];
           if (numbers->n_values > 0)
             {
-              g_assert (numbers->values[0].dim != SVG_DIMENSION_PERCENTAGE);
-              g_assert (numbers->values[1].dim != SVG_DIMENSION_PERCENTAGE);
+              g_assert (numbers->values[0].unit != SVG_UNIT_PERCENTAGE);
+              g_assert (numbers->values[1].unit != SVG_UNIT_PERCENTAGE);
               gsk_path_builder_move_to (builder,
                                         numbers->values[0].value, numbers->values[1].value);
               for (unsigned int i = 2; i < numbers->n_values; i += 2)
                 {
-                  g_assert (numbers->values[i].dim != SVG_DIMENSION_PERCENTAGE);
-                  g_assert (numbers->values[i+1].dim != SVG_DIMENSION_PERCENTAGE);
+                  g_assert (numbers->values[i].unit != SVG_UNIT_PERCENTAGE);
+                  g_assert (numbers->values[i+1].unit != SVG_UNIT_PERCENTAGE);
                   gsk_path_builder_line_to (builder,
                                             numbers->values[i].value, numbers->values[i + 1].value);
                 }
@@ -12235,15 +12475,6 @@ get_transform_data_for_motion (GskPathMeasure   *measure,
     }
 }
 
-typedef struct {
-  GtkSvg *svg;
-  const graphene_rect_t *viewport;
-  Shape *parent; /* Can be different from the actual parent, for <use> */
-  int64_t current_time;
-  const GdkRGBA *colors;
-  size_t n_colors;
-} ComputeContext;
-
 static SvgValue *
 resolve_value (Shape           *shape,
                ComputeContext  *context,
@@ -12254,9 +12485,15 @@ resolve_value (Shape           *shape,
   if (svg_value_is_initial (value))
     {
       if (idx > 0 && shape->type == SHAPE_FILTER)
-        return svg_value_ref (filter_attr_get_initial_value (shape, g_ptr_array_index (shape->filters, idx - 1), attr));
+        return svg_value_resolve (filter_attr_get_initial_value (shape, g_ptr_array_index (shape->filters, idx - 1), attr),
+                                  attr,
+                                  shape,
+                                  context);
       else
-        return svg_value_ref (shape_attr_get_initial_value (attr, shape));
+        return svg_value_resolve (shape_attr_get_initial_value (attr, shape),
+                                  attr,
+                                  shape,
+                                  context);
     }
   else if (svg_value_is_inherit (value))
     {
@@ -12265,7 +12502,10 @@ resolve_value (Shape           *shape,
       else if (context->parent && shape_has_attr (context->parent->type, attr))
         return svg_value_ref (context->parent->current[attr]);
       else
-        return svg_value_ref (shape_attr_get_initial_value (attr, shape));
+        return svg_value_resolve (shape_attr_get_initial_value (attr, shape),
+                                  attr,
+                                  shape,
+                                  context);
     }
   else if (svg_value_is_current (value))
     {
@@ -12286,28 +12526,9 @@ resolve_value (Shape           *shape,
       else
         return svg_value_ref (shape->current[attr]);
     }
-  else if (attr == SHAPE_ATTR_STROKE || attr == SHAPE_ATTR_FILL)
-    {
-      return svg_paint_resolve (value, context->colors, context->n_colors, (context->svg->features & GTK_SVG_EXTENSIONS) != 0);
-    }
-  else if (attr == SHAPE_ATTR_STROKE_DASHARRAY)
-    {
-      return svg_dash_array_resolve (value, context->viewport);
-    }
-  else if (attr == SHAPE_ATTR_POINTS)
-    {
-      return svg_numbers_resolve (value, context->viewport);
-    }
-  else if (attr == SHAPE_ATTR_TEXT_DECORATION)
-    {
-      if (context->parent)
-        return svg_text_decoration_resolve (value, context->parent->current[attr]);
-      else
-        return svg_value_ref (value);
-    }
   else
     {
-      return svg_value_ref (value);
+      return svg_value_resolve (value, attr, shape, context);
     }
 }
 
@@ -14208,7 +14429,7 @@ parse_value_animation_attrs (Animation            *a,
 
       by = g_ptr_array_index (values, 0);
       if (by->class == &SVG_NUMBER_CLASS)
-        from = svg_number_new_full (((SvgNumber *)by)->dim, 0);
+        from = svg_number_new_full (((SvgNumber *)by)->unit, 0);
       else if (by->class == &SVG_TRANSFORM_CLASS)
         from = svg_transform_new_none ();
       else if (by->class == &SVG_PAINT_CLASS &&
@@ -16526,7 +16747,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     {
       SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_WIDTH];
 
-      if (v->dim != SVG_DIMENSION_PERCENTAGE)
+      if (v->unit != SVG_UNIT_PERCENTAGE)
         self->width = v->value;
     }
 
@@ -16534,7 +16755,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     {
       SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_HEIGHT];
 
-      if (v->dim != SVG_DIMENSION_PERCENTAGE)
+      if (v->unit != SVG_UNIT_PERCENTAGE)
         self->height = v->value;
     }
 
@@ -19430,7 +19651,7 @@ shape_create_stroke (Shape        *shape,
         {
           for (unsigned int i = 0; i < len; i++)
             {
-              g_assert (dashes[i].dim != SVG_DIMENSION_PERCENTAGE);
+              g_assert (dashes[i].unit != SVG_UNIT_PERCENTAGE);
               vals[i] = dashes[i].value / path_length * length;
             }
 
@@ -19440,7 +19661,7 @@ shape_create_stroke (Shape        *shape,
         {
           for (unsigned int i = 0; i < len; i++)
             {
-              g_assert (dashes[i].dim != SVG_DIMENSION_PERCENTAGE);
+              g_assert (dashes[i].unit != SVG_UNIT_PERCENTAGE);
               vals[i] = dashes[i].value;
             }
         }
@@ -19702,7 +19923,7 @@ paint_marker (Shape              *shape,
   height = svg_number_get (marker->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
   SvgNumber *n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_X];
-  if (n->dim == SVG_DIMENSION_PERCENTAGE)
+  if (n->unit == SVG_UNIT_PERCENTAGE)
     x = n->value / 100 * width;
   else if (!vb->unset)
     x = n->value / vb->view_box.size.width * width;
@@ -19710,7 +19931,7 @@ paint_marker (Shape              *shape,
     x = n->value;
 
   n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_Y];
-  if (n->dim == SVG_DIMENSION_PERCENTAGE)
+  if (n->unit == SVG_UNIT_PERCENTAGE)
     y = n->value / 100 * height;
   else if (!vb->unset)
     y = n->value / vb->view_box.size.height * height;

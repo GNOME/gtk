@@ -373,10 +373,14 @@ struct _Shape
 
 typedef enum
 {
-  SVG_DIMENSION_NUMBER,
-  SVG_DIMENSION_PERCENTAGE,
-  SVG_DIMENSION_LENGTH,
-} SvgDimension;
+  SVG_UNIT_NUMBER,
+  SVG_UNIT_PERCENTAGE,
+  SVG_UNIT_PX,
+  SVG_UNIT_PT,
+  SVG_UNIT_IN,
+  SVG_UNIT_CM,
+  SVG_UNIT_MM
+} SvgUnit;
 
 typedef enum
 {
