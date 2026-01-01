@@ -1,5 +1,6 @@
 #ifdef GSK_PREAMBLE
 textures = 0;
+instances = 48;
 var_name = "gsk_gpu_box_shadow";
 struct_name = "GskGpuBoxShadow";
 

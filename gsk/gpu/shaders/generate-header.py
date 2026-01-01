@@ -52,6 +52,7 @@ print(f'''/* This file is auto-generated; any change will not be preserved */
 #pragma once
 
 #define {var_name}_n_textures {n_textures}
+#define {var_name}_n_instances 6
 
 typedef struct _{struct_name} {struct_name};
 

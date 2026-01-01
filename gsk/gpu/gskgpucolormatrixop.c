@@ -39,6 +39,7 @@ static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
   },
   "gskgpucolormatrix",
   gsk_gpu_color_matrix_n_textures,
+  gsk_gpu_color_matrix_n_instances,
   sizeof (GskGpuColorMatrixInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_color_matrix_info,

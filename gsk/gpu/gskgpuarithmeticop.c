@@ -24,7 +24,7 @@ gsk_gpu_arithmetic_op_print_instance (GskGpuShaderOp *shader,
 //  GskGpuArithmeticInstance *instance = (GskGpuArithmeticInstance *) instance_;
 }
 
-static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
+static const GskGpuShaderOpClass GSK_GPU_ARITHMETIC_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuArithmeticOp),
     GSK_GPU_STAGE_SHADER,
@@ -37,6 +37,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
   },
   "gskgpuarithmetic",
   gsk_gpu_arithmetic_n_textures,
+  gsk_gpu_arithmetic_n_instances,
   sizeof (GskGpuArithmeticInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_arithmetic_info,
@@ -59,7 +60,7 @@ gsk_gpu_arithmetic_op (GskGpuFrame             *frame,
   GskGpuArithmeticInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
-                           &GSK_GPU_BLEND_MODE_OP_CLASS,
+                           &GSK_GPU_ARITHMETIC_OP_CLASS,
                            gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            0,
                            clip,

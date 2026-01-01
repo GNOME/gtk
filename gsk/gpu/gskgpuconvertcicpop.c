@@ -50,6 +50,7 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_CICP_OP_CLASS = {
   },
   "gskgpuconvertcicp",
   gsk_gpu_convert_cicp_n_textures,
+  gsk_gpu_convert_cicp_n_instances,
   sizeof (GskGpuConvertCicpInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_convert_cicp_info,

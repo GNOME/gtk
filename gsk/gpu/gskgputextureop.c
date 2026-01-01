@@ -40,6 +40,7 @@ static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
   },
   "gskgputexture",
   gsk_gpu_texture_n_textures,
+  gsk_gpu_texture_n_instances,
   sizeof (GskGpuTextureInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_texture_info,

@@ -41,6 +41,7 @@ static const GskGpuShaderOpClass GSK_GPU_COMPOSITE_OP_CLASS = {
   },
   "gskgpucomposite",
   gsk_gpu_composite_n_textures,
+  gsk_gpu_composite_n_instances,
   sizeof (GskGpuCompositeInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_composite_info,

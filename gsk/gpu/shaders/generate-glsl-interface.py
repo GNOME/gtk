@@ -107,6 +107,7 @@ class File:
     var_name: str
     struct_name: str
     n_textures: int
+    n_instances: int
     variables: list[Variable]
 
 types = [
@@ -188,6 +189,7 @@ def read_file (filename):
     variables = []
     on = False
     n_textures = 0
+    n_instances = 6
     name = ''
     var_name = ''
     struct_name = ''
@@ -212,6 +214,8 @@ def read_file (filename):
             n_textures = int (match.group(1))
             if n_textures < 0 or n_textures > 2:
                 raise Excepthin (f'''{filename}:{pos}: Number of textures must be <= 2''')
+        elif match := re.search (r'^instances\s*=\s*(\d+)\s*;$', line):
+            n_instances = int (match.group(1))
         elif match := re.search (r'^name\s*=\s*"(\w+)"\s*;$', line):
             name = match.group(1)
         elif match := re.search (r'^var_name\s*=\s*"(\w+)"\s*;$', line):
@@ -233,6 +237,7 @@ def read_file (filename):
                  var_name = var_name,
                  struct_name = struct_name,
                  n_textures = n_textures,
+                 n_instances = n_instances,
                  variables = variables)
 
 
@@ -385,6 +390,7 @@ def print_header_file (file, n_attributes, attributes):
 #pragma once
 
 #define {file.var_name}_n_textures {file.n_textures}
+#define {file.var_name}_n_instances {file.n_instances}
 ''')
     print_c_struct (file, n_attributes, attributes)
     print_c_struct_initializer (file, n_attributes, attributes)

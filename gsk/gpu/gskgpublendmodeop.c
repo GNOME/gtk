@@ -43,6 +43,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
   },
   "gskgpublendmode",
   gsk_gpu_blend_mode_n_textures,
+  gsk_gpu_blend_mode_n_instances,
   sizeof (GskGpuBlendModeInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_blend_mode_info,

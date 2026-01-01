@@ -42,6 +42,7 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_OP_CLASS = {
   },
   "gskgpuconvert",
   gsk_gpu_convert_n_textures,
+  gsk_gpu_convert_n_instances,
   sizeof (GskGpuConvertInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_convert_info,
