@@ -4,6 +4,9 @@
  * more complex than a rounded rectangle.
  *
  * It also demonstrates printing to a stream with GtkPrintDialog.
+ *
+ * Finally, it shows how to use GtkPopoverBin to add a context menu
+ * to a widget that does not have one.
  */
 
 #include <glib/gi18n.h>
@@ -234,10 +237,8 @@ print_ready (GObject      *source,
 }
 
 static void
-print (GtkButton *button,
-       gpointer   data)
+print (GtkWidget *picture)
 {
-  GtkWidget *picture = data;
   GtkPrintDialog *dialog;
 
   dialog = gtk_print_dialog_new ();
@@ -252,6 +253,46 @@ print (GtkButton *button,
   g_object_unref (dialog);
 }
 
+static GMenuModel *
+get_menu (void)
+{
+  GMenu *menu;
+  GMenuItem *item;
+
+  menu = g_menu_new ();
+  item = g_menu_item_new ("Print", "widget.print");
+  g_menu_append_item (menu, item);
+  item = g_menu_item_new ("About", "app.about");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  return G_MENU_MODEL (menu);
+}
+
+static void
+activate_print (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  print (GTK_WIDGET (user_data));
+}
+
+static GActionGroup *
+get_actions (GtkWidget *widget)
+{
+  GSimpleActionGroup *actions;
+  GActionEntry entries[] = {
+    { "print", activate_print, NULL, NULL, NULL, },
+  };
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   widget);
+
+  return G_ACTION_GROUP (actions);
+}
+
 GtkWidget *
 do_path_fill (GtkWidget *do_widget)
 {
@@ -262,11 +303,17 @@ do_path_fill (GtkWidget *do_widget)
       GtkWidget *header, *button, *label;
       GtkWidget *picture;
       GdkPaintable *paintable;
+      GtkWidget *bin;
+      GMenuModel *menu;
+      GActionGroup *actions;
 
       window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       gtk_window_set_default_size (GTK_WINDOW (window), 100, 100);
       gtk_window_set_title (GTK_WINDOW (window), "Fill and Stroke");
+
+      gtk_window_set_application (GTK_WINDOW (window), GTK_APPLICATION (g_application_get_default ()));
+
       header = gtk_header_bar_new ();
       button = gtk_button_new_from_icon_name ("printer-symbolic");
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
@@ -282,9 +329,23 @@ do_path_fill (GtkWidget *do_widget)
       gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
       g_object_unref (paintable);
 
-      g_signal_connect (button, "clicked", G_CALLBACK (print), picture);
+      bin = gtk_popover_bin_new ();
 
-      gtk_window_set_child (GTK_WINDOW (window), picture);
+      actions = get_actions (picture);
+      gtk_widget_insert_action_group (bin, "widget", actions);
+      g_object_unref (actions);
+
+      gtk_popover_bin_set_child (GTK_POPOVER_BIN (bin), picture);
+
+      menu = get_menu ();
+      gtk_popover_bin_set_menu_model (GTK_POPOVER_BIN (bin), menu);
+      g_object_unref (menu);
+
+      gtk_popover_bin_set_handle_input (GTK_POPOVER_BIN (bin), TRUE);
+
+      g_signal_connect_swapped (button, "clicked", G_CALLBACK (print), picture);
+
+      gtk_window_set_child (GTK_WINDOW (window), bin);
     }
 
   if (!gtk_widget_get_visible (window))
