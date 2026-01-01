@@ -10234,13 +10234,14 @@ shape_has_attr (ShapeType type,
     case SHAPE_ATTR_FONT_VARIANT:
     case SHAPE_ATTR_FONT_WEIGHT:
     case SHAPE_ATTR_FONT_STRETCH:
-    case SHAPE_ATTR_FONT_SIZE:
       return type == SHAPE_TEXT || type == SHAPE_TSPAN ||
              type == SHAPE_GROUP || type == SHAPE_USE ||
              type == SHAPE_MARKER || type == SHAPE_CLIP_PATH ||
              type == SHAPE_MASK || type == SHAPE_DEFS ||
              type == SHAPE_SVG || type == SHAPE_PATTERN ||
              type == SHAPE_SYMBOL;
+    case SHAPE_ATTR_FONT_SIZE:
+      return TRUE;
     default:
       return type != SHAPE_LINEAR_GRADIENT &&
              type != SHAPE_RADIAL_GRADIENT &&
