@@ -379,7 +379,9 @@ typedef enum
   SVG_UNIT_PT,
   SVG_UNIT_IN,
   SVG_UNIT_CM,
-  SVG_UNIT_MM
+  SVG_UNIT_MM,
+  SVG_UNIT_EM,
+  SVG_UNIT_EX,
 } SvgUnit;
 
 typedef enum

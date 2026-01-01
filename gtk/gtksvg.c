@@ -783,6 +783,8 @@ static const char * unit_names[] = {
   [SVG_UNIT_IN] = "in",
   [SVG_UNIT_CM] = "cm",
   [SVG_UNIT_MM] = "mm",
+  [SVG_UNIT_EM] = "em",
+  [SVG_UNIT_EX] = "ex",
 };
 
 static gboolean
@@ -2347,6 +2349,23 @@ svg_number_resolve (const SvgValue *value,
       return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
     case SVG_UNIT_MM:
       return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+    case SVG_UNIT_EM:
+    case SVG_UNIT_EX:
+      {
+        SvgNumber *font_size;
+
+        if (attr != SHAPE_ATTR_FONT_SIZE)
+          font_size = (SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE];
+        else if (context->parent)
+          font_size = (SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE];
+        else
+          font_size = (SvgNumber *) shape_attr_get_initial_value (SHAPE_ATTR_FONT_SIZE, shape);
+
+        if (n->unit == SVG_UNIT_EM)
+          return svg_number_new_full (SVG_UNIT_PX, n->value * font_size->value);
+        else
+          return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * font_size->value);
+      }
     default:
       g_assert_not_reached ();
     }
