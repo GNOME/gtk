@@ -14,6 +14,11 @@
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkgestureclick.h"
+#include "gtkgesturelongpress.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcuttrigger.h"
 
 /**
  * GtkPopoverBin:
@@ -32,6 +37,11 @@ struct _GtkPopoverBin
   GtkWidget *popover;
 
   GMenuModel *menu_model;
+
+  gboolean handle_input;
+  GtkEventController *click_gesture;
+  GtkEventController *long_press_gesture;
+  GtkEventController *shortcut_controller;
 };
 
 enum
@@ -39,7 +49,7 @@ enum
   PROP_CHILD = 1,
   PROP_POPOVER,
   PROP_MENU_MODEL,
-
+  PROP_HANDLE_INPUT,
   N_PROPS
 };
 
@@ -105,6 +115,16 @@ on_popover_unmap (GtkPopoverBin *self)
 }
 
 static void
+popup_action (GtkWidget  *widget,
+              const char *action_name,
+              GVariant   *parameters)
+{
+  GtkPopoverBin *self = GTK_POPOVER_BIN (widget);
+
+  gtk_popover_bin_popup (self);
+}
+
+static void
 gtk_popover_bin_dispose (GObject *gobject)
 {
   GtkPopoverBin *self = GTK_POPOVER_BIN (gobject);
@@ -152,6 +172,10 @@ gtk_popover_bin_set_property (GObject *gobject,
         gtk_popover_bin_set_child (self, g_value_get_object (value));
         break;
 
+      case PROP_HANDLE_INPUT:
+        gtk_popover_bin_set_handle_input (self, g_value_get_boolean (value));
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -177,6 +201,10 @@ gtk_popover_bin_get_property (GObject *gobject,
 
       case PROP_CHILD:
         g_value_set_object (value, self->child);
+        break;
+
+      case PROP_HANDLE_INPUT:
+        g_value_set_boolean (value, self->handle_input);
         break;
 
       default:
@@ -258,7 +286,22 @@ gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
                            GTK_TYPE_WIDGET,
                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPopoverBin:handle-input:
+   *
+   * Whether the popover bin will handle input
+   * to trigger the popup.
+   *
+   * Since: 4.22
+   */
+  obj_props[PROP_HANDLE_INPUT] =
+      g_param_spec_boolean ("handle-input", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
+
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, popup_action);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 
@@ -488,6 +531,75 @@ gtk_popover_bin_get_popover (GtkPopoverBin *self)
   g_return_val_if_fail (GTK_IS_POPOVER_BIN (self), NULL);
 
   return self->popover;
+}
+
+/**
+ * gtk_popover_bin_set_handle_input:
+ * @self: a popover bin
+ * @handle_input: whether to handle input
+ *
+ * Enables or disables input handling.
+ *
+ * If enabled, the popover bin will pop up the
+ * popover on right-click or long press, as expected
+ * for a context menu.
+ *
+ * Since: 4.22
+ */
+void
+gtk_popover_bin_set_handle_input (GtkPopoverBin *self,
+                                  gboolean       handle_input)
+{
+  g_return_if_fail (GTK_IS_POPOVER_BIN (self));
+
+  if (self->handle_input == handle_input)
+    return;
+
+  self->handle_input = handle_input;
+
+  if (handle_input)
+    {
+      GtkShortcutTrigger *trigger;
+      GtkShortcutAction *action;
+
+      self->click_gesture = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->click_gesture),
+                                     GDK_BUTTON_SECONDARY);
+      g_signal_connect_swapped (self->click_gesture, "pressed",
+                                G_CALLBACK (gtk_popover_bin_popup), self);
+      gtk_widget_add_controller (GTK_WIDGET (self), self->click_gesture);
+
+      self->long_press_gesture = GTK_EVENT_CONTROLLER (gtk_gesture_long_press_new ());
+      g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (gtk_popover_bin_popup), self);
+      gtk_widget_add_controller (GTK_WIDGET (self), self->long_press_gesture);
+
+      self->shortcut_controller = GTK_EVENT_CONTROLLER (gtk_shortcut_controller_new ());
+      trigger = gtk_keyval_trigger_new (GDK_KEY_Menu, GDK_NO_MODIFIER_MASK);
+      action = gtk_named_action_new ("menu.popup");
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (self->shortcut_controller),
+                                            gtk_shortcut_new (trigger, action));
+
+      gtk_widget_add_controller (GTK_WIDGET (self), self->shortcut_controller);
+    }
+  else
+    {
+      gtk_widget_remove_controller (GTK_WIDGET (self), self->click_gesture);
+      self->click_gesture = NULL;
+      gtk_widget_remove_controller (GTK_WIDGET (self), self->long_press_gesture);
+      self->long_press_gesture = NULL;
+      gtk_widget_remove_controller (GTK_WIDGET (self), self->shortcut_controller);
+      self->shortcut_controller = NULL;
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_HANDLE_INPUT]);
+}
+
+gboolean
+gtk_popover_bin_get_handle_input (GtkPopoverBin *self)
+{
+  g_return_val_if_fail (GTK_IS_POPOVER_BIN (self), FALSE);
+
+  return self->handle_input;
 }
 
 /**

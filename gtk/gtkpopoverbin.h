@@ -44,4 +44,10 @@ void            gtk_popover_bin_popup           (GtkPopoverBin *self);
 GDK_AVAILABLE_IN_4_22
 void            gtk_popover_bin_popdown         (GtkPopoverBin *self);
 
+GDK_AVAILABLE_IN_4_22
+void            gtk_popover_bin_set_handle_input (GtkPopoverBin *self,
+                                                  gboolean       handle_input);
+GDK_AVAILABLE_IN_4_22
+gboolean        gtk_popover_bin_get_handle_input (GtkPopoverBin *self);
+
 G_END_DECLS
