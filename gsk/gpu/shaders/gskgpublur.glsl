@@ -5,13 +5,13 @@ graphene_rect_t rect;
 GdkColor blur_color;
 graphene_rect_t tex_rect;
 graphene_vec2_t blur_direction;
+
+variation: gboolean colorize;
 #endif
 
 #include "gskgpublurinstance.glsl"
 
 /* blur radius (aka in_blur_direction) 0 is NOT supported and MUST be caught before */
-
-#define VARIATION_COLORIZE ((GSK_VARIATION & 1u) == 1u)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;

@@ -10,13 +10,13 @@ GdkColor color;
 graphene_point_t shadow_offset;
 float shadow_spread;
 float blur_radius;
+
+variation: gboolean inset;
 #endif
 
 #include "gskgpuboxshadowinstance.glsl"
 
 /* blur radius (aka in_blur_direction) 0 is NOT supported and MUST be caught before */
-
-#define VARIATION_INSET ((GSK_VARIATION & 1u) == 1u)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) RoundedRect _shadow_outline;

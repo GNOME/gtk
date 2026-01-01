@@ -5,11 +5,11 @@ graphene_rect_t rect;
 graphene_rect_t source_rect;
 graphene_rect_t mask_rect;
 float opacity;
+
+variation: GskMaskMode mask_mode;
 #endif
 
 #include "gskgpumaskinstance.glsl"
-
-#define VARIATION_MASK_MODE GSK_VARIATION
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _source_rect;

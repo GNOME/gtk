@@ -10,14 +10,12 @@ guint32 color_primaries;
 guint32 transfer_function;
 guint32 matrix_coefficients;
 guint32 range;
+
+variation: gboolean opacity;
+variation: gboolean reverse;
 #endif
 
 #include "gskgpuconvertcicpinstance.glsl"
-
-#define VARIATION_OPACITY              (1u << 0)
-#define VARIATION_REVERSE              (1u << 1)
-
-#define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -219,7 +217,7 @@ run (out vec2 pos)
   _transfer_function = in_transfer_function;
   _range = in_range;
 
-  if (HAS_VARIATION (VARIATION_REVERSE))
+  if (VARIATION_REVERSE)
     {
       if (OUTPUT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB ||
           OUTPUT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB_LINEAR)
@@ -479,7 +477,7 @@ run (out vec4 color,
 {
   vec4 pixel = gsk_texture0 (_tex_coord);
 
-  if (HAS_VARIATION (VARIATION_REVERSE))
+  if (VARIATION_REVERSE)
     pixel = convert_color_to_cicp (pixel,
                                    ALT_PREMULTIPLIED,
                                    OUTPUT_COLOR_SPACE, OUTPUT_PREMULTIPLIED);
@@ -489,7 +487,7 @@ run (out vec4 color,
                                      OUTPUT_COLOR_SPACE, OUTPUT_PREMULTIPLIED);
 
   float alpha = rect_coverage (_rect, _pos);
-  if (HAS_VARIATION (VARIATION_OPACITY))
+  if (VARIATION_OPACITY)
     alpha *= _opacity;
 
   color = output_color_alpha (pixel, alpha);

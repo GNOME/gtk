@@ -6,18 +6,14 @@ struct_name = "GskGpuConvertBuiltin";
 graphene_rect_t rect;
 graphene_rect_t tex_rect;
 float opacity;
+
+variation: GdkBuiltinColorStateId color_space;
+variation: gboolean opacity;
+variation: gboolean premultiply;
+variation: gboolean reverse;
 #endif
 
 #include "gskgpuconvertbuiltininstance.glsl"
-
-#define VARIATION_COLOR_SPACE_MASK     (0xFFu)
-#define VARIATION_OPACITY              (1u << 8)
-#define VARIATION_STRAIGHT_ALPHA       (1u << 9)
-#define VARIATION_PREMULTIPLY          (1u << 10)
-#define VARIATION_REVERSE              (1u << 11)
-
-#define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
-#define BUILTIN_COLOR_SPACE (GSK_VARIATION & VARIATION_COLOR_SPACE_MASK)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -143,7 +139,7 @@ convert_color_from_builtin (vec4 color)
 {
   color = color_unpremultiply (color);
 
-  switch (BUILTIN_COLOR_SPACE)
+  switch (VARIATION_COLOR_SPACE)
     {
     case GDK_BUILTIN_COLOR_STATE_ID_OKLAB:
       return vec4 (oklab_to_srgb_linear (color.rgb), color.a);
@@ -159,7 +155,7 @@ convert_color_from_builtin (vec4 color)
 vec4
 convert_color_to_builtin (vec4 color)
 {
-  switch (BUILTIN_COLOR_SPACE)
+  switch (VARIATION_COLOR_SPACE)
     {
     case GDK_BUILTIN_COLOR_STATE_ID_OKLAB:
       return vec4 (srgb_linear_to_oklab (color.rgb), color.a);
@@ -178,7 +174,7 @@ run (out vec4 color,
 {
   vec4 pixel = gsk_texture0 (_tex_coord);
 
-  if (HAS_VARIATION (VARIATION_REVERSE))
+  if (VARIATION_REVERSE)
     {
       pixel = alt_color_from_output (pixel);
       pixel = convert_color_to_builtin (pixel);
@@ -190,12 +186,12 @@ run (out vec4 color,
     }
 
   float alpha = rect_coverage (_rect, _pos);
-  if (HAS_VARIATION (VARIATION_OPACITY))
+  if (VARIATION_OPACITY)
     alpha *= _opacity;
 
   color = output_color_alpha (pixel, alpha);
 
-  if (HAS_VARIATION (VARIATION_PREMULTIPLY))
+  if (VARIATION_PREMULTIPLY)
     color_premultiply (color);
 
   position = _pos;
