@@ -8497,6 +8497,54 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_mask_parse,
   },
+  { .id = SHAPE_ATTR_FONT_FAMILY,
+    .name = "font-family",
+    .inherited = 1,
+    .discrete = 1,
+    .has_css = 1,
+    .only_css = 0,
+    .parse_value = svg_string_new,
+  },
+  { .id = SHAPE_ATTR_FONT_STYLE,
+    .name = "font-style",
+    .inherited = 1,
+    .discrete = 0,
+    .has_css = 1,
+    .only_css = 0,
+    .parse_value = svg_font_style_parse,
+  },
+  { .id = SHAPE_ATTR_FONT_VARIANT,
+    .name = "font-variant",
+    .inherited = 1,
+    .discrete = 1,
+    .has_css = 1,
+    .only_css = 0,
+    .parse_value = svg_font_variant_parse,
+  },
+  { .id = SHAPE_ATTR_FONT_WEIGHT,
+    .name = "font-weight",
+    .inherited = 1,
+    .discrete = 0,
+    .has_css = 1,
+    .only_css = 0,
+    .parse_value = parse_font_weight,
+  },
+  { .id = SHAPE_ATTR_FONT_STRETCH,
+    .name = "font-stretch",
+    .inherited = 1,
+    .discrete = 0,
+    .has_css = 1,
+    .only_css = 0,
+    .parse_value = svg_font_stretch_parse,
+  },
+  { .id = SHAPE_ATTR_FONT_SIZE,
+    .name = "font-size",
+    .inherited = 1,
+    .discrete = 0,
+    .has_css = 1,
+    .only_css = 0,
+    .parse_value = parse_length_percentage, // TODO: more units & string sizes
+  },
   { .id = SHAPE_ATTR_FILL,
     .name = "fill",
     .inherited = 1,
@@ -8968,54 +9016,6 @@ static ShapeAttribute shape_attrs[] = {
     .only_css = 0,
     .parse_value = svg_text_decoration_parse,
   },
-  { .id = SHAPE_ATTR_FONT_FAMILY,
-    .name = "font-family",
-    .inherited = 1,
-    .discrete = 1,
-    .has_css = 1,
-    .only_css = 0,
-    .parse_value = svg_string_new,
-  },
-  { .id = SHAPE_ATTR_FONT_STYLE,
-    .name = "font-style",
-    .inherited = 1,
-    .discrete = 0,
-    .has_css = 1,
-    .only_css = 0,
-    .parse_value = svg_font_style_parse,
-  },
-  { .id = SHAPE_ATTR_FONT_VARIANT,
-    .name = "font-variant",
-    .inherited = 1,
-    .discrete = 1,
-    .has_css = 1,
-    .only_css = 0,
-    .parse_value = svg_font_variant_parse,
-  },
-  { .id = SHAPE_ATTR_FONT_WEIGHT,
-    .name = "font-weight",
-    .inherited = 1,
-    .discrete = 0,
-    .has_css = 1,
-    .only_css = 0,
-    .parse_value = parse_font_weight,
-  },
-  { .id = SHAPE_ATTR_FONT_STRETCH,
-    .name = "font-stretch",
-    .inherited = 1,
-    .discrete = 0,
-    .has_css = 1,
-    .only_css = 0,
-    .parse_value = svg_font_stretch_parse,
-  },
-  { .id = SHAPE_ATTR_FONT_SIZE,
-    .name = "font-size",
-    .inherited = 1,
-    .discrete = 0,
-    .has_css = 1,
-    .only_css = 0,
-    .parse_value = parse_length_percentage, // TODO: more units & string sizes
-  },
   { .id = SHAPE_ATTR_STROKE_MINWIDTH,
     .name = "gpa:stroke-minwidth",
     .inherited = 1,
@@ -9352,7 +9352,12 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_CLIP_PATH].initial_value = svg_clip_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
   shape_attrs[SHAPE_ATTR_MASK].initial_value = svg_mask_new_none ();
-  shape_attrs[SHAPE_ATTR_MASK_TYPE].initial_value = svg_mask_type_new (GSK_MASK_MODE_LUMINANCE);
+  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new (NULL);
+  shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_number_new (PANGO_WEIGHT_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (16.);
   shape_attrs[SHAPE_ATTR_FILL].initial_value = svg_paint_new_black ();
   shape_attrs[SHAPE_ATTR_FILL_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FILL_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
@@ -9392,19 +9397,13 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_UNICODE_BIDI].initial_value = svg_unicode_bidi_new (UNICODE_BIDI_NORMAL);
   shape_attrs[SHAPE_ATTR_DIRECTION].initial_value = svg_direction_new (PANGO_DIRECTION_LTR);
   shape_attrs[SHAPE_ATTR_WRITING_MODE].initial_value = svg_writing_mode_new (WRITING_MODE_HORIZONTAL_TB);
-  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new (NULL);
-  shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_number_new (PANGO_WEIGHT_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
-  // rsvg has a default font size of 12, where as firefox has 16
-  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (16.);
   shape_attrs[SHAPE_ATTR_LETTER_SPACING].initial_value = svg_number_new (0.);
   shape_attrs[SHAPE_ATTR_TEXT_DECORATION].initial_value = svg_text_decoration_new (TEXT_DECORATION_NONE);
   shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_numbers_new_none ();
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
   shape_attrs[SHAPE_ATTR_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
   shape_attrs[SHAPE_ATTR_BOUND_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
+  shape_attrs[SHAPE_ATTR_MASK_TYPE].initial_value = svg_mask_type_new (GSK_MASK_MODE_LUMINANCE);
   shape_attrs[SHAPE_ATTR_VIEW_BOX].initial_value = svg_view_box_new_unset ();
   shape_attrs[SHAPE_ATTR_CONTENT_FIT].initial_value = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
   shape_attrs[SHAPE_ATTR_REF_X].initial_value = svg_number_new (0);

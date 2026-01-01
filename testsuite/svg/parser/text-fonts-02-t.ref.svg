@@ -13,68 +13,68 @@
             font-family='Georgia,&apos;Times New Roman&apos;,Times,&apos;MS Mincho&apos;,serif'
             font-size='30'>
       <text
+              font-weight='100'
               x='360'
-              y='50'
-              font-weight='100'>100</text>
+              y='50'>100</text>
       <text
+              font-weight='200'
               x='360'
-              y='85'
-              font-weight='200'>200</text>
+              y='85'>200</text>
       <text
+              font-weight='300'
               x='360'
-              y='120'
-              font-weight='300'>300</text>
+              y='120'>300</text>
       <text
+              font-weight='400'
               x='360'
-              y='155'
-              font-weight='400'>400</text>
+              y='155'>400</text>
       <text
+              font-weight='500'
               x='360'
-              y='190'
-              font-weight='500'>500</text>
+              y='190'>500</text>
       <text
+              font-weight='600'
               fill='rgb(0,128,0)'
               x='360'
-              y='225'
-              font-weight='600'>600</text>
+              y='225'>600</text>
       <text
+              font-weight='700'
               fill='rgb(0,128,0)'
               x='360'
-              y='260'
-              font-weight='700'>700</text>
+              y='260'>700</text>
       <text
+              font-weight='800'
               fill='rgb(0,128,0)'
               x='360'
-              y='295'
-              font-weight='800'>800</text>
+              y='295'>800</text>
       <text
+              font-weight='900'
               fill='rgb(0,128,0)'
               x='360'
-              y='330'
-              font-weight='900'>900</text>
+              y='330'>900</text>
       <text
+              font-weight='700'
               x='60'
-              y='80'
-              font-weight='700'>This is bold</text>
+              y='80'>This is bold</text>
       <text
+              font-weight='400'
               x='60'
-              y='130'
-              font-weight='400'>This is normal</text>
+              y='130'>This is normal</text>
       <g
-              fill='rgb(0,0,255)'
-              font-weight='400'>
+              font-weight='400'
+              fill='rgb(0,0,255)'>
         <text
+                font-weight='800'
                 x='60'
-                y='180'
-                font-weight='800'>Blue is bolder</text>
+                y='180'>Blue is bolder</text>
       </g>
       <g
-              fill='rgb(0,0,255)'
-              font-weight='700'>
+              font-weight='700'
+              fill='rgb(0,0,255)'>
         <text
+                font-weight='300'
                 x='60'
-                y='230'
-                font-weight='300'>Blue is lighter</text>
+                y='230'>Blue is lighter</text>
       </g>
     </g>
   </g>

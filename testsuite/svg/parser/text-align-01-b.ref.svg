@@ -10,9 +10,9 @@
           font-family='SVGFreeSansASCII,sans-serif'
           font-size='18'>
     <text
+            font-size='34'
             x='5'
-            y='40'
-            font-size='34'>Test &apos;text-anchor&apos; (horizontal)</text>
+            y='40'>Test &apos;text-anchor&apos; (horizontal)</text>
     <g
             id='text-anchor'
             font-size='14'>
@@ -26,8 +26,8 @@
                 r='3'>
         </circle>
         <text
-                fill='rgb(255,0,255)'
-                font-size='30'>text-anchor:none</text>
+                font-size='30'
+                fill='rgb(255,0,255)'>text-anchor:none</text>
       </g>
       <g
               transform='translate(230, 180)'>
@@ -39,9 +39,9 @@
                 r='3'>
         </circle>
         <text
+                font-size='30'
                 fill='rgb(255,0,255)'
-                text-anchor='start'
-                font-size='30'>text-anchor:start</text>
+                text-anchor='start'>text-anchor:start</text>
       </g>
       <g
               transform='translate(230, 230)'>
@@ -54,9 +54,9 @@
                 r='3'>
         </circle>
         <text
+                font-size='30'
                 fill='rgb(0,128,0)'
-                text-anchor='middle'
-                font-size='30'>text-anchor:middle</text>
+                text-anchor='middle'>text-anchor:middle</text>
       </g>
       <g
               transform='translate(230, 280)'>
@@ -69,9 +69,9 @@
                 r='3'>
         </circle>
         <text
+                font-size='30'
                 fill='rgb(0,0,255)'
-                text-anchor='end'
-                font-size='30'>text-anchor:end</text>
+                text-anchor='end'>text-anchor:end</text>
       </g>
     </g>
   </g>

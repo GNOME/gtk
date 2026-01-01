@@ -36,10 +36,10 @@
             height='140'>
     </rect>
     <text
-            x='10'
-            y='165'
             font-family='Arial'
-            font-size='12'>Radial gradient on fill of rectangle</text>
+            font-size='12'
+            x='10'
+            y='165'>Radial gradient on fill of rectangle</text>
     <radialGradient
             id='Grad2'
             cx='295'
@@ -70,10 +70,10 @@
             class='transparent-fill'>
     </rect>
     <text
-            x='230'
-            y='165'
             font-family='Arial'
-            font-size='12'>Radial gradient on stroke of rectangle</text>
+            font-size='12'
+            x='230'
+            y='165'>Radial gradient on stroke of rectangle</text>
     <radialGradient
             id='Grad3'
             cx='225'
@@ -94,16 +94,16 @@
       </stop>
     </radialGradient>
     <text
+            font-family='Arial'
+            font-size='50'
             fill='url(#Grad3)'
             x='10'
-            y='210'
-            font-family='Arial'
-            font-size='50'>Gradient on text fill</text>
+            y='210'>Gradient on text fill</text>
     <text
-            x='10'
-            y='225'
             font-family='Arial'
-            font-size='12'>Radial gradient on text, black to yellow</text>
+            font-size='12'
+            x='10'
+            y='225'>Radial gradient on text, black to yellow</text>
     <radialGradient
             id='Grad4'
             cx='225'
@@ -124,19 +124,19 @@
       </stop>
     </radialGradient>
     <text
+            font-family='Arial'
+            font-size='45'
             fill='none'
             stroke='url(#Grad4)'
             stroke-width='2'
             x='10'
             y='270'
-            font-family='Arial'
-            font-size='45'
             class='transparent-fill'>Gradient on text stroke</text>
     <text
-            x='10'
-            y='285'
             font-family='Arial'
-            font-size='12'>Radial gradient on stroke of text, black to red</text>
+            font-size='12'
+            x='10'
+            y='285'>Radial gradient on stroke of text, black to red</text>
   </g>
   <g
           font-family='SVGFreeSansASCII,sans-serif'
