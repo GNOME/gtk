@@ -83,6 +83,15 @@ class Type:
         return self.struct_init.format (indent, var_name, struct_member, offset);
 
 @dataclass
+class VariationType:
+    type: str
+    bits: int
+    glsl_string: str
+
+    def to_glsl (self, offset_bits):
+        return self.glsl_string.format (offset_bits)
+
+@dataclass
 class Input:
     name: str
     type: Type
@@ -101,6 +110,12 @@ class Variable:
     type: Type
 
 @dataclass
+class Variation:
+    name: str
+    offset_bits: int
+    type: VariationType
+
+@dataclass
 class File:
     filename: str
     name: str
@@ -109,6 +124,7 @@ class File:
     n_textures: int
     n_instances: int
     variables: list[Variable]
+    variations: list[Variation]
 
 types = [
 Type(
@@ -184,9 +200,39 @@ Type(
 ),
 ]
 
+variation_types = [
+VariationType(
+    type = 'gboolean',
+    bits = 1,
+    glsl_string = '(((GSK_VARIATION >> {0}u) & 1u) == 1u)'
+),
+VariationType(
+    type = 'GdkBuiltinColorStateId',
+    bits = 8,
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+),
+VariationType(
+    type = 'GskBlendMode',
+    bits = 8,
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+),
+VariationType(
+    type = 'GskMaskMode',
+    bits = 8,
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+),
+VariationType(
+    type = 'GskPorterDuff',
+    bits = 8,
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+),
+]
+
 def read_file (filename):
     lines = open(filename).readlines()
     variables = []
+    variations = []
+    variation_bits = 0
     on = False
     n_textures = 0
     n_instances = 6
@@ -204,6 +250,16 @@ def read_file (filename):
             on = False
         elif line == "":
             pass
+        elif match := re.search (r'^variation\s*:\s*(\w+)\s+(\w+)\s*;$', line):
+            var_type = next ((x for x in variation_types if x.type == match.group (1)), None)
+            if not var_type:
+                raise Exception (f'''{filename}:{pos}: Unknown variation type "{match.group (1)}"''')
+            if variation_bits + var_type.bits > 32:
+                raise Exception (f'''{filename}:{pos}: too many bits taken by variations''')
+            variations.append (Variation (name = match.group (2),
+                                          offset_bits = variation_bits,
+                                          type = var_type))
+            variation_bits += var_type.bits
         elif match := re.search (r'(\w+)\s+(\w+)\s*;', line):
             var_type = next ((x for x in types if x.type == match.group (1)), None)
             if not var_type:
@@ -238,7 +294,8 @@ def read_file (filename):
                  struct_name = struct_name,
                  n_textures = n_textures,
                  n_instances = n_instances,
-                 variables = variables)
+                 variables = variables,
+                 variations = variations)
 
 
 def generate_attributes(inputs):
@@ -268,6 +325,12 @@ def generate_attributes(inputs):
             
     return location, result
 
+
+def print_glsl_variations (variations):
+    for var in variations:
+        print (f'''#define VARIATION_{var.name.upper()} {var.type.to_glsl (var.offset_bits)}''')
+    if variations:
+        print ()
 
 def print_glsl_attributes (attributes):
     print (f'''#ifdef GSK_VERTEX_SHADER''')
@@ -383,6 +446,7 @@ def print_glsl_file (file, n_attributes, attributes):
 
 #include "common.glsl"
 ''')
+    print_glsl_variations (file.variations)
     print_glsl_attributes (attributes)
 
 def print_header_file (file, n_attributes, attributes):

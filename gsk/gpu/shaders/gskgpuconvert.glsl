@@ -4,14 +4,11 @@ textures = 1;
 graphene_rect_t rect;
 graphene_rect_t tex_rect;
 float opacity;
+
+variation: gboolean opacity;
 #endif
 
 #include "gskgpuconvertinstance.glsl"
-
-#define VARIATION_OPACITY              (1u << 0)
-#define VARIATION_STRAIGHT_ALPHA       (1u << 1)
-
-#define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -48,7 +45,7 @@ run (out vec4 color,
   pixel = output_color_from_alt (pixel);
 
   float alpha = rect_coverage (_rect, _pos);
-  if (HAS_VARIATION (VARIATION_OPACITY))
+  if (VARIATION_OPACITY)
     alpha *= _opacity;
 
   color = output_color_alpha (pixel, alpha);

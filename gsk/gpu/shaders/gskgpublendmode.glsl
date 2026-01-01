@@ -7,6 +7,8 @@ graphene_rect_t rect;
 graphene_rect_t bottom_rect;
 graphene_rect_t top_rect;
 float opacity;
+
+variation: GskBlendMode blend_mode;
 #endif
 
 #include "gskgpublendmodeinstance.glsl"
@@ -57,7 +59,7 @@ run (out vec4 color,
   vec4 top_color = texture (GSK_TEXTURE1, _top_coord);
   top_color = output_color_alpha (top_color, rect_coverage (_top_rect, _pos));
 
-  color = blend_mode (bottom_color, top_color, GSK_VARIATION);
+  color = blend_mode (bottom_color, top_color, VARIATION_BLEND_MODE);
   color = output_color_alpha (color, _opacity);
 
   position = _pos;
