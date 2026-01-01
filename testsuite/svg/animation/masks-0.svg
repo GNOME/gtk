@@ -10,7 +10,11 @@
         height='20'
         viewBox='0 0 30 20'>
   <mask
-          id='mask1'>
+          id='mask1'
+          x='-3px'
+          y='-2px'
+          width='36px'
+          height='24px'>
     <circle
             fill='rgb(255,255,255)'
             fill-opacity='0.5'
@@ -20,7 +24,11 @@
     </circle>
   </mask>
   <mask
-          id='mask2'>
+          id='mask2'
+          x='-3px'
+          y='-2px'
+          width='36px'
+          height='24px'>
     <circle
             fill='rgb(255,255,255)'
             fill-opacity='1'

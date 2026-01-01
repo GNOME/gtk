@@ -5,25 +5,25 @@
         height='128'
         viewBox='0 0 128 128'>
   <text
+          font-family='Noto Serif CJK'
+          font-size='72'
           x='32'
           y='10'
           lang='zh'
-          writing-mode='vertical-rl'
-          font-family='Noto Serif CJK'
-          font-size='72'>骨</text>
+          writing-mode='vertical-rl'>骨</text>
   <text
+          font-size='12'
           x='4'
-          y='96'
-          font-size='12'>Chineese</text>
+          y='96'>Chineese</text>
   <text
+          font-family='Noto Serif CJK'
+          font-size='72'
           x='96'
           y='10'
           lang='ja'
-          writing-mode='vertical-rl'
-          font-family='Noto Serif CJK'
-          font-size='72'>骨</text>
+          writing-mode='vertical-rl'>骨</text>
   <text
+          font-size='12'
           x='66'
-          y='96'
-          font-size='12'>Japaneese</text>
+          y='96'>Japaneese</text>
 </svg>

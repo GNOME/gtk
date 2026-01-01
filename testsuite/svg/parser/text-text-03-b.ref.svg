@@ -10,42 +10,42 @@
           font-family='FreeSerif, serif'
           font-size='18'>
     <text
+            font-size='32'
             fill='rgb(0,0,255)'
             x='19'
-            y='61'
-            font-size='32'>Plain</text>
+            y='61'>Plain</text>
     <text
+            font-style='italic'
+            font-size='32'
             fill='rgb(0,0,255)'
             x='142'
-            y='61'
-            font-style='italic'
-            font-size='32'>Italic</text>
+            y='61'>Italic</text>
     <text
+            font-weight='700'
+            font-size='32'
             fill='rgb(0,0,255)'
             x='257'
-            y='60'
-            font-weight='700'
-            font-size='32'>Bold</text>
+            y='60'>Bold</text>
     <text
+            font-size='32'
             fill='rgb(0,0,255)'
             x='224'
             y='110'
-            text-decoration='underline'
-            font-size='32'>Underline</text>
+            text-decoration='underline'>Underline</text>
     <text
+            font-size='32'
             fill='rgb(255,0,255)'
             x='39'
             y='147'
-            text-decoration='line-through'
-            font-size='32'>Line through</text>
+            text-decoration='line-through'>Line through</text>
     <text
+            font-style='italic'
+            font-weight='700'
+            font-size='32'
             fill='rgb(0,0,0)'
             x='1'
             y='200'
-            text-decoration='underline'
-            font-style='italic'
-            font-weight='700'
-            font-size='32'>Bold, italic and underlined</text>
+            text-decoration='underline'>Bold, italic and underlined</text>
     <g>
       <rect
               fill='none'
@@ -60,20 +60,20 @@
       <g
               font-family='SVGFreeSansASCII,sans-serif'>
         <text
+                font-size='24'
                 fill='rgb(0,0,0)'
                 x='55'
-                y='245'
-                font-size='24'>Each line of text which flows in a </text>
+                y='245'>Each line of text which flows in a </text>
         <text
+                font-size='24'
                 fill='rgb(0,0,0)'
                 x='55'
-                y='265'
-                font-size='24'>rectangular box has to be broken</text>
+                y='265'>rectangular box has to be broken</text>
         <text
+                font-size='24'
                 fill='rgb(0,0,0)'
                 x='55'
-                y='285'
-                font-size='24'>into separated lines.</text>
+                y='285'>into separated lines.</text>
       </g>
     </g>
   </g>
