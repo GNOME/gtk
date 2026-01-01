@@ -1,29 +1,55 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='preferences-desktop-wallpaper folder image photo picture folder-pictures image-x-generic'
-     gpa:state='0'>
-  <style type='text/css'>
-    .not-initial-state {
-      display: none;
-    }
-  </style>
-  <path d='M 2 12 L 2 4 C 2 2.9000001, 2.9000001 2, 4 2 L 12 2 C 13.1045694 2, 14 2.89543056, 14 4 L 14 12 C 14 13.1045694, 13.1045694 14, 12 14 L 4 14 C 2.89543056 14, 2 13.1045694, 2 12 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 5 6.51379299 C 5.00761747 7.34222031, 5.68536568 8.00761795, 6.51379299 8 C 7.34222031 7.99238253, 8.00761795 7.31463432, 8 6.48620701 C 7.99238253 5.65777969, 7.31463432 4.99238253, 6.48620701 5 C 5.65777969 5.00761747, 4.99238253 5.68536568, 5 6.51379299 Z M 2.79999995 13.6000004 L 6.11999989 10.3000002 L 7.61999989 11.3000002 L 9.5 9.39999962 L 13.4399996 13.3900003'
-        id='path2'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        gpa:stroke-width='0.25 1 2'
-        fill='none'
-        class='foreground-stroke transparent-fill'
-        gpa:stroke='foreground'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='preferences-desktop-wallpaper folder image photo picture folder-pictures image-x-generic'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>preferences-desktop-wallpaper folder image photo picture folder-pictures image-x-generic</rdf:li>
+
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='path0'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          d='M 2 12 L 2 4 C 2 2.9, 2.9 2, 4 2 L 12 2 C 13.1046 2, 14 2.89543, 14 4 L 14 12 C 14 13.1046, 13.1046 14, 12 14 L 4 14 C 2.89543 14, 2 13.1046, 2 12 Z'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='1.5'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
+  <path
+          id='path2'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-width='1'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 5 6.51379 C 5.00762 7.34222, 5.68537 8.00762, 6.51379 8 C 7.34222 7.99238, 8.00762 7.31463, 8 6.48621 C 7.99238 5.65778, 7.31463 4.99238, 6.48621 5 C 5.65778 5.00762, 4.99238 5.68537, 5 6.51379 Z M 2.8 13.6 L 6.12 10.3 L 7.62 11.3 L 9.5 9.4 L 13.44 13.39'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='2'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
 </svg>

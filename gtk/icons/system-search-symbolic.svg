@@ -1,19 +1,41 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='system-search loupe edit-find system-search folder-saved-search preferences-system-search'
-     gpa:state='0'>
-  <style type='text/css'>
-    .not-initial-state {
-      display: none;
-    }
-  </style>
-  <path d='M 14 14 L 10.3891287 10.3890696 M 12 6.51379299 C 11.992382 9.55135918, 9.52377319 12.007618, 6.48620701 12 C 3.44864082 11.992382, 0.992382228 9.52377319, 0.99999994 6.48620701 C 1.00761747 3.44864082, 3.47622681 0.992382169, 6.51379299 0.99999994 C 9.55135918 1.00761747, 12.007618 3.47622681, 12 6.51379299 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='system-search loupe edit-find system-search folder-saved-search preferences-system-search'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>system-search loupe edit-find system-search folder-saved-search preferences-system-search</rdf:li>
+
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='path0'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          d='M 14 14 L 10.3891 10.3891 M 12 6.51379 C 11.9924 9.55136, 9.52377 12.0076, 6.48621 12 C 3.44864 11.9924, 0.992382 9.52377, 1 6.48621 C 1.00762 3.44864, 3.47623 0.992382, 6.51379 1 C 9.55136 1.00762, 12.0076 3.47623, 12 6.51379 Z'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='1.5'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
 </svg>
