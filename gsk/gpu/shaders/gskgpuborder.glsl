@@ -1,4 +1,6 @@
 #ifdef GSK_PREAMBLE
+instances = 48;
+
 GdkColor top_border_color;
 GdkColor right_border_color;
 GdkColor bottom_border_color;

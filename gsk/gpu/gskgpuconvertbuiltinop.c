@@ -50,6 +50,7 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_BUILTIN_OP_CLASS = {
   },
   "gskgpuconvertbuiltin",
   gsk_gpu_convert_builtin_n_textures,
+  gsk_gpu_convert_builtin_n_instances,
   sizeof (GskGpuConvertBuiltinInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_convert_builtin_info,

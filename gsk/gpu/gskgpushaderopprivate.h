@@ -37,6 +37,7 @@ struct _GskGpuShaderOpClass
 
   const char *          shader_name;
   gsize                 n_textures;
+  gsize                 n_instances;
   gsize                 vertex_size;
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
@@ -64,18 +65,10 @@ void                    gsk_gpu_shader_op_print                         (GskGpuO
                                                                          GString                *string,
                                                                          guint                   indent);
 #ifdef GDK_RENDERING_VULKAN
-GskGpuOp *              gsk_gpu_shader_op_vk_command_n                  (GskGpuOp               *op,
-                                                                         GskGpuFrame            *frame,
-                                                                         GskVulkanCommandState  *state,
-                                                                         gsize                   instance_scale);
 GskGpuOp *              gsk_gpu_shader_op_vk_command                    (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
                                                                          GskVulkanCommandState  *state);
 #endif
-GskGpuOp *              gsk_gpu_shader_op_gl_command_n                  (GskGpuOp               *op,
-                                                                         GskGpuFrame            *frame,
-                                                                         GskGLCommandState      *state,
-                                                                         gsize                   instance_scale);
 GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
                                                                          GskGLCommandState      *state);
