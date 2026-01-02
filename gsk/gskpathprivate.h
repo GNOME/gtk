@@ -112,11 +112,12 @@ typedef struct
                               gpointer                user_data);
   gboolean (* add_rect)      (const graphene_rect_t  *rect,
                               gpointer                user_data);
-  gboolean (* add_circle)      (const graphene_point_t *center,
-                                float                    radius,
-                                gpointer                 user_data);
-  gboolean (* add_rounded_rect) (const GskRoundedRect    *rect,
-                                 gpointer                 user_data);
+  gboolean (* add_circle)    (const graphene_point_t *center,
+                              float                   radius,
+                              gpointer                user_data);
+  gboolean (* add_rounded_rect)
+                             (const GskRoundedRect   *rect,
+                              gpointer                user_data);
 } GskPathParser;
 
 gboolean gsk_path_parse_full (const char    *string,
