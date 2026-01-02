@@ -10045,8 +10045,6 @@ shape_new (Shape     *parent,
 {
   Shape *shape = g_new0 (Shape, 1);
 
-  memset (shape, 0, sizeof (Shape));
-
   shape->parent = parent;
   shape->type = type;
 
