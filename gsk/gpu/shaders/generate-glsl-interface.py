@@ -322,6 +322,9 @@ def generate_attributes(inputs):
                           location = location)
         location += (size + 3) // 4;
         result.append (attr)
+
+    if location > 16:
+        raise Exception (f'''MAX_VERTEX_ATTRIBS is 16, this shader uses {location}''')
             
     return location, result
 
