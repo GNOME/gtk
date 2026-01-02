@@ -1,6 +1,7 @@
 test_renderer = executable('test-svg-renderer',
-  sources: ['test-svg-renderer.c', '../../testutils.c'],
+  sources: ['test-svg-renderer.c'],
   c_args: common_cflags,
+  link_with: testutils_lib,
   dependencies: libgtk_dep,
 )
 

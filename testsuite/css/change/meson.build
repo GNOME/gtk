@@ -7,8 +7,9 @@ changetest_env.set('GSETTINGS_BACKEND', 'memory')
 changetest_env.set('G_ENABLE_DIAGNOSTIC', '0')
 
 test_change = executable('test-css-change',
-  sources: ['test-css-change.c', '../../testutils.c'],
+  sources: ['test-css-change.c'],
   c_args: common_cflags,
+  link_with: testutils_lib,
   dependencies: libgtk_dep,
 )
 

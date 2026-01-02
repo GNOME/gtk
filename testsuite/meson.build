@@ -1,3 +1,13 @@
+testutils_lib = static_library('testutils', 'testutils.c', 'diff/diffreg.c',
+  c_args: common_cflags,
+  include_directories: include_directories('..'),
+  dependencies: [
+    glib_dep,
+    gio_dep
+  ],
+  install: false
+)
+
 gtk_libexecdir = join_paths(gtk_prefix, get_option('libexecdir'))
 installed_test_bindir = join_paths(gtk_libexecdir, 'installed-tests', 'gtk-4.0')
 installed_test_datadir = join_paths(gtk_datadir, 'installed-tests', 'gtk-4.0')

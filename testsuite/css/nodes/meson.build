@@ -7,8 +7,9 @@ nodetest_env.set('GSETTINGS_BACKEND', 'memory')
 nodetest_env.set('G_ENABLE_DIAGNOSTIC', '0')
 
 test_nodes = executable('test-css-nodes',
-  sources: ['test-css-nodes.c', '../../testutils.c'],
+  sources: ['test-css-nodes.c'],
   c_args: common_cflags,
+  link_with: testutils_lib,
   dependencies: libgtk_dep,
 )
 

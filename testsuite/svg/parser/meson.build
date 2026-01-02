@@ -1,6 +1,7 @@
 test_parser = executable('test-svg-parser',
-  sources: ['test-svg-parser.c', '../../testutils.c'],
+  sources: ['test-svg-parser.c'],
   c_args: common_cflags,
+  link_with: testutils_lib,
   dependencies: libgtk_dep,
 )
 

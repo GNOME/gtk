@@ -28,6 +28,7 @@
 #endif
 
 #include "testsuite/testutils.h"
+#include "testsuite/diff/diff.h"
 
 /*<private>
  * diff_bytes_with_file:
@@ -53,89 +54,55 @@ diff_bytes_with_file (const char  *file1,
                       GBytes      *input,
                       GError     **error)
 {
-  char *diff_cmd, *diff;
+  GInputStream *old, *new;
+  GOutputStream *out;
+  char *fbase, *diff;
 
-  diff = NULL;
-
-  diff_cmd = g_find_program_in_path ("zdiff");
-  if (diff_cmd)
-    {
-      GSubprocess *process;
-      GBytes *output;
-
-      process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
-                                  | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
-                                  error,
-                                  diff_cmd, "--strip-trailing-cr", "-u", file1, "-", NULL);
-      g_free (diff_cmd);
-
-      if (process == NULL)
-        return NULL;
-
-      if (!g_subprocess_communicate (process,
-                                     input,
-                                     NULL,
-                                     &output,
-                                     NULL,
-                                     error))
-        {
-          g_object_unref (process);
-          return NULL;
-        }
-
-      if (g_subprocess_get_successful (process))
-        {
-          g_clear_pointer (&output, g_bytes_unref);
-        }
-      else if (g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) == 1)
-        {
-          gsize size;
-
-          /* this is the condition when the files differ */
-          diff = g_bytes_unref_to_data (output, &size);
-          output = NULL;
-        }
-      else
-        {
-          g_clear_pointer (&output, g_bytes_unref);
-          g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                      "The `diff' process exited with error status %d",
-                      g_subprocess_get_exit_status (process));
-        }
-
-      g_object_unref (process);
-    }
-  else
+  if (g_str_has_suffix (file1, ".gz"))
     {
       char *buf1;
-      const char *buf2;
-      gsize len1, len2;
-
-      buf2 = g_bytes_get_data (input, &len2);
+      size_t len1;
+      GConverter *decompressor;
+      GBytes *compressed, *decompressed;
 
       if (!g_file_get_contents (file1, &buf1, &len1, error))
         return NULL;
-
-      if (g_str_has_suffix (file1, ".gz"))
-        {
-          GConverter *decompressor;
-          GBytes *compressed, *decompressed;
-          decompressor = G_CONVERTER (g_zlib_decompressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP));
-          compressed = g_bytes_new_take (buf1, len1);
-          decompressed = g_converter_convert_bytes (decompressor, compressed, error);
-          g_object_unref (decompressor);
-          g_bytes_unref (compressed);
-          if (!decompressed)
-            return NULL;
-          buf1 = g_bytes_unref_to_data (decompressed, &len1);
-        }
-
-      if ((len2 != len1) ||
-          strncmp (buf2, buf1, len1) != 0)
-        diff = g_strdup ("Files differ.\n");
-
-      g_free (buf1);
+      decompressor = G_CONVERTER (g_zlib_decompressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP));
+      compressed = g_bytes_new_take (buf1, len1);
+      decompressed = g_converter_convert_bytes (decompressor, compressed, error);
+      g_object_unref (decompressor);
+      g_bytes_unref (compressed);
+      if (!decompressed)
+        return NULL;
+      old = g_memory_input_stream_new_from_bytes (decompressed);
+      g_bytes_unref (decompressed);
     }
+  else
+    {
+      GFile *file;
+      file = g_file_new_for_path (file1);
+      old = G_INPUT_STREAM (g_file_read (file, NULL, error));
+      // Maybe wrap old in BufferedInputStream?
+      g_object_unref (file);
+      if (!old)
+        return NULL;
+    }
+
+  new = g_memory_input_stream_new_from_bytes (input);
+  out = g_memory_output_stream_new_resizable ();
+
+  fbase = g_path_get_basename (file1);
+
+  if (diffreg (fbase, old, new, out, 0) == D_SAME)
+    diff = NULL;
+  else
+    diff = g_strndup (g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (out)),
+                      g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (out)));
+
+  g_object_unref (old);
+  g_object_unref (new);
+  g_object_unref (out);
+  g_free (fbase);
 
   return diff;
 }

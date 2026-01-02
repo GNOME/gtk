@@ -14,8 +14,9 @@ cssresources = gnome.compile_resources(
 )
 
 test_style = executable('test-css-style',
-  sources: ['test-css-style.c', '../../testutils.c', cssresources],
+  sources: ['test-css-style.c', cssresources],
   c_args: common_cflags,
+  link_with: testutils_lib,
   dependencies: libgtk_dep,
 )
 

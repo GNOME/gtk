@@ -1,6 +1,7 @@
 test_renderer = executable('test-svg-animation',
-  sources: ['test-svg-animation.c', '../../testutils.c'],
+  sources: ['test-svg-animation.c'],
   c_args: common_cflags+ ['-DGTK_COMPILATION'],
+  link_with: testutils_lib,
   dependencies: libgtk_static_dep,
 )
 
