@@ -5,7 +5,6 @@
  */
 
 #include <gtk/gtk.h>
-#include "symbolicpaintable.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
 
 static guint tick_cb;
@@ -407,14 +406,11 @@ create_path (void)
   idx = (idx + 1) % G_N_ELEMENTS (symbolics);
   if (symbolics[idx].paintable == NULL)
     {
-      char *uri;
-      GFile *file;
+      char *path;
 
-      uri = g_strconcat ("resource://", "/org/gtk/libgtk/icons/", symbolics[idx].path, NULL);
-      file = g_file_new_for_uri (uri);
-      symbolics[idx].paintable = GDK_PAINTABLE (symbolic_paintable_new (file));
-      g_object_unref (file);
-      g_free (uri);
+      path = g_strconcat ("/org/gtk/libgtk/icons/", symbolics[idx].path, NULL);
+      symbolics[idx].paintable = GDK_PAINTABLE (gtk_svg_new_from_resource (path));
+      g_free (path);
     }
 
   image = gtk_image_new ();

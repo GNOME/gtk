@@ -1,19 +1,41 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='view-refresh reload round arrow'
-     gpa:state='0'>
-  <style type='text/css'>
-    .not-initial-state {
-      display: none;
-    }
-  </style>
-  <path d='M 11 7 L 15 7 L 15 3 M 13.1300001 11.75 C 11.5793581 14.4362106, 8.3468399 15.6525917, 5.40999985 14.6549997 C 2.47419 13.6578684, 0.651352704 10.7260056, 1.05599999 7.65199995 C 1.46059072 4.57750797, 3.98065066 2.21696687, 7.07499981 2.01399994 C 8.83185673 1.89877009, 10.4960108 2.49726486, 11.753314 3.58436871 C 12.710638 4.41210079, 15 7, 15 7'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='view-refresh reload round arrow'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>view-refresh reload round arrow</rdf:li>
+
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='path0'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          d='M 11 7 L 15 7 L 15 3 M 13.13 11.75 C 11.5794 14.4362, 8.34684 15.6526, 5.41 14.655 C 2.47419 13.6579, 0.651353 10.726, 1.056 7.652 C 1.46059 4.57751, 3.98065 2.21697, 7.075 2.014 C 8.83186 1.89877, 10.496 2.49726, 11.7533 3.58437 C 12.7106 4.4121, 15 7, 15 7'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='1.5'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
 </svg>

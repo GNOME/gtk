@@ -1,19 +1,41 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='view-more kebab more inline menu'
-     gpa:state='0'>
-  <style type='text/css'>
-    .not-initial-state {
-      display: none;
-    }
-  </style>
-  <path d='M 9 14 C 9 14.5522852, 8.55228519 15, 8 15 C 7.44771528 15, 7 14.5522852, 7 14 C 7 13.4477148, 7.44771528 13, 8 13 C 8.55228519 13, 9 13.4477148, 9 14 M 9 8 C 9 8.55228519, 8.55228519 9, 8 9 C 7.44771528 9, 7 8.55228519, 7 8 C 7 7.44771528, 7.44771528 7, 8 7 C 8.55228519 7, 9 7.44771528, 9 8 M 9 2 C 9 2.55228472, 8.55228519 3, 8 3 C 7.44771528 3, 7 2.55228472, 7 2 C 7 1.44771528, 7.44771528 1, 8 1 C 8.55228519 1, 9 1.44771528, 9 2'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='view-more kebab more inline menu'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>view-more kebab more inline menu</rdf:li>
+
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='path0'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          d='M 9 14 C 9 14.5523, 8.55229 15, 8 15 C 7.44772 15, 7 14.5523, 7 14 C 7 13.4477, 7.44772 13, 8 13 C 8.55229 13, 9 13.4477, 9 14 M 9 8 C 9 8.55229, 8.55229 9, 8 9 C 7.44772 9, 7 8.55229, 7 8 C 7 7.44772, 7.44772 7, 8 7 C 8.55229 7, 9 7.44772, 9 8 M 9 2 C 9 2.55228, 8.55229 3, 8 3 C 7.44772 3, 7 2.55228, 7 2 C 7 1.44772, 7.44772 1, 8 1 C 8.55229 1, 9 1.44772, 9 2'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='1.5'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
 </svg>

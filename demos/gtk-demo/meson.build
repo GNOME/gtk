@@ -71,6 +71,7 @@ demos = files([
   'paintable_animated.c',
   'paintable_emblem.c',
   'paintable_mediastream.c',
+  'paintable_svg.c',
   'paintable_symbolic.c',
   'panes.c',
   'password_entry.c',
@@ -144,7 +145,6 @@ extra_demo_sources = files([
   'singular_value_decomposition.c',
   'suggestionentry.c',
   'unicode-names.c',
-  'symbolicpaintable.c',
   '../../gtk/gtkrendernodepaintable.c',
   'component_filter.c',
   'minigraph.c',
@@ -152,14 +152,6 @@ extra_demo_sources = files([
 
 if os_unix
   demos += files('pagesetup.c')
-endif
-
-librsvg_dep = dependency('librsvg-2.0', version: '>= 2.52.0', required: false)
-
-if librsvg_dep.found()
-  demos += files('paintable_svg.c')
-  extra_demo_sources += files(['svgpaintable.c'])
-  gtkdemo_deps += [ librsvg_dep ]
 endif
 
 demos_h = custom_target('gtk4 demo header',

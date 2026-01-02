@@ -1,14 +1,26 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     icon='bookmark plus new create ribbon'
-     gpa:state='0'>
-  <path d='M 6 11 L 2 13 L 2 3 C 2 1.89543045, 2.89543056 1, 4 1 L 8 1 C 9.10456944 1, 10 1.89543045, 10 3 L 10 6 M 9 12 L 15 12 M 12 9 L 12 15'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        width='16'
+        height='16'>
+  <path
+          id='path0'
+          opacity='0.85'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          d='M 6 11 L 2 13 L 2 3 C 2 1.89543, 2.89543 1, 4 1 L 8 1 C 9.10457 1, 10 1.89543, 10 3 L 10 6 M 9 12 L 15 12 M 12 9 L 12 15'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='1.5'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
 </svg>

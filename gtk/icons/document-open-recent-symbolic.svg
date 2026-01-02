@@ -1,29 +1,55 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='clock document history recent emoji-recent document-open-recent documents-recent preferences-system-time'
-     gpa:state='0'>
-  <style type='text/css'>
-    .not-initial-state {
-      display: none;
-    }
-  </style>
-  <path d='M 15 8 C 15 11.8659935, 11.8659935 15, 8 15 C 4.13400698 15, 1 11.8659935, 1 8 C 1 4.13400698, 4.13400698 1, 8 1 C 11.8659935 1, 15 4.13400698, 15 8 Z'
-        id='path0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill'/>
-  <path d='M 8.5 8.5 C 8.5 8.77614212, 8.27614212 9, 8 9 C 7.7238574 9, 7.5 8.77614212, 7.5 8.5 C 7.5 8.22385788, 7.7238574 8, 8 8 C 8.27614212 8, 8.5 8.22385788, 8.5 8.5 Z M 6 6.5079999 L 7.64639044 8.15439034 M 8.35470486 8.15550613 L 11.5299997 5'
-        id='path1'
-        stroke-width='0.75'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        gpa:stroke-width='0.25 0.75 2'
-        fill='none'
-        class='foreground-stroke transparent-fill'
-        gpa:stroke='foreground'/>
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:keywords='clock document history recent emoji-recent document-open-recent documents-recent preferences-system-time'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>clock document history recent emoji-recent document-open-recent documents-recent preferences-system-time</rdf:li>
+
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='path0'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          d='M 15 8 C 15 11.866, 11.866 15, 8 15 C 4.13401 15, 1 11.866, 1 8 C 1 4.13401, 4.13401 1, 8 1 C 11.866 1, 15 4.13401, 15 8 Z'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='1.5'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
+  <path
+          id='path1'
+          clip-path='none'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-width='0.75'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 8.5 8.5 C 8.5 8.77614, 8.27614 9, 8 9 C 7.72386 9, 7.5 8.77614, 7.5 8.5 C 7.5 8.22386, 7.72386 8, 8 8 C 8.27614 8, 8.5 8.22386, 8.5 8.5 Z M 6 6.508 L 7.64639 8.15439 M 8.3547 8.15551 L 11.53 5'
+          gpa:stroke-minwidth='0.25'
+          gpa:stroke-maxwidth='2'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'>
+  </path>
 </svg>
