@@ -14,7 +14,7 @@ static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 11
+#define N_WIDGET_TYPES 12
 
 
 static int hincrement = 5;
@@ -394,10 +394,66 @@ struct {
   { "orientation-portrait-symbolic.svg", NULL },
   { "process-working-symbolic.svg", NULL },
   { "switch-off-symbolic.svg", NULL },
-  { "switch-on-symbolic.svg", NULL }, 
+  { "switch-on-symbolic.svg", NULL },
 };
 
-static GtkWidget *
+GtkWidget *
+create_symbolic (void)
+{
+  GtkWidget *image;
+  static int idx = 0;
+
+  idx = (idx + 1) % G_N_ELEMENTS (symbolics);
+  if (symbolics[idx].paintable == NULL)
+    {
+      char *uri;
+      GFile *file;
+
+      uri = g_strconcat ("resource:///org/gtk/libgtk/icons/", symbolics[idx].path, NULL);
+      file = g_file_new_for_uri (uri);
+      symbolics[idx].paintable = GDK_PAINTABLE (gtk_icon_paintable_new_for_file (file, 16, 1));
+      g_object_unref (file);
+      g_free (uri);
+    }
+
+  image = gtk_image_new ();
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), symbolics[idx].paintable);
+
+  return image;
+}
+
+static void
+populate_symbolics (void)
+{
+  GtkWidget *grid;
+  int top, left;
+
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_start (grid, 10);
+  gtk_widget_set_margin_end (grid, 10);
+  gtk_widget_set_margin_top (grid, 10);
+  gtk_widget_set_margin_bottom (grid, 10);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+
+  for (top = 0; top < 100; top++)
+    for (left = 0; left < 15; left++)
+       {
+         gtk_grid_attach (GTK_GRID (grid), create_symbolic (), left, top, 1, 1);
+       }
+
+  hincrement = 0;
+  vincrement = 5;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), grid);
+}
+
+GtkWidget *
 create_path (void)
 {
   GtkWidget *image;
@@ -584,11 +640,16 @@ set_widget_type (int type)
       break;
 
     case 9:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling symbolics");
+      populate_symbolics ();
+      break;
+
+    case 10:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling paths");
       populate_paths ();
       break;
 
-    case 10:
+    case 11:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling squiggles");
       populate_squiggles ();
       break;
