@@ -102,6 +102,7 @@ test_data = [
   'rect2.svg',
   'render-after-use.svg',
   'rounded-rect.svg',
+  'size-units.svg',
   'spec-ellipse.svg',
   'spec-opacity.svg',
   'spec-rect.svg',

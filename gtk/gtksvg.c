@@ -2237,6 +2237,26 @@ svg_number_distance (const SvgValue *value0,
 }
 
 static SvgValue *
+svg_number_to_px (const SvgValue *value)
+{
+  const SvgNumber *n = (const SvgNumber *) value;
+
+  switch ((unsigned int) n->unit)
+    {
+    case SVG_UNIT_PT:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 72);
+    case SVG_UNIT_IN:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96);
+    case SVG_UNIT_CM:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
+    case SVG_UNIT_MM:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+    default:
+      return svg_value_ref ((SvgValue *) value);
+    }
+}
+
+static SvgValue *
 svg_number_resolve (const SvgValue *value,
                     ShapeAttr       attr,
                     Shape          *shape,
@@ -2310,13 +2330,10 @@ svg_number_resolve (const SvgValue *value,
         }
       break;
     case SVG_UNIT_PT:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 72);
     case SVG_UNIT_IN:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96);
     case SVG_UNIT_CM:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
     case SVG_UNIT_MM:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+      return svg_number_to_px (value);
     case SVG_UNIT_EM:
     case SVG_UNIT_EX:
       {
@@ -16772,18 +16789,24 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
     {
-      SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_WIDTH];
+      SvgValue *v = svg_number_to_px (self->content->base[SHAPE_ATTR_WIDTH]);
+      SvgNumber *n = (SvgNumber *) v;
 
-      if (v->unit != SVG_UNIT_PERCENTAGE)
-        self->width = v->value;
+      if (n->unit != SVG_UNIT_PERCENTAGE)
+        self->width = n->value;
+
+      svg_value_unref (v);
     }
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
     {
-      SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_HEIGHT];
+      SvgValue *v = svg_number_to_px (self->content->base[SHAPE_ATTR_HEIGHT]);
+      SvgNumber *n = (SvgNumber *) v;
 
-      if (v->unit != SVG_UNIT_PERCENTAGE)
-        self->height = v->value;
+      if (n->unit != SVG_UNIT_PERCENTAGE)
+        self->height = n->value;
+
+      svg_value_unref (v);
     }
 
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
