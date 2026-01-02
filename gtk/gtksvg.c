@@ -1074,28 +1074,20 @@ load_texture (const char  *string,
 }
 
 static GdkTexture *
-get_texture (GtkSvg     *svg,
-             const char *string)
+get_texture (GtkSvg      *svg,
+             const char  *string,
+             GError     **error)
 {
   GdkTexture *texture;
 
   texture = g_hash_table_lookup (svg->images, string);
   if (!texture)
     {
-      GError *error = NULL;
-
       texture = load_texture (string,
                               (svg->features & GTK_SVG_EXTERNAL_RESOURCES) != 0,
-                              &error);
+                              error);
       if (texture)
-        {
-          g_hash_table_insert (svg->images, g_strdup (string), texture);
-        }
-      else if (error)
-        {
-          gtk_svg_emit_error (svg, error);
-          g_error_free (error);
-        }
+        g_hash_table_insert (svg->images, g_strdup (string), texture);
     }
 
   return texture;
@@ -16338,16 +16330,20 @@ resolve_href_ref (SvgValue   *value,
 
   if (shape->type == SHAPE_IMAGE || shape->type == SHAPE_FILTER)
     {
-      href->texture = get_texture (data->svg, href->ref);
+      GError *error = NULL;
+
+      href->texture = get_texture (data->svg, href->ref, &error);
 
       if (href->texture != NULL)
         return;
 
       if (shape->type == SHAPE_IMAGE)
         {
-          gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>)", href->ref);
+          gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>): %s", href->ref, error->message);
+          g_error_free (error);
           return; /* Image href is always external */
         }
+      g_error_free (error);
     }
 
   if (href->shape == NULL)
@@ -18181,27 +18177,40 @@ apply_filter_tree (Shape         *shape,
 
       graphene_rect_init_from_rect (&subregion, &filter_region);
 
-      if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)))
         {
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)))
-            subregion.origin.x = bounds.origin.x + svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_X), 1) * bounds.size.width;
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)))
-            subregion.origin.y = bounds.origin.y + svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_Y), 1) * bounds.size.height;
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)))
-            subregion.size.width = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_WIDTH), 1) * bounds.size.width;
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_HEIGHT)))
-            subregion.size.height = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_HEIGHT), 1) * bounds.size.height;
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_X);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion.origin.x = bounds.origin.x + svg_number_get (n, bounds.size.width);
+          else
+            subregion.origin.x = context->viewport->origin.x + svg_number_get (n, context->viewport->size.width);
         }
-      else
+
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)))
         {
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)))
-            subregion.origin.x = context->viewport->origin.x + svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_X), context->viewport->size.width);
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)))
-            subregion.origin.y = context->viewport->origin.y + svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_Y), context->viewport->size.height);
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)))
-            subregion.size.width = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_WIDTH), context->viewport->size.width);
-          if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_HEIGHT)))
-            subregion.size.height = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_HEIGHT), context->viewport->size.height);
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_Y);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion.origin.y = bounds.origin.y + svg_number_get (n, bounds.size.height);
+          else
+            subregion.origin.y = context->viewport->origin.y + svg_number_get (n, context->viewport->size.height);
+        }
+
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)))
+        {
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_WIDTH);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion.size.width = svg_number_get (n, bounds.size.width);
+          else
+            subregion.size.width = svg_number_get (n, context->viewport->size.width);
+        }
+
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_HEIGHT)))
+        {
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_HEIGHT);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion.size.height = svg_number_get (n, bounds.size.height);
+          else
+            subregion.size.height = svg_number_get (n, context->viewport->size.height);
         }
 
       switch (f->type)
@@ -18529,6 +18538,8 @@ apply_filter_tree (Shape         *shape,
           {
             SvgHref *href = (SvgHref *) filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_HREF);
             SvgContentFit *cf = (SvgContentFit *) filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_CONTENT_FIT);
+            GskTransform *transform;
+            GskRenderNode *node;
 
             if (href->kind == HREF_NONE)
               {
@@ -18536,8 +18547,6 @@ apply_filter_tree (Shape         *shape,
               }
             else if (href->texture != NULL)
               {
-                GskTransform *transform;
-                GskRenderNode *node;
                 graphene_rect_t vb;
                 double sx, sy, tx, ty;
 
@@ -18569,7 +18578,11 @@ apply_filter_tree (Shape         *shape,
               {
                 gtk_snapshot_push_collect (context->snapshot);
                 render_shape (href->shape, context);
-                result = gtk_snapshot_pop_collect (context->snapshot);
+                node = gtk_snapshot_pop_collect (context->snapshot);
+                transform = gsk_transform_translate (NULL, &subregion.origin);
+                result = gsk_transform_node_new (node, transform);
+                gsk_render_node_unref (node);
+                gsk_transform_unref (transform);
               }
             else
               {

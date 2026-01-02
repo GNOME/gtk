@@ -30,6 +30,7 @@ test_data = [
   'filter-flood.svg',
   'filter-gaussian-blur.svg',
   'filter-image.svg',
+  'filter-image-shenanigans.svg',
   'filter-merge.svg',
   'filter-offset.svg',
   'filter-offset2.svg',
