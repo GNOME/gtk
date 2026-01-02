@@ -1682,3 +1682,44 @@ out:
   gsk_path_builder_end_current (self);
   self->current_point = current;
 }
+
+void
+gsk_path_builder_add_op (GskPathBuilder         *builder,
+                         GskPathOperation        op,
+                         const graphene_point_t *pts,
+                         size_t                  n_pts,
+                         float                   weight)
+{
+  g_assert (op == GSK_PATH_MOVE || op == GSK_PATH_CLOSE ||
+            graphene_point_equal (&builder->current_point, &pts[0]));
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (builder);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_CUBIC:
+      gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
