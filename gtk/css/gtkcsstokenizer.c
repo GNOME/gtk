@@ -1061,6 +1061,28 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
     }
 }
 
+static inline double
+exp10i (gint64 exp)
+{
+  switch (exp)
+    {
+    case -6: return 0.000001;
+    case -5: return 0.00001;
+    case -4: return 0.0001;
+    case -3: return 0.001;
+    case -2: return 0.01;
+    case -1: return 0.1;
+    case 0: return 1;
+    case 1: return 10;
+    case 2: return 100;
+    case 3: return 1000;
+    case 4: return 10000;
+    case 5: return 100000;
+    case 6: return 1000000;
+    default: return pow (10, exp);
+    }
+}
+
 static void
 gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
                                 GtkCssToken     *token)
@@ -1135,7 +1157,7 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
 
   gtk_css_tokenizer_consume (tokenizer, data - tokenizer->data, data - tokenizer->data);
 
-  value = sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent);
+  value = sign * (integer + ((double) fractional / fractional_length)) * exp10i (exponent_sign * exponent);
 
   if (gtk_css_tokenizer_has_identifier (tokenizer))
     {
