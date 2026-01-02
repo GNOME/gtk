@@ -1462,32 +1462,7 @@ transform_op (GskPathOperation        op,
   for (unsigned int i = 0; i < n_pts; i++)
     gsk_transform_transform_point (t->transform, &_pts[i], &pts[i]);
 
-  switch (op)
-    {
-    case GSK_PATH_MOVE:
-      gsk_path_builder_move_to (t->builder, pts[0].x, pts[0].y);
-      break;
-
-    case GSK_PATH_CLOSE:
-      gsk_path_builder_close (t->builder);
-      break;
-
-    case GSK_PATH_LINE:
-      gsk_path_builder_line_to (t->builder, pts[1].x, pts[1].y);
-      break;
-
-    case GSK_PATH_QUAD:
-      gsk_path_builder_quad_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
-      break;
-
-    case GSK_PATH_CUBIC:
-      gsk_path_builder_cubic_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
-      break;
-
-    case GSK_PATH_CONIC:
-    default:
-      g_assert_not_reached ();
-    }
+  gsk_path_builder_add_op (t->builder, op, pts, n_pts, weight);
 
   return TRUE;
 }
@@ -1556,10 +1531,25 @@ svg_path_data_free (SvgPathData *p)
   g_free (p);
 }
 
+static inline size_t
+points_per_op (GskPathOperation op)
+{
+  size_t n_pts[] = {
+    [GSK_PATH_MOVE] = 1,
+    [GSK_PATH_CLOSE] = 0,
+    [GSK_PATH_LINE] = 2,
+    [GSK_PATH_QUAD] = 3,
+    [GSK_PATH_CUBIC] = 4,
+    [GSK_PATH_CONIC] = 3
+  };
+
+  return n_pts[op];
+}
+
 static gboolean
 add_op (GskPathOperation        op,
         const graphene_point_t *pts,
-        gsize                   n_pts,
+        size_t                  n_pts,
         float                   weight,
         gpointer                user_data)
 {
@@ -1763,39 +1753,15 @@ svg_path_data_to_gsk (SvgPathData *p)
     {
       SvgPathOp *op = svg_path_ops_index (&p->ops, i);
 
-      switch (op->op)
-        {
-        case GSK_PATH_MOVE:
-          gsk_path_builder_move_to (builder, op->seg.pts[0].x, op->seg.pts[0].y);
-          break;
-        case GSK_PATH_CLOSE:
-          gsk_path_builder_close (builder);
-          break;
-        case GSK_PATH_LINE:
-          gsk_path_builder_line_to (builder, op->seg.pts[1].x, op->seg.pts[1].y);
-          break;
-        case GSK_PATH_QUAD:
-          gsk_path_builder_quad_to (builder,
-                                    op->seg.pts[1].x, op->seg.pts[1].y,
-                                    op->seg.pts[2].x, op->seg.pts[2].y);
-          break;
-        case GSK_PATH_CUBIC:
-          gsk_path_builder_cubic_to (builder,
-                                     op->seg.pts[1].x, op->seg.pts[1].y,
-                                     op->seg.pts[2].x, op->seg.pts[2].y,
-                                     op->seg.pts[3].x, op->seg.pts[3].y);
-          break;
-        case SVG_PATH_ARC:
-          gsk_path_builder_svg_arc_to (builder,
-                                       op->arc.rx, op->arc.ry,
-                                       op->arc.x_axis_rotation,
-                                       op->arc.large_arc,
-                                       op->arc.positive_sweep,
-                                       op->arc.x, op->arc.y);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
+      if (op->op == SVG_PATH_ARC)
+        gsk_path_builder_svg_arc_to (builder,
+                                     op->arc.rx, op->arc.ry,
+                                     op->arc.x_axis_rotation,
+                                     op->arc.large_arc,
+                                     op->arc.positive_sweep,
+                                     op->arc.x, op->arc.y);
+      else
+        gsk_path_builder_add_op (builder, op->op, op->seg.pts, points_per_op (op->op), 1);
     }
 
   return gsk_path_builder_free_to_path (builder);

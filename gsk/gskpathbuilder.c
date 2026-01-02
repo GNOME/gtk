@@ -1690,9 +1690,6 @@ gsk_path_builder_add_op (GskPathBuilder         *builder,
                          size_t                  n_pts,
                          float                   weight)
 {
-  g_assert (op == GSK_PATH_MOVE || op == GSK_PATH_CLOSE ||
-            graphene_point_equal (&builder->current_point, &pts[0]));
-
   switch (op)
     {
     case GSK_PATH_MOVE:
