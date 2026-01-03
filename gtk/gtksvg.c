@@ -795,14 +795,18 @@ parse_numeric (const char   *value,
                double       *f,
                SvgUnit      *unit)
 {
-  char *end = NULL;
+  char *endp = NULL;
 
-  *f = g_ascii_strtod (value, &end);
-  if (end && *end != '\0')
+  *f = g_ascii_strtod (value, &endp);
+
+  if (endp == value)
+    return FALSE;
+
+  if (endp && *endp != '\0')
     {
       unsigned int i;
 
-      if (*end == '%')
+      if (*endp == '%')
         {
           *unit = SVG_UNIT_PERCENTAGE;
           return (flags & PERCENTAGE) != 0;
@@ -813,7 +817,7 @@ parse_numeric (const char   *value,
 
       for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
         {
-          if (strcmp (end, unit_names[i]) == 0)
+          if (strcmp (endp, unit_names[i]) == 0)
             {
               *unit = i;
               break;
@@ -936,14 +940,18 @@ parse_duration (const char *value,
                 int64_t    *f)
 {
   double v;
-  char *end;
+  char *endp = NULL;
 
-  v = g_ascii_strtod (value, &end);
-  if (end && *end != '\0')
+  v = g_ascii_strtod (value, &endp);
+
+  if (endp == value)
+    return FALSE;
+
+  if (endp && *endp != '\0')
     {
-      if (strcmp (end, "ms") == 0)
+      if (strcmp (endp, "ms") == 0)
         *f = (int64_t) round (v * G_TIME_SPAN_MILLISECOND);
-      else if (strcmp (end, "s") == 0)
+      else if (strcmp (endp, "s") == 0)
         *f = (int64_t) round (v * G_TIME_SPAN_SECOND);
       else
         return FALSE;
@@ -9676,7 +9684,7 @@ shape_attr_parse_values (ShapeAttr      attr,
       char *s = g_strstrip (strv[i]);
       SvgValue *v;
 
-      if (*s == '\0' && strv[i] == NULL)
+      if (*s == '\0' && strv[i + 1] == NULL)
         break;
 
       if (attr == SHAPE_ATTR_TRANSFORM && transform_type != TRANSFORM_NONE)

@@ -22,6 +22,7 @@
   </g>
   <defs>
     <filter id='myfirstfilter'>
+      <animate attributeName='x' values='1;;2 ; 3'/>
       <feFlood/>
       <feMerge/>
       <fefe/>
