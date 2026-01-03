@@ -15323,268 +15323,61 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (strcmp (element_name, "metadata") == 0)
+  if (shape_type_lookup (element_name, &shape_type))
     {
-      return;
-    }
-  else if (strcmp (element_name, "rdf:RDF") == 0 ||
-           strcmp (element_name, "cc:Work") == 0 ||
-           strcmp (element_name, "dc:subject") == 0 ||
-           strcmp (element_name, "rdf:Bag") == 0 ||
-           strcmp (element_name, "rdf:li") == 0)
-    {
-      if (!has_ancestor (context, "metadata"))
-        skip_element (data, context, "Ignoring RDF elements outside <metadata>: <%s>", element_name);
-
-      if (strcmp (element_name, "rdf:li") == 0)
+      if (data->current_shape &&
+          !shape_types[data->current_shape->type].has_shapes)
         {
-          /* Verify we're in the right place */
-          if (check_ancestors (context, "rdf:Bag", "dc:subject", "cc:Work", "rdf:RDF", "metadata", NULL))
-            {
-              data->collect_text = TRUE;
-              g_string_set_size (data->text, 0);
-            }
-          else
-            skip_element (data, context, "Ignoring RDF element in wrong context: <%s>", element_name);
-        }
-
-      return;
-    }
-  else if (strcmp (element_name, "font-face") == 0 ||
-           strcmp (element_name, "font-face-src") == 0)
-    {
-      return;
-    }
-  else if (strcmp (element_name, "font-face-uri") == 0)
-    {
-      if (check_ancestors (context, "font-face-src", "font-face", NULL))
-        {
-          for (unsigned int i = 0; attr_names[i]; i++)
-            {
-              if (strcmp (attr_names[i], "href") == 0)
-                {
-                  if (!add_font_from_url (data->svg, context, attr_values[i]))
-                    {
-                      // too bad
-                    }
-                }
-            }
-        }
-      else
-        skip_element (data, context, "Ignoring font element int he wrong context: <%s>", element_name);
-
-      return;
-    }
-  else if (strcmp (element_name, "style") == 0 ||
-           strcmp (element_name, "title") == 0 ||
-           strcmp (element_name, "desc") == 0 ||
-           g_str_has_prefix (element_name, "sodipodi:") ||
-           g_str_has_prefix (element_name, "inkscape:"))
-    {
-      skip_element (data, context, "Ignoring metadata and style elements: <%s>", element_name);
-      return;
-    }
-  else if (strcmp (element_name, "set") == 0)
-    {
-      Animation *a;
-      const char *to_attr = NULL;
-      SvgValue *value;
-
-      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
-        {
-          skip_element (data, context, "Animations are disabled");
+          skip_element (data, context, "Parent element can't contain shapes");
           return;
         }
 
-      if (data->current_animation)
+      shape = shape_new (data->current_shape, shape_type);
+
+      if (data->current_shape == NULL && shape->type == SHAPE_SVG)
         {
-          skip_element (data, context, "Nested animation elements are not allowed: <set>");
-          return;
+          data->svg->content = shape;
+
+          if (data->svg->features & GTK_SVG_EXTENSIONS)
+            parse_svg_gpa_attrs (data->svg,
+                                 element_name, attr_names, attr_values,
+                                 &handled, data, context);
         }
 
-      a = animation_set_new ();
+      parse_shape_attrs (shape,
+                         element_name, attr_names, attr_values,
+                         &handled, data, context);
 
-      markup_filter_attributes (element_name,
-                                attr_names, attr_values,
-                                &handled,
-                                "to", &to_attr,
-                                NULL);
-
-      if (!parse_base_animation_attrs (a,
-                                       element_name,
-                                       attr_names, attr_values,
-                                       &handled,
-                                       data,
-                                       context))
-        {
-          animation_drop_and_free (a);
-          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
-          return;
-        }
+      if (data->svg->gpa_version > 0)
+        parse_shape_gpa_attrs (shape,
+                               element_name, attr_names, attr_values,
+                               &handled, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
-      if (!to_attr)
-        {
-          gtk_svg_missing_attribute (data->svg, context, "to", NULL);
-          animation_drop_and_free (a);
-          skip_element (data, context, "Dropping <set> without 'to'");
-          return;
-        }
+      if (data->current_shape)
+        g_ptr_array_add (data->current_shape->shapes, shape);
 
-      a->calc_mode = CALC_MODE_DISCRETE;
-      a->frames = g_new0 (Frame, 2);
-      a->frames[0].time = 0;
-      a->frames[1].time = 1;
+      data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
 
-      value = shape_attr_parse_value (a->attr, to_attr);
-      if (!value)
-        {
-          gtk_svg_invalid_attribute (data->svg, context, "to", "Failed to parse: %s", to_attr);
-          animation_drop_and_free (a);
-          skip_element (data, context, "Dropping <set> without 'to'");
-          return;
-        }
+      if (data->current_shape && (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN) && shape->type == SHAPE_TSPAN)
+      {
+        TextNode node = {
+          .type = TEXT_NODE_SHAPE,
+          .shape = { .shape = shape },
+        };
+        g_array_append_val (data->current_shape->text, node);
+      }
 
-      a->frames[0].value = svg_value_ref (value);
-      a->frames[1].value = svg_value_ref (value);
-      a->n_frames = 2;
+      data->current_shape = shape;
 
-      svg_value_unref (value);
-
-      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
-        {
-          a->shape = data->current_shape;
-          g_ptr_array_add (data->current_shape->animations, a);
-        }
-      else
-        {
-          g_ptr_array_add (data->pending_animations, a);
-        }
-
-      if (a->id)
-        g_hash_table_insert (data->animations, a->id, a);
-
-      data->current_animation = a;
+      if (shape->id)
+        g_hash_table_insert (data->shapes, shape->id, shape);
 
       return;
     }
-  else if (strcmp (element_name, "animate") == 0 ||
-           strcmp (element_name, "animateTransform") == 0 ||
-           strcmp (element_name, "animateMotion") == 0)
-    {
-      Animation *a;
 
-      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
-        {
-          skip_element (data, context, "Animations are disabled");
-          return;
-        }
-
-      if (data->current_animation)
-        {
-          skip_element (data, context, "Nested animation elements are not allowed: <%s>", element_name);
-          return;
-        }
-
-      if (strcmp (element_name, "animate") == 0)
-        a = animation_animate_new ();
-      else if (strcmp (element_name, "animateTransform") == 0)
-        a = animation_transform_new ();
-      else
-        a = animation_motion_new ();
-
-      g_markup_parse_context_get_position (context, &a->line, NULL);
-
-      if (!parse_base_animation_attrs (a,
-                                       element_name,
-                                       attr_names, attr_values,
-                                       &handled,
-                                       data,
-                                       context))
-        {
-          animation_drop_and_free (a);
-          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
-          return;
-        }
-
-      if (!parse_value_animation_attrs (a,
-                                        element_name,
-                                        attr_names, attr_values,
-                                        &handled,
-                                        data,
-                                        context))
-        {
-          animation_drop_and_free (a);
-          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
-          return;
-        }
-
-      if (a->type == ANIMATION_TYPE_MOTION)
-        {
-          if (!parse_motion_animation_attrs (a,
-                                             element_name,
-                                             attr_names, attr_values,
-                                             &handled,
-                                             data,
-                                             context))
-            {
-              animation_drop_and_free (a);
-              skip_element (data, context, "Skipping <%s>: bad attributes", element_name);
-              return;
-            }
-        }
-
-      gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
-
-      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
-        {
-          a->shape = data->current_shape;
-          g_ptr_array_add (data->current_shape->animations, a);
-        }
-      else
-        {
-          g_ptr_array_add (data->pending_animations, a);
-        }
-
-      if (a->id)
-        g_hash_table_insert (data->animations, a->id, a);
-
-      data->current_animation = a;
-
-      return;
-    }
-  else if (strcmp (element_name, "mpath") == 0)
-    {
-      if (data->current_animation == NULL ||
-          data->current_animation->type != ANIMATION_TYPE_MOTION ||
-          data->current_animation->motion.path_ref != NULL)
-        {
-          skip_element (data, context, "<mpath> only allowed in <animateMotion>");
-          return;
-        }
-
-      for (unsigned int i = 0; attr_names[i]; i++)
-        {
-          if (strcmp (attr_names[i], "href") == 0)
-            {
-              handled |= BIT (i);
-
-              if (attr_values[i][0] == '#')
-                data->current_animation->motion.path_ref = g_strdup (attr_values[i] + 1);
-              else
-                data->current_animation->motion.path_ref = g_strdup (attr_values[i]);
-            }
-        }
-
-      gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
-
-      if (!data->current_animation->motion.path_ref)
-        gtk_svg_missing_attribute (data->svg, context, "href", NULL);
-
-      return;
-    }
-  else if (strcmp (element_name, "stop") == 0)
+  if (strcmp (element_name, "stop") == 0)
     {
       const char *parent = g_markup_parse_context_get_element_stack (context)->next->data;
       SvgValue *value;
@@ -15652,7 +15445,8 @@ start_element_cb (GMarkupParseContext  *context,
 
       return;
     }
-  else if (filter_type_lookup (element_name, &filter_type))
+
+  if (filter_type_lookup (element_name, &filter_type))
     {
       const char *style_attr = NULL;
       unsigned int idx;
@@ -15743,63 +15537,278 @@ start_element_cb (GMarkupParseContext  *context,
 
       return;
     }
-  else if (shape_type_lookup (element_name, &shape_type))
+
+  if (strcmp (element_name, "metadata") == 0)
     {
-      shape = shape_new (data->current_shape, shape_type);
-    }
-  else
-    {
-      skip_element (data, context, "Unknown element: <%s>", element_name);
       return;
     }
 
-  if (data->current_shape &&
-      !shape_types[data->current_shape->type].has_shapes)
+  if (strcmp (element_name, "rdf:RDF") == 0 ||
+      strcmp (element_name, "cc:Work") == 0 ||
+      strcmp (element_name, "dc:subject") == 0 ||
+      strcmp (element_name, "rdf:Bag") == 0 ||
+      strcmp (element_name, "rdf:li") == 0)
     {
-      shape_free (shape);
-      skip_element (data, context, "Parent element can't contain shapes");
+      if (!has_ancestor (context, "metadata"))
+        skip_element (data, context, "Ignoring RDF elements outside <metadata>: <%s>", element_name);
+
+      if (strcmp (element_name, "rdf:li") == 0)
+        {
+          /* Verify we're in the right place */
+          if (check_ancestors (context, "rdf:Bag", "dc:subject", "cc:Work", "rdf:RDF", "metadata", NULL))
+            {
+              data->collect_text = TRUE;
+              g_string_set_size (data->text, 0);
+            }
+          else
+            skip_element (data, context, "Ignoring RDF element in wrong context: <%s>", element_name);
+        }
+
       return;
     }
 
-  if (data->current_shape == NULL && shape->type == SHAPE_SVG)
+  if (strcmp (element_name, "font-face") == 0 ||
+      strcmp (element_name, "font-face-src") == 0)
     {
-      data->svg->content = shape;
-
-      if (data->svg->features & GTK_SVG_EXTENSIONS)
-        parse_svg_gpa_attrs (data->svg,
-                             element_name, attr_names, attr_values,
-                             &handled, data, context);
+      return;
     }
 
-  parse_shape_attrs (shape,
-                     element_name, attr_names, attr_values,
-                     &handled, data, context);
+  if (strcmp (element_name, "font-face-uri") == 0)
+    {
+      if (check_ancestors (context, "font-face-src", "font-face", NULL))
+        {
+          for (unsigned int i = 0; attr_names[i]; i++)
+            {
+              if (strcmp (attr_names[i], "href") == 0)
+                {
+                  if (!add_font_from_url (data->svg, context, attr_values[i]))
+                    {
+                      // too bad
+                    }
+                }
+            }
+        }
+      else
+        skip_element (data, context, "Ignoring font element int he wrong context: <%s>", element_name);
 
-  if (data->svg->gpa_version > 0)
-    parse_shape_gpa_attrs (shape,
-                           element_name, attr_names, attr_values,
-                           &handled, data, context);
+      return;
+    }
 
-  gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
+  if (strcmp (element_name, "style") == 0 ||
+      strcmp (element_name, "title") == 0 ||
+      strcmp (element_name, "desc") == 0 ||
+      g_str_has_prefix (element_name, "sodipodi:") ||
+      g_str_has_prefix (element_name, "inkscape:"))
+    {
+      skip_element (data, context, "Ignoring metadata and style elements: <%s>", element_name);
+      return;
+    }
 
-  if (data->current_shape)
-    g_ptr_array_add (data->current_shape->shapes, shape);
+  if (strcmp (element_name, "set") == 0)
+    {
+      Animation *a;
+      const char *to_attr = NULL;
+      SvgValue *value;
 
-  data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
+      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+        {
+          skip_element (data, context, "Animations are disabled");
+          return;
+        }
 
-  if (data->current_shape && (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN) && shape->type == SHAPE_TSPAN)
-  {
-    TextNode node = {
-      .type = TEXT_NODE_SHAPE,
-      .shape = { .shape = shape },
-    };
-    g_array_append_val (data->current_shape->text, node);
-  }
+      if (data->current_animation)
+        {
+          skip_element (data, context, "Nested animation elements are not allowed: <set>");
+          return;
+        }
 
-  data->current_shape = shape;
+      a = animation_set_new ();
 
-  if (shape->id)
-    g_hash_table_insert (data->shapes, shape->id, shape);
+      markup_filter_attributes (element_name,
+                                attr_names, attr_values,
+                                &handled,
+                                "to", &to_attr,
+                                NULL);
+
+      if (!parse_base_animation_attrs (a,
+                                       element_name,
+                                       attr_names, attr_values,
+                                       &handled,
+                                       data,
+                                       context))
+        {
+          animation_drop_and_free (a);
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          return;
+        }
+
+      gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
+
+      if (!to_attr)
+        {
+          gtk_svg_missing_attribute (data->svg, context, "to", NULL);
+          animation_drop_and_free (a);
+          skip_element (data, context, "Dropping <set> without 'to'");
+          return;
+        }
+
+      a->calc_mode = CALC_MODE_DISCRETE;
+      a->frames = g_new0 (Frame, 2);
+      a->frames[0].time = 0;
+      a->frames[1].time = 1;
+
+      value = shape_attr_parse_value (a->attr, to_attr);
+      if (!value)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "to", "Failed to parse: %s", to_attr);
+          animation_drop_and_free (a);
+          skip_element (data, context, "Dropping <set> without 'to'");
+          return;
+        }
+
+      a->frames[0].value = svg_value_ref (value);
+      a->frames[1].value = svg_value_ref (value);
+      a->n_frames = 2;
+
+      svg_value_unref (value);
+
+      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
+        {
+          a->shape = data->current_shape;
+          g_ptr_array_add (data->current_shape->animations, a);
+        }
+      else
+        {
+          g_ptr_array_add (data->pending_animations, a);
+        }
+
+      if (a->id)
+        g_hash_table_insert (data->animations, a->id, a);
+
+      data->current_animation = a;
+
+      return;
+    }
+
+  if (strcmp (element_name, "animate") == 0 ||
+      strcmp (element_name, "animateTransform") == 0 ||
+      strcmp (element_name, "animateMotion") == 0)
+    {
+      Animation *a;
+
+      if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
+        {
+          skip_element (data, context, "Animations are disabled");
+          return;
+        }
+
+      if (data->current_animation)
+        {
+          skip_element (data, context, "Nested animation elements are not allowed: <%s>", element_name);
+          return;
+        }
+
+      if (strcmp (element_name, "animate") == 0)
+        a = animation_animate_new ();
+      else if (strcmp (element_name, "animateTransform") == 0)
+        a = animation_transform_new ();
+      else
+        a = animation_motion_new ();
+
+      g_markup_parse_context_get_position (context, &a->line, NULL);
+
+      if (!parse_base_animation_attrs (a,
+                                       element_name,
+                                       attr_names, attr_values,
+                                       &handled,
+                                       data,
+                                       context))
+        {
+          animation_drop_and_free (a);
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          return;
+        }
+
+      if (!parse_value_animation_attrs (a,
+                                        element_name,
+                                        attr_names, attr_values,
+                                        &handled,
+                                        data,
+                                        context))
+        {
+          animation_drop_and_free (a);
+          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          return;
+        }
+
+      if (a->type == ANIMATION_TYPE_MOTION)
+        {
+          if (!parse_motion_animation_attrs (a,
+                                             element_name,
+                                             attr_names, attr_values,
+                                             &handled,
+                                             data,
+                                             context))
+            {
+              animation_drop_and_free (a);
+              skip_element (data, context, "Skipping <%s>: bad attributes", element_name);
+              return;
+            }
+        }
+
+      gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
+
+      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
+        {
+          a->shape = data->current_shape;
+          g_ptr_array_add (data->current_shape->animations, a);
+        }
+      else
+        {
+          g_ptr_array_add (data->pending_animations, a);
+        }
+
+      if (a->id)
+        g_hash_table_insert (data->animations, a->id, a);
+
+      data->current_animation = a;
+
+      return;
+    }
+
+  if (strcmp (element_name, "mpath") == 0)
+    {
+      if (data->current_animation == NULL ||
+          data->current_animation->type != ANIMATION_TYPE_MOTION ||
+          data->current_animation->motion.path_ref != NULL)
+        {
+          skip_element (data, context, "<mpath> only allowed in <animateMotion>");
+          return;
+        }
+
+      for (unsigned int i = 0; attr_names[i]; i++)
+        {
+          if (strcmp (attr_names[i], "href") == 0)
+            {
+              handled |= BIT (i);
+
+              if (attr_values[i][0] == '#')
+                data->current_animation->motion.path_ref = g_strdup (attr_values[i] + 1);
+              else
+                data->current_animation->motion.path_ref = g_strdup (attr_values[i]);
+            }
+        }
+
+      gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
+
+      if (!data->current_animation->motion.path_ref)
+        gtk_svg_missing_attribute (data->svg, context, "href", NULL);
+
+      return;
+    }
+
+  /* If we get here, its all over */
+  skip_element (data, context, "Unknown element: <%s>", element_name);
 }
 
 static void
