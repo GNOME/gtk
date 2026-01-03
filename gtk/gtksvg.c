@@ -9592,181 +9592,186 @@ shape_attr_parse_values (ShapeAttr      attr,
 /*  }}} */
 /* {{{ Shapes */
 
-struct {
+typedef enum
+{
+  SHAPE_TYPE_HAS_SHAPES      = 1 << 0,
+  SHAPE_TYPE_HAS_COLOR_STOPS = 1 << 1,
+  SHAPE_TYPE_HAS_FILTERS     = 1 << 2,
+  SHAPE_TYPE_NEVER_RENDERED  = 1 << 3,
+  SHAPE_TYPE_HAS_GPA_ATTRS   = 1 << 4,
+} ShapeTypeFlags;
+
+typedef struct
+{
   const char *name;
-  unsigned int has_shapes      : 1;
-  unsigned int never_rendered  : 1;
-  unsigned int has_gpa_attrs   : 1;
-  unsigned int has_color_stops : 1;
-  unsigned int has_filters     : 1;
-} shape_types[] = {
-  { .name = "line",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 1,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  ShapeTypeFlags flags;
+} ShapeTypeInfo;
+
+static ShapeTypeInfo shape_types[] = {
+  [SHAPE_LINE] = {
+    .name = "line",
+    .flags = SHAPE_TYPE_HAS_GPA_ATTRS,
   },
-  { .name = "polyline",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 1,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_POLYLINE] = {
+    .name = "polyline",
+    .flags = SHAPE_TYPE_HAS_GPA_ATTRS,
   },
-  { .name = "polygon",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 1,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_POLYGON] = {
+    .name = "polygon",
+    .flags = SHAPE_TYPE_HAS_GPA_ATTRS,
   },
-  { .name = "rect",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 1,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_RECT] = {
+    .name = "rect",
+    .flags = SHAPE_TYPE_HAS_GPA_ATTRS,
   },
-  { .name = "circle",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 1,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_CIRCLE] = {
+    .name = "circle",
+    .flags = SHAPE_TYPE_HAS_GPA_ATTRS,
   },
-  { .name = "ellipse",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 1,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_ELLIPSE] = {
+    .name = "ellipse",
+    .flags = SHAPE_TYPE_HAS_GPA_ATTRS,
   },
-  { .name = "path",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 1,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_PATH] = {
+    .name = "path",
+    .flags = SHAPE_TYPE_HAS_GPA_ATTRS,
   },
-  { .name = "g",
-    .has_shapes = 1,
-    .never_rendered = 0,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_GROUP] = {
+    .name = "g",
+    .flags = SHAPE_TYPE_HAS_SHAPES,
   },
-  { .name = "clipPath",
-    .has_shapes = 1,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_CLIP_PATH] = {
+    .name = "clipPath",
+    .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "mask",
-    .has_shapes = 1,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_MASK] = {
+    .name = "mask",
+    .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "defs",
-    .has_shapes = 1,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_DEFS] = {
+    .name = "defs",
+    .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "use",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_USE] = {
+    .name = "use",
   },
-  { .name = "linearGradient",
-    .has_shapes = 0,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 1,
-    .has_filters = 0,
+  [SHAPE_LINEAR_GRADIENT] = {
+    .name = "linearGradient",
+    .flags = SHAPE_TYPE_HAS_COLOR_STOPS | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "radialGradient",
-    .has_shapes = 0,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 1,
-    .has_filters = 0,
+  [SHAPE_RADIAL_GRADIENT] = {
+    .name = "radialGradient",
+   .flags = SHAPE_TYPE_HAS_COLOR_STOPS | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "pattern",
-    .has_shapes = 1,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_PATTERN] = {
+    .name = "pattern",
+    .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "marker",
-    .has_shapes = 1,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_MARKER] = {
+    .name = "marker",
+    .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "text",
-    .has_shapes = 1,
-    .never_rendered = 0,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
+  [SHAPE_TEXT] = {
+    .name = "text",
+    .flags = SHAPE_TYPE_HAS_SHAPES,
   },
-  { .name = "tspan",
-    .has_shapes = 1,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
+  [SHAPE_TSPAN] = {
+    .name = "tspan",
+    .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "svg",
-    .has_shapes = 1,
-    .never_rendered = 0,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_SVG] = {
+    .name = "svg",
+    .flags = SHAPE_TYPE_HAS_SHAPES,
   },
-  { .name = "image",
-    .has_shapes = 0,
-    .never_rendered = 0,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_IMAGE] = {
+    .name = "image",
   },
-  { .name = "filter",
-    .has_shapes = 0,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 1,
+  [SHAPE_FILTER] = {
+    .name = "filter",
+    .flags = SHAPE_TYPE_HAS_FILTERS | SHAPE_TYPE_NEVER_RENDERED,
   },
-  { .name = "symbol",
-    .has_shapes = 1,
-    .never_rendered = 1,
-    .has_gpa_attrs = 0,
-    .has_color_stops = 0,
-    .has_filters = 0,
+  [SHAPE_SYMBOL] = {
+    .name = "symbol",
+    .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
    },
 };
+
+static guint
+shape_type_hash (gconstpointer v)
+{
+  const ShapeTypeInfo *t = (const ShapeTypeInfo *) v;
+
+  return g_str_hash (t->name);
+}
+
+static gboolean
+shape_type_equal (gconstpointer v0,
+                  gconstpointer v1)
+{
+  const ShapeTypeInfo *t0 = (const ShapeTypeInfo *) v0;
+  const ShapeTypeInfo *t1 = (const ShapeTypeInfo *) v1;
+
+  return strcmp (t0->name, t1->name) == 0;
+}
+
+static GHashTable *shape_type_lookup_table;
+
+static void
+shape_types_init (void)
+{
+  shape_type_lookup_table = g_hash_table_new (shape_type_hash,
+                                              shape_type_equal);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_types); i++)
+    g_hash_table_add (shape_type_lookup_table, &shape_types[i]);
+}
+
+static inline gboolean
+shape_type_has_shapes (ShapeType type)
+{
+  return (shape_types[type].flags & SHAPE_TYPE_HAS_SHAPES) != 0;
+}
+
+static inline gboolean
+shape_type_has_color_stops (ShapeType type)
+{
+  return (shape_types[type].flags & SHAPE_TYPE_HAS_COLOR_STOPS) != 0;
+}
+
+static inline gboolean
+shape_type_has_filters (ShapeType type)
+{
+  return (shape_types[type].flags & SHAPE_TYPE_HAS_FILTERS) != 0;
+}
+
+static inline gboolean
+shape_type_has_gpa_attrs (ShapeType type)
+{
+  return (shape_types[type].flags & SHAPE_TYPE_HAS_GPA_ATTRS) != 0;
+}
+
+static inline gboolean
+shape_type_is_never_rendered (ShapeType type)
+{
+  return (shape_types[type].flags & SHAPE_TYPE_NEVER_RENDERED) != 0;
+}
 
 static gboolean
 shape_type_lookup (const char *name,
                    ShapeType  *type)
 {
-  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_types); i++)
-    {
-      if (strcmp (name, shape_types[i].name) == 0)
-        {
-          *type = i;
-          return TRUE;
-        }
-    }
-  return FALSE;
+  ShapeTypeInfo key;
+  ShapeTypeInfo *value;
+
+  key.name = name;
+
+  value = g_hash_table_lookup (shape_type_lookup_table, &key);
+
+  if (!value)
+    return FALSE;
+
+  *type = value - shape_types;
+  return TRUE;
 }
 
 static void
@@ -9958,13 +9963,13 @@ shape_new (Shape     *parent,
 
   shape->animations = g_ptr_array_new_with_free_func (animation_free);
 
-  if (shape_types[type].has_shapes)
+  if (shape_type_has_shapes (type))
     shape->shapes = g_ptr_array_new_with_free_func (shape_free);
 
-  if (shape_types[type].has_color_stops)
+  if (shape_type_has_color_stops (type))
     shape->color_stops = g_ptr_array_new_with_free_func (color_stop_free);
 
-  if (shape_types[type].has_filters)
+  if (shape_type_has_filters (type))
     shape->filters = g_ptr_array_new_with_free_func (filter_primitive_free);
 
   if (type == SHAPE_TEXT || type == SHAPE_TSPAN)
@@ -10416,7 +10421,7 @@ shape_add_color_stop (Shape *shape)
 {
   ColorStop *stop = g_new0 (ColorStop, 1);
 
-  g_assert (shape_types[shape->type].has_color_stops);
+  g_assert (shape_type_has_color_stops (shape->type));
 
   for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
     stop->base[color_stop_attr_idx (attr)] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
@@ -10432,7 +10437,7 @@ shape_add_filter (Shape               *shape,
 {
   FilterPrimitive *f = g_new0 (FilterPrimitive, 1);
 
-  g_assert (shape_types[shape->type].has_filters);
+  g_assert (shape_type_has_filters (shape->type));
 
   f->type = type;
 
@@ -11404,7 +11409,7 @@ animations_update_for_pause (Shape   *shape,
       animation_update_for_pause (a, duration);
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -11453,7 +11458,7 @@ shape_get_current_value (Shape        *shape,
     {
       ColorStop *stop;
 
-      g_assert (shape_types[shape->type].has_color_stops);
+      g_assert (shape_type_has_color_stops (shape->type));
       g_assert (idx <= shape->color_stops->len);
 
       stop = g_ptr_array_index (shape->color_stops, idx - 1);
@@ -11464,7 +11469,7 @@ shape_get_current_value (Shape        *shape,
     {
       FilterPrimitive *f;
 
-      g_assert (shape_types[shape->type].has_filters);
+      g_assert (shape_type_has_filters (shape->type));
       g_assert (idx <= shape->filters->len);
 
       f = g_ptr_array_index (shape->filters, idx - 1);
@@ -11521,7 +11526,7 @@ shape_get_base_value (Shape        *shape,
       unsigned int pos;
       SvgValue *value;
 
-      g_assert (shape_types[shape->type].has_color_stops);
+      g_assert (shape_type_has_color_stops (shape->type));
       g_assert (idx <= shape->color_stops->len);
 
       stop = g_ptr_array_index (shape->color_stops, idx - 1);
@@ -11555,7 +11560,7 @@ shape_get_base_value (Shape        *shape,
       unsigned int pos;
       SvgValue *value;
 
-      g_assert (shape_types[shape->type].has_filters);
+      g_assert (shape_type_has_filters (shape->type));
       g_assert (idx <= shape->filters->len);
 
       f = g_ptr_array_index (shape->filters, idx - 1);
@@ -11604,7 +11609,7 @@ shape_set_base_value (Shape        *shape,
       ColorStop *stop;
       unsigned int pos;
 
-      g_assert (shape_types[shape->type].has_color_stops);
+      g_assert (shape_type_has_color_stops (shape->type));
       g_assert (idx <= shape->color_stops->len);
 
       stop = g_ptr_array_index (shape->color_stops, idx - 1);
@@ -11618,7 +11623,7 @@ shape_set_base_value (Shape        *shape,
       FilterPrimitive *f;
       unsigned int pos;
 
-      g_assert (shape_types[shape->type].has_filters);
+      g_assert (shape_type_has_filters (shape->type));
       g_assert (idx <= shape->filters->len);
 
       f = g_ptr_array_index (shape->filters, idx - 1);
@@ -11648,7 +11653,7 @@ shape_set_current_value (Shape        *shape,
     {
       ColorStop *stop;
 
-      g_assert (shape_types[shape->type].has_color_stops);
+      g_assert (shape_type_has_color_stops (shape->type));
 
       stop = g_ptr_array_index (shape->color_stops, idx - 1);
 
@@ -11661,7 +11666,7 @@ shape_set_current_value (Shape        *shape,
     {
       FilterPrimitive *f;
 
-      g_assert (shape_types[shape->type].has_filters);
+      g_assert (shape_type_has_filters (shape->type));
 
       f = g_ptr_array_index (shape->filters, idx - 1);
 
@@ -12570,7 +12575,7 @@ shape_init_current_values (Shape          *shape,
         }
     }
 
-  if (shape_types[shape->type].has_color_stops)
+  if (shape_type_has_color_stops (shape->type))
     {
       for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
         {
@@ -12586,7 +12591,7 @@ shape_init_current_values (Shape          *shape,
         }
     }
 
-  if (shape_types[shape->type].has_filters)
+  if (shape_type_has_filters (shape->type))
     {
       for (unsigned int idx = 0; idx < shape->filters->len; idx++)
         {
@@ -12612,7 +12617,7 @@ mark_as_computed_for_use (Shape    *shape,
 {
   shape->computed_for_use = computed_for_use;
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (Shape *sh = shape->first; sh; sh = sh->next)
         mark_as_computed_for_use (sh, computed_for_use);
@@ -12717,7 +12722,7 @@ compute_current_values_for_shape (Shape          *shape,
     }
   svg_value_unref (identity);
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       Shape *parent = context->parent;
       context->parent = shape;
@@ -12751,7 +12756,7 @@ static void
 apply_state (Shape        *shape,
              unsigned int  state)
 {
-  if (shape_types[shape->type].has_gpa_attrs)
+  if (shape_type_has_gpa_attrs (shape->type))
     {
       SvgValue *value;
 
@@ -12766,7 +12771,7 @@ apply_state (Shape        *shape,
       svg_value_unref (value);
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -15013,7 +15018,7 @@ parse_shape_gpa_attrs (Shape                *shape,
   double animation_segment;
   double attach_pos;
 
-  if (!shape_types[shape->type].has_gpa_attrs)
+  if (!shape_type_has_gpa_attrs (shape->type))
     return;
 
   markup_filter_attributes (element_name,
@@ -15326,7 +15331,7 @@ start_element_cb (GMarkupParseContext  *context,
   if (shape_type_lookup (element_name, &shape_type))
     {
       if (data->current_shape &&
-          !shape_types[data->current_shape->type].has_shapes)
+          !shape_type_has_shapes (data->current_shape->type))
         {
           skip_element (data, context, "Parent element can't contain shapes");
           return;
@@ -15361,13 +15366,13 @@ start_element_cb (GMarkupParseContext  *context,
       data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
 
       if (data->current_shape && (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN) && shape->type == SHAPE_TSPAN)
-      {
-        TextNode node = {
-          .type = TEXT_NODE_SHAPE,
-          .shape = { .shape = shape },
-        };
-        g_array_append_val (data->current_shape->text, node);
-      }
+        {
+          TextNode node = {
+            .type = TEXT_NODE_SHAPE,
+            .shape = { .shape = shape },
+          };
+          g_array_append_val (data->current_shape->text, node);
+        }
 
       data->current_shape = shape;
 
@@ -16299,7 +16304,7 @@ resolve_animation_refs (Shape      *shape,
         }
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -16363,7 +16368,7 @@ static void
 compute_update_order (Shape  *shape,
                       GtkSvg *svg)
 {
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       GHashTable *waiting;
       unsigned int n_waiting;
@@ -16625,7 +16630,7 @@ serialize_shape_attrs (GString              *s,
     {
       if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
           svg->gpa_version > 0 &&
-          shape_types[shape->type].has_gpa_attrs &&
+          shape_type_has_gpa_attrs (shape->type) &&
           attr == SHAPE_ATTR_VISIBILITY)
         {
           if ((shape->gpa.states & BIT (svg->state)) == 0)
@@ -16774,7 +16779,7 @@ serialize_gpa_attrs (GString              *s,
   SvgValue **values;
   SvgPaint *paint;
 
-  if (svg->gpa_version == 0 || !shape_types[shape->type].has_gpa_attrs)
+  if (svg->gpa_version == 0 || !shape_type_has_gpa_attrs (shape->type))
     return;
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
@@ -17431,13 +17436,13 @@ serialize_shape (GString              *s,
       g_string_append_c (s, '>');
     }
 
-  if (shape_types[shape->type].has_color_stops)
+  if (shape_type_has_color_stops (shape->type))
     {
       for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
         serialize_color_stop (s, svg, indent + 2, shape, idx, flags);
     }
 
-  if (shape_types[shape->type].has_filters)
+  if (shape_type_has_filters (shape->type))
     {
       for (unsigned int idx = 0; idx < shape->filters->len; idx++)
         {
@@ -17515,7 +17520,7 @@ serialize_shape (GString              *s,
       g_string_append_printf (s, "</%s>", shape_types[shape->type].name);
       return;
     }
-  else if (shape_types[shape->type].has_shapes)
+  else if (shape_type_has_shapes (shape->type))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -18961,7 +18966,7 @@ pop_group (Shape        *shape,
 static gboolean
 type_is_gradient (ShapeType type)
 {
-  return shape_types[type].has_color_stops;
+  return shape_type_has_color_stops (type);
 }
 
 static gboolean
@@ -20448,7 +20453,7 @@ paint_shape (Shape        *shape,
       return;
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (int i = 0; i < shape->shapes->len; i++)
         {
@@ -20571,7 +20576,7 @@ render_shape (Shape        *shape,
       shape->type == SHAPE_RADIAL_GRADIENT)
     return;
 
-  if (shape_types[shape->type].never_rendered)
+  if (shape_type_is_never_rendered (shape->type))
     {
       if (!((shape->type == SHAPE_SYMBOL && shape_is_use_target (shape, context)) ||
            (shape->type == SHAPE_CLIP_PATH && context->op == CLIPPING && context->op_changed) ||
@@ -21020,6 +21025,7 @@ gtk_svg_class_init (GtkSvgClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  shape_types_init ();
   shape_attr_init_default_values ();
   shape_attr_init_lookup ();
 
@@ -21160,7 +21166,7 @@ shape_dump_animation_state (Shape *shape, GString *string)
         g_string_append_printf (string, " %s", a->id);
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -21288,7 +21294,7 @@ shape_equal (Shape *shape1,
         return FALSE;
     }
 
-  if (shape_types[shape1->type].has_shapes)
+  if (shape_type_has_shapes (shape1->type))
     {
       if (shape1->shapes->len != shape2->shapes->len)
         return FALSE;
@@ -21303,7 +21309,7 @@ shape_equal (Shape *shape1,
         }
     }
 
-  if (shape_types[shape1->type].has_color_stops)
+  if (shape_type_has_color_stops (shape1->type))
     {
       if (shape1->color_stops->len != shape2->color_stops->len)
         return FALSE;
@@ -21388,7 +21394,7 @@ collect_next_update_for_shape (Shape         *shape,
       collect_next_update_for_animation (a, current_time, run_mode, next_update);
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -21426,7 +21432,7 @@ shape_update_animation_state (Shape   *shape,
       animation_update_state (a, current_time);
     }
 
-  if (shape_types[shape->type].has_shapes)
+  if (shape_type_has_shapes (shape->type))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
