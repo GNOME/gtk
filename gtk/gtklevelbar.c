@@ -1184,6 +1184,8 @@ gtk_level_bar_set_min_value (GtkLevelBar *self,
 
   if (self->min_value > self->cur_value)
     gtk_level_bar_set_value_internal (self, self->min_value);
+  else
+    gtk_widget_queue_allocate (GTK_WIDGET (self->trough_widget));
 
   update_block_nodes (self);
   update_level_style_classes (self);
@@ -1220,6 +1222,8 @@ gtk_level_bar_set_max_value (GtkLevelBar *self,
 
   if (self->max_value < self->cur_value)
     gtk_level_bar_set_value_internal (self, self->max_value);
+  else
+    gtk_widget_queue_allocate (GTK_WIDGET (self->trough_widget));
 
   gtk_level_bar_ensure_offsets_in_range (self);
   update_block_nodes (self);
