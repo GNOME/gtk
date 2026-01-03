@@ -16365,59 +16365,75 @@ can_add (Shape      *shape,
 }
 
 static void
-compute_update_order (Shape  *shape,
-                      GtkSvg *svg)
+do_compute_update_order (Shape      *shape,
+                         GtkSvg     *svg,
+                         GHashTable *waiting)
 {
-  if (shape_type_has_shapes (shape->type))
+  unsigned int n_waiting;
+  gboolean has_cycle = FALSE;
+  Shape *last = NULL;
+
+  if (!shape_type_has_shapes (shape->type))
+    return;
+
+  g_assert (g_hash_table_size (waiting) == 0);
+
+  for (unsigned int i = 0; i < shape->shapes->len; i++)
     {
-      GHashTable *waiting;
-      unsigned int n_waiting;
-      gboolean has_cycle = FALSE;
-      Shape *last = NULL;
+      Shape *sh = g_ptr_array_index (shape->shapes, i);
+      do_compute_update_order (sh, svg, waiting);
+    }
 
-      waiting = g_hash_table_new (g_direct_hash, g_direct_equal);
+  for (unsigned int i = 0; i < shape->shapes->len; i++)
+    {
+      Shape *sh = g_ptr_array_index (shape->shapes, i);
+      g_hash_table_add (waiting, sh);
+    }
 
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
+  n_waiting = g_hash_table_size (waiting);
+  while (n_waiting > 0)
+    {
+      GHashTableIter iter;
+      Shape *key;
+
+      g_hash_table_iter_init (&iter, waiting);
+      while (g_hash_table_iter_next (&iter, (gpointer *) &key, NULL))
         {
-          Shape *sh = g_ptr_array_index (shape->shapes, i);
-          compute_update_order (sh, svg);
+          if (can_add (key, waiting) || has_cycle)
+            {
+              if (last)
+                last->next = key;
+              else
+                shape->first = key;
+              last = key;
+              last->next = NULL;
+              g_hash_table_iter_remove (&iter);
+            }
+        }
 
-          g_hash_table_add (waiting, sh);
+      if (n_waiting == g_hash_table_size (waiting))
+        {
+          gtk_svg_update_error (svg, "Cyclic dependency detected");
+          has_cycle = TRUE;
         }
 
       n_waiting = g_hash_table_size (waiting);
-
-      while (n_waiting > 0)
-        {
-          GHashTableIter iter;
-          Shape *key;
-
-          g_hash_table_iter_init (&iter, waiting);
-          while (g_hash_table_iter_next (&iter, (gpointer *) &key, NULL))
-            {
-              if (can_add (key, waiting) || has_cycle)
-                {
-                  if (last)
-                    last->next = key;
-                  else
-                    shape->first = key;
-                  last = key;
-                  last->next = NULL;
-                  g_hash_table_iter_remove (&iter);
-                }
-            }
-
-          if (g_hash_table_size (waiting) == n_waiting)
-            {
-              gtk_svg_update_error (svg, "Cyclic dependency detected");
-              has_cycle = TRUE;
-            }
-
-          n_waiting = g_hash_table_size (waiting);
-        }
-
-      g_hash_table_unref (waiting);
     }
+
+  for (unsigned int i = 0; i < shape->shapes->len; i++)
+    {
+      Shape *sh = g_ptr_array_index (shape->shapes, i);
+      g_clear_pointer (&sh->deps, g_ptr_array_unref);
+    }
+}
+
+static void
+compute_update_order (Shape  *shape,
+                      GtkSvg *svg)
+{
+  GHashTable *waiting = g_hash_table_new (g_direct_hash, g_direct_equal);
+  do_compute_update_order (shape, svg, waiting);
+  g_hash_table_unref (waiting);
 }
 
 /* }}} */
