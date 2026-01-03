@@ -9961,8 +9961,6 @@ shape_new (Shape     *parent,
       shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, shape));
     }
 
-  shape->animations = g_ptr_array_new_with_free_func (animation_free);
-
   if (shape_type_has_shapes (type))
     shape->shapes = g_ptr_array_new_with_free_func (shape_free);
 
@@ -11149,6 +11147,16 @@ animation_add_dep (Animation *base,
   g_ptr_array_add (base->deps, a);
 }
 
+static void
+shape_add_animation (Shape     *shape,
+                     Animation *a)
+{
+  a->shape = shape;
+  if (!shape->animations)
+    shape->animations = g_ptr_array_new_with_free_func (animation_free);
+  g_ptr_array_add (shape->animations, a);
+}
+
 static Animation *
 animation_set_new (void)
 {
@@ -11403,10 +11411,13 @@ static void
 animations_update_for_pause (Shape   *shape,
                              int64_t  duration)
 {
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      animation_update_for_pause (a, duration);
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          animation_update_for_pause (a, duration);
+        }
     }
 
   if (shape_type_has_shapes (shape->type))
@@ -12628,9 +12639,8 @@ static void
 compute_current_values_for_shape (Shape          *shape,
                                   ComputeContext *context)
 {
-  const graphene_rect_t *old_viewport = NULL;
+  const graphene_rect_t *old_viewport = context->viewport;
   graphene_rect_t viewport;
-  SvgValue *identity, *motion;
 
   shape_init_current_values (shape, context);
 
@@ -12659,68 +12669,73 @@ compute_current_values_for_shape (Shape          *shape,
       else
         graphene_rect_init_from_rect (&viewport, &vb->view_box);
 
-      old_viewport = context->viewport;
       context->viewport = &viewport;
     }
 
-  g_ptr_array_sort_values (shape->animations, compare_anim);
-
-  identity = svg_transform_new_none ();
-  motion = svg_value_ref (identity);
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      SvgValue *val;
+      SvgValue *identity, *motion;
 
-      if (a->status == ANIMATION_STATUS_INACTIVE)
-        continue;
+      g_ptr_array_sort_values (shape->animations, compare_anim);
 
-      val = compute_value_for_animation (a, context);
-      if (val)
+      identity = svg_transform_new_none ();
+      motion = svg_value_ref (identity);
+
+      for (unsigned int i = 0; i < shape->animations->len; i++)
         {
-          if (a->additive == ANIMATION_ADDITIVE_SUM)
-            {
-              SvgValue *end_val;
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          SvgValue *val;
 
-              if (a->type == ANIMATION_TYPE_MOTION)
+          if (a->status == ANIMATION_STATUS_INACTIVE)
+            continue;
+
+          val = compute_value_for_animation (a, context);
+          if (val)
+            {
+              if (a->additive == ANIMATION_ADDITIVE_SUM)
                 {
-                  end_val = svg_value_accumulate (val, motion, 1);
-                  svg_value_unref (motion);
-                  motion = end_val;
+                  SvgValue *end_val;
+
+                  if (a->type == ANIMATION_TYPE_MOTION)
+                    {
+                      end_val = svg_value_accumulate (val, motion, 1);
+                      svg_value_unref (motion);
+                      motion = end_val;
+                    }
+                  else
+                    {
+                      end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
+                      shape_set_current_value (shape, a->attr, a->idx, end_val);
+                      svg_value_unref (end_val);
+                    }
                 }
               else
                 {
-                  end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
-                  shape_set_current_value (shape, a->attr, a->idx, end_val);
-                  svg_value_unref (end_val);
+                  if (a->type == ANIMATION_TYPE_MOTION)
+                    {
+                      svg_value_unref (motion);
+                      motion = svg_value_ref (val);
+                    }
+                  else
+                    {
+                      shape_set_current_value (shape, a->attr, a->idx, val);
+                    }
                 }
-            }
-          else
-            {
-              if (a->type == ANIMATION_TYPE_MOTION)
-                {
-                  svg_value_unref (motion);
-                  motion = svg_value_ref (val);
-                }
-              else
-                {
-                  shape_set_current_value (shape, a->attr, a->idx, val);
-                }
-            }
 
-          svg_value_unref (val);
-       }
+              svg_value_unref (val);
+           }
+        }
+
+      if (!svg_value_equal (motion, identity))
+        {
+          SvgValue *combined;
+
+          combined = svg_value_accumulate (shape_get_current_value (shape, SHAPE_ATTR_TRANSFORM, 0), motion, 1);
+          shape_set_current_value (shape, SHAPE_ATTR_TRANSFORM, 0, combined);
+          svg_value_unref (combined);
+        }
+      svg_value_unref (identity);
     }
-
-  if (!svg_value_equal (motion, identity))
-    {
-      SvgValue *combined;
-
-      combined = svg_value_accumulate (shape_get_current_value (shape, SHAPE_ATTR_TRANSFORM, 0), motion, 1);
-      shape_set_current_value (shape, SHAPE_ATTR_TRANSFORM, 0, combined);
-      svg_value_unref (combined);
-    }
-  svg_value_unref (identity);
 
   if (shape_type_has_shapes (shape->type))
     {
@@ -12733,10 +12748,7 @@ compute_current_values_for_shape (Shape          *shape,
       context->parent = parent;
     }
 
-  if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
-    {
-      context->viewport = old_viewport;
-    }
+  context->viewport = old_viewport;
 }
 
 /* }}} */
@@ -12877,8 +12889,7 @@ create_visibility_setter (Shape        *shape,
 
   a->fill = ANIMATION_FILL_REMOVE;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
+  shape_add_animation (shape, a);
 }
 
 static void
@@ -12921,8 +12932,7 @@ create_path_length (Shape    *shape,
 
   a->fill = ANIMATION_FILL_REMOVE;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
+  shape_add_animation (shape, a);
 }
 
 static void
@@ -12967,9 +12977,7 @@ create_transition (Shape         *shape,
 
   a->fill = ANIMATION_FILL_FREEZE;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
-
+  shape_add_animation (shape, a);
   time_spec_add_animation (begin, a);
 
   a->gpa.transition = type;
@@ -13002,9 +13010,7 @@ create_transition (Shape         *shape,
 
   a->fill = ANIMATION_FILL_FREEZE;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
-
+  shape_add_animation (shape, a);
   time_spec_add_animation (begin, a);
 
   a->gpa.transition = type;
@@ -13036,8 +13042,7 @@ create_transition (Shape         *shape,
 
       a->fill = ANIMATION_FILL_FREEZE;
 
-      a->shape = shape;
-      g_ptr_array_add (shape->animations, a);
+      shape_add_animation (shape, a);
 
       a = animation_set_new ();
       a->attr = attr;
@@ -13062,8 +13067,7 @@ create_transition (Shape         *shape,
 
       a->fill = ANIMATION_FILL_FREEZE;
 
-      a->shape = shape;
-      g_ptr_array_add (shape->animations, a);
+      shape_add_animation (shape, a);
     }
 }
 
@@ -13101,8 +13105,7 @@ create_transition_delay (Shape     *shape,
 
   a->fill = ANIMATION_FILL_REMOVE;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
+  shape_add_animation (shape, a);
   time_spec_add_animation (begin, a);
 
   a = animation_set_new ();
@@ -13128,8 +13131,7 @@ create_transition_delay (Shape     *shape,
 
   a->fill = ANIMATION_FILL_REMOVE;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
+  shape_add_animation (shape, a);
   time_spec_add_animation (begin, a);
 
   svg_value_unref (value);
@@ -13238,8 +13240,7 @@ create_animation (Shape        *shape,
 
   a->calc_mode = calc_mode;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
+  shape_add_animation (shape, a);
 
   return a;
 }
@@ -13573,8 +13574,7 @@ create_attachment (Shape      *shape,
   a->gpa.origin = origin;
   a->gpa.attach_pos = attach_pos;
 
-  a->shape = shape;
-  g_ptr_array_add (shape->animations, a);
+  shape_add_animation (shape, a);
   time_spec_add_animation (begin, a);
   time_spec_add_animation (end, a);
 }
@@ -13639,8 +13639,7 @@ create_attachment_connection_to (Animation *a,
 
   a2->gpa.origin = a->gpa.origin;
 
-  a2->shape = a->shape;
-  g_ptr_array_add (a2->shape->animations, a2);
+  shape_add_animation (a->shape, a2);
   time_spec_add_animation (begin, a2);
   time_spec_add_animation (end, a2);
 
@@ -15678,14 +15677,9 @@ start_element_cb (GMarkupParseContext  *context,
       svg_value_unref (value);
 
       if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
-        {
-          a->shape = data->current_shape;
-          g_ptr_array_add (data->current_shape->animations, a);
-        }
+        shape_add_animation (data->current_shape, a);
       else
-        {
-          g_ptr_array_add (data->pending_animations, a);
-        }
+        g_ptr_array_add (data->pending_animations, a);
 
       if (a->id)
         g_hash_table_insert (data->animations, a->id, a);
@@ -15764,14 +15758,9 @@ start_element_cb (GMarkupParseContext  *context,
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
       if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
-        {
-          a->shape = data->current_shape;
-          g_ptr_array_add (data->current_shape->animations, a);
-        }
+        shape_add_animation (data->current_shape, a);
       else
-        {
-          g_ptr_array_add (data->pending_animations, a);
-        }
+        g_ptr_array_add (data->pending_animations, a);
 
       if (a->id)
         g_hash_table_insert (data->animations, a->id, a);
@@ -16212,93 +16201,96 @@ static void
 resolve_animation_refs (Shape      *shape,
                         ParserData *data)
 {
-  unsigned int first;
-
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      for (int k = 0; k < 2; k++)
+      unsigned int first;
+
+      for (unsigned int i = 0; i < shape->animations->len; i++)
         {
-          GPtrArray *specs = k == 0 ? a->begin : a->end;
-          for (unsigned int j = 0; j < specs->len; j++)
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          for (int k = 0; k < 2; k++)
             {
-              TimeSpec *spec = g_ptr_array_index (specs, j);
-              if (spec->type == TIME_SPEC_TYPE_SYNC && spec->sync.base == NULL)
+              GPtrArray *specs = k == 0 ? a->begin : a->end;
+              for (unsigned int j = 0; j < specs->len; j++)
                 {
-                  g_assert (spec->sync.ref);
-                  spec->sync.base = g_hash_table_lookup (data->animations, spec->sync.ref);
-                  if (!spec->sync.base)
-                    gtk_svg_invalid_reference (data->svg, "No animation with ID %s", spec->sync.ref);
-                  else
-                    animation_add_dep (spec->sync.base, a);
+                  TimeSpec *spec = g_ptr_array_index (specs, j);
+                  if (spec->type == TIME_SPEC_TYPE_SYNC && spec->sync.base == NULL)
+                    {
+                      g_assert (spec->sync.ref);
+                      spec->sync.base = g_hash_table_lookup (data->animations, spec->sync.ref);
+                      if (!spec->sync.base)
+                        gtk_svg_invalid_reference (data->svg, "No animation with ID %s", spec->sync.ref);
+                      else
+                        animation_add_dep (spec->sync.base, a);
+                    }
                 }
             }
-        }
 
-      /* The resolve functions don't know how to handle
-       * our special current keyword, and it gets resolved
-       * later anyway, so skip it.
-       */
-      if (a->frames[0].value && svg_value_is_current (a->frames[0].value))
-        first = 1;
-      else
-        first = 0;
-
-      if (a->attr == SHAPE_ATTR_CLIP_PATH)
-        {
-          for (unsigned int j = first; j < a->n_frames; j++)
-            resolve_clip_ref (a->frames[j].value, a->shape, data);
-        }
-      else if (a->attr == SHAPE_ATTR_MASK)
-        {
-          for (unsigned int j = first; j < a->n_frames; j++)
-            resolve_mask_ref (a->frames[j].value, a->shape, data);
-        }
-      else if (a->attr == SHAPE_ATTR_HREF)
-        {
-          for (unsigned int j = first; j < a->n_frames; j++)
-            resolve_href_ref (a->frames[j].value, a->shape, data);
-        }
-      else if (a->attr == SHAPE_ATTR_MARKER_START ||
-               a->attr == SHAPE_ATTR_MARKER_MID ||
-               a->attr == SHAPE_ATTR_MARKER_END)
-        {
-          for (unsigned int j = first; j < a->n_frames; j++)
-            resolve_marker_ref (a->frames[j].value, a->shape, data);
-        }
-      else if (a->attr == SHAPE_ATTR_FILL ||
-               a->attr == SHAPE_ATTR_STROKE)
-        {
-          for (unsigned int j = first; j < a->n_frames; j++)
-            resolve_paint_ref (a->frames[j].value, a->shape, data);
-        }
-      else if (a->attr == SHAPE_ATTR_FILTER)
-        {
-          for (unsigned int j = first; j < a->n_frames; j++)
-            resolve_filter_ref (a->frames[j].value, a->shape, data);
-        }
-      else if (a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
-        {
-          for (unsigned int j = first; j < a->n_frames; j++)
-            resolve_href_ref (a->frames[j].value, a->shape, data);
-        }
-
-      if (a->motion.path_ref)
-        {
-          a->motion.path_shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
-          if (a->motion.path_shape == NULL)
-            gtk_svg_invalid_reference (data->svg,
-                                       "No path with ID %s (resolving <mpath>",
-                                       a->motion.path_ref);
+          /* The resolve functions don't know how to handle
+           * our special current keyword, and it gets resolved
+           * later anyway, so skip it.
+           */
+          if (a->frames[0].value && svg_value_is_current (a->frames[0].value))
+            first = 1;
           else
+            first = 0;
+
+          if (a->attr == SHAPE_ATTR_CLIP_PATH)
             {
-              add_dependency_to_common_ancestor (a->shape, a->motion.path_shape);
-              if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
+              for (unsigned int j = first; j < a->n_frames; j++)
+                resolve_clip_ref (a->frames[j].value, a->shape, data);
+            }
+          else if (a->attr == SHAPE_ATTR_MASK)
+            {
+              for (unsigned int j = first; j < a->n_frames; j++)
+                resolve_mask_ref (a->frames[j].value, a->shape, data);
+            }
+          else if (a->attr == SHAPE_ATTR_HREF)
+            {
+              for (unsigned int j = first; j < a->n_frames; j++)
+                resolve_href_ref (a->frames[j].value, a->shape, data);
+            }
+          else if (a->attr == SHAPE_ATTR_MARKER_START ||
+                   a->attr == SHAPE_ATTR_MARKER_MID ||
+                   a->attr == SHAPE_ATTR_MARKER_END)
+            {
+              for (unsigned int j = first; j < a->n_frames; j++)
+                resolve_marker_ref (a->frames[j].value, a->shape, data);
+            }
+          else if (a->attr == SHAPE_ATTR_FILL ||
+                   a->attr == SHAPE_ATTR_STROKE)
+            {
+              for (unsigned int j = first; j < a->n_frames; j++)
+                resolve_paint_ref (a->frames[j].value, a->shape, data);
+            }
+          else if (a->attr == SHAPE_ATTR_FILTER)
+            {
+              for (unsigned int j = first; j < a->n_frames; j++)
+                resolve_filter_ref (a->frames[j].value, a->shape, data);
+            }
+          else if (a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
+            {
+              for (unsigned int j = first; j < a->n_frames; j++)
+                resolve_href_ref (a->frames[j].value, a->shape, data);
+            }
+
+          if (a->motion.path_ref)
+            {
+              a->motion.path_shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
+              if (a->motion.path_shape == NULL)
+                gtk_svg_invalid_reference (data->svg,
+                                           "No path with ID %s (resolving <mpath>",
+                                           a->motion.path_ref);
+              else
                 {
-                  /* a's path is attached to a->motion.path_shape
-                   * Make sure it moves along with transitions and animations
-                   */
-                  create_attachment_connection (a, a->motion.path_shape, data->svg->timeline);
+                  add_dependency_to_common_ancestor (a->shape, a->motion.path_shape);
+                  if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
+                    {
+                      /* a's path is attached to a->motion.path_shape
+                       * Make sure it moves along with transitions and animations
+                       */
+                      create_attachment_connection (a, a->motion.path_shape, data->svg->timeline);
+                    }
                 }
             }
         }
@@ -16537,12 +16529,13 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
     {
       Animation *a = g_ptr_array_index (data.pending_animations, i);
+      Shape *shape;
 
       g_assert (a->href != NULL);
       g_assert (a->shape == NULL);
 
-      a->shape = g_hash_table_lookup (data.shapes, a->href);
-      if (!a->shape)
+      shape = g_hash_table_lookup (data.shapes, a->href);
+      if (!shape)
         {
           gtk_svg_invalid_reference (self,
                                      "No shape with ID %s (resolving begin or end attribute)",
@@ -16551,7 +16544,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
         }
       else
         {
-          g_ptr_array_add (a->shape->animations, a);
+          shape_add_animation (shape, a);
         }
     }
 
@@ -17365,12 +17358,15 @@ serialize_color_stop (GString              *s,
     }
   g_string_append (s, ">");
 
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      if (a->idx == idx + 1)
+      for (unsigned int i = 0; i < shape->animations->len; i++)
         {
-          serialize_animation (s, svg, indent + 2, a, flags);
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          if (a->idx == idx + 1)
+            {
+              serialize_animation (s, svg, indent + 2, a, flags);
+            }
         }
     }
 
@@ -17412,11 +17408,14 @@ serialize_filter_begin (GString              *s,
 
   g_string_append (s, ">");
 
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      if (a->idx == idx + 1)
-        serialize_animation (s, svg, indent + 2, a, flags);
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          if (a->idx == idx + 1)
+            serialize_animation (s, svg, indent + 2, a, flags);
+        }
     }
 }
 
@@ -17505,11 +17504,14 @@ serialize_shape (GString              *s,
         }
     }
 
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      if (a->idx == 0)
-        serialize_animation (s, svg, indent + 2, a, flags);
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          if (a->idx == 0)
+            serialize_animation (s, svg, indent + 2, a, flags);
+        }
     }
 
   if (shape->type == SHAPE_TEXT || shape->type == SHAPE_TSPAN)
@@ -21174,12 +21176,15 @@ gtk_svg_class_init (GtkSvgClass *class)
 static void
 shape_dump_animation_state (Shape *shape, GString *string)
 {
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          Animation *a = g_ptr_array_index (shape->animations, i);
 
-      if (a->status == ANIMATION_STATUS_RUNNING)
-        g_string_append_printf (string, " %s", a->id);
+          if (a->status == ANIMATION_STATUS_RUNNING)
+            g_string_append_printf (string, " %s", a->id);
+        }
     }
 
   if (shape_type_has_shapes (shape->type))
@@ -21404,10 +21409,13 @@ collect_next_update_for_shape (Shape         *shape,
                                GtkSvgRunMode *run_mode,
                                int64_t       *next_update)
 {
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      collect_next_update_for_animation (a, current_time, run_mode, next_update);
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          collect_next_update_for_animation (a, current_time, run_mode, next_update);
+        }
     }
 
   if (shape_type_has_shapes (shape->type))
@@ -21442,10 +21450,13 @@ static void
 shape_update_animation_state (Shape   *shape,
                               int64_t  current_time)
 {
-  for (unsigned int i = 0; i < shape->animations->len; i++)
+  if (shape->animations)
     {
-      Animation *a = g_ptr_array_index (shape->animations, i);
-      animation_update_state (a, current_time);
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          Animation *a = g_ptr_array_index (shape->animations, i);
+          animation_update_state (a, current_time);
+        }
     }
 
   if (shape_type_has_shapes (shape->type))
