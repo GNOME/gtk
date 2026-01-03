@@ -459,6 +459,7 @@ endif
 
 # Dependencies
 glib_dep       = dependency('glib-2.0', version: glib_req)
+gio_dep        = dependency('gio-2.0', version: glib_req)
 gi_dep         = dependency('gobject-introspection-1.0', version: gi_req, required: get_option('introspection').enabled())
 gobject_dep    = dependency('gobject-2.0', version: glib_req)
 if os_win32

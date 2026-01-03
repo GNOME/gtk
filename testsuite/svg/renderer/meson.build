@@ -1,6 +1,7 @@
 test_renderer = executable('test-svg-renderer',
-  sources: ['test-svg-renderer.c', '../../testutils.c'],
+  sources: ['test-svg-renderer.c'],
   c_args: common_cflags,
+  link_with: testutils_lib,
   dependencies: libgtk_dep,
 )
 
@@ -77,6 +78,7 @@ test_data = [
   'nested-svg-overflow.svg',
   'nested-svg-positioning.svg',
   'nested-svg-viewbox.svg',
+  'nested-use.test',
   'non-scaling-stroke.svg',
   'not-rendered.svg',
   'opacity.svg',
@@ -90,6 +92,7 @@ test_data = [
   'pattern6.svg',
   'pattern7.svg',
   'pattern8.svg',
+  'pattern-billion-laughs.test',
   'percentage.svg',
   'polygon.svg',
   'polyline.svg',

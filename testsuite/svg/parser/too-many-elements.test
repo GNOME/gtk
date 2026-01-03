@@ -1,0 +1,5 @@
+[testcase]
+compressed = true
+
+[reference]
+compressed = true
