@@ -60,6 +60,12 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
                                                                  GskContour             *contour);
 
+void                    gsk_path_builder_add_op                 (GskPathBuilder         *builder,
+                                                                 GskPathOperation        op,
+                                                                 const graphene_point_t *pts,
+                                                                 gsize                   n_pts,
+                                                                 float                   weight);
+
 
 /* implemented in gskstrokenode.c */
 void                    gsk_cairo_stroke_path                   (cairo_t                *cr,
@@ -93,7 +99,7 @@ typedef struct
 {
   gboolean (* add_op)        (GskPathOperation        op,
                               const graphene_point_t *pts,
-                              gsize                   n_pts,
+                              size_t                  n_pts,
                               float                   weight,
                               gpointer                user_data);
   gboolean (* add_arc)       (float                   rx,
@@ -106,11 +112,12 @@ typedef struct
                               gpointer                user_data);
   gboolean (* add_rect)      (const graphene_rect_t  *rect,
                               gpointer                user_data);
-  gboolean (* add_circle)      (const graphene_point_t *center,
-                                float                    radius,
-                                gpointer                 user_data);
-  gboolean (* add_rounded_rect) (const GskRoundedRect    *rect,
-                                 gpointer                 user_data);
+  gboolean (* add_circle)    (const graphene_point_t *center,
+                              float                   radius,
+                              gpointer                user_data);
+  gboolean (* add_rounded_rect)
+                             (const GskRoundedRect   *rect,
+                              gpointer                user_data);
 } GskPathParser;
 
 gboolean gsk_path_parse_full (const char    *string,

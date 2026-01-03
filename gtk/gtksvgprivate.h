@@ -54,20 +54,32 @@ typedef enum
   GTK_SVG_RUN_MODE_CONTINUOUS,
 } GtkSvgRunMode;
 
+typedef enum
+{
+  GTK_SVG_USES_STROKES             = 1 << 0,
+  GTK_SVG_USES_SYMBOLIC_FOREGROUND = 1 << 1,
+  GTK_SVG_USES_SYMBOLIC_ERROR      = 1 << 2,
+  GTK_SVG_USES_SYMBOLIC_WARNING    = 1 << 3,
+  GTK_SVG_USES_SYMBOLIC_SUCCESS    = 1 << 4,
+  GTK_SVG_USES_SYMBOLIC_ACCENT     = 1 << 5,
+} GtkSvgUses;
+
 struct _GtkSvg
 {
   GObject parent_instance;
   Shape *content;
 
-  double width, height; /* Intrinsic size */
+  double current_width, current_height; /* Last snapshot size */
 
-  double current_width, current_height; /* last snapshot size */
+  double width, height; /* Intrinsic size */
 
   double weight;
   unsigned int state;
   unsigned int max_state;
   int64_t state_change_delay;
+  gboolean has_animations;
   GtkSvgFeatures features;
+  GtkSvgUses used;
 
   char *resource;
 
@@ -95,6 +107,15 @@ struct _GtkSvg
 
   PangoFontMap *fontmap;
   GPtrArray *font_files;
+
+  GskRenderNode *node;
+
+  struct {
+    double width, height;
+    GdkRGBA colors[5];
+    size_t n_colors;
+    double weight;
+  } node_for;
 };
 
 typedef enum

@@ -145,7 +145,7 @@
  *
  * will make the fill color of path1 transition from black to
  * magenta when the renderer enters state 0.
- * 
+ *
  * <image src="svg-renderer2.svg">
  *
  * The `gpa:states(...)` condition triggers for upcoming state changes
@@ -1295,6 +1295,16 @@ add_font_from_url (GtkSvg              *svg,
 }
 
 /* }}} */
+/* {{{ Caching */
+
+static void
+gtk_svg_invalidate_contents (GtkSvg *self)
+{
+  g_clear_pointer (&self->node, gsk_render_node_unref);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+/* }}} */
 /* {{{ Pango utilities */
 
 static GskPath *
@@ -1452,32 +1462,7 @@ transform_op (GskPathOperation        op,
   for (unsigned int i = 0; i < n_pts; i++)
     gsk_transform_transform_point (t->transform, &_pts[i], &pts[i]);
 
-  switch (op)
-    {
-    case GSK_PATH_MOVE:
-      gsk_path_builder_move_to (t->builder, pts[0].x, pts[0].y);
-      break;
-
-    case GSK_PATH_CLOSE:
-      gsk_path_builder_close (t->builder);
-      break;
-
-    case GSK_PATH_LINE:
-      gsk_path_builder_line_to (t->builder, pts[1].x, pts[1].y);
-      break;
-
-    case GSK_PATH_QUAD:
-      gsk_path_builder_quad_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
-      break;
-
-    case GSK_PATH_CUBIC:
-      gsk_path_builder_cubic_to (t->builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
-      break;
-
-    case GSK_PATH_CONIC:
-    default:
-      g_assert_not_reached ();
-    }
+  gsk_path_builder_add_op (t->builder, op, pts, n_pts, weight);
 
   return TRUE;
 }
@@ -1546,10 +1531,25 @@ svg_path_data_free (SvgPathData *p)
   g_free (p);
 }
 
+static inline size_t
+points_per_op (GskPathOperation op)
+{
+  size_t n_pts[] = {
+    [GSK_PATH_MOVE] = 1,
+    [GSK_PATH_CLOSE] = 0,
+    [GSK_PATH_LINE] = 2,
+    [GSK_PATH_QUAD] = 3,
+    [GSK_PATH_CUBIC] = 4,
+    [GSK_PATH_CONIC] = 3
+  };
+
+  return n_pts[op];
+}
+
 static gboolean
 add_op (GskPathOperation        op,
         const graphene_point_t *pts,
-        gsize                   n_pts,
+        size_t                  n_pts,
         float                   weight,
         gpointer                user_data)
 {
@@ -1753,39 +1753,15 @@ svg_path_data_to_gsk (SvgPathData *p)
     {
       SvgPathOp *op = svg_path_ops_index (&p->ops, i);
 
-      switch (op->op)
-        {
-        case GSK_PATH_MOVE:
-          gsk_path_builder_move_to (builder, op->seg.pts[0].x, op->seg.pts[0].y);
-          break;
-        case GSK_PATH_CLOSE:
-          gsk_path_builder_close (builder);
-          break;
-        case GSK_PATH_LINE:
-          gsk_path_builder_line_to (builder, op->seg.pts[1].x, op->seg.pts[1].y);
-          break;
-        case GSK_PATH_QUAD:
-          gsk_path_builder_quad_to (builder,
-                                    op->seg.pts[1].x, op->seg.pts[1].y,
-                                    op->seg.pts[2].x, op->seg.pts[2].y);
-          break;
-        case GSK_PATH_CUBIC:
-          gsk_path_builder_cubic_to (builder,
-                                     op->seg.pts[1].x, op->seg.pts[1].y,
-                                     op->seg.pts[2].x, op->seg.pts[2].y,
-                                     op->seg.pts[3].x, op->seg.pts[3].y);
-          break;
-        case SVG_PATH_ARC:
-          gsk_path_builder_svg_arc_to (builder,
-                                       op->arc.rx, op->arc.ry,
-                                       op->arc.x_axis_rotation,
-                                       op->arc.large_arc,
-                                       op->arc.positive_sweep,
-                                       op->arc.x, op->arc.y);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
+      if (op->op == SVG_PATH_ARC)
+        gsk_path_builder_svg_arc_to (builder,
+                                     op->arc.rx, op->arc.ry,
+                                     op->arc.x_axis_rotation,
+                                     op->arc.large_arc,
+                                     op->arc.positive_sweep,
+                                     op->arc.x, op->arc.y);
+      else
+        gsk_path_builder_add_op (builder, op->op, op->seg.pts, points_per_op (op->op), 1);
     }
 
   return gsk_path_builder_free_to_path (builder);
@@ -2261,6 +2237,26 @@ svg_number_distance (const SvgValue *value0,
 }
 
 static SvgValue *
+svg_number_to_px (const SvgValue *value)
+{
+  const SvgNumber *n = (const SvgNumber *) value;
+
+  switch ((unsigned int) n->unit)
+    {
+    case SVG_UNIT_PT:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 72);
+    case SVG_UNIT_IN:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96);
+    case SVG_UNIT_CM:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
+    case SVG_UNIT_MM:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+    default:
+      return svg_value_ref ((SvgValue *) value);
+    }
+}
+
+static SvgValue *
 svg_number_resolve (const SvgValue *value,
                     ShapeAttr       attr,
                     Shape          *shape,
@@ -2334,13 +2330,10 @@ svg_number_resolve (const SvgValue *value,
         }
       break;
     case SVG_UNIT_PT:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 72);
     case SVG_UNIT_IN:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96);
     case SVG_UNIT_CM:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
     case SVG_UNIT_MM:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+      return svg_number_to_px (value);
     case SVG_UNIT_EM:
     case SVG_UNIT_EX:
       {
@@ -5479,6 +5472,35 @@ svg_paint_print_gpa (const SvgValue *value,
     }
 }
 
+static gboolean
+svg_paint_is_symbolic (const SvgPaint   *paint,
+                       GtkSymbolicColor *symbolic,
+                       GdkRGBA          *fallback)
+{
+  if (paint->kind == PAINT_SYMBOLIC)
+    {
+      *fallback = GDK_RGBA_BLACK;
+      *symbolic = paint->symbolic;
+      return TRUE;
+    }
+  else if (paint->kind == PAINT_SERVER)
+    {
+      *fallback = GDK_RGBA_BLACK;
+      if (g_str_has_prefix (paint->server.ref, "gpa:") &&
+          parse_symbolic_color (paint->server.ref + strlen ("gpa:"), symbolic))
+        return TRUE;
+    }
+  else if (paint->kind == PAINT_SERVER_WITH_FALLBACK)
+    {
+      *fallback = paint->server.fallback;
+      if (g_str_has_prefix (paint->server.ref, "gpa:") &&
+          parse_symbolic_color (paint->server.ref + strlen ("gpa:"), symbolic))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static SvgValue *
 svg_paint_resolve (const SvgValue *value,
                    ShapeAttr       attr,
@@ -5486,32 +5508,19 @@ svg_paint_resolve (const SvgValue *value,
                    ComputeContext *context)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
+  GtkSymbolicColor symbolic;
+  GdkRGBA fallback;
 
   g_assert (value->class == &SVG_PAINT_CLASS);
 
-  if (paint->kind == PAINT_SYMBOLIC)
+  if (svg_paint_is_symbolic (paint, &symbolic, &fallback))
     {
       if (!(context->svg->features & GTK_SVG_EXTENSIONS))
         return svg_paint_new_black ();
-      else if (paint->symbolic < context->n_colors)
-        return svg_paint_new_rgba (&context->colors[paint->symbolic]);
-      else if (GTK_SYMBOLIC_COLOR_FOREGROUND < context->n_colors)
-        return svg_paint_new_rgba (&context->colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
-      else
-        return svg_paint_new_black ();
-    }
-  else if ((paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK) &&
-           paint->server.shape == NULL)
-    {
-      GtkSymbolicColor symbolic;
-
-      if ((context->svg->features & GTK_SVG_EXTENSIONS) &&
-          g_str_has_prefix (paint->server.ref, "gpa:") &&
-          parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic) &&
-          symbolic < context->n_colors)
+      else if (symbolic < context->n_colors)
         return svg_paint_new_rgba (&context->colors[symbolic]);
       else
-        return svg_paint_new_rgba (&paint->server.fallback);
+        return svg_paint_new_rgba (&fallback);
     }
   else
     {
@@ -10045,8 +10054,6 @@ shape_new (Shape     *parent,
 {
   Shape *shape = g_new0 (Shape, 1);
 
-  memset (shape, 0, sizeof (Shape));
-
   shape->parent = parent;
   shape->type = type;
 
@@ -12341,7 +12348,7 @@ invalidate_later (gpointer data)
   self->pending_invalidate = 0;
 
   gtk_svg_advance (self, MAX (self->current_time, g_get_monotonic_time ()));
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gtk_svg_invalidate_contents (self);
 }
 
 static void
@@ -12369,7 +12376,7 @@ schedule_next_update (GtkSvg *self)
   if (self->next_update <= self->current_time)
     {
       dbg_print ("times", "next update NOW (%s)\n", format_time (self->current_time));
-      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+      gtk_svg_invalidate_contents (self);
       self->advance_after_snapshot = TRUE;
       return;
     }
@@ -12397,7 +12404,7 @@ frame_clock_update (GdkFrameClock *clock,
   int64_t time = gdk_frame_clock_get_frame_time (self->clock);
   dbg_print ("clock", "clock update, advancing to %s\n", format_time (time));
   gtk_svg_advance (self, time);
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gtk_svg_invalidate_contents (self);
 }
 
 static gboolean
@@ -12406,7 +12413,7 @@ periodic_update (GtkSvg *self)
   int64_t time = g_get_monotonic_time ();
   dbg_print ("clock", "periodic update, advancing to %s\n", format_time (time));
   gtk_svg_advance (self, time);
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gtk_svg_invalidate_contents (self);
 
   return G_SOURCE_CONTINUE;
 }
@@ -16147,8 +16154,30 @@ end_element_cb (GMarkupParseContext *context,
   else if (shape_type_lookup (element_name, &shape_type))
     {
       GSList *tos = data->shape_stack;
+      Shape *shape = data->current_shape;
 
       g_assert (shape_type == data->current_shape->type);
+
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
+        {
+          GtkSymbolicColor symbolic;
+          GdkRGBA fallback;
+
+          if (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_STROKE])->kind != PAINT_NONE)
+            data->svg->used |= GTK_SVG_USES_STROKES;
+
+          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_STROKE]), &symbolic, &fallback))
+            data->svg->used |= BIT (symbolic + 1);
+        }
+
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
+        {
+          GtkSymbolicColor symbolic;
+          GdkRGBA fallback;
+
+          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_FILL]), &symbolic, &fallback))
+            data->svg->used |= BIT (symbolic + 1);
+        }
 
       data->current_shape = tos->data;
       data->shape_stack = tos->next;
@@ -16760,18 +16789,24 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
     {
-      SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_WIDTH];
+      SvgValue *v = svg_number_to_px (self->content->base[SHAPE_ATTR_WIDTH]);
+      SvgNumber *n = (SvgNumber *) v;
 
-      if (v->unit != SVG_UNIT_PERCENTAGE)
-        self->width = v->value;
+      if (n->unit != SVG_UNIT_PERCENTAGE)
+        self->width = n->value;
+
+      svg_value_unref (v);
     }
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
     {
-      SvgNumber *v = (SvgNumber *) self->content->base[SHAPE_ATTR_HEIGHT];
+      SvgValue *v = svg_number_to_px (self->content->base[SHAPE_ATTR_HEIGHT]);
+      SvgNumber *n = (SvgNumber *) v;
 
-      if (v->unit != SVG_UNIT_PERCENTAGE)
-        self->height = v->value;
+      if (n->unit != SVG_UNIT_PERCENTAGE)
+        self->height = n->value;
+
+      svg_value_unref (v);
     }
 
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
@@ -20873,6 +20908,84 @@ render_shape (Shape        *shape,
 /* }}} */
 /* {{{ GtkSymbolicPaintable implementation */
 
+static gboolean
+can_reuse_node (GtkSvg        *self,
+                double         width,
+                double         height,
+                const GdkRGBA *colors,
+                size_t         n_colors,
+                double         weight)
+{
+  if ((width != self->node_for.width || height != self->node_for.height))
+    {
+      dbg_print ("cache", "Can't reuse rendernode: size change");
+      return FALSE;
+    }
+
+  if ((self->used & GTK_SVG_USES_STROKES) != 0 &&
+      self->weight < 1 &&
+      weight != self->node_for.weight)
+    {
+      dbg_print ("cache", "Can't reuse rendernode: stroke weight change");
+      return FALSE;
+    }
+
+  if ((self->features & GTK_SVG_EXTENSIONS) != 0)
+    {
+      if ((self->used & GTK_SVG_USES_SYMBOLIC_FOREGROUND) != 0 &&
+           self->node_for.n_colors > GTK_SYMBOLIC_COLOR_FOREGROUND &&
+           n_colors > GTK_SYMBOLIC_COLOR_FOREGROUND &&
+           !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_FOREGROUND],
+                            &colors[GTK_SYMBOLIC_COLOR_FOREGROUND]))
+        {
+          dbg_print ("cache", "Can't reuse rendernode: symbolic foreground change");
+          return FALSE;
+        }
+
+      if ((self->used & GTK_SVG_USES_SYMBOLIC_ERROR) != 0 &&
+          self->node_for.n_colors > GTK_SYMBOLIC_COLOR_ERROR &&
+          n_colors > GTK_SYMBOLIC_COLOR_ERROR &&
+          !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_ERROR],
+                          &colors[GTK_SYMBOLIC_COLOR_ERROR]))
+        {
+          dbg_print ("cache", "Can't reuse rendernode: symbolic error change");
+          return FALSE;
+        }
+
+      if ((self->used & GTK_SVG_USES_SYMBOLIC_WARNING) != 0 &&
+          self->node_for.n_colors > GTK_SYMBOLIC_COLOR_WARNING &&
+          n_colors > GTK_SYMBOLIC_COLOR_WARNING &&
+          !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_WARNING],
+                          &colors[GTK_SYMBOLIC_COLOR_WARNING]))
+        {
+          dbg_print ("cache", "Can't reuse rendernode: symbolic warning change");
+          return FALSE;
+        }
+
+      if ((self->used & GTK_SVG_USES_SYMBOLIC_SUCCESS) != 0 &&
+          self->node_for.n_colors > GTK_SYMBOLIC_COLOR_SUCCESS &&
+          n_colors > GTK_SYMBOLIC_COLOR_SUCCESS &&
+          !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_SUCCESS],
+                          &colors[GTK_SYMBOLIC_COLOR_SUCCESS]))
+        {
+          dbg_print ("cache", "Can't reuse rendernode: symbolic success change");
+          return FALSE;
+        }
+
+      if ((self->used & GTK_SVG_USES_SYMBOLIC_ACCENT) != 0 &&
+          self->node_for.n_colors > GTK_SYMBOLIC_COLOR_ACCENT &&
+          n_colors > GTK_SYMBOLIC_COLOR_ACCENT &&
+          !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_ACCENT],
+                          &colors[GTK_SYMBOLIC_COLOR_ACCENT]))
+        {
+          dbg_print ("cache", "Can't reuse rendernode: symbolic accent change");
+          return FALSE;
+        }
+    }
+
+  return TRUE;
+}
+
 /* Note that we are doing this in two passes:
  * 1. Update current values from animations
  * 2. Paint with the current values
@@ -20898,49 +21011,69 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               double                 weight)
 {
   GtkSvg *self = GTK_SVG (paintable);
-  ComputeContext compute_context;
-  PaintContext paint_context;
 
-  self->current_width = width;
-  self->current_height = height;
+  if (self->node == NULL ||
+      !can_reuse_node (self, width, height, colors, n_colors, weight))
+    {
+      ComputeContext compute_context;
+      PaintContext paint_context;
 
-  compute_context.svg = self;
-  compute_context.viewport = NULL;
-  compute_context.colors = colors;
-  compute_context.n_colors = n_colors;
-  compute_context.current_time = self->current_time;
-  compute_context.parent = NULL;
+      g_clear_pointer (&self->node, gsk_render_node_unref);
 
-  compute_current_values_for_shape (self->content, &compute_context);
+      self->current_width = width;
+      self->current_height = height;
 
-  paint_context.svg = self;
-  paint_context.viewport = NULL;
-  paint_context.viewport_stack = NULL;
-  paint_context.snapshot = snapshot;
-  paint_context.colors = colors;
-  paint_context.n_colors = n_colors;
-  paint_context.weight = self->weight >= 1 ? self->weight : weight;
-  paint_context.op = RENDERING;
-  paint_context.op_stack = NULL;
-  paint_context.ctx_shape_stack = NULL;
-  paint_context.current_time = self->current_time;
-  paint_context.depth = 0;
-  paint_context.transforms = NULL;
+      compute_context.svg = self;
+      compute_context.viewport = NULL;
+      compute_context.colors = colors;
+      compute_context.n_colors = n_colors;
+      compute_context.current_time = self->current_time;
+      compute_context.parent = NULL;
 
-  if (self->overflow == GTK_OVERFLOW_HIDDEN)
-    gtk_snapshot_push_clip (snapshot,
-                            &GRAPHENE_RECT_INIT (0, 0, width, height));
+      compute_current_values_for_shape (self->content, &compute_context);
 
-  render_shape (self->content, &paint_context);
+      paint_context.svg = self;
+      paint_context.viewport = NULL;
+      paint_context.viewport_stack = NULL;
+      paint_context.snapshot = snapshot;
+      paint_context.colors = colors;
+      paint_context.n_colors = n_colors;
+      paint_context.weight = self->weight >= 1 ? self->weight : weight;
+      paint_context.op = RENDERING;
+      paint_context.op_stack = NULL;
+      paint_context.ctx_shape_stack = NULL;
+      paint_context.current_time = self->current_time;
+      paint_context.depth = 0;
+      paint_context.transforms = NULL;
 
-  if (self->overflow == GTK_OVERFLOW_HIDDEN)
-    gtk_snapshot_pop (snapshot);
+      gtk_snapshot_push_collect (snapshot);
 
-  /* Sanity checks. */
-  g_assert (paint_context.viewport_stack == NULL);
-  g_assert (paint_context.op_stack == NULL);
-  g_assert (paint_context.ctx_shape_stack == NULL);
-  g_assert (paint_context.transforms == NULL);
+      if (self->overflow == GTK_OVERFLOW_HIDDEN)
+        gtk_snapshot_push_clip (snapshot,
+                                &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+      render_shape (self->content, &paint_context);
+
+      if (self->overflow == GTK_OVERFLOW_HIDDEN)
+        gtk_snapshot_pop (snapshot);
+
+      /* Sanity checks. */
+      g_assert (paint_context.viewport_stack == NULL);
+      g_assert (paint_context.op_stack == NULL);
+      g_assert (paint_context.ctx_shape_stack == NULL);
+      g_assert (paint_context.transforms == NULL);
+
+      self->node = gtk_snapshot_pop_collect (snapshot);
+
+      self->node_for.width = width;
+      self->node_for.height = height;
+      memcpy (self->node_for.colors, colors, MIN (n_colors, 5) * sizeof (GdkRGBA));
+      self->node_for.n_colors = n_colors;
+      self->node_for.weight = weight;
+    }
+
+  if (self->node)
+    gtk_snapshot_append_node (snapshot, self->node);
 
   if (self->advance_after_snapshot)
     {
@@ -22364,6 +22497,7 @@ gtk_svg_clear_content (GtkSvg *self)
   g_clear_pointer (&self->images, g_hash_table_unref);
   g_clear_object (&self->fontmap);
   g_clear_pointer (&self->font_files, g_ptr_array_unref);
+  g_clear_pointer (&self->node, gsk_render_node_unref);
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
@@ -22376,6 +22510,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->state = 0;
   self->max_state = 0;
   self->state_change_delay = 0;
+  self->used = 0;
 
   self->gpa_version = 0;
 }
@@ -22402,7 +22537,7 @@ gtk_svg_set_overflow (GtkSvg      *self,
     return;
 
   self->overflow = overflow;
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gtk_svg_invalidate_contents (self);
 }
 
 /*< private >
@@ -22507,6 +22642,9 @@ gtk_svg_load_from_bytes (GtkSvg *self,
   gtk_svg_clear_content (self);
 
   gtk_svg_init_from_bytes (self, bytes);
+
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 /**
@@ -22623,7 +22761,7 @@ gtk_svg_set_weight (GtkSvg *self,
 
   self->weight = weight;
 
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gtk_svg_invalidate_contents (self);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
 }
 
@@ -22694,8 +22832,7 @@ gtk_svg_set_state (GtkSvg       *self,
       if (self->gpa_version > 0)
         {
           apply_state (self->content, state);
-
-          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+          gtk_svg_invalidate_contents (self);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);

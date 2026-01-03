@@ -358,63 +358,29 @@ parse_rounded_rect (const char     **p,
 static gboolean
 add_op (GskPathOperation        op,
         const graphene_point_t *pts,
-        gsize                   n_pts,
+        size_t                  n_pts,
         float                   weight,
         gpointer                user_data)
 {
   GskPathBuilder *builder = user_data;
 
-  switch (op)
-    {
-    case GSK_PATH_MOVE:
-      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
-      break;
-
-    case GSK_PATH_CLOSE:
-      gsk_path_builder_close (builder);
-      break;
-
-    case GSK_PATH_LINE:
-      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
-      break;
-
-    case GSK_PATH_CUBIC:
-      gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
-      break;
-
-    case GSK_PATH_QUAD:
-      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
-      break;
-
-    case GSK_PATH_CONIC:
-      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
+  gsk_path_builder_add_op (builder, op, pts, n_pts, weight);
   return TRUE;
 }
 
 static gboolean
 add_arc (float    rx,
          float    ry,
-         float    x_axis_rotation,
-         gboolean large_arc,
-         gboolean positive_sweep,
+         float    rotation,
+         gboolean large,
+         gboolean sweep,
          float    x,
          float    y,
          gpointer user_data)
 {
   GskPathBuilder *builder = user_data;
 
-  gsk_path_builder_svg_arc_to (builder,
-                               rx, ry,
-                               x_axis_rotation,
-                               large_arc,
-                               positive_sweep,
-                               x, y);
+  gsk_path_builder_svg_arc_to (builder, rx, ry, rotation, large, sweep, x, y);
   return TRUE;
 }
 
