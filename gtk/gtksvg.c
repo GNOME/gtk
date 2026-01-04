@@ -7877,6 +7877,17 @@ color_stop_attr_idx (ShapeAttr attr)
   return attr - FIRST_STOP_ATTR;
 }
 
+static ColorStop *
+color_stop_new (void)
+{
+  ColorStop *stop = g_new0 (ColorStop, 1);
+
+  for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
+    stop->base[color_stop_attr_idx (attr)] = svg_value_ref (shape_attr_get_initial_value (attr, SHAPE_LINEAR_GRADIENT, TRUE));
+
+  return stop;
+}
+
 /* }}} */
 /* {{{ Filters */
 
@@ -8341,6 +8352,22 @@ filter_needs_backdrop (Shape *filter)
     }
 
   return FALSE;
+}
+
+static FilterPrimitive *
+filter_primitive_new (FilterPrimitiveType type)
+{
+  FilterTypeInfo *ft = &filter_types[type];
+  FilterPrimitive *f;
+
+  f = g_new0 (FilterPrimitive, 1);
+
+  f->type = type;
+
+  for (unsigned int i = 0; i < ft->n_attrs; i++)
+    f->base[i] = svg_value_ref (filter_attr_get_initial_value (f, ft->attrs[i]));
+
+  return f;
 }
 
 /* }}} */
@@ -10448,14 +10475,9 @@ shape_get_current_bounds (Shape                 *shape,
 static unsigned int
 shape_add_color_stop (Shape *shape)
 {
-  ColorStop *stop = g_new0 (ColorStop, 1);
-
   g_assert (shape_type_has_color_stops (shape->type));
 
-  for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
-    stop->base[color_stop_attr_idx (attr)] = svg_value_ref (shape_attr_get_initial_value (attr, shape->type, shape->parent != NULL));
-
-  g_ptr_array_add (shape->color_stops, stop);
+  g_ptr_array_add (shape->color_stops, color_stop_new ());
 
   return shape->color_stops->len - 1;
 }
@@ -10464,16 +10486,9 @@ static unsigned int
 shape_add_filter (Shape               *shape,
                   FilterPrimitiveType  type)
 {
-  FilterPrimitive *f = g_new0 (FilterPrimitive, 1);
-
   g_assert (shape_type_has_filters (shape->type));
 
-  f->type = type;
-
-  for (unsigned int i = 0; i < filter_types[type].n_attrs; i++)
-    f->base[i] = svg_value_ref (filter_attr_get_initial_value (f, filter_types[type].attrs[i]));
-
-  g_ptr_array_add (shape->filters, f);
+  g_ptr_array_add (shape->filters, filter_primitive_new (type));
 
   return shape->filters->len - 1;
 }
