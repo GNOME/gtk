@@ -767,6 +767,14 @@ string_append_point (GString                *s,
   string_append_double (s, " ", p->y);
 }
 
+/* Break str into tokens that are separated
+ * by whitespace and the given separator.
+ * If sep contains just a non-space byte,
+ * the separator is mandatory. If it contains
+ * a space as well, the separator is optional.
+ * If a mandatory separators is missing, NULL
+ * is returned.
+ */
 static char **
 strsplit_set (const char *str,
               const char *sep)
@@ -783,11 +791,30 @@ strsplit_set (const char *str,
       if (!*p)
         break;
 
-      while (strchr (sep, *p))
-        p++;
+      if (array->len > 0)
+        {
+          if (strchr (sep, *p))
+            {
+              p++;
+
+              if (!*p)
+                break;
+
+              while (*p == ' ')
+                p++;
+
+              if (!*p)
+                break;
+            }
+          else if (!strchr (sep, ' '))
+            {
+              g_ptr_array_free (array, TRUE);
+              return NULL;
+            }
+        }
 
       p0 = p;
-      while (!strchr (sep, *p))
+      while (!strchr (sep, *p) && *p != ' ')
         p++;
 
       g_ptr_array_add (array, g_strndup (p0, p - p0));
