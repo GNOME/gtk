@@ -28,4 +28,5 @@
       <fefe/>
     </filter>
   </defs>
+  <polyline points='1,,2, 3 4'/>
 </svg>
