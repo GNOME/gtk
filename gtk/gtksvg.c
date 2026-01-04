@@ -12691,8 +12691,6 @@ compute_current_values_for_shape (Shape          *shape,
     {
       SvgValue *identity, *motion;
 
-      g_ptr_array_sort_values (shape->animations, compare_anim);
-
       identity = svg_transform_new_none ();
       motion = svg_value_ref (identity);
 
@@ -21476,11 +21474,17 @@ shape_update_animation_state (Shape   *shape,
 {
   if (shape->animations)
     {
+      gboolean any_changed = FALSE;
+
       for (unsigned int i = 0; i < shape->animations->len; i++)
         {
           Animation *a = g_ptr_array_index (shape->animations, i);
           animation_update_state (a, current_time);
+          any_changed |= a->state_changed;
         }
+
+      if (any_changed)
+        g_ptr_array_sort_values (shape->animations, compare_anim);
     }
 
   if (shape_type_has_shapes (shape->type))
