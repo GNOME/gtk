@@ -7,17 +7,7 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu11',
           'cpp_std=c++11',
-        ] + (meson.version().version_compare('>= 1.8.0') ? [
-          # rsvg subproject options
-          # meson < 1.8 had issues with parsing default_options
-          # keys for subprojects, if the project being evaluated
-          # also was a subproject.
-          # We'll just not pass them along in that case.
-          # TODO: move this back once we require meson >= 1.8
-          'librsvg:default_library=static',
-          'librsvg:rsvg-convert=disabled',
-          'librsvg:rsvg-view-3=disabled',
-        ] : []),
+        ],
         meson_version : '>= 1.5.0',
         license: 'LGPL-2.1-or-later')
 
@@ -44,7 +34,6 @@ sysprof_req        = '>= 3.38.0'
 vulkan_req         = '>= 1.3'
 gstreamer_req      = '>= 1.24.0'
 gi_req             = '>= 1.84'
-rsvg_req           = '>= 2.48'
 
 fs = import('fs')
 gnome = import('gnome')
@@ -494,10 +483,6 @@ pixbuf_dep        = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 png_dep           = dependency('libpng', 'png')
 tiff_dep          = dependency('libtiff-4', 'tiff')
 jpeg_dep          = dependency('libjpeg', 'jpeg')
-rsvg_dep          = dependency('librsvg-2.0', version: rsvg_req, required: false)
-if not rsvg_dep.found()
-  rsvg_dep        = dependency('librsvg-2.0', version: ['>= 2.40.23', '< 2.41'])
-endif
 epoxy_dep         = dependency('epoxy', version: epoxy_req)
 xkbdep            = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep      = dependency('graphene-gobject-1.0', version: graphene_req,

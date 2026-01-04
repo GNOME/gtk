@@ -20,6 +20,8 @@
 #include "gdktextureutilsprivate.h"
 #include "gtkscalerprivate.h"
 #include "gtksnapshot.h"
+#include "gtk/gtksvg.h"
+#include "gtk/gtksymbolicpaintable.h"
 
 #include "gdk/gdktextureprivate.h"
 #include "gdk/loaders/gdkpngprivate.h"
@@ -28,102 +30,43 @@
 #include "gtk/gtkenums.h"
 #include "gtk/gtkbitmaskprivate.h"
 
-#include <librsvg/rsvg.h>
-
 /* {{{ svg helpers */
 
-static gboolean
-gdk_texture_get_rsvg_handle_size (RsvgHandle *handle, gdouble *out_width, gdouble *out_height)
-{
-#if LIBRSVG_CHECK_VERSION (2,52,0)
-  gboolean has_viewbox;
-  RsvgRectangle viewbox;
-
-  if (rsvg_handle_get_intrinsic_size_in_pixels (handle, out_width, out_height))
-    return TRUE;
-
-  rsvg_handle_get_intrinsic_dimensions (handle,
-                                        NULL, NULL, NULL, NULL,
-                                        &has_viewbox,
-                                        &viewbox);
-
-  if (has_viewbox)
-    {
-      *out_width = viewbox.width;
-      *out_height = viewbox.height;
-      return TRUE;
-    }
-
-  return FALSE;
-#else
-  RsvgDimensionData dim;
-  rsvg_handle_get_dimensions (handle, &dim);
-  if (out_width)
-    *out_width = dim.width;
-  if (out_height)
-    *out_height = dim.height;
-  return TRUE;
-#endif
-}
-
 static GdkTexture *
-gdk_texture_new_from_rsvg (RsvgHandle  *handle,
-                           int          width,
-                           int          height,
-                           GError     **error)
+svg_to_texture (GtkSvg  *svg,
+                int      width,
+                int      height,
+                GdkRGBA *colors,
+                size_t   n_colors)
 {
-  int stride;
-  guchar *data;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
   cairo_surface_t *surface;
   cairo_t *cr;
-  GdkTexture *texture = NULL;
+  GdkTexture *texture;
 
-  stride = width * 4;
-  data = g_new0 (guchar, stride * height);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
-  surface = cairo_image_surface_create_for_data (data,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 width, height,
-                                                 stride);
+  snapshot = gtk_snapshot_new ();
 
-  cr = cairo_create (surface);
+  gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (svg),
+                                            snapshot,
+                                            width, height,
+                                            colors, n_colors);
 
-#if !LIBRSVG_CHECK_VERSION (2,52,0)
-  {
-    RsvgDimensionData dim;
-    gdouble sx,sy,s;
+  node = gtk_snapshot_free_to_node (snapshot);
 
-    rsvg_handle_get_dimensions (handle, &dim);
-    sx = (gdouble)width / dim.width;
-    sy = (gdouble)height / dim.height;
-    s = MIN (sx, sy);
-
-    cairo_scale (cr, s, s);
-  }
-
-  if (!rsvg_handle_render_cairo (handle, cr))
-    g_set_error (error, GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
-                 "Error rendering SVG document (%s)", cairo_status_to_string (cairo_status (cr)));
-  else
-#else
-  if (rsvg_handle_render_document (handle, cr,
-                                   &(RsvgRectangle) { 0, 0, width, height },
-                                   error))
-#endif
+  if (node)
     {
-      GBytes *bytes;
+      cr = cairo_create (surface);
+      gsk_render_node_draw (node, cr);
+      cairo_destroy (cr);
 
-      bytes = g_bytes_new (data, stride * height);
-      texture = gdk_memory_texture_new (width, height,
-                                        GDK_MEMORY_DEFAULT,
-                                        bytes,
-                                        stride);
-      g_bytes_unref (bytes);
+      gsk_render_node_unref (node);
     }
 
-  cairo_destroy (cr);
+  texture = gdk_texture_new_for_surface (surface);
   cairo_surface_destroy (surface);
-  g_free (data);
 
   return texture;
 }
@@ -131,33 +74,32 @@ gdk_texture_new_from_rsvg (RsvgHandle  *handle,
 static GdkTexture *
 gdk_texture_new_from_svg_bytes (GBytes  *bytes,
                                 double   scale,
+                                GdkRGBA *colors,
+                                size_t   n_colors,
                                 GError **error)
 {
-  const guchar *data;
-  gsize len;
-  RsvgHandle *handle;
+  GtkSvg *svg;
   GdkTexture *texture;
   int width, height;
-  double w, h;
 
-  data = g_bytes_get_data (bytes, &len);
-  handle = rsvg_handle_new_from_data (data, len, error);
-  if (!handle)
-    return NULL;
+  svg = gtk_svg_new_from_bytes (bytes);
 
-  if (!gdk_texture_get_rsvg_handle_size (handle, &w, &h))
+  width = gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg));
+  height = gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg));
+
+  if (width == 0 || height == 0)
     {
       g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
                            "Svg image has no intrinsic size; please set one");
-      g_object_unref (handle);
+      g_object_unref (svg);
       return NULL;
     }
 
-  width = ceil (w * scale);
-  height = ceil (h * scale);
-
-  texture = gdk_texture_new_from_rsvg (handle, width, height, error);
-  g_object_unref (handle);
+  texture = svg_to_texture (svg,
+                            ceil (scale * width),
+                            ceil (scale * height),
+                            colors, n_colors);
+  g_object_unref (svg);
 
   return texture;
 }
@@ -165,44 +107,8 @@ gdk_texture_new_from_svg_bytes (GBytes  *bytes,
 /* }}} */
 /* {{{ Symbolic processing */
 
-static char *
-make_stylesheet (const char *fg_color,
-                 const char *success_color,
-                 const char *warning_color,
-                 const char *error_color)
-{
-  return g_strconcat ("rect,circle,path,.foreground-fill {\n"
-                      " fill:", fg_color, "!important;\n"
-                      "}\n"
-                      ".warning,.warning-fill {\n"
-                      " fill:", warning_color, "!important;\n"
-                      "}\n"
-                      ".error,.error-fill {\n"
-                      "  fill:", error_color, "!important;\n"
-                      "}\n"
-                      ".success,.success-fill {\n"
-                      "  fill:", success_color, "!important;\n"
-                      "}\n"
-                      ".transparent-fill {\n"
-                      "  fill: none !important;\n"
-                      "}\n"
-                      ".foreground-stroke {\n"
-                      "  stroke:", fg_color, "!important;\n"
-                      "}\n"
-                      ".warning-stroke {\n"
-                      "  stroke:", warning_color, "!important;\n"
-                      "}\n"
-                      ".error-stroke {\n"
-                      "  stroke:", error_color, "!important;\n"
-                      "}\n"
-                      ".success-stroke {\n"
-                      "  stroke:", success_color, "!important;\n"
-                      "}",
-                      NULL);
-}
-
 static GdkTexture *
-load_symbolic_svg (RsvgHandle  *handle,
+load_symbolic_svg (GtkSvg      *svg,
                    int          width,
                    int          height,
                    const char  *fg_color,
@@ -211,23 +117,14 @@ load_symbolic_svg (RsvgHandle  *handle,
                    const char  *error_color,
                    GError     **error)
 {
-  GdkTexture *texture = NULL;
-  char *stylesheet;
+  GdkRGBA colors[4];
 
-  stylesheet = make_stylesheet (fg_color, success_color, warning_color, error_color);
+  gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND], fg_color);
+  gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_SUCCESS], success_color);
+  gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_WARNING], warning_color);
+  gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_ERROR], error_color);
 
-  if (!rsvg_handle_set_stylesheet (handle, (const guint8 *) stylesheet, strlen (stylesheet), error))
-    {
-      g_prefix_error (error, "Could not set stylesheet");
-      goto out;
-    }
-
-  texture = gdk_texture_new_from_rsvg (handle, width, height, error);
-
-out:
-  g_free (stylesheet);
-
-  return texture;
+  return svg_to_texture (svg, width, height, colors, 4);
 }
 
 static gboolean
@@ -344,8 +241,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
                                      GError   **error)
 
 {
-  RsvgHandle *handle;
-  double w, h;
+  GtkSvg *svg;
   const char *r_string = "rgb(255,0,0)";
   const char *g_string = "rgb(0,255,0)";
   gboolean only_fg;
@@ -353,28 +249,24 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
   GBytes *data_bytes;
   GdkTexture *texture;
 
-  handle = rsvg_handle_new_from_data (g_bytes_get_data (bytes, NULL),
-                                      g_bytes_get_size (bytes),
-                                      error);
+  svg = gtk_svg_new_from_bytes (bytes);
 
-  if (width == 0 || height == 0)
+  if (width == 0 && height == 0)
     {
-      /* Fetch size from the original icon */
-      if (!gdk_texture_get_rsvg_handle_size (handle, &w, &h))
+      width = gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg));
+      height = gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg));
+      if (width == 0 || height == 0)
         {
           g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
                        "Symbolic icon has no intrinsic size; please set one in its SVG");
-          g_object_unref (handle);
+          g_object_unref (svg);
           return NULL;
         }
-
-      width = (int) ceil (w);
-      height = (int) ceil (h);
     }
 
   if (!svg_has_symbolic_classes (bytes))
     {
-      texture = gdk_texture_new_from_rsvg (handle, width, height, error);
+      texture = svg_to_texture (svg, width, height, NULL, 0);
 
       if (texture)
         texture = keep_alpha (texture);
@@ -382,7 +274,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
       if (out_only_fg)
         *out_only_fg = TRUE;
 
-      g_object_unref (handle);
+      g_object_unref (svg);
 
       return texture;
     }
@@ -409,7 +301,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
        * channels, with the color of the fg being implicitly
        * the "rest", as all color fractions should add up to 1.
        */
-      loaded = load_symbolic_svg (handle, width, height,
+      loaded = load_symbolic_svg (svg, width, height,
                                   g_string,
                                   plane == 0 ? r_string : g_string,
                                   plane == 1 ? r_string : g_string,
@@ -438,7 +330,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
 
 out:
   g_bytes_unref (data_bytes);
-  g_object_unref (handle);
+  g_object_unref (svg);
 
   if (out_only_fg)
     *out_only_fg = only_fg;
@@ -559,18 +451,22 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       GCancellable  *cancellable,
                                       GError       **error)
 {
-  RsvgHandle *handle;
+  GBytes *bytes;
+  GtkSvg *svg;
   GdkTexture *texture;
 
   if (only_fg)
     *only_fg = FALSE;
 
-  handle = rsvg_handle_new_from_stream_sync (stream, NULL, RSVG_HANDLE_FLAGS_NONE, NULL, error);
-  if (!handle)
+  bytes = input_stream_get_bytes (stream, error);
+  if (!bytes)
     return NULL;
 
-  texture = gdk_texture_new_from_rsvg (handle, width, height, error);
-  g_object_unref (handle);
+  svg = gtk_svg_new_from_bytes (bytes);
+  texture = svg_to_texture (svg, width, height, NULL, 0);
+
+  g_object_unref (svg);
+  g_bytes_unref (bytes);
 
   return texture;
 }
@@ -705,14 +601,14 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
     }
   else if (scale == 1)
     {
-      return GDK_PAINTABLE (gdk_texture_new_from_svg_bytes (bytes, scale, NULL));
+      return GDK_PAINTABLE (gdk_texture_new_from_svg_bytes (bytes, scale, NULL, 0, NULL));
     }
   else
     {
       GdkTexture *texture;
       GdkPaintable *paintable;
 
-      texture = gdk_texture_new_from_svg_bytes (bytes, scale, NULL);
+      texture = gdk_texture_new_from_svg_bytes (bytes, scale, NULL, 0, NULL);
       if (texture)
         {
           paintable = gtk_scaler_new (GDK_PAINTABLE (texture), scale);

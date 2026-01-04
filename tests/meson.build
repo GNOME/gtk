@@ -137,8 +137,10 @@ if os_unix
 endif
 
 if os_linux
+  rsvg_dep = dependency('librsvg-2.0', required: false)
+
   gtk_tests += [
-    ['svg-compare', ['svgpaintable.c' ],[ libgtk_static_dep ]],
+    ['svg-compare', ['svgpaintable.c' ],[ libgtk_static_dep, rsvg_dep ]],
   ]
 endif
 
