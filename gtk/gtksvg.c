@@ -12699,9 +12699,6 @@ compute_current_values_for_shape (Shape          *shape,
           Animation *a = g_ptr_array_index (shape->animations, i);
           SvgValue *val;
 
-          if (a->status == ANIMATION_STATUS_INACTIVE)
-            continue;
-
           val = compute_value_for_animation (a, context);
           if (val)
             {
