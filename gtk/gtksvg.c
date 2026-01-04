@@ -7995,115 +7995,146 @@ G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (component_transfer_attrs));
 G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (func_attrs));
 G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (dropshadow_attrs));
 
-static struct {
-  FilterPrimitiveType type;
+typedef struct
+{
   const char *name;
   unsigned int n_attrs;
   ShapeAttr *attrs;
-} filter_types[] = {
-  {
-    .type = FE_FLOOD,
+} FilterTypeInfo;
+
+static FilterTypeInfo filter_types[] = {
+  [FE_FLOOD] = {
     .name = "feFlood",
     .n_attrs = G_N_ELEMENTS (flood_attrs),
     .attrs = flood_attrs,
   },
-  {
-    .type = FE_BLUR,
+  [FE_BLUR] = {
     .name = "feGaussianBlur",
     .n_attrs = G_N_ELEMENTS (blur_attrs),
     .attrs = blur_attrs,
   },
-  {
-    .type = FE_BLEND,
+  [FE_BLEND] = {
     .name = "feBlend",
     .n_attrs = G_N_ELEMENTS (blend_attrs),
     .attrs = blend_attrs,
   },
-  {
-    .type = FE_COLOR_MATRIX,
+  [FE_COLOR_MATRIX] = {
     .name = "feColorMatrix",
     .n_attrs = G_N_ELEMENTS (color_matrix_attrs),
     .attrs = color_matrix_attrs,
   },
-  {
-    .type = FE_COMPOSITE,
+  [FE_COMPOSITE] = {
     .name = "feComposite",
     .n_attrs = G_N_ELEMENTS (composite_attrs),
     .attrs = composite_attrs,
   },
-  {
-    .type = FE_OFFSET,
+  [FE_OFFSET] = {
     .name = "feOffset",
     .n_attrs = G_N_ELEMENTS (offset_attrs),
     .attrs = offset_attrs,
   },
-  {
-    .type = FE_DISPLACEMENT,
+  [FE_DISPLACEMENT] = {
     .name = "feDisplacementMap",
     .n_attrs = G_N_ELEMENTS (displacement_attrs),
     .attrs = displacement_attrs,
   },
-  {
-    .type = FE_TILE,
+  [FE_TILE] = {
     .name = "feTile",
     .n_attrs = G_N_ELEMENTS (tile_attrs),
     .attrs = tile_attrs,
   },
-  {
-    .type = FE_IMAGE,
+  [FE_IMAGE] = {
     .name = "feImage",
     .n_attrs = G_N_ELEMENTS (image_attrs),
     .attrs = image_attrs,
   },
-  {
-    .type = FE_MERGE,
+  [FE_MERGE] = {
     .name = "feMerge",
     .n_attrs = G_N_ELEMENTS (merge_attrs),
     .attrs = merge_attrs,
   },
-  {
-    .type = FE_MERGE_NODE,
+  [FE_MERGE_NODE] = {
     .name = "feMergeNode",
     .n_attrs = G_N_ELEMENTS (merge_node_attrs),
     .attrs = merge_node_attrs,
   },
-  {
-    .type = FE_COMPONENT_TRANSFER,
+  [FE_COMPONENT_TRANSFER] = {
     .name = "feComponentTransfer",
     .n_attrs = G_N_ELEMENTS (component_transfer_attrs),
     .attrs = component_transfer_attrs,
   },
-  {
-    .type = FE_FUNC_R,
+  [FE_FUNC_R] = {
     .name = "feFuncR",
     .n_attrs = G_N_ELEMENTS (func_attrs),
     .attrs = func_attrs,
   },
-  {
-    .type = FE_FUNC_G,
+  [FE_FUNC_G] = {
     .name = "feFuncG",
     .n_attrs = G_N_ELEMENTS (func_attrs),
     .attrs = func_attrs,
   },
-  {
-    .type = FE_FUNC_B,
+  [FE_FUNC_B] = {
     .name = "feFuncB",
     .n_attrs = G_N_ELEMENTS (func_attrs),
     .attrs = func_attrs,
   },
-  {
-    .type = FE_FUNC_A,
+  [FE_FUNC_A] = {
     .name = "feFuncA",
     .n_attrs = G_N_ELEMENTS (func_attrs),
     .attrs = func_attrs,
   },
-  {
-    .type = FE_DROPSHADOW,
+  [FE_DROPSHADOW] = {
     .name = "feDropShadow",
     .n_attrs = G_N_ELEMENTS (dropshadow_attrs),
     .attrs = dropshadow_attrs,
   },
 };
+
+static guint
+filter_type_hash (gconstpointer v)
+{
+  const FilterTypeInfo *t = (const FilterTypeInfo *) v;
+
+  return g_str_hash (t->name);
+}
+
+static gboolean
+filter_type_equal (gconstpointer v0,
+                   gconstpointer v1)
+{
+  const FilterTypeInfo *t0 = (const FilterTypeInfo *) v0;
+  const FilterTypeInfo *t1 = (const FilterTypeInfo *) v1;
+
+  return strcmp (t0->name, t1->name) == 0;
+}
+
+static GHashTable *filter_type_lookup_table;
+
+static void
+filter_types_init (void)
+{
+  filter_type_lookup_table = g_hash_table_new (filter_type_hash,
+                                               filter_type_equal);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (filter_types); i++)
+    g_hash_table_add (filter_type_lookup_table, &filter_types[i]);
+}
+
+static gboolean
+filter_type_lookup (const char          *name,
+                    FilterPrimitiveType *type)
+{
+  FilterTypeInfo key;
+  FilterTypeInfo *value;
+
+  key.name = name;
+  value = g_hash_table_lookup (filter_type_lookup_table, &key);
+  if (!value)
+    return FALSE;
+
+  *type = value - filter_types;
+  return TRUE;
+}
 
 typedef struct
 {
@@ -8153,22 +8184,6 @@ filter_attr_index (FilterPrimitiveType type,
     }
 
   return -1;
-}
-
-static gboolean
-filter_type_lookup (const char          *name,
-                    FilterPrimitiveType *type)
-{
-  for (unsigned int i = 0; i < G_N_ELEMENTS (filter_types); i++)
-    {
-      if (strcmp (filter_types[i].name, name) == 0)
-        {
-          *type = filter_types[i].type;
-          return TRUE;
-        }
-    }
-
-  return FALSE;
 }
 
 static unsigned int
@@ -21063,6 +21078,7 @@ gtk_svg_class_init (GtkSvgClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  filter_types_init ();
   shape_types_init ();
   shape_attr_init_default_values ();
   shape_attr_init_lookup ();
