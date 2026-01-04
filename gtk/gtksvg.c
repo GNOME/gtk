@@ -9854,10 +9854,10 @@ shape_free (gpointer data)
 
   g_clear_pointer (&shape->id, g_free);
 
-  for (unsigned int i = 0; i < N_SHAPE_ATTRS; i++)
+  for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
-      g_clear_pointer (&shape->base[i], svg_value_unref);
-      g_clear_pointer (&shape->current[i], svg_value_unref);
+      g_clear_pointer (&shape->base[attr], svg_value_unref);
+      g_clear_pointer (&shape->current[attr], svg_value_unref);
     }
 
   g_clear_pointer (&shape->shapes, g_ptr_array_unref);
@@ -9946,7 +9946,7 @@ shape_new (Shape     *parent,
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
       shape->base[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type, parent != NULL));
-      shape->current[attr] = svg_value_ref (shape_attr_get_initial_value (attr, type, parent != NULL));
+      shape->current[attr] = svg_value_ref (shape->base[attr]);
     }
 
   if (shape_type_has_shapes (type))
@@ -11504,8 +11504,10 @@ shape_get_base_value (Shape        *shape,
         {
           return shape_attr_get_initial_value (attr, shape->type, parent != NULL);
         }
-
-      return shape->base[attr];
+      else
+        {
+          return shape->base[attr];
+        }
     }
   else if (FIRST_STOP_ATTR <= attr && attr <= LAST_STOP_ATTR)
     {
