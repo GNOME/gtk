@@ -2181,27 +2181,27 @@ static const SvgValueClass SVG_KEYWORD_CLASS = {
 };
 
 static SvgValue *
-svg_inherit_new (void)
+svg_inherit_get (void)
 {
   static SvgKeyword inherit = { { &SVG_KEYWORD_CLASS, 1 }, SVG_INHERIT };
 
-  return svg_value_ref ((SvgValue *) &inherit);
+  return (SvgValue *) &inherit;
 }
 
 static SvgValue *
-svg_initial_new (void)
+svg_initial_get (void)
 {
   static SvgKeyword initial = { { &SVG_KEYWORD_CLASS, 1 }, SVG_INITIAL };
 
-  return svg_value_ref ((SvgValue *) &initial);
+  return (SvgValue *) &initial;
 }
 
 static SvgValue *
-svg_current_new (void)
+svg_current_get (void)
 {
   static SvgKeyword current = { { &SVG_KEYWORD_CLASS, 1 }, SVG_CURRENT };
 
-  return svg_value_ref ((SvgValue *) &current);
+  return (SvgValue *) &current;
 }
 
 static gboolean
@@ -2423,8 +2423,8 @@ static const SvgValueClass SVG_NUMBER_CLASS = {
   svg_number_resolve,
 };
 
-SvgValue *
-svg_number_new (double value)
+static SvgValue *
+svg_number_get_static (double value)
 {
   static SvgNumber singletons[] = {
     { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 0 },
@@ -2432,43 +2432,70 @@ svg_number_new (double value)
     { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 2 },
     { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = DEFAULT_FONT_SIZE },
   };
-  SvgNumber *result;
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
     {
       if (value == singletons[i].value)
-        return svg_value_ref ((SvgValue *) &singletons[i]);
+        return (SvgValue *) &singletons[i];
     }
 
-  result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
-  result->unit = SVG_UNIT_NUMBER;
-  result->value = value;
+  return NULL;
+}
 
-  return (SvgValue *) result;
+SvgValue *
+svg_number_new (double value)
+{
+  SvgValue *result;
+
+  result = svg_number_get_static (value);
+
+  if (result)
+    return svg_value_ref (result);
+
+  result = svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
+  ((SvgNumber *) result)->unit = SVG_UNIT_NUMBER;
+  ((SvgNumber *) result)->value = value;
+
+  return result;
+}
+
+static SvgValue *
+svg_percentage_get (double value)
+{
+  static SvgNumber singletons[] = {
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = -10 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 25 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 50 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 100 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 120 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 150 },
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
+    {
+      if (value == singletons[i].value)
+        return (SvgValue *) &singletons[i];
+    }
+
+  return NULL;
 }
 
 static SvgValue *
 svg_percentage_new (double value)
 {
-  static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 50 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 100 },
-  };
-  SvgNumber *result;
+  SvgValue *result;
 
-  if (value == 0)
-    return svg_value_ref ((SvgValue *) &singletons[0]);
-  else if (value == 50)
-    return svg_value_ref ((SvgValue *) &singletons[1]);
-  else if (value == 100)
-    return svg_value_ref ((SvgValue *) &singletons[2]);
+  result = svg_percentage_get (value);
 
-  result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
-  result->value = value;
-  result->unit = SVG_UNIT_PERCENTAGE;
+  if (result)
+    return svg_value_ref (result);
 
-  return (SvgValue *) result;
+  result = svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
+  ((SvgNumber *) result)->unit = SVG_UNIT_PERCENTAGE;
+  ((SvgNumber *) result)->value = value;
+
+  return result;
 }
 
 static SvgValue *
@@ -2635,7 +2662,7 @@ svg_numbers_new (double       *values,
 }
 
 static SvgValue *
-svg_numbers_new_identity_matrix (void)
+svg_numbers_get_identity_matrix (void)
 {
   static SvgValue *id;
 
@@ -2649,39 +2676,40 @@ svg_numbers_new_identity_matrix (void)
 }
 
 static SvgValue *
-svg_numbers_new_zero (void)
+svg_numbers_new_identity_matrix (void)
 {
-  static SvgValue *zero;
-
-  if (zero == NULL)
-    zero = svg_numbers_new ((double []) { 0 }, 1);
-
-  return svg_value_ref (zero);
+  return svg_value_ref (svg_numbers_get_identity_matrix ());
 }
 
 static SvgValue *
-svg_numbers_new_one (void)
+svg_numbers_get_none (void)
 {
-  static SvgValue *one;
+  static SvgNumbers none = { { &SVG_NUMBERS_CLASS, 1 }, .n_values = 0, .values[0] = { SVG_UNIT_NUMBER, 0 } };
 
-  if (one == NULL)
-    one = svg_numbers_new ((double []) { 1 }, 1);
-
-  return svg_value_ref (one);
+  return (SvgValue *) &none;
 }
 
 static SvgValue *
 svg_numbers_new_none (void)
 {
-  static SvgValue *none;
+  return svg_value_ref (svg_numbers_get_none ());
+}
 
-  if (none == NULL)
+static SvgValue *
+svg_numbers_get1 (double value)
+{
+  static SvgNumbers singletons[] = {
+      { { &SVG_NUMBERS_CLASS, 1 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 0 } },
+      { { &SVG_NUMBERS_CLASS, 1 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 1 } },
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
     {
-      none = svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (1));
-      ((SvgNumbers *) none)->n_values = 0;
+      if (singletons[i].values[0].value == value)
+        return (SvgValue *) &singletons[i];
     }
 
-  return svg_value_ref (none);
+  return NULL;
 }
 
 static SvgValue *
@@ -3168,10 +3196,16 @@ static SvgEnum display_values[] = {
 };
 
 static SvgValue *
-svg_display_new (SvgDisplay value)
+svg_display_get (SvgDisplay value)
 {
   g_assert (value < G_N_ELEMENTS (display_values));
-  return svg_value_ref ((SvgValue *) &display_values[value]);
+  return (SvgValue *) &display_values[value];
+}
+
+static SvgValue *
+svg_display_new (SvgDisplay value)
+{
+  return svg_value_ref (svg_display_get (value));
 }
 
 static SvgValue *
@@ -3242,10 +3276,16 @@ static SvgEnum coord_units_values[] = {
 };
 
 static SvgValue *
-svg_coord_units_new (CoordUnits value)
+svg_coord_units_get (CoordUnits value)
 {
   g_assert (value < G_N_ELEMENTS (coord_units_values));
-  return svg_value_ref ((SvgValue *) &coord_units_values[value]);
+  return (SvgValue *) &coord_units_values[value];
+}
+
+static SvgValue *
+svg_coord_units_new (CoordUnits value)
+{
+  return svg_value_ref (svg_coord_units_get (value));
 }
 
 static SvgValue *
@@ -3539,10 +3579,16 @@ static SvgEnum overflow_values[] = {
 };
 
 static SvgValue *
-svg_overflow_new (SvgOverflow value)
+svg_overflow_get (SvgOverflow value)
 {
   g_assert (value < G_N_ELEMENTS (overflow_values));
-  return svg_value_ref ((SvgValue *) &overflow_values[value]);
+  return (SvgValue *) &overflow_values[value];
+}
+
+static SvgValue *
+svg_overflow_new (SvgOverflow value)
+{
+  return svg_value_ref (svg_overflow_get (value));
 }
 
 static SvgValue *
@@ -8203,49 +8249,24 @@ static SvgValue *
 filter_attr_get_initial_value (FilterPrimitive *filter,
                                ShapeAttr        attr)
 {
-  if (filter->type == FE_COLOR_MATRIX &&
-      attr == SHAPE_ATTR_FE_COLOR_MATRIX_VALUES)
+  if (filter->type == FE_COLOR_MATRIX && attr == SHAPE_ATTR_FE_COLOR_MATRIX_VALUES)
     {
-      SvgValue *type = filter->base[filter_attr_idx (filter->type, SHAPE_ATTR_FE_COLOR_MATRIX_TYPE)];
-      SvgValue *v;
-
-      switch (svg_enum_get (type))
+      switch (svg_enum_get (filter->base[filter_attr_idx (filter->type, SHAPE_ATTR_FE_COLOR_MATRIX_TYPE)]))
         {
-        case COLOR_MATRIX_TYPE_MATRIX:
-          v = svg_numbers_new_identity_matrix ();
-          break;
-        case COLOR_MATRIX_TYPE_SATURATE:
-          v = svg_numbers_new_one ();
-          break;
-        case COLOR_MATRIX_TYPE_HUE_ROTATE:
-          v = svg_numbers_new_zero ();
-          break;
-        case COLOR_MATRIX_TYPE_LUMINANCE_TO_ALPHA:
-          v = svg_numbers_new_none ();
-          break;
-        default:
-          g_assert_not_reached ();
+        case COLOR_MATRIX_TYPE_MATRIX: return svg_numbers_get_identity_matrix ();
+        case COLOR_MATRIX_TYPE_SATURATE: return svg_numbers_get1 (1);
+        case COLOR_MATRIX_TYPE_HUE_ROTATE: return svg_numbers_get1 (0);
+        case COLOR_MATRIX_TYPE_LUMINANCE_TO_ALPHA: return svg_numbers_get_none ();
+        default: g_assert_not_reached ();
         }
-
-      svg_value_unref (v);
-
-      return v;
     }
 
   if (filter->type == FE_DROPSHADOW && attr == SHAPE_ATTR_FE_STD_DEV)
-    {
-      SvgValue *v = svg_number_new (2);
-      svg_value_unref (v);
-      return v;
-    }
+    return svg_number_get_static (2);
 
   if (filter->type == FE_DROPSHADOW &&
       (attr == SHAPE_ATTR_FE_DX || attr == SHAPE_ATTR_FE_DY))
-    {
-      SvgValue *v = svg_number_new (2);
-      svg_value_unref (v);
-      return v;
-    }
+    return svg_number_get_static (2);
 
   return shape_attr_get_initial_value (attr, SHAPE_FILTER, TRUE);
 }
@@ -9572,9 +9593,9 @@ shape_attr_parse_value (ShapeAttr   attr,
                         const char *value)
 {
   if (strcmp (value, "inherit") == 0)
-    return svg_inherit_new ();
+    return svg_value_ref (svg_inherit_get ());
   else if (strcmp (value, "initial") == 0)
-    return svg_initial_new ();
+    return svg_value_ref (svg_initial_get ());
 
   return shape_attrs[attr].parse_value (value);
 }
@@ -9584,9 +9605,9 @@ shape_attr_parse_for_values (ShapeAttr   attr,
                              const char *value)
 {
   if (strcmp (value, "inherit") == 0)
-    return svg_inherit_new ();
+    return svg_value_ref (svg_inherit_get ());
   else if (strcmp (value, "initial") == 0)
-    return svg_initial_new ();
+    return svg_value_ref (svg_initial_get ());
 
   if (shape_attrs[attr].parse_for_values)
     return shape_attrs[attr].parse_for_values (value);
@@ -9859,132 +9880,46 @@ shape_attr_get_initial_value (ShapeAttr attr,
                               ShapeType shape_type,
                               gboolean  has_parent)
 {
-  if (shape_type == SHAPE_RADIAL_GRADIENT)
-    {
-      /* Radial gradients have conflicting initial values. Yay */
-      if (attr == SHAPE_ATTR_CX ||
-          attr == SHAPE_ATTR_CY ||
-          attr == SHAPE_ATTR_R)
-        {
-          static SvgValue *default_radial_value = NULL;
+  if (shape_type == SHAPE_RADIAL_GRADIENT &&
+      (attr == SHAPE_ATTR_CX || attr == SHAPE_ATTR_CY || attr == SHAPE_ATTR_R))
+    return svg_percentage_get (50);
 
-          if (!default_radial_value)
-            default_radial_value = svg_percentage_new (50);
+  if (shape_type == SHAPE_LINE &&
+      (attr == SHAPE_ATTR_X1 || attr == SHAPE_ATTR_Y1 ||
+       attr == SHAPE_ATTR_X2 || attr == SHAPE_ATTR_Y2))
+    return svg_number_get_static (0);
 
-          return default_radial_value;
-        }
-    }
-
-  if (shape_type == SHAPE_LINE)
-    {
-      if (attr == SHAPE_ATTR_X1 ||
-          attr == SHAPE_ATTR_Y1 ||
-          attr == SHAPE_ATTR_X2 ||
-          attr == SHAPE_ATTR_Y2)
-        {
-          static SvgValue *default_line_value = NULL;
-
-          if (!default_line_value)
-            default_line_value = svg_number_new (0);
-
-          return default_line_value;
-
-        }
-    }
-
-  if (shape_type == SHAPE_CLIP_PATH ||
-      shape_type == SHAPE_MASK ||
-      shape_type == SHAPE_PATTERN ||
-      shape_type == SHAPE_FILTER)
-    {
-      if (attr == SHAPE_ATTR_CONTENT_UNITS)
-        {
-          static SvgValue *default_content_units_value = NULL;
-
-          if (!default_content_units_value)
-            default_content_units_value = svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
-
-          return default_content_units_value;
-        }
-    }
+  if ((shape_type == SHAPE_CLIP_PATH || shape_type == SHAPE_MASK ||
+       shape_type == SHAPE_PATTERN || shape_type == SHAPE_FILTER) &&
+      attr == SHAPE_ATTR_CONTENT_UNITS)
+    return svg_coord_units_get (COORD_UNITS_USER_SPACE_ON_USE);
 
   if (shape_type == SHAPE_MASK || shape_type == SHAPE_FILTER)
     {
       if (attr == SHAPE_ATTR_X || attr == SHAPE_ATTR_Y)
-        {
-          static SvgValue *default_mask_pos_value = NULL;
-
-          if (!default_mask_pos_value)
-            default_mask_pos_value = svg_percentage_new (-10);
-
-          return default_mask_pos_value;
-        }
-      else if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
-        {
-          static SvgValue *default_mask_size_value = NULL;
-
-          if (!default_mask_size_value)
-            default_mask_size_value = svg_percentage_new (120);
-
-          return default_mask_size_value;
-        }
+        return svg_percentage_get (-10);
+      if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
+        return svg_percentage_get (120);
     }
 
-  if (shape_type == SHAPE_MARKER || shape_type == SHAPE_PATTERN)
-    {
-      if (attr == SHAPE_ATTR_OVERFLOW)
-        {
-          SvgValue *value;
-
-          value = svg_overflow_new (OVERFLOW_HIDDEN);
-          svg_value_unref (value);
-
-          return value;
-        }
-    }
+  if ((shape_type == SHAPE_MARKER || shape_type == SHAPE_PATTERN) &&
+      attr == SHAPE_ATTR_OVERFLOW)
+    return svg_overflow_get (OVERFLOW_HIDDEN);
 
   if (shape_type == SHAPE_SVG || shape_type == SHAPE_SYMBOL)
     {
       if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
-        {
-          static SvgValue *default_size = NULL;
-
-          if (!default_size)
-            default_size = svg_percentage_new (100);
-
-          return default_size;
-        }
-
-      if (attr == SHAPE_ATTR_OVERFLOW)
-        {
-          SvgValue *value;
-
-          if (has_parent)
-            value = svg_overflow_new (OVERFLOW_HIDDEN);
-          else
-            value = svg_overflow_new (OVERFLOW_VISIBLE);
-          svg_value_unref (value);
-          return value;
-        }
+        return svg_percentage_get (100);
+      if (attr == SHAPE_ATTR_OVERFLOW && has_parent)
+        return svg_overflow_get (OVERFLOW_HIDDEN);
     }
 
-  if (shape_type == SHAPE_CLIP_PATH ||
-      shape_type == SHAPE_MASK ||
-      shape_type == SHAPE_DEFS ||
-      shape_type == SHAPE_MARKER ||
-      shape_type == SHAPE_PATTERN ||
-      shape_type == SHAPE_LINEAR_GRADIENT ||
-      shape_type == SHAPE_RADIAL_GRADIENT)
-    {
-      if (attr == SHAPE_ATTR_DISPLAY)
-        {
-          SvgValue *value;
-
-          value = svg_display_new (DISPLAY_NONE);
-          svg_value_unref (value);
-          return value;
-        }
-    }
+  if ((shape_type == SHAPE_CLIP_PATH || shape_type == SHAPE_MASK ||
+       shape_type == SHAPE_DEFS || shape_type == SHAPE_MARKER ||
+       shape_type == SHAPE_PATTERN || shape_type == SHAPE_LINEAR_GRADIENT ||
+       shape_type == SHAPE_RADIAL_GRADIENT) &&
+      attr == SHAPE_ATTR_DISPLAY)
+    return svg_display_get (DISPLAY_NONE);
 
   return shape_attrs[attr].initial_value;
 }
@@ -14182,7 +14117,7 @@ parse_value_animation_attrs (Animation            *a,
         }
 
       /* We use a special keyword for this */
-      g_ptr_array_insert (values, 0, svg_current_new ());
+      g_ptr_array_insert (values, 0, svg_value_ref (svg_current_get ()));
     }
   else if (by_attr)
     {
