@@ -12733,7 +12733,7 @@ compute_current_values_for_shape (Shape          *shape,
                 }
 
               svg_value_unref (val);
-           }
+            }
         }
 
       if (!svg_value_equal (motion, identity))
