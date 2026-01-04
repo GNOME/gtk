@@ -12745,6 +12745,7 @@ compute_current_values_for_shape (Shape          *shape,
           svg_value_unref (combined);
         }
       svg_value_unref (identity);
+      svg_value_unref (motion);
     }
 
   if (shape_type_has_shapes (shape->type))
