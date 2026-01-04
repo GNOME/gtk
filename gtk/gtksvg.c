@@ -16213,101 +16213,109 @@ resolve_filter_ref (SvgValue   *value,
 }
 
 static void
+resolve_refs_for_animation (Animation  *a,
+                            ParserData *data)
+{
+  unsigned int first;
+
+  for (int k = 0; k < 2; k++)
+    {
+      GPtrArray *specs = k == 0 ? a->begin : a->end;
+
+      for (unsigned int j = 0; j < specs->len; j++)
+        {
+          TimeSpec *spec = g_ptr_array_index (specs, j);
+          if (spec->type == TIME_SPEC_TYPE_SYNC && spec->sync.base == NULL)
+            {
+              g_assert (spec->sync.ref);
+              spec->sync.base = g_hash_table_lookup (data->animations, spec->sync.ref);
+              if (!spec->sync.base)
+                gtk_svg_invalid_reference (data->svg, "No animation with ID %s", spec->sync.ref);
+              else
+                animation_add_dep (spec->sync.base, a);
+            }
+        }
+    }
+
+  /* The resolve functions don't know how to handle
+   * our special current keyword, and it gets resolved
+   * later anyway, so skip it.
+   */
+  if (a->frames[0].value && svg_value_is_current (a->frames[0].value))
+    first = 1;
+  else
+    first = 0;
+
+  if (a->attr == SHAPE_ATTR_CLIP_PATH)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        resolve_clip_ref (a->frames[j].value, a->shape, data);
+    }
+  else if (a->attr == SHAPE_ATTR_MASK)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        resolve_mask_ref (a->frames[j].value, a->shape, data);
+    }
+  else if (a->attr == SHAPE_ATTR_HREF)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        resolve_href_ref (a->frames[j].value, a->shape, data);
+    }
+  else if (a->attr == SHAPE_ATTR_MARKER_START ||
+           a->attr == SHAPE_ATTR_MARKER_MID ||
+           a->attr == SHAPE_ATTR_MARKER_END)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        resolve_marker_ref (a->frames[j].value, a->shape, data);
+    }
+  else if (a->attr == SHAPE_ATTR_FILL ||
+           a->attr == SHAPE_ATTR_STROKE)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        resolve_paint_ref (a->frames[j].value, a->shape, data);
+    }
+  else if (a->attr == SHAPE_ATTR_FILTER)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        resolve_filter_ref (a->frames[j].value, a->shape, data);
+    }
+  else if (a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        resolve_href_ref (a->frames[j].value, a->shape, data);
+    }
+
+  if (a->motion.path_ref)
+    {
+      a->motion.path_shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
+      if (a->motion.path_shape == NULL)
+        gtk_svg_invalid_reference (data->svg,
+                                   "No path with ID %s (resolving <mpath>",
+                                   a->motion.path_ref);
+      else
+        {
+          add_dependency_to_common_ancestor (a->shape, a->motion.path_shape);
+          if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
+            {
+              /* a's path is attached to a->motion.path_shape
+               * Make sure it moves along with transitions and animations
+               */
+              create_attachment_connection (a, a->motion.path_shape, data->svg->timeline);
+            }
+        }
+    }
+}
+
+static void
 resolve_animation_refs (Shape      *shape,
                         ParserData *data)
 {
   if (shape->animations)
     {
-      unsigned int first;
-
       for (unsigned int i = 0; i < shape->animations->len; i++)
         {
           Animation *a = g_ptr_array_index (shape->animations, i);
-          for (int k = 0; k < 2; k++)
-            {
-              GPtrArray *specs = k == 0 ? a->begin : a->end;
-              for (unsigned int j = 0; j < specs->len; j++)
-                {
-                  TimeSpec *spec = g_ptr_array_index (specs, j);
-                  if (spec->type == TIME_SPEC_TYPE_SYNC && spec->sync.base == NULL)
-                    {
-                      g_assert (spec->sync.ref);
-                      spec->sync.base = g_hash_table_lookup (data->animations, spec->sync.ref);
-                      if (!spec->sync.base)
-                        gtk_svg_invalid_reference (data->svg, "No animation with ID %s", spec->sync.ref);
-                      else
-                        animation_add_dep (spec->sync.base, a);
-                    }
-                }
-            }
-
-          /* The resolve functions don't know how to handle
-           * our special current keyword, and it gets resolved
-           * later anyway, so skip it.
-           */
-          if (a->frames[0].value && svg_value_is_current (a->frames[0].value))
-            first = 1;
-          else
-            first = 0;
-
-          if (a->attr == SHAPE_ATTR_CLIP_PATH)
-            {
-              for (unsigned int j = first; j < a->n_frames; j++)
-                resolve_clip_ref (a->frames[j].value, a->shape, data);
-            }
-          else if (a->attr == SHAPE_ATTR_MASK)
-            {
-              for (unsigned int j = first; j < a->n_frames; j++)
-                resolve_mask_ref (a->frames[j].value, a->shape, data);
-            }
-          else if (a->attr == SHAPE_ATTR_HREF)
-            {
-              for (unsigned int j = first; j < a->n_frames; j++)
-                resolve_href_ref (a->frames[j].value, a->shape, data);
-            }
-          else if (a->attr == SHAPE_ATTR_MARKER_START ||
-                   a->attr == SHAPE_ATTR_MARKER_MID ||
-                   a->attr == SHAPE_ATTR_MARKER_END)
-            {
-              for (unsigned int j = first; j < a->n_frames; j++)
-                resolve_marker_ref (a->frames[j].value, a->shape, data);
-            }
-          else if (a->attr == SHAPE_ATTR_FILL ||
-                   a->attr == SHAPE_ATTR_STROKE)
-            {
-              for (unsigned int j = first; j < a->n_frames; j++)
-                resolve_paint_ref (a->frames[j].value, a->shape, data);
-            }
-          else if (a->attr == SHAPE_ATTR_FILTER)
-            {
-              for (unsigned int j = first; j < a->n_frames; j++)
-                resolve_filter_ref (a->frames[j].value, a->shape, data);
-            }
-          else if (a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
-            {
-              for (unsigned int j = first; j < a->n_frames; j++)
-                resolve_href_ref (a->frames[j].value, a->shape, data);
-            }
-
-          if (a->motion.path_ref)
-            {
-              a->motion.path_shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
-              if (a->motion.path_shape == NULL)
-                gtk_svg_invalid_reference (data->svg,
-                                           "No path with ID %s (resolving <mpath>",
-                                           a->motion.path_ref);
-              else
-                {
-                  add_dependency_to_common_ancestor (a->shape, a->motion.path_shape);
-                  if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
-                    {
-                      /* a's path is attached to a->motion.path_shape
-                       * Make sure it moves along with transitions and animations
-                       */
-                      create_attachment_connection (a, a->motion.path_shape, data->svg->timeline);
-                    }
-                }
-            }
+          resolve_refs_for_animation (a, data);
         }
     }
 
