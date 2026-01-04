@@ -7990,23 +7990,6 @@ static ShapeAttr dropshadow_attrs[] = {
   SHAPE_ATTR_FE_COLOR, SHAPE_ATTR_FE_OPACITY,
 };
 
-#define N_FILTER_PROPS 12
-
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (flood_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (blur_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (blend_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (color_matrix_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (composite_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (offset_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (displacement_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (tile_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (image_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (merge_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (merge_node_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (component_transfer_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (func_attrs));
-G_STATIC_ASSERT (N_FILTER_PROPS >= G_N_ELEMENTS (dropshadow_attrs));
-
 typedef struct
 {
   const char *name;
@@ -8152,8 +8135,8 @@ typedef struct
 {
   FilterPrimitiveType type;
   unsigned int attrs;
-  SvgValue *base[N_FILTER_ATTRS];
-  SvgValue *current[N_FILTER_ATTRS];
+  SvgValue **current;
+  SvgValue *base[1];
 } FilterPrimitive;
 
 static void
@@ -8161,7 +8144,7 @@ filter_primitive_free (gpointer v)
 {
   FilterPrimitive *f = v;
 
-  for (unsigned int i = 0; i < N_FILTER_ATTRS; i++)
+  for (unsigned int i = 0; i < filter_types[f->type].n_attrs; i++)
     {
       g_clear_pointer (&f->base[i], svg_value_unref);
       g_clear_pointer (&f->current[i], svg_value_unref);
@@ -8360,9 +8343,10 @@ filter_primitive_new (FilterPrimitiveType type)
   FilterTypeInfo *ft = &filter_types[type];
   FilterPrimitive *f;
 
-  f = g_new0 (FilterPrimitive, 1);
+  f = g_malloc0 (sizeof (FilterPrimitive) + sizeof (SvgValue *) * (2 * ft->n_attrs - 1));
 
   f->type = type;
+  f->current = f->base + ft->n_attrs;
 
   for (unsigned int i = 0; i < ft->n_attrs; i++)
     f->base[i] = svg_value_ref (filter_attr_get_initial_value (f, ft->attrs[i]));
