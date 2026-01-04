@@ -11667,7 +11667,7 @@ gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
 /**
  * gtk_widget_get_template_child:
  * @widget: a widget
- * @widget_type: The `GType` to get a template child for
+ * @widget_type: The type of the widget class that defines the child in the template
  * @name: ID of the child defined in the template XML
  *
  * Fetches an object build from the template XML for @widget_type in
