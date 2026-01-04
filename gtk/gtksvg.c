@@ -5327,25 +5327,25 @@ svg_paint_new_symbolic (GtkSymbolicColor symbolic)
 
 static SvgPaint default_rgba[] = {
   { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 1 } },
-  { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_COLOR, .color = { 1, 1, 1, 1 } },
+  { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 0 } },
 };
 
 SvgValue *
 svg_paint_new_rgba (const GdkRGBA *rgba)
 {
-  if (gdk_rgba_equal (rgba, &default_rgba[0].color))
-    return svg_value_ref ((SvgValue *) &default_rgba[0]);
-  else if (gdk_rgba_equal (rgba, &default_rgba[1].color))
-    return svg_value_ref ((SvgValue *) &default_rgba[1]);
-  else
-    {
-      SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
-                                                      sizeof (SvgPaint));
-      paint->color = *rgba;
-      paint->kind = PAINT_COLOR;
+  SvgValue *value;
 
-      return (SvgValue *) paint;
+  for (unsigned int i = 0; i < G_N_ELEMENTS (default_rgba); i++)
+    {
+      if (gdk_rgba_equal (rgba, &default_rgba[i].color))
+        return svg_value_ref ((SvgValue *) &default_rgba[i]);
     }
+
+  value = svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
+  ((SvgPaint *) value)->color = *rgba;
+  ((SvgPaint *) value)->kind = PAINT_COLOR;
+
+  return value;
 }
 
 static SvgValue *
@@ -5355,23 +5355,33 @@ svg_paint_new_black (void)
 }
 
 static SvgValue *
-svg_paint_new_server (Shape         *shape,
-                      const char    *ref,
-                      const GdkRGBA *fallback)
+svg_paint_new_transparent (void)
+{
+  return svg_value_ref ((SvgValue *) &default_rgba[1]);
+}
+
+static SvgValue *
+svg_paint_new_server (const char *ref)
 {
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
-  if (fallback)
-    {
-      paint->kind = PAINT_SERVER_WITH_FALLBACK;
-      paint->server.fallback = *fallback;
-    }
-  else
-    {
-      paint->kind = PAINT_SERVER;
-      paint->server.fallback = GDK_RGBA_TRANSPARENT;
-    }
-  paint->server.shape = shape;
+  paint->kind = PAINT_SERVER;
+  paint->server.fallback = GDK_RGBA_TRANSPARENT;
+  paint->server.shape = NULL;
+  paint->server.ref = g_strdup (ref);
+
+  return (SvgValue *) paint;
+}
+
+static SvgValue *
+svg_paint_new_server_with_fallback (const char    *ref,
+                                    const GdkRGBA *fallback)
+{
+  SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
+                                                  sizeof (SvgPaint));
+  paint->kind = PAINT_SERVER_WITH_FALLBACK;
+  paint->server.fallback = *fallback;
+  paint->server.shape = NULL;
   paint->server.ref = g_strdup (ref);
 
   return (SvgValue *) paint;
@@ -5422,14 +5432,14 @@ svg_paint_parse (const char *value)
           gtk_css_parser_skip_whitespace (parser);
           if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
             {
-              paint = svg_paint_new_server (NULL, ref, NULL);
+              paint = svg_paint_new_server (ref);
             }
           else if (gtk_css_parser_try_ident (parser, "none") ||
                    gdk_rgba_parser_parse (parser, &fallback))
             {
               gtk_css_parser_skip_whitespace (parser);
               if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-                paint = svg_paint_new_server (NULL, ref, &fallback);
+                paint = svg_paint_new_server_with_fallback (ref, &fallback);
             }
         }
 
@@ -5577,25 +5587,16 @@ svg_paint_print_gpa (const SvgValue *value,
 
 static gboolean
 svg_paint_is_symbolic (const SvgPaint   *paint,
-                       GtkSymbolicColor *symbolic,
-                       GdkRGBA          *fallback)
+                       GtkSymbolicColor *symbolic)
 {
   if (paint->kind == PAINT_SYMBOLIC)
     {
-      *fallback = GDK_RGBA_BLACK;
       *symbolic = paint->symbolic;
       return TRUE;
     }
-  else if (paint->kind == PAINT_SERVER)
+  else if (paint->kind == PAINT_SERVER ||
+           paint->kind == PAINT_SERVER_WITH_FALLBACK)
     {
-      *fallback = GDK_RGBA_BLACK;
-      if (g_str_has_prefix (paint->server.ref, "gpa:") &&
-          parse_symbolic_color (paint->server.ref + strlen ("gpa:"), symbolic))
-        return TRUE;
-    }
-  else if (paint->kind == PAINT_SERVER_WITH_FALLBACK)
-    {
-      *fallback = paint->server.fallback;
       if (g_str_has_prefix (paint->server.ref, "gpa:") &&
           parse_symbolic_color (paint->server.ref + strlen ("gpa:"), symbolic))
         return TRUE;
@@ -5612,23 +5613,30 @@ svg_paint_resolve (const SvgValue *value,
 {
   const SvgPaint *paint = (const SvgPaint *) value;
   GtkSymbolicColor symbolic;
-  GdkRGBA fallback;
 
   g_assert (value->class == &SVG_PAINT_CLASS);
 
-  if (svg_paint_is_symbolic (paint, &symbolic, &fallback))
+  if ((context->svg->features & GTK_SVG_EXTENSIONS) != 0)
     {
-      if (!(context->svg->features & GTK_SVG_EXTENSIONS))
-        return svg_paint_new_black ();
-      else if (symbolic < context->n_colors)
-        return svg_paint_new_rgba (&context->colors[symbolic]);
-      else
-        return svg_paint_new_rgba (&fallback);
+      if (svg_paint_is_symbolic (paint, &symbolic))
+        {
+          if (symbolic < context->n_colors)
+            return svg_paint_new_rgba (&context->colors[symbolic]);
+          else if (GTK_SYMBOLIC_COLOR_FOREGROUND < context->n_colors)
+            return svg_paint_new_rgba (&context->colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
+          else
+            return svg_paint_new_black ();
+        }
     }
   else
     {
-      return svg_value_ref ((SvgValue *) value);
+      if (paint->kind == PAINT_SYMBOLIC)
+        {
+          return svg_paint_new_transparent ();
+        }
     }
+
+  return svg_value_ref ((SvgValue *) value);
 }
 
 static SvgValue *
@@ -14140,7 +14148,7 @@ parse_value_animation_attrs (Animation            *a,
         from = svg_transform_new_none ();
       else if (by->class == &SVG_PAINT_CLASS &&
                ((SvgPaint *) by)->kind == PAINT_COLOR)
-        from = svg_paint_new_rgba (&GDK_RGBA_TRANSPARENT);
+        from = svg_paint_new_transparent ();
       else
         {
           gtk_svg_invalid_attribute (data->svg, context, NULL,  "Don't know how to handle this 'by' value");
@@ -15822,21 +15830,19 @@ do_target:
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
         {
           GtkSymbolicColor symbolic;
-          GdkRGBA fallback;
 
           if (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_STROKE])->kind != PAINT_NONE)
             data->svg->used |= GTK_SVG_USES_STROKES;
 
-          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_STROKE]), &symbolic, &fallback))
+          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_STROKE]), &symbolic))
             data->svg->used |= BIT (symbolic + 1);
         }
 
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
         {
           GtkSymbolicColor symbolic;
-          GdkRGBA fallback;
 
-          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_FILL]), &symbolic, &fallback))
+          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_FILL]), &symbolic))
             data->svg->used |= BIT (symbolic + 1);
         }
 
