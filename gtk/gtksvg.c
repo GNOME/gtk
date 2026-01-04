@@ -213,6 +213,8 @@
  */
 #define DRAWING_LIMIT 150000
 
+#define DEFAULT_FONT_SIZE 16
+
 #ifndef _MSC_VER
 #define DEBUG
 #endif /* _MSC_VER */
@@ -2224,7 +2226,7 @@ svg_value_is_current (const SvgValue *value)
 }
 
 /* }}} */
-/* {{{ Numbers */ 
+/* {{{ Numbers */
 
 typedef struct
 {
@@ -2391,19 +2393,19 @@ svg_number_resolve (const SvgValue *value,
     case SVG_UNIT_EM:
     case SVG_UNIT_EX:
       {
-        SvgNumber *font_size;
+        double font_size;
 
         if (attr != SHAPE_ATTR_FONT_SIZE)
-          font_size = (SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE];
+          font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
         else if (context->parent)
-          font_size = (SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE];
+          font_size = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
         else
-          font_size = (SvgNumber *) shape_attr_get_initial_value (SHAPE_ATTR_FONT_SIZE, shape->type, TRUE);
+          font_size = DEFAULT_FONT_SIZE;
 
         if (n->unit == SVG_UNIT_EM)
-          return svg_number_new_full (SVG_UNIT_PX, n->value * font_size->value);
+          return svg_number_new_full (SVG_UNIT_PX, n->value * font_size);
         else
-          return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * font_size->value);
+          return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * font_size);
       }
     default:
       g_assert_not_reached ();
@@ -2428,6 +2430,7 @@ svg_number_new (double value)
     { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 0 },
     { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 1 },
     { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 2 },
+    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = DEFAULT_FONT_SIZE },
   };
   SvgNumber *result;
 
@@ -9167,7 +9170,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_number_new (PANGO_WEIGHT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (16.);
+  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (DEFAULT_FONT_SIZE);
   shape_attrs[SHAPE_ATTR_FILL].initial_value = svg_paint_new_black ();
   shape_attrs[SHAPE_ATTR_FILL_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FILL_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
