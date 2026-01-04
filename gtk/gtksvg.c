@@ -1975,7 +1975,7 @@ svg_value_alloc (const SvgValueClass *class,
   value = g_malloc0 (size);
 
   value->class = class;
-  value->ref_count = 1;
+  g_atomic_ref_count_init (&value->ref_count);
 
   return value;
 }
@@ -1983,6 +1983,9 @@ svg_value_alloc (const SvgValueClass *class,
 SvgValue *
 svg_value_ref (SvgValue *value)
 {
+  if (value->ref_count == 0)
+    return value;
+
   value->ref_count += 1;
   return value;
 }
@@ -1990,6 +1993,9 @@ svg_value_ref (SvgValue *value)
 void
 svg_value_unref (SvgValue *value)
 {
+  if (value->ref_count == 0)
+    return;
+
   if (value->ref_count > 1)
     {
       value->ref_count -= 1;
@@ -2183,7 +2189,7 @@ static const SvgValueClass SVG_KEYWORD_CLASS = {
 static SvgValue *
 svg_inherit_get (void)
 {
-  static SvgKeyword inherit = { { &SVG_KEYWORD_CLASS, 1 }, SVG_INHERIT };
+  static SvgKeyword inherit = { { &SVG_KEYWORD_CLASS, 0 }, SVG_INHERIT };
 
   return (SvgValue *) &inherit;
 }
@@ -2191,7 +2197,7 @@ svg_inherit_get (void)
 static SvgValue *
 svg_initial_get (void)
 {
-  static SvgKeyword initial = { { &SVG_KEYWORD_CLASS, 1 }, SVG_INITIAL };
+  static SvgKeyword initial = { { &SVG_KEYWORD_CLASS, 0 }, SVG_INITIAL };
 
   return (SvgValue *) &initial;
 }
@@ -2199,7 +2205,7 @@ svg_initial_get (void)
 static SvgValue *
 svg_current_get (void)
 {
-  static SvgKeyword current = { { &SVG_KEYWORD_CLASS, 1 }, SVG_CURRENT };
+  static SvgKeyword current = { { &SVG_KEYWORD_CLASS, 0 }, SVG_CURRENT };
 
   return (SvgValue *) &current;
 }
@@ -2427,10 +2433,10 @@ static SvgValue *
 svg_number_get_static (double value)
 {
   static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 1 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = 2 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_NUMBER, .value = DEFAULT_FONT_SIZE },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 1 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 2 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = DEFAULT_FONT_SIZE },
   };
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
@@ -2463,13 +2469,13 @@ static SvgValue *
 svg_percentage_get (double value)
 {
   static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = -10 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 25 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 50 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 100 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 120 },
-    { { &SVG_NUMBER_CLASS, 1 }, .unit = SVG_UNIT_PERCENTAGE, .value = 150 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = -10 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 0 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 25 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 50 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 100 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 120 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 150 },
   };
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
@@ -2684,7 +2690,7 @@ svg_numbers_new_identity_matrix (void)
 static SvgValue *
 svg_numbers_get_none (void)
 {
-  static SvgNumbers none = { { &SVG_NUMBERS_CLASS, 1 }, .n_values = 0, .values[0] = { SVG_UNIT_NUMBER, 0 } };
+  static SvgNumbers none = { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 0, .values[0] = { SVG_UNIT_NUMBER, 0 } };
 
   return (SvgValue *) &none;
 }
@@ -2699,8 +2705,8 @@ static SvgValue *
 svg_numbers_get1 (double value)
 {
   static SvgNumbers singletons[] = {
-      { { &SVG_NUMBERS_CLASS, 1 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 0 } },
-      { { &SVG_NUMBERS_CLASS, 1 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 1 } },
+      { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 0 } },
+      { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 1 } },
   };
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
@@ -3019,8 +3025,8 @@ static const SvgValueClass SVG_FILL_RULE_CLASS = {
 };
 
 static SvgEnum fill_rule_values[] = {
-  { { &SVG_FILL_RULE_CLASS, 1 }, GSK_FILL_RULE_WINDING, "nonzero" },
-  { { &SVG_FILL_RULE_CLASS, 1 }, GSK_FILL_RULE_EVEN_ODD, "evenodd" },
+  { { &SVG_FILL_RULE_CLASS, 0 }, GSK_FILL_RULE_WINDING, "nonzero" },
+  { { &SVG_FILL_RULE_CLASS, 0 }, GSK_FILL_RULE_EVEN_ODD, "evenodd" },
 };
 
 SvgValue *
@@ -3051,8 +3057,8 @@ static const SvgValueClass SVG_MASK_TYPE_CLASS = {
 };
 
 static SvgEnum mask_type_values[] = {
- { { &SVG_MASK_TYPE_CLASS, 1 }, GSK_MASK_MODE_ALPHA, "alpha" },
- { { &SVG_MASK_TYPE_CLASS, 1 }, GSK_MASK_MODE_LUMINANCE, "luminance" },
+ { { &SVG_MASK_TYPE_CLASS, 0 }, GSK_MASK_MODE_ALPHA, "alpha" },
+ { { &SVG_MASK_TYPE_CLASS, 0 }, GSK_MASK_MODE_LUMINANCE, "luminance" },
 };
 
 static SvgValue *
@@ -3087,9 +3093,9 @@ static const SvgValueClass SVG_LINE_CAP_CLASS = {
 };
 
 static SvgEnum line_cap_values[] = {
-  { { &SVG_LINE_CAP_CLASS, 1 }, GSK_LINE_CAP_BUTT, "butt" },
-  { { &SVG_LINE_CAP_CLASS, 1 }, GSK_LINE_CAP_ROUND, "round" },
-  { { &SVG_LINE_CAP_CLASS, 1 }, GSK_LINE_CAP_SQUARE, "square" },
+  { { &SVG_LINE_CAP_CLASS, 0 }, GSK_LINE_CAP_BUTT, "butt" },
+  { { &SVG_LINE_CAP_CLASS, 0 }, GSK_LINE_CAP_ROUND, "round" },
+  { { &SVG_LINE_CAP_CLASS, 0 }, GSK_LINE_CAP_SQUARE, "square" },
 };
 
 SvgValue *
@@ -3120,9 +3126,9 @@ static const SvgValueClass SVG_LINE_JOIN_CLASS = {
 };
 
 static SvgEnum line_join_values[] = {
-  { { &SVG_LINE_JOIN_CLASS, 1 }, GSK_LINE_JOIN_MITER, "miter" },
-  { { &SVG_LINE_JOIN_CLASS, 1 }, GSK_LINE_JOIN_ROUND, "round" },
-  { { &SVG_LINE_JOIN_CLASS, 1 }, GSK_LINE_JOIN_BEVEL, "bevel" },
+  { { &SVG_LINE_JOIN_CLASS, 0 }, GSK_LINE_JOIN_MITER, "miter" },
+  { { &SVG_LINE_JOIN_CLASS, 0 }, GSK_LINE_JOIN_ROUND, "round" },
+  { { &SVG_LINE_JOIN_CLASS, 0 }, GSK_LINE_JOIN_BEVEL, "bevel" },
 };
 
 SvgValue *
@@ -3153,8 +3159,8 @@ static const SvgValueClass SVG_VISIBILITY_CLASS = {
 };
 
 static SvgEnum visibility_values[] = {
-  { { &SVG_VISIBILITY_CLASS, 1 }, VISIBILITY_HIDDEN, "hidden" },
-  { { &SVG_VISIBILITY_CLASS, 1 }, VISIBILITY_VISIBLE, "visible" },
+  { { &SVG_VISIBILITY_CLASS, 0 }, VISIBILITY_HIDDEN, "hidden" },
+  { { &SVG_VISIBILITY_CLASS, 0 }, VISIBILITY_VISIBLE, "visible" },
 };
 
 static SvgValue *
@@ -3191,8 +3197,8 @@ static const SvgValueClass SVG_DISPLAY_CLASS = {
 };
 
 static SvgEnum display_values[] = {
-  { { &SVG_DISPLAY_CLASS, 1 }, DISPLAY_NONE, "none" },
-  { { &SVG_DISPLAY_CLASS, 1 }, DISPLAY_INLINE, "inline" },
+  { { &SVG_DISPLAY_CLASS, 0 }, DISPLAY_NONE, "none" },
+  { { &SVG_DISPLAY_CLASS, 0 }, DISPLAY_INLINE, "inline" },
 };
 
 static SvgValue *
@@ -3232,9 +3238,9 @@ static const SvgValueClass SVG_SPREAD_METHOD_CLASS = {
 };
 
 static SvgEnum spread_method_values[] = {
-  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_PAD, "pad" },
-  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_REFLECT, "reflect" },
-  { { &SVG_SPREAD_METHOD_CLASS, 1 }, GSK_REPEAT_REPEAT, "repeat" },
+  { { &SVG_SPREAD_METHOD_CLASS, 0 }, GSK_REPEAT_PAD, "pad" },
+  { { &SVG_SPREAD_METHOD_CLASS, 0 }, GSK_REPEAT_REFLECT, "reflect" },
+  { { &SVG_SPREAD_METHOD_CLASS, 0 }, GSK_REPEAT_REPEAT, "repeat" },
 };
 
 static SvgValue *
@@ -3271,8 +3277,8 @@ static const SvgValueClass SVG_COORD_UNITS_CLASS = {
 };
 
 static SvgEnum coord_units_values[] = {
-  { { &SVG_COORD_UNITS_CLASS, 1 }, COORD_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
-  { { &SVG_COORD_UNITS_CLASS, 1 }, COORD_UNITS_OBJECT_BOUNDING_BOX, "objectBoundingBox" },
+  { { &SVG_COORD_UNITS_CLASS, 0 }, COORD_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
+  { { &SVG_COORD_UNITS_CLASS, 0 }, COORD_UNITS_OBJECT_BOUNDING_BOX, "objectBoundingBox" },
 };
 
 static SvgValue *
@@ -3309,12 +3315,12 @@ static const SvgValueClass SVG_PAINT_ORDER_CLASS = {
 };
 
 static SvgEnum paint_order_values[] = {
-  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_FILL_STROKE_MARKERS, "normal" },
-  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_FILL_MARKERS_STROKE, "fill markers stroke" },
-  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_STROKE_FILL_MARKERS, "stroke fill markers" },
-  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_STROKE_MARKERS_FILL, "stroke markers fill" },
-  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_MARKERS_FILL_STROKE, "markers fill stroke" },
-  { { &SVG_PAINT_ORDER_CLASS, 1 }, PAINT_ORDER_MARKERS_STROKE_FILL, "markers stroke fill" },
+  { { &SVG_PAINT_ORDER_CLASS, 0 }, PAINT_ORDER_FILL_STROKE_MARKERS, "normal" },
+  { { &SVG_PAINT_ORDER_CLASS, 0 }, PAINT_ORDER_FILL_MARKERS_STROKE, "fill markers stroke" },
+  { { &SVG_PAINT_ORDER_CLASS, 0 }, PAINT_ORDER_STROKE_FILL_MARKERS, "stroke fill markers" },
+  { { &SVG_PAINT_ORDER_CLASS, 0 }, PAINT_ORDER_STROKE_MARKERS_FILL, "stroke markers fill" },
+  { { &SVG_PAINT_ORDER_CLASS, 0 }, PAINT_ORDER_MARKERS_FILL_STROKE, "markers fill stroke" },
+  { { &SVG_PAINT_ORDER_CLASS, 0 }, PAINT_ORDER_MARKERS_STROKE_FILL, "markers stroke fill" },
 };
 
 SvgValue *
@@ -3367,22 +3373,22 @@ static const SvgValueClass SVG_BLEND_MODE_CLASS = {
 };
 
 static SvgEnum blend_mode_values[] = {
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DEFAULT, "normal" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_MULTIPLY, "multiply" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SCREEN, "screen" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_OVERLAY, "overlay" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DARKEN, "darken" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_LIGHTEN, "lighten" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR_DODGE, "color-dodge" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR_BURN, "color-burn" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_HARD_LIGHT, "hard-light" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SOFT_LIGHT, "soft-light" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_DIFFERENCE, "difference" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_EXCLUSION, "exclusiohn" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_COLOR, "color" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_HUE, "hue" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_SATURATION, "saturation" },
-  { { &SVG_BLEND_MODE_CLASS, 1 }, GSK_BLEND_MODE_LUMINOSITY, "luminosity" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_DEFAULT, "normal" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_MULTIPLY, "multiply" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_SCREEN, "screen" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_OVERLAY, "overlay" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_DARKEN, "darken" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_LIGHTEN, "lighten" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_COLOR_DODGE, "color-dodge" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_COLOR_BURN, "color-burn" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_HARD_LIGHT, "hard-light" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_SOFT_LIGHT, "soft-light" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_DIFFERENCE, "difference" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_EXCLUSION, "exclusiohn" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_COLOR, "color" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_HUE, "hue" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_SATURATION, "saturation" },
+  { { &SVG_BLEND_MODE_CLASS, 0 }, GSK_BLEND_MODE_LUMINOSITY, "luminosity" },
 };
 
 static SvgValue *
@@ -3419,9 +3425,9 @@ static const SvgValueClass SVG_TEXT_ANCHOR_CLASS = {
 };
 
 static SvgEnum text_anchor_values[] = {
-  { { &SVG_TEXT_ANCHOR_CLASS, 1 }, TEXT_ANCHOR_START, "start" },
-  { { &SVG_TEXT_ANCHOR_CLASS, 1 }, TEXT_ANCHOR_MIDDLE, "middle" },
-  { { &SVG_TEXT_ANCHOR_CLASS, 1 }, TEXT_ANCHOR_END, "end" },
+  { { &SVG_TEXT_ANCHOR_CLASS, 0 }, TEXT_ANCHOR_START, "start" },
+  { { &SVG_TEXT_ANCHOR_CLASS, 0 }, TEXT_ANCHOR_MIDDLE, "middle" },
+  { { &SVG_TEXT_ANCHOR_CLASS, 0 }, TEXT_ANCHOR_END, "end" },
 };
 
 static SvgValue *
@@ -3457,8 +3463,8 @@ static const SvgValueClass SVG_ISOLATION_CLASS = {
 };
 
 static SvgEnum isolation_values[] = {
-  { { &SVG_ISOLATION_CLASS, 1 }, ISOLATION_AUTO, "auto" },
-  { { &SVG_ISOLATION_CLASS, 1 }, ISOLATION_ISOLATE, "isolate" },
+  { { &SVG_ISOLATION_CLASS, 0 }, ISOLATION_AUTO, "auto" },
+  { { &SVG_ISOLATION_CLASS, 0 }, ISOLATION_ISOLATE, "isolate" },
 };
 
 static SvgValue *
@@ -3495,8 +3501,8 @@ static const SvgValueClass SVG_MARKER_UNITS_CLASS = {
 };
 
 static SvgEnum marker_units_values[] = {
-  { { &SVG_MARKER_UNITS_CLASS, 1 }, MARKER_UNITS_STROKE_WIDTH, "strokeWidth" },
-  { { &SVG_MARKER_UNITS_CLASS, 1 }, MARKER_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
+  { { &SVG_MARKER_UNITS_CLASS, 0 }, MARKER_UNITS_STROKE_WIDTH, "strokeWidth" },
+  { { &SVG_MARKER_UNITS_CLASS, 0 }, MARKER_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse" },
 };
 
 static SvgValue *
@@ -3533,9 +3539,9 @@ static const SvgValueClass SVG_UNICODE_BIDI_CLASS = {
 };
 
 static SvgEnum unicode_bidi_values[] = {
-  { { &SVG_UNICODE_BIDI_CLASS, 1 }, UNICODE_BIDI_NORMAL, "normal" },
-  { { &SVG_UNICODE_BIDI_CLASS, 1 }, UNICODE_BIDI_EMBED, "embed" },
-  { { &SVG_UNICODE_BIDI_CLASS, 1 }, UNICODE_BIDI_OVERRIDE, "bidi-override" },
+  { { &SVG_UNICODE_BIDI_CLASS, 0 }, UNICODE_BIDI_NORMAL, "normal" },
+  { { &SVG_UNICODE_BIDI_CLASS, 0 }, UNICODE_BIDI_EMBED, "embed" },
+  { { &SVG_UNICODE_BIDI_CLASS, 0 }, UNICODE_BIDI_OVERRIDE, "bidi-override" },
 };
 
 static SvgValue *
@@ -3573,9 +3579,9 @@ static const SvgValueClass SVG_OVERFLOW_CLASS = {
 };
 
 static SvgEnum overflow_values[] = {
-  { { &SVG_OVERFLOW_CLASS, 1 }, OVERFLOW_VISIBLE, "visible" },
-  { { &SVG_OVERFLOW_CLASS, 1 }, OVERFLOW_HIDDEN, "hidden" },
-  { { &SVG_OVERFLOW_CLASS, 1 }, OVERFLOW_AUTO, "auto" },
+  { { &SVG_OVERFLOW_CLASS, 0 }, OVERFLOW_VISIBLE, "visible" },
+  { { &SVG_OVERFLOW_CLASS, 0 }, OVERFLOW_HIDDEN, "hidden" },
+  { { &SVG_OVERFLOW_CLASS, 0 }, OVERFLOW_AUTO, "auto" },
 };
 
 static SvgValue *
@@ -3693,13 +3699,13 @@ static const SvgValueClass SVG_FILTER_PRIMITIVE_REF_CLASS = {
 };
 
 static SvgFilterPrimitiveRef filter_primitive_ref_values[] = {
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = DEFAULT_SOURCE, .ref = NULL, },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = SOURCE_GRAPHIC, .ref = "SourceGraphic", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = SOURCE_ALPHA, .ref = "SourceAlpha", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = BACKGROUND_IMAGE, .ref = "BackgroundImage", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = BACKGROUND_ALPHA, .ref = "BackgroundAlpha", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = FILL_PAINT, .ref = "FillPaint", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 1 }, .type = STROKE_PAINT, .ref = "StrokePaint", },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = DEFAULT_SOURCE, .ref = NULL, },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = SOURCE_GRAPHIC, .ref = "SourceGraphic", },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = SOURCE_ALPHA, .ref = "SourceAlpha", },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = BACKGROUND_IMAGE, .ref = "BackgroundImage", },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = BACKGROUND_ALPHA, .ref = "BackgroundAlpha", },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = FILL_PAINT, .ref = "FillPaint", },
+     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = STROKE_PAINT, .ref = "StrokePaint", },
   };
 
 static SvgValue *
@@ -3750,8 +3756,8 @@ static const SvgValueClass SVG_DIRECTION_CLASS = {
 };
 
 static SvgEnum direction_values[] = {
-  { { &SVG_DIRECTION_CLASS, 1 }, PANGO_DIRECTION_LTR, "ltr" },
-  { { &SVG_DIRECTION_CLASS, 1 }, PANGO_DIRECTION_RTL, "rtl" },
+  { { &SVG_DIRECTION_CLASS, 0 }, PANGO_DIRECTION_LTR, "ltr" },
+  { { &SVG_DIRECTION_CLASS, 0 }, PANGO_DIRECTION_RTL, "rtl" },
 };
 
 static SvgValue *
@@ -3801,17 +3807,17 @@ static const SvgValueClass SVG_WRITING_MODE_CLASS = {
 };
 
 static SvgEnum writing_mode_values[] = {
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_HORIZONTAL_TB, "horizontal-tb" },
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_VERTICAL_RL, "vertical-rl" },
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_VERTICAL_LR, "vertical-lr" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_HORIZONTAL_TB, "horizontal-tb" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_VERTICAL_RL, "vertical-rl" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_VERTICAL_LR, "vertical-lr" },
 
   /* SVG 1.1 legacy properties */
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_LR, "lr" },
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_LR_TB, "lr-tb" },
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_RL, "rl" },
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_RL_TB, "rl-tb" },
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_TB, "tb" },
-  { { &SVG_WRITING_MODE_CLASS, 1 }, WRITING_MODE_LEGACY_TB_RL, "tb-rl" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_LEGACY_LR, "lr" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_LEGACY_LR_TB, "lr-tb" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_LEGACY_RL, "rl" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_LEGACY_RL_TB, "rl-tb" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_LEGACY_TB, "tb" },
+  { { &SVG_WRITING_MODE_CLASS, 0 }, WRITING_MODE_LEGACY_TB_RL, "tb-rl" },
 };
 
 static SvgValue *
@@ -3842,9 +3848,9 @@ static const SvgValueClass SVG_FONT_STYLE_CLASS = {
 };
 
 static SvgEnum font_style_values[] = {
-  { { &SVG_FONT_STYLE_CLASS, 1 }, PANGO_STYLE_NORMAL, "normal" },
-  { { &SVG_FONT_STYLE_CLASS, 1 }, PANGO_STYLE_OBLIQUE, "oblique" },
-  { { &SVG_FONT_STYLE_CLASS, 1 }, PANGO_STYLE_ITALIC, "italic" },
+  { { &SVG_FONT_STYLE_CLASS, 0 }, PANGO_STYLE_NORMAL, "normal" },
+  { { &SVG_FONT_STYLE_CLASS, 0 }, PANGO_STYLE_OBLIQUE, "oblique" },
+  { { &SVG_FONT_STYLE_CLASS, 0 }, PANGO_STYLE_ITALIC, "italic" },
 };
 
 static SvgValue *
@@ -3875,13 +3881,13 @@ static const SvgValueClass SVG_FONT_VARIANT_CLASS = {
 };
 
 static SvgEnum font_variant_values[] = {
-  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_NORMAL, "normal" },
-  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_SMALL_CAPS, "small-caps" },
-  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_ALL_SMALL_CAPS, "all-small-caps" },
-  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_PETITE_CAPS, "petite-caps" },
-  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_ALL_PETITE_CAPS, "all-petite-caps" },
-  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_UNICASE, "unicase" },
-  { { &SVG_FONT_VARIANT_CLASS, 1 }, PANGO_VARIANT_TITLE_CAPS, "titling-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 0 }, PANGO_VARIANT_NORMAL, "normal" },
+  { { &SVG_FONT_VARIANT_CLASS, 0 }, PANGO_VARIANT_SMALL_CAPS, "small-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 0 }, PANGO_VARIANT_ALL_SMALL_CAPS, "all-small-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 0 }, PANGO_VARIANT_PETITE_CAPS, "petite-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 0 }, PANGO_VARIANT_ALL_PETITE_CAPS, "all-petite-caps" },
+  { { &SVG_FONT_VARIANT_CLASS, 0 }, PANGO_VARIANT_UNICASE, "unicase" },
+  { { &SVG_FONT_VARIANT_CLASS, 0 }, PANGO_VARIANT_TITLE_CAPS, "titling-caps" },
 };
 
 static SvgValue *
@@ -3912,15 +3918,15 @@ static const SvgValueClass SVG_FONT_STRETCH_CLASS = {
 };
 
 static SvgEnum font_stretch_values[] = {
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_ULTRA_CONDENSED, "ultra-condensed" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_EXTRA_CONDENSED, "extra-condensed" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_CONDENSED, "condensed" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_SEMI_CONDENSED, "semi-condensed" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_NORMAL, "normal" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_SEMI_EXPANDED, "semi-expanded" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_EXPANDED, "expanded" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_EXTRA_EXPANDED, "extra-expanded" },
-  { { &SVG_FONT_STRETCH_CLASS, 1 }, PANGO_STRETCH_ULTRA_EXPANDED, "ultra-expanded" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_ULTRA_CONDENSED, "ultra-condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_EXTRA_CONDENSED, "extra-condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_CONDENSED, "condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_SEMI_CONDENSED, "semi-condensed" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_NORMAL, "normal" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_SEMI_EXPANDED, "semi-expanded" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_EXPANDED, "expanded" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_EXTRA_EXPANDED, "extra-expanded" },
+  { { &SVG_FONT_STRETCH_CLASS, 0 }, PANGO_STRETCH_ULTRA_EXPANDED, "ultra-expanded" },
 };
 
 static SvgValue *
@@ -3958,9 +3964,9 @@ static const SvgValueClass SVG_EDGE_MODE_CLASS = {
 };
 
 static SvgEnum edge_mode_values[] = {
-  { { &SVG_EDGE_MODE_CLASS, 1 }, EDGE_MODE_DUPLICATE, "duplicate" },
-  { { &SVG_EDGE_MODE_CLASS, 1 }, EDGE_MODE_WRAP, "wrap" },
-  { { &SVG_EDGE_MODE_CLASS, 1 }, EDGE_MODE_NONE, "none" },
+  { { &SVG_EDGE_MODE_CLASS, 0 }, EDGE_MODE_DUPLICATE, "duplicate" },
+  { { &SVG_EDGE_MODE_CLASS, 0 }, EDGE_MODE_WRAP, "wrap" },
+  { { &SVG_EDGE_MODE_CLASS, 0 }, EDGE_MODE_NONE, "none" },
 };
 
 static SvgValue *
@@ -3996,8 +4002,8 @@ static const SvgValueClass SVG_BLEND_COMPOSITE_CLASS = {
 };
 
 static SvgEnum blend_composite_values[] = {
-  { { &SVG_BLEND_COMPOSITE_CLASS, 1 }, BLEND_COMPOSITE, NULL },
-  { { &SVG_BLEND_COMPOSITE_CLASS, 1 }, BLEND_NO_COMPOSITE, "no-composite" },
+  { { &SVG_BLEND_COMPOSITE_CLASS, 0 }, BLEND_COMPOSITE, NULL },
+  { { &SVG_BLEND_COMPOSITE_CLASS, 0 }, BLEND_NO_COMPOSITE, "no-composite" },
 };
 
 static SvgValue *
@@ -4036,10 +4042,10 @@ static const SvgValueClass SVG_COLOR_MATRIX_TYPE_CLASS = {
 };
 
 static SvgEnum color_matrix_type_values[] = {
-  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 1 }, COLOR_MATRIX_TYPE_MATRIX, "matrix"},
-  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 1 }, COLOR_MATRIX_TYPE_SATURATE, "saturate" },
-  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 1 }, COLOR_MATRIX_TYPE_HUE_ROTATE, "hueRotate" },
-  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 1 }, COLOR_MATRIX_TYPE_LUMINANCE_TO_ALPHA, "luminanceToAlpha" },
+  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 0 }, COLOR_MATRIX_TYPE_MATRIX, "matrix"},
+  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 0 }, COLOR_MATRIX_TYPE_SATURATE, "saturate" },
+  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 0 }, COLOR_MATRIX_TYPE_HUE_ROTATE, "hueRotate" },
+  { { &SVG_COLOR_MATRIX_TYPE_CLASS, 0 }, COLOR_MATRIX_TYPE_LUMINANCE_TO_ALPHA, "luminanceToAlpha" },
 };
 
 static SvgValue *
@@ -4081,13 +4087,13 @@ static const SvgValueClass SVG_COMPOSITE_OPERATOR_CLASS = {
 };
 
 static SvgEnum composite_operator_values[] = {
-  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_OVER, "over" },
-  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_IN, "in" },
-  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_OUT, "out" },
-  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_ATOP, "atop" },
-  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_XOR, "xor" },
-  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_LIGHTER, "lighter" },
-  { { &SVG_COMPOSITE_OPERATOR_CLASS, 1 }, COMPOSITE_OPERATOR_ARITHMETIC, "arithmetic" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 0 }, COMPOSITE_OPERATOR_OVER, "over" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 0 }, COMPOSITE_OPERATOR_IN, "in" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 0 }, COMPOSITE_OPERATOR_OUT, "out" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 0 }, COMPOSITE_OPERATOR_ATOP, "atop" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 0 }, COMPOSITE_OPERATOR_XOR, "xor" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 0 }, COMPOSITE_OPERATOR_LIGHTER, "lighter" },
+  { { &SVG_COMPOSITE_OPERATOR_CLASS, 0 }, COMPOSITE_OPERATOR_ARITHMETIC, "arithmetic" },
 };
 
 static SvgValue *
@@ -4143,10 +4149,10 @@ static const SvgValueClass SVG_RGBA_CHANNEL_CLASS = {
 };
 
 static SvgEnum rgba_channel_values[] = {
-  { { &SVG_RGBA_CHANNEL_CLASS, 1 }, RGBA_CHANNEL_R, "R" },
-  { { &SVG_RGBA_CHANNEL_CLASS, 1 }, RGBA_CHANNEL_G, "G" },
-  { { &SVG_RGBA_CHANNEL_CLASS, 1 }, RGBA_CHANNEL_B, "B" },
-  { { &SVG_RGBA_CHANNEL_CLASS, 1 }, RGBA_CHANNEL_A, "A" },
+  { { &SVG_RGBA_CHANNEL_CLASS, 0 }, RGBA_CHANNEL_R, "R" },
+  { { &SVG_RGBA_CHANNEL_CLASS, 0 }, RGBA_CHANNEL_G, "G" },
+  { { &SVG_RGBA_CHANNEL_CLASS, 0 }, RGBA_CHANNEL_B, "B" },
+  { { &SVG_RGBA_CHANNEL_CLASS, 0 }, RGBA_CHANNEL_A, "A" },
 };
 
 static SvgValue *
@@ -4186,11 +4192,11 @@ static const SvgValueClass SVG_COMPONENT_TRANSFER_TYPE_CLASS = {
 };
 
 static SvgEnum component_transfer_type_values[] = {
-  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 1 }, COMPONENT_TRANSFER_IDENTITY, "identity" },
-  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 1 }, COMPONENT_TRANSFER_TABLE, "table" },
-  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 1 }, COMPONENT_TRANSFER_DISCRETE, "discrete" },
-  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 1 }, COMPONENT_TRANSFER_LINEAR, "linear" },
-  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 1 }, COMPONENT_TRANSFER_GAMMA, "gamma" },
+  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 0 }, COMPONENT_TRANSFER_IDENTITY, "identity" },
+  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 0 }, COMPONENT_TRANSFER_TABLE, "table" },
+  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 0 }, COMPONENT_TRANSFER_DISCRETE, "discrete" },
+  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 0 }, COMPONENT_TRANSFER_LINEAR, "linear" },
+  { { &SVG_COMPONENT_TRANSFER_TYPE_CLASS, 0 }, COMPONENT_TRANSFER_GAMMA, "gamma" },
 };
 
 static SvgValue *
@@ -4227,8 +4233,8 @@ static const SvgValueClass SVG_VECTOR_EFFECT_CLASS = {
 };
 
 static SvgEnum vector_effect_values[] = {
-  { { &SVG_VECTOR_EFFECT_CLASS, 1 }, VECTOR_EFFECT_NONE, "none" },
-  { { &SVG_VECTOR_EFFECT_CLASS, 1 }, VECTOR_EFFECT_NON_SCALING_STROKE, "non-scaling-stroke" },
+  { { &SVG_VECTOR_EFFECT_CLASS, 0 }, VECTOR_EFFECT_NONE, "none" },
+  { { &SVG_VECTOR_EFFECT_CLASS, 0 }, VECTOR_EFFECT_NON_SCALING_STROKE, "non-scaling-stroke" },
 };
 
 static SvgValue *
@@ -4383,7 +4389,7 @@ svg_transform_alloc (unsigned int n)
 SvgValue *
 svg_transform_new_none (void)
 {
-  static SvgTransform none = { { &SVG_TRANSFORM_CLASS, 1 }, 1, { { TRANSFORM_NONE, } }};
+  static SvgTransform none = { { &SVG_TRANSFORM_CLASS, 0 }, 1, { { TRANSFORM_NONE, } }};
   return svg_value_ref ((SvgValue *) &none);
 }
 
@@ -5295,9 +5301,9 @@ static SvgValue *
 svg_paint_new_simple (PaintKind kind)
 {
   static SvgPaint paint_values[] = {
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_NONE },
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_CONTEXT_FILL },
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_CONTEXT_STROKE },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_NONE },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_FILL },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_STROKE },
   };
 
   g_assert (kind < G_N_ELEMENTS (paint_values));
@@ -5315,19 +5321,19 @@ SvgValue *
 svg_paint_new_symbolic (GtkSymbolicColor symbolic)
 {
   static SvgPaint sym[] = {
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND },
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ERROR },
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_WARNING },
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_SUCCESS },
-    { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ACCENT },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ERROR },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_WARNING },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_SUCCESS },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ACCENT },
   };
 
   return svg_value_ref ((SvgValue *) &sym[symbolic]);
 }
 
 static SvgPaint default_rgba[] = {
-  { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 1 } },
-  { { &SVG_PAINT_CLASS, 1 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 0 } },
+  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 1 } },
+  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 0 } },
 };
 
 SvgValue *
@@ -5856,7 +5862,7 @@ svg_filter_alloc (unsigned int n)
 static SvgValue *
 svg_filter_new_none (void)
 {
-  static SvgFilter none = { { &SVG_FILTER_CLASS, 1 }, 1, { { FILTER_NONE, } } };
+  static SvgFilter none = { { &SVG_FILTER_CLASS, 0 }, 1, { { FILTER_NONE, } } };
   return svg_value_ref ((SvgValue *) &none);
 }
 
@@ -6296,7 +6302,7 @@ svg_dash_array_alloc (unsigned int n)
 static SvgValue *
 svg_dash_array_new_none (void)
 {
-  static SvgDashArray none = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_NONE, 0 };
+  static SvgDashArray none = { { &SVG_DASH_ARRAY_CLASS, 0 }, DASH_ARRAY_NONE, 0 };
   return svg_value_ref ((SvgValue *) &none);
 }
 
@@ -6304,8 +6310,8 @@ static SvgValue *
 svg_dash_array_new (double       *values,
                     unsigned int  n)
 {
-  static SvgDashArray da01 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_UNIT_NUMBER, 0 }, { SVG_UNIT_NUMBER, 1 } } };
-  static SvgDashArray da10 = { { &SVG_DASH_ARRAY_CLASS, 1 }, DASH_ARRAY_DASHES, 2, { { SVG_UNIT_NUMBER, 1 }, { SVG_UNIT_NUMBER, 0 } } };
+  static SvgDashArray da01 = { { &SVG_DASH_ARRAY_CLASS, 0 }, DASH_ARRAY_DASHES, 2, { { SVG_UNIT_NUMBER, 0 }, { SVG_UNIT_NUMBER, 1 } } };
+  static SvgDashArray da10 = { { &SVG_DASH_ARRAY_CLASS, 0 }, DASH_ARRAY_DASHES, 2, { { SVG_UNIT_NUMBER, 1 }, { SVG_UNIT_NUMBER, 0 } } };
 
   if (n == 2 && values[0] == 0 && values[1] == 1)
     {
@@ -6544,7 +6550,7 @@ static const SvgValueClass SVG_PATH_CLASS = {
 static SvgValue *
 svg_path_new_none (void)
 {
-  static SvgPath none = { { &SVG_PATH_CLASS, 1 }, NULL, NULL };
+  static SvgPath none = { { &SVG_PATH_CLASS, 0 }, NULL, NULL };
 
   return svg_value_ref ((SvgValue *) &none);
 }
@@ -6720,7 +6726,7 @@ static const SvgValueClass SVG_CLIP_CLASS = {
 SvgValue *
 svg_clip_new_none (void)
 {
-  static SvgClip none = { { &SVG_CLIP_CLASS, 1 }, CLIP_NONE };
+  static SvgClip none = { { &SVG_CLIP_CLASS, 0 }, CLIP_NONE };
   return svg_value_ref ((SvgValue *) &none);
 }
 
@@ -6961,7 +6967,7 @@ static const SvgValueClass SVG_MASK_CLASS = {
 static SvgValue *
 svg_mask_new_none (void)
 {
-  static SvgMask none = { { &SVG_MASK_CLASS, 1 }, MASK_NONE };
+  static SvgMask none = { { &SVG_MASK_CLASS, 0 }, MASK_NONE };
   return svg_value_ref ((SvgValue *) &none);
 }
 
@@ -7102,7 +7108,7 @@ static const SvgValueClass SVG_VIEW_BOX_CLASS = {
 static SvgValue *
 svg_view_box_new_unset (void)
 {
-  static SvgViewBox unset = { { &SVG_VIEW_BOX_CLASS, 1 }, TRUE, { { 0, 0 }, { 0, 0 } } };
+  static SvgViewBox unset = { { &SVG_VIEW_BOX_CLASS, 0 }, TRUE, { { 0, 0 }, { 0, 0 } } };
 
   return svg_value_ref ((SvgValue *) &unset);
 }
@@ -7822,7 +7828,7 @@ static const SvgValueClass SVG_HREF_CLASS = {
 static SvgValue *
 svg_href_new_none (void)
 {
-  static SvgHref none = { { &SVG_HREF_CLASS, 1 }, HREF_NONE };
+  static SvgHref none = { { &SVG_HREF_CLASS, 0 }, HREF_NONE };
   return svg_value_ref ((SvgValue *) &none);
 }
 
