@@ -123,7 +123,16 @@ test_data = [
   'zero-length-path-stroke.svg',
 ]
 
+slow_tests = [
+  'nested-use.test',
+  'pattern-billion-laughs.test',
+]
+
 foreach testname : test_data
+  suites = [ 'svg', 'svg renderer' ]
+  if testname in slow_tests
+    suites += 'slow'
+  endif
   test('svg renderer ' + testname, test_renderer,
         args: [ '--tap',
                 '-k',
@@ -135,6 +144,6 @@ foreach testname : test_data
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
              ],
-        suite: [ 'svg', 'svg renderer']
+        suite: suites
   )
 endforeach
