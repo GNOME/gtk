@@ -53,6 +53,7 @@ test_data = [
   'nested-svg-overflow.svg',
   'nested-svg-positioning.svg',
   'nested-svg-viewbox.svg',
+  'non-svg-toplevel.svg',
   'paint.svg',
   'paint-server-fallback.svg',
   'pattern.svg',
