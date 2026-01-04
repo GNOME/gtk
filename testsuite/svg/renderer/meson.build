@@ -84,6 +84,7 @@ test_data = [
   'opacity.svg',
   'overflow.svg',
   'paint-order.svg',
+  'paint-server-fallback.svg',
   'pattern1.svg',
   'pattern2.svg',
   'pattern3.svg',

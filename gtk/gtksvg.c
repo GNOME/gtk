@@ -19328,10 +19328,14 @@ paint_server (SvgPaint              *paint,
 {
   Shape *server = paint->server.shape;
 
-  g_assert (paint->server.shape != NULL);
-
-  if (server->type == SHAPE_LINEAR_GRADIENT ||
-      server->type == SHAPE_RADIAL_GRADIENT)
+  if (server == NULL)
+    {
+      gtk_snapshot_append_color (context->snapshot,
+                                 &paint->server.fallback,
+                                 bounds);
+    }
+  else if (server->type == SHAPE_LINEAR_GRADIENT ||
+           server->type == SHAPE_RADIAL_GRADIENT)
     {
       GPtrArray *color_stops;
 
