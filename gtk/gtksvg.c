@@ -2328,18 +2328,6 @@ svg_number_resolve (const SvgValue *value,
                     ComputeContext *context)
 {
   const SvgNumber *n = (const SvgNumber *) value;
-  const graphene_rect_t *viewport;
-  graphene_rect_t vb;
-
-  if (context->viewport)
-    {
-      viewport = context->viewport;
-    }
-  else
-    {
-      graphene_rect_init (&vb, 0, 0, context->svg->width, context->svg->height);
-      viewport = &vb;
-    }
 
   switch (n->unit)
     {
@@ -2357,37 +2345,37 @@ svg_number_resolve (const SvgValue *value,
         case SHAPE_ATTR_STROKE_WIDTH:
         case SHAPE_ATTR_R:
         case SHAPE_ATTR_FR:
-          return svg_number_new_full (SVG_UNIT_PX, n->value * normalized_diagonal (viewport) / 100);
+          return svg_number_new_full (SVG_UNIT_PX, n->value * normalized_diagonal (context->viewport) / 100);
         case SHAPE_ATTR_CX:
         case SHAPE_ATTR_RX:
         case SHAPE_ATTR_FX:
-          return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
+          return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
         case SHAPE_ATTR_X:
         case SHAPE_ATTR_WIDTH:
           if (shape->type != SHAPE_FILTER)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
+            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
           else
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_X1:
         case SHAPE_ATTR_X2:
           if (shape->type == SHAPE_LINE)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
+            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
           else
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_CY:
         case SHAPE_ATTR_RY:
         case SHAPE_ATTR_FY:
-          return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
+          return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
         case SHAPE_ATTR_Y:
         case SHAPE_ATTR_HEIGHT:
           if (shape->type != SHAPE_FILTER)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
+            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_Y1:
         case SHAPE_ATTR_Y2:
           if (shape->type == SHAPE_LINE)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
+            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
         default:
@@ -20772,6 +20760,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               double                 weight)
 {
   GtkSvg *self = GTK_SVG (paintable);
+  graphene_rect_t viewport = GRAPHENE_RECT_INIT (0, 0, self->width, self->height);
 
   if (self->node == NULL ||
       !can_reuse_node (self, width, height, colors, n_colors, weight))
@@ -20785,7 +20774,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       self->current_height = height;
 
       compute_context.svg = self;
-      compute_context.viewport = NULL;
+      compute_context.viewport = &viewport;
       compute_context.colors = colors;
       compute_context.n_colors = n_colors;
       compute_context.current_time = self->current_time;
@@ -20794,7 +20783,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       compute_current_values_for_shape (self->content, &compute_context);
 
       paint_context.svg = self;
-      paint_context.viewport = NULL;
+      paint_context.viewport = &viewport;
       paint_context.viewport_stack = NULL;
       paint_context.snapshot = snapshot;
       paint_context.colors = colors;
