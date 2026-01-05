@@ -212,6 +212,7 @@
 #include <gtk/gtkpasswordentrybuffer.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
+#include <gtk/gtkpopoverbin.h>
 #include <gtk/gtkpopovermenu.h>
 #include <gtk/gtkpopovermenubar.h>
 #include <gtk/gtkprintdialog.h>
