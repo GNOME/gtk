@@ -15868,7 +15868,7 @@ text_cb (GMarkupParseContext  *context,
 {
   ParserData *data = user_data;
 
-  if (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN)
+  if (data->current_shape && (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN))
     {
       TextNode node = {
         .type = TEXT_NODE_CHARACTERS,
@@ -18982,10 +18982,24 @@ paint_server_get_current_value (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
+      context->depth++;
+      if (context->depth > NESTING_LIMIT)
+        {
+          gtk_svg_rendering_error (context->svg,
+                                   "excessive rendering depth (> %d) while resolving href %s, aborting",
+                                   NESTING_LIMIT,
+                                   href->ref);
+          goto fail;
+        }
+
       if (href->shape)
         {
           if (template_type_compatible (href->shape->type, shape->type))
-            return paint_server_get_current_value (href->shape, attr, context);
+            {
+              SvgValue *ret = paint_server_get_current_value (href->shape, attr, context);
+              context->depth--;
+              return ret;
+            }
 
           gtk_svg_invalid_reference (context->svg,
                                      "<%s> can not use a <%s> as template (while resolving href %s)",
@@ -18995,6 +19009,8 @@ paint_server_get_current_value (Shape        *shape,
         }
     }
 
+fail:
+  context->depth--;
   return shape->current[attr];
 }
 
@@ -19006,10 +19022,24 @@ gradient_get_color_stops (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
+      context->depth++;
+      if (context->depth > NESTING_LIMIT)
+        {
+          gtk_svg_rendering_error (context->svg,
+                                   "excessive rendering depth (> %d) while resolving href %s, aborting",
+                                   NESTING_LIMIT,
+                                   href->ref);
+          goto fail;
+        }
+
       if (href->shape)
         {
           if (template_type_compatible (href->shape->type, shape->type))
-            return gradient_get_color_stops (href->shape, context);
+            {
+              GPtrArray *ret = gradient_get_color_stops (href->shape, context);
+              context->depth--;
+              return ret;
+            }
 
           gtk_svg_invalid_reference (context->svg,
                                      "<%s> can not use a <%s> as template (while collecting color stops)",
@@ -19018,6 +19048,8 @@ gradient_get_color_stops (Shape        *shape,
         }
     }
 
+fail:
+  context->depth--;
   return shape->color_stops;
 }
 
@@ -19058,10 +19090,24 @@ pattern_get_shapes (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
+      context->depth++;
+      if (context->depth > NESTING_LIMIT)
+        {
+          gtk_svg_rendering_error (context->svg,
+                                   "excessive rendering depth (> %d) while resolving href %s, aborting",
+                                   NESTING_LIMIT,
+                                   href->ref);
+          goto fail;
+        }
+
       if (href->shape)
         {
           if (template_type_compatible (href->shape->type, shape->type))
-            return pattern_get_shapes (href->shape, context);
+            {
+              GPtrArray *ret = pattern_get_shapes (href->shape, context);
+              context->depth--;
+              return ret;
+            }
 
           gtk_svg_invalid_reference (context->svg,
                                      "<%s> can not use a <%s> as template (while collecting pattern content)",
@@ -19070,6 +19116,8 @@ pattern_get_shapes (Shape        *shape,
         }
     }
 
+fail:
+  context->depth--;
   return shape->shapes;
 }
 
@@ -19660,6 +19708,8 @@ paint_marker (Shape              *shape,
     return TRUE;
 
   marker = href->shape;
+  if (!marker)
+    return FALSE;
 
   orient = (SvgOrient *) marker->current[SHAPE_ATTR_MARKER_ORIENT];
   units = marker->current[SHAPE_ATTR_MARKER_UNITS];
