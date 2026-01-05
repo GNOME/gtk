@@ -205,13 +205,21 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       return FALSE;
     }
 
-  if (button == 0 ||
-      (priv->button != 0 && priv->button != button) ||
-      (priv->current_button != 0 && priv->current_button != button))
+  if (button == 0)
     {
       if (gtk_gesture_is_active (GTK_GESTURE (controller)))
         gtk_event_controller_reset (controller);
       return FALSE;
+    }
+
+  if (priv->button != 0 && priv->button != button)
+    return FALSE;
+
+  if (priv->current_button != 0 && priv->current_button != button)
+    {
+      if (gtk_gesture_is_active (GTK_GESTURE (controller)))
+        gtk_event_controller_reset (controller);
+      priv->current_button = 0;
     }
 
   if (event_type == GDK_BUTTON_PRESS || event_type == GDK_TOUCH_BEGIN ||
