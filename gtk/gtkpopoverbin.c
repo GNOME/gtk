@@ -27,6 +27,17 @@
  *
  * You should use `GtkPopoverBin` whenever you need to present a [class@Gtk.Popover]
  * to the user.
+ *
+ * ## Actions
+ *
+ * `GtkPopoverBin` defines the `menu.popup` action, which can be activated
+ * to present the popover to the user.
+ *
+ * ## CSS nodes
+ *
+ * `GtkPopoverBin` has a single CSS node with the name `popoverbin`.
+ *
+ * Since: 4.22
  */
 
 struct _GtkPopoverBin
