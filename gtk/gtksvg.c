@@ -7548,8 +7548,6 @@ svg_language_interpolate (const SvgValue *value0,
     return svg_value_ref ((SvgValue *) value1);
 }
 
-
-
 static SvgValue *
 svg_language_accumulate (const SvgValue *value0,
                          const SvgValue *value1,
@@ -7590,6 +7588,17 @@ svg_language_new (PangoLanguage *language)
   SvgLanguage *result = (SvgLanguage *)svg_value_alloc (&SVG_LANGUAGE_CLASS, sizeof (SvgLanguage));
   result->value = language;
   return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_language_new_default (void)
+{
+  static SvgLanguage def = { { &SVG_LANGUAGE_CLASS, 0 }, NULL };
+
+  if (def.value == NULL)
+    def.value = gtk_get_default_language ();
+
+  return svg_value_ref ((SvgValue *) &def);
 }
 
 /* }}} */
@@ -9205,7 +9214,7 @@ shape_attr_only_css (ShapeAttr attr)
 static void
 shape_attr_init_default_values (void)
 {
-  shape_attrs[SHAPE_ATTR_LANG].initial_value = svg_language_new (gtk_get_default_language ());
+  shape_attrs[SHAPE_ATTR_LANG].initial_value = svg_language_new_default ();
   shape_attrs[SHAPE_ATTR_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
