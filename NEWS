@@ -1,5 +1,179 @@
-Overview of Changes in 4.21.4, xx-xx-xxxx
+Overview of Changes in 4.21.4, 05-01-2026
 =========================================
+
+* GtkPopoverBin is a new widget to help with
+  adding context menus (and other popovers) to
+  widgets that don't have them
+
+* GtkSvg is a much more complete SVG renderer now
+
+* Gsk supports displacement maps (no public api yet)
+
+* GtkScrolledWindow scrollbar allocation has been fixed
+
+* A11y overlays are now properly positioned on MacOS
+
+* Bugs fixed:
+  - #7675 Convert included symbolics from fills to strokes (Jakub Steiner)
+  - #7774 macOS: Accesskit overlay rectangles misplaced when scale factor > 1
+  - #7793 Wacom tablet pressure stopped working on Wayland after GTK4 4.20.1
+    upgrade (Peter Hutterer)
+  - #7817 In testsuite/gdk/colorstate.c include of udmabuf.h seems errrorneous
+    (Matthias Clasen)
+  - #7818 GTK 4.21.0 compilation failure on RedHat 8.10 (Matthias Clasen)
+  - #7860 GtkLevelBar doesn't correctly update when value set when unmapped
+    (Ignacy Kuchciński)
+  - #7881 Backdrop blur leaves a transparent area along the edges (Benjamin
+    Otte)
+  - #7892 Shaper: canvas size not respected (Matthias Clasen)
+  - #7893 GtkGLArea + backdrop filter leak (Benjamin Otte)
+  - #7894 GL shader compilation error on Android/Mali (Benjamin Otte)
+  - #7906 Gtk.Svg: Investigate proper viewbox handling
+  - #7914 svg: ellipses w. cx ≠ cy render incorrectly (Matthias Clasen)
+  - #7922 Offloading broken for Showtime on main: "Only textures supported
+    (found GskOpacityNode)" (Benjamin Otte)
+  - #7928 Incorrect CSS crashes Gtk (Matthias Clasen)
+  - #7932 ICON in title bar has no margin (GTK4 aplications) (Matthias Clasen)
+  - #7934 svg use problem (Matthias Clasen)
+  - #7941 svg: Support viewBox on <marker> (Matthias Clasen)
+  - #7951 document-save-as-symbolic looks wrong in main (Matthias Clasen)
+  - #7962 issue for `<svg>` width with units (Matthias Clasen)
+  - !7901 scrolledwindow: Fix scrollbars allocation for all known cases (Khalid
+    Abu Shawarib)
+  - !8990 Scale access kit node bounding box for retina displays (Arjan
+    Molenaar)
+  - !9047 revealer: Push opacity through GtkSnapshot (Hari Rana)
+  - !9123 Add GtkPopoverBin
+  - !9148 CODING-STYLE: Tiny braces examples improvements (Adrien Plazas)
+  - !9189 gdk: clipboard: fix internal paste mime type resolution order
+    (Dominique Martinet)
+  - !9190 Gtk 4 21 3 (Matthias Clasen)
+  - !9191 icon editor: Allow grouping (Matthias Clasen)
+  - !9192 Fix typo in README.md: "cmompose" → "compose" (Azibom)
+  - !9193 svg: Cosmetics (Matthias Clasen)
+  - !9194 gdk: Cursors improvements (g.willems)
+  - !9195 gdkevents: Fix relative_direction annotations (Maximiliano Sandoval)
+  - !9197 docs: Fixes for RenderReplay and CompositeNode docstrings (Maximiliano
+    Sandoval)
+  - !9198 gtk: Fix target widget lookup for scroll events from "puck" devices
+    (Carlos Garnacho)
+  - !9200 Add GskRepeatNode::repeat and use it for CSS backdrop blur (Benjamin
+    Otte)
+  - !9201 icon editor: Fix path duplication (Matthias Clasen)
+  - !9202 Revert "Merge branch 'wip/jimmac/gtk4-stroke-symbolics' into 'main'"
+  - !9203 icon editor: Fix fill and stroke opacity (Matthias Clasen)
+  - !9204 rendernodeparser: Don't clamp values (Benjamin Otte)
+  - !9205 main: Allow avoiding only certain portals (Peter Eisenmann)
+  - !9206 svg: Add traditional symbolic compat (Matthias Clasen)
+  - !9207 svg: Improve the compat handling a bit (Matthias Clasen)
+  - !9208 CI: restore -Werror with MSYS2 (Christoph Reiter)
+  - !9209 CI: Move the Werror disabling where it belongs (Benjamin Otte)
+  - !9210 Refactor opacity computation (Benjamin Otte)
+  - !9211 reftests: Also include the widget property in the test (Benjamin Otte)
+  - !9212 icon editor: Don't ursurp Ctrl-a (Matthias Clasen)
+  - !9215 display/wayland: Gracefully handle dispose being called twice (Jonas
+    Ådahl)
+  - !9218 svg: Tweak serialize flags (Matthias Clasen)
+  - !9219 nodeparser: Don't name nested "duplicates" (Benjamin Otte)
+  - !9220 svg: Use the viewBox transformation specified in the spec (Florian
+    "sp1rit"​)
+  - !9221 gdkglcontext-win32-wgl.c: Fix running on 32-bit Windows (Chun-wei Fan)
+  - !9223 revealer: Fix fade slide direction (Alice Mikhaylenko)
+  - !9224 icon editor: Cosmetics
+  - !9225 svg: Never try to render <defs>
+  - !9226 Refactor offload code to have it deal with copy/paste nodes (Benjamin
+    Otte)
+  - !9227 ci: Disable the msys2-ucrt64 job (Matthias Clasen)
+  - !9228 texthandle: Reposition when surface transform changes (Sergey Bugaev)
+  - !9229 svg: Parse dash arrays more carefully (Matthias Clasen)
+  - !9230 Make diffing code work with copy/paste nodes (Benjamin Otte)
+  - !9231 image: Fix baseline rounding issues (Adrien Plazas)
+  - !9232 svg: Handle bounding boxes better (Matthias Clasen)
+  - !9233 inspector: Make copy/paste nodes display properly (Benjamin Otte)
+  - !9234 CI: install sassc package for MSYS2 (Christoph Reiter)
+  - !9235 Add GskIsolationNode (Benjamin Otte)
+  - !9236 CI: add a MSYS2 job for clang64 (Christoph Reiter)
+  - !9237 svg: Cosmetics (Matthias Clasen)
+  - !9238 Misc svg parsing improvements (Matthias Clasen)
+  - !9239 svg: Handle xlink:href (Matthias Clasen)
+  - !9240 copypaste: Fix memleak (Benjamin Otte)
+  - !9241 svg: Added support for `<text>` & `<tspan>` nodes (Florian "sp1rit"​,
+    Matthias Clasen)
+  - !9242 CI: enable ccache for the msvc job (Christoph Reiter)
+  - !9243 svg: Fix a few copy/paste errors (Matthias Clasen)
+  - !9245 svg: Fix a serialization oversight (Matthias Clasen)
+  - !9246 offload: Don't skip component transfer nodes (Benjamin Otte)
+  - !9248 inspector: Be more consistent (Matthias Clasen)
+  - !9249 svg: Small refactoring (Matthias Clasen)
+  - !9250 svg: Some parsing fixes (Matthias Clasen)
+  - !9252 svg: Handle inkscapes keywords (Matthias Clasen)
+  - !9253 svg: Better isolation (Matthias Clasen)
+  - !9257 gradients: Check bouds for equality when diffing (Benjamin Otte)
+  - !9258 svg: Parse paint order more completely (Matthias Clasen)
+  - !9259 svg: Add assertions (Matthias Clasen)
+  - !9260 svg: Support `<marker>` (Matthias Clasen)
+  - !9261 a11y: Fix the accessible range max value (g.willems)
+  - !9262 svg: Handle overflow (Matthias Clasen)
+  - !9266 ci: Build Node Editor application (Florian "sp1rit"​)
+  - !9267 svg: Support nested `<svg>` (Matthias Clasen)
+  - !9271 svg: Move some code around (Matthias Clasen)
+  - !9272 svg: Cosmetics (Matthias Clasen)
+  - !9274 svg: Stop allocating too many values (Matthias Clasen)
+  - !9275 widget: Fix baseline-center valign (Adrien Plazas)
+  - !9276 svg: Rework href values a bit (Matthias Clasen)
+  - !9277 svg: Fix the hue-rotate filter (Matthias Clasen)
+  - !9279 snapshot: Rename variables (Benjamin Otte)
+  - !9280 svg: Support `<filter>` (Benjamin Otte, Matthias Clasen)
+  - !9281 Register GskRenderReplay as a GType
+  - !9282 macos: Fix uninitialized variables when attaching vulkan context to a
+    surface (Arjan Molenaar)
+  - !9283 svg: Fix some issues with marker placement (Matthias Clasen)
+  - !9285 testsuite: Small improvement (Matthias Clasen)
+  - !9290 svg: Implement gradient templates (Matthias Clasen)
+  - !9291 svg: support stroking for text (Matthias Clasen)
+  - !9292 svg: Tweak sizing behavior (Matthias Clasen)
+  - !9293 svg: Map Gsk.Repeat onto the correct spread method value (Florian
+    "sp1rit"​)
+  - !9294 gsk: Handle zero-length paths without crashing (Matthias Clasen)
+  - !9295 gtk-demo: Use stroking in the drawing area demo (Benjamin Otte,
+    Matthias Clasen)
+  - !9296 svg: Fix handling of empty filters (Matthias Clasen)
+  - !9297 svg-compare: Add some comfort (Matthias Clasen)
+  - !9298 svg: Implement from-by animation (Matthias Clasen)
+  - !9299 path: Allow to preserve structure (Matthias Clasen)
+  - !9300 svg: Add svg_value_distance (Matthias Clasen)
+  - !9301 svg: Fix hueRotate filters (Matthias Clasen)
+  - !9302 gsk: Drop a leftover typedef (Matthias Clasen)
+  - !9303 svg: Fix bounding boxes for images (Matthias Clasen)
+  - !9304 Implement svgs arithmetic compositing (Matthias Clasen)
+  - !9306 icon editor: Fix example 6 (Matthias Clasen)
+  - !9307 Cosmetic: Typo fix (Matthias Clasen)
+  - !9308 svg-compare: Fix a crash in argument parsing (Matthias Clasen)
+  - !9309 svg: Allow embedding fonts (Matthias Clasen)
+  - !9310 svg: limit rendering up to an upper bound (Florian "sp1rit"​)
+  - !9311 macos: Fix crash due to drag-n-drop on macOS 26 (Arjan Molenaar)
+  - !9312 svg: Support symbols (Matthias Clasen)
+  - !9313 gtk: Fix since annotation (Bilal Elmoussaoui)
+  - !9316 columnview: Fix configuring an adjustment (Sergey Bugaev)
+  - !9317 droptarget: Implement reset (Sergey Bugaev)
+  - !9318 icon editor: Make it work again (Matthias Clasen)
+  - !9319 svg: Implement non-scaling strokes (Matthias Clasen)
+  - !9323 svg: Clean up some parsing (Matthias Clasen)
+  - !9324 Fix up included icons (Matthias Clasen)
+  - !9325 Fix up feImage a bit (Matthias Clasen)
+  - !9327 svg: Cache the render node (Matthias Clasen)
+  - !9330 svg: Don't accept empty strings as numbers (Matthias Clasen)
+  - !9331 svg: Reorganize shape attributes (Matthias Clasen)
+
+* Translation updates:
+  - Chinese (Taiwan) (Cheng-Chia Tseng)
+  - Georgian (Ekaterine Papava)
+  - Indonesian (Andika Triwidada)
+  - Occitan (post 1500) (Quentin PAGÈS)
+  - Russian (Danil Gashigullin)
+  - Slovenian (Martin)
+  - Uzbek (Baxrom Raxmatov)
+
 
 Overview of Changes in 4.21.3, 24-11-2025
 =========================================
