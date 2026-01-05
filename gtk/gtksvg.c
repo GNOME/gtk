@@ -2711,8 +2711,9 @@ static SvgValue *
 svg_numbers_get1 (double value)
 {
   static SvgNumbers singletons[] = {
-      { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 0 } },
-      { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 1 } },
+    { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 0 } },
+    { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 1 } },
+    { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 2 } },
   };
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
@@ -8543,20 +8544,13 @@ static SvgValue *
 parse_number_optional_number (const char *value)
 {
   SvgNumbers *numbers = (SvgNumbers *) svg_numbers_parse (value);
-  if (numbers->n_values == 2)
+  if (numbers->n_values <= 2)
     {
       return (SvgValue *) numbers;
     }
-  else if (numbers->n_values == 1)
-    {
-      double vals[2];
-
-      vals[0] = vals[1] = numbers->values[0].value;
-      svg_value_unref ((SvgValue *) numbers);
-      return svg_numbers_new (vals, 2);
-    }
   else
     {
+      svg_value_unref ((SvgValue *) numbers);
       return NULL;
     }
 }
@@ -9297,7 +9291,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FE_IN].initial_value = svg_filter_primitive_ref_new (DEFAULT_SOURCE);
   shape_attrs[SHAPE_ATTR_FE_IN2].initial_value = svg_filter_primitive_ref_new (DEFAULT_SOURCE);
-  shape_attrs[SHAPE_ATTR_FE_STD_DEV].initial_value = svg_numbers_new ((double[]) { 2, 2 }, 2);
+  shape_attrs[SHAPE_ATTR_FE_STD_DEV].initial_value = svg_value_ref (svg_numbers_get1 (2));
   shape_attrs[SHAPE_ATTR_FE_BLUR_EDGE_MODE].initial_value = svg_edge_mode_new (EDGE_MODE_NONE);
   shape_attrs[SHAPE_ATTR_FE_BLEND_MODE].initial_value = svg_blend_mode_new (GSK_BLEND_MODE_DEFAULT);
   shape_attrs[SHAPE_ATTR_FE_BLEND_COMPOSITE].initial_value = svg_blend_composite_new (BLEND_COMPOSITE);
@@ -17997,7 +17991,8 @@ apply_filter_tree (Shape         *shape,
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
 
             num = (SvgNumbers *) filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
-            if (num->values[0].value != num->values[1].value)
+            if (num->n_values == 2 &&
+                num->values[0].value != num->values[1].value)
               gtk_svg_rendering_error (context->svg,
                                        "Separate x/y values for stdDeviation not supported");
             std_dev = num->values[0].value;
@@ -18274,7 +18269,8 @@ apply_filter_tree (Shape         *shape,
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
             num = (SvgNumbers *) filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
-            if (num->values[0].value != num->values[1].value)
+            if (num->n_values == 2 &&
+                num->values[0].value != num->values[1].value)
               gtk_svg_rendering_error (context->svg,
                                        "Separate x/y values for stdDeviation not supported");
             std_dev = num->values[0].value;
