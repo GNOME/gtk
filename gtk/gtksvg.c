@@ -2436,7 +2436,10 @@ svg_number_get_static (double value)
     { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 0 },
     { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 1 },
     { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 2 },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 4 }, /* default miter limit */
     { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = DEFAULT_FONT_SIZE },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = PANGO_WEIGHT_NORMAL },
+    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = -1 }, /* unset path length */
   };
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
@@ -2673,10 +2676,13 @@ svg_numbers_get_identity_matrix (void)
   static SvgValue *id;
 
   if (id == NULL)
-    id = svg_numbers_new ((double []) { 1, 0, 0, 0, 0,
-                                        0, 1, 0, 0, 0,
-                                        0, 0, 1, 0, 0,
-                                        0, 0, 0, 1, 0 }, 20);
+    {
+      id = svg_numbers_new ((double []) { 1, 0, 0, 0, 0,
+                                          0, 1, 0, 0, 0,
+                                          0, 0, 1, 0, 0,
+                                          0, 0, 0, 1, 0 }, 20);
+      id->ref_count = 0;
+    }
 
   return svg_value_ref (id);
 }
@@ -2933,7 +2939,13 @@ static const SvgValueClass SVG_STRING_CLASS = {
 static SvgValue *
 svg_string_new (const char *str)
 {
-  SvgString *result = (SvgString *)svg_value_alloc (&SVG_STRING_CLASS, sizeof (SvgString));
+  static SvgString empty = { { &SVG_STRING_CLASS, 0 }, .value = (char *) "" };
+  SvgString *result;
+
+  if (str[0] == '\0')
+    return svg_value_ref ((SvgValue *) &empty);
+
+  result = (SvgString *) svg_value_alloc (&SVG_STRING_CLASS, sizeof (SvgString));
   result->value = g_strdup (str);
   return (SvgValue *) result;
 }
@@ -7244,13 +7256,9 @@ static const SvgValueClass SVG_CONTENT_FIT_CLASS = {
 static SvgValue *
 svg_content_fit_new_none (void)
 {
-  SvgContentFit *v;
+  static SvgContentFit none = { { &SVG_CONTENT_FIT_CLASS, 0 }, 1, 0, 0, 0 };
 
-  v = (SvgContentFit *) svg_value_alloc (&SVG_CONTENT_FIT_CLASS, sizeof (SvgContentFit));
-
-  v->is_none = TRUE;
-
-  return (SvgValue *) v;
+  return svg_value_ref ((SvgValue *) &none);
 }
 
 static SvgValue *
@@ -7258,7 +7266,11 @@ svg_content_fit_new (Align       align_x,
                      Align       align_y,
                      MeetOrSlice meet)
 {
+  static SvgContentFit def = { { &SVG_CONTENT_FIT_CLASS, 0 }, 0, ALIGN_MID, ALIGN_MID, MEET };
   SvgContentFit *v;
+
+  if (align_x == ALIGN_MID && align_y == ALIGN_MID && meet == MEET)
+    return svg_value_ref ((SvgValue *) &def);
 
   v = (SvgContentFit *) svg_value_alloc (&SVG_CONTENT_FIT_CLASS, sizeof (SvgContentFit));
 
@@ -7453,7 +7465,11 @@ static const SvgValueClass SVG_ORIENT_CLASS = {
 static SvgValue *
 svg_orient_new_angle (double angle)
 {
+  static SvgOrient def = { { &SVG_ORIENT_CLASS, 0 }, .kind = ORIENT_ANGLE, .angle = 0 };
   SvgOrient *v;
+
+  if (angle == 0)
+    return svg_value_ref ((SvgValue *) &def);
 
   v = (SvgOrient *) svg_value_alloc (&SVG_ORIENT_CLASS, sizeof (SvgOrient));
 
@@ -7677,7 +7693,13 @@ static const SvgValueClass SVG_TEXT_DECORATION_CLASS = {
 static SvgValue *
 svg_text_decoration_new (TextDecoration decoration)
 {
-  SvgTextDecoration *result = (SvgTextDecoration *)svg_value_alloc (&SVG_TEXT_DECORATION_CLASS, sizeof (SvgTextDecoration));
+  static SvgTextDecoration none = { { &SVG_TEXT_DECORATION_CLASS, 0 }, .value = TEXT_DECORATION_NONE };
+  SvgTextDecoration *result;
+
+  if (decoration == TEXT_DECORATION_NONE)
+    return svg_value_ref ((SvgValue *) &none);
+
+  result = (SvgTextDecoration *) svg_value_alloc (&SVG_TEXT_DECORATION_CLASS, sizeof (SvgTextDecoration));
   result->value = decoration;
   return (SvgValue *) result;
 }
@@ -9200,7 +9222,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_CLIP_PATH].initial_value = svg_clip_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
   shape_attrs[SHAPE_ATTR_MASK].initial_value = svg_mask_new_none ();
-  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new (NULL);
+  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new ("");
   shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_number_new (PANGO_WEIGHT_NORMAL);
@@ -9240,12 +9262,12 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SHAPE_ATTR_TEXT_ANCHOR].initial_value = svg_text_anchor_new (TEXT_ANCHOR_START);
-  shape_attrs[SHAPE_ATTR_DX].initial_value = svg_number_new (0.);
-  shape_attrs[SHAPE_ATTR_DY].initial_value = svg_number_new (0.);
+  shape_attrs[SHAPE_ATTR_DX].initial_value = svg_number_new (0);
+  shape_attrs[SHAPE_ATTR_DY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_UNICODE_BIDI].initial_value = svg_unicode_bidi_new (UNICODE_BIDI_NORMAL);
   shape_attrs[SHAPE_ATTR_DIRECTION].initial_value = svg_direction_new (PANGO_DIRECTION_LTR);
   shape_attrs[SHAPE_ATTR_WRITING_MODE].initial_value = svg_writing_mode_new (WRITING_MODE_HORIZONTAL_TB);
-  shape_attrs[SHAPE_ATTR_LETTER_SPACING].initial_value = svg_number_new (0.);
+  shape_attrs[SHAPE_ATTR_LETTER_SPACING].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_TEXT_DECORATION].initial_value = svg_text_decoration_new (TEXT_DECORATION_NONE);
   shape_attrs[SHAPE_ATTR_POINTS].initial_value = svg_numbers_new_none ();
   shape_attrs[SHAPE_ATTR_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
@@ -19935,7 +19957,7 @@ text_create_layout (Shape            *self,
   font_desc = pango_font_description_copy (pango_context_get_font_description (context));
 
   font_family = svg_string_get (self->current[SHAPE_ATTR_FONT_FAMILY]);
-  if (font_family)
+  if (font_family && *font_family)
     pango_font_description_set_family_static (font_desc, font_family);
 
   pango_font_description_set_style (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STYLE]));
