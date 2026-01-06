@@ -1,9 +1,0 @@
-[wrap-git]
-directory=librsvg
-url=https://gitlab.gnome.org/GNOME/librsvg.git
-#push-url=git@ssh.gitlab.gnome.org:GNOME/librsvg.git
-revision=librsvg-gtk-2.40.23
-depth=1
-
-[provide]
-librsvg-2.0=librsvg_dep
