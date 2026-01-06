@@ -2091,6 +2091,12 @@ svg_value_to_string (const SvgValue *value)
   return g_string_free (s, FALSE);
 }
 
+static void
+svg_value_default_free (SvgValue *value)
+{
+  g_free (value);
+}
+
 static double
 svg_value_default_distance (const SvgValue *value0,
                             const SvgValue *value1)
@@ -2143,13 +2149,6 @@ typedef struct
   unsigned int keyword;
 } SvgKeyword;
 
-G_GNUC_NORETURN
-static void
-svg_keyword_free (SvgValue *value)
-{
-  g_assert_not_reached ();
-}
-
 static gboolean
 svg_keyword_equal (const SvgValue *value0,
                    const SvgValue *value1)
@@ -2199,7 +2198,7 @@ svg_keyword_print (const SvgValue *value,
 
 static const SvgValueClass SVG_KEYWORD_CLASS = {
   "SvgKeyword",
-  svg_keyword_free,
+  svg_value_default_free,
   svg_keyword_equal,
   svg_keyword_interpolate,
   svg_keyword_accumulate,
@@ -2262,12 +2261,6 @@ typedef struct
   SvgUnit unit;
   double value;
 } SvgNumber;
-
-static void
-svg_number_free (SvgValue *value)
-{
-  g_free (value);
-}
 
 static gboolean
 svg_number_equal (const SvgValue *value0,
@@ -2442,7 +2435,7 @@ svg_number_resolve (const SvgValue *value,
 
 static const SvgValueClass SVG_NUMBER_CLASS = {
   "SvgNumber",
-  svg_number_free,
+  svg_value_default_free,
   svg_number_equal,
   svg_number_interpolate,
   svg_number_accumulate,
@@ -2580,12 +2573,6 @@ svg_numbers_size (unsigned int n)
   return sizeof (SvgNumbers) + MAX (n - 1, 0) * sizeof (Number);
 }
 
-static void
-svg_numbers_free (SvgValue *value)
-{
-  g_free (value);
-}
-
 static gboolean
 svg_numbers_equal (const SvgValue *value0,
                    const SvgValue *value1)
@@ -2641,7 +2628,7 @@ static SvgValue * svg_numbers_resolve (const SvgValue *value,
 
 static const SvgValueClass SVG_NUMBERS_CLASS = {
   "SvgNumbers",
-  svg_numbers_free,
+  svg_value_default_free,
   svg_numbers_equal,
   svg_numbers_interpolate,
   svg_numbers_accumulate,
@@ -2954,12 +2941,6 @@ typedef struct
   const char *name;
 } SvgEnum;
 
-static void
-svg_enum_free (SvgValue *value)
-{
-  g_free (value);
-}
-
 static gboolean
 svg_enum_equal (const SvgValue *value0,
                 const SvgValue *value1)
@@ -3023,7 +3004,7 @@ svg_enum_parse (const SvgEnum  values[],
 #define DEF_E(kw,CLASS_NAME, class_name, EnumType, ...) \
 static const SvgValueClass SVG_ ## CLASS_NAME ## _CLASS = { \
   #CLASS_NAME, \
-  svg_enum_free, \
+  svg_value_default_free, \
   svg_enum_equal, \
   svg_enum_interpolate, \
   svg_enum_accumulate, \
@@ -3613,12 +3594,6 @@ svg_transform_size (unsigned int n)
   return sizeof (SvgTransform) + (n - 1) * sizeof (PrimitiveTransform);
 }
 
-static void
-svg_transform_free (SvgValue *value)
-{
-  g_free (value);
-}
-
 static gboolean
 primitive_transform_equal (const PrimitiveTransform *t0,
                            const PrimitiveTransform *t1)
@@ -3686,7 +3661,7 @@ static double    svg_transform_distance    (const SvgValue *v0,
 
 static const SvgValueClass SVG_TRANSFORM_CLASS = {
   "SvgTransform",
-  svg_transform_free,
+  svg_value_default_free,
   svg_transform_equal,
   svg_transform_interpolate,
   svg_transform_accumulate,
@@ -4517,12 +4492,6 @@ typedef struct
   GdkRGBA color;
 } SvgColor;
 
-static void
-svg_color_free (SvgValue *value)
-{
-  g_free (value);
-}
-
 static gboolean
 svg_color_equal (const SvgValue *value0,
                  const SvgValue *value1)
@@ -4551,7 +4520,7 @@ static SvgValue * svg_color_resolve    (const SvgValue *value,
 
 static const SvgValueClass SVG_COLOR_CLASS = {
   "SvgColor",
-  svg_color_free,
+  svg_value_default_free,
   svg_color_equal,
   svg_color_interpolate,
   svg_color_accumulate,
@@ -5744,12 +5713,6 @@ svg_dash_array_size (unsigned int n)
   return sizeof (SvgDashArray) + MAX (n - 2, 0) * sizeof (Number);
 }
 
-static void
-svg_dash_array_free (SvgValue *da)
-{
-  g_free (da);
-}
-
 static gboolean
 svg_dash_array_equal (const SvgValue *value0,
                       const SvgValue *value1)
@@ -5794,7 +5757,7 @@ static SvgValue * svg_dash_array_resolve    (const SvgValue *value,
 
 static const SvgValueClass SVG_DASH_ARRAY_CLASS = {
   "SvgFilter",
-  svg_dash_array_free,
+  svg_value_default_free,
   svg_dash_array_equal,
   svg_dash_array_interpolate,
   svg_dash_array_accumulate,
@@ -6542,12 +6505,6 @@ typedef struct
   graphene_rect_t view_box;
 } SvgViewBox;
 
-static void
-svg_view_box_free (SvgValue *value)
-{
-  g_free (value);
-}
-
 static gboolean
 svg_view_box_equal (const SvgValue *value0,
                     const SvgValue *value1)
@@ -6611,7 +6568,7 @@ svg_view_box_print (const SvgValue *value,
 
 static const SvgValueClass SVG_VIEW_BOX_CLASS = {
   "SvgViewBox",
-  svg_view_box_free,
+  svg_value_default_free,
   svg_view_box_equal,
   svg_view_box_interpolate,
   svg_view_box_accumulate,
@@ -6675,12 +6632,6 @@ typedef struct
   Align align_y;
   MeetOrSlice meet;
 } SvgContentFit;
-
-static void
-svg_content_fit_free (SvgValue *value)
-{
-  g_free (value);
-}
 
 static gboolean
 svg_content_fit_equal (const SvgValue *value0,
@@ -6747,7 +6698,7 @@ svg_content_fit_print (const SvgValue *value,
 
 static const SvgValueClass SVG_CONTENT_FIT_CLASS = {
   "SvgContentFit",
-  svg_content_fit_free,
+  svg_value_default_free,
   svg_content_fit_equal,
   svg_content_fit_interpolate,
   svg_content_fit_accumulate,
@@ -6891,12 +6842,6 @@ typedef struct
   double angle;
 } SvgOrient;
 
-static void
-svg_orient_free (SvgValue *value)
-{
-  g_free (value);
-}
-
 static gboolean
 svg_orient_equal (const SvgValue *value0,
                   const SvgValue *value1)
@@ -6956,7 +6901,7 @@ svg_orient_print (const SvgValue *value,
 
 static const SvgValueClass SVG_ORIENT_CLASS = {
   "SvgOrient",
-  svg_orient_free,
+  svg_value_default_free,
   svg_orient_equal,
   svg_orient_interpolate,
   svg_orient_accumulate,
@@ -7023,12 +6968,6 @@ typedef struct
   PangoLanguage *value;
 } SvgLanguage;
 
-static void
-svg_language_free (SvgValue *value)
-{
-  g_free (value);
-}
-
 static gboolean
 svg_language_equal (const SvgValue *value0,
                     const SvgValue *value1)
@@ -7075,7 +7014,7 @@ svg_language_get (const SvgValue *value)
 
 static const SvgValueClass SVG_LANGUAGE_CLASS = {
   "SvgLanguage",
-  svg_language_free,
+  svg_value_default_free,
   svg_language_equal,
   svg_language_interpolate,
   svg_language_accumulate,
@@ -7127,12 +7066,6 @@ typedef struct
   SvgValue base;
   TextDecoration value;
 } SvgTextDecoration;
-
-static void
-svg_text_decoration_free (SvgValue *value)
-{
-  g_free (value);
-}
 
 static gboolean
 svg_text_decoration_equal (const SvgValue *value0,
@@ -7193,7 +7126,7 @@ static SvgValue * svg_text_decoration_resolve (const SvgValue *value,
 
 static const SvgValueClass SVG_TEXT_DECORATION_CLASS = {
   "SvgTextDecoration",
-  svg_text_decoration_free,
+  svg_value_default_free,
   svg_text_decoration_equal,
   svg_text_decoration_interpolate,
   svg_text_decoration_accumulate,
