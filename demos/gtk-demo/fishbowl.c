@@ -55,7 +55,7 @@ create_icon (void)
 }
 
 extern GtkWidget *create_symbolic (void);
-extern GtkWidget *create_path (void);
+extern GtkWidget *create_svg (void);
 
 static GtkWidget *
 create_button (void)
@@ -113,7 +113,7 @@ create_spinbutton (void)
 static GtkWidget *
 create_label (void)
 {
-  GtkWidget *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+  GtkWidget *w = gtk_label_new ("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
 
   gtk_label_set_wrap (GTK_LABEL (w), TRUE);
   gtk_label_set_max_width_chars (GTK_LABEL (w), 100);
@@ -206,7 +206,7 @@ static const struct {
   { "Tiger",      create_tiger,          NULL },
   { "Graph",      create_graph,          NULL },
   { "Symbolic",   create_symbolic,       NULL },
-  { "SVG",        create_path,           NULL },
+  { "SVG",        create_svg,            NULL },
 };
 
 static int selected_widget_type = -1;

@@ -454,7 +454,7 @@ populate_symbolics (void)
 }
 
 GtkWidget *
-create_path (void)
+create_svg (void)
 {
   GtkWidget *image;
   static int idx = 0;
@@ -477,7 +477,7 @@ create_path (void)
 }
 
 static void
-populate_paths (void)
+populate_svg (void)
 {
   GtkWidget *grid;
   int top, left;
@@ -494,7 +494,7 @@ populate_paths (void)
   for (top = 0; top < 100; top++)
     for (left = 0; left < 15; left++)
        {
-         gtk_grid_attach (GTK_GRID (grid), create_path (), left, top, 1, 1);
+         gtk_grid_attach (GTK_GRID (grid), create_svg (), left, top, 1, 1);
        }
 
   hincrement = 0;
@@ -645,8 +645,8 @@ set_widget_type (int type)
       break;
 
     case 10:
-      gtk_window_set_title (GTK_WINDOW (window), "Scrolling paths");
-      populate_paths ();
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling SVG");
+      populate_svg ();
       break;
 
     case 11:
