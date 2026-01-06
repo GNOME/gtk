@@ -219,12 +219,6 @@
 #define DEBUG
 #endif /* _MSC_VER */
 
-typedef enum
-{
-  VISIBILITY_HIDDEN,
-  VISIBILITY_VISIBLE,
-} Visibility;
-
 #define ALIGN_XY(x,y) ((x) | ((y) << 2))
 
 #define ALIGN_GET_X(x) ((x) & 3)
@@ -3072,6 +3066,12 @@ DEFINE_ENUM_PUBLIC (LINE_JOIN, linejoin, GskLineJoin,
   DEFINE_ENUM_VALUE (LINE_JOIN, GSK_LINE_JOIN_ROUND, "round"),
   DEFINE_ENUM_VALUE (LINE_JOIN, GSK_LINE_JOIN_BEVEL, "bevel")
 )
+
+typedef enum
+{
+  VISIBILITY_HIDDEN,
+  VISIBILITY_VISIBLE,
+} Visibility;
 
 DEFINE_ENUM (VISIBILITY, visibility, Visibility,
   DEFINE_ENUM_VALUE (VISIBILITY, VISIBILITY_HIDDEN, "hidden"),
@@ -8651,8 +8651,16 @@ shape_attr_only_css (ShapeAttr attr)
   return (shape_attrs[attr].flags & SHAPE_ATTR_ONLY_CSS) != 0;
 }
 
+static gboolean
+shape_has_attr (ShapeType type,
+                ShapeAttr attr)
+{
+  return shape_attr_is_inherited (attr) ||
+         (shape_attrs[attr].applies_to & BIT (type)) != 0;
+}
+
 static void
-shape_attr_init_default_values (void)
+shape_attrs_init_default_values (void)
 {
   shape_attrs[SHAPE_ATTR_LANG].initial_value = svg_language_new_default ();
   shape_attrs[SHAPE_ATTR_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
@@ -8768,11 +8776,54 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_FUNC_OFFSET].initial_value = svg_number_new (0);
 }
 
-/* Some attributes use different names for different shapes:
- * SHAPE_ATTR_TRANSFORM: transform vs gradientTransform vs patternTransform
- * SHAPE_ATTR_CONTENT_UNITS: gradientUnits vs clipPathUnits vs maskContentUnits vs patternContentUnits vs primitiveUnits
- * SHAPE_ATTR_BOUND_UNITS: maskUnits vs patternUnits vs filterUnits
- */
+static SvgValue *
+shape_attr_ref_initial_value (ShapeAttr attr,
+                              ShapeType shape_type,
+                              gboolean  has_parent)
+{
+  if (shape_type == SHAPE_RADIAL_GRADIENT &&
+      (attr == SHAPE_ATTR_CX || attr == SHAPE_ATTR_CY || attr == SHAPE_ATTR_R))
+    return svg_percentage_new (50);
+
+  if (shape_type == SHAPE_LINE &&
+      (attr == SHAPE_ATTR_X1 || attr == SHAPE_ATTR_Y1 ||
+       attr == SHAPE_ATTR_X2 || attr == SHAPE_ATTR_Y2))
+    return svg_number_new (0);
+
+  if ((shape_type == SHAPE_CLIP_PATH || shape_type == SHAPE_MASK ||
+       shape_type == SHAPE_PATTERN || shape_type == SHAPE_FILTER) &&
+      attr == SHAPE_ATTR_CONTENT_UNITS)
+    return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
+
+  if (shape_type == SHAPE_MASK || shape_type == SHAPE_FILTER)
+    {
+      if (attr == SHAPE_ATTR_X || attr == SHAPE_ATTR_Y)
+        return svg_percentage_new (-10);
+      if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
+        return svg_percentage_new (120);
+    }
+
+  if ((shape_type == SHAPE_MARKER || shape_type == SHAPE_PATTERN) &&
+      attr == SHAPE_ATTR_OVERFLOW)
+    return svg_overflow_new (OVERFLOW_HIDDEN);
+
+  if (shape_type == SHAPE_SVG || shape_type == SHAPE_SYMBOL)
+    {
+      if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
+        return svg_percentage_new (100);
+      if (attr == SHAPE_ATTR_OVERFLOW && has_parent)
+        return svg_overflow_new (OVERFLOW_HIDDEN);
+    }
+
+  if ((shape_type == SHAPE_CLIP_PATH || shape_type == SHAPE_MASK ||
+       shape_type == SHAPE_DEFS || shape_type == SHAPE_MARKER ||
+       shape_type == SHAPE_PATTERN || shape_type == SHAPE_LINEAR_GRADIENT ||
+       shape_type == SHAPE_RADIAL_GRADIENT) &&
+      attr == SHAPE_ATTR_DISPLAY)
+    return svg_display_new (DISPLAY_NONE);
+
+  return svg_value_ref (shape_attrs[attr].initial_value);
+}
 
 typedef struct {
   const char *name;
@@ -8937,10 +8988,15 @@ shape_attr_lookup_hash (gconstpointer v)
   return g_str_hash (l->name);
 }
 
-/* This is a slightly tricky use of a hash table,
- * since this relationship is not transitive, in general.
- * It is for our use case, by the way the hash table
- * is constructed.
+/* This is a slightly tricky use of a hash table, since this relationship
+ * is not transitive, in general. It is for our use case, by the way the
+ * table is constructed.
+ *
+ * Names can occur multiple times in the table, but each (name, shape)
+ * pair will only occur once. Attributes can also occur multiple times
+ * (e.g. transform vs gradientTransform vs patternTransform).
+ *
+ * We use the array too, to find names for attributes.
  */
 static gboolean
 shape_attr_lookup_equal (gconstpointer v0,
@@ -8958,7 +9014,7 @@ shape_attr_lookup_equal (gconstpointer v0,
 static GHashTable *shape_attr_lookup_table;
 
 static void
-shape_attr_init_lookup (void)
+shape_attrs_init (void)
 {
   shape_attr_lookup_table = g_hash_table_new (shape_attr_lookup_hash,
                                               shape_attr_lookup_equal);
@@ -9242,36 +9298,6 @@ static ShapeTypeInfo shape_types[] = {
    },
 };
 
-static guint
-shape_type_hash (gconstpointer v)
-{
-  const ShapeTypeInfo *t = (const ShapeTypeInfo *) v;
-
-  return g_str_hash (t->name);
-}
-
-static gboolean
-shape_type_equal (gconstpointer v0,
-                  gconstpointer v1)
-{
-  const ShapeTypeInfo *t0 = (const ShapeTypeInfo *) v0;
-  const ShapeTypeInfo *t1 = (const ShapeTypeInfo *) v1;
-
-  return strcmp (t0->name, t1->name) == 0;
-}
-
-static GHashTable *shape_type_lookup_table;
-
-static void
-shape_types_init (void)
-{
-  shape_type_lookup_table = g_hash_table_new (shape_type_hash,
-                                              shape_type_equal);
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_types); i++)
-    g_hash_table_add (shape_type_lookup_table, &shape_types[i]);
-}
-
 static inline gboolean
 shape_type_has_shapes (ShapeType type)
 {
@@ -9300,6 +9326,42 @@ static inline gboolean
 shape_type_is_never_rendered (ShapeType type)
 {
   return (shape_types[type].flags & SHAPE_TYPE_NEVER_RENDERED) != 0;
+}
+
+static inline gboolean
+shape_type_has_text (ShapeType type)
+{
+  return type == SHAPE_TEXT || type == SHAPE_TSPAN;
+}
+
+static guint
+shape_type_hash (gconstpointer v)
+{
+  const ShapeTypeInfo *t = (const ShapeTypeInfo *) v;
+
+  return g_str_hash (t->name);
+}
+
+static gboolean
+shape_type_equal (gconstpointer v0,
+                  gconstpointer v1)
+{
+  const ShapeTypeInfo *t0 = (const ShapeTypeInfo *) v0;
+  const ShapeTypeInfo *t1 = (const ShapeTypeInfo *) v1;
+
+  return strcmp (t0->name, t1->name) == 0;
+}
+
+static GHashTable *shape_type_lookup_table;
+
+static void
+shape_types_init (void)
+{
+  shape_type_lookup_table = g_hash_table_new (shape_type_hash,
+                                              shape_type_equal);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_types); i++)
+    g_hash_table_add (shape_type_lookup_table, &shape_types[i]);
 }
 
 static gboolean
@@ -9356,55 +9418,6 @@ shape_free (gpointer data)
 
 static void animation_free (gpointer data);
 
-static SvgValue *
-shape_attr_ref_initial_value (ShapeAttr attr,
-                              ShapeType shape_type,
-                              gboolean  has_parent)
-{
-  if (shape_type == SHAPE_RADIAL_GRADIENT &&
-      (attr == SHAPE_ATTR_CX || attr == SHAPE_ATTR_CY || attr == SHAPE_ATTR_R))
-    return svg_percentage_new (50);
-
-  if (shape_type == SHAPE_LINE &&
-      (attr == SHAPE_ATTR_X1 || attr == SHAPE_ATTR_Y1 ||
-       attr == SHAPE_ATTR_X2 || attr == SHAPE_ATTR_Y2))
-    return svg_number_new (0);
-
-  if ((shape_type == SHAPE_CLIP_PATH || shape_type == SHAPE_MASK ||
-       shape_type == SHAPE_PATTERN || shape_type == SHAPE_FILTER) &&
-      attr == SHAPE_ATTR_CONTENT_UNITS)
-    return svg_coord_units_new (COORD_UNITS_USER_SPACE_ON_USE);
-
-  if (shape_type == SHAPE_MASK || shape_type == SHAPE_FILTER)
-    {
-      if (attr == SHAPE_ATTR_X || attr == SHAPE_ATTR_Y)
-        return svg_percentage_new (-10);
-      if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
-        return svg_percentage_new (120);
-    }
-
-  if ((shape_type == SHAPE_MARKER || shape_type == SHAPE_PATTERN) &&
-      attr == SHAPE_ATTR_OVERFLOW)
-    return svg_overflow_new (OVERFLOW_HIDDEN);
-
-  if (shape_type == SHAPE_SVG || shape_type == SHAPE_SYMBOL)
-    {
-      if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
-        return svg_percentage_new (100);
-      if (attr == SHAPE_ATTR_OVERFLOW && has_parent)
-        return svg_overflow_new (OVERFLOW_HIDDEN);
-    }
-
-  if ((shape_type == SHAPE_CLIP_PATH || shape_type == SHAPE_MASK ||
-       shape_type == SHAPE_DEFS || shape_type == SHAPE_MARKER ||
-       shape_type == SHAPE_PATTERN || shape_type == SHAPE_LINEAR_GRADIENT ||
-       shape_type == SHAPE_RADIAL_GRADIENT) &&
-      attr == SHAPE_ATTR_DISPLAY)
-    return svg_display_new (DISPLAY_NONE);
-
-  return svg_value_ref (shape_attrs[attr].initial_value);
-}
-
 static Shape *
 shape_new (Shape     *parent,
            ShapeType  type)
@@ -9431,21 +9444,13 @@ shape_new (Shape     *parent,
   if (shape_type_has_filters (type))
     shape->filters = g_ptr_array_new_with_free_func (filter_primitive_free);
 
-  if (type == SHAPE_TEXT || type == SHAPE_TSPAN)
+  if (shape_type_has_text (type))
     {
-      shape->text = g_array_new (FALSE, FALSE, sizeof(TextNode));
-      g_array_set_clear_func (shape->text, (GDestroyNotify)text_node_clear);
+      shape->text = g_array_new (FALSE, FALSE, sizeof (TextNode));
+      g_array_set_clear_func (shape->text, (GDestroyNotify) text_node_clear);
     }
 
   return shape;
-}
-
-static gboolean
-shape_has_attr (ShapeType type,
-                ShapeAttr attr)
-{
-  return shape_attr_is_inherited (attr) ||
-         (shape_attrs[attr].applies_to & BIT (type)) != 0;
 }
 
 static GskPath *
@@ -14820,7 +14825,9 @@ start_element_cb (GMarkupParseContext  *context,
 
       data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
 
-      if (data->current_shape && (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN) && shape->type == SHAPE_TSPAN)
+      if (data->current_shape &&
+          shape_type_has_text (data->current_shape->type) &&
+          shape->type == SHAPE_TSPAN)
         {
           TextNode node = {
             .type = TEXT_NODE_SHAPE,
@@ -15353,7 +15360,7 @@ text_cb (GMarkupParseContext  *context,
 {
   ParserData *data = user_data;
 
-  if (data->current_shape && (data->current_shape->type == SHAPE_TEXT || data->current_shape->type == SHAPE_TSPAN))
+  if (data->current_shape && shape_type_has_text (data->current_shape->type))
     {
       TextNode node = {
         .type = TEXT_NODE_CHARACTERS,
@@ -16985,7 +16992,7 @@ serialize_shape (GString              *s,
         }
     }
 
-  if (shape->type == SHAPE_TEXT || shape->type == SHAPE_TSPAN)
+  if (shape_type_has_text (shape->type))
     {
       for (guint i = 0; i < shape->text->len; i++)
         {
@@ -18912,12 +18919,6 @@ paint_server (SvgPaint              *paint,
 /* }}} */
 /* {{{ Shapes */
 
-static gboolean
-shape_is_text (Shape *shape)
-{
-  return shape->type == SHAPE_TEXT || shape->type == SHAPE_TSPAN;
-}
-
 static GskStroke *
 shape_create_stroke (Shape        *shape,
                      PaintContext *context)
@@ -18949,7 +18950,7 @@ shape_create_stroke (Shape        *shape,
       double offset;
       GskPathMeasure *measure;
 
-      if (shape_is_text (shape))
+      if (shape_type_has_text (shape->type))
         {
           gtk_svg_rendering_error (context->svg,
                                    "Dashing of stroked text is not supported");
@@ -19532,7 +19533,7 @@ generate_layouts (Shape           *self,
   gboolean lwss = TRUE;
   double dx, dy;
 
-  g_assert (self->type == SHAPE_TEXT || self->type == SHAPE_TSPAN);
+  g_assert (shape_type_has_text (self->type));
 
   if (!x)
     x = &xs;
@@ -19632,7 +19633,7 @@ fill_text (Shape                 *self,
            SvgPaint              *paint,
            const graphene_rect_t *bounds)
 {
-  g_assert (self->type == SHAPE_TEXT || self->type == SHAPE_TSPAN);
+  g_assert (shape_type_has_text (self->type));
 
   for (guint i = 0; i < self->text->len; i++)
     {
@@ -19712,7 +19713,7 @@ stroke_text (Shape                 *self,
              GskStroke             *stroke,
              const graphene_rect_t *bounds)
 {
-  g_assert (self->type == SHAPE_TEXT || self->type == SHAPE_TSPAN);
+  g_assert (shape_type_has_text (self->type));
 
   for (guint i = 0; i < self->text->len; i++)
     {
@@ -20576,8 +20577,8 @@ gtk_svg_class_init (GtkSvgClass *class)
 
   filter_types_init ();
   shape_types_init ();
-  shape_attr_init_default_values ();
-  shape_attr_init_lookup ();
+  shape_attrs_init ();
+  shape_attrs_init_default_values ();
 
   object_class->dispose = gtk_svg_dispose;
   object_class->get_property = gtk_svg_get_property;
@@ -21702,7 +21703,7 @@ svg_shape_add (Shape     *parent,
 
   g_ptr_array_add (parent->shapes, shape);
 
-  if ((parent->type == SHAPE_TEXT || parent->type == SHAPE_TSPAN) && type == SHAPE_TSPAN)
+  if (shape_type_has_text (parent->type) && type == SHAPE_TSPAN)
     {
       TextNode node = {
         .type = TEXT_NODE_SHAPE,
