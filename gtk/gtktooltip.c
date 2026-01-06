@@ -875,6 +875,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   GdkWindow *widget_window;
   GdkWindow *effective_toplevel;
   GtkWidget *toplevel;
+  GtkAllocation toplevel_allocation;
   int rect_anchor_dx = 0;
   int cursor_size;
   int anchor_rect_padding;
@@ -886,8 +887,9 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   tooltip->tooltip_widget = new_tooltip_widget;
 
   toplevel = _gtk_widget_get_toplevel (new_tooltip_widget);
+  _gtk_widget_get_allocation (toplevel, &toplevel_allocation);
   gtk_widget_translate_coordinates (new_tooltip_widget, toplevel,
-                                    0, 0,
+                                    toplevel_allocation.x, toplevel_allocation.y,
                                     &anchor_rect.x, &anchor_rect.y);
 
   anchor_rect.width = gtk_widget_get_allocated_width (new_tooltip_widget);
