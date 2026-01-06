@@ -1023,7 +1023,6 @@ gtk_deps = [
   pixbuf_dep,
   epoxy_dep,
   media_deps,
-  rsvg_dep,
   libm,
   graphene_dep,
   accesskit_dep,
