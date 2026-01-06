@@ -1975,7 +1975,7 @@ svg_value_alloc (const SvgValueClass *class,
   value = g_malloc0 (size);
 
   value->class = class;
-  g_atomic_ref_count_init (&value->ref_count);
+  value->ref_count = 1;
 
   return value;
 }
