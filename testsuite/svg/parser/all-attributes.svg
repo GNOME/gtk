@@ -11,6 +11,7 @@
      clip-path='none'
      clip-rule='nonzero'
      mask='none'
+     color='rgba(255,100,0,1)'
      fill='none'
      fill-opacity='1'
      fill-rule='nonzero'

@@ -20,7 +20,7 @@
         fill='url(#one) none nono'
         filter='grayscale(1)hue-rotate(45)url(#myfirstfilter) junk at the end'/>
   </g>
-  <defs>
+  <defs color='x'>
     <filter id='myfirstfilter'>
       <animate attributeName='x' values='1;;2 ; 3'/>
       <feFlood/>

@@ -613,10 +613,32 @@ lerp_point (double                  t,
   p->y = lerp (t, p0->y, p1->y);
 }
 
+static inline void
+lerp_rgba (double  t,
+           const GdkRGBA *c0,
+           const GdkRGBA *c1,
+           GdkRGBA       *c)
+{
+  c->red = lerp (t, c0->red, c1->red);
+  c->green = lerp (t, c0->green, c1->green);
+  c->blue = lerp (t, c0->blue, c1->blue);
+  c->alpha = lerp (t, c0->alpha, c1->alpha);
+}
+
 static inline double
 accumulate (double a, double b, int n)
 {
   return a + b * n;
+}
+
+static inline double
+rgba_distance (const GdkRGBA *c0,
+               const GdkRGBA *c1)
+{
+  return sqrt ((c0->red - c1->red)     * (c0->red - c1->red) +
+               (c0->green - c1->green) * (c0->green - c1->green) +
+               (c0->blue - c1->blue)   * (c0->blue - c1->blue) +
+               (c0->alpha - c1->alpha) * (c0->alpha - c1->alpha));
 }
 
 static float
@@ -5172,6 +5194,194 @@ svg_transform_distance (const SvgValue *value0,
 }
 
 /* }}} */
+/* {{{ Color */
+
+typedef struct
+{
+  SvgValue base;
+  gboolean current;
+  GdkRGBA color;
+} SvgColor;
+
+static void
+svg_color_free (SvgValue *value)
+{
+  g_free (value);
+}
+
+static gboolean
+svg_color_equal (const SvgValue *value0,
+                 const SvgValue *value1)
+{
+  const SvgColor *c0 = (const SvgColor *) value0;
+  const SvgColor *c1 = (const SvgColor *) value1;
+
+  return c0->current == c1->current &&
+         gdk_rgba_equal (&c0->color, &c1->color);
+}
+
+static SvgValue *svg_color_interpolate (const SvgValue *v0,
+                                        const SvgValue *v1,
+                                        double          t);
+static SvgValue *svg_color_accumulate  (const SvgValue *v0,
+                                        const SvgValue *v1,
+                                        int             n);
+static void      svg_color_print       (const SvgValue *v0,
+                                        GString        *string);
+static double    svg_color_distance    (const SvgValue *v0,
+                                        const SvgValue *v1);
+static SvgValue * svg_color_resolve    (const SvgValue *value,
+                                        ShapeAttr       attr,
+                                        Shape          *shape,
+                                        ComputeContext *context);
+
+static const SvgValueClass SVG_COLOR_CLASS = {
+  "SvgColor",
+  svg_color_free,
+  svg_color_equal,
+  svg_color_interpolate,
+  svg_color_accumulate,
+  svg_color_print,
+  svg_color_distance,
+  svg_color_resolve,
+};
+
+static SvgValue *
+svg_color_new_black (void)
+{
+  static SvgColor black = { { &SVG_COLOR_CLASS, 0 }, .current = 0, .color = { 0, 0, 0, 1 } };
+
+  return (SvgValue *) &black;
+}
+
+static SvgValue *
+svg_color_new (gboolean       current,
+               const GdkRGBA *color)
+{
+  SvgColor *result;
+
+  if (!current && gdk_rgba_equal (color, &GDK_RGBA_BLACK))
+    return svg_color_new_black ();
+
+  result = (SvgColor *) svg_value_alloc (&SVG_COLOR_CLASS, sizeof (SvgColor));
+  result->current = current;
+  result->color = *color;
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_color_parse (const char *value)
+{
+  GdkRGBA color;
+
+  if (strcmp (value, "currentColor") == 0)
+    return svg_color_new (TRUE, &GDK_RGBA_BLACK);
+  else if (gdk_rgba_parse (&color, value))
+   return svg_color_new (FALSE, &color);
+
+  return NULL;
+}
+
+static void
+svg_color_print (const SvgValue *value,
+                 GString        *s)
+{
+  const SvgColor *color = (const SvgColor *) value;
+
+  if (color->current)
+    g_string_append (s, "currentColor");
+  else
+    gdk_rgba_print (&color->color, s);
+}
+
+static SvgValue *
+svg_color_resolve (const SvgValue *value,
+                   ShapeAttr       attr,
+                   Shape          *shape,
+                   ComputeContext *context)
+{
+  if (((SvgColor *) value)->current)
+    {
+      if (context->parent)
+        return svg_value_ref (context->parent->current[SHAPE_ATTR_COLOR]);
+      else
+        return svg_color_new_black ();
+    }
+  else
+    return svg_value_ref ((SvgValue *) value);
+}
+
+static SvgValue *
+svg_color_interpolate (const SvgValue *value0,
+                       const SvgValue *value1,
+                       double          t)
+{
+  const SvgColor *c0 = (const SvgColor *) value0;
+  const SvgColor *c1 = (const SvgColor *) value1;
+
+  if (!c0->current && !c1->current)
+    {
+      GdkRGBA c;
+
+      lerp_rgba (t, &c0->color, &c1->color, &c);
+
+      return svg_color_new (FALSE, &c);
+    }
+
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+static SvgValue *
+svg_color_accumulate (const SvgValue *value0,
+                      const SvgValue *value1,
+                      int             n)
+{
+  const SvgColor *c0 = (const SvgColor *) value0;
+  const SvgColor *c1 = (const SvgColor *) value1;
+
+  if (c0->current != c1->current)
+    return NULL;
+
+  if (!c0->current)
+    {
+      GdkRGBA c;
+
+      c.red = accumulate (c0->color.red, c1->color.red, n);
+      c.green = accumulate (c0->color.green, c1->color.green, n);
+      c.blue = accumulate (c0->color.blue, c1->color.blue, n);
+      c.alpha = accumulate (c0->color.alpha, c1->color.alpha, n);
+
+      return svg_color_new (FALSE, &c);
+    }
+
+  return svg_value_ref ((SvgValue *) value0);
+}
+
+static double
+svg_color_distance (const SvgValue *v0,
+                    const SvgValue *v1)
+{
+  const SvgColor *c0 = (const SvgColor *) v0;
+  const SvgColor *c1 = (const SvgColor *) v1;
+
+  if (c0->current != c1->current)
+    {
+      g_warning ("Can't measure distance between "
+                 "different kinds of color");
+      return 1;
+    }
+
+  if (c0->current)
+    return 0;
+  else
+    return rgba_distance (&c0->color, &c1->color);
+}
+
+/* }}} */
 /* {{{ Paint */
 
 typedef struct
@@ -5215,6 +5425,7 @@ svg_paint_equal (const SvgValue *value0,
     case PAINT_NONE:
     case PAINT_CONTEXT_FILL:
     case PAINT_CONTEXT_STROKE:
+    case PAINT_CURRENT_COLOR:
       return TRUE;
     case PAINT_SYMBOLIC:
       return paint0->symbolic == paint1->symbolic;
@@ -5288,6 +5499,7 @@ svg_paint_new_simple (PaintKind kind)
     { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_NONE },
     { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_FILL },
     { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_STROKE },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CURRENT_COLOR },
   };
 
   g_assert (kind < G_N_ELEMENTS (paint_values));
@@ -5394,6 +5606,10 @@ svg_paint_parse (const char *value)
     {
       return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
     }
+  else if (strcmp (value, "currentColor") == 0)
+    {
+      return svg_paint_new_simple (PAINT_CURRENT_COLOR);
+    }
   else if (gdk_rgba_parse (&color, value))
     {
       return svg_paint_new_rgba (&color);
@@ -5453,6 +5669,8 @@ svg_paint_parse_gpa (const char *value)
     return svg_paint_new_simple (PAINT_CONTEXT_FILL);
   else if (strcmp (value, "context-stroke") == 0)
     return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
+  else if (strcmp (value, "currentColor") == 0)
+    return svg_paint_new_simple (PAINT_CURRENT_COLOR);
   else if (parse_symbolic_color (value, &symbolic))
     return svg_paint_new_symbolic (symbolic);
   else if (gdk_rgba_parse (&rgba, value))
@@ -5490,6 +5708,10 @@ svg_paint_print (const SvgValue *value,
 
     case PAINT_CONTEXT_STROKE:
       g_string_append (s, "context-stroke");
+      break;
+
+    case PAINT_CURRENT_COLOR:
+      g_string_append (s, "currentColor");
       break;
 
     case PAINT_COLOR:
@@ -5532,9 +5754,6 @@ svg_paint_print_gpa (const SvgValue *value,
                      GString        *s)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
-  const char *symbolic[] = {
-    "foreground", "error", "warning", "success", "accent",
-  };
 
   g_assert (value->class == &SVG_PAINT_CLASS);
 
@@ -5552,12 +5771,16 @@ svg_paint_print_gpa (const SvgValue *value,
       g_string_append (s, "context-stroke");
       break;
 
+    case PAINT_CURRENT_COLOR:
+      g_string_append (s, "currentColor");
+      break;
+
     case PAINT_COLOR:
       gdk_rgba_print (&paint->color, s);
       break;
 
     case PAINT_SYMBOLIC:
-      g_string_append (s, symbolic[paint->symbolic]);
+      g_string_append (s, symbolic_colors[paint->symbolic]);
       break;
 
     case PAINT_SERVER:
@@ -5606,6 +5829,12 @@ svg_paint_resolve (const SvgValue *value,
 
   g_assert (value->class == &SVG_PAINT_CLASS);
 
+  if (paint->kind == PAINT_CURRENT_COLOR)
+    {
+      SvgColor *color = (SvgColor *) shape->current[SHAPE_ATTR_COLOR];
+      return svg_paint_new_rgba (&color->color);
+    }
+
   if ((context->svg->features & GTK_SVG_EXTENSIONS) != 0)
     {
       if (svg_paint_is_symbolic (paint, &symbolic))
@@ -5621,9 +5850,7 @@ svg_paint_resolve (const SvgValue *value,
   else
     {
       if (paint->kind == PAINT_SYMBOLIC)
-        {
-          return svg_paint_new_transparent ();
-        }
+        return svg_paint_new_transparent ();
     }
 
   return svg_value_ref ((SvgValue *) value);
@@ -5639,17 +5866,11 @@ svg_paint_interpolate (const SvgValue *value0,
 
   if (p0->kind == PAINT_COLOR || p1->kind == PAINT_COLOR)
     {
-      SvgPaint *paint;
+      GdkRGBA c;
 
-      paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
+      lerp_rgba (t, &p0->color, &p1->color, &c);
 
-      paint->kind = PAINT_COLOR;
-      paint->color.red = lerp (t, p0->color.red, p1->color.red);
-      paint->color.green = lerp (t, p0->color.green, p1->color.green);
-      paint->color.blue = lerp (t, p0->color.blue, p1->color.blue);
-      paint->color.alpha = lerp (t, p0->color.alpha, p1->color.alpha);
-
-      return (SvgValue *) paint;
+      return svg_paint_new_rgba (&c);
     }
 
   if (t < 0.5)
@@ -5693,26 +5914,22 @@ svg_paint_distance (const SvgValue *v0,
   const SvgPaint *p0 = (const SvgPaint *) v0;
   const SvgPaint *p1 = (const SvgPaint *) v1;
 
-  if (p0->kind != p1->kind)
+  if (p0->kind == p1->kind)
     {
-      g_warning ("Can't measure distance between different "
-                 "kinds of paint");
-      return 1;
+      if (p0->kind == PAINT_COLOR)
+        return rgba_distance (&p0->color, &p1->color);
+      else if (p0->kind == PAINT_NONE ||
+               p0->kind == PAINT_CONTEXT_FILL ||
+               p0->kind == PAINT_CONTEXT_STROKE ||
+               p0->kind == PAINT_CURRENT_COLOR)
+        return 0;
     }
 
-  if (p0->kind != PAINT_COLOR)
-    {
-      g_warning ("Can't measure distance between these paints");
-      return 1;
-    }
-
-  return sqrt ((p0->color.red - p1->color.red)*(p0->color.red - p1->color.red) +
-               (p0->color.green - p1->color.green)*(p0->color.green - p1->color.green) +
-               (p0->color.blue - p1->color.blue)*(p0->color.blue - p1->color.blue) +
-               (p0->color.alpha - p1->color.alpha)*(p0->color.alpha - p1->color.alpha));
+  g_warning ("Can't measure distance between these paint values");
+  return 1;
 }
 
-/* }}} */
+/* }}} */ 
 /* {{{ Filter functions */
 
 typedef enum
@@ -8613,6 +8830,11 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = SHAPE_ANY,
     .parse_value = parse_opacity,
   },
+  [SHAPE_ATTR_COLOR] = {
+    .flags = SHAPE_ATTR_INHERITED,
+    .applies_to = SHAPE_ANY,
+    .parse_value = svg_color_parse,
+  },
   [SHAPE_ATTR_FILTER] = {
     .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
     .parse_value = svg_filter_parse,
@@ -9190,6 +9412,7 @@ shape_attr_init_default_values (void)
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
+  shape_attrs[SHAPE_ATTR_COLOR].initial_value = svg_color_new_black ();
   shape_attrs[SHAPE_ATTR_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
   shape_attrs[SHAPE_ATTR_VECTOR_EFFECT].initial_value = svg_vector_effect_new (VECTOR_EFFECT_NONE);
   shape_attrs[SHAPE_ATTR_FILTER].initial_value = svg_filter_new_none ();
@@ -9328,6 +9551,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "transform", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)) & ~SHAPE_PAINT_SERVERS, 0, SHAPE_ATTR_TRANSFORM },
   { "gradientTransform", SHAPE_GRADIENTS, 0, SHAPE_ATTR_TRANSFORM },
   { "patternTransform", BIT (SHAPE_PATTERN), 0, SHAPE_ATTR_TRANSFORM },
+  { "color", SHAPE_ANY, 0, SHAPE_ATTR_COLOR },
   { "opacity", SHAPE_ANY, 0, SHAPE_ATTR_OPACITY },
   { "filter", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_FILTER },
   { "clip-path", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_CLIP_PATH },
@@ -11528,13 +11752,13 @@ shape_ref_base_value (Shape        *shape,
       if ((stop->attrs & BIT (pos)) == 0)
         {
           if (shape_attr_is_inherited (attr))
-            return svg_value_ref (shape_get_current_value (shape, attr, 0));
+            return svg_value_ref (shape->current[attr]);
           else
             return shape_attr_ref_initial_value (attr, shape->type, parent != NULL);
         }
       else if (svg_value_is_inherit (value))
         {
-          return svg_value_ref (shape_get_current_value (shape, attr, 0));
+          return svg_value_ref (shape->current[attr]);
         }
       else if (svg_value_is_initial (value))
         {
@@ -19530,6 +19754,7 @@ get_context_paint (SvgPaint *paint,
   switch (paint->kind)
     {
     case PAINT_NONE:
+    case PAINT_CURRENT_COLOR:
       break;
     case PAINT_COLOR:
     case PAINT_SERVER:
@@ -19604,6 +19829,7 @@ fill_shape (Shape        *shape,
           gtk_snapshot_pop (context->snapshot);
       }
       break;
+    case PAINT_CURRENT_COLOR:
     case PAINT_CONTEXT_FILL:
     case PAINT_CONTEXT_STROKE:
     case PAINT_SYMBOLIC:
@@ -22076,6 +22302,7 @@ svg_shape_attr_get_paint (Shape            *shape,
     case PAINT_NONE:
     case PAINT_CONTEXT_FILL:
     case PAINT_CONTEXT_STROKE:
+    case PAINT_CURRENT_COLOR:
     case PAINT_SERVER:
     case PAINT_SERVER_WITH_FALLBACK:
       break;
