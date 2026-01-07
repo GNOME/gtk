@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+  <defs>
+    <g id="foo">
+      <rect x="0" y="0" width="100" height="100" fill="red" />
+      <rect x="100" y="0" width="100" height="100" fill="lime" />
+      <rect x="100" y="100" width="100" height="100" fill="blue" />
+      <rect x="0" y="100" width="100" height="100" fill="yellow" />
+    </g>
+    <filter id="topleft">
+      <feImage href="#foo" x="0%" y="0%" width="50%" height="50%"/>
+    </filter>
+    <filter id="top">
+      <feImage href="#foo" x="25%" y="0%" width="50%" height="50%"/>
+    </filter>
+    <filter id="topright">
+      <feImage href="#foo" x="50%" y="0%" width="50%" height="50%"/>
+    </filter>
+    <filter id="left">
+      <feImage href="#foo" x="0%" y="25%" width="50%" height="50%"/>
+    </filter>
+    <filter id="center">
+      <feImage href="#foo" x="25%" y="25%" width="50%" height="50%"/>
+    </filter>
+    <filter id="right">
+      <feImage href="#foo" x="50%" y="25%" width="50%" height="50%"/>
+    </filter>
+    <filter id="bottomleft">
+      <feImage href="#foo" x="0%" y="50%" width="50%" height="50%"/>
+    </filter>
+    <filter id="bottom">
+      <feImage href="#foo" x="25%" y="50%" width="50%" height="50%"/>
+    </filter>
+    <filter id="bottomright">
+      <feImage href="#foo" x="50%" y="50%" width="50%" height="50%"/>
+    </filter>
+  </defs>
+  <rect transform="rotate(45, 100 100)" x="50" y="50" width="100" height="100" filter="url(#topleft)" />
+  <rect transform="rotate(45, 250 100)" x="200" y="50" width="100" height="100" filter="url(#top)" />
+  <rect transform="rotate(45, 400 100)" x="350" y="50" width="100" height="100" filter="url(#topright)" />
+  <rect transform="rotate(45, 100 250)" x="50" y="200" width="100" height="100" filter="url(#left)" />
+  <rect transform="rotate(45, 250 250)" x="200" y="200" width="100" height="100" filter="url(#center)" />
+  <rect transform="rotate(45, 400 250)" x="350" y="200" width="100" height="100" filter="url(#right)" />
+  <rect transform="rotate(45, 100 400)" x="50" y="350" width="100" height="100" filter="url(#bottomleft)" />
+  <rect transform="rotate(45, 250 400)" x="200" y="350" width="100" height="100" filter="url(#bottom)" />
+  <rect transform="rotate(45, 400 400)" x="350" y="350" width="100" height="100" filter="url(#bottomright)" />
+</svg>

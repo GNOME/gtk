@@ -6,12 +6,18 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='1000ms'
+        font-weight='400'
+        font-size='16'
         width='30'
         height='20'
         viewBox='0 0 30 20'>
-  <defs>
+  <defs
+          font-weight='400'
+          font-size='16'>
     <circle
             id='circle1'
+            font-weight='400'
+            font-size='16'
             fill='rgb(255,0,0)'
             fill-opacity='0.5'
             cx='10'
@@ -20,6 +26,8 @@
     </circle>
     <circle
             id='circle2'
+            font-weight='400'
+            font-size='16'
             fill='rgb(0,128,0)'
             fill-opacity='1'
             cx='20'
@@ -28,6 +36,8 @@
     </circle>
   </defs>
   <use
+          font-weight='400'
+          font-size='16'
           href='#circle2'>
     <animate
             attributeName='href'

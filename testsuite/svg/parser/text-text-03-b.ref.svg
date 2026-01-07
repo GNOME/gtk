@@ -21,7 +21,7 @@
             x='142'
             y='61'>Italic</text>
     <text
-            font-weight='700'
+            font-weight='bold'
             font-size='32'
             fill='rgb(0,0,255)'
             x='257'
@@ -40,7 +40,7 @@
             text-decoration='line-through'>Line through</text>
     <text
             font-style='italic'
-            font-weight='700'
+            font-weight='bold'
             font-size='32'
             fill='rgb(0,0,0)'
             x='1'

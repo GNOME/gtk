@@ -6,6 +6,8 @@
         gpa:state='empty'
         gpa:state-change-delay='2000ms'
         gpa:time-since-load='5000ms'
+        font-weight='400'
+        font-size='16'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
@@ -13,6 +15,8 @@
           id='red'
           visibility='hidden'
           opacity='0.5'
+          font-weight='400'
+          font-size='16'
           fill='rgb(255,0,0)'
           cx='0'
           cy='5'
