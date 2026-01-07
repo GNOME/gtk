@@ -3,6 +3,16 @@
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  * SPDX-FileCopyrightText: 2025-2026 GNOME Foundation
+ *
+ * ## IDLE and SUSPEND inhibition
+ * https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-powersetrequest
+ * Requests counters are automatically managed by PowerSetRequest().
+ * It could be possible to use the old SetThreadExecutionState() API instead,
+ * but this one needs to be called periodically.
+ * The underlying Win32 APIs need a reason string, if not provided the
+ * inhibition will be ignored.
+ * Note that power requests will be cancelled if the user manually stops them,
+ * e.g. by sleeping from the start menu or by closing the lid.
  */
 
 #define WIN32_LEAN_AND_MEAN
@@ -30,6 +40,7 @@ typedef struct
 {
   guint cookie;
   GtkApplicationInhibitFlags flags;
+  HANDLE pwr_handle;
 } GtkApplicationWin32Inhibitor;
 
 G_DEFINE_TYPE (GtkApplicationImplWin32, gtk_application_impl_win32, GTK_TYPE_APPLICATION_IMPL)
@@ -38,6 +49,7 @@ G_DEFINE_TYPE (GtkApplicationImplWin32, gtk_application_impl_win32, GTK_TYPE_APP
 static void
 appwin32_inhibitor_free (GtkApplicationWin32Inhibitor *inhibitor)
 {
+  CloseHandle (inhibitor->pwr_handle);
   g_free (inhibitor);
 }
 
@@ -63,6 +75,33 @@ gtk_application_impl_win32_inhibit (GtkApplicationImpl         *impl,
 
   inhibitor->cookie = ++appwin32->next_cookie;
 
+  if (flags & (GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_IDLE))
+    {
+      REASON_CONTEXT context;
+
+      memset (&context, 0, sizeof (context));
+      context.Version = POWER_REQUEST_CONTEXT_VERSION;
+      context.Flags = POWER_REQUEST_CONTEXT_SIMPLE_STRING;
+      context.Reason.SimpleReasonString = reason_w;
+
+      inhibitor->pwr_handle = PowerCreateRequest (&context);
+
+      if (flags & GTK_APPLICATION_INHIBIT_SUSPEND)
+        {
+          if (PowerSetRequest (inhibitor->pwr_handle, PowerRequestSystemRequired))
+            inhibitor->flags |= GTK_APPLICATION_INHIBIT_SUSPEND;
+          else
+            g_warning ("Failed to apply suspend inhibition");
+        }
+
+      if (flags & GTK_APPLICATION_INHIBIT_IDLE)
+        {
+          if (PowerSetRequest (inhibitor->pwr_handle, PowerRequestDisplayRequired))
+            inhibitor->flags |= GTK_APPLICATION_INHIBIT_IDLE;
+          else
+            g_warning ("Failed to apply idle inhibition");
+        }
+    }
 
   g_free (reason_w);
 
@@ -88,6 +127,11 @@ gtk_application_impl_win32_uninhibit (GtkApplicationImpl *impl, guint cookie)
 
       if (inhibitor->cookie == cookie)
         {
+          if (inhibitor->flags & GTK_APPLICATION_INHIBIT_SUSPEND)
+            PowerClearRequest (inhibitor->pwr_handle, PowerRequestSystemRequired);
+
+          if (inhibitor->flags & GTK_APPLICATION_INHIBIT_IDLE)
+            PowerClearRequest (inhibitor->pwr_handle, PowerRequestDisplayRequired);
 
           appwin32_inhibitor_free (inhibitor);
           appwin32->inhibitors = g_slist_delete_link (appwin32->inhibitors, iter);
