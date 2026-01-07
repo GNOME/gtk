@@ -9934,7 +9934,6 @@ shape_get_current_bounds (Shape                 *shape,
                           const graphene_rect_t *viewport,
                           graphene_rect_t       *bounds)
 {
-  GskTransform *transform;
   graphene_rect_t b;
   gboolean ret = FALSE;
 
@@ -10019,9 +10018,7 @@ shape_get_current_bounds (Shape                 *shape,
       g_assert_not_reached ();
     }
 
-  transform = svg_transform_get_gsk ((SvgTransform *) shape->current[SHAPE_ATTR_TRANSFORM]);
-  gsk_transform_transform_bounds (transform, &b, bounds);
-  gsk_transform_unref (transform);
+  graphene_rect_init_from_rect (bounds, &b);
 
   return ret;
 }

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+  <defs>
+    <filter id="f" x='0%' y='0%' width='100%' height='100%'>
+      <feFlood flood-color='red' x='0%' y='0%' width='50%' height='50%' result='r'/>
+      <feFlood flood-color='yellow' x='50%' y='0%' width='50%' height='50%' result='y'/>
+      <feFlood flood-color='green' x='50%' y='50%' width='50%' height='50%' result='g'/>
+      <feFlood flood-color='blue' x='0%' y='50%' width='50%' height='50%' result='b'/>
+      <feMerge>
+        <feMergeNode in='r'/>
+        <feMergeNode in='y'/>
+        <feMergeNode in='g'/>
+        <feMergeNode in='b'/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect transform="rotate(45, 100 100)" x="50" y="50" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 250 100)" x="200" y="50" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 400 100)" x="350" y="50" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 100 250)" x="50" y="200" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 250 250)" x="200" y="200" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 400 250)" x="350" y="200" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 100 400)" x="50" y="350" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 250 400)" x="200" y="350" width="100" height="100" filter="url(#f)" />
+  <rect transform="rotate(45, 400 400)" x="350" y="350" width="100" height="100" filter="url(#f)" />
+</svg>
