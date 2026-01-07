@@ -199,6 +199,7 @@ struct _GdkWin32Surface
   IDirectManipulationViewport *dmanipulation_viewport_pan;
   IDirectManipulationViewport *dmanipulation_viewport_zoom;
 
+  guint inhibit_logout;
   GdkWin32SessionCallback cb_session_query_end;
   GdkWin32SessionCallback cb_session_end;
 };

@@ -4,6 +4,16 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  * SPDX-FileCopyrightText: 2025-2026 GNOME Foundation
  *
+ * ## LOGOFF inhibition
+ * https://learn.microsoft.com/en-us/windows/win32/shutdown/logging-off
+ * It seems that only visible windows are able to block logout requests,
+ * so delegate the events handling to the HWND of each application window.
+ * Requests counters are managed on GdkWin32 side.
+ * Because we need to track added and removed windows, only windows attached
+ * to the application are supported.
+ * Using SetProcessShutdownParameters() with higher priority will ensure the
+ * mainloop catches and responds to session events before all other HWNDs.
+ *
  * ## IDLE and SUSPEND inhibition
  * https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-powersetrequest
  * Requests counters are automatically managed by PowerSetRequest().
@@ -41,6 +51,7 @@ typedef struct
   guint cookie;
   GtkApplicationInhibitFlags flags;
   HANDLE pwr_handle;
+  GdkSurface *surface;
 } GtkApplicationWin32Inhibitor;
 
 G_DEFINE_TYPE (GtkApplicationImplWin32, gtk_application_impl_win32, GTK_TYPE_APPLICATION_IMPL)
@@ -50,6 +61,7 @@ static void
 appwin32_inhibitor_free (GtkApplicationWin32Inhibitor *inhibitor)
 {
   CloseHandle (inhibitor->pwr_handle);
+  g_clear_object (&inhibitor->surface);
   g_free (inhibitor);
 }
 
@@ -131,6 +143,22 @@ gtk_application_impl_win32_window_removed (GtkApplicationImpl *impl,
   gdk_win32_surface_set_session_callbacks (surface,
                                            NULL,
                                            NULL);
+
+  /* Ensure we don't keep a ref of the surface in the inhibitors,
+   * should the window get removed before uninhibit is called.
+   */
+  for (iter = appwin32->inhibitors; iter; iter = iter->next)
+    {
+      GtkApplicationWin32Inhibitor *inhibitor = iter->data;
+
+      if ((inhibitor->flags & GTK_APPLICATION_INHIBIT_LOGOUT) &&
+          (inhibitor->surface == surface))
+        {
+          gdk_win32_surface_uninhibit_logout (inhibitor->surface);
+          inhibitor->flags &= ~GTK_APPLICATION_INHIBIT_LOGOUT;
+          g_clear_object (&inhibitor->surface);
+        }
+    }
 }
 
 static guint
@@ -144,6 +172,23 @@ gtk_application_impl_win32_inhibit (GtkApplicationImpl         *impl,
   wchar_t *reason_w = g_utf8_to_utf16 (reason, -1, NULL, NULL, NULL);
 
   inhibitor->cookie = ++appwin32->next_cookie;
+
+  if (flags & GTK_APPLICATION_INHIBIT_LOGOUT)
+    {
+      if (GTK_IS_WINDOW (window) &&
+          impl->application == gtk_window_get_application (window))
+        {
+          GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (window));
+
+          if (gdk_win32_surface_inhibit_logout (surface, reason_w))
+            {
+              inhibitor->surface = g_object_ref (surface);
+              inhibitor->flags |= GTK_APPLICATION_INHIBIT_LOGOUT;
+            }
+        }
+      else
+        g_warning ("Logout inhibition is only supported on application windows");
+    }
 
   if (flags & (GTK_APPLICATION_INHIBIT_SUSPEND | GTK_APPLICATION_INHIBIT_IDLE))
     {
@@ -197,6 +242,9 @@ gtk_application_impl_win32_uninhibit (GtkApplicationImpl *impl, guint cookie)
 
       if (inhibitor->cookie == cookie)
         {
+          if (inhibitor->flags & GTK_APPLICATION_INHIBIT_LOGOUT)
+            gdk_win32_surface_uninhibit_logout (inhibitor->surface);
+
           if (inhibitor->flags & GTK_APPLICATION_INHIBIT_SUSPEND)
             PowerClearRequest (inhibitor->pwr_handle, PowerRequestSystemRequired);
 

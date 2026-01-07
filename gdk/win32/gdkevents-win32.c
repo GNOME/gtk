@@ -3152,6 +3152,8 @@ gdk_event_translate (MSG *msg,
 
           if (impl->cb_session_query_end)
             impl->cb_session_query_end();
+
+          *ret_valp = !gdk_win32_is_logout_inhibited();
         }
       return_val = TRUE;
       break;
