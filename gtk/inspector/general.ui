@@ -12,8 +12,8 @@
             <property name="child">
               <object class="GtkImage">
                 <property name="paintable">
-                  <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/edit-copy-symbolic.svg</property>
+                  <object class="GtkSvg">
+                    <property name="resource">/org/gtk/libgtk/icons/edit-copy-symbolic.svg</property>
                   </object>
                 </property>
               </object>
@@ -500,8 +500,8 @@
                                 <property name="halign">end</property>
                                 <property name="valign">baseline</property>
                                 <property name="paintable">
-                                  <object class="GtkIconPaintable" id="object-select-symbolic">
-                                    <property name="file">resource:///org/gtk/libgtk/icons/object-select-symbolic.svg</property>
+                                  <object class="GtkSvg" id="object-select-symbolic">
+                                    <property name="resource">/org/gtk/libgtk/icons/object-select-symbolic.svg</property>
                                   </object>
                                 </property>
                                 <property name="hexpand">1</property>

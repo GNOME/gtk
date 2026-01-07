@@ -591,8 +591,8 @@ Manual</property>
                                     <property name="child">
                                       <object class="GtkImage">
                                         <property name="paintable">
-                                          <object class="GtkIconPaintable">
-                                            <property name="file">resource:///org/gtk/libgtk/icons/dialog-information-symbolic.svg</property>
+                                          <object class="GtkSvg">
+                                            <property name="resource">/org/gtk/libgtk/icons/dialog-information-symbolic.svg</property>
                                           </object>
                                         </property>
                                       </object>

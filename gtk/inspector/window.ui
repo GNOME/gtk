@@ -30,8 +30,8 @@
                         <property name="child">
                           <object class="GtkImage">
                             <property name="paintable">
-                              <object class="GtkIconPaintable">
-                                <property name="file">resource:///org/gtk/libgtk/icons/find-location-symbolic.svg</property>
+                              <object class="GtkSvg">
+                                <property name="resource">/org/gtk/libgtk/icons/find-location-symbolic.svg</property>
                               </object>
                             </property>
                           </object>
@@ -53,8 +53,8 @@
                                 <property name="child">
                                   <object class="GtkImage">
                                     <property name="paintable">
-                                      <object class="GtkIconPaintable" id="dialog-information-symbolic">
-                                        <property name="file">resource:///org/gtk/libgtk/icons/dialog-information-symbolic.svg</property>
+                                      <object class="GtkSvg" id="dialog-information-symbolic">
+                                        <property name="resource">/org/gtk/libgtk/icons/dialog-information-symbolic.svg</property>
                                       </object>
                                     </property>
                                   </object>
@@ -76,8 +76,8 @@
                                 <property name="child">
                                   <object class="GtkImage">
                                     <property name="paintable">
-                                      <object class="GtkIconPaintable" id="view-list-symbolic">
-                                        <property name="file">resource:///org/gtk/libgtk/icons/view-list-symbolic.svg</property>
+                                      <object class="GtkSvg" id="view-list-symbolic">
+                                        <property name="resource">/org/gtk/libgtk/icons/view-list-symbolic.svg</property>
                                       </object>
                                     </property>
                                   </object>
@@ -182,8 +182,8 @@
                             <property name="child">
                               <object class="GtkImage">
                                 <property name="paintable">
-                                  <object class="GtkIconPaintable">
-                                    <property name="file">resource:///org/gtk/libgtk/icons/media-record-symbolic.svg</property>
+                                  <object class="GtkSvg">
+                                    <property name="resource">/org/gtk/libgtk/icons/media-record-symbolic.svg</property>
                                   </object>
                                 </property>
                               </object>
@@ -270,8 +270,8 @@
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/open-menu-symbolic.svg</property>
+                                              <object class="GtkSvg">
+                                                <property name="resource">/org/gtk/libgtk/icons/open-menu-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -300,8 +300,8 @@
                                                 <property name="child">
                                                   <object class="GtkImage">
                                                     <property name="paintable">
-                                                      <object class="GtkIconPaintable">
-                                                        <property name="file">resource:///org/gtk/libgtk/icons/view-refresh-symbolic.svg</property>
+                                                      <object class="GtkSvg">
+                                                        <property name="resource">/org/gtk/libgtk/icons/view-refresh-symbolic.svg</property>
                                                       </object>
                                                     </property>
                                                   </object>
@@ -382,8 +382,8 @@
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/go-up-symbolic.svg</property>
+                                              <object class="GtkSvg">
+                                                <property name="resource">/org/gtk/libgtk/icons/go-up-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -397,8 +397,8 @@
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/go-down-symbolic.svg</property>
+                                              <object class="GtkSvg">
+                                                <property name="resource">/org/gtk/libgtk/icons/go-down-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -412,8 +412,8 @@
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/go-previous-symbolic.svg</property>
+                                              <object class="GtkSvg">
+                                                <property name="resource">/org/gtk/libgtk/icons/go-previous-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>
@@ -433,8 +433,8 @@
                                         <property name="child">
                                           <object class="GtkImage">
                                             <property name="paintable">
-                                              <object class="GtkIconPaintable">
-                                                <property name="file">resource:///org/gtk/libgtk/icons/go-next-symbolic.svg</property>
+                                              <object class="GtkSvg">
+                                                <property name="resource">/org/gtk/libgtk/icons/go-next-symbolic.svg</property>
                                               </object>
                                             </property>
                                           </object>

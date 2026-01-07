@@ -128,6 +128,8 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
     {
     case GTK_IMAGE_PAINTABLE:
       paintable = g_object_ref (gtk_image_definition_get_paintable (self->def));
+      if (GTK_IS_ICON_PAINTABLE (paintable))
+        g_object_set (paintable, "scale", gtk_widget_get_scale_factor (self->owner), NULL);
       symbolic = GTK_IS_SYMBOLIC_PAINTABLE (paintable);
       break;
 

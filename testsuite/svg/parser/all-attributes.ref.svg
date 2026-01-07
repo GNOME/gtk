@@ -9,6 +9,7 @@
           visibility='visible'
           transform='none'
           opacity='1'
+          color='rgb(255,100,0)'
           filter='none'
           clip-path='none'
           clip-rule='nonzero'
