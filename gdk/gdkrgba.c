@@ -134,7 +134,8 @@ gboolean
 static gboolean
 parse_rgb_value (const char   *str,
                  char        **endp,
-                 double       *number)
+                 double       *number,
+                 int           coord)
 {
   const char *p;
 
@@ -150,11 +151,16 @@ parse_rgb_value (const char   *str,
   if (*p == '%')
     {
       *endp = (char *)(p + 1);
-      *number = CLAMP(*number / 100., 0., 1.);
+      *number = CLAMP (*number / 100., 0., 1.);
     }
   else
     {
-      *number = CLAMP(*number / 255., 0., 1.);
+      if (coord == 'h')
+        *number = CLAMP (*number / 360.0, 0., 1.);
+      else if (coord == 's' || coord == 'l')
+        *number = CLAMP (*number / 100.0, 0., 1.);
+      else
+        *number = CLAMP (*number / 255., 0., 1.);
     }
 
   return TRUE;
@@ -177,14 +183,16 @@ parse_rgb_value (const char   *str,
  * - A RGB color in the form “rgb(r,g,b)” (In this case the color
  *   will have full opacity)
  * - A RGBA color in the form “rgba(r,g,b,a)”
- * - A HSL color in the form "hsl(hue, saturation, lightness)"
- * - A HSLA color in the form "hsla(hue, saturation, lightness, alpha)"
+ * - A HSL color in the form “hsl(h,s,l)”
+ * - A HSLA color in the form “hsla(h,s,l,a)”
  *
  * Where “r”, “g”, “b” and “a” are respectively the red, green,
  * blue and alpha color values. In the last two cases, “r”, “g”,
  * and “b” are either integers in the range 0 to 255 or percentage
  * values in the range 0% to 100%, and a is a floating point value
- * in the range 0 to 1.
+ * in the range 0 to 1. The range for “h” is 0 to 360, and
+ * “s”, “l” can be either numbers in the range 0 to 100 or
+ * percentages.
  *
  * Returns: %TRUE if the parsing succeeded
  */
@@ -258,7 +266,7 @@ gdk_rgba_parse (GdkRGBA    *rgba,
 
   /* Parse red */
   SKIP_WHITESPACES (str);
-  if (!parse_rgb_value (str, &str, &r))
+  if (!parse_rgb_value (str, &str, &r, is_hsl ? 'h' : 'r'))
     return FALSE;
   SKIP_WHITESPACES (str);
 
@@ -269,7 +277,7 @@ gdk_rgba_parse (GdkRGBA    *rgba,
 
   /* Parse green */
   SKIP_WHITESPACES (str);
-  if (!parse_rgb_value (str, &str, &g))
+  if (!parse_rgb_value (str, &str, &g, is_hsl ? 's' : 'g'))
     return FALSE;
   SKIP_WHITESPACES (str);
 
@@ -280,7 +288,7 @@ gdk_rgba_parse (GdkRGBA    *rgba,
 
   /* Parse blue */
   SKIP_WHITESPACES (str);
-  if (!parse_rgb_value (str, &str, &b))
+  if (!parse_rgb_value (str, &str, &b, is_hsl ? 'l' : 'b'))
     return FALSE;
   SKIP_WHITESPACES (str);
 
@@ -319,7 +327,7 @@ gdk_rgba_parse (GdkRGBA    *rgba,
       if (is_hsl)
         {
           GdkHSLA hsla;
-          hsla.hue = r * 255;
+          hsla.hue = r * 360;
           hsla.saturation = CLAMP (g, 0, 1);
           hsla.lightness = CLAMP (b, 0, 1);
           hsla.alpha = CLAMP (a, 0, 1);
