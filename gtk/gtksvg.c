@@ -2355,6 +2355,18 @@ svg_number_resolve (const SvgValue *value,
     case SVG_UNIT_PERCENTAGE:
       switch ((unsigned int) attr)
         {
+        case SHAPE_ATTR_FONT_SIZE:
+          {
+            double parent_size;
+
+            if (context->parent)
+              parent_size = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
+            else
+              parent_size = DEFAULT_FONT_SIZE;
+
+            return svg_number_new (n->value * parent_size / 100);
+          }
+          break;
         case SHAPE_ATTR_OPACITY:
         case SHAPE_ATTR_FILL_OPACITY:
         case SHAPE_ATTR_STROKE_OPACITY:
@@ -2995,7 +3007,7 @@ svg_enum_parse (const SvgEnum  values[],
 #define DEFINE_ENUM_VALUE(CLASS_NAME, value, name) \
   { { & SVG_ ## CLASS_NAME ## _CLASS, 0 }, value, name }
 
-#define DEF_E(kw,CLASS_NAME, class_name, EnumType, ...) \
+#define DEF_E(kw,CLASS_NAME, class_name, EnumType, resolve, ...) \
 static const SvgValueClass SVG_ ## CLASS_NAME ## _CLASS = { \
   #CLASS_NAME, \
   svg_value_default_free, \
@@ -3004,7 +3016,7 @@ static const SvgValueClass SVG_ ## CLASS_NAME ## _CLASS = { \
   svg_enum_accumulate, \
   svg_enum_print, \
   svg_value_default_distance, \
-  svg_value_default_resolve, \
+  resolve, \
 }; \
 \
 static SvgEnum class_name ## _values[] = { \
@@ -3032,18 +3044,22 @@ svg_ ## class_name ## _parse (const char *string) \
 }
 
 #define DEFINE_ENUM_PUBLIC(CLASS_NAME, class_name, EnumType, ...) \
-  DEF_E(,CLASS_NAME, class_name, EnumType, __VA_ARGS__) \
+  DEF_E(,CLASS_NAME, class_name, EnumType, svg_value_default_resolve, __VA_ARGS__) \
   DEF_E_PARSE(class_name)
 
 #define DEFINE_ENUM(CLASS_NAME, class_name, EnumType, ...) \
-  DEF_E(static, CLASS_NAME, class_name, EnumType, __VA_ARGS__) \
+  DEF_E(static, CLASS_NAME, class_name, EnumType, svg_value_default_resolve, __VA_ARGS__) \
   DEF_E_PARSE(class_name)
 
 #define DEFINE_ENUM_PUBLIC_NO_PARSE(CLASS_NAME, class_name, EnumType, ...) \
-  DEF_E(, CLASS_NAME, class_name, EnumType, __VA_ARGS__)
+  DEF_E(, CLASS_NAME, class_name, EnumType, svg_value_default_resolve, __VA_ARGS__)
 
 #define DEFINE_ENUM_NO_PARSE(CLASS_NAME, class_name, EnumType, ...) \
-  DEF_E(static, CLASS_NAME, class_name, EnumType, __VA_ARGS__) \
+  DEF_E(static, CLASS_NAME, class_name, EnumType, svg_value_default_resolve, __VA_ARGS__)
+
+#define DEFINE_ENUM_CUSTOM_RESOLVE(CLASS_NAME, class_name, EnumType, resolve, ...) \
+  DEF_E(static, CLASS_NAME, class_name, EnumType, resolve, __VA_ARGS__) \
+  DEF_E_PARSE(class_name)
 
 DEFINE_ENUM_PUBLIC (FILL_RULE, fill_rule, GskFillRule,
   DEFINE_ENUM_VALUE (FILL_RULE, GSK_FILL_RULE_WINDING, "nonzero"),
@@ -3364,8 +3380,8 @@ svg_composite_operator_to_gsk (CompositeOperator op)
     case COMPOSITE_OPERATOR_OUT: return GSK_PORTER_DUFF_SOURCE_OUT_DEST;
     case COMPOSITE_OPERATOR_ATOP: return GSK_PORTER_DUFF_SOURCE_ATOP_DEST;
     case COMPOSITE_OPERATOR_XOR: return GSK_PORTER_DUFF_XOR;
-    case COMPOSITE_OPERATOR_LIGHTER: return GSK_PORTER_DUFF_SOURCE; // FIXME
-    case COMPOSITE_OPERATOR_ARITHMETIC: return GSK_PORTER_DUFF_SOURCE; // FIXME
+    case COMPOSITE_OPERATOR_LIGHTER: return GSK_PORTER_DUFF_SOURCE; /* Not used */
+    case COMPOSITE_OPERATOR_ARITHMETIC: return GSK_PORTER_DUFF_SOURCE; /* Not used */
     default:
       g_assert_not_reached ();
     }
@@ -3412,6 +3428,137 @@ typedef enum
 DEFINE_ENUM (VECTOR_EFFECT, vector_effect, VectorEffect,
   DEFINE_ENUM_VALUE (VECTOR_EFFECT, VECTOR_EFFECT_NONE, "none"),
   DEFINE_ENUM_VALUE (VECTOR_EFFECT, VECTOR_EFFECT_NON_SCALING_STROKE, "non-scaling-stroke")
+)
+
+typedef enum
+{
+  FONT_SIZE_SMALLER,
+  FONT_SIZE_LARGER,
+  FONT_SIZE_XX_SMALL,
+  FONT_SIZE_X_SMALL,
+  FONT_SIZE_SMALL,
+  FONT_SIZE_MEDIUM,
+  FONT_SIZE_LARGE,
+  FONT_SIZE_X_LARGE,
+  FONT_SIZE_XX_LARGE,
+} FontSize;
+
+static SvgValue *
+svg_font_size_resolve (const SvgValue *value,
+                       ShapeAttr       attr,
+                       Shape          *shape,
+                       ComputeContext *context)
+{
+  const SvgEnum *font_size = (const SvgEnum *) value;
+
+  g_assert (attr == SHAPE_ATTR_FONT_SIZE);
+
+  if (font_size->value == FONT_SIZE_XX_SMALL)
+    return svg_number_new (DEFAULT_FONT_SIZE * 3. / 5.);
+  else if (font_size->value == FONT_SIZE_X_SMALL)
+    return svg_number_new (DEFAULT_FONT_SIZE * 3. / 4.);
+  else if (font_size->value == FONT_SIZE_SMALL)
+    return svg_number_new (DEFAULT_FONT_SIZE * 8. / 9.);
+  else if (font_size->value == FONT_SIZE_MEDIUM)
+    return svg_number_new (DEFAULT_FONT_SIZE);
+  else if (font_size->value == FONT_SIZE_LARGE)
+    return svg_number_new (DEFAULT_FONT_SIZE * 6. / 5.);
+  else if (font_size->value == FONT_SIZE_X_LARGE)
+    return svg_number_new (DEFAULT_FONT_SIZE * 3. / 2.);
+  else if (font_size->value == FONT_SIZE_XX_LARGE)
+    return svg_number_new (DEFAULT_FONT_SIZE * 2.);
+  else
+    {
+      double parent_size;
+
+      if (context->parent)
+        parent_size = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
+      else
+        parent_size = DEFAULT_FONT_SIZE;
+
+      if (font_size->value == FONT_SIZE_SMALLER)
+        return svg_number_new (parent_size / 1.2);
+      else if (font_size->value == FONT_SIZE_LARGER)
+        return svg_number_new (parent_size * 1.2);
+      else
+        g_assert_not_reached ();
+    }
+}
+
+DEFINE_ENUM_CUSTOM_RESOLVE (FONT_SIZE, font_size, FontSize, svg_font_size_resolve,
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALLER, "smaller"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGER, "larger"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_XX_SMALL, "xx-small"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_SMALL, "x-small"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALL, "small"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_MEDIUM, "medium"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGE, "largr"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_LARGE, "x-large"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_XX_LARGE, "xx-large")
+)
+
+typedef enum {
+  FONT_WEIGHT_NORMAL,
+  FONT_WEIGHT_BOLD,
+  FONT_WEIGHT_BOLDER,
+  FONT_WEIGHT_LIGHTER,
+} FontWeight;
+
+static SvgValue *
+svg_font_weight_resolve (const SvgValue *value,
+                         ShapeAttr       attr,
+                         Shape          *shape,
+                         ComputeContext *context)
+{
+  const SvgEnum *font_weight = (const SvgEnum *) value;
+
+  g_assert (attr == SHAPE_ATTR_FONT_WEIGHT);
+
+  if (font_weight->value == FONT_WEIGHT_NORMAL)
+    return svg_number_new (PANGO_WEIGHT_NORMAL);
+  else if (font_weight->value == FONT_WEIGHT_BOLD)
+    return svg_number_new (PANGO_WEIGHT_BOLD);
+  else
+    {
+      double parent_weight;
+
+      if (context->parent)
+        parent_weight = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_WEIGHT])->value;
+      else
+        parent_weight = PANGO_WEIGHT_NORMAL;
+
+      if (font_weight->value == FONT_WEIGHT_BOLDER)
+        {
+          if (parent_weight < 350)
+            return svg_number_new (400);
+          else if (parent_weight < 550)
+            return svg_number_new (700);
+          else if (parent_weight < 900)
+            return svg_number_new (900);
+          else
+            return svg_number_new (parent_weight);
+        }
+      else if (font_weight->value == FONT_WEIGHT_LIGHTER)
+        {
+          if (parent_weight > 750)
+            return svg_number_new (700);
+          else if (parent_weight > 550)
+            return svg_number_new (400);
+          else if (parent_weight > 100)
+            return svg_number_new (100);
+          else
+            return svg_number_new (parent_weight);
+        }
+      else
+        g_assert_not_reached ();
+    }
+}
+
+DEFINE_ENUM_CUSTOM_RESOLVE (FONT_WEIGHT, font_weight, FontWeight, svg_font_weight_resolve,
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_NORMAL, "normal"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLD, "bold"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLDER, "bolder"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_LIGHTER, "lighter")
 )
 
 /* }}} */
@@ -7919,29 +8066,28 @@ parse_any_number (const char *value)
   return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER);
 }
 
-static const struct {
-  const char *name;
-  int value;
-} named_font_weights[] = {
-  { .name ="normal", .value = PANGO_WEIGHT_NORMAL },
-  { .name ="bold",   .value = PANGO_WEIGHT_BOLD },
-
-  /*
-   * The relative weights lighter/bolder *should* be
-   * relative to their parent element. For now we'll
-   * just hard-code them like legacy rsvg did.
-   */
-  { .name = "lighter", .value = PANGO_WEIGHT_LIGHT },
-  { .name = "bolder", .value = PANGO_WEIGHT_ULTRABOLD },
-};
-
 static SvgValue *
 parse_font_weight (const char *value)
 {
-  for (guint i = 0; i < G_N_ELEMENTS(named_font_weights); i++)
-    if (g_strcmp0 (named_font_weights[i].name, value) == 0)
-      return svg_number_new (named_font_weights[i].value);
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|LENGTH);
+  SvgValue *v;
+
+  v = svg_font_weight_parse (value);
+  if (v)
+    return v;
+
+  return svg_number_parse (value, 1, 1000, NUMBER);
+}
+
+static SvgValue *
+parse_font_size (const char *value)
+{
+  SvgValue *v;
+
+  v = svg_font_size_parse (value);
+  if (v)
+    return v;
+
+  return svg_number_parse (value, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
 }
 
 static SvgValue *
@@ -8129,7 +8275,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FONT_SIZE] = {
     .flags = SHAPE_ATTR_INHERITED,
     .applies_to = SHAPE_ANY,
-    .parse_value = parse_length_percentage, // TODO: more units & string sizes
+    .parse_value = parse_font_size,
   },
   [SHAPE_ATTR_FILL] = {
     .flags = SHAPE_ATTR_INHERITED,
@@ -8677,9 +8823,9 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new ("");
   shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_number_new (PANGO_WEIGHT_NORMAL);
+  shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_font_weight_new (FONT_WEIGHT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_number_new (DEFAULT_FONT_SIZE);
+  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_font_size_new (FONT_SIZE_MEDIUM);
   shape_attrs[SHAPE_ATTR_FILL].initial_value = svg_paint_new_black ();
   shape_attrs[SHAPE_ATTR_FILL_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FILL_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
@@ -9847,7 +9993,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
       if (!shape->valid_bounds)
-        g_critical ("TODO");
+        g_critical ("No valid bounds for text");
       graphene_rect_init_from_rect (&b, &shape->bounds);
       break;
     case SHAPE_IMAGE:

@@ -1,0 +1,20 @@
+isolation {
+  child: container {
+    text {
+      font: "Cantarell 32px";
+      glyphs: "N", 92 18, 102 12, 89 28, 58 16, 88 9;
+      offset: 0 100;
+    }
+    text {
+      font: "Cantarell Bold 38.399px";
+      glyphs: 9 25, 92 22, 88 12, 69 22, 71 21, 102 16, 160 10, 186 8, 88 12, 58 20, 102 16, 77 22, 71 21, 102 16;
+      offset: 0 200;
+    }
+    text {
+      font: "Cantarell Bold 33.792px";
+      glyphs: 128 20, 128 20, 128 20, 170 12, 130 20, 130 20;
+      offset: 0 300;
+    }
+  }
+  isolations: background;
+}

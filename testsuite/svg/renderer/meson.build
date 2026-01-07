@@ -42,6 +42,7 @@ test_data = [
   'filter-units-combined.svg',
   'filter-units-object-bounding-box.svg',
   'filter-units-user-space-on-use.svg',
+  'fonts.svg',
   'font-size-units.svg',
   'gpa-attachment1.svg',
   'gpa-attachment2.svg',

@@ -6,12 +6,16 @@
         gpa:state='empty'
         gpa:state-change-delay='2000ms'
         gpa:time-since-load='0ms'
+        font-weight='400'
+        font-size='16'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
   <circle
           id='red'
           visibility='hidden'
+          font-weight='400'
+          font-size='16'
           fill='none'
           stroke='rgb(255,0,0)'
           cx='0'

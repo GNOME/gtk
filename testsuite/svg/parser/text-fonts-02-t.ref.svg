@@ -53,26 +53,26 @@
               x='360'
               y='330'>900</text>
       <text
-              font-weight='700'
+              font-weight='bold'
               x='60'
               y='80'>This is bold</text>
       <text
-              font-weight='400'
+              font-weight='normal'
               x='60'
               y='130'>This is normal</text>
       <g
-              font-weight='400'
+              font-weight='normal'
               fill='rgb(0,0,255)'>
         <text
-                font-weight='800'
+                font-weight='bolder'
                 x='60'
                 y='180'>Blue is bolder</text>
       </g>
       <g
-              font-weight='700'
+              font-weight='bold'
               fill='rgb(0,0,255)'>
         <text
-                font-weight='300'
+                font-weight='lighter'
                 x='60'
                 y='230'>Blue is lighter</text>
       </g>
