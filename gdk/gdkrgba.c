@@ -156,7 +156,12 @@ parse_rgb_value (const char   *str,
   else
     {
       if (coord == 'h')
-        *number = CLAMP (*number / 360.0, 0., 1.);
+        {
+          *number = fmod (*number, 360);
+          if (*number < 0)
+            *number += 360;
+          *number = CLAMP (*number / 360.0, 0., 1.);
+        }
       else if (coord == 's' || coord == 'l')
         *number = CLAMP (*number / 100.0, 0., 1.);
       else
