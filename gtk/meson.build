@@ -662,6 +662,7 @@ endif
 if os_win32
   gtk_sources += gtk_win32_print_sources
   gtk_sources += [
+    'gtkapplication-win32.c',
     'gtkcolorpickerwin32.c',
     'gtkimcontextime.c',
     'gtkfilechoosernativewin32.c',
