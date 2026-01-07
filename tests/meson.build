@@ -141,6 +141,7 @@ if os_linux
 
   gtk_tests += [
     ['svg-compare', ['svgpaintable.c' ],[ libgtk_static_dep, rsvg_dep ]],
+    ['svg-png-compare'],
   ]
 endif
 
