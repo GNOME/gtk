@@ -2413,12 +2413,28 @@ svg_number_resolve (const SvgValue *value,
           return svg_number_new (n->value / 100);
         case SHAPE_ATTR_STROKE_WIDTH:
         case SHAPE_ATTR_R:
-        case SHAPE_ATTR_FR:
-          return svg_number_new_full (SVG_UNIT_PX, n->value * normalized_diagonal (context->viewport) / 100);
+          if (shape->type != SHAPE_RADIAL_GRADIENT)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * normalized_diagonal (context->viewport) / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_CX:
         case SHAPE_ATTR_RX:
-        case SHAPE_ATTR_FX:
-          return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
+          if (shape->type != SHAPE_RADIAL_GRADIENT)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
+        case SHAPE_ATTR_CY:
+        case SHAPE_ATTR_RY:
+          if (shape->type != SHAPE_RADIAL_GRADIENT)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
+        case SHAPE_ATTR_Y:
+        case SHAPE_ATTR_HEIGHT:
+          if (shape->type != SHAPE_FILTER)
+            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
+          else
+            return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_X:
         case SHAPE_ATTR_WIDTH:
           if (shape->type != SHAPE_FILTER)
@@ -2429,16 +2445,6 @@ svg_number_resolve (const SvgValue *value,
         case SHAPE_ATTR_X2:
           if (shape->type == SHAPE_LINE)
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_CY:
-        case SHAPE_ATTR_RY:
-        case SHAPE_ATTR_FY:
-          return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
-        case SHAPE_ATTR_Y:
-        case SHAPE_ATTR_HEIGHT:
-          if (shape->type != SHAPE_FILTER)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_Y1:
