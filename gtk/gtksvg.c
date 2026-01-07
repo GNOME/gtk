@@ -8567,7 +8567,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_LETTER_SPACING] = {
     .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
     .applies_to = SHAPE_TEXTS,
-    .parse_value = parse_letter_spacing, // TODO: more units & string sizes
+    .parse_value = parse_letter_spacing,
   },
   [SHAPE_ATTR_TEXT_DECORATION] = {
     .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
@@ -20006,7 +20006,6 @@ recompute_current_values (Shape        *shape,
 {
   ComputeContext ctx;
 
-  /* FIXME: this isn't the best way of doing this */
   ctx.svg = context->svg;
   ctx.viewport = context->viewport;
   ctx.parent = parent;
@@ -21738,7 +21737,7 @@ svg_shape_attr_get_points (Shape        *shape,
 
   for (unsigned int i = 0; i < numbers->n_values; i++)
     {
-      /* FIXME: What about the dimension */
+      /* FIXME: What about the dimension ? */
       ret[i] = numbers->values[i].value;
     }
 
