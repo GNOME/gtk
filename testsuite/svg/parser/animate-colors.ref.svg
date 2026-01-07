@@ -27,7 +27,7 @@
             dur='3000ms'
             repeatCount='indefinite'
             from='rgb(255,0,0)'
-            to='rgb(64,0,255)'
+            to='rgb(255,0,0)'
             keyTimes='0; 1'/>
   </circle>
   <circle
