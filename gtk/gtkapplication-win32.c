@@ -54,13 +54,83 @@ appwin32_inhibitor_free (GtkApplicationWin32Inhibitor *inhibitor)
 }
 
 static void
+cb_appwin32_session_query_end (void)
+{
+  GApplication *application = g_application_get_default ();
+
+  if (GTK_IS_APPLICATION (application))
+    g_signal_emit_by_name (application, "query-end");
+}
+
+static void
+cb_appwin32_session_end (void)
+{
+  GApplication *application = g_application_get_default ();
+
+  if (G_IS_APPLICATION (application))
+    g_application_quit (application);
+}
+
+static void
 gtk_application_impl_win32_shutdown (GtkApplicationImpl *impl)
 {
   GtkApplicationImplWin32 *appwin32 = (GtkApplicationImplWin32 *) impl;
   GList *iter;
 
+  for (iter = gtk_application_get_windows (impl->application); iter; iter = iter->next)
+    {
+      if (!gtk_widget_get_realized (GTK_WIDGET (iter->data)))
+        continue;
+
+      gdk_win32_surface_set_session_callbacks (gtk_native_get_surface (GTK_NATIVE (iter->data)),
+                                               NULL,
+                                               NULL);
+    }
+
   g_slist_free_full (appwin32->inhibitors, (GDestroyNotify) appwin32_inhibitor_free);
   appwin32->inhibitors = NULL;
+}
+
+static void
+gtk_application_impl_win32_handle_window_realize (GtkApplicationImpl *impl,
+                                                  GtkWindow          *window)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  gdk_win32_surface_set_session_callbacks (gtk_native_get_surface (GTK_NATIVE (window)),
+                                           cb_appwin32_session_query_end,
+                                           cb_appwin32_session_end);
+}
+
+static void
+gtk_application_impl_win32_window_added (GtkApplicationImpl *impl,
+                                         GtkWindow          *window,
+                                         GVariant           *state)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+    return;   /* no surface yet, wait for handle_window_realize */
+
+  gdk_win32_surface_set_session_callbacks (gtk_native_get_surface (GTK_NATIVE (window)),
+                                           cb_appwin32_session_query_end,
+                                           cb_appwin32_session_end);
+}
+
+static void
+gtk_application_impl_win32_window_removed (GtkApplicationImpl *impl,
+                                           GtkWindow          *window)
+{
+  GtkApplicationImplWin32 *appwin32 = (GtkApplicationImplWin32 *) impl;
+  GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (window));
+  GSList *iter;
+
+  if (!surface)
+    return;
+
+  gdk_win32_surface_set_session_callbacks (surface,
+                                           NULL,
+                                           NULL);
 }
 
 static guint
@@ -163,6 +233,9 @@ static void
 gtk_application_impl_win32_class_init (GtkApplicationImplClass *klass)
 {
   klass->shutdown = gtk_application_impl_win32_shutdown;
+  klass->handle_window_realize = gtk_application_impl_win32_handle_window_realize;
+  klass->window_added = gtk_application_impl_win32_window_added;
+  klass->window_removed = gtk_application_impl_win32_window_removed;
   klass->inhibit = gtk_application_impl_win32_inhibit;
   klass->uninhibit = gtk_application_impl_win32_uninhibit;
   klass->is_inhibited = gtk_application_impl_win32_is_inhibited;
@@ -171,6 +244,14 @@ gtk_application_impl_win32_class_init (GtkApplicationImplClass *klass)
 static void
 gtk_application_impl_win32_init (GtkApplicationImplWin32 *appwin32)
 {
+  DWORD dwLevel, dwFlags;
+
   appwin32->next_cookie = 0;
   appwin32->inhibitors = NULL;
+
+  if (GetProcessShutdownParameters (&dwLevel, &dwFlags))
+    {
+      dwLevel = MAX (dwLevel, 0x300);
+      SetProcessShutdownParameters (dwLevel, dwFlags);
+    }
 }

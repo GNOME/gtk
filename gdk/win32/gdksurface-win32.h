@@ -125,6 +125,8 @@ typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
 /* defined in gdkdrop-win32.c */
 typedef struct _drop_target_context drop_target_context;
 
+typedef void (* GdkWin32SessionCallback) (void);
+
 struct _GdkWin32Surface
 {
   GdkSurface parent_instance;
@@ -196,6 +198,9 @@ struct _GdkWin32Surface
 
   IDirectManipulationViewport *dmanipulation_viewport_pan;
   IDirectManipulationViewport *dmanipulation_viewport_zoom;
+
+  GdkWin32SessionCallback cb_session_query_end;
+  GdkWin32SessionCallback cb_session_end;
 };
 
 struct _GdkWin32SurfaceClass

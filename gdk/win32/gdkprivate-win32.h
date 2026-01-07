@@ -315,6 +315,11 @@ void gdk_win32_surface_resize (GdkSurface *surface,
 BOOL WINAPI GtkShowSurfaceHWND (GdkSurface *surface,
                                 int        cmd_show);
 
+/* Session management */
+void     gdk_win32_surface_set_session_callbacks (GdkSurface             *surface,
+                                                  GdkWin32SessionCallback cb_query_end,
+                                                  GdkWin32SessionCallback cb_end);
+
 /* Initialization */
 void _gdk_win32_surfaceing_init (void);
 void _gdk_drag_init    (void);

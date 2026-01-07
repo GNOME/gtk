@@ -93,6 +93,8 @@ gdk_win32_surface_init (GdkWin32Surface *impl)
   impl->num_transients = 0;
   impl->changing_state = FALSE;
   impl->surface_scale = 1;
+  impl->cb_session_query_end = NULL;
+  impl->cb_session_end = NULL;
 }
 
 
@@ -139,6 +141,9 @@ gdk_surface_win32_finalize (GObject *object)
     }
 
   _gdk_win32_surface_unregister_dnd (GDK_SURFACE (surface));
+
+  surface->cb_session_query_end = NULL;
+  surface->cb_session_end = NULL;
 
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);
@@ -2889,6 +2894,19 @@ gdk_win32_surface_get_handle (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_WIN32_SURFACE (surface), NULL);
 
   return GDK_SURFACE_HWND (surface);
+}
+
+void
+gdk_win32_surface_set_session_callbacks (GdkSurface             *surface,
+                                         GdkWin32SessionCallback cb_query_end,
+                                         GdkWin32SessionCallback cb_end)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  g_return_if_fail (GDK_IS_WIN32_SURFACE (surface));
+
+  impl->cb_session_query_end = cb_query_end;
+  impl->cb_session_end = cb_end;
 }
 
 #define LAST_PROP 1
