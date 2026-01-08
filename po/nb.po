@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.24.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-10 23:47+0000\n"
-"PO-Revision-Date: 2025-10-15 16:03+0200\n"
+"POT-Creation-Date: 2025-10-28 17:38+0000\n"
+"PO-Revision-Date: 2026-01-08 16:52+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -482,7 +482,7 @@ msgstr "Kan ikke lage et GL-kontekst"
 msgid "No available configurations for the given pixel format"
 msgstr "Ingen tilgjengelige konfigurasjoner for oppgitt pikselformat"
 
-#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1515
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1519
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementasjon tilgjengelig"
@@ -4158,7 +4158,7 @@ msgstr "GDK-motor"
 
 #: gtk/inspector/general.ui:102
 msgid "Pango Fontmap"
-msgstr ""
+msgstr "Pango skriftkart"
 
 #: gtk/inspector/general.ui:136
 msgid "Input Method"
@@ -4764,7 +4764,7 @@ msgstr "Generelt"
 #: gtk/open-type-layout.h:13
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr ""
+msgstr "Aksesser alle alternative"
 
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
@@ -6649,12 +6649,12 @@ msgstr "Glagolittisk"
 #: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr ""
+msgstr "Tifinagh"
 
 #: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "Syloti Nagri"
 
 #: gtk/script-names.c:75
 msgctxt "Script"
@@ -6664,7 +6664,7 @@ msgstr "Gammelpersisk"
 #: gtk/script-names.c:76
 msgctxt "Script"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "Kharoshthi"
 
 #: gtk/script-names.c:77
 msgctxt "Script"
@@ -6719,7 +6719,7 @@ msgstr "Sundanesisk"
 #: gtk/script-names.c:87
 msgctxt "Script"
 msgid "Saurashtra"
-msgstr ""
+msgstr "Saurashtra"
 
 #: gtk/script-names.c:88
 msgctxt "Script"
@@ -6839,7 +6839,7 @@ msgstr "Brahmi"
 #: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "Mandaisk"
 
 #: gtk/script-names.c:112
 msgctxt "Script"
@@ -6899,7 +6899,7 @@ msgstr ""
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
@@ -7224,15 +7224,15 @@ msgstr "Steder"
 
 #: gtk/ui/gtkfilechooserwidget.ui:47
 msgid "Browse Header Revealer"
-msgstr ""
+msgstr "Se på headerrevealer"
 
 #: gtk/ui/gtkfilechooserwidget.ui:65
 msgid "Browse Header Stack"
-msgstr ""
+msgstr "Se på headerstabel"
 
 #: gtk/ui/gtkfilechooserwidget.ui:75
 msgid "PathBar Layer"
-msgstr ""
+msgstr "Lag i stilinje"
 
 #: gtk/ui/gtkfilechooserwidget.ui:121
 msgid "Location Layer"
