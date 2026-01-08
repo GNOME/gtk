@@ -87,9 +87,13 @@ class VariationType:
     type: str
     bits: int
     glsl_string: str
+    c_flag: str
 
     def to_glsl (self, offset_bits):
         return self.glsl_string.format (offset_bits)
+
+    def to_c_flag (self, name, offset_bits):
+        return self.c_flag.format (name, offset_bits)
 
 @dataclass
 class Input:
@@ -123,6 +127,8 @@ class File:
     struct_name: str
     n_textures: int
     n_instances: int
+    acs_premultiplied: bool
+    acs_equals_ccs: bool
     variables: list[Variable]
     variations: list[Variation]
 
@@ -204,29 +210,48 @@ variation_types = [
 VariationType(
     type = 'gboolean',
     bits = 1,
-    glsl_string = '(((GSK_VARIATION >> {0}u) & 1u) == 1u)'
+    glsl_string = '(((GSK_VARIATION >> {0}u) & 1u) == 1u)',
+    c_flag = '(({0} & 1) << {1})'
 ),
 VariationType(
     type = 'GdkBuiltinColorStateId',
     bits = 8,
-    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)',
+    c_flag = '(({0} & 0xFF) << {1})'
 ),
 VariationType(
     type = 'GskBlendMode',
     bits = 8,
-    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)',
+    c_flag = '(({0} & 0xFF) << {1})'
 ),
 VariationType(
     type = 'GskMaskMode',
     bits = 8,
-    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)',
+    c_flag = '(({0} & 0xFF) << {1})'
 ),
 VariationType(
     type = 'GskPorterDuff',
     bits = 8,
-    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)'
+    glsl_string = '((GSK_VARIATION >> {0}u) & 255u)',
+    c_flag = '(({0} & 0xFF) << {1})'
+),
+VariationType(
+    type = 'GskRepeat',
+    bits = 4,
+    glsl_string = '((GSK_VARIATION >> {0}u) & 15u)',
+    c_flag = '(({0} & 0xF) << {1})'
 ),
 ]
+
+def strtobool (val, file_line):
+    if val.lower() in [ 'true' ]:
+        return True;
+    elif val.lower() in [ 'false' ]:
+        return False;
+    else:
+        raise Exception (f'''{file_line} Expected "true" or "false"''')
 
 def read_file (filename):
     lines = open(filename).readlines()
@@ -236,6 +261,8 @@ def read_file (filename):
     on = False
     n_textures = 0
     n_instances = 6
+    acs_premultiplied = False
+    acs_equals_ccs = False
     name = ''
     var_name = ''
     struct_name = ''
@@ -278,6 +305,10 @@ def read_file (filename):
             var_name = match.group(1)
         elif match := re.search (r'^struct_name\s*=\s*"(\w+)"\s*;$', line):
             struct_name = match.group(1)
+        elif match := re.search (r'^acs_premultiplied\s*=\s*(\w+)\s*;$', line):
+            acs_premultiplied = strtobool (match.group(1), filename + ':' + str (pos))
+        elif match := re.search (r'^acs_equals_ccs\s*=\s*(\w+)\s*;$', line):
+            acs_equals_ccs = strtobool (match.group(1), filename + ':' + str (pos))
         else:
             raise Exception (f'''{filename}:{pos}: Could not parse line''')
     
@@ -294,6 +325,8 @@ def read_file (filename):
                  struct_name = struct_name,
                  n_textures = n_textures,
                  n_instances = n_instances,
+                 acs_premultiplied = acs_premultiplied,
+                 acs_equals_ccs = acs_equals_ccs,
                  variables = variables,
                  variations = variations)
 
@@ -357,31 +390,146 @@ struct _{file.struct_name}Instance {{''');
     print (f'''}};
 ''')
 
-def print_c_struct_initializer (file, n_attributes, attributes):
-    indent = len (f'''{file.var_name}_instance_init (''')
-    type_len = max (map (lambda var: len ((('const ' if var.type.pointer else '') + var.type.type)), file.variables))
-    type_len = max (type_len, len (file.struct_name + 'Instance'))
-    print (f'''static inline void
-{file.var_name}_instance_init ({(file.struct_name + 'Instance').ljust(type_len)} *instance,
-{''.ljust(indent)}{'GdkColorState'.ljust(type_len)} *color_space,
-{''.ljust(indent)}{'const graphene_point_t'.ljust(type_len)} *offset,
-{''.ljust(indent)}{'float'.ljust(type_len)}  opacity,''')
+@dataclass
+class FunctionArg:
+    type: str
+    pointer: bool
+    name: str
 
-    variables = [var for var in file.variables if var.name != 'opacity']
-    for pos, var in enumerate (variables):
+def print_c_function (retval, name, args, is_prototype):
+    indent = len (name) + 2
+    type_len = max (map (lambda arg: len (arg.type), args))
+    
+    print (retval)
+    if args:
+        print (f'''{name} ({args[0].type.ljust(type_len)} {'*' if args[0].pointer else ' '}{args[0].name}{',' if len (args) > 1 else (');' if is_prototype else ')')}''')
+    else:
+        print (f'''{name} (void){';' if is_prototype else ''}''')
+
+    for pos, arg in enumerate (args[1:], 2):
+        print (f'''{' '.ljust(indent)}{arg.type.ljust(type_len)} {'*' if arg.pointer else ' '}{arg.name}{',' if pos < len (args) else (');' if is_prototype else ')')}''')
+
+def print_c_print_function (file):
+    print_c_function ('static void',
+                      file.var_name + '_op_print_instance',
+                      [ FunctionArg ('GskGpuShaderOp', True,  'shader'),
+                        FunctionArg ('gpointer',       False, 'instance'),
+                        FunctionArg ('GString',        True,  'string') ],
+                      False)
+    print (f'''{{
+  /* FIXME: Implement */
+}}
+''')
+
+def print_c_shader_op_class (file):
+    print (f'''static const GskGpuShaderOpClass {file.var_name.upper()}_OP_CLASS = {{
+  {{
+    GSK_GPU_OP_SIZE (GskGpuShaderOp),
+    GSK_GPU_STAGE_SHADER,
+    gsk_gpu_shader_op_finish,
+    gsk_gpu_shader_op_print,
+#ifdef GDK_RENDERING_VULKAN
+    gsk_gpu_shader_op_vk_command,
+#endif
+    gsk_gpu_shader_op_gl_command
+  }},
+  "gskgpu{file.name}",
+  {file.n_textures},
+  {file.n_instances},
+  sizeof ({file.struct_name}Instance),
+#ifdef GDK_RENDERING_VULKAN
+  &{file.var_name}_info,
+#endif
+  {file.var_name}_op_print_instance,
+  {file.var_name}_setup_attrib_locations,
+  {file.var_name}_setup_vao
+}};
+''')
+
+def print_c_struct_initializer (file, n_attributes, attributes):
+    args = [ FunctionArg (file.struct_name + 'Instance', True,  'instance'),
+             FunctionArg ('GdkColorState',               True,  'acs'),
+             FunctionArg ('float',                       False, 'opacity'),
+             FunctionArg ('const graphene_point_t',      True,  'offset') ]
+    for var in file.variables:
         if var.name == 'opacity':
             continue
-        print (f'''{''.ljust(indent)}{(('const ' if var.type.pointer else '') + var.type.type).ljust (type_len)} {'*' if var.type.pointer else ' '}{var.name}{',' if (pos + 1 < len (variables)) else ')'}''')
+        args.append (FunctionArg (('const ' if var.type.pointer else '') + var.type.type, var.type.pointer, var.name))
+
+    print_c_function ('static inline void',
+                      f'''{file.var_name}_instance_init''',
+                      args,
+                      False)
 
     print (f'''{{''')
     for attr in attributes:
         size = 0
         for var in attr.inputs:
-            print (var.type.struct_initializer ('  ', var.name, attr.name, size))
+            print (var.type.struct_initializer ('  ', 'instance->', var.name, attr.name, size))
             size += var.type.size
 
     print (f'''}}
 ''')
+
+def print_c_invocation (file, n_attributes, attributes, prototype_only):
+    args = [ FunctionArg ('GskGpuFrame',                 True,  'frame'),
+             FunctionArg ('GskGpuShaderClip',            False, 'clip'),
+             FunctionArg ('GdkColorState',               True,  'ccs') ]
+    if not file.acs_equals_ccs:
+        args.append (FunctionArg ('GdkColorState',               True,  'acs'))
+    args += [ FunctionArg ('float',                       False, 'opacity'),
+              FunctionArg ('const graphene_point_t',      True,  'offset') ]
+
+    for i in range(1, file.n_textures + 1):
+        args += [ FunctionArg ('GskGpuImage',             True, 'image' + str (i)),
+                  FunctionArg ('GskGpuSampler',           False, 'sampler' + str (i)) ]
+
+    for var in file.variations:
+        args.append (FunctionArg (var.type.type, False, 'variation_' + var.name))
+    for var in file.variables:
+        if var.name == 'opacity':
+            continue
+        args.append (FunctionArg (('const ' if var.type.pointer else '') + var.type.type, var.type.pointer, var.name))
+
+    print_c_function ('void',
+                      f'''{file.var_name}_op''',
+                      args,
+                      prototype_only)
+
+    if prototype_only:
+        return
+
+    print (f'''{{
+  {file.struct_name}Instance *instance;
+
+  gsk_gpu_shader_op_alloc (frame,
+                           &{file.var_name.upper()}_OP_CLASS,
+                           ccs ? gsk_gpu_color_states_create (ccs, TRUE, {'ccs' if file.acs_equals_ccs else 'acs'}, {'TRUE' if file.acs_premultiplied else 'FALSE'})
+                               : gsk_gpu_color_states_create_equal (TRUE, {'TRUE' if file.acs_premultiplied else 'FALSE'}),''')
+    if file.variations:
+        for pos, var in enumerate (file.variations, 1):
+            print (f'''                           {var.type.to_c_flag ('variation_' + var.name, var.offset_bits)}{' |' if pos < len (file.variations) else ','}''')
+
+    else:
+        print (f'''                           0,''')
+    print (f'''                           clip,''')
+    if file.n_textures > 0:
+        print (f'''                           (GskGpuImage *[{file.n_textures}]) {{ {', '.join (map (lambda x: 'image' + str(x), range(1, file.n_textures + 1)))} }},
+                           (GskGpuSampler[{file.n_textures}]) {{ {', '.join (map (lambda x: 'sampler' + str(x), range(1, file.n_textures + 1)))} }},''')
+    else:
+        print (f'''                           NULL,
+                           NULL,''')
+    print (f'''                           &instance);''')
+
+    for attr in attributes:
+        size = 0
+        for var in attr.inputs:
+            print (var.type.struct_initializer ('  ', 'instance->', var.name, attr.name, size))
+            size += var.type.size
+
+    print (f'''}}
+''')
+
 
 def print_gl_setup_vao (file, n_attributes, attributes):
     print(f'''static inline void
@@ -452,22 +600,59 @@ def print_glsl_file (file, n_attributes, attributes):
     print_glsl_variations (file.variations)
     print_glsl_attributes (attributes)
 
-def print_header_file (file, n_attributes, attributes):
+def print_old_header_file (file, n_attributes, attributes):
     print (f'''/* This file is auto-generated; changes will not be preserved */
 #pragma once
 
-#define {file.var_name}_n_textures {file.n_textures}
+#include "gskgpushaderopprivate.h"
+#include "gskgradientprivate.h" /* for GskRepeat */
+''')
+
+    print (f'''#define {file.var_name}_n_textures {file.n_textures}
 #define {file.var_name}_n_instances {file.n_instances}
 ''')
+    #print_c_struct_initializer (file, n_attributes, attributes)
     print_c_struct (file, n_attributes, attributes)
-    print_c_struct_initializer (file, n_attributes, attributes)
     print_gl_setup_vao (file, n_attributes, attributes)
     print_gl_attrib_locations (file, n_attributes, attributes)
     print_vulkan_info (file, n_attributes, attributes)
 
+def print_header_file (file, n_attributes, attributes):
+    print (f'''/* This file is auto-generated; changes will not be preserved */
+#pragma once
+
+#include "gskgpushaderopprivate.h"
+#include "gskgradientprivate.h" /* for GskRepeat */
+#include "gsk/gskroundedrectprivate.h"
+''')
+    print_c_invocation (file, n_attributes, attributes, True)
+
+def print_source_file (file, n_attributes, attributes):
+    print (f'''/* This file is auto-generated; changes will not be preserved */
+
+#include "config.h"
+
+#include "gskgpu{file.name}opprivate.h"
+
+#include "gskgpushaderopprivate.h"
+#include "gskrectprivate.h"
+#include <graphene.h>
+
+''')
+    print_c_struct (file, n_attributes, attributes)
+    print_c_print_function (file)
+    print_gl_setup_vao (file, n_attributes, attributes)
+    print_gl_attrib_locations (file, n_attributes, attributes)
+    print_vulkan_info (file, n_attributes, attributes)
+    print_c_shader_op_class (file)
+    print_c_invocation (file, n_attributes, attributes, False)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument ('--generate-glsl', action='store_true', help='Generate GLSL includes')
+parser.add_argument ('--generate-old-header', action='store_true', help='Generate old version of C header')
 parser.add_argument ('--generate-header', action='store_true', help='Generate C header')
+parser.add_argument ('--generate-source', action='store_true', help='Generate C source')
 parser.add_argument ('FILES', nargs='*', help='Input files')
 args = parser.parse_args()
 
@@ -477,5 +662,10 @@ for path in args.FILES:
 
     if args.generate_glsl:
         print_glsl_file (file, n_attributes,attributes)
+    if args.generate_old_header:
+        print_old_header_file (file, n_attributes, attributes)
     if args.generate_header:
         print_header_file (file, n_attributes, attributes)
+    if args.generate_source:
+        print_source_file (file, n_attributes, attributes)
+
