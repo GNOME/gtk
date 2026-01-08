@@ -11,11 +11,11 @@ gsk_private_gpu_include_shaders = files([
 ])
 
 converted_again_shaders = files([
+  'gskgpuarithmetic.glsl',
   'gskgpucolor.glsl',
 ])
 
 converted_shaders = files([
-  'gskgpuarithmetic.glsl',
   'gskgpuborder.glsl',
   'gskgpublendmode.glsl',
   'gskgpublur.glsl',

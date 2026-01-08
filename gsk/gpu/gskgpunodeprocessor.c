@@ -3010,12 +3010,12 @@ static void
 gsk_gpu_node_processor_add_arithmetic_node (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
 {
-  float k[4];
+  float k1, k2, k3, k4;
   GskRenderNode *first_child, *second_child;
   graphene_rect_t first_rect, second_rect;
   GskGpuImage *first_image, *second_image;
 
-  gsk_arithmetic_node_get_factors (node, &k[0], &k[1], &k[2], &k[3]);
+  gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
 
   first_child = gsk_arithmetic_node_get_first_child (node);
   second_child = gsk_arithmetic_node_get_second_child (node);
@@ -3047,22 +3047,17 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuNodeProcessor *self,
 
   gsk_gpu_arithmetic_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                         &node->bounds,
-                         &self->offset,
+                         self->ccs,
                          self->opacity,
-                         k,
-                         &(GskGpuShaderImage) {
-                             first_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             NULL,
-                             &first_rect
-                         },
-                         &(GskGpuShaderImage) {
-                             second_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             NULL,
-                             &second_rect
-                         });
+                         &self->offset,
+                         first_image,
+                         GSK_GPU_SAMPLER_DEFAULT,
+                         second_image,
+                         GSK_GPU_SAMPLER_DEFAULT,
+                         &node->bounds,
+                         &first_rect,
+                         &second_rect,
+                         k1, k2, k3, k4);
 
   g_object_unref (first_image);
   g_object_unref (second_image);
