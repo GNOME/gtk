@@ -34,10 +34,14 @@ main (int argc, char *argv[])
   gboolean allow_shrink = FALSE;
   gboolean show_rsvg = TRUE;
   gboolean show_gtk = TRUE;
+  gboolean show_png = TRUE;
+  int size = 24;
   const GOptionEntry entries[] = {
     { "no-rsvg", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &show_rsvg, "Don't show rsvg rendering", NULL },
     { "no-gtk", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &show_gtk, "Don't show gtk rendering", NULL },
+    { "no-png", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &show_png, "Don't show reference image", NULL },
     { "allow-shrink", 0, 0, G_OPTION_ARG_NONE, &allow_shrink, "Allow to shrink rendering", NULL },
+    { "size", 0, 0, G_OPTION_ARG_INT, &size, "Minimum size" },
     { NULL, 0 },
   };
   GError *error = NULL;
@@ -122,6 +126,13 @@ main (int argc, char *argv[])
       gtk_grid_attach (GTK_GRID (grid), label, 2, -1, 1, 1);
     }
 
+  if (show_png)
+    {
+      label = gtk_label_new ("png");
+      gtk_label_set_xalign (GTK_LABEL (label), 0.5);
+      gtk_grid_attach (GTK_GRID (grid), label, 3, -1, 1, 1);
+    }
+
   row = 0;
   for (unsigned int i = 0; i < files->len; i++)
     {
@@ -153,6 +164,7 @@ main (int argc, char *argv[])
             {
               img = gtk_picture_new_for_paintable (svg);
               gtk_picture_set_can_shrink (GTK_PICTURE (img), allow_shrink);
+              gtk_widget_set_size_request (img, size, size);
               gtk_grid_attach (GTK_GRID (grid), img, 1, row, 1, 1);
               g_object_unref (svg);
             }
@@ -166,6 +178,7 @@ main (int argc, char *argv[])
             {
               img = gtk_picture_new_for_paintable (svg);
               gtk_picture_set_can_shrink (GTK_PICTURE (img), allow_shrink);
+              gtk_widget_set_size_request (img, size, size);
               gtk_grid_attach (GTK_GRID (grid), img, 2, row, 1, 1);
               g_object_unref (svg);
               g_bytes_unref (bytes);
@@ -175,6 +188,29 @@ main (int argc, char *argv[])
               g_warning ("%s", error->message);
               g_clear_error (&error);
             }
+        }
+
+      if (show_png)
+        {
+          char *png_path = g_strdup (path);
+          GdkPaintable *paintable;
+
+          png_path[strlen (path) - 3] = 'p';
+          png_path[strlen (path) - 2] = 'n';
+          png_path[strlen (path) - 1] = 'g';
+
+          paintable = GDK_PAINTABLE (gdk_texture_new_from_filename (png_path, NULL));
+          if (paintable)
+            {
+              img = gtk_picture_new_for_paintable (paintable);
+              gtk_picture_set_can_shrink (GTK_PICTURE (img), allow_shrink);
+              gtk_widget_set_size_request (img, size, size);
+              gtk_widget_set_halign (img, GTK_ALIGN_START);
+              gtk_grid_attach (GTK_GRID (grid), img, 3, row, 1, 1);
+              g_object_unref (paintable);
+            }
+
+          g_free (png_path);
         }
 
       row++;
