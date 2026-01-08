@@ -38,7 +38,9 @@
   <use
           font-weight='400'
           font-size='16'
-          href='#circle2'>
+          href='#circle2'
+          width='0'
+          height='0'>
     <animate
             attributeName='href'
             begin='0ms'
