@@ -14602,7 +14602,8 @@ parse_shape_attrs (Shape                *shape,
           shape->id = g_strdup (attr_values[i]);
           *handled |= BIT (i);
         }
-      else if (shape_attr_lookup (attr_names[i], shape->type, &attr, &deprecated))
+      else if (shape_attr_lookup (attr_names[i], shape->type, &attr, &deprecated) &&
+               !shape_attr_only_css (attr))
         {
           if (shape_has_attr (shape->type, attr))
             {
