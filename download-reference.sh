@@ -5,7 +5,7 @@
 PROJECTS=( \
 	"gtk main reference" \
         "gdk-pixbuf master reference" \
-#	"glib main msys2-mingw32" \
+	"glib main msys2-mingw32" \
 	"glib main fedora-x86_64" \
 )
 
