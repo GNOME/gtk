@@ -10,6 +10,9 @@ gsk_private_gpu_include_shaders = files([
   'roundedrect.glsl',
 ])
 
+converted_again_shaders = files([
+])
+
 converted_shaders = files([
   'gskgpuarithmetic.glsl',
   'gskgpuborder.glsl',
@@ -29,7 +32,7 @@ converted_shaders = files([
   'gskgpumask.glsl',
   'gskgpuroundedcolor.glsl',
   'gskgputexture.glsl',
-])
+]) + converted_again_shaders
 
 gsk_private_gpu_shaders = files([
   'gskgpuconicgradient.glsl',
@@ -38,6 +41,7 @@ gsk_private_gpu_shaders = files([
 ]) + converted_shaders
 
 gsk_private_gpu_shader_headers = []
+gsk_generated_gpu_shader_sources = []
 gsk_private_gpu_gl_shaders = []
 gsk_private_gpu_vulkan_shaders = []
 
@@ -46,7 +50,22 @@ generate_interface = find_program('generate-glsl-interface.py')
 process_includes = find_program('process-glsl-includes.py')
 
 foreach shader: gsk_private_gpu_shaders
-  instance = fs.name (fs.replace_suffix (shader, '')) + 'instance.h'
+  if (converted_again_shaders.contains (shader))
+    source_file = fs.name (fs.replace_suffix (shader, '')) + 'op.c'
+    instance = fs.name (fs.replace_suffix (shader, '')) + 'opprivate.h'
+    shader_source = custom_target(source_file,
+                                  output: source_file,
+                                  input: shader,
+                                  command: [
+                                    generate_interface,
+                                    '--generate-source',
+                                    '@INPUT@',
+                                  ],
+                                  capture: true)
+  else
+    instance = fs.name (fs.replace_suffix (shader, '')) + 'instance.h'
+    shader_source = []
+  endif
   if (converted_shaders.contains (shader))
     glsl_instance = fs.name (fs.replace_suffix (shader, '')) + 'instance.glsl'
     shader_header = custom_target(instance,
@@ -54,7 +73,9 @@ foreach shader: gsk_private_gpu_shaders
                                   input: shader,
                                   command: [
                                     generate_interface,
-                                    '--generate-header',
+                                    converted_again_shaders.contains (shader) 
+                                    ? '--generate-header' 
+                                    : '--generate-old-header',
                                     '@INPUT@',
                                   ],
                                   capture: true)
@@ -77,10 +98,12 @@ foreach shader: gsk_private_gpu_shaders
                                     '@INPUT@',
                                   ],
                                   capture: true)
+    shader_source = []
     shader_glsl = []
   endif
 
   gsk_private_gpu_shader_headers += shader_header
+  gsk_generated_gpu_shader_sources += shader_source
 
   gl_shader_name = fs.name (shader)
   gl_shader = custom_target (gl_shader_name,
