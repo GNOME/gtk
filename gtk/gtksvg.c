@@ -10012,6 +10012,7 @@ shape_get_current_bounds (Shape                 *shape,
                           graphene_rect_t       *bounds)
 {
   graphene_rect_t b;
+  gboolean has_any;
   gboolean ret = FALSE;
 
   graphene_rect_init_from_rect (&b, graphene_rect_zero ());
@@ -10051,20 +10052,25 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_MARKER:
     case SHAPE_SVG:
     case SHAPE_SYMBOL:
+      has_any = FALSE;
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
           Shape *sh = g_ptr_array_index (shape->shapes, i);
           graphene_rect_t b2;
 
+          if (svg_enum_get (sh->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+            continue;
+
           if (shape_get_current_bounds (sh, viewport, &b2))
             {
-              if (i == 0)
+              if (!has_any)
                 graphene_rect_init_from_rect (&b, &b2);
               else
                 graphene_rect_union (&b, &b2, &b);
+              has_any = TRUE;
             }
         }
-      ret = TRUE;
+      ret = has_any;
       break;
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
