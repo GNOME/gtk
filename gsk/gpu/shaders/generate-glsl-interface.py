@@ -79,8 +79,8 @@ class Type:
     size: int
     struct_init: str
 
-    def struct_initializer (self, indent, var_name, struct_member, offset):
-        return self.struct_init.format (indent, var_name, struct_member, offset);
+    def struct_initializer (self, indent, instance_name, var_name, struct_member, offset):
+        return self.struct_init.format (indent, instance_name, var_name, struct_member, offset);
 
 @dataclass
 class VariationType:
@@ -132,71 +132,71 @@ Type(
     pointer = False,
     var_type = VarType.FLOAT,
     size = 1,
-    struct_init = '{0}instance->{2}[{3}] = {1};'
+    struct_init = '{0}{1}{3}[{4}] = {2};'
 ),
 Type(
     type = 'guint32',
     pointer = False,
     var_type = VarType.UINT,
     size = 1,
-    struct_init = '{0}instance->{2}[{3}] = {1};'
+    struct_init = '{0}{1}{3}[{4}] = {2};'
 ),
 Type(
     type = 'graphene_point_t',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
-    struct_init = '{0}gsk_gpu_point_to_float ({1}, offset, &instance->{2}[{3}]);'
+    struct_init = '{0}gsk_gpu_point_to_float ({2}, offset, &{1}{3}[{4}]);'
 ),
 Type(
     type = 'graphene_size_t',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
-    struct_init = '{0}instance->{2}[{3}] = {1}->width;\n'
-                  '{0}instance->{2}[{3} + 1] = {1}->height;'
+    struct_init = '{0}{1}{3}[{4}] = {2}->width;\n'
+                  '{0}{1}{3}[{4} + 1] = {2}->height;'
 ),
 Type(
     type = 'graphene_vec2_t',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
-    struct_init = '{0}graphene_vec2_to_float ({1}, instance->{2});'
+    struct_init = '{0}graphene_vec2_to_float ({2}, {1}{3});'
 ),
 Type(
     type = 'graphene_vec4_t',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}graphene_vec4_to_float ({1}, instance->{2});'
+    struct_init = '{0}graphene_vec4_to_float ({2}, {1}{3});'
 ),
 Type(
     type = 'graphene_rect_t',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gsk_gpu_rect_to_float ({1}, offset, instance->{2});'
+    struct_init = '{0}gsk_gpu_rect_to_float ({2}, offset, {1}{3});'
 ),
 Type(
     type = 'GskRoundedRect',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 12,
-    struct_init = '{0}gsk_rounded_rect_to_float ({1}, offset, instance->{2});'
+    struct_init = '{0}gsk_rounded_rect_to_float ({2}, offset, {1}{3});'
 ),
 Type(
     type = 'graphene_matrix_t',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 16,
-    struct_init = '{0}graphene_matrix_to_float ({1}, instance->{2});'
+    struct_init = '{0}graphene_matrix_to_float ({2}, {1}{3});'
 ),
 Type(
     type = 'GdkColor',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gsk_gpu_color_to_float ({1}, color_space, opacity, instance->{2});'
+    struct_init = '{0}gsk_gpu_color_to_float ({2}, acs, opacity, {1}{3});'
 ),
 ]
 
