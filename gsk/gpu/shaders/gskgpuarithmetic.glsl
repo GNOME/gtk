@@ -1,10 +1,15 @@
 #ifdef GSK_PREAMBLE
 textures = 2;
+acs_equals_ccs = true;
+acs_premultiplied = true;
 
 graphene_rect_t rect;
 graphene_rect_t first_rect;
 graphene_rect_t second_rect;
-graphene_vec4_t factors;
+float k1;
+float k2;
+float k3;
+float k4;
 float opacity;
 #endif
 
@@ -30,7 +35,7 @@ run (out vec2 pos)
 
   _pos = pos;
   _opacity = in_opacity;
-  _factors = in_factors;
+  _factors = vec4(in_k1, in_k2, in_k3, in_k4);
 
   Rect first_rect = rect_from_gsk (in_first_rect);
   _first_rect = first_rect;
