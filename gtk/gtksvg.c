@@ -19761,6 +19761,9 @@ generate_layouts (Shape           *self,
 
   g_assert (shape_type_has_text (self->type));
 
+  if (svg_enum_get (self->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+    return FALSE;
+
   if (!x)
     x = &xs;
   if (!y)
@@ -19864,12 +19867,20 @@ fill_text (Shape                 *self,
   for (guint i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
+
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
           {
             SvgPaint *cpaint = paint;
             const graphene_rect_t *cbounds = bounds;
+
+            if (svg_enum_get (node->shape.shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+              continue;
+
+            if (svg_enum_get (node->shape.shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
+              continue;
+
             if (_gtk_bitmask_get (node->shape.shape->attrs, SHAPE_ATTR_FILL))
               {
                 cpaint = (SvgPaint *) node->shape.shape->current[SHAPE_ATTR_FILL];
@@ -19943,12 +19954,20 @@ stroke_text (Shape                 *self,
   for (guint i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
+
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
           {
             SvgPaint *cpaint = paint;
             const graphene_rect_t *cbounds = bounds;
+
+            if (svg_enum_get (node->shape.shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+              continue;
+
+            if (svg_enum_get (node->shape.shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
+              continue;
+
             if (_gtk_bitmask_get (node->shape.shape->attrs, SHAPE_ATTR_STROKE))
               {
                 cpaint = (SvgPaint *) node->shape.shape->current[SHAPE_ATTR_STROKE];
@@ -20132,6 +20151,9 @@ paint_shape (Shape        *shape,
       graphene_rect_t bounds;
       GskStroke *stroke;
       float dx, dy;
+
+      if (svg_enum_get (shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+        return;
 
       if (svg_enum_get (shape->current[SHAPE_ATTR_VISIBILITY]) == VISIBILITY_HIDDEN)
         return;
