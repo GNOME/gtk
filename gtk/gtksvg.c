@@ -1736,8 +1736,7 @@ svg_path_data_parse (const char *string)
 
   if (!gsk_path_parse_full (string, &parser, p))
     {
-      svg_path_data_free (p);
-      return NULL;
+      /* TODO: emit an error */
     }
 
   return p;
