@@ -3556,7 +3556,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 
       wl_surface_destroy (impl->display_server.wl_surface);
       impl->display_server.wl_surface = NULL;
-      impl->surface_callback = NULL;
+      g_clear_pointer (&impl->surface_callback, wl_callback_destroy);
 
       g_slist_free (impl->display_server.outputs);
       impl->display_server.outputs = NULL;
