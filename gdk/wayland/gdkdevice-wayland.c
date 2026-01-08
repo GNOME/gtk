@@ -610,7 +610,9 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
     return;
 
   if (seat->grab_cursor)
-    cursor = seat->grab_cursor;
+    cursor = g_object_ref (seat->grab_cursor);
+  else if (cursor)
+    cursor = g_object_ref (cursor);
 
   /* Setting the cursor to NULL means that we should use
    * the default cursor
@@ -624,17 +626,23 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
                                                              scale);
     }
   else
-    _gdk_wayland_cursor_set_scale (cursor, pointer->current_output_scale);
+    {
+      _gdk_wayland_cursor_set_scale (cursor, pointer->current_output_scale);
+    }
 
   if (cursor == pointer->cursor)
-    return;
+    {
+      if (cursor)
+        g_object_unref (cursor);
+      return;
+    }
 
   gdk_wayland_pointer_stop_cursor_animation (pointer);
 
   if (pointer->cursor)
     g_object_unref (pointer->cursor);
 
-  pointer->cursor = g_object_ref (cursor);
+  pointer->cursor = cursor;
 
   gdk_wayland_device_update_window_cursor (device);
 }
