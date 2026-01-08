@@ -3138,10 +3138,21 @@ typedef enum
   VISIBILITY_VISIBLE,
 } Visibility;
 
-DEFINE_ENUM (VISIBILITY, visibility, Visibility,
+DEFINE_ENUM_NO_PARSE (VISIBILITY, visibility, Visibility,
   DEFINE_ENUM_VALUE (VISIBILITY, VISIBILITY_HIDDEN, "hidden"),
   DEFINE_ENUM_VALUE (VISIBILITY, VISIBILITY_VISIBLE, "visible")
 )
+
+/* Accept other values too, but treat "collapse" as "hidden" */
+static SvgValue *
+svg_visibility_parse (const char *string)
+{
+  if (match_str (string, "hidden") ||
+      match_str (string, "collapse"))
+    return svg_visibility_new (VISIBILITY_HIDDEN);
+  else
+    return svg_visibility_new (VISIBILITY_VISIBLE);
+}
 
 typedef enum
 {
