@@ -66,6 +66,7 @@ test_data = [
   'linear-gradient7.svg',
   'linear-gradient8.svg',
   'linear-gradient9.svg',
+  'linear-gradient10.svg',
   'marker1.svg',
   'marker2.svg',
   'marker3.svg',
