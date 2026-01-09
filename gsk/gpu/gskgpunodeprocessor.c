@@ -70,6 +70,7 @@
 #include "gsksubsurfacenode.h"
 #include "gsktextnodeprivate.h"
 #include "gsktexturenode.h"
+#include "gsktexturescalenode.h"
 #include "gsktransformnode.h"
 #include "gsktransformprivate.h"
 #include "gskprivate.h"
