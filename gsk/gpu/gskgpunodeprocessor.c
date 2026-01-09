@@ -2742,28 +2742,59 @@ gsk_gpu_node_processor_radial_gradient_op (GskGpuNodeProcessor   *self,
                                            const GskGradientStop *stops,
                                            gsize                  n_stops)
 {
-  const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
+  const graphene_point_t *start_center, *end_center;
+  float start_radius, end_radius, aspect_ratio;
+  const GskGradient *gradient;
+  GdkColor colors[7];
+  graphene_vec4_t offsets[2];
+  graphene_vec4_t hints[2];
+
+  gradient = gsk_gradient_node_get_gradient (node);
+  start_center = gsk_radial_gradient_node_get_start_center (node);
+  start_radius = gsk_radial_gradient_node_get_start_radius (node);
+  end_center = gsk_radial_gradient_node_get_end_center (node);
+  end_radius = gsk_radial_gradient_node_get_end_radius (node);
+  aspect_ratio = gsk_radial_gradient_node_get_aspect_ratio (node);
+
+  gsk_gpu_color_stops_to_shader (stops,
+                                 n_stops,
+                                 gsk_gradient_get_interpolation (gradient),
+                                 gsk_gradient_get_hue_interpolation (gradient),
+                                 colors,
+                                 offsets,
+                                 hints);
+
   gsk_gpu_radial_gradient_op (self->frame,
                               gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                               target,
+                              gsk_gradient_get_interpolation (gradient),
                               self->opacity,
                               &self->offset,
-                              gsk_gradient_get_interpolation (gradient),
-                              gsk_gradient_get_hue_interpolation (gradient),
+                              gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GRADIENTS),
+                              graphene_point_equal (start_center, end_center),
                               gsk_gradient_get_repeat (gradient),
                               &node->bounds,
-                              gsk_radial_gradient_node_get_start_center (node),
+                              &colors[0],
+                              &colors[1],
+                              &colors[2],
+                              &colors[3],
+                              &colors[4],
+                              &colors[5],
+                              &colors[6],
+                              &offsets[0],
+                              &offsets[1],
+                              &hints[0],
+                              &hints[1],
+                              start_center,
                               &GRAPHENE_SIZE_INIT (
-                                  gsk_radial_gradient_node_get_start_radius (node),
-                                  gsk_radial_gradient_node_get_start_radius (node) / gsk_radial_gradient_node_get_aspect_ratio (node)
+                                  start_radius,
+                                  start_radius / aspect_ratio
                               ),
-                              gsk_radial_gradient_node_get_end_center (node),
+                              end_center,
                               &GRAPHENE_SIZE_INIT (
-                                  gsk_radial_gradient_node_get_end_radius (node),
-                                  gsk_radial_gradient_node_get_end_radius (node) / gsk_radial_gradient_node_get_aspect_ratio (node)
-                              ),
-                              stops,
-                              n_stops);
+                                  end_radius,
+                                  end_radius / aspect_ratio
+                              ));
 }
 
 static void

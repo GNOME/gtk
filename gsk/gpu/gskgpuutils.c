@@ -159,3 +159,113 @@ gsk_gpu_color_state_apply_conversion (GdkColorState    *color_state,
       return NULL;
   }
 }
+
+static float
+adjust_hue (GskHueInterpolation  interp,
+            float                h1,
+            float                h2)
+{
+  float d;
+
+  d = h2 - h1;
+
+  while (d > 360)
+    {
+      h2 -= 360;
+      d = h2 - h1;
+    }
+  while (d < -360)
+    {
+      h2 += 360;
+      d = h2 - h1;
+    }
+
+  g_assert (fabsf (d) <= 360);
+
+  switch (interp)
+    {
+    case GSK_HUE_INTERPOLATION_SHORTER:
+      {
+        if (d > 180)
+          h2 -= 360;
+        else if (d < -180)
+          h2 += 360;
+      }
+      g_assert (fabsf (h2 - h1) <= 180);
+      break;
+
+   case GSK_HUE_INTERPOLATION_LONGER:
+      {
+        if (0 < d && d < 180)
+          h2 -= 360;
+        else if (-180 < d && d <= 0)
+          h2 += 360;
+      g_assert (fabsf (h2 - h1) >= 180);
+      }
+      break;
+
+    case GSK_HUE_INTERPOLATION_INCREASING:
+      if (h2 < h1)
+        h2 += 360;
+      d = h2 - h1;
+      g_assert (h1 <= h2);
+      break;
+
+    case GSK_HUE_INTERPOLATION_DECREASING:
+      if (h1 < h2)
+        h2 -= 360;
+      d = h2 - h1;
+      g_assert (h1 >= h2);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return h2;
+}
+
+void
+gsk_gpu_color_stops_to_shader (const GskGradientStop *stops,
+                               gsize                  n_stops,
+                               GdkColorState         *color_state,
+                               GskHueInterpolation    interp,
+                               GdkColor               colors[7],
+                               graphene_vec4_t        offsets[2],
+                               graphene_vec4_t        hints[2])
+{
+  GdkColorChannel channel;
+  float o[8], h[8];
+  gsize i;
+
+  for (i = 0; i < n_stops; i++)
+    {
+      gdk_color_convert (&colors[i], color_state, &stops[i].color);
+      o[i] = stops[i].offset;
+      h[i] = stops[i].transition_hint;
+    }
+  for (; i < 7; i++)
+    {
+      colors[i] = colors[i-1];
+      o[i] = o[i-1];
+      h[i] = h[i-1];
+    }
+
+  if (gdk_color_state_get_hue_channel (color_state, &channel))
+    {
+      for (i = 1; i < n_stops; i++)
+        {
+          colors[i].values[channel] = adjust_hue (interp,
+                                                  colors[i-1].values[channel],
+                                                  colors[i].values[channel]);
+        }
+      for (; i < 7; i++)
+        colors[i].values[channel] = colors[i-1].values[channel];
+    }
+
+  graphene_vec4_init_from_float (&offsets[0], &o[0]);
+  graphene_vec4_init_from_float (&offsets[1], &o[4]);
+  graphene_vec4_init_from_float (&hints[0], &h[0]);
+  graphene_vec4_init_from_float (&hints[1], &h[4]);
+}
+
