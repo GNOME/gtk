@@ -50,10 +50,13 @@
 #include <gsk/gskrepeatnode.h>
 #include <gsk/gskroundedclipnode.h>
 #include <gsk/gskroundedrect.h>
+#include <gsk/gskshadownode.h>
 #include <gsk/gskstroke.h>
 #include <gsk/gskstrokenode.h>
 #include <gsk/gsksubsurfacenode.h>
 #include <gsk/gsktextnode.h>
+#include <gsk/gsktexturenode.h>
+#include <gsk/gsktexturescalenode.h>
 #include <gsk/gsktransform.h>
 #include <gsk/gsktransformnode.h>
 #include <gsk/gskglshader.h>

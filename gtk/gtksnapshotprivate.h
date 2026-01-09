@@ -23,6 +23,7 @@
 #include "gsk/gskrendernodeprivate.h"
 /* for GskRepeat */
 #include "gsk/gskgradientprivate.h"
+#include "gsk/gskshadownodeprivate.h"
 
 G_BEGIN_DECLS
 

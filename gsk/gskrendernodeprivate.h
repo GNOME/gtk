@@ -178,27 +178,6 @@ GskRenderNode *         gsk_outset_shadow_node_new2             (const GskRounde
 const GdkColor *        gsk_outset_shadow_node_get_gdk_color    (const GskRenderNode    *node);
 const graphene_point_t *gsk_outset_shadow_node_get_offset       (const GskRenderNode    *node);
 
-typedef struct _GskShadowEntry GskShadowEntry;
-struct _GskShadowEntry
-{
-  GdkColor color;
-  graphene_point_t offset;
-  float radius;
-};
-
-GskRenderNode * gsk_shadow_node_new2                    (GskRenderNode        *child,
-                                                         const GskShadowEntry *shadows,
-                                                         gsize                 n_shadows);
-
-const GskShadowEntry *gsk_shadow_node_get_shadow_entry  (const GskRenderNode  *node,
-                                                         gsize                 i);
-
-GskRenderNode * gsk_text_node_new2                      (PangoFont              *font,
-                                                         PangoGlyphString       *glyphs,
-                                                         const GdkColor         *color,
-                                                         const graphene_point_t *offset);
-const GdkColor *gsk_text_node_get_gdk_color             (const GskRenderNode    *node);
-
 
 #define GSK_RENDER_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
 

@@ -34,6 +34,7 @@
 #include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 #include "gsk/gskstrokeprivate.h"
+#include "gsk/gsktextnodeprivate.h"
 
 #include "gtk/gskpangoprivate.h"
 

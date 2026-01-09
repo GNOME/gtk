@@ -21,8 +21,10 @@
 #include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
+#include "gskshadownode.h"
 #include "gsksubsurfacenode.h"
 #include "gsktransformnode.h"
+#include "gsktexturenode.h"
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdktextureprivate.h"
 

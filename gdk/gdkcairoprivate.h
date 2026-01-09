@@ -6,6 +6,8 @@
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytexture.h"
 
+#include "gdkrectangleprivate.h"
+
 #include <cairo.h>
 #include <graphene.h>
 
@@ -350,5 +352,24 @@ gdk_cairo_create_similar_surface (cairo_t               *cr,
                                    - bounds->origin.y * yscale);
 
   return surface;
+}
+
+static inline void
+gdk_cairo_region_union_affine (cairo_region_t       *region,
+                               const cairo_region_t *sub,
+                               float                 scale_x,
+                               float                 scale_y,
+                               float                 offset_x,
+                               float                 offset_y)
+{
+  cairo_rectangle_int_t rect;
+  int i;
+
+  for (i = 0; i < cairo_region_num_rectangles (sub); i++)
+    {
+      cairo_region_get_rectangle (sub, i, &rect);
+      gdk_rectangle_transform_affine (&rect, scale_x, scale_y, offset_x, offset_y, &rect);
+      cairo_region_union_rectangle (region, &rect);
+    }
 }
 

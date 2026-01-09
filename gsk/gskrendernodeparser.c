@@ -54,10 +54,13 @@
 #include "gskrepeatnodeprivate.h"
 #include "gskroundedclipnode.h"
 #include "gskroundedrectprivate.h"
+#include "gskshadownodeprivate.h"
 #include "gskstroke.h"
 #include "gskstrokenode.h"
 #include "gsksubsurfacenode.h"
 #include "gsktextnodeprivate.h"
+#include "gsktexturenode.h"
+#include "gsktexturescalenode.h"
 #include "gsktransformnode.h"
 #include "gsktransformprivate.h"
 
