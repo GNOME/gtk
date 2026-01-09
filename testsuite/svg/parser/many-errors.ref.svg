@@ -6,7 +6,8 @@
   <g>
     <circle>
     </circle>
-    <path>
+    <path
+            d=''>
     </path>
     <rect
             stroke='rgb(255,0,0)'
@@ -15,7 +16,8 @@
     </rect>
     <use>
     </use>
-    <path>
+    <path
+            d='M 0 0'>
     </path>
     <circle>
     </circle>
