@@ -13,6 +13,7 @@ gsk_private_gpu_include_shaders = files([
 converted_again_shaders = files([
   'gskgpuarithmetic.glsl',
   'gskgpucolor.glsl',
+  'gskgpuradialgradient.glsl',
 ])
 
 converted_shaders = files([
@@ -37,7 +38,6 @@ converted_shaders = files([
 gsk_private_gpu_shaders = files([
   'gskgpuconicgradient.glsl',
   'gskgpulineargradient.glsl',
-  'gskgpuradialgradient.glsl',
 ]) + converted_shaders
 
 gsk_private_gpu_shader_headers = []
