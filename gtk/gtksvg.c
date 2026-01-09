@@ -2427,6 +2427,7 @@ svg_number_resolve (const SvgValue *value,
         case SHAPE_ATTR_OPACITY:
         case SHAPE_ATTR_FILL_OPACITY:
         case SHAPE_ATTR_STROKE_OPACITY:
+          return svg_number_new (CLAMP (n->value / 100, 0, 1));
         case SHAPE_ATTR_STOP_OFFSET:
           return svg_number_new (n->value / 100);
         case SHAPE_ATTR_STROKE_WIDTH:
@@ -8127,7 +8128,7 @@ parse_language (const char *value)
 static SvgValue *
 parse_opacity (const char *value)
 {
-  return svg_number_parse (value, 0, 1, NUMBER|PERCENTAGE);
+  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
 }
 
 static SvgValue *
@@ -21834,6 +21835,7 @@ svg_shape_attr_get_number (Shape                 *shape,
     case SHAPE_ATTR_STROKE_OPACITY:
     case SHAPE_ATTR_FILL_OPACITY:
     case SHAPE_ATTR_OPACITY:
+      return svg_number_get (value, 1);
     case SHAPE_ATTR_STROKE_MINWIDTH:
     case SHAPE_ATTR_STROKE_MAXWIDTH:
       return svg_number_get (value, 1);
