@@ -18,6 +18,7 @@
 #include "gskinsetshadownode.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
+#include "gskoutsetshadownode.h"
 #include "gskroundedclipnode.h"
 #include "gsktransformprivate.h"
 #include "gskrendererprivate.h"

@@ -61,6 +61,7 @@
 #include "gskisolationnode.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
+#include "gskoutsetshadownodeprivate.h"
 #include "gskpath.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"

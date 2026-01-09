@@ -40,6 +40,7 @@
 #include <gsk/gskisolationnode.h>
 #include <gsk/gskmasknode.h>
 #include <gsk/gskopacitynode.h>
+#include <gsk/gskoutsetshadownode.h>
 #include <gsk/gskpastenode.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>
