@@ -791,31 +791,12 @@ _gdk_quartz_window_did_become_main (GdkWindow *window)
 void
 _gdk_quartz_window_did_resign_main (GdkWindow *window)
 {
-  GdkWindow *new_window = NULL;
-
-  if (main_window_stack)
-    new_window = main_window_stack->data;
-  else
-    {
-      GList *toplevels;
-
-      toplevels = gdk_screen_get_toplevel_windows (gdk_screen_get_default ());
-      if (toplevels)
-        new_window = toplevels->data;
-      g_list_free (toplevels);
-    }
-
-  if (new_window &&
-      new_window != window &&
-      GDK_WINDOW_IS_MAPPED (new_window) &&
-      WINDOW_IS_TOPLEVEL (new_window))
-    {
-      GdkWindowImplQuartz *impl = gdk_window_get_quartz_impl (new_window);
-
-      if (impl)
-        [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
-    }
-
+  /* Don't try to make another window key when one resigns main.
+   * macOS handles this automatically, and GTK's attempt to manage focus
+   * here causes focus fighting between windows.
+   * See: https://gitlab.gnome.org/GNOME/gimp/-/issues/14901
+   *      https://gitlab.gnome.org/GNOME/gimp/-/issues/15480
+   */
   clear_toplevel_order ();
 }
 
