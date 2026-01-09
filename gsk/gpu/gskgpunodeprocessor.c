@@ -2706,20 +2706,43 @@ gsk_gpu_node_processor_linear_gradient_op (GskGpuNodeProcessor   *self,
                                            const GskGradientStop *stops,
                                            gsize                  n_stops)
 {
-  const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
+  const GskGradient *gradient;
+  GdkColor colors[7];
+  graphene_vec4_t offsets[2];
+  graphene_vec4_t hints[2];
+
+  gradient = gsk_gradient_node_get_gradient (node);
+
+  gsk_gpu_color_stops_to_shader (stops,
+                                 n_stops,
+                                 gsk_gradient_get_interpolation (gradient),
+                                 gsk_gradient_get_hue_interpolation (gradient),
+                                 colors,
+                                 offsets,
+                                 hints);
+
   gsk_gpu_linear_gradient_op (self->frame,
                               gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                               target,
+                              gsk_gradient_get_interpolation (gradient),
                               self->opacity,
                               &self->offset,
-                              gsk_gradient_get_interpolation (gradient),
-                              gsk_gradient_get_hue_interpolation (gradient),
+                              gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GRADIENTS),
                               gsk_gradient_get_repeat (gradient),
                               &node->bounds,
                               gsk_linear_gradient_node_get_start (node),
                               gsk_linear_gradient_node_get_end (node),
-                              stops,
-                              n_stops);
+                              &colors[0],
+                              &colors[1],
+                              &colors[2],
+                              &colors[3],
+                              &colors[4],
+                              &colors[5],
+                              &colors[6],
+                              &offsets[0],
+                              &offsets[1],
+                              &hints[0],
+                              &hints[1]);
 }
 
 static void
