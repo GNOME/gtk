@@ -19448,6 +19448,7 @@ stroke_shape (Shape        *shape,
   VectorEffect effect;
   GskRenderNode *child;
   GskRenderNode *node;
+  GdkRGBA color;
 
   paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
   paint = get_context_paint (paint, context->ctx_shape_stack);
@@ -19461,18 +19462,28 @@ stroke_shape (Shape        *shape,
   opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
   effect = svg_enum_get (shape->current[SHAPE_ATTR_VECTOR_EFFECT]);
 
-  if (paint->kind == PAINT_COLOR)
+  switch (paint->kind)
     {
-      GdkRGBA color = paint->color;
+    case PAINT_COLOR:
+      color = paint->color;
       color.alpha *= opacity;
-      child = gsk_color_node_new (&color, &bounds);
       opacity = 1;
-    }
-  else if (paint_is_server (paint->kind))
-    {
+      child = gsk_color_node_new (&color, &bounds);
+      break;
+    case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
+    case PAINT_SERVER_WITH_CURRENT_COLOR:
       gtk_snapshot_push_collect (context->snapshot);
       paint_server (paint, &bounds, context);
       child = gtk_snapshot_pop_collect (context->snapshot);
+      break;
+    case PAINT_NONE:
+    case PAINT_CURRENT_COLOR:
+    case PAINT_CONTEXT_FILL:
+    case PAINT_CONTEXT_STROKE:
+    case PAINT_SYMBOLIC:
+    default:
+      g_assert_not_reached ();
     }
 
   if (effect == VECTOR_EFFECT_NON_SCALING_STROKE)
