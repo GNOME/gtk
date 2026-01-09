@@ -50,6 +50,7 @@
 #include <gsk/gskrepeatnode.h>
 #include <gsk/gskroundedclipnode.h>
 #include <gsk/gskroundedrect.h>
+#include <gsk/gskshadownode.h>
 #include <gsk/gskstroke.h>
 #include <gsk/gskstrokenode.h>
 #include <gsk/gsksubsurfacenode.h>

@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 #define GSK_SERIALIZATION_ERROR       (gsk_serialization_error_quark ())
 
 typedef struct _GskColorStop            GskColorStop;
-typedef struct _GskShadow               GskShadow;
 
 /**
  * GskColorStop:
@@ -48,23 +47,6 @@ struct _GskColorStop
 {
   float offset;
   GdkRGBA color;
-};
-
-/**
- * GskShadow:
- * @color: the color of the shadow
- * @dx: the horizontal offset of the shadow
- * @dy: the vertical offset of the shadow
- * @radius: the radius of the shadow
- *
- * The shadow parameters in a shadow node.
- */
-struct _GskShadow
-{
-  GdkRGBA color;
-  float dx;
-  float dy;
-  float radius;
 };
 
 typedef struct _GskParseLocation GskParseLocation;
@@ -147,7 +129,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_CONIC_GRADIENT_NODE            (gsk_conic_gradient_node_get_type())
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
-#define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 
 typedef struct _GskLinearGradientNode           GskLinearGradientNode;
@@ -157,7 +138,6 @@ typedef struct _GskRepeatingRadialGradientNode  GskRepeatingRadialGradientNode;
 typedef struct _GskConicGradientNode            GskConicGradientNode;
 typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
-typedef struct _GskShadowNode                   GskShadowNode;
 
 
 GDK_AVAILABLE_IN_ALL
@@ -289,20 +269,6 @@ GDK_AVAILABLE_IN_ALL
 float                   gsk_outset_shadow_node_get_spread       (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 float                   gsk_outset_shadow_node_get_blur_radius  (const GskRenderNode      *node) G_GNUC_PURE;
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_shadow_node_get_type                (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_shadow_node_new                     (GskRenderNode            *child,
-                                                                 const GskShadow          *shadows,
-                                                                 gsize                     n_shadows);
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_shadow_node_get_child               (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const GskShadow *       gsk_shadow_node_get_shadow              (const GskRenderNode      *node,
-                                                                 gsize                     i) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-gsize                   gsk_shadow_node_get_n_shadows           (const GskRenderNode      *node) G_GNUC_PURE;
 
 /**
  * GSK_VALUE_HOLDS_RENDER_NODE:

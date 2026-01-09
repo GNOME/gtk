@@ -66,6 +66,7 @@
 #include "gskrepeatnodeprivate.h"
 #include "gskroundedclipnode.h"
 #include "gskroundedrectprivate.h"
+#include "gskshadownodeprivate.h"
 #include "gskstrokenode.h"
 #include "gsksubsurfacenode.h"
 #include "gsktextnodeprivate.h"
