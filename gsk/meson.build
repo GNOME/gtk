@@ -197,9 +197,6 @@ if get_variable('broadway_enabled')
   gsk_public_headers += gsk_public_broadway_headers
 endif
 
-gsk_private_vulkan_shaders = []
-gsk_private_vulkan_compiled_shaders = []
-gsk_private_vulkan_compiled_shaders_deps = []
 gsk_private_vulkan_shader_headers = []
 
 if have_vulkan
@@ -226,8 +223,6 @@ gsk_resources_xml = custom_target(output: 'gsk.resources.xml',
   command: [
     find_program('gen-gsk-gresources-xml.py'),
     '@OUTPUT@',
-    gsk_private_vulkan_compiled_shaders,
-    gsk_private_vulkan_shaders,
     gsk_private_gpu_gl_shaders,
     gsk_private_gpu_vulkan_shaders,
   ],
@@ -246,7 +241,7 @@ gskenum_h = gsk_enums[1]
 gskresources = gnome.compile_resources('gskresources',
   gsk_resources_xml,
   dependencies: [
-                  gsk_private_vulkan_compiled_shaders_deps,
+                  gsk_private_gpu_gl_shaders,
                   gsk_private_gpu_vulkan_shaders,
                 ],
   source_dir: [meson.current_build_dir(), meson.current_source_dir()],
