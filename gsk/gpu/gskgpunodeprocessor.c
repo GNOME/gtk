@@ -57,6 +57,7 @@
 #include "gskdebugnode.h"
 #include "gskdisplacementnodeprivate.h"
 #include "gskfillnode.h"
+#include "gskinsetshadownodeprivate.h"
 #include "gskisolationnode.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"

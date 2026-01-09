@@ -48,6 +48,7 @@
 #include <gsk/gskbordernodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskcopypasteutilsprivate.h>
+#include <gsk/gskinsetshadownodeprivate.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
