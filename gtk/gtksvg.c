@@ -3069,8 +3069,9 @@ svg_enum_parse (const SvgEnum  values[],
   return NULL;
 }
 
+/* Note that name must be a string literal */
 #define DEFINE_ENUM_VALUE(CLASS_NAME, value, name) \
-  { { & SVG_ ## CLASS_NAME ## _CLASS, 0 }, value, name, strlen (name), }
+  { { & SVG_ ## CLASS_NAME ## _CLASS, 0 }, value, name, sizeof (name) - 1, }
 
 #define DEFINE_ENUM_VALUE_NO_NAME(CLASS_NAME, value) \
   { { & SVG_ ## CLASS_NAME ## _CLASS, 0 }, value, NULL, 0, }
