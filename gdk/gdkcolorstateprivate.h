@@ -33,6 +33,7 @@ struct _GdkColorState
   gatomicrefcount ref_count;
 
   GdkMemoryDepth depth;
+  GdkColorChannel hue_channel; /* use ALPHA for none */
   GdkColorState *rendering_color_state;
   GdkColorState *rendering_color_state_linear;
 };
@@ -100,6 +101,8 @@ extern GdkBuiltinColorState gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_N_I
 
 GdkColorState * gdk_color_state_yuv                     (void);
 const char *    gdk_color_state_get_name                (GdkColorState          *self);
+gboolean        gdk_color_state_get_hue_channel         (GdkColorState          *self,
+                                                         GdkColorChannel        *out_channel);
 GdkColorState * gdk_color_state_get_no_srgb_tf          (GdkColorState          *self);
 
 GdkColorState * gdk_color_state_new_for_cicp            (const GdkCicp          *cicp,

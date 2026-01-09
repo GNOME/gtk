@@ -521,6 +521,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_U8_SRGB,
+      .hue_channel = GDK_COLOR_CHANNEL_ALPHA,
       .rendering_color_state = GDK_COLOR_STATE_SRGB,
       .rendering_color_state_linear = GDK_COLOR_STATE_SRGB_LINEAR,
     },
@@ -538,6 +539,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_U8,
+      .hue_channel = GDK_COLOR_CHANNEL_ALPHA,
       .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
       .rendering_color_state_linear = GDK_COLOR_STATE_SRGB_LINEAR,
     },
@@ -555,6 +557,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
+      .hue_channel = GDK_COLOR_CHANNEL_ALPHA,
       .rendering_color_state = GDK_COLOR_STATE_REC2100_PQ,
       .rendering_color_state_linear = GDK_COLOR_STATE_REC2100_LINEAR,
     },
@@ -572,6 +575,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
+      .hue_channel = GDK_COLOR_CHANNEL_ALPHA,
       .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
       .rendering_color_state_linear = GDK_COLOR_STATE_REC2100_LINEAR,
     },
@@ -601,6 +605,30 @@ gdk_builtin_color_state_get_name (GdkColorState *color_state)
   GdkBuiltinColorState *self = (GdkBuiltinColorState *) color_state;
 
   return self->name;
+}
+
+/*<private>
+ * gdk_color_state_get_hue_channel:
+ * @self: the color state
+ * @out_channel: (out caller-allocates): the channel
+ *
+ * Checks if the color state has a hue channel and returns it if
+ * there is one.
+ * 
+ * Unlike other channels, hue channels are periodic, so they may
+ * need different treatment in various places.
+ *
+ * Returns: true if the color state has a hue channel
+ **/
+gboolean
+gdk_color_state_get_hue_channel (GdkColorState   *self,
+                                 GdkColorChannel *out_channel)
+{
+  if (self->hue_channel == GDK_COLOR_CHANNEL_ALPHA)
+    return FALSE;
+
+  *out_channel = self->hue_channel;
+  return TRUE;
 }
 
 static GdkColorState *
@@ -658,6 +686,7 @@ GdkBuiltinColorState gdk_builtin_color_states[] = {
       .klass = &GDK_BUILTIN_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
+      .hue_channel = GDK_COLOR_CHANNEL_ALPHA,
       .rendering_color_state = GDK_COLOR_STATE_SRGB,
     },
     .name = "oklab",
@@ -679,6 +708,7 @@ GdkBuiltinColorState gdk_builtin_color_states[] = {
       .klass = &GDK_BUILTIN_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
+      .hue_channel = GDK_COLOR_CHANNEL_BLUE,
       .rendering_color_state = GDK_COLOR_STATE_SRGB,
     },
     .name = "oklch",
@@ -1137,6 +1167,7 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   self->parent.rendering_color_state_linear = GDK_COLOR_STATE_REC2100_LINEAR;
 
   self->parent.depth = GDK_MEMORY_FLOAT16;
+  self->parent.hue_channel = GDK_COLOR_CHANNEL_ALPHA;
 
   memcpy (&self->cicp, cicp, sizeof (GdkCicp));
 
