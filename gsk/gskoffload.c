@@ -35,6 +35,7 @@
 #include "gskroundedclipnode.h"
 #include "gskroundedrectprivate.h"
 #include "gsksubsurfacenode.h"
+#include "gsktexturenode.h"
 #include "gsktransformnode.h"
 #include "gsktransformprivate.h"
 

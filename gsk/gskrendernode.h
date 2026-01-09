@@ -140,7 +140,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
                                                                  GskParseErrorFunc  error_func,
                                                                  gpointer           user_data);
 
-#define GSK_TYPE_TEXTURE_NODE                   (gsk_texture_node_get_type())
 #define GSK_TYPE_TEXTURE_SCALE_NODE             (gsk_texture_scale_node_get_type())
 #define GSK_TYPE_LINEAR_GRADIENT_NODE           (gsk_linear_gradient_node_get_type())
 #define GSK_TYPE_REPEATING_LINEAR_GRADIENT_NODE (gsk_repeating_linear_gradient_node_get_type())
@@ -152,7 +151,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
 #define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 
-typedef struct _GskTextureNode                  GskTextureNode;
 typedef struct _GskTextureScaleNode             GskTextureScaleNode;
 typedef struct _GskLinearGradientNode           GskLinearGradientNode;
 typedef struct _GskRepeatingLinearGradientNode  GskRepeatingLinearGradientNode;
@@ -163,13 +161,6 @@ typedef struct _GskInsetShadowNode              GskInsetShadowNode;
 typedef struct _GskOutsetShadowNode             GskOutsetShadowNode;
 typedef struct _GskShadowNode                   GskShadowNode;
 
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_texture_node_new                    (GdkTexture               *texture,
-                                                                 const graphene_rect_t    *bounds);
-GDK_AVAILABLE_IN_ALL
-GdkTexture *            gsk_texture_node_get_texture            (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_4_10
 GType                   gsk_texture_scale_node_get_type         (void) G_GNUC_CONST;
