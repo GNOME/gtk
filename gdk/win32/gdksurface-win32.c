@@ -82,6 +82,8 @@ struct _FullscreenInfo
 
 G_DEFINE_TYPE (GdkWin32Surface, gdk_win32_surface, GDK_TYPE_SURFACE)
 
+static guint gdkwin32_global_inhibit_logout;
+
 static void
 gdk_win32_surface_init (GdkWin32Surface *impl)
 {
@@ -93,6 +95,9 @@ gdk_win32_surface_init (GdkWin32Surface *impl)
   impl->num_transients = 0;
   impl->changing_state = FALSE;
   impl->surface_scale = 1;
+  impl->inhibit_logout = 0;
+  impl->cb_session_query_end = NULL;
+  impl->cb_session_end = NULL;
 }
 
 
@@ -139,6 +144,9 @@ gdk_surface_win32_finalize (GObject *object)
     }
 
   _gdk_win32_surface_unregister_dnd (GDK_SURFACE (surface));
+
+  surface->cb_session_query_end = NULL;
+  surface->cb_session_end = NULL;
 
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);
@@ -512,6 +520,10 @@ gdk_win32_surface_destroy (GdkSurface *surface,
       surface->destroyed = TRUE;
       DestroyWindow (GDK_SURFACE_HWND (surface));
     }
+
+  gdkwin32_global_inhibit_logout -= MIN (gdkwin32_global_inhibit_logout,
+                                         impl->inhibit_logout);
+  impl->inhibit_logout = 0;
 }
 
 /* This function is called when the surface really gone.
@@ -2889,6 +2901,70 @@ gdk_win32_surface_get_handle (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_WIN32_SURFACE (surface), NULL);
 
   return GDK_SURFACE_HWND (surface);
+}
+
+void
+gdk_win32_surface_set_session_callbacks (GdkSurface             *surface,
+                                         GdkWin32SessionCallback cb_query_end,
+                                         GdkWin32SessionCallback cb_end)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  g_return_if_fail (GDK_IS_WIN32_SURFACE (surface));
+
+  impl->cb_session_query_end = cb_query_end;
+  impl->cb_session_end = cb_end;
+}
+
+gboolean
+gdk_win32_is_logout_inhibited (void)
+{
+  return gdkwin32_global_inhibit_logout > 0;
+}
+
+gboolean
+gdk_win32_surface_inhibit_logout (GdkSurface    *surface,
+                                  const wchar_t *reason)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  g_return_val_if_fail (GDK_IS_WIN32_SURFACE (surface), FALSE);
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (surface), FALSE);
+
+  if (impl->inhibit_logout == 0)
+    {
+      if (ShutdownBlockReasonCreate (GDK_SURFACE_HWND (surface), reason) == 0)
+        g_warning ("Failed to create shutdown block reason for hwnd %p",
+                   GDK_SURFACE_HWND (surface));
+    }
+
+  impl->inhibit_logout++;
+  gdkwin32_global_inhibit_logout++;
+
+  return TRUE;
+}
+
+void
+gdk_win32_surface_uninhibit_logout (GdkSurface *surface)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  g_return_if_fail (GDK_IS_WIN32_SURFACE (surface));
+
+  if (impl->inhibit_logout > 0)
+    {
+      if (gdkwin32_global_inhibit_logout > 0)
+        gdkwin32_global_inhibit_logout--;
+
+      impl->inhibit_logout--;
+
+      if (impl->inhibit_logout == 0)
+        {
+          if (ShutdownBlockReasonDestroy (GDK_SURFACE_HWND (surface)) == 0)
+            g_warning ("Failed to destroy shutdown block reason for hwnd %p",
+                       GDK_SURFACE_HWND (surface));
+        }
+    }
 }
 
 #define LAST_PROP 1

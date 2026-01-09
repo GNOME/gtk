@@ -1,4 +1,3 @@
-
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
@@ -3141,6 +3140,33 @@ gdk_event_translate (MSG *msg,
                   TABLET_DISABLE_PENBARRELFEEDBACK |
                   TABLET_DISABLE_FLICKS |
                   TABLET_DISABLE_FLICKFALLBACKKEYS;
+      return_val = TRUE;
+      break;
+
+    case WM_QUERYENDSESSION:
+      *ret_valp = TRUE;
+      if (msg->lParam == 0 ||                // shutdown or restart
+          msg->lParam & ENDSESSION_LOGOFF)   // log-off
+        {
+          impl = GDK_WIN32_SURFACE (surface);
+
+          if (impl->cb_session_query_end)
+            impl->cb_session_query_end();
+
+          *ret_valp = !gdk_win32_is_logout_inhibited();
+        }
+      return_val = TRUE;
+      break;
+
+    case WM_ENDSESSION:
+      if (msg->wParam)
+        {
+          impl = GDK_WIN32_SURFACE (surface);
+
+          if (impl->cb_session_end)
+            impl->cb_session_end();
+        }
+      *ret_valp = 0;
       return_val = TRUE;
       break;
 

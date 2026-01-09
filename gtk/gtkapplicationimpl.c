@@ -37,6 +37,10 @@
 #include <gdk/android/gdkandroid.h>
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/win32/gdkwin32display.h>
+#endif
+
 G_DEFINE_TYPE (GtkApplicationImpl, gtk_application_impl, G_TYPE_OBJECT)
 
 static void
@@ -247,6 +251,11 @@ gtk_application_impl_new (GtkApplication *application,
 #ifdef GDK_WINDOWING_ANDROID
   if (GDK_IS_ANDROID_DISPLAY (display))
     impl_type = gtk_application_impl_android_get_type ();
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (display))
+    impl_type = gtk_application_impl_win32_get_type ();
 #endif
 
   impl = g_object_new (impl_type, NULL);
