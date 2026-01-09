@@ -164,6 +164,5 @@ foreach t: gtk_tests
     include_directories: [confinc, gdkinc],
     c_args: test_args + common_cflags,
     dependencies: test_libs,
-    win_subsystem: 'windows',
   )
 endforeach
