@@ -136,9 +136,6 @@ void            gsk_render_node_render_opacity          (GskRenderNode          
 GskRenderNode **gsk_render_node_get_children            (GskRenderNode               *node,
                                                          gsize                       *n_children);
 
-bool            gsk_border_node_get_uniform             (const GskRenderNode         *self) G_GNUC_PURE;
-bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self) G_GNUC_PURE;
-
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
@@ -157,28 +154,6 @@ _gsk_render_node_ref (GskRenderNode *node)
   return node;
 }
 
-GskRenderNode *         gsk_border_node_new2                    (const GskRoundedRect   *outline,
-                                                                 const float             border_width[4],
-                                                                 const GdkColor          border_color[4]);
-const GdkColor *        gsk_border_node_get_gdk_colors          (const GskRenderNode    *node);
-
-GskRenderNode *         gsk_inset_shadow_node_new2              (const GskRoundedRect   *outline,
-                                                                 const GdkColor         *color,
-                                                                 const graphene_point_t *offset,
-                                                                 float                   spread,
-                                                                 float                   blur_radius);
-const GdkColor *        gsk_inset_shadow_node_get_gdk_color     (const GskRenderNode    *node);
-const graphene_point_t *gsk_inset_shadow_node_get_offset        (const GskRenderNode    *node);
-
-GskRenderNode *         gsk_outset_shadow_node_new2             (const GskRoundedRect   *outline,
-                                                                 const GdkColor         *color,
-                                                                 const graphene_point_t *offset,
-                                                                 float                   spread,
-                                                                 float                   blur_radius);
-const GdkColor *        gsk_outset_shadow_node_get_gdk_color    (const GskRenderNode    *node);
-const graphene_point_t *gsk_outset_shadow_node_get_offset       (const GskRenderNode    *node);
-
-
 #define GSK_RENDER_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
 
 #define gsk_render_node_get_node_type(node) _gsk_render_node_get_node_type (node)
@@ -190,35 +165,6 @@ _gsk_render_node_get_node_type (const GskRenderNode *node)
   return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
 }
 
-GskRenderNode * gsk_linear_gradient_node_new2           (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *start,
-                                                         const graphene_point_t  *end,
-                                                         const GskGradient       *gradient);
-
-GskRenderNode * gsk_radial_gradient_node_new2           (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *start_center,
-                                                         float                    start_radius,
-                                                         const graphene_point_t  *end_center,
-                                                         float                    end_radius,
-                                                         float                    aspect_ratio,
-                                                         const GskGradient       *gradient);
-
-GskRenderNode * gsk_conic_gradient_node_new2            (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *center,
-                                                         float                    rotation,
-                                                         const GskGradient       *gradient);
-
 const GskGradient * gsk_gradient_node_get_gradient      (const GskRenderNode *node);
-
-const graphene_point_t *gsk_radial_gradient_node_get_start_center     (const GskRenderNode *node) G_GNUC_PURE;
-const graphene_point_t *gsk_radial_gradient_node_get_end_center       (const GskRenderNode *node) G_GNUC_PURE;
-float                   gsk_radial_gradient_node_get_start_radius     (const GskRenderNode *node) G_GNUC_PURE;
-float                   gsk_radial_gradient_node_get_end_radius       (const GskRenderNode *node) G_GNUC_PURE;
-float                   gsk_radial_gradient_node_get_aspect_ratio     (const GskRenderNode *node) G_GNUC_PURE;
-
-gboolean gsk_radial_gradient_fills_plane (const graphene_point_t *c1,
-                                          float                   r1,
-                                          const graphene_point_t *c2,
-                                          float                   r2);
 
 G_END_DECLS

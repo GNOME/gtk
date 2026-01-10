@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskbordernode.h"
+#include "gskbordernodeprivate.h"
 
 #include "gskrendernodeprivate.h"
 #include "gskrectprivate.h"

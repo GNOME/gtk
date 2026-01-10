@@ -29,6 +29,7 @@
 #include <gsk/gskcomponenttransfer.h>
 #include <gsk/gskcomponenttransfernode.h>
 #include <gsk/gskcompositenode.h>
+#include <gsk/gskconicgradientnode.h>
 #include <gsk/gskcopynode.h>
 #include <gsk/gskcontainernode.h>
 #include <gsk/gskcrossfadenode.h>
@@ -36,14 +37,18 @@
 #include <gsk/gskenums.h>
 #include <gsk/gskfillnode.h>
 #include <gsk/gskglshadernode.h>
+#include <gsk/gskinsetshadownode.h>
 #include <gsk/gskisolationnode.h>
+#include <gsk/gsklineargradientnode.h>
 #include <gsk/gskmasknode.h>
 #include <gsk/gskopacitynode.h>
+#include <gsk/gskoutsetshadownode.h>
 #include <gsk/gskpastenode.h>
 #include <gsk/gskpath.h>
 #include <gsk/gskpathbuilder.h>
 #include <gsk/gskpathmeasure.h>
 #include <gsk/gskpathpoint.h>
+#include <gsk/gskradialgradientnode.h>
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskrenderreplay.h>
