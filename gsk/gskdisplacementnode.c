@@ -290,7 +290,7 @@ gsk_displacement_node_diff (GskRenderNode *node1,
   cairo_region_t *child_region, *displacement_region;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
-      self1->channels[0] != self2->channels[1] ||
+      self1->channels[0] != self2->channels[0] ||
       self1->channels[1] != self2->channels[1] ||
       !graphene_size_equal (&self1->max, &self2->max) ||
       !graphene_size_equal (&self1->scale, &self2->scale) ||
