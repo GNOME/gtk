@@ -122,45 +122,14 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
                                                                  GskParseErrorFunc  error_func,
                                                                  gpointer           user_data);
 
-#define GSK_TYPE_LINEAR_GRADIENT_NODE           (gsk_linear_gradient_node_get_type())
-#define GSK_TYPE_REPEATING_LINEAR_GRADIENT_NODE (gsk_repeating_linear_gradient_node_get_type())
 #define GSK_TYPE_RADIAL_GRADIENT_NODE           (gsk_radial_gradient_node_get_type())
 #define GSK_TYPE_REPEATING_RADIAL_GRADIENT_NODE (gsk_repeating_radial_gradient_node_get_type())
 #define GSK_TYPE_CONIC_GRADIENT_NODE            (gsk_conic_gradient_node_get_type())
 
-typedef struct _GskLinearGradientNode           GskLinearGradientNode;
-typedef struct _GskRepeatingLinearGradientNode  GskRepeatingLinearGradientNode;
 typedef struct _GskRadialGradientNode           GskRadialGradientNode;
 typedef struct _GskRepeatingRadialGradientNode  GskRepeatingRadialGradientNode;
 typedef struct _GskConicGradientNode            GskConicGradientNode;
 
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_linear_gradient_node_get_type           (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_linear_gradient_node_new                (const graphene_rect_t    *bounds,
-                                                                     const graphene_point_t   *start,
-                                                                     const graphene_point_t   *end,
-                                                                     const GskColorStop       *color_stops,
-                                                                     gsize                     n_color_stops);
-GDK_AVAILABLE_IN_ALL
-const graphene_point_t * gsk_linear_gradient_node_get_start         (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const graphene_point_t * gsk_linear_gradient_node_get_end           (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-gsize                    gsk_linear_gradient_node_get_n_color_stops (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const GskColorStop *     gsk_linear_gradient_node_get_color_stops   (const GskRenderNode      *node,
-                                                                     gsize                    *n_stops);
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_repeating_linear_gradient_node_get_type (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_repeating_linear_gradient_node_new      (const graphene_rect_t    *bounds,
-                                                                     const graphene_point_t   *start,
-                                                                     const graphene_point_t   *end,
-                                                                     const GskColorStop       *color_stops,
-                                                                     gsize                     n_color_stops);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_conic_gradient_node_get_type            (void) G_GNUC_CONST;

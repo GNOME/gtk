@@ -16,6 +16,7 @@
 #include "gskdebugnode.h"
 #include "gskdebugprivate.h"
 #include "gskinsetshadownode.h"
+#include "gsklineargradientnode.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
 #include "gskoutsetshadownode.h"

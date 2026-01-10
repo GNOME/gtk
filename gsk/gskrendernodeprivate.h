@@ -165,11 +165,6 @@ _gsk_render_node_get_node_type (const GskRenderNode *node)
   return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
 }
 
-GskRenderNode * gsk_linear_gradient_node_new2           (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *start,
-                                                         const graphene_point_t  *end,
-                                                         const GskGradient       *gradient);
-
 GskRenderNode * gsk_radial_gradient_node_new2           (const graphene_rect_t   *bounds,
                                                          const graphene_point_t  *start_center,
                                                          float                    start_radius,

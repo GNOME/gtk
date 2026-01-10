@@ -32,6 +32,7 @@
 #include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskinsetshadownodeprivate.h"
+#include "gsk/gsklineargradientnodeprivate.h"
 #include "gsk/gskoutsetshadownodeprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"

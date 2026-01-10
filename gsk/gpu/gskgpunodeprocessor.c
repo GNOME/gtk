@@ -59,6 +59,7 @@
 #include "gskfillnode.h"
 #include "gskinsetshadownodeprivate.h"
 #include "gskisolationnode.h"
+#include "gsklineargradientnodeprivate.h"
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
 #include "gskoutsetshadownodeprivate.h"

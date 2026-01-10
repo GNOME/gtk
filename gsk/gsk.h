@@ -38,6 +38,7 @@
 #include <gsk/gskglshadernode.h>
 #include <gsk/gskinsetshadownode.h>
 #include <gsk/gskisolationnode.h>
+#include <gsk/gsklineargradientnode.h>
 #include <gsk/gskmasknode.h>
 #include <gsk/gskopacitynode.h>
 #include <gsk/gskoutsetshadownode.h>
