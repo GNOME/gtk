@@ -3155,6 +3155,7 @@ gsk_gpu_node_processor_add_displacement_node (GskGpuNodeProcessor *self,
   GskRenderNode *displacement_child, *child;
   GskGpuImage *displacement_image, *child_image;
   const graphene_size_t *max;
+  const GdkColorChannel *channels;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
     return;
@@ -3162,6 +3163,7 @@ gsk_gpu_node_processor_add_displacement_node (GskGpuNodeProcessor *self,
   displacement_child = gsk_displacement_node_get_displacement (node);
   child = gsk_displacement_node_get_child (node);
   max = gsk_displacement_node_get_max (node);
+  channels = gsk_displacement_node_get_channels (node);
 
   child_bounds = bounds;
   graphene_rect_inset (&child_bounds, - max->width, - max->height);
@@ -3198,7 +3200,7 @@ gsk_gpu_node_processor_add_displacement_node (GskGpuNodeProcessor *self,
                                NULL,
                                &displacement_rect
                            },
-                           gsk_displacement_node_get_channels (node),
+                           (guint[2]) { channels[0], channels[1] },
                            max,
                            gsk_displacement_node_get_scale (node),
                            gsk_displacement_node_get_offset (node));

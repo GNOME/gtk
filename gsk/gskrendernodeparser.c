@@ -4193,27 +4193,28 @@ parse_four_floats (GtkCssParser *parser,
   return TRUE;
 }
 
+static const char *channel_names[] = { "red", "green", "blue", "alpha" };
+
 static gboolean
 parse_channels (GtkCssParser *parser,
                 Context      *context,
                 gpointer      out)
 {
-  const char *names[] = { "red", "green", "blue", "alpha" };
   guint tmp[2];
-  guint *channels = out;
+  GdkColorChannel *channels = out;
   gsize i, j;
 
   for (i = 0; i < G_N_ELEMENTS (tmp); i++)
     {
-      for (j = 0; j < G_N_ELEMENTS (names); j++)
+      for (j = 0; j < G_N_ELEMENTS (channel_names); j++)
         {
-          if (gtk_css_parser_try_ident (parser, names[j]))
+          if (gtk_css_parser_try_ident (parser, channel_names[j]))
             {
               tmp[i] = j;
               break;
             }
         }
-      if (j == G_N_ELEMENTS (names))
+      if (j == G_N_ELEMENTS (channel_names))
         {
           gtk_css_parser_error_value (parser, "Not a valid channel name");
           return FALSE;
@@ -4232,7 +4233,7 @@ parse_displacement_node (GtkCssParser *parser,
 {
   GskRenderNode *child = NULL, *displacement = NULL;
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
-  guint channels[2] = { 0, 1 };
+  GdkColorChannel channels[2] = { GDK_COLOR_CHANNEL_RED, GDK_COLOR_CHANNEL_GREEN };
   graphene_size_t max = { 5, 5 };
   graphene_size_t scale = { 10, 10 };
   /* using size_t because parse function */

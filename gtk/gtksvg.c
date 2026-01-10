@@ -18190,7 +18190,7 @@ apply_filter_tree (Shape         *shape,
         case FE_DISPLACEMENT:
           {
             FilterResult *in, *in2;
-            unsigned int channels[2];
+            GdkColorChannel channels[2];
             graphene_size_t max, scale;
             graphene_point_t offset;
 
