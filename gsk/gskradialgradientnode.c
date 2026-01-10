@@ -365,7 +365,10 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
   g_return_val_if_fail (end_radius >= 0., NULL);
   g_return_val_if_fail (aspect_ratio > 0., NULL);
 
-  self = gsk_render_node_alloc (GSK_TYPE_RADIAL_GRADIENT_NODE);
+  if (gsk_gradient_get_repeat (gradient) == GSK_REPEAT_REPEAT)
+    self = gsk_render_node_alloc (GSK_TYPE_REPEATING_RADIAL_GRADIENT_NODE);
+  else
+    self = gsk_render_node_alloc (GSK_TYPE_RADIAL_GRADIENT_NODE);
   node = (GskRenderNode *) self;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);

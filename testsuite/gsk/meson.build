@@ -130,6 +130,7 @@ compare_render_tests = [
   'linear-gradient-interpolation-nocairo',
   'linear-gradient-3d-nocairo',
   'linear-gradient-nonorthogonal-scale',
+  'linear-gradient-pad-color',
   'linear-gradient-premultiplied-nocairo',
   'linear-gradient-with-64-colorstops',
   'lots-of-offscreens',
@@ -170,6 +171,7 @@ compare_render_tests = [
   'paste-no-porter-duff',
   'paste-with-depth',
   'premul-color',
+  'radial-gradient-pad-color',
   'radial-gradient-premultiplied-nocairo',
   'radial-gradient-with-64-colorstops',
   'repeat',
@@ -297,28 +299,35 @@ variants = {
   'clip': '--clip',
   'colorflip': '--colorflip',
   'opaque': '--opaque',
+  'serialize': '--serialize',
 }
 
 compare_xfails = {
   'gl': {
-    'blur-child-bounds-oversize': ['clip'], # 6450
-    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clipped'], # 6444
+    'blur-child-bounds-oversize': ['clip'], # 6450
+    'cairo-coordinates': ['serialize'],
+    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
+    'yuv-matrix-dmabuf-nv12': ['serialize'],
   },
   'vulkan': {
+    'big-checkerboard': ['clip'], # 6444
     'blur-child-bounds-oversize': ['clip'], # 6450
+    'cairo-coordinates': ['serialize'],
     'repeat-repeats-nested': ['clip'], # 6522
     'repeating-radial-gradient-edge-colors': ['colorflip'],
-    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
-    'big-checkerboard': ['clip'], # 6444
+    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
+    'yuv-matrix-dmabuf-nv12': ['serialize'],
   },
   'cairo': {
+    'cairo-coordinates': ['serialize'],
     'inter-hinting': ['flip', 'rotate'],
     'inter-optical-scaling': ['flip', 'rotate'],
-    'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
-    'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
-    'stroke-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
-    'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'stroke-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'yuv-matrix-dmabuf-nv12': ['serialize'],
   }
 }
 

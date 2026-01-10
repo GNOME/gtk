@@ -1,0 +1,21 @@
+fill {
+  child: radial-gradient {
+    bounds: 0 0 50 50;
+    start: 25 25 5;
+    end: 25 25 25;
+    stops: 0 rgb(255,0,0), 0 rgb(0,0,0), 1 rgb(0,0,0), 1 rgb(0,0,255);
+  }
+  path: "\
+M 0 0 h 7 v 7 h -7 z\
+M 43 0 h 7 v 7 h -7 z\
+M 43 43 h 7 v 7 h -7 z\
+M 0 43 h 7 v 7 h -7 z\
+M 10 10 h 30 v 30 h -30 z\
+M 20 20\
+L 20 30\
+L 30 30\
+L 30 20\
+Z\
+M 22 22 h 6 v 6 h -6 z";
+  fill-rule: even-odd;
+}

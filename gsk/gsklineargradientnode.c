@@ -299,7 +299,10 @@ gsk_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
   g_return_val_if_fail (end != NULL, NULL);
   g_return_val_if_fail (gradient != NULL, NULL);
 
-  self = gsk_render_node_alloc (GSK_TYPE_LINEAR_GRADIENT_NODE);
+  if (gsk_gradient_get_repeat (gradient) == GSK_REPEAT_REPEAT)
+    self = gsk_render_node_alloc (GSK_TYPE_REPEATING_LINEAR_GRADIENT_NODE);
+  else
+    self = gsk_render_node_alloc (GSK_TYPE_LINEAR_GRADIENT_NODE);
   node = (GskRenderNode *) self;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);

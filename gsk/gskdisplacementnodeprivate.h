@@ -34,13 +34,13 @@ GType                   gsk_displacement_node_get_type          (void) G_GNUC_CO
 GskRenderNode *         gsk_displacement_node_new               (const graphene_rect_t    *bounds,
                                                                  GskRenderNode            *child,
                                                                  GskRenderNode            *displacement,
-                                                                 const guint               channels[2],
+                                                                 const GdkColorChannel     channels[2],
                                                                  const graphene_size_t    *max,
                                                                  const graphene_size_t    *scale,
                                                                  const graphene_point_t   *offset);
 GskRenderNode *         gsk_displacement_node_get_child         (const GskRenderNode      *node) G_GNUC_PURE;
 GskRenderNode *         gsk_displacement_node_get_displacement  (const GskRenderNode      *node) G_GNUC_PURE;
-const guint *           gsk_displacement_node_get_channels      (const GskRenderNode      *node) G_GNUC_PURE;
+const GdkColorChannel * gsk_displacement_node_get_channels      (const GskRenderNode      *node) G_GNUC_PURE;
 const graphene_size_t * gsk_displacement_node_get_max           (const GskRenderNode      *node) G_GNUC_PURE;
 const graphene_size_t * gsk_displacement_node_get_scale         (const GskRenderNode      *node) G_GNUC_PURE;
 const graphene_point_t *gsk_displacement_node_get_offset        (const GskRenderNode      *node) G_GNUC_PURE;

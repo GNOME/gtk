@@ -681,6 +681,20 @@ opaque_create_reference (GskRenderer   *renderer,
   return result;
 }
 
+static GskRenderNode *
+serialize_create_test (GskRenderNode *node,
+                       gconstpointer  data)
+{
+  GskRenderNode *result;
+  GBytes *bytes;
+
+  bytes = gsk_render_node_serialize (node);
+  result = gsk_render_node_deserialize (bytes, NULL, NULL);
+  g_bytes_unref (bytes);
+
+  return result;
+}
+
 typedef enum
 {
   KEEP_BOUNDS = (1 << 0),
@@ -761,6 +775,12 @@ static const TestSetup test_setups[] = {
     .free = g_free,
     .create_test = opaque_create_test,
     .create_reference = opaque_create_reference,
+  },
+  {
+    .name = "serialize",
+    .description = "Serialize and deserialize",
+    .create_test = serialize_create_test,
+    .create_reference = NULL,
   },
 };
 
@@ -921,6 +941,7 @@ main (int argc, char **argv)
     { test_setups[6].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[6], test_setups[6].description, NULL },
     { test_setups[7].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[7], test_setups[7].description, NULL },
     { test_setups[8].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[8], test_setups[8].description, NULL },
+    { test_setups[9].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[9], test_setups[9].description, NULL },
     { NULL }
   };
   GOptionContext *context;

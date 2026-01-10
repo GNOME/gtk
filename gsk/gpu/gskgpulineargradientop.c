@@ -58,14 +58,15 @@ gsk_adjust_hue (GdkColorState       *ics,
                 const float          color1[4],
                 float                color2[4])
 {
+  GdkColorChannel channel;
   float h1, h2;
   float d;
 
-  if (!gdk_color_state_equal (ics, GDK_COLOR_STATE_OKLCH))
+  if (!gdk_color_state_get_hue_channel (ics, &channel))
     return;
 
-  h1 = color1[2];
-  h2 = color2[2];
+  h1 = color1[channel];
+  h2 = color2[channel];
   d = h2 - h1;
 
   while (d > 360)
@@ -121,7 +122,7 @@ gsk_adjust_hue (GdkColorState       *ics,
       g_assert_not_reached ();
     }
 
-  color2[2] = h2;
+  color2[channel] = h2;
 }
 
 void

@@ -52,7 +52,7 @@ struct _GskDisplacementNode
       GskRenderNode *displacement;
     };
   };
-  guint channels[2];
+  GdkColorChannel channels[2];
   graphene_size_t max;
   graphene_size_t scale;
   graphene_point_t offset;
@@ -71,13 +71,13 @@ gsk_displacement_node_finalize (GskRenderNode *node)
 }
 
 static float
-get_channel (guint32 pixel,
-             guint   channel)
+get_channel (guint32         pixel,
+             GdkColorChannel channel)
 {
   float alpha = (pixel >> 24) / 255.0;
   float result;
 
-  if (channel == 3)
+  if (channel == GDK_COLOR_CHANNEL_ALPHA)
     return alpha;
   
   if (alpha == 0.0f)
@@ -290,7 +290,7 @@ gsk_displacement_node_diff (GskRenderNode *node1,
   cairo_region_t *child_region, *displacement_region;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
-      self1->channels[0] != self2->channels[1] ||
+      self1->channels[0] != self2->channels[0] ||
       self1->channels[1] != self2->channels[1] ||
       !graphene_size_equal (&self1->max, &self2->max) ||
       !graphene_size_equal (&self1->scale, &self2->scale) ||
@@ -392,8 +392,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskDisplacementNode, gsk_displacement_node)
  * @child: The child to displace
  * @displacement: The dissplacement mask
  * @channels: Which channels to usefor the displacement in horizontal and
- *   vertical direction respectively. The numbers must be from 0 to 3 for
- *   red, green, blue, and alpha channel respectively.
+ *   vertical direction respectively.
  * @max: The maximum displacement in units
  * @scale: The scale to apply to the displacement value
  * @offset: The offset to apply to the displacement value
@@ -415,7 +414,7 @@ GskRenderNode *
 gsk_displacement_node_new (const graphene_rect_t  *bounds,
                            GskRenderNode          *child,
                            GskRenderNode          *displacement,
-                           const guint             channels[2],
+                           const GdkColorChannel   channels[2],
                            const graphene_size_t  *max,
                            const graphene_size_t  *scale,
                            const graphene_point_t *offset)
@@ -493,7 +492,7 @@ gsk_displacement_node_get_displacement (const GskRenderNode *node)
   return self->displacement;
 }
 
-const guint *
+const GdkColorChannel *
 gsk_displacement_node_get_channels (const GskRenderNode *node)
 {
   const GskDisplacementNode *self = (const GskDisplacementNode *) node;

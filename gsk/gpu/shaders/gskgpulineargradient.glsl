@@ -173,7 +173,12 @@ get_gradient_color_at (float offset)
         offset = 1.0 - fract (offset);
       break;
     case GSK_REPEAT_PAD:
-      offset = clamp (offset, 0.0, 1.0);
+      if (offset <= 0.0)
+        return _color0;
+      else if (offset >= 1.0)
+        return _color6;
+      break;
+    default:
       break;
     }
 

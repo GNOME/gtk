@@ -11,7 +11,10 @@ PASS_FLAT(5) RoundedRect _inside;
 
 #ifdef GSK_VERTEX_SHADER
 
-IN(0) mat4 in_border_colors;
+IN(0) vec4 in_top_border_color;
+IN(1) vec4 in_right_border_color;
+IN(2) vec4 in_bottom_border_color;
+IN(3) vec4 in_left_border_color;
 IN(4) mat3x4 in_outline;
 IN(7) vec4 in_border_widths;
 IN(8) vec2 in_offset;
@@ -25,70 +28,70 @@ compute_color (void)
   {
     case 2u * SLICE_TOP_LEFT + 1u:
       if (in_border_widths[TOP] > 0.0)
-        return output_color_from_alt (in_border_colors[TOP]);
+        return output_color_from_alt (in_top_border_color);
       else
-        return output_color_from_alt (in_border_colors[LEFT]);
+        return output_color_from_alt (in_left_border_color);
 
     case 2u * SLICE_TOP:
     case 2u * SLICE_TOP + 1u:
-      return output_color_from_alt (in_border_colors[TOP]);
+      return output_color_from_alt (in_top_border_color);
 
     case 2u * SLICE_TOP_RIGHT:
       if (in_border_widths[TOP] > 0.0)
-        return output_color_from_alt (in_border_colors[TOP]);
+        return output_color_from_alt (in_top_border_color);
       else
-        return output_color_from_alt (in_border_colors[RIGHT]);
+        return output_color_from_alt (in_right_border_color);
 
     case 2u * SLICE_TOP_RIGHT + 1u:
       if (in_border_widths[RIGHT] > 0.0)
-        return output_color_from_alt (in_border_colors[RIGHT]);
+        return output_color_from_alt (in_right_border_color);
       else
-        return output_color_from_alt (in_border_colors[TOP]);
+        return output_color_from_alt (in_top_border_color);
 
     case 2u * SLICE_RIGHT:
     case 2u * SLICE_RIGHT + 1u:
-      return output_color_from_alt (in_border_colors[RIGHT]);
+      return output_color_from_alt (in_right_border_color);
 
     case 2u * SLICE_BOTTOM_RIGHT:
       if (in_border_widths[RIGHT] > 0.0)
-        return output_color_from_alt (in_border_colors[RIGHT]);
+        return output_color_from_alt (in_right_border_color);
       else
-        return output_color_from_alt (in_border_colors[BOTTOM]);
+        return output_color_from_alt (in_bottom_border_color);
 
     case 2u * SLICE_BOTTOM_RIGHT + 1u:
       if (in_border_widths[BOTTOM] > 0.0)
-        return output_color_from_alt (in_border_colors[BOTTOM]);
+        return output_color_from_alt (in_bottom_border_color);
       else
-        return output_color_from_alt (in_border_colors[RIGHT]);
+        return output_color_from_alt (in_right_border_color);
 
     case 2u * SLICE_BOTTOM:
     case 2u * SLICE_BOTTOM + 1u:
-      return output_color_from_alt (in_border_colors[BOTTOM]);
+      return output_color_from_alt (in_bottom_border_color);
 
     case 2u * SLICE_BOTTOM_LEFT:
       if (in_border_widths[BOTTOM] > 0.0)
-        return output_color_from_alt (in_border_colors[BOTTOM]);
+        return output_color_from_alt (in_bottom_border_color);
       else
-        return output_color_from_alt (in_border_colors[LEFT]);
+        return output_color_from_alt (in_left_border_color);
 
     case 2u * SLICE_BOTTOM_LEFT + 1u:
       if (in_border_widths[LEFT] > 0.0)
-        return output_color_from_alt (in_border_colors[LEFT]);
+        return output_color_from_alt (in_left_border_color);
       else
-        return output_color_from_alt (in_border_colors[BOTTOM]);
+        return output_color_from_alt (in_bottom_border_color);
 
     case 2u * SLICE_LEFT:
     case 2u * SLICE_LEFT + 1u:
-      return output_color_from_alt (in_border_colors[LEFT]);
+      return output_color_from_alt (in_left_border_color);
 
     case 2u * SLICE_TOP_LEFT:
       if (in_border_widths[LEFT] > 0.0)
-        return output_color_from_alt (in_border_colors[LEFT]);
+        return output_color_from_alt (in_left_border_color);
       else
-        return output_color_from_alt (in_border_colors[TOP]);
+        return output_color_from_alt (in_top_border_color);
 
     default:
-      return output_color_from_alt (in_border_colors[TOP]);
+      return output_color_from_alt (in_top_border_color);
   }
 }
 

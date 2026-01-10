@@ -4193,27 +4193,28 @@ parse_four_floats (GtkCssParser *parser,
   return TRUE;
 }
 
+static const char *channel_names[] = { "red", "green", "blue", "alpha" };
+
 static gboolean
 parse_channels (GtkCssParser *parser,
                 Context      *context,
                 gpointer      out)
 {
-  const char *names[] = { "red", "green", "blue", "alpha" };
   guint tmp[2];
-  guint *channels = out;
+  GdkColorChannel *channels = out;
   gsize i, j;
 
   for (i = 0; i < G_N_ELEMENTS (tmp); i++)
     {
-      for (j = 0; j < G_N_ELEMENTS (names); j++)
+      for (j = 0; j < G_N_ELEMENTS (channel_names); j++)
         {
-          if (gtk_css_parser_try_ident (parser, names[j]))
+          if (gtk_css_parser_try_ident (parser, channel_names[j]))
             {
               tmp[i] = j;
               break;
             }
         }
-      if (j == G_N_ELEMENTS (names))
+      if (j == G_N_ELEMENTS (channel_names))
         {
           gtk_css_parser_error_value (parser, "Not a valid channel name");
           return FALSE;
@@ -4232,7 +4233,7 @@ parse_displacement_node (GtkCssParser *parser,
 {
   GskRenderNode *child = NULL, *displacement = NULL;
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
-  guint channels[2] = { 0, 1 };
+  GdkColorChannel channels[2] = { GDK_COLOR_CHANNEL_RED, GDK_COLOR_CHANNEL_GREEN };
   graphene_size_t max = { 5, 5 };
   graphene_size_t scale = { 10, 10 };
   /* using size_t because parse function */
@@ -5879,6 +5880,21 @@ append_four_float_param (Printer    *p,
 }
 
 static void
+append_channels_param (Printer         *p,
+                       const char      *param_name,
+                       GdkColorChannel  channel1,
+                       GdkColorChannel  channel2)
+{
+  _indent (p);
+  g_string_append_printf (p->str,
+                          "%s: %s %s;\n",
+                          param_name,
+                          channel_names[channel1],
+                          channel_names[channel2]);
+  g_string_append (p->str, ";\n");
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -5949,10 +5965,7 @@ render_node_print (Printer       *p,
       {
         const GskGradient *gradient;
 
-        if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
-          start_node (p, "repeating-linear-gradient", node_name);
-        else
-          start_node (p, "linear-gradient", node_name);
+        start_node (p, "linear-gradient", node_name);
 
         gradient = gsk_gradient_node_get_gradient (node);
         append_rect_param (p, "bounds", &node->bounds);
@@ -5960,8 +5973,7 @@ render_node_print (Printer       *p,
         append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
         append_stops_param (p, "stops", gradient);
 
-        if (gsk_render_node_get_node_type (node) == GSK_RADIAL_GRADIENT_NODE &&
-            gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
+        if (gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
           append_repeat_param (p, "repeat", gsk_gradient_get_repeat (gradient));
 
         append_color_state_param (p, "interpolation",
@@ -5980,10 +5992,7 @@ render_node_print (Printer       *p,
       {
         const GskGradient *gradient;
 
-        if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
-          start_node (p, "repeating-radial-gradient", node_name);
-        else
-          start_node (p, "radial-gradient", node_name);
+        start_node (p, "radial-gradient", node_name);
 
         gradient = gsk_gradient_node_get_gradient (node);
 
@@ -5998,8 +6007,7 @@ render_node_print (Printer       *p,
 
         append_stops_param (p, "stops", gradient);
 
-        if (gsk_render_node_get_node_type (node) == GSK_RADIAL_GRADIENT_NODE &&
-            gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
+        if (gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
           append_repeat_param (p, "repeat", gsk_gradient_get_repeat (gradient));
 
         append_color_state_param (p, "interpolation",
@@ -6653,6 +6661,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         const graphene_size_t *max, *scale;
         const graphene_point_t *offset;
+        const GdkColorChannel *channels = gsk_displacement_node_get_channels (node);
         max = gsk_displacement_node_get_max (node);
         scale = gsk_displacement_node_get_scale (node);
         offset = gsk_displacement_node_get_offset (node);
@@ -6662,6 +6671,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_two_float_param (p, "max", max->width, max->height);
         append_two_float_param (p, "scale", scale->width, scale->height);
         append_two_float_param (p, "offset", offset->x, offset->y);
+        append_channels_param (p, "channel", channels[0], channels[1]);
         end_node (p);
       }
       break;

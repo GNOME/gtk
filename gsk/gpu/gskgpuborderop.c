@@ -33,14 +33,14 @@ gsk_gpu_border_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_rounded_rect (string, instance->outline);
 
-  gsk_gpu_print_rgba (string, (const float *) &instance->border_colors[0]);
-  if (!color_equal (&instance->border_colors[12], &instance->border_colors[0]) ||
-      !color_equal (&instance->border_colors[8], &instance->border_colors[0]) ||
-      !color_equal (&instance->border_colors[4], &instance->border_colors[0]))
+  gsk_gpu_print_rgba (string, (const float *) instance->top_border_color);
+  if (!color_equal (instance->right_border_color, instance->top_border_color) ||
+      !color_equal (instance->bottom_border_color, instance->top_border_color) ||
+      !color_equal (instance->left_border_color, instance->top_border_color))
     {
-      gsk_gpu_print_rgba (string, &instance->border_colors[4]);
-      gsk_gpu_print_rgba (string, &instance->border_colors[8]);
-      gsk_gpu_print_rgba (string, &instance->border_colors[12]);
+      gsk_gpu_print_rgba (string, instance->right_border_color);
+      gsk_gpu_print_rgba (string, instance->bottom_border_color);
+      gsk_gpu_print_rgba (string, instance->left_border_color);
     }
   g_string_append_printf (string, "%g ", instance->border_widths[0]);
   if (instance->border_widths[0] != instance->border_widths[1] ||
@@ -131,8 +131,11 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
   for (i = 0; i < 4; i++)
     {
       instance->border_widths[i] = widths[i];
-      gsk_gpu_color_to_float (&colors[i], alt, opacity, &instance->border_colors[4 * i]);
     }
+  gsk_gpu_color_to_float (&colors[0], alt, opacity, instance->top_border_color);
+  gsk_gpu_color_to_float (&colors[1], alt, opacity, instance->right_border_color);
+  gsk_gpu_color_to_float (&colors[2], alt, opacity, instance->bottom_border_color);
+  gsk_gpu_color_to_float (&colors[3], alt, opacity, instance->left_border_color);
   instance->offset[0] = inside_offset->x;
   instance->offset[1] = inside_offset->y;
 }

@@ -104,6 +104,14 @@ gsk_gpu_point_to_float (const graphene_point_t *point,
 }
 
 static inline void
+gsk_gpu_size_to_float (const graphene_size_t *size,
+                       float                  values[2])
+{
+  values[0] = size->width;
+  values[1] = size->height;
+}
+
+static inline void
 gsk_gpu_color_to_float (const GdkColor *color,
                         GdkColorState  *target,
                         float           opacity,

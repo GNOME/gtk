@@ -6,6 +6,7 @@ isolation {
         start: 114.645 -6.06602;
         end: 185.355 206.066;
         stops: 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(255,255,0);
+        repeat: repeat;
       }
       path: "\
 M 50 50 h 200 v 100 h -200 z";

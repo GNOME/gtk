@@ -35,6 +35,28 @@
 G_BEGIN_DECLS
 
 /**
+ * GdkColorChannel:
+ * @GDK_COLOR_CHANNEL_RED: The red color channel, aka 0
+ * @GDK_COLOR_CHANNEL_GREEN: The green color channel, aka 1
+ * @GDK_COLOR_CHANNEL_BLUE: The blue color channel, aka 2
+ * @GDK_COLOR_CHANNEL_ALPHA: The alpha color channel, aka 3
+ *
+ * Enumerates the color channels of RGBA values as used in
+ * `GdkColor` and OpenGL/Vulkan shaders.
+ *
+ * Note that this is not the order of pixel values in Cairo
+ * and `GdkMemoryFormat` can have many different orders.
+ *
+ * Since: 4.22
+ */
+typedef enum {
+  GDK_COLOR_CHANNEL_RED = 0 GDK_AVAILABLE_ENUMERATOR_IN_4_22,
+  GDK_COLOR_CHANNEL_GREEN = 1 GDK_AVAILABLE_ENUMERATOR_IN_4_22,
+  GDK_COLOR_CHANNEL_BLUE = 2 GDK_AVAILABLE_ENUMERATOR_IN_4_22,
+  GDK_COLOR_CHANNEL_ALPHA = 3 GDK_AVAILABLE_ENUMERATOR_IN_4_22
+} GdkColorChannel;
+
+/**
  * GdkGLAPI:
  * @GDK_GL_API_GL: The OpenGL API
  * @GDK_GL_API_GLES: The OpenGL ES API
