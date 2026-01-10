@@ -1964,15 +1964,27 @@ static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
+  GdkColorState *acs;
+  const GdkColor *colors;
+  graphene_vec4_t widths;
+
+  colors = gsk_border_node_get_gdk_colors (node);
+  acs = gsk_gpu_color_states_find (self->ccs, &colors[0]);
+  graphene_vec4_init_from_float (&widths, gsk_border_node_get_widths (node));
+
   gsk_gpu_border_op (self->frame,
                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                      self->ccs,
+                     acs,
                      self->opacity,
                      &self->offset,
                      gsk_border_node_get_outline (node),
-                     graphene_point_zero (),
-                     gsk_border_node_get_widths (node),
-                     gsk_border_node_get_gdk_colors (node));
+                     &colors[0],
+                     &colors[1],
+                     &colors[2],
+                     &colors[3],
+                     &widths,
+                     graphene_vec2_zero ());
 }
 
 static gboolean
@@ -2510,23 +2522,27 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
 
   if (blur_radius < 0.01)
     {
-      GdkColor colors[4];
+      graphene_vec4_t widths;
+      const graphene_point_t *offset;
+      graphene_vec2_t offset_vec;
 
-      for (int i = 0; i < 4; i++)
-        gdk_color_init_copy (&colors[i], color);
+      offset = gsk_inset_shadow_node_get_offset (node);
+      graphene_vec4_init (&widths, spread, spread, spread, spread);
+      graphene_vec2_init (&offset_vec, offset->x, offset->y);
 
       gsk_gpu_border_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                          self->ccs,
+                         gsk_gpu_color_states_find (self->ccs, color),
                          self->opacity,
                          &self->offset,
                          gsk_inset_shadow_node_get_outline (node),
-                         gsk_inset_shadow_node_get_offset (node),
-                         (float[4]) { spread, spread, spread, spread },
-                         colors);
-
-      for (int i = 0; i < 4; i++)
-        gdk_color_finish (&colors[i]);
+                         color,
+                         color,
+                         color,
+                         color,
+                         &widths,
+                         &offset_vec);
     }
   else
     {
@@ -2560,28 +2576,29 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
 
   if (blur_radius < 0.01)
     {
+      graphene_vec4_t widths;
+      graphene_vec2_t offset_vec;
       GskRoundedRect outline;
-      GdkColor colors[4];
 
+      graphene_vec4_init (&widths, spread, spread, spread, spread);
+      graphene_vec2_init (&offset_vec, - offset->x, - offset->y);
       gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
       gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
       gsk_rect_init_offset (&outline.bounds, &outline.bounds, offset);
 
-      for (int i = 0; i < 4; i++)
-        gdk_color_init_copy (&colors[i], color);
-
       gsk_gpu_border_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                          self->ccs,
+                         gsk_gpu_color_states_find (self->ccs, color),
                          self->opacity,
                          &self->offset,
                          &outline,
-                         &GRAPHENE_POINT_INIT (- offset->x, - offset->y),
-                         (float[4]) { spread, spread, spread, spread },
-                         colors);
-
-      for (int i = 0; i < 4; i++)
-        gdk_color_finish (&colors[i]);
+                         color,
+                         color,
+                         color,
+                         color,
+                         &widths,
+                         &offset_vec);
     }
   else
     {

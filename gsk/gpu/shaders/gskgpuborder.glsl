@@ -1,11 +1,11 @@
 #ifdef GSK_PREAMBLE
 instances = 48;
 
+GskRoundedRect outline;
 GdkColor top_border_color;
 GdkColor right_border_color;
 GdkColor bottom_border_color;
 GdkColor left_border_color;
-GskRoundedRect outline;
 graphene_vec4_t border_widths;
 graphene_vec2_t inside_offset;
 #endif
