@@ -5880,6 +5880,21 @@ append_four_float_param (Printer    *p,
 }
 
 static void
+append_channels_param (Printer         *p,
+                       const char      *param_name,
+                       GdkColorChannel  channel1,
+                       GdkColorChannel  channel2)
+{
+  _indent (p);
+  g_string_append_printf (p->str,
+                          "%s: %s %s;\n",
+                          param_name,
+                          channel_names[channel1],
+                          channel_names[channel2]);
+  g_string_append (p->str, ";\n");
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -6654,6 +6669,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         const graphene_size_t *max, *scale;
         const graphene_point_t *offset;
+        const GdkColorChannel *channels = gsk_displacement_node_get_channels (node);
         max = gsk_displacement_node_get_max (node);
         scale = gsk_displacement_node_get_scale (node);
         offset = gsk_displacement_node_get_offset (node);
@@ -6663,6 +6679,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_two_float_param (p, "max", max->width, max->height);
         append_two_float_param (p, "scale", scale->width, scale->height);
         append_two_float_param (p, "offset", offset->x, offset->y);
+        append_channels_param (p, "channel", channels[0], channels[1]);
         end_node (p);
       }
       break;
