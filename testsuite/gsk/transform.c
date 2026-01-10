@@ -1189,6 +1189,32 @@ test_fine_category (void)
   gsk_transform_unref (transform);
 }
 
+static void
+test_invert_singular (void)
+{
+  GskTransform *transform, *inverse;
+
+  transform = gsk_transform_matrix_2d (NULL, 0, 0, 0, 0, 0, 0);
+  inverse = gsk_transform_invert (transform);
+  g_assert_true (inverse == NULL);
+
+  transform = gsk_transform_matrix_2d (NULL, 0, 0, 1, 2, 3, 4);
+  inverse = gsk_transform_invert (transform);
+  g_assert_true (inverse == NULL);
+
+  transform = gsk_transform_scale (NULL, 0, 0);
+  inverse = gsk_transform_invert (transform);
+  g_assert_true (inverse == NULL);
+
+  transform = gsk_transform_scale (NULL, 1, 0);
+  inverse = gsk_transform_invert (transform);
+  g_assert_true (inverse == NULL);
+
+  transform = gsk_transform_skew (NULL, 45, 45);
+  inverse = gsk_transform_invert (transform);
+  g_assert_true (inverse == NULL);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -1219,6 +1245,7 @@ main (int   argc,
   g_test_add_func ("/transform/to-dihedral", test_to_dihedral);
   g_test_add_func ("/transform/dihedral-matrix", test_dihedral_matrix);
   g_test_add_func ("/transform/fine-category", test_fine_category);
+  g_test_add_func ("/transform/invert-singular", test_invert_singular);
 
   return g_test_run ();
 }
