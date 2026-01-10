@@ -18826,10 +18826,14 @@ template_type_compatible (ShapeType type1,
          (type_is_gradient (type1) && type_is_gradient (type2));
 }
 
+/* Only return explicitly set values from a template.
+ * If we don't have one, we use the initial value for
+ * the original paint server.
+ */
 static SvgValue *
-paint_server_get_current_value (Shape        *shape,
-                                ShapeAttr     attr,
-                                PaintContext *context)
+paint_server_get_template_value (Shape        *shape,
+                                 ShapeAttr     attr,
+                                 PaintContext *context)
 {
   if (!_gtk_bitmask_get (shape->attrs, attr))
     {
@@ -18851,7 +18855,7 @@ paint_server_get_current_value (Shape        *shape,
               SvgValue *ret;
 
               context->depth++;
-              ret = paint_server_get_current_value (href->shape, attr, context);
+              ret = paint_server_get_template_value (href->shape, attr, context);
               context->depth--;
 
               return ret;
@@ -18863,9 +18867,28 @@ paint_server_get_current_value (Shape        *shape,
                                      shape_types[href->shape->type].name,
                                      href->ref);
         }
+
+      return NULL;
     }
 
 fail:
+  return shape->current[attr];
+}
+
+static SvgValue *
+paint_server_get_current_value (Shape        *shape,
+                                ShapeAttr     attr,
+                                PaintContext *context)
+{
+  SvgValue *value = NULL;
+
+  if (_gtk_bitmask_get (shape->attrs, attr))
+    return shape->current[attr];
+
+  value = paint_server_get_template_value (shape, attr, context);
+  if (value)
+    return value;
+
   return shape->current[attr];
 }
 
