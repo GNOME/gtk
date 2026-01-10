@@ -1369,7 +1369,8 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   gsk_gpu_rounded_color_op (other.frame,
                             gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &node->bounds),
                             self->ccs,
-                            1,
+                            self->ccs,
+                            1.0f,
                             &other.offset,
                             gsk_rounded_clip_node_get_clip (node),
                             &white);
@@ -1418,15 +1419,20 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
   if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&child->bounds, &original_clip->bounds))
     {
+      const GdkColor *color;
+
       gsk_gpu_node_processor_sync_globals (self, 0);
+
+      color = gsk_color_node_get_gdk_color (child);
 
       gsk_gpu_rounded_color_op (self->frame,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &original_clip->bounds),
                                 self->ccs,
+                                gsk_gpu_color_states_find (self->ccs, color),
                                 self->opacity,
                                 &self->offset,
                                 original_clip,
-                                gsk_color_node_get_gdk_color (child));
+                                color);
       return;
     }
 
