@@ -129,7 +129,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_CONIC_GRADIENT_NODE            (gsk_conic_gradient_node_get_type())
 #define GSK_TYPE_INSET_SHADOW_NODE              (gsk_inset_shadow_node_get_type())
 #define GSK_TYPE_OUTSET_SHADOW_NODE             (gsk_outset_shadow_node_get_type())
-#define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 
 typedef struct _GskLinearGradientNode           GskLinearGradientNode;
 typedef struct _GskRepeatingLinearGradientNode  GskRepeatingLinearGradientNode;
