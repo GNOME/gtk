@@ -2,8 +2,8 @@
 textures = 1;
 
 graphene_rect_t rect;
-GdkColor color;
 graphene_rect_t tex_rect;
+GdkColor color;
 
 #endif
 
