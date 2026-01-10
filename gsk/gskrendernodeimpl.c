@@ -20,36 +20,8 @@
 
 #include "gskrendernodeprivate.h"
 
-#include "gskcairoblurprivate.h"
-#include "gskcairoshadowprivate.h"
-#include "gskcairogradientprivate.h"
 #include "gskcairorenderer.h"
-#include "gskcolormatrixnodeprivate.h"
-#include "gskcolornode.h"
-#include "gskcontainernode.h"
-#include "gskdebugprivate.h"
-#include "gskfillnode.h"
-#include "gskrectprivate.h"
-#include "gskrendererprivate.h"
-#include "gskrenderreplay.h"
-#include "gskrepeatnode.h"
-#include "gskroundedrectprivate.h"
-#include "gskstrokenode.h"
-#include "gsksubsurfacenode.h"
-#include "gsktransformprivate.h"
-#include "gskcomponenttransferprivate.h"
-#include "gskprivate.h"
 #include "gpu/gskglrenderer.h"
-
-#include "gdk/gdkcairoprivate.h"
-#include "gdk/gdkcolorstateprivate.h"
-#include "gdk/gdkmemoryformatprivate.h"
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkrectangleprivate.h"
-#include "gdk/gdktextureprivate.h"
-#include "gdk/gdktexturedownloaderprivate.h"
-#include "gdk/gdkrgbaprivate.h"
-#include "gdk/gdkcolorstateprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
