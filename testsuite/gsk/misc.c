@@ -2,6 +2,7 @@
 #include "gsk/gskcontainernodeprivate.h"
 #include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskgradientprivate.h"
+#include "gsk/gskradialgradientnodeprivate.h"
 
 #include <gobject/gvaluecollector.h>
 

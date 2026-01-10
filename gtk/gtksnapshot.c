@@ -34,6 +34,7 @@
 #include "gsk/gskinsetshadownodeprivate.h"
 #include "gsk/gsklineargradientnodeprivate.h"
 #include "gsk/gskoutsetshadownodeprivate.h"
+#include "gsk/gskradialgradientnodeprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"

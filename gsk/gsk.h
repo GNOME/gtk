@@ -47,6 +47,7 @@
 #include <gsk/gskpathbuilder.h>
 #include <gsk/gskpathmeasure.h>
 #include <gsk/gskpathpoint.h>
+#include <gsk/gskradialgradientnode.h>
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskrenderreplay.h>

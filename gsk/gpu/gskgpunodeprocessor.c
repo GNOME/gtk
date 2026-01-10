@@ -64,6 +64,7 @@
 #include "gskopacitynode.h"
 #include "gskoutsetshadownodeprivate.h"
 #include "gskpath.h"
+#include "gskradialgradientnodeprivate.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrepeatnodeprivate.h"
