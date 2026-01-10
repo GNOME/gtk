@@ -129,6 +129,7 @@ class File:
     n_instances: int
     acs_premultiplied: bool
     acs_equals_ccs: bool
+    opacity: bool
     variables: list[Variable]
     variations: list[Variation]
 
@@ -263,6 +264,7 @@ def read_file (filename):
     n_instances = 6
     acs_premultiplied = False
     acs_equals_ccs = False
+    opacity = True
     name = ''
     var_name = ''
     struct_name = ''
@@ -309,6 +311,8 @@ def read_file (filename):
             acs_premultiplied = strtobool (match.group(1), filename + ':' + str (pos))
         elif match := re.search (r'^acs_equals_ccs\s*=\s*(\w+)\s*;$', line):
             acs_equals_ccs = strtobool (match.group(1), filename + ':' + str (pos))
+        elif match := re.search (r'^opacity\s*=\s*(\w+)\s*;$', line):
+            opacity = strtobool (match.group(1), filename + ':' + str (pos))
         else:
             raise Exception (f'''{filename}:{pos}: Could not parse line''')
     
@@ -327,6 +331,7 @@ def read_file (filename):
                  n_instances = n_instances,
                  acs_premultiplied = acs_premultiplied,
                  acs_equals_ccs = acs_equals_ccs,
+                 opacity = opacity,
                  variables = variables,
                  variations = variations)
 
@@ -476,9 +481,10 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
              FunctionArg ('GskGpuShaderClip',            False, 'clip'),
              FunctionArg ('GdkColorState',               True,  'ccs') ]
     if not file.acs_equals_ccs:
-        args.append (FunctionArg ('GdkColorState',               True,  'acs'))
-    args += [ FunctionArg ('float',                       False, 'opacity'),
-              FunctionArg ('const graphene_point_t',      True,  'offset') ]
+        args.append (FunctionArg ('GdkColorState',       True,  'acs'))
+    if file.opacity:
+        args.append (FunctionArg ('float',               False, 'opacity'))
+    args.append (FunctionArg ('const graphene_point_t',  True,  'offset'))
 
     for i in range(1, file.n_textures + 1):
         args += [ FunctionArg ('GskGpuImage',             True, 'image' + str (i)),

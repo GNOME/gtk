@@ -689,13 +689,12 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
     {
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                          self->ccs,
                           &self->offset,
-                          &(GskGpuShaderImage) {
-                              image,
-                              sampler,
-                              rect,
-                              tex_rect
-                          });
+                          image,
+                          sampler,
+                          rect,
+                          tex_rect);
     }
 }
 
@@ -2441,13 +2440,12 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
         }
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                          self->ccs,
                           &self->offset,
-                          &(GskGpuShaderImage) {
-                              offscreen,
-                              GSK_GPU_SAMPLER_DEFAULT,
-                              &node->bounds,
-                              &clip_bounds
-                          });
+                          offscreen,
+                          GSK_GPU_SAMPLER_DEFAULT,
+                          &node->bounds,
+                          &clip_bounds);
       g_object_unref (offscreen);
       return;
     }
@@ -2470,13 +2468,12 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
 
   gsk_gpu_texture_op (self->frame,
                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                      self->ccs,
                       &self->offset,
-                      &(GskGpuShaderImage) {
-                          image,
-                          gsk_gpu_sampler_for_scaling_filter (scaling_filter),
-                          &node->bounds,
-                          &node->bounds,
-                      });
+                      image,
+                      gsk_gpu_sampler_for_scaling_filter (scaling_filter),
+                      &node->bounds,
+                      &node->bounds);
 
   gdk_color_state_unref (image_cs);
   g_object_unref (image);
@@ -3016,13 +3013,12 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
 
   gsk_gpu_texture_op (self->frame,
                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
+                      self->ccs,
                       &self->offset,
-                      &(GskGpuShaderImage) {
-                          image,
-                          GSK_GPU_SAMPLER_DEFAULT,
-                          &tex_rect,
-                          &tex_rect,
-                      });
+                      image,
+                      GSK_GPU_SAMPLER_DEFAULT,
+                      &tex_rect,
+                      &tex_rect);
 
   g_object_unref (image);
 }
@@ -3492,13 +3488,12 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       if (glyphs[i].attr.is_color)
         gsk_gpu_texture_op (self->frame,
                             glyph_clip,
+                            self->ccs,
                             &glyph_origin,
-                            &(GskGpuShaderImage) {
-                                image,
-                                GSK_GPU_SAMPLER_DEFAULT,
-                                &glyph_bounds,
-                                &glyph_tex_rect
-                            });
+                            image,
+                            GSK_GPU_SAMPLER_DEFAULT,
+                            &glyph_bounds,
+                            &glyph_tex_rect);
       else
         gsk_gpu_colorize_op2 (self->frame,
                               glyph_clip,
@@ -3636,18 +3631,17 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
 
   gsk_gpu_texture_op (self->frame,
                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                      self->ccs,
                       &self->offset,
-                      &(GskGpuShaderImage) {
-                          image,
-                          GSK_GPU_SAMPLER_REPEAT,
-                          rect,
-                          &GRAPHENE_RECT_INIT (
-                              clipped_child_bounds.origin.x + x * child_bounds->size.width,
-                              clipped_child_bounds.origin.y + y * child_bounds->size.height,
-                              clipped_child_bounds.size.width,
-                              clipped_child_bounds.size.height
-                          )
-                      });
+                      image,
+                      GSK_GPU_SAMPLER_REPEAT,
+                      rect,
+                      &GRAPHENE_RECT_INIT (
+                          clipped_child_bounds.origin.x + x * child_bounds->size.width,
+                          clipped_child_bounds.origin.y + y * child_bounds->size.height,
+                          clipped_child_bounds.size.width,
+                          clipped_child_bounds.size.height
+                      ));
 
   g_object_unref (image);
 }
@@ -3703,13 +3697,12 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
       g_return_if_fail (image);
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                          self->ccs,
                           &self->offset,
-                          &(GskGpuShaderImage) {
-                              image,
-                              GSK_GPU_SAMPLER_DEFAULT,
-                              &bounds,
-                              &clipped_child_bounds
-                          });
+                          image,
+                          GSK_GPU_SAMPLER_DEFAULT,
+                          &bounds,
+                          &clipped_child_bounds);
       g_object_unref (image);
     }
   else if (repeat == GSK_REPEAT_REFLECT)
@@ -3731,13 +3724,12 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
       clipped_child_bounds.origin = pos;
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                          self->ccs,
                           &self->offset,
-                          &(GskGpuShaderImage) {
-                              image,
-                              GSK_GPU_SAMPLER_REFLECT,
-                              &bounds,
-                              &clipped_child_bounds
-                          });
+                          image,
+                          GSK_GPU_SAMPLER_REFLECT,
+                          &bounds,
+                          &clipped_child_bounds);
       g_object_unref (image);
     }
   else
@@ -4233,13 +4225,12 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
     {
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
+                          self->ccs,
                           &self->offset,
-                          &(GskGpuShaderImage) {
-                              mask_image,
-                              GSK_GPU_SAMPLER_DEFAULT,
-                              &mask_rect,
-                              &mask_rect,
-                          });
+                          mask_image,
+                          GSK_GPU_SAMPLER_DEFAULT,
+                          &mask_rect,
+                          &mask_rect);
     }
   else
     {
