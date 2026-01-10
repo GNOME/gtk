@@ -299,28 +299,32 @@ variants = {
   'clip': '--clip',
   'colorflip': '--colorflip',
   'opaque': '--opaque',
+  'serialize': '--serialize',
 }
 
 compare_xfails = {
   'gl': {
     'blur-child-bounds-oversize': ['clip'], # 6450
-    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
+    'cairo-coordinates': ['serialize'],
+    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
     'big-checkerboard': ['clipped'], # 6444
   },
   'vulkan': {
     'blur-child-bounds-oversize': ['clip'], # 6450
+    'cairo-coordinates': ['serialize'],
     'repeat-repeats-nested': ['clip'], # 6522
     'repeating-radial-gradient-edge-colors': ['colorflip'],
-    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
+    'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
     'big-checkerboard': ['clip'], # 6444
   },
   'cairo': {
+    'cairo-coordinates': ['serialize'],
     'inter-hinting': ['flip', 'rotate'],
     'inter-optical-scaling': ['flip', 'rotate'],
-    'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
-    'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
-    'stroke-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
-    'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'stroke-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
   }
 }
 

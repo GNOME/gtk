@@ -15,12 +15,14 @@ linear-gradient {
   start: 2 3;
   end: 20 40;
   stops: 0 rgb(0,0,0), 0.5 0.3 color(rec2100-pq 0.4 0.5 0.6), 1 rgb(170,255,0);
+  repeat: repeat;
 }
 linear-gradient {
   bounds: 10 10 100 100;
   start: 2 3;
   end: 20 40;
   stops: 0 rgb(0,0,0), 0.5 0.3 color(rec2100-pq 0.4 0.5 0.6), 1 rgb(170,255,0);
+  repeat: reflect;
 }
 radial-gradient {
   bounds: 10 10 100 100;
