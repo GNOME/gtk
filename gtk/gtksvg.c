@@ -18835,7 +18835,6 @@ paint_server_get_current_value (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
-      context->depth++;
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
@@ -18849,8 +18848,12 @@ paint_server_get_current_value (Shape        *shape,
         {
           if (template_type_compatible (href->shape->type, shape->type))
             {
-              SvgValue *ret = paint_server_get_current_value (href->shape, attr, context);
+              SvgValue *ret;
+
+              context->depth++;
+              ret = paint_server_get_current_value (href->shape, attr, context);
               context->depth--;
+
               return ret;
             }
 
@@ -18863,7 +18866,6 @@ paint_server_get_current_value (Shape        *shape,
     }
 
 fail:
-  context->depth--;
   return shape->current[attr];
 }
 
@@ -18875,7 +18877,6 @@ gradient_get_color_stops (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
-      context->depth++;
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
@@ -18889,7 +18890,9 @@ gradient_get_color_stops (Shape        *shape,
         {
           if (template_type_compatible (href->shape->type, shape->type))
             {
-              GPtrArray *ret = gradient_get_color_stops (href->shape, context);
+              GPtrArray *ret;
+              context->depth++;
+              ret = gradient_get_color_stops (href->shape, context);
               context->depth--;
               return ret;
             }
@@ -18902,7 +18905,6 @@ gradient_get_color_stops (Shape        *shape,
     }
 
 fail:
-  context->depth--;
   return shape->color_stops;
 }
 
@@ -18942,13 +18944,13 @@ pattern_get_shapes (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
-      context->depth++;
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
                                    "excessive rendering depth (> %d) while resolving href %s, aborting",
                                    NESTING_LIMIT,
                                    href->ref);
+
           goto fail;
         }
 
@@ -18956,7 +18958,9 @@ pattern_get_shapes (Shape        *shape,
         {
           if (template_type_compatible (href->shape->type, shape->type))
             {
-              GPtrArray *ret = pattern_get_shapes (href->shape, context);
+              GPtrArray *ret;
+              context->depth++;
+              ret = pattern_get_shapes (href->shape, context);
               context->depth--;
               return ret;
             }
@@ -18969,7 +18973,6 @@ pattern_get_shapes (Shape        *shape,
     }
 
 fail:
-  context->depth--;
   return shape->shapes;
 }
 
