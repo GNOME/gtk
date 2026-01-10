@@ -175,7 +175,7 @@ over_native_window_buttons (NSEvent *nsevent)
   if (!GDK_IS_MACOS_WINDOW (window) || ![(GdkMacosWindow*)window showStandardWindowButtons])
     return FALSE;
 
-  NSPoint pos = [nsevent locationInWindow];
+  NSPoint win_pos = [nsevent locationInWindow];
   NSButton *buttons[] = {
     [window standardWindowButton:NSWindowCloseButton],
     [window standardWindowButton:NSWindowMiniaturizeButton],
@@ -184,8 +184,8 @@ over_native_window_buttons (NSEvent *nsevent)
 
   for (int i = 0; i < G_N_ELEMENTS (buttons); i++)
     {
-      NSRect frame = [buttons[i] convertRect:[buttons[i] bounds] toView:nil];
-      if (NSPointInRect(pos, frame))
+      NSPoint view_pos = [[buttons[i] superview] convertPoint:win_pos fromView:nil];
+      if ([buttons[i] hitTest:view_pos])
         return TRUE;
     }
 
