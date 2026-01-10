@@ -15,6 +15,7 @@ converted_shaders = files([
   'gskgpublendmode.glsl',
   'gskgpublur.glsl',
   'gskgpuborder.glsl',
+  'gskgpuboxshadow.glsl',
   'gskgpucolor.glsl',
   'gskgpuconicgradient.glsl',
   'gskgpulineargradient.glsl',
@@ -24,7 +25,6 @@ converted_shaders = files([
 ])
 
 gsk_private_gpu_shaders = files([
-  'gskgpuboxshadow.glsl',
   'gskgpucolorize.glsl',
   'gskgpucolormatrix.glsl',
   'gskgpucomponenttransfer.glsl',

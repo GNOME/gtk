@@ -4,12 +4,12 @@ instances = 48;
 var_name = "gsk_gpu_box_shadow";
 struct_name = "GskGpuBoxShadow";
 
-GskRoundedRect outline;
 graphene_rect_t bounds;
-GdkColor color;
-graphene_point_t shadow_offset;
+GskRoundedRect outline;
+graphene_size_t shadow_offset;
 float shadow_spread;
 float blur_radius;
+GdkColor color;
 
 variation: gboolean inset;
 #endif
