@@ -2,6 +2,8 @@
 textures = 2;
 var_name = "gsk_gpu_blend_mode";
 struct_name = "GskGpuBlendMode";
+acs_equals_ccs = true;
+acs_premultiplied = true;
 
 graphene_rect_t rect;
 graphene_rect_t bottom_rect;
