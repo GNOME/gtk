@@ -18999,6 +18999,32 @@ fail:
   return shape->shapes;
 }
 
+static gboolean
+paint_server_is_skipped (Shape                 *server,
+                         const graphene_rect_t *bounds,
+                         PaintContext          *context)
+{
+  SvgValue *units;
+
+  if (server->type == SHAPE_PATTERN)
+    {
+      SvgValue *width = paint_server_get_current_value (server, SHAPE_ATTR_WIDTH, context);
+      SvgValue *height = paint_server_get_current_value (server, SHAPE_ATTR_HEIGHT, context);
+
+      if (svg_number_get (width, 1) == 0 || svg_number_get (height, 1) == 0)
+        return TRUE;
+
+      units = paint_server_get_current_value (server, SHAPE_ATTR_BOUND_UNITS, context);
+    }
+  else
+    units = paint_server_get_current_value (server, SHAPE_ATTR_CONTENT_UNITS, context);
+
+  if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+    return bounds->size.width == 0 || bounds->size.height == 0;
+  else
+    return FALSE;
+}
+
 static void
 paint_linear_gradient (Shape                 *gradient,
                        const graphene_rect_t *bounds,
@@ -19099,6 +19125,8 @@ paint_radial_gradient (Shape                 *gradient,
     }
 
   g = gradient_get_gsk_gradient (gradient, context);
+
+  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
   GskTransform *transform = NULL;
   gtk_snapshot_save (context->snapshot);
@@ -19282,7 +19310,8 @@ paint_server (SvgPaint              *paint,
 {
   Shape *server = paint->server.shape;
 
-  if (server == NULL)
+  if (server == NULL ||
+      paint_server_is_skipped (server, bounds, context))
     {
       gtk_snapshot_append_color (context->snapshot,
                                  &paint->server.fallback,
