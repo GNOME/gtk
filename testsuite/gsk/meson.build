@@ -304,18 +304,20 @@ variants = {
 
 compare_xfails = {
   'gl': {
+    'big-checkerboard': ['clipped'], # 6444
     'blur-child-bounds-oversize': ['clip'], # 6450
     'cairo-coordinates': ['serialize'],
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
-    'big-checkerboard': ['clipped'], # 6444
+    'yuv-matrix-dmabuf-nv12': ['serialize'],
   },
   'vulkan': {
+    'big-checkerboard': ['clip'], # 6444
     'blur-child-bounds-oversize': ['clip'], # 6450
     'cairo-coordinates': ['serialize'],
     'repeat-repeats-nested': ['clip'], # 6522
     'repeating-radial-gradient-edge-colors': ['colorflip'],
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
-    'big-checkerboard': ['clip'], # 6444
+    'yuv-matrix-dmabuf-nv12': ['serialize'],
   },
   'cairo': {
     'cairo-coordinates': ['serialize'],
@@ -325,6 +327,7 @@ compare_xfails = {
     'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
     'stroke-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
     'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'yuv-matrix-dmabuf-nv12': ['serialize'],
   }
 }
 
