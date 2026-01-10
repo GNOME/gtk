@@ -5965,10 +5965,7 @@ render_node_print (Printer       *p,
       {
         const GskGradient *gradient;
 
-        if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
-          start_node (p, "repeating-linear-gradient", node_name);
-        else
-          start_node (p, "linear-gradient", node_name);
+        start_node (p, "linear-gradient", node_name);
 
         gradient = gsk_gradient_node_get_gradient (node);
         append_rect_param (p, "bounds", &node->bounds);
@@ -5976,8 +5973,7 @@ render_node_print (Printer       *p,
         append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
         append_stops_param (p, "stops", gradient);
 
-        if (gsk_render_node_get_node_type (node) == GSK_LINEAR_GRADIENT_NODE &&
-            gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
+        if (gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
           append_repeat_param (p, "repeat", gsk_gradient_get_repeat (gradient));
 
         append_color_state_param (p, "interpolation",
@@ -5996,10 +5992,7 @@ render_node_print (Printer       *p,
       {
         const GskGradient *gradient;
 
-        if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
-          start_node (p, "repeating-radial-gradient", node_name);
-        else
-          start_node (p, "radial-gradient", node_name);
+        start_node (p, "radial-gradient", node_name);
 
         gradient = gsk_gradient_node_get_gradient (node);
 
@@ -6014,8 +6007,7 @@ render_node_print (Printer       *p,
 
         append_stops_param (p, "stops", gradient);
 
-        if (gsk_render_node_get_node_type (node) == GSK_RADIAL_GRADIENT_NODE &&
-            gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
+        if (gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
           append_repeat_param (p, "repeat", gsk_gradient_get_repeat (gradient));
 
         append_color_state_param (p, "interpolation",
