@@ -5,14 +5,14 @@
 # Gia Shervashidze <giasher@telenet.ge>, 2005.
 # Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>, 2007, 2008.
 # Zura Davitashvili <zdavitashvili0@gmail.com>, 2020.
-# Ekaterine Papava <papava.e@gtu.ge>, 2023-2025.
+# Ekaterine Papava <papava.e@gtu.ge>, 2023-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-12-22 02:50+0000\n"
-"PO-Revision-Date: 2025-12-22 13:09+0100\n"
+"POT-Creation-Date: 2026-01-09 17:55+0000\n"
+"PO-Revision-Date: 2026-01-10 03:19+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -5072,7 +5072,7 @@ msgstr "წყარო:"
 msgid "Defined At"
 msgstr "აღწერის წერტილი"
 
-#: gtk/inspector/recorder.c:2251
+#: gtk/inspector/recorder.c:2272
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNode-ის შენახვის შეცდომა"
@@ -7750,8 +7750,9 @@ msgid "Overwrite existing file"
 msgstr "არსებულ ფაილზე გადაწერა"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
-#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-relabel.c:86 tools/gtk-image-tool-show.c:119
+#: tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:272
 msgid "FILE…"
 msgstr "FILE…"
@@ -8029,6 +8030,40 @@ msgstr ""
 "მისაღებია, მხოლოდ, ერთი გამოსახულების ფაილი\n"
 "\n"
 
+#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:121
+msgid "Don't add a titlebar"
+msgstr "სათაურის ზოლი არ დაემატება"
+
+#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "ზომა"
+
+#: tools/gtk-image-tool-play.c:323
+msgid "Don't run animations"
+msgstr "ანიმაციების არგაშვება"
+
+#: tools/gtk-image-tool-play.c:324
+msgid "Don't use system resources"
+msgstr "სისტემური რესურსების არგამოყენება"
+
+#: tools/gtk-image-tool-play.c:325
+msgid "Don't load external resources"
+msgstr "გარე რესურსების არჩატვირთვა"
+
+#: tools/gtk-image-tool-play.c:326
+msgid "Don't allow gpa extensions"
+msgstr "GPA გაფართოებების არდაშვება"
+
+#: tools/gtk-image-tool-play.c:337
+msgid "Show one or more animations."
+msgstr "ერთი ან მეტი ანიმაციის ჩვენება."
+
+#: tools/gtk-image-tool-play.c:350
+#, c-format
+msgid "No animation file specified\n"
+msgstr "ანიმაციის ფაილი მითითებული არაა\n"
+
 #: tools/gtk-image-tool-relabel.c:96
 msgid "Change the color state of the image without conversion."
 msgstr "შეცვალეთ გამოსახულების ფერის მდგომარეობა გადაყვანის გარეშე."
@@ -8041,10 +8076,6 @@ msgid ""
 msgstr ""
 "ფერის მდგომარეობა არაა: %s\n"
 "შესაძლო მნიშვნელობებია: %s\n"
-
-#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:121
-msgid "Don't add a titlebar"
-msgstr "სათაურის ზოლი არ დაემატება"
 
 #: tools/gtk-image-tool-show.c:128
 msgid "Show one or more images."
@@ -8572,10 +8603,6 @@ msgstr "გაფრთხილებების ფერი"
 #: tools/gtk-rendernode-tool-convert.c:96
 msgid "Error color"
 msgstr "შეცდომის ფერი"
-
-#: tools/gtk-rendernode-tool-convert.c:97
-msgid "SIZE"
-msgstr "ზომა"
 
 #: tools/gtk-rendernode-tool-convert.c:107
 msgid "Convert from symbolic svg to node."
