@@ -58,6 +58,7 @@ gsk_public_sources = files([
 
 gsk_private_sources = files([
   'gskcairoblur.c',
+  'gskcairogradient.c',
   'gskcairoshadow.c',
   'gskcontour.c',
   'gskcurve.c',
