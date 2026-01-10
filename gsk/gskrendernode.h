@@ -122,31 +122,6 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
                                                                  GskParseErrorFunc  error_func,
                                                                  gpointer           user_data);
 
-#define GSK_TYPE_CONIC_GRADIENT_NODE            (gsk_conic_gradient_node_get_type())
-
-typedef struct _GskConicGradientNode            GskConicGradientNode;
-
-
-GDK_AVAILABLE_IN_ALL
-GType                   gsk_conic_gradient_node_get_type            (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_conic_gradient_node_new                 (const graphene_rect_t    *bounds,
-                                                                     const graphene_point_t   *center,
-                                                                     float                     rotation,
-                                                                     const GskColorStop       *color_stops,
-                                                                     gsize                     n_color_stops);
-GDK_AVAILABLE_IN_ALL
-const graphene_point_t * gsk_conic_gradient_node_get_center         (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-float                    gsk_conic_gradient_node_get_rotation       (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_2
-float                    gsk_conic_gradient_node_get_angle          (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-gsize                    gsk_conic_gradient_node_get_n_color_stops  (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const GskColorStop *     gsk_conic_gradient_node_get_color_stops    (const GskRenderNode      *node,
-                                                                     gsize                    *n_stops);
-
 /**
  * GSK_VALUE_HOLDS_RENDER_NODE:
  * @value: a `GValue`
@@ -169,4 +144,3 @@ GskRenderNode *         gsk_value_dup_render_node               (const GValue   
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderNode, gsk_render_node_unref)
 
 G_END_DECLS
-

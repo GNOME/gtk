@@ -31,6 +31,7 @@
 #include "gskclipnode.h"
 #include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
+#include "gskconicgradientnodeprivate.h"
 #include "gskcomponenttransfernode.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcompositenode.h"

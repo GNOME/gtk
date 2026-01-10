@@ -29,6 +29,7 @@
 #include <gsk/gskcomponenttransfer.h>
 #include <gsk/gskcomponenttransfernode.h>
 #include <gsk/gskcompositenode.h>
+#include <gsk/gskconicgradientnode.h>
 #include <gsk/gskcopynode.h>
 #include <gsk/gskcontainernode.h>
 #include <gsk/gskcrossfadenode.h>

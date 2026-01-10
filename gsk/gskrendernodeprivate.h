@@ -165,11 +165,6 @@ _gsk_render_node_get_node_type (const GskRenderNode *node)
   return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
 }
 
-GskRenderNode * gsk_conic_gradient_node_new2            (const graphene_rect_t   *bounds,
-                                                         const graphene_point_t  *center,
-                                                         float                    rotation,
-                                                         const GskGradient       *gradient);
-
 const GskGradient * gsk_gradient_node_get_gradient      (const GskRenderNode *node);
 
 G_END_DECLS

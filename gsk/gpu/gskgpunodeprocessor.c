@@ -51,6 +51,7 @@
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
 #include "gskcompositenode.h"
+#include "gskconicgradientnodeprivate.h"
 #include "gskcontainernodeprivate.h"
 #include "gskcrossfadenode.h"
 #include "gskdebugprivate.h"
