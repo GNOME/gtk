@@ -7873,6 +7873,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
       gtk_widget_unset_state_flags (widget,
                                     GTK_STATE_FLAG_PRELIGHT |
                                     GTK_STATE_FLAG_ACTIVE);
+      gtk_widget_reset_controllers (widget);
     }
 }
 
