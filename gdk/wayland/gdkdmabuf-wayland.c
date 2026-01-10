@@ -116,6 +116,8 @@ linux_dmabuf_format_table (void *data,
 
   info->n_dmabuf_formats = size / 16;
   info->dmabuf_format_table = mmap (NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+
+  close (fd);
 }
 
 static void
