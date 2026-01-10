@@ -2450,13 +2450,13 @@ svg_number_resolve (const SvgValue *value,
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_Y:
         case SHAPE_ATTR_HEIGHT:
-          if (shape->type != SHAPE_FILTER)
+          if (shape->type != SHAPE_FILTER && shape->type != SHAPE_PATTERN)
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_X:
         case SHAPE_ATTR_WIDTH:
-          if (shape->type != SHAPE_FILTER)
+          if (shape->type != SHAPE_FILTER && shape->type != SHAPE_PATTERN)
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
           else
             return svg_value_ref ((SvgValue *) value);
@@ -18826,16 +18826,19 @@ template_type_compatible (ShapeType type1,
          (type_is_gradient (type1) && type_is_gradient (type2));
 }
 
+/* Only return explicitly set values from a template.
+ * If we don't have one, we use the initial value for
+ * the original paint server.
+ */
 static SvgValue *
-paint_server_get_current_value (Shape        *shape,
-                                ShapeAttr     attr,
-                                PaintContext *context)
+paint_server_get_template_value (Shape        *shape,
+                                 ShapeAttr     attr,
+                                 PaintContext *context)
 {
   if (!_gtk_bitmask_get (shape->attrs, attr))
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
-      context->depth++;
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
@@ -18849,8 +18852,12 @@ paint_server_get_current_value (Shape        *shape,
         {
           if (template_type_compatible (href->shape->type, shape->type))
             {
-              SvgValue *ret = paint_server_get_current_value (href->shape, attr, context);
+              SvgValue *ret;
+
+              context->depth++;
+              ret = paint_server_get_template_value (href->shape, attr, context);
               context->depth--;
+
               return ret;
             }
 
@@ -18860,10 +18867,28 @@ paint_server_get_current_value (Shape        *shape,
                                      shape_types[href->shape->type].name,
                                      href->ref);
         }
+
+      return NULL;
     }
 
 fail:
-  context->depth--;
+  return shape->current[attr];
+}
+
+static SvgValue *
+paint_server_get_current_value (Shape        *shape,
+                                ShapeAttr     attr,
+                                PaintContext *context)
+{
+  SvgValue *value = NULL;
+
+  if (_gtk_bitmask_get (shape->attrs, attr))
+    return shape->current[attr];
+
+  value = paint_server_get_template_value (shape, attr, context);
+  if (value)
+    return value;
+
   return shape->current[attr];
 }
 
@@ -18875,7 +18900,6 @@ gradient_get_color_stops (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
-      context->depth++;
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
@@ -18889,7 +18913,9 @@ gradient_get_color_stops (Shape        *shape,
         {
           if (template_type_compatible (href->shape->type, shape->type))
             {
-              GPtrArray *ret = gradient_get_color_stops (href->shape, context);
+              GPtrArray *ret;
+              context->depth++;
+              ret = gradient_get_color_stops (href->shape, context);
               context->depth--;
               return ret;
             }
@@ -18902,7 +18928,6 @@ gradient_get_color_stops (Shape        *shape,
     }
 
 fail:
-  context->depth--;
   return shape->color_stops;
 }
 
@@ -18942,13 +18967,13 @@ pattern_get_shapes (Shape        *shape,
     {
       SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
 
-      context->depth++;
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
                                    "excessive rendering depth (> %d) while resolving href %s, aborting",
                                    NESTING_LIMIT,
                                    href->ref);
+
           goto fail;
         }
 
@@ -18956,7 +18981,9 @@ pattern_get_shapes (Shape        *shape,
         {
           if (template_type_compatible (href->shape->type, shape->type))
             {
-              GPtrArray *ret = pattern_get_shapes (href->shape, context);
+              GPtrArray *ret;
+              context->depth++;
+              ret = pattern_get_shapes (href->shape, context);
               context->depth--;
               return ret;
             }
@@ -18969,13 +18996,39 @@ pattern_get_shapes (Shape        *shape,
     }
 
 fail:
-  context->depth--;
   return shape->shapes;
+}
+
+static gboolean
+paint_server_is_skipped (Shape                 *server,
+                         const graphene_rect_t *bounds,
+                         PaintContext          *context)
+{
+  SvgValue *units;
+
+  if (server->type == SHAPE_PATTERN)
+    {
+      SvgValue *width = paint_server_get_current_value (server, SHAPE_ATTR_WIDTH, context);
+      SvgValue *height = paint_server_get_current_value (server, SHAPE_ATTR_HEIGHT, context);
+
+      if (svg_number_get (width, 1) == 0 || svg_number_get (height, 1) == 0)
+        return TRUE;
+
+      units = paint_server_get_current_value (server, SHAPE_ATTR_BOUND_UNITS, context);
+    }
+  else
+    units = paint_server_get_current_value (server, SHAPE_ATTR_CONTENT_UNITS, context);
+
+  if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+    return bounds->size.width == 0 || bounds->size.height == 0;
+  else
+    return FALSE;
 }
 
 static void
 paint_linear_gradient (Shape                 *gradient,
                        const graphene_rect_t *bounds,
+                       const graphene_rect_t *paint_bounds,
                        PaintContext          *context)
 {
   graphene_point_t start, end;
@@ -19021,7 +19074,7 @@ paint_linear_gradient (Shape                 *gradient,
 
   gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
-  gtk_snapshot_add_linear_gradient (context->snapshot, bounds, &start, &end, g);
+  gtk_snapshot_add_linear_gradient (context->snapshot, paint_bounds, &start, &end, g);
 
   gsk_gradient_free (g);
 }
@@ -19029,6 +19082,7 @@ paint_linear_gradient (Shape                 *gradient,
 static void
 paint_radial_gradient (Shape                 *gradient,
                        const graphene_rect_t *bounds,
+                       const graphene_rect_t *paint_bounds,
                        PaintContext          *context)
 {
   graphene_point_t start_center;
@@ -19047,8 +19101,15 @@ paint_radial_gradient (Shape                 *gradient,
   SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
   SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
+  g = gradient_get_gsk_gradient (gradient, context);
+  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
+
+  gtk_snapshot_save (context->snapshot);
+
   if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
+      GskTransform *transform = NULL;
+
       graphene_point_init (&start_center,
                            svg_number_get (fx, 1),
                            svg_number_get (fy, 1));
@@ -19058,6 +19119,15 @@ paint_radial_gradient (Shape                 *gradient,
                            svg_number_get (cx, 1),
                            svg_number_get (cy, 1));
       end_radius = svg_number_get (r, 1);
+
+      transform = gsk_transform_translate (transform, &bounds->origin);
+      transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
+      gtk_snapshot_transform (context->snapshot, transform);
+      push_transform (context, transform);
+
+      transform = gsk_transform_invert (transform);
+      gsk_transform_transform_bounds (transform, paint_bounds, &gradient_bounds);
+      gsk_transform_unref (transform);
     }
   else
     {
@@ -19070,42 +19140,39 @@ paint_radial_gradient (Shape                 *gradient,
                            svg_number_get (cx, context->viewport->size.width),
                            svg_number_get (cy, context->viewport->size.height));
       end_radius = svg_number_get (r, normalized_diagonal (context->viewport));
+      graphene_rect_init_from_rect (&gradient_bounds, paint_bounds);
+      push_transform (context, NULL);
     }
-
-  g = gradient_get_gsk_gradient (gradient, context);
-
-  GskTransform *transform = NULL;
-  gtk_snapshot_save (context->snapshot);
-
-  if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-    {
-      transform = gsk_transform_translate (transform, &bounds->origin);
-      transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
-      gtk_snapshot_transform (context->snapshot, transform);
-      graphene_rect_init (&gradient_bounds, 0, 0, 1, 1);
-    }
-  else
-    graphene_rect_init_from_rect (&gradient_bounds, bounds);
-
-  push_transform (context, transform);
-  gsk_transform_unref (transform);
 
   gradient_transform = svg_transform_get_gsk ((SvgTransform *) tf);
   gtk_snapshot_transform (context->snapshot, gradient_transform);
   push_transform (context, gradient_transform);
 
   gradient_transform = gsk_transform_invert (gradient_transform);
+
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
 
-  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
+  /* If the gradient transform is singular, we might end up with
+   * nans or infs in the bounds :(
+   */
+  if (!isfinite (gradient_bounds.size.width) || gradient_bounds.size.width == 0 ||
+      !isfinite (gradient_bounds.size.height) || gradient_bounds.size.height == 0)
+    {
+      GskRenderNode *node = gsk_container_node_new (NULL, 0);
+      gtk_snapshot_append_node (context->snapshot, node);
+      gsk_render_node_unref (node);
+    }
+  else
+    {
+      gtk_snapshot_add_radial_gradient (context->snapshot,
+                                        &gradient_bounds,
+                                        &start_center, start_radius,
+                                        &end_center, end_radius,
+                                        1,
+                                        g);
+    }
 
-  gtk_snapshot_add_radial_gradient (context->snapshot,
-                                    &gradient_bounds,
-                                    &start_center, start_radius,
-                                    &end_center, end_radius,
-                                    1,
-                                    g);
   gsk_gradient_free (g);
 
   pop_transform (context);
@@ -19116,6 +19183,7 @@ paint_radial_gradient (Shape                 *gradient,
 static void
 paint_pattern (Shape                 *pattern,
                const graphene_rect_t *bounds,
+               const graphene_rect_t *paint_bounds,
                PaintContext          *context)
 {
   graphene_rect_t pattern_bounds, child_bounds;
@@ -19193,29 +19261,42 @@ paint_pattern (Shape                 *pattern,
   push_transform (context, transform);
 
   transform = gsk_transform_invert (transform);
-  gsk_transform_transform_bounds (transform, bounds, &pattern_bounds);
+  gsk_transform_transform_bounds (transform, paint_bounds, &pattern_bounds);
   gsk_transform_unref (transform);
 
-  gtk_snapshot_push_repeat (context->snapshot, &pattern_bounds, &child_bounds);
-
-  gtk_snapshot_save (context->snapshot);
-  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty));
-  transform = gsk_transform_scale (transform, sx, sy);
-  gtk_snapshot_transform (context->snapshot, transform);
-  push_transform (context, transform);
-  gsk_transform_unref (transform);
-
-  shapes = pattern_get_shapes (pattern, context);
-  for (int i = 0; i < shapes->len; i++)
+  /* If the gradient transform is singular, we might end up with
+   * nans or infs in the bounds :(
+   */
+  if (!isfinite (pattern_bounds.size.width) || pattern_bounds.size.width == 0 ||
+      !isfinite (pattern_bounds.size.height) || pattern_bounds.size.height == 0)
     {
-      Shape *s = g_ptr_array_index (shapes, i);
-      render_shape (s, context);
+      GskRenderNode *node = gsk_container_node_new (NULL, 0);
+      gtk_snapshot_append_node (context->snapshot, node);
+      gsk_render_node_unref (node);
     }
+  else
+    {
+      gtk_snapshot_push_repeat (context->snapshot, &pattern_bounds, &child_bounds);
 
-  pop_transform (context);
-  gtk_snapshot_restore (context->snapshot);
+      gtk_snapshot_save (context->snapshot);
+      transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty));
+      transform = gsk_transform_scale (transform, sx, sy);
+      gtk_snapshot_transform (context->snapshot, transform);
+      push_transform (context, transform);
+      gsk_transform_unref (transform);
 
-  gtk_snapshot_pop (context->snapshot);
+      shapes = pattern_get_shapes (pattern, context);
+      for (int i = 0; i < shapes->len; i++)
+        {
+          Shape *s = g_ptr_array_index (shapes, i);
+          render_shape (s, context);
+        }
+
+      pop_transform (context);
+      gtk_snapshot_restore (context->snapshot);
+
+      gtk_snapshot_pop (context->snapshot);
+    }
 
   pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
@@ -19224,15 +19305,17 @@ paint_pattern (Shape                 *pattern,
 static void
 paint_server (SvgPaint              *paint,
               const graphene_rect_t *bounds,
+              const graphene_rect_t *paint_bounds,
               PaintContext          *context)
 {
   Shape *server = paint->server.shape;
 
-  if (server == NULL)
+  if (server == NULL ||
+      paint_server_is_skipped (server, bounds, context))
     {
       gtk_snapshot_append_color (context->snapshot,
                                  &paint->server.fallback,
-                                 bounds);
+                                 paint_bounds);
     }
   else if (server->type == SHAPE_LINEAR_GRADIENT ||
            server->type == SHAPE_RADIAL_GRADIENT)
@@ -19250,18 +19333,18 @@ paint_server (SvgPaint              *paint,
           SvgColor *stop_color = (SvgColor *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
           GdkRGBA color = stop_color->color;
           color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
-          gtk_snapshot_append_color (context->snapshot, &color, bounds);
+          gtk_snapshot_append_color (context->snapshot, &color, paint_bounds);
           return;
         }
 
       if (server->type == SHAPE_LINEAR_GRADIENT)
-        paint_linear_gradient (server, bounds, context);
+        paint_linear_gradient (server, bounds, paint_bounds, context);
       else
-        paint_radial_gradient (server, bounds, context);
+        paint_radial_gradient (server, bounds, paint_bounds, context);
     }
   else if (server->type == SHAPE_PATTERN)
     {
-      paint_pattern (server, bounds, context);
+      paint_pattern (server, bounds, paint_bounds, context);
     }
 }
 
@@ -19421,7 +19504,7 @@ fill_shape (Shape        *shape,
           gtk_snapshot_push_opacity (context->snapshot, opacity);
 
         gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
-        paint_server (paint, &bounds, context);
+        paint_server (paint, &bounds, &bounds, context);
         gtk_snapshot_pop (context->snapshot);
 
         if (opacity < 1)
@@ -19445,6 +19528,7 @@ stroke_shape (Shape        *shape,
   SvgPaint *paint;
   GskStroke *stroke;
   graphene_rect_t bounds;
+  graphene_rect_t paint_bounds;
   double opacity;
   VectorEffect effect;
   GskRenderNode *child;
@@ -19456,8 +19540,11 @@ stroke_shape (Shape        *shape,
   if (paint->kind == PAINT_NONE)
     return;
 
+  if (!gsk_path_get_bounds (path, &bounds))
+    return;
+
   stroke = shape_create_stroke (shape, context);
-  if (!gsk_path_get_stroke_bounds (path, stroke, &bounds))
+  if (!gsk_path_get_stroke_bounds (path, stroke, &paint_bounds))
     return;
 
   opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
@@ -19469,13 +19556,13 @@ stroke_shape (Shape        *shape,
       color = paint->color;
       color.alpha *= opacity;
       opacity = 1;
-      child = gsk_color_node_new (&color, &bounds);
+      child = gsk_color_node_new (&color, &paint_bounds);
       break;
     case PAINT_SERVER:
     case PAINT_SERVER_WITH_FALLBACK:
     case PAINT_SERVER_WITH_CURRENT_COLOR:
       gtk_snapshot_push_collect (context->snapshot);
-      paint_server (paint, &bounds, context);
+      paint_server (paint, &bounds, &paint_bounds, context);
       child = gtk_snapshot_pop_collect (context->snapshot);
       break;
     case PAINT_NONE:
@@ -20060,7 +20147,7 @@ fill_text (Shape                 *self,
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &(GdkRGBA){ .red = 0., .green = 0., .blue = 0., .alpha = 1. });
                 gtk_snapshot_pop (context->snapshot);
-                paint_server (paint, bounds, context);
+                paint_server (paint, bounds, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
 
                 if (opacity < 1)
@@ -20145,7 +20232,7 @@ stroke_text (Shape                 *self,
                 gtk_snapshot_append_stroke (context->snapshot, path, stroke, &(GdkRGBA) { 0, 0, 0, 1 });
                 gsk_path_unref (path);
                 gtk_snapshot_pop (context->snapshot);
-                paint_server (paint, bounds, context);
+                paint_server (paint, bounds, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
 
                 if (opacity < 1)

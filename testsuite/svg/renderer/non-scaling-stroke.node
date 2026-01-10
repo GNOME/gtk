@@ -1,6 +1,6 @@
 isolation {
   child: transform {
-    transform: scale(1.5);
+    transform: scale(1.5, 1);
     child: container {
       fill {
         child: color {
@@ -39,22 +39,22 @@ M 20 20 h 30 v 10 h -30 z";
       transform {
         transform: translate(150, 0) scale(3);
         child: transform {
-          transform: scale(0.222222) translate(-150, -0);
+          transform: scale(0.222222, 0.333333) translate(-150, -0);
           child: stroke {
             child: transform {
-              transform: translate(150, 0) scale(4.5);
+              transform: translate(150, 0) scale(4.5, 3);
               child: linear-gradient {
                 bounds: 19.5 19.5 19 21;
-                start: 17.6047 21.5948;
-                end: 38.5 40.5;
+                start: 18.1105 22.0994;
+                end: 38 40;
                 stops: 0 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(0,128,0);
               }
             }
             path: "\
-M 240 89.9999924\
-L 321 89.9999924\
-L 321 179.999985\
-L 240 179.999985\
+M 240 60\
+L 321 60\
+L 321 120\
+L 240 120\
 Z";
             line-width: 1;
             line-cap: butt;
