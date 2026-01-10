@@ -5976,7 +5976,7 @@ render_node_print (Printer       *p,
         append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
         append_stops_param (p, "stops", gradient);
 
-        if (gsk_render_node_get_node_type (node) == GSK_RADIAL_GRADIENT_NODE &&
+        if (gsk_render_node_get_node_type (node) == GSK_LINEAR_GRADIENT_NODE &&
             gsk_gradient_get_repeat (gradient) != GSK_REPEAT_PAD)
           append_repeat_param (p, "repeat", gsk_gradient_get_repeat (gradient));
 
