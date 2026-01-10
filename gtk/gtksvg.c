@@ -19095,17 +19095,32 @@ paint_radial_gradient (Shape                 *gradient,
   push_transform (context, gradient_transform);
 
   gradient_transform = gsk_transform_invert (gradient_transform);
+
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
 
   gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
-  gtk_snapshot_add_radial_gradient (context->snapshot,
-                                    &gradient_bounds,
-                                    &start_center, start_radius,
-                                    &end_center, end_radius,
-                                    1,
-                                    g);
+  /* If the gradient transform is singular, we might end up with
+   * nans or infs in the bounds :(
+   */
+  if (!isfinite (gradient_bounds.size.width) || gradient_bounds.size.width == 0 ||
+      !isfinite (gradient_bounds.size.height) || gradient_bounds.size.height == 0)
+    {
+      GskRenderNode *node = gsk_container_node_new (NULL, 0);
+      gtk_snapshot_append_node (context->snapshot, node);
+      gsk_render_node_unref (node);
+    }
+  else
+    {
+      gtk_snapshot_add_radial_gradient (context->snapshot,
+                                        &gradient_bounds,
+                                        &start_center, start_radius,
+                                        &end_center, end_radius,
+                                        1,
+                                        g);
+    }
+
   gsk_gradient_free (g);
 
   pop_transform (context);
@@ -19196,26 +19211,39 @@ paint_pattern (Shape                 *pattern,
   gsk_transform_transform_bounds (transform, bounds, &pattern_bounds);
   gsk_transform_unref (transform);
 
-  gtk_snapshot_push_repeat (context->snapshot, &pattern_bounds, &child_bounds);
-
-  gtk_snapshot_save (context->snapshot);
-  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty));
-  transform = gsk_transform_scale (transform, sx, sy);
-  gtk_snapshot_transform (context->snapshot, transform);
-  push_transform (context, transform);
-  gsk_transform_unref (transform);
-
-  shapes = pattern_get_shapes (pattern, context);
-  for (int i = 0; i < shapes->len; i++)
+  /* If the gradient transform is singular, we might end up with
+   * nans or infs in the bounds :(
+   */
+  if (!isfinite (pattern_bounds.size.width) || pattern_bounds.size.width == 0 ||
+      !isfinite (pattern_bounds.size.height) || pattern_bounds.size.height == 0)
     {
-      Shape *s = g_ptr_array_index (shapes, i);
-      render_shape (s, context);
+      GskRenderNode *node = gsk_container_node_new (NULL, 0);
+      gtk_snapshot_append_node (context->snapshot, node);
+      gsk_render_node_unref (node);
     }
+  else
+    {
+      gtk_snapshot_push_repeat (context->snapshot, &pattern_bounds, &child_bounds);
 
-  pop_transform (context);
-  gtk_snapshot_restore (context->snapshot);
+      gtk_snapshot_save (context->snapshot);
+      transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty));
+      transform = gsk_transform_scale (transform, sx, sy);
+      gtk_snapshot_transform (context->snapshot, transform);
+      push_transform (context, transform);
+      gsk_transform_unref (transform);
 
-  gtk_snapshot_pop (context->snapshot);
+      shapes = pattern_get_shapes (pattern, context);
+      for (int i = 0; i < shapes->len; i++)
+        {
+          Shape *s = g_ptr_array_index (shapes, i);
+          render_shape (s, context);
+        }
+
+      pop_transform (context);
+      gtk_snapshot_restore (context->snapshot);
+
+      gtk_snapshot_pop (context->snapshot);
+    }
 
   pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
