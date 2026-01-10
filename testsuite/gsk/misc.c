@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "gsk/gskcontainernodeprivate.h"
+#include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskgradientprivate.h"
 
 #include <gobject/gvaluecollector.h>

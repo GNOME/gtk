@@ -45,6 +45,7 @@
 #include <gtk/gtknative.h>
 #include <gtk/gtkprivate.h>
 #include <gsk/gskarithmeticnodeprivate.h>
+#include <gsk/gskbordernodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskcopypasteutilsprivate.h>
 #include <gsk/gskrendererprivate.h>

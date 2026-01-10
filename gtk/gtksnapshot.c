@@ -29,6 +29,7 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
 
+#include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"

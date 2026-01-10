@@ -136,9 +136,6 @@ void            gsk_render_node_render_opacity          (GskRenderNode          
 GskRenderNode **gsk_render_node_get_children            (GskRenderNode               *node,
                                                          gsize                       *n_children);
 
-bool            gsk_border_node_get_uniform             (const GskRenderNode         *self) G_GNUC_PURE;
-bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self) G_GNUC_PURE;
-
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
@@ -156,11 +153,6 @@ _gsk_render_node_ref (GskRenderNode *node)
   g_atomic_ref_count_inc (&node->ref_count);
   return node;
 }
-
-GskRenderNode *         gsk_border_node_new2                    (const GskRoundedRect   *outline,
-                                                                 const float             border_width[4],
-                                                                 const GdkColor          border_color[4]);
-const GdkColor *        gsk_border_node_get_gdk_colors          (const GskRenderNode    *node);
 
 GskRenderNode *         gsk_inset_shadow_node_new2              (const GskRoundedRect   *outline,
                                                                  const GdkColor         *color,

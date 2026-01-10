@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtksnapshotprivate.h>
 #include <gsk/gskarithmeticnodeprivate.h>
+#include <gsk/gskbordernodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskrepeatnodeprivate.h>
