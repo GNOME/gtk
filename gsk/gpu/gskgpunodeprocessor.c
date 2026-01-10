@@ -952,14 +952,15 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   gsk_gpu_blur_op (other.frame,
                    gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &intermediate_rect),
                    other.ccs,
-                   1,
+                   other.ccs,
+                   1.0f,
                    &other.offset,
-                   &(GskGpuShaderImage) {
-                       source_image,
-                       GSK_GPU_SAMPLER_TRANSPARENT,
-                       &intermediate_rect,
-                       source_rect
-                   },
+                   source_image,
+                   GSK_GPU_SAMPLER_TRANSPARENT,
+                   FALSE,
+                   &intermediate_rect,
+                   &(GdkColor) { .color_state = other.ccs, .values = { 1, 1, 1, 1 } }, /* doesn't matter */
+                   source_rect,
                    &direction);
 
   gsk_gpu_node_processor_finish_draw (&other, intermediate);
@@ -969,33 +970,34 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   graphene_vec2_init (&direction, 0.0f, blur_radius);
   if (shadow_color)
     {
-      gsk_gpu_blur_shadow_op (self->frame,
-                              gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
-                              self->ccs,
-                              1,
-                              &real_offset,
-                              &(GskGpuShaderImage) {
-                                  intermediate,
-                                  GSK_GPU_SAMPLER_TRANSPARENT,
-                                  rect,
-                                  &intermediate_rect,
-                              },
-                              &direction,
-                              shadow_color);
+      gsk_gpu_blur_op (self->frame,
+                       gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
+                       self->ccs,
+                       gsk_gpu_color_states_find (self->ccs, shadow_color),
+                       1.0f,
+                       &real_offset,
+                       intermediate,
+                       GSK_GPU_SAMPLER_TRANSPARENT,
+                       TRUE,
+                       rect,
+                       shadow_color,
+                       &intermediate_rect,
+                       &direction);
     }
   else
     {
       gsk_gpu_blur_op (self->frame,
                        gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
                        self->ccs,
-                       1,
+                       self->ccs,
+                       1.0f,
                        &real_offset,
-                       &(GskGpuShaderImage) {
-                           intermediate,
-                           GSK_GPU_SAMPLER_TRANSPARENT,
-                           rect,
-                           &intermediate_rect,
-                       },
+                       intermediate,
+                       GSK_GPU_SAMPLER_TRANSPARENT,
+                       FALSE,
+                       rect,
+                       &(GdkColor) { .color_state = other.ccs, .values = { 1, 1, 1, 1 } }, /* doesn't matter */
+                       &intermediate_rect,
                        &direction);
     }
 
