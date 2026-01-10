@@ -432,7 +432,6 @@ vs2019-x64:
   # rules:
   #   - if: $CI_PROJECT_NAMESPACE == "GNOME"
   stage: build
-  allow_failure: true
   tags:
     - win32-ps
   needs: []
