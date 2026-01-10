@@ -19101,8 +19101,15 @@ paint_radial_gradient (Shape                 *gradient,
   SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
   SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
+  g = gradient_get_gsk_gradient (gradient, context);
+  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
+
+  gtk_snapshot_save (context->snapshot);
+
   if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
+      GskTransform *transform = NULL;
+
       graphene_point_init (&start_center,
                            svg_number_get (fx, 1),
                            svg_number_get (fy, 1));
@@ -19112,6 +19119,15 @@ paint_radial_gradient (Shape                 *gradient,
                            svg_number_get (cx, 1),
                            svg_number_get (cy, 1));
       end_radius = svg_number_get (r, 1);
+
+      transform = gsk_transform_translate (transform, &bounds->origin);
+      transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
+      gtk_snapshot_transform (context->snapshot, transform);
+      push_transform (context, transform);
+
+      transform = gsk_transform_invert (transform);
+      gsk_transform_transform_bounds (transform, paint_bounds, &gradient_bounds);
+      gsk_transform_unref (transform);
     }
   else
     {
@@ -19124,28 +19140,6 @@ paint_radial_gradient (Shape                 *gradient,
                            svg_number_get (cx, context->viewport->size.width),
                            svg_number_get (cy, context->viewport->size.height));
       end_radius = svg_number_get (r, normalized_diagonal (context->viewport));
-    }
-
-  g = gradient_get_gsk_gradient (gradient, context);
-
-  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
-
-  gtk_snapshot_save (context->snapshot);
-
-  if (svg_enum_get (units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-    {
-      GskTransform *transform = NULL;
-      transform = gsk_transform_translate (transform, &bounds->origin);
-      transform = gsk_transform_scale (transform, bounds->size.width, bounds->size.height);
-      gtk_snapshot_transform (context->snapshot, transform);
-      push_transform (context, transform);
-
-      transform = gsk_transform_invert (transform);
-      gsk_transform_transform_bounds (transform, paint_bounds, &gradient_bounds);
-      gsk_transform_unref (transform);
-    }
-  else
-    {
       graphene_rect_init_from_rect (&gradient_bounds, paint_bounds);
       push_transform (context, NULL);
     }
@@ -19158,8 +19152,6 @@ paint_radial_gradient (Shape                 *gradient,
 
   gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
   gsk_transform_unref (gradient_transform);
-
-  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
   /* If the gradient transform is singular, we might end up with
    * nans or infs in the bounds :(
