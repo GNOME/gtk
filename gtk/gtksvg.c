@@ -18938,6 +18938,7 @@ gradient_get_gsk_gradient (Shape        *gradient,
   GskGradient *g;
   GPtrArray *color_stops;
   double offset;
+  SvgValue *spread_method;
 
   color_stops = gradient_get_color_stops (gradient, context);
 
@@ -18955,6 +18956,9 @@ gradient_get_gsk_gradient (Shape        *gradient,
       gsk_gradient_add_stop (g, offset, 0.5, &color);
       gdk_color_finish (&color);
     }
+
+  spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
+  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
   return g;
 }
@@ -19040,7 +19044,6 @@ paint_linear_gradient (Shape                 *gradient,
   SvgValue *y2 = paint_server_get_current_value (gradient, SHAPE_ATTR_Y2, context);
   SvgValue *tf = paint_server_get_current_value (gradient, SHAPE_ATTR_TRANSFORM, context);
   SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
-  SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
   g = gradient_get_gsk_gradient (gradient, context);
 
@@ -19072,8 +19075,6 @@ paint_linear_gradient (Shape                 *gradient,
   transform_gradient_line (transform, &start, &end, &start, &end);
   gsk_transform_unref (transform);
 
-  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
-
   gtk_snapshot_add_linear_gradient (context->snapshot, paint_bounds, &start, &end, g);
 
   gsk_gradient_free (g);
@@ -19099,10 +19100,8 @@ paint_radial_gradient (Shape                 *gradient,
   SvgValue *r = paint_server_get_current_value (gradient, SHAPE_ATTR_R, context);
   SvgValue *tf = paint_server_get_current_value (gradient, SHAPE_ATTR_TRANSFORM, context);
   SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
-  SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
   g = gradient_get_gsk_gradient (gradient, context);
-  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
   gtk_snapshot_save (context->snapshot);
 
