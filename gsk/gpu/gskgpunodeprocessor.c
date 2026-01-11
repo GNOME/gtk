@@ -50,6 +50,7 @@
 #include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernode.h"
+#include "gskcomponenttransferprivate.h"
 #include "gskcompositenode.h"
 #include "gskconicgradientnodeprivate.h"
 #include "gskcontainernodeprivate.h"
@@ -319,17 +320,6 @@ gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
     gsk_gpu_node_processor_emit_scissor_op (self);
   if (required & GSK_GPU_GLOBAL_BLEND)
     gsk_gpu_node_processor_emit_blend_op (self);
-}
-
-static inline GskGpuColorStates
-gsk_gpu_node_processor_color_states_explicit (GskGpuNodeProcessor *self,
-                                              GdkColorState       *alt,
-                                              gboolean             alt_premultiplied)
-{
-  return gsk_gpu_color_states_create (self->ccs,
-                                      TRUE,
-                                      alt,
-                                      alt_premultiplied);
 }
 
 static GskGpuImage *
@@ -3596,12 +3586,55 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
 }
 
 static void
+copy_component_transfer (const GskComponentTransfer *transfer,
+                         float                       params[4],
+                         float                       table[32],
+                         guint                      *n)
+{
+  params[0] = transfer->kind;
+  switch (transfer->kind)
+    {
+    case GSK_COMPONENT_TRANSFER_IDENTITY:
+      break;
+    case GSK_COMPONENT_TRANSFER_LEVELS:
+      params[1] = transfer->levels.n;
+      break;
+    case GSK_COMPONENT_TRANSFER_LINEAR:
+      params[1] = transfer->linear.m;
+      params[2] = transfer->linear.b;
+      break;
+    case GSK_COMPONENT_TRANSFER_GAMMA:
+      params[1] = transfer->gamma.amp;
+      params[2] = transfer->gamma.exp;
+      params[3] = transfer->gamma.ofs;
+      break;
+    case GSK_COMPONENT_TRANSFER_DISCRETE:
+    case GSK_COMPONENT_TRANSFER_TABLE:
+      if (*n + transfer->table.n >= 32)
+        g_warning ("tables too big in component transfer");
+      params[1] = transfer->table.n;
+      params[2] = *n;
+      for (guint i = 0; i < transfer->table.n && *n + i < 32; i++)
+        table[*n + i] = transfer->table.values[i];
+      *n += transfer->table.n;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
 gsk_gpu_node_processor_add_component_transfer_node (GskGpuNodeProcessor *self,
                                                     GskRenderNode       *node)
 {
   GskGpuImage *image;
   GskRenderNode *child;
   graphene_rect_t tex_rect;
+  float params[4];
+  graphene_vec4_t params_vec[4];
+  float table[32];
+  graphene_vec4_t table_vec[8];
+  guint i, n;
 
   child = gsk_component_transfer_node_get_child (node);
 
@@ -3613,21 +3646,41 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuNodeProcessor *self,
   if (image == NULL)
     return;
 
+  n = 0;
+  for (i = 0; i < 4; i++)
+    {
+      copy_component_transfer (gsk_component_transfer_node_get_transfer (node, i),
+                               params,
+                               table,
+                               &n);
+      graphene_vec4_init_from_float (&params_vec[i], params);
+    }
+  for (i = 0; i < 8; i++)
+    {
+      graphene_vec4_init_from_float (&table_vec[i], &table[4 * i]);
+    }
+
   gsk_gpu_component_transfer_op (self->frame,
                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                                 gsk_gpu_node_processor_color_states_explicit (self, self->ccs, FALSE),
-                                 &self->offset,
+                                 self->ccs,
                                  self->opacity,
-                                 &(GskGpuShaderImage) {
-                                   image,
-                                   GSK_GPU_SAMPLER_DEFAULT,
-                                   &node->bounds,
-                                   &tex_rect,
-                                 },
-                                 gsk_component_transfer_node_get_transfer (node, 0),
-                                 gsk_component_transfer_node_get_transfer (node, 1),
-                                 gsk_component_transfer_node_get_transfer (node, 2),
-                                 gsk_component_transfer_node_get_transfer (node, 3));
+                                 &self->offset,
+                                 image,
+                                 GSK_GPU_SAMPLER_DEFAULT,
+                                 &params_vec[0],
+                                 &params_vec[1],
+                                 &params_vec[2],
+                                 &params_vec[3],
+                                 &table_vec[0],
+                                 &table_vec[1],
+                                 &table_vec[2],
+                                 &table_vec[3],
+                                 &table_vec[4],
+                                 &table_vec[5],
+                                 &table_vec[6],
+                                 &table_vec[7],
+                                 &node->bounds,
+                                 &tex_rect);
 
   g_object_unref (image);
 }

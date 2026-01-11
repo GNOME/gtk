@@ -2,6 +2,7 @@
 textures = 1;
 var_name = "gsk_gpu_component_transfer";
 struct_name = "GskGpuComponentTransfer";
+acs_equals_ccs = true;
 
 graphene_vec4_t params_r;
 graphene_vec4_t params_g;
@@ -182,16 +183,12 @@ run (out vec4 color,
   vec4 pixel = texture (GSK_TEXTURE0, _tex_coord);
   pixel = alt_color_from_output (pixel);
 
-  pixel = color_unpremultiply (pixel);
-
   pixel.r = apply_component_transfer (0u, pixel.r);
   pixel.g = apply_component_transfer (1u, pixel.g);
   pixel.b = apply_component_transfer (2u, pixel.b);
   pixel.a = apply_component_transfer (3u, pixel.a);
 
   pixel = clamp (pixel, 0.0, 1.0);
-
-  pixel = color_premultiply (pixel);
 
   pixel = output_color_from_alt (pixel);
 

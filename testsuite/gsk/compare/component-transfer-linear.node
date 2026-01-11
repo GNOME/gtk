@@ -8,3 +8,4 @@ component-transfer {
   red: linear(0.5, 0.25);
   green: linear(0.5, 0.25);
   blue: linear(0.5, 0.25);
+}
