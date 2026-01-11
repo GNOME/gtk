@@ -717,17 +717,16 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
     {
       gsk_gpu_convert_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                          gsk_gpu_node_processor_color_states_explicit (self,
-                                                                        image_color_state,
-                                                                        TRUE),
+                          self->ccs,
+                          TRUE,
+                          image_color_state,
                           self->opacity,
                           &self->offset,
-                          &(GskGpuShaderImage) {
-                              image,
-                              sampler,
-                              rect,
-                              tex_rect
-                          });
+                          image,
+                          sampler,
+                          self->opacity < 1.0f,
+                          rect,
+                          tex_rect);
     }
   else
     {
@@ -5057,16 +5056,16 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
     {
       gsk_gpu_convert_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                          gsk_gpu_color_states_create (self->ccs, target_premultiplied,
-                                                       image_color_state, TRUE),
+                          self->ccs,
+                          target_premultiplied,
+                          image_color_state,
                           self->opacity,
                           &self->offset,
-                          &(GskGpuShaderImage) {
-                              image,
-                              GSK_GPU_SAMPLER_DEFAULT,
-                              rect,
-                              tex_rect
-                          });
+                          image,
+                          GSK_GPU_SAMPLER_DEFAULT,
+                          self->opacity < 1.0f,
+                          rect,
+                          tex_rect);
     }
 }
 

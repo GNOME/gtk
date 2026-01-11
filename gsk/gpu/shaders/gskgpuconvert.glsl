@@ -1,5 +1,7 @@
 #ifdef GSK_PREAMBLE
 textures = 1;
+ccs_premultiplied = argument;
+acs_premultiplied = true;
 
 graphene_rect_t rect;
 graphene_rect_t tex_rect;
