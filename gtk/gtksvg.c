@@ -3603,14 +3603,14 @@ svg_font_size_resolve (const SvgValue *value,
 }
 
 DEFINE_ENUM_CUSTOM_RESOLVE (FONT_SIZE, font_size, FontSize, svg_font_size_resolve,
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALLER, "smaller"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGER, "larger"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALLER,  "smaller"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGER,   "larger"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_XX_SMALL, "xx-small"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_SMALL, "x-small"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALL, "small"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_MEDIUM, "medium"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGE, "largr"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_LARGE, "x-large"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_SMALL,  "x-small"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALL,    "small"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_MEDIUM,   "medium"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGE,    "larger"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_LARGE,  "x-large"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_XX_LARGE, "xx-large")
 )
 
@@ -3672,11 +3672,41 @@ svg_font_weight_resolve (const SvgValue *value,
 }
 
 DEFINE_ENUM_CUSTOM_RESOLVE (FONT_WEIGHT, font_weight, FontWeight, svg_font_weight_resolve,
-  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_NORMAL, "normal"),
-  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLD, "bold"),
-  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLDER, "bolder"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_NORMAL,  "normal"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLD,    "bold"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLDER,  "bolder"),
   DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_LIGHTER, "lighter")
 )
+
+typedef enum
+{
+  COLOR_INTERPOLATION_AUTO,
+  COLOR_INTERPOLATION_SRGB,
+  COLOR_INTERPOLATION_LINEAR,
+} ColorInterpolation;
+
+static SvgValue * svg_color_interpolation_resolve (const SvgValue *value,
+                                                   ShapeAttr       attr,
+                                                   Shape          *shape,
+                                                   ComputeContext *context);
+
+DEFINE_ENUM_CUSTOM_RESOLVE (COLOR_INTERPOLATION, color_interpolation, ColorInterpolation, svg_color_interpolation_resolve,
+  DEFINE_ENUM_VALUE (COLOR_INTERPOLATION, COLOR_INTERPOLATION_AUTO,   "auto"),
+  DEFINE_ENUM_VALUE (COLOR_INTERPOLATION, COLOR_INTERPOLATION_SRGB,   "sRGB"),
+  DEFINE_ENUM_VALUE (COLOR_INTERPOLATION, COLOR_INTERPOLATION_LINEAR, "linearRGB")
+)
+
+static SvgValue *
+svg_color_interpolation_resolve (const SvgValue *value,
+                                 ShapeAttr       attr,
+                                 Shape          *shape,
+                                 ComputeContext *context)
+{
+  if (svg_enum_get (value) == COLOR_INTERPOLATION_AUTO)
+    return svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
+  else
+    return svg_value_ref ((SvgValue *) value);
+}
 
 /* }}} */
 /* {{{ Filter primitive references */
@@ -8515,6 +8545,11 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = SHAPE_ANY,
     .parse_value = svg_color_parse,
   },
+  [SHAPE_ATTR_COLOR_INTERPOLATION] = {
+    .flags = SHAPE_ATTR_INHERITED,
+    .applies_to = SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE,
+    .parse_value = svg_color_interpolation_parse,
+  },
   [SHAPE_ATTR_FILTER] = {
     .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
     .parse_value = svg_filter_parse,
@@ -9101,6 +9136,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_COLOR].initial_value = svg_color_new_black ();
+  shape_attrs[SHAPE_ATTR_COLOR_INTERPOLATION].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
   shape_attrs[SHAPE_ATTR_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
   shape_attrs[SHAPE_ATTR_VECTOR_EFFECT].initial_value = svg_vector_effect_new (VECTOR_EFFECT_NONE);
   shape_attrs[SHAPE_ATTR_FILTER].initial_value = svg_filter_new_none ();
@@ -9283,6 +9319,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "gradientTransform", SHAPE_GRADIENTS, 0, SHAPE_ATTR_TRANSFORM },
   { "patternTransform", BIT (SHAPE_PATTERN), 0, SHAPE_ATTR_TRANSFORM },
   { "color", SHAPE_ANY, 0, SHAPE_ATTR_COLOR },
+  { "color-interpolation", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE, 0, SHAPE_ATTR_COLOR_INTERPOLATION },
   { "opacity", SHAPE_ANY, 0, SHAPE_ATTR_OPACITY },
   { "filter", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_FILTER },
   { "clip-path", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_CLIP_PATH },
