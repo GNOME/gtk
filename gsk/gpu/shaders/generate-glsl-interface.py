@@ -130,6 +130,7 @@ class File:
     acs_premultiplied: bool
     acs_equals_ccs: bool
     opacity: bool
+    dual_blend: bool
     variables: list[Variable]
     variations: list[Variation]
 
@@ -265,6 +266,7 @@ def read_file (filename):
     acs_premultiplied = False
     acs_equals_ccs = False
     opacity = True
+    dual_blend = False
     name = ''
     var_name = ''
     struct_name = ''
@@ -313,6 +315,8 @@ def read_file (filename):
             acs_equals_ccs = strtobool (match.group(1), filename + ':' + str (pos))
         elif match := re.search (r'^opacity\s*=\s*(\w+)\s*;$', line):
             opacity = strtobool (match.group(1), filename + ':' + str (pos))
+        elif match := re.search (r'^dual_blend\s*=\s*(\w+)\s*;$', line):
+            dual_blend = strtobool (match.group(1), filename + ':' + str (pos))
         else:
             raise Exception (f'''{filename}:{pos}: Could not parse line''')
     
@@ -332,6 +336,7 @@ def read_file (filename):
                  acs_premultiplied = acs_premultiplied,
                  acs_equals_ccs = acs_equals_ccs,
                  opacity = opacity,
+                 dual_blend = dual_blend,
                  variables = variables,
                  variations = variations)
 
@@ -600,6 +605,7 @@ static const VkPipelineVertexInputStateCreateInfo {file.var_name}_info = {{
 
 def print_glsl_file (file, n_attributes, attributes):
     print (f'''#define GSK_N_TEXTURES {file.n_textures}
+{'//#undef' if not file.dual_blend else '#define'} GSK_DUAL_BLEND 1
 
 #include "common.glsl"
 ''')

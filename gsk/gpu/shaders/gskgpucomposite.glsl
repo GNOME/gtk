@@ -1,5 +1,6 @@
 #ifdef GSK_PREAMBLE
 textures = 2;
+dual_blend = true;
 
 graphene_rect_t rect;
 graphene_rect_t source_rect;
@@ -8,8 +9,6 @@ float opacity;
 
 variation: GskPorterDuff operator;
 #endif
-
-#define GSK_DUAL_BLEND 1
 
 #include "gskgpucompositeinstance.glsl"
 
