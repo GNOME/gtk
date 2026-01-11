@@ -1,6 +1,8 @@
 #ifdef GSK_PREAMBLE
 textures = 2;
 dual_blend = true;
+acs_equals_ccs = true;
+acs_premultiplied = true;
 
 graphene_rect_t rect;
 graphene_rect_t source_rect;
