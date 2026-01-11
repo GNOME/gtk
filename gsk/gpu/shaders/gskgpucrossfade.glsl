@@ -2,6 +2,8 @@
 textures = 2;
 var_name = "gsk_gpu_cross_fade";
 struct_name = "GskGpuCrossFade";
+acs_equals_ccs = true;
+acs_premultiplied = true;
 
 graphene_rect_t rect;
 graphene_rect_t start_rect;
