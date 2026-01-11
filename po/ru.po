@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-11-24 00:19+0000\n"
-"PO-Revision-Date: 2025-11-24 15:57+0300\n"
-"Last-Translator: Данил Гашигуллин <gashigullin44@gmail.com>\n"
+"POT-Creation-Date: 2025-12-29 02:14+0000\n"
+"PO-Revision-Date: 2026-01-05 15:18+0300\n"
+"Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: RU\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -59,22 +59,22 @@ msgstr "Невозможно прочитать из пустого буфера
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Нет совместимых форматов для передачи содержимого буфера обмена."
 
-#: gdk/gdkcolorstate.c:1089
+#: gdk/gdkcolorstate.c:1020
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: неуказанные параметры не поддерживаются"
 
-#: gdk/gdkcolorstate.c:1135
+#: gdk/gdkcolorstate.c:1066
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: функция переноса %u не поддерживается"
 
-#: gdk/gdkcolorstate.c:1166
+#: gdk/gdkcolorstate.c:1097
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: основные цвета %u не поддерживаются"
 
-#: gdk/gdkcolorstate.c:1193
+#: gdk/gdkcolorstate.c:1124
 #, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp: матричные коэффициенты %u, %s не поддерживаются"
@@ -94,7 +94,7 @@ msgstr "Невозможно предоставить содержимое ка�
 msgid "The current backend does not support OpenGL"
 msgstr "Текущая серверная часть не поддерживает OpenGL"
 
-#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1957
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1961
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Поддержка Vulkan отключена с помощью GDK_DISABLE"
 
@@ -159,8 +159,8 @@ msgstr "Нет совместимых форматов для передачи �
 msgid "No GL API allowed."
 msgstr "API GL не допускаются."
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:661
-#: gdk/win32/gdkglcontext-win32-wgl.c:784 gdk/x11/gdkglcontext-glx.c:700
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:660
+#: gdk/win32/gdkglcontext-win32-wgl.c:783 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Невозможно создать контекст GL"
 
@@ -766,26 +766,26 @@ msgstr "Сбой IDataObject_GetData (0x%x), возвращено 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Не удалось преобразовать формат данных DnD W32 0x%x в %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:591
+#: gdk/win32/gdkglcontext-win32-wgl.c:590
 msgid "No GL implementation is available"
 msgstr "Нет доступной реализации GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:675
+#: gdk/win32/gdkglcontext-win32-wgl.c:674
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версия WGL %d.%d слишком старая, требуется версия %d.%d и выше"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:694
+#: gdk/win32/gdkglcontext-win32-wgl.c:693
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реализация GL не может совместно использовать контексты GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:853
+#: gdk/win32/gdkglcontext-win32-wgl.c:852
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
 msgstr "Неподдерживаемый формат пикселя %d, установленный в окне"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:862
+#: gdk/win32/gdkglcontext-win32-wgl.c:861
 msgid "No available configurations for the given pixel format"
 msgstr "Нет доступных конфигураций для данного формата пикселя"
 
@@ -892,7 +892,7 @@ msgstr "Недействительные форматы в преобразов�
 msgid "Unsupported encoding “%s”"
 msgstr "Неподдерживаемая кодировка \"%s\""
 
-#: gsk/gpu/gskgldevice.c:253
+#: gsk/gpu/gskgldevice.c:258
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "OpenGL ES 3.0 не поддерживается этим инструментом визуализации."
@@ -2701,7 +2701,7 @@ msgstr "Изменение характеристик шрифта"
 #: gtk/gtkfontchooserwidget.c:1335
 msgctxt "Search placeholder for font language"
 msgid "Language…"
-msgstr "Язык..."
+msgstr "Язык…"
 
 #: gtk/gtkfontchooserwidget.c:1600
 msgctxt "Font variation axis"
@@ -4679,7 +4679,7 @@ msgstr "Сбой при сохранении CSS"
 
 #: gtk/inspector/css-editor.ui:39
 msgid "Enable this custom CSS"
-msgstr "Включить  этот пользовательский CSS"
+msgstr "Включить этот пользовательский CSS"
 
 #: gtk/inspector/css-editor.ui:45
 msgid "Save the current CSS"
@@ -4963,6 +4963,18 @@ msgstr "На высшем уровне"
 msgid "Child Visible"
 msgstr "Видимость дочернего элемента"
 
+#: gtk/inspector/misc-info.ui:685
+msgid "Paintable Size"
+msgstr "Окрашиваемый размер"
+
+#: gtk/inspector/misc-info.ui:710
+msgid "Paintable Aspect Ratio"
+msgstr "Окрашиваемое соотношение сторон"
+
+#: gtk/inspector/misc-info.ui:735
+msgid "Paintable Flags"
+msgstr "Окрашиваемые флаги"
+
 #: gtk/inspector/prop-editor.c:749
 #, c-format
 msgid "Pointer: %p"
@@ -5067,7 +5079,7 @@ msgstr "Источник:"
 msgid "Defined At"
 msgstr "Где определён"
 
-#: gtk/inspector/recorder.c:2249
+#: gtk/inspector/recorder.c:2271
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Сбой при сохранении RenderNode"
@@ -7745,8 +7757,9 @@ msgid "Overwrite existing file"
 msgstr "Перезаписать существующий файл"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:112 tools/gtk-image-tool-relabel.c:86
-#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-relabel.c:86 tools/gtk-image-tool-show.c:119
+#: tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:272
 msgid "FILE…"
 msgstr "ФАЙЛ…"
@@ -7897,7 +7910,7 @@ msgstr "Файл вывода"
 msgid "Compare two images"
 msgstr "Сравнить два изображения"
 
-#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:136
+#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:166
 #: tools/gtk-image-tool-info.c:101 tools/gtk-image-tool-relabel.c:109
 #: tools/gtk-image-tool-show.c:141
 #, c-format
@@ -7929,40 +7942,40 @@ msgstr "Изображения различаются.\n"
 msgid "No differences.\n"
 msgstr "Нет различий.\n"
 
-#: tools/gtk-image-tool-convert.c:109
+#: tools/gtk-image-tool-convert.c:139
 msgid "Format to use"
 msgstr "Используемый формат"
 
-#: tools/gtk-image-tool-convert.c:109
+#: tools/gtk-image-tool-convert.c:139
 msgid "FORMAT"
 msgstr "ФОРМАТ"
 
-#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:140 tools/gtk-image-tool-relabel.c:84
 msgid "Color state to use"
 msgstr "Используемое цветовое состояние"
 
-#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:140 tools/gtk-image-tool-relabel.c:84
 msgid "COLORSTATE"
 msgstr "COLORSTATE"
 
-#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use, as cicp tuple"
 msgstr "Используемое цветовое состояние, в виде набора значений cicp"
 
-#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "CICP"
 msgstr "CICP"
 
-#: tools/gtk-image-tool-convert.c:123
+#: tools/gtk-image-tool-convert.c:153
 msgid "Convert the image to a different format or color state."
 msgstr "Преобразование изображения в другой формат или цветовое состояние."
 
-#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:115
+#: tools/gtk-image-tool-convert.c:172 tools/gtk-image-tool-relabel.c:115
 #, c-format
 msgid "Can only accept a single image file and output file\n"
 msgstr "Возможно принять только один файл изображения и один файл на выходе\n"
 
-#: tools/gtk-image-tool-convert.c:156
+#: tools/gtk-image-tool-convert.c:186
 #, c-format
 msgid ""
 "Not a memory format: %s\n"
@@ -7973,7 +7986,7 @@ msgstr ""
 "Возможные значения:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:173
+#: tools/gtk-image-tool-convert.c:203
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -7984,12 +7997,12 @@ msgstr ""
 "Возможные значения:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:183 tools/gtk-image-tool-relabel.c:140
+#: tools/gtk-image-tool-convert.c:213 tools/gtk-image-tool-relabel.c:140
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "Нельзя указывать --color-state и --cicp одновременно\n"
 
-#: tools/gtk-image-tool-convert.c:191 tools/gtk-image-tool-relabel.c:148
+#: tools/gtk-image-tool-convert.c:221 tools/gtk-image-tool-relabel.c:148
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Неподдерживаемый набор значений cicp: %s\n"
@@ -8016,6 +8029,40 @@ msgstr "Предоставить сведения об изображении."
 msgid "Can only accept a single image file\n"
 msgstr "Возможно принять только один файл изображения\n"
 
+#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:121
+msgid "Don't add a titlebar"
+msgstr "Не добавлять панель заголовка"
+
+#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "РАЗМЕР"
+
+#: tools/gtk-image-tool-play.c:323
+msgid "Don't run animations"
+msgstr "Не запускать анимации"
+
+#: tools/gtk-image-tool-play.c:324
+msgid "Don't use system resources"
+msgstr "Не использовать системные ресурсы"
+
+#: tools/gtk-image-tool-play.c:325
+msgid "Don't load external resources"
+msgstr "Не загружать внешние ресурсы"
+
+#: tools/gtk-image-tool-play.c:326
+msgid "Don't allow gpa extensions"
+msgstr "Не разрешать расширения gpa"
+
+#: tools/gtk-image-tool-play.c:337
+msgid "Show one or more animations."
+msgstr "Показать одну или более анимаций."
+
+#: tools/gtk-image-tool-play.c:350
+#, c-format
+msgid "No animation file specified\n"
+msgstr "Файл анимации не указан\n"
+
 #: tools/gtk-image-tool-relabel.c:96
 msgid "Change the color state of the image without conversion."
 msgstr "Изменить цветовое состояние изображения без преобразования."
@@ -8028,10 +8075,6 @@ msgid ""
 msgstr ""
 "Не является цветовым состоянием: %s\n"
 "Возможные значения: %s\n"
-
-#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:121
-msgid "Don't add a titlebar"
-msgstr "Не добавлять панель заголовка"
 
 #: tools/gtk-image-tool-show.c:128
 msgid "Show one or more images."
@@ -8560,10 +8603,6 @@ msgstr "Цвет предупреждения"
 #: tools/gtk-rendernode-tool-convert.c:96
 msgid "Error color"
 msgstr "Цвет ошибки"
-
-#: tools/gtk-rendernode-tool-convert.c:97
-msgid "SIZE"
-msgstr "РАЗМЕР"
 
 #: tools/gtk-rendernode-tool-convert.c:107
 msgid "Convert from symbolic svg to node."
