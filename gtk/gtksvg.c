@@ -19175,6 +19175,7 @@ gradient_get_gsk_gradient (Shape        *gradient,
   GPtrArray *color_stops;
   double offset;
   SvgValue *spread_method;
+  SvgValue *color_interpolation;
 
   color_stops = gradient_get_color_stops (gradient, context);
 
@@ -19195,6 +19196,12 @@ gradient_get_gsk_gradient (Shape        *gradient,
 
   spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
   gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
+
+  color_interpolation = paint_server_get_current_value (gradient, SHAPE_ATTR_COLOR_INTERPOLATION, context);
+  if (svg_enum_get (color_interpolation) == COLOR_INTERPOLATION_LINEAR)
+    gsk_gradient_set_interpolation (g, GDK_COLOR_STATE_SRGB_LINEAR);
+  else
+    gsk_gradient_set_interpolation (g, GDK_COLOR_STATE_SRGB);
 
   return g;
 }
