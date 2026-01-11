@@ -8,6 +8,7 @@ isolation {
           start: 10 10;
           end: 440 10;
           stops: 0 rgb(0,0,255), 1 rgb(0,255,0);
+          premultiplied: false;
         }
       }
       mask: transform {
@@ -27,6 +28,7 @@ isolation {
           start: 10 10;
           end: 440 10;
           stops: 0 rgb(0,0,255), 1 rgb(0,255,0);
+          premultiplied: false;
         }
       }
       mask: transform {

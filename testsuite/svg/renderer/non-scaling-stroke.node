@@ -48,6 +48,7 @@ M 20 20 h 30 v 10 h -30 z";
                 start: 18.1105 22.0994;
                 end: 38 40;
                 stops: 0 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(0,128,0);
+                premultiplied: false;
               }
             }
             path: "\
