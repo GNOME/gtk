@@ -1381,22 +1381,17 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   gsk_gpu_node_processor_sync_globals (self, 0);
   gsk_gpu_mask_op (self->frame,
                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
-                   &clip_bounds,
-                   &self->offset,
+                   self->ccs,
                    self->opacity,
+                   &self->offset,
+                   child_image,
+                   GSK_GPU_SAMPLER_DEFAULT,
+                   mask_image,
+                   GSK_GPU_SAMPLER_DEFAULT,
                    GSK_MASK_MODE_ALPHA,
-                   &(GskGpuShaderImage) {
-                       child_image,
-                       GSK_GPU_SAMPLER_DEFAULT,
-                       NULL,
-                       &child_rect,
-                   },
-                   &(GskGpuShaderImage) {
-                       mask_image,
-                       GSK_GPU_SAMPLER_DEFAULT,
-                       NULL,
-                       &clip_bounds,
-                   });
+                   &clip_bounds,
+                   &child_rect,
+                   &clip_bounds);
 
   g_object_unref (child_image);
   g_object_unref (mask_image);
@@ -3371,22 +3366,17 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
 
       gsk_gpu_mask_op (self->frame,
                        gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
-                       &bounds,
-                       &self->offset,
+                       self->ccs,
                        self->opacity,
+                       &self->offset,
+                       source_image,
+                       GSK_GPU_SAMPLER_DEFAULT,
+                       mask_image,
+                       GSK_GPU_SAMPLER_DEFAULT,
                        mask_mode,
-                       &(GskGpuShaderImage) {
-                           source_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           NULL,
-                           &source_rect,
-                       },
-                       &(GskGpuShaderImage) {
-                           mask_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           NULL,
-                           &mask_rect,
-                       });
+                       &bounds,
+                       &source_rect,
+                       &mask_rect);
 
       g_object_unref (source_image);
     }
@@ -3897,22 +3887,17 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
         {
           gsk_gpu_mask_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
-                           &clip_bounds,
-                           &self->offset,
+                           self->ccs,
                            self->opacity,
+                           &self->offset,
+                           source_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           mask_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
                            GSK_MASK_MODE_ALPHA,
-                           &(GskGpuShaderImage) {
-                             source_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             NULL,
-                             &source_rect,
-                           },
-                           &(GskGpuShaderImage) {
-                             mask_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             &clip_bounds,
-                             &tex_rect,
-                           });
+                           &clip_bounds,
+                           &source_rect,
+                           &tex_rect);
 
           g_object_unref (source_image);
         }
@@ -3978,22 +3963,17 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
         {
           gsk_gpu_mask_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
-                           &clip_bounds,
-                           &self->offset,
+                           self->ccs,
                            self->opacity,
+                           &self->offset,
+                           source_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           mask_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
                            GSK_MASK_MODE_ALPHA,
-                           &(GskGpuShaderImage) {
-                             source_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             NULL,
-                             &source_rect,
-                           },
-                           &(GskGpuShaderImage) {
-                             mask_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             &clip_bounds,
-                             &tex_rect,
-                           });
+                           &clip_bounds,
+                           &source_rect,
+                           &tex_rect);
 
           g_object_unref (source_image);
         }
@@ -4279,22 +4259,17 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
         {
           gsk_gpu_mask_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
-                           &bounds,
-                           &self->offset,
+                           self->ccs,
                            self->opacity,
+                           &self->offset,
+                           child_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           mask_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
                            GSK_MASK_MODE_ALPHA,
-                           &(GskGpuShaderImage) {
-                             child_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             NULL,
-                             &child_rect,
-                           },
-                           &(GskGpuShaderImage) {
-                             mask_image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             NULL,
-                             &mask_rect,
-                           });
+                           &bounds,
+                           &child_rect,
+                           &mask_rect);
         }
       else
         {
