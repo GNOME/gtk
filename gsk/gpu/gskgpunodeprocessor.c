@@ -638,6 +638,28 @@ gsk_gpu_get_acs_for_builtin (GdkColorState *builtin)
       return NULL;
     }
 }
+
+static GdkColorState *
+gsk_gpu_get_acs_for_cicp (GdkColorState *cicp,
+                          GdkColorState *ccs)
+{
+  switch (GDK_DEFAULT_COLOR_STATE_ID (ccs))
+    {
+      case GDK_COLOR_STATE_ID_SRGB:
+      case GDK_COLOR_STATE_ID_SRGB_LINEAR:
+        return GDK_COLOR_STATE_SRGB_LINEAR;
+
+      case GDK_COLOR_STATE_ID_REC2100_PQ:
+      case GDK_COLOR_STATE_ID_REC2100_LINEAR:
+        return GDK_COLOR_STATE_REC2100_LINEAR;
+
+    case GDK_COLOR_STATE_N_IDS:
+    default:
+      g_assert_not_reached ();
+      return NULL;
+    }
+}
+
 static void
 gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                  GskGpuImage           *image,
@@ -671,18 +693,23 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
 
       g_assert (cicp != NULL);
 
-      gsk_gpu_convert_from_cicp_op (self->frame,
-                                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                                    cicp,
-                                    gsk_gpu_color_states_create_cicp (self->ccs, TRUE, TRUE),
-                                    self->opacity,
-                                    &self->offset,
-                                    &(GskGpuShaderImage) {
-                                      image,
-                                      sampler,
-                                      rect,
-                                      tex_rect
-                                    });
+      gsk_gpu_convert_cicp_op (self->frame,
+                               gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                               self->ccs,
+                               gsk_gpu_get_acs_for_cicp (image_color_state, self->ccs),
+                               self->opacity,
+                               &self->offset,
+                               image,
+                               sampler,
+                               self->opacity < 1.0f,
+                               TRUE,
+                               FALSE,
+                               rect,
+                               tex_rect,
+                               cicp->color_primaries,
+                               cicp->transfer_function,
+                               cicp->matrix_coefficients,
+                               cicp->range == GDK_CICP_RANGE_NARROW ? 0 : 1);
     }
   else if (gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
            self->opacity < 1.0 ||
@@ -5013,18 +5040,23 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
 
       g_assert (cicp != NULL);
 
-      gsk_gpu_convert_to_cicp_op (self->frame,
-                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                                  cicp,
-                                  gsk_gpu_color_states_create_cicp (image_color_state, TRUE, target_premultiplied),
-                                  self->opacity,
-                                  &self->offset,
-                                  &(GskGpuShaderImage) {
-                                      image,
-                                      GSK_GPU_SAMPLER_DEFAULT,
-                                      rect,
-                                      tex_rect
-                                  });
+      gsk_gpu_convert_cicp_op (self->frame,
+                               gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                               image_color_state,
+                               gsk_gpu_get_acs_for_cicp (self->ccs, image_color_state),
+                               self->opacity,
+                               &self->offset,
+                               image,
+                               GSK_GPU_SAMPLER_DEFAULT,
+                               self->opacity < 1.0f,
+                               target_premultiplied,
+                               TRUE,
+                               rect,
+                               tex_rect,
+                               cicp->color_primaries,
+                               cicp->transfer_function,
+                               cicp->matrix_coefficients,
+                               cicp->range == GDK_CICP_RANGE_NARROW ? 0 : 1);
     }
   else
     {

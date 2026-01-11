@@ -85,7 +85,6 @@ gsk_private_sources = files([
   'gpu/gskgpucomponenttransferop.c',
   'gpu/gskgpucompositeop.c',
   'gpu/gskgpuconvertop.c',
-  'gpu/gskgpuconvertcicpop.c',
   'gpu/gskgpudownloadop.c',
   'gpu/gskgpudevice.c',
   'gpu/gskgpuframe.c',
