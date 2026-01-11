@@ -11063,6 +11063,7 @@ struct _Animation
   int64_t simple_duration;
   double repeat_count;
   int64_t repeat_duration;
+  ColorInterpolation color_interpolation;
 
   GtkSvgRunMode run_mode;
   int64_t next_invalidate;
@@ -11129,6 +11130,7 @@ animation_init (Animation     *a,
   a->additive = ANIMATION_ADDITIVE_REPLACE;
   a->accumulate = ANIMATION_ACCUMULATE_NONE;
 
+  a->color_interpolation = COLOR_INTERPOLATION_SRGB;
 
   a->begin = g_ptr_array_new ();
   a->end = g_ptr_array_new ();
@@ -14040,6 +14042,7 @@ parse_value_animation_attrs (Animation            *a,
   const char *splines_attr = NULL;
   const char *additive_attr = NULL;
   const char *accumulate_attr = NULL;
+  const char *color_interpolation_attr = NULL;
   TransformType transform_type = TRANSFORM_NONE;
   GArray *times = NULL;
   GArray *points = NULL;
@@ -14059,6 +14062,7 @@ parse_value_animation_attrs (Animation            *a,
                             "keySplines", &splines_attr,
                             "additive", &additive_attr,
                             "accumulate", &accumulate_attr,
+                            "color-interpolation", &color_interpolation_attr,
                             NULL);
 
   if (a->type == ANIMATION_TYPE_MOTION)
@@ -14127,6 +14131,22 @@ parse_value_animation_attrs (Animation            *a,
       else
         a->accumulate = (AnimationAccumulate) value;
    }
+
+  if (color_interpolation_attr)
+    {
+      SvgValue *v;
+
+      v = svg_color_interpolation_parse (color_interpolation_attr);
+      if (!v)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "color-interpolation", NULL);
+        }
+      else
+        {
+          a->color_interpolation = svg_enum_get (v);
+          svg_value_unref (v);
+        }
+    }
 
   if (values_attr)
     {
@@ -17153,6 +17173,13 @@ serialize_value_animation_attrs (GString   *s,
       const char *accumulate[] = { "none", "sum" };
       indent_for_attr (s, indent);
       g_string_append_printf (s, "accumulate='%s'", accumulate[a->accumulate]);
+    }
+
+  if (a->color_interpolation != COLOR_INTERPOLATION_SRGB)
+    {
+      const char *vals[] = { "auto", "sRGB", "linearRGB" };
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "color-interpolation='%s'", vals[a->color_interpolation]);
     }
 }
 

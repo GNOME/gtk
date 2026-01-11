@@ -21,6 +21,7 @@
         values='red;green'
         keyTimes='0;1'
         keySplines='0 0 1 1'
+        color-interpolation='linearRGB'
         additive='sum'
         accumulate='sum'/>
   <animateTransform id='a2'

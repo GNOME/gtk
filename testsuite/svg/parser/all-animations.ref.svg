@@ -29,7 +29,8 @@
             keyTimes='0; 1'
             calcMode='spline'
             additive='sum'
-            accumulate='sum'/>
+            accumulate='sum'
+            color-interpolation='linearRGB'/>
     <animateTransform
             id='a2'
             attributeName='transform'
