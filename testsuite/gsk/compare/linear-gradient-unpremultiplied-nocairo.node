@@ -1,0 +1,18 @@
+color-matrix {
+  matrix: matrix3d(0, 0, 0, 0, 0, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500);
+  child: container {
+    linear-gradient {
+      bounds: 0 0 50 50;
+      start: 0 -25;
+      end: 0 75;
+      stops: 0 rgb(255,0,0), 1 rgba(0,255,0,0);
+    }
+    linear-gradient {
+      bounds: 60 0 50 50;
+      start: 0 -25;
+      end: 0 75;
+      stops: 0 rgb(255,0,0), 1 rgba(0,255,0,0);
+      premultiplied: false;
+    }
+  }
+}

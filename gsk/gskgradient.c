@@ -9,6 +9,7 @@ gsk_gradient_new (void)
 
   gradient->interpolation = GDK_COLOR_STATE_SRGB;
   gradient->hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  gradient->premultiplied = TRUE;
   gradient->repeat = GSK_REPEAT_PAD;
   gradient->opaque = TRUE;
 
@@ -38,6 +39,7 @@ gsk_gradient_init_copy (GskGradient       *gradient,
 
   gradient->interpolation = gdk_color_state_ref (orig->interpolation);
   gradient->hue_interpolation = orig->hue_interpolation;
+  gradient->premultiplied = orig->premultiplied;
   gradient->repeat = orig->repeat;
   gradient->opaque = orig->opaque;
 
@@ -65,6 +67,7 @@ gsk_gradient_equal (const GskGradient *gradient0,
 {
   if (gradient0->repeat != gradient1->repeat ||
       gradient0->hue_interpolation != gradient1->hue_interpolation ||
+      gradient0->premultiplied != gradient1->premultiplied ||
       gradient_stops_get_size (&gradient0->stops) != gradient_stops_get_size (&gradient1->stops) ||
       !gdk_color_state_equal (gradient0->interpolation, gradient1->interpolation))
     return FALSE;
@@ -143,6 +146,13 @@ gsk_gradient_set_hue_interpolation (GskGradient         *gradient,
   gradient->hue_interpolation = hue_interpolation;
 }
 
+void
+gsk_gradient_set_premultiplied (GskGradient *gradient,
+                                gboolean     premultiplied)
+{
+  gradient->premultiplied = premultiplied;
+}
+
 gsize
 gsk_gradient_get_n_stops (const GskGradient *gradient)
 {
@@ -186,6 +196,12 @@ GskHueInterpolation
 gsk_gradient_get_hue_interpolation (const GskGradient *gradient)
 {
   return gradient->hue_interpolation;
+}
+
+gboolean
+gsk_gradient_get_premultiplied (const GskGradient *gradient)
+{
+  return gradient->premultiplied;
 }
 
 GskRepeat

@@ -64,6 +64,7 @@ struct _GskGradient
   GradientStops stops;
   GdkColorState *interpolation;
   GskHueInterpolation hue_interpolation;
+  gboolean premultiplied;
   GskRepeat repeat;
   gboolean opaque;
   GskColorStop *rgba_stops;
@@ -94,6 +95,8 @@ void            gsk_gradient_set_interpolation          (GskGradient            
                                                          GdkColorState           *interpolation);
 void            gsk_gradient_set_hue_interpolation      (GskGradient             *gradient,
                                                          GskHueInterpolation      hue_interpolation);
+void            gsk_gradient_set_premultiplied          (GskGradient             *gradient,
+                                                         gboolean                 premultiplied);
 
 gsize           gsk_gradient_get_n_stops                (const GskGradient       *gradient);
 const GskGradientStop *
@@ -108,6 +111,7 @@ float           gsk_gradient_get_stop_transition_hint   (const GskGradient      
 GdkColorState * gsk_gradient_get_interpolation          (const GskGradient       *gradient);
 GskHueInterpolation
                 gsk_gradient_get_hue_interpolation      (const GskGradient       *gradient);
+gboolean        gsk_gradient_get_premultiplied          (const GskGradient       *gradient);
 GskRepeat       gsk_gradient_get_repeat                 (const GskGradient       *gradient);
 gboolean        gsk_gradient_is_opaque                  (const GskGradient       *gradient);
 const GdkColor *gsk_gradient_check_single_color         (const GskGradient       *gradient);
