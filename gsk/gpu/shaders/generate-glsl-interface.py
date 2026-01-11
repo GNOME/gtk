@@ -489,31 +489,6 @@ def print_c_shader_op_class (file):
 }};
 ''')
 
-def print_c_struct_initializer (file, n_attributes, attributes):
-    args = [ FunctionArg (file.struct_name + 'Instance', True,  'instance'),
-             FunctionArg ('GdkColorState',               True,  'acs'),
-             FunctionArg ('float',                       False, 'opacity'),
-             FunctionArg ('const graphene_point_t',      True,  'offset') ]
-    for var in file.variables:
-        if var.name == 'opacity':
-            continue
-        args.append (FunctionArg (('const ' if var.type.pointer else '') + var.type.type, var.type.pointer, var.name))
-
-    print_c_function ('static inline void',
-                      f'''{file.var_name}_instance_init''',
-                      args,
-                      False)
-
-    print (f'''{{''')
-    for attr in attributes:
-        size = 0
-        for var in attr.inputs:
-            print (var.type.struct_initializer ('  ', 'instance->', var.name, attr.name, size))
-            size += var.type.size
-
-    print (f'''}}
-''')
-
 def print_c_invocation (file, n_attributes, attributes, prototype_only):
     args = [ FunctionArg ('GskGpuFrame',                 True,  'frame'),
              FunctionArg ('GskGpuShaderClip',            False, 'clip'),
@@ -649,23 +624,6 @@ def print_glsl_file (file, n_attributes, attributes):
     print_glsl_variations (file.variations)
     print_glsl_attributes (attributes)
 
-def print_old_header_file (file, n_attributes, attributes):
-    print (f'''/* This file is auto-generated; changes will not be preserved */
-#pragma once
-
-#include "gskgpushaderopprivate.h"
-#include "gskgradientprivate.h" /* for GskRepeat */
-''')
-
-    print (f'''#define {file.var_name}_n_textures {file.n_textures}
-#define {file.var_name}_n_instances {file.n_instances}
-''')
-    #print_c_struct_initializer (file, n_attributes, attributes)
-    print_c_struct (file, n_attributes, attributes)
-    print_gl_setup_vao (file, n_attributes, attributes)
-    print_gl_attrib_locations (file, n_attributes, attributes)
-    print_vulkan_info (file, n_attributes, attributes)
-
 def print_header_file (file, n_attributes, attributes):
     print (f'''/* This file is auto-generated; changes will not be preserved */
 #pragma once
@@ -711,8 +669,6 @@ for path in args.FILES:
 
     if args.generate_glsl:
         print_glsl_file (file, n_attributes,attributes)
-    if args.generate_old_header:
-        print_old_header_file (file, n_attributes, attributes)
     if args.generate_header:
         print_header_file (file, n_attributes, attributes)
     if args.generate_source:
