@@ -1299,21 +1299,25 @@ gsk_skew_transform_invert (GskTransform *transform,
                            GskTransform *next)
 {
   GskSkewTransform *self = (GskSkewTransform *) transform;
-  float tx, ty;
+  float tx, ty, d;
   graphene_matrix_t matrix;
 
   tx = tanf (DEG_TO_RAD (self->skew_x));
   ty = tanf (DEG_TO_RAD (self->skew_y));
 
-  graphene_matrix_init_from_2d (&matrix,
-                                1 / (1 - tx * ty),
-                                - ty / (1 - tx * ty),
-                                - tx / (1 - tx * ty),
-                                1 / (1 - tx * ty),
-                                0, 0);
-  return gsk_transform_matrix_with_category (next,
-                                             &matrix,
-                                             GSK_FINE_TRANSFORM_CATEGORY_2D);
+  d = 1 - tx * ty;
+  if (isnormal (d))
+    {
+      graphene_matrix_init_from_2d (&matrix,
+                                       1 / d, - ty / d,
+                                    - tx / d,    1 / d,
+                                           0,        0);
+      return gsk_transform_matrix_with_category (next,
+                                                 &matrix,
+                                                 GSK_FINE_TRANSFORM_CATEGORY_2D);
+    }
+  else
+    return NULL;
 }
 
 static gboolean
@@ -1379,7 +1383,6 @@ gsk_transform_skew (GskTransform *next,
 }
 /* }}} */
 /*  {{{ SCALE */
-
 typedef struct _GskScaleTransform GskScaleTransform;
 
 struct _GskScaleTransform
@@ -1498,11 +1501,14 @@ gsk_scale_transform_invert (GskTransform *transform,
                             GskTransform *next)
 {
   GskScaleTransform *self = (GskScaleTransform *) transform;
+  float xinv = 1.f / self->factor_x;
+  float yinv = 1.f / self->factor_y;
+  float zinv = 1.f / self->factor_z;
 
-  return gsk_transform_scale_3d (next,
-                                 1.f / self->factor_x,
-                                 1.f / self->factor_y,
-                                 1.f / self->factor_z);
+  if (isnormal (xinv) && isnormal (yinv) && isnormal (zinv))
+    return gsk_transform_scale_3d (next, xinv, yinv, zinv);
+  else
+    return NULL;
 }
 
 static gboolean
