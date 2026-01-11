@@ -611,16 +611,22 @@ static inline void
 lerp_color (double          t,
             const GdkColor *c0,
             const GdkColor *c1,
+            GdkColorState  *interpolation,
             GdkColor       *c)
 {
+  GdkColor cc0, cc1;
   float values[4];
 
-  g_assert (gdk_color_state_equal (c0->color_state, c1->color_state));
+  gdk_color_convert (&cc0, interpolation, c0);
+  gdk_color_convert (&cc1, interpolation, c1);
 
   for (unsigned int i = 0; i < 4; i++)
-    values[i] = lerp (t, c0->values[i], c1->values[i]);
+    values[i] = lerp (t, cc0.values[i], cc1.values[i]);
 
-  gdk_color_init (c, c0->color_state, values);
+  gdk_color_finish (&cc0);
+  gdk_color_finish (&cc1);
+
+  gdk_color_init (c, interpolation, values);
 }
 
 static inline double
@@ -633,16 +639,22 @@ static inline void
 accumulate_color (const GdkColor *c0,
                   const GdkColor *c1,
                   int             n,
+                  GdkColorState  *interpolation,
                   GdkColor       *c)
 {
+  GdkColor cc0, cc1;
   float values[4];
 
-  g_assert (gdk_color_state_equal (c0->color_state, c1->color_state));
+  gdk_color_convert (&cc0, interpolation, c0);
+  gdk_color_convert (&cc1, interpolation, c1);
 
   for (unsigned int i = 0; i < 4; i++)
-    values[0] = accumulate (c0->values[i], c1->values[i], n);
+    values[0] = accumulate (cc0.values[i], cc1.values[i], n);
 
-  gdk_color_init (c, c0->color_state, values);
+  gdk_color_finish (&cc0);
+  gdk_color_finish (&cc1);
+
+  gdk_color_init (c, interpolation, values);
 }
 
 static inline double
@@ -2009,6 +2021,7 @@ typedef struct {
   int64_t current_time;
   const GdkRGBA *colors;
   size_t n_colors;
+  GdkColorState *interpolation;
 } ComputeContext;
 
 typedef struct _SvgValueClass SvgValueClass;
@@ -4953,7 +4966,7 @@ svg_color_interpolate (const SvgValue *value0,
       GdkColor c;
       SvgValue *res;
 
-      lerp_color (t, &c0->color, &c1->color, &c);
+      lerp_color (t, &c0->color, &c1->color, context->interpolation, &c);
       res = svg_color_new_color (&c);
       gdk_color_finish (&c);
 
@@ -4983,7 +4996,7 @@ svg_color_accumulate (const SvgValue *value0,
       GdkColor c;
       SvgValue *res;
 
-      accumulate_color (&c0->color, &c1->color, n, &c);
+      accumulate_color (&c0->color, &c1->color, n, context->interpolation, &c);
       res = svg_color_new_color (&c);
       gdk_color_finish (&c);
 
@@ -5577,7 +5590,7 @@ svg_paint_interpolate (const SvgValue *value0,
       GdkColor c;
       SvgValue *ret;
 
-      lerp_color (t, &p0->color, &p1->color, &c);
+      lerp_color (t, &p0->color, &p1->color, context->interpolation, &c);
       ret = svg_paint_new_color (&c);
       gdk_color_finish (&c);
 
@@ -5608,7 +5621,7 @@ svg_paint_accumulate (const SvgValue *value0,
       paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
 
       paint->kind = PAINT_COLOR;
-      accumulate_color (&p0->color, &p1->color, n, &paint->color);
+      accumulate_color (&p0->color, &p1->color, n, context->interpolation, &paint->color);
 
       return (SvgValue *) paint;
     }
@@ -12502,17 +12515,24 @@ static SvgValue *
 compute_value_for_animation (Animation      *a,
                              ComputeContext *context)
 {
+  GdkColorState *previous = context->interpolation;
+  SvgValue *value = NULL;
+
+  if (a->color_interpolation == COLOR_INTERPOLATION_LINEAR)
+    context->interpolation = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    context->interpolation = GDK_COLOR_STATE_SRGB;
+
   if (a->status == ANIMATION_STATUS_INACTIVE)
     {
       /* keep the base value */
       dbg_print ("values", "%s: too early\n", a->id);
-      return NULL;
     }
   else if (a->status == ANIMATION_STATUS_RUNNING)
     {
       /* animation is active */
       dbg_print ("values", "%s: updating value\n", a->id);
-      return compute_value_at_time (a, context);
+      value = compute_value_at_time (a, context);
     }
   else if (a->fill == ANIMATION_FILL_FREEZE)
     {
@@ -12522,26 +12542,29 @@ compute_value_for_animation (Animation      *a,
           if (!(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
             {
               dbg_print ("values", "%s: frozen (fast)\n", a->id);
-              return resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
+              value = resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
             }
           else
            {
               dbg_print ("values", "%s: frozen (motion)\n", a->id);
-              return compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
+              value = compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
            }
         }
       else
         {
           dbg_print ("values", "%s: frozen\n", a->id);
-          return compute_value_at_time (a, context);
+          value = compute_value_at_time (a, context);
         }
     }
   else
     {
       /* Back to base value */
       dbg_print ("values", "%s: back to base\n", a->id);
-      return NULL;
     }
+
+  context->interpolation = previous;
+
+  return value;
 }
 
 static int64_t
@@ -21026,6 +21049,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       compute_context.n_colors = n_colors;
       compute_context.current_time = self->current_time;
       compute_context.parent = NULL;
+      compute_context.interpolation = GDK_COLOR_STATE_SRGB;
 
       compute_current_values_for_shape (self->content, &compute_context);
 
