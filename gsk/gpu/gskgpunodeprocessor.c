@@ -623,6 +623,21 @@ gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (GskGpuNodeProcessor *s
   return TRUE;
 }
 
+static GdkColorState *
+gsk_gpu_get_acs_for_builtin (GdkColorState *builtin)
+{
+  switch (GDK_BUILTIN_COLOR_STATE_ID (builtin))
+    {
+    case GDK_BUILTIN_COLOR_STATE_ID_OKLAB:
+    case GDK_BUILTIN_COLOR_STATE_ID_OKLCH:
+      return GDK_COLOR_STATE_SRGB_LINEAR;
+
+    case GDK_BUILTIN_COLOR_STATE_N_IDS:
+    default:
+      g_assert_not_reached ();
+      return NULL;
+    }
+}
 static void
 gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                  GskGpuImage           *image,
@@ -635,18 +650,20 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
 
   if (GDK_IS_BUILTIN_COLOR_STATE (image_color_state))
     {
-      gsk_gpu_convert_from_builtin_op (self->frame,
-                                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                                       self->ccs,
-                                       image_color_state,
-                                       self->opacity,
-                                       &self->offset,
-                                       &(GskGpuShaderImage) {
-                                         image,
-                                         sampler,
-                                         rect,
-                                         tex_rect
-                                       });
+      gsk_gpu_convert_builtin_op (self->frame,
+                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                  self->ccs,
+                                  gsk_gpu_get_acs_for_builtin (image_color_state),
+                                  self->opacity,
+                                  &self->offset,
+                                  image,
+                                  sampler,
+                                  GDK_BUILTIN_COLOR_STATE_ID (image_color_state),
+                                  self->opacity < 1.0f,
+                                  FALSE,
+                                  FALSE,
+                                  rect,
+                                  tex_rect);
     }
   else if (!GDK_IS_DEFAULT_COLOR_STATE (image_color_state))
     {
@@ -4976,19 +4993,20 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
 
   if (GDK_IS_BUILTIN_COLOR_STATE (self->ccs))
     {
-      gsk_gpu_convert_to_builtin_op (self->frame,
-                                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                                     self->ccs,
-                                     target_premultiplied,
-                                     image_color_state,
-                                     self->opacity,
-                                     &self->offset,
-                                     &(GskGpuShaderImage) {
-                                         image,
-                                         GSK_GPU_SAMPLER_DEFAULT,
-                                         rect,
-                                         tex_rect
-                                     });
+      gsk_gpu_convert_builtin_op (self->frame,
+                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                  image_color_state,
+                                  gsk_gpu_get_acs_for_builtin (self->ccs),
+                                  self->opacity,
+                                  &self->offset,
+                                  image,
+                                  GSK_GPU_SAMPLER_DEFAULT,
+                                  GDK_BUILTIN_COLOR_STATE_ID (self->ccs),
+                                  self->opacity < 1.0f,
+                                  target_premultiplied,
+                                  TRUE,
+                                  rect,
+                                  tex_rect);
     }
   else if (!GDK_IS_DEFAULT_COLOR_STATE (self->ccs))
     {
