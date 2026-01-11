@@ -2,6 +2,7 @@
 textures = 1;
 var_name = "gsk_gpu_color_matrix";
 struct_name = "GskGpuColorMatrix";
+opacity = false;
 
 graphene_matrix_t color_matrix;
 graphene_vec4_t color_offset;
