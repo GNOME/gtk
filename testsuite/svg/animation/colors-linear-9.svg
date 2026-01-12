@@ -1,0 +1,57 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='empty'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='9000ms'
+        font-weight='400'
+        font-size='16'
+        width='200'
+        height='200'
+        viewBox='0 0 200 200'>
+  <g
+          font-weight='400'
+          font-size='16'>
+    <circle
+            id='p'
+            clip-path='path("M 0 0 L 100 0 L 100 200 L 0 200 Z")'
+            font-weight='400'
+            font-size='16'
+            fill='rgb(124,124,124)'
+            cx='100'
+            cy='100'
+            r='100'>
+      <animate
+              attributeName='fill'
+              begin='0ms'
+              dur='10000ms'
+              repeatCount='indefinite'
+              values='rgb(0,0,0); rgb(255,255,255); rgb(0,0,0)'
+              keyTimes='0; 0.5; 1'
+              color-interpolation='linearRGB'
+              gpa:status='running'
+              gpa:current-start-time='0ms'/>
+    </circle>
+    <circle
+            id='q'
+            clip-path='path("M 100 0 L 200 0 L 200 200 L 100 200 Z")'
+            font-weight='400'
+            font-size='16'
+            fill='rgb(51,51,51)'
+            cx='100'
+            cy='100'
+            r='100'>
+      <animate
+              attributeName='fill'
+              begin='0ms'
+              dur='10000ms'
+              repeatCount='indefinite'
+              values='rgb(0,0,0); rgb(255,255,255); rgb(0,0,0)'
+              keyTimes='0; 0.5; 1'
+              gpa:status='running'
+              gpa:current-start-time='0ms'/>
+    </circle>
+  </g>
+</svg>

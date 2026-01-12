@@ -1,0 +1,12 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+     width='200' height='200' viewBox='0 0 200 200'>
+  <g>
+    <circle id='p' cx='100' cy='100' r='100' clip-path='path("m0,0h100v200h-100z")'/>
+    <circle id='q' cx='100' cy='100' r='100' clip-path='path("m100,0h100v200h-100z")'/>
+    <animate href='#p' attributeName='fill' begin='0s'
+        color-interpolation='linearRGB'
+        values='black;white;black' dur='10s' repeatCount='indefinite'/>
+    <animate href='#q' attributeName='fill' begin='0s'
+        values='black;white;black' dur='10s' repeatCount='indefinite'/>
+  </g>
+</svg>

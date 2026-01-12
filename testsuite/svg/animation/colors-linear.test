@@ -1,0 +1,24 @@
+# animating colors interpolating in srgb-linear
+input: colors-linear.svg
+time: 0
+output: colors-linear-0.svg
+time: 1000
+output: colors-linear-1.svg
+time: 2000
+output: colors-linear-2.svg
+time: 3000
+output: colors-linear-3.svg
+time: 4000
+output: colors-linear-4.svg
+time: 5000
+output: colors-linear-5.svg
+time: 6000
+output: colors-linear-6.svg
+time: 7000
+output: colors-linear-7.svg
+time: 8000
+output: colors-linear-8.svg
+time: 9000
+output: colors-linear-9.svg
+time: 10000
+output: colors-linear-10.svg
