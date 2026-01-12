@@ -10430,7 +10430,6 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_LINEAR_GRADIENT:
     case SHAPE_RADIAL_GRADIENT:
     case SHAPE_FILTER:
-      g_error ("Attempt to get the bounds of a %s", shape_types[shape->type].name);
       break;
     default:
       g_assert_not_reached ();
