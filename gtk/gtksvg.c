@@ -5162,10 +5162,10 @@ static SvgValue *
 svg_paint_new_simple (PaintKind kind)
 {
   static SvgPaint paint_values[] = {
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_NONE, .color = GDK_COLOR_SRGB (0, 0, 0, 0) },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_FILL, .color = GDK_COLOR_SRGB (0, 0, 0, 0) },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_STROKE, .color = GDK_COLOR_SRGB (0, 0, 0, 0) },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CURRENT_COLOR, .color = GDK_COLOR_SRGB (0, 0, 0, 0) },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_NONE,           .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_FILL,   .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_STROKE, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CURRENT_COLOR,  .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
   };
 
   g_assert (kind < G_N_ELEMENTS (paint_values));
@@ -5194,8 +5194,8 @@ svg_paint_new_symbolic (GtkSymbolicColor symbolic)
 }
 
 static SvgPaint default_color[] = {
-  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = GDK_COLOR_SRGB (0, 0, 0, 1) },
-  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = GDK_COLOR_SRGB (0,0 , 0, 0) },
+  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 1 } },
+  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
 };
 
 static SvgValue *
