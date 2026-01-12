@@ -3264,6 +3264,7 @@ DEFINE_ENUM (COORD_UNITS, coord_units, CoordUnits,
 
 DEFINE_ENUM_PUBLIC_NO_PARSE (PAINT_ORDER, paint_order, PaintOrder,
   DEFINE_ENUM_VALUE (PAINT_ORDER, PAINT_ORDER_FILL_STROKE_MARKERS, "normal"),
+  DEFINE_ENUM_VALUE (PAINT_ORDER, PAINT_ORDER_FILL_STROKE_MARKERS, "fill stroke markers"),
   DEFINE_ENUM_VALUE (PAINT_ORDER, PAINT_ORDER_FILL_MARKERS_STROKE, "fill markers stroke"),
   DEFINE_ENUM_VALUE (PAINT_ORDER, PAINT_ORDER_STROKE_FILL_MARKERS, "stroke fill markers"),
   DEFINE_ENUM_VALUE (PAINT_ORDER, PAINT_ORDER_STROKE_MARKERS_FILL, "stroke markers fill"),
@@ -3283,13 +3284,13 @@ svg_paint_order_parse (const char *string)
   strv = strsplit_set (string, " ");
   key = g_strjoinv (" ", strv);
 
-  for (unsigned int i = 0; i < G_N_ELEMENTS (paint_order_values); i++)
+  for (unsigned int i = 1; i < G_N_ELEMENTS (paint_order_values); i++)
     {
       if (g_str_has_prefix (paint_order_values[i].name, key))
         {
           g_strfreev (strv);
           g_free (key);
-          return svg_paint_order_new (i);
+          return svg_paint_order_new (paint_order_values[i].value);
         }
     }
 
