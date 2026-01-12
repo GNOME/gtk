@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width='300' height='200'
+     viewBox="0 0 300 200" >
+
+  <defs>
+    <radialGradient id="MyGradient" spreadMethod='pad'
+      gradientUnits='objectBoundingBox'
+      r='0.5' fr='0'>
+      <stop offset="0" stop-color="red" />
+      <stop offset="0" stop-color="yellow" />
+      <stop offset="1" stop-color="yellow" />
+      <stop offset="1" stop-color="blue" />
+    </radialGradient>
+  </defs>
+
+  <!-- The rectangle is filled using a linear-gradient paint server -->
+  <circle stroke="url(#MyGradient)"
+        fill='none'
+        stroke-width="10"
+        cx="100" cy="100" r='50'/>
+</svg>
