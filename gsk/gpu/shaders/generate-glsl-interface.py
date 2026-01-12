@@ -7,6 +7,21 @@ import re
 import sys
 import os
 
+class Premultiplied(Enum):
+    PREMULTIPLIED = 0,
+    STRAIGHT = 1,
+    ARGUMENT = 2
+
+    def from_string(val):
+        if val.lower() in [ 'true', 'premultiplied' ]:
+            return Premultiplied.PREMULTIPLIED;
+        elif val.lower() in [ 'false', 'straight' ]:
+            return Premultiplied.STRAIGHT;
+        elif val.lower() in [ 'argument' ]:
+            return Premultiplied.ARGUMENT;
+        else:
+            raise Exception ('Expected "premultiplied" or "straight" or "argument"')
+
 @dataclass
 class VarType:
     c_name: str
@@ -127,7 +142,7 @@ class File:
     struct_name: str
     n_textures: int
     n_instances: int
-    acs_premultiplied: bool
+    acs_premultiplied: Premultiplied
     acs_equals_ccs: bool
     opacity: bool
     dual_blend: bool
@@ -247,13 +262,13 @@ VariationType(
 ),
 ]
 
-def strtobool (val, file_line):
+def strtobool (val):
     if val.lower() in [ 'true' ]:
         return True;
     elif val.lower() in [ 'false' ]:
         return False;
     else:
-        raise Exception (f'''{file_line} Expected "true" or "false"''')
+        raise Exception ('Expected "true" or "false"')
 
 def read_file (filename):
     lines = open(filename).readlines()
@@ -263,7 +278,7 @@ def read_file (filename):
     on = False
     n_textures = 0
     n_instances = 6
-    acs_premultiplied = False
+    acs_premultiplied = Premultiplied.STRAIGHT
     acs_equals_ccs = False
     opacity = True
     dual_blend = False
@@ -273,52 +288,55 @@ def read_file (filename):
 
     for pos, line in enumerate (lines):
         line = line.strip ()
-        if not on and line == "#ifdef GSK_PREAMBLE":
-            on = True
-        elif not on:
-            pass
-        elif line == "#endif":
-            on = False
-        elif line == "":
-            pass
-        elif match := re.search (r'^variation\s*:\s*(\w+)\s+(\w+)\s*;$', line):
-            var_type = next ((x for x in variation_types if x.type == match.group (1)), None)
-            if not var_type:
-                raise Exception (f'''{filename}:{pos}: Unknown variation type "{match.group (1)}"''')
-            if variation_bits + var_type.bits > 32:
-                raise Exception (f'''{filename}:{pos}: too many bits taken by variations''')
-            variations.append (Variation (name = match.group (2),
-                                          offset_bits = variation_bits,
-                                          type = var_type))
-            variation_bits += var_type.bits
-        elif match := re.search (r'(\w+)\s+(\w+)\s*;', line):
-            var_type = next ((x for x in types if x.type == match.group (1)), None)
-            if not var_type:
-                raise Exception (f'''{filename}:{pos}: Unknown type name "{match.group (1)}"''')
-            variables.append (Input (name = match.group (2),
-                                     type = var_type))
-        elif match := re.search (r'^textures\s*=\s*(\d+)\s*;$', line):
-            n_textures = int (match.group(1))
-            if n_textures < 0 or n_textures > 2:
-                raise Excepthin (f'''{filename}:{pos}: Number of textures must be <= 2''')
-        elif match := re.search (r'^instances\s*=\s*(\d+)\s*;$', line):
-            n_instances = int (match.group(1))
-        elif match := re.search (r'^name\s*=\s*"(\w+)"\s*;$', line):
-            name = match.group(1)
-        elif match := re.search (r'^var_name\s*=\s*"(\w+)"\s*;$', line):
-            var_name = match.group(1)
-        elif match := re.search (r'^struct_name\s*=\s*"(\w+)"\s*;$', line):
-            struct_name = match.group(1)
-        elif match := re.search (r'^acs_premultiplied\s*=\s*(\w+)\s*;$', line):
-            acs_premultiplied = strtobool (match.group(1), filename + ':' + str (pos))
-        elif match := re.search (r'^acs_equals_ccs\s*=\s*(\w+)\s*;$', line):
-            acs_equals_ccs = strtobool (match.group(1), filename + ':' + str (pos))
-        elif match := re.search (r'^opacity\s*=\s*(\w+)\s*;$', line):
-            opacity = strtobool (match.group(1), filename + ':' + str (pos))
-        elif match := re.search (r'^dual_blend\s*=\s*(\w+)\s*;$', line):
-            dual_blend = strtobool (match.group(1), filename + ':' + str (pos))
-        else:
-            raise Exception (f'''{filename}:{pos}: Could not parse line''')
+        try:
+            if not on and line == "#ifdef GSK_PREAMBLE":
+                on = True
+            elif not on:
+                pass
+            elif line == "#endif":
+                on = False
+            elif line == "":
+                pass
+            elif match := re.search (r'^variation\s*:\s*(\w+)\s+(\w+)\s*;$', line):
+                var_type = next ((x for x in variation_types if x.type == match.group (1)), None)
+                if not var_type:
+                    raise Exception (f'''Unknown variation type "{match.group (1)}"''')
+                if variation_bits + var_type.bits > 32:
+                    raise Exception (f'''too many bits taken by variations''')
+                variations.append (Variation (name = match.group (2),
+                                              offset_bits = variation_bits,
+                                              type = var_type))
+                variation_bits += var_type.bits
+            elif match := re.search (r'(\w+)\s+(\w+)\s*;', line):
+                var_type = next ((x for x in types if x.type == match.group (1)), None)
+                if not var_type:
+                    raise Exception (f'''Unknown type name "{match.group (1)}"''')
+                variables.append (Input (name = match.group (2),
+                                         type = var_type))
+            elif match := re.search (r'^textures\s*=\s*(\d+)\s*;$', line):
+                n_textures = int (match.group(1))
+                if n_textures < 0 or n_textures > 2:
+                    raise Exception (f'''Number of textures must be <= 2''')
+            elif match := re.search (r'^instances\s*=\s*(\d+)\s*;$', line):
+                n_instances = int (match.group(1))
+            elif match := re.search (r'^name\s*=\s*"(\w+)"\s*;$', line):
+                name = match.group(1)
+            elif match := re.search (r'^var_name\s*=\s*"(\w+)"\s*;$', line):
+                var_name = match.group(1)
+            elif match := re.search (r'^struct_name\s*=\s*"(\w+)"\s*;$', line):
+                struct_name = match.group(1)
+            elif match := re.search (r'^acs_premultiplied\s*=\s*(\w+)\s*;$', line):
+                acs_premultiplied = Premultiplied.from_string (match.group(1))
+            elif match := re.search (r'^acs_equals_ccs\s*=\s*(\w+)\s*;$', line):
+                acs_equals_ccs = strtobool (match.group(1))
+            elif match := re.search (r'^opacity\s*=\s*(\w+)\s*;$', line):
+                opacity = strtobool (match.group(1))
+            elif match := re.search (r'^dual_blend\s*=\s*(\w+)\s*;$', line):
+                dual_blend = strtobool (match.group(1))
+            else:
+                raise Exception ('Could not parse line')
+        except Exception as e:
+            raise Exception (f'''{filename}:{pos}: {repr (e)}''')
     
     if not name:
         name = os.path.splitext(os.path.splitext(os.path.basename(filename))[0])[0][6:]
@@ -487,6 +505,8 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
              FunctionArg ('GdkColorState',               True,  'ccs') ]
     if not file.acs_equals_ccs:
         args.append (FunctionArg ('GdkColorState',       True,  'acs'))
+    if file.acs_premultiplied == Premultiplied.ARGUMENT:
+        args.append (FunctionArg ('gboolean',            False,  'acs_premultiplied'))
     if file.opacity:
         args.append (FunctionArg ('float',               False, 'opacity'))
     args.append (FunctionArg ('const graphene_point_t',  True,  'offset'))
@@ -510,13 +530,22 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     if prototype_only:
         return
 
+    if file.acs_premultiplied == Premultiplied.PREMULTIPLIED:
+        acs_premultiplied_str = 'TRUE'
+    elif file.acs_premultiplied == Premultiplied.STRAIGHT:
+        acs_premultiplied_str = 'FALSE'
+    elif file.acs_premultiplied == Premultiplied.ARGUMENT:
+        acs_premultiplied_str = 'acs_premultiplied'
+    else:
+        raise Exception('FIXME: Figure out assert_not_reached() with Python')
+
     print (f'''{{
   {file.struct_name}Instance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &{file.var_name.upper()}_OP_CLASS,
-                           ccs ? gsk_gpu_color_states_create (ccs, TRUE, {'ccs' if file.acs_equals_ccs else 'acs'}, {'TRUE' if file.acs_premultiplied else 'FALSE'})
-                               : gsk_gpu_color_states_create_equal (TRUE, {'TRUE' if file.acs_premultiplied else 'FALSE'}),''')
+                           ccs ? gsk_gpu_color_states_create (ccs, TRUE, {'ccs' if file.acs_equals_ccs else 'acs'}, {acs_premultiplied_str})
+                               : gsk_gpu_color_states_create_equal (TRUE, {acs_premultiplied_str}),''')
     if file.variations:
         for pos, var in enumerate (file.variations, 1):
             print (f'''                           {var.type.to_c_flag ('variation_' + var.name, var.offset_bits)}{' |' if pos < len (file.variations) else ','}''')
