@@ -4909,6 +4909,17 @@ svg_color_parse (const char *value)
     {
       return svg_color_new_current ();
     }
+  else if (match_str (value, "transparent"))
+    {
+       GdkColor c;
+       SvgValue *res;
+
+       gdk_color_init_from_rgba (&c, &GDK_RGBA_TRANSPARENT);
+       res = svg_color_new_color (&c);
+       gdk_color_finish (&c);
+
+       return res;
+    }
   else if (rgba_parse (&rgba, value))
     {
        GdkColor c;
@@ -5312,6 +5323,10 @@ svg_paint_parse (const char *value)
   else if (match_str (value, "currentColor"))
     {
       return svg_paint_new_simple (PAINT_CURRENT_COLOR);
+    }
+  else if (match_str (value, "transparent"))
+    {
+      return svg_paint_new_rgba (&GDK_RGBA_TRANSPARENT);
     }
   else if (rgba_parse (&color, value))
     {
