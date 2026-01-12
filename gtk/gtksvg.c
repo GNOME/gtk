@@ -20065,7 +20065,7 @@ paint_marker (Shape              *shape,
   gsk_transform_unref (transform);
 
   if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
-    gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, vb->view_box.size.width, vb->view_box.size.height));
+    gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (0, 0, view_box.size.width, view_box.size.height));
 
   render_shape (marker, context);
 
