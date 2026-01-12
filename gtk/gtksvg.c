@@ -13779,6 +13779,7 @@ parse_base_animation_attrs (Animation            *a,
 {
   const char *id_attr = NULL;
   const char *href_attr = NULL;
+  const char *xlink_href_attr = NULL;
   const char *begin_attr = NULL;
   const char *end_attr = NULL;
   const char *dur_attr = NULL;
@@ -13796,6 +13797,7 @@ parse_base_animation_attrs (Animation            *a,
                             handled,
                             "id", &id_attr,
                             "href", &href_attr,
+                            "xlink:href", &xlink_href_attr,
                             "begin", &begin_attr,
                             "end", &end_attr,
                             "dur", &dur_attr,
@@ -13809,10 +13811,16 @@ parse_base_animation_attrs (Animation            *a,
 
   a->id = g_strdup (id_attr);
 
-  if (href_attr && href_attr[0] == '#')
-    a->href = g_strdup (href_attr + 1);
-  else
-    a->href = g_strdup (href_attr);
+  if (xlink_href_attr && !href_attr)
+    href_attr = xlink_href_attr;
+
+  if (href_attr)
+    {
+      if (href_attr[0] != '#')
+        gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in 'href'");
+      else
+        a->href = g_strdup (href_attr + 1);
+    }
 
   if (begin_attr)
     {
@@ -15837,6 +15845,9 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (strcmp (element_name, "mpath") == 0)
     {
+      const char *xlink_href_attr = NULL;
+      const char *href_attr = NULL;
+
       if (data->current_animation == NULL ||
           data->current_animation->type != ANIMATION_TYPE_MOTION ||
           data->current_animation->motion.path_ref != NULL)
@@ -15847,16 +15858,25 @@ start_element_cb (GMarkupParseContext  *context,
 
       for (unsigned int i = 0; attr_names[i]; i++)
         {
-          if (strcmp (attr_names[i], "href") == 0)
+          if (strcmp (attr_names[i], "xlink:href") == 0)
             {
+              xlink_href_attr = attr_values[i];
               handled |= BIT (i);
-
-              if (attr_values[i][0] == '#')
-                data->current_animation->motion.path_ref = g_strdup (attr_values[i] + 1);
-              else
-                data->current_animation->motion.path_ref = g_strdup (attr_values[i]);
+            }
+          else if (strcmp (attr_names[i], "href") == 0)
+            {
+              href_attr = attr_values[i];
+              handled |= BIT (i);
             }
         }
+
+      if (xlink_href_attr && !href_attr)
+        href_attr = xlink_href_attr;
+
+      if (href_attr[0] != '#')
+        gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in href");
+      else
+        data->current_animation->motion.path_ref = g_strdup (href_attr + 1);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
