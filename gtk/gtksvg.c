@@ -20655,6 +20655,18 @@ recompute_current_values (Shape        *shape,
   compute_current_values_for_shape (shape, &ctx);
 }
 
+static gboolean
+shape_is_ancestor (Shape *parent, Shape *shape)
+{
+  for (Shape *p = shape->parent;  p; p = p->parent)
+    {
+      if (p == parent)
+        return TRUE;
+    }
+  return FALSE;
+}
+
+
 static void
 paint_shape (Shape        *shape,
              PaintContext *context)
@@ -20666,6 +20678,12 @@ paint_shape (Shape        *shape,
       if (((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape != NULL)
         {
           Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+
+          if (shape_is_ancestor (use_shape, shape))
+            {
+              gtk_svg_rendering_error (context->svg, "not following invalid <use> href");
+              return;
+            }
 
           mark_as_computed_for_use (use_shape, FALSE);
           recompute_current_values (use_shape, shape, context);
