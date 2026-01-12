@@ -18116,7 +18116,15 @@ apply_filter_tree (Shape         *shape,
              default:
                g_assert_not_reached ();
              }
-             result = gsk_blur_node_new (child, 2 * std_dev);
+             if (std_dev < 0)
+               {
+                 gtk_svg_rendering_error (context->svg, "stdDeviation < 0");
+                 result = gsk_render_node_ref (child);
+               }
+             else
+               {
+                 result = gsk_blur_node_new (child, 2 * std_dev);
+               }
              gsk_render_node_unref (child);
              filter_result_unref (in);
           }
@@ -18562,7 +18570,15 @@ apply_filter_functions (SvgValue      *filter,
           result = gsk_render_node_ref (child);
           break;
         case FILTER_BLUR:
-          result = gsk_blur_node_new (child, 2 * ff->value);
+          if (ff->value < 0)
+            {
+              gtk_svg_rendering_error (context->svg, "blur radius < 0");
+              result = gsk_render_node_ref (child);
+            }
+          else
+            {
+              result = gsk_blur_node_new (child, 2 * ff->value);
+            }
           break;
         case FILTER_OPACITY:
           result = gsk_opacity_node_new (child, ff->value);
