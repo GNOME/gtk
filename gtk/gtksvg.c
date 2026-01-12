@@ -21123,6 +21123,9 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   GtkSvg *self = GTK_SVG (paintable);
   graphene_rect_t viewport = GRAPHENE_RECT_INIT (0, 0, self->width, self->height);
 
+  if (self->width <= 0 || self->height <= 0)
+    return;
+
   if (self->node == NULL ||
       !can_reuse_node (self, width, height, colors, n_colors, weight))
     {
