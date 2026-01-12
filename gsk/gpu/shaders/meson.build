@@ -12,6 +12,7 @@ gsk_private_gpu_include_shaders = files([
 
 converted_shaders = files([
   'gskgpuboxshadow.glsl',
+  'gskgputexture.glsl',
 ])
 
 gsk_private_gpu_shaders = files([
@@ -34,7 +35,6 @@ gsk_private_gpu_shaders = files([
   'gskgpumask.glsl',
   'gskgpuradialgradient.glsl',
   'gskgpuroundedcolor.glsl',
-  'gskgputexture.glsl',
 ]) + converted_shaders
 
 gsk_private_gpu_shader_headers = []
