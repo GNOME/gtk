@@ -2,13 +2,13 @@
 <svg width="16" height="16">
   <path d="m0 0 l100 100" id='path0' pathLength='1'/>
   <set id='a0'
-        href='path0'
+        href='#path0'
         begin='0s'
         end='indefinite'
         attributeName='stroke-width'
         to='25'/>
   <animate id='a1'
-        href='path0'
+        href='#path0'
         begin='0s'
         end='indefinite'
         dur='1s'
@@ -21,16 +21,17 @@
         values='red;green'
         keyTimes='0;1'
         keySplines='0 0 1 1'
+        color-interpolation='linearRGB'
         additive='sum'
         accumulate='sum'/>
   <animateTransform id='a2'
         attributeName='transform'
-        href='path0'
+        href='#path0'
         type='translate'
         from='0 0'
         to='10 10'/>
   <animateMotion id='a3'
-        href='path0'
+        href='#path0'
         rotate='auto-reverse'
         path='M 0 0 L 10 20 L 20 10'
         calcMode='linear'

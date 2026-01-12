@@ -10,6 +10,7 @@ test_data = [
   'animate-motion.test',
   'clips.test',
   'colors.test',
+  'colors-linear.test',
   'dashes.test',
   'gpa-animations.test',
   'gpa-attachment.test',

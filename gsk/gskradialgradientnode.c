@@ -106,25 +106,7 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
   else
-    {
-      switch (gsk_gradient_get_repeat (gradient))
-        {
-        case GSK_REPEAT_NONE:
-          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_NONE);
-          break;
-        case GSK_REPEAT_PAD:
-          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
-          break;
-        case GSK_REPEAT_REPEAT:
-          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-          break;
-        case GSK_REPEAT_REFLECT:
-          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REFLECT);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-    }
+    cairo_pattern_set_extend (pattern, gsk_repeat_to_cairo (gsk_gradient_get_repeat (gradient)));
 
   if (gsk_gradient_get_stop_offset (gradient, 0) > 0.0)
     gdk_cairo_pattern_add_color_stop_color (pattern,

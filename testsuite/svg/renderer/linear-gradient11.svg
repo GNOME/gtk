@@ -4,14 +4,13 @@
      viewBox="0 0 300 200" >
 
   <defs>
-    <linearGradient id="MyGradient" spreadMethod='repeat'
+    <linearGradient id="MyGradient" spreadMethod='pad'
       gradientUnits='objectBoundingBox'
-      x1='0' y1='0' x2='0.5' y2='0.5'
-      color-interpolation='linearRGB'>
+      x1='0' y1='0' x2='0' y2='1'>
       <stop offset="0" stop-color="red" />
-      <stop offset="0.5" stop-color="red" />
-      <stop offset="0.5" stop-color="yellow" />
+      <stop offset="0" stop-color="yellow" />
       <stop offset="1" stop-color="yellow" />
+      <stop offset="1" stop-color="blue" />
     </linearGradient>
   </defs>
 

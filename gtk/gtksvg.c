@@ -608,15 +608,25 @@ lerp_point (double                  t,
 }
 
 static inline void
-lerp_rgba (double  t,
-           const GdkRGBA *c0,
-           const GdkRGBA *c1,
-           GdkRGBA       *c)
+lerp_color (double          t,
+            const GdkColor *c0,
+            const GdkColor *c1,
+            GdkColorState  *interpolation,
+            GdkColor       *c)
 {
-  c->red = lerp (t, c0->red, c1->red);
-  c->green = lerp (t, c0->green, c1->green);
-  c->blue = lerp (t, c0->blue, c1->blue);
-  c->alpha = lerp (t, c0->alpha, c1->alpha);
+  GdkColor cc0, cc1;
+  float values[4];
+
+  gdk_color_convert (&cc0, interpolation, c0);
+  gdk_color_convert (&cc1, interpolation, c1);
+
+  for (unsigned int i = 0; i < 4; i++)
+    values[i] = lerp (t, cc0.values[i], cc1.values[i]);
+
+  gdk_color_finish (&cc0);
+  gdk_color_finish (&cc1);
+
+  gdk_color_init (c, interpolation, values);
 }
 
 static inline double
@@ -625,10 +635,34 @@ accumulate (double a, double b, int n)
   return a + b * n;
 }
 
-static inline double
-rgba_distance (const GdkRGBA *c0,
-               const GdkRGBA *c1)
+static inline void
+accumulate_color (const GdkColor *c0,
+                  const GdkColor *c1,
+                  int             n,
+                  GdkColorState  *interpolation,
+                  GdkColor       *c)
 {
+  GdkColor cc0, cc1;
+  float values[4];
+
+  gdk_color_convert (&cc0, interpolation, c0);
+  gdk_color_convert (&cc1, interpolation, c1);
+
+  for (unsigned int i = 0; i < 4; i++)
+    values[0] = accumulate (cc0.values[i], cc1.values[i], n);
+
+  gdk_color_finish (&cc0);
+  gdk_color_finish (&cc1);
+
+  gdk_color_init (c, interpolation, values);
+}
+
+static inline double
+color_distance (const GdkColor *c0,
+                const GdkColor *c1)
+{
+  g_assert (gdk_color_state_equal (c0->color_state, c1->color_state));
+
   return sqrt ((c0->red - c1->red)     * (c0->red - c1->red) +
                (c0->green - c1->green) * (c0->green - c1->green) +
                (c0->blue - c1->blue)   * (c0->blue - c1->blue) +
@@ -1987,6 +2021,7 @@ typedef struct {
   int64_t current_time;
   const GdkRGBA *colors;
   size_t n_colors;
+  GdkColorState *interpolation;
 } ComputeContext;
 
 typedef struct _SvgValueClass SvgValueClass;
@@ -2000,9 +2035,11 @@ struct _SvgValueClass
                               const SvgValue        *value1);
   SvgValue * (* interpolate) (const SvgValue        *value0,
                               const SvgValue        *value1,
+                              ComputeContext        *context,
                               double                 t);
   SvgValue * (* accumulate)  (const SvgValue        *value0,
                               const SvgValue        *value1,
+                              ComputeContext        *context,
                               int                    n);
   void       (* print)       (const SvgValue        *value,
                               GString               *string);
@@ -2078,6 +2115,7 @@ svg_value_equal (const SvgValue *value0,
 static SvgValue *
 svg_value_interpolate (const SvgValue *value0,
                        const SvgValue *value1,
+                       ComputeContext *context,
                        double          t)
 {
   g_return_val_if_fail (value0->class == value1->class, svg_value_ref ((SvgValue *) value0));
@@ -2091,13 +2129,14 @@ svg_value_interpolate (const SvgValue *value0,
   if (value0 == value1)
     return svg_value_ref ((SvgValue *) value0);
 
-  return value1->class->interpolate (value0, value1, t);
+  return value1->class->interpolate (value0, value1, context, t);
 }
 
 /* Compute v = n * b + a */
 static SvgValue *
 svg_value_accumulate (const SvgValue *value0,
                       const SvgValue *value1,
+                       ComputeContext *context,
                       int             n)
 {
   g_return_val_if_fail (value0->class == value1->class, svg_value_ref ((SvgValue *) value0));
@@ -2105,7 +2144,7 @@ svg_value_accumulate (const SvgValue *value0,
   if (n == 0)
     return svg_value_ref ((SvgValue *) value0);
 
-  return value0->class->accumulate (value0, value1, n);
+  return value0->class->accumulate (value0, value1, context, n);
 }
 
 static void
@@ -2194,6 +2233,7 @@ svg_keyword_equal (const SvgValue *value0,
 static SvgValue *
 svg_keyword_interpolate (const SvgValue *value0,
                          const SvgValue *value1,
+                         ComputeContext *context,
                          double          t)
 {
   return NULL;
@@ -2202,6 +2242,7 @@ svg_keyword_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_keyword_accumulate (const SvgValue *value0,
                         const SvgValue *value1,
+                        ComputeContext *context,
                         int             n)
 {
   return NULL;
@@ -2329,6 +2370,7 @@ static SvgValue * svg_number_new_full (SvgUnit unit,
 static SvgValue *
 svg_number_interpolate (const SvgValue *value0,
                         const SvgValue *value1,
+                        ComputeContext *context,
                         double          t)
 {
   const SvgNumber *n0 = (const SvgNumber *) value0;
@@ -2343,6 +2385,7 @@ svg_number_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_number_accumulate (const SvgValue *value0,
                        const SvgValue *value1,
+                       ComputeContext *context,
                        int             n)
 {
   const SvgNumber *n0 = (const SvgNumber *) value0;
@@ -2667,6 +2710,7 @@ svg_numbers_equal (const SvgValue *value0,
 static SvgValue *
 svg_numbers_accumulate (const SvgValue *value0,
                         const SvgValue *value1,
+                        ComputeContext *context,
                         int             n)
 {
   return NULL;
@@ -2689,6 +2733,7 @@ svg_numbers_print (const SvgValue *value,
 
 static SvgValue * svg_numbers_interpolate (const SvgValue *value0,
                                            const SvgValue *value1,
+                                           ComputeContext *context,
                                            double          t);
 
 static SvgValue * svg_numbers_resolve (const SvgValue *value,
@@ -2807,6 +2852,7 @@ svg_numbers_parse (const char *value)
 static SvgValue *
 svg_numbers_interpolate (const SvgValue *value0,
                          const SvgValue *value1,
+                         ComputeContext *context,
                          double          t)
 {
   const SvgNumbers *p0 = (const SvgNumbers *) value0;
@@ -2943,6 +2989,7 @@ svg_string_equal (const SvgValue *value0,
 static SvgValue *
 svg_string_interpolate (const SvgValue *value0,
                         const SvgValue *value1,
+                        ComputeContext *context,
                         double          t)
 {
   if (t < 0.5)
@@ -2954,6 +3001,7 @@ svg_string_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_string_accumulate (const SvgValue *value0,
                        const SvgValue *value1,
+                       ComputeContext *context,
                        int             n)
 {
   return svg_value_ref ((SvgValue *)value0);
@@ -3025,6 +3073,7 @@ svg_enum_equal (const SvgValue *value0,
 static SvgValue *
 svg_enum_interpolate (const SvgValue *value0,
                       const SvgValue *value1,
+                      ComputeContext *context,
                       double          t)
 {
   if (t < 0.5)
@@ -3036,6 +3085,7 @@ svg_enum_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_enum_accumulate (const SvgValue *value0,
                      const SvgValue *value1,
+                     ComputeContext *context,
                      int             n)
 {
   return svg_value_ref ((SvgValue *) value0);
@@ -3566,14 +3616,14 @@ svg_font_size_resolve (const SvgValue *value,
 }
 
 DEFINE_ENUM_CUSTOM_RESOLVE (FONT_SIZE, font_size, FontSize, svg_font_size_resolve,
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALLER, "smaller"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGER, "larger"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALLER,  "smaller"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGER,   "larger"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_XX_SMALL, "xx-small"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_SMALL, "x-small"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALL, "small"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_MEDIUM, "medium"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGE, "largr"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_LARGE, "x-large"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_SMALL,  "x-small"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALL,    "small"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_MEDIUM,   "medium"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGE,    "larger"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_LARGE,  "x-large"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_XX_LARGE, "xx-large")
 )
 
@@ -3635,11 +3685,41 @@ svg_font_weight_resolve (const SvgValue *value,
 }
 
 DEFINE_ENUM_CUSTOM_RESOLVE (FONT_WEIGHT, font_weight, FontWeight, svg_font_weight_resolve,
-  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_NORMAL, "normal"),
-  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLD, "bold"),
-  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLDER, "bolder"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_NORMAL,  "normal"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLD,    "bold"),
+  DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_BOLDER,  "bolder"),
   DEFINE_ENUM_VALUE (FONT_WEIGHT, FONT_WEIGHT_LIGHTER, "lighter")
 )
+
+typedef enum
+{
+  COLOR_INTERPOLATION_AUTO,
+  COLOR_INTERPOLATION_SRGB,
+  COLOR_INTERPOLATION_LINEAR,
+} ColorInterpolation;
+
+static SvgValue * svg_color_interpolation_resolve (const SvgValue *value,
+                                                   ShapeAttr       attr,
+                                                   Shape          *shape,
+                                                   ComputeContext *context);
+
+DEFINE_ENUM_CUSTOM_RESOLVE (COLOR_INTERPOLATION, color_interpolation, ColorInterpolation, svg_color_interpolation_resolve,
+  DEFINE_ENUM_VALUE (COLOR_INTERPOLATION, COLOR_INTERPOLATION_AUTO,   "auto"),
+  DEFINE_ENUM_VALUE (COLOR_INTERPOLATION, COLOR_INTERPOLATION_SRGB,   "sRGB"),
+  DEFINE_ENUM_VALUE (COLOR_INTERPOLATION, COLOR_INTERPOLATION_LINEAR, "linearRGB")
+)
+
+static SvgValue *
+svg_color_interpolation_resolve (const SvgValue *value,
+                                 ShapeAttr       attr,
+                                 Shape          *shape,
+                                 ComputeContext *context)
+{
+  if (svg_enum_get (value) == COLOR_INTERPOLATION_AUTO)
+    return svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
+  else
+    return svg_value_ref ((SvgValue *) value);
+}
 
 /* }}} */
 /* {{{ Filter primitive references */
@@ -3693,6 +3773,7 @@ svg_filter_primitive_ref_equal (const SvgValue *value0,
 static SvgValue *
 svg_filter_primitive_ref_interpolate (const SvgValue *value0,
                                       const SvgValue *value1,
+                                      ComputeContext *context,
                                       double          t)
 {
   const SvgFilterPrimitiveRef *f0 = (const SvgFilterPrimitiveRef *) value0;
@@ -3710,6 +3791,7 @@ svg_filter_primitive_ref_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_filter_primitive_ref_accumulate (const SvgValue *value0,
                                      const SvgValue *value1,
+                                     ComputeContext *context,
                                      int             n)
 {
   return NULL;
@@ -3876,9 +3958,11 @@ svg_transform_equal (const SvgValue *value0,
 
 static SvgValue *svg_transform_interpolate (const SvgValue *v0,
                                             const SvgValue *v1,
+                                            ComputeContext *context,
                                             double          t);
 static SvgValue *svg_transform_accumulate  (const SvgValue *v0,
                                             const SvgValue *v1,
+                                            ComputeContext *context,
                                             int             n);
 static void      svg_transform_print       (const SvgValue *v,
                                             GString        *string);
@@ -4470,6 +4554,7 @@ primitive_transform_apply (const PrimitiveTransform *transform,
 static SvgValue *
 svg_transform_interpolate (const SvgValue *value0,
                            const SvgValue *value1,
+                           ComputeContext *context,
                            double          t)
 {
   static const PrimitiveTransform identity[] = {
@@ -4569,6 +4654,7 @@ svg_transform_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_transform_accumulate (const SvgValue *value0,
                           const SvgValue *value1,
+                          ComputeContext *context,
                           int             n)
 {
   const SvgTransform *tf0 = (const SvgTransform *) value0;
@@ -4716,7 +4802,7 @@ typedef struct
 {
   SvgValue base;
   gboolean current;
-  GdkRGBA color;
+  GdkColor color;
 } SvgColor;
 
 static gboolean
@@ -4727,14 +4813,16 @@ svg_color_equal (const SvgValue *value0,
   const SvgColor *c1 = (const SvgColor *) value1;
 
   return c0->current == c1->current &&
-         gdk_rgba_equal (&c0->color, &c1->color);
+         gdk_color_equal (&c0->color, &c1->color);
 }
 
 static SvgValue *svg_color_interpolate (const SvgValue *v0,
                                         const SvgValue *v1,
+                                        ComputeContext *context,
                                         double          t);
 static SvgValue *svg_color_accumulate  (const SvgValue *v0,
                                         const SvgValue *v1,
+                                        ComputeContext *context,
                                         int             n);
 static void      svg_color_print       (const SvgValue *v0,
                                         GString        *string);
@@ -4745,9 +4833,18 @@ static SvgValue * svg_color_resolve    (const SvgValue *value,
                                         Shape          *shape,
                                         ComputeContext *context);
 
+static void
+svg_color_free (SvgValue *value)
+{
+  SvgColor *color = (SvgColor *) value;
+
+  gdk_color_finish (&color->color);
+  g_free (color);
+}
+
 static const SvgValueClass SVG_COLOR_CLASS = {
   "SvgColor",
-  svg_value_default_free,
+  svg_color_free,
   svg_color_equal,
   svg_color_interpolate,
   svg_color_accumulate,
@@ -4756,39 +4853,63 @@ static const SvgValueClass SVG_COLOR_CLASS = {
   svg_color_resolve,
 };
 
+static SvgColor black_color_value =
+  { { &SVG_COLOR_CLASS, 0 }, .current = 0, { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 1 } };
+
 static SvgValue *
 svg_color_new_black (void)
 {
-  static SvgColor black = { { &SVG_COLOR_CLASS, 0 }, .current = 0, .color = { 0, 0, 0, 1 } };
-
-  return (SvgValue *) &black;
+  return (SvgValue *) &black_color_value;
 }
 
 static SvgValue *
-svg_color_new (gboolean       current,
-               const GdkRGBA *color)
+svg_color_new_color (const GdkColor *color)
 {
-  SvgColor *result;
+  SvgColor *res;
 
-  if (!current && gdk_rgba_equal (color, &GDK_RGBA_BLACK))
-    return svg_color_new_black ();
+  if (gdk_color_equal (&black_color_value.color, color))
+    return (SvgValue *) &black_color_value;
 
-  result = (SvgColor *) svg_value_alloc (&SVG_COLOR_CLASS, sizeof (SvgColor));
-  result->current = current;
-  result->color = *color;
+  res = (SvgColor *) svg_value_alloc (&SVG_COLOR_CLASS, sizeof (SvgColor));
+  res->current = FALSE;
+  gdk_color_init_copy (&res->color, color);
 
-  return (SvgValue *) result;
+  return (SvgValue *) res;
+}
+
+static SvgValue *
+svg_color_new_current (void)
+{
+  SvgColor *res;
+
+  res = (SvgColor *) svg_value_alloc (&SVG_COLOR_CLASS, sizeof (SvgColor));
+
+  res->current = TRUE;
+  res->color = GDK_COLOR_SRGB (0, 0, 0, 1);
+
+  return (SvgValue *) res;
 }
 
 static SvgValue *
 svg_color_parse (const char *value)
 {
-  GdkRGBA color;
+  GdkRGBA rgba;
 
   if (match_str (value, "currentColor"))
-    return svg_color_new (TRUE, &GDK_RGBA_BLACK);
-  else if (rgba_parse (&color, value))
-   return svg_color_new (FALSE, &color);
+    {
+      return svg_color_new_current ();
+    }
+  else if (rgba_parse (&rgba, value))
+    {
+       GdkColor c;
+       SvgValue *res;
+
+       gdk_color_init_from_rgba (&c, &rgba);
+       res = svg_color_new_color (&c);
+       gdk_color_finish (&c);
+
+       return res;
+    }
 
   return NULL;
 }
@@ -4802,7 +4923,16 @@ svg_color_print (const SvgValue *value,
   if (color->current)
     g_string_append (s, "currentColor");
   else
-    gdk_rgba_print (&color->color, s);
+    {
+      GdkColor c;
+
+      /* Don't use gdk_color_print here until we parse
+       * modern css color syntax.
+       */
+      gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &color->color);
+      gdk_rgba_print ((const GdkRGBA *) c.values, s);
+      gdk_color_finish (&c);
+    }
 }
 
 static SvgValue *
@@ -4825,6 +4955,7 @@ svg_color_resolve (const SvgValue *value,
 static SvgValue *
 svg_color_interpolate (const SvgValue *value0,
                        const SvgValue *value1,
+                       ComputeContext *context,
                        double          t)
 {
   const SvgColor *c0 = (const SvgColor *) value0;
@@ -4832,11 +4963,14 @@ svg_color_interpolate (const SvgValue *value0,
 
   if (!c0->current && !c1->current)
     {
-      GdkRGBA c;
+      GdkColor c;
+      SvgValue *res;
 
-      lerp_rgba (t, &c0->color, &c1->color, &c);
+      lerp_color (t, &c0->color, &c1->color, context->interpolation, &c);
+      res = svg_color_new_color (&c);
+      gdk_color_finish (&c);
 
-      return svg_color_new (FALSE, &c);
+      return res;
     }
 
   if (t < 0.5)
@@ -4848,6 +4982,7 @@ svg_color_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_color_accumulate (const SvgValue *value0,
                       const SvgValue *value1,
+                      ComputeContext *context,
                       int             n)
 {
   const SvgColor *c0 = (const SvgColor *) value0;
@@ -4858,14 +4993,14 @@ svg_color_accumulate (const SvgValue *value0,
 
   if (!c0->current)
     {
-      GdkRGBA c;
+      GdkColor c;
+      SvgValue *res;
 
-      c.red = accumulate (c0->color.red, c1->color.red, n);
-      c.green = accumulate (c0->color.green, c1->color.green, n);
-      c.blue = accumulate (c0->color.blue, c1->color.blue, n);
-      c.alpha = accumulate (c0->color.alpha, c1->color.alpha, n);
+      accumulate_color (&c0->color, &c1->color, n, context->interpolation, &c);
+      res = svg_color_new_color (&c);
+      gdk_color_finish (&c);
 
-      return svg_color_new (FALSE, &c);
+      return res;
     }
 
   return svg_value_ref ((SvgValue *) value0);
@@ -4888,7 +5023,7 @@ svg_color_distance (const SvgValue *v0,
   if (c0->current)
     return 0;
   else
-    return rgba_distance (&c0->color, &c1->color);
+    return color_distance (&c0->color, &c1->color);
 }
 
 /* }}} */
@@ -4908,11 +5043,11 @@ typedef struct
   PaintKind kind;
   union {
     GtkSymbolicColor symbolic;
-    GdkRGBA color;
+    GdkColor color;
     struct {
       char *ref;
       Shape *shape;
-      GdkRGBA fallback;
+      GdkColor fallback;
     } server;
   };
 } SvgPaint;
@@ -4922,8 +5057,16 @@ svg_paint_free (SvgValue *value)
 {
   SvgPaint *paint = (SvgPaint *) value;
 
-  if (paint->kind == PAINT_SERVER || paint->kind == PAINT_SERVER_WITH_FALLBACK)
-    g_free (paint->server.ref);
+  if (paint->kind == PAINT_COLOR)
+    {
+      gdk_color_finish (&paint->color);
+    }
+  else if (paint->kind == PAINT_SERVER ||
+           paint->kind == PAINT_SERVER_WITH_FALLBACK)
+    {
+      g_free (paint->server.ref);
+      gdk_color_finish (&paint->server.fallback);
+    }
 
   g_free (value);
 }
@@ -4948,7 +5091,7 @@ svg_paint_equal (const SvgValue *value0,
     case PAINT_SYMBOLIC:
       return paint0->symbolic == paint1->symbolic;
     case PAINT_COLOR:
-      return gdk_rgba_equal (&paint0->color, &paint1->color);
+      return gdk_color_equal (&paint0->color, &paint1->color);
     case PAINT_SERVER:
     case PAINT_SERVER_WITH_CURRENT_COLOR:
       return paint0->server.shape == paint1->server.shape &&
@@ -4956,7 +5099,7 @@ svg_paint_equal (const SvgValue *value0,
     case PAINT_SERVER_WITH_FALLBACK:
       return paint0->server.shape == paint1->server.shape &&
              g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0 &&
-             gdk_rgba_equal (&paint0->server.fallback, &paint1->server.fallback);
+             gdk_color_equal (&paint0->server.fallback, &paint1->server.fallback);
     default:
       g_assert_not_reached ();
     }
@@ -4964,9 +5107,11 @@ svg_paint_equal (const SvgValue *value0,
 
 static SvgValue *svg_paint_interpolate (const SvgValue *v0,
                                         const SvgValue *v1,
+                                        ComputeContext *context,
                                         double          t);
 static SvgValue *svg_paint_accumulate  (const SvgValue *v0,
                                         const SvgValue *v1,
+                                        ComputeContext *context,
                                         int             n);
 static void      svg_paint_print       (const SvgValue *v0,
                                         GString        *string);
@@ -5017,10 +5162,10 @@ static SvgValue *
 svg_paint_new_simple (PaintKind kind)
 {
   static SvgPaint paint_values[] = {
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_NONE },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_FILL },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_STROKE },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CURRENT_COLOR },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_NONE,           .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_FILL,   .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_STROKE, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
+    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CURRENT_COLOR,  .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
   };
 
   g_assert (kind < G_N_ELEMENTS (paint_values));
@@ -5048,39 +5193,52 @@ svg_paint_new_symbolic (GtkSymbolicColor symbolic)
   return (SvgValue *) &sym[symbolic];
 }
 
-static SvgPaint default_rgba[] = {
-  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 1 } },
-  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { 0, 0, 0, 0 } },
+static SvgPaint default_color[] = {
+  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 1 } },
+  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
 };
+
+static SvgValue *
+svg_paint_new_color (const GdkColor *color)
+{
+  SvgValue *value;
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (default_color); i++)
+    {
+      if (gdk_color_equal (color, &default_color[i].color))
+        return (SvgValue *) &default_color[i];
+    }
+
+  value = svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
+  ((SvgPaint *) value)->kind = PAINT_COLOR;
+  gdk_color_init_copy (&((SvgPaint *) value)->color, color);
+
+  return value;
+}
 
 SvgValue *
 svg_paint_new_rgba (const GdkRGBA *rgba)
 {
-  SvgValue *value;
+  GdkColor c;
+  SvgValue *ret;
 
-  for (unsigned int i = 0; i < G_N_ELEMENTS (default_rgba); i++)
-    {
-      if (gdk_rgba_equal (rgba, &default_rgba[i].color))
-        return (SvgValue *) &default_rgba[i];
-    }
+  gdk_color_init_from_rgba (&c, rgba);
+  ret = svg_paint_new_color (&c);
+  gdk_color_finish (&c);
 
-  value = svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
-  ((SvgPaint *) value)->color = *rgba;
-  ((SvgPaint *) value)->kind = PAINT_COLOR;
-
-  return value;
+  return ret;
 }
 
 static SvgValue *
 svg_paint_new_black (void)
 {
-  return (SvgValue *) &default_rgba[0];
+  return (SvgValue *) &default_color[0];
 }
 
 static SvgValue *
 svg_paint_new_transparent (void)
 {
-  return (SvgValue *) &default_rgba[1];
+  return (SvgValue *) &default_color[1];
 }
 
 static SvgValue *
@@ -5089,7 +5247,8 @@ svg_paint_new_server (const char *ref)
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
   paint->kind = PAINT_SERVER;
-  paint->server.fallback = GDK_RGBA_TRANSPARENT;
+
+  paint->server.fallback = GDK_COLOR_SRGB (0, 0, 0, 0);
   paint->server.shape = NULL;
   paint->server.ref = g_strdup (ref);
 
@@ -5097,13 +5256,13 @@ svg_paint_new_server (const char *ref)
 }
 
 static SvgValue *
-svg_paint_new_server_with_fallback (const char    *ref,
-                                    const GdkRGBA *fallback)
+svg_paint_new_server_with_fallback (const char     *ref,
+                                    const GdkColor *fallback)
 {
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
   paint->kind = PAINT_SERVER_WITH_FALLBACK;
-  paint->server.fallback = *fallback;
+  gdk_color_init_copy (&paint->server.fallback, fallback);
   paint->server.shape = NULL;
   paint->server.ref = g_strdup (ref);
 
@@ -5116,7 +5275,7 @@ svg_paint_new_server_with_current_color (const char *ref)
   SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
                                                   sizeof (SvgPaint));
   paint->kind = PAINT_SERVER_WITH_CURRENT_COLOR;
-  paint->server.fallback = GDK_RGBA_BLACK;
+  paint->server.fallback = GDK_COLOR_SRGB (0, 0, 0, 1);
   paint->server.shape = NULL;
   paint->server.ref = g_strdup (ref);
 
@@ -5179,7 +5338,12 @@ svg_paint_parse (const char *value)
             {
               gtk_css_parser_skip_whitespace (parser);
               if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-                paint = svg_paint_new_server_with_fallback (ref, &fallback);
+                {
+                  GdkColor c;
+                  gdk_color_init_from_rgba (&c, &fallback);
+                  paint = svg_paint_new_server_with_fallback (ref, &c);
+                  gdk_color_finish (&c);
+                }
             }
           else if (gtk_css_parser_try_ident (parser, "currentColor"))
             {
@@ -5244,7 +5408,15 @@ svg_paint_print (const SvgValue *value,
       break;
 
     case PAINT_COLOR:
-      gdk_rgba_print (&paint->color, s);
+      {
+        GdkColor c;
+        /* Don't use gdk_color_print here until we parse
+         * modern css color syntax.
+         */
+        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &paint->color);
+        gdk_rgba_print ((const GdkRGBA *) &c.values, s);
+        gdk_color_finish (&c);
+      }
       break;
 
     case PAINT_SYMBOLIC:
@@ -5268,8 +5440,18 @@ svg_paint_print (const SvgValue *value,
       break;
 
     case PAINT_SERVER_WITH_FALLBACK:
-      g_string_append_printf (s, "url(#%s) ", paint->server.ref);
-      gdk_rgba_print (&paint->server.fallback, s);
+      {
+        GdkColor c;
+
+        g_string_append_printf (s, "url(#%s) ", paint->server.ref);
+
+        /* Don't use gdk_color_print here until we parse
+         * modern css color syntax.
+         */
+        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &paint->server.fallback);
+        gdk_rgba_print ((const GdkRGBA *) &c.values, s);
+        gdk_color_finish (&c);
+      }
       break;
 
     case PAINT_SERVER_WITH_CURRENT_COLOR:
@@ -5308,7 +5490,7 @@ svg_paint_print_gpa (const SvgValue *value,
       break;
 
     case PAINT_COLOR:
-      gdk_rgba_print (&paint->color, s);
+      gdk_color_print (&paint->color, s);
       break;
 
     case PAINT_SYMBOLIC:
@@ -5322,7 +5504,7 @@ svg_paint_print_gpa (const SvgValue *value,
     case PAINT_SERVER_WITH_FALLBACK:
       g_string_append_printf  (s, "url(#%s)", paint->server.ref);
       g_string_append_c (s, ' ');
-      gdk_rgba_print (&paint->server.fallback, s);
+      gdk_color_print (&paint->server.fallback, s);
       break;
 
     case PAINT_SERVER_WITH_CURRENT_COLOR:
@@ -5364,7 +5546,7 @@ svg_paint_resolve (const SvgValue *value,
   if (paint->kind == PAINT_CURRENT_COLOR)
     {
       SvgColor *color = (SvgColor *) shape->current[SHAPE_ATTR_COLOR];
-      return svg_paint_new_rgba (&color->color);
+      return svg_paint_new_color (&color->color);
     }
 
   if ((context->svg->features & GTK_SVG_EXTENSIONS) != 0)
@@ -5397,6 +5579,7 @@ svg_paint_resolve (const SvgValue *value,
 static SvgValue *
 svg_paint_interpolate (const SvgValue *value0,
                        const SvgValue *value1,
+                       ComputeContext *context,
                        double          t)
 {
   const SvgPaint *p0 = (const SvgPaint *) value0;
@@ -5404,11 +5587,14 @@ svg_paint_interpolate (const SvgValue *value0,
 
   if (p0->kind == PAINT_COLOR || p1->kind == PAINT_COLOR)
     {
-      GdkRGBA c;
+      GdkColor c;
+      SvgValue *ret;
 
-      lerp_rgba (t, &p0->color, &p1->color, &c);
+      lerp_color (t, &p0->color, &p1->color, context->interpolation, &c);
+      ret = svg_paint_new_color (&c);
+      gdk_color_finish (&c);
 
-      return svg_paint_new_rgba (&c);
+      return ret;
     }
 
   if (t < 0.5)
@@ -5420,6 +5606,7 @@ svg_paint_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_paint_accumulate (const SvgValue *value0,
                       const SvgValue *value1,
+                      ComputeContext *context,
                       int             n)
 {
   const SvgPaint *p0 = (const SvgPaint *) value0;
@@ -5434,10 +5621,7 @@ svg_paint_accumulate (const SvgValue *value0,
       paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
 
       paint->kind = PAINT_COLOR;
-      paint->color.red = accumulate (p0->color.red, p1->color.red, n);
-      paint->color.green = accumulate (p0->color.green, p1->color.green, n);
-      paint->color.blue = accumulate (p0->color.blue, p1->color.blue, n);
-      paint->color.alpha = accumulate (p0->color.alpha, p1->color.alpha, n);
+      accumulate_color (&p0->color, &p1->color, n, context->interpolation, &paint->color);
 
       return (SvgValue *) paint;
     }
@@ -5455,7 +5639,7 @@ svg_paint_distance (const SvgValue *v0,
   if (p0->kind == p1->kind)
     {
       if (p0->kind == PAINT_COLOR)
-        return rgba_distance (&p0->color, &p1->color);
+        return color_distance (&p0->color, &p1->color);
       else if (p0->kind == PAINT_NONE ||
                p0->kind == PAINT_CONTEXT_FILL ||
                p0->kind == PAINT_CONTEXT_STROKE ||
@@ -5467,7 +5651,7 @@ svg_paint_distance (const SvgValue *v0,
   return 1;
 }
 
-/* }}} */ 
+/* }}} */
 /* {{{ Filter functions */
 
 typedef enum
@@ -5569,9 +5753,11 @@ svg_filter_equal (const SvgValue *value0,
 
 static SvgValue *svg_filter_interpolate (const SvgValue *v0,
                                          const SvgValue *v1,
+                                         ComputeContext *context,
                                          double          t);
 static SvgValue *svg_filter_accumulate  (const SvgValue *v0,
                                          const SvgValue *v1,
+                                         ComputeContext *context,
                                          int             n);
 static void      svg_filter_print       (const SvgValue *v0,
                                          GString        *string);
@@ -5720,6 +5906,7 @@ svg_filter_print (const SvgValue *value,
 static SvgValue *
 svg_filter_interpolate (const SvgValue *value0,
                         const SvgValue *value1,
+                        ComputeContext *context,
                         double          t)
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
@@ -5751,6 +5938,7 @@ svg_filter_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_filter_accumulate (const SvgValue *value0,
                        const SvgValue *value1,
+                       ComputeContext *context,
                        int             n)
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
@@ -5997,6 +6185,7 @@ svg_dash_array_equal (const SvgValue *value0,
 
 static SvgValue * svg_dash_array_interpolate (const SvgValue *value0,
                                               const SvgValue *value1,
+                                              ComputeContext *context,
                                               double          t);
 
 static void svg_dash_array_print (const SvgValue *value,
@@ -6004,6 +6193,7 @@ static void svg_dash_array_print (const SvgValue *value,
 
 static SvgValue * svg_dash_array_accumulate (const SvgValue *value0,
                                              const SvgValue *value1,
+                                             ComputeContext *context,
                                              int             n);
 static SvgValue * svg_dash_array_resolve    (const SvgValue *value,
                                              ShapeAttr       attr,
@@ -6130,6 +6320,7 @@ svg_dash_array_print (const SvgValue *value,
 static SvgValue *
 svg_dash_array_interpolate (const SvgValue *value0,
                             const SvgValue *value1,
+                            ComputeContext *context,
                             double          t)
 {
   const SvgDashArray *a0 = (const SvgDashArray *) value0;
@@ -6174,6 +6365,7 @@ out:
 static SvgValue *
 svg_dash_array_accumulate (const SvgValue *value0,
                            const SvgValue *value1,
+                           ComputeContext *context,
                            int             n)
 {
   return NULL;
@@ -6248,6 +6440,7 @@ svg_path_equal (const SvgValue *value0,
 static SvgValue *
 svg_path_accumulate (const SvgValue *value0,
                      const SvgValue *value1,
+                     ComputeContext *context,
                      int             n)
 {
   return NULL;
@@ -6267,6 +6460,7 @@ svg_path_print (const SvgValue *value,
 
 static SvgValue * svg_path_interpolate (const SvgValue *value1,
                                         const SvgValue *value2,
+                                        ComputeContext *context,
                                         double          t);
 
 static const SvgValueClass SVG_PATH_CLASS = {
@@ -6331,6 +6525,7 @@ svg_path_get_gsk (const SvgValue *value)
 static SvgValue *
 svg_path_interpolate (const SvgValue *value0,
                       const SvgValue *value1,
+                      ComputeContext *context,
                       double          t)
 {
   const SvgPath *p0 = (const SvgPath *) value0;
@@ -6411,11 +6606,13 @@ svg_clip_equal (const SvgValue *value0,
 
 static SvgValue * svg_clip_interpolate (const SvgValue *value0,
                                         const SvgValue *value1,
+                                        ComputeContext *context,
                                         double          t);
 
 static SvgValue *
 svg_clip_accumulate (const SvgValue *value0,
                      const SvgValue *value1,
+                     ComputeContext *context,
                      int             n)
 {
   return NULL;
@@ -6500,6 +6697,7 @@ svg_clip_new_ref (const char *ref)
 static SvgValue *
 svg_clip_interpolate (const SvgValue *value0,
                       const SvgValue *value1,
+                      ComputeContext *context,
                       double          t)
 {
   const SvgClip *c0 = (const SvgClip *) value0;
@@ -6651,6 +6849,7 @@ svg_mask_equal (const SvgValue *value0,
 static SvgValue *
 svg_mask_interpolate (const SvgValue *value0,
                       const SvgValue *value1,
+                      ComputeContext *context,
                       double          t)
 {
   if (t < 0.5)
@@ -6662,6 +6861,7 @@ svg_mask_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_mask_accumulate (const SvgValue *value0,
                      const SvgValue *value1,
+                     ComputeContext *context,
                      int             n)
 {
   return NULL;
@@ -6779,6 +6979,7 @@ svg_view_box_equal (const SvgValue *value0,
 static SvgValue *
 svg_view_box_interpolate (const SvgValue *value0,
                           const SvgValue *value1,
+                          ComputeContext *context,
                           double          t)
 {
   const SvgViewBox *v0 = (const SvgViewBox *) value0;
@@ -6801,6 +7002,7 @@ svg_view_box_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_view_box_accumulate (const SvgValue *value0,
                          const SvgValue *value1,
+                         ComputeContext *context,
                          int             n)
 {
   return NULL;
@@ -6906,6 +7108,7 @@ svg_content_fit_equal (const SvgValue *value0,
 static SvgValue *
 svg_content_fit_interpolate (const SvgValue *value0,
                              const SvgValue *value1,
+                             ComputeContext *context,
                              double          t)
 {
   if (t < 0.5)
@@ -6917,6 +7120,7 @@ svg_content_fit_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_content_fit_accumulate (const SvgValue *value0,
                             const SvgValue *value1,
+                            ComputeContext *context,
                             int             n)
 {
   return NULL;
@@ -7118,6 +7322,7 @@ static SvgValue *svg_orient_new_angle (double angle);
 static SvgValue *
 svg_orient_interpolate (const SvgValue *value0,
                         const SvgValue *value1,
+                        ComputeContext *context,
                         double          t)
 {
   const SvgOrient *v0 = (const SvgOrient *) value0;
@@ -7135,6 +7340,7 @@ svg_orient_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_orient_accumulate (const SvgValue *value0,
                        const SvgValue *value1,
+                       ComputeContext *context,
                        int             n)
 {
   return NULL;
@@ -7236,6 +7442,7 @@ svg_language_equal (const SvgValue *value0,
 static SvgValue *
 svg_language_interpolate (const SvgValue *value0,
                           const SvgValue *value1,
+                          ComputeContext *context,
                           double          t)
 {
   if (t < 0.5)
@@ -7247,6 +7454,7 @@ svg_language_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_language_accumulate (const SvgValue *value0,
                          const SvgValue *value1,
+                         ComputeContext *context,
                          int             n)
 {
   return svg_value_ref ((SvgValue *)value0);
@@ -7335,6 +7543,7 @@ svg_text_decoration_equal (const SvgValue *value0,
 static SvgValue *
 svg_text_decoration_interpolate (const SvgValue *value0,
                                  const SvgValue *value1,
+                                 ComputeContext *context,
                                  double          t)
 {
   if (t < 0.5)
@@ -7346,6 +7555,7 @@ svg_text_decoration_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_text_decoration_accumulate (const SvgValue *value0,
                                 const SvgValue *value1,
+                                ComputeContext *context,
                                 int             n)
 {
   return svg_value_ref ((SvgValue *)value0);
@@ -7498,6 +7708,7 @@ svg_href_equal (const SvgValue *value1,
 static SvgValue *
 svg_href_interpolate (const SvgValue *value1,
                       const SvgValue *value2,
+                      ComputeContext *context,
                       double          t)
 {
   if (t < 0.5)
@@ -7509,6 +7720,7 @@ svg_href_interpolate (const SvgValue *value1,
 static SvgValue *
 svg_href_accumulate (const SvgValue *value1,
                      const SvgValue *value2,
+                     ComputeContext *context,
                      int             n)
 {
   return NULL;
@@ -8346,6 +8558,11 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = SHAPE_ANY,
     .parse_value = svg_color_parse,
   },
+  [SHAPE_ATTR_COLOR_INTERPOLATION] = {
+    .flags = SHAPE_ATTR_INHERITED,
+    .applies_to = SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE,
+    .parse_value = svg_color_interpolation_parse,
+  },
   [SHAPE_ATTR_FILTER] = {
     .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
     .parse_value = svg_filter_parse,
@@ -8932,6 +9149,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_COLOR].initial_value = svg_color_new_black ();
+  shape_attrs[SHAPE_ATTR_COLOR_INTERPOLATION].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
   shape_attrs[SHAPE_ATTR_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
   shape_attrs[SHAPE_ATTR_VECTOR_EFFECT].initial_value = svg_vector_effect_new (VECTOR_EFFECT_NONE);
   shape_attrs[SHAPE_ATTR_FILTER].initial_value = svg_filter_new_none ();
@@ -9114,6 +9332,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "gradientTransform", SHAPE_GRADIENTS, 0, SHAPE_ATTR_TRANSFORM },
   { "patternTransform", BIT (SHAPE_PATTERN), 0, SHAPE_ATTR_TRANSFORM },
   { "color", SHAPE_ANY, 0, SHAPE_ATTR_COLOR },
+  { "color-interpolation", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE, 0, SHAPE_ATTR_COLOR_INTERPOLATION },
   { "opacity", SHAPE_ANY, 0, SHAPE_ATTR_OPACITY },
   { "filter", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_FILTER },
   { "clip-path", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_CLIP_PATH },
@@ -10857,6 +11076,7 @@ struct _Animation
   int64_t simple_duration;
   double repeat_count;
   int64_t repeat_duration;
+  ColorInterpolation color_interpolation;
 
   GtkSvgRunMode run_mode;
   int64_t next_invalidate;
@@ -10923,6 +11143,7 @@ animation_init (Animation     *a,
   a->additive = ANIMATION_ADDITIVE_REPLACE;
   a->accumulate = ANIMATION_ACCUMULATE_NONE;
 
+  a->color_interpolation = COLOR_INTERPOLATION_SRGB;
 
   a->begin = g_ptr_array_new ();
   a->end = g_ptr_array_new ();
@@ -12167,7 +12388,7 @@ compute_animation_motion_value (Animation      *a,
         {
           SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
           SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame + 1].value);
-          value = svg_value_interpolate (v1, v2, frame_t);
+          value = svg_value_interpolate (v1, v2, context, frame_t);
           svg_value_unref (v1);
           svg_value_unref (v2);
         }
@@ -12194,7 +12415,7 @@ compute_animation_motion_value (Animation      *a,
         {
           end_val = svg_transform_new_none ();
         }
-      acc = svg_value_accumulate (value, end_val, rep);
+      acc = svg_value_accumulate (value, end_val, context, rep);
       svg_value_unref (end_val);
       svg_value_unref (value);
       value = acc;
@@ -12245,7 +12466,7 @@ compute_value_at_time (Animation      *a,
         {
           SvgValue *v1 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame].value);
           SvgValue *v2 = resolve_value (a->shape, context, a->attr, a->idx, a->frames[frame + 1].value);
-          ival = svg_value_interpolate (v1, v2, frame_t);
+          ival = svg_value_interpolate (v1, v2, context, frame_t);
           svg_value_unref (v1);
           svg_value_unref (v2);
         }
@@ -12263,7 +12484,7 @@ compute_value_at_time (Animation      *a,
           SvgValue *aval;
 
           SvgValue *v = resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
-          aval = svg_value_accumulate (ival, v, rep);
+          aval = svg_value_accumulate (ival, v, context, rep);
           svg_value_unref (v);
 
           if (aval == NULL)
@@ -12294,17 +12515,24 @@ static SvgValue *
 compute_value_for_animation (Animation      *a,
                              ComputeContext *context)
 {
+  GdkColorState *previous = context->interpolation;
+  SvgValue *value = NULL;
+
+  if (a->color_interpolation == COLOR_INTERPOLATION_LINEAR)
+    context->interpolation = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    context->interpolation = GDK_COLOR_STATE_SRGB;
+
   if (a->status == ANIMATION_STATUS_INACTIVE)
     {
       /* keep the base value */
       dbg_print ("values", "%s: too early\n", a->id);
-      return NULL;
     }
   else if (a->status == ANIMATION_STATUS_RUNNING)
     {
       /* animation is active */
       dbg_print ("values", "%s: updating value\n", a->id);
-      return compute_value_at_time (a, context);
+      value = compute_value_at_time (a, context);
     }
   else if (a->fill == ANIMATION_FILL_FREEZE)
     {
@@ -12314,26 +12542,29 @@ compute_value_for_animation (Animation      *a,
           if (!(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
             {
               dbg_print ("values", "%s: frozen (fast)\n", a->id);
-              return resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
+              value = resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
             }
           else
            {
               dbg_print ("values", "%s: frozen (motion)\n", a->id);
-              return compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
+              value = compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
            }
         }
       else
         {
           dbg_print ("values", "%s: frozen\n", a->id);
-          return compute_value_at_time (a, context);
+          value = compute_value_at_time (a, context);
         }
     }
   else
     {
       /* Back to base value */
       dbg_print ("values", "%s: back to base\n", a->id);
-      return NULL;
     }
+
+  context->interpolation = previous;
+
+  return value;
 }
 
 static int64_t
@@ -12527,13 +12758,13 @@ compute_current_values_for_shape (Shape          *shape,
 
                   if (a->type == ANIMATION_TYPE_MOTION)
                     {
-                      end_val = svg_value_accumulate (val, motion, 1);
+                      end_val = svg_value_accumulate (val, motion, context, 1);
                       svg_value_unref (motion);
                       motion = end_val;
                     }
                   else
                     {
-                      end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), 1);
+                      end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), context, 1);
                       shape_set_current_value (shape, a->attr, a->idx, end_val);
                       svg_value_unref (end_val);
                     }
@@ -12559,7 +12790,7 @@ compute_current_values_for_shape (Shape          *shape,
         {
           SvgValue *combined;
 
-          combined = svg_value_accumulate (shape_get_current_value (shape, SHAPE_ATTR_TRANSFORM, 0), motion, 1);
+          combined = svg_value_accumulate (shape_get_current_value (shape, SHAPE_ATTR_TRANSFORM, 0), motion, context, 1);
           shape_set_current_value (shape, SHAPE_ATTR_TRANSFORM, 0, combined);
           svg_value_unref (combined);
         }
@@ -13548,6 +13779,7 @@ parse_base_animation_attrs (Animation            *a,
 {
   const char *id_attr = NULL;
   const char *href_attr = NULL;
+  const char *xlink_href_attr = NULL;
   const char *begin_attr = NULL;
   const char *end_attr = NULL;
   const char *dur_attr = NULL;
@@ -13565,6 +13797,7 @@ parse_base_animation_attrs (Animation            *a,
                             handled,
                             "id", &id_attr,
                             "href", &href_attr,
+                            "xlink:href", &xlink_href_attr,
                             "begin", &begin_attr,
                             "end", &end_attr,
                             "dur", &dur_attr,
@@ -13578,10 +13811,16 @@ parse_base_animation_attrs (Animation            *a,
 
   a->id = g_strdup (id_attr);
 
-  if (href_attr && href_attr[0] == '#')
-    a->href = g_strdup (href_attr + 1);
-  else
-    a->href = g_strdup (href_attr);
+  if (xlink_href_attr && !href_attr)
+    href_attr = xlink_href_attr;
+
+  if (href_attr)
+    {
+      if (href_attr[0] != '#')
+        gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in 'href'");
+      else
+        a->href = g_strdup (href_attr + 1);
+    }
 
   if (begin_attr)
     {
@@ -13834,6 +14073,7 @@ parse_value_animation_attrs (Animation            *a,
   const char *splines_attr = NULL;
   const char *additive_attr = NULL;
   const char *accumulate_attr = NULL;
+  const char *color_interpolation_attr = NULL;
   TransformType transform_type = TRANSFORM_NONE;
   GArray *times = NULL;
   GArray *points = NULL;
@@ -13853,6 +14093,7 @@ parse_value_animation_attrs (Animation            *a,
                             "keySplines", &splines_attr,
                             "additive", &additive_attr,
                             "accumulate", &accumulate_attr,
+                            "color-interpolation", &color_interpolation_attr,
                             NULL);
 
   if (a->type == ANIMATION_TYPE_MOTION)
@@ -13922,6 +14163,22 @@ parse_value_animation_attrs (Animation            *a,
         a->accumulate = (AnimationAccumulate) value;
    }
 
+  if (color_interpolation_attr)
+    {
+      SvgValue *v;
+
+      v = svg_color_interpolation_parse (color_interpolation_attr);
+      if (!v)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, "color-interpolation", NULL);
+        }
+      else
+        {
+          a->color_interpolation = svg_enum_get (v);
+          svg_value_unref (v);
+        }
+    }
+
   if (values_attr)
     {
       values = shape_attr_parse_values (a->attr, transform_type, values_attr);
@@ -13953,6 +14210,7 @@ parse_value_animation_attrs (Animation            *a,
       SvgValue *from;
       SvgValue *by;
       SvgValue *to;
+      ComputeContext ctx = { 0, };
 
       values = shape_attr_parse_values (a->attr, transform_type, from_attr);
       byvals = shape_attr_parse_values (a->attr, transform_type, by_attr);
@@ -13967,7 +14225,8 @@ parse_value_animation_attrs (Animation            *a,
 
       from = g_ptr_array_index (values, 0);
       by = g_ptr_array_index (byvals, 0);
-      to = svg_value_accumulate (by, from, 1);
+      ctx.interpolation = GDK_COLOR_STATE_SRGB; /* Nothing else is used */
+      to = svg_value_accumulate (by, from, &ctx, 1);
       g_ptr_array_add (values, to);
       g_ptr_array_unref (byvals);
     }
@@ -15586,6 +15845,9 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (strcmp (element_name, "mpath") == 0)
     {
+      const char *xlink_href_attr = NULL;
+      const char *href_attr = NULL;
+
       if (data->current_animation == NULL ||
           data->current_animation->type != ANIMATION_TYPE_MOTION ||
           data->current_animation->motion.path_ref != NULL)
@@ -15596,16 +15858,25 @@ start_element_cb (GMarkupParseContext  *context,
 
       for (unsigned int i = 0; attr_names[i]; i++)
         {
-          if (strcmp (attr_names[i], "href") == 0)
+          if (strcmp (attr_names[i], "xlink:href") == 0)
             {
+              xlink_href_attr = attr_values[i];
               handled |= BIT (i);
-
-              if (attr_values[i][0] == '#')
-                data->current_animation->motion.path_ref = g_strdup (attr_values[i] + 1);
-              else
-                data->current_animation->motion.path_ref = g_strdup (attr_values[i]);
+            }
+          else if (strcmp (attr_names[i], "href") == 0)
+            {
+              href_attr = attr_values[i];
+              handled |= BIT (i);
             }
         }
+
+      if (xlink_href_attr && !href_attr)
+        href_attr = xlink_href_attr;
+
+      if (href_attr[0] != '#')
+        gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in href");
+      else
+        data->current_animation->motion.path_ref = g_strdup (href_attr + 1);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -16946,6 +17217,13 @@ serialize_value_animation_attrs (GString   *s,
       indent_for_attr (s, indent);
       g_string_append_printf (s, "accumulate='%s'", accumulate[a->accumulate]);
     }
+
+  if (a->color_interpolation != COLOR_INTERPOLATION_SRGB)
+    {
+      const char *vals[] = { "auto", "sRGB", "linearRGB" };
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "color-interpolation='%s'", vals[a->color_interpolation]);
+    }
 }
 
 static void
@@ -17851,9 +18129,8 @@ apply_filter_tree (Shape         *shape,
             SvgValue *alpha = filter_get_current_value (f, SHAPE_ATTR_FE_OPACITY);
             GdkColor c;
 
-            gdk_color_init_from_rgba (&c, &color->color);
+            gdk_color_init_copy (&c, &color->color);
             c.alpha *= svg_number_get (alpha, 1);
-
             result = gsk_color_node_new2 (&c, &subregion);
             gdk_color_finish (&c);
           }
@@ -18116,13 +18393,15 @@ apply_filter_tree (Shape         *shape,
             color = (SvgColor *) filter_get_current_value (f, SHAPE_ATTR_FE_COLOR);
             alpha = filter_get_current_value (f, SHAPE_ATTR_FE_OPACITY);
 
-            gdk_color_init_from_rgba (&shadow.color, &color->color);
+            gdk_color_init_copy (&shadow.color, &color->color);
             shadow.color.alpha *= svg_number_get (alpha, 1);
             shadow.offset.x = dx;
             shadow.offset.y = dy;
             shadow.radius = std_dev;
 
             result = gsk_shadow_node_new2 (in->node, &shadow, 1);
+
+            gdk_color_finish (&shadow.color);
 
             filter_result_unref (in);
           }
@@ -18938,6 +19217,8 @@ gradient_get_gsk_gradient (Shape        *gradient,
   GskGradient *g;
   GPtrArray *color_stops;
   double offset;
+  SvgValue *spread_method;
+  SvgValue *color_interpolation;
 
   color_stops = gradient_get_color_stops (gradient, context);
 
@@ -18950,11 +19231,20 @@ gradient_get_gsk_gradient (Shape        *gradient,
       GdkColor color;
 
       offset = MAX (svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OFFSET)], 1), offset);
-      gdk_color_init_from_rgba (&color, &stop_color->color);
+      gdk_color_init_copy (&color, &stop_color->color);
       color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
       gsk_gradient_add_stop (g, offset, 0.5, &color);
       gdk_color_finish (&color);
     }
+
+  spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
+  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
+
+  color_interpolation = paint_server_get_current_value (gradient, SHAPE_ATTR_COLOR_INTERPOLATION, context);
+  if (svg_enum_get (color_interpolation) == COLOR_INTERPOLATION_LINEAR)
+    gsk_gradient_set_interpolation (g, GDK_COLOR_STATE_SRGB_LINEAR);
+  else
+    gsk_gradient_set_interpolation (g, GDK_COLOR_STATE_SRGB);
 
   return g;
 }
@@ -19040,7 +19330,6 @@ paint_linear_gradient (Shape                 *gradient,
   SvgValue *y2 = paint_server_get_current_value (gradient, SHAPE_ATTR_Y2, context);
   SvgValue *tf = paint_server_get_current_value (gradient, SHAPE_ATTR_TRANSFORM, context);
   SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
-  SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
   g = gradient_get_gsk_gradient (gradient, context);
 
@@ -19072,8 +19361,6 @@ paint_linear_gradient (Shape                 *gradient,
   transform_gradient_line (transform, &start, &end, &start, &end);
   gsk_transform_unref (transform);
 
-  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
-
   gtk_snapshot_add_linear_gradient (context->snapshot, paint_bounds, &start, &end, g);
 
   gsk_gradient_free (g);
@@ -19099,10 +19386,8 @@ paint_radial_gradient (Shape                 *gradient,
   SvgValue *r = paint_server_get_current_value (gradient, SHAPE_ATTR_R, context);
   SvgValue *tf = paint_server_get_current_value (gradient, SHAPE_ATTR_TRANSFORM, context);
   SvgValue *units = paint_server_get_current_value (gradient, SHAPE_ATTR_CONTENT_UNITS, context);
-  SvgValue *spread_method = paint_server_get_current_value (gradient, SHAPE_ATTR_SPREAD_METHOD, context);
 
   g = gradient_get_gsk_gradient (gradient, context);
-  gsk_gradient_set_repeat (g, svg_enum_get (spread_method));
 
   gtk_snapshot_save (context->snapshot);
 
@@ -19313,9 +19598,9 @@ paint_server (SvgPaint              *paint,
   if (server == NULL ||
       paint_server_is_skipped (server, bounds, context))
     {
-      gtk_snapshot_append_color (context->snapshot,
-                                 &paint->server.fallback,
-                                 paint_bounds);
+      gtk_snapshot_add_color (context->snapshot,
+                              &paint->server.fallback,
+                              paint_bounds);
     }
   else if (server->type == SHAPE_LINEAR_GRADIENT ||
            server->type == SHAPE_RADIAL_GRADIENT)
@@ -19331,9 +19616,12 @@ paint_server (SvgPaint              *paint,
         {
           ColorStop *cs = g_ptr_array_index (color_stops, 0);
           SvgColor *stop_color = (SvgColor *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
-          GdkRGBA color = stop_color->color;
-          color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
-          gtk_snapshot_append_color (context->snapshot, &color, paint_bounds);
+          GdkColor c;
+
+          gdk_color_init_copy (&c, &stop_color->color);
+          c.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
+          gtk_snapshot_add_color (context->snapshot, &c, paint_bounds);
+          gdk_color_finish (&c);
           return;
         }
 
@@ -19491,9 +19779,14 @@ fill_shape (Shape        *shape,
       break;
     case PAINT_COLOR:
       {
-        GdkRGBA color = paint->color;
+        GdkColor color;
+
+        gdk_color_init_copy (&color, &paint->color);
         color.alpha *= opacity;
-        gtk_snapshot_append_fill (context->snapshot, path, fill_rule, &color);
+        gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
+        gtk_snapshot_add_color (context->snapshot, &color, &bounds);
+        gtk_snapshot_pop (context->snapshot);
+        gdk_color_finish (&color);
       }
       break;
     case PAINT_SERVER:
@@ -19533,7 +19826,6 @@ stroke_shape (Shape        *shape,
   VectorEffect effect;
   GskRenderNode *child;
   GskRenderNode *node;
-  GdkRGBA color;
 
   paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
   paint = get_context_paint (paint, context->ctx_shape_stack);
@@ -19553,10 +19845,14 @@ stroke_shape (Shape        *shape,
   switch (paint->kind)
     {
     case PAINT_COLOR:
-      color = paint->color;
-      color.alpha *= opacity;
-      opacity = 1;
-      child = gsk_color_node_new (&color, &paint_bounds);
+      {
+        GdkColor color;
+        gdk_color_init_copy (&color, &paint->color);
+        color.alpha *= opacity;
+        opacity = 1;
+        child = gsk_color_node_new2 (&color, &paint_bounds);
+        gdk_color_finish (&color);
+      }
       break;
     case PAINT_SERVER:
     case PAINT_SERVER_WITH_FALLBACK:
@@ -20131,11 +20427,13 @@ fill_text (Shape                 *self,
             opacity = svg_number_get (self->current[SHAPE_ATTR_FILL_OPACITY], 1);
             if (paint->kind == PAINT_COLOR)
               {
-                GdkRGBA color = paint->color;
+                GdkColor color;
+
+                gdk_color_init_copy (&color, &paint->color);
                 color.alpha *= opacity;
                 gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
-                gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &color);
+                gtk_snapshot_add_layout (context->snapshot, node->characters.layout, &color);
               }
             else if (paint_is_server (paint->kind))
               {
@@ -20145,7 +20443,7 @@ fill_text (Shape                 *self,
                 gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
                 gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
-                gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &(GdkRGBA){ .red = 0., .green = 0., .blue = 0., .alpha = 1. });
+                gtk_snapshot_append_layout (context->snapshot, node->characters.layout, &GDK_RGBA_BLACK);
                 gtk_snapshot_pop (context->snapshot);
                 paint_server (paint, bounds, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
@@ -20212,13 +20510,20 @@ stroke_text (Shape                 *self,
             opacity = svg_number_get (self->current[SHAPE_ATTR_STROKE_OPACITY], 1);
             if (paint->kind == PAINT_COLOR)
               {
-                GdkRGBA color = paint->color;
+                GdkColor color;
+
+                gdk_color_init_copy (&color, &paint->color);
                 color.alpha *= opacity;
                 gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 path = pango_layout_to_path (node->characters.layout);
-                gtk_snapshot_append_stroke (context->snapshot, path, stroke, &color);
+
+                gtk_snapshot_append_stroke (context->snapshot, path, stroke, &GDK_RGBA_BLACK);
+                gtk_snapshot_pop (context->snapshot);
+                gtk_snapshot_add_color (context->snapshot, &color, bounds);
+                gtk_snapshot_pop (context->snapshot);
                 gsk_path_unref (path);
+                gdk_color_finish (&color);
               }
             else if (paint_is_server (paint->kind))
               {
@@ -20229,11 +20534,11 @@ stroke_text (Shape                 *self,
                 gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 path = pango_layout_to_path (node->characters.layout);
-                gtk_snapshot_append_stroke (context->snapshot, path, stroke, &(GdkRGBA) { 0, 0, 0, 1 });
-                gsk_path_unref (path);
+                gtk_snapshot_append_stroke (context->snapshot, path, stroke, &GDK_RGBA_BLACK);
                 gtk_snapshot_pop (context->snapshot);
                 paint_server (paint, bounds, bounds, context);
                 gtk_snapshot_pop (context->snapshot);
+                gsk_path_unref (path);
 
                 if (opacity < 1)
                   gtk_snapshot_pop (context->snapshot);
@@ -20502,12 +20807,12 @@ paint_shape (Shape        *shape,
 
       if (gsk_path_get_bounds (path, &bounds))
         {
-          GdkRGBA color = { 0, 0, 0, 1 };
+          GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
           GskFillRule clip_rule;
 
           clip_rule = svg_enum_get (shape->current[SHAPE_ATTR_CLIP_RULE]);
           gtk_snapshot_push_fill (context->snapshot, path, clip_rule);
-          gtk_snapshot_append_color (context->snapshot, &color, &bounds);
+          gtk_snapshot_add_color (context->snapshot, &color, &bounds);
           gtk_snapshot_pop (context->snapshot);
         }
     }
@@ -20764,6 +21069,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       compute_context.n_colors = n_colors;
       compute_context.current_time = self->current_time;
       compute_context.parent = NULL;
+      compute_context.interpolation = GDK_COLOR_STATE_SRGB;
 
       compute_current_values_for_shape (self->content, &compute_context);
 
@@ -22029,7 +22335,7 @@ svg_shape_attr_get_paint (Shape            *shape,
       *symbolic = paint->symbolic;
       break;
     case PAINT_COLOR:
-      *color = paint->color;
+      *color = *(const GdkRGBA *) paint->color.values;
       break;
     default:
       g_assert_not_reached ();
