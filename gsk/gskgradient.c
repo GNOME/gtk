@@ -282,3 +282,16 @@ gsk_gradient_check_single_color (const GskGradient *gradient)
 
   return &first->color;
 }
+
+cairo_extend_t
+gsk_repeat_to_cairo (GskRepeat repeat)
+{
+  switch (repeat)
+    {
+    case GSK_REPEAT_NONE: return CAIRO_EXTEND_NONE;
+    case GSK_REPEAT_REPEAT: return CAIRO_EXTEND_REPEAT;
+    case GSK_REPEAT_REFLECT: return CAIRO_EXTEND_REFLECT;
+    case GSK_REPEAT_PAD: return CAIRO_EXTEND_PAD;
+    default: g_assert_not_reached ();
+    }
+}
