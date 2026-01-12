@@ -2451,7 +2451,17 @@ svg_number_resolve (const SvgValue *value,
     {
     case SVG_UNIT_NUMBER:
     case SVG_UNIT_PX:
-      return svg_value_ref ((SvgValue *) value);
+      switch ((unsigned int) attr)
+        {
+        case SHAPE_ATTR_OPACITY:
+        case SHAPE_ATTR_FILL_OPACITY:
+        case SHAPE_ATTR_STROKE_OPACITY:
+        case SHAPE_ATTR_STOP_OFFSET:
+          return svg_number_new (CLAMP (n->value, 0, 1));
+        default:
+          return svg_value_ref ((SvgValue *) value);
+        }
+      break;
     case SVG_UNIT_PERCENTAGE:
       switch ((unsigned int) attr)
         {
@@ -2470,9 +2480,8 @@ svg_number_resolve (const SvgValue *value,
         case SHAPE_ATTR_OPACITY:
         case SHAPE_ATTR_FILL_OPACITY:
         case SHAPE_ATTR_STROKE_OPACITY:
-          return svg_number_new (CLAMP (n->value / 100, 0, 1));
         case SHAPE_ATTR_STOP_OFFSET:
-          return svg_number_new (n->value / 100);
+          return svg_number_new (CLAMP (n->value / 100, 0, 1));
         case SHAPE_ATTR_STROKE_WIDTH:
         case SHAPE_ATTR_R:
           if (shape->type != SHAPE_RADIAL_GRADIENT)
@@ -8422,7 +8431,7 @@ parse_letter_spacing (const char *value)
 static SvgValue *
 parse_offset (const char *value)
 {
-  return svg_number_parse (value, 0, 1, NUMBER|PERCENTAGE);
+  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
 }
 
 static SvgValue *
