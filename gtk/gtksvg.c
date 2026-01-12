@@ -2047,6 +2047,7 @@ struct _SvgValueClass
                               const SvgValue        *value1);
   SvgValue * (* resolve)     (const SvgValue        *value,
                               ShapeAttr              attr,
+                              unsigned int           idx,
                               Shape                 *shape,
                               ComputeContext        *context);
 };
@@ -2189,6 +2190,7 @@ svg_value_distance (const SvgValue *value0,
 static SvgValue *
 svg_value_default_resolve (const SvgValue  *value,
                            ShapeAttr        attr,
+                           unsigned int     idx,
                            Shape           *shape,
                            ComputeContext  *context)
 {
@@ -2198,10 +2200,11 @@ svg_value_default_resolve (const SvgValue  *value,
 static SvgValue *
 svg_value_resolve (const SvgValue  *value,
                    ShapeAttr        attr,
+                   unsigned int     idx,
                    Shape           *shape,
                    ComputeContext  *context)
 {
-  return value->class->resolve (value, attr, shape, context);
+  return value->class->resolve (value, attr, idx, shape, context);
 }
 
 /* }}} */
@@ -2442,6 +2445,7 @@ svg_number_to_px (const SvgValue *value)
 static SvgValue *
 svg_number_resolve (const SvgValue *value,
                     ShapeAttr       attr,
+                    unsigned int    idx,
                     Shape          *shape,
                     ComputeContext *context)
 {
@@ -2747,6 +2751,7 @@ static SvgValue * svg_numbers_interpolate (const SvgValue *value0,
 
 static SvgValue * svg_numbers_resolve (const SvgValue *value,
                                        ShapeAttr       attr,
+                                       unsigned int    idx,
                                        Shape          *shape,
                                        ComputeContext *context);
 
@@ -2892,6 +2897,7 @@ svg_numbers_interpolate (const SvgValue *value0,
 static SvgValue *
 svg_numbers_resolve (const SvgValue *value,
                      ShapeAttr       attr,
+                     unsigned int    idx,
                      Shape          *shape,
                      ComputeContext *context)
 {
@@ -3586,6 +3592,7 @@ typedef enum
 static SvgValue *
 svg_font_size_resolve (const SvgValue *value,
                        ShapeAttr       attr,
+                       unsigned int    idx,
                        Shape          *shape,
                        ComputeContext *context)
 {
@@ -3647,6 +3654,7 @@ typedef enum {
 static SvgValue *
 svg_font_weight_resolve (const SvgValue *value,
                          ShapeAttr       attr,
+                         unsigned int    idx,
                          Shape          *shape,
                          ComputeContext *context)
 {
@@ -3710,6 +3718,7 @@ typedef enum
 
 static SvgValue * svg_color_interpolation_resolve (const SvgValue *value,
                                                    ShapeAttr       attr,
+                                                   unsigned int    idx,
                                                    Shape          *shape,
                                                    ComputeContext *context);
 
@@ -3722,6 +3731,7 @@ DEFINE_ENUM_CUSTOM_RESOLVE (COLOR_INTERPOLATION, color_interpolation, ColorInter
 static SvgValue *
 svg_color_interpolation_resolve (const SvgValue *value,
                                  ShapeAttr       attr,
+                                 unsigned int    idx,
                                  Shape          *shape,
                                  ComputeContext *context)
 {
@@ -4840,6 +4850,7 @@ static double    svg_color_distance    (const SvgValue *v0,
                                         const SvgValue *v1);
 static SvgValue * svg_color_resolve    (const SvgValue *value,
                                         ShapeAttr       attr,
+                                        unsigned int    idx,
                                         Shape          *shape,
                                         ComputeContext *context);
 
@@ -4959,6 +4970,7 @@ svg_color_print (const SvgValue *value,
 static SvgValue *
 svg_color_resolve (const SvgValue *value,
                    ShapeAttr       attr,
+                   unsigned int    idx,
                    Shape          *shape,
                    ComputeContext *context)
 {
@@ -5140,6 +5152,7 @@ static double    svg_paint_distance    (const SvgValue *v0,
                                         const SvgValue *v1);
 static SvgValue * svg_paint_resolve    (const SvgValue *value,
                                         ShapeAttr       attr,
+                                        unsigned int    idx,
                                         Shape          *shape,
                                         ComputeContext *context);
 
@@ -5560,6 +5573,7 @@ svg_paint_is_symbolic (const SvgPaint   *paint,
 static SvgValue *
 svg_paint_resolve (const SvgValue *value,
                    ShapeAttr       attr,
+                   unsigned int    idx,
                    Shape          *shape,
                    ComputeContext *context)
 {
@@ -6222,6 +6236,7 @@ static SvgValue * svg_dash_array_accumulate (const SvgValue *value0,
                                              int             n);
 static SvgValue * svg_dash_array_resolve    (const SvgValue *value,
                                              ShapeAttr       attr,
+                                             unsigned int    idx,
                                              Shape          *shape,
                                              ComputeContext *context);
 
@@ -6399,6 +6414,7 @@ svg_dash_array_accumulate (const SvgValue *value0,
 static SvgValue *
 svg_dash_array_resolve (const SvgValue *value,
                         ShapeAttr       attr,
+                        unsigned int    idx,
                         Shape          *shape,
                         ComputeContext *context)
 {
@@ -7611,6 +7627,7 @@ svg_text_decoration_get (const SvgValue *value)
 
 static SvgValue * svg_text_decoration_resolve (const SvgValue *value,
                                                ShapeAttr       attr,
+                                               unsigned int    idx,
                                                Shape          *shape,
                                                ComputeContext *context);
 
@@ -7655,6 +7672,7 @@ svg_text_decoration_parse (const char *text)
 static SvgValue *
 svg_text_decoration_resolve (const SvgValue *value,
                              ShapeAttr       attr,
+                             unsigned int    idx,
                              Shape          *shape,
                              ComputeContext *context)
 {
@@ -12282,7 +12300,7 @@ resolve_value (Shape           *shape,
         v = filter_attr_ref_initial_value (g_ptr_array_index (shape->filters, idx - 1), attr);
       else
         v = shape_attr_ref_initial_value (attr, shape->type, context->parent != NULL);
-      ret = svg_value_resolve (v, attr, shape, context);
+      ret = svg_value_resolve (v, attr, idx, shape, context);
       svg_value_unref (v);
       return ret;
     }
@@ -12297,7 +12315,7 @@ resolve_value (Shape           *shape,
           SvgValue *v, *ret;
 
           v = shape_attr_ref_initial_value (attr, shape->type, context->parent != NULL);
-          ret = svg_value_resolve (v, attr, shape, context);
+          ret = svg_value_resolve (v, attr, idx, shape, context);
           svg_value_unref (v);
           return ret;
         }
@@ -12327,12 +12345,12 @@ resolve_value (Shape           *shape,
         {
           if (shape->type == SHAPE_SVG)
             {
-              return svg_value_resolve (svg_percentage_new (100), attr, shape, context);
+              return svg_value_resolve (svg_percentage_new (100), attr, idx, shape, context);
             }
           else if (shape->type == SHAPE_IMAGE)
             {
               /* FIXME */
-              return svg_value_resolve (svg_percentage_new (100), attr, shape, context);
+              return svg_value_resolve (svg_percentage_new (100), attr, idx, shape, context);
             }
           else
             {
@@ -12350,7 +12368,7 @@ resolve_value (Shape           *shape,
     }
   else
     {
-      return svg_value_resolve (value, attr, shape, context);
+      return svg_value_resolve (value, attr, idx, shape, context);
     }
 }
 
