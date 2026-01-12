@@ -46,7 +46,7 @@ VarType.FLOAT = VarType (
                                 '{0}                       GL_FLOAT,\n'
                                 '{0}                       GL_FALSE,\n'
                                 '{0}                       {3},\n'
-                                '{0}                       GSIZE_TO_POINTER ({4}));'
+                                '{0}                       GSIZE_TO_POINTER (offset + {4}));'
     )
 VarType.INT = VarType (
         c_name = 'gint32',
@@ -57,7 +57,7 @@ VarType.INT = VarType (
                                 '{0}                        {2},\n'
                                 '{0}                        GL_INT,\n'
                                 '{0}                        {3},\n'
-                                '{0}                        GSIZE_TO_POINTER ({4}));'
+                                '{0}                        GSIZE_TO_POINTER (offset + {4}));'
     )
 VarType.UINT = VarType (
         c_name = 'guint32',
@@ -68,7 +68,7 @@ VarType.UINT = VarType (
                                 '{0}                        {2},\n'
                                 '{0}                        GL_UNSIGNED_INT,\n'
                                 '{0}                        {3},\n'
-                                '{0}                        GSIZE_TO_POINTER ({4}));'
+                                '{0}                        GSIZE_TO_POINTER (offset + {4}));'
     )
 
 @dataclass
