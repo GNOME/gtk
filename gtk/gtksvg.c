@@ -19434,16 +19434,23 @@ paint_radial_gradient (Shape                 *gradient,
   gtk_snapshot_transform (context->snapshot, gradient_transform);
   push_transform (context, gradient_transform);
 
-  gradient_transform = gsk_transform_invert (gradient_transform);
-
-  gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
-  gsk_transform_unref (gradient_transform);
+  if (gradient_transform)
+    {
+      gradient_transform = gsk_transform_invert (gradient_transform);
+      if (gradient_transform)
+        {
+          gsk_transform_transform_bounds (gradient_transform, &gradient_bounds, &gradient_bounds);
+          gsk_transform_unref (gradient_transform);
+        }
+      else
+        graphene_rect_init (&gradient_bounds, 0, 0, 0, 0);
+    }
 
   /* If the gradient transform is singular, we might end up with
    * nans or infs in the bounds :(
    */
-  if (!isfinite (gradient_bounds.size.width) || gradient_bounds.size.width == 0 ||
-      !isfinite (gradient_bounds.size.height) || gradient_bounds.size.height == 0)
+  if (!isnormal (gradient_bounds.size.width) ||
+      !isnormal (gradient_bounds.size.height))
     {
       GskRenderNode *node = gsk_container_node_new (NULL, 0);
       gtk_snapshot_append_node (context->snapshot, node);
@@ -20413,6 +20420,7 @@ fill_text (Shape                 *self,
         case TEXT_NODE_CHARACTERS:
           {
             double opacity;
+
             if (paint->kind == PAINT_NONE)
               goto skip;
 
@@ -20515,6 +20523,8 @@ stroke_text (Shape                 *self,
 
                 gdk_color_init_copy (&color, &paint->color);
                 color.alpha *= opacity;
+
+                gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
                 gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 path = pango_layout_to_path (node->characters.layout);
@@ -20620,8 +20630,10 @@ shape_is_degenerate (Shape *shape)
   else if (shape->type == SHAPE_CIRCLE)
     return svg_number_get (shape->current[SHAPE_ATTR_R], 1) <= 0;
   else if (shape->type == SHAPE_ELLIPSE)
-    return svg_number_get (shape->current[SHAPE_ATTR_RX], 1) <= 0 ||
-           svg_number_get (shape->current[SHAPE_ATTR_RY], 1) <= 0;
+    return (!svg_value_is_auto (shape->current[SHAPE_ATTR_RX]) &&
+            svg_number_get (shape->current[SHAPE_ATTR_RX], 1) <= 0) ||
+           (!svg_value_is_auto (shape->current[SHAPE_ATTR_RY]) &&
+            svg_number_get (shape->current[SHAPE_ATTR_RY], 1) <= 0);
   else
     return FALSE;
 }
