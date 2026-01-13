@@ -2803,6 +2803,65 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
                                                  GskRenderNode       *node)
 {
   const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
+
+  if (gsk_linear_gradient_node_is_zero_length (node))
+    {
+      switch (gsk_gradient_get_repeat (gradient))
+        {
+        case GSK_REPEAT_NONE:
+          return;
+
+        case GSK_REPEAT_PAD:
+          /* average first and last color stop */
+          {
+            GdkColor color, start, end;
+            GdkColorState *interpolation = gsk_gradient_get_interpolation (gradient);
+            gdk_color_convert (&start,
+                               interpolation,
+                               gsk_gradient_get_stop_color (gradient, 0));
+            gdk_color_convert (&end,
+                               interpolation,
+                               gsk_gradient_get_stop_color (gradient, gsk_gradient_get_n_stops (gradient) - 1));
+            gdk_color_init (&color,
+                            interpolation,
+                            (float[4]) { 0.5 * (start.values[0] + end.values[0]),
+                                         0.5 * (start.values[1] + end.values[1]),
+                                         0.5 * (start.values[2] + end.values[2]),
+                                         0.5 * (start.values[3] + end.values[3]) });
+            gsk_gpu_color_op (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                              self->ccs,
+                              gsk_gpu_color_states_find (self->ccs, &color),
+                              self->opacity,
+                              &self->offset,
+                              &node->bounds,
+                              &color);
+          }
+          break;
+
+        case GSK_REPEAT_REPEAT:
+        case GSK_REPEAT_REFLECT:
+          {
+            GdkColor color;
+            gsk_gradient_get_average_color (gradient, &color);
+            gsk_gpu_color_op (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                              self->ccs,
+                              gsk_gpu_color_states_find (self->ccs, &color),
+                              self->opacity,
+                              &self->offset,
+                              &node->bounds,
+                              &color);
+            gdk_color_finish (&color);
+            return;
+          }
+
+        default:
+          g_assert_not_reached ();
+          return;
+        }
+    }
+
   gsk_gpu_node_processor_add_gradient_node (self,
                                             node,
                                             gsk_gradient_get_interpolation (gradient),

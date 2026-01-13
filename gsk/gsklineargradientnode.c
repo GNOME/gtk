@@ -78,6 +78,14 @@ gsk_linear_gradient_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+gboolean
+gsk_linear_gradient_node_is_zero_length (GskRenderNode *node)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  return graphene_point_equal (&self->start, &self->end);
+}
+
 static void
 add_color_stop_to_pattern (float          offset,
                            GdkColorState *ccs,
@@ -99,6 +107,54 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
   cairo_pattern_t *pattern;
   gsize n_stops;
   gsize i;
+
+  if (gsk_linear_gradient_node_is_zero_length (node))
+    {
+      switch (gsk_gradient_get_repeat (gradient))
+        {
+        case GSK_REPEAT_NONE:
+          return;
+
+        case GSK_REPEAT_PAD:
+          /* average first and last color stop */
+          {
+            GdkColor color, start, end;
+            GdkColorState *interpolation = gsk_gradient_get_interpolation (&self->gradient);
+            gdk_color_convert (&start,
+                               interpolation,
+                               gsk_gradient_get_stop_color (&self->gradient, 0));
+            gdk_color_convert (&end,
+                               interpolation,
+                               gsk_gradient_get_stop_color (&self->gradient, gsk_gradient_get_n_stops (&self->gradient) - 1));
+            gdk_color_init (&color,
+                            interpolation,
+                            (float[4]) { 0.5 * (start.values[0] + end.values[0]),
+                                         0.5 * (start.values[1] + end.values[1]),
+                                         0.5 * (start.values[2] + end.values[2]),
+                                         0.5 * (start.values[3] + end.values[3]) });
+            gdk_cairo_set_source_color (cr, data->ccs, &color);
+            gdk_cairo_rect (cr, &node->bounds);
+            cairo_fill (cr);
+          }
+          break;
+
+        case GSK_REPEAT_REPEAT:
+        case GSK_REPEAT_REFLECT:
+          {
+            GdkColor color;
+            gsk_gradient_get_average_color (gradient, &color);
+            gdk_cairo_set_source_color (cr, data->ccs, &color);
+            gdk_cairo_rect (cr, &node->bounds);
+            cairo_fill (cr);
+            gdk_color_finish (&color);
+            return;
+          }
+
+        default:
+          g_assert_not_reached ();
+          return;
+        }
+    }
 
   pattern = cairo_pattern_create_linear (self->start.x, self->start.y,
                                          self->end.x, self->end.y);
