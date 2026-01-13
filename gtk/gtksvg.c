@@ -894,10 +894,14 @@ static const char * unit_names[] = {
   [SVG_UNIT_IN] = "in",
   [SVG_UNIT_CM] = "cm",
   [SVG_UNIT_MM] = "mm",
+  [SVG_UNIT_VW] = "vw",
+  [SVG_UNIT_VH] = "vh",
+  [SVG_UNIT_VMIN] = "vmin",
+  [SVG_UNIT_VMAX] = "vmax",
   [SVG_UNIT_EM] = "em",
   [SVG_UNIT_EX] = "ex",
-  [SVG_UNIT_RAD] = "rad",
   [SVG_UNIT_DEG] = "deg",
+  [SVG_UNIT_RAD] = "rad",
   [SVG_UNIT_GRAD] = "grad",
   [SVG_UNIT_TURN] = "turn",
 };
@@ -927,7 +931,7 @@ parse_numeric (const char   *value,
           return (flags & PERCENTAGE) != 0;
         }
 
-      for (i = 0; i <= G_N_ELEMENTS (unit_names); i++)
+      for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
         {
           if (strcmp (endp, unit_names[i]) == 0)
             {
@@ -2435,7 +2439,7 @@ svg_number_distance (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_number_to_px (const SvgValue *value)
+svg_absolute_length_to_px (const SvgValue *value)
 {
   const SvgNumber *n = (const SvgNumber *) value;
 
@@ -2449,6 +2453,49 @@ svg_number_to_px (const SvgValue *value)
       return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
     case SVG_UNIT_MM:
       return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+    default:
+      return svg_value_ref ((SvgValue *) value);
+    }
+}
+
+static SvgValue *
+svg_angle_to_deg (const SvgValue *value)
+{
+  const SvgNumber *n = (const SvgNumber *) value;
+
+  switch ((unsigned int) n->unit)
+    {
+    case SVG_UNIT_DEG:
+      return svg_value_ref ((SvgValue *) value);
+    case SVG_UNIT_RAD:
+      return svg_number_new_full (SVG_UNIT_DEG, n->value * 180.0 / M_PI);
+    case SVG_UNIT_GRAD:
+      return svg_number_new_full (SVG_UNIT_DEG, n->value * 360.0 / 400.0);
+    case SVG_UNIT_TURN:
+      return svg_number_new_full (SVG_UNIT_DEG, n->value * 360.0);
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static SvgValue *
+svg_viewport_relative_to_px (const SvgValue        *value,
+                             const graphene_rect_t *viewport)
+{
+  const SvgNumber *n = (const SvgNumber *) value;
+
+  switch ((unsigned int) n->unit)
+    {
+    case SVG_UNIT_VW:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
+    case SVG_UNIT_VH:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
+    case SVG_UNIT_VMIN:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * MIN (viewport->size.width,
+                                                               viewport->size.height) / 100);
+    case SVG_UNIT_VMAX:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * MAX (viewport->size.width,
+                                                               viewport->size.height) / 100);
     default:
       return svg_value_ref ((SvgValue *) value);
     }
@@ -2548,7 +2595,14 @@ svg_number_resolve (const SvgValue *value,
     case SVG_UNIT_IN:
     case SVG_UNIT_CM:
     case SVG_UNIT_MM:
-      return svg_number_to_px (value);
+      return svg_absolute_length_to_px (value);
+
+    case SVG_UNIT_VW:
+    case SVG_UNIT_VH:
+    case SVG_UNIT_VMIN:
+    case SVG_UNIT_VMAX:
+      return svg_viewport_relative_to_px (value, context->viewport);
+
     case SVG_UNIT_EM:
     case SVG_UNIT_EX:
       {
@@ -2566,10 +2620,13 @@ svg_number_resolve (const SvgValue *value,
         else
           return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * font_size);
       }
+
     case SVG_UNIT_RAD:
     case SVG_UNIT_DEG:
     case SVG_UNIT_GRAD:
     case SVG_UNIT_TURN:
+      return svg_angle_to_deg (value);
+
     default:
       g_assert_not_reached ();
     }
@@ -6038,6 +6095,24 @@ svg_filter_resolve (const SvgValue *value,
               result->functions[i].value = filter->functions[i].value * 96 / 25.4;
               result->functions[i].unit = SVG_UNIT_PX;
               break;
+            case SVG_UNIT_VW:
+              result->functions[i].value = filter->functions[i].value * context->viewport->size.width / 100;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_VH:
+              result->functions[i].value = filter->functions[i].value * context->viewport->size.height / 100;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_VMIN:
+              result->functions[i].value = filter->functions[i].value * MIN (context->viewport->size.width,
+                                                                             context->viewport->size.height) / 100;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_VMAX:
+              result->functions[i].value = filter->functions[i].value * MAX (context->viewport->size.width,
+                                                                             context->viewport->size.height) / 100;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
             case SVG_UNIT_EM:
             case SVG_UNIT_EX:
               {
@@ -6708,6 +6783,20 @@ svg_dash_array_resolve (const SvgValue *value,
           break;
         case SVG_UNIT_MM:
           a->dashes[i].value = orig->dashes[i].value * 96 / 25.4;
+          break;
+        case SVG_UNIT_VW:
+          a->dashes[i].value = orig->dashes[i].value * context->viewport->size.width / 100;
+          break;
+        case SVG_UNIT_VH:
+          a->dashes[i].value = orig->dashes[i].value * context->viewport->size.height / 100;
+          break;
+        case SVG_UNIT_VMIN:
+          a->dashes[i].value = orig->dashes[i].value * MIN (context->viewport->size.width,
+                                                            context->viewport->size.height) / 100;
+          break;
+        case SVG_UNIT_VMAX:
+          a->dashes[i].value = orig->dashes[i].value * MAX (context->viewport->size.width,
+                                                            context->viewport->size.height) / 100;
           break;
         case SVG_UNIT_EM:
         case SVG_UNIT_EX:
@@ -16979,7 +17068,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
     {
-      SvgValue *v = svg_number_to_px (self->content->base[SHAPE_ATTR_WIDTH]);
+      SvgValue *v = svg_absolute_length_to_px (self->content->base[SHAPE_ATTR_WIDTH]);
       SvgNumber *n = (SvgNumber *) v;
 
       if (n->unit != SVG_UNIT_PERCENTAGE)
@@ -16990,7 +17079,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
     {
-      SvgValue *v = svg_number_to_px (self->content->base[SHAPE_ATTR_HEIGHT]);
+      SvgValue *v = svg_absolute_length_to_px (self->content->base[SHAPE_ATTR_HEIGHT]);
       SvgNumber *n = (SvgNumber *) v;
 
       if (n->unit != SVG_UNIT_PERCENTAGE)
