@@ -883,6 +883,7 @@ enum
   NUMBER     = 1 << 0,
   PERCENTAGE = 1 << 1,
   LENGTH     = 1 << 2,
+  ANGLE      = 1 << 3,
 };
 
 static const char * unit_names[] = {
@@ -895,6 +896,10 @@ static const char * unit_names[] = {
   [SVG_UNIT_MM] = "mm",
   [SVG_UNIT_EM] = "em",
   [SVG_UNIT_EX] = "ex",
+  [SVG_UNIT_RAD] = "rad",
+  [SVG_UNIT_DEG] = "deg",
+  [SVG_UNIT_GRAD] = "grad",
+  [SVG_UNIT_TURN] = "turn",
 };
 
 static gboolean
@@ -922,15 +927,22 @@ parse_numeric (const char   *value,
           return (flags & PERCENTAGE) != 0;
         }
 
-      if ((flags & LENGTH) == 0)
-        return FALSE;
-
-      for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
+      for (i = 0; i <= G_N_ELEMENTS (unit_names); i++)
         {
           if (strcmp (endp, unit_names[i]) == 0)
             {
-              *unit = i;
-              break;
+              if ((flags & LENGTH) != 0 &&
+                  FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
+                {
+                  *unit = i;
+                  break;
+                }
+              if ((flags & ANGLE) != 0 &&
+                  FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
+                {
+                  *unit = i;
+                  break;
+                }
             }
         }
 
@@ -2554,6 +2566,10 @@ svg_number_resolve (const SvgValue *value,
         else
           return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * font_size);
       }
+    case SVG_UNIT_RAD:
+    case SVG_UNIT_DEG:
+    case SVG_UNIT_GRAD:
+    case SVG_UNIT_TURN:
     default:
       g_assert_not_reached ();
     }
@@ -7342,6 +7358,7 @@ typedef struct
   OrientKind kind;
   gboolean start_reverse;
   double angle;
+  SvgUnit unit;
 } SvgOrient;
 
 static gboolean
@@ -7357,10 +7374,12 @@ svg_orient_equal (const SvgValue *value0,
   if (v0->kind == ORIENT_AUTO)
     return v0->start_reverse == v1->start_reverse;
   else
-    return v0->angle == v1->angle;
+    return v0->angle == v1->angle &&
+           v0->unit == v1->unit;
 }
 
-static SvgValue *svg_orient_new_angle (double angle);
+static SvgValue *svg_orient_new_angle (double  angle,
+                                       SvgUnit unit);
 
 static SvgValue *
 svg_orient_interpolate (const SvgValue *value0,
@@ -7371,8 +7390,10 @@ svg_orient_interpolate (const SvgValue *value0,
   const SvgOrient *v0 = (const SvgOrient *) value0;
   const SvgOrient *v1 = (const SvgOrient *) value1;
 
-  if (v0->kind == v1->kind && v0->kind == ORIENT_ANGLE)
-    return svg_orient_new_angle (lerp (v0->angle, v1->angle, t));
+  if (v0->kind == v1->kind &&
+      v0->kind == ORIENT_ANGLE &&
+      v0->unit == v1->unit)
+    return svg_orient_new_angle (lerp (v0->angle, v1->angle, t), v0->unit);
 
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -7396,12 +7417,25 @@ svg_orient_print (const SvgValue *value,
   const SvgOrient *v = (const SvgOrient *) value;
 
   if (v->kind == ORIENT_ANGLE)
-    string_append_double (string, "", v->angle);
+    {
+      string_append_double (string, "", v->angle);
+      g_string_append (string, unit_names[v->unit]);
+    }
   else if (v->start_reverse)
-    g_string_append (string, "auto-start-reverse");
+    {
+      g_string_append (string, "auto-start-reverse");
+    }
   else
-    g_string_append (string, "auto");
+    {
+      g_string_append (string, "auto");
+    }
 }
+
+static SvgValue * svg_orient_resolve (const SvgValue  *value,
+                                      ShapeAttr        attr,
+                                      unsigned int     idx,
+                                      Shape           *shape,
+                                      ComputeContext  *context);
 
 static const SvgValueClass SVG_ORIENT_CLASS = {
   "SvgOrient",
@@ -7411,22 +7445,24 @@ static const SvgValueClass SVG_ORIENT_CLASS = {
   svg_orient_accumulate,
   svg_orient_print,
   svg_value_default_distance,
-  svg_value_default_resolve,
+  svg_orient_resolve,
 };
 
 static SvgValue *
-svg_orient_new_angle (double angle)
+svg_orient_new_angle (double  angle,
+                      SvgUnit unit)
 {
-  static SvgOrient def = { { &SVG_ORIENT_CLASS, 0 }, .kind = ORIENT_ANGLE, .angle = 0 };
+  static SvgOrient def = { { &SVG_ORIENT_CLASS, 0 }, .kind = ORIENT_ANGLE, .angle = 0, .unit = SVG_UNIT_NUMBER };
   SvgOrient *v;
 
-  if (angle == 0)
+  if (angle == 0 && unit == SVG_UNIT_NUMBER)
     return (SvgValue *) &def;
 
   v = (SvgOrient *) svg_value_alloc (&SVG_ORIENT_CLASS, sizeof (SvgOrient));
 
   v->kind = ORIENT_ANGLE;
   v->angle = angle;
+  v->unit = unit;
 
   return (SvgValue *) v;
 }
@@ -7456,11 +7492,42 @@ svg_orient_parse (const char *value)
       double f;
       SvgUnit unit;
 
-      if (!parse_numeric (value, -DBL_MAX, DBL_MAX, NUMBER, &f, &unit))
+      if (!parse_numeric (value, -DBL_MAX, DBL_MAX, NUMBER|ANGLE, &f, &unit))
         return NULL;
 
-      return svg_orient_new_angle (f);
+      return svg_orient_new_angle (f, unit);
     }
+}
+
+static SvgValue *
+svg_orient_resolve (const SvgValue  *value,
+                    ShapeAttr        attr,
+                    unsigned int     idx,
+                    Shape           *shape,
+                    ComputeContext  *context)
+{
+  const SvgOrient *v = (const SvgOrient *) value;
+
+  if (v->kind == ORIENT_ANGLE)
+    {
+      switch ((unsigned int) v->unit)
+        {
+        case SVG_UNIT_NUMBER:
+          return svg_value_ref ((SvgValue *) value);
+        case SVG_UNIT_RAD:
+          return svg_orient_new_angle (v->angle * 180.0 / M_PI, SVG_UNIT_NUMBER);
+        case SVG_UNIT_DEG:
+          return svg_orient_new_angle (v->angle, SVG_UNIT_NUMBER);
+        case SVG_UNIT_GRAD:
+          return svg_orient_new_angle (v->angle * 360.0 / 400.0, SVG_UNIT_NUMBER);
+        case SVG_UNIT_TURN:
+          return svg_orient_new_angle (v->angle * 360.0, SVG_UNIT_NUMBER);
+        default:
+          g_assert_not_reached ();
+        }
+    }
+  else
+    return svg_value_ref ((SvgValue *) value);
 }
 
 /* }}} */
@@ -9256,7 +9323,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_REF_X].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_REF_Y].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_MARKER_UNITS].initial_value = svg_marker_units_new (MARKER_UNITS_STROKE_WIDTH);
-  shape_attrs[SHAPE_ATTR_MARKER_ORIENT].initial_value = svg_orient_new_angle (0);
+  shape_attrs[SHAPE_ATTR_MARKER_ORIENT].initial_value = svg_orient_new_angle (0, SVG_UNIT_NUMBER);
   shape_attrs[SHAPE_ATTR_MARKER_START].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_MARKER_MID].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_MARKER_END].initial_value = svg_href_new_none ();
