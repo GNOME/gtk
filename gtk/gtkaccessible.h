@@ -152,6 +152,18 @@ struct _GtkAccessibleInterface
                            int           *y,
                            int           *width,
                            int           *height);
+
+  /**
+   * GtkAccessibleIface::get_accessible_id:
+   * @self: an accessible object
+   *
+   * Retrieves the accessible identifier for the accessible object.
+   *
+   * Returns: (transfer full) (nullable): the accessible identifier
+   *
+   * Since: 4.22
+   */
+  char * (* get_accessible_id) (GtkAccessible *self);
 };
 
 /**
@@ -194,6 +206,9 @@ gboolean gtk_accessible_get_bounds (GtkAccessible *self,
                                     int           *y,
                                     int           *width,
                                     int           *height);
+
+GDK_AVAILABLE_IN_4_22
+char * gtk_accessible_get_accessible_id (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_ALL
 GtkAccessibleRole gtk_accessible_get_accessible_role (GtkAccessible *self);
