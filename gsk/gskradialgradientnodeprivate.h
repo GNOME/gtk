@@ -26,4 +26,6 @@ gboolean                gsk_radial_gradient_fills_plane               (const gra
                                                                        const graphene_point_t *c2,
                                                                        float                   r2);
 
+gboolean                gsk_radial_gradient_node_is_zero_length       (GskRenderNode          *node) G_GNUC_PURE;
+
 G_END_DECLS

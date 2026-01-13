@@ -79,6 +79,15 @@ add_color_stop_to_pattern (float          offset,
   cairo_pattern_add_color_stop_rgba (pattern, offset, values[0], values[1], values[2], values[3]);
 }
 
+gboolean
+gsk_radial_gradient_node_is_zero_length (GskRenderNode *node)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+
+  return self->start_radius == self->end_radius &&
+         graphene_point_equal (&self->start_center, &self->end_center);
+}
+
 static void
 gsk_radial_gradient_node_draw (GskRenderNode *node,
                                cairo_t       *cr,
@@ -89,11 +98,44 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
   gsize i;
   GskGradient *gradient = &self->gradient;
   gsize n_stops;
+  float end_radius;
+
+  if (gsk_radial_gradient_node_is_zero_length (node))
+    {
+      switch (gsk_gradient_get_repeat (gradient))
+        {
+        case GSK_REPEAT_NONE:
+          return;
+
+        case GSK_REPEAT_PAD:
+          /* hack to make Cairo draw someting */
+          end_radius = self->start_radius + 0.0001;
+          break;
+
+        case GSK_REPEAT_REPEAT:
+        case GSK_REPEAT_REFLECT:
+          {
+            GdkColor color;
+            gsk_gradient_get_average_color (gradient, &color);
+            gdk_cairo_set_source_color (cr, data->ccs, &color);
+            gdk_cairo_rect (cr, &node->bounds);
+            cairo_fill (cr);
+            gdk_color_finish (&color);
+            return;
+          }
+
+        default:
+          g_assert_not_reached ();
+          return;
+        }
+    }
+  else
+    end_radius = self->end_radius;
 
   pattern = cairo_pattern_create_radial (0, 0, self->start_radius,
                                          self->end_center.x - self->start_center.x,
                                          self->end_center.y - self->start_center.y,
-                                         self->end_radius);
+                                         end_radius);
 
   if (self->aspect_ratio != 1)
     {
