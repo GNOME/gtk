@@ -6452,10 +6452,40 @@ svg_dash_array_resolve (const SvgValue *value,
   for (unsigned int i = 0; i < orig->n_dashes; i++)
     {
       a->dashes[i].unit = SVG_UNIT_NUMBER;
-      if (orig->dashes[i].unit == SVG_UNIT_PERCENTAGE)
-        a->dashes[i].value = orig->dashes[i].value / 100 * size;
-      else
-        a->dashes[i].value = orig->dashes[i].value;
+      switch ((unsigned int) orig->dashes[i].unit)
+        {
+        case SVG_UNIT_NUMBER:
+        case SVG_UNIT_PX:
+          a->dashes[i].value = orig->dashes[i].value;
+          break;
+        case SVG_UNIT_PERCENTAGE:
+          a->dashes[i].value = orig->dashes[i].value / 100 * size;
+          break;
+        case SVG_UNIT_PT:
+          a->dashes[i].value = orig->dashes[i].value * 96 / 72;
+          break;
+        case SVG_UNIT_IN:
+          a->dashes[i].value = orig->dashes[i].value * 96;
+          break;
+        case SVG_UNIT_CM:
+          a->dashes[i].value = orig->dashes[i].value * 96 / 2.54;
+          break;
+        case SVG_UNIT_MM:
+          a->dashes[i].value = orig->dashes[i].value * 96 / 25.4;
+          break;
+        case SVG_UNIT_EM:
+        case SVG_UNIT_EX:
+          {
+            double font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
+            if (orig->dashes[i].unit == SVG_UNIT_EM)
+              a->dashes[i].value = orig->dashes[i].value * font_size;
+            else
+              a->dashes[i].value = orig->dashes[i].value * 0.5 * font_size;
+          }
+          break;
+        default:
+          g_assert_not_reached ();
+        }
     }
 
   return (SvgValue *) a;
@@ -19802,6 +19832,7 @@ shape_create_stroke (Shape        *shape,
       double length;
       double offset;
       GskPathMeasure *measure;
+      gboolean invalid = FALSE;
 
       if (shape_type_has_text (shape->type))
         {
@@ -19828,6 +19859,8 @@ shape_create_stroke (Shape        *shape,
             {
               g_assert (dashes[i].unit != SVG_UNIT_PERCENTAGE);
               vals[i] = dashes[i].value / path_length * length;
+              if (vals[i] < 0)
+                invalid = TRUE;
             }
 
           offset = offset / path_length * length;
@@ -19838,11 +19871,16 @@ shape_create_stroke (Shape        *shape,
             {
               g_assert (dashes[i].unit != SVG_UNIT_PERCENTAGE);
               vals[i] = dashes[i].value;
+              if (vals[i] < 0)
+                invalid = TRUE;
             }
         }
 
-      gsk_stroke_set_dash (stroke, vals, len);
-      gsk_stroke_set_dash_offset (stroke, offset);
+      if (!invalid)
+        {
+          gsk_stroke_set_dash (stroke, vals, len);
+          gsk_stroke_set_dash_offset (stroke, offset);
+        }
     }
 
   return stroke;
