@@ -4117,14 +4117,127 @@ css_parser_parse_number (GtkCssParser *parser,
                          guint         n,
                          gpointer      data)
 {
-  double *f = data;
+  Number *val = data;
   double d;
 
   if (!gtk_css_parser_consume_number (parser, &d))
     return 0;
 
-  f[n] = d;
+  val[n].value = d;
+  val[n].unit = SVG_UNIT_NUMBER;
+
   return 1;
+}
+
+static guint
+css_parser_parse_number_length (GtkCssParser *parser,
+                                guint         n,
+                                gpointer      data)
+{
+  Number *val = data;
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER))
+    {
+      val[n].value = ((const GtkCssNumberToken *) token)->number;
+      val[n].unit = SVG_UNIT_NUMBER;
+      gtk_css_parser_consume_token (parser);
+      return 1;
+    }
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
+    {
+      for (unsigned int i = FIRST_LENGTH_UNIT; i <= LAST_LENGTH_UNIT; i++)
+        {
+          if (strcmp (unit_names[i], ((const GtkCssDimensionToken *) token)->dimension) == 0)
+            {
+              val[n].value = ((const GtkCssDimensionToken *) token)->value;
+              val[n].unit = i;
+              gtk_css_parser_consume_token (parser);
+              return TRUE;
+            }
+        }
+    }
+
+  return 0;
+}
+
+static guint
+css_parser_parse_number_angle (GtkCssParser *parser,
+                               guint         n,
+                               gpointer      data)
+{
+  Number *val = data;
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER))
+    {
+      val[n].value = ((const GtkCssNumberToken *) token)->number;
+      val[n].unit = SVG_UNIT_NUMBER;
+      gtk_css_parser_consume_token (parser);
+      return 1;
+    }
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
+    {
+      for (unsigned int i = FIRST_ANGLE_UNIT; i <= LAST_ANGLE_UNIT; i++)
+        {
+          if (strcmp (unit_names[i], ((const GtkCssDimensionToken *) token)->dimension) == 0)
+            {
+              val[n].value = ((const GtkCssDimensionToken *) token)->value;
+              val[n].unit = i;
+              gtk_css_parser_consume_token (parser);
+              return TRUE;
+            }
+        }
+    }
+
+  return 0;
+}
+
+static guint
+css_parser_parse_number_percentage (GtkCssParser *parser,
+                                    guint         n,
+                                    gpointer      data)
+{
+  Number *val = data;
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER))
+    {
+      val[n].value = ((const GtkCssNumberToken *) token)->number;
+      val[n].unit = SVG_UNIT_NUMBER;
+      gtk_css_parser_consume_token (parser);
+      return 1;
+    }
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
+    {
+      val[n].value = ((const GtkCssNumberToken *) token)->number;
+      val[n].unit = SVG_UNIT_PERCENTAGE;
+      gtk_css_parser_consume_token (parser);
+      return 1;
+    }
+
+  return 0;
 }
 
 static gboolean
@@ -4137,6 +4250,9 @@ parse_transform_function (GtkCssParser *self,
   gboolean result = FALSE;
   char function_name[64];
   guint arg;
+  Number *num;
+
+  num = g_newa (Number, max_args);
 
   token = gtk_css_parser_get_token (self);
   g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
@@ -4147,9 +4263,10 @@ parse_transform_function (GtkCssParser *self,
   arg = 0;
   while (TRUE)
     {
-      guint parse_args = css_parser_parse_number (self, arg, values);
+      guint parse_args = css_parser_parse_number (self, arg, num);
       if (parse_args == 0)
         break;
+      values[arg] = num[arg].value;
       arg += parse_args;
       token = gtk_css_parser_get_token (self);
       if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
@@ -5727,21 +5844,32 @@ typedef enum
   FILTER_REF,
 } FilterKind;
 
+typedef guint (* ArgParseFunc) (GtkCssParser *, guint, gpointer);
+
+enum
+{
+  CLAMPED  = 1 << 0,
+  POSITIVE = 1 << 1,
+};
+
 static struct {
   FilterKind kind;
   const char *name;
+  double default_value;
+  unsigned int flags;
+  ArgParseFunc parse_arg;
 } filter_desc[] = {
-  { FILTER_NONE,        "none"        },
-  { FILTER_BLUR,        "blur"        },
-  { FILTER_BRIGHTNESS,  "brightness"  },
-  { FILTER_CONTRAST,    "contrast"    },
-  { FILTER_GRAYSCALE,   "grayscale"   },
-  { FILTER_HUE_ROTATE,  "hue-rotate"  },
-  { FILTER_INVERT,      "invert"      },
-  { FILTER_OPACITY,     "opacity"     },
-  { FILTER_SATURATE,    "saturate"    },
-  { FILTER_SEPIA,       "sepia"       },
-  { FILTER_ALPHA_LEVEL, "alpha-level" },
+  { FILTER_NONE,        "none", 0, 0,                     NULL, },
+  { FILTER_BLUR,        "blur", 1, POSITIVE,              css_parser_parse_number_length, },
+  { FILTER_BRIGHTNESS,  "brightness", 1, POSITIVE,        css_parser_parse_number_percentage, },
+  { FILTER_CONTRAST,    "contrast", 1, POSITIVE,          css_parser_parse_number_percentage, },
+  { FILTER_GRAYSCALE,   "grayscale", 1, CLAMPED|POSITIVE, css_parser_parse_number_percentage, },
+  { FILTER_HUE_ROTATE,  "hue-rotate", 0, 0,               css_parser_parse_number_angle, },
+  { FILTER_INVERT,      "invert", 1, CLAMPED|POSITIVE,    css_parser_parse_number_percentage, },
+  { FILTER_OPACITY,     "opacity", 1, CLAMPED|POSITIVE,   css_parser_parse_number_percentage, },
+  { FILTER_SATURATE,    "saturate", 1, POSITIVE,          css_parser_parse_number_percentage, },
+  { FILTER_SEPIA,       "sepia", 1, CLAMPED|POSITIVE,     css_parser_parse_number_percentage, },
+  { FILTER_ALPHA_LEVEL, "alpha-level", 0.5, POSITIVE,     css_parser_parse_number, },
 };
 
 typedef struct
@@ -5749,6 +5877,7 @@ typedef struct
   FilterKind kind;
   union {
     double value;
+    SvgUnit unit;
     struct {
       char *ref;
       Shape *shape;
@@ -5800,9 +5929,10 @@ svg_filter_equal (const SvgValue *value0,
         return TRUE;
       else if (f0->functions[i].kind == FILTER_REF)
         return f0->functions[i].ref.shape == f1->functions[i].ref.shape &&
-               strcmp (f0->functions[i].ref.ref, f1->functions[i].ref.ref) == 9;
+               strcmp (f0->functions[i].ref.ref, f1->functions[i].ref.ref) == 0;
       else
-        return f0->functions[i].value == f1->functions[i].value;
+        return f0->functions[i].unit == f1->functions[i].unit &&
+               f0->functions[i].value == f1->functions[i].value;
     }
 
   return TRUE;
@@ -5819,6 +5949,12 @@ static SvgValue *svg_filter_accumulate  (const SvgValue *v0,
 static void      svg_filter_print       (const SvgValue *v0,
                                          GString        *string);
 
+static SvgValue * svg_filter_resolve    (const SvgValue *value,
+                                         ShapeAttr       attr,
+                                         unsigned int    idx,
+                                         Shape          *shape,
+                                         ComputeContext *context);
+
 static const SvgValueClass SVG_FILTER_CLASS = {
   "SvgFilter",
   svg_filter_free,
@@ -5827,7 +5963,7 @@ static const SvgValueClass SVG_FILTER_CLASS = {
   svg_filter_accumulate,
   svg_filter_print,
   svg_value_default_distance,
-  svg_value_default_resolve,
+  svg_filter_resolve,
 };
 
 static SvgFilter *
@@ -5846,6 +5982,95 @@ svg_filter_new_none (void)
 {
   static SvgFilter none = { { &SVG_FILTER_CLASS, 0 }, 1, { { FILTER_NONE, } } };
   return (SvgValue *) &none;
+}
+
+static SvgValue *
+svg_filter_resolve (const SvgValue *value,
+                    ShapeAttr       attr,
+                    unsigned int    idx,
+                    Shape          *shape,
+                    ComputeContext *context)
+{
+  const SvgFilter *filter = (const SvgFilter *) value;
+  SvgFilter *result;
+
+  if (filter->n_functions == 1 && filter->functions[0].kind == FILTER_NONE)
+    return svg_value_ref ((SvgValue *) value);
+
+  result = svg_filter_alloc (filter->n_functions);
+
+  for (unsigned int i = 0; i < filter->n_functions; i++)
+    {
+      result->functions[i].kind = filter->functions[i].kind;
+
+      if (filter->functions[i].kind == FILTER_REF)
+        {
+          result->functions[i].ref.ref = g_strdup (filter->functions[i].ref.ref);
+          result->functions[i].ref.shape = filter->functions[i].ref.shape;
+        }
+      else
+        {
+          switch (filter->functions[i].unit)
+            {
+            case SVG_UNIT_DEG:
+            case SVG_UNIT_PX:
+            case SVG_UNIT_NUMBER:
+              result->functions[i].value = filter->functions[i].value;
+              result->functions[i].unit = filter->functions[i].unit;
+              break;
+            case SVG_UNIT_PERCENTAGE:
+              result->functions[i].value = filter->functions[i].value / 100.0;
+              result->functions[i].unit = SVG_UNIT_NUMBER;
+              break;
+            case SVG_UNIT_PT:
+              result->functions[i].value = filter->functions[i].value * 96 / 72;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_IN:
+              result->functions[i].value = filter->functions[i].value * 96;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_CM:
+              result->functions[i].value = filter->functions[i].value * 96 / 2.54;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_MM:
+              result->functions[i].value = filter->functions[i].value * 96 / 25.4;
+              result->functions[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_EM:
+            case SVG_UNIT_EX:
+              {
+                double font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
+                if (filter->functions[i].unit == SVG_UNIT_EM)
+                  result->functions[i].value = filter->functions[i].value * font_size;
+                else
+                  result->functions[i].value = filter->functions[i].value * 0.5 * font_size;
+                result->functions[i].unit = SVG_UNIT_PX;
+              }
+              break;
+            case SVG_UNIT_RAD:
+              result->functions[i].value = filter->functions[i].value * 180 / M_PI;
+              result->functions[i].unit = SVG_UNIT_DEG;
+              break;
+            case SVG_UNIT_GRAD:
+              result->functions[i].value = filter->functions[i].value * 360 / 400;
+              result->functions[i].unit = SVG_UNIT_DEG;
+              break;
+            case SVG_UNIT_TURN:
+              result->functions[i].value = filter->functions[i].value * 360;
+              result->functions[i].unit = SVG_UNIT_DEG;
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+
+          if (filter_desc[filter->functions[i].kind].flags & CLAMPED)
+            result->functions[i].value = CLAMP (result->functions[i].value, 0, 1);
+        }
+    }
+
+  return (SvgValue *) result;
 }
 
 static SvgValue *
@@ -5882,8 +6107,19 @@ filter_parser_parse (GtkCssParser *parser)
             {
               if (gtk_css_parser_has_function (parser, filter_desc[i].name))
                 {
-                  if (!gtk_css_parser_consume_function (parser, 1, 1, css_parser_parse_number, &function.value))
+                  Number n;
+
+                  n.value = filter_desc[i].default_value;
+                  n.unit = SVG_UNIT_NUMBER;
+
+                  if (!gtk_css_parser_consume_function (parser, 0, 1, filter_desc[i].parse_arg, &n))
                     goto fail;
+
+                  if ((filter_desc[i].flags & POSITIVE) && n.value < 0)
+                    goto fail;
+
+                  function.value = n.value;
+                  function.unit = n.unit;
                   function.kind = filter_desc[i].kind;
                   break;
                 }

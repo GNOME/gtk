@@ -74,4 +74,12 @@
           width='10'
           height='10'>
   </rect>
+  <ellipse
+          filter='grayscale(1)'
+          fill='rgb(255,0,0)'
+          cx='10'
+          cy='20'
+          rx='4'
+          ry='5'>
+  </ellipse>
 </svg>

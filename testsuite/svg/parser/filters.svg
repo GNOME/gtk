@@ -12,4 +12,5 @@
   <circle cx='100' cy='0' r='10' filter='alpha-level(0.2)'/>
   <rect x='0' y='20' width='10' height='10'
         filter='blur(5) brightness(0.75) contrast(1.5) grayscale(1) hue-rotate(45) invert(0.5) opacity(0.75) saturate(0.75) sepia(0.75) alpha-level(0.2)'/>
+  <ellipse cx='10' cy='20' rx='4' ry='5' fill='red' filter='grayscale()'/>
 </svg>
