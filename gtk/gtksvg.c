@@ -4976,7 +4976,9 @@ svg_color_resolve (const SvgValue *value,
 {
   if (((SvgColor *) value)->current)
     {
-      if (context->parent)
+      if (idx > 0)
+        return svg_value_ref (shape->current[SHAPE_ATTR_COLOR]);
+      else if (context->parent)
         return svg_value_ref (context->parent->current[SHAPE_ATTR_COLOR]);
       else
         return svg_color_new_black ();
