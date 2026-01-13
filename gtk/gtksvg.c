@@ -9001,6 +9001,8 @@ typedef struct
 
 #define SHAPE_VIEWPORTS (BIT (SHAPE_SVG) | BIT (SHAPE_SYMBOL))
 
+#define CLIP_PATH_CONTENT (SHAPE_SHAPES | SHAPE_TEXTS)
+
 static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_DISPLAY] = {
     .flags = SHAPE_ATTR_DISCRETE,
@@ -10397,6 +10399,18 @@ shape_new (Shape     *parent,
     }
 
   return shape;
+}
+
+static gboolean
+shape_has_ancestor (Shape     *shape,
+                    ShapeType  type)
+{
+  for (Shape *p = shape->parent; p; p = p->parent)
+    {
+      if (p->type == type)
+        return TRUE;
+    }
+  return FALSE;
 }
 
 static void
@@ -15868,7 +15882,8 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      if ((BIT (shape_type) & (SHAPE_SHAPES | SHAPE_TEXTS | BIT (SHAPE_USE))) == 0 &&
+      if (shape_type != SHAPE_USE &&
+          (BIT (shape_type) & CLIP_PATH_CONTENT) == 0 &&
           has_ancestor (context, "clipPath") &&
           shape_type != SHAPE_CLIP_PATH)
         {
@@ -16628,17 +16643,25 @@ resolve_href_ref (SvgValue   *value,
   if (href->shape == NULL)
     {
       Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
-      if (target)
-        {
-          href->shape = target;
-          add_dependency_to_common_ancestor (shape, target);
-        }
-      else
+      if (!target)
         {
           gtk_svg_invalid_reference (data->svg,
                                      "No shape with ID %s (resolving href in <%s>)",
                                      svg_href_get_id (href),
                                      shape_types[shape->type].name);
+        }
+      else if (shape->type == SHAPE_USE &&
+               shape_has_ancestor (shape, SHAPE_CLIP_PATH) &&
+               (BIT (target->type) & CLIP_PATH_CONTENT) == 0)
+        {
+          gtk_svg_invalid_reference (data->svg,
+                                     "Can't include a <%s> in a <clipPath> via <use>",
+                                     shape_types[target->type].name);
+        }
+      else
+        {
+          href->shape = target;
+          add_dependency_to_common_ancestor (shape, target);
         }
     }
 }
