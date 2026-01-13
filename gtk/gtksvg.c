@@ -8950,12 +8950,10 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = parse_offset,
   },
   [SHAPE_ATTR_STOP_COLOR] = {
-    .flags = SHAPE_ATTR_INHERITED,
     .applies_to = SHAPE_GRADIENTS,
     .parse_value = svg_color_parse,
   },
   [SHAPE_ATTR_STOP_OPACITY] = {
-    .flags = SHAPE_ATTR_INHERITED,
     .applies_to = SHAPE_GRADIENTS,
     .parse_value = parse_opacity,
   },
