@@ -7,7 +7,7 @@
         gpa:state-change-delay='1000ms'
         gpa:time-since-load='2500ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='100'
         height='100'
         viewBox='0 0 100 100'>
@@ -15,7 +15,7 @@
           id='line'
           visibility='hidden'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           stroke='rgb(0,0,0)'
           pathLength='1'
           d='M 10 10 L 90 90'>
@@ -100,7 +100,7 @@
           visibility='hidden'
           transform='translate(50, 50) rotate(45, 0, 0) translate(-5, -5)'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='rgb(255,0,0)'
           pathLength='1'
           cx='0'

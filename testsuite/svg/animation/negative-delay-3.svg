@@ -7,14 +7,14 @@
         gpa:state-change-delay='250ms'
         gpa:time-since-load='500ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='100'
         height='100'>
   <path
           id='line1'
           visibility='hidden'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='none'
           stroke='rgb(0,0,0)'
           stroke-width='2'
@@ -90,7 +90,7 @@
   <path
           id='line2'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='none'
           stroke='rgb(0,0,0)'
           stroke-width='2'

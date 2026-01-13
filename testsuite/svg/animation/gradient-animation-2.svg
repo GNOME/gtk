@@ -7,16 +7,16 @@
         gpa:state-change-delay='0ms'
         gpa:time-since-load='1000ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='100'
         height='100'>
   <defs
           font-weight='400'
-          font-size='16'>
+          font-size='13.333'>
     <linearGradient
             id='gradient'
             font-weight='400'
-            font-size='16'
+            font-size='13.333'
             x1='0'
             y1='0'
             x2='1'
@@ -49,7 +49,7 @@
   </defs>
   <rect
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='url(#gradient)'
           x='0'
           y='0'

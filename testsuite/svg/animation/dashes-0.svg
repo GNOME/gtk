@@ -7,14 +7,14 @@
         gpa:state-change-delay='0ms'
         gpa:time-since-load='0ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='300'
         height='200'
         viewBox='0 0 300 200'>
   <path
           id='p'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           stroke='rgb(0,0,0)'
           stroke-width='1'
           stroke-dasharray='1 1'
@@ -44,7 +44,7 @@
   </path>
   <circle
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='rgb(255,0,0)'
           r='5'>
   </circle>

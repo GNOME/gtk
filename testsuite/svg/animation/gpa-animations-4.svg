@@ -7,14 +7,14 @@
         gpa:state-change-delay='0ms'
         gpa:time-since-load='3000ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
   <circle
           id='red'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='none'
           stroke='rgb(255,0,0)'
           stroke-dasharray='0.5 1'

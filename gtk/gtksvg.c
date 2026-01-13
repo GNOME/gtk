@@ -213,7 +213,7 @@
  */
 #define DRAWING_LIMIT 150000
 
-#define DEFAULT_FONT_SIZE 16
+#define DEFAULT_FONT_SIZE 13.333
 
 #ifndef _MSC_VER
 #define DEBUG

@@ -7,18 +7,18 @@
         gpa:state-change-delay='0ms'
         gpa:time-since-load='3000ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='300'
         height='200'
         viewBox='0 0 300 200'>
   <g
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='rgb(0,0,255)'>
     <circle
             id='p'
             font-weight='400'
-            font-size='16'
+            font-size='13.333'
             fill='rgb(0,128,0)'
             cx='10'
             cy='10'

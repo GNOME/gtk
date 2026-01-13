@@ -7,17 +7,17 @@
         gpa:state-change-delay='0ms'
         gpa:time-since-load='1000ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='30'
         height='20'
         viewBox='0 0 30 20'>
   <clipPath
           id='clip1'
           font-weight='400'
-          font-size='16'>
+          font-size='13.333'>
     <circle
             font-weight='400'
-            font-size='16'
+            font-size='13.333'
             cx='10'
             cy='10'
             r='5'>
@@ -26,10 +26,10 @@
   <clipPath
           id='clip2'
           font-weight='400'
-          font-size='16'>
+          font-size='13.333'>
     <circle
             font-weight='400'
-            font-size='16'
+            font-size='13.333'
             cx='20'
             cy='10'
             r='5'>
@@ -39,7 +39,7 @@
           id='rect'
           clip-path='url(#clip2)'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='rgb(255,0,0)'
           x='10'
           y='0'

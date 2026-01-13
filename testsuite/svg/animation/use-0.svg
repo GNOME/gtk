@@ -7,17 +7,17 @@
         gpa:state-change-delay='0ms'
         gpa:time-since-load='0ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='30'
         height='20'
         viewBox='0 0 30 20'>
   <defs
           font-weight='400'
-          font-size='16'>
+          font-size='13.333'>
     <circle
             id='circle1'
             font-weight='400'
-            font-size='16'
+            font-size='13.333'
             fill='rgb(255,0,0)'
             fill-opacity='0.5'
             cx='10'
@@ -27,7 +27,7 @@
     <circle
             id='circle2'
             font-weight='400'
-            font-size='16'
+            font-size='13.333'
             fill='rgb(0,128,0)'
             fill-opacity='1'
             cx='20'
@@ -37,7 +37,7 @@
   </defs>
   <use
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           href='#circle1'
           width='0'
           height='0'>

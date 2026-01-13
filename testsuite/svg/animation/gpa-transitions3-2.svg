@@ -7,7 +7,7 @@
         gpa:state-change-delay='2000ms'
         gpa:time-since-load='3000ms'
         font-weight='400'
-        font-size='16'
+        font-size='13.333'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
@@ -15,7 +15,7 @@
           id='red'
           filter='blur(16) alpha-level(0.2)'
           font-weight='400'
-          font-size='16'
+          font-size='13.333'
           fill='none'
           stroke='rgb(255,0,0)'
           cx='0'
