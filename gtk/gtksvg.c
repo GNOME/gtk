@@ -9427,12 +9427,10 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = svg_string_new,
   },
   [SHAPE_ATTR_FE_COLOR] = {
-    .flags = SHAPE_ATTR_INHERITED,
     .applies_to = BIT (SHAPE_FILTER),
     .parse_value = svg_color_parse,
   },
   [SHAPE_ATTR_FE_OPACITY] = {
-    .flags = SHAPE_ATTR_INHERITED,
     .applies_to = BIT (SHAPE_FILTER),
     .parse_value = parse_opacity,
   },
