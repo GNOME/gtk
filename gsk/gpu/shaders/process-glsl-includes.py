@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import sys
 import re
 import os
@@ -8,7 +9,7 @@ loaded_files = []
 
 check_defines = [ 'VULKAN' ]
 
-def load (path):
+def load (path, includes):
     if (path in loaded_files):
         return
 
@@ -37,9 +38,20 @@ def load (path):
 
             match = re.search (r"^#include \"(.*)\"$", line)
             if match:
-                load (os.path.join (os.path.dirname(path), match.group(1)))
+                for dir in [os.path.dirname(path)] + includes:
+                    file = os.path.join (dir, match.group (1))
+                    if not os.path.isfile (file):
+                        continue
+                    load (file, includes)
+                    break
             else:
                 print (line, end="")
 
-load (sys.argv[1])
+parser = argparse.ArgumentParser()
+parser.add_argument ('-I', '--include', type=str, action='append', help='Add include directory')
+parser.add_argument ('FILES', nargs='*', help='Input files')
+args = parser.parse_args()
+
+for path in args.FILES:
+    load (path, args.include)
 

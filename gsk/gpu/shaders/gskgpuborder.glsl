@@ -1,6 +1,16 @@
-#define GSK_N_TEXTURES 0
+#ifdef GSK_PREAMBLE
+instances = 48;
 
-#include "common.glsl"
+GskRoundedRect outline;
+GdkColor top_border_color;
+GdkColor right_border_color;
+GdkColor bottom_border_color;
+GdkColor left_border_color;
+graphene_vec4_t border_widths;
+graphene_vec2_t inside_offset;
+#endif
+
+#include "gskgpuborderinstance.glsl"
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) vec4 _color;
@@ -8,16 +18,7 @@ PASS_FLAT(2) RoundedRect _outside;
 PASS_FLAT(5) RoundedRect _inside;
 
 
-
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_top_border_color;
-IN(1) vec4 in_right_border_color;
-IN(2) vec4 in_bottom_border_color;
-IN(3) vec4 in_left_border_color;
-IN(4) mat3x4 in_outline;
-IN(7) vec4 in_border_widths;
-IN(8) vec2 in_offset;
 
 vec4
 compute_color (void)
@@ -101,7 +102,7 @@ run (out vec2 pos)
   vec4 border_widths = in_border_widths * GSK_GLOBAL_SCALE.yxyx;
   RoundedRect outside = rounded_rect_from_gsk (in_outline);
   RoundedRect inside = rounded_rect_shrink (outside, border_widths);
-  rounded_rect_offset (inside, in_offset * GSK_GLOBAL_SCALE);
+  rounded_rect_offset (inside, in_inside_offset * GSK_GLOBAL_SCALE);
 
   pos = border_get_position (outside, inside);
 

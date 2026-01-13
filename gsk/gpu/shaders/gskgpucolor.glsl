@@ -1,17 +1,16 @@
-#define GSK_N_TEXTURES 0
+#ifdef GSK_PREAMBLE
+graphene_rect_t rect;
+GdkColor color;
+#endif
 
-#include "common.glsl"
+#include "gskgpucolorinstance.glsl"
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS_FLAT(2) vec4 _color;
 
 
-
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_color;
 
 void
 run (out vec2 pos)

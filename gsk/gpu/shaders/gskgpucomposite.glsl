@@ -1,9 +1,18 @@
-#define GSK_N_TEXTURES 2
-#define GSK_DUAL_BLEND 1
+#ifdef GSK_PREAMBLE
+textures = 2;
+dual_blend = true;
+acs_equals_ccs = true;
+acs_premultiplied = true;
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t source_rect;
+graphene_rect_t mask_rect;
+float opacity;
 
-#define GSK_OPERATOR GSK_VARIATION
+variation: GskPorterDuff operator;
+#endif
+
+#include "gskgpucompositeinstance.glsl"
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _source_rect;
@@ -14,11 +23,6 @@ PASS_FLAT(7) float _opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_source_rect;
-IN(2) vec4 in_mask_rect;
-IN(3) float in_opacity;
 
 void
 run (out vec2 pos)
@@ -40,14 +44,13 @@ run (out vec2 pos)
 #endif
 
 
-
 #ifdef GSK_FRAGMENT_SHADER
 
 float
 get_dest_alpha (float source,
                 float mask)
 {
-  switch (GSK_OPERATOR)
+  switch (VARIATION_OPERATOR)
   {
     case GSK_PORTER_DUFF_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_IN_DEST:
@@ -73,7 +76,7 @@ get_dest_alpha (float source,
 float
 get_source_alpha (float mask)
 {
-  switch (GSK_OPERATOR)
+  switch (VARIATION_OPERATOR)
   {
     case GSK_PORTER_DUFF_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_OVER_DEST:

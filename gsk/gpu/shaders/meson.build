@@ -35,31 +35,58 @@ gsk_private_gpu_shaders = files([
 ])
 
 gsk_private_gpu_shader_headers = []
+gsk_generated_gpu_shader_sources = []
 gsk_private_gpu_gl_shaders = []
 gsk_private_gpu_vulkan_shaders = []
 
-generate_header = find_program('generate-header.py')
+generate_interface = find_program('generate-glsl-interface.py')
 process_includes = find_program('process-glsl-includes.py')
 
 foreach shader: gsk_private_gpu_shaders
-  instance = fs.name (fs.replace_suffix (shader, '')) + 'instance.h'
+  source_file = fs.name (fs.replace_suffix (shader, '')) + 'op.c'
+  instance = fs.name (fs.replace_suffix (shader, '')) + 'opprivate.h'
+  glsl_instance = fs.name (fs.replace_suffix (shader, '')) + 'instance.glsl'
+  shader_source = custom_target(source_file,
+                                output: source_file,
+                                input: shader,
+                                command: [
+                                  generate_interface,
+                                  '--generate-source',
+                                  '@INPUT@',
+                                ],
+                                capture: true)
   shader_header = custom_target(instance,
                                 output: instance,
                                 input: shader,
                                 command: [
-                                  generate_header,
+                                  generate_interface,
+                                  '--generate-header',
                                   '@INPUT@',
                                 ],
                                 capture: true)
+  shader_glsl = custom_target(glsl_instance,
+                              output: glsl_instance,
+                              input: shader,
+                              command: [
+                                generate_interface,
+                                '--generate-glsl',
+                                '@INPUT@',
+                              ],
+                              capture: true)
+
   gsk_private_gpu_shader_headers += shader_header
+  gsk_generated_gpu_shader_sources += shader_source
 
   gl_shader_name = fs.name (shader)
   gl_shader = custom_target (gl_shader_name,
                              output: gl_shader_name,
                              input: shader,
+                             depends: shader_glsl,
                              depend_files: gsk_private_gpu_include_shaders,
                              command: [
                                process_includes,
+                               '-I'+meson.current_source_dir(),
+                               '-I'+meson.current_build_dir(),
                                '@INPUT@',
                              ],
                              capture: true)
@@ -71,12 +98,16 @@ foreach shader: gsk_private_gpu_shaders
         [ '--target-env=vulkan1.0',
           '-fshader-stage=vertex',
           '-DGSK_VERTEX_SHADER=1',
+          '-I'+meson.current_source_dir(),
+          '-I'+meson.current_build_dir(),
         ]
       ],
       [ fs.name (fs.replace_suffix (shader, '')) + '.frag.spv',
         [ '--target-env=vulkan1.0',
           '-fshader-stage=fragment',
           '-DGSK_FRAGMENT_SHADER=1',
+          '-I'+meson.current_source_dir(),
+          '-I'+meson.current_build_dir(),
         ]
       ],
     ]
@@ -84,6 +115,7 @@ foreach shader: gsk_private_gpu_shaders
       target = custom_target(option.get(0),
                              input: shader,
                              output: option.get(0),
+                             depends: shader_glsl,
                              depend_files: gsk_private_gpu_include_shaders,
                              command: [
                                glslc,

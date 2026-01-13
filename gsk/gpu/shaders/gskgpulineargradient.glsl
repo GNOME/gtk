@@ -1,10 +1,30 @@
-#define GSK_N_TEXTURES 0
+#ifdef GSK_PREAMBLE
+var_name = "gsk_gpu_linear_gradient";
+struct_name = "GskGpuLinearGradient";
+acs_premultiplied = true;
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_point_t start;
+graphene_point_t end;
+GdkColor color0;
+GdkColor color1;
+GdkColor color2;
+GdkColor color3;
+GdkColor color4;
+GdkColor color5;
+GdkColor color6;
+graphene_vec4_t offsets0;
+graphene_vec4_t offsets1;
+graphene_vec4_t hints0;
+graphene_vec4_t hints1;
+
+variation: gboolean supersampling;
+variation: GskRepeat repeat;
+#endif
+
+#include "gskgpulineargradientinstance.glsl"
+
 #include "enums.glsl"
-
-#define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
-#define GSK_REPEAT ((GSK_VARIATION >> 1) & GSK_REPEAT_MASK)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -16,27 +36,13 @@ PASS_FLAT(6) vec4 _color4;
 PASS_FLAT(7) vec4 _color5;
 PASS_FLAT(8) vec4 _color6;
 PASS_FLAT(9) vec4 _offsets0;
-PASS_FLAT(10) vec3 _offsets1;
+PASS_FLAT(10) vec4 _offsets1;
 PASS_FLAT(11) vec4 _hints0;
-PASS_FLAT(12) vec3 _hints1;
+PASS_FLAT(12) vec4 _hints1;
 PASS(13) float _offset;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_startend;
-IN(2) vec4 in_color0;
-IN(3) vec4 in_color1;
-IN(4) vec4 in_color2;
-IN(5) vec4 in_color3;
-IN(6) vec4 in_color4;
-IN(7) vec4 in_color5;
-IN(8) vec4 in_color6;
-IN(9) vec4 in_offsets0;
-IN(10) vec3 in_offsets1;
-IN(11) vec4 in_hints0;
-IN(12) vec3 in_hints1;
 
 void
 run (out vec2 pos)
@@ -45,8 +51,8 @@ run (out vec2 pos)
   
   pos = rect_get_position (r);
 
-  vec2 start = in_startend.xy;
-  vec2 end = in_startend.zw;
+  vec2 start = in_start;
+  vec2 end = in_end;
   vec2 line = end - start;
   float line_length = dot (line, line);
   _offset = dot (pos / GSK_GLOBAL_SCALE - start, line) / line_length;
@@ -67,7 +73,6 @@ run (out vec2 pos)
 }
 
 #endif
-
 
 
 #ifdef GSK_FRAGMENT_SHADER
@@ -157,7 +162,7 @@ get_gradient_color (float offset)
 vec4
 get_gradient_color_at (float offset)
 {
-  switch (GSK_REPEAT)
+  switch (VARIATION_REPEAT)
     {
     case GSK_REPEAT_NONE:
       if (offset < 0.0 || offset > 1.0)

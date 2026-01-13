@@ -1,11 +1,22 @@
-#define GSK_N_TEXTURES 1
+#ifdef GSK_PREAMBLE
+textures = 1;
+var_name = "gsk_gpu_convert_cicp";
+struct_name = "GskGpuConvertCicp";
 
-#include "common.glsl"
+graphene_rect_t rect;
+graphene_rect_t tex_rect;
+float opacity;
+guint32 color_primaries;
+guint32 transfer_function;
+guint32 matrix_coefficients;
+guint32 range;
 
-#define VARIATION_OPACITY              (1u << 0)
-#define VARIATION_REVERSE              (1u << 1)
+variation: gboolean opacity;
+variation: gboolean premultiply;
+variation: gboolean reverse;
+#endif
 
-#define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
+#include "gskgpuconvertcicpinstance.glsl"
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -17,16 +28,8 @@ PASS_FLAT(8) mat3 _yuv;
 PASS_FLAT(11) vec3 _yuv_add;
 PASS_FLAT(12) uint _range;
 
+
 #ifdef GSK_VERTEX_SHADER
-
-IN(0) vec4 in_rect;
-IN(1) vec4 in_tex_rect;
-IN(2) float in_opacity;
-IN(3) uint in_color_primaries;
-IN(4) uint in_transfer_function;
-IN(5) uint in_matrix_coefficients;
-IN(6) uint in_range;
-
 
 const mat3 identity = mat3(
   1.0, 0.0, 0.0,
@@ -215,23 +218,25 @@ run (out vec2 pos)
   _transfer_function = in_transfer_function;
   _range = in_range;
 
-  if (HAS_VARIATION (VARIATION_REVERSE))
+  if (VARIATION_REVERSE)
     {
-      if (OUTPUT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB ||
-          OUTPUT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB_LINEAR)
+      if (ALT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB_LINEAR)
         _mat = cicp_from_xyz (in_color_primaries) * srgb_to_xyz;
-      else
+      else if (ALT_COLOR_SPACE == GDK_COLOR_STATE_ID_REC2100_LINEAR)
         _mat = cicp_from_xyz (in_color_primaries) * rec2020_to_xyz;
+      else
+        _mat = mat3(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.8, 0.8, 0.8);
 
       _yuv = rgb_to_yuv (in_matrix_coefficients, _yuv_add);
     }
   else
     {
-      if (OUTPUT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB ||
-          OUTPUT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB_LINEAR)
+      if (ALT_COLOR_SPACE == GDK_COLOR_STATE_ID_SRGB_LINEAR)
         _mat = xyz_to_srgb * cicp_to_xyz (in_color_primaries);
-      else
+      else if (ALT_COLOR_SPACE == GDK_COLOR_STATE_ID_REC2100_LINEAR)
         _mat = xyz_to_rec2020 * cicp_to_xyz (in_color_primaries);
+      else
+        _mat = mat3(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.8, 0.8, 0.8);
 
       _yuv = yuv_to_rgb (in_matrix_coefficients, _yuv_add);
     }
@@ -412,12 +417,9 @@ apply_cicp_oetf (vec3 color,
 }
 
 vec4
-convert_color_from_cicp (vec4 color,
-                         bool from_premul,
-                         uint to,
-                         bool to_premul)
+convert_color_from_cicp (vec4 color)
 {
-  if (from_premul)
+  if (VARIATION_PREMULTIPLY)
     color = color_unpremultiply (color);
 
   if (_range == 0u)
@@ -431,24 +433,17 @@ convert_color_from_cicp (vec4 color,
 
   color.rgb = apply_cicp_eotf (color.rgb, _transfer_function);
   color.rgb = _mat * color.rgb;
-  color.rgb = apply_oetf (color.rgb, to);
 
-  if (to_premul)
-    color = color_premultiply (color);
+  color = output_color_from_alt (color);
 
   return color;
 }
 
 vec4
-convert_color_to_cicp (vec4 color,
-                       bool to_premul,
-                       uint from,
-                       bool from_premul)
+convert_color_to_cicp (vec4 color)
 {
-  if (from_premul)
-    color = color_unpremultiply (color);
+  color = alt_color_from_output (color);
 
-  color.rgb = apply_eotf (color.rgb, from);
   color.rgb = _mat * color.rgb;
   color.rgb = apply_cicp_oetf (color.rgb, _transfer_function);
 
@@ -463,7 +458,7 @@ convert_color_to_cicp (vec4 color,
       color.b = color.b * 224.0/255.0 + 16.0/255.0;
     }
 
-  if (to_premul)
+  if (VARIATION_PREMULTIPLY)
     color = color_premultiply (color);
 
   return color;
@@ -475,17 +470,13 @@ run (out vec4 color,
 {
   vec4 pixel = gsk_texture0 (_tex_coord);
 
-  if (HAS_VARIATION (VARIATION_REVERSE))
-    pixel = convert_color_to_cicp (pixel,
-                                   ALT_PREMULTIPLIED,
-                                   OUTPUT_COLOR_SPACE, OUTPUT_PREMULTIPLIED);
+  if (VARIATION_REVERSE)
+    pixel = convert_color_to_cicp (pixel);
   else
-    pixel = convert_color_from_cicp (pixel,
-                                     ALT_PREMULTIPLIED,
-                                     OUTPUT_COLOR_SPACE, OUTPUT_PREMULTIPLIED);
+    pixel = convert_color_from_cicp (pixel);
 
   float alpha = rect_coverage (_rect, _pos);
-  if (HAS_VARIATION (VARIATION_OPACITY))
+  if (VARIATION_OPACITY)
     alpha *= _opacity;
 
   color = output_color_alpha (pixel, alpha);
