@@ -9754,6 +9754,12 @@ shape_attr_ref_initial_value (ShapeAttr attr,
       attr == SHAPE_ATTR_OVERFLOW)
     return svg_overflow_new (OVERFLOW_HIDDEN);
 
+  if (shape_type == SHAPE_MARKER)
+    {
+      if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
+        return svg_number_new (3);
+    }
+
   if (shape_type == SHAPE_SVG || shape_type == SHAPE_SYMBOL)
     {
       if (attr == SHAPE_ATTR_WIDTH || attr == SHAPE_ATTR_HEIGHT)
@@ -20450,7 +20456,7 @@ typedef enum {
 /* }}} */
 /* {{{ Markers */
 
-static gboolean
+static void
 paint_marker (Shape              *shape,
               GskPath            *path,
               PaintContext       *context,
@@ -20471,16 +20477,18 @@ paint_marker (Shape              *shape,
   SvgValue *overflow;
   double sx, sy, tx, ty;
   graphene_rect_t view_box;
+  SvgNumber *n;
+  GskTransform *transform = NULL;
 
   gsk_path_point_get_position (point, path, &vertex);
 
   href = (SvgHref *) shape->current[attrs[kind]];
   if (href->kind == HREF_NONE)
-    return TRUE;
+    return;
 
   marker = href->shape;
   if (!marker)
-    return FALSE;
+    return;
 
   orient = (SvgOrient *) marker->current[SHAPE_ATTR_MARKER_ORIENT];
   units = marker->current[SHAPE_ATTR_MARKER_UNITS];
@@ -20520,7 +20528,10 @@ paint_marker (Shape              *shape,
   width = svg_number_get (marker->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
   height = svg_number_get (marker->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
-  SvgNumber *n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_X];
+  if (width == 0 || height == 0)
+    return;
+
+  n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_X];
   if (n->unit == SVG_UNIT_PERCENTAGE)
     x = n->value / 100 * width;
   else if (!vb->unset)
@@ -20554,11 +20565,9 @@ paint_marker (Shape              *shape,
                               0, 0, width, height,
                               &sx, &sy, &tx, &ty);
 
-  GskTransform *transform = NULL;
-
   gtk_snapshot_save (context->snapshot);
 
-  transform = gsk_transform_translate (transform, &vertex);
+  transform = gsk_transform_translate (NULL, &vertex);
   transform = gsk_transform_rotate (transform, angle);
   transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (-x, -y));
   transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (tx, ty));
@@ -20578,8 +20587,6 @@ paint_marker (Shape              *shape,
 
   pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
-
-  return TRUE;
 }
 
 static void
