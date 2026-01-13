@@ -22,6 +22,16 @@ class Premultiplied(Enum):
         else:
             raise Exception ('Expected "premultiplied" or "straight" or "argument"')
 
+    def to_c_code(self, argument_name):
+        if self == Premultiplied.PREMULTIPLIED:
+            return 'TRUE'
+        elif self == Premultiplied.STRAIGHT:
+            return 'FALSE'
+        elif self == Premultiplied.ARGUMENT:
+            return argument_name
+        else:
+            raise Exception('FIXME: Figure out assert_not_reached() with Python')
+
 @dataclass
 class VarType:
     c_name: str
@@ -142,6 +152,7 @@ class File:
     struct_name: str
     n_textures: int
     n_instances: int
+    ccs_premultiplied: Premultiplied
     acs_premultiplied: Premultiplied
     acs_equals_ccs: bool
     opacity: bool
@@ -278,6 +289,7 @@ def read_file (filename):
     on = False
     n_textures = 0
     n_instances = 6
+    ccs_premultiplied = Premultiplied.PREMULTIPLIED
     acs_premultiplied = Premultiplied.STRAIGHT
     acs_equals_ccs = False
     opacity = True
@@ -325,6 +337,8 @@ def read_file (filename):
                 var_name = match.group(1)
             elif match := re.search (r'^struct_name\s*=\s*"(\w+)"\s*;$', line):
                 struct_name = match.group(1)
+            elif match := re.search (r'^ccs_premultiplied\s*=\s*(\w+)\s*;$', line):
+                ccs_premultiplied = Premultiplied.from_string (match.group(1))
             elif match := re.search (r'^acs_premultiplied\s*=\s*(\w+)\s*;$', line):
                 acs_premultiplied = Premultiplied.from_string (match.group(1))
             elif match := re.search (r'^acs_equals_ccs\s*=\s*(\w+)\s*;$', line):
@@ -351,6 +365,7 @@ def read_file (filename):
                  struct_name = struct_name,
                  n_textures = n_textures,
                  n_instances = n_instances,
+                 ccs_premultiplied = ccs_premultiplied,
                  acs_premultiplied = acs_premultiplied,
                  acs_equals_ccs = acs_equals_ccs,
                  opacity = opacity,
@@ -503,6 +518,8 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     args = [ FunctionArg ('GskGpuFrame',                 True,  'frame'),
              FunctionArg ('GskGpuShaderClip',            False, 'clip'),
              FunctionArg ('GdkColorState',               True,  'ccs') ]
+    if file.ccs_premultiplied == Premultiplied.ARGUMENT:
+        args.append (FunctionArg ('gboolean',            False,  'ccs_premultiplied'))
     if not file.acs_equals_ccs:
         args.append (FunctionArg ('GdkColorState',       True,  'acs'))
     if file.acs_premultiplied == Premultiplied.ARGUMENT:
@@ -530,22 +547,13 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     if prototype_only:
         return
 
-    if file.acs_premultiplied == Premultiplied.PREMULTIPLIED:
-        acs_premultiplied_str = 'TRUE'
-    elif file.acs_premultiplied == Premultiplied.STRAIGHT:
-        acs_premultiplied_str = 'FALSE'
-    elif file.acs_premultiplied == Premultiplied.ARGUMENT:
-        acs_premultiplied_str = 'acs_premultiplied'
-    else:
-        raise Exception('FIXME: Figure out assert_not_reached() with Python')
-
     print (f'''{{
   {file.struct_name}Instance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &{file.var_name.upper()}_OP_CLASS,
-                           ccs ? gsk_gpu_color_states_create (ccs, TRUE, {'ccs' if file.acs_equals_ccs else 'acs'}, {acs_premultiplied_str})
-                               : gsk_gpu_color_states_create_equal (TRUE, {acs_premultiplied_str}),''')
+                           ccs ? gsk_gpu_color_states_create (ccs, {file.ccs_premultiplied.to_c_code('ccs_premultiplied')}, {'ccs' if file.acs_equals_ccs else 'acs'}, {file.acs_premultiplied.to_c_code('acs_premultiplied')})
+                               : gsk_gpu_color_states_create_equal ({file.ccs_premultiplied.to_c_code('ccs_premultiplied')}, {file.acs_premultiplied.to_c_code('acs_premultiplied')}),''')
     if file.variations:
         for pos, var in enumerate (file.variations, 1):
             print (f'''                           {var.type.to_c_flag ('variation_' + var.name, var.offset_bits)}{' |' if pos < len (file.variations) else ','}''')
