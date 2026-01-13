@@ -8782,6 +8782,13 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
   return TRUE;
 }
 
+static char *
+gtk_widget_accessible_get_accessible_id (GtkAccessible *self)
+{
+  const char *id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (self));
+  return g_strdup (id);
+}
+
 static void
 gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
 {
@@ -8791,6 +8798,7 @@ gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
   iface->get_first_accessible_child = gtk_widget_accessible_get_first_accessible_child;
   iface->get_next_accessible_sibling = gtk_widget_accessible_get_next_accessible_sibling;
   iface->get_bounds = gtk_widget_accessible_get_bounds;
+  iface->get_accessible_id = gtk_widget_accessible_get_accessible_id;
 }
 
 static void
