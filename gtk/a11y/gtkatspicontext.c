@@ -800,7 +800,13 @@ handle_accessible_get_property (GDBusConnection       *connection,
   else if (g_strcmp0 (property_name, "Locale") == 0)
     res = g_variant_new_string (setlocale (LC_MESSAGES, NULL));
   else if (g_strcmp0 (property_name, "AccessibleId") == 0)
-    res = g_variant_new_string ("");
+    {
+      char *id = gtk_accessible_get_accessible_id (accessible);
+      if (id)
+        res = g_variant_new_take_string (id);
+      else
+        res = g_variant_new_string ("");
+    }
   else if (g_strcmp0 (property_name, "Parent") == 0)
     res = get_parent_context_ref (accessible);
   else if (g_strcmp0 (property_name, "ChildCount") == 0)

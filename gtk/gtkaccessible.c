@@ -70,6 +70,12 @@
 
 G_DEFINE_INTERFACE (GtkAccessible, gtk_accessible, G_TYPE_OBJECT)
 
+static char *
+gtk_accessible_default_get_accessible_id (GtkAccessible *self)
+{
+  return NULL;
+}
+
 static void
 gtk_accessible_default_init (GtkAccessibleInterface *iface)
 {
@@ -88,6 +94,8 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
                        G_PARAM_STATIC_STRINGS);
 
   g_object_interface_install_property (iface, pspec);
+
+  iface->get_accessible_id = gtk_accessible_default_get_accessible_id;
 }
 
 /**
@@ -1268,6 +1276,30 @@ gtk_accessible_get_bounds (GtkAccessible *self,
   g_return_val_if_fail (width != NULL && height != NULL, FALSE);
 
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_bounds (self, x, y, width, height);
+}
+
+/**
+ * gtk_accessible_get_accessible_id:
+ * @self: an accessible object
+ *
+ * Retrieves the accessible identifier for the accessible object.
+ *
+ * This functionality can be overridden by `GtkAccessible`
+ * implementations.
+ *
+ * It is left to the accessible implementation to define the scope
+ * and uniqueness of the identifier.
+ *
+ * Returns: (transfer full) (nullable): the accessible identifier
+ *
+ * Since: 4.22
+ */
+char *
+gtk_accessible_get_accessible_id (GtkAccessible *self)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
+
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_id (self);
 }
 
 struct _GtkAccessibleList
