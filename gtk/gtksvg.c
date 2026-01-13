@@ -15545,6 +15545,14 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
+      if ((BIT (shape_type) & (SHAPE_SHAPES | SHAPE_TEXTS | BIT (SHAPE_USE))) == 0 &&
+          has_ancestor (context, "clipPath") &&
+          shape_type != SHAPE_CLIP_PATH)
+        {
+          skip_element (data, context, "<clipPath> can only contain shapes, not %s", element_name);
+          return;
+        }
+
       shape = shape_new (data->current_shape, shape_type);
 
       if (data->current_shape == NULL && shape->type == SHAPE_SVG)
@@ -19071,7 +19079,8 @@ push_group (Shape        *shape,
       pop_op (context);
     }
 
-  if (mask->kind != MASK_NONE && mask->shape != NULL)
+  if (mask->kind != MASK_NONE && mask->shape != NULL &&
+      context->op != CLIPPING)
     {
       gboolean has_clip = FALSE;
 
@@ -19188,7 +19197,8 @@ pop_group (Shape        *shape,
         gtk_snapshot_pop (context->snapshot);
     }
 
-  if (mask->kind != MASK_NONE && mask->shape != NULL)
+  if (mask->kind != MASK_NONE && mask->shape != NULL &&
+      context->op != CLIPPING)
     {
       gtk_snapshot_pop (context->snapshot);
     }
