@@ -21204,7 +21204,6 @@ paint_shape (Shape        *shape,
       TextAnchor anchor;
       WritingMode wmode;
       graphene_rect_t bounds;
-      GskStroke *stroke;
       float dx, dy;
 
       if (svg_enum_get (shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
@@ -21252,43 +21251,52 @@ paint_shape (Shape        *shape,
       push_transform (context, transform);
       gsk_transform_unref (transform);
 
-      stroke = shape_create_stroke (shape, context);
-
-      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+      if (context->op == CLIPPING)
         {
-        case PAINT_ORDER_FILL_STROKE_MARKERS:
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-        case PAINT_ORDER_MARKERS_FILL_STROKE:
-          fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
-          break;
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
-        case PAINT_ORDER_MARKERS_STROKE_FILL:
-          stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
-          break;
-        default:
-          g_assert_not_reached ();
+          SvgValue *paint = svg_paint_new_black ();
+          fill_text (shape, context, (SvgPaint *) paint, &bounds);
+          svg_value_unref (paint);
         }
-
-      switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+      else
         {
-        case PAINT_ORDER_FILL_STROKE_MARKERS:
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-        case PAINT_ORDER_MARKERS_FILL_STROKE:
-          stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
-          break;
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
-        case PAINT_ORDER_MARKERS_STROKE_FILL:
-          fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
-          break;
-        default:
-          g_assert_not_reached ();
+          GskStroke *stroke = shape_create_stroke (shape, context);
+
+          switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+            {
+            case PAINT_ORDER_FILL_STROKE_MARKERS:
+            case PAINT_ORDER_FILL_MARKERS_STROKE:
+            case PAINT_ORDER_MARKERS_FILL_STROKE:
+              fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+              break;
+            case PAINT_ORDER_STROKE_FILL_MARKERS:
+            case PAINT_ORDER_STROKE_MARKERS_FILL:
+            case PAINT_ORDER_MARKERS_STROKE_FILL:
+              stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+
+          switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
+            {
+            case PAINT_ORDER_FILL_STROKE_MARKERS:
+            case PAINT_ORDER_FILL_MARKERS_STROKE:
+            case PAINT_ORDER_MARKERS_FILL_STROKE:
+              stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
+              break;
+            case PAINT_ORDER_STROKE_FILL_MARKERS:
+            case PAINT_ORDER_STROKE_MARKERS_FILL:
+            case PAINT_ORDER_MARKERS_STROKE_FILL:
+              fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+
+          gsk_stroke_free (stroke);
         }
 
       clear_layouts (shape);
-
-      gsk_stroke_free (stroke);
 
       pop_transform (context);
       gtk_snapshot_restore (context->snapshot);
