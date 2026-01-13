@@ -115,6 +115,8 @@ gboolean        gsk_gradient_get_premultiplied          (const GskGradient      
 GskRepeat       gsk_gradient_get_repeat                 (const GskGradient       *gradient);
 gboolean        gsk_gradient_is_opaque                  (const GskGradient       *gradient);
 const GdkColor *gsk_gradient_check_single_color         (const GskGradient       *gradient);
+void            gsk_gradient_get_average_color          (const GskGradient       *self,
+                                                         GdkColor                *out_color);
 const GskColorStop *
                 gsk_gradient_get_color_stops            (GskGradient             *gradient,
                                                          gsize                   *n_stops);
