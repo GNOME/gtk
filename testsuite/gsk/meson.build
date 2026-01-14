@@ -127,6 +127,7 @@ compare_render_tests = [
   'invalid-transform',
   'isolation',
   'issue-3615',
+  'linear-gradient-averages-nocairo',
   'linear-gradient-interpolation-nocairo',
   'linear-gradient-3d-nocairo',
   'linear-gradient-nonorthogonal-scale',
