@@ -9314,7 +9314,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_CONTENT_FIT] = {
     .flags = SHAPE_ATTR_NO_CSS,
-    .applies_to = SHAPE_VIEWPORTS | BIT (SHAPE_PATTERN) | BIT (SHAPE_MARKER),
+    .applies_to = SHAPE_VIEWPORTS | BIT (SHAPE_PATTERN) | BIT (SHAPE_MARKER) | BIT (SHAPE_IMAGE),
     .parse_value = svg_content_fit_parse,
   },
   [SHAPE_ATTR_REF_X] = {
@@ -9754,9 +9754,12 @@ shape_attr_ref_initial_value (ShapeAttr attr,
         return svg_percentage_new (120);
     }
 
-  if ((shape_type == SHAPE_MARKER || shape_type == SHAPE_PATTERN) &&
-      attr == SHAPE_ATTR_OVERFLOW)
-    return svg_overflow_new (OVERFLOW_HIDDEN);
+  if (shape_type == SHAPE_MARKER || shape_type == SHAPE_PATTERN ||
+      shape_type == SHAPE_IMAGE)
+    {
+      if (attr == SHAPE_ATTR_OVERFLOW)
+        return svg_overflow_new (OVERFLOW_HIDDEN);
+    }
 
   if (shape_type == SHAPE_MARKER)
     {
@@ -9880,7 +9883,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "fr", BIT (SHAPE_RADIAL_GRADIENT), 0, SHAPE_ATTR_FR },
   { "mask-type", BIT (SHAPE_MASK), 0, SHAPE_ATTR_MASK_TYPE },
   { "viewBox", SHAPE_VIEWPORTS | BIT (SHAPE_PATTERN) | BIT (SHAPE_MARKER), 0, SHAPE_ATTR_VIEW_BOX },
-  { "preserveAspectRatio", SHAPE_VIEWPORTS | BIT (SHAPE_PATTERN) | BIT (SHAPE_MARKER), 0, SHAPE_ATTR_CONTENT_FIT },
+  { "preserveAspectRatio", SHAPE_VIEWPORTS | BIT (SHAPE_PATTERN) | BIT (SHAPE_MARKER) | BIT (SHAPE_IMAGE), 0, SHAPE_ATTR_CONTENT_FIT },
   { "refX", BIT (SHAPE_MARKER), 0, SHAPE_ATTR_REF_X },
   { "refY", BIT (SHAPE_MARKER), 0, SHAPE_ATTR_REF_Y },
   { "markerUnits", BIT (SHAPE_MARKER), 0, SHAPE_ATTR_MARKER_UNITS },
@@ -21104,6 +21107,7 @@ render_image (Shape        *shape,
 {
   SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
   SvgContentFit *content_fit = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
+  SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
   graphene_rect_t vb;
   double sx, sy, tx, ty;
   double x, y, width, height;
@@ -21133,6 +21137,9 @@ render_image (Shape        *shape,
                               x, y, width, height,
                               &sx, &sy, &tx, &ty);
 
+  if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+    gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (x, y, width, height));
+
   GskTransform *transform = NULL;
   gtk_snapshot_save (context->snapshot);
 
@@ -21147,6 +21154,9 @@ render_image (Shape        *shape,
 
   pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
+
+  if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+    gtk_snapshot_pop (context->snapshot);
 }
 
 /* }}} */
