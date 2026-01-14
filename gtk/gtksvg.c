@@ -5512,83 +5512,87 @@ static SvgValue *
 svg_paint_parse (const char *value)
 {
   GdkRGBA color;
+  GtkCssParser *parser;
+  GBytes *bytes;
+  SvgValue *paint = NULL;
 
-  if (match_str (value, "none"))
+  bytes = g_bytes_new_static (value, strlen (value));
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+
+  if (gtk_css_parser_try_ident (parser, "none"))
     {
-      return svg_paint_new_simple (PAINT_NONE);
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        paint = svg_paint_new_simple (PAINT_NONE);
     }
-  else if (match_str (value, "context-fill"))
+  else if (gtk_css_parser_try_ident (parser, "context-fill"))
     {
-      return svg_paint_new_simple (PAINT_CONTEXT_FILL);
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        paint = svg_paint_new_simple (PAINT_CONTEXT_FILL);
     }
-  else if (match_str (value, "context-stroke"))
+  else if (gtk_css_parser_try_ident (parser, "context-stroke"))
     {
-      return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        paint = svg_paint_new_simple (PAINT_CONTEXT_STROKE);
     }
-  else if (match_str (value, "currentColor"))
+  else if (gtk_css_parser_try_ident (parser, "currentColor"))
     {
-      return svg_paint_new_simple (PAINT_CURRENT_COLOR);
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        paint = svg_paint_new_simple (PAINT_CURRENT_COLOR);
     }
-  else if (match_str (value, "transparent"))
+  else if (gdk_rgba_parser_parse (parser, &color))
     {
-      return svg_paint_new_rgba (&GDK_RGBA_TRANSPARENT);
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        paint = svg_paint_new_rgba (&color);
     }
-  else if (rgba_parse (&color, value))
+  else if (gtk_css_parser_has_url (parser))
     {
-      return svg_paint_new_rgba (&color);
-    }
-  else
-    {
-      GtkCssParser *parser;
-      GBytes *bytes;
+      GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
       char *url;
-      SvgValue *paint = NULL;
-
-      bytes = g_bytes_new_static (value, strlen (value));
-      parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+      const char *ref;
 
       url = gtk_css_parser_consume_url (parser);
-      if (url)
+
+      if (url[0] == '#')
+        ref = url + 1;
+      else
+        ref = url;
+
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
         {
-          GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
-          const char *ref;
-
-          if (url[0] == '#')
-            ref = url + 1;
-          else
-            ref = url;
-
+          paint = svg_paint_new_server (ref);
+        }
+      else if (gtk_css_parser_try_ident (parser, "none") ||
+               gdk_rgba_parser_parse (parser, &fallback))
+        {
           gtk_css_parser_skip_whitespace (parser);
           if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
             {
-              paint = svg_paint_new_server (ref);
+              GdkColor c;
+              gdk_color_init_from_rgba (&c, &fallback);
+              paint = svg_paint_new_server_with_fallback (ref, &c);
+              gdk_color_finish (&c);
             }
-          else if (gtk_css_parser_try_ident (parser, "none") ||
-                   gdk_rgba_parser_parse (parser, &fallback))
-            {
-              gtk_css_parser_skip_whitespace (parser);
-              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-                {
-                  GdkColor c;
-                  gdk_color_init_from_rgba (&c, &fallback);
-                  paint = svg_paint_new_server_with_fallback (ref, &c);
-                  gdk_color_finish (&c);
-                }
-            }
-          else if (gtk_css_parser_try_ident (parser, "currentColor"))
-            {
-              gtk_css_parser_skip_whitespace (parser);
-              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-                paint = svg_paint_new_server_with_current_color (ref);
-            }
+        }
+      else if (gtk_css_parser_try_ident (parser, "currentColor"))
+        {
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+            paint = svg_paint_new_server_with_current_color (ref);
         }
 
       g_free (url);
-      gtk_css_parser_unref (parser);
-      g_bytes_unref (bytes);
-
-      return paint;
     }
+
+  gtk_css_parser_unref (parser);
+  g_bytes_unref (bytes);
+
+  return paint;
 }
 
 static SvgValue *
