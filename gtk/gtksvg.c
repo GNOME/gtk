@@ -5106,35 +5106,36 @@ static SvgValue *
 svg_color_parse (const char *value)
 {
   GdkRGBA rgba;
+  GtkCssParser *parser;
+  GBytes *bytes;
+  SvgValue *result = NULL;
 
-  if (match_str (value, "currentColor"))
+  bytes = g_bytes_new_static (value, strlen (value));
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+
+  if (gtk_css_parser_try_ident (parser, "currentColor"))
     {
-      return svg_color_new_current ();
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        result = svg_color_new_current ();
     }
-  else if (match_str (value, "transparent"))
+  else if (gdk_rgba_parser_parse (parser, &rgba))
     {
-       GdkColor c;
-       SvgValue *res;
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        {
+          GdkColor color;
 
-       gdk_color_init_from_rgba (&c, &GDK_RGBA_TRANSPARENT);
-       res = svg_color_new_color (&c);
-       gdk_color_finish (&c);
-
-       return res;
-    }
-  else if (rgba_parse (&rgba, value))
-    {
-       GdkColor c;
-       SvgValue *res;
-
-       gdk_color_init_from_rgba (&c, &rgba);
-       res = svg_color_new_color (&c);
-       gdk_color_finish (&c);
-
-       return res;
+          gdk_color_init_from_rgba (&color, &rgba);
+          result = svg_color_new_color (&color);
+          gdk_color_finish (&color);
+        }
     }
 
-  return NULL;
+  gtk_css_parser_unref (parser);
+  g_bytes_unref (bytes);
+
+  return result;
 }
 
 static void
@@ -15948,7 +15949,7 @@ start_element_cb (GMarkupParseContext  *context,
 
       data->current_shape = shape;
 
-      if (shape->id)
+      if (shape->id && !g_hash_table_contains (data->shapes, shape->id))
         g_hash_table_insert (data->shapes, shape->id, shape);
 
       return;
