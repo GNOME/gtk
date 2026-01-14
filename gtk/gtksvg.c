@@ -10895,7 +10895,9 @@ shape_get_current_bounds (Shape                 *shape,
               has_any = TRUE;
             }
         }
-      ret = has_any;
+      if (!has_any)
+        graphene_rect_init (&b, 0, 0, 0, 0);
+      ret = TRUE;
       break;
     case SHAPE_TEXT:
     case SHAPE_TSPAN:
