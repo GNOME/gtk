@@ -160,71 +160,6 @@ gsk_gpu_color_state_apply_conversion (GdkColorState    *color_state,
   }
 }
 
-static float
-adjust_hue (GskHueInterpolation  interp,
-            float                h1,
-            float                h2)
-{
-  float d;
-
-  d = h2 - h1;
-
-  while (d > 360)
-    {
-      h2 -= 360;
-      d = h2 - h1;
-    }
-  while (d < -360)
-    {
-      h2 += 360;
-      d = h2 - h1;
-    }
-
-  g_assert (fabsf (d) <= 360);
-
-  switch (interp)
-    {
-    case GSK_HUE_INTERPOLATION_SHORTER:
-      {
-        if (d > 180)
-          h2 -= 360;
-        else if (d < -180)
-          h2 += 360;
-      }
-      g_assert (fabsf (h2 - h1) <= 180);
-      break;
-
-   case GSK_HUE_INTERPOLATION_LONGER:
-      {
-        if (0 < d && d < 180)
-          h2 -= 360;
-        else if (-180 < d && d <= 0)
-          h2 += 360;
-      g_assert (fabsf (h2 - h1) >= 180);
-      }
-      break;
-
-    case GSK_HUE_INTERPOLATION_INCREASING:
-      if (h2 < h1)
-        h2 += 360;
-      d = h2 - h1;
-      g_assert (h1 <= h2);
-      break;
-
-    case GSK_HUE_INTERPOLATION_DECREASING:
-      if (h1 < h2)
-        h2 -= 360;
-      d = h2 - h1;
-      g_assert (h1 >= h2);
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  return h2;
-}
-
 void
 gsk_gpu_color_stops_to_shader (const GskGradientStop *stops,
                                gsize                  n_stops,
@@ -255,9 +190,9 @@ gsk_gpu_color_stops_to_shader (const GskGradientStop *stops,
     {
       for (i = 1; i < n_stops; i++)
         {
-          colors[i].values[channel] = adjust_hue (interp,
-                                                  colors[i-1].values[channel],
-                                                  colors[i].values[channel]);
+          colors[i].values[channel] = gsk_hue_interpolation_fixup (interp,
+                                                                   colors[i-1].values[channel],
+                                                                   colors[i].values[channel]);
         }
       for (; i < 7; i++)
         colors[i].values[channel] = colors[i-1].values[channel];
