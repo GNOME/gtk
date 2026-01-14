@@ -35,6 +35,7 @@
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskpathprivate.h"
+#include "gsk/gskrectprivate.h"
 #include <glib/gstdio.h>
 
 #include <tgmath.h>
@@ -18504,6 +18505,187 @@ get_input_for_ref (SvgValue              *in,
   return NULL;
 }
 
+static void
+determine_filter_subregion_from_refs (SvgFilterPrimitiveRef **refs,
+                                      unsigned int            n_refs,
+                                      gboolean                is_first,
+                                      const graphene_rect_t  *filter_region,
+                                      GHashTable             *results,
+                                      graphene_rect_t        *subregion)
+{
+  for (unsigned int i = 0; i < n_refs; i++)
+    {
+      SvgFilterPrimitiveRef *ref = refs[i];
+
+      if (ref->type == SOURCE_GRAPHIC || ref->type == SOURCE_ALPHA ||
+          ref->type == BACKGROUND_IMAGE || ref->type == BACKGROUND_ALPHA ||
+          ref->type == FILL_PAINT || ref->type == STROKE_PAINT ||
+          (ref->type == DEFAULT_SOURCE && is_first))
+        {
+          if (i == 0)
+            graphene_rect_init_from_rect (subregion, filter_region);
+          else
+            graphene_rect_union (filter_region, subregion, subregion);
+        }
+      else
+        {
+          FilterResult *res;
+
+          if (ref->type == DEFAULT_SOURCE)
+            res = g_hash_table_lookup (results, "");
+          else if (ref->type == PRIMITIVE_REF)
+            res = g_hash_table_lookup (results, ref->ref);
+          else
+            g_assert_not_reached ();
+
+          if (res)
+            {
+              if (i == 0)
+                graphene_rect_init_from_rect (subregion, &res->bounds);
+              else
+                graphene_rect_union (&res->bounds, subregion, subregion);
+            }
+          else
+            {
+              if (i == 0)
+                graphene_rect_init_from_rect (subregion, filter_region);
+              else
+                graphene_rect_union (filter_region, subregion, subregion);
+            }
+        }
+    }
+}
+
+static gboolean
+determine_filter_subregion (FilterPrimitive       *f,
+                            Shape                 *filter,
+                            unsigned int           idx,
+                            const graphene_rect_t *bounds,
+                            const graphene_rect_t *viewport,
+                            const graphene_rect_t *filter_region,
+                            GHashTable            *results,
+                            graphene_rect_t       *subregion)
+{
+  if (f->attrs & (BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)) |
+                  BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)) |
+                  BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)) |
+                  BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_HEIGHT))))
+    {
+      graphene_rect_init_from_rect (subregion, filter_region);
+
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)))
+        {
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_X);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion->origin.x = bounds->origin.x + svg_number_get (n, bounds->size.width);
+          else
+            subregion->origin.x = viewport->origin.x + svg_number_get (n, viewport->size.width);
+        }
+
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)))
+        {
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_Y);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion->origin.y = bounds->origin.y + svg_number_get (n, bounds->size.height);
+          else
+            subregion->origin.y = viewport->origin.y + svg_number_get (n, viewport->size.height);
+        }
+
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)))
+        {
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_WIDTH);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion->size.width = svg_number_get (n, bounds->size.width);
+          else
+            subregion->size.width = svg_number_get (n, viewport->size.width);
+        }
+
+      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_HEIGHT)))
+        {
+          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_HEIGHT);
+          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            subregion->size.height = svg_number_get (n, bounds->size.height);
+          else
+            subregion->size.height = svg_number_get (n, viewport->size.height);
+        }
+    }
+  else
+    {
+      gboolean is_first = idx == 0;
+
+      switch (f->type)
+        {
+        case FE_FLOOD:
+        case FE_IMAGE:
+          /* zero inputs */
+          graphene_rect_init_from_rect (subregion, filter_region);
+          break;
+
+        case FE_TILE:
+        case FE_MERGE_NODE:
+        case FE_FUNC_R:
+        case FE_FUNC_G:
+        case FE_FUNC_B:
+        case FE_FUNC_A:
+          /* special case */
+          graphene_rect_init_from_rect (subregion, filter_region);
+          break;
+
+        case FE_BLUR:
+        case FE_BLEND:
+        case FE_COLOR_MATRIX:
+        case FE_COMPONENT_TRANSFER:
+        case FE_DROPSHADOW:
+        case FE_OFFSET:
+          {
+            SvgFilterPrimitiveRef *ref = (SvgFilterPrimitiveRef *) filter_get_current_value (f, SHAPE_ATTR_FE_IN);
+
+            determine_filter_subregion_from_refs (&ref, 1, is_first, filter_region, results, subregion);
+          }
+          break;
+
+        case FE_COMPOSITE:
+        case FE_DISPLACEMENT:
+          {
+            SvgFilterPrimitiveRef *refs[2];
+
+            refs[0] = (SvgFilterPrimitiveRef *) filter_get_current_value (f, SHAPE_ATTR_FE_IN);
+            refs[1] = (SvgFilterPrimitiveRef *) filter_get_current_value (f, SHAPE_ATTR_FE_IN2);
+
+            determine_filter_subregion_from_refs (refs, 2, is_first, filter_region, results, subregion);
+          }
+          break;
+
+        case FE_MERGE:
+          {
+            SvgFilterPrimitiveRef **refs;
+            unsigned int n_refs;
+
+            refs = g_newa (SvgFilterPrimitiveRef *, filter->filters->len);
+            n_refs = 0;
+            for (idx++; idx < filter->filters->len; idx++)
+              {
+                FilterPrimitive *ff = g_ptr_array_index (filter->filters, idx);
+
+                if (ff->type != FE_MERGE_NODE)
+                  break;
+
+                refs[n_refs] = (SvgFilterPrimitiveRef *) filter_get_current_value (ff, SHAPE_ATTR_FE_IN);
+                n_refs++;
+              }
+
+            determine_filter_subregion_from_refs (refs, n_refs, is_first, filter_region, results, subregion);
+          }
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  return gsk_rect_intersection (filter_region, subregion, subregion);
+}
+
 static void recompute_current_values (Shape        *shape,
                                       Shape        *parent,
                                       PaintContext *context);
@@ -18552,42 +18734,11 @@ apply_filter_tree (Shape         *shape,
       graphene_rect_t subregion;
       GskRenderNode *result = NULL;
 
-      graphene_rect_init_from_rect (&subregion, &filter_region);
-
-      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)))
+      if (!determine_filter_subregion (f, filter, i, &bounds, context->viewport, &filter_region, results, &subregion))
         {
-          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_X);
-          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion.origin.x = bounds.origin.x + svg_number_get (n, bounds.size.width);
-          else
-            subregion.origin.x = context->viewport->origin.x + svg_number_get (n, context->viewport->size.width);
-        }
-
-      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)))
-        {
-          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_Y);
-          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion.origin.y = bounds.origin.y + svg_number_get (n, bounds.size.height);
-          else
-            subregion.origin.y = context->viewport->origin.y + svg_number_get (n, context->viewport->size.height);
-        }
-
-      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)))
-        {
-          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_WIDTH);
-          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion.size.width = svg_number_get (n, bounds.size.width);
-          else
-            subregion.size.width = svg_number_get (n, context->viewport->size.width);
-        }
-
-      if (f->attrs & BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_HEIGHT)))
-        {
-          SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_HEIGHT);
-          if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion.size.height = svg_number_get (n, bounds.size.height);
-          else
-            subregion.size.height = svg_number_get (n, context->viewport->size.height);
+          graphene_rect_init (&subregion, 0, 0, 0, 0);
+          result = gsk_container_node_new (NULL, 0);
+          goto got_result;
         }
 
       switch (f->type)
@@ -19014,6 +19165,7 @@ apply_filter_tree (Shape         *shape,
           g_assert_not_reached ();
         }
 
+got_result:
      if (result)
        {
          GskRenderNode *clipped;
@@ -19046,7 +19198,7 @@ apply_filter_tree (Shape         *shape,
     GskRenderNode *result;
 
     out = g_hash_table_lookup (results, "");
-    result = gsk_clip_node_new (out->node, &filter_region);
+    result = gsk_render_node_ref (out->node);
 
     g_hash_table_unref (results);
 
