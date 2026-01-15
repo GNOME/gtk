@@ -100,15 +100,14 @@
  * supported: feConvolveMatrix, feDiffuseLighting,
  * feMorphology, feSpecularLighting and feTurbulence.
  *
- * The `transform-origin` and `transform-box` attributes are not supported.
- *
  * The support for the `mask` attribute is limited to just a url
  * referring to the `<mask>` element by ID.
  *
  * In animation elements, the parsing of `begin` and `end` attributes
  * is limited, and the `min` and `max` attributes are not supported.
  *
- * Lastly, there is only minimal CSS support, and no interactivity.
+ * Lastly, there is only minimal CSS support (the style attribute,
+ * but not `<style>`), and no interactivity.
  *
  *
  * ## SVG Extensions
@@ -2946,6 +2945,22 @@ svg_numbers_new1 (double value)
 }
 
 static SvgValue *
+svg_numbers_new_00 (void)
+{
+  static SvgNumbers *value = NULL;
+
+  if (value == NULL)
+    {
+      value = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
+      ((SvgValue *) value)->ref_count = 0;
+      value->values[0].value = value->values[1].value = 0;
+      value->values[0].unit = value->values[1].unit = SVG_UNIT_NUMBER;
+    }
+
+  return (SvgValue *) value;
+}
+
+static SvgValue *
 svg_numbers_parse (const char *value)
 {
   GStrv strv;
@@ -3016,10 +3031,59 @@ svg_numbers_resolve (const SvgValue *value,
   SvgNumbers *p;
   double size;
 
-  g_assert (value->class == &SVG_NUMBERS_CLASS);
-
   if (orig->n_values == 0)
     return svg_value_ref ((SvgValue *) orig);
+
+  if (attr == SHAPE_ATTR_TRANSFORM_ORIGIN)
+    {
+      double font_size;
+
+      if (value == svg_numbers_new_00 ())
+        return svg_value_ref ((SvgValue *) value);
+
+      p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
+      memcpy (p->values, orig->values, sizeof (Number) * 2);
+
+      font_size = shape_get_current_font_size (shape, attr, context);
+
+      for (unsigned int i = 0; i < 2; i++)
+        {
+          switch ((unsigned int) p->values[i].unit)
+            {
+            case SVG_UNIT_NUMBER:
+            case SVG_UNIT_PERCENTAGE:
+              break;
+
+            case SVG_UNIT_PX:
+            case SVG_UNIT_PT:
+            case SVG_UNIT_IN:
+            case SVG_UNIT_CM:
+            case SVG_UNIT_MM:
+              p->values[i].value = absolute_length_to_px (p->values[i].value, p->values[i].unit);
+              p->values[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_VW:
+            case SVG_UNIT_VH:
+            case SVG_UNIT_VMIN:
+            case SVG_UNIT_VMAX:
+              p->values[i].value = viewport_relative_to_px (p->values[i].value, p->values[i].unit, context->viewport);
+              p->values[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_EM:
+              p->values[i].value = p->values[i].value * font_size;
+              p->values[i].unit = SVG_UNIT_PX;
+              break;
+            case SVG_UNIT_EX:
+              p->values[i].value = p->values[i].value * 0.5 * font_size;
+              p->values[i].unit = SVG_UNIT_PX;
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+
+      return (SvgValue *) p;
+    }
 
   p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (orig->n_values));
   p->n_values = orig->n_values;
@@ -3851,6 +3915,23 @@ svg_color_interpolation_resolve (const SvgValue *value,
   else
     return svg_value_ref ((SvgValue *) value);
 }
+
+typedef enum
+{
+  TRANSFORM_BOX_CONTENT_BOX,
+  TRANSFORM_BOX_BORDER_BOX,
+  TRANSFORM_BOX_FILL_BOX,
+  TRANSFORM_BOX_STROKE_BOX,
+  TRANSFORM_BOX_VIEW_BOX,
+} TransformBox;
+
+DEFINE_ENUM (TRANSFORM_BOX, transform_box, TransformBox,
+  DEFINE_ENUM_VALUE (TRANSFORM_BOX, TRANSFORM_BOX_CONTENT_BOX, "content-box"),
+  DEFINE_ENUM_VALUE (TRANSFORM_BOX, TRANSFORM_BOX_BORDER_BOX, "border-box"),
+  DEFINE_ENUM_VALUE (TRANSFORM_BOX, TRANSFORM_BOX_FILL_BOX, "fill-box"),
+  DEFINE_ENUM_VALUE (TRANSFORM_BOX, TRANSFORM_BOX_STROKE_BOX, "stroke-box"),
+  DEFINE_ENUM_VALUE (TRANSFORM_BOX, TRANSFORM_BOX_VIEW_BOX, "view-box")
+)
 
 /* }}} */
 /* {{{ Filter primitive references */
@@ -8967,6 +9048,74 @@ parse_number_optional_number (const char *value)
     }
 }
 
+static SvgValue *
+parse_transform_origin (const char *value)
+{
+  GStrv strv;
+  unsigned int n;
+  SvgNumbers *p;
+  const char *h_values[] = { "left", "center", "right" };
+  const char *v_values[] = { "top", "center", "bottom" };
+
+  strv = strsplit_set (value, " ");
+  n = g_strv_length (strv);
+
+  if (n > 2)
+    {
+      g_strfreev (strv);
+      return NULL;
+    }
+
+  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
+  p->n_values = 2;
+
+  if (n == 1)
+    {
+      unsigned int j;
+
+      p->values[0].value = 50;
+      p->values[0].unit = SVG_UNIT_PERCENTAGE;
+      p->values[1].value = 50;
+      p->values[1].unit = SVG_UNIT_PERCENTAGE;
+
+      if (parse_enum (strv[0], h_values, G_N_ELEMENTS (h_values), &j))
+        p->values[0].value = j * 50;
+      else if (parse_enum (strv[0], v_values, G_N_ELEMENTS (v_values), &j))
+        p->values[1].value = j * 50;
+      else if (!parse_numeric (strv[0], -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE,
+                               &p->values[0].value, &p->values[0].unit))
+        g_clear_pointer ((gpointer *)&p, svg_value_unref);
+    }
+  else
+    {
+      unsigned int j;
+
+      if (parse_enum (strv[0], h_values, G_N_ELEMENTS (h_values), &j))
+        {
+          p->values[0].value = j * 50;
+          p->values[0].unit = SVG_UNIT_PERCENTAGE;
+        }
+      else if (!parse_numeric (strv[0], -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE,
+                               &p->values[0].value, &p->values[0].unit))
+        g_clear_pointer ((gpointer *)&p, svg_value_unref);
+
+      if (p)
+        {
+          if (parse_enum (strv[1], v_values, G_N_ELEMENTS (v_values), &j))
+            {
+              p->values[1].value = j * 50;
+              p->values[1].unit = SVG_UNIT_PERCENTAGE;
+            }
+          else if (!parse_numeric (strv[1], -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE,
+                                   &p->values[1].value, &p->values[1].unit))
+            g_clear_pointer ((gpointer *)&p, svg_value_unref);
+        }
+    }
+  g_strfreev (strv);
+
+  return (SvgValue *) p;
+}
+
 typedef enum
 {
   SHAPE_ATTR_NONE      = 0,
@@ -9042,6 +9191,14 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_TRANSFORM] = {
     .applies_to = (SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN),
     .parse_value = svg_transform_parse,
+  },
+  [SHAPE_ATTR_TRANSFORM_ORIGIN] = {
+    .applies_to = (SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN),
+    .parse_value = parse_transform_origin,
+  },
+  [SHAPE_ATTR_TRANSFORM_BOX] = {
+    .applies_to = (SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN),
+    .parse_value = svg_transform_box_parse,
   },
   [SHAPE_ATTR_OPACITY] = {
     .applies_to = SHAPE_ANY,
@@ -9637,6 +9794,8 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
+  shape_attrs[SHAPE_ATTR_TRANSFORM_ORIGIN].initial_value = svg_numbers_new_00 ();
+ shape_attrs[SHAPE_ATTR_TRANSFORM_BOX].initial_value = svg_transform_box_new (TRANSFORM_BOX_VIEW_BOX);
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_COLOR].initial_value = svg_color_new_black ();
   shape_attrs[SHAPE_ATTR_COLOR_INTERPOLATION].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
@@ -9828,6 +9987,8 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "display", SHAPE_ANY, 0, SHAPE_ATTR_DISPLAY },
   { "visibility", SHAPE_ANY, 0, SHAPE_ATTR_VISIBILITY },
   { "transform", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)) & ~SHAPE_PAINT_SERVERS, 0, SHAPE_ATTR_TRANSFORM },
+  { "transform-origin", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)), 0, SHAPE_ATTR_TRANSFORM_ORIGIN },
+  { "transform-box", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)), 0, SHAPE_ATTR_TRANSFORM_BOX },
   { "gradientTransform", SHAPE_GRADIENTS, 0, SHAPE_ATTR_TRANSFORM },
   { "patternTransform", BIT (SHAPE_PATTERN), 0, SHAPE_ATTR_TRANSFORM },
   { "color", SHAPE_ANY, 0, SHAPE_ATTR_COLOR },
@@ -10908,6 +11069,111 @@ shape_get_current_bounds (Shape                 *shape,
             continue;
 
           if (shape_get_current_bounds (sh, viewport, &b2))
+            {
+              if (!has_any)
+                graphene_rect_init_from_rect (&b, &b2);
+              else
+                graphene_rect_union (&b, &b2, &b);
+              has_any = TRUE;
+            }
+        }
+      if (!has_any)
+        graphene_rect_init (&b, 0, 0, 0, 0);
+      ret = TRUE;
+      break;
+    case SHAPE_TEXT:
+    case SHAPE_TSPAN:
+      if (!shape->valid_bounds)
+        g_critical ("No valid bounds for text");
+      graphene_rect_init_from_rect (&b, &shape->bounds);
+      break;
+    case SHAPE_IMAGE:
+      {
+        double x, y, width, height;
+
+        x = viewport->origin.x + svg_number_get (shape->current[SHAPE_ATTR_X], viewport->size.width);
+        y = viewport->origin.y + svg_number_get (shape->current[SHAPE_ATTR_Y], viewport->size.height);
+        width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], viewport->size.width);
+        height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], viewport->size.height);
+
+        graphene_rect_init (&b, x, y, width, height);
+        ret = TRUE;
+      }
+      break;
+    case SHAPE_DEFS:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+    case SHAPE_FILTER:
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  graphene_rect_init_from_rect (bounds, &b);
+
+  return ret;
+}
+
+static GskStroke * shape_create_basic_stroke (Shape                 *shape,
+                                              const graphene_rect_t *viewport,
+                                              gboolean               allow_gpa,
+                                              double                 weight);
+
+static gboolean
+shape_get_current_stroke_bounds (Shape                 *shape,
+                                 const graphene_rect_t *viewport,
+                                 graphene_rect_t       *bounds)
+{
+  graphene_rect_t b;
+  gboolean has_any;
+  gboolean ret = FALSE;
+
+  graphene_rect_init_from_rect (&b, graphene_rect_zero ());
+
+  switch (shape->type)
+    {
+    case SHAPE_LINE:
+    case SHAPE_POLYLINE:
+    case SHAPE_POLYGON:
+    case SHAPE_RECT:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+      {
+        GskPath *path = shape_get_current_path (shape, viewport);
+        GskStroke *stroke = shape_create_basic_stroke (shape, viewport, TRUE, 400);
+        if (!gsk_path_get_stroke_bounds (shape->path, stroke, &b))
+          graphene_rect_init (&b, 0, 0, 0, 0);
+        gsk_path_unref (path);
+        gsk_stroke_free (stroke);
+        ret = TRUE;
+      }
+      break;
+    case SHAPE_USE:
+      {
+        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        if (use_shape)
+          ret = shape_get_current_stroke_bounds (use_shape, viewport, &b);
+        ret = TRUE;
+      }
+      break;
+    case SHAPE_GROUP:
+    case SHAPE_CLIP_PATH:
+    case SHAPE_MASK:
+    case SHAPE_PATTERN:
+    case SHAPE_MARKER:
+    case SHAPE_SVG:
+    case SHAPE_SYMBOL:
+      has_any = FALSE;
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          graphene_rect_t b2;
+
+          if (svg_enum_get (sh->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
+            continue;
+
+          if (shape_get_current_stroke_bounds (sh, viewport, &b2))
             {
               if (!has_any)
                 graphene_rect_init_from_rect (&b, &b2);
@@ -19515,6 +19781,47 @@ push_group (Shape        *shape,
     {
       GskTransform *transform = svg_transform_get_gsk (tf);
 
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
+        {
+          SvgNumbers *tfo = (SvgNumbers *) shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+          SvgValue *tfb = shape->current[SHAPE_ATTR_TRANSFORM_BOX];
+          graphene_rect_t bounds;
+          double x, y;
+
+          switch (svg_enum_get (tfb))
+            {
+            case TRANSFORM_BOX_CONTENT_BOX:
+            case TRANSFORM_BOX_FILL_BOX:
+              shape_get_current_bounds (shape, context->viewport, &bounds);
+              break;
+            case TRANSFORM_BOX_BORDER_BOX:
+            case TRANSFORM_BOX_STROKE_BOX:
+              shape_get_current_stroke_bounds (shape, context->viewport, &bounds);
+              break;
+            case TRANSFORM_BOX_VIEW_BOX:
+              graphene_rect_init_from_rect (&bounds, context->viewport);
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+
+          if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
+            x = bounds.size.width * tfo->values[0].value / 100;
+          else
+            x = tfo->values[0].value;
+
+          if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
+            y = bounds.size.height * tfo->values[1].value / 100;
+          else
+            y = tfo->values[1].value;
+
+          transform = gsk_transform_translate (
+                          gsk_transform_transform (
+                              gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                              transform),
+                          &GRAPHENE_POINT_INIT (-x, -y));
+        }
+
       push_transform (context, transform);
       gtk_snapshot_save (context->snapshot);
       gtk_snapshot_transform (context->snapshot, transform);
@@ -20246,6 +20553,29 @@ paint_pattern (Shape                 *pattern,
   gtk_snapshot_save (context->snapshot);
 
   transform = svg_transform_get_gsk ((SvgTransform *) tf);
+
+  if (_gtk_bitmask_get (pattern->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
+    {
+      SvgNumbers *tfo = (SvgNumbers *) pattern->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+      double xx, yy;
+
+      if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
+        xx = child_bounds.size.width * tfo->values[0].value / 100;
+      else
+        xx = tfo->values[0].value;
+
+      if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
+        yy = child_bounds.size.height * tfo->values[1].value / 100;
+      else
+        yy = tfo->values[1].value;
+
+      transform = gsk_transform_translate (
+                      gsk_transform_transform (
+                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (xx, yy)),
+                          transform),
+                      &GRAPHENE_POINT_INIT (-xx, -yy));
+     }
+
   gtk_snapshot_transform (context->snapshot, transform);
   push_transform (context, transform);
 
@@ -20344,25 +20674,38 @@ paint_server (SvgPaint              *paint,
 /* {{{ Shapes */
 
 static GskStroke *
-shape_create_stroke (Shape        *shape,
-                     PaintContext *context)
+shape_create_basic_stroke (Shape                 *shape,
+                           const graphene_rect_t *viewport,
+                           gboolean               allow_gpa,
+                           double                 weight)
 {
   GskStroke *stroke;
   double width, min, max;
-  SvgDashArray *dasharray;
 
-  width = svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], normalized_diagonal (context->viewport));
+  width = svg_number_get (shape->current[SHAPE_ATTR_STROKE_WIDTH], normalized_diagonal (viewport));
   min = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MINWIDTH], width);
   max = svg_number_get (shape->current[SHAPE_ATTR_STROKE_MAXWIDTH], width);
 
-  if (context->svg->features & GTK_SVG_EXTENSIONS)
-    width = width_apply_weight (width, min, max, context->weight);
+  if (allow_gpa)
+    width = width_apply_weight (width, min, max, weight);
 
   stroke = gsk_stroke_new (width);
 
   gsk_stroke_set_line_cap (stroke, svg_enum_get (shape->current[SHAPE_ATTR_STROKE_LINECAP]));
   gsk_stroke_set_line_join (stroke, svg_enum_get (shape->current[SHAPE_ATTR_STROKE_LINEJOIN]));
   gsk_stroke_set_miter_limit (stroke, svg_number_get (shape->current[SHAPE_ATTR_STROKE_MITERLIMIT], 1));
+
+  return stroke;
+}
+
+static GskStroke *
+shape_create_stroke (Shape        *shape,
+                     PaintContext *context)
+{
+  GskStroke *stroke;
+  SvgDashArray *dasharray;
+
+  stroke = shape_create_basic_stroke (shape, context->viewport, context->svg->features & GTK_SVG_EXTENSIONS, context->weight);
 
   dasharray = (SvgDashArray *) shape->current[SHAPE_ATTR_STROKE_DASHARRAY];
   if (dasharray->kind != DASH_ARRAY_NONE)
