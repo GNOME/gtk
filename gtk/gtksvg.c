@@ -6057,8 +6057,10 @@ typedef struct
 {
   FilterKind kind;
   union {
-    double value;
-    SvgUnit unit;
+    struct {
+      double value;
+      SvgUnit unit;
+    } simple;
     struct {
       char *ref;
       Shape *shape;
@@ -6112,8 +6114,8 @@ svg_filter_equal (const SvgValue *value0,
         return f0->functions[i].ref.shape == f1->functions[i].ref.shape &&
                strcmp (f0->functions[i].ref.ref, f1->functions[i].ref.ref) == 0;
       else
-        return f0->functions[i].unit == f1->functions[i].unit &&
-               f0->functions[i].value == f1->functions[i].value;
+        return f0->functions[i].simple.unit == f1->functions[i].simple.unit &&
+               f0->functions[i].simple.value == f1->functions[i].simple.value;
     }
 
   return TRUE;
@@ -6191,81 +6193,53 @@ svg_filter_resolve (const SvgValue *value,
         }
       else
         {
-          switch (filter->functions[i].unit)
+          double font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
+          switch (filter->functions[i].simple.unit)
             {
+            case SVG_UNIT_NUMBER:
             case SVG_UNIT_DEG:
             case SVG_UNIT_PX:
-            case SVG_UNIT_NUMBER:
-              result->functions[i].value = filter->functions[i].value;
-              result->functions[i].unit = filter->functions[i].unit;
+              result->functions[i].simple.value = filter->functions[i].simple.value;
+              result->functions[i].simple.unit = filter->functions[i].simple.unit;
               break;
             case SVG_UNIT_PERCENTAGE:
-              result->functions[i].value = filter->functions[i].value / 100.0;
-              result->functions[i].unit = SVG_UNIT_NUMBER;
+              result->functions[i].simple.value = filter->functions[i].simple.value / 100.0;
+              result->functions[i].simple.unit = SVG_UNIT_NUMBER;
               break;
             case SVG_UNIT_PT:
-              result->functions[i].value = filter->functions[i].value * 96 / 72;
-              result->functions[i].unit = SVG_UNIT_PX;
-              break;
             case SVG_UNIT_IN:
-              result->functions[i].value = filter->functions[i].value * 96;
-              result->functions[i].unit = SVG_UNIT_PX;
-              break;
             case SVG_UNIT_CM:
-              result->functions[i].value = filter->functions[i].value * 96 / 2.54;
-              result->functions[i].unit = SVG_UNIT_PX;
-              break;
             case SVG_UNIT_MM:
-              result->functions[i].value = filter->functions[i].value * 96 / 25.4;
-              result->functions[i].unit = SVG_UNIT_PX;
+              result->functions[i].simple.value = absolute_length_to_px (filter->functions[i].simple.value, filter->functions[i].simple.unit);
+              result->functions[i].simple.unit = SVG_UNIT_PX;
               break;
             case SVG_UNIT_VW:
-              result->functions[i].value = filter->functions[i].value * context->viewport->size.width / 100;
-              result->functions[i].unit = SVG_UNIT_PX;
-              break;
             case SVG_UNIT_VH:
-              result->functions[i].value = filter->functions[i].value * context->viewport->size.height / 100;
-              result->functions[i].unit = SVG_UNIT_PX;
-              break;
             case SVG_UNIT_VMIN:
-              result->functions[i].value = filter->functions[i].value * MIN (context->viewport->size.width,
-                                                                             context->viewport->size.height) / 100;
-              result->functions[i].unit = SVG_UNIT_PX;
-              break;
             case SVG_UNIT_VMAX:
-              result->functions[i].value = filter->functions[i].value * MAX (context->viewport->size.width,
-                                                                             context->viewport->size.height) / 100;
-              result->functions[i].unit = SVG_UNIT_PX;
+              result->functions[i].simple.value = viewport_relative_to_px (filter->functions[i].simple.value, filter->functions[i].simple.unit, context->viewport);
+              result->functions[i].simple.unit = SVG_UNIT_PX;
               break;
             case SVG_UNIT_EM:
+              result->functions[i].simple.value = filter->functions[i].simple.value * font_size;
+              result->functions[i].simple.unit = SVG_UNIT_PX;
+              break;
             case SVG_UNIT_EX:
-              {
-                double font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
-                if (filter->functions[i].unit == SVG_UNIT_EM)
-                  result->functions[i].value = filter->functions[i].value * font_size;
-                else
-                  result->functions[i].value = filter->functions[i].value * 0.5 * font_size;
-                result->functions[i].unit = SVG_UNIT_PX;
-              }
+              result->functions[i].simple.value = filter->functions[i].simple.value * 0.5 * font_size;
+              result->functions[i].simple.unit = SVG_UNIT_PX;
               break;
             case SVG_UNIT_RAD:
-              result->functions[i].value = filter->functions[i].value * 180 / M_PI;
-              result->functions[i].unit = SVG_UNIT_DEG;
-              break;
             case SVG_UNIT_GRAD:
-              result->functions[i].value = filter->functions[i].value * 360 / 400;
-              result->functions[i].unit = SVG_UNIT_DEG;
-              break;
             case SVG_UNIT_TURN:
-              result->functions[i].value = filter->functions[i].value * 360;
-              result->functions[i].unit = SVG_UNIT_DEG;
+              result->functions[i].simple.value = angle_to_deg (filter->functions[i].simple.value, filter->functions[i].simple.unit);
+              result->functions[i].simple.unit = SVG_UNIT_DEG;
               break;
             default:
               g_assert_not_reached ();
             }
 
           if (filter_desc[filter->functions[i].kind].flags & CLAMPED)
-            result->functions[i].value = CLAMP (result->functions[i].value, 0, 1);
+            result->functions[i].simple.value = CLAMP (result->functions[i].simple.value, 0, 1);
         }
     }
 
@@ -6317,8 +6291,8 @@ filter_parser_parse (GtkCssParser *parser)
                   if ((filter_desc[i].flags & POSITIVE) && n.value < 0)
                     goto fail;
 
-                  function.value = n.value;
-                  function.unit = n.unit;
+                  function.simple.value = n.value;
+                  function.simple.unit = n.unit;
                   function.kind = filter_desc[i].kind;
                   break;
                 }
@@ -6389,7 +6363,8 @@ svg_filter_print (const SvgValue *value,
       else
         {
           g_string_append (s, filter_desc[function->kind].name);
-          string_append_double (s, "(", function->value);
+          string_append_double (s, "(", function->simple.value);
+          g_string_append (s, unit_names[function->simple.unit]);
           g_string_append (s, ")");
         }
     }
@@ -6413,6 +6388,9 @@ svg_filter_interpolate (const SvgValue *value0,
     {
       if (f0->functions[i].kind != f1->functions[i].kind)
         return NULL;
+      if (f0->functions[i].kind != FILTER_REF &&
+          f0->functions[i].simple.unit != f1->functions[i].simple.unit)
+        return NULL;
     }
 
   f = svg_filter_alloc (f0->n_functions);
@@ -6421,7 +6399,10 @@ svg_filter_interpolate (const SvgValue *value0,
     {
       f->functions[i].kind = f0->functions[i].kind;
       if (f->functions[i].kind != FILTER_NONE && f->functions[i].kind != FILTER_REF)
-        f->functions[i].value = lerp (t, f0->functions[i].value, f1->functions[i].value);
+        {
+          f->functions[i].simple.value = lerp (t, f0->functions[i].simple.value, f1->functions[i].simple.value);
+          f->functions[i].simple.unit = f0->functions[i].simple.unit;
+        }
     }
 
   return (SvgValue *) f;
@@ -19543,18 +19524,18 @@ apply_filter_functions (SvgValue      *filter,
           result = gsk_render_node_ref (child);
           break;
         case FILTER_BLUR:
-          if (ff->value < 0)
+          if (ff->simple.value < 0)
             {
               gtk_svg_rendering_error (context->svg, "blur radius < 0");
               result = gsk_render_node_ref (child);
             }
           else
             {
-              result = gsk_blur_node_new (child, 2 * ff->value);
+              result = gsk_blur_node_new (child, 2 * ff->simple.value);
             }
           break;
         case FILTER_OPACITY:
-          result = gsk_opacity_node_new (child, ff->value);
+          result = gsk_opacity_node_new (child, ff->simple.value);
           break;
         case FILTER_BRIGHTNESS:
         case FILTER_CONTRAST:
@@ -19567,7 +19548,7 @@ apply_filter_functions (SvgValue      *filter,
             graphene_matrix_t matrix;
             graphene_vec4_t offset;
 
-            filter_function_get_color_matrix (ff->kind, ff->value, &matrix, &offset);
+            filter_function_get_color_matrix (ff->kind, ff->simple.value, &matrix, &offset);
             result = gsk_color_matrix_node_new (child, &matrix, &offset);
           }
           break;
@@ -19579,7 +19560,7 @@ apply_filter_functions (SvgValue      *filter,
             identity = gsk_component_transfer_new_identity ();
             for (unsigned int j = 0; j < 10; j++)
               {
-                if ((j + 1) / 10.0 <= ff->value)
+                if ((j + 1) / 10.0 <= ff->simple.value)
                   values[j] = 0;
                 else
                   values[j] = 1;
