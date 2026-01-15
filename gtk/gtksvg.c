@@ -19777,7 +19777,8 @@ push_group (Shape        *shape,
         gtk_snapshot_push_clip (context->snapshot, viewport);
     }
 
-  if (tf->transforms[0].type != TRANSFORM_NONE)
+  if (shape->type != SHAPE_CLIP_PATH &&
+      tf->transforms[0].type != TRANSFORM_NONE)
     {
       GskTransform *transform = svg_transform_get_gsk (tf);
 
@@ -19885,6 +19886,59 @@ push_group (Shape        *shape,
         }
       else
         {
+          SvgTransform *ctf = (SvgTransform *) clip->ref.shape->current[SHAPE_ATTR_TRANSFORM];
+
+          if (ctf->transforms[0].type != TRANSFORM_NONE)
+            {
+              GskTransform *transform = svg_transform_get_gsk (ctf);
+
+              if (_gtk_bitmask_get (clip->ref.shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
+                {
+                  SvgNumbers *tfo = (SvgNumbers *) clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+                  SvgValue *tfb = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_BOX];
+                  graphene_rect_t bounds;
+                  double x, y;
+
+                  switch (svg_enum_get (tfb))
+                    {
+                    case TRANSFORM_BOX_CONTENT_BOX:
+                    case TRANSFORM_BOX_FILL_BOX:
+                      shape_get_current_bounds (shape, context->viewport, &bounds);
+                      break;
+                    case TRANSFORM_BOX_BORDER_BOX:
+                    case TRANSFORM_BOX_STROKE_BOX:
+                      shape_get_current_stroke_bounds (shape, context->viewport, &bounds);
+                      break;
+                    case TRANSFORM_BOX_VIEW_BOX:
+                      graphene_rect_init_from_rect (&bounds, context->viewport);
+                      break;
+                    default:
+                      g_assert_not_reached ();
+                    }
+
+                  if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
+                    x = bounds.size.width * tfo->values[0].value / 100;
+                  else
+                    x = tfo->values[0].value;
+
+                  if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
+                    y = bounds.size.height * tfo->values[1].value / 100;
+                  else
+                    y = tfo->values[1].value;
+
+                  transform = gsk_transform_translate (
+                                  gsk_transform_transform (
+                                      gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                                      transform),
+                                  &GRAPHENE_POINT_INIT (-x, -y));
+                }
+
+              push_transform (context, transform);
+              gtk_snapshot_save (context->snapshot);
+              gtk_snapshot_transform (context->snapshot, transform);
+              gsk_transform_unref (transform);
+            }
+
           if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
             {
               graphene_rect_t bounds;
@@ -19906,6 +19960,12 @@ push_group (Shape        *shape,
           render_shape (clip->ref.shape, context);
 
           if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+            {
+              pop_transform (context);
+              gtk_snapshot_restore (context->snapshot);
+            }
+
+          if (ctf->transforms[0].type != TRANSFORM_NONE)
             {
               pop_transform (context);
               gtk_snapshot_restore (context->snapshot);
@@ -20071,7 +20131,8 @@ pop_group (Shape        *shape,
       gtk_snapshot_restore (context->snapshot);
     }
 
-  if (tf->transforms[0].type != TRANSFORM_NONE)
+  if (shape->type != SHAPE_CLIP_PATH &&
+      tf->transforms[0].type != TRANSFORM_NONE)
     {
       pop_transform (context);
       gtk_snapshot_restore (context->snapshot);
