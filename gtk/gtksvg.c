@@ -20495,6 +20495,29 @@ paint_radial_gradient (Shape                 *gradient,
     }
 
   gradient_transform = svg_transform_get_gsk ((SvgTransform *) tf);
+
+  if (_gtk_bitmask_get (gradient->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
+    {
+      SvgNumbers *tfo = (SvgNumbers *) gradient->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+      double x, y;
+
+      if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
+        x = bounds->origin.x + bounds->size.width * tfo->values[0].value / 100;
+      else
+        x = tfo->values[0].value;
+
+      if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
+        y = bounds->origin.y + bounds->size.height * tfo->values[1].value / 100;
+      else
+        y = tfo->values[1].value;
+
+      gradient_transform = gsk_transform_translate (
+                      gsk_transform_transform (
+                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                          gradient_transform),
+                      &GRAPHENE_POINT_INIT (-x, -y));
+    }
+
   gtk_snapshot_transform (context->snapshot, gradient_transform);
   push_transform (context, gradient_transform);
 
