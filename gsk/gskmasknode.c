@@ -43,8 +43,8 @@ struct _GskMaskNode
   union {
     GskRenderNode *children[2];
     struct {
-      GskRenderNode *mask;
       GskRenderNode *source;
+      GskRenderNode *mask;
     };
   };
   GskMaskMode mask_mode;
