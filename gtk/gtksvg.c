@@ -92,9 +92,8 @@
  *
  * Among the graphical elements, `<textPath>` is not supported.
  *
- * All filter functions except `drop-shadow()` are supported, plus a
- * custom `alpha-level()` function, which implements one particular
- * case of feComponentTransfer.
+ * All filter functions are supported, plus a custom `alpha-level()`
+ * function, which implements one particular case of feComponentTransfer.
  *
  * In the `<filter>` element, the following primitives are not
  * supported: feConvolveMatrix, feDiffuseLighting,
@@ -2592,6 +2591,8 @@ svg_number_resolve (const SvgValue *value,
         case SHAPE_ATTR_STROKE_OPACITY:
         case SHAPE_ATTR_STOP_OFFSET:
           return svg_number_new (CLAMP (n->value / 100, 0, 1));
+        case SHAPE_ATTR_FILTER:
+          return svg_number_new (n->value / 100);
         case SHAPE_ATTR_STROKE_WIDTH:
         case SHAPE_ATTR_R:
           if (shape->type != SHAPE_RADIAL_GRADIENT)
@@ -2796,6 +2797,13 @@ typedef struct
   double value;
 } Number;
 
+static inline gboolean
+number_equal (const Number *n0,
+              const Number *n1)
+{
+  return n0->unit == n1->unit && n0->value == n1->value;
+}
+
 typedef struct
 {
   SvgValue base;
@@ -2821,9 +2829,7 @@ svg_numbers_equal (const SvgValue *value0,
 
   for (unsigned int i = 0; i < p0->n_values; i++)
     {
-      if (p0->values[i].unit != p1->values[i].unit)
-        return FALSE;
-      if (p0->values[i].value != p1->values[i].value)
+      if (!number_equal (&p0->values[i], &p1->values[i]))
         return FALSE;
     }
 
@@ -5208,6 +5214,19 @@ svg_color_new_color (const GdkColor *color)
 }
 
 static SvgValue *
+svg_color_new_rgba (const GdkRGBA *rgba)
+{
+  GdkColor color;
+  SvgValue *result;
+
+  gdk_color_init_from_rgba (&color, rgba);
+  result = svg_color_new_color (&color);
+  gdk_color_finish (&color);
+
+  return result;
+}
+
+static SvgValue *
 svg_color_new_current (void)
 {
   SvgColor *res;
@@ -5218,6 +5237,12 @@ svg_color_new_current (void)
   res->color = GDK_COLOR_SRGB (0, 0, 0, 1);
 
   return (SvgValue *) res;
+}
+
+static gboolean
+svg_color_is_current (SvgValue *value)
+{
+   return ((SvgColor *) value)->current;
 }
 
 static SvgValue *
@@ -5241,13 +5266,7 @@ svg_color_parse (const char *value)
     {
       gtk_css_parser_skip_whitespace (parser);
       if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        {
-          GdkColor color;
-
-          gdk_color_init_from_rgba (&color, &rgba);
-          result = svg_color_new_color (&color);
-          gdk_color_finish (&color);
-        }
+        result = svg_color_new_rgba (&rgba);
     }
 
   gtk_css_parser_unref (parser);
@@ -5285,14 +5304,7 @@ svg_color_resolve (const SvgValue *value,
                    ComputeContext *context)
 {
   if (((SvgColor *) value)->current)
-    {
-      if (idx > 0)
-        return svg_value_ref (shape->current[SHAPE_ATTR_COLOR]);
-      else if (context->parent)
-        return svg_value_ref (context->parent->current[SHAPE_ATTR_COLOR]);
-      else
-        return svg_color_new_black ();
-    }
+    return svg_value_ref (shape->current[SHAPE_ATTR_COLOR]);
   else
     return svg_value_ref ((SvgValue *) value);
 }
@@ -6023,6 +6035,7 @@ typedef enum
   FILTER_SEPIA,
   FILTER_ALPHA_LEVEL,
   FILTER_REF,
+  FILTER_DROPSHADOW,
 } FilterKind;
 
 typedef guint (* ArgParseFunc) (GtkCssParser *, guint, gpointer);
@@ -6051,20 +6064,24 @@ static struct {
   { FILTER_SATURATE,    "saturate", 1, POSITIVE,          css_parser_parse_number_percentage, },
   { FILTER_SEPIA,       "sepia", 1, CLAMPED|POSITIVE,     css_parser_parse_number_percentage, },
   { FILTER_ALPHA_LEVEL, "alpha-level", 0.5, POSITIVE,     css_parser_parse_number, },
+  /* FILTER_REF and FILTER_DROPSHADOW are handled separately */
 };
 
 typedef struct
 {
   FilterKind kind;
   union {
-    struct {
-      double value;
-      SvgUnit unit;
-    } simple;
+    SvgValue *simple;
     struct {
       char *ref;
       Shape *shape;
     } ref;
+    struct {
+      SvgValue *color;
+      SvgValue *dx;
+      SvgValue *dy;
+      SvgValue *std_dev;
+    } dropshadow;
   };
 } FilterFunction;
 
@@ -6084,11 +6101,19 @@ static void
 svg_filter_free (SvgValue *value)
 {
   SvgFilter *f = (SvgFilter *) value;
-
   for (unsigned int i = 0; i < f->n_functions; i++)
     {
       if (f->functions[i].kind == FILTER_REF)
         g_free (f->functions[i].ref.ref);
+      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+        {
+          svg_value_unref (f->functions[i].dropshadow.color);
+          svg_value_unref (f->functions[i].dropshadow.dx);
+          svg_value_unref (f->functions[i].dropshadow.dy);
+          svg_value_unref (f->functions[i].dropshadow.std_dev);
+        }
+      else
+        svg_value_unref (f->functions[i].simple);
     }
 
   g_free (value);
@@ -6108,14 +6133,18 @@ svg_filter_equal (const SvgValue *value0,
     {
       if (f0->functions[i].kind != f1->functions[i].kind)
         return FALSE;
-      else if (f0->functions[i].kind == FILTER_NONE)
+      if (f0->functions[i].kind == FILTER_NONE)
         return TRUE;
       else if (f0->functions[i].kind == FILTER_REF)
         return f0->functions[i].ref.shape == f1->functions[i].ref.shape &&
                strcmp (f0->functions[i].ref.ref, f1->functions[i].ref.ref) == 0;
+      else if (f0->functions[i].kind == FILTER_DROPSHADOW)
+        return svg_value_equal (f0->functions[i].dropshadow.color, f1->functions[i].dropshadow.color) &&
+               svg_value_equal (f0->functions[i].dropshadow.dx, f1->functions[i].dropshadow.dx) &&
+               svg_value_equal (f0->functions[i].dropshadow.dy, f1->functions[i].dropshadow.dy) &&
+               svg_value_equal (f0->functions[i].dropshadow.std_dev, f1->functions[i].dropshadow.std_dev);
       else
-        return f0->functions[i].simple.unit == f1->functions[i].simple.unit &&
-               f0->functions[i].simple.value == f1->functions[i].simple.value;
+        return svg_value_equal (f0->functions[i].simple, f1->functions[i].simple);
     }
 
   return TRUE;
@@ -6191,59 +6220,63 @@ svg_filter_resolve (const SvgValue *value,
           result->functions[i].ref.ref = g_strdup (filter->functions[i].ref.ref);
           result->functions[i].ref.shape = filter->functions[i].ref.shape;
         }
+      else if (filter->functions[i].kind == FILTER_DROPSHADOW)
+        {
+          result->functions[i].dropshadow.color = svg_value_resolve (filter->functions[i].dropshadow.color, attr, idx, shape, context);
+          result->functions[i].dropshadow.dx = svg_value_resolve (filter->functions[i].dropshadow.dx, attr, idx, shape, context);
+          result->functions[i].dropshadow.dy = svg_value_resolve (filter->functions[i].dropshadow.dy, attr, idx, shape, context);
+          result->functions[i].dropshadow.std_dev = svg_value_resolve (filter->functions[i].dropshadow.std_dev, attr, idx, shape, context);
+        }
       else
         {
-          double font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
-          switch (filter->functions[i].simple.unit)
-            {
-            case SVG_UNIT_NUMBER:
-            case SVG_UNIT_DEG:
-            case SVG_UNIT_PX:
-              result->functions[i].simple.value = filter->functions[i].simple.value;
-              result->functions[i].simple.unit = filter->functions[i].simple.unit;
-              break;
-            case SVG_UNIT_PERCENTAGE:
-              result->functions[i].simple.value = filter->functions[i].simple.value / 100.0;
-              result->functions[i].simple.unit = SVG_UNIT_NUMBER;
-              break;
-            case SVG_UNIT_PT:
-            case SVG_UNIT_IN:
-            case SVG_UNIT_CM:
-            case SVG_UNIT_MM:
-              result->functions[i].simple.value = absolute_length_to_px (filter->functions[i].simple.value, filter->functions[i].simple.unit);
-              result->functions[i].simple.unit = SVG_UNIT_PX;
-              break;
-            case SVG_UNIT_VW:
-            case SVG_UNIT_VH:
-            case SVG_UNIT_VMIN:
-            case SVG_UNIT_VMAX:
-              result->functions[i].simple.value = viewport_relative_to_px (filter->functions[i].simple.value, filter->functions[i].simple.unit, context->viewport);
-              result->functions[i].simple.unit = SVG_UNIT_PX;
-              break;
-            case SVG_UNIT_EM:
-              result->functions[i].simple.value = filter->functions[i].simple.value * font_size;
-              result->functions[i].simple.unit = SVG_UNIT_PX;
-              break;
-            case SVG_UNIT_EX:
-              result->functions[i].simple.value = filter->functions[i].simple.value * 0.5 * font_size;
-              result->functions[i].simple.unit = SVG_UNIT_PX;
-              break;
-            case SVG_UNIT_RAD:
-            case SVG_UNIT_GRAD:
-            case SVG_UNIT_TURN:
-              result->functions[i].simple.value = angle_to_deg (filter->functions[i].simple.value, filter->functions[i].simple.unit);
-              result->functions[i].simple.unit = SVG_UNIT_DEG;
-              break;
-            default:
-              g_assert_not_reached ();
-            }
+          SvgValue *v = svg_value_resolve (filter->functions[i].simple, attr, idx, shape, context);
 
           if (filter_desc[filter->functions[i].kind].flags & CLAMPED)
-            result->functions[i].simple.value = CLAMP (result->functions[i].simple.value, 0, 1);
+            result->functions[i].simple = svg_number_new_full (((SvgNumber *) v)->unit, CLAMP (((SvgNumber *) v)->value, 0, 1));
+          else
+            result->functions[i].simple = svg_value_ref (v);
+          svg_value_unref (v);
         }
     }
 
   return (SvgValue *) result;
+}
+
+static guint
+parse_drop_shadow_arg (GtkCssParser *parser,
+                       guint         n,
+                       gpointer      data)
+{
+  SvgValue **vals = data;
+  Number num;
+  unsigned int i;
+
+  if (vals[0] == NULL)
+    {
+      GdkRGBA color;
+
+      if (gtk_css_parser_try_ident (parser, "currentColor"))
+        {
+          vals[0] = svg_color_new_current ();
+          return 1;
+        }
+      else if (gdk_rgba_parser_parse (parser, &color))
+        {
+          vals[0] = svg_color_new_rgba (&color);
+          return 1;
+        }
+    }
+
+  if (!css_parser_parse_number_length (parser, 0, &num))
+    return 0;
+
+  for (i = 1; vals[i]; i++)
+    ;
+
+  g_assert (i < 4);
+
+  vals[i] = svg_number_new_full (num.unit, num.value);
+  return 1;
 }
 
 static SvgValue *
@@ -6274,6 +6307,60 @@ filter_parser_parse (GtkCssParser *parser)
             function.ref.ref = g_strdup (url);
           g_free (url);
         }
+      else if (gtk_css_parser_has_function (parser, "drop-shadow"))
+        {
+          SvgValue *values[4] = { NULL, };
+
+          gtk_css_parser_start_block (parser);
+          for (i = 0; i < 4; i++)
+            {
+              guint parse_args = parse_drop_shadow_arg (parser, i, values);
+              if (parse_args == 0)
+                break;
+            }
+
+          const GtkCssToken *token = gtk_css_parser_get_token (parser);
+          if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+            {
+              gtk_css_parser_error_syntax (parser, "Unexpected data at the end of drop-shadow()");
+              g_clear_pointer (&values[0], svg_value_unref);
+              g_clear_pointer (&values[1], svg_value_unref);
+              g_clear_pointer (&values[2], svg_value_unref);
+              g_clear_pointer (&values[3], svg_value_unref);
+
+              gtk_css_parser_end_block (parser);
+
+              goto fail;
+            }
+
+          gtk_css_parser_end_block (parser);
+
+          if (!values[1] || !values[2])
+            {
+              gtk_css_parser_error_syntax (parser, "failed to parse drop-shadow() arguments");
+              g_clear_pointer (&values[0], svg_value_unref);
+              g_clear_pointer (&values[1], svg_value_unref);
+              g_clear_pointer (&values[2], svg_value_unref);
+              g_clear_pointer (&values[3], svg_value_unref);
+
+              goto fail;
+            }
+
+          if (values[0])
+            function.dropshadow.color = values[0];
+          else
+            function.dropshadow.color = svg_color_new_current ();
+
+          function.dropshadow.dx = values[1];
+          function.dropshadow.dy = values[2];
+
+          if (values[3])
+            function.dropshadow.std_dev = values[3];
+          else
+            function.dropshadow.std_dev = svg_number_new (0);
+
+          function.kind = FILTER_DROPSHADOW;
+        }
       else
         {
           for (i = 1; i < G_N_ELEMENTS (filter_desc); i++)
@@ -6291,8 +6378,7 @@ filter_parser_parse (GtkCssParser *parser)
                   if ((filter_desc[i].flags & POSITIVE) && n.value < 0)
                     goto fail;
 
-                  function.simple.value = n.value;
-                  function.simple.unit = n.unit;
+                  function.simple = svg_number_new_full (n.unit, n.value);
                   function.kind = filter_desc[i].kind;
                   break;
                 }
@@ -6360,12 +6446,27 @@ svg_filter_print (const SvgValue *value,
         {
           g_string_append_printf (s, "url(#%s)", function->ref.ref);
         }
+      else if (function->kind == FILTER_DROPSHADOW)
+        {
+          g_string_append (s, "drop-shadow(");
+          if (!svg_color_is_current (function->dropshadow.color))
+            {
+              svg_value_print (function->dropshadow.color, s);
+              g_string_append (s, ", ");
+            }
+          svg_value_print (function->dropshadow.dx, s);
+          g_string_append (s, ", ");
+          svg_value_print (function->dropshadow.dy, s);
+          g_string_append (s, ", ");
+          svg_value_print (function->dropshadow.std_dev, s);
+          g_string_append_c (s, ')');
+        }
       else
         {
           g_string_append (s, filter_desc[function->kind].name);
-          string_append_double (s, "(", function->simple.value);
-          g_string_append (s, unit_names[function->simple.unit]);
-          g_string_append (s, ")");
+          g_string_append_c (s, '(');
+          svg_value_print (function->simple, s);
+          g_string_append_c (s, ')');
         }
     }
 }
@@ -6389,7 +6490,7 @@ svg_filter_interpolate (const SvgValue *value0,
       if (f0->functions[i].kind != f1->functions[i].kind)
         return NULL;
       if (f0->functions[i].kind != FILTER_REF &&
-          f0->functions[i].simple.unit != f1->functions[i].simple.unit)
+          ((SvgNumber *) f0->functions[i].simple)->unit != ((SvgNumber *) f1->functions[i].simple)->unit)
         return NULL;
     }
 
@@ -6398,10 +6499,21 @@ svg_filter_interpolate (const SvgValue *value0,
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
       f->functions[i].kind = f0->functions[i].kind;
-      if (f->functions[i].kind != FILTER_NONE && f->functions[i].kind != FILTER_REF)
+      if (f->functions[i].kind == FILTER_NONE)
+        ;
+      else if (f->functions[i].kind == FILTER_REF)
         {
-          f->functions[i].simple.value = lerp (t, f0->functions[i].simple.value, f1->functions[i].simple.value);
-          f->functions[i].simple.unit = f0->functions[i].simple.unit;
+        }
+      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+        {
+          f->functions[i].dropshadow.color = svg_value_interpolate (f0->functions[i].dropshadow.color, f1->functions[i].dropshadow.color, context, t);
+          f->functions[i].dropshadow.dx = svg_value_interpolate (f0->functions[i].dropshadow.dx, f1->functions[i].dropshadow.dx, context, t);
+          f->functions[i].dropshadow.dy = svg_value_interpolate (f0->functions[i].dropshadow.dy, f1->functions[i].dropshadow.dy, context, t);
+          f->functions[i].dropshadow.std_dev = svg_value_interpolate (f0->functions[i].dropshadow.std_dev, f1->functions[i].dropshadow.std_dev, context, t);
+        }
+      else
+        {
+          f->functions[i].simple = svg_value_interpolate (f0->functions[i].simple, f1->functions[i].simple, context, t);
         }
     }
 
@@ -6429,6 +6541,23 @@ svg_filter_accumulate (const SvgValue *value0,
           f0->functions,
           f0->n_functions * sizeof (FilterFunction));
 
+  for (unsigned int i = 0; i < f->n_functions; i++)
+    {
+      if (f->functions[i].kind == FILTER_NONE)
+        ;
+      else if (f->functions[i].kind == FILTER_REF)
+        f->functions[i].ref.ref = g_strdup (f->functions[i].ref.ref);
+      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+        {
+          svg_value_ref (f->functions[i].dropshadow.color);
+          svg_value_ref (f->functions[i].dropshadow.dx);
+          svg_value_ref (f->functions[i].dropshadow.dy);
+          svg_value_ref (f->functions[i].dropshadow.std_dev);
+        }
+      else
+        svg_value_ref (f->functions[i].simple);
+    }
+
   return (SvgValue *) f;
 }
 
@@ -6450,6 +6579,7 @@ filter_function_get_color_matrix (FilterKind         kind,
     case FILTER_BLUR:
     case FILTER_ALPHA_LEVEL:
     case FILTER_REF:
+    case FILTER_DROPSHADOW:
       return FALSE;
     case FILTER_BRIGHTNESS:
       graphene_matrix_init_scale (matrix, v, v, v);
@@ -6488,6 +6618,7 @@ filter_function_get_color_matrix (FilterKind         kind,
       return TRUE;
     case FILTER_INVERT:
       graphene_matrix_init_scale (matrix, 1 - 2 * v, 1 - 2 * v, 1 - 2 * v);
+
       graphene_vec4_init (offset, v, v, v, 0);
       return TRUE;
     case FILTER_OPACITY:
@@ -19350,7 +19481,7 @@ apply_filter_tree (Shape         *shape,
             shadow.color.alpha *= svg_number_get (alpha, 1);
             shadow.offset.x = dx;
             shadow.offset.y = dy;
-            shadow.radius = std_dev;
+            shadow.radius = 2 * std_dev;
 
             result = gsk_shadow_node_new2 (in->node, &shadow, 1);
 
@@ -19524,18 +19655,10 @@ apply_filter_functions (SvgValue      *filter,
           result = gsk_render_node_ref (child);
           break;
         case FILTER_BLUR:
-          if (ff->simple.value < 0)
-            {
-              gtk_svg_rendering_error (context->svg, "blur radius < 0");
-              result = gsk_render_node_ref (child);
-            }
-          else
-            {
-              result = gsk_blur_node_new (child, 2 * ff->simple.value);
-            }
+          result = gsk_blur_node_new (child, 2 * svg_number_get (ff->simple, 1));
           break;
         case FILTER_OPACITY:
-          result = gsk_opacity_node_new (child, ff->simple.value);
+          result = gsk_opacity_node_new (child, svg_number_get (ff->simple, 1));
           break;
         case FILTER_BRIGHTNESS:
         case FILTER_CONTRAST:
@@ -19548,7 +19671,7 @@ apply_filter_functions (SvgValue      *filter,
             graphene_matrix_t matrix;
             graphene_vec4_t offset;
 
-            filter_function_get_color_matrix (ff->kind, ff->simple.value, &matrix, &offset);
+            filter_function_get_color_matrix (ff->kind, svg_number_get (ff->simple, 1), &matrix, &offset);
             result = gsk_color_matrix_node_new (child, &matrix, &offset);
           }
           break;
@@ -19560,7 +19683,7 @@ apply_filter_functions (SvgValue      *filter,
             identity = gsk_component_transfer_new_identity ();
             for (unsigned int j = 0; j < 10; j++)
               {
-                if ((j + 1) / 10.0 <= ff->simple.value)
+                if ((j + 1) / 10.0 <= svg_number_get (ff->simple, 1))
                   values[j] = 0;
                 else
                   values[j] = 1;
@@ -19569,6 +19692,20 @@ apply_filter_functions (SvgValue      *filter,
             result = gsk_component_transfer_node_new (child, identity, identity, identity, alpha);
             gsk_component_transfer_free (identity);
             gsk_component_transfer_free (alpha);
+          }
+          break;
+        case FILTER_DROPSHADOW:
+          {
+            GskShadowEntry shadow;
+
+            gdk_color_init_copy (&shadow.color, &((SvgColor *) ff->dropshadow.color)->color);
+            shadow.offset.x = svg_number_get (ff->dropshadow.dx, 1);
+            shadow.offset.y = svg_number_get (ff->dropshadow.dy, 1);
+            shadow.radius = 2 * svg_number_get (ff->dropshadow.std_dev, 1);
+
+            result = gsk_shadow_node_new2 (child, &shadow, 1);
+
+            gdk_color_finish (&shadow.color);
           }
           break;
         case FILTER_REF:

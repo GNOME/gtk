@@ -6,7 +6,7 @@ clip {
         child: clip {
           clip: 2 2 112 112;
           child: shadow {
-            shadows: rgba(255,0,0,0.5) 8 8 8;
+            shadows: rgba(255,0,0,0.5) 8 8 16;
             child: fill {
               child: color {
                 bounds: 10 10 80 80;
@@ -24,7 +24,7 @@ M 90 50 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -4
         child: clip {
           clip: 96 6 56 56;
           child: shadow {
-            shadows: rgba(255,0,0,0.5) 8 8 8;
+            shadows: rgba(255,0,0,0.5) 8 8 16;
             child: fill {
               child: color {
                 bounds: 100 10 40 40;
