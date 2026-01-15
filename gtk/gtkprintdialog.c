@@ -1218,6 +1218,7 @@ print_called (GObject      *source,
       ptd->has_returned = TRUE;
       g_object_add_weak_pointer (G_OBJECT (ptd->stream), (gpointer *)&ptd->stream);
       g_task_return_pointer (task, ptd->stream, g_object_unref);
+      g_object_unref (task);
     }
 }
 

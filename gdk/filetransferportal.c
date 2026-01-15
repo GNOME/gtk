@@ -267,6 +267,7 @@ retrieve_files_done (GObject      *object,
   g_variant_unref (ret);
 
   g_task_return_boolean (task, TRUE);
+  g_object_unref (task);
 }
 
 void

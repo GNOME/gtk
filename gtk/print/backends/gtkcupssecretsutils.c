@@ -121,6 +121,7 @@ get_secret_cb (GObject      *source_object,
   if (output == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -131,6 +132,7 @@ get_secret_cb (GObject      *source_object,
       GTK_DEBUG (PRINTING, "Failed to lookup attributes.");
       g_variant_unref (output);
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -223,6 +225,7 @@ get_secret_cb (GObject      *source_object,
     }
 
   g_task_return_pointer (task, auth_info, NULL);
+  g_object_unref (task);
   return;
 
 fail:
@@ -237,6 +240,7 @@ fail:
     }
   g_free (auth_info);
   g_task_return_pointer (task, NULL, NULL);
+  g_object_unref (task);
 }
 
 static void
@@ -257,6 +261,7 @@ create_item_cb (GObject      *source_object,
   if (output == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -265,6 +270,7 @@ create_item_cb (GObject      *source_object,
     {
       GTK_DEBUG (PRINTING, "Successfully stored auth info.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
   g_variant_unref (output);
@@ -318,6 +324,7 @@ do_store_auth_info (GTask *task)
     {
       GTK_DEBUG (PRINTING, "Failed to create attributes.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -325,6 +332,7 @@ do_store_auth_info (GTask *task)
     {
       GTK_DEBUG (PRINTING, "No secret to store.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -389,6 +397,7 @@ prompt_completed_cb (GDBusConnection *connection,
     {
       GTK_DEBUG (PRINTING, "Invalid prompt signal.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -399,6 +408,7 @@ prompt_completed_cb (GDBusConnection *connection,
     {
       GTK_DEBUG (PRINTING, "Collection unlock dismissed.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -444,6 +454,7 @@ prompt_cb (GObject      *source_object,
   if (output == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -483,6 +494,7 @@ unlock_collection_cb (GObject      *source_object,
   if (output == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -552,6 +564,7 @@ unlock_read_alias_cb (GObject      *source_object,
   if (output == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -562,6 +575,7 @@ unlock_read_alias_cb (GObject      *source_object,
     {
       GTK_DEBUG (PRINTING, "Invalid ReadAlias response.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -607,6 +621,7 @@ item_proxy_cb (GObject      *source_object,
   if (item_proxy == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -618,6 +633,7 @@ item_proxy_cb (GObject      *source_object,
     {
       GTK_DEBUG (PRINTING, "Failed to look up \"Locked\" property on item.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -687,6 +703,7 @@ search_items_cb (GObject      *source_object,
   if (output == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -733,6 +750,7 @@ search_items_cb (GObject      *source_object,
     {
       GTK_DEBUG (PRINTING, "No match found in secrets service.");
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 }
@@ -757,6 +775,7 @@ open_session_cb (GObject      *source_object,
   if (output == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -767,6 +786,7 @@ open_session_cb (GObject      *source_object,
       GTK_DEBUG (PRINTING, "Invalid session path response.");
       g_variant_unref (output);
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -778,6 +798,7 @@ open_session_cb (GObject      *source_object,
       g_variant_unref (session_variant);
       g_variant_unref (output);
       g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
       return;
     }
 
@@ -796,6 +817,7 @@ open_session_cb (GObject      *source_object,
             {
               GTK_DEBUG (PRINTING, "Failed to create attributes.");
               g_task_return_pointer (task, NULL, NULL);
+              g_object_unref (task);
               return;
             }
 
@@ -852,6 +874,7 @@ get_connection_cb (GObject      *source_object,
   if (task_data->dbus_connection == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
