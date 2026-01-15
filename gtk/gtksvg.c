@@ -2439,67 +2439,114 @@ svg_number_distance (const SvgValue *value0,
   return fabs (n0->value - n1->value);
 }
 
-static SvgValue *
-svg_absolute_length_to_px (const SvgValue *value)
+static gboolean
+is_absolute_length (SvgUnit unit)
 {
-  const SvgNumber *n = (const SvgNumber *) value;
-
-  switch ((unsigned int) n->unit)
+  switch ((unsigned int) unit)
     {
+    case SVG_UNIT_PX:
     case SVG_UNIT_PT:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 72);
     case SVG_UNIT_IN:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96);
     case SVG_UNIT_CM:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 2.54);
     case SVG_UNIT_MM:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 96 / 25.4);
+      return TRUE;
     default:
-      return svg_value_ref ((SvgValue *) value);
+      return FALSE;
     }
 }
 
-static SvgValue *
-svg_angle_to_deg (const SvgValue *value)
+static double
+absolute_length_to_px (double  value,
+                       SvgUnit unit)
 {
-  const SvgNumber *n = (const SvgNumber *) value;
+  switch ((unsigned int) unit)
+    {
+    case SVG_UNIT_PX: return value;
+    case SVG_UNIT_PT: return value * 96 / 72;
+    case SVG_UNIT_IN: return value * 96;
+    case SVG_UNIT_CM: return value * 96 / 2.54;
+    case SVG_UNIT_MM: return value * 96 / 25.4;
+    default: g_assert_not_reached ();
+    }
+}
 
-  switch ((unsigned int) n->unit)
+#if 0
+static gboolean
+is_angle (SvgUnit unit)
+{
+  switch ((unsigned int) unit)
     {
     case SVG_UNIT_DEG:
-      return svg_value_ref ((SvgValue *) value);
     case SVG_UNIT_RAD:
-      return svg_number_new_full (SVG_UNIT_DEG, n->value * 180.0 / M_PI);
     case SVG_UNIT_GRAD:
-      return svg_number_new_full (SVG_UNIT_DEG, n->value * 360.0 / 400.0);
     case SVG_UNIT_TURN:
-      return svg_number_new_full (SVG_UNIT_DEG, n->value * 360.0);
+      return TRUE;
     default:
-      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+#endif
+
+static double
+angle_to_deg (double  value,
+              SvgUnit unit)
+{
+  switch ((unsigned int) unit)
+    {
+    case SVG_UNIT_DEG: return value;
+    case SVG_UNIT_RAD: return value * 180.0 / M_PI;
+    case SVG_UNIT_GRAD: return value * 360.0 / 400.0;
+    case SVG_UNIT_TURN: return value * 360.0;
+    default: g_assert_not_reached ();
     }
 }
 
-static SvgValue *
-svg_viewport_relative_to_px (const SvgValue        *value,
-                             const graphene_rect_t *viewport)
+#if 0
+static gboolean
+is_viewport_relative (SvgUnit unit)
 {
-  const SvgNumber *n = (const SvgNumber *) value;
-
-  switch ((unsigned int) n->unit)
+  switch ((unsigned int) unit)
     {
     case SVG_UNIT_VW:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.width / 100);
     case SVG_UNIT_VH:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * viewport->size.height / 100);
     case SVG_UNIT_VMIN:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * MIN (viewport->size.width,
-                                                               viewport->size.height) / 100);
     case SVG_UNIT_VMAX:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * MAX (viewport->size.width,
-                                                               viewport->size.height) / 100);
+      return TRUE;
     default:
-      return svg_value_ref ((SvgValue *) value);
+      return FALSE;
     }
+}
+#endif
+
+static double
+viewport_relative_to_px (double                 value,
+                         SvgUnit                unit,
+                         const graphene_rect_t *viewport)
+{
+  switch ((unsigned int) unit)
+    {
+    case SVG_UNIT_VW: return value * viewport->size.width / 100;
+    case SVG_UNIT_VH: return value * viewport->size.height / 100;
+    case SVG_UNIT_VMIN: return value * MIN (viewport->size.width,
+                                            viewport->size.height) / 100;
+    case SVG_UNIT_VMAX: return value * MAX (viewport->size.width,
+                                            viewport->size.height) / 100;
+    default: g_assert_not_reached ();
+    }
+}
+
+static double
+shape_get_current_font_size (Shape          *shape,
+                             ShapeAttr       attr,
+                             ComputeContext *context)
+{
+  /* FIXME: units */
+  if (attr != SHAPE_ATTR_FONT_SIZE)
+    return ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
+  else if (context->parent)
+    return ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
+  else
+    return DEFAULT_FONT_SIZE;
 }
 
 static SvgValue *
@@ -2596,37 +2643,27 @@ svg_number_resolve (const SvgValue *value,
     case SVG_UNIT_IN:
     case SVG_UNIT_CM:
     case SVG_UNIT_MM:
-      return svg_absolute_length_to_px (value);
+      return svg_number_new_full (SVG_UNIT_PX, absolute_length_to_px (n->value, n->unit));
 
     case SVG_UNIT_VW:
     case SVG_UNIT_VH:
     case SVG_UNIT_VMIN:
     case SVG_UNIT_VMAX:
-      return svg_viewport_relative_to_px (value, context->viewport);
+      return svg_number_new_full (SVG_UNIT_PX, viewport_relative_to_px (n->value,
+                                                                        n->unit,
+                                                                        context->viewport));
 
     case SVG_UNIT_EM:
+      return svg_number_new_full (SVG_UNIT_PX, n->value * shape_get_current_font_size (shape, attr, context));
+
     case SVG_UNIT_EX:
-      {
-        double font_size;
-
-        if (attr != SHAPE_ATTR_FONT_SIZE)
-          font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
-        else if (context->parent)
-          font_size = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
-        else
-          font_size = DEFAULT_FONT_SIZE;
-
-        if (n->unit == SVG_UNIT_EM)
-          return svg_number_new_full (SVG_UNIT_PX, n->value * font_size);
-        else
-          return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * font_size);
-      }
+      return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * shape_get_current_font_size (shape, attr, context));
 
     case SVG_UNIT_RAD:
     case SVG_UNIT_DEG:
     case SVG_UNIT_GRAD:
     case SVG_UNIT_TURN:
-      return svg_angle_to_deg (value);
+      return svg_number_new_full (SVG_UNIT_DEG, angle_to_deg (n->value, n->unit));
 
     default:
       g_assert_not_reached ();
@@ -6779,40 +6816,22 @@ svg_dash_array_resolve (const SvgValue *value,
           a->dashes[i].value = orig->dashes[i].value / 100 * size;
           break;
         case SVG_UNIT_PT:
-          a->dashes[i].value = orig->dashes[i].value * 96 / 72;
-          break;
         case SVG_UNIT_IN:
-          a->dashes[i].value = orig->dashes[i].value * 96;
-          break;
         case SVG_UNIT_CM:
-          a->dashes[i].value = orig->dashes[i].value * 96 / 2.54;
-          break;
         case SVG_UNIT_MM:
-          a->dashes[i].value = orig->dashes[i].value * 96 / 25.4;
+          a->dashes[i].value = absolute_length_to_px (orig->dashes[i].value, orig->dashes[i].unit);
           break;
         case SVG_UNIT_VW:
-          a->dashes[i].value = orig->dashes[i].value * context->viewport->size.width / 100;
-          break;
         case SVG_UNIT_VH:
-          a->dashes[i].value = orig->dashes[i].value * context->viewport->size.height / 100;
-          break;
         case SVG_UNIT_VMIN:
-          a->dashes[i].value = orig->dashes[i].value * MIN (context->viewport->size.width,
-                                                            context->viewport->size.height) / 100;
-          break;
         case SVG_UNIT_VMAX:
-          a->dashes[i].value = orig->dashes[i].value * MAX (context->viewport->size.width,
-                                                            context->viewport->size.height) / 100;
+          a->dashes[i].value = viewport_relative_to_px (orig->dashes[i].value, orig->dashes[i].unit, context->viewport);
           break;
         case SVG_UNIT_EM:
+          a->dashes[i].value = orig->dashes[i].value * shape_get_current_font_size (shape, attr, context);
+          break;
         case SVG_UNIT_EX:
-          {
-            double font_size = ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
-            if (orig->dashes[i].unit == SVG_UNIT_EM)
-              a->dashes[i].value = orig->dashes[i].value * font_size;
-            else
-              a->dashes[i].value = orig->dashes[i].value * 0.5 * font_size;
-          }
+          a->dashes[i].value = orig->dashes[i].value * 0.5 * shape_get_current_font_size (shape, attr, context);
           break;
         default:
           g_assert_not_reached ();
@@ -17106,24 +17125,22 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
     {
-      SvgValue *v = svg_absolute_length_to_px (self->content->base[SHAPE_ATTR_WIDTH]);
-      SvgNumber *n = (SvgNumber *) v;
+      SvgNumber *n = (SvgNumber *) self->content->base[SHAPE_ATTR_WIDTH];
 
-      if (n->unit != SVG_UNIT_PERCENTAGE)
+      if (is_absolute_length (n->unit))
+        self->width = absolute_length_to_px (n->value, n->unit);
+      else if (n->unit != SVG_UNIT_PERCENTAGE)
         self->width = n->value;
-
-      svg_value_unref (v);
     }
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
     {
-      SvgValue *v = svg_absolute_length_to_px (self->content->base[SHAPE_ATTR_HEIGHT]);
-      SvgNumber *n = (SvgNumber *) v;
+      SvgNumber *n = (SvgNumber *) self->content->base[SHAPE_ATTR_HEIGHT];
 
-      if (n->unit != SVG_UNIT_PERCENTAGE)
+      if (is_absolute_length (n->unit))
+        self->height = absolute_length_to_px (n->value, n->unit);
+      else if (n->unit != SVG_UNIT_PERCENTAGE)
         self->height = n->value;
-
-      svg_value_unref (v);
     }
 
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
