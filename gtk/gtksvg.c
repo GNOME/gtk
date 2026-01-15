@@ -10113,6 +10113,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "xChannelSelector", BIT (SHAPE_FILTER), BIT (FE_DISPLACEMENT), SHAPE_ATTR_FE_DISPLACEMENT_X },
   { "yChannelSelector", BIT (SHAPE_FILTER), BIT (FE_DISPLACEMENT), SHAPE_ATTR_FE_DISPLACEMENT_Y },
   { "href", BIT (SHAPE_FILTER), BIT (FE_IMAGE), SHAPE_ATTR_FE_IMAGE_HREF },
+  { "xlink:href", BIT (SHAPE_FILTER), BIT (FE_IMAGE), SHAPE_ATTR_FE_IMAGE_HREF | DEPRECATED_BIT },
   { "preserveAspectRatio", BIT (SHAPE_FILTER), BIT (FE_IMAGE), SHAPE_ATTR_FE_IMAGE_CONTENT_FIT },
   { "type", BIT (SHAPE_FILTER), FILTER_FUNCS, SHAPE_ATTR_FE_FUNC_TYPE },
   { "tableValues", BIT (SHAPE_FILTER), FILTER_FUNCS, SHAPE_ATTR_FE_FUNC_VALUES },
@@ -10203,7 +10204,8 @@ shape_attr_lookup (const char *name,
 static gboolean
 filter_attr_lookup (FilterPrimitiveType  type,
                     const char          *name,
-                    ShapeAttr           *attr)
+                    ShapeAttr           *attr,
+                    gboolean            *deprecated)
 {
   ShapeAttrLookup key;
   ShapeAttrLookup *found;
@@ -10220,7 +10222,17 @@ filter_attr_lookup (FilterPrimitiveType  type,
   g_assert ((found->shapes & BIT (SHAPE_FILTER)) != 0);
   g_assert ((found->filters & BIT (type)) != 0);
 
-  *attr = found->attr;
+  if (found->attr & DEPRECATED_BIT)
+    {
+      *attr = found->attr & ~DEPRECATED_BIT;
+      *deprecated = TRUE;
+    }
+  else
+    {
+      *attr = found->attr;
+      *deprecated = FALSE;
+    }
+
   return TRUE;
 }
 
@@ -15466,7 +15478,7 @@ attr_lookup (const char          *name,
   *deprecated = FALSE;
 
   if (for_filter)
-    return filter_attr_lookup (filter_type, name, attr);
+    return filter_attr_lookup (filter_type, name, attr, deprecated);
 
   if (!shape_attr_lookup (name, type, attr, deprecated))
     return FALSE;
@@ -16314,6 +16326,7 @@ start_element_cb (GMarkupParseContext  *context,
       const char *style_attr = NULL;
       unsigned int idx;
       gboolean values_set = FALSE;
+      FilterPrimitive *f;
 
       if (filter_type == FE_MERGE_NODE)
         {
@@ -16345,29 +16358,38 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       idx = shape_add_filter (data->current_shape, filter_type);
+      f = g_ptr_array_index (data->current_shape->filters, idx);
 
       for (unsigned int i = 0; attr_names[i]; i++)
         {
           ShapeAttr attr;
+          gboolean deprecated;
 
           if (strcmp (attr_names[i], "style") == 0)
             {
               handled |= BIT (i);
               style_attr = attr_values[i];
             }
-          else if (filter_attr_lookup (filter_type, attr_names[i], &attr))
+          else if (filter_attr_lookup (filter_type, attr_names[i], &attr, &deprecated))
             {
-              SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
-              handled |= BIT (i);
-              if (value)
+              if (deprecated && (f->attrs & BIT (filter_attr_idx (filter_type, attr))) != 0)
                 {
-                  shape_set_base_value (data->current_shape, attr, idx + 1, value);
-                  svg_value_unref (value);
+                  /* ignore */
                 }
               else
-                gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
-              if (attr == SHAPE_ATTR_FE_COLOR_MATRIX_VALUES)
-                values_set = TRUE;
+                {
+                  SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
+                  handled |= BIT (i);
+                  if (value)
+                    {
+                      shape_set_base_value (data->current_shape, attr, idx + 1, value);
+                      svg_value_unref (value);
+                    }
+                  else
+                    gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
+                  if (attr == SHAPE_ATTR_FE_COLOR_MATRIX_VALUES)
+                    values_set = TRUE;
+                }
             }
         }
 
@@ -16381,7 +16403,6 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (filter_type == FE_COLOR_MATRIX)
         {
-          FilterPrimitive *f = g_ptr_array_index (data->current_shape->filters, idx);
           SvgNumbers *values = (SvgNumbers *) f->base[filter_attr_idx (f->type, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES)];
           SvgNumbers *initial = (SvgNumbers *) filter_attr_ref_initial_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES);
 
@@ -19403,15 +19424,22 @@ apply_filter_tree (Shape         *shape,
                 gtk_snapshot_push_collect (context->snapshot);
                 render_shape (href->shape, context);
                 node = gtk_snapshot_pop_collect (context->snapshot);
-                transform = gsk_transform_translate (NULL, &subregion.origin);
-                result = gsk_transform_node_new (node, transform);
-                gsk_render_node_unref (node);
-                gsk_transform_unref (transform);
+                if (node)
+                  {
+                    transform = gsk_transform_translate (NULL, &subregion.origin);
+                    result = gsk_transform_node_new (node, transform);
+                    gsk_render_node_unref (node);
+                    gsk_transform_unref (transform);
+                  }
+                else
+                  {
+                    gtk_svg_rendering_error (context->svg, "No content for <feImage>");
+                    result = error_node (&subregion);
+                  }
               }
             else
               {
-                gtk_svg_rendering_error (context->svg,
-                                         "No content for <feImage>");
+                gtk_svg_rendering_error (context->svg, "No content for <feImage>");
                 result = error_node (&subregion);
               }
           }
