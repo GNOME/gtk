@@ -9378,12 +9378,17 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_COLOR_INTERPOLATION] = {
     .flags = SHAPE_ATTR_INHERITED,
-    .applies_to = SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE,
+    .applies_to = SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | BIT (SHAPE_USE),
+    .parse_value = svg_color_interpolation_parse,
+  },
+  [SHAPE_ATTR_COLOR_INTERPOLATION_FILTERS] = {
+    .flags = SHAPE_ATTR_INHERITED,
+    .applies_to = BIT (SHAPE_FILTER),
     .parse_value = svg_color_interpolation_parse,
   },
   [SHAPE_ATTR_CLIP_PATH] = {
     .flags = SHAPE_ATTR_DISCRETE,
-    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
+    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) | SHAPE_GRAPHICS | BIT (SHAPE_USE),
     .parse_value = svg_clip_parse,
   },
   [SHAPE_ATTR_CLIP_RULE] = {
@@ -9393,7 +9398,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_MASK] = {
     .flags = SHAPE_ATTR_DISCRETE,
-    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
+    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) | SHAPE_GRAPHICS | BIT (SHAPE_USE),
     .parse_value = svg_mask_parse,
   },
   [SHAPE_ATTR_FONT_FAMILY] = {
@@ -9422,7 +9427,7 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = svg_font_stretch_parse,
   },
   [SHAPE_ATTR_FILTER] = {
-    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
+    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) | SHAPE_GRAPHICS | BIT (SHAPE_USE),
     .parse_value = svg_filter_parse,
   },
   [SHAPE_ATTR_FILL] = {
@@ -9977,6 +9982,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_COLOR].initial_value = svg_color_new_black ();
   shape_attrs[SHAPE_ATTR_COLOR_INTERPOLATION].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
+  shape_attrs[SHAPE_ATTR_COLOR_INTERPOLATION_FILTERS].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_LINEAR);
   shape_attrs[SHAPE_ATTR_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
   shape_attrs[SHAPE_ATTR_VECTOR_EFFECT].initial_value = svg_vector_effect_new (VECTOR_EFFECT_NONE);
   shape_attrs[SHAPE_ATTR_FILTER].initial_value = svg_filter_new_none ();
@@ -10175,6 +10181,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "opacity", SHAPE_ANY, 0, SHAPE_ATTR_OPACITY },
   { "color", SHAPE_ANY, 0, SHAPE_ATTR_COLOR },
   { "color-interpolation", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE, 0, SHAPE_ATTR_COLOR_INTERPOLATION },
+  { "color-interpolation-filters", BIT (SHAPE_FILTER), 0, SHAPE_ATTR_COLOR_INTERPOLATION_FILTERS },
   { "clip-path", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_CLIP_PATH },
   { "clip-rule", SHAPE_ANY, 0, SHAPE_ATTR_CLIP_RULE },
   { "mask", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_MASK },
