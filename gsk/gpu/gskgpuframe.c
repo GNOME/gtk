@@ -755,7 +755,11 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
+  gsk_gpu_frame_start_node (self, node, 0);
+
   gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
+
+  gsk_gpu_frame_end_node (self);
 
   if (texture)
     gsk_gpu_download_op (self, target, target_color_state, texture);
