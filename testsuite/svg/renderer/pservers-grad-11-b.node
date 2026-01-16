@@ -6,6 +6,7 @@ isolation {
         start: 75 100 0;
         end: 75 100 130;
         stops: 0 rgb(0,0,153), 1 rgb(34,238,34);
+        premultiplied: false;
       }
       path: "\
 M 10 10 h 210 v 140 h -210 z";
@@ -22,6 +23,7 @@ M 10 10 h 210 v 140 h -210 z";
         start: 295 100 0;
         end: 295 100 150;
         stops: 0 rgb(238,34,34), 1 rgb(255,255,102);
+        premultiplied: false;
       }
       path: "\
 M 250 30 h 170 v 100 h -170 z";
@@ -40,6 +42,7 @@ M 250 30 h 170 v 100 h -170 z";
         start: 225 180 0;
         end: 225 180 90;
         stops: 0 rgb(0,102,0), 1 rgb(255,255,0);
+        premultiplied: false;
       }
       mask: text {
         font: "SVGFreeSansASCII 50px";
@@ -58,6 +61,7 @@ M 250 30 h 170 v 100 h -170 z";
         start: 225 245 0;
         end: 225 245 90;
         stops: 0 rgb(0,0,0), 1 rgb(221,102,221);
+        premultiplied: false;
       }
       mask: transform {
         transform: translate(10, 234);

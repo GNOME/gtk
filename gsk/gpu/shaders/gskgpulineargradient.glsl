@@ -19,6 +19,7 @@ graphene_vec4_t hints0;
 graphene_vec4_t hints1;
 
 variation: gboolean supersampling;
+variation: gboolean premultiplied;
 variation: GskRepeat repeat;
 #endif
 
@@ -59,13 +60,26 @@ run (out vec2 pos)
 
   _pos = pos;
   _rect = r;
-  _color0 = color_premultiply (in_color0);
-  _color1 = color_premultiply (in_color1);
-  _color2 = color_premultiply (in_color2);
-  _color3 = color_premultiply (in_color3);
-  _color4 = color_premultiply (in_color4);
-  _color5 = color_premultiply (in_color5);
-  _color6 = color_premultiply (in_color6);
+  if (VARIATION_PREMULTIPLIED)
+    {
+      _color0 = color_premultiply (in_color0);
+      _color1 = color_premultiply (in_color1);
+      _color2 = color_premultiply (in_color2);
+      _color3 = color_premultiply (in_color3);
+      _color4 = color_premultiply (in_color4);
+      _color5 = color_premultiply (in_color5);
+      _color6 = color_premultiply (in_color6);
+    }
+  else
+    {
+      _color0 = in_color0;
+      _color1 = in_color1;
+      _color2 = in_color2;
+      _color3 = in_color3;
+      _color4 = in_color4;
+      _color5 = in_color5;
+      _color6 = in_color6;
+    }
   _offsets0 = in_offsets0;
   _offsets1 = in_offsets1;
   _hints0 = in_hints0;
@@ -156,7 +170,11 @@ get_gradient_color (float offset)
             color = _color6;
         }
     }
-  return color;
+
+  if (VARIATION_PREMULTIPLIED)
+    return color;
+  else
+    return color_premultiply (color);
 }
 
 vec4

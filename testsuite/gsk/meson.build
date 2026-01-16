@@ -132,6 +132,7 @@ compare_render_tests = [
   'linear-gradient-nonorthogonal-scale',
   'linear-gradient-pad-color',
   'linear-gradient-premultiplied-nocairo',
+  'linear-gradient-unpremultiplied-nocairo',
   'linear-gradient-with-64-colorstops',
   'lots-of-offscreens',
   'mask',

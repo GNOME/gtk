@@ -268,14 +268,15 @@ Possible values for the transfer propertes are:
 
 ### conic-gradient
 
-| property          | syntax          | default        | printed     |
-| ----------------- | --------------- | -------------- | ----------- |
-| bounds            | `<rect>`        | 50             | always      |
-| center            | `<point>`       | 25, 25         | always      |
-| rotation          | `<number>`      | 0              | always      |
-| stops             | `<color-stops>` | 0 #AF0, 1 #F0C | always      |
-| interpolation     | `<color-state>` | srgb           | non-default |
-| hue-interpolation | `<hue-interp>`  | shorter        | non-default |
+| property          | syntax            | default        | printed     |
+| ----------------- | ----------------- | -------------- | ----------- |
+| bounds            | `<rect>`          | 50             | always      |
+| center            | `<point>`         | 25, 25         | always      |
+| rotation          | `<number>`        | 0              | always      |
+| stops             | `<color-stops>`   | 0 #AF0, 1 #F0C | always      |
+| interpolation     | `<color-state>`   | srgb           | non-default |
+| hue-interpolation | `<hue-interp>`    | shorter        | non-default |
+| premultiplied     | `<boolean>`       | true           | non-default |
 
 Creates a node like `gsk_conic_gradient_node_new()` with the given properties.
 
@@ -291,6 +292,9 @@ The syntax for color stops is:
     transition-hint: <number>
 
 The default value for transition hints is 0.5.
+
+The premultiplied property determines whether colors are interpolated
+in premultiplied form (as in CSS) or unpremultiplied form (as in SVG).
 
 ### composite
 
@@ -410,12 +414,16 @@ Possible values for the isolations property are:
 | repeat            | `<repeat>`        | pad            | non-default |
 | interpolation     | `<color-state>`   | srgb           | non-default |
 | hue-interpolation | `<hue-interp>`    | shorter        | non-default |
+| premultiplied     | `<boolean>`       | true           | non-default |
 
 Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
 
 Possible values for the repeat property are:
 
     repeat: none | pad | repeat | reflect
+
+The premultiplied property determines whether colors are interpolated
+in premultiplied form (as in CSS) or unpremultiplied form (as in SVG).
 
 ### mask
 
@@ -481,6 +489,7 @@ parameter defines the copy node to paste from.
 | repeat            | `<repeat>`          | pad            | non-default |
 | interpolation     | `<color-state>`     | srgb           | non-default |
 | hue-interpolation | `<hue-interp>`      | shorter        | non-default |
+| premultiplied     | `<boolean>`         | true           | non-default |
 
 Creates a gradient like the SVG `<radialGradient>` element. The
 `start` and `end` properties specify the start and end circles as
@@ -493,6 +502,9 @@ A deprecated method exists when only using a single center for both
 circles. In that case the `center`, `hradius`, `vradius`, `start` and
 `end` properties are consulted to generate a node like with
 `gsk_radial_gradient_node_new()`.
+
+The premultiplied property determines whether colors are interpolated
+in premultiplied form (as in CSS) or unpremultiplied form (as in SVG).
 
 ### repeat
 
@@ -536,6 +548,7 @@ difference is that the default value for the "repeat" property is "repeat".
 | stops             | `<color-stops>`     | 0 #AF0, 1 #F0C         | always      |
 | interpolation     | `<color-state>`     | srgb                   | non-default |
 | hue-interpolation | `<hue-interp>`      | shorter                | non-default |
+| premultiplied     | `<boolean>`         | true                   | non-default |
 
 Creates a repeating radial gradient.
 

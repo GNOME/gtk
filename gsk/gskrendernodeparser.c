@@ -2473,6 +2473,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  gboolean premultiplied = TRUE;
   GskRepeat repeat = GSK_REPEAT_PAD;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
@@ -2481,6 +2482,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "premultiplied", parse_boolean, NULL, &premultiplied },
     { "repeat", parse_repeat, NULL, &repeat },
   };
   GskGradient *gradient;
@@ -2521,8 +2523,10 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
       GskGradientStop *stop = &g_array_index (stops, GskGradientStop, i);
       gsk_gradient_add_stop (gradient, stop->offset, stop->transition_hint, &stop->color);
     }
+
   gsk_gradient_set_interpolation (gradient, interpolation);
   gsk_gradient_set_hue_interpolation (gradient, hue_interpolation);
+  gsk_gradient_set_premultiplied (gradient, premultiplied);
   gsk_gradient_set_repeat (gradient, repeat);
 
   result = gsk_linear_gradient_node_new2 (&bounds, &start, &end, gradient);
@@ -2621,6 +2625,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  gboolean premultiplied = TRUE;
   ParsedCircle start = {
     .center = { .x = 25, .y = 25 },
     .radius = 0,
@@ -2646,6 +2651,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "premultiplied", parse_boolean, NULL, &premultiplied },
     { "repeat", parse_repeat, NULL, &repeat },
   };
   GskGradient *gradient;
@@ -2701,8 +2707,10 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
       GskGradientStop *stop = &g_array_index (stops, GskGradientStop, i);
       gsk_gradient_add_stop (gradient, stop->offset, stop->transition_hint, &stop->color);
     }
+
   gsk_gradient_set_interpolation (gradient, interpolation);
   gsk_gradient_set_hue_interpolation (gradient, hue_interpolation);
+  gsk_gradient_set_premultiplied (gradient, premultiplied);
   gsk_gradient_set_repeat (gradient, repeat);
 
   result = gsk_radial_gradient_node_new2 (&bounds,
@@ -2742,6 +2750,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  gboolean premultiplied = TRUE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "center", parse_point, NULL, &center },
@@ -2749,6 +2758,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "premultiplied", parse_boolean, NULL, &premultiplied },
   };
   GskGradient *gradient;
   GskRenderNode *result;
@@ -2783,6 +2793,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
     }
   gsk_gradient_set_interpolation (gradient, interpolation);
   gsk_gradient_set_hue_interpolation (gradient, hue_interpolation);
+  gsk_gradient_set_premultiplied (gradient, premultiplied);
   gsk_gradient_set_repeat (gradient, GSK_REPEAT_PAD);
 
   result = gsk_conic_gradient_node_new2 (&bounds, &center, rotation, gradient);
@@ -5982,6 +5993,8 @@ render_node_print (Printer       *p,
         append_hue_interpolation_param (p, "hue-interpolation",
                                         gsk_gradient_get_hue_interpolation (gradient),
                                         GSK_HUE_INTERPOLATION_SHORTER);
+        if (!gsk_gradient_get_premultiplied (gradient))
+          append_boolean_param (p, "premultiplied", FALSE);
 
         end_node (p);
       }
@@ -6016,6 +6029,8 @@ render_node_print (Printer       *p,
         append_hue_interpolation_param (p, "hue-interpolation",
                                         gsk_gradient_get_hue_interpolation (gradient),
                                         GSK_HUE_INTERPOLATION_SHORTER);
+        if (!gsk_gradient_get_premultiplied (gradient))
+          append_boolean_param (p, "premultiplied", FALSE);
 
         end_node (p);
       }
@@ -6040,6 +6055,8 @@ render_node_print (Printer       *p,
         append_hue_interpolation_param (p, "hue-interpolation",
                                         gsk_gradient_get_hue_interpolation (gradient),
                                         GSK_HUE_INTERPOLATION_SHORTER);
+        if (!gsk_gradient_get_premultiplied (gradient))
+          append_boolean_param (p, "premultiplied", FALSE);
 
         end_node (p);
       }

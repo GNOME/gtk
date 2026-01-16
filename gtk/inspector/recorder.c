@@ -1241,6 +1241,7 @@ populate_render_node_properties (GListStore    *store,
         const GskGradientStop *stops = gsk_gradient_get_stops (gradient);
         GdkColorState *interpolation = gsk_gradient_get_interpolation (gradient);
         GskHueInterpolation hue_interpolation = gsk_gradient_get_hue_interpolation (gradient);
+        gboolean premultiplied = gsk_gradient_get_premultiplied (gradient);
         int i;
         GString *s;
         GdkTexture *texture;
@@ -1248,6 +1249,7 @@ populate_render_node_properties (GListStore    *store,
         add_text_row (store, "Direction", "%.2f %.2f ⟶ %.2f %.2f", start->x, start->y, end->x, end->y);
         add_text_row (store, "Interpolation", "%s", gdk_color_state_get_name (interpolation));
         add_text_row (store, "Hue Interpolation", "%s", hue_interpolation_to_string (hue_interpolation));
+        add_boolean_row (store, "Premultiplied", premultiplied);
 
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
@@ -1280,6 +1282,8 @@ populate_render_node_properties (GListStore    *store,
         const GskGradientStop *stops = gsk_gradient_get_stops (gradient);
         GdkColorState *interpolation = gsk_gradient_get_interpolation (gradient);
         GskHueInterpolation hue_interpolation = gsk_gradient_get_hue_interpolation (gradient);
+        gboolean premultiplied = gsk_gradient_get_premultiplied (gradient);
+
         int i;
         GString *s;
         GdkTexture *texture;
@@ -1289,6 +1293,7 @@ populate_render_node_properties (GListStore    *store,
         add_text_row (store, "Radius", "%.2f, %.2f", hradius, vradius);
         add_text_row (store, "Interpolation", "%s", gdk_color_state_get_name (interpolation));
         add_text_row (store, "Hue Interpolation", "%s", hue_interpolation_to_string (hue_interpolation));
+        add_boolean_row (store, "Premultiplied", premultiplied);
 
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
@@ -1317,6 +1322,7 @@ populate_render_node_properties (GListStore    *store,
         const GskGradientStop *stops = gsk_gradient_get_stops (gradient);
         GdkColorState *interpolation = gsk_gradient_get_interpolation (gradient);
         GskHueInterpolation hue_interpolation = gsk_gradient_get_hue_interpolation (gradient);
+        gboolean premultiplied = gsk_gradient_get_premultiplied (gradient);
         gsize i;
         GString *s;
         GdkTexture *texture;
@@ -1325,6 +1331,7 @@ populate_render_node_properties (GListStore    *store,
         add_text_row (store, "Rotation", "%.2f", rotation);
         add_text_row (store, "Interpolation", "%s", gdk_color_state_get_name (interpolation));
         add_text_row (store, "Hue Interpolation", "%s", hue_interpolation_to_string (hue_interpolation));
+        add_boolean_row (store, "Premultiplied", premultiplied);
 
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)

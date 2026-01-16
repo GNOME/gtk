@@ -88,6 +88,7 @@ M 40 40 h 30 v 30 h -30 z";
                       start: 55 55;
                       end: 115 55;
                       stops: 0 rgb(255,255,0), 1 rgb(128,0,128);
+                      premultiplied: false;
                     }
                     path: "\
 M 55 55 h 60 v 60 h -60 z";
@@ -101,6 +102,7 @@ M 55 55 h 60 v 60 h -60 z";
                   start: 70 70;
                   end: 100 70;
                   stops: 0 rgb(255,255,0), 1 rgb(128,0,128);
+                  premultiplied: false;
                 }
                 path: "\
 M 70 70 h 30 v 30 h -30 z";
