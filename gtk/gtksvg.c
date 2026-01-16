@@ -8979,6 +8979,9 @@ filter_get_component_transfer (FilterPrimitive *filter)
         SvgNumbers *numbers = (SvgNumbers *) filter->current [filter_attr_idx (filter->type, SHAPE_ATTR_FE_FUNC_VALUES)];
         float *values = g_newa (float, numbers->n_values);
 
+        if (numbers->n_values == 0)
+          return gsk_component_transfer_new_identity ();
+
         for (unsigned int i = 0; i < numbers->n_values; i++)
           values[i] = numbers->values[i].value;
 
