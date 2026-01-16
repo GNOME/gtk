@@ -19899,6 +19899,9 @@ push_group (Shape        *shape,
           h = height;
         }
 
+      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+        gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (x, y, width, height));
+
       if (vb->unset)
         graphene_rect_init (&view_box, 0, 0, w, h);
       else
@@ -19924,9 +19927,6 @@ push_group (Shape        *shape,
       gtk_snapshot_transform (context->snapshot, transform);
       push_transform (context, transform);
       gsk_transform_unref (transform);
-
-      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
-        gtk_snapshot_push_clip (context->snapshot, viewport);
     }
 
   if (shape->type != SHAPE_CLIP_PATH &&
@@ -20294,13 +20294,13 @@ pop_group (Shape        *shape,
     {
       SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
 
-      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
-        gtk_snapshot_pop (context->snapshot);
+      g_free ((gpointer) pop_viewport (context));
 
       pop_transform (context);
       gtk_snapshot_restore (context->snapshot);
 
-      g_free ((gpointer) pop_viewport (context));
+      if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
+        gtk_snapshot_pop (context->snapshot);
    }
 }
 
