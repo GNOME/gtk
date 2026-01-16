@@ -7,8 +7,8 @@
         viewBox='0 0 480 360'>
   <g
           id='test-body-content'
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='18'>
+          font-size='18'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <radialGradient
             id='Grad1'
             cx='75'
@@ -36,8 +36,8 @@
             height='140'>
     </rect>
     <text
-            font-family='Arial'
             font-size='12'
+            font-family='Arial'
             x='10'
             y='165'>Radial gradient on fill of rectangle</text>
     <radialGradient
@@ -70,8 +70,8 @@
             class='transparent-fill'>
     </rect>
     <text
-            font-family='Arial'
             font-size='12'
+            font-family='Arial'
             x='230'
             y='165'>Radial gradient on stroke of rectangle</text>
     <radialGradient
@@ -94,14 +94,14 @@
       </stop>
     </radialGradient>
     <text
-            font-family='Arial'
             font-size='50'
+            font-family='Arial'
             fill='url(#Grad3)'
             x='10'
             y='210'>Gradient on text fill</text>
     <text
-            font-family='Arial'
             font-size='12'
+            font-family='Arial'
             x='10'
             y='225'>Radial gradient on text, black to yellow</text>
     <radialGradient
@@ -124,8 +124,8 @@
       </stop>
     </radialGradient>
     <text
-            font-family='Arial'
             font-size='45'
+            font-family='Arial'
             fill='none'
             stroke='url(#Grad4)'
             stroke-width='2'
@@ -133,14 +133,14 @@
             y='270'
             class='transparent-fill'>Gradient on text stroke</text>
     <text
-            font-family='Arial'
             font-size='12'
+            font-family='Arial'
             x='10'
             y='285'>Radial gradient on stroke of text, black to red</text>
   </g>
   <g
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='32'>
+          font-size='32'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <text
             id='revision'
             fill='rgb(0,0,0)'

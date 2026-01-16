@@ -6,15 +6,15 @@
         gpa:state='empty'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='0ms'
-        font-weight='400'
         font-size='13.333'
+        font-weight='400'
         width='300'
         height='200'
         viewBox='0 0 300 200'>
   <path
           id='p'
-          font-weight='400'
           font-size='13.333'
+          font-weight='400'
           stroke='rgb(0,0,0)'
           stroke-width='1'
           stroke-dasharray='1 1'
@@ -43,8 +43,8 @@
             gpa:current-end-time='11000ms'/>
   </path>
   <circle
-          font-weight='400'
           font-size='13.333'
+          font-weight='400'
           fill='rgb(255,0,0)'
           r='5'>
   </circle>

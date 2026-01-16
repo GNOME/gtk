@@ -9295,6 +9295,11 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = SHAPE_ANY,
     .parse_value = svg_display_parse,
   },
+  [SHAPE_ATTR_FONT_SIZE] = {
+    .flags = SHAPE_ATTR_INHERITED,
+    .applies_to = SHAPE_ANY,
+    .parse_value = parse_font_size,
+  },
   [SHAPE_ATTR_VISIBILITY] = {
     .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
     .applies_to = SHAPE_ANY,
@@ -9325,10 +9330,6 @@ static ShapeAttribute shape_attrs[] = {
     .flags = SHAPE_ATTR_INHERITED,
     .applies_to = SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE,
     .parse_value = svg_color_interpolation_parse,
-  },
-  [SHAPE_ATTR_FILTER] = {
-    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
-    .parse_value = svg_filter_parse,
   },
   [SHAPE_ATTR_CLIP_PATH] = {
     .flags = SHAPE_ATTR_DISCRETE,
@@ -9370,10 +9371,9 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = SHAPE_ANY,
     .parse_value = svg_font_stretch_parse,
   },
-  [SHAPE_ATTR_FONT_SIZE] = {
-    .flags = SHAPE_ATTR_INHERITED,
-    .applies_to = SHAPE_ANY,
-    .parse_value = parse_font_size,
+  [SHAPE_ATTR_FILTER] = {
+    .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE),
+    .parse_value = svg_filter_parse,
   },
   [SHAPE_ATTR_FILL] = {
     .flags = SHAPE_ATTR_INHERITED,
@@ -9905,6 +9905,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_LANG].initial_value = svg_language_new_default ();
   shape_attrs[SHAPE_ATTR_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
   shape_attrs[SHAPE_ATTR_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
+  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_font_size_new (FONT_SIZE_MEDIUM);
   shape_attrs[SHAPE_ATTR_TRANSFORM].initial_value = svg_transform_new_none ();
   shape_attrs[SHAPE_ATTR_TRANSFORM_ORIGIN].initial_value = svg_numbers_new_00 ();
  shape_attrs[SHAPE_ATTR_TRANSFORM_BOX].initial_value = svg_transform_box_new (TRANSFORM_BOX_VIEW_BOX);
@@ -9922,7 +9923,6 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_font_weight_new (FONT_WEIGHT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
-  shape_attrs[SHAPE_ATTR_FONT_SIZE].initial_value = svg_font_size_new (FONT_SIZE_MEDIUM);
   shape_attrs[SHAPE_ATTR_FILL].initial_value = svg_paint_new_black ();
   shape_attrs[SHAPE_ATTR_FILL_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FILL_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
@@ -10098,15 +10098,15 @@ typedef struct {
 static ShapeAttrLookup shape_attr_lookups[] = {
   { "display", SHAPE_ANY, 0, SHAPE_ATTR_DISPLAY },
   { "visibility", SHAPE_ANY, 0, SHAPE_ATTR_VISIBILITY },
+  { "font-size", SHAPE_ANY, 0, SHAPE_ATTR_FONT_SIZE },
   { "transform", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)) & ~SHAPE_PAINT_SERVERS, 0, SHAPE_ATTR_TRANSFORM },
-  { "transform-origin", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)), 0, SHAPE_ATTR_TRANSFORM_ORIGIN },
-  { "transform-box", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)), 0, SHAPE_ATTR_TRANSFORM_BOX },
   { "gradientTransform", SHAPE_GRADIENTS, 0, SHAPE_ATTR_TRANSFORM },
   { "patternTransform", BIT (SHAPE_PATTERN), 0, SHAPE_ATTR_TRANSFORM },
+  { "transform-origin", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)), 0, SHAPE_ATTR_TRANSFORM_ORIGIN },
+  { "transform-box", ((SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN)), 0, SHAPE_ATTR_TRANSFORM_BOX },
+  { "opacity", SHAPE_ANY, 0, SHAPE_ATTR_OPACITY },
   { "color", SHAPE_ANY, 0, SHAPE_ATTR_COLOR },
   { "color-interpolation", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRADIENTS | SHAPE_USE, 0, SHAPE_ATTR_COLOR_INTERPOLATION },
-  { "opacity", SHAPE_ANY, 0, SHAPE_ATTR_OPACITY },
-  { "filter", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_FILTER },
   { "clip-path", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_CLIP_PATH },
   { "clip-rule", SHAPE_ANY, 0, SHAPE_ATTR_CLIP_RULE },
   { "mask", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_MASK },
@@ -10115,7 +10115,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "font-variant", SHAPE_ANY, 0, SHAPE_ATTR_FONT_VARIANT },
   { "font-weight", SHAPE_ANY, 0, SHAPE_ATTR_FONT_WEIGHT },
   { "font-stretch", SHAPE_ANY, 0, SHAPE_ATTR_FONT_STRETCH },
-  { "font-size", SHAPE_ANY, 0, SHAPE_ATTR_FONT_SIZE },
+  { "filter", (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) |SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_FILTER },
   { "fill", SHAPE_ANY, 0, SHAPE_ATTR_FILL },
   { "fill-opacity", SHAPE_ANY, 0, SHAPE_ATTR_FILL_OPACITY },
   { "fill-rule", SHAPE_ANY, 0, SHAPE_ATTR_FILL_RULE },

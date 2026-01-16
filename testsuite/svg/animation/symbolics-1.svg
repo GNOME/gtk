@@ -6,15 +6,15 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='2000ms'
-        font-weight='400'
         font-size='13.333'
+        font-weight='400'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
   <circle
           id='foreground'
-          font-weight='400'
           font-size='13.333'
+          font-weight='400'
           fill='rgb(255,255,255)'
           cx='0'
           cy='5'
@@ -30,8 +30,8 @@
   </circle>
   <circle
           id='warning'
-          font-weight='400'
           font-size='13.333'
+          font-weight='400'
           fill='rgb(165,42,42)'
           cx='10'
           cy='5'
@@ -47,8 +47,8 @@
   </circle>
   <circle
           id='blue'
-          font-weight='400'
           font-size='13.333'
+          font-weight='400'
           fill='rgb(0,0,255)'
           cx='20'
           cy='5'

@@ -6,19 +6,19 @@
         gpa:state='empty'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='6000ms'
-        font-weight='400'
         font-size='13.333'
+        font-weight='400'
         width='200'
         height='200'
         viewBox='0 0 200 200'>
   <g
-          font-weight='400'
-          font-size='13.333'>
+          font-size='13.333'
+          font-weight='400'>
     <circle
             id='p'
+            font-size='13.333'
             clip-path='path("M 0 0 L 100 0 L 100 200 L 0 200 Z")'
             font-weight='400'
-            font-size='13.333'
             fill='rgb(231,231,231)'
             cx='100'
             cy='100'
@@ -36,9 +36,9 @@
     </circle>
     <circle
             id='q'
+            font-size='13.333'
             clip-path='path("M 100 0 L 200 0 L 200 200 L 100 200 Z")'
             font-weight='400'
-            font-size='13.333'
             fill='rgb(204,204,204)'
             cx='100'
             cy='100'

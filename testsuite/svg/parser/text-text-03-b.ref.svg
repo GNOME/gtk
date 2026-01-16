@@ -7,22 +7,22 @@
         viewBox='0 0 480 360'>
   <g
           id='test-body-content'
-          font-family='FreeSerif, serif'
-          font-size='18'>
+          font-size='18'
+          font-family='FreeSerif, serif'>
     <text
             font-size='32'
             fill='rgb(0,0,255)'
             x='19'
             y='61'>Plain</text>
     <text
-            font-style='italic'
             font-size='32'
+            font-style='italic'
             fill='rgb(0,0,255)'
             x='142'
             y='61'>Italic</text>
     <text
-            font-weight='bold'
             font-size='32'
+            font-weight='bold'
             fill='rgb(0,0,255)'
             x='257'
             y='60'>Bold</text>
@@ -39,9 +39,9 @@
             y='147'
             text-decoration='line-through'>Line through</text>
     <text
+            font-size='32'
             font-style='italic'
             font-weight='bold'
-            font-size='32'
             fill='rgb(0,0,0)'
             x='1'
             y='200'
@@ -78,8 +78,8 @@
     </g>
   </g>
   <g
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='32'>
+          font-size='32'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <text
             id='revision'
             fill='rgb(0,0,0)'

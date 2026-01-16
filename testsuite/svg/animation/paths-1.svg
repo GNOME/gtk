@@ -6,14 +6,14 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='5000ms'
-        font-weight='400'
         font-size='13.333'
+        font-weight='400'
         width='300'
         height='200'
         viewBox='0 0 300 200'>
   <path
-          font-weight='400'
           font-size='13.333'
+          font-weight='400'
           stroke='rgb(0,0,0)'
           d='M 0 0 L 105 0 L 105 55 L 0 55 Z'>
     <animate

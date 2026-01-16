@@ -7,8 +7,8 @@
         viewBox='0 0 480 360'>
   <g
           id='test-body-content'
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='18'>
+          font-size='18'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <text
             font-size='34'
             x='5'
@@ -76,8 +76,8 @@
     </g>
   </g>
   <g
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='32'>
+          font-size='32'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <text
             id='revision'
             fill='rgb(0,0,0)'
