@@ -3939,6 +3939,49 @@ DEFINE_ENUM (TRANSFORM_BOX, transform_box, TransformBox,
   DEFINE_ENUM_VALUE (TRANSFORM_BOX, TRANSFORM_BOX_VIEW_BOX, "view-box")
 )
 
+typedef enum
+{
+  SHAPE_RENDERING_AUTO,
+  SHAPE_RENDERING_OPTIMIZE_SPEED,
+  SHAPE_RENDERING_CRISP_EDGES,
+  SHAPE_RENDERING_GEOMETRIC_PRECISION,
+} ShapeRendering;
+
+DEFINE_ENUM (SHAPE_RENDERING, shape_rendering, ShapeRendering,
+  DEFINE_ENUM_VALUE (SHAPE_RENDERING, SHAPE_RENDERING_AUTO, "auto"),
+  DEFINE_ENUM_VALUE (SHAPE_RENDERING, SHAPE_RENDERING_OPTIMIZE_SPEED, "optimizeSpeed"),
+  DEFINE_ENUM_VALUE (SHAPE_RENDERING, SHAPE_RENDERING_CRISP_EDGES, "crispEdges"),
+  DEFINE_ENUM_VALUE (SHAPE_RENDERING, SHAPE_RENDERING_GEOMETRIC_PRECISION, "geometricPrecision")
+)
+
+typedef enum
+{
+  TEXT_RENDERING_AUTO,
+  TEXT_RENDERING_OPTIMIZE_SPEED,
+  TEXT_RENDERING_OPTIMIZE_LEGIBILITY,
+  TEXT_RENDERING_GEOMETRIC_PRECISION,
+} TextRendering;
+
+DEFINE_ENUM (TEXT_RENDERING, text_rendering, TextRendering,
+  DEFINE_ENUM_VALUE (TEXT_RENDERING, TEXT_RENDERING_AUTO, "auto"),
+  DEFINE_ENUM_VALUE (TEXT_RENDERING, TEXT_RENDERING_OPTIMIZE_SPEED, "optimizeSpeed"),
+  DEFINE_ENUM_VALUE (TEXT_RENDERING, TEXT_RENDERING_OPTIMIZE_LEGIBILITY, "optimizeLegibility"),
+  DEFINE_ENUM_VALUE (TEXT_RENDERING, TEXT_RENDERING_GEOMETRIC_PRECISION , "geometricPrecision")
+)
+
+typedef enum
+{
+  IMAGE_RENDERING_AUTO,
+  IMAGE_RENDERING_OPTIMIZE_QUALITY,
+  IMAGE_RENDERING_OPTIMIZE_SPEED,
+} ImageRendering;
+
+DEFINE_ENUM (IMAGE_RENDERING, image_rendering, ImageRendering,
+  DEFINE_ENUM_VALUE (IMAGE_RENDERING, IMAGE_RENDERING_AUTO, "auto"),
+  DEFINE_ENUM_VALUE (IMAGE_RENDERING, IMAGE_RENDERING_OPTIMIZE_QUALITY, "optimizeQuality"),
+  DEFINE_ENUM_VALUE (IMAGE_RENDERING, IMAGE_RENDERING_OPTIMIZE_SPEED, "optimizeSpeed")
+)
+
 /* }}} */
 /* {{{ Filter primitive references */
 
@@ -9450,6 +9493,21 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = SHAPE_SHAPES | SHAPE_TEXTS,
     .parse_value = svg_paint_order_parse,
   },
+  [SHAPE_ATTR_SHAPE_RENDERING] = {
+    .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
+    .applies_to = SHAPE_SHAPES,
+    .parse_value = svg_shape_rendering_parse,
+  },
+  [SHAPE_ATTR_TEXT_RENDERING] = {
+    .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
+    .applies_to = SHAPE_TEXTS,
+    .parse_value = svg_text_rendering_parse,
+  },
+  [SHAPE_ATTR_IMAGE_RENDERING] = {
+    .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
+    .applies_to = BIT (SHAPE_IMAGE),
+    .parse_value = svg_image_rendering_parse,
+  },
   [SHAPE_ATTR_BLEND_MODE] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_ONLY_CSS,
     .applies_to = SHAPE_CONTAINERS |SHAPE_GRAPHICS | SHAPE_GRAPHICS_REF,
@@ -9935,6 +9993,9 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_STROKE_DASHARRAY].initial_value = svg_dash_array_new_none ();
   shape_attrs[SHAPE_ATTR_STROKE_DASHOFFSET].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_PAINT_ORDER].initial_value = svg_paint_order_new (PAINT_ORDER_FILL_STROKE_MARKERS);
+  shape_attrs[SHAPE_ATTR_SHAPE_RENDERING].initial_value = svg_shape_rendering_new (SHAPE_RENDERING_AUTO);
+  shape_attrs[SHAPE_ATTR_TEXT_RENDERING].initial_value = svg_text_rendering_new (TEXT_RENDERING_AUTO);
+  shape_attrs[SHAPE_ATTR_IMAGE_RENDERING].initial_value = svg_image_rendering_new (IMAGE_RENDERING_AUTO);
   shape_attrs[SHAPE_ATTR_BLEND_MODE].initial_value = svg_blend_mode_new (GSK_BLEND_MODE_DEFAULT);
   shape_attrs[SHAPE_ATTR_ISOLATION].initial_value = svg_isolation_new (ISOLATION_AUTO);
   shape_attrs[SHAPE_ATTR_HREF].initial_value = svg_href_new_none ();
@@ -10131,6 +10192,9 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "marker-mid", SHAPE_ANY, 0, SHAPE_ATTR_MARKER_MID },
   { "marker-end", SHAPE_ANY, 0, SHAPE_ATTR_MARKER_END },
   { "paint-order", SHAPE_ANY, 0, SHAPE_ATTR_PAINT_ORDER },
+  { "shape-rendering", SHAPE_ANY, 0, SHAPE_ATTR_SHAPE_RENDERING },
+  { "text-rendering", SHAPE_ANY, 0, SHAPE_ATTR_TEXT_RENDERING },
+  { "image-rendering", SHAPE_ANY, 0, SHAPE_ATTR_IMAGE_RENDERING },
   { "mix-blend-mode", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRAPHICS_REF, 0, SHAPE_ATTR_BLEND_MODE },
   { "isolation", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRAPHICS_REF, 0, SHAPE_ATTR_ISOLATION },
   { "pathLength", SHAPE_SHAPES, 0, SHAPE_ATTR_PATH_LENGTH },
