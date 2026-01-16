@@ -17548,6 +17548,15 @@ gtk_svg_init_from_bytes (GtkSvg *self,
         self->height = n->value;
     }
 
+  if (!_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_VIEW_BOX) &&
+      !_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH) &&
+      !_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
+    {
+      /* arbitrary */
+      self->width = 200;
+      self->height = 200;
+    }
+
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
     {
       Animation *a = g_ptr_array_index (data.pending_animations, i);
@@ -22380,9 +22389,9 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                               double                 weight)
 {
   GtkSvg *self = GTK_SVG (paintable);
-  graphene_rect_t viewport = GRAPHENE_RECT_INIT (0, 0, self->width, self->height);
+  graphene_rect_t viewport = GRAPHENE_RECT_INIT (0, 0, width, height);
 
-  if (self->width <= 0 || self->height <= 0)
+  if (self->width < 0 || self->height < 0)
     return;
 
   if (self->node == NULL ||
