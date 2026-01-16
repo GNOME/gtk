@@ -13211,8 +13211,14 @@ resolve_value (Shape           *shape,
             }
           else if (shape->type == SHAPE_IMAGE)
             {
-              /* FIXME */
-              return svg_value_resolve (svg_percentage_new (100), attr, idx, shape, context);
+              SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+
+              if (!href->texture)
+                return svg_number_new (0);
+              else if (attr == SHAPE_ATTR_WIDTH)
+                return svg_number_new (gdk_texture_get_width (href->texture));
+              else
+                return svg_number_new (gdk_texture_get_height (href->texture));
             }
           else
             {
