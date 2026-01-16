@@ -904,3 +904,35 @@ gsk_gpu_frame_download_texture (GskGpuFrame           *self,
 
   return TRUE;
 }
+
+/*<private>
+ * gsk_gpu_frame_start_node:
+ * @self: the frame
+ * @node: the rendernode to track
+ * @pos: the position in the parent node
+ *
+ * Starts rendering the given node, which is the child of
+ * the currently rendered node at the given position.
+ *
+ * To end rendering that node, call gsk_gpu_frame_end_node().
+ **/
+void
+gsk_gpu_frame_start_node (GskGpuFrame   *self,
+                          GskRenderNode *node,
+                          gsize          pos)
+{
+  /* FIXME: Implement */
+}
+
+/*<private>
+ * gsk_gpu_frame_end_node:
+ * @self: the frame
+ *
+ * Ends the current node and continues with its parent.
+ **/
+void
+gsk_gpu_frame_end_node (GskGpuFrame *self)
+{
+  /* FIXME: Implement */
+}
+

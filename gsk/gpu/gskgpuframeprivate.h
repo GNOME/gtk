@@ -123,6 +123,11 @@ gboolean                gsk_gpu_frame_download_texture                  (GskGpuF
                                                                          GdkColorState          *color_state);
 GskGpuOp               *gsk_gpu_frame_get_last_op                       (GskGpuFrame            *self);
 
+void                    gsk_gpu_frame_start_node                        (GskGpuFrame            *self,
+                                                                         GskRenderNode          *node,
+                                                                         gsize                   pos);
+void                    gsk_gpu_frame_end_node                          (GskGpuFrame            *self);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuFrame, g_object_unref)
 
 G_END_DECLS
