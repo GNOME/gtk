@@ -90,7 +90,11 @@
  *
  * The paintable supports much of SVG 2, some notable exceptions.
  *
- * Among the graphical elements, `<textPath>` is not supported.
+ * Among the graphical elements, `<textPath>` and `<foreignObject>`
+ * are not supported.
+ *
+ * Among the structural elements, `<a>`, `<switch>` and `<view>`
+ * are not supported.
  *
  * All filter functions are supported, plus a custom `alpha-level()`
  * function, which implements one particular case of feComponentTransfer.
