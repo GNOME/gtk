@@ -35,6 +35,18 @@
 #define GDK_ARRAY_BY_VALUE 1
 #include "gdk/gdkarrayimpl.c"
 
+typedef struct _GskNodeStackNode GskNodeStackNode;
+struct _GskNodeStackNode {
+  GskRenderNode *node;
+  guint pos;
+};
+
+#define GDK_ARRAY_NAME gsk_node_stack
+#define GDK_ARRAY_TYPE_NAME GskNodeStack
+#define GDK_ARRAY_ELEMENT_TYPE GskNodeStackNode
+#define GDK_ARRAY_BY_VALUE 1
+#include "gdk/gdkarrayimpl.c"
+
 typedef struct _GskGpuFramePrivate GskGpuFramePrivate;
 
 struct _GskGpuFramePrivate
@@ -58,6 +70,8 @@ struct _GskGpuFramePrivate
   GskGpuBuffer *storage_buffer;
   guchar *storage_buffer_data;
   gsize storage_buffer_used;
+
+  GskNodeStack node_stack;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuFrame, gsk_gpu_frame, G_TYPE_OBJECT)
@@ -73,6 +87,8 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuOp *op;
   gsize i;
+
+  g_assert (gsk_node_stack_get_size (&priv->node_stack) == 0);
 
   priv->n_globals = 0;
 
@@ -152,6 +168,7 @@ gsk_gpu_frame_finalize (GObject *object)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_clear (&priv->ops);
+  gsk_node_stack_clear (&priv->node_stack);
 
   g_clear_object (&priv->vertex_buffer);
   g_clear_object (&priv->globals_buffer);
@@ -184,6 +201,7 @@ gsk_gpu_frame_init (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_init (&priv->ops);
+  gsk_node_stack_init (&priv->node_stack);
 }
 
 void
@@ -925,7 +943,29 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
                           GskRenderNode *node,
                           gsize          pos)
 {
-  /* FIXME: Implement */
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+#ifndef G_DISABLE_ASSERT
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  gsize n = gsk_node_stack_get_size (&priv->node_stack);
+
+  if (n > 0)
+    {
+      GskNodeStackNode *stack;
+      GskRenderNode **children;
+      gsize n_children;
+
+      stack = gsk_node_stack_get (&priv->node_stack, n - 1);
+      children = gsk_render_node_get_children (stack->node, &n_children);
+      g_assert (pos < n_children);
+      g_assert (children[pos] == node);
+    }
+  else
+    {
+      g_assert (pos == 0);
+    }
+#endif
+
+  gsk_node_stack_append (&priv->node_stack, &(GskNodeStackNode) { node, pos });
 }
 
 /*<private>
@@ -937,6 +977,12 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
 void
 gsk_gpu_frame_end_node (GskGpuFrame *self)
 {
-  /* FIXME: Implement */
+#ifndef G_DISABLE_ASSERT
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  g_assert (gsk_node_stack_get_size (&priv->node_stack) > 0);
+#endif
+
+  gsk_node_stack_set_size (&priv->node_stack, gsk_node_stack_get_size (&priv->node_stack) - 1);
 }
 
