@@ -20,7 +20,13 @@ M 20 20 h 40 v 40 h -40 z";
               clip: 16 16 48 48;
               child: transform {
                 transform: translate(12, 12);
-                child: "node1";
+                child: container {
+                  color {
+                    bounds: 16 16 48 48;
+                    color: rgba(0,0,0,0);
+                  }
+                  "node1";
+                }
               }
             }
           }

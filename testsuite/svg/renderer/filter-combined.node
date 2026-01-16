@@ -21,14 +21,20 @@ isolation {
                   clip: 26 26 48 48;
                   child: blur {
                     blur: 4;
-                    child: fill "node1" {
-                      child: color {
-                        bounds: 30 30 40 40;
-                        color: rgb(0,0,255);
+                    child: container {
+                      color {
+                        bounds: 26 26 48 48;
+                        color: rgba(0,0,0,0);
                       }
-                      path: "\
+                      fill "node1" {
+                        child: color {
+                          bounds: 30 30 40 40;
+                          color: rgb(0,0,255);
+                        }
+                        path: "\
 M 30 30 h 40 v 40 h -40 z";
-                      fill-rule: winding;
+                        fill-rule: winding;
+                      }
                     }
                   }
                 }

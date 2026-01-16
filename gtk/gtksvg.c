@@ -19201,7 +19201,7 @@ apply_filter_tree (Shape         *shape,
 {
   graphene_rect_t filter_region;
   GHashTable *results;
-  graphene_rect_t bounds;
+  graphene_rect_t bounds, rect;
 
   if (filter->filters->len == 0)
     return empty_node ();
@@ -19229,7 +19229,19 @@ apply_filter_tree (Shape         *shape,
 
   results = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) filter_result_unref);
 
-  g_hash_table_insert (results, (gpointer) "", filter_result_new (source, NULL));
+  gsk_rect_intersection (&filter_region, &source->bounds, &rect);
+  if (!gsk_rect_equal (&filter_region, &rect))
+    {
+      GskRenderNode *pad, *padded;
+
+      pad = gsk_color_node_new (&GDK_RGBA_TRANSPARENT, &filter_region);
+      padded = gsk_container_node_new ((GskRenderNode*[]) { pad, source }, 2);
+      g_hash_table_insert (results, (gpointer) "", filter_result_new (padded, NULL));
+      gsk_render_node_unref (padded);
+      gsk_render_node_unref (pad);
+    }
+  else
+    g_hash_table_insert (results, (gpointer) "", filter_result_new (source, NULL));
 
   for (unsigned int i = 0; i < filter->filters->len; i++)
     {
