@@ -79,31 +79,4 @@ gsk_gpu_vec4_to_float (const float color[4],
   values[3] = color[3];
 }
 
-static inline void
-gsk_gpu_point_to_float (const graphene_point_t *point,
-                        const graphene_point_t *offset,
-                        float                   values[2])
-{
-  values[0] = point->x + offset->x;
-  values[1] = point->y + offset->y;
-}
-
-static inline void
-gsk_gpu_size_to_float (const graphene_size_t *size,
-                       float                  values[2])
-{
-  values[0] = size->width;
-  values[1] = size->height;
-}
-
-static inline void
-gsk_gpu_color_to_float (const GdkColor *color,
-                        GdkColorState  *target,
-                        float           opacity,
-                        float           values[4])
-{
-  gdk_color_to_float (color, target, values);
-  values[3] *= opacity;
-}
-
 G_END_DECLS

@@ -180,7 +180,8 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
-    struct_init = '{0}gsk_gpu_point_to_float ({2}, offset, &{1}{3}[{4}]);'
+    struct_init = '{0}{1}{3}[{4}] = {2}->x + offset->x;\n'
+                  '{0}{1}{3}[{4} + 1] = {2}->y + offset->y;'
 ),
 Type(
     type = 'graphene_size_t',
@@ -230,7 +231,8 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gsk_gpu_color_to_float ({2}, acs, opacity, {1}{3});'
+    struct_init = '{0}gdk_color_to_float ({2}, acs, {1}{3});'
+                  '{0}{1}{3}[3] *= opacity;'
 ),
 ]
 
