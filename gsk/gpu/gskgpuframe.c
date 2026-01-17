@@ -45,6 +45,7 @@ struct _GskNodeStackNode {
 #define GDK_ARRAY_TYPE_NAME GskNodeStack
 #define GDK_ARRAY_ELEMENT_TYPE GskNodeStackNode
 #define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 64
 #include "gdk/gdkarrayimpl.c"
 
 typedef struct _GskGpuFramePrivate GskGpuFramePrivate;
