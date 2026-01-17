@@ -69,14 +69,4 @@ GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuO
 #define GSK_RGBA_TO_VEC4_ALPHA(_color, _alpha) (float[4]) { (_color)->red, (_color)->green, (_color)->blue, (_color)->alpha * (_alpha) }
 #define GSK_VEC4_TRANSPARENT (float[4]) { 0.0f, 0.0f, 0.0f, 0.0f }
 
-static inline void
-gsk_gpu_vec4_to_float (const float color[4],
-                       float       values[4])
-{
-  values[0] = color[0];
-  values[1] = color[1];
-  values[2] = color[2];
-  values[3] = color[3];
-}
-
 G_END_DECLS
