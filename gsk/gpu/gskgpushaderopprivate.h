@@ -10,14 +10,6 @@
 
 G_BEGIN_DECLS
 
-struct _GskGpuShaderImage
-{
-  GskGpuImage           *image;         /* image to draw */
-  GskGpuSampler          sampler;       /* sampler to use for image */
-  const graphene_rect_t *coverage;      /* the clip area for the image or NULL for unclipped */
-  const graphene_rect_t *bounds;        /* bounds for the image */
-};
-
 struct _GskGpuShaderOp
 {
   GskGpuOp parent_op;
