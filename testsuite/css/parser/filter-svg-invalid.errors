@@ -1,0 +1,4 @@
+filter-svg-invalid.css:2:16-79: error: g-io-error-quark 15
+filter-svg-invalid.css:6:16-72: error: GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE
+filter-svg-invalid.css:10:16-72: error: GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE
+filter-svg-invalid.css:14:16-34: error: g-io-error-quark 1

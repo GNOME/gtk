@@ -1,0 +1,15 @@
+a {
+  filter: url("notdata:image/svg+xml,<svg><filter id='yay'></filter></svg>#yay");
+}
+
+b {
+  filter: url("data:image/png,<svg><filter id='yay'></filter></svg>#yay");
+}
+
+c {
+  filter: url("data:image/svg+xml,<svg><filter id='yay'></filter></svg>");
+}
+
+d {
+  filter: url("nosuchfile.svg#bla");
+}
