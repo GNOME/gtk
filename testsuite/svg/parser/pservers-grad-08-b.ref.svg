@@ -7,8 +7,8 @@
         viewBox='0 0 480 360'>
   <g
           id='test-body-content'
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='18'>
+          font-size='18'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <g
             transform='scale(1, 1.5)'>
       <linearGradient
@@ -30,14 +30,14 @@
         </stop>
       </linearGradient>
       <text
-              font-family='Blocky'
               font-size='68'
+              font-family='Blocky'
               fill='url(#Gradient)'
               x='20'
               y='70'>Gradient on fill</text>
       <text
-              font-family='Blocky'
               font-size='55'
+              font-family='Blocky'
               fill='none'
               stroke='url(#Gradient)'
               stroke-width='3'
@@ -46,8 +46,8 @@
               class='transparent-fill'>Gradient on stroke</text>
     </g>
     <g
-            font-family='SVGFreeSansASCII,sans-serif'
-            font-size='28'>
+            font-size='28'
+            font-family='SVGFreeSansASCII,sans-serif'>
       <text
               x='40'
               y='145'>Linear gradient on filled text</text>
@@ -57,8 +57,8 @@
     </g>
   </g>
   <g
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='32'>
+          font-size='32'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <text
             id='revision'
             fill='rgb(0,0,0)'

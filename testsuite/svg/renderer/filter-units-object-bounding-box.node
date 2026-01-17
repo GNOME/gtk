@@ -4,11 +4,14 @@ clip {
     child: isolation {
       child: clip {
         clip: 20 20 90 90;
-        child: clip {
-          clip: 20 20 90 90;
-          child: blur {
-            blur: 20;
-            child: fill {
+        child: blur {
+          blur: 20;
+          child: container {
+            color {
+              bounds: 20 20 90 90;
+              color: rgba(0,0,0,0);
+            }
+            fill {
               child: color {
                 bounds: 20 20 60 60;
                 color: rgb(0,0,255);

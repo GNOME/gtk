@@ -67,6 +67,12 @@
           cy='0'
           r='10'>
   </circle>
+  <circle
+          filter='drop-shadow(rgb(255,0,0), 1px, 2px, 3px)'
+          cx='100'
+          cy='0'
+          r='10'>
+  </circle>
   <rect
           filter='blur(5) brightness(0.75) contrast(1.5) grayscale(1) hue-rotate(45) invert(0.5) opacity(0.75) saturate(0.75) sepia(0.75) alpha-level(0.2)'
           x='0'
@@ -74,4 +80,12 @@
           width='10'
           height='10'>
   </rect>
+  <ellipse
+          filter='grayscale(1)'
+          fill='rgb(255,0,0)'
+          cx='10'
+          cy='20'
+          rx='4'
+          ry='5'>
+  </ellipse>
 </svg>

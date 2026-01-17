@@ -1,89 +1,104 @@
-isolation {
-  child: container {
-    isolation {
-      child: clip {
-        clip: 6 6 48 48;
+clip {
+  clip: 0 0 200 100;
+  child: isolation {
+    child: container {
+      isolation {
         child: clip {
           clip: 6 6 48 48;
           child: color-matrix {
             matrix: matrix3d(0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-            child: fill {
-              child: color {
-                bounds: 10 10 40 40;
-                color: rgb(255,0,0);
+            child: container {
+              color {
+                bounds: 6 6 48 48;
+                color: rgba(0,0,0,0);
               }
-              path: "\
+              fill {
+                child: color {
+                  bounds: 10 10 40 40;
+                  color: rgb(255,0,0);
+                }
+                path: "\
 M 10 10 h 40 v 40 h -40 z";
-              fill-rule: winding;
+                fill-rule: winding;
+              }
             }
           }
         }
+        isolations: background;
       }
-      isolations: background;
-    }
-    isolation {
-      child: clip {
-        clip: 56 6 48 48;
+      isolation {
         child: clip {
           clip: 56 6 48 48;
           child: color-matrix {
             matrix: matrix3d(0.6063, 0.1063, 0.1063, 0, 0.3576, 0.8576, 0.3576, 0, 0.0361, 0.0361, 0.5361, 0, 0, 0, 0, 1);
-            child: fill {
-              child: color {
-                bounds: 60 10 40 40;
-                color: rgb(255,0,0);
+            child: container {
+              color {
+                bounds: 56 6 48 48;
+                color: rgba(0,0,0,0);
               }
-              path: "\
+              fill {
+                child: color {
+                  bounds: 60 10 40 40;
+                  color: rgb(255,0,0);
+                }
+                path: "\
 M 60 10 h 40 v 40 h -40 z";
-              fill-rule: winding;
+                fill-rule: winding;
+              }
             }
           }
         }
+        isolations: background;
       }
-      isolations: background;
-    }
-    isolation {
-      child: clip {
-        clip: 106 6 48 48;
+      isolation {
         child: clip {
           clip: 106 6 48 48;
           child: color-matrix {
             matrix: matrix3d(5.55112e-17, 0.356, -0.574, 0, 0, 0.855, 1.43, 0, 1, -0.211, 0.144, 0, 0, 0, 0, 1);
-            child: fill {
-              child: color {
-                bounds: 110 10 40 40;
-                color: rgb(255,0,0);
+            child: container {
+              color {
+                bounds: 106 6 48 48;
+                color: rgba(0,0,0,0);
               }
-              path: "\
+              fill {
+                child: color {
+                  bounds: 110 10 40 40;
+                  color: rgb(255,0,0);
+                }
+                path: "\
 M 110 10 h 40 v 40 h -40 z";
-              fill-rule: winding;
+                fill-rule: winding;
+              }
             }
           }
         }
+        isolations: background;
       }
-      isolations: background;
-    }
-    isolation {
-      child: clip {
-        clip: 6 56 48 48;
+      isolation {
         child: clip {
           clip: 6 56 48 48;
           child: color-matrix {
             matrix: matrix3d(0, 0, 0, 0.2126, 0, 0, 0, 0.7152, 0, 0, 0, 0.0722, 0, 0, 0, 0);
-            child: fill {
-              child: color {
-                bounds: 10 60 40 40;
-                color: rgb(255,0,0);
+            child: container {
+              color {
+                bounds: 6 56 48 48;
+                color: rgba(0,0,0,0);
               }
-              path: "\
+              fill {
+                child: color {
+                  bounds: 10 60 40 40;
+                  color: rgb(255,0,0);
+                }
+                path: "\
 M 10 60 h 40 v 40 h -40 z";
-              fill-rule: winding;
+                fill-rule: winding;
+              }
             }
           }
         }
+        isolations: background;
       }
-      isolations: background;
     }
+    isolations: background;
   }
-  isolations: background;
 }

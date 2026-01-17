@@ -7,8 +7,8 @@
         viewBox='0 0 480 360'>
   <g
           id='test-body-content'
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='18'>
+          font-size='18'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <text
             transform='rotate(90, 0, 0) translate(120, -100)'
             text-anchor='middle'>Rotated 90 degrees</text>
@@ -59,8 +59,8 @@
             transform='translate(250, 180) rotate(-85, 0, 0)'>Rotated by 10 degrees</text>
   </g>
   <g
-          font-family='SVGFreeSansASCII,sans-serif'
-          font-size='32'>
+          font-size='32'
+          font-family='SVGFreeSansASCII,sans-serif'>
     <text
             id='revision'
             fill='rgb(0,0,0)'

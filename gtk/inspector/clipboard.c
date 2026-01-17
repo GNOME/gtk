@@ -198,6 +198,8 @@ add_content_type_row (GtkInspectorClipboard *self,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), 60);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_box_append (GTK_BOX (hbox), label);
 

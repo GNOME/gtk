@@ -6,19 +6,19 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='5000ms'
+        font-size='13.333'
         font-weight='400'
-        font-size='16'
         width='300'
         height='200'
         viewBox='0 0 300 200'>
   <g
+          font-size='13.333'
           font-weight='400'
-          font-size='16'
           fill='rgb(0,0,255)'>
     <circle
             id='p'
+            font-size='13.333'
             font-weight='400'
-            font-size='16'
             fill='rgb(0,0,128)'
             cx='10'
             cy='10'

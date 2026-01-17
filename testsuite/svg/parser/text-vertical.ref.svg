@@ -20,8 +20,8 @@
     </linearGradient>
   </defs>
   <text
-          visibility='visible'
           font-size='16'
+          visibility='visible'
           fill='url(#gr)'
           x='32'
           y='10'

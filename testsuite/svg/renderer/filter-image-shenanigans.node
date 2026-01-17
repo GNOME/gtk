@@ -2,47 +2,44 @@ isolation {
   child: container {
     isolation {
       child: clip {
-        clip: -10 -10 120 120;
-        child: clip {
-          clip: 0 0 200 200;
-          child: transform {
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 0 0 110 110;
+        child: transform {
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -51,48 +48,45 @@ M 0 100 h 100 v 100 h -100 z";
     }
     isolation {
       child: clip {
-        clip: 140 -10 120 120;
-        child: clip {
-          clip: 100 0 200 200;
-          child: transform {
-            transform: translate(100, 0);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 140 0 120 110;
+        child: transform {
+          transform: translate(140, 0);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -101,48 +95,45 @@ M 0 100 h 100 v 100 h -100 z";
     }
     isolation {
       child: clip {
-        clip: 290 -10 120 120;
-        child: clip {
-          clip: 200 0 200 200;
-          child: transform {
-            transform: translate(200, 0);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 290 0 110 110;
+        child: transform {
+          transform: translate(290, 0);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -151,48 +142,45 @@ M 0 100 h 100 v 100 h -100 z";
     }
     isolation {
       child: clip {
-        clip: -10 140 120 120;
-        child: clip {
-          clip: 0 100 200 200;
-          child: transform {
-            transform: translate(0, 100);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 0 140 110 120;
+        child: transform {
+          transform: translate(0, 140);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -202,47 +190,44 @@ M 0 100 h 100 v 100 h -100 z";
     isolation {
       child: clip {
         clip: 140 140 120 120;
-        child: clip {
-          clip: 100 100 200 200;
-          child: transform {
-            transform: translate(100, 100);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        child: transform {
+          transform: translate(140, 140);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -251,48 +236,45 @@ M 0 100 h 100 v 100 h -100 z";
     }
     isolation {
       child: clip {
-        clip: 290 140 120 120;
-        child: clip {
-          clip: 200 100 200 200;
-          child: transform {
-            transform: translate(200, 100);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 290 140 110 120;
+        child: transform {
+          transform: translate(290, 140);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -301,48 +283,45 @@ M 0 100 h 100 v 100 h -100 z";
     }
     isolation {
       child: clip {
-        clip: -10 290 120 120;
-        child: clip {
-          clip: 0 200 200 200;
-          child: transform {
-            transform: translate(0, 200);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 0 290 110 110;
+        child: transform {
+          transform: translate(0, 290);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -351,48 +330,45 @@ M 0 100 h 100 v 100 h -100 z";
     }
     isolation {
       child: clip {
-        clip: 140 290 120 120;
-        child: clip {
-          clip: 100 200 200 200;
-          child: transform {
-            transform: translate(100, 200);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 140 290 120 110;
+        child: transform {
+          transform: translate(140, 290);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }
@@ -401,48 +377,45 @@ M 0 100 h 100 v 100 h -100 z";
     }
     isolation {
       child: clip {
-        clip: 290 290 120 120;
-        child: clip {
-          clip: 200 200 200 200;
-          child: transform {
-            transform: translate(200, 200);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 100 100;
-                  color: rgb(255,0,0);
-                }
-                path: "\
+        clip: 290 290 110 110;
+        child: transform {
+          transform: translate(290, 290);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 100 100;
+                color: rgb(255,0,0);
+              }
+              path: "\
 M 0 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 0 100 100;
+                color: rgb(0,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 100 0 100 100;
-                  color: rgb(0,255,0);
-                }
-                path: "\
+              path: "\
 M 100 0 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 100 100 100 100;
+                color: rgb(0,0,255);
               }
-              fill {
-                child: color {
-                  bounds: 100 100 100 100;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 100 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            fill {
+              child: color {
+                bounds: 0 100 100 100;
+                color: rgb(255,255,0);
               }
-              fill {
-                child: color {
-                  bounds: 0 100 100 100;
-                  color: rgb(255,255,0);
-                }
-                path: "\
+              path: "\
 M 0 100 h 100 v 100 h -100 z";
-                fill-rule: winding;
-              }
+              fill-rule: winding;
             }
           }
         }

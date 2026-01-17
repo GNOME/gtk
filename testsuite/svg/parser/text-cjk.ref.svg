@@ -5,8 +5,8 @@
         height='128'
         viewBox='0 0 128 128'>
   <text
-          font-family='Noto Serif CJK'
           font-size='72'
+          font-family='Noto Serif CJK'
           x='32'
           y='10'
           lang='zh'
@@ -16,8 +16,8 @@
           x='4'
           y='96'>Chineese</text>
   <text
-          font-family='Noto Serif CJK'
           font-size='72'
+          font-family='Noto Serif CJK'
           x='96'
           y='10'
           lang='ja'

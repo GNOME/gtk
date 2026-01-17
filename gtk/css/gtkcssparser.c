@@ -860,10 +860,15 @@ gtk_css_parser_consume_function (GtkCssParser *self,
   arg = 0;
   while (TRUE)
     {
-      guint parse_args = parse_func (self, arg, data);
-      if (parse_args == 0)
-        break;
-      arg += parse_args;
+      token = gtk_css_parser_get_token (self);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+        {
+          guint parse_args = parse_func (self, arg, data);
+          if (parse_args == 0)
+            break;
+          arg += parse_args;
+        }
+
       token = gtk_css_parser_get_token (self);
       if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
         {
@@ -894,6 +899,7 @@ gtk_css_parser_consume_function (GtkCssParser *self,
           gtk_css_parser_error_syntax (self, "Unexpected data at end of %s() argument", function_name);
           break;
         }
+
     }
 
   gtk_css_parser_end_block (self);

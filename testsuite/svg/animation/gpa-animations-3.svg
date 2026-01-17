@@ -6,15 +6,15 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='2000ms'
+        font-size='13.333'
         font-weight='400'
-        font-size='16'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
   <circle
           id='red'
+          font-size='13.333'
           font-weight='400'
-          font-size='16'
           fill='none'
           stroke='rgb(255,0,0)'
           stroke-dasharray='0 2'

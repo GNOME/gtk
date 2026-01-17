@@ -25,87 +25,10 @@ M 21 21 h 98 v 98 h -98 z";
           transform: translate(120, 0);
           child: clip {
             clip: 10 10 120 120;
-            child: clip {
-              clip: 10 10 120 120;
-              child: blur {
-                blur: 20;
-                child: repeat {
-                  bounds: 10 10 120 120;
-                  child: container {
-                    fill {
-                      child: color {
-                        bounds: 20 20 100 100;
-                        color: rgb(255,0,0);
-                      }
-                      path: "\
-M 20 20 h 100 v 100 h -100 z";
-                      fill-rule: winding;
-                    }
-                    fill {
-                      child: color {
-                        bounds: 21 21 98 98;
-                        color: rgb(0,0,255);
-                      }
-                      path: "\
-M 21 21 h 98 v 98 h -98 z";
-                      fill-rule: winding;
-                    }
-                  }
-                  repeat: pad;
-                }
-              }
-            }
-          }
-        }
-        isolations: background;
-      }
-      isolation {
-        child: transform {
-          transform: translate(240, 0);
-          child: clip {
-            clip: 10 10 120 120;
-            child: clip {
-              clip: 10 10 120 120;
-              child: blur {
-                blur: 20;
-                child: repeat {
-                  bounds: 10 10 120 120;
-                  child: container {
-                    fill {
-                      child: color {
-                        bounds: 20 20 100 100;
-                        color: rgb(255,0,0);
-                      }
-                      path: "\
-M 20 20 h 100 v 100 h -100 z";
-                      fill-rule: winding;
-                    }
-                    fill {
-                      child: color {
-                        bounds: 21 21 98 98;
-                        color: rgb(0,0,255);
-                      }
-                      path: "\
-M 21 21 h 98 v 98 h -98 z";
-                      fill-rule: winding;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-        isolations: background;
-      }
-      isolation {
-        child: transform {
-          transform: translate(360, 0);
-          child: clip {
-            clip: 10 10 120 120;
-            child: clip {
-              clip: 10 10 120 120;
-              child: blur {
-                blur: 20;
+            child: blur {
+              blur: 20;
+              child: repeat {
+                bounds: 10 10 120 120;
                 child: container {
                   fill {
                     child: color {
@@ -125,6 +48,74 @@ M 20 20 h 100 v 100 h -100 z";
 M 21 21 h 98 v 98 h -98 z";
                     fill-rule: winding;
                   }
+                }
+                repeat: pad;
+              }
+            }
+          }
+        }
+        isolations: background;
+      }
+      isolation {
+        child: transform {
+          transform: translate(240, 0);
+          child: clip {
+            clip: 10 10 120 120;
+            child: blur {
+              blur: 20;
+              child: repeat {
+                bounds: 10 10 120 120;
+                child: container {
+                  fill {
+                    child: color {
+                      bounds: 20 20 100 100;
+                      color: rgb(255,0,0);
+                    }
+                    path: "\
+M 20 20 h 100 v 100 h -100 z";
+                    fill-rule: winding;
+                  }
+                  fill {
+                    child: color {
+                      bounds: 21 21 98 98;
+                      color: rgb(0,0,255);
+                    }
+                    path: "\
+M 21 21 h 98 v 98 h -98 z";
+                    fill-rule: winding;
+                  }
+                }
+              }
+            }
+          }
+        }
+        isolations: background;
+      }
+      isolation {
+        child: transform {
+          transform: translate(360, 0);
+          child: clip {
+            clip: 10 10 120 120;
+            child: blur {
+              blur: 20;
+              child: container {
+                fill {
+                  child: color {
+                    bounds: 20 20 100 100;
+                    color: rgb(255,0,0);
+                  }
+                  path: "\
+M 20 20 h 100 v 100 h -100 z";
+                  fill-rule: winding;
+                }
+                fill {
+                  child: color {
+                    bounds: 21 21 98 98;
+                    color: rgb(0,0,255);
+                  }
+                  path: "\
+M 21 21 h 98 v 98 h -98 z";
+                  fill-rule: winding;
                 }
               }
             }
