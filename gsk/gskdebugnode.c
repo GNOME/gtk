@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskdebugnode.h"
+#include "gskdebugnodeprivate.h"
 
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
@@ -35,6 +35,7 @@ struct _GskDebugNode
   GskRenderNode render_node;
 
   GskRenderNode *child;
+  GskDebugProfile *profile;
   char *message;
 };
 
@@ -46,6 +47,7 @@ gsk_debug_node_finalize (GskRenderNode *node)
 
   gsk_render_node_unref (self->child);
   g_free (self->message);
+  g_free (self->profile);
 
   parent_class->finalize (node);
 }
@@ -116,7 +118,7 @@ gsk_debug_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_debug_node_new (child, g_strdup (self->message));
+    result = gsk_debug_node_new_profile (child, self->profile, g_strdup (self->message));
 
   gsk_render_node_unref (child);
 
@@ -142,6 +144,37 @@ gsk_debug_node_class_init (gpointer g_class,
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskDebugNode, gsk_debug_node)
 
+GskRenderNode *
+gsk_debug_node_new_profile (GskRenderNode             *child,
+                                const GskDebugProfile *perf,
+                                char *                     message)
+{
+  GskDebugNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = gsk_render_node_alloc (GSK_TYPE_DEBUG_NODE);
+  node = (GskRenderNode *) self;
+  node->fully_opaque = child->fully_opaque;
+
+  self->child = gsk_render_node_ref (child);
+  self->message = message;
+  if (perf)
+    self->profile = g_memdup2 (perf, sizeof (GskDebugProfile));
+
+  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
+
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
+  node->clears_background = gsk_render_node_clears_background (child);
+  node->copy_mode = gsk_render_node_get_copy_mode (child);
+  node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
+  node->contains_paste_node = gsk_render_node_contains_paste_node (child);
+
+  return node;
+}
+
 /**
  * gsk_debug_node_new:
  * @child: The child to add debug info for
@@ -158,28 +191,7 @@ GskRenderNode *
 gsk_debug_node_new (GskRenderNode *child,
                     char          *message)
 {
-  GskDebugNode *self;
-  GskRenderNode *node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
-
-  self = gsk_render_node_alloc (GSK_TYPE_DEBUG_NODE);
-  node = (GskRenderNode *) self;
-  node->fully_opaque = child->fully_opaque;
-
-  self->child = gsk_render_node_ref (child);
-  self->message = message;
-
-  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
-
-  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
-  node->is_hdr = gsk_render_node_is_hdr (child);
-  node->clears_background = gsk_render_node_clears_background (child);
-  node->copy_mode = gsk_render_node_get_copy_mode (child);
-  node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
-  node->contains_paste_node = gsk_render_node_contains_paste_node (child);
-
-  return node;
+  return gsk_debug_node_new_profile (child, NULL, message);
 }
 
 /**
@@ -214,3 +226,18 @@ gsk_debug_node_get_message (const GskRenderNode *node)
   return self->message;
 }
 
+/*<private>
+ * gsk_debug_node_get_profile:
+ * @node: the node
+ *
+ * Gets the profile information carried by this debug node if available.
+ *
+ * Returns: (nullable) (transfer none): the profile information
+ **/
+const GskDebugProfile *
+gsk_debug_node_get_profile (GskRenderNode *node)
+{
+  const GskDebugNode *self = (const GskDebugNode *) node;
+
+  return self->profile;
+}
