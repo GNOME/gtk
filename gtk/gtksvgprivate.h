@@ -597,4 +597,9 @@ GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
                                         size_t                 n_colors,
                                         GtkSvgSerializeFlags   flags);
 
+GskRenderNode *gtk_svg_apply_filter    (GtkSvg                *svg,
+                                        const char            *filter,
+                                        const graphene_rect_t *bounds,
+                                        GskRenderNode         *node);
+
 G_END_DECLS

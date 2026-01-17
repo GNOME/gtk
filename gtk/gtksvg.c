@@ -23096,6 +23096,9 @@ gboolean
 gtk_svg_equal (GtkSvg *svg1,
                GtkSvg *svg2)
 {
+  if (svg1 == svg2)
+    return TRUE;
+
   if (svg1->gpa_version != svg2->gpa_version ||
       g_strcmp0 (svg1->gpa_keywords, svg2->gpa_keywords) != 0)
     return FALSE;
@@ -24062,6 +24065,93 @@ gtk_svg_get_overflow (GtkSvg *self)
   g_return_val_if_fail (GTK_IS_SVG (self), GTK_OVERFLOW_HIDDEN);
 
   return self->overflow;
+}
+
+static Shape *
+find_filter (Shape      *shape,
+             const char *filter_id)
+{
+  if (shape->type == SHAPE_FILTER)
+    {
+      if (g_strcmp0 (shape->id, filter_id) == 0)
+        return shape;
+      else
+        return NULL;
+    }
+
+  if (shape_type_has_shapes (shape->type))
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          Shape *res;
+
+          res = find_filter (sh, filter_id);
+          if (res)
+            return res;
+        }
+    }
+
+  return NULL;
+}
+
+GskRenderNode *
+gtk_svg_apply_filter (GtkSvg                *svg,
+                      const char            *filter_id,
+                      const graphene_rect_t *bounds,
+                      GskRenderNode         *source)
+{
+  Shape *filter;
+  Shape *shape;
+  PaintContext paint_context;
+  GskRenderNode *result;
+  G_GNUC_UNUSED GskRenderNode *node;
+
+  filter = find_filter (svg->content, filter_id);
+  if (!filter)
+    return gsk_render_node_ref (source);
+
+  /* This is a bit iffy. We create an extra shape,
+   * and treat it as if it was part of the svg.
+   */
+
+  shape = shape_new (NULL, SHAPE_RECT);
+
+  shape->valid_bounds = TRUE;
+  shape->bounds = *bounds;
+
+  paint_context.svg = svg;
+  paint_context.viewport = bounds;
+  paint_context.viewport_stack = NULL;
+  paint_context.snapshot = gtk_snapshot_new ();
+  paint_context.colors = NULL;
+  paint_context.n_colors = 0;
+  paint_context.weight = 400;
+  paint_context.op = RENDERING;
+  paint_context.op_stack = NULL;
+  paint_context.ctx_shape_stack = NULL;
+  paint_context.current_time = svg->current_time;
+  paint_context.depth = 0;
+  paint_context.transforms = NULL;
+  paint_context.instance_count = 0;
+
+  /* This is necessary so the filter has current values.
+   * Also, any other part of the svg that the filter might
+   * refer to.
+   */
+  recompute_current_values (svg->content, NULL, &paint_context);
+
+  /* This is necessary, so the shape itself has current values */
+  recompute_current_values (shape, NULL, &paint_context);
+
+  result = apply_filter_tree (shape, filter, &paint_context, source);
+
+  shape_free (shape);
+
+  node = gtk_snapshot_free_to_node (paint_context.snapshot);
+  g_assert (node == NULL);
+
+  return result;
 }
 
 /* }}} */
