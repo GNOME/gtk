@@ -981,8 +981,9 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
 }
 
 void
-gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
-                                   GtkSnapshot       *snapshot)
+gtk_css_filter_value_pop_snapshot (const GtkCssValue     *filter,
+                                   const graphene_rect_t *bounds,
+                                   GtkSnapshot           *snapshot)
 {
   int i, j;
 
