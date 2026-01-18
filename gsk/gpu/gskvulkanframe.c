@@ -58,16 +58,6 @@ struct _GskVulkanFramePrivate
   gsize pool_n_buffers;
 };
 
-struct _GskVulkanFrame
-{
-  GskGpuFrame parent_instance;
-};
-
-struct _GskVulkanFrameClass
-{
-  GskGpuFrameClass parent_class;
-};
-
 G_DEFINE_TYPE_WITH_PRIVATE (GskVulkanFrame, gsk_vulkan_frame, GSK_TYPE_GPU_FRAME)
 
 static gboolean
