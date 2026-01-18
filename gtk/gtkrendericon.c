@@ -84,7 +84,9 @@ gtk_css_style_snapshot_icon (GtkCssStyle *style,
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_css_filter_value_pop_snapshot (style->other->icon_filter, snapshot);
+  gtk_css_filter_value_pop_snapshot (style->other->icon_filter,
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                     snapshot);
 
   gtk_snapshot_pop (snapshot);
 
@@ -158,7 +160,9 @@ transparent:
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_css_filter_value_pop_snapshot (style->other->icon_filter, snapshot);
+  gtk_css_filter_value_pop_snapshot (style->other->icon_filter,
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                     snapshot);
 
   gsk_transform_unref (transform);
 }

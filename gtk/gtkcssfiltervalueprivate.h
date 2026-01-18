@@ -34,6 +34,7 @@ gboolean        gtk_css_filter_value_is_none            (const GtkCssValue      
 double          gtk_css_filter_value_push_snapshot      (const GtkCssValue      *filter,
                                                          GtkSnapshot            *snapshot);
 void            gtk_css_filter_value_pop_snapshot       (const GtkCssValue      *filter,
+                                                         const graphene_rect_t  *bounds,
                                                          GtkSnapshot            *snapshot);
 
 G_END_DECLS

@@ -133,6 +133,7 @@ GtkSvgFeatures   gtk_svg_get_features      (GtkSvg         *self);
 
 typedef enum
 {
+  GTK_SVG_ERROR_INVALID_SYNTAX,
   GTK_SVG_ERROR_INVALID_ELEMENT,
   GTK_SVG_ERROR_INVALID_ATTRIBUTE,
   GTK_SVG_ERROR_MISSING_ATTRIBUTE,

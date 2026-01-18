@@ -442,6 +442,29 @@ gtk_svg_invalid_attribute (GtkSvg               *self,
   g_error_free (error);
 }
 
+static void
+gtk_svg_markup_error (GtkSvg              *self,
+                      GMarkupParseContext *context,
+                      const GError        *markup_error)
+{
+  GError *error;
+  GtkSvgLocation start, end;
+
+  error = g_error_new_literal (GTK_SVG_ERROR,
+                               GTK_SVG_ERROR_INVALID_SYNTAX,
+                               markup_error->message);
+
+  gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
+  gtk_svg_location_init (&start, context);
+  gtk_svg_location_init (&end, context);
+  end.bytes += 1;
+  end.line_chars += 1;
+  gtk_svg_error_set_location (error, &start, &end);
+
+  gtk_svg_emit_error (self, error);
+  g_clear_error (&error);
+}
+
 G_GNUC_PRINTF (4, 5)
 static void
 gtk_svg_missing_attribute (GtkSvg               *self,
@@ -16993,6 +17016,16 @@ text_cb (GMarkupParseContext  *context,
   g_string_append_len (data->text, text, len);
 }
 
+static void
+error_cb (GMarkupParseContext *context,
+          GError              *error,
+          gpointer             user_data)
+{
+  ParserData *data = user_data;
+
+  gtk_svg_markup_error (data->svg, context, error);
+}
+
 /* {{{ Href handling, dependency tracking */
 
 static gboolean
@@ -17535,9 +17568,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     end_element_cb,
     text_cb,
     NULL,
-    NULL,
+    error_cb,
   };
-  GError *error = NULL;
 
   g_clear_pointer (&self->content, shape_free);
 
@@ -17565,11 +17597,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   if (!g_markup_parse_context_parse (context,
                                      g_bytes_get_data (bytes, NULL),
                                      g_bytes_get_size (bytes),
-                                     &error) ||
-      !g_markup_parse_context_end_parse (context, &error))
+                                     NULL) ||
+      !g_markup_parse_context_end_parse (context, NULL))
     {
-      gtk_svg_emit_error (self, error);
-      g_clear_error (&error);
       gtk_svg_clear_content (self);
       g_slist_free (data.shape_stack);
       g_clear_pointer (&data.skip.reason, g_free);
@@ -23096,6 +23126,9 @@ gboolean
 gtk_svg_equal (GtkSvg *svg1,
                GtkSvg *svg2)
 {
+  if (svg1 == svg2)
+    return TRUE;
+
   if (svg1->gpa_version != svg2->gpa_version ||
       g_strcmp0 (svg1->gpa_keywords, svg2->gpa_keywords) != 0)
     return FALSE;
@@ -24064,6 +24097,93 @@ gtk_svg_get_overflow (GtkSvg *self)
   return self->overflow;
 }
 
+static Shape *
+find_filter (Shape      *shape,
+             const char *filter_id)
+{
+  if (shape->type == SHAPE_FILTER)
+    {
+      if (g_strcmp0 (shape->id, filter_id) == 0)
+        return shape;
+      else
+        return NULL;
+    }
+
+  if (shape_type_has_shapes (shape->type))
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          Shape *res;
+
+          res = find_filter (sh, filter_id);
+          if (res)
+            return res;
+        }
+    }
+
+  return NULL;
+}
+
+GskRenderNode *
+gtk_svg_apply_filter (GtkSvg                *svg,
+                      const char            *filter_id,
+                      const graphene_rect_t *bounds,
+                      GskRenderNode         *source)
+{
+  Shape *filter;
+  Shape *shape;
+  PaintContext paint_context;
+  GskRenderNode *result;
+  G_GNUC_UNUSED GskRenderNode *node;
+
+  filter = find_filter (svg->content, filter_id);
+  if (!filter)
+    return gsk_render_node_ref (source);
+
+  /* This is a bit iffy. We create an extra shape,
+   * and treat it as if it was part of the svg.
+   */
+
+  shape = shape_new (NULL, SHAPE_RECT);
+
+  shape->valid_bounds = TRUE;
+  shape->bounds = *bounds;
+
+  paint_context.svg = svg;
+  paint_context.viewport = bounds;
+  paint_context.viewport_stack = NULL;
+  paint_context.snapshot = gtk_snapshot_new ();
+  paint_context.colors = NULL;
+  paint_context.n_colors = 0;
+  paint_context.weight = 400;
+  paint_context.op = RENDERING;
+  paint_context.op_stack = NULL;
+  paint_context.ctx_shape_stack = NULL;
+  paint_context.current_time = svg->current_time;
+  paint_context.depth = 0;
+  paint_context.transforms = NULL;
+  paint_context.instance_count = 0;
+
+  /* This is necessary so the filter has current values.
+   * Also, any other part of the svg that the filter might
+   * refer to.
+   */
+  recompute_current_values (svg->content, NULL, &paint_context);
+
+  /* This is necessary, so the shape itself has current values */
+  recompute_current_values (shape, NULL, &paint_context);
+
+  result = apply_filter_tree (shape, filter, &paint_context, source);
+
+  shape_free (shape);
+
+  node = gtk_snapshot_free_to_node (paint_context.snapshot);
+  g_assert (node == NULL);
+
+  return result;
+}
+
 /* }}} */
 /* {{{ Public API */
 /* {{{ Constructors */
@@ -24535,10 +24655,12 @@ gtk_svg_pause (GtkSvg *self)
 
 /**
  * GtkSvgError:
+ * @GTK_SVG_ERROR_INVALID_SYNTAX: The XML syntax is broken
+ *   in some way
  * @GTK_SVG_ERROR_INVALID_ELEMENT: An XML element is invalid
  *   (either because it is not part of SVG, or because it is
  *   in the wrong place, or because it not implemented in GTK)
- * @GTK_SVG_ERROR_INVALID_ATTRIBUTE: An XML attribute is invalid
+ * @GTK_SVG_ERROR_INVALID_ATTRIBUTE: An attribute is invalid
  *   (either because it is not part of SVG, or because it is
  *   not implemented in GTK, or its value is problematic)
  * @GTK_SVG_ERROR_MISSING_ATTRIBUTE: A required attribute is missing

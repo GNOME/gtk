@@ -25,6 +25,9 @@
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
+#include "gtk/css/gtkcssdataurlprivate.h"
+#include "gtksvgprivate.h"
+#include "gtksnapshotprivate.h"
 
 #include "gsk/gskcairoblurprivate.h"
 
@@ -41,7 +44,8 @@ typedef enum {
   GTK_CSS_FILTER_INVERT,
   GTK_CSS_FILTER_OPACITY,
   GTK_CSS_FILTER_SATURATE,
-  GTK_CSS_FILTER_SEPIA
+  GTK_CSS_FILTER_SEPIA,
+  GTK_CSS_FILTER_SVG,
 } GtkCssFilterType;
 
 union _GtkCssFilter {
@@ -50,6 +54,12 @@ union _GtkCssFilter {
     GtkCssFilterType     type;
     GtkCssValue         *value;
   }            blur, brightness, contrast, drop_shadow, grayscale, hue_rotate, invert, opacity, saturate, sepia;
+  struct {
+    GtkCssFilterType type;
+    char *url;
+    char *ref;
+    GtkSvg *svg;
+  } svg;
 };
 
 struct _GtkCssValue {
@@ -95,6 +105,11 @@ gtk_css_filter_clear (GtkCssFilter *filter)
     case GTK_CSS_FILTER_DROP_SHADOW:
       gtk_css_value_unref (filter->drop_shadow.value);
       break;
+    case GTK_CSS_FILTER_SVG:
+      g_free (filter->svg.ref);
+      g_free (filter->svg.url);
+      g_clear_object (&filter->svg.svg);
+      break;
     case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
@@ -137,6 +152,11 @@ gtk_css_filter_init_identity (GtkCssFilter       *filter,
       break;
     case GTK_CSS_FILTER_DROP_SHADOW:
       filter->drop_shadow.value = gtk_css_shadow_value_new_filter (other->drop_shadow.value);
+      break;
+    case GTK_CSS_FILTER_SVG:
+      filter->svg.ref = NULL;
+      filter->svg.url = NULL;
+      filter->svg.svg = NULL;
       break;
     case GTK_CSS_FILTER_NONE:
     default:
@@ -250,6 +270,7 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
     case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
     case GTK_CSS_FILTER_DROP_SHADOW:
+    case GTK_CSS_FILTER_SVG:
       return FALSE;
     default:
       g_assert_not_reached ();
@@ -357,6 +378,15 @@ gtk_css_filter_compute (GtkCssFilter         *dest,
       dest->drop_shadow.value = gtk_css_value_compute (src->drop_shadow.value, property_id, context);
       return dest->drop_shadow.value == src->drop_shadow.value;
 
+    case GTK_CSS_FILTER_SVG:
+      if (src->svg.ref)
+        {
+          dest->svg.ref = g_strdup (src->svg.ref);
+          dest->svg.url = g_strdup (src->svg.url);
+          dest->svg.svg = g_object_ref (src->svg.svg);
+        }
+      return TRUE;
+
     case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
@@ -435,6 +465,10 @@ gtk_css_filter_equal (const GtkCssFilter *filter1,
 
     case GTK_CSS_FILTER_DROP_SHADOW:
       return gtk_css_value_equal (filter1->drop_shadow.value, filter2->drop_shadow.value);
+
+    case GTK_CSS_FILTER_SVG:
+      return g_strcmp0 (filter1->svg.url, filter2->svg.url) == 0 &&
+             g_strcmp0 (filter1->svg.ref, filter2->svg.ref) == 0;
 
     case GTK_CSS_FILTER_NONE:
     default:
@@ -526,6 +560,21 @@ gtk_css_filter_transition (GtkCssFilter       *result,
 
     case GTK_CSS_FILTER_DROP_SHADOW:
       result->drop_shadow.value = gtk_css_value_transition (start->drop_shadow.value, end->drop_shadow.value, property_id, progress);
+      break;
+
+    case GTK_CSS_FILTER_SVG:
+      if (progress < 0.5)
+        {
+          result->svg.ref = g_strdup (start->svg.ref);
+          result->svg.url = g_strdup (start->svg.url);
+          result->svg.svg = g_object_ref (start->svg.svg);
+        }
+      else
+        {
+          result->svg.ref = g_strdup (end->svg.ref);
+          result->svg.url = g_strdup (end->svg.url);
+          result->svg.svg = g_object_ref (end->svg.svg);
+        }
       break;
 
     case GTK_CSS_FILTER_NONE:
@@ -679,6 +728,10 @@ gtk_css_filter_print (const GtkCssFilter *filter,
       g_string_append (string, ")");
       break;
 
+    case GTK_CSS_FILTER_SVG:
+      g_string_append_printf (string, "url(\"%s#%s\")", filter->svg.url, filter->svg.ref);
+      break;
+
     case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
@@ -802,6 +855,51 @@ gtk_css_filter_parse_shadow (GtkCssParser *parser,
   return 1;
 }
 
+typedef struct
+{
+  GtkCssParser *parser;
+  gboolean is_data;
+  GtkCssLocation start, end;
+} ParserErrorData;
+
+static void
+css_location_update (GtkCssLocation *l,
+                     int             bytes,
+                     int             chars)
+{
+  l->bytes += bytes;
+  l->chars += chars;
+  l->line_bytes += bytes;
+  l->line_chars += chars;
+}
+
+static void
+svg_error_cb (GtkSvg          *svg,
+              const GError    *svg_error,
+              ParserErrorData *d)
+{
+  GtkCssLocation start = d->start;
+  GtkCssLocation end = d->end;
+
+#if 0
+  /* GMarkup error locations are not good enough for this :( */
+  if (d->is_data && svg_error->domain == GTK_SVG_ERROR)
+    {
+      const GtkSvgLocation *s = gtk_svg_error_get_start (svg_error);
+      const GtkSvgLocation *e = gtk_svg_error_get_end (svg_error);
+
+      start = end = d->start;
+      css_location_update (&start, s->line_chars, e->line_chars);
+      css_location_update (&end, e->line_chars, e->line_chars);
+    }
+#endif
+
+  gtk_css_parser_error (d->parser,
+                        GTK_CSS_PARSER_ERROR_SYNTAX,
+                        &start, &end,
+                        "%s", svg_error->message);
+}
+
 GtkCssValue *
 gtk_css_filter_value_parse (GtkCssParser *parser)
 {
@@ -899,6 +997,117 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
           filter.type = GTK_CSS_FILTER_DROP_SHADOW;
           computed = computed && gtk_css_value_is_computed (filter.drop_shadow.value);
         }
+      else if (gtk_css_parser_has_url (parser))
+        {
+          GtkCssLocation start, end;
+          char *url;
+          char *scheme = NULL;
+          char *path = NULL;
+          GBytes *bytes = NULL;
+          char *fragment = NULL;
+          GError *error = NULL;
+          unsigned long signal_id;
+          gboolean is_data;
+          int len;
+
+          start = *gtk_css_parser_get_start_location (parser);
+
+          url = gtk_css_parser_consume_url (parser);
+          if (!url)
+            goto fail;
+
+          end = *gtk_css_parser_get_end_location (parser);
+
+          len = strlen ("url(\"");
+          css_location_update (&start, len, len);
+          len = strlen ("\")");
+          css_location_update (&end, - len, - len);
+
+          g_uri_split (url, 0, &scheme, NULL, NULL, NULL, &path, NULL, &fragment, NULL);
+          if (!fragment)
+            {
+              g_set_error (&error,
+                           GTK_CSS_PARSER_ERROR,
+                           GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                           "Filter url without fragment ID");
+              gtk_css_parser_emit_error (parser, &start, &end, error);
+              g_error_free (error);
+              g_free (scheme);
+              g_free (path);
+              g_free (url);
+              goto fail;
+            }
+
+          url[strlen (url) - (strlen (fragment) + 1)] = '\0';
+
+          is_data = scheme && g_ascii_strcasecmp (scheme, "data") == 0;
+
+          if (is_data)
+            {
+              char *mimetype = NULL;
+
+              bytes = gtk_css_data_url_parse (url, &mimetype, &error);
+
+              if (mimetype && strcmp (mimetype, "image/svg+xml") != 0)
+                {
+                  g_bytes_unref (bytes);
+                  g_set_error (&error,
+                               GTK_CSS_PARSER_ERROR,
+                               GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                               "Filter url contains non-SVG data");
+                  g_clear_pointer (&bytes, g_bytes_unref);
+                }
+
+              g_free (mimetype);
+
+              if (bytes)
+                {
+                  len = strchr (url, ',') - url;
+                  css_location_update (&start, len, len);
+                  len = strlen (fragment) - 1;
+                  css_location_update (&end, - len, - len);
+                }
+            }
+          else
+            {
+              GFile *file;
+
+              file = gtk_css_parser_resolve_url (parser, url);
+              if (!file)
+                file = g_file_new_for_path (path);
+
+              bytes = g_file_load_bytes (file, NULL, NULL, &error);
+              g_object_unref (file);
+            }
+
+          g_free (scheme);
+          g_free (path);
+
+          if (!bytes)
+            {
+              gtk_css_parser_emit_error (parser, &start, &end, error);
+              g_error_free (error);
+              g_free (fragment);
+              g_free (url);
+              goto fail;
+            }
+
+          /* Don't allow animations and gpa extensions for now,
+           * to avoid complications
+           */
+          filter.svg.svg = gtk_svg_new ();
+          gtk_svg_set_features (filter.svg.svg,
+                                GTK_SVG_ALL_FEATURES &
+                                ~(GTK_SVG_ANIMATIONS | GTK_SVG_EXTENSIONS));
+          signal_id = g_signal_connect (filter.svg.svg, "error",
+                                        G_CALLBACK (svg_error_cb),
+                                        (&(ParserErrorData) { parser, is_data, start, end }));
+          gtk_svg_load_from_bytes (filter.svg.svg, bytes);
+          g_signal_handler_disconnect (filter.svg.svg, signal_id);
+          filter.svg.ref = fragment;
+          filter.svg.url = url;
+          filter.svg.type = GTK_CSS_FILTER_SVG;
+        }
       else
         {
           break;
@@ -970,6 +1179,10 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
             {
               gtk_css_shadow_value_push_snapshot (filter->filters[j].drop_shadow.value, snapshot);
             }
+          else if (filter->filters[j].type == GTK_CSS_FILTER_SVG)
+            {
+              gtk_snapshot_push_collect (snapshot);
+            }
           else
             g_warning ("Don't know how to handle filter type %d", filter->filters[j].type);
         }
@@ -981,8 +1194,9 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
 }
 
 void
-gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
-                                   GtkSnapshot       *snapshot)
+gtk_css_filter_value_pop_snapshot (const GtkCssValue     *filter,
+                                   const graphene_rect_t *bounds,
+                                   GtkSnapshot           *snapshot)
 {
   int i, j;
 
@@ -995,7 +1209,8 @@ gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
       for (j = i; j < filter->n_filters; j++)
         {
           if (filter->filters[j].type == GTK_CSS_FILTER_BLUR ||
-              filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
+              filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW ||
+              filter->filters[j].type == GTK_CSS_FILTER_SVG)
             break;
         }
 
@@ -1008,6 +1223,19 @@ gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
             gtk_snapshot_pop (snapshot);
           else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
             gtk_css_shadow_value_pop_snapshot (filter->filters[j].drop_shadow.value, snapshot);
+          else if (filter->filters[j].type == GTK_CSS_FILTER_SVG)
+            {
+              GskRenderNode *source, *node;
+
+              source = gtk_snapshot_pop_collect (snapshot);
+              node = gtk_svg_apply_filter (filter->filters[j].svg.svg,
+                                           filter->filters[j].svg.ref,
+                                           bounds,
+                                           source);
+              gtk_snapshot_append_node (snapshot, node);
+              gsk_render_node_unref (node);
+              gsk_render_node_unref (source);
+            }
         }
 
       i = j + 1;

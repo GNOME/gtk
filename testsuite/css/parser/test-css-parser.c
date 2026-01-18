@@ -110,7 +110,7 @@ parsing_error_cb (GtkCssProvider *provider,
     append_error_value (errors, GTK_TYPE_CSS_PARSER_WARNING, error->code);
   else
     g_string_append_printf (errors,
-                            "%s %u\n",
+                            "%s %u",
                             g_quark_to_string (error->domain),
                             error->code);
 

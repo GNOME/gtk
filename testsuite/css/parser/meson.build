@@ -357,6 +357,7 @@ test_data = [
   'filter-invalid9.css',
   'filter-invalid9.errors',
   'filter-invalid9.ref.css',
+  'filter-svg.css',
   'font-family.css',
   'font-family.ref.css',
   'font-features.css',

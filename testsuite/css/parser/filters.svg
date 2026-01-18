@@ -1,0 +1,5 @@
+<svg>
+  <filter id='myfirstfilter'>
+    <feGaussianBlur stdDeviation='2 4'/>
+  </filter>
+</svg>
