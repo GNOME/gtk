@@ -51,10 +51,10 @@ gsk_component_transfer_node_finalize (GskRenderNode *node)
 
   gsk_render_node_unref (self->child);
 
-  gsk_component_transfer_clear (&self->transfer[0]);
-  gsk_component_transfer_clear (&self->transfer[1]);
-  gsk_component_transfer_clear (&self->transfer[2]);
-  gsk_component_transfer_clear (&self->transfer[3]);
+  gsk_component_transfer_clear (&self->transfer[GDK_COLOR_CHANNEL_RED]);
+  gsk_component_transfer_clear (&self->transfer[GDK_COLOR_CHANNEL_GREEN]);
+  gsk_component_transfer_clear (&self->transfer[GDK_COLOR_CHANNEL_BLUE]);
+  gsk_component_transfer_clear (&self->transfer[GDK_COLOR_CHANNEL_ALPHA]);
 
   parent_class->finalize (node);
 }
@@ -104,10 +104,10 @@ gsk_component_transfer_node_draw (GskRenderNode *node,
               b /= a;
             }
 
-          r = gsk_component_transfer_apply (&self->transfer[0], r);
-          g = gsk_component_transfer_apply (&self->transfer[1], g);
-          b = gsk_component_transfer_apply (&self->transfer[2], b);
-          a = gsk_component_transfer_apply (&self->transfer[3], a);
+          r = gsk_component_transfer_apply (&self->transfer[GDK_COLOR_CHANNEL_RED], r);
+          g = gsk_component_transfer_apply (&self->transfer[GDK_COLOR_CHANNEL_GREEN], g);
+          b = gsk_component_transfer_apply (&self->transfer[GDK_COLOR_CHANNEL_BLUE], b);
+          a = gsk_component_transfer_apply (&self->transfer[GDK_COLOR_CHANNEL_ALPHA], a);
 
           r *= a;
           g *= a;
@@ -142,10 +142,10 @@ gsk_component_transfer_node_can_diff (const GskRenderNode *node1,
   GskComponentTransferNode *self1 = (GskComponentTransferNode *) node1;
   GskComponentTransferNode *self2 = (GskComponentTransferNode *) node2;
 
-  return gsk_component_transfer_equal (&self1->transfer[0], &self2->transfer[0]) &&
-         gsk_component_transfer_equal (&self1->transfer[1], &self2->transfer[1]) &&
-         gsk_component_transfer_equal (&self1->transfer[2], &self2->transfer[2]) &&
-         gsk_component_transfer_equal (&self1->transfer[3], &self2->transfer[3]);
+  return gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_RED], &self2->transfer[GDK_COLOR_CHANNEL_RED]) &&
+         gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_GREEN], &self2->transfer[GDK_COLOR_CHANNEL_GREEN]) &&
+         gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_BLUE], &self2->transfer[GDK_COLOR_CHANNEL_BLUE]) &&
+         gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_ALPHA], &self2->transfer[GDK_COLOR_CHANNEL_ALPHA]);
 }
 
 static void
@@ -169,7 +169,7 @@ gsk_component_transfer_node_get_children (GskRenderNode *node,
   GskComponentTransferNode *self = (GskComponentTransferNode *) node;
 
   *n_children = 1;
-  
+
   return &self->child;
 }
 
@@ -189,10 +189,10 @@ gsk_component_transfer_node_replay (GskRenderNode   *node,
     result = gsk_render_node_ref (node);
   else
     result = gsk_component_transfer_node_new (child,
-                                              &self->transfer[0],
-                                              &self->transfer[1],
-                                              &self->transfer[2],
-                                              &self->transfer[3]);
+                                              &self->transfer[GDK_COLOR_CHANNEL_RED],
+                                              &self->transfer[GDK_COLOR_CHANNEL_GREEN],
+                                              &self->transfer[GDK_COLOR_CHANNEL_BLUE],
+                                              &self->transfer[GDK_COLOR_CHANNEL_ALPHA]);
 
   gsk_render_node_unref (child);
 
@@ -250,10 +250,10 @@ gsk_component_transfer_node_new (GskRenderNode              *child,
 
   self->child = gsk_render_node_ref (child);
 
-  gsk_component_transfer_init_copy (&self->transfer[0], r);
-  gsk_component_transfer_init_copy (&self->transfer[1], g);
-  gsk_component_transfer_init_copy (&self->transfer[2], b);
-  gsk_component_transfer_init_copy (&self->transfer[3], a);
+  gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_RED], r);
+  gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_GREEN], g);
+  gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_BLUE], b);
+  gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_ALPHA], a);
 
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
@@ -286,8 +286,7 @@ gsk_component_transfer_node_get_child (const GskRenderNode *node)
 /**
  * gsk_component_transfer_node_get_transfer:
  * @node: (type GskComponentTransferNode): a component transfer `GskRenderNode`
- * @component: a value between 0 and 3 to indicate the red, green, blue
- *   or alpha component
+ * @component: the component to get the transfer for
  *
  * Gets the component transfer for one of the components.
  *
@@ -297,7 +296,7 @@ gsk_component_transfer_node_get_child (const GskRenderNode *node)
  */
 const GskComponentTransfer *
 gsk_component_transfer_node_get_transfer (const GskRenderNode *node,
-                                          guint                component)
+                                          GdkColorChannel      component)
 {
   const GskComponentTransferNode *self = (const GskComponentTransferNode *) node;
 
@@ -305,4 +304,3 @@ gsk_component_transfer_node_get_transfer (const GskRenderNode *node,
 
   return &self->transfer[component];
 }
-

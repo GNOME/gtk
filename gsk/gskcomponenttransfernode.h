@@ -44,7 +44,7 @@ GskRenderNode *         gsk_component_transfer_node_get_child   (const GskRender
 GDK_AVAILABLE_IN_4_20
 const GskComponentTransfer *
                         gsk_component_transfer_node_get_transfer (const GskRenderNode     *node,
-                                                                  guint                    component) G_GNUC_PURE;
+                                                                  GdkColorChannel          component) G_GNUC_PURE;
 
 G_END_DECLS
 
