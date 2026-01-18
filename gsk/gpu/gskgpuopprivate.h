@@ -52,6 +52,7 @@ struct _GskGpuOp
 {
   const GskGpuOpClass *op_class;
 
+  gsize node_id; /* debug info maintained by frame, usually 0 */
   GskGpuOp *next;
 };
 
