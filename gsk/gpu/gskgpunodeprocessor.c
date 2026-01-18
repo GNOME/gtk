@@ -1065,8 +1065,8 @@ gsk_gpu_node_processor_add_cairo_node (GskGpuNodeProcessor *self,
 }
 
 static void
-gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
-                                            GskRenderNode       *node)
+gsk_gpu_node_processor_add_with_offscreen (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
 {
   GskGpuImage *image;
   graphene_rect_t tex_rect;
@@ -1838,7 +1838,7 @@ gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
   child = gsk_opacity_node_get_child (node);
 
   if (gsk_render_node_clears_background (child))
-    gsk_gpu_node_processor_add_without_opacity (self, child);
+    gsk_gpu_node_processor_add_with_offscreen (self, child);
   else
     gsk_gpu_node_processor_add_node (self, child);
 
@@ -3529,7 +3529,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
     {
-      gsk_gpu_node_processor_add_without_opacity (self, node);
+      gsk_gpu_node_processor_add_with_offscreen (self, node);
       return;
     }
 
@@ -4477,7 +4477,7 @@ gsk_gpu_node_processor_add_isolation_node (GskGpuNodeProcessor *self,
       if (gsk_render_node_get_copy_mode (child) != GSK_COPY_NONE ||
           gsk_render_node_clears_background (child))
         {
-          gsk_gpu_node_processor_add_without_opacity (self, child);
+          gsk_gpu_node_processor_add_with_offscreen (self, child);
           return;
         }
     }
@@ -4494,7 +4494,7 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
 
   if (self->opacity < 1.0 && !gsk_container_node_is_disjoint (node))
     {
-      gsk_gpu_node_processor_add_without_opacity (self, node);
+      gsk_gpu_node_processor_add_with_offscreen (self, node);
       return;
     }
 
@@ -4900,7 +4900,7 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
 
   if (self->opacity < 1.0 && (nodes_vtable[node_type].features & GSK_GPU_HANDLE_OPACITY) == 0)
     {
-      gsk_gpu_node_processor_add_without_opacity (self, node);
+      gsk_gpu_node_processor_add_with_offscreen (self, node);
       return;
     }
 

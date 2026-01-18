@@ -10,14 +10,6 @@
 
 G_BEGIN_DECLS
 
-struct _GskGpuShaderImage
-{
-  GskGpuImage           *image;         /* image to draw */
-  GskGpuSampler          sampler;       /* sampler to use for image */
-  const graphene_rect_t *coverage;      /* the clip area for the image or NULL for unclipped */
-  const graphene_rect_t *bounds;        /* bounds for the image */
-};
-
 struct _GskGpuShaderOp
 {
   GskGpuOp parent_op;
@@ -76,42 +68,5 @@ GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuO
 #define GSK_RGBA_TO_VEC4(_color) (float[4]) { (_color)->red, (_color)->green, (_color)->blue, (_color)->alpha }
 #define GSK_RGBA_TO_VEC4_ALPHA(_color, _alpha) (float[4]) { (_color)->red, (_color)->green, (_color)->blue, (_color)->alpha * (_alpha) }
 #define GSK_VEC4_TRANSPARENT (float[4]) { 0.0f, 0.0f, 0.0f, 0.0f }
-
-static inline void
-gsk_gpu_vec4_to_float (const float color[4],
-                       float       values[4])
-{
-  values[0] = color[0];
-  values[1] = color[1];
-  values[2] = color[2];
-  values[3] = color[3];
-}
-
-static inline void
-gsk_gpu_point_to_float (const graphene_point_t *point,
-                        const graphene_point_t *offset,
-                        float                   values[2])
-{
-  values[0] = point->x + offset->x;
-  values[1] = point->y + offset->y;
-}
-
-static inline void
-gsk_gpu_size_to_float (const graphene_size_t *size,
-                       float                  values[2])
-{
-  values[0] = size->width;
-  values[1] = size->height;
-}
-
-static inline void
-gsk_gpu_color_to_float (const GdkColor *color,
-                        GdkColorState  *target,
-                        float           opacity,
-                        float           values[4])
-{
-  gdk_color_to_float (color, target, values);
-  values[3] *= opacity;
-}
 
 G_END_DECLS
