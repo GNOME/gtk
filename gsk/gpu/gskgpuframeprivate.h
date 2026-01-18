@@ -88,7 +88,7 @@ gboolean                gsk_gpu_frame_should_optimize                   (GskGpuF
                                                                          GskGpuOptimizations     optimization) G_GNUC_PURE;
 
 gpointer                gsk_gpu_frame_alloc_op                          (GskGpuFrame            *self,
-                                                                         gsize                   size);
+                                                                         const GskGpuOpClass    *op_class);
 GskGpuImage *           gsk_gpu_frame_upload_texture                    (GskGpuFrame            *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkTexture             *texture);

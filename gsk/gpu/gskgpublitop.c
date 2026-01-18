@@ -3,6 +3,7 @@
 #include "gskgpublitopprivate.h"
 
 #include "gskglimageprivate.h"
+#include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanimageprivate.h"
@@ -211,7 +212,7 @@ gsk_gpu_blit_op (GskGpuFrame                 *frame,
   g_assert (filter != GSK_GPU_BLIT_LINEAR || (gsk_gpu_image_get_flags (src_image) & GSK_GPU_IMAGE_FILTERABLE) == GSK_GPU_IMAGE_FILTERABLE);
   g_assert ((gsk_gpu_image_get_flags (dest_image) & GSK_GPU_IMAGE_RENDERABLE) == GSK_GPU_IMAGE_RENDERABLE);
 
-  self = (GskGpuBlitOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_BLIT_OP_CLASS);
+  self = (GskGpuBlitOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_BLIT_OP_CLASS);
 
   self->src_image = g_object_ref (src_image);
   self->dest_image = g_object_ref (dest_image);

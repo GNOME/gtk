@@ -2,6 +2,7 @@
 
 #include "gskgpuclearopprivate.h"
 
+#include "gskgpuframeprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpuprintprivate.h"
 
@@ -109,7 +110,7 @@ gsk_gpu_clear_op (GskGpuFrame                 *frame,
 {
   GskGpuClearOp *self;
 
-  self = (GskGpuClearOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_CLEAR_OP_CLASS);
+  self = (GskGpuClearOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_CLEAR_OP_CLASS);
 
   self->rect = *rect;
   memcpy (self->color, color, sizeof (float) * 4);

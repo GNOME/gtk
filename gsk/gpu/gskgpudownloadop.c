@@ -399,7 +399,7 @@ gsk_gpu_download_op (GskGpuFrame        *frame,
   g_assert (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_DOWNLOADABLE);
   g_assert (out_texture != NULL && *out_texture == NULL);
 
-  self = (GskGpuDownloadOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_DOWNLOAD_OP_CLASS);
+  self = (GskGpuDownloadOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_DOWNLOAD_OP_CLASS);
 
   self->image = g_object_ref (image);
   self->color_state = gdk_color_state_ref (color_state);
@@ -535,7 +535,7 @@ gsk_gpu_download_into_op (GskGpuFrame           *frame,
 
   g_assert (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_DOWNLOADABLE);
 
-  self = (GskGpuDownloadIntoOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_DOWNLOAD_INTO_OP_CLASS);
+  self = (GskGpuDownloadIntoOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_DOWNLOAD_INTO_OP_CLASS);
 
   self->image = g_object_ref (image);
   self->image_color_state = gdk_color_state_ref (image_color_state);

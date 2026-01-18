@@ -420,7 +420,7 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame      *frame,
       g_type_class_unref (enum_class);
     }
 
-  self = (GskGpuUploadTextureOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_TEXTURE_OP_CLASS);
+  self = (GskGpuUploadTextureOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_UPLOAD_TEXTURE_OP_CLASS);
 
   self->texture = g_object_ref (texture);
   self->lod_level = lod_level;
@@ -599,7 +599,7 @@ gsk_gpu_upload_cairo_into_op (GskGpuFrame                 *frame,
 {
   GskGpuUploadCairoOp *self;
 
-  self = (GskGpuUploadCairoOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_CAIRO_OP_CLASS);
+  self = (GskGpuUploadCairoOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_UPLOAD_CAIRO_OP_CLASS);
 
   self->image = g_object_ref (image);
   self->area = *area;

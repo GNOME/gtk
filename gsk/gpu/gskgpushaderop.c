@@ -282,7 +282,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   else
     {
       GskGpuShaderOp *self;
-      self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
+      self = (GskGpuShaderOp *) gsk_gpu_frame_alloc_op (frame, &op_class->parent_class);
 
       self->flags = flags;
       self->color_states = color_states;

@@ -2,6 +2,7 @@
 
 #include "gskgpublendopprivate.h"
 
+#include "gskgpuframeprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpuprintprivate.h"
 
@@ -140,7 +141,7 @@ gsk_gpu_blend_op (GskGpuFrame *frame,
 {
   GskGpuBlendOp *self;
 
-  self = (GskGpuBlendOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_BLEND_OP_CLASS);
+  self = (GskGpuBlendOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_BLEND_OP_CLASS);
 
   self->blend = blend;
 }

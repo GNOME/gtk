@@ -366,7 +366,7 @@ gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
 
   g_assert (load_op != GSK_GPU_LOAD_OP_CLEAR || clear_color != NULL);
 
-  self = (GskGpuRenderPassOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_RENDER_PASS_OP_CLASS);
+  self = (GskGpuRenderPassOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_RENDER_PASS_OP_CLASS);
 
   self->target = g_object_ref (image);
   self->area = *area;
@@ -388,7 +388,7 @@ gsk_gpu_render_pass_end_op (GskGpuFrame       *frame,
 {
   GskGpuFramePassEndOp *self;
 
-  self = (GskGpuFramePassEndOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_RENDER_PASS_END_OP_CLASS);
+  self = (GskGpuFramePassEndOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_RENDER_PASS_END_OP_CLASS);
 
   self->target = g_object_ref (image);
   self->pass_type = pass_type;

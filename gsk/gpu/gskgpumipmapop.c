@@ -3,6 +3,7 @@
 #include "gskgpumipmapopprivate.h"
 
 #include "gskglimageprivate.h"
+#include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskgpuutilsprivate.h"
 #ifdef GDK_RENDERING_VULKAN
@@ -185,7 +186,7 @@ gsk_gpu_mipmap_op (GskGpuFrame *frame,
 
   g_assert ((gsk_gpu_image_get_flags (image) & (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP)) == GSK_GPU_IMAGE_CAN_MIPMAP);
 
-  self = (GskGpuMipmapOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_MIPMAP_OP_CLASS);
+  self = (GskGpuMipmapOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_MIPMAP_OP_CLASS);
 
   self->image = g_object_ref (image);
 

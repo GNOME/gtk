@@ -519,10 +519,11 @@ gsk_gpu_frame_sort_ops (GskGpuFrame *self)
 }
 
 gpointer
-gsk_gpu_frame_alloc_op (GskGpuFrame *self,
-                        gsize        size)
+gsk_gpu_frame_alloc_op (GskGpuFrame         *self,
+                        const GskGpuOpClass *op_class)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  GskGpuOp *op;
   gsize pos;
 
   pos = gsk_gpu_ops_get_size (&priv->ops);
@@ -531,11 +532,15 @@ gsk_gpu_frame_alloc_op (GskGpuFrame *self,
                       pos,
                       0, FALSE,
                       NULL,
-                      size);
+                      op_class->size);
 
-  priv->last_op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, pos);
+  op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, pos);
 
-  return priv->last_op;
+  op->op_class = op_class;
+
+  priv->last_op = op;
+
+  return op;
 }
 
 GskGpuOp *
