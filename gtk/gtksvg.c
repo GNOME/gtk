@@ -3718,19 +3718,11 @@ svg_composite_operator_to_gsk (CompositeOperator op)
     }
 }
 
-typedef enum
-{
-  RGBA_CHANNEL_R,
-  RGBA_CHANNEL_G,
-  RGBA_CHANNEL_B,
-  RGBA_CHANNEL_A,
-} RgbaChannel;
-
-DEFINE_ENUM (RGBA_CHANNEL, rgba_channel, RgbaChannel,
-  DEFINE_ENUM_VALUE (RGBA_CHANNEL, RGBA_CHANNEL_R, "R"),
-  DEFINE_ENUM_VALUE (RGBA_CHANNEL, RGBA_CHANNEL_G, "G"),
-  DEFINE_ENUM_VALUE (RGBA_CHANNEL, RGBA_CHANNEL_B, "B"),
-  DEFINE_ENUM_VALUE (RGBA_CHANNEL, RGBA_CHANNEL_A, "A")
+DEFINE_ENUM (RGBA_CHANNEL, rgba_channel, GdkColorChannel,
+  DEFINE_ENUM_VALUE (RGBA_CHANNEL, GDK_COLOR_CHANNEL_RED, "R"),
+  DEFINE_ENUM_VALUE (RGBA_CHANNEL, GDK_COLOR_CHANNEL_GREEN, "G"),
+  DEFINE_ENUM_VALUE (RGBA_CHANNEL, GDK_COLOR_CHANNEL_BLUE, "B"),
+  DEFINE_ENUM_VALUE (RGBA_CHANNEL, GDK_COLOR_CHANNEL_ALPHA, "A")
 )
 
 typedef enum
@@ -10080,8 +10072,8 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_DX].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DY].initial_value = svg_number_new (0);
   shape_attrs[SHAPE_ATTR_FE_DISPLACEMENT_SCALE].initial_value = svg_number_new (1);
-  shape_attrs[SHAPE_ATTR_FE_DISPLACEMENT_X].initial_value = svg_rgba_channel_new (RGBA_CHANNEL_A);
-  shape_attrs[SHAPE_ATTR_FE_DISPLACEMENT_Y].initial_value = svg_rgba_channel_new (RGBA_CHANNEL_A);
+  shape_attrs[SHAPE_ATTR_FE_DISPLACEMENT_X].initial_value = svg_rgba_channel_new (GDK_COLOR_CHANNEL_ALPHA);
+  shape_attrs[SHAPE_ATTR_FE_DISPLACEMENT_Y].initial_value = svg_rgba_channel_new (GDK_COLOR_CHANNEL_ALPHA);
   shape_attrs[SHAPE_ATTR_FE_IMAGE_HREF].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_FE_IMAGE_CONTENT_FIT].initial_value = svg_content_fit_new (ALIGN_MID, ALIGN_MID, MEET);
   shape_attrs[SHAPE_ATTR_FE_FUNC_TYPE].initial_value = svg_component_transfer_type_new (COMPONENT_TRANSFER_IDENTITY);
