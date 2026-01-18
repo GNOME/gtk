@@ -5,7 +5,6 @@
 
 static const GdkDebugKey gsk_debug_keys[] = {
   { "renderer", GSK_DEBUG_RENDERER, "General renderer information" },
-  { "vulkan", GSK_DEBUG_VULKAN, "Vulkan renderer information" },
   { "shaders", GSK_DEBUG_SHADERS, "Information about shaders" },
   { "fallback", GSK_DEBUG_FALLBACK, "Information about fallback usage in renderers" },
   { "cache", GSK_DEBUG_CACHE, "Information about caching" },
