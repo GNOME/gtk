@@ -153,6 +153,24 @@ gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
 }
 
 static void
+gsk_gpu_frame_default_start_node (GskGpuFrame   *self,
+                                  GskRenderNode *node,
+                                  gsize          pos)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  gsk_node_stack_append (&priv->node_stack, &(GskNodeStackNode) { node, pos });
+}
+
+static void
+gsk_gpu_frame_default_end_node (GskGpuFrame *self)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  gsk_node_stack_set_size (&priv->node_stack, gsk_node_stack_get_size (&priv->node_stack) - 1);
+}
+
+static void
 gsk_gpu_frame_dispose (GObject *object)
 {
   GskGpuFrame *self = GSK_GPU_FRAME (object);
@@ -191,6 +209,8 @@ gsk_gpu_frame_class_init (GskGpuFrameClass *klass)
   klass->end = gsk_gpu_frame_default_end;
   klass->sync = gsk_gpu_frame_default_sync;
   klass->upload_texture = gsk_gpu_frame_default_upload_texture;
+  klass->start_node = gsk_gpu_frame_default_start_node;
+  klass->end_node = gsk_gpu_frame_default_end_node;
 
   object_class->dispose = gsk_gpu_frame_dispose;
   object_class->finalize = gsk_gpu_frame_finalize;
@@ -944,7 +964,6 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
                           GskRenderNode *node,
                           gsize          pos)
 {
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 #ifndef G_DISABLE_ASSERT
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   gsize n = gsk_node_stack_get_size (&priv->node_stack);
@@ -966,7 +985,7 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
     }
 #endif
 
-  gsk_node_stack_append (&priv->node_stack, &(GskNodeStackNode) { node, pos });
+  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, node, pos);
 }
 
 /*<private>
@@ -984,6 +1003,6 @@ gsk_gpu_frame_end_node (GskGpuFrame *self)
   g_assert (gsk_node_stack_get_size (&priv->node_stack) > 0);
 #endif
 
-  gsk_node_stack_set_size (&priv->node_stack, gsk_node_stack_get_size (&priv->node_stack) - 1);
+  GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
 }
 

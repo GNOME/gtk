@@ -54,6 +54,10 @@ struct _GskGpuFrameClass
                                                                          GskGpuBuffer           *vertex_buffer,
                                                                          GskGpuBuffer           *globals_buffer,
                                                                          GskGpuOp               *op);
+  void                  (* start_node)                                  (GskGpuFrame            *self,
+                                                                         GskRenderNode          *node,
+                                                                         gsize                   pos);
+  void                  (* end_node)                                    (GskGpuFrame            *self);
 };
 
 GType                   gsk_gpu_frame_get_type                          (void) G_GNUC_CONST;
