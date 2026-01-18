@@ -9,6 +9,7 @@
 #ifdef GDK_RENDERING_VULKAN
 
 #include "gskvulkandeviceprivate.h"
+#include "gskvulkandebugframeprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 
@@ -103,6 +104,8 @@ gsk_vulkan_renderer_create_context (GskGpuRenderer       *renderer,
   *supported = -1;
   if (!(display->vulkan_features & GDK_VULKAN_FEATURE_DUAL_SOURCE_BLEND))
     *supported &= ~GSK_GPU_OPTIMIZE_DUAL_BLEND;
+  if (!(display->vulkan_features & GDK_VULKAN_FEATURE_PROFILE))
+    *supported &= ~GSK_GPU_OPTIMIZE_PROFILE;
 
   return GDK_DRAW_CONTEXT (context);
 }
@@ -171,7 +174,10 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
 #ifdef GDK_RENDERING_VULKAN
   GskGpuRendererClass *gpu_renderer_class = GSK_GPU_RENDERER_CLASS (klass);
 
-  gpu_renderer_class->frame_type = GSK_TYPE_VULKAN_FRAME;
+  if (GSK_DEBUG_CHECK (PERF))
+    gpu_renderer_class->frame_type = GSK_TYPE_VULKAN_DEBUG_FRAME;
+  else
+    gpu_renderer_class->frame_type = GSK_TYPE_VULKAN_FRAME;
 
   gpu_renderer_class->get_device = gsk_vulkan_device_get_for_display;
   gpu_renderer_class->create_context = gsk_vulkan_renderer_create_context;
