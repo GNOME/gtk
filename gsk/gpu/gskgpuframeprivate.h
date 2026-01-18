@@ -54,6 +54,8 @@ struct _GskGpuFrameClass
                                                                          GskGpuBuffer           *vertex_buffer,
                                                                          GskGpuBuffer           *globals_buffer,
                                                                          GskGpuOp               *op);
+  gpointer              (* alloc_op)                                    (GskGpuFrame            *self,
+                                                                         const GskGpuOpClass    *op_class);
   void                  (* start_node)                                  (GskGpuFrame            *self,
                                                                          GskRenderNode          *node,
                                                                          gsize                   pos);

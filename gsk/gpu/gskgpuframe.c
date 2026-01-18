@@ -152,6 +152,31 @@ gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
   return NULL;
 }
 
+static gpointer
+gsk_gpu_frame_default_alloc_op (GskGpuFrame         *self,
+                                const GskGpuOpClass *op_class)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  GskGpuOp *op;
+  gsize pos;
+
+  pos = gsk_gpu_ops_get_size (&priv->ops);
+
+  gsk_gpu_ops_splice (&priv->ops,
+                      pos,
+                      0, FALSE,
+                      NULL,
+                      op_class->size);
+
+  op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, pos);
+
+  op->op_class = op_class;
+
+  priv->last_op = op;
+
+  return op;
+}
+
 static void
 gsk_gpu_frame_default_start_node (GskGpuFrame   *self,
                                   GskRenderNode *node,
@@ -209,6 +234,7 @@ gsk_gpu_frame_class_init (GskGpuFrameClass *klass)
   klass->end = gsk_gpu_frame_default_end;
   klass->sync = gsk_gpu_frame_default_sync;
   klass->upload_texture = gsk_gpu_frame_default_upload_texture;
+  klass->alloc_op = gsk_gpu_frame_default_alloc_op;
   klass->start_node = gsk_gpu_frame_default_start_node;
   klass->end_node = gsk_gpu_frame_default_end_node;
 
@@ -522,25 +548,7 @@ gpointer
 gsk_gpu_frame_alloc_op (GskGpuFrame         *self,
                         const GskGpuOpClass *op_class)
 {
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-  GskGpuOp *op;
-  gsize pos;
-
-  pos = gsk_gpu_ops_get_size (&priv->ops);
-
-  gsk_gpu_ops_splice (&priv->ops,
-                      pos,
-                      0, FALSE,
-                      NULL,
-                      op_class->size);
-
-  op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, pos);
-
-  op->op_class = op_class;
-
-  priv->last_op = op;
-
-  return op;
+  return GSK_GPU_FRAME_GET_CLASS (self)->alloc_op (self, op_class);
 }
 
 GskGpuOp *
