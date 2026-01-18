@@ -442,6 +442,29 @@ gtk_svg_invalid_attribute (GtkSvg               *self,
   g_error_free (error);
 }
 
+static void
+gtk_svg_markup_error (GtkSvg              *self,
+                      GMarkupParseContext *context,
+                      const GError        *markup_error)
+{
+  GError *error;
+  GtkSvgLocation start, end;
+
+  error = g_error_new_literal (GTK_SVG_ERROR,
+                               GTK_SVG_ERROR_INVALID_SYNTAX,
+                               markup_error->message);
+
+  gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
+  gtk_svg_location_init (&start, context);
+  gtk_svg_location_init (&end, context);
+  end.bytes += 1;
+  end.line_chars += 1;
+  gtk_svg_error_set_location (error, &start, &end);
+
+  gtk_svg_emit_error (self, error);
+  g_clear_error (&error);
+}
+
 G_GNUC_PRINTF (4, 5)
 static void
 gtk_svg_missing_attribute (GtkSvg               *self,
@@ -16993,6 +17016,16 @@ text_cb (GMarkupParseContext  *context,
   g_string_append_len (data->text, text, len);
 }
 
+static void
+error_cb (GMarkupParseContext *context,
+          GError              *error,
+          gpointer             user_data)
+{
+  ParserData *data = user_data;
+
+  gtk_svg_markup_error (data->svg, context, error);
+}
+
 /* {{{ Href handling, dependency tracking */
 
 static gboolean
@@ -17535,9 +17568,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     end_element_cb,
     text_cb,
     NULL,
-    NULL,
+    error_cb,
   };
-  GError *error = NULL;
 
   g_clear_pointer (&self->content, shape_free);
 
@@ -17565,11 +17597,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   if (!g_markup_parse_context_parse (context,
                                      g_bytes_get_data (bytes, NULL),
                                      g_bytes_get_size (bytes),
-                                     &error) ||
-      !g_markup_parse_context_end_parse (context, &error))
+                                     NULL) ||
+      !g_markup_parse_context_end_parse (context, NULL))
     {
-      gtk_svg_emit_error (self, error);
-      g_clear_error (&error);
       gtk_svg_clear_content (self);
       g_slist_free (data.shape_stack);
       g_clear_pointer (&data.skip.reason, g_free);
@@ -24625,10 +24655,12 @@ gtk_svg_pause (GtkSvg *self)
 
 /**
  * GtkSvgError:
+ * @GTK_SVG_ERROR_INVALID_SYNTAX: The XML syntax is broken
+ *   in some way
  * @GTK_SVG_ERROR_INVALID_ELEMENT: An XML element is invalid
  *   (either because it is not part of SVG, or because it is
  *   in the wrong place, or because it not implemented in GTK)
- * @GTK_SVG_ERROR_INVALID_ATTRIBUTE: An XML attribute is invalid
+ * @GTK_SVG_ERROR_INVALID_ATTRIBUTE: An attribute is invalid
  *   (either because it is not part of SVG, or because it is
  *   not implemented in GTK, or its value is problematic)
  * @GTK_SVG_ERROR_MISSING_ATTRIBUTE: A required attribute is missing
