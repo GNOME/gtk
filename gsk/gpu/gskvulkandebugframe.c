@@ -2,6 +2,7 @@
 
 #include "gskvulkandebugframeprivate.h"
 
+#include "gskgpuopprivate.h"
 #include "gskdebugnodeprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
@@ -34,6 +35,7 @@ struct _GskVulkanDebugFrame
 
   GskRenderNode *node;
 
+  gsize n_ops;
   GskVulkanDebug debug;
   gsize debug_current;
 };
@@ -65,8 +67,9 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
   self->debug_current = entry->first_child;
   child = gsk_render_replay_default (replay, node);
 
-  entry->profile.elapsed_cpu_self_ns = entry->profile.elapsed_cpu_total_ns;
-  entry->profile.elapsed_gpu_total_ns = entry->profile.elapsed_gpu_self_ns;
+  entry->profile.self.cpu_record_ns = entry->profile.total.cpu_record_ns;
+  entry->profile.total.cpu_submit_ns = entry->profile.self.cpu_submit_ns;
+  entry->profile.total.gpu_ns = entry->profile.self.gpu_ns;
   if (entry->first_child != NO_ITEM)
     {
       gsize i, n_children;
@@ -75,21 +78,28 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
       for (i = 0; i < n_children; i++)
         {
           GskVulkanDebugEntry *child_entry = gsk_vulkan_debug_get (&self->debug, entry->first_child + i);
-          entry->profile.elapsed_cpu_self_ns -= child_entry->profile.elapsed_cpu_total_ns;
-          entry->profile.elapsed_gpu_total_ns += child_entry->profile.elapsed_gpu_total_ns;
+          entry->profile.self.cpu_record_ns -= child_entry->profile.total.cpu_record_ns;
+          entry->profile.total.cpu_submit_ns += child_entry->profile.total.cpu_submit_ns;
+          entry->profile.total.gpu_ns += child_entry->profile.total.gpu_ns;
         }
     }
+  entry->profile.self.cpu_ns = entry->profile.self.cpu_record_ns + entry->profile.self.cpu_submit_ns;
+  entry->profile.total.cpu_ns = entry->profile.total.cpu_record_ns + entry->profile.total.cpu_submit_ns;
 
   result = gsk_debug_node_new_profile (child,
                                        &entry->profile,
-                                       g_strdup_printf ("CPU total: %lluns\n"
-                                                        "CPU self : %lluns\n"
-                                                        "GPU total: %lluns\n"
-                                                        "GPU self : %lluns",
-                                                        (long long unsigned) entry->profile.elapsed_cpu_total_ns,
-                                                        (long long unsigned) entry->profile.elapsed_cpu_self_ns,
-                                                        (long long unsigned) entry->profile.elapsed_gpu_total_ns,
-                                                        (long long unsigned) entry->profile.elapsed_gpu_self_ns));
+                                       g_strdup_printf ("record total: %lluns\n"
+                                                        "record self : %lluns\n"
+                                                        "submit total: %lluns\n"
+                                                        "submit self : %lluns\n"
+                                                        "GPU total   : %lluns\n"
+                                                        "GPU self    : %lluns",
+                                                        (long long unsigned) entry->profile.total.cpu_record_ns,
+                                                        (long long unsigned) entry->profile.self.cpu_record_ns,
+                                                        (long long unsigned) entry->profile.total.cpu_submit_ns,
+                                                        (long long unsigned) entry->profile.self.cpu_submit_ns,
+                                                        (long long unsigned) entry->profile.total.gpu_ns,
+                                                        (long long unsigned) entry->profile.self.gpu_ns));
   gsk_render_node_unref (child);
 
   self->debug_current = pos + 1;
@@ -133,7 +143,24 @@ gsk_vulkan_debug_frame_cleanup (GskGpuFrame *frame)
   gsk_vulkan_debug_clear (&self->debug);
   g_clear_pointer (&self->node, gsk_render_node_unref);
 
+  self->n_ops = 0;
+
   GSK_GPU_FRAME_CLASS (gsk_vulkan_debug_frame_parent_class)->cleanup (frame);
+}
+
+static gpointer
+gsk_vulkan_debug_frame_alloc_op (GskGpuFrame         *frame,
+                                 const GskGpuOpClass *op_class)
+{
+  GskVulkanDebugFrame *self = GSK_VULKAN_DEBUG_FRAME (frame);
+  GskGpuOp *op;
+
+  self->n_ops++;
+
+  op = GSK_GPU_FRAME_CLASS (gsk_vulkan_debug_frame_parent_class)->alloc_op (frame, op_class);
+  op->node_id = self->debug_current;
+
+  return op;
 }
 
 static void
@@ -192,7 +219,7 @@ gsk_vulkan_debug_frame_start_node (GskGpuFrame   *frame,
 
   entry = gsk_vulkan_debug_get (&self->debug, self->debug_current);
 
-  entry->profile.elapsed_cpu_total_ns -= g_get_monotonic_time () * 1000;
+  entry->profile.total.cpu_record_ns -= g_get_monotonic_time () * 1000;
 }
 
 static void
@@ -203,7 +230,7 @@ gsk_vulkan_debug_frame_end_node (GskGpuFrame *frame)
 
   entry = gsk_vulkan_debug_get (&self->debug, self->debug_current);
 
-  entry->profile.elapsed_cpu_total_ns += g_get_monotonic_time () * 1000;
+  entry->profile.total.cpu_record_ns += g_get_monotonic_time () * 1000;
 
   self->debug_current = entry->parent;
 
@@ -227,6 +254,7 @@ gsk_vulkan_debug_frame_class_init (GskVulkanDebugFrameClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gpu_frame_class->cleanup = gsk_vulkan_debug_frame_cleanup;
+  gpu_frame_class->alloc_op = gsk_vulkan_debug_frame_alloc_op;
   gpu_frame_class->start_node = gsk_vulkan_debug_frame_start_node;
   gpu_frame_class->end_node = gsk_vulkan_debug_frame_end_node;
 

@@ -7,10 +7,12 @@ G_BEGIN_DECLS
 typedef struct _GskDebugProfile GskDebugProfile;
 
 struct _GskDebugProfile {
-  guint64 elapsed_cpu_total_ns;
-  guint64 elapsed_cpu_self_ns;
-  guint64 elapsed_gpu_total_ns;
-  guint64 elapsed_gpu_self_ns;
+  struct {
+    guint64 cpu_ns;
+    guint64 cpu_record_ns;
+    guint64 cpu_submit_ns;
+    guint64 gpu_ns;
+  } total, self;
 };
 
 GskRenderNode *         gsk_debug_node_new_profile              (GskRenderNode                  *child,
