@@ -186,15 +186,7 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp              *op,
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
 
-  op = op->next;
-  while (op->op_class->stage != GSK_GPU_STAGE_END_PASS)
-    {
-      op = gsk_gpu_op_vk_command (op, frame, state);
-    }
-
-  op = gsk_gpu_op_vk_command (op, frame, state);
-
-  return op;
+  return op->next;
 }
 #endif
 
@@ -229,15 +221,7 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp          *op,
       glClear (GL_COLOR_BUFFER_BIT);
     }
 
-  op = op->next;
-  while (op->op_class->stage != GSK_GPU_STAGE_END_PASS)
-    {
-      op = gsk_gpu_op_gl_command (op, frame, state);
-    }
-
-  op = gsk_gpu_op_gl_command (op, frame, state);
-
-  return op;
+  return op->next;
 }
 
 static const GskGpuOpClass GSK_GPU_RENDER_PASS_OP_CLASS = {
