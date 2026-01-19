@@ -292,6 +292,17 @@ gsk_vulkan_frame_write_texture_vertex_data (GskGpuFrame    *self,
 }
 
 static void
+gsk_vulkan_frame_submit_ops (GskVulkanFrame        *frame,
+                             GskVulkanCommandState *state,
+                             GskGpuOp              *op)
+{
+  while (op)
+    {
+      op = gsk_gpu_op_vk_command (op, GSK_GPU_FRAME (frame), state);
+    }
+}
+
+static void
 gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                          GskRenderPassType  pass_type,
                          GskGpuBuffer      *vertex_buffer,
@@ -343,10 +354,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
   state.blend = GSK_GPU_BLEND_OVER; /* should we have a BLEND_NONE? */
   state.semaphores = &semaphores;
 
-  while (op)
-    {
-      op = gsk_gpu_op_vk_command (op, frame, &state);
-    }
+  GSK_VULKAN_FRAME_GET_CLASS (self)->submit_ops (self, &state, op);
 
   GSK_VK_CHECK (vkEndCommandBuffer, priv->vk_command_buffer);
 
@@ -406,6 +414,8 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
 {
   GskGpuFrameClass *gpu_frame_class = GSK_GPU_FRAME_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  klass->submit_ops = gsk_vulkan_frame_submit_ops;
 
   gpu_frame_class->is_busy = gsk_vulkan_frame_is_busy;
   gpu_frame_class->wait = gsk_vulkan_frame_wait;

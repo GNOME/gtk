@@ -25,6 +25,10 @@ struct _GskVulkanFrame
 struct _GskVulkanFrameClass
 {
   GskGpuFrameClass parent_class;
+
+  void                  (* submit_ops)                                  (GskVulkanFrame         *frame,
+                                                                         GskVulkanCommandState  *state,
+                                                                         GskGpuOp               *op);
 };
 
 GType                   gsk_vulkan_frame_get_type                       (void) G_GNUC_CONST;

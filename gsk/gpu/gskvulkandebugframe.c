@@ -47,6 +47,26 @@ struct _GskVulkanDebugFrameClass
 
 G_DEFINE_TYPE (GskVulkanDebugFrame, gsk_vulkan_debug_frame, GSK_TYPE_VULKAN_FRAME)
 
+static void
+gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
+                                   GskVulkanCommandState *state,
+                                   GskGpuOp              *op)
+{
+  GskVulkanDebugFrame *self = GSK_VULKAN_DEBUG_FRAME (frame);
+
+  while (op)
+    {
+      GskVulkanDebugEntry *entry;
+
+      entry = gsk_vulkan_debug_get (&self->debug, op->node_id);
+      entry->perf.self.cpu_submit_ns -= g_get_monotonic_time () * 1000;
+
+      op = gsk_gpu_op_vk_command (op, GSK_GPU_FRAME (frame), state);
+
+      entry->perf.self.cpu_submit_ns += g_get_monotonic_time () * 1000;
+    }
+}
+
 static GskRenderNode *
 gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                     GskRenderNode   *node,
@@ -250,8 +270,11 @@ gsk_vulkan_debug_frame_finalize (GObject *object)
 static void
 gsk_vulkan_debug_frame_class_init (GskVulkanDebugFrameClass *klass)
 {
+  GskVulkanFrameClass *vulkan_frame_class = GSK_VULKAN_FRAME_CLASS (klass);
   GskGpuFrameClass *gpu_frame_class = GSK_GPU_FRAME_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  vulkan_frame_class->submit_ops = gsk_vulkan_debug_frame_submit_ops;
 
   gpu_frame_class->cleanup = gsk_vulkan_debug_frame_cleanup;
   gpu_frame_class->alloc_op = gsk_vulkan_debug_frame_alloc_op;
