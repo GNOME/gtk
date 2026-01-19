@@ -3560,6 +3560,9 @@ gtk_text_state_flags_changed (GtkWidget     *widget,
     {
       /* Clear any selection */
       gtk_text_set_selection_bounds (self, priv->current_pos, priv->current_pos);
+
+      /* Stop blinking */
+      remove_blink_timeout (self);
     }
 
   state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
@@ -6851,7 +6854,6 @@ remove_blink_timeout (GtkText *self)
       priv->blink_tick = 0;
     }
 }
-
 /*
  * Blink!
  */
