@@ -89,9 +89,6 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   k3 = self->factors[2];
   k4 = self->factors[3];
 
-  if (!gdk_color_state_equal (data->ccs, GDK_COLOR_STATE_SRGB))
-    g_warning ("arithmetic node in non-srgb colorstate isn't implemented yet.");
-
   cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
   gsk_render_node_draw_full (self->first, cr, data);
   first_pattern = cairo_pop_group (cr);
