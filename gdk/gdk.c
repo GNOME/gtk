@@ -147,7 +147,6 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "high-depth",      GDK_DEBUG_HIGH_DEPTH, "Use high bit depth rendering if possible" },
   { "no-vsync",        GDK_DEBUG_NO_VSYNC, "Repaint instantly (uses 100% CPU with animations)" },
   { "color-mgmt",      GDK_DEBUG_COLOR_MANAGEMENT, "Enable color management" },
-  { "session-mgmt",    GDK_DEBUG_SESSION_MANAGEMENT, "Enable session management" },
 };
 
 static const GdkDebugKey gdk_feature_keys[] = {

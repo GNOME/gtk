@@ -180,9 +180,6 @@ init_skip_protocols (GdkWaylandDisplay *display_wayland)
   if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), COLOR_MANAGEMENT))
     g_strv_builder_add (strv, wp_color_manager_v1_interface.name);
 
-  if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), SESSION_MANAGEMENT))
-    g_strv_builder_add (strv, xdg_session_manager_v1_interface.name);
-
   if (help)
     {
       gdk_help_message ("%s can be set to a list of Wayland interfaces to disable.\n", variable);
