@@ -19231,6 +19231,7 @@ apply_filter_tree (Shape         *shape,
   graphene_rect_t filter_region;
   GHashTable *results;
   graphene_rect_t bounds, rect;
+  GdkColorState *color_state;
 
   if (filter->filters->len == 0)
     return empty_node ();
@@ -19271,6 +19272,11 @@ apply_filter_tree (Shape         *shape,
     }
   else
     g_hash_table_insert (results, (gpointer) "", filter_result_new (source, NULL));
+
+  if (svg_enum_get (filter->current[SHAPE_ATTR_COLOR_INTERPOLATION_FILTERS]) == COLOR_INTERPOLATION_LINEAR)
+    color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    color_state = GDK_COLOR_STATE_SRGB;
 
   for (unsigned int i = 0; i < filter->filters->len; i++)
     {
@@ -19448,7 +19454,7 @@ apply_filter_tree (Shape         *shape,
                 k3 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K3), 1);
                 k4 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K4), 1);
 
-                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, GDK_COLOR_STATE_SRGB, k1, k2, k3, k4);
+                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, color_state, k1, k2, k3, k4);
               }
             else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {
