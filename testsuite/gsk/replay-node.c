@@ -469,9 +469,11 @@ replay_arithmetic_node (GskRenderNode *node,
   GtkSnapshot *snap;
   GskRenderNode *node1, *node2;
   graphene_rect_t bounds;
+  GdkColorState *color_state;
 
   gsk_render_node_get_bounds (node, &bounds);
   gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
+  color_state = gsk_arithmetic_node_get_color_state (node);
 
   snap = gtk_snapshot_new ();
   replay_node (gsk_arithmetic_node_get_first_child (node), snap);
@@ -481,7 +483,7 @@ replay_arithmetic_node (GskRenderNode *node,
   replay_node (gsk_arithmetic_node_get_second_child (node), snap);
   node2 = gtk_snapshot_free_to_node (snap);
 
-  node = gsk_arithmetic_node_new (&bounds, node1, node2, k1, k2, k3, k4);
+  node = gsk_arithmetic_node_new (&bounds, node1, node2, color_state, k1, k2, k3, k4);
   gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);
 }

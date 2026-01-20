@@ -1788,6 +1788,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
         tmp = g_strdup_printf ("%f %f %f %f", k1, k2, k3, k4);
         add_text_row (store, "Factors", "%s", tmp);
+        add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gsk_arithmetic_node_get_color_state (node)));
         g_free (tmp);
       }
       break;

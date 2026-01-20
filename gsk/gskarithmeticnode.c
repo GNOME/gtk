@@ -47,6 +47,7 @@ struct _GskArithmeticNode
       GskRenderNode *second;
     };
   };
+  GdkColorState *color_state;
   float factors[4];
 };
 
@@ -58,6 +59,7 @@ gsk_arithmetic_node_finalize (GskRenderNode *node)
 
   gsk_render_node_unref (self->first);
   gsk_render_node_unref (self->second);
+  gdk_color_state_unref (self->color_state);
 
   parent_class->finalize (node);
 }
@@ -77,6 +79,8 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   guint32 pixel1, pixel2;
   float r1, g1, b1, a1, r2, g2, b2, a2, r, g, b, a;
   float k1, k2, k3, k4;
+  gboolean cs_equal;
+  GdkColor c, l;
 
   gdk_cairo_rect (cr, &node->bounds);
   cairo_clip (cr);
@@ -88,9 +92,6 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   k2 = self->factors[1];
   k3 = self->factors[2];
   k4 = self->factors[3];
-
-  if (!gdk_color_state_equal (data->ccs, GDK_COLOR_STATE_SRGB))
-    g_warning ("arithmetic node in non-srgb colorstate isn't implemented yet.");
 
   cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
   gsk_render_node_draw_full (self->first, cr, data);
@@ -116,6 +117,8 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   g_assert (first_width == cairo_image_surface_get_width (second_image));
   g_assert (first_height == cairo_image_surface_get_height (second_image));
 
+  cs_equal = gdk_color_state_equal (data->ccs, self->color_state);
+
   for (guint y = 0; y < first_height; y++)
     {
       for (guint x = 0; x < first_width; x++)
@@ -135,9 +138,37 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
               g1 = ((pixel1 >> 8) & 0xff) / 255.;
               b1 = ((pixel1 >> 0) & 0xff) / 255.;
 
+              if (!cs_equal && a1 > 0)
+                {
+                  r1 /= a1;
+                  g1 /= a1;
+                  b1 /= a1;
+
+                  gdk_color_init (&c, data->ccs, (float[]) { r1, g1, b1, a1 });
+                  gdk_color_convert (&l, self->color_state, &c);
+
+                  r1 = l.r * l.a;
+                  g1 = l.g * l.a;
+                  b1 = l.b * l.a;
+                }
+
               r2 = ((pixel2 >> 16) & 0xff) / 255.;
               g2 = ((pixel2 >> 8) & 0xff) / 255.;
               b2 = ((pixel2 >> 0) & 0xff) / 255.;
+
+              if (!cs_equal && a2 > 0)
+                {
+                  r2 /= a2;
+                  g2 /= a2;
+                  b2 /= a2;
+
+                  gdk_color_init (&c, data->ccs, (float[]) { r2, g2, b2, a2 });
+                  gdk_color_convert (&l, self->color_state, &c);
+
+                  r2 = l.r * l.a;
+                  g2 = l.g * l.a;
+                  b2 = l.b * l.a;
+                }
 
               r = k1 * r1 * r2 + k2 * r1 + k3 * r2 + k4;
               g = k1 * g1 * g2 + k2 * g1 + k3 * g2 + k4;
@@ -146,6 +177,21 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
               r = CLAMP (r, 0, a);
               g = CLAMP (g, 0, a);
               b = CLAMP (b, 0, a);
+
+              if (!cs_equal)
+                {
+                  r /= a;
+                  g /= a;
+                  b /= a;
+
+                  gdk_color_init (&l, self->color_state, (float[]) { r, g, b, a });
+                  gdk_color_convert (&c, data->ccs, &l);
+
+                  r = c.r * c.a;
+                  g = c.g * c.a;
+                  b = c.b * c.a;
+                }
+
             }
           else
             {
@@ -185,7 +231,8 @@ gsk_arithmetic_node_diff (GskRenderNode *node1,
   if (self1->factors[0] == self2->factors[0] &&
       self1->factors[1] == self2->factors[1] &&
       self1->factors[2] == self2->factors[2] &&
-      self1->factors[3] == self2->factors[3])
+      self1->factors[3] == self2->factors[3] &&
+      gdk_color_state_equal (self1->color_state, self2->color_state))
     {
       gsk_render_node_diff (self1->first, self2->first, data);
       gsk_render_node_diff (self1->second, self2->second, data);
@@ -234,6 +281,7 @@ gsk_arithmetic_node_replay (GskRenderNode   *node,
   else
     result = gsk_arithmetic_node_new (&node->bounds,
                                       first, second,
+                                      self->color_state,
                                       self->factors[0],
                                       self->factors[1],
                                       self->factors[2],
@@ -267,6 +315,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskArithmeticNode, gsk_arithmetic_node)
  * @bounds: The bounds for the node
  * @first: The first node to be composited
  * @second: The second node to be composited
+ * @color_state: The color state to composite in
  * @k1: first factor
  * @k2: second factor
  * @k3: third factor
@@ -281,6 +330,7 @@ GskRenderNode *
 gsk_arithmetic_node_new (const graphene_rect_t *bounds,
                          GskRenderNode         *first,
                          GskRenderNode         *second,
+                         GdkColorState         *color_state,
                          float                  k1,
                          float                  k2,
                          float                  k3,
@@ -296,8 +346,15 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
   self = gsk_render_node_alloc (GSK_TYPE_ARITHMETIC_NODE);
   node = (GskRenderNode *) self;
 
+  if (!GDK_IS_DEFAULT_COLOR_STATE (color_state))
+    {
+      g_warning ("Arithmetic compositing in %s is not supported", gdk_color_state_get_name (color_state));
+      return NULL;
+    }
+
   self->first = gsk_render_node_ref (first);
   self->second = gsk_render_node_ref (second);
+  self->color_state = gdk_color_state_ref (color_state);
   self->factors[0] = k1;
   self->factors[1] = k2;
   self->factors[2] = k3;
@@ -370,3 +427,20 @@ gsk_arithmetic_node_get_factors (const GskRenderNode *node,
   *k3 = self->factors[2];
   *k4 = self->factors[3];
 }
+
+/*< private >
+ * gsk_arithmetic_node_get_color_state:
+ * @node: (type GskArithmeticNode): a `GskRenderNode`
+ *
+ * Retrieves the color state of the @node.
+ *
+ * Returns: (transfer none): the color state
+ */
+GdkColorState *
+gsk_arithmetic_node_get_color_state (const GskRenderNode *node)
+{
+  const GskArithmeticNode *self = (const GskArithmeticNode *) node;
+
+  return self->color_state;
+}
+
