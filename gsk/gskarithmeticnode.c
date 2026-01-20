@@ -122,43 +122,37 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
         {
           pixel1 = *(guint32 *)(first_data + y * first_stride + 4 * x);
           a1 = ((pixel1 >> 24) & 0xff) / 255.;
-          r1 = ((pixel1 >> 16) & 0xff) / 255.;
-          g1 = ((pixel1 >> 8) & 0xff) / 255.;
-          b1 = ((pixel1 >> 0) & 0xff) / 255.;
-
-          if (a1 != 0)
-            {
-              r1 /= a1;
-              g1 /= a1;
-              b1 /= a1;
-            }
 
           pixel2 = *(guint32 *)(second_data + y * second_stride + 4 * x);
           a2 = ((pixel2 >> 24) & 0xff) / 255.;
-          r2 = ((pixel2 >> 16) & 0xff) / 255.;
-          g2 = ((pixel2 >> 8) & 0xff) / 255.;
-          b2 = ((pixel2 >> 0) & 0xff) / 255.;
-
-          if (a2 != 0)
-            {
-              r2 /= a2;
-              g2 /= a2;
-              b2 /= a2;
-            }
 
           a = k1 * a1 * a2 + k2 * a1 + k3 * a2 + k4;
-          r = k1 * r1 * r2 + k2 * r1 + k3 * r2 + k4;
-          g = k1 * g1 * g2 + k2 * g1 + k3 * g2 + k4;
-          b = k1 * b1 * b2 + k2 * b1 + k3 * b2 + k4;
-
           a = CLAMP (a, 0, 1);
-          r = CLAMP (r, 0, 1);
-          g = CLAMP (g, 0, 1);
-          b = CLAMP (b, 0, 1);
 
-          r *= a;
-          g *= a;
-          b *= a;
+          if (a > 0)
+            {
+              r1 = ((pixel1 >> 16) & 0xff) / 255.;
+              g1 = ((pixel1 >> 8) & 0xff) / 255.;
+              b1 = ((pixel1 >> 0) & 0xff) / 255.;
+
+              r2 = ((pixel2 >> 16) & 0xff) / 255.;
+              g2 = ((pixel2 >> 8) & 0xff) / 255.;
+              b2 = ((pixel2 >> 0) & 0xff) / 255.;
+
+              r = k1 * r1 * r2 + k2 * r1 + k3 * r2 + k4;
+              g = k1 * g1 * g2 + k2 * g1 + k3 * g2 + k4;
+              b = k1 * b1 * b2 + k2 * b1 + k3 * b2 + k4;
+
+              r = CLAMP (r, 0, a);
+              g = CLAMP (g, 0, a);
+              b = CLAMP (b, 0, a);
+            }
+          else
+            {
+              r = 0;
+              g = 0;
+              b = 0;
+            }
 
           *(guint32 *)(first_data + y * first_stride + 4 * x) =
               CLAMP ((int) roundf (a * 255), 0, 255) << 24 |
