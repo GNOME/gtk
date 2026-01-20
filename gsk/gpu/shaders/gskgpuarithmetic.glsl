@@ -51,7 +51,8 @@ run (out vec2 pos)
 vec4
 arithmetic (vec4 i1, vec4 i2, vec4 k)
 {
-  return k.x * i1 * i2 + k.y * i1 + k.z * i2 + k.w;
+  vec4 result = k.x * i1 * i2 + k.y * i1 + k.z * i2 + k.w;
+  return clamp (result, vec4 (0.0), vec4 (min (1.0, result.a)));
 }
 
 #ifdef GSK_FRAGMENT_SHADER
@@ -66,14 +67,7 @@ run (out vec4 color,
   vec4 second_color = texture (GSK_TEXTURE1, _second_coord);
   second_color = output_color_alpha (second_color, rect_coverage (_second_rect, _pos));
 
-  first_color = color_unpremultiply (first_color);
-  second_color = color_unpremultiply (second_color);
-
   color = arithmetic (first_color, second_color, _factors);
-
-  color = clamp (color, 0.0, 1.0);
-
-  color = color_premultiply (color);
 
   color = output_color_alpha (color, _opacity);
 
