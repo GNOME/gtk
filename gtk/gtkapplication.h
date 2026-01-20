@@ -69,7 +69,7 @@ struct _GtkApplicationClass
    *
    * Class closure for the [signal@Application::save-state] signal.
    *
-   * Returns: true to stop stop further handlers from running
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.22
    */
@@ -83,7 +83,7 @@ struct _GtkApplicationClass
    *
    * Class closure for the [signal@Application::restore-state] signal.
    *
-   * Returns: true to stop stop further handlers from running
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.22
    */

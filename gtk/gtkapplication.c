@@ -829,7 +829,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * and [signal@Gtk.Application::restore-window] for handling
    * per-window state.
    *
-   * Returns: true to stop stop further handlers from running
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.22
    */
@@ -855,7 +855,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * corresponding handler for [signal@Gtk.Application::save-state]
    * does.
    *
-   * Returns: true to stop stop further handlers from running
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.22
    */
