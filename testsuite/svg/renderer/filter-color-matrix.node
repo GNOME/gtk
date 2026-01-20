@@ -22,6 +22,7 @@ M 10 10 h 40 v 40 h -40 z";
                 fill-rule: winding;
               }
             }
+            color-state: srgb-linear;
           }
         }
         isolations: background;
@@ -46,6 +47,7 @@ M 60 10 h 40 v 40 h -40 z";
                 fill-rule: winding;
               }
             }
+            color-state: srgb-linear;
           }
         }
         isolations: background;
@@ -70,6 +72,7 @@ M 110 10 h 40 v 40 h -40 z";
                 fill-rule: winding;
               }
             }
+            color-state: srgb-linear;
           }
         }
         isolations: background;
@@ -94,6 +97,7 @@ M 10 60 h 40 v 40 h -40 z";
                 fill-rule: winding;
               }
             }
+            color-state: srgb-linear;
           }
         }
         isolations: background;

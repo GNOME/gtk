@@ -29,6 +29,7 @@ M 20 20 h 40 v 40 h -40 z";
                 }
               }
             }
+            color-state: srgb-linear;
           }
         }
       }

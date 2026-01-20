@@ -31,7 +31,10 @@
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtksnapshotprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
+#include "gsk/gskblendnodeprivate.h"
+#include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
+#include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskpathprivate.h"
@@ -19396,7 +19399,7 @@ apply_filter_tree (Shape         *shape,
             in2 = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN2), &subregion, shape, context, source, results);
             blend_mode = svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_BLEND_MODE));
 
-            result = gsk_blend_node_new (in2->node, in->node, blend_mode);
+            result = gsk_blend_node_new2 (in2->node, in->node, color_state, blend_mode);
 
             filter_result_unref (in);
             filter_result_unref (in2);
@@ -19545,7 +19548,7 @@ apply_filter_tree (Shape         *shape,
                   }
               }
 
-            result = gsk_component_transfer_node_new (in->node, r, g, b, a);
+            result = gsk_component_transfer_node_new2 (in->node, color_state, r, g, b, a);
 
             gsk_component_transfer_free (r);
             gsk_component_transfer_free (g);
@@ -19572,7 +19575,7 @@ apply_filter_tree (Shape         *shape,
                                                 filter_get_current_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES),
                                                 &matrix, &offset);
 
-            result = gsk_color_matrix_node_new (in->node, &matrix, &offset);
+            result = gsk_color_matrix_node_new2 (in->node, color_state, &matrix, &offset);
 
             filter_result_unref (in);
           }

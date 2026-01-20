@@ -20,6 +20,7 @@ isolation {
 M 20 20 h 60 v 60 h -60 z";
           fill-rule: winding;
         }
+        color-state: srgb-linear;
       }
     }
     isolations: background;
