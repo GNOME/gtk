@@ -1441,5 +1441,33 @@ gdk_wayland_display_get_session_id (GdkDisplay *display)
   return display_wayland->session_id;
 }
 
+static gint
+cmp_toplevel_session_id (GdkToplevel *toplevel,
+                         const char  *expected)
+{
+  return g_strcmp0 (gdk_wayland_toplevel_get_session_id (toplevel), expected);
+}
+
+void
+gdk_wayland_display_remove_session_toplevel (GdkDisplay *display,
+                                             const char *name)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GList *found_toplevel = NULL;
+
+  if (!display_wayland->session)
+    return;
+
+  found_toplevel = g_list_find_custom (display_wayland->toplevels, name,
+                                       (GCompareFunc) cmp_toplevel_session_id);
+  if (found_toplevel)
+    {
+      gdk_wayland_toplevel_remove_from_session (found_toplevel->data);
+      return;
+    }
+
+  xdg_session_v1_remove_toplevel (display_wayland->session, name);
+}
+
 /* }}} */
 /* vim:set foldmethod=marker: */
