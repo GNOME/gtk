@@ -3,6 +3,7 @@
 #include <gsk/gskarithmeticnodeprivate.h>
 #include <gsk/gskbordernodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
+#include <gsk/gskcomponenttransfernodeprivate.h>
 #include <gsk/gskinsetshadownodeprivate.h>
 #include <gsk/gskoutsetshadownodeprivate.h>
 #include <gsk/gskrendernodeprivate.h>
@@ -408,11 +409,12 @@ replay_component_transfer_node (GskRenderNode *node, GtkSnapshot *snapshot)
 
   snapshot2 = gtk_snapshot_new ();
   replay_node (gsk_component_transfer_node_get_child (node), snapshot2);
-  node2 = gsk_component_transfer_node_new (gtk_snapshot_free_to_node (snapshot2),
-                                           gsk_component_transfer_node_get_transfer (node, 0),
-                                           gsk_component_transfer_node_get_transfer (node, 1),
-                                           gsk_component_transfer_node_get_transfer (node, 2),
-                                           gsk_component_transfer_node_get_transfer (node, 3));
+  node2 = gsk_component_transfer_node_new2 (gtk_snapshot_free_to_node (snapshot2),
+                                            gsk_component_transfer_node_get_color_state (node),
+                                            gsk_component_transfer_node_get_transfer (node, 0),
+                                            gsk_component_transfer_node_get_transfer (node, 1),
+                                            gsk_component_transfer_node_get_transfer (node, 2),
+                                            gsk_component_transfer_node_get_transfer (node, 3));
   gtk_snapshot_append_node (snapshot, node2);
   gsk_render_node_unref (node2);
 }

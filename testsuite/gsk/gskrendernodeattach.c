@@ -19,6 +19,7 @@
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
+#include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
@@ -210,11 +211,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_COMPONENT_TRANSFER_NODE:
       child = node_attach (gsk_component_transfer_node_get_child (node), surface, idx);
-      res = gsk_component_transfer_node_new (child,
-                                             gsk_component_transfer_node_get_transfer (node, 0),
-                                             gsk_component_transfer_node_get_transfer (node, 1),
-                                             gsk_component_transfer_node_get_transfer (node, 2),
-                                             gsk_component_transfer_node_get_transfer (node, 3));
+      res = gsk_component_transfer_node_new2 (child,
+                                              gsk_component_transfer_node_get_color_state (node),
+                                              gsk_component_transfer_node_get_transfer (node, 0),
+                                              gsk_component_transfer_node_get_transfer (node, 1),
+                                              gsk_component_transfer_node_get_transfer (node, 2),
+                                              gsk_component_transfer_node_get_transfer (node, 3));
       gsk_render_node_unref (child);
       return res;
 

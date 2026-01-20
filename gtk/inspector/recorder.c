@@ -47,6 +47,7 @@
 #include <gsk/gskarithmeticnodeprivate.h>
 #include <gsk/gskbordernodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
+#include <gsk/gskcomponenttransfernodeprivate.h>
 #include <gsk/gskcopypasteutilsprivate.h>
 #include <gsk/gskinsetshadownodeprivate.h>
 #include <gsk/gskoutsetshadownodeprivate.h>
@@ -1735,6 +1736,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
             gsk_component_transfer_print (gsk_component_transfer_node_get_transfer (node, i), s);
             add_text_row (store, component[i], "%s", s->str);
           }
+        add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gsk_component_transfer_node_get_color_state (node)));
 
         g_string_free (s, TRUE);
       }

@@ -49,7 +49,7 @@
 #include "gskclipnode.h"
 #include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
-#include "gskcomponenttransfernode.h"
+#include "gskcomponenttransfernodeprivate.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcompositenode.h"
 #include "gskconicgradientnodeprivate.h"
@@ -3761,6 +3761,7 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuNodeProcessor *self,
   gsk_gpu_component_transfer_op (self->frame,
                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                                  self->ccs,
+                                 gsk_component_transfer_node_get_color_state (node),
                                  self->opacity,
                                  &self->offset,
                                  image,

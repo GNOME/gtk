@@ -32,7 +32,7 @@
 #include "gskcolormatrixnode.h"
 #include "gskcolornodeprivate.h"
 #include "gskconicgradientnodeprivate.h"
-#include "gskcomponenttransfernode.h"
+#include "gskcomponenttransfernodeprivate.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcompositenode.h"
 #include "gskcontainernodeprivate.h"
@@ -3985,12 +3985,14 @@ parse_component_transfer_node (GtkCssParser *parser,
   GskComponentTransfer *green = NULL;
   GskComponentTransfer *blue = NULL;
   GskComponentTransfer *alpha = NULL;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
     { "red", parse_component_transfer, clear_component_transfer, &red },
     { "green", parse_component_transfer, clear_component_transfer, &green },
     { "blue", parse_component_transfer, clear_component_transfer, &blue },
     { "alpha", parse_component_transfer, clear_component_transfer, &alpha },
+    { "color-state", parse_default_color_state, clear_color_state, &color_state },
   };
   GskRenderNode *result;
 
@@ -4006,12 +4008,14 @@ parse_component_transfer_node (GtkCssParser *parser,
   if (alpha == NULL)
     alpha = gsk_component_transfer_new_identity ();
 
-  result = gsk_component_transfer_node_new (child, red, green, blue, alpha);
+  result = gsk_component_transfer_node_new2 (child, color_state, red, green, blue, alpha);
 
   gsk_component_transfer_free (red);
   gsk_component_transfer_free (green);
   gsk_component_transfer_free (blue);
   gsk_component_transfer_free (alpha);
+
+  gdk_color_state_unref (color_state);
 
   gsk_render_node_unref (child);
 
@@ -6656,6 +6660,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_component_transfer_param (p, "green", gsk_component_transfer_node_get_transfer (node, 1));
         append_component_transfer_param (p, "blue", gsk_component_transfer_node_get_transfer (node, 2));
         append_component_transfer_param (p, "alpha", gsk_component_transfer_node_get_transfer (node, 3));
+        append_color_state_param (p, "color-state", gsk_component_transfer_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);
       }
