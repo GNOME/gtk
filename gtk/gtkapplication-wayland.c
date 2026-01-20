@@ -264,7 +264,7 @@ gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
 {
   GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
   GdkDisplay *display = gdk_display_get_default ();
-  enum xx_session_manager_v1_reason wl_reason;
+  enum xdg_session_manager_v1_reason wl_reason;
   char *id = NULL;
   GVariant *state;
 
@@ -285,19 +285,19 @@ gtk_application_impl_wayland_startup (GtkApplicationImpl *impl,
   switch (wayland->dbus.reason)
     {
     case GTK_RESTORE_REASON_LAUNCH:
-      wl_reason = XX_SESSION_MANAGER_V1_REASON_LAUNCH;
+      wl_reason = XDG_SESSION_MANAGER_V1_REASON_LAUNCH;
       break;
 
     case GTK_RESTORE_REASON_RESTORE:
-      wl_reason = XX_SESSION_MANAGER_V1_REASON_SESSION_RESTORE;
+      wl_reason = XDG_SESSION_MANAGER_V1_REASON_SESSION_RESTORE;
       break;
 
     case GTK_RESTORE_REASON_RECOVER:
-      wl_reason = XX_SESSION_MANAGER_V1_REASON_RECOVER;
+      wl_reason = XDG_SESSION_MANAGER_V1_REASON_RECOVER;
       break;
 
     case GTK_RESTORE_REASON_PRISTINE:
-      wl_reason = XX_SESSION_MANAGER_V1_REASON_LAUNCH;
+      wl_reason = XDG_SESSION_MANAGER_V1_REASON_LAUNCH;
       g_clear_pointer (&id, g_free);
       break;
     default:
