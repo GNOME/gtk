@@ -192,7 +192,10 @@ get_state_file (GtkApplicationImpl *impl,
   else if (dbus->instance_id)
     instance_id = dbus->instance_id;
   else
-    instance_id = "fallback";
+    {
+      GTK_DEBUG (SESSION, "Session didn't report an instance_id, so we're using \"fallback\"!");
+      instance_id = "fallback";
+    }
 
   dir = g_get_user_state_dir ();
 
