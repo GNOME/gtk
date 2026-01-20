@@ -79,6 +79,8 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   guint32 pixel1, pixel2;
   float r1, g1, b1, a1, r2, g2, b2, a2, r, g, b, a;
   float k1, k2, k3, k4;
+  gboolean cs_equal;
+  GdkColor c, l;
 
   gdk_cairo_rect (cr, &node->bounds);
   cairo_clip (cr);
@@ -115,6 +117,8 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   g_assert (first_width == cairo_image_surface_get_width (second_image));
   g_assert (first_height == cairo_image_surface_get_height (second_image));
 
+  cs_equal = gdk_color_state_equal (data->ccs, self->color_state);
+
   for (guint y = 0; y < first_height; y++)
     {
       for (guint x = 0; x < first_width; x++)
@@ -134,9 +138,37 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
               g1 = ((pixel1 >> 8) & 0xff) / 255.;
               b1 = ((pixel1 >> 0) & 0xff) / 255.;
 
+              if (!cs_equal && a1 > 0)
+                {
+                  r1 /= a1;
+                  g1 /= a1;
+                  b1 /= a1;
+
+                  gdk_color_init (&c, data->ccs, (float[]) { r1, g1, b1, a1 });
+                  gdk_color_convert (&l, self->color_state, &c);
+
+                  r1 = l.r * l.a;
+                  g1 = l.g * l.a;
+                  b1 = l.b * l.a;
+                }
+
               r2 = ((pixel2 >> 16) & 0xff) / 255.;
               g2 = ((pixel2 >> 8) & 0xff) / 255.;
               b2 = ((pixel2 >> 0) & 0xff) / 255.;
+
+              if (!cs_equal && a2 > 0)
+                {
+                  r2 /= a2;
+                  g2 /= a2;
+                  b2 /= a2;
+
+                  gdk_color_init (&c, data->ccs, (float[]) { r2, g2, b2, a2 });
+                  gdk_color_convert (&l, self->color_state, &c);
+
+                  r2 = l.r * l.a;
+                  g2 = l.g * l.a;
+                  b2 = l.b * l.a;
+                }
 
               r = k1 * r1 * r2 + k2 * r1 + k3 * r2 + k4;
               g = k1 * g1 * g2 + k2 * g1 + k3 * g2 + k4;
@@ -145,6 +177,21 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
               r = CLAMP (r, 0, a);
               g = CLAMP (g, 0, a);
               b = CLAMP (b, 0, a);
+
+              if (!cs_equal)
+                {
+                  r /= a;
+                  g /= a;
+                  b /= a;
+
+                  gdk_color_init (&l, self->color_state, (float[]) { r, g, b, a });
+                  gdk_color_convert (&c, data->ccs, &l);
+
+                  r = c.r * c.a;
+                  g = c.g * c.a;
+                  b = c.b * c.a;
+                }
+
             }
           else
             {
@@ -298,6 +345,12 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
 
   self = gsk_render_node_alloc (GSK_TYPE_ARITHMETIC_NODE);
   node = (GskRenderNode *) self;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (color_state))
+    {
+      g_warning ("Arithmetic compositing in %s is not supported", gdk_color_state_get_name (color_state));
+      return NULL;
+    }
 
   self->first = gsk_render_node_ref (first);
   self->second = gsk_render_node_ref (second);
