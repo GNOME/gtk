@@ -1680,8 +1680,10 @@ gtk_application_forget (GtkApplication *application)
 
   if (priv->kept_window_state)
     {
-      // TODO: Tell compositor to forget the window state
-      //       (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
+      GVariant *gtk_state;
+      g_variant_get (priv->kept_window_state, "(@a{sv}@a{sv})", &gtk_state, NULL);
+      gtk_application_impl_window_forget_by_state (priv->impl, gtk_state);
+      g_variant_unref (gtk_state);
       g_clear_pointer (&priv->kept_window_state, g_variant_unref);
     }
 
@@ -1714,8 +1716,7 @@ restore_window (GtkApplication   *application,
   if (priv->pending_window_state)
     {
       GTK_DEBUG (SESSION, "App didn't restore a toplevel, removing it from session");
-      // TODO: Tell compositor to forget the window state
-      // (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
+      gtk_application_impl_window_forget_by_state (priv->impl, gtk_state);
       priv->pending_window_state = NULL;
     }
 }
