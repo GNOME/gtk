@@ -19448,7 +19448,7 @@ apply_filter_tree (Shape         *shape,
                 k3 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K3), 1);
                 k4 = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_COMPOSITE_K4), 1);
 
-                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, k1, k2, k3, k4);
+                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, GDK_COLOR_STATE_SRGB, k1, k2, k3, k4);
               }
             else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {

@@ -47,6 +47,7 @@ struct _GskArithmeticNode
       GskRenderNode *second;
     };
   };
+  GdkColorState *color_state;
   float factors[4];
 };
 
@@ -58,6 +59,7 @@ gsk_arithmetic_node_finalize (GskRenderNode *node)
 
   gsk_render_node_unref (self->first);
   gsk_render_node_unref (self->second);
+  gdk_color_state_unref (self->color_state);
 
   parent_class->finalize (node);
 }
@@ -182,7 +184,8 @@ gsk_arithmetic_node_diff (GskRenderNode *node1,
   if (self1->factors[0] == self2->factors[0] &&
       self1->factors[1] == self2->factors[1] &&
       self1->factors[2] == self2->factors[2] &&
-      self1->factors[3] == self2->factors[3])
+      self1->factors[3] == self2->factors[3] &&
+      gdk_color_state_equal (self1->color_state, self2->color_state))
     {
       gsk_render_node_diff (self1->first, self2->first, data);
       gsk_render_node_diff (self1->second, self2->second, data);
@@ -231,6 +234,7 @@ gsk_arithmetic_node_replay (GskRenderNode   *node,
   else
     result = gsk_arithmetic_node_new (&node->bounds,
                                       first, second,
+                                      self->color_state,
                                       self->factors[0],
                                       self->factors[1],
                                       self->factors[2],
@@ -264,6 +268,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskArithmeticNode, gsk_arithmetic_node)
  * @bounds: The bounds for the node
  * @first: The first node to be composited
  * @second: The second node to be composited
+ * @color_state: The color state to composite in
  * @k1: first factor
  * @k2: second factor
  * @k3: third factor
@@ -278,6 +283,7 @@ GskRenderNode *
 gsk_arithmetic_node_new (const graphene_rect_t *bounds,
                          GskRenderNode         *first,
                          GskRenderNode         *second,
+                         GdkColorState         *color_state,
                          float                  k1,
                          float                  k2,
                          float                  k3,
@@ -295,6 +301,7 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
 
   self->first = gsk_render_node_ref (first);
   self->second = gsk_render_node_ref (second);
+  self->color_state = gdk_color_state_ref (color_state);
   self->factors[0] = k1;
   self->factors[1] = k2;
   self->factors[2] = k3;
@@ -367,3 +374,20 @@ gsk_arithmetic_node_get_factors (const GskRenderNode *node,
   *k3 = self->factors[2];
   *k4 = self->factors[3];
 }
+
+/*< private >
+ * gsk_arithmetic_node_get_color_state:
+ * @node: (type GskArithmeticNode): a `GskRenderNode`
+ *
+ * Retrieves the color state of the @node.
+ *
+ * Returns: (transfer none): the color state
+ */
+GdkColorState *
+gsk_arithmetic_node_get_color_state (const GskRenderNode *node)
+{
+  const GskArithmeticNode *self = (const GskArithmeticNode *) node;
+
+  return self->color_state;
+}
+

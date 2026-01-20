@@ -4287,12 +4287,14 @@ parse_arithmetic_node (GtkCssParser *parser,
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GskRenderNode *first = NULL;
   GskRenderNode *second = NULL;
+  GdkColorState *color_state = NULL;
   float k[4] = { 0, 0, 0, 0 };
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "first", parse_node, clear_node, &first },
     { "second", parse_node, clear_node, &second },
     { "k", parse_four_floats, NULL, k },
+    { "color-state", parse_color_state, clear_color_state, &color_state }
   };
   GskRenderNode *result;
 
@@ -4302,10 +4304,14 @@ parse_arithmetic_node (GtkCssParser *parser,
   if (second == NULL)
     second = create_default_render_node ();
 
-  result = gsk_arithmetic_node_new (&bounds, first, second, k[0], k[1], k[2], k[3]);
+  if (color_state == NULL)
+    color_state = GDK_COLOR_STATE_SRGB;
+
+  result = gsk_arithmetic_node_new (&bounds, first, second, color_state, k[0], k[1], k[2], k[3]);
 
   gsk_render_node_unref (first);
   gsk_render_node_unref (second);
+  gdk_color_state_unref (color_state);
 
   return result;
 }
@@ -6702,6 +6708,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_four_float_param (p, "k", k1, k2, k3, k4);
         append_node_param (p, "first", gsk_arithmetic_node_get_first_child (node));
         append_node_param (p, "second", gsk_arithmetic_node_get_second_child (node));
+        append_color_state_param (p, "color-state", gsk_arithmetic_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);
       }

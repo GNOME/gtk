@@ -34,6 +34,7 @@ GType                   gsk_arithmetic_node_get_type            (void) G_GNUC_CO
 GskRenderNode *         gsk_arithmetic_node_new                 (const graphene_rect_t  *bounds,
                                                                  GskRenderNode          *first,
                                                                  GskRenderNode          *second,
+                                                                 GdkColorState          *color_state,
                                                                  float                   k1,
                                                                  float                   k2,
                                                                  float                   k3,
@@ -46,6 +47,7 @@ void                    gsk_arithmetic_node_get_factors         (const GskRender
                                                                  float                  *k2,
                                                                  float                  *k3,
                                                                  float                  *k4);
+GdkColorState *         gsk_arithmetic_node_get_color_state     (const GskRenderNode    *node) G_GNUC_PURE;
 
 G_END_DECLS
 
