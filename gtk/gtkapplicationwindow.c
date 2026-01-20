@@ -715,21 +715,15 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
 
   /**
    * GtkApplicationWindow::save-state:
-   * @window: the window on which the signal is emitted
-   * @dict: a dictionary of type `a{sv}`
+   * @window: the window which emitted the signal
+   * @dict: a dictionary to populate with application window state
    *
-   * The handler for this signal should persist any
-   * application-specific state of @window into @dict.
+   * The handler for this signal should persist any application-specific
+   * state of @window into @dict.
    *
-   * Note that window management state such as maximized,
-   * fullscreen, or window size should not be saved as
-   * part of this, they are handled by GTK.
-   *
-   * You must be careful to be robust in the face of app upgrades and downgrades:
-   * the @state might have been created by a previous or occasionally even a future
-   * version of your app. Do not assume that a given key exists in the state.
-   * Apps must try to restore state saved by a previous version, but are free to
-   * discard state if it was written by a future version.
+   * Note that window management state such as maximized, fullscreen,
+   * or window size should not be saved as part of this. They are handled
+   * by GTK.
    *
    * See [signal@Gtk.Application::restore-window].
    *
@@ -918,16 +912,6 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
   return priv->help_overlay;
 }
 
-/*< private >
- * gtk_application_window_save:
- * @window: a `GtkApplicationWindow`
- * @state: a `GVariantDict` to add state to
- *
- * Save the state of @window and its children to a `GVariant`.
- *
- * See [signal@Gtk.ApplicationWindow::save-state] for how to override
- * what state is saved.
- */
 void
 gtk_application_window_save (GtkApplicationWindow *window,
                              GVariantDict         *state)
