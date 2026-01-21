@@ -62,6 +62,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->window_removed = (gpointer) do_nothing;
   class->window_forget = (gpointer) do_nothing;
   class->window_forget_by_state = (gpointer) do_nothing;
+  class->window_unforget = (gpointer) do_nothing;
   class->active_window_changed = (gpointer) do_nothing;
   class->handle_window_realize = (gpointer) do_nothing;
   class->handle_window_map = (gpointer) do_nothing;
@@ -76,6 +77,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->collect_window_state = (gpointer) do_nothing;
   class->store_state = (gpointer) do_nothing;
   class->forget_state = (gpointer) do_nothing;
+  class->unforget_state = (gpointer) do_nothing;
   class->retrieve_state = (gpointer) return_null;
 }
 
@@ -126,6 +128,13 @@ gtk_application_impl_window_forget_by_state (GtkApplicationImpl *impl,
                                              GVariant           *state)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->window_forget_by_state (impl, state);
+}
+
+void
+gtk_application_impl_window_unforget (GtkApplicationImpl *impl,
+                                      GtkWindow          *window)
+{
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->window_unforget (impl, window);
 }
 
 void
@@ -224,6 +233,12 @@ void
 gtk_application_impl_forget_state (GtkApplicationImpl *impl)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->forget_state (impl);
+}
+
+void
+gtk_application_impl_unforget_state (GtkApplicationImpl *impl)
+{
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->unforget_state (impl);
 }
 
 GVariant *
