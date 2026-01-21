@@ -532,11 +532,6 @@ show_render_node (GtkInspectorRecorder *recorder,
                            (gpointer[1]) { wrapper },
                            1);
 
-      gsk_render_node_get_bounds (node, &bounds);
-      paintable = gtk_render_node_paintable_new (draw_node, &bounds);
-      gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), paintable);
-      g_object_unref (paintable);
-
       g_object_unref (wrapper);
       gsk_render_node_unref (draw_node);
     }
