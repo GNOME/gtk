@@ -190,6 +190,16 @@ gtk_inspector_node_wrapper_get_profile_node (GtkInspectorNodeWrapper *self)
   return self->profile_node;
 }
 
+const GskDebugProfile *
+gtk_inspector_node_wrapper_get_profile (GtkInspectorNodeWrapper *self)
+{
+  if (self->profile_node == NULL ||
+      gsk_render_node_get_node_type (self->profile_node) != GSK_DEBUG_NODE)
+    return NULL;
+
+  return gsk_debug_node_get_profile (self->profile_node);
+}
+
 GskRenderNode *
 gtk_inspector_node_wrapper_get_draw_node (GtkInspectorNodeWrapper *self)
 {

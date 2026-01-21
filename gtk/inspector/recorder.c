@@ -1018,9 +1018,10 @@ add_rect_row (GListStore            *store,
 }
 
 static void
-populate_render_node_properties (GListStore    *store,
-                                 GskRenderNode *node,
-                                 const char    *role)
+populate_render_node_properties (GListStore            *store,
+                                 GskRenderNode         *node,
+                                 const char            *role,
+                                 const GskDebugProfile *profile)
 {
   graphene_rect_t bounds, opaque;
 
@@ -1662,6 +1663,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     default:
       break;
     }
+
+  if (profile)
+    {
+        add_text_row (store, "Performance", "%s", "");
+        add_text_row (store, "CPU total", "%'lluns", (unsigned long long) profile->total.cpu_ns);
+        add_text_row (store, "CPU self", "%'lluns", (unsigned long long) profile->self.cpu_ns);
+        add_text_row (store, "GPU total", "%'lluns", (unsigned long long) profile->total.gpu_ns);
+        add_text_row (store, "GPU self", "%'lluns", (unsigned long long) profile->self.gpu_ns);
+    }
 }
 
 static const char *
@@ -2100,7 +2110,8 @@ render_node_list_selection_changed (GtkListBox           *list,
   gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), paintable);
   populate_render_node_properties (recorder->render_node_properties,
                                    gtk_inspector_node_wrapper_get_node (wrapper),
-                                   gtk_inspector_node_wrapper_get_role (wrapper));
+                                   gtk_inspector_node_wrapper_get_role (wrapper),
+                                   gtk_inspector_node_wrapper_get_profile (wrapper));
 
   g_object_unref (paintable);
 }
