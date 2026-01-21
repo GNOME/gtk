@@ -305,9 +305,6 @@ static void
 shape_editor_update_path (ShapeEditor *self,
                           GskPath     *path)
 {
-  g_autofree char *text = NULL;
-  g_autofree char *s = NULL;
-
   self->shape->type = SHAPE_PATH;
   svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (path));
   path_paintable_changed (self->paintable);
@@ -1064,9 +1061,6 @@ shape_editor_update (ShapeEditor *self)
     {
       GskPath *path;
       g_autofree char *text = NULL;
-      g_autofree char *id = NULL;
-      g_autofree char *states = NULL;
-      g_autoptr (GskStroke) stroke = gsk_stroke_new (1);
       unsigned int symbolic;
       GdkRGBA color;
       double line_width;

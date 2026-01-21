@@ -193,11 +193,9 @@ temp_file_changed (GFileMonitor      *monitor,
 {
   if (event == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT)
     {
-      g_autoptr (GFileMonitor) the_monitor = monitor;
       g_autoptr (GBytes) bytes = NULL;
       g_autoptr (GError) error = NULL;
       g_autoptr (PathPaintable) paintable = NULL;
-      g_autoptr (GskPath) path = NULL;
 
       bytes = g_file_load_bytes (file, NULL, NULL, &error);
       if (!bytes)
