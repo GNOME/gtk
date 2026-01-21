@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-09-23 20:25+0000\n"
+"POT-Creation-Date: 2026-01-03 21:02+0000\n"
 "PO-Revision-Date: 2025-09-24 16:37+0200\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
@@ -55,22 +55,22 @@ msgstr "Не може да се чете от празен буфер за об�
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Няма съвместим формат за пренос на съдържанието на буфера за обмен."
 
-#: gdk/gdkcolorstate.c:1081
+#: gdk/gdkcolorstate.c:1089
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: неуказани параметри не се поддържат"
 
-#: gdk/gdkcolorstate.c:1127
+#: gdk/gdkcolorstate.c:1135
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: функцията за трансфер %u не се поддържа"
 
-#: gdk/gdkcolorstate.c:1158
+#: gdk/gdkcolorstate.c:1166
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: %u основни цвята не се поддържат"
 
-#: gdk/gdkcolorstate.c:1185
+#: gdk/gdkcolorstate.c:1193
 #, fuzzy, c-format
 #| msgid "cicp: Transfer function %u not supported"
 msgid "cicp: Matrix coefficients %u, %s not supported"
@@ -91,7 +91,7 @@ msgstr "Съдържанието не може да се предостави к
 msgid "The current backend does not support OpenGL"
 msgstr "Текущата графична подсистема не поддържа OpenGL"
 
-#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1754
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1962
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Поддръжката на Vulkan е забранена чрез „GDK_DISABLE“"
 
@@ -2264,12 +2264,12 @@ msgstr "Бели полета"
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5949 gtk/gtktext.c:6379
 #: gtk/gtktextview.c:9382
 msgid "_Copy"
 msgstr "_Копиране"
 
-#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
+#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:6009 gtk/gtktext.c:2891
 #: gtk/gtktextview.c:9460
 msgid "Context menu"
 msgstr "Контекстно меню"
@@ -2345,7 +2345,7 @@ msgstr "Вече съществува файл с това име"
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
 #: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
-#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_Отказ"
@@ -2439,7 +2439,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Когато окончателно изтриете обект, го загубите безвъзвратно."
 
 #: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9390
+#: gtk/gtklabel.c:5951 gtk/gtktext.c:6387 gtk/gtktextview.c:9390
 msgid "_Delete"
 msgstr "_Изтриване"
 
@@ -2681,7 +2681,7 @@ msgid "Save a File"
 msgstr "Запазване на файл"
 
 #: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:56
-#: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
+#: gtk/ui/gtkcolorchooserdialog.ui:49 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "_Избор"
 
@@ -2793,23 +2793,23 @@ msgstr "Затваряне"
 msgid "Close the infobar"
 msgstr "Затваряне на информационната лента"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9378
+#: gtk/gtklabel.c:5948 gtk/gtktext.c:6375 gtk/gtktextview.c:9378
 msgid "Cu_t"
 msgstr "От_рязване"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9386
+#: gtk/gtklabel.c:5950 gtk/gtktext.c:6383 gtk/gtktextview.c:9386
 msgid "_Paste"
 msgstr "_Поставяне"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9411
+#: gtk/gtklabel.c:5956 gtk/gtktext.c:6396 gtk/gtktextview.c:9411
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: gtk/gtklabel.c:5918
+#: gtk/gtklabel.c:5961
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
-#: gtk/gtklabel.c:5922
+#: gtk/gtklabel.c:5965
 msgid "Copy _Link Address"
 msgstr "Копиране на _адреса на връзка"
 
