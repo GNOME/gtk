@@ -1666,6 +1666,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         add_text_row (store, "CPU self", "%'lluns", (unsigned long long) profile->self.cpu_ns);
         add_text_row (store, "GPU total", "%'lluns", (unsigned long long) profile->total.gpu_ns);
         add_text_row (store, "GPU self", "%'lluns", (unsigned long long) profile->self.gpu_ns);
+        add_text_row (store, "pixels total", "%'llu", (unsigned long long) profile->total.gpu_pixels);
+        add_text_row (store, "pixels self", "%'llu", (unsigned long long) profile->self.gpu_pixels);
     }
 }
 
@@ -2098,7 +2100,9 @@ render_node_list_selection_changed (GtkSingleSelection   *selection,
     return;
 
   wrapper = gtk_tree_list_row_get_item (row_item);
-  draw_node = gtk_inspector_node_wrapper_get_draw_node (wrapper);
+  draw_node = gtk_inspector_node_wrapper_create_heat_map (wrapper);
+  if (draw_node == NULL)
+    draw_node = gsk_render_node_ref (gtk_inspector_node_wrapper_get_draw_node (wrapper));
 
   gsk_render_node_get_bounds (draw_node, &bounds);
   paintable = gtk_render_node_paintable_new (draw_node, &bounds);
@@ -2109,6 +2113,7 @@ render_node_list_selection_changed (GtkSingleSelection   *selection,
                                    gtk_inspector_node_wrapper_get_profile (wrapper));
 
   g_object_unref (paintable);
+  gsk_render_node_unref (draw_node);
 }
 
 static void

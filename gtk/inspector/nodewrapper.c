@@ -20,7 +20,10 @@
 #include "nodewrapper.h"
 
 #include "gsk/gskdebugnodeprivate.h"
+#include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrendernodeprivate.h"
+#include "gdk/gdkcairoprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -345,5 +348,285 @@ gtk_inspector_node_wrapper_create_children_model (GtkInspectorNodeWrapper *self)
     }
 
   return G_LIST_MODEL (store);
+}
+
+static void
+render_heatmap_node (cairo_t       *cr,
+                     GskRenderNode *node,
+                     gsize          max_value)
+{
+  switch (gsk_render_node_get_node_type (node))
+  {
+    case GSK_TRANSFORM_NODE:
+      {
+        float xx, yx, xy, yy, dx, dy;
+        GskTransform *transform;
+        cairo_matrix_t ctm;
+
+        transform = gsk_transform_node_get_transform (node);
+        if (gsk_transform_get_category (transform) < GSK_TRANSFORM_CATEGORY_2D)
+          break;
+
+        gsk_transform_to_2d (transform, &xx, &yx, &xy, &yy, &dx, &dy);
+        cairo_matrix_init (&ctm, xx, yx, xy, yy, dx, dy);
+        if (xx * yy == xy * yx)
+          break;
+        
+        cairo_save (cr);
+        cairo_transform (cr, &ctm);
+        render_heatmap_node (cr, gsk_transform_node_get_child (node), max_value);
+        cairo_restore (cr);
+      }
+      break;
+
+    case GSK_DEBUG_NODE:
+      {
+        const GskDebugProfile *profile = gsk_debug_node_get_profile (node);
+        graphene_rect_t bounds;
+        double val;
+
+        gsk_render_node_get_bounds (node, &bounds);
+        gdk_cairo_rect (cr, &bounds);
+        val = (double) profile->self.gpu_ns / max_value;
+        cairo_set_source_rgb (cr, val, val, val);
+        cairo_fill (cr);
+        render_heatmap_node (cr, gsk_debug_node_get_child (node), max_value);
+      }
+      break;
+
+    case GSK_CLIP_NODE:
+      cairo_save (cr);
+      gdk_cairo_rect (cr, gsk_clip_node_get_clip (node));
+      cairo_clip (cr);
+      render_heatmap_node (cr, gsk_clip_node_get_child (node), max_value);
+      cairo_restore (cr);
+      break;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      {
+        cairo_save (cr);
+        gdk_cairo_rect (cr, &gsk_rounded_clip_node_get_clip (node)->bounds);
+        cairo_clip (cr);
+        render_heatmap_node (cr, gsk_rounded_clip_node_get_child (node), max_value);
+        cairo_restore (cr);
+      }
+      break;
+
+    case GSK_CONTAINER_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_COLOR_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_BLUR_NODE:
+    case GSK_GL_SHADER_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
+    case GSK_MASK_NODE:
+    case GSK_FILL_NODE:
+    case GSK_STROKE_NODE:
+    case GSK_SUBSURFACE_NODE:
+    case GSK_COMPONENT_TRANSFER_NODE:
+    case GSK_COPY_NODE:
+    case GSK_PASTE_NODE:
+    case GSK_COMPOSITE_NODE:
+    case GSK_ISOLATION_NODE:
+    case GSK_DISPLACEMENT_NODE:
+    case GSK_ARITHMETIC_NODE:
+      {
+        GskRenderNode **children;
+        gsize i, n_children;
+        graphene_rect_t bounds;
+
+        cairo_save (cr);
+        gsk_render_node_get_bounds (node, &bounds);
+        gdk_cairo_rect (cr, &bounds);
+        cairo_clip (cr);
+        children = gsk_render_node_get_children (node, &n_children);
+        for (i = 0; i < n_children; i++)
+          render_heatmap_node (cr, children[i], max_value);
+        cairo_restore (cr);
+      }
+      break;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_return_if_reached ();
+  }
+}
+
+static void
+scale_surface (cairo_surface_t *surface)
+{
+  float max = 0;
+  guint8 *data;
+  gsize width, height, stride;
+  gsize x, y;
+
+  cairo_surface_flush (surface);
+
+  data = cairo_image_surface_get_data (surface);
+  width = cairo_image_surface_get_width (surface);
+  height = cairo_image_surface_get_height (surface);
+  stride = cairo_image_surface_get_stride (surface);
+
+  for (y = 0; y < height; y++)
+    {
+      float *row = (float *) (data + y * stride);
+
+      for (x = 0; x < width; x++)
+        max = MAX (max, row[3 * x]);
+    }
+
+  if (max >= 1.0)
+    return;
+
+  for (y = 0; y < height; y++)
+    {
+      float *row = (float *) (data + y * stride);
+
+      for (x = 0; x < width; x++)
+        {
+          float val = row[3 * x] / max;
+          row[3 * x + 0] = val;
+          row[3 * x + 1] = val;
+          row[3 * x + 2] = val;
+        }
+    }
+
+  cairo_surface_mark_dirty (surface);
+}
+
+static gsize
+round_up_pow2 (gsize size)
+{
+  return g_bit_nth_msf (size - 1, -1) + 1;
+}
+
+static GdkTexture *
+render_heatmap_mask (GskRenderNode *node)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  graphene_rect_t bounds;
+  GdkTexture *texture;
+  gsize max_value;
+
+  max_value = 8 * 1024 * 1024;
+  if (gsk_render_node_get_node_type (node) == GSK_DEBUG_NODE)
+    {
+      const GskDebugProfile *profile = gsk_debug_node_get_profile (node);
+
+      if (profile != NULL)
+        max_value = ((gsize) 1) << round_up_pow2 (profile->total.gpu_ns);
+    }
+
+  gsk_render_node_get_bounds (node, &bounds);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB96F,
+                                        ceil (bounds.size.width),
+                                        ceil (bounds.size.height));
+
+  cr = cairo_create (surface);
+  cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
+  cairo_translate (cr, - bounds.origin.x, - bounds.origin.y);
+
+  render_heatmap_node (cr, node, max_value);
+
+  scale_surface (surface);
+
+  cairo_destroy (cr);
+
+  texture = gdk_texture_new_for_surface (surface);
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
+
+static GskRenderNode *
+heatmap_from_mask (GskRenderNode *mask)
+{
+  GskRenderNode *mask_gradient, *container, *gradient_node, *displacement;
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (mask, &bounds);
+  
+  mask_gradient = gsk_linear_gradient_node_new (&bounds,
+                                                &GRAPHENE_POINT_INIT (bounds.origin.x,
+                                                                      bounds.origin.y),
+                                                &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width,
+                                                                      bounds.origin.y),
+                                                (GskColorStop[2]) {
+                                                  { 0, { 1, 1, 1, 0.5 } },
+                                                  { 1, { 0, 0, 0, 0.5 } },
+                                                },
+                                                2);
+  container = gsk_container_node_new ((GskRenderNode *[2]) { mask, mask_gradient }, 2);
+  gsk_render_node_unref (mask_gradient);
+
+  gradient_node = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (bounds.origin.x - 10,
+                                                                     bounds.origin.y,
+                                                                     bounds.size.width + 20,
+                                                                     bounds.size.height),
+                                                &GRAPHENE_POINT_INIT (bounds.origin.x,
+                                                                      bounds.origin.y),
+                                                &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width,
+                                                                      bounds.origin.y),
+                                                (GskColorStop[4]) {
+                                                    { 0.0, { 0.3, 0.7, 0, 0.0 } },
+                                                    { 0.1, { 0.3, 0.7, 0, 0.2 } },
+                                                    { 0.5, { 1, 1, 0, 0.8 } },
+                                                    { 1.0, { 1, 0, 0, 0.8 } },
+                                                },
+                                                4);
+
+  displacement = gsk_displacement_node_new (&bounds,
+                                            gradient_node,
+                                            container,
+                                            (GdkColorChannel[2]) { GDK_COLOR_CHANNEL_RED, GDK_COLOR_CHANNEL_GREEN },
+                                            &GRAPHENE_SIZE_INIT (bounds.size.width * 2, 0.1),
+                                            &GRAPHENE_SIZE_INIT (bounds.size.width * 2, 0),
+                                            &GRAPHENE_POINT_INIT (0.5, 0));
+  gsk_render_node_unref (container);
+  gsk_render_node_unref (gradient_node);
+  
+  return displacement;
+}
+
+GskRenderNode *
+gtk_inspector_node_wrapper_create_heat_map (GtkInspectorNodeWrapper *self)
+{
+  GdkTexture *texture;
+  GskRenderNode *result, *heatmap, *texture_node;
+  graphene_rect_t bounds;
+
+  if (self->profile_node == NULL)
+    return self->draw_node;
+
+  gsk_render_node_get_bounds (self->profile_node, &bounds);
+
+  texture = render_heatmap_mask (self->profile_node);
+  texture_node = gsk_texture_node_new (texture, &bounds);
+  g_object_unref (texture);
+
+  heatmap = heatmap_from_mask (texture_node);
+  gsk_render_node_unref (texture_node);
+
+  result = gsk_container_node_new ((GskRenderNode *[2]) { self->draw_node, heatmap }, 2);
+  gsk_render_node_unref (heatmap);
+
+  return result;
 }
 

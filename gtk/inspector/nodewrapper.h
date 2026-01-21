@@ -40,6 +40,7 @@ GskRenderNode *         gtk_inspector_node_wrapper_get_profile_node     (GtkInsp
 const GskDebugProfile * gtk_inspector_node_wrapper_get_profile          (GtkInspectorNodeWrapper        *self);
 const char *            gtk_inspector_node_wrapper_get_role             (GtkInspectorNodeWrapper        *self);
 
+GskRenderNode *         gtk_inspector_node_wrapper_create_heat_map      (GtkInspectorNodeWrapper        *self);
 GListModel *            gtk_inspector_node_wrapper_create_children_model(GtkInspectorNodeWrapper        *self);
 
 G_END_DECLS
