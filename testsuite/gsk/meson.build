@@ -49,6 +49,7 @@ compare_render_tests = [
   'clip-nested1',
   'clip-translate-offscreen',
   'color-blur0',
+  'color-dodge-nan',
   'color-matrix-identity',
   'color-matrix-merge',
   'color-matrix-parsing',
