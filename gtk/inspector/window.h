@@ -163,6 +163,9 @@ void                    gtk_inspector_trace_event            (GdkEvent          
                                                               GtkEventController   *controller,
                                                               GtkWidget            *target,
                                                               gboolean              handled);
+void                    gtk_inspector_add_profile_node       (GdkDisplay           *display,
+                                                              GskRenderNode        *node,
+                                                              GskRenderNode        *profile_node);
 
 
 G_END_DECLS

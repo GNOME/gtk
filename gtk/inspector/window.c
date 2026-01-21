@@ -1121,5 +1121,23 @@ gtk_inspector_window_set_object (GtkInspectorWindow *iw,
   update_go_buttons (iw);
 }
 
-// vim: set et sw=2 ts=2:
+void
+gtk_inspector_add_profile_node (GdkDisplay    *display,
+                                GskRenderNode *node,
+                                GskRenderNode *profile_node)
+{
+  GtkInspectorWindow *iw;
 
+  if (!any_inspector_window_constructed)
+    return;
+
+  iw = gtk_inspector_window_get_for_display (display);
+  if (iw == NULL)
+    return;
+
+  gtk_inspector_recorder_add_profile_node (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
+                                           node,
+                                           profile_node);
+}
+
+// vim: set et sw=2 ts=2:

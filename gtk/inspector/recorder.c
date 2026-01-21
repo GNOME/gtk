@@ -3003,4 +3003,29 @@ gtk_inspector_recorder_set_selected_sequence (GtkInspectorRecorder *recorder,
   g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_SELECTED_SEQUENCE]);
 }
 
+void
+gtk_inspector_recorder_add_profile_node (GtkInspectorRecorder *self,
+                                         GskRenderNode        *node,
+                                         GskRenderNode        *profile_node)
+{
+  guint i;
+
+  for (i = g_list_model_get_n_items (self->recordings);
+       i-- > 0;)
+    {
+      GtkInspectorRecording *rec = g_list_model_get_item (self->recordings, i);
+
+      if (!GTK_INSPECTOR_IS_RENDER_RECORDING (rec))
+        {
+          g_object_unref (rec);
+          continue;
+        }
+
+      if (node == gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (rec)))
+        gtk_inspector_render_recording_set_profile_node (GTK_INSPECTOR_RENDER_RECORDING (rec), profile_node);
+
+      g_object_unref (rec);
+    }
+}
+
 /* vim:set foldmethod=marker: */

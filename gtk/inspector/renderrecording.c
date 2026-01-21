@@ -29,6 +29,7 @@ gtk_inspector_render_recording_finalize (GObject *object)
 
   g_clear_pointer (&recording->clip_region, cairo_region_destroy);
   g_clear_pointer (&recording->node, gsk_render_node_unref);
+  g_clear_pointer (&recording->profile_node, gsk_render_node_unref);
 
   G_OBJECT_CLASS (gtk_inspector_render_recording_parent_class)->finalize (object);
 }
@@ -71,6 +72,21 @@ GskRenderNode *
 gtk_inspector_render_recording_get_node (GtkInspectorRenderRecording *recording)
 {
   return recording->node;
+}
+
+GskRenderNode *
+gtk_inspector_render_recording_get_profile_node (GtkInspectorRenderRecording *recording)
+{
+  return recording->profile_node;
+}
+
+void
+gtk_inspector_render_recording_set_profile_node (GtkInspectorRenderRecording *recording,
+                                                 GskRenderNode               *profile_node)
+{
+  g_clear_pointer (&recording->profile_node, gsk_render_node_unref);
+  if (profile_node)
+    recording->profile_node = gsk_render_node_ref (profile_node);
 }
 
 const cairo_region_t *
