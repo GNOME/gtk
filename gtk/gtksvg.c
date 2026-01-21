@@ -19110,7 +19110,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_X);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->origin.x = bounds->origin.x + svg_number_get (n, bounds->size.width);
+            subregion->origin.x = bounds->origin.x + svg_number_get (n, 1) * bounds->size.width;
           else
             subregion->origin.x = viewport->origin.x + svg_number_get (n, viewport->size.width);
         }
@@ -19119,7 +19119,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_Y);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->origin.y = bounds->origin.y + svg_number_get (n, bounds->size.height);
+            subregion->origin.y = bounds->origin.y + svg_number_get (n, 1) * bounds->size.height;
           else
             subregion->origin.y = viewport->origin.y + svg_number_get (n, viewport->size.height);
         }
@@ -19128,7 +19128,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_WIDTH);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->size.width = svg_number_get (n, bounds->size.width);
+            subregion->size.width = svg_number_get (n, 1) * bounds->size.width;
           else
             subregion->size.width = svg_number_get (n, viewport->size.width);
         }
@@ -19137,7 +19137,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_HEIGHT);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->size.height = svg_number_get (n, bounds->size.height);
+            subregion->size.height = svg_number_get (n, 1) * bounds->size.height;
           else
             subregion->size.height = svg_number_get (n, viewport->size.height);
         }
