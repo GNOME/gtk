@@ -48,4 +48,6 @@ const char *
 void     gdk_wayland_toplevel_restore_from_session
                                                   (GdkToplevel *toplevel);
 
+void     gdk_wayland_toplevel_ensure_in_session   (GdkToplevel *toplevel);
+
 void     gdk_wayland_toplevel_remove_from_session (GdkToplevel *toplevel);

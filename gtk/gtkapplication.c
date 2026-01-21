@@ -1650,6 +1650,17 @@ gtk_application_save (GtkApplication *application)
   if (!priv->support_save)
     return;
 
+  if (priv->forgotten)
+    {
+      for (GList *l = priv->windows; l != NULL; l = l->next)
+        {
+          GtkWindow *window = GTK_WINDOW (l->data);
+          gtk_application_impl_window_unforget (priv->impl, window);
+        }
+
+      gtk_application_impl_unforget_state (priv->impl);
+    }
+
   state = collect_state (application);
   gtk_application_impl_store_state (priv->impl, state);
   g_variant_unref (state);

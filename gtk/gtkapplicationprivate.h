@@ -84,6 +84,8 @@ typedef struct
                                              GtkWindow                   *window);
   void        (* window_forget_by_state)    (GtkApplicationImpl          *impl,
                                              GVariant                    *state);
+  void        (* window_unforget)           (GtkApplicationImpl          *impl,
+                                             GtkWindow                   *window);
   void        (* active_window_changed)     (GtkApplicationImpl          *impl,
                                              GtkWindow                   *window);
   void        (* handle_window_realize)     (GtkApplicationImpl          *impl,
@@ -120,6 +122,7 @@ typedef struct
   void         (* store_state)              (GtkApplicationImpl          *impl,
                                              GVariant                    *state);
   void         (* forget_state)             (GtkApplicationImpl          *impl);
+  void         (* unforget_state)           (GtkApplicationImpl          *impl);
   GVariant *   (* retrieve_state)           (GtkApplicationImpl          *impl);
 } GtkApplicationImplClass;
 
@@ -148,15 +151,16 @@ typedef struct
   char            *menubar_path;
   guint            menubar_id;
 
-  char            *instance_id;
-  GtkRestoreReason reason;
-
   /* Portal support */
   GDBusProxy      *inhibit_proxy;
   GSList          *inhibit_handles;
   guint            state_changed_handler;
   char            *session_path;
   guint            session_state;
+
+  gboolean         save_restore_registered;
+  char            *instance_id;
+  GtkRestoreReason reason;
 } GtkApplicationImplDBus;
 
 typedef struct
@@ -189,6 +193,8 @@ void                    gtk_application_impl_window_forget              (GtkAppl
                                                                          GtkWindow                   *window);
 void                    gtk_application_impl_window_forget_by_state     (GtkApplicationImpl          *impl,
                                                                          GVariant                    *state);
+void                    gtk_application_impl_window_unforget            (GtkApplicationImpl          *impl,
+                                                                         GtkWindow                   *window);
 void                    gtk_application_impl_active_window_changed      (GtkApplicationImpl          *impl,
                                                                          GtkWindow                   *window);
 void                    gtk_application_impl_handle_window_realize      (GtkApplicationImpl          *impl,
@@ -230,6 +236,7 @@ void                    gtk_application_impl_collect_window_state       (GtkAppl
 void                    gtk_application_impl_store_state                (GtkApplicationImpl          *impl,
                                                                          GVariant                    *state);
 void                    gtk_application_impl_forget_state               (GtkApplicationImpl          *impl);
+void                    gtk_application_impl_unforget_state             (GtkApplicationImpl          *impl);
 GVariant *              gtk_application_impl_retrieve_state             (GtkApplicationImpl          *impl);
 
 GVariant *              gtk_application_impl_dbus_get_window_state      (GtkApplicationImplDBus *dbus,
