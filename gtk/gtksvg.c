@@ -19165,7 +19165,6 @@ determine_filter_subregion (FilterPrimitive       *f,
           break;
 
         case FE_BLUR:
-        case FE_BLEND:
         case FE_COLOR_MATRIX:
         case FE_COMPONENT_TRANSFER:
         case FE_DROPSHADOW:
@@ -19177,6 +19176,7 @@ determine_filter_subregion (FilterPrimitive       *f,
           }
           break;
 
+        case FE_BLEND:
         case FE_COMPOSITE:
         case FE_DISPLACEMENT:
           {
