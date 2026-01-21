@@ -11290,6 +11290,14 @@ shape_get_current_bounds (Shape                 *shape,
 
           if (shape_get_current_bounds (sh, viewport, &b2))
             {
+              if (_gtk_bitmask_get (sh->attrs, SHAPE_ATTR_TRANSFORM))
+                {
+                   SvgTransform *tf = (SvgTransform *) sh->current[SHAPE_ATTR_TRANSFORM];
+                   GskTransform *transform = svg_transform_get_gsk (tf);
+                   gsk_transform_transform_bounds (transform, &b2, &b2);
+                   gsk_transform_unref (transform);
+                }
+
               if (!has_any)
                 graphene_rect_init_from_rect (&b, &b2);
               else
