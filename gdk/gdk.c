@@ -476,6 +476,7 @@ environment_has_portals (void)
                                         25000,
                                         NULL,
                                         &error);
+  g_object_unref (bus);
   if (error != NULL)
     {
       g_warning ("Cannot list activatable names: %s", error->message);
