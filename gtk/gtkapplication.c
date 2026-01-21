@@ -340,41 +340,6 @@ gtk_application_set_window_icon (GtkApplication *application)
   gtk_window_set_default_icon_name (appid);
 }
 
-#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
-static void
-gtk_application_identify_to_portal (GtkApplication *application)
-{
-  GVariantBuilder builder;
-  GApplication *g_application = G_APPLICATION (application);
-  GDBusConnection *session_bus;
-  const char *application_id;
-
-  session_bus = g_application_get_dbus_connection (g_application);
-  if (!session_bus)
-    return;
-
-  application_id = g_application_get_application_id (g_application);
-  if (!application_id)
-    return;
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-
-  /* Intentionally ignore errors */
-  g_dbus_connection_call (session_bus,
-                          PORTAL_BUS_NAME,
-                          PORTAL_OBJECT_PATH,
-                          "org.freedesktop.host.portal.Registry",
-                          "Register",
-                          g_variant_new ("(sa{sv})",
-                                         application_id,
-                                         &builder),
-                          NULL,
-                          G_DBUS_CALL_FLAGS_NO_AUTO_START,
-                          -1,
-                          NULL, NULL, NULL);
-}
-#endif
-
 static void
 gtk_application_startup (GApplication *g_application)
 {
@@ -389,10 +354,7 @@ gtk_application_startup (GApplication *g_application)
 
   gtk_action_muxer_insert (priv->muxer, "app", G_ACTION_GROUP (application));
 
-#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
-  if (!gdk_running_in_sandbox ())
-    gtk_application_identify_to_portal (application);
-#endif
+  gdk_set_portals_app_id (g_application_get_application_id (g_application));
 
   before2 = GDK_PROFILER_CURRENT_TIME;
   gtk_init ();

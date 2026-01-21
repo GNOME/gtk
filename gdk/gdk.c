@@ -415,9 +415,11 @@ gdk_running_in_sandbox (void)
 #define DBUS_BUS_INTERFACE "org.freedesktop.DBus"
 #define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
 #define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
+#define PORTAL_HOST_REGISTRY_INTERFACE "org.freedesktop.host.portal.Registry"
 
 static gboolean portals_disabled;
 static GHashTable *disabled_portals = NULL;
+static char *portals_app_id;
 
 void
 gdk_disable_portals (const char **portal_interfaces)
@@ -437,6 +439,12 @@ void
 gdk_disable_all_portals (void)
 {
   portals_disabled = TRUE;
+}
+
+void
+gdk_set_portals_app_id (const char *app_id)
+{
+  portals_app_id = g_strdup (app_id);
 }
 
 static gboolean
@@ -468,6 +476,7 @@ environment_has_portals (void)
                                         25000,
                                         NULL,
                                         &error);
+  g_object_unref (bus);
   if (error != NULL)
     {
       g_warning ("Cannot list activatable names: %s", error->message);
@@ -556,6 +565,47 @@ check_portal_interface (const char *portal_interface,
   return version >= min_version;
 }
 
+static void
+ensure_portals_app_id_registered (void)
+{
+  char *app_id;
+  GDBusConnection *bus;
+  GVariantBuilder options_builder;
+
+  if (!portals_app_id)
+    return;
+
+  app_id = g_steal_pointer (&portals_app_id);
+
+  if (!check_portal_interface (PORTAL_HOST_REGISTRY_INTERFACE, 1))
+    {
+      g_free (app_id);
+      return;
+    }
+
+  bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  if (!bus)
+    {
+      g_free (app_id);
+      return;
+    }
+
+  g_variant_builder_init (&options_builder, G_VARIANT_TYPE_VARDICT);
+
+  g_dbus_connection_call (bus,
+                          PORTAL_BUS_NAME,
+                          PORTAL_OBJECT_PATH,
+                          PORTAL_HOST_REGISTRY_INTERFACE,
+                          "Register",
+                          g_variant_new ("(sa{sv})", app_id, &options_builder),
+                          NULL,
+                          G_DBUS_CALL_FLAGS_NONE,
+                          -1, NULL, NULL, NULL);
+
+  g_free (app_id);
+  g_object_unref (bus);
+}
+
 /* Here we decide whether we should use a given portal or not.
  * - If the GDK_DEBUG flags are set, they always win
  * - If we are in a sandbox, we always want to use portals
@@ -570,6 +620,8 @@ gdk_display_should_use_portal (GdkDisplay *display,
                                const char *portal_interface,
                                guint       min_version)
 {
+  gboolean sandboxed;
+
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_NO_PORTALS)
     return FALSE;
 
@@ -583,11 +635,15 @@ gdk_display_should_use_portal (GdkDisplay *display,
       g_hash_table_contains (disabled_portals, portal_interface))
     return FALSE;
 
-  if (gdk_running_in_sandbox ())
+  sandboxed = gdk_running_in_sandbox ();
+  if (sandboxed)
     return TRUE;
 
   if (!environment_has_portals ())
     return FALSE;
+
+  if (!sandboxed)
+    ensure_portals_app_id_registered ();
 
   if (portal_interface == NULL)
     return TRUE;
