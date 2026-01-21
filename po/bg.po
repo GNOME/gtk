@@ -1,12 +1,12 @@
 # Bulgarian translation of gtk po-file.
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2015 Free Software Foundation, Inc.
 # Copyright (C) 2015 Zahari Yurukov <zahari.yurukov@gmail.com>.
-# Copyright (C) 2022, 2023, 2024, 2025 Alexander Shopov <ash@kambanaria.org>.
+# Copyright (C) 2022, 2023, 2024, 2025, 2026 Alexander Shopov <ash@kambanaria.org>.
 # Copyright (C) 2024, 2025 twlvnn kraftwerk <kraft_werk@tutanota.com>.
 # Borislav Aleksandrov <B.Aleksandrov@CNsys.bg>, 2002.
 # Yanko Kaneti <yaneti@declera.com>, 2002.
 # Vladimir Petkov <kaladan@gmail.com>, 2004, 2005.
-# Alexander Shopov <ash@kambanaria.org>, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2022, 2023, 2025.
+# Alexander Shopov <ash@kambanaria.org>, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2022, 2023, 2025, 2026.
 # Damyan Ivanov <dam+gnome@ktnx.net>, 2010.
 # Zahari Yurukov <zahari.yurukov@gmail.com>, 2015.
 # twlvnn kraftwerk <kraft_werk@tutanota.com>, 2024, 2025.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2026-01-03 21:02+0000\n"
-"PO-Revision-Date: 2025-09-24 16:37+0200\n"
+"PO-Revision-Date: 2026-01-21 20:20+0100\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -71,10 +71,9 @@ msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: %u основни цвята не се поддържат"
 
 #: gdk/gdkcolorstate.c:1193
-#, fuzzy, c-format
-#| msgid "cicp: Transfer function %u not supported"
+#, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
-msgstr "cicp: функцията за трансфер %u не се поддържа"
+msgstr "cicp: коефициенти на матрица %u, %s не се поддържа"
 
 #: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
@@ -795,7 +794,7 @@ msgstr "Реализацията на GL не може да споделя GL к
 #: gdk/win32/gdkglcontext-win32-wgl.c:853
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
-msgstr ""
+msgstr "На прозореца е зададен неподдържан формат на пиксели %d"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:862
 msgid "No available configurations for the given pixel format"
@@ -5227,7 +5226,7 @@ msgstr "Тема на GTK"
 
 #: gtk/inspector/visual.ui:58
 msgid "System Color Scheme"
-msgstr ""
+msgstr "Схема на цветовете на системата"
 
 #: gtk/inspector/visual.ui:72 gtk/inspector/visual.ui:106
 msgid "Unsupported"
@@ -5246,17 +5245,16 @@ msgid "System Contrast"
 msgstr "Системен контраст"
 
 #: gtk/inspector/visual.ui:107
-#, fuzzy
 msgid "No Preference"
-msgstr "Настройки"
+msgstr "Без настройки"
 
 #: gtk/inspector/visual.ui:108
 msgid "More"
-msgstr ""
+msgstr "Повече"
 
 #: gtk/inspector/visual.ui:109
 msgid "Less"
-msgstr ""
+msgstr "По-малко"
 
 #: gtk/inspector/visual.ui:127
 msgid "Cursor Theme"
@@ -5362,10 +5360,8 @@ msgid "Show Graphics Offload"
 msgstr "Показване на графичното разтоварване"
 
 #: gtk/inspector/visual.ui:766
-#, fuzzy
-#| msgid "Show Focus"
 msgid "Show Touch UI"
-msgstr "Показване на фокуса"
+msgstr "Показване на сензорния интерфейс"
 
 #: gtk/inspector/visual.ui:797
 msgid "Inspect Inspector"
@@ -7424,6 +7420,8 @@ msgid ""
 "A visualization of the effect of the collate and reverse options on the page "
 "ordering"
 msgstr ""
+"Визуализиране на резултата от последователността и обратния ред на "
+"подредбата на отпечатаните страници"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:424
 msgid "General"
@@ -7463,7 +7461,7 @@ msgstr "_Мащабиране:"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:587
 msgid "Scale in percent"
-msgstr ""
+msgstr "Мащабиране [%s]"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:619
 msgid "Paper"
@@ -7486,10 +7484,8 @@ msgid "Or_ientation:"
 msgstr "_Ориентация:"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:770
-#, fuzzy
-#| msgid "Path Preview"
 msgid "Page layout preview"
-msgstr "Предварителен преглед на пътеката"
+msgstr "Предварителен преглед на страниците"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:806
 msgid "Job Details"
@@ -8053,7 +8049,7 @@ msgstr "Неуспешно зареждане на файла с възли: %s\
 #: tools/gtk-image-tool-utils.c:89
 #, c-format
 msgid "%s is not a texture node\n"
-msgstr ""
+msgstr "%s не е възел за текстура\n"
 
 #: tools/gtk-image-tool-utils.c:315
 #, c-format
@@ -8242,10 +8238,8 @@ msgid "Show control points"
 msgstr "Показване на контролните точки"
 
 #: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:116
-#, fuzzy
-#| msgid "Show deprecations"
 msgid "Show intersections"
-msgstr "Показване на остарелите"
+msgstr "Показване на пресичанията"
 
 #: tools/gtk-path-tool-render.c:63
 msgid "The output file"
@@ -8254,7 +8248,7 @@ msgstr "Изходният файл"
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:117
 #: tools/gtk-rendernode-tool-convert.c:93
 msgid "Foreground color"
-msgstr "Цвят на преден план"
+msgstr "Цвят за преден план"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-render.c:65
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
@@ -8269,17 +8263,15 @@ msgstr "ЦВЯТ"
 
 #: tools/gtk-path-tool-render.c:65 tools/gtk-path-tool-show.c:118
 msgid "Background color"
-msgstr "Цвят на фон"
+msgstr "Цвят за фон"
 
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:119
 msgid "Point color"
-msgstr "Цвят на точките"
+msgstr "Цвят за точките"
 
 #: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:120
-#, fuzzy
-#| msgid "Enter location or URL"
 msgid "Intersection color"
-msgstr "Въведете местоположение или адрес"
+msgstr "Цвят за пресечните точки"
 
 #: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:121
 msgid "Zoom level (number)"
@@ -8410,12 +8402,10 @@ msgid "Path Preview"
 msgstr "Предварителен преглед на пътеката"
 
 #: tools/gtk-path-tool-show.c:132
-#, fuzzy
-#| msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgid "Line join (miter, miter-clip, round, bevel)"
 msgstr ""
 "Свързване на линиите „miter“ (остро), „miter-clip“ (остро отсечено), „round“ "
-"(кръгло), „bevel“ (откос), „arcs“ (по криви)"
+"(кръгло) или „bevel“ (откос)"
 
 #: tools/gtk-path-tool-show.c:156
 msgid "Display the path."
@@ -8460,21 +8450,7 @@ msgid "Failed to parse '%s' as number"
 msgstr "Неуспешно анализиране на „%s“ като число"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  extract      Extract data urls\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8499,6 +8475,7 @@ msgstr ""
 "Команди:\n"
 "  benchmark    Тестване на производителността на изобразяването на възел\n"
 "  compare      Сравняване на възли или изображения\n"
+"  convert      Преобразуване във възли\n"
 "  extract      Извличане на адресите на данни\n"
 "  info         Предоставяне на информация за възела\n"
 "  show         Показване на възела\n"
@@ -8575,19 +8552,19 @@ msgstr "Неуспешно зареждане на %s: %s\n"
 
 #: tools/gtk-rendernode-tool-convert.c:92
 msgid "Recolor the node"
-msgstr ""
+msgstr "Оцветяване на възела наново"
 
 #: tools/gtk-rendernode-tool-convert.c:94
 msgid "Success color"
-msgstr "Цвят на успех"
+msgstr "Цвят за успех"
 
 #: tools/gtk-rendernode-tool-convert.c:95
 msgid "Warning color"
-msgstr "Цвят на предупрежденията"
+msgstr "Цвят за предупреждения"
 
 #: tools/gtk-rendernode-tool-convert.c:96
 msgid "Error color"
-msgstr "Цвят на грешките"
+msgstr "Цвят за грешки"
 
 #: tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
@@ -8595,7 +8572,7 @@ msgstr "РАЗМЕР"
 
 #: tools/gtk-rendernode-tool-convert.c:107
 msgid "Convert from symbolic svg to node."
-msgstr ""
+msgstr "Преобразуване от символен svg към възел."
 
 #: tools/gtk-rendernode-tool-convert.c:177
 #, c-format
@@ -8675,7 +8652,7 @@ msgstr "Неуспешно генериране на SVG: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:271
 msgid "Keep node position unchanged"
-msgstr ""
+msgstr "Без промяна на местоположението на възела"
 
 #: tools/gtk-rendernode-tool-render.c:287
 msgid "Render a .node file to an image."
@@ -8688,7 +8665,7 @@ msgstr "Може да се изобразява само един „.node“ ф
 
 #: tools/gtk-rendernode-tool-show.c:120
 msgid "Put node into offload container"
-msgstr ""
+msgstr "Поставяне на възела в контейнер за разтоварване"
 
 #: tools/gtk-rendernode-tool-show.c:137
 msgid "Show the render node."
@@ -8807,17 +8784,3 @@ msgstr ""
 "В „%s“ не е открит индексен файл за тема.\n"
 "Ако наистина искате да създадете временен файл за икони тук, използвайте "
 "опцията „--ignore-theme-index“.\n"
-
-#, c-format
-#~ msgid "cicp: Narrow range or YUV not supported"
-#~ msgstr "cicp: тесен диапазон или YUV не се поддържат"
-
-#~ msgid "Theme is hardcoded by GTK_THEME"
-#~ msgstr "Темата е изрично зададена чрез „GTK_THEME“"
-
-#~ msgid "Dark Variant"
-#~ msgstr "Тъмен вариант"
-
-#, c-format
-#~ msgid "Can’t close stream"
-#~ msgstr "Потокът не може да бъде затворен"
