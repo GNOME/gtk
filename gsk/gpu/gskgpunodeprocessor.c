@@ -42,7 +42,7 @@
 #include "gskgpuutilsprivate.h"
 
 #include "gskarithmeticnodeprivate.h"
-#include "gskblendnode.h"
+#include "gskblendnodeprivate.h"
 #include "gskblurnode.h"
 #include "gskbordernodeprivate.h"
 #include "gskcairoblurprivate.h"
@@ -3210,6 +3210,7 @@ gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
   gsk_gpu_blend_mode_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                          self->ccs,
+                         gsk_blend_node_get_color_state (node),
                          self->opacity,
                          &self->offset,
                          bottom_image,

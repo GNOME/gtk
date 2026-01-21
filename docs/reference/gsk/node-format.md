@@ -158,11 +158,12 @@ The **container** node is a special node that allows specifying a list of child 
 
 ### blend
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| bottom   | `<node>`         | color { }              | always      |
-| mode     | `<blend-mode>`   | normal                 | non-default |
-| top      | `<node>`         | color { }              | always      |
+| property    | syntax           | default                | printed     |
+| ----------- | ---------------- | ---------------------- | ----------- |
+| bottom      | `<node>`         | color { }              | always      |
+| mode        | `<blend-mode>`   | normal                 | non-default |
+| top         | `<node>`         | color { }              | always      |
+| color-state | `<color-state>`  | srgb                   | non-default |
 
 Creates a node like `gsk_blend_node_new()` with the given properties.
 

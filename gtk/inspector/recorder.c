@@ -45,6 +45,7 @@
 #include <gtk/gtknative.h>
 #include <gtk/gtkprivate.h>
 #include <gsk/gskarithmeticnodeprivate.h>
+#include <gsk/gskblendnodeprivate.h>
 #include <gsk/gskbordernodeprivate.h>
 #include <gsk/gskcolormatrixnodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
@@ -1431,6 +1432,7 @@ populate_render_node_properties (GListStore    *store,
       {
         GskBlendMode mode = gsk_blend_node_get_blend_mode (node);
         add_text_row (store, "Blendmode", "%s", enum_to_nick (GSK_TYPE_BLEND_MODE, mode));
+        add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gsk_blend_node_get_color_state (node)));
       }
       break;
 

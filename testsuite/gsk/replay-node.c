@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtksnapshotprivate.h>
 #include <gsk/gskarithmeticnodeprivate.h>
+#include <gsk/gskblendnodeprivate.h>
 #include <gsk/gskbordernodeprivate.h>
 #include <gsk/gskcolormatrixnodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
@@ -242,12 +243,21 @@ replay_blend_node (GskRenderNode *node, GtkSnapshot *snapshot)
   GskRenderNode *bottom_child = gsk_blend_node_get_bottom_child (node);
   GskRenderNode *top_child = gsk_blend_node_get_top_child (node);
   GskBlendMode blend_mode = gsk_blend_node_get_blend_mode (node);
+  GdkColorState *color_state = gsk_blend_node_get_color_state (node);
+  GskRenderNode *child;
 
-  gtk_snapshot_push_blend (snapshot, blend_mode);
+  gtk_snapshot_push_collect (snapshot);
   replay_node (bottom_child, snapshot);
-  gtk_snapshot_pop (snapshot);
+  bottom_child = gtk_snapshot_pop_collect (snapshot);
+  gtk_snapshot_push_collect (snapshot);
   replay_node (top_child, snapshot);
-  gtk_snapshot_pop (snapshot);
+  top_child = gtk_snapshot_pop_collect (snapshot);
+
+  child = gsk_blend_node_new2 (bottom_child, top_child, color_state, blend_mode);
+  gtk_snapshot_append_node (snapshot, child);
+  gsk_render_node_unref (child);
+  gsk_render_node_unref (bottom_child);
+  gsk_render_node_unref (top_child);
 }
 
 static void

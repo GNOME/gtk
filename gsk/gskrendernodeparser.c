@@ -24,7 +24,7 @@
 #include "gskrendernodeparserprivate.h"
 
 #include "gskarithmeticnodeprivate.h"
-#include "gskblendnode.h"
+#include "gskblendnodeprivate.h"
 #include "gskblurnode.h"
 #include "gskbordernodeprivate.h"
 #include "gskcaironodeprivate.h"
@@ -3388,10 +3388,12 @@ parse_blend_node (GtkCssParser *parser,
   GskRenderNode *bottom = NULL;
   GskRenderNode *top = NULL;
   GskBlendMode mode = GSK_BLEND_MODE_DEFAULT;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   const Declaration declarations[] = {
     { "mode", parse_blend_mode, NULL, &mode },
     { "bottom", parse_node, clear_node, &bottom },
     { "top", parse_node, clear_node, &top },
+    { "color-state", parse_default_color_state, clear_color_state, &color_state },
   };
   GskRenderNode *result;
 
@@ -3401,10 +3403,12 @@ parse_blend_node (GtkCssParser *parser,
   if (top == NULL)
     top = create_default_render_node ();
 
-  result = gsk_blend_node_new (bottom, top, mode);
+  result = gsk_blend_node_new2 (bottom, top, color_state, mode);
 
   gsk_render_node_unref (bottom);
   gsk_render_node_unref (top);
+
+  gdk_color_state_unref (color_state);
 
   return result;
 }
@@ -6564,6 +6568,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           }
         append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
+        append_color_state_param (p, "color-state", gsk_blend_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);
       }

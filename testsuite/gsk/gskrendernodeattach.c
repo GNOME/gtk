@@ -19,6 +19,7 @@
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
+#include "gsk/gskblendnodeprivate.h"
 #include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
@@ -117,7 +118,7 @@ node_attach (const GskRenderNode *node,
         GskRenderNode *top, *bottom;
         bottom = node_attach (gsk_blend_node_get_bottom_child (node), surface, idx);
         top = node_attach (gsk_blend_node_get_top_child (node), surface, idx);
-        res = gsk_blend_node_new (bottom, top, gsk_blend_node_get_blend_mode (node));
+        res = gsk_blend_node_new2 (bottom, top, gsk_blend_node_get_color_state (node), gsk_blend_node_get_blend_mode (node));
         gsk_render_node_unref (bottom);
         gsk_render_node_unref (top);
         return res;
