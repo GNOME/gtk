@@ -18993,10 +18993,8 @@ get_input_for_ref (SvgValue              *in,
       res = g_hash_table_lookup (results, ref->ref);
       if (res)
         return filter_result_ref (res);
-      node = error_node (subregion);
-      res = filter_result_new (node, subregion);
-      gsk_render_node_unref (node);
-      return res;
+      else
+        return filter_result_ref (g_hash_table_lookup (results, ""));
     case FILL_PAINT:
     case STROKE_PAINT:
       {
