@@ -19,6 +19,7 @@
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
+#include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gdk/gdksurfaceprivate.h"
@@ -64,9 +65,10 @@ node_attach (const GskRenderNode *node,
 
     case GSK_COLOR_MATRIX_NODE:
       child = node_attach (gsk_color_matrix_node_get_child (node), surface, idx);
-      res = gsk_color_matrix_node_new (child,
-                                       gsk_color_matrix_node_get_color_matrix (node),
-                                       gsk_color_matrix_node_get_color_offset (node));
+      res = gsk_color_matrix_node_new2 (child,
+                                        gsk_color_matrix_node_get_color_state (node),
+                                        gsk_color_matrix_node_get_color_matrix (node),
+                                        gsk_color_matrix_node_get_color_offset (node));
       gsk_render_node_unref (child);
       return res;
 

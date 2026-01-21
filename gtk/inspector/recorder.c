@@ -46,6 +46,7 @@
 #include <gtk/gtkprivate.h>
 #include <gsk/gskarithmeticnodeprivate.h>
 #include <gsk/gskbordernodeprivate.h>
+#include <gsk/gskcolormatrixnodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskcomponenttransfernodeprivate.h>
 #include <gsk/gskcopypasteutilsprivate.h>
@@ -1607,6 +1608,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                              graphene_vec4_get_y (offset),
                              graphene_vec4_get_z (offset),
                              graphene_vec4_get_w (offset));
+        add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gsk_color_matrix_node_get_color_state (node)));
       }
       break;
 

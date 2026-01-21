@@ -47,7 +47,7 @@
 #include "gskbordernodeprivate.h"
 #include "gskcairoblurprivate.h"
 #include "gskclipnode.h"
-#include "gskcolormatrixnode.h"
+#include "gskcolormatrixnodeprivate.h"
 #include "gskcolornodeprivate.h"
 #include "gskcomponenttransfernodeprivate.h"
 #include "gskcomponenttransferprivate.h"
@@ -3671,7 +3671,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
   gsk_gpu_color_matrix_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                            self->ccs,
-                           self->ccs,
+                           gsk_color_matrix_node_get_color_state (node),
                            &self->offset,
                            image,
                            GSK_GPU_SAMPLER_DEFAULT,

@@ -2,6 +2,7 @@
 #include <gtk/gtksnapshotprivate.h>
 #include <gsk/gskarithmeticnodeprivate.h>
 #include <gsk/gskbordernodeprivate.h>
+#include <gsk/gskcolormatrixnodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskcomponenttransfernodeprivate.h>
 #include <gsk/gskinsetshadownodeprivate.h>

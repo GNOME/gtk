@@ -29,7 +29,7 @@
 #include "gskbordernodeprivate.h"
 #include "gskcaironodeprivate.h"
 #include "gskclipnode.h"
-#include "gskcolormatrixnode.h"
+#include "gskcolormatrixnodeprivate.h"
 #include "gskcolornodeprivate.h"
 #include "gskconicgradientnodeprivate.h"
 #include "gskcomponenttransfernodeprivate.h"
@@ -3327,10 +3327,12 @@ parse_color_matrix_node (GtkCssParser *parser,
   graphene_matrix_t matrix;
   GskTransform *transform = NULL;
   graphene_vec4_t offset;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   const Declaration declarations[] = {
     { "matrix", parse_transform, clear_transform, &transform },
     { "offset", parse_vec4, NULL, &offset },
-    { "child", parse_node, clear_node, &child }
+    { "child", parse_node, clear_node, &child },
+    { "color-state", parse_default_color_state, clear_color_state, &color_state },
   };
   GskRenderNode *result;
 
@@ -3342,10 +3344,11 @@ parse_color_matrix_node (GtkCssParser *parser,
 
   gsk_transform_to_matrix (transform, &matrix);
 
-  result = gsk_color_matrix_node_new (child, &matrix, &offset);
+  result = gsk_color_matrix_node_new2 (child, color_state, &matrix, &offset);
 
   gsk_transform_unref (transform);
   gsk_render_node_unref (child);
+  gdk_color_state_unref (color_state);
 
   return result;
 }
@@ -6198,6 +6201,7 @@ render_node_print (Printer       *p,
         if (!graphene_vec4_equal (gsk_color_matrix_node_get_color_offset (node), graphene_vec4_zero ()))
           append_vec4_param (p, "offset", gsk_color_matrix_node_get_color_offset (node));
         append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
+        append_color_state_param (p, "color-state", gsk_color_matrix_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);
       }
