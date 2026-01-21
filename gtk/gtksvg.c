@@ -19243,7 +19243,7 @@ apply_filter_tree (Shape         *shape,
   if (svg_enum_get (filter->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       if (bounds.size.width == 0 || bounds.size.height == 0)
-        return gsk_render_node_ref (source);
+        return empty_node ();
 
       filter_region.origin.x = bounds.origin.x + svg_number_get (filter->current[SHAPE_ATTR_X], 1) * bounds.size.width;
       filter_region.origin.y = bounds.origin.y + svg_number_get (filter->current[SHAPE_ATTR_Y], 1) * bounds.size.height;
