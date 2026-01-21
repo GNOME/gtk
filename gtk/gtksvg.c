@@ -19396,7 +19396,7 @@ apply_filter_tree (Shape         *shape,
             in2 = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN2), &subregion, shape, context, source, results);
             blend_mode = svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_BLEND_MODE));
 
-            result = gsk_blend_node_new (in->node, in2->node, blend_mode);
+            result = gsk_blend_node_new (in2->node, in->node, blend_mode);
 
             filter_result_unref (in);
             filter_result_unref (in2);

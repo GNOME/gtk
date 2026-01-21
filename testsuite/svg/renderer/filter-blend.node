@@ -4,7 +4,14 @@ isolation {
       clip: 14 14 72 72;
       child: blend {
         mode: multiply;
-        bottom: fill {
+        bottom: clip {
+          clip: 14 14 72 72;
+          child: color {
+            bounds: 14 14 72 72;
+            color: rgb(255,0,0);
+          }
+        }
+        top: fill {
           child: color {
             bounds: 20 20 60 60;
             color: rgb(0,0,255);
@@ -12,13 +19,6 @@ isolation {
           path: "\
 M 20 20 h 60 v 60 h -60 z";
           fill-rule: winding;
-        }
-        top: clip {
-          clip: 14 14 72 72;
-          child: color {
-            bounds: 14 14 72 72;
-            color: rgb(255,0,0);
-          }
         }
       }
     }
