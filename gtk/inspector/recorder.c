@@ -2079,8 +2079,8 @@ get_selected_node (GtkInspectorRecorder *recorder)
 }
 
 static void
-render_node_list_selection_changed (GtkListBox           *list,
-                                    GtkListBoxRow        *row,
+render_node_list_selection_changed (GtkSingleSelection   *selection,
+                                    GParamSpec           *pspec, 
                                     GtkInspectorRecorder *recorder)
 {
   GskRenderNode *draw_node;
