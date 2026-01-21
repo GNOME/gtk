@@ -514,7 +514,8 @@ bind_widget_for_render_node (GtkSignalListItemFactory *factory,
 
 static void
 show_render_node (GtkInspectorRecorder *recorder,
-                  GskRenderNode        *node)
+                  GskRenderNode        *node,
+                  GskRenderNode        *profile_node)
 {
   GtkInspectorNodeWrapper *wrapper;
   GskRenderNode *draw_node;
@@ -524,7 +525,7 @@ show_render_node (GtkInspectorRecorder *recorder,
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (recorder->recording_data_stack)), "frame_data") == 0)
     {
       draw_node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
-      wrapper = gtk_inspector_node_wrapper_new (node, NULL, draw_node, "Root");
+      wrapper = gtk_inspector_node_wrapper_new (node, profile_node, draw_node, "Root");
 
       g_list_store_splice (recorder->render_node_root_model,
                            0, g_list_model_get_n_items (G_LIST_MODEL (recorder->render_node_root_model)),
@@ -701,12 +702,11 @@ recording_selected (GtkSingleSelection   *selection,
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      GskRenderNode *node;
-
       gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "frame_data");
 
-      node = gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording));
-      show_render_node (recorder, node);
+      show_render_node (recorder,
+                        gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)),
+                        gtk_inspector_render_recording_get_profile_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
     }
   else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
     {
@@ -732,7 +732,7 @@ recording_selected (GtkSingleSelection   *selection,
                   GskRenderNode *temp;
 
                   temp = make_event_node (event, node, NULL);
-                  show_render_node (recorder, temp);
+                  show_render_node (recorder, temp, NULL);
                   gsk_render_node_unref (temp);
                 }
 
@@ -2118,7 +2118,7 @@ event_properties_list_selection_changed (GtkSelectionModel *model,
     return;
 
   if (prop->node)
-    show_render_node (recorder, prop->node);
+    show_render_node (recorder, prop->node, NULL);
 }
 
 static void
