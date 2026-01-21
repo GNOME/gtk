@@ -27,6 +27,7 @@ inspector_sources = files(
   'measuregraph.c',
   'menu.c',
   'misc-info.c',
+  'nodewrapper.c',
   'object-tree.c',
   'prop-editor.c',
   'prop-holder.c',
