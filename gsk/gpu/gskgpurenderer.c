@@ -80,7 +80,11 @@ gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
   GskGpuRendererClass *klass = GSK_GPU_RENDERER_GET_CLASS (self);
   GskGpuFrame *result;
 
-  result = g_object_new (klass->frame_type, NULL);
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), PROFILE) &&
+      priv->optimizations & GSK_GPU_OPTIMIZE_PROFILE)
+    result = g_object_new (klass->profile_frame_type, NULL);
+  else
+    result = g_object_new (klass->frame_type, NULL);
 
   gsk_gpu_frame_setup (result, self, priv->device, priv->optimizations);
 

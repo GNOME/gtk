@@ -174,10 +174,8 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
 #ifdef GDK_RENDERING_VULKAN
   GskGpuRendererClass *gpu_renderer_class = GSK_GPU_RENDERER_CLASS (klass);
 
-  if (GSK_DEBUG_CHECK (PERF))
-    gpu_renderer_class->frame_type = GSK_TYPE_VULKAN_DEBUG_FRAME;
-  else
-    gpu_renderer_class->frame_type = GSK_TYPE_VULKAN_FRAME;
+  gpu_renderer_class->frame_type = GSK_TYPE_VULKAN_FRAME;
+  gpu_renderer_class->profile_frame_type = GSK_TYPE_VULKAN_FRAME;
 
   gpu_renderer_class->get_device = gsk_vulkan_device_get_for_display;
   gpu_renderer_class->create_context = gsk_vulkan_renderer_create_context;
