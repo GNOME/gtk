@@ -20279,10 +20279,10 @@ push_group (Shape        *shape,
 
               if (shape_get_current_bounds (shape, context->viewport, &bounds))
                 {
-                  mask_clip.origin.x = bounds.origin.x + svg_number_get (mask->shape->current[SHAPE_ATTR_X], bounds.size.width);
-                  mask_clip.origin.y = bounds.origin.y + svg_number_get (mask->shape->current[SHAPE_ATTR_Y], bounds.size.height);
-                  mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], bounds.size.width);
-                  mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], bounds.size.height);
+                  mask_clip.origin.x = bounds.origin.x + svg_number_get (mask->shape->current[SHAPE_ATTR_X], 1) * bounds.size.width;
+                  mask_clip.origin.y = bounds.origin.y + svg_number_get (mask->shape->current[SHAPE_ATTR_Y], 1) * bounds.size.height;
+                  mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], 1) * bounds.size.width;
+                  mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], 1) * bounds.size.height;
                   has_clip = TRUE;
                 }
             }
