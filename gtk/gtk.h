@@ -210,6 +210,7 @@
 #include <gtk/print/gtkpapersize.h>
 #include <gtk/gtkpasswordentry.h>
 #include <gtk/gtkpasswordentrybuffer.h>
+#include <gtk/gtkpendingoperation.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtkpopoverbin.h>
