@@ -126,6 +126,36 @@ on_popover_unmap (GtkPopoverBin *self)
 }
 
 static void
+gtk_popover_bin_popup_at_position (GtkPopoverBin   *self,
+                                   gdouble          x,
+                                   gdouble          y)
+{
+  GdkRectangle rect;
+
+  if (self->popover == NULL)
+    return;
+
+  if (x > -0.5 && y > -0.5) {
+    rect.x = x;
+    rect.y = y;
+  } else {
+    if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+      rect.x = gtk_widget_get_width (GTK_WIDGET (self));
+    else
+      rect.x = 0.0;
+
+    rect.y = gtk_widget_get_height (GTK_WIDGET (self));
+  }
+
+  rect.width = 0.0;
+  rect.height = 0.0;
+
+  gtk_popover_set_pointing_to (GTK_POPOVER (self->popover), &rect);
+
+  gtk_popover_popup (GTK_POPOVER (self->popover));
+}
+
+static void
 popup_action (GtkWidget  *widget,
               const char *action_name,
               GVariant   *parameters)
@@ -577,11 +607,11 @@ gtk_popover_bin_set_handle_input (GtkPopoverBin *self,
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->click_gesture),
                                      GDK_BUTTON_SECONDARY);
       g_signal_connect_swapped (self->click_gesture, "pressed",
-                                G_CALLBACK (gtk_popover_bin_popup), self);
+                                G_CALLBACK (gtk_popover_bin_popup_at_position), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->click_gesture);
 
       self->long_press_gesture = GTK_EVENT_CONTROLLER (gtk_gesture_long_press_new ());
-      g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (gtk_popover_bin_popup), self);
+      g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (gtk_popover_bin_popup_at_position), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->long_press_gesture);
 
       self->shortcut_controller = GTK_EVENT_CONTROLLER (gtk_shortcut_controller_new ());
@@ -631,8 +661,7 @@ gtk_popover_bin_popup (GtkPopoverBin *self)
 {
   g_return_if_fail (GTK_IS_POPOVER_BIN (self));
 
-  if (self->popover != NULL)
-    gtk_popover_popup (GTK_POPOVER (self->popover));
+  gtk_popover_bin_popup_at_position (self, -1.0, -1.0);
 }
 
 /**
