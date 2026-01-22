@@ -875,26 +875,6 @@ build_gir = gir.found() and (get_option('introspection').enabled() or
 # Resource building
 glib_compile_resources = find_program('glib-compile-resources')
 
-objcopy_supports_add_symbol = false
-objcopy_supports_section_alignment = false
-objcopy = find_program('objcopy', required : false)
-if objcopy.found()
-  objcopy_supports_add_symbol = run_command(objcopy, '--help', check: false).stdout().contains('--add-symbol')
-  objcopy_supports_section_alignment = run_command(objcopy, '--help', check: false).stdout().contains('--set-section-alignment')
-endif
-
-ld_is_bfd = false
-ld = find_program('ld', required : false)
-if ld.found()
-  ld_is_bfd = run_command(ld, '--version', check: false).stdout().startswith('GNU ld')
-endif
-
-if not meson.is_cross_build() and build_machine.cpu_family() == 'x86_64' and build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and objcopy_supports_section_alignment and ld.found() and ld_is_bfd
-  can_use_objcopy_for_resources = true
-else
-  can_use_objcopy_for_resources = false
-endif
-
 project_build_root = meson.current_build_dir()
 
 gen_visibility_macros = find_program('build-aux/meson/gen-visibility-macros.py')
