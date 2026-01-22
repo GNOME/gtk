@@ -2,7 +2,7 @@
 textures = 1;
 var_name = "gsk_gpu_component_transfer";
 struct_name = "GskGpuComponentTransfer";
-acs_equals_ccs = true;
+acs_equals_ccs = false;
 
 graphene_vec4_t params_r;
 graphene_vec4_t params_g;

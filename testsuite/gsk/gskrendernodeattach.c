@@ -19,6 +19,9 @@
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
+#include "gsk/gskblendnodeprivate.h"
+#include "gsk/gskcolormatrixnodeprivate.h"
+#include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
@@ -63,9 +66,10 @@ node_attach (const GskRenderNode *node,
 
     case GSK_COLOR_MATRIX_NODE:
       child = node_attach (gsk_color_matrix_node_get_child (node), surface, idx);
-      res = gsk_color_matrix_node_new (child,
-                                       gsk_color_matrix_node_get_color_matrix (node),
-                                       gsk_color_matrix_node_get_color_offset (node));
+      res = gsk_color_matrix_node_new2 (child,
+                                        gsk_color_matrix_node_get_color_state (node),
+                                        gsk_color_matrix_node_get_color_matrix (node),
+                                        gsk_color_matrix_node_get_color_offset (node));
       gsk_render_node_unref (child);
       return res;
 
@@ -114,7 +118,7 @@ node_attach (const GskRenderNode *node,
         GskRenderNode *top, *bottom;
         bottom = node_attach (gsk_blend_node_get_bottom_child (node), surface, idx);
         top = node_attach (gsk_blend_node_get_top_child (node), surface, idx);
-        res = gsk_blend_node_new (bottom, top, gsk_blend_node_get_blend_mode (node));
+        res = gsk_blend_node_new2 (bottom, top, gsk_blend_node_get_color_state (node), gsk_blend_node_get_blend_mode (node));
         gsk_render_node_unref (bottom);
         gsk_render_node_unref (top);
         return res;
@@ -210,11 +214,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_COMPONENT_TRANSFER_NODE:
       child = node_attach (gsk_component_transfer_node_get_child (node), surface, idx);
-      res = gsk_component_transfer_node_new (child,
-                                             gsk_component_transfer_node_get_transfer (node, 0),
-                                             gsk_component_transfer_node_get_transfer (node, 1),
-                                             gsk_component_transfer_node_get_transfer (node, 2),
-                                             gsk_component_transfer_node_get_transfer (node, 3));
+      res = gsk_component_transfer_node_new2 (child,
+                                              gsk_component_transfer_node_get_color_state (node),
+                                              gsk_component_transfer_node_get_transfer (node, 0),
+                                              gsk_component_transfer_node_get_transfer (node, 1),
+                                              gsk_component_transfer_node_get_transfer (node, 2),
+                                              gsk_component_transfer_node_get_transfer (node, 3));
       gsk_render_node_unref (child);
       return res;
 

@@ -22,6 +22,7 @@ M 10 10 h 40 v 40 h -40 z";
               }
             }
             red: table(0, 0.5, 1);
+            color-state: srgb-linear;
           }
         }
         isolations: background;
@@ -48,6 +49,7 @@ M 60 10 h 40 v 40 h -40 z";
             red: gamma(1, 2, 0);
             green: gamma(1, 2, 0);
             blue: gamma(1, 2, 0);
+            color-state: srgb-linear;
           }
         }
         isolations: background;
@@ -72,6 +74,7 @@ M 110 10 h 40 v 40 h -40 z";
               }
             }
             red: linear(0.5, 0.2);
+            color-state: srgb-linear;
           }
         }
         isolations: background;
@@ -96,6 +99,7 @@ M 10 60 h 40 v 40 h -40 z";
               }
             }
             red: discrete(0, 0.5, 1);
+            color-state: srgb-linear;
           }
         }
         isolations: background;

@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskblendnode.h"
+#include "gskblendnodeprivate.h"
 
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
@@ -42,6 +42,7 @@ struct _GskBlendNode
       GskRenderNode *top;
     };
   };
+  GdkColorState *color_state;
   GskBlendMode blend_mode;
 };
 
@@ -93,6 +94,7 @@ gsk_blend_node_finalize (GskRenderNode *node)
   GskBlendNode *self = (GskBlendNode *) node;
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_BLEND_NODE));
 
+  gdk_color_state_unref (self->color_state);
   gsk_render_node_unref (self->bottom);
   gsk_render_node_unref (self->top);
 
@@ -134,7 +136,8 @@ gsk_blend_node_diff (GskRenderNode *node1,
   GskBlendNode *self1 = (GskBlendNode *) node1;
   GskBlendNode *self2 = (GskBlendNode *) node2;
 
-  if (self1->blend_mode == self2->blend_mode)
+  if (self1->blend_mode == self2->blend_mode &&
+      gdk_color_state_equal (self1->color_state, self2->color_state))
     {
       gsk_render_node_diff (self1->top, self2->top, data);
       gsk_render_node_diff (self1->bottom, self2->bottom, data);
@@ -181,7 +184,9 @@ gsk_blend_node_replay (GskRenderNode   *node,
   if (top == self->top && bottom == self->bottom)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_blend_node_new (bottom, top, self->blend_mode);
+    result = gsk_blend_node_new2 (bottom, top,
+                                  self->color_state,
+                                  self->blend_mode);
 
   gsk_render_node_unref (top);
   gsk_render_node_unref (bottom);
@@ -222,17 +227,40 @@ gsk_blend_node_new (GskRenderNode *bottom,
                     GskRenderNode *top,
                     GskBlendMode   blend_mode)
 {
+  return gsk_blend_node_new2 (bottom, top, GDK_COLOR_STATE_SRGB, blend_mode);
+}
+
+/*< private >
+ * gsk_blend_node_new2:
+ * @bottom: The bottom node to be drawn
+ * @top: The node to be blended onto the @bottom node
+ * @color_state: The color state to blend in
+ * @blend_mode: The blend mode to use
+ *
+ * Creates a `GskRenderNode` that will use @blend_mode to blend the @top
+ * node onto the @bottom node.
+ *
+ * Returns: (transfer full) (type GskBlendNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_blend_node_new2 (GskRenderNode *bottom,
+                     GskRenderNode *top,
+                     GdkColorState *color_state,
+                     GskBlendMode   blend_mode)
+{
   GskBlendNode *self;
   GskRenderNode *node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (bottom), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (top), NULL);
+  g_return_val_if_fail (GDK_IS_DEFAULT_COLOR_STATE (color_state), NULL);
 
   self = gsk_render_node_alloc (GSK_TYPE_BLEND_NODE);
   node = (GskRenderNode *) self;
 
   self->bottom = gsk_render_node_ref (bottom);
   self->top = gsk_render_node_ref (top);
+  self->color_state = gdk_color_state_ref (color_state);
   self->blend_mode = blend_mode;
 
   graphene_rect_union (&bottom->bounds, &top->bounds, &node->bounds);
@@ -291,4 +319,21 @@ gsk_blend_node_get_blend_mode (const GskRenderNode *node)
   const GskBlendNode *self = (const GskBlendNode *) node;
 
   return self->blend_mode;
+}
+
+
+/*< private >
+ * gsk_blend_node_get_color_state:
+ * @node: (type GskBlendNode): a `GskRenderNode`
+ *
+ * Retrieves the color state of the @node.
+ *
+ * Returns: (transfer none): the color state
+ */
+GdkColorState *
+gsk_blend_node_get_color_state (const GskRenderNode *node)
+{
+  const GskBlendNode *self = (const GskBlendNode *) node;
+
+  return self->color_state;
 }

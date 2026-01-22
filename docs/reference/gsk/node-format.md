@@ -158,11 +158,12 @@ The **container** node is a special node that allows specifying a list of child 
 
 ### blend
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| bottom   | `<node>`         | color { }              | always      |
-| mode     | `<blend-mode>`   | normal                 | non-default |
-| top      | `<node>`         | color { }              | always      |
+| property    | syntax           | default                | printed     |
+| ----------- | ---------------- | ---------------------- | ----------- |
+| bottom      | `<node>`         | color { }              | always      |
+| mode        | `<blend-mode>`   | normal                 | non-default |
+| top         | `<node>`         | color { }              | always      |
+| color-state | `<color-state>`  | srgb                   | non-default |
 
 Creates a node like `gsk_blend_node_new()` with the given properties.
 
@@ -251,13 +252,14 @@ matrix3d() production to specify all 16 values individually.
 
 ### component-transfer
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| child    | `<node>`         | color { }              | always      |
-| red      | `<transfer>`     | none                   | non-default |
-| green    | `<transfer>`     | none                   | non-default |
-| blue     | `<transfer>`     | none                   | non-default |
-| alpha    | `<transfer>`     | none                   | non-default |
+| property    | syntax           | default                | printed     |
+| ----------- | ---------------- | ---------------------- | ----------- |
+| child       | `<node>`         | color { }              | always      |
+| red         | `<transfer>`     | none                   | non-default |
+| green       | `<transfer>`     | none                   | non-default |
+| blue        | `<transfer>`     | none                   | non-default |
+| alpha       | `<transfer>`     | none                   | non-default |
+| color-state | `<color-state>`  | srgb                   | non-default |
 
 Creates a node like `gsk_component_transfer_node_new()` with the given properties.
 

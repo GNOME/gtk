@@ -37,6 +37,7 @@ struct _GskColorMatrixNode
   GskRenderNode render_node;
 
   GskRenderNode *child;
+  GdkColorState *color_state;
   graphene_matrix_t color_matrix;
   graphene_vec4_t color_offset;
 };
@@ -55,14 +56,18 @@ gsk_color_matrix_node_finalize (GskRenderNode *node)
 void
 apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
                                const graphene_matrix_t *color_matrix,
-                               const graphene_vec4_t   *color_offset)
+                               const graphene_vec4_t   *color_offset,
+                               GdkColorState           *color_state,
+                               GskCairoData            *cairo_data)
 {
   cairo_surface_t *surface, *image_surface;
   guchar *data;
   gsize x, y, width, height, stride;
   float alpha;
   graphene_vec4_t pixel;
-  guint32* pixel_data;
+  guint32 *pixel_data;
+  gboolean cs_equal;
+  GdkColor c, l;
 
   cairo_pattern_get_surface (pattern, &surface);
   image_surface = cairo_surface_map_to_image (surface, NULL);
@@ -71,6 +76,8 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
   width = cairo_image_surface_get_width (image_surface);
   height = cairo_image_surface_get_height (image_surface);
   stride = cairo_image_surface_get_stride (image_surface);
+
+  cs_equal = gdk_color_state_equal (cairo_data->ccs, color_state);
 
   for (y = 0; y < height; y++)
     {
@@ -85,15 +92,39 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
             }
           else
             {
-              graphene_vec4_init (&pixel,
-                                  ((pixel_data[x] >> 16) & 0xFF) / (255.0 * alpha),
-                                  ((pixel_data[x] >>  8) & 0xFF) / (255.0 * alpha),
-                                  ( pixel_data[x]        & 0xFF) / (255.0 * alpha),
-                                  alpha);
+              float r, g, b;
+
+              r = ((pixel_data[x] >> 16) & 0xFF) / (255.0 * alpha);
+              g = ((pixel_data[x] >>  8) & 0xFF) / (255.0 * alpha);
+              b = ( pixel_data[x]        & 0xFF) / (255.0 * alpha);
+
+              if (!cs_equal)
+                {
+                  gdk_color_init (&c, cairo_data->ccs, (float[]) { r, g, b, alpha });
+                  gdk_color_convert (&l, color_state, &c);
+
+                  r = l.r;
+                  g = l.g;
+                  b = l.b;
+                  alpha = l.a;
+                }
+
+              graphene_vec4_init (&pixel, r, g, b, alpha);
+
               graphene_matrix_transform_vec4 (color_matrix, &pixel, &pixel);
             }
 
           graphene_vec4_add (&pixel, color_offset, &pixel);
+
+          if (!cs_equal)
+            {
+              float v[4];
+
+              graphene_vec4_to_float (&pixel, v);
+              gdk_color_init (&l, color_state, v);
+              gdk_color_convert (&c, cairo_data->ccs, &l);
+              graphene_vec4_init_from_float (&pixel, c.values);
+            }
 
           alpha = graphene_vec4_get_w (&pixel);
 
@@ -139,7 +170,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   gsk_render_node_draw_full (self->child, cr, data);
 
   pattern = cairo_pop_group (cr);
-  apply_color_matrix_to_pattern (pattern, &self->color_matrix, &self->color_offset);
+  apply_color_matrix_to_pattern (pattern, &self->color_matrix, &self->color_offset, self->color_state, data);
 
   cairo_set_source (cr, pattern);
   cairo_paint (cr);
@@ -155,18 +186,15 @@ gsk_color_matrix_node_diff (GskRenderNode *node1,
   GskColorMatrixNode *self1 = (GskColorMatrixNode *) node1;
   GskColorMatrixNode *self2 = (GskColorMatrixNode *) node2;
 
-  if (!graphene_vec4_equal (&self1->color_offset, &self2->color_offset))
-    goto nope;
+  if (gdk_color_state_equal (self1->color_state, self2->color_state) &&
+      graphene_vec4_equal (&self1->color_offset, &self2->color_offset) &&
+      graphene_matrix_equal_fast (&self1->color_matrix, &self2->color_matrix))
+    {
+      gsk_render_node_diff (self1->child, self2->child, data);
+      return;
+    }
 
-  if (!graphene_matrix_equal_fast (&self1->color_matrix, &self2->color_matrix))
-    goto nope;
-
-  gsk_render_node_diff (self1->child, self2->child, data);
-  return;
-
-nope:
   gsk_render_node_diff_impossible (node1, node2, data);
-  return;
 }
 
 static GskRenderNode **
@@ -176,7 +204,7 @@ gsk_color_matrix_node_get_children (GskRenderNode *node,
   GskColorMatrixNode *self = (GskColorMatrixNode *) node;
 
   *n_children = 1;
-  
+
   return &self->child;
 }
 
@@ -195,7 +223,10 @@ gsk_color_matrix_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_color_matrix_node_new (child, &self->color_matrix, &self->color_offset);
+    result = gsk_color_matrix_node_new2 (child,
+                                         self->color_state,
+                                         &self->color_matrix,
+                                         &self->color_offset);
 
   gsk_render_node_unref (child);
 
@@ -242,15 +273,46 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
                            const graphene_matrix_t *color_matrix,
                            const graphene_vec4_t   *color_offset)
 {
+  return gsk_color_matrix_node_new2 (child, GDK_COLOR_STATE_SRGB,
+                                     color_matrix, color_offset);
+}
+
+/*< private >
+ * gsk_color_matrix_node_new2:
+ * @child: The node to draw
+ * @color_state: the color state to operate in
+ * @color_matrix: The matrix to apply
+ * @color_offset: Values to add to the color
+ *
+ * Creates a `GskRenderNode` that will drawn the @child with
+ * @color_matrix.
+ *
+ * In particular, the node will transform colors by applying
+ *
+ *     pixel = transpose(color_matrix) * pixel + color_offset
+ *
+ * for every pixel. The transformation operates on unpremultiplied
+ * colors, with color components ordered R, G, B, A.
+ *
+ * Returns: (transfer full) (type GskColorMatrixNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_color_matrix_node_new2 (GskRenderNode           *child,
+                            GdkColorState           *color_state,
+                            const graphene_matrix_t *color_matrix,
+                            const graphene_vec4_t   *color_offset)
+{
   GskColorMatrixNode *self;
   GskRenderNode *node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (GDK_IS_DEFAULT_COLOR_STATE (color_state), NULL);
 
   self = gsk_render_node_alloc (GSK_TYPE_COLOR_MATRIX_NODE);
   node = (GskRenderNode *) self;
 
   self->child = gsk_render_node_ref (child);
+  self->color_state = gdk_color_state_ref (color_state);
   graphene_matrix_init_from_matrix (&self->color_matrix, color_matrix);
   graphene_vec4_init_from_vec4 (&self->color_offset, color_offset);
 
@@ -310,4 +372,20 @@ gsk_color_matrix_node_get_color_offset (const GskRenderNode *node)
   const GskColorMatrixNode *self = (const GskColorMatrixNode *) node;
 
   return &self->color_offset;
+}
+
+/*< private >
+ * gsk_color_matrix_node_get_color_state:
+ * @node: (type GskColorMatrixNode): a `GskRenderNode`
+ *
+ * Retrieves the color state of the @node.
+ *
+ * Returns: (transfer none): the color state
+ */
+GdkColorState *
+gsk_color_matrix_node_get_color_state (const GskRenderNode *node)
+{
+  const GskColorMatrixNode *self = (const GskColorMatrixNode *) node;
+
+  return self->color_state;
 }

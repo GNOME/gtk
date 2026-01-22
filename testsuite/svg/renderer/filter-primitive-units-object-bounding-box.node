@@ -1,9 +1,9 @@
 isolation {
   child: isolation {
     child: clip {
-      clip: 20.1 20.1 0.799999 0.799999;
+      clip: 26 26 48 48;
       child: color {
-        bounds: 20.1 20.1 0.799999 0.799999;
+        bounds: 26 26 48 48;
         color: rgb(255,0,0);
       }
     }

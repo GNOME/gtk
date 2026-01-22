@@ -141,7 +141,7 @@ gsk_mask_node_draw (GskRenderNode *node,
                                                                   0,  0,  0,  0,
                                                                  -1, -1, -1, -1 });
       graphene_vec4_init (&color_offset, 1, 1, 1, 1);
-      apply_color_matrix_to_pattern (mask_pattern, &color_matrix, &color_offset);
+      apply_color_matrix_to_pattern (mask_pattern, &color_matrix, &color_offset, data->ccs, data);
       break;
     case GSK_MASK_MODE_LUMINANCE:
       apply_luminance_to_pattern (mask_pattern, FALSE);

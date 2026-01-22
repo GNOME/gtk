@@ -24,15 +24,15 @@
 #include "gskrendernodeparserprivate.h"
 
 #include "gskarithmeticnodeprivate.h"
-#include "gskblendnode.h"
+#include "gskblendnodeprivate.h"
 #include "gskblurnode.h"
 #include "gskbordernodeprivate.h"
 #include "gskcaironodeprivate.h"
 #include "gskclipnode.h"
-#include "gskcolormatrixnode.h"
+#include "gskcolormatrixnodeprivate.h"
 #include "gskcolornodeprivate.h"
 #include "gskconicgradientnodeprivate.h"
-#include "gskcomponenttransfernode.h"
+#include "gskcomponenttransfernodeprivate.h"
 #include "gskcomponenttransferprivate.h"
 #include "gskcompositenode.h"
 #include "gskcontainernodeprivate.h"
@@ -544,6 +544,27 @@ parse_color_state (GtkCssParser *parser,
     }
 
   *(GdkColorState **) color_state = gdk_color_state_ref (cs);
+  return TRUE;
+}
+
+static gboolean
+parse_default_color_state (GtkCssParser *parser,
+                           Context      *context,
+                           gpointer      out_value)
+{
+   GdkColorState *color_state;
+
+  if (!parse_color_state (parser, context, &color_state))
+    return FALSE;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (color_state))
+    {
+      gtk_css_parser_error_value (parser, "The color state must be a default color state.");
+      gdk_color_state_unref (color_state);
+      return FALSE;
+    }
+
+  *(GdkColorState **) out_value = color_state;
   return TRUE;
 }
 
@@ -3306,10 +3327,12 @@ parse_color_matrix_node (GtkCssParser *parser,
   graphene_matrix_t matrix;
   GskTransform *transform = NULL;
   graphene_vec4_t offset;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   const Declaration declarations[] = {
     { "matrix", parse_transform, clear_transform, &transform },
     { "offset", parse_vec4, NULL, &offset },
-    { "child", parse_node, clear_node, &child }
+    { "child", parse_node, clear_node, &child },
+    { "color-state", parse_default_color_state, clear_color_state, &color_state },
   };
   GskRenderNode *result;
 
@@ -3321,10 +3344,11 @@ parse_color_matrix_node (GtkCssParser *parser,
 
   gsk_transform_to_matrix (transform, &matrix);
 
-  result = gsk_color_matrix_node_new (child, &matrix, &offset);
+  result = gsk_color_matrix_node_new2 (child, color_state, &matrix, &offset);
 
   gsk_transform_unref (transform);
   gsk_render_node_unref (child);
+  gdk_color_state_unref (color_state);
 
   return result;
 }
@@ -3364,10 +3388,12 @@ parse_blend_node (GtkCssParser *parser,
   GskRenderNode *bottom = NULL;
   GskRenderNode *top = NULL;
   GskBlendMode mode = GSK_BLEND_MODE_DEFAULT;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   const Declaration declarations[] = {
     { "mode", parse_blend_mode, NULL, &mode },
     { "bottom", parse_node, clear_node, &bottom },
     { "top", parse_node, clear_node, &top },
+    { "color-state", parse_default_color_state, clear_color_state, &color_state },
   };
   GskRenderNode *result;
 
@@ -3377,10 +3403,12 @@ parse_blend_node (GtkCssParser *parser,
   if (top == NULL)
     top = create_default_render_node ();
 
-  result = gsk_blend_node_new (bottom, top, mode);
+  result = gsk_blend_node_new2 (bottom, top, color_state, mode);
 
   gsk_render_node_unref (bottom);
   gsk_render_node_unref (top);
+
+  gdk_color_state_unref (color_state);
 
   return result;
 }
@@ -3964,12 +3992,14 @@ parse_component_transfer_node (GtkCssParser *parser,
   GskComponentTransfer *green = NULL;
   GskComponentTransfer *blue = NULL;
   GskComponentTransfer *alpha = NULL;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
     { "red", parse_component_transfer, clear_component_transfer, &red },
     { "green", parse_component_transfer, clear_component_transfer, &green },
     { "blue", parse_component_transfer, clear_component_transfer, &blue },
     { "alpha", parse_component_transfer, clear_component_transfer, &alpha },
+    { "color-state", parse_default_color_state, clear_color_state, &color_state },
   };
   GskRenderNode *result;
 
@@ -3985,12 +4015,14 @@ parse_component_transfer_node (GtkCssParser *parser,
   if (alpha == NULL)
     alpha = gsk_component_transfer_new_identity ();
 
-  result = gsk_component_transfer_node_new (child, red, green, blue, alpha);
+  result = gsk_component_transfer_node_new2 (child, color_state, red, green, blue, alpha);
 
   gsk_component_transfer_free (red);
   gsk_component_transfer_free (green);
   gsk_component_transfer_free (blue);
   gsk_component_transfer_free (alpha);
+
+  gdk_color_state_unref (color_state);
 
   gsk_render_node_unref (child);
 
@@ -4287,14 +4319,14 @@ parse_arithmetic_node (GtkCssParser *parser,
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GskRenderNode *first = NULL;
   GskRenderNode *second = NULL;
-  GdkColorState *color_state = NULL;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   float k[4] = { 0, 0, 0, 0 };
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "first", parse_node, clear_node, &first },
     { "second", parse_node, clear_node, &second },
     { "k", parse_four_floats, NULL, k },
-    { "color-state", parse_color_state, clear_color_state, &color_state }
+    { "color-state", parse_default_color_state, clear_color_state, &color_state }
   };
   GskRenderNode *result;
 
@@ -4303,9 +4335,6 @@ parse_arithmetic_node (GtkCssParser *parser,
     first = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
   if (second == NULL)
     second = create_default_render_node ();
-
-  if (color_state == NULL)
-    color_state = GDK_COLOR_STATE_SRGB;
 
   result = gsk_arithmetic_node_new (&bounds, first, second, color_state, k[0], k[1], k[2], k[3]);
 
@@ -6176,6 +6205,7 @@ render_node_print (Printer       *p,
         if (!graphene_vec4_equal (gsk_color_matrix_node_get_color_offset (node), graphene_vec4_zero ()))
           append_vec4_param (p, "offset", gsk_color_matrix_node_get_color_offset (node));
         append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
+        append_color_state_param (p, "color-state", gsk_color_matrix_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);
       }
@@ -6538,6 +6568,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           }
         append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
+        append_color_state_param (p, "color-state", gsk_blend_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);
       }
@@ -6638,6 +6669,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_component_transfer_param (p, "green", gsk_component_transfer_node_get_transfer (node, 1));
         append_component_transfer_param (p, "blue", gsk_component_transfer_node_get_transfer (node, 2));
         append_component_transfer_param (p, "alpha", gsk_component_transfer_node_get_transfer (node, 3));
+        append_color_state_param (p, "color-state", gsk_component_transfer_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);
       }

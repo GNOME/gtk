@@ -31,7 +31,10 @@
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtksnapshotprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
+#include "gsk/gskblendnodeprivate.h"
+#include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
+#include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskpathprivate.h"
@@ -3558,7 +3561,7 @@ DEFINE_ENUM (BLEND_MODE, blend_mode, GskBlendMode,
   DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_HARD_LIGHT, "hard-light"),
   DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_SOFT_LIGHT, "soft-light"),
   DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_DIFFERENCE, "difference"),
-  DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_EXCLUSION, "exclusiohn"),
+  DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_EXCLUSION, "exclusion"),
   DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_COLOR, "color"),
   DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_HUE, "hue"),
   DEFINE_ENUM_VALUE (BLEND_MODE, GSK_BLEND_MODE_SATURATION, "saturation"),
@@ -11287,6 +11290,14 @@ shape_get_current_bounds (Shape                 *shape,
 
           if (shape_get_current_bounds (sh, viewport, &b2))
             {
+              if (_gtk_bitmask_get (sh->attrs, SHAPE_ATTR_TRANSFORM))
+                {
+                   SvgTransform *tf = (SvgTransform *) sh->current[SHAPE_ATTR_TRANSFORM];
+                   GskTransform *transform = svg_transform_get_gsk (tf);
+                   gsk_transform_transform_bounds (transform, &b2, &b2);
+                   gsk_transform_unref (transform);
+                }
+
               if (!has_any)
                 graphene_rect_init_from_rect (&b, &b2);
               else
@@ -18990,10 +19001,8 @@ get_input_for_ref (SvgValue              *in,
       res = g_hash_table_lookup (results, ref->ref);
       if (res)
         return filter_result_ref (res);
-      node = error_node (subregion);
-      res = filter_result_new (node, subregion);
-      gsk_render_node_unref (node);
-      return res;
+      else
+        return filter_result_ref (g_hash_table_lookup (results, ""));
     case FILL_PAINT:
     case STROKE_PAINT:
       {
@@ -19109,7 +19118,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_X);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->origin.x = bounds->origin.x + svg_number_get (n, bounds->size.width);
+            subregion->origin.x = bounds->origin.x + svg_number_get (n, 1) * bounds->size.width;
           else
             subregion->origin.x = viewport->origin.x + svg_number_get (n, viewport->size.width);
         }
@@ -19118,7 +19127,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_Y);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->origin.y = bounds->origin.y + svg_number_get (n, bounds->size.height);
+            subregion->origin.y = bounds->origin.y + svg_number_get (n, 1) * bounds->size.height;
           else
             subregion->origin.y = viewport->origin.y + svg_number_get (n, viewport->size.height);
         }
@@ -19127,7 +19136,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_WIDTH);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->size.width = svg_number_get (n, bounds->size.width);
+            subregion->size.width = svg_number_get (n, 1) * bounds->size.width;
           else
             subregion->size.width = svg_number_get (n, viewport->size.width);
         }
@@ -19136,7 +19145,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         {
           SvgValue *n = filter_get_current_value (f, SHAPE_ATTR_FE_HEIGHT);
           if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            subregion->size.height = svg_number_get (n, bounds->size.height);
+            subregion->size.height = svg_number_get (n, 1) * bounds->size.height;
           else
             subregion->size.height = svg_number_get (n, viewport->size.height);
         }
@@ -19164,7 +19173,6 @@ determine_filter_subregion (FilterPrimitive       *f,
           break;
 
         case FE_BLUR:
-        case FE_BLEND:
         case FE_COLOR_MATRIX:
         case FE_COMPONENT_TRANSFER:
         case FE_DROPSHADOW:
@@ -19176,6 +19184,7 @@ determine_filter_subregion (FilterPrimitive       *f,
           }
           break;
 
+        case FE_BLEND:
         case FE_COMPOSITE:
         case FE_DISPLACEMENT:
           {
@@ -19242,7 +19251,7 @@ apply_filter_tree (Shape         *shape,
   if (svg_enum_get (filter->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
       if (bounds.size.width == 0 || bounds.size.height == 0)
-        return gsk_render_node_ref (source);
+        return empty_node ();
 
       filter_region.origin.x = bounds.origin.x + svg_number_get (filter->current[SHAPE_ATTR_X], 1) * bounds.size.width;
       filter_region.origin.y = bounds.origin.y + svg_number_get (filter->current[SHAPE_ATTR_Y], 1) * bounds.size.height;
@@ -19396,7 +19405,7 @@ apply_filter_tree (Shape         *shape,
             in2 = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN2), &subregion, shape, context, source, results);
             blend_mode = svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_BLEND_MODE));
 
-            result = gsk_blend_node_new (in->node, in2->node, blend_mode);
+            result = gsk_blend_node_new2 (in2->node, in->node, color_state, blend_mode);
 
             filter_result_unref (in);
             filter_result_unref (in2);
@@ -19545,7 +19554,7 @@ apply_filter_tree (Shape         *shape,
                   }
               }
 
-            result = gsk_component_transfer_node_new (in->node, r, g, b, a);
+            result = gsk_component_transfer_node_new2 (in->node, color_state, r, g, b, a);
 
             gsk_component_transfer_free (r);
             gsk_component_transfer_free (g);
@@ -19572,7 +19581,7 @@ apply_filter_tree (Shape         *shape,
                                                 filter_get_current_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES),
                                                 &matrix, &offset);
 
-            result = gsk_color_matrix_node_new (in->node, &matrix, &offset);
+            result = gsk_color_matrix_node_new2 (in->node, color_state, &matrix, &offset);
 
             filter_result_unref (in);
           }
@@ -20278,10 +20287,10 @@ push_group (Shape        *shape,
 
               if (shape_get_current_bounds (shape, context->viewport, &bounds))
                 {
-                  mask_clip.origin.x = bounds.origin.x + svg_number_get (mask->shape->current[SHAPE_ATTR_X], bounds.size.width);
-                  mask_clip.origin.y = bounds.origin.y + svg_number_get (mask->shape->current[SHAPE_ATTR_Y], bounds.size.height);
-                  mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], bounds.size.width);
-                  mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], bounds.size.height);
+                  mask_clip.origin.x = bounds.origin.x + svg_number_get (mask->shape->current[SHAPE_ATTR_X], 1) * bounds.size.width;
+                  mask_clip.origin.y = bounds.origin.y + svg_number_get (mask->shape->current[SHAPE_ATTR_Y], 1) * bounds.size.height;
+                  mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], 1) * bounds.size.width;
+                  mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], 1) * bounds.size.height;
                   has_clip = TRUE;
                 }
             }
