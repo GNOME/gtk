@@ -12,6 +12,7 @@ struct _GskDebugProfile {
     guint64 cpu_record_ns;
     guint64 cpu_submit_ns;
     guint64 gpu_ns;
+    guint64 gpu_pixels;
   } total, self;
 };
 

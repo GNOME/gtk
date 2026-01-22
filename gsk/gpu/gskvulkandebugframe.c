@@ -40,10 +40,13 @@ struct _GskVulkanDebugFrame
   gsize debug_current;
 
   float vk_timestamp_scale;
+  gsize pool_size;
+
   VkQueryPool vk_timestamp_pool;
   uint64_t *timestamp_pool_values;
   gsize *timestamp_pool_nodes;
-  gsize timestamp_pool_size;
+  VkQueryPool vk_pixels_pool;
+  uint64_t *pixels_pool_values;
 };
 
 struct _GskVulkanDebugFrameClass
@@ -60,7 +63,7 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
 {
   GskVulkanDebugFrame *self = GSK_VULKAN_DEBUG_FRAME (frame);
 
-  if (self->n_ops * 2 > self->timestamp_pool_size)
+  if (self->n_ops > self->pool_size)
     {
       GskVulkanDevice *device;
       VkDevice vk_device;
@@ -74,19 +77,31 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
                           self->vk_timestamp_pool,
                           NULL);
       /* reserve 50% more than needed */
-      self->timestamp_pool_size = (3 * self->n_ops) & ~1;
+      self->pool_size = 3 * self->n_ops / 2;
 
-      self->timestamp_pool_values = g_new (uint64_t, self->timestamp_pool_size);
-      self->timestamp_pool_nodes = g_new (uint64_t, self->timestamp_pool_size / 2);
+      self->timestamp_pool_values = g_new (uint64_t, self->pool_size * 2);
+      self->timestamp_pool_nodes = g_new (uint64_t, self->pool_size);
       GSK_VK_CHECK (vkCreateQueryPool, vk_device,
                                        &(VkQueryPoolCreateInfo) {
                                            .sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
                                            .flags = 0,
                                            VK_QUERY_TYPE_TIMESTAMP,
-                                           .queryCount = self->timestamp_pool_size,
+                                           .queryCount = self->pool_size * 2,
                                        },
                                        NULL,
                                        &self->vk_timestamp_pool);
+
+      self->pixels_pool_values = g_new (uint64_t, self->pool_size);
+      GSK_VK_CHECK (vkCreateQueryPool, vk_device,
+                                       &(VkQueryPoolCreateInfo) {
+                                           .sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
+                                           .flags = 0,
+                                           VK_QUERY_TYPE_PIPELINE_STATISTICS,
+                                           .queryCount = self->pool_size,
+                                           .pipelineStatistics = VK_QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT,
+                                       },
+                                       NULL,
+                                       &self->vk_pixels_pool);
     }
 
   vkCmdResetQueryPool (state->vk_command_buffer, self->vk_timestamp_pool, 0, self->n_ops * 2);
@@ -103,6 +118,10 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
           GskVulkanDebugEntry *entry;
 
           self->timestamp_pool_nodes[self->n_ops] = op->node_id;
+          vkCmdBeginQuery (state->vk_command_buffer,
+                           self->vk_pixels_pool,
+                           self->n_ops,
+                           0);
           vkCmdWriteTimestamp (state->vk_command_buffer,
                                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                                self->vk_timestamp_pool,
@@ -118,11 +137,12 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
                                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
                                self->vk_timestamp_pool,
                                self->n_ops * 2 + 1);
+          vkCmdEndQuery (state->vk_command_buffer,
+                         self->vk_pixels_pool,
+                         self->n_ops);
           self->n_ops++;
         }
     }
-
-  g_assert (self->n_ops * 2 <= self->timestamp_pool_size);
 }
 
 static void
@@ -130,28 +150,14 @@ gsk_vulkan_debug_frame_setup (GskGpuFrame *frame)
 {
   GskVulkanDebugFrame *self = GSK_VULKAN_DEBUG_FRAME (frame);
   GskVulkanDevice *device;
-  VkDevice vk_device;
   VkPhysicalDeviceProperties vk_props;
 
   GSK_GPU_FRAME_CLASS (gsk_vulkan_debug_frame_parent_class)->setup (frame);
 
   device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
-  vk_device = gsk_vulkan_device_get_vk_device (device);
 
   vkGetPhysicalDeviceProperties (gsk_vulkan_device_get_vk_physical_device (device), &vk_props);
   self->vk_timestamp_scale = vk_props.limits.timestampPeriod;
-
-  GSK_VK_CHECK (vkCreateQueryPool, vk_device,
-                                   &(VkQueryPoolCreateInfo) {
-                                       .sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
-                                       .flags = 0,
-                                       VK_QUERY_TYPE_TIMESTAMP,
-                                       .queryCount = self->timestamp_pool_size,
-                                   },
-                                   NULL,
-                                   &self->vk_timestamp_pool);
-  self->timestamp_pool_values = g_new (uint64_t, self->timestamp_pool_size);
-  self->timestamp_pool_nodes = g_new (uint64_t, self->timestamp_pool_size / 2);
 }
 
 static GskRenderNode *
@@ -177,6 +183,7 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
   entry->profile.self.cpu_record_ns = entry->profile.total.cpu_record_ns;
   entry->profile.total.cpu_submit_ns = entry->profile.self.cpu_submit_ns;
   entry->profile.total.gpu_ns = entry->profile.self.gpu_ns;
+  entry->profile.total.gpu_pixels = entry->profile.self.gpu_pixels;
   if (entry->first_child != NO_ITEM)
     {
       gsize i, n_children;
@@ -188,6 +195,7 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
           entry->profile.self.cpu_record_ns -= child_entry->profile.total.cpu_record_ns;
           entry->profile.total.cpu_submit_ns += child_entry->profile.total.cpu_submit_ns;
           entry->profile.total.gpu_ns += child_entry->profile.total.gpu_ns;
+          entry->profile.total.gpu_pixels += child_entry->profile.total.gpu_pixels;
         }
     }
   entry->profile.self.cpu_ns = entry->profile.self.cpu_record_ns + entry->profile.self.cpu_submit_ns;
@@ -200,13 +208,17 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                                         "submit total: %lluns\n"
                                                         "submit self : %lluns\n"
                                                         "GPU total   : %lluns\n"
-                                                        "GPU self    : %lluns",
+                                                        "GPU self    : %lluns\n"
+                                                        "pixels total: %llu\n"
+                                                        "pixels self : %llu",
                                                         (long long unsigned) entry->profile.total.cpu_record_ns,
                                                         (long long unsigned) entry->profile.self.cpu_record_ns,
                                                         (long long unsigned) entry->profile.total.cpu_submit_ns,
                                                         (long long unsigned) entry->profile.self.cpu_submit_ns,
                                                         (long long unsigned) entry->profile.total.gpu_ns,
-                                                        (long long unsigned) entry->profile.self.gpu_ns));
+                                                        (long long unsigned) entry->profile.self.gpu_ns,
+                                                        (long long unsigned) entry->profile.total.gpu_pixels,
+                                                        (long long unsigned) entry->profile.self.gpu_pixels));
   gsk_render_node_unref (child);
 
   self->debug_current = pos + 1;
@@ -258,6 +270,14 @@ gsk_vulkan_debug_frame_cleanup (GskGpuFrame *frame)
                                        self->timestamp_pool_values,
                                        sizeof (uint64_t),
                                        VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT);
+  GSK_VK_CHECK (vkGetQueryPoolResults, vk_device,
+                                       self->vk_pixels_pool,
+                                       0,
+                                       self->n_ops,
+                                       self->n_ops * sizeof (uint64_t),
+                                       self->pixels_pool_values,
+                                       sizeof (uint64_t),
+                                       VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT);
   for (i = 0; i < self->n_ops; i++)
     {
       GskVulkanDebugEntry *entry;
@@ -266,6 +286,7 @@ gsk_vulkan_debug_frame_cleanup (GskGpuFrame *frame)
       entry = gsk_vulkan_debug_get (&self->debug, self->timestamp_pool_nodes[i]);
       entry->profile.self.gpu_ns += (self->timestamp_pool_values[2 * i + 1] - self->timestamp_pool_values[2 * i])
                                  * self->vk_timestamp_scale;
+      entry->profile.self.gpu_pixels += self->pixels_pool_values[i];
     }
 
   if (self->node)
@@ -411,7 +432,6 @@ gsk_vulkan_debug_frame_class_init (GskVulkanDebugFrameClass *klass)
 static void
 gsk_vulkan_debug_frame_init (GskVulkanDebugFrame *self)
 {
-  self->timestamp_pool_size = 32 * 1024; /* random big number */
   self->debug_current = NO_ITEM;
   gsk_vulkan_debug_init (&self->debug);
 }
