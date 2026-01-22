@@ -41,6 +41,7 @@
 #ifdef GDK_RENDERING_VULKAN
 const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "dual-source-blend", GDK_VULKAN_FEATURE_DUAL_SOURCE_BLEND, "Disable dual source blending" },
+  { "profile", GDK_VULKAN_FEATURE_PROFILE, "Disable profiling support" },
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
   { "win32", GDK_VULKAN_FEATURE_WIN32, "Never import Windows resources" },
   { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures (also disables dmabufs)" },
@@ -643,6 +644,9 @@ physical_device_check_features (VkPhysicalDevice device)
 
   if (v10_features.features.dualSrcBlend)
     features |= GDK_VULKAN_FEATURE_DUAL_SOURCE_BLEND;
+
+  if (v10_features.features.pipelineStatisticsQuery)
+    features |= GDK_VULKAN_FEATURE_PROFILE;
 
   if (ycbcr_features.samplerYcbcrConversion ||
       physical_device_supports_extension (device, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME))
@@ -1869,6 +1873,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                     .ppEnabledExtensionNames = (const char * const *) device_extensions->pdata,
                                                     .pEnabledFeatures = &(VkPhysicalDeviceFeatures) {
                                                         .dualSrcBlend = ENABLE_IF (GDK_VULKAN_FEATURE_DUAL_SOURCE_BLEND),
+                                                        .pipelineStatisticsQuery = ENABLE_IF (GDK_VULKAN_FEATURE_PROFILE),
                                                     },
                                                     .pNext = &(VkPhysicalDeviceVulkan11Features) {
                                                         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES,
