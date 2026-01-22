@@ -747,98 +747,17 @@ if not fs.exists('theme/Default/Default-light.css')
   ]
 endif
 
-
-if can_use_objcopy_for_resources
-  # Create the resource blob
-  gtk_gresource = custom_target('gtk.gresource',
-      input : gtk_gresources_xml,
-      depends : theme_deps,
-      output : 'gtk.gresource',
-      depfile : 'gtk.gresource.d',
-      command : [glib_compile_resources,
-                 '--generate',
-                 '--internal',
-                 '--target=@OUTPUT@',
-                 '--dependency-file=@DEPFILE@',
-                 '--sourcedir=' + meson.current_source_dir(),
-                 '--sourcedir=' + meson.current_build_dir(),
-                 '@INPUT@'])
-
-  # Create resource data file
-  gtk_resources_c = custom_target('gtkresources.c',
-      input : gtk_gresources_xml,
-      depends : theme_deps,
-      output : 'gtkresources.c',
-      depfile : 'gtkresources.c.d',
-      command : [glib_compile_resources,
-                 '--generate-source',
-                 '--internal',
-                 '--target=@OUTPUT@',
-                 '--dependency-file=@DEPFILE@',
-                 '--sourcedir=' + meson.current_source_dir(),
-                 '--sourcedir=' + meson.current_build_dir(),
-                 '--external-data',
-                 '--c-name', '_gtk',
-                 '--manual-register',
-                 '@INPUT@'])
-
-  gtk_resources_h = custom_target('gtkresources.h',
-      input : gtk_gresources_xml,
-      depends : theme_deps,
-      output : 'gtkresources.h',
-      depfile : 'gtkresources.h.d',
-      command : [glib_compile_resources,
-                 '--generate-header',
-                 '--internal',
-                 '--target=@OUTPUT@',
-                 '--dependency-file=@DEPFILE@',
-                 '--sourcedir=' + meson.current_source_dir(),
-                 '--sourcedir=' + meson.current_build_dir(),
-                 '--external-data',
-                 '--c-name', '_gtk',
-                 '--manual-register',
-                 '@INPUT@'])
-
-  # Create object file containing resource data
-  gtk_resources_binary = custom_target('gtkresources_blob.o',
-      input : gtk_gresource,
-      output : 'gtkresources_blob.o',
-      command : [ld,
-                 '-z', 'noexecstack',
-                 '-r',
-                 '-b','binary',
-                 '@INPUT@',
-                 '-o','@OUTPUT@'])
-
-  # Rename symbol to match the one in the C file
-  gtk_resources_o = custom_target('gtkresources_blob2.o',
-    input : gtk_resources_binary,
-    output : 'gtkresources_blob2.o',
-    command : [objcopy,
-                 '--strip-all',
-                 '--rename-section', '.data=.gresource.gtk',
-                 '--add-symbol','_gtk_resource_data=.gresource.gtk:0',
-                 '@INPUT@',
-                 '@OUTPUT@'])
-
-  gtkresources = [
-      gtk_resources_c,
-      gtk_resources_h,
-      gtk_resources_o,
-    ]
-else
-  gtkresources = gnome.compile_resources('gtkresources',
-    gtk_gresources_xml,
-    dependencies: theme_deps,
-    source_dir: [
-      # List in order of preference
-      meson.current_build_dir(),
-      meson.current_source_dir(),
-    ],
-    c_name: '_gtk',
-    extra_args: '--manual-register',
-  )
-endif
+gtkresources = gnome.compile_resources('gtkresources',
+  gtk_gresources_xml,
+  dependencies: theme_deps,
+  source_dir: [
+    # List in order of preference
+    meson.current_build_dir(),
+    meson.current_source_dir(),
+  ],
+  c_name: '_gtk',
+  extra_args: '--manual-register',
+)
 
 foreach lang : [
     'bn',
