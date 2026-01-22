@@ -156,6 +156,27 @@ gtk_popover_bin_popup_at_position (GtkPopoverBin   *self,
 }
 
 static void
+pressed_cb (GtkPopoverBin *self,
+            int            n_press,
+            double         x,
+            double         y,
+            GtkGesture    *gesture)
+{
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+  gtk_popover_bin_popup_at_position (self, x, y);
+}
+
+static void
+long_pressed_cb (GtkPopoverBin *self,
+                 double         x,
+                 double         y,
+                 GtkGesture    *gesture)
+{
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+  gtk_popover_bin_popup_at_position (self, x, y);
+}
+
+static void
 popup_action (GtkWidget  *widget,
               const char *action_name,
               GVariant   *parameters)
@@ -607,11 +628,11 @@ gtk_popover_bin_set_handle_input (GtkPopoverBin *self,
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->click_gesture),
                                      GDK_BUTTON_SECONDARY);
       g_signal_connect_swapped (self->click_gesture, "pressed",
-                                G_CALLBACK (gtk_popover_bin_popup_at_position), self);
+                                G_CALLBACK (pressed_cb), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->click_gesture);
 
       self->long_press_gesture = GTK_EVENT_CONTROLLER (gtk_gesture_long_press_new ());
-      g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (gtk_popover_bin_popup_at_position), self);
+      g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (long_pressed_cb), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->long_press_gesture);
 
       self->shortcut_controller = GTK_EVENT_CONTROLLER (gtk_shortcut_controller_new ());
