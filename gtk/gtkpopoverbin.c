@@ -644,6 +644,7 @@ gtk_popover_bin_set_handle_input (GtkPopoverBin *self,
 
       self->long_press_gesture = GTK_EVENT_CONTROLLER (gtk_gesture_long_press_new ());
       gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->long_press_gesture), TRUE);
+      gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->long_press_gesture), TRUE);
       g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (long_pressed_cb), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->long_press_gesture);
 
