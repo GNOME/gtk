@@ -226,6 +226,7 @@
 #include <gtk/deprecated/gtkrender.h>
 #include <gtk/gtkrevealer.h>
 #include <gtk/gtkroot.h>
+#include <gtk/gtksave.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscalebutton.h>
 #include <gtk/gtkscrollable.h>
