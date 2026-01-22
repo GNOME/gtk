@@ -547,6 +547,27 @@ parse_color_state (GtkCssParser *parser,
   return TRUE;
 }
 
+static gboolean
+parse_default_color_state (GtkCssParser *parser,
+                           Context      *context,
+                           gpointer      out_value)
+{
+   GdkColorState *color_state;
+
+  if (!parse_color_state (parser, context, &color_state))
+    return FALSE;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (color_state))
+    {
+      gtk_css_parser_error_value (parser, "The color state must be a default color state.");
+      gdk_color_state_unref (color_state);
+      return FALSE;
+    }
+
+  *(GdkColorState **) out_value = color_state;
+  return TRUE;
+}
+
 static void
 clear_color_state (gpointer inout_color_state)
 {
@@ -4287,14 +4308,14 @@ parse_arithmetic_node (GtkCssParser *parser,
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GskRenderNode *first = NULL;
   GskRenderNode *second = NULL;
-  GdkColorState *color_state = NULL;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   float k[4] = { 0, 0, 0, 0 };
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "first", parse_node, clear_node, &first },
     { "second", parse_node, clear_node, &second },
     { "k", parse_four_floats, NULL, k },
-    { "color-state", parse_color_state, clear_color_state, &color_state }
+    { "color-state", parse_default_color_state, clear_color_state, &color_state }
   };
   GskRenderNode *result;
 
@@ -4303,9 +4324,6 @@ parse_arithmetic_node (GtkCssParser *parser,
     first = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
   if (second == NULL)
     second = create_default_render_node ();
-
-  if (color_state == NULL)
-    color_state = GDK_COLOR_STATE_SRGB;
 
   result = gsk_arithmetic_node_new (&bounds, first, second, color_state, k[0], k[1], k[2], k[3]);
 
