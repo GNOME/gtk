@@ -22,6 +22,7 @@
 #include "gtkapplicationwindowprivate.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtksave.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkpopovermenubar.h"
@@ -718,6 +719,8 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
    * @window: the window on which the signal is emitted
    * @dict: a dictionary of type `a{sv}`
    *
+   * TODO: Edit these docs
+   *
    * The handler for this signal should persist any
    * application-specific state of @window into @dict.
    *
@@ -921,18 +924,18 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
 /*< private >
  * gtk_application_window_save:
  * @window: a `GtkApplicationWindow`
- * @state: a `GVariantDict` to add state to
+ * @state: a `GtkSave` to add state to
  *
- * Save the state of @window and its children to a `GVariant`.
+ * Save the state of @window and its children to a `GtkSave`.
  *
  * See [signal@Gtk.ApplicationWindow::save-state] for how to override
  * what state is saved.
  */
 void
 gtk_application_window_save (GtkApplicationWindow *window,
-                             GVariantDict         *state)
+                             GtkSave              *save)
 {
   gboolean ret;
 
-  g_signal_emit (window, gtk_application_window_signals[SAVE_STATE], 0, state, &ret);
+  g_signal_emit (window, gtk_application_window_signals[SAVE_STATE], 0, save, &ret);
 }

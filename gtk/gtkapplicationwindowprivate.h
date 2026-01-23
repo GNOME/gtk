@@ -22,10 +22,11 @@
 #pragma once
 
 #include "gtkapplicationwindow.h"
+#include "gtksave.h"
 
 G_BEGIN_DECLS
 
 void         gtk_application_window_save            (GtkApplicationWindow *window,
-                                                     GVariantDict         *state);
+                                                     GtkSave              *save);
 
 G_END_DECLS

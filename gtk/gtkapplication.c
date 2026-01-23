@@ -31,6 +31,7 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtkapplicationwindowprivate.h"
+#include "gtksaveprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkicontheme.h"
@@ -198,6 +199,8 @@ enum {
 
 static GParamSpec *gtk_application_props[NUM_PROPERTIES];
 
+typedef struct _GtkSaveTransaction GtkSaveTransaction;
+
 typedef struct
 {
   GtkApplicationImpl *impl;
@@ -220,6 +223,7 @@ typedef struct
   GVariant        *kept_window_state;
   gboolean         restored;
   gboolean         forgotten;
+  GtkSaveTransaction *ongoing_save;
 } GtkApplicationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -542,9 +546,52 @@ should_remove_from_session (GtkApplication *application,
   return FALSE;
 }
 
+static void
+blocking_window_state_ready (GVariant *state,
+                             gpointer  data)
+{
+  GVariant **out = data;
+  *out = g_variant_ref (state);
+}
+
 static GVariant *
-collect_window_state (GtkApplication *application,
-                      GtkWindow      *window);
+collect_window_state_blocking (GtkApplication *application,
+                               GtkWindow      *window)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GVariant *app_state = NULL;
+  GVariantBuilder builder;
+  GVariant *state;
+
+  if (GTK_IS_APPLICATION_WINDOW (window))
+    {
+      GtkSave *save = gtk_save_new (blocking_window_state_ready, &app_state);
+
+      gtk_save_defer (save);
+      gtk_application_window_save (GTK_APPLICATION_WINDOW (window), save);
+      gtk_save_complete (save);
+
+      while (app_state == NULL)
+        g_main_context_iteration (NULL, TRUE);
+
+      g_clear_object (&save);
+    }
+  else
+    app_state = g_variant_ref_sink (g_variant_new ("a{sv}", NULL));
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(a{sv}a{sv})"));
+
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
+  gtk_application_impl_collect_window_state (priv->impl, window, &builder);
+  g_variant_builder_close (&builder);
+
+  g_variant_builder_add_value (&builder, app_state);
+  g_variant_unref (app_state);
+
+  state = g_variant_builder_end (&builder);
+  g_variant_ref_sink (state);
+  return state;
+}
 
 static void
 gtk_application_window_removed (GtkApplication *application,
@@ -561,7 +608,7 @@ gtk_application_window_removed (GtkApplication *application,
   if (!remove_from_session)
     {
       g_assert (!priv->kept_window_state);
-      priv->kept_window_state = collect_window_state (application, window);
+      priv->kept_window_state = collect_window_state_blocking (application, window);
 
       /* If we're keeping around the last window, and the window is now gone,
        * from the user's perspective the app is now gone even if it hasn't
@@ -819,6 +866,8 @@ gtk_application_class_init (GtkApplicationClass *class)
    * @application: the `GtkApplication` which emitted the signal
    * @dict: a `GVariantDict`
    *
+   * TODO: Edit these docs
+   *
    * Emitted when the application is saving global state.
    *
    * The handler for this signal should persist any
@@ -841,7 +890,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                   _gtk_boolean_handled_accumulator, NULL,
                   NULL,
                   G_TYPE_BOOLEAN, 1,
-                  G_TYPE_VARIANT_DICT);
+                  GTK_TYPE_SAVE);
 
   /**
    * GtkApplication::restore-state:
@@ -1535,28 +1584,14 @@ gtk_application_set_screensaver_active (GtkApplication *application,
     }
 }
 
-static GVariant *
-collect_window_state (GtkApplication *application,
-                      GtkWindow      *window)
-{
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  GVariantBuilder builder;
-  GVariantDict *dict;
-  GVariant *state;
+struct _GtkSaveTransaction {
+  GVariant *app_global_state;
+  GVariantBuilder window_state_builder;
+  guint n_pending_windows;
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  gtk_application_impl_collect_window_state (priv->impl, window, &builder);
-
-  dict = g_variant_dict_new (NULL);
-  if (GTK_IS_APPLICATION_WINDOW (window))
-    gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict);
-
-  state = g_variant_new ("(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
-  g_variant_dict_unref (dict);
-
-  g_variant_ref_sink (state);
-  return state;
-}
+  GSList *callbacks;
+  gboolean pending_forget;
+};
 
 /* State saving.
  *
@@ -1574,22 +1609,130 @@ collect_window_state (GtkApplication *application,
  *  IDs that are needed for session registration). All other state
  *  is applied during activate.
  */
-static GVariant *
-collect_state (GtkApplication *application)
+static void
+save_transaction_maybe_done (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  GVariantBuilder win_builder;
-  GVariant *state;
-  GVariantBuilder global_builder;
-  GVariantDict *global_dict;
+  GtkSaveTransaction *transaction = priv->ongoing_save;
+  GVariantBuilder gtk_global_builder;
+  GVariant *state = NULL;
+
+  g_return_if_fail (transaction);
+
+  if (transaction->n_pending_windows > 0 || transaction->app_global_state == NULL)
+    return; /* Not done yet! */
+
+  priv->ongoing_save = NULL;
+
+  g_variant_builder_init (&gtk_global_builder, G_VARIANT_TYPE_VARDICT);
+  gtk_application_impl_collect_global_state (priv->impl, &gtk_global_builder);
+
+  state = g_variant_new ("(a{sv}@a{sv}a(a{sv}a{sv}))",
+                         &gtk_global_builder,
+                         transaction->app_global_state,
+                         &transaction->window_state_builder);
+  g_variant_unref (transaction->app_global_state);
+
+  g_variant_ref_sink (state);
+  gtk_application_impl_store_state (priv->impl, state);
+  g_variant_unref (state);
+
+  schedule_autosave (application);
+
+  for (GSList *l = transaction->callbacks; l != NULL; l = l->next)
+    {
+      GtkApplicationSaveFunc callback = l->data;
+      callback(application);
+    }
+  g_slist_free (transaction->callbacks);
+
+  if (transaction->pending_forget)
+    gtk_application_forget (application);
+
+  g_free (transaction);
+}
+
+static void
+app_window_state_cb (GVariant *app_window_state,
+                     gpointer  data)
+{
+  GtkWindow *window = GTK_WINDOW (data);
+  GtkApplication *application = gtk_window_get_application (window);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkSaveTransaction *transaction = priv->ongoing_save;
+  GVariantBuilder gtk_builder;
+
+  g_return_if_fail (transaction);
+
+  g_variant_builder_init (&gtk_builder, G_VARIANT_TYPE_VARDICT);
+  gtk_application_impl_collect_window_state (priv->impl, window, &gtk_builder);
+
+  g_object_unref (window);
+
+  g_variant_builder_add (&transaction->window_state_builder, "(a{sv}@a{sv})",
+                         &gtk_builder, app_window_state);
+  transaction->n_pending_windows--;
+  save_transaction_maybe_done (application);
+}
+
+static void
+collect_window_state (GtkApplication *application,
+                      GtkWindow      *window)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkSaveTransaction *transaction = priv->ongoing_save;
+
+  g_return_if_fail (transaction);
+
+  if (GTK_IS_APPLICATION_WINDOW (window))
+    {
+      GtkSave *app_state = gtk_save_new (app_window_state_cb, g_object_ref (window));
+      gtk_save_defer (app_state);
+      transaction->n_pending_windows++;
+      gtk_application_window_save (GTK_APPLICATION_WINDOW (window), app_state);
+      gtk_save_complete (app_state);
+    }
+  else
+    {
+      GVariantBuilder gtk_builder;
+      g_variant_builder_init (&gtk_builder, G_VARIANT_TYPE_VARDICT);
+      gtk_application_impl_collect_window_state (priv->impl, window, &gtk_builder);
+      g_variant_builder_add (&transaction->window_state_builder, "(a{sv}a{sv})",
+                             &gtk_builder, NULL);
+    }
+}
+
+static void
+app_global_state_cb (GVariant *app_global_state,
+                     gpointer  data)
+{
+  GtkApplication *application = GTK_APPLICATION (data);
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkSaveTransaction *transaction = priv->ongoing_save;
+
+  g_return_if_fail (transaction);
+
+  g_object_unref (application);
+
+  transaction->app_global_state = g_variant_ref (app_global_state);
+  save_transaction_maybe_done (application);
+}
+
+static void
+collect_all_state (GtkApplication *application)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkSaveTransaction *transaction = priv->ongoing_save;
+  GtkSave *app_global_state;
   gboolean handled;
 
-  g_variant_builder_init (&win_builder, G_VARIANT_TYPE ("a(a{sv}a{sv})"));
-
+  g_variant_builder_init (&transaction->window_state_builder,
+                          G_VARIANT_TYPE ("a(a{sv}a{sv})"));
   if (priv->kept_window_state)
     {
       GTK_DEBUG (SESSION, "Using state of kept last window");
-      g_variant_builder_add_value (&win_builder, priv->kept_window_state);
+      g_variant_builder_add_value (&transaction->window_state_builder,
+                                   priv->kept_window_state);
     }
   else
     {
@@ -1598,31 +1741,51 @@ collect_state (GtkApplication *application)
       for (GList *l = priv->windows; l != NULL; l = l->next)
         {
           GtkWindow *window = GTK_WINDOW (l->data);
-          GVariant *win_state;
-
-          win_state = collect_window_state (application, window);
-          g_variant_builder_add_value (&win_builder, win_state);
-
-          g_variant_unref (win_state);
+          collect_window_state (application, window);
         }
     }
 
-  g_variant_builder_init (&global_builder, G_VARIANT_TYPE_VARDICT);
-  gtk_application_impl_collect_global_state (priv->impl, &global_builder);
+  app_global_state = gtk_save_new (app_global_state_cb, g_object_ref (application));
+  gtk_save_defer (app_global_state);
+  g_signal_emit (application, gtk_application_signals[SAVE_STATE], 0, app_global_state, &handled);
+  gtk_save_complete (app_global_state);
+}
 
-  global_dict = g_variant_dict_new (NULL);
-  g_signal_emit (application, gtk_application_signals[SAVE_STATE], 0, global_dict, &handled);
+void
+gtk_application_save_full (GtkApplication         *application,
+                           GtkApplicationSaveFunc  callback)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkSaveTransaction *transaction;
 
-  state = g_variant_new ("(a{sv}@a{sv}a(a{sv}a{sv}))",
-                         &global_builder,
-                         g_variant_dict_end (global_dict),
-                         &win_builder);
+  g_return_if_fail (GTK_IS_APPLICATION (application));
 
-  g_variant_dict_unref (global_dict);
+  if (!priv->support_save)
+    return;
 
-  g_variant_ref_sink (state);
+  transaction = priv->ongoing_save ?: g_new0 (GtkSaveTransaction, 1);
 
-  return state;
+  if (callback)
+    transaction->callbacks = g_slist_prepend (transaction->callbacks, callback);
+
+  if (priv->ongoing_save)
+    return;
+  priv->ongoing_save = transaction;
+
+  if (priv->forgotten)
+    {
+      for (GList *l = priv->windows; l != NULL; l = l->next)
+        {
+          GtkWindow *window = GTK_WINDOW (l->data);
+          gtk_application_impl_window_unforget (priv->impl, window);
+        }
+
+      gtk_application_impl_unforget_state (priv->impl);
+
+      priv->forgotten = FALSE;
+    }
+
+  collect_all_state (application);
 }
 
 /**
@@ -1642,31 +1805,7 @@ collect_state (GtkApplication *application)
 void
 gtk_application_save (GtkApplication *application)
 {
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  GVariant *state;
-
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-
-  if (!priv->support_save)
-    return;
-
-  if (priv->forgotten)
-    {
-      for (GList *l = priv->windows; l != NULL; l = l->next)
-        {
-          GtkWindow *window = GTK_WINDOW (l->data);
-          gtk_application_impl_window_unforget (priv->impl, window);
-        }
-
-      gtk_application_impl_unforget_state (priv->impl);
-    }
-
-  state = collect_state (application);
-  gtk_application_impl_store_state (priv->impl, state);
-  g_variant_unref (state);
-
-  priv->forgotten = FALSE;
-  schedule_autosave (application);
+  gtk_application_save_full (application, NULL);
 }
 
 /**
@@ -1688,6 +1827,12 @@ gtk_application_forget (GtkApplication *application)
 
   if (!priv->support_save)
     return;
+
+  if (priv->ongoing_save)
+    {
+      priv->ongoing_save->pending_forget = TRUE;
+      return;
+    }
 
   if (priv->kept_window_state)
     {

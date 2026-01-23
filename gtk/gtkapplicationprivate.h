@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2011, 2013 Canonical Limited
  *
@@ -17,7 +18,6 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-
 #pragma once
 
 #include "gtkapplicationwindow.h"
@@ -28,6 +28,8 @@
 #include "gtkapplicationaccelsprivate.h"
 
 G_BEGIN_DECLS
+
+typedef void (*GtkApplicationSaveFunc) (GtkApplication*);
 
 void                    gtk_application_window_set_id                   (GtkApplicationWindow     *window,
                                                                          guint                     id);
@@ -48,6 +50,8 @@ GtkApplicationAccels *  gtk_application_get_application_accels          (GtkAppl
 void                    gtk_application_set_screensaver_active          (GtkApplication           *application,
                                                                          gboolean                  active);
 
+void                    gtk_application_save_full                       (GtkApplication           *application,
+                                                                         GtkApplicationSaveFunc    callback);
 
 #define GTK_TYPE_APPLICATION_IMPL                           (gtk_application_impl_get_type ())
 #define GTK_APPLICATION_IMPL_CLASS(class)                   (G_TYPE_CHECK_CLASS_CAST ((class),                     \
