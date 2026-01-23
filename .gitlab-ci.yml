@@ -225,6 +225,20 @@ style-check-diff:
   before_script:
     - find /subprojects -mindepth 1 -maxdepth 1 -type d -exec ln -s {} subprojects/ \;
 
+gnomeos-x86_64:
+  extends:
+    - .test-runner
+  stage: build
+  image: "quay.io/gnome_infrastructure/gnome-build-meta:core-nightly"
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
+  script:
+    - .gitlab-ci/show-info-linux.sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - meson setup -Dvulkan=disabled _build
+    - meson compile -C _build
+    - .gitlab-ci/run-tests.sh _build wayland gtk
+
 fedora-x86_64:
   extends:
     - .test-runner
