@@ -1767,6 +1767,27 @@ test_circle_zero (void)
   gsk_path_unref (path);
 }
 
+static void
+test_large_coord_conics (void)
+{
+  GskPath *path = gsk_path_parse ("M 2 10 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z M 3000002 10 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.70710676");
+  cairo_t *cr;
+  cairo_surface_t *surface;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 100, 100);
+  cr = cairo_create (surface);
+
+  /* Check that this does not cause a stack overflow due to
+   * runaway recursion.
+   */
+  gsk_path_to_cairo (path, cr);
+
+  cairo_surface_destroy (surface);
+  cairo_destroy (cr);
+
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1798,6 +1819,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/circle/plain", test_circle_plain);
   g_test_add_func ("/path/circle/zero", test_circle_zero);
   g_test_add_func ("/path/zero-length", test_zero_length);
+  g_test_add_func ("/path/large-coord-conics", test_large_coord_conics);
 
   return g_test_run ();
 }
