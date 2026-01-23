@@ -2510,7 +2510,7 @@ gtk_text_view_get_iter_location (GtkTextView       *text_view,
 
   gtk_text_view_ensure_layout (text_view);
 
-  gtk_text_layout_get_iter_location (text_view->priv->layout, iter, location);
+  gtk_text_layout_get_iter_location (text_view->priv->layout, iter, location, FALSE);
 }
 
 /**
@@ -2632,7 +2632,8 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
 
   gtk_text_layout_get_iter_location (priv->layout,
                                      iter,
-                                     &cursor);
+                                     &cursor,
+                                     !use_align);
 
   DV (g_print (" target cursor %d,%d  %d x %d\n", cursor.x, cursor.y, cursor.width, cursor.height));
 

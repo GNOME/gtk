@@ -309,7 +309,8 @@ void     gtk_text_layout_cursors_changed      (GtkTextLayout     *layout,
                                                int                new_height);
 void     gtk_text_layout_get_iter_location    (GtkTextLayout     *layout,
                                                const GtkTextIter *iter,
-                                               GdkRectangle      *rect);
+                                               GdkRectangle      *rect,
+                                               gboolean           include_caret);
 void     gtk_text_layout_get_line_yrange      (GtkTextLayout     *layout,
                                                const GtkTextIter *iter,
                                                int               *y,
