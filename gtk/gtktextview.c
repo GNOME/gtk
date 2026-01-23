@@ -2872,7 +2872,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
           if (cursor.x == priv->left_margin)
             border_xoffset = 0;
 
-          screen_dest.x = cursor.x - MAX (within_margin_xoffset, border_xoffset);
+          screen_dest.x = cursor.x - MAX (within_margin_xoffset, border_xoffset) - 1;
         }
       else if (cursor_right >= screen_inner_right - 1)
         {
