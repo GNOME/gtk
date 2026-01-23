@@ -21,6 +21,7 @@
 
 #include "gsk/gskdebugnodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
+#include "gsk/gskrectprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gdk/gdkcairoprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -351,17 +352,20 @@ gtk_inspector_node_wrapper_create_children_model (GtkInspectorNodeWrapper *self)
 }
 
 static void
-render_heatmap_node (cairo_t       *cr,
-                     GskRenderNode *node,
-                     gsize          max_value)
+render_heatmap_node (cairo_t               *cr,
+                     GskRenderNode         *node,
+                     const graphene_size_t *scale,
+                     const graphene_rect_t *clip,
+                     gsize                  max_value)
 {
   switch (gsk_render_node_get_node_type (node))
   {
     case GSK_TRANSFORM_NODE:
       {
         float xx, yx, xy, yy, dx, dy;
-        GskTransform *transform;
+        GskTransform *transform, *inverse;
         cairo_matrix_t ctm;
+        graphene_rect_t new_clip;
 
         transform = gsk_transform_node_get_transform (node);
         if (gsk_transform_get_category (transform) < GSK_TRANSFORM_CATEGORY_2D)
@@ -371,10 +375,17 @@ render_heatmap_node (cairo_t       *cr,
         cairo_matrix_init (&ctm, xx, yx, xy, yy, dx, dy);
         if (xx * yy == xy * yx)
           break;
-        
+
+        inverse = gsk_transform_invert (gsk_transform_ref (transform));
+        gsk_transform_transform_bounds (inverse, clip, &new_clip);
+        gsk_transform_unref (inverse);
         cairo_save (cr);
         cairo_transform (cr, &ctm);
-        render_heatmap_node (cr, gsk_transform_node_get_child (node), max_value);
+        render_heatmap_node (cr,
+                             gsk_transform_node_get_child (node),
+                             &GRAPHENE_SIZE_INIT (scale->width * xx, scale->height * yy),
+                             &new_clip,
+                             max_value);
         cairo_restore (cr);
       }
       break;
@@ -386,28 +397,43 @@ render_heatmap_node (cairo_t       *cr,
         double val;
 
         gsk_render_node_get_bounds (node, &bounds);
-        gdk_cairo_rect (cr, &bounds);
-        val = (double) profile->self.gpu_ns / max_value;
-        cairo_set_source_rgb (cr, val, val, val);
-        cairo_fill (cr);
-        render_heatmap_node (cr, gsk_debug_node_get_child (node), max_value);
+        if (!gsk_rect_intersection (&bounds, clip, &bounds))
+          break;
+        if (profile && profile->self.gpu_ns)
+          {
+            gdk_cairo_rect (cr, &bounds);
+            val = ((double) profile->self.gpu_ns) / (bounds.size.width * scale->width * bounds.size.height * scale->height) / max_value;
+            cairo_set_source_rgb (cr, val, val, val);
+            cairo_fill (cr);
+          }
+        render_heatmap_node (cr, gsk_debug_node_get_child (node), scale, &bounds, max_value);
       }
       break;
 
     case GSK_CLIP_NODE:
-      cairo_save (cr);
-      gdk_cairo_rect (cr, gsk_clip_node_get_clip (node));
-      cairo_clip (cr);
-      render_heatmap_node (cr, gsk_clip_node_get_child (node), max_value);
-      cairo_restore (cr);
+      {
+        graphene_rect_t new_clip;
+
+        cairo_save (cr);
+        gdk_cairo_rect (cr, gsk_clip_node_get_clip (node));
+        if (!gsk_rect_intersection (clip, gsk_clip_node_get_clip (node), &new_clip))
+          break;
+        cairo_clip (cr);
+        render_heatmap_node (cr, gsk_clip_node_get_child (node), scale, &new_clip, max_value);
+        cairo_restore (cr);
+      }
       break;
 
     case GSK_ROUNDED_CLIP_NODE:
       {
+        graphene_rect_t new_clip;
+
         cairo_save (cr);
         gdk_cairo_rect (cr, &gsk_rounded_clip_node_get_clip (node)->bounds);
+        if (!gsk_rect_intersection (clip, &gsk_rounded_clip_node_get_clip (node)->bounds, &new_clip))
+          break;
         cairo_clip (cr);
-        render_heatmap_node (cr, gsk_rounded_clip_node_get_child (node), max_value);
+        render_heatmap_node (cr, gsk_rounded_clip_node_get_child (node), scale, &new_clip, max_value);
         cairo_restore (cr);
       }
       break;
@@ -454,9 +480,11 @@ render_heatmap_node (cairo_t       *cr,
         gsk_render_node_get_bounds (node, &bounds);
         gdk_cairo_rect (cr, &bounds);
         cairo_clip (cr);
+        if (!gsk_rect_intersection (&bounds, clip, &bounds))
+          break;
         children = gsk_render_node_get_children (node, &n_children);
         for (i = 0; i < n_children; i++)
-          render_heatmap_node (cr, children[i], max_value);
+          render_heatmap_node (cr, children[i], scale, &bounds, max_value);
         cairo_restore (cr);
       }
       break;
@@ -509,12 +537,6 @@ scale_surface (cairo_surface_t *surface)
   cairo_surface_mark_dirty (surface);
 }
 
-static gsize
-round_up_pow2 (gsize size)
-{
-  return g_bit_nth_msf (size - 1, -1) + 1;
-}
-
 static GdkTexture *
 render_heatmap_mask (GskRenderNode *node)
 {
@@ -522,18 +544,19 @@ render_heatmap_mask (GskRenderNode *node)
   cairo_t *cr;
   graphene_rect_t bounds;
   GdkTexture *texture;
-  gsize max_value;
+  gsize max_value, n_pixels;
 
-  max_value = 8 * 1024 * 1024;
+  gsk_render_node_get_bounds (node, &bounds);
+
+  n_pixels = ceil (bounds.size.width) * ceil (bounds.size.height);
+  max_value = 100 * 1024 * n_pixels;
   if (gsk_render_node_get_node_type (node) == GSK_DEBUG_NODE)
     {
       const GskDebugProfile *profile = gsk_debug_node_get_profile (node);
 
       if (profile != NULL)
-        max_value = ((gsize) 1) << round_up_pow2 (profile->total.gpu_ns);
+        max_value = 100 * profile->total.gpu_ns / n_pixels;
     }
-
-  gsk_render_node_get_bounds (node, &bounds);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_RGB96F,
                                         ceil (bounds.size.width),
@@ -543,7 +566,7 @@ render_heatmap_mask (GskRenderNode *node)
   cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
   cairo_translate (cr, - bounds.origin.x, - bounds.origin.y);
 
-  render_heatmap_node (cr, node, max_value);
+  render_heatmap_node (cr, node, &GRAPHENE_SIZE_INIT (1.0, 1.0), &bounds, max_value);
 
   scale_surface (surface);
 
