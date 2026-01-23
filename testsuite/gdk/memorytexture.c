@@ -430,7 +430,6 @@ should_skip_download_test (GdkMemoryFormat format,
   {
     case TEXTURE_METHOD_LOCAL:
     case TEXTURE_METHOD_PNG:
-    case TEXTURE_METHOD_PNG_PIXBUF:
     case TEXTURE_METHOD_TIFF:
       return FALSE;
 
@@ -453,6 +452,10 @@ should_skip_download_test (GdkMemoryFormat format,
           return TRUE;
         }
       return FALSE;
+
+    case TEXTURE_METHOD_PNG_PIXBUF:
+      g_test_skip ("the glypin-based pixbuf png loader mis-rounds (glycin#261)");
+      return TRUE;
 
     case TEXTURE_METHOD_TIFF_PIXBUF:
       g_test_skip ("the pixbuf tiff loader is broken (gdk-pixbuf#100)");
@@ -647,6 +650,7 @@ add_test (const char    *name,
             [TEXTURE_METHOD_TIFF] = "tiff",
             [TEXTURE_METHOD_TIFF_PIXBUF] = "tiff-pixbuf"
           };
+
           char *test_name = g_strdup_printf ("%s/%s/%s",
                                              name,
                                              g_enum_get_value (enum_class, format)->value_nick,
