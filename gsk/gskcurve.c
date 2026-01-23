@@ -1946,6 +1946,8 @@ gsk_conic_curve_decompose_or_add (const GskCurve       *curve,
                                   GskCurveAddCurveFunc  add_curve_func,
                                   gpointer              user_data)
 {
+  static int level = 0;
+
   if (graphene_point_equal (&curve->conic.points[0], &curve->conic.points[1]) ||
       graphene_point_equal (&curve->conic.points[1], &curve->conic.points[3]))
     {
@@ -1959,20 +1961,30 @@ gsk_conic_curve_decompose_or_add (const GskCurve       *curve,
       else
         return TRUE;
     }
-  else if (gsk_conic_is_close_to_cubic (curve, cubic, tolerance))
-    return add_curve_func (GSK_PATH_CUBIC, cubic->cubic.points, 4, 0.f, user_data);
+  else if (gsk_conic_is_close_to_cubic (curve, cubic, tolerance) ||
+           level == 20)
+    {
+      return add_curve_func (GSK_PATH_CUBIC, cubic->cubic.points, 4, 0.f, user_data);
+    }
   else
     {
       GskCurve c1, c2;
       GskCurve cc1, cc2;
+      gboolean ret;
 
       gsk_conic_curve_split (curve, 0.5, &c1, &c2);
 
       cubic_approximation (&c1, &cc1);
       cubic_approximation (&c2, &cc2);
 
-      return gsk_conic_curve_decompose_or_add (&c1, &cc1, tolerance, add_curve_func, user_data) &&
-             gsk_conic_curve_decompose_or_add (&c2, &cc2, tolerance, add_curve_func, user_data);
+      level++;
+
+      ret = gsk_conic_curve_decompose_or_add (&c1, &cc1, tolerance, add_curve_func, user_data) &&
+            gsk_conic_curve_decompose_or_add (&c2, &cc2, tolerance, add_curve_func, user_data);
+
+      level--;
+
+      return ret;
     }
 }
 
