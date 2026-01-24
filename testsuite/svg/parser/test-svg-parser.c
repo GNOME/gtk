@@ -29,7 +29,8 @@ typedef enum {
   TEST_FLAG_GENERATE          = 1 << 0,
   TEST_FLAG_COMPRESSED_TEST   = 1 << 1,
   TEST_FLAG_COMPRESSED_REF    = 1 << 2,
-  TEST_FLAG_COMPRESSED_ERR    = 1 << 3
+  TEST_FLAG_COMPRESSED_ERR    = 1 << 3,
+  TEST_FLAG_REPLACE_EXPECTED  = 1 << 4,
 } TestFlags;
 
 static char *
@@ -273,7 +274,32 @@ parse_svg_file (GFile *file, TestFlags flags)
 
   if (flags & TEST_FLAG_GENERATE)
     {
-      g_print ("%s", (const char *) g_bytes_get_data (output, NULL));
+      if (flags & TEST_FLAG_REPLACE_EXPECTED)
+        {
+          reference_file = test_get_sibling_file (svg_file,
+                                                  (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
+                                                  (flags & TEST_FLAG_COMPRESSED_REF) ? ".ref.svg.gz" : ".ref.svg");
+          g_assert_nonnull (reference_file);
+          g_file_set_contents (reference_file,
+                               g_bytes_get_data (output, NULL),
+                               g_bytes_get_size (output),
+                               NULL);
+          g_free (reference_file);
+
+          if (errors->len > 0)
+            {
+              errors_file = file_replace_extension (svg_file,
+                                                   (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
+                                                   (flags & TEST_FLAG_COMPRESSED_ERR) ? ".errors.gz" : ".errors");
+              g_file_set_contents (errors_file,
+                                   errors->str,
+                                   errors->len,
+                                   NULL);
+              g_free (errors_file);
+            }
+        }
+      else
+        g_print ("%s", (const char *) g_bytes_get_data (output, NULL));
       goto out;
     }
 
@@ -501,6 +527,16 @@ main (int argc, char **argv)
 
       return 0;
     }
+  else if (argc >= 2 && strcmp (argv[1], "--regenerate") == 0)
+    {
+      GFile *file;
+
+      file = g_file_new_for_commandline_arg (argv[2]);
+      parse_svg_file (file, TEST_FLAG_GENERATE|TEST_FLAG_REPLACE_EXPECTED);
+      g_object_unref (file);
+
+      return 0;
+    }
 
   gtk_test_init (&argc, &argv);
 
@@ -547,4 +583,3 @@ main (int argc, char **argv)
 
   return g_test_run ();
 }
-
