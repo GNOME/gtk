@@ -24,8 +24,6 @@
 /* nothing here is evil, so you can just skip to the comment that starts the evil */
 #include "gsk/gskcopypasteutilsprivate.h"
 
-/* this comment starts the evil */
-
 GskRenderNode *
 filter_copypaste (GskRenderNode  *node,
                   int             argc,
