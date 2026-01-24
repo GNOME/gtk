@@ -24,6 +24,63 @@
 /* nothing here is evil, so you can just skip to the comment that starts the evil */
 #include "gsk/gskcopypasteutilsprivate.h"
 
+static gboolean
+gsk_render_node_isolates_background (const GskRenderNode *node)
+{
+  /* This should return the same thing as node->isolates_background but if not: oh well */
+
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_BLEND_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_BLUR_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_MASK_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_GL_SHADER_NODE:
+    case GSK_COMPONENT_TRANSFER_NODE:
+    case GSK_COMPOSITE_NODE:
+    case GSK_DISPLACEMENT_NODE:
+    case GSK_ARITHMETIC_NODE:
+      return TRUE;
+
+    case GSK_ISOLATION_NODE:
+      return gsk_isolation_node_get_isolations (node) & GSK_ISOLATION_BACKGROUND ? TRUE : FALSE;
+
+    case GSK_CONTAINER_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_COLOR_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_TRANSFORM_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_DEBUG_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
+    case GSK_FILL_NODE:
+    case GSK_STROKE_NODE:
+    case GSK_SUBSURFACE_NODE:
+    case GSK_COPY_NODE:
+    case GSK_PASTE_NODE:
+      return FALSE;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
 #include "gsk/gskcopypasteutils.c"
 
 /* this comment starts the evil */

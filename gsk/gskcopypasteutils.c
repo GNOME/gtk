@@ -199,10 +199,6 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
     case GSK_DEBUG_NODE:
     case GSK_TEXTURE_SCALE_NODE:
     case GSK_SUBSURFACE_NODE:
-      /* keep recording */
-      result = gsk_render_replay_default (replay, node);
-      break;
-
     case GSK_OPACITY_NODE:
     case GSK_COLOR_MATRIX_NODE:
     case GSK_REPEAT_NODE:
@@ -215,17 +211,23 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
     case GSK_COMPOSITE_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
-      /* record a new background for each child */
-      {
-        const PartialNode *saved = recording->nodes;
-        recording->nodes = NULL;
-        result = gsk_render_replay_default (replay, node);
-        recording->nodes = saved;
-      }
+      if (gsk_render_node_isolates_background (node))
+        {
+          /* record a new background for each child */
+          const PartialNode *saved = recording->nodes;
+          recording->nodes = NULL;
+          result = gsk_render_replay_default (replay, node);
+          recording->nodes = saved;
+        }
+      else
+        {
+          /* keep recording */
+          result = gsk_render_replay_default (replay, node);
+        }
       break;
 
     case GSK_ISOLATION_NODE:
-      /* Do either of the 2 above, depending on flags */
+      /* Handle the spacial cases */
       {
         GskIsolation isolations = gsk_isolation_node_get_isolations (node);
         Recording saved = *recording;

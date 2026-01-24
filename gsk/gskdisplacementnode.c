@@ -441,6 +441,7 @@ gsk_displacement_node_new (const graphene_rect_t  *bounds,
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
+  node->isolates_background = TRUE;
   if (child->fully_opaque)
     {
       graphene_rect_t child_opaque = child->bounds;
