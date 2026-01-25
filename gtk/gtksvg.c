@@ -19782,17 +19782,12 @@ apply_filter_functions (SvgValue      *filter,
                         GskRenderNode *source)
 {
   SvgFilter *f = (SvgFilter *) filter;
-  GskRenderNode *result = NULL;
+  GskRenderNode *result = gsk_render_node_ref (source);
 
   for (unsigned int i = 0; i < f->n_functions; i++)
     {
       FilterFunction *ff = &f->functions[i];
-      GskRenderNode *child;
-
-      if (i == 0)
-        child = gsk_render_node_ref (source);
-      else
-        child = result;
+      GskRenderNode *child = result;
 
       switch (ff->kind)
         {
@@ -20369,16 +20364,17 @@ pop_group (Shape        *shape,
     {
       if (!svg_filter_is_none (filter))
         {
-          GskRenderNode *node;
+          GskRenderNode *node, *node2;
 
           node = gtk_snapshot_pop_collect (context->snapshot);
 
           if (!node)
             node = empty_node ();
 
-          node = apply_filter_functions (filter, context, shape, node);
+          node2 = apply_filter_functions (filter, context, shape, node);
 
-          gtk_snapshot_append_node (context->snapshot, node);
+          gtk_snapshot_append_node (context->snapshot, node2);
+          gsk_render_node_unref (node2);
           gsk_render_node_unref (node);
         }
 
