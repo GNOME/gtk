@@ -18868,7 +18868,9 @@ context_get_host_transform (PaintContext *context)
       GskTransform *t = l->data;
 
       t = gsk_transform_invert (gsk_transform_ref (t));
-      transform = gsk_transform_transform (t, transform);
+      t = gsk_transform_transform (t, transform);
+      gsk_transform_unref (transform);
+      transform = t;
     }
 
   return transform;
