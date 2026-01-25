@@ -282,15 +282,11 @@ render_svg_file (GFile *file, TestFlags flags)
                           gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg)),
                           gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg)));
   node = gtk_snapshot_free_to_node (snapshot);
+
   if (node)
-    {
-      bytes = gsk_render_node_serialize (node);
-      gsk_render_node_unref (node);
-    }
+    bytes = gsk_render_node_serialize (node);
   else
-    {
-      bytes = g_bytes_new_static ("", 0);
-    }
+    bytes = g_bytes_new_static ("", 0);
 
   if (flags & TEST_FLAG_GENERATE)
     {
@@ -303,7 +299,7 @@ render_svg_file (GFile *file, TestFlags flags)
                                           (flags & TEST_FLAG_COMPRESSED_REF) ? ".node.gz" : ".node");
   g_assert_nonnull (reference_file);
 
-  diff = diff_bytes_with_file (reference_file, bytes, &error);
+  diff = diff_node_with_file (reference_file, node, &error);
   g_assert_no_error (error);
 
   if (diff && diff[0])
@@ -319,7 +315,7 @@ render_svg_file (GFile *file, TestFlags flags)
     }
 
   g_free (reference_file);
-  g_clear_pointer (&diff,g_free);
+  g_clear_pointer (&diff, g_free);
 
   errors_file = test_get_sibling_file (svg_file,
                                        (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
@@ -354,8 +350,9 @@ render_svg_file (GFile *file, TestFlags flags)
 out:
   g_string_free (errors, TRUE);
   g_free (svg_file);
-  g_clear_pointer (&bytes, g_bytes_unref);
   g_object_unref (svg);
+  g_clear_pointer (&bytes, g_bytes_unref);
+  g_clear_pointer (&node, gsk_render_node_unref);
 }
 
 static void
