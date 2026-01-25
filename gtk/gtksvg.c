@@ -22735,6 +22735,7 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->images, g_hash_table_unref);
   g_clear_object (&self->fontmap);
   g_clear_pointer (&self->font_files, g_ptr_array_unref);
+  g_clear_pointer (&self->node, gsk_render_node_unref);
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
