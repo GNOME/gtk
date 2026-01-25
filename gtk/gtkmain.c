@@ -288,7 +288,7 @@ gtk_disable_portals (void)
 
 
 /**
- * gtk_disable_portal_interfaces: (method)
+ * gtk_disable_portal_interfaces:
  * @portal_interfaces: (array zero-terminated=1) (not nullable):
  *     a %NULL-terminated array of portal interface names to disable
  *
