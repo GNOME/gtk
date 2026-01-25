@@ -7472,6 +7472,7 @@ svg_clip_parse (const char *value)
           if (gtk_css_parser_consume_function (parser, 1, 1, parse_clip_path_arg, &string))
             {
               res = svg_clip_new_path (string);
+              g_free (string);
             }
         }
       else
