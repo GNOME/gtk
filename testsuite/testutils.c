@@ -112,6 +112,7 @@ diff_node_with_file (const char     *file,
   GskRenderNode *old_node;
   GBytes *bytes1, *bytes2;
   char *diff;
+  int ret;
 
   old = file_get_input_stream (file, error);
   if (!old)
@@ -126,19 +127,19 @@ diff_node_with_file (const char     *file,
 
   fbase = g_path_get_basename (file);
 
-  if (diffreg (fbase, old, new, out, 0) == D_SAME)
-    {
-      g_object_unref (old);
-      g_object_unref (new);
-      g_object_unref (out);
-      g_free (fbase);
-      return NULL;
-    }
+  ret = diffreg (fbase, old, new, out, 0);
 
+  g_free (fbase);
+  g_object_unref (old);
   g_object_unref (new);
   g_object_unref (out);
-  g_free (fbase);
 
+  if (ret == D_SAME)
+    return NULL;
+
+  g_test_message ("Node diff failed, retrying with serialize roundtrip");
+
+  old = file_get_input_stream (file, error);
   data = input_stream_to_bytes (old);
   old_node = gsk_render_node_deserialize (data, NULL, NULL);
   g_assert (old_node != NULL);

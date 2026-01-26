@@ -666,7 +666,7 @@ parse_dmabuf_texture (GtkCssParser *parser,
   guint width = 0;
   guint height = 0;
   GdkDmabuf dmabuf = { 0, };
-  gboolean premultiplied = FALSE;
+  gboolean premultiplied = TRUE;
   GdkColorState *color_state = NULL;
   unsigned offsets[4] = { 0, }, strides[4] = { 0, };
   const Declaration declarations[] = {
@@ -2183,8 +2183,8 @@ parse_glyphs (GtkCssParser *parser,
                   pango_glyph_string_free (glyph_string);
                   return FALSE;
                 }
-              gi.geometry.x_offset = (int) (d * PANGO_SCALE);
-              gi.geometry.y_offset = (int) (d2 * PANGO_SCALE);
+              gi.geometry.x_offset = (int) round (d * PANGO_SCALE);
+              gi.geometry.y_offset = (int) round (d2 * PANGO_SCALE);
 
               if (gtk_css_parser_try_ident (parser, "same-cluster"))
                 gi.attr.is_cluster_start = 0;
@@ -5739,9 +5739,9 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
           glyphs[i].geometry.y_offset != 0)
         {
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.x_offset / PANGO_SCALE);
+          string_append_double (p, (double) glyphs[i].geometry.x_offset / (double) PANGO_SCALE);
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
+          string_append_double (p, (double) glyphs[i].geometry.y_offset / (double) PANGO_SCALE);
           if (!glyphs[i].attr.is_cluster_start)
             g_string_append (p, " same-cluster");
           if (glyphs[i].attr.is_color)
@@ -6789,9 +6789,11 @@ gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
   GHashTableIter iter;
-  GdkColorState *cs;
-  const char *name;
   GString *str;
+  GHashTable *table;
+  GPtrArray *keys;
+  const char *name;
+  GdkColorState *cs;
 
   printer_init (&p, node);
 
@@ -6813,9 +6815,21 @@ gsk_render_node_serialize (GskRenderNode *node)
 
   str = g_string_new (NULL);
 
+  table = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_iter_init (&iter, p.named_color_states);
   while (g_hash_table_iter_next (&iter, (gpointer *)&cs, (gpointer *)&name))
-    serialize_color_state (str, cs, name);
+    g_hash_table_insert (table, (gpointer) name, (gpointer) cs);
+
+  keys = g_hash_table_get_keys_as_ptr_array (table);
+  g_ptr_array_sort_values (keys, (GCompareFunc) strcmp);
+  for (unsigned int i = 0; i < keys->len; i++)
+    {
+      name = g_ptr_array_index (keys, i);
+      cs = g_hash_table_lookup (table, name);
+      serialize_color_state (str, cs, name);
+    }
+  g_ptr_array_unref (keys);
+  g_hash_table_unref (table);
 
   g_string_append_len (str, p.str->str, p.str->len);
 
