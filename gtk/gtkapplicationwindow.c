@@ -717,9 +717,18 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
    * GtkApplicationWindow::save-state:
    * @window: the window on which the signal is emitted
    * @dict: a dictionary of type `a{sv}`
+   * @operation: a pending operation
    *
    * The handler for this signal should persist any
    * application-specific state of @window into @dict.
+   *
+   * The application must synchronously populate the @dict, however it can also
+   * start asynchronous work in response to this signal. For instance, a text
+   * editor application might want to save the text buffer to a temporary file.
+   * In this case, the application should defer the @operation for the duration
+   * of the asynchronous work. Beware of an edge-case: due to limitations of
+   * `GApplication`, [signal@Gtk.Application::restore-window] may be emitted
+   * before the @operation is marked as complete!
    *
    * Note that window management state such as maximized,
    * fullscreen, or window size should not be saved as
@@ -744,8 +753,8 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
                   G_STRUCT_OFFSET (GtkApplicationWindowClass, save_state),
                   _gtk_boolean_handled_accumulator, NULL,
                   NULL,
-                  G_TYPE_BOOLEAN, 1,
-                  G_TYPE_VARIANT_DICT);
+                  G_TYPE_BOOLEAN,
+                  2, G_TYPE_VARIANT_DICT, GTK_TYPE_PENDING_OPERATION);
 }
 
 /**
@@ -922,6 +931,7 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
  * gtk_application_window_save:
  * @window: a `GtkApplicationWindow`
  * @state: a `GVariantDict` to add state to
+ * @operation: a `GtkPendingOperation`
  *
  * Save the state of @window and its children to a `GVariant`.
  *
@@ -930,9 +940,12 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
  */
 void
 gtk_application_window_save (GtkApplicationWindow *window,
-                             GVariantDict         *state)
+                             GVariantDict         *state,
+                             GtkPendingOperation  *operation)
 {
   gboolean ret;
 
-  g_signal_emit (window, gtk_application_window_signals[SAVE_STATE], 0, state, &ret);
+  gtk_pending_operation_defer (operation);
+  g_signal_emit (window, gtk_application_window_signals[SAVE_STATE], 0, state, operation, &ret);
+  gtk_pending_operation_complete (operation);
 }

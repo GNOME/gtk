@@ -24,6 +24,7 @@
 #endif
 
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkpendingoperation.h>
 #include <gtk/deprecated/gtkshortcutswindow.h>
 
 G_BEGIN_DECLS
@@ -67,7 +68,8 @@ struct _GtkApplicationWindowClass
    * Since: 4.22
    */
   gboolean     (* save_state)           (GtkApplicationWindow   *window,
-                                         GVariantDict           *dict);
+                                         GVariantDict           *dict,
+                                         GtkPendingOperation    *operation);
 
   /*< private >*/
   gpointer padding[7];
