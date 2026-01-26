@@ -2183,8 +2183,8 @@ parse_glyphs (GtkCssParser *parser,
                   pango_glyph_string_free (glyph_string);
                   return FALSE;
                 }
-              gi.geometry.x_offset = (int) (d * PANGO_SCALE);
-              gi.geometry.y_offset = (int) (d2 * PANGO_SCALE);
+              gi.geometry.x_offset = (int) round (d * PANGO_SCALE);
+              gi.geometry.y_offset = (int) round (d2 * PANGO_SCALE);
 
               if (gtk_css_parser_try_ident (parser, "same-cluster"))
                 gi.attr.is_cluster_start = 0;
@@ -5739,9 +5739,9 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
           glyphs[i].geometry.y_offset != 0)
         {
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.x_offset / PANGO_SCALE);
+          string_append_double (p, (double) glyphs[i].geometry.x_offset / (double) PANGO_SCALE);
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
+          string_append_double (p, (double) glyphs[i].geometry.y_offset / (double) PANGO_SCALE);
           if (!glyphs[i].attr.is_cluster_start)
             g_string_append (p, " same-cluster");
           if (glyphs[i].attr.is_color)
