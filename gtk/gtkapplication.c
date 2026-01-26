@@ -31,6 +31,7 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtkapplicationwindowprivate.h"
+#include "gtkpendingoperationprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkicontheme.h"
@@ -220,6 +221,8 @@ typedef struct
   GVariant        *kept_window_state;
   gboolean         restored;
   gboolean         forgotten;
+  GtkPendingOperation *ongoing_save;
+  gboolean pending_forget;
 } GtkApplicationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -543,8 +546,9 @@ should_remove_from_session (GtkApplication *application,
 }
 
 static GVariant *
-collect_window_state (GtkApplication *application,
-                      GtkWindow      *window);
+collect_window_state (GtkApplication      *application,
+                      GtkWindow           *window,
+                      GtkPendingOperation *operation);
 
 static void
 gtk_application_window_removed (GtkApplication *application,
@@ -560,8 +564,12 @@ gtk_application_window_removed (GtkApplication *application,
 
   if (!remove_from_session)
     {
+      GtkPendingOperation *operation;
+
       g_assert (!priv->kept_window_state);
-      priv->kept_window_state = collect_window_state (application, window);
+      operation = gtk_noop_pending_operation_new ();
+      priv->kept_window_state = collect_window_state (application, window, operation);
+      g_clear_object (&operation);
 
       /* If we're keeping around the last window, and the window is now gone,
        * from the user's perspective the app is now gone even if it hasn't
@@ -1536,11 +1544,13 @@ gtk_application_set_screensaver_active (GtkApplication *application,
 }
 
 static GVariant *
-collect_window_state (GtkApplication *application,
-                      GtkWindow      *window)
+collect_window_state (GtkApplication      *application,
+                      GtkWindow           *window,
+                      GtkPendingOperation *operation)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GVariantBuilder builder;
+  GtkPendingOperation *wrapper;
   GVariantDict *dict;
   GVariant *state;
 
@@ -1548,8 +1558,10 @@ collect_window_state (GtkApplication *application,
   gtk_application_impl_collect_window_state (priv->impl, window, &builder);
 
   dict = g_variant_dict_new (NULL);
+  wrapper = gtk_pending_operation_wrap (operation);
   if (GTK_IS_APPLICATION_WINDOW (window))
-    gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict);
+    gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict, operation);
+  g_clear_object (&wrapper);
 
   state = g_variant_new ("(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
   g_variant_dict_unref (dict);
