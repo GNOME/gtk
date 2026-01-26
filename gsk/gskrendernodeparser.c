@@ -6789,9 +6789,11 @@ gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
   GHashTableIter iter;
-  GdkColorState *cs;
-  const char *name;
   GString *str;
+  GHashTable *table;
+  GPtrArray *keys;
+  const char *name;
+  GdkColorState *cs;
 
   printer_init (&p, node);
 
@@ -6813,9 +6815,21 @@ gsk_render_node_serialize (GskRenderNode *node)
 
   str = g_string_new (NULL);
 
+  table = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_iter_init (&iter, p.named_color_states);
   while (g_hash_table_iter_next (&iter, (gpointer *)&cs, (gpointer *)&name))
-    serialize_color_state (str, cs, name);
+    g_hash_table_insert (table, (gpointer) name, (gpointer) cs);
+
+  keys = g_hash_table_get_keys_as_ptr_array (table);
+  g_ptr_array_sort_values (keys, (GCompareFunc) strcmp);
+  for (unsigned int i = 0; i < keys->len; i++)
+    {
+      name = g_ptr_array_index (keys, i);
+      cs = g_hash_table_lookup (table, name);
+      serialize_color_state (str, cs, name);
+    }
+  g_ptr_array_unref (keys);
+  g_hash_table_unref (table);
 
   g_string_append_len (str, p.str->str, p.str->len);
 
