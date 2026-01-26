@@ -11,6 +11,13 @@ node_parser = executable('node-parser',
   c_args: common_cflags,
 )
 
+serialize = executable('serialize',
+  [ 'serialize.c' ],
+  link_with: testutils_lib,
+  dependencies: libgtk_dep,
+  c_args: common_cflags,
+)
+
 compare_render_tests = [
   'big-box-glyph',
   'big-checkerboard',
@@ -381,6 +388,28 @@ foreach renderer : renderers
       endforeach
     endif
   endforeach
+endforeach
+
+serialize_xfails = [
+  'cairo-coordinates',
+]
+
+foreach testname : compare_render_tests
+  extra_suites = []
+  if serialize_xfails.contains(testname)
+    extra_suites += ['failing']
+  endif
+  test('serialize ' + testname, serialize,
+          protocol: 'tap',
+          args: [
+            '--tap',
+            '-k',
+            join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
+          ],
+          env: test_env,
+          suite: [ 'gsk', 'gsk-serialize', ] + extra_suites,
+        )
+  
 endforeach
 
 node_parser_tests = [
