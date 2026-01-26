@@ -666,7 +666,7 @@ parse_dmabuf_texture (GtkCssParser *parser,
   guint width = 0;
   guint height = 0;
   GdkDmabuf dmabuf = { 0, };
-  gboolean premultiplied = FALSE;
+  gboolean premultiplied = TRUE;
   GdkColorState *color_state = NULL;
   unsigned offsets[4] = { 0, }, strides[4] = { 0, };
   const Declaration declarations[] = {
