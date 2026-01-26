@@ -3,7 +3,11 @@ testutils_lib = static_library('testutils', 'testutils.c', 'diff/diffreg.c',
   include_directories: include_directories('..'),
   dependencies: [
     glib_dep,
-    gio_dep
+    gio_dep,
+    graphene_dep,
+    cairo_dep,
+    pango_dep,
+    pixbuf_dep,
   ],
   install: false
 )

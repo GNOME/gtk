@@ -29,7 +29,8 @@ typedef enum {
   TEST_FLAG_GENERATE          = 1 << 0,
   TEST_FLAG_COMPRESSED_TEST   = 1 << 1,
   TEST_FLAG_COMPRESSED_REF    = 1 << 2,
-  TEST_FLAG_COMPRESSED_ERR    = 1 << 3
+  TEST_FLAG_COMPRESSED_ERR    = 1 << 3,
+  TEST_FLAG_REPLACE_EXPECTED  = 1 << 4,
 } TestFlags;
 
 static char *
@@ -282,19 +283,40 @@ render_svg_file (GFile *file, TestFlags flags)
                           gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg)),
                           gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg)));
   node = gtk_snapshot_free_to_node (snapshot);
+
   if (node)
-    {
-      bytes = gsk_render_node_serialize (node);
-      gsk_render_node_unref (node);
-    }
+    bytes = gsk_render_node_serialize (node);
   else
-    {
-      bytes = g_bytes_new_static ("", 0);
-    }
+    bytes = g_bytes_new_static ("", 0);
 
   if (flags & TEST_FLAG_GENERATE)
     {
-      g_print ("%s", (const char *) g_bytes_get_data (bytes, NULL));
+      if (flags & TEST_FLAG_REPLACE_EXPECTED)
+        {
+          reference_file = test_get_sibling_file (svg_file,
+                                                  (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
+                                                  (flags & TEST_FLAG_COMPRESSED_REF) ? ".node.gz" : ".node");
+          g_assert_nonnull (reference_file);
+          g_file_set_contents (reference_file,
+                               g_bytes_get_data (bytes, NULL),
+                               g_bytes_get_size (bytes),
+                               NULL);
+          g_free (reference_file);
+
+          if (errors->len > 0)
+            {
+              errors_file = file_replace_extension (svg_file,
+                                                   (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
+                                                   (flags & TEST_FLAG_COMPRESSED_ERR) ? ".errors.gz" : ".errors");
+              g_file_set_contents (errors_file,
+                                   errors->str,
+                                   errors->len,
+                                   NULL);
+              g_free (errors_file);
+            }
+        }
+      else
+        g_print ("%s", (const char *) g_bytes_get_data (bytes, NULL));
       goto out;
     }
 
@@ -303,7 +325,7 @@ render_svg_file (GFile *file, TestFlags flags)
                                           (flags & TEST_FLAG_COMPRESSED_REF) ? ".node.gz" : ".node");
   g_assert_nonnull (reference_file);
 
-  diff = diff_bytes_with_file (reference_file, bytes, &error);
+  diff = diff_node_with_file (reference_file, node, &error);
   g_assert_no_error (error);
 
   if (diff && diff[0])
@@ -319,7 +341,7 @@ render_svg_file (GFile *file, TestFlags flags)
     }
 
   g_free (reference_file);
-  g_clear_pointer (&diff,g_free);
+  g_clear_pointer (&diff, g_free);
 
   errors_file = test_get_sibling_file (svg_file,
                                        (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
@@ -354,8 +376,9 @@ render_svg_file (GFile *file, TestFlags flags)
 out:
   g_string_free (errors, TRUE);
   g_free (svg_file);
-  g_clear_pointer (&bytes, g_bytes_unref);
   g_object_unref (svg);
+  g_clear_pointer (&bytes, g_bytes_unref);
+  g_clear_pointer (&node, gsk_render_node_unref);
 }
 
 static void
@@ -509,26 +532,8 @@ main (int argc, char **argv)
   };
   GOptionContext *context;
   GError *error = NULL;
-  const char *srcdir = g_getenv ("G_TEST_SRCDIR");
-  const char *static_fonts[] = {
-    "SVGFreeSans.ttf",
-    "FreeSerif.otf",
-    "FreeSerifItalic.otf",
-    "FreeSerifBold.otf",
-    "FreeSerifBoldItalic.otf"
-  };
 
-  if (srcdir)
-    for (size_t i = 0; i < G_N_ELEMENTS (static_fonts); i++)
-      {
-        char *fontpath = g_build_path (G_DIR_SEPARATOR_S, srcdir, "resources", static_fonts[i], NULL);
-        if (!pango_font_map_add_font_file (pango_cairo_font_map_get_default (), fontpath, &error))
-          {
-            g_warning ("Failed to load %s: %s", static_fonts[i], error->message);
-            g_clear_error (&error);
-          }
-        g_free (fontpath);
-      }
+  g_setenv ("GSK_SUBSET_FONTS", "1", TRUE);
 
   if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
     {
@@ -538,6 +543,16 @@ main (int argc, char **argv)
 
       file = g_file_new_for_commandline_arg (argv[2]);
       render_svg_file (file, TEST_FLAG_GENERATE);
+      g_object_unref (file);
+
+      return 0;
+    }
+  else if (argc >= 2 && strcmp (argv[1], "--regenerate") == 0)
+    {
+      GFile *file;
+
+      file = g_file_new_for_commandline_arg (argv[2]);
+      render_svg_file (file, TEST_FLAG_GENERATE|TEST_FLAG_REPLACE_EXPECTED);
       g_object_unref (file);
 
       return 0;

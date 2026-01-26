@@ -30,6 +30,138 @@
 #include "testsuite/testutils.h"
 #include "testsuite/diff/diff.h"
 
+char *
+diff_bytes (const char *file,
+            GBytes     *input1,
+            GBytes     *input2)
+{
+  GInputStream *in1 = g_memory_input_stream_new_from_bytes (input1);
+  GInputStream *in2 = g_memory_input_stream_new_from_bytes (input2);
+  GOutputStream *out = g_memory_output_stream_new_resizable ();
+  char *fbase;
+  char *diff;
+
+  fbase = g_path_get_basename (file);
+
+  if (diffreg (fbase, in1, in2, out, 0) == D_SAME)
+    diff = NULL;
+  else
+    diff = g_strndup (g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (out)),
+                      g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (out)));
+
+  g_free (fbase);
+
+  g_object_unref (in1);
+  g_object_unref (in2);
+  g_object_unref (out);
+
+  return diff;
+}
+
+static GInputStream *
+file_get_input_stream (const char  *file,
+                       GError     **error)
+{
+  GFile *f;
+  GInputStream *in;
+  GInputStream *in2;
+  GConverter *converter;
+
+  f = g_file_new_for_path (file);
+  in = G_INPUT_STREAM (g_file_read (f, NULL, error));
+  g_object_unref (f);
+
+  if (in == NULL)
+    return NULL;
+
+  if (!g_str_has_suffix (file, ".gz"))
+    return in;
+
+  converter = G_CONVERTER (g_zlib_decompressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP));
+  in2 = g_converter_input_stream_new (in, converter);
+
+  g_object_unref (in);
+  g_object_unref (converter);
+
+  return in2;
+}
+
+static GBytes *
+input_stream_to_bytes (GInputStream *in)
+{
+  GOutputStream *out = g_memory_output_stream_new_resizable ();
+  GBytes *bytes;
+
+  g_output_stream_splice (out, in, G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET, NULL, NULL);
+
+  bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (out));
+  g_object_unref (out);
+
+  return bytes;
+}
+
+char *
+diff_node_with_file (const char     *file,
+                     GskRenderNode  *node,
+                     GError        **error)
+{
+  GInputStream *old, *new;
+  GOutputStream *out;
+  char *fbase;
+  GBytes *data;
+  GskRenderNode *old_node;
+  GBytes *bytes1, *bytes2;
+  char *diff;
+
+  old = file_get_input_stream (file, error);
+  if (!old)
+    return NULL;
+
+  if (node)
+    bytes2 = gsk_render_node_serialize (node);
+  else
+    bytes2 = g_bytes_new_static ("", 0);
+  new = g_memory_input_stream_new_from_bytes (bytes2);
+  out = g_memory_output_stream_new_resizable ();
+
+  fbase = g_path_get_basename (file);
+
+  if (diffreg (fbase, old, new, out, 0) == D_SAME)
+    {
+      g_object_unref (old);
+      g_object_unref (new);
+      g_object_unref (out);
+      g_free (fbase);
+      return NULL;
+    }
+
+  g_object_unref (new);
+  g_object_unref (out);
+  g_free (fbase);
+
+  data = input_stream_to_bytes (old);
+  old_node = gsk_render_node_deserialize (data, NULL, NULL);
+  g_assert (old_node != NULL);
+
+  g_bytes_unref (data);
+  g_object_unref (old);
+
+  bytes1 = gsk_render_node_serialize (old_node);
+  if (node)
+    bytes2 = gsk_render_node_serialize (node);
+  else
+    bytes2 = g_bytes_new_static ("", 0);
+
+  diff = diff_bytes (file, bytes1, bytes2);
+
+  gsk_render_node_unref (old_node);
+
+  g_bytes_unref (bytes1);
+  g_bytes_unref (bytes2);
+
+  return diff;
+}
+
 /*<private>
  * diff_bytes_with_file:
  * @file1: The filename of the original. This is assumed
@@ -58,36 +190,7 @@ diff_bytes_with_file (const char  *file1,
   GOutputStream *out;
   char *fbase, *diff;
 
-  if (g_str_has_suffix (file1, ".gz"))
-    {
-      char *buf1;
-      size_t len1;
-      GConverter *decompressor;
-      GBytes *compressed, *decompressed;
-
-      if (!g_file_get_contents (file1, &buf1, &len1, error))
-        return NULL;
-      decompressor = G_CONVERTER (g_zlib_decompressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP));
-      compressed = g_bytes_new_take (buf1, len1);
-      decompressed = g_converter_convert_bytes (decompressor, compressed, error);
-      g_object_unref (decompressor);
-      g_bytes_unref (compressed);
-      if (!decompressed)
-        return NULL;
-      old = g_memory_input_stream_new_from_bytes (decompressed);
-      g_bytes_unref (decompressed);
-    }
-  else
-    {
-      GFile *file;
-      file = g_file_new_for_path (file1);
-      old = G_INPUT_STREAM (g_file_read (file, NULL, error));
-      // Maybe wrap old in BufferedInputStream?
-      g_object_unref (file);
-      if (!old)
-        return NULL;
-    }
-
+  old = file_get_input_stream (file1, error);
   new = g_memory_input_stream_new_from_bytes (input);
   out = g_memory_output_stream_new_resizable ();
 

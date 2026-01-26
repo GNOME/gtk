@@ -7472,6 +7472,7 @@ svg_clip_parse (const char *value)
           if (gtk_css_parser_consume_function (parser, 1, 1, parse_clip_path_arg, &string))
             {
               res = svg_clip_new_path (string);
+              g_free (string);
             }
         }
       else
@@ -18868,7 +18869,9 @@ context_get_host_transform (PaintContext *context)
       GskTransform *t = l->data;
 
       t = gsk_transform_invert (gsk_transform_ref (t));
-      transform = gsk_transform_transform (t, transform);
+      t = gsk_transform_transform (t, transform);
+      gsk_transform_unref (transform);
+      transform = t;
     }
 
   return transform;
@@ -19779,17 +19782,12 @@ apply_filter_functions (SvgValue      *filter,
                         GskRenderNode *source)
 {
   SvgFilter *f = (SvgFilter *) filter;
-  GskRenderNode *result = NULL;
+  GskRenderNode *result = gsk_render_node_ref (source);
 
   for (unsigned int i = 0; i < f->n_functions; i++)
     {
       FilterFunction *ff = &f->functions[i];
-      GskRenderNode *child;
-
-      if (i == 0)
-        child = gsk_render_node_ref (source);
-      else
-        child = result;
+      GskRenderNode *child = result;
 
       switch (ff->kind)
         {
@@ -20366,16 +20364,17 @@ pop_group (Shape        *shape,
     {
       if (!svg_filter_is_none (filter))
         {
-          GskRenderNode *node;
+          GskRenderNode *node, *node2;
 
           node = gtk_snapshot_pop_collect (context->snapshot);
 
           if (!node)
             node = empty_node ();
 
-          node = apply_filter_functions (filter, context, shape, node);
+          node2 = apply_filter_functions (filter, context, shape, node);
 
-          gtk_snapshot_append_node (context->snapshot, node);
+          gtk_snapshot_append_node (context->snapshot, node2);
+          gsk_render_node_unref (node2);
           gsk_render_node_unref (node);
         }
 
@@ -22735,6 +22734,7 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->images, g_hash_table_unref);
   g_clear_object (&self->fontmap);
   g_clear_pointer (&self->font_files, g_ptr_array_unref);
+  g_clear_pointer (&self->node, gsk_render_node_unref);
 
   g_clear_object (&self->clock);
   g_free (self->gpa_keywords);
