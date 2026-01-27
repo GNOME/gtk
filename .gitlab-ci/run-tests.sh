@@ -7,6 +7,7 @@ srcdir=$( pwd )
 builddir=$1
 setup=$2
 suite=$3
+nosuite="$4,failing,${setup}_failing,flaky,headless,gsk-compare-broadway"
 multiplier=${MESON_TEST_TIMEOUT_MULTIPLIER:-1}
 n_processes=${MESON_TEST_MAX_PROCESSES:-$(nproc)}
 
@@ -26,11 +27,7 @@ case "${setup}" in
                 --print-errorlogs \
                 --setup=${setup} \
                 --suite=${suite//,/ --suite=} \
-                --no-suite=failing \
-                --no-suite=${setup}_failing \
-                --no-suite=flaky \
-                --no-suite=headless \
-                --no-suite=gsk-compare-broadway
+                --no-suite=${nosuite//,/ --no-suite=}
 
     # Store the exit code for the CI run, but always
     # generate the reports
@@ -49,11 +46,7 @@ case "${setup}" in
                 --print-errorlogs \
                 --setup=${setup} \
                 --suite=${suite//,/ --suite=} \
-                --no-suite=failing \
-                --no-suite=${setup}_failing \
-                --no-suite=flaky \
-                --no-suite=headless \
-                --no-suite=gsk-compare-broadway
+                --no-suite=${nosuite//,/ --no-suite=}
     exit_code=$?
     ;;
 
@@ -72,11 +65,7 @@ case "${setup}" in
                 --print-errorlogs \
                 --setup=${setup} \
                 --suite=${suite//,/ --suite=} \
-                --no-suite=failing \
-                --no-suite=${setup}_failing \
-                --no-suite=flaky \
-                --no-suite=headless \
-                --no-suite=gsk-compare-opengl
+                --no-suite=${nosuite//,/ --no-suite=}
 
     kill ${server}
     ;;

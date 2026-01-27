@@ -335,10 +335,9 @@ render_svg_file (GFile *file, TestFlags flags)
     }
 
   if (diff || g_test_verbose ())
-    {
-       save_output (g_bytes_get_data (bytes, NULL), svg_file, file_ext, ".out.node", (flags & TEST_FLAG_COMPRESSED_REF) != 0);
-       save_output (diff, svg_file, file_ext, ".node.diff", FALSE);
-    }
+    save_output (g_bytes_get_data (bytes, NULL), svg_file, file_ext, ".out.node", (flags & TEST_FLAG_COMPRESSED_REF) != 0);
+  if (diff)
+    save_output (diff, svg_file, file_ext, ".node.diff", FALSE);
 
   g_free (reference_file);
   g_clear_pointer (&diff, g_free);
@@ -361,10 +360,9 @@ render_svg_file (GFile *file, TestFlags flags)
         }
 
       if (diff || g_test_verbose ())
-        {
-           save_output (errors->str, svg_file, file_ext, ".out.errors", (flags & TEST_FLAG_COMPRESSED_ERR) != 0);
-           save_output (diff, svg_file, file_ext, ".errors.diff", FALSE);
-        }
+        save_output (errors->str, svg_file, file_ext, ".out.errors", (flags & TEST_FLAG_COMPRESSED_ERR) != 0);
+      if (diff)
+        save_output (diff, svg_file, file_ext, ".errors.diff", FALSE);
 
       g_free (diff);
     }

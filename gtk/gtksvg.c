@@ -16697,7 +16697,7 @@ start_element_cb (GMarkupParseContext  *context,
             }
         }
       else
-        skip_element (data, context, "Ignoring font element int he wrong context: <%s>", element_name);
+        skip_element (data, context, "Ignoring font element in the wrong context: <%s>", element_name);
 
       return;
     }
