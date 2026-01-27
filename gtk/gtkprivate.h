@@ -30,6 +30,7 @@
 #include <gdk/gdkdebugprivate.h>
 
 #include "gtkcsstypesprivate.h"
+#include "gtkenumsprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtkplacessidebarprivate.h"
 #include "gtkeventcontrollerprivate.h"

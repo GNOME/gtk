@@ -63,50 +63,8 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
-  /**
-   * GtkApplicationClass::save_state:
-   * @state: a dictionary where to store the application's state
-   *
-   * Class closure for the [signal@Application::save-state] signal.
-   *
-   * Returns: true to stop stop further handlers from running
-   *
-   * Since: 4.22
-   */
-  gboolean (* save_state)    (GtkApplication   *application,
-                              GVariantDict     *state);
-
-  /**
-   * GtkApplicationClass::restore_state:
-   * @reason: the reason for restoring state
-   * @state: a dictionary containing the application state to restore
-   *
-   * Class closure for the [signal@Application::restore-state] signal.
-   *
-   * Returns: true to stop stop further handlers from running
-   *
-   * Since: 4.22
-   */
-  gboolean (* restore_state) (GtkApplication   *application,
-                              GtkRestoreReason  reason,
-                              GVariant         *state);
-
-  /**
-   * GtkApplicationClass::restore_window:
-   * @reason: the reason this window is restored
-   * @state: (nullable): the state to restore, as saved by a
-   *   [signal@Gtk.ApplicationWindow::save-state] handler
-   *
-   * Class closure for the [signal@Application::restore-window] signal.
-   *
-   * Since: 4.22
-   */
-  void     (*restore_window) (GtkApplication   *application,
-                              GtkRestoreReason  reason,
-                              GVariant         *state);
-
   /*< private >*/
-  gpointer padding[5];
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -175,12 +133,6 @@ void             gtk_application_set_accels_for_action           (GtkApplication
 GDK_AVAILABLE_IN_ALL
 GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
                                                                   const char           *id);
-
-GDK_AVAILABLE_IN_4_22
-void             gtk_application_save                            (GtkApplication       *application);
-
-GDK_AVAILABLE_IN_4_22
-void             gtk_application_forget                          (GtkApplication       *application);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)
 

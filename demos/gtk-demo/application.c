@@ -367,14 +367,6 @@ create_demo_window (GApplication *app,
 }
 
 static void
-restore_window (GtkApplication   *app,
-                GtkRestoreReason  reason,
-                GVariant         *state)
-{
-  create_demo_window (G_APPLICATION (app), NULL);
-}
-
-static void
 demo_application_init (DemoApplication *app)
 {
   GSettings *settings;
@@ -397,10 +389,8 @@ static void
 demo_application_class_init (DemoApplicationClass *class)
 {
   GApplicationClass *app_class = G_APPLICATION_CLASS (class);
-  GtkApplicationClass *gtk_app_class = GTK_APPLICATION_CLASS (class);
 
   app_class->startup = startup;
-  gtk_app_class->restore_window = restore_window;
 }
 
 static void
