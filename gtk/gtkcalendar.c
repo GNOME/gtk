@@ -609,14 +609,18 @@ gtk_calendar_init (GtkCalendar *calendar)
   calendar->month_name_stack = gtk_stack_new ();
   gtk_widget_add_css_class (calendar->month_name_stack, "month");
   calendar->arrow_widgets[0] = gtk_button_new_from_icon_name ("pan-start-symbolic");
+  gtk_widget_set_tooltip_text (calendar->arrow_widgets[0], _("Previous Month"));
   g_signal_connect_swapped (calendar->arrow_widgets[0], "clicked", G_CALLBACK (calendar_set_month_prev), calendar);
   calendar->arrow_widgets[1] = gtk_button_new_from_icon_name ("pan-end-symbolic");
+  gtk_widget_set_tooltip_text (calendar->arrow_widgets[1], _("Next Month"));
   g_signal_connect_swapped (calendar->arrow_widgets[1], "clicked", G_CALLBACK (calendar_set_month_next), calendar);
   gtk_widget_set_hexpand (calendar->arrow_widgets[1], TRUE);
   gtk_widget_set_halign (calendar->arrow_widgets[1], GTK_ALIGN_START);
   calendar->arrow_widgets[2] = gtk_button_new_from_icon_name ("pan-start-symbolic");
+  gtk_widget_set_tooltip_text (calendar->arrow_widgets[2], _("Previous Year"));
   g_signal_connect_swapped (calendar->arrow_widgets[2], "clicked", G_CALLBACK (calendar_set_year_prev), calendar);
   calendar->arrow_widgets[3] = gtk_button_new_from_icon_name ("pan-end-symbolic");
+  gtk_widget_set_tooltip_text (calendar->arrow_widgets[3], _("Next Year"));
   g_signal_connect_swapped (calendar->arrow_widgets[3], "clicked", G_CALLBACK (calendar_set_year_next), calendar);
 
   gtk_box_append (GTK_BOX (calendar->header_box), calendar->arrow_widgets[0]);
