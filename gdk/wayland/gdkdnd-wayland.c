@@ -394,6 +394,9 @@ gdk_wayland_drag_context_manage_dnd (GdkDragContext *context,
 
   context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
 
+  if (!gdk_wayland_window_get_wl_surface (toplevel))
+    return FALSE;
+
   if (display_wayland->data_device_manager_version >=
       WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
     {
