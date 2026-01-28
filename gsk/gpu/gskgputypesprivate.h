@@ -16,6 +16,7 @@ typedef struct _GskGpuGlobalsInstance   GskGpuGlobalsInstance;
 typedef struct _GskGpuImage             GskGpuImage;
 typedef struct _GskGpuOp                GskGpuOp;
 typedef struct _GskGpuOpClass           GskGpuOpClass;
+typedef struct _GskGpuRenderPass        GskGpuRenderPass;
 typedef guint32                         GskGpuShaderFlags;
 typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
