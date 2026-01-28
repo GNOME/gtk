@@ -8,6 +8,7 @@ testutils_lib = static_library('testutils', 'testutils.c', 'diff/diffreg.c',
     cairo_dep,
     pango_dep,
     pixbuf_dep,
+    libgsk_dep,
   ],
   install: false
 )
