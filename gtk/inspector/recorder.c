@@ -441,7 +441,9 @@ prepare_render_node_drag (GtkDragSource  *source,
     return NULL;
 
   wrapper = gtk_tree_list_row_get_item (row_item);
-  node = gtk_inspector_node_wrapper_get_node (wrapper);
+  node = gtk_inspector_node_wrapper_get_profile_node (wrapper);
+  if (node == NULL)
+    node = gtk_inspector_node_wrapper_get_node (wrapper);
   g_object_unref (wrapper);
 
   return gdk_content_provider_new_typed (GSK_TYPE_RENDER_NODE, node);
@@ -2074,7 +2076,9 @@ get_selected_node (GtkInspectorRecorder *recorder)
     return NULL;
 
   wrapper = gtk_tree_list_row_get_item (row_item);
-  node = gtk_inspector_node_wrapper_get_node (wrapper);
+  node = gtk_inspector_node_wrapper_get_profile_node (wrapper);
+  if (node == NULL)
+    node = gtk_inspector_node_wrapper_get_node (wrapper);
   g_object_unref (wrapper);
 
   return node;
