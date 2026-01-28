@@ -410,12 +410,29 @@ struct _GtkNeverTriggerClass
 
 G_DEFINE_TYPE (GtkNeverTrigger, gtk_never_trigger, GTK_TYPE_SHORTCUT_TRIGGER)
 
+static GtkShortcutTrigger *never_singleton;
+
 static void G_GNUC_NORETURN
 gtk_never_trigger_finalize (GObject *gobject)
 {
   g_assert_not_reached ();
 
   G_OBJECT_CLASS (gtk_never_trigger_parent_class)->finalize (gobject);
+}
+
+static GObject *
+gtk_never_trigger_constructor (GType                  type,
+                               guint                  n_construct_params,
+                               GObjectConstructParam *construct_params)
+{
+  if (G_UNLIKELY (never_singleton == NULL))
+    {
+      GObjectClass *parent_class = G_OBJECT_CLASS (gtk_never_trigger_parent_class);
+      never_singleton = GTK_SHORTCUT_TRIGGER (parent_class->constructor (type,
+                                                                         n_construct_params,
+                                                                         construct_params));
+    }
+  return g_object_ref (G_OBJECT (never_singleton));
 }
 
 static GdkKeyMatch
@@ -460,6 +477,7 @@ gtk_never_trigger_class_init (GtkNeverTriggerClass *klass)
   GtkShortcutTriggerClass *trigger_class = GTK_SHORTCUT_TRIGGER_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gobject_class->constructor = gtk_never_trigger_constructor;
   gobject_class->finalize = gtk_never_trigger_finalize;
 
   trigger_class->trigger = gtk_never_trigger_trigger;
@@ -472,6 +490,8 @@ gtk_never_trigger_class_init (GtkNeverTriggerClass *klass)
 static void
 gtk_never_trigger_init (GtkNeverTrigger *self)
 {
+  /* We are the singleton being constructed */
+  g_assert (!never_singleton);
 }
 
 /**
@@ -488,12 +508,14 @@ gtk_never_trigger_init (GtkNeverTrigger *self)
 GtkShortcutTrigger *
 gtk_never_trigger_get (void)
 {
-  static GtkShortcutTrigger *never = NULL;
+  if (G_UNLIKELY (never_singleton == NULL))
+    {
+      GtkShortcutTrigger *never = g_object_new (GTK_TYPE_NEVER_TRIGGER, NULL);
+      g_assert (never == never_singleton);
+      g_object_unref (never);
+    }
 
-  if (G_UNLIKELY (never == NULL))
-    never = g_object_new (GTK_TYPE_NEVER_TRIGGER, NULL);
-
-  return never;
+  return never_singleton;
 }
 
 struct _GtkKeyvalTrigger
