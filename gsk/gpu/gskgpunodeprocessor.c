@@ -14,7 +14,6 @@
 #include "gskgpucachedfillprivate.h"
 #include "gskgpucachedstrokeprivate.h"
 #include "gskgpuclearopprivate.h"
-#include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
 #include "gskgpucolormatrixopprivate.h"
 #include "gskgpucomponenttransferopprivate.h"
@@ -34,6 +33,7 @@
 #include "gskgpumaskopprivate.h"
 #include "gskgpumipmapopprivate.h"
 #include "gskgpuradialgradientopprivate.h"
+#include "gskgpurenderpassprivate.h"
 #include "gskgpurenderpassopprivate.h"
 #include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
@@ -163,30 +163,6 @@ typedef enum {
    */
   GSK_GPU_AS_IMAGE_EXACT_SIZE = (1 << 1),
 } GskGpuAsImageFlags;
-
-typedef enum {
-  GSK_GPU_GLOBAL_MATRIX  = (1 << 0),
-  GSK_GPU_GLOBAL_SCALE   = (1 << 1),
-  GSK_GPU_GLOBAL_CLIP    = (1 << 2),
-  GSK_GPU_GLOBAL_SCISSOR = (1 << 3),
-  GSK_GPU_GLOBAL_BLEND   = (1 << 4),
-} GskGpuGlobals;
-
-struct _GskGpuRenderPass
-{
-  GskGpuFrame                   *frame;
-  GdkColorState                 *ccs;
-  cairo_rectangle_int_t          scissor;
-  GskGpuBlend                    blend;
-  graphene_point_t               offset;
-  graphene_matrix_t              projection;
-  graphene_vec2_t                scale;
-  GskTransform                  *modelview;
-  GskGpuClip                     clip;
-  float                          opacity;
-
-  GskGpuGlobals                  pending_globals;
-};
 
 typedef struct _GskGpuFirstNodeInfo GskGpuFirstNodeInfo;
 
