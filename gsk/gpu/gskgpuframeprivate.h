@@ -54,6 +54,12 @@ struct _GskGpuFrameClass
                                                                          GskGpuBuffer           *vertex_buffer,
                                                                          GskGpuBuffer           *globals_buffer,
                                                                          GskGpuOp               *op);
+  gpointer              (* alloc_op)                                    (GskGpuFrame            *self,
+                                                                         const GskGpuOpClass    *op_class);
+  void                  (* start_node)                                  (GskGpuFrame            *self,
+                                                                         GskRenderNode          *node,
+                                                                         gsize                   pos);
+  void                  (* end_node)                                    (GskGpuFrame            *self);
 };
 
 GType                   gsk_gpu_frame_get_type                          (void) G_GNUC_CONST;
@@ -84,7 +90,7 @@ gboolean                gsk_gpu_frame_should_optimize                   (GskGpuF
                                                                          GskGpuOptimizations     optimization) G_GNUC_PURE;
 
 gpointer                gsk_gpu_frame_alloc_op                          (GskGpuFrame            *self,
-                                                                         gsize                   size);
+                                                                         const GskGpuOpClass    *op_class);
 GskGpuImage *           gsk_gpu_frame_upload_texture                    (GskGpuFrame            *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkTexture             *texture);
@@ -122,6 +128,11 @@ gboolean                gsk_gpu_frame_download_texture                  (GskGpuF
                                                                          const GdkMemoryLayout  *layout,
                                                                          GdkColorState          *color_state);
 GskGpuOp               *gsk_gpu_frame_get_last_op                       (GskGpuFrame            *self);
+
+void                    gsk_gpu_frame_start_node                        (GskGpuFrame            *self,
+                                                                         GskRenderNode          *node,
+                                                                         gsize                   pos);
+void                    gsk_gpu_frame_end_node                          (GskGpuFrame            *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuFrame, g_object_unref)
 

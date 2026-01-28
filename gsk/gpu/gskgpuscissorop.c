@@ -2,6 +2,7 @@
 
 #include "gskgpuscissoropprivate.h"
 
+#include "gskgpuframeprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpuprintprivate.h"
 
@@ -84,7 +85,7 @@ gsk_gpu_scissor_op (GskGpuFrame                 *frame,
 {
   GskGpuScissorOp *self;
 
-  self = (GskGpuScissorOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_SCISSOR_OP_CLASS);
+  self = (GskGpuScissorOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_SCISSOR_OP_CLASS);
 
   self->rect = *rect;
 }

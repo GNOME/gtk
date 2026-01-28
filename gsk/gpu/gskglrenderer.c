@@ -66,7 +66,7 @@ gsk_gl_renderer_create_context (GskGpuRenderer       *renderer,
       return NULL;
     }
 
-  *supported = -1;
+  *supported = ~GSK_GPU_OPTIMIZE_PROFILE;
   if (!gdk_gl_context_has_feature (context, GDK_GL_FEATURE_BLEND_FUNC_EXTENDED))
     *supported &= ~GSK_GPU_OPTIMIZE_DUAL_BLEND;
 
@@ -138,6 +138,7 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
   GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 
   gpu_renderer_class->frame_type = GSK_TYPE_GL_FRAME;
+  gpu_renderer_class->profile_frame_type = GSK_TYPE_GL_FRAME; /* unused */
 
   gpu_renderer_class->get_device = gsk_gl_device_get_for_display;
   gpu_renderer_class->create_context = gsk_gl_renderer_create_context;

@@ -61,6 +61,9 @@ void            gtk_inspector_recorder_trace_event              (GtkInspectorRec
                                                                  GtkEventController     *controller,
                                                                  GtkWidget              *target,
                                                                  gboolean                handled);
+void            gtk_inspector_recorder_add_profile_node         (GtkInspectorRecorder   *self,
+                                                                 GskRenderNode          *node,
+                                                                 GskRenderNode          *profile_node);
 
 G_END_DECLS
 

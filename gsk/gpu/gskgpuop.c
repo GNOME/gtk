@@ -4,18 +4,6 @@
 
 #include "gskgpuframeprivate.h"
 
-GskGpuOp *
-gsk_gpu_op_alloc (GskGpuFrame         *frame,
-                  const GskGpuOpClass *op_class)
-{
-  GskGpuOp *op;
-
-  op = gsk_gpu_frame_alloc_op (frame, op_class->size);
-  op->op_class = op_class;
-
-  return op;
-}
-
 void
 gsk_gpu_op_finish (GskGpuOp *op)
 {

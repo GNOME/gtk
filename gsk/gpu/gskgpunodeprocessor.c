@@ -205,11 +205,12 @@ struct _GskGpuFirstNodeInfo
   guint has_started_rendering : 1;
 };
 
-static void             gsk_gpu_node_processor_add_node                 (GskGpuNodeProcessor            *self,
+static void             gsk_gpu_node_processor_add_node_untracked       (GskGpuNodeProcessor            *self,
                                                                          GskRenderNode                  *node);
 static gboolean         gsk_gpu_node_processor_add_first_node           (GskGpuNodeProcessor            *self,
                                                                          GskGpuFirstNodeInfo            *info,
-                                                                         GskRenderNode                  *node);
+                                                                         GskRenderNode                  *node,
+                                                                         gsize                           pos);
 static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskGpuFrame                    *frame,
                                                                          GskGpuAsImageFlags              flags,
                                                                          GdkColorState                  *ccs,
@@ -769,6 +770,18 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
   return image;
 }
 
+static void
+gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
+                                 GskRenderNode       *node,
+                                 gsize                pos)
+{
+  gsk_gpu_frame_start_node (self->frame, node, pos);
+
+  gsk_gpu_node_processor_add_node_untracked (self, node);
+
+  gsk_gpu_frame_end_node (self->frame);
+}
+
 static GskGpuImage *
 gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame           *frame,
                                          GskGpuAsImageFlags     flags,
@@ -883,29 +896,12 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
   return copy;
 }
 
-/*
- * gsk_gpu_node_processor_get_node_as_image:
- * @self: a node processor
- * @flags: flags for the image
- * @clip_bounds: (nullable): clip rectangle to use or NULL to use
- *   the current clip
- * @node: the node to turn into an image
- * @out_bounds: bounds of the the image in node space
- *
- * Generates an image for the given node. The image is restricted to the
- * region in the clip bounds.
- *
- * The resulting image is guaranteed to be premultiplied.
- *
- * Returns: (nullable): The node as an image or %NULL if the node is fully
- *     clipped
- **/
 static GskGpuImage *
-gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
-                                          GskGpuAsImageFlags     flags,
-                                          const graphene_rect_t *clip_bounds,
-                                          GskRenderNode         *node,
-                                          graphene_rect_t       *out_bounds)
+gsk_gpu_node_processor_get_node_as_image_untracked (GskGpuNodeProcessor   *self,
+                                                    GskGpuAsImageFlags     flags,
+                                                    const graphene_rect_t *clip_bounds,
+                                                    GskRenderNode         *node,
+                                                    graphene_rect_t       *out_bounds)
 {
   graphene_rect_t clip;
 
@@ -939,6 +935,48 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
                                     &self->scale,
                                     node,
                                     out_bounds);
+}
+
+/*
+ * gsk_gpu_node_processor_get_node_as_image:
+ * @self: a node processor
+ * @flags: flags for the image
+ * @clip_bounds: (nullable): clip rectangle to use or NULL to use
+ *   the current clip
+ * @node: the node to turn into an image
+ * @pos: position of the node in the parent for tracking purposes or
+ *   -1 to not do tracking
+ * @out_bounds: bounds of the the image in node space
+ *
+ * Generates an image for the given node. The image is restricted to the
+ * region in the clip bounds.
+ *
+ * The resulting image is guaranteed to be premultiplied.
+ *
+ * Returns: (nullable): The node as an image or %NULL if the node is fully
+ *     clipped
+ **/
+static GskGpuImage *
+gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
+                                          GskGpuAsImageFlags     flags,
+                                          const graphene_rect_t *clip_bounds,
+                                          GskRenderNode         *node,
+                                          gsize                  pos,
+                                          graphene_rect_t       *out_bounds)
+{
+  GskGpuImage *result;
+
+  gsk_gpu_frame_start_node (self->frame, node, pos);
+
+  result = gsk_gpu_node_processor_get_node_as_image_untracked (self,
+                                                               flags,
+                                                               clip_bounds,
+                                                               node,
+                                                               out_bounds);
+
+  gsk_gpu_frame_end_node (self->frame);
+
+  return result;
 }
 
 static void
@@ -1073,11 +1111,11 @@ gsk_gpu_node_processor_add_with_offscreen (GskGpuNodeProcessor *self,
 
   gsk_gpu_node_processor_sync_globals (self, 0);
 
-  image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    0,
-                                                    NULL,
-                                                    node,
-                                                    &tex_rect);
+  image = gsk_gpu_node_processor_get_node_as_image_untracked (self,
+                                                              0,
+                                                              NULL,
+                                                              node,
+                                                              &tex_rect);
   if (image == NULL)
     return;
 
@@ -1094,6 +1132,7 @@ gsk_gpu_node_processor_add_with_offscreen (GskGpuNodeProcessor *self,
 static void
 gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
                                          GskRenderNode         *node,
+                                         gsize                  pos,
                                          const graphene_rect_t *clip_bounds)
 {
   GskGpuClip old_clip;
@@ -1102,7 +1141,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
 
   if (gsk_rect_contains_rect (clip_bounds, &node->bounds))
     {
-      gsk_gpu_node_processor_add_node (self, node);
+      gsk_gpu_node_processor_add_node (self, node, pos);
       return;
     }
 
@@ -1136,7 +1175,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
           self->scissor = scissor;
           self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_CLIP;
 
-          gsk_gpu_node_processor_add_node (self, node);
+          gsk_gpu_node_processor_add_node (self, node, pos);
 
           gsk_gpu_clip_init_copy (&self->clip, &old_clip);
           self->scissor = old_scissor;
@@ -1149,7 +1188,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
 
           gsk_gpu_clip_init_copy (&self->clip, &old_clip);
 
-          gsk_gpu_node_processor_add_node (self, node);
+          gsk_gpu_node_processor_add_node (self, node, pos);
 
           self->scissor = old_scissor;
           self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
@@ -1184,6 +1223,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
                                                               0,
                                                               &bounds,
                                                               node,
+                                                              pos,
                                                               &tex_rect);
           else
             image = NULL;
@@ -1208,7 +1248,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
 
       self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
 
-      gsk_gpu_node_processor_add_node (self, node);
+      gsk_gpu_node_processor_add_node (self, node, pos);
 
       gsk_gpu_clip_init_copy (&self->clip, &old_clip);
       self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
@@ -1221,6 +1261,7 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
 {
   gsk_gpu_node_processor_add_node_clipped (self,
                                            gsk_clip_node_get_child (node),
+                                           0,
                                            gsk_clip_node_get_clip (node));
 }
 
@@ -1333,7 +1374,8 @@ static gboolean
 gsk_gpu_node_processor_add_first_node_clipped (GskGpuNodeProcessor   *self,
                                                GskGpuFirstNodeInfo   *info,
                                                const graphene_rect_t *clip,
-                                               GskRenderNode         *node)
+                                               GskRenderNode         *node,
+                                               gsize                  pos)
 {
   GskGpuClip old_clip;
   cairo_rectangle_int_t old_scissor;
@@ -1346,7 +1388,8 @@ gsk_gpu_node_processor_add_first_node_clipped (GskGpuNodeProcessor   *self,
 
   if (gsk_gpu_node_processor_add_first_node (self,
                                              info,
-                                             node))
+                                             node,
+                                             pos))
     {
       /* don't revert clip here, the add_first_node() adjusted it to a correct value */
       return TRUE;
@@ -1366,7 +1409,8 @@ gsk_gpu_node_processor_add_first_clip_node (GskGpuNodeProcessor *self,
   return gsk_gpu_node_processor_add_first_node_clipped (self,
                                                         info,
                                                         &node->bounds,
-                                                        gsk_clip_node_get_child (node));
+                                                        gsk_clip_node_get_child (node),
+                                                        0);
 }
 
 static void
@@ -1385,6 +1429,7 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
                                                           0,
                                                           &clip_bounds,
                                                           gsk_rounded_clip_node_get_child (node),
+                                                          0,
                                                           &child_rect);
   if (child_image == NULL)
     return;
@@ -1495,7 +1540,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
 
   self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
 
-  gsk_gpu_node_processor_add_node (self, gsk_rounded_clip_node_get_child (node));
+  gsk_gpu_node_processor_add_node (self, gsk_rounded_clip_node_get_child (node), 0);
 
   gsk_gpu_clip_init_copy (&self->clip, &old_clip);
   self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
@@ -1516,7 +1561,8 @@ gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuNodeProcessor *self,
   return gsk_gpu_node_processor_add_first_node_clipped (self,
                                                         info,
                                                         &cover,
-                                                        gsk_rounded_clip_node_get_child (node));
+                                                        gsk_rounded_clip_node_get_child (node),
+                                                        0);
 }
 
 static void
@@ -1543,7 +1589,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
         old_offset = self->offset;
         self->offset.x += dx;
         self->offset.y += dy;
-        gsk_gpu_node_processor_add_node (self, child);
+        gsk_gpu_node_processor_add_node (self, child, 0);
         self->offset = old_offset;
       }
       return;
@@ -1626,11 +1672,11 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
             gsk_transform_unref (clip_transform);
             /* This cannot loop because the next time we'll hit the branch above */
             gsk_gpu_node_processor_sync_globals (self, 0);
-            image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                              0,
-                                                              NULL,
-                                                              node,
-                                                              &tex_rect);
+            image = gsk_gpu_node_processor_get_node_as_image_untracked (self,
+                                                                        0,
+                                                                        NULL,
+                                                                        node,
+                                                                        &tex_rect);
             if (image != NULL)
               {
                 gsk_gpu_node_processor_image_op (self,
@@ -1701,7 +1747,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
   if (self->modelview != old_modelview)
     self->pending_globals |= GSK_GPU_GLOBAL_MATRIX;
 
-  gsk_gpu_node_processor_add_node (self, child);
+  gsk_gpu_node_processor_add_node (self, child, 0);
 
   self->offset = old_offset;
   self->scale = old_scale;
@@ -1739,7 +1785,8 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor *self,
       self->offset.y += dy;
       result = gsk_gpu_node_processor_add_first_node (self,
                                                       info,
-                                                      gsk_transform_node_get_child (node));
+                                                      gsk_transform_node_get_child (node),
+                                                      0);
       self->offset = old_offset;
       return result;
 
@@ -1760,7 +1807,8 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor *self,
 
       result = gsk_gpu_node_processor_add_first_node (self,
                                                       info,
-                                                      gsk_transform_node_get_child (node));
+                                                      gsk_transform_node_get_child (node),
+                                                      0);
 
       self->offset = old_offset;
       self->scale = old_scale;
@@ -1801,7 +1849,8 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor *self,
 
         result = gsk_gpu_node_processor_add_first_node (self,
                                                         info,
-                                                        gsk_transform_node_get_child (node));
+                                                        gsk_transform_node_get_child (node),
+                                                        0);
 
         self->offset = old_offset;
         self->scale = old_scale;
@@ -1837,10 +1886,14 @@ gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
 
   child = gsk_opacity_node_get_child (node);
 
+  gsk_gpu_frame_start_node (self->frame, child, 0);
+
   if (gsk_render_node_clears_background (child))
     gsk_gpu_node_processor_add_with_offscreen (self, child);
   else
-    gsk_gpu_node_processor_add_node (self, child);
+    gsk_gpu_node_processor_add_node_untracked (self, child);
+
+  gsk_gpu_frame_end_node (self->frame);
 
   self->opacity = old_opacity;
 }
@@ -2334,7 +2387,7 @@ gsk_gpu_node_processor_add_first_node_no_blend (GskGpuNodeProcessor *self,
   self->blend = GSK_GPU_BLEND_NONE;
   self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
 
-  gsk_gpu_node_processor_add_node (self, node);
+  gsk_gpu_node_processor_add_node_untracked (self, node);
 
   self->blend = GSK_GPU_BLEND_OVER;
   self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
@@ -3053,7 +3106,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
   blur_radius = gsk_blur_node_get_radius (node);
   if (blur_radius <= 0.f)
     {
-      gsk_gpu_node_processor_add_node (self, child);
+      gsk_gpu_node_processor_add_node (self, child, 0);
       return;
     }
 
@@ -3064,6 +3117,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
                                                     GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
                                                     &clip_rect,
                                                     child,
+                                                    0,
                                                     &tex_rect);
   if (image == NULL)
     return;
@@ -3103,6 +3157,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                                     GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
                                                     &clip_bounds, 
                                                     child,
+                                                    0,
                                                     &tex_rect);
   if (image == NULL)
     return;
@@ -3186,11 +3241,13 @@ gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
                                                            0,
                                                            NULL,
                                                            bottom_child,
+                                                           0,
                                                            &bottom_rect);
   top_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                         0,
                                                         NULL,
                                                         top_child,
+                                                        1,
                                                         &top_rect);
 
   if (bottom_image == NULL)
@@ -3244,11 +3301,13 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuNodeProcessor *self,
                                                           0,
                                                           NULL,
                                                           first_child,
+                                                          0,
                                                           &first_rect);
   second_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                            0,
                                                            NULL,
                                                            second_child,
+                                                           1,
                                                            &second_rect);
 
   if (first_image == NULL)
@@ -3299,12 +3358,12 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
 
   if (progress <= 0.0)
     {
-      gsk_gpu_node_processor_add_node (self, start_child);
+      gsk_gpu_node_processor_add_node (self, start_child, 0);
       return;
     }
   if (progress >= 1.0)
     {
-      gsk_gpu_node_processor_add_node (self, end_child);
+      gsk_gpu_node_processor_add_node (self, end_child, 1);
       return;
     }
 
@@ -3312,11 +3371,13 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
                                                           0,
                                                           NULL,
                                                           start_child,
+                                                          0,
                                                           &start_rect);
   end_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                         0,
                                                         NULL,
                                                         end_child,
+                                                        1,
                                                         &end_rect);
 
   if (start_image == NULL)
@@ -3395,6 +3456,7 @@ gsk_gpu_node_processor_add_displacement_node (GskGpuNodeProcessor *self,
                                                           0,
                                                           &child_bounds,
                                                           child,
+                                                          0,
                                                           &child_rect);
   if (child_image == NULL)
     return;
@@ -3403,6 +3465,7 @@ gsk_gpu_node_processor_add_displacement_node (GskGpuNodeProcessor *self,
                                                                  0,
                                                                  &bounds,
                                                                  displacement_child,
+                                                                 1,
                                                                  &displacement_rect);
   if (displacement_image == NULL)
     return; /* technically we have to render TRANSPARENT everywhere */
@@ -3449,11 +3512,12 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
                                                          0,
                                                          &bounds,
                                                          mask_child,
+                                                         1,
                                                          &mask_rect);
   if (mask_image == NULL)
     {
       if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
-        gsk_gpu_node_processor_add_node (self, source_child);
+        gsk_gpu_node_processor_add_node (self, source_child, 0);
       return;
     }
 
@@ -3482,6 +3546,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
                                                                0,
                                                                &bounds,
                                                                source_child,
+                                                               0,
                                                                &source_rect);
       if (source_image == NULL)
         {
@@ -3665,6 +3730,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
                                                     0,
                                                     NULL,
                                                     child,
+                                                    0,
                                                     &tex_rect);
   if (image == NULL)
     return;
@@ -3741,6 +3807,7 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuNodeProcessor *self,
                                                     0,
                                                     NULL,
                                                     child,
+                                                    0,
                                                     &tex_rect);
   if (image == NULL)
     return;
@@ -3810,6 +3877,7 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
                                                     GSK_GPU_AS_IMAGE_EXACT_SIZE,
                                                     &clipped_child_bounds,
                                                     child,
+                                                    0,
                                                     &clipped_child_bounds);
   g_return_if_fail (image);
 
@@ -3851,6 +3919,7 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
     {
       gsk_gpu_node_processor_add_node_clipped (self,
                                                child,
+                                               0,
                                                &node->bounds);
       return;
     }
@@ -3877,6 +3946,7 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
                                                         GSK_GPU_AS_IMAGE_EXACT_SIZE,
                                                         &clipped_child_bounds,
                                                         child,
+                                                        0,
                                                         &clipped_child_bounds);
       g_return_if_fail (image);
       gsk_gpu_texture_op (self->frame,
@@ -3903,6 +3973,7 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
                                                         GSK_GPU_AS_IMAGE_EXACT_SIZE,
                                                         &clipped_child_bounds,
                                                         child,
+                                                        0,
                                                         &clipped_child_bounds);
       g_return_if_fail (image);
       clipped_child_bounds.origin = pos;
@@ -4008,6 +4079,7 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
                     continue;
                   gsk_gpu_node_processor_add_node_clipped (self,
                                                            child,
+                                                           0,
                                                            &clip_bounds);
                 }
             }
@@ -4069,6 +4141,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                                                0,
                                                                &clip_bounds,
                                                                child,
+                                                               0,
                                                                &source_rect);
 
       if (source_image != NULL)
@@ -4146,6 +4219,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                                                0,
                                                                &clip_bounds,
                                                                child,
+                                                               0,
                                                                &source_rect);
       if (source_image != NULL)
         {
@@ -4181,7 +4255,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
       gdk_subsurface_get_texture (subsurface) == NULL ||
       gdk_subsurface_get_parent (subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (self->frame)))
     {
-      gsk_gpu_node_processor_add_node (self, gsk_subsurface_node_get_child (node));
+      gsk_gpu_node_processor_add_node (self, gsk_subsurface_node_get_child (node), 0);
       return;
     }
 
@@ -4243,7 +4317,8 @@ gsk_gpu_node_processor_add_first_subsurface_node (GskGpuNodeProcessor *self,
     {
       return gsk_gpu_node_processor_add_first_node (self,
                                                     info,
-                                                    gsk_subsurface_node_get_child (node));
+                                                    gsk_subsurface_node_get_child (node),
+                                                    0);
     }
 
   if (gdk_subsurface_is_above_parent (subsurface))
@@ -4266,6 +4341,8 @@ gsk_gpu_get_subsurface_node_as_image (GskGpuFrame           *frame,
                                       GskRenderNode         *node,
                                       graphene_rect_t       *out_bounds)
 {
+  GskGpuImage *result;
+  GskRenderNode *child;
 #ifndef G_DISABLE_ASSERT
   GdkSubsurface *subsurface;
 
@@ -4275,13 +4352,21 @@ gsk_gpu_get_subsurface_node_as_image (GskGpuFrame           *frame,
             gdk_subsurface_get_parent (subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (frame)));
 #endif
 
-  return gsk_gpu_get_node_as_image (frame,
-                                    flags,
-                                    ccs,
-                                    clip_bounds,
-                                    scale,
-                                    gsk_subsurface_node_get_child (node),
-                                    out_bounds);
+  child = gsk_subsurface_node_get_child (node);
+
+  gsk_gpu_frame_start_node (frame, child, 0);
+
+  result = gsk_gpu_get_node_as_image (frame,
+                                      flags,
+                                      ccs,
+                                      clip_bounds,
+                                      scale,
+                                      child,
+                                      out_bounds);
+
+  gsk_gpu_frame_end_node (frame);
+
+  return result;
 }
 
 static void
@@ -4393,6 +4478,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
                                                          0,
                                                          &bounds,
                                                          gsk_composite_node_get_mask (node),
+                                                         1,
                                                          &mask_rect);
   if (mask_image == NULL)
     return;
@@ -4417,6 +4503,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
                                                               0,
                                                               &bounds,
                                                               child,
+                                                              0,
                                                               &child_rect);
       if (child_image == NULL)
         /* FIXME */
@@ -4480,12 +4567,14 @@ gsk_gpu_node_processor_add_isolation_node (GskGpuNodeProcessor *self,
       if (gsk_render_node_get_copy_mode (child) != GSK_COPY_NONE ||
           gsk_render_node_clears_background (child))
         {
+          gsk_gpu_frame_start_node (self->frame, child, 0);
           gsk_gpu_node_processor_add_with_offscreen (self, child);
+          gsk_gpu_frame_end_node (self->frame);
           return;
         }
     }
   
-  gsk_gpu_node_processor_add_node (self, child);
+  gsk_gpu_node_processor_add_node (self, child, 0);
 }
 
 static void
@@ -4519,7 +4608,7 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
     i = 0;
 
   for (; i < n_children; i++)
-    gsk_gpu_node_processor_add_node (self, children[i]);
+    gsk_gpu_node_processor_add_node (self, children[i], i);
 }
 
 static gboolean
@@ -4542,7 +4631,7 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
 
   for (i = n; i-- > 0; )
     {
-      if (gsk_gpu_node_processor_add_first_node (self, info, children[i]))
+      if (gsk_gpu_node_processor_add_first_node (self, info, children[i], i))
         break;
     }
 
@@ -4550,7 +4639,7 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
     gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
 
   for (i++; i < n; i++)
-    gsk_gpu_node_processor_add_node (self, children[i]);
+    gsk_gpu_node_processor_add_node (self, children[i], i);
 
   return TRUE;
 }
@@ -4559,7 +4648,7 @@ static void
 gsk_gpu_node_processor_add_debug_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
 {
-  gsk_gpu_node_processor_add_node (self, gsk_debug_node_get_child (node));
+  gsk_gpu_node_processor_add_node (self, gsk_debug_node_get_child (node), 0);
 }
 
 static gboolean
@@ -4569,7 +4658,8 @@ gsk_gpu_node_processor_add_first_debug_node (GskGpuNodeProcessor *self,
 {
   return gsk_gpu_node_processor_add_first_node (self,
                                                 info,
-                                                gsk_debug_node_get_child (node));
+                                                gsk_debug_node_get_child (node),
+                                                0);
 }
 
 static GskGpuImage *
@@ -4581,13 +4671,24 @@ gsk_gpu_get_debug_node_as_image (GskGpuFrame           *frame,
                                  GskRenderNode         *node,
                                  graphene_rect_t       *out_bounds)
 {
-  return gsk_gpu_get_node_as_image (frame,
-                                    flags,
-                                    ccs,
-                                    clip_bounds,
-                                    scale,
-                                    gsk_debug_node_get_child (node),
-                                    out_bounds);
+  GskGpuImage *result;
+  GskRenderNode *child;
+
+  child = gsk_debug_node_get_child (node);
+
+  gsk_gpu_frame_start_node (frame, child, 0);
+
+  result = gsk_gpu_get_node_as_image (frame,
+                                      flags,
+                                      ccs,
+                                      clip_bounds,
+                                      scale,
+                                      child,
+                                      out_bounds);
+
+  gsk_gpu_frame_end_node (frame);
+
+  return result;
 }
 
 typedef enum {
@@ -4880,8 +4981,8 @@ static const struct
 };
 
 static void
-gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
-                                 GskRenderNode       *node)
+gsk_gpu_node_processor_add_node_untracked (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
 {
   GskRenderNodeType node_type;
 
@@ -4924,9 +5025,9 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
-                                       GskGpuFirstNodeInfo *info,
-                                       GskRenderNode       *node)
+gsk_gpu_node_processor_add_first_node_untracked (GskGpuNodeProcessor *self,
+                                                 GskGpuFirstNodeInfo *info,
+                                                 GskRenderNode       *node)
 {
   GskRenderNodeType node_type;
   graphene_rect_t opaque;
@@ -4956,9 +5057,26 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
     return FALSE;
 
   gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
-  gsk_gpu_node_processor_add_node (self, node);
+  gsk_gpu_node_processor_add_node_untracked (self, node);
 
   return TRUE;
+}
+
+static gboolean
+gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
+                                       GskGpuFirstNodeInfo *info,
+                                       GskRenderNode       *node,
+                                       gsize                pos)
+{
+  gboolean result;
+
+  gsk_gpu_frame_start_node (self->frame, node, pos);
+
+  result = gsk_gpu_node_processor_add_first_node_untracked (self, info, node);
+  
+  gsk_gpu_frame_end_node (self->frame);
+
+  return result;
 }
 
 /*
@@ -4969,6 +5087,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
  * @clip_bounds: region of node that must be included in image
  * @scale: scale factor to use for the image
  * @node: the node to render
+ * @pos: position in child to do tracking with or -1 for no tracking
  * @out_bounds: the actual bounds of the result
  *
  * Get the part of the node indicated by the clip bounds as an image.
@@ -5086,12 +5205,12 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
 
       gsk_gpu_node_processor_set_scissor (self, &rect);
 
-      if (!gsk_gpu_node_processor_add_first_node (self,
-                                                  &info,
-                                                  node))
+      if (!gsk_gpu_node_processor_add_first_node_untracked (self,
+                                                            &info,
+                                                            node))
         {
           gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
-          gsk_gpu_node_processor_add_node (self, node);
+          gsk_gpu_node_processor_add_node_untracked (self, node);
           do_culling = FALSE;
         }
       else if (GSK_DEBUG_CHECK (OCCLUSION))
@@ -5119,12 +5238,12 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
       /* only run pass if it's covering the whole rectangle */
       info.min_occlusion_pixels = rect.width * rect.height;
 
-      if (!gsk_gpu_node_processor_add_first_node (self,
-                                                  &info,
-                                                  node))
+      if (!gsk_gpu_node_processor_add_first_node_untracked (self,
+                                                            &info,
+                                                            node))
         {
           gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
-          gsk_gpu_node_processor_add_node (self, node);
+          gsk_gpu_node_processor_add_node_untracked (self, node);
         }
     }
 

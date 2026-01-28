@@ -52,6 +52,7 @@ struct _GskGpuOp
 {
   const GskGpuOpClass *op_class;
 
+  gsize node_id; /* debug info maintained by frame, usually 0 */
   GskGpuOp *next;
 };
 
@@ -80,8 +81,6 @@ struct _GskGpuOpClass
 /* ensures alignment of ops to multiples of 16 bytes - and that makes graphene happy */
 #define GSK_GPU_OP_SIZE(struct_name) ((sizeof(struct_name) + 15) & ~15)
 
-GskGpuOp *              gsk_gpu_op_alloc                                (GskGpuFrame            *frame,
-                                                                         const GskGpuOpClass    *op_class);
 void                    gsk_gpu_op_finish                               (GskGpuOp               *op);
 
 void                    gsk_gpu_op_print                                (GskGpuOp               *op,

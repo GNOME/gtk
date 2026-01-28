@@ -41,6 +41,7 @@ typedef struct _GtkInspectorRenderRecording
   GdkRectangle area;
   cairo_region_t *clip_region;
   GskRenderNode *node;
+  GskRenderNode *profile_node;
   gpointer surface;
 } GtkInspectorRenderRecording;
 
@@ -49,23 +50,26 @@ typedef struct _GtkInspectorRenderRecordingClass
   GtkInspectorRecordingClass parent;
 } GtkInspectorRenderRecordingClass;
 
-GType           gtk_inspector_render_recording_get_type      (void);
+GType           gtk_inspector_render_recording_get_type         (void);
 
 GtkInspectorRecording *
-                gtk_inspector_render_recording_new           (gint64                             timestamp,
-                                                              const GdkRectangle                *area,
-                                                              const cairo_region_t              *clip_region,
-                                                              GskRenderNode                     *node,
-                                                              gpointer                           surface);
+                gtk_inspector_render_recording_new              (gint64                             timestamp,
+                                                                 const GdkRectangle                *area,
+                                                                 const cairo_region_t              *clip_region,
+                                                                 GskRenderNode                     *node,
+                                                                 gpointer                           surface);
 
-GskRenderNode * gtk_inspector_render_recording_get_node      (GtkInspectorRenderRecording       *recording);
+GskRenderNode * gtk_inspector_render_recording_get_node         (GtkInspectorRenderRecording       *recording);
+GskRenderNode * gtk_inspector_render_recording_get_profile_node (GtkInspectorRenderRecording       *recording);
+void            gtk_inspector_render_recording_set_profile_node (GtkInspectorRenderRecording       *recording,
+                                                                 GskRenderNode                     *profile_node);
 const cairo_region_t *
-                gtk_inspector_render_recording_get_clip_region (GtkInspectorRenderRecording     *recording);
+                gtk_inspector_render_recording_get_clip_region  (GtkInspectorRenderRecording       *recording);
 const cairo_rectangle_int_t *
-                gtk_inspector_render_recording_get_area      (GtkInspectorRenderRecording       *recording);
+                gtk_inspector_render_recording_get_area         (GtkInspectorRenderRecording       *recording);
 
 gpointer
-                gtk_inspector_render_recording_get_surface   (GtkInspectorRenderRecording       *recording);
+                gtk_inspector_render_recording_get_surface      (GtkInspectorRenderRecording       *recording);
 
 G_END_DECLS
 

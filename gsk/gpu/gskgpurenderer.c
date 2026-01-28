@@ -33,6 +33,7 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "to-image",  GSK_GPU_OPTIMIZE_TO_IMAGE,          "Don't fast-path creation of images for nodes" },
   { "occlusion", GSK_GPU_OPTIMIZE_OCCLUSION_CULLING, "Disable occlusion culling via opaque node tracking" },
   { "repeat",    GSK_GPU_OPTIMIZE_REPEAT,            "Repeat drawing operations instead of using offscreen and GL_REPEAT" },
+  { "profile",   GSK_GPU_OPTIMIZE_PROFILE,           "Disable profiling support" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;
@@ -79,7 +80,11 @@ gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
   GskGpuRendererClass *klass = GSK_GPU_RENDERER_GET_CLASS (self);
   GskGpuFrame *result;
 
-  result = g_object_new (klass->frame_type, NULL);
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), PROFILE) &&
+      priv->optimizations & GSK_GPU_OPTIMIZE_PROFILE)
+    result = g_object_new (klass->profile_frame_type, NULL);
+  else
+    result = g_object_new (klass->frame_type, NULL);
 
   gsk_gpu_frame_setup (result, self, priv->device, priv->optimizations);
 

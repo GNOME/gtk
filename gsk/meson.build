@@ -181,6 +181,7 @@ gsk_private_vulkan_shader_headers = []
 if have_vulkan
   gsk_private_sources += files([
     'gpu/gskvulkanbuffer.c',
+    'gpu/gskvulkandebugframe.c',
     'gpu/gskvulkandevice.c',
     'gpu/gskvulkanframe.c',
     'gpu/gskvulkanimage.c',

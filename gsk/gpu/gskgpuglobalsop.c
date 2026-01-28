@@ -98,7 +98,7 @@ gsk_gpu_globals_op (GskGpuFrame             *frame,
 {
   GskGpuGlobalsOp *self;
 
-  self = (GskGpuGlobalsOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_GLOBALS_OP_CLASS);
+  self = (GskGpuGlobalsOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_GLOBALS_OP_CLASS);
 
   graphene_matrix_to_float (mvp, self->instance.mvp);
   gsk_rounded_rect_to_float (clip, graphene_point_zero (), self->instance.clip);

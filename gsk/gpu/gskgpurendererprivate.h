@@ -23,6 +23,7 @@ struct _GskGpuRendererClass
   GskRendererClass parent_class;
 
   GType frame_type;
+  GType profile_frame_type;
   GskGpuOptimizations optimizations; /* subclasses cannot override this */
 
   GskGpuDevice *        (* get_device)                                  (GdkDisplay             *display,

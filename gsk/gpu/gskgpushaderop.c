@@ -85,6 +85,7 @@ gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
   
       if (next->op_class != op->op_class ||
+          next->node_id != op->node_id ||
           next_shader->flags != self->flags ||
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
@@ -197,6 +198,7 @@ gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
 
       if (next->op_class != op->op_class ||
+          next->node_id != op->node_id ||
           next_shader->flags != self->flags ||
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
@@ -282,7 +284,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   else
     {
       GskGpuShaderOp *self;
-      self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
+      self = (GskGpuShaderOp *) gsk_gpu_frame_alloc_op (frame, &op_class->parent_class);
 
       self->flags = flags;
       self->color_states = color_states;

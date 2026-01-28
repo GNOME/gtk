@@ -35,6 +35,19 @@
 #define GDK_ARRAY_BY_VALUE 1
 #include "gdk/gdkarrayimpl.c"
 
+typedef struct _GskNodeStackNode GskNodeStackNode;
+struct _GskNodeStackNode {
+  GskRenderNode *node;
+  guint pos;
+};
+
+#define GDK_ARRAY_NAME gsk_node_stack
+#define GDK_ARRAY_TYPE_NAME GskNodeStack
+#define GDK_ARRAY_ELEMENT_TYPE GskNodeStackNode
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 64
+#include "gdk/gdkarrayimpl.c"
+
 typedef struct _GskGpuFramePrivate GskGpuFramePrivate;
 
 struct _GskGpuFramePrivate
@@ -58,6 +71,8 @@ struct _GskGpuFramePrivate
   GskGpuBuffer *storage_buffer;
   guchar *storage_buffer_data;
   gsize storage_buffer_used;
+
+  GskNodeStack node_stack;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuFrame, gsk_gpu_frame, G_TYPE_OBJECT)
@@ -73,6 +88,8 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuOp *op;
   gsize i;
+
+  g_assert (gsk_node_stack_get_size (&priv->node_stack) == 0);
 
   priv->n_globals = 0;
 
@@ -135,6 +152,49 @@ gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
   return NULL;
 }
 
+static gpointer
+gsk_gpu_frame_default_alloc_op (GskGpuFrame         *self,
+                                const GskGpuOpClass *op_class)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  GskGpuOp *op;
+  gsize pos;
+
+  pos = gsk_gpu_ops_get_size (&priv->ops);
+
+  gsk_gpu_ops_splice (&priv->ops,
+                      pos,
+                      0, FALSE,
+                      NULL,
+                      op_class->size);
+
+  op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, pos);
+
+  op->op_class = op_class;
+
+  priv->last_op = op;
+
+  return op;
+}
+
+static void
+gsk_gpu_frame_default_start_node (GskGpuFrame   *self,
+                                  GskRenderNode *node,
+                                  gsize          pos)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  gsk_node_stack_append (&priv->node_stack, &(GskNodeStackNode) { node, pos });
+}
+
+static void
+gsk_gpu_frame_default_end_node (GskGpuFrame *self)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  gsk_node_stack_set_size (&priv->node_stack, gsk_node_stack_get_size (&priv->node_stack) - 1);
+}
+
 static void
 gsk_gpu_frame_dispose (GObject *object)
 {
@@ -152,6 +212,7 @@ gsk_gpu_frame_finalize (GObject *object)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_clear (&priv->ops);
+  gsk_node_stack_clear (&priv->node_stack);
 
   g_clear_object (&priv->vertex_buffer);
   g_clear_object (&priv->globals_buffer);
@@ -173,6 +234,9 @@ gsk_gpu_frame_class_init (GskGpuFrameClass *klass)
   klass->end = gsk_gpu_frame_default_end;
   klass->sync = gsk_gpu_frame_default_sync;
   klass->upload_texture = gsk_gpu_frame_default_upload_texture;
+  klass->alloc_op = gsk_gpu_frame_default_alloc_op;
+  klass->start_node = gsk_gpu_frame_default_start_node;
+  klass->end_node = gsk_gpu_frame_default_end_node;
 
   object_class->dispose = gsk_gpu_frame_dispose;
   object_class->finalize = gsk_gpu_frame_finalize;
@@ -184,6 +248,7 @@ gsk_gpu_frame_init (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_init (&priv->ops);
+  gsk_node_stack_init (&priv->node_stack);
 }
 
 void
@@ -480,23 +545,10 @@ gsk_gpu_frame_sort_ops (GskGpuFrame *self)
 }
 
 gpointer
-gsk_gpu_frame_alloc_op (GskGpuFrame *self,
-                        gsize        size)
+gsk_gpu_frame_alloc_op (GskGpuFrame         *self,
+                        const GskGpuOpClass *op_class)
 {
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-  gsize pos;
-
-  pos = gsk_gpu_ops_get_size (&priv->ops);
-
-  gsk_gpu_ops_splice (&priv->ops,
-                      pos,
-                      0, FALSE,
-                      NULL,
-                      size);
-
-  priv->last_op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, pos);
-
-  return priv->last_op;
+  return GSK_GPU_FRAME_GET_CLASS (self)->alloc_op (self, op_class);
 }
 
 GskGpuOp *
@@ -755,7 +807,11 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
+  gsk_gpu_frame_start_node (self, node, 0);
+
   gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
+
+  gsk_gpu_frame_end_node (self);
 
   if (texture)
     gsk_gpu_download_op (self, target, target_color_state, texture);
@@ -904,3 +960,62 @@ gsk_gpu_frame_download_texture (GskGpuFrame           *self,
 
   return TRUE;
 }
+
+/*<private>
+ * gsk_gpu_frame_start_node:
+ * @self: the frame
+ * @node: the rendernode to track
+ * @pos: the position in the parent node
+ *
+ * Starts rendering the given node, which is the child of
+ * the currently rendered node at the given position.
+ *
+ * To end rendering that node, call gsk_gpu_frame_end_node().
+ **/
+void
+gsk_gpu_frame_start_node (GskGpuFrame   *self,
+                          GskRenderNode *node,
+                          gsize          pos)
+{
+#ifndef G_DISABLE_ASSERT
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  gsize n = gsk_node_stack_get_size (&priv->node_stack);
+
+  if (n > 0)
+    {
+      GskNodeStackNode *stack;
+      GskRenderNode **children;
+      gsize n_children;
+
+      stack = gsk_node_stack_get (&priv->node_stack, n - 1);
+      children = gsk_render_node_get_children (stack->node, &n_children);
+      g_assert (pos < n_children);
+      g_assert (children[pos] == node);
+    }
+  else
+    {
+      g_assert (pos == 0);
+    }
+#endif
+
+  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, node, pos);
+}
+
+/*<private>
+ * gsk_gpu_frame_end_node:
+ * @self: the frame
+ *
+ * Ends the current node and continues with its parent.
+ **/
+void
+gsk_gpu_frame_end_node (GskGpuFrame *self)
+{
+#ifndef G_DISABLE_ASSERT
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  g_assert (gsk_node_stack_get_size (&priv->node_stack) > 0);
+#endif
+
+  GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
+}
+
