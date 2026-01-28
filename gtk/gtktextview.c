@@ -10561,7 +10561,7 @@ gtk_text_view_set_extra_menu (GtkTextView *text_view,
  * Gets the menu model that gets added to the context menu
  * or %NULL if none has been set.
  *
- * Returns: (transfer none): the menu model
+ * Returns: (transfer none) (nullable): the menu model
  */
 GMenuModel *
 gtk_text_view_get_extra_menu (GtkTextView *text_view)
