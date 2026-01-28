@@ -23,6 +23,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
 #include "gskcontainernode.h"
+#include "gskrectprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
 
@@ -269,6 +270,14 @@ gsk_blend_node_new2 (GskRenderNode *bottom,
                                                   gsk_render_node_get_preferred_depth (top));
   node->is_hdr = gsk_render_node_is_hdr (bottom) ||
                  gsk_render_node_is_hdr (top);
+  node->fully_opaque = gsk_render_node_is_fully_opaque (bottom) &&
+                       gsk_render_node_is_fully_opaque (top) &&
+                       gsk_rect_equal (&bottom->bounds, &top->bounds);
+  node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (bottom) ||
+                                   gsk_render_node_contains_subsurface_node (top);
+  node->contains_paste_node = gsk_render_node_contains_paste_node (bottom) ||
+                              gsk_render_node_contains_paste_node (top);
+
 
   return node;
 }

@@ -23,6 +23,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
 #include "gskcontainernode.h"
+#include "gskrectprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
 
@@ -367,6 +368,15 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
                                                   gsk_render_node_get_preferred_depth (second));
   node->is_hdr = gsk_render_node_is_hdr (first) ||
                  gsk_render_node_is_hdr (second);
+  node->fully_opaque = gsk_render_node_is_fully_opaque (first) &&
+                       gsk_render_node_is_fully_opaque (second) &&
+                       gsk_rect_contains_rect (&first->bounds, bounds) &&
+                       gsk_rect_contains_rect (&second->bounds, bounds) &&
+                       k1 + k2 + k3 + k4 >= 1;
+  node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (first) ||
+                                   gsk_render_node_contains_subsurface_node (second);
+  node->contains_paste_node = gsk_render_node_contains_paste_node (first) ||
+                              gsk_render_node_contains_paste_node (second);
 
   return node;
 }
