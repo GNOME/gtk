@@ -98,7 +98,10 @@ gdk_wayland_cairo_context_buffer_release (void             *_data,
 
   /* context was destroyed before compositor released this buffer */
   if (self == NULL)
-    return;
+    {
+      cairo_surface_destroy (cairo_surface);
+      return;
+    }
 
   /* Cache one surface for reuse when drawing */
   if (self->cached_surface == NULL)
