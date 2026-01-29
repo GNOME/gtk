@@ -5200,9 +5200,11 @@ gsk_gpu_node_processor_set_scissor (GskGpuRenderPass         *self,
 }
 
 static void
-gsk_gpu_node_processor_render (GskGpuRenderPass   *self,
+gsk_gpu_node_processor_render (GskGpuFrame           *frame,
                                GskGpuImage           *target,
+                               GdkColorState         *target_color_state,
                                cairo_region_t        *clip,
+                               const graphene_rect_t *viewport,
                                GskRenderNode         *node,
                                GskRenderPassType      pass_type)
 {
@@ -5212,15 +5214,24 @@ gsk_gpu_node_processor_render (GskGpuRenderPass   *self,
   };
   int i, n, best, best_size;
   cairo_rectangle_int_t rect;
+  GskGpuRenderPass self;
   gboolean do_culling;
 
   cairo_region_get_extents (clip, &info.extents);
+
+  gsk_gpu_render_pass_init (&self,
+                            frame,
+                            target,
+                            target_color_state,
+                            &info.extents,
+                            viewport);
+
   info.whole_area = cairo_region_contains_rectangle (clip, &info.extents) == CAIRO_REGION_OVERLAP_IN;
   info.min_occlusion_pixels = gsk_gpu_image_get_width (target) * gsk_gpu_image_get_height (target) *
                               MIN_PERCENTAGE_FOR_OCCLUSION_PASS / 100;
   info.min_occlusion_pixels = MAX (info.min_occlusion_pixels, MIN_PIXELS_FOR_OCCLUSION_PASS);
 
-  do_culling = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING);
+  do_culling = gsk_gpu_frame_should_optimize (self.frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING);
 
   while (do_culling &&
          (n = cairo_region_num_rectangles (clip)) > 0)
@@ -5242,42 +5253,44 @@ gsk_gpu_node_processor_render (GskGpuRenderPass   *self,
       if (best_size < MIN_PIXELS_FOR_OCCLUSION_PASS)
         break;
 
-      gsk_gpu_node_processor_set_scissor (self, &rect);
+      gsk_gpu_node_processor_set_scissor (&self, &rect);
 
-      if (!gsk_gpu_node_processor_add_first_node_untracked (self,
+      if (!gsk_gpu_node_processor_add_first_node_untracked (&self,
                                                             &info,
                                                             node))
         {
-          gsk_gpu_first_node_begin_rendering_node (self, &info, node);
+          gsk_gpu_first_node_begin_rendering_node (&self, &info, node);
           do_culling = FALSE;
         }
 
-      cairo_region_subtract_rectangle (clip, &self->scissor);
+      cairo_region_subtract_rectangle (clip, &self.scissor);
     }
 
   for (i = 0; i < cairo_region_num_rectangles (clip); i++) 
     {
       cairo_region_get_rectangle (clip, i, &rect);
 
-      gsk_gpu_node_processor_set_scissor (self, &rect);
+      gsk_gpu_node_processor_set_scissor (&self, &rect);
 
       /* only run pass if it's covering the whole rectangle */
       info.min_occlusion_pixels = rect.width * rect.height;
 
-      if (!gsk_gpu_node_processor_add_first_node_untracked (self,
+      if (!gsk_gpu_node_processor_add_first_node_untracked (&self,
                                                             &info,
                                                             node))
         {
-          gsk_gpu_first_node_begin_rendering_node (self, &info, node);
+          gsk_gpu_first_node_begin_rendering_node (&self, &info, node);
         }
     }
 
   if (info.has_started_rendering)
     {
-      gsk_gpu_render_pass_end_op (self->frame,
+      gsk_gpu_render_pass_end_op (self.frame,
                                   target,
                                   pass_type);
     }
+
+  gsk_gpu_render_pass_finish (&self);
 }
 
 static void
@@ -5386,19 +5399,19 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
 
   cairo_region_get_extents (clip, &extents);
 
-  gsk_gpu_render_pass_init (&self,
-                            frame,
-                            target,
-                            target_color_state,
-                            &extents,
-                            viewport);
-
   if (gdk_color_state_equal (ccs, target_color_state))
     {
-      gsk_gpu_node_processor_render (&self, target, clip, node, pass_type);
+      gsk_gpu_node_processor_render (frame, target, target_color_state, clip, viewport, node, pass_type);
     }
   else
     {
+      gsk_gpu_render_pass_init (&self,
+                                frame,
+                                target,
+                                target_color_state,
+                                &extents,
+                                viewport);
+
       for (i = 0; i < cairo_region_num_rectangles (clip); i++)
         {
           cairo_rectangle_int_t rect;
@@ -5443,9 +5456,9 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
 
           g_object_unref (image);
         }
-    }
 
-  gsk_gpu_render_pass_finish (&self);
+      gsk_gpu_render_pass_finish (&self);
+    }
 
   cairo_region_destroy (clip);
 }
