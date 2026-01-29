@@ -194,58 +194,6 @@ static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskGpuF
                                                                          graphene_rect_t                *out_bounds);
 
 static void
-gsk_gpu_node_processor_finish (GskGpuRenderPass *self)
-{
-  g_clear_pointer (&self->modelview, gsk_transform_unref);
-}
-
-static void
-gsk_gpu_node_processor_init (GskGpuRenderPass         *self,
-                             GskGpuFrame                 *frame,
-                             GskGpuImage                 *target,
-                             GdkColorState               *ccs,
-                             const cairo_rectangle_int_t *clip,
-                             const graphene_rect_t       *viewport)
-{
-  gsize width, height;
-
-  width = gsk_gpu_image_get_width (target);
-  height = gsk_gpu_image_get_height (target);
-
-  self->frame = frame;
-  self->ccs = ccs;
-
-  self->scissor = *clip;
-  self->blend = GSK_GPU_BLEND_OVER;
-  if (clip->x == 0 && clip->y == 0 && clip->width == width && clip->height == height)
-    {
-      gsk_gpu_clip_init_empty (&self->clip, &GRAPHENE_RECT_INIT (0, 0, viewport->size.width, viewport->size.height));
-    }
-  else
-    {
-      float scale_x = viewport->size.width / width;
-      float scale_y = viewport->size.height / height;
-      gsk_gpu_clip_init_empty (&self->clip,
-                               &GRAPHENE_RECT_INIT (
-                                   scale_x * clip->x,
-                                   scale_y * clip->y,
-                                   scale_x * clip->width,
-                                   scale_y * clip->height
-                               ));
-    }
-
-  self->modelview = NULL;
-  gsk_gpu_image_get_projection_matrix (target, &self->projection);
-  graphene_vec2_init (&self->scale,
-                      width / viewport->size.width,
-                      height / viewport->size.height);
-  self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
-                                      -viewport->origin.y);
-  self->opacity = 1.0;
-  self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND;
-}
-
-static void
 gsk_gpu_node_processor_emit_globals_op (GskGpuRenderPass *self)
 {
   graphene_matrix_t mvp;
@@ -351,12 +299,12 @@ gsk_gpu_node_processor_init_draw (GskGpuRenderPass   *self,
   if (image == NULL)
     return NULL;
 
-  gsk_gpu_node_processor_init (self,
-                               frame,
-                               image,
-                               ccs,
-                               &area,
-                               viewport);
+  gsk_gpu_render_pass_init (self,
+                            frame,
+                            image,
+                            ccs,
+                            &area,
+                            viewport);
 
   gsk_gpu_render_pass_begin_op (frame,
                                 image,
@@ -376,7 +324,7 @@ gsk_gpu_node_processor_finish_draw (GskGpuRenderPass *self,
                               image,
                               GSK_RENDER_PASS_OFFSCREEN);
 
-  gsk_gpu_node_processor_finish (self);
+  gsk_gpu_render_pass_finish (self);
 }
 
 static void
@@ -866,12 +814,12 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
       GskGpuRenderPass other;
       graphene_rect_t rect = GRAPHENE_RECT_INIT (0, 0, width, height);
 
-      gsk_gpu_node_processor_init (&other,
-                                   frame,
-                                   copy,
-                                   ccs,
-                                   &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                   &rect);
+      gsk_gpu_render_pass_init (&other,
+                                frame,
+                                copy,
+                                ccs,
+                                &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                &rect);
 
       gsk_gpu_render_pass_begin_op (other.frame,
                                     copy,
@@ -895,7 +843,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                   copy,
                                   GSK_RENDER_PASS_OFFSCREEN);
 
-      gsk_gpu_node_processor_finish (&other);
+      gsk_gpu_render_pass_finish (&other);
     }
 
   g_object_unref (image);
@@ -5438,12 +5386,12 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
 
   cairo_region_get_extents (clip, &extents);
 
-  gsk_gpu_node_processor_init (&self,
-                               frame,
-                               target,
-                               target_color_state,
-                               &extents,
-                               viewport);
+  gsk_gpu_render_pass_init (&self,
+                            frame,
+                            target,
+                            target_color_state,
+                            &extents,
+                            viewport);
 
   if (gdk_color_state_equal (ccs, target_color_state))
     {
@@ -5497,7 +5445,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
         }
     }
 
-  gsk_gpu_node_processor_finish (&self);
+  gsk_gpu_render_pass_finish (&self);
 
   cairo_region_destroy (clip);
 }
@@ -5543,12 +5491,12 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
       image_shader_op = GDK_SHADER_DEFAULT;
     }
 
-  gsk_gpu_node_processor_init (&self,
-                               frame,
-                               target,
-                               target_color_state,
-                               &(cairo_rectangle_int_t) { 0, 0, width, height },
-                               &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gsk_gpu_render_pass_init (&self,
+                            frame,
+                            target,
+                            target_color_state,
+                            &(cairo_rectangle_int_t) { 0, 0, width, height },
+                            &GRAPHENE_RECT_INIT (0, 0, width, height));
   gsk_gpu_render_pass_begin_op (frame,
                                 target,
                                 &(cairo_rectangle_int_t) { 0, 0, width, height },
@@ -5582,7 +5530,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   gsk_gpu_render_pass_end_op (self.frame,
                               target,
                               GSK_RENDER_PASS_OFFSCREEN);
-  gsk_gpu_node_processor_finish (&self);
+  gsk_gpu_render_pass_finish (&self);
 
   g_clear_object (&intermediate);
 
