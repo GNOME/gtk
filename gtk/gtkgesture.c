@@ -1028,6 +1028,7 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
                                 GtkEventSequenceState  state)
 {
   GtkGesturePrivate *priv;
+  GtkWidget *widget;
   PointData *data;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
@@ -1054,8 +1055,8 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
 
   data->state = state;
 
-  gtk_widget_cancel_event_sequence (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
-                                    gesture, sequence, state);
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_propagate_event_sequence_state (widget, gesture, sequence, state);
   g_signal_emit (gesture, signals[SEQUENCE_STATE_CHANGED], 0,
                  sequence, state);
 

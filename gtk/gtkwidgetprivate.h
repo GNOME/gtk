@@ -325,10 +325,10 @@ GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
 void              gtk_widget_set_active_state              (GtkWidget *widget,
                                                             gboolean   active);
 
-void              gtk_widget_cancel_event_sequence         (GtkWidget             *widget,
-                                                            GtkGesture            *gesture,
-                                                            GdkEventSequence      *sequence,
-                                                            GtkEventSequenceState  state);
+void              gtk_widget_propagate_event_sequence_state (GtkWidget             *widget,
+                                                             GtkGesture            *gesture,
+                                                             GdkEventSequence      *sequence,
+                                                             GtkEventSequenceState  state);
 gboolean          gtk_widget_event                         (GtkWidget           *widget,
                                                             GdkEvent            *event,
                                                             GtkWidget           *target);
@@ -485,4 +485,3 @@ void gtk_widget_set_accessible_role (GtkWidget        *self,
                                      GtkAccessibleRole role);
 
 G_END_DECLS
-

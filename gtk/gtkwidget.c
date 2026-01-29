@@ -11904,10 +11904,10 @@ gtk_widget_activate_default (GtkWidget *widget)
 }
 
 void
-gtk_widget_cancel_event_sequence (GtkWidget             *widget,
-                                  GtkGesture            *gesture,
-                                  GdkEventSequence      *sequence,
-                                  GtkEventSequenceState  state)
+gtk_widget_propagate_event_sequence_state (GtkWidget             *widget,
+                                           GtkGesture            *owning_gesture,
+                                           GdkEventSequence      *sequence,
+                                           GtkEventSequenceState  state)
 {
   gboolean handled = FALSE;
   GtkPropagationPhase phase;
@@ -11915,8 +11915,9 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
   gboolean in_child_widget = TRUE;
   GdkEvent *event;
 
+  /* First, set the state on the gesture (group) setting the state */
   handled = _gtk_widget_set_sequence_state_internal (widget, sequence,
-                                                     state, gesture);
+                                                     state, owning_gesture);
 
   if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
     return;
@@ -11928,6 +11929,10 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
 
   phase = gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (owning_gesture));
 
+  /* If the sequence was claimed, either deny or cancel other gestures along
+   * the pick stack. Respectively, depending on whether their relative position
+   * in event handling order is prior or after the claiming gesture.
+   */
   while (event_widget)
     {
       if (event_widget == widget)
@@ -11937,7 +11942,7 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
       else if (in_child_widget)
         _gtk_widget_deny_sequence (event_widget, sequence);
       else
-        _gtk_widget_cancel_or_deny_sequence (event_widget, sequence, gesture);
+        _gtk_widget_cancel_or_deny_sequence (event_widget, sequence, owning_gesture);
 
       event_widget = _gtk_widget_get_parent (event_widget);
     }
