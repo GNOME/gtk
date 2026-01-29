@@ -1847,20 +1847,6 @@ zoom_out_cb (GtkButton        *button,
 }
 
 static gboolean
-node_editor_window_save_state (GtkApplicationWindow *win,
-                               GVariantDict         *state)
-{
-  NodeEditorWindow *self = NODE_EDITOR_WINDOW (win);
-
-  g_variant_dict_insert (state, "zoom-level", "i", self->zoom_level);
-  g_variant_dict_insert (state, "auto-reload", "b", self->auto_reload);
-  g_variant_dict_insert (state, "dark-mode", "b", self->dark_mode);
-  g_variant_dict_insert (state, "paned-position", "i", self->paned_position);
-
-  return TRUE;
-}
-
-static gboolean
 node_editor_window_close_request (GtkWindow *window)
 {
   GtkApplication *application;
@@ -1877,7 +1863,6 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkWindowClass *win_class = GTK_WINDOW_CLASS (class);
-  GtkApplicationWindowClass *appwin_class = GTK_APPLICATION_WINDOW_CLASS (class);
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
   GtkShortcut *shortcut;
@@ -1888,7 +1873,6 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   object_class->get_property = node_editor_window_get_property;
 
   win_class->close_request = node_editor_window_close_request;
-  appwin_class->save_state = node_editor_window_save_state;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/gtk4/node-editor/node-editor-window.ui");
