@@ -14804,6 +14804,7 @@ parse_base_animation_attrs (Animation            *a,
   const char *ignored = NULL;
   ShapeAttr attr;
   gboolean deprecated;
+  Shape *current_shape = NULL;
 
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
@@ -14834,6 +14835,12 @@ parse_base_animation_attrs (Animation            *a,
       else
         a->href = g_strdup (href_attr + 1);
     }
+
+  if (a->href)
+    current_shape = g_hash_table_lookup (data->shapes, a->href);
+
+  if (!current_shape)
+    current_shape = data->current_shape;
 
   if (begin_attr)
     {
@@ -15014,7 +15021,7 @@ parse_base_animation_attrs (Animation            *a,
       const char *expected;
 
       /* FIXME: if href is set, current_shape might be the wrong shape */
-      expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, data->current_shape->type);
+      expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, current_shape->type);
       if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
         gtk_svg_invalid_attribute (data->svg, context, "attributeName",
                                    "value must be '%s'", expected);
@@ -15026,14 +15033,14 @@ parse_base_animation_attrs (Animation            *a,
       return FALSE;
     }
   /* FIXME: if href is set, current_shape might be the wrong shape */
-  else if (shape_attr_lookup (attr_name_attr, data->current_shape->type, &attr, &deprecated))
+  else if (shape_attr_lookup (attr_name_attr, current_shape->type, &attr, &deprecated))
     {
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */
       if (has_ancestor (context, "stop"))
-        a->idx = data->current_shape->color_stops->len;
+        a->idx = current_shape->color_stops->len;
       else if (has_ancestor (context, "filter"))
-        a->idx = data->current_shape->filters->len;
+        a->idx = current_shape->filters->len;
     }
   else
     {
