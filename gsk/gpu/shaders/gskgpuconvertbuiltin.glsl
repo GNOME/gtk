@@ -11,7 +11,7 @@ variation: GdkBuiltinColorStateId color_space;
 variation: gboolean opacity;
 variation: gboolean premultiply;
 variation: gboolean reverse;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpuconvertbuiltininstance.glsl"
 

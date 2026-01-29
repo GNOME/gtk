@@ -6,7 +6,7 @@ opacity = false;
 
 graphene_rect_t rect;
 graphene_rect_t tex_rect;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgputextureinstance.glsl"
 

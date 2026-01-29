@@ -20,7 +20,7 @@ graphene_vec4_t table7;
 graphene_rect_t rect;
 graphene_rect_t tex_rect;
 float opacity;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpucomponenttransferinstance.glsl"
 

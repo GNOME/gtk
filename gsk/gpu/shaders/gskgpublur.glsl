@@ -7,7 +7,7 @@ graphene_rect_t tex_rect;
 graphene_vec2_t blur_direction;
 
 variation: gboolean colorize;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpublurinstance.glsl"
 

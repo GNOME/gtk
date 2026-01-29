@@ -21,7 +21,7 @@ graphene_vec4_t hints1;
 variation: gboolean supersampling;
 variation: gboolean premultiplied;
 variation: GskRepeat repeat;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpulineargradientinstance.glsl"
 

@@ -4,7 +4,7 @@ struct_name = "GskGpuRoundedColor";
 
 GskRoundedRect outline;
 GdkColor color;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpuroundedcolorinstance.glsl"
 

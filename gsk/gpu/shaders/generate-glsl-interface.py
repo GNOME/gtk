@@ -307,7 +307,7 @@ def read_file (filename):
                 on = True
             elif not on:
                 pass
-            elif line == "#endif":
+            elif line == "#endif /* GSK_PREAMBLE */":
                 on = False
             elif line == "":
                 pass

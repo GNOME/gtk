@@ -5,7 +5,7 @@ graphene_rect_t rect;
 graphene_rect_t tex_rect;
 GdkColor color;
 
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpucolorizeinstance.glsl"
 

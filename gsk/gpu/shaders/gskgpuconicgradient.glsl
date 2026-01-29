@@ -20,7 +20,7 @@ graphene_vec4_t hints1;
 
 variation: gboolean supersampling;
 variation: gboolean premultiplied;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpuconicgradientinstance.glsl"
 

@@ -24,7 +24,7 @@ variation: gboolean supersampling;
 variation: gboolean concentric;
 variation: gboolean premultiplied;
 variation: GskRepeat repeat;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpuradialgradientinstance.glsl"
 

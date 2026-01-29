@@ -8,7 +8,7 @@ graphene_matrix_t color_matrix;
 graphene_vec4_t color_offset;
 graphene_rect_t rect;
 graphene_rect_t tex_rect;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpucolormatrixinstance.glsl"
 
