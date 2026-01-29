@@ -33,6 +33,15 @@ struct _GskGpuRenderPass
   GskGpuGlobals                  pending_globals;
 };
 
+void                    gsk_gpu_render_pass_init                        (GskGpuRenderPass               *self,
+                                                                         GskGpuFrame                    *frame,
+                                                                         GskGpuImage                    *target,
+                                                                         GdkColorState                  *ccs,
+                                                                         const cairo_rectangle_int_t    *clip,
+                                                                         const graphene_rect_t          *viewport);
+
+void                    gsk_gpu_render_pass_finish                      (GskGpuRenderPass               *self);
+
 
 G_END_DECLS
 
