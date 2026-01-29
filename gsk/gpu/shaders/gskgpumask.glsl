@@ -9,7 +9,7 @@ graphene_rect_t mask_rect;
 float opacity;
 
 variation: GskMaskMode mask_mode;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpumaskinstance.glsl"
 

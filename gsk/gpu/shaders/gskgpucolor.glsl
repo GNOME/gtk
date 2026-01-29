@@ -1,7 +1,7 @@
 #ifdef GSK_PREAMBLE
 graphene_rect_t rect;
 GdkColor color;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpucolorinstance.glsl"
 

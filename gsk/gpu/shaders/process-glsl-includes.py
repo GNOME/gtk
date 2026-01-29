@@ -7,7 +7,7 @@ import os
 
 loaded_files = []
 
-check_defines = [ 'VULKAN' ]
+check_defines = [ 'VULKAN', 'GSK_PREAMBLE' ]
 
 def load (path, includes):
     if (path in loaded_files):

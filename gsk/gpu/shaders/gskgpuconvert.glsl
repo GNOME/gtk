@@ -8,7 +8,7 @@ graphene_rect_t tex_rect;
 float opacity;
 
 variation: gboolean opacity;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpuconvertinstance.glsl"
 

@@ -12,7 +12,7 @@ graphene_size_t displace_max;
 graphene_size_t displace_scale;
 graphene_size_t displace_offset;
 float opacity;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpudisplacementinstance.glsl"
 

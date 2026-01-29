@@ -11,7 +11,7 @@ float k2;
 float k3;
 float k4;
 float opacity;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpuarithmeticinstance.glsl"
 

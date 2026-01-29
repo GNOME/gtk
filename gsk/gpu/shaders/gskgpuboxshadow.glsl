@@ -12,7 +12,7 @@ float blur_radius;
 GdkColor color;
 
 variation: gboolean inset;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpuboxshadowinstance.glsl"
 

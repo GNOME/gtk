@@ -10,7 +10,7 @@ graphene_rect_t start_rect;
 graphene_rect_t end_rect;
 float opacity;
 float progress;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpucrossfadeinstance.glsl"
 

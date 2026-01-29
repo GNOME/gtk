@@ -10,7 +10,7 @@ graphene_rect_t mask_rect;
 float opacity;
 
 variation: GskPorterDuff operator;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpucompositeinstance.glsl"
 

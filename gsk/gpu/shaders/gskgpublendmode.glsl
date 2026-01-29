@@ -9,7 +9,7 @@ graphene_rect_t top_rect;
 float opacity;
 
 variation: GskBlendMode blend_mode;
-#endif
+#endif /* GSK_PREAMBLE */
 
 #include "gskgpublendmodeinstance.glsl"
 #include "blendmode.glsl"
