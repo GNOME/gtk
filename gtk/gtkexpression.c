@@ -2281,8 +2281,6 @@ gtk_expression_bind_notify (gpointer data)
  * the object's property stays synchronized with `self`.
  *
  * If `self`'s evaluation fails, `target`'s `property` is not updated.
- * You can ensure that this doesn't happen by using a fallback
- * expression.
  *
  * Note that this function takes ownership of `self`. If you want
  * to keep it around, you should [method@Gtk.Expression.ref] it beforehand.
