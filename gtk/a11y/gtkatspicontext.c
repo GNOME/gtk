@@ -1113,7 +1113,10 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
           emit_state_changed (self, "expanded",gtk_boolean_accessible_value_get (value));
         }
       else
-        emit_state_changed (self, "expandable", FALSE);
+        {
+          emit_state_changed (self, "expanded", FALSE);
+          emit_state_changed (self, "expandable", FALSE);
+        }
     }
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_INVALID)
