@@ -1047,8 +1047,12 @@ gdk_android_content_file_copy (GFile *file,
                                gpointer callback_data,
                                GError **error)
 {
-  if (!GDK_IS_ANDROID_CONTENT_FILE(file) || !GDK_IS_ANDROID_CONTENT_FILE(destination))
-    return FALSE;
+  g_return_val_if_fail (GDK_IS_ANDROID_CONTENT_FILE (file), FALSE);
+  if (!GDK_IS_ANDROID_CONTENT_FILE (destination))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Cannot copy content file into %s", G_OBJECT_TYPE_NAME(destination));
+      return FALSE;
+    }
   GdkAndroidContentFile *self = (GdkAndroidContentFile *)file;
   GdkAndroidContentFile *dest = (GdkAndroidContentFile *)destination;
   if (!gdk_android_content_file_make_valid (self, error))
