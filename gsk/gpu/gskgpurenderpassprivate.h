@@ -21,6 +21,7 @@ struct _GskGpuRenderPass
 {
   GskGpuFrame                   *frame;
   GdkColorState                 *ccs;
+  GskRenderPassType              pass_type;
   cairo_rectangle_int_t          scissor;
   GskGpuBlend                    blend;
   graphene_point_t               offset;
@@ -37,6 +38,7 @@ void                    gsk_gpu_render_pass_init                        (GskGpuR
                                                                          GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *target,
                                                                          GdkColorState                  *ccs,
+                                                                         GskRenderPassType               pass_type,
                                                                          const cairo_rectangle_int_t    *clip,
                                                                          const graphene_rect_t          *viewport);
 
