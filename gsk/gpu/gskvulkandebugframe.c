@@ -390,6 +390,17 @@ gsk_vulkan_debug_frame_end_node (GskGpuFrame *frame)
   GSK_GPU_FRAME_CLASS (gsk_vulkan_debug_frame_parent_class)->end_node (frame);
 }
 
+static GskDebugProfile *
+gsk_vulkan_debug_frame_get_profile (GskGpuFrame *frame)
+{
+  GskVulkanDebugFrame *self = GSK_VULKAN_DEBUG_FRAME (frame);
+
+  if (self->debug_current == NO_ITEM)
+    return NULL;
+
+  return &gsk_vulkan_debug_get (&self->debug, self->debug_current)->profile;
+}
+
 static void
 gsk_vulkan_debug_frame_finalize (GObject *object)
 {
@@ -425,6 +436,7 @@ gsk_vulkan_debug_frame_class_init (GskVulkanDebugFrameClass *klass)
   gpu_frame_class->alloc_op = gsk_vulkan_debug_frame_alloc_op;
   gpu_frame_class->start_node = gsk_vulkan_debug_frame_start_node;
   gpu_frame_class->end_node = gsk_vulkan_debug_frame_end_node;
+  gpu_frame_class->get_profile = gsk_vulkan_debug_frame_get_profile;
 
   object_class->finalize = gsk_vulkan_debug_frame_finalize;
 }

@@ -3,6 +3,8 @@
 #include "gskgpurenderer.h"
 #include "gskgputypesprivate.h"
 
+#include "gskdebugnodeprivate.h" /* GskDebugProfile */
+
 G_BEGIN_DECLS
 
 #define GSK_TYPE_GPU_FRAME         (gsk_gpu_frame_get_type ())
@@ -60,6 +62,7 @@ struct _GskGpuFrameClass
                                                                          GskRenderNode          *node,
                                                                          gsize                   pos);
   void                  (* end_node)                                    (GskGpuFrame            *self);
+  GskDebugProfile *     (* get_profile)                                 (GskGpuFrame            *self);
 };
 
 GType                   gsk_gpu_frame_get_type                          (void) G_GNUC_CONST;
@@ -133,6 +136,7 @@ void                    gsk_gpu_frame_start_node                        (GskGpuF
                                                                          GskRenderNode          *node,
                                                                          gsize                   pos);
 void                    gsk_gpu_frame_end_node                          (GskGpuFrame            *self);
+GskDebugProfile *       gsk_gpu_frame_get_profile                       (GskGpuFrame            *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuFrame, g_object_unref)
 
