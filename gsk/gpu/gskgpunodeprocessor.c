@@ -303,6 +303,7 @@ gsk_gpu_node_processor_init_draw (GskGpuRenderPass   *self,
                             frame,
                             image,
                             ccs,
+                            GSK_RENDER_PASS_OFFSCREEN,
                             &area,
                             viewport);
 
@@ -818,6 +819,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                 frame,
                                 copy,
                                 ccs,
+                                GSK_RENDER_PASS_OFFSCREEN,
                                 &(cairo_rectangle_int_t) { 0, 0, width, height },
                                 &rect);
 
@@ -5223,6 +5225,7 @@ gsk_gpu_node_processor_render (GskGpuFrame           *frame,
                             frame,
                             target,
                             target_color_state,
+                            pass_type,
                             &info.extents,
                             viewport);
 
@@ -5409,6 +5412,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                 frame,
                                 target,
                                 target_color_state,
+                                pass_type,
                                 &extents,
                                 viewport);
 
@@ -5508,6 +5512,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
                             frame,
                             target,
                             target_color_state,
+                            GSK_RENDER_PASS_OFFSCREEN,
                             &(cairo_rectangle_int_t) { 0, 0, width, height },
                             &GRAPHENE_RECT_INIT (0, 0, width, height));
   gsk_gpu_render_pass_begin_op (frame,
