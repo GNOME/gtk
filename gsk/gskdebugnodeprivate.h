@@ -17,6 +17,7 @@ struct _GskDebugProfile {
     /* recorded while processing nodes */
     guint64 offscreen_pixels;
     guint64 upload_pixels;
+    guint64 base_pixels;
   } total, self;
 };
 

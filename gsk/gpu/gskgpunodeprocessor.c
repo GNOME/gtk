@@ -1306,6 +1306,12 @@ gsk_gpu_first_node_begin_rendering (GskGpuNodeProcessor *self,
                                     GskGpuFirstNodeInfo *info,
                                     float                clear_color[4])
 {
+  GskDebugProfile *profile;
+
+  profile = gsk_gpu_frame_get_profile (self->frame);
+  if (profile)
+    profile->self.base_pixels += self->scissor.width * self->scissor.height;
+
   if (info->has_started_rendering)
     {
       if (clear_color &&
