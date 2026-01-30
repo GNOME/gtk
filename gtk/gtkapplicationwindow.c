@@ -888,12 +888,8 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
  * See [signal@Gtk.ApplicationWindow::save-state] for how to override
  * what state is saved.
  */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-noreturn"
 void
 gtk_application_window_save (GtkApplicationWindow *window,
                              GVariantDict         *state)
 {
-  g_assert_not_reached ();
 }
-#pragma GCC diagnostic pop
