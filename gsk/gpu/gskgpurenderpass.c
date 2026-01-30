@@ -11,6 +11,7 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
                           GskGpuFrame                 *frame,
                           GskGpuImage                 *target,
                           GdkColorState               *ccs,
+                          GskRenderPassType            pass_type,
                           const cairo_rectangle_int_t *clip,
                           const graphene_rect_t       *viewport)
 {
@@ -20,6 +21,7 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
   height = gsk_gpu_image_get_height (target);
 
   self->frame = frame;
+  self->pass_type = pass_type;
   self->ccs = ccs;
 
   self->scissor = *clip;
