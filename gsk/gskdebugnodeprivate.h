@@ -16,6 +16,7 @@ struct _GskDebugProfile {
     guint64 gpu_pixels;
     /* recorded while processing nodes */
     guint64 offscreen_pixels;
+    guint64 upload_pixels;
   } total, self;
 };
 

@@ -372,6 +372,7 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame      *frame,
   GskGpuUploadTextureOp *self;
   GskGpuImage *image;
   GdkMemoryFormat format;
+  GskDebugProfile *profile;
 
   format = gdk_texture_get_format (texture);
 
@@ -421,6 +422,9 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame      *frame,
     }
 
   self = (GskGpuUploadTextureOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_UPLOAD_TEXTURE_OP_CLASS);
+  profile = gsk_gpu_frame_get_profile (frame);
+  if (profile)
+    profile->self.upload_pixels += gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
 
   self->texture = g_object_ref (texture);
   self->lod_level = lod_level;
@@ -598,8 +602,12 @@ gsk_gpu_upload_cairo_into_op (GskGpuFrame                 *frame,
                               GDestroyNotify               user_destroy)
 {
   GskGpuUploadCairoOp *self;
+  GskDebugProfile *profile;
 
   self = (GskGpuUploadCairoOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_UPLOAD_CAIRO_OP_CLASS);
+  profile = gsk_gpu_frame_get_profile (frame);
+  if (profile)
+    profile->self.upload_pixels += area->width * area->height;
 
   self->image = g_object_ref (image);
   self->area = *area;

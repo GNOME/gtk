@@ -185,6 +185,7 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
   entry->profile.total.gpu_ns = entry->profile.self.gpu_ns;
   entry->profile.total.gpu_pixels = entry->profile.self.gpu_pixels;
   entry->profile.total.offscreen_pixels = entry->profile.self.offscreen_pixels;
+  entry->profile.total.upload_pixels = entry->profile.self.upload_pixels;
   if (entry->first_child != NO_ITEM)
     {
       gsize i, n_children;
@@ -198,6 +199,7 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
           entry->profile.total.gpu_ns += child_entry->profile.total.gpu_ns;
           entry->profile.total.gpu_pixels += child_entry->profile.total.gpu_pixels;
           entry->profile.total.offscreen_pixels += child_entry->profile.total.offscreen_pixels;
+          entry->profile.total.upload_pixels += child_entry->profile.total.upload_pixels;
         }
     }
   entry->profile.self.cpu_ns = entry->profile.self.cpu_record_ns + entry->profile.self.cpu_submit_ns;
@@ -214,7 +216,9 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                                         "pixels total   : %llu\n"
                                                         "pixels self    : %llu\n"
                                                         "offscreen total: %llu\n"
-                                                        "offscreen self : %llu",
+                                                        "offscreen self : %llu"
+                                                        "upload total   : %llu\n"
+                                                        "upload self    : %llu",
                                                         (long long unsigned) entry->profile.total.cpu_record_ns,
                                                         (long long unsigned) entry->profile.self.cpu_record_ns,
                                                         (long long unsigned) entry->profile.total.cpu_submit_ns,
@@ -224,7 +228,9 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                                         (long long unsigned) entry->profile.total.gpu_pixels,
                                                         (long long unsigned) entry->profile.self.gpu_pixels,
                                                         (long long unsigned) entry->profile.total.offscreen_pixels,
-                                                        (long long unsigned) entry->profile.self.offscreen_pixels));
+                                                        (long long unsigned) entry->profile.self.offscreen_pixels,
+                                                        (long long unsigned) entry->profile.total.upload_pixels,
+                                                        (long long unsigned) entry->profile.self.upload_pixels));
   gsk_render_node_unref (child);
 
   self->debug_current = pos + 1;

@@ -1672,6 +1672,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         add_text_row (store, "pixels self", "%'llu", (unsigned long long) profile->self.gpu_pixels);
         add_text_row (store, "offscreen total", "%'llu", (unsigned long long) profile->total.offscreen_pixels);
         add_text_row (store, "offscreen self", "%'llu", (unsigned long long) profile->self.offscreen_pixels);
+        add_text_row (store, "upload total", "%'llu", (unsigned long long) profile->total.upload_pixels);
+        add_text_row (store, "upload self", "%'llu", (unsigned long long) profile->self.upload_pixels);
     }
 }
 
