@@ -2333,12 +2333,11 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   return n_handled;
 }
 
-static gboolean
+static void
 _gtk_widget_cancel_sequence (GtkWidget        *widget,
                              GdkEventSequence *sequence)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gboolean handled = FALSE;
   GList *l;
 
   for (l = priv->event_controllers; l; l = l->next)
@@ -2352,11 +2351,8 @@ _gtk_widget_cancel_sequence (GtkWidget        *widget,
         continue;
 
       gesture = GTK_GESTURE (controller);
-
-      handled |= _gtk_gesture_cancel_sequence (gesture, sequence);
+      _gtk_gesture_cancel_sequence (gesture, sequence);
     }
-
-  return handled;
 }
 
 static void
