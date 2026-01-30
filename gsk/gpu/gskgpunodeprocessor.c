@@ -324,6 +324,33 @@ gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
 }
 
 static GskGpuImage *
+create_offscreen_image (GskGpuFrame     *frame,
+                        gboolean         with_mipmap,
+                        GdkMemoryFormat  format,
+                        gboolean         is_srgb,
+                        gsize            width,
+                        gsize            height)
+{
+  GskGpuImage *result;
+  GskDebugProfile *profile;
+
+  result = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
+                                                  with_mipmap,
+                                                  format,
+                                                  is_srgb,
+                                                  width,
+                                                  height);
+  if (result == NULL)
+    return NULL;
+
+  profile = gsk_gpu_frame_get_profile (frame);
+  if (profile)
+    profile->self.offscreen_pixels += width * height;
+
+  return result;
+}
+     
+static GskGpuImage *
 gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
                                   GskGpuFrame           *frame,
                                   GdkColorState         *ccs,
@@ -339,11 +366,11 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
   area.width = MAX (1, ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON));
   area.height = MAX (1, ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON));
 
-  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
-                                                 FALSE,
-                                                 gdk_memory_depth_get_format (depth),
-                                                 gdk_memory_depth_is_srgb (depth),
-                                                 area.width, area.height);
+  image = create_offscreen_image (frame,
+                                  FALSE,
+                                  gdk_memory_depth_get_format (depth),
+                                  gdk_memory_depth_is_srgb (depth),
+                                  area.width, area.height);
   if (image == NULL)
     return NULL;
 
@@ -751,11 +778,11 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
   depth = gdk_memory_depth_merge (gdk_color_state_get_depth (ccs),
                                   gsk_render_node_get_preferred_depth (node));
 
-  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
-                                                 FALSE,
-                                                 gdk_memory_depth_get_format (depth),
-                                                 gdk_memory_depth_is_srgb (depth),
-                                                 area.width, area.height);
+  image = create_offscreen_image (frame,
+                                  FALSE,
+                                  gdk_memory_depth_get_format (depth),
+                                  gdk_memory_depth_is_srgb (depth),
+                                  area.width, area.height);
   if (image == NULL)
     return NULL;
 
@@ -836,11 +863,11 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                        gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (ccs));
 
-  copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
-                                                prepare_mipmap,
-                                                gdk_memory_depth_get_format (depth),
-                                                gdk_memory_depth_is_srgb (depth),
-                                                width, height);
+  copy = create_offscreen_image (frame,
+                                 prepare_mipmap,
+                                 gdk_memory_depth_get_format (depth),
+                                 gdk_memory_depth_is_srgb (depth),
+                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&
       (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE)) == (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_BLIT) &&
@@ -5440,12 +5467,12 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   width = gsk_gpu_image_get_width (image);
   height = gsk_gpu_image_get_height (image);
 
-  target = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
-                                                  FALSE,
-                                                  target_format,
-                                                  gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB,
-                                                  width,
-                                                  height);
+  target = create_offscreen_image (frame,
+                                   FALSE,
+                                   target_format,
+                                   gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB,
+                                   width,
+                                   height);
   if (target == NULL)
     return NULL;
 
