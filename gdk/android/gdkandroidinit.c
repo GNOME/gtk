@@ -252,6 +252,8 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   gdk_android_java_cache.surface_exception.klass = (*env)->NewGlobalRef (env, surface_exception_class);
   POPULATE_REFCACHE_METHOD (surface_exception, constructor, "<init>", "(Ljava/lang/Object;)V")
 
+  // BEGIN DEPRECATION CHECK
+
   jclass android_activity_class = (*env)->FindClass (env, "android/app/Activity");
   gdk_android_java_cache.a_activity.klass = (*env)->NewGlobalRef (env, android_activity_class);
   POPULATE_REFCACHE_METHOD (a_activity, get_task_id, "getTaskId", "()I")
@@ -617,6 +619,8 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   jclass java_throwable = (*env)->FindClass (env, "java/lang/Throwable");
   gdk_android_java_cache.j_throwable.klass = (*env)->NewGlobalRef (env, java_throwable);
   POPULATE_REFCACHE_METHOD (j_throwable, get_message, "getMessage", "()Ljava/lang/String;")
+
+  // END DEPRECATION CHECK
 
   (*env)->PopLocalFrame (env, NULL);
 
