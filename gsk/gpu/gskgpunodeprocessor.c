@@ -174,6 +174,8 @@ struct _GskGpuFirstNodeInfo
   gsize min_occlusion_pixels;
   float background_color[4];
 
+  GskGpuRenderPass pass;
+
   guint whole_area : 1;
   guint has_background : 1;
   guint has_started_rendering : 1;
@@ -181,8 +183,7 @@ struct _GskGpuFirstNodeInfo
 
 static void             gsk_gpu_node_processor_add_node_untracked       (GskGpuRenderPass            *self,
                                                                          GskRenderNode                  *node);
-static gboolean         gsk_gpu_node_processor_add_first_node           (GskGpuRenderPass            *self,
-                                                                         GskGpuFirstNodeInfo            *info,
+static gboolean         gsk_gpu_node_processor_add_first_node           (GskGpuFirstNodeInfo            *info,
                                                                          GskRenderNode                  *node,
                                                                          gsize                           pos);
 static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskGpuFrame                    *frame,
@@ -1232,66 +1233,65 @@ gsk_gpu_node_processor_add_clip_node (GskGpuRenderPass *self,
  * to the given clear color.
  **/
 static void
-gsk_gpu_first_node_begin_rendering (GskGpuRenderPass *self,
-                                    GskGpuFirstNodeInfo *info,
+gsk_gpu_first_node_begin_rendering (GskGpuFirstNodeInfo *self,
                                     float                clear_color[4])
 {
   GskDebugProfile *profile;
 
-  profile = gsk_gpu_frame_get_profile (self->frame);
+  profile = gsk_gpu_frame_get_profile (self->pass.frame);
   if (profile)
     {
       profile->self.n_bases++;
-      profile->self.base_pixels += self->scissor.width * self->scissor.height;
+      profile->self.base_pixels += self->pass.scissor.width * self->pass.scissor.height;
     }
 
-  if (info->has_started_rendering)
+  if (self->has_started_rendering)
     {
       if (clear_color &&
-          (!info->has_background ||
-           (info->has_background &&
-            (clear_color[0] != info->background_color[0] ||
-             clear_color[1] != info->background_color[1] ||
-             clear_color[2] != info->background_color[2] ||
-             clear_color[3] != info->background_color[3]))))
+          (!self->has_background ||
+           (self->has_background &&
+            (clear_color[0] != self->background_color[0] ||
+             clear_color[1] != self->background_color[1] ||
+             clear_color[2] != self->background_color[2] ||
+             clear_color[3] != self->background_color[3]))))
         {
-          gsk_gpu_clear_op (self->frame, &self->scissor, clear_color);
+          gsk_gpu_clear_op (self->pass.frame, &self->pass.scissor, clear_color);
         }
     }
   else
     {
       GskGpuLoadOp load_op;
 
-      if (!info->whole_area)
+      if (!self->whole_area)
         {
-          info->has_background = FALSE;
+          self->has_background = FALSE;
           load_op = GSK_GPU_LOAD_OP_LOAD;
         }
       else if (clear_color)
         {
-          info->background_color[0] = clear_color[0];
-          info->background_color[1] = clear_color[1];
-          info->background_color[2] = clear_color[2];
-          info->background_color[3] = clear_color[3];
-          info->has_background = TRUE;
+          self->background_color[0] = clear_color[0];
+          self->background_color[1] = clear_color[1];
+          self->background_color[2] = clear_color[2];
+          self->background_color[3] = clear_color[3];
+          self->has_background = TRUE;
           load_op = GSK_GPU_LOAD_OP_CLEAR;
         }
       else
         {
-          info->has_background = FALSE;
+          self->has_background = FALSE;
           load_op = GSK_GPU_LOAD_OP_DONT_CARE;
         }
 
-      info->has_started_rendering = TRUE;
-      gsk_gpu_render_pass_begin_op (self->frame,
-                                    info->target,
-                                    &info->extents,
+      self->has_started_rendering = TRUE;
+      gsk_gpu_render_pass_begin_op (self->pass.frame,
+                                    self->target,
+                                    &self->extents,
                                     load_op,
                                     clear_color,
-                                    info->pass_type);
+                                    self->pass_type);
 
-      if (!info->whole_area && clear_color)
-        gsk_gpu_clear_op (self->frame, &self->scissor, clear_color);
+      if (!self->whole_area && clear_color)
+        gsk_gpu_clear_op (self->pass.frame, &self->pass.scissor, clear_color);
     }
 }
 
@@ -1314,31 +1314,29 @@ gsk_gpu_first_node_begin_rendering (GskGpuRenderPass *self,
  * Returns: TRUE if the adjustment was successful.
  **/
 static gboolean
-gsk_gpu_node_processor_clip_first_node (GskGpuRenderPass   *self,
-                                        GskGpuFirstNodeInfo   *info,
+gsk_gpu_node_processor_clip_first_node (GskGpuFirstNodeInfo   *self,
                                         const graphene_rect_t *opaque)
 {
   cairo_rectangle_int_t device_clip;
   graphene_rect_t rect;
 
-  if (!gsk_gpu_node_processor_rect_to_device_shrink (self, opaque, &device_clip) ||
-      !gdk_rectangle_intersect (&device_clip, &self->scissor, &device_clip) ||
-      device_clip.width * device_clip.height < info->min_occlusion_pixels)
+  if (!gsk_gpu_node_processor_rect_to_device_shrink (&self->pass, opaque, &device_clip) ||
+      !gdk_rectangle_intersect (&device_clip, &self->pass.scissor, &device_clip) ||
+      device_clip.width * device_clip.height < self->min_occlusion_pixels)
     return FALSE;
 
-  self->scissor = device_clip;
+  self->pass.scissor = device_clip;
 
-  gsk_gpu_node_processor_rect_device_to_clip (self,
+  gsk_gpu_node_processor_rect_device_to_clip (&self->pass,
                                               &GSK_RECT_INIT_CAIRO (&device_clip),
                                               &rect);
-  gsk_gpu_clip_init_empty (&self->clip, &rect);
+  gsk_gpu_clip_init_empty (&self->pass.clip, &rect);
 
   return TRUE;
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_node_clipped (GskGpuRenderPass   *self,
-                                               GskGpuFirstNodeInfo   *info,
+gsk_gpu_node_processor_add_first_node_clipped (GskGpuFirstNodeInfo   *self,
                                                const graphene_rect_t *clip,
                                                GskRenderNode         *node,
                                                gsize                  pos)
@@ -1346,14 +1344,13 @@ gsk_gpu_node_processor_add_first_node_clipped (GskGpuRenderPass   *self,
   GskGpuClip old_clip;
   cairo_rectangle_int_t old_scissor;
 
-  old_scissor = self->scissor;
-  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+  old_scissor = self->pass.scissor;
+  gsk_gpu_clip_init_copy (&old_clip, &self->pass.clip);
 
-  if (!gsk_gpu_node_processor_clip_first_node (self, info, clip))
+  if (!gsk_gpu_node_processor_clip_first_node (self, clip))
     return FALSE;
 
   if (gsk_gpu_node_processor_add_first_node (self,
-                                             info,
                                              node,
                                              pos))
     {
@@ -1361,19 +1358,17 @@ gsk_gpu_node_processor_add_first_node_clipped (GskGpuRenderPass   *self,
       return TRUE;
     }
 
-  self->scissor = old_scissor;
-  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+  self->pass.scissor = old_scissor;
+  gsk_gpu_clip_init_copy (&old_clip, &self->pass.clip);
 
   return FALSE;
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_clip_node (GskGpuRenderPass *self,
-                                            GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_clip_node (GskGpuFirstNodeInfo *self,
                                             GskRenderNode       *node)
 {
   return gsk_gpu_node_processor_add_first_node_clipped (self,
-                                                        info,
                                                         &node->bounds,
                                                         gsk_clip_node_get_child (node),
                                                         0);
@@ -1513,20 +1508,18 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuRenderPass *self,
-                                                    GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuFirstNodeInfo *self,
                                                     GskRenderNode       *node)
 {
   graphene_rect_t cover, clip;
 
-  gsk_gpu_node_processor_get_clip_bounds (self, &clip);
+  gsk_gpu_node_processor_get_clip_bounds (&self->pass, &clip);
   if (!gsk_rounded_rect_get_largest_cover (gsk_rounded_clip_node_get_clip (node),
                                            &clip,
                                            &cover))
     return FALSE;
 
   return gsk_gpu_node_processor_add_first_node_clipped (self,
-                                                        info,
                                                         &cover,
                                                         gsk_rounded_clip_node_get_child (node),
                                                         0);
@@ -1729,8 +1722,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_transform_node (GskGpuRenderPass *self,
-                                                 GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_transform_node (GskGpuFirstNodeInfo *self,
                                                  GskRenderNode       *node)
 {
   GskTransform *transform;
@@ -1747,41 +1739,39 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuRenderPass *self,
     case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
       gsk_transform_to_translate (transform, &dx, &dy);
-      old_offset = self->offset;
-      self->offset.x += dx;
-      self->offset.y += dy;
+      old_offset = self->pass.offset;
+      self->pass.offset.x += dx;
+      self->pass.offset.y += dy;
       result = gsk_gpu_node_processor_add_first_node (self,
-                                                      info,
                                                       gsk_transform_node_get_child (node),
                                                       0);
-      self->offset = old_offset;
+      self->pass.offset = old_offset;
       return result;
 
     case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
       gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
 
-      gsk_gpu_clip_init_copy (&old_clip, &self->clip);
-      old_offset = self->offset;
-      old_scale = self->scale;
+      gsk_gpu_clip_init_copy (&old_clip, &self->pass.clip);
+      old_offset = self->pass.offset;
+      old_scale = self->pass.scale;
 
-      gsk_gpu_clip_scale (&self->clip, &old_clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
-      self->offset.x = (self->offset.x + dx) / scale_x;
-      self->offset.y = (self->offset.y + dy) / scale_y;
-      graphene_vec2_init (&self->scale, fabs (scale_x), fabs (scale_y));
-      graphene_vec2_multiply (&self->scale, &old_scale, &self->scale);
+      gsk_gpu_clip_scale (&self->pass.clip, &old_clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
+      self->pass.offset.x = (self->pass.offset.x + dx) / scale_x;
+      self->pass.offset.y = (self->pass.offset.y + dy) / scale_y;
+      graphene_vec2_init (&self->pass.scale, fabs (scale_x), fabs (scale_y));
+      graphene_vec2_multiply (&self->pass.scale, &old_scale, &self->pass.scale);
 
-      self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+      self->pass.pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 
       result = gsk_gpu_node_processor_add_first_node (self,
-                                                      info,
                                                       gsk_transform_node_get_child (node),
                                                       0);
 
-      self->offset = old_offset;
-      self->scale = old_scale;
-      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+      self->pass.offset = old_offset;
+      self->pass.scale = old_scale;
+      gsk_gpu_clip_init_copy (&self->pass.clip, &old_clip);
 
-      self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+      self->pass.pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 
       return result;
 
@@ -1792,40 +1782,39 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuRenderPass *self,
         float xx, xy, yx, yy, old_scale_x, old_scale_y;
         GskTransform *old_modelview;
 
-        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
-        old_offset = self->offset;
-        old_scale = self->scale;
-        old_modelview = gsk_transform_ref (self->modelview);
+        gsk_gpu_clip_init_copy (&old_clip, &self->pass.clip);
+        old_offset = self->pass.offset;
+        old_scale = self->pass.scale;
+        old_modelview = gsk_transform_ref (self->pass.modelview);
 
         gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
         inverted = gdk_dihedral_invert (dihedral);
         gdk_dihedral_get_mat2 (inverted, &xx, &xy, &yx, &yy);
-        gsk_gpu_clip_scale (&self->clip, &old_clip, inverted, scale_x, scale_y);
-        self->offset.x = (self->offset.x + dx) / scale_x;
-        self->offset.y = (self->offset.y + dy) / scale_y;
-        self->offset = GRAPHENE_POINT_INIT (xx * self->offset.x + xy * self->offset.y,
-                                            yx * self->offset.x + yy * self->offset.y);
+        gsk_gpu_clip_scale (&self->pass.clip, &old_clip, inverted, scale_x, scale_y);
+        self->pass.offset.x = (self->pass.offset.x + dx) / scale_x;
+        self->pass.offset.y = (self->pass.offset.y + dy) / scale_y;
+        self->pass.offset = GRAPHENE_POINT_INIT (xx * self->pass.offset.x + xy * self->pass.offset.y,
+                                                 yx * self->pass.offset.x + yy * self->pass.offset.y);
         old_scale_x = graphene_vec2_get_x (&old_scale);
         old_scale_y = graphene_vec2_get_y (&old_scale);
-        graphene_vec2_init (&self->scale,
+        graphene_vec2_init (&self->pass.scale,
                             fabs (scale_x * (old_scale_x * xx + old_scale_y * yx)),
                             fabs (scale_y * (old_scale_x * xy + old_scale_y * yy)));
-        self->modelview = gsk_transform_dihedral (self->modelview, dihedral);
+        self->pass.modelview = gsk_transform_dihedral (self->pass.modelview, dihedral);
 
-        self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+        self->pass.pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 
         result = gsk_gpu_node_processor_add_first_node (self,
-                                                        info,
                                                         gsk_transform_node_get_child (node),
                                                         0);
 
-        self->offset = old_offset;
-        self->scale = old_scale;
-        gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-        gsk_transform_unref (self->modelview);
-        self->modelview = old_modelview;
+        self->pass.offset = old_offset;
+        self->pass.scale = old_scale;
+        gsk_gpu_clip_init_copy (&self->pass.clip, &old_clip);
+        gsk_transform_unref (self->pass.modelview);
+        self->pass.modelview = old_modelview;
 
-        self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+        self->pass.pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 
         return result;
       }
@@ -2004,8 +1993,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_color_node (GskGpuRenderPass *self,
-                                             GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_color_node (GskGpuFirstNodeInfo *self,
                                              GskRenderNode       *node)
 {
   float clear_color[4];
@@ -2013,11 +2001,11 @@ gsk_gpu_node_processor_add_first_color_node (GskGpuRenderPass *self,
   if (!node->fully_opaque)
     return FALSE;
 
-  if (!gsk_gpu_node_processor_clip_first_node (self, info, &node->bounds))
+  if (!gsk_gpu_node_processor_clip_first_node (self, &node->bounds))
     return FALSE;
 
-  gdk_color_to_float (gsk_color_node_get_gdk_color (node), self->ccs, clear_color);
-  gsk_gpu_first_node_begin_rendering (self, info, clear_color);
+  gdk_color_to_float (gsk_color_node_get_gdk_color (node), self->pass.ccs, clear_color);
+  gsk_gpu_first_node_begin_rendering (self, clear_color);
 
   return TRUE;
 }
@@ -2339,25 +2327,24 @@ gsk_gpu_node_processor_add_texture_node (GskGpuRenderPass *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_node_no_blend (GskGpuRenderPass *self,
-                                                GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_node_no_blend (GskGpuFirstNodeInfo *self,
                                                 GskRenderNode       *node)
 {
   if (!node->fully_opaque)
     return FALSE;
 
-  if (!gsk_gpu_node_processor_clip_first_node (self, info, &node->bounds))
+  if (!gsk_gpu_node_processor_clip_first_node (self, &node->bounds))
     return FALSE;
 
-  gsk_gpu_first_node_begin_rendering (self, info, NULL);
+  gsk_gpu_first_node_begin_rendering (self, NULL);
 
-  self->blend = GSK_GPU_BLEND_NONE;
-  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  self->pass.blend = GSK_GPU_BLEND_NONE;
+  self->pass.pending_globals |= GSK_GPU_GLOBAL_BLEND;
 
-  gsk_gpu_node_processor_add_node_untracked (self, node);
+  gsk_gpu_node_processor_add_node_untracked (&self->pass, node);
 
-  self->blend = GSK_GPU_BLEND_OVER;
-  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  self->pass.blend = GSK_GPU_BLEND_OVER;
+  self->pass.pending_globals |= GSK_GPU_GLOBAL_BLEND;
 
   return TRUE;
 }
@@ -4271,8 +4258,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuRenderPass *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_subsurface_node (GskGpuRenderPass *self,
-                                                  GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_subsurface_node (GskGpuFirstNodeInfo *self,
                                                   GskRenderNode       *node)
 {
   GdkSubsurface *subsurface;
@@ -4280,10 +4266,9 @@ gsk_gpu_node_processor_add_first_subsurface_node (GskGpuRenderPass *self,
   subsurface = gsk_subsurface_node_get_subsurface (node);
   if (subsurface == NULL ||
       gdk_subsurface_get_texture (subsurface) == NULL ||
-      gdk_subsurface_get_parent (subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (self->frame)))
+      gdk_subsurface_get_parent (subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (self->pass.frame)))
     {
       return gsk_gpu_node_processor_add_first_node (self,
-                                                    info,
                                                     gsk_subsurface_node_get_child (node),
                                                     0);
     }
@@ -4291,10 +4276,10 @@ gsk_gpu_node_processor_add_first_subsurface_node (GskGpuRenderPass *self,
   if (gdk_subsurface_is_above_parent (subsurface))
     return FALSE;
 
-  if (!gsk_gpu_node_processor_clip_first_node (self, info, &node->bounds))
+  if (!gsk_gpu_node_processor_clip_first_node (self, &node->bounds))
     return FALSE;
 
-  gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
+  gsk_gpu_first_node_begin_rendering (self, GSK_VEC4_TRANSPARENT);
 
   return TRUE;
 }
@@ -4631,8 +4616,7 @@ gsk_gpu_node_processor_add_container_node (GskGpuRenderPass *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_container_node (GskGpuRenderPass *self,
-                                                 GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_container_node (GskGpuFirstNodeInfo *self,
                                                  GskRenderNode       *node)
 {
   GskRenderNode **children;
@@ -4645,20 +4629,20 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuRenderPass *self,
     return FALSE;
 
   if (!gsk_render_node_get_opaque_rect (node, &opaque) ||
-      !gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
+      !gsk_gpu_node_processor_clip_first_node (self, &opaque))
     return FALSE;
 
   for (i = n; i-- > 0; )
     {
-      if (gsk_gpu_node_processor_add_first_node (self, info, children[i], i))
+      if (gsk_gpu_node_processor_add_first_node (self, children[i], i))
         break;
     }
 
   if (i < 0)
-    gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
+    gsk_gpu_first_node_begin_rendering (self, GSK_VEC4_TRANSPARENT);
 
   for (i++; i < n; i++)
-    gsk_gpu_node_processor_add_node (self, children[i], i);
+    gsk_gpu_node_processor_add_node (&self->pass, children[i], i);
 
   return TRUE;
 }
@@ -4671,12 +4655,10 @@ gsk_gpu_node_processor_add_debug_node (GskGpuRenderPass *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_debug_node (GskGpuRenderPass *self,
-                                             GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_debug_node (GskGpuFirstNodeInfo *self,
                                              GskRenderNode       *node)
 {
   return gsk_gpu_node_processor_add_first_node (self,
-                                                info,
                                                 gsk_debug_node_get_child (node),
                                                 0);
 }
@@ -4720,8 +4702,7 @@ static const struct
   GskGpuNodeFeatures features;
   void                  (* process_node)                        (GskGpuRenderPass    *self,
                                                                  GskRenderNode          *node);
-  gboolean              (* process_first_node)                  (GskGpuRenderPass    *self,
-                                                                 GskGpuFirstNodeInfo    *info,
+  gboolean              (* process_first_node)                  (GskGpuFirstNodeInfo    *self,
                                                                  GskRenderNode          *node);
   GskGpuImage *         (* get_node_as_image)                   (GskGpuFrame            *self,
                                                                  GskGpuAsImageFlags      flags,
@@ -5044,31 +5025,29 @@ gsk_gpu_node_processor_add_node_untracked (GskGpuRenderPass *self,
 }
 
 static void
-gsk_gpu_first_node_begin_rendering_node (GskGpuRenderPass *self,
-                                         GskGpuFirstNodeInfo *info,
+gsk_gpu_first_node_begin_rendering_node (GskGpuFirstNodeInfo *self,
                                          GskRenderNode       *node)
 {
-  gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
+  gsk_gpu_first_node_begin_rendering (self, GSK_VEC4_TRANSPARENT);
 
   if (gsk_render_node_needs_blending (node))
     {
-      gsk_gpu_node_processor_add_node_untracked (self, node);
+      gsk_gpu_node_processor_add_node_untracked (&self->pass, node);
     }
   else
     {
-      self->blend = GSK_GPU_BLEND_NONE;
-      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+      self->pass.blend = GSK_GPU_BLEND_NONE;
+      self->pass.pending_globals |= GSK_GPU_GLOBAL_BLEND;
 
-      gsk_gpu_node_processor_add_node_untracked (self, node);
+      gsk_gpu_node_processor_add_node_untracked (&self->pass, node);
 
-      self->blend = GSK_GPU_BLEND_OVER;
-      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+      self->pass.blend = GSK_GPU_BLEND_OVER;
+      self->pass.pending_globals |= GSK_GPU_GLOBAL_BLEND;
     }
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_node_untracked (GskGpuRenderPass *self,
-                                                 GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_node_untracked (GskGpuFirstNodeInfo *self,
                                                  GskRenderNode       *node)
 {
   GskRenderNodeType node_type;
@@ -5081,7 +5060,7 @@ gsk_gpu_node_processor_add_first_node_untracked (GskGpuRenderPass *self,
       !gsk_render_node_get_opaque_rect (node, &opaque))
     return FALSE;
 
-  if (!gsk_gpu_clip_may_intersect_rect (&self->clip, &self->offset, &node->bounds))
+  if (!gsk_gpu_clip_may_intersect_rect (&self->pass.clip, &self->pass.offset, &node->bounds))
     return FALSE;
 
   node_type = gsk_render_node_get_node_type (node);
@@ -5092,30 +5071,29 @@ gsk_gpu_node_processor_add_first_node_untracked (GskGpuRenderPass *self,
     }
 
   if (nodes_vtable[node_type].process_first_node)
-    return nodes_vtable[node_type].process_first_node (self, info, node);
+    return nodes_vtable[node_type].process_first_node (self, node);
 
   /* fallback starts here */
-  if (!gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
+  if (!gsk_gpu_node_processor_clip_first_node (self, &opaque))
     return FALSE;
 
-  gsk_gpu_first_node_begin_rendering_node (self, info, node);
+  gsk_gpu_first_node_begin_rendering_node (self, node);
 
   return TRUE;
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_node (GskGpuRenderPass *self,
-                                       GskGpuFirstNodeInfo *info,
+gsk_gpu_node_processor_add_first_node (GskGpuFirstNodeInfo *self,
                                        GskRenderNode       *node,
                                        gsize                pos)
 {
   gboolean result;
 
-  gsk_gpu_frame_start_node (self->frame, node, pos);
+  gsk_gpu_frame_start_node (self->pass.frame, node, pos);
 
-  result = gsk_gpu_node_processor_add_first_node_untracked (self, info, node);
+  result = gsk_gpu_node_processor_add_first_node_untracked (self, node);
   
-  gsk_gpu_frame_end_node (self->frame);
+  gsk_gpu_frame_end_node (self->pass.frame);
 
   return result;
 }
@@ -5210,31 +5188,30 @@ gsk_gpu_node_processor_render (GskGpuFrame           *frame,
                                GskRenderNode         *node,
                                GskRenderPassType      pass_type)
 {
-  GskGpuFirstNodeInfo info = {
+  GskGpuFirstNodeInfo self = {
     .target = target,
     .pass_type = pass_type,
   };
   int i, n, best, best_size;
   cairo_rectangle_int_t rect;
-  GskGpuRenderPass self;
   gboolean do_culling;
 
-  cairo_region_get_extents (clip, &info.extents);
+  cairo_region_get_extents (clip, &self.extents);
 
-  gsk_gpu_render_pass_init (&self,
+  gsk_gpu_render_pass_init (&self.pass,
                             frame,
                             target,
                             target_color_state,
                             pass_type,
-                            &info.extents,
+                            &self.extents,
                             viewport);
 
-  info.whole_area = cairo_region_contains_rectangle (clip, &info.extents) == CAIRO_REGION_OVERLAP_IN;
-  info.min_occlusion_pixels = gsk_gpu_image_get_width (target) * gsk_gpu_image_get_height (target) *
+  self.whole_area = cairo_region_contains_rectangle (clip, &self.extents) == CAIRO_REGION_OVERLAP_IN;
+  self.min_occlusion_pixels = gsk_gpu_image_get_width (target) * gsk_gpu_image_get_height (target) *
                               MIN_PERCENTAGE_FOR_OCCLUSION_PASS / 100;
-  info.min_occlusion_pixels = MAX (info.min_occlusion_pixels, MIN_PIXELS_FOR_OCCLUSION_PASS);
+  self.min_occlusion_pixels = MAX (self.min_occlusion_pixels, MIN_PIXELS_FOR_OCCLUSION_PASS);
 
-  do_culling = gsk_gpu_frame_should_optimize (self.frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING);
+  do_culling = gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING);
 
   while (do_culling &&
          (n = cairo_region_num_rectangles (clip)) > 0)
@@ -5256,44 +5233,42 @@ gsk_gpu_node_processor_render (GskGpuFrame           *frame,
       if (best_size < MIN_PIXELS_FOR_OCCLUSION_PASS)
         break;
 
-      gsk_gpu_node_processor_set_scissor (&self, &rect);
+      gsk_gpu_node_processor_set_scissor (&self.pass, &rect);
 
       if (!gsk_gpu_node_processor_add_first_node_untracked (&self,
-                                                            &info,
                                                             node))
         {
-          gsk_gpu_first_node_begin_rendering_node (&self, &info, node);
+          gsk_gpu_first_node_begin_rendering_node (&self, node);
           do_culling = FALSE;
         }
 
-      cairo_region_subtract_rectangle (clip, &self.scissor);
+      cairo_region_subtract_rectangle (clip, &self.pass.scissor);
     }
 
   for (i = 0; i < cairo_region_num_rectangles (clip); i++) 
     {
       cairo_region_get_rectangle (clip, i, &rect);
 
-      gsk_gpu_node_processor_set_scissor (&self, &rect);
+      gsk_gpu_node_processor_set_scissor (&self.pass, &rect);
 
       /* only run pass if it's covering the whole rectangle */
-      info.min_occlusion_pixels = rect.width * rect.height;
+      self.min_occlusion_pixels = rect.width * rect.height;
 
       if (!gsk_gpu_node_processor_add_first_node_untracked (&self,
-                                                            &info,
                                                             node))
         {
-          gsk_gpu_first_node_begin_rendering_node (&self, &info, node);
+          gsk_gpu_first_node_begin_rendering_node (&self, node);
         }
     }
 
-  if (info.has_started_rendering)
+  if (self.has_started_rendering)
     {
-      gsk_gpu_render_pass_end_op (self.frame,
+      gsk_gpu_render_pass_end_op (self.pass.frame,
                                   target,
                                   pass_type);
     }
 
-  gsk_gpu_render_pass_finish (&self);
+  gsk_gpu_render_pass_finish (&self.pass);
 }
 
 static void
