@@ -495,6 +495,9 @@ should_remove_from_session (GtkApplication *application,
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
+  if (!priv->support_save)
+    return TRUE;
+
   if (gtk_window_get_transient_for (window))
     {
       GTK_DEBUG (SESSION, "Removing transient toplevel from session state");
