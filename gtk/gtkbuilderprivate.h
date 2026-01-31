@@ -84,7 +84,8 @@ struct _ExpressionInfo {
     EXPRESSION_EXPRESSION,
     EXPRESSION_CONSTANT,
     EXPRESSION_CLOSURE,
-    EXPRESSION_PROPERTY
+    EXPRESSION_PROPERTY,
+    EXPRESSION_FALLBACK
   } expression_type;
   union {
     GtkExpression *expression;
@@ -106,6 +107,11 @@ struct _ExpressionInfo {
       char *property_name;
       ExpressionInfo *expression;
     } property;
+    struct {
+      GType type;
+      ExpressionInfo *expression;
+      ExpressionInfo *fallback;
+    } fallback;
   };
 };
 

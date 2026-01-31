@@ -181,6 +181,16 @@
  *   </closure>
  * ```
  *
+ * To create a fallback expression, use the `<fallback>` element. The content
+ * of the element contains the wrapped expression and fallback:
+ *
+ * ```xml
+ *   <fallback type='gchararray'>
+ *     <constant type='gchararray'>Wrapped expression</constant>
+ *     <constant type='gchararray'>Fallback</constant>
+ *   </fallback>
+ * ```
+ *
  * To create a property binding, use the `<binding>` element in place of where a
  * `<property>` tag would ordinarily be used. The `name` and `object` attributes are
  * supported. The `name` attribute is required, and pertains to the applicable property

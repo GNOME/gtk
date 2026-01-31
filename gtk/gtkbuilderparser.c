@@ -1084,6 +1084,11 @@ free_expression_info (ExpressionInfo *info)
       g_free (info->property.property_name);
       break;
 
+    case EXPRESSION_FALLBACK:
+      g_clear_pointer (&info->fallback.expression, free_expression_info);
+      g_clear_pointer (&info->fallback.fallback, free_expression_info);
+      break;
+
     default:
       g_assert_not_reached ();
       break;
@@ -1123,6 +1128,8 @@ check_expression_parent (ParserData *data)
           return FALSE;
         case EXPRESSION_PROPERTY:
           return expr_info->property.expression == NULL;
+        case EXPRESSION_FALLBACK:
+          return TRUE;
         case EXPRESSION_EXPRESSION:
         default:
           g_assert_not_reached ();
@@ -1314,6 +1321,50 @@ parse_lookup_expression (ParserData   *data,
   state_push (data, info);
 }
 
+static void
+parse_fallback_expression (ParserData   *data,
+                          const char   *element_name,
+                          const char **names,
+                          const char **values,
+                          GError      **error)
+{
+  ExpressionInfo *info;
+  const char *type_name;
+  GType type;
+
+  if (!check_expression_parent (data))
+    {
+      error_invalid_tag (data, element_name, NULL, error);
+      return;
+    }
+
+  if (!g_markup_collect_attributes (element_name, names, values, error,
+                                    G_MARKUP_COLLECT_STRING, "type", &type_name,
+                                    G_MARKUP_COLLECT_INVALID))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  type = gtk_builder_get_type_from_name (data->builder, type_name);
+  if (type == G_TYPE_INVALID)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "Invalid type '%s'", type_name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  info = g_new0 (ExpressionInfo, 1);
+  info->tag_type = TAG_EXPRESSION;
+  info->expression_type = EXPRESSION_FALLBACK;
+  info->fallback.type = type;
+
+  state_push (data, info);
+}
+
 GtkExpression *
 expression_info_construct (GtkBuilder      *builder,
                            const char      *domain,
@@ -1491,6 +1542,33 @@ expression_info_construct (GtkBuilder      *builder,
         expression = gtk_property_expression_new_for_pspec (expression, pspec);
 
         g_free (info->property.property_name);
+        info->expression_type = EXPRESSION_EXPRESSION;
+        info->expression = expression;
+      }
+      break;
+
+    case EXPRESSION_FALLBACK:
+      {
+        GtkExpression *expr;
+        GtkExpression *expression;
+        GtkExpression *fallback;
+
+        if (!(info->fallback.expression && info->fallback.fallback))
+          {
+            g_set_error (error,
+                         GTK_BUILDER_ERROR,
+                         GTK_BUILDER_ERROR_INVALID_VALUE,
+                         "GtkFallbackExpression needs two arguments");
+            return NULL;
+          }
+
+        expr = expression_info_construct (builder, domain, info->fallback.expression, error);
+        fallback = expression_info_construct (builder, domain, info->fallback.fallback, error);
+        expression = gtk_fallback_expression_new (expr, fallback);
+
+        g_clear_pointer (&info->fallback.expression, free_expression_info);
+        g_clear_pointer (&info->fallback.fallback, free_expression_info);
+
         info->expression_type = EXPRESSION_EXPRESSION;
         info->expression = expression;
       }
@@ -1865,6 +1943,8 @@ start_element (GtkBuildableParseContext  *context,
     parse_closure_expression (data, element_name, names, values, error);
   else if (strcmp (element_name, "lookup") == 0)
     parse_lookup_expression (data, element_name, names, values, error);
+  else if (strcmp (element_name, "fallback") == 0)
+    parse_fallback_expression (data, element_name, names, values, error);
   else if (strcmp (element_name, "menu") == 0)
     _gtk_builder_menu_start (data, element_name, names, values, error);
   else if (strcmp (element_name, "placeholder") == 0)
@@ -2043,7 +2123,8 @@ end_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "constant") == 0 ||
            strcmp (element_name, "closure") == 0 ||
-           strcmp (element_name, "lookup") == 0)
+           strcmp (element_name, "lookup") == 0 ||
+           strcmp (element_name, "fallback") == 0)
     {
       ExpressionInfo *expression_info = state_pop_info (data, ExpressionInfo);
       CommonInfo *parent_info = state_peek_info (data, CommonInfo);
@@ -2073,6 +2154,24 @@ end_element (GtkBuildableParseContext  *context,
               break;
             case EXPRESSION_PROPERTY:
               expr_info->property.expression = expression_info;
+              break;
+            case EXPRESSION_FALLBACK:
+              if (!expr_info->fallback.expression)
+                {
+                  expr_info->fallback.expression = expression_info;
+                }
+              else if (!expr_info->fallback.fallback)
+                {
+                  expr_info->fallback.fallback = expression_info;
+                }
+              else
+                {
+                  g_set_error (error,
+                               GTK_BUILDER_ERROR,
+                               GTK_BUILDER_ERROR_INVALID_VALUE,
+                               "GtkFallbackExpression only takes in two arguments");
+                  free_expression_info (expr_info);
+                }
               break;
             case EXPRESSION_EXPRESSION:
             case EXPRESSION_CONSTANT:

@@ -2683,6 +2683,22 @@ test_expressions (void)
     "    </closure></property>"
     "  </object>"
     "</interface>",
+    "<interface>"
+    "  <object class='GtkLabel' id='label'>"
+    "    <binding name='label'>"
+    "      <fallback type='gchararray'>"
+    "        <lookup name='title' type='GtkWindow'>"
+    "          <lookup name='root' type='GtkLabel'>label</lookup>"
+    "        </lookup>"
+    "        <constant type='gchararray'>Hello World</constant>"
+    "      </fallback>"
+    "    </binding>"
+    "  </object>"
+    "  <object class='GtkStringFilter'>"
+    "    <property name='search' bind-source='label' bind-property='label' bind-flags='sync-create'/>"
+    "    <property name='expression'><constant type='gchararray'>Hello World</constant></property>"
+    "  </object>"
+    "</interface>"
   };
   GtkBuilder *builder;
   GObject *obj;
