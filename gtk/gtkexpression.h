@@ -102,6 +102,16 @@ GtkExpression *         gtk_property_expression_get_expression  (GtkExpression  
 GDK_AVAILABLE_IN_ALL
 GParamSpec *            gtk_property_expression_get_pspec       (GtkExpression                  *expression);
 
+#define GTK_TYPE_FALLBACK_EXPRESSION (gtk_fallback_expression_get_type())
+typedef struct _GtkFallbackExpression   GtkFallbackExpression;
+
+GDK_AVAILABLE_IN_ALL
+GType                   gtk_fallback_expression_get_type        (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_ALL
+GtkExpression *         gtk_fallback_expression_new             (GtkExpression                  *expression,
+                                                                 GtkExpression                  *fallback);
+
 #define GTK_TYPE_CONSTANT_EXPRESSION (gtk_constant_expression_get_type())
 typedef struct _GtkConstantExpression   GtkConstantExpression;
 

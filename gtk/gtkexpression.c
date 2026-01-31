@@ -1523,6 +1523,180 @@ gtk_property_expression_get_pspec (GtkExpression *expression)
 
 /* }}} */
 
+/* {{{ GtkFallbackExpression */
+
+/**
+ * GtkFallbackExpression:
+ *
+ * A `GtkExpression` with a fallback, which evaluates if the wrapped expression's evaluation fails.
+ */
+struct _GtkFallbackExpression
+{
+  GtkExpression parent;
+
+  GtkExpression *expr;
+  GtkExpression *fallback;
+};
+
+static void
+gtk_fallback_expression_finalize (GtkExpression *expr)
+{
+  GtkFallbackExpression *self = (GtkFallbackExpression *) expr;
+
+  gtk_expression_unref (self->expr);
+  gtk_expression_unref (self->fallback);
+
+  GTK_EXPRESSION_SUPER (expr)->finalize (expr);
+}
+
+static gboolean
+gtk_fallback_expression_is_static (GtkExpression *expr)
+{
+  return FALSE;
+}
+
+static gboolean
+gtk_fallback_expression_evaluate (GtkExpression *expr,
+                                  gpointer       this,
+                                  GValue        *value)
+{
+  GtkFallbackExpression *self = (GtkFallbackExpression *) expr;
+
+  return gtk_expression_evaluate (self->expr, this, value) ||
+         gtk_expression_evaluate (self->fallback, this, value);
+}
+
+typedef struct _GtkFallbackExpressionWatch GtkFallbackExpressionWatch;
+struct _GtkFallbackExpressionWatch
+{
+  GtkExpressionNotify    notify;
+  gpointer               user_data;
+
+  guchar                 sub[0];
+};
+
+static void
+gtk_fallback_expression_watch_notify_cb (gpointer data)
+{
+  GtkFallbackExpressionWatch *fwatch = data;
+
+  fwatch->notify (fwatch->user_data);
+}
+
+static gsize
+gtk_fallback_expression_watch_size (GtkExpression *expr)
+{
+  GtkFallbackExpression *self = (GtkFallbackExpression *) expr;
+  gsize size;
+
+  size = sizeof (GtkFallbackExpressionWatch);
+  if (!gtk_expression_is_static (self->expr))
+    size += gtk_expression_watch_size (self->expr);
+
+  return size;
+}
+
+static void
+gtk_fallback_expression_watch (GtkExpression         *expr,
+                               GtkExpressionSubWatch *watch,
+                               gpointer               this_,
+                               GtkExpressionNotify    notify,
+                               gpointer               user_data)
+{
+  GtkFallbackExpressionWatch *fwatch = (GtkFallbackExpressionWatch *) watch;
+  GtkFallbackExpression *self = (GtkFallbackExpression *) expr;
+  guchar *sub;
+
+  fwatch->notify = notify;
+  fwatch->user_data = user_data;
+
+  sub = fwatch->sub;
+  if (!gtk_expression_is_static (self->expr))
+    {
+      gtk_expression_subwatch_init (self->expr,
+                                    (GtkExpressionSubWatch *) sub,
+                                    this_,
+                                    gtk_fallback_expression_watch_notify_cb,
+                                    watch);
+      sub += gtk_expression_watch_size (self->expr);
+    }
+}
+
+static void
+gtk_fallback_expression_unwatch (GtkExpression         *expr,
+                                 GtkExpressionSubWatch *watch)
+{
+  GtkFallbackExpressionWatch *fwatch = (GtkFallbackExpressionWatch *) watch;
+  GtkFallbackExpression *self = (GtkFallbackExpression *) expr;
+  guchar *sub;
+
+  sub = fwatch->sub;
+  if (!gtk_expression_is_static (self->expr))
+    {
+      gtk_expression_subwatch_finish (self->expr,
+                                      (GtkExpressionSubWatch *) sub);
+      sub += gtk_expression_watch_size (self->expr);
+    }
+}
+
+static const GtkExpressionTypeInfo gtk_fallback_expression_info =
+{
+  sizeof (GtkFallbackExpression),
+  NULL,
+  gtk_fallback_expression_finalize,
+  gtk_fallback_expression_is_static,
+  gtk_fallback_expression_evaluate,
+  gtk_fallback_expression_watch_size,
+  gtk_fallback_expression_watch,
+  gtk_fallback_expression_unwatch
+};
+
+GTK_DEFINE_EXPRESSION_TYPE (GtkFallbackExpression,
+                            gtk_fallback_expression,
+                            &gtk_fallback_expression_info)
+
+/**
+ * gtk_fallback_expression_new: (constructor)
+ * @expression: (transfer full): the wrapped expression
+ * @fallback: the fallback expression
+ *
+ * Creates an expression with a `fallback` that runs when the wrapped `expression` fails to evaluate.
+ *
+ * The value type of `expression` and `fallback` must be the same.
+ *
+ * Returns: (type GtkFallbackExpression) (transfer full): a new `GtkExpression`
+ **/
+GtkExpression *
+gtk_fallback_expression_new (GtkExpression *expression,
+                             GtkExpression *fallback)
+{
+  GtkExpression *result;
+  GtkFallbackExpression *self;
+  GType value_type;
+  GType fallback_value_type;
+
+  value_type = gtk_expression_get_value_type (expression);
+  fallback_value_type = gtk_expression_get_value_type (expression);
+
+  if (value_type != fallback_value_type)
+    {
+      g_critical ("Type `%s` and `%s` do not match",
+                  g_type_name (value_type),
+                  g_type_name (fallback_value_type));
+      return NULL;
+    }
+
+  result = gtk_expression_alloc (GTK_TYPE_FALLBACK_EXPRESSION, value_type);
+  self = (GtkFallbackExpression *) result;
+
+  self->expr = expression;
+  self->fallback = fallback;
+
+  return result;
+}
+
+/* }}} */
+
 /* {{{ GtkClosureExpression */
 
 /**
@@ -2281,6 +2455,7 @@ gtk_expression_bind_notify (gpointer data)
  * the object's property stays synchronized with `self`.
  *
  * If `self`'s evaluation fails, `target`'s `property` is not updated.
+ * You can ensure that this doesn't happen by using a [class@Gtk.FallbackExpression].
  *
  * Note that this function takes ownership of `self`. If you want
  * to keep it around, you should [method@Gtk.Expression.ref] it beforehand.

@@ -74,6 +74,34 @@ test_interface_property (void)
   gtk_expression_unref (expr);
 }
 
+static void
+test_fallback (void)
+{
+  GtkExpression *root_expr;
+  GtkExpression *title_expr;
+  GtkExpression *constant_expr;
+  GtkExpression *fallback_expr;
+  GtkLabel *label;
+  GtkWindow *window;
+
+  root_expr = gtk_property_expression_new (GTK_TYPE_LABEL, NULL, "root");
+  title_expr = gtk_property_expression_new (GTK_TYPE_WINDOW, root_expr, "title");
+  constant_expr = gtk_constant_expression_new (G_TYPE_STRING, "fallback");
+  fallback_expr = gtk_fallback_expression_new (title_expr, constant_expr);
+
+  label = GTK_LABEL (gtk_label_new (NULL));
+  gtk_expression_bind (fallback_expr,
+                       label,
+                       "label",
+                       label);
+  g_assert_cmpstr (gtk_label_get_label (label), ==, "fallback");
+
+  window = GTK_WINDOW (gtk_window_new ());
+  gtk_window_set_title (window, "window");
+  gtk_window_set_child (window, GTK_WIDGET (label));
+  g_assert_cmpstr (gtk_label_get_label (label), ==, "window");
+}
+
 static char *
 print_filter_info (GtkStringFilter         *filter,
                    const char              *search,
@@ -787,6 +815,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/expression/property", test_property);
   g_test_add_func ("/expression/interface-property", test_interface_property);
+  g_test_add_func ("/expression/fallback", test_fallback);
   g_test_add_func ("/expression/cclosure", test_cclosure);
   g_test_add_func ("/expression/closure", test_closure);
   g_test_add_func ("/expression/constant", test_constant);
