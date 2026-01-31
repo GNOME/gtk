@@ -228,6 +228,7 @@ style-check-diff:
 gnomeos-x86_64:
   extends:
     - .test-runner
+  needs: []
   stage: build
   image: "quay.io/gnome_infrastructure/gnome-build-meta:core-nightly"
   variables:
