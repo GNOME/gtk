@@ -242,7 +242,7 @@ gnomeos-x86_64:
             -Dvulkan=disabled
             _build
     - meson compile -C _build
-    - .gitlab-ci/run-tests.sh _build wayland gtk gnomeos-failing
+    - .gitlab-ci/run-tests.sh _build wayland gtk failing
 
 fedora-x86_64:
   extends:
