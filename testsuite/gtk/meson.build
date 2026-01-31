@@ -49,7 +49,7 @@ tests = [
   { 'name': 'flattenlistmodel' },
   { 'name': 'floating' },
   { 'name': 'flowbox' },
-  #{ 'name': 'gestures' },
+  { 'name': 'gestures' },
   { 'name': 'grid' },
   { 'name': 'grid-layout' },
   { 'name': 'icontheme' },
