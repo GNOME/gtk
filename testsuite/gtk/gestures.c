@@ -477,6 +477,28 @@ add_legacy (GtkWidget *w, GString *str, gboolean exit)
 }
 
 static void
+assert_gesture_state (GtkWidget *w, const char *name, GdkEventSequence *seq, GtkEventSequenceState state)
+{
+  GList *gestures, *l;
+
+  gestures = g_object_get_data (G_OBJECT (w), "gestures");
+
+  for (l = gestures; l; l = l->next)
+    {
+      const char *n;
+
+      n = g_object_get_data (l->data, "name");
+      if (g_strcmp0 (n, name) != 0)
+        continue;
+
+      g_assert_cmpint (gtk_gesture_get_sequence_state (l->data, seq), ==, state);
+      return;
+    }
+
+  g_assert_not_reached ();
+}
+
+static void
 test_phases (void)
 {
   GtkWidget *A, *B, *C;
@@ -698,6 +720,14 @@ test_claim_capture (void)
                    "a1 cancelled, "
                    "c1 state claimed");
 
+  assert_gesture_state (A, "a1", NULL, GTK_EVENT_SEQUENCE_NONE);
+  assert_gesture_state (B, "b1", NULL, GTK_EVENT_SEQUENCE_NONE);
+  assert_gesture_state (C, "c1", NULL, GTK_EVENT_SEQUENCE_CLAIMED);
+  assert_gesture_state (C, "c2", NULL, GTK_EVENT_SEQUENCE_NONE);
+  assert_gesture_state (C, "c3", NULL, GTK_EVENT_SEQUENCE_NONE);
+  assert_gesture_state (B, "b3", NULL, GTK_EVENT_SEQUENCE_NONE);
+  assert_gesture_state (A, "a3", NULL, GTK_EVENT_SEQUENCE_NONE);
+
   gtk_window_destroy (GTK_WINDOW (A));
 
   g_string_free (str, TRUE);
@@ -750,6 +780,14 @@ test_claim_target (void)
                    "b1 state denied, "
                    "a1 state denied, "
                    "c2 state claimed");
+
+  assert_gesture_state (A, "a1", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (B, "b1", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (C, "c1", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (C, "c2", NULL, GTK_EVENT_SEQUENCE_CLAIMED);
+  assert_gesture_state (C, "c3", NULL, GTK_EVENT_SEQUENCE_NONE);
+  assert_gesture_state (B, "b3", NULL, GTK_EVENT_SEQUENCE_NONE);
+  assert_gesture_state (A, "a3", NULL, GTK_EVENT_SEQUENCE_NONE);
 
   gtk_window_destroy (GTK_WINDOW (A));
 
@@ -808,6 +846,14 @@ test_claim_bubble (void)
                    "c1 state denied, "
                    "a1 state denied, "
                    "b3 state claimed");
+
+  assert_gesture_state (A, "a1", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (B, "b1", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (C, "c1", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (C, "c2", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (C, "c3", NULL, GTK_EVENT_SEQUENCE_DENIED);
+  assert_gesture_state (B, "b3", NULL, GTK_EVENT_SEQUENCE_CLAIMED);
+  assert_gesture_state (A, "a3", NULL, GTK_EVENT_SEQUENCE_NONE);
 
   gtk_window_destroy (GTK_WINDOW (A));
 
