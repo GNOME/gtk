@@ -53,5 +53,5 @@ parser.add_argument ('FILES', nargs='*', help='Input files')
 args = parser.parse_args()
 
 for path in args.FILES:
-    load (path, args.include)
+    load (path, args.include if args.include else [])
 

@@ -92,25 +92,6 @@ new_resource_file (const char *filename)
   return file;
 }
 
-static GskRenderNode *
-enforce_logical_size (GskRenderNode *node,
-                      double         width,
-                      double         height)
-{
-  GskRenderNode *nodes[2];
-
-  nodes[0] = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 0 },
-                                 &GRAPHENE_RECT_INIT (0, 0, width, height));
-  nodes[1] = node;
-
-  node = gsk_container_node_new (nodes, 2);
-
-  gsk_render_node_unref (nodes[0]);
-  gsk_render_node_unref (nodes[1]);
-
-  return node;
-}
-
 /* }}} */
 /* {{{ Icon loading */
 
@@ -378,7 +359,6 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
       gsk_render_node_recolor (node, colors, n_colors, weight, &recolored))
     {
       g_debug ("snapshot symbolic icon as recolored node");
-      recolored = enforce_logical_size (recolored, icon->width, icon->height);
 
       gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
       gsk_render_node_unref (recolored);
@@ -388,8 +368,6 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
       g_debug ("snapshot symbolic icon %s using mask",
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
                ? "as texture" : "as node");
-      if (gsk_render_node_get_node_type (node) != GSK_TEXTURE_NODE)
-        node = enforce_logical_size (node, icon->width, icon->height);
 
       gtk_snapshot_push_mask (snapshot, GSK_MASK_MODE_ALPHA);
       gtk_snapshot_append_node_scaled (snapshot, node, &icon_rect, &render_rect);
@@ -405,8 +383,6 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
       g_debug ("snapshot symbolic icon %s using color-matrix",
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
                ? "as texture" : "as node");
-      if (gsk_render_node_get_node_type (node) != GSK_TEXTURE_NODE)
-        node = enforce_logical_size (node, icon->width, icon->height);
 
       init_color_matrix (&matrix, &offset,
                          &colors[GTK_SYMBOLIC_COLOR_FOREGROUND],

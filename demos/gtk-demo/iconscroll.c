@@ -5,7 +5,6 @@
  */
 
 #include <gtk/gtk.h>
-#include "gtk/gtkrendernodepaintableprivate.h"
 
 static guint tick_cb;
 static GtkAdjustment *hadjustment;
@@ -510,8 +509,7 @@ static GtkWidget *
 create_squiggle (void)
 {
   GtkWidget *image;
-  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 18, 18);
-  GskRenderNode *child, *node;
+  GtkSnapshot *snapshot;
   GdkPaintable *paintable;
   GskStroke *stroke;
   GskPathBuilder *builder;
@@ -534,9 +532,9 @@ create_squiggle (void)
   path = gsk_path_builder_free_to_path (builder);
   stroke = gsk_stroke_new (1);
 
-  child = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 1}, &bounds);
-  node = gsk_stroke_node_new (child, path, stroke);
-  paintable = gtk_render_node_paintable_new (node, &bounds);
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_append_stroke (snapshot, path, stroke, &(GdkRGBA) { 0, 0, 0, 1});
+  paintable = gtk_snapshot_free_to_paintable (snapshot, &GRAPHENE_SIZE_INIT (18, 18));
 
   image = gtk_image_new ();
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
@@ -545,8 +543,6 @@ create_squiggle (void)
   g_object_unref (paintable);
   gsk_stroke_free (stroke);
   gsk_path_unref (path);
-  gsk_render_node_unref (node);
-  gsk_render_node_unref (child);
 
   return image;
 }

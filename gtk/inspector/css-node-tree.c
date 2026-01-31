@@ -778,12 +778,13 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
       for (; i < g_list_model_get_n_items (G_LIST_MODEL (cnt->priv->node_model)); i++)
         {
           GtkTreeListRow *row = g_list_model_get_item (G_LIST_MODEL (cnt->priv->node_model), i);
-          g_object_unref (row);
           if (gtk_tree_list_row_get_item (row) == node)
             {
               gtk_tree_list_row_set_expanded (row, TRUE);
+              g_object_unref (row);
               break;
             }
+          g_object_unref (row);
         }
     }
 

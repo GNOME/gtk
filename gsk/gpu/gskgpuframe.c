@@ -195,6 +195,12 @@ gsk_gpu_frame_default_end_node (GskGpuFrame *self)
   gsk_node_stack_set_size (&priv->node_stack, gsk_node_stack_get_size (&priv->node_stack) - 1);
 }
 
+static GskDebugProfile *
+gsk_gpu_frame_default_get_profile (GskGpuFrame *self)
+{
+  return NULL;
+}
+
 static void
 gsk_gpu_frame_dispose (GObject *object)
 {
@@ -237,6 +243,7 @@ gsk_gpu_frame_class_init (GskGpuFrameClass *klass)
   klass->alloc_op = gsk_gpu_frame_default_alloc_op;
   klass->start_node = gsk_gpu_frame_default_start_node;
   klass->end_node = gsk_gpu_frame_default_end_node;
+  klass->get_profile = gsk_gpu_frame_default_get_profile;
 
   object_class->dispose = gsk_gpu_frame_dispose;
   object_class->finalize = gsk_gpu_frame_finalize;
@@ -1017,5 +1024,11 @@ gsk_gpu_frame_end_node (GskGpuFrame *self)
 #endif
 
   GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
+}
+
+GskDebugProfile *
+gsk_gpu_frame_get_profile (GskGpuFrame *self)
+{
+  return GSK_GPU_FRAME_GET_CLASS (self)->get_profile (self);
 }
 

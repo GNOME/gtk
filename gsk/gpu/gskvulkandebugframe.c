@@ -184,6 +184,9 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
   entry->profile.total.cpu_submit_ns = entry->profile.self.cpu_submit_ns;
   entry->profile.total.gpu_ns = entry->profile.self.gpu_ns;
   entry->profile.total.gpu_pixels = entry->profile.self.gpu_pixels;
+  entry->profile.total.offscreen_pixels = entry->profile.self.offscreen_pixels;
+  entry->profile.total.upload_pixels = entry->profile.self.upload_pixels;
+  entry->profile.total.base_pixels = entry->profile.self.base_pixels;
   if (entry->first_child != NO_ITEM)
     {
       gsize i, n_children;
@@ -196,6 +199,9 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
           entry->profile.total.cpu_submit_ns += child_entry->profile.total.cpu_submit_ns;
           entry->profile.total.gpu_ns += child_entry->profile.total.gpu_ns;
           entry->profile.total.gpu_pixels += child_entry->profile.total.gpu_pixels;
+          entry->profile.total.offscreen_pixels += child_entry->profile.total.offscreen_pixels;
+          entry->profile.total.upload_pixels += child_entry->profile.total.upload_pixels;
+          entry->profile.total.base_pixels += child_entry->profile.total.base_pixels;
         }
     }
   entry->profile.self.cpu_ns = entry->profile.self.cpu_record_ns + entry->profile.self.cpu_submit_ns;
@@ -203,14 +209,20 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
 
   result = gsk_debug_node_new_profile (child,
                                        &entry->profile,
-                                       g_strdup_printf ("record total: %lluns\n"
-                                                        "record self : %lluns\n"
-                                                        "submit total: %lluns\n"
-                                                        "submit self : %lluns\n"
-                                                        "GPU total   : %lluns\n"
-                                                        "GPU self    : %lluns\n"
-                                                        "pixels total: %llu\n"
-                                                        "pixels self : %llu",
+                                       g_strdup_printf ("record total   : %lluns\n"
+                                                        "record self    : %lluns\n"
+                                                        "submit total   : %lluns\n"
+                                                        "submit self    : %lluns\n"
+                                                        "GPU total      : %lluns\n"
+                                                        "GPU self       : %lluns\n"
+                                                        "pixels total   : %llu\n"
+                                                        "pixels self    : %llu\n"
+                                                        "offscreen total: %llu\n"
+                                                        "offscreen self : %llu"
+                                                        "upload total   : %llu\n"
+                                                        "upload self    : %llu\n"
+                                                        "base total     : %llu\n"
+                                                        "base self      : %llu",
                                                         (long long unsigned) entry->profile.total.cpu_record_ns,
                                                         (long long unsigned) entry->profile.self.cpu_record_ns,
                                                         (long long unsigned) entry->profile.total.cpu_submit_ns,
@@ -218,7 +230,13 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                                         (long long unsigned) entry->profile.total.gpu_ns,
                                                         (long long unsigned) entry->profile.self.gpu_ns,
                                                         (long long unsigned) entry->profile.total.gpu_pixels,
-                                                        (long long unsigned) entry->profile.self.gpu_pixels));
+                                                        (long long unsigned) entry->profile.self.gpu_pixels,
+                                                        (long long unsigned) entry->profile.total.offscreen_pixels,
+                                                        (long long unsigned) entry->profile.self.offscreen_pixels,
+                                                        (long long unsigned) entry->profile.total.upload_pixels,
+                                                        (long long unsigned) entry->profile.self.upload_pixels,
+                                                        (long long unsigned) entry->profile.total.base_pixels,
+                                                        (long long unsigned) entry->profile.self.base_pixels));
   gsk_render_node_unref (child);
 
   self->debug_current = pos + 1;
@@ -390,6 +408,17 @@ gsk_vulkan_debug_frame_end_node (GskGpuFrame *frame)
   GSK_GPU_FRAME_CLASS (gsk_vulkan_debug_frame_parent_class)->end_node (frame);
 }
 
+static GskDebugProfile *
+gsk_vulkan_debug_frame_get_profile (GskGpuFrame *frame)
+{
+  GskVulkanDebugFrame *self = GSK_VULKAN_DEBUG_FRAME (frame);
+
+  if (self->debug_current == NO_ITEM)
+    return NULL;
+
+  return &gsk_vulkan_debug_get (&self->debug, self->debug_current)->profile;
+}
+
 static void
 gsk_vulkan_debug_frame_finalize (GObject *object)
 {
@@ -425,6 +454,7 @@ gsk_vulkan_debug_frame_class_init (GskVulkanDebugFrameClass *klass)
   gpu_frame_class->alloc_op = gsk_vulkan_debug_frame_alloc_op;
   gpu_frame_class->start_node = gsk_vulkan_debug_frame_start_node;
   gpu_frame_class->end_node = gsk_vulkan_debug_frame_end_node;
+  gpu_frame_class->get_profile = gsk_vulkan_debug_frame_get_profile;
 
   object_class->finalize = gsk_vulkan_debug_frame_finalize;
 }
