@@ -495,6 +495,9 @@ should_remove_from_session (GtkApplication *application,
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
+  if (!priv->support_save)
+    return TRUE;
+
   if (gtk_window_get_transient_for (window))
     {
       GTK_DEBUG (SESSION, "Removing transient toplevel from session state");
@@ -1447,6 +1450,7 @@ collect_state (GtkApplication *application)
   gtk_application_impl_collect_global_state (priv->impl, &global_builder);
 
   global_dict = g_variant_dict_new (NULL);
+  g_assert_not_reached ();
 
   state = g_variant_new ("(a{sv}@a{sv}a(a{sv}a{sv}))",
                          &global_builder,
@@ -1546,6 +1550,7 @@ restore_window (GtkApplication   *application,
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   priv->pending_window_state = gtk_state;
+  g_assert_not_reached ();
 
   if (priv->pending_window_state)
     {
@@ -1559,8 +1564,8 @@ restore_window (GtkApplication   *application,
 
 static void
 restore_file_state (GtkApplication   *application,
-                    GtkRestoreReason  reason,
-                    GVariant         *state)
+               GtkRestoreReason  reason,
+               GVariant         *state)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   GVariant *gtk_state;
@@ -1574,6 +1579,8 @@ restore_file_state (GtkApplication   *application,
   g_variant_get (state, "(@a{sv}@a{sv}a(a{sv}a{sv}))", &gtk_state, &app_state, NULL);
 
   gtk_application_impl_restore_global_state (priv->impl, gtk_state);
+
+  g_assert_not_reached ();
 
   g_variant_unref (gtk_state);
   g_variant_unref (app_state);
