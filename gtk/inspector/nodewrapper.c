@@ -636,7 +636,7 @@ gtk_inspector_node_wrapper_create_heat_map (GtkInspectorNodeWrapper *self)
   graphene_rect_t bounds;
 
   if (self->profile_node == NULL)
-    return self->draw_node;
+    return gsk_render_node_ref (self->draw_node);
 
   gsk_render_node_get_bounds (self->profile_node, &bounds);
 
