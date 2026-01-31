@@ -235,7 +235,10 @@ gnomeos-x86_64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - meson setup -Dvulkan=disabled _build
+    - meson setup
+            ${EXTRA_MESON_FLAGS}
+            -Dvulkan=disabled
+            _build
     - meson compile -C _build
     - .gitlab-ci/run-tests.sh _build wayland gtk gnomeos-failing
 
