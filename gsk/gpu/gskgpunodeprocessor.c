@@ -5246,18 +5246,6 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
           gsk_gpu_node_processor_add_node_untracked (self, node);
           do_culling = FALSE;
         }
-      else if (GSK_DEBUG_CHECK (OCCLUSION))
-        {
-          gsk_gpu_node_processor_sync_globals (self, 0);
-          gsk_gpu_color_op (self->frame,
-                            GSK_GPU_SHADER_CLIP_NONE,
-                            self->ccs,
-                            GDK_COLOR_STATE_SRGB,
-                            1.0,
-                            &self->offset,
-                            &GRAPHENE_RECT_INIT(0, 0, 10000, 10000),
-                            &GDK_COLOR_SRGB (1.0, 1.0, 1.0, 0.6));
-        }
 
       cairo_region_subtract_rectangle (clip, &self->scissor);
     }
