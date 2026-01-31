@@ -146,7 +146,6 @@ extra_demo_sources = files([
   'singular_value_decomposition.c',
   'suggestionentry.c',
   'unicode-names.c',
-  '../../gtk/gtkrendernodepaintable.c',
   'component_filter.c',
   'minigraph.c',
 ])
