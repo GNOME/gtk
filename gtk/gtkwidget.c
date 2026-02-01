@@ -2197,6 +2197,24 @@ gtk_widget_needs_press_emulation (GtkWidget        *widget,
   return !sequence_press_handled;
 }
 
+static gboolean
+gesture_phase_is_before (GtkEventController *controller,
+                         GtkGesture         *emitter)
+{
+  GtkPropagationPhase phase, emitter_phase;
+
+  phase = gtk_event_controller_get_propagation_phase (controller);
+  emitter_phase =
+    gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (emitter));
+
+  if (emitter_phase == GTK_PHASE_CAPTURE)
+    return FALSE;
+  else if (emitter_phase == GTK_PHASE_TARGET)
+    return phase == GTK_PHASE_CAPTURE;
+  else
+    return (phase == GTK_PHASE_CAPTURE || phase == GTK_PHASE_TARGET);
+}
+
 static int
 _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                                          GdkEventSequence      *sequence,
@@ -2254,29 +2272,48 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
           !gtk_gesture_handles_sequence (gesture, seq))
         seq = NULL;
 
-      if (group && !g_list_find (group, controller))
+      if (group)
         {
-          /* If a group is provided, ensure only gestures pertaining to the group
-           * get a "claimed" state, all other claiming gestures must deny the sequence.
-           */
-          if (state == GTK_EVENT_SEQUENCE_CLAIMED)
-            gesture_state = GTK_EVENT_SEQUENCE_DENIED;
+          if (g_list_find (group, controller))
+            {
+              G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+              gtk_gesture_set_sequence_state (gesture, sequence, state);
+              G_GNUC_END_IGNORE_DEPRECATIONS
+              continue;
+            }
           else
+            {
+              /* If a group is provided, ensure only gestures pertaining to the group
+               * get a "claimed" state, all other claiming gestures must deny the sequence.
+               */
+              if (state == GTK_EVENT_SEQUENCE_CLAIMED)
+                gesture_state = GTK_EVENT_SEQUENCE_DENIED;
+              else
+                continue;
+            }
+        }
+      else
+        {
+          if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_CLAIMED)
             continue;
         }
-      else if (!group &&
-               gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_CLAIMED)
-        continue;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      retval = gtk_gesture_set_sequence_state (gesture, seq, gesture_state);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-      if (retval || gesture == emitter)
+      if (gesture_phase_is_before (controller, emitter))
         {
-          sequence_handled |=
-            _gtk_gesture_handled_sequence_press (gesture, seq);
-          n_handled++;
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+          retval = gtk_gesture_set_sequence_state (gesture, seq, gesture_state);
+          G_GNUC_END_IGNORE_DEPRECATIONS
+
+          if (retval || gesture == emitter)
+            {
+              sequence_handled |=
+                _gtk_gesture_handled_sequence_press (gesture, seq);
+              n_handled++;
+            }
+        }
+      else
+        {
+          _gtk_gesture_cancel_sequence (gesture, seq);
         }
     }
 
@@ -2296,12 +2333,57 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   return n_handled;
 }
 
-static gboolean
+static void
 _gtk_widget_cancel_sequence (GtkWidget        *widget,
                              GdkEventSequence *sequence)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gboolean handled = FALSE;
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller;
+      GtkGesture *gesture;
+
+      controller = l->data;
+
+      if (!GTK_IS_GESTURE (controller))
+        continue;
+
+      gesture = GTK_GESTURE (controller);
+      _gtk_gesture_cancel_sequence (gesture, sequence);
+    }
+}
+
+static void
+_gtk_widget_deny_sequence (GtkWidget *widget,
+                           GdkEventSequence *sequence)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller;
+
+      controller = l->data;
+
+      if (!GTK_IS_GESTURE (controller))
+        continue;
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      gtk_gesture_set_sequence_state (GTK_GESTURE (controller), sequence,
+                                      GTK_EVENT_SEQUENCE_DENIED);
+      G_GNUC_END_IGNORE_DEPRECATIONS
+    }
+}
+
+static void
+_gtk_widget_cancel_or_deny_sequence (GtkWidget        *widget,
+                                     GdkEventSequence *sequence,
+                                     GtkGesture       *owner)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
 
   for (l = priv->event_controllers; l; l = l->next)
@@ -2316,10 +2398,15 @@ _gtk_widget_cancel_sequence (GtkWidget        *widget,
 
       gesture = GTK_GESTURE (controller);
 
-      handled |= _gtk_gesture_cancel_sequence (gesture, sequence);
+      if (gesture_phase_is_before (controller, owner))
+        {
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+          gtk_gesture_set_sequence_state (gesture, sequence, GTK_EVENT_SEQUENCE_DENIED);
+          G_GNUC_END_IGNORE_DEPRECATIONS
+        }
+      else
+        _gtk_gesture_cancel_sequence (gesture, sequence);
     }
-
-  return handled;
 }
 
 static gboolean
@@ -11813,18 +11900,20 @@ gtk_widget_activate_default (GtkWidget *widget)
 }
 
 void
-gtk_widget_cancel_event_sequence (GtkWidget             *widget,
-                                  GtkGesture            *gesture,
-                                  GdkEventSequence      *sequence,
-                                  GtkEventSequenceState  state)
+gtk_widget_propagate_event_sequence_state (GtkWidget             *widget,
+                                           GtkGesture            *owning_gesture,
+                                           GdkEventSequence      *sequence,
+                                           GtkEventSequenceState  state)
 {
   gboolean handled = FALSE;
+  GtkPropagationPhase phase;
   GtkWidget *event_widget;
-  gboolean cancel = TRUE;
+  gboolean in_child_widget = TRUE;
   GdkEvent *event;
 
+  /* First, set the state on the gesture (group) setting the state */
   handled = _gtk_widget_set_sequence_state_internal (widget, sequence,
-                                                     state, gesture);
+                                                     state, owning_gesture);
 
   if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
     return;
@@ -11834,16 +11923,22 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
   if (!event)
     return;
 
+  phase = gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (owning_gesture));
+
+  /* If the sequence was claimed, either deny or cancel other gestures along
+   * the pick stack. Respectively, depending on whether their relative position
+   * in event handling order is prior or after the claiming gesture.
+   */
   while (event_widget)
     {
       if (event_widget == widget)
-        cancel = FALSE;
-      else if (cancel)
+        in_child_widget = FALSE;
+      else if (in_child_widget && phase == GTK_PHASE_CAPTURE)
         _gtk_widget_cancel_sequence (event_widget, sequence);
+      else if (in_child_widget)
+        _gtk_widget_deny_sequence (event_widget, sequence);
       else
-        _gtk_widget_set_sequence_state_internal (event_widget, sequence,
-                                                 GTK_EVENT_SEQUENCE_DENIED,
-                                                 NULL);
+        _gtk_widget_cancel_or_deny_sequence (event_widget, sequence, owning_gesture);
 
       event_widget = _gtk_widget_get_parent (event_widget);
     }
@@ -12013,7 +12108,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
           graphene_rect_inset (&enlarged, - extra_size, - extra_size);
           gtk_snapshot_push_repeat2 (snapshot,
                                      &enlarged,
-                                     &bounds, 
+                                     &bounds,
                                      GSK_REPEAT_REFLECT);
           gtk_snapshot_append_paste (snapshot,
                                      &bounds,
