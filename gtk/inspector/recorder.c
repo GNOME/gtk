@@ -224,6 +224,7 @@ struct _GtkInspectorRecorder
   GtkWidget *render_node_list;
   GtkWidget *render_node_save_button;
   GtkWidget *render_node_clip_button;
+  GtkWidget *rendering_mode_dropdown;
   GtkWidget *node_property_tree;
   GtkWidget *recording_data_stack;
   GListStore *render_node_properties;
@@ -2116,7 +2117,8 @@ render_node_list_selection_changed (GtkSingleSelection   *selection,
     return;
 
   wrapper = gtk_tree_list_row_get_item (row_item);
-  draw_node = gtk_inspector_node_wrapper_create_heat_map (wrapper);
+  draw_node = gtk_inspector_node_wrapper_render (wrapper,
+                  gtk_drop_down_get_selected (GTK_DROP_DOWN (recorder->rendering_mode_dropdown)));
   if (draw_node == NULL)
     draw_node = gsk_render_node_ref (gtk_inspector_node_wrapper_get_draw_node (wrapper));
 
@@ -2231,6 +2233,14 @@ render_node_clip (GtkButton            *button,
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (recorder));
   gdk_clipboard_set (clipboard, GSK_TYPE_RENDER_NODE, node);
+}
+
+static void
+rendering_mode_update (GtkWidget            *dropdown,
+                       GParamSpec           *pspec,
+                       GtkInspectorRecorder *recorder)
+{
+  render_node_list_selection_changed (recorder->render_node_selection, NULL, recorder);
 }
 
 static void
@@ -2541,6 +2551,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_save_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_clip_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, rendering_mode_dropdown);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, node_property_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, recording_data_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, event_view);
@@ -2550,6 +2561,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, recording_selected);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
   gtk_widget_class_bind_template_callback (widget_class, render_node_clip);
+  gtk_widget_class_bind_template_callback (widget_class, rendering_mode_update);
   //gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -2566,6 +2578,9 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   recorder->record_events = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (recorder));
+
+  if (GSK_DEBUG_CHECK (PROFILE))
+    gtk_widget_set_sensitive (recorder->rendering_mode_dropdown, TRUE);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_widget_for_recording), recorder);

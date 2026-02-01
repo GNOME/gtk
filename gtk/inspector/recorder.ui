@@ -77,6 +77,24 @@
               </object>
             </child>
             <child>
+              <object class="GtkDropDown" id="rendering_mode_dropdown">
+                <property name="sensitive">false</property>
+                <property name="tooltip-text" translatable="yes">Profiling overlay (requires GSK_DEBUG=profile)</property>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <!-- Keep in sync with enum in nodewrapper.h -->
+                    <items>
+                      <item>None</item>
+                      <item>GPU times</item>
+                      <item>Offscreens</item>
+                      <item>Uploads</item>
+                    </items>
+                  </object>
+                </property>
+                <signal name="notify::selected" handler="rendering_mode_update"/>
+              </object>
+            </child>
+            <child>
               <object class="GtkToggleButton" id="dark_mode_button">
                 <property name="child">
                   <object class="GtkImage">
