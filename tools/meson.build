@@ -41,6 +41,7 @@ gtk_tools = [
                          'gtk-builder-tool-preview.c',
                          'fake-scope.c'], [libgtk_dep] ],
   ['gtk4-rendernode-tool', ['gtk-rendernode-tool.c',
+                        'gtk-rendernode-filter-copypaste.c',
                         'gtk-rendernode-filter-strip.c',
                         'gtk-rendernode-tool-benchmark.c',
                         'gtk-rendernode-tool-compare.c',

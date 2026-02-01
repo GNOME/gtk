@@ -76,6 +76,11 @@ struct _Filter
 
 static const Filter filters[] = {
   {
+    .name = "copypaste",
+    .description = "Replace copy/paste nodes with copies of nodes",
+    .run = filter_copypaste,
+  },
+  {
     .name = "strip",
     .description = "Strip debug nodes (and others)",
     .run = filter_strip,
