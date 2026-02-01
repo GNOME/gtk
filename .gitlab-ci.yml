@@ -228,6 +228,7 @@ style-check-diff:
 gnomeos-x86_64:
   extends:
     - .test-runner
+  needs: []
   stage: build
   image: "quay.io/gnome_infrastructure/gnome-build-meta:core-nightly"
   variables:
@@ -235,9 +236,14 @@ gnomeos-x86_64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - meson setup -Dvulkan=disabled _build
+    - meson setup
+            --prefix=/usr
+            --libdir=lib/$(gcc -print-multiarch)
+            ${EXTRA_MESON_FLAGS}
+            -Dvulkan=disabled
+            _build
     - meson compile -C _build
-    - .gitlab-ci/run-tests.sh _build wayland gtk gnomeos-failing
+    - .gitlab-ci/run-tests.sh _build wayland gtk failing
 
 fedora-x86_64:
   extends:
