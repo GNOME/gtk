@@ -2590,14 +2590,32 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
   gtk_snapshot_append_node_internal (snapshot, gsk_render_node_ref (node));
 }
 
-
+/*< private>
+ * gtk_snapshot_append_node_scaled:
+ * @snapshot: a `GtkSnapshot`
+ * @node: a `GskRenderNode`
+ * @from: first rectangle
+ * @to: second rectangle
+ *
+ * Appends @node to the current render node of @snapshot,
+ * without changing the current node, with a transform
+ * that maps @from to @to.
+ *
+ * If @snapshot does not have a current node yet, @node
+ * will become the initial node.
+ */
 void
 gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
                                  GskRenderNode   *node,
                                  graphene_rect_t *from,
                                  graphene_rect_t *to)
 {
-  if (gsk_rect_equal (from, to))
+  if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE &&
+      gsk_rect_equal (from, &node->bounds))
+    {
+      gtk_snapshot_append_texture (snapshot, gsk_texture_node_get_texture (node), to);
+    }
+  else if (gsk_rect_equal (from, to))
     {
       gtk_snapshot_append_node (snapshot, node);
     }
