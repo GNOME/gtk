@@ -1670,12 +1670,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         add_text_row (store, "GPU self", "%'lluns", (unsigned long long) profile->self.gpu_ns);
         add_text_row (store, "pixels total", "%'llu", (unsigned long long) profile->total.gpu_pixels);
         add_text_row (store, "pixels self", "%'llu", (unsigned long long) profile->self.gpu_pixels);
-        add_text_row (store, "offscreen total", "%'llu", (unsigned long long) profile->total.offscreen_pixels);
-        add_text_row (store, "offscreen self", "%'llu", (unsigned long long) profile->self.offscreen_pixels);
-        add_text_row (store, "upload total", "%'llu", (unsigned long long) profile->total.upload_pixels);
-        add_text_row (store, "upload self", "%'llu", (unsigned long long) profile->self.upload_pixels);
-        add_text_row (store, "base total", "%'llu", (unsigned long long) profile->total.base_pixels);
-        add_text_row (store, "base self", "%'llu", (unsigned long long) profile->self.base_pixels);
+        add_text_row (store, "offscreen total", "%zu @ %'llu",
+                      profile->total.n_offscreens, (unsigned long long) profile->total.offscreen_pixels);
+        add_text_row (store, "offscreen self", "%zu @ %'llu",
+                      profile->self.n_offscreens, (unsigned long long) profile->self.offscreen_pixels);
+        add_text_row (store, "upload total", "%zu @ %'llu",
+                      profile->total.n_uploads, (unsigned long long) profile->total.upload_pixels);
+        add_text_row (store, "upload self", "%zu @ %'llu",
+                      profile->self.n_uploads, (unsigned long long) profile->self.upload_pixels);
+        add_text_row (store, "base total", "%zu @ %'llu",
+                      profile->total.n_bases, (unsigned long long) profile->total.base_pixels);
+        add_text_row (store, "base self", "%zu @ %'llu",
+                      profile->self.n_bases, (unsigned long long) profile->self.base_pixels);
     }
 }
 
