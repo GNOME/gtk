@@ -181,7 +181,7 @@ gdk_color_is_srgb (const GdkColor *self)
 /*< private >
  * gdk_color_convert:
  * @self: the `GdkColor` to store the result in
- * @color_state: the target color start
+ * @color_state: the target color state
  * @other: the `GdkColor` to convert
  *
  * Converts a given `GdkColor` to another color state.
