@@ -565,7 +565,7 @@ scale_surface (cairo_surface_t *surface)
         max = MAX (max, row[3 * x]);
     }
 
-  if (max >= 1.0)
+  if (max >= 1.0 || max <= 0.0)
     return;
 
   for (y = 0; y < height; y++)
