@@ -523,6 +523,25 @@ render_heatmap_node (cairo_t               *cr,
   }
 }
 
+static gboolean
+should_scale_surface (NodeWrapperRendering rendering)
+{
+  switch (rendering)
+  {
+    case NODE_WRAPPER_RENDER_DEFAULT:
+    case NODE_WRAPPER_RENDER_OFFSCREENS:
+    case NODE_WRAPPER_RENDER_UPLOADS:
+      return FALSE;
+
+    case NODE_WRAPPER_RENDER_GPU_TIME:
+      return TRUE;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+  }
+}
+
 static void
 scale_surface (cairo_surface_t *surface)
 {
@@ -597,7 +616,8 @@ render_heatmap_mask (GskRenderNode        *node,
 
   render_heatmap_node (cr, node, &GRAPHENE_SIZE_INIT (1.0, 1.0), &bounds, rendering, max_value);
 
-  scale_surface (surface);
+  if (should_scale_surface (rendering))
+    scale_surface (surface);
 
   cairo_destroy (cr);
 
