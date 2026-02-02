@@ -345,7 +345,10 @@ create_offscreen_image (GskGpuFrame     *frame,
 
   profile = gsk_gpu_frame_get_profile (frame);
   if (profile)
-    profile->self.offscreen_pixels += width * height;
+    {
+      profile->self.n_offscreens++;
+      profile->self.offscreen_pixels += width * height;
+    }
 
   return result;
 }
@@ -1310,7 +1313,10 @@ gsk_gpu_first_node_begin_rendering (GskGpuNodeProcessor *self,
 
   profile = gsk_gpu_frame_get_profile (self->frame);
   if (profile)
-    profile->self.base_pixels += self->scissor.width * self->scissor.height;
+    {
+      profile->self.n_bases++;
+      profile->self.base_pixels += self->scissor.width * self->scissor.height;
+    }
 
   if (info->has_started_rendering)
     {

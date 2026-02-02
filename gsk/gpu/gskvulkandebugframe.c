@@ -184,8 +184,11 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
   entry->profile.total.cpu_submit_ns = entry->profile.self.cpu_submit_ns;
   entry->profile.total.gpu_ns = entry->profile.self.gpu_ns;
   entry->profile.total.gpu_pixels = entry->profile.self.gpu_pixels;
+  entry->profile.total.n_offscreens = entry->profile.self.n_offscreens;
   entry->profile.total.offscreen_pixels = entry->profile.self.offscreen_pixels;
+  entry->profile.total.n_uploads = entry->profile.self.n_uploads;
   entry->profile.total.upload_pixels = entry->profile.self.upload_pixels;
+  entry->profile.total.n_bases = entry->profile.self.n_bases;
   entry->profile.total.base_pixels = entry->profile.self.base_pixels;
   if (entry->first_child != NO_ITEM)
     {
@@ -199,8 +202,11 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
           entry->profile.total.cpu_submit_ns += child_entry->profile.total.cpu_submit_ns;
           entry->profile.total.gpu_ns += child_entry->profile.total.gpu_ns;
           entry->profile.total.gpu_pixels += child_entry->profile.total.gpu_pixels;
+          entry->profile.total.n_offscreens += child_entry->profile.total.n_offscreens;
           entry->profile.total.offscreen_pixels += child_entry->profile.total.offscreen_pixels;
+          entry->profile.total.n_uploads += child_entry->profile.total.n_uploads;
           entry->profile.total.upload_pixels += child_entry->profile.total.upload_pixels;
+          entry->profile.total.n_bases += child_entry->profile.total.n_bases;
           entry->profile.total.base_pixels += child_entry->profile.total.base_pixels;
         }
     }
@@ -217,12 +223,12 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                                         "GPU self       : %lluns\n"
                                                         "pixels total   : %llu\n"
                                                         "pixels self    : %llu\n"
-                                                        "offscreen total: %llu\n"
-                                                        "offscreen self : %llu"
-                                                        "upload total   : %llu\n"
-                                                        "upload self    : %llu\n"
-                                                        "base total     : %llu\n"
-                                                        "base self      : %llu",
+                                                        "offscreen total: %zu @ %llu\n"
+                                                        "offscreen self : %zu @ %llu"
+                                                        "upload total   : %zu @ %llu\n"
+                                                        "upload self    : %zu @ %llu\n"
+                                                        "base total     : %zu @ %llu\n"
+                                                        "base self      : %zu @ %llu",
                                                         (long long unsigned) entry->profile.total.cpu_record_ns,
                                                         (long long unsigned) entry->profile.self.cpu_record_ns,
                                                         (long long unsigned) entry->profile.total.cpu_submit_ns,
@@ -231,11 +237,17 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                                         (long long unsigned) entry->profile.self.gpu_ns,
                                                         (long long unsigned) entry->profile.total.gpu_pixels,
                                                         (long long unsigned) entry->profile.self.gpu_pixels,
+                                                        entry->profile.total.n_offscreens,
                                                         (long long unsigned) entry->profile.total.offscreen_pixels,
+                                                        entry->profile.self.n_offscreens,
                                                         (long long unsigned) entry->profile.self.offscreen_pixels,
+                                                        entry->profile.total.n_uploads,
                                                         (long long unsigned) entry->profile.total.upload_pixels,
+                                                        entry->profile.self.n_uploads,
                                                         (long long unsigned) entry->profile.self.upload_pixels,
+                                                        entry->profile.total.n_bases,
                                                         (long long unsigned) entry->profile.total.base_pixels,
+                                                        entry->profile.self.n_bases,
                                                         (long long unsigned) entry->profile.self.base_pixels));
   gsk_render_node_unref (child);
 
