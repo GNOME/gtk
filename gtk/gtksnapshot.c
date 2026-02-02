@@ -41,6 +41,7 @@
 #include "gsk/gskroundedrectprivate.h"
 #include "gsk/gskstrokeprivate.h"
 #include "gsk/gsktextnodeprivate.h"
+#include "gsk/gskrectprivate.h"
 
 #include "gtk/gskpangoprivate.h"
 
@@ -841,7 +842,7 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
     return NULL;
 
   if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE &&
-      graphene_rect_equal (child_bounds, &node->bounds))
+      gsk_rect_equal (child_bounds, &node->bounds))
     {
       /* Repeating a color node entirely is pretty easy by just increasing
        * the size of the color node.
@@ -2596,7 +2597,7 @@ gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
                                  graphene_rect_t *from,
                                  graphene_rect_t *to)
 {
-  if (graphene_rect_equal (from, to))
+  if (gsk_rect_equal (from, to))
     {
       gtk_snapshot_append_node (snapshot, node);
     }
