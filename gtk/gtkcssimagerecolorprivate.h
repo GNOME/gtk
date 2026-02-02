@@ -46,6 +46,7 @@ struct _GtkCssImageRecolor
   double width;
   double height;
   gboolean single_path;
+  gboolean has_strokes;
   gboolean only_fg;
 };
 

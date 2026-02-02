@@ -109,6 +109,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
   GdkTexture *texture = NULL;
   gboolean only_fg = FALSE;
   gboolean single_path = FALSE;
+  gboolean has_strokes = FALSE;
 
   icon_cache_mark_used_if_cached (icon);
 
@@ -135,6 +136,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
                 icon->node = gsk_render_node_new_from_resource_symbolic (icon->filename,
                                                                          &only_fg,
                                                                          &single_path,
+                                                                         &has_strokes,
                                                                          &icon->width,
                                                                          &icon->height);
               if (!icon->node)
@@ -162,6 +164,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
                 icon->node = gsk_render_node_new_from_filename_symbolic (icon->filename,
                                                                          &only_fg,
                                                                          &single_path,
+                                                                         &has_strokes,
                                                                          &icon->width,
                                                                          &icon->height);
               if (!icon->node)
@@ -220,6 +223,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
 
   icon->only_fg = only_fg;
   icon->single_path = single_path;
+  icon->has_strokes = has_strokes;
 
   if (icon->node)
     {
@@ -369,11 +373,15 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
                ? "as texture" : "as node");
 
+      if (!icon->has_strokes || !gsk_render_node_restroke (node, weight, &recolored))
+        recolored = gsk_render_node_ref (node);
+
       gtk_snapshot_push_mask (snapshot, GSK_MASK_MODE_ALPHA);
-      gtk_snapshot_append_node_scaled (snapshot, node, &icon_rect, &render_rect);
+      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
       gtk_snapshot_pop (snapshot);
       gtk_snapshot_append_color (snapshot, &colors[0], &render_rect);
       gtk_snapshot_pop (snapshot);
+      gsk_render_node_unref (recolored);
     }
   else if (icon->is_symbolic)
     {
@@ -384,6 +392,9 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
                ? "as texture" : "as node");
 
+      if (!icon->has_strokes || !gsk_render_node_restroke (node, weight, &recolored))
+        recolored = gsk_render_node_ref (node);
+
       init_color_matrix (&matrix, &offset,
                          &colors[GTK_SYMBOLIC_COLOR_FOREGROUND],
                          &colors[GTK_SYMBOLIC_COLOR_SUCCESS],
@@ -391,8 +402,9 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
                          &colors[GTK_SYMBOLIC_COLOR_ERROR]);
 
       gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
-      gtk_snapshot_append_node_scaled (snapshot, node, &icon_rect, &render_rect);
+      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
       gtk_snapshot_pop (snapshot);
+      gsk_render_node_unref (recolored);
     }
   else
     {

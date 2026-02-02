@@ -33,6 +33,7 @@ struct _GtkIconPaintable
   guint is_symbolic     : 1;
   guint only_fg         : 1;
   guint single_path     : 1;
+  guint has_strokes     : 1;
 
   /* Debug flags for testing svg->node conversion */
   guint allow_node     : 1;
