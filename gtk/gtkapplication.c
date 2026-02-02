@@ -1464,7 +1464,7 @@ collect_state (GtkApplication *application)
   return state;
 }
 
-/**<private>
+/*<private>
  * gtk_application_save:
  * @application: a `GtkApplication`
  *
@@ -1497,7 +1497,7 @@ gtk_application_save (GtkApplication *application)
   schedule_autosave (application);
 }
 
-/**<private>
+/*<private>
  * gtk_application_forget:
  * @application: a `GtkApplication`
  *
