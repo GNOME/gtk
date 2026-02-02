@@ -123,6 +123,8 @@ main (int argc, const char *argv[])
     do_extract (&argc, &argv);
   else if (strcmp (argv[0], "convert") == 0)
     do_convert (&argc, &argv);
+  else if (strcmp (argv[0], "filter") == 0)
+    do_filter (&argc, &argv);
   else
     usage ();
 

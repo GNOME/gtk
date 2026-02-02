@@ -27,12 +27,13 @@
 #include "gskisolationnode.h"
 #include "gskopacitynode.h"
 #include "gskpastenode.h"
-#include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
 #include "gsktransform.h"
 #include "gsktransformnode.h"
 
-#include "gdk/gdkrgbaprivate.h"
+#ifdef GTK_COMPILATION
+#include "gskrendernodeprivate.h"
+#endif
 
 typedef struct _PartialNode PartialNode;
 struct _PartialNode
@@ -323,7 +324,9 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
             GskRenderNode *child = replay_partial_node (paste->nodes_copied);
             if (child)
               {
-                result = gsk_clip_node_new (child, &node->bounds);
+                graphene_rect_t bounds;
+                gsk_render_node_get_bounds (node, &bounds);
+                result = gsk_clip_node_new (child, &bounds);
                 gsk_render_node_unref (child);
               }
             else
@@ -358,7 +361,11 @@ gsk_render_node_replace_copy_paste (GskRenderNode *node)
   gsk_render_replay_free (replay);
 
   if (result == NULL)
-    result = gsk_color_node_new (&GDK_RGBA_TRANSPARENT, &node->bounds);
+    {
+      graphene_rect_t bounds;
+      gsk_render_node_get_bounds (node, &bounds);
+      result = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 0 }, &bounds);
+    }
 
   gsk_render_node_unref (node);
 
