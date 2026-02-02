@@ -2992,6 +2992,9 @@ gdk_surface_handle_event (GdkEvent *event)
   gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   gboolean handled = FALSE;
 
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    return FALSE;
+
   if (check_autohide (event))
     return TRUE;
 
