@@ -1119,6 +1119,52 @@ path_paintable_get_shape_by_id (PathPaintable *self,
   return get_shape_by_id (self->svg->content, id);
 }
 
+GtkIconPaintable *
+path_paintable_get_icon_paintable (PathPaintable *self)
+{
+  GtkIconPaintable *paintable;
+  GFile *file;
+  GIOStream *iostream;
+  GOutputStream *ostream;
+  GInputStream *istream;
+  GBytes *bytes;
+  GError *error = NULL;
+
+  file = g_file_new_tmp ("gtkXXXXXX.svg", (GFileIOStream **) &iostream, &error);
+  if (error)
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+  ostream = g_io_stream_get_output_stream (iostream);
+  bytes = path_paintable_serialize_as_svg (self);
+  istream = g_memory_input_stream_new_from_bytes (bytes);
+
+  g_output_stream_splice (ostream, istream, 0, NULL, &error);
+  if (error)
+    {
+      g_object_unref (file);
+      g_object_unref (iostream);
+      g_bytes_unref (bytes);
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+  paintable = gtk_icon_paintable_new_for_file (file, 64, 1);
+  g_object_set (paintable, "is-symbolic", TRUE, NULL);
+
+  //g_file_delete (file, NULL, NULL);
+
+  g_object_unref (file);
+  g_object_unref (iostream);
+  g_bytes_unref (bytes);
+
+  return paintable;
+}
+
 /* }}} */
 
 /* vim:set foldmethod=marker: */
