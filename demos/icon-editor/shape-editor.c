@@ -305,6 +305,9 @@ static void
 shape_editor_update_path (ShapeEditor *self,
                           GskPath     *path)
 {
+  if (self->updating)
+    return;
+
   self->shape->type = SHAPE_PATH;
   svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (path));
   path_paintable_changed (self->paintable);
