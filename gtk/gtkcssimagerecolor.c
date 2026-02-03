@@ -68,7 +68,6 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
                                  GError             **error)
 {
   char *uri;
-  gboolean only_fg;
 
   if (recolor->node)
     return;
@@ -83,12 +82,18 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
           g_str_has_suffix (resource_path, "-symbolic-ltr.svg") ||
           g_str_has_suffix (resource_path, "-symbolic-rtl.svg"))
         {
-          recolor->node = gsk_render_node_new_from_resource_symbolic (resource_path, &recolor->only_fg, &recolor->single_path, &recolor->width, &recolor->height);
+          recolor->node = gsk_render_node_new_from_resource_symbolic (resource_path,
+                                                                      &recolor->only_fg,
+                                                                      &recolor->single_path,
+                                                                      &recolor->has_strokes,
+                                                                      &recolor->width,
+                                                                      &recolor->height);
         }
 
       if (!recolor->node)
         {
           GdkTexture *texture;
+          gboolean only_fg;
 
           if (g_str_has_suffix (uri, ".symbolic.png"))
             texture = gdk_texture_new_from_resource (resource_path);
@@ -114,12 +119,18 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
           g_str_has_suffix (path, "-symbolic-ltr.svg") ||
           g_str_has_suffix (path, "-symbolic-rtl.svg"))
         {
-          recolor->node = gsk_render_node_new_from_filename_symbolic (path, &recolor->only_fg, &recolor->single_path, &recolor->width, &recolor->height);
+          recolor->node = gsk_render_node_new_from_filename_symbolic (path,
+                                                                      &recolor->only_fg,
+                                                                      &recolor->single_path,
+                                                                      &recolor->has_strokes,
+                                                                      &recolor->width,
+                                                                      &recolor->height);
         }
 
       if (!recolor->node)
         {
           GdkTexture *texture;
+          gboolean only_fg;
 
           if (g_str_has_suffix (uri, ".symbolic.png"))
             texture = gdk_texture_new_from_file (recolor->file, NULL);
@@ -127,6 +138,7 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
             texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, &only_fg, NULL);
           recolor->only_fg = FALSE;
           recolor->single_path = FALSE;
+          recolor->has_strokes = FALSE;
           recolor->width = gdk_texture_get_width (texture);
           recolor->height = gdk_texture_get_height (texture);
           recolor->node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT (0, 0,
@@ -162,6 +174,7 @@ gtk_css_image_recolor_load (GtkCssImageRecolor    *recolor,
       image->width = recolor->width;
       image->height = recolor->height;
       image->only_fg = recolor->only_fg;
+      image->has_strokes = recolor->has_strokes;
       image->single_path = recolor->single_path;
     }
   else
