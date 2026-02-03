@@ -323,6 +323,7 @@ gsk_shadow_node_new2 (GskRenderNode        *child,
   node->is_hdr = is_hdr;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
   node->contains_paste_node = gsk_render_node_contains_paste_node (child);
+  node->needs_blending = TRUE;
 
   gsk_shadow_node_get_bounds (self, &node->bounds);
 

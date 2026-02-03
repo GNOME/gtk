@@ -573,6 +573,8 @@ gsk_repeat_node_new2 (const graphene_rect_t  *bounds,
                        !gsk_rect_is_empty (&self->child_bounds);
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
   node->contains_paste_node = gsk_render_node_contains_paste_node (child);
+  /* because we sometimes manually repeat the child */
+  node->needs_blending = TRUE;
 
   return node;
 }

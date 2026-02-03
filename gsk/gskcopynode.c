@@ -258,6 +258,7 @@ gsk_copy_node_new (GskRenderNode *child)
   node->clears_background = gsk_render_node_clears_background (child);
   node->copy_mode = gsk_render_node_get_copy_mode (child);
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
+  node->needs_blending = gsk_render_node_needs_blending (child);
 
   gsk_copy_node_analyze_child (self, child, 0);
 

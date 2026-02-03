@@ -309,6 +309,7 @@ gsk_container_node_new (GskRenderNode **children,
       node->copy_mode = gsk_render_node_get_copy_mode (children[0]);
       node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (children[0]);
       node->contains_paste_node = gsk_render_node_contains_paste_node (children[0]);
+      node->needs_blending = n_children > 1 || gsk_render_node_needs_blending (children[0]);
 
       for (i = 1; i < n_children; i++)
         {

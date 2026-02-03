@@ -272,6 +272,8 @@ gsk_text_node_new2 (PangoFont              *font,
       n++;
     }
 
+  node->needs_blending = n > 1;
+
   self->glyphs = glyph_infos;
   self->num_glyphs = n;
 
