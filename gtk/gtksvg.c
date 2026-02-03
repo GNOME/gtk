@@ -23129,16 +23129,22 @@ shape_equal (Shape *shape1,
         }
     }
 
-  if (shape1->animations->len != shape2->animations->len)
-    return FALSE;
-
-  for (unsigned int i = 0; i < shape1->animations->len; i++)
+  if (shape1->animations || shape2->animations)
     {
-      Animation *a1 = g_ptr_array_index (shape1->animations, i);
-      Animation *a2 = g_ptr_array_index (shape2->animations, i);
-
-      if (!animation_equal (a1, a2))
+      if (!shape1->animations || !shape2->animations)
         return FALSE;
+
+      if (shape1->animations->len != shape2->animations->len)
+        return FALSE;
+
+      for (unsigned int i = 0; i < shape1->animations->len; i++)
+        {
+          Animation *a1 = g_ptr_array_index (shape1->animations, i);
+          Animation *a2 = g_ptr_array_index (shape2->animations, i);
+
+          if (!animation_equal (a1, a2))
+            return FALSE;
+        }
     }
 
   return TRUE;

@@ -96,6 +96,7 @@ main (int argc, char *argv[])
       while (1)
         {
           GFile *child;
+          const char *path;
 
           if (!g_file_enumerator_iterate (dir, NULL, &child, NULL, &error))
             g_error ("%s", error->message);
@@ -103,7 +104,12 @@ main (int argc, char *argv[])
           if (!child)
             break;
 
-          g_ptr_array_add (files, g_file_get_path (child));
+          path = g_file_peek_path (child);
+
+          if ((g_str_has_suffix (path, ".svg") ||
+               g_str_has_suffix (path, ".gpa")) &&
+              !g_str_has_suffix (path, ".ref.svg"))
+            g_ptr_array_add (files, g_strdup (path));
         }
       g_object_unref (dir);
     }
@@ -156,10 +162,6 @@ main (int argc, char *argv[])
 
       child = g_file_new_for_path (path);
 
-      if (!g_str_has_suffix (path, ".svg") ||
-          g_str_has_suffix (path, ".ref.svg"))
-        continue;
-
       basename = g_file_get_basename (child);
 
       label = gtk_label_new (basename);
@@ -186,6 +188,7 @@ main (int argc, char *argv[])
           if (svg)
             {
               img = gtk_picture_new_for_paintable (svg);
+              gtk_svg_play (GTK_SVG (svg));
               gtk_picture_set_can_shrink (GTK_PICTURE (img), allow_shrink);
               gtk_widget_set_size_request (img, size, size);
               gtk_grid_attach (GTK_GRID (grid), img, 2, row, 1, 1);
