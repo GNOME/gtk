@@ -2658,9 +2658,7 @@ gdk_surface_set_opaque_rect (GdkSurface            *self,
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
   cairo_rectangle_int_t opaque;
 
-  if (rect)
-    gsk_rect_to_cairo_shrink (rect, &opaque);
-  else
+  if (rect == NULL || !gsk_rect_to_cairo_shrink (rect, &opaque))
     opaque = (cairo_rectangle_int_t) { 0, 0, 0, 0 };
 
   if (gdk_rectangle_equal (&priv->opaque_rect, &opaque))

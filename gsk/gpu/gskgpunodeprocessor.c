@@ -563,9 +563,7 @@ gsk_gpu_node_processor_rect_to_device_shrink (GskGpuNodeProcessor   *self,
   if (!gsk_gpu_node_processor_rect_clip_to_device (self, &tmp, &tmp))
     return FALSE;
 
-  gsk_rect_to_cairo_shrink (&tmp, int_rect);
-
-  return int_rect->width > 0 && int_rect->height > 0;
+  return gsk_rect_to_cairo_shrink (&tmp, int_rect);
 }
 
 static gboolean
@@ -578,7 +576,8 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
   if (!gsk_gpu_node_processor_rect_clip_to_device (self, rect, &tmp))
     return FALSE;
 
-  gsk_rect_to_cairo_shrink (&tmp, int_rect);
+  if (!gsk_rect_to_cairo_shrink (&tmp, int_rect))
+    return FALSE;
 
   return int_rect->x == tmp.origin.x
       && int_rect->y == tmp.origin.y
