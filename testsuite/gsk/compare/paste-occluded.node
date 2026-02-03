@@ -1,0 +1,15 @@
+color {
+  bounds: 10 10 30 30;
+  color: rgba(0,0,255,0.666667);
+}
+copy {
+  child: container {
+    color {
+      bounds: 0 0 50 50;
+      color: rgb(255,0,0);
+    }
+    paste {
+      bounds: 0 0 50 50;
+    }
+  }
+}
