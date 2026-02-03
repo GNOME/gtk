@@ -140,9 +140,54 @@ get_number_from_entry (GtkEntry *entry,
 }
 
 static void
+shape_attr_unset (Shape     *shape,
+                  ShapeAttr  attr)
+{
+  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, FALSE);
+}
+
+static void
 shape_changed (ShapeEditor *self)
 {
   int res = 0;
+
+  if (self->updating)
+    return;
+
+  switch ((unsigned int) self->shape->type)
+    {
+    case SHAPE_LINE:
+      shape_attr_unset (self->shape, SHAPE_ATTR_X1);
+      shape_attr_unset (self->shape, SHAPE_ATTR_Y1);
+      shape_attr_unset (self->shape, SHAPE_ATTR_X2);
+      shape_attr_unset (self->shape, SHAPE_ATTR_Y2);
+      break;
+    case SHAPE_CIRCLE:
+      shape_attr_unset (self->shape, SHAPE_ATTR_CX);
+      shape_attr_unset (self->shape, SHAPE_ATTR_CY);
+      shape_attr_unset (self->shape, SHAPE_ATTR_R);
+      break;
+    case SHAPE_ELLIPSE:
+      shape_attr_unset (self->shape, SHAPE_ATTR_CX);
+      shape_attr_unset (self->shape, SHAPE_ATTR_CY);
+      shape_attr_unset (self->shape, SHAPE_ATTR_RX);
+      shape_attr_unset (self->shape, SHAPE_ATTR_RY);
+      break;
+    case SHAPE_RECT:
+      shape_attr_unset (self->shape, SHAPE_ATTR_X);
+      shape_attr_unset (self->shape, SHAPE_ATTR_Y);
+      shape_attr_unset (self->shape, SHAPE_ATTR_WIDTH);
+      shape_attr_unset (self->shape, SHAPE_ATTR_HEIGHT);
+      shape_attr_unset (self->shape, SHAPE_ATTR_RX);
+      shape_attr_unset (self->shape, SHAPE_ATTR_RY);
+      break;
+    case SHAPE_POLYLINE:
+    case SHAPE_POLYGON:
+      shape_attr_unset (self->shape, SHAPE_ATTR_POINTS);
+      break;
+    default:
+      break;
+    }
 
   switch (gtk_drop_down_get_selected (self->shape_dropdown))
     {
@@ -319,8 +364,10 @@ shape_editor_update_path (ShapeEditor *self,
 static void
 path_changed (ShapeEditor *self)
 {
-  GskPath *path = path_editor_get_path (self->path_editor);
-  shape_editor_update_path (self, path);
+  if (self->updating)
+    return;
+
+  shape_editor_update_path (self, path_editor_get_path (self->path_editor));
 }
 
 static void

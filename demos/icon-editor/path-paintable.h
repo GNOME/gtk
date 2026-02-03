@@ -150,3 +150,6 @@ void            path_paintable_paths_changed       (PathPaintable   *self);
 
 Shape *         shape_duplicate                    (Shape *shape);
 gboolean        shape_is_graphical                 (Shape *shape);
+
+GtkIconPaintable *
+                path_paintable_get_icon_paintable  (PathPaintable *self);

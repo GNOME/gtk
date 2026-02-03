@@ -32,6 +32,7 @@ struct _PaintableEditor
   GtkWidget parent_instance;
 
   PathPaintable *paintable;
+  GtkIconPaintable *icon_paintable;
   unsigned int state;
 
   GtkScrolledWindow *swin;
@@ -42,6 +43,7 @@ struct _PaintableEditor
   GtkLabel *summary1;
   GtkLabel *summary2;
   GtkSpinButton *initial_state;
+  GtkImage *icon_image;
 
   GtkBox *path_elts;
 };
@@ -175,12 +177,23 @@ update_compat (PaintableEditor *self)
 }
 
 static void
+update_icon_paintable (PaintableEditor *self)
+{
+  GdkPaintable *paintable = GDK_PAINTABLE (path_paintable_get_icon_paintable (self->paintable));
+
+  gtk_image_set_from_paintable (self->icon_image, paintable);
+
+  g_object_unref (paintable);
+}
+
+static void
 paths_changed (PaintableEditor *self)
 {
   clear_shape_editors (self);
   create_shape_editors (self);
   update_size (self);
   update_summary (self);
+  update_icon_paintable (self);
 }
 
 static void
@@ -329,6 +342,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary1);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary2);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, initial_state);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, icon_image);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, path_elts);
 
   gtk_widget_class_bind_template_callback (widget_class, size_changed);
@@ -398,6 +412,7 @@ paintable_editor_set_paintable (PaintableEditor *self,
       create_shape_editors (self);
       update_summary (self);
       update_compat (self);
+      update_icon_paintable (self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
