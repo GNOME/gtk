@@ -367,6 +367,12 @@ path_paintable_set_size (PathPaintable *self,
   self->svg->height = height;
 
   svg_shape_attr_set (self->svg->content,
+                      SHAPE_ATTR_WIDTH,
+                      svg_number_new (width));
+  svg_shape_attr_set (self->svg->content,
+                      SHAPE_ATTR_HEIGHT,
+                      svg_number_new (height));
+  svg_shape_attr_set (self->svg->content,
                       SHAPE_ATTR_VIEW_BOX,
                       svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
   g_signal_emit (self, signals[CHANGED], 0);
@@ -1119,6 +1125,15 @@ path_paintable_get_shape_by_id (PathPaintable *self,
   return get_shape_by_id (self->svg->content, id);
 }
 
+static void
+clear_tempfile (gpointer data)
+{
+  GFile *file = data;
+
+  g_file_delete (file, NULL, NULL);
+  g_object_unref (file);
+}
+
 GtkIconPaintable *
 path_paintable_get_icon_paintable (PathPaintable *self)
 {
@@ -1130,7 +1145,7 @@ path_paintable_get_icon_paintable (PathPaintable *self)
   GBytes *bytes;
   GError *error = NULL;
 
-  file = g_file_new_tmp ("gtkXXXXXX.svg", (GFileIOStream **) &iostream, &error);
+  file = g_file_new_tmp ("gtkXXXXXX-symbolic.svg", (GFileIOStream **) &iostream, &error);
   if (error)
     {
       g_warning ("%s", error->message);
@@ -1154,11 +1169,9 @@ path_paintable_get_icon_paintable (PathPaintable *self)
     }
 
   paintable = gtk_icon_paintable_new_for_file (file, 64, 1);
-  g_object_set (paintable, "is-symbolic", TRUE, NULL);
 
-  //g_file_delete (file, NULL, NULL);
+  g_object_set_data_full (G_OBJECT (paintable), "file", file, clear_tempfile);
 
-  g_object_unref (file);
   g_object_unref (iostream);
   g_bytes_unref (bytes);
 

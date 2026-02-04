@@ -295,34 +295,28 @@ test_symbolic_resource (gconstpointer data)
 int
 main (int argc, char *argv[])
 {
-  const char *path = "/org/gtk/libgtk/icons";
-  char **dirs;
+  const char *path = "/org/gtk/libgtk/icons/";
+  char **names;
 
   gtk_test_init (&argc, &argv);
 
-  dirs = g_resources_enumerate_children (path, 0, NULL);
-  for (int i = 0; dirs[i]; i++)
+  names = g_resources_enumerate_children (path, 0, NULL);
+  for (int j = 0; names[j]; j++)
     {
-      char *dir = g_strconcat (path, "/", dirs[i], NULL);
-      char **names;
-
-      names = g_resources_enumerate_children (dir, 0, NULL);
-      for (int j = 0; names[j]; j++)
+      if (g_str_has_suffix (names[j], ".svg"))
         {
           char *testname = g_strconcat ("/symbolic/", names[j], NULL);
 
-          g_test_add_data_func_full (testname, g_strconcat (dir, names[j], NULL), test_symbolic_resource, g_free);
+          g_test_add_data_func_full (testname, g_strconcat (path, names[j], NULL), test_symbolic_resource, g_free);
           g_free (testname);
         }
-      g_strfreev (names);
     }
-  g_strfreev (dirs);
+  g_strfreev (names);
 
   if (argc > 1 && strcmp (argv[1], "--include-theme") == 0)
     {
       GdkDisplay *display;
       GtkIconTheme *icon_theme;
-      char **names;
 
       display = gdk_display_get_default ();
       icon_theme = gtk_icon_theme_get_for_display (display);

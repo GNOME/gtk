@@ -901,7 +901,8 @@ start_element_cb (GMarkupParseContext  *context,
            g_str_has_prefix (element_name, "inkscape:"))
 
     {
-      /* Do nothing */
+      if (GTK_DEBUG_CHECK (ICONTHEME))
+        gdk_debug_message ("Ignoring element in symbolic icon: <%s>", element_name);
       return;
     }
   else if (strcmp (element_name, "circle") == 0)
@@ -1072,8 +1073,8 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else
     {
-      g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                   "Unhandled element: %s", element_name);
+      if (GTK_DEBUG_CHECK (ICONTHEME))
+        gdk_debug_message ("Unhandled element in symbolic icon: <%s>", element_name);
       return;
     }
 

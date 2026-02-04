@@ -354,9 +354,9 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
     colors_opaque = gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
   else
     colors_opaque = gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]) &&
-                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_SUCCESS]) &&
-                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_WARNING]) &&
-                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_ERROR]);
+                    GTK_SYMBOLIC_COLOR_SUCCESS < n_colors && gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_SUCCESS]) &&
+                    GTK_SYMBOLIC_COLOR_WARNING < n_colors && gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_WARNING]) &&
+                    GTK_SYMBOLIC_COLOR_ERROR < n_colors && gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_ERROR]);
 
   if (icon->is_symbolic && icon->allow_recolor &&
       (icon->single_path || colors_opaque) &&

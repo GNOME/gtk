@@ -144,7 +144,6 @@ internal_tests = [
       'symbolic2.c',
       '../reftests/reftest-compare.c',
     ],
-    'suites': [ 'flaky' ],
   },
   { 'name': 'bitmask' },
 ]

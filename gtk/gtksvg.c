@@ -5557,15 +5557,19 @@ static const SvgValueClass SVG_PAINT_CLASS = {
 };
 
 static const char *symbolic_colors[] = {
-  "foreground", "error", "warning", "success", "accent"
+  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "foreground",
+  [GTK_SYMBOLIC_COLOR_ERROR] = "error",
+  [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
+  [GTK_SYMBOLIC_COLOR_SUCCESS] = "success",
+  [GTK_SYMBOLIC_COLOR_ACCENT] = "accent",
 };
 
 static const char *symbolic_fallbacks[] = {
-  "rgb(0,0,0)",
-  "rgb(204,0,0)",
-  "rgb(245,121,0)",
-  "rgb(51,209,122)",
-  "rgb(0,34,255)",
+  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "rgb(0,0,0)",
+  [GTK_SYMBOLIC_COLOR_ERROR] = "rgb(204,0,0)",
+  [GTK_SYMBOLIC_COLOR_WARNING] = "rgb(245,121,0)",
+  [GTK_SYMBOLIC_COLOR_SUCCESS] = "rgb(51,209,122)",
+  [GTK_SYMBOLIC_COLOR_ACCENT] = "rgb(0,34,255)",
 };
 
 static gboolean
@@ -5889,56 +5893,6 @@ svg_paint_print (const SvgValue *value,
       g_string_append_printf (s, "url(#%s) currentColor", paint->server.ref);
       break;
 
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static void
-svg_paint_print_gpa (const SvgValue *value,
-                     GString        *s)
-{
-  const SvgPaint *paint = (const SvgPaint *) value;
-
-  g_assert (value->class == &SVG_PAINT_CLASS);
-
-  switch (paint->kind)
-    {
-    case PAINT_NONE:
-      g_string_append (s, "none");
-      break;
-
-    case PAINT_CONTEXT_FILL:
-      g_string_append (s, "context-fill");
-      break;
-
-    case PAINT_CONTEXT_STROKE:
-      g_string_append (s, "context-stroke");
-      break;
-
-    case PAINT_CURRENT_COLOR:
-      g_string_append (s, "currentColor");
-      break;
-
-    case PAINT_COLOR:
-      gdk_color_print (&paint->color, s);
-      break;
-
-    case PAINT_SYMBOLIC:
-      g_string_append (s, symbolic_colors[paint->symbolic]);
-      break;
-
-    case PAINT_SERVER:
-      g_string_append_printf  (s, "url(#%s)", paint->server.ref);
-      break;
-
-    case PAINT_SERVER_WITH_FALLBACK:
-      g_string_append_printf  (s, "url(#%s)", paint->server.ref);
-      g_string_append_c (s, ' ');
-      gdk_color_print (&paint->server.fallback, s);
-      break;
-
-    case PAINT_SERVER_WITH_CURRENT_COLOR:
     default:
       g_assert_not_reached ();
     }
@@ -17844,15 +17798,24 @@ serialize_shape_attrs (GString              *s,
                 }
               else if (paint->kind == PAINT_SYMBOLIC)
                 {
+                  /* Accent color doesn't work with matrix recoloring */
+                  if (paint->symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+                  else
+                    symbolic = paint->symbolic;
+
                   g_string_append_printf (classes, "%s%s %s-fill",
                                           classes->len > 0 ? " " : "",
-                                          symbolic_colors[paint->symbolic],
-                                          symbolic_colors[paint->symbolic]);
+                                          symbolic_colors[symbolic],
+                                          symbolic_colors[symbolic]);
                 }
               else if (paint_is_server (paint->kind) &&
                        g_str_has_prefix (paint->server.ref, "gpa:") &&
                        parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
                {
+                  if (symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+
                   g_string_append_printf (classes, "%s%s %s-fill",
                                           classes->len > 0 ? " " : "",
                                           symbolic_colors[symbolic],
@@ -17867,14 +17830,22 @@ serialize_shape_attrs (GString              *s,
 
               if (paint->kind == PAINT_SYMBOLIC)
                 {
+                  if (paint->symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+                  else
+                    symbolic = paint->symbolic;
+
                   g_string_append_printf (classes, "%s%s-stroke",
                                           classes->len > 0 ? " " : "",
-                                          symbolic_colors[paint->symbolic]);
+                                          symbolic_colors[symbolic]);
                 }
               else if (paint_is_server (paint->kind) &&
                        g_str_has_prefix (paint->server.ref, "gpa:") &&
                        parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
                 {
+                  if (symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+
                   g_string_append_printf (classes, "%s%s-stroke",
                                           classes->len > 0 ? " " : "",
                                           symbolic_colors[symbolic]);
@@ -17940,6 +17911,7 @@ serialize_gpa_attrs (GString              *s,
 {
   SvgValue **values;
   SvgPaint *paint;
+  GtkSymbolicColor symbolic;
 
   if (svg->gpa_version == 0 || !shape_type_has_gpa_attrs (shape->type))
     return;
@@ -17951,21 +17923,21 @@ serialize_gpa_attrs (GString              *s,
 
   paint = (SvgPaint *) values[SHAPE_ATTR_STROKE];
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) &&
-      paint->kind == PAINT_SYMBOLIC)
+      svg_paint_is_symbolic (paint, &symbolic))
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:stroke='");
-      svg_paint_print_gpa (values[SHAPE_ATTR_STROKE], s);
+      g_string_append (s, symbolic_colors[symbolic]);
       g_string_append_c (s, '\'');
     }
 
   paint = (SvgPaint *) values[SHAPE_ATTR_FILL];
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) &&
-      paint->kind == PAINT_SYMBOLIC)
+      svg_paint_is_symbolic (paint, &symbolic))
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:fill='");
-      svg_paint_print_gpa (values[SHAPE_ATTR_FILL], s);
+      g_string_append (s, symbolic_colors[symbolic]);
       g_string_append_c (s, '\'');
     }
 
@@ -23902,7 +23874,6 @@ svg_shape_attr_get_transform (Shape     *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
   SvgValue *value;
-  SvgTransform *transform;
   GString *s = g_string_new ("");
 
   if (_gtk_bitmask_get (shape->attrs, attr))
@@ -23910,11 +23881,7 @@ svg_shape_attr_get_transform (Shape     *shape,
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  transform = (SvgTransform *) value;
-
-  if (transform->transforms[0].type != TRANSFORM_NONE)
-    svg_value_print (value, s);
-
+  svg_value_print (value, s);
   svg_value_unref (value);
 
   return g_string_free (s, FALSE);
@@ -23926,7 +23893,6 @@ svg_shape_attr_get_filter (Shape     *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
   SvgValue *value;
-  SvgFilter *filter;
   GString *s = g_string_new ("");
 
   if (_gtk_bitmask_get (shape->attrs, attr))
@@ -23934,11 +23900,7 @@ svg_shape_attr_get_filter (Shape     *shape,
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  filter = (SvgFilter *) value;
-
-  if (filter->functions[0].kind != FILTER_NONE)
-    svg_value_print (value, s);
-
+  svg_value_print (value, s);
   svg_value_unref (value);
 
   return g_string_free (s, FALSE);

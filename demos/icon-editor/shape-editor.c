@@ -106,6 +106,13 @@ static GParamSpec *properties[NUM_PROPERTIES];
 
 /* {{{ Callbacks */
 
+static void
+shape_attr_unset (Shape     *shape,
+                  ShapeAttr  attr)
+{
+  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, FALSE);
+}
+
 enum
 {
   LINE,
@@ -137,13 +144,6 @@ get_number_from_entry (GtkEntry *entry,
       gtk_accessible_reset_state (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_STATE_INVALID);
       return TRUE;
     }
-}
-
-static void
-shape_attr_unset (Shape     *shape,
-                  ShapeAttr  attr)
-{
-  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, FALSE);
 }
 
 static void
@@ -374,9 +374,13 @@ static void
 shape_editor_update_clip_path (ShapeEditor *self,
                                GskPath     *path)
 {
+  if (self->updating)
+    return;
+
   if (gsk_path_is_empty (path))
     {
       svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
+      shape_attr_unset (self->shape, SHAPE_ATTR_CLIP_PATH);
     }
   else
     {
@@ -615,6 +619,12 @@ shape_editor_get_path_image (ShapeEditor *self)
       svg->width = path_paintable_get_width (self->paintable);
       svg->height = path_paintable_get_height (self->paintable);
 
+      svg_shape_attr_set (svg->content,
+                          SHAPE_ATTR_WIDTH,
+                          svg_number_new (svg->width));
+      svg_shape_attr_set (svg->content,
+                          SHAPE_ATTR_HEIGHT,
+                          svg_number_new (svg->height));
       svg_shape_attr_set (svg->content,
                           SHAPE_ATTR_VIEW_BOX,
                           svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
@@ -1111,6 +1121,7 @@ shape_editor_update (ShapeEditor *self)
     {
       GskPath *path;
       g_autofree char *text = NULL;
+      SvgValue *tf;
       unsigned int symbolic;
       GdkRGBA color;
       double line_width;
@@ -1353,21 +1364,22 @@ shape_editor_update (ShapeEditor *self)
                     NULL);
 
       text = svg_shape_attr_get_transform (self->shape, SHAPE_ATTR_TRANSFORM);
-      gtk_editable_set_text (GTK_EDITABLE (self->transform), text);
+      if (g_strcmp0 (text, "none") == 0)
+        gtk_editable_set_text (GTK_EDITABLE (self->transform), "");
+      else
+        gtk_editable_set_text (GTK_EDITABLE (self->transform), text);
 
-      SvgValue *tf;
-      if (text && *text)
-        tf = svg_transform_parse (text);
-       else
-        tf = svg_transform_new_none ();
-
+      tf = svg_transform_parse (text);
       populate_transform (self, tf);
       svg_value_unref (tf);
 
       g_clear_pointer (&text, g_free);
 
       text = svg_shape_attr_get_filter (self->shape, SHAPE_ATTR_FILTER);
-      gtk_editable_set_text (GTK_EDITABLE (self->filter), text);
+      if (g_strcmp0 (text, "none") == 0)
+        gtk_editable_set_text (GTK_EDITABLE (self->filter), "");
+      else
+        gtk_editable_set_text (GTK_EDITABLE (self->filter), text);
       g_clear_pointer (&text, g_free);
 
       self->updating = FALSE;
