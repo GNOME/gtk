@@ -4,6 +4,7 @@
 
 #include "gskgpuimageprivate.h"
 
+#include "gskrectprivate.h"
 #include "gsktransform.h"
 
 void
@@ -58,5 +59,26 @@ void
 gsk_gpu_render_pass_finish (GskGpuRenderPass *self)
 {
   g_clear_pointer (&self->modelview, gsk_transform_unref);
+}
+
+void
+gsk_gpu_render_pass_set_transform (GskGpuRenderPass *self,
+                                   GskGpuTransform  *transform)
+{
+  gsk_gpu_clip_init_empty (&self->clip, &GSK_RECT_INIT_CAIRO (&self->scissor));
+  gsk_gpu_clip_scale (&self->clip,
+                      &self->clip,
+                      transform->dihedral,
+                      transform->scale.width,
+                      transform->scale.height);
+  self->offset = transform->offset;
+  graphene_vec2_init (&self->scale, transform->scale.width, transform->scale.height);
+  self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+  if (self->modelview || transform->dihedral != GDK_DIHEDRAL_NORMAL)
+    {
+      g_clear_pointer (&self->modelview, gsk_transform_unref);
+      self->pending_globals |= GSK_GPU_GLOBAL_MATRIX;
+      self->modelview = gsk_transform_dihedral (NULL, transform->dihedral);
+    }
 }
 
