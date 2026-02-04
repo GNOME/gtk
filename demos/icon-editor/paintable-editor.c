@@ -32,7 +32,6 @@ struct _PaintableEditor
   GtkWidget parent_instance;
 
   PathPaintable *paintable;
-  GtkIconPaintable *icon_paintable;
   unsigned int state;
 
   GtkScrolledWindow *swin;
@@ -202,6 +201,7 @@ changed (PaintableEditor *self)
   update_compat (self);
   update_size (self);
   update_summary (self);
+  update_icon_paintable (self);
 }
 
 static void
