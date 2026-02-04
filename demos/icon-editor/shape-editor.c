@@ -106,6 +106,13 @@ static GParamSpec *properties[NUM_PROPERTIES];
 
 /* {{{ Callbacks */
 
+static void
+shape_attr_unset (Shape     *shape,
+                  ShapeAttr  attr)
+{
+  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, FALSE);
+}
+
 enum
 {
   LINE,
@@ -137,13 +144,6 @@ get_number_from_entry (GtkEntry *entry,
       gtk_accessible_reset_state (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_STATE_INVALID);
       return TRUE;
     }
-}
-
-static void
-shape_attr_unset (Shape     *shape,
-                  ShapeAttr  attr)
-{
-  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, FALSE);
 }
 
 static void
@@ -374,9 +374,13 @@ static void
 shape_editor_update_clip_path (ShapeEditor *self,
                                GskPath     *path)
 {
+  if (self->updating)
+    return;
+
   if (gsk_path_is_empty (path))
     {
       svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
+      shape_attr_unset (self->shape, SHAPE_ATTR_CLIP_PATH);
     }
   else
     {
