@@ -8,6 +8,7 @@
         gpa:version='1'
         gpa:state='0'
         gpa:keywords='pan-down arrow'
+        id='svg1'
         width='16'
         height='16'>
   <metadata>
@@ -27,14 +28,10 @@
           clip-path='none'
           fill='none'
           stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
           stroke-width='2'
           stroke-linecap='round'
           stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 3 6 L 13 6 L 8 11 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
+          d='M 13 6 L 8 11 L 3 6'
           class='transparent-fill foreground-stroke'
           gpa:stroke='foreground'>
   </path>
