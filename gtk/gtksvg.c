@@ -5898,56 +5898,6 @@ svg_paint_print (const SvgValue *value,
     }
 }
 
-static void
-svg_paint_print_gpa (const SvgValue *value,
-                     GString        *s)
-{
-  const SvgPaint *paint = (const SvgPaint *) value;
-
-  g_assert (value->class == &SVG_PAINT_CLASS);
-
-  switch (paint->kind)
-    {
-    case PAINT_NONE:
-      g_string_append (s, "none");
-      break;
-
-    case PAINT_CONTEXT_FILL:
-      g_string_append (s, "context-fill");
-      break;
-
-    case PAINT_CONTEXT_STROKE:
-      g_string_append (s, "context-stroke");
-      break;
-
-    case PAINT_CURRENT_COLOR:
-      g_string_append (s, "currentColor");
-      break;
-
-    case PAINT_COLOR:
-      gdk_color_print (&paint->color, s);
-      break;
-
-    case PAINT_SYMBOLIC:
-      g_string_append (s, symbolic_colors[paint->symbolic]);
-      break;
-
-    case PAINT_SERVER:
-      g_string_append_printf  (s, "url(#%s)", paint->server.ref);
-      break;
-
-    case PAINT_SERVER_WITH_FALLBACK:
-      g_string_append_printf  (s, "url(#%s)", paint->server.ref);
-      g_string_append_c (s, ' ');
-      gdk_color_print (&paint->server.fallback, s);
-      break;
-
-    case PAINT_SERVER_WITH_CURRENT_COLOR:
-    default:
-      g_assert_not_reached ();
-    }
-}
-
 static gboolean
 svg_paint_is_symbolic (const SvgPaint   *paint,
                        GtkSymbolicColor *symbolic)
@@ -17961,6 +17911,7 @@ serialize_gpa_attrs (GString              *s,
 {
   SvgValue **values;
   SvgPaint *paint;
+  GtkSymbolicColor symbolic;
 
   if (svg->gpa_version == 0 || !shape_type_has_gpa_attrs (shape->type))
     return;
@@ -17972,21 +17923,21 @@ serialize_gpa_attrs (GString              *s,
 
   paint = (SvgPaint *) values[SHAPE_ATTR_STROKE];
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) &&
-      paint->kind == PAINT_SYMBOLIC)
+      svg_paint_is_symbolic (paint, &symbolic))
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:stroke='");
-      svg_paint_print_gpa (values[SHAPE_ATTR_STROKE], s);
+      g_string_append (s, symbolic_colors[symbolic]);
       g_string_append_c (s, '\'');
     }
 
   paint = (SvgPaint *) values[SHAPE_ATTR_FILL];
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) &&
-      paint->kind == PAINT_SYMBOLIC)
+      svg_paint_is_symbolic (paint, &symbolic))
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:fill='");
-      svg_paint_print_gpa (values[SHAPE_ATTR_FILL], s);
+      g_string_append (s, symbolic_colors[symbolic]);
       g_string_append_c (s, '\'');
     }
 
