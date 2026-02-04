@@ -5557,15 +5557,19 @@ static const SvgValueClass SVG_PAINT_CLASS = {
 };
 
 static const char *symbolic_colors[] = {
-  "foreground", "error", "warning", "success", "accent"
+  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "foreground",
+  [GTK_SYMBOLIC_COLOR_ERROR] = "error",
+  [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
+  [GTK_SYMBOLIC_COLOR_SUCCESS] = "success",
+  [GTK_SYMBOLIC_COLOR_ACCENT] = "accent",
 };
 
 static const char *symbolic_fallbacks[] = {
-  "rgb(0,0,0)",
-  "rgb(204,0,0)",
-  "rgb(245,121,0)",
-  "rgb(51,209,122)",
-  "rgb(0,34,255)",
+  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "rgb(0,0,0)",
+  [GTK_SYMBOLIC_COLOR_ERROR] = "rgb(204,0,0)",
+  [GTK_SYMBOLIC_COLOR_WARNING] = "rgb(245,121,0)",
+  [GTK_SYMBOLIC_COLOR_SUCCESS] = "rgb(51,209,122)",
+  [GTK_SYMBOLIC_COLOR_ACCENT] = "rgb(0,34,255)",
 };
 
 static gboolean
@@ -17844,15 +17848,24 @@ serialize_shape_attrs (GString              *s,
                 }
               else if (paint->kind == PAINT_SYMBOLIC)
                 {
+                  /* Accent color doesn't work with matrix recoloring */
+                  if (paint->symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+                  else
+                    symbolic = paint->symbolic;
+
                   g_string_append_printf (classes, "%s%s %s-fill",
                                           classes->len > 0 ? " " : "",
-                                          symbolic_colors[paint->symbolic],
-                                          symbolic_colors[paint->symbolic]);
+                                          symbolic_colors[symbolic],
+                                          symbolic_colors[symbolic]);
                 }
               else if (paint_is_server (paint->kind) &&
                        g_str_has_prefix (paint->server.ref, "gpa:") &&
                        parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
                {
+                  if (symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+
                   g_string_append_printf (classes, "%s%s %s-fill",
                                           classes->len > 0 ? " " : "",
                                           symbolic_colors[symbolic],
@@ -17867,14 +17880,22 @@ serialize_shape_attrs (GString              *s,
 
               if (paint->kind == PAINT_SYMBOLIC)
                 {
+                  if (paint->symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+                  else
+                    symbolic = paint->symbolic;
+
                   g_string_append_printf (classes, "%s%s-stroke",
                                           classes->len > 0 ? " " : "",
-                                          symbolic_colors[paint->symbolic]);
+                                          symbolic_colors[symbolic]);
                 }
               else if (paint_is_server (paint->kind) &&
                        g_str_has_prefix (paint->server.ref, "gpa:") &&
                        parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
                 {
+                  if (symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
+                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
+
                   g_string_append_printf (classes, "%s%s-stroke",
                                           classes->len > 0 ? " " : "",
                                           symbolic_colors[symbolic]);

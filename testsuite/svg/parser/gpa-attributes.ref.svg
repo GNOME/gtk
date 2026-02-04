@@ -30,7 +30,7 @@
           d='M 0 0 L 100 100'
           gpa:stroke-minwidth='1'
           gpa:stroke-maxwidth='3'
-          class='accent accent-fill foreground-stroke'
+          class='foreground foreground-fill foreground-stroke'
           gpa:stroke='foreground'
           gpa:fill='accent'>
   </path>

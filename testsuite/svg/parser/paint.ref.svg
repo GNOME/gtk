@@ -28,7 +28,7 @@
           fill='url(#gpa:accent) rgb(0,34,255)'
           stroke='url(#gpa:accent) rgb(0,34,255)'
           d='M 0 0 L 100 100'
-          class='accent accent-fill accent-stroke'>
+          class='foreground foreground-fill foreground-stroke'>
   </path>
   <path
           id='path4'
