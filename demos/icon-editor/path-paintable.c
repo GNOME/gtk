@@ -367,6 +367,12 @@ path_paintable_set_size (PathPaintable *self,
   self->svg->height = height;
 
   svg_shape_attr_set (self->svg->content,
+                      SHAPE_ATTR_WIDTH,
+                      svg_number_new (width));
+  svg_shape_attr_set (self->svg->content,
+                      SHAPE_ATTR_HEIGHT,
+                      svg_number_new (height));
+  svg_shape_attr_set (self->svg->content,
                       SHAPE_ATTR_VIEW_BOX,
                       svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
   g_signal_emit (self, signals[CHANGED], 0);

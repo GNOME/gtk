@@ -620,6 +620,12 @@ shape_editor_get_path_image (ShapeEditor *self)
       svg->height = path_paintable_get_height (self->paintable);
 
       svg_shape_attr_set (svg->content,
+                          SHAPE_ATTR_WIDTH,
+                          svg_number_new (svg->width));
+      svg_shape_attr_set (svg->content,
+                          SHAPE_ATTR_HEIGHT,
+                          svg_number_new (svg->height));
+      svg_shape_attr_set (svg->content,
                           SHAPE_ATTR_VIEW_BOX,
                           svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
 
