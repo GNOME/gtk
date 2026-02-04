@@ -23923,7 +23923,6 @@ svg_shape_attr_get_transform (Shape     *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
   SvgValue *value;
-  SvgTransform *transform;
   GString *s = g_string_new ("");
 
   if (_gtk_bitmask_get (shape->attrs, attr))
@@ -23931,11 +23930,7 @@ svg_shape_attr_get_transform (Shape     *shape,
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  transform = (SvgTransform *) value;
-
-  if (transform->transforms[0].type != TRANSFORM_NONE)
-    svg_value_print (value, s);
-
+  svg_value_print (value, s);
   svg_value_unref (value);
 
   return g_string_free (s, FALSE);
@@ -23947,7 +23942,6 @@ svg_shape_attr_get_filter (Shape     *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
   SvgValue *value;
-  SvgFilter *filter;
   GString *s = g_string_new ("");
 
   if (_gtk_bitmask_get (shape->attrs, attr))
@@ -23955,11 +23949,7 @@ svg_shape_attr_get_filter (Shape     *shape,
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  filter = (SvgFilter *) value;
-
-  if (filter->functions[0].kind != FILTER_NONE)
-    svg_value_print (value, s);
-
+  svg_value_print (value, s);
   svg_value_unref (value);
 
   return g_string_free (s, FALSE);

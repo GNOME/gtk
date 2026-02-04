@@ -1115,6 +1115,7 @@ shape_editor_update (ShapeEditor *self)
     {
       GskPath *path;
       g_autofree char *text = NULL;
+      SvgValue *tf;
       unsigned int symbolic;
       GdkRGBA color;
       double line_width;
@@ -1357,21 +1358,22 @@ shape_editor_update (ShapeEditor *self)
                     NULL);
 
       text = svg_shape_attr_get_transform (self->shape, SHAPE_ATTR_TRANSFORM);
-      gtk_editable_set_text (GTK_EDITABLE (self->transform), text);
+      if (g_strcmp0 (text, "none") == 0)
+        gtk_editable_set_text (GTK_EDITABLE (self->transform), "");
+      else
+        gtk_editable_set_text (GTK_EDITABLE (self->transform), text);
 
-      SvgValue *tf;
-      if (text && *text)
-        tf = svg_transform_parse (text);
-       else
-        tf = svg_transform_new_none ();
-
+      tf = svg_transform_parse (text);
       populate_transform (self, tf);
       svg_value_unref (tf);
 
       g_clear_pointer (&text, g_free);
 
       text = svg_shape_attr_get_filter (self->shape, SHAPE_ATTR_FILTER);
-      gtk_editable_set_text (GTK_EDITABLE (self->filter), text);
+      if (g_strcmp0 (text, "none") == 0)
+        gtk_editable_set_text (GTK_EDITABLE (self->filter), "");
+      else
+        gtk_editable_set_text (GTK_EDITABLE (self->filter), text);
       g_clear_pointer (&text, g_free);
 
       self->updating = FALSE;
