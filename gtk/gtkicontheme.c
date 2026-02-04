@@ -131,6 +131,7 @@ struct _GtkStringSet {
   int used_in_chunk;
 };
 
+#if 0
 static void
 dump_string_set (GtkStringSet *set)
 {
@@ -153,6 +154,7 @@ dump_string_set (GtkStringSet *set)
       g_print ("%s\n", string);
     }
 }
+#endif
 
 static void
 gtk_string_set_init (GtkStringSet *set)
@@ -1939,7 +1941,9 @@ load_themes (GtkIconTheme *self)
       gdk_debug_message ("%s", s->str);
       g_string_free (s, TRUE);
 
+#if 0
       dump_string_set (&self->icons);
+#endif
     }
 }
 
