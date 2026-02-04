@@ -1072,8 +1072,13 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else
     {
+#if 0
+      /* Ignore things like <metadata> quietly, so they
+       * don't disrupt our parsing of otherwise ok svgs.
+       */
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
                    "Unhandled element: %s", element_name);
+#endif
       return;
     }
 
