@@ -6,6 +6,7 @@
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkcolorprivate.h"
 #include "gskgradientprivate.h"
+#include "gpu/gskgputypesprivate.h"
 
 G_BEGIN_DECLS
 
@@ -88,6 +89,11 @@ struct _GskRenderNodeClass
                                                          GskRenderReplay             *replay);
   void          (* render_opacity)                      (GskRenderNode               *node,
                                                          GskOpacityData              *data);
+
+  /* GPU renderer */
+  GskGpuRenderPass *
+                (* occlusion)                           (GskRenderNode               *node,
+                                                         GskGpuOcclusion             *occlusion);
 };
 
 void            gsk_render_node_init_types              (void);

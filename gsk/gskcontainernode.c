@@ -23,6 +23,7 @@
 #include "gskdiffprivate.h"
 #include "gskrectprivate.h"
 #include "gskrenderreplay.h"
+#include "gpu/gskgpuocclusionprivate.h"
 
 /* maximal number of rectangles we keep in a diff region before we throw
  * the towel and just use the bounding box of the parent node.
@@ -263,6 +264,7 @@ gsk_container_node_class_init (gpointer g_class,
   node_class->get_children = gsk_container_node_get_children;
   node_class->replay = gsk_container_node_replay;
   node_class->render_opacity = gsk_container_node_render_opacity;
+  node_class->occlusion = gsk_container_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskContainerNode, gsk_container_node)

@@ -6,6 +6,7 @@
 
 #include "gskgpuclipprivate.h"
 #include "gskgputypesprivate.h"
+#include "gskgputransformprivate.h"
 
 G_BEGIN_DECLS
 
@@ -44,6 +45,8 @@ void                    gsk_gpu_render_pass_init                        (GskGpuR
 
 void                    gsk_gpu_render_pass_finish                      (GskGpuRenderPass               *self);
 
+void                    gsk_gpu_render_pass_set_transform               (GskGpuRenderPass               *self,
+                                                                         GskGpuTransform                *transform);
 
 G_END_DECLS
 

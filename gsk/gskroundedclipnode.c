@@ -25,6 +25,7 @@
 
 #include "gskrectprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gpu/gskgpuocclusionprivate.h"
 
 /**
  * GskRoundedClipNode:
@@ -153,6 +154,15 @@ gsk_rounded_clip_node_replay (GskRenderNode   *node,
   return result;
 }
 
+static GskGpuRenderPass *
+gsk_rounded_clip_node_occlusion (GskRenderNode   *node,
+                                 GskGpuOcclusion *occlusion)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+
+  return gsk_gpu_occlusion_try_node (occlusion, self->child, 0);
+}
+
 static void
 gsk_rounded_clip_node_class_init (gpointer g_class,
                                   gpointer class_data)
@@ -167,6 +177,7 @@ gsk_rounded_clip_node_class_init (gpointer g_class,
   node_class->get_children = gsk_rounded_clip_node_get_children;
   node_class->replay = gsk_rounded_clip_node_replay;
   node_class->render_opacity = gsk_rounded_clip_node_render_opacity;
+  node_class->occlusion = gsk_rounded_clip_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskRoundedClipNode, gsk_rounded_clip_node)

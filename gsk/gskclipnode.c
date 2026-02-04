@@ -23,8 +23,10 @@
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
 
+
 #include "gdk/gdkcairoprivate.h"
 #include "gskrectprivate.h"
+#include "gpu/gskgpuocclusionprivate.h"
 
 /**
  * GskClipNode:
@@ -153,6 +155,15 @@ gsk_clip_node_replay (GskRenderNode   *node,
   return result;
 }
 
+static GskGpuRenderPass *
+gsk_clip_node_occlusion (GskRenderNode   *node,
+                         GskGpuOcclusion *occlusion)
+{
+  GskClipNode *self = (GskClipNode *) node;
+
+  return gsk_gpu_occlusion_try_node (occlusion, self->child, 0);
+}
+
 static void
 gsk_clip_node_class_init (gpointer g_class,
                           gpointer class_data)
@@ -167,6 +178,7 @@ gsk_clip_node_class_init (gpointer g_class,
   node_class->get_children = gsk_clip_node_get_children;
   node_class->replay = gsk_clip_node_replay;
   node_class->render_opacity = gsk_clip_node_render_opacity;
+  node_class->occlusion = gsk_clip_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskClipNode, gsk_clip_node)

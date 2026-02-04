@@ -23,6 +23,7 @@
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
+#include "gpu/gskgpuocclusionprivate.h"
 
 /**
  * GskDebugNode:
@@ -125,6 +126,15 @@ gsk_debug_node_replay (GskRenderNode   *node,
   return result;
 }
 
+static GskGpuRenderPass *
+gsk_debug_node_occlusion (GskRenderNode   *node,
+                          GskGpuOcclusion *occlusion)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  return gsk_gpu_occlusion_try_node (occlusion, self->child, 0);
+}
+
 static void
 gsk_debug_node_class_init (gpointer g_class,
                            gpointer class_data)
@@ -140,6 +150,7 @@ gsk_debug_node_class_init (gpointer g_class,
   node_class->get_children = gsk_debug_node_get_children;
   node_class->replay = gsk_debug_node_replay;
   node_class->render_opacity = gsk_debug_node_render_opacity;
+  node_class->occlusion = gsk_debug_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskDebugNode, gsk_debug_node)

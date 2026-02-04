@@ -23,6 +23,7 @@
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
+#include "gpu/gskgpuocclusionprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
 
@@ -179,6 +180,15 @@ gsk_isolation_node_replay (GskRenderNode   *node,
   return result;
 }
 
+static GskGpuRenderPass *
+gsk_isolation_node_occlusion (GskRenderNode   *node,
+                              GskGpuOcclusion *occlusion)
+{
+  GskIsolationNode *self = (GskIsolationNode *) node;
+
+  return gsk_gpu_occlusion_try_node (occlusion, self->child, 0);
+}
+
 static void
 gsk_isolation_node_class_init (gpointer g_class,
                                gpointer class_data)
@@ -193,6 +203,7 @@ gsk_isolation_node_class_init (gpointer g_class,
   node_class->get_children = gsk_isolation_node_get_children;
   node_class->replay = gsk_isolation_node_replay;
   node_class->render_opacity = gsk_isolation_node_render_opacity;
+  node_class->occlusion = gsk_isolation_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskIsolationNode, gsk_isolation_node)
