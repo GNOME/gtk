@@ -18,4 +18,7 @@ GskGpuImage *           gsk_gpu_node_processor_convert_image            (GskGpuF
                                                                          GskGpuImage                    *image,
                                                                          GdkColorState                  *image_color_state);
 
+void                    gsk_gpu_node_processor_add_first_node_untracked (GskGpuRenderPass               *self,
+                                                                         GskRenderNode                  *node);
+
 G_END_DECLS

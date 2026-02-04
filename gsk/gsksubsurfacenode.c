@@ -23,6 +23,8 @@
 #include "gskrendernodeprivate.h"
 #include "gskrectprivate.h"
 #include "gskrenderreplay.h"
+#include "gpu/gskgpuframeprivate.h"
+#include "gpu/gskgpuocclusionprivate.h"
 
 #include "gdk/gdksubsurfaceprivate.h"
 
@@ -147,6 +149,41 @@ gsk_subsurface_node_replay (GskRenderNode   *node,
   return result;
 }
 
+static GdkSubsurface *
+gsk_subsurface_node_get_subsurface_for_frame (GskSubsurfaceNode *self,
+                                              GskGpuFrame       *frame)
+{
+  if (self->subsurface == NULL)
+    return NULL;
+
+  if (gdk_subsurface_get_texture (self->subsurface) == NULL)
+    return NULL;
+
+  if (gdk_subsurface_get_parent (self->subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (frame)))
+    return NULL;
+
+  return self->subsurface;
+}
+
+static GskGpuRenderPass *
+gsk_subsurface_node_occlusion (GskRenderNode   *node,
+                               GskGpuOcclusion *occlusion)
+{
+  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
+  GdkSubsurface *subsurface;
+
+  subsurface = gsk_subsurface_node_get_subsurface_for_frame (self, gsk_gpu_occlusion_get_frame (occlusion));
+  if (subsurface == NULL)
+    {
+      return gsk_gpu_occlusion_try_node (occlusion, self->child, 0);
+    }
+
+  if (gdk_subsurface_is_above_parent (subsurface))
+    return gsk_gpu_occlusion_begin_rendering_whatever (occlusion);
+  else
+    return gsk_gpu_occlusion_begin_rendering_transparent (occlusion);
+}
+
 static void
 gsk_subsurface_node_class_init (gpointer g_class,
                                 gpointer class_data)
@@ -162,6 +199,7 @@ gsk_subsurface_node_class_init (gpointer g_class,
   node_class->get_children = gsk_subsurface_node_get_children;
   node_class->replay = gsk_subsurface_node_replay;
   node_class->render_opacity = gsk_subsurface_node_render_opacity;
+  node_class->occlusion = gsk_subsurface_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskSubsurfaceNode, gsk_subsurface_node)

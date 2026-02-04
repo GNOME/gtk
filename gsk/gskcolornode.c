@@ -22,6 +22,7 @@
 
 #include "gskrendernodeprivate.h"
 #include "gskrectprivate.h"
+#include "gpu/gskgpuocclusionprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
 #include "gdk/gdkcolorprivate.h"
@@ -82,6 +83,15 @@ gsk_color_node_replay (GskRenderNode   *node,
   return gsk_render_node_ref (node);
 }
 
+static GskGpuRenderPass *
+gsk_color_node_occlusion (GskRenderNode   *node,
+                          GskGpuOcclusion *occlusion)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  return gsk_gpu_occlusion_begin_rendering_color (occlusion, &self->color);
+}
+
 static void
 gsk_color_node_class_init (gpointer g_class,
                            gpointer class_data)
@@ -94,6 +104,7 @@ gsk_color_node_class_init (gpointer g_class,
   node_class->draw = gsk_color_node_draw;
   node_class->diff = gsk_color_node_diff;
   node_class->replay = gsk_color_node_replay;
+  node_class->occlusion = gsk_color_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskColorNode, gsk_color_node)

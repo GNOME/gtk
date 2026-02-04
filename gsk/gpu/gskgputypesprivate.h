@@ -14,6 +14,7 @@ typedef struct _GskGpuDevice            GskGpuDevice;
 typedef struct _GskGpuFrame             GskGpuFrame;
 typedef struct _GskGpuGlobalsInstance   GskGpuGlobalsInstance;
 typedef struct _GskGpuImage             GskGpuImage;
+typedef struct _GskGpuOcclusion         GskGpuOcclusion;
 typedef struct _GskGpuOp                GskGpuOp;
 typedef struct _GskGpuOpClass           GskGpuOpClass;
 typedef struct _GskGpuRenderPass        GskGpuRenderPass;
