@@ -24,6 +24,8 @@
 #include "gskrenderreplay.h"
 #include "gskrectprivate.h"
 #include "gsktransformprivate.h"
+#include "gpu/gskgpuocclusionprivate.h"
+#include "gpu/gskgpurenderpassprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
 #include "gdk/gdkcolorprivate.h"
@@ -253,6 +255,27 @@ gsk_transform_node_render_opacity (GskRenderNode  *node,
     gsk_transform_transform_bounds (self->transform, &data->opaque, &data->opaque);
 }
 
+static GskGpuRenderPass *
+gsk_transform_node_occlusion (GskRenderNode   *node,
+                              GskGpuOcclusion *occlusion)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+  GskGpuTransform saved_transform;
+  GskGpuRenderPass *result;
+
+  if (!gsk_gpu_occlusion_push_transform (occlusion, self->transform, &saved_transform))
+    return NULL;
+
+  result = gsk_gpu_occlusion_try_node (occlusion, self->child, 0);
+
+  gsk_gpu_occlusion_pop_transform (occlusion, &saved_transform);
+
+  if (result)
+    gsk_gpu_render_pass_set_transform (result, &saved_transform);
+
+  return result;
+}
+
 static void
 gsk_transform_node_class_init (gpointer g_class,
                                gpointer class_data)
@@ -268,6 +291,7 @@ gsk_transform_node_class_init (gpointer g_class,
   node_class->get_children = gsk_transform_node_get_children;
   node_class->replay = gsk_transform_node_replay;
   node_class->render_opacity = gsk_transform_node_render_opacity;
+  node_class->occlusion = gsk_transform_node_occlusion;
 }
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskTransformNode, gsk_transform_node)
