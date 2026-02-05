@@ -281,9 +281,6 @@ print out different types of debugging information.
 `renderer`
 : General renderer information
 
-`vulkan`
-: Check Vulkan errors
-
 `shaders`
 : Information about shaders
 
@@ -295,6 +292,12 @@ print out different types of debugging information.
 
 `verbose`
 : Print verbose output while rendering
+
+`diff`
+: Print the result of diff computations
+
+`opacity`
+: Print the result of every opacity computation
 
 A number of options affect behavior instead of logging:
 
@@ -310,8 +313,8 @@ A number of options affect behavior instead of logging:
 `cairo`
 : Overlay error pattern over cairo drawing (finds fallbacks)
 
-`occlusion`
-: Overlay highlight over areas optimized via occlusion culling
+`profile`
+: Enable profiling (Vulkan only)
 
 The special value `all` can be used to turn on all debug options. The special
 value `help` can be used to obtain a list of all supported debug options.
@@ -374,14 +377,23 @@ disable certain features.
 `dmabuf`
 : Disable dmabuf support
 
+`d3d11`
+: Don't allow the use of Direct3D 11 (on Windows)
+
+`d3d12`
+: Don't allow the use of Direct3D 12 (on Windows)
+
+`dcomp`
+: Don't allow the use of Direct Composition (on Windows)
+
 `offload`
 : Disable graphics offload to subsurfaces
 
 `threads`
-: Disables the use of threads where possible
+: Disable threads where possible
 
 `icon-nodes`
-: Disables the svg-to-node conversion for symbolic icons
+: Disable the svg-to-node conversion for symbolic icons
 
 ### `GDK_GL_DISABLE`
 
@@ -418,17 +430,35 @@ does not support them.
 `ycbr`
 : Do not support Ycbcr textures
 
+`timeline-semaphore`
+: Disable timeline semaphore support (disables Windows sync)
+
 `semaphore-export`
 : Disable sync of exported dmabufs
 
 `semaphore-import`
 : Disable sync of imported dmabufs
 
+`win32-semaphore`
+: Disable Windows sync support
+
 `incremental-present`
 : Do not send damage regions
 
 `swapchain-maintenance`
 : Do not use advanced swapchain features
+
+`portability-subset`
+: Vulkan implementation is non-conformant
+
+`dual-source-blending`
+: Disable dual source blending
+
+`profile`
+: Disable profiling support
+
+`win32`
+: Never import Windows resources
 
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
@@ -515,6 +545,9 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 
 `repeat`
 : Repeat drawing operations instead of using offscreen and GL_REPEAT
+
+`profile`
+: Disable profiling support
 
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
