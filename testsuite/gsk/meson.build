@@ -179,6 +179,7 @@ compare_render_tests = [
   'outset_shadow_simple',
   'paste-behind-clip',
   'paste-no-porter-duff',
+  'paste-occluded',
   'paste-with-depth',
   'premul-color',
   'radial-gradient-pad-color',

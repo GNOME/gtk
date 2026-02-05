@@ -303,7 +303,7 @@ gsk_rect_to_cairo_grow (const graphene_rect_t *graphene,
   cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
 }
 
-static inline void
+static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_to_cairo_shrink (const graphene_rect_t *graphene,
                           cairo_rectangle_int_t *cairo)
 {
@@ -311,6 +311,8 @@ gsk_rect_to_cairo_shrink (const graphene_rect_t *graphene,
   cairo->y = ceilf (graphene->origin.y);
   cairo->width = floorf (graphene->origin.x + graphene->size.width) - cairo->x;
   cairo->height = floorf (graphene->origin.y + graphene->size.height) - cairo->y;
+
+  return cairo->width > 0 && cairo->height > 0;
 }
 
 static inline gboolean

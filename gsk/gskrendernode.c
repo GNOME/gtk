@@ -953,3 +953,20 @@ gsk_render_node_contains_paste_node (const GskRenderNode *node)
 {
   return node->contains_paste_node;
 }
+
+/*<private>
+ * gsk_render_node_needs_blending:
+ * @node: the node
+ *
+ * Checks if the node can be drawn without any blending. This means
+ * that glDisable(GL_BLEND) can be called by renderers when drawing
+ * this node and the node's background can be left unitialized if
+ * the node also doesn
+ *
+ * Returns: true if the node needs to be blended
+ **/
+gboolean
+gsk_render_node_needs_blending (const GskRenderNode *node)
+{
+  return node->needs_blending;
+}

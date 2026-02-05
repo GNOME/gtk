@@ -20,6 +20,7 @@
 
 #include "gskcopynode.h"
 
+#include "gskpastenode.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
@@ -37,6 +38,7 @@ struct _GskCopyNode
   GskRenderNode render_node;
 
   GskRenderNode *child;
+  graphene_rect_t paste_area;
 };
 
 static void
@@ -143,6 +145,87 @@ gsk_copy_node_class_init (gpointer g_class,
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskCopyNode, gsk_copy_node)
 
+static void
+gsk_copy_node_analyze_child (GskCopyNode   *self,
+                             GskRenderNode *node,
+                             guint          depth)
+{
+  GskRenderNode **children;
+  gsize i, n_children;
+
+  if (!gsk_render_node_contains_paste_node (node))
+    return;
+
+  children = gsk_render_node_get_children (node, &n_children);
+
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_COPY_NODE:
+      gsk_copy_node_analyze_child (self, children[0], depth + 1);
+      break;
+
+    case GSK_PASTE_NODE:
+      if (gsk_paste_node_get_depth (node) == depth)
+        {
+          if (gsk_rect_is_empty (&self->paste_area))
+            self->paste_area = node->bounds;
+          else
+            graphene_rect_union (&self->paste_area, &node->bounds, &self->paste_area);
+        }
+      else
+        {
+          self->render_node.contains_paste_node = TRUE;
+        }
+      break;
+
+    case GSK_CONTAINER_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_COLOR_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_TRANSFORM_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_BLUR_NODE:
+    case GSK_DEBUG_NODE:
+    case GSK_GL_SHADER_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
+    case GSK_MASK_NODE:
+    case GSK_FILL_NODE:
+    case GSK_STROKE_NODE:
+    case GSK_SUBSURFACE_NODE:
+    case GSK_COMPONENT_TRANSFER_NODE:
+    case GSK_COMPOSITE_NODE:
+    case GSK_ISOLATION_NODE:
+    case GSK_DISPLACEMENT_NODE:
+    case GSK_ARITHMETIC_NODE:
+      for (i = 0; i < n_children; i++)
+        {
+          gsk_copy_node_analyze_child (self, children[i], depth);
+        }
+      break;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+}
+
 /**
  * gsk_copy_node_new:
  * @child: The child
@@ -173,9 +256,14 @@ gsk_copy_node_new (GskRenderNode *child)
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
   node->clears_background = gsk_render_node_clears_background (child);
-  node->copy_mode = GSK_COPY_ANY;
+  node->copy_mode = gsk_render_node_get_copy_mode (child);
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
-  node->contains_paste_node = gsk_render_node_contains_paste_node (child);
+  node->needs_blending = gsk_render_node_needs_blending (child);
+
+  gsk_copy_node_analyze_child (self, child, 0);
+
+  if (!gsk_rect_is_empty (&self->paste_area))
+    node->copy_mode = GSK_COPY_ANY;
 
   return node;
 }

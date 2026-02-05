@@ -244,6 +244,7 @@ gsk_isolation_node_new (GskRenderNode *child,
   if (!gsk_isolation_node_is_isolating (self, GSK_ISOLATION_COPY_PASTE))
     node->contains_paste_node = gsk_render_node_contains_paste_node (child);
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
+  node->needs_blending = gsk_render_node_needs_blending (child);
 
   return node;
 }

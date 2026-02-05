@@ -563,9 +563,7 @@ gsk_gpu_node_processor_rect_to_device_shrink (GskGpuNodeProcessor   *self,
   if (!gsk_gpu_node_processor_rect_clip_to_device (self, &tmp, &tmp))
     return FALSE;
 
-  gsk_rect_to_cairo_shrink (&tmp, int_rect);
-
-  return int_rect->width > 0 && int_rect->height > 0;
+  return gsk_rect_to_cairo_shrink (&tmp, int_rect);
 }
 
 static gboolean
@@ -578,7 +576,8 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
   if (!gsk_gpu_node_processor_rect_clip_to_device (self, rect, &tmp))
     return FALSE;
 
-  gsk_rect_to_cairo_shrink (&tmp, int_rect);
+  if (!gsk_rect_to_cairo_shrink (&tmp, int_rect))
+    return FALSE;
 
   return int_rect->x == tmp.origin.x
       && int_rect->y == tmp.origin.y
@@ -5063,6 +5062,29 @@ gsk_gpu_node_processor_add_node_untracked (GskGpuNodeProcessor *self,
     }
 }
 
+static void
+gsk_gpu_first_node_begin_rendering_node (GskGpuNodeProcessor *self,
+                                         GskGpuFirstNodeInfo *info,
+                                         GskRenderNode       *node)
+{
+  gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
+
+  if (gsk_render_node_needs_blending (node))
+    {
+      gsk_gpu_node_processor_add_node_untracked (self, node);
+    }
+  else
+    {
+      self->blend = GSK_GPU_BLEND_NONE;
+      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+
+      gsk_gpu_node_processor_add_node_untracked (self, node);
+
+      self->blend = GSK_GPU_BLEND_OVER;
+      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+    }
+}
+
 static gboolean
 gsk_gpu_node_processor_add_first_node_untracked (GskGpuNodeProcessor *self,
                                                  GskGpuFirstNodeInfo *info,
@@ -5095,8 +5117,7 @@ gsk_gpu_node_processor_add_first_node_untracked (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
     return FALSE;
 
-  gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
-  gsk_gpu_node_processor_add_node_untracked (self, node);
+  gsk_gpu_first_node_begin_rendering_node (self, info, node);
 
   return TRUE;
 }
@@ -5248,8 +5269,7 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
                                                             &info,
                                                             node))
         {
-          gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
-          gsk_gpu_node_processor_add_node_untracked (self, node);
+          gsk_gpu_first_node_begin_rendering_node (self, &info, node);
           do_culling = FALSE;
         }
 
@@ -5269,8 +5289,7 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
                                                             &info,
                                                             node))
         {
-          gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
-          gsk_gpu_node_processor_add_node_untracked (self, node);
+          gsk_gpu_first_node_begin_rendering_node (self, &info, node);
         }
     }
 
