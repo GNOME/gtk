@@ -898,8 +898,11 @@ start_element_cb (GMarkupParseContext  *context,
            strcmp (element_name, "defs") == 0 ||
            strcmp (element_name, "style") == 0 ||
            g_str_has_prefix (element_name, "sodipodi:") ||
-           g_str_has_prefix (element_name, "inkscape:"))
-
+           g_str_has_prefix (element_name, "inkscape:") ||
+           strcmp (element_name, "metadata") == 0 ||
+           g_str_has_prefix (element_name, "rdf:") ||
+           g_str_has_prefix (element_name, "cc:") ||
+           g_str_has_prefix (element_name, "dc:"))
     {
       if (GTK_DEBUG_CHECK (ICONTHEME))
         gdk_debug_message ("Ignoring element in symbolic icon: <%s>", element_name);
@@ -1073,8 +1076,8 @@ start_element_cb (GMarkupParseContext  *context,
     }
   else
     {
-      if (GTK_DEBUG_CHECK (ICONTHEME))
-        gdk_debug_message ("Unhandled element in symbolic icon: <%s>", element_name);
+      g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                   "Unhandled element: %s", element_name);
       return;
     }
 
