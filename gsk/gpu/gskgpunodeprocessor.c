@@ -5068,7 +5068,21 @@ gsk_gpu_first_node_begin_rendering_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
 {
   gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
-  gsk_gpu_node_processor_add_node_untracked (self, node);
+
+  if (gsk_render_node_needs_blending (node))
+    {
+      gsk_gpu_node_processor_add_node_untracked (self, node);
+    }
+  else
+    {
+      self->blend = GSK_GPU_BLEND_NONE;
+      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+
+      gsk_gpu_node_processor_add_node_untracked (self, node);
+
+      self->blend = GSK_GPU_BLEND_OVER;
+      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+    }
 }
 
 static gboolean
