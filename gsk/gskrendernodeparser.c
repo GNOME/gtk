@@ -6772,7 +6772,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_two_float_param (p, "max", max->width, max->height);
         append_two_float_param (p, "scale", scale->width, scale->height);
         append_two_float_param (p, "offset", offset->x, offset->y);
-        append_channels_param (p, "channel", channels[0], channels[1]);
+        append_channels_param (p, "channels", channels[0], channels[1]);
         end_node (p);
       }
       break;
