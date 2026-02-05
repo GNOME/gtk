@@ -837,6 +837,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *stroke_dashoffset_attr = NULL;
   const char *opacity_attr = NULL;
   const char *class_attr = NULL;
+  const char *visibility_attr = NULL;
   GskPath *path = NULL;
   GskStroke *stroke = NULL;
   GskFillRule fill_rule;
@@ -848,6 +849,7 @@ start_element_cb (GMarkupParseContext  *context,
   char *end;
   gboolean do_fill = FALSE;
   gboolean do_stroke = FALSE;
+  gboolean visibility = TRUE;
 
   if (strcmp (element_name, "svg") == 0)
     {
@@ -1089,6 +1091,7 @@ start_element_cb (GMarkupParseContext  *context,
                                  error,
                                  "class", &class_attr,
                                  "opacity", &opacity_attr,
+                                 "visibility", &visibility_attr,
                                  "fill-rule", &fill_rule_attr,
                                  "fill-opacity", &fill_opacity_attr,
                                  "stroke-width", &stroke_width_attr,
@@ -1233,6 +1236,13 @@ start_element_cb (GMarkupParseContext  *context,
         }
     }
 
+  visibility = TRUE;
+  if (visibility_attr)
+    {
+      if (strcmp (visibility_attr, "hidden") == 0)
+        visibility = FALSE;
+    }
+
   if (fill_rule_attr && strcmp (fill_rule_attr, "evenodd") == 0)
     fill_rule = GSK_FILL_RULE_EVEN_ODD;
   else
@@ -1338,20 +1348,23 @@ start_element_cb (GMarkupParseContext  *context,
       gsk_stroke_set_dash_offset (stroke, offset);
     }
 
-  if (opacity != 1)
-    gtk_snapshot_push_opacity (data->snapshot, opacity);
-
-  if (do_fill)
+  if (visibility)
     {
-      data->n_paths++;
-      gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &fill_color);
-    }
+      if (opacity != 1)
+        gtk_snapshot_push_opacity (data->snapshot, opacity);
 
-  if (do_stroke)
-    {
-      data->n_paths++;
-      data->has_strokes = TRUE;
-      gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
+      if (do_fill)
+        {
+          data->n_paths++;
+          gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &fill_color);
+        }
+
+      if (do_stroke)
+        {
+          data->n_paths++;
+          data->has_strokes = TRUE;
+          gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
+        }
     }
 
   if (opacity != 1)
