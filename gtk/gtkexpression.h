@@ -156,6 +156,16 @@ GtkExpression *         gtk_cclosure_expression_new             (GType          
                                                                  gpointer                        user_data,
                                                                  GClosureNotify                  user_destroy);
 
+#define GTK_TYPE_TRY_EXPRESSION (gtk_try_expression_get_type())
+typedef struct _GtkTryExpression   GtkTryExpression;
+
+GDK_AVAILABLE_IN_4_22
+GType                   gtk_try_expression_get_type             (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_4_22
+GtkExpression *         gtk_try_expression_new                  (guint                           n_expressions,
+                                                                 GtkExpression                 **expressions);
+
 /* GObject integration, so we can use GtkBuilder */
 
 /**

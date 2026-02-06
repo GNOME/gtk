@@ -779,6 +779,40 @@ test_value (void)
   g_value_unset (&value);
 }
 
+static void
+test_try (void)
+{
+  GtkExpression *root_expr;
+  GtkExpression *expressions[2];
+  GtkExpression *try_expr;
+  GtkLabel *label;
+  GtkWindow *window;
+
+  root_expr = gtk_property_expression_new (GTK_TYPE_LABEL, NULL, "root");
+  expressions[0] = gtk_property_expression_new (GTK_TYPE_WINDOW, root_expr, "title");
+  expressions[1] = gtk_constant_expression_new (G_TYPE_STRING, "fallback");
+  try_expr = gtk_try_expression_new (2, expressions);
+
+  label = GTK_LABEL (gtk_label_new (NULL));
+  g_object_ref_sink (label);
+  gtk_expression_bind (try_expr, label, "label", label);
+  g_assert_cmpstr (gtk_label_get_label (label), ==, "fallback");
+
+  window = GTK_WINDOW (gtk_window_new ());
+  gtk_window_set_title (window, "window");
+  gtk_window_set_child (window, GTK_WIDGET (label));
+  g_assert_cmpstr (gtk_label_get_label (label), ==, "window");
+
+  gtk_window_set_title (window, "still window");
+  g_assert_cmpstr (gtk_label_get_label (label), ==, "still window");
+
+  gtk_window_set_child (window, NULL);
+  g_assert_cmpstr (gtk_label_get_label (label), ==, "fallback");
+
+  g_object_unref (label);
+  gtk_window_destroy (window);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -804,6 +838,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/binds", test_binds);
   g_test_add_func ("/expression/bind-object", test_bind_object);
   g_test_add_func ("/expression/value", test_value);
+  g_test_add_func ("/expression/try", test_try);
 
   return g_test_run ();
 }

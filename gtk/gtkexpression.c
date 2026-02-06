@@ -1846,6 +1846,220 @@ gtk_cclosure_expression_new (GType                value_type,
 
 /* }}} */
 
+/* {{{ GtkTryExpression */
+
+/**
+ * GtkTryExpression:
+ *
+ * A `GtkExpression` that tries to evaluate each of its expressions until it succeeds.
+
+ * If all expressions fail to evaluate, the `GtkTryExpression`'s evaluation fails as well.
+ *
+ * Since: 4.22
+ */
+struct _GtkTryExpression
+{
+  GtkExpression parent;
+
+  guint n_expressions;
+  GtkExpression **expressions;
+};
+
+static void
+gtk_try_expression_finalize (GtkExpression *expr)
+{
+  GtkTryExpression *self = (GtkTryExpression *) expr;
+  guint i;
+
+  for (i = 0; i < self->n_expressions; i++)
+    {
+      gtk_expression_unref (self->expressions[i]);
+    }
+  g_free (self->expressions);
+
+  GTK_EXPRESSION_SUPER (expr)->finalize (expr);
+}
+
+static gboolean
+gtk_try_expression_is_static (GtkExpression *expr)
+{
+  GtkTryExpression *self = (GtkTryExpression *) expr;
+  guint i;
+
+  for (i = 0; i < self->n_expressions; i++)
+    {
+      if (!gtk_expression_is_static (self->expressions[i]))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_try_expression_evaluate (GtkExpression *expr,
+                             gpointer       this,
+                             GValue        *value)
+{
+  GtkTryExpression *self = (GtkTryExpression *) expr;
+  guint i;
+
+  for (i = 0; i < self->n_expressions; i++)
+    {
+      if (gtk_expression_evaluate (self->expressions[i], this, value))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+typedef struct _GtkTryExpressionWatch GtkTryExpressionWatch;
+struct _GtkTryExpressionWatch
+{
+  GtkExpressionNotify    notify;
+  gpointer               user_data;
+
+  guchar                 sub[0];
+};
+
+static void
+gtk_try_expression_watch_notify_cb (gpointer data)
+{
+  GtkTryExpressionWatch *twatch = data;
+
+  twatch->notify (twatch->user_data);
+}
+
+static gsize
+gtk_try_expression_watch_size (GtkExpression *expr)
+{
+  GtkTryExpression *self = (GtkTryExpression *) expr;
+  gsize size;
+  guint i;
+
+  size = sizeof (GtkTryExpressionWatch);
+
+  for (i = 0; i < self->n_expressions; i++)
+    {
+      if (gtk_expression_is_static (self->expressions[i]))
+        continue;
+
+      size += gtk_expression_watch_size (self->expressions[i]);
+    }
+
+  return size;
+}
+
+static void
+gtk_try_expression_watch (GtkExpression         *expr,
+                          GtkExpressionSubWatch *watch,
+                          gpointer               this_,
+                          GtkExpressionNotify    notify,
+                          gpointer               user_data)
+{
+  GtkTryExpressionWatch *twatch = (GtkTryExpressionWatch *) watch;
+  GtkTryExpression *self = (GtkTryExpression *) expr;
+  guchar *sub;
+  guint i;
+
+  twatch->notify = notify;
+  twatch->user_data = user_data;
+
+  sub = twatch->sub;
+  for (i = 0; i < self->n_expressions; i++)
+    {
+      if (gtk_expression_is_static (self->expressions[i]))
+        continue;
+
+      gtk_expression_subwatch_init (self->expressions[i],
+                                    (GtkExpressionSubWatch *) sub,
+                                    this_,
+                                    gtk_try_expression_watch_notify_cb,
+                                    watch);
+      sub += gtk_expression_watch_size (self->expressions[i]);
+    }
+}
+
+static void
+gtk_try_expression_unwatch (GtkExpression         *expr,
+                            GtkExpressionSubWatch *watch)
+{
+  GtkTryExpressionWatch *twatch = (GtkTryExpressionWatch *) watch;
+  GtkTryExpression *self = (GtkTryExpression *) expr;
+  guchar *sub;
+  guint i;
+
+  sub = twatch->sub;
+  for (i = 0; i < self->n_expressions; i++)
+    {
+      if (gtk_expression_is_static (self->expressions[i]))
+        continue;
+
+      gtk_expression_subwatch_finish (self->expressions[i],
+                                      (GtkExpressionSubWatch *) sub);
+      sub += gtk_expression_watch_size (self->expressions[i]);
+    }
+}
+
+static const GtkExpressionTypeInfo gtk_try_expression_info =
+{
+  sizeof (GtkTryExpression),
+  NULL,
+  gtk_try_expression_finalize,
+  gtk_try_expression_is_static,
+  gtk_try_expression_evaluate,
+  gtk_try_expression_watch_size,
+  gtk_try_expression_watch,
+  gtk_try_expression_unwatch
+};
+
+GTK_DEFINE_EXPRESSION_TYPE (GtkTryExpression,
+                            gtk_try_expression,
+                            &gtk_try_expression_info)
+
+/**
+ * gtk_try_expression_new: (constructor)
+ * @n_expressions: The number of expressions
+ * @expressions: (array length=n_expressions) (transfer full): The array of expressions
+ *
+ * Creates a `GtkExpression` with an array of expressions.
+ *
+ * When evaluated, the `GtkTryExpression` tries to evaluate each of its expressions until it succeeds.
+ * If all expressions fail to evaluate, the `GtkTryExpression`'s evaluation fails as well.
+ *
+ * The value type of the expressions in the array must match.
+ *
+ * Returns: (type GtkTryExpression) (transfer full): a new `GtkExpression`
+ *
+ * Since: 4.22
+ */
+GtkExpression *
+gtk_try_expression_new (guint           n_expressions,
+                        GtkExpression **expressions)
+{
+  GtkExpression *result;
+  GtkTryExpression *self;
+  GType value_type;
+  guint i;
+
+  g_return_val_if_fail (n_expressions != 0, NULL);
+
+  value_type = gtk_expression_get_value_type (expressions[0]);
+  for (i = 1; i < n_expressions; i++)
+    g_return_val_if_fail (g_type_is_a (gtk_expression_get_value_type (expressions[i]), value_type), NULL);
+
+  result = gtk_expression_alloc (GTK_TYPE_TRY_EXPRESSION, value_type);
+  self = (GtkTryExpression *) result;
+
+  self->n_expressions = n_expressions;
+  self->expressions = g_new (GtkExpression *, n_expressions);
+  for (i = 0; i < n_expressions; i++)
+    self->expressions[i] = expressions[i];
+
+  return result;
+}
+
+/* }}} */
+
 /* {{{ GtkExpression public API */
 
 /**
@@ -2281,6 +2495,7 @@ gtk_expression_bind_notify (gpointer data)
  * the object's property stays synchronized with `self`.
  *
  * If `self`'s evaluation fails, `target`'s `property` is not updated.
+ * Use a [class@Gtk.TryExpression] to provide a fallback for this case.
  *
  * Note that this function takes ownership of `self`. If you want
  * to keep it around, you should [method@Gtk.Expression.ref] it beforehand.
