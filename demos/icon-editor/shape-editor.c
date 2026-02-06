@@ -185,6 +185,9 @@ shape_changed (ShapeEditor *self)
     case SHAPE_POLYGON:
       shape_attr_unset (self->shape, SHAPE_ATTR_POINTS);
       break;
+    case SHAPE_PATH:
+      shape_attr_unset (self->shape, SHAPE_ATTR_PATH);
+      break;
     default:
       break;
     }
