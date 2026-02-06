@@ -4764,6 +4764,18 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                 &extents,
                                 viewport);
 
+      gsk_gpu_render_pass_begin_op (frame,
+                                    target,
+                                    &extents,
+                                    gdk_cairo_region_is_rectangle (clip)
+                                    ? GSK_GPU_LOAD_OP_DONT_CARE
+                                    : GSK_GPU_LOAD_OP_LOAD,
+                                    NULL,
+                                    pass_type);
+
+      self.blend = GSK_GPU_BLEND_NONE;
+      self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+
       for (i = 0; i < cairo_region_num_rectangles (clip); i++)
         {
           cairo_rectangle_int_t rect;
@@ -4785,16 +4797,6 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
           if (image == NULL)
             continue;
 
-          gsk_gpu_render_pass_begin_op (frame,
-                                        target,
-                                        &rect,
-                                        GSK_GPU_LOAD_OP_DONT_CARE,
-                                        NULL,
-                                        pass_type);
-
-          self.blend = GSK_GPU_BLEND_NONE;
-          self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
-
           gsk_gpu_node_processor_convert_to (&self,
                                              gsk_gpu_image_get_shader_op (target),
                                              image,
@@ -4802,12 +4804,12 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                              &clip_bounds,
                                              &tex_rect);
 
-          gsk_gpu_render_pass_end_op (frame,
-                                      target,
-                                      pass_type);
-
           g_object_unref (image);
         }
+
+      gsk_gpu_render_pass_end_op (frame,
+                                  target,
+                                  pass_type);
 
       gsk_gpu_render_pass_finish (&self);
 
