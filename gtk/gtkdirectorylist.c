@@ -74,6 +74,7 @@ struct _QueuedEvent
   GFile *file;
   GFileInfo *info;
   GFileMonitorEvent event;
+  gboolean ignore;
 };
 
 static void
@@ -600,6 +601,9 @@ handle_event (QueuedEvent *event)
   GSequenceIter *iter;
   unsigned int position;
 
+  if (event->ignore)
+    return TRUE;
+
   switch ((int)event->event)
     {
     case G_FILE_MONITOR_EVENT_MOVED_IN:
@@ -803,9 +807,18 @@ gtk_directory_list_start_monitoring (GtkDirectoryList *self)
 }
 
 static void
+ignore_queued_event (gpointer data)
+{
+  QueuedEvent *event = data;
+
+  event->ignore = TRUE;
+}
+
+static void
 gtk_directory_list_update_monitoring (GtkDirectoryList *self)
 {
   gtk_directory_list_stop_monitoring (self);
+  g_queue_foreach (&self->events, (GFunc) ignore_queued_event, NULL);
   if (self->file && self->monitored)
     gtk_directory_list_start_monitoring (self);
 }
