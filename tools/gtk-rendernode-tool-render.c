@@ -151,10 +151,11 @@ create_pdf (GskRenderNode  *node,
 #endif
 
 static void
-render_file (const char *filename,
-             const char *renderer_name,
-             const char *save_file,
-             gboolean    snap)
+render_file (const char            *filename,
+             const char            *renderer_name,
+             const graphene_rect_t *bounds,
+             gboolean               snap,
+             const char            *save_file)
 {
   GskRenderNode *node;
   GBytes *bytes;
@@ -203,7 +204,7 @@ render_file (const char *filename,
     {
       GdkTexture *texture;
       GskRenderer *renderer;
-      graphene_rect_t bounds;
+      graphene_rect_t node_bounds;
 
       renderer = create_renderer (renderer_name, &error);
       if (renderer == NULL)
@@ -212,20 +213,24 @@ render_file (const char *filename,
           exit (1);
         }
 
-      gsk_render_node_get_bounds (node, &bounds);
-      if (snap)
+      if (bounds == NULL)
         {
-          graphene_rect_t snapped;
+          gsk_render_node_get_bounds (node, &node_bounds);
+          if (snap)
+            {
+              graphene_rect_t snapped;
 
-          snapped.origin.x = floorf (bounds.origin.x);
-          snapped.origin.y = floorf (bounds.origin.y);
-          snapped.size.width = ceilf (bounds.origin.x + bounds.size.width) - snapped.origin.x;
-          snapped.size.height = ceilf (bounds.origin.y + bounds.size.height) - snapped.origin.y;
+              snapped.origin.x = floorf (node_bounds.origin.x);
+              snapped.origin.y = floorf (node_bounds.origin.y);
+              snapped.size.width = ceilf (node_bounds.origin.x + node_bounds.size.width) - snapped.origin.x;
+              snapped.size.height = ceilf (node_bounds.origin.y + node_bounds.size.height) - snapped.origin.y;
 
-          bounds = snapped;
+              node_bounds = snapped;
+            }
+          bounds = &node_bounds;
         }
 
-      texture = gsk_renderer_render_texture (renderer, node, &bounds);
+      texture = gsk_renderer_render_texture (renderer, node, bounds);
 
       if (g_str_has_suffix (save_to, ".tif") ||
           g_str_has_suffix (save_to, ".tiff"))
@@ -258,6 +263,36 @@ render_file (const char *filename,
   gsk_render_node_unref (node);
 }
 
+static gboolean
+my_strtof (const char *str,
+           float      *result)
+{
+  char *end;
+
+  if (str[0] == 0)
+    return FALSE;
+
+  *result = g_ascii_strtod (str, &end);
+  return *end == 0;
+}
+
+static gboolean
+rect_init_from_arg (graphene_rect_t *rect,
+                    const char      *arg)
+{
+  char **split = g_strsplit (arg, ",", 4);
+  gboolean result;
+
+  result = g_strv_length (split) == 4 &&
+           my_strtof(split[0], &rect->origin.x) &&
+           my_strtof(split[1], &rect->origin.y) &&
+           my_strtof(split[2], &rect->size.width) &&
+           my_strtof(split[3], &rect->size.height);
+
+  g_strfreev (split);
+  return result;
+}
+
 void
 do_render (int          *argc,
            const char ***argv)
@@ -265,10 +300,13 @@ do_render (int          *argc,
   GOptionContext *context;
   char **filenames = NULL;
   char *renderer = NULL;
+  char *bounds_str = NULL;
+  graphene_rect_t bounds;
   gboolean snap = FALSE;
   const GOptionEntry entries[] = {
     { "renderer", 0, 0, G_OPTION_ARG_STRING, &renderer, N_("Renderer to use"), N_("RENDERER") },
     { "dont-move", 0, 0, G_OPTION_ARG_NONE, &snap, N_("Keep node position unchanged"),  NULL },
+    { "bounds", 0, 0, G_OPTION_ARG_STRING, &bounds_str, N_("Area to render"), N_("X,Y,W,H") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
@@ -307,7 +345,20 @@ do_render (int          *argc,
       exit (1);
     }
 
-  render_file (filenames[0], renderer, filenames[1], snap);
+  if (bounds_str)
+    {
+      if (!rect_init_from_arg (&bounds, bounds_str))
+        {
+          g_printerr (_("Invalid rectangle given for bounds\n"));
+          exit (1);
+        }
+    }
+
+  render_file (filenames[0],
+               renderer,
+               bounds_str ? &bounds : NULL,
+               snap,
+               filenames[1]);
 
   g_strfreev (filenames);
 }
