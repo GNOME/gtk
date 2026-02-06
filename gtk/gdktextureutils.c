@@ -1365,10 +1365,10 @@ start_element_cb (GMarkupParseContext  *context,
           data->has_strokes = TRUE;
           gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
         }
-    }
 
-  if (opacity != 1)
-    gtk_snapshot_pop (data->snapshot);
+      if (opacity != 1)
+        gtk_snapshot_pop (data->snapshot);
+    }
 
 cleanup:
   g_clear_pointer (&path, gsk_path_unref);
