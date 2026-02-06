@@ -3,6 +3,7 @@
 #include "gskgpurenderpassprivate.h"
 
 #include "gskgpuimageprivate.h"
+#include "gskgpurenderpassopprivate.h"
 
 #include "gskrectprivate.h"
 #include "gsktransform.h"
@@ -13,6 +14,8 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
                           GskGpuImage                 *target,
                           GdkColorState               *ccs,
                           GskRenderPassType            pass_type,
+                          GskGpuLoadOp                 load_op,
+                          float                        clear_color[4],
                           const cairo_rectangle_int_t *clip,
                           const graphene_rect_t       *viewport)
 {
@@ -22,6 +25,7 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
   height = gsk_gpu_image_get_height (target);
 
   self->frame = frame;
+  self->target = target;
   self->pass_type = pass_type;
   self->ccs = ccs;
 
@@ -53,11 +57,22 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
                                       -viewport->origin.y);
   self->opacity = 1.0;
   self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND;
+
+  gsk_gpu_render_pass_begin_op (frame,
+                                target,
+                                clip,
+                                load_op,
+                                clear_color,
+                                pass_type);
 }
 
 void
 gsk_gpu_render_pass_finish (GskGpuRenderPass *self)
 {
+  gsk_gpu_render_pass_end_op (self->frame,
+                              self->target,
+                              self->pass_type);
+
   g_clear_pointer (&self->modelview, gsk_transform_unref);
 }
 

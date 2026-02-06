@@ -35,7 +35,6 @@
 #include "gskgpuocclusionprivate.h"
 #include "gskgpuradialgradientopprivate.h"
 #include "gskgpurenderpassprivate.h"
-#include "gskgpurenderpassopprivate.h"
 #include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
 #include "gskgputextureopprivate.h"
@@ -286,28 +285,12 @@ gsk_gpu_node_processor_init_draw (GskGpuRenderPass   *self,
                             image,
                             ccs,
                             GSK_RENDER_PASS_OFFSCREEN,
+                            GSK_GPU_LOAD_OP_CLEAR,
+                            GSK_VEC4_TRANSPARENT,
                             &area,
                             viewport);
 
-  gsk_gpu_render_pass_begin_op (frame,
-                                image,
-                                &area,
-                                GSK_GPU_LOAD_OP_CLEAR,
-                                GSK_VEC4_TRANSPARENT,
-                                GSK_RENDER_PASS_OFFSCREEN);
-
   return image;
-}
-
-static void
-gsk_gpu_node_processor_finish_draw (GskGpuRenderPass *self,
-                                    GskGpuImage         *image)
-{
-  gsk_gpu_render_pass_end_op (self->frame,
-                              image,
-                              GSK_RENDER_PASS_OFFSCREEN);
-
-  gsk_gpu_render_pass_finish (self);
 }
 
 static void
@@ -787,15 +770,10 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                 copy,
                                 ccs,
                                 GSK_RENDER_PASS_OFFSCREEN,
+                                GSK_GPU_LOAD_OP_DONT_CARE,
+                                NULL,
                                 &(cairo_rectangle_int_t) { 0, 0, width, height },
                                 &rect);
-
-      gsk_gpu_render_pass_begin_op (other.frame,
-                                    copy,
-                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                    GSK_GPU_LOAD_OP_DONT_CARE,
-                                    NULL,
-                                    GSK_RENDER_PASS_OFFSCREEN);
 
       other.blend = GSK_GPU_BLEND_NONE;
       other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
@@ -807,10 +785,6 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                        GSK_GPU_SAMPLER_DEFAULT,
                                        &rect,
                                        &rect);
-
-      gsk_gpu_render_pass_end_op (other.frame,
-                                  copy,
-                                  GSK_RENDER_PASS_OFFSCREEN);
 
       gsk_gpu_render_pass_finish (&other);
     }
@@ -958,7 +932,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                    source_rect,
                    &direction);
 
-  gsk_gpu_node_processor_finish_draw (&other, intermediate);
+  gsk_gpu_render_pass_finish (&other);
 
   real_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow_offset->x,
                                      self->offset.y + shadow_offset->y);
@@ -1230,7 +1204,7 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuRenderPass *self,
                             &other.offset,
                             gsk_rounded_clip_node_get_clip (node),
                             &white);
-  gsk_gpu_node_processor_finish_draw (&other, mask_image);
+  gsk_gpu_render_pass_finish (&other);
 
   gsk_gpu_node_processor_sync_globals (self, 0);
   gsk_gpu_mask_op (self->frame,
@@ -1917,7 +1891,7 @@ gsk_gpu_get_texture_tiles_as_image (GskGpuFrame            *frame,
                                              texture,
                                              scaling_filter);
 
-  gsk_gpu_node_processor_finish_draw (&self, image);
+  gsk_gpu_render_pass_finish (&self);
 
   return image;
 }
@@ -2391,7 +2365,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuRenderPass   *self,
       func (&other, NULL, node, real_stops, j);
     }
 
-  gsk_gpu_node_processor_finish_draw (&other, image);
+  gsk_gpu_render_pass_finish (&other);
 
   gsk_gpu_node_processor_image_op (self,
                                    image,
@@ -4761,17 +4735,12 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                 target,
                                 target_color_state,
                                 pass_type,
+                                gdk_cairo_region_is_rectangle (clip)
+                                ? GSK_GPU_LOAD_OP_DONT_CARE
+                                : GSK_GPU_LOAD_OP_LOAD,
+                                NULL,
                                 &extents,
                                 viewport);
-
-      gsk_gpu_render_pass_begin_op (frame,
-                                    target,
-                                    &extents,
-                                    gdk_cairo_region_is_rectangle (clip)
-                                    ? GSK_GPU_LOAD_OP_DONT_CARE
-                                    : GSK_GPU_LOAD_OP_LOAD,
-                                    NULL,
-                                    pass_type);
 
       self.blend = GSK_GPU_BLEND_NONE;
       self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
@@ -4806,10 +4775,6 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
 
           g_object_unref (image);
         }
-
-      gsk_gpu_render_pass_end_op (frame,
-                                  target,
-                                  pass_type);
 
       gsk_gpu_render_pass_finish (&self);
 
@@ -4863,14 +4828,10 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
                             target,
                             target_color_state,
                             GSK_RENDER_PASS_OFFSCREEN,
+                            GSK_GPU_LOAD_OP_DONT_CARE,
+                            NULL,
                             &(cairo_rectangle_int_t) { 0, 0, width, height },
                             &GRAPHENE_RECT_INIT (0, 0, width, height));
-  gsk_gpu_render_pass_begin_op (frame,
-                                target,
-                                &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                GSK_GPU_LOAD_OP_DONT_CARE,
-                                NULL,
-                                GSK_RENDER_PASS_OFFSCREEN);
 
   self.blend = GSK_GPU_BLEND_NONE;
   self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
@@ -4895,9 +4856,6 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
                                          &GRAPHENE_RECT_INIT (0, 0, width, height));
     }
 
-  gsk_gpu_render_pass_end_op (self.frame,
-                              target,
-                              GSK_RENDER_PASS_OFFSCREEN);
   gsk_gpu_render_pass_finish (&self);
 
   g_clear_object (&intermediate);
