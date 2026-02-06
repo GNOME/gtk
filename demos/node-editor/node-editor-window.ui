@@ -224,6 +224,9 @@ flat</property>
         <child type="end">
         <object class="GtkLabel" id="zoom_label">
           <property name="label" translatable="1">100%</property>
+          <attributes>
+            <attribute name="font-features" value="tnum=1"/>
+          </attributes>
           <property name="width-chars">4</property>
           <property name="xalign">0.5</property>
           </object>

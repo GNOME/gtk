@@ -1829,13 +1829,14 @@ close_crash_warning (GtkButton        *button,
 static void
 update_zoom_buttons (NodeEditorWindow *self)
 {
-  char *str;
+  GString *s = g_string_new ("");
 
   gtk_widget_set_sensitive (self->zoom_in, self->zoom_level < G_N_ELEMENTS (zoom_levels) - 1);
   gtk_widget_set_sensitive (self->zoom_out, self->zoom_level > 0);
-  str = g_strdup_printf ("%d%%", (guint) round (100 * zoom_levels[self->zoom_level]));
-  gtk_label_set_text (GTK_LABEL (self->zoom_label), str);
-  g_free (str);
+  g_string_append_printf (s, "%3d%%", (guint) round (100 * zoom_levels[self->zoom_level]));
+  g_string_replace (s, " ", " ", 0); /* Replace ASCII space by U+2007 figure space */
+  gtk_label_set_text (GTK_LABEL (self->zoom_label), s->str);
+  g_string_free (s, TRUE);
 }
 
 static void
