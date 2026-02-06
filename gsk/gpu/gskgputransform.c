@@ -108,3 +108,61 @@ gsk_gpu_transform_invert_rect (const GskGpuTransform *self,
                                 tmp.size.height / self->scale.height);
 }
 
+static void
+string_append_double (GString *string,
+                      double   d)
+{
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%g", d);
+  g_string_append (string, buf);
+}
+
+void
+gsk_gpu_transform_print (const GskGpuTransform *self,
+                         GString               *str)
+{
+  int rotate = self->dihedral & 3;
+  int flip = self->dihedral & 4;
+  gboolean some = FALSE;
+
+  if (rotate)
+    {
+      g_string_append (str, "rotate(90)");
+      some = TRUE;
+    }
+  if (self->scale.width != 1.0 || self->scale.height != 1.0 || flip)
+    {
+      if (some)
+        g_string_append_c (str, ' ');
+      g_string_append (str, "scale(");
+      string_append_double (str, ((flip && !rotate) ? -1.0 : 1.0) * self->scale.width);
+      g_string_append (str, ", ");
+      string_append_double (str, ((flip && rotate) ? -1.0 : 1.0) * self->scale.height);
+      g_string_append (str, ")");
+      some = TRUE;
+    }
+
+  if (self->offset.x != 0 || self->offset.y != 0)
+    {
+      if (some)
+        g_string_append_c (str, ' ');
+      g_string_append (str, "translate(");
+      string_append_double (str, self->offset.x);
+      g_string_append (str, ", ");
+      string_append_double (str, self->offset.y);
+      g_string_append (str, ")");
+      some = TRUE;
+    }
+  if (!some)
+    g_string_append (str, "none");
+}
+
+char *
+gsk_gpu_transform_to_string (const GskGpuTransform *self)
+{
+  GString *str = g_string_new (NULL);
+  gsk_gpu_transform_print (self, str);
+  return g_string_free (str, FALSE);
+}
+
