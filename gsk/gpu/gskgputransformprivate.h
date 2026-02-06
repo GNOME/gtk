@@ -25,6 +25,10 @@ void                    gsk_gpu_transform_init                  (GskGpuTransform
                                                                  const graphene_size_t  *size,
                                                                  const graphene_point_t *offset);
 
+void                    gsk_gpu_transform_print                 (const GskGpuTransform  *self,
+                                                                 GString                *str);
+char *                  gsk_gpu_transform_to_string             (const GskGpuTransform  *self);
+
 gboolean                gsk_gpu_transform_transform             (GskGpuTransform        *self,
                                                                  GskTransform           *transform);
 
