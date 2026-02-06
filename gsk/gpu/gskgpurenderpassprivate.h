@@ -21,6 +21,7 @@ typedef enum {
 struct _GskGpuRenderPass
 {
   GskGpuFrame                   *frame;
+  GskGpuImage                   *target;
   GdkColorState                 *ccs;
   GskRenderPassType              pass_type;
   cairo_rectangle_int_t          scissor;
@@ -40,6 +41,8 @@ void                    gsk_gpu_render_pass_init                        (GskGpuR
                                                                          GskGpuImage                    *target,
                                                                          GdkColorState                  *ccs,
                                                                          GskRenderPassType               pass_type,
+                                                                         GskGpuLoadOp                    load_op,
+                                                                         float                           clear_color[4],
                                                                          const cairo_rectangle_int_t    *clip,
                                                                          const graphene_rect_t          *viewport);
 

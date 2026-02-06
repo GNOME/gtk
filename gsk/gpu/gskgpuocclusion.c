@@ -6,7 +6,6 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpunodeprocessorprivate.h"
-#include "gskgpurenderpassopprivate.h"
 
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
@@ -88,9 +87,6 @@ gsk_gpu_occlusion_finish (GskGpuOcclusion *self)
 
   if (self->has_started_rendering)
     {
-      gsk_gpu_render_pass_end_op (self->frame,
-                                  self->target,
-                                  self->pass_type);
       gsk_gpu_render_pass_finish (&self->pass);
     }
 }
@@ -216,15 +212,10 @@ gsk_gpu_occlusion_begin_rendering (GskGpuOcclusion *self,
                                 self->target,
                                 self->target_color_state,
                                 self->pass_type,
+                                load_op,
+                                clear_color,
                                 &extents,
                                 &self->viewport);
-
-      gsk_gpu_render_pass_begin_op (self->frame,
-                                    self->target,
-                                    &extents,
-                                    load_op,
-                                    clear_color,
-                                    self->pass_type);
 
       self->pass.scissor = self->device_clip;
       self->pass.pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
