@@ -10,6 +10,7 @@
 
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
+#include "gdkcairoprivate.h"
 
 /* the amount of pixels for us to potentially save to warrant
  * carving out a rectangle for an extra render pass
@@ -153,15 +154,6 @@ gsk_gpu_occlusion_clip (GskGpuOcclusion       *self,
   return TRUE;
 }
 
-static gboolean
-gsk_gpu_occlusion_covers_whole_area (GskGpuOcclusion *self)
-{
-  cairo_rectangle_int_t extents;
-
-  cairo_region_get_extents (self->clip_region, &extents);
-  return cairo_region_contains_rectangle (self->clip_region, &extents) == CAIRO_REGION_OVERLAP_IN;
-}
-
 static void
 gsk_gpu_occlusion_begin_rendering (GskGpuOcclusion *self,
                                    float           *clear_color) /* float[4] or NULL */
@@ -197,7 +189,7 @@ gsk_gpu_occlusion_begin_rendering (GskGpuOcclusion *self,
       GskGpuLoadOp load_op;
       cairo_rectangle_int_t extents;
 
-      if (!gsk_gpu_occlusion_covers_whole_area (self))
+      if (!gdk_cairo_region_is_rectangle (self->clip_region))
         {
           self->has_background = FALSE;
           load_op = GSK_GPU_LOAD_OP_LOAD;
