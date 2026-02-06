@@ -16281,9 +16281,19 @@ parse_shape_gpa_attrs (Shape                *shape,
   if (attach_to_attr)
     g_ptr_array_add (data->pending_refs, shape);
 
-  /* our dasharray-based animations require unit path length */
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_PATH_LENGTH))
-    gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set pathLength and use gpa features");
+  if (shape->gpa.transition != GPA_TRANSITION_NONE ||
+      shape->gpa.animation != GPA_ANIMATION_NONE)
+    {
+      /* our dasharray-based animations require unit path length */
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_PATH_LENGTH))
+        gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set %s and use gpa features", "pathLength");
+
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_DASHARRAY))
+        gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set %s and use gpa features", "stroke-dasharray");
+
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_DASHOFFSET))
+        gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set %s and use gpa features", "stroke-dashoffset");
+    }
 
   create_states (shape,
                  data->svg->timeline,
