@@ -222,6 +222,13 @@ flat</property>
           </object>
         </child>
         <child type="end">
+        <object class="GtkLabel" id="zoom_label">
+          <property name="label" translatable="1">100%</property>
+          <property name="width-chars">4</property>
+          <property name="xalign">0.5</property>
+          </object>
+        </child>
+        <child type="end">
           <object class="GtkButton" id="zoom_out">
             <property name="css-classes">circular
 flat</property>
