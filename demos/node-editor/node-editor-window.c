@@ -35,6 +35,28 @@
 #include <cairo-svg.h>
 #endif
 
+/* Hardcode zoom levels that fractional scaling is likely to use.
+ * Be aware that people using this might have fractional
+ * scaling enabled themselves. and might want to view stuff at device scale */
+static float zoom_levels[] = {
+  /* TINY */ 1.0 / 8.0,
+  /*  25% */ 1.0 / 4.0,
+  /*  33% */ 1.0 / 3.0,
+  /*  40% */ 2.0 / 5.0,
+  /*  50% */ 1.0 / 2.0,
+  /*  67% */ 2.0 / 3.0,
+  /*  80% */ 4.0 / 5.0,
+  /* d'oh */ 1.0,
+  /* 125% */ 5.0 / 4.0,
+  /* 150% */ 3.0 / 2.0,
+  /* 175% */ 7.0 / 4.0,
+  /* 200% */ 2.0,
+  /* 250% */ 5.0 / 2.0,
+  /* 300% */ 3.0,
+  /* 400% */ 4.0,
+  /* HUGE */ 8.0
+};
+
 typedef struct
 {
   gsize  start_chars;
@@ -58,6 +80,7 @@ struct _NodeEditorWindow
   GtkWidget *testcase_save_button;
   GtkWidget *zoom_in;
   GtkWidget *zoom_out;
+  GtkWidget *zoom_label;
   GtkWidget *crash_warning;
 
   GtkWidget *renderer_listbox;
@@ -343,7 +366,7 @@ reload (NodeEditorWindow *self)
       GskTransform *transform;
       float scale;
 
-      scale = pow (1.2, self->zoom_level);
+      scale = zoom_levels [self->zoom_level];
 
       transform = gsk_transform_scale (NULL, scale, scale);
       big_node = gsk_transform_node_new (self->node, transform);
@@ -1803,21 +1826,23 @@ close_crash_warning (GtkButton        *button,
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->crash_warning), FALSE);
 }
 
-#define MIN_ZOOM -10
-#define MAX_ZOOM 10
-
 static void
 update_zoom_buttons (NodeEditorWindow *self)
 {
-  gtk_widget_set_sensitive (self->zoom_in, self->zoom_level < MAX_ZOOM);
-  gtk_widget_set_sensitive (self->zoom_out, self->zoom_level > MIN_ZOOM);
+  char *str;
+
+  gtk_widget_set_sensitive (self->zoom_in, self->zoom_level < G_N_ELEMENTS (zoom_levels) - 1);
+  gtk_widget_set_sensitive (self->zoom_out, self->zoom_level > 0);
+  str = g_strdup_printf ("%d%%", (guint) round (100 * zoom_levels[self->zoom_level]));
+  gtk_label_set_text (GTK_LABEL (self->zoom_label), str);
+  g_free (str);
 }
 
 static void
 set_zoom_level (NodeEditorWindow *self,
                 int               zoom_level)
 {
-  zoom_level = CLAMP (zoom_level + 1, MIN_ZOOM, MAX_ZOOM);
+  zoom_level = CLAMP (zoom_level, 0, G_N_ELEMENTS (zoom_levels) - 1);
 
   if (self->zoom_level == zoom_level)
     return;
@@ -1832,18 +1857,14 @@ static void
 zoom_in_cb (GtkButton        *button,
             NodeEditorWindow *self)
 {
-  self->zoom_level = CLAMP (self->zoom_level + 1, MIN_ZOOM, MAX_ZOOM);
-  update_zoom_buttons (self);
-  text_changed (self->text_buffer, self);
+  set_zoom_level (self, self->zoom_level + 1);
 }
 
 static void
 zoom_out_cb (GtkButton        *button,
              NodeEditorWindow *self)
 {
-  self->zoom_level = CLAMP (self->zoom_level - 1, MIN_ZOOM, MAX_ZOOM);
-  update_zoom_buttons (self);
-  text_changed (self->text_buffer, self);
+  set_zoom_level (self, self->zoom_level - 1);
 }
 
 static gboolean
@@ -1885,7 +1906,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_ZOOM_LEVEL] = g_param_spec_int ("zoom-level", NULL, NULL,
-                                                  MIN_ZOOM, MAX_ZOOM, 0,
+                                                  0, G_N_ELEMENTS (zoom_levels) - 1, 0,
                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_DARK_MODE] = g_param_spec_boolean ("dark-mode", NULL, NULL,
@@ -1909,6 +1930,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, crash_warning);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, zoom_in);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, zoom_out);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, zoom_label);
 
   gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
@@ -2068,10 +2090,18 @@ static void
 node_editor_window_init (NodeEditorWindow *self)
 {
   GAction *action;
+  gsize i;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->zoom_level = 0;
+  for (i = 0; i < G_N_ELEMENTS (zoom_levels); i++)
+    {
+      if (zoom_levels[i] == 1.0)
+        {
+          self->zoom_level = i;
+          break;
+        }
+    }
   self->auto_reload = TRUE;
 
   self->renderers = g_list_store_new (GDK_TYPE_PAINTABLE);
