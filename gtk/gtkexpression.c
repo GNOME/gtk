@@ -181,6 +181,19 @@
  *   </closure>
  * ```
  *
+ * If an expression can fail, a `<try>` element can be used to provide fallbacks.
+ * The expressions are tried from top to bottom until one of them succeeds.
+ * If none of the expressions succeed, the expression fails as normal:
+ *
+ * ```xml
+ *   <try>
+ *     <lookup type='GtkWindow' name='title'>
+ *       <lookup type='GtkLabel' name='root'></lookup>
+ *     </lookup>
+ *     <constant type='gchararray'>Hello World</constant>
+ *   </try>
+ * ```
+ *
  * To create a property binding, use the `<binding>` element in place of where a
  * `<property>` tag would ordinarily be used. The `name` and `object` attributes are
  * supported. The `name` attribute is required, and pertains to the applicable property
