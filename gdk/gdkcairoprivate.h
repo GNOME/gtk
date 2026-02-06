@@ -373,3 +373,21 @@ gdk_cairo_region_union_affine (cairo_region_t       *region,
     }
 }
 
+/*
+ * gdk_cairo_region_is_rectangle:
+ * @region: a cairo region
+ *
+ * Checks if the region can be represented by a rectangle.
+ * 
+ * This rectangle can be queried with cairo_region_get_extents().
+ *
+ * FIXME: Should this return TRUE or FALSE for an empty region?
+ * Currently I have no use case, so it returns whatever.
+ *
+ * Returns: true if the region is a rectangle.
+ **/
+static inline gboolean
+gdk_cairo_region_is_rectangle (cairo_region_t *region)
+{
+  return cairo_region_num_rectangles (region) == 1;
+}
