@@ -231,8 +231,8 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gdk_color_to_float ({2}, acs, {1}{3});'
-                  '{0}{1}{3}[3] *= opacity;'
+    struct_init = '{0}gdk_color_to_float ({2}, acs, {1}{3});\n'
+                  '{0}{1}{3}[3] *= pass->opacity;'
 ),
 ]
 
@@ -501,8 +501,6 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
         args.append (FunctionArg ('GdkColorState',       True,  'acs'))
     if file.acs_premultiplied == Premultiplied.ARGUMENT:
         args.append (FunctionArg ('gboolean',            False,  'acs_premultiplied'))
-    if file.opacity:
-        args.append (FunctionArg ('float',               False, 'opacity'))
     args.append (FunctionArg ('const graphene_point_t',  True,  'offset'))
 
     for i in range(1, file.n_textures + 1):
@@ -549,7 +547,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     for attr in attributes:
         size = 0
         for var in attr.inputs:
-            print (var.type.struct_initializer ('  ', 'instance->', var.name, attr.name, size))
+            print (var.type.struct_initializer ('  ', 'instance->', var.name if var.name != 'opacity' else 'pass->opacity', attr.name, size))
             size += var.type.size
 
     print (f'''}}
