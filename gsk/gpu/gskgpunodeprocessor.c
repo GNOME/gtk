@@ -3148,9 +3148,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
 
   node_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
 
-  offset.x += self->offset.x;
-  offset.y += self->offset.y;
-
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
 
   if (hint_style != CAIRO_HINT_STYLE_NONE)
@@ -3191,16 +3188,16 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
                                            &glyph_bounds,
                                            &glyph_offset);
 
-      glyph_tex_rect = GRAPHENE_RECT_INIT (-glyph_bounds.origin.x / scale,
-                                           -glyph_bounds.origin.y / scale,
+      glyph_origin.x -= glyph_offset.x / scale;
+      glyph_origin.y -= glyph_offset.y / scale;
+      glyph_tex_rect = GRAPHENE_RECT_INIT (glyph_origin.x - glyph_bounds.origin.x / scale,
+                                           glyph_origin.y - glyph_bounds.origin.y / scale,
                                            gsk_gpu_image_get_width (image) / scale,
                                            gsk_gpu_image_get_height (image) / scale);
-      glyph_bounds = GRAPHENE_RECT_INIT (0,
-                                         0,
+      glyph_bounds = GRAPHENE_RECT_INIT (glyph_origin.x,
+                                         glyph_origin.y,
                                          glyph_bounds.size.width / scale,
                                          glyph_bounds.size.height / scale);
-      glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x / scale,
-                                          glyph_origin.y - glyph_offset.y / scale);
 
       if (node_clip == GSK_GPU_SHADER_CLIP_NONE)
         glyph_clip = GSK_GPU_SHADER_CLIP_NONE;
@@ -3211,7 +3208,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
         gsk_gpu_texture_op (self,
                             glyph_clip,
                             self->ccs,
-                            &glyph_origin,
+                            &self->offset,
                             image,
                             GSK_GPU_SAMPLER_DEFAULT,
                             &glyph_bounds,
@@ -3221,7 +3218,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
                              glyph_clip,
                              self->ccs,
                              acs,
-                             &glyph_origin,
+                             &self->offset,
                              image,
                              GSK_GPU_SAMPLER_DEFAULT,
                              &glyph_bounds,
