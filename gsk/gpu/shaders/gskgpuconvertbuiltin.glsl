@@ -8,7 +8,6 @@ graphene_rect_t tex_rect;
 float opacity;
 
 variation: GdkBuiltinColorStateId color_space;
-variation: gboolean opacity;
 variation: gboolean premultiply;
 variation: gboolean reverse;
 #endif /* GSK_PREAMBLE */
@@ -185,9 +184,7 @@ run (out vec4 color,
       pixel = output_color_from_alt (pixel);
     }
 
-  float alpha = rect_coverage (_rect, _pos);
-  if (VARIATION_OPACITY)
-    alpha *= _opacity;
+  float alpha = rect_coverage (_rect, _pos) * _opacity;
 
   color = output_color_alpha (pixel, alpha);
 
