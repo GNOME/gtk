@@ -492,7 +492,7 @@ def print_c_shader_op_class (file):
 ''')
 
 def print_c_invocation (file, n_attributes, attributes, prototype_only):
-    args = [ FunctionArg ('GskGpuFrame',                 True,  'frame'),
+    args = [ FunctionArg ('GskGpuRenderPass',            True,  'pass'),
              FunctionArg ('GskGpuShaderClip',            False, 'clip'),
              FunctionArg ('GdkColorState',               True,  'ccs') ]
     if file.ccs_premultiplied == Premultiplied.ARGUMENT:
@@ -527,7 +527,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     print (f'''{{
   {file.struct_name}Instance *instance;
 
-  gsk_gpu_shader_op_alloc (frame,
+  gsk_gpu_shader_op_alloc (pass->frame,
                            &{file.var_name.upper()}_OP_CLASS,
                            ccs ? gsk_gpu_color_states_create (ccs, {file.ccs_premultiplied.to_c_code('ccs_premultiplied')}, {'ccs' if file.acs_equals_ccs else 'acs'}, {file.acs_premultiplied.to_c_code('acs_premultiplied')})
                                : gsk_gpu_color_states_create_equal ({file.ccs_premultiplied.to_c_code('ccs_premultiplied')}, {file.acs_premultiplied.to_c_code('acs_premultiplied')}),''')
@@ -643,6 +643,7 @@ def print_source_file (file, n_attributes, attributes):
 
 #include "gskgpu{file.name}opprivate.h"
 
+#include "gskgpurenderpassprivate.h"
 #include "gskgpushaderopprivate.h"
 #include "gskrectprivate.h"
 #include <graphene.h>
