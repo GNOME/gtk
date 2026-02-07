@@ -6,8 +6,6 @@ acs_premultiplied = true;
 graphene_rect_t rect;
 graphene_rect_t tex_rect;
 float opacity;
-
-variation: gboolean opacity;
 #endif /* GSK_PREAMBLE */
 
 #include "gskgpuconvertinstance.glsl"
@@ -46,9 +44,7 @@ run (out vec4 color,
 
   pixel = output_color_from_alt (pixel);
 
-  float alpha = rect_coverage (_rect, _pos);
-  if (VARIATION_OPACITY)
-    alpha *= _opacity;
+  float alpha = rect_coverage (_rect, _pos) * _opacity;
 
   color = output_color_alpha (pixel, alpha);
 

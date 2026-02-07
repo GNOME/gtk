@@ -11,7 +11,6 @@ guint32 transfer_function;
 guint32 matrix_coefficients;
 guint32 range;
 
-variation: gboolean opacity;
 variation: gboolean premultiply;
 variation: gboolean reverse;
 #endif /* GSK_PREAMBLE */
@@ -475,9 +474,7 @@ run (out vec4 color,
   else
     pixel = convert_color_from_cicp (pixel);
 
-  float alpha = rect_coverage (_rect, _pos);
-  if (VARIATION_OPACITY)
-    alpha *= _opacity;
+  float alpha = rect_coverage (_rect, _pos) * _opacity;
 
   color = output_color_alpha (pixel, alpha);
 
