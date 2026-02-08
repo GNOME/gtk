@@ -4304,7 +4304,8 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
       graphene_rect_t rect, clipped;
 
       gsk_rect_init_offset (&rect, &node->bounds, &self->offset);
-      gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
+      if (!gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped))
+        return;
 
       if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
           node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
