@@ -220,7 +220,8 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
   self->child = gsk_render_node_ref (child);
   gsk_rounded_rect_init_copy (&self->clip, clip);
 
-  gsk_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds);
+  if (!gsk_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds))
+    node->bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
