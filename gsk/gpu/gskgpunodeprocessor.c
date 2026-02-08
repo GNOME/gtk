@@ -1303,13 +1303,13 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
     case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
       {
+        GskGpuRenderPassTranslateStorage storage;
         float dx, dy;
+
         gsk_transform_to_translate (transform, &dx, &dy);
-        old_offset = self->offset;
-        self->offset.x += dx;
-        self->offset.y += dy;
+        gsk_gpu_render_pass_push_translate (self, &GRAPHENE_POINT_INIT (dx, dy), &storage);
         gsk_gpu_node_processor_add_node (self, child, 0);
-        self->offset = old_offset;
+        gsk_gpu_render_pass_pop_translate (self, &storage);
       }
       return;
 
