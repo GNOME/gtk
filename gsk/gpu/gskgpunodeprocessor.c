@@ -2701,19 +2701,20 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
 
       if (shadow->radius == 0)
         {
-          graphene_point_t shadow_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow->offset.x,
-                                                                self->offset.y + shadow->offset.y);
+          GskGpuRenderPassTranslateStorage storage;
 
+          gsk_gpu_render_pass_push_translate (self, &shadow->offset, &storage);
           gsk_gpu_colorize_op (self,
-                               gsk_gpu_clip_get_shader_clip (&self->clip, &shadow_offset, &child->bounds),
+                               gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
                                self->ccs,
                                gsk_gpu_color_states_find (self->ccs, &shadow->color),
-                               &shadow_offset,
+                               &self->offset,
                                image,
                                GSK_GPU_SAMPLER_TRANSPARENT,
                                &tex_rect,
                                &tex_rect,
                                &shadow->color);
+          gsk_gpu_render_pass_pop_translate (self, &storage);
         }
       else
         {
