@@ -63,7 +63,7 @@ gsk_rect_intersects (const graphene_rect_t *r1,
     return TRUE;
 }
 
-static inline gboolean
+static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_intersection (const graphene_rect_t *r1,
                        const graphene_rect_t *r2,
                        graphene_rect_t       *res)
