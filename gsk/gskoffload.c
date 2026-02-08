@@ -254,7 +254,12 @@ find_texture_to_attach (GskOffload          *self,
                 float sx = width / node->bounds.size.width;
                 float sy = height / node->bounds.size.height;
 
-                gsk_rect_intersection (&node->bounds, &clip, &clip);
+                if (!gsk_rect_intersection (&node->bounds, &clip, &clip))
+                  {
+                    GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                       "[%p] 🗙 Empty clip", subsurface);
+                    goto out;
+                  }
 
                 out_source_rect->origin.x = (clip.origin.x - dx) * sx;
                 out_source_rect->origin.y = (clip.origin.y - dy) * sy;
@@ -494,8 +499,10 @@ update_clip (GskOffload            *self,
 
       /* The clip gets simpler for this node */
 
-      gsk_rect_intersection (&self->current_clip->rect.bounds, transformed_bounds, &rect);
-      push_rect_clip (self, &GSK_ROUNDED_RECT_INIT_FROM_RECT (rect));
+      if (gsk_rect_intersection (&self->current_clip->rect.bounds, transformed_bounds, &rect))
+        push_rect_clip (self, &GSK_ROUNDED_RECT_INIT_FROM_RECT (rect));
+      else
+        push_empty_clip (self);
       return TRUE;
     }
 
@@ -690,11 +697,12 @@ visit_node (GskOffload    *self,
         if (self->current_clip->is_rectilinear)
           {
             memset (&intersection.corner, 0, sizeof intersection.corner);
-            gsk_rect_intersection (&transformed_clip,
-                                   &self->current_clip->rect.bounds,
-                                   &intersection.bounds);
-
-            push_rect_clip (self, &intersection);
+            if (gsk_rect_intersection (&transformed_clip,
+                                       &self->current_clip->rect.bounds,
+                                       &intersection.bounds))
+              push_rect_clip (self, &intersection);
+            else
+              push_empty_clip (self);
             visit_node (self, gsk_clip_node_get_child (node));
             pop_clip (self);
           }
