@@ -1503,135 +1503,125 @@ gsk_gpu_node_processor_add_opacity_node (GskGpuRenderPass *self,
   self->opacity = old_opacity;
 }
 
+static gboolean
+gsk_gpu_node_processor_user_to_device (GskGpuRenderPass      *self,
+                                       const graphene_rect_t *user,
+                                       cairo_rectangle_int_t *device)
+{
+  float scale_x = graphene_vec2_get_x (&self->scale);
+  float scale_y = graphene_vec2_get_y (&self->scale);
+
+  if (self->modelview)
+    return FALSE;
+
+  return gsk_rect_to_cairo_shrink (&GRAPHENE_RECT_INIT ((user->origin.x + self->offset.x) * scale_x,
+                                                        (user->origin.y + self->offset.y) * scale_y,
+                                                        user->size.width * scale_x,
+                                                        user->size.height * scale_y),
+                                   device);
+}
+
+static gboolean
+gsk_gpu_node_processor_device_to_user (GskGpuRenderPass            *self,
+                                       const cairo_rectangle_int_t *device,
+                                       graphene_rect_t             *user)
+{
+  float scale_x = graphene_vec2_get_x (&self->scale);
+  float scale_y = graphene_vec2_get_y (&self->scale);
+
+  if (self->modelview)
+    return FALSE;
+
+  *user = GRAPHENE_RECT_INIT (device->x / scale_x + self->offset.x,
+                              device->y / scale_y + self->offset.y,
+                              device->width / scale_x,
+                              device->height / scale_y);
+  return TRUE;
+}
+
 static void
 gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
                                        GskRenderNode       *node)
 {
-  cairo_rectangle_int_t int_clipped;
-  graphene_rect_t rect, clipped;
-  float clear_color[4];
+  cairo_rectangle_int_t device;
+  graphene_rect_t bounds, cover;
   const GdkColor *color;
 
   color = gsk_color_node_get_gdk_color (node);
-
-  gsk_rect_init_offset (&rect, &node->bounds, &self->offset);
-  if (!gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped))
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
     return;
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
-      gdk_color_is_opaque (color) &&
+      !self->modelview && 
       self->opacity >= 1.0 &&
-      node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
-      gsk_gpu_node_processor_rect_is_integer (self, &clipped, &int_clipped))
+      gdk_color_is_opaque (color) &&
+      gsk_gpu_clip_get_largest_cover (&self->clip, &self->offset, &bounds, &cover) &&
+      gsk_gpu_node_processor_user_to_device (self, &cover, &device) &&
+      gdk_rectangle_intersect (&device, &self->scissor, &device) &&
+      device.width * device.height > 100 * 100 && /* not worth the effort for small images */
+      gsk_gpu_node_processor_device_to_user (self, &device, &cover))
     {
-      /* now handle all the clip */
-      if (!gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
-        return;
+      GskGpuShaderClip shader_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds);
+      float clear_color[4];
 
-      /* we have handled the bounds, now do the corners */
-      if (self->clip.type == GSK_GPU_CLIP_ROUNDED)
-        {
-          graphene_rect_t cover;
-          GskGpuShaderClip shader_clip;
-          float scale_x, scale_y;
-
-          if (self->modelview)
-            {
-              /* Yuck, rounded clip and modelview. I give up. */
-              gsk_gpu_color_op (self,
-                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                                self->ccs,
-                                gsk_gpu_color_states_find (self->ccs, color),
-                                &self->offset,
-                                &node->bounds,
-                                color);
-              return;
-            }
-
-          scale_x = graphene_vec2_get_x (&self->scale);
-          scale_y = graphene_vec2_get_y (&self->scale);
-          clipped = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
-                                        int_clipped.width / scale_x, int_clipped.height / scale_y);
-          shader_clip = gsk_gpu_clip_get_shader_clip (&self->clip, graphene_point_zero(), &clipped);
-          if (shader_clip != GSK_GPU_SHADER_CLIP_NONE)
-            {
-              if (gsk_rounded_rect_get_largest_cover (&self->clip.rect, &clipped, &cover))
-                {
-                  int_clipped.x = ceilf (cover.origin.x * scale_x);
-                  int_clipped.y = ceilf (cover.origin.y * scale_y);
-                  int_clipped.width = floorf ((cover.origin.x + cover.size.width) * scale_x) - int_clipped.x;
-                  int_clipped.height = floorf ((cover.origin.y + cover.size.height) * scale_y) - int_clipped.y;
-                }
-              else
-                {
-                  int_clipped = (GdkRectangle) { 0, 0, 0, 0 };
-                }
-              if (int_clipped.width == 0 || int_clipped.height == 0)
-                {
-                  gsk_gpu_color_op (self,
-                                    shader_clip,
-                                    self->ccs,
-                                    gsk_gpu_color_states_find (self->ccs, color),
-                                    graphene_point_zero (),
-                                    &clipped,
-                                    color);
-                  return;
-                }
-              cover = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
-                                          int_clipped.width / scale_x, int_clipped.height / scale_y);
-              if (clipped.origin.x != cover.origin.x)
-                gsk_gpu_color_op (self,
-                                  shader_clip,
-                                  self->ccs,
-                                  gsk_gpu_color_states_find (self->ccs, color),
-                                  graphene_point_zero (),
-                                  &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, cover.origin.x - clipped.origin.x, clipped.size.height),
-                                  color);
-              if (clipped.origin.y != cover.origin.y)
-                gsk_gpu_color_op (self,
-                                  shader_clip,
-                                  self->ccs,
-                                  gsk_gpu_color_states_find (self->ccs, color),
-                                  graphene_point_zero (),
-                                  &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, clipped.size.width, cover.origin.y - clipped.origin.y),
-                                  color);
-              if (clipped.origin.x + clipped.size.width != cover.origin.x + cover.size.width)
-                gsk_gpu_color_op (self,
-                                  shader_clip,
-                                  self->ccs,
-                                  gsk_gpu_color_states_find (self->ccs, color),
-                                  graphene_point_zero (),
-                                  &GRAPHENE_RECT_INIT (cover.origin.x + cover.size.width,
-                                                       clipped.origin.y,
-                                                       clipped.origin.x + clipped.size.width - cover.origin.x - cover.size.width,
-                                                       clipped.size.height),
-                                  color);
-              if (clipped.origin.y + clipped.size.height != cover.origin.y + cover.size.height)
-                gsk_gpu_color_op (self,
-                                  shader_clip,
-                                  self->ccs,
-                                  gsk_gpu_color_states_find (self->ccs, color),
-                                  graphene_point_zero (),
-                                  &GRAPHENE_RECT_INIT (clipped.origin.x,
-                                                       cover.origin.y + cover.size.height,
-                                                       clipped.size.width,
-                                                       clipped.origin.y + clipped.size.height - cover.origin.y - cover.size.height),
-                                  color);
-            }
-        }
+      if (bounds.origin.x != cover.origin.x)
+        gsk_gpu_color_op (self,
+                          shader_clip,
+                          self->ccs,
+                          gsk_gpu_color_states_find (self->ccs, color),
+                          &self->offset,
+                          &GRAPHENE_RECT_INIT (bounds.origin.x,
+                                               bounds.origin.y,
+                                               cover.origin.x - bounds.origin.x,
+                                               bounds.size.height),
+                          color);
+      if (bounds.origin.y != cover.origin.y)
+        gsk_gpu_color_op (self,
+                          shader_clip,
+                          self->ccs,
+                          gsk_gpu_color_states_find (self->ccs, color),
+                          &self->offset,
+                          &GRAPHENE_RECT_INIT (bounds.origin.x,
+                                               bounds.origin.y,
+                                               bounds.size.width,
+                                               cover.origin.y - bounds.origin.y),
+                          color);
+      if (bounds.origin.x + bounds.size.width != cover.origin.x + cover.size.width)
+        gsk_gpu_color_op (self,
+                          shader_clip,
+                          self->ccs,
+                          gsk_gpu_color_states_find (self->ccs, color),
+                          &self->offset,
+                          &GRAPHENE_RECT_INIT (cover.origin.x + cover.size.width,
+                                               bounds.origin.y,
+                                               bounds.origin.x + bounds.size.width - cover.origin.x - cover.size.width,
+                                               bounds.size.height),
+                          color);
+      if (bounds.origin.y + bounds.size.height != cover.origin.y + cover.size.height)
+        gsk_gpu_color_op (self,
+                          shader_clip,
+                          self->ccs,
+                          gsk_gpu_color_states_find (self->ccs, color),
+                          &self->offset,
+                          &GRAPHENE_RECT_INIT (bounds.origin.x,
+                                               cover.origin.y + cover.size.height,
+                                               bounds.size.width,
+                                               bounds.origin.y + bounds.size.height - cover.origin.y - cover.size.height),
+                          color);
 
       gdk_color_to_float (color, self->ccs, clear_color);
-      gsk_gpu_clear_op (self->frame, &int_clipped, clear_color);
-      return;
+      gsk_gpu_clear_op (self->frame, &device, clear_color);
     }
-
-  gsk_gpu_color_op (self,
-                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                    self->ccs,
-                    gsk_gpu_color_states_find (self->ccs, color),
-                    &self->offset,
-                    &node->bounds,
-                    color);
+  else
+    {
+      gsk_gpu_color_op (self,
+                        gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                        self->ccs,
+                        gsk_gpu_color_states_find (self->ccs, color),
+                        &self->offset,
+                        &bounds,
+                        color);
+    }
 }
 
 static void
