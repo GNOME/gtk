@@ -333,3 +333,45 @@ gsk_gpu_clip_get_shader_clip (const GskGpuClip       *self,
     }
 }
 
+gboolean
+gsk_gpu_clip_get_largest_cover (const GskGpuClip       *self,
+                                const graphene_point_t *offset,
+                                const graphene_rect_t  *rect,
+                                graphene_rect_t        *result)
+{
+  switch (self->type)
+    {
+      case GSK_GPU_CLIP_NONE:
+      case GSK_GPU_CLIP_CONTAINED:
+        if (result != rect)
+          *result = *rect;
+        return TRUE;
+
+      case GSK_GPU_CLIP_RECT:
+        return gsk_rect_intersection (rect,
+                                      &GRAPHENE_RECT_INIT (self->rect.bounds.origin.x + offset->x,
+                                                           self->rect.bounds.origin.y + offset->y,
+                                                           self->rect.bounds.size.width,
+                                                           self->rect.bounds.size.height),
+                                      result);
+
+      case GSK_GPU_CLIP_ROUNDED:
+        if (!gsk_rounded_rect_get_largest_cover (&self->rect,
+                                                 &GRAPHENE_RECT_INIT (rect->origin.x + offset->x,
+                                                                      rect->origin.y + offset->y,
+                                                                      rect->size.width,
+                                                                      rect->size.height),
+                                                 result))
+          return FALSE;
+        result->origin.x -= offset->x;
+        result->origin.y -= offset->y;
+        return TRUE;
+
+      case GSK_GPU_CLIP_ALL_CLIPPED:
+        return FALSE;
+
+      default:
+        g_return_val_if_reached (FALSE);
+    }
+}
+
