@@ -99,8 +99,6 @@ gsk_rounded_clip_node_render_opacity (GskRenderNode  *node,
 {
   GskRoundedClipNode *self = (GskRoundedClipNode *) node;
   GskOpacityData child_data;
-  graphene_rect_t opaque, wide_opaque, high_opaque;
-  double start, end;
 
   child_data = GSK_OPACITY_DATA_INIT_COPY (data);
   gsk_render_node_render_opacity (self->child, &child_data);
@@ -112,34 +110,13 @@ gsk_rounded_clip_node_render_opacity (GskRenderNode  *node,
         data->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
     }
 
-  if (!gsk_rect_is_empty (&child_data.opaque))
+  if (!gsk_rect_is_empty (&child_data.opaque) &&
+      gsk_rounded_rect_get_largest_cover (&self->clip, &child_data.opaque, &child_data.opaque))
     {
-      wide_opaque = self->clip.bounds;
-      start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].height, self->clip.corner[GSK_CORNER_TOP_RIGHT].height);
-      end = MAX(self->clip.corner[GSK_CORNER_BOTTOM_LEFT].height, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].height);
-      wide_opaque.size.height -= MIN (wide_opaque.size.height, start + end);
-      wide_opaque.origin.y += start;
-      graphene_rect_intersection (&wide_opaque, &child_data.opaque, &wide_opaque);
-
-      high_opaque = self->clip.bounds;
-      start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].width, self->clip.corner[GSK_CORNER_BOTTOM_LEFT].width);
-      end = MAX(self->clip.corner[GSK_CORNER_TOP_RIGHT].width, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].width);
-      high_opaque.size.width -= MIN (high_opaque.size.width, start + end);
-      high_opaque.origin.x += start;
-      graphene_rect_intersection (&high_opaque, &child_data.opaque, &high_opaque);
-
-      if (wide_opaque.size.width * wide_opaque.size.height > high_opaque.size.width * high_opaque.size.height)
-        opaque = wide_opaque;
+      if (gsk_rect_is_empty (&data->opaque))
+        data->opaque = child_data.opaque;
       else
-        opaque = high_opaque;
-
-      if (!gsk_rect_is_empty (&opaque))
-        {
-          if (gsk_rect_is_empty (&child_data.opaque))
-            data->opaque = opaque;
-          else
-            gsk_rect_coverage (&data->opaque, &opaque, &data->opaque);
-        }
+        gsk_rect_coverage (&data->opaque, &child_data.opaque, &data->opaque);
     }
 }
 
