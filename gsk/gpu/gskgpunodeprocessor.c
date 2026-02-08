@@ -885,8 +885,8 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   GskGpuImage *intermediate;
   graphene_vec2_t direction;
   graphene_rect_t clip_rect, intermediate_rect;
-  graphene_point_t real_offset;
   float clip_radius;
+  GskGpuRenderPassTranslateStorage storage;
 
   clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
 
@@ -927,16 +927,15 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
 
   gsk_gpu_render_pass_finish (&other);
 
-  real_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow_offset->x,
-                                     self->offset.y + shadow_offset->y);
+  gsk_gpu_render_pass_push_translate (self, shadow_offset, &storage);
   graphene_vec2_init (&direction, 0.0f, blur_radius);
   if (shadow_color)
     {
       gsk_gpu_blur_op (self,
-                       gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
+                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
                        self->ccs,
                        gsk_gpu_color_states_find (self->ccs, shadow_color),
-                       &real_offset,
+                       &self->offset,
                        intermediate,
                        GSK_GPU_SAMPLER_TRANSPARENT,
                        TRUE,
@@ -948,10 +947,10 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   else
     {
       gsk_gpu_blur_op (self,
-                       gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
+                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
                        self->ccs,
                        self->ccs,
-                       &real_offset,
+                       &self->offset,
                        intermediate,
                        GSK_GPU_SAMPLER_TRANSPARENT,
                        FALSE,
@@ -960,6 +959,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                        &intermediate_rect,
                        &direction);
     }
+  gsk_gpu_render_pass_pop_translate (self, &storage);
 
   g_object_unref (intermediate);
 }
