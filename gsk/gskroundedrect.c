@@ -1047,32 +1047,41 @@ gsk_rounded_rect_to_string (const GskRoundedRect *self)
  * can be used to compute a decomposition for
  * the rounded rectangle itself.
  */
-void
+gboolean
 gsk_rounded_rect_get_largest_cover (const GskRoundedRect  *self,
                                     const graphene_rect_t *rect,
                                     graphene_rect_t       *result)
 {
   graphene_rect_t wide, high;
   double start, end;
+  gboolean empty_wide, empty_high;
 
   wide = self->bounds;
   start = MAX(self->corner[GSK_CORNER_TOP_LEFT].height, self->corner[GSK_CORNER_TOP_RIGHT].height);
   end = MAX(self->corner[GSK_CORNER_BOTTOM_LEFT].height, self->corner[GSK_CORNER_BOTTOM_RIGHT].height);
   wide.size.height -= MIN (wide.size.height, start + end);
   wide.origin.y += start;
-  gsk_rect_intersection (&wide, rect, &wide);
+  empty_wide = !gsk_rect_intersection (&wide, rect, &wide);
 
   high = self->bounds;
   start = MAX(self->corner[GSK_CORNER_TOP_LEFT].width, self->corner[GSK_CORNER_BOTTOM_LEFT].width);
   end = MAX(self->corner[GSK_CORNER_TOP_RIGHT].width, self->corner[GSK_CORNER_BOTTOM_RIGHT].width);
   high.size.width -= MIN (high.size.width, start + end);
   high.origin.x += start;
-  gsk_rect_intersection (&high, rect, &high);
+  empty_high = !gsk_rect_intersection (&high, rect, &high);
 
-  if (wide.size.width * wide.size.height > high.size.width * high.size.height)
+  if (empty_wide && empty_high)
+    return FALSE;
+  else if (empty_wide)
+    *result = high;
+  else if (empty_high)
+    *result = wide;
+  else if (wide.size.width * wide.size.height > high.size.width * high.size.height)
     *result = wide;
   else
     *result = high;
+
+  return TRUE;
 }
 
 /*< private >

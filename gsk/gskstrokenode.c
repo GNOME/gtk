@@ -247,10 +247,9 @@ gsk_stroke_node_new (GskRenderNode   *child,
   self->path = gsk_path_ref (path);
   self->stroke = GSK_STROKE_INIT_COPY (stroke);
 
-  if (gsk_path_get_stroke_bounds (self->path, &self->stroke, &stroke_bounds))
-    gsk_rect_intersection (&stroke_bounds, &child->bounds, &node->bounds);
-  else
-    gsk_rect_init (&node->bounds, 0.f, 0.f, 0.f, 0.f);
+  if (!gsk_path_get_stroke_bounds (self->path, &self->stroke, &stroke_bounds) ||
+      !gsk_rect_intersection (&stroke_bounds, &child->bounds, &node->bounds))
+    node->bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
 
   return node;
 }

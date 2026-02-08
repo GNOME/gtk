@@ -19260,7 +19260,9 @@ apply_filter_tree (Shape         *shape,
 
   results = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) filter_result_unref);
 
-  gsk_rect_intersection (&filter_region, &source->bounds, &rect);
+  if (!gsk_rect_intersection (&filter_region, &source->bounds, &rect))
+    return empty_node ();
+
   if (!gsk_rect_equal (&filter_region, &rect))
     {
       GskRenderNode *pad, *padded;

@@ -321,7 +321,8 @@ gsk_composite_node_render_opacity (GskRenderNode  *node,
             }
           else
             {
-              gsk_rect_intersection (&child_data.opaque, &self->mask->bounds, &child_data.opaque);
+              if (!gsk_rect_intersection (&child_data.opaque, &self->mask->bounds, &child_data.opaque))
+                data->opaque = GRAPHENE_RECT_INIT (0, 0, 0, 0);
             }
 
           if (gsk_rect_is_empty (&data->opaque))

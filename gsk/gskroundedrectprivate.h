@@ -58,9 +58,9 @@ gboolean                 gsk_rounded_rect_equal                 (gconstpointer  
                                                                  gconstpointer             rect2) G_GNUC_PURE;
 char *                   gsk_rounded_rect_to_string             (const GskRoundedRect     *self) G_GNUC_MALLOC;
 
-void                     gsk_rounded_rect_get_largest_cover     (const GskRoundedRect     *self,
+gboolean                 gsk_rounded_rect_get_largest_cover     (const GskRoundedRect     *self,
                                                                  const graphene_rect_t    *rect,
-                                                                 graphene_rect_t          *result);
+                                                                 graphene_rect_t          *result) G_GNUC_WARN_UNUSED_RESULT;
 
 typedef enum {
   GSK_INTERSECTION_EMPTY,
