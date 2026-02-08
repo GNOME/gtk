@@ -1948,7 +1948,8 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
   color = gsk_color_node_get_gdk_color (node);
 
   gsk_rect_init_offset (&rect, &node->bounds, &self->offset);
-  gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
+  if (!gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped))
+    return;
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
       gdk_color_is_opaque (color) &&
