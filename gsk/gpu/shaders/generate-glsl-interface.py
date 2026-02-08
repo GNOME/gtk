@@ -180,8 +180,8 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
-    struct_init = '{0}{1}{3}[{4}] = {2}->x + offset->x;\n'
-                  '{0}{1}{3}[{4} + 1] = {2}->y + offset->y;'
+    struct_init = '{0}{1}{3}[{4}] = {2}->x + pass->offset.x;\n'
+                  '{0}{1}{3}[{4} + 1] = {2}->y + pass->offset.y;'
 ),
 Type(
     type = 'graphene_size_t',
@@ -210,14 +210,14 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gsk_gpu_rect_to_float ({2}, offset, {1}{3});'
+    struct_init = '{0}gsk_gpu_rect_to_float ({2}, &pass->offset, {1}{3});'
 ),
 Type(
     type = 'GskRoundedRect',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 12,
-    struct_init = '{0}gsk_rounded_rect_to_float ({2}, offset, {1}{3});'
+    struct_init = '{0}gsk_rounded_rect_to_float ({2}, &pass->offset, {1}{3});'
 ),
 Type(
     type = 'graphene_matrix_t',
@@ -501,8 +501,6 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
         args.append (FunctionArg ('GdkColorState',       True,  'acs'))
     if file.acs_premultiplied == Premultiplied.ARGUMENT:
         args.append (FunctionArg ('gboolean',            False,  'acs_premultiplied'))
-    args.append (FunctionArg ('const graphene_point_t',  True,  'offset'))
-
     for i in range(1, file.n_textures + 1):
         args += [ FunctionArg ('GskGpuImage',             True, 'image' + str (i)),
                   FunctionArg ('GskGpuSampler',           False, 'sampler' + str (i)) ]
