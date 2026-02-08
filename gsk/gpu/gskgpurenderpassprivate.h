@@ -36,6 +36,10 @@ struct _GskGpuRenderPass
   GskGpuGlobals                  pending_globals;
 };
 
+typedef struct {
+  graphene_point_t offset;
+} GskGpuRenderPassTranslateStorage;
+
 void                    gsk_gpu_render_pass_init                        (GskGpuRenderPass               *self,
                                                                          GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *target,
@@ -50,6 +54,11 @@ void                    gsk_gpu_render_pass_finish                      (GskGpuR
 
 void                    gsk_gpu_render_pass_set_transform               (GskGpuRenderPass               *self,
                                                                          GskGpuTransform                *transform);
+void                    gsk_gpu_render_pass_push_translate              (GskGpuRenderPass               *self,
+                                                                         const graphene_point_t         *offset,
+                                                                         GskGpuRenderPassTranslateStorage *storage);
+void                    gsk_gpu_render_pass_pop_translate               (GskGpuRenderPass               *self,
+                                                                         GskGpuRenderPassTranslateStorage *storage);
 
 G_END_DECLS
 

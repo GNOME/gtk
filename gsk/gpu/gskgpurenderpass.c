@@ -97,3 +97,19 @@ gsk_gpu_render_pass_set_transform (GskGpuRenderPass *self,
     }
 }
 
+void
+gsk_gpu_render_pass_push_translate (GskGpuRenderPass                 *self,
+                                    const graphene_point_t           *offset,
+                                    GskGpuRenderPassTranslateStorage *storage)
+{
+  storage->offset = self->offset;
+  self->offset.x += offset->x;
+  self->offset.y += offset->y;
+}
+
+void
+gsk_gpu_render_pass_pop_translate (GskGpuRenderPass                 *self,
+                                   GskGpuRenderPassTranslateStorage *storage)
+{
+  self->offset = storage->offset;
+}
