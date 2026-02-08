@@ -1592,9 +1592,10 @@ gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuNodeProcessor *self,
   graphene_rect_t cover, clip;
 
   gsk_gpu_node_processor_get_clip_bounds (self, &clip);
-  gsk_rounded_rect_get_largest_cover (gsk_rounded_clip_node_get_clip (node),
-                                      &clip,
-                                      &cover);
+  if (!gsk_rounded_rect_get_largest_cover (gsk_rounded_clip_node_get_clip (node),
+                                           &clip,
+                                           &cover))
+    return FALSE;
 
   return gsk_gpu_node_processor_add_first_node_clipped (self,
                                                         info,
@@ -1989,11 +1990,17 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
           shader_clip = gsk_gpu_clip_get_shader_clip (&self->clip, graphene_point_zero(), &clipped);
           if (shader_clip != GSK_GPU_SHADER_CLIP_NONE)
             {
-              gsk_rounded_rect_get_largest_cover (&self->clip.rect, &clipped, &cover);
-              int_clipped.x = ceilf (cover.origin.x * scale_x);
-              int_clipped.y = ceilf (cover.origin.y * scale_y);
-              int_clipped.width = floorf ((cover.origin.x + cover.size.width) * scale_x) - int_clipped.x;
-              int_clipped.height = floorf ((cover.origin.y + cover.size.height) * scale_y) - int_clipped.y;
+              if (gsk_rounded_rect_get_largest_cover (&self->clip.rect, &clipped, &cover))
+                {
+                  int_clipped.x = ceilf (cover.origin.x * scale_x);
+                  int_clipped.y = ceilf (cover.origin.y * scale_y);
+                  int_clipped.width = floorf ((cover.origin.x + cover.size.width) * scale_x) - int_clipped.x;
+                  int_clipped.height = floorf ((cover.origin.y + cover.size.height) * scale_y) - int_clipped.y;
+                }
+              else
+                {
+                  int_clipped = (GdkRectangle) { 0, 0, 0, 0 };
+                }
               if (int_clipped.width == 0 || int_clipped.height == 0)
                 {
                   gsk_gpu_color_op (self->frame,
