@@ -77,6 +77,29 @@ gsk_gpu_render_pass_finish (GskGpuRenderPass *self)
 }
 
 void
+gsk_gpu_render_pass_push_blend (GskGpuRenderPass             *self,
+                                GskGpuBlend                   blend,
+                                GskGpuRenderPassBlendStorage *storage)
+{
+  storage->blend = self->blend;
+  
+  self->blend = blend;
+
+  if (storage->blend != self->blend)
+    self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+}
+
+void
+gsk_gpu_render_pass_pop_blend (GskGpuRenderPass             *self,
+                               GskGpuRenderPassBlendStorage *storage)
+{
+  if (storage->blend != self->blend)
+    self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+
+  self->blend = storage->blend;
+}
+
+void
 gsk_gpu_render_pass_set_transform (GskGpuRenderPass *self,
                                    GskGpuTransform  *transform)
 {
