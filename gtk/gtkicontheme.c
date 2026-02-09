@@ -2373,16 +2373,16 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
 
   if (flags & GTK_ICON_LOOKUP_PRELOAD)
     {
-      gboolean has_node = FALSE;
+      gboolean has_paintable = FALSE;
 
       /* If we fail to get the lock it is because some other thread is
          currently loading the icon, so we need to do nothing */
       if (g_mutex_trylock (&icon->texture_lock))
         {
-          has_node = icon->node != NULL;
+          has_paintable = icon->paintable != NULL;
           g_mutex_unlock (&icon->texture_lock);
 
-          if (!has_node)
+          if (!has_paintable)
             {
               GTask *task = g_task_new (icon, NULL, NULL, NULL);
               g_task_run_in_thread (task, load_icon_thread);

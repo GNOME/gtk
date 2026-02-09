@@ -44,7 +44,7 @@ struct _GtkIconPaintable
    */
   GMutex texture_lock;
 
-  GskRenderNode *node;
+  GdkPaintable *paintable;
   double width;
   double height;
 };
