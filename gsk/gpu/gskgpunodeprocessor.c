@@ -4588,6 +4588,38 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
                                 &child_rect,
                                 &mask_rect);
         }
+      else if (op == GSK_PORTER_DUFF_SOURCE)
+        {
+          /* SOURCE = CLEAR in mask
+           *          + ADD source in mask */
+          self->blend = GSK_GPU_BLEND_CLEAR;
+          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          gsk_gpu_node_processor_sync_globals (self, 0);
+          gsk_gpu_texture_op (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
+                              self->ccs,
+                              &self->offset,
+                              mask_image,
+                              GSK_GPU_SAMPLER_DEFAULT,
+                              &mask_rect,
+                              &mask_rect);
+          self->blend = GSK_GPU_BLEND_ADD;
+          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          gsk_gpu_node_processor_sync_globals (self, 0);
+          gsk_gpu_mask_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                           self->ccs,
+                           self->opacity,
+                           &self->offset,
+                           child_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           mask_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           GSK_MASK_MODE_ALPHA,
+                           &bounds,
+                           &child_rect,
+                           &mask_rect);
+        }
       else
         {
           g_warning_once ("FIXME: Implement compositing without dual blending support.");
