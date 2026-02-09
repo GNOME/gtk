@@ -4437,6 +4437,7 @@ gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
   {
     case GSK_PORTER_DUFF_DEST:
     case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
     case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
     case GSK_PORTER_DUFF_CLEAR:
       return FALSE;
@@ -4444,7 +4445,6 @@ gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
     case GSK_PORTER_DUFF_SOURCE:
     case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_IN_DEST:
-    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
     case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
     case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
@@ -4464,8 +4464,6 @@ gsk_gpu_node_processor_set_porter_duff (GskGpuNodeProcessor *self,
   switch (op)
     {
     case GSK_PORTER_DUFF_SOURCE:
-      /* these don't matter as long as the mask is there */
-    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
       self->blend = GSK_GPU_BLEND_MASK_ONE;
       break;
 
@@ -4482,6 +4480,7 @@ gsk_gpu_node_processor_set_porter_duff (GskGpuNodeProcessor *self,
       break;
 
     case GSK_PORTER_DUFF_CLEAR:
+    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
     case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
       self->blend = GSK_GPU_BLEND_CLEAR;
       break;
@@ -4556,7 +4555,23 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
         /* FIXME */
         child_image = g_object_ref (mask_image);
 
-      if (!gsk_gpu_porter_duff_needs_dual_blend (op))
+      if (op == GSK_PORTER_DUFF_DEST_IN_SOURCE)
+        {
+          gsk_gpu_mask_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                           self->ccs,
+                           self->opacity,
+                           &self->offset,
+                           mask_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           child_image,
+                           GSK_GPU_SAMPLER_TRANSPARENT,
+                           GSK_MASK_MODE_INVERTED_ALPHA,
+                           &bounds,
+                           &mask_rect,
+                           &child_rect);
+        }
+      else if (!gsk_gpu_porter_duff_needs_dual_blend (op))
         {
           gsk_gpu_mask_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
