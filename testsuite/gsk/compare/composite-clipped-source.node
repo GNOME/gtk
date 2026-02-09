@@ -1,0 +1,300 @@
+/* Test cases where the source is clipped off but the mask isn't */
+color {
+  color: #000;
+  bounds: -10 -10 910 310;
+}
+
+opacity {
+  opacity: 1.0;
+  child: container {
+
+    color {
+      color: #F0C00080;
+      bounds: 0 0 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 0 0 100 100;
+    }
+    clip {
+      clip:  0 0 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 40 40 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 0 0 140 140;
+        }
+        operator: source;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 0 150 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 0 150 100 100;
+    }
+    clip {
+      clip:  0 150 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 40 190 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 0 150 140 140;
+        }
+        operator: dest;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 150 0 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 150 0 100 100;
+    }
+    clip {
+      clip:  150 0 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 190 40 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 150 0 140 140;
+        }
+        operator: source-over-dest;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 150 150 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 150 150 100 100;
+    }
+    clip {
+      clip:  150 150 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 190 190 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 150 150 140 140;
+        }
+        operator: dest-over-source;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 300 0 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 300 0 100 100;
+    }
+    clip {
+      clip:  300 0 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 340 40 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 300 0 140 140;
+        }
+        operator: source-in-dest;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 300 150 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 300 150 100 100;
+    }
+    clip {
+      clip:  300 150 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 340 190 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 300 150 140 140;
+        }
+        operator: dest-in-source;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 450 0 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 450 0 100 100;
+    }
+    clip {
+      clip:  450 0 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 490 40 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 450 0 140 140;
+        }
+        operator: source-out-dest;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 450 150 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 450 150 100 100;
+    }
+    clip {
+      clip:  450 150 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 490 190 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 450 150 140 140;
+        }
+        operator: dest-out-source;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 600 0 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 600 0 100 100;
+    }
+    clip {
+      clip:  600 0 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 640 40 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 600 0 140 140;
+        }
+        operator: source-atop-dest;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 600 150 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 600 150 100 100;
+    }
+    clip {
+      clip:  600 150 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 640 190 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 600 150 140 140;
+        }
+        operator: dest-atop-source;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 750 0 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 750 0 100 100;
+    }
+    clip {
+      clip:  750 0 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 790 40 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 750 0 140 140;
+        }
+        operator: xor;
+      }
+    }
+
+    color {
+      color: #F0C00080;
+      bounds: 750 150 100 100;
+    }
+    border {
+      colors: #F0C000;
+      widths: 15;
+      outline: 750 150 100 100;
+    }
+    clip {
+      clip:  750 150 100 40;
+      child: composite {
+        child: color {
+          color: #00C0F080;
+          bounds: 790 190 100 100;
+        }
+        mask: color {
+          color: #FFF;
+          bounds: 750 150 140 140;
+        }
+        operator: clear;
+      }
+    }
+
+  }
+}

@@ -4552,8 +4552,13 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
                                                               0,
                                                               &child_rect);
       if (child_image == NULL)
-        /* FIXME */
-        child_image = g_object_ref (mask_image);
+        {
+          /* FIXME */
+          child_image = g_object_ref (mask_image);
+          /* put it far away so it won't get sampled */
+          child_rect = mask_rect;
+          child_rect.origin.x += 2 * mask_rect.size.width;
+        }
 
       if (op == GSK_PORTER_DUFF_DEST_IN_SOURCE)
         {
