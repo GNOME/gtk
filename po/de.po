@@ -30,16 +30,16 @@
 # Bernd Homuth <dev@hmt.im>, 2015.
 # Philipp Kiemle <l10n@prly.mozmail.com>, 2020-2023, 2025.
 # Tim Sabsch <tim@sabsch.com>, 2022, 2024.
-# Jürgen Benvenuti <gastornis@posteo.org>, 2022-2024.
+# Jürgen Benvenuti <gastornis@posteo.org>, 2022-2024, 2026.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-12-17 06:51+0000\n"
-"PO-Revision-Date: 2025-12-19 23:22+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2026-01-03 21:02+0000\n"
+"PO-Revision-Date: 2026-02-08 21:28+0100\n"
+"Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -821,6 +821,7 @@ msgstr "GL-Implementierung kann keine GL-Kontexte teilen"
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
 msgstr ""
+"Es ist ein nicht unterstütztes Pixelformat %d für das Fenster festgelegt"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:862
 msgid "No available configurations for the given pixel format"
@@ -7331,10 +7332,8 @@ msgid "Font Name"
 msgstr "Schriftname"
 
 #: gtk/ui/gtkfontchooserwidget.ui:382
-#, fuzzy
-#| msgid "Style Variations"
 msgid "Font Variation Axes"
-msgstr "Stilvariationen"
+msgstr "Schriftvariations-Achsen"
 
 #: gtk/ui/gtkfontchooserwidget.ui:430
 msgid "Font Features"
@@ -8641,7 +8640,7 @@ msgstr "GRÖßE"
 
 #: tools/gtk-rendernode-tool-convert.c:107
 msgid "Convert from symbolic svg to node."
-msgstr ""
+msgstr "Von symbolischem SVG in einen Knoten umwandeln."
 
 #: tools/gtk-rendernode-tool-convert.c:177
 #, c-format
@@ -8736,7 +8735,7 @@ msgstr ""
 
 #: tools/gtk-rendernode-tool-show.c:120
 msgid "Put node into offload container"
-msgstr ""
+msgstr "Knoten in einen Offload-Container legen"
 
 #: tools/gtk-rendernode-tool-show.c:137
 msgid "Show the render node."
