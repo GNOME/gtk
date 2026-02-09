@@ -293,71 +293,6 @@ gsk_gpu_node_processor_init_draw (GskGpuRenderPass   *self,
   return image;
 }
 
-static void
-extract_scale_from_transform (GskTransform *transform,
-                              float        *out_scale_x,
-                              float        *out_scale_y)
-{
-  switch (gsk_transform_get_fine_category (transform))
-    {
-    default:
-      g_assert_not_reached ();
-    case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *out_scale_x = 1.0f;
-      *out_scale_y = 1.0f;
-      return;
-
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
-      {
-        float scale_x, scale_y, dx, dy;
-        gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-        *out_scale_x = scale_x;
-        *out_scale_y = scale_y;
-      }
-      return;
-
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D:
-      {
-        float skew_x, skew_y, scale_x, scale_y, angle, dx, dy;
-        gsk_transform_to_2d_components (transform,
-                                        &skew_x, &skew_y,
-                                        &scale_x, &scale_y,
-                                        &angle,
-                                        &dx, &dy);
-        *out_scale_x = fabs (scale_x);
-        *out_scale_y = fabs (scale_y);
-      }
-      return;
-
-    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
-    case GSK_FINE_TRANSFORM_CATEGORY_3D:
-      {
-        graphene_quaternion_t rotation;
-        graphene_matrix_t matrix;
-        graphene_vec4_t perspective;
-        graphene_vec3_t translation;
-        graphene_vec3_t matrix_scale;
-        graphene_vec3_t shear;
-
-        gsk_transform_to_matrix (transform, &matrix);
-        graphene_matrix_decompose (&matrix,
-                                   &translation,
-                                   &matrix_scale,
-                                   &rotation,
-                                   &shear,
-                                   &perspective);
-
-        *out_scale_x = fabs (graphene_vec3_get_x (&matrix_scale));
-        *out_scale_y = fabs (graphene_vec3_get_y (&matrix_scale));
-      }
-      return;
-    }
-}
-
 static gboolean
 gsk_gpu_node_processor_rect_clip_to_device (GskGpuRenderPass   *self,
                                             const graphene_rect_t *src,
@@ -1280,10 +1215,6 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
 {
   GskRenderNode *child;
   GskTransform *transform;
-  graphene_point_t old_offset;
-  graphene_vec2_t old_scale;
-  GskTransform *old_modelview;
-  GskGpuClip old_clip;
 
   child = gsk_transform_node_get_child (node);
   transform = gsk_transform_node_get_transform (node);
@@ -1301,84 +1232,26 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
         gsk_gpu_node_processor_add_node (self, child, 0);
         gsk_gpu_render_pass_pop_translate (self, &storage);
       }
-      return;
+      break;
 
     case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
-      {
-        float dx, dy, scale_x, scale_y;
-
-        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
-        old_offset = self->offset;
-        old_scale = self->scale;
-        old_modelview = self->modelview;
-
-        gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-        gsk_gpu_clip_scale (&self->clip, &old_clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
-        self->offset.x = (self->offset.x + dx) / scale_x;
-        self->offset.y = (self->offset.y + dy) / scale_y;
-        graphene_vec2_init (&self->scale, scale_x, scale_y);
-        graphene_vec2_multiply (&self->scale, &old_scale, &self->scale);
-      }
-      break;
-
     case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
-      {
-        GdkDihedral dihedral, inverted;
-        float xx, xy, yx, yy, dx, dy, scale_x, scale_y, old_scale_x, old_scale_y;
-
-        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
-        old_offset = self->offset;
-        old_scale = self->scale;
-        old_modelview = gsk_transform_ref (self->modelview);
-
-        gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
-        inverted = gdk_dihedral_invert (dihedral);
-        gdk_dihedral_get_mat2 (inverted, &xx, &xy, &yx, &yy);
-        gsk_gpu_clip_scale (&self->clip, &old_clip, inverted, scale_x, scale_y);
-        self->offset.x = (self->offset.x + dx) / scale_x;
-        self->offset.y = (self->offset.y + dy) / scale_y;
-        self->offset = GRAPHENE_POINT_INIT (xx * self->offset.x + xy * self->offset.y,
-                                            yx * self->offset.x + yy * self->offset.y);
-        old_scale_x = graphene_vec2_get_x (&old_scale);
-        old_scale_y = graphene_vec2_get_y (&old_scale);
-        graphene_vec2_init (&self->scale,
-                            fabs (scale_x * (old_scale_x * xx + old_scale_y * yx)),
-                            fabs (scale_y * (old_scale_x * xy + old_scale_y * yy)));
-        self->modelview = gsk_transform_dihedral (self->modelview, dihedral);
-      }
-      break;
-
     case GSK_FINE_TRANSFORM_CATEGORY_2D:
-    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
     case GSK_FINE_TRANSFORM_CATEGORY_3D:
+    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
+    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
       {
-        GskTransform *clip_transform;
-        float scale_x, scale_y, old_pixels, new_pixels;
-        graphene_rect_t scissor;
+        GskGpuRenderPassTransformStorage storage;
 
-        clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset), transform);
-        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
-
-        if (gsk_gpu_clip_contains_rect (&self->clip, &self->offset, &node->bounds))
-          {
-            gsk_gpu_clip_init_contained (&self->clip, &child->bounds);
-          }
-        else if (old_clip.type == GSK_GPU_CLIP_NONE)
-          {
-            GskTransform *inverse;
-            graphene_rect_t new_bounds;
-            inverse = gsk_transform_invert (gsk_transform_ref (clip_transform));
-            gsk_transform_transform_bounds (inverse, &old_clip.rect.bounds, &new_bounds);
-            gsk_transform_unref (inverse);
-            gsk_gpu_clip_init_empty (&self->clip, &new_bounds);
-          }
-        else if (!gsk_gpu_clip_transform (&self->clip, &old_clip, clip_transform, &child->bounds))
+        if (!gsk_gpu_render_pass_push_transform (self,
+                                                 transform,
+                                                 &node->bounds,
+                                                 &child->bounds,
+                                                 &storage))
           {
             GskGpuImage *image;
             graphene_rect_t tex_rect;
-            gsk_transform_unref (clip_transform);
             /* This cannot loop because the next time we'll hit the branch above */
             gsk_gpu_node_processor_sync_globals (self, 0);
             image = gsk_gpu_node_processor_get_node_as_image_untracked (self,
@@ -1399,74 +1272,15 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
             return;
           }
 
-        old_offset = self->offset;
-        old_scale = self->scale;
-        old_modelview = gsk_transform_ref (self->modelview);
-
-        self->modelview = gsk_transform_scale (self->modelview,
-                                               graphene_vec2_get_x (&self->scale),
-                                               graphene_vec2_get_y (&self->scale));
-        self->modelview = gsk_transform_transform (self->modelview, clip_transform);
-        gsk_transform_unref (clip_transform);
-
-        extract_scale_from_transform (self->modelview, &scale_x, &scale_y);
-
-        old_pixels = MAX (graphene_vec2_get_x (&old_scale) * old_clip.rect.bounds.size.width,
-                          graphene_vec2_get_y (&old_scale) * old_clip.rect.bounds.size.height);
-        new_pixels = MAX (scale_x * self->clip.rect.bounds.size.width,
-                          scale_y * self->clip.rect.bounds.size.height);
-
-        /* Check that our offscreen doesn't get too big.  1.5 ~ sqrt(2) */
-        if (new_pixels > 1.5 * old_pixels)
-          {
-            float forced_downscale = 2 * old_pixels / new_pixels;
-            scale_x *= forced_downscale;
-            scale_y *= forced_downscale;
-          }
-
-        self->modelview = gsk_transform_scale (self->modelview, 1 / scale_x, 1 / scale_y);
-        graphene_vec2_init (&self->scale, scale_x, scale_y);
-        self->offset = *graphene_point_zero ();
-
-        if (gsk_gpu_node_processor_rect_device_to_clip (self,
-                                                        &GSK_RECT_INIT_CAIRO (&self->scissor),
-                                                        &scissor))
-          {
-            GskGpuClip scissored_clip;
-            if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &scissor))
-              gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
-
-            if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
-              {
-                self->offset = old_offset;
-                self->scale = old_scale;
-                gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-              }
-          }
-
+          if (self->clip.type != GSK_GPU_CLIP_ALL_CLIPPED)
+            gsk_gpu_node_processor_add_node (self, child, 0);
+          gsk_gpu_render_pass_pop_transform (self, &storage);
       }
       break;
 
     default:
       g_assert_not_reached ();
       break;
-    }
-
-  self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
-  if (self->modelview != old_modelview)
-    self->pending_globals |= GSK_GPU_GLOBAL_MATRIX;
-
-  gsk_gpu_node_processor_add_node (self, child, 0);
-
-  self->offset = old_offset;
-  self->scale = old_scale;
-  gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-  self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
-  if (self->modelview != old_modelview)
-    {
-      self->pending_globals |= GSK_GPU_GLOBAL_MATRIX;
-      gsk_transform_unref (self->modelview);
-      self->modelview = old_modelview;
     }
 }
 
@@ -1534,62 +1348,65 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
                                        GskRenderNode       *node)
 {
   cairo_rectangle_int_t device;
-  graphene_rect_t cover;
-  float clear_color[4];
+  graphene_rect_t bounds, cover;
   const GdkColor *color;
 
   color = gsk_color_node_get_gdk_color (node);
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
+    return;
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
       !self->modelview && 
       self->opacity >= 1.0 &&
       gdk_color_is_opaque (color) &&
-      gsk_gpu_clip_get_largest_cover (&self->clip, &self->offset, &node->bounds, &cover) &&
+      gsk_gpu_clip_get_largest_cover (&self->clip, &self->offset, &bounds, &cover) &&
       gsk_gpu_node_processor_user_to_device (self, &cover, &device) &&
+      gdk_rectangle_intersect (&device, &self->scissor, &device) &&
       device.width * device.height > 100 * 100 && /* not worth the effort for small images */
       gsk_gpu_node_processor_device_to_user (self, &device, &cover))
     {
-      GskGpuShaderClip shader_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds);
+      GskGpuShaderClip shader_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds);
+      float clear_color[4];
 
-      if (node->bounds.origin.x != cover.origin.x)
+      if (bounds.origin.x != cover.origin.x)
         gsk_gpu_color_op (self,
                           shader_clip,
                           self->ccs,
                           gsk_gpu_color_states_find (self->ccs, color),
-                          &GRAPHENE_RECT_INIT (node->bounds.origin.x,
-                                               node->bounds.origin.y,
-                                               cover.origin.x - node->bounds.origin.x,
-                                               node->bounds.size.height),
+                          &GRAPHENE_RECT_INIT (bounds.origin.x,
+                                               bounds.origin.y,
+                                               cover.origin.x - bounds.origin.x,
+                                               bounds.size.height),
                           color);
-      if (node->bounds.origin.y != cover.origin.y)
+      if (bounds.origin.y != cover.origin.y)
         gsk_gpu_color_op (self,
                           shader_clip,
                           self->ccs,
                           gsk_gpu_color_states_find (self->ccs, color),
-                          &GRAPHENE_RECT_INIT (node->bounds.origin.x,
-                                               node->bounds.origin.y,
-                                               node->bounds.size.width,
-                                               cover.origin.y - node->bounds.origin.y),
+                          &GRAPHENE_RECT_INIT (bounds.origin.x,
+                                               bounds.origin.y,
+                                               bounds.size.width,
+                                               cover.origin.y - bounds.origin.y),
                           color);
-      if (node->bounds.origin.x + node->bounds.size.width != cover.origin.x + cover.size.width)
+      if (bounds.origin.x + bounds.size.width != cover.origin.x + cover.size.width)
         gsk_gpu_color_op (self,
                           shader_clip,
                           self->ccs,
                           gsk_gpu_color_states_find (self->ccs, color),
                           &GRAPHENE_RECT_INIT (cover.origin.x + cover.size.width,
-                                               node->bounds.origin.y,
-                                               node->bounds.origin.x + node->bounds.size.width - cover.origin.x - cover.size.width,
-                                               node->bounds.size.height),
+                                               bounds.origin.y,
+                                               bounds.origin.x + bounds.size.width - cover.origin.x - cover.size.width,
+                                               bounds.size.height),
                           color);
-      if (node->bounds.origin.y + node->bounds.size.height != cover.origin.y + cover.size.height)
+      if (bounds.origin.y + bounds.size.height != cover.origin.y + cover.size.height)
         gsk_gpu_color_op (self,
                           shader_clip,
                           self->ccs,
                           gsk_gpu_color_states_find (self->ccs, color),
-                          &GRAPHENE_RECT_INIT (node->bounds.origin.x,
+                          &GRAPHENE_RECT_INIT (bounds.origin.x,
                                                cover.origin.y + cover.size.height,
-                                               node->bounds.size.width,
-                                               node->bounds.origin.y + node->bounds.size.height - cover.origin.y - cover.size.height),
+                                               bounds.size.width,
+                                               bounds.origin.y + bounds.size.height - cover.origin.y - cover.size.height),
                           color);
 
       gdk_color_to_float (color, self->ccs, clear_color);
@@ -1598,10 +1415,10 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
   else
     {
       gsk_gpu_color_op (self,
-                        gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                        gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
                         self->ccs,
                         gsk_gpu_color_states_find (self->ccs, color),
-                        &node->bounds,
+                        &bounds,
                         color);
     }
 }
