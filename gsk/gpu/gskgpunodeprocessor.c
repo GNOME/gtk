@@ -4431,21 +4431,21 @@ gsk_gpu_node_processor_add_paste_node (GskGpuNodeProcessor *self,
 }
 
 static gboolean
-gsk_gpu_porter_duff_needs_mask_output (GskPorterDuff op)
+gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
 {
   switch (op)
   {
     case GSK_PORTER_DUFF_DEST:
     case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
     case GSK_PORTER_DUFF_CLEAR:
       return FALSE;
 
     case GSK_PORTER_DUFF_SOURCE:
     case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_IN_DEST:
-    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
-    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
     case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
     case GSK_PORTER_DUFF_XOR:
@@ -4464,9 +4464,6 @@ gsk_gpu_node_processor_set_porter_duff (GskGpuNodeProcessor *self,
   switch (op)
     {
     case GSK_PORTER_DUFF_SOURCE:
-      /* these don't matter as long as the mask is there */
-    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
-    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
       self->blend = GSK_GPU_BLEND_MASK_ONE;
       break;
 
@@ -4483,6 +4480,8 @@ gsk_gpu_node_processor_set_porter_duff (GskGpuNodeProcessor *self,
       break;
 
     case GSK_PORTER_DUFF_CLEAR:
+    case GSK_PORTER_DUFF_DEST_IN_SOURCE:
+    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
       self->blend = GSK_GPU_BLEND_CLEAR;
       break;
 
@@ -4553,10 +4552,47 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
                                                               0,
                                                               &child_rect);
       if (child_image == NULL)
-        /* FIXME */
-        child_image = g_object_ref (mask_image);
+        {
+          /* FIXME */
+          child_image = g_object_ref (mask_image);
+          /* put it far away so it won't get sampled */
+          child_rect = mask_rect;
+          child_rect.origin.x += 2 * mask_rect.size.width;
+        }
 
-      if (gsk_gpu_porter_duff_needs_mask_output (op))
+      if (op == GSK_PORTER_DUFF_DEST_IN_SOURCE)
+        {
+          gsk_gpu_mask_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                           self->ccs,
+                           self->opacity,
+                           &self->offset,
+                           mask_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           child_image,
+                           GSK_GPU_SAMPLER_TRANSPARENT,
+                           GSK_MASK_MODE_INVERTED_ALPHA,
+                           &bounds,
+                           &mask_rect,
+                           &child_rect);
+        }
+      else if (!gsk_gpu_porter_duff_needs_dual_blend (op))
+        {
+          gsk_gpu_mask_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                           self->ccs,
+                           self->opacity,
+                           &self->offset,
+                           child_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           mask_image,
+                           GSK_GPU_SAMPLER_DEFAULT,
+                           GSK_MASK_MODE_ALPHA,
+                           &bounds,
+                           &child_rect,
+                           &mask_rect);
+        }
+      else if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_DUAL_BLEND))
         {
           gsk_gpu_composite_op (self->frame,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
@@ -4572,8 +4608,24 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
                                 &child_rect,
                                 &mask_rect);
         }
-      else if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_DUAL_BLEND))
+      else if (op == GSK_PORTER_DUFF_SOURCE)
         {
+          /* SOURCE = CLEAR in mask
+           *          + ADD source in mask */
+          self->blend = GSK_GPU_BLEND_CLEAR;
+          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          gsk_gpu_node_processor_sync_globals (self, 0);
+          gsk_gpu_texture_op (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
+                              self->ccs,
+                              &self->offset,
+                              mask_image,
+                              GSK_GPU_SAMPLER_DEFAULT,
+                              &mask_rect,
+                              &mask_rect);
+          self->blend = GSK_GPU_BLEND_ADD;
+          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          gsk_gpu_node_processor_sync_globals (self, 0);
           gsk_gpu_mask_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
                            self->ccs,

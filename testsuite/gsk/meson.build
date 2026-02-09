@@ -68,6 +68,7 @@ compare_render_tests = [
   'copy-transform-order',
   'component-transfer-levels',
   'component-transfer-linear',
+  'composite-clipped-source',
   'composite-everything',
   'conic-gradient-premultiplied-nocairo',
   'conic-gradient-with-64-colorstops',
