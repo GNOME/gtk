@@ -4437,6 +4437,7 @@ gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
   {
     case GSK_PORTER_DUFF_DEST:
     case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
+    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
     case GSK_PORTER_DUFF_CLEAR:
       return FALSE;
 
@@ -4445,7 +4446,6 @@ gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
     case GSK_PORTER_DUFF_SOURCE_IN_DEST:
     case GSK_PORTER_DUFF_DEST_IN_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
-    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
     case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
     case GSK_PORTER_DUFF_XOR:
@@ -4466,7 +4466,6 @@ gsk_gpu_node_processor_set_porter_duff (GskGpuNodeProcessor *self,
     case GSK_PORTER_DUFF_SOURCE:
       /* these don't matter as long as the mask is there */
     case GSK_PORTER_DUFF_DEST_IN_SOURCE:
-    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
       self->blend = GSK_GPU_BLEND_MASK_ONE;
       break;
 
@@ -4483,6 +4482,7 @@ gsk_gpu_node_processor_set_porter_duff (GskGpuNodeProcessor *self,
       break;
 
     case GSK_PORTER_DUFF_CLEAR:
+    case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
       self->blend = GSK_GPU_BLEND_CLEAR;
       break;
 
