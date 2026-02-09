@@ -689,6 +689,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
     {
       GskGpuRenderPass other;
       graphene_rect_t rect = GRAPHENE_RECT_INIT (0, 0, width, height);
+      GskGpuRenderPassBlendStorage storage;
 
       gsk_gpu_render_pass_init (&other,
                                 frame,
@@ -700,8 +701,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                 &(cairo_rectangle_int_t) { 0, 0, width, height },
                                 &rect);
 
-      other.blend = GSK_GPU_BLEND_NONE;
-      other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+      gsk_gpu_render_pass_push_blend (&other, GSK_GPU_BLEND_NONE, &storage);
       gsk_gpu_node_processor_sync_globals (&other, 0);
 
       gsk_gpu_node_processor_image_op (&other,
@@ -711,6 +711,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                        &rect,
                                        &rect);
 
+      gsk_gpu_render_pass_pop_blend (&other, &storage);
       gsk_gpu_render_pass_finish (&other);
     }
 
@@ -1640,6 +1641,7 @@ gsk_gpu_get_texture_tiles_as_image (GskGpuFrame            *frame,
 {
   GskGpuRenderPass self;
   GskGpuImage *image;
+  GskGpuRenderPassBlendStorage storage;
 
   image = gsk_gpu_node_processor_init_draw (&self,
                                             frame,
@@ -1650,8 +1652,7 @@ gsk_gpu_get_texture_tiles_as_image (GskGpuFrame            *frame,
   if (image == NULL)
     return NULL;
 
-  self.blend = GSK_GPU_BLEND_ADD;
-  self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  gsk_gpu_render_pass_push_blend (&self, GSK_GPU_BLEND_ADD, &storage);
   gsk_gpu_node_processor_sync_globals (&self, 0);
 
   gsk_gpu_node_processor_draw_texture_tiles (&self,
@@ -1659,6 +1660,7 @@ gsk_gpu_get_texture_tiles_as_image (GskGpuFrame            *frame,
                                              texture,
                                              scaling_filter);
 
+  gsk_gpu_render_pass_pop_blend (&self, &storage);
   gsk_gpu_render_pass_finish (&self);
 
   return image;
@@ -2056,6 +2058,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuRenderPass   *self,
   graphene_rect_t bounds;
   gsize i, j;
   GskGpuImage *image;
+  GskGpuRenderPassBlendStorage storage;
 
   if (n_stops < 8 && GDK_IS_DEFAULT_COLOR_STATE (ics))
     {
@@ -2076,8 +2079,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuRenderPass   *self,
 
   g_return_if_fail (image != NULL);
 
-  other.blend = GSK_GPU_BLEND_ADD;
-  other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  gsk_gpu_render_pass_push_blend (&other, GSK_GPU_BLEND_ADD, &storage);
   gsk_gpu_node_processor_sync_globals (&other, 0);
 
   for (i = 0; i < n_stops; /* happens inside the loop */)
@@ -2124,6 +2126,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuRenderPass   *self,
       func (&other, NULL, node, real_stops, j);
     }
 
+  gsk_gpu_render_pass_pop_blend (&other, &storage);
   gsk_gpu_render_pass_finish (&other);
 
   gsk_gpu_node_processor_image_op (self,
@@ -3566,8 +3569,9 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuRenderPass *self,
         }
       else
         {
-          self->blend = GSK_GPU_BLEND_CLEAR;
-          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          GskGpuRenderPassBlendStorage storage;
+
+          gsk_gpu_render_pass_push_blend (self, GSK_GPU_BLEND_CLEAR, &storage);
           gsk_gpu_node_processor_sync_globals (self, 0);
           GdkColor white;
 
@@ -3580,8 +3584,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuRenderPass *self,
                             &white);
           gdk_color_finish (&white);
 
-          self->blend = GSK_GPU_BLEND_OVER;
-          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          gsk_gpu_render_pass_pop_blend (self, &storage);
         }
     }
 }
@@ -3664,46 +3667,37 @@ gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
   }
 }
 
-static void
-gsk_gpu_node_processor_set_porter_duff (GskGpuRenderPass *self,
-                                        GskPorterDuff        op)
+static GskGpuBlend
+gsk_gpu_blend_for_porter_duff (GskPorterDuff op)
 {
   switch (op)
     {
     case GSK_PORTER_DUFF_SOURCE:
-      self->blend = GSK_GPU_BLEND_MASK_ONE;
-      break;
+      return GSK_GPU_BLEND_MASK_ONE;
 
     case GSK_PORTER_DUFF_DEST_OVER_SOURCE:
     case GSK_PORTER_DUFF_SOURCE_OUT_DEST:
     case GSK_PORTER_DUFF_DEST_ATOP_SOURCE:
     case GSK_PORTER_DUFF_XOR:
-      self->blend = GSK_GPU_BLEND_MASK_INV_ALPHA;
-      break;
+      return GSK_GPU_BLEND_MASK_INV_ALPHA;
 
     case GSK_PORTER_DUFF_SOURCE_IN_DEST:
     case GSK_PORTER_DUFF_SOURCE_ATOP_DEST:
-      self->blend = GSK_GPU_BLEND_MASK_ALPHA;
-      break;
+      return GSK_GPU_BLEND_MASK_ALPHA;
 
     case GSK_PORTER_DUFF_CLEAR:
     case GSK_PORTER_DUFF_DEST_IN_SOURCE:
     case GSK_PORTER_DUFF_DEST_OUT_SOURCE:
-      self->blend = GSK_GPU_BLEND_CLEAR;
-      break;
+      return GSK_GPU_BLEND_CLEAR;
 
     case GSK_PORTER_DUFF_SOURCE_OVER_DEST:
-      self->blend = GSK_GPU_BLEND_OVER;
-      break;
+      return GSK_GPU_BLEND_OVER;
 
     case GSK_PORTER_DUFF_DEST:
     default:
       g_assert_not_reached ();
-      break;
+      return GSK_GPU_BLEND_OVER;
     }
-
-  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
-  gsk_gpu_node_processor_sync_globals (self, 0);
 }
 
 static void
@@ -3714,6 +3708,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
   GskGpuImage *mask_image;
   graphene_rect_t bounds, mask_rect;
   GskPorterDuff op;
+  GskGpuRenderPassBlendStorage storage;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
     return;
@@ -3725,7 +3720,10 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
   if (op == GSK_PORTER_DUFF_DEST)
     return;
   
-  gsk_gpu_node_processor_set_porter_duff (self, op);
+  gsk_gpu_render_pass_push_blend (self,
+                                  gsk_gpu_blend_for_porter_duff (op),
+                                  &storage);
+  gsk_gpu_node_processor_sync_globals (self, 0);
 
   mask_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                          0,
@@ -3812,8 +3810,10 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
         {
           /* SOURCE = CLEAR in mask
            *          + ADD source in mask */
-          self->blend = GSK_GPU_BLEND_CLEAR;
-          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          gsk_gpu_render_pass_pop_blend (self, &storage);
+          gsk_gpu_render_pass_push_blend (self,
+                                          GSK_GPU_BLEND_CLEAR,
+                                          &storage);
           gsk_gpu_node_processor_sync_globals (self, 0);
           gsk_gpu_texture_op (self,
                               gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
@@ -3822,9 +3822,10 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                               GSK_GPU_SAMPLER_DEFAULT,
                               &mask_rect,
                               &mask_rect);
-          self->blend = GSK_GPU_BLEND_ADD;
-          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
-          gsk_gpu_node_processor_sync_globals (self, 0);
+          gsk_gpu_render_pass_pop_blend (self, &storage);
+          gsk_gpu_render_pass_push_blend (self,
+                                          GSK_GPU_BLEND_ADD,
+                                          &storage);
           gsk_gpu_mask_op (self,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
                            self->ccs,
@@ -3847,8 +3848,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
 
   g_object_unref (mask_image);
 
-  self->blend = GSK_GPU_BLEND_OVER;
-  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  gsk_gpu_render_pass_pop_blend (self, &storage);
 }
 
 static void
@@ -4416,6 +4416,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
     }
   else
     {
+      GskGpuRenderPassBlendStorage storage;
       cairo_rectangle_int_t extents;
 
       cairo_region_get_extents (clip, &extents);
@@ -4432,8 +4433,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                 &extents,
                                 viewport);
 
-      self.blend = GSK_GPU_BLEND_NONE;
-      self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+      gsk_gpu_render_pass_push_blend (&self, GSK_GPU_BLEND_NONE, &storage);
 
       for (i = 0; i < cairo_region_num_rectangles (clip); i++)
         {
@@ -4466,6 +4466,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
           g_object_unref (image);
         }
 
+      gsk_gpu_render_pass_pop_blend (&self, &storage);
       gsk_gpu_render_pass_finish (&self);
 
       cairo_region_destroy (clip);
@@ -4483,6 +4484,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   GskGpuImage *target, *intermediate = NULL;
   gsize width, height;
   gboolean target_shader_op, image_shader_op;
+  GskGpuRenderPassBlendStorage storage;
 
   width = gsk_gpu_image_get_width (image);
   height = gsk_gpu_image_get_height (image);
@@ -4523,8 +4525,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
                             &(cairo_rectangle_int_t) { 0, 0, width, height },
                             &GRAPHENE_RECT_INIT (0, 0, width, height));
 
-  self.blend = GSK_GPU_BLEND_NONE;
-  self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  gsk_gpu_render_pass_push_blend (&self, GSK_GPU_BLEND_NONE, &storage);
   gsk_gpu_node_processor_sync_globals (&self, 0);
 
   if (GDK_IS_DEFAULT_COLOR_STATE (target_color_state) && target_shader_op == GDK_SHADER_DEFAULT)
@@ -4546,6 +4547,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
                                          &GRAPHENE_RECT_INIT (0, 0, width, height));
     }
 
+  gsk_gpu_render_pass_pop_blend (&self, &storage);
   gsk_gpu_render_pass_finish (&self);
 
   g_clear_object (&intermediate);
@@ -4563,13 +4565,13 @@ gsk_gpu_node_processor_add_first_node_untracked (GskGpuRenderPass *self,
     }
   else
     {
-      self->blend = GSK_GPU_BLEND_NONE;
-      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+      GskGpuRenderPassBlendStorage storage;
+
+      gsk_gpu_render_pass_push_blend (self, GSK_GPU_BLEND_NONE, &storage);
 
       gsk_gpu_node_processor_add_node_untracked (self, node);
 
-      self->blend = GSK_GPU_BLEND_OVER;
-      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+      gsk_gpu_render_pass_pop_blend (self, &storage);
     }
 }
 
