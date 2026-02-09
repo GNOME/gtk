@@ -283,6 +283,7 @@ print_rect (const char *label,
         char buf[64]; \
         g_print ("%s: ", format_time_buf (buf, 64, g_get_monotonic_time ())); \
         g_print (fmt __VA_OPT__(,) __VA_ARGS__); \
+        g_print ("\n"); \
       } \
   } G_STMT_END
 
