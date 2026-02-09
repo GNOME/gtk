@@ -4431,7 +4431,7 @@ gsk_gpu_node_processor_add_paste_node (GskGpuNodeProcessor *self,
 }
 
 static gboolean
-gsk_gpu_porter_duff_needs_mask_output (GskPorterDuff op)
+gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
 {
   switch (op)
   {
@@ -4556,7 +4556,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
         /* FIXME */
         child_image = g_object_ref (mask_image);
 
-      if (!gsk_gpu_porter_duff_needs_mask_output (op))
+      if (!gsk_gpu_porter_duff_needs_dual_blend (op))
         {
           gsk_gpu_mask_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
