@@ -4556,23 +4556,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
         /* FIXME */
         child_image = g_object_ref (mask_image);
 
-      if (gsk_gpu_porter_duff_needs_mask_output (op))
-        {
-          gsk_gpu_composite_op (self->frame,
-                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
-                                self->ccs,
-                                self->opacity,
-                                &self->offset,
-                                child_image,
-                                GSK_GPU_SAMPLER_DEFAULT,
-                                mask_image,
-                                GSK_GPU_SAMPLER_DEFAULT,
-                                op,
-                                &bounds,
-                                &child_rect,
-                                &mask_rect);
-        }
-      else if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_DUAL_BLEND))
+      if (!gsk_gpu_porter_duff_needs_mask_output (op))
         {
           gsk_gpu_mask_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
@@ -4587,6 +4571,22 @@ gsk_gpu_node_processor_add_composite_node (GskGpuNodeProcessor *self,
                            &bounds,
                            &child_rect,
                            &mask_rect);
+        }
+      else if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_DUAL_BLEND))
+        {
+          gsk_gpu_composite_op (self->frame,
+                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                                self->ccs,
+                                self->opacity,
+                                &self->offset,
+                                child_image,
+                                GSK_GPU_SAMPLER_DEFAULT,
+                                mask_image,
+                                GSK_GPU_SAMPLER_DEFAULT,
+                                op,
+                                &bounds,
+                                &child_rect,
+                                &mask_rect);
         }
       else
         {
