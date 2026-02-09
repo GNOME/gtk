@@ -1,61 +1,44 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='car travel transport route category emoji-travel'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 1.8482759 7 L 2.54125094 3.991575 C 2.80975699 2.82590461, 3.84753227 1.99999988, 5.0437274 2 L 10.9562731 2 C 12.1446133 1.99999988, 13.1677561 2.83877611, 13.4008083 4.00403976 L 14 7'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 13.5 9.5 C 13.5 10.0522852, 13.0522852 10.5, 12.5 10.5 C 11.9477148 10.5, 11.5 10.0522852, 11.5 9.5 C 11.5 8.94771576, 11.9477148 8.5, 12.5 8.5 C 13.0522852 8.5, 13.5 8.94771576, 13.5 9.5 Z M 4.5 9.5 C 4.5 10.0522852, 4.05228519 10.5, 3.5 10.5 C 2.94771504 10.5, 2.5 10.0522852, 2.5 9.5 C 2.5 8.94771576, 2.94771504 8.5, 3.5 8.5 C 4.05228519 8.5, 4.5 8.94771576, 4.5 9.5 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.25 1 1.5'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path2'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 4 12 L 4 13 C 4 13.5522852, 3.55228519 14, 3 14 C 2.44771481 14, 2 13.5522852, 2 13 L 2 12 M 14 12 L 14 13 C 14 13.5522852, 13.5522842 14, 13 14 C 12.4477158 14, 12 13.5522852, 12 13 L 12 12'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path3'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 1 8 L 1 11 C 1 11.5522852, 1.44771528 12, 2 12 L 14 12 C 14.5522852 12, 15 11.5522852, 15 11 L 15 8 C 15 7.44771528, 14.5522852 7, 14 7 L 2 7 C 1.44771528 7, 1 7.44771528, 1 8 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-</svg>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          xmlns:svg='http://www.w3.org/2000/svg'
+          xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+          xmlns:cc='http://creativecommons.org/ns#'
+          xmlns:dc='http://purl.org/dc/elements/1.1/'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='car vehicle ice combustion engine internal'
+          id='svg1'
+          width='16'
+          height='16'>
+    <metadata>
+      <rdf:RDF>
+        <cc:Work>
+          <dc:subject>
+            <rdf:Bag>
+              <rdf:li>
+              </rdf:li>
+            </rdf:Bag>
+          </dc:subject>
+        </cc:Work>
+      </rdf:RDF>
+    </metadata>
+    <path
+            id='car'
+            clip-path='none'
+            fill='none'
+            stroke='url(#gpa:foreground) rgb(0,0,0)'
+            stroke-opacity='1'
+            stroke-width='2'
+            stroke-linecap='butt'
+            stroke-linejoin='miter'
+            stroke-miterlimit='4'
+            stroke-dasharray='none'
+            d='M 6 13.5 C 6 14.3284, 5.32843 15, 4.5 15 C 3.67157 15, 3 14.3284, 3 13.5 C 3 12.6716, 3.67157 12, 4.5 12 C 5.32843 12, 6 12.6716, 6 13.5 Z M 13 13.5 C 13 14.3284, 12.3284 15, 11.5 15 C 10.6716 15, 10 14.3284, 10 13.5 C 10 12.6716, 10.6716 12, 11.5 12 C 12.3284 12, 13 12.6716, 13 13.5 Z M 1 9 L 12.4862 9 C 13.8745 9, 15 10.1255, 15 11.5138 C 15.1343 12.7526, 14.2388 13.8657, 13 14 M 3 14 C 1.89543 14, 1 13.1046, 1 12 L 1 7 C 1 5.89543, 1.89543 5, 3 5 L 8 5 C 9.22573 5, 10.3463 5.69253, 10.8944 6.78885 L 12 9 M 6 14 L 10 14'
+            gpa:stroke-minwidth='0.25'
+            gpa:stroke-maxwidth='1.5'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

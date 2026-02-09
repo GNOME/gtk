@@ -1,55 +1,50 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='preferences-desktop-wallpaper folder image photo picture folder-pictures image-x-generic'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>preferences-desktop-wallpaper folder image photo picture folder-pictures image-x-generic</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 2 12 L 2 4 C 2 2.9, 2.9 2, 4 2 L 12 2 C 13.1046 2, 14 2.89543, 14 4 L 14 12 C 14 13.1046, 13.1046 14, 12 14 L 4 14 C 2.89543 14, 2 13.1046, 2 12 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path2'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 5 6.51379 C 5.00762 7.34222, 5.68537 8.00762, 6.51379 8 C 7.34222 7.99238, 8.00762 7.31463, 8 6.48621 C 7.99238 5.65778, 7.31463 4.99238, 6.48621 5 C 5.65778 5.00762, 4.99238 5.68537, 5 6.51379 Z M 2.8 13.6 L 6.12 10.3 L 7.62 11.3 L 9.5 9.4 L 13.44 13.39'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='2'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='3'
+          gpa:keywords='image photo drawing picture'>
+    <defs
+            id='defs1'
+            fill='url("#gpa:foreground") rgb(0,0,0)'
+            stroke='none'
+            class='foreground foreground-fill'
+            gpa:states='none'
+            gpa:animation-repeat='0'
+            gpa:animation-segment='0'
+            gpa:fill='foreground'>
+    </defs>
+    <path
+            id='hills'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-opacity='1'
+            stroke-width='1'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 7 6 C 7 6.55228472, 6.55228472 7, 6 7 C 5.44771528 7, 5 6.55228472, 5 6 C 5 5.44771528, 5.44771528 5, 6 5 C 6.55228472 5, 7 5.44771528, 7 6 Z M 4 11 L 5.25116301 9.74883747 C 5.67000294 9.32999706, 6.34431505 9.31502819, 6.7813282 9.71487045 C 6.98520041 9.88573265, 7.24992514 9.96608448, 7.51437426 9.93737221 C 7.77882338 9.90865898, 8.02013397 9.77336407, 8.18258476 9.56272793 L 8.81741524 8.80968666 C 8.99293327 8.60148525, 9.24769306 8.47639751, 9.51976013 8.46483231 C 9.7918272 8.45326614, 10.056283 8.556283, 10.2488375 8.74883747 L 12 10.5'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.25 1 2'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='rounded'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-opacity='1'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke-miterlimit='4'
+            stroke-dashoffset='3.20001'
+            d='M 4 1 L 12 1 C 13.6568546 1, 15 2.34314585, 15 4 L 15 12 C 15 13.6568546, 13.6568546 15, 12 15 L 4 15 C 2.34314585 15, 1 13.6568546, 1 12 L 1 4 C 1 2.34314585, 2.34314585 1, 4 1 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>

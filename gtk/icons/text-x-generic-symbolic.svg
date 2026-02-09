@@ -1,57 +1,43 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='folder-documents document blank empty text sheet text-x-generic'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>folder-documents document blank empty text sheet text-x-generic</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 3 4 L 3 13 C 3 14.1046, 3.89543 15, 5 15 L 11 15 C 12.1046 15, 13 14.1046, 13 13 L 13 6 C 13 5.35971, 12.7456 4.74565, 12.2929 4.29289 L 10.7071 2.70711 C 10.2544 2.25435, 9.64029 2, 9 2 L 5 2 C 3.89543 2, 3 2.89543, 3 4 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path1'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 8.53103 2 L 8.53103 6.49655 L 10.4966 6.49655 C 11.8792 6.49655, 13 7.61738, 13 9'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='document plain text x-office-document'>
+    <defs
+            id='defs1'
+            class=''
+            gpa:states='none'
+            gpa:animation-repeat='0'
+            gpa:animation-segment='0'>
+    </defs>
+    <path
+            id='path0'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 6 C 13 5.35971069, 12.7456465 4.74564648, 12.2928934 4.29289341 L 10.7071066 2.70710683 C 10.2543535 2.254354, 9.64028931 2.00000024, 9 2 L 5 2 C 3.89543056 2, 3 2.89543056, 3 4 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='path5'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='1'
+            stroke-linecap='butt'
+            stroke-linejoin='round'
+            d='M 4.99816799 8.5 L 11 8.5 M 5 10.5 L 11 10.5 M 5 12.5 L 11 12.5 M 4.99816799 6.4931035 L 8 6.4931035'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.25 1 2'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>

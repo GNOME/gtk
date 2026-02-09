@@ -1,22 +1,23 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='unlocked changes-allow'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 11 9 L 11 4 C 11 2.34314585, 9.65685463 1, 8 1 C 6.34314585 1, 5 2.34314585, 5 4 L 5 5 M 3 15 L 3 10 C 3 9.39999962, 3.4000001 9, 4 9 L 12 9 C 12.6000004 9, 13 9.39999962, 13 10 L 13 15 L 3 15 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-</svg>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='unlocked changes-allow'>
+    <path
+            id='path0'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 11 9 L 11 4 C 11 2.34314585, 9.65685463 1, 8 1 C 6.34314585 1, 5 2.34314585, 5 4 L 5 5 M 3 15 L 3 10 C 3 9.39999962, 3.4000001 9, 4 9 L 12 9 C 12.6000004 9, 13 9.39999962, 13 10 L 13 15 L 3 15 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>

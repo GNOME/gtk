@@ -1,74 +1,49 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='emoji-people face-smile person smile :)'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>emoji-people face-smile person smile :)</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 1 8 C 1 11.866, 4.13401 15, 8 15 C 11.866 15, 15 11.866, 15 8 C 15 4.13401, 11.866 1, 8 1 C 4.13401 1, 1 4.13401, 1 8 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path1'
-          opacity='0.96'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 11 6.49655 C 11 6.7746, 10.7746 7, 10.4966 7 C 10.2185 7, 9.9931 6.7746, 9.9931 6.49655 C 9.9931 6.2185, 10.2185 5.9931, 10.4966 5.9931 C 10.7746 5.9931, 11 6.2185, 11 6.49655 Z M 6.03448 6.49655 C 6.03448 6.7746, 5.80908 7, 5.53103 7 C 5.25299 7, 5.02759 6.7746, 5.02759 6.49655 C 5.02759 6.2185, 5.25299 5.9931, 5.53103 5.9931 C 5.80908 5.9931, 6.03448 6.2185, 6.03448 6.49655 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path2'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 11.0311 9.48408 C 10.4059 10.567, 9.25043 11.2341, 8 11.2341 C 6.74957 11.2341, 5.59413 10.567, 4.96891 9.48408'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='emoji-people face-smile person smile :)'
+          gpa:state='0'>
+    <style
+            type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+    <path
+            d='M 1 8 C 1 11.8659935, 4.13400698 15, 8 15 C 11.8659935 15, 15 11.8659935, 15 8 C 15 4.13400698, 11.8659935 1, 8 1 C 4.13400698 1, 1 4.13400698, 1 8 Z'
+            id='path0'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 10.999999 6.49655151 C 10.999999 6.77459812, 10.7745981 7, 10.4965525 7 C 10.2185049 7, 9.99310303 6.77459812, 9.99310303 6.49655151 C 9.99310303 6.21850491, 10.2185049 5.99310303, 10.4965525 5.99310303 C 10.7745981 5.99310303, 10.999999 6.21850491, 10.999999 6.49655151 Z M 6.03448296 6.49655151 C 6.03448296 6.77459812, 5.80908108 7, 5.53103447 7 C 5.25298786 7, 5.02758598 6.77459812, 5.02758598 6.49655151 C 5.02758598 6.21850491, 5.25298786 5.99310303, 5.53103447 5.99310303 C 5.80908108 5.99310303, 6.03448296 6.21850491, 6.03448296 6.49655151 Z'
+            id='path1'
+            stroke-width='1'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 11.0310888 9.48407745 C 10.4058743 10.5669813, 9.25042915 11.2340775, 8 11.2340775 C 6.74957037 11.2340775, 5.59412575 10.5669813, 4.96891117 9.48407745'
+            id='path2'
+            stroke-width='1'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

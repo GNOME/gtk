@@ -8,6 +8,7 @@
         gpa:version='1'
         gpa:state='0'
         gpa:keywords='dialog-question ask prompt questionmark'
+        id='svg1'
         width='16'
         height='16'>
   <metadata>
@@ -23,18 +24,14 @@
     </rdf:RDF>
   </metadata>
   <path
-          id='path0'
+          id='border'
           clip-path='none'
           fill='none'
           stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
           stroke-width='2'
           stroke-linecap='round'
           stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 6.50169 0.498314 L 0.498314 6.50169 C -0.329182 7.32918, -0.329182 8.67082, 0.498314 9.49831 L 6.50169 15.5017 C 7.32918 16.3292, 8.67082 16.3292, 9.49831 15.5017 L 15.5017 9.49831 C 16.3292 8.67082, 16.3292 7.32918, 15.5017 6.50169 L 9.49831 0.498314 C 8.67082 -0.329182, 7.32918 -0.329182, 6.50169 0.498314 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
+          d='M 6.70555 1.519 L 1.519 6.70555 C 0.804098 7.42045, 0.804098 8.57955, 1.519 9.29445 L 6.70555 14.481 C 7.42045 15.1959, 8.57955 15.1959, 9.29445 14.481 L 14.481 9.29445 C 15.1959 8.57955, 15.1959 7.42045, 14.481 6.70555 L 9.29445 1.519 C 8.57955 0.804098, 7.46227 0.813653, 6.70555 1.519 Z'
           class='transparent-fill foreground-stroke'
           gpa:stroke='foreground'>
   </path>
@@ -43,14 +40,10 @@
           clip-path='none'
           fill='none'
           stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
           stroke-width='2'
           stroke-linecap='butt'
           stroke-linejoin='miter'
-          stroke-miterlimit='4'
           d='M 6 7 C 6 5.89543, 6.89543 5, 8 5 C 9.10457 5, 10 5.89543, 10 7 C 10 8.5971, 8 8.69847, 8 10'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
           class='transparent-fill foreground-stroke'
           gpa:stroke='foreground'>
   </path>
@@ -59,14 +52,10 @@
           clip-path='none'
           fill='none'
           stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
           stroke-width='2'
           stroke-linecap='round'
           stroke-linejoin='round'
-          stroke-miterlimit='4'
           d='M 7.95703 12 L 8.04688 12'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
           class='transparent-fill foreground-stroke'
           gpa:stroke='foreground'>
   </path>

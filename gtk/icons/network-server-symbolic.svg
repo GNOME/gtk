@@ -1,87 +1,88 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='remote server network LAN'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 10 14 L 13 14'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 6 14 L 3 14'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path2'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 7.99609423 12 L 7.99609423 10'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path3'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6.51191902 14 C 6.51191902 14.8218431, 7.1781559 15.488081, 8 15.488081 C 8.82184315 15.488081, 9.48808193 14.8218431, 9.48808193 14 C 9.48808193 13.1781569, 8.82184315 12.51192, 8 12.51192 C 7.1781559 12.51192, 6.51191902 13.1781569, 6.51191902 14 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 1 2'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path4'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='square'
-          stroke-linejoin='round'
-          d='M 1 4.04164886 L 1 6.95835114 C 1.00000012 8.63820744, 2.36179256 10, 4.04164886 10 L 11.9583511 10 C 13.6382074 10, 15 8.63820744, 15 6.95835114 L 15 4.04164886 C 15 2.36179256, 13.6382074 1.00000012, 11.9583511 1.00000012 L 4.04164886 1 C 2.36179256 1.00000012, 1.00000012 2.36179256, 1.00000012 4.04164886 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path5'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 8 5 L 8.07653904 5 M 5 5 L 5.07653904 5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-</svg>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='remote server network LAN'>
+    <path
+            id='path0'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='square'
+            stroke-linejoin='round'
+            d='M 10 14 L 13 14'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='path1'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='square'
+            stroke-linejoin='round'
+            d='M 6 14 L 3 14'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='path2'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='square'
+            stroke-linejoin='round'
+            d='M 7.99609423 12 L 7.99609423 10'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='path3'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='1'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 6.51191902 14 C 6.51191902 14.8218431, 7.1781559 15.488081, 8 15.488081 C 8.82184315 15.488081, 9.48808193 14.8218431, 9.48808193 14 C 9.48808193 13.1781569, 8.82184315 12.51192, 8 12.51192 C 7.1781559 12.51192, 6.51191902 13.1781569, 6.51191902 14 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 1 2'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='path4'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='square'
+            stroke-linejoin='round'
+            d='M 1 4.04164886 L 1 6.95835114 C 1.00000012 8.63820744, 2.36179256 10, 4.04164886 10 L 11.9583511 10 C 13.6382074 10, 15 8.63820744, 15 6.95835114 L 15 4.04164886 C 15 2.36179256, 13.6382074 1.00000012, 11.9583511 1.00000012 L 4.04164886 1 C 2.36179256 1.00000012, 1.00000012 2.36179256, 1.00000012 4.04164886 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='path5'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 8 5 L 8.07653904 5 M 5 5 L 5.07653904 5'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>

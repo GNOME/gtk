@@ -1,33 +1,42 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='media-playback-stop square'
-     gpa:state='1'>
-  <style type='text/css'>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='media-playback-stop square'
+          gpa:state='1'>
+    <style
+            type='text/css'>
     .not-initial-state {
       display: none;
     }
   </style>
-  <path d='M 3 4.5 L 3 11.5 C 3 12.3284273, 3.67157292 13, 4.5 13 L 11.5 13 C 12.3284273 13, 13 12.3284273, 13 11.5 L 13 4.5 C 13 3.67157292, 12.3284273 3, 11.5 3 L 4.5 3 C 3.67157292 3, 3 3.67157292, 3 4.5 Z'
-        id='path0'
-        gpa:states='1'
-        gpa:transition-type='fade'
-        gpa:transition-duration='200ms'
-        stroke='none'
-        fill-rule='nonzero'
-        fill='rgb(0,0,0)'
-        class='foreground-fill'
-        gpa:fill='foreground'/>
-  <path d='M 3 4.5 L 3 11.5 C 3 12.3284273, 3.67157292 13, 4.5 13 L 11.5 13 C 12.3284273 13, 13 12.3284273, 13 11.5 L 13 4.5 C 13 3.67157292, 12.3284273 3, 11.5 3 L 4.5 3 C 3.67157292 3, 3 3.67157292, 3 4.5 Z'
-        id='path1'
-        gpa:states='0'
-        gpa:transition-type='fade'
-        gpa:transition-duration='200ms'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill not-initial-state'
-        gpa:stroke='foreground'/>
-</svg>
+    <path
+            d='M 3 4.5 L 3 11.5 C 3 12.3284273, 3.67157292 13, 4.5 13 L 11.5 13 C 12.3284273 13, 13 12.3284273, 13 11.5 L 13 4.5 C 13 3.67157292, 12.3284273 3, 11.5 3 L 4.5 3 C 3.67157292 3, 3 3.67157292, 3 4.5 Z'
+            id='path0'
+            gpa:states='1'
+            gpa:transition-type='fade'
+            gpa:transition-duration='200ms'
+            stroke='none'
+            fill-rule='nonzero'
+            fill='rgb(0,0,0)'
+            class='foreground-fill'
+            gpa:fill='foreground'>
+    </path>
+    <path
+            d='M 3 4.5 L 3 11.5 C 3 12.3284273, 3.67157292 13, 4.5 13 L 11.5 13 C 12.3284273 13, 13 12.3284273, 13 11.5 L 13 4.5 C 13 3.67157292, 12.3284273 3, 11.5 3 L 4.5 3 C 3.67157292 3, 3 3.67157292, 3 4.5 Z'
+            id='path1'
+            gpa:states='0'
+            gpa:transition-type='fade'
+            gpa:transition-duration='200ms'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill not-initial-state'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

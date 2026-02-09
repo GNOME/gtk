@@ -1,57 +1,30 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='camra-video camera-webfolder videos movie clip video-x-generic folder-videos'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>camra-video camera-webfolder videos movie clip video-x-generic folder-videos</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 7.00717 4 L 12.9928 4 C 14.0717 4, 15 4.92826, 15 6.00717 L 15 10.9928 C 15 12.0717, 14.0717 13, 12.9928 13 L 7.00717 13 C 5.92826 13, 5 12.0717, 5 10.9928 L 5 6.00717 C 5 4.92826, 5.92826 4, 7.00717 4 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path1'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 5 8.46094 L 1 5 L 1 12 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='camsera-video camera-webfolder videos movie clip video-x-generic folder-videos'>
+    <defs
+            id='defs1'
+            class=''
+            gpa:states='none'
+            gpa:animation-repeat='0'
+            gpa:animation-segment='0'>
+    </defs>
+    <path
+            id='path1'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-opacity='1'
+            stroke-width='2'
+            stroke-dasharray='none'
+            d='M 4.58418512 7.60277891 L 2.18173814 5.85815954 C 1.9552753 5.69370556, 1.65570462 5.67018223, 1.40634835 5.79727221 C 1.15699208 5.92436266, 1 6.18058395, 1 6.46045971 L 1 10.5395403 C 1 10.8171511, 1.15649891 11.0710478, 1.40450454 11.1957903 C 1.65251017 11.3205328, 1.94965279 11.2948103, 2.1725328 11.1293049 L 4.59339046 9.33163357 C 4.86747122 9.12810707, 5.0282855 8.80625534, 5.0264678 8.46487617 C 5.0246501 8.12349606, 4.86041784 7.80337477, 4.58418512 7.60277891 Z M 7.00716591 4 L 12.9928341 4 C 14.0717354 4, 15 4.92826462, 15 6.00716591 L 15 10.9928341 C 15 12.0717354, 14.0717354 13, 12.9928341 13 L 7.00716591 13 C 5.92826462 13, 5 12.0717354, 5 10.9928341 L 5 6.00716591 C 5 4.92826462, 5.92826462 4, 7.00716591 4 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>
