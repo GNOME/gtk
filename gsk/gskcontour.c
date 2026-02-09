@@ -1856,7 +1856,6 @@ gsk_circle_contour_new (const graphene_point_t *center,
 
   self->contour.klass = &GSK_CIRCLE_CONTOUR_CLASS;
 
-  self->contour.klass = &GSK_CIRCLE_CONTOUR_CLASS;
   self->center = *center;
   self->radius = radius;
   self->ccw = FALSE;
