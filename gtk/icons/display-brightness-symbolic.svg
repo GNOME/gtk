@@ -1,57 +1,38 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='display brightness lightness light sun weather-clear'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>display brightness lightness light sun weather-clear</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 14 8 L 15 8 M 12.28 3.71 L 13 3.01 M 8 2 L 8 1 M 3.72 3.71 L 3 3 M 1 8 L 2 8 M 3 12.99 L 3.72 12.28 M 8 15 L 8 14 M 13 13 L 12.28 12.28'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path1'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='1.88168'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 6 6 C 4.89543 7.10457, 4.89543 8.89543, 6 10 C 7.10457 11.1046, 8.89543 11.1046, 10 10 C 11.1046 8.89543, 11.1046 7.10457, 10 6 C 8.89543 4.89543, 7.10457 4.89543, 6 6 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='display brightness lightness light sun weather-clear'
+          gpa:state='0'>
+    <style
+            type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+    <path
+            d='M 14 8 L 15 8 M 12.2799997 3.71000004 L 13 3.00999999 M 8 2 L 8 1 M 3.72000003 3.71000004 L 3 3 M 1 8 L 2 8 M 3 12.9899998 L 3.72000003 12.2799997 M 8 15 L 8 14 M 13 13 L 12.2799997 12.2799997'
+            id='path0'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 6 6 C 4.89543056 7.10456944, 4.89543056 8.89543056, 6 10 C 7.10456944 11.1045694, 8.89543056 11.1045694, 10 10 C 11.1045694 8.89543056, 11.1045694 7.10456944, 10 6 C 8.89543056 4.89543056, 7.10456944 4.89543056, 6 6 Z'
+            id='path1'
+            stroke-width='1.88168'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

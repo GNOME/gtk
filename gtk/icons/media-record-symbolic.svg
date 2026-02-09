@@ -1,41 +1,44 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='1'
-        gpa:keywords='media-record rec playback redmeansrecording'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'
-          gpa:states='0'>
-  </path>
-  <path
-          id='path1'
-          fill='url("#gpa:foreground") rgb(0,0,0)'
-          fill-rule='nonzero'
-          stroke='none'
-          d='M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z'
-          class='foreground foreground-fill'
-          gpa:states='1'>
-  </path>
-  <path
-          id='path1'
-          fill='url("#gpa:error") rgb(204,0,0)'
-          fill-rule='nonzero'
-          stroke='none'
-          d='M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z'
-          class='error error-fill'
-          gpa:states='2'>
-  </path>
-</svg>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='1'
+          gpa:keywords='media-record rec playback redmeansrecording'>
+    <path
+            id='path0'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'
+            gpa:states='0'>
+    </path>
+    <path
+            id='path1'
+            fill='url("#gpa:foreground") rgb(0,0,0)'
+            fill-rule='nonzero'
+            stroke='none'
+            d='M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z'
+            class='foreground foreground-fill'
+            gpa:states='1'
+            gpa:fill='foreground'>
+    </path>
+    <path
+            id='path1'
+            fill='url("#gpa:error") rgb(204,0,0)'
+            fill-rule='nonzero'
+            stroke='none'
+            d='M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z'
+            class='error error-fill'
+            gpa:states='2'
+            gpa:fill='error'>
+    </path>
+  </svg>

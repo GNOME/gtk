@@ -1,22 +1,23 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='folder-new add create mkdir'>
-  <path
-          id='folderplus'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 9 12 L 15 12 M 12 9 L 12 15 M 6 14 L 3 14 C 1.89543045 14, 1 13.1045694, 1 12 L 1 4 C 1 2.89543056, 1.89543045 2, 3 2 L 7 2 L 9 4 L 13 4 C 14.1045694 4, 15 4.89543056, 15 6 L 15 7'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-</svg>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='folder-new add create mkdir'>
+    <path
+            id='folderplus'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 9 12 L 15 12 M 12 9 L 12 15 M 6 14 L 3 14 C 1.89543045 14, 1 13.1045694, 1 12 L 1 4 C 1 2.89543056, 1.89543045 2, 3 2 L 7 2 L 9 4 L 13 4 C 14.1045694 4, 15 4.89543056, 15 6 L 15 7'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>

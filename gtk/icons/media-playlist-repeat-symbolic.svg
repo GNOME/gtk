@@ -1,89 +1,54 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='media playback loop playlist repeat'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>media playback loop playlist repeat</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 11 4 L 4 4 C 2.34315 4, 1 5.34315, 1 7 L 1 9 C 1 9.75568, 1.2794 10.4461, 1.74054 10.9736'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path1'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 9 2 L 11 4 L 9 6'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path2'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 5 12 L 12 12 C 13.6569 12, 15 10.6569, 15 9 L 15 7 C 15 6.24432, 14.7206 5.55389, 14.2595 5.0264'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path3'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 7 14 L 5 12 L 7 10'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='media playback loop playlist repeat'
+          gpa:state='0'>
+    <path
+            d='M 11 4 L 4 4 C 2.34314585 4, 1 5.34314585, 1 7 L 1 9 C 1 9.75568199, 1.2794044 10.446106, 1.74054229 10.9736013'
+            id='path0'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 9 2 L 11 4 L 9 6'
+            id='path1'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 5 12 L 12 12 C 13.6568537 12, 15.0000019 10.6568546, 15 9 L 15 7.00000048 C 15 6.24431849, 14.7205982 5.55389309, 14.2594566 5.02639866'
+            id='path2'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 7 14 L 5 12 L 7 10'
+            id='path3'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

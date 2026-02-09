@@ -1,41 +1,23 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='open-menu hamburger open'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>open-menu hamburger open</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 2 13 L 14 13 M 2 8 L 14 8 M 2 3 L 14 3'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='open-menu hamburger open'>
+    <path
+            id='path0'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 2 13 L 14 13 M 2 8 L 14 8 M 2 3 L 14 3'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>

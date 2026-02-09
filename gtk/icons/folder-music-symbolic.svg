@@ -1,41 +1,27 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='folder-music note folder sound tune audio-x-generic'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>folder-music note folder sound tune audio-x-generic</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 14 11.4851 L 14 4 C 14 2.89543, 13.1046 2, 12 2 L 8 2 C 6.89548 2, 6.00014 2.89548, 6.00031 4 L 6.00147 11.5386 M 14 11.4851 C 14 12.8576, 12.8874 13.9702, 11.5149 13.9702 C 10.1424 13.9702, 9.02978 12.8576, 9.02978 11.4851 C 9.02978 10.1126, 10.1424 9, 11.5149 9 C 12.8874 9, 14 10.1126, 14 11.4851 Z M 6.00147 11.5386 C 6.00147 12.911, 4.85907 14, 3.48658 14 C 2.11409 14, 1.00147 12.8874, 1.00147 11.5149 C 1.00147 10.1424, 2.11409 9.02978, 3.48658 9.02978 C 4.85907 9.02978, 6.00147 10.1661, 6.00147 11.5386 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='folder-music note folder sound tune audio-x-generic'
+          gpa:state='0'>
+    <style
+            type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+    <path
+            d='M 14 11.4851112 L 14 4 C 14 2.89543056, 13.1045694 2, 12 2 L 8 2 C 6.89548016 2, 6.00013828 2.89548039, 6.00030851 4 L 6.00146866 11.5385504 M 14 11.4851122 C 14 12.8576012, 12.8873777 13.9702225, 11.5148888 13.9702225 C 10.1423998 13.9702225, 9.02977753 12.8576002, 9.02977753 11.4851112 C 9.02977848 10.1126223, 10.1423998 9, 11.5148888 9.00000095 C 12.8873777 9, 14 10.1126223, 14 11.4851112 Z M 6.00147152 11.5385523 C 6.00147152 12.9110394, 4.85907078 14, 3.48658228 14 C 2.1140933 14, 1.0014714 12.8873777, 1.00147152 11.5148888 C 1.00147176 10.1423998, 2.11409354 9.02977848, 3.48658228 9.02977848 C 4.85907078 9.02977848, 6.00147152 10.1660614, 6.00147152 11.5385504 Z'
+            id='path0'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

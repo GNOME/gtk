@@ -1,35 +1,36 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='page orientation print portrait inverse'>
-  <path
-          id='path0'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 5.15862083 1 L 10.8413792 1 C 12.0016909 1, 13 1.99830878, 13 3.1586206 L 13 12.8413792 C 13 14.0016909, 12.0016909 15, 10.8413792 15 L 5.15862083 15 C 3.9983089 15, 3 14.0016909, 3 12.8413792 L 3 3.1586206 C 3 1.99830878, 3.9983089 1, 5.15862083 1 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-  <path
-          id='path1'
-          fill='none'
-          stroke='url("#gpa:foreground") rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 9.5361948 11.000001 L 6.5361948 8.00000095 L 9.53619576 5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke-width='0.5 2 3'
-          gpa:stroke='foreground'
-          gpa:fill='none'>
-  </path>
-</svg>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='page orientation print portrait inverse'>
+    <path
+            id='path0'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 5.15862083 1 L 10.8413792 1 C 12.0016909 1, 13 1.99830878, 13 3.1586206 L 13 12.8413792 C 13 14.0016909, 12.0016909 15, 10.8413792 15 L 5.15862083 15 C 3.9983089 15, 3 14.0016909, 3 12.8413792 L 3 3.1586206 C 3 1.99830878, 3.9983089 1, 5.15862083 1 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+    <path
+            id='path1'
+            fill='none'
+            stroke='url("#gpa:foreground") rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 9.5361948 11.000001 L 6.5361948 8.00000095 L 9.53619576 5'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke-width='0.5 2 3'
+            gpa:stroke='foreground'
+            gpa:fill='none'>
+    </path>
+  </svg>

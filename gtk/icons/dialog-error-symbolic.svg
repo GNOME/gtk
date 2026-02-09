@@ -1,39 +1,50 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='dialog-error one-way sign traffic'
-     gpa:state='1'>
-  <style type='text/css'>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='dialog-error one-way sign traffic'
+          gpa:state='1'>
+    <style
+            type='text/css'>
     .not-initial-state {
       display: none;
     }
   </style>
-  <path d='M 8 1 C 4.12890577 1, 1 4.12890577, 1 8 C 1 11.8710938, 4.12890577 15, 8 15 C 11.8710938 15, 15 11.8710938, 15 8 C 15 4.12890577, 11.8710938 1, 8 1 Z M 5.4968462 6.26896524 L 10.5169458 6.26896524 C 11.476017 6.26896524, 12.2534981 7.04644632, 12.2534981 8.00551796 L 12.2534981 8.00827789 C 12.2534971 8.9673481, 11.476016 9.74482822, 10.5169458 9.74482822 L 5.4968462 9.74482822 C 4.53777504 9.74482822, 3.7602942 8.96734715, 3.7602942 8.00827599 L 3.7602942 8.00551605 C 3.76029515 7.04644537, 4.53777552 6.26896524, 5.4968462 6.26896524 Z'
-        id='path0'
-        gpa:states='1'
-        stroke='none'
-        fill-rule='nonzero'
-        fill='rgb(0,0,0)'
-        class='foreground-fill'
-        gpa:fill='foreground'/>
-  <path d='M 8 1 C 4.12890577 1, 1 4.12890577, 1 8 C 1 11.8710938, 4.12890577 15, 8 15 C 11.8710938 15, 15 11.8710938, 15 8 C 15 4.12890577, 11.8710938 1, 8 1 Z'
-        id='path1'
-        gpa:states='0'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill not-initial-state'
-        gpa:stroke='foreground'/>
-  <path d='M 5.4968462 6.26896524 L 10.5169458 6.26896524 C 11.476017 6.26896524, 12.2534981 7.04644632, 12.2534981 8.00551796 L 12.2534981 8.00827789 C 12.2534971 8.9673481, 11.476016 9.74482822, 10.5169458 9.74482822 L 5.4968462 9.74482822 C 4.53777504 9.74482822, 3.7602942 8.96734715, 3.7602942 8.00827599 L 3.7602942 8.00551605 C 3.76029515 7.04644537, 4.53777552 6.26896524, 5.4968462 6.26896524 Z'
-        gpa:states='0'
-        stroke-width='1'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        gpa:stroke-width='0.25 1 2'
-        fill='none'
-        class='foreground-stroke transparent-fill not-initial-state'
-        gpa:stroke='foreground'/>
-</svg>
+    <path
+            d='M 8 1 C 4.12890577 1, 1 4.12890577, 1 8 C 1 11.8710938, 4.12890577 15, 8 15 C 11.8710938 15, 15 11.8710938, 15 8 C 15 4.12890577, 11.8710938 1, 8 1 Z M 5.4968462 6.26896524 L 10.5169458 6.26896524 C 11.476017 6.26896524, 12.2534981 7.04644632, 12.2534981 8.00551796 L 12.2534981 8.00827789 C 12.2534971 8.9673481, 11.476016 9.74482822, 10.5169458 9.74482822 L 5.4968462 9.74482822 C 4.53777504 9.74482822, 3.7602942 8.96734715, 3.7602942 8.00827599 L 3.7602942 8.00551605 C 3.76029515 7.04644537, 4.53777552 6.26896524, 5.4968462 6.26896524 Z'
+            id='path0'
+            gpa:states='1'
+            stroke='none'
+            fill-rule='nonzero'
+            fill='rgb(0,0,0)'
+            class='foreground-fill'
+            gpa:fill='foreground'>
+    </path>
+    <path
+            d='M 8 1 C 4.12890577 1, 1 4.12890577, 1 8 C 1 11.8710938, 4.12890577 15, 8 15 C 11.8710938 15, 15 11.8710938, 15 8 C 15 4.12890577, 11.8710938 1, 8 1 Z'
+            id='path1'
+            gpa:states='0'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill not-initial-state'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 5.4968462 6.26896524 L 10.5169458 6.26896524 C 11.476017 6.26896524, 12.2534981 7.04644632, 12.2534981 8.00551796 L 12.2534981 8.00827789 C 12.2534971 8.9673481, 11.476016 9.74482822, 10.5169458 9.74482822 L 5.4968462 9.74482822 C 4.53777504 9.74482822, 3.7602942 8.96734715, 3.7602942 8.00827599 L 3.7602942 8.00551605 C 3.76029515 7.04644537, 4.53777552 6.26896524, 5.4968462 6.26896524 Z'
+            gpa:states='0'
+            stroke-width='1'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            gpa:stroke-width='0.25 1 2'
+            fill='none'
+            class='foreground-stroke transparent-fill not-initial-state'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

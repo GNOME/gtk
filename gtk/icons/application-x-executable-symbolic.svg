@@ -1,55 +1,39 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='gear pegged wheel application-x-sharedlib'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>gear pegged wheel application-x-sharedlib</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-width='1.7733'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 1.73874 6.21107 L 6.21107 1.73874 C 7.19907 0.750738, 8.80093 0.750738, 9.78893 1.73874 L 14.2613 6.21107 C 15.2493 7.19907, 15.2493 8.80093, 14.2613 9.78893 L 9.78893 14.2613 C 8.80093 15.2493, 7.19907 15.2493, 6.21107 14.2613 L 1.73874 9.78893 C 0.750738 8.80093, 0.750738 7.19907, 1.73874 6.21107 Z'
-          gpa:stroke-minwidth='0.443325'
-          gpa:stroke-maxwidth='2.65995'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path2'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='1'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 13.5856 9.04308 L 14.2131 8.2645 M 8.04034 12.9311 L 7.10758 13.2915 M 7.85145 11.1304 L 6.86341 10.9762 M 8.57224 9.48902 L 7.79366 8.86147 M 9.8986 8.46706 L 9.53811 7.5343 M 11.8492 8.21189 L 12.0034 7.22385 M 14.2613 9.78893 C 13.6069 8.76167, 12.4535 8.13634, 11.2108 8.17144 C 9.79067 8.21155, 8.53568 9.10612, 8.03456 10.4355 C 7.53344 11.7649, 7.88563 13.2653, 8.9259 14.2328 C 9.10176 14.3941, 9.2635 14.517, 9.39233 14.6056'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='gear pegged wheel application-x-sharedlib'
+          gpa:state='0'>
+    <style
+            type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+    <path
+            d='M 1.73873818 6.21106672 L 6.21106672 1.73873818 C 7.19906664 0.750738025, 8.80093098 0.750738025, 9.78892994 1.73873806 L 14.2612591 6.21106672 C 15.2492628 7.19906664, 15.2492628 8.80093098, 14.2612591 9.78892994 L 9.78892994 14.2612591 C 8.80093098 15.2492628, 7.19906664 15.2492628, 6.21106672 14.2612591 L 1.73873818 9.78892994 C 0.750738025 8.80093098, 0.750738025 7.19906664, 1.73873818 6.21106672 Z'
+            id='path0'
+            stroke-width='1.7733'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            gpa:stroke-width='0.443325 1.7733 2.65995'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            d='M 13.5856009 9.04307747 L 14.2131491 8.26449966 M 8.04034042 12.9310541 L 7.10757923 13.2915487 M 7.85145187 11.1303988 L 6.86340904 10.9762144 M 8.57223988 9.48901844 L 7.79366207 8.86147022 M 9.89860439 8.46706009 L 9.53811073 7.53429937 M 11.8492432 8.21189404 L 12.0034266 7.22385263 M 14.2612591 9.78892994 C 13.6069469 8.76167393, 12.4535284 8.13633823, 11.2107868 8.17143726 C 9.79066658 8.21154594, 8.53567696 9.1061182, 8.0345602 10.4354916 C 7.5334425 11.7648649, 7.88562679 13.2652731, 8.92589569 14.2328434 C 9.10175705 14.3940506, 9.2634964 14.5170078, 9.39232731 14.6055918'
+            id='path2'
+            stroke-width='1'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

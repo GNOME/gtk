@@ -1,33 +1,42 @@
-<svg width='16' height='16'
-     xmlns:gpa='https://www.gtk.org/grappa'
-     gpa:version='1'
-     gpa:keywords='media-playback-pause'
-     gpa:state='1'>
-  <style type='text/css'>
+
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='media-playback-pause'
+          gpa:state='1'>
+    <style
+            type='text/css'>
     .not-initial-state {
       display: none;
     }
   </style>
-  <path d='M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z'
-        id='path0'
-        gpa:states='1'
-        gpa:transition-type='fade'
-        gpa:transition-duration='200ms'
-        stroke='none'
-        fill-rule='nonzero'
-        fill='rgb(0,0,0)'
-        class='foreground-fill'
-        gpa:fill='foreground'/>
-  <path d='M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z'
-        id='path1'
-        gpa:states='0'
-        gpa:transition-type='fade'
-        gpa:transition-duration='200ms'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke='rgb(0,0,0)'
-        fill='none'
-        class='foreground-stroke transparent-fill not-initial-state'
-        gpa:stroke='foreground'/>
-</svg>
+    <path
+            d='M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z'
+            id='path0'
+            gpa:states='1'
+            gpa:transition-type='fade'
+            gpa:transition-duration='200ms'
+            stroke='none'
+            fill-rule='nonzero'
+            fill='rgb(0,0,0)'
+            class='foreground-fill'
+            gpa:fill='foreground'>
+    </path>
+    <path
+            d='M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z'
+            id='path1'
+            gpa:states='0'
+            gpa:transition-type='fade'
+            gpa:transition-duration='200ms'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill not-initial-state'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

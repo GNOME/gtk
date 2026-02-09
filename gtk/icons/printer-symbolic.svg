@@ -1,41 +1,27 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='printer printer-printing paper sheet lpt document-print'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>printer printer-printing paper sheet lpt document-print</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 4 11 L 4 15 L 12 15 L 12 11 M 5 5 L 5 3 C 5 2.44772, 5.44772 2, 6 2 L 10 2 C 10.5523 2, 11 2.44772, 11 3 L 11 5 M 1 7 L 1 10 C 1 10.5523, 1.44772 11, 2 11 L 4 11 L 4 10 C 4 9.44772, 4.44772 9, 5 9 L 11 9 C 11.5523 9, 12 9.44772, 12 10 L 12 11 L 14 11 C 14.5523 11, 15 10.5523, 15 10 L 15 7 C 15 5.89543, 14.1046 5, 13 5 L 3 5 C 1.89543 5, 1 5.89543, 1 7 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:keywords='printer printer-printing paper sheet lpt document-print'
+          gpa:state='0'>
+    <style
+            type='text/css'>
+    .not-initial-state {
+      display: none;
+    }
+  </style>
+    <path
+            d='M 4 11 L 4 15 L 12 15 L 12 11 M 5 5 L 5 3 C 5 2.44771528, 5.44771528 2, 6 2 L 10 2 C 10.5522852 2, 11 2.44771528, 11 3 L 11 5 M 1 7 L 1 10 C 1 10.5522852, 1.44771528 11, 2 11 L 4 11 L 4 10 C 4 9.44771576, 4.44771528 9, 5 9 L 11 9 C 11.5522852 9, 12 9.44771576, 12 10 L 12 11 L 14 11 C 14.5522852 11, 15 10.5522852, 15 10 L 15 7 C 15 5.89543056, 14.1045694 5, 13 5 L 3 5 C 1.89543045 5, 1 5.89543056, 1 7 Z'
+            id='path0'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke='rgb(0,0,0)'
+            fill='none'
+            class='foreground-stroke transparent-fill'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>
