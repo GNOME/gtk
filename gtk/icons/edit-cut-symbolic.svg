@@ -1,42 +1,43 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='edit-cut clipboard scissors'
-        id='svg1'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>edit-cut clipboard scissors</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='scissors'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 10 12 C 10 13.1046, 9.10457 14, 8 14 C 6.89543 14, 6 13.1046, 6 12 C 6 10.8954, 6.89543 10, 8 10 C 9.10457 10, 10 10.8954, 10 12 Z M 6 5 C 6 6.10457, 5.10457 7, 4 7 C 2.89543 7, 2 6.10457, 2 5 C 2 3.89543, 2.89543 3, 4 3 C 5.10457 3, 6 3.89543, 6 5 Z M 12 3 L 6.302 10.944 M 14 7 L 4 7'
-          gpa:stroke-minwidth='0.5'
-          gpa:stroke-maxwidth='3'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          xmlns:svg='http://www.w3.org/2000/svg'
+          xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+          xmlns:cc='http://creativecommons.org/ns#'
+          xmlns:dc='http://purl.org/dc/elements/1.1/'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='edit-cut clipboard scissors'
+          id='svg1'
+          width='16'
+          height='16'>
+    <metadata>
+      <rdf:RDF>
+        <cc:Work>
+          <dc:subject>
+            <rdf:Bag>
+              <rdf:li>
+              </rdf:li>
+            </rdf:Bag>
+          </dc:subject>
+        </cc:Work>
+      </rdf:RDF>
+    </metadata>
+    <path
+            id='scissors'
+            clip-path='none'
+            fill='none'
+            stroke='url(#gpa:foreground) rgb(0,0,0)'
+            stroke-opacity='1'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke-miterlimit='4'
+            d='M 10 12 C 10 13.1046, 9.10457 14, 8 14 C 6.89543 14, 6 13.1046, 6 12 C 6 10.8954, 6.89543 10, 8 10 C 9.10457 10, 10 10.8954, 10 12 Z M 6 5 C 6 6.10457, 5.10457 7, 4 7 C 2.89543 7, 2 6.10457, 2 5 C 2 3.89543, 2.89543 3, 4 3 C 5.10457 3, 6 3.89543, 6 5 Z M 12 3 L 6.302 10.944 M 14 7 L 4 7'
+            gpa:stroke-minwidth='0.5'
+            gpa:stroke-maxwidth='3'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

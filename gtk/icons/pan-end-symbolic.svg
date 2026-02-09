@@ -1,38 +1,39 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='pan-right pan-end arrow'
-        id='svg1'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>pan-right pan-end arrow</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='path0'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6 13 L 11.006 8 L 6 3'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          xmlns:svg='http://www.w3.org/2000/svg'
+          xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+          xmlns:cc='http://creativecommons.org/ns#'
+          xmlns:dc='http://purl.org/dc/elements/1.1/'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='pan-right pan-end arrow'
+          id='svg1'
+          width='16'
+          height='16'>
+    <metadata>
+      <rdf:RDF>
+        <cc:Work>
+          <dc:subject>
+            <rdf:Bag>
+              <rdf:li>
+              </rdf:li>
+            </rdf:Bag>
+          </dc:subject>
+        </cc:Work>
+      </rdf:RDF>
+    </metadata>
+    <path
+            id='path0'
+            clip-path='none'
+            fill='none'
+            stroke='url(#gpa:foreground) rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 6 13 L 11.006 8 L 6 3'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>

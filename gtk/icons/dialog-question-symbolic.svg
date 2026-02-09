@@ -1,62 +1,63 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state='0'
-        gpa:keywords='dialog-question ask prompt questionmark'
-        id='svg1'
-        width='16'
-        height='16'>
-  <metadata>
-    <rdf:RDF>
-      <cc:Work>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>dialog-question ask prompt questionmark</rdf:li>
 
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-          id='border'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 6.70555 1.519 L 1.519 6.70555 C 0.804098 7.42045, 0.804098 8.57955, 1.519 9.29445 L 6.70555 14.481 C 7.42045 15.1959, 8.57955 15.1959, 9.29445 14.481 L 14.481 9.29445 C 15.1959 8.57955, 15.1959 7.42045, 14.481 6.70555 L 9.29445 1.519 C 8.57955 0.804098, 7.46227 0.813653, 6.70555 1.519 Z'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path1'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='butt'
-          stroke-linejoin='miter'
-          d='M 6 7 C 6 5.89543, 6.89543 5, 8 5 C 9.10457 5, 10 5.89543, 10 7 C 10 8.5971, 8 8.69847, 8 10'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-  <path
-          id='path2'
-          clip-path='none'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          d='M 7.95703 12 L 8.04688 12'
-          class='transparent-fill foreground-stroke'
-          gpa:stroke='foreground'>
-  </path>
-</svg>
+  <svg
+          xmlns='http://www.w3.org/2000/svg'
+          xmlns:svg='http://www.w3.org/2000/svg'
+          xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+          xmlns:cc='http://creativecommons.org/ns#'
+          xmlns:dc='http://purl.org/dc/elements/1.1/'
+          xmlns:gpa='https://www.gtk.org/grappa'
+          gpa:version='1'
+          gpa:state='0'
+          gpa:keywords='dialog-question ask prompt questionmark'
+          id='svg1'
+          width='16'
+          height='16'>
+    <metadata>
+      <rdf:RDF>
+        <cc:Work>
+          <dc:subject>
+            <rdf:Bag>
+              <rdf:li>
+              </rdf:li>
+            </rdf:Bag>
+          </dc:subject>
+        </cc:Work>
+      </rdf:RDF>
+    </metadata>
+    <path
+            id='border'
+            clip-path='none'
+            fill='none'
+            stroke='url(#gpa:foreground) rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 6.70555 1.519 L 1.519 6.70555 C 0.804098 7.42045, 0.804098 8.57955, 1.519 9.29445 L 6.70555 14.481 C 7.42045 15.1959, 8.57955 15.1959, 9.29445 14.481 L 14.481 9.29445 C 15.1959 8.57955, 15.1959 7.42045, 14.481 6.70555 L 9.29445 1.519 C 8.57955 0.804098, 7.46227 0.813653, 6.70555 1.519 Z'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            id='path1'
+            clip-path='none'
+            fill='none'
+            stroke='url(#gpa:foreground) rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='butt'
+            stroke-linejoin='miter'
+            d='M 6 7 C 6 5.89543, 6.89543 5, 8 5 C 9.10457 5, 10 5.89543, 10 7 C 10 8.5971, 8 8.69847, 8 10'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke='foreground'>
+    </path>
+    <path
+            id='path2'
+            clip-path='none'
+            fill='none'
+            stroke='url(#gpa:foreground) rgb(0,0,0)'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M 7.95703 12 L 8.04688 12'
+            class='transparent-fill foreground-stroke'
+            gpa:stroke='foreground'>
+    </path>
+  </svg>
