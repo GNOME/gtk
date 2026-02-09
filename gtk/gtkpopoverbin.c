@@ -126,6 +126,68 @@ on_popover_unmap (GtkPopoverBin *self)
 }
 
 static void
+gtk_popover_bin_popup_at_position (GtkPopoverBin   *self,
+                                   gdouble          x,
+                                   gdouble          y)
+{
+  GdkRectangle rect;
+
+  if (self->popover == NULL)
+    return;
+
+  if (x > -0.5 && y > -0.5) {
+    rect.x = x;
+    rect.y = y;
+  } else {
+    if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+      rect.x = gtk_widget_get_width (GTK_WIDGET (self));
+    else
+      rect.x = 0.0;
+
+    rect.y = gtk_widget_get_height (GTK_WIDGET (self));
+  }
+
+  rect.width = 0.0;
+  rect.height = 0.0;
+
+  gtk_popover_set_pointing_to (GTK_POPOVER (self->popover), &rect);
+
+  gtk_popover_popup (GTK_POPOVER (self->popover));
+}
+
+static void
+pressed_cb (GtkPopoverBin *self,
+            int            n_press,
+            double         x,
+            double         y,
+            GtkGesture    *gesture)
+{
+  GdkEventSequence *current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  GdkEvent *event = gtk_gesture_get_last_event (gesture, current);
+
+  if (gdk_event_triggers_context_menu (event))
+    {
+      gtk_popover_bin_popup_at_position (self, x, y);
+      gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+
+      return;
+    }
+
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
+}
+
+static void
+long_pressed_cb (GtkPopoverBin *self,
+                 double         x,
+                 double         y,
+                 GtkGesture    *gesture)
+{
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+  gtk_popover_bin_popup_at_position (self, x, y);
+}
+
+static void
 popup_action (GtkWidget  *widget,
               const char *action_name,
               GVariant   *parameters)
@@ -574,18 +636,22 @@ gtk_popover_bin_set_handle_input (GtkPopoverBin *self,
       GtkShortcutAction *action;
 
       self->click_gesture = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
-      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->click_gesture),
-                                     GDK_BUTTON_SECONDARY);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->click_gesture), 0);
+      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->click_gesture), TRUE);
       g_signal_connect_swapped (self->click_gesture, "pressed",
-                                G_CALLBACK (gtk_popover_bin_popup), self);
+                                G_CALLBACK (pressed_cb), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->click_gesture);
 
       self->long_press_gesture = GTK_EVENT_CONTROLLER (gtk_gesture_long_press_new ());
-      g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (gtk_popover_bin_popup), self);
+      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->long_press_gesture), TRUE);
+      gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->long_press_gesture), TRUE);
+      g_signal_connect_swapped (self->long_press_gesture, "pressed", G_CALLBACK (long_pressed_cb), self);
       gtk_widget_add_controller (GTK_WIDGET (self), self->long_press_gesture);
 
       self->shortcut_controller = GTK_EVENT_CONTROLLER (gtk_shortcut_controller_new ());
-      trigger = gtk_keyval_trigger_new (GDK_KEY_Menu, GDK_NO_MODIFIER_MASK);
+      trigger = gtk_alternative_trigger_new (
+                  gtk_keyval_trigger_new (GDK_KEY_Menu, GDK_NO_MODIFIER_MASK),
+                  gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK));
       action = gtk_named_action_new ("menu.popup");
       gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (self->shortcut_controller),
                                             gtk_shortcut_new (trigger, action));
@@ -631,8 +697,7 @@ gtk_popover_bin_popup (GtkPopoverBin *self)
 {
   g_return_if_fail (GTK_IS_POPOVER_BIN (self));
 
-  if (self->popover != NULL)
-    gtk_popover_popup (GTK_POPOVER (self->popover));
+  gtk_popover_bin_popup_at_position (self, -1.0, -1.0);
 }
 
 /**
