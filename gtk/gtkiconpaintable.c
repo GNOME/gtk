@@ -132,13 +132,12 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
         {
           if (icon->is_symbolic)
             {
-              if (icon->allow_node)
-                icon->node = gsk_render_node_new_from_resource_symbolic (icon->filename,
-                                                                         &only_fg,
-                                                                         &single_path,
-                                                                         &has_strokes,
-                                                                         &icon->width,
-                                                                         &icon->height);
+              icon->node = gsk_render_node_new_from_resource_symbolic (icon->filename,
+                                                                       &only_fg,
+                                                                       &single_path,
+                                                                       &has_strokes,
+                                                                       &icon->width,
+                                                                       &icon->height);
               if (!icon->node)
                 texture = gdk_texture_new_from_resource_symbolic (icon->filename,
                                                                   pixel_size, pixel_size,
@@ -160,13 +159,12 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
         {
           if (icon->is_symbolic)
             {
-              if (icon->allow_node)
-                icon->node = gsk_render_node_new_from_filename_symbolic (icon->filename,
-                                                                         &only_fg,
-                                                                         &single_path,
-                                                                         &has_strokes,
-                                                                         &icon->width,
-                                                                         &icon->height);
+              icon->node = gsk_render_node_new_from_filename_symbolic (icon->filename,
+                                                                       &only_fg,
+                                                                       &single_path,
+                                                                       &has_strokes,
+                                                                       &icon->width,
+                                                                       &icon->height);
               if (!icon->node)
                 texture = gdk_texture_new_from_filename_symbolic (icon->filename,
                                                                   pixel_size, pixel_size,
@@ -358,7 +356,7 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
                     GTK_SYMBOLIC_COLOR_WARNING < n_colors && gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_WARNING]) &&
                     GTK_SYMBOLIC_COLOR_ERROR < n_colors && gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_ERROR]);
 
-  if (icon->is_symbolic && icon->allow_recolor &&
+  if (icon->is_symbolic &&
       (icon->single_path || colors_opaque) &&
       gsk_render_node_recolor (node, colors, n_colors, weight, &recolored))
     {
@@ -367,7 +365,7 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
       gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
       gsk_render_node_unref (recolored);
     }
-  else if (icon->is_symbolic && icon->only_fg && icon->allow_mask)
+  else if (icon->is_symbolic && icon->only_fg)
     {
       g_debug ("snapshot symbolic icon %s using mask",
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
@@ -506,10 +504,6 @@ static void
 gtk_icon_paintable_init (GtkIconPaintable *icon)
 {
   g_mutex_init (&icon->texture_lock);
-
-  icon->allow_node = 1;
-  icon->allow_recolor = 1;
-  icon->allow_mask = 1;
 
   icon->desired_size = 16;
   icon->desired_scale = 1;
@@ -681,17 +675,6 @@ gtk_icon_paintable_load_in_thread (GtkIconPaintable *self)
   g_mutex_lock (&self->texture_lock);
   icon_ensure_node__locked (self, TRUE);
   g_mutex_unlock (&self->texture_lock);
-}
-
-void
-gtk_icon_paintable_set_debug (GtkIconPaintable *icon,
-                              gboolean          allow_node,
-                              gboolean          allow_recolor,
-                              gboolean          allow_mask)
-{
-  icon->allow_node = allow_node;
-  icon->allow_recolor = allow_recolor;
-  icon->allow_mask = allow_mask;
 }
 
 void

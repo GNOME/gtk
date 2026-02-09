@@ -2,6 +2,7 @@
 
 #include "gtkicontheme.h"
 #include "gtkiconpaintable.h"
+#include "gtksvg.h"
 #include "gsk/gsktypes.h"
 
 typedef struct {
@@ -34,11 +35,6 @@ struct _GtkIconPaintable
   guint only_fg         : 1;
   guint single_path     : 1;
   guint has_strokes     : 1;
-
-  /* Debug flags for testing svg->node conversion */
-  guint allow_node     : 1;
-  guint allow_recolor  : 1;
-  guint allow_mask     : 1;
 
   /* Cached information if we go ahead and try to load the icon.
    *
