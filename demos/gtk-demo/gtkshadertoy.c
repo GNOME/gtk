@@ -21,9 +21,18 @@ const char *default_image_shader =
   "    fragColor = vec4(col,1.0);\n"
   "}\n";
 
+const char *shadertoy_shader_prefix[] =
+{
+  [GDK_GL_API_GL] =
+    "#version 150 core\n"
+    "\n",
+  [GDK_GL_API_GLES] =
+    "#version 300 es\n"
+    "precision highp float;\n"
+    "\n",
+};
+
 const char *shadertoy_vertex_shader =
-  "#version 150 core\n"
-  "\n"
   "uniform vec3 iResolution;\n"
   "\n"
   "in vec2 position;\n"
@@ -39,8 +48,6 @@ const char *shadertoy_vertex_shader =
   "}\n";
 
 const char *fragment_prefix =
-  "#version 150 core\n"
-  "\n"
   "uniform vec3      iResolution;           // viewport resolution (in pixels)\n"
   "uniform float     iTime;                 // shader playback time (in seconds)\n"
   "uniform float     iTimeDelta;            // render time (in seconds)\n"
@@ -117,7 +124,7 @@ GtkWidget *
 gtk_shadertoy_new (void)
 {
   return g_object_new (gtk_shadertoy_get_type (),
-                       "allowed-apis", GDK_GL_API_GL,
+                       "allowed-apis", GDK_GL_API_GL | GDK_GL_API_GLES,
                        NULL);
 }
 
@@ -344,16 +351,22 @@ static void
 gtk_shadertoy_realize_shader (GtkShadertoy *shadertoy)
 {
   GtkShadertoyPrivate *priv = gtk_shadertoy_get_instance_private (shadertoy);
-  char *fragment_shader;
+  GdkGLAPI api;
+  char *vertex_shader, *fragment_shader;
   GError *error = NULL;
 
-  fragment_shader = g_strconcat (fragment_prefix, priv->image_shader, fragment_suffix, NULL);
-  if (!init_shaders (shadertoy, shadertoy_vertex_shader, fragment_shader, &error))
+  api = gtk_gl_area_get_api (GTK_GL_AREA (shadertoy));
+  g_return_if_fail (api > 0 && api < G_N_ELEMENTS (shadertoy_shader_prefix));
+
+  vertex_shader = g_strconcat (shadertoy_shader_prefix[api], shadertoy_vertex_shader, NULL);
+  fragment_shader = g_strconcat (shadertoy_shader_prefix[api], fragment_prefix, priv->image_shader, fragment_suffix, NULL);
+  if (!init_shaders (shadertoy, vertex_shader, fragment_shader, &error))
     {
       priv->error_set = TRUE;
       gtk_gl_area_set_error (GTK_GL_AREA (shadertoy), error);
       g_error_free (error);
     }
+  g_free (vertex_shader);
   g_free (fragment_shader);
 
   /* Start new shader at time zero */
