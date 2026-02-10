@@ -351,7 +351,7 @@ parse_sequence (GtkShortcutLabel *self,
 
 static gboolean
 parse_range (GtkShortcutLabel *self,
-             const char       *str)
+             char             *str)
 {
   char *dots;
 
