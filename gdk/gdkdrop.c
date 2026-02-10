@@ -761,6 +761,7 @@ gdk_drop_read_value_got_stream (GObject      *source,
   if (stream == NULL)
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
