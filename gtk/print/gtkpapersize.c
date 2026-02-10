@@ -272,7 +272,8 @@ gtk_paper_size_new (const char *name)
 static char *
 improve_displayname (const char *name)
 {
-  char *p, *p1, *p2, *s;
+  char *p1, *p2, *s;
+  const char *p;
 
   p = strrchr (name, 'x');
   if (p && p != name &&
