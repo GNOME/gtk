@@ -707,20 +707,21 @@ get_renderer_fallback (GdkSurface *surface)
 }
 
 static struct {
+  gboolean warn_if_fail;
   GType (* get_renderer) (GdkSurface *surface);
 } renderer_possibilities[] = {
-  { get_renderer_for_display },
-  { get_renderer_for_env_var },
-  { get_renderer_for_backend },
+  { TRUE,  get_renderer_for_display },
+  { TRUE,  get_renderer_for_env_var },
+  { FALSE, get_renderer_for_backend },
 #ifdef GDK_RENDERING_VULKAN
-  { get_renderer_for_vulkan },
+  { FALSE, get_renderer_for_vulkan },
 #endif
-  { get_renderer_for_gl },
+  { FALSE, get_renderer_for_gl },
 #ifdef GDK_RENDERING_VULKAN
-  { get_renderer_for_vulkan_fallback },
+  { FALSE, get_renderer_for_vulkan_fallback },
 #endif
-  { get_renderer_for_gl_fallback },
-  { get_renderer_fallback },
+  { FALSE, get_renderer_for_gl_fallback },
+  { FALSE, get_renderer_fallback },
 };
 
 GskRenderer *
@@ -749,11 +750,21 @@ gsk_renderer_new_for_surface_full (GdkSurface *surface,
           return renderer;
         }
 
-      GSK_DEBUG (RENDERER,
-                 "Failed to realize renderer '%s' for surface '%s': %s",
-                 G_OBJECT_TYPE_NAME (renderer),
-                 G_OBJECT_TYPE_NAME (surface),
-                 error->message);
+      if (renderer_possibilities[i].warn_if_fail)
+        {
+          g_warning ("Failed to realize renderer '%s' for surface '%s': %s",
+                     G_OBJECT_TYPE_NAME (renderer),
+                     G_OBJECT_TYPE_NAME (surface),
+                     error->message);
+        }
+      else
+        {
+          GSK_DEBUG (RENDERER,
+                     "Failed to realize renderer '%s' for surface '%s': %s",
+                     G_OBJECT_TYPE_NAME (renderer),
+                     G_OBJECT_TYPE_NAME (surface),
+                     error->message);
+        }
 
       g_object_unref (renderer);
       g_clear_error (&error);
