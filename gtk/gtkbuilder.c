@@ -1628,7 +1628,7 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
   GError *tmp_error;
   GBytes *data;
   char *filename_for_errors;
-  char *slash;
+  const char *slash;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (resource_path != NULL, 0);
@@ -1703,7 +1703,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
   GError *tmp_error;
   GBytes *data;
   char *filename_for_errors;
-  char *slash;
+  const char *slash;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (resource_path != NULL, 0);
