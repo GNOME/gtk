@@ -6152,7 +6152,7 @@ gdk_memory_convert_generic (gpointer data)
   gboolean needs_premultiply, needs_unpremultiply;
   gsize y0, y;
   gint64 before = GDK_PROFILER_CURRENT_TIME;
-  gsize rows;
+  G_GNUC_UNUSED gsize rows;
 
   if (gdk_color_state_equal (mc->src_cs, mc->dest_cs))
     {
@@ -6412,7 +6412,7 @@ gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
   MemoryConvertColorState *mc = data;
   gsize y0, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
-  gsize rows;
+  G_GNUC_UNUSED gsize rows;
 
   for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
        y0 < mc->layout.height;
@@ -6433,7 +6433,7 @@ gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
   MemoryConvertColorState *mc = data;
   gsize y0, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
-  gsize rows;
+  G_GNUC_UNUSED gsize rows;
 
   for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
        y0 < mc->layout.height;
@@ -6458,7 +6458,7 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
   float (*tmp)[4];
   gsize y0, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
-  gsize rows;
+  G_GNUC_UNUSED gsize rows;
 
   convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
 
@@ -6569,7 +6569,7 @@ gdk_memory_mipmap_same_format_nearest (gpointer data)
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_layout.format];
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
-  gsize rows;
+  G_GNUC_UNUSED gsize rows;
 
   n = 1 << mipmap->lod_level;
 
@@ -6597,7 +6597,7 @@ gdk_memory_mipmap_same_format_linear (gpointer data)
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_layout.format];
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
-  gsize rows;
+  G_GNUC_UNUSED gsize rows;
 
   n = 1 << mipmap->lod_level;
 
@@ -6629,7 +6629,7 @@ gdk_memory_mipmap_generic (gpointer data)
   guchar *tmp;
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
-  gsize rows;
+  G_GNUC_UNUSED gsize rows;
 
   n = 1 << mipmap->lod_level;
   dest_width = (mipmap->src_layout.width + n - 1) >> mipmap->lod_level;
