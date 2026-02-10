@@ -23706,12 +23706,16 @@ svg_shape_attr_get_number (Shape                 *shape,
   switch ((unsigned int) attr)
     {
     case SHAPE_ATTR_X:
+    case SHAPE_ATTR_X1:
+    case SHAPE_ATTR_X2:
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_CX:
       g_assert (viewport);
       return svg_number_get (value, viewport->size.width);
     case SHAPE_ATTR_Y:
+    case SHAPE_ATTR_Y1:
+    case SHAPE_ATTR_Y2:
     case SHAPE_ATTR_HEIGHT:
     case SHAPE_ATTR_RY:
     case SHAPE_ATTR_CY:
