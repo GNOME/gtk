@@ -304,7 +304,7 @@ gsk_text_node_get_color (const GskRenderNode *node)
   const GskTextNode *self = (const GskTextNode *) node;
 
   /* NOTE: This is only correct for nodes with sRGB colors */
-  return (const GdkRGBA *) &self->color;
+  return (const GdkRGBA *) self->color.values;
 }
 
 /*< private >
