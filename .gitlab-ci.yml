@@ -111,6 +111,7 @@ default:
       meson subprojects download || exit 137 &&
       meson subprojects update --reset || exit 137 &&
       mkdir /subprojects && find subprojects -mindepth 1 -maxdepth 1 -type d -exec mv {} /subprojects \;
+    VK_LOADER_DRIVERS_DISABLE: "*power*"
 
 .distribution.fedora:
   extends:
