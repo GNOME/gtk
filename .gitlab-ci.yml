@@ -84,6 +84,7 @@ default:
       libasan
       libcloudproviders-devel
       libubsan
+      mesa-vulkan-drivers
       meson
       mingw64-filesystem
       mingw64-gcc
