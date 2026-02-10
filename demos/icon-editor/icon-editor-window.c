@@ -41,6 +41,7 @@ struct _IconEditorWindow
   gboolean show_thumbnails;
   gboolean show_bounds;
   gboolean show_spines;
+  gboolean show_grid;
   gboolean invert_colors;
   float weight;
   unsigned int state;
@@ -73,6 +74,7 @@ enum
   PROP_SHOW_CONTROLS,
   PROP_SHOW_BOUNDS,
   PROP_SHOW_SPINES,
+  PROP_SHOW_GRID,
   PROP_INVERT_COLORS,
   PROP_WEIGHT,
   PROP_STATE,
@@ -127,6 +129,17 @@ icon_editor_window_set_show_spines (IconEditorWindow *self,
 
   self->show_spines = show_spines;
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_SPINES]);
+}
+
+static void
+icon_editor_window_set_show_grid (IconEditorWindow *self,
+                                  gboolean          show_grid)
+{
+  if (self->show_grid == show_grid)
+    return;
+
+  self->show_grid = show_grid;
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_GRID]);
 }
 
 static void
@@ -957,6 +970,9 @@ icon_editor_window_init (IconEditorWindow *self)
   g_set_object (&action, g_property_action_new ("show-spines", self, "show-spines"));
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
 
+  g_set_object (&action, g_property_action_new ("show-grid", self, "show-grid"));
+  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
+
   g_simple_action_set_enabled (G_SIMPLE_ACTION (g_action_map_lookup_action (G_ACTION_MAP (self), "save")), FALSE);
 
   g_simple_action_set_enabled (G_SIMPLE_ACTION (g_action_map_lookup_action (G_ACTION_MAP (self), "revert")), FALSE);
@@ -990,6 +1006,10 @@ icon_editor_window_set_property (GObject      *object,
 
     case PROP_SHOW_SPINES:
       icon_editor_window_set_show_spines (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_GRID:
+      icon_editor_window_set_show_grid (self, g_value_get_boolean (value));
       break;
 
     case PROP_INVERT_COLORS:
@@ -1042,6 +1062,10 @@ icon_editor_window_get_property (GObject      *object,
 
     case PROP_SHOW_SPINES:
       g_value_set_boolean (value, self->show_spines);
+      break;
+
+    case PROP_SHOW_GRID:
+      g_value_set_boolean (value, self->show_grid);
       break;
 
     case PROP_INVERT_COLORS:
@@ -1149,6 +1173,11 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
 
   properties[PROP_SHOW_SPINES] =
     g_param_spec_boolean ("show-spines", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_SHOW_GRID] =
+    g_param_spec_boolean ("show-grid", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
