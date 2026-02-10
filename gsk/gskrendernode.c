@@ -538,10 +538,10 @@ gsk_render_node_draw_fallback (GskRenderNode *node,
  * Returns: (transfer none) (nullable) (array length=n_children): The children
  **/
 GskRenderNode **
-gsk_render_node_get_children (GskRenderNode *node,
+gsk_render_node_get_children (GskRenderNode *self,
                               gsize         *n_children)
 {
-  return GSK_RENDER_NODE_GET_CLASS (node)->get_children (node, n_children);
+  return GSK_RENDER_NODE_GET_CLASS (self)->get_children (self, n_children);
 }
 
 /*
