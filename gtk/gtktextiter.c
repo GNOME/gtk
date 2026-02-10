@@ -4878,7 +4878,8 @@ strbreakup (const char *string,
             gboolean    case_insensitive)
 {
   GSList *string_list = NULL, *slist;
-  char **str_array, *s;
+  char **str_array;
+  const char *s;
   char *casefold, *new_string;
   guint i, n = 1;
 
