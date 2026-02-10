@@ -2683,6 +2683,20 @@ test_expressions (void)
     "    </closure></property>"
     "  </object>"
     "</interface>",
+    "<interface>"
+    "  <object class='GtkLabel' id='label'></object>"
+    "  <object class='GtkStringFilter' id='filter'>"
+    "    <property name='search'>Hello World</property>"
+    "    <property name='expression'>"
+    "      <try>"
+    "        <lookup name='title' type='GtkWindow'>"
+    "          <lookup name='root' type='GtkLabel'>label</lookup>"
+    "        </lookup>"
+    "        <constant type='gchararray'>Hello World</constant>"
+    "      </try>"
+    "    </property>"
+    "  </object>"
+    "</interface>",
   };
   GtkBuilder *builder;
   GObject *obj;
