@@ -121,6 +121,7 @@ enum {
   PROP_INPUT_HINTS,
   PROP_ACTIVATES_DEFAULT,
   PROP_SEARCH_DELAY,
+  PROP_KEY_CAPTURE_WIDGET,
   NUM_PROPERTIES,
 };
 
@@ -250,6 +251,10 @@ gtk_search_entry_set_property (GObject      *object,
       gtk_search_entry_set_search_delay (entry, g_value_get_uint (value));
       break;
 
+    case PROP_KEY_CAPTURE_WIDGET:
+      gtk_search_entry_set_key_capture_widget (entry, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -286,6 +291,10 @@ gtk_search_entry_get_property (GObject    *object,
 
     case PROP_SEARCH_DELAY:
       g_value_set_uint (value, entry->search_delay);
+      break;
+
+    case PROP_KEY_CAPTURE_WIDGET:
+      g_value_set_object (value, entry->capture_widget);
       break;
 
     default:
@@ -529,6 +538,20 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
       g_param_spec_uint ("search-delay", NULL, NULL,
                          0, G_MAXUINT, 150,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSearchEntry:key-capture-widget:
+   *
+   * The widget that the entry will use to capture key events.
+   *
+   * Key events are consumed by the search entry to start or continue a search.
+   *
+   * Since: 4.22
+   */
+  props[PROP_KEY_CAPTURE_WIDGET] =
+      g_param_spec_object ("key-capture-widget", NULL, NULL,
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
@@ -953,6 +976,9 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
   g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
 
+  if (entry->capture_widget == widget)
+    return;
+
   if (entry->capture_widget)
     {
       gtk_widget_remove_controller (entry->capture_widget,
@@ -977,6 +1003,8 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
                         G_CALLBACK (capture_widget_key_handled), entry);
       gtk_widget_add_controller (widget, entry->capture_widget_controller);
     }
+
+  g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_KEY_CAPTURE_WIDGET]);
 }
 
 /**
