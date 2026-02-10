@@ -82,8 +82,6 @@ struct _FullscreenInfo
 
 G_DEFINE_TYPE (GdkWin32Surface, gdk_win32_surface, GDK_TYPE_SURFACE)
 
-static guint gdkwin32_global_inhibit_logout;
-
 static void
 gdk_win32_surface_init (GdkWin32Surface *impl)
 {
@@ -521,8 +519,6 @@ gdk_win32_surface_destroy (GdkSurface *surface,
       DestroyWindow (GDK_SURFACE_HWND (surface));
     }
 
-  gdkwin32_global_inhibit_logout -= MIN (gdkwin32_global_inhibit_logout,
-                                         impl->inhibit_logout);
   impl->inhibit_logout = 0;
 }
 
@@ -2917,12 +2913,6 @@ gdk_win32_surface_set_session_callbacks (GdkSurface             *surface,
 }
 
 gboolean
-gdk_win32_is_logout_inhibited (void)
-{
-  return gdkwin32_global_inhibit_logout > 0;
-}
-
-gboolean
 gdk_win32_surface_inhibit_logout (GdkSurface    *surface,
                                   const wchar_t *reason)
 {
@@ -2939,7 +2929,6 @@ gdk_win32_surface_inhibit_logout (GdkSurface    *surface,
     }
 
   impl->inhibit_logout++;
-  gdkwin32_global_inhibit_logout++;
 
   return TRUE;
 }
@@ -2953,9 +2942,6 @@ gdk_win32_surface_uninhibit_logout (GdkSurface *surface)
 
   if (impl->inhibit_logout > 0)
     {
-      if (gdkwin32_global_inhibit_logout > 0)
-        gdkwin32_global_inhibit_logout--;
-
       impl->inhibit_logout--;
 
       if (impl->inhibit_logout == 0)
