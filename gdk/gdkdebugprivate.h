@@ -116,17 +116,28 @@ gdk_help_message (const char *format, ...)
   fprintf (stderr, "\n");
 }
 
-#define GDK_DISPLAY_DEBUG_CHECK(display,type) \
-    G_UNLIKELY (gdk_display_get_debug_flags (display) & GDK_DEBUG_##type)
+#define GDK_DISPLAY_DEBUG_CHECK_FULL(display, types) \
+  G_UNLIKELY (gdk_display_get_debug_flags (display) & (types))
 
-#define GDK_DISPLAY_DEBUG(display,type,...)                               \
-    G_STMT_START {                                                        \
-    if (GDK_DISPLAY_DEBUG_CHECK (display,type))                           \
-      gdk_debug_message (__VA_ARGS__);                                    \
-    } G_STMT_END
+#define GDK_DISPLAY_DEBUG_CHECK(display, type) \
+  GDK_DISPLAY_DEBUG_CHECK_FULL ((display), GDK_DEBUG_##type)
+
+#define GDK_DISPLAY_DEBUG_FULL(display, types, ...)        \
+  G_STMT_START                                             \
+  {                                                        \
+    if (GDK_DISPLAY_DEBUG_CHECK_FULL ((display), (types))) \
+      gdk_debug_message (__VA_ARGS__);                     \
+  }                                                        \
+  G_STMT_END
+
+#define GDK_DISPLAY_DEBUG(display, type, ...) \
+  GDK_DISPLAY_DEBUG_FULL ((display), GDK_DEBUG_##type, __VA_ARGS__)
 
 #define GDK_DEBUG_CHECK(type) GDK_DISPLAY_DEBUG_CHECK (NULL,type)
+#define GDK_DEBUG_CHECK_FULL(types) GDK_DISPLAY_DEBUG_CHECK (NULL, (types))
 #define GDK_DEBUG(type,...) GDK_DISPLAY_DEBUG (NULL,type,__VA_ARGS__)
+#define GDK_DEBUG_FULL(types, ...) \
+  GDK_DISPLAY_DEBUG_FULL (NULL, (types), __VA_ARGS__)
 
 typedef struct
 {

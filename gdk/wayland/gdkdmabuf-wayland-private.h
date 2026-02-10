@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdksurface.h>
+#include <gdk/gdkdmabufformats.h>
 
 G_BEGIN_DECLS
 
@@ -42,8 +43,7 @@ typedef struct
 {
   dev_t target_device;
   uint32_t flags;
-  gsize n_formats;
-  DmabufFormat *formats;
+  GdkDmabufFormats *formats;
 } DmabufTranche;
 
 typedef struct

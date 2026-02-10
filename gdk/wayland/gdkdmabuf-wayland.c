@@ -26,7 +26,7 @@ dmabuf_tranche_new (void)
 static void
 dmabuf_tranche_free (DmabufTranche *tranche)
 {
-  g_free (tranche->formats);
+  gdk_dmabuf_formats_unref (tranche->formats);
   g_free (tranche);
 }
 
@@ -53,38 +53,44 @@ update_dmabuf_formats (DmabufFormatsInfo *info)
 {
   DmabufFormats *formats = info->dmabuf_formats;
 
-  GDK_DISPLAY_DEBUG (info->display, MISC,
-                     "dmabuf format table (%" G_GSIZE_FORMAT " entries)", info->n_dmabuf_formats);
+  GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                          "dmabuf format table (%" G_GSIZE_FORMAT " entries)",
+                          info->n_dmabuf_formats);
 
 #ifdef HAVE_SYS_SYSMACROS_H
-  GDK_DISPLAY_DEBUG (info->display, MISC,
-                     "dmabuf main device: %u %u",
-                     major (formats->main_device),
-                     minor (formats->main_device));
+  GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                          "dmabuf main device: %u %u",
+                          major (formats->main_device),
+                          minor (formats->main_device));
 #endif
 
   for (gsize i = 0; i < formats->tranches->len; i++)
     {
       DmabufTranche *tranche = g_ptr_array_index (formats->tranches, i);
+      gsize n_formats = gdk_dmabuf_formats_get_n_formats (tranche->formats);
 
 #ifdef HAVE_SYS_SYSMACROS_H
-      GDK_DISPLAY_DEBUG (info->display, MISC,
-                         "dmabuf tranche target device: %u %u",
-                         major (tranche->target_device),
-                         minor (tranche->target_device));
+      GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                              "dmabuf tranche target device: %u %u",
+                              major (tranche->target_device),
+                              minor (tranche->target_device));
 #endif
 
-      GDK_DISPLAY_DEBUG (info->display, MISC,
-                         "dmabuf%s tranche (%" G_GSIZE_FORMAT " entries):",
-                         tranche->flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ? " scanout" : "",
-                         tranche->n_formats);
+      GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                              "dmabuf%s tranche (%" G_GSIZE_FORMAT " entries):",
+                              tranche->flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ?
+                                " scanout" : "",
+                              n_formats);
 
-      for (gsize j = 0; j < tranche->n_formats; j++)
+      for (gsize j = 0; j < n_formats; j++)
         {
-          GDK_DISPLAY_DEBUG (info->display, MISC,
-                             "  %.4s:%#" G_GINT64_MODIFIER "x",
-                             (char *) &(tranche->formats[j].fourcc),
-                             tranche->formats[j].modifier);
+          guint32 fourcc;
+          guint64 modifier;
+
+          gdk_dmabuf_formats_get_format (tranche->formats, j, &fourcc, &modifier);
+          GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                                  "  %.4s:%#" G_GINT64_MODIFIER "x",
+                                  (char *) &fourcc, modifier);
         }
     }
 }
@@ -174,20 +180,25 @@ linux_dmabuf_tranche_formats (void *data,
 {
   DmabufFormatsInfo *info = data;
   DmabufTranche *tranche;
-  int i;
+  GdkDmabufFormatsBuilder *formats_builder;
   uint16_t *pos;
 
   g_assert (info->pending_tranche != NULL);
   tranche = info->pending_tranche;
 
-  tranche->n_formats = indices->size / sizeof (uint16_t);
-  tranche->formats = g_new (DmabufFormat, tranche->n_formats);
+  formats_builder = gdk_dmabuf_formats_builder_new ();
 
-  i = 0;
   wl_array_for_each (pos, indices)
     {
-      tranche->formats[i++] = info->dmabuf_format_table[*pos];
+      DmabufFormat *format = &info->dmabuf_format_table[*pos];
+
+      gdk_dmabuf_formats_builder_add_format (formats_builder,
+                                             format->fourcc,
+                                             format->modifier);
     }
+
+  tranche->formats =
+    gdk_dmabuf_formats_builder_free_to_formats (g_steal_pointer (&formats_builder));
 }
 
 static void

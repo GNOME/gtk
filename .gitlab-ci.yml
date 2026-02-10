@@ -723,6 +723,11 @@ asan-build:
     # Work around https://gitlab.freedesktop.org/mesa/mesa/-/issues/12666
     - rm -rf _build/subprojects/wayland/src/libwayland-server*
     - .gitlab-ci/run-tests.sh _build wayland gtk
+  artifacts:
+    when: on_failure
+    name: "gtk-asan-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 reference:
   extends:
