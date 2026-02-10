@@ -66,8 +66,8 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2026-01-23.0'
-    FDO_DISTRIBUTION_VERSION: 43
+    BASE_TAG: '2026-02-10.0'
+    FDO_DISTRIBUTION_VERSION: 44
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
       ccache
