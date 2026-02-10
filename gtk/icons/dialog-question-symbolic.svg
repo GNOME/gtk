@@ -25,7 +25,6 @@
   </metadata>
   <path
           id='border'
-          clip-path='none'
           fill='none'
           stroke='url(#gpa:foreground) rgb(0,0,0)'
           stroke-width='2'
@@ -37,7 +36,6 @@
   </path>
   <path
           id='path1'
-          clip-path='none'
           fill='none'
           stroke='url(#gpa:foreground) rgb(0,0,0)'
           stroke-width='2'
@@ -49,7 +47,6 @@
   </path>
   <path
           id='path2'
-          clip-path='none'
           fill='none'
           stroke='url(#gpa:foreground) rgb(0,0,0)'
           stroke-width='2'

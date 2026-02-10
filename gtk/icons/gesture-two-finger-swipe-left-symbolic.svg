@@ -4,7 +4,6 @@
         width='64'
         height='64'>
   <path
-          clip-path='none'
           fill='url(#gpa:foreground) rgb(0,0,0)'
           fill-opacity='1'
           fill-rule='nonzero'
