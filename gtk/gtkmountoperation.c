@@ -581,7 +581,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   gboolean   can_anonymous;
   guint      rows;
   char *primary;
-  const char *secondary = NULL;
+  const char *secondary;
   gboolean use_header;
 
   priv = operation->priv;
@@ -632,12 +632,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   gtk_box_append (GTK_BOX (hbox), main_vbox);
 
-  primary = strstr (message, "\n");
-  if (primary)
+  secondary = strstr (message, "\n");
+  if (secondary)
     {
-      secondary = primary + 1;
-      primary = g_strndup (message, primary - message);
+      primary = g_strndup (message, secondary - message);
+      secondary++;
     }
+  else
+    primary = NULL;
 
   label = gtk_label_new (primary != NULL ? primary : message);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
@@ -946,7 +948,7 @@ gtk_mount_operation_ask_question_do_gtk (GtkMountOperation *op,
 {
   GtkMountOperationPrivate *priv;
   GtkAlertDialog *dialog;
-  const char *secondary = NULL;
+  const char *secondary;
   char       *primary;
 
   g_return_if_fail (GTK_IS_MOUNT_OPERATION (op));
@@ -955,12 +957,14 @@ gtk_mount_operation_ask_question_do_gtk (GtkMountOperation *op,
 
   priv = op->priv;
 
-  primary = strstr (message, "\n");
-  if (primary)
+  secondary = strstr (message, "\n");
+  if (secondary)
     {
-      secondary = primary + 1;
-      primary = g_strndup (message, primary - message);
+      primary = g_strndup (message, secondary - message);
+      secondary++;
     }
+  else
+    primary = NULL;
 
   dialog = gtk_alert_dialog_new ("%s", primary ? primary : message);
   if (secondary)
@@ -1447,7 +1451,7 @@ create_show_processes_dialog (GtkMountOperation *op,
 {
   GtkMountOperationPrivate *priv;
   GtkWidget  *dialog;
-  const char *secondary = NULL;
+  const char *secondary;
   char       *primary;
   int        count, len = 0;
   GtkWidget *label;
@@ -1463,12 +1467,14 @@ create_show_processes_dialog (GtkMountOperation *op,
 
   priv = op->priv;
 
-  primary = strstr (message, "\n");
-  if (primary)
+  secondary = strstr (message, "\n");
+  if (secondary)
     {
-      secondary = primary + 1;
-      primary = g_strndup (message, primary - message);
+      primary = g_strndup (message, secondary - message);
+      secondary++;
     }
+  else
+    primary = g_strdup (message);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   dialog = gtk_dialog_new ();
