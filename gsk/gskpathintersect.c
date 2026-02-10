@@ -501,8 +501,9 @@ circle_contour_collect_intersections (const GskContour  *contour1,
   int n;
   Intersection is[2];
 
-  gsk_circle_contour_get_params (contour1, &center1, &radius1, &ccw1);
-  gsk_circle_contour_get_params (contour2, &center2, &radius2, &ccw2);
+  if (!gsk_contour_get_circle (contour1, &center1, &radius1, &ccw1) ||
+      !gsk_contour_get_circle (contour2, &center2, &radius2, &ccw2))
+    return;
 
   if (graphene_point_equal (&center1, &center2) && radius1 == radius2)
     {
