@@ -175,7 +175,7 @@ widget_application_activated_cb (GtkAppChooserWidget *widget,
 static char *
 get_extension (const char *basename)
 {
-  char *p;
+  const char *p;
 
   p = strrchr (basename, '.');
 
