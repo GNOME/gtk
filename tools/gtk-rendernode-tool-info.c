@@ -37,23 +37,22 @@ typedef struct {
   guint cur_depth;
 } NodeCount;
 
-static GskRenderNode *
-count_nodes (GskRenderReplay *replay,
-             GskRenderNode   *node,
-             gpointer         data)
+static void
+count_nodes (GskRenderNode *node,
+             NodeCount     *count)
 {
-  NodeCount *count = data;
-  GskRenderNode *result;
+  GskRenderNode **children;
+  gsize i, n_children;
 
   g_assert (gsk_render_node_get_node_type (node) < N_NODE_TYPES);
 
   count->counts[gsk_render_node_get_node_type (node)] += 1;
   count->cur_depth++;
   count->max_depth = MAX (count->cur_depth, count->max_depth);
-  result = gsk_render_replay_default (replay, node);
+  children = gsk_render_node_get_children (node, &n_children);
+  for (i = 0; i < n_children; i++)
+    count_nodes (children[i], count);
   count->cur_depth--;
-
-  return result;
 }
 
 static const char *
@@ -75,17 +74,14 @@ static void
 file_info (const char *filename)
 {
   GskRenderNode *node;
-  GskRenderReplay *replay;
   NodeCount count = { { 0, } };
   unsigned int total = 0;
   unsigned int namelen = 0;
   graphene_rect_t bounds, opaque;
 
   node = load_node_file (filename);
-  replay = gsk_render_replay_new ();
-  gsk_render_replay_set_node_filter (replay, count_nodes, &count, NULL);
-  
-  gsk_render_replay_foreach_node (replay, node);
+
+  count_nodes (node, &count);
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
@@ -117,7 +113,6 @@ file_info (const char *filename)
   else
     g_print ("%s none\n", _("Opaque part:"));
 
-  gsk_render_replay_free (replay);
   gsk_render_node_unref (node);
 }
 
