@@ -140,9 +140,11 @@ endif
 if os_linux
   rsvg_dep = dependency('librsvg-2.0', required: false)
 
-  gtk_tests += [
-    ['svg-compare', ['svgpaintable.c' ],[ libgtk_dep, rsvg_dep ]],
-  ]
+  if rsvg_dep.found()
+    gtk_tests += [
+      ['svg-compare', ['svgpaintable.c' ],[ libgtk_dep, rsvg_dep ]],
+    ]
+  endif
 endif
 
 if x11_enabled
