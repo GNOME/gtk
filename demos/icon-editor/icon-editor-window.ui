@@ -927,5 +927,12 @@
         </child>
       </object>
     </property>
+    <child>
+      <object class="GtkDropTarget">
+        <property name="actions">copy</property>
+        <property name="formats">GFile</property>
+        <signal name="drop" handler="file_drop" swapped="no"/>
+      </object>
+    </child>
   </template>
 </interface>
