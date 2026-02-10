@@ -176,12 +176,12 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
     }
   else if (strcmp (mime_type, "text/uri-list") == 0)
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
       if ([[pasteboard types] containsObject:NSPasteboardTypeFileURL])
         {
           GString *str = g_string_new (NULL);
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
           NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
+          G_GNUC_END_IGNORE_DEPRECATIONS;
           gsize n_files = [files count];
           char *data;
           guint len;
@@ -190,7 +190,7 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
             {
               NSString* uriString = [files objectAtIndex:i];
               uriString = [@"file://" stringByAppendingString:uriString];
-              uriString = [uriString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+              uriString = [uriString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
 
               g_string_append_printf (str,
                                       "%s\r\n",
@@ -201,8 +201,6 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
           data = g_string_free (str, FALSE);
           stream = g_memory_input_stream_new_from_data (data, len, g_free);
         }
-
-      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else if (strcmp (mime_type, "application/x-color") == 0)
     {
