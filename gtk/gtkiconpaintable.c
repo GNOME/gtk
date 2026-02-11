@@ -288,6 +288,10 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
 
   p = gtk_icon_paintable_ensure_paintable (icon);
 
+  gtk_snapshot_push_debug (snapshot, "GtkIconPaintable %s (%s)",
+                           icon->filename ? icon->filename : icon->icon_name,
+                           GDK_IS_TEXTURE (p) ? "texture" : "svg");
+
   if (GTK_IS_SYMBOLIC_PAINTABLE (p))
     gtk_symbolic_paintable_snapshot_with_weight (GTK_SYMBOLIC_PAINTABLE (p),
                                                  snapshot,
@@ -311,6 +315,8 @@ gtk_icon_paintable_snapshot_with_weight (GtkSymbolicPaintable *paintable,
     }
   else
     gdk_paintable_snapshot (p, snapshot, width, height);
+
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
