@@ -144,6 +144,9 @@
                     </child>
                     <child>
                       <object class="GtkImage" id="icon_image">
+                        <style>
+                          <class name="icon-paintable-preview"/>
+                        </style>
                         <property name="tooltip-text">GtkIconPaintable</property>
                         <property name="pixel-size">24</property>
                       </object>

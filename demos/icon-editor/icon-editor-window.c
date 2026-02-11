@@ -60,6 +60,7 @@ struct _IconEditorWindow
     };
   };
   PaintableEditor *paintable_editor;
+  GtkCssProvider *paintable_style;
 };
 
 struct _IconEditorWindowClass
@@ -173,6 +174,27 @@ icon_editor_window_set_invert_colors (IconEditorWindow *self,
 }
 
 static void
+update_icon_paintable_style (IconEditorWindow *self,
+                             float             weight)
+{
+  char *css;
+
+  css = g_strdup_printf ("image.icon-paintable-preview { -gtk-icon-weight: %f; }", weight);
+
+  if (!self->paintable_style)
+    {
+      self->paintable_style = gtk_css_provider_new ();
+      gtk_style_context_add_provider_for_display (gtk_widget_get_display (GTK_WIDGET (self)),
+                                                  GTK_STYLE_PROVIDER (self->paintable_style),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+  gtk_css_provider_load_from_string (self->paintable_style, css);
+
+  g_free (css);
+}
+
+static void
 icon_editor_window_set_weight (IconEditorWindow *self,
                                float             weight)
 {
@@ -182,6 +204,8 @@ icon_editor_window_set_weight (IconEditorWindow *self,
   self->weight = weight;
 
   path_paintable_set_weight (self->paintable, weight);
+
+  update_icon_paintable_style (self, weight);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
 }
@@ -1128,6 +1152,7 @@ icon_editor_window_finalize (GObject *object)
   g_clear_object (&self->paintable);
   g_clear_object (&self->orig_paintable);
   g_clear_object (&self->file);
+  g_clear_object (&self->paintable_style);
 
   G_OBJECT_CLASS (icon_editor_window_parent_class)->finalize (object);
 }
