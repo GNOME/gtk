@@ -28,6 +28,7 @@ struct _BorderPaintable
 
   gboolean show_bounds;
   gboolean show_spines;
+  gboolean show_grid;
 
   PathPaintable *paintable;
 };
@@ -85,6 +86,37 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
     return;
 
   scale = MIN (width / w, height / h);
+
+  if (self->show_grid && scale >= 3.f)
+    {
+      GskPathBuilder *builder;
+      GdkRGBA grid_color = colors[GTK_SYMBOLIC_COLOR_FOREGROUND];
+      g_autoptr (GskStroke) stroke = NULL;
+      g_autoptr (GskPath) grid_path = NULL;
+
+      builder = gsk_path_builder_new ();
+      stroke = gsk_stroke_new (1.f);
+      grid_color.alpha /= 2.f;
+
+      for (float x = 0; x <= w; x += 1.f)
+        {
+          gsk_path_builder_move_to (builder, scale * x, 0);
+          gsk_path_builder_rel_line_to (builder, 0, height);
+        }
+
+      for (float y = 0; y <= h; y += 1.f)
+        {
+          gsk_path_builder_move_to (builder, 0, scale * y);
+          gsk_path_builder_rel_line_to (builder, width, 0);
+        }
+
+      grid_path = gsk_path_builder_free_to_path (builder);
+      gtk_snapshot_push_stroke (snapshot, grid_path, stroke);
+      gtk_snapshot_append_color (snapshot,
+                                 &grid_color,
+                                 &GRAPHENE_RECT_INIT (0, 0, width, height));
+      gtk_snapshot_pop (snapshot);
+    }
 
   if (self->show_bounds)
     {
@@ -257,6 +289,7 @@ enum
   PROP_PAINTABLE = 1,
   PROP_SHOW_BOUNDS,
   PROP_SHOW_SPINES,
+  PROP_SHOW_GRID,
   NUM_PROPERTIES,
 };
 
@@ -311,6 +344,10 @@ border_paintable_get_property (GObject      *object,
       g_value_set_boolean (value, self->show_spines);
       break;
 
+    case PROP_SHOW_GRID:
+      g_value_set_boolean (value, self->show_grid);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -337,6 +374,10 @@ border_paintable_set_property (GObject      *object,
 
     case PROP_SHOW_SPINES:
       border_paintable_set_show_spines (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_GRID:
+      border_paintable_set_show_grid (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -366,6 +407,11 @@ border_paintable_class_init (BorderPaintableClass *class)
 
   properties[PROP_SHOW_SPINES] =
     g_param_spec_boolean ("show-spines", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SHOW_GRID] =
+    g_param_spec_boolean ("show-grid", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -449,6 +495,25 @@ gboolean
 border_paintable_get_show_spines (BorderPaintable *self)
 {
   return self->show_spines;
+}
+
+void
+border_paintable_set_show_grid (BorderPaintable *self,
+                                gboolean         show_grid)
+{
+  if (self->show_grid == show_grid)
+    return;
+
+  self->show_grid = show_grid;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_GRID]);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+gboolean
+border_paintable_get_show_grid (BorderPaintable *self)
+{
+  return self->show_grid;
 }
 
 /* }}} */

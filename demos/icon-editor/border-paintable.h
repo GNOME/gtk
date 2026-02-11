@@ -43,3 +43,7 @@ gboolean          border_paintable_get_show_bounds (BorderPaintable *self);
 void              border_paintable_set_show_spines (BorderPaintable *self,
                                                     gboolean         show_spines);
 gboolean          border_paintable_get_show_spines (BorderPaintable *self);
+
+void              border_paintable_set_show_grid   (BorderPaintable *self,
+                                                    gboolean         show_grid);
+gboolean          border_paintable_get_show_grid   (BorderPaintable *self);
