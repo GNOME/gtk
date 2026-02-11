@@ -477,6 +477,25 @@ load_file_contents (IconEditorWindow *self,
   return load_bytes (self, bytes);
 }
 
+static gboolean
+file_drop (GtkDropTarget *target,
+           const GValue  *value,
+           double         x,
+           double         y,
+           gpointer       user_data)
+{
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      GtkWidget *self = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (target));
+      GFile *file = g_value_get_object (value);
+
+      icon_editor_window_load (ICON_EDITOR_WINDOW (self), file);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 open_response_cb (GObject      *source,
                   GAsyncResult *result,
@@ -1235,6 +1254,7 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
 
   gtk_widget_class_bind_template_callback (widget_class, show_open_filechooser);
   gtk_widget_class_bind_template_callback (widget_class, toggle_controls);
+  gtk_widget_class_bind_template_callback (widget_class, file_drop);
 }
 
 /* }}} */
