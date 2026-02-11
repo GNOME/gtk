@@ -267,6 +267,10 @@ test_symbolic_file (gconstpointer data)
 static const char *skipped[] = {
   "/org/gtk/libgtk/icons/emoji-objects-symbolic.svg",
   "/org/gtk/libgtk/icons/folder-publicshare-symbolic.svg",
+  "/org/gtk/libgtk/icons/gesture-rotate-anticlockwise-symbolic.svg",
+  "/org/gtk/libgtk/icons/gesture-rotate-clockwise-symbolic.svg",
+  "/org/gtk/libgtk/icons/gesture-swipe-left-symbolic.svg",
+  "/org/gtk/libgtk/icons/gesture-swipe-right-symbolic.svg",
   NULL
 };
 

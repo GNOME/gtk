@@ -23691,15 +23691,31 @@ svg_shape_attr_get_number (Shape                 *shape,
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
+  if (svg_value_equal (value, svg_auto_new ()))
+    {
+      if (attr == SHAPE_ATTR_RX || attr == SHAPE_ATTR_RY)
+        return 0;
+      else if (attr == SHAPE_ATTR_WIDTH)
+        return viewport->size.width;
+      else if (attr == SHAPE_ATTR_HEIGHT)
+        return viewport->size.height;
+      else
+        g_assert_not_reached ();
+    }
+
   switch ((unsigned int) attr)
     {
     case SHAPE_ATTR_X:
+    case SHAPE_ATTR_X1:
+    case SHAPE_ATTR_X2:
     case SHAPE_ATTR_WIDTH:
     case SHAPE_ATTR_RX:
     case SHAPE_ATTR_CX:
       g_assert (viewport);
       return svg_number_get (value, viewport->size.width);
     case SHAPE_ATTR_Y:
+    case SHAPE_ATTR_Y1:
+    case SHAPE_ATTR_Y2:
     case SHAPE_ATTR_HEIGHT:
     case SHAPE_ATTR_RY:
     case SHAPE_ATTR_CY:

@@ -26,7 +26,6 @@
     </metadata>
     <path
             id='car'
-            clip-path='none'
             fill='none'
             stroke='url(#gpa:foreground) rgb(0,0,0)'
             stroke-opacity='1'
