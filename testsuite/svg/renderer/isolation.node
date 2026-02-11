@@ -44,10 +44,10 @@ M 130 80 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -
       }
     }
     isolation {
-      child: container {
-        transform {
-          transform: translate(130, 0);
-          child: copy {
+      child: transform {
+        transform: translate(130, 0);
+        child: container {
+          copy {
             child: blend {
               mode: multiply;
               bottom: paste {
@@ -64,10 +64,7 @@ M 20 20 h 80 v 80 h -80 z";
               }
             }
           }
-        }
-        transform {
-          transform: translate(130, 0);
-          child: copy {
+          copy {
             child: blend {
               mode: screen;
               bottom: paste {

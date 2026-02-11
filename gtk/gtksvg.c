@@ -16493,6 +16493,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       shape = shape_new (data->current_shape, shape_type);
+      g_markup_parse_context_get_position (context, &shape->line, NULL);
 
       if (data->current_shape == NULL && shape->type == SHAPE_SVG)
         {
@@ -20076,6 +20077,16 @@ push_group (Shape        *shape,
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
   SvgValue *fill_rule = shape->current[SHAPE_ATTR_FILL_RULE];
 
+#ifdef DEBUG
+  if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+    {
+      if (shape->id)
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s id='%s'> at line %d", shape_types[shape->type].name, shape->id, shape->line);
+      else
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s> at line %d", shape_types[shape->type].name, shape->line);
+    }
+#endif
+
   if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
       SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
@@ -20226,13 +20237,19 @@ push_group (Shape        *shape,
 
       if (needs_copy (shape, context, &reason))
         {
-          gtk_snapshot_push_debug (context->snapshot, "copy for %s", reason);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_push_debug (context->snapshot, "copy for %s", reason);
+#endif
           gtk_snapshot_push_copy (context->snapshot);
         }
 
       if (needs_isolation (shape, context, &reason))
         {
-          gtk_snapshot_push_debug (context->snapshot, "isolate for %s", reason);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_push_debug (context->snapshot, "isolate for %s", reason);
+#endif
           gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_BACKGROUND);
         }
 
@@ -20252,6 +20269,10 @@ push_group (Shape        *shape,
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
     {
       push_op (context, CLIPPING);
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+        gtk_snapshot_push_debug (context->snapshot, "mask for clipping");
+#endif
       gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
 
       /* Clip mask - see language in the spec about 'raw geometry' */
@@ -20375,6 +20396,10 @@ push_group (Shape        *shape,
 
       push_op (context, MASKING);
 
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+        gtk_snapshot_push_debug (context->snapshot, "mask for masking");
+#endif
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (mask->shape->current[SHAPE_ATTR_MASK_TYPE]));
 
       if (_gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_X) ||
@@ -20491,11 +20516,21 @@ pop_group (Shape        *shape,
       context->op != CLIPPING)
     {
       gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+        gtk_snapshot_pop (context->snapshot);
+#endif
     }
 
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
-    gtk_snapshot_pop (context->snapshot);
+    {
+      gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+        gtk_snapshot_pop (context->snapshot);
+#endif
+    }
 
   if (context->op != CLIPPING)
     {
@@ -20507,13 +20542,19 @@ pop_group (Shape        *shape,
       if (needs_isolation (shape, context, NULL))
         {
           gtk_snapshot_pop (context->snapshot);
-          gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_pop (context->snapshot);
+#endif
         }
 
       if (needs_copy (shape, context, NULL))
         {
           gtk_snapshot_pop (context->snapshot);
-          gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_pop (context->snapshot);
+#endif
         }
     }
 
@@ -20542,6 +20583,11 @@ pop_group (Shape        *shape,
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         gtk_snapshot_pop (context->snapshot);
    }
+
+#ifdef DEBUG
+  if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+    gtk_snapshot_pop (context->snapshot);
+#endif
 }
 
 /* }}} */
