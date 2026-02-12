@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-01-31 17:30+0000\n"
-"PO-Revision-Date: 2026-01-30 23:16+0200\n"
+"POT-Creation-Date: 2026-02-12 09:33+0000\n"
+"PO-Revision-Date: 2026-02-12 22:54+0200\n"
 "Last-Translator: Aurimas Černius <aurimas.cernius@mailo.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -48,11 +48,11 @@ msgstr "Broadway vaizduoklio tipas nepalaikomas „%s“"
 msgid "This clipboard cannot store data."
 msgstr "Ši iškarpinė negali įrašyti duomenų."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:782 gdk/gdkclipboard.c:1073
 msgid "Cannot read from empty clipboard."
 msgstr "Negalima skaityti iš tuščios iškarpinės."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1123 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Nėra suderinamų formatų iškarpinės turinio perdavimui."
 
@@ -616,7 +616,7 @@ msgstr "Nepavyko įkelti TIFF duomenų"
 msgid "Reading data failed at row %d"
 msgstr "Duomenų skaitymas nepavyko ties eilute %d"
 
-#: gdk/macos/gdkmacospasteboard.c:255
+#: gdk/macos/gdkmacospasteboard.c:253
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Nepavyko iškoduoti turinio su mime tipu „%s“"
@@ -2879,59 +2879,59 @@ msgstr "_Taip"
 msgid "Co_nnect"
 msgstr "Prisi_jungti"
 
-#: gtk/gtkmountoperation.c:676
+#: gtk/gtkmountoperation.c:678
 msgid "Connect As"
 msgstr "Prisijungti kaip"
 
-#: gtk/gtkmountoperation.c:685
+#: gtk/gtkmountoperation.c:687
 msgid "_Anonymous"
 msgstr "_Anonimas"
 
-#: gtk/gtkmountoperation.c:692
+#: gtk/gtkmountoperation.c:694
 msgid "Registered U_ser"
 msgstr "Registruotas na_udotojas"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:704
 msgid "_Username"
 msgstr "Na_udotojo vardas"
 
-#: gtk/gtkmountoperation.c:707
+#: gtk/gtkmountoperation.c:709
 msgid "_Domain"
 msgstr "S_ritis"
 
-#: gtk/gtkmountoperation.c:716
+#: gtk/gtkmountoperation.c:718
 msgid "Volume type"
 msgstr "Tomo (skirsnio) tipas"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:728
 msgid "_Hidden"
 msgstr "_Paslėptas"
 
-#: gtk/gtkmountoperation.c:729
+#: gtk/gtkmountoperation.c:731
 msgid "_Windows system"
 msgstr "_Windows sisteminis"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:734
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:738
+#: gtk/gtkmountoperation.c:740
 msgid "_Password"
 msgstr "_Slaptažodis"
 
-#: gtk/gtkmountoperation.c:761
+#: gtk/gtkmountoperation.c:763
 msgid "Forget password _immediately"
 msgstr "_Neįsiminti slaptažodžio"
 
-#: gtk/gtkmountoperation.c:771
+#: gtk/gtkmountoperation.c:773
 msgid "Remember password until you _logout"
 msgstr "Įsiminti slaptažodį iki _atsijungsite"
 
-#: gtk/gtkmountoperation.c:782
+#: gtk/gtkmountoperation.c:784
 msgid "Remember _forever"
 msgstr "Įsiminti _visam laikui"
 
-#: gtk/gtkmountoperation.c:1252
+#: gtk/gtkmountoperation.c:1256
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Nežinoma programa (PID %d)"
@@ -2941,12 +2941,12 @@ msgstr "Nežinoma programa (PID %d)"
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
 #.
-#: gtk/gtkmountoperation.c:1397
+#: gtk/gtkmountoperation.c:1401
 #, c-format
 msgid "Unable to end process"
 msgstr "Nepavyko užbaigti proceso"
 
-#: gtk/gtkmountoperation.c:1547
+#: gtk/gtkmountoperation.c:1553
 msgid "_End Process"
 msgstr "_Užbaigti procesą"
 
@@ -2998,8 +2998,8 @@ msgstr "Kita kortelė"
 msgid "Page %u"
 msgstr "%u puslapis"
 
-#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:942
-#: gtk/print/gtkpapersize.c:982
+#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:943
+#: gtk/print/gtkpapersize.c:983
 msgid "Not a valid page setup file"
 msgstr "Netinkamas puslapio sąrankos failas"
 
@@ -4200,7 +4200,7 @@ msgstr "Iš viršaus žemyn"
 msgid "Bottom to top"
 msgstr "Iš apačios į viršų"
 
-#: gtk/gtkprintdialog.c:1766
+#: gtk/gtkprintdialog.c:1767
 msgid "Failed to create the read file descriptor"
 msgstr "Nepavyko sukurti skaitymo failo deskriptoriaus"
 
@@ -4227,7 +4227,7 @@ msgstr "Nepavyko perkelti elemento su URI „%s“ į „%s“"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "Nerasta registruota programa pavadinimu „%s“ elementui su URI „%s“"
 
-#: gtk/gtksearchentry.c:838
+#: gtk/gtksearchentry.c:861
 msgid "Clear Entry"
 msgstr "Išvalyti lauką"
 
@@ -4561,8 +4561,8 @@ msgid "Attribute"
 msgstr "Atributas"
 
 #: gtk/inspector/a11y.ui:204 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:207
-#: gtk/inspector/recorder.ui:251 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:225
+#: gtk/inspector/recorder.ui:269 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "Vertė"
 
@@ -5068,7 +5068,7 @@ msgstr "Šaltinis:"
 msgid "Defined At"
 msgstr "Apibrėžtas"
 
-#: gtk/inspector/recorder.c:2172
+#: gtk/inspector/recorder.c:2180
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Nepavyko įrašyti RenderNode"
@@ -5097,19 +5097,23 @@ msgstr "Įrašyti kadrus"
 msgid "Clear recorded frames"
 msgstr "Išvalyti įrašytus kadrus"
 
-#: gtk/inspector/recorder.ui:90
+#: gtk/inspector/recorder.ui:82
+msgid "Profiling overlay (requires GSK_DEBUG=profile)"
+msgstr "Profiliavimo dangalas (būtina GSK_DEBUG=profile)"
+
+#: gtk/inspector/recorder.ui:108
 msgid "Use a dark background"
 msgstr "Naudoti tamsų foną"
 
-#: gtk/inspector/recorder.ui:106
+#: gtk/inspector/recorder.ui:124
 msgid "Save selected node"
 msgstr "Įrašyti pažymėtą viršūnę"
 
-#: gtk/inspector/recorder.ui:122
+#: gtk/inspector/recorder.ui:140
 msgid "Copy to clipboard"
 msgstr "Kopijuoti į iškarpinę"
 
-#: gtk/inspector/recorder.ui:202 gtk/inspector/recorder.ui:246
+#: gtk/inspector/recorder.ui:220 gtk/inspector/recorder.ui:264
 msgid "Property"
 msgstr "Savybė"
 
@@ -7638,11 +7642,11 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
+#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
 #: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
 #: tools/gtk-rendernode-tool-convert.c:98
-#: tools/gtk-rendernode-tool-extract.c:198 tools/gtk-rendernode-tool-info.c:131
+#: tools/gtk-rendernode-tool-extract.c:199 tools/gtk-rendernode-tool-info.c:126
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
 msgstr "FAILAS"
@@ -7675,9 +7679,9 @@ msgid "Use style from CSS file"
 msgstr "Naudoti stilių iš CSS failo"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:274
+#: tools/gtk-builder-tool-validate.c:275
 #: tools/gtk-rendernode-tool-benchmark.c:108
-#: tools/gtk-rendernode-tool-render.c:279 tools/gtk-rendernode-tool-show.c:129
+#: tools/gtk-rendernode-tool-render.c:317 tools/gtk-rendernode-tool-show.c:129
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Nepavyko inicializuoti langų sistemos\n"
@@ -7687,7 +7691,7 @@ msgid "Preview the file."
 msgstr "Peržiūrėti failą."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:293
+#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:294
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Nenurodytas .ui failas\n"
@@ -7722,13 +7726,13 @@ msgstr ""
 "Naudokite --force perrašymui.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:245
+#: tools/gtk-rendernode-tool-render.c:250
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Išvesti įrašyta į %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:249
+#: tools/gtk-rendernode-tool-render.c:254
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Nepavyko įrašyti failo %s: %s\n"
@@ -7749,7 +7753,7 @@ msgstr "Perrašyti esamą failą"
 #: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-play.c:327
 #: tools/gtk-image-tool-relabel.c:86 tools/gtk-image-tool-show.c:119
 #: tools/gtk-rendernode-tool-benchmark.c:99
-#: tools/gtk-rendernode-tool-render.c:272
+#: tools/gtk-rendernode-tool-render.c:310
 msgid "FILE…"
 msgstr "FAILAS…"
 
@@ -7855,7 +7859,7 @@ msgstr "Pasenę tipai:\n"
 msgid "Failed to create an instance of the template type %s\n"
 msgstr "Nepavyko sukurti %s šablono tipo egzemplioriaus\n"
 
-#: tools/gtk-builder-tool-validate.c:282
+#: tools/gtk-builder-tool-validate.c:283
 msgid "Validate the file."
 msgstr "Patikrinti failą."
 
@@ -8513,7 +8517,7 @@ msgstr "Pridėti piešėją į matavimą"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-render.c:307
 msgid "RENDERER"
 msgstr "PIEŠĖJAS"
 
@@ -8534,8 +8538,8 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Matuoti .node failo piešimą."
 
 #: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:220 tools/gtk-rendernode-tool-info.c:153
-#: tools/gtk-rendernode-tool-render.c:300 tools/gtk-rendernode-tool-show.c:150
+#: tools/gtk-rendernode-tool-extract.c:221 tools/gtk-rendernode-tool-info.c:148
+#: tools/gtk-rendernode-tool-render.c:338 tools/gtk-rendernode-tool-show.c:150
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Nenurodytas .node failas\n"
@@ -8546,7 +8550,7 @@ msgid "Can only benchmark a single .node file\n"
 msgstr "Galima matuoti tik vieną .node failą\n"
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-render.c:307
 msgid "Renderer to use"
 msgstr "Naudotinas piešėjas"
 
@@ -8564,7 +8568,7 @@ msgid "Must specify two files\n"
 msgstr "Reikia nurodyti du failus\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-render.c:212
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "Nepavyko sukurti piešėjo: %s\n"
@@ -8610,52 +8614,52 @@ msgstr "Galima pateikti tik vieną .svg failą\n"
 msgid "Failed to write %s\n"
 msgstr "Nepavyko įrašyti %s\n"
 
-#: tools/gtk-rendernode-tool-extract.c:196
+#: tools/gtk-rendernode-tool-extract.c:197
 msgid "Directory to use"
 msgstr "Naudotinas katalogas"
 
-#: tools/gtk-rendernode-tool-extract.c:196
+#: tools/gtk-rendernode-tool-extract.c:197
 msgid "DIRECTORY"
 msgstr "KATALOGAS"
 
-#: tools/gtk-rendernode-tool-extract.c:197
+#: tools/gtk-rendernode-tool-extract.c:198
 msgid "Be verbose"
 msgstr "Būti išsamiai"
 
-#: tools/gtk-rendernode-tool-extract.c:207
+#: tools/gtk-rendernode-tool-extract.c:208
 msgid "Extract data urls from the render node."
 msgstr "Gauti duomenis iš piešimo viršūnės url."
 
-#: tools/gtk-rendernode-tool-extract.c:226 tools/gtk-rendernode-tool-info.c:159
+#: tools/gtk-rendernode-tool-extract.c:227 tools/gtk-rendernode-tool-info.c:154
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Galima pateikti tik vieną .node failą\n"
 
-#: tools/gtk-rendernode-tool-info.c:97
+#: tools/gtk-rendernode-tool-info.c:93
 msgid "Number of nodes:"
 msgstr "Viršūnių skaičius:"
 
-#: tools/gtk-rendernode-tool-info.c:104
+#: tools/gtk-rendernode-tool-info.c:100
 msgid "Depth:"
 msgstr "Gylis:"
 
-#: tools/gtk-rendernode-tool-info.c:107
+#: tools/gtk-rendernode-tool-info.c:103
 msgid "Bounds:"
 msgstr "Paraštės:"
 
-#: tools/gtk-rendernode-tool-info.c:108
+#: tools/gtk-rendernode-tool-info.c:104
 msgid "Origin:"
 msgstr "Pradinė koordinatė:"
 
-#: tools/gtk-rendernode-tool-info.c:112 tools/gtk-rendernode-tool-info.c:118
+#: tools/gtk-rendernode-tool-info.c:108 tools/gtk-rendernode-tool-info.c:114
 msgid "Opaque part:"
 msgstr "Nepermatoma dalis:"
 
-#: tools/gtk-rendernode-tool-info.c:140
+#: tools/gtk-rendernode-tool-info.c:135
 msgid "Provide information about the render node."
 msgstr "Pateikti informaciją apie piešimo viršūnę."
 
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:172
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -8664,24 +8668,37 @@ msgstr ""
 "Failas %s jau yra.\n"
 "Jei norite perrašyti, nurodykite failo pavadinimą.\n"
 
-#: tools/gtk-rendernode-tool-render.c:185
-#: tools/gtk-rendernode-tool-render.c:197
+#: tools/gtk-rendernode-tool-render.c:186
+#: tools/gtk-rendernode-tool-render.c:198
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Nepavyko sugeneruoti SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:271
+#: tools/gtk-rendernode-tool-render.c:308
 msgid "Keep node position unchanged"
 msgstr "Išlaikyti viršūnės padėtį nepakeistą"
 
-#: tools/gtk-rendernode-tool-render.c:287
+#: tools/gtk-rendernode-tool-render.c:309
+msgid "Area to render"
+msgstr "Pieština sritis"
+
+#: tools/gtk-rendernode-tool-render.c:309
+msgid "X,Y,W,H"
+msgstr "X,Y,W,H"
+
+#: tools/gtk-rendernode-tool-render.c:325
 msgid "Render a .node file to an image."
 msgstr "Piešti .node failą į paveikslėlį."
 
-#: tools/gtk-rendernode-tool-render.c:306
+#: tools/gtk-rendernode-tool-render.c:344
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Galima piešti vienintelį .node failą į vienintelį išvesties failą\n"
+
+#: tools/gtk-rendernode-tool-render.c:352
+#, c-format
+msgid "Invalid rectangle given for bounds\n"
+msgstr "Rėžiams pateiktas netinkamas stačiakampis\n"
 
 #: tools/gtk-rendernode-tool-show.c:120
 msgid "Put node into offload container"
@@ -10741,9 +10758,6 @@ msgstr ""
 
 #~ msgid "printer offline"
 #~ msgstr "spausdintuvas atjungtas"
-
-#~ msgid "ready to print"
-#~ msgstr "pasiruošęs spausdinti"
 
 #~ msgid "processing job"
 #~ msgstr "atlieka užduotį"
