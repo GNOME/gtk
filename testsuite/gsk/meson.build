@@ -408,7 +408,9 @@ foreach testname : compare_render_tests
             '-k',
             join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
           ],
-          env: test_env,
+          env: test_env + [
+            'GDK_DISABLE=gl,vulkan'
+          ],
           suite: [ 'gsk', 'gsk-serialize', ] + extra_suites,
         )
   
