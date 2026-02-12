@@ -82,16 +82,21 @@ static const Filter filters[] = {
     .run = filter_copypaste,
   },
   {
+    .name = "save",
+    .description = "Save current node to file",
+    .suppress_printing = TRUE,
+    .run = filter_save,
+  },
+  {
     .name = "strip",
     .description = "Strip debug nodes (and others)",
     .run = filter_strip,
   },
   {
-    .name = "save",
-    .description = "Save current node to file",
-    .suppress_printing = TRUE,
-    .run = filter_save,
-  }
+    .name = "texture",
+    .description = "Convert textures",
+    .run = filter_texture,
+  },
 };
 
 static const Filter *

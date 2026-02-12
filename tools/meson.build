@@ -43,6 +43,7 @@ gtk_tools = [
   ['gtk4-rendernode-tool', ['gtk-rendernode-tool.c',
                         'gtk-rendernode-filter-copypaste.c',
                         'gtk-rendernode-filter-strip.c',
+                        'gtk-rendernode-filter-texture.c',
                         'gtk-rendernode-tool-benchmark.c',
                         'gtk-rendernode-tool-compare.c',
                         'gtk-rendernode-tool-convert.c',
