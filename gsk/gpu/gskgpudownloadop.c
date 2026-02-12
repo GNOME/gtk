@@ -83,14 +83,17 @@ gsk_gpu_download_vk_start (GskGpuFrame           *frame,
 {
   const VkImageAspectFlags aspect_flags[3] = { VK_IMAGE_ASPECT_PLANE_0_BIT, VK_IMAGE_ASPECT_PLANE_1_BIT, VK_IMAGE_ASPECT_PLANE_2_BIT };
   VkBufferImageCopy buffer_image_copy[3];
+  GdkMemoryFormat format;
   GskGpuBuffer *buffer;
   gsize i, n_planes;
 
+  format = gsk_gpu_image_get_format (GSK_GPU_IMAGE (image));
   gdk_memory_layout_init (layout,
-                          gsk_gpu_image_get_format (image),
+                          format,
                           gsk_gpu_image_get_width (image),
                           gsk_gpu_image_get_height (image),
-                          1);
+                          gdk_memory_format_alignment (format));
+
   n_planes = gdk_memory_format_get_n_planes (layout->format);
 
   buffer = gsk_vulkan_buffer_new_read (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
