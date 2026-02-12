@@ -1,7 +1,4 @@
-clip {
-  clip: 26 26 48 48;
-  child: color {
-    bounds: 26 26 48 48;
-    color: rgb(255,0,0);
-  }
+color {
+  bounds: 26 26 48 48;
+  color: rgb(255,0,0);
 }

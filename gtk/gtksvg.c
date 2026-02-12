@@ -19880,7 +19880,10 @@ got_result:
          FilterResult *res;
          const char *id;
 
-         clipped = gsk_clip_node_new (result, &subregion);
+         if (graphene_rect_contains_rect (&subregion, &result->bounds))
+           clipped = gsk_render_node_ref (result);
+         else
+           clipped = gsk_clip_node_new (result, &subregion);
          res = filter_result_new (clipped, &subregion);
          gsk_render_node_unref (clipped);
 

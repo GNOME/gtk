@@ -1,34 +1,26 @@
-clip {
-  clip: 16 16 48 48;
-  child: container {
-    fill "node1" {
-      child: color {
-        bounds: 20 20 40 40;
-        color: rgb(0,0,255);
-      }
-      path: "\
+fill "node1" {
+  child: color {
+    bounds: 20 20 40 40;
+    color: rgb(0,0,255);
+  }
+  path: "\
 M 20 20 h 40 v 40 h -40 z";
-      fill-rule: winding;
-    }
-    clip {
-      clip: 16 16 48 48;
-      child: color-matrix {
-        matrix: matrix3d(0.618879, 0.163503, -0.494107, 0, -0.296163, 1.01552, 0.715, 0, 0.677283, -0.179023, 0.779107, 0, 0, 0, 0, 1);
-        child: clip {
-          clip: 16 16 48 48;
-          child: transform {
-            transform: translate(10, 10);
-            child: container {
-              color {
-                bounds: 16 16 48 48;
-                color: rgba(0,0,0,0);
-              }
-              "node1";
-            }
-          }
+  fill-rule: winding;
+}
+color-matrix {
+  matrix: matrix3d(0.618879, 0.163503, -0.494107, 0, -0.296163, 1.01552, 0.715, 0, 0.677283, -0.179023, 0.779107, 0, 0, 0, 0, 1);
+  child: clip {
+    clip: 16 16 48 48;
+    child: transform {
+      transform: translate(10, 10);
+      child: container {
+        color {
+          bounds: 16 16 48 48;
+          color: rgba(0,0,0,0);
         }
-        color-state: srgb-linear;
+        "node1";
       }
     }
   }
+  color-state: srgb-linear;
 }
