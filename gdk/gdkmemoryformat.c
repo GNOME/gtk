@@ -2869,7 +2869,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .alignment = G_ALIGNOF (guint8),
+    .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R8G8B8,
@@ -2941,7 +2941,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .alignment = G_ALIGNOF (guint8),
+    .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R8G8B8,
@@ -3013,7 +3013,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .alignment = G_ALIGNOF (guint8),
+    .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R8G8B8,
@@ -3085,7 +3085,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .alignment = G_ALIGNOF (guint8),
+    .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R8G8B8,
@@ -3157,7 +3157,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .alignment = G_ALIGNOF (guint8),
+    .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R8G8B8,
@@ -3229,7 +3229,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = -1,
         .swizzle = GDK_SWIZZLE_IDENTITY
     },
-    .alignment = G_ALIGNOF (guint8),
+    .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R8G8B8,
