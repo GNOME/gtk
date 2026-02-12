@@ -28,6 +28,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
+#include "gtk-tool-utils.h"
 
 static void
 benchmark_node (GskRenderNode *node,

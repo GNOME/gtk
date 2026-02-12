@@ -1,9 +1,12 @@
 #pragma once
 
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
+
+GskRenderNode *load_node_file (const char *filename);
 GdkTexture * load_image_file (const char *filename);
 
+GskRenderer   *create_renderer (const char *name, GError **error);
 
 gboolean        find_format_by_name      (const char      *name,
                                           GdkMemoryFormat *format);
