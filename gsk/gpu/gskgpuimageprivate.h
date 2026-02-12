@@ -52,6 +52,9 @@ GdkShaderOp             gsk_gpu_image_get_shader_op                     (GskGpuI
 void                    gsk_gpu_image_get_projection_matrix             (GskGpuImage            *self,
                                                                          graphene_matrix_t      *out_projection);
 
+gboolean                gsk_gpu_image_supports_sampler                  (GskGpuImage            *self,
+                                                                         GskGpuSampler           sampler);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuImage, g_object_unref)
 
