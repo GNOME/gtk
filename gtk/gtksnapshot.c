@@ -560,7 +560,7 @@ gtk_snapshot_collect_isolation (GtkSnapshot      *snapshot,
   if (features == 0)
     return node;
 
-  isolation_node = gsk_isolation_node_new (node, state->data.isolation.features);
+  isolation_node = gsk_isolation_node_new (node, features);
   gsk_render_node_unref (node);
 
   return isolation_node;
