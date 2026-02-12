@@ -80,7 +80,7 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
       self->pool_size = 3 * self->n_ops / 2;
 
       self->timestamp_pool_values = g_new (uint64_t, self->pool_size * 2);
-      self->timestamp_pool_nodes = g_new (uint64_t, self->pool_size);
+      self->timestamp_pool_nodes = g_new (gsize, self->pool_size);
       GSK_VK_CHECK (vkCreateQueryPool, vk_device,
                                        &(VkQueryPoolCreateInfo) {
                                            .sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
