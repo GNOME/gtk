@@ -144,11 +144,12 @@
  *
  * To create a constant expression, use the `<constant>` element. If the type attribute
  * is specified, the element content is interpreted as a value of that type. Otherwise,
- * it is assumed to be an object. For instance:
+ * it is assumed to be an object, or `NULL` if the content is `null`. For instance:
  *
  * ```xml
  *   <constant>string_filter</constant>
  *   <constant type='gchararray'>Hello, world</constant>
+ *   <constant>null</constant>
  * ```
  *
  * String (`type='gchararray'`) constants can be marked for translation with the

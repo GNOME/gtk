@@ -1369,11 +1369,18 @@ expression_info_construct (GtkBuilder      *builder,
 
         if (info->constant.type == G_TYPE_INVALID)
           {
-            GObject *o = gtk_builder_lookup_object (builder, info->constant.text->str, 0, 0, error);
-            if (o == NULL)
-              return NULL;
+            if (g_ascii_strcasecmp (info->constant.text->str, "null") == 0)
+              {
+                expr = gtk_constant_expression_new (G_TYPE_OBJECT, NULL);
+              }
+            else
+              {
+                GObject *o = gtk_builder_lookup_object (builder, info->constant.text->str, 0, 0, error);
+                if (o == NULL)
+                  return NULL;
 
-            expr = gtk_object_expression_new (o);
+                expr = gtk_object_expression_new (o);
+              }
           }
         else
           {
