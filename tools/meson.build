@@ -60,7 +60,7 @@ gtk_tools = [
                        'gtk-image-tool-play.c',
                        'gtk-image-tool-relabel.c',
                        'gtk-image-tool-show.c',
-                       'gtk-image-tool-utils.c',
+                       'gtk-tool-utils.c',
                         '../testsuite/reftests/reftest-compare.c'], [libgtk_dep] ],
   ['gtk4-update-icon-cache', ['updateiconcache.c', '../gtk/gtkiconcachevalidator.c' ] + extra_update_icon_cache_objs, [ libgtk_dep ] ],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c'], [ libgtk_static_dep ] ],
