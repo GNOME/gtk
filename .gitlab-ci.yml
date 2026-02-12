@@ -242,7 +242,6 @@ gnomeos-x86_64:
             --prefix=/usr
             --libdir=lib/$(gcc -print-multiarch)
             ${EXTRA_MESON_FLAGS}
-            -Dvulkan=disabled
             _build
     - meson compile -C _build
     - .gitlab-ci/run-tests.sh _build wayland gtk failing
