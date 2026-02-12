@@ -1043,7 +1043,11 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                       .pNext = &(VkExportMemoryAllocateInfo) {
                                           .sType = VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO,
                                           .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
-                                      }
+                                          .pNext = &(VkMemoryDedicatedAllocateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO,
+                                              .image = self->vk_image,
+                                          },
+                                      },
                                   },
                                   NULL,
                                   &self->allocation.vk_memory);
