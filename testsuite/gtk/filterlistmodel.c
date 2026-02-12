@@ -914,9 +914,14 @@ items_changed_cb (gboolean *items_changed_emitted)
 }
 
 static void
+n_items_changed_cb (gboolean *notify_n_items_emitted)
+{
+  *notify_n_items_emitted = TRUE;
+}
+
+static void
 test_watch_items_signaling (void)
 {
-
   GtkMutableStringObject *string_object;
   GtkFilterListModel *filter_model;
   GtkStringFilter *string_filter;
@@ -924,6 +929,7 @@ test_watch_items_signaling (void)
   const char * const strings[] = {
     "a",
   };
+  gboolean notify_n_items_emitted = FALSE;
   gboolean items_changed_emitted = FALSE;
 
   string_filter = gtk_string_filter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT,
@@ -943,6 +949,7 @@ test_watch_items_signaling (void)
                                             GTK_FILTER (string_filter));
   gtk_filter_list_model_set_watch_items (filter_model, TRUE);
   g_signal_connect_swapped (filter_model, "items-changed", G_CALLBACK (items_changed_cb), &items_changed_emitted);
+  g_signal_connect_swapped (filter_model, "notify::n-items", G_CALLBACK (n_items_changed_cb), &notify_n_items_emitted);
 
   g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
 
@@ -953,10 +960,12 @@ test_watch_items_signaling (void)
   g_assert_true (items_changed_emitted);
 
   items_changed_emitted = FALSE;
+  notify_n_items_emitted = FALSE;
 
   gtk_mutable_string_object_set_string (string_object, "a");
   g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter_model)), ==, 1);
   g_assert_true (items_changed_emitted);
+  g_assert_true (notify_n_items_emitted);
 
   g_clear_object (&string_object);
   g_clear_object (&filter_model);
