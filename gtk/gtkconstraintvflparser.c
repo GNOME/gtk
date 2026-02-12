@@ -252,11 +252,11 @@ static const struct {
   { 8, "baseline" }
 };
 
-static char *
+static const char *
 get_offset_to (const char *str,
                const char *tokens)
 {
-  char *offset = NULL;
+  const char *offset = NULL;
   int n_tokens = strlen (tokens);
 
   for (int i = 0; i < n_tokens; i++)
@@ -418,7 +418,7 @@ parse_attribute:
 
       if (predicate->attr == NULL)
         {
-          char *range_end = get_offset_to (end, "*/+-@,)]");
+          const char *range_end = get_offset_to (end, "*/+-@,)]");
 
           if (range_end != NULL)
             parser->error_range = range_end - end - 1;
@@ -564,7 +564,7 @@ parse_operators:
         }
       else
         {
-          char *range_end = get_offset_to (end, ",)]");
+          const char *range_end = get_offset_to (end, ",)]");
 
           g_free (predicate->object);
 

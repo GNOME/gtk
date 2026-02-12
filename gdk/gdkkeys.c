@@ -677,7 +677,7 @@ static char *
 _gdk_keyval_name (guint keyval)
 {
   static char buf[100];
-  gdk_key *found;
+  const gdk_key *found;
 
   /* Check for directly encoded 24-bit UCS characters: */
   if ((keyval & 0xff000000) == 0x01000000)
@@ -718,7 +718,7 @@ gdk_keys_name_compare (const void *pkey, const void *pbase)
 static guint
 _gdk_keyval_from_name (const char *keyval_name)
 {
-  gdk_key *found;
+  const gdk_key *found;
 
   g_return_val_if_fail (keyval_name != NULL, 0);
 

@@ -103,7 +103,7 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_render_node_get_bounds              (GskRenderNode   *node,
                                                                  graphene_rect_t *bounds);
 GDK_AVAILABLE_IN_4_22
-GskRenderNode **        gsk_render_node_get_children            (GskRenderNode   *node,
+GskRenderNode **        gsk_render_node_get_children            (GskRenderNode   *self,
                                                                  gsize           *n_children);
 
 GDK_AVAILABLE_IN_4_16

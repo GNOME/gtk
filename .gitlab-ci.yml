@@ -66,8 +66,8 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2026-01-23.0'
-    FDO_DISTRIBUTION_VERSION: 43
+    BASE_TAG: '2026-02-10.0'
+    FDO_DISTRIBUTION_VERSION: 44
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
       ccache
@@ -84,6 +84,7 @@ default:
       libasan
       libcloudproviders-devel
       libubsan
+      mesa-vulkan-drivers
       meson
       mingw64-filesystem
       mingw64-gcc
@@ -111,6 +112,7 @@ default:
       meson subprojects download || exit 137 &&
       meson subprojects update --reset || exit 137 &&
       mkdir /subprojects && find subprojects -mindepth 1 -maxdepth 1 -type d -exec mv {} /subprojects \;
+    VK_LOADER_DRIVERS_DISABLE: "*power*"
 
 .distribution.fedora:
   extends:
@@ -240,7 +242,6 @@ gnomeos-x86_64:
             --prefix=/usr
             --libdir=lib/$(gcc -print-multiarch)
             ${EXTRA_MESON_FLAGS}
-            -Dvulkan=disabled
             _build
     - meson compile -C _build
     - .gitlab-ci/run-tests.sh _build wayland gtk failing

@@ -193,3 +193,40 @@ gsk_gpu_image_get_projection_matrix (GskGpuImage       *self,
 {
   GSK_GPU_IMAGE_GET_CLASS (self)->get_projection_matrix (self, out_projection);
 }
+
+gboolean
+gsk_gpu_image_supports_sampler (GskGpuImage   *self,
+                                GskGpuSampler  sampler)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  switch (sampler)
+    {
+      case GSK_GPU_SAMPLER_NEAREST:
+        if (priv->shader_op != GDK_SHADER_DEFAULT)
+          return FALSE;
+        return TRUE;
+
+      case GSK_GPU_SAMPLER_DEFAULT:
+      case GSK_GPU_SAMPLER_REPEAT:
+      case GSK_GPU_SAMPLER_REFLECT:
+        return (priv->flags & GSK_GPU_IMAGE_FILTERABLE) != 0; 
+
+      case GSK_GPU_SAMPLER_TRANSPARENT:
+        if (gdk_memory_format_alpha (priv->format) == GDK_MEMORY_ALPHA_OPAQUE)
+          return FALSE;
+        return (priv->flags & GSK_GPU_IMAGE_FILTERABLE) != 0; 
+
+      case GSK_GPU_SAMPLER_MIPMAP_DEFAULT:
+        /* Our mipmap algorithm can't deal with this */
+        if (priv->shader_op != GDK_SHADER_DEFAULT)
+          return FALSE;
+        return (priv->flags & (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_FILTERABLE)) ==
+               (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_FILTERABLE);
+
+      case GSK_GPU_SAMPLER_N_SAMPLERS:
+      default:
+        g_return_val_if_reached (FALSE);
+    }
+}
+

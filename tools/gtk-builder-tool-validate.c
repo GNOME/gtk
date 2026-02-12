@@ -193,19 +193,20 @@ parse_template_error (const char   *message,
                       char        **parent_name)
 {
   char *p;
+  const char *m;
 
-  p = strstr (message, "(class '");
-  if (p)
+  m = strstr (message, "(class '");
+  if (m)
     {
-      *class_name = g_strdup (p + strlen ("(class '"));
+      *class_name = g_strdup (m + strlen ("(class '"));
       p = strstr (*class_name, "'");
       if (p)
         *p = '\0';
     }
-  p = strstr (message, ", parent '");
-  if (p)
+  m = strstr (message, ", parent '");
+  if (m)
     {
-      *parent_name = g_strdup (p + strlen (", parent '"));
+      *parent_name = g_strdup (m + strlen (", parent '"));
       p = strstr (*parent_name, "'");
       if (p)
         *p = '\0';

@@ -136,14 +136,16 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
   const VkImageAspectFlags aspect_flags[3] = { VK_IMAGE_ASPECT_PLANE_0_BIT, VK_IMAGE_ASPECT_PLANE_1_BIT, VK_IMAGE_ASPECT_PLANE_2_BIT };
   VkBufferImageCopy buffer_image_copy[3];
   GdkMemoryLayout layout;
+  GdkMemoryFormat format;
   guchar *data;
   gsize i, n_planes;
 
+  format = gsk_gpu_image_get_format (GSK_GPU_IMAGE (image));
   gdk_memory_layout_init (&layout,
-                          gsk_gpu_image_get_format (GSK_GPU_IMAGE (image)),
+                          format,
                           area->width,
                           area->height,
-                          1);
+                          gdk_memory_format_alignment (format));
 
   *buffer = gsk_vulkan_buffer_new_write (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                          layout.size);

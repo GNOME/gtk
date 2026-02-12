@@ -1095,7 +1095,7 @@ update_features (void)
             {
               FeatureItem *item = l->data;
               char buf[5];
-              char *p;
+              const char *p;
 
               hb_tag_to_string (item->tag, buf);
               buf[4] = 0;
