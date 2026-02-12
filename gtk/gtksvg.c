@@ -1499,6 +1499,29 @@ add_font_from_url (GtkSvg              *svg,
 }
 
 /* }}} */
+/* {{{ Color utilities */
+
+static void
+apply_color_matrix (GdkColorState           *color_state,
+                    const graphene_matrix_t *matrix,
+                    const graphene_vec4_t   *offset,
+                    const GdkColor          *color,
+                    GdkColor                *new_color)
+{
+  GdkColor c;
+  graphene_vec4_t p;
+  float v[4];
+
+  gdk_color_convert (&c, color_state, color);
+  graphene_vec4_init (&p, c.r, c.g, c.b, c.a);
+  graphene_matrix_transform_vec4 (matrix, &p, &p);
+  graphene_vec4_add (&p, offset, &p);
+  graphene_vec4_to_float (&p, v);
+  gdk_color_init (new_color, color_state, v);
+  gdk_color_finish (&c);
+}
+
+/* }}} */
 /* {{{ Caching */
 
 static void
@@ -1598,6 +1621,18 @@ transform_gradient_line (GskTransform *transform,
 }
 
 /*  }}} */
+/* {{{ Rendernode utilities */
+
+static GskRenderNode *
+skip_debug_node (GskRenderNode *node)
+{
+  if (gsk_render_node_get_node_type (node) == GSK_DEBUG_NODE)
+    return gsk_debug_node_get_child (node);
+  else
+    return node;
+}
+
+/* }}} */
 /* {{{ Text */
 
 static char *
@@ -19670,13 +19705,25 @@ apply_filter_tree (Shape         *shape,
             FilterResult *in;
             graphene_matrix_t matrix;
             graphene_vec4_t offset;
+            GskRenderNode *node;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
             color_matrix_type_get_color_matrix (svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_TYPE)),
                                                 filter_get_current_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES),
                                                 &matrix, &offset);
 
-            result = gsk_color_matrix_node_new2 (in->node, color_state, &matrix, &offset);
+            node = skip_debug_node (in->node);
+            if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE)
+              {
+                const GdkColor *color = gsk_color_node_get_gdk_color (node);
+                GdkColor new_color;
+
+                apply_color_matrix (color_state, &matrix, &offset,  color, &new_color);
+                result = gsk_color_node_new2 (&new_color, &node->bounds);
+                gdk_color_finish (&new_color);
+              }
+            else
+              result = gsk_color_matrix_node_new2 (in->node, color_state, &matrix, &offset);
 
             filter_result_unref (in);
           }
