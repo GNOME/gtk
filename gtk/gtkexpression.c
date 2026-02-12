@@ -143,12 +143,14 @@
  * [class@Gtk.BuilderListItemFactory] for an example of this technique.
  *
  * To create a constant expression, use the `<constant>` element. If the type attribute
- * is specified, the element content is interpreted as a value of that type. Otherwise,
+ * is specified, the element content is interpreted as a value of that type, and the
+ * initial attribute can be specified to get the initial value for that type. Otherwise,
  * it is assumed to be an object. For instance:
  *
  * ```xml
  *   <constant>string_filter</constant>
  *   <constant type='gchararray'>Hello, world</constant>
+ *   <constant type='gchararray' initial='true' /> <!-- NULL -->
  * ```
  *
  * String (`type='gchararray'`) constants can be marked for translation with the

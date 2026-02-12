@@ -2653,6 +2653,12 @@ builder_copy_arg (gpointer item, const char *arg)
   return g_strdup (arg);
 }
 
+G_MODULE_EXPORT char *
+builder_get_search_if_null (gpointer item, const char *arg)
+{
+  return (arg == NULL) ? g_strdup (gtk_string_filter_get_search (item)) : g_strdup (arg);
+}
+
 static void
 test_expressions (void)
 {
@@ -2694,6 +2700,16 @@ test_expressions (void)
     "        </lookup>"
     "        <constant type='gchararray'>Hello World</constant>"
     "      </try>"
+    "    </property>"
+    "  </object>"
+    "</interface>",
+    "<interface>"
+    "  <object class='GtkStringFilter' id='filter'>"
+    "    <property name='search'>Hello World</property>"
+    "    <property name='expression'>"
+    "      <closure type='gchararray' function='builder_get_search_if_null'>"
+    "        <constant type='gchararray' initial='true' />"
+    "      </closure>"
     "    </property>"
     "  </object>"
     "</interface>",

@@ -1149,6 +1149,8 @@ parse_constant_expression (ParserData   *data,
   ExpressionInfo *info;
   const char *type_name = NULL;
   GType type;
+  gboolean initial = FALSE;
+  const char *initial_string = NULL;
   gboolean translatable = FALSE;
   const char *translatable_string = NULL;
   const char *context = NULL;
@@ -1161,6 +1163,7 @@ parse_constant_expression (ParserData   *data,
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "type", &type_name,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "initial", &initial_string,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable_string,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &context,
@@ -1170,8 +1173,26 @@ parse_constant_expression (ParserData   *data,
       return;
     }
 
+  if (initial_string &&
+      !_gtk_builder_boolean_from_string (initial_string, &initial, error))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
   if (type_name == NULL)
-    type = G_TYPE_INVALID;
+    {
+      type = G_TYPE_INVALID;
+      if (initial)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+                       "Constants require a type attribute for an initial value.");
+          _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+          return;
+        }
+    }
   else
     {
       type = gtk_builder_get_type_from_name (data->builder, type_name);
@@ -1197,6 +1218,7 @@ parse_constant_expression (ParserData   *data,
   info->tag_type = TAG_EXPRESSION;
   info->expression_type = EXPRESSION_CONSTANT;
   info->constant.type = type;
+  info->constant.initial = initial;
   info->constant.text = g_string_new (NULL);
   info->constant.translatable = translatable;
   info->constant.context = g_strdup (context);
@@ -1379,12 +1401,18 @@ expression_info_construct (GtkBuilder      *builder,
           {
             GValue value = G_VALUE_INIT;
 
-            if (!gtk_builder_value_from_string_type (builder,
-                                                     info->constant.type,
-                                                     info->constant.text->str,
-                                                     &value,
-                                                     error))
-              return  NULL;
+            if (info->constant.initial)
+              {
+                g_value_init (&value, info->constant.type);
+              }
+            else if (!gtk_builder_value_from_string_type (builder,
+                                                          info->constant.type,
+                                                          info->constant.text->str,
+                                                          &value,
+                                                          error))
+              {
+                return NULL;
+              }
 
             if (G_VALUE_HOLDS_OBJECT (&value))
               expr = gtk_object_expression_new (g_value_get_object (&value));
