@@ -581,6 +581,7 @@ setup_value_widgets (GtkSignalListItemFactory *factory,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_box_append (GTK_BOX (box), label);
   picture = gtk_picture_new ();
   gtk_picture_set_can_shrink (GTK_PICTURE (picture), TRUE);
