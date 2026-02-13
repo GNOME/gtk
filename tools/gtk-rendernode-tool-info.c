@@ -61,11 +61,22 @@ get_node_name (GskRenderNodeType type)
   GEnumClass *class;
   GEnumValue *value;
   const char *name;
+  static char buf[80];
 
-  class = g_type_class_ref (GSK_TYPE_RENDER_NODE_TYPE);
+  class = g_type_class_get (GSK_TYPE_RENDER_NODE_TYPE);
   value = g_enum_get_value (class, type);
   name = value->value_nick;
-  g_type_class_unref (class);
+
+  if (g_str_has_suffix (name, "-node"))
+    {
+      unsigned int i;
+
+      for (i = 0; i < MIN (strlen (name) - strlen ("-node"), sizeof (buf) - 1); i++)
+        buf[i] = name[i];
+      buf[i] = '\0';
+
+      return buf;
+    }
 
   return name;
 }
@@ -90,11 +101,18 @@ file_info (const char *filename)
         namelen = MAX (namelen, strlen (get_node_name (i)));
     }
 
-  g_print ("%s %u\n", _("Number of nodes:"), total);
+  namelen = MAX (namelen, strlen (_("Number of nodes:")));
+
+  g_print ("%*s %u\n", namelen, _("Number of nodes:"), total);
+
+  int digits = 0;
+  while (pow (10, digits) < total)
+    digits++;
+
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
       if (count.counts[i] > 0)
-        g_print ("  %*s: %u\n", namelen, get_node_name (i), count.counts[i]);
+        g_print ("%*s: %*u\n", namelen - 1, get_node_name (i), digits, count.counts[i]);
     }
 
   g_print ("%s %u\n", _("Depth:"), count.max_depth);
