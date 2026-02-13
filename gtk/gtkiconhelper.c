@@ -190,6 +190,8 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
 {
   GtkIconHelper *self = GTK_ICON_HELPER (paintable);
   GtkCssStyle *style;
+  double image_ratio, ratio;
+  double x, y, w, h;
 
   style = gtk_css_node_get_style (self->node);
 
@@ -197,98 +199,43 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
   if (self->paintable == NULL)
     return;
 
-  switch (gtk_image_definition_get_storage_type (self->def))
+  image_ratio = (double) width / height;
+  ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
+  if (ratio == 0)
     {
-    case GTK_IMAGE_ICON_NAME:
-    case GTK_IMAGE_GICON:
-      {
-        double x, y, w, h;
+      w = MIN (width, gtk_icon_helper_get_size (self));
+      h = MIN (height, gtk_icon_helper_get_size (self));
+    }
+  else if (ratio > image_ratio)
+    {
+      w = MIN (width, gtk_icon_helper_get_size (self));
+      h = w / ratio;
+    }
+  else
+    {
+      h = MIN (height, gtk_icon_helper_get_size (self));
+      w = h * ratio;
+    }
 
-        /* Never scale up icons. */
-        w = gdk_paintable_get_intrinsic_width (self->paintable);
-        h = gdk_paintable_get_intrinsic_height (self->paintable);
-        w = MIN (w, width);
-        h = MIN (h, height);
-        x = (width - w) / 2;
-        y = (height - h) / 2;
+  x = floor (width - ceil (w)) / 2;
+  y = floor (height - ceil (h)) / 2;
 
-        if (w == 0 || h == 0)
-          return;
-
-        if (x  != 0 || y != 0)
-          {
-            gtk_snapshot_save (snapshot);
-            gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-            gtk_css_style_snapshot_icon_paintable (style,
-                                                   snapshot,
-                                                   self->paintable,
-                                                   w, h);
-            gtk_snapshot_restore (snapshot);
-          }
-        else
-          {
-            gtk_css_style_snapshot_icon_paintable (style,
-                                                   snapshot,
-                                                   self->paintable,
-                                                   w, h);
-
-          }
-
-      }
-      break;
-
-    case GTK_IMAGE_EMPTY:
-      break;
-
-    case GTK_IMAGE_PAINTABLE:
-    default:
-      {
-        double image_ratio = (double) width / height;
-        double ratio;
-        double x, y, w, h;
-
-        if (self->paintable == NULL)
-          break;
-
-        ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
-        if (ratio == 0)
-          {
-            w = MIN (width, gtk_icon_helper_get_size (self));
-            h = MIN (height, gtk_icon_helper_get_size (self));
-          }
-        else if (ratio > image_ratio)
-          {
-            w = MIN (width, gtk_icon_helper_get_size (self));
-            h = w / ratio;
-          }
-        else
-          {
-            h = MIN (height, gtk_icon_helper_get_size (self));
-            w = h * ratio;
-          }
-
-        x = floor (width - ceil (w)) / 2;
-        y = floor (height - ceil (h)) / 2;
-
-        if (x != 0 || y != 0)
-          {
-            gtk_snapshot_save (snapshot);
-            gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-            gtk_css_style_snapshot_icon_paintable (style,
-                                                   snapshot,
-                                                   self->paintable,
-                                                   w, h);
-            gtk_snapshot_restore (snapshot);
-          }
-        else
-          {
-            gtk_css_style_snapshot_icon_paintable (style,
-                                                   snapshot,
-                                                   self->paintable,
-                                                   w, h);
-          }
-      }
-      break;
+  if (x != 0 || y != 0)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+      gtk_css_style_snapshot_icon_paintable (style,
+                                             snapshot,
+                                             self->paintable,
+                                             w, h);
+      gtk_snapshot_restore (snapshot);
+    }
+  else
+    {
+      gtk_css_style_snapshot_icon_paintable (style,
+                                             snapshot,
+                                             self->paintable,
+                                             w, h);
     }
 }
 
