@@ -56,6 +56,10 @@ struct _GskVulkanDebugFrameClass
 
 G_DEFINE_TYPE (GskVulkanDebugFrame, gsk_vulkan_debug_frame, GSK_TYPE_VULKAN_FRAME)
 
+#if !GLIB_CHECK_VERSION(2, 87, 3)
+#define g_get_monotonic_time_ns() (1000 * g_get_monotonic_time ())
+#endif
+
 static void
 gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
                                    GskVulkanCommandState *state,
@@ -127,11 +131,11 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
                                self->vk_timestamp_pool,
                                self->n_ops * 2);
           entry = gsk_vulkan_debug_get (&self->debug, op->node_id);
-          entry->profile.self.cpu_submit_ns -= g_get_monotonic_time () * 1000;
+          entry->profile.self.cpu_submit_ns -= g_get_monotonic_time_ns ();
 
           op = gsk_gpu_op_vk_command (op, GSK_GPU_FRAME (frame), state);
 
-          entry->profile.self.cpu_submit_ns += g_get_monotonic_time () * 1000;
+          entry->profile.self.cpu_submit_ns += g_get_monotonic_time_ns ();
 
           vkCmdWriteTimestamp (state->vk_command_buffer,
                                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
