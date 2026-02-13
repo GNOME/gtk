@@ -346,10 +346,14 @@ item_changed_cb (gpointer item,
 
   is_filtered = gtk_bitset_contains (self->matches, position);
   if (was_filtered != is_filtered)
-    g_list_model_items_changed (G_LIST_MODEL (self),
-                                position > 0 ? gtk_bitset_get_size_in_range (self->matches, 0, position - 1) : 0,
-                                is_filtered ? 0 : 1,
-                                is_filtered ? 1 : 0);
+    {
+      g_list_model_items_changed (G_LIST_MODEL (self),
+                                  position > 0 ? gtk_bitset_get_size_in_range (self->matches, 0, position - 1) : 0,
+                                  is_filtered ? 0 : 1,
+                                  is_filtered ? 1 : 0);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
+    }
 }
 
 static void
