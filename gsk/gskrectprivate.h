@@ -303,6 +303,36 @@ gsk_rect_to_cairo_grow (const graphene_rect_t *graphene,
   cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
 }
 
+static inline gboolean
+isintegralf (float f)
+{
+  return truncf(f) == f;
+}
+
+static inline gboolean G_GNUC_PURE
+gsk_rect_is_integral (const graphene_rect_t *rect)
+{
+  return isintegralf (rect->origin.x) &&
+         isintegralf (rect->origin.y) &&
+         isintegralf (rect->size.width) &&
+         isintegralf (rect->size.height);
+}
+
+static inline gboolean G_GNUC_WARN_UNUSED_RESULT
+gsk_rect_to_cairo_exact (const graphene_rect_t *graphene,
+                         cairo_rectangle_int_t *cairo)
+{
+  if (!gsk_rect_is_integral (graphene))
+    return FALSE;
+
+  cairo->x = graphene->origin.x;
+  cairo->y = graphene->origin.y;
+  cairo->width = graphene->size.width;
+  cairo->height = graphene->size.height;
+
+  return TRUE;
+}
+
 static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_to_cairo_shrink (const graphene_rect_t *graphene,
                           cairo_rectangle_int_t *cairo)
