@@ -36,7 +36,8 @@ struct _GskGpuClip
   GskRoundedRect       rect;
 };
 
-void                    gsk_gpu_clip_init_empty                         (GskGpuClip          *clip,
+void                    gsk_gpu_clip_init_empty                         (GskGpuClip             *clip,
+                                                                         const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect);
 void                    gsk_gpu_clip_init_contained                     (GskGpuClip          *clip,
                                                                          const graphene_rect_t  *rect);
