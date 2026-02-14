@@ -977,7 +977,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuRenderPass   *self,
 
       old_scissor = self->scissor;
 
-      if (gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, &clip))
+      if (gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, graphene_point_zero (), &clip))
         {
           if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
             {
@@ -1027,7 +1027,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuRenderPass   *self,
             }
         }
 
-      if (!gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, &clip))
+      if (!gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, graphene_point_zero (), &clip))
         {
           GskGpuImage *image;
           graphene_rect_t bounds, tex_rect;
@@ -1192,7 +1192,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
                                                   &scissor))
     {
       GskGpuClip scissored_clip;
-      if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &scissor))
+      if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, graphene_point_zero (), &scissor))
         gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
     }
 
@@ -4311,7 +4311,7 @@ gsk_gpu_node_processor_set_scissor (GskGpuRenderPass         *self,
       g_assert_not_reached ();
     }
   
-  gsk_gpu_clip_init_empty (&self->clip, &clip_rect);
+  gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &clip_rect);
 
   self->pending_globals |= GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR;
 }

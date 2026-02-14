@@ -46,8 +46,9 @@ void                    gsk_gpu_clip_init_copy                          (GskGpuC
 void                    gsk_gpu_clip_init_rect                          (GskGpuClip          *clip,
                                                                          const graphene_rect_t  *rect);
 
-gboolean                gsk_gpu_clip_intersect_rect                     (GskGpuClip          *dest,
-                                                                         const GskGpuClip    *src,
+gboolean                gsk_gpu_clip_intersect_rect                     (GskGpuClip             *dest,
+                                                                         const GskGpuClip       *src,
+                                                                         const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
 gboolean                gsk_gpu_clip_intersect_rounded_rect             (GskGpuClip          *dest,
                                                                          const GskGpuClip    *src,
