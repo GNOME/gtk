@@ -925,6 +925,10 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
         }
     }
 
+  /* If patterns list is empty, add a catch-all as fallback */
+  if (array->len == 0)
+    g_ptr_array_add (array, g_strdup ("*"));
+
   g_ptr_array_add (array, NULL); /* Null terminate */
   return (char **)g_ptr_array_free (array, FALSE);
 }
