@@ -67,11 +67,15 @@ gsk_gpu_clip_init_after_intersection (GskGpuClip                 *self,
 }
 
 gboolean
-gsk_gpu_clip_intersect_rect (GskGpuClip            *dest,
-                             const GskGpuClip      *src,
-                             const graphene_rect_t *rect)
+gsk_gpu_clip_intersect_rect (GskGpuClip             *dest,
+                             const GskGpuClip       *src,
+                             const graphene_point_t *offset,
+                             const graphene_rect_t  *rect)
 {
   GskRoundedRectIntersection res;
+  graphene_rect_t tmp;
+
+  gsk_rect_init_offset (&tmp, rect, offset);
 
   switch (src->type)
     {
@@ -80,7 +84,7 @@ gsk_gpu_clip_intersect_rect (GskGpuClip            *dest,
       break;
 
     case GSK_GPU_CLIP_NONE:
-      if (gsk_rect_contains_rect (rect, &src->rect.bounds))
+      if (gsk_rect_contains_rect (&tmp, &src->rect.bounds))
         {
           gsk_gpu_clip_init_copy (dest, src);
           return TRUE;
@@ -89,7 +93,7 @@ gsk_gpu_clip_intersect_rect (GskGpuClip            *dest,
 
     case GSK_GPU_CLIP_CONTAINED:
       gsk_gpu_clip_init_copy (dest, src);
-      if (gsk_rect_intersection (&dest->rect.bounds, rect, &dest->rect.bounds))
+      if (gsk_rect_intersection (&dest->rect.bounds, &tmp, &dest->rect.bounds))
         dest->type = GSK_GPU_CLIP_RECT;
       else
         dest->type = GSK_GPU_CLIP_ALL_CLIPPED;
@@ -97,12 +101,12 @@ gsk_gpu_clip_intersect_rect (GskGpuClip            *dest,
 
     case GSK_GPU_CLIP_RECT:
       gsk_gpu_clip_init_copy (dest, src);
-      if (!gsk_rect_intersection (&dest->rect.bounds, rect, &dest->rect.bounds))
+      if (!gsk_rect_intersection (&dest->rect.bounds, &tmp, &dest->rect.bounds))
         dest->type = GSK_GPU_CLIP_ALL_CLIPPED;
       break;
 
     case GSK_GPU_CLIP_ROUNDED:
-      res = gsk_rounded_rect_intersect_with_rect (&src->rect, rect, &dest->rect);
+      res = gsk_rounded_rect_intersect_with_rect (&src->rect, &tmp, &dest->rect);
       if (!gsk_gpu_clip_init_after_intersection (dest, res))
         return FALSE;
       break;
