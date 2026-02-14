@@ -8,6 +8,71 @@
 #include "gskrectprivate.h"
 #include "gsktransform.h"
 
+static gboolean
+gsk_gpu_render_pass_device_to_user (GskGpuRenderPass            *self,
+                                    const cairo_rectangle_int_t *device,
+                                    graphene_rect_t             *user)
+{
+  float scale_x, scale_y;
+  GskTransform *inverse;
+  graphene_rect_t tmp;
+
+  if (gsk_transform_get_fine_category (self->modelview) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
+    return FALSE;
+
+  inverse = gsk_transform_invert (gsk_transform_ref (self->modelview));
+  gsk_transform_transform_bounds (inverse, &GSK_RECT_INIT_CAIRO (device), &tmp);
+  gsk_transform_unref (inverse);
+
+  scale_x = graphene_vec2_get_x (&self->scale);
+  scale_y = graphene_vec2_get_y (&self->scale);
+  *user = GRAPHENE_RECT_INIT (tmp.origin.x / scale_x - self->offset.x,
+                              tmp.origin.y / scale_y - self->offset.y,
+                              tmp.size.width / scale_x,
+                              tmp.size.height / scale_y);
+
+  return TRUE;
+}
+
+static gboolean
+gsk_gpu_render_pass_user_to_device (GskGpuRenderPass      *self,
+                                    const graphene_rect_t *user,
+                                    graphene_rect_t       *device)
+{
+  float scale_x, scale_y;
+  graphene_rect_t tmp;
+
+  if (gsk_transform_get_fine_category (self->modelview) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
+    return FALSE;
+
+  scale_x = graphene_vec2_get_x (&self->scale);
+  scale_y = graphene_vec2_get_y (&self->scale);
+  tmp = GRAPHENE_RECT_INIT ((user->origin.x + self->offset.x) * scale_x,
+                            (user->origin.y + self->offset.y) * scale_y,
+                            user->size.width * scale_x,
+                            user->size.height * scale_y);
+
+  gsk_transform_transform_bounds (self->modelview, &tmp, device);
+
+  return TRUE;
+}
+
+static gboolean
+gsk_gpu_render_pass_user_to_device_exact (GskGpuRenderPass      *self,
+                                          const graphene_rect_t *user,
+                                          cairo_rectangle_int_t *device)
+{
+  graphene_rect_t tmp;
+
+  if (!gsk_gpu_render_pass_user_to_device (self, user, &tmp))
+    return FALSE;
+
+  if (!gsk_rect_to_cairo_exact (&tmp, device))
+    return FALSE;
+
+  return TRUE;
+}
+
 void
 gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
                           GskGpuFrame                 *frame,
@@ -31,15 +96,18 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
 
   self->scissor = *clip;
   self->blend = GSK_GPU_BLEND_OVER;
+  self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
+                                      -viewport->origin.y);
   if (clip->x == 0 && clip->y == 0 && clip->width == width && clip->height == height)
     {
-      gsk_gpu_clip_init_empty (&self->clip, &GRAPHENE_RECT_INIT (0, 0, viewport->size.width, viewport->size.height));
+      gsk_gpu_clip_init_empty (&self->clip, &self->offset, viewport);
     }
   else
     {
       float scale_x = viewport->size.width / width;
       float scale_y = viewport->size.height / height;
       gsk_gpu_clip_init_empty (&self->clip,
+                               graphene_point_zero (),
                                &GRAPHENE_RECT_INIT (
                                    scale_x * clip->x,
                                    scale_y * clip->y,
@@ -53,8 +121,6 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
   graphene_vec2_init (&self->scale,
                       width / viewport->size.width,
                       height / viewport->size.height);
-  self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
-                                      -viewport->origin.y);
   self->opacity = 1.0;
   self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND;
 
@@ -103,7 +169,7 @@ void
 gsk_gpu_render_pass_set_transform (GskGpuRenderPass *self,
                                    GskGpuTransform  *transform)
 {
-  gsk_gpu_clip_init_empty (&self->clip, &GSK_RECT_INIT_CAIRO (&self->scissor));
+  gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &GSK_RECT_INIT_CAIRO (&self->scissor));
   gsk_gpu_clip_scale (&self->clip,
                       &self->clip,
                       transform->dihedral,
@@ -264,7 +330,7 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
             inverse = gsk_transform_invert (gsk_transform_ref (clip_transform));
             gsk_transform_transform_bounds (inverse, &storage->clip.rect.bounds, &new_bounds);
             gsk_transform_unref (inverse);
-            gsk_gpu_clip_init_empty (&self->clip, &new_bounds);
+            gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &new_bounds);
           }
         else if (!gsk_gpu_clip_transform (&self->clip, &storage->clip, clip_transform, child_bounds))
           {
@@ -302,16 +368,12 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
             self->clip.rect.bounds.origin.y += self->offset.y;
 
             /* We can now check the clip against the scissor rect again */
-            scissor_rect = GSK_RECT_INIT_CAIRO (&self->scissor);
-            if (self->modelview)
+            if (!gsk_gpu_render_pass_device_to_user (self, &self->scissor, &scissor_rect))
               {
-                GskTransform *inverse = gsk_transform_invert (gsk_transform_ref (self->modelview));
-                g_return_val_if_fail (inverse != NULL, FALSE);
-                gsk_transform_transform_bounds (inverse, &scissor_rect, &scissor_rect);
-                gsk_transform_unref (inverse);
+                /* Only happens with more complex transforms */
+                g_assert_not_reached ();
               }
-            gsk_rect_scale (&scissor_rect, scale_x, scale_y, &scissor_rect);
-            if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &scissor_rect))
+            if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &self->offset, &scissor_rect))
               gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
           }
         else
@@ -379,3 +441,99 @@ gsk_gpu_render_pass_pop_translate (GskGpuRenderPass                 *self,
 {
   self->offset = storage->offset;
 }
+
+gboolean
+gsk_gpu_render_pass_is_all_clipped (GskGpuRenderPass *self)
+{
+  return gsk_gpu_clip_is_all_clipped (&self->clip);
+}
+
+gboolean
+gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
+                                    const graphene_rect_t       *clip,
+                                    GskGpuRenderPassClipStorage *storage)
+{
+  cairo_rectangle_int_t scissor;
+  graphene_rect_t scissored;
+
+  if (gsk_gpu_clip_is_all_clipped (&self->clip))
+    {
+      storage->modified = 0;
+      return TRUE;
+    }
+
+  if (gsk_gpu_render_pass_device_to_user (self,
+                                          &self->scissor,
+                                          &scissored))
+    {
+      if (!gsk_rect_intersection (&scissored, clip, &scissored))
+        {
+          gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+          gsk_gpu_clip_init_all_clipped (&self->clip);
+          storage->modified = GSK_GPU_GLOBAL_CLIP;
+          self->pending_globals |= storage->modified;
+          return TRUE;
+        }
+    }
+  else
+    scissored = *clip;
+
+  /* Check if we can use scissoring for the clip */
+  /* We could check scissoring for each edge individually, but that's a lot
+   * more code */
+  if (gsk_gpu_render_pass_user_to_device_exact (self, &scissored, &scissor))
+    {
+      storage->scissor = self->scissor;
+      storage->modified = GSK_GPU_GLOBAL_SCISSOR;
+      self->scissor = scissor;
+
+      gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+
+      if (gsk_gpu_clip_intersect_rect (&self->clip, &storage->clip, &self->offset, &scissored))
+        {
+          /* if scissoring does all the work, we can pretend the clip is empty */
+          if (gsk_gpu_clip_contains_rect (&self->clip, &self->offset, &scissored))
+            {
+              gsk_gpu_clip_init_empty (&self->clip, &self->offset, &scissored);
+            }
+          storage->modified |= GSK_GPU_GLOBAL_CLIP;
+        }
+      else
+        {
+          gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+        }
+    }
+  else
+    {
+      gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+
+      if (gsk_gpu_clip_intersect_rect (&self->clip, &storage->clip, &self->offset, &scissored))
+        {
+          storage->modified = GSK_GPU_GLOBAL_CLIP;
+        }
+      else
+        {
+          gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+          return FALSE;
+        }
+
+    }
+
+  self->pending_globals |= storage->modified;
+
+  return TRUE;
+}
+
+void
+gsk_gpu_render_pass_pop_clip_rect (GskGpuRenderPass            *self,
+                                   GskGpuRenderPassClipStorage *storage)
+{
+  if (storage->modified & GSK_GPU_GLOBAL_SCISSOR)
+    self->scissor = storage->scissor;
+
+  if (storage->modified & GSK_GPU_GLOBAL_CLIP)
+    gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+
+  self->pending_globals |= storage->modified;
+}
+
