@@ -872,6 +872,7 @@ void _gtk_file_filter_store_types_in_list (GtkFileFilter *filter, jobject list)
 }
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
 char **
 _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
 {
@@ -927,6 +928,7 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
   g_ptr_array_add (array, NULL); /* Null terminate */
   return (char **)g_ptr_array_free (array, FALSE);
 }
+#endif
 
 static GtkFilterMatch
 gtk_file_filter_get_strictness (GtkFilter *filter)
