@@ -4578,11 +4578,8 @@ transform_parser_parse (GtkCssParser *parser)
 
           transform.type = TRANSFORM_ROTATE;
           transform.rotate.angle = values[0];
-          if (values[1])
-            {
-              transform.rotate.x = values[1];
-              transform.rotate.y = values[2];
-            }
+          transform.rotate.x = values[1];
+          transform.rotate.y = values[2];
         }
       else if (gtk_css_parser_has_function (parser, "scale"))
         {

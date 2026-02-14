@@ -126,6 +126,7 @@ test_data = [
   'text-stroke-gradient.svg',
   'text-text-03-b.svg',
   'text-text-10-t.svg',
+  'transform-rotate.svg',
   'use.svg',
   'use2.svg',
   'viewbox.svg',

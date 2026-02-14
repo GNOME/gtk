@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="912.4717255049763" height="1482.4717255049763" viewBox="-456.2358627524882 -741.2358627524882 912.4717255049763 1482.4717255049763">
+<circle cx="0" cy="-503" r="25.0" fill="#a0a0a0" stroke-width="5.0" stroke="rgb(230, 45, 66)" />
+
+<path d="M-15,-503 L15,-503" stroke-width="5" stroke="rgb(230, 45, 66)" transform="rotate(0, 0, -503)" />
+<path d="M-15,-503 L15,-503" stroke-width="5" stroke="rgb(230, 45, 66)" transform="rotate(90, 0, -503)" />
+<path d="M-15,-503 L15,-503" stroke-width="5" stroke="rgb(230, 45, 66)" transform="rotate(45, 0, -503)" />
+<path d="M-15,-503 L15,-503" stroke-width="5" stroke="rgb(230, 45, 66)" transform="rotate(135, 0, -503)" />
+</svg>
+
