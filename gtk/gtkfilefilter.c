@@ -888,8 +888,12 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
       switch (rule->type)
         {
         case FILTER_RULE_MIME_TYPE:
-          g_ptr_array_free (array, TRUE);
-          return NULL;
+          for (int i = 0; rule->u.content_types[i]; i++)
+            {
+              /* When the content type is a file extension, use it as pattern */
+              if (rule->u.content_types[i][0] == '.')
+                g_ptr_array_add (array, g_strdup_printf ("*%s", rule->u.content_types[i]));
+            }
           break;
 
         case FILTER_RULE_PATTERN:
