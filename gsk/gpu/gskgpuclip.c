@@ -7,11 +7,14 @@
 #include "gsktransform.h"
 
 void
-gsk_gpu_clip_init_empty (GskGpuClip            *clip,
-                         const graphene_rect_t *rect)
+gsk_gpu_clip_init_empty (GskGpuClip             *clip,
+                         const graphene_point_t *offset,
+                         const graphene_rect_t  *rect)
 {
   clip->type = GSK_GPU_CLIP_NONE;
   gsk_rounded_rect_init_from_rect (&clip->rect, rect, 0);
+  clip->rect.bounds.origin.x += offset->x;
+  clip->rect.bounds.origin.y += offset->y;
 }
 
 void
