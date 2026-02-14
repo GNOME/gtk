@@ -52,6 +52,12 @@ typedef struct {
   graphene_point_t offset;
 } GskGpuRenderPassTranslateStorage;
 
+typedef struct {
+  GskGpuClip clip;
+  cairo_rectangle_int_t scissor;
+  guint modified;
+} GskGpuRenderPassClipStorage;
+
 void                    gsk_gpu_render_pass_init                        (GskGpuRenderPass               *self,
                                                                          GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *target,
@@ -84,6 +90,14 @@ void                    gsk_gpu_render_pass_push_translate              (GskGpuR
                                                                          GskGpuRenderPassTranslateStorage *storage);
 void                    gsk_gpu_render_pass_pop_translate               (GskGpuRenderPass               *self,
                                                                          GskGpuRenderPassTranslateStorage *storage);
+
+gboolean                gsk_gpu_render_pass_is_all_clipped              (GskGpuRenderPass                 *self);
+
+gboolean                gsk_gpu_render_pass_push_clip_rect              (GskGpuRenderPass                 *self,
+                                                                         const graphene_rect_t            *clip,
+                                                                         GskGpuRenderPassClipStorage      *storage);
+void                    gsk_gpu_render_pass_pop_clip_rect               (GskGpuRenderPass                 *self,
+                                                                         GskGpuRenderPassClipStorage      *storage);
 
 G_END_DECLS
 

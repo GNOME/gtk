@@ -953,124 +953,42 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuRenderPass   *self,
                                          gsize                  pos,
                                          const graphene_rect_t *clip_bounds)
 {
-  GskGpuClip old_clip;
-  graphene_rect_t clip;
-  cairo_rectangle_int_t scissor;
+  GskGpuRenderPassClipStorage storage;
 
-  if (gsk_rect_contains_rect (clip_bounds, &node->bounds))
+  if (!gsk_gpu_render_pass_push_clip_rect (self, clip_bounds, &storage))
     {
-      gsk_gpu_node_processor_add_node (self, node, pos);
+      GskGpuImage *image;
+      graphene_rect_t bounds, tex_rect;
+
+      gsk_gpu_node_processor_sync_globals (self, 0);
+
+      if (gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds) &&
+          gsk_rect_intersection (&bounds, clip_bounds, &bounds))
+        image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                          0,
+                                                          &bounds,
+                                                          node,
+                                                          pos,
+                                                          &tex_rect);
+      else
+        image = NULL;
+      if (image)
+        {
+          gsk_gpu_node_processor_image_op (self,
+                                           image,
+                                           self->ccs,
+                                           GSK_GPU_SAMPLER_DEFAULT,
+                                           &bounds,
+                                           &tex_rect);
+          g_object_unref (image);
+        }
       return;
     }
 
-  gsk_rect_init_offset (&clip, clip_bounds, &self->offset);
+  if (!gsk_gpu_render_pass_is_all_clipped (self))
+    gsk_gpu_node_processor_add_node (self, node, pos);
 
-  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
-
-  /* Check if we can use scissoring for the clip */
-  if (gsk_gpu_node_processor_rect_is_integer (self, &clip, &scissor))
-    {
-      cairo_rectangle_int_t old_scissor;
-
-      if (!gdk_rectangle_intersect (&scissor, &self->scissor, &scissor))
-        return;
-
-      old_scissor = self->scissor;
-
-      if (gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, graphene_point_zero (), &clip))
-        {
-          if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
-            {
-              gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-              return;
-            }
-          else if ((self->clip.type == GSK_GPU_CLIP_RECT || self->clip.type == GSK_GPU_CLIP_CONTAINED) &&
-                   gsk_rect_contains_rect (&self->clip.rect.bounds, &clip))
-            {
-              self->clip.type = GSK_GPU_CLIP_NONE;
-            }
-
-          self->scissor = scissor;
-          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_CLIP;
-
-          gsk_gpu_node_processor_add_node (self, node, pos);
-
-          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-          self->scissor = old_scissor;
-          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_CLIP;
-        }
-      else
-        {
-          self->scissor = scissor;
-          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
-
-          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-
-          gsk_gpu_node_processor_add_node (self, node, pos);
-
-          self->scissor = old_scissor;
-          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
-        }
-    }
-  else
-    {
-      graphene_rect_t scissored_clip;
-
-      if (gsk_gpu_node_processor_rect_device_to_clip (self,
-                                                      &GSK_RECT_INIT_CAIRO (&self->scissor),
-                                                      &scissored_clip))
-        {
-          if (!gsk_rect_intersection (&scissored_clip, &clip, &clip))
-            {
-              gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-              return;
-            }
-        }
-
-      if (!gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, graphene_point_zero (), &clip))
-        {
-          GskGpuImage *image;
-          graphene_rect_t bounds, tex_rect;
-
-          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-          gsk_gpu_node_processor_sync_globals (self, 0);
-
-          if (gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds) &&
-              gsk_rect_intersection (&bounds, clip_bounds, &bounds))
-            image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                              0,
-                                                              &bounds,
-                                                              node,
-                                                              pos,
-                                                              &tex_rect);
-          else
-            image = NULL;
-          if (image)
-            {
-              gsk_gpu_node_processor_image_op (self,
-                                               image,
-                                               self->ccs,
-                                               GSK_GPU_SAMPLER_DEFAULT,
-                                               &bounds,
-                                               &tex_rect);
-              g_object_unref (image);
-            }
-          return;
-        }
-
-      if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
-        {
-          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-          return;
-        }
-
-      self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
-
-      gsk_gpu_node_processor_add_node (self, node, pos);
-
-      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-      self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
-    }
+  gsk_gpu_render_pass_pop_clip_rect (self, &storage);
 }
 
 static void
@@ -1273,7 +1191,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
             return;
           }
 
-          if (self->clip.type != GSK_GPU_CLIP_ALL_CLIPPED)
+          if (!gsk_gpu_render_pass_is_all_clipped (self))
             gsk_gpu_node_processor_add_node (self, child, 0);
           gsk_gpu_render_pass_pop_transform (self, &storage);
       }
