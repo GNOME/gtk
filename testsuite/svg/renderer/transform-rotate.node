@@ -1,0 +1,85 @@
+isolation {
+  child: transform {
+    transform: translate(456.5, 741.5) scale(1.00036);
+    child: container {
+      fill {
+        child: color {
+          bounds: -25 -528 50 50;
+          color: rgb(160,160,160);
+        }
+        path: "\
+M 25 -503 o 0 25, -25 25, 0.707106769 o -25 0, -25 -25, 0.707106769 o 0 -25, 25 -25, 0.707106769 o 25 0, 25 25, 0.707106769 z";
+        fill-rule: winding;
+      }
+      stroke {
+        child: color {
+          bounds: -30 -533 57.5 60;
+          color: rgb(230,45,66);
+        }
+        path: "\
+M 25 -503 o 0 25, -25 25, 0.707106769 o -25 0, -25 -25, 0.707106769 o 0 -25, 25 -25, 0.707106769 o 25 0, 25 25, 0.707106769 z";
+        line-width: 5;
+        line-cap: butt;
+        line-join: miter;
+      }
+      stroke {
+        child: color {
+          bounds: -35 -523 70 40;
+          color: rgb(230,45,66);
+        }
+        path: "\
+M -15 -503\
+L 15 -503";
+        line-width: 5;
+        line-cap: butt;
+        line-join: miter;
+      }
+      transform {
+        transform: translate(0, -503) rotate(90) translate(-0, 503);
+        child: stroke {
+          child: color {
+            bounds: -35 -523 70 40;
+            color: rgb(230,45,66);
+          }
+          path: "\
+M -15 -503\
+L 15 -503";
+          line-width: 5;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+      transform {
+        transform: translate(0, -503) rotate(45) translate(-0, 503);
+        child: stroke {
+          child: color {
+            bounds: -35 -523 70 40;
+            color: rgb(230,45,66);
+          }
+          path: "\
+M -15 -503\
+L 15 -503";
+          line-width: 5;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+      transform {
+        transform: translate(0, -503) rotate(135) translate(-0, 503);
+        child: stroke {
+          child: color {
+            bounds: -35 -523 70 40;
+            color: rgb(230,45,66);
+          }
+          path: "\
+M -15 -503\
+L 15 -503";
+          line-width: 5;
+          line-cap: butt;
+          line-join: miter;
+        }
+      }
+    }
+  }
+  isolations: background;
+}
