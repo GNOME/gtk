@@ -1632,6 +1632,33 @@ skip_debug_node (GskRenderNode *node)
     return node;
 }
 
+static GskRenderNode *
+apply_transform (GskRenderNode *node,
+                 GskTransform  *transform)
+{
+  if (transform != NULL)
+    {
+      node = skip_debug_node (node);
+
+      if (gsk_render_node_get_node_type (node) == GSK_TRANSFORM_NODE)
+        {
+          GskTransform *tx = gsk_transform_node_get_transform (node);
+          GskRenderNode *child = gsk_transform_node_get_child (node);
+          GskRenderNode *transformed;
+
+          tx = gsk_transform_transform (gsk_transform_ref (tx), transform);
+          transformed = gsk_transform_node_new (child, tx);
+          gsk_transform_unref (tx);
+
+          return transformed;
+        }
+      else
+        return gsk_transform_node_new (node, transform);
+    }
+  else
+    return gsk_render_node_ref (node);
+}
+
 /* }}} */
 /* {{{ Text */
 
@@ -19555,8 +19582,7 @@ apply_filter_tree (Shape         *shape,
               }
 
             transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, dy));
-            result = gsk_transform_node_new (in->node, transform);
-
+            result = apply_transform (in->node, transform);
             filter_result_unref (in);
             gsk_transform_unref (transform);
           }
@@ -19809,11 +19835,8 @@ apply_filter_tree (Shape         *shape,
                 transform = gsk_transform_scale (transform, sx, sy);
 
                 node = gsk_texture_node_new (href->texture, &vb);
-
-                result = gsk_transform_node_new (node, transform);
-
+                result = apply_transform (node, transform);
                 gsk_render_node_unref (node);
-                gsk_transform_unref (transform);
               }
             else if (href->shape != NULL)
               {
@@ -19823,7 +19846,7 @@ apply_filter_tree (Shape         *shape,
                 if (node)
                   {
                     transform = gsk_transform_translate (NULL, &subregion.origin);
-                    result = gsk_transform_node_new (node, transform);
+                    result = apply_transform (node, transform);
                     gsk_render_node_unref (node);
                     gsk_transform_unref (transform);
                   }
