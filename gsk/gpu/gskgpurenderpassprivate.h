@@ -98,6 +98,11 @@ gboolean                gsk_gpu_render_pass_push_clip_rect              (GskGpuR
                                                                          GskGpuRenderPassClipStorage      *storage);
 void                    gsk_gpu_render_pass_pop_clip_rect               (GskGpuRenderPass                 *self,
                                                                          GskGpuRenderPassClipStorage      *storage);
+gboolean                gsk_gpu_render_pass_push_clip_rounded           (GskGpuRenderPass                 *self,
+                                                                         const GskRoundedRect             *clip,
+                                                                         GskGpuRenderPassClipStorage      *storage);
+void                    gsk_gpu_render_pass_pop_clip_rounded            (GskGpuRenderPass                 *self,
+                                                                         GskGpuRenderPassClipStorage      *storage);
 
 G_END_DECLS
 
