@@ -33,6 +33,7 @@
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
 #include "gsk/gskinsetshadownodeprivate.h"
+#include "gsk/gskisolationnodeprivate.h"
 #include "gsk/gsklineargradientnodeprivate.h"
 #include "gsk/gskoutsetshadownodeprivate.h"
 #include "gsk/gskradialgradientnodeprivate.h"
@@ -544,10 +545,15 @@ gtk_snapshot_collect_isolation (GtkSnapshot      *snapshot,
                                 guint             n_nodes)
 {
   GskRenderNode *node, *isolation_node;
+  GskIsolation features;
 
   node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
   if (node == NULL)
     return NULL;
+
+  features = gsk_isolation_features_simplify_for_node (state->data.isolation.features, node);
+  if (features == 0)
+    return node;
 
   isolation_node = gsk_isolation_node_new (node, state->data.isolation.features);
   gsk_render_node_unref (node);
