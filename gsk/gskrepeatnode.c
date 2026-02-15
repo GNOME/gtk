@@ -96,7 +96,6 @@ gsk_repeat_node_draw_tiled (cairo_t                *cr,
   cairo_destroy (child_cr);
 
   pattern = cairo_pattern_create_for_surface (child_surface);
-  cairo_surface_write_to_png (child_surface, "foo.png");
   gdk_cairo_pattern_set_repeat (pattern, repeat);
   cairo_matrix_init_translate (&matrix, -pos->x, -pos->y);
   cairo_pattern_set_matrix (pattern, &matrix);
