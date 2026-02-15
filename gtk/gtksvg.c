@@ -36,6 +36,7 @@
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
+#include "gsk/gskisolationnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskpathprivate.h"
 #include "gsk/gskrectprivate.h"
@@ -19533,6 +19534,7 @@ apply_filter_tree (Shape         *shape,
                 graphene_rect_t mask_bounds;
                 GskRenderNode *comp, *mask, *container;
                 GskPorterDuff op;
+                GskIsolation features;
 
                 op = svg_composite_operator_to_gsk (svg_op);
 
@@ -19541,9 +19543,15 @@ apply_filter_tree (Shape         *shape,
 
                 comp = gsk_composite_node_new (in->node, mask, op);
                 container = gsk_container_node_new ((GskRenderNode*[]) { in2->node, comp }, 2);
-                result = gsk_isolation_node_new (container, GSK_ISOLATION_ALL);
+                features = gsk_isolation_features_simplify_for_node (GSK_ISOLATION_ALL, container);
+                if (features)
+                  {
+                    result = gsk_isolation_node_new (container, features);
+                    gsk_render_node_unref (container);
+                  }
+                else
+                  result = container;
 
-                gsk_render_node_unref (container);
                 gsk_render_node_unref (comp);
                 gsk_render_node_unref (mask);
               }
