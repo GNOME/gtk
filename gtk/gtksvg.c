@@ -1716,21 +1716,24 @@ typedef struct
 
 typedef struct
 {
-  SvgPathOps ops;
+  SvgPathOp *ops;
+  size_t n_ops;
 } SvgPathData;
 
 static SvgPathData *
-svg_path_data_new (void)
+svg_path_data_new (size_t     n_ops,
+                   SvgPathOp *ops)
 {
   SvgPathData *p = g_new0 (SvgPathData, 1);
-  svg_path_ops_init (&p->ops);
+  p->n_ops = n_ops;
+  p->ops = ops;
   return p;
 }
 
 static void
 svg_path_data_free (SvgPathData *p)
 {
-  svg_path_ops_clear (&p->ops);
+  g_free (p->ops);
   g_free (p);
 }
 
@@ -1756,16 +1759,16 @@ add_op (GskPathOperation        op,
         float                   weight,
         gpointer                user_data)
 {
-  SvgPathData *p = user_data;
+  SvgPathOps *ops = user_data;
   gsize size;
   SvgPathOp *pop;
 
   if (op == GSK_PATH_CONIC)
     return FALSE;
 
-  size = svg_path_ops_get_size (&p->ops);
-  svg_path_ops_set_size (&p->ops, size + 1);
-  pop = svg_path_ops_index (&p->ops, size);
+  size = svg_path_ops_get_size (ops);
+  svg_path_ops_set_size (ops, size + 1);
+  pop = svg_path_ops_index (ops, size);
 
   pop->op = op;
   memset (pop->seg.pts, 0, sizeof (graphene_point_t) * 4);
@@ -1784,13 +1787,13 @@ add_arc (float    rx,
          float    y,
          gpointer user_data)
 {
-  SvgPathData *p = user_data;
+  SvgPathOps *ops = user_data;
   gsize size;
   SvgPathOp *pop;
 
-  size = svg_path_ops_get_size (&p->ops);
-  svg_path_ops_set_size (&p->ops, size + 1);
-  pop = svg_path_ops_index (&p->ops, size);
+  size = svg_path_ops_get_size (ops);
+  svg_path_ops_set_size (ops, size + 1);
+  pop = svg_path_ops_index (ops, size);
 
   pop->op = SVG_PATH_ARC;
   pop->arc.rx = rx;
@@ -1810,39 +1813,51 @@ svg_path_data_parse (const char *string)
   GskPathParser parser = {
     add_op, add_arc, NULL, NULL, NULL,
   };
-  SvgPathData *p;
+  SvgPathOps ops;
+  size_t size;
+  SvgPathOp *data;
 
-  p = svg_path_data_new ();
+  svg_path_ops_init (&ops);
 
-  if (!gsk_path_parse_full (string, &parser, p))
+  if (!gsk_path_parse_full (string, &parser, &ops))
     {
       /* TODO: emit an error */
     }
 
-  return p;
+  size = svg_path_ops_get_size (&ops);
+  data = svg_path_ops_steal (&ops);
+
+  return svg_path_data_new (size, data);
 }
 
 static SvgPathData *
 svg_path_data_collect (GskPath *path)
 {
-  SvgPathData *p = svg_path_data_new ();
+  SvgPathOps ops;
+  size_t size;
+  SvgPathOp *data;
+
+  svg_path_ops_init (&ops);
 
   gsk_path_foreach (path,
                     GSK_PATH_FOREACH_ALLOW_QUAD |
                     GSK_PATH_FOREACH_ALLOW_CUBIC,
                     add_op,
-                    p);
+                    &ops);
 
-  return p;
+  size = svg_path_ops_get_size (&ops);
+  data = svg_path_ops_steal (&ops);
+
+  return svg_path_data_new (size, data);
 }
 
 static void
 svg_path_data_print (SvgPathData *p,
                      GString     *s)
 {
-  for (unsigned int i = 0; i < svg_path_ops_get_size (&p->ops); i++)
+  for (unsigned int i = 0; i < p->n_ops; i++)
     {
-      SvgPathOp *op = svg_path_ops_index (&p->ops, i);
+      SvgPathOp *op = &p->ops[i];
 
       if (i > 0)
         g_string_append_c (s, ' ');
@@ -1886,62 +1901,58 @@ svg_path_data_interpolate (SvgPathData *p0,
                            SvgPathData *p1,
                            double       t)
 {
-  SvgPathData *p;
+  SvgPathOp *ops;
 
-  if (svg_path_ops_get_size (&p0->ops) != svg_path_ops_get_size (&p1->ops))
+  if (p0->n_ops != p1->n_ops)
     return NULL;
 
-  p = svg_path_data_new ();
+  ops = g_new0 (SvgPathOp, p0->n_ops);
 
-  svg_path_ops_reserve (&p->ops, svg_path_ops_get_size (&p0->ops));
-
-  for (unsigned int i = 0; i < svg_path_ops_get_size (&p0->ops); i++)
+  for (unsigned int i = 0; i < p0->n_ops; i++)
     {
-      SvgPathOp *op0 = svg_path_ops_index (&p0->ops, i);
-      SvgPathOp *op1 = svg_path_ops_index (&p1->ops, i);
-      SvgPathOp op;
+      SvgPathOp *op0 = &p0->ops[i];
+      SvgPathOp *op1 = &p1->ops[i];
+      SvgPathOp *op = &ops[i];
 
       if (op0->op != op1->op)
         {
-          svg_path_data_free (p);
+          g_free (ops);
           return NULL;
         }
 
-      op.op = op0->op;
+      op->op = op0->op;
 
-      switch (op.op)
+      switch (op->op)
         {
         case GSK_PATH_CUBIC:
-          lerp_point (t, &op0->seg.pts[3], &op1->seg.pts[3], &op.seg.pts[3]);
+          lerp_point (t, &op0->seg.pts[3], &op1->seg.pts[3], &op->seg.pts[3]);
           G_GNUC_FALLTHROUGH;
         case GSK_PATH_QUAD:
-          lerp_point (t, &op0->seg.pts[2], &op1->seg.pts[2], &op.seg.pts[2]);
+          lerp_point (t, &op0->seg.pts[2], &op1->seg.pts[2], &op->seg.pts[2]);
           G_GNUC_FALLTHROUGH;
         case GSK_PATH_LINE:
         case GSK_PATH_MOVE:
-          lerp_point (t, &op0->seg.pts[1], &op1->seg.pts[1], &op.seg.pts[1]);
+          lerp_point (t, &op0->seg.pts[1], &op1->seg.pts[1], &op->seg.pts[1]);
           G_GNUC_FALLTHROUGH;
         case GSK_PATH_CLOSE:
-          lerp_point (t, &op0->seg.pts[0], &op1->seg.pts[0], &op.seg.pts[0]);
+          lerp_point (t, &op0->seg.pts[0], &op1->seg.pts[0], &op->seg.pts[0]);
           break;
         case SVG_PATH_ARC:
-          op.arc.rx = lerp (t, op0->arc.rx, op1->arc.rx);
-          op.arc.ry = lerp (t, op0->arc.ry, op1->arc.ry);
-          op.arc.x_axis_rotation = lerp (t, op0->arc.x_axis_rotation, op1->arc.x_axis_rotation);
-          op.arc.large_arc = lerp_bool (t, op0->arc.large_arc, op1->arc.large_arc);
-          op.arc.positive_sweep = lerp_bool (t, op0->arc.positive_sweep, op1->arc.positive_sweep);
-          op.arc.x = lerp (t, op0->arc.x, op1->arc.x);
-          op.arc.y = lerp (t, op0->arc.y, op1->arc.y);
+          op->arc.rx = lerp (t, op0->arc.rx, op1->arc.rx);
+          op->arc.ry = lerp (t, op0->arc.ry, op1->arc.ry);
+          op->arc.x_axis_rotation = lerp (t, op0->arc.x_axis_rotation, op1->arc.x_axis_rotation);
+          op->arc.large_arc = lerp_bool (t, op0->arc.large_arc, op1->arc.large_arc);
+          op->arc.positive_sweep = lerp_bool (t, op0->arc.positive_sweep, op1->arc.positive_sweep);
+          op->arc.x = lerp (t, op0->arc.x, op1->arc.x);
+          op->arc.y = lerp (t, op0->arc.y, op1->arc.y);
 
           break;
         default:
           g_assert_not_reached ();
         }
-
-      svg_path_ops_append (&p->ops, op);
     }
 
-  return p;
+  return svg_path_data_new (p0->n_ops, ops);
 }
 
 static GskPath *
@@ -1951,9 +1962,9 @@ svg_path_data_to_gsk (SvgPathData *p)
 
   builder = gsk_path_builder_new ();
 
-  for (unsigned int i = 0; i < svg_path_ops_get_size (&p->ops); i++)
+  for (unsigned int i = 0; i < p->n_ops; i++)
     {
-      SvgPathOp *op = svg_path_ops_index (&p->ops, i);
+      SvgPathOp *op = &p->ops[i];
 
       if (op->op == SVG_PATH_ARC)
         gsk_path_builder_svg_arc_to (builder,
