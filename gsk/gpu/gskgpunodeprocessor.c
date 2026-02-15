@@ -1064,19 +1064,17 @@ static void
 gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
                                               GskRenderNode       *node)
 {
-  GskGpuClip old_clip;
-  GskRoundedRect clip;
-  const GskRoundedRect *original_clip;
+  GskGpuRenderPassClipStorage storage;
+  const GskRoundedRect *clip;
   GskRenderNode *child;
-  graphene_rect_t scissor;
 
   child = gsk_rounded_clip_node_get_child (node);
-  original_clip = gsk_rounded_clip_node_get_clip (node);
+  clip = gsk_rounded_clip_node_get_clip (node);
 
   /* Common case for entries etc: rounded solid color background.
    * And we have a shader for that */
   if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE &&
-      gsk_rect_contains_rect (&child->bounds, &original_clip->bounds))
+      gsk_rect_contains_rect (&child->bounds, &clip->bounds))
     {
       const GdkColor *color;
 
@@ -1085,47 +1083,24 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
       color = gsk_color_node_get_gdk_color (child);
 
       gsk_gpu_rounded_color_op (self,
-                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &original_clip->bounds),
+                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip->bounds),
                                 self->ccs,
                                 gsk_gpu_color_states_find (self->ccs, color),
-                                original_clip,
+                                clip,
                                 color);
       return;
     }
 
-  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
-
-  clip = *original_clip;
-  gsk_rounded_rect_offset (&clip, self->offset.x, self->offset.y);
-
-  if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &old_clip, &clip))
+  if (!gsk_gpu_render_pass_push_clip_rounded (self, clip, &storage))
     {
-      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
       gsk_gpu_node_processor_add_rounded_clip_node_with_mask (self, node);
       return;
     }
 
-  if (gsk_gpu_node_processor_rect_device_to_clip (self,
-                                                  &GSK_RECT_INIT_CAIRO (&self->scissor),
-                                                  &scissor))
-    {
-      GskGpuClip scissored_clip;
-      if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, graphene_point_zero (), &scissor))
-        gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
-    }
+  if (!gsk_gpu_render_pass_is_all_clipped (self))
+    gsk_gpu_node_processor_add_node (self, child, 0);
 
-  if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
-    {
-      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-      return;
-    }
-
-  self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
-
-  gsk_gpu_node_processor_add_node (self, gsk_rounded_clip_node_get_child (node), 0);
-
-  gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-  self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
+  gsk_gpu_render_pass_pop_clip_rounded (self, &storage);
 }
 
 static void

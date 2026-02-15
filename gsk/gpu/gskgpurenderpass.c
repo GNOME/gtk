@@ -537,3 +537,39 @@ gsk_gpu_render_pass_pop_clip_rect (GskGpuRenderPass            *self,
   self->pending_globals |= storage->modified;
 }
 
+gboolean
+gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
+                                       const GskRoundedRect        *clip,
+                                       GskGpuRenderPassClipStorage *storage)
+{
+  graphene_rect_t scissor;
+
+  gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+  storage->modified = GSK_GPU_GLOBAL_CLIP;
+
+  if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &storage->clip, &self->offset, clip))
+    {
+      gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+      return FALSE;
+    }
+
+  if (gsk_gpu_render_pass_device_to_user (self,
+                                          &self->scissor,
+                                          &scissor))
+    {
+      GskGpuClip scissored_clip;
+      if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &self->offset, &scissor))
+        gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
+    }
+
+  self->pending_globals |= storage->modified;
+  return TRUE;
+}
+
+void
+gsk_gpu_render_pass_pop_clip_rounded (GskGpuRenderPass            *self,
+                                      GskGpuRenderPassClipStorage *storage)
+{
+  /* They're identical currently */
+  gsk_gpu_render_pass_pop_clip_rect (self, storage);
+}
