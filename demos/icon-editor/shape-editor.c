@@ -388,7 +388,7 @@ shape_editor_update_clip_path (ShapeEditor *self,
   else
     {
       char *s = gsk_path_to_string (path);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (s));
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (s, 0xffff));
       g_free (s);
     }
   path_paintable_changed (self->paintable);
