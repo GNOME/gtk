@@ -1201,42 +1201,6 @@ gsk_gpu_node_processor_add_opacity_node (GskGpuRenderPass *self,
   self->opacity = old_opacity;
 }
 
-static gboolean
-gsk_gpu_node_processor_user_to_device (GskGpuRenderPass      *self,
-                                       const graphene_rect_t *user,
-                                       cairo_rectangle_int_t *device)
-{
-  float scale_x = graphene_vec2_get_x (&self->scale);
-  float scale_y = graphene_vec2_get_y (&self->scale);
-
-  if (self->modelview)
-    return FALSE;
-
-  return gsk_rect_to_cairo_shrink (&GRAPHENE_RECT_INIT ((user->origin.x + self->offset.x) * scale_x,
-                                                        (user->origin.y + self->offset.y) * scale_y,
-                                                        user->size.width * scale_x,
-                                                        user->size.height * scale_y),
-                                   device);
-}
-
-static gboolean
-gsk_gpu_node_processor_device_to_user (GskGpuRenderPass            *self,
-                                       const cairo_rectangle_int_t *device,
-                                       graphene_rect_t             *user)
-{
-  float scale_x = graphene_vec2_get_x (&self->scale);
-  float scale_y = graphene_vec2_get_y (&self->scale);
-
-  if (self->modelview)
-    return FALSE;
-
-  *user = GRAPHENE_RECT_INIT (device->x / scale_x + self->offset.x,
-                              device->y / scale_y + self->offset.y,
-                              device->width / scale_x,
-                              device->height / scale_y);
-  return TRUE;
-}
-
 static void
 gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
                                        GskRenderNode       *node)
@@ -1254,10 +1218,10 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
       self->opacity >= 1.0 &&
       gdk_color_is_opaque (color) &&
       gsk_gpu_clip_get_largest_cover (&self->clip, &self->offset, &bounds, &cover) &&
-      gsk_gpu_node_processor_user_to_device (self, &cover, &device) &&
+      gsk_gpu_render_pass_user_to_device_shrink (self, &cover, &device) &&
       gdk_rectangle_intersect (&device, &self->scissor, &device) &&
       device.width * device.height > 100 * 100 && /* not worth the effort for small images */
-      gsk_gpu_node_processor_device_to_user (self, &device, &cover))
+      gsk_gpu_render_pass_device_to_user (self, &device, &cover))
     {
       GskGpuShaderClip shader_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds);
       float clear_color[4];

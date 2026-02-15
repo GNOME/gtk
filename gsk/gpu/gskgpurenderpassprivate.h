@@ -70,6 +70,16 @@ void                    gsk_gpu_render_pass_init                        (GskGpuR
 
 void                    gsk_gpu_render_pass_finish                      (GskGpuRenderPass               *self);
 
+gboolean                gsk_gpu_render_pass_device_to_user              (GskGpuRenderPass               *self,
+                                                                         const cairo_rectangle_int_t    *device,
+                                                                         graphene_rect_t                *user) G_GNUC_WARN_UNUSED_RESULT;
+gboolean                gsk_gpu_render_pass_user_to_device_shrink       (GskGpuRenderPass               *self,
+                                                                         const graphene_rect_t          *user,
+                                                                         cairo_rectangle_int_t          *device) G_GNUC_WARN_UNUSED_RESULT;
+gboolean                gsk_gpu_render_pass_user_to_device_exact        (GskGpuRenderPass               *self,
+                                                                         const graphene_rect_t          *user,
+                                                                         cairo_rectangle_int_t          *device) G_GNUC_WARN_UNUSED_RESULT;
+
 void                    gsk_gpu_render_pass_push_blend                  (GskGpuRenderPass               *self,
                                                                          GskGpuBlend                     blend,
                                                                          GskGpuRenderPassBlendStorage   *storage);
