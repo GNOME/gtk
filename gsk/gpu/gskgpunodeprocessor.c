@@ -294,44 +294,6 @@ gsk_gpu_node_processor_init_draw (GskGpuRenderPass   *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_rect_clip_to_device (GskGpuRenderPass   *self,
-                                            const graphene_rect_t *src,
-                                            graphene_rect_t       *dest)
-{
-  graphene_rect_t transformed;
-  float scale_x = graphene_vec2_get_x (&self->scale);
-  float scale_y = graphene_vec2_get_y (&self->scale);
-
-  switch (gsk_transform_get_fine_category (self->modelview))
-    {
-    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
-    case GSK_FINE_TRANSFORM_CATEGORY_3D:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D:
-      return FALSE;
-
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      gsk_transform_transform_bounds (self->modelview, src, &transformed);
-      src = &transformed;
-      break;
-
-    case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
-    default:
-      break;
-    }
-
-  dest->origin.x = src->origin.x * scale_x;
-  dest->origin.y = src->origin.y * scale_y;
-  dest->size.width = src->size.width * scale_x;
-  dest->size.height = src->size.height * scale_y;
-
-  return TRUE;
-}
-
-static gboolean
 gsk_gpu_node_processor_rect_device_to_clip (GskGpuRenderPass   *self,
                                             const graphene_rect_t *src,
                                             graphene_rect_t       *dest)
@@ -372,25 +334,6 @@ gsk_gpu_node_processor_rect_device_to_clip (GskGpuRenderPass   *self,
   dest->size.height = src->size.height / scale_y;
 
   return TRUE;
-}
-
-static gboolean
-gsk_gpu_node_processor_rect_is_integer (GskGpuRenderPass   *self,
-                                        const graphene_rect_t *rect,
-                                        cairo_rectangle_int_t *int_rect)
-{
-  graphene_rect_t tmp;
-
-  if (!gsk_gpu_node_processor_rect_clip_to_device (self, rect, &tmp))
-    return FALSE;
-
-  if (!gsk_rect_to_cairo_shrink (&tmp, int_rect))
-    return FALSE;
-
-  return int_rect->x == tmp.origin.x
-      && int_rect->y == tmp.origin.y
-      && int_rect->width == tmp.size.width
-      && int_rect->height == tmp.size.height;
 }
 
 static gboolean G_GNUC_WARN_UNUSED_RESULT
@@ -3387,24 +3330,20 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuRenderPass *self,
 
   if (!gdk_subsurface_is_above_parent (subsurface))
     {
-      cairo_rectangle_int_t int_clipped;
-      graphene_rect_t rect, clipped;
+      cairo_rectangle_int_t device_clipped;
+      graphene_rect_t clipped;
 
-      gsk_rect_init_offset (&rect, &node->bounds, &self->offset);
-      if (!gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped))
+      if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped))
         return;
 
       if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
           node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
           (self->clip.type != GSK_GPU_CLIP_ROUNDED ||
-           gsk_gpu_clip_contains_rect (&self->clip, &GRAPHENE_POINT_INIT(0,0), &clipped)) &&
-          gsk_gpu_node_processor_rect_is_integer (self, &clipped, &int_clipped))
+           gsk_gpu_clip_contains_rect (&self->clip, &self->offset, &clipped)) &&
+          gsk_gpu_render_pass_user_to_device_exact (self, &clipped, &device_clipped))
         {
-          if (gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
-            {
-              float color[4] = { 0, 0, 0, 0 };
-              gsk_gpu_clear_op (self->frame, &int_clipped, color);
-            }
+          float color[4] = { 0, 0, 0, 0 };
+          gsk_gpu_clear_op (self->frame, &device_clipped, color);
         }
       else
         {
