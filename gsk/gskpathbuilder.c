@@ -77,7 +77,7 @@
 #define GDK_ARRAY_TYPE_NAME GskPathOps
 #define GDK_ARRAY_ELEMENT_TYPE gskpathop
 #define GDK_ARRAY_BY_VALUE 1
-#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_PREALLOC 150
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
@@ -85,7 +85,7 @@
 #define GDK_ARRAY_TYPE_NAME GskPoints
 #define GDK_ARRAY_ELEMENT_TYPE GskAlignedPoint
 #define GDK_ARRAY_BY_VALUE 1
-#define GDK_ARRAY_PREALLOC 48
+#define GDK_ARRAY_PREALLOC 350
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
@@ -101,6 +101,9 @@ struct _GskPathBuilder
   GskPathOps ops; /* operations for current contour - size == 0 means no current contour */
   GskPoints points; /* points for the operations */
 };
+
+/* We want to choose the array preallocations above so that the struct fits in 1 page */
+G_STATIC_ASSERT (sizeof (GskPathBuilder) < 4096);
 
 G_DEFINE_BOXED_TYPE (GskPathBuilder,
                      gsk_path_builder,
@@ -227,7 +230,6 @@ gsk_path_builder_end_current (GskPathBuilder *self)
             }
         }
     }
-
   contour = gsk_standard_contour_new (self->flags,
                                       gsk_points_get_data (&self->points),
                                       gsk_points_get_size (&self->points),
