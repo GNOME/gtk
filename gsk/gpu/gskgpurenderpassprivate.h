@@ -70,6 +70,8 @@ void                    gsk_gpu_render_pass_init                        (GskGpuR
 
 void                    gsk_gpu_render_pass_finish                      (GskGpuRenderPass               *self);
 
+void                    gsk_gpu_render_pass_prepare_shader              (GskGpuRenderPass               *self);
+
 gboolean                gsk_gpu_render_pass_device_to_user              (GskGpuRenderPass               *self,
                                                                          const cairo_rectangle_int_t    *device,
                                                                          graphene_rect_t                *user) G_GNUC_WARN_UNUSED_RESULT;
