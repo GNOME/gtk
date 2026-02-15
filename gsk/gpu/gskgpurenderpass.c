@@ -465,6 +465,42 @@ gsk_gpu_render_pass_is_all_clipped (GskGpuRenderPass *self)
 }
 
 gboolean
+gsk_gpu_render_pass_get_clip_bounds (GskGpuRenderPass *self,
+                                     graphene_rect_t  *out_bounds)
+{
+  graphene_rect_t scissor;
+
+  if (gsk_gpu_clip_is_all_clipped (&self->clip))
+    return FALSE;
+
+  if (gsk_gpu_render_pass_device_to_user (self,
+                                          &self->scissor,
+                                          &scissor))
+    {
+      graphene_rect_t tmp;
+
+      gsk_rect_init_offset (&tmp,
+                            &self->clip.rect.bounds,
+                            &GRAPHENE_POINT_INIT (-self->offset.x, -self->offset.y));
+
+      if (!gsk_rect_intersection (&scissor, &tmp, out_bounds))
+        {
+          g_warning ("Clipping is broken, everything is clipped, but we didn't set all-clipped.");
+          return FALSE;
+        }
+
+      return TRUE;
+    }
+  else
+    {
+      gsk_rect_init_offset (out_bounds,
+                            &self->clip.rect.bounds,
+                            &GRAPHENE_POINT_INIT (-self->offset.x, -self->offset.y));
+      return TRUE;
+    }
+}
+
+gboolean
 gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
                                     const graphene_rect_t       *clip,
                                     GskGpuRenderPassClipStorage *storage)

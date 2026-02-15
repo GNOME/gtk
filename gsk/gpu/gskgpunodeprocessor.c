@@ -393,31 +393,6 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuRenderPass   *self,
       && int_rect->height == tmp.size.height;
 }
 
-static void
-gsk_gpu_node_processor_get_clip_bounds (GskGpuRenderPass *self,
-                                        graphene_rect_t     *out_bounds)
-{
-  graphene_rect_t scissor;
-
-  if (gsk_gpu_node_processor_rect_device_to_clip (self,
-                                                  &GSK_RECT_INIT_CAIRO (&self->scissor),
-                                                  &scissor))
-    {
-      if (!gsk_rect_intersection (&scissor, &self->clip.rect.bounds, out_bounds))
-        {
-          g_warning ("Clipping is broken, everything is clipped, but we didn't early-exit.");
-          *out_bounds = self->clip.rect.bounds;
-        }
-    }
-  else
-    {
-      *out_bounds = self->clip.rect.bounds;
-    }
-
-  out_bounds->origin.x -= self->offset.x;
-  out_bounds->origin.y -= self->offset.y;
-}
- 
 static gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_gpu_node_processor_clip_node_bounds (GskGpuRenderPass *self,
                                          GskRenderNode       *node,
@@ -425,7 +400,8 @@ gsk_gpu_node_processor_clip_node_bounds (GskGpuRenderPass *self,
 {
   graphene_rect_t tmp;
 
-  gsk_gpu_node_processor_get_clip_bounds (self, &tmp);
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &tmp))
+    return FALSE;
   
   if (!gsk_rect_intersection (&tmp, &node->bounds, out_bounds))
     return FALSE;
@@ -440,7 +416,8 @@ gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (GskGpuRenderPass *self
 {
   graphene_rect_t tmp;
 
-  gsk_gpu_node_processor_get_clip_bounds (self, &tmp);
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &tmp))
+    return FALSE;
 
   if (!gsk_rect_intersection (&tmp, &node->bounds, out_bounds))
     return FALSE;
@@ -823,7 +800,8 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
 
   /* FIXME: Handle clip radius growing the clip too much */
-  gsk_gpu_node_processor_get_clip_bounds (self, &clip_rect);
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
+    return;
   clip_rect.origin.x -= shadow_offset->x;
   clip_rect.origin.y -= shadow_offset->y;
   graphene_rect_inset (&clip_rect, 0.f, -clip_radius);
@@ -1402,7 +1380,8 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuRenderPass    *self,
   cache = gsk_gpu_device_get_cache (device);
   sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
-  gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_bounds))
+    return;
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
   tile_size = gsk_gpu_device_get_tile_size (device);
@@ -1682,7 +1661,9 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
       GskGpuImage *offscreen;
       graphene_rect_t clip_bounds;
 
-      gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
+      if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_bounds))
+        return;
+
       /* first round to pixel boundaries, so we make sure the full pixels are covered */
       if (!gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds))
         {
@@ -2291,7 +2272,8 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
     }
 
   clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
-  gsk_gpu_node_processor_get_clip_bounds (self, &clip_rect);
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
+    return;
   graphene_rect_inset (&clip_rect, -clip_radius, -clip_radius);
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
@@ -2327,7 +2309,8 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
   n_shadows = gsk_shadow_node_get_n_shadows (node);
   child = gsk_shadow_node_get_child (node);
   /* enlarge clip for shadow offsets */
-  gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_bounds))
+    return;
   clip_bounds = GRAPHENE_RECT_INIT (clip_bounds.origin.x - node->bounds.size.width + child->bounds.size.width - node->bounds.origin.x + child->bounds.origin.x,
                                     clip_bounds.origin.y - node->bounds.size.height + child->bounds.size.height - node->bounds.origin.y + child->bounds.origin.y,
                                     clip_bounds.size.width + node->bounds.size.width - child->bounds.size.width,
@@ -3078,8 +3061,7 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
       return;
     }
 
-  gsk_gpu_node_processor_get_clip_bounds (self, &bounds);
-  if (!gsk_rect_intersection (&bounds, &node->bounds, &bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
     return;
 
   tile_left = (bounds.origin.x - child_bounds->origin.x) / child_bounds->size.width;
