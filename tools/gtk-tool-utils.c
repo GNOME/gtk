@@ -19,15 +19,13 @@
 
 #include "config.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+#include "gtk-tool-utils.h"
 
-#include <glib/gi18n-lib.h>
-#include <glib/gprintf.h>
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-image-tool.h"
+#include <glib/gi18n-lib.h>
+#ifdef GDK_WINDOWING_BROADWAY
+#include <gsk/broadway/gskbroadwayrenderer.h>
+#endif
 
 static void
 deserialize_error_func (const GskParseLocation *start,
@@ -52,7 +50,7 @@ deserialize_error_func (const GskParseLocation *start,
   g_string_free (string, TRUE);
 }
 
-static GskRenderNode *
+GskRenderNode *
 load_node_file (const char *filename)
 {
   GFile *file;
@@ -329,4 +327,86 @@ parse_cicp_tuple (const char  *cicp_tuple,
   g_object_unref (params);
 
   return color_state;
+}
+
+/* keep in sync with gsk/gskrenderer.c */
+static GskRenderer *
+get_renderer_for_name (const char *renderer_name)
+{
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (renderer_name == NULL)
+    return NULL;
+#ifdef GDK_WINDOWING_BROADWAY
+  else if (g_ascii_strcasecmp (renderer_name, "broadway") == 0)
+    return gsk_broadway_renderer_new ();
+#endif
+  else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
+    return gsk_cairo_renderer_new ();
+  else if (g_ascii_strcasecmp (renderer_name, "gl") == 0)
+    return gsk_gl_renderer_new ();
+#ifdef GDK_RENDERING_VULKAN
+  else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
+    return gsk_vulkan_renderer_new ();
+#endif
+  else
+    return NULL;
+G_GNUC_END_IGNORE_DEPRECATIONS
+}
+
+static const char **
+get_renderer_names (void)
+{
+  static const char *names[] = {
+#ifdef GDK_WINDOWING_BROADWAY
+    "broadway",
+#endif
+    "cairo",
+    "gl",
+#ifdef GDK_RENDERING_VULKAN
+    "vulkan",
+#endif
+    NULL
+  };
+
+  return names;
+}
+
+GskRenderer *
+create_renderer (const char *name, GError **error)
+{
+  GskRenderer *renderer;
+
+  if (name == NULL)
+    {
+      /* awwwwwkward - there should be code to get the
+       * default renderer without a surface */
+      static GdkSurface *window = NULL;
+
+      if (window == NULL)
+        window = gdk_surface_new_toplevel (gdk_display_get_default ());
+      return gsk_renderer_new_for_surface (window);
+    }
+
+  renderer = get_renderer_for_name (name);
+
+  if (renderer == NULL)
+    {
+      char **names;
+      char *suggestion;
+
+      names = (char **) get_renderer_names ();
+      suggestion = g_strjoinv ("\n  ", names);
+
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                   "No renderer named \"%s\"\nPossible values:\n  %s", name, suggestion);
+      return NULL;
+    }
+
+  if (!gsk_renderer_realize_for_display (renderer, gdk_display_get_default (), error))
+    {
+      g_object_unref (renderer);
+      return NULL;
+    }
+
+  return renderer;
 }

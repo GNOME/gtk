@@ -440,7 +440,6 @@ tools/gtk-image-tool-info.c
 tools/gtk-image-tool-play.c
 tools/gtk-image-tool-relabel.c
 tools/gtk-image-tool-show.c
-tools/gtk-image-tool-utils.c
 tools/gtk-launch.c
 tools/gtk-path-tool.c
 tools/gtk-path-tool-decompose.c
@@ -458,5 +457,5 @@ tools/gtk-rendernode-tool-extract.c
 tools/gtk-rendernode-tool-info.c
 tools/gtk-rendernode-tool-render.c
 tools/gtk-rendernode-tool-show.c
-tools/gtk-rendernode-tool-utils.c
+tools/gtk-tool-utils.c
 tools/updateiconcache.c

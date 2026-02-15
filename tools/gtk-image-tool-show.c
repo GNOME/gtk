@@ -28,6 +28,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtk-image-tool.h"
+#include "gtk-tool-utils.h"
 
 static void
 quit_cb (GtkWidget *widget,

@@ -28,6 +28,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
+#include "gtk-tool-utils.h"
 
 #define N_NODE_TYPES (GSK_DISPLACEMENT_NODE + 1)
 
