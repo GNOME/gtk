@@ -1710,9 +1710,14 @@ typedef struct
 #define GDK_ARRAY_NAME svg_path_ops
 #define GDK_ARRAY_TYPE_NAME SvgPathOps
 #define GDK_ARRAY_ELEMENT_TYPE SvgPathOp
-#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_PREALLOC 112
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
+
+/* We want to choose the array preallocations above so that the
+ * struct fits in 1 page
+ */
+G_STATIC_ASSERT (sizeof (SvgPathOps) < 4096);
 
 typedef struct
 {
