@@ -8,7 +8,7 @@
 #include "gskrectprivate.h"
 #include "gsktransform.h"
 
-static gboolean
+gboolean
 gsk_gpu_render_pass_device_to_user (GskGpuRenderPass            *self,
                                     const cairo_rectangle_int_t *device,
                                     graphene_rect_t             *user)
@@ -57,7 +57,23 @@ gsk_gpu_render_pass_user_to_device (GskGpuRenderPass      *self,
   return TRUE;
 }
 
-static gboolean
+gboolean
+gsk_gpu_render_pass_user_to_device_shrink (GskGpuRenderPass      *self,
+                                           const graphene_rect_t *user,
+                                           cairo_rectangle_int_t *device)
+{
+  graphene_rect_t tmp;
+
+  if (!gsk_gpu_render_pass_user_to_device (self, user, &tmp))
+    return FALSE;
+
+  if (!gsk_rect_to_cairo_shrink (&tmp, device))
+    return FALSE;
+
+  return TRUE;
+}
+
+gboolean
 gsk_gpu_render_pass_user_to_device_exact (GskGpuRenderPass      *self,
                                           const graphene_rect_t *user,
                                           cairo_rectangle_int_t *device)
