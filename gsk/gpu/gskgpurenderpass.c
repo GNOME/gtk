@@ -2,8 +2,11 @@
 
 #include "gskgpurenderpassprivate.h"
 
+#include "gskgpublendopprivate.h"
+#include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpurenderpassopprivate.h"
+#include "gskgpuscissoropprivate.h"
 
 #include "gskrectprivate.h"
 #include "gsktransform.h"
@@ -156,6 +159,44 @@ gsk_gpu_render_pass_finish (GskGpuRenderPass *self)
                               self->pass_type);
 
   g_clear_pointer (&self->modelview, gsk_transform_unref);
+}
+
+void
+gsk_gpu_render_pass_prepare_shader (GskGpuRenderPass *self)
+{
+  if (self->pending_globals == 0)
+    return;
+
+  if (self->pending_globals & (GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP))
+    {
+      graphene_matrix_t mvp;
+
+      if (self->modelview)
+        {
+          gsk_transform_to_matrix (self->modelview, &mvp);
+          graphene_matrix_multiply (&mvp, &self->projection, &mvp);
+        }
+      else
+        graphene_matrix_init_from_matrix (&mvp, &self->projection);
+
+      gsk_gpu_globals_op (self->frame,
+                          &self->scale,
+                          &mvp,
+                          &self->clip.rect);
+    }
+
+  if (self->pending_globals & GSK_GPU_GLOBAL_SCISSOR)
+    {
+      gsk_gpu_scissor_op (self->frame,
+                          &self->scissor);
+    }
+
+  if (self->pending_globals & GSK_GPU_GLOBAL_BLEND)
+    {
+      gsk_gpu_blend_op (self->frame, self->blend);
+    }
+
+  self->pending_globals = 0;
 }
 
 void
