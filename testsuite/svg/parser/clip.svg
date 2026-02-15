@@ -9,4 +9,6 @@
   </g>
   <path d='M 0 0 L 100 100' clip-path='none'/>
   <circle cx='10' cy='10' r='10' clip-path='path("M 0 0 h 10 v 20 h -10 z")'/>
+  <ellipse cx='10' cy='10' rx='10' ry='1' clip-path='path(nonzero, "M 0 0 h 10 v 20 h -10 z")'/>
+  <rect x='10' y='10' width='10' height='1' clip-path='path(evenodd, "M 0 0 h 10 v 20 h -10 z")'/>
 </svg>
