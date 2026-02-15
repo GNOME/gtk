@@ -132,18 +132,24 @@ gsk_gpu_clip_intersect_rect (GskGpuClip             *dest,
 }
 
 gboolean
-gsk_gpu_clip_intersect_rounded_rect (GskGpuClip           *dest,
-                                     const GskGpuClip     *src,
-                                     const GskRoundedRect *rounded)
+gsk_gpu_clip_intersect_rounded_rect (GskGpuClip             *dest,
+                                     const GskGpuClip       *src,
+                                     const graphene_point_t *offset,
+                                     const GskRoundedRect   *rounded)
 {
   GskRoundedRectIntersection res;
+  GskRoundedRect tmp;
 
-  if (gsk_rounded_rect_contains_rect (rounded, &src->rect.bounds))
+  tmp = *rounded;
+  tmp.bounds.origin.x += offset->x;
+  tmp.bounds.origin.y += offset->y;
+
+  if (gsk_rounded_rect_contains_rect (&tmp, &src->rect.bounds))
     {
       gsk_gpu_clip_init_copy (dest, src);
       return TRUE;
     }
-  if (!gsk_rect_intersects (&rounded->bounds, &src->rect.bounds))
+  if (!gsk_rect_intersects (&tmp.bounds, &src->rect.bounds))
     {
       dest->type = GSK_GPU_CLIP_ALL_CLIPPED;
       return TRUE;
@@ -156,22 +162,22 @@ gsk_gpu_clip_intersect_rounded_rect (GskGpuClip           *dest,
       break;
 
     case GSK_GPU_CLIP_NONE:
-      res = gsk_rounded_rect_intersect_with_rect (rounded, &src->rect.bounds, &dest->rect);
+      res = gsk_rounded_rect_intersect_with_rect (&tmp, &src->rect.bounds, &dest->rect);
       if (gsk_gpu_clip_init_after_intersection (dest, res))
         break;
       /* XXX: This may grow the bounds quite substantially */
-      gsk_gpu_clip_init_rounded_rect (dest, rounded);
+      gsk_gpu_clip_init_rounded_rect (dest, &tmp);
       break;
 
     case GSK_GPU_CLIP_CONTAINED:
     case GSK_GPU_CLIP_RECT:
-      res = gsk_rounded_rect_intersect_with_rect (rounded, &src->rect.bounds, &dest->rect);
+      res = gsk_rounded_rect_intersect_with_rect (&tmp, &src->rect.bounds, &dest->rect);
       if (!gsk_gpu_clip_init_after_intersection (dest, res))
         return FALSE;
       break;
 
     case GSK_GPU_CLIP_ROUNDED:
-      res = gsk_rounded_rect_intersection (&src->rect, rounded, &dest->rect);
+      res = gsk_rounded_rect_intersection (&src->rect, &tmp, &dest->rect);
       if (!gsk_gpu_clip_init_after_intersection (dest, res))
         return FALSE;
       break;

@@ -53,8 +53,9 @@ gboolean                gsk_gpu_clip_intersect_rect                     (GskGpuC
                                                                          const GskGpuClip       *src,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-gboolean                gsk_gpu_clip_intersect_rounded_rect             (GskGpuClip          *dest,
-                                                                         const GskGpuClip    *src,
+gboolean                gsk_gpu_clip_intersect_rounded_rect             (GskGpuClip             *dest,
+                                                                         const GskGpuClip       *src,
+                                                                         const graphene_point_t *offset,
                                                                          const GskRoundedRect   *rounded) G_GNUC_WARN_UNUSED_RESULT;
 void                    gsk_gpu_clip_scale                              (GskGpuClip             *dest,
                                                                          const GskGpuClip       *src,
