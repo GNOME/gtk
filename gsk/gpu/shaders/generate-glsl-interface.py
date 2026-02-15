@@ -523,6 +523,8 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     print (f'''{{
   {file.struct_name}Instance *instance;
 
+  gsk_gpu_render_pass_prepare_shader (pass);
+
   gsk_gpu_shader_op_alloc (pass->frame,
                            &{file.var_name.upper()}_OP_CLASS,
                            ccs ? gsk_gpu_color_states_create (ccs, {file.ccs_premultiplied.to_c_code('ccs_premultiplied')}, {'ccs' if file.acs_equals_ccs else 'acs'}, {file.acs_premultiplied.to_c_code('acs_premultiplied')})
