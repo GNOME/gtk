@@ -85,7 +85,7 @@ gdk_texture_new_from_svg_bytes (GBytes  *bytes,
   svg = gtk_svg_new_from_bytes (bytes);
 
   width = gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg));
-  height = gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg));
+  height = gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg));
 
   if (width == 0 || height == 0)
     {
