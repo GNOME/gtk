@@ -1542,13 +1542,13 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
           gdk_color_state_unref (image_cs);
           g_object_unref (image);
         }
-      gsk_gpu_texture_op (self,
-                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                          self->ccs,
-                          offscreen,
-                          GSK_GPU_SAMPLER_DEFAULT,
-                          &node->bounds,
-                          &clip_bounds);
+      gsk_gpu_node_processor_image_op (self,
+                                       offscreen,
+                                       self->ccs,
+                                       GSK_GPU_SAMPLER_DEFAULT,
+                                       &node->bounds,
+                                       &clip_bounds);
+
       g_object_unref (offscreen);
       return;
     }
@@ -3759,7 +3759,7 @@ static const struct
     NULL,
   },
   [GSK_TEXTURE_SCALE_NODE] = {
-    0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_texture_scale_node,
     NULL,
   },
