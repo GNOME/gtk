@@ -1404,20 +1404,24 @@ expression_info_construct (GtkBuilder      *builder,
             if (info->constant.initial)
               {
                 g_value_init (&value, info->constant.type);
+                expr = gtk_constant_expression_new_for_value (&value);
               }
-            else if (!gtk_builder_value_from_string_type (builder,
-                                                          info->constant.type,
-                                                          info->constant.text->str,
-                                                          &value,
-                                                          error))
-              {
-                return NULL;
-              }
-
-            if (G_VALUE_HOLDS_OBJECT (&value))
-              expr = gtk_object_expression_new (g_value_get_object (&value));
             else
-              expr = gtk_constant_expression_new_for_value (&value);
+              {
+                if (!gtk_builder_value_from_string_type (builder,
+                                                         info->constant.type,
+                                                         info->constant.text->str,
+                                                         &value,
+                                                         error))
+                  {
+                    return NULL;
+                  }
+
+                if (G_VALUE_HOLDS_OBJECT (&value))
+                  expr = gtk_object_expression_new (g_value_get_object (&value));
+                else
+                  expr = gtk_constant_expression_new_for_value (&value);
+              }
 
             g_value_unset (&value);
           }
