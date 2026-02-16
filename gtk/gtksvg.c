@@ -15934,6 +15934,7 @@ parse_shape_attrs (Shape                *shape,
     {
       GStrv classes = g_strsplit (class_attr, " ", 0);
       SvgValue *value;
+      gboolean has_stroke;
 
       if (g_strv_has (classes, "transparent-fill"))
         value = svg_paint_new_none ();
@@ -15966,9 +15967,35 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_none ();
 
+      has_stroke = !svg_value_equal (value, svg_paint_new_none ());
+
       if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
         shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
       svg_value_unref (value);
+
+      if (has_stroke)
+        {
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH))
+            {
+              value = svg_number_new (2);
+              shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
+              svg_value_unref (value);
+            }
+
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINEJOIN))
+            {
+              value = svg_linejoin_new (GSK_LINE_JOIN_ROUND);
+              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINEJOIN, 0, value);
+              svg_value_unref (value);
+            }
+
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINECAP))
+            {
+              value = svg_linecap_new (GSK_LINE_CAP_ROUND);
+              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINECAP, 0, value);
+              svg_value_unref (value);
+            }
+        }
 
       g_strfreev (classes);
     }
