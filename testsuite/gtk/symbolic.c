@@ -148,6 +148,9 @@ svg_to_texture (const char *filename)
                                             G_N_ELEMENTS (colors));
   node = gtk_snapshot_free_to_node (snapshot);
 
+  if (node == NULL)
+    node = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 0 }, &GRAPHENE_RECT_INIT (0, 0, 16, 16));
+
   surface = gdk_surface_new_toplevel (gdk_display_get_default ());
   renderer = gsk_renderer_new_for_surface (surface);
 
