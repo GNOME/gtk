@@ -91,6 +91,7 @@ struct _ExpressionInfo {
     GtkExpression *expression;
     struct {
       GType type;
+      gboolean initial;
       GString *text;
       gboolean translatable;
       char *context;
