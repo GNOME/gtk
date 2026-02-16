@@ -246,7 +246,7 @@ gsk_text_node_new2 (PangoFont              *font,
   self = gsk_render_node_alloc (GSK_TYPE_TEXT_NODE);
   node = (GskRenderNode *) self;
   node->preferred_depth = GDK_MEMORY_NONE;
-  node->is_hdr = gdk_color_is_srgb (color);
+  node->is_hdr = !gdk_color_is_srgb (color);
 
   self->fontmap = g_object_ref (pango_font_get_font_map (font));
   self->font = g_object_ref (font);
