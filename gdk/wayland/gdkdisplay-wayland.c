@@ -127,7 +127,7 @@
 #define SINGLE_PIXEL_BUFFER_VERSION     1
 #define SYSTEM_BELL_VERSION             1
 #define CURSOR_SHAPE_VERSION            1
-#define GTK_SHELL1_VERSION              6
+#define GTK_SHELL1_VERSION              7
 #define XDG_WM_DIALOG_VERSION           1
 #define XDG_TOPLEVEL_ICON_VERSION       1
 #define XDG_WM_BASE_VERSION             7
