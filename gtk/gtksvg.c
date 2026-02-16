@@ -15859,6 +15859,9 @@ parse_shape_attrs (Shape                *shape,
   const char *class_attr = NULL;
   const char *style_attr = NULL;
 
+  if (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC)
+    class_attr = "foreground-fill";
+
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
@@ -15929,7 +15932,7 @@ parse_shape_attrs (Shape                *shape,
   if (style_attr)
     parse_style_attr (shape, FALSE, FALSE, style_attr, data, context);
 
-  if ((data->svg->features & GTK_SVG_EXTENSIONS) != 0 &&
+  if ((data->svg->features & (GTK_SVG_EXTENSIONS|GTK_SVG_TRADITIONAL_SYMBOLIC)) != 0 &&
       class_attr && *class_attr)
     {
       GStrv classes = g_strsplit (class_attr, " ", 0);
@@ -15952,7 +15955,8 @@ parse_shape_attrs (Shape                *shape,
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
 
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) ||
+          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
         shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
       svg_value_unref (value);
 
@@ -15969,27 +15973,31 @@ parse_shape_attrs (Shape                *shape,
 
       has_stroke = !svg_value_equal (value, svg_paint_new_none ());
 
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) ||
+          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
         shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
       svg_value_unref (value);
 
       if (has_stroke)
         {
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH))
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH) ||
+              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
             {
               value = svg_number_new (2);
               shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
               svg_value_unref (value);
             }
 
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINEJOIN))
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINEJOIN) ||
+              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
             {
               value = svg_linejoin_new (GSK_LINE_JOIN_ROUND);
               shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINEJOIN, 0, value);
               svg_value_unref (value);
             }
 
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINECAP))
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINECAP) ||
+              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
             {
               value = svg_linecap_new (GSK_LINE_CAP_ROUND);
               shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINECAP, 0, value);
@@ -22810,7 +22818,7 @@ gtk_svg_init (GtkSvg *self)
   self->playing = FALSE;
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
 
-  self->features = GTK_SVG_ALL_FEATURES;
+  self->features = GTK_SVG_DEFAULT_FEATURES;
 
   self->content = shape_new (NULL, SHAPE_SVG);
   self->timeline = timeline_new ();
@@ -22952,7 +22960,7 @@ gtk_svg_class_init (GtkSvgClass *class)
    */
   properties[PROP_FEATURES] =
     g_param_spec_flags ("features", NULL, NULL,
-                        GTK_TYPE_SVG_FEATURES, GTK_SVG_ALL_FEATURES,
+                        GTK_TYPE_SVG_FEATURES, GTK_SVG_DEFAULT_FEATURES,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -24696,7 +24704,7 @@ gtk_svg_set_features (GtkSvg         *self,
 GtkSvgFeatures
 gtk_svg_get_features (GtkSvg *self)
 {
-  g_return_val_if_fail (GTK_IS_SVG (self), GTK_SVG_ALL_FEATURES);
+  g_return_val_if_fail (GTK_IS_SVG (self), GTK_SVG_DEFAULT_FEATURES);
 
   return self->features;
 }
