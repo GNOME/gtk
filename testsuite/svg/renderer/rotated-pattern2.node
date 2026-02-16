@@ -1,316 +1,284 @@
-isolation {
-  child: container {
-    isolation {
-      child: transform {
-        transform: translate(100, 100) rotate(45) translate(-100, -100);
-        child: clip {
-          clip: 50 50 100 100;
-          child: container {
-            clip {
-              clip: 50 50 100 100;
-              child: color {
-                bounds: 50 50 100 100;
-                color: rgb(255,0,0);
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-          }
+transform {
+  transform: translate(100, 100) rotate(45) translate(-100, -100);
+  child: clip {
+    clip: 50 50 100 100;
+    child: container {
+      clip {
+        clip: 50 50 100 100;
+        child: color {
+          bounds: 50 50 100 100;
+          color: rgb(255,0,0);
         }
       }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(250, 100) rotate(45) translate(-250, -100);
-        child: clip {
-          clip: 200 50 100 100;
-          child: container {
-            clip {
-              clip: 200 50 50 100;
-              child: color {
-                bounds: 200 50 50 100;
-                color: rgb(255,0,0);
-              }
-            }
-            clip {
-              clip: 250 50 50 100;
-              child: color {
-                bounds: 250 50 50 100;
-                color: rgb(255,255,0);
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-          }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
         }
       }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(400, 100) rotate(45) translate(-400, -100);
-        child: clip {
-          clip: 350 50 100 100;
-          child: container {
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 350 50 100 100;
-              child: color {
-                bounds: 350 50 100 100;
-                color: rgb(255,255,0);
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-          }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
         }
       }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(100, 250) rotate(45) translate(-100, -250);
-        child: clip {
-          clip: 50 200 100 100;
-          child: container {
-            clip {
-              clip: 50 200 100 50;
-              child: color {
-                bounds: 50 200 100 50;
-                color: rgb(255,0,0);
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 50 250 100 50;
-              child: color {
-                bounds: 50 250 100 50;
-                color: rgb(0,0,255);
-              }
-            }
-          }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
         }
       }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(250, 250) rotate(45) translate(-250, -250);
-        child: clip {
-          clip: 200 200 100 100;
-          child: container {
-            clip {
-              clip: 200 200 50 50;
-              child: color {
-                bounds: 200 200 50 50;
-                color: rgb(255,0,0);
-              }
-            }
-            clip {
-              clip: 250 200 50 50;
-              child: color {
-                bounds: 250 200 50 50;
-                color: rgb(255,255,0);
-              }
-            }
-            clip {
-              clip: 250 250 50 50;
-              child: color {
-                bounds: 250 250 50 50;
-                color: rgb(0,128,0);
-              }
-            }
-            clip {
-              clip: 200 250 50 50;
-              child: color {
-                bounds: 200 250 50 50;
-                color: rgb(0,0,255);
-              }
-            }
-          }
-        }
-      }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(400, 250) rotate(45) translate(-400, -250);
-        child: clip {
-          clip: 350 200 100 100;
-          child: container {
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 350 200 100 50;
-              child: color {
-                bounds: 350 200 100 50;
-                color: rgb(255,255,0);
-              }
-            }
-            clip {
-              clip: 350 250 100 50;
-              child: color {
-                bounds: 350 250 100 50;
-                color: rgb(0,128,0);
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-          }
-        }
-      }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(100, 400) rotate(45) translate(-100, -400);
-        child: clip {
-          clip: 50 350 100 100;
-          child: container {
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 50 350 100 100;
-              child: color {
-                bounds: 50 350 100 100;
-                color: rgb(0,0,255);
-              }
-            }
-          }
-        }
-      }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(250, 400) rotate(45) translate(-250, -400);
-        child: clip {
-          clip: 200 350 100 100;
-          child: container {
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 250 350 50 100;
-              child: color {
-                bounds: 250 350 50 100;
-                color: rgb(0,128,0);
-              }
-            }
-            clip {
-              clip: 200 350 50 100;
-              child: color {
-                bounds: 200 350 50 100;
-                color: rgb(0,0,255);
-              }
-            }
-          }
-        }
-      }
-      isolations: background;
-    }
-    isolation {
-      child: transform {
-        transform: translate(400, 400) rotate(45) translate(-400, -400);
-        child: clip {
-          clip: 350 350 100 100;
-          child: container {
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-            clip {
-              clip: 350 350 100 100;
-              child: color {
-                bounds: 350 350 100 100;
-                color: rgb(0,128,0);
-              }
-            }
-            clip {
-              clip: 0 0 0 0;
-              child: container {
-              }
-            }
-          }
-        }
-      }
-      isolations: background;
     }
   }
-  isolations: background;
+}
+transform {
+  transform: translate(250, 100) rotate(45) translate(-250, -100);
+  child: clip {
+    clip: 200 50 100 100;
+    child: container {
+      clip {
+        clip: 200 50 50 100;
+        child: color {
+          bounds: 200 50 50 100;
+          color: rgb(255,0,0);
+        }
+      }
+      clip {
+        clip: 250 50 50 100;
+        child: color {
+          bounds: 250 50 50 100;
+          color: rgb(255,255,0);
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(400, 100) rotate(45) translate(-400, -100);
+  child: clip {
+    clip: 350 50 100 100;
+    child: container {
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 350 50 100 100;
+        child: color {
+          bounds: 350 50 100 100;
+          color: rgb(255,255,0);
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(100, 250) rotate(45) translate(-100, -250);
+  child: clip {
+    clip: 50 200 100 100;
+    child: container {
+      clip {
+        clip: 50 200 100 50;
+        child: color {
+          bounds: 50 200 100 50;
+          color: rgb(255,0,0);
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 50 250 100 50;
+        child: color {
+          bounds: 50 250 100 50;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(250, 250) rotate(45) translate(-250, -250);
+  child: clip {
+    clip: 200 200 100 100;
+    child: container {
+      clip {
+        clip: 200 200 50 50;
+        child: color {
+          bounds: 200 200 50 50;
+          color: rgb(255,0,0);
+        }
+      }
+      clip {
+        clip: 250 200 50 50;
+        child: color {
+          bounds: 250 200 50 50;
+          color: rgb(255,255,0);
+        }
+      }
+      clip {
+        clip: 250 250 50 50;
+        child: color {
+          bounds: 250 250 50 50;
+          color: rgb(0,128,0);
+        }
+      }
+      clip {
+        clip: 200 250 50 50;
+        child: color {
+          bounds: 200 250 50 50;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(400, 250) rotate(45) translate(-400, -250);
+  child: clip {
+    clip: 350 200 100 100;
+    child: container {
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 350 200 100 50;
+        child: color {
+          bounds: 350 200 100 50;
+          color: rgb(255,255,0);
+        }
+      }
+      clip {
+        clip: 350 250 100 50;
+        child: color {
+          bounds: 350 250 100 50;
+          color: rgb(0,128,0);
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(100, 400) rotate(45) translate(-100, -400);
+  child: clip {
+    clip: 50 350 100 100;
+    child: container {
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 50 350 100 100;
+        child: color {
+          bounds: 50 350 100 100;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(250, 400) rotate(45) translate(-250, -400);
+  child: clip {
+    clip: 200 350 100 100;
+    child: container {
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 250 350 50 100;
+        child: color {
+          bounds: 250 350 50 100;
+          color: rgb(0,128,0);
+        }
+      }
+      clip {
+        clip: 200 350 50 100;
+        child: color {
+          bounds: 200 350 50 100;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(400, 400) rotate(45) translate(-400, -400);
+  child: clip {
+    clip: 350 350 100 100;
+    child: container {
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+      clip {
+        clip: 350 350 100 100;
+        child: color {
+          bounds: 350 350 100 100;
+          color: rgb(0,128,0);
+        }
+      }
+      clip {
+        clip: 0 0 0 0;
+        child: container {
+        }
+      }
+    }
+  }
 }

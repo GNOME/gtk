@@ -1,15 +1,12 @@
-isolation {
-  child: transform {
-    transform: scale(15.12);
-    child: fill {
-      child: color {
-        bounds: 0 0 20 20;
-        color: rgb(0,0,0);
-      }
-      path: "\
-M 0 0 h 20 v 20 h -20 z";
-      fill-rule: winding;
+transform {
+  transform: scale(15.12);
+  child: fill {
+    child: color {
+      bounds: 0 0 20 20;
+      color: rgb(0,0,0);
     }
+    path: "\
+M 0 0 h 20 v 20 h -20 z";
+    fill-rule: winding;
   }
-  isolations: background;
 }

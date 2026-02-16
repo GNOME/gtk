@@ -1,7 +1,5 @@
-isolation {
-  child: container {
-    text {
-      font: "Cantarell 26.665px" url("data:font/ttf;base64,\
+text {
+  font: "Cantarell 26.665px" url("data:font/ttf;base64,\
 T1RUTwARAQAABAAQQ0ZGMvRqhYYAAB2EAAAYKEdERUYK1QrQAAACKAAAAExHUE9TRHRMdQAAASQA\
 AAAeR1NVQgokA1MAAAQkAAAA7EhWQVKuAfnfAAAHXAAABM1NVkFS6vnYLwAAAeAAAABGT1MvMlWp\
 c10AAALAAAAAYFNUQVR+CnSVAAADIAAAAGZhdmFy9hMarAAAAUQAAAAeY21hcBO4ERsAAAOIAAAA\
@@ -245,19 +243,16 @@ n59o0I0QA/sMn5+MEBaMCvtC97mPhnepjRAB4+KndEzmjRADu/tCp3CPho0QFdNW24wQBq7in/bu\
 hJN/lIiShaGJipAQGjTKMIwQBiZ8+wGMh4uHlHeOEHI4lYWMEB6UCqSZdowQ+wcV1VXfjBAG92qC\
 mJgK\
 ");
-      glyphs: 115 20, 370 15, 409 10, 358 24, 244 14, 349 7;
-      offset: 0 100;
-    }
-    text {
-      font: "Cantarell Bold 31.999px";
-      glyphs: 29 21, 370 19, 349 10, 280 19, 287 17, 409 13, 1059 9, 1109 7, 349 10, 244 17, 409 13, 312 19, 287 17, 409 13;
-      offset: 0 200;
-    }
-    text {
-      font: "Cantarell Bold 28.159px";
-      glyphs: 970 17, 970 17, 970 17, 1071 10, 972 17, 972 17;
-      offset: 0 300;
-    }
-  }
-  isolations: background;
+  glyphs: 115 20, 370 15, 409 10, 358 24, 244 14, 349 7;
+  offset: 0 100;
+}
+text {
+  font: "Cantarell Bold 31.999px";
+  glyphs: 29 21, 370 19, 349 10, 280 19, 287 17, 409 13, 1059 9, 1109 7, 349 10, 244 17, 409 13, 312 19, 287 17, 409 13;
+  offset: 0 200;
+}
+text {
+  font: "Cantarell Bold 28.159px";
+  glyphs: 970 17, 970 17, 970 17, 1071 10, 972 17, 972 17;
+  offset: 0 300;
 }

@@ -1,19 +1,17 @@
-isolation {
-  child: container {
-    fill {
-      child: radial-gradient {
-        bounds: 10 10 210 140;
-        start: 75 100 0;
-        end: 75 100 130;
-        stops: 0 rgb(0,0,153), 1 rgb(34,238,34);
-        premultiplied: false;
-      }
-      path: "\
+fill {
+  child: radial-gradient {
+    bounds: 10 10 210 140;
+    start: 75 100 0;
+    end: 75 100 130;
+    stops: 0 rgb(0,0,153), 1 rgb(34,238,34);
+    premultiplied: false;
+  }
+  path: "\
 M 10 10 h 210 v 140 h -210 z";
-      fill-rule: winding;
-    }
-    text {
-      font: "SVGFreeSansASCII 12px" url("data:font/ttf;base64,\
+  fill-rule: winding;
+}
+text {
+  font: "SVGFreeSansASCII 12px" url("data:font/ttf;base64,\
 AAEAAAALAIAAAwAwR1NVQrj8uOoAAAEgAAAAKE9TLzJWVF4jAAABgAAAAGBjbWFwBKMEIgAAAnwA\
 AACsZ2x5ZvfavRYAAAVMAAAJpGhlYWQthLmJAAABSAAAADZoaGVhBsQDdAAAAPwAAAAkaG10eDNn\
 AAAAAAPgAAABamxvY2FLx04pAAADKAAAALhtYXhwAWoAdAAAALwAAAAgbmFtZQfXH7IAAAHgAAAA\
@@ -83,63 +81,63 @@ AZgAAAEAAAAAAdkCDAALAAABEyMnByMTAzMXNzMBJLVhg4Vfua9ffn5eAQ/+8cnJAQsBAb6+AAAB\
 AAD/JgHeAgwAEAAAATMDDgEjIic1FjMyPwEDMxMBhFrpFkUsHxkbES0SJLFZhgIM/YY5Mw1LBihe\
 Ag7+aAA=\
 ");
-      glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, 71 3, 74 3, 77 3, 77 3, 1 3, 80 7, 71 3, 1 3, 83 4, 70 7, "c", 85 3, 66 7, 79 7, 72 7, 77 3, 70 7;
-      offset: 10 165;
-    }
-    stroke {
-      child: radial-gradient {
-        bounds: 230 10 210 140;
-        start: 295 100 0;
-        end: 295 100 150;
-        stops: 0 rgb(238,34,34), 1 rgb(255,255,102);
-        premultiplied: false;
+  glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, 71 3, 74 3, 77 3, 77 3, 1 3, 80 7, 71 3, 1 3, 83 4, 70 7, "c", 85 3, 66 7, 79 7, 72 7, 77 3, 70 7;
+  offset: 10 165;
+}
+stroke {
+  child: radial-gradient {
+    bounds: 230 10 210 140;
+    start: 295 100 0;
+    end: 295 100 150;
+    stops: 0 rgb(238,34,34), 1 rgb(255,255,102);
+    premultiplied: false;
+  }
+  path: "\
+M 250 30 h 170 v 100 h -170 z";
+  line-width: 40;
+  line-cap: butt;
+  line-join: miter;
+}
+text {
+  font: "SVGFreeSansASCII 12px";
+  glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, "s", 85 3, 83 4, 80 7, "k", 70 7, 1 3, 80 7, 71 3, 1 3, 83 4, 70 7, "c", 85 3, 66 7, 79 7, 72 7, 77 3, 70 7;
+  offset: 230 165;
+}
+mask {
+  source: radial-gradient {
+    bounds: 10 170 419 50;
+    start: 225 180 0;
+    end: 225 180 90;
+    stops: 0 rgb(0,102,0), 1 rgb(255,255,0);
+    premultiplied: false;
+  }
+  mask: text {
+    font: "SVGFreeSansASCII 50px";
+    glyphs: 40 39, 83 17, 66 28, 69 28, 74 11, 70 28, 79 28, 85 14, 1 14, 80 28, 79 28, 1 14, 85 14, 70 28, "x", 85 14, 1 14, 71 14, 74 11, 77 11, 77 11;
+    offset: 10 210;
+  }
+}
+text {
+  font: "SVGFreeSansASCII 12px";
+  glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, 85 3, 70 7, "x", 85 3, 13 3, 1 3, 67 7, 77 3, 66 7, "ck", 1 3, 85 3, 80 7, 1 3, "y", 70 7, 77 3, 77 3, 80 7, 88 9;
+  offset: 10 225;
+}
+mask {
+  source: radial-gradient {
+    bounds: 10 234 460 45;
+    start: 225 245 0;
+    end: 225 245 90;
+    stops: 0 rgb(0,0,0), 1 rgb(221,102,221);
+    premultiplied: false;
+  }
+  mask: transform {
+    transform: translate(10, 234);
+    child: stroke {
+      child: color {
+        bounds: -6 -4 472 49.9219;
+        color: rgb(0,0,0);
       }
       path: "\
-M 250 30 h 170 v 100 h -170 z";
-      line-width: 40;
-      line-cap: butt;
-      line-join: miter;
-    }
-    text {
-      font: "SVGFreeSansASCII 12px";
-      glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, "s", 85 3, 83 4, 80 7, "k", 70 7, 1 3, 80 7, 71 3, 1 3, 83 4, 70 7, "c", 85 3, 66 7, 79 7, 72 7, 77 3, 70 7;
-      offset: 230 165;
-    }
-    mask {
-      source: radial-gradient {
-        bounds: 10 170 419 50;
-        start: 225 180 0;
-        end: 225 180 90;
-        stops: 0 rgb(0,102,0), 1 rgb(255,255,0);
-        premultiplied: false;
-      }
-      mask: text {
-        font: "SVGFreeSansASCII 50px";
-        glyphs: 40 39, 83 17, 66 28, 69 28, 74 11, 70 28, 79 28, 85 14, 1 14, 80 28, 79 28, 1 14, 85 14, 70 28, "x", 85 14, 1 14, 71 14, 74 11, 77 11, 77 11;
-        offset: 10 210;
-      }
-    }
-    text {
-      font: "SVGFreeSansASCII 12px";
-      glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, 85 3, 70 7, "x", 85 3, 13 3, 1 3, 67 7, 77 3, 66 7, "ck", 1 3, 85 3, 80 7, 1 3, "y", 70 7, 77 3, 77 3, 80 7, 88 9;
-      offset: 10 225;
-    }
-    mask {
-      source: radial-gradient {
-        bounds: 10 234 460 45;
-        start: 225 245 0;
-        end: 225 245 90;
-        stops: 0 rgb(0,0,0), 1 rgb(221,102,221);
-        premultiplied: false;
-      }
-      mask: transform {
-        transform: translate(10, 234);
-        child: stroke {
-          child: color {
-            bounds: -6 -4 472 49.9219;
-            color: rgb(0,0,0);
-          }
-          path: "\
 M 32 19.578125\
 L 32 36.625\
 L 29.171875 36.625\
@@ -539,33 +537,30 @@ C 454.078125 20.3828125, 453.207031 18.5390625, 451.46875 17.203125\
 C 450.34375 16.3515625, 449.070312 15.921875, 447.65625 15.921875 Q 443.888672 15.921875, 442.078125 19.25\
 C 441.484375 20.3125, 441.128906 21.5625, 441.015625 23\
 Z";
-          line-width: 2;
-          line-cap: butt;
-          line-join: miter;
-        }
-      }
-    }
-    text {
-      font: "SVGFreeSansASCII 12px";
-      glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, "s", 85 3, 83 4, 80 7, "k", 70 7, 1 3, 80 7, 71 3, 1 3, 85 3, 70 7, "x", 85 3, 13 3, 1 3, 67 7, 77 3, 66 7, "ck", 1 3, 85 3, 80 7, 1 3, 83 4, 70 7, 69 7;
-      offset: 10 285;
-    }
-    text {
-      font: "SVGFreeSansASCII 32px";
-      glyphs: 5 18, 51 23, 70 18, "v", 74 7, "s", 74 7, 80 18, 79 18, 27 9, 1 9, 18 18, 15 9, 25 18, 1 9, 5 18;
-      offset: 10 340;
-    }
-    stroke {
-      child: color {
-        bounds: 0.5 0.5 479 359;
-        color: rgb(0,0,0);
-      }
-      path: "\
-M 1 1 h 478 v 358 h -478 z";
-      line-width: 1;
+      line-width: 2;
       line-cap: butt;
       line-join: miter;
     }
   }
-  isolations: background;
+}
+text {
+  font: "SVGFreeSansASCII 12px";
+  glyphs: 51 9, 66 7, 69 7, 74 3, 66 7, 77 3, 1 3, 72 7, 83 4, 66 7, 69 7, 74 3, 70 7, 79 7, 85 3, 1 3, 80 7, 79 7, 1 3, "s", 85 3, 83 4, 80 7, "k", 70 7, 1 3, 80 7, 71 3, 1 3, 85 3, 70 7, "x", 85 3, 13 3, 1 3, 67 7, 77 3, 66 7, "ck", 1 3, 85 3, 80 7, 1 3, 83 4, 70 7, 69 7;
+  offset: 10 285;
+}
+text {
+  font: "SVGFreeSansASCII 32px";
+  glyphs: 5 18, 51 23, 70 18, "v", 74 7, "s", 74 7, 80 18, 79 18, 27 9, 1 9, 18 18, 15 9, 25 18, 1 9, 5 18;
+  offset: 10 340;
+}
+stroke {
+  child: color {
+    bounds: 0.5 0.5 479 359;
+    color: rgb(0,0,0);
+  }
+  path: "\
+M 1 1 h 478 v 358 h -478 z";
+  line-width: 1;
+  line-cap: butt;
+  line-join: miter;
 }

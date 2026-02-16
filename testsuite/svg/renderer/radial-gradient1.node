@@ -1,29 +1,24 @@
-isolation {
-  child: container {
-    fill {
-      child: radial-gradient {
-        bounds: 50 50 200 100;
-        start: 150 100 40;
-        end: 150 100 100;
-        aspect-ratio: 2;
-        stops: 0 rgb(0,128,0), 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 0.99 rgb(255,255,0), 1 rgb(0,0,255);
-        premultiplied: false;
-      }
-      path: "\
-M 50 50 h 200 v 100 h -200 z";
-      fill-rule: winding;
-    }
-    stroke {
-      child: color {
-        bounds: 49 49 202 102;
-        color: rgb(0,0,0);
-      }
-      path: "\
-M 50 50 h 200 v 100 h -200 z";
-      line-width: 2;
-      line-cap: butt;
-      line-join: miter;
-    }
+fill {
+  child: radial-gradient {
+    bounds: 50 50 200 100;
+    start: 150 100 40;
+    end: 150 100 100;
+    aspect-ratio: 2;
+    stops: 0 rgb(0,128,0), 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 0.99 rgb(255,255,0), 1 rgb(0,0,255);
+    premultiplied: false;
   }
-  isolations: background;
+  path: "\
+M 50 50 h 200 v 100 h -200 z";
+  fill-rule: winding;
+}
+stroke {
+  child: color {
+    bounds: 49 49 202 102;
+    color: rgb(0,0,0);
+  }
+  path: "\
+M 50 50 h 200 v 100 h -200 z";
+  line-width: 2;
+  line-cap: butt;
+  line-join: miter;
 }

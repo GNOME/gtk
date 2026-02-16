@@ -1,46 +1,43 @@
 clip {
   clip: 0 0 480 360;
-  child: isolation {
-    child: container {
-      stroke {
-        child: color {
-          bounds: -50 20 580 200;
-          color: rgb(0,0,255);
-        }
-        path: "\
+  child: container {
+    stroke {
+      child: color {
+        bounds: -50 20 580 200;
+        color: rgb(0,0,255);
+      }
+      path: "\
 M 50 120\
 L 430 120";
-        line-width: 25;
-        line-cap: butt;
-        line-join: miter;
-        dash: 10 10;
+      line-width: 25;
+      line-cap: butt;
+      line-join: miter;
+      dash: 10 10;
+    }
+    stroke {
+      child: color {
+        bounds: -50 40 580 200;
+        color: rgb(0,0,0);
       }
-      stroke {
-        child: color {
-          bounds: -50 40 580 200;
-          color: rgb(0,0,0);
-        }
-        path: "\
+      path: "\
 M 50 140\
 L 430 140";
-        line-width: 25;
-        line-cap: butt;
-        line-join: miter;
-        dash: 10 10;
-        dash-offset: 10;
-      }
-      stroke {
-        child: color {
-          bounds: 0.5 0.5 479 359;
-          color: rgb(0,0,0);
-        }
-        path: "\
-M 1 1 h 478 v 358 h -478 z";
-        line-width: 1;
-        line-cap: butt;
-        line-join: miter;
-      }
+      line-width: 25;
+      line-cap: butt;
+      line-join: miter;
+      dash: 10 10;
+      dash-offset: 10;
     }
-    isolations: background;
+    stroke {
+      child: color {
+        bounds: 0.5 0.5 479 359;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 1 1 h 478 v 358 h -478 z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
   }
 }

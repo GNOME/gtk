@@ -1,17 +1,14 @@
-isolation {
-  child: stroke {
-    child: linear-gradient {
-      bounds: 45 45 210 110;
-      start: 50 50;
-      end: 50 150;
-      stops: 0 rgb(255,0,0), 0 rgb(255,255,0), 1 rgb(255,255,0), 1 rgb(0,0,255);
-      premultiplied: false;
-    }
-    path: "\
-M 50 50 h 200 v 100 h -200 z";
-    line-width: 10;
-    line-cap: butt;
-    line-join: miter;
+stroke {
+  child: linear-gradient {
+    bounds: 45 45 210 110;
+    start: 50 50;
+    end: 50 150;
+    stops: 0 rgb(255,0,0), 0 rgb(255,255,0), 1 rgb(255,255,0), 1 rgb(0,0,255);
+    premultiplied: false;
   }
-  isolations: background;
+  path: "\
+M 50 50 h 200 v 100 h -200 z";
+  line-width: 10;
+  line-cap: butt;
+  line-join: miter;
 }

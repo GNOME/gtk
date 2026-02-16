@@ -1,61 +1,58 @@
 clip {
   clip: 0 0 300 200;
-  child: isolation {
-    child: container {
-      fill {
-        child: repeat {
-          bounds: 0.707107 0 274.293 175;
-          child-bounds: 0 0 50 50;
-          child: transform {
-            transform: scale(5);
-            child: container {
-              fill {
-                child: color {
-                  bounds: 0 0 7 7;
-                  color: rgb(221,160,221);
-                }
-                path: "\
+  child: container {
+    fill {
+      child: repeat {
+        bounds: 0.707107 0 274.293 175;
+        child-bounds: 0 0 50 50;
+        child: transform {
+          transform: scale(5);
+          child: container {
+            fill {
+              child: color {
+                bounds: 0 0 7 7;
+                color: rgb(221,160,221);
+              }
+              path: "\
 M 0 0\
 L 7 0\
 L 3.5 7\
 Z";
-                fill-rule: winding;
+              fill-rule: winding;
+            }
+            stroke {
+              child: color {
+                bounds: -4 -4 15 15;
+                color: rgb(0,0,255);
               }
-              stroke {
-                child: color {
-                  bounds: -4 -4 15 15;
-                  color: rgb(0,0,255);
-                }
-                path: "\
+              path: "\
 M 0 0\
 L 7 0\
 L 3.5 7\
 Z";
-                line-width: 1;
-                line-cap: butt;
-                line-join: miter;
-              }
+              line-width: 1;
+              line-cap: butt;
+              line-join: miter;
             }
           }
         }
-        path: "\
+      }
+      path: "\
 M 275 100 O 275 175, 150 175, 0.707106769 O 25 175, 25 100, 0.707106769 O 25 25, 150 25, 0.707106769 O 275 25, 275 100, 0.707106769\
 Z";
-        fill-rule: winding;
-      }
-      stroke {
-        child: color {
-          bounds: -7.29289 -8 290.293 191;
-          color: rgb(0,0,0);
-        }
-        path: "\
-M 275 100 O 275 175, 150 175, 0.707106769 O 25 175, 25 100, 0.707106769 O 25 25, 150 25, 0.707106769 O 275 25, 275 100, 0.707106769\
-Z";
-        line-width: 2;
-        line-cap: butt;
-        line-join: miter;
-      }
+      fill-rule: winding;
     }
-    isolations: background;
+    stroke {
+      child: color {
+        bounds: -7.29289 -8 290.293 191;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 275 100 O 275 175, 150 175, 0.707106769 O 25 175, 25 100, 0.707106769 O 25 25, 150 25, 0.707106769 O 275 25, 275 100, 0.707106769\
+Z";
+      line-width: 2;
+      line-cap: butt;
+      line-join: miter;
+    }
   }
 }

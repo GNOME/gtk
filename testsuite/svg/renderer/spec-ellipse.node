@@ -1,50 +1,47 @@
 clip {
   clip: 0 0 120 40;
-  child: isolation {
-    child: transform {
-      transform: scale(0.1);
-      child: container {
-        stroke {
+  child: transform {
+    transform: scale(0.1);
+    child: container {
+      stroke {
+        child: color {
+          bounds: 0 0 1200 400;
+          color: rgb(0,0,255);
+        }
+        path: "\
+M 1 1 h 1198 v 398 h -1198 z";
+        line-width: 2;
+        line-cap: butt;
+        line-join: miter;
+      }
+      transform {
+        transform: translate(300, 200);
+        child: fill {
           child: color {
-            bounds: 0 0 1200 400;
+            bounds: -250 -100 500 200;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M 250 0 O 250 100, 0 100, 0.707106769 O -250 100, -250 0, 0.707106769 O -250 -100, 0 -100, 0.707106769 O 250 -100, 250 0, 0.707106769\
+Z";
+          fill-rule: winding;
+        }
+      }
+      transform {
+        transform: translate(900, 200) rotate(330);
+        child: stroke {
+          child: color {
+            bounds: -330 -180 660 360;
             color: rgb(0,0,255);
           }
           path: "\
-M 1 1 h 1198 v 398 h -1198 z";
-          line-width: 2;
+M 250 0 O 250 100, 0 100, 0.707106769 O -250 100, -250 0, 0.707106769 O -250 -100, 0 -100, 0.707106769 O 250 -100, 250 0, 0.707106769\
+Z";
+          line-width: 20;
           line-cap: butt;
           line-join: miter;
         }
-        transform {
-          transform: translate(300, 200);
-          child: fill {
-            child: color {
-              bounds: -250 -100 500 200;
-              color: rgb(255,0,0);
-            }
-            path: "\
-M 250 0 O 250 100, 0 100, 0.707106769 O -250 100, -250 0, 0.707106769 O -250 -100, 0 -100, 0.707106769 O 250 -100, 250 0, 0.707106769\
-Z";
-            fill-rule: winding;
-          }
-        }
-        transform {
-          transform: translate(900, 200) rotate(330);
-          child: stroke {
-            child: color {
-              bounds: -330 -180 660 360;
-              color: rgb(0,0,255);
-            }
-            path: "\
-M 250 0 O 250 100, 0 100, 0.707106769 O -250 100, -250 0, 0.707106769 O -250 -100, 0 -100, 0.707106769 O 250 -100, 250 0, 0.707106769\
-Z";
-            line-width: 20;
-            line-cap: butt;
-            line-join: miter;
-          }
-        }
       }
     }
-    isolations: background;
   }
 }

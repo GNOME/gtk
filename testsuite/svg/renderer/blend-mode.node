@@ -10,23 +10,20 @@ M 250 150 o 0 100, -100 100, 0.707106769 o -100 0, -100 -100, 0.707106769 o 0 -1
       fill-rule: winding;
     }
     copy {
-      child: isolation {
-        child: blend {
-          mode: multiply;
-          bottom: paste {
-            bounds: 120 120 200 200;
-          }
-          top: fill {
-            child: color {
-              bounds: 120 120 200 200;
-              color: rgb(51,113,255);
-            }
-            path: "\
-M 320 220 o 0 100, -100 100, 0.707106769 o -100 0, -100 -100, 0.707106769 o 0 -100, 100 -100, 0.707106769 o 100 0, 100 100, 0.707106769 z";
-            fill-rule: winding;
-          }
+      child: blend {
+        mode: multiply;
+        bottom: paste {
+          bounds: 120 120 200 200;
         }
-        isolations: background;
+        top: fill {
+          child: color {
+            bounds: 120 120 200 200;
+            color: rgb(51,113,255);
+          }
+          path: "\
+M 320 220 o 0 100, -100 100, 0.707106769 o -100 0, -100 -100, 0.707106769 o 0 -100, 100 -100, 0.707106769 o 100 0, 100 100, 0.707106769 z";
+          fill-rule: winding;
+        }
       }
     }
   }

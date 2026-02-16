@@ -1,40 +1,34 @@
-isolation {
-  child: isolation {
-    child: blur {
-      blur: 4;
-      child: container {
-        fill {
-          child: color {
-            bounds: 30 30 40 40;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 70 50 o 0 20, -20 20, 0.707106769 o -20 0, -20 -20, 0.707106769 o 0 -20, 20 -20, 0.707106769 o 20 0, 20 20, 0.707106769 z";
-          fill-rule: winding;
-        }
-        stroke {
-          child: color {
-            bounds: 29 29 41.5 42;
-            color: rgb(0,128,0);
-          }
-          path: "\
-M 70 50 o 0 20, -20 20, 0.707106769 o -20 0, -20 -20, 0.707106769 o 0 -20, 20 -20, 0.707106769 o 20 0, 20 20, 0.707106769 z";
-          line-width: 1;
-          line-cap: butt;
-          line-join: miter;
-        }
-        fill {
-          child: color {
-            bounds: 55 55 10 10;
-            color: rgba(0,255,0,0.5);
-          }
-          path: "\
-M 65 60 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
-          fill-rule: winding;
-        }
+blur {
+  blur: 4;
+  child: container {
+    fill {
+      child: color {
+        bounds: 30 30 40 40;
+        color: rgb(255,0,0);
       }
+      path: "\
+M 70 50 o 0 20, -20 20, 0.707106769 o -20 0, -20 -20, 0.707106769 o 0 -20, 20 -20, 0.707106769 o 20 0, 20 20, 0.707106769 z";
+      fill-rule: winding;
     }
-    isolations: background;
+    stroke {
+      child: color {
+        bounds: 29 29 41.5 42;
+        color: rgb(0,128,0);
+      }
+      path: "\
+M 70 50 o 0 20, -20 20, 0.707106769 o -20 0, -20 -20, 0.707106769 o 0 -20, 20 -20, 0.707106769 o 20 0, 20 20, 0.707106769 z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    fill {
+      child: color {
+        bounds: 55 55 10 10;
+        color: rgba(0,255,0,0.5);
+      }
+      path: "\
+M 65 60 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
+      fill-rule: winding;
+    }
   }
-  isolations: background;
 }
