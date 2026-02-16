@@ -541,6 +541,50 @@ gsk_gpu_render_pass_get_clip_bounds (GskGpuRenderPass *self,
     }
 }
 
+void
+gsk_gpu_render_pass_push_clip_device_rect (GskGpuRenderPass            *self,
+                                           const cairo_rectangle_int_t *clip,
+                                           GskGpuRenderPassClipStorage *storage)
+{
+  graphene_rect_t scissor;
+
+  gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+  storage->scissor = self->scissor;
+
+  if (!gdk_rectangle_intersect (&self->scissor, clip, &self->scissor))
+    {
+      gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+      gsk_gpu_clip_init_all_clipped (&self->clip);
+      storage->modified = GSK_GPU_GLOBAL_CLIP;
+      self->pending_globals |= storage->modified;
+      return;
+    }
+
+  storage->modified = GSK_GPU_GLOBAL_SCISSOR;
+  if (gsk_gpu_render_pass_device_to_user (self, &self->scissor, &scissor) &&
+      gsk_gpu_clip_intersect_rect (&self->clip, &storage->clip, &self->offset, &scissor))
+    {
+      /* if scissoring does all the work, we can pretend the clip is empty */
+      if (gsk_gpu_clip_contains_rect (&self->clip, &self->offset, &scissor))
+        {
+          gsk_gpu_clip_init_empty (&self->clip, &self->offset, &scissor);
+        }
+      storage->modified |= GSK_GPU_GLOBAL_CLIP;
+    }
+  else
+    {
+      gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+    }
+}
+
+void
+gsk_gpu_render_pass_pop_clip_device_rect (GskGpuRenderPass            *self,
+                                          GskGpuRenderPassClipStorage *storage)
+{
+  /* They're identical currently */
+  gsk_gpu_render_pass_pop_clip_rect (self, storage);
+}
+
 gboolean
 gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
                                     const graphene_rect_t       *clip,
