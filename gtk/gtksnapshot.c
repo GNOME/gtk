@@ -2120,8 +2120,28 @@ gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
 
   if (current_state)
     {
-      gtk_snapshot_nodes_append (&snapshot->nodes, node);
-      current_state->n_nodes ++;
+      if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+        {
+          GskRenderNode **children;
+          gsize i, n_children;
+
+          children = gsk_render_node_get_children (node, &n_children);
+          for (i = 0; i < n_children; i++)
+            gsk_render_node_ref (children[i]);
+          gtk_snapshot_nodes_splice (&snapshot->nodes,
+                                     gtk_snapshot_nodes_get_size (&snapshot->nodes),
+                                     0,
+                                     FALSE,
+                                     children,
+                                     n_children);
+          current_state->n_nodes += n_children;
+          gsk_render_node_unref (node);
+        }
+      else
+        {
+          gtk_snapshot_nodes_append (&snapshot->nodes, node);
+          current_state->n_nodes ++;
+        }
     }
   else
     {
