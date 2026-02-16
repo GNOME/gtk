@@ -31,7 +31,9 @@
 
 G_BEGIN_DECLS
 
+#ifdef GDK_WINDOWING_WIN32
 char ** _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter);
+#endif
 
 #ifdef GDK_WINDOWING_MACOS
 NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter);

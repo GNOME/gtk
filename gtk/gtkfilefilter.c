@@ -872,6 +872,7 @@ void _gtk_file_filter_store_types_in_list (GtkFileFilter *filter, jobject list)
 }
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
 char **
 _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
 {
@@ -887,8 +888,12 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
       switch (rule->type)
         {
         case FILTER_RULE_MIME_TYPE:
-          g_ptr_array_free (array, TRUE);
-          return NULL;
+          for (int i = 0; rule->u.content_types[i]; i++)
+            {
+              /* When the content type is a file extension, use it as pattern */
+              if (rule->u.content_types[i][0] == '.')
+                g_ptr_array_add (array, g_strdup_printf ("*%s", rule->u.content_types[i]));
+            }
           break;
 
         case FILTER_RULE_PATTERN:
@@ -924,9 +929,14 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
         }
     }
 
+  /* If patterns list is empty, add a catch-all as fallback */
+  if (array->len == 0)
+    g_ptr_array_add (array, g_strdup ("*"));
+
   g_ptr_array_add (array, NULL); /* Null terminate */
   return (char **)g_ptr_array_free (array, FALSE);
 }
+#endif
 
 static GtkFilterMatch
 gtk_file_filter_get_strictness (GtkFilter *filter)
