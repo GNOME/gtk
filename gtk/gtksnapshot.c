@@ -67,6 +67,11 @@
  * The typical way to obtain a `GtkSnapshot` object is as an argument to
  * the [vfunc@Gtk.Widget.snapshot] vfunc. If you need to create your own
  * `GtkSnapshot`, use [ctor@Gtk.Snapshot.new].
+ *
+ * Note that `GtkSnapshot` applies some optimizations, so the node
+ * it produces may not match the API calls 1:1. For example, it will
+ * omit clip nodes if the child node is entirely contained within the
+ * clip rectangle.
  */
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
