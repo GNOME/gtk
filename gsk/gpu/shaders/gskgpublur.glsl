@@ -5,6 +5,7 @@ graphene_rect_t rect;
 GdkColor blur_color;
 graphene_rect_t tex_rect;
 graphene_vec2_t blur_direction;
+float opacity;
 
 variation: gboolean colorize;
 #endif /* GSK_PREAMBLE */
@@ -20,6 +21,7 @@ PASS(3) vec2 _tex_coord;
 PASS_FLAT(4) vec2 _tex_blur_step;
 PASS_FLAT(5) uint _samples_per_side;
 PASS_FLAT(7) vec3 _initial_gaussian;
+PASS_FLAT(8) float _opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -44,6 +46,7 @@ run (out vec2 pos)
   _initial_gaussian.x = 1.0 / (sqrt (2.0 * PI) * sigma);
   _initial_gaussian.y = exp (-0.5 / (sigma * sigma));
   _initial_gaussian.z = _initial_gaussian.y * _initial_gaussian.y;
+  _opacity = in_opacity;
 }
 
 #endif
@@ -74,9 +77,9 @@ run (out vec4 color,
     }
 
   if (VARIATION_COLORIZE)
-    color = output_color_alpha (_blur_color, sum.a / coefficient_sum);
+    color = output_color_alpha (_blur_color, _opacity * sum.a / coefficient_sum);
   else
-    color = sum / coefficient_sum;
+    color = output_color_alpha (sum / coefficient_sum, _opacity);
   position = _pos;
 }
 
