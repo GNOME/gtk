@@ -1,69 +1,66 @@
-isolation {
-  child: transform {
-    transform: scale(1.5, 1);
-    child: container {
-      fill {
-        child: color {
-          bounds: 0 0 400 400;
-          color: rgb(0,0,0);
-        }
-        path: "\
-M 0 0 h 400 v 400 h -400 z";
-        fill-rule: winding;
+transform {
+  transform: scale(1.5, 1);
+  child: container {
+    fill {
+      child: color {
+        bounds: 0 0 400 400;
+        color: rgb(0,0,0);
       }
-      stroke {
+      path: "\
+M 0 0 h 400 v 400 h -400 z";
+      fill-rule: winding;
+    }
+    stroke {
+      child: color {
+        bounds: 18.5 18.5 83 63;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 20 20 h 80 v 60 h -80 z";
+      line-width: 3;
+      line-cap: butt;
+      line-join: miter;
+    }
+    transform {
+      transform: translate(120, 0) scale(3);
+      child: stroke {
         child: color {
-          bounds: 18.5 18.5 83 63;
-          color: rgb(0,0,255);
+          bounds: 18.5 18.5 33 13;
+          color: rgb(255,0,0);
         }
         path: "\
-M 20 20 h 80 v 60 h -80 z";
+M 20 20 h 30 v 10 h -30 z";
         line-width: 3;
         line-cap: butt;
         line-join: miter;
       }
-      transform {
-        transform: translate(120, 0) scale(3);
+    }
+    transform {
+      transform: translate(150, 0) scale(3);
+      child: transform {
+        transform: scale(0.222222, 0.333333) translate(-150, -0);
         child: stroke {
-          child: color {
-            bounds: 18.5 18.5 33 13;
-            color: rgb(255,0,0);
+          child: transform {
+            transform: translate(150, 0) scale(4.5, 3);
+            child: linear-gradient {
+              bounds: 19.5 19.5 19 21;
+              start: 18.1105 22.0994;
+              end: 38 40;
+              stops: 0 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(0,128,0);
+              premultiplied: false;
+            }
           }
           path: "\
-M 20 20 h 30 v 10 h -30 z";
-          line-width: 3;
-          line-cap: butt;
-          line-join: miter;
-        }
-      }
-      transform {
-        transform: translate(150, 0) scale(3);
-        child: transform {
-          transform: scale(0.222222, 0.333333) translate(-150, -0);
-          child: stroke {
-            child: transform {
-              transform: translate(150, 0) scale(4.5, 3);
-              child: linear-gradient {
-                bounds: 19.5 19.5 19 21;
-                start: 18.1105 22.0994;
-                end: 38 40;
-                stops: 0 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(0,128,0);
-                premultiplied: false;
-              }
-            }
-            path: "\
 M 240 60\
 L 321 60\
 L 321 120\
 L 240 120\
 Z";
-            line-width: 1;
-            line-cap: butt;
-            line-join: miter;
-          }
+          line-width: 1;
+          line-cap: butt;
+          line-join: miter;
         }
       }
     }
   }
-  isolations: background;
 }

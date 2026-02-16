@@ -1,18 +1,16 @@
-isolation {
-  child: isolation {
-    child: clip {
-      clip: 0 0 100 100;
-      child: transform {
-        transform: scale(3.125);
-        child: texture {
-          bounds: 0 0 32 32;
-          texture: memory {
-            format: RGBA8;
-            width: 32;
-            height: 32;
-            offset: 0;
-            stride: 128;
-            data: url("data:application/gzip;base64,\
+clip {
+  clip: 0 0 100 100;
+  child: transform {
+    transform: scale(3.125);
+    child: texture {
+      bounds: 0 0 32 32;
+      texture: memory {
+        format: RGBA8;
+        width: 32;
+        height: 32;
+        offset: 0;
+        stride: 128;
+        data: url("data:application/gzip;base64,\
 H4sIAAAAAAACA61WZ1SUVxqmM8BQlCZVEBApKoIFKYpYjooail3UKIqSMKioFAHFLkVdGwajEoOx\
 o4BiMESNmrUDARNFkN57G8owMzz7fp/jWdbVTfbs/njOPfd7732et94ZAFL4U0hJA9EywH25ItxW\
 BF4qAwWqLXipDjxVa8B9LlDKoe/ydJ7OQRp/ifeva99M9NdK2T3X78Zej8z0mHlF6fE+LTcPLuxL\
@@ -63,11 +61,7 @@ tMjVWECr0Iv2pMl3ttZ+ZaStclnmva4/YTrBcoC24sexf5SDD3ngSM5rEZietSNMIswj+BLWqCjK\
 BetocHaqKMmFSLRWEnwI0wjjJbofaq4kiU3mU9qf8EPmwzxI7nIJGpI4jCQ+mUs0LAhmknzpSWqs\
 KsmjgiQe2U/NHaP3D4l8Yu8AEAAA\
 ");
-          }
-        }
       }
     }
-    isolations: background;
   }
-  isolations: background;
 }

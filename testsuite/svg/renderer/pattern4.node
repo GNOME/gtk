@@ -1,34 +1,31 @@
-isolation {
-  child: fill {
-    child: repeat {
-      bounds: 40 40 120 120;
-      child: transform {
-        transform: scale(3);
-        child: container {
-          fill {
-            child: color {
-              bounds: 0 0 5 5;
-              color: rgb(128,0,128);
-            }
-            path: "\
+fill {
+  child: repeat {
+    bounds: 40 40 120 120;
+    child: transform {
+      transform: scale(3);
+      child: container {
+        fill {
+          child: color {
+            bounds: 0 0 5 5;
+            color: rgb(128,0,128);
+          }
+          path: "\
 M 0 0 h 5 v 5 h -5 z";
-            fill-rule: winding;
+          fill-rule: winding;
+        }
+        fill {
+          child: color {
+            bounds: 5 5 5 5;
+            color: rgb(255,165,0);
           }
-          fill {
-            child: color {
-              bounds: 5 5 5 5;
-              color: rgb(255,165,0);
-            }
-            path: "\
+          path: "\
 M 5 5 h 5 v 5 h -5 z";
-            fill-rule: winding;
-          }
+          fill-rule: winding;
         }
       }
     }
-    path: "\
-M 40 40 h 120 v 120 h -120 z";
-    fill-rule: winding;
   }
-  isolations: background;
+  path: "\
+M 40 40 h 120 v 120 h -120 z";
+  fill-rule: winding;
 }

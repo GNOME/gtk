@@ -1,16 +1,13 @@
 clip {
   clip: 0 0 290 250;
-  child: isolation {
-    child: fill {
-      child: color {
-        bounds: 0.707107 0 341.293 218;
-        color: rgb(0,0,0);
-      }
-      path: "\
+  child: fill {
+    child: color {
+      bounds: 0.707107 0 341.293 218;
+      color: rgb(0,0,0);
+    }
+    path: "\
 M 342 122 O 342 218, 246 218, 0.707106769 O 150 218, 150 122, 0.707106769 O 150 26, 246 26, 0.707106769 O 342 26, 342 122, 0.707106769\
 Z";
-      fill-rule: winding;
-    }
-    isolations: background;
+    fill-rule: winding;
   }
 }

@@ -1,15 +1,12 @@
-isolation {
-  child: transform {
-    transform: translate(128, 128);
-    child: fill {
-      child: color {
-        bounds: -64 -64 128 128;
-        color: rgb(0,0,0);
-      }
-      path: "\
-M 64 0 o 0 64, -64 64, 0.707106769 o -64 0, -64 -64, 0.707106769 o 0 -64, 64 -64, 0.707106769 o 64 0, 64 64, 0.707106769 z";
-      fill-rule: winding;
+transform {
+  transform: translate(128, 128);
+  child: fill {
+    child: color {
+      bounds: -64 -64 128 128;
+      color: rgb(0,0,0);
     }
+    path: "\
+M 64 0 o 0 64, -64 64, 0.707106769 o -64 0, -64 -64, 0.707106769 o 0 -64, 64 -64, 0.707106769 o 64 0, 64 64, 0.707106769 z";
+    fill-rule: winding;
   }
-  isolations: background;
 }

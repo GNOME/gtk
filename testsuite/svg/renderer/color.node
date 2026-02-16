@@ -1,23 +1,18 @@
-isolation {
-  child: container {
-    fill {
-      child: color {
-        bounds: 0 0 50 50;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 0 0 h 50 v 50 h -50 z";
-      fill-rule: winding;
-    }
-    fill {
-      child: color {
-        bounds: 50 50 50 50;
-        color: rgb(0,0,255);
-      }
-      path: "\
-M 50 50 h 50 v 50 h -50 z";
-      fill-rule: winding;
-    }
+fill {
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(255,0,0);
   }
-  isolations: background;
+  path: "\
+M 0 0 h 50 v 50 h -50 z";
+  fill-rule: winding;
+}
+fill {
+  child: color {
+    bounds: 50 50 50 50;
+    color: rgb(0,0,255);
+  }
+  path: "\
+M 50 50 h 50 v 50 h -50 z";
+  fill-rule: winding;
 }

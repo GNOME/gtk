@@ -1,14 +1,12 @@
-isolation {
-  child: container {
-    texture {
-      bounds: -1.36424e-14 25 240 100;
-      texture: memory {
-        format: RGBA8;
-        width: 240;
-        height: 160;
-        offset: 0;
-        stride: 960;
-        data: url("data:application/gzip;base64,\
+texture {
+  bounds: -1.36424e-14 25 240 100;
+  texture: memory {
+    format: RGBA8;
+    width: 240;
+    height: 160;
+    offset: 0;
+    stride: 960;
+    data: url("data:application/gzip;base64,\
 H4sIAAAAAAACA7S9ZXtcV9YtmtiBTro75HBiBjEzlErMLJlJMqMMsZM4DG0nceLYcWJGmVEs2YKC\
 XVUiS7Kd9Puec+9zfsw4Y661d6mkpPvc7j73w3p24a5dVWusMeeYsFxuN1z/wXAHjMDHnW6XGv/o\
 tU6OHq8HfR4DTo8Hw32dcDf+hNaP1uLmikx0F83AYOZfMWR/Fg8ynkJ7vQ2X1hWjOjcfZWWLUFa5\
@@ -1692,49 +1690,46 @@ q63eFce22PLosH6W9TyrLfaW3ZSHpfb04XHU3Ld9QWliKAcUF9I4khaD/b04P6eu9I9xMV6LRd68\
 t45DVdfvCa+R//l4X+fHOGKv5kd30XxW/6ry3tMw/sYrz0OUnnDNw2d1x9Oce/G3E+oh1zypx254\
 XyvcGzh0X7l5kJlRaF9RO/3/L5f2aAgAWAIA\
 ");
+  }
+}
+transform {
+  transform: translate(240, 150) scale(0.24, 0.15);
+  child: container {
+    fill {
+      child: color {
+        bounds: 0 0 500 500;
+        color: rgb(255,255,0);
       }
-    }
-    transform {
-      transform: translate(240, 150) scale(0.24, 0.15);
-      child: container {
-        fill {
-          child: color {
-            bounds: 0 0 500 500;
-            color: rgb(255,255,0);
-          }
-          path: "\
+      path: "\
 M 0 0 h 500 v 500 h -500 z";
-          fill-rule: winding;
-        }
-        fill {
-          child: color {
-            bounds: 500 0 500 500;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 500 0 h 500 v 500 h -500 z";
-          fill-rule: winding;
-        }
-        fill {
-          child: color {
-            bounds: 0 500 500 500;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 0 500 h 500 v 500 h -500 z";
-          fill-rule: winding;
-        }
-        fill {
-          child: color {
-            bounds: 500 500 500 500;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 500 500 h 500 v 500 h -500 z";
-          fill-rule: winding;
-        }
+      fill-rule: winding;
+    }
+    fill {
+      child: color {
+        bounds: 500 0 500 500;
+        color: rgb(0,0,255);
       }
+      path: "\
+M 500 0 h 500 v 500 h -500 z";
+      fill-rule: winding;
+    }
+    fill {
+      child: color {
+        bounds: 0 500 500 500;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 0 500 h 500 v 500 h -500 z";
+      fill-rule: winding;
+    }
+    fill {
+      child: color {
+        bounds: 500 500 500 500;
+        color: rgb(255,255,0);
+      }
+      path: "\
+M 500 500 h 500 v 500 h -500 z";
+      fill-rule: winding;
     }
   }
-  isolations: background;
 }

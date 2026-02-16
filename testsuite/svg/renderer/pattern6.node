@@ -1,35 +1,32 @@
-isolation {
-  child: fill {
-    child: repeat {
-      bounds: 0.707107 0 179.293 160;
-      child-bounds: 0 0 25 25;
-      child: container {
-        fill {
-          child: color {
-            bounds: 2.5 2.5 20 20;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 22.5 12.5 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-          fill-rule: winding;
+fill {
+  child: repeat {
+    bounds: 0.707107 0 179.293 160;
+    child-bounds: 0 0 25 25;
+    child: container {
+      fill {
+        child: color {
+          bounds: 2.5 2.5 20 20;
+          color: rgb(255,0,0);
         }
-        stroke {
-          child: color {
-            bounds: 1.5 1.5 21.5 22;
-            color: rgb(0,0,0);
-          }
-          path: "\
+        path: "\
 M 22.5 12.5 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-          line-width: 1;
-          line-cap: butt;
-          line-join: miter;
+        fill-rule: winding;
+      }
+      stroke {
+        child: color {
+          bounds: 1.5 1.5 21.5 22;
+          color: rgb(0,0,0);
         }
+        path: "\
+M 22.5 12.5 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
+        line-width: 1;
+        line-cap: butt;
+        line-join: miter;
       }
     }
-    path: "\
+  }
+  path: "\
 M 180 100 O 180 160, 100 160, 0.707106769 O 20 160, 20 100, 0.707106769 O 20 40, 100 40, 0.707106769 O 180 40, 180 100, 0.707106769\
 Z";
-    fill-rule: winding;
-  }
-  isolations: background;
+  fill-rule: winding;
 }

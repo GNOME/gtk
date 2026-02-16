@@ -1,38 +1,33 @@
-isolation {
-  child: container {
-    fill {
-      child: color {
-        bounds: 0 0 100 20;
-        color: rgb(255,192,203);
-      }
-      path: "\
-M 0 0 h 100 v 20 h -100 z";
-      fill-rule: winding;
-    }
-    transform {
-      transform: translate(0, 25);
-      child: fill {
-        child: color {
-          bounds: 0 0 100 30;
-          color: rgb(255,192,203);
-        }
-        path: "\
-M 0 0 h 100 v 30 h -100 z";
-        fill-rule: winding;
-      }
-    }
-    transform {
-      transform: translate(0, 60);
-      child: fill {
-        child: color {
-          bounds: 0 0 100 40;
-          color: rgb(255,192,203);
-        }
-        path: "\
-M 0 0 h 100 v 40 h -100 z";
-        fill-rule: winding;
-      }
-    }
+fill {
+  child: color {
+    bounds: 0 0 100 20;
+    color: rgb(255,192,203);
   }
-  isolations: background;
+  path: "\
+M 0 0 h 100 v 20 h -100 z";
+  fill-rule: winding;
+}
+transform {
+  transform: translate(0, 25);
+  child: fill {
+    child: color {
+      bounds: 0 0 100 30;
+      color: rgb(255,192,203);
+    }
+    path: "\
+M 0 0 h 100 v 30 h -100 z";
+    fill-rule: winding;
+  }
+}
+transform {
+  transform: translate(0, 60);
+  child: fill {
+    child: color {
+      bounds: 0 0 100 40;
+      color: rgb(255,192,203);
+    }
+    path: "\
+M 0 0 h 100 v 40 h -100 z";
+    fill-rule: winding;
+  }
 }

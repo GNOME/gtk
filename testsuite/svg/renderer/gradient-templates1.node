@@ -1,16 +1,14 @@
-isolation {
-  child: container {
-    transform {
-      transform: translate(123.265, -118.118) scale(0.7798);
-      child: fill {
-        child: linear-gradient {
-          bounds: -142.049 161.39 132.098 149.668;
-          start: -142.049 236.001;
-          end: -9.951 236.001;
-          stops: 0 rgb(192,191,188), 0.036 rgb(250,250,249), 0.088 rgb(192,191,188), 0.399 rgb(213,213,211), 0.491 rgb(234,234,233), 0.569 rgb(167,165,161), 0.966 rgb(169,167,163), 1 rgb(255,255,255);
-          premultiplied: false;
-        }
-        path: "\
+transform {
+  transform: translate(123.265, -118.118) scale(0.7798);
+  child: fill {
+    child: linear-gradient {
+      bounds: -142.049 161.39 132.098 149.668;
+      start: -142.049 236.001;
+      end: -9.951 236.001;
+      stops: 0 rgb(192,191,188), 0.036 rgb(250,250,249), 0.088 rgb(192,191,188), 0.399 rgb(213,213,211), 0.491 rgb(234,234,233), 0.569 rgb(167,165,161), 0.966 rgb(169,167,163), 1 rgb(255,255,255);
+      premultiplied: false;
+    }
+    path: "\
 M -75.7399979 161.438004\
 C -77.7576752 161.389694, -79.7497406 161.897568, -81.4980011 162.906006\
 L -136.550995 194.690994\
@@ -26,15 +24,15 @@ C -9.95078278 200.286133, -12.0466099 196.655609, -15.4490004 194.690994\
 L -70.5019989 162.906006\
 C -72.0974121 161.985382, -73.8985214 161.480255, -75.7399979 161.436996\
 Z";
-        fill-rule: winding;
-      }
-    }
-    fill {
-      child: color {
-        bounds: 12.4948 3.7327 103.011 116.711;
-        color: rgb(255,255,255);
-      }
-      path: "\
+    fill-rule: winding;
+  }
+}
+fill {
+  child: color {
+    bounds: 12.4948 3.7327 103.011 116.711;
+    color: rgb(255,255,255);
+  }
+  path: "\
 M 64.2030029 3.76999998\
 C 62.6295242 3.73269725, 61.0761337 4.12917519, 59.7130013 4.91600037\
 L 16.7830009 29.7019997\
@@ -50,63 +48,60 @@ C 115.505402 34.0652542, 113.871178 31.2340527, 111.218002 29.7019997\
 L 68.288002 4.91599989\
 C 67.0437317 4.19820309, 65.6390762 3.80448699, 64.2030029 3.77100039\
 Z";
-      fill-rule: winding;
-    }
-    fill {
-      child: color {
-        bounds: 18.131 6.814 91.738 52.965;
-        color: rgb(152,193,241);
-      }
-      path: "\
+  fill-rule: winding;
+}
+fill {
+  child: color {
+    bounds: 18.131 6.814 91.738 52.965;
+    color: rgb(152,193,241);
+  }
+  path: "\
 M 109.869003 33.2970009\
 L 64 59.7789993\
 L 18.1310005 33.2970009\
 L 64 6.81400013\
 Z";
-      fill-rule: winding;
+  fill-rule: winding;
+}
+transform {
+  transform: translate(0, -172);
+  child: fill {
+    child: transform {
+      transform: matrix(1.90297, -0.05506, 0.0501, 1.73133, -89.25, -176.863);
+      child: radial-gradient {
+        bounds: 74.5974 225.2 25.0356 46.1454;
+        start: 90.974 263.479 0;
+        end: 90.974 263.479 22.703;
+        stops: 0 rgb(245,194,17), 1 rgba(51,209,122,0.899);
+        premultiplied: false;
+      }
     }
-    transform {
-      transform: translate(0, -172);
-      child: fill {
-        child: transform {
-          transform: matrix(1.90297, -0.05506, 0.0501, 1.73133, -89.25, -176.863);
-          child: radial-gradient {
-            bounds: 74.5974 225.2 25.0356 46.1454;
-            start: 90.974 263.479 0;
-            end: 90.974 263.479 22.703;
-            stops: 0 rgb(245,194,17), 1 rgba(51,209,122,0.899);
-            premultiplied: false;
-          }
-        }
-        path: "\
+    path: "\
 M 66.2630005 287.505005\
 L 111.612999 261.621002\
 L 111.668999 208.858994\
 L 66.2630005 235.074005\
 Z";
-        fill-rule: winding;
-      }
+    fill-rule: winding;
+  }
+}
+transform {
+  transform: translate(0, -172);
+  child: fill {
+    child: radial-gradient {
+      bounds: 16.312 208.694 45.406 78.646;
+      start: 61.7181 287.337 0;
+      end: 61.7181 287.337 56.5416;
+      aspect-ratio: 0.852522;
+      stops: 0 rgb(255,120,0), 1 rgb(237,51,59);
+      premultiplied: false;
     }
-    transform {
-      transform: translate(0, -172);
-      child: fill {
-        child: radial-gradient {
-          bounds: 16.312 208.694 45.406 78.646;
-          start: 61.7181 287.337 0;
-          end: 61.7181 287.337 56.5416;
-          aspect-ratio: 0.852522;
-          stops: 0 rgb(255,120,0), 1 rgb(237,51,59);
-          premultiplied: false;
-        }
-        path: "\
+    path: "\
 M 61.7179985 287.339996\
 L 16.368 261.454987\
 L 16.3120003 208.694\
 L 61.7179985 234.908997\
 Z";
-        fill-rule: winding;
-      }
-    }
+    fill-rule: winding;
   }
-  isolations: background;
 }
