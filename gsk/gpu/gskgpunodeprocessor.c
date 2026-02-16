@@ -2136,6 +2136,12 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
   GskRenderNode *child;
   gsize i, n_shadows;
 
+  if (self->opacity < 1.0)
+    {
+      gsk_gpu_node_processor_add_with_offscreen (self, node);
+      return;
+    }
+
   n_shadows = gsk_shadow_node_get_n_shadows (node);
   child = gsk_shadow_node_get_child (node);
   /* enlarge clip for shadow offsets */
@@ -3718,7 +3724,7 @@ static const struct
     NULL,
   },
   [GSK_SHADOW_NODE] = {
-    0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_shadow_node,
     NULL,
   },
