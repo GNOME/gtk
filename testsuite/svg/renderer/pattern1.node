@@ -1,28 +1,13 @@
-fill {
-  child: repeat {
-    bounds: 50 50 100 100;
-    child: container {
-      fill {
-        child: color {
-          bounds: 0 0 10 10;
-          color: rgb(255,0,0);
-        }
-        path: "\
-M 0 0 h 10 v 10 h -10 z";
-        fill-rule: winding;
-      }
-      fill {
-        child: color {
-          bounds: 10 10 10 10;
-          color: rgb(0,0,255);
-        }
-        path: "\
-M 10 10 h 10 v 10 h -10 z";
-        fill-rule: winding;
-      }
+repeat {
+  bounds: 50 50 100 100;
+  child: container {
+    color {
+      bounds: 0 0 10 10;
+      color: rgb(255,0,0);
+    }
+    color {
+      bounds: 10 10 10 10;
+      color: rgb(0,0,255);
     }
   }
-  path: "\
-M 50 50 h 100 v 100 h -100 z";
-  fill-rule: winding;
 }

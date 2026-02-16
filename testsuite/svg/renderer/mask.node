@@ -1,21 +1,17 @@
 mask {
   mode: luminance;
-  source: fill {
+  source: rounded-clip {
+    clip: 20 20 80 80 / 40;
     child: color {
       bounds: 20 20 80 80;
       color: rgb(0,0,0);
     }
-    path: "\
-M 100 60 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-    fill-rule: winding;
   }
-  mask: fill {
+  mask: rounded-clip {
+    clip: 0 0 80 80 / 40;
     child: color {
       bounds: 0 0 80 80;
       color: rgba(255,0,128,0.5);
     }
-    path: "\
-M 80 40 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-    fill-rule: winding;
   }
 }

@@ -1,21 +1,14 @@
-fill {
+rounded-clip {
+  clip: 0 0 200 200 / 100;
   child: transform {
     transform: rotate(45);
     child: repeat {
       bounds: 0 -141.421 282.843 282.843;
       child-bounds: 0 0 20 20;
-      child: fill {
-        child: color {
-          bounds: 0 0 10 10;
-          color: rgb(0,128,0);
-        }
-        path: "\
-M 0 0 h 10 v 10 h -10 z";
-        fill-rule: winding;
+      child: color {
+        bounds: 0 0 10 10;
+        color: rgb(0,128,0);
       }
     }
   }
-  path: "\
-M 200 100 o 0 100, -100 100, 0.707106769 o -100 0, -100 -100, 0.707106769 o 0 -100, 100 -100, 0.707106769 o 100 0, 100 100, 0.707106769 z";
-  fill-rule: winding;
 }

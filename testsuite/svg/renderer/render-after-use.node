@@ -1,21 +1,14 @@
-transform {
-  transform: translate(20, 0);
-  child: fill {
-    child: color {
-      bounds: 40 40 20 20;
-      color: rgb(0,0,255);
-    }
-    path: "\
-M 60 50 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-    fill-rule: winding;
+rounded-clip {
+  clip: 60 40 20 20 / 10;
+  child: color {
+    bounds: 60 40 20 20;
+    color: rgb(0,0,255);
   }
 }
-fill {
+rounded-clip {
+  clip: 40 40 20 20 / 10;
   child: color {
     bounds: 40 40 20 20;
     color: rgb(255,0,0);
   }
-  path: "\
-M 60 50 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-  fill-rule: winding;
 }

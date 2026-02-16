@@ -1692,44 +1692,19 @@ XyvcGzh0X7l5kJlRaF9RO/3/L5f2aAgAWAIA\
 ");
   }
 }
-transform {
-  transform: translate(240, 150) scale(0.24, 0.15);
-  child: container {
-    fill {
-      child: color {
-        bounds: 0 0 500 500;
-        color: rgb(255,255,0);
-      }
-      path: "\
-M 0 0 h 500 v 500 h -500 z";
-      fill-rule: winding;
-    }
-    fill {
-      child: color {
-        bounds: 500 0 500 500;
-        color: rgb(0,0,255);
-      }
-      path: "\
-M 500 0 h 500 v 500 h -500 z";
-      fill-rule: winding;
-    }
-    fill {
-      child: color {
-        bounds: 0 500 500 500;
-        color: rgb(0,0,255);
-      }
-      path: "\
-M 0 500 h 500 v 500 h -500 z";
-      fill-rule: winding;
-    }
-    fill {
-      child: color {
-        bounds: 500 500 500 500;
-        color: rgb(255,255,0);
-      }
-      path: "\
-M 500 500 h 500 v 500 h -500 z";
-      fill-rule: winding;
-    }
-  }
+color {
+  bounds: 240 150 120 75;
+  color: rgb(255,255,0);
+}
+color {
+  bounds: 360 150 120 75;
+  color: rgb(0,0,255);
+}
+color {
+  bounds: 240 225 120 75;
+  color: rgb(0,0,255);
+}
+color {
+  bounds: 360 225 120 75;
+  color: rgb(255,255,0);
 }

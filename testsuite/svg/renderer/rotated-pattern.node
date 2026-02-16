@@ -5,41 +5,21 @@ transform {
     child: transform {
       transform: translate(40, 40);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -52,41 +32,21 @@ transform {
     child: transform {
       transform: translate(190, 40);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -99,41 +59,21 @@ transform {
     child: transform {
       transform: translate(340, 40);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -146,41 +86,21 @@ transform {
     child: transform {
       transform: translate(40, 190);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -193,41 +113,21 @@ transform {
     child: transform {
       transform: translate(190, 190);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -240,41 +140,21 @@ transform {
     child: transform {
       transform: translate(340, 190);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -287,41 +167,21 @@ transform {
     child: transform {
       transform: translate(40, 340);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -334,41 +194,21 @@ transform {
     child: transform {
       transform: translate(190, 340);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }
@@ -381,41 +221,21 @@ transform {
     child: transform {
       transform: translate(340, 340);
       child: container {
-        fill {
-          child: color {
-            bounds: 0 0 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 0 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 0 100 100;
+          color: rgb(255,0,0);
         }
-        fill {
-          child: color {
-            bounds: 100 0 100 100;
-            color: rgb(0,255,0);
-          }
-          path: "\
-M 100 0 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 0 100 100;
+          color: rgb(0,255,0);
         }
-        fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 100 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 100 100 100 100;
+          color: rgb(0,0,255);
         }
-        fill {
-          child: color {
-            bounds: 0 100 100 100;
-            color: rgb(255,255,0);
-          }
-          path: "\
-M 0 100 h 100 v 100 h -100 z";
-          fill-rule: winding;
+        color {
+          bounds: 0 100 100 100;
+          color: rgb(255,255,0);
         }
       }
     }

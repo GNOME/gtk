@@ -1,14 +1,9 @@
 mask {
-  source: transform {
-    transform: translate(0, 25) scale(0.5);
-    child: fill {
-      child: color {
-        bounds: 10 10 80 80;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 90 50 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-      fill-rule: winding;
+  source: rounded-clip {
+    clip: 5 30 40 40 / 20;
+    child: color {
+      bounds: 5 30 40 40;
+      color: rgb(255,0,0);
     }
   }
   mask: transform {
@@ -77,16 +72,11 @@ Z";
   }
 }
 mask {
-  source: transform {
-    transform: translate(0, 25) scale(0.5) translate(0, 80);
-    child: fill {
-      child: color {
-        bounds: 10 10 80 80;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 90 50 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-      fill-rule: winding;
+  source: rounded-clip {
+    clip: 5 70 40 40 / 20;
+    child: color {
+      bounds: 5 70 40 40;
+      color: rgb(255,0,0);
     }
   }
   mask: transform {

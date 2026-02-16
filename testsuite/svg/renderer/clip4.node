@@ -1,18 +1,11 @@
 mask {
-  source: transform {
-    transform: translate(0, 25) scale(0.5);
-    child: fill {
-      child: color {
-        bounds: 0 0 100 100;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 0 0 h 100 v 100 h -100 z";
-      fill-rule: winding;
-    }
+  source: color {
+    bounds: 0 25 50 50;
+    color: rgb(255,0,0);
   }
-  mask: mask {
-    source: transform {
+  mask: rounded-clip {
+    clip: 10 10 80 80 / 40;
+    child: transform {
       transform: translate(0, 25) scale(0.5);
       child: fill {
         child: color {
@@ -21,18 +14,6 @@ M 0 0 h 100 v 100 h -100 z";
         }
         path: "\
 M 0 0 h 200 v 100 h -200 z";
-        fill-rule: winding;
-      }
-    }
-    mask: transform {
-      transform: translate(0, 25) scale(0.5);
-      child: fill {
-        child: color {
-          bounds: 20 -30 160 160;
-          color: rgb(0,0,0);
-        }
-        path: "\
-M 180 50 o 0 80, -80 80, 0.707106769 o -80 0, -80 -80, 0.707106769 o 0 -80, 80 -80, 0.707106769 o 80 0, 80 80, 0.707106769 z";
         fill-rule: winding;
       }
     }

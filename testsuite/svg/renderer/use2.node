@@ -1,125 +1,105 @@
+rounded-clip {
+  clip: 20 10 20 20 / 10;
+  child: color {
+    bounds: 20 10 20 20;
+    color: rgb(255,0,0);
+  }
+}
 transform {
   transform: translate(30, 20);
-  child: container {
-    fill {
-      child: color {
-        bounds: -10 -10 20 20;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      fill-rule: winding;
+  child: stroke {
+    child: color {
+      bounds: -15 -15 27.5 30;
+      color: rgb(0,0,255);
     }
-    stroke {
-      child: color {
-        bounds: -15 -15 27.5 30;
-        color: rgb(0,0,255);
-      }
-      path: "\
+    path: "\
 M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      line-width: 5;
-      line-cap: butt;
-      line-join: miter;
-    }
+    line-width: 5;
+    line-cap: butt;
+    line-join: miter;
+  }
+}
+rounded-clip {
+  clip: 10 20 20 20 / 10;
+  child: color {
+    bounds: 10 20 20 20;
+    color: rgb(0,0,255);
   }
 }
 transform {
   transform: translate(20, 30);
-  child: container {
-    fill {
-      child: color {
-        bounds: -10 -10 20 20;
-        color: rgb(0,0,255);
-      }
-      path: "\
-M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      fill-rule: winding;
+  child: stroke {
+    child: color {
+      bounds: -15 -15 27.5 30;
+      color: rgb(255,0,0);
     }
-    stroke {
-      child: color {
-        bounds: -15 -15 27.5 30;
-        color: rgb(255,0,0);
-      }
-      path: "\
+    path: "\
 M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      line-width: 5;
-      line-cap: butt;
-      line-join: miter;
-    }
+    line-width: 5;
+    line-cap: butt;
+    line-join: miter;
+  }
+}
+rounded-clip {
+  clip: 40 30 20 20 / 10;
+  child: color {
+    bounds: 40 30 20 20;
+    color: rgb(255,0,0);
   }
 }
 transform {
   transform: translate(50, 40);
-  child: container {
-    fill {
-      child: color {
-        bounds: -10 -10 20 20;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      fill-rule: winding;
+  child: stroke {
+    child: color {
+      bounds: -15 -15 27.5 30;
+      color: rgb(255,0,0);
     }
-    stroke {
-      child: color {
-        bounds: -15 -15 27.5 30;
-        color: rgb(255,0,0);
-      }
-      path: "\
+    path: "\
 M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      line-width: 5;
-      line-cap: butt;
-      line-join: miter;
-    }
+    line-width: 5;
+    line-cap: butt;
+    line-join: miter;
+  }
+}
+rounded-clip {
+  clip: 30 40 20 20 / 10;
+  child: color {
+    bounds: 30 40 20 20;
+    color: rgb(0,0,255);
   }
 }
 transform {
   transform: translate(40, 50);
-  child: container {
-    fill {
-      child: color {
-        bounds: -10 -10 20 20;
-        color: rgb(0,0,255);
-      }
-      path: "\
-M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      fill-rule: winding;
+  child: stroke {
+    child: color {
+      bounds: -15 -15 27.5 30;
+      color: rgb(0,0,255);
     }
-    stroke {
-      child: color {
-        bounds: -15 -15 27.5 30;
-        color: rgb(0,0,255);
-      }
-      path: "\
+    path: "\
 M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      line-width: 5;
-      line-cap: butt;
-      line-join: miter;
-    }
+    line-width: 5;
+    line-cap: butt;
+    line-join: miter;
+  }
+}
+rounded-clip {
+  clip: 55 55 20 20 / 10;
+  child: color {
+    bounds: 55 55 20 20;
+    color: rgb(255,0,255);
   }
 }
 transform {
   transform: translate(65, 65);
-  child: container {
-    fill {
-      child: color {
-        bounds: -10 -10 20 20;
-        color: rgb(255,0,255);
-      }
-      path: "\
-M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      fill-rule: winding;
+  child: stroke {
+    child: color {
+      bounds: -15 -15 27.5 30;
+      color: rgb(255,0,255);
     }
-    stroke {
-      child: color {
-        bounds: -15 -15 27.5 30;
-        color: rgb(255,0,255);
-      }
-      path: "\
+    path: "\
 M 10 0 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-      line-width: 5;
-      line-cap: butt;
-      line-join: miter;
-    }
+    line-width: 5;
+    line-cap: butt;
+    line-join: miter;
   }
 }

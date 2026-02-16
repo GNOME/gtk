@@ -1,15 +1,10 @@
+color {
+  bounds: 0 0 600 400;
+  color: rgb(0,0,0);
+}
 transform {
   transform: scale(1.5, 1);
   child: container {
-    fill {
-      child: color {
-        bounds: 0 0 400 400;
-        color: rgb(0,0,0);
-      }
-      path: "\
-M 0 0 h 400 v 400 h -400 z";
-      fill-rule: winding;
-    }
     stroke {
       child: color {
         bounds: 18.5 18.5 83 63;

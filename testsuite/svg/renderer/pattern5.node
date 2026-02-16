@@ -1,32 +1,14 @@
-fill {
-  child: repeat {
-    bounds: 50 50 100 100;
-    child-bounds: 60 60 70 70;
-    child: transform {
-      transform: translate(60, 60) scale(100);
-      child: container {
-        fill {
-          child: color {
-            bounds: 0 0 0.5 0.5;
-            color: rgb(0,255,255);
-          }
-          path: "\
-M 0 0 h 0.5 v 0.5 h -0.5 z";
-          fill-rule: winding;
-        }
-        fill {
-          child: color {
-            bounds: 0.5 0.5 0.5 0.5;
-            color: rgb(255,0,255);
-          }
-          path: "\
-M 0.5 0.5 h 0.5 v 0.5 h -0.5 z";
-          fill-rule: winding;
-        }
-      }
+repeat {
+  bounds: 50 50 100 100;
+  child-bounds: 60 60 70 70;
+  child: container {
+    color {
+      bounds: 60 60 50 50;
+      color: rgb(0,255,255);
+    }
+    color {
+      bounds: 110 110 50 50;
+      color: rgb(255,0,255);
     }
   }
-  path: "\
-M 50 50 h 100 v 100 h -100 z";
-  fill-rule: winding;
 }

@@ -83,14 +83,12 @@ L 50 0";
       line-cap: butt;
       line-join: miter;
     }
-    fill {
+    rounded-clip {
+      clip: -3 -3 6 6 / 3;
       child: color {
         bounds: -3 -3 6 6;
         color: rgb(0,0,0);
       }
-      path: "\
-M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106769 o 3 0, 3 3, 0.707106769 z";
-      fill-rule: winding;
     }
     text {
       color: rgb(255,0,255);
@@ -114,14 +112,12 @@ L 50 0";
       line-cap: butt;
       line-join: miter;
     }
-    fill {
+    rounded-clip {
+      clip: -3 -3 6 6 / 3;
       child: color {
         bounds: -3 -3 6 6;
         color: rgb(0,0,0);
       }
-      path: "\
-M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106769 o 3 0, 3 3, 0.707106769 z";
-      fill-rule: winding;
     }
     text {
       color: rgb(255,0,255);
@@ -145,14 +141,12 @@ L 25 0";
       line-cap: butt;
       line-join: miter;
     }
-    fill {
+    rounded-clip {
+      clip: -3 -3 6 6 / 3;
       child: color {
         bounds: -3 -3 6 6;
         color: rgb(0,0,0);
       }
-      path: "\
-M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106769 o 3 0, 3 3, 0.707106769 z";
-      fill-rule: winding;
     }
     text {
       color: rgb(0,128,0);
@@ -177,14 +171,12 @@ L 0 0";
       line-cap: butt;
       line-join: miter;
     }
-    fill {
+    rounded-clip {
+      clip: -3 -3 6 6 / 3;
       child: color {
         bounds: -3 -3 6 6;
         color: rgb(0,0,0);
       }
-      path: "\
-M 3 0 o 0 3, -3 3, 0.707106769 o -3 0, -3 -3, 0.707106769 o 0 -3, 3 -3, 0.707106769 o 3 0, 3 3, 0.707106769 z";
-      fill-rule: winding;
     }
     text {
       color: rgb(0,0,255);
