@@ -43,7 +43,7 @@ scroll_cb (GtkWidget *widget,
   return G_SOURCE_CONTINUE;
 }
 
-extern GtkWidget *create_icon (void);
+extern GtkWidget *create_icon_by_id (gsize id);
 
 static void
 populate_icons (void)
@@ -62,7 +62,7 @@ populate_icons (void)
 
   for (top = 0; top < 100; top++)
     for (left = 0; left < 15; left++)
-      gtk_grid_attach (GTK_GRID (grid), create_icon (), left, top, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), create_icon_by_id (top * 15 + left), left, top, 1, 1);
 
   hincrement = 0;
   vincrement = 5;
