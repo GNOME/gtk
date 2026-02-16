@@ -3744,7 +3744,7 @@ static const struct
     NULL,
   },
   [GSK_BLUR_NODE] = {
-    0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_blur_node,
     NULL,
   },
