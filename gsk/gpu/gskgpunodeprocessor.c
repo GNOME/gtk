@@ -241,49 +241,6 @@ gsk_gpu_node_processor_init_draw (GskGpuRenderPass   *self,
   return image;
 }
 
-static gboolean
-gsk_gpu_node_processor_rect_device_to_clip (GskGpuRenderPass   *self,
-                                            const graphene_rect_t *src,
-                                            graphene_rect_t       *dest)
-{
-  graphene_rect_t transformed;
-  float scale_x = graphene_vec2_get_x (&self->scale);
-  float scale_y = graphene_vec2_get_y (&self->scale);
-
-  switch (gsk_transform_get_fine_category (self->modelview))
-    {
-    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
-    case GSK_FINE_TRANSFORM_CATEGORY_3D:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D:
-      return FALSE;
-
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      {
-        GskTransform *inverse = gsk_transform_invert (gsk_transform_ref (self->modelview));
-        g_return_val_if_fail (inverse != NULL, FALSE);
-        gsk_transform_transform_bounds (inverse, src, &transformed);
-        gsk_transform_unref (inverse);
-        src = &transformed;
-      }
-      break;
-
-    case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
-    default:
-      break;
-    }
-
-  dest->origin.x = src->origin.x / scale_x;
-  dest->origin.y = src->origin.y / scale_y;
-  dest->size.width = src->size.width / scale_x;
-  dest->size.height = src->size.height / scale_y;
-
-  return TRUE;
-}
-
 static gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_gpu_node_processor_clip_node_bounds (GskGpuRenderPass *self,
                                          GskRenderNode       *node,
@@ -3957,29 +3914,6 @@ gsk_gpu_get_node_as_image (GskGpuFrame           *frame,
 }
 
 static void
-gsk_gpu_node_processor_set_scissor (GskGpuRenderPass         *self,
-                                    const cairo_rectangle_int_t *scissor)
-{
-  graphene_rect_t clip_rect;
-
-  self->scissor = *scissor;
-
-  if (!gsk_gpu_node_processor_rect_device_to_clip (self,
-                                                   &GSK_RECT_INIT_CAIRO (scissor),
-                                                   &clip_rect))
-    {
-      /* If the transform is screwed up in the places where we call this function,
-       * something has seriously gone wrong.
-       */
-      g_assert_not_reached ();
-    }
-  
-  gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &clip_rect);
-
-  self->pending_globals |= GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR;
-}
-
-static void
 gsk_gpu_node_processor_convert_to (GskGpuRenderPass   *self,
                                    GdkShaderOp            target_shader_op,
                                    GskGpuImage           *image,
@@ -4077,7 +4011,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
     }
   else
     {
-      GskGpuRenderPassBlendStorage storage;
+      GskGpuRenderPassBlendStorage blend_storage;
       cairo_rectangle_int_t extents;
 
       cairo_region_get_extents (clip, &extents);
@@ -4094,18 +4028,22 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                 &extents,
                                 viewport);
 
-      gsk_gpu_render_pass_push_blend (&self, GSK_GPU_BLEND_NONE, &storage);
+      gsk_gpu_render_pass_push_blend (&self, GSK_GPU_BLEND_NONE, &blend_storage);
 
       for (i = 0; i < cairo_region_num_rectangles (clip); i++)
         {
+          GskGpuRenderPassClipStorage clip_storage;
           cairo_rectangle_int_t rect;
 
           cairo_region_get_rectangle (clip, i, &rect);
-          gsk_gpu_node_processor_set_scissor (&self, &rect);
+          gsk_gpu_render_pass_push_clip_device_rect (&self, &rect, &clip_storage);
 
           /* Can't use gsk_gpu_node_processor_get_node_as_image () because of colorspaces */
           if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (&self, node, &clip_bounds))
-            continue;
+            {
+              gsk_gpu_render_pass_pop_clip_device_rect (&self, &clip_storage);
+              continue;
+            }
 
           image = gsk_gpu_get_node_as_image (self.frame,
                                              0,
@@ -4115,7 +4053,10 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                              node,
                                              &tex_rect);
           if (image == NULL)
-            continue;
+            {
+              gsk_gpu_render_pass_pop_clip_device_rect (&self, &clip_storage);
+              continue;
+            }
 
           gsk_gpu_node_processor_convert_to (&self,
                                              gsk_gpu_image_get_shader_op (target),
@@ -4125,9 +4066,10 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                              &tex_rect);
 
           g_object_unref (image);
+          gsk_gpu_render_pass_pop_clip_device_rect (&self, &clip_storage);
         }
 
-      gsk_gpu_render_pass_pop_blend (&self, &storage);
+      gsk_gpu_render_pass_pop_blend (&self, &blend_storage);
       gsk_gpu_render_pass_finish (&self);
 
       cairo_region_destroy (clip);

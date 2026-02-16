@@ -34,6 +34,7 @@ struct _GskGpuOcclusion
   GskGpuTransform transform;
 
   GskGpuRenderPass pass;
+  GskGpuRenderPassClipStorage scissor_storage;
   float background_color[4];
 
   guint has_background : 1;
@@ -165,8 +166,7 @@ gsk_gpu_occlusion_begin_rendering (GskGpuOcclusion *self,
 
   if (self->has_started_rendering)
     {
-      self->pass.scissor = self->device_clip;
-      self->pass.pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
+      gsk_gpu_render_pass_push_clip_device_rect (&self->pass, &self->device_clip, &self->scissor_storage);
       gsk_gpu_render_pass_set_transform (&self->pass, &self->transform);
 
       if (clear_color &&
@@ -217,8 +217,7 @@ gsk_gpu_occlusion_begin_rendering (GskGpuOcclusion *self,
                                 &extents,
                                 &self->viewport);
 
-      self->pass.scissor = self->device_clip;
-      self->pass.pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
+      gsk_gpu_render_pass_push_clip_device_rect (&self->pass, &self->device_clip, &self->scissor_storage);
       gsk_gpu_render_pass_set_transform (&self->pass, &self->transform);
       if (!self->has_background && clear_color)
         gsk_gpu_clear_op (self->pass.frame, &self->pass.scissor, clear_color);
@@ -320,6 +319,7 @@ gsk_gpu_occlusion_run (GskGpuOcclusion       *self,
   
   /* NB: not the passed in device clip, we might have shrunk the region */
   cairo_region_subtract_rectangle (self->clip_region, &self->device_clip);
+  gsk_gpu_render_pass_pop_clip_device_rect (&self->pass, &self->scissor_storage);
 
   return result;
 }
