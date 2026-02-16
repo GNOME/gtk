@@ -91,9 +91,8 @@ void             gtk_svg_pause             (GtkSvg        *self);
 
 /**
  * GtkSvgFeatures:
- * @GTK_SVG_ANIMATIONS: Whether to run animations.
- *   If disabled, state changes are applied without
- *   transitions
+ * @GTK_SVG_ANIMATIONS: Whether to run animations. If disabled,
+ *   state changes are applied without transitions
  * @GTK_SVG_SYSTEM_RESOURCES: Whether to use system resources,
  *   such as fonts. If disabled, only embedded fonts are used
  * @GTK_SVG_EXTERNAL_RESOURCES: Whether to load external
@@ -101,10 +100,16 @@ void             gtk_svg_pause             (GtkSvg        *self);
  *   images are loaded
  * @GTK_SVG_EXTENSIONS: Whether to allow gpa extensions, such
  *   as states and transitions
+ * @GTK_SVG_TRADITIONAL_SYMBOLIC: This feature is meant for
+ *   compatibility with old symbolic icons. If this is enabled,
+ *   fill and stroke attributes are ignored. The used colors
+ *   are derived from symbolic style classes if present, and
+ *   the default fill color is the symbolic foreground color.
  *
- * Features of the SVG renderer that can be disabled.
+ * Features of the SVG renderer that can be enabled or disabled.
  *
- * By default, all features are enabled.
+ * By default, all features except `GTK_SVG_TRADITIONAL_SYMBOLIC`
+ * are enabled.
  *
  * New values may be added in the future.
  *
@@ -112,13 +117,21 @@ void             gtk_svg_pause             (GtkSvg        *self);
  */
 typedef enum
 {
-  GTK_SVG_ANIMATIONS         = 1 << 0,
-  GTK_SVG_SYSTEM_RESOURCES   = 1 << 1,
-  GTK_SVG_EXTERNAL_RESOURCES = 1 << 2,
-  GTK_SVG_EXTENSIONS         = 1 << 3,
+  GTK_SVG_ANIMATIONS           = 1 << 0,
+  GTK_SVG_SYSTEM_RESOURCES     = 1 << 1,
+  GTK_SVG_EXTERNAL_RESOURCES   = 1 << 2,
+  GTK_SVG_EXTENSIONS           = 1 << 3,
+  GTK_SVG_TRADITIONAL_SYMBOLIC = 1 << 4,
 } GtkSvgFeatures;
 
-#define GTK_SVG_ALL_FEATURES \
+/**
+ * GTK_SVG_DEFAULT_FEATURES:
+ *
+ * The `GtkSvgFeatures` that are enabled by default.
+ *
+ * Since: 4.22
+ */
+#define GTK_SVG_DEFAULT_FEATURES \
   (GTK_SVG_ANIMATIONS | \
    GTK_SVG_SYSTEM_RESOURCES | \
    GTK_SVG_EXTERNAL_RESOURCES | \

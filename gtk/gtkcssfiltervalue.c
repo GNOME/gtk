@@ -1097,8 +1097,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
            */
           filter.svg.svg = gtk_svg_new ();
           gtk_svg_set_features (filter.svg.svg,
-                                GTK_SVG_ALL_FEATURES &
-                                ~(GTK_SVG_ANIMATIONS | GTK_SVG_EXTENSIONS));
+                                GTK_SVG_SYSTEM_RESOURCES & GTK_SVG_EXTERNAL_RESOURCES);
           signal_id = g_signal_connect (filter.svg.svg, "error",
                                         G_CALLBACK (svg_error_cb),
                                         (&(ParserErrorData) { parser, is_data, start, end }));
