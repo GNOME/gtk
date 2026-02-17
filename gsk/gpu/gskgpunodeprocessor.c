@@ -357,7 +357,7 @@ gsk_gpu_node_processor_image_op (GskGpuRenderPass   *self,
                                cicp->range == GDK_CICP_RANGE_NARROW ? 0 : 1);
     }
   else if (gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
-           self->opacity < 1.0 ||
+           gsk_gpu_render_pass_has_opacity (self) ||
            !gdk_color_state_equal (image_color_state, self->ccs))
     {
       gsk_gpu_convert_op (self,
@@ -1022,7 +1022,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
       !self->modelview && 
-      self->opacity >= 1.0 &&
+      !gsk_gpu_render_pass_has_opacity (self) &&
       gdk_color_is_opaque (color) &&
       gsk_gpu_clip_get_largest_cover (&self->clip, &self->offset, &bounds, &cover) &&
       gsk_gpu_render_pass_user_to_device_shrink (self, &cover, &device) &&
@@ -2119,7 +2119,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
   GskRenderNode *child;
   gsize i, n_shadows;
 
-  if (self->opacity < 1.0)
+  if (gsk_gpu_render_pass_has_opacity (self))
     {
       gsk_gpu_node_processor_add_with_offscreen (self, node);
       return;
@@ -2556,7 +2556,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
   GdkColorState *acs;
   GdkColor color2;
 
-  if (self->opacity < 1.0 &&
+  if (gsk_gpu_render_pass_has_opacity (self) &&
       gsk_text_node_has_color_glyphs (node))
     {
       gsk_gpu_node_processor_add_with_offscreen (self, node);
@@ -2660,7 +2660,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
   child = gsk_color_matrix_node_get_child (node);
 
   color_matrix = gsk_color_matrix_node_get_color_matrix (node);
-  if (self->opacity < 1.0f)
+  if (gsk_gpu_render_pass_has_opacity (self))
     {
       graphene_matrix_init_from_float (&opacity_matrix,
                                        (float[16]) {
@@ -3503,7 +3503,8 @@ gsk_gpu_node_processor_add_container_node (GskGpuRenderPass *self,
   GskRenderNode **children;
   gsize i, n_children;
 
-  if (self->opacity < 1.0 && !gsk_container_node_is_disjoint (node))
+  if (gsk_gpu_render_pass_has_opacity (self) &&
+      !gsk_container_node_is_disjoint (node))
     {
       gsk_gpu_node_processor_add_with_offscreen (self, node);
       return;
