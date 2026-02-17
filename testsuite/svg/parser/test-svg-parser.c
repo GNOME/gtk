@@ -521,6 +521,8 @@ main (int argc, char **argv)
     {
       GFile *file;
 
+      gtk_init ();
+
       file = g_file_new_for_commandline_arg (argv[2]);
       parse_svg_file (file, TRUE);
       g_object_unref (file);
@@ -530,6 +532,8 @@ main (int argc, char **argv)
   else if (argc >= 2 && strcmp (argv[1], "--regenerate") == 0)
     {
       GFile *file;
+
+      gtk_init ();
 
       file = g_file_new_for_commandline_arg (argv[2]);
       parse_svg_file (file, TEST_FLAG_GENERATE|TEST_FLAG_REPLACE_EXPECTED);
