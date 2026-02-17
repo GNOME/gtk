@@ -7,4 +7,8 @@
   <polyline points='0 0 1 1 2 2'/>
   <polygon points='100 10 200 10 50 30'/>
   <image href="smiley.png" x='10' y='10' width='20' height='30'/>
+  <switch>
+    <g systemLanguage='en'/>
+    <path requiredExtensions='http://www.gtk.org/grappa'/>
+  </switch>
 </svg>

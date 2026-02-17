@@ -22,6 +22,7 @@ test_data = [
   'bad-attr.svg',
   'bad-time.svg',
   'clip.svg',
+  'conditional.svg',
   'containers.svg',
   'crash1.svg',
   'crash2.svg',

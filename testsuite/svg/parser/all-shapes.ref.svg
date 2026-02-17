@@ -44,4 +44,12 @@
           width='20'
           height='30'>
   </image>
+  <switch>
+    <g
+            systemLanguage='en'>
+    </g>
+    <path
+            requiredExtensions='http://www.gtk.org/grappa'>
+    </path>
+  </switch>
 </svg>

@@ -549,6 +549,8 @@ main (int argc, char **argv)
     {
       GFile *file;
 
+      gtk_init ();
+
       file = g_file_new_for_commandline_arg (argv[2]);
       render_svg_file (file, TEST_FLAG_GENERATE|TEST_FLAG_REPLACE_EXPECTED);
       g_object_unref (file);

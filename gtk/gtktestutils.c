@@ -73,12 +73,17 @@ gtk_test_init (int    *argcp,
                char ***argvp,
                ...)
 {
+  char *lang;
+
   /* g_test_init is defined as a macro that aborts if assertions
    * are disabled. We don't want that, so we call the function.
    */
   (g_test_init) (argcp, argvp, NULL);
+
   gtk_disable_setlocale();
-  setlocale (LC_ALL, "en_US.UTF-8");
+  lang = setlocale (LC_ALL, "en_US.UTF-8");
+  if (g_test_verbose ())
+    g_test_message ("language: %s", lang ? lang : "C");
 
   gtk_init ();
 }

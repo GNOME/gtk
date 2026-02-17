@@ -66,7 +66,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2026-02-10.0'
+    BASE_TAG: '2026-02-17.0'
     FDO_DISTRIBUTION_VERSION: 44
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -80,6 +80,7 @@ default:
       dejavu-sans-mono-fonts
       diffutils
       git
+      glibc-langpack-en
       graphviz
       libasan
       libcloudproviders-devel
