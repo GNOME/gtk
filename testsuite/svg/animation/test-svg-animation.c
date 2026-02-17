@@ -578,7 +578,9 @@ main (int argc, char **argv)
   GOptionContext *context;
   GError *error = NULL;
 
-  if (argc >= 3 && strcmp (argv[1], "--generate") == 0)
+  if (argc >= 3 &&
+      (strcmp (argv[1], "--generate") == 0 ||
+       strcmp (argv[1], "--regenerate") == 0))
     {
       GFile *file;
 
