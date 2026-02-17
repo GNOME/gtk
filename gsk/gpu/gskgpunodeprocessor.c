@@ -3420,7 +3420,6 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                                 mask_image,
                                 GSK_GPU_SAMPLER_DEFAULT,
                                 op,
-                                &bounds,
                                 &child_rect,
                                 &mask_rect);
         }
