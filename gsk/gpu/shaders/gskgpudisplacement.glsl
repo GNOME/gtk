@@ -3,7 +3,7 @@ textures = 2;
 acs_equals_ccs = true;
 acs_premultiplied = true;
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_rect_t displacement_rect;
 graphene_rect_t child_rect;
 guint32 x_channel;
@@ -17,7 +17,7 @@ float opacity;
 #include "gskgpudisplacementinstance.glsl"
 
 PASS(0) vec2 _pos;
-PASS_FLAT(1) Rect _rect;
+PASS_FLAT(1) Rect _bounds;
 PASS_FLAT(2) Rect _child_rect;
 PASS(3) vec2 _displacement_coord;
 PASS_FLAT(4) uvec2 _channels;
@@ -32,12 +32,12 @@ PASS_FLAT(8) float _opacity;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
   
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
-  _rect = r;
+  _bounds = b;
 
   Rect displacement_rect = rect_from_gsk (in_displacement_rect);
   _displacement_coord = rect_get_coord (displacement_rect, pos);
@@ -69,7 +69,7 @@ run (out vec4 color,
   vec2 child_coord = rect_get_coord (_child_rect, _pos + displace);
 
   color = output_color_alpha (texture (GSK_TEXTURE1, child_coord),
-                              rect_coverage (_rect, _pos) *
+                              rect_coverage (_bounds, _pos) *
                               _opacity);
   position = _pos;
 }
