@@ -2386,7 +2386,6 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuRenderPass *self,
                          GSK_GPU_SAMPLER_DEFAULT,
                          end_image,
                          GSK_GPU_SAMPLER_DEFAULT,
-                         &node->bounds,
                          &start_rect,
                          &end_rect,
                          progress);
