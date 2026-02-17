@@ -2302,7 +2302,6 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
                          GSK_GPU_SAMPLER_DEFAULT,
                          second_image,
                          GSK_GPU_SAMPLER_DEFAULT,
-                         &node->bounds,
                          &first_rect,
                          &second_rect,
                          k1, k2, k3, k4);
