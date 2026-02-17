@@ -14,11 +14,7 @@
   <mask
           id='mask1'
           font-size='13.333'
-          font-weight='400'
-          x='-3px'
-          y='-2px'
-          width='36px'
-          height='24px'>
+          font-weight='400'>
     <circle
             font-size='13.333'
             font-weight='400'
@@ -32,11 +28,7 @@
   <mask
           id='mask2'
           font-size='13.333'
-          font-weight='400'
-          x='-3px'
-          y='-2px'
-          width='36px'
-          height='24px'>
+          font-weight='400'>
     <circle
             font-size='13.333'
             font-weight='400'

@@ -1,0 +1,12 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'>
+  <g>
+    <animate
+            attributeName='fill'
+            begin='0ms'
+            from='rgb(255,0,0)'
+            to='rgb(0,128,0)'
+            keyTimes='0; 1'/>
+  </g>
+</svg>

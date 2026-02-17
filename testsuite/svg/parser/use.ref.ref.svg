@@ -1,0 +1,21 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'>
+  <defs>
+    <circle
+            id='circle1'
+            cx='1'
+            cy='2'
+            r='3'>
+    </circle>
+  </defs>
+  <g>
+    <use
+            href='#circle1'>
+    </use>
+    <use
+            href='#circle1'
+            x='10'>
+    </use>
+  </g>
+</svg>

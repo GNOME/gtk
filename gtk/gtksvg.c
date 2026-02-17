@@ -239,9 +239,17 @@ typedef struct _Animation Animation;
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
 
-static SvgValue *   shape_attr_ref_initial_value (ShapeAttr  attr,
-                                                  ShapeType  type,
-                                                  gboolean   has_parent);
+static SvgValue *shape_attr_ref_initial_value (ShapeAttr  attr,
+                                               ShapeType  type,
+                                               gboolean   has_parent);
+
+static unsigned int svg_enum_get (const SvgValue *value);
+
+typedef enum
+{
+  COORD_UNITS_USER_SPACE_ON_USE,
+  COORD_UNITS_OBJECT_BOUNDING_BOX,
+} CoordUnits;
 
 /* {{{ Some debug tools */
 
@@ -3335,13 +3343,19 @@ svg_number_resolve (const SvgValue *value,
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_Y:
         case SHAPE_ATTR_HEIGHT:
-          if (shape->type != SHAPE_FILTER && shape->type != SHAPE_PATTERN)
+          if (shape->type != SHAPE_FILTER &&
+              shape->type != SHAPE_PATTERN &&
+              (shape->type != SHAPE_MASK ||
+               svg_enum_get (shape->current[SHAPE_ATTR_BOUND_UNITS]) != COORD_UNITS_OBJECT_BOUNDING_BOX))
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
         case SHAPE_ATTR_X:
         case SHAPE_ATTR_WIDTH:
-          if (shape->type != SHAPE_FILTER && shape->type != SHAPE_PATTERN)
+          if (shape->type != SHAPE_FILTER &&
+              shape->type != SHAPE_PATTERN &&
+              (shape->type != SHAPE_MASK ||
+               svg_enum_get (shape->current[SHAPE_ATTR_BOUND_UNITS]) != COORD_UNITS_OBJECT_BOUNDING_BOX))
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
           else
             return svg_value_ref ((SvgValue *) value);
@@ -4168,12 +4182,6 @@ DEFINE_ENUM (SPREAD_METHOD, spread_method, GskRepeat,
   DEFINE_ENUM_VALUE (SPREAD_METHOD, GSK_REPEAT_REFLECT, "reflect"),
   DEFINE_ENUM_VALUE (SPREAD_METHOD, GSK_REPEAT_REPEAT, "repeat")
 )
-
-typedef enum
-{
-  COORD_UNITS_USER_SPACE_ON_USE,
-  COORD_UNITS_OBJECT_BOUNDING_BOX,
-} CoordUnits;
 
 DEFINE_ENUM (COORD_UNITS, coord_units, CoordUnits,
   DEFINE_ENUM_VALUE (COORD_UNITS, COORD_UNITS_USER_SPACE_ON_USE, "userSpaceOnUse"),

@@ -1,0 +1,29 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='128'
+        height='128'
+        viewBox='0 0 128 128'>
+  <text
+          font-size='72'
+          font-family='Noto Serif CJK'
+          x='32'
+          y='10'
+          lang='zh'
+          writing-mode='vertical-rl'>骨</text>
+  <text
+          font-size='12'
+          x='4'
+          y='96'>Chineese</text>
+  <text
+          font-size='72'
+          font-family='Noto Serif CJK'
+          x='96'
+          y='10'
+          lang='ja'
+          writing-mode='vertical-rl'>骨</text>
+  <text
+          font-size='12'
+          x='66'
+          y='96'>Japaneese</text>
+</svg>

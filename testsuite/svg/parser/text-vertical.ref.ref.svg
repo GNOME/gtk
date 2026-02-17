@@ -1,0 +1,47 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='128'
+        height='128'
+        viewBox='0 0 128 128'>
+  <defs>
+    <linearGradient
+            id='gr'>
+      <stop
+              offset='0%'
+              stop-color='rgb(255,0,0)'
+              stop-opacity='1'>
+      </stop>
+      <stop
+              offset='100%'
+              stop-color='rgb(0,0,255)'
+              stop-opacity='1'>
+      </stop>
+    </linearGradient>
+  </defs>
+  <text
+          font-size='16'
+          visibility='visible'
+          fill='url(#gr)'
+          x='32'
+          y='10'
+          writing-mode='vertical-rl'>Alpha 
+    
+    <tspan
+            fill='rgb(0,0,0)'>私は車</tspan>がありません</text>
+  <text
+          font-size='16'
+          fill-opacity='0.5'
+          x='64'
+          y='64'
+          text-anchor='middle'>Hello</text>
+  <text
+          font-size='16'
+          fill='url(#gr)'
+          x='96'
+          y='10'
+          writing-mode='vertical-lr'>Beta 
+    
+    <tspan
+            fill='rgb(0,0,0)'>私は車</tspan>がありません</text>
+</svg>

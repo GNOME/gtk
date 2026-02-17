@@ -1,0 +1,16 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'>
+  <path
+          stroke-dasharray='1 2 3'
+          d=''>
+  </path>
+  <path
+          stroke-dasharray='1 2 3'
+          d=''>
+  </path>
+  <path
+          stroke-dasharray='1 2 3px 4cm 5%'
+          d=''>
+  </path>
+</svg>
