@@ -493,7 +493,6 @@ def print_c_shader_op_class (file):
 
 def print_c_invocation (file, n_attributes, attributes, prototype_only):
     args = [ FunctionArg ('GskGpuRenderPass',            True,  'pass'),
-             FunctionArg ('GskGpuShaderClip',            False, 'clip'),
              FunctionArg ('GdkColorState',               True,  'ccs') ]
     if file.ccs_premultiplied == Premultiplied.ARGUMENT:
         args.append (FunctionArg ('gboolean',            False,  'ccs_premultiplied'))
@@ -501,6 +500,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
         args.append (FunctionArg ('GdkColorState',       True,  'acs'))
     if file.acs_premultiplied == Premultiplied.ARGUMENT:
         args.append (FunctionArg ('gboolean',            False,  'acs_premultiplied'))
+    args.append (FunctionArg ('const graphene_rect_t',   True,  'bounds'))
     for i in range(1, file.n_textures + 1):
         args += [ FunctionArg ('GskGpuImage',             True, 'image' + str (i)),
                   FunctionArg ('GskGpuSampler',           False, 'sampler' + str (i)) ]
@@ -508,7 +508,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     for var in file.variations:
         args.append (FunctionArg (var.type.type, False, 'variation_' + var.name))
     for var in file.variables:
-        if var.name == 'opacity':
+        if var.name == 'opacity' or var.name == 'bounds':
             continue
         args.append (FunctionArg (('const ' if var.type.pointer else '') + var.type.type, var.type.pointer, var.name))
 
@@ -535,7 +535,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
 
     else:
         print (f'''                           0,''')
-    print (f'''                           clip,''')
+    print (f'''                           gsk_gpu_clip_get_shader_clip (&pass->clip, &pass->offset, bounds),''')
     if file.n_textures > 0:
         print (f'''                           (GskGpuImage *[{file.n_textures}]) {{ {', '.join (map (lambda x: 'image' + str(x), range(1, file.n_textures + 1)))} }},
                            (GskGpuSampler[{file.n_textures}]) {{ {', '.join (map (lambda x: 'sampler' + str(x), range(1, file.n_textures + 1)))} }},''')
