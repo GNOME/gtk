@@ -147,6 +147,7 @@ foreach testname : test_data
   endif
   test('svg renderer ' + testname, test_renderer,
         args: [ '--tap',
+                '--verbose',
                 '-k',
                 '--output', meson.current_build_dir(),
                 join_paths(meson.current_source_dir(), testname),
