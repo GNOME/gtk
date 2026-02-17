@@ -2681,7 +2681,6 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
                            GSK_GPU_SAMPLER_DEFAULT,
                            color_matrix,
                            gsk_color_matrix_node_get_color_offset (node),
-                           &node->bounds,
                            &tex_rect);
 
   g_object_unref (image);
