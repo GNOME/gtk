@@ -3,14 +3,9 @@ clip {
   child: transform {
     transform: rotate(30);
     child: container {
-      fill {
-        child: color {
-          bounds: 10 10 50 20;
-          color: rgb(0,0,0);
-        }
-        path: "\
-M 10 10 h 50 v 20 h -50 z";
-        fill-rule: winding;
+      color {
+        bounds: 10 10 50 20;
+        color: rgb(0,0,0);
       }
       stroke {
         child: color {

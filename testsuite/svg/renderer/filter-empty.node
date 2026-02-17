@@ -1,20 +1,16 @@
-fill {
+rounded-clip {
+  clip: 100 30 60 60 / 30;
   child: color {
     bounds: 100 30 60 60;
     color: rgb(255,0,0);
   }
-  path: "\
-M 160 60 o 0 30, -30 30, 0.707106769 o -30 0, -30 -30, 0.707106769 o 0 -30, 30 -30, 0.707106769 o 30 0, 30 30, 0.707106769 z";
-  fill-rule: winding;
 }
-fill {
+rounded-clip {
+  clip: 90 20 80 80 / 40;
   child: color {
     bounds: 90 20 80 80;
     color: rgb(0,255,0);
   }
-  path: "\
-M 170 60 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-  fill-rule: winding;
 }
 text {
   font: "SVGFreeSansASCII 20px" url("data:font/ttf;base64,\
@@ -82,51 +78,43 @@ AQ/+8cnJAQsBAb6+AA==\
   glyphs: 47 14, 80 11, 1 6, 71 6, 74 4, 77 4, 85 6, 70 11, 83 7, 1 6;
   offset: 92.5 130;
 }
-fill {
+rounded-clip {
+  clip: 100 180 60 60 / 30;
   child: color {
     bounds: 100 180 60 60;
     color: rgb(0,255,0);
   }
-  path: "\
-M 160 210 o 0 30, -30 30, 0.707106769 o -30 0, -30 -30, 0.707106769 o 0 -30, 30 -30, 0.707106769 o 30 0, 30 30, 0.707106769 z";
-  fill-rule: winding;
 }
 text {
   font: "SVGFreeSansASCII 20px";
   glyphs: 47 14, 86 11, 77 4, 77 4, 1 6, 71 6, 74 4, 77 4, 85 6, 70 11, 83 7, 1 6;
   offset: 88.5 280;
 }
-fill {
+rounded-clip {
+  clip: 300 30 60 60 / 30;
   child: color {
     bounds: 300 30 60 60;
     color: rgb(0,255,0);
   }
-  path: "\
-M 360 60 o 0 30, -30 30, 0.707106769 o -30 0, -30 -30, 0.707106769 o 0 -30, 30 -30, 0.707106769 o 30 0, 30 30, 0.707106769 z";
-  fill-rule: winding;
 }
-fill {
+rounded-clip {
+  clip: 290 20 80 80 / 40;
   child: color {
     bounds: 290 20 80 80;
     color: rgb(255,0,0);
   }
-  path: "\
-M 370 60 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-  fill-rule: winding;
 }
 text {
   font: "SVGFreeSansASCII 20px";
   glyphs: 47 14, 80 11, 79 11, 14 7, 70 11, "x", 74 4, "s", 85 6, 70 11, 79 11, 85 6, 1 6, 71 6, 74 4, 77 4, 85 6, 70 11, 83 7, 1 6;
   offset: 249 130;
 }
-fill {
+rounded-clip {
+  clip: 300 180 60 60 / 30;
   child: color {
     bounds: 300 180 60 60;
     color: rgb(0,255,0);
   }
-  path: "\
-M 360 210 o 0 30, -30 30, 0.707106769 o -30 0, -30 -30, 0.707106769 o 0 -30, 30 -30, 0.707106769 o 30 0, 30 30, 0.707106769 z";
-  fill-rule: winding;
 }
 text {
   font: "SVGFreeSansASCII 20px";

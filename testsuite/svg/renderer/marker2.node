@@ -1,61 +1,48 @@
-transform {
-  transform: translate(40, 40) scale(3);
-  child: fill {
-    child: color {
-      bounds: -2 -2 4 4;
-      color: rgb(0,0,255);
-    }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
+rounded-clip {
+  clip: 34 34 12 12 / 6;
+  child: color {
+    bounds: 34 34 12 12;
+    color: rgb(0,0,255);
   }
 }
 transform {
   transform: translate(165, 40) rotate(45) scale(3);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(0,0,255);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(165, 115) rotate(135) scale(3);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(0,0,255);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(40, 115) rotate(45) scale(3);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(0,0,255);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(40, 40) rotate(270) scale(3);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(0,0,255);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 stroke {
@@ -69,64 +56,51 @@ M 40 40 h 125 v 75 h -125 z";
   line-cap: butt;
   line-join: miter;
 }
-transform {
-  transform: translate(60, 50) scale(2);
-  child: fill {
-    child: color {
-      bounds: -2 -2 4 4;
-      color: rgb(128,0,128);
-    }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
+rounded-clip {
+  clip: 56 46 8 8 / 4;
+  child: color {
+    bounds: 56 46 8 8;
+    color: rgb(128,0,128);
   }
 }
 transform {
   transform: translate(145, 50) rotate(45) scale(2);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(128,0,128);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(145, 105) rotate(135) scale(2);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(128,0,128);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(60, 105) rotate(45) scale(2);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(128,0,128);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(60, 50) rotate(270) scale(2);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(128,0,128);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 stroke {
@@ -140,64 +114,51 @@ M 60 50 h 85 v 55 h -85 z";
   line-cap: butt;
   line-join: miter;
 }
-transform {
-  transform: translate(80, 60);
-  child: fill {
-    child: color {
-      bounds: -2 -2 4 4;
-      color: rgb(255,0,0);
-    }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
+rounded-clip {
+  clip: 78 58 4 4 / 2;
+  child: color {
+    bounds: 78 58 4 4;
+    color: rgb(255,0,0);
   }
 }
 transform {
   transform: translate(125, 60) rotate(45);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(255,0,0);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(125, 95) rotate(135);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(255,0,0);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(80, 95) rotate(45);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(255,0,0);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 transform {
   transform: translate(80, 60) rotate(270);
-  child: fill {
+  child: rounded-clip {
+    clip: -2 -2 4 4 / 2;
     child: color {
       bounds: -2 -2 4 4;
       color: rgb(255,0,0);
     }
-    path: "\
-M 2 0 o 0 2, -2 2, 0.707106769 o -2 0, -2 -2, 0.707106769 o 0 -2, 2 -2, 0.707106769 o 2 0, 2 2, 0.707106769 z";
-    fill-rule: winding;
   }
 }
 stroke {

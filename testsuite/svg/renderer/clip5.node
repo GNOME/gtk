@@ -1,15 +1,13 @@
+clip {
+  clip: 4.16667 27.0833 43.75 43.75;
+  child: color {
+    bounds: 4.16667 27.0833 43.75 43.75;
+    color: rgb(255,0,0);
+  }
+}
 transform {
   transform: translate(0, 12.5) scale(0.208333);
   child: container {
-    fill {
-      child: color {
-        bounds: 20 70 210 210;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 20 70 h 210 v 210 h -210 z";
-      fill-rule: winding;
-    }
     stroke {
       child: color {
         bounds: 18 68 214 214;
@@ -21,14 +19,9 @@ M 20 70 h 210 v 210 h -210 z";
       line-cap: butt;
       line-join: miter;
     }
-    fill {
-      child: color {
-        bounds: 250 70 210 210;
-        color: rgb(255,0,0);
-      }
-      path: "\
-M 250 70 h 210 v 210 h -210 z";
-      fill-rule: winding;
+    color {
+      bounds: 250 70 210 210;
+      color: rgb(255,0,0);
     }
     stroke {
       child: color {
@@ -62,74 +55,35 @@ Z";
         fill-rule: even-odd;
       }
     }
-    mask {
-      source: transform {
-        transform: translate(20, 70);
-        child: fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 200 150 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
+    rounded-clip {
+      clip: 70 120 100 100 / 50;
+      child: rounded-clip {
+        clip: 120 170 100 100 / 50;
+        child: color {
+          bounds: 120 170 100 100;
+          color: rgb(255,0,0);
         }
       }
-      mask: transform {
-        transform: translate(20, 70);
-        child: fill {
-          child: color {
-            bounds: 50 50 100 100;
-            color: rgb(0,0,0);
-          }
-          path: "\
-M 150 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
+    }
+    rounded-clip {
+      clip: 120 170 100 100 / 50;
+      child: rounded-clip {
+        clip: 70 120 100 100 / 50;
+        child: color {
+          bounds: 70 120 100 100;
+          color: rgb(255,0,0);
         }
       }
     }
     mask {
-      source: transform {
-        transform: translate(20, 70);
-        child: fill {
-          child: color {
-            bounds: 50 50 100 100;
-            color: rgb(255,0,0);
-          }
-          path: "\
-M 150 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
-      mask: transform {
-        transform: translate(20, 70);
-        child: fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,0);
-          }
-          path: "\
-M 200 150 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
-    }
-    mask {
-      source: transform {
-        transform: translate(20, 70);
-        child: fill {
-          child: color {
-            bounds: 0 0 200 200;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 0 0 h 200 v 200 h -200 z";
-          fill-rule: winding;
-        }
+      source: color {
+        bounds: 20 70 200 200;
+        color: rgb(0,0,255);
       }
       mask: container {
-        mask {
-          source: transform {
+        rounded-clip {
+          clip: 70 120 100 100 / 50;
+          child: transform {
             transform: translate(20, 70);
             child: fill {
               child: color {
@@ -138,18 +92,6 @@ M 0 0 h 200 v 200 h -200 z";
               }
               path: "\
 M 200 150 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-              fill-rule: winding;
-            }
-          }
-          mask: transform {
-            transform: translate(20, 70);
-            child: fill {
-              child: color {
-                bounds: 50 50 100 100;
-                color: rgb(0,0,0);
-              }
-              path: "\
-M 150 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
               fill-rule: winding;
             }
           }
@@ -177,8 +119,9 @@ Z";
         }
       }
     }
-    mask {
-      source: transform {
+    rounded-clip {
+      clip: 70 120 100 100 / 50;
+      child: transform {
         transform: translate(20, 70);
         child: stroke {
           child: color {
@@ -192,21 +135,10 @@ M 200 150 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 
           line-join: miter;
         }
       }
-      mask: transform {
-        transform: translate(20, 70);
-        child: fill {
-          child: color {
-            bounds: 50 50 100 100;
-            color: rgb(0,0,0);
-          }
-          path: "\
-M 150 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
     }
-    mask {
-      source: transform {
+    rounded-clip {
+      clip: 120 170 100 100 / 50;
+      child: transform {
         transform: translate(20, 70);
         child: stroke {
           child: color {
@@ -218,18 +150,6 @@ M 150 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 
           line-width: 1;
           line-cap: butt;
           line-join: miter;
-        }
-      }
-      mask: transform {
-        transform: translate(20, 70);
-        child: fill {
-          child: color {
-            bounds: 100 100 100 100;
-            color: rgb(0,0,0);
-          }
-          path: "\
-M 200 150 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
         }
       }
     }
@@ -256,18 +176,14 @@ Z";
         line-join: miter;
       }
     }
-    mask {
-      source: container {
-        transform {
-          transform: translate(250, 70);
-          child: fill {
-            child: color {
-              bounds: 100 100 100 100;
-              color: rgb(255,0,0);
-            }
-            path: "\
-M 200 150 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-            fill-rule: winding;
+    rounded-clip {
+      clip: 300 120 100 100 / 50;
+      child: container {
+        rounded-clip {
+          clip: 350 170 100 100 / 50;
+          child: color {
+            bounds: 350 170 100 100;
+            color: rgb(255,0,0);
           }
         }
         transform {
@@ -292,34 +208,15 @@ Z";
           }
         }
       }
-      mask: transform {
-        transform: translate(250, 70);
-        child: fill {
-          child: color {
-            bounds: 50 50 100 100;
-            color: rgb(0,0,0);
-          }
-          path: "\
-M 150 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-          fill-rule: winding;
-        }
-      }
     }
     mask {
-      source: transform {
-        transform: translate(250, 70);
-        child: fill {
-          child: color {
-            bounds: 0 0 300 300;
-            color: rgb(0,0,255);
-          }
-          path: "\
-M 0 0 h 300 v 300 h -300 z";
-          fill-rule: winding;
-        }
+      source: color {
+        bounds: 250 70 300 300;
+        color: rgb(0,0,255);
       }
-      mask: mask {
-        source: container {
+      mask: rounded-clip {
+        clip: 300 120 100 100 / 50;
+        child: container {
           transform {
             transform: translate(250, 70);
             child: fill {
@@ -352,18 +249,6 @@ L 50 90\
 Z";
               fill-rule: even-odd;
             }
-          }
-        }
-        mask: transform {
-          transform: translate(250, 70);
-          child: fill {
-            child: color {
-              bounds: 50 50 100 100;
-              color: rgb(0,0,0);
-            }
-            path: "\
-M 150 100 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 -50, 0.707106769 o 50 0, 50 50, 0.707106769 z";
-            fill-rule: winding;
           }
         }
       }

@@ -209,7 +209,6 @@ main (int argc, char *argv[])
           sym = GDK_PAINTABLE (gtk_icon_paintable_new_for_file (child, 16, 1));
           if (sym)
             {
-              g_object_set (sym, "is-symbolic", TRUE, NULL);
               img = gtk_picture_new_for_paintable (sym);
               gtk_picture_set_can_shrink (GTK_PICTURE (img), allow_shrink);
               gtk_widget_set_size_request (img, size, size);

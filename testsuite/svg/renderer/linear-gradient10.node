@@ -1,27 +1,17 @@
-fill {
-  child: linear-gradient {
-    bounds: 50 50 200 100;
-    start: 50 50;
-    end: 250 50;
-    stops: 0 rgb(0,0,0), 0.5 rgb(255,255,255), 1 rgb(0,0,0);
-    repeat: repeat;
-    premultiplied: false;
-  }
-  path: "\
-M 50 50 h 200 v 100 h -200 z";
-  fill-rule: winding;
+linear-gradient {
+  bounds: 50 50 200 100;
+  start: 50 50;
+  end: 250 50;
+  stops: 0 rgb(0,0,0), 0.5 rgb(255,255,255), 1 rgb(0,0,0);
+  repeat: repeat;
+  premultiplied: false;
 }
-fill {
-  child: linear-gradient {
-    bounds: 50 150 200 100;
-    start: 50 150;
-    end: 250 150;
-    stops: 0 rgb(0,0,0), 0.5 rgb(255,255,255), 1 rgb(0,0,0);
-    repeat: repeat;
-    interpolation: srgb-linear;
-    premultiplied: false;
-  }
-  path: "\
-M 50 150 h 200 v 100 h -200 z";
-  fill-rule: winding;
+linear-gradient {
+  bounds: 50 150 200 100;
+  start: 50 150;
+  end: 250 150;
+  stops: 0 rgb(0,0,0), 0.5 rgb(255,255,255), 1 rgb(0,0,0);
+  repeat: repeat;
+  interpolation: srgb-linear;
+  premultiplied: false;
 }

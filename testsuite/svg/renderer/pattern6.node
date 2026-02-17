@@ -3,14 +3,12 @@ fill {
     bounds: 0.707107 0 179.293 160;
     child-bounds: 0 0 25 25;
     child: container {
-      fill {
+      rounded-clip {
+        clip: 2.5 2.5 20 20 / 10;
         child: color {
           bounds: 2.5 2.5 20 20;
           color: rgb(255,0,0);
         }
-        path: "\
-M 22.5 12.5 o 0 10, -10 10, 0.707106769 o -10 0, -10 -10, 0.707106769 o 0 -10, 10 -10, 0.707106769 o 10 0, 10 10, 0.707106769 z";
-        fill-rule: winding;
       }
       stroke {
         child: color {

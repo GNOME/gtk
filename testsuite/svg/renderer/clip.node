@@ -1,20 +1,10 @@
-mask {
-  source: fill {
+rounded-clip {
+  clip: 0 0 80 80 / 40;
+  child: rounded-clip {
+    clip: 20 20 80 80 / 40;
     child: color {
       bounds: 20 20 80 80;
       color: rgb(0,0,0);
     }
-    path: "\
-M 100 60 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-    fill-rule: winding;
-  }
-  mask: fill {
-    child: color {
-      bounds: 0 0 80 80;
-      color: rgb(0,0,0);
-    }
-    path: "\
-M 80 40 o 0 40, -40 40, 0.707106769 o -40 0, -40 -40, 0.707106769 o 0 -40, 40 -40, 0.707106769 o 40 0, 40 40, 0.707106769 z";
-    fill-rule: winding;
   }
 }

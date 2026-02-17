@@ -25,14 +25,12 @@ L 90 90";
     }
     transform {
       transform: translate(10, 10) rotate(45) translate(-5, -5);
-      child: fill {
+      child: rounded-clip {
+        clip: -5 0 10 10 / 5;
         child: color {
           bounds: -5 0 10 10;
           color: rgb(255,0,0);
         }
-        path: "\
-M 5 5 o 0 5, -5 5, 0.707106769 o -5 0, -5 -5, 0.707106769 o 0 -5, 5 -5, 0.707106769 o 5 0, 5 5, 0.707106769 z";
-        fill-rule: winding;
       }
     }
   }

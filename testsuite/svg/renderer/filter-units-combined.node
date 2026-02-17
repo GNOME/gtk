@@ -7,14 +7,9 @@ clip {
         bounds: 14 14 72 72;
         color: rgba(0,0,0,0);
       }
-      fill {
-        child: color {
-          bounds: 20 20 60 60;
-          color: rgb(0,0,255);
-        }
-        path: "\
-M 20 20 h 60 v 60 h -60 z";
-        fill-rule: winding;
+      color {
+        bounds: 20 20 60 60;
+        color: rgb(0,0,255);
       }
     }
   }
@@ -28,14 +23,9 @@ clip {
         bounds: 100 10 80 80;
         color: rgba(0,0,0,0);
       }
-      fill {
-        child: color {
-          bounds: 120 20 60 60;
-          color: rgb(0,128,0);
-        }
-        path: "\
-M 120 20 h 60 v 60 h -60 z";
-        fill-rule: winding;
+      color {
+        bounds: 120 20 60 60;
+        color: rgb(0,128,0);
       }
     }
   }
@@ -49,14 +39,9 @@ clip {
         bounds: 208 8 84 84;
         color: rgba(0,0,0,0);
       }
-      fill {
-        child: color {
-          bounds: 220 20 60 60;
-          color: rgb(255,0,0);
-        }
-        path: "\
-M 220 20 h 60 v 60 h -60 z";
-        fill-rule: winding;
+      color {
+        bounds: 220 20 60 60;
+        color: rgb(255,0,0);
       }
     }
   }
@@ -70,14 +55,9 @@ clip {
         bounds: 200 100 100 100;
         color: rgba(0,0,0,0);
       }
-      fill {
-        child: color {
-          bounds: 220 120 60 60;
-          color: rgb(128,0,128);
-        }
-        path: "\
-M 220 120 h 60 v 60 h -60 z";
-        fill-rule: winding;
+      color {
+        bounds: 220 120 60 60;
+        color: rgb(128,0,128);
       }
     }
   }

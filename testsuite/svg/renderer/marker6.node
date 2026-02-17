@@ -65,14 +65,12 @@ Z";
         line-cap: butt;
         line-join: miter;
       }
-      fill {
+      rounded-clip {
+        clip: -1 4 2 2 / 1;
         child: color {
           bounds: -1 4 2 2;
           color: rgb(255,0,0);
         }
-        path: "\
-M 1 5 o 0 1, -1 1, 0.707106769 o -1 0, -1 -1, 0.707106769 o 0 -1, 1 -1, 0.707106769 o 1 0, 1 1, 0.707106769 z";
-        fill-rule: winding;
       }
     }
   }
@@ -108,14 +106,12 @@ Z";
         line-cap: butt;
         line-join: miter;
       }
-      fill {
+      rounded-clip {
+        clip: -1 4 2 2 / 1;
         child: color {
           bounds: -1 4 2 2;
           color: rgb(255,0,0);
         }
-        path: "\
-M 1 5 o 0 1, -1 1, 0.707106769 o -1 0, -1 -1, 0.707106769 o 0 -1, 1 -1, 0.707106769 o 1 0, 1 1, 0.707106769 z";
-        fill-rule: winding;
       }
     }
   }

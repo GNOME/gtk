@@ -1,4 +1,5 @@
-fill {
+clip {
+  clip: 50 50 200 100;
   child: transform {
     transform: translate(50, 50) scale(200, 100) translate(0.5, 0.5) rotate(45) translate(-0.5, -0.5);
     child: radial-gradient {
@@ -9,9 +10,6 @@ fill {
       premultiplied: false;
     }
   }
-  path: "\
-M 50 50 h 200 v 100 h -200 z";
-  fill-rule: winding;
 }
 stroke {
   child: color {

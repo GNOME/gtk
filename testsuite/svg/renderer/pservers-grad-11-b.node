@@ -1,14 +1,9 @@
-fill {
-  child: radial-gradient {
-    bounds: 10 10 210 140;
-    start: 75 100 0;
-    end: 75 100 130;
-    stops: 0 rgb(0,0,153), 1 rgb(34,238,34);
-    premultiplied: false;
-  }
-  path: "\
-M 10 10 h 210 v 140 h -210 z";
-  fill-rule: winding;
+radial-gradient {
+  bounds: 10 10 210 140;
+  start: 75 100 0;
+  end: 75 100 130;
+  stops: 0 rgb(0,0,153), 1 rgb(34,238,34);
+  premultiplied: false;
 }
 text {
   font: "SVGFreeSansASCII 12px" url("data:font/ttf;base64,\

@@ -339,6 +339,7 @@ struct _Shape
   Shape *parent;
   GtkBitmask *attrs;
   char *id;
+  int line;
 
   /* Dependency order for computing updates */
   Shape *first;

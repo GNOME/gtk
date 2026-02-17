@@ -39,7 +39,9 @@
 #include "gsk/gskisolationnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
 #include "gsk/gskpathprivate.h"
+#include "gsk/gskcontourprivate.h"
 #include "gsk/gskrectprivate.h"
+#include "gsk/gskroundedrectprivate.h"
 #include <glib/gstdio.h>
 
 #include <tgmath.h>
@@ -1499,6 +1501,29 @@ add_font_from_url (GtkSvg              *svg,
 }
 
 /* }}} */
+/* {{{ Color utilities */
+
+static void
+apply_color_matrix (GdkColorState           *color_state,
+                    const graphene_matrix_t *matrix,
+                    const graphene_vec4_t   *offset,
+                    const GdkColor          *color,
+                    GdkColor                *new_color)
+{
+  GdkColor c;
+  graphene_vec4_t p;
+  float v[4];
+
+  gdk_color_convert (&c, color_state, color);
+  graphene_vec4_init (&p, c.r, c.g, c.b, c.a);
+  graphene_matrix_transform_vec4 (matrix, &p, &p);
+  graphene_vec4_add (&p, offset, &p);
+  graphene_vec4_to_float (&p, v);
+  gdk_color_init (new_color, color_state, v);
+  gdk_color_finish (&c);
+}
+
+/* }}} */
 /* {{{ Caching */
 
 static void
@@ -1598,6 +1623,45 @@ transform_gradient_line (GskTransform *transform,
 }
 
 /*  }}} */
+/* {{{ Rendernode utilities */
+
+static GskRenderNode *
+skip_debug_node (GskRenderNode *node)
+{
+  if (gsk_render_node_get_node_type (node) == GSK_DEBUG_NODE)
+    return gsk_debug_node_get_child (node);
+  else
+    return node;
+}
+
+static GskRenderNode *
+apply_transform (GskRenderNode *node,
+                 GskTransform  *transform)
+{
+  if (transform != NULL)
+    {
+      node = skip_debug_node (node);
+
+      if (gsk_render_node_get_node_type (node) == GSK_TRANSFORM_NODE)
+        {
+          GskTransform *tx = gsk_transform_node_get_transform (node);
+          GskRenderNode *child = gsk_transform_node_get_child (node);
+          GskRenderNode *transformed;
+
+          tx = gsk_transform_transform (gsk_transform_ref (tx), transform);
+          transformed = gsk_transform_node_new (child, tx);
+          gsk_transform_unref (tx);
+
+          return transformed;
+        }
+      else
+        return gsk_transform_node_new (node, transform);
+    }
+  else
+    return gsk_render_node_ref (node);
+}
+
+/* }}} */
 /* {{{ Text */
 
 static char *
@@ -1984,6 +2048,614 @@ svg_path_data_to_gsk (SvgPathData *p)
     }
 
   return gsk_path_builder_free_to_path (builder);
+}
+
+/* }}} */
+/* {{{ Path decomposition */
+
+typedef enum
+{
+  PATH_EMPTY,
+  PATH_RECT,
+  PATH_ROUNDED_RECT,
+  PATH_CIRCLE,
+  PATH_GENERAL,
+} PathClassification;
+
+static gboolean
+path_is_rect (GskPathOperation *ops,
+              size_t            n_ops,
+              graphene_point_t *points,
+              size_t            n_points,
+              graphene_rect_t  *rect)
+{
+  /* Look for the path produced by an axis-aligned rectangle: mlllz */
+
+  if (n_ops != 5)
+    return FALSE;
+
+  if (ops[0] != GSK_PATH_MOVE ||
+      ops[1] != GSK_PATH_LINE ||
+      ops[2] != GSK_PATH_LINE ||
+      ops[3] != GSK_PATH_LINE ||
+      ops[4] != GSK_PATH_CLOSE)
+    return FALSE;
+
+  if (!((points[0].y == points[1].y &&
+         points[1].x == points[2].x &&
+         points[2].y == points[3].y &&
+         points[3].x == points[0].x) ||
+        (points[0].x == points[1].x &&
+         points[1].y == points[2].y &&
+         points[2].x == points[3].x &&
+         points[3].y == points[0].y)))
+    return FALSE;
+
+  if (points[0].x == points[1].x)
+    {
+      rect->origin.x = MIN (points[0].x, points[2].x);
+      rect->size.width = MAX (points[0].x, points[2].x) - rect->origin.x;
+    }
+  else
+    {
+      rect->origin.x = MIN (points[0].x, points[1].x);
+      rect->size.width = MAX (points[0].x, points[1].x) - rect->origin.x;
+    }
+  if (points[0].y == points[1].y)
+    {
+      rect->origin.y = MIN (points[0].y, points[2].y);
+      rect->size.height = MAX (points[0].y, points[2].y) - rect->origin.y;
+    }
+  else
+    {
+      rect->origin.y = MIN (points[0].y, points[1].y);
+      rect->size.height = MAX (points[0].y, points[1].y) - rect->origin.y;
+    }
+
+  return TRUE;
+}
+
+#define in_order5(a, b, c, d, e) \
+  ((a <= b && b <= c && c <= d && d <= e) || \
+   (a >= b && b >= c && c >= d && d >= e))
+#define in_order6(a, b, c, d, e, f) \
+  ((a <= b && b <= c && c <= d && d <= e && e <= f) || \
+   (a >= b && b >= c && c >= d && d >= e && e >= f))
+
+#define equal3(a, b, c) (a == b && b == c)
+#define equal4(a, b, c, d) (a == b && b == c && c == d)
+
+static const double quarter_circle_d = (M_SQRT2 - 1) * 4 / 3;
+
+static gboolean
+path_is_circle (GskPathOperation *ops,
+                size_t            n_ops,
+                graphene_point_t *points,
+                size_t            n_points,
+                GskRoundedRect   *rect)
+{
+  /* Look for the path produced by the common way
+   * to encode a circle: mccccz.
+   *
+   * See https://spencermortensen.com/articles/bezier-circle/
+   *
+   * There are of course many other ways to encode circles
+   * that we don't find. Such is life.
+   *
+   * Harmlessly, we also accept a trailing m
+   */
+  double r;
+
+  if (n_ops != 6)
+    return FALSE;
+
+  if (n_points != 14)
+    return FALSE;
+
+  if (ops[0] != GSK_PATH_MOVE ||
+      ops[1] != GSK_PATH_CUBIC ||
+      ops[2] != GSK_PATH_CUBIC ||
+      ops[3] != GSK_PATH_CUBIC ||
+      ops[4] != GSK_PATH_CUBIC ||
+      ops[5] != GSK_PATH_CLOSE)
+    return FALSE;
+
+  if (!(points[0].x == points[12].x &&
+        points[0].y == points[12].y))
+    return FALSE;
+
+  if (!(equal3 (points[11].x, points[0].x, points[1].x) &&
+        equal3 (points[2].y, points[3].y, points[4].y) &&
+        equal3 (points[5].x, points[6].x, points[7].x) &&
+        equal3 (points[8].y, points[9].y, points[10].y)))
+    return FALSE;
+
+  if (!(points[11].y == points[7].y &&
+        points[0].y == points[6].y &&
+        points[1].y == points[5].y &&
+        points[2].x == points[10].x &&
+        points[3].x == points[9].x &&
+        points[4].x == points[8].x))
+    return FALSE;
+
+  if (!in_order5 (points[10].y, points[11].y, points[0].y, points[1].y, points[2].y))
+    return FALSE;
+
+  if (!in_order5 (points[1].x, points[2].x, points[3].x, points[4].x, points[5].x))
+    return FALSE;
+
+  if (points[0].y - points[3].y != points[9].y - points[0].y)
+    return FALSE;
+
+  if (points[3].x - points[6].x != points[0].x - points[3].x)
+    return FALSE;
+
+  if (fabs (points[0].y - points[3].y) != fabs (points[0].x - points[3].x))
+    return FALSE;
+
+  r = fabs (points[0].y - points[3].y);
+
+  if (points[0].y - points[1].y != points[11].y - points[12].y)
+    return FALSE;
+
+  if (points[2].x - points[3].x != points[3].x - points[4].x)
+    return FALSE;
+
+  if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), fabs (points[2].x - points[3].x), 0.01))
+    return FALSE;
+
+  if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), quarter_circle_d * r, 0.01))
+    return FALSE;
+
+  gsk_rounded_rect_init_uniform (rect,
+                                 MIN (points[6].x, points[0].x),
+                                 MIN (points[9].y, points[3].y),
+                                 2 * r, 2 * r,
+                                 r);
+
+  return TRUE;
+}
+
+#define swap(a, b) { tmp = a; a = b; b = tmp; }
+
+static gboolean
+path_is_circle2 (GskPathOperation *ops,
+                 size_t            n_ops,
+                 graphene_point_t *points,
+                 size_t            n_points,
+                 GskRoundedRect   *rect)
+{
+  graphene_point_t pts[14];
+  float tmp;
+
+  if (n_ops != 6)
+    return FALSE;
+
+  if (n_points != 14)
+    return FALSE;
+
+  for (unsigned int i = 0; i < 14; i++)
+    {
+      pts[i].x = points[i].y;
+      pts[i].y = points[i].x;
+    }
+
+  if (!path_is_circle (ops, n_ops, pts, n_points, rect))
+    return FALSE;
+
+  swap (rect->bounds.origin.x, rect->bounds.origin.y);
+  swap (rect->bounds.size.width, rect->bounds.size.height);
+
+  return TRUE;
+}
+
+static gboolean
+rounded_rect_from_points2 (graphene_point_t *points,
+                           GskRoundedRect   *rect)
+{
+  GskCorner c;
+
+  /* points are assumed to be for an mlclclclcz contour */
+
+  if (points[0].x != points[16].x ||
+      points[0].y != points[16].y)
+    return FALSE;
+
+  if (!(equal4 (points[15].y, points[0].y, points[1].y, points[2].y) &&
+        equal4 (points[3].x, points[4].x, points[5].x, points[6].x) &&
+        equal4 (points[7].y, points[8].y, points[9].y, points[10].y) &&
+        equal4 (points[11].x, points[12].x, points[13].x, points[14].x)))
+    return FALSE;
+
+  /* We match both cw and ccw */
+  if (!in_order6 (points[14].x, points[15].x, points[0].x, points[1].x, points[2].x, points[3].x))
+    return FALSE;
+
+  if (!in_order6 (points[2].y, points[3].y, points[4].y, points[5].y, points[6].y, points[7].y))
+    return FALSE;
+
+  graphene_rect_init (&rect->bounds,
+                      MIN (points[4].x, points[13].x),
+                      MIN (points[8].y, points[1].y),
+                      fabs (points[13].x - points[4].x),
+                      fabs (points[8].y - points[1].y));
+
+  if (!(G_APPROX_VALUE (points[2].x - points[1].x, quarter_circle_d * (points[4].x - points[1].x), 0.01) &&
+        G_APPROX_VALUE (points[4].y - points[3].y, quarter_circle_d * (points[4].y - points[1].y), 0.01)))
+    return FALSE;
+
+  if (points[1].x < points[4].x)
+    {
+      if (points[1].y < points[4].y)
+        c = GSK_CORNER_TOP_RIGHT;
+      else
+        c = GSK_CORNER_BOTTOM_RIGHT;
+    }
+  else
+    {
+      if (points[1].y < points[4].y)
+        c = GSK_CORNER_TOP_LEFT;
+      else
+        c = GSK_CORNER_BOTTOM_LEFT;
+    }
+
+  rect->corner[c].width = fabs (points[4].x - points[1].x);
+  rect->corner[c].height = fabs (points[4].y - points[1].y);
+
+  if (!(G_APPROX_VALUE (points[7].x - points[8].x, quarter_circle_d * (points[5].x - points[8].x), 0.01) &&
+        G_APPROX_VALUE (points[6].y - points[5].y, quarter_circle_d * (points[8].y - points[5].y), 0.01)))
+    return FALSE;
+
+  if (points[8].x < points[5].x)
+    {
+      if (points[5].y < points[8].y)
+        c = GSK_CORNER_BOTTOM_RIGHT;
+      else
+        c = GSK_CORNER_TOP_RIGHT;
+    }
+  else
+    {
+      if (points[5].y < points[8].y)
+        c = GSK_CORNER_BOTTOM_LEFT;
+      else
+        c = GSK_CORNER_TOP_LEFT;
+    }
+
+  rect->corner[c].width = fabs (points[5].x - points[8].x);
+  rect->corner[c].height = fabs (points[8].y - points[5].y);
+
+  if (!(G_APPROX_VALUE (points[9].x - points[10].x, quarter_circle_d * (points[9].x - points[12].x), 0.01) &&
+        G_APPROX_VALUE (points[11].y - points[12].y, quarter_circle_d * (points[9].y - points[12].y), 0.01)))
+    return FALSE;
+
+  if (points[12].x < points[9].x)
+    {
+      if (points[12].y < points[9].y)
+        c = GSK_CORNER_BOTTOM_LEFT;
+      else
+        c = GSK_CORNER_TOP_LEFT;
+    }
+  else
+    {
+      if (points[12].y < points[9].y)
+        c = GSK_CORNER_BOTTOM_RIGHT;
+      else
+        c = GSK_CORNER_TOP_RIGHT;
+    }
+
+  rect->corner[c].width = fabs (points[9].x - points[12].x);
+  rect->corner[c].height = fabs (points[9].y - points[12].y);
+
+  if (!(G_APPROX_VALUE (points[16].x - points[15].x, quarter_circle_d * (points[16].x - points[13].x), 0.01) &&
+        G_APPROX_VALUE (points[13].y - points[14].y, quarter_circle_d * (points[13].y - points[16].y), 0.01)))
+    return FALSE;
+
+  if (points[13].x < points[16].x)
+    {
+      if (points[16].y < points[13].y)
+        c = GSK_CORNER_TOP_LEFT;
+      else
+        c = GSK_CORNER_BOTTOM_LEFT;
+    }
+  else
+    {
+      if (points[16].y < points[13].y)
+        c = GSK_CORNER_TOP_RIGHT;
+      else
+        c = GSK_CORNER_BOTTOM_RIGHT;
+    }
+
+  rect->corner[c].width = fabs (points[16].x - points[13].x);
+  rect->corner[c].height = fabs (points[13].y - points[16].y);
+
+  return TRUE;
+}
+
+static gboolean
+rounded_rect_from_points (graphene_point_t *points,
+                          GskRoundedRect   *rect)
+{
+  if (rounded_rect_from_points2 (points, rect))
+    {
+      return TRUE;
+    }
+  else
+    {
+      graphene_point_t pts[18];
+
+      for (unsigned int i = 0; i < 18; i++)
+        {
+          pts[i].x = points[i].y;
+          pts[i].y = points[i].x;
+        }
+
+      if (rounded_rect_from_points2 (pts, rect))
+        {
+          float tmp;
+
+          swap (rect->bounds.origin.x, rect->bounds.origin.y);
+          swap (rect->bounds.size.width, rect->bounds.size.height);
+          swap (rect->corner[0].width, rect->corner[0].height);
+          swap (rect->corner[1].width, rect->corner[1].height);
+          swap (rect->corner[2].width, rect->corner[2].height);
+          swap (rect->corner[3].width, rect->corner[3].height);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+path_is_rounded_rect (GskPathOperation *ops,
+                      size_t            n_ops,
+                      graphene_point_t *points,
+                      size_t            n_points,
+                      GskRoundedRect   *rect)
+{
+  if (n_ops != 10)
+    return FALSE;
+
+  if (n_points != 18)
+    return FALSE;
+
+  if (ops[0] != GSK_PATH_MOVE ||
+      ops[1] != GSK_PATH_LINE ||
+      ops[2] != GSK_PATH_CUBIC ||
+      ops[3] != GSK_PATH_LINE ||
+      ops[4] != GSK_PATH_CUBIC ||
+      ops[5] != GSK_PATH_LINE ||
+      ops[6] != GSK_PATH_CUBIC ||
+      ops[7] != GSK_PATH_LINE ||
+      ops[8] != GSK_PATH_CUBIC ||
+      ops[9] != GSK_PATH_CLOSE)
+    return FALSE;
+
+  return rounded_rect_from_points (points, rect);
+}
+
+static gboolean
+path_is_rounded_rect2 (GskPathOperation *ops,
+                       size_t            n_ops,
+                       graphene_point_t *points,
+                       size_t            n_points,
+                       GskRoundedRect   *rect)
+{
+  graphene_point_t pts[18];
+
+  if (n_ops != 10)
+    return FALSE;
+
+  if (n_points != 18)
+    return FALSE;
+
+  if (ops[0] != GSK_PATH_MOVE ||
+      ops[1] != GSK_PATH_CUBIC ||
+      ops[2] != GSK_PATH_LINE ||
+      ops[3] != GSK_PATH_CUBIC ||
+      ops[4] != GSK_PATH_LINE ||
+      ops[5] != GSK_PATH_CUBIC ||
+      ops[6] != GSK_PATH_LINE ||
+      ops[7] != GSK_PATH_CUBIC ||
+      ops[8] != GSK_PATH_LINE ||
+      ops[9] != GSK_PATH_CLOSE)
+    return FALSE;
+
+  /* rotate the points to go from mclclclclz to mlclclclclz */
+  pts[0] = points[15];
+  memcpy (pts + 1, points, sizeof (graphene_point_t) * 16);
+  pts[17] = pts[0];
+
+  return rounded_rect_from_points (pts, rect);
+}
+
+static gboolean
+path_is_pill (GskPathOperation *ops,
+              size_t            n_ops,
+              graphene_point_t *points,
+              size_t            n_points,
+              GskRoundedRect   *rect)
+{
+  graphene_point_t pts[18];
+
+  /* Check for the 'horizontal pill' shape that results from
+   * omitting the vertical lines in a rounded rect
+   */
+
+  if (n_ops != 8)
+    return FALSE;
+
+  if (n_points != 16)
+    return FALSE;
+
+  if (ops[0] != GSK_PATH_MOVE ||
+      ops[1] != GSK_PATH_LINE ||
+      ops[2] != GSK_PATH_CUBIC ||
+      ops[3] != GSK_PATH_CUBIC ||
+      ops[4] != GSK_PATH_LINE ||
+      ops[5] != GSK_PATH_CUBIC ||
+      ops[6] != GSK_PATH_CUBIC ||
+      ops[7] != GSK_PATH_CLOSE)
+    return FALSE;
+
+  /* duplicate points 4 and 11 to from mlcclccz to mlclclclcz */
+  memcpy (pts, points, sizeof (graphene_point_t) * 5);
+  memcpy (pts + 5, points + 4, sizeof (graphene_point_t) * 8);
+  memcpy (pts + 13, points + 11, sizeof (graphene_point_t) * 5);
+
+  return rounded_rect_from_points (pts, rect);
+}
+
+static gboolean
+path_is_pill2 (GskPathOperation *ops,
+               size_t            n_ops,
+               graphene_point_t *points,
+               size_t            n_points,
+               GskRoundedRect   *rect)
+{
+  graphene_point_t pts[18];
+
+  if (n_ops != 8)
+    return FALSE;
+
+  if (n_points != 16)
+    return FALSE;
+
+  if (ops[0] != GSK_PATH_MOVE ||
+      ops[1] != GSK_PATH_CUBIC ||
+      ops[2] != GSK_PATH_CUBIC ||
+      ops[3] != GSK_PATH_LINE ||
+      ops[4] != GSK_PATH_CUBIC ||
+      ops[5] != GSK_PATH_CUBIC ||
+      ops[6] != GSK_PATH_LINE ||
+      ops[7] != GSK_PATH_CLOSE)
+    return FALSE;
+
+  pts[0] = points[13];
+  memcpy (pts + 1, points, sizeof (graphene_point_t) * 4);
+  memcpy (pts + 5, points + 4, sizeof (graphene_point_t) * 8);
+  memcpy (pts + 13, points + 11, sizeof (graphene_point_t) * 4);
+  pts[17] = points[13];
+
+  return rounded_rect_from_points (pts, rect);
+}
+
+static gboolean
+path_is_pill3 (GskPathOperation *ops,
+               size_t            n_ops,
+               graphene_point_t *points,
+               size_t            n_points,
+               GskRoundedRect   *rect)
+{
+  graphene_point_t pts[18];
+
+  if (n_ops != 8)
+    return FALSE;
+
+  if (n_points != 16)
+    return FALSE;
+
+  if (ops[0] != GSK_PATH_MOVE ||
+      ops[1] != GSK_PATH_CUBIC ||
+      ops[2] != GSK_PATH_LINE ||
+      ops[3] != GSK_PATH_CUBIC ||
+      ops[4] != GSK_PATH_CUBIC ||
+      ops[5] != GSK_PATH_LINE ||
+      ops[6] != GSK_PATH_CUBIC ||
+      ops[7] != GSK_PATH_CLOSE)
+    return FALSE;
+
+  memcpy (pts, points + 3, sizeof (graphene_point_t) * 5);
+  memcpy (pts + 5, points + 7, sizeof (graphene_point_t) * 8);
+  memcpy (pts + 13, points, sizeof (graphene_point_t) * 4);
+  pts[17] = points[3];
+
+  return rounded_rect_from_points (pts, rect);
+}
+
+static PathClassification
+classify_path (GskPath        *path,
+               GskRoundedRect *rect)
+{
+  const GskContour *contour;
+  graphene_point_t center;
+  float radius;
+  gboolean ccw;
+  GskPathOperation ops[10];
+  graphene_point_t points[18];
+  size_t n_ops;
+  size_t n_points;
+
+  if (gsk_path_is_empty (path))
+    return PATH_EMPTY;
+
+  if (gsk_path_get_n_contours (path) > 2 ||
+      (gsk_path_get_n_contours (path) == 2 &&
+       gsk_contour_get_standard_ops (gsk_path_get_contour (path, 1), 0, NULL) > 1))
+    return PATH_GENERAL;
+
+  contour = gsk_path_get_contour (path, 0);
+
+  if (gsk_contour_get_rect (contour, &rect->bounds))
+    return PATH_RECT;
+  else if (gsk_contour_get_rounded_rect (contour, rect))
+    return PATH_ROUNDED_RECT;
+  else if (gsk_contour_get_circle (contour, &center, &radius, &ccw))
+    {
+      graphene_rect_init (&rect->bounds,
+                          center.x - radius,
+                          center.y - radius,
+                          2 * radius,
+                          2 * radius);
+      rect->corner[0].width = rect->corner[0].height = radius;
+      rect->corner[1].width = rect->corner[1].height = radius;
+      rect->corner[2].width = rect->corner[2].height = radius;
+      rect->corner[3].width = rect->corner[3].height = radius;
+      return PATH_CIRCLE;
+    }
+
+  n_ops = gsk_contour_get_standard_ops (contour, G_N_ELEMENTS (ops), ops);
+  n_points = gsk_contour_get_standard_points (contour, G_N_ELEMENTS (points), points);
+
+  if (path_is_rect (ops, n_ops, points, n_points, &rect->bounds))
+    return PATH_RECT;
+  else if (path_is_circle (ops, n_ops, points, n_points, rect) ||
+           path_is_circle2 (ops, n_ops, points, n_points, rect))
+    return PATH_CIRCLE;
+  else if (path_is_rounded_rect (ops, n_ops, points, n_points, rect) ||
+           path_is_rounded_rect2 (ops, n_ops, points, n_points, rect) ||
+           path_is_pill (ops, n_ops, points, n_points, rect) ||
+           path_is_pill2 (ops, n_ops, points, n_points, rect) ||
+           path_is_pill3 (ops, n_ops, points, n_points, rect))
+    return PATH_ROUNDED_RECT;
+
+  return PATH_GENERAL;
+}
+
+static void
+snapshot_push_fill (GtkSnapshot *snapshot,
+                    GskPath     *path,
+                    GskFillRule  rule)
+{
+  GskRoundedRect rect = { 0, };
+
+  switch (classify_path (path, &rect))
+    {
+    case PATH_RECT:
+      gtk_snapshot_push_clip (snapshot, &rect.bounds);
+      break;
+    case PATH_ROUNDED_RECT:
+    case PATH_CIRCLE:
+      gtk_snapshot_push_rounded_clip (snapshot, &rect);
+      break;
+    case PATH_GENERAL:
+      gtk_snapshot_push_fill (snapshot, path, rule);
+      break;
+    case PATH_EMPTY:
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 /* }}} */
@@ -16493,6 +17165,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       shape = shape_new (data->current_shape, shape_type);
+      g_markup_parse_context_get_position (context, &shape->line, NULL);
 
       if (data->current_shape == NULL && shape->type == SHAPE_SVG)
         {
@@ -19519,8 +20192,7 @@ apply_filter_tree (Shape         *shape,
               }
 
             transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, dy));
-            result = gsk_transform_node_new (in->node, transform);
-
+            result = apply_transform (in->node, transform);
             filter_result_unref (in);
             gsk_transform_unref (transform);
           }
@@ -19669,13 +20341,25 @@ apply_filter_tree (Shape         *shape,
             FilterResult *in;
             graphene_matrix_t matrix;
             graphene_vec4_t offset;
+            GskRenderNode *node;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
             color_matrix_type_get_color_matrix (svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_TYPE)),
                                                 filter_get_current_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES),
                                                 &matrix, &offset);
 
-            result = gsk_color_matrix_node_new2 (in->node, color_state, &matrix, &offset);
+            node = skip_debug_node (in->node);
+            if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE)
+              {
+                const GdkColor *color = gsk_color_node_get_gdk_color (node);
+                GdkColor new_color;
+
+                apply_color_matrix (color_state, &matrix, &offset,  color, &new_color);
+                result = gsk_color_node_new2 (&new_color, &node->bounds);
+                gdk_color_finish (&new_color);
+              }
+            else
+              result = gsk_color_matrix_node_new2 (in->node, color_state, &matrix, &offset);
 
             filter_result_unref (in);
           }
@@ -19761,11 +20445,8 @@ apply_filter_tree (Shape         *shape,
                 transform = gsk_transform_scale (transform, sx, sy);
 
                 node = gsk_texture_node_new (href->texture, &vb);
-
-                result = gsk_transform_node_new (node, transform);
-
+                result = apply_transform (node, transform);
                 gsk_render_node_unref (node);
-                gsk_transform_unref (transform);
               }
             else if (href->shape != NULL)
               {
@@ -19775,7 +20456,7 @@ apply_filter_tree (Shape         *shape,
                 if (node)
                   {
                     transform = gsk_transform_translate (NULL, &subregion.origin);
-                    result = gsk_transform_node_new (node, transform);
+                    result = apply_transform (node, transform);
                     gsk_render_node_unref (node);
                     gsk_transform_unref (transform);
                   }
@@ -19832,7 +20513,10 @@ got_result:
          FilterResult *res;
          const char *id;
 
-         clipped = gsk_clip_node_new (result, &subregion);
+         if (graphene_rect_contains_rect (&subregion, &result->bounds))
+           clipped = gsk_render_node_ref (result);
+         else
+           clipped = gsk_clip_node_new (result, &subregion);
          res = filter_result_new (clipped, &subregion);
          gsk_render_node_unref (clipped);
 
@@ -20076,6 +20760,16 @@ push_group (Shape        *shape,
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
   SvgValue *fill_rule = shape->current[SHAPE_ATTR_FILL_RULE];
 
+#ifdef DEBUG
+  if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+    {
+      if (shape->id)
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s id='%s'> at line %d", shape_types[shape->type].name, shape->id, shape->line);
+      else
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s> at line %d", shape_types[shape->type].name, shape->line);
+    }
+#endif
+
   if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
       SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
@@ -20226,13 +20920,19 @@ push_group (Shape        *shape,
 
       if (needs_copy (shape, context, &reason))
         {
-          gtk_snapshot_push_debug (context->snapshot, "copy for %s", reason);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_push_debug (context->snapshot, "copy for %s", reason);
+#endif
           gtk_snapshot_push_copy (context->snapshot);
         }
 
       if (needs_isolation (shape, context, &reason))
         {
-          gtk_snapshot_push_debug (context->snapshot, "isolate for %s", reason);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_push_debug (context->snapshot, "isolate for %s", reason);
+#endif
           gtk_snapshot_push_isolation (context->snapshot, GSK_ISOLATION_BACKGROUND);
         }
 
@@ -20252,7 +20952,6 @@ push_group (Shape        *shape,
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
     {
       push_op (context, CLIPPING);
-      gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
 
       /* Clip mask - see language in the spec about 'raw geometry' */
       if (clip->kind == CLIP_PATH)
@@ -20270,100 +20969,139 @@ push_group (Shape        *shape,
               break;
             }
 
-          gtk_snapshot_append_fill (context->snapshot,
-                                    clip->path.path,
-                                    rule,
-                                    &(GdkRGBA) { 1, 1, 1, 1 });
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
+#endif
+          snapshot_push_fill (context->snapshot, clip->path.path, rule);
         }
       else
         {
+          /* In the general case, we collect the clip geometry in a mask.
+           * We special-case a single shape in the <clipPath> without
+           * transforms and translate them to a clip or a fill.
+           */
+
           SvgTransform *ctf = (SvgTransform *) clip->ref.shape->current[SHAPE_ATTR_TRANSFORM];
 
-          if (ctf->transforms[0].type != TRANSFORM_NONE)
+          Shape *child = NULL;
+
+          if (clip->ref.shape->shapes->len > 0)
+            child = g_ptr_array_index (clip->ref.shape->shapes, 0);
+
+          if (ctf->transforms[0].type == TRANSFORM_NONE &&
+              svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_USER_SPACE_ON_USE &&
+              clip->ref.shape->shapes->len == 1 &&
+              (child->type == SHAPE_PATH || child->type == SHAPE_RECT || child->type == SHAPE_CIRCLE) &&
+              svg_enum_get (child->current[SHAPE_ATTR_VISIBILITY]) != VISIBILITY_HIDDEN &&
+              svg_enum_get (child->current[SHAPE_ATTR_DISPLAY]) != DISPLAY_NONE &&
+              ((SvgClip *) child->current[SHAPE_ATTR_CLIP_PATH])->kind == CLIP_NONE &&
+              ((SvgTransform *) child->current[SHAPE_ATTR_TRANSFORM])->transforms[0].type == TRANSFORM_NONE)
             {
-              GskTransform *transform = svg_transform_get_gsk (ctf);
+              GskPath *path;
 
-              if (_gtk_bitmask_get (clip->ref.shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
+              path = shape_get_current_path (child, context->viewport);
+#ifdef DEBUG
+              if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+                gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
+#endif
+              snapshot_push_fill (context->snapshot, path, GSK_FILL_RULE_WINDING);
+              gsk_path_unref (path);
+            }
+          else
+            {
+#ifdef DEBUG
+              if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+                gtk_snapshot_push_debug (context->snapshot, "mask for clip");
+#endif
+              gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
+
+              if (ctf->transforms[0].type != TRANSFORM_NONE)
                 {
-                  SvgNumbers *tfo = (SvgNumbers *) clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
-                  SvgValue *tfb = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_BOX];
-                  graphene_rect_t bounds;
-                  double x, y;
+                  GskTransform *transform = svg_transform_get_gsk (ctf);
 
-                  switch (svg_enum_get (tfb))
+                  if (_gtk_bitmask_get (clip->ref.shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
                     {
-                    case TRANSFORM_BOX_CONTENT_BOX:
-                    case TRANSFORM_BOX_FILL_BOX:
-                      shape_get_current_bounds (shape, context->viewport, &bounds);
-                      break;
-                    case TRANSFORM_BOX_BORDER_BOX:
-                    case TRANSFORM_BOX_STROKE_BOX:
-                      shape_get_current_stroke_bounds (shape, context->viewport, &bounds);
-                      break;
-                    case TRANSFORM_BOX_VIEW_BOX:
-                      graphene_rect_init_from_rect (&bounds, context->viewport);
-                      break;
-                    default:
-                      g_assert_not_reached ();
+                      SvgNumbers *tfo = (SvgNumbers *) clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+                      SvgValue *tfb = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_BOX];
+                      graphene_rect_t bounds;
+                      double x, y;
+
+                      switch (svg_enum_get (tfb))
+                        {
+                        case TRANSFORM_BOX_CONTENT_BOX:
+                        case TRANSFORM_BOX_FILL_BOX:
+                          shape_get_current_bounds (shape, context->viewport, &bounds);
+                          break;
+                        case TRANSFORM_BOX_BORDER_BOX:
+                        case TRANSFORM_BOX_STROKE_BOX:
+                          shape_get_current_stroke_bounds (shape, context->viewport, &bounds);
+                          break;
+                        case TRANSFORM_BOX_VIEW_BOX:
+                          graphene_rect_init_from_rect (&bounds, context->viewport);
+                          break;
+                        default:
+                          g_assert_not_reached ();
+                        }
+
+                      if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
+                        x = bounds.size.width * tfo->values[0].value / 100;
+                      else
+                        x = tfo->values[0].value;
+
+                      if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
+                        y = bounds.size.height * tfo->values[1].value / 100;
+                      else
+                        y = tfo->values[1].value;
+
+                      transform = gsk_transform_translate (
+                                      gsk_transform_transform (
+                                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                                          transform),
+                                      &GRAPHENE_POINT_INIT (-x, -y));
                     }
 
-                  if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
-                    x = bounds.size.width * tfo->values[0].value / 100;
-                  else
-                    x = tfo->values[0].value;
-
-                  if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
-                    y = bounds.size.height * tfo->values[1].value / 100;
-                  else
-                    y = tfo->values[1].value;
-
-                  transform = gsk_transform_translate (
-                                  gsk_transform_transform (
-                                      gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
-                                      transform),
-                                  &GRAPHENE_POINT_INIT (-x, -y));
-                }
-
-              push_transform (context, transform);
-              gtk_snapshot_save (context->snapshot);
-              gtk_snapshot_transform (context->snapshot, transform);
-              gsk_transform_unref (transform);
-            }
-
-          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            {
-              graphene_rect_t bounds;
-
-              GskTransform *transform = NULL;
-
-              gtk_snapshot_save (context->snapshot);
-
-              if (shape_get_current_bounds (shape, context->viewport, &bounds))
-                {
-                  transform = gsk_transform_translate (NULL, &bounds.origin);
-                  transform = gsk_transform_scale (transform, bounds.size.width, bounds.size.height);
+                  push_transform (context, transform);
+                  gtk_snapshot_save (context->snapshot);
                   gtk_snapshot_transform (context->snapshot, transform);
+                  gsk_transform_unref (transform);
                 }
-              push_transform (context, transform);
-              gsk_transform_unref (transform);
-            }
 
-          render_shape (clip->ref.shape, context);
+              if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+                {
+                  graphene_rect_t bounds;
 
-          if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-            {
-              pop_transform (context);
-              gtk_snapshot_restore (context->snapshot);
-            }
+                  GskTransform *transform = NULL;
 
-          if (ctf->transforms[0].type != TRANSFORM_NONE)
-            {
-              pop_transform (context);
-              gtk_snapshot_restore (context->snapshot);
+                  gtk_snapshot_save (context->snapshot);
+
+                  if (shape_get_current_bounds (shape, context->viewport, &bounds))
+                    {
+                      transform = gsk_transform_translate (NULL, &bounds.origin);
+                      transform = gsk_transform_scale (transform, bounds.size.width, bounds.size.height);
+                      gtk_snapshot_transform (context->snapshot, transform);
+                    }
+                  push_transform (context, transform);
+                  gsk_transform_unref (transform);
+                }
+
+              render_shape (clip->ref.shape, context);
+
+              if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+                {
+                  pop_transform (context);
+                  gtk_snapshot_restore (context->snapshot);
+                }
+
+              if (ctf->transforms[0].type != TRANSFORM_NONE)
+                {
+                  pop_transform (context);
+                  gtk_snapshot_restore (context->snapshot);
+                }
+
+              gtk_snapshot_pop (context->snapshot); /* mask */
             }
         }
-
-      gtk_snapshot_pop (context->snapshot);
 
       pop_op (context);
     }
@@ -20375,6 +21113,10 @@ push_group (Shape        *shape,
 
       push_op (context, MASKING);
 
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+        gtk_snapshot_push_debug (context->snapshot, "mask for masking");
+#endif
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (mask->shape->current[SHAPE_ATTR_MASK_TYPE]));
 
       if (_gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_X) ||
@@ -20491,11 +21233,21 @@ pop_group (Shape        *shape,
       context->op != CLIPPING)
     {
       gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+        gtk_snapshot_pop (context->snapshot);
+#endif
     }
 
   if (clip->kind == CLIP_PATH ||
       (clip->kind == CLIP_REF && clip->ref.shape != NULL))
-    gtk_snapshot_pop (context->snapshot);
+    {
+      gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+        gtk_snapshot_pop (context->snapshot);
+#endif
+    }
 
   if (context->op != CLIPPING)
     {
@@ -20507,13 +21259,19 @@ pop_group (Shape        *shape,
       if (needs_isolation (shape, context, NULL))
         {
           gtk_snapshot_pop (context->snapshot);
-          gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_pop (context->snapshot);
+#endif
         }
 
       if (needs_copy (shape, context, NULL))
         {
           gtk_snapshot_pop (context->snapshot);
-          gtk_snapshot_pop (context->snapshot);
+#ifdef DEBUG
+          if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+            gtk_snapshot_pop (context->snapshot);
+#endif
         }
     }
 
@@ -20542,6 +21300,11 @@ pop_group (Shape        *shape,
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         gtk_snapshot_pop (context->snapshot);
    }
+
+#ifdef DEBUG
+  if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+    gtk_snapshot_pop (context->snapshot);
+#endif
 }
 
 /* }}} */
@@ -21314,7 +22077,7 @@ fill_shape (Shape        *shape,
 
         gdk_color_init_copy (&color, &paint->color);
         color.alpha *= opacity;
-        gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
+        snapshot_push_fill (context->snapshot, path, fill_rule);
         gtk_snapshot_add_color (context->snapshot, &color, &bounds);
         gtk_snapshot_pop (context->snapshot);
         gdk_color_finish (&color);
@@ -21327,7 +22090,7 @@ fill_shape (Shape        *shape,
         if (opacity < 1)
           gtk_snapshot_push_opacity (context->snapshot, opacity);
 
-        gtk_snapshot_push_fill (context->snapshot, path, fill_rule);
+        snapshot_push_fill (context->snapshot, path, fill_rule);
         paint_server (paint, &bounds, &bounds, context);
         gtk_snapshot_pop (context->snapshot);
 

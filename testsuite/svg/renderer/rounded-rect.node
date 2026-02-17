@@ -1,16 +1,9 @@
-fill {
+rounded-clip {
+  clip: 10 10 50 50 / 10;
   child: color {
     bounds: 10 10 50 50;
     color: rgb(0,0,0);
   }
-  path: "\
-M 20 10\
-L 50 10 O 60 10, 60 25, 0.707106769\
-L 60 45 O 60 60, 50 60, 0.707106769\
-L 20 60 O 10 60, 10 45, 0.707106769\
-L 10 25 O 10 10, 20 10, 0.707106769\
-Z";
-  fill-rule: winding;
 }
 stroke {
   child: color {

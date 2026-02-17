@@ -1,11 +1,6 @@
-fill {
-  child: color {
-    bounds: 10 10 50 50;
-    color: rgb(0,0,0);
-  }
-  path: "\
-M 10 10 h 50 v 50 h -50 z";
-  fill-rule: winding;
+color {
+  bounds: 10 10 50 50;
+  color: rgb(0,0,0);
 }
 stroke {
   child: color {

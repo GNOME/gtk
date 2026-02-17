@@ -1,15 +1,10 @@
-fill {
-  child: linear-gradient {
-    bounds: 50 50 200 100;
-    start: 110 20;
-    end: 150 100;
-    stops: 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(255,255,0);
-    repeat: repeat;
-    premultiplied: false;
-  }
-  path: "\
-M 50 50 h 200 v 100 h -200 z";
-  fill-rule: winding;
+linear-gradient {
+  bounds: 50 50 200 100;
+  start: 110 20;
+  end: 150 100;
+  stops: 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(255,255,0);
+  repeat: repeat;
+  premultiplied: false;
 }
 stroke {
   child: color {
