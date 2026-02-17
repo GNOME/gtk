@@ -21,6 +21,7 @@
 #pragma once
 
 #include "gdkdrmdisplay.h"
+#include "gdkdrmsurface.h"
 #include "gdkdisplayprivate.h"
 
 G_BEGIN_DECLS
@@ -31,6 +32,25 @@ struct _GdkDrmDisplay
   char       *name;
   GListStore *monitors;
   GdkKeymap  *keymap;
+
+  /* DRM/GBM/EGL backend */
+  int         drm_fd;
+  void       *gbm_device;   /* struct gbm_device * */
+  void       *egl_display;  /* EGLDisplay */
+
+  /* Input */
+  void       *libinput;     /* struct libinput * */
+  GSource    *libinput_source;
+  int         pointer_x;
+  int         pointer_y;
+  GdkModifierType keyboard_modifiers;
+  GdkModifierType mouse_modifiers;
+
+  /* Surface stacking (front to back); GdkDrmSurface * */
+  GList      *surfaces;
+
+  /* Full layout bounds (synthetic geometry across all monitors) */
+  GdkRectangle layout_bounds;
 };
 
 struct _GdkDrmDisplayClass
@@ -51,5 +71,18 @@ void             _gdk_drm_display_from_display_coords            (GdkDrmDisplay 
                                                                   int            y,
                                                                   int           *out_x,
                                                                   int           *out_y);
+
+GdkDrmSurface   *_gdk_drm_display_get_surface_at_display_coords  (GdkDrmDisplay *self,
+                                                                  int            x,
+                                                                  int            y,
+                                                                  int           *out_surface_x,
+                                                                  int           *out_surface_y);
+void             _gdk_drm_display_add_surface                    (GdkDrmDisplay *self,
+                                                                  GdkDrmSurface *surface);
+void             _gdk_drm_display_remove_surface                 (GdkDrmDisplay *self,
+                                                                  GdkDrmSurface *surface);
+void             _gdk_drm_display_set_pointer_position           (GdkDrmDisplay *self,
+                                                                  int            x,
+                                                                  int            y);
 
 G_END_DECLS

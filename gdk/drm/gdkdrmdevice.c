@@ -75,15 +75,11 @@ gdk_drm_device_surface_at_position (GdkDevice       *device,
     *state = (_gdk_drm_display_get_current_keyboard_modifiers (display) |
               _gdk_drm_display_get_current_mouse_modifiers (display));
 
-#if 1
-  point = GRAPHENE_POINT_INIT (0, 0);
-#endif
-
-#if 0
-  surface = _gdk_drm_display_get_surface_at_display_coords (display, point.x, point.y, &x, &y);
-#else
-  surface = NULL;
-#endif
+  point = GRAPHENE_POINT_INIT (display->pointer_x, display->pointer_y);
+  surface = _gdk_drm_display_get_surface_at_display_coords (display,
+                                                           (int) point.x,
+                                                           (int) point.y,
+                                                           &x, &y);
 
   *win_x = x;
   *win_y = y;
@@ -145,11 +141,8 @@ gdk_drm_device_query_state (GdkDevice        *device,
 
   display = gdk_device_get_display (device);
 
-#if 0
-  point = [NSEvent mouseLocation];
-#else
-  point = GRAPHENE_POINT_INIT (0, 0);
-#endif
+  point = GRAPHENE_POINT_INIT (GDK_DRM_DISPLAY (display)->pointer_x,
+                              GDK_DRM_DISPLAY (display)->pointer_y);
 
   _gdk_drm_display_from_display_coords (GDK_DRM_DISPLAY (display),
                                         point.x, point.y,

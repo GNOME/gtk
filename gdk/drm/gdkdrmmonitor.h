@@ -31,9 +31,9 @@ G_BEGIN_DECLS
 typedef struct _GdkDrmMonitor      GdkDrmMonitor;
 typedef struct _GdkDrmMonitorClass GdkDrmMonitorClass;
 
-#define GDK_TYPE__MONITOR       (gdk_drm_monitor_get_type())
-#define GDK__MONITOR(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_MACOS_MONITOR, GdkDrmMonitor))
-#define GDK_IS__MONITOR(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MACOS_MONITOR))
+#define GDK_TYPE_DRM_MONITOR       (gdk_drm_monitor_get_type())
+#define GDK_DRM_MONITOR(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRM_MONITOR, GdkDrmMonitor))
+#define GDK_IS_DRM_MONITOR(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRM_MONITOR))
 
 GDK_AVAILABLE_IN_ALL
 GType gdk_drm_monitor_get_type (void);

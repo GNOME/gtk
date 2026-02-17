@@ -53,6 +53,10 @@
 #include "wayland/gdkprivate-wayland.h"
 #endif
 
+#ifdef GDK_WINDOWING_DRM
+#include "drm/gdkdrmdisplay-private.h"
+#endif
+
 /**
  * GdkDisplayManager:
  *
@@ -270,6 +274,9 @@ static GdkBackend gdk_backends[] = {
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
   { "broadway", _gdk_broadway_display_open },
+#endif
+#ifdef GDK_WINDOWING_DRM
+  { "drm", _gdk_drm_display_open },
 #endif
   /* NULL-terminating this array so we can use commas above */
   { NULL, NULL }

@@ -55,5 +55,6 @@ void        _gdk_drm_surface_get_root_coords  (GdkDrmSurface *self,
                                                int           *x,
                                                int           *y);
 GdkMonitor *_gdk_drm_surface_get_best_monitor (GdkDrmSurface *self);
+void        _gdk_drm_surface_show             (GdkDrmSurface *surface);
 
 G_END_DECLS

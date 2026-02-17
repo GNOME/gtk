@@ -22,10 +22,10 @@
 
 #include <gdk/gdk.h>
 
-//#include "gdkdrmdevice.h"
+#include "gdkdrmdevice.h"
 #include "gdkdrmdisplay.h"
-//#include "gdkdrmglcontext.h"
-//#include "gdkdrmkeymap.h"
-//#include "gdkdrmmonitor.h"
-//#include "gdkdrmsurface.h"
+#include "gdkdrmglcontext.h"
+#include "gdkdrmkeymap.h"
+#include "gdkdrmmonitor.h"
+#include "gdkdrmsurface.h"
 

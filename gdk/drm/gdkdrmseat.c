@@ -73,7 +73,7 @@ gdk_drm_seat_dispose (GObject *object)
   if (self->logical_keyboard)
     {
       gdk_seat_device_removed (GDK_SEAT (self), self->logical_keyboard);
-      g_clear_object (&self->logical_pointer);
+      g_clear_object (&self->logical_keyboard);
     }
 
   G_OBJECT_CLASS (gdk_drm_seat_parent_class)->dispose (object);

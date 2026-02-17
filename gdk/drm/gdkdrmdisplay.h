@@ -42,4 +42,13 @@ typedef struct _GdkDrmDisplayClass GdkDrmDisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_drm_display_get_type (void);
 
+GDK_AVAILABLE_IN_ALL
+void gdk_drm_display_set_monitor_layout (GdkDrmDisplay      *display,
+                                         const GdkRectangle *geometries,
+                                         guint               n_geometries);
+
+GDK_AVAILABLE_IN_ALL
+void gdk_drm_display_get_layout_bounds  (GdkDrmDisplay *display,
+                                         GdkRectangle  *bounds);
+
 G_END_DECLS

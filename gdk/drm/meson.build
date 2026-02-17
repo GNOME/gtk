@@ -1,4 +1,8 @@
 gdk_drm_deps = [
+  dependency('libdrm'),
+  dependency('gbm'),
+  dependency('libinput', version: '>= 1.10'),
+  dependency('libudev'),
   xkbdep,
 ]
 
@@ -8,6 +12,7 @@ gdk_drm_sources = files([
   'gdkdrmdevice.c',
   'gdkdrmdisplay.c',
   'gdkdrmglcontext.c',
+  'gdkdrminput.c',
   'gdkdrmkeymap.c',
   'gdkdrmmonitor.c',
   'gdkdrmpopupsurface.c',

@@ -27,7 +27,9 @@
 
 G_BEGIN_DECLS
 
-GdkDrmMonitor *_gdk_drm_monitor_new          (GdkDrmDisplay *display);
+GdkDrmMonitor *_gdk_drm_monitor_new          (GdkDrmDisplay    *display,
+                                              const GdkRectangle *geometry,
+                                              uint32_t          connector_id);
 void           _gdk_drm_monitor_get_workarea (GdkMonitor    *monitor,
                                               GdkRectangle  *workarea);
 

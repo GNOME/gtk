@@ -23,8 +23,19 @@
 #include "gdkdrmdisplay.h"
 #include "gdkdrmkeymap.h"
 
+#include "gdkeventsprivate.h"
+
 G_BEGIN_DECLS
 
 GdkDrmKeymap *_gdk_drm_keymap_new (GdkDrmDisplay *display);
+
+void          _gdk_drm_keymap_update_key (GdkDrmKeymap   *keymap,
+                                         guint           keycode,
+                                         gboolean        pressed);
+gboolean      _gdk_drm_keymap_translate_key (GdkDrmKeymap     *keymap,
+                                             guint             keycode,
+                                             GdkModifierType   state,
+                                             GdkTranslatedKey *translated,
+                                             GdkTranslatedKey *no_lock);
 
 G_END_DECLS

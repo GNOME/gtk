@@ -38,5 +38,10 @@ typedef struct _GdkDrmSurfaceClass GdkDrmSurfaceClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_drm_surface_get_type (void);
 
+GDK_AVAILABLE_IN_ALL
+void gdk_drm_surface_set_position (GdkDrmSurface *surface,
+                                   int            x,
+                                   int            y);
+
 G_END_DECLS
 

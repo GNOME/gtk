@@ -891,7 +891,7 @@ gsk_packages = [ 'graphene-gobject-1.0 @0@'.format(graphene_req) ]
 gtk_packages = [ 'gio-2.0 @0@'.format(glib_req) ]
 
 enabled_backends = []
-foreach backend: [ 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'broadway', 'drm', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     enabled_backends += backend
   endif

@@ -55,8 +55,12 @@ gdk_drm_surface_set_opaque_region (GdkSurface     *surface,
 static void
 gdk_drm_surface_hide (GdkSurface *surface)
 {
+  GdkDrmDisplay *display = GDK_DRM_DISPLAY (gdk_surface_get_display (surface));
+
   g_assert (GDK_IS_DRM_SURFACE (surface));
 
+  _gdk_drm_display_remove_surface (display, GDK_DRM_SURFACE (surface));
+  gdk_surface_set_is_mapped (surface, FALSE);
 }
 
 static double
@@ -79,10 +83,10 @@ gdk_drm_surface_get_root_coords (GdkSurface *surface,
   g_assert (GDK_IS_DRM_SURFACE (self));
 
   if (root_x)
-    *root_x = 0;
+    *root_x = self->root_x + x;
 
   if (root_y)
-    *root_y = 0;
+    *root_y = self->root_y + y;
 }
 
 static gboolean
@@ -92,20 +96,24 @@ gdk_drm_surface_get_device_state (GdkSurface      *surface,
                                   double          *y,
                                   GdkModifierType *mask)
 {
+  GdkDrmSurface *self = GDK_DRM_SURFACE (surface);
+  GdkDrmDisplay *display = GDK_DRM_DISPLAY (gdk_surface_get_display (surface));
+
   g_assert (GDK_IS_DRM_SURFACE (surface));
   g_assert (GDK_IS_DRM_DEVICE (device));
   g_assert (x != NULL);
   g_assert (y != NULL);
   g_assert (mask != NULL);
 
-  *x = 0;
-  *y = 0;
-  *mask = 0;
-
   if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
 
-  return FALSE;
+  *x = display->pointer_x - self->root_x;
+  *y = display->pointer_y - self->root_y;
+  *mask = _gdk_drm_display_get_current_keyboard_modifiers (display) |
+          _gdk_drm_display_get_current_mouse_modifiers (display);
+
+  return TRUE;
 }
 
 static void
@@ -118,16 +126,16 @@ gdk_drm_surface_get_geometry (GdkSurface *surface,
   g_assert (GDK_IS_DRM_SURFACE (surface));
 
   if (x != NULL)
-    *x = 0;
+    *x = surface->x;
 
   if (y != NULL)
-    *y = 0;
+    *y = surface->y;
 
   if (width != NULL)
-    *width = 0;
+    *width = surface->width;
 
   if (height != NULL)
-    *height = 0;
+    *height = surface->height;
 }
 
 static GdkDrag *
@@ -149,6 +157,9 @@ static void
 gdk_drm_surface_destroy (GdkSurface *surface,
                          gboolean    foreign_destroy)
 {
+  GdkDrmDisplay *display = GDK_DRM_DISPLAY (gdk_surface_get_display (surface));
+
+  _gdk_drm_display_remove_surface (display, GDK_DRM_SURFACE (surface));
 }
 
 static void
@@ -188,6 +199,35 @@ _gdk_drm_surface_move_resize (GdkDrmSurface *surface,
                               float          width,
                               float          height)
 {
+  GdkSurface *s = GDK_SURFACE (surface);
+
+  surface->root_x = (int) x;
+  surface->root_y = (int) y;
+  s->x = (int) x;
+  s->y = (int) y;
+  if (width >= 0)
+    s->width = (int) width;
+  if (height >= 0)
+    s->height = (int) height;
+}
+
+void
+_gdk_drm_surface_show (GdkDrmSurface *surface)
+{
+  GdkDrmDisplay *display = GDK_DRM_DISPLAY (gdk_surface_get_display (GDK_SURFACE (surface)));
+
+  _gdk_drm_display_add_surface (display, surface);
+  gdk_surface_set_is_mapped (GDK_SURFACE (surface), TRUE);
+}
+
+void
+gdk_drm_surface_set_position (GdkDrmSurface *surface,
+                              int            x,
+                              int            y)
+{
+  g_return_if_fail (GDK_IS_DRM_SURFACE (surface));
+
+  _gdk_drm_surface_move (surface, (float) x, (float) y);
 }
 
 void
@@ -202,5 +242,7 @@ _gdk_drm_surface_get_root_coords (GdkDrmSurface *surface,
 GdkMonitor *
 _gdk_drm_surface_get_best_monitor (GdkDrmSurface *surface)
 {
-  return NULL;
+  GdkDrmDisplay *display = GDK_DRM_DISPLAY (gdk_surface_get_display (GDK_SURFACE (surface)));
+
+  return gdk_display_get_monitor_at_surface (GDK_DISPLAY (display), GDK_SURFACE (surface));
 }
