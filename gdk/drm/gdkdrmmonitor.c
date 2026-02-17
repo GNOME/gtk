@@ -20,16 +20,13 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include <gdk/gdk.h>
 
 #include "gdkdrmdisplay-private.h"
 #include "gdkdrmmonitor-private.h"
 #include "gdkdrmsurface-private.h"
-
-struct _GdkDrmMonitor
-{
-  GdkMonitor parent_instance;
-};
 
 struct _GdkDrmMonitorClass
 {
@@ -58,9 +55,11 @@ gdk_drm_monitor_init (GdkDrmMonitor *self)
 }
 
 GdkDrmMonitor *
-_gdk_drm_monitor_new (GdkDrmDisplay         *display,
-                      const GdkRectangle    *geometry,
-                      uint32_t              connector_id)
+_gdk_drm_monitor_new (GdkDrmDisplay           *display,
+                      const GdkRectangle      *geometry,
+                      guint32                  connector_id,
+                      guint32                  crtc_id,
+                      const drmModeModeInfo   *mode)
 {
   GdkDrmMonitor *self;
   char *connector_name;
@@ -75,10 +74,41 @@ _gdk_drm_monitor_new (GdkDrmDisplay         *display,
   gdk_monitor_set_connector (GDK_MONITOR (self), connector_name);
   gdk_monitor_set_geometry (GDK_MONITOR (self), geometry);
   gdk_monitor_set_physical_size (GDK_MONITOR (self), 0, 0);
-  gdk_monitor_set_refresh_rate (GDK_MONITOR (self), 60000);
+  if (mode && mode->vrefresh)
+    gdk_monitor_set_refresh_rate (GDK_MONITOR (self), mode->vrefresh);
+  else
+    gdk_monitor_set_refresh_rate (GDK_MONITOR (self), 60000);
   g_free (connector_name);
 
+  self->connector_id = connector_id;
+  self->crtc_id = crtc_id;
+  if (mode)
+    self->mode = *mode;
+  else
+    memset (&self->mode, 0, sizeof (self->mode));
+
   return g_steal_pointer (&self);
+}
+
+guint32
+_gdk_drm_monitor_get_crtc_id (GdkDrmMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_DRM_MONITOR (monitor), 0);
+  return monitor->crtc_id;
+}
+
+guint32
+_gdk_drm_monitor_get_connector_id (GdkDrmMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_DRM_MONITOR (monitor), 0);
+  return monitor->connector_id;
+}
+
+const drmModeModeInfo *
+_gdk_drm_monitor_get_mode (GdkDrmMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_DRM_MONITOR (monitor), NULL);
+  return &monitor->mode;
 }
 
 void

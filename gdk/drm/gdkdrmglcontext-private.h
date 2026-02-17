@@ -35,6 +35,12 @@ G_BEGIN_DECLS
 struct _GdkDrmGLContext
 {
   GdkGLContext parent_instance;
+
+  struct gbm_surface *gbm_surface;
+  int width;
+  int height;
+  struct gbm_bo *previous_bo;
+  guint32 previous_fb_id;
 };
 
 struct _GdkDrmGLContextClass

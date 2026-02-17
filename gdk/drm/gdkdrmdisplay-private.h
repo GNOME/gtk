@@ -36,7 +36,12 @@ struct _GdkDrmDisplay
   /* DRM/GBM/EGL backend */
   int         drm_fd;
   void       *gbm_device;   /* struct gbm_device * */
-  void       *egl_display;  /* EGLDisplay */
+
+  /* Page flip tracking: crtc_id -> gboolean (pending) */
+  GHashTable *page_flip_pending;
+  /* CRTCs that have had initial SetCrtc (so we use PageFlip after) */
+  GHashTable *crtc_initialized;
+  GSource    *drm_source;
 
   /* Input */
   void       *libinput;     /* struct libinput * */
@@ -84,5 +89,13 @@ void             _gdk_drm_display_remove_surface                 (GdkDrmDisplay 
 void             _gdk_drm_display_set_pointer_position           (GdkDrmDisplay *self,
                                                                   int            x,
                                                                   int            y);
+
+void             _gdk_drm_display_process_events                 (GdkDrmDisplay *display);
+void             _gdk_drm_display_wait_page_flip                  (GdkDrmDisplay *display,
+                                                                   guint32        crtc_id);
+void             _gdk_drm_display_mark_page_flip_pending          (GdkDrmDisplay *display,
+                                                                   guint32        crtc_id);
+gboolean         _gdk_drm_display_is_page_flip_pending            (GdkDrmDisplay *display,
+                                                                   guint32        crtc_id);
 
 G_END_DECLS

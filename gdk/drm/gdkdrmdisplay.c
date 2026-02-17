@@ -21,9 +21,11 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <poll.h>
 #include <string.h>
 #include <unistd.h>
 
+#include <drm.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 #include <gbm.h>
@@ -50,6 +52,105 @@
 #include "gdkdrmtoplevelsurface-private.h"
 
 G_DEFINE_FINAL_TYPE (GdkDrmDisplay, gdk_drm_display, GDK_TYPE_DISPLAY)
+
+typedef struct
+{
+  GSource parent_instance;
+  GdkDrmDisplay *display;
+  GPollFD poll_fd;
+} GdkDrmDrmSource;
+
+static gboolean
+drm_source_dispatch (GSource     *source,
+                    GSourceFunc  callback,
+                    gpointer     user_data)
+{
+  GdkDrmDrmSource *drm_source = (GdkDrmDrmSource *) source;
+  _gdk_drm_display_process_events (drm_source->display);
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+drm_source_finalize (GSource *source)
+{
+  GdkDrmDrmSource *drm_source = (GdkDrmDrmSource *) source;
+  if (drm_source->display)
+    drm_source->display->drm_source = NULL;
+}
+
+static GSourceFuncs drm_source_funcs = {
+  NULL,
+  NULL,
+  drm_source_dispatch,
+  drm_source_finalize
+};
+
+void
+_gdk_drm_display_process_events (GdkDrmDisplay *display)
+{
+  char buf[1024];
+  ssize_t n;
+
+  if (display->drm_fd < 0)
+    return;
+
+  while ((n = read (display->drm_fd, buf, sizeof (buf))) > 0)
+    {
+      char *p = buf;
+      while (p < buf + n)
+        {
+          struct drm_event *ev = (struct drm_event *) p;
+          if (p + ev->length > buf + n)
+            break;
+          if (ev->type == DRM_EVENT_FLIP_COMPLETE)
+            {
+              struct drm_event_vblank *vbl = (struct drm_event_vblank *) ev;
+              guint32 crtc_id = (guint32) (uintptr_t) vbl->user_data;
+              if (crtc_id != 0)
+                g_hash_table_remove (display->page_flip_pending, GUINT_TO_POINTER (crtc_id));
+            }
+          p += ev->length;
+        }
+    }
+}
+
+void
+_gdk_drm_display_wait_page_flip (GdkDrmDisplay *display,
+                                 guint32         crtc_id)
+{
+  const int timeout_ms = 100;
+  int elapsed = 0;
+
+  while (_gdk_drm_display_is_page_flip_pending (display, crtc_id) && elapsed < 5000)
+    {
+      _gdk_drm_display_process_events (display);
+      if (_gdk_drm_display_is_page_flip_pending (display, crtc_id))
+        {
+          struct pollfd pfd = { display->drm_fd, POLLIN, 0 };
+          int r = poll (&pfd, 1, timeout_ms);
+          if (r > 0)
+            _gdk_drm_display_process_events (display);
+          elapsed += timeout_ms;
+        }
+    }
+}
+
+void
+_gdk_drm_display_mark_page_flip_pending (GdkDrmDisplay *display,
+                                         guint32        crtc_id)
+{
+  g_hash_table_insert (display->page_flip_pending,
+                       GUINT_TO_POINTER (crtc_id),
+                       GINT_TO_POINTER (1));
+}
+
+gboolean
+_gdk_drm_display_is_page_flip_pending (GdkDrmDisplay *display,
+                                       guint32        crtc_id)
+{
+  return g_hash_table_contains (display->page_flip_pending,
+                                GUINT_TO_POINTER (crtc_id));
+}
 
 static GdkDrmMonitor *
 get_monitor_unowned (GdkDrmDisplay *self,
@@ -152,7 +253,10 @@ load_monitors (GdkDrmDisplay *self)
       geometry.height = connector->modes[0].vdisplay;
       x_offset += geometry.width;
 
-      monitor = _gdk_drm_monitor_new (self, &geometry, connector->connector_id);
+      monitor = _gdk_drm_monitor_new (self, &geometry,
+                                      connector->connector_id,
+                                      crtc ? crtc->crtc_id : 0,
+                                      connector->count_modes > 0 ? &connector->modes[0] : NULL);
       g_list_store_append (self->monitors, monitor);
       g_object_unref (monitor);
 
@@ -426,6 +530,20 @@ static GdkGLContext *
 gdk_drm_display_init_gl (GdkDisplay  *display,
                          GError     **error)
 {
+  GdkDrmDisplay *self = GDK_DRM_DISPLAY (display);
+
+  if (self->gbm_device && !gdk_display_get_egl_display (display))
+    {
+#ifdef HAVE_EGL
+      if (!gdk_display_init_egl (display, 0, self->gbm_device, TRUE, error))
+        return NULL;
+#else
+      g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                           "EGL support not compiled in");
+      return NULL;
+#endif
+    }
+
   return _gdk_drm_gl_context_new (GDK_DRM_DISPLAY (display), error);
 }
 
@@ -441,6 +559,13 @@ gdk_drm_display_finalize (GObject *object)
 {
   GdkDrmDisplay *self = (GdkDrmDisplay *)object;
 
+  if (self->drm_source)
+    {
+      g_source_destroy (self->drm_source);
+      g_clear_pointer (&self->drm_source, g_source_unref);
+    }
+  g_clear_pointer (&self->page_flip_pending, g_hash_table_unref);
+  g_clear_pointer (&self->crtc_initialized, g_hash_table_unref);
   if (self->libinput_source)
     {
       g_source_destroy (self->libinput_source);
@@ -451,13 +576,6 @@ gdk_drm_display_finalize (GObject *object)
       libinput_unref (self->libinput);
       self->libinput = NULL;
     }
-#ifdef HAVE_EGL
-  if (self->egl_display)
-    {
-      eglTerminate (self->egl_display);
-      self->egl_display = NULL;
-    }
-#endif
   if (self->gbm_device)
     {
       gbm_device_destroy (self->gbm_device);
@@ -537,14 +655,6 @@ _gdk_drm_display_open (const char *display_name)
     }
 
   self->gbm_device = gbm_create_device (self->drm_fd);
-  if (self->gbm_device)
-    {
-#ifdef HAVE_EGL
-      self->egl_display = eglGetDisplay ((EGLNativeDisplayType) self->gbm_device);
-      if (self->egl_display != EGL_NO_DISPLAY)
-        eglInitialize (self->egl_display, NULL, NULL);
-#endif
-    }
 
   load_monitors (self);
 
@@ -569,6 +679,21 @@ _gdk_drm_display_open (const char *display_name)
       self->libinput_source = _gdk_drm_input_source_new (self);
       if (self->libinput_source)
         g_source_attach (self->libinput_source, NULL);
+    }
+
+  self->page_flip_pending = g_hash_table_new (NULL, NULL);
+  self->crtc_initialized = g_hash_table_new (NULL, NULL);
+  if (self->drm_fd >= 0)
+    {
+      GdkDrmDrmSource *drm_src = (GdkDrmDrmSource *) g_source_new (&drm_source_funcs, sizeof (GdkDrmDrmSource));
+      drm_src->display = self;
+      drm_src->poll_fd.fd = self->drm_fd;
+      drm_src->poll_fd.events = G_IO_IN;
+      g_source_add_poll ((GSource *) drm_src, &drm_src->poll_fd);
+      g_source_set_priority ((GSource *) drm_src, G_PRIORITY_DEFAULT);
+      self->drm_source = (GSource *) drm_src;
+      g_source_attach ((GSource *) drm_src, NULL);
+      g_source_set_static_name ((GSource *) drm_src, "[gtk] gdk-drm-display");
     }
 
   g_object_add_weak_pointer (G_OBJECT (self), (gpointer *)&self);

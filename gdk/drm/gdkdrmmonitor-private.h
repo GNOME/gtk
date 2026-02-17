@@ -25,12 +25,29 @@
 
 #include "gdkmonitorprivate.h"
 
+#include <xf86drmMode.h>
+
 G_BEGIN_DECLS
 
-GdkDrmMonitor *_gdk_drm_monitor_new          (GdkDrmDisplay    *display,
+struct _GdkDrmMonitor
+{
+  GdkMonitor parent_instance;
+
+  guint32 connector_id;
+  guint32 crtc_id;
+  drmModeModeInfo mode;
+};
+
+GdkDrmMonitor *_gdk_drm_monitor_new          (GdkDrmDisplay      *display,
                                               const GdkRectangle *geometry,
-                                              uint32_t          connector_id);
-void           _gdk_drm_monitor_get_workarea (GdkMonitor    *monitor,
-                                              GdkRectangle  *workarea);
+                                              guint32             connector_id,
+                                              guint32             crtc_id,
+                                              const drmModeModeInfo *mode);
+void           _gdk_drm_monitor_get_workarea (GdkMonitor         *monitor,
+                                              GdkRectangle       *workarea);
+
+guint32        _gdk_drm_monitor_get_crtc_id       (GdkDrmMonitor *monitor);
+guint32        _gdk_drm_monitor_get_connector_id  (GdkDrmMonitor *monitor);
+const drmModeModeInfo * _gdk_drm_monitor_get_mode (GdkDrmMonitor *monitor);
 
 G_END_DECLS

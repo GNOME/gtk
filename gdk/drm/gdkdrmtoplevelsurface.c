@@ -24,6 +24,7 @@
 
 #include "gdkframeclockidleprivate.h"
 #include "gdkseatprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
 
 #include "gdkdrmdisplay-private.h"
@@ -41,7 +42,17 @@ static void
 _gdk_drm_toplevel_surface_present (GdkToplevel       *toplevel,
                                    GdkToplevelLayout *layout)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+
   g_assert (GDK_IS_DRM_TOPLEVEL_SURFACE (toplevel));
+
+  gdk_surface_request_layout (surface);
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    {
+      gdk_surface_set_is_mapped (surface, TRUE);
+      _gdk_drm_surface_show (GDK_DRM_SURFACE (surface));
+    }
+  gdk_surface_invalidate_rect (surface, NULL);
 }
 
 static gboolean
@@ -213,6 +224,13 @@ _gdk_drm_toplevel_surface_set_property (GObject      *object,
 static void
 _gdk_drm_toplevel_surface_constructed (GObject *object)
 {
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkFrameClock *frame_clock;
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
+
   G_OBJECT_CLASS (_gdk_drm_toplevel_surface_parent_class)->constructed (object);
 }
 

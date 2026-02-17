@@ -396,7 +396,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   return api;
 }
 
-static GdkGLAPI
+GdkGLAPI
 gdk_gl_context_realize_egl (GdkGLContext  *context,
                             GError       **error)
 {

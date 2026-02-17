@@ -118,6 +118,9 @@ typedef struct {
   guint use_es : 1;
 } GdkGLContextPaintData;
 
+GdkGLAPI                gdk_gl_context_realize_egl              (GdkGLContext    *context,
+                                                                 GError         **error);
+
 gboolean                gdk_gl_backend_can_be_used              (GdkGLBackend     backend_type,
                                                                  GError         **error);
 void                    gdk_gl_backend_use                      (GdkGLBackend     backend_type);
