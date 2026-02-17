@@ -3,7 +3,7 @@ textures = 1;
 var_name = "gsk_gpu_convert_builtin";
 struct_name = "GskGpuConvertBuiltin";
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_rect_t tex_rect;
 float opacity;
 
@@ -15,7 +15,7 @@ variation: gboolean reverse;
 #include "gskgpuconvertbuiltininstance.glsl"
 
 PASS(0) vec2 _pos;
-PASS_FLAT(1) Rect _rect;
+PASS_FLAT(1) Rect _bounds;
 PASS(2) vec2 _tex_coord;
 PASS_FLAT(3) float _opacity;
 
@@ -24,12 +24,12 @@ PASS_FLAT(3) float _opacity;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
 
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
-  _rect = r;
+  _bounds = b;
   _tex_coord = rect_get_coord (rect_from_gsk (in_tex_rect), pos);
   _opacity = in_opacity;
 }
@@ -184,7 +184,7 @@ run (out vec4 color,
       pixel = output_color_from_alt (pixel);
     }
 
-  float alpha = rect_coverage (_rect, _pos) * _opacity;
+  float alpha = rect_coverage (_bounds, _pos) * _opacity;
 
   color = output_color_alpha (pixel, alpha);
 

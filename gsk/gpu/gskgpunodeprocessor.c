@@ -334,7 +334,6 @@ gsk_gpu_node_processor_image_op (GskGpuRenderPass   *self,
                                   GDK_BUILTIN_COLOR_STATE_ID (image_color_state),
                                   FALSE,
                                   FALSE,
-                                  rect,
                                   tex_rect);
     }
   else if (!GDK_IS_DEFAULT_COLOR_STATE (image_color_state))
@@ -351,7 +350,6 @@ gsk_gpu_node_processor_image_op (GskGpuRenderPass   *self,
                                sampler,
                                TRUE,
                                FALSE,
-                               rect,
                                tex_rect,
                                cicp->color_primaries,
                                cicp->transfer_function,
@@ -369,7 +367,6 @@ gsk_gpu_node_processor_image_op (GskGpuRenderPass   *self,
                           rect,
                           image,
                           sampler,
-                          rect,
                           tex_rect);
     }
   else
@@ -3877,7 +3874,6 @@ gsk_gpu_node_processor_convert_to (GskGpuRenderPass   *self,
                                   GDK_BUILTIN_COLOR_STATE_ID (self->ccs),
                                   target_premultiplied,
                                   TRUE,
-                                  rect,
                                   tex_rect);
     }
   else if (!GDK_IS_DEFAULT_COLOR_STATE (self->ccs))
@@ -3894,7 +3890,6 @@ gsk_gpu_node_processor_convert_to (GskGpuRenderPass   *self,
                                GSK_GPU_SAMPLER_DEFAULT,
                                target_premultiplied,
                                TRUE,
-                               rect,
                                tex_rect,
                                cicp->color_primaries,
                                cicp->transfer_function,
@@ -3910,7 +3905,6 @@ gsk_gpu_node_processor_convert_to (GskGpuRenderPass   *self,
                           rect,
                           image,
                           GSK_GPU_SAMPLER_DEFAULT,
-                          rect,
                           tex_rect);
     }
 }
