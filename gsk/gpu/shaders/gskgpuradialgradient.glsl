@@ -3,7 +3,7 @@ var_name = "gsk_gpu_radial_gradient";
 struct_name = "GskGpuRadialGradient";
 acs_premultiplied = true;
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 GdkColor color0;
 GdkColor color1;
 GdkColor color2;
@@ -31,7 +31,7 @@ variation: GskRepeat repeat;
 #include "enums.glsl"
 
 PASS(0) vec2 _pos;
-PASS_FLAT(1) Rect _rect;
+PASS_FLAT(1) Rect _bounds;
 PASS_FLAT(2) vec4 _color0;
 PASS_FLAT(3) vec4 _color1;
 PASS_FLAT(4) vec4 _color2;
@@ -52,12 +52,12 @@ PASS_FLAT(14) vec4 _end_circle;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
 
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
-  _rect = r;
+  _bounds = b;
 
   _start_circle = vec4 (in_start_center, in_start_radius);
   _end_circle = vec4 (in_end_center, in_end_radius);
@@ -269,7 +269,7 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  float alpha = rect_coverage (_rect, _pos);
+  float alpha = rect_coverage (_bounds, _pos);
 
   vec2 pos = _pos / GSK_GLOBAL_SCALE;
   if (VARIATION_SUPERSAMPLING)
