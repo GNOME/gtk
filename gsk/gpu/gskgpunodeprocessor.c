@@ -376,7 +376,6 @@ gsk_gpu_node_processor_image_op (GskGpuRenderPass   *self,
                           rect,
                           image,
                           sampler,
-                          rect,
                           tex_rect);
     }
 
@@ -2182,10 +2181,9 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
 
   gsk_gpu_texture_op (self,
                       self->ccs,
-                      &child->bounds,
+                      &tex_rect,
                       image,
                       GSK_GPU_SAMPLER_DEFAULT,
-                      &tex_rect,
                       &tex_rect);
 
   g_object_unref (image);
@@ -2629,7 +2627,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
                             &glyph_bounds,
                             image,
                             GSK_GPU_SAMPLER_DEFAULT,
-                            &glyph_bounds,
                             &glyph_tex_rect);
       else
         gsk_gpu_colorize_op (self,
@@ -2830,7 +2827,6 @@ gsk_gpu_node_processor_repeat_tile (GskGpuRenderPass    *self,
                       rect,
                       image,
                       GSK_GPU_SAMPLER_REPEAT,
-                      rect,
                       &GRAPHENE_RECT_INIT (
                           clipped_child_bounds.origin.x + x * child_bounds->size.width,
                           clipped_child_bounds.origin.y + y * child_bounds->size.height,
@@ -2896,7 +2892,6 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
                           &bounds,
                           image,
                           GSK_GPU_SAMPLER_DEFAULT,
-                          &bounds,
                           &clipped_child_bounds);
       g_object_unref (image);
     }
@@ -2923,7 +2918,6 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
                           &bounds,
                           image,
                           GSK_GPU_SAMPLER_REFLECT,
-                          &bounds,
                           &clipped_child_bounds);
       g_object_unref (image);
     }
@@ -3374,10 +3368,9 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
     {
       gsk_gpu_texture_op (self,
                           self->ccs,
-                          &child->bounds,
+                          &mask_rect,
                           mask_image,
                           GSK_GPU_SAMPLER_DEFAULT,
-                          &mask_rect,
                           &mask_rect);
     }
   else
@@ -3452,10 +3445,9 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                                           &storage);
           gsk_gpu_texture_op (self,
                               self->ccs,
-                              &child->bounds,
+                              &mask_rect,
                               mask_image,
                               GSK_GPU_SAMPLER_DEFAULT,
-                              &mask_rect,
                               &mask_rect);
           gsk_gpu_render_pass_pop_blend (self, &storage);
           gsk_gpu_render_pass_push_blend (self,
