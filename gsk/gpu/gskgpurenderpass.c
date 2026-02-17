@@ -223,6 +223,22 @@ gsk_gpu_render_pass_pop_blend (GskGpuRenderPass             *self,
 }
 
 void
+gsk_gpu_render_pass_push_opacity (GskGpuRenderPass               *self,
+                                  float                           opacity,
+                                  GskGpuRenderPassOpacityStorage *storage)
+{
+  storage->opacity = self->opacity;
+  self->opacity *= opacity;
+}
+
+void
+gsk_gpu_render_pass_pop_opacity (GskGpuRenderPass               *self,
+                                 GskGpuRenderPassOpacityStorage *storage)
+{
+  self->opacity = storage->opacity;
+}
+
+void
 gsk_gpu_render_pass_set_transform (GskGpuRenderPass *self,
                                    GskGpuTransform  *transform)
 {
