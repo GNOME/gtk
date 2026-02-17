@@ -1,0 +1,59 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='300'
+        height='200'>
+  <svg
+          x='0'
+          y='0'
+          width='100'
+          height='100'
+          viewBox='0 0 200 200'>
+    <rect
+            fill='rgb(255,0,0)'
+            x='50'
+            y='50'
+            width='100'
+            height='100'>
+    </rect>
+  </svg>
+  <svg
+          x='100'
+          y='0'
+          width='100'
+          height='100'
+          viewBox='50 50 100 100'>
+    <rect
+            fill='rgb(0,0,255)'
+            x='50'
+            y='50'
+            width='100'
+            height='100'>
+    </rect>
+  </svg>
+  <svg
+          x='200'
+          y='0'
+          width='100'
+          height='100'
+          viewBox='-50 -50 100 100'>
+    <circle
+            fill='rgb(0,128,0)'
+            cx='0'
+            cy='0'
+            r='30'>
+    </circle>
+  </svg>
+  <svg
+          x='0'
+          y='100'
+          viewBox='0 0 50 50'>
+    <rect
+            fill='rgb(255,255,0)'
+            x='0'
+            y='0'
+            width='50'
+            height='50'>
+    </rect>
+  </svg>
+</svg>

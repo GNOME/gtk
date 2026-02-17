@@ -1,0 +1,36 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'>
+  <path
+          id='path0'
+          display='inline'
+          visibility='visible'
+          transform='none'
+          opacity='1'
+          color='rgb(255,100,0)'
+          clip-path='none'
+          clip-rule='nonzero'
+          mask='none'
+          filter='none'
+          fill='none'
+          fill-opacity='1'
+          fill-rule='nonzero'
+          stroke='none'
+          stroke-opacity='1'
+          stroke-width='1'
+          stroke-linecap='butt'
+          stroke-linejoin='miter'
+          stroke-dasharray=''
+          stroke-dashoffset='0'
+          marker-start='none'
+          marker-mid='none'
+          marker-end='none'
+          paint-order='stroke markers fill'
+          pathLength='99'
+          vector-effect='non-scaling-stroke'
+          d='M 0 0 L 10 10'
+          class='transparent-fill'>
+  </path>
+</svg>

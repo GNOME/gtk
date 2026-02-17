@@ -1,0 +1,101 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        id='svg-root'
+        width='100%'
+        height='100%'
+        viewBox='0 0 480 360'>
+  <g
+          id='test-body-content'
+          font-size='18'
+          font-family='SVGFreeSansASCII,sans-serif'>
+    <g
+            font-size='30'
+            font-family='Georgia,&apos;Times New Roman&apos;,Times,&apos;MS Mincho&apos;,serif'>
+      <text
+              font-weight='100'
+              x='360'
+              y='50'>100</text>
+      <text
+              font-weight='200'
+              x='360'
+              y='85'>200</text>
+      <text
+              font-weight='300'
+              x='360'
+              y='120'>300</text>
+      <text
+              font-weight='400'
+              x='360'
+              y='155'>400</text>
+      <text
+              font-weight='500'
+              x='360'
+              y='190'>500</text>
+      <text
+              font-weight='600'
+              fill='rgb(0,128,0)'
+              x='360'
+              y='225'>600</text>
+      <text
+              font-weight='700'
+              fill='rgb(0,128,0)'
+              x='360'
+              y='260'>700</text>
+      <text
+              font-weight='800'
+              fill='rgb(0,128,0)'
+              x='360'
+              y='295'>800</text>
+      <text
+              font-weight='900'
+              fill='rgb(0,128,0)'
+              x='360'
+              y='330'>900</text>
+      <text
+              font-weight='bold'
+              x='60'
+              y='80'>This is bold</text>
+      <text
+              font-weight='normal'
+              x='60'
+              y='130'>This is normal</text>
+      <g
+              font-weight='normal'
+              fill='rgb(0,0,255)'>
+        <text
+                font-weight='bolder'
+                x='60'
+                y='180'>Blue is bolder</text>
+      </g>
+      <g
+              font-weight='bold'
+              fill='rgb(0,0,255)'>
+        <text
+                font-weight='lighter'
+                x='60'
+                y='230'>Blue is lighter</text>
+      </g>
+    </g>
+  </g>
+  <g
+          font-size='32'
+          font-family='SVGFreeSansASCII,sans-serif'>
+    <text
+            id='revision'
+            fill='rgb(0,0,0)'
+            stroke='none'
+            x='10'
+            y='340'>$Revision: 1.5 $</text>
+  </g>
+  <rect
+          id='test-frame'
+          fill='none'
+          stroke='rgb(0,0,0)'
+          x='1'
+          y='1'
+          width='478'
+          height='358'
+          class='transparent-fill'>
+  </rect>
+</svg>

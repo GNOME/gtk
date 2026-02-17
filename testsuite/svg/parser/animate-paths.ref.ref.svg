@@ -1,0 +1,67 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='150'
+        height='120'
+        viewBox='0 0 150 120'>
+  <path
+          fill='rgb(255,0,0)'
+          stroke='rgb(0,0,0)'
+          stroke-width='2'
+          d='M 20 20 L 40 20 L 40 40 L 20 40 Z'>
+    <animate
+            attributeName='stroke'
+            dur='3000ms'
+            repeatCount='indefinite'
+            values='rgb(0,0,0); rgb(0,0,255); rgb(0,128,0); rgb(0,0,0)'
+            keyTimes='0; 0.333333; 0.666667; 1'/>
+  </path>
+  <path
+          fill='rgb(0,0,255)'
+          stroke='none'
+          d='M 60 20 C 60 20, 80 20, 80 20'>
+    <animate
+            attributeName='fill'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='rgb(0,0,255); rgb(255,0,0); rgb(255,255,0); rgb(0,0,255)'
+            keyTimes='0; 0.333333; 0.666667; 1'/>
+  </path>
+  <path
+          fill='none'
+          stroke='rgb(0,128,0)'
+          stroke-width='2'
+          d='M 20 60 L 40 60 L 60 60'
+          class='transparent-fill'>
+    <animate
+            attributeName='stroke-width'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='2; 6; 2'
+            keyTimes='0; 0.5; 1'/>
+  </path>
+  <path
+          opacity='1'
+          fill='rgb(255,165,0)'
+          stroke='none'
+          d='M 100 20 L 120 20 L 120 40 L 100 40 Z'>
+    <animate
+            attributeName='opacity'
+            dur='4000ms'
+            repeatCount='indefinite'
+            values='1; 0.3; 1'
+            keyTimes='0; 0.5; 1'/>
+  </path>
+  <path
+          fill='rgb(128,0,128)'
+          stroke='none'
+          d='M 20 100 Q 40 80, 60 100'>
+    <animateTransform
+            attributeName='transform'
+            dur='3000ms'
+            repeatCount='indefinite'
+            values='0 40 90; 180 40 90; 360 40 90'
+            keyTimes='0; 0.5; 1'
+            type='rotate'/>
+  </path>
+</svg>

@@ -118,8 +118,6 @@
             fill='freeze'
             keyTimes='0; 0.2; 1'
             calcMode='linear'
-            keyPoints='0; 0.8; 1'>
-      <mpath href='p'/>
-    </animateMotion>
+            keyPoints='0; 0.8; 1'/>
   </circle>
 </svg>

@@ -1,0 +1,25 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'>
+  <circle
+          id='circle'
+          r='5'>
+    <animateMotion
+            begin='0ms'
+            dur='1000ms'
+            keyTimes='0; 1'
+            calcMode='linear'
+            keyPoints='0; 1'/>
+  </circle>
+  <g
+          id='group'>
+    <rect
+            id='rect'
+            width='5'
+            height='5'>
+    </rect>
+    <use
+            href='#circle'>
+    </use>
+  </g>
+</svg>
