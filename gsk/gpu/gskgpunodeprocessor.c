@@ -2653,25 +2653,11 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
 {
   GskGpuImage *image;
   GskRenderNode *child;
-  graphene_matrix_t opacity_matrix;
   const graphene_matrix_t *color_matrix;
   graphene_rect_t tex_rect;
 
   child = gsk_color_matrix_node_get_child (node);
-
   color_matrix = gsk_color_matrix_node_get_color_matrix (node);
-  if (gsk_gpu_render_pass_has_opacity (self))
-    {
-      graphene_matrix_init_from_float (&opacity_matrix,
-                                       (float[16]) {
-                                           1.0f, 0.0f, 0.0f, 0.0f,
-                                           0.0f, 1.0f, 0.0f, 0.0f,
-                                           0.0f, 0.0f, 1.0f, 0.0f,
-                                           0.0f, 0.0f, 0.0f, self->opacity
-                                      });
-      graphene_matrix_multiply (&opacity_matrix, color_matrix, &opacity_matrix);
-      color_matrix = &opacity_matrix;
-    }
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,

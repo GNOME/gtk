@@ -2,12 +2,12 @@
 textures = 1;
 var_name = "gsk_gpu_color_matrix";
 struct_name = "GskGpuColorMatrix";
-opacity = false;
 
 graphene_matrix_t color_matrix;
 graphene_vec4_t color_offset;
 graphene_rect_t bounds;
 graphene_rect_t tex_rect;
+float opacity;
 #endif /* GSK_PREAMBLE */
 
 #include "gskgpucolormatrixinstance.glsl"
@@ -31,7 +31,16 @@ run (out vec2 pos)
   _pos = pos;
   _bounds = b;
   _tex_coord = rect_get_coord (rect_from_gsk (in_tex_rect), pos);
-  _color_matrix = in_color_matrix;
+  mat4 cm = in_color_matrix;
+  if (in_opacity < 1.0)
+    {
+      cm *= mat4(1.0, 0.0, 0.0, 0.0,
+                 0.0, 1.0, 0.0, 0.0,
+                 0.0, 0.0, 1.0, 0.0,
+                 0.0, 0.0, 0.0, in_opacity);
+    }
+    
+  _color_matrix = cm;
   _color_offset = in_color_offset;
 }
 
