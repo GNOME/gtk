@@ -99,8 +99,7 @@
  * Among the graphical elements, `<textPath>` and `<foreignObject>`
  * are not supported.
  *
- * Among the structural elements, `<a>`, `<switch>` and `<view>`
- * are not supported.
+ * Among the structural elements, `<a>` and `<view>` are not supported.
  *
  * All filter functions are supported, plus a custom `alpha-level()`
  * function, which implements one particular case of feComponentTransfer.
@@ -10210,7 +10209,7 @@ typedef struct
    BIT (SHAPE_MARKER) | BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN) | \
    BIT (SHAPE_SVG) | BIT (SHAPE_SYMBOL) | \
    BIT (SHAPE_LINEAR_GRADIENT) | BIT (SHAPE_RADIAL_GRADIENT) | \
-   BIT (SHAPE_FILTER) | BIT (SHAPE_USE))
+   BIT (SHAPE_FILTER) | BIT (SHAPE_USE) | BIT (SHAPE_SWITCH))
 
 #define SHAPE_SHAPES \
   (BIT (SHAPE_CIRCLE) | BIT (SHAPE_ELLIPSE) | BIT (SHAPE_LINE) | \
@@ -10226,7 +10225,7 @@ typedef struct
 #define SHAPE_CONTAINERS \
   (BIT (SHAPE_CLIP_PATH) | BIT (SHAPE_DEFS) | BIT (SHAPE_GROUP) | \
    BIT (SHAPE_MARKER) | BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN) | \
-   BIT (SHAPE_SVG) | BIT (SHAPE_SYMBOL))
+   BIT (SHAPE_SVG) | BIT (SHAPE_SYMBOL) | BIT (SHAPE_SWITCH))
 
 #define SHAPE_NEVER_RENDERED \
   (BIT (SHAPE_CLIP_PATH) | BIT (SHAPE_DEFS) | BIT (SHAPE_LINEAR_GRADIENT) | \
@@ -11560,6 +11559,10 @@ static ShapeTypeInfo shape_types[] = {
     .name = "symbol",
     .flags = SHAPE_TYPE_HAS_SHAPES | SHAPE_TYPE_NEVER_RENDERED,
    },
+  [SHAPE_SWITCH] = {
+    .name = "switch",
+    .flags = SHAPE_TYPE_HAS_SHAPES,
+  },
 };
 
 static inline gboolean
@@ -11729,6 +11732,56 @@ shape_has_ancestor (Shape     *shape,
   return FALSE;
 }
 
+/* {{{ Conditional exclusion */
+
+static gboolean
+shape_conditionally_excluded (Shape  *shape,
+                              GtkSvg *svg)
+{
+  SvgStringList *required_extensions = (SvgStringList *) shape->current[SHAPE_ATTR_REQUIRED_EXTENSIONS];
+  SvgLanguage *system_language = (SvgLanguage *) shape->current[SHAPE_ATTR_SYSTEM_LANGUAGE];
+  PangoLanguage *lang;
+
+  if (svg_value_equal ((SvgValue *) required_extensions, svg_string_list_new (NULL)) &&
+      svg_value_equal ((SvgValue *) system_language, svg_language_new_list (0, NULL)))
+    return FALSE;
+
+  for (unsigned int i = 0; i < required_extensions->len; i++)
+    {
+      if ((svg->features & GTK_SVG_EXTENSIONS) == 0)
+        return TRUE;
+
+      if (strcmp (required_extensions->values[i], "http://www.gtk.org/grappa") != 0)
+        return TRUE;
+    }
+
+  lang = gtk_get_default_language ();
+
+  for (unsigned int i = 0; i < system_language->len; i++)
+    {
+      const char *l1;
+      const char *l2;
+
+      if (lang == system_language->values[i])
+        return FALSE;
+
+      l1 = pango_language_to_string (lang);
+      l2 = pango_language_to_string (system_language->values[i]);
+
+      for (unsigned int j = 0; l1[j]; j++)
+        {
+          if (l1[j] == '-')
+            return FALSE;
+
+          if (l1[j] != l2[j])
+            break;
+        }
+    }
+
+  return TRUE;
+}
+
+/* }}} */
 static void
 shape_resolve_rx (Shape                 *shape,
                   const graphene_rect_t *viewport,
@@ -11942,6 +11995,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_IMAGE:
     case SHAPE_FILTER:
     case SHAPE_SYMBOL:
+    case SHAPE_SWITCH:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -12041,6 +12095,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_IMAGE:
         case SHAPE_FILTER:
         case SHAPE_SYMBOL:
+        case SHAPE_SWITCH:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -12112,6 +12167,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_IMAGE:
         case SHAPE_FILTER:
         case SHAPE_SYMBOL:
+        case SHAPE_SWITCH:
         default:
           g_assert_not_reached ();
         }
@@ -12137,6 +12193,7 @@ shape_get_current_measure (Shape                 *shape,
 static gboolean
 shape_get_current_bounds (Shape                 *shape,
                           const graphene_rect_t *viewport,
+                          GtkSvg                *svg,
                           graphene_rect_t       *bounds)
 {
   graphene_rect_t b;
@@ -12169,7 +12226,7 @@ shape_get_current_bounds (Shape                 *shape,
       {
         Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
         if (use_shape)
-          ret = shape_get_current_bounds (use_shape, viewport, &b);
+          ret = shape_get_current_bounds (use_shape, viewport, svg, &b);
         ret = TRUE;
       }
       break;
@@ -12180,6 +12237,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_MARKER:
     case SHAPE_SVG:
     case SHAPE_SYMBOL:
+    case SHAPE_SWITCH:
       has_any = FALSE;
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -12189,7 +12247,10 @@ shape_get_current_bounds (Shape                 *shape,
           if (svg_enum_get (sh->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
             continue;
 
-          if (shape_get_current_bounds (sh, viewport, &b2))
+          if (shape_conditionally_excluded (sh, svg))
+            continue;
+
+          if (shape_get_current_bounds (sh, viewport, svg, &b2))
             {
               if (_gtk_bitmask_get (sh->attrs, SHAPE_ATTR_TRANSFORM))
                 {
@@ -12205,6 +12266,9 @@ shape_get_current_bounds (Shape                 *shape,
                 graphene_rect_union (&b, &b2, &b);
               has_any = TRUE;
             }
+
+          if (shape->type == SHAPE_SWITCH)
+            break;
         }
       if (!has_any)
         graphene_rect_init (&b, 0, 0, 0, 0);
@@ -12251,6 +12315,7 @@ static GskStroke * shape_create_basic_stroke (Shape                 *shape,
 static gboolean
 shape_get_current_stroke_bounds (Shape                 *shape,
                                  const graphene_rect_t *viewport,
+                                 GtkSvg                *svg,
                                  graphene_rect_t       *bounds)
 {
   graphene_rect_t b;
@@ -12282,7 +12347,7 @@ shape_get_current_stroke_bounds (Shape                 *shape,
       {
         Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
         if (use_shape)
-          ret = shape_get_current_stroke_bounds (use_shape, viewport, &b);
+          ret = shape_get_current_stroke_bounds (use_shape, viewport, svg, &b);
         ret = TRUE;
       }
       break;
@@ -12293,6 +12358,7 @@ shape_get_current_stroke_bounds (Shape                 *shape,
     case SHAPE_MARKER:
     case SHAPE_SVG:
     case SHAPE_SYMBOL:
+    case SHAPE_SWITCH:
       has_any = FALSE;
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -12302,7 +12368,10 @@ shape_get_current_stroke_bounds (Shape                 *shape,
           if (svg_enum_get (sh->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
             continue;
 
-          if (shape_get_current_stroke_bounds (sh, viewport, &b2))
+          if (shape_conditionally_excluded (sh, svg))
+            continue;
+
+          if (shape_get_current_stroke_bounds (sh, viewport, svg, &b2))
             {
               if (!has_any)
                 graphene_rect_init_from_rect (&b, &b2);
@@ -12310,6 +12379,9 @@ shape_get_current_stroke_bounds (Shape                 *shape,
                 graphene_rect_union (&b, &b2, &b);
               has_any = TRUE;
             }
+
+          if (shape->type == SHAPE_SWITCH)
+            break;
         }
       if (!has_any)
         graphene_rect_init (&b, 0, 0, 0, 0);
@@ -12367,56 +12439,6 @@ shape_add_filter (Shape               *shape,
   g_ptr_array_add (shape->filters, filter_primitive_new (type));
 
   return shape->filters->len - 1;
-}
-
-/* }}} */
-/* {{{ Conditional exclusion */
-
-static gboolean
-conditionally_excluded (Shape  *shape,
-                        GtkSvg *svg)
-{
-  SvgStringList *required_extensions = (SvgStringList *) shape->current[SHAPE_ATTR_REQUIRED_EXTENSIONS];
-  SvgLanguage *system_language = (SvgLanguage *) shape->current[SHAPE_ATTR_SYSTEM_LANGUAGE];
-  PangoLanguage *lang;
-
-  if (svg_value_equal ((SvgValue *) required_extensions, svg_string_list_new (NULL)) &&
-      svg_value_equal ((SvgValue *) system_language, svg_language_new_list (0, NULL)))
-    return FALSE;
-
-  for (unsigned int i = 0; i < required_extensions->len; i++)
-    {
-      if ((svg->features & GTK_SVG_EXTENSIONS) == 0)
-        return TRUE;
-
-      if (strcmp (required_extensions->values[i], "http://www.gtk.org/grappa") != 0)
-        return FALSE;
-    }
-
-  lang = gtk_get_default_language ();
-
-  for (unsigned int i = 0; i < system_language->len; i++)
-    {
-      const char *l1;
-      const char *l2;
-
-      if (lang == system_language->values[i])
-        return FALSE;
-
-      l1 = pango_language_to_string (lang);
-      l2 = pango_language_to_string (system_language->values[i]);
-
-      for (unsigned int j = 0; l1[j]; j++)
-        {
-          if (l1[j] == '-')
-            return FALSE;
-
-          if (l1[j] != l2[j])
-            break;
-        }
-    }
-
-  return TRUE;
 }
 
 /* }}} */
@@ -20269,7 +20291,7 @@ apply_filter_tree (Shape         *shape,
   if (filter->filters->len == 0)
     return empty_node ();
 
-  if (!shape_get_current_bounds (shape, context->viewport, &bounds))
+  if (!shape_get_current_bounds (shape, context->viewport, context->svg, &bounds))
     return gsk_render_node_ref (source);
 
   if (svg_enum_get (filter->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
@@ -21131,11 +21153,11 @@ push_group (Shape        *shape,
             {
             case TRANSFORM_BOX_CONTENT_BOX:
             case TRANSFORM_BOX_FILL_BOX:
-              shape_get_current_bounds (shape, context->viewport, &bounds);
+              shape_get_current_bounds (shape, context->viewport, context->svg, &bounds);
               break;
             case TRANSFORM_BOX_BORDER_BOX:
             case TRANSFORM_BOX_STROKE_BOX:
-              shape_get_current_stroke_bounds (shape, context->viewport, &bounds);
+              shape_get_current_stroke_bounds (shape, context->viewport, context->svg, &bounds);
               break;
             case TRANSFORM_BOX_VIEW_BOX:
               graphene_rect_init_from_rect (&bounds, context->viewport);
@@ -21206,7 +21228,7 @@ push_group (Shape        *shape,
         {
           graphene_rect_t bounds;
 
-          shape_get_current_bounds (shape, context->viewport, &bounds);
+          shape_get_current_bounds (shape, context->viewport, context->svg, &bounds);
 
           gtk_snapshot_push_blend (context->snapshot, svg_enum_get (blend));
           gtk_snapshot_append_paste (context->snapshot, &bounds, 0);
@@ -21297,11 +21319,11 @@ push_group (Shape        *shape,
                         {
                         case TRANSFORM_BOX_CONTENT_BOX:
                         case TRANSFORM_BOX_FILL_BOX:
-                          shape_get_current_bounds (shape, context->viewport, &bounds);
+                          shape_get_current_bounds (shape, context->viewport, context->svg, &bounds);
                           break;
                         case TRANSFORM_BOX_BORDER_BOX:
                         case TRANSFORM_BOX_STROKE_BOX:
-                          shape_get_current_stroke_bounds (shape, context->viewport, &bounds);
+                          shape_get_current_stroke_bounds (shape, context->viewport, context->svg, &bounds);
                           break;
                         case TRANSFORM_BOX_VIEW_BOX:
                           graphene_rect_init_from_rect (&bounds, context->viewport);
@@ -21341,7 +21363,7 @@ push_group (Shape        *shape,
 
                   gtk_snapshot_save (context->snapshot);
 
-                  if (shape_get_current_bounds (shape, context->viewport, &bounds))
+                  if (shape_get_current_bounds (shape, context->viewport, context->svg, &bounds))
                     {
                       transform = gsk_transform_translate (NULL, &bounds.origin);
                       transform = gsk_transform_scale (transform, bounds.size.width, bounds.size.height);
@@ -21396,7 +21418,7 @@ push_group (Shape        *shape,
             {
               graphene_rect_t bounds;
 
-              if (shape_get_current_bounds (shape, context->viewport, &bounds))
+              if (shape_get_current_bounds (shape, context->viewport, context->svg, &bounds))
                 {
                   mask_clip.origin.x = bounds.origin.x + svg_number_get (mask->shape->current[SHAPE_ATTR_X], 1) * bounds.size.width;
                   mask_clip.origin.y = bounds.origin.y + svg_number_get (mask->shape->current[SHAPE_ATTR_Y], 1) * bounds.size.height;
@@ -21425,7 +21447,7 @@ push_group (Shape        *shape,
 
           gtk_snapshot_save (context->snapshot);
 
-          if (shape_get_current_bounds (shape, context->viewport, &bounds))
+          if (shape_get_current_bounds (shape, context->viewport, context->svg, &bounds))
             {
               transform = gsk_transform_translate (NULL, &bounds.origin);
               transform = gsk_transform_scale (transform, bounds.size.width, bounds.size.height);
@@ -23380,7 +23402,12 @@ paint_shape (Shape        *shape,
       for (int i = 0; i < shape->shapes->len; i++)
         {
           Shape *s = g_ptr_array_index (shape->shapes, i);
+
           render_shape (s, context);
+
+          if (shape->type == SHAPE_SWITCH &&
+              !shape_conditionally_excluded (s, context->svg))
+            break;
         }
 
       return;
@@ -23513,7 +23540,7 @@ render_shape (Shape        *shape,
         return;
     }
 
-  if (conditionally_excluded (shape, context->svg))
+  if (shape_conditionally_excluded (shape, context->svg))
     return;
 
   if (context->instance_count++ > DRAWING_LIMIT)

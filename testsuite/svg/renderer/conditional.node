@@ -6,3 +6,10 @@ color {
   bounds: 30 10 10 10;
   color: rgb(0,0,255);
 }
+rounded-clip {
+  clip: 20 15 10 10 / 5;
+  child: color {
+    bounds: 20 15 10 10;
+    color: rgb(0,0,255);
+  }
+}

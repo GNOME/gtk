@@ -5,4 +5,11 @@
         systemLanguage='de'/>
   <rect x='30' y='10' width='10' height='10' fill='blue'
         systemLanguage='ru, en'/>
+
+  <switch>
+    <circle cx='25' cy='20' r='5' fill='red'
+       systemLanguage='de'/>
+    <circle cx='25' cy='20' r='5' fill='blue'
+       systemLanguage='en'/>
+  </switch>
 </svg>
