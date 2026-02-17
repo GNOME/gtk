@@ -3,7 +3,7 @@ var_name = "gsk_gpu_linear_gradient";
 struct_name = "GskGpuLinearGradient";
 acs_premultiplied = true;
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_point_t start;
 graphene_point_t end;
 GdkColor color0;
@@ -28,7 +28,7 @@ variation: GskRepeat repeat;
 #include "enums.glsl"
 
 PASS(0) vec2 _pos;
-PASS_FLAT(1) Rect _rect;
+PASS_FLAT(1) Rect _bounds;
 PASS_FLAT(2) vec4 _color0;
 PASS_FLAT(3) vec4 _color1;
 PASS_FLAT(4) vec4 _color2;
@@ -48,9 +48,9 @@ PASS(13) float _offset;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
   
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   vec2 start = in_start;
   vec2 end = in_end;
@@ -59,7 +59,7 @@ run (out vec2 pos)
   _offset = dot (pos / GSK_GLOBAL_SCALE - start, line) / line_length;
 
   _pos = pos;
-  _rect = r;
+  _bounds = b;
   if (VARIATION_PREMULTIPLIED)
     {
       _color0 = color_premultiply (in_color0);
@@ -218,7 +218,7 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  float alpha = rect_coverage (_rect, _pos);
+  float alpha = rect_coverage (_bounds, _pos);
 
   if (VARIATION_SUPERSAMPLING)
     {
