@@ -987,10 +987,12 @@ static void
 gsk_gpu_node_processor_add_opacity_node (GskGpuRenderPass *self,
                                          GskRenderNode       *node)
 {
+  GskGpuRenderPassOpacityStorage storage;
   GskRenderNode *child;
-  float old_opacity = self->opacity;
 
-  self->opacity *= gsk_opacity_node_get_opacity (node);
+  gsk_gpu_render_pass_push_opacity (self,
+                                    gsk_opacity_node_get_opacity (node),
+                                    &storage);
 
   child = gsk_opacity_node_get_child (node);
 
@@ -1003,7 +1005,7 @@ gsk_gpu_node_processor_add_opacity_node (GskGpuRenderPass *self,
 
   gsk_gpu_frame_end_node (self->frame);
 
-  self->opacity = old_opacity;
+  gsk_gpu_render_pass_pop_opacity (self, &storage);
 }
 
 static void
@@ -2314,10 +2316,11 @@ static void
 gsk_gpu_node_processor_add_cross_fade_node (GskGpuRenderPass *self,
                                             GskRenderNode       *node)
 {
+  GskGpuRenderPassOpacityStorage storage;
   GskRenderNode *start_child, *end_child;
   graphene_rect_t start_rect, end_rect;
   GskGpuImage *start_image, *end_image;
-  float progress, old_opacity;
+  float progress;
 
   start_child = gsk_cross_fade_node_get_start_child (node);
   end_child = gsk_cross_fade_node_get_end_child (node);
@@ -2352,30 +2355,36 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuRenderPass *self,
       if (end_image == NULL)
         return;
 
-      old_opacity = self->opacity;
-      self->opacity *= progress;
+      gsk_gpu_render_pass_push_opacity (self,
+                                        progress,
+                                        &storage);
       gsk_gpu_node_processor_image_op (self,
                                        end_image,
                                        self->ccs,
                                        GSK_GPU_SAMPLER_DEFAULT,
                                        &end_child->bounds,
                                        &end_rect);
+      gsk_gpu_render_pass_pop_opacity (self,
+                                       &storage);
+
       g_object_unref (end_image);
-      self->opacity = old_opacity;
       return;
     }
   else if (end_image == NULL)
     {
-      old_opacity = self->opacity;
-      self->opacity *= (1 - progress);
+      gsk_gpu_render_pass_push_opacity (self,
+                                        1 - progress,
+                                        &storage);
       gsk_gpu_node_processor_image_op (self,
                                        start_image,
                                        self->ccs,
                                        GSK_GPU_SAMPLER_DEFAULT,
                                        &start_child->bounds,
                                        &start_rect);
+      gsk_gpu_render_pass_pop_opacity (self,
+                                       &storage);
+
       g_object_unref (start_image);
-      self->opacity = old_opacity;
       return;
     }
 
