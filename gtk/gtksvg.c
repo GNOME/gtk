@@ -3550,7 +3550,7 @@ typedef struct
 static unsigned int
 svg_numbers_size (unsigned int n)
 {
-  return sizeof (SvgNumbers) + MAX (n - 1, 0) * sizeof (Number);
+  return sizeof (SvgNumbers) + (n > 0 ? n - 1 : 0) * sizeof (Number);
 }
 
 static gboolean
@@ -3978,6 +3978,122 @@ svg_string_new (const char *str)
 
   result = (SvgString *) svg_value_alloc (&SVG_STRING_CLASS, sizeof (SvgString));
   result->value = g_strdup (str);
+  return (SvgValue *) result;
+}
+
+/* }}} */
+/* {{{ String Lists */
+
+typedef struct
+{
+  SvgValue base;
+  unsigned int len;
+  char *values[1];
+} SvgStringList;
+
+static unsigned int
+svg_string_list_size (unsigned int n)
+{
+  return sizeof (SvgStringList) + MAX (n - 1, 0) * sizeof (char *);
+}
+
+static void
+svg_string_list_free (SvgValue *value)
+{
+  SvgStringList *s = (SvgStringList *)value;
+  for (size_t i = 0; i < s->len; i++)
+    g_free (s->values[i]);
+  g_free (s);
+}
+
+static gboolean
+svg_string_list_equal (const SvgValue *value0,
+                       const SvgValue *value1)
+{
+  const SvgStringList *s0 = (const SvgStringList *)value0;
+  const SvgStringList *s1 = (const SvgStringList *)value1;
+
+  if (s0->len != s1->len)
+    return FALSE;
+
+  for (unsigned int i = 0; i < s0->len; i++)
+    {
+      if (strcmp (s0->values[i], s1->values[i]) != 0)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static SvgValue *
+svg_string_list_interpolate (const SvgValue *value0,
+                             const SvgValue *value1,
+                             ComputeContext *context,
+                             double          t)
+{
+  if (t < 0.5)
+    return svg_value_ref ((SvgValue *) value0);
+  else
+    return svg_value_ref ((SvgValue *) value1);
+}
+
+static SvgValue *
+svg_string_list_accumulate (const SvgValue *value0,
+                            const SvgValue *value1,
+                            ComputeContext *context,
+                            int             n)
+{
+  return svg_value_ref ((SvgValue *)value0);
+}
+
+static void
+svg_string_list_print (const SvgValue *value,
+                       GString        *string)
+{
+  const SvgStringList *s = (const SvgStringList *)value;
+
+  for (unsigned int i = 0; i < s->len; i++)
+    {
+      gchar *escaped = g_markup_escape_text (s->values[i], strlen (s->values[i]));
+      if (i > 0)
+        g_string_append_c (string, ' ');
+      g_string_append (string, escaped);
+      g_free (escaped);
+    }
+}
+
+static const SvgValueClass SVG_STRING_LIST_CLASS = {
+  "SvgStringList",
+  svg_string_list_free,
+  svg_string_list_equal,
+  svg_string_list_interpolate,
+  svg_string_list_accumulate,
+  svg_string_list_print,
+  svg_value_default_distance,
+  svg_value_default_resolve,
+};
+
+static SvgValue *
+svg_string_list_new (GStrv strv)
+{
+  static SvgStringList empty = { { &SVG_STRING_LIST_CLASS, 0 }, .len = 0, .values[0] = NULL, };
+  SvgStringList *result;
+  unsigned int len;
+
+  if (strv)
+    len = g_strv_length (strv);
+  else
+    len = 0;
+
+  if (len == 0)
+    return svg_value_ref ((SvgValue *) &empty);
+
+  result = (SvgStringList *) svg_value_alloc (&SVG_STRING_LIST_CLASS, svg_string_list_size (len));
+
+  result->len = len;
+  for (unsigned int i = 0; i < len; i++)
+    result->values[i] = g_strdup (strv[i]);
+
   return (SvgValue *) result;
 }
 
@@ -7473,7 +7589,7 @@ typedef struct
 static unsigned int
 svg_dash_array_size (unsigned int n)
 {
-  return sizeof (SvgDashArray) + MAX (n - 2, 0) * sizeof (Number);
+  return sizeof (SvgDashArray) + (n > 1 ? n - 2 : 0) * sizeof (Number);
 }
 
 static gboolean
@@ -8869,8 +8985,15 @@ svg_orient_resolve (const SvgValue  *value,
 typedef struct
 {
   SvgValue base;
-  PangoLanguage *value;
+  unsigned int len;
+  PangoLanguage *values[1];
 } SvgLanguage;
+
+static unsigned int
+svg_language_size (unsigned int n)
+{
+  return sizeof (SvgLanguage) + (n > 0 ? n - 1 : 0) * sizeof (PangoLanguage *);
+}
 
 static gboolean
 svg_language_equal (const SvgValue *value0,
@@ -8879,7 +9002,16 @@ svg_language_equal (const SvgValue *value0,
   const SvgLanguage *l0 = (const SvgLanguage *)value0;
   const SvgLanguage *l1 = (const SvgLanguage *)value1;
 
-  return l0->value == l1->value;
+  if (l0->len != l1->len)
+    return FALSE;
+
+  for (unsigned int i = 0; i < l0->len; i++)
+    {
+      if (l0->values[i] != l1->values[i])
+        return FALSE;
+    }
+
+  return TRUE;
 }
 
 static SvgValue *
@@ -8908,14 +9040,21 @@ svg_language_print (const SvgValue *value,
                     GString        *string)
 {
   const SvgLanguage *l = (const SvgLanguage *)value;
-  g_string_append (string, pango_language_to_string (l->value));
+
+  for (unsigned int i = 0; i < l->len; i++)
+    {
+      if (i > 0)
+        g_string_append_c (string, ' ');
+      g_string_append (string, pango_language_to_string (l->values[i]));
+    }
 }
 
 static PangoLanguage *
 svg_language_get (const SvgValue *value)
 {
   const SvgLanguage *l = (const SvgLanguage *)value;
-  return l->value;
+
+  return l->values[0];
 }
 
 static const SvgValueClass SVG_LANGUAGE_CLASS = {
@@ -8930,20 +9069,35 @@ static const SvgValueClass SVG_LANGUAGE_CLASS = {
 };
 
 static SvgValue *
+svg_language_new_list (unsigned int    len,
+                       PangoLanguage **langs)
+{
+  SvgLanguage *result;
+
+  result = (SvgLanguage *) svg_value_alloc (&SVG_LANGUAGE_CLASS,
+                                            svg_language_size (len));
+
+  result->len = len;
+
+  for (unsigned int i = 0; i < len; i++)
+    result->values[i] = langs[i];
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
 svg_language_new (PangoLanguage *language)
 {
-  SvgLanguage *result = (SvgLanguage *)svg_value_alloc (&SVG_LANGUAGE_CLASS, sizeof (SvgLanguage));
-  result->value = language;
-  return (SvgValue *) result;
+  return svg_language_new_list (1, &language);
 }
 
 static SvgValue *
 svg_language_new_default (void)
 {
-  static SvgLanguage def = { { &SVG_LANGUAGE_CLASS, 0 }, NULL };
+  static SvgLanguage def = { { &SVG_LANGUAGE_CLASS, 0 }, .len = 1, .values[0] = NULL, };
 
-  if (def.value == NULL)
-    def.value = gtk_get_default_language ();
+  if (def.values[0] == NULL)
+    def.values[0] = gtk_get_default_language ();
 
   return (SvgValue *) &def;
 }
@@ -9787,6 +9941,44 @@ parse_language (const char *value)
 }
 
 static SvgValue *
+parse_language_list (const char *value)
+{
+  GStrv strv;
+  unsigned int len;
+  PangoLanguage **langs;
+
+  strv = strsplit_set (value, ", ");
+  len = g_strv_length (strv);
+
+  langs = g_newa (PangoLanguage *, len);
+  for (unsigned int i = 0; i < len; i++)
+    {
+      langs[i] = pango_language_from_string (strv[i]);
+      if (!langs[i])
+        {
+          g_strfreev (strv);
+          return NULL;
+        }
+    }
+  g_strfreev (strv);
+
+  return svg_language_new_list (len, langs);
+}
+
+static SvgValue *
+parse_string_list (const char *value)
+{
+  GStrv strv;
+  SvgValue *result;
+
+  strv = strsplit_set (value, " ");
+  result = svg_string_list_new (strv);
+  g_strfreev (strv);
+
+  return result;
+}
+
+static SvgValue *
 parse_opacity (const char *value)
 {
   return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
@@ -10455,6 +10647,16 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = SHAPE_TEXTS,
     .parse_value = svg_text_decoration_parse,
   },
+  [SHAPE_ATTR_REQUIRED_EXTENSIONS] = {
+    .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
+    .applies_to = SHAPE_ANY,
+    .parse_value = parse_string_list,
+  },
+  [SHAPE_ATTR_SYSTEM_LANGUAGE] = {
+    .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
+    .applies_to = SHAPE_ANY,
+    .parse_value = parse_language_list,
+  },
   [SHAPE_ATTR_STROKE_MINWIDTH] = {
     .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_NO_CSS,
     .applies_to = SHAPE_SHAPES,
@@ -10765,6 +10967,8 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_MARKER_START].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_MARKER_MID].initial_value = svg_href_new_none ();
   shape_attrs[SHAPE_ATTR_MARKER_END].initial_value = svg_href_new_none ();
+  shape_attrs[SHAPE_ATTR_REQUIRED_EXTENSIONS].initial_value = svg_string_list_new (NULL);
+  shape_attrs[SHAPE_ATTR_SYSTEM_LANGUAGE].initial_value = svg_language_new_list (0, NULL);
   shape_attrs[SHAPE_ATTR_STROKE_MINWIDTH].initial_value = svg_percentage_new (25);
   shape_attrs[SHAPE_ATTR_STROKE_MAXWIDTH].initial_value = svg_percentage_new (150);
   shape_attrs[SHAPE_ATTR_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -10983,6 +11187,8 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "writing-mode", SHAPE_ANY, 0, SHAPE_ATTR_WRITING_MODE },
   { "letter-spacing", SHAPE_ANY, 0, SHAPE_ATTR_LETTER_SPACING },
   { "text-decoration", SHAPE_ANY, 0, SHAPE_ATTR_TEXT_DECORATION },
+  { "requiredExtensions", SHAPE_ANY, 0, SHAPE_ATTR_REQUIRED_EXTENSIONS },
+  { "systemLanguage", SHAPE_ANY, 0, SHAPE_ATTR_SYSTEM_LANGUAGE },
   { "gpa:stroke-minwidth", SHAPE_ANY, 0, SHAPE_ATTR_STROKE_MINWIDTH },
   { "gpa:stroke-maxwidth", SHAPE_ANY, 0, SHAPE_ATTR_STROKE_MAXWIDTH },
   { "stop-offset", SHAPE_GRADIENTS, 0, SHAPE_ATTR_STOP_OFFSET },
@@ -12161,6 +12367,56 @@ shape_add_filter (Shape               *shape,
   g_ptr_array_add (shape->filters, filter_primitive_new (type));
 
   return shape->filters->len - 1;
+}
+
+/* }}} */
+/* {{{ Conditional exclusion */
+
+static gboolean
+conditionally_excluded (Shape  *shape,
+                        GtkSvg *svg)
+{
+  SvgStringList *required_extensions = (SvgStringList *) shape->current[SHAPE_ATTR_REQUIRED_EXTENSIONS];
+  SvgLanguage *system_language = (SvgLanguage *) shape->current[SHAPE_ATTR_SYSTEM_LANGUAGE];
+  PangoLanguage *lang;
+
+  if (svg_value_equal ((SvgValue *) required_extensions, svg_string_list_new (NULL)) &&
+      svg_value_equal ((SvgValue *) system_language, svg_language_new_list (0, NULL)))
+    return FALSE;
+
+  for (unsigned int i = 0; i < required_extensions->len; i++)
+    {
+      if ((svg->features & GTK_SVG_EXTENSIONS) == 0)
+        return TRUE;
+
+      if (strcmp (required_extensions->values[i], "http://www.gtk.org/grappa") != 0)
+        return FALSE;
+    }
+
+  lang = gtk_get_default_language ();
+
+  for (unsigned int i = 0; i < system_language->len; i++)
+    {
+      const char *l1;
+      const char *l2;
+
+      if (lang == system_language->values[i])
+        return FALSE;
+
+      l1 = pango_language_to_string (lang);
+      l2 = pango_language_to_string (system_language->values[i]);
+
+      for (unsigned int j = 0; l1[j]; j++)
+        {
+          if (l1[j] == '-')
+            return FALSE;
+
+          if (l1[j] != l2[j])
+            break;
+        }
+    }
+
+  return TRUE;
 }
 
 /* }}} */
@@ -23256,6 +23512,9 @@ render_shape (Shape        *shape,
       if (svg_enum_get (shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
         return;
     }
+
+  if (conditionally_excluded (shape, context->svg))
+    return;
 
   if (context->instance_count++ > DRAWING_LIMIT)
     {

@@ -1,0 +1,8 @@
+<svg width="100" height="100">
+  <rect x='10' y='10' width='10' height='10' fill='red'
+        systemLanguage='en'/>
+  <rect x='20' y='10' width='10' height='10' fill='green'
+        systemLanguage='de'/>
+  <rect x='30' y='10' width='10' height='10' fill='blue'
+        systemLanguage='ru, en'/>
+</svg>

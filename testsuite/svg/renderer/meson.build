@@ -17,6 +17,7 @@ test_data = [
   'clip6.svg',
   'clip7.svg',
   'color.svg',
+  'conditional.svg',
   'dashes.svg',
   'ellipse.svg',
   'ellipse2.svg',
