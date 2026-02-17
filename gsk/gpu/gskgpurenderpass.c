@@ -238,6 +238,12 @@ gsk_gpu_render_pass_pop_opacity (GskGpuRenderPass               *self,
   self->opacity = storage->opacity;
 }
 
+gboolean
+gsk_gpu_render_pass_has_opacity (GskGpuRenderPass *self)
+{
+  return self->opacity < 1.0;
+}
+
 void
 gsk_gpu_render_pass_set_transform (GskGpuRenderPass *self,
                                    GskGpuTransform  *transform)

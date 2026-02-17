@@ -97,6 +97,7 @@ void                    gsk_gpu_render_pass_push_opacity                (GskGpuR
                                                                          GskGpuRenderPassOpacityStorage *storage);
 void                    gsk_gpu_render_pass_pop_opacity                 (GskGpuRenderPass               *self,
                                                                          GskGpuRenderPassOpacityStorage *storage);
+gboolean                gsk_gpu_render_pass_has_opacity                 (GskGpuRenderPass               *self);
 
 void                    gsk_gpu_render_pass_set_transform               (GskGpuRenderPass               *self,
                                                                          GskGpuTransform                *transform);
