@@ -3,7 +3,7 @@ textures = 2;
 var_name = "gsk_gpu_blend_mode";
 struct_name = "GskGpuBlendMode";
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_rect_t bottom_rect;
 graphene_rect_t top_rect;
 float opacity;
@@ -27,9 +27,9 @@ PASS_FLAT(5) float _opacity;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
   
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
   _opacity = in_opacity;
