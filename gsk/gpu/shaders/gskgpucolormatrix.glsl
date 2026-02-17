@@ -6,7 +6,7 @@ opacity = false;
 
 graphene_matrix_t color_matrix;
 graphene_vec4_t color_offset;
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_rect_t tex_rect;
 #endif /* GSK_PREAMBLE */
 
@@ -15,7 +15,7 @@ graphene_rect_t tex_rect;
 PASS_FLAT(0) mat4 _color_matrix;
 PASS_FLAT(4) vec4 _color_offset;
 PASS(5) vec2 _pos;
-PASS_FLAT(6) Rect _rect;
+PASS_FLAT(6) Rect _bounds;
 PASS(7) vec2 _tex_coord;
 
 
@@ -24,12 +24,12 @@ PASS(7) vec2 _tex_coord;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
   
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
-  _rect = r;
+  _bounds = b;
   _tex_coord = rect_get_coord (rect_from_gsk (in_tex_rect), pos);
   _color_matrix = in_color_matrix;
   _color_offset = in_color_offset;
@@ -53,7 +53,7 @@ run (out vec4 color,
 
   pixel = output_color_from_alt (pixel);
 
-  color = output_color_alpha (pixel, rect_coverage (_rect, _pos));
+  color = output_color_alpha (pixel, rect_coverage (_bounds, _pos));
   position = _pos;
 }
 
