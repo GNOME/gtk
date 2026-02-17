@@ -3,7 +3,7 @@ textures = 2;
 acs_equals_ccs = false;
 acs_premultiplied = true;
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_rect_t first_rect;
 graphene_rect_t second_rect;
 float k1;
@@ -29,9 +29,9 @@ PASS_FLAT(6) vec4 _factors;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
   
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
   _opacity = in_opacity;
