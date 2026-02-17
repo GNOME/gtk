@@ -2653,6 +2653,8 @@ snapshot_push_fill (GtkSnapshot *snapshot,
       gtk_snapshot_push_fill (snapshot, path, rule);
       break;
     case PATH_EMPTY:
+      gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, 0, 0));
+      break;
     default:
       g_assert_not_reached ();
     }
