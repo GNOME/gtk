@@ -860,7 +860,6 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuRenderPass *self,
                    mask_image,
                    GSK_GPU_SAMPLER_DEFAULT,
                    GSK_MASK_MODE_ALPHA,
-                   &clip_bounds,
                    &child_rect,
                    &clip_bounds);
 
@@ -2525,7 +2524,6 @@ gsk_gpu_node_processor_add_mask_node (GskGpuRenderPass *self,
                        mask_image,
                        GSK_GPU_SAMPLER_DEFAULT,
                        mask_mode,
-                       &bounds,
                        &source_rect,
                        &mask_rect);
 
@@ -3085,7 +3083,6 @@ gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
                            GSK_MASK_MODE_ALPHA,
-                           &clip_bounds,
                            &source_rect,
                            &tex_rect);
 
@@ -3157,7 +3154,6 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
                            GSK_MASK_MODE_ALPHA,
-                           &clip_bounds,
                            &source_rect,
                            &tex_rect);
 
@@ -3403,7 +3399,6 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                            child_image,
                            GSK_GPU_SAMPLER_TRANSPARENT,
                            GSK_MASK_MODE_INVERTED_ALPHA,
-                           &bounds,
                            &mask_rect,
                            &child_rect);
         }
@@ -3417,7 +3412,6 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
                            GSK_MASK_MODE_ALPHA,
-                           &bounds,
                            &child_rect,
                            &mask_rect);
         }
@@ -3461,7 +3455,6 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
                            GSK_MASK_MODE_ALPHA,
-                           &bounds,
                            &child_rect,
                            &mask_rect);
         }
