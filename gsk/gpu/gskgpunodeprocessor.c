@@ -2246,7 +2246,6 @@ gsk_gpu_node_processor_add_blend_node (GskGpuRenderPass *self,
                          top_image,
                          GSK_GPU_SAMPLER_DEFAULT,
                          gsk_blend_node_get_blend_mode (node),
-                         &node->bounds,
                          &bottom_rect,
                          &top_rect);
 
