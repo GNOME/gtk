@@ -2159,10 +2159,9 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
           gsk_gpu_colorize_op (self,
                                self->ccs,
                                gsk_gpu_color_states_find (self->ccs, &shadow->color),
-                               &child->bounds,
+                               &tex_rect,
                                image,
                                GSK_GPU_SAMPLER_TRANSPARENT,
-                               &tex_rect,
                                &tex_rect,
                                &shadow->color);
           gsk_gpu_render_pass_pop_translate (self, &storage);
@@ -2503,7 +2502,6 @@ gsk_gpu_node_processor_add_mask_node (GskGpuRenderPass *self,
                            &bounds,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
-                           &bounds,
                            &mask_rect,
                            color);
     }
@@ -2643,7 +2641,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
                              &glyph_bounds,
                              image,
                              GSK_GPU_SAMPLER_DEFAULT,
-                             &glyph_bounds,
                              &glyph_tex_rect,
                              &color2);
 
@@ -3072,7 +3069,6 @@ gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
                            &clip_bounds,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
-                           &clip_bounds,
                            &tex_rect,
                            color);
     }
@@ -3146,7 +3142,6 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
                            &clip_bounds,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
-                           &clip_bounds,
                            &tex_rect,
                            color);
     }
