@@ -41,6 +41,10 @@ typedef struct {
 } GskGpuRenderPassBlendStorage;
 
 typedef struct {
+  float opacity;
+} GskGpuRenderPassOpacityStorage;
+
+typedef struct {
   GskTransform *modelview;
   graphene_vec2_t scale;
   graphene_point_t offset;
@@ -87,6 +91,12 @@ void                    gsk_gpu_render_pass_push_blend                  (GskGpuR
                                                                          GskGpuRenderPassBlendStorage   *storage);
 void                    gsk_gpu_render_pass_pop_blend                   (GskGpuRenderPass               *self,
                                                                          GskGpuRenderPassBlendStorage   *storage);
+
+void                    gsk_gpu_render_pass_push_opacity                (GskGpuRenderPass               *self,
+                                                                         float                           opacity,
+                                                                         GskGpuRenderPassOpacityStorage *storage);
+void                    gsk_gpu_render_pass_pop_opacity                 (GskGpuRenderPass               *self,
+                                                                         GskGpuRenderPassOpacityStorage *storage);
 
 void                    gsk_gpu_render_pass_set_transform               (GskGpuRenderPass               *self,
                                                                          GskGpuTransform                *transform);
