@@ -252,6 +252,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   GskGpuShaderFlags flags;
 
   flags = gsk_gpu_shader_flags_create (clip,
+                                       FALSE,
                                        op_class->n_textures > 0 ? gsk_gpu_image_get_shader_op (images[0]) : GDK_SHADER_DEFAULT,
                                        op_class->n_textures > 0 && (gsk_gpu_image_get_flags (images[0]) & GSK_GPU_IMAGE_EXTERNAL),
                                        op_class->n_textures > 1 ? gsk_gpu_image_get_shader_op (images[1]) : GDK_SHADER_DEFAULT,

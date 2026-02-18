@@ -19,10 +19,10 @@ void            main_clip_rounded               (void);
 
 #define GSK_SHADER_CLIP (GSK_FLAGS & 3u)
 /* Defined by the shader compilers directly */
-/* #define GSK_TEXTURE0_IS_EXTERNAL ((GSK_FLAGS >> 2u) & 1u) */
-/* #define GSK_TEXTURE1_IS_EXTERNAL ((GSK_FLAGS >> 3u) & 1u) */
-#define GSK_TEXTURE0_SAMPLE_OP ((GSK_FLAGS >> 4u) & 7u)
-#define GSK_TEXTURE1_SAMPLE_OP ((GSK_FLAGS >> 8u) & 7u)
+/* #define GSK_TEXTURE0_IS_EXTERNAL ((GSK_FLAGS >> 4u) & 1u) */
+/* #define GSK_TEXTURE1_IS_EXTERNAL ((GSK_FLAGS >> 5u) & 1u) */
+#define GSK_TEXTURE0_SAMPLE_OP ((GSK_FLAGS >> 6u) & 7u)
+#define GSK_TEXTURE1_SAMPLE_OP ((GSK_FLAGS >> 10u) & 7u)
 
 #include "color.glsl"
 #include "rect.glsl"

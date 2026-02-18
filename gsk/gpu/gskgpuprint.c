@@ -72,6 +72,7 @@ gsk_gpu_print_shader_flags (GString           *string,
         break;
     }
 
+  g_string_append (string, gsk_gpu_shader_flags_has_clip_mask (flags) ? "░" : " ");
   gsk_gpu_print_shader_op (string, gsk_gpu_shader_flags_get_texture0_op (flags));
   gsk_gpu_print_shader_op (string, gsk_gpu_shader_flags_get_texture1_op (flags));
 
