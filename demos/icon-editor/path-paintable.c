@@ -627,14 +627,28 @@ void
 path_paintable_set_keywords (PathPaintable *self,
                              const char    *keywords)
 {
-  if (g_set_str (&self->svg->gpa_keywords, keywords))
+  if (g_set_str (&self->svg->keywords, keywords))
     g_signal_emit (self, signals[CHANGED], 0);
 }
 
 const char *
 path_paintable_get_keywords (PathPaintable *self)
 {
-  return self->svg->gpa_keywords;
+  return self->svg->keywords;
+}
+
+void
+path_paintable_set_description (PathPaintable *self,
+                                const char    *description)
+{
+  if (g_set_str (&self->svg->description, description))
+    g_signal_emit (self, signals[CHANGED], 0);
+}
+
+const char *
+path_paintable_get_description (PathPaintable *self)
+{
+  return self->svg->description;
 }
 
 size_t
