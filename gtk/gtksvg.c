@@ -15837,7 +15837,10 @@ parse_base_animation_attrs (Animation            *a,
           time_spec_add_animation (begin, a);
           time_spec_clear (&spec);
           if (begin->type == TIME_SPEC_TYPE_STATES)
-            data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (begin->states.states, -1));
+            {
+              if (begin->states.states != NO_STATES)
+                data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (begin->states.states, -1));
+            }
         }
       g_strfreev (strv);
     }
@@ -15870,7 +15873,10 @@ parse_base_animation_attrs (Animation            *a,
           time_spec_add_animation (end, a);
           time_spec_clear (&spec);
           if (end->type == TIME_SPEC_TYPE_STATES)
-            data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (end->states.states, -1));
+            {
+              if (end->states.states != NO_STATES)
+                data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (end->states.states, -1));
+            }
         }
       g_strfreev (strv);
     }
@@ -17207,7 +17213,8 @@ parse_shape_gpa_attrs (Shape                *shape,
         }
       else
         {
-          data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (states, -1));
+          if (states != NO_STATES)
+            data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (states, -1));
         }
     }
 
