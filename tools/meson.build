@@ -50,6 +50,7 @@ gtk_tools = [
                         'gtk-rendernode-tool-extract.c',
                         'gtk-rendernode-tool-filter.c',
                         'gtk-rendernode-tool-info.c',
+                        'gtk-rendernode-tool-match.c',
                         'gtk-rendernode-tool-render.c',
                         'gtk-rendernode-tool-show.c',
                        'gtk-tool-utils.c',

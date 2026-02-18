@@ -21,6 +21,7 @@ SYNOPSIS
 |   **gtk4-rendernode-tool** convert [OPTIONS...] <FILE1>
 |   **gtk4-rendernode-tool** extract [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** info [OPTIONS...] <FILE>
+|   **gtk4-rendernode-tool** match [OPTIONS...] <PATTERN> <FILE>
 |   **gtk4-rendernode-tool** render [OPTIONS...] <FILE> [<FILE>]
 |   **gtk4-rendernode-tool** show [OPTIONS...] <FILE>
 
@@ -147,3 +148,23 @@ of the url.
 ``--dir=DIRECTORY``
 
   Save extracted files in ``DIRECTORY`` (defaults to the current directory).
+
+Matching
+^^^^^^^^
+
+The ``match`` command allows to count occurrences of node patterns in a
+larger node. The syntax for patterns allows to describe collections of
+nodes with given types, like this:
+
+  ``(mask . color)``
+
+  Match mask nodes with any source child and a color node as mask child.
+
+  ``(rounded-clip linear-gradient)``
+
+  Match rounded clip nodes containing a linear gradient.
+
+  ``(container 2 color (fill color))``
+
+  Match containers with 2 children, the first of which is a color node
+  and the second of which is a fill node containing a color node.
