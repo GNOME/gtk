@@ -177,8 +177,7 @@ gtk_file_filter_set_property (GObject      *object,
     case PROP_MIME_TYPES:
       strv = (const char * const *) g_value_get_boxed (value);
       if (strv)
-        for (int i = 0; strv[i]; i++)
-          gtk_file_filter_add_mime_type (filter, strv[i]);
+        gtk_file_filter_add_mime_types (filter, (const char **) strv);
       break;
 
     case PROP_SUFFIXES:
@@ -635,6 +634,34 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
   rule->type = FILTER_RULE_MIME_TYPE;
   rule->u.content_types = g_new0 (char *, 2);
   rule->u.content_types[0] = g_content_type_from_mime_type (mime_type);
+
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
+  file_filter_add_rule (filter, rule);
+}
+
+/**
+ * gtk_file_filter_add_mime_types:
+ * @filter: a file filter
+ * @mime_types: (array zero-terminated=1): a %NULL-terminated array of mime types
+ *
+ * Adds a rule allowing a given array of mime types.
+ * It can for example be used with
+ * [Gly.Loader.get_mime_types](https://gnome.pages.gitlab.gnome.org/glycin/libglycin/type_func.Loader.get_mime_types.html).
+ *
+ * This is equivalent to calling [method@Gtk.FileFilter.add_mime_type]
+ * for all the supported mime types.
+ */
+void
+gtk_file_filter_add_mime_types (GtkFileFilter  *filter,
+                                const char    **mime_types)
+{
+  FilterRule *rule;
+
+  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
+
+  rule = g_new (FilterRule, 1);
+  rule->type = FILTER_RULE_MIME_TYPE;
+  rule->u.content_types = g_strdupv ((char **) mime_types);
 
   file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);

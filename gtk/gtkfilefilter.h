@@ -48,6 +48,10 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_file_filter_add_mime_type      (GtkFileFilter *filter,
                                                     const char    *mime_type);
 
+GDK_AVAILABLE_IN_4_22
+void            gtk_file_filter_add_mime_types (GtkFileFilter  *filter,
+                                                const char    **mime_types);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_file_filter_add_pattern        (GtkFileFilter *filter,
                                                     const char    *pattern);
