@@ -637,6 +637,20 @@ path_paintable_get_keywords (PathPaintable *self)
   return self->svg->keywords;
 }
 
+void
+path_paintable_set_description (PathPaintable *self,
+                                const char    *description)
+{
+  if (g_set_str (&self->svg->description, description))
+    g_signal_emit (self, signals[CHANGED], 0);
+}
+
+const char *
+path_paintable_get_description (PathPaintable *self)
+{
+  return self->svg->description;
+}
+
 size_t
 path_paintable_get_n_paths (PathPaintable *self)
 {

@@ -75,6 +75,9 @@ double          path_paintable_get_height          (PathPaintable   *self);
 void            path_paintable_set_keywords        (PathPaintable   *self,
                                                     const char      *keywords);
 const char *    path_paintable_get_keywords        (PathPaintable   *self);
+void            path_paintable_set_description     (PathPaintable   *self,
+                                                    const char      *description);
+const char *    path_paintable_get_description     (PathPaintable   *self);
 
 size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 
