@@ -26,14 +26,55 @@
 #include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
+#include "gdktoplevelsizeprivate.h"
 
 #include "gdkdrmdisplay-private.h"
 #include "gdkdrmmonitor-private.h"
+#include "gdkdrmsurface-private.h"
 
 static gboolean
 _gdk_drm_toplevel_surface_compute_size (GdkSurface *surface)
 {
+  GdkMonitor *monitor;
+  GdkRectangle monitor_geometry;
+  GdkToplevelSize size;
+  int bounds_width;
+  int bounds_height;
+  int width;
+  int height;
+
   g_assert (GDK_IS_DRM_TOPLEVEL_SURFACE (surface));
+
+  /* Place at 0,0 so we get the right monitor for bounds */
+  _gdk_drm_surface_move_resize (GDK_DRM_SURFACE (surface), 0, 0, -1, -1);
+
+  monitor = _gdk_drm_surface_get_best_monitor (GDK_DRM_SURFACE (surface));
+  if (monitor != NULL)
+    {
+      gdk_monitor_get_geometry (monitor, &monitor_geometry);
+      bounds_width = monitor_geometry.width;
+      bounds_height = monitor_geometry.height;
+    }
+  else
+    {
+      bounds_width = G_MAXINT;
+      bounds_height = G_MAXINT;
+    }
+
+  gdk_toplevel_size_init (&size, bounds_width, bounds_height);
+  gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
+
+  width = CLAMP (size.width, size.min_width, bounds_width);
+  height = CLAMP (size.height, size.min_height, bounds_height);
+
+  /* Ensure we have at least 1x1 to avoid zero-sized surfaces */
+  width = MAX (width, 1);
+  height = MAX (height, 1);
+
+  surface->width = width;
+  surface->height = height;
+
+  _gdk_drm_surface_move_resize (GDK_DRM_SURFACE (surface), 0, 0, width, height);
 
   return FALSE;
 }
