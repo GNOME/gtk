@@ -8,8 +8,11 @@ layout(std140, binding = 0)
 uniform PushConstants
 {
     mat4 mvp;
-    mat3x4 clip;
     vec2 scale;
+    vec2 color_volume1;
+    vec2 color_volume2;
+    vec4 clip_mask_rect;
+    mat3x4 clip;
 } push;
 
 #define GSK_GLOBAL_MVP push.mvp

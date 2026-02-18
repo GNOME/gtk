@@ -2,8 +2,11 @@
 
 layout(push_constant) uniform PushConstants {
     mat4 mvp;
-    mat3x4 clip;
     vec2 scale;
+    vec2 color_volume1;
+    vec2 color_volume2;
+    vec4 clip_mask_rect;
+    mat3x4 clip;
 } push;
 
 layout(constant_id=0) const uint GSK_FLAGS = 0;

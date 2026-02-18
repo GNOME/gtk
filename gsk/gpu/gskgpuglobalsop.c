@@ -6,6 +6,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gskrectprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanframeprivate.h"
@@ -39,6 +40,11 @@ gsk_gpu_globals_op_print (GskGpuOp    *op,
   g_string_append_printf (string, "scale %g %g ", instance->scale[0], instance->scale[1]);
   g_string_append (string, "clip ");
   gsk_gpu_print_rounded_rect (string, instance->clip);
+  if (instance->clip_mask_rect[2] > 0 && instance->clip_mask_rect[3])
+    {
+      g_string_append (string, "mask ");
+      gsk_gpu_print_rect (string, instance->clip_mask_rect);
+    }
   gsk_gpu_print_newline (string);
 }
 
@@ -94,14 +100,16 @@ void
 gsk_gpu_globals_op (GskGpuFrame             *frame,
                     const graphene_vec2_t   *scale,
                     const graphene_matrix_t *mvp,
+                    const graphene_rect_t   *clip_mask_rect,
                     const GskRoundedRect    *clip)
 {
   GskGpuGlobalsOp *self;
 
   self = (GskGpuGlobalsOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_GLOBALS_OP_CLASS);
 
+  graphene_vec2_to_float (scale, self->instance.scale);
   graphene_matrix_to_float (mvp, self->instance.mvp);
   gsk_rounded_rect_to_float (clip, graphene_point_zero (), self->instance.clip);
-  graphene_vec2_to_float (scale, self->instance.scale);
+  gsk_gpu_rect_to_float (clip_mask_rect, graphene_point_zero(), self->instance.clip_mask_rect);
   self->id = gsk_gpu_frame_add_globals (frame, &self->instance);
 }
