@@ -120,6 +120,8 @@ gdk_wayland_gl_context_surface_detach (GdkDrawContext *context)
 {
   GdkWaylandGLContext *self = GDK_WAYLAND_GL_CONTEXT (context);
 
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->surface_detach (context);
+
   g_clear_pointer (&self->egl_window, wl_egl_window_destroy);
 }
 
