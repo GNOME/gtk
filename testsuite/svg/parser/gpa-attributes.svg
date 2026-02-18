@@ -1,8 +1,7 @@
 <svg width="16" height="16"
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state='-1'
-        gpa:keywords='just some test'>
+        gpa:state='-1'>
   <path d="m0 0 l100 100"
      id='path0'
      gpa:fill='accent'

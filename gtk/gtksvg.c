@@ -24699,11 +24699,6 @@ gtk_svg_serialize_full (GtkSvg               *self,
         g_string_append (s, "gpa:state='empty'");
       else
         g_string_append_printf (s, "gpa:state='%u'", self->state);
-      if (self->keywords)
-        {
-          indent_for_attr (s, 0);
-          g_string_append_printf (s, "gpa:keywords='%s'", self->keywords);
-        }
     }
 
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)

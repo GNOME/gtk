@@ -124,7 +124,6 @@ GTK defines a small number of attributes in the `gpa` namespace to support state
 The following attributes can be set on the `<svg>` element:
 
 - `gpa:version`: The format version. Must be 1 if specified, currently.
-- `gpa:keywords`: A space-separated list of keywords
 - `gpa:state`: The initial state, as a number between -1 and 63
 
 The following attributes can be set on elements that specify a path:
