@@ -182,6 +182,7 @@ gsk_gpu_render_pass_prepare_shader (GskGpuRenderPass *self)
       gsk_gpu_globals_op (self->frame,
                           &self->scale,
                           &mvp,
+                          &GRAPHENE_RECT_INIT (0, 0, 0, 0),
                           &self->clip.rect);
     }
 
