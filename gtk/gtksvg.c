@@ -17076,7 +17076,7 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
     }
 
   if (keywords_attr)
-    svg->gpa_keywords = g_strdup (keywords_attr);
+    svg->keywords = g_strdup (keywords_attr);
 }
 
 static void
@@ -17994,7 +17994,7 @@ end_element_cb (GMarkupParseContext *context,
 do_target:
   if (strcmp (element_name, "rdf:li") == 0)
     {
-      g_set_str (&data->svg->gpa_keywords, data->text->str);
+      g_set_str (&data->svg->keywords, data->text->str);
     }
   else if (shape_type_lookup (element_name, &shape_type))
     {
@@ -23908,7 +23908,7 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->node, gsk_render_node_unref);
 
   g_clear_object (&self->clock);
-  g_free (self->gpa_keywords);
+  g_free (self->keywords);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -24322,7 +24322,7 @@ gtk_svg_equal (GtkSvg *svg1,
     return TRUE;
 
   if (svg1->gpa_version != svg2->gpa_version ||
-      g_strcmp0 (svg1->gpa_keywords, svg2->gpa_keywords) != 0)
+      g_strcmp0 (svg1->keywords, svg2->keywords) != 0)
     return FALSE;
 
   return shape_equal (svg1->content, svg2->content);
@@ -24658,7 +24658,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
   g_string_append (s, "xmlns='http://www.w3.org/2000/svg'");
   indent_for_attr (s, 0);
   g_string_append (s, "xmlns:svg='http://www.w3.org/2000/svg'");
-  if (self->gpa_keywords)
+  if (self->keywords)
     {
       /* we only need these to write out keywords in a way
        * that inkscape understand.s
@@ -24682,10 +24682,10 @@ gtk_svg_serialize_full (GtkSvg               *self,
         g_string_append (s, "gpa:state='empty'");
       else
         g_string_append_printf (s, "gpa:state='%u'", self->state);
-      if (self->gpa_keywords)
+      if (self->keywords)
         {
           indent_for_attr (s, 0);
-          g_string_append_printf (s, "gpa:keywords='%s'", self->gpa_keywords);
+          g_string_append_printf (s, "gpa:keywords='%s'", self->keywords);
         }
     }
 
@@ -24709,7 +24709,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
   serialize_shape_attrs (s, self, 0, self->content, flags);
   g_string_append (s, ">");
 
-  if (self->gpa_keywords)
+  if (self->keywords)
     {
       indent_for_elt (s, 2);
       g_string_append (s, "<metadata>");
@@ -24722,7 +24722,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
       indent_for_elt (s, 10);
       g_string_append (s, "<rdf:Bag>");
       indent_for_elt (s, 12);
-      g_string_append_printf (s, "<rdf:li>%s</rdf:li>\n", self->gpa_keywords);
+      g_string_append_printf (s, "<rdf:li>%s</rdf:li>\n", self->keywords);
       indent_for_elt (s, 10);
       g_string_append (s, "</rdf:Bag>");
       indent_for_elt (s, 8);

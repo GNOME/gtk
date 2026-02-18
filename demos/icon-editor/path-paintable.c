@@ -627,14 +627,14 @@ void
 path_paintable_set_keywords (PathPaintable *self,
                              const char    *keywords)
 {
-  if (g_set_str (&self->svg->gpa_keywords, keywords))
+  if (g_set_str (&self->svg->keywords, keywords))
     g_signal_emit (self, signals[CHANGED], 0);
 }
 
 const char *
 path_paintable_get_keywords (PathPaintable *self)
 {
-  return self->svg->gpa_keywords;
+  return self->svg->keywords;
 }
 
 size_t
