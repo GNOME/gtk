@@ -100,6 +100,7 @@ struct _GtkSvg
 
   unsigned int gpa_version;
   char *keywords;
+  char *description;
 
   Timeline *timeline;
 
