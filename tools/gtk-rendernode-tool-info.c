@@ -56,32 +56,6 @@ count_nodes (GskRenderNode *node,
   count->cur_depth--;
 }
 
-static const char *
-get_node_name (GskRenderNodeType type)
-{
-  GEnumClass *class;
-  GEnumValue *value;
-  const char *name;
-  static char buf[80];
-
-  class = g_type_class_get (GSK_TYPE_RENDER_NODE_TYPE);
-  value = g_enum_get_value (class, type);
-  name = value->value_nick;
-
-  if (g_str_has_suffix (name, "-node"))
-    {
-      unsigned int i;
-
-      for (i = 0; i < MIN (strlen (name) - strlen ("-node"), sizeof (buf) - 1); i++)
-        buf[i] = name[i];
-      buf[i] = '\0';
-
-      return buf;
-    }
-
-  return name;
-}
-
 static void
 file_info (const char *filename)
 {

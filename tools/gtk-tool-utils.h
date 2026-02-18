@@ -19,3 +19,5 @@ char *          get_color_state_cicp     (GdkColorState   *color_state);
 
 GdkColorState  *parse_cicp_tuple         (const char      *cicp_tuple,
                                           GError         **error);
+
+const char *    get_node_name            (GskRenderNodeType type);
