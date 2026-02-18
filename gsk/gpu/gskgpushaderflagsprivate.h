@@ -4,16 +4,24 @@
 
 static inline GskGpuShaderFlags
 gsk_gpu_shader_flags_create (GskGpuShaderClip clip,
+                             gboolean         has_clip_mask,
                              GdkShaderOp      texture0_shader_op,
                              gboolean         texture0_is_external,
                              GdkShaderOp      texture1_shader_op,
                              gboolean         texture1_is_external)
 {
   return (clip & GSK_GPU_SHADER_CLIP_MASK) |
+         (has_clip_mask ? 1 << (GSK_GPU_SHADER_CLIP_SHIFT -1) : 0) |
          (texture0_is_external ? 1 << GSK_GPU_SHADER_CLIP_SHIFT : 0) | 
          (texture1_is_external ? 1 << (GSK_GPU_SHADER_CLIP_SHIFT + 1) : 0) |
          (texture0_shader_op << (GSK_GPU_SHADER_CLIP_SHIFT + 2)) |
          (texture1_shader_op << (GSK_GPU_SHADER_CLIP_SHIFT + 2 + GSK_GPU_SHADER_OP_SHIFT));
+}
+
+static inline gboolean
+gsk_gpu_shader_flags_has_clip_mask (GskGpuShaderFlags flags)
+{
+  return flags & (1 << (GSK_GPU_SHADER_CLIP_SHIFT - 1)) ? TRUE : FALSE;
 }
 
 static inline gboolean
