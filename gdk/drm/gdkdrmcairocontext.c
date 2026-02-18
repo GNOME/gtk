@@ -222,6 +222,13 @@ _gdk_drm_cairo_context_begin_frame (GdkDrawContext  *draw_context,
                                                              self->width,
                                                              self->height,
                                                              back->pitch);
+  /* Debug: solid blue to verify we have taken over DRM master */
+  {
+    cairo_t *cr = cairo_create (self->paint_surface);
+    cairo_set_source_rgb (cr, 0.0, 0.0, 1.0);
+    cairo_paint (cr);
+    cairo_destroy (cr);
+  }
   *out_color_state = GDK_COLOR_STATE_SRGB;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }

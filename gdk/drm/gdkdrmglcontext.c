@@ -22,6 +22,8 @@
 
 #include "gdkconfig.h"
 
+#include <errno.h>
+
 #include "gdkdrmglcontext-private.h"
 #include "gdkdrmdisplay-private.h"
 #include "gdkdrmmonitor-private.h"
@@ -37,6 +39,7 @@
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
+#include <epoxy/gl.h>
 #endif
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -117,6 +120,14 @@ gdk_drm_gl_context_begin_frame (GdkDrawContext  *context,
                                                                          region,
                                                                          out_color_state,
                                                                          out_depth);
+
+  /* Debug: draw solid blue to verify we have taken over DRM master and are scanning out */
+  if (self->gbm_surface)
+    {
+      gdk_gl_context_make_current (GDK_GL_CONTEXT (context));
+      glClearColor (0.0f, 0.0f, 1.0f, 1.0f);
+      glClear (GL_COLOR_BUFFER_BIT);
+    }
 }
 
 static void
@@ -139,11 +150,17 @@ gdk_drm_gl_context_end_frame (GdkDrawContext *context,
   GDK_DRAW_CONTEXT_CLASS (gdk_drm_gl_context_parent_class)->end_frame (context, painted);
 
   if (!self->gbm_surface || self->width == 0 || self->height == 0)
-    return;
+    {
+      g_debug ("DRM GL end_frame: no gbm_surface or zero size, skipping page flip");
+      return;
+    }
 
   bo = gbm_surface_lock_front_buffer (self->gbm_surface);
   if (!bo)
-    return;
+    {
+      g_debug ("DRM GL end_frame: gbm_surface_lock_front_buffer failed, skipping page flip");
+      return;
+    }
 
   if (self->previous_bo)
     {
@@ -172,6 +189,7 @@ gdk_drm_gl_context_end_frame (GdkDrawContext *context,
                        &fb_id, 0);
   if (ret != 0)
     {
+      g_debug ("DRM GL end_frame: drmModeAddFB2 failed (ret=%d), skipping page flip", ret);
       gbm_surface_release_buffer (self->gbm_surface, bo);
       return;
     }
@@ -179,6 +197,7 @@ gdk_drm_gl_context_end_frame (GdkDrawContext *context,
   monitor = gdk_display_get_monitor_at_surface (gdk_draw_context_get_display (context), surface);
   if (!monitor || !GDK_IS_DRM_MONITOR (monitor))
     {
+      g_debug ("DRM GL end_frame: no monitor at surface, skipping page flip");
       gbm_surface_release_buffer (self->gbm_surface, bo);
       drmModeRmFB (display->drm_fd, fb_id);
       return;
@@ -187,6 +206,7 @@ gdk_drm_gl_context_end_frame (GdkDrawContext *context,
   crtc_id = _gdk_drm_monitor_get_crtc_id (drm_monitor);
   if (crtc_id == 0)
     {
+      g_debug ("DRM GL end_frame: CRTC id is 0, skipping page flip");
       gbm_surface_release_buffer (self->gbm_surface, bo);
       drmModeRmFB (display->drm_fd, fb_id);
       return;
@@ -216,6 +236,7 @@ gdk_drm_gl_context_end_frame (GdkDrawContext *context,
                              (void *) (uintptr_t) crtc_id);
       if (ret != 0)
         {
+          g_debug ("DRM GL end_frame: drmModePageFlip failed (ret=%d, errno=%d)", ret, errno);
           drmModeRmFB (display->drm_fd, fb_id);
           gbm_surface_release_buffer (self->gbm_surface, bo);
           return;
