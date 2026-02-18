@@ -1997,6 +1997,20 @@ gdk_display_init_egl (GdkDisplay  *self,
  * Returns: (nullable): the EGL display object
  */
 gpointer
+_gdk_display_peek_egl_display (GdkDisplay *self)
+{
+#ifdef HAVE_EGL
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
+
+  return priv->egl_display;
+#else
+  return NULL;
+#endif
+}
+
+gpointer
 gdk_display_get_egl_display (GdkDisplay *self)
 {
 #ifdef HAVE_EGL

@@ -255,6 +255,7 @@ gboolean            gdk_display_init_egl              (GdkDisplay       *self,
                                                        gboolean          allow_any,
                                                        GError          **error);
 gpointer            gdk_display_get_egl_display       (GdkDisplay       *self);
+gpointer            _gdk_display_peek_egl_display      (GdkDisplay       *self);
 gpointer            gdk_display_get_egl_config        (GdkDisplay       *self,
                                                        GdkMemoryDepth    depth);
 

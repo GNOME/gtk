@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -51,7 +52,242 @@
 #include "gdkdrmsurface-private.h"
 #include "gdkdrmtoplevelsurface-private.h"
 
+#include <glib/gstdio.h>
+
 G_DEFINE_FINAL_TYPE (GdkDrmDisplay, gdk_drm_display, GDK_TYPE_DISPLAY)
+
+/* Check if a DRM fd has at least one connected connector (can drive a display).
+ * Used to prefer a card that has outputs when multiple cards exist. */
+static gboolean
+drm_device_has_connected_connector (int fd)
+{
+  drmModeRes *resources;
+  int i;
+  gboolean found = FALSE;
+
+  resources = drmModeGetResources (fd);
+  if (!resources)
+    return FALSE;
+
+  for (i = 0; i < resources->count_connectors && !found; i++)
+    {
+      drmModeConnector *connector = drmModeGetConnector (fd, resources->connectors[i]);
+      if (connector && connector->connection == DRM_MODE_CONNECTED)
+        found = TRUE;
+      if (connector)
+        drmModeFreeConnector (connector);
+    }
+  drmModeFreeResources (resources);
+  return found;
+}
+
+/* Priority for device selection, matching mutter's choose_primary_gpu order:
+ * 1) udev tag mutter-device-preferred-primary, 2) platform (integrated), 3) boot VGA, 4) any. */
+typedef struct { char *path; int priority; } DrmCandidate;
+
+static void
+drm_candidate_free (DrmCandidate *c)
+{
+  g_free (c->path);
+}
+
+static int
+drm_candidate_compare (const DrmCandidate *a,
+                       const DrmCandidate *b)
+{
+  int cmp = b->priority - a->priority;
+  return cmp ? cmp : g_strcmp0 (a->path, b->path);
+}
+
+static gboolean
+udev_device_is_platform (struct udev_device *device)
+{
+  struct udev_device *parent = udev_device_get_parent_with_subsystem_devtype (
+    device, "platform", NULL);
+  return parent != NULL;
+}
+
+static gboolean
+udev_device_is_boot_vga (struct udev_device *device)
+{
+  struct udev_device *pci;
+  const char *vga_str;
+
+  pci = udev_device_get_parent_with_subsystem_devtype (device, "pci", NULL);
+  if (!pci)
+    return FALSE;
+  vga_str = udev_device_get_sysattr_value (pci, "boot_vga");
+  return vga_str && vga_str[0] == '1' && vga_str[1] == '\0';
+}
+
+/* Enumerate DRM cards via udev (like mutter), filter by seat and type, and sort
+ * by preferred-primary > platform > boot_vga > other. Returns a GArray of
+ * DrmCandidate; caller frees array and path in each element. */
+static GArray *
+drm_discover_via_udev (struct udev *udev,
+                       const char  *seat_id)
+{
+  struct udev_enumerate *enumerate;
+  struct udev_list_entry *entry;
+  GArray *candidates;
+  const char *syspath;
+
+  enumerate = udev_enumerate_new (udev);
+  if (!enumerate)
+    return NULL;
+
+  udev_enumerate_add_match_subsystem (enumerate, "drm");
+  udev_enumerate_scan_devices (enumerate);
+
+  candidates = g_array_new (TRUE, TRUE, sizeof (DrmCandidate));
+
+  udev_list_entry_foreach (entry, udev_enumerate_get_list_entry (enumerate))
+    {
+      struct udev_device *device;
+      const char *devnode, *devtype, *device_seat, *sysname;
+      int priority = 0;
+      DrmCandidate c = { 0 };
+
+      syspath = udev_list_entry_get_name (entry);
+      device = udev_device_new_from_syspath (udev, syspath);
+      if (!device)
+        continue;
+
+      devtype = udev_device_get_property_value (device, "DEVTYPE");
+      if (!g_str_equal (devtype, "drm_minor"))
+        {
+          udev_device_unref (device);
+          continue;
+        }
+
+      sysname = udev_device_get_sysname (device);
+      if (!sysname || !g_str_has_prefix (sysname, "card"))
+        {
+          udev_device_unref (device);
+          continue;
+        }
+      if (sysname[4] < '0' || sysname[4] > '9')
+        {
+          udev_device_unref (device);
+          continue;
+        }
+
+      device_seat = udev_device_get_property_value (device, "ID_SEAT");
+      if (!device_seat)
+        device_seat = "seat0";
+      if (!g_str_equal (device_seat, seat_id))
+        {
+          udev_device_unref (device);
+          continue;
+        }
+
+      devnode = udev_device_get_devnode (device);
+      if (!devnode)
+        {
+          udev_device_unref (device);
+          continue;
+        }
+
+      if (udev_device_has_tag (device, "mutter-device-preferred-primary") != 0)
+        priority = 4;
+      else if (udev_device_is_platform (device))
+        priority = 3;
+      else if (udev_device_is_boot_vga (device))
+        priority = 2;
+      else
+        priority = 1;
+
+      c.path = g_strdup (devnode);
+      c.priority = priority;
+      g_array_append_val (candidates, c);
+      udev_device_unref (device);
+    }
+
+  udev_enumerate_unref (enumerate);
+
+  if (candidates->len == 0)
+    {
+      g_array_free (candidates, TRUE);
+      return NULL;
+    }
+
+  g_array_sort (candidates, (GCompareFunc) drm_candidate_compare);
+  return candidates;
+}
+
+/* Fallback: build a sorted list of DRM card names from /dev/dri/ when udev
+ * is unavailable or returns no devices. Returns GList of newly allocated
+ * strings; caller frees list and elements. */
+static GList *
+drm_discover_card_names_fallback (void)
+{
+  GDir *dir;
+  const char *ent;
+  GList *names = NULL;
+
+  dir = g_dir_open ("/dev/dri", 0, NULL);
+  if (!dir)
+    return NULL;
+
+  while ((ent = g_dir_read_name (dir)) != NULL)
+    {
+      if (g_str_has_prefix (ent, "card") && ent[4] != '\0')
+        {
+          const char *p = ent + 4;
+          while (*p >= '0' && *p <= '9')
+            p++;
+          if (*p == '\0')
+            names = g_list_append (names, g_strdup (ent));
+        }
+    }
+  g_dir_close (dir);
+
+  if (!names)
+    return NULL;
+
+  names = g_list_sort (names, (GCompareFunc) g_strcmp0);
+  return names;
+}
+
+/* Try to open and take master on a single DRM device. If successful, sets
+ * self->drm_fd and returns TRUE. If prefer_connected is TRUE and the device
+ * has no connected connectors, leaves fd closed and returns FALSE so the
+ * caller can try the next card. */
+static gboolean
+try_open_drm_device (GdkDrmDisplay *self,
+                    const char    *path,
+                    gboolean       prefer_connected,
+                    GError       **error)
+{
+  int fd;
+
+  fd = open (path, O_RDWR | O_CLOEXEC);
+  if (fd < 0)
+    {
+      g_set_error (error, G_IO_ERROR, g_io_error_from_errno (errno),
+                   "Failed to open DRM device %s: %s", path, strerror (errno));
+      return FALSE;
+    }
+
+  if (drmSetMaster (fd) != 0)
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Failed to become DRM master on %s: %s", path, strerror (errno));
+      close (fd);
+      return FALSE;
+    }
+
+  if (prefer_connected && !drm_device_has_connected_connector (fd))
+    {
+      drmDropMaster (fd);
+      close (fd);
+      g_clear_error (error);
+      return FALSE;
+    }
+
+  self->drm_fd = fd;
+  return TRUE;
+}
 
 typedef struct
 {
@@ -172,36 +408,129 @@ open_drm_device (GdkDrmDisplay *self,
                  const char    *display_name,
                  GError       **error)
 {
+  gboolean explicit_name = display_name && display_name[0];
   char *path = NULL;
-  const char *name = display_name && display_name[0] ? display_name : "card0";
+  const char *name;
 
-  if (g_str_has_prefix (name, "drm:"))
-    path = g_strdup_printf ("/dev/dri/%s", name + 4);
-  else if (g_str_has_prefix (name, "/dev/"))
-    path = g_strdup (name);
-  else
-    path = g_strdup_printf ("/dev/dri/%s", name);
-
-  self->drm_fd = open (path, O_RDWR | O_CLOEXEC);
-  g_free (path);
-
-  if (self->drm_fd < 0)
+  if (explicit_name)
     {
-      g_set_error (error, G_IO_ERROR, g_io_error_from_errno (errno),
-                   "Failed to open DRM device: %s", strerror (errno));
+      name = display_name;
+      if (g_str_has_prefix (name, "drm:"))
+        path = g_strdup_printf ("/dev/dri/%s", name + 4);
+      else if (g_str_has_prefix (name, "/dev/"))
+        path = g_strdup (name);
+      else
+        path = g_strdup_printf ("/dev/dri/%s", name);
+
+      if (try_open_drm_device (self, path, FALSE, error))
+        {
+          g_free (path);
+          return TRUE;
+        }
+      g_free (path);
       return FALSE;
     }
 
-  if (drmSetMaster (self->drm_fd) != 0)
+  /* No display name: discover DRM cards (mutter-style udev, then fallback).
+   * Order: udev list (preferred-primary > platform > boot_vga > other), then
+   * /dev/dri scan, then card0. Prefer a card with a connected connector. */
+  {
+    struct udev *udev = udev_new ();
+    GArray *udev_candidates = udev ? drm_discover_via_udev (udev, "seat0") : NULL;
+    if (udev)
+      udev_unref (udev);
+
+    if (udev_candidates && udev_candidates->len > 0)
+      {
+        guint i;
+        gboolean opened = FALSE;
+
+        for (i = 0; i < udev_candidates->len; i++)
+          {
+            DrmCandidate *c = &g_array_index (udev_candidates, DrmCandidate, i);
+            if (try_open_drm_device (self, c->path, TRUE, error))
+              {
+                g_free (self->name);
+                self->name = g_path_get_basename (c->path);
+                opened = TRUE;
+                break;
+              }
+          }
+        if (!opened)
+          {
+            g_clear_error (error);
+            for (i = 0; i < udev_candidates->len; i++)
+              {
+                DrmCandidate *c = &g_array_index (udev_candidates, DrmCandidate, i);
+                if (try_open_drm_device (self, c->path, FALSE, error))
+                  {
+                    g_free (self->name);
+                    self->name = g_path_get_basename (c->path);
+                    opened = TRUE;
+                    break;
+                  }
+                g_clear_error (error);
+              }
+          }
+        for (i = 0; i < udev_candidates->len; i++)
+          drm_candidate_free (&g_array_index (udev_candidates, DrmCandidate, i));
+        g_array_free (udev_candidates, TRUE);
+        if (opened)
+          return TRUE;
+      }
+  }
+
+  /* Fallback: scan /dev/dri/ for card* (no udev or no udev seats) */
+  {
+    GList *cards = drm_discover_card_names_fallback ();
+    if (cards)
+      {
+        GList *l;
+        for (l = cards; l != NULL; l = l->next)
+          {
+            const char *card_name = l->data;
+            char *card_path = g_strdup_printf ("/dev/dri/%s", card_name);
+            if (try_open_drm_device (self, card_path, TRUE, error))
+              {
+                g_free (self->name);
+                self->name = g_strdup (card_name);
+                g_free (card_path);
+                g_list_free_full (cards, g_free);
+                return TRUE;
+              }
+            g_free (card_path);
+          }
+        g_clear_error (error);
+        for (l = cards; l != NULL; l = l->next)
+          {
+            const char *card_name = l->data;
+            char *card_path = g_strdup_printf ("/dev/dri/%s", card_name);
+            if (try_open_drm_device (self, card_path, FALSE, error))
+              {
+                g_free (self->name);
+                self->name = g_strdup (card_name);
+                g_free (card_path);
+                g_list_free_full (cards, g_free);
+                return TRUE;
+              }
+            g_clear_error (error);
+            g_free (card_path);
+          }
+        g_list_free_full (cards, g_free);
+      }
+  }
+
+  /* Last resort: try legacy "card0" */
+  if (try_open_drm_device (self, "/dev/dri/card0", FALSE, error))
     {
-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "Failed to become DRM master: %s", strerror (errno));
-      close (self->drm_fd);
-      self->drm_fd = -1;
-      return FALSE;
+      g_free (self->name);
+      self->name = g_strdup ("card0");
+      return TRUE;
     }
 
-  return TRUE;
+  g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+               "No usable DRM device found. Check /dev/dri/ and DRM permissions.");
+  return FALSE;
 }
 
 static void
@@ -273,6 +602,29 @@ load_monitors (GdkDrmDisplay *self)
   drmModeFreeResources (resources);
 }
 
+static int
+libinput_open_restricted (const char *path,
+                         int         flags,
+                         void       *user_data)
+{
+  int fd = open (path, flags | O_CLOEXEC);
+  if (fd < 0)
+    return -errno;
+  return fd;
+}
+
+static void
+libinput_close_restricted (int   fd,
+                           void *user_data)
+{
+  close (fd);
+}
+
+static const struct libinput_interface libinput_interface = {
+  .open_restricted = libinput_open_restricted,
+  .close_restricted = libinput_close_restricted,
+};
+
 static gboolean
 load_libinput (GdkDrmDisplay *self,
                GError       **error)
@@ -284,7 +636,7 @@ load_libinput (GdkDrmDisplay *self,
       return FALSE;
     }
 
-  self->libinput = libinput_udev_create_context (&(struct libinput_interface){ 0 }, NULL, udev);
+  self->libinput = libinput_udev_create_context (&libinput_interface, NULL, udev);
   udev_unref (udev);
   if (!self->libinput)
     {
@@ -532,7 +884,7 @@ gdk_drm_display_init_gl (GdkDisplay  *display,
 {
   GdkDrmDisplay *self = GDK_DRM_DISPLAY (display);
 
-  if (self->gbm_device && !gdk_display_get_egl_display (display))
+  if (self->gbm_device && !_gdk_display_peek_egl_display (display))
     {
 #ifdef HAVE_EGL
       if (!gdk_display_init_egl (display, 0, self->gbm_device, TRUE, error))
