@@ -4,13 +4,13 @@
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2010.
 # wanderlust <wanderlust@ukr.net>, 2009.
 # Daniel Korostil <ted.korostiled@gmail.com>, 2013, 2014, 2015, 2016.
-# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-09-20 16:07+0000\n"
-"PO-Revision-Date: 2025-09-20 19:22+0300\n"
+"POT-Creation-Date: 2026-02-18 18:21+0000\n"
+"PO-Revision-Date: 2026-02-19 12:24+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -43,30 +43,30 @@ msgstr "Тип показу Broadway не підтримується: %s"
 msgid "This clipboard cannot store data."
 msgstr "У цьому буфері даних неможливо зберегти дані."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:782 gdk/gdkclipboard.c:1073
 msgid "Cannot read from empty clipboard."
 msgstr "Неможливо прочитати дані з порожнього буфера обміну."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1123 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Немає сумісних форматів для передавання вмісту буфера обміну."
 
-#: gdk/gdkcolorstate.c:1081
+#: gdk/gdkcolorstate.c:1050
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: підтримки невказаних параметрів не передбачено"
 
-#: gdk/gdkcolorstate.c:1127
+#: gdk/gdkcolorstate.c:1096
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: підтримки функції передавання %u не передбачено"
 
-#: gdk/gdkcolorstate.c:1158
+#: gdk/gdkcolorstate.c:1127
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: підтримки основних кольорів %u не передбачено"
 
-#: gdk/gdkcolorstate.c:1185
+#: gdk/gdkcolorstate.c:1154
 #, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp: коефіцієнтів матриці %u, підтримки %s не передбачено"
@@ -82,11 +82,11 @@ msgstr "Не вдалося надати дані як «%s»"
 msgid "Cannot provide contents as %s"
 msgstr "Не вдалося надати дані як %s"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:471
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:472
 msgid "The current backend does not support OpenGL"
 msgstr "У цьому модулі не передбачено підтримки OpenGL"
 
-#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1754
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1966
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Підтримку Vulkan вимкнено через GDK_DISABLE"
 
@@ -94,23 +94,23 @@ msgstr "Підтримку Vulkan вимкнено через GDK_DISABLE"
 msgid "OpenGL support disabled via GDK_DISABLE"
 msgstr "Вимкнено підтримування OpenGL через GDK_DISABLE"
 
-#: gdk/gdkdisplay.c:1729
+#: gdk/gdkdisplay.c:1728
 msgid "No EGL configuration available"
 msgstr "Немає доступних налаштувань EGL"
 
-#: gdk/gdkdisplay.c:1737
+#: gdk/gdkdisplay.c:1736
 msgid "Failed to get EGL configurations"
 msgstr "Не вдалося отримати налаштування EGL"
 
-#: gdk/gdkdisplay.c:1767
+#: gdk/gdkdisplay.c:1766
 msgid "No EGL configuration with required features found"
 msgstr "Не знайдено налаштувань EGL із потрібними можливостями"
 
-#: gdk/gdkdisplay.c:1774
+#: gdk/gdkdisplay.c:1773
 msgid "No perfect EGL configuration found"
 msgstr "Не знайдено ідеальних налаштувань EGL"
 
-#: gdk/gdkdisplay.c:1816
+#: gdk/gdkdisplay.c:1815
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -119,23 +119,23 @@ msgstr[1] "У реалізації EGL не вистачає %2$d розшире
 msgstr[2] "У реалізації EGL не вистачає %2$d розширень %1$s"
 msgstr[3] "У реалізації EGL не вистачає розширення %1$s"
 
-#: gdk/gdkdisplay.c:1865
+#: gdk/gdkdisplay.c:1864
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL є недоступною у цій пісочниці"
 
-#: gdk/gdkdisplay.c:1866
+#: gdk/gdkdisplay.c:1865
 msgid "libEGL not available"
 msgstr "libEGL є недоступною"
 
-#: gdk/gdkdisplay.c:1876
+#: gdk/gdkdisplay.c:1875
 msgid "Failed to create EGL display"
 msgstr "Не вдалося створити запис дисплея EGL"
 
-#: gdk/gdkdisplay.c:1885
+#: gdk/gdkdisplay.c:1884
 msgid "Could not initialize EGL display"
 msgstr "Не вдалося ініціалізувати дисплей EGL"
 
-#: gdk/gdkdisplay.c:1895
+#: gdk/gdkdisplay.c:1894
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr ""
@@ -150,24 +150,24 @@ msgstr ""
 msgid "No compatible formats to transfer contents."
 msgstr "Немає сумісних форматів для передавання даних."
 
-#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:654
+#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:654
 msgid "No GL API allowed."
 msgstr "Програмний інтерфейс GL заборонено."
 
-#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:661
-#: gdk/win32/gdkglcontext-win32-wgl.c:784 gdk/x11/gdkglcontext-glx.c:700
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:660
+#: gdk/win32/gdkglcontext-win32-wgl.c:783 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/gdkglcontext.c:1439
+#: gdk/gdkglcontext.c:1440
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "За допомогою GDK_DISABLE вимкнено API OpenGL ES"
 
-#: gdk/gdkglcontext.c:1451
+#: gdk/gdkglcontext.c:1452
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "API OpenGL вимкнено за допомогою GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1462
+#: gdk/gdkglcontext.c:1463
 #, c-format
 msgid "Application does not support %s API"
 msgstr "У програмі не передбачено підтримки програмного інтерфейсу %s"
@@ -175,12 +175,12 @@ msgstr "У програмі не передбачено підтримки пр�
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2253
+#: gdk/gdkglcontext.c:2259
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
 
-#: gdk/gdkglcontext.c:2264
+#: gdk/gdkglcontext.c:2270
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr ""
@@ -615,7 +615,7 @@ msgstr "Не вдалося завантажити дані TIFF"
 msgid "Reading data failed at row %d"
 msgstr "Помилка читання даних у рядку %d"
 
-#: gdk/macos/gdkmacospasteboard.c:255
+#: gdk/macos/gdkmacospasteboard.c:253
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Не вдалося декодувати дані з типом MIME «%s»"
@@ -772,26 +772,26 @@ msgstr ""
 "Не вдалося перетворити формат W32 даних перетягування зі скиданням 0x%x до "
 "%p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:591
+#: gdk/win32/gdkglcontext-win32-wgl.c:590
 msgid "No GL implementation is available"
 msgstr "Немає жодної реалізації GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:675
+#: gdk/win32/gdkglcontext-win32-wgl.c:674
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версія WGL %d.%d є надто давньою. Потрібна версія принаймні %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:694
+#: gdk/win32/gdkglcontext-win32-wgl.c:693
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реалізація GL не може оприлюднювати контексти GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:853
+#: gdk/win32/gdkglcontext-win32-wgl.c:852
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
 msgstr "У Window встановлено непідтримуваний формат у пікселях %d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:862
+#: gdk/win32/gdkglcontext-win32-wgl.c:861
 msgid "No available configurations for the given pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок"
 
@@ -897,7 +897,7 @@ msgstr "Некоректні формати у складному перетво
 msgid "Unsupported encoding “%s”"
 msgstr "Непідтримуване кодування «%s»"
 
-#: gsk/gpu/gskgldevice.c:253
+#: gsk/gpu/gskgldevice.c:258
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "У цьому засобі обробки не передбачено підтримки OpenGL ES 3.0."
@@ -906,7 +906,7 @@ msgstr "У цьому засобі обробки не передбачено п
 msgid "OpenGL 3.3 required"
 msgstr "Потрібна OpenGL 3.3"
 
-#: gsk/gpu/gskvulkanrenderer.c:159
+#: gsk/gpu/gskvulkanrenderer.c:164
 msgid "Vulkan support disabled during GTK build"
 msgstr "Підтримку Vulkan вимкнено під час збирання GTK"
 
@@ -1013,7 +1013,7 @@ msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Вилучає вміст запису"
 
-#: gtk/a11y/gtkatspiroot.c:269 gtk/gtkaccessible.c:906
+#: gtk/a11y/gtkatspiroot.c:269 gtk/gtkaccessible.c:916
 msgctxt "accessibility"
 msgid "application"
 msgstr "програма"
@@ -1134,13 +1134,13 @@ msgid "Pick a Color"
 msgstr "Вибір кольору"
 
 #: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:323
-#: gtk/gtkcolordialogbutton.c:337
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%, Альфа %d%%"
 
 #: gtk/deprecated/gtkcolorbutton.c:514 gtk/gtkcolorchooserwidget.c:329
-#: gtk/gtkcolordialogbutton.c:343
+#: gtk/gtkcolordialogbutton.c:347
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%"
@@ -1154,12 +1154,12 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Виберіть шрифт"
 
-#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3854
-#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:328
+#: gtk/deprecated/gtkfontbutton.c:603 gtk/gtkfilechooserwidget.c:3850
+#: gtk/gtkfontdialogbutton.c:128 gtk/inspector/visual.ui:360
 msgid "Font"
 msgstr "Шрифт"
 
-#: gtk/deprecated/gtkfontbutton.c:1158 gtk/gtkfontdialogbutton.c:657
+#: gtk/deprecated/gtkfontbutton.c:1158 gtk/gtkfontdialogbutton.c:661
 msgctxt "font"
 msgid "None"
 msgstr "Немає"
@@ -1420,422 +1420,422 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: gtk/gtkaccessible.c:827
+#: gtk/gtkaccessible.c:837
 msgctxt "accessibility"
 msgid "alert"
 msgstr "попередження"
 
-#: gtk/gtkaccessible.c:828
+#: gtk/gtkaccessible.c:838
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "вікно попередження"
 
-#: gtk/gtkaccessible.c:829
+#: gtk/gtkaccessible.c:839
 msgctxt "accessibility"
 msgid "banner"
 msgstr "банер"
 
-#: gtk/gtkaccessible.c:830
+#: gtk/gtkaccessible.c:840
 msgctxt "accessibility"
 msgid "button"
 msgstr "кнопка"
 
-#: gtk/gtkaccessible.c:831
+#: gtk/gtkaccessible.c:841
 msgctxt "accessibility"
 msgid "caption"
 msgstr "підпис"
 
-#: gtk/gtkaccessible.c:832
+#: gtk/gtkaccessible.c:842
 msgctxt "accessibility"
 msgid "cell"
 msgstr "комірка"
 
-#: gtk/gtkaccessible.c:833
+#: gtk/gtkaccessible.c:843
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "кнопка варіанта"
 
-#: gtk/gtkaccessible.c:834
+#: gtk/gtkaccessible.c:844
 msgctxt "accessibility"
 msgid "column header"
 msgstr "заголовок стовпчика"
 
-#: gtk/gtkaccessible.c:835
+#: gtk/gtkaccessible.c:845
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "поле зі списком"
 
-#: gtk/gtkaccessible.c:836
+#: gtk/gtkaccessible.c:846
 msgctxt "accessibility"
 msgid "command"
 msgstr "команда"
 
-#: gtk/gtkaccessible.c:837
+#: gtk/gtkaccessible.c:847
 msgctxt "accessibility"
 msgid "composite"
 msgstr "суміщення"
 
-#: gtk/gtkaccessible.c:838
+#: gtk/gtkaccessible.c:848
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "діалогове вікно"
 
-#: gtk/gtkaccessible.c:839
+#: gtk/gtkaccessible.c:849
 msgctxt "accessibility"
 msgid "document"
 msgstr "документ"
 
-#: gtk/gtkaccessible.c:840
+#: gtk/gtkaccessible.c:850
 msgctxt "accessibility"
 msgid "feed"
 msgstr "стрічка"
 
-#: gtk/gtkaccessible.c:841
+#: gtk/gtkaccessible.c:851
 msgctxt "accessibility"
 msgid "form"
 msgstr "форм"
 
-#: gtk/gtkaccessible.c:842
+#: gtk/gtkaccessible.c:852
 msgctxt "accessibility"
 msgid "generic"
 msgstr "загальне"
 
-#: gtk/gtkaccessible.c:843
+#: gtk/gtkaccessible.c:853
 msgctxt "accessibility"
 msgid "grid"
 msgstr "таблиця"
 
-#: gtk/gtkaccessible.c:844
+#: gtk/gtkaccessible.c:854
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "комірка таблиці"
 
-#: gtk/gtkaccessible.c:845
+#: gtk/gtkaccessible.c:855
 msgctxt "accessibility"
 msgid "group"
 msgstr "група"
 
-#: gtk/gtkaccessible.c:846
+#: gtk/gtkaccessible.c:856
 msgctxt "accessibility"
 msgid "heading"
 msgstr "заголовок"
 
-#: gtk/gtkaccessible.c:847
+#: gtk/gtkaccessible.c:857
 msgctxt "accessibility"
 msgid "image"
 msgstr "зображення"
 
-#: gtk/gtkaccessible.c:848
+#: gtk/gtkaccessible.c:858
 msgctxt "accessibility"
 msgid "input"
 msgstr "введення даних"
 
-#: gtk/gtkaccessible.c:849
+#: gtk/gtkaccessible.c:859
 msgctxt "accessibility"
 msgid "label"
 msgstr "мітка"
 
-#: gtk/gtkaccessible.c:850
+#: gtk/gtkaccessible.c:860
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "орієнтир"
 
-#: gtk/gtkaccessible.c:851
+#: gtk/gtkaccessible.c:861
 msgctxt "accessibility"
 msgid "legend"
 msgstr "умовні позначення"
 
-#: gtk/gtkaccessible.c:852
+#: gtk/gtkaccessible.c:862
 msgctxt "accessibility"
 msgid "link"
 msgstr "посилання"
 
-#: gtk/gtkaccessible.c:853
+#: gtk/gtkaccessible.c:863
 msgctxt "accessibility"
 msgid "list"
 msgstr "список"
 
-#: gtk/gtkaccessible.c:854
+#: gtk/gtkaccessible.c:864
 msgctxt "accessibility"
 msgid "list box"
 msgstr "поле списку"
 
-#: gtk/gtkaccessible.c:855
+#: gtk/gtkaccessible.c:865
 msgctxt "accessibility"
 msgid "list item"
 msgstr "елемент списку"
 
-#: gtk/gtkaccessible.c:856
+#: gtk/gtkaccessible.c:866
 msgctxt "accessibility"
 msgid "log"
 msgstr "журнал"
 
-#: gtk/gtkaccessible.c:857
+#: gtk/gtkaccessible.c:867
 msgctxt "accessibility"
 msgid "main"
 msgstr "основний"
 
-#: gtk/gtkaccessible.c:858
+#: gtk/gtkaccessible.c:868
 msgctxt "accessibility"
 msgid "marquee"
 msgstr "область"
 
-#: gtk/gtkaccessible.c:859
+#: gtk/gtkaccessible.c:869
 msgctxt "accessibility"
 msgid "math"
 msgstr "математичний вираз"
 
-#: gtk/gtkaccessible.c:860
+#: gtk/gtkaccessible.c:870
 msgctxt "accessibility"
 msgid "meter"
 msgstr "вимірювач"
 
-#: gtk/gtkaccessible.c:861
+#: gtk/gtkaccessible.c:871
 msgctxt "accessibility"
 msgid "menu"
 msgstr "меню"
 
-#: gtk/gtkaccessible.c:862
+#: gtk/gtkaccessible.c:872
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "рядок меню"
 
-#: gtk/gtkaccessible.c:863
+#: gtk/gtkaccessible.c:873
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "елемент меню"
 
-#: gtk/gtkaccessible.c:864
+#: gtk/gtkaccessible.c:874
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "пункт позначення у меню"
 
-#: gtk/gtkaccessible.c:865
+#: gtk/gtkaccessible.c:875
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "пункт-перемикач у меню"
 
-#: gtk/gtkaccessible.c:866
+#: gtk/gtkaccessible.c:876
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "навігація"
 
-#: gtk/gtkaccessible.c:867
+#: gtk/gtkaccessible.c:877
 msgctxt "accessibility"
 msgid "none"
 msgstr "немає"
 
-#: gtk/gtkaccessible.c:868
+#: gtk/gtkaccessible.c:878
 msgctxt "accessibility"
 msgid "note"
 msgstr "нотатка"
 
-#: gtk/gtkaccessible.c:869
+#: gtk/gtkaccessible.c:879
 msgctxt "accessibility"
 msgid "option"
 msgstr "параметр"
 
-#: gtk/gtkaccessible.c:870
+#: gtk/gtkaccessible.c:880
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "презентація"
 
-#: gtk/gtkaccessible.c:871
+#: gtk/gtkaccessible.c:881
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "індикатор поступу"
 
-#: gtk/gtkaccessible.c:872
+#: gtk/gtkaccessible.c:882
 msgctxt "accessibility"
 msgid "radio"
 msgstr "радіо"
 
-#: gtk/gtkaccessible.c:873
+#: gtk/gtkaccessible.c:883
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "група пунктів-перемикачів"
 
-#: gtk/gtkaccessible.c:874
+#: gtk/gtkaccessible.c:884
 msgctxt "accessibility"
 msgid "range"
 msgstr "діапазон"
 
-#: gtk/gtkaccessible.c:875
+#: gtk/gtkaccessible.c:885
 msgctxt "accessibility"
 msgid "region"
 msgstr "область"
 
-#: gtk/gtkaccessible.c:876
+#: gtk/gtkaccessible.c:886
 msgctxt "accessibility"
 msgid "row"
 msgstr "рядок"
 
-#: gtk/gtkaccessible.c:877
+#: gtk/gtkaccessible.c:887
 msgctxt "accessibility"
 msgid "row group"
 msgstr "група рядків"
 
-#: gtk/gtkaccessible.c:878
+#: gtk/gtkaccessible.c:888
 msgctxt "accessibility"
 msgid "row header"
 msgstr "заголовок рядка"
 
-#: gtk/gtkaccessible.c:879
+#: gtk/gtkaccessible.c:889
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "смуга прокрутки"
 
-#: gtk/gtkaccessible.c:880
+#: gtk/gtkaccessible.c:890
 msgctxt "accessibility"
 msgid "search"
 msgstr "пошук"
 
-#: gtk/gtkaccessible.c:881
+#: gtk/gtkaccessible.c:891
 msgctxt "accessibility"
 msgid "search box"
 msgstr "поле пошуку"
 
-#: gtk/gtkaccessible.c:882
+#: gtk/gtkaccessible.c:892
 msgctxt "accessibility"
 msgid "section"
 msgstr "розділ"
 
-#: gtk/gtkaccessible.c:883
+#: gtk/gtkaccessible.c:893
 msgctxt "accessibility"
 msgid "section head"
 msgstr "заголовок розділу"
 
-#: gtk/gtkaccessible.c:884
+#: gtk/gtkaccessible.c:894
 msgctxt "accessibility"
 msgid "select"
 msgstr "вибрати"
 
-#: gtk/gtkaccessible.c:885
+#: gtk/gtkaccessible.c:895
 msgctxt "accessibility"
 msgid "separator"
 msgstr "роздільник"
 
-#: gtk/gtkaccessible.c:886
+#: gtk/gtkaccessible.c:896
 msgctxt "accessibility"
 msgid "slider"
 msgstr "повзунок"
 
-#: gtk/gtkaccessible.c:887
+#: gtk/gtkaccessible.c:897
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "кнопка обертання"
 
-#: gtk/gtkaccessible.c:888
+#: gtk/gtkaccessible.c:898
 msgctxt "accessibility"
 msgid "status"
 msgstr "стан"
 
-#: gtk/gtkaccessible.c:889
+#: gtk/gtkaccessible.c:899
 msgctxt "accessibility"
 msgid "structure"
 msgstr "структура"
 
-#: gtk/gtkaccessible.c:890
+#: gtk/gtkaccessible.c:900
 msgctxt "accessibility"
 msgid "switch"
 msgstr "перемикач"
 
-#: gtk/gtkaccessible.c:891
+#: gtk/gtkaccessible.c:901
 msgctxt "accessibility"
 msgid "tab"
 msgstr "вкладка"
 
-#: gtk/gtkaccessible.c:892
+#: gtk/gtkaccessible.c:902
 msgctxt "accessibility"
 msgid "table"
 msgstr "Таблиця"
 
-#: gtk/gtkaccessible.c:893
+#: gtk/gtkaccessible.c:903
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "список вкладок"
 
-#: gtk/gtkaccessible.c:894
+#: gtk/gtkaccessible.c:904
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "панель вкладки"
 
-#: gtk/gtkaccessible.c:895
+#: gtk/gtkaccessible.c:905
 msgctxt "accessibility"
 msgid "text box"
 msgstr "текстовий блок"
 
-#: gtk/gtkaccessible.c:896
+#: gtk/gtkaccessible.c:906
 msgctxt "accessibility"
 msgid "time"
 msgstr "час"
 
-#: gtk/gtkaccessible.c:897
+#: gtk/gtkaccessible.c:907
 msgctxt "accessibility"
 msgid "timer"
 msgstr "таймер"
 
-#: gtk/gtkaccessible.c:898
+#: gtk/gtkaccessible.c:908
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "панель інструментів"
 
-#: gtk/gtkaccessible.c:899
+#: gtk/gtkaccessible.c:909
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "підказка"
 
-#: gtk/gtkaccessible.c:900
+#: gtk/gtkaccessible.c:910
 msgctxt "accessibility"
 msgid "tree"
 msgstr "дерево"
 
-#: gtk/gtkaccessible.c:901
+#: gtk/gtkaccessible.c:911
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "ієрархічна таблиця"
 
-#: gtk/gtkaccessible.c:902
+#: gtk/gtkaccessible.c:912
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "об'єкт дерева"
 
-#: gtk/gtkaccessible.c:903
+#: gtk/gtkaccessible.c:913
 msgctxt "accessibility"
 msgid "widget"
 msgstr "віджет"
 
-#: gtk/gtkaccessible.c:904
+#: gtk/gtkaccessible.c:914
 msgctxt "accessibility"
 msgid "window"
 msgstr "вікно"
 
-#: gtk/gtkaccessible.c:905
+#: gtk/gtkaccessible.c:915
 msgctxt "accessibility"
 msgid "toggle button"
 msgstr "кнопка-перемикач"
 
-#: gtk/gtkaccessible.c:907
+#: gtk/gtkaccessible.c:917
 msgctxt "accessibility"
 msgid "paragraph"
 msgstr "абзац"
 
-#: gtk/gtkaccessible.c:908
+#: gtk/gtkaccessible.c:918
 msgctxt "accessibility"
 msgid "block quote"
 msgstr "цитата"
 
-#: gtk/gtkaccessible.c:909
+#: gtk/gtkaccessible.c:919
 msgctxt "accessibility"
 msgid "article"
 msgstr "стаття"
 
-#: gtk/gtkaccessible.c:910
+#: gtk/gtkaccessible.c:920
 msgctxt "accessibility"
 msgid "comment"
 msgstr "коментар"
 
-#: gtk/gtkaccessible.c:911
+#: gtk/gtkaccessible.c:921
 msgctxt "accessibility"
 msgid "terminal"
 msgstr "термінал"
@@ -1849,11 +1849,11 @@ msgstr "_Закрити"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:384
+#: gtk/gtkapplication-dbus.c:559
 msgid "Reason not specified"
 msgstr "Причину не вказано"
 
-#: gtk/gtkapplicationwindow.c:234
+#: gtk/gtkapplicationwindow.c:236
 msgid "Menu bar"
 msgstr "Панель меню"
 
@@ -1882,11 +1882,27 @@ msgstr "Елемент <%s> не допустимий на верхньому р
 msgid "Text may not appear inside <%s>"
 msgstr "Текст може не показуватись усередині «%s»"
 
+#: gtk/gtkcalendar.c:612
+msgid "Previous Month"
+msgstr "Попередній місяць"
+
+#: gtk/gtkcalendar.c:615
+msgid "Next Month"
+msgstr "Наступний місяць"
+
+#: gtk/gtkcalendar.c:620
+msgid "Previous Year"
+msgstr "Попередній рік"
+
+#: gtk/gtkcalendar.c:623
+msgid "Next Year"
+msgstr "Наступний рік"
+
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:693
+#: gtk/gtkcalendar.c:697
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1900,7 +1916,7 @@ msgstr "calendar:week_start:1"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:844
+#: gtk/gtkcalendar.c:848
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1914,7 +1930,7 @@ msgstr "calendar:MY"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1025
+#: gtk/gtkcalendar.c:1029
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1926,7 +1942,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1129
+#: gtk/gtkcalendar.c:1133
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1939,7 +1955,7 @@ msgstr "%Y"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1175
+#: gtk/gtkcalendar.c:1179
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2263,17 +2279,17 @@ msgstr "Поля сторінки"
 msgid "_Edit"
 msgstr "З_міни"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5906 gtk/gtktext.c:6379
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5949 gtk/gtktext.c:6382
 #: gtk/gtktextview.c:9382
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
+#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:6009 gtk/gtktext.c:2891
 #: gtk/gtktextview.c:9460
 msgid "Context menu"
 msgstr "Контекстне меню"
 
-#: gtk/gtkentry.c:3787
+#: gtk/gtkentry.c:3791
 msgid "Insert Emoji"
 msgstr "Вставити емодзі"
 
@@ -2338,13 +2354,13 @@ msgid "A file with that name already exists"
 msgstr "Файл з такою назвою вже існує"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:5037
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:5033
 #: gtk/gtkfiledialog.c:914 gtk/gtkmessagedialog.c:173
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
 #: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
-#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_Скасувати"
@@ -2435,8 +2451,8 @@ msgstr "Остаточно вилучити «%s»?"
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
-#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1852
-#: gtk/gtklabel.c:5908 gtk/gtktext.c:6387 gtk/gtktextview.c:9390
+#: gtk/gtkfilechooserwidget.c:1249 gtk/gtkfilechooserwidget.c:1848
+#: gtk/gtklabel.c:5951 gtk/gtktext.c:6390 gtk/gtktextview.c:9390
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2444,221 +2460,221 @@ msgstr "В_илучити"
 msgid "The file could not be renamed"
 msgstr "Неможливо перейменувати файл"
 
-#: gtk/gtkfilechooserwidget.c:1543
+#: gtk/gtkfilechooserwidget.c:1539
 msgid "Could not select file"
 msgstr "Не вдалось вибрати файл"
 
-#: gtk/gtkfilechooserwidget.c:1763 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1759 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "Перегляд ґраткою"
 
-#: gtk/gtkfilechooserwidget.c:1769
+#: gtk/gtkfilechooserwidget.c:1765
 msgid "List View"
 msgstr "Перегляд списком"
 
-#: gtk/gtkfilechooserwidget.c:1832
+#: gtk/gtkfilechooserwidget.c:1828
 msgid "_Visit File"
 msgstr "_Відвідати файл"
 
-#: gtk/gtkfilechooserwidget.c:1836
+#: gtk/gtkfilechooserwidget.c:1832
 msgid "_Open With File Manager"
 msgstr "_Відкрити через файловий менеджер"
 
-#: gtk/gtkfilechooserwidget.c:1840
+#: gtk/gtkfilechooserwidget.c:1836
 msgid "_Copy Location"
 msgstr "Копіювати _адресу"
 
-#: gtk/gtkfilechooserwidget.c:1844
+#: gtk/gtkfilechooserwidget.c:1840
 msgid "_Add to Bookmarks"
 msgstr "_Додати до закладок"
 
-#: gtk/gtkfilechooserwidget.c:1848 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1844 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "Пере_йменувати"
 
-#: gtk/gtkfilechooserwidget.c:1856
+#: gtk/gtkfilechooserwidget.c:1852
 msgid "_Move to Trash"
 msgstr "Пере_містити у смітник"
 
-#: gtk/gtkfilechooserwidget.c:1865
+#: gtk/gtkfilechooserwidget.c:1861
 msgid "Show _Hidden Files"
 msgstr "Показати при_ховані файли"
 
-#: gtk/gtkfilechooserwidget.c:1869
+#: gtk/gtkfilechooserwidget.c:1865
 msgid "Sort _Folders Before Files"
 msgstr "Впорядковувати _теки перед файлами"
 
-#: gtk/gtkfilechooserwidget.c:1992 gtk/gtkfilechooserwidget.c:2022
-#: gtk/gtkfilechooserwidget.c:3897
+#: gtk/gtkfilechooserwidget.c:1988 gtk/gtkfilechooserwidget.c:2018
+#: gtk/gtkfilechooserwidget.c:3893
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: gtk/gtkfilechooserwidget.c:2077 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2073 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Домівка"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2232 gtk/gtkfilechooserwidget.c:7469
+#: gtk/gtkfilechooserwidget.c:2228 gtk/gtkfilechooserwidget.c:7465
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Адреса"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2339
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Name:"
 msgstr "_Назва:"
 
-#: gtk/gtkfilechooserwidget.c:2896 gtk/gtkfilechooserwidget.c:2910
+#: gtk/gtkfilechooserwidget.c:2892 gtk/gtkfilechooserwidget.c:2906
 #, c-format
 msgid "Searching in %s"
 msgstr "Пошук в %s"
 
-#: gtk/gtkfilechooserwidget.c:2916
+#: gtk/gtkfilechooserwidget.c:2912
 msgid "Searching"
 msgstr "Пошук"
 
-#: gtk/gtkfilechooserwidget.c:2922
+#: gtk/gtkfilechooserwidget.c:2918
 msgid "Enter location or URL"
 msgstr "Увести адресу або URL"
 
-#: gtk/gtkfilechooserwidget.c:3481 gtk/gtkfilechooserwidget.c:5824
-#: gtk/gtkfilechooserwidget.c:7491
+#: gtk/gtkfilechooserwidget.c:3477 gtk/gtkfilechooserwidget.c:5820
+#: gtk/gtkfilechooserwidget.c:7487
 msgid "Modified"
 msgstr "Змінено"
 
-#: gtk/gtkfilechooserwidget.c:3666
+#: gtk/gtkfilechooserwidget.c:3662
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не вдалось прочитати вміст %s"
 
-#: gtk/gtkfilechooserwidget.c:3670
+#: gtk/gtkfilechooserwidget.c:3666
 msgid "Could not read the contents of the folder"
 msgstr "Не вдалось прочитати вміст теки"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3793 gtk/gtkfilechooserwidget.c:3836
+#: gtk/gtkfilechooserwidget.c:3789 gtk/gtkfilechooserwidget.c:3832
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3795 gtk/gtkfilechooserwidget.c:3838
+#: gtk/gtkfilechooserwidget.c:3791 gtk/gtkfilechooserwidget.c:3834
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:3799
+#: gtk/gtkfilechooserwidget.c:3795
 msgid "Yesterday"
 msgstr "Учора"
 
-#: gtk/gtkfilechooserwidget.c:3808
+#: gtk/gtkfilechooserwidget.c:3804
 #, no-c-format
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:3812
+#: gtk/gtkfilechooserwidget.c:3808
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:3852 gtk/gtkfilechooserwidget.c:3860
+#: gtk/gtkfilechooserwidget.c:3848 gtk/gtkfilechooserwidget.c:3856
 msgid "Program"
 msgstr "Програма"
 
-#: gtk/gtkfilechooserwidget.c:3853
+#: gtk/gtkfilechooserwidget.c:3849
 msgid "Audio"
 msgstr "Звук"
 
-#: gtk/gtkfilechooserwidget.c:3855 gtk/gtkfilefilter.c:1072
+#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilefilter.c:1082
 msgid "Image"
 msgstr "Картинка"
 
-#: gtk/gtkfilechooserwidget.c:3856
+#: gtk/gtkfilechooserwidget.c:3852
 msgid "Archive"
 msgstr "Архів"
 
-#: gtk/gtkfilechooserwidget.c:3857
+#: gtk/gtkfilechooserwidget.c:3853
 msgid "Markup"
 msgstr "Розмітка"
 
-#: gtk/gtkfilechooserwidget.c:3858 gtk/gtkfilechooserwidget.c:3859
+#: gtk/gtkfilechooserwidget.c:3854 gtk/gtkfilechooserwidget.c:3855
 msgid "Text"
 msgstr "Текст"
 
-#: gtk/gtkfilechooserwidget.c:3861
+#: gtk/gtkfilechooserwidget.c:3857
 msgid "Video"
 msgstr "Відео"
 
-#: gtk/gtkfilechooserwidget.c:3862
+#: gtk/gtkfilechooserwidget.c:3858
 msgid "Contacts"
 msgstr "Контакти"
 
-#: gtk/gtkfilechooserwidget.c:3863
+#: gtk/gtkfilechooserwidget.c:3859
 msgid "Calendar"
 msgstr "Календар"
 
-#: gtk/gtkfilechooserwidget.c:3864
+#: gtk/gtkfilechooserwidget.c:3860
 msgid "Document"
 msgstr "Документ"
 
-#: gtk/gtkfilechooserwidget.c:3865
+#: gtk/gtkfilechooserwidget.c:3861
 msgid "Presentation"
 msgstr "Презентація"
 
-#: gtk/gtkfilechooserwidget.c:3866
+#: gtk/gtkfilechooserwidget.c:3862
 msgid "Spreadsheet"
 msgstr "Електронна таблиця"
 
-#: gtk/gtkfilechooserwidget.c:4216 gtk/gtkfilechooserwidget.c:5192
+#: gtk/gtkfilechooserwidget.c:4212 gtk/gtkfilechooserwidget.c:5188
 msgid "You do not have access to the specified folder."
 msgstr "Ви не маєте доступу до вказаної теки."
 
-#: gtk/gtkfilechooserwidget.c:5029 gtk/print/gtkprintunixdialog.c:674
+#: gtk/gtkfilechooserwidget.c:5025 gtk/print/gtkprintunixdialog.c:674
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Файл з назвою «%s» вже існує. Замінити його?"
 
-#: gtk/gtkfilechooserwidget.c:5031 gtk/print/gtkprintunixdialog.c:678
+#: gtk/gtkfilechooserwidget.c:5027 gtk/print/gtkprintunixdialog.c:678
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Файл у «%s» вже існує. Перезапис призведе до втрати вмісту."
 
-#: gtk/gtkfilechooserwidget.c:5037 gtk/print/gtkprintunixdialog.c:686
+#: gtk/gtkfilechooserwidget.c:5033 gtk/print/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "_Замінити"
 
-#: gtk/gtkfilechooserwidget.c:5771
+#: gtk/gtkfilechooserwidget.c:5767
 msgid "Could not send the search request"
 msgstr "Не вдалось надіслати запит на пошук"
 
-#: gtk/gtkfilechooserwidget.c:6052
+#: gtk/gtkfilechooserwidget.c:6048
 msgid "Accessed"
 msgstr "Дозволено"
 
-#: gtk/gtkfilechooserwidget.c:7447
+#: gtk/gtkfilechooserwidget.c:7443
 msgid "_Size"
 msgstr "_Розмір"
 
-#: gtk/gtkfilechooserwidget.c:7451
+#: gtk/gtkfilechooserwidget.c:7447
 msgid "T_ype"
 msgstr "Т_ип"
 
-#: gtk/gtkfilechooserwidget.c:7455
+#: gtk/gtkfilechooserwidget.c:7451
 msgid "_Time"
 msgstr "_Час"
 
-#: gtk/gtkfilechooserwidget.c:7461 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7457 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Назва"
 
-#: gtk/gtkfilechooserwidget.c:7478 gtk/inspector/resource-list.ui:98
-#: gtk/ui/gtkfontchooserwidget.ui:220 gtk/ui/gtkfontchooserwidget.ui:386
+#: gtk/gtkfilechooserwidget.c:7474 gtk/inspector/resource-list.ui:98
+#: gtk/ui/gtkfontchooserwidget.ui:229 gtk/ui/gtkfontchooserwidget.ui:395
 #: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "Розмір"
 
-#: gtk/gtkfilechooserwidget.c:7484 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7480 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Тип"
@@ -2676,7 +2692,7 @@ msgid "Save a File"
 msgstr "Зберегти файл"
 
 #: gtk/gtkfiledialog.c:896 gtk/ui/gtkappchooserdialog.ui:56
-#: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
+#: gtk/ui/gtkcolorchooserdialog.ui:49 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "_Вибрати"
 
@@ -2696,7 +2712,7 @@ msgstr "Кодування"
 msgid "Line Ending"
 msgstr "Кінець рядка"
 
-#: gtk/gtkfilefilter.c:1085
+#: gtk/gtkfilefilter.c:1095
 msgid "Unspecified"
 msgstr "Не визначено"
 
@@ -2704,74 +2720,79 @@ msgstr "Не визначено"
 msgid "Change Font Features"
 msgstr "Змінити властивості шрифту"
 
-#: gtk/gtkfontchooserwidget.c:1491
+#: gtk/gtkfontchooserwidget.c:1335
+msgctxt "Search placeholder for font language"
+msgid "Language…"
+msgstr "Мова…"
+
+#: gtk/gtkfontchooserwidget.c:1600
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Ширина"
 
-#: gtk/gtkfontchooserwidget.c:1492
+#: gtk/gtkfontchooserwidget.c:1601
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Вага"
 
-#: gtk/gtkfontchooserwidget.c:1493
+#: gtk/gtkfontchooserwidget.c:1602
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Курсив"
 
-#: gtk/gtkfontchooserwidget.c:1494
+#: gtk/gtkfontchooserwidget.c:1603
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Нахил"
 
-#: gtk/gtkfontchooserwidget.c:1495
+#: gtk/gtkfontchooserwidget.c:1604
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Оптичний розмір"
 
-#: gtk/gtkfontchooserwidget.c:2053
+#: gtk/gtkfontchooserwidget.c:2162
 msgctxt "Font feature value"
 msgid "Default"
 msgstr "Типове"
 
-#: gtk/gtkfontchooserwidget.c:2070
+#: gtk/gtkfontchooserwidget.c:2179
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: gtk/gtkfontchooserwidget.c:2406 gtk/inspector/visual.ui:73
+#: gtk/gtkfontchooserwidget.c:2515 gtk/inspector/visual.ui:73
 msgid "Default"
 msgstr "Типово"
 
-#: gtk/gtkfontchooserwidget.c:2469
+#: gtk/gtkfontchooserwidget.c:2578
 msgid "Ligatures"
 msgstr "Лігатури"
 
-#: gtk/gtkfontchooserwidget.c:2470
+#: gtk/gtkfontchooserwidget.c:2579
 msgid "Letter Case"
 msgstr "Розмір літер"
 
-#: gtk/gtkfontchooserwidget.c:2471
+#: gtk/gtkfontchooserwidget.c:2580
 msgid "Number Case"
 msgstr "Розмір цифр"
 
-#: gtk/gtkfontchooserwidget.c:2472
+#: gtk/gtkfontchooserwidget.c:2581
 msgid "Number Spacing"
 msgstr "Інтервали між цифрами"
 
-#: gtk/gtkfontchooserwidget.c:2473
+#: gtk/gtkfontchooserwidget.c:2582
 msgid "Numeric Extras"
 msgstr "Числові додатки"
 
-#: gtk/gtkfontchooserwidget.c:2474
+#: gtk/gtkfontchooserwidget.c:2583
 msgid "Fractions"
 msgstr "Дроби"
 
-#: gtk/gtkfontchooserwidget.c:2475
+#: gtk/gtkfontchooserwidget.c:2584
 msgid "Style Variations"
 msgstr "Варіанти стилів"
 
-#: gtk/gtkfontchooserwidget.c:2477
+#: gtk/gtkfontchooserwidget.c:2586
 msgid "Character Variations"
 msgstr "Варіанти символів"
 
@@ -2788,23 +2809,23 @@ msgstr "Закрити"
 msgid "Close the infobar"
 msgstr "Закрити панель відомостей"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6375 gtk/gtktextview.c:9378
+#: gtk/gtklabel.c:5948 gtk/gtktext.c:6378 gtk/gtktextview.c:9378
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5907 gtk/gtktext.c:6383 gtk/gtktextview.c:9386
+#: gtk/gtklabel.c:5950 gtk/gtktext.c:6386 gtk/gtktextview.c:9386
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5913 gtk/gtktext.c:6396 gtk/gtktextview.c:9411
+#: gtk/gtklabel.c:5956 gtk/gtktext.c:6399 gtk/gtktextview.c:9411
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5918
+#: gtk/gtklabel.c:5961
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5922
+#: gtk/gtklabel.c:5965
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
@@ -2891,59 +2912,59 @@ msgstr "_Так"
 msgid "Co_nnect"
 msgstr "З'_єднатись"
 
-#: gtk/gtkmountoperation.c:676
+#: gtk/gtkmountoperation.c:678
 msgid "Connect As"
 msgstr "З'єднатись як"
 
-#: gtk/gtkmountoperation.c:685
+#: gtk/gtkmountoperation.c:687
 msgid "_Anonymous"
 msgstr "_Анонімний користувач"
 
-#: gtk/gtkmountoperation.c:692
+#: gtk/gtkmountoperation.c:694
 msgid "Registered U_ser"
 msgstr "Зареєстрований _користувач"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:704
 msgid "_Username"
 msgstr "_Користувач"
 
-#: gtk/gtkmountoperation.c:707
+#: gtk/gtkmountoperation.c:709
 msgid "_Domain"
 msgstr "_Домен"
 
-#: gtk/gtkmountoperation.c:716
+#: gtk/gtkmountoperation.c:718
 msgid "Volume type"
 msgstr "Тип тому"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:728
 msgid "_Hidden"
 msgstr "При_хований"
 
-#: gtk/gtkmountoperation.c:729
+#: gtk/gtkmountoperation.c:731
 msgid "_Windows system"
 msgstr "С_истема Windows"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:734
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:738
+#: gtk/gtkmountoperation.c:740
 msgid "_Password"
 msgstr "_Пароль"
 
-#: gtk/gtkmountoperation.c:761
+#: gtk/gtkmountoperation.c:763
 msgid "Forget password _immediately"
 msgstr "_Забути пароль негайно"
 
-#: gtk/gtkmountoperation.c:771
+#: gtk/gtkmountoperation.c:773
 msgid "Remember password until you _logout"
 msgstr "Запам'ятати пароль _до виходу з сеансу"
 
-#: gtk/gtkmountoperation.c:782
+#: gtk/gtkmountoperation.c:784
 msgid "Remember _forever"
 msgstr "Запам'ятати _назавжди"
 
-#: gtk/gtkmountoperation.c:1252
+#: gtk/gtkmountoperation.c:1256
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Невідома програма (PID %d)"
@@ -2953,12 +2974,12 @@ msgstr "Невідома програма (PID %d)"
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
 #.
-#: gtk/gtkmountoperation.c:1397
+#: gtk/gtkmountoperation.c:1401
 #, c-format
 msgid "Unable to end process"
 msgstr "Не вдалось завершити процес"
 
-#: gtk/gtkmountoperation.c:1547
+#: gtk/gtkmountoperation.c:1553
 msgid "_End Process"
 msgstr "_Завершити процес"
 
@@ -3012,8 +3033,8 @@ msgstr "Наступна вкладка"
 msgid "Page %u"
 msgstr "Сторінка %u"
 
-#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:942
-#: gtk/print/gtkpapersize.c:982
+#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:943
+#: gtk/print/gtkpapersize.c:983
 msgid "Not a valid page setup file"
 msgstr "Некоректний файл налаштування друку"
 
@@ -4216,7 +4237,7 @@ msgstr "Згори донизу"
 msgid "Bottom to top"
 msgstr "Знизу догори"
 
-#: gtk/gtkprintdialog.c:1766
+#: gtk/gtkprintdialog.c:1767
 msgid "Failed to create the read file descriptor"
 msgstr "Не вдалося створити дескриптор читання файла"
 
@@ -4244,7 +4265,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Не знайдено зареєстрованої програми з назвою «%s» для пункту з URI «%s»"
 
-#: gtk/gtksearchentry.c:838
+#: gtk/gtksearchentry.c:861
 msgid "Clear Entry"
 msgstr "Спорожнити запис"
 
@@ -4336,11 +4357,11 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Бічна панель"
 
-#: gtk/gtktext.c:6401
+#: gtk/gtktext.c:6404
 msgid "Change di_rection"
 msgstr "Змінити _напрям"
 
-#: gtk/gtktext.c:6406 gtk/gtktextview.c:9416
+#: gtk/gtktext.c:6409 gtk/gtktextview.c:9416
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
@@ -4570,7 +4591,6 @@ msgid "Object Path"
 msgstr "Шлях до об'єкта"
 
 #: gtk/inspector/a11y.ui:153
-#| msgid "Surface"
 msgid "Interface"
 msgstr "Інтерфейс"
 
@@ -4579,8 +4599,8 @@ msgid "Attribute"
 msgstr "Атрибут"
 
 #: gtk/inspector/a11y.ui:204 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:207
-#: gtk/inspector/recorder.ui:251 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:225
+#: gtk/inspector/recorder.ui:269 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "Значення"
 
@@ -4605,25 +4625,25 @@ msgstr "Тип параметра"
 msgid "State"
 msgstr "Стан"
 
-#: gtk/inspector/clipboard.c:211 gtk/inspector/misc-info.ui:245
+#: gtk/inspector/clipboard.c:213 gtk/inspector/misc-info.ui:245
 msgid "Show"
 msgstr "Показати"
 
-#: gtk/inspector/clipboard.c:228
+#: gtk/inspector/clipboard.c:230
 msgid "Hover to load"
 msgstr "Наведення для завантаження"
 
-#: gtk/inspector/clipboard.c:286
+#: gtk/inspector/clipboard.c:288
 msgctxt "clipboard"
 msgid "empty"
 msgstr "порожній"
 
-#: gtk/inspector/clipboard.c:291 gtk/inspector/clipboard.c:344
+#: gtk/inspector/clipboard.c:293 gtk/inspector/clipboard.c:346
 msgctxt "clipboard"
 msgid "local"
 msgstr "локальний"
 
-#: gtk/inspector/clipboard.c:293 gtk/inspector/clipboard.c:346
+#: gtk/inspector/clipboard.c:295 gtk/inspector/clipboard.c:348
 msgctxt "clipboard"
 msgid "remote"
 msgstr "віддалений"
@@ -4665,35 +4685,35 @@ msgctxt "propagation limit"
 msgid "Native"
 msgstr "Природне"
 
-#: gtk/inspector/css-editor.c:139
+#: gtk/inspector/css-editor.c:141
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Можете ввести будь-яке правило CSS, яке розпізнає GTK."
 
-#: gtk/inspector/css-editor.c:140
+#: gtk/inspector/css-editor.c:142
 msgid ""
-"You can temporarily disable this custom CSS by clicking on the “Pause” "
-"button above."
+"You can temporarily disable this custom CSS by toggling the switch above."
 msgstr ""
-"Можете тимчасово вимкнути цю CSS, натиснувши на кнопку «Призупинити» вище."
+"Ви можете тимчасово вимкнути цю нетипову CSS перемиканням наведеного вище "
+"перемикача."
 
-#: gtk/inspector/css-editor.c:141
+#: gtk/inspector/css-editor.c:143
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr "Зміни застосовуються миттєво і повсюдно, для всіє програми."
 
-#: gtk/inspector/css-editor.c:240
+#: gtk/inspector/css-editor.c:243
 #, c-format
 msgid "Saving CSS failed"
 msgstr "Не вдалося зберегти CSS"
 
-#: gtk/inspector/css-editor.ui:37
-msgid "Disable this custom CSS"
-msgstr "Вимкнутий цей CSS"
+#: gtk/inspector/css-editor.ui:39
+msgid "Enable this custom CSS"
+msgstr "Увімкнути цю нетипову CSS"
 
-#: gtk/inspector/css-editor.ui:52
+#: gtk/inspector/css-editor.ui:45
 msgid "Save the current CSS"
 msgstr "Зберегти поточний CSS"
 
-#: gtk/inspector/css-editor.ui:67
+#: gtk/inspector/css-editor.ui:60
 msgid "Show deprecations"
 msgstr "Показувати застаріле"
 
@@ -4947,7 +4967,7 @@ msgstr "Підрахунок кадрів"
 msgid "Frame Rate"
 msgstr "Частота кадрів"
 
-#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:358
+#: gtk/inspector/misc-info.ui:531 gtk/inspector/visual.ui:390
 msgid "Scale"
 msgstr "Масштаб"
 
@@ -4970,6 +4990,18 @@ msgstr "На верхньому рівні"
 #: gtk/inspector/misc-info.ui:659
 msgid "Child Visible"
 msgstr "Видимі діти"
+
+#: gtk/inspector/misc-info.ui:685
+msgid "Paintable Size"
+msgstr "Розмір придатної до малювання області"
+
+#: gtk/inspector/misc-info.ui:710
+msgid "Paintable Aspect Ratio"
+msgstr "Пропорції придатної до малювання області"
+
+#: gtk/inspector/misc-info.ui:735
+msgid "Paintable Flags"
+msgstr "Прапорці придатної для малювання області"
 
 #: gtk/inspector/prop-editor.c:749
 #, c-format
@@ -5075,7 +5107,7 @@ msgstr "Джерело:"
 msgid "Defined At"
 msgstr "Визначено в"
 
-#: gtk/inspector/recorder.c:2212
+#: gtk/inspector/recorder.c:2181
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
@@ -5104,19 +5136,23 @@ msgstr "Запис кадрів"
 msgid "Clear recorded frames"
 msgstr "Вилучити записані кадри"
 
-#: gtk/inspector/recorder.ui:90
+#: gtk/inspector/recorder.ui:82
+msgid "Profiling overlay (requires GSK_DEBUG=profile)"
+msgstr "Накладка профілювання (потребує GSK_DEBUG=profile)"
+
+#: gtk/inspector/recorder.ui:108
 msgid "Use a dark background"
 msgstr "Використовувати темне тло"
 
-#: gtk/inspector/recorder.ui:106
+#: gtk/inspector/recorder.ui:124
 msgid "Save selected node"
 msgstr "Зберегти позначений вузол"
 
-#: gtk/inspector/recorder.ui:122
+#: gtk/inspector/recorder.ui:140
 msgid "Copy to clipboard"
 msgstr "Скопіювати до буфера"
 
-#: gtk/inspector/recorder.ui:202 gtk/inspector/recorder.ui:246
+#: gtk/inspector/recorder.ui:220 gtk/inspector/recorder.ui:264
 msgid "Property"
 msgstr "Властивість"
 
@@ -5136,7 +5172,7 @@ msgstr "Назва:"
 msgid "Type:"
 msgstr "Тип:"
 
-#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:56
+#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:57
 msgid "Size:"
 msgstr "Розмір:"
 
@@ -5245,7 +5281,7 @@ msgstr "Світла"
 msgid "System Contrast"
 msgstr "Загальносистемна контрастність"
 
-#: gtk/inspector/visual.ui:107
+#: gtk/inspector/visual.ui:107 gtk/inspector/visual.ui:140
 msgid "No Preference"
 msgstr "Без переваг"
 
@@ -5257,24 +5293,32 @@ msgstr "Більше"
 msgid "Less"
 msgstr "Менше"
 
-#: gtk/inspector/visual.ui:127
+#: gtk/inspector/visual.ui:126
+msgid "System Reduced Motion"
+msgstr "Рух зі спрощенням з боку системи"
+
+#: gtk/inspector/visual.ui:141
+msgid "Reduced"
+msgstr "Спрощення"
+
+#: gtk/inspector/visual.ui:159
 msgid "Cursor Theme"
 msgstr "Тема курсора"
 
-#: gtk/inspector/visual.ui:152
+#: gtk/inspector/visual.ui:184
 msgid "Cursor Size"
 msgstr "Розмір курсора"
 
-#: gtk/inspector/visual.ui:188
+#: gtk/inspector/visual.ui:220
 msgid "Icon Theme"
 msgstr "Тема піктограм"
 
-#: gtk/inspector/visual.ui:213
+#: gtk/inspector/visual.ui:245
 msgid "Text Direction"
 msgstr "Напрям тексту"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:228
+#: gtk/inspector/visual.ui:260
 msgid ""
 "Left-to-Right\n"
 "Right-to-Left"
@@ -5282,20 +5326,20 @@ msgstr ""
 "Зліва направо\n"
 "Справа наліво"
 
-#: gtk/inspector/visual.ui:245
+#: gtk/inspector/visual.ui:277
 msgid "Animations"
 msgstr "Анімація"
 
-#: gtk/inspector/visual.ui:270
+#: gtk/inspector/visual.ui:302
 msgid "Slowdown"
 msgstr "Уповільнення"
 
-#: gtk/inspector/visual.ui:405
+#: gtk/inspector/visual.ui:437
 msgid "Rendering"
 msgstr "Обробка"
 
 #. translators: these strings must be separated by newlines
-#: gtk/inspector/visual.ui:420
+#: gtk/inspector/visual.ui:452
 msgctxt "Font rendering"
 msgid ""
 "Automatic\n"
@@ -5304,15 +5348,15 @@ msgstr ""
 "Автоматично\n"
 "Вручну"
 
-#: gtk/inspector/visual.ui:447
+#: gtk/inspector/visual.ui:479
 msgid "Show Framerate"
 msgstr "Показати частоту кадрів"
 
-#: gtk/inspector/visual.ui:472
+#: gtk/inspector/visual.ui:504
 msgid "Show Graphic Updates"
 msgstr "Показувати графічні оновлення"
 
-#: gtk/inspector/visual.ui:492
+#: gtk/inspector/visual.ui:524
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
@@ -5320,51 +5364,51 @@ msgstr ""
 "Підсвітити усі місця, де поточний засіб обробки використовує Cairo замість "
 "графічного процесора."
 
-#: gtk/inspector/visual.ui:498
+#: gtk/inspector/visual.ui:530
 msgid "Show Cairo Rendering"
 msgstr "Показати обробку Cairo"
 
-#: gtk/inspector/visual.ui:523
+#: gtk/inspector/visual.ui:555
 msgid "Show Baselines"
 msgstr "Показати базову лінію"
 
-#: gtk/inspector/visual.ui:551
+#: gtk/inspector/visual.ui:583
 msgid "Show Layout Borders"
 msgstr "Показати межі шару"
 
-#: gtk/inspector/visual.ui:616
+#: gtk/inspector/visual.ui:648
 msgid "CSS Padding"
 msgstr "Фаска CSS"
 
-#: gtk/inspector/visual.ui:626
+#: gtk/inspector/visual.ui:658
 msgid "CSS Border"
 msgstr "Рамка CSS"
 
-#: gtk/inspector/visual.ui:636
+#: gtk/inspector/visual.ui:668
 msgid "CSS Margin"
 msgstr "Поле CSS"
 
-#: gtk/inspector/visual.ui:646
+#: gtk/inspector/visual.ui:678
 msgid "Widget Margin"
 msgstr "Поле віджета"
 
-#: gtk/inspector/visual.ui:681
+#: gtk/inspector/visual.ui:713
 msgid "Show Focus"
 msgstr "Показувати фокус"
 
-#: gtk/inspector/visual.ui:706
+#: gtk/inspector/visual.ui:738
 msgid "Show Accessibility warnings"
 msgstr "Показати попередження щодо доступності"
 
-#: gtk/inspector/visual.ui:731
+#: gtk/inspector/visual.ui:763
 msgid "Show Graphics Offload"
 msgstr "Показувати графічне вивантаження"
 
-#: gtk/inspector/visual.ui:766
+#: gtk/inspector/visual.ui:798
 msgid "Show Touch UI"
 msgstr "Показувати сенсорний інтерфейс"
 
-#: gtk/inspector/visual.ui:797
+#: gtk/inspector/visual.ui:829
 msgid "Inspect Inspector"
 msgstr "Ревізувати Інспектор"
 
@@ -7260,24 +7304,24 @@ msgstr "Моноширинний"
 msgid "Language"
 msgstr "Мова"
 
-#: gtk/ui/gtkfontchooserwidget.ui:201 gtk/ui/gtkfontchooserwidget.ui:203
-#: gtk/ui/gtkfontchooserwidget.ui:353 gtk/ui/gtkfontchooserwidget.ui:357
+#: gtk/ui/gtkfontchooserwidget.ui:210 gtk/ui/gtkfontchooserwidget.ui:212
+#: gtk/ui/gtkfontchooserwidget.ui:362 gtk/ui/gtkfontchooserwidget.ui:366
 msgid "Preview Font"
 msgstr "Перегляд шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:299
+#: gtk/ui/gtkfontchooserwidget.ui:308
 msgid "No Fonts Found"
 msgstr "Не знайдено жодного шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:337
+#: gtk/ui/gtkfontchooserwidget.ui:346
 msgid "Font Name"
 msgstr "Назва шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:382
+#: gtk/ui/gtkfontchooserwidget.ui:391
 msgid "Font Variation Axes"
 msgstr "Вісі варіації шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:430
+#: gtk/ui/gtkfontchooserwidget.ui:439
 msgid "Font Features"
 msgstr "Параметри шрифту"
 
@@ -7638,12 +7682,12 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
-#: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
-#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:268
+#: tools/gtk-image-tool-compare.c:44 tools/gtk-image-tool-info.c:80
+#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:68
 #: tools/gtk-rendernode-tool-convert.c:98
-#: tools/gtk-rendernode-tool-extract.c:298 tools/gtk-rendernode-tool-info.c:230
-#: tools/gtk-rendernode-tool-show.c:122
+#: tools/gtk-rendernode-tool-extract.c:200 tools/gtk-rendernode-tool-info.c:119
+#: tools/gtk-rendernode-tool-show.c:123
 msgid "FILE"
 msgstr "ФАЙЛ"
 
@@ -7675,9 +7719,9 @@ msgid "Use style from CSS file"
 msgstr "Використати стиль з файла CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:274
-#: tools/gtk-rendernode-tool-benchmark.c:108
-#: tools/gtk-rendernode-tool-render.c:279 tools/gtk-rendernode-tool-show.c:129
+#: tools/gtk-builder-tool-validate.c:275
+#: tools/gtk-rendernode-tool-benchmark.c:109
+#: tools/gtk-rendernode-tool-render.c:318 tools/gtk-rendernode-tool-show.c:130
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Не вдалося ініціалізувати систему вікон\n"
@@ -7687,7 +7731,7 @@ msgid "Preview the file."
 msgstr "Попередньо переглянути вміст файла."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:293
+#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:294
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Не вказано файла .ui\n"
@@ -7722,13 +7766,13 @@ msgstr ""
 "Скористайтеся --force, щоб перезаписати його.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:245
+#: tools/gtk-rendernode-tool-render.c:251
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Результати записано до %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:249
+#: tools/gtk-rendernode-tool-render.c:255
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Не вдалося зберегти %s: %s\n"
@@ -7745,10 +7789,11 @@ msgstr "Зберегти як файл вузла замість png"
 msgid "Overwrite existing file"
 msgstr "Перезаписати наявний файл"
 
-#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:112 tools/gtk-image-tool-relabel.c:86
-#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
-#: tools/gtk-rendernode-tool-render.c:272
+#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
+#: tools/gtk-rendernode-tool-benchmark.c:100
+#: tools/gtk-rendernode-tool-render.c:311
 msgid "FILE…"
 msgstr "ФАЙЛ…"
 
@@ -7856,7 +7901,7 @@ msgstr "Застарілі типи:\n"
 msgid "Failed to create an instance of the template type %s\n"
 msgstr "Не вдалося створити екземпляр шаблонного типу %s\n"
 
-#: tools/gtk-builder-tool-validate.c:282
+#: tools/gtk-builder-tool-validate.c:283
 msgid "Validate the file."
 msgstr "Перевірити чинність файла."
 
@@ -7874,6 +7919,7 @@ msgid ""
 "  info         Show general information about the image\n"
 "  relabel      Change the color state of the image without conversion\n"
 "  show         Show the image\n"
+"  play         Play an animation\n"
 "\n"
 msgstr ""
 "Користування:\n"
@@ -7887,84 +7933,85 @@ msgstr ""
 "  info         показати загальні дані щодо зображення\n"
 "  relabel      змінити стан кольору зображення без перетворення\n"
 "  show         показати зображення\n"
+"  play         відтворити анімацію\n"
 "\n"
 
-#: tools/gtk-image-tool-compare.c:43 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-image-tool-compare.c:44 tools/gtk-rendernode-tool-compare.c:68
 msgid "Output file"
 msgstr "Файл результатів"
 
-#: tools/gtk-image-tool-compare.c:57
+#: tools/gtk-image-tool-compare.c:58
 msgid "Compare two images"
 msgstr "Порівняти два зображення"
 
-#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:136
-#: tools/gtk-image-tool-info.c:101 tools/gtk-image-tool-relabel.c:109
-#: tools/gtk-image-tool-show.c:141
+#: tools/gtk-image-tool-compare.c:71 tools/gtk-image-tool-convert.c:167
+#: tools/gtk-image-tool-info.c:102 tools/gtk-image-tool-relabel.c:110
+#: tools/gtk-image-tool-show.c:142
 #, c-format
 msgid "No image file specified\n"
 msgstr "Не вказано файла зображення\n"
 
-#: tools/gtk-image-tool-compare.c:76
+#: tools/gtk-image-tool-compare.c:77
 #, c-format
 msgid "Can only accept two image files\n"
 msgstr "Може приймати лише два файли зображень\n"
 
-#: tools/gtk-image-tool-compare.c:89 tools/gtk-rendernode-tool-compare.c:122
+#: tools/gtk-image-tool-compare.c:90 tools/gtk-rendernode-tool-compare.c:123
 #, c-format
 msgid "Could not save diff image to %s\n"
 msgstr "Не вдалося зберегти зображення-різницю до %s\n"
 
-#: tools/gtk-image-tool-compare.c:99 tools/gtk-rendernode-tool-compare.c:132
+#: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
 msgid "Differences witten to %s.\n"
 msgstr "Різниці записано до %s.\n"
 
-#: tools/gtk-image-tool-compare.c:101 tools/gtk-rendernode-tool-compare.c:134
+#: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
 #, c-format
 msgid "The images are different.\n"
 msgstr "Зображення є різними.\n"
 
-#: tools/gtk-image-tool-compare.c:104 tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-image-tool-compare.c:105 tools/gtk-rendernode-tool-compare.c:138
 #, c-format
 msgid "No differences.\n"
 msgstr "Немає різниці.\n"
 
-#: tools/gtk-image-tool-convert.c:109
+#: tools/gtk-image-tool-convert.c:140
 msgid "Format to use"
 msgstr "Формат, яким слід скористатися"
 
-#: tools/gtk-image-tool-convert.c:109
+#: tools/gtk-image-tool-convert.c:140
 msgid "FORMAT"
 msgstr "ФОРМАТ"
 
-#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use"
 msgstr "Стан кольору, яким слід скористатися"
 
-#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "COLORSTATE"
 msgstr "СТАН_КОЛЬОРУ"
 
-#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "Color state to use, as cicp tuple"
 msgstr "Стан кольору, яким слід скористатися, у форматі кортежу cicp"
 
-#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "CICP"
 msgstr "CICP"
 
-#: tools/gtk-image-tool-convert.c:123
+#: tools/gtk-image-tool-convert.c:154
 msgid "Convert the image to a different format or color state."
 msgstr "Перетворити зображення до іншого формату або стану кольору."
 
-#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:115
+#: tools/gtk-image-tool-convert.c:173 tools/gtk-image-tool-relabel.c:116
 #, c-format
 msgid "Can only accept a single image file and output file\n"
 msgstr ""
 "Одночасно можливе використання одного файла зображення і одного файла "
 "виведення\n"
 
-#: tools/gtk-image-tool-convert.c:156
+#: tools/gtk-image-tool-convert.c:187
 #, c-format
 msgid ""
 "Not a memory format: %s\n"
@@ -7975,7 +8022,7 @@ msgstr ""
 "Можливі значення:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:173
+#: tools/gtk-image-tool-convert.c:204
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -7986,43 +8033,77 @@ msgstr ""
 "Можливі значення:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:183 tools/gtk-image-tool-relabel.c:140
+#: tools/gtk-image-tool-convert.c:214 tools/gtk-image-tool-relabel.c:141
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "Не можна вказувати одразу --color-state і --cicp\n"
 
-#: tools/gtk-image-tool-convert.c:191 tools/gtk-image-tool-relabel.c:148
+#: tools/gtk-image-tool-convert.c:222 tools/gtk-image-tool-relabel.c:149
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Не є підтримуваним кортежем cicp: %s\n"
 
-#: tools/gtk-image-tool-info.c:57
+#: tools/gtk-image-tool-info.c:58
 msgid "Format:"
 msgstr "Формат:"
 
-#: tools/gtk-image-tool-info.c:63 tools/gtk-image-tool-info.c:65
-#: tools/gtk-image-tool-info.c:67
+#: tools/gtk-image-tool-info.c:64 tools/gtk-image-tool-info.c:66
+#: tools/gtk-image-tool-info.c:68
 msgid "Color state:"
 msgstr "Стан кольору:"
 
-#: tools/gtk-image-tool-info.c:67
+#: tools/gtk-image-tool-info.c:68
 msgid "unknown"
 msgstr "невідомий"
 
-#: tools/gtk-image-tool-info.c:88
+#: tools/gtk-image-tool-info.c:89
 msgid "Provide information about the image."
 msgstr "Надати дані щодо зображення."
 
-#: tools/gtk-image-tool-info.c:107
+#: tools/gtk-image-tool-info.c:108
 #, c-format
 msgid "Can only accept a single image file\n"
 msgstr "Можлива одночасна обробка лише одного файла зображення\n"
 
-#: tools/gtk-image-tool-relabel.c:96
+#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:118
+#: tools/gtk-rendernode-tool-show.c:122
+msgid "Don't add a titlebar"
+msgstr "Не додавати смужку заголовка"
+
+#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+msgid "SIZE"
+msgstr "РОЗМІР"
+
+#: tools/gtk-image-tool-play.c:323
+msgid "Don't run animations"
+msgstr "Не відтворювати анімації"
+
+#: tools/gtk-image-tool-play.c:324
+msgid "Don't use system resources"
+msgstr "Не використовувати ресурсів системи"
+
+#: tools/gtk-image-tool-play.c:325
+msgid "Don't load external resources"
+msgstr "Не завантажувати зовнішні ресурси"
+
+#: tools/gtk-image-tool-play.c:326
+msgid "Don't allow gpa extensions"
+msgstr "Не дозволяти розширення gpa"
+
+#: tools/gtk-image-tool-play.c:337
+msgid "Show one or more animations."
+msgstr "Показати одну або декілька анімацій."
+
+#: tools/gtk-image-tool-play.c:350
+#, c-format
+msgid "No animation file specified\n"
+msgstr "Не вказано файла анімації\n"
+
+#: tools/gtk-image-tool-relabel.c:97
 msgid "Change the color state of the image without conversion."
 msgstr "Змінити стан кольору зображення без перетворення."
 
-#: tools/gtk-image-tool-relabel.c:130
+#: tools/gtk-image-tool-relabel.c:131
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -8031,33 +8112,9 @@ msgstr ""
 "Не є станом кольору: %s\n"
 "Можливі значення: %s\n"
 
-#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:121
-msgid "Don't add a titlebar"
-msgstr "Не додавати смужку заголовка"
-
-#: tools/gtk-image-tool-show.c:128
+#: tools/gtk-image-tool-show.c:129
 msgid "Show one or more images."
 msgstr "Показати одне або декілька зображень."
-
-#: tools/gtk-image-tool-utils.c:50 tools/gtk-rendernode-tool-utils.c:54
-#, c-format
-msgid "Error at %s: %s\n"
-msgstr "Помилка у %s: %s\n"
-
-#: tools/gtk-image-tool-utils.c:68 tools/gtk-rendernode-tool-utils.c:72
-#, c-format
-msgid "Failed to load node file: %s\n"
-msgstr "Не вдалося завантажити файл вузла: %s\n"
-
-#: tools/gtk-image-tool-utils.c:89
-#, c-format
-msgid "%s is not a texture node\n"
-msgstr "%s не є вузлом текстури\n"
-
-#: tools/gtk-image-tool-utils.c:315
-#, c-format
-msgid "cicp must be 4 numbers, separated by /\n"
-msgstr "cicp має складатися з 4 чисел, які відокремлено /\n"
 
 #: tools/gtk-launch.c:40
 msgid "Show program version"
@@ -8454,6 +8511,21 @@ msgstr "Не вдалося обробити «%s» як число"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
+#| msgid ""
+#| "Usage:\n"
+#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
+#| "\n"
+#| "Perform various tasks on GTK render nodes.\n"
+#| "\n"
+#| "Commands:\n"
+#| "  benchmark    Benchmark rendering of a node\n"
+#| "  compare      Compare nodes or images\n"
+#| "  convert      Convert into nodes\n"
+#| "  extract      Extract data urls\n"
+#| "  info         Provide information about the node\n"
+#| "  show         Show the node\n"
+#| "  render       Take a screenshot of the node\n"
+#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8466,6 +8538,7 @@ msgid ""
 "  convert      Convert into nodes\n"
 "  extract      Extract data urls\n"
 "  info         Provide information about the node\n"
+"  match        Match pattern in the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
 "\n"
@@ -8481,74 +8554,75 @@ msgstr ""
 "  convert      Перетворити на вузли\n"
 "  extract      Видобути адреси даних\n"
 "  info         Надати дані щодо вузла\n"
+"  match        Шукати за взірцем у вузлі\n\n"
 "  show         Показати вузол\n"
 "  render       Створити знімок вікна вузла\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Add renderer to benchmark"
 msgstr "Додати обробник до тестування"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
-#: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-compare.c:66
+#: tools/gtk-rendernode-tool-render.c:308
 msgid "RENDERER"
 msgstr "ОБРОБНИК"
 
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Number of runs with each renderer"
 msgstr "Кількість запусків для кожного засобу обробки"
 
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "RUNS"
 msgstr "ЗАПУСКИ"
 
-#: tools/gtk-rendernode-tool-benchmark.c:98
+#: tools/gtk-rendernode-tool-benchmark.c:99
 msgid "Don’t download result/wait for GPU to finish"
 msgstr ""
 "Не отримувати результат/очікувати на завершення обробки графічним процесором"
 
-#: tools/gtk-rendernode-tool-benchmark.c:116
+#: tools/gtk-rendernode-tool-benchmark.c:117
 msgid "Benchmark rendering of a .node file."
 msgstr "Тестова обробка файла .node."
 
-#: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:320 tools/gtk-rendernode-tool-info.c:252
-#: tools/gtk-rendernode-tool-render.c:300 tools/gtk-rendernode-tool-show.c:150
+#: tools/gtk-rendernode-tool-benchmark.c:130
+#: tools/gtk-rendernode-tool-extract.c:222 tools/gtk-rendernode-tool-info.c:141
+#: tools/gtk-rendernode-tool-render.c:339 tools/gtk-rendernode-tool-show.c:151
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Не вказано файл .node\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:135
+#: tools/gtk-rendernode-tool-benchmark.c:136
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Можлива одночасне тестування лише за допомогою одного файла .node\n"
 
-#: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-compare.c:66
+#: tools/gtk-rendernode-tool-render.c:308
 msgid "Renderer to use"
 msgstr "Обробник, яким слід скористатися"
 
-#: tools/gtk-rendernode-tool-compare.c:70
+#: tools/gtk-rendernode-tool-compare.c:71
 msgid "FILE1 FILE2"
 msgstr "ФАЙЛ1 ФАЙЛ2"
 
-#: tools/gtk-rendernode-tool-compare.c:82
+#: tools/gtk-rendernode-tool-compare.c:83
 msgid "Compare .node or .png files."
 msgstr "Порівняти файли .node або .png."
 
-#: tools/gtk-rendernode-tool-compare.c:95
+#: tools/gtk-rendernode-tool-compare.c:96
 #, c-format
 msgid "Must specify two files\n"
 msgstr "Слід вказати два файли\n"
 
-#: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-compare.c:103
+#: tools/gtk-rendernode-tool-render.c:213
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "Не вдалося створити засіб обробки: %s\n"
 
-#: tools/gtk-rendernode-tool-compare.c:111
+#: tools/gtk-rendernode-tool-compare.c:112
 #, c-format
 msgid "Failed to load %s: %s\n"
 msgstr "Не вдалося завантажити %s: %s\n"
@@ -8569,10 +8643,6 @@ msgstr "Колір попередження"
 msgid "Error color"
 msgstr "Колір помилки"
 
-#: tools/gtk-rendernode-tool-convert.c:97
-msgid "SIZE"
-msgstr "РОЗМІР"
-
 #: tools/gtk-rendernode-tool-convert.c:107
 msgid "Convert from symbolic svg to node."
 msgstr "Перетворити з символічного svg на вузол."
@@ -8587,58 +8657,58 @@ msgstr "Не вказано файла .svg\n"
 msgid "Can only accept a single .svg file\n"
 msgstr "Можлива одночасна обробка лише одного файла .svg\n"
 
-#: tools/gtk-rendernode-tool-extract.c:73
-#: tools/gtk-rendernode-tool-extract.c:149
+#: tools/gtk-rendernode-tool-extract.c:70
+#: tools/gtk-rendernode-tool-extract.c:148
 #, c-format
 msgid "Failed to write %s\n"
 msgstr "Не вдалося записати %s\n"
 
-#: tools/gtk-rendernode-tool-extract.c:296
+#: tools/gtk-rendernode-tool-extract.c:198
 msgid "Directory to use"
 msgstr "Каталог, яким слід скористатися"
 
-#: tools/gtk-rendernode-tool-extract.c:296
+#: tools/gtk-rendernode-tool-extract.c:198
 msgid "DIRECTORY"
 msgstr "КАТАЛОГ"
 
-#: tools/gtk-rendernode-tool-extract.c:297
+#: tools/gtk-rendernode-tool-extract.c:199
 msgid "Be verbose"
 msgstr "Режим докладних повідомлень"
 
-#: tools/gtk-rendernode-tool-extract.c:307
+#: tools/gtk-rendernode-tool-extract.c:209
 msgid "Extract data urls from the render node."
 msgstr "Видобути адреси даних з вузла обробки."
 
-#: tools/gtk-rendernode-tool-extract.c:326 tools/gtk-rendernode-tool-info.c:258
+#: tools/gtk-rendernode-tool-extract.c:228 tools/gtk-rendernode-tool-info.c:147
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Можлива одночасна обробка лише одного файла .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:197
+#: tools/gtk-rendernode-tool-info.c:79 tools/gtk-rendernode-tool-info.c:81
 msgid "Number of nodes:"
 msgstr "Кількість вузлів:"
 
-#: tools/gtk-rendernode-tool-info.c:204
+#: tools/gtk-rendernode-tool-info.c:93
 msgid "Depth:"
 msgstr "Глибина:"
 
-#: tools/gtk-rendernode-tool-info.c:207
+#: tools/gtk-rendernode-tool-info.c:96
 msgid "Bounds:"
 msgstr "Межі:"
 
-#: tools/gtk-rendernode-tool-info.c:208
+#: tools/gtk-rendernode-tool-info.c:97
 msgid "Origin:"
 msgstr "Початок:"
 
-#: tools/gtk-rendernode-tool-info.c:212 tools/gtk-rendernode-tool-info.c:218
+#: tools/gtk-rendernode-tool-info.c:101 tools/gtk-rendernode-tool-info.c:107
 msgid "Opaque part:"
 msgstr "Непрозора частина:"
 
-#: tools/gtk-rendernode-tool-info.c:239
+#: tools/gtk-rendernode-tool-info.c:128
 msgid "Provide information about the render node."
 msgstr "Надати дані щодо вузла обробки."
 
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:173
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -8647,39 +8717,72 @@ msgstr ""
 "Файл із назвою %s вже існує.\n"
 "Якщо ви хочете його перезаписати, вкажіть назву файла.\n"
 
-#: tools/gtk-rendernode-tool-render.c:185
-#: tools/gtk-rendernode-tool-render.c:197
+#: tools/gtk-rendernode-tool-render.c:187
+#: tools/gtk-rendernode-tool-render.c:199
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Не вдалося створити SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:271
+#: tools/gtk-rendernode-tool-render.c:309
 msgid "Keep node position unchanged"
 msgstr "Не змінювати позицію вузла"
 
-#: tools/gtk-rendernode-tool-render.c:287
+#: tools/gtk-rendernode-tool-render.c:310
+msgid "Area to render"
+msgstr "Область для обробки"
+
+#: tools/gtk-rendernode-tool-render.c:310
+msgid "X,Y,W,H"
+msgstr "X,Y,Ш,В"
+
+#: tools/gtk-rendernode-tool-render.c:326
 msgid "Render a .node file to an image."
 msgstr "Обробити файл .node до зображення."
 
-#: tools/gtk-rendernode-tool-render.c:306
+#: tools/gtk-rendernode-tool-render.c:345
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
 "Одночасно можливе створення лише одного знімка вікна файла .node і виведення "
 "даних лише до одного файла\n"
 
-#: tools/gtk-rendernode-tool-show.c:120
+#: tools/gtk-rendernode-tool-render.c:353
+#, c-format
+msgid "Invalid rectangle given for bounds\n"
+msgstr "Для рамки вказано некоректний прямокутник\n"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Put node into offload container"
 msgstr "Розмістити вузол до контейнера вивантаження"
 
-#: tools/gtk-rendernode-tool-show.c:137
+#: tools/gtk-rendernode-tool-show.c:138
 msgid "Show the render node."
 msgstr "Показати вузол обробки."
 
-#: tools/gtk-rendernode-tool-show.c:156
+#: tools/gtk-rendernode-tool-show.c:157
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Можливий попередній перегляд лише одного файла .node\n"
+
+#: tools/gtk-tool-utils.c:48
+#, c-format
+msgid "Error at %s: %s\n"
+msgstr "Помилка у %s: %s\n"
+
+#: tools/gtk-tool-utils.c:66
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "Не вдалося завантажити файл вузла: %s\n"
+
+#: tools/gtk-tool-utils.c:87
+#, c-format
+msgid "%s is not a texture node\n"
+msgstr "%s не є вузлом текстури\n"
+
+#: tools/gtk-tool-utils.c:313
+#, c-format
+msgid "cicp must be 4 numbers, separated by /\n"
+msgstr "cicp має складатися з 4 чисел, які відокремлено /\n"
 
 #: tools/updateiconcache.c:1402
 #, c-format
