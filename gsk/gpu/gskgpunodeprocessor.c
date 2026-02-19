@@ -2510,7 +2510,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuRenderPass *self,
         {
           GskGpuRenderPassClipStorage storage;
 
-          gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, &storage);
+          gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, TRUE, &storage);
           gsk_gpu_node_processor_add_node (self, source_child, 0);
           gsk_gpu_render_pass_pop_clip_mask (self, &storage);
         }
@@ -3066,7 +3066,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
     {
       GskGpuRenderPassClipStorage storage;
 
-      gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, &storage);
+      gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, FALSE, &storage);
       gsk_gpu_node_processor_add_node (self, child, 0);
       gsk_gpu_render_pass_pop_clip_mask (self, &storage);
     }
@@ -3118,7 +3118,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
     {
       GskGpuRenderPassClipStorage storage;
 
-      gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, &storage);
+      gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, FALSE, &storage);
       gsk_gpu_node_processor_add_node (self, child, 0);
       gsk_gpu_render_pass_pop_clip_mask (self, &storage);
     }
