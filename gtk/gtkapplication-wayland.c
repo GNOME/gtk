@@ -30,6 +30,7 @@
 #include <gdk/wayland/gdktoplevel-wayland-private.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 
+#include "a11y/gtkatspicontextprivate.h"
 
 typedef struct
 {
@@ -84,6 +85,35 @@ restore_wayland_fallback_state (GtkWindow *window,
 }
 
 static void
+set_a11y_properties (GtkWindow *window)
+{
+  GdkSurface *gdk_surface;
+  GtkATContext *at_context;
+
+  gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
+
+  at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
+
+  if (GTK_IS_AT_SPI_CONTEXT (at_context))
+    {
+      const char *dbus_name = NULL, *object_path = NULL;
+      GVariant *ref_data;
+
+      gtk_at_context_realize (at_context);
+
+      ref_data = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (at_context));
+
+      g_variant_get (ref_data, "(&s&o)", &dbus_name, &object_path);
+
+      gdk_wayland_toplevel_set_a11y_properties (GDK_TOPLEVEL (gdk_surface),
+                                                dbus_name, object_path);
+      g_variant_unref (ref_data);
+    }
+
+  g_clear_object (&at_context);
+}
+
+static void
 gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
                                                     GtkWindow          *window)
 {
@@ -133,6 +163,8 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   gdk_wayland_toplevel_set_session_id (GDK_TOPLEVEL (gdk_surface), id);
   gdk_wayland_toplevel_restore_from_session (GDK_TOPLEVEL (gdk_surface));
   g_free (id);
+
+  set_a11y_properties (window);
 
   impl_class->handle_window_realize (impl, window);
 }

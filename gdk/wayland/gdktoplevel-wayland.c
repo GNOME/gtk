@@ -124,6 +124,13 @@ struct _GdkWaylandToplevel
     char *unique_bus_name;
   } application;
 
+  struct {
+    gboolean was_set;
+
+    char *dbus_name;
+    char *toplevel_object_path;
+  } a11y;
+
   struct zwp_idle_inhibitor_v1 *idle_inhibitor;
   size_t idle_inhibitor_refcount;
 
@@ -242,6 +249,7 @@ gdk_wayland_toplevel_init_capabilities (GdkWaylandToplevel *toplevel)
 /* {{{ Toplevel implementation */
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel);
+static void maybe_set_gtk_surface_a11y_properties (GdkWaylandToplevel *wayland_toplevel);
 static void maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel);
 static gboolean maybe_set_xdg_dialog_modal (GdkWaylandToplevel *wayland_toplevel);
 static gboolean maybe_set_xdg_toplevel_icon (GdkWaylandToplevel *wayland_toplevel);
@@ -996,6 +1004,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   gdk_wayland_toplevel_set_application_id (GDK_TOPLEVEL (wayland_toplevel), app_id);
 
   maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
+  maybe_set_gtk_surface_a11y_properties (wayland_toplevel);
   if (!maybe_set_xdg_dialog_modal (wayland_toplevel))
     maybe_set_gtk_surface_modal (wayland_toplevel);
 
@@ -2871,6 +2880,49 @@ gdk_wayland_toplevel_remove_from_session (GdkToplevel *toplevel)
       xx_toplevel_session_v1_remove (wayland_toplevel->toplevel_session);
       wayland_toplevel->toplevel_session = NULL;
     }
+}
+
+static void
+maybe_set_gtk_surface_a11y_properties (GdkWaylandToplevel *wayland_toplevel)
+{
+  if (wayland_toplevel->a11y.was_set)
+    return;
+
+  if (wayland_toplevel->a11y.dbus_name == NULL ||
+      wayland_toplevel->a11y.toplevel_object_path == NULL)
+    return;
+
+  if (!gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel))
+    return;
+
+  if (gtk_surface1_get_version (wayland_toplevel->display_server.gtk_surface) <
+      GTK_SURFACE1_SET_A11Y_PROPERTIES_SINCE_VERSION)
+    return;
+
+  gtk_surface1_set_a11y_properties (wayland_toplevel->display_server.gtk_surface,
+                                    wayland_toplevel->a11y.dbus_name,
+                                    wayland_toplevel->a11y.toplevel_object_path);
+  wayland_toplevel->a11y.was_set = TRUE;
+}
+
+void
+gdk_wayland_toplevel_set_a11y_properties (GdkToplevel *toplevel,
+                                          const char  *bus_name,
+                                          const char  *toplevel_object_path)
+{
+  GdkWaylandToplevel *wayland_toplevel;
+
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+
+  wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+
+  g_clear_pointer (&wayland_toplevel->a11y.dbus_name, g_free);
+  wayland_toplevel->a11y.dbus_name = g_strdup (bus_name);
+  g_clear_pointer (&wayland_toplevel->a11y.toplevel_object_path, g_free);
+  wayland_toplevel->a11y.toplevel_object_path = g_strdup (toplevel_object_path);
+  wayland_toplevel->a11y.was_set = FALSE;
+
+  maybe_set_gtk_surface_a11y_properties (wayland_toplevel);
 }
 
 /* }}} */

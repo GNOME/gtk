@@ -49,3 +49,7 @@ void     gdk_wayland_toplevel_restore_from_session
                                                   (GdkToplevel *toplevel);
 
 void     gdk_wayland_toplevel_remove_from_session (GdkToplevel *toplevel);
+
+void gdk_wayland_toplevel_set_a11y_properties (GdkToplevel *toplevel,
+                                               const char  *bus_name,
+                                               const char  *toplevel_object_path);
