@@ -232,6 +232,9 @@ main_clip_none (void)
   run (color, pos);
 #endif
 
+  float coverage = gsk_mask_coverage (pos);
+  color *= coverage;
+
   gsk_set_output_color (color);
 #ifdef GSK_DUAL_BLEND
   gsk_set_output_mask (mask);
@@ -255,7 +258,7 @@ main_clip_rect (void)
 
   Rect clip = rect_from_gsk (GSK_GLOBAL_CLIP_RECT);
 
-  float coverage = rect_coverage (clip, pos);
+  float coverage = rect_coverage (clip, pos) * gsk_mask_coverage (pos);
   color *= coverage;
 
   gsk_set_output_color (color);
@@ -282,7 +285,7 @@ main_clip_rounded (void)
 
   RoundedRect clip = rounded_rect_from_gsk (GSK_GLOBAL_CLIP);
 
-  float coverage = rounded_rect_coverage (clip, pos);
+  float coverage = rounded_rect_coverage (clip, pos) * gsk_mask_coverage (pos);
   color *= coverage;
 
   gsk_set_output_color (color);
