@@ -451,6 +451,9 @@ gsk_gl_device_load_shader (GskGLDevice       *self,
     }
 
   g_string_append_printf (preamble, "#define GSK_FLAGS %uu\n", flags);
+  /* We define this here so the bad shader compilers don't have to parse complex #if checks */
+  if (gsk_gpu_shader_flags_has_clip_mask (flags))
+    g_string_append (preamble, "#define GSK_GL_HAS_CLIP_MASK\n");
   g_string_append_printf (preamble, "#define GSK_COLOR_STATES %uu\n", color_states);
   g_string_append_printf (preamble, "#define GSK_VARIATION %uu\n", variation);
 
@@ -611,6 +614,8 @@ gsk_gl_device_use_program (GskGLDevice               *self,
           glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1_2"), 5);
         }
     }
+  if (gsk_gpu_shader_flags_has_clip_mask (flags))
+    glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE_MASK"), 6);
 }
 
 GLuint
