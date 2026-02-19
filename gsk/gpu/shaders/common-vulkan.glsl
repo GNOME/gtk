@@ -44,6 +44,22 @@ layout(location = 0) out vec4 out_color;
 layout(location = 0, index = 1) out vec4 out_mask;
 #endif
 
+layout(set = 2, binding = 0) uniform sampler2D GSK_TEXTURE_MASK;
+
+#include "rect.glsl"
+
+float
+gsk_mask_coverage (vec2 pos)
+{
+  if ((GSK_FLAGS & 8u) != 0u)
+    {
+      vec2 coord = rect_get_coord (rect_from_gsk (push.clip_mask_rect), pos);
+      return texture (GSK_TEXTURE_MASK, coord).a;
+    }
+  else
+    return 1.0;
+}
+
 void
 gsk_set_output_color (vec4 color)
 {
