@@ -1,0 +1,97 @@
+color {
+  bounds: 0 0 170 230;
+  color: rgb(0,0,0);
+}
+radial-gradient {
+  bounds: 0 0 50 50;
+  start: 100 0 0;
+  end: 100 0 10;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: none;
+  premultiplied: false;
+}
+linear-gradient {
+  bounds: 60 0 50 50;
+  start: 80 0;
+  end: 90 0;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: none;
+  premultiplied: false;
+}
+radial-gradient {
+  bounds: 120 0 50 50;
+  start: 145 0 100;
+  end: 145 0 110;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: none;
+  premultiplied: false;
+}
+radial-gradient {
+  bounds: 0 60 50 50;
+  start: 100 60 0;
+  end: 100 60 10;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  premultiplied: false;
+}
+linear-gradient {
+  bounds: 60 60 50 50;
+  start: 80 60;
+  end: 90 60;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  premultiplied: false;
+}
+radial-gradient {
+  bounds: 120 60 50 50;
+  start: 145 60 100;
+  end: 145 60 110;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  premultiplied: false;
+}
+radial-gradient {
+  bounds: 0 120 50 50;
+  start: 100 120 0;
+  end: 100 120 10;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: repeat;
+  premultiplied: false;
+}
+linear-gradient {
+  bounds: 60 120 50 50;
+  start: 80 120;
+  end: 90 120;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: repeat;
+  premultiplied: false;
+}
+radial-gradient {
+  bounds: 120 120 50 50;
+  start: 145 120 100;
+  end: 145 120 110;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: none;
+  premultiplied: false;
+}
+radial-gradient {
+  bounds: 0 180 50 50;
+  start: 100 180 0;
+  end: 100 180 10;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: reflect;
+  premultiplied: false;
+}
+linear-gradient {
+  bounds: 60 180 50 50;
+  start: 80 180;
+  end: 90 180;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: reflect;
+  premultiplied: false;
+}
+radial-gradient {
+  bounds: 120 180 50 50;
+  start: 145 180 100;
+  end: 145 180 110;
+  stops: 0 rgba(0,255,0,0), 0 rgb(0,0,255), 1 rgb(0,0,255), 1 rgba(255,0,0,0);
+  repeat: none;
+  premultiplied: false;
+}
