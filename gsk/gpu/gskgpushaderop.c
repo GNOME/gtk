@@ -29,6 +29,7 @@ gsk_gpu_shader_op_finish (GskGpuOp *op)
 
   g_clear_object (&self->images[0]);
   g_clear_object (&self->images[1]);
+  g_clear_object (&self->clip_mask);
 }
 
 void
@@ -90,6 +91,7 @@ gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
           next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size ||
+          (next_shader->clip_mask && next_shader->clip_mask != self->clip_mask) ||
           (shader_op_class->n_textures > 0 && (next_shader->images[0] != self->images[0] || next_shader->samplers[0] != self->samplers[0])) ||
           (shader_op_class->n_textures > 1 && (next_shader->images[1] != self->images[1] || next_shader->samplers[1] != self->samplers[1])))
         break;
@@ -119,6 +121,20 @@ gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
           state->current_images[i] = self->images[i];
           state->current_samplers[i] = self->samplers[i];
         }
+    }
+  if (self->clip_mask && state->clip_mask != self->clip_mask)
+    {
+      vkCmdBindDescriptorSets (state->vk_command_buffer,
+                               VK_PIPELINE_BIND_POINT_GRAPHICS,
+                               vk_pipeline_layout,
+                               2,
+                               1,
+                               (VkDescriptorSet[1]) {
+                                   gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->clip_mask), GSK_GPU_SAMPLER_DEFAULT),
+                               },
+                               0,
+                               NULL);
+      state->clip_mask = self->clip_mask;
     }
                                
   vkCmdBindPipeline (state->vk_command_buffer,
@@ -186,6 +202,13 @@ gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
           state->current_samplers[i] = self->samplers[i];
         }
     }
+  if (self->clip_mask && state->clip_mask != self->clip_mask)
+    {
+      gsk_gl_image_bind_textures (GSK_GL_IMAGE (self->clip_mask), GL_TEXTURE0 + 3 * 2);
+      glBindSampler (3 * 2, gsk_gl_device_get_sampler_id (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                          GSK_GPU_SAMPLER_DEFAULT));
+      state->clip_mask = self->clip_mask;
+    }
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
     max_ops_per_draw = MAX_MERGE_OPS;
@@ -241,6 +264,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          GskGpuColorStates          color_states,
                          guint32                    variation,
                          GskGpuShaderClip           clip,
+                         GskGpuImage               *clip_mask,
                          GskGpuImage              **images,
                          GskGpuSampler             *samplers,
                          gpointer                   out_vertex_data)
@@ -252,7 +276,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   GskGpuShaderFlags flags;
 
   flags = gsk_gpu_shader_flags_create (clip,
-                                       FALSE,
+                                       clip_mask != NULL,
                                        op_class->n_textures > 0 ? gsk_gpu_image_get_shader_op (images[0]) : GDK_SHADER_DEFAULT,
                                        op_class->n_textures > 0 && (gsk_gpu_image_get_flags (images[0]) & GSK_GPU_IMAGE_EXTERNAL),
                                        op_class->n_textures > 1 ? gsk_gpu_image_get_shader_op (images[1]) : GDK_SHADER_DEFAULT,
@@ -276,6 +300,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
       last_shader->color_states == color_states &&
       last_shader->variation == variation &&
       last_shader->flags == flags &&
+      last_shader->clip_mask == clip_mask &&
       last_shader->vertex_offset + last_shader->n_ops * vertex_size == vertex_offset &&
       (op_class->n_textures < 1 || (last_shader->images[0] == images[0] && last_shader->samplers[0] == samplers[0])) &&
       (op_class->n_textures < 2 || (last_shader->images[1] == images[1] && last_shader->samplers[1] == samplers[1])))
@@ -297,6 +322,8 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
           self->images[i] = g_object_ref (images[i]);
           self->samplers[i] = samplers[i];
         }
+      if (clip_mask)
+        self->clip_mask = g_object_ref (clip_mask);
     }
 
   *((gpointer *) out_vertex_data) = vertex_data + texture_vertex_size;

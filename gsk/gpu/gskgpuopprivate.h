@@ -32,6 +32,7 @@ struct _GskGLCommandState
   GskGpuBuffer *globals;
   GskGpuImage *current_images[2];
   GskGpuSampler current_samplers[2];
+  GskGpuImage *clip_mask;
 };
 
 #ifdef GDK_RENDERING_VULKAN
@@ -45,6 +46,7 @@ struct _GskVulkanCommandState
   GskVulkanSemaphores *semaphores;
   GskGpuImage *current_images[2];
   GskGpuSampler current_samplers[2];
+  GskGpuImage *clip_mask;
 };
 #endif
 
