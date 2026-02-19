@@ -155,6 +155,7 @@ compare_render_tests = [
   'mask-modes-in-opacity',
   'mask-modes-with-alpha',
   'mask-texture-color-alpha',
+  'mask-with-opacity-nondisjoint-source',
   'mipmap-generation-later',
   'mipmap-with-1x1',
   'nested-rounded-clips',

@@ -148,6 +148,7 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
 
   self->clip_mask = NULL;
   self->clip_mask_rect = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  self->clip_mask_has_opacity = FALSE;
   self->modelview = NULL;
   gsk_gpu_image_get_projection_matrix (target, &self->projection);
   graphene_vec2_init (&self->scale,
@@ -255,7 +256,7 @@ gsk_gpu_render_pass_pop_opacity (GskGpuRenderPass               *self,
 gboolean
 gsk_gpu_render_pass_has_opacity (GskGpuRenderPass *self)
 {
-  return self->opacity < 1.0;
+  return self->opacity < 1.0 || self->clip_mask_has_opacity;
 }
 
 void
@@ -760,6 +761,7 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
 
   storage->clip_mask = self->clip_mask;
   storage->clip_mask_rect = self->clip_mask_rect;
+  storage->clip_mask_has_opacity = self->clip_mask_has_opacity;
   gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
   storage->modified = GSK_GPU_GLOBAL_MASK | GSK_GPU_GLOBAL_CLIP;
 
@@ -862,6 +864,7 @@ gsk_gpu_render_pass_pop_clip_rect (GskGpuRenderPass            *self,
       g_clear_object (&self->clip_mask);
       self->clip_mask = storage->clip_mask;
       self->clip_mask_rect = storage->clip_mask_rect;
+      self->clip_mask_has_opacity = storage->clip_mask_has_opacity;
     }
 
   self->pending_globals |= storage->modified;
@@ -908,11 +911,13 @@ void
 gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
                                     GskGpuImage                 *clip_mask,
                                     const graphene_rect_t       *clip_mask_rect,
+                                    gboolean                     has_opacity,
                                     GskGpuRenderPassClipStorage *storage)
 {
   if (self->clip_mask != NULL)
     {
       gsk_gpu_render_pass_draw_clip_mask (self, NULL, NULL, clip_mask, clip_mask_rect, storage);
+      storage->clip_mask_has_opacity |= has_opacity;
       return;
     }
 
@@ -920,12 +925,14 @@ gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
 
   storage->clip_mask = self->clip_mask;
   storage->clip_mask_rect = self->clip_mask_rect;
+  storage->clip_mask_has_opacity = self->clip_mask_has_opacity;
   storage->modified = GSK_GPU_GLOBAL_MASK;
 
   self->clip_mask = g_object_ref (clip_mask);
   gsk_rect_init_offset (&self->clip_mask_rect,
                         clip_mask_rect,
                         &self->offset);
+  self->clip_mask_has_opacity = has_opacity;
 
   self->pending_globals |= storage->modified;
 }

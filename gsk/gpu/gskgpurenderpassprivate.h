@@ -36,6 +36,7 @@ struct _GskGpuRenderPass
   GskGpuClip                     clip;
   GskGpuImage *                  clip_mask;
   graphene_rect_t                clip_mask_rect;
+  gboolean                       clip_mask_has_opacity;
 
   GskGpuGlobals                  pending_globals;
 };
@@ -66,6 +67,7 @@ typedef struct {
   cairo_rectangle_int_t scissor;
   GskGpuImage *clip_mask;
   graphene_rect_t clip_mask_rect;
+  gboolean clip_mask_has_opacity;
   guint modified;
 } GskGpuRenderPassClipStorage;
 
@@ -143,6 +145,7 @@ void                    gsk_gpu_render_pass_pop_clip_device_rect        (GskGpuR
 void                    gsk_gpu_render_pass_push_clip_mask              (GskGpuRenderPass                 *self,
                                                                          GskGpuImage                      *clip_mask,
                                                                          const graphene_rect_t            *clip_mask_rect,
+                                                                         gboolean                          clip_mask_has_opacity,
                                                                          GskGpuRenderPassClipStorage      *storage);
 void                    gsk_gpu_render_pass_pop_clip_mask               (GskGpuRenderPass                 *self,
                                                                          GskGpuRenderPassClipStorage      *storage);
