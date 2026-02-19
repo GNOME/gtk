@@ -156,3 +156,7 @@ gboolean        shape_is_graphical                 (Shape *shape);
 
 GtkIconPaintable *
                 path_paintable_get_icon_paintable  (PathPaintable *self);
+
+void            path_paintable_set_playing         (PathPaintable *self,
+                                                    gboolean       playing);
+gboolean        path_paintable_get_playing         (PathPaintable *self);
