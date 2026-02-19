@@ -3080,7 +3080,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
   graphene_rect_t clip_bounds;
   GskGpuImage *mask_image;
   GskRenderNode *child;
-  graphene_rect_t tex_rect;
+  graphene_rect_t mask_rect;
   GskGpuCache *cache;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
@@ -3096,7 +3096,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
                                              &clip_bounds,
                                              gsk_stroke_node_get_path (node),
                                              gsk_stroke_node_get_stroke (node),
-                                             &tex_rect);
+                                             &mask_rect);
   if (mask_image == NULL)
     return;
 
@@ -3110,35 +3110,16 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
                            &clip_bounds,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
-                           &tex_rect,
+                           &mask_rect,
                            color);
     }
   else
     {
-      GskGpuImage *source_image;
-      graphene_rect_t source_rect;
+      GskGpuRenderPassClipStorage storage;
 
-      source_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                               0,
-                                                               &clip_bounds,
-                                                               child,
-                                                               0,
-                                                               &source_rect);
-      if (source_image != NULL)
-        {
-          gsk_gpu_mask_op (self,
-                           self->ccs,
-                           &clip_bounds,
-                           source_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           mask_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           GSK_MASK_MODE_ALPHA,
-                           &source_rect,
-                           &tex_rect);
-
-          g_object_unref (source_image);
-        }
+      gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, &storage);
+      gsk_gpu_node_processor_add_node (self, child, 0);
+      gsk_gpu_render_pass_pop_clip_mask (self, &storage);
     }
 
   g_object_unref (mask_image);
