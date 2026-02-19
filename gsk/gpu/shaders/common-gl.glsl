@@ -22,13 +22,13 @@ uniform PushConstants
 
 #define GSK_VERTEX_INDEX gl_VertexID
 
+#include "rect.glsl"
 
 #ifdef GSK_VERTEX_SHADER
 #define IN(_loc) in
 #define PASS(_loc) out
 #define PASS_FLAT(_loc) flat out
 #endif
-
 
 #ifdef GSK_FRAGMENT_SHADER
 #define PASS(_loc) in
@@ -63,6 +63,23 @@ uniform sampler2D GSK_TEXTURE1_2;
 #endif
 
 #endif
+#endif
+
+#ifdef GSK_GL_HAS_CLIP_MASK
+uniform sampler2D GSK_TEXTURE_MASK;
+
+float
+gsk_mask_coverage (vec2 pos)
+{
+  vec2 coord = rect_get_coord (rect_from_gsk (push.clip_mask_rect), pos);
+  return texture (GSK_TEXTURE_MASK, coord).a;
+}
+#else
+float
+gsk_mask_coverage (vec2 pos)
+{
+  return 1.0;
+}
 #endif
 
 #ifdef HAS_EXTERNAL_TEXTURES
