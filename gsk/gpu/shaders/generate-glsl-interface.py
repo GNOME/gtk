@@ -536,7 +536,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     else:
         print (f'''                           0,''')
     print (f'''                           gsk_gpu_clip_get_shader_clip (&pass->clip, &pass->offset, bounds),''')
-    print (f'''                           NULL,''')
+    print (f'''                           pass->clip_mask,''')
     if file.n_textures > 0:
         print (f'''                           (GskGpuImage *[{file.n_textures}]) {{ {', '.join (map (lambda x: 'image' + str(x), range(1, file.n_textures + 1)))} }},
                            (GskGpuSampler[{file.n_textures}]) {{ {', '.join (map (lambda x: 'sampler' + str(x), range(1, file.n_textures + 1)))} }},''')
