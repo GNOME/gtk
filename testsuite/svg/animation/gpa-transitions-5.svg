@@ -29,7 +29,7 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='0ms'/>
     <animate
             id='gpa:transition:fade-in:opacity:red'
             attributeName='opacity'

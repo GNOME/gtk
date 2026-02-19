@@ -36,6 +36,7 @@ enum
 {
   PROP_STATE = 1,
   PROP_WEIGHT,
+  PROP_PLAYING,
   PROP_RESOURCE,
   NUM_PROPERTIES,
 };
@@ -69,7 +70,10 @@ ensure_render_paintable (PathPaintable *self)
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), gtk_svg_get_weight (self->svg));
-      gtk_svg_play (GTK_SVG (self->render_paintable));
+
+      g_object_bind_property (self->svg, "playing",
+                              self->render_paintable, "playing",
+                              G_BINDING_SYNC_CREATE);
 
       g_signal_connect_swapped (self->render_paintable, "notify::state",
                                 G_CALLBACK (notify_state), self);
@@ -197,7 +201,6 @@ static void
 path_paintable_dispose (GObject *object)
 {
   PathPaintable *self = PATH_PAINTABLE (object);
-
   if (self->render_paintable)
     {
       g_signal_handlers_disconnect_by_func (self->render_paintable, notify_state, self);
@@ -230,6 +233,10 @@ path_paintable_get_property (GObject      *object,
       g_value_set_double (value, path_paintable_get_weight (self));
       break;
 
+    case PROP_PLAYING:
+      g_value_set_boolean (value, path_paintable_get_playing (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -252,6 +259,10 @@ path_paintable_set_property (GObject      *object,
 
     case PROP_WEIGHT:
       path_paintable_set_weight (self, g_value_get_double (value));
+      break;
+
+    case PROP_PLAYING:
+      path_paintable_set_playing (self, g_value_get_boolean (value));
       break;
 
     case PROP_RESOURCE:
@@ -309,6 +320,11 @@ path_paintable_class_init (PathPaintableClass *class)
     g_param_spec_double ("weight", NULL, NULL,
                          -1, 1000.f, -1,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_PLAYING] =
+    g_param_spec_boolean ("playing", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_RESOURCE] =
     g_param_spec_string ("resource", NULL, NULL,
@@ -1194,6 +1210,24 @@ path_paintable_get_icon_paintable (PathPaintable *self)
   g_bytes_unref (bytes);
 
   return paintable;
+}
+
+void
+path_paintable_set_playing (PathPaintable *self,
+                            gboolean       playing)
+{
+  if (self->svg->playing == playing)
+    return;
+
+  g_object_set (self->svg, "playing", playing, NULL);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
+}
+
+gboolean
+path_paintable_get_playing (PathPaintable *self)
+{
+  return self->svg->playing;
 }
 
 /* }}} */

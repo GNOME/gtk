@@ -56,8 +56,7 @@
 /**
  * GtkSvg:
  *
- * A paintable implementation that renders (a subset of) SVG,
- * with animations.
+ * A paintable implementation that renders SVG, with animations.
  *
  * `GtkSvg` objects are created by parsing a subset of SVG,
  * including SVG animations.
@@ -65,16 +64,15 @@
  * The `GtkSvg` fills or strokes paths with symbolic or fixed
  * colors. It can have multiple states, and paths can be included
  * in a subset of the states. The special 'empty' state is always
- *
- * available. States can have animation, and the transition between
+ * available. States can have animations, and the transition between
  * different states can also be animated.
  *
  * To find out what states a `GtkSvg` has, use [method@Gtk.Svg.get_n_states].
  * To set the current state, use [method@Gtk.Svg.set_state].
  *
  * To play the animations in an SVG file, use
- * [method@Gtk.Svg.set_frame_clock] to connect the paintable to a frame clock,
- * and then use [method@Gtk.Svg.play] to start the animation.
+ * [method@Gtk.Svg.set_frame_clock] to connect the paintable to a
+ * frame clock, and then call [method@Gtk.Svg.play] to start animations.
  *
  *
  * ## Error handling
@@ -94,7 +92,7 @@
  *
  * ## The supported subset of SVG
  *
- * The paintable supports much of SVG 2, some notable exceptions.
+ * The paintable supports much of SVG 2, with some exceptions.
  *
  * Among the graphical elements, `<textPath>` and `<foreignObject>`
  * are not supported.
@@ -108,7 +106,7 @@
  * supported: feConvolveMatrix, feDiffuseLighting,
  * feMorphology, feSpecularLighting and feTurbulence.
  *
- * The support for the `mask` attribute is limited to just a url
+ * Support for the `mask` attribute is limited to just a url
  * referring to the `<mask>` element by ID.
  *
  * In animation elements, the parsing of `begin` and `end` attributes
@@ -169,11 +167,11 @@
  *
  * will start a fade-out of path1 300ms before state 0 ends.
  *
- * In addition to `gpa:fill` and `gpa:stroke`, symbolic colors can
- * also be specified as a custom paint server reference, like this:
- * `url(gpa:#warning)`. This works in `fill` and `stroke` attributes,
- * but also when specifying colors in SVG animation attributes like
- * `to` or `values`.
+ * In addition to the `gpa:fill` and `gpa:stroke` attributes, symbolic
+ * colors can also be specified as a custom paint server reference,
+ * like this: `url(gpa:#warning)`. This works in `fill` and `stroke`
+ * attributes, but also when specifying colors in SVG animation
+ * attributes like `to` or `values`.
  *
  * Note that the SVG syntax allows for a fallback RGB color to be
  * specified after the url, for compatibility with other SVG consumers:
@@ -14577,7 +14575,7 @@ compare_anim (gconstpointer a,
   else if (a1->attr > a2->attr)
     return 1;
 
-  /* The situation with animateTransform sv animateMotion
+  /* The situation with animateTransform vs. animateMotion
    * is special: they don't add to each other, and
    * the accumulate animateMotion transform is always
    * applied after the accumulate animateTransform.
@@ -14811,22 +14809,46 @@ static struct {
 };
 
 static void
-apply_state (Shape        *shape,
-             unsigned int  state)
+shape_apply_state (GtkSvg       *self,
+                   Shape        *shape,
+                   unsigned int  state)
 {
   if (shape_type_has_gpa_attrs (shape->type))
     {
       SvgValue *value;
+      Visibility visibility;
 
       if (state == GTK_SVG_STATE_EMPTY)
-        value = svg_visibility_new (VISIBILITY_HIDDEN);
+        visibility = VISIBILITY_HIDDEN;
       else if (shape->gpa.states & BIT (state))
-        value = svg_visibility_new (VISIBILITY_VISIBLE);
+        visibility = VISIBILITY_VISIBLE;
       else
-        value = svg_visibility_new (VISIBILITY_HIDDEN);
+        visibility = VISIBILITY_HIDDEN;
 
-      shape_set_base_value (shape, SHAPE_ATTR_VISIBILITY, 0, value);
-      svg_value_unref (value);
+      if ((self->features & GTK_SVG_ANIMATIONS) == 0)
+        {
+          value = svg_visibility_new (visibility);
+          shape_set_base_value (shape, SHAPE_ATTR_VISIBILITY, 0, value);
+          svg_value_unref (value);
+        }
+
+      if (!self->playing && shape->animations)
+        {
+          for (unsigned int i = shape->animations->len; i > 0; i--)
+            {
+              Animation *a = g_ptr_array_index (shape->animations, i - 1);
+
+              if ((visibility == VISIBILITY_VISIBLE &&
+                   g_str_has_prefix (a->id, "gpa:transition:fade-in")) ||
+                  (visibility == VISIBILITY_HIDDEN &&
+                   g_str_has_prefix (a->id, "gpa:transition:fade-out")))
+                {
+                  a->status = ANIMATION_STATUS_DONE;
+                  g_ptr_array_steal_index (shape->animations, i - 1);
+                  g_ptr_array_add (shape->animations, a);
+                }
+            }
+        }
     }
 
   if (shape_type_has_shapes (shape->type))
@@ -14834,9 +14856,16 @@ apply_state (Shape        *shape,
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
           Shape *sh = g_ptr_array_index (shape->shapes, i);
-          apply_state (sh, state);
+          shape_apply_state (self, sh, state);
         }
     }
+}
+
+static void
+apply_state (GtkSvg   *self,
+             uint64_t  state)
+{
+  shape_apply_state (self, self->content, state);
 }
 
 /* {{{ Weight variation */
@@ -18760,9 +18789,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_ptr_array_unref (data.pending_refs);
   g_string_free (data.text, TRUE);
 
-  if (self->gpa_version == 1 &&
+  if (self->gpa_version > 0 &&
       (self->features & GTK_SVG_ANIMATIONS) == 0)
-    apply_state (self->content, self->state);
+    apply_state (self, self->state);
 }
 
 static void
@@ -25638,8 +25667,10 @@ gtk_svg_get_weight (GtkSvg *self)
  * Use [method@Gtk.Svg.get_n_states] to find out
  * what states @self has.
  *
- * Note that [method@Gtk.Svg.play] must have been
- * called for the SVG paintable to react to state changes.
+ * If the paintable is currently playing, the state change
+ * will apply transitions that are defined in the SVG. If
+ * the paintable is not playing, the state change will take
+ * effect instantaneously.
  *
  * Since: 4.22
  */
@@ -25655,15 +25686,14 @@ gtk_svg_set_state (GtkSvg       *self,
   if (self->state == state)
     return;
 
+  previous_state = self->state;
+  self->state = state;
+
   if (self->playing)
     {
       /* FIXME frame time */
       self->current_time = MAX (self->current_time, g_get_monotonic_time ());
     }
-
-  previous_state = self->state;
-
-  self->state = state;
 
   if ((self->features & GTK_SVG_EXTENSIONS) == 0)
     {
@@ -25671,36 +25701,35 @@ gtk_svg_set_state (GtkSvg       *self,
       return;
     }
 
-  if ((self->features & GTK_SVG_ANIMATIONS) == 0)
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0 ||
+      !self->playing)
     {
       if (self->gpa_version > 0)
         {
-          apply_state (self->content, state);
+          apply_state (self, state);
           gtk_svg_invalidate_contents (self);
         }
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
-      return;
     }
-
-  /* Don't jiggle things while we're still loading */
-  if (self->load_time != INDEFINITE)
+  else
     {
-      dbg_print ("state", "renderer state %u -> %u\n", previous_state, state);
+      if (self->load_time != INDEFINITE)
+        {
+          /* Don't jiggle things while we're still loading */
+          dbg_print ("state", "renderer state %u -> %u\n", previous_state, state);
 
-      timeline_update_for_state (self->timeline,
-                                 previous_state, self->state,
-                                 self->current_time + self->state_change_delay);
+          timeline_update_for_state (self->timeline,
+                                     previous_state, self->state,
+                                     self->current_time + self->state_change_delay);
 
-      update_animation_state (self);
-      collect_next_update (self);
+          update_animation_state (self);
+          collect_next_update (self);
 
 #ifdef DEBUG
-      animation_state_dump (self);
+          animation_state_dump (self);
 #endif
 
-      if (self->playing)
-        schedule_next_update (self);
+          schedule_next_update (self);
+        }
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
@@ -25833,10 +25862,9 @@ gtk_svg_set_frame_clock (GtkSvg        *self,
  * gtk_svg_play:
  * @self: an SVG paintable
  *
- * Start playing animations.
+ * Start playing animations and state transitions.
  *
- * Note that this is necessary for state changes as
- * well.
+ * Animations can be paused and started repeatedly.
  *
  * Since: 4.22
  */
@@ -25852,7 +25880,7 @@ gtk_svg_play (GtkSvg *self)
  * gtk_svg_pause:
  * @self: an SVG paintable
  *
- * Stop any playing animations.
+ * Stop any playing animations and state transitions.
  *
  * Animations can be paused and started repeatedly.
  *

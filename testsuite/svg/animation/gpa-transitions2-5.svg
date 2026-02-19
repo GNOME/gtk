@@ -32,7 +32,16 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='0ms'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
     <animate
             id='gpa:transition:fade-in:stroke-dasharray:red'
             attributeName='stroke-dasharray'
@@ -59,14 +68,5 @@
             keyTimes='0; 1'
             calcMode='spline'
             gpa:status='done'/>
-    <set
-            id='gpa:path-length'
-            attributeName='pathLength'
-            begin='0ms'
-            end='indefinite'
-            to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
   </circle>
 </svg>

@@ -36,6 +36,7 @@ struct _IconEditorWindow
   GFile *file;
   PathPaintable *paintable;
   PathPaintable *orig_paintable;
+  GBinding *playing_binding;
   gboolean changed;
   gboolean show_controls;
   gboolean show_thumbnails;
@@ -43,6 +44,7 @@ struct _IconEditorWindow
   gboolean show_spines;
   gboolean show_grid;
   gboolean invert_colors;
+  gboolean playing;
   float weight;
   unsigned int state;
   unsigned int initial_state;
@@ -80,6 +82,7 @@ enum
   PROP_WEIGHT,
   PROP_STATE,
   PROP_INITIAL_STATE,
+  PROP_PLAYING,
   NUM_PROPERTIES,
 };
 
@@ -254,6 +257,18 @@ icon_editor_window_set_initial_state (IconEditorWindow *self,
   icon_editor_window_set_changed (self, TRUE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_STATE]);
+}
+
+static void
+icon_editor_window_set_playing (IconEditorWindow *self,
+                                gboolean          playing)
+{
+  if (self->playing == playing)
+    return;
+
+  self->playing = playing;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
 }
 
 /* }}} */
@@ -431,7 +446,10 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
     return;
 
   if (self->paintable)
-    g_signal_handlers_disconnect_by_func (self->paintable, paintable_changed, self);
+    {
+      g_signal_handlers_disconnect_by_func (self->paintable, paintable_changed, self);
+      g_clear_object (&self->playing_binding);
+    }
 
   g_set_object (&self->paintable, paintable);
 
@@ -442,6 +460,10 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
 
       g_signal_connect_swapped (self->paintable, "changed",
                                 G_CALLBACK (paintable_changed), self);
+
+      self->playing_binding = g_object_bind_property (self, "playing",
+                                                      self->paintable, "playing",
+                                                      G_BINDING_SYNC_CREATE);
 
       set_random_icons (self);
 
@@ -997,6 +1019,7 @@ icon_editor_window_init (IconEditorWindow *self)
 
   self->weight = 400;
   self->state = 0;
+  self->playing = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -1014,6 +1037,9 @@ icon_editor_window_init (IconEditorWindow *self)
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
 
   g_set_object (&action, g_property_action_new ("show-grid", self, "show-grid"));
+  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
+
+  g_set_object (&action, g_property_action_new ("set-playing", self, "playing"));
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
 
   g_simple_action_set_enabled (G_SIMPLE_ACTION (g_action_map_lookup_action (G_ACTION_MAP (self), "save")), FALSE);
@@ -1071,6 +1097,10 @@ icon_editor_window_set_property (GObject      *object,
       icon_editor_window_set_initial_state (self, g_value_get_uint (value));
       break;
 
+    case PROP_PLAYING:
+      icon_editor_window_set_playing (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1125,6 +1155,10 @@ icon_editor_window_get_property (GObject      *object,
 
     case PROP_INITIAL_STATE:
       g_value_set_uint (value, self->initial_state);
+      break;
+
+    case PROP_PLAYING:
+      g_value_set_boolean (value, self->playing);
       break;
 
     default:
@@ -1244,6 +1278,11 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
     g_param_spec_uint ("initial-state", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_PLAYING] =
+    g_param_spec_boolean ("playing", NULL, NULL,
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
