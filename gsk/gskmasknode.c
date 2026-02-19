@@ -287,6 +287,7 @@ gsk_mask_node_new (GskRenderNode *source,
                                    gsk_render_node_contains_subsurface_node (mask);
   node->contains_paste_node = gsk_render_node_contains_paste_node (source) ||
                               gsk_render_node_contains_paste_node (mask);
+  node->needs_blending = gsk_render_node_needs_blending (source);
 
   return node;
 }

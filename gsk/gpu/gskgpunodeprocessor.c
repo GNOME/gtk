@@ -2491,18 +2491,28 @@ gsk_gpu_node_processor_add_mask_node (GskGpuRenderPass *self,
       return;
     }
 
-  if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE &&
-      mask_mode == GSK_MASK_MODE_ALPHA)
+  if (mask_mode == GSK_MASK_MODE_ALPHA)
     {
-      const GdkColor *color = gsk_color_node_get_gdk_color (source_child);
-      gsk_gpu_colorize_op (self,
-                           self->ccs,
-                           gsk_gpu_color_states_find (self->ccs, color),
-                           &bounds,
-                           mask_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           &mask_rect,
-                           color);
+      if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE)
+        {
+          const GdkColor *color = gsk_color_node_get_gdk_color (source_child);
+          gsk_gpu_colorize_op (self,
+                               self->ccs,
+                               gsk_gpu_color_states_find (self->ccs, color),
+                               &bounds,
+                               mask_image,
+                               GSK_GPU_SAMPLER_DEFAULT,
+                               &mask_rect,
+                               color);
+        }
+      else
+        {
+          GskGpuRenderPassClipStorage storage;
+
+          gsk_gpu_render_pass_push_clip_mask (self, mask_image, &mask_rect, &storage);
+          gsk_gpu_node_processor_add_node (self, source_child, 0);
+          gsk_gpu_render_pass_pop_clip_mask (self, &storage);
+        }
     }
   else
     {
