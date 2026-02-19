@@ -42,7 +42,7 @@
             from='0 2'
             to='1 0'
             keyTimes='0; 1'
-            gpa:status='done'/>
+            gpa:status='inactive'/>
     <set
             id='gpa:path-length'
             attributeName='pathLength'
