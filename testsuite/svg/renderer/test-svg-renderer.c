@@ -33,6 +33,8 @@ typedef enum {
   TEST_FLAG_REPLACE_EXPECTED  = 1 << 4,
 } TestFlags;
 
+static gboolean arg_no_animations = FALSE;
+
 static char *
 file_replace_extension (const char *old_file,
                         const char *old_ext,
@@ -271,7 +273,8 @@ render_svg_file (GFile *file, TestFlags flags)
 
   /* No system fonts, please */
   gtk_svg_set_features (svg,
-                        GTK_SVG_DEFAULT_FEATURES & ~GTK_SVG_SYSTEM_RESOURCES);
+                        GTK_SVG_DEFAULT_FEATURES & ~GTK_SVG_SYSTEM_RESOURCES
+                                                 & ~(arg_no_animations ? GTK_SVG_ANIMATIONS : 0));
 
   gtk_svg_load_from_bytes (svg, bytes);
   g_clear_pointer (&bytes, g_bytes_unref);
@@ -526,6 +529,7 @@ main (int argc, char **argv)
 {
   GOptionEntry options[] = {
     { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
+    { "no-animations", 0, 0, G_OPTION_ARG_NONE, &arg_no_animations, "Disable animations", NULL },
     { NULL }
   };
   GOptionContext *context;
