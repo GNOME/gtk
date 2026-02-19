@@ -14847,6 +14847,25 @@ shape_apply_state (GtkSvg       *self,
                   g_ptr_array_steal_index (shape->animations, i - 1);
                   g_ptr_array_add (shape->animations, a);
                 }
+
+              if (g_str_has_prefix (a->id, "gpa:out-of-state"))
+                {
+                  if (visibility == VISIBILITY_HIDDEN)
+                    a->status = ANIMATION_STATUS_RUNNING;
+                  else
+                    a->status = ANIMATION_STATUS_DONE;
+                  g_ptr_array_steal_index (shape->animations, i - 1);
+                  g_ptr_array_add (shape->animations, a);
+                }
+              if (g_str_has_prefix (a->id, "gpa:in-state"))
+                {
+                  if (visibility == VISIBILITY_VISIBLE)
+                    a->status = ANIMATION_STATUS_RUNNING;
+                  else
+                    a->status = ANIMATION_STATUS_DONE;
+                  g_ptr_array_steal_index (shape->animations, i - 1);
+                  g_ptr_array_add (shape->animations, a);
+                }
             }
         }
     }
