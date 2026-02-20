@@ -233,6 +233,13 @@ test_variant_no_name (void)
   g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_types (filter,
+                                  (const char *[3]){"image/png", "image/jpeg", NULL});
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
   gtk_file_filter_add_suffix (filter, "txt");
   variant = gtk_file_filter_to_gvariant (filter);
   g_variant_unref (variant);
