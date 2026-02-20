@@ -30,6 +30,7 @@ struct _PathPaintable
   GtkSvg *svg;
   graphene_rect_t viewport;
   GdkPaintable *render_paintable;
+  GdkFrameClock *clock;
 };
 
 enum
@@ -70,6 +71,8 @@ ensure_render_paintable (PathPaintable *self)
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), gtk_svg_get_weight (self->svg));
+
+      gtk_svg_set_frame_clock (GTK_SVG (self->render_paintable), self->clock);
 
       g_object_bind_property (self->svg, "playing",
                               self->render_paintable, "playing",
@@ -211,6 +214,7 @@ path_paintable_dispose (GObject *object)
 
   g_clear_object (&self->svg);
   g_clear_object (&self->render_paintable);
+  g_clear_object (&self->clock);
 
   G_OBJECT_CLASS (path_paintable_parent_class)->dispose (object);
 }
@@ -1258,6 +1262,15 @@ path_paintable_get_playing (PathPaintable *self)
   return self->svg->playing;
 }
 
-/* }}} */
+void
+path_paintable_set_frame_clock (PathPaintable *self,
+                                GdkFrameClock *clock)
+{
+  g_set_object (&self->clock, clock);
 
+  if (self->render_paintable)
+    gtk_svg_set_frame_clock (GTK_SVG (self->render_paintable), clock);
+}
+
+/* }}} */
 /* vim:set foldmethod=marker: */
