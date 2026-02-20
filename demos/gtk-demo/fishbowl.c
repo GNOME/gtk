@@ -32,26 +32,35 @@ init_icon_names (GtkIconTheme *theme)
   n_icon_names = g_strv_length (icon_names);
 }
 
-static const char *
-get_random_icon_name (GtkIconTheme *theme)
-{
-  init_icon_names (theme);
-
-  return icon_names[g_random_int_range(0, n_icon_names)];
-}
-
 /* Can't be static because it's also used in iconscroll.c */
 GtkWidget *
-create_icon (void)
+create_icon_by_id (gsize icon_index)
 {
   GtkWidget *image;
 
   image = gtk_image_new ();
+
+  init_icon_names (gtk_icon_theme_get_for_display (gtk_widget_get_display (image)));
+
+  icon_index %= n_icon_names;
+
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-  gtk_image_set_from_icon_name (GTK_IMAGE (image),
-                                get_random_icon_name (gtk_icon_theme_get_for_display (gtk_widget_get_display (image))));
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), icon_names[icon_index]);
 
   return image;
+}
+
+static GtkWidget *
+create_icon (void)
+{
+  gsize n;
+
+  if (n_icon_names == 0)
+    n = 0;
+  else
+    n = g_random_int_range (0, n_icon_names);
+
+  return create_icon_by_id (n);
 }
 
 extern GtkWidget *create_symbolic (void);

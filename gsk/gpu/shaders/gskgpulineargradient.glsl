@@ -107,6 +107,15 @@ compute_c (float f, float hint)
 }
 
 vec4
+maybe_premultiply (vec4 color)
+{
+  if (VARIATION_PREMULTIPLIED)
+    return color;
+  else
+    return color_premultiply (color);
+}
+
+vec4
 get_gradient_color (float offset)
 {
   vec4 color;
@@ -171,10 +180,7 @@ get_gradient_color (float offset)
         }
     }
 
-  if (VARIATION_PREMULTIPLIED)
-    return color;
-  else
-    return color_premultiply (color);
+  return maybe_premultiply (color);
 }
 
 vec4
@@ -197,9 +203,9 @@ get_gradient_color_at (float offset)
       break;
     case GSK_REPEAT_PAD:
       if (offset <= 0.0)
-        return _color0;
+        return maybe_premultiply (_color0);
       else if (offset >= 1.0)
-        return _color6;
+        return maybe_premultiply (_color6);
       break;
     default:
       break;
