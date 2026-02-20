@@ -778,7 +778,7 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
   gsk_gpu_clip_init_empty (&self->clip, &self->offset, &bounds);
 }
 
-gboolean
+void
 gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
                                     const graphene_rect_t       *clip,
                                     GskGpuRenderPassClipStorage *storage)
@@ -789,7 +789,7 @@ gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
   if (gsk_gpu_clip_is_all_clipped (&self->clip))
     {
       storage->modified = 0;
-      return TRUE;
+      return;
     }
 
   if (gsk_gpu_render_pass_device_to_user (self,
@@ -802,7 +802,7 @@ gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
           gsk_gpu_clip_init_all_clipped (&self->clip);
           storage->modified = GSK_GPU_GLOBAL_CLIP;
           self->pending_globals |= storage->modified;
-          return TRUE;
+          return;
         }
     }
   else
@@ -844,14 +844,13 @@ gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
       else
         {
           gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
-          return FALSE;
+          gsk_gpu_render_pass_draw_clip_mask (self, clip, NULL, NULL, NULL, storage);
+          return;
         }
 
     }
 
   self->pending_globals |= storage->modified;
-
-  return TRUE;
 }
 
 void
