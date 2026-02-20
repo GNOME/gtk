@@ -14140,17 +14140,6 @@ frame_clock_update (GdkFrameClock *clock,
   gtk_svg_invalidate_contents (self);
 }
 
-static gboolean
-periodic_update (GtkSvg *self)
-{
-  int64_t time = g_get_monotonic_time ();
-  dbg_print ("clock", "periodic update, advancing to %s\n", format_time (time));
-  gtk_svg_advance (self, time);
-  gtk_svg_invalidate_contents (self);
-
-  return G_SOURCE_CONTINUE;
-}
-
 static void
 frame_clock_connect (GtkSvg *self)
 {
@@ -14159,10 +14148,6 @@ frame_clock_connect (GtkSvg *self)
       self->clock_update_id = g_signal_connect (self->clock, "update",
                                                 G_CALLBACK (frame_clock_update), self);
       gdk_frame_clock_begin_updating (self->clock);
-    }
-  else if (!self->clock && !self->periodic_update_id)
-    {
-      self->periodic_update_id = g_timeout_add (16, (GSourceFunc) periodic_update, self);
     }
 }
 
@@ -14173,10 +14158,6 @@ frame_clock_disconnect (GtkSvg *self)
     {
       gdk_frame_clock_end_updating (self->clock);
       g_clear_signal_handler (&self->clock_update_id, self->clock);
-    }
-  else if (!self->clock && self->periodic_update_id)
-    {
-      g_clear_handle_id (&self->periodic_update_id, g_source_remove);
     }
 }
 
@@ -24516,7 +24497,7 @@ update_animation_state (GtkSvg *self)
  * it.
  *
  * @load_time must be in microseconds and in the same
- * timescale as g_get_monotonic_time().
+ * timescale as the times returned by [class@Gdk.FrameClock].
  *
  * Since: 4.22
  */
@@ -24551,7 +24532,7 @@ gtk_svg_set_load_time (GtkSvg  *self,
  *
  * Advances the animation to the given value,
  * which must be in microseconds and in the same
- * timescale as g_get_monotonic_time().
+ * timescale as the times returned by [class@Gdk.FrameClock].
  *
  * Note that this function is only useful when *not*
  * running the animations automatically via
@@ -25279,8 +25260,8 @@ gtk_svg_set_playing (GtkSvg   *self,
 
   self->playing = playing;
 
-  /* FIXME frame time */
-  current_time = MAX (self->current_time, g_get_monotonic_time ());
+  if (self->clock)
+    current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
 
   if (playing)
     {
@@ -25299,6 +25280,7 @@ gtk_svg_set_playing (GtkSvg   *self,
         }
       else
         {
+          /* FIXME */
           gtk_svg_set_load_time (self, g_get_monotonic_time ());
         }
       schedule_next_update (self);
@@ -25882,8 +25864,7 @@ gtk_svg_get_features (GtkSvg *self)
  *
  * Sets a frame clock.
  *
- * Without a frame clock, GTK has to rely
- * on simple timeouts to run animations.
+ * Without a frame clock, GtkSvg will not advance animations.
  *
  * Since: 4.22
  */

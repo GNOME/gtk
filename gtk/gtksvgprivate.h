@@ -92,7 +92,6 @@ struct _GtkSvg
   GtkSvgRunMode run_mode;
   GdkFrameClock *clock;
   unsigned long clock_update_id;
-  unsigned int periodic_update_id;
 
   int64_t next_update;
   unsigned int pending_invalidate;
