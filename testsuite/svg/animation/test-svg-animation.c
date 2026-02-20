@@ -255,7 +255,10 @@ set_state (gpointer data)
 {
   StepData *sd = data;
 
-  g_print ("Step %u: Setting state to %u\n", sd->step, sd->state);
+  if (sd->state == GTK_SVG_STATE_EMPTY)
+    g_print ("Step %u: Setting state to empty\n", sd->step);
+  else
+    g_print ("Step %u: Setting state to %u\n", sd->step, sd->state);
   gtk_svg_set_state (sd->svg, sd->state);
   g_free (sd);
 
