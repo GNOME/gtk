@@ -320,9 +320,9 @@ reftest_compare_textures (GdkTexture *texture1,
       stride = w *  4 * sizeof (float);
     }
 
-  data1 = g_malloc_n (stride, h);
+  data1 = g_malloc0_n (stride, h);
   gdk_texture_downloader_download_into (downloader, data1, stride);
-  data2 = g_malloc_n (stride, h);
+  data2 = g_malloc0_n (stride, h);
   gdk_texture_downloader_set_texture (downloader, texture2);
   gdk_texture_downloader_download_into (downloader, data2, stride);
 
