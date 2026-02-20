@@ -937,6 +937,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
       !self->modelview && 
       !gsk_gpu_render_pass_has_opacity (self) &&
+      self->clip_mask == NULL &&
       gdk_color_is_opaque (color) &&
       gsk_gpu_clip_get_largest_cover (&self->clip, &self->offset, &bounds, &cover) &&
       gsk_gpu_render_pass_user_to_device_shrink (self, &cover, &device) &&
