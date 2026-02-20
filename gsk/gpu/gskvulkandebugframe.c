@@ -228,7 +228,7 @@ gsk_vulkan_debug_frame_filter_node (GskRenderReplay *replay,
                                                         "pixels total   : %llu\n"
                                                         "pixels self    : %llu\n"
                                                         "offscreen total: %zu @ %llu\n"
-                                                        "offscreen self : %zu @ %llu"
+                                                        "offscreen self : %zu @ %llu\n"
                                                         "upload total   : %zu @ %llu\n"
                                                         "upload self    : %zu @ %llu\n"
                                                         "base total     : %zu @ %llu\n"
