@@ -15825,6 +15825,7 @@ parse_base_animation_attrs (Animation            *a,
   ShapeAttr attr;
   gboolean deprecated;
   Shape *current_shape = NULL;
+  FilterPrimitiveType filter_type = 0;
 
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
@@ -16035,6 +16036,16 @@ parse_base_animation_attrs (Animation            *a,
   if (attr_name_attr && strcmp (attr_name_attr, "xlink:href") == 0)
     attr_name_attr = "href";
 
+  if (current_shape->type == SHAPE_FILTER &&
+      current_shape->filters->len > 0)
+    {
+      FilterPrimitive *fp;
+
+      fp = g_ptr_array_index (current_shape->filters,
+                              current_shape->filters->len - 1);
+      filter_type = fp->type;
+    }
+
   attr = a->attr;
   if (a->type == ANIMATION_TYPE_MOTION)
     {
@@ -16059,7 +16070,10 @@ parse_base_animation_attrs (Animation            *a,
       return FALSE;
     }
   /* FIXME: if href is set, current_shape might be the wrong shape */
-  else if (shape_attr_lookup (attr_name_attr, current_shape->type, &attr, &deprecated))
+  else if ((current_shape->type == SHAPE_FILTER &&
+            filter_attr_lookup (filter_type, attr_name_attr, &attr, &deprecated)) ||
+           (current_shape->type != SHAPE_FILTER &&
+            shape_attr_lookup (attr_name_attr, current_shape->type, &attr, &deprecated)))
     {
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */

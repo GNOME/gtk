@@ -1,0 +1,8 @@
+# animate filter attributes
+input: filter-animation.svg
+time: 0
+output: filter-animation-0.svg
+time: 500
+output: filter-animation-1.svg
+time: 1000
+output: filter-animation-2.svg

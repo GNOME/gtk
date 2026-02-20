@@ -12,6 +12,7 @@ test_data = [
   'colors.test',
   'colors-linear.test',
   'dashes.test',
+  'filter-animation.test',
   'gpa-animations.test',
   'gpa-attachment.test',
   'gpa-attachment2.test',
