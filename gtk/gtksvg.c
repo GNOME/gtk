@@ -11738,10 +11738,17 @@ shape_conditionally_excluded (Shape  *shape,
 {
   SvgStringList *required_extensions = (SvgStringList *) shape->current[SHAPE_ATTR_REQUIRED_EXTENSIONS];
   SvgLanguage *system_language = (SvgLanguage *) shape->current[SHAPE_ATTR_SYSTEM_LANGUAGE];
+  SvgValue *string_list = svg_string_list_new (NULL);
+  SvgValue *lang_list = svg_language_new_list (0, NULL);
+  gboolean no_langs_or_extensions;
   PangoLanguage *lang;
 
-  if (svg_value_equal ((SvgValue *) required_extensions, svg_string_list_new (NULL)) &&
-      svg_value_equal ((SvgValue *) system_language, svg_language_new_list (0, NULL)))
+  no_langs_or_extensions = svg_value_equal ((SvgValue *) required_extensions, string_list) &&
+                           svg_value_equal ((SvgValue *) system_language, lang_list);
+  svg_value_unref (string_list);
+  svg_value_unref (lang_list);
+
+  if (no_langs_or_extensions)
     return FALSE;
 
   for (unsigned int i = 0; i < required_extensions->len; i++)
