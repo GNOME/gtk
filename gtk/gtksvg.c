@@ -9069,7 +9069,11 @@ static SvgValue *
 svg_language_new_list (unsigned int    len,
                        PangoLanguage **langs)
 {
+  static SvgLanguage empty = { { &SVG_LANGUAGE_CLASS, 0 }, .len = 0, .values[0] = NULL, };
   SvgLanguage *result;
+
+  if (len == 0)
+    return (SvgValue *) &empty;
 
   result = (SvgLanguage *) svg_value_alloc (&SVG_LANGUAGE_CLASS,
                                             svg_language_size (len));
