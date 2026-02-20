@@ -50,6 +50,7 @@ compare_render_tests = [
   'clip-in-rounded-clip2',
   'clip-in-rounded-clip3',
   'clip-in-smaller-rounded-clip',
+  'clip-intersection-background',
   'clip-intersection-fail-opacity',
   'clipped-repeat',
   'clipped_rounded_clip',

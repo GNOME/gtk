@@ -1,0 +1,46 @@
+color {
+  bounds: 0 0 100 100;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 0 0 100 100 / 50;
+  child: clip {
+    clip: 10.5 10.5 79 79;
+    child: container {
+      color {
+        bounds: 0 0 100 100;
+        color: rgb(0,0,255);
+      }
+      composite {
+        child: color {
+          bounds: 0 0 50 50;
+          color: rgb(255,0,204);
+        }
+        mask: color {
+          bounds: 35 35 30 30;
+          color: rgb(255,0,204);
+        }
+        operator: clear;
+      }
+    }
+  }
+}
+border {
+  outline: 10 10 80 80;
+}
+color {
+  bounds: 10 10 10 10;
+  color: rgb(0,0,0);
+}
+color {
+  bounds: 80 10 10 10;
+  color: rgb(0,0,0);
+}
+color {
+  bounds: 10 80 10 10;
+  color: rgb(0,0,0);
+}
+color {
+  bounds: 80 80 10 10;
+  color: rgb(0,0,0);
+}

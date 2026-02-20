@@ -768,33 +768,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuRenderPass   *self,
 {
   GskGpuRenderPassClipStorage storage;
 
-  if (!gsk_gpu_render_pass_push_clip_rect (self, clip_bounds, &storage))
-    {
-      GskGpuImage *image;
-      graphene_rect_t bounds, tex_rect;
-
-      if (gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds) &&
-          gsk_rect_intersection (&bounds, clip_bounds, &bounds))
-        image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                          0,
-                                                          &bounds,
-                                                          node,
-                                                          pos,
-                                                          &tex_rect);
-      else
-        image = NULL;
-      if (image)
-        {
-          gsk_gpu_node_processor_image_op (self,
-                                           image,
-                                           self->ccs,
-                                           GSK_GPU_SAMPLER_DEFAULT,
-                                           &bounds,
-                                           &tex_rect);
-          g_object_unref (image);
-        }
-      return;
-    }
+  gsk_gpu_render_pass_push_clip_rect (self, clip_bounds, &storage);
 
   if (!gsk_gpu_render_pass_is_all_clipped (self))
     gsk_gpu_node_processor_add_node (self, node, pos);

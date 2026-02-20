@@ -127,7 +127,7 @@ gboolean                gsk_gpu_render_pass_is_all_clipped              (GskGpuR
 gboolean                gsk_gpu_render_pass_get_clip_bounds             (GskGpuRenderPass                 *self,
                                                                          graphene_rect_t                  *out_bounds) G_GNUC_WARN_UNUSED_RESULT;
 
-gboolean                gsk_gpu_render_pass_push_clip_rect              (GskGpuRenderPass                 *self,
+void                    gsk_gpu_render_pass_push_clip_rect              (GskGpuRenderPass                 *self,
                                                                          const graphene_rect_t            *clip,
                                                                          GskGpuRenderPassClipStorage      *storage);
 void                    gsk_gpu_render_pass_pop_clip_rect               (GskGpuRenderPass                 *self,
