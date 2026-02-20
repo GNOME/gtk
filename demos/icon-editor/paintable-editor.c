@@ -35,8 +35,10 @@ struct _PaintableEditor
   unsigned int state;
 
   GtkScrolledWindow *swin;
-  GtkEntry *keywords;
+  GtkEntry *author;
+  GtkEntry *license;
   GtkEntry *description;
+  GtkEntry *keywords;
   GtkEntry *width;
   GtkEntry *height;
   GtkLabel *compat;
@@ -221,10 +223,17 @@ size_changed (PaintableEditor *self)
 }
 
 static void
-keywords_changed (PaintableEditor *self)
+author_changed (PaintableEditor *self)
 {
-  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->keywords));
-  path_paintable_set_keywords (self->paintable, text);
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->author));
+  path_paintable_set_author (self->paintable, text);
+}
+
+static void
+license_changed (PaintableEditor *self)
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->license));
+  path_paintable_set_license (self->paintable, text);
 }
 
 static void
@@ -232,6 +241,13 @@ description_changed (PaintableEditor *self)
 {
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self->description));
   path_paintable_set_description (self->paintable, text);
+}
+
+static void
+keywords_changed (PaintableEditor *self)
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->keywords));
+  path_paintable_set_keywords (self->paintable, text);
 }
 
 /* }}} */
@@ -343,8 +359,10 @@ paintable_editor_class_init (PaintableEditorClass *class)
                                                "/org/gtk/Shaper/paintable-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, swin);
-  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, keywords);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, author);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, license);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, description);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, keywords);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, width);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, height);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat);
@@ -355,8 +373,10 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, path_elts);
 
   gtk_widget_class_bind_template_callback (widget_class, size_changed);
-  gtk_widget_class_bind_template_callback (widget_class, keywords_changed);
+  gtk_widget_class_bind_template_callback (widget_class, author_changed);
+  gtk_widget_class_bind_template_callback (widget_class, license_changed);
   gtk_widget_class_bind_template_callback (widget_class, description_changed);
+  gtk_widget_class_bind_template_callback (widget_class, keywords_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "PaintableEditor");
@@ -405,10 +425,14 @@ paintable_editor_set_paintable (PaintableEditor *self,
       g_autofree char *height = NULL;
       const char *text;
 
-      text = path_paintable_get_keywords (paintable);
-      gtk_editable_set_text (GTK_EDITABLE (self->keywords), text ? text : "");
+      text = path_paintable_get_author (paintable);
+      gtk_editable_set_text (GTK_EDITABLE (self->author), text ? text : "");
+      text = path_paintable_get_license (paintable);
+      gtk_editable_set_text (GTK_EDITABLE (self->license), text ? text : "");
       text = path_paintable_get_description (paintable);
       gtk_editable_set_text (GTK_EDITABLE (self->description), text ? text : "");
+      text = path_paintable_get_keywords (paintable);
+      gtk_editable_set_text (GTK_EDITABLE (self->keywords), text ? text : "");
       width = g_strdup_printf ("%g", path_paintable_get_width (paintable));
       gtk_editable_set_text (GTK_EDITABLE (self->width), width);
       height = g_strdup_printf ("%g", path_paintable_get_height (paintable));

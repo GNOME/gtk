@@ -667,6 +667,34 @@ path_paintable_get_description (PathPaintable *self)
   return self->svg->description;
 }
 
+void
+path_paintable_set_author (PathPaintable *self,
+                           const char    *author)
+{
+  if (g_set_str (&self->svg->author, author))
+    g_signal_emit (self, signals[CHANGED], 0);
+}
+
+const char *
+path_paintable_get_author (PathPaintable *self)
+{
+  return self->svg->author;
+}
+
+void
+path_paintable_set_license (PathPaintable *self,
+                            const char    *license)
+{
+  if (g_set_str (&self->svg->license, license))
+    g_signal_emit (self, signals[CHANGED], 0);
+}
+
+const char *
+path_paintable_get_license (PathPaintable *self)
+{
+  return self->svg->license;
+}
+
 size_t
 path_paintable_get_n_paths (PathPaintable *self)
 {

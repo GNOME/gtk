@@ -1,0 +1,26 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license
+                rdf:resource='http://creativecommons.org/publicdomain/zero/1.0/'/>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Matthias</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description>Empty SVG</dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>keywords</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
