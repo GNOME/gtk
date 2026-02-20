@@ -25242,28 +25242,19 @@ svg_shape_delete (Shape *shape)
 
 /* }}} */
 
-/*< private>
- * gtk_svg_set_playing:
- * @self: an SVG paintable
- * @playing: the new state
- *
- * Sets whether the paintable is animating its content.
- */
-void
-gtk_svg_set_playing (GtkSvg   *self,
-                     gboolean  playing)
+static void
+update_for_playing (GtkSvg *self)
 {
   int64_t current_time;
 
-  if (self->playing == playing)
-    return;
-
-  self->playing = playing;
-
   if (self->clock)
-    current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
+    current_time = gdk_frame_clock_get_frame_time (self->clock);
+  else
+    current_time = g_get_monotonic_time (); // FIXME
 
-  if (playing)
+  current_time = MAX (self->current_time, current_time);
+
+  if (self->playing)
     {
       if (self->load_time != INDEFINITE)
         {
@@ -25280,21 +25271,41 @@ gtk_svg_set_playing (GtkSvg   *self,
         }
       else
         {
-          /* FIXME */
-          gtk_svg_set_load_time (self, g_get_monotonic_time ());
+          gtk_svg_set_load_time (self, current_time);
         }
-      schedule_next_update (self);
+
+      if (self->clock)
+        schedule_next_update (self);
     }
   else
     {
       if (self->load_time != INDEFINITE)
-        {
-          self->pause_time = current_time;
-        }
+        self->pause_time = current_time;
 
-      frame_clock_disconnect (self);
+      if (self->clock)
+        frame_clock_disconnect (self);
+
       g_clear_handle_id (&self->pending_invalidate, g_source_remove);
     }
+}
+
+/*< private>
+ * gtk_svg_set_playing:
+ * @self: an SVG paintable
+ * @playing: the new state
+ *
+ * Sets whether the paintable is animating its content.
+ */
+void
+gtk_svg_set_playing (GtkSvg   *self,
+                     gboolean  playing)
+{
+  if (self->playing == playing)
+    return;
+
+  self->playing = playing;
+
+  update_for_playing (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
 }
@@ -25887,6 +25898,8 @@ gtk_svg_set_frame_clock (GtkSvg        *self,
 
   if (was_connected)
     frame_clock_connect (self);
+  else
+    update_for_playing (self);
 }
 
 /**
@@ -26059,3 +26072,4 @@ gtk_svg_error_get_end (const GError *error)
 /* }}} */
 
 /* vim:set foldmethod=marker: */
+
