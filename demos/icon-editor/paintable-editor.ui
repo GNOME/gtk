@@ -10,9 +10,9 @@
               <object class="GtkGrid">
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">_Description</property>
+                    <property name="label" translatable="yes">_Author</property>
                     <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">description</property>
+                    <property name="mnemonic-widget">author</property>
                     <property name="xalign">1</property>
                     <layout>
                       <property name="row">0</property>
@@ -21,10 +21,52 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkEntry" id="author">
+                    <signal name="activate" handler="author_changed" swapped="yes"/>
+                    <layout>
+                      <property name="row">0</property>
+                      <property name="column">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">_License</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">license</property>
+                    <property name="xalign">1</property>
+                    <layout>
+                      <property name="row">1</property>
+                      <property name="column">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="license">
+                    <signal name="activate" handler="license_changed" swapped="yes"/>
+                    <layout>
+                      <property name="row">1</property>
+                      <property name="column">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">_Description</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">description</property>
+                    <property name="xalign">1</property>
+                    <layout>
+                      <property name="row">2</property>
+                      <property name="column">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkEntry" id="description">
                     <signal name="activate" handler="description_changed" swapped="yes"/>
                     <layout>
-                      <property name="row">0</property>
+                      <property name="row">2</property>
                       <property name="column">1</property>
                     </layout>
                   </object>
@@ -36,7 +78,7 @@
                     <property name="mnemonic-widget">keywords</property>
                     <property name="xalign">1</property>
                     <layout>
-                      <property name="row">1</property>
+                      <property name="row">3</property>
                       <property name="column">0</property>
                     </layout>
                   </object>
@@ -45,7 +87,7 @@
                   <object class="GtkEntry" id="keywords">
                     <signal name="activate" handler="keywords_changed" swapped="yes"/>
                     <layout>
-                      <property name="row">1</property>
+                      <property name="row">3</property>
                       <property name="column">1</property>
                     </layout>
                   </object>

@@ -78,6 +78,12 @@ const char *    path_paintable_get_keywords        (PathPaintable   *self);
 void            path_paintable_set_description     (PathPaintable   *self,
                                                     const char      *description);
 const char *    path_paintable_get_description     (PathPaintable   *self);
+void            path_paintable_set_author          (PathPaintable   *self,
+                                                    const char      *author);
+const char *    path_paintable_get_author          (PathPaintable   *self);
+void            path_paintable_set_license         (PathPaintable   *self,
+                                                    const char      *license);
+const char *    path_paintable_get_license         (PathPaintable   *self);
 
 size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 
