@@ -1,0 +1,20 @@
+color {
+  bounds: 0 0 100 100;
+  color: red;
+}
+
+rounded-clip {
+  clip: 0 0 100 100 / 100 0;
+  child: rounded-clip {
+    clip: 0 0 100 100 / 0 100;
+    child: composite {
+      operator: clear;
+      mask: clip {
+        clip: 30 30 40 40;
+        child: color {
+          bounds: 0 0 100 100;
+        }
+      }
+    }
+  }
+}

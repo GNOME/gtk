@@ -875,7 +875,7 @@ gsk_gpu_render_pass_pop_clip_rect (GskGpuRenderPass            *self,
   self->pending_globals |= storage->modified;
 }
 
-gboolean
+void
 gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
                                        const GskRoundedRect        *clip,
                                        GskGpuRenderPassClipStorage *storage)
@@ -887,8 +887,8 @@ gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
 
   if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &storage->clip, &self->offset, clip))
     {
-      gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
-      return FALSE;
+      gsk_gpu_render_pass_draw_clip_mask (self, NULL, clip, NULL, NULL, storage);
+      return;
     }
 
   if (gsk_gpu_render_pass_device_to_user (self,
@@ -901,7 +901,6 @@ gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
     }
 
   self->pending_globals |= storage->modified;
-  return TRUE;
 }
 
 void
