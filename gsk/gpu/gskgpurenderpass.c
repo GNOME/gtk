@@ -343,6 +343,7 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
   storage->modelview = self->modelview;
   storage->scale = self->scale;
   storage->offset = self->offset;
+  storage->clip_mask_rect = self->clip_mask_rect;
   gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
   storage->modified = 0;
 
@@ -365,6 +366,11 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
         graphene_vec2_multiply (&self->scale, &storage->scale, &self->scale);
         self->modelview = gsk_transform_ref (storage->modelview);
         storage->modified = GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+        if (self->clip_mask)
+          {
+            gsk_rect_scale (&storage->clip_mask_rect, 1 / scale_x, 1 / scale_y, &self->clip_mask_rect);
+            storage->modified |= GSK_GPU_GLOBAL_MASK;
+          }
       }
       break;
 
@@ -373,6 +379,10 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
       {
         GdkDihedral dihedral, inverted;
         float xx, xy, yx, yy, dx, dy, scale_x, scale_y, old_scale_x, old_scale_y;
+
+        /* FIXME: find a way to support dihedral-transforming tex rects */
+        if (self->clip_mask)
+          return FALSE;
 
         gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
         inverted = gdk_dihedral_invert (dihedral);
@@ -398,6 +408,9 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
     case GSK_FINE_TRANSFORM_CATEGORY_3D:
       {
         GskTransform *clip_transform;
+
+        if (self->clip_mask)
+          return FALSE;
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset), transform);
 
@@ -504,6 +517,7 @@ gsk_gpu_render_pass_pop_transform (GskGpuRenderPass                 *self,
   self->scale = storage->scale;
   self->offset = storage->offset;
   gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+  self->clip_mask_rect = storage->clip_mask_rect;
   self->pending_globals |= storage->modified;
 }
 
