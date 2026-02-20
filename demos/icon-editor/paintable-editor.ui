@@ -9,11 +9,19 @@
             <child>
               <object class="GtkGrid">
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">_Author</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">author</property>
-                    <property name="xalign">1</property>
+                  <object class="GtkExpander" id="expander">
+                    <property name="hexpand">0</property>
+                    <property name="valign">center</property>
+                    <property name="label-widget">
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">_Author</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">fill</property>
+                        <property name="use-underline">1</property>
+                        <property name="mnemonic-widget">author</property>
+                        <property name="xalign">1</property>
+                      </object>
+                    </property>
                     <layout>
                       <property name="row">0</property>
                       <property name="column">0</property>
@@ -31,6 +39,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
+                    <property name="visible" bind-source="expander" bind-property="expanded"/>
                     <property name="label" translatable="yes">_License</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">license</property>
@@ -43,6 +52,7 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="license">
+                    <property name="visible" bind-source="expander" bind-property="expanded"/>
                     <signal name="activate" handler="license_changed" swapped="yes"/>
                     <layout>
                       <property name="row">1</property>
@@ -52,6 +62,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
+                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
                     <property name="label" translatable="yes">_Description</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">description</property>
@@ -64,6 +75,7 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="description">
+                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
                     <signal name="activate" handler="description_changed" swapped="yes"/>
                     <layout>
                       <property name="row">2</property>
@@ -73,6 +85,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
+                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
                     <property name="label" translatable="yes">_Keywords</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">keywords</property>
@@ -85,6 +98,7 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="keywords">
+                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
                     <signal name="activate" handler="keywords_changed" swapped="yes"/>
                     <layout>
                       <property name="row">3</property>
