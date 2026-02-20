@@ -62,8 +62,7 @@ typedef struct {
   guint modified;
 } GskGpuRenderPassClipStorage;
 
-void                    gsk_gpu_render_pass_init                        (GskGpuRenderPass               *self,
-                                                                         GskGpuFrame                    *frame,
+GskGpuRenderPass *      gsk_gpu_render_pass_new                         (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *target,
                                                                          GdkColorState                  *ccs,
                                                                          GskRenderPassType               pass_type,
@@ -72,7 +71,7 @@ void                    gsk_gpu_render_pass_init                        (GskGpuR
                                                                          const cairo_rectangle_int_t    *clip,
                                                                          const graphene_rect_t          *viewport);
 
-void                    gsk_gpu_render_pass_finish                      (GskGpuRenderPass               *self);
+void                    gsk_gpu_render_pass_free                        (GskGpuRenderPass               *self);
 
 void                    gsk_gpu_render_pass_prepare_shader              (GskGpuRenderPass               *self);
 

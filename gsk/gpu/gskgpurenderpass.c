@@ -92,18 +92,20 @@ gsk_gpu_render_pass_user_to_device_exact (GskGpuRenderPass      *self,
   return TRUE;
 }
 
-void
-gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
-                          GskGpuFrame                 *frame,
-                          GskGpuImage                 *target,
-                          GdkColorState               *ccs,
-                          GskRenderPassType            pass_type,
-                          GskGpuLoadOp                 load_op,
-                          float                        clear_color[4],
-                          const cairo_rectangle_int_t *clip,
-                          const graphene_rect_t       *viewport)
+GskGpuRenderPass *
+gsk_gpu_render_pass_new (GskGpuFrame                 *frame,
+                         GskGpuImage                 *target,
+                         GdkColorState               *ccs,
+                         GskRenderPassType            pass_type,
+                         GskGpuLoadOp                 load_op,
+                         float                        clear_color[4],
+                         const cairo_rectangle_int_t *clip,
+                         const graphene_rect_t       *viewport)
 {
+  GskGpuRenderPass *self;
   gsize width, height;
+
+  self = g_new0 (GskGpuRenderPass, 1);
 
   width = gsk_gpu_image_get_width (target);
   height = gsk_gpu_image_get_height (target);
@@ -149,16 +151,20 @@ gsk_gpu_render_pass_init (GskGpuRenderPass            *self,
                                 load_op,
                                 clear_color,
                                 pass_type);
+
+  return self;
 }
 
 void
-gsk_gpu_render_pass_finish (GskGpuRenderPass *self)
+gsk_gpu_render_pass_free (GskGpuRenderPass *self)
 {
   gsk_gpu_render_pass_end_op (self->frame,
                               self->target,
                               self->pass_type);
 
   g_clear_pointer (&self->modelview, gsk_transform_unref);
+
+  g_free (self);
 }
 
 void
