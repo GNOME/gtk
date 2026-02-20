@@ -650,6 +650,8 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
  *
  * This is equivalent to calling [method@Gtk.FileFilter.add_mime_type]
  * for all the supported mime types.
+ *
+ * Since: 4.22
  */
 void
 gtk_file_filter_add_mime_types (GtkFileFilter  *filter,
