@@ -813,62 +813,6 @@ gsk_gpu_node_processor_add_clip_node (GskGpuRenderPass *self,
 }
 
 static void
-gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuRenderPass *self,
-                                                        GskRenderNode       *node)
-{
-  GskGpuRenderPass other;
-  graphene_rect_t clip_bounds, child_rect;
-  GskGpuImage *child_image, *mask_image;
-  GdkColor white;
-
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
-    return;
-
-  child_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                          0,
-                                                          &clip_bounds,
-                                                          gsk_rounded_clip_node_get_child (node),
-                                                          0,
-                                                          &child_rect);
-  if (child_image == NULL)
-    return;
-
-  mask_image = gsk_gpu_node_processor_init_draw (&other,
-                                                 self->frame,
-                                                 self->ccs,
-                                                 gdk_memory_depth_merge (gdk_color_state_get_depth (self->ccs),
-                                                                         gsk_render_node_get_preferred_depth (node)),
-                                                 &self->scale,
-                                                 &clip_bounds);
-
-  g_return_if_fail (mask_image != NULL);
-
-  gdk_color_init (&white, self->ccs, ((float[]){ 1, 1, 1, 1 }));
-  gsk_gpu_rounded_color_op (&other,
-                            self->ccs,
-                            self->ccs,
-                            &node->bounds,
-                            gsk_rounded_clip_node_get_clip (node),
-                            &white);
-  gsk_gpu_render_pass_finish (&other);
-
-  gsk_gpu_mask_op (self,
-                   self->ccs,
-                   &clip_bounds,
-                   child_image,
-                   GSK_GPU_SAMPLER_DEFAULT,
-                   mask_image,
-                   GSK_GPU_SAMPLER_DEFAULT,
-                   GSK_MASK_MODE_ALPHA,
-                   &child_rect,
-                   &clip_bounds);
-
-  g_object_unref (child_image);
-  g_object_unref (mask_image);
-  gdk_color_finish (&white);
-}
-
-static void
 gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
                                               GskRenderNode       *node)
 {
@@ -897,11 +841,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
       return;
     }
 
-  if (!gsk_gpu_render_pass_push_clip_rounded (self, clip, &storage))
-    {
-      gsk_gpu_node_processor_add_rounded_clip_node_with_mask (self, node);
-      return;
-    }
+  gsk_gpu_render_pass_push_clip_rounded (self, clip, &storage);
 
   if (!gsk_gpu_render_pass_is_all_clipped (self))
     gsk_gpu_node_processor_add_node (self, child, 0);

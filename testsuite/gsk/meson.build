@@ -208,6 +208,7 @@ compare_render_tests = [
   'repeat-tiny-nocairo',
   'repeating-gradient-scaled',
   'reuse-of-texture-nested-in-offscreens',
+  'rounded-clip-intersection-background',
   'rounded-clip-with-huge-bounds',
   'scale-textures-negative-ngl',
   'scale-up-down',
