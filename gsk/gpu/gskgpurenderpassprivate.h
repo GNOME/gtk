@@ -68,6 +68,7 @@ typedef struct {
   GskGpuImage *clip_mask;
   graphene_rect_t clip_mask_rect;
   gboolean clip_mask_has_opacity;
+  float opacity; /* only used with clip masks */
   guint modified;
 } GskGpuRenderPassClipStorage;
 

@@ -702,7 +702,7 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
                             self->ccs,
                             GSK_RENDER_PASS_OFFSCREEN,
                             GSK_GPU_LOAD_OP_CLEAR,
-                            (float[4]) { 1, 1, 1, 1 },
+                            (float[4]) { self->opacity, self->opacity, self->opacity, self->opacity },
                             &area,
                             &bounds);
   gsk_gpu_render_pass_push_blend (&other, GSK_GPU_BLEND_MASK, &blend_storage);
@@ -761,10 +761,12 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
 
   storage->clip_mask = self->clip_mask;
   storage->clip_mask_rect = self->clip_mask_rect;
-  storage->clip_mask_has_opacity = self->clip_mask_has_opacity;
+  storage->clip_mask_has_opacity = self->clip_mask_has_opacity || self->opacity < 1.0;
+  storage->opacity = self->opacity;
   gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
   storage->modified = GSK_GPU_GLOBAL_MASK | GSK_GPU_GLOBAL_CLIP;
 
+  self->opacity = 1.0;
   self->clip_mask = image;
   gsk_rect_init_offset (&self->clip_mask_rect,
                         &bounds,
@@ -864,6 +866,7 @@ gsk_gpu_render_pass_pop_clip_rect (GskGpuRenderPass            *self,
       self->clip_mask = storage->clip_mask;
       self->clip_mask_rect = storage->clip_mask_rect;
       self->clip_mask_has_opacity = storage->clip_mask_has_opacity;
+      self->opacity = storage->opacity;
     }
 
   self->pending_globals |= storage->modified;
@@ -924,6 +927,7 @@ gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
   storage->clip_mask = self->clip_mask;
   storage->clip_mask_rect = self->clip_mask_rect;
   storage->clip_mask_has_opacity = self->clip_mask_has_opacity;
+  storage->opacity = self->opacity;
   storage->modified = GSK_GPU_GLOBAL_MASK;
 
   self->clip_mask = g_object_ref (clip_mask);
