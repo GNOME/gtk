@@ -24777,9 +24777,11 @@ gtk_svg_serialize_full (GtkSvg               *self,
       g_string_append (s, "<rdf:RDF>");
       indent_for_elt (s, 6);
       g_string_append (s, "<cc:Work>");
-      indent_for_elt (s, 8);
       if (self->description)
-        g_string_append_printf (s, "<dc:description>%s</dc:description>", self->description);
+        {
+          indent_for_elt (s, 8);
+          g_string_append_printf (s, "<dc:description>%s</dc:description>", self->description);
+        }
       if (self->keywords)
         {
           indent_for_elt (s, 8);
