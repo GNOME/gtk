@@ -99,8 +99,10 @@ struct _GtkSvg
   gboolean advance_after_snapshot;
 
   unsigned int gpa_version;
-  char *keywords;
+  char *author;
+  char *license;
   char *description;
+  char *keywords;
 
   Timeline *timeline;
 
