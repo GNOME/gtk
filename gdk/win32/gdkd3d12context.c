@@ -172,7 +172,6 @@ gdk_d3d12_context_surface_attach (GdkDrawContext  *context,
                                   GError         **error)
 {
   GdkD3d12Context *self = GDK_D3D12_CONTEXT (context);
-  ID3D12Device *d3d12_device;
   GdkWin32Display *display;
   GdkSurface *surface;
   HRESULT hr;
