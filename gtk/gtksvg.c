@@ -23734,6 +23734,23 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   if (self->width < 0 || self->height < 0)
     return;
 
+  if (self->load_time == INDEFINITE)
+    {
+      int64_t current_time;
+
+      /* If we get here and load_time is still INDEFINITE, we are
+       * rendering an animation properly, we just do a snapshot.
+       *
+       * But we still need to get initial animation state applied.
+       */
+      if (self->clock)
+        current_time = gdk_frame_clock_get_frame_time (self->clock);
+      else
+        current_time = 0;
+
+      gtk_svg_set_load_time (self, current_time);
+    }
+
 #if 0
   if (self->node == NULL ||
       !can_reuse_node (self, width, height, colors, n_colors, weight))
