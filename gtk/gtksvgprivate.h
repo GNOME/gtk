@@ -94,7 +94,7 @@ struct _GtkSvg
   unsigned long clock_update_id;
 
   int64_t next_update;
-  unsigned int pending_invalidate;
+  unsigned int pending_advance;
   gboolean advance_after_snapshot;
 
   unsigned int gpa_version;

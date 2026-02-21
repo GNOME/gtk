@@ -14064,11 +14064,11 @@ static void frame_clock_disconnect (GtkSvg *self);
 static void schedule_next_update (GtkSvg *self);
 
 static void
-invalidate_later (gpointer data)
+advance_later (gpointer data)
 {
   GtkSvg *self = data;
 
-  self->pending_invalidate = 0;
+  self->pending_advance = 0;
 
   gtk_svg_advance (self, MAX (self->current_time, g_get_monotonic_time ()));
 }
@@ -14081,7 +14081,7 @@ schedule_next_update (GtkSvg *self)
   if (self->clock == NULL || !self->playing)
     return;
 
-  g_clear_handle_id (&self->pending_invalidate, g_source_remove);
+  g_clear_handle_id (&self->pending_advance, g_source_remove);
 
   run_mode = self->run_mode;
 #ifdef DEBUG
@@ -14111,7 +14111,7 @@ schedule_next_update (GtkSvg *self)
       int64_t interval = (self->next_update - self->current_time) / (double) G_TIME_SPAN_MILLISECOND;
 
       dbg_print ("times", "next update in %" G_GINT64_FORMAT "ms\n", interval);
-      self->pending_invalidate = g_timeout_add_once (interval, invalidate_later, self);
+      self->pending_advance = g_timeout_add_once (interval, advance_later, self);
     }
   else
     {
@@ -23823,8 +23823,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   if (self->advance_after_snapshot)
     {
       self->advance_after_snapshot = FALSE;
-      g_clear_handle_id (&self->pending_invalidate, g_source_remove);
-      self->pending_invalidate = g_idle_add_once (invalidate_later, self);
+      g_clear_handle_id (&self->pending_advance, g_source_remove);
+      self->pending_advance = g_idle_add_once (advance_later, self);
     }
 }
 
@@ -23962,7 +23962,7 @@ gtk_svg_dispose (GObject *object)
   GtkSvg *self = GTK_SVG (object);
 
   frame_clock_disconnect (self);
-  g_clear_handle_id (&self->pending_invalidate, g_source_remove);
+  g_clear_handle_id (&self->pending_advance, g_source_remove);
 
   g_clear_pointer (&self->content, shape_free);
   g_clear_pointer (&self->timeline, timeline_free);
@@ -25333,7 +25333,7 @@ gtk_svg_set_playing (GtkSvg   *self,
       if (self->clock)
         frame_clock_disconnect (self);
 
-      g_clear_handle_id (&self->pending_invalidate, g_source_remove);
+      g_clear_handle_id (&self->pending_advance, g_source_remove);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
