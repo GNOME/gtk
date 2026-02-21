@@ -14081,16 +14081,19 @@ invalidate_later (gpointer data)
   self->pending_invalidate = 0;
 
   gtk_svg_advance (self, MAX (self->current_time, g_get_monotonic_time ()));
-  gtk_svg_invalidate_contents (self);
 }
 
 static void
 schedule_next_update (GtkSvg *self)
 {
-  GtkSvgRunMode run_mode = self->run_mode;
+  GtkSvgRunMode run_mode;
+
+  if (self->clock == NULL || !self->playing)
+    return;
 
   g_clear_handle_id (&self->pending_invalidate, g_source_remove);
 
+  run_mode = self->run_mode;
 #ifdef DEBUG
   if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
     run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
@@ -14109,7 +14112,6 @@ schedule_next_update (GtkSvg *self)
   if (self->next_update <= self->current_time)
     {
       dbg_print ("times", "next update NOW (%s)\n", format_time (self->current_time));
-      gtk_svg_invalidate_contents (self);
       self->advance_after_snapshot = TRUE;
       return;
     }
@@ -14137,7 +14139,6 @@ frame_clock_update (GdkFrameClock *clock,
   int64_t time = gdk_frame_clock_get_frame_time (self->clock);
   dbg_print ("clock", "clock update, advancing to %s\n", format_time (time));
   gtk_svg_advance (self, time);
-  gtk_svg_invalidate_contents (self);
 }
 
 static void
@@ -23733,8 +23734,10 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   if (self->width < 0 || self->height < 0)
     return;
 
+#if 0
   if (self->node == NULL ||
       !can_reuse_node (self, width, height, colors, n_colors, weight))
+#endif
     {
       ComputeContext compute_context;
       PaintContext paint_context;
@@ -24453,6 +24456,14 @@ collect_next_update (GtkSvg *self)
 }
 
 static void
+invalidate_for_next_update (GtkSvg *self)
+{
+  if (self->next_update <= self->current_time ||
+      self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
+    gtk_svg_invalidate_contents (self);
+}
+
+static void
 shape_update_animation_state (Shape   *shape,
                               int64_t  current_time)
 {
@@ -24523,6 +24534,8 @@ gtk_svg_set_load_time (GtkSvg  *self,
 
   update_animation_state (self);
   collect_next_update (self);
+  invalidate_for_next_update (self);
+  schedule_next_update (self);
 }
 
 /*< private >
@@ -24557,13 +24570,12 @@ gtk_svg_advance (GtkSvg  *self,
 
   update_animation_state (self);
   collect_next_update (self);
+  invalidate_for_next_update (self);
+  schedule_next_update (self);
 
 #ifdef DEBUG
   animation_state_dump (self);
 #endif
-
-  if (self->playing)
-    schedule_next_update (self);
 }
 
 /*< private >
@@ -25242,15 +25254,28 @@ svg_shape_delete (Shape *shape)
 
 /* }}} */
 
-static void
-update_for_playing (GtkSvg *self)
+/*< private>
+ * gtk_svg_set_playing:
+ * @self: an SVG paintable
+ * @playing: the new state
+ *
+ * Sets whether the paintable is animating its content.
+ */
+void
+gtk_svg_set_playing (GtkSvg   *self,
+                     gboolean  playing)
 {
   int64_t current_time;
+
+  if (self->playing == playing)
+    return;
+
+  self->playing = playing;
 
   if (self->clock)
     current_time = gdk_frame_clock_get_frame_time (self->clock);
   else
-    current_time = g_get_monotonic_time (); // FIXME
+    current_time = 0;
 
   current_time = MAX (self->current_time, current_time);
 
@@ -25265,17 +25290,21 @@ update_for_playing (GtkSvg *self)
            * the pause, to make it as if that time never
            * happened.
            */
+          if (self->clock)
+            self->current_time = current_time;
+
           self->load_time += duration;
+
           animations_update_for_pause (self->content, duration);
           timeline_update_for_pause (self->timeline, duration);
+          invalidate_for_next_update (self);
+          schedule_next_update (self);
         }
       else
         {
-          gtk_svg_set_load_time (self, current_time);
+          if (self->clock)
+            gtk_svg_set_load_time (self, current_time);
         }
-
-      if (self->clock)
-        schedule_next_update (self);
     }
   else
     {
@@ -25287,25 +25316,6 @@ update_for_playing (GtkSvg *self)
 
       g_clear_handle_id (&self->pending_invalidate, g_source_remove);
     }
-}
-
-/*< private>
- * gtk_svg_set_playing:
- * @self: an SVG paintable
- * @playing: the new state
- *
- * Sets whether the paintable is animating its content.
- */
-void
-gtk_svg_set_playing (GtkSvg   *self,
-                     gboolean  playing)
-{
-  if (self->playing == playing)
-    return;
-
-  self->playing = playing;
-
-  update_for_playing (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
 }
@@ -25727,11 +25737,8 @@ gtk_svg_set_state (GtkSvg       *self,
   if (self->state == state)
     return;
 
-  if (self->playing)
-    {
-      /* FIXME frame time */
-      self->current_time = MAX (self->current_time, g_get_monotonic_time ());
-    }
+  if (self->clock && self->playing)
+    self->current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
 
   previous_state = self->state;
 
@@ -25766,13 +25773,12 @@ gtk_svg_set_state (GtkSvg       *self,
 
       update_animation_state (self);
       collect_next_update (self);
+      invalidate_for_next_update (self);
+      schedule_next_update (self);
 
 #ifdef DEBUG
       animation_state_dump (self);
 #endif
-
-      if (self->playing)
-        schedule_next_update (self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
@@ -25896,10 +25902,20 @@ gtk_svg_set_frame_clock (GtkSvg        *self,
 
   g_set_object (&self->clock, clock);
 
+  if (self->clock && self->playing)
+    {
+      if (self->load_time == INDEFINITE)
+        gtk_svg_set_load_time (self, gdk_frame_clock_get_frame_time (clock));
+      else
+        gtk_svg_advance (self, gdk_frame_clock_get_frame_time (clock));
+    }
+
+  /* FIXME should account for the difference between old and
+   * new clock even when paused
+   */
+
   if (was_connected)
     frame_clock_connect (self);
-  else
-    update_for_playing (self);
 }
 
 /**
