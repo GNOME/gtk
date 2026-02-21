@@ -14555,7 +14555,7 @@ compare_anim (gconstpointer a,
   else if (a1->attr > a2->attr)
     return 1;
 
-  /* The situation with animateTransform sv animateMotion
+  /* The situation with animateTransform vs. animateMotion
    * is special: they don't add to each other, and
    * the accumulate animateMotion transform is always
    * applied after the accumulate animateTransform.
