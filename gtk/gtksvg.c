@@ -61,18 +61,22 @@
  * `GtkSvg` objects are created by parsing a subset of SVG,
  * including SVG animations.
  *
- * The `GtkSvg` fills or strokes paths with symbolic or fixed
- * colors. It can have multiple states, and paths can be included
- * in a subset of the states. The special 'empty' state is always
- * available. States can have animations, and the transition between
- * different states can also be animated.
+ * `GtkSvg` fills or strokes paths with symbolic or fixed colors.
+ * It can have multiple states, and paths can be included in a subset
+ * of the states. The special 'empty' state is always available.
+ * States can have animations, and the transition between different
+ * states can also be animated.
+ *
+ * To show a static SVG image, it is enough to load the
+ * the SVG and use it like any other paintable.
+ *
+ * To play an SVG animation, use [method@Gtk.Svg.set_frame_clock]
+ * to connect the paintable to a frame clock, and call
+ * [method@Gtk.Svg.play] after loading the SVG. The animation can
+ * be paused using [method@Gtk.Svg.pause].
  *
  * To find out what states a `GtkSvg` has, use [method@Gtk.Svg.get_n_states].
  * To set the current state, use [method@Gtk.Svg.set_state].
- *
- * To play the animations in an SVG file, use
- * [method@Gtk.Svg.set_frame_clock] to connect the paintable to a
- * frame clock, and then call [method@Gtk.Svg.play] to start animations.
  *
  *
  * ## Error handling
@@ -24523,8 +24527,12 @@ update_animation_state (GtkSvg *self)
  * @load_time: the load time
  *
  * Sets the load time of the SVG, which marks the
- * 'beginning of time' for any animations defined in
- * it.
+ * 'beginning of time' for any animations defined
+ * in it.
+ *
+ * The load time will be set as a side-effect when
+ * the animation starts runnning due to `playing`
+ * being set to `TRUE`.
  *
  * @load_time must be in microseconds and in the same
  * timescale as the times returned by [class@Gdk.FrameClock].
@@ -24562,13 +24570,13 @@ gtk_svg_set_load_time (GtkSvg  *self,
  * @self: an SVG paintable
  * @current_time: the time to advance to
  *
- * Advances the animation to the given value,
- * which must be in microseconds and in the same
- * timescale as the times returned by [class@Gdk.FrameClock].
+ * Advances the animation to the given value, which must
+ * be in microseconds and in the same timescale as the
+ * times returned by [class@Gdk.FrameClock].
  *
  * Note that this function is only useful when *not*
- * running the animations automatically via
- * [method@Gtk.Svg.play].
+ * running the animations automatically with a frame
+ * clock, via [method@Gtk.Svg.play].
  *
  * Also note that moving time backwards is not
  * supported and may lead to unexpected results.
@@ -24632,7 +24640,7 @@ gtk_svg_get_run_mode (GtkSvg *self)
  * expected to provide different content.
  *
  * An economic way of handling the update is to schedule
- * a timeout for that time, and advance the animations then.
+ * a timeout for that time, and advance the animation then.
  *
  * Since: 4.22
  */
@@ -24641,6 +24649,7 @@ gtk_svg_get_next_update (GtkSvg *self)
 {
   return self->next_update;
 }
+
 /* }}} */
 /* {{{ Serialization */
 
@@ -25279,6 +25288,10 @@ svg_shape_delete (Shape *shape)
  * @playing: the new state
  *
  * Sets whether the paintable is animating its content.
+ *
+ * If `playing` is set to true, and the paintable has
+ * a frame clock, then it will automatically advance
+ * the animation.
  */
 void
 gtk_svg_set_playing (GtkSvg   *self,
@@ -26107,4 +26120,3 @@ gtk_svg_error_get_end (const GError *error)
 /* }}} */
 
 /* vim:set foldmethod=marker: */
-
