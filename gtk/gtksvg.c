@@ -14070,7 +14070,7 @@ advance_later (gpointer data)
 
   self->pending_advance = 0;
 
-  gtk_svg_advance (self, MAX (self->current_time, g_get_monotonic_time ()));
+  gtk_svg_advance (self, MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock)));
 }
 
 static void
