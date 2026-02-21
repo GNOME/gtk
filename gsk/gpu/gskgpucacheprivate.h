@@ -33,7 +33,6 @@ gboolean                gsk_gpu_cache_gc                                (GskGpuC
                                                                          gint64                  timestamp);
 gsize                   gsk_gpu_cache_get_dead_textures                 (GskGpuCache            *self);
 gsize                   gsk_gpu_cache_get_dead_texture_pixels           (GskGpuCache            *self);
-GskGpuImage *           gsk_gpu_cache_get_atlas_image                   (GskGpuCache            *self);
 GskGpuImage *           gsk_gpu_cache_add_atlas_image                   (GskGpuCache            *self,
                                                                          gsize                   width,
                                                                          gsize                   height,
