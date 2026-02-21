@@ -20,6 +20,24 @@
           stroke-dasharray='0 2'
           pathLength='1'
           d='M 10 10 L 90 90'>
+    <set
+            id='gpa:out-of-state:line'
+            attributeName='visibility'
+            begin='gpa:states(0).end; 0ms'
+            end='gpa:states(0).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
     <animate
             id='gpa:transition:fade-in:stroke-dasharray:line'
             attributeName='stroke-dasharray'
@@ -33,15 +51,6 @@
             keyTimes='0; 1'
             calcMode='spline'
             gpa:status='done'/>
-    <set
-            id='gpa:path-length'
-            attributeName='pathLength'
-            begin='0ms'
-            end='indefinite'
-            to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
     <animate
             id='gpa:transition:fade-out:stroke-dasharray:line'
             attributeName='stroke-dasharray'
@@ -55,15 +64,6 @@
             keyTimes='0; 1'
             calcMode='spline'
             gpa:status='done'/>
-    <set
-            id='gpa:out-of-state:line'
-            attributeName='visibility'
-            begin='gpa:states(0).end; 0ms'
-            end='gpa:states(0).begin'
-            to='hidden'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
   </path>
   <circle
           id='red'
@@ -76,6 +76,15 @@
           cx='0'
           cy='5'
           r='5'>
+    <set
+            id='gpa:out-of-state:red'
+            attributeName='visibility'
+            begin='gpa:states(all).end; 0ms'
+            end='gpa:states(all).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
     <animateMotion
             id='gpa:attachment:red'
             begin='0ms'
@@ -123,15 +132,6 @@
             begin='0ms'
             end='indefinite'
             to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
-    <set
-            id='gpa:out-of-state:red'
-            attributeName='visibility'
-            begin='gpa:states(all).end; 0ms'
-            end='gpa:states(all).begin'
-            to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='0ms'/>

@@ -21,6 +21,15 @@
           cx='0'
           cy='5'
           r='5'>
+    <set
+            id='gpa:out-of-state:red'
+            attributeName='visibility'
+            begin='gpa:states(0).end; 0ms'
+            end='gpa:states(0).begin'
+            to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
     <animate
             id='gpa:transition:fade-in:opacity:red'
             attributeName='opacity'
@@ -47,14 +56,5 @@
             keyTimes='0; 1'
             calcMode='spline'
             gpa:status='done'/>
-    <set
-            id='gpa:out-of-state:red'
-            attributeName='visibility'
-            begin='gpa:states(0).end; 0ms'
-            end='gpa:states(0).begin'
-            to='hidden'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
   </circle>
 </svg>

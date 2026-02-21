@@ -33,19 +33,6 @@
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='0ms'/>
     <animate
-            id='gpa:transition:fade-in:filter:red'
-            attributeName='filter'
-            begin='gpa:states(0).begin'
-            dur='2000ms'
-            repeatDur='2000ms'
-            fill='freeze'
-            from='blur(32) alpha-level(0.2)'
-            to='blur(0) alpha-level(0.2)'
-            keySplines='0 0 1 1'
-            keyTimes='0; 1'
-            calcMode='spline'
-            gpa:status='done'/>
-    <animate
             id='gpa:transition:fade-out:filter:red'
             attributeName='filter'
             begin='gpa:states(0).end -2000ms'
@@ -58,5 +45,18 @@
             keyTimes='0; 1'
             calcMode='spline'
             gpa:status='inactive'/>
+    <animate
+            id='gpa:transition:fade-in:filter:red'
+            attributeName='filter'
+            begin='gpa:states(0).begin'
+            dur='2000ms'
+            repeatDur='2000ms'
+            fill='freeze'
+            from='blur(32) alpha-level(0.2)'
+            to='blur(0) alpha-level(0.2)'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'/>
   </circle>
 </svg>
