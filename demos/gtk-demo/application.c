@@ -367,6 +367,12 @@ create_demo_window (GApplication *app,
 }
 
 static void
+activate (GApplication *app)
+{
+  create_demo_window (app, NULL);
+}
+
+static void
 demo_application_init (DemoApplication *app)
 {
   GSettings *settings;
@@ -391,6 +397,7 @@ demo_application_class_init (DemoApplicationClass *class)
   GApplicationClass *app_class = G_APPLICATION_CLASS (class);
 
   app_class->startup = startup;
+  app_class->activate = activate;
 }
 
 static void
