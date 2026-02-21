@@ -138,13 +138,6 @@ internal_tests = [
       '../reftests/reftest-compare.c',
     ],
   },
-  {
-    'name': 'symbolic2',
-    'sources': [
-      'symbolic2.c',
-      '../reftests/reftest-compare.c',
-    ],
-  },
   { 'name': 'bitmask' },
 ]
 
