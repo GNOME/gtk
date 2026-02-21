@@ -226,7 +226,7 @@
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <property name="child">
-                          <object class="GtkImage">
+                          <object class="GtkImage" id="example1">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
                               <object class="GtkSvg">
@@ -248,7 +248,7 @@
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <property name="child">
-                          <object class="GtkImage">
+                          <object class="GtkImage" id="example2">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
                               <object class="GtkSvg">
@@ -270,7 +270,7 @@
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <property name="child">
-                          <object class="GtkImage">
+                          <object class="GtkImage" id="example3">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
                               <object class="GtkSvg">
@@ -292,7 +292,7 @@
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <property name="child">
-                          <object class="GtkImage">
+                          <object class="GtkImage" id="example4">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
                               <object class="GtkSvg">
@@ -314,7 +314,7 @@
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <property name="child">
-                          <object class="GtkImage">
+                          <object class="GtkImage" id="example5">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
                               <object class="GtkSvg">
@@ -336,7 +336,7 @@
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <property name="child">
-                          <object class="GtkImage">
+                          <object class="GtkImage" id="example6">
                             <property name="pixel-size">32</property>
                             <property name="paintable">
                               <object class="GtkSvg">

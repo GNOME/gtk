@@ -28,7 +28,7 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='3000ms'/>
   </circle>
   <circle
           id='yellow'
@@ -47,7 +47,7 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='3000ms'/>
   </circle>
   <circle
           id='blue'
@@ -66,6 +66,6 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='3000ms'/>
   </circle>
 </svg>

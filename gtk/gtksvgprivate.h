@@ -92,10 +92,9 @@ struct _GtkSvg
   GtkSvgRunMode run_mode;
   GdkFrameClock *clock;
   unsigned long clock_update_id;
-  unsigned int periodic_update_id;
 
   int64_t next_update;
-  unsigned int pending_invalidate;
+  unsigned int pending_advance;
   gboolean advance_after_snapshot;
 
   unsigned int gpa_version;
@@ -118,6 +117,8 @@ struct _GtkSvg
     GdkRGBA colors[5];
     size_t n_colors;
     double weight;
+    int64_t time;
+    unsigned int state;
   } node_for;
 };
 

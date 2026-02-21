@@ -61,6 +61,13 @@ struct _IconEditorWindow
       GtkImage *image24_12, *image24_13, *image24_14, *image24_15;
     };
   };
+  union {
+    GtkImage *examples[6];
+    struct {
+      GtkImage *example1, *example2, *example3;
+      GtkImage *example4, *example5, *example6;
+    };
+  };
   PaintableEditor *paintable_editor;
   GtkCssProvider *paintable_style;
 };
@@ -455,6 +462,7 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
 
   if (self->paintable)
     {
+      path_paintable_set_frame_clock (self->paintable, gtk_widget_get_frame_clock (GTK_WIDGET (self)));
       icon_editor_window_set_state (self, path_paintable_get_state (paintable));
       icon_editor_window_set_initial_state (self, path_paintable_get_state (paintable));
 
@@ -1199,6 +1207,7 @@ icon_editor_window_realize (GtkWidget *widget)
   g_autofree char *path = NULL;
   g_autoptr (GFile) file = NULL;
   g_autoptr (GtkIconPaintable) logo = NULL;
+  GdkFrameClock *clock;
 
   GTK_WIDGET_CLASS (icon_editor_window_parent_class)->realize (widget);
 
@@ -1209,6 +1218,13 @@ icon_editor_window_realize (GtkWidget *widget)
   file = g_file_new_for_uri (path);
   logo = gtk_icon_paintable_new_for_file (file, 128, 1);
   gtk_image_set_from_paintable (self->empty_logo, GDK_PAINTABLE (logo));
+
+  clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
+  for (unsigned int i = 0; i < 6; i++)
+    gtk_svg_set_frame_clock (GTK_SVG (gtk_image_get_paintable (GTK_IMAGE (self->examples[i]))), clock);
+
+  if (self->paintable)
+    path_paintable_set_frame_clock (self->paintable, clock);
 }
 
 static void
@@ -1315,6 +1331,12 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, image24_14);
   gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, image24_15);
   gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, paintable_editor);
+  gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, example1);
+  gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, example2);
+  gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, example3);
+  gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, example4);
+  gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, example5);
+  gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, example6);
 
   gtk_widget_class_bind_template_callback (widget_class, show_open_filechooser);
   gtk_widget_class_bind_template_callback (widget_class, toggle_controls);

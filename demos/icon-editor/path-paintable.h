@@ -166,3 +166,6 @@ GtkIconPaintable *
 void            path_paintable_set_playing         (PathPaintable *self,
                                                     gboolean       playing);
 gboolean        path_paintable_get_playing         (PathPaintable *self);
+
+void            path_paintable_set_frame_clock     (PathPaintable *self,
+                                                    GdkFrameClock *clock);

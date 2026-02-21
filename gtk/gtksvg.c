@@ -61,18 +61,22 @@
  * `GtkSvg` objects are created by parsing a subset of SVG,
  * including SVG animations.
  *
- * The `GtkSvg` fills or strokes paths with symbolic or fixed
- * colors. It can have multiple states, and paths can be included
- * in a subset of the states. The special 'empty' state is always
- * available. States can have animations, and the transition between
- * different states can also be animated.
+ * `GtkSvg` fills or strokes paths with symbolic or fixed colors.
+ * It can have multiple states, and paths can be included in a subset
+ * of the states. The special 'empty' state is always available.
+ * States can have animations, and the transition between different
+ * states can also be animated.
+ *
+ * To show a static SVG image, it is enough to load the
+ * the SVG and use it like any other paintable.
+ *
+ * To play an SVG animation, use [method@Gtk.Svg.set_frame_clock]
+ * to connect the paintable to a frame clock, and call
+ * [method@Gtk.Svg.play] after loading the SVG. The animation can
+ * be paused using [method@Gtk.Svg.pause].
  *
  * To find out what states a `GtkSvg` has, use [method@Gtk.Svg.get_n_states].
  * To set the current state, use [method@Gtk.Svg.set_state].
- *
- * To play the animations in an SVG file, use
- * [method@Gtk.Svg.set_frame_clock] to connect the paintable to a
- * frame clock, and then call [method@Gtk.Svg.play] to start animations.
  *
  *
  * ## Error handling
@@ -1526,16 +1530,6 @@ apply_color_matrix (GdkColorState           *color_state,
   graphene_vec4_to_float (&p, v);
   gdk_color_init (new_color, color_state, v);
   gdk_color_finish (&c);
-}
-
-/* }}} */
-/* {{{ Caching */
-
-static void
-gtk_svg_invalidate_contents (GtkSvg *self)
-{
-  g_clear_pointer (&self->node, gsk_render_node_unref);
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 /* }}} */
@@ -14074,23 +14068,26 @@ static void frame_clock_disconnect (GtkSvg *self);
 static void schedule_next_update (GtkSvg *self);
 
 static void
-invalidate_later (gpointer data)
+advance_later (gpointer data)
 {
   GtkSvg *self = data;
 
-  self->pending_invalidate = 0;
+  self->pending_advance = 0;
 
-  gtk_svg_advance (self, MAX (self->current_time, g_get_monotonic_time ()));
-  gtk_svg_invalidate_contents (self);
+  gtk_svg_advance (self, MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock)));
 }
 
 static void
 schedule_next_update (GtkSvg *self)
 {
-  GtkSvgRunMode run_mode = self->run_mode;
+  GtkSvgRunMode run_mode;
 
-  g_clear_handle_id (&self->pending_invalidate, g_source_remove);
+  if (self->clock == NULL || !self->playing)
+    return;
 
+  g_clear_handle_id (&self->pending_advance, g_source_remove);
+
+  run_mode = self->run_mode;
 #ifdef DEBUG
   if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
     run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
@@ -14109,7 +14106,6 @@ schedule_next_update (GtkSvg *self)
   if (self->next_update <= self->current_time)
     {
       dbg_print ("times", "next update NOW (%s)\n", format_time (self->current_time));
-      gtk_svg_invalidate_contents (self);
       self->advance_after_snapshot = TRUE;
       return;
     }
@@ -14119,7 +14115,7 @@ schedule_next_update (GtkSvg *self)
       int64_t interval = (self->next_update - self->current_time) / (double) G_TIME_SPAN_MILLISECOND;
 
       dbg_print ("times", "next update in %" G_GINT64_FORMAT "ms\n", interval);
-      self->pending_invalidate = g_timeout_add_once (interval, invalidate_later, self);
+      self->pending_advance = g_timeout_add_once (interval, advance_later, self);
     }
   else
     {
@@ -14137,18 +14133,6 @@ frame_clock_update (GdkFrameClock *clock,
   int64_t time = gdk_frame_clock_get_frame_time (self->clock);
   dbg_print ("clock", "clock update, advancing to %s\n", format_time (time));
   gtk_svg_advance (self, time);
-  gtk_svg_invalidate_contents (self);
-}
-
-static gboolean
-periodic_update (GtkSvg *self)
-{
-  int64_t time = g_get_monotonic_time ();
-  dbg_print ("clock", "periodic update, advancing to %s\n", format_time (time));
-  gtk_svg_advance (self, time);
-  gtk_svg_invalidate_contents (self);
-
-  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -14160,10 +14144,6 @@ frame_clock_connect (GtkSvg *self)
                                                 G_CALLBACK (frame_clock_update), self);
       gdk_frame_clock_begin_updating (self->clock);
     }
-  else if (!self->clock && !self->periodic_update_id)
-    {
-      self->periodic_update_id = g_timeout_add (16, (GSourceFunc) periodic_update, self);
-    }
 }
 
 static void
@@ -14173,10 +14153,6 @@ frame_clock_disconnect (GtkSvg *self)
     {
       gdk_frame_clock_end_updating (self->clock);
       g_clear_signal_handler (&self->clock_update_id, self->clock);
-    }
-  else if (!self->clock && self->periodic_update_id)
-    {
-      g_clear_handle_id (&self->periodic_update_id, g_source_remove);
     }
 }
 
@@ -14819,7 +14795,6 @@ shape_apply_state (GtkSvg       *self,
 {
   if (shape_type_has_gpa_attrs (shape->type))
     {
-      SvgValue *value;
       Visibility visibility;
 
       if (state == GTK_SVG_STATE_EMPTY)
@@ -14831,7 +14806,7 @@ shape_apply_state (GtkSvg       *self,
 
       if ((self->features & GTK_SVG_ANIMATIONS) == 0)
         {
-          value = svg_visibility_new (visibility);
+          SvgValue *value = svg_visibility_new (visibility);
           shape_set_base_value (shape, SHAPE_ATTR_VISIBILITY, 0, value);
           svg_value_unref (value);
         }
@@ -14848,25 +14823,50 @@ shape_apply_state (GtkSvg       *self,
                    g_str_has_prefix (a->id, "gpa:transition:fade-out")))
                 {
                   a->status = ANIMATION_STATUS_DONE;
+                  a->previous.begin = self->current_time;
+                  a->current.begin = INDEFINITE;
+                  a->current.end = INDEFINITE;
+                  a->state_changed = TRUE;
                   g_ptr_array_steal_index (shape->animations, i - 1);
                   g_ptr_array_add (shape->animations, a);
                 }
-
               if (g_str_has_prefix (a->id, "gpa:out-of-state"))
                 {
                   if (visibility == VISIBILITY_HIDDEN)
-                    a->status = ANIMATION_STATUS_RUNNING;
+                    {
+                      a->status = ANIMATION_STATUS_RUNNING;
+                      a->previous.begin = self->current_time;
+                      a->current.begin = self->current_time;
+                      a->current.end = INDEFINITE;
+                    }
                   else
-                    a->status = ANIMATION_STATUS_DONE;
+                    {
+                      a->status = ANIMATION_STATUS_DONE;
+                      a->previous.begin = self->current_time;
+                      a->current.begin = INDEFINITE;
+                      a->current.end = INDEFINITE;
+                    }
+                  a->state_changed = TRUE;
                   g_ptr_array_steal_index (shape->animations, i - 1);
                   g_ptr_array_add (shape->animations, a);
                 }
               if (g_str_has_prefix (a->id, "gpa:in-state"))
                 {
                   if (visibility == VISIBILITY_VISIBLE)
-                    a->status = ANIMATION_STATUS_RUNNING;
+                    {
+                      a->status = ANIMATION_STATUS_RUNNING;
+                      a->previous.begin = self->current_time;
+                      a->current.begin = self->current_time;
+                      a->current.end = INDEFINITE;
+                    }
                   else
-                    a->status = ANIMATION_STATUS_DONE;
+                    {
+                      a->status = ANIMATION_STATUS_DONE;
+                      a->previous.begin = self->current_time;
+                      a->current.begin = INDEFINITE;
+                      a->current.end = INDEFINITE;
+                    }
+                  a->state_changed = TRUE;
                   g_ptr_array_steal_index (shape->animations, i - 1);
                   g_ptr_array_add (shape->animations, a);
                 }
@@ -23702,6 +23702,23 @@ can_reuse_node (GtkSvg        *self,
                 size_t         n_colors,
                 double         weight)
 {
+  return FALSE;
+
+  if (self->node == NULL)
+    return FALSE;
+
+  if (self->state != self->node_for.state)
+    {
+      dbg_print ("cache", "Can't reuse rendernode: state change");
+      return FALSE;
+    }
+
+  if (self->current_time != self->node_for.time)
+    {
+      dbg_print ("cache", "Can't reuse rendernode: current_time change");
+      return FALSE;
+    }
+
   if ((width != self->node_for.width || height != self->node_for.height))
     {
       dbg_print ("cache", "Can't reuse rendernode: size change");
@@ -23802,8 +23819,24 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   if (self->width < 0 || self->height < 0)
     return;
 
-  if (self->node == NULL ||
-      !can_reuse_node (self, width, height, colors, n_colors, weight))
+  if (self->load_time == INDEFINITE)
+    {
+      int64_t current_time;
+
+      /* If we get here and load_time is still INDEFINITE, we are
+       * rendering an animation properly, we just do a snapshot.
+       *
+       * But we still need to get initial animation state applied.
+       */
+      if (self->clock)
+        current_time = gdk_frame_clock_get_frame_time (self->clock);
+      else
+        current_time = 0;
+
+      gtk_svg_set_load_time (self, current_time);
+    }
+
+  if (!can_reuse_node (self, width, height, colors, n_colors, weight))
     {
       ComputeContext compute_context;
       PaintContext paint_context;
@@ -23870,8 +23903,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
   if (self->advance_after_snapshot)
     {
       self->advance_after_snapshot = FALSE;
-      g_clear_handle_id (&self->pending_invalidate, g_source_remove);
-      self->pending_invalidate = g_idle_add_once (invalidate_later, self);
+      g_clear_handle_id (&self->pending_advance, g_source_remove);
+      self->pending_advance = g_idle_add_once (advance_later, self);
     }
 }
 
@@ -24009,7 +24042,7 @@ gtk_svg_dispose (GObject *object)
   GtkSvg *self = GTK_SVG (object);
 
   frame_clock_disconnect (self);
-  g_clear_handle_id (&self->pending_invalidate, g_source_remove);
+  g_clear_handle_id (&self->pending_advance, g_source_remove);
 
   g_clear_pointer (&self->content, shape_free);
   g_clear_pointer (&self->timeline, timeline_free);
@@ -24522,6 +24555,14 @@ collect_next_update (GtkSvg *self)
 }
 
 static void
+invalidate_for_next_update (GtkSvg *self)
+{
+  if (self->next_update <= self->current_time ||
+      self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
+    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+static void
 shape_update_animation_state (Shape   *shape,
                               int64_t  current_time)
 {
@@ -24562,11 +24603,15 @@ update_animation_state (GtkSvg *self)
  * @load_time: the load time
  *
  * Sets the load time of the SVG, which marks the
- * 'beginning of time' for any animations defined in
- * it.
+ * 'beginning of time' for any animations defined
+ * in it.
+ *
+ * The load time will be set as a side-effect when
+ * the animation starts runnning due to `playing`
+ * being set to `TRUE`.
  *
  * @load_time must be in microseconds and in the same
- * timescale as g_get_monotonic_time().
+ * timescale as the times returned by [class@Gdk.FrameClock].
  *
  * Since: 4.22
  */
@@ -24592,6 +24637,8 @@ gtk_svg_set_load_time (GtkSvg  *self,
 
   update_animation_state (self);
   collect_next_update (self);
+  invalidate_for_next_update (self);
+  schedule_next_update (self);
 }
 
 /*< private >
@@ -24599,13 +24646,13 @@ gtk_svg_set_load_time (GtkSvg  *self,
  * @self: an SVG paintable
  * @current_time: the time to advance to
  *
- * Advances the animation to the given value,
- * which must be in microseconds and in the same
- * timescale as g_get_monotonic_time().
+ * Advances the animation to the given value, which must
+ * be in microseconds and in the same timescale as the
+ * times returned by [class@Gdk.FrameClock].
  *
  * Note that this function is only useful when *not*
- * running the animations automatically via
- * [method@Gtk.Svg.play].
+ * running the animations automatically with a frame
+ * clock, via [method@Gtk.Svg.play].
  *
  * Also note that moving time backwards is not
  * supported and may lead to unexpected results.
@@ -24626,13 +24673,12 @@ gtk_svg_advance (GtkSvg  *self,
 
   update_animation_state (self);
   collect_next_update (self);
+  invalidate_for_next_update (self);
+  schedule_next_update (self);
 
 #ifdef DEBUG
   animation_state_dump (self);
 #endif
-
-  if (self->playing)
-    schedule_next_update (self);
 }
 
 /*< private >
@@ -24670,7 +24716,7 @@ gtk_svg_get_run_mode (GtkSvg *self)
  * expected to provide different content.
  *
  * An economic way of handling the update is to schedule
- * a timeout for that time, and advance the animations then.
+ * a timeout for that time, and advance the animation then.
  *
  * Since: 4.22
  */
@@ -24679,6 +24725,7 @@ gtk_svg_get_next_update (GtkSvg *self)
 {
   return self->next_update;
 }
+
 /* }}} */
 /* {{{ Serialization */
 
@@ -25317,6 +25364,10 @@ svg_shape_delete (Shape *shape)
  * @playing: the new state
  *
  * Sets whether the paintable is animating its content.
+ *
+ * If `playing` is set to true, and the paintable has
+ * a frame clock, then it will automatically advance
+ * the animation.
  */
 void
 gtk_svg_set_playing (GtkSvg   *self,
@@ -25329,10 +25380,14 @@ gtk_svg_set_playing (GtkSvg   *self,
 
   self->playing = playing;
 
-  /* FIXME frame time */
-  current_time = MAX (self->current_time, g_get_monotonic_time ());
+  if (self->clock)
+    current_time = gdk_frame_clock_get_frame_time (self->clock);
+  else
+    current_time = 0;
 
-  if (playing)
+  current_time = MAX (self->current_time, current_time);
+
+  if (self->playing)
     {
       if (self->load_time != INDEFINITE)
         {
@@ -25343,25 +25398,31 @@ gtk_svg_set_playing (GtkSvg   *self,
            * the pause, to make it as if that time never
            * happened.
            */
+          if (self->clock)
+            self->current_time = current_time;
+
           self->load_time += duration;
+
           animations_update_for_pause (self->content, duration);
           timeline_update_for_pause (self->timeline, duration);
+          invalidate_for_next_update (self);
+          schedule_next_update (self);
         }
       else
         {
-          gtk_svg_set_load_time (self, g_get_monotonic_time ());
+          if (self->clock)
+            gtk_svg_set_load_time (self, current_time);
         }
-      schedule_next_update (self);
     }
   else
     {
       if (self->load_time != INDEFINITE)
-        {
-          self->pause_time = current_time;
-        }
+        self->pause_time = current_time;
 
-      frame_clock_disconnect (self);
-      g_clear_handle_id (&self->pending_invalidate, g_source_remove);
+      if (self->clock)
+        frame_clock_disconnect (self);
+
+      g_clear_handle_id (&self->pending_advance, g_source_remove);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
@@ -25421,7 +25482,7 @@ gtk_svg_set_overflow (GtkSvg      *self,
     return;
 
   self->overflow = overflow;
-  gtk_svg_invalidate_contents (self);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 /*< private >
@@ -25732,7 +25793,7 @@ gtk_svg_set_weight (GtkSvg *self,
 
   self->weight = weight;
 
-  gtk_svg_invalidate_contents (self);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
 }
 
@@ -25787,11 +25848,8 @@ gtk_svg_set_state (GtkSvg       *self,
   previous_state = self->state;
   self->state = state;
 
-  if (self->playing)
-    {
-      /* FIXME frame time */
-      self->current_time = MAX (self->current_time, g_get_monotonic_time ());
-    }
+  if (self->clock && self->playing)
+    self->current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
 
   if ((self->features & GTK_SVG_EXTENSIONS) == 0)
     {
@@ -25805,29 +25863,27 @@ gtk_svg_set_state (GtkSvg       *self,
       if (self->gpa_version > 0)
         {
           apply_state (self, state);
-          gtk_svg_invalidate_contents (self);
+          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
         }
     }
-  else
+
+  /* Don't jiggle things while we're still loading */
+  if (self->load_time != INDEFINITE)
     {
-      if (self->load_time != INDEFINITE)
-        {
-          /* Don't jiggle things while we're still loading */
-          dbg_print ("state", "renderer state %u -> %u\n", previous_state, state);
+      dbg_print ("state", "renderer state %u -> %u\n", previous_state, state);
 
-          timeline_update_for_state (self->timeline,
-                                     previous_state, self->state,
-                                     self->current_time + self->state_change_delay);
+      timeline_update_for_state (self->timeline,
+                                 previous_state, self->state,
+                                 self->current_time + self->state_change_delay);
 
-          update_animation_state (self);
-          collect_next_update (self);
+      update_animation_state (self);
+      collect_next_update (self);
+      invalidate_for_next_update (self);
+      schedule_next_update (self);
 
 #ifdef DEBUG
-          animation_state_dump (self);
+      animation_state_dump (self);
 #endif
-
-          schedule_next_update (self);
-        }
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
@@ -25930,8 +25986,7 @@ gtk_svg_get_features (GtkSvg *self)
  *
  * Sets a frame clock.
  *
- * Without a frame clock, GTK has to rely
- * on simple timeouts to run animations.
+ * Without a frame clock, GtkSvg will not advance animations.
  *
  * Since: 4.22
  */
@@ -25951,6 +26006,18 @@ gtk_svg_set_frame_clock (GtkSvg        *self,
   frame_clock_disconnect (self);
 
   g_set_object (&self->clock, clock);
+
+  if (self->clock && self->playing)
+    {
+      if (self->load_time == INDEFINITE)
+        gtk_svg_set_load_time (self, gdk_frame_clock_get_frame_time (clock));
+      else
+        gtk_svg_advance (self, gdk_frame_clock_get_frame_time (clock));
+    }
+
+  /* FIXME should account for the difference between old and
+   * new clock even when paused
+   */
 
   if (was_connected)
     frame_clock_connect (self);
