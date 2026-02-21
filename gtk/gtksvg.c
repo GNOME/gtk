@@ -1529,16 +1529,6 @@ apply_color_matrix (GdkColorState           *color_state,
 }
 
 /* }}} */
-/* {{{ Caching */
-
-static void
-gtk_svg_invalidate_contents (GtkSvg *self)
-{
-  g_clear_pointer (&self->node, gsk_render_node_unref);
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
-}
-
-/* }}} */
 /* {{{ Pango utilities */
 
 static GskPath *
@@ -23634,6 +23624,21 @@ can_reuse_node (GtkSvg        *self,
                 size_t         n_colors,
                 double         weight)
 {
+  if (self->node == NULL)
+    return FALSE;
+
+  if (self->state != self->node_for.state)
+    {
+      dbg_print ("cache", "Can't reuse rendernode: state change");
+      return FALSE;
+    }
+
+  if (self->current_time != self->node_for.time)
+    {
+      dbg_print ("cache", "Can't reuse rendernode: current_time change");
+      return FALSE;
+    }
+
   if ((width != self->node_for.width || height != self->node_for.height))
     {
       dbg_print ("cache", "Can't reuse rendernode: size change");
@@ -23751,10 +23756,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       gtk_svg_set_load_time (self, current_time);
     }
 
-#if 0
-  if (self->node == NULL ||
-      !can_reuse_node (self, width, height, colors, n_colors, weight))
-#endif
+  if (!can_reuse_node (self, width, height, colors, n_colors, weight))
     {
       ComputeContext compute_context;
       PaintContext paint_context;
@@ -24477,7 +24479,7 @@ invalidate_for_next_update (GtkSvg *self)
 {
   if (self->next_update <= self->current_time ||
       self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
-    gtk_svg_invalidate_contents (self);
+    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 static void
@@ -25391,7 +25393,7 @@ gtk_svg_set_overflow (GtkSvg      *self,
     return;
 
   self->overflow = overflow;
-  gtk_svg_invalidate_contents (self);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 /*< private >
@@ -25702,7 +25704,7 @@ gtk_svg_set_weight (GtkSvg *self,
 
   self->weight = weight;
 
-  gtk_svg_invalidate_contents (self);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
 }
 
@@ -25772,7 +25774,7 @@ gtk_svg_set_state (GtkSvg       *self,
       if (self->gpa_version > 0)
         {
           apply_state (self->content, state);
-          gtk_svg_invalidate_contents (self);
+          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);

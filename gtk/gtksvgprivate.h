@@ -117,6 +117,8 @@ struct _GtkSvg
     GdkRGBA colors[5];
     size_t n_colors;
     double weight;
+    int64_t time;
+    unsigned int state;
   } node_for;
 };
 
