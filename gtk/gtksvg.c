@@ -24579,6 +24579,8 @@ gtk_svg_set_load_time (GtkSvg  *self,
 
   self->load_time = load_time;
   self->current_time = load_time;
+  if (!self->playing)
+    self->pause_time = load_time;
 
 #ifdef DEBUG
   time_base = self->load_time;
