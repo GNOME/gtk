@@ -28,7 +28,7 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='2000ms'/>
+            gpa:current-start-time='3000ms'/>
   </circle>
   <circle
           id='yellow'

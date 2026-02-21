@@ -72,7 +72,9 @@
             dur='-250ms'
             repeatDur='-250ms'
             to='0.5'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:current-start-time='750ms'
+            gpa:current-end-time='500ms'/>
     <set
             id='gpa:path-length'
             attributeName='pathLength'
@@ -105,7 +107,7 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='1000ms'/>
     <animate
             id='gpa:transition:fade-in:stroke-dasharray:line2'
             attributeName='stroke-dasharray'
@@ -147,7 +149,9 @@
             dur='-250ms'
             repeatDur='-250ms'
             to='0.5'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:current-start-time='1000ms'
+            gpa:current-end-time='750ms'/>
     <set
             id='gpa:path-length'
             attributeName='pathLength'

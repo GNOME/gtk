@@ -31,7 +31,7 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='3500ms'/>
     <animate
             id='gpa:animation:red-stroke-dasharray'
             attributeName='stroke-dasharray'

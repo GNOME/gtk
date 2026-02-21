@@ -107,9 +107,7 @@
             end='gpa:states(1).begin -250ms'
             to='hidden'
             gpa:status='done'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'
-            gpa:current-end-time='0ms'/>
+            gpa:computed-simple-duration='indefinite'/>
     <animate
             id='gpa:transition:fade-in:stroke-dasharray:line2'
             attributeName='stroke-dasharray'

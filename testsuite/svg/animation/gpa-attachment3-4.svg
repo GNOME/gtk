@@ -26,7 +26,7 @@
             begin='gpa:states(0).end; 0ms'
             end='gpa:states(0).begin'
             to='hidden'
-            gpa:status='done'
+            gpa:status='running'
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='6000ms'/>
     <animate
@@ -98,6 +98,7 @@
   <circle
           id='red'
           font-size='13.333'
+          visibility='hidden'
           transform='translate(50, 50) rotate(45, 0, 0) translate(-5, -5)'
           font-weight='400'
           fill='rgb(255,0,0)'
@@ -111,7 +112,7 @@
             begin='gpa:states(all).end; 0ms'
             end='gpa:states(all).begin'
             to='hidden'
-            gpa:status='done'
+            gpa:status='running'
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='6000ms'/>
     <animateMotion
