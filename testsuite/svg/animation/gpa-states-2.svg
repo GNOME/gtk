@@ -28,12 +28,11 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='2000ms'/>
   </circle>
   <circle
           id='yellow'
           font-size='13.333'
-          visibility='hidden'
           font-weight='400'
           fill='rgb(255,255,0)'
           cx='10'
@@ -45,14 +44,12 @@
             begin='gpa:states(1).end; 0ms'
             end='gpa:states(1).begin'
             to='hidden'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:status='done'
+            gpa:computed-simple-duration='indefinite'/>
   </circle>
   <circle
           id='blue'
           font-size='13.333'
-          visibility='hidden'
           font-weight='400'
           fill='rgb(0,0,255)'
           cx='20'
@@ -64,8 +61,7 @@
             begin='gpa:states(0 1).end; 0ms'
             end='gpa:states(0 1).begin'
             to='hidden'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:status='done'
+            gpa:computed-simple-duration='indefinite'/>
   </circle>
 </svg>

@@ -14,7 +14,6 @@
   <circle
           id='red'
           font-size='13.333'
-          visibility='hidden'
           font-weight='400'
           fill='rgb(255,0,0)'
           cx='0'
@@ -26,9 +25,8 @@
             begin='gpa:states(0).end; 0ms'
             end='gpa:states(0).begin'
             to='hidden'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:status='done'
+            gpa:computed-simple-duration='indefinite'/>
   </circle>
   <circle
           id='yellow'
@@ -52,7 +50,6 @@
   <circle
           id='blue'
           font-size='13.333'
-          visibility='hidden'
           font-weight='400'
           fill='rgb(0,0,255)'
           cx='20'
@@ -64,8 +61,7 @@
             begin='gpa:states(0 1).end; 0ms'
             end='gpa:states(0 1).begin'
             to='hidden'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:status='done'
+            gpa:computed-simple-duration='indefinite'/>
   </circle>
 </svg>

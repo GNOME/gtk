@@ -14579,7 +14579,7 @@ compare_anim (gconstpointer a,
   else if (a1->attr > a2->attr)
     return 1;
 
-  /* The situation with animateTransform vs. animateMotion
+  /* The situation with animateTransform sv animateMotion
    * is special: they don't add to each other, and
    * the accumulate animateMotion transform is always
    * applied after the accumulate animateTransform.
@@ -14813,46 +14813,22 @@ static struct {
 };
 
 static void
-shape_apply_state (GtkSvg       *self,
-                   Shape        *shape,
-                   unsigned int  state)
+apply_state (Shape        *shape,
+             unsigned int  state)
 {
   if (shape_type_has_gpa_attrs (shape->type))
     {
       SvgValue *value;
-      Visibility visibility;
 
       if (state == GTK_SVG_STATE_EMPTY)
-        visibility = VISIBILITY_HIDDEN;
+        value = svg_visibility_new (VISIBILITY_HIDDEN);
       else if (shape->gpa.states & BIT (state))
-        visibility = VISIBILITY_VISIBLE;
+        value = svg_visibility_new (VISIBILITY_VISIBLE);
       else
-        visibility = VISIBILITY_HIDDEN;
+        value = svg_visibility_new (VISIBILITY_HIDDEN);
 
-      if ((self->features & GTK_SVG_ANIMATIONS) == 0)
-        {
-          value = svg_visibility_new (visibility);
-          shape_set_base_value (shape, SHAPE_ATTR_VISIBILITY, 0, value);
-          svg_value_unref (value);
-        }
-
-      if (!self->playing && shape->animations)
-        {
-          for (unsigned int i = shape->animations->len; i > 0; i--)
-            {
-              Animation *a = g_ptr_array_index (shape->animations, i - 1);
-
-              if ((visibility == VISIBILITY_VISIBLE &&
-                   g_str_has_prefix (a->id, "gpa:transition:fade-in")) ||
-                  (visibility == VISIBILITY_HIDDEN &&
-                   g_str_has_prefix (a->id, "gpa:transition:fade-out")))
-                {
-                  a->status = ANIMATION_STATUS_DONE;
-                  g_ptr_array_steal_index (shape->animations, i - 1);
-                  g_ptr_array_add (shape->animations, a);
-                }
-            }
-        }
+      shape_set_base_value (shape, SHAPE_ATTR_VISIBILITY, 0, value);
+      svg_value_unref (value);
     }
 
   if (shape_type_has_shapes (shape->type))
@@ -14860,16 +14836,9 @@ shape_apply_state (GtkSvg       *self,
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
           Shape *sh = g_ptr_array_index (shape->shapes, i);
-          shape_apply_state (self, sh, state);
+          apply_state (sh, state);
         }
     }
-}
-
-static void
-apply_state (GtkSvg   *self,
-             uint64_t  state)
-{
-  shape_apply_state (self, self->content, state);
 }
 
 /* {{{ Weight variation */
@@ -18837,9 +18806,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_ptr_array_unref (data.pending_refs);
   g_string_free (data.text, TRUE);
 
-  if (self->gpa_version > 0 &&
+  if (self->gpa_version == 1 &&
       (self->features & GTK_SVG_ANIMATIONS) == 0)
-    apply_state (self, self->state);
+    apply_state (self->content, self->state);
 }
 
 static void
@@ -25765,14 +25734,15 @@ gtk_svg_set_state (GtkSvg       *self,
   if (self->state == state)
     return;
 
-  previous_state = self->state;
-  self->state = state;
-
   if (self->playing)
     {
       /* FIXME frame time */
       self->current_time = MAX (self->current_time, g_get_monotonic_time ());
     }
+
+  previous_state = self->state;
+
+  self->state = state;
 
   if ((self->features & GTK_SVG_EXTENSIONS) == 0)
     {
@@ -25780,35 +25750,36 @@ gtk_svg_set_state (GtkSvg       *self,
       return;
     }
 
-  if ((self->features & GTK_SVG_ANIMATIONS) == 0 ||
-      !self->playing)
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0)
     {
       if (self->gpa_version > 0)
         {
-          apply_state (self, state);
+          apply_state (self->content, state);
           gtk_svg_invalidate_contents (self);
         }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
+      return;
     }
-  else
+
+  /* Don't jiggle things while we're still loading */
+  if (self->load_time != INDEFINITE)
     {
-      if (self->load_time != INDEFINITE)
-        {
-          /* Don't jiggle things while we're still loading */
-          dbg_print ("state", "renderer state %u -> %u\n", previous_state, state);
+      dbg_print ("state", "renderer state %u -> %u\n", previous_state, state);
 
-          timeline_update_for_state (self->timeline,
-                                     previous_state, self->state,
-                                     self->current_time + self->state_change_delay);
+      timeline_update_for_state (self->timeline,
+                                 previous_state, self->state,
+                                 self->current_time + self->state_change_delay);
 
-          update_animation_state (self);
-          collect_next_update (self);
+      update_animation_state (self);
+      collect_next_update (self);
 
 #ifdef DEBUG
-          animation_state_dump (self);
+      animation_state_dump (self);
 #endif
 
-          schedule_next_update (self);
-        }
+      if (self->playing)
+        schedule_next_update (self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);

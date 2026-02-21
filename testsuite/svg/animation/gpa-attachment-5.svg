@@ -17,7 +17,7 @@
           visibility='hidden'
           font-weight='400'
           stroke='rgb(0,0,0)'
-          stroke-dasharray='0 2'
+          stroke-dasharray='0.5 1'
           pathLength='1'
           d='M 10 10 L 90 90'>
     <set
@@ -26,18 +26,9 @@
             begin='gpa:states(0).end; 0ms'
             end='gpa:states(0).begin'
             to='hidden'
-            gpa:status='running'
+            gpa:status='done'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
-    <set
-            id='gpa:path-length'
-            attributeName='pathLength'
-            begin='0ms'
-            end='indefinite'
-            to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='3000ms'/>
     <animate
             id='gpa:transition:fade-in:stroke-dasharray:line'
             attributeName='stroke-dasharray'
@@ -63,13 +54,23 @@
             keySplines='0 0 1 1'
             keyTimes='0; 1'
             calcMode='spline'
-            gpa:status='done'/>
+            gpa:status='running'
+            gpa:current-start-time='2000ms'
+            gpa:current-end-time='3000ms'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
   </path>
   <circle
           id='red'
           font-size='13.333'
-          visibility='hidden'
-          transform='translate(90, 90) rotate(45, 0, 0) translate(-5, -5)'
+          transform='translate(50, 50) rotate(45, 0, 0) translate(-5, -5)'
           font-weight='400'
           fill='rgb(255,0,0)'
           pathLength='1'
@@ -82,9 +83,9 @@
             begin='gpa:states(all).end; 0ms'
             end='gpa:states(all).begin'
             to='hidden'
-            gpa:status='running'
+            gpa:status='done'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='3000ms'/>
     <animateMotion
             id='gpa:attachment:red'
             begin='0ms'
@@ -109,7 +110,7 @@
             calcMode='spline'
             keyPoints='0; 1'
             rotate='auto'
-            gpa:status='inactive'>
+            gpa:status='done'>
       <mpath href='line'/>
     </animateMotion>
     <animateMotion
@@ -123,7 +124,9 @@
             calcMode='spline'
             keyPoints='1; 0'
             rotate='auto'
-            gpa:status='inactive'>
+            gpa:status='running'
+            gpa:current-start-time='2000ms'
+            gpa:current-end-time='3000ms'>
       <mpath href='line'/>
     </animateMotion>
     <set
