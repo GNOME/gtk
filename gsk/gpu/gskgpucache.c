@@ -307,14 +307,6 @@ gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
 }
 
 GskGpuImage *
-gsk_gpu_cache_get_atlas_image (GskGpuCache *self)
-{
-  gsk_gpu_cache_ensure_atlas (self, FALSE);
-
-  return self->current_atlas->image;
-}
-
-GskGpuImage *
 gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
                                gsize             width,
                                gsize             height,
