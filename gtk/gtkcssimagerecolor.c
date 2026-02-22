@@ -259,7 +259,7 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
 
   colors[GTK_SYMBOLIC_COLOR_FOREGROUND] = *fg;
   colors[GTK_SYMBOLIC_COLOR_SUCCESS] = *sc;
-  colors[GTK_SYMBOLIC_COLOR_WARNING] = *sc;
+  colors[GTK_SYMBOLIC_COLOR_WARNING] = *wc;
   colors[GTK_SYMBOLIC_COLOR_ERROR] = *ec;
 
     if (recolor->only_fg)
@@ -394,7 +394,7 @@ gtk_css_image_recolor_get_height (GtkCssImage *image)
   if (recolor->node == NULL)
     return 0;
 
-  return (int) recolor->width;
+  return (int) recolor->height;
 }
 
 static gboolean
