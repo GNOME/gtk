@@ -176,7 +176,18 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
     }
   else if (strcmp (mime_type, "text/uri-list") == 0)
     {
-      if ([[pasteboard types] containsObject:NSPasteboardTypeFileURL])
+      if ([[pasteboard types] containsObject:NSPasteboardTypeURL])
+        {
+          NSURL *url = [NSURL URLFromPasteboard:pasteboard];
+          if (url != NULL)
+            {
+              NSString *urlString = [url absoluteString];
+              const char *str = [urlString UTF8String];
+              char *data = g_strdup_printf ("%s\r\n", str);
+              stream = g_memory_input_stream_new_from_data (data, strlen (data), g_free);
+            }
+        }
+      else if ([[pasteboard types] containsObject:NSPasteboardTypeFileURL])
         {
           GString *str = g_string_new (NULL);
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
