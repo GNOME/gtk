@@ -186,51 +186,61 @@ gtk_css_image_recolor_load (GtkCssImageRecolor    *recolor,
 }
 
 static void
+init_color_matrix (graphene_matrix_t *color_matrix,
+                   graphene_vec4_t   *color_offset,
+                   const GdkRGBA     *foreground_color,
+                   const GdkRGBA     *success_color,
+                   const GdkRGBA     *warning_color,
+                   const GdkRGBA     *error_color)
+{
+  const GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0};
+  const GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};
+  const GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
+  const GdkRGBA error_default = { 0.796887159533074, 0 ,0, 1.0 };
+  const GdkRGBA *fg = foreground_color ? foreground_color : &fg_default;
+  const GdkRGBA *sc = success_color ? success_color : &success_default;
+  const GdkRGBA *wc = warning_color ? warning_color : &warning_default;
+  const GdkRGBA *ec = error_color ? error_color : &error_default;
+
+  graphene_matrix_init_from_float (color_matrix,
+                                   (float[16]) {
+                                     sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
+                                     wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
+                                     ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
+                                     0, 0, 0, fg->alpha
+                                   });
+  graphene_vec4_init (color_offset, fg->red, fg->green, fg->blue, 0);
+}
+
+static void
 gtk_css_image_recolor_snapshot (GtkCssImage *image,
                                 GtkSnapshot *snapshot,
                                 double       width,
                                 double       height)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
-  const GdkRGBA *fg, *sc, *wc, *ec, *ac;
-  const GtkCssValue *color;
   GdkRGBA colors[5];
-  double weight = 400;
+  const char *symbolic[5] = {
+    [GTK_SYMBOLIC_COLOR_FOREGROUND] = "foreground",
+    [GTK_SYMBOLIC_COLOR_SUCCESS] = "success",
+    [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
+    [GTK_SYMBOLIC_COLOR_ERROR] = "error",
+    [GTK_SYMBOLIC_COLOR_ACCENT] = "accent",
+  };
 
   if (recolor->paintable == NULL)
     return;
 
-  fg = gtk_css_color_value_get_rgba (recolor->color);
+  colors[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (recolor->color);
 
-  color = gtk_css_palette_value_get_color (recolor->palette, "success");
-  if (color)
-    sc = gtk_css_color_value_get_rgba (color);
-  else
-    sc = fg;
-
-  color = gtk_css_palette_value_get_color (recolor->palette, "warning");
-  if (color)
-    wc = gtk_css_color_value_get_rgba (color);
-  else
-    wc = fg;
-
-  color = gtk_css_palette_value_get_color (recolor->palette, "error");
-  if (color)
-    ec = gtk_css_color_value_get_rgba (color);
-  else
-    ec = fg;
-
-  color = gtk_css_palette_value_get_color (recolor->palette, "accent");
-  if (color)
-    ac = gtk_css_color_value_get_rgba (color);
-  else
-    ac = fg;
-
-  colors[GTK_SYMBOLIC_COLOR_FOREGROUND] = *fg;
-  colors[GTK_SYMBOLIC_COLOR_SUCCESS] = *sc;
-  colors[GTK_SYMBOLIC_COLOR_WARNING] = *wc;
-  colors[GTK_SYMBOLIC_COLOR_ERROR] = *ec;
-  colors[GTK_SYMBOLIC_COLOR_ACCENT] = *ac;
+  for (unsigned int i = GTK_SYMBOLIC_COLOR_SUCCESS; i <= GTK_SYMBOLIC_COLOR_ACCENT; i++)
+    {
+      const GtkCssValue *color = gtk_css_palette_value_get_color (recolor->palette, symbolic[i]);
+      if (color)
+        colors[i] = *gtk_css_color_value_get_rgba (color);
+      else
+        colors[i] = colors[GTK_SYMBOLIC_COLOR_FOREGROUND];
+    }
 
   if (GTK_IS_SYMBOLIC_PAINTABLE (recolor->paintable))
     {
@@ -238,26 +248,21 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
                                                    snapshot,
                                                    width, height,
                                                    colors, 5,
-                                                   weight);
+                                                   400);
     }
   else
     {
       graphene_matrix_t matrix;
       graphene_vec4_t offset;
 
-      graphene_matrix_init_from_float (&matrix,
-              (float[16]) {
-                           sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
-                           wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
-                           ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
-                           0, 0, 0, fg->alpha
-                          });
+      init_color_matrix (&matrix, &offset,
+                         &colors[GTK_SYMBOLIC_COLOR_FOREGROUND],
+                         &colors[GTK_SYMBOLIC_COLOR_SUCCESS],
+                         &colors[GTK_SYMBOLIC_COLOR_WARNING],
+                         &colors[GTK_SYMBOLIC_COLOR_ERROR]);
 
-      graphene_vec4_init (&offset, fg->red, fg->green, fg->blue, 0);
       gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
-      gtk_snapshot_append_texture (snapshot,
-                                   GDK_TEXTURE (recolor->paintable),
-                                   &GRAPHENE_RECT_INIT (0, 0, width, height));
+      gdk_paintable_snapshot (recolor->paintable, snapshot, width, height);
       gtk_snapshot_pop (snapshot);
     }
 }
