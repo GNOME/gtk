@@ -536,6 +536,7 @@ gsk_render_node_draw_fallback (GskRenderNode *node,
  * thse semantics, don't use this function, use the specific getters instead.
  *
  * Returns: (transfer none) (nullable) (array length=n_children): The children
+ * Since: 4.22
  **/
 GskRenderNode **
 gsk_render_node_get_children (GskRenderNode *self,
