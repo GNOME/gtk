@@ -87,10 +87,9 @@ gsk_gpu_cached_should_collect (GskGpuCached *cached,
   return cached->class->should_collect (cached, cache_timeout, timestamp);
 }
 
-static gpointer
-gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
-                               const GskGpuCachedClass *class,
-                               GskGpuCachedAtlas       *atlas)
+gpointer
+gsk_gpu_cached_new (GskGpuCache             *cache,
+                    const GskGpuCachedClass *class)
 {
   GskGpuCached *cached;
 
@@ -98,7 +97,6 @@ gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
 
   cached->cache = cache;
   cached->class = class;
-  cached->atlas = atlas;
 
   cached->prev = cache->last_cached;
   cache->last_cached = cached;
@@ -108,22 +106,6 @@ gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
     cache->first_cached = cached;
 
   return cached;
-}
-
-gpointer
-gsk_gpu_cached_new_from_current_atlas (GskGpuCache             *cache,
-                                       const GskGpuCachedClass *class)
-{
-  return gsk_gpu_cached_new_from_atlas (cache,
-                                        class,
-                                        cache->current_atlas);
-}
-
-gpointer
-gsk_gpu_cached_new (GskGpuCache             *cache,
-                    const GskGpuCachedClass *class)
-{
-  return gsk_gpu_cached_new_from_atlas (cache, class, NULL);
 }
 
 void
@@ -306,33 +288,47 @@ gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
   self->current_atlas = gsk_gpu_cached_atlas_new (self);
 }
 
-GskGpuImage *
-gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
-                               gsize             width,
-                               gsize             height,
-                               gsize            *out_x,
-                               gsize            *out_y)
+gpointer
+gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
+                               const GskGpuCachedClass *class,
+                               gsize                    width,
+                               gsize                    height,
+                               cairo_rectangle_int_t   *out_area)
 {
+  GskGpuCached *cached;
+  gsize x, y;
+
   if (width > MAX_ATLAS_ITEM_SIZE || height > MAX_ATLAS_ITEM_SIZE)
     return NULL;
 
-  gsk_gpu_cache_ensure_atlas (self, FALSE);
+  gsk_gpu_cache_ensure_atlas (cache, FALSE);
 
-  if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
+  if (!gsk_gpu_cached_atlas_allocate (cache->current_atlas, width, height, &x, &y))
     {
-      gsk_gpu_cached_use ((GskGpuCached *) self->current_atlas);
-      return self->current_atlas->image;
+      gsk_gpu_cache_ensure_atlas (cache, TRUE);
+      
+      if (gsk_gpu_cached_atlas_allocate (cache->current_atlas, width, height, &x, &y))
+        return NULL;
     }
 
-  gsk_gpu_cache_ensure_atlas (self, TRUE);
+  cached = gsk_gpu_cached_new (cache, class);
+  cached->atlas = cache->current_atlas;
 
-  if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use ((GskGpuCached *) self->current_atlas);
-      return self->current_atlas->image;
-    }
+  out_area->x = x;
+  out_area->y = y;
+  out_area->width = width;
+  out_area->height = height;
 
-  return NULL;
+  return cached;
+}
+
+GskGpuImage *
+gsk_gpu_cached_get_atlas_image (GskGpuCached *cached)
+{
+  if (cached->atlas == NULL)
+    return NULL;
+
+  return cached->atlas->image;
 }
 
 /* }}} */

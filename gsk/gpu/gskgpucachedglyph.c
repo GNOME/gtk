@@ -169,7 +169,8 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
   graphene_rect_t rect;
   graphene_point_t origin;
   GskGpuImage *image;
-  gsize atlas_x, atlas_y, padding;
+  gsize padding;
+  cairo_rectangle_int_t area;
   float subpixel_x, subpixel_y;
   PangoFont *scaled_font;
 
@@ -194,19 +195,25 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
   rect.size.height = ceil ((ink_rect.y + ink_rect.height) * 1.0 / PANGO_SCALE + subpixel_y) - origin.y;
   padding = 1;
 
-  image = gsk_gpu_cache_add_atlas_image (self,
-                                         rect.size.width + 2 * padding, rect.size.height + 2 * padding,
-                                         &atlas_x, &atlas_y);
-  if (image)
+  cache = gsk_gpu_cached_new_from_atlas (self,
+                                         &GSK_GPU_CACHED_GLYPH_CLASS,
+                                         rect.size.width + 2 * padding,
+                                         rect.size.height + 2 * padding,
+                                         &area);
+  if (cache)
     {
+      image = gsk_gpu_cached_get_atlas_image ((GskGpuCached *) cache);
       g_object_ref (image);
-      rect.origin.x = atlas_x + padding;
-      rect.origin.y = atlas_y + padding;
-      cache = gsk_gpu_cached_new_from_current_atlas (self, &GSK_GPU_CACHED_GLYPH_CLASS);
+      rect.origin.x = area.x + padding;
+      rect.origin.y = area.y + padding;
     }
   else
     {
       image = gsk_gpu_device_create_upload_image (gsk_gpu_cache_get_device (self), FALSE, GDK_MEMORY_DEFAULT, FALSE, rect.size.width, rect.size.height),
+      area.x = 0;
+      area.y = 0;
+      area.width = rect.size.width;
+      area.height = rect.size.height;
       rect.origin.x = 0;
       rect.origin.y = 0;
       padding = 0;
@@ -221,16 +228,11 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
   cache->image = image;
   cache->origin = GRAPHENE_POINT_INIT (- origin.x + subpixel_x,
                                        - origin.y + subpixel_y);
-  ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
+  ((GskGpuCached *) cache)->pixels = area.width * area.height;
 
   gsk_gpu_upload_cairo_into_op (frame,
                                 cache->image,
-                                &(cairo_rectangle_int_t) {
-                                  .x = rect.origin.x - padding,
-                                  .y = rect.origin.y - padding,
-                                  .width = rect.size.width + 2 * padding,
-                                  .height = rect.size.height + 2 * padding,
-                                },
+                                &area,
                                 &GRAPHENE_RECT_INIT (- cache->origin.x - padding,
                                                      - cache->origin.y - padding,
                                                      rect.size.width + 2 * padding,

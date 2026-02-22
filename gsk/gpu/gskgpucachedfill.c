@@ -175,34 +175,35 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
   float sx = graphene_vec2_get_x (scale);
   float sy = graphene_vec2_get_y (scale);
   float dx, dy;
-  GskGpuCachedFill *cache;
-  gsize fx, fy, atlas_x, atlas_y, padding, image_width, image_height;
+  GskGpuCachedFill *cached;
+  gsize fx, fy, padding;
+  cairo_rectangle_int_t area;
   GskGpuImage *image = NULL;
   graphene_rect_t viewport;
 
   fx = mod_subpixel (bounds->origin.x, sx, SUBPIXEL_SCALE_X, &dx);
   fy = mod_subpixel (bounds->origin.y, sy, SUBPIXEL_SCALE_Y, &dy);
 
-  cache = g_hash_table_lookup (priv->fill_cache,
-                               &(GskGpuCachedFill) {
-                                 .path = path,
-                                 .fill_rule = fill_rule,
-                                 .sx = sx,
-                                 .sy = sy,
-                                 .fx = fx,
-                                 .fy = fy,
-                               });
-  if (cache)
+  cached = g_hash_table_lookup (priv->fill_cache,
+                                &(GskGpuCachedFill) {
+                                  .path = path,
+                                  .fill_rule = fill_rule,
+                                  .sx = sx,
+                                  .sy = sy,
+                                  .fx = fx,
+                                  .fy = fy,
+                                });
+  if (cached)
     {
-      gsk_gpu_cached_use ((GskGpuCached *) cache);
+      gsk_gpu_cached_use ((GskGpuCached *) cached);
 
       graphene_rect_init (out_rect,
-                          cache->image_offset.x - dx,
-                          cache->image_offset.y - dy,
-                          gsk_gpu_image_get_width (cache->image) / sx,
-                          gsk_gpu_image_get_height (cache->image) / sy);
+                          cached->image_offset.x - dx,
+                          cached->image_offset.y - dy,
+                          gsk_gpu_image_get_width (cached->image) / sx,
+                          gsk_gpu_image_get_height (cached->image) / sy);
 
-      return g_object_ref (cache->image);
+      return g_object_ref (cached->image);
     }
 
   if (!gsk_path_get_bounds (path, &viewport) ||
@@ -214,34 +215,32 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
     return NULL;
 
   padding = 1;
+
   /* Should already be integers because of snap_to_grid() above, but round just to be sure */
-  image_width = round (sx * viewport.size.width);
-  image_height = round (sy * viewport.size.height);
+  cached = gsk_gpu_cached_new_from_atlas (self,
+                                          &GSK_GPU_CACHED_FILL_CLASS,
+                                          round (sx * viewport.size.width) + 2 * padding,
+                                          round (sy * viewport.size.height) + 2 * padding,
+                                          &area);
 
-  image = gsk_gpu_cache_add_atlas_image (self,
-                                         image_width + 2 * padding,
-                                         image_height + 2 * padding,
-                                         &atlas_x,
-                                         &atlas_y);
-
-  if (image)
+  if (cached)
     {
+      image = gsk_gpu_cached_get_atlas_image ((GskGpuCached *) cached);
       g_object_ref (image);
-      cache = gsk_gpu_cached_new_from_current_atlas (self, &GSK_GPU_CACHED_FILL_CLASS);
-      cache->path = gsk_path_ref (path);
-      cache->fill_rule = fill_rule;
-      cache->sx = sx;
-      cache->sy = sy;
-      cache->fx = fx;
-      cache->fy = fy;
-      cache->image = g_object_ref (image);
+      cached->path = gsk_path_ref (path);
+      cached->fill_rule = fill_rule;
+      cached->sx = sx;
+      cached->sy = sy;
+      cached->fx = fx;
+      cached->fy = fy;
+      cached->image = g_object_ref (image);
       graphene_rect_inset (&viewport, padding / -sx, padding / -sy);
-      cache->image_offset = GRAPHENE_POINT_INIT (viewport.origin.x - atlas_x / sx,
-                                                 viewport.origin.y - atlas_y / sy);
-      ((GskGpuCached *) cache)->pixels = (image_width + 2 * padding) * (image_height + 2 * padding);
+      cached->image_offset = GRAPHENE_POINT_INIT (viewport.origin.x - area.x / sx,
+                                                  viewport.origin.y - area.y / sy);
+      ((GskGpuCached *) cached)->pixels = area.width * area.height;
 
-      g_hash_table_insert (priv->fill_cache, cache, cache);
-      gsk_gpu_cached_use ((GskGpuCached *) cache);
+      g_hash_table_insert (priv->fill_cache, cached, cached);
+      gsk_gpu_cached_use ((GskGpuCached *) cached);
     }
   else
     {
@@ -251,30 +250,24 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
        * We'll also assume those are grid aligned.
        */
       viewport = *bounds;
-      padding = 0;
-      atlas_x = 0;
-      atlas_y = 0;
-      image_width = ceil (sx * viewport.size.width);
-      image_height = ceil (sy * viewport.size.height);
+      area.x = 0; 
+      area.y = 0; 
+      area.width = ceil (sx * viewport.size.width);
+      area.height = ceil (sy * viewport.size.height);
 
       image = gsk_gpu_device_create_upload_image (gsk_gpu_cache_get_device (self),
                                                   FALSE,
                                                   GDK_MEMORY_DEFAULT,
                                                   gsk_gpu_color_state_get_conversion (GDK_COLOR_STATE_SRGB),
-                                                  image_width,
-                                                  image_height);
+                                                  area.width,
+                                                  area.height);
       if (image == NULL)
         return NULL;
     }
 
   gsk_gpu_upload_cairo_into_op (frame,
                                 image,
-                                &(cairo_rectangle_int_t) {
-                                  .x = atlas_x,
-                                  .y = atlas_y,
-                                  .width = image_width + 2 * padding,
-                                  .height = image_height + 2 * padding
-                                },
+                                &area,
                                 &viewport,
                                 fill_path,
                                 fill_path_print,
@@ -285,8 +278,8 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
                                 (GDestroyNotify) fill_data_free);
 
   graphene_rect_init (out_rect,
-                      viewport.origin.x - atlas_x / sx - dx,
-                      viewport.origin.y - atlas_y / sy - dy,
+                      viewport.origin.x - area.x / sx - dx,
+                      viewport.origin.y - area.y / sy - dy,
                       gsk_gpu_image_get_width (image) / sx,
                       gsk_gpu_image_get_height (image) / sy);
 
