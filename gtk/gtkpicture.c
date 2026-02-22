@@ -763,7 +763,7 @@ gtk_picture_set_file (GtkPicture *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
 
   if (file)
-    paintable = gdk_paintable_new_from_file (file);
+    paintable = gdk_paintable_new_from_file (file, NULL);
   else
     paintable = NULL;
 

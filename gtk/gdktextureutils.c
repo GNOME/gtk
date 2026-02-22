@@ -323,68 +323,6 @@ input_stream_get_bytes (GInputStream  *stream,
 }
 
 GdkTexture *
-gdk_texture_new_from_stream (GInputStream  *stream,
-                             GCancellable  *cancellable,
-                             GError       **error)
-{
-  GBytes *bytes;
-  GdkTexture *texture;
-
-  bytes = input_stream_get_bytes (stream, error);
-  if (!bytes)
-    return NULL;
-
-  texture = gdk_texture_new_from_bytes (bytes, error);
-  g_bytes_unref (bytes);
-
-  return texture;
-}
-
-/* Only called for svg */
-GdkTexture *
-gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
-                                      int            width,
-                                      int            height,
-                                      GCancellable  *cancellable,
-                                      GError       **error)
-{
-  GBytes *bytes;
-  GtkSvg *svg;
-  GdkTexture *texture;
-
-  bytes = input_stream_get_bytes (stream, error);
-  if (!bytes)
-    return NULL;
-
-  svg = gtk_svg_new_from_bytes (bytes);
-  texture = svg_to_texture (svg, width, height, NULL, 0);
-
-  g_object_unref (svg);
-  g_bytes_unref (bytes);
-
-  return texture;
-}
-
-GdkTexture *
-gdk_texture_new_from_resource_at_scale (const char    *path,
-                                        int            width,
-                                        int            height,
-                                        GError       **error)
-{
-  GInputStream *stream;
-  GdkTexture *texture;
-
-  stream = g_resources_open_stream (path, 0, error);
-  if (stream == NULL)
-    return NULL;
-
-  texture = gdk_texture_new_from_stream_at_scale (stream, width, height, NULL, error);
-  g_object_unref (stream);
-
-  return texture;
-}
-
-GdkTexture *
 gdk_texture_new_from_filename_at_scale (const char  *filename,
                                         int          width,
                                         int          height,
@@ -392,17 +330,26 @@ gdk_texture_new_from_filename_at_scale (const char  *filename,
 {
   GFile *file;
   GInputStream *stream;
+  GBytes *bytes;
+  GtkSvg *svg;
   GdkTexture *texture;
 
   file = g_file_new_for_path (filename);
   stream = G_INPUT_STREAM (g_file_read (file, NULL, error));
   g_object_unref (file);
-
   if (!stream)
     return NULL;
 
-  texture = gdk_texture_new_from_stream_at_scale (stream, width, height, NULL, error);
+  bytes = input_stream_get_bytes (stream, error);
   g_object_unref (stream);
+  if (!bytes)
+    return NULL;
+
+  svg = gtk_svg_new_from_bytes (bytes);
+  g_bytes_unref (bytes);
+
+  texture = svg_to_texture (svg, width, height, NULL, 0);
+  g_object_unref (svg);
 
   return texture;
 }
@@ -417,51 +364,16 @@ gdk_texture_new_from_filename_symbolic (const char  *filename,
                                         GError     **error)
 {
   GFile *file;
+  GBytes *bytes;
   GdkTexture *texture;
 
   file = g_file_new_for_path (filename);
-  texture = gdk_texture_new_from_file_symbolic (file, width, height, error);
-  g_object_unref (file);
-
-  return texture;
-}
-
-GdkTexture *
-gdk_texture_new_from_resource_symbolic (const char  *path,
-                                        int          width,
-                                        int          height,
-                                        GError     **error)
-{
-  GBytes *bytes;
-  GdkTexture *texture;
-
-  bytes = g_resources_lookup_data (path, 0, error);
-  if (!bytes)
-    return NULL;
-
-  texture = gdk_texture_new_from_bytes_symbolic (bytes, width, height, error);
-
-  g_bytes_unref (bytes);
-
-  return texture;
-
-}
-
-GdkTexture *
-gdk_texture_new_from_file_symbolic (GFile     *file,
-                                    int        width,
-                                    int        height,
-                                    GError   **error)
-{
-  GBytes *bytes;
-  GdkTexture *texture;
-
   bytes = g_file_load_bytes (file, NULL, NULL, error);
+  g_object_unref (file);
   if (!bytes)
     return NULL;
 
   texture = gdk_texture_new_from_bytes_symbolic (bytes, width, height, error);
-
   g_bytes_unref (bytes);
 
   return texture;
@@ -503,14 +415,15 @@ gdk_paintable_new_from_bytes (GBytes   *bytes,
 }
 
 GdkPaintable *
-gdk_paintable_new_from_filename (const char *filename)
+gdk_paintable_new_from_filename (const char  *filename,
+                                 GError     **error)
 {
   char *contents;
   gsize length;
   GBytes *bytes;
   GdkPaintable *paintable;
 
-  if (!g_file_get_contents (filename, &contents, &length, NULL))
+  if (!g_file_get_contents (filename, &contents, &length, error))
     return NULL;
 
   bytes = g_bytes_new_take (contents, length);
@@ -537,18 +450,37 @@ gdk_paintable_new_from_resource (const char *path)
 }
 
 GdkPaintable *
-gdk_paintable_new_from_file (GFile *file)
+gdk_paintable_new_from_file (GFile   *file,
+                             GError **error)
 {
   GBytes *bytes;
   GdkPaintable *paintable;
   const char *path;
 
-  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+  bytes = g_file_load_bytes (file, NULL, NULL, error);
   if (!bytes)
     return NULL;
 
   path = g_file_peek_path (file);
   paintable = gdk_paintable_new_from_bytes (bytes, is_symbolic (path));
+  g_bytes_unref (bytes);
+
+  return paintable;
+}
+
+GdkPaintable *
+gdk_paintable_new_from_stream (GInputStream  *stream,
+                               GCancellable  *cancellable,
+                               GError       **error)
+{
+  GBytes *bytes;
+  GdkPaintable *paintable;
+
+  bytes = input_stream_get_bytes (stream, error);
+  if (!bytes)
+    return NULL;
+
+  paintable = gdk_paintable_new_from_bytes (bytes, FALSE);
   g_bytes_unref (bytes);
 
   return paintable;

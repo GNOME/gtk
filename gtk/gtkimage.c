@@ -612,7 +612,7 @@ gtk_image_set_from_file (GtkImage    *image,
       return;
     }
 
-  paintable = gdk_paintable_new_from_filename (filename);
+  paintable = gdk_paintable_new_from_filename (filename, NULL);
 
   if (paintable == NULL)
     {

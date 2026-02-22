@@ -22,38 +22,25 @@
 
 G_BEGIN_DECLS
 
-GdkTexture *gdk_texture_new_from_stream             (GInputStream  *stream,
-                                                     GCancellable  *cancellable,
-                                                     GError       **error);
-GdkTexture *gdk_texture_new_from_stream_at_scale    (GInputStream  *stream,
-                                                     int            width,
-                                                     int            height,
-                                                     GCancellable  *cancellable,
-                                                     GError       **error);
-GdkTexture *gdk_texture_new_from_resource_at_scale  (const char    *path,
-                                                     int            width,
-                                                     int            height,
-                                                     GError       **error);
+/* Used for icons in the file chooser */
 GdkTexture *gdk_texture_new_from_filename_at_scale  (const char    *filename,
                                                      int            width,
                                                      int            height,
                                                      GError       **error);
 
+/* Used in the gtk4-encode-symbolic tool */
 GdkTexture *gdk_texture_new_from_filename_symbolic  (const char    *path,
                                                      int            width,
                                                      int            height,
                                                      GError       **error);
-GdkTexture *gdk_texture_new_from_file_symbolic      (GFile         *file,
-                                                     int            width,
-                                                     int            height,
-                                                     GError       **error);
-GdkTexture *gdk_texture_new_from_resource_symbolic  (const char    *path,
-                                                     int            width,
-                                                     int            height,
-                                                     GError       **error);
 
-GdkPaintable *gdk_paintable_new_from_filename       (const char    *filename);
+GdkPaintable *gdk_paintable_new_from_filename       (const char    *filename,
+                                                     GError       **error);
 GdkPaintable *gdk_paintable_new_from_resource       (const char    *path);
-GdkPaintable *gdk_paintable_new_from_file           (GFile         *file);
+GdkPaintable *gdk_paintable_new_from_file           (GFile         *file,
+                                                     GError       **error);
+GdkPaintable *gdk_paintable_new_from_stream         (GInputStream  *stream,
+                                                     GCancellable  *cancellable,
+                                                     GError       **error);
 
 G_END_DECLS

@@ -104,9 +104,7 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
                                gboolean          in_thread)
 {
   gint64 before;
-  int pixel_size;
   GError *load_error = NULL;
-  GdkTexture *texture = NULL;
 
   icon_cache_mark_used_if_cached (icon);
 
@@ -115,89 +113,36 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  /* This is the natural pixel size for the requested icon size + scale in this directory.
-   * We precalculate this so we can use it as a rasterization size for svgs.
-   */
-  pixel_size = icon->desired_size * icon->desired_scale;
-
-  /* At this point, we need to actually get the icon; either from the
-   * builtin image or by loading the file
-   */
   if (icon->is_resource)
     {
-      if (icon->is_svg)
-        {
-          icon->paintable = GDK_PAINTABLE (gtk_svg_new ());
-          if (icon->is_symbolic)
-            gtk_svg_set_features (GTK_SVG (icon->paintable), GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
-          gtk_svg_load_from_resource (GTK_SVG (icon->paintable), icon->filename);
-        }
-      else
-        texture = gdk_texture_new_from_resource (icon->filename);
+      icon->paintable = gdk_paintable_new_from_resource (icon->filename);
     }
   else if (icon->filename)
     {
-      if (icon->is_svg)
-        {
-          char *data;
-          size_t length;
-          GBytes *bytes;
-
-          g_file_get_contents (icon->filename, &data, &length, NULL);
-          bytes = g_bytes_new_take (data, length);
-          icon->paintable = GDK_PAINTABLE (gtk_svg_new ());
-          if (icon->is_symbolic)
-            gtk_svg_set_features (GTK_SVG (icon->paintable), GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
-          gtk_svg_load_from_bytes (GTK_SVG (icon->paintable), bytes);
-          g_bytes_unref (bytes);
-        }
-      else
-        {
-          texture = gdk_texture_new_from_filename (icon->filename, &load_error);
-        }
+      icon->paintable = gdk_paintable_new_from_filename (icon->filename, &load_error);
     }
-  else
+  else if (icon->loadable)
     {
       GInputStream *stream;
-
-      g_assert (icon->loadable);
-
+      int pixel_size = icon->desired_size * icon->desired_scale;
       stream = g_loadable_icon_load (icon->loadable, pixel_size, NULL, NULL, &load_error);
       if (stream)
         {
-          /* SVG icons are a special case - we just immediately scale them
-           * to the desired size
-           */
-          if (icon->is_svg)
-            texture = gdk_texture_new_from_stream_at_scale (stream,
-                                                            pixel_size, pixel_size,
-                                                            NULL,
-                                                            &load_error);
-          else
-            texture = gdk_texture_new_from_stream (stream, NULL, &load_error);
-
+          icon->paintable = gdk_paintable_new_from_stream (stream, NULL, &load_error);
           g_object_unref (stream);
         }
     }
-
-  if (icon->paintable)
-    {
-      g_assert (texture == NULL);
-    }
   else
+    g_assert_not_reached ();
+
+  if (!icon->paintable)
     {
-      if (!texture)
-        {
-          g_warning ("Failed to load icon %s: %s", icon->filename, load_error ? load_error->message : "");
-          g_clear_error (&load_error);
-          texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
-          g_set_str (&icon->icon_name, "image-missing");
-          icon->is_symbolic = FALSE;
-        }
-
-      icon->paintable = GDK_PAINTABLE (texture);
+      g_warning ("Failed to load icon %s: %s", icon->filename, load_error ? load_error->message : "");
+      g_clear_error (&load_error);
+      icon->paintable = GDK_PAINTABLE (gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH));
+      g_set_str (&icon->icon_name, "image-missing");
+      icon->is_symbolic = FALSE;
     }
-
 
   icon->width = gdk_paintable_get_intrinsic_width (icon->paintable);
   icon->height = gdk_paintable_get_intrinsic_height (icon->paintable);

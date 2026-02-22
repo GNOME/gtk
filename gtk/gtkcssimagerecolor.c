@@ -92,17 +92,9 @@ gtk_css_image_recolor_load_paintable (GtkCssImageRecolor  *recolor,
           gtk_svg_load_from_resource (svg, resource_path);
           recolor->paintable = GDK_PAINTABLE (svg);
         }
-
-      if (!recolor->paintable)
+      else if (g_str_has_suffix (uri, ".symbolic.png"))
         {
-          GdkTexture *texture;
-
-          if (g_str_has_suffix (uri, ".symbolic.png"))
-            texture = gdk_texture_new_from_resource (resource_path);
-          else
-            texture = gdk_texture_new_from_resource_symbolic (resource_path, 0, 0, NULL);
-
-          recolor->paintable = GDK_PAINTABLE (texture);
+          recolor->paintable = GDK_PAINTABLE (gdk_texture_new_from_resource (resource_path));
         }
 
       g_free (resource_path);
@@ -124,6 +116,7 @@ gtk_css_image_recolor_load_paintable (GtkCssImageRecolor  *recolor,
               g_str_has_suffix (path, "-symbolic-rtl.svg"))
             gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
 
+
           if (g_file_get_contents (path, &data, &size, NULL))
             {
               GBytes *bytes = g_bytes_new_take (data, size);
@@ -133,16 +126,9 @@ gtk_css_image_recolor_load_paintable (GtkCssImageRecolor  *recolor,
 
           recolor->paintable = GDK_PAINTABLE (svg);
         }
-
-      if (!recolor->paintable)
+      else if (g_str_has_suffix (uri, ".symbolic.png"))
         {
-          GdkTexture *texture;
-
-          if (g_str_has_suffix (uri, ".symbolic.png"))
-            texture = gdk_texture_new_from_file (recolor->file, NULL);
-          else
-            texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, NULL);
-          recolor->paintable = GDK_PAINTABLE (texture);
+          recolor->paintable = GDK_PAINTABLE (gdk_texture_new_from_file (recolor->file, NULL));
         }
     }
 
