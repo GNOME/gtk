@@ -71,28 +71,4 @@ GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,
 GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
                                                       double         scale);
 
-GskRenderNode *gsk_render_node_new_from_resource_symbolic (const char *path,
-                                                           gboolean   *only_fg,
-                                                           gboolean   *single_path,
-                                                           gboolean   *has_strokes,
-                                                           double     *width,
-                                                           double     *height);
-GskRenderNode *gsk_render_node_new_from_filename_symbolic (const char *filename,
-                                                           gboolean   *only_fg,
-                                                           gboolean   *single_path,
-                                                           gboolean   *has_strokes,
-                                                           double     *width,
-                                                           double     *height);
-
-gboolean gsk_render_node_recolor (GskRenderNode  *node,
-                                  const GdkRGBA  *colors,
-                                  gsize           n_colors,
-                                  float           weight,
-                                  GskRenderNode **recolored);
-gboolean gsk_render_node_restroke (GskRenderNode  *node,
-                                   float           weight,
-                                   GskRenderNode **restroked);
-
-
-
 G_END_DECLS
