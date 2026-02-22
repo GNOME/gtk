@@ -18,17 +18,10 @@
 
 #include <gsk/gsk.h>
 #include "gdktextureutilsprivate.h"
-#include "gtkscalerprivate.h"
-#include "gtksnapshot.h"
-#include "gtk/gtksvg.h"
-#include "gtk/gtksymbolicpaintable.h"
-
 #include "gdk/gdktextureprivate.h"
-#include "gdk/loaders/gdkpngprivate.h"
-#include "gdk/gdkdebugprivate.h"
-#include "gtk/gtkdebug.h"
-#include "gtk/gtkenums.h"
-#include "gtk/gtkbitmaskprivate.h"
+#include "gtksnapshot.h"
+#include "gtksvg.h"
+#include "gtksymbolicpaintable.h"
 
 /* {{{ svg helpers */
 
