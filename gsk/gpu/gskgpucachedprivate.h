@@ -45,10 +45,15 @@ struct _GskGpuCachePrivate
 
 gpointer                gsk_gpu_cached_new                              (GskGpuCache                    *cache,
                                                                          const GskGpuCachedClass        *class);
-gpointer                gsk_gpu_cached_new_from_current_atlas           (GskGpuCache                    *cache,
-                                                                         const GskGpuCachedClass        *class);
+gpointer                gsk_gpu_cached_new_from_atlas                   (GskGpuCache                    *cache,
+                                                                         const GskGpuCachedClass        *class,
+                                                                         gsize                           width,
+                                                                         gsize                           height,
+                                                                         cairo_rectangle_int_t          *out_area);
 
 void                    gsk_gpu_cached_use                              (GskGpuCached                   *cached);
+
+GskGpuImage *           gsk_gpu_cached_get_atlas_image                  (GskGpuCached                   *cached);
 
 static inline gboolean
 gsk_gpu_cached_is_old (GskGpuCached *cached,
