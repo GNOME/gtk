@@ -108,8 +108,6 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
   GError *load_error = NULL;
   GdkTexture *texture = NULL;
   gboolean only_fg = FALSE;
-  gboolean single_path = FALSE;
-  gboolean has_strokes = FALSE;
 
   icon_cache_mark_used_if_cached (icon);
 
@@ -184,10 +182,6 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
         }
     }
 
-  icon->only_fg = only_fg;
-  icon->single_path = single_path;
-  icon->has_strokes = has_strokes;
-
   if (icon->paintable)
     {
       g_assert (texture == NULL);
@@ -201,7 +195,6 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
           texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
           g_set_str (&icon->icon_name, "image-missing");
           icon->is_symbolic = FALSE;
-          icon->only_fg = FALSE;
         }
 
       icon->paintable = GDK_PAINTABLE (texture);

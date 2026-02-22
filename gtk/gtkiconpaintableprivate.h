@@ -32,9 +32,6 @@ struct _GtkIconPaintable
   guint is_svg          : 1;
   guint is_resource     : 1;
   guint is_symbolic     : 1;
-  guint only_fg         : 1;
-  guint single_path     : 1;
-  guint has_strokes     : 1;
 
   /* Cached information if we go ahead and try to load the icon.
    *
