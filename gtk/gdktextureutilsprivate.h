@@ -28,12 +28,6 @@ GdkTexture *gdk_texture_new_from_filename_at_scale  (const char    *filename,
                                                      int            height,
                                                      GError       **error);
 
-/* Used in the gtk4-encode-symbolic tool */
-GdkTexture *gdk_texture_new_from_filename_symbolic  (const char    *path,
-                                                     int            width,
-                                                     int            height,
-                                                     GError       **error);
-
 GdkPaintable *gdk_paintable_new_from_filename       (const char    *filename,
                                                      GError       **error);
 GdkPaintable *gdk_paintable_new_from_resource       (const char    *path);
