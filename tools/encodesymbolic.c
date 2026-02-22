@@ -55,8 +55,6 @@ main (int argc, char **argv)
   char **sizev;
   GFile *dest;
   GBytes *bytes;
-  gboolean only_fg = FALSE;
-  GHashTable *options = NULL;
 
   setlocale (LC_ALL, "");
 
@@ -101,7 +99,7 @@ main (int argc, char **argv)
 
   basename = g_path_get_basename (path);
 
-  symbolic = gdk_texture_new_from_filename_symbolic (path, width, height, &only_fg, &error);
+  symbolic = gdk_texture_new_from_filename_symbolic (path, width, height, &error);
   if (symbolic == NULL)
     {
       g_printerr (_("Can’t load file: %s\n"), error->message);
@@ -123,13 +121,7 @@ main (int argc, char **argv)
 
   dest = g_file_new_for_path (pngpath);
 
-  if (only_fg)
-    {
-      options = g_hash_table_new (g_str_hash, g_str_equal);
-      g_hash_table_insert (options, (gpointer) "tEXt::only-foreground", (gpointer) "true");
-    }
-
-  bytes = gdk_save_png (symbolic, options);
+  bytes = gdk_save_png (symbolic, NULL);
 
   if (!g_file_replace_contents (dest,
                                 g_bytes_get_data (bytes, NULL),
@@ -147,7 +139,6 @@ main (int argc, char **argv)
 
   g_bytes_unref (bytes);
   g_object_unref (dest);
-  g_clear_pointer (&options, g_hash_table_unref);
   g_free (pngpath);
 
   return 0;

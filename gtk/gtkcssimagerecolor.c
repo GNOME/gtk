@@ -80,12 +80,15 @@ gtk_css_image_recolor_load_paintable (GtkCssImageRecolor  *recolor,
     {
       char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
 
-      if (g_str_has_suffix (resource_path, "-symbolic.svg") ||
-          g_str_has_suffix (resource_path, "-symbolic-ltr.svg") ||
-          g_str_has_suffix (resource_path, "-symbolic-rtl.svg"))
+      if (g_str_has_suffix (resource_path, ".svg"))
         {
           GtkSvg *svg = gtk_svg_new ();
-          gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
+
+          if (g_str_has_suffix (resource_path, "-symbolic.svg") ||
+              g_str_has_suffix (resource_path, "-symbolic-ltr.svg") ||
+              g_str_has_suffix (resource_path, "-symbolic-rtl.svg"))
+            gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
+
           gtk_svg_load_from_resource (svg, resource_path);
           recolor->paintable = GDK_PAINTABLE (svg);
         }
@@ -93,15 +96,12 @@ gtk_css_image_recolor_load_paintable (GtkCssImageRecolor  *recolor,
       if (!recolor->paintable)
         {
           GdkTexture *texture;
-          gboolean only_fg;
 
           if (g_str_has_suffix (uri, ".symbolic.png"))
             texture = gdk_texture_new_from_resource (resource_path);
           else
-            texture = gdk_texture_new_from_resource_symbolic (resource_path, 0, 0, &only_fg, NULL);
+            texture = gdk_texture_new_from_resource_symbolic (resource_path, 0, 0, NULL);
 
-          recolor->width = gdk_texture_get_width (texture);
-          recolor->height = gdk_texture_get_height (texture);
           recolor->paintable = GDK_PAINTABLE (texture);
         }
 
@@ -111,37 +111,45 @@ gtk_css_image_recolor_load_paintable (GtkCssImageRecolor  *recolor,
     {
       const char *path = g_file_peek_path (recolor->file);
 
-      if (g_str_has_suffix (path, "-symbolic.svg") ||
-          g_str_has_suffix (path, "-symbolic-ltr.svg") ||
-          g_str_has_suffix (path, "-symbolic-rtl.svg"))
+      if (g_str_has_suffix (path, ".svg"))
         {
+          GtkSvg *svg;
           char *data;
           size_t size;
+
+          svg = gtk_svg_new ();
+
+          if (g_str_has_suffix (path, "-symbolic.svg") ||
+              g_str_has_suffix (path, "-symbolic-ltr.svg") ||
+              g_str_has_suffix (path, "-symbolic-rtl.svg"))
+            gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
 
           if (g_file_get_contents (path, &data, &size, NULL))
             {
               GBytes *bytes = g_bytes_new_take (data, size);
-              GtkSvg *svg = gtk_svg_new ();
-              gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
               gtk_svg_load_from_bytes (svg, bytes);
               g_bytes_unref (bytes);
-              recolor->paintable = GDK_PAINTABLE (svg);
             }
+
+          recolor->paintable = GDK_PAINTABLE (svg);
         }
 
       if (!recolor->paintable)
         {
           GdkTexture *texture;
-          gboolean only_fg;
 
           if (g_str_has_suffix (uri, ".symbolic.png"))
             texture = gdk_texture_new_from_file (recolor->file, NULL);
           else
-            texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, &only_fg, NULL);
-          recolor->width = gdk_texture_get_width (texture);
-          recolor->height = gdk_texture_get_height (texture);
+            texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, NULL);
           recolor->paintable = GDK_PAINTABLE (texture);
         }
+    }
+
+  if (recolor->paintable)
+    {
+      recolor->width = gdk_paintable_get_intrinsic_width (recolor->paintable);
+      recolor->height = gdk_paintable_get_intrinsic_height (recolor->paintable);
     }
 
   g_free (uri);

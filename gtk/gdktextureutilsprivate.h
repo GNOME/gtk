@@ -22,53 +22,38 @@
 
 G_BEGIN_DECLS
 
-GdkTexture *gdk_texture_new_from_filename_with_fg   (const char    *filename,
-                                                     gboolean      *only_fg,
-                                                     GError       **error);
-GdkTexture *gdk_texture_new_from_resource_with_fg   (const char    *path,
-                                                     gboolean      *only_fg);
-GdkTexture *gdk_texture_new_from_stream_with_fg     (GInputStream  *stream,
-                                                     gboolean      *only_fg,
+GdkTexture *gdk_texture_new_from_stream             (GInputStream  *stream,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_stream_at_scale    (GInputStream  *stream,
                                                      int            width,
                                                      int            height,
-                                                     gboolean      *only_fg,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_resource_at_scale  (const char    *path,
                                                      int            width,
                                                      int            height,
-                                                     gboolean      *only_fg,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_filename_at_scale  (const char    *filename,
                                                      int            width,
                                                      int            height,
-                                                     gboolean      *only_fg,
                                                      GError       **error);
 
 GdkTexture *gdk_texture_new_from_filename_symbolic  (const char    *path,
                                                      int            width,
                                                      int            height,
-                                                     gboolean      *only_fg,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_file_symbolic      (GFile         *file,
                                                      int            width,
                                                      int            height,
-                                                     gboolean      *only_fg,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_resource_symbolic  (const char    *path,
                                                      int            width,
                                                      int            height,
-                                                     gboolean      *only_fg,
                                                      GError       **error);
 
-GdkPaintable *gdk_paintable_new_from_filename_scaled (const char    *filename,
-                                                      double         scale);
-GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,
-                                                      double         scale);
-GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
-                                                      double         scale);
+GdkPaintable *gdk_paintable_new_from_filename       (const char    *filename);
+GdkPaintable *gdk_paintable_new_from_resource       (const char    *path);
+GdkPaintable *gdk_paintable_new_from_file           (GFile         *file);
 
 G_END_DECLS

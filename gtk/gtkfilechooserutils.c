@@ -469,7 +469,6 @@ _gtk_file_info_get_icon (GFileInfo    *info,
 
       texture = gdk_texture_new_from_filename_at_scale (thumbnail_path,
                                                         icon_size*scale, icon_size*scale,
-                                                        NULL,
                                                         NULL);
 
       if (texture != NULL)

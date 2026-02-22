@@ -107,7 +107,6 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
   int pixel_size;
   GError *load_error = NULL;
   GdkTexture *texture = NULL;
-  gboolean only_fg = FALSE;
 
   icon_cache_mark_used_if_cached (icon);
 
@@ -134,7 +133,7 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
           gtk_svg_load_from_resource (GTK_SVG (icon->paintable), icon->filename);
         }
       else
-        texture = gdk_texture_new_from_resource_with_fg (icon->filename, &only_fg);
+        texture = gdk_texture_new_from_resource (icon->filename);
     }
   else if (icon->filename)
     {
@@ -154,7 +153,7 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
         }
       else
         {
-          texture = gdk_texture_new_from_filename_with_fg (icon->filename, &only_fg, &load_error);
+          texture = gdk_texture_new_from_filename (icon->filename, &load_error);
         }
     }
   else
@@ -172,11 +171,10 @@ icon_ensure_paintable__locked (GtkIconPaintable *icon,
           if (icon->is_svg)
             texture = gdk_texture_new_from_stream_at_scale (stream,
                                                             pixel_size, pixel_size,
-                                                            &only_fg,
                                                             NULL,
                                                             &load_error);
           else
-            texture = gdk_texture_new_from_stream_with_fg (stream, &only_fg, NULL, &load_error);
+            texture = gdk_texture_new_from_stream (stream, NULL, &load_error);
 
           g_object_unref (stream);
         }
