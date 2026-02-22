@@ -727,6 +727,7 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  [ 'atlasallocator', ['atlasallocator.c', '../../gsk/gpu/gskatlasallocator.c' ] ],
   [ 'boundingbox'],
   [ 'curve', [ ], [ 'flaky' ]],
   [ 'curve-special-cases' ],
