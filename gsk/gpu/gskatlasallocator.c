@@ -67,12 +67,14 @@ struct _GskAtlasSlot
 #define GDK_ARRAY_PREALLOC 32
 #include "gdk/gdkarrayimpl.c"
 
+#define N_EMPTYLISTS 8
+
 struct _GskAtlasAllocator
 {
   GskAtlasSlots slots;
   gsize root;
   gsize first_free_slot;
-  gsize emptylist;
+  gsize emptylists[N_EMPTYLISTS];
 };
 
 void
@@ -166,7 +168,7 @@ gsk_atlas_allocator_dump (GskAtlasAllocator *self,
                           const char        *format,
                           ...)
 {
-  gsize i;
+  gsize i, j;
   va_list args;
   char *s;
 
@@ -177,19 +179,22 @@ gsk_atlas_allocator_dump (GskAtlasAllocator *self,
 
   gsk_atlas_allocator_dump_depth (self, self->root, 0);
 
-  g_print ("emptylist: ");
-  for (i = self->emptylist; i != G_MAXSIZE; )
+  for (i = 0; i < G_N_ELEMENTS (self->emptylists); i++)
     {
-      GskAtlasSlot *slot;
-  
-      slot = gsk_atlas_slots_get (&self->slots, i);
-      g_assert (slot->type == GSK_ATLAS_EMPTY || slot->type == GSK_ATLAS_FREELIST);
-      if (i != self->emptylist)
-        g_print (", ");
-      g_print ("%zu%s", i, slot->type == GSK_ATLAS_FREELIST ? "*" : "");
-      i = slot->emptylist_next;
+      g_print ("emptylist %zu: ", i);
+      for (j = self->emptylists[i]; j != G_MAXSIZE; )
+        {
+          GskAtlasSlot *slot;
+      
+          slot = gsk_atlas_slots_get (&self->slots, j);
+          g_assert (slot->type == GSK_ATLAS_EMPTY || slot->type == GSK_ATLAS_FREELIST);
+          if (j != self->emptylists[i])
+            g_print (", ");
+          g_print ("%zu%s", j, slot->type == GSK_ATLAS_FREELIST ? "*" : "");
+          j = slot->emptylist_next;
+        }
+      g_print ("\n");
     }
-  g_print ("\n");
 }
 #else
 static void
@@ -200,11 +205,19 @@ gsk_atlas_allocator_dump (GskAtlasAllocator *self,
 }
 #endif
 
+static gsize
+get_emptylist_for_size (gsize width,
+                        gsize height)
+{
+  return MIN (g_bit_storage (MIN (width, height)), N_EMPTYLISTS) - 1;
+}
+
 GskAtlasAllocator *
 gsk_atlas_allocator_new (gsize width,
                          gsize height)
 {
   GskAtlasAllocator *self;
+  gsize i;
 
   self = g_new0 (GskAtlasAllocator, 1);
   gsk_atlas_slots_init (&self->slots);
@@ -218,7 +231,9 @@ gsk_atlas_allocator_new (gsize width,
                               .area = (cairo_rectangle_int_t) { 0, 0, width, height }
                           });
   self->root = 0;
-  self->emptylist = 0;
+  for (i = 0; i < G_N_ELEMENTS (self->emptylists); i++)
+    self->emptylists[i] = G_MAXSIZE;
+  self->emptylists[get_emptylist_for_size (width, height)] = 0;
 
   return self;
 }
@@ -258,39 +273,46 @@ gsk_atlas_allocator_allocate_pos (GskAtlasAllocator *self,
                                   gsize              height)
 {
   GskAtlasSlot *prev, *best_prev, *best_slot, *slot;
-  gsize pos, best_pos, best_size;
+  gsize list, pos, best_list, best_pos, best_size;
 
-  prev = NULL;
   best_prev = NULL;
   best_slot = NULL;
   best_pos = G_MAXSIZE;
   best_size = G_MAXSIZE;
-  for (pos = self->emptylist; pos < gsk_atlas_slots_get_size (&self->slots); /* done in loop */)
-    {
-      slot = gsk_atlas_slots_get (&self->slots, pos);
-      if (slot->type == GSK_ATLAS_FREELIST)
-        {
-          gsize next_pos = slot->emptylist_next;
-          if (prev)
-            prev->emptylist_next = slot->emptylist_next;
-          else
-            self->emptylist = slot->emptylist_next;
-          gsk_atlas_allocator_free_slot (self, pos);
-          pos = next_pos;
-          continue;
-        }
+  best_list = G_MAXSIZE;
 
-      if (slot->area.width >= width &&
-          slot->area.height >= height &&
-          slot->area.width * slot->area.height < best_size)
+  for (list = get_emptylist_for_size (width, height); list < N_EMPTYLISTS; list++)
+    {
+      prev = NULL;
+
+      for (pos = self->emptylists[list]; pos < gsk_atlas_slots_get_size (&self->slots); /* done in loop */)
         {
-          best_prev = prev;
-          best_slot = slot;
-          best_pos = pos;
-          best_size = slot->area.width * slot->area.height;
+          slot = gsk_atlas_slots_get (&self->slots, pos);
+          if (slot->type == GSK_ATLAS_FREELIST)
+            {
+              gsize next_pos = slot->emptylist_next;
+              if (prev)
+                prev->emptylist_next = slot->emptylist_next;
+              else
+                self->emptylists[list] = slot->emptylist_next;
+              gsk_atlas_allocator_free_slot (self, pos);
+              pos = next_pos;
+              continue;
+            }
+
+          if (slot->area.width >= width &&
+              slot->area.height >= height &&
+              slot->area.width * slot->area.height < best_size)
+            {
+              best_prev = prev;
+              best_list = list;
+              best_slot = slot;
+              best_pos = pos;
+              best_size = slot->area.width * slot->area.height;
+            }
+          prev = slot;
+          pos = slot->emptylist_next;
         }
-      prev = slot;
-      pos = slot->emptylist_next;
     }
 
   if (best_pos >= gsk_atlas_slots_get_size (&self->slots))
@@ -302,7 +324,7 @@ gsk_atlas_allocator_allocate_pos (GskAtlasAllocator *self,
       best_slot->emptylist_next = G_MAXSIZE;
     }
   else
-    self->emptylist = best_slot->emptylist_next;
+    self->emptylists[best_list] = best_slot->emptylist_next;
 
   return best_pos;
 }
@@ -312,13 +334,15 @@ gsk_atlas_allocator_enqueue_empty (GskAtlasAllocator *self,
                                    gsize              pos)
 {
   GskAtlasSlot *slot;
+  gsize list;
 
   slot = gsk_atlas_slots_get (&self->slots, pos);
 
   g_assert (slot->type == GSK_ATLAS_EMPTY);
 
-  slot->emptylist_next = self->emptylist;
-  self->emptylist = pos;
+  list = get_emptylist_for_size (slot->area.width, slot->area.height);
+  slot->emptylist_next = self->emptylists[list];
+  self->emptylists[list] = pos;
 }
 
 static void
