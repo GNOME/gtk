@@ -17,4 +17,7 @@ gpointer                gsk_gpu_cached_atlas_create                     (GskGpuC
 void                    gsk_gpu_cached_atlas_deallocate                 (GskGpuCachedAtlas              *self,
                                                                          GskGpuCached                   *cached);
 
+void                    gsk_gpu_cached_atlas_set_item_stale             (GskGpuCachedAtlas              *self,
+                                                                         GskGpuCached                   *item,
+                                                                         gboolean                        stale);
 G_END_DECLS

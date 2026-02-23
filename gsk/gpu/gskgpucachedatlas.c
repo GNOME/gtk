@@ -144,3 +144,13 @@ gsk_gpu_cached_get_atlas_area (GskGpuCached *cached)
   return gsk_atlas_allocator_get_area (cached->atlas->allocator, cached->atlas_slot);
 }
 
+void
+gsk_gpu_cached_atlas_set_item_stale (GskGpuCachedAtlas *self,
+                                     GskGpuCached      *item,
+                                     gboolean           stale)
+{
+  if (stale)
+    ((GskGpuCached *) self)->pixels -= item->pixels;
+  else
+    ((GskGpuCached *) self)->pixels += item->pixels;
+}
