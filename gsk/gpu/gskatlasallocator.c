@@ -281,7 +281,7 @@ gsk_atlas_allocator_allocate_pos (GskAtlasAllocator *self,
   best_size = G_MAXSIZE;
   best_list = G_MAXSIZE;
 
-  for (list = get_emptylist_for_size (width, height); list < N_EMPTYLISTS; list++)
+  for (list = get_emptylist_for_size (width, height); list < N_EMPTYLISTS && best_pos == G_MAXSIZE; list++)
     {
       prev = NULL;
 
