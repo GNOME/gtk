@@ -25,6 +25,7 @@ struct _GskGpuCached
 
   GskGpuCache *cache;
   GskGpuCachedAtlas *atlas;
+  gsize atlas_slot;
   GskGpuCached *next;
   GskGpuCached *prev;
 
@@ -48,12 +49,14 @@ gpointer                gsk_gpu_cached_new                              (GskGpuC
 gpointer                gsk_gpu_cached_new_from_atlas                   (GskGpuCache                    *cache,
                                                                          const GskGpuCachedClass        *class,
                                                                          gsize                           width,
-                                                                         gsize                           height,
-                                                                         cairo_rectangle_int_t          *out_area);
+                                                                         gsize                           height);
+void                    gsk_gpu_cached_free                             (GskGpuCached                   *cached);
 
 void                    gsk_gpu_cached_use                              (GskGpuCached                   *cached);
 
 GskGpuImage *           gsk_gpu_cached_get_atlas_image                  (GskGpuCached                   *cached);
+const cairo_rectangle_int_t *
+                        gsk_gpu_cached_get_atlas_area                   (GskGpuCached                   *cached);
 
 static inline gboolean
 gsk_gpu_cached_is_old (GskGpuCached *cached,
@@ -83,6 +86,5 @@ gsk_gpu_cached_set_stale (GskGpuCached *cached,
         ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
     }
 }
-
 
 G_END_DECLS

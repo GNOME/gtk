@@ -220,12 +220,12 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
   cached = gsk_gpu_cached_new_from_atlas (self,
                                           &GSK_GPU_CACHED_FILL_CLASS,
                                           round (sx * viewport.size.width) + 2 * padding,
-                                          round (sy * viewport.size.height) + 2 * padding,
-                                          &area);
+                                          round (sy * viewport.size.height) + 2 * padding);
 
   if (cached)
     {
       image = gsk_gpu_cached_get_atlas_image ((GskGpuCached *) cached);
+      area = *gsk_gpu_cached_get_atlas_area ((GskGpuCached *) cached);
       g_object_ref (image);
       cached->path = gsk_path_ref (path);
       cached->fill_rule = fill_rule;

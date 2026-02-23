@@ -2,6 +2,7 @@
 
 #include "gskgpucacheprivate.h"
 
+#include "gskgpucachedatlasprivate.h"
 #include "gskgpucachedglyphprivate.h"
 #include "gskgpucachedfillprivate.h"
 #include "gskgpucachedstrokeprivate.h"
@@ -19,18 +20,11 @@
 
 #include "gsk/gskdebugprivate.h"
 
-#define MAX_SLICES_PER_ATLAS 64
-
 #define ATLAS_SIZE 1024
 
 #define MAX_ATLAS_ITEM_SIZE 256
 
-#define MIN_ALIVE_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
-
-#define ATLAS_TIMEOUT_SCALE 4
-
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
-G_STATIC_ASSERT (MIN_ALIVE_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
 
 typedef struct _GskGpuCachedGlyph GskGpuCachedGlyph;
 typedef struct _GskGpuCachedTexture GskGpuCachedTexture;
@@ -60,7 +54,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GskGpuCache, gsk_gpu_cache, G_TYPE_OBJECT)
 
 /* {{{ Cached base class */
 
-static void
+void
 gsk_gpu_cached_free (GskGpuCached *cached)
 {
   GskGpuCache *self = cached->cache;
@@ -115,166 +109,6 @@ gsk_gpu_cached_use (GskGpuCached *cached)
   gsk_gpu_cached_set_stale (cached, FALSE);
 }
 
-/* }}} */
-/* {{{ CachedAtlas */
-
-struct _GskGpuCachedAtlas
-{
-  GskGpuCached parent;
-
-  GskGpuImage *image;
-
-  gsize remaining_pixels;
-  gsize n_slices;
-  struct {
-    gsize width;
-    gsize height;
-  } slices[MAX_SLICES_PER_ATLAS];
-};
-
-static void
-gsk_gpu_cached_atlas_free (GskGpuCached *cached)
-{
-  GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
-  GskGpuCache *cache = cached->cache;
-  GskGpuCached *c, *next;
-
-  /* Free all remaining glyphs on this atlas */
-  for (c = cache->first_cached; c != NULL; c = next)
-    {
-      next = c->next;
-      if (c->atlas == self)
-        gsk_gpu_cached_free (c);
-    }
-
-  if (cache->current_atlas == self)
-    cache->current_atlas = NULL;
-
-  g_object_unref (self->image);
-
-  g_free (self);
-}
-
-static gboolean
-gsk_gpu_cached_atlas_should_collect (GskGpuCached *cached,
-                                     gint64        cache_timeout,
-                                     gint64        timestamp)
-{
-  GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
-
-  if (cached->cache->current_atlas == self &&
-      gsk_gpu_cached_is_old (cached, cache_timeout * ATLAS_TIMEOUT_SCALE, timestamp) &&
-      cached->pixels == 0)
-    return TRUE;
-
-  return cached->pixels + self->remaining_pixels < MIN_ALIVE_PIXELS;
-}
-
-static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
-{
-  sizeof (GskGpuCachedAtlas),
-  "Atlas",
-  gsk_gpu_cached_atlas_free,
-  gsk_gpu_cached_atlas_should_collect
-};
-
-static GskGpuCachedAtlas *
-gsk_gpu_cached_atlas_new (GskGpuCache *cache)
-{
-  GskGpuCachedAtlas *self;
-
-  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_ATLAS_CLASS);
-  self->image = gsk_gpu_device_create_atlas_image (cache->device, ATLAS_SIZE, ATLAS_SIZE);
-  self->remaining_pixels = gsk_gpu_image_get_width (self->image) * gsk_gpu_image_get_height (self->image);
-
-  return self;
-}
-
-/* This rounds up to the next number that has <= 2 bits set:
- * 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, ...
- * That is roughly sqrt(2), so it should limit waste
- */
-static gsize
-round_up_atlas_size (gsize num)
-{
-  gsize storage = g_bit_storage (num);
-
-  num = num + (((1 << storage) - 1) >> 2);
-  num &= (((gsize) 7) << storage) >> 2;
-
-  return num;
-}
-
-static gboolean
-gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
-                               gsize              width,
-                               gsize              height,
-                               gsize             *out_x,
-                               gsize             *out_y)
-{
-  gsize i;
-  gsize waste, slice_waste;
-  gsize best_slice;
-  gsize y, best_y;
-  gboolean can_add_slice;
-
-  best_y = 0;
-  best_slice = G_MAXSIZE;
-  can_add_slice = atlas->n_slices < MAX_SLICES_PER_ATLAS;
-  if (can_add_slice)
-    waste = height; /* Require less than 100% waste */
-  else
-    waste = G_MAXSIZE; /* Accept any slice, we can't make better ones */
-
-  for (i = 0, y = 0; i < atlas->n_slices; y += atlas->slices[i].height, i++)
-    {
-      if (atlas->slices[i].height < height || ATLAS_SIZE - atlas->slices[i].width < width)
-        continue;
-
-      slice_waste = atlas->slices[i].height - height;
-      if (slice_waste < waste)
-        {
-          waste = slice_waste;
-          best_slice = i;
-          best_y = y;
-          if (waste == 0)
-            break;
-        }
-    }
-
-  if (best_slice >= i && i == atlas->n_slices)
-    {
-      gsize slice_height;
-
-      if (!can_add_slice)
-        return FALSE;
-
-      slice_height = round_up_atlas_size (MAX (height, 4));
-      if (slice_height > ATLAS_SIZE - y)
-        return FALSE;
-
-      atlas->n_slices++;
-      if (atlas->n_slices == MAX_SLICES_PER_ATLAS)
-        slice_height = ATLAS_SIZE - y;
-
-      atlas->slices[i].width = 0;
-      atlas->slices[i].height = slice_height;
-      best_y = y;
-      best_slice = i;
-    }
-
-  *out_x = atlas->slices[best_slice].width;
-  *out_y = best_y;
-
-  atlas->slices[best_slice].width += width;
-  g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
-
-  atlas->remaining_pixels -= width * height;
-  ((GskGpuCached *) atlas)->pixels += width * height;
-
-  return TRUE;
-}
-
 static void
 gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
                             gboolean     recreate)
@@ -282,53 +116,29 @@ gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
   if (self->current_atlas && !recreate)
     return;
 
-  if (self->current_atlas)
-    self->current_atlas->remaining_pixels = 0;
-
-  self->current_atlas = gsk_gpu_cached_atlas_new (self);
+  self->current_atlas = gsk_gpu_cached_atlas_new (self, ATLAS_SIZE, ATLAS_SIZE);
 }
 
 gpointer
-gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
+gsk_gpu_cached_new_from_atlas (GskGpuCache             *self,
                                const GskGpuCachedClass *class,
                                gsize                    width,
-                               gsize                    height,
-                               cairo_rectangle_int_t   *out_area)
+                               gsize                    height)
 {
   GskGpuCached *cached;
-  gsize x, y;
 
   if (width > MAX_ATLAS_ITEM_SIZE || height > MAX_ATLAS_ITEM_SIZE)
     return NULL;
 
-  gsk_gpu_cache_ensure_atlas (cache, FALSE);
+  gsk_gpu_cache_ensure_atlas (self, FALSE);
 
-  if (!gsk_gpu_cached_atlas_allocate (cache->current_atlas, width, height, &x, &y))
-    {
-      gsk_gpu_cache_ensure_atlas (cache, TRUE);
-      
-      if (gsk_gpu_cached_atlas_allocate (cache->current_atlas, width, height, &x, &y))
-        return NULL;
-    }
+  cached = gsk_gpu_cached_atlas_create (self->current_atlas, class, width, height);
+  if (cached)
+    return cached;
 
-  cached = gsk_gpu_cached_new (cache, class);
-  cached->atlas = cache->current_atlas;
+  gsk_gpu_cache_ensure_atlas (self, TRUE);
 
-  out_area->x = x;
-  out_area->y = y;
-  out_area->width = width;
-  out_area->height = height;
-
-  return cached;
-}
-
-GskGpuImage *
-gsk_gpu_cached_get_atlas_image (GskGpuCached *cached)
-{
-  if (cached->atlas == NULL)
-    return NULL;
-
-  return cached->atlas->image;
+  return gsk_gpu_cached_atlas_create (self->current_atlas, class, width, height);
 }
 
 /* }}} */
@@ -740,7 +550,6 @@ print_cache_stats (GskGpuCache *self)
 {
   GskGpuCached *cached;
   GString *message;
-  GString *ratios = g_string_new ("");
   GHashTable *classes = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
   GHashTableIter iter;
   gpointer key, value;
@@ -756,23 +565,7 @@ print_cache_stats (GskGpuCache *self)
       cache_data->n_items++;
       if (cached->stale)
         cache_data->n_stale++;
-
-      if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
-        {
-          double ratio;
-
-          ratio = (double) cached->pixels / (double) (ATLAS_SIZE * ATLAS_SIZE);
-
-          if (ratios->len == 0)
-            g_string_append (ratios, " (ratios ");
-          else
-            g_string_append (ratios, ", ");
-          g_string_append_printf (ratios, "%.2f", ratio);
-        }
     }
-
-  if (ratios->len > 0)
-    g_string_append (ratios, ")");
 
   message = g_string_new ("Cached items");
   g_hash_table_iter_init (&iter, classes);
@@ -783,16 +576,13 @@ print_cache_stats (GskGpuCache *self)
 
       g_string_append_printf (message, "\n  %s:%*s%5u (%u stale)", class->name, 12 - MIN (12, (int) strlen (class->name)), "", cache_data->n_items, cache_data->n_stale);
 
-      if (class == &GSK_GPU_CACHED_ATLAS_CLASS)
-        g_string_append_printf (message, "%s", ratios->str);
-      else if (class == &GSK_GPU_CACHED_TEXTURE_CLASS)
+      if (class == &GSK_GPU_CACHED_TEXTURE_CLASS)
         g_string_append_printf (message, " (%u in hash)", g_hash_table_size (self->texture_cache));
     }
 
   gdk_debug_message ("%s", message->str);
   g_string_free (message, TRUE);
   g_hash_table_unref (classes);
-  g_string_free (ratios, TRUE);
 }
 
 /* Returns TRUE if everything was GC'ed */
@@ -976,5 +766,3 @@ gsk_gpu_cache_get_private (GskGpuCache *self)
   return gsk_gpu_cache_get_instance_private (self);
 }
 
-/* }}} */
-/* vim:set foldmethod=marker: */
