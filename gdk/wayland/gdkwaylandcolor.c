@@ -589,6 +589,9 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
             { "saturation", WP_COLOR_MANAGER_V1_RENDER_INTENT_SATURATION },
             { "absolute", WP_COLOR_MANAGER_V1_RENDER_INTENT_ABSOLUTE },
             { "relative-bpc", WP_COLOR_MANAGER_V1_RENDER_INTENT_RELATIVE_BPC },
+#ifdef WP_COLOR_MANAGER_V1_RENDER_INTENT_ABSOLUTE_NO_ADAPTATION_SINCE_VERSION
+            { "absolute-no-adaptation", WP_COLOR_MANAGER_V1_RENDER_INTENT_ABSOLUTE_NO_ADAPTATION },
+#endif
           };
           struct {
             const char *name;
@@ -635,6 +638,9 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
             { "st2084-pq", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST2084_PQ },
             { "st428", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST428 },
             { "hlg", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_HLG },
+#ifdef WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_COMPOUND_POWER_2_4_SINCE_VERSION
+            { "compound-power24", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_COMPOUND_POWER_2_4 },
+#endif
           };
           unsigned int len;
 
