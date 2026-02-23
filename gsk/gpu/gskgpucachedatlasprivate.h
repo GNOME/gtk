@@ -20,4 +20,5 @@ void                    gsk_gpu_cached_atlas_deallocate                 (GskGpuC
 void                    gsk_gpu_cached_atlas_set_item_stale             (GskGpuCachedAtlas              *self,
                                                                          GskGpuCached                   *item,
                                                                          gboolean                        stale);
+
 G_END_DECLS

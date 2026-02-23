@@ -13,6 +13,9 @@ struct _GskGpuCachedAtlas
 
   GskAtlasAllocator *allocator;
   GskGpuImage *image;
+
+  gsize used_pixels;
+  gsize stale_pixels;
 };
 
 static void
@@ -65,10 +68,15 @@ gsk_gpu_cached_atlas_new (GskGpuCache *cache,
                           gsize        height)
 {
   GskGpuCachedAtlas *self;
+  GskGpuCached *cached;
 
   self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_ATLAS_CLASS);
+  cached = (GskGpuCached *) self;
+
   self->allocator = gsk_atlas_allocator_new (width, height);
   self->image = gsk_gpu_device_create_atlas_image (gsk_gpu_cache_get_device (cache), width, height);
+
+  cached->pixels = width * height;
 
   return self;
 }
@@ -92,10 +100,29 @@ gsk_gpu_cached_atlas_purge_stale (GskGpuCachedAtlas *self)
     */
 }
 
+static gsize 
+gsk_gpu_cached_atlas_get_item_pixels (GskGpuCachedAtlas *self,
+                                      GskGpuCached      *item)
+{
+  const cairo_rectangle_int_t *area;
+
+  /* We use the area over cached->pixels so that the cached can rewrite
+   * the pixels for whatever */
+  area = gsk_atlas_allocator_get_area (self->allocator, item->atlas_slot);
+  return area->width * area->height;
+}
+
 void
 gsk_gpu_cached_atlas_deallocate (GskGpuCachedAtlas *self,
                                  GskGpuCached      *cached)
 {
+  gsize pixels;
+
+  pixels = gsk_gpu_cached_atlas_get_item_pixels (self, cached);
+  self->used_pixels -= pixels;
+  if (cached->stale)
+    self->stale_pixels -= pixels;
+
   gsk_atlas_allocator_deallocate (self->allocator, cached->atlas_slot);
 }
 
@@ -121,6 +148,7 @@ gsk_gpu_cached_atlas_create (GskGpuCachedAtlas       *self,
   cached->atlas = self;
   cached->atlas_slot = pos;
 
+  self->used_pixels += width * height;
   gsk_gpu_cached_use ((GskGpuCached *) self);
 
   return cached;
@@ -149,8 +177,17 @@ gsk_gpu_cached_atlas_set_item_stale (GskGpuCachedAtlas *self,
                                      GskGpuCached      *item,
                                      gboolean           stale)
 {
+  gsize pixels;
+
+  pixels = gsk_gpu_cached_atlas_get_item_pixels (self, item);
+
   if (stale)
-    ((GskGpuCached *) self)->pixels -= item->pixels;
+    {
+      self->stale_pixels += pixels;
+    }
   else
-    ((GskGpuCached *) self)->pixels += item->pixels;
+    {
+      self->stale_pixels -= pixels;
+    }
 }
+
