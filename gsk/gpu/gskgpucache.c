@@ -542,7 +542,9 @@ gsk_gpu_cache_set_time (GskGpuCache *self,
 typedef struct
 {
   guint n_items;
-  guint n_stale;
+  guint n_stale_items;
+  gsize n_pixels;
+  gsize n_stale_pixels;
 } GskGpuCacheData;
 
 static void
@@ -563,8 +565,12 @@ print_cache_stats (GskGpuCache *self)
           g_hash_table_insert (classes, (gpointer) cached->class, cache_data);
         }
       cache_data->n_items++;
+      cache_data->n_pixels += cached->pixels;
       if (cached->stale)
-        cache_data->n_stale++;
+        {
+          cache_data->n_stale_items++;
+          cache_data->n_stale_pixels += cached->pixels;
+        }
     }
 
   message = g_string_new ("Cached items");
@@ -574,10 +580,11 @@ print_cache_stats (GskGpuCache *self)
       const GskGpuCachedClass *class = key;
       const GskGpuCacheData *cache_data = value;
 
-      g_string_append_printf (message, "\n  %s:%*s%5u (%u stale)", class->name, 12 - MIN (12, (int) strlen (class->name)), "", cache_data->n_items, cache_data->n_stale);
+      g_string_append_printf (message, "\n  %s:%*s%5u (%u stale)", class->name, 12 - MIN (12, (int) strlen (class->name)), "", cache_data->n_items, cache_data->n_stale_items);
 
       if (class == &GSK_GPU_CACHED_TEXTURE_CLASS)
         g_string_append_printf (message, " (%u in hash)", g_hash_table_size (self->texture_cache));
+      g_string_append_printf (message, " %zu pixels (%zu stale)", cache_data->n_pixels, cache_data->n_stale_pixels);
     }
 
   gdk_debug_message ("%s", message->str);
