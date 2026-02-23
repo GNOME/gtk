@@ -198,11 +198,11 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
   cache = gsk_gpu_cached_new_from_atlas (self,
                                          &GSK_GPU_CACHED_GLYPH_CLASS,
                                          rect.size.width + 2 * padding,
-                                         rect.size.height + 2 * padding,
-                                         &area);
+                                         rect.size.height + 2 * padding);
   if (cache)
     {
       image = gsk_gpu_cached_get_atlas_image ((GskGpuCached *) cache);
+      area = *gsk_gpu_cached_get_atlas_area ((GskGpuCached *) cache);
       g_object_ref (image);
       rect.origin.x = area.x + padding;
       rect.origin.y = area.y + padding;
