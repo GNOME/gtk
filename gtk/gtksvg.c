@@ -6892,8 +6892,7 @@ static struct {
   { FILTER_OPACITY,     "opacity", 1, CLAMPED|POSITIVE,   css_parser_parse_number_percentage, },
   { FILTER_SATURATE,    "saturate", 1, POSITIVE,          css_parser_parse_number_percentage, },
   { FILTER_SEPIA,       "sepia", 1, CLAMPED|POSITIVE,     css_parser_parse_number_percentage, },
-  { FILTER_ALPHA_LEVEL, "alpha-level", 0.5, POSITIVE,     css_parser_parse_number, },
-  /* FILTER_REF and FILTER_DROPSHADOW are handled separately */
+  /* FILTER_REF, FILTER_ALPHA_LEVEL and FILTER_DROPSHADOW are handled separately */
 };
 
 typedef struct
@@ -6911,6 +6910,10 @@ typedef struct
       SvgValue *dy;
       SvgValue *std_dev;
     } dropshadow;
+    struct {
+      SvgValue *threshold0;
+      SvgValue *threshold1;
+    } alpha_level;
   };
 } FilterFunction;
 
@@ -6932,17 +6935,26 @@ svg_filter_free (SvgValue *value)
   SvgFilter *f = (SvgFilter *) value;
   for (unsigned int i = 0; i < f->n_functions; i++)
     {
-      if (f->functions[i].kind == FILTER_REF)
-        g_free (f->functions[i].ref.ref);
-      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+      FilterFunction *ff = &f->functions[i];
+
+      if (ff->kind == FILTER_REF)
         {
-          svg_value_unref (f->functions[i].dropshadow.color);
-          svg_value_unref (f->functions[i].dropshadow.dx);
-          svg_value_unref (f->functions[i].dropshadow.dy);
-          svg_value_unref (f->functions[i].dropshadow.std_dev);
+          g_free (ff->ref.ref);
+        }
+      else if (ff->kind == FILTER_DROPSHADOW)
+        {
+          svg_value_unref (ff->dropshadow.color);
+          svg_value_unref (ff->dropshadow.dx);
+          svg_value_unref (ff->dropshadow.dy);
+          svg_value_unref (ff->dropshadow.std_dev);
+        }
+      else if (ff->kind == FILTER_ALPHA_LEVEL)
+        {
+          svg_value_unref (ff->alpha_level.threshold0);
+          svg_value_unref (ff->alpha_level.threshold1);
         }
       else
-        svg_value_unref (f->functions[i].simple);
+        svg_value_unref (ff->simple);
     }
 
   g_free (value);
@@ -6960,20 +6972,27 @@ svg_filter_equal (const SvgValue *value0,
 
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      if (f0->functions[i].kind != f1->functions[i].kind)
+      const FilterFunction *ff0 = &f0->functions[i];
+      const FilterFunction *ff1 = &f1->functions[i];
+
+      if (ff0->kind != ff1->kind)
         return FALSE;
-      if (f0->functions[i].kind == FILTER_NONE)
+
+      if (ff0->kind == FILTER_NONE)
         return TRUE;
-      else if (f0->functions[i].kind == FILTER_REF)
-        return f0->functions[i].ref.shape == f1->functions[i].ref.shape &&
-               strcmp (f0->functions[i].ref.ref, f1->functions[i].ref.ref) == 0;
-      else if (f0->functions[i].kind == FILTER_DROPSHADOW)
-        return svg_value_equal (f0->functions[i].dropshadow.color, f1->functions[i].dropshadow.color) &&
-               svg_value_equal (f0->functions[i].dropshadow.dx, f1->functions[i].dropshadow.dx) &&
-               svg_value_equal (f0->functions[i].dropshadow.dy, f1->functions[i].dropshadow.dy) &&
-               svg_value_equal (f0->functions[i].dropshadow.std_dev, f1->functions[i].dropshadow.std_dev);
+      else if (ff0->kind == FILTER_REF)
+        return ff0->ref.shape == ff1->ref.shape &&
+               strcmp (ff0->ref.ref, ff1->ref.ref) == 0;
+      else if (ff0->kind == FILTER_DROPSHADOW)
+        return svg_value_equal (ff0->dropshadow.color, ff1->dropshadow.color) &&
+               svg_value_equal (ff0->dropshadow.dx, ff1->dropshadow.dx) &&
+               svg_value_equal (ff0->dropshadow.dy, ff1->dropshadow.dy) &&
+               svg_value_equal (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev);
+      else if (ff0->kind == FILTER_ALPHA_LEVEL)
+        return svg_value_equal (ff0->alpha_level.threshold0, ff1->alpha_level.threshold0) &&
+               svg_value_equal (ff0->alpha_level.threshold1, ff1->alpha_level.threshold1);
       else
-        return svg_value_equal (f0->functions[i].simple, f1->functions[i].simple);
+        return svg_value_equal (ff0->simple, ff1->simple);
     }
 
   return TRUE;
@@ -7042,28 +7061,36 @@ svg_filter_resolve (const SvgValue *value,
 
   for (unsigned int i = 0; i < filter->n_functions; i++)
     {
-      result->functions[i].kind = filter->functions[i].kind;
+      const FilterFunction *ff = &filter->functions[i];
+      FilterFunction *r = &result->functions[i];
 
-      if (filter->functions[i].kind == FILTER_REF)
+      r->kind = ff->kind;
+
+      if (ff->kind == FILTER_REF)
         {
-          result->functions[i].ref.ref = g_strdup (filter->functions[i].ref.ref);
-          result->functions[i].ref.shape = filter->functions[i].ref.shape;
+          r->ref.ref = g_strdup (ff->ref.ref);
+          r->ref.shape = ff->ref.shape;
         }
-      else if (filter->functions[i].kind == FILTER_DROPSHADOW)
+      else if (ff->kind == FILTER_DROPSHADOW)
         {
-          result->functions[i].dropshadow.color = svg_value_resolve (filter->functions[i].dropshadow.color, attr, idx, shape, context);
-          result->functions[i].dropshadow.dx = svg_value_resolve (filter->functions[i].dropshadow.dx, attr, idx, shape, context);
-          result->functions[i].dropshadow.dy = svg_value_resolve (filter->functions[i].dropshadow.dy, attr, idx, shape, context);
-          result->functions[i].dropshadow.std_dev = svg_value_resolve (filter->functions[i].dropshadow.std_dev, attr, idx, shape, context);
+          r->dropshadow.color = svg_value_resolve (ff->dropshadow.color, attr, idx, shape, context);
+          r->dropshadow.dx = svg_value_resolve (ff->dropshadow.dx, attr, idx, shape, context);
+          r->dropshadow.dy = svg_value_resolve (ff->dropshadow.dy, attr, idx, shape, context);
+          r->dropshadow.std_dev = svg_value_resolve (ff->dropshadow.std_dev, attr, idx, shape, context);
+        }
+      else if (ff->kind == FILTER_ALPHA_LEVEL)
+        {
+          r->alpha_level.threshold0 = svg_value_resolve (ff->alpha_level.threshold0, attr, idx, shape, context);
+          r->alpha_level.threshold1 = svg_value_resolve (ff->alpha_level.threshold1, attr, idx, shape, context);
         }
       else
         {
-          SvgValue *v = svg_value_resolve (filter->functions[i].simple, attr, idx, shape, context);
+          SvgValue *v = svg_value_resolve (ff->simple, attr, idx, shape, context);
 
-          if (filter_desc[filter->functions[i].kind].flags & CLAMPED)
-            result->functions[i].simple = svg_number_new_full (((SvgNumber *) v)->unit, CLAMP (((SvgNumber *) v)->value, 0, 1));
+          if (filter_desc[ff->kind].flags & CLAMPED)
+            r->simple = svg_number_new_full (((SvgNumber *) v)->unit, CLAMP (((SvgNumber *) v)->value, 0, 1));
           else
-            result->functions[i].simple = svg_value_ref (v);
+            r->simple = svg_value_ref (v);
           svg_value_unref (v);
         }
     }
@@ -7190,6 +7217,27 @@ filter_parser_parse (GtkCssParser *parser)
 
           function.kind = FILTER_DROPSHADOW;
         }
+      else if (gtk_css_parser_has_function (parser, "alpha-level"))
+        {
+          Number n[2] = {
+            { .value = NAN, .unit = SVG_UNIT_NUMBER },
+            { .value = NAN, .unit = SVG_UNIT_NUMBER },
+          };
+
+          if (!gtk_css_parser_consume_function (parser, 1, 2, css_parser_parse_number, n))
+            {
+              gtk_css_parser_error_syntax (parser, "failed to parse alpha-level() arguments");
+              goto fail;
+            }
+
+          function.alpha_level.threshold0 = svg_number_new (n[0].value);
+          if (!isnan (n[1].value))
+            function.alpha_level.threshold1 = svg_number_new (n[1].value);
+          else
+            function.alpha_level.threshold1 = svg_value_ref (function.alpha_level.threshold0);
+
+          function.kind = FILTER_ALPHA_LEVEL;
+        }
       else
         {
           for (i = 1; i < G_N_ELEMENTS (filter_desc); i++)
@@ -7262,39 +7310,50 @@ svg_filter_print (const SvgValue *value,
 
   for (unsigned int i = 0; i < filter->n_functions; i++)
     {
-      const FilterFunction *function = &filter->functions[i];
+      const FilterFunction *f = &filter->functions[i];
 
       if (i > 0)
         g_string_append_c (s, ' ');
 
-      if (function->kind == FILTER_NONE)
+      if (f->kind == FILTER_NONE)
         {
           g_string_append (s, "none");
         }
-      else if (function->kind == FILTER_REF)
+      else if (f->kind == FILTER_REF)
         {
-          g_string_append_printf (s, "url(#%s)", function->ref.ref);
+          g_string_append_printf (s, "url(#%s)", f->ref.ref);
         }
-      else if (function->kind == FILTER_DROPSHADOW)
+      else if (f->kind == FILTER_DROPSHADOW)
         {
           g_string_append (s, "drop-shadow(");
-          if (!svg_color_is_current (function->dropshadow.color))
+          if (!svg_color_is_current (f->dropshadow.color))
             {
-              svg_value_print (function->dropshadow.color, s);
+              svg_value_print (f->dropshadow.color, s);
               g_string_append (s, ", ");
             }
-          svg_value_print (function->dropshadow.dx, s);
+          svg_value_print (f->dropshadow.dx, s);
           g_string_append (s, ", ");
-          svg_value_print (function->dropshadow.dy, s);
+          svg_value_print (f->dropshadow.dy, s);
           g_string_append (s, ", ");
-          svg_value_print (function->dropshadow.std_dev, s);
+          svg_value_print (f->dropshadow.std_dev, s);
+          g_string_append_c (s, ')');
+        }
+      else if (f->kind == FILTER_ALPHA_LEVEL)
+        {
+          g_string_append (s, "alpha-level(");
+          svg_value_print (f->alpha_level.threshold0, s);
+          if (!svg_value_equal (f->alpha_level.threshold0, f->alpha_level.threshold1))
+            {
+              g_string_append (s, ", ");
+              svg_value_print (f->alpha_level.threshold1, s);
+            }
           g_string_append_c (s, ')');
         }
       else
         {
-          g_string_append (s, filter_desc[function->kind].name);
+          g_string_append (s, filter_desc[f->kind].name);
           g_string_append_c (s, '(');
-          svg_value_print (function->simple, s);
+          svg_value_print (f->simple, s);
           g_string_append_c (s, ')');
         }
     }
@@ -7308,7 +7367,7 @@ svg_filter_interpolate (const SvgValue *value0,
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
-  SvgFilter *f;
+  SvgFilter *result;
 
   if (f0->n_functions != f1->n_functions)
     return NULL;
@@ -7316,37 +7375,65 @@ svg_filter_interpolate (const SvgValue *value0,
   /* TODO: filter interpolation wording in the spec */
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      if (f0->functions[i].kind != f1->functions[i].kind)
+      const FilterFunction *ff0 = &f0->functions[i];
+      const FilterFunction *ff1 = &f1->functions[i];
+
+      if (ff0->kind != ff1->kind)
         return NULL;
-      if (f0->functions[i].kind != FILTER_REF &&
-          ((SvgNumber *) f0->functions[i].simple)->unit != ((SvgNumber *) f1->functions[i].simple)->unit)
+
+      if (ff0->kind == FILTER_REF ||
+          ff0->kind == FILTER_DROPSHADOW ||
+          ff0->kind == FILTER_ALPHA_LEVEL)
+        continue;
+
+      if (((SvgNumber *) ff0->simple)->unit != ((SvgNumber *) ff1->simple)->unit)
         return NULL;
     }
 
-  f = svg_filter_alloc (f0->n_functions);
+  result = svg_filter_alloc (f0->n_functions);
 
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      f->functions[i].kind = f0->functions[i].kind;
-      if (f->functions[i].kind == FILTER_NONE)
+      const FilterFunction *ff0 = &f0->functions[i];
+      const FilterFunction *ff1 = &f1->functions[i];
+      FilterFunction *r = &result->functions[i];
+
+      r->kind = ff0->kind;
+
+      if (ff0->kind == FILTER_NONE)
         ;
-      else if (f->functions[i].kind == FILTER_REF)
+      else if (ff0->kind == FILTER_REF)
         {
+          if (t < 0.5)
+            {
+              r->ref.ref = g_strdup (ff0->ref.ref);
+              r->ref.shape = ff0->ref.shape;
+            }
+          else
+            {
+              r->ref.ref = g_strdup (ff1->ref.ref);
+              r->ref.shape = ff1->ref.shape;
+            }
         }
-      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+      else if (ff0->kind == FILTER_DROPSHADOW)
         {
-          f->functions[i].dropshadow.color = svg_value_interpolate (f0->functions[i].dropshadow.color, f1->functions[i].dropshadow.color, context, t);
-          f->functions[i].dropshadow.dx = svg_value_interpolate (f0->functions[i].dropshadow.dx, f1->functions[i].dropshadow.dx, context, t);
-          f->functions[i].dropshadow.dy = svg_value_interpolate (f0->functions[i].dropshadow.dy, f1->functions[i].dropshadow.dy, context, t);
-          f->functions[i].dropshadow.std_dev = svg_value_interpolate (f0->functions[i].dropshadow.std_dev, f1->functions[i].dropshadow.std_dev, context, t);
+          r->dropshadow.color = svg_value_interpolate (ff0->dropshadow.color, ff1->dropshadow.color, context, t);
+          r->dropshadow.dx = svg_value_interpolate (ff0->dropshadow.dx, ff1->dropshadow.dx, context, t);
+          r->dropshadow.dy = svg_value_interpolate (ff0->dropshadow.dy, ff1->dropshadow.dy, context, t);
+          r->dropshadow.std_dev = svg_value_interpolate (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev, context, t);
+        }
+      else if (ff0->kind == FILTER_ALPHA_LEVEL)
+        {
+          r->alpha_level.threshold0 = svg_value_interpolate (ff0->alpha_level.threshold0, ff1->alpha_level.threshold0, context, t);
+          r->alpha_level.threshold1 = svg_value_interpolate (ff0->alpha_level.threshold1, ff1->alpha_level.threshold1, context, t);
         }
       else
         {
-          f->functions[i].simple = svg_value_interpolate (f0->functions[i].simple, f1->functions[i].simple, context, t);
+          r->simple = svg_value_interpolate (ff0->simple, ff1->simple, context, t);
         }
     }
 
-  return (SvgValue *) f;
+  return (SvgValue *) result;
 }
 
 static SvgValue *
@@ -7357,37 +7444,46 @@ svg_filter_accumulate (const SvgValue *value0,
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
-  SvgFilter *f;
+  SvgFilter *result;
 
-  f = svg_filter_alloc (f0->n_functions + n * f1->n_functions);
+  result = svg_filter_alloc (f0->n_functions + n * f1->n_functions);
 
   for (unsigned int i = 0; i < n; i++)
-    memcpy (&f->functions[i * f1->n_functions],
+    memcpy (&result->functions[i * f1->n_functions],
             f1->functions,
             f1->n_functions * sizeof (FilterFunction));
 
-  memcpy (&f->functions[f0->n_functions + (n - 1) * f1->n_functions],
+  memcpy (&result->functions[f0->n_functions + (n - 1) * f1->n_functions],
           f0->functions,
           f0->n_functions * sizeof (FilterFunction));
 
-  for (unsigned int i = 0; i < f->n_functions; i++)
+  for (unsigned int i = 0; i < result->n_functions; i++)
     {
-      if (f->functions[i].kind == FILTER_NONE)
+      FilterFunction *r = &result->functions[i];
+
+      if (r->kind == FILTER_NONE)
         ;
-      else if (f->functions[i].kind == FILTER_REF)
-        f->functions[i].ref.ref = g_strdup (f->functions[i].ref.ref);
-      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+      else if (r->kind == FILTER_REF)
         {
-          svg_value_ref (f->functions[i].dropshadow.color);
-          svg_value_ref (f->functions[i].dropshadow.dx);
-          svg_value_ref (f->functions[i].dropshadow.dy);
-          svg_value_ref (f->functions[i].dropshadow.std_dev);
+          r->ref.ref = g_strdup (r->ref.ref);
+        }
+      else if (r->kind == FILTER_DROPSHADOW)
+        {
+          svg_value_ref (r->dropshadow.color);
+          svg_value_ref (r->dropshadow.dx);
+          svg_value_ref (r->dropshadow.dy);
+          svg_value_ref (r->dropshadow.std_dev);
+        }
+      else if (r->kind == FILTER_ALPHA_LEVEL)
+        {
+          svg_value_ref (r->alpha_level.threshold0);
+          svg_value_ref (r->alpha_level.threshold1);
         }
       else
-        svg_value_ref (f->functions[i].simple);
+        svg_value_ref (r->simple);
     }
 
-  return (SvgValue *) f;
+  return (SvgValue *) result;
 }
 
 #define R 0.2126
@@ -15284,8 +15380,8 @@ create_transitions (Shape         *shape,
                          duration, delay, easing,
                          origin, type,
                          SHAPE_ATTR_FILTER,
-                         svg_filter_parse ("blur(32) alpha-level(0.2)"),
-                         svg_filter_parse ("blur(0) alpha-level(0.2)"));
+                         svg_filter_parse ("blur(4) alpha-level(0.2)"),
+                         svg_filter_parse ("blur(0) alpha-level(0, 1)"));
       break;
     case GPA_TRANSITION_FADE:
       create_transition (shape, timeline, states,
@@ -21010,17 +21106,16 @@ apply_filter_functions (SvgValue      *filter,
         case FILTER_ALPHA_LEVEL:
           {
             GskComponentTransfer *identity, *alpha;
-            float values[10];
+            double t0, t1;
 
             identity = gsk_component_transfer_new_identity ();
-            for (unsigned int j = 0; j < 10; j++)
-              {
-                if ((j + 1) / 10.0 <= svg_number_get (ff->simple, 1))
-                  values[j] = 0;
-                else
-                  values[j] = 1;
-              }
-            alpha = gsk_component_transfer_new_discrete (10, values);
+
+            t0 = svg_number_get (ff->alpha_level.threshold0, 1);
+            t1 = svg_number_get (ff->alpha_level.threshold1, 1);
+            t1 = MAX (t1, t0 + 0.01);
+
+            alpha = gsk_component_transfer_new_linear (1 / (t1 - t0), -t0 / (t1 - t0));
+
             result = gsk_component_transfer_node_new (child, identity, identity, identity, alpha);
             gsk_component_transfer_free (identity);
             gsk_component_transfer_free (alpha);

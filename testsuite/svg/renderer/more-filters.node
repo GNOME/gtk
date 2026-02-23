@@ -108,7 +108,7 @@ clip {
           color: rgb(0,0,0);
         }
       }
-      alpha: discrete(0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
+      alpha: linear(100, -25);
     }
     component-transfer {
       child: color-matrix {
@@ -144,7 +144,7 @@ clip {
           }
         }
       }
-      alpha: discrete(0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
+      alpha: linear(100, -25);
     }
   }
 }
