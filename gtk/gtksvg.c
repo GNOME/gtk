@@ -15142,6 +15142,7 @@ create_path_length (Shape    *shape,
 
 static void
 create_transition (Shape         *shape,
+                   unsigned int   idx,
                    Timeline      *timeline,
                    uint64_t       states,
                    int64_t        duration,
@@ -15157,6 +15158,7 @@ create_transition (Shape         *shape,
   TimeSpec *begin;
 
   a = animation_animate_new ();
+  a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
   a->repeat_count = 1;
@@ -15165,7 +15167,7 @@ create_transition (Shape         *shape,
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
-  a->id = g_strdup_printf ("gpa:transition:fade-in:%s:%s", shape_attr_get_name (attr), shape->id);
+  a->id = g_strdup_printf ("gpa:transition:fade-in:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, delay));
 
@@ -15190,6 +15192,7 @@ create_transition (Shape         *shape,
   a->gpa.origin = origin;
 
   a = animation_animate_new ();
+  a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
   a->repeat_count = 1;
@@ -15198,7 +15201,7 @@ create_transition (Shape         *shape,
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
-  a->id = g_strdup_printf ("gpa:transition:fade-out:%s:%s", shape_attr_get_name (attr), shape->id);
+  a->id = g_strdup_printf ("gpa:transition:fade-out:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (duration + delay)));
 
@@ -15225,12 +15228,13 @@ create_transition (Shape         *shape,
   if (delay > 0)
     {
       a = animation_set_new ();
+      a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
       a->repeat_duration = duration;
       a->repeat_count = 1;
 
-      a->id = g_strdup_printf ("gpa:transition:delay-in:%s:%s", shape_attr_get_name (attr), shape->id);
+      a->id = g_strdup_printf ("gpa:transition:delay-in:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
       begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
       time_spec_add_animation (begin, a);
 
@@ -15250,12 +15254,13 @@ create_transition (Shape         *shape,
       shape_add_animation (shape, a);
 
       a = animation_set_new ();
+      a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
       a->repeat_duration = duration;
       a->repeat_count = 1;
 
-      a->id = g_strdup_printf ("gpa:transition:delay-out:%s:%s", shape_attr_get_name (attr), shape->id);
+      a->id = g_strdup_printf ("gpa:transition:delay-out:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
       begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, 0));
       time_spec_add_animation (begin, a);
 
@@ -15342,9 +15347,185 @@ create_transition_delay (Shape     *shape,
   svg_value_unref (value);
 }
 
+/* The filter we create here looks roughly like this:
+ *
+ * <feGaussianBlur -> blurred
+ * <feComponentTransfer in=SourceGraphic ... make source alpha solid
+ * <feGaussianBlur
+ * <feComponentTransfer threshold alpha, white-out color -> blobbed
+ * <feComposite ...multiply blurred and blobbed
+ *
+ * The blurs and the second component transfer are animated
+ * from their full effect to identity.
+ */
+static void
+create_morph_filter (Shape      *shape,
+                     Timeline   *timeline,
+                     GHashTable *shapes,
+                     uint64_t    states,
+                     int64_t     duration,
+                     int64_t     delay,
+                     GpaEasing   easing)
+{
+  Shape *parent = NULL;
+  Shape *filter;
+  SvgValue *value;
+  Animation *a;
+  unsigned int idx;
+  char *str;
+  TimeSpec *begin;
+  TimeSpec *end;
+
+  for (unsigned int i = 0; i < shape->parent->shapes->len; i++)
+    {
+      Shape *sh = g_ptr_array_index (shape->parent->shapes, i);
+
+      if (sh == shape)
+        break;
+
+      if (sh->type == SHAPE_DEFS)
+        {
+          parent = sh;
+          break;
+        }
+    }
+
+  if (parent == NULL)
+    {
+      parent = shape_new (shape->parent, SHAPE_DEFS);
+      g_ptr_array_insert (shape->parent->shapes, 0, parent);
+    }
+
+  filter = svg_shape_add (parent, SHAPE_FILTER);
+  filter->id = g_strdup_printf ("gpa:morph-filter:%s", shape->id);
+
+  g_hash_table_insert (shapes, filter->id, filter);
+
+  value = svg_percentage_new (-50);
+  shape_set_base_value (filter, SHAPE_ATTR_X, 0, value);
+  shape_set_base_value (filter, SHAPE_ATTR_Y, 0, value);
+  svg_value_unref (value);
+  value = svg_percentage_new (200);
+  shape_set_base_value (filter, SHAPE_ATTR_WIDTH, 0, value);
+  shape_set_base_value (filter, SHAPE_ATTR_HEIGHT, 0, value);
+  svg_value_unref (value);
+
+  idx = shape_add_filter (filter, FE_BLUR);
+  str = g_strdup_printf ("gpa:morph-filter:%s:blurred", shape->id);
+  value = svg_string_new (str);
+  g_free (str);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_RESULT, idx + 1, value);
+  svg_value_unref (value);
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_STD_DEV,
+                     svg_numbers_new1 (4),
+                     svg_numbers_new1 (0));
+
+  idx = shape_add_filter (filter, FE_COMPONENT_TRANSFER);
+  value = svg_filter_primitive_ref_new (SOURCE_GRAPHIC);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_IN, idx + 1, value);
+  svg_value_unref (value);
+
+  idx = shape_add_filter (filter, FE_FUNC_A);
+  value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_TYPE, idx + 1, value);
+  svg_value_unref (value);
+  value = svg_number_new (100);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_SLOPE, idx + 1, value);
+  svg_value_unref (value);
+  value = svg_number_new (0);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_INTERCEPT, idx + 1, value);
+  svg_value_unref (value);
+
+  idx = shape_add_filter (filter, FE_BLUR);
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_STD_DEV,
+                     svg_numbers_new1 (4),
+                     svg_numbers_new1 (0));
+
+  idx = shape_add_filter (filter, FE_COMPONENT_TRANSFER);
+
+  for (unsigned int func = FE_FUNC_R; func <= FE_FUNC_B; func++)
+    {
+      idx = shape_add_filter (filter, func);
+      value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
+      shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_TYPE, idx + 1, value);
+      svg_value_unref (value);
+      value = svg_number_new (0);
+      shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_SLOPE, idx + 1, value);
+      svg_value_unref (value);
+      value = svg_number_new (1);
+      shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_INTERCEPT, idx + 1, value);
+      svg_value_unref (value);
+    }
+
+  idx = shape_add_filter (filter, FE_FUNC_A);
+  value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_TYPE, idx + 1, value);
+  svg_value_unref (value);
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_FUNC_SLOPE,
+                     svg_number_new (100),
+                     svg_number_new (1));
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_FUNC_INTERCEPT,
+                     svg_number_new (-20),
+                     svg_number_new (0));
+
+  idx = shape_add_filter (filter, FE_COMPOSITE);
+  value = svg_composite_operator_new (COMPOSITE_OPERATOR_ARITHMETIC);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_COMPOSITE_OPERATOR, idx + 1, value);
+  svg_value_unref (value);
+  value = svg_number_new (1);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_COMPOSITE_K1, idx + 1, value);
+  svg_value_unref (value);
+  str = g_strdup_printf ("gpa:morph-filter:%s:blurred", shape->id);
+  value = svg_filter_primitive_ref_new_ref (str);
+  g_free (str);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_IN2, idx + 1, value);
+  svg_value_unref (value);
+
+  a = animation_set_new ();
+  a->id = g_strdup_printf ("gpa:set:morph:%s", shape->id);
+  a->attr = SHAPE_ATTR_FILTER;
+
+  begin = animation_add_begin (a, timeline_get_start_of_time (timeline));
+  time_spec_add_animation (begin, a);
+  end = animation_add_end (a, timeline_get_end_of_time (timeline));
+  time_spec_add_animation (end, a);
+
+  a->has_begin = 1;
+  a->has_end = 1;
+
+  a->n_frames = 2;
+  a->frames = g_new0 (Frame, a->n_frames);
+  a->frames[0].time = 0;
+  a->frames[1].time = 1;
+  str = g_strdup_printf ("url(#%s)", filter->id);
+  a->frames[0].value = svg_filter_parse (str);
+  a->frames[1].value = svg_value_ref (a->frames[0].value);
+  g_free (str);
+
+  shape_add_animation (shape, a);
+}
+
 static void
 create_transitions (Shape         *shape,
                     Timeline      *timeline,
+                    GHashTable    *shapes,
+                    GPtrArray     *pending_refs,
                     uint64_t       states,
                     GpaTransition  type,
                     int64_t        duration,
@@ -15357,7 +15538,7 @@ create_transitions (Shape         *shape,
     case GPA_TRANSITION_NONE:
       break;
     case GPA_TRANSITION_ANIMATE:
-      create_transition (shape, timeline, states,
+      create_transition (shape, 0, timeline, states,
                          duration, delay, easing,
                          origin, type,
                          SHAPE_ATTR_STROKE_DASHARRAY,
@@ -15368,23 +15549,20 @@ create_transitions (Shape         *shape,
                                  SHAPE_ATTR_STROKE_DASHOFFSET,
                                  svg_number_new (0.5));
       if (!G_APPROX_VALUE (origin, 0, 0.001))
-        create_transition (shape, timeline, states,
+        create_transition (shape, 0, timeline, states,
                            duration, delay, easing,
-                         origin, type,
+                           origin, type,
                            SHAPE_ATTR_STROKE_DASHOFFSET,
                            svg_number_new (-origin),
                            svg_number_new (0));
       break;
     case GPA_TRANSITION_MORPH:
-      create_transition (shape, timeline, states,
-                         duration, delay, easing,
-                         origin, type,
-                         SHAPE_ATTR_FILTER,
-                         svg_filter_parse ("blur(4) alpha-level(0.2)"),
-                         svg_filter_parse ("blur(0) alpha-level(0, 1)"));
+      create_morph_filter (shape, timeline, shapes, states,
+                           duration, delay, easing);
+      g_ptr_array_add (pending_refs, shape);
       break;
     case GPA_TRANSITION_FADE:
-      create_transition (shape, timeline, states,
+      create_transition (shape, 0, timeline, states,
                          duration, delay, easing,
                          origin, type,
                          SHAPE_ATTR_OPACITY,
@@ -17549,6 +17727,8 @@ parse_shape_gpa_attrs (Shape                *shape,
 
   create_transitions (shape,
                       data->svg->timeline,
+                      data->shapes,
+                      data->pending_refs,
                       states,
                       transition_type,
                       transition_duration,
@@ -19358,9 +19538,17 @@ serialize_base_animation_attrs (GString   *s,
 
   if (a->type != ANIMATION_TYPE_MOTION)
     {
+      const char *name;
+
       indent_for_attr (s, indent);
-      g_string_append_printf (s, "attributeName='%s'",
-                              shape_attr_get_presentation (a->attr, a->shape->type));
+      if (a->shape->type == SHAPE_FILTER && a->idx > 0)
+        {
+          FilterPrimitive *f = g_ptr_array_index (a->shape->filters, a->idx - 1);
+          name = filter_attr_get_presentation (a->attr, f->type);
+        }
+      else
+        name = shape_attr_get_presentation (a->attr, a->shape->type);
+      g_string_append_printf (s, "attributeName='%s'", name);
     }
 
   if (a->has_begin)

@@ -28,7 +28,7 @@
             gpa:status='done'
             gpa:computed-simple-duration='indefinite'/>
     <animate
-            id='gpa:transition:fade-in:stroke-dasharray:line'
+            id='gpa:transition:fade-in:0:stroke-dasharray:line'
             attributeName='stroke-dasharray'
             begin='gpa:states(0).begin'
             dur='1000ms'
@@ -43,7 +43,7 @@
             gpa:current-start-time='1000ms'
             gpa:current-end-time='2000ms'/>
     <animate
-            id='gpa:transition:fade-out:stroke-dasharray:line'
+            id='gpa:transition:fade-out:0:stroke-dasharray:line'
             attributeName='stroke-dasharray'
             begin='gpa:states(0).end -1000ms'
             dur='1000ms'
@@ -98,8 +98,8 @@
     </animateMotion>
     <animateMotion
             id='gpa:attachment-transition:fade-in:red'
-            begin='gpa:transition:fade-in:stroke-dasharray:line.begin'
-            end='gpa:transition:fade-in:stroke-dasharray:line.end'
+            begin='gpa:transition:fade-in:0:stroke-dasharray:line.begin'
+            end='gpa:transition:fade-in:0:stroke-dasharray:line.end'
             dur='1000ms'
             fill='freeze'
             keySplines='0 0 1 1'
@@ -114,8 +114,8 @@
     </animateMotion>
     <animateMotion
             id='gpa:attachment-transition:fade-out:red'
-            begin='gpa:transition:fade-out:stroke-dasharray:line.begin'
-            end='gpa:transition:fade-out:stroke-dasharray:line.end'
+            begin='gpa:transition:fade-out:0:stroke-dasharray:line.begin'
+            end='gpa:transition:fade-out:0:stroke-dasharray:line.end'
             dur='1000ms'
             fill='freeze'
             keySplines='0 0 1 1'
