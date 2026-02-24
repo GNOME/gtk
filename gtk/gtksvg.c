@@ -2808,10 +2808,16 @@ svg_value_alloc (const SvgValueClass *class,
   return value;
 }
 
+static inline gboolean
+svg_value_is_immortal (SvgValue *value)
+{
+  return value->ref_count == 0;
+}
+
 SvgValue *
 svg_value_ref (SvgValue *value)
 {
-  if (value->ref_count == 0)
+  if (svg_value_is_immortal (value))
     return value;
 
   value->ref_count += 1;
@@ -2821,7 +2827,7 @@ svg_value_ref (SvgValue *value)
 void
 svg_value_unref (SvgValue *value)
 {
-  if (value->ref_count == 0)
+  if (svg_value_is_immortal (value))
     return;
 
   if (value->ref_count > 1)
@@ -11003,6 +11009,11 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_FUNC_AMPLITUDE].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FE_FUNC_EXPONENT].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FE_FUNC_OFFSET].initial_value = svg_number_new (0);
+
+#ifndef G_DISABLE_ASSERT
+  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
+    g_assert (svg_value_is_immortal (shape_attrs[i].initial_value));
+#endif
 }
 
 static SvgValue *
