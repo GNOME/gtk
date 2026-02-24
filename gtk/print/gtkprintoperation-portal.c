@@ -363,7 +363,9 @@ finish_print (PortalData        *portal,
 
       priv->print_pages = gtk_print_job_get_pages (job);
       priv->page_ranges = gtk_print_job_get_page_ranges (job, &priv->num_page_ranges);
-      priv->manual_num_copies = gtk_print_job_get_num_copies (job);
+      /* Printers used through portals always have the COPIES capability, so
+      there is no need to make manual copies. */
+      priv->manual_num_copies = 1;
       priv->manual_collation = gtk_print_job_get_collate (job);
       priv->manual_reverse = gtk_print_job_get_reverse (job);
       priv->manual_page_set = gtk_print_job_get_page_set (job);
