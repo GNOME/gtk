@@ -1440,7 +1440,11 @@ handle_pointing_event (GdkEvent *event)
                                                            device,
                                                            sequence);
           if (grab_widget)
-            set_widget_active_state (grab_widget, FALSE);
+            {
+              gtk_window_set_pointer_focus_grab (toplevel, device,
+                                                 sequence, NULL);
+              set_widget_active_state (grab_widget, FALSE);
+            }
         }
 
       old_target = update_pointer_focus_state (toplevel, event, NULL);
@@ -1450,6 +1454,8 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
+      gtk_window_set_pointer_focus_grab (toplevel, device,
+                                         sequence, NULL);
       set_widget_active_state (old_target, FALSE);
       break;
     case GDK_DRAG_LEAVE:
@@ -1569,7 +1575,12 @@ handle_pointing_event (GdkEvent *event)
           target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
                                                                      device,
                                                                      sequence);
-          set_widget_active_state (target, FALSE);
+          if (target)
+            {
+              gtk_window_set_pointer_focus_grab (toplevel, device,
+                                                 sequence, NULL);
+              set_widget_active_state (target, FALSE);
+            }
         }
       break;
     default:
