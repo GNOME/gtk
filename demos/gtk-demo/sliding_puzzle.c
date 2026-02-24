@@ -492,7 +492,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
 
       tweak = gtk_menu_button_new ();
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (tweak), popover);
-      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (tweak), "emblem-system-symbolic");
+      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (tweak), "open-menu-symbolic");
 
       restart = gtk_button_new_from_icon_name ("view-refresh-symbolic");
       g_signal_connect (restart, "clicked", G_CALLBACK (reshuffle), NULL);
