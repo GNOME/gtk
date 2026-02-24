@@ -370,29 +370,34 @@ gsk_atlas_allocator_make_empty (GskAtlasAllocator *self,
 {
   GskAtlasSlot *slot;
   gsize tmp;
-  gboolean first;
 
   slot = gsk_atlas_slots_get (&self->slots, pos);
-  first = is_first_child (self, pos);
 
-  if (!first)
+  if (!is_first_child (self, pos))
     {
       GskAtlasSlot *prev = gsk_atlas_slots_get (&self->slots, slot->prev);
       if (prev->type == GSK_ATLAS_EMPTY)
         {
-          rectangle_union (&prev->area, &slot->area, &prev->area);
-          prev->next = slot->next;
-          if (slot->next != G_MAXSIZE)
+          rectangle_union (&slot->area, &prev->area, &slot->area);
+          if (is_first_child (self, slot->prev))
             {
-              GskAtlasSlot *next = gsk_atlas_slots_get (&self->slots, slot->next);
-              next->prev = slot->prev;
+              if (prev->prev != G_MAXSIZE)
+                {
+                  GskAtlasSlot *parent = gsk_atlas_slots_get (&self->slots, prev->prev);
+                  parent->first_child = pos;
+                }
+              else
+                {
+                  self->root = pos;
+                }
             }
-          tmp = slot->prev;
-          gsk_atlas_allocator_free_slot (self, pos);
-          pos = tmp;
-          slot = prev;
-          prev = gsk_atlas_slots_get (&self->slots, slot->prev);
-          first = is_first_child (self, pos);
+          else
+            {
+              GskAtlasSlot *prev_prev = gsk_atlas_slots_get (&self->slots, prev->prev);
+              prev_prev->next = pos;
+            }
+          slot->prev = prev->prev;
+          prev->type = GSK_ATLAS_FREELIST;
         }
     }
   if (slot->next != G_MAXSIZE)
@@ -400,48 +405,25 @@ gsk_atlas_allocator_make_empty (GskAtlasAllocator *self,
       GskAtlasSlot *next = gsk_atlas_slots_get (&self->slots, slot->next);
       if (next->type == GSK_ATLAS_EMPTY)
         {
-          rectangle_union (&next->area, &slot->area, &next->area);
-          next->prev = slot->prev;
-          if (first)
+          rectangle_union (&slot->area, &next->area, &slot->area);
+          if (next->next != G_MAXSIZE)
             {
-              if (slot->prev != G_MAXSIZE)
-                {
-                  GskAtlasSlot *prev = gsk_atlas_slots_get (&self->slots, slot->prev);
-                  prev->first_child = slot->next;
-                }
-              else
-                {
-                  self->root = slot->next;
-                }
+              GskAtlasSlot *next_next = gsk_atlas_slots_get (&self->slots, next->next);
+              next_next->prev = pos;
             }
-          else
-            {
-              GskAtlasSlot *prev = gsk_atlas_slots_get (&self->slots, slot->prev);
-              prev->next = slot->next;
-            }
-          /* We can't remove the item from the freelist, because we don't have access
-           * to the prev pointer, so we use this hack: */
-          if (slot->type == GSK_ATLAS_EMPTY)
-            slot->type = GSK_ATLAS_FREELIST;
-          else
-            gsk_atlas_allocator_free_slot (self, pos);
-          pos = slot->next;
-          slot = next;
+          slot->next = next->next;
+          next->type = GSK_ATLAS_FREELIST;
         }
     }
-  if (first && slot->prev != G_MAXSIZE && slot->next == G_MAXSIZE)
+  if (is_first_child (self, pos) && slot->prev != G_MAXSIZE && slot->next == G_MAXSIZE)
     {
       tmp = slot->prev;
       /* only item in this level, merge with parent */
-      if (slot->type == GSK_ATLAS_EMPTY)
-        slot->type = GSK_ATLAS_FREELIST;
-      else
-        gsk_atlas_allocator_free_slot (self, pos);
+      gsk_atlas_allocator_free_slot (self, pos);
       gsk_atlas_allocator_make_empty (self, tmp);
     }
-  else if (slot->type != GSK_ATLAS_EMPTY)
+  else
     {
-      /* not merged above, so add to the freelist */
       slot->type = GSK_ATLAS_EMPTY;
       gsk_atlas_allocator_enqueue_empty (self, pos);
     }
