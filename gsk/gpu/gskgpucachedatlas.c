@@ -123,6 +123,9 @@ gsk_gpu_cached_atlas_deallocate (GskGpuCachedAtlas *self,
   if (cached->stale)
     self->stale_pixels -= pixels;
 
+  if (!cached->stale)
+    gsk_gpu_cached_use ((GskGpuCached *) self);
+
   gsk_atlas_allocator_deallocate (self->allocator, cached->atlas_slot);
 }
 
@@ -191,5 +194,7 @@ gsk_gpu_cached_atlas_set_item_stale (GskGpuCachedAtlas *self,
     {
       self->stale_pixels -= pixels;
     }
+
+  gsk_gpu_cached_use ((GskGpuCached *) self);
 }
 
